@@ -57,3 +57,4 @@ if ($missing.Count) {
 }
 
 Write-Output "Structure valid: $($skills.Count) skills, $($adapters.Count) adapters, $($templates.Count) templates, $($tests.Count) tests."
+Write-Output "Note: This script only checks file existence. Run .\scripts\validate-manifest.ps1 to verify frontmatter-to-manifest consistency."

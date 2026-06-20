@@ -1,5 +1,12 @@
 # Changelog
 
+## v0.7.0 - Phase 6: Manifest verification (2026-06-20)
+
+- Added a standalone manifest verification script (`scripts/validate-manifest.ps1`).
+- Implemented robust frontmatter-to-manifest consistency checks to prevent documentation drift.
+- Ensured the Markdown-first `SKILL.md` frontmatter remains the absolute source of truth.
+- Zero runtime plugin implementation added. Plugin schema examples strictly verified.
+
 ## v0.6.0 - Phase 5: Plugin readiness and metadata discovery (2026-06-20)
 
 - Added `PLUGIN_READINESS.md` documenting how future LLM loaders can extract routing metadata and lazily load outputs while preserving the core Markdown-first architecture.

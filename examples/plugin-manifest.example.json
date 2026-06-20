@@ -1,109 +1,127 @@
 {
-  "_notice": "EXAMPLE ONLY. This framework is Markdown-first. Plugin support does not currently exist.",
-  "skills": [
-    {
-      "name": "amalgam-conductor",
-      "description": "Route, coordinate, sequence, and verify the work of multiple specialist skills to achieve a complex objective.",
-      "slug": "amalgam-conductor",
-      "role": "Routing and orchestration layer",
-      "primary_use": "Project orientation, multi-skill routing, workflow planning",
-      "avoid_when": "A single obvious specialist suffices",
-      "activation_level": "Commander",
-      "depends_on": "None",
-      "output_formats": ["Routing Plan", "Prompts"],
-      "skill_path": "skills/amalgam-conductor/SKILL.md",
-      "icon_path": "assets/icons/amalgam-conductor.png"
-    },
-    {
-      "name": "cloak-meister",
-      "description": "Review and refine user interfaces, layouts, accessibility, semantic HTML, CSS/Tailwind architecture, form usability, responsive design, state visibility, error handling, microcopy, and overall visual hierarchy. Use when reviewing the presentation layer.",
-      "slug": "cloak-meister",
-      "role": "UI/UX architect and frontend auditor",
-      "primary_use": "UI, UX, accessibility, frontend architecture, responsive layout",
-      "avoid_when": "Database schema or system architecture diagraming is needed",
-      "activation_level": "Specialist",
-      "depends_on": "None",
-      "output_formats": ["Output"],
-      "skill_path": "skills/cloak-meister/SKILL.md",
-      "icon_path": "assets/icons/cloak-meister.png"
-    },
-    {
-      "name": "scribe-meister",
-      "description": "Compile, refine, and verify project documentation, READMEs, onboarding guides, status reports, release notes, and final handovers by analyzing the actual repository state. Use when you need accurate, evidence-backed documentation.",
-      "slug": "scribe-meister",
-      "role": "Documentation compiler and auditor",
-      "primary_use": "READMEs, project reports, readiness summaries, handover docs",
-      "avoid_when": "Source evidence is unavailable to verify claims",
-      "activation_level": "Specialist",
-      "depends_on": "None",
-      "output_formats": ["Compact", "Full"],
-      "skill_path": "skills/scribe-meister/SKILL.md",
-      "icon_path": "assets/icons/scribe-meister.png"
-    },
-    {
-      "name": "meister-weaver",
-      "description": "Analyze, design, and render structured system diagrams including UML, ERD, flowcharts, sequence diagrams, state machines, and architecture maps using Mermaid or standard notation. Use when visualizing data flow or system structure.",
-      "slug": "meister-weaver",
-      "role": "Visual modeling and diagram specialist",
-      "primary_use": "UML, ERD, architecture, workflow, data-flow diagrams",
-      "avoid_when": "Resolving UI accessibility or evaluating functional code without diagrams",
-      "activation_level": "Specialist",
-      "depends_on": "None",
-      "output_formats": ["Compact", "Full"],
-      "skill_path": "skills/meister-weaver/SKILL.md",
-      "icon_path": "assets/icons/meister-weaver.png"
-    },
-    {
-      "name": "meister-chronicler",
-      "description": "Review database schemas, ERDs, referential integrity, indexing, normalization, migration paths, default values, constraint logic, seed data strategies, and SQL syntax. Use when analyzing the data persistence layer.",
-      "slug": "meister-chronicler",
-      "role": "Database architect and schema auditor",
-      "primary_use": "Schemas, ERDs, constraints, migrations, SQL validation",
-      "avoid_when": "Evaluating visible UI or system-level testing",
-      "activation_level": "Specialist",
-      "depends_on": "None",
-      "output_formats": ["Compact", "Full"],
-      "skill_path": "skills/meister-chronicler/SKILL.md",
-      "icon_path": "assets/icons/meister-chronicler.png"
-    },
-    {
-      "name": "acme-overseer",
-      "description": "Review quality assurance, test strategy and plans, test cases, acceptance criteria, requirements testability, unit/integration/system/user-acceptance testing, smoke and regression planning, defect triage, verification and validation evidence, CI test workflows, quality gates, release readiness, and quality documentation. Use when project quality or readiness must be assessed from available evidence.",
-      "slug": "acme-overseer",
-      "role": "Quality assurance auditor and release gatekeeper",
-      "primary_use": "Test strategy, test cases, defect triage, regression, release readiness",
-      "avoid_when": "Destructive pressure testing is needed",
-      "activation_level": "Specialist",
-      "depends_on": "None",
-      "output_formats": ["Compact", "Full"],
-      "skill_path": "skills/acme-overseer/SKILL.md",
-      "icon_path": "assets/icons/acme-overseer.png"
-    },
-    {
-      "name": "cipher-meister",
-      "description": "Review architecture, code, and configurations for authentication, authorization (RBAC/ABAC), data protection, secrets management, input validation, dependency risks, and privacy compliance (minimization, retention). Provide defensive remediation strategies. Use when assessing security posture and risk.",
-      "slug": "cipher-meister",
-      "role": "Security and privacy auditor",
-      "primary_use": "Defensive review, RBAC, data protection, sensitive data handling",
-      "avoid_when": "Offensive or destructive testing is needed",
-      "activation_level": "Specialist",
-      "depends_on": "None",
-      "output_formats": ["Compact", "Full"],
-      "skill_path": "skills/cipher-meister/SKILL.md",
-      "icon_path": "assets/icons/cipher-meister.png"
-    },
-    {
-      "name": "hidden-dagger",
-      "description": "Perform authorized, controlled resilience, boundary, fuzz, and negative pressure testing. Challenge guardrails, input validation, and failure modes to find unhandled exceptions and security flaws. Use ONLY when explicit authorization, environment safety, and rollback capability are confirmed.",
-      "slug": "hidden-dagger",
-      "role": "Controlled resilience tester",
-      "primary_use": "Destructive, negative, fuzz, adversarial QA, failure-mode testing",
-      "avoid_when": "Operating in production, lacking explicit approval, or during early dev",
-      "activation_level": "Gated",
-      "depends_on": "amalgam-conductor",
-      "output_formats": ["Output"],
-      "skill_path": "skills/hidden-dagger/SKILL.md",
-      "icon_path": "assets/icons/hidden-dagger.png"
-    }
-  ]
+    "_notice":  "EXAMPLE ONLY. This framework is Markdown-first. Plugin support does not currently exist.",
+    "skills":  [
+                   {
+                       "primary_use":  "Test strategy, test cases, defect triage, regression, release readiness",
+                       "slug":  "acme-overseer",
+                       "description":  "Review quality assurance, test strategy and plans, test cases, acceptance criteria, requirements testability, unit/integration/system/user-acceptance testing, smoke and regression planning, defect triage, verification and validation evidence, CI test workflows, quality gates, release readiness, and quality documentation. Use when project quality or readiness must be assessed from available evidence.",
+                       "avoid_when":  "Destructive pressure testing is needed",
+                       "skill_path":  "skills/acme-overseer/SKILL.md",
+                       "role":  "Quality assurance auditor and release gatekeeper",
+                       "name":  "acme-overseer",
+                       "activation_level":  "Specialist",
+                       "depends_on":  "None",
+                       "icon_path":  "assets/icons/acme-overseer.png",
+                       "output_formats":  [
+                                              "Compact",
+                                              "Full"
+                                          ]
+                   },
+                   {
+                       "primary_use":  "Project orientation, multi-skill routing, workflow planning",
+                       "slug":  "amalgam-conductor",
+                       "description":  "Amalgam Conductor is the routing and orchestration layer of the Orchestra of Amalgamation. Use it for project orientation, multi-skill routing, workflow planning, readiness reviews, or deciding which specialist should handle UI/UX, documentation, diagrams, databases, QA, security/privacy, or gated resilience testing. It chooses the smallest effective skill stack, sequences work by dependency, controls token usage, prevents duplicate reviews, and protects projects from unnecessary or risky actions.",
+                       "avoid_when":  "A single obvious specialist suffices",
+                       "skill_path":  "skills/amalgam-conductor/SKILL.md",
+                       "role":  "Routing and orchestration layer",
+                       "name":  "amalgam-conductor",
+                       "activation_level":  "Commander",
+                       "depends_on":  "None",
+                       "icon_path":  "assets/icons/amalgam-conductor.png",
+                       "output_formats":  [
+                                              "Routing Plan",
+                                              "Prompts"
+                                          ]
+                   },
+                   {
+                       "primary_use":  "Defensive review, RBAC, data protection, sensitive data handling",
+                       "slug":  "cipher-meister",
+                       "description":  "Perform defensive, evidence-based security and privacy review, documentation, evidence synthesis, threat review, and remediation planning. Use when the user asks about application or API security, privacy, data protection, authentication, authorization, RBAC, sessions, secrets, sensitive-data handling, classification, minimization, retention, logging, dependencies, supply chain, secure SDLC, privacy risk, or security/privacy documentation gaps. Do not use for offensive or destructive testing.",
+                       "avoid_when":  "Offensive or destructive testing is needed",
+                       "skill_path":  "skills/cipher-meister/SKILL.md",
+                       "role":  "Security and privacy auditor",
+                       "name":  "cipher-meister",
+                       "activation_level":  "Specialist",
+                       "depends_on":  "None",
+                       "icon_path":  "assets/icons/cipher-meister.png",
+                       "output_formats":  [
+                                              "Compact",
+                                              "Full"
+                                          ]
+                   },
+                   {
+                       "primary_use":  "UI, UX, accessibility, frontend architecture, responsive layout",
+                       "slug":  "cloak-meister",
+                       "description":  "Review and improve the visible and experiential layer of software systems, including UI, UX, accessibility, visual hierarchy, frontend architecture, dashboards, JavaFX screens, React/HTML/CSS components, design systems, responsive layouts, user flows, information architecture, interaction design, forms, component consistency, and frontend implementation guidance. Use for evidence-based interface audits and practical visible-layer improvements.",
+                       "avoid_when":  "Database schema or system architecture diagraming is needed",
+                       "skill_path":  "skills/cloak-meister/SKILL.md",
+                       "role":  "UI/UX architect and frontend auditor",
+                       "name":  "cloak-meister",
+                       "activation_level":  "Specialist",
+                       "depends_on":  "None",
+                       "icon_path":  "assets/icons/cloak-meister.png",
+                       "output_formats":  "Output"
+                   },
+                   {
+                       "primary_use":  "Destructive, negative, fuzz, adversarial QA, failure-mode testing",
+                       "slug":  "hidden-dagger",
+                       "description":  "Use only when the user explicitly requests controlled destructive testing, negative testing, fuzz testing, adversarial QA, boundary or failure-mode testing, guardrail or crash testing, invalid-input testing, database constraint stress testing, resilience testing, or pre-production pressure testing. Do not invoke automatically. Operate only on authorized, non-production systems with a completed safety gate and explicit approval for risky execution.",
+                       "avoid_when":  "Operating in production, lacking explicit approval, or during early dev",
+                       "skill_path":  "skills/hidden-dagger/SKILL.md",
+                       "role":  "Controlled resilience tester",
+                       "name":  "hidden-dagger",
+                       "activation_level":  "Gated",
+                       "depends_on":  "amalgam-conductor",
+                       "icon_path":  "assets/icons/hidden-dagger.png",
+                       "output_formats":  "Output"
+                   },
+                   {
+                       "primary_use":  "Schemas, ERDs, constraints, migrations, SQL validation",
+                       "slug":  "meister-chronicler",
+                       "description":  "Review, document, and improve database architecture, schemas, ERDs, tables, columns, keys, constraints, indexes, normalization, reference and seed data, migrations, stored procedures, views, audit tables, reporting tables, SQL, data dictionaries, integration documentation, and database testing plans. Use when database facts must be validated against schema, migration, dump, live metadata, or project requirements.",
+                       "avoid_when":  "Evaluating visible UI or system-level testing",
+                       "skill_path":  "skills/meister-chronicler/SKILL.md",
+                       "role":  "Database architect and schema auditor",
+                       "name":  "meister-chronicler",
+                       "activation_level":  "Specialist",
+                       "depends_on":  "None",
+                       "icon_path":  "assets/icons/meister-chronicler.png",
+                       "output_formats":  [
+                                              "Compact",
+                                              "Full"
+                                          ]
+                   },
+                   {
+                       "primary_use":  "UML, ERD, architecture, workflow, data-flow diagrams",
+                       "slug":  "meister-weaver",
+                       "description":  "Create, review, correct, and document UML class, use case, sequence, activity, state, component, deployment, ERD, database relationship, system architecture, layered architecture, data-flow, workflow, process, user-flow, and feature-interaction diagrams. Use when a diagram must accurately reflect project objectives, system behavior, data relationships, implementation boundaries, or supplied source evidence.",
+                       "avoid_when":  "Resolving UI accessibility or evaluating functional code without diagrams",
+                       "skill_path":  "skills/meister-weaver/SKILL.md",
+                       "role":  "Visual modeling and diagram specialist",
+                       "name":  "meister-weaver",
+                       "activation_level":  "Specialist",
+                       "depends_on":  "None",
+                       "icon_path":  "assets/icons/meister-weaver.png",
+                       "output_formats":  [
+                                              "Compact",
+                                              "Full"
+                                          ]
+                   },
+                   {
+                       "primary_use":  "READMEs, project reports, readiness summaries, handover docs",
+                       "slug":  "scribe-meister",
+                       "description":  "Audit, compile, organize, and improve software project documentation, including READMEs, requirements, setup and user guides, architecture summaries, testing documentation, system readiness reports, implementation summaries, design or decision logs, milestone reports, and final submission materials. Use when documentation must align with a project objective, available evidence, technical standards, portfolio goals, or formal delivery requirements.",
+                       "avoid_when":  "Source evidence is unavailable to verify claims",
+                       "skill_path":  "skills/scribe-meister/SKILL.md",
+                       "role":  "Documentation compiler and auditor",
+                       "name":  "scribe-meister",
+                       "activation_level":  "Specialist",
+                       "depends_on":  "None",
+                       "icon_path":  "assets/icons/scribe-meister.png",
+                       "output_formats":  [
+                                              "Compact",
+                                              "Full"
+                                          ]
+                   }
+               ]
 }

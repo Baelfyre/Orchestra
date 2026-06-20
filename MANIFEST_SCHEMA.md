@@ -22,3 +22,9 @@ A future loader might generate a JSON file (e.g., `plugin-manifest.json`) using 
 - `icon_path`: The relative path to the skill's visual icon.
 
 By maintaining this structured YAML metadata directly inside the `SKILL.md` files, the repository ensures zero drift between the human-readable Markdown documentation and any future machine-readable JSON manifests.
+
+## Manifest verification
+
+- The YAML frontmatter in each `SKILL.md` is the **absolute source of truth**.
+- The `examples/plugin-manifest.example.json` file must match the frontmatter exactly.
+- The `scripts/validate-manifest.ps1` script explicitly verifies the example JSON manifest against the live skill metadata, preventing documentation drift.
