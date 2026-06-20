@@ -168,8 +168,6 @@ Licensed under the MIT License. See [LICENSE](LICENSE).
 
 ## External inspiration and plugin disclaimer
 
-[Ponytail](https://github.com/DietrichGebert/ponytail) and Caveman are external tools. They are not part of this repository and must be installed separately from their official sources if desired.
+[Ponytail](https://github.com/DietrichGebert/ponytail) and [Caveman](https://github.com/juliusbrussee/caveman) are external tools. They are not part of this repository and must be installed separately from their official sources if desired.
 
 This repository is inspired only by the general idea of clear, focused, and low-filler review behavior. It does not bundle, copy, vendor, or install those external tools.
-
-The official Caveman source link should be added here once it has been verified.
