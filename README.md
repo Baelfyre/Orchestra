@@ -4,9 +4,15 @@
   <p>A portable Markdown-based framework for coordinating specialized AI workflows across review, documentation, diagrams, database work, QA, security, and gated resilience testing.</p>
 </div>
 
+## About
+
+Amalgamatic Orchestra is a portable AI workflow framework for coordinating specialist instruction files across different AI coding and review environments. It is designed to help an AI assistant route work to the right specialist, keep outputs focused, and preserve clear ownership across documentation, UI/UX, diagrams, database work, QA, security, and gated resilience testing.
+
+The framework is Markdown-first so the core instructions can remain reusable across tools. Tool-specific adapters or plugins can be added later, but the repository does not depend on a single AI platform or plugin system.
+
 ## What this repository is
 
-Amalgamatic Orchestra is a portable AI workflow framework. It uses reusable Markdown instruction files to guide AI assistants through specialized project tasks while keeping responsibilities clear and separated.
+Amalgamatic Orchestra uses reusable Markdown instruction files to guide AI assistants through specialized project tasks while keeping responsibilities clear and separated.
 
 The goal is to make AI-assisted project work easier to route, review, and verify. Instead of relying on one broad prompt for every task, this framework coordinates focused specialists. For example, one specialist handles UI/UX review, another handles documentation, another handles database review, and another handles QA readiness.
 
@@ -20,16 +26,40 @@ It also does not include private project context, external plugins, or permissio
 
 ## Skills included
 
-| Skill | Purpose | Use when |
-|---|---|---|
-| [Amalgam Conductor](skills/amalgam-conductor/SKILL.md) | Routes work to the correct specialist skill | The task needs sequencing, multiple skill owners, or unclear responsibility |
-| [Cloak Meister](skills/cloak-meister/SKILL.md) | Reviews user-facing software | You need UI, UX, accessibility, layout, forms, dashboards, or responsive design review |
-| [Scribe Meister](skills/scribe-meister/SKILL.md) | Reviews and improves documentation | You need README files, reports, audits, handoffs, or technical writing |
-| [Meister Weaver](skills/meister-weaver/SKILL.md) | Reviews and creates visual models | You need UML, ERD visuals, architecture diagrams, workflows, or process diagrams |
-| [Meister Chronicler](skills/meister-chronicler/SKILL.md) | Reviews database design and evidence | You need schema, SQL, constraints, seed data, migrations, or database documentation reviewed |
-| [Acme Overseer](skills/acme-overseer/SKILL.md) | Reviews QA and release readiness | You need test plans, defects, validation, regression checks, or release-readiness review |
-| [Cipher Meister](skills/cipher-meister/SKILL.md) | Reviews security and privacy evidence | You need defensive review of authentication, RBAC, secrets, sensitive data, dependencies, or remediation |
-| [Hidden Dagger](skills/hidden-dagger/SKILL.md) | Plans gated resilience and negative testing | You have explicit approval for non-production pressure testing, boundary testing, fuzz testing, or failure-mode review |
+<table>
+  <tr>
+    <td align="center" width="100"><img src="assets/icons/amalgam-conductor.png" alt="Amalgam Conductor" width="80" /><br /><b><a href="skills/amalgam-conductor/SKILL.md">Amalgam Conductor</a></b></td>
+    <td><b>Use for:</b> Routing, sequencing, overlap control, and token efficiency<br /><b>Not for:</b> Replacing domain specialists</td>
+  </tr>
+  <tr>
+    <td align="center" width="100"><img src="assets/icons/cloak-meister.png" alt="Cloak Meister" width="80" /><br /><b><a href="skills/cloak-meister/SKILL.md">Cloak Meister</a></b></td>
+    <td><b>Use for:</b> UI/UX, accessibility, frontend layout, dashboards, forms, responsiveness<br /><b>Not for:</b> Database or system-diagram ownership</td>
+  </tr>
+  <tr>
+    <td align="center" width="100"><img src="assets/icons/scribe-meister.png" alt="Scribe Meister" width="80" /><br /><b><a href="skills/scribe-meister/SKILL.md">Scribe Meister</a></b></td>
+    <td><b>Use for:</b> Documentation audits, reports, README files, readiness documents, technical writing<br /><b>Not for:</b> Inventing technical facts</td>
+  </tr>
+  <tr>
+    <td align="center" width="100"><img src="assets/icons/meister-weaver.png" alt="Meister Weaver" width="80" /><br /><b><a href="skills/meister-weaver/SKILL.md">Meister Weaver</a></b></td>
+    <td><b>Use for:</b> UML, use cases, ERD visuals, architecture, workflow, and process diagrams<br /><b>Not for:</b> Database semantics without a database source</td>
+  </tr>
+  <tr>
+    <td align="center" width="100"><img src="assets/icons/meister-chronicler.png" alt="Meister Chronicler" width="80" /><br /><b><a href="skills/meister-chronicler/SKILL.md">Meister Chronicler</a></b></td>
+    <td><b>Use for:</b> Schema, constraints, SQL, seeds, migrations, dictionaries, database documentation<br /><b>Not for:</b> UI review</td>
+  </tr>
+  <tr>
+    <td align="center" width="100"><img src="assets/icons/acme-overseer.png" alt="Acme Overseer" width="80" /><br /><b><a href="skills/acme-overseer/SKILL.md">Acme Overseer</a></b></td>
+    <td><b>Use for:</b> QA, tests, defects, verification, validation, regression, and release readiness<br /><b>Not for:</b> Destructive pressure testing by default</td>
+  </tr>
+  <tr>
+    <td align="center" width="100"><img src="assets/icons/cipher-meister.png" alt="Cipher Meister" width="80" /><br /><b><a href="skills/cipher-meister/SKILL.md">Cipher Meister</a></b></td>
+    <td><b>Use for:</b> Security/privacy evidence, auth, RBAC, secrets, sensitive data, dependencies, remediation<br /><b>Not for:</b> Offensive or destructive testing</td>
+  </tr>
+  <tr>
+    <td align="center" width="100"><img src="assets/icons/hidden-dagger.png" alt="Hidden Dagger" width="80" /><br /><b><a href="skills/hidden-dagger/SKILL.md">Hidden Dagger</a></b></td>
+    <td><b>Use for:</b> Approved destructive, negative, fuzz, boundary, failure-mode, guardrail, and resilience testing<br /><b>Not for:</b> Automatic, production, or unauthorized testing</td>
+  </tr>
+</table>
 
 See [SKILL_INDEX.md](SKILL_INDEX.md) for the full skill index, activation level, and expected output for each skill.
 
@@ -51,8 +81,8 @@ If the task is obvious, use the correct specialist directly.
 Clone or download this repository.
 
 ```sh
-git clone <approved-repository-url> orchestra-of-amalgamation
-cd orchestra-of-amalgamation
+git clone https://github.com/Baelfyre/Amalgamatic-Orchestra.git
+cd Amalgamatic-Orchestra
 ```
 
 Then copy only the skill folders you need from `skills/` into the instruction or skill location supported by your AI environment.
