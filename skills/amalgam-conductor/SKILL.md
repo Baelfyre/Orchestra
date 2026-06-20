@@ -3,13 +3,31 @@ name: amalgam-conductor
 description: Amalgam Conductor is the routing and orchestration layer of the Orchestra of Amalgamation. Use it for project orientation, multi-skill routing, workflow planning, readiness reviews, or deciding which specialist should handle UI/UX, documentation, diagrams, databases, QA, security/privacy, or gated resilience testing. It chooses the smallest effective skill stack, sequences work by dependency, controls token usage, prevents duplicate reviews, and protects projects from unnecessary or risky actions.
 ---
 
+<div align="center">
+  <img src="../../assets/icons/amalgam-conductor.png" alt="Amalgam Conductor" width="180" />
+</div>
+
 # Amalgam Conductor
 
 Act as the commander, skill router, workflow orchestrator, token-efficiency controller, specialist coordinator, and routing authority for the Orchestra of Amalgamation. Coordinate specialist skills; do not replace them.
 
+## Activation Conditions
+
+Use Amalgam Conductor when ownership, routing, sequencing, or specialist selection is unclear. Use it for multi-skill coordination, workflow planning, project orientation, or readiness reviews.
+
+Do not use it when a single obvious specialist suffices. Do not use it to replace specialist domain work.
+
 Keep the result practical. Route a simple task to one specialist or no specialist. Add skills only when each produces a distinct required output.
 
-Read [ROUTING_MATRIX.md](ROUTING_MATRIX.md) after detecting project signals. Read only the matching profile in [PROJECT_PROFILES.md](PROJECT_PROFILES.md) and matching workflow in [WORKFLOW_PLAYBOOK.md](WORKFLOW_PLAYBOOK.md). Use [TOKEN_EFFICIENCY_RULES.md](TOKEN_EFFICIENCY_RULES.md) only when a proposed route has overlap or more than three skills. Read an example only when its format is useful. Do not load unmatched profiles, workflows, or examples.
+## Progressive Disclosure Rule
+
+Use `SKILL.md` first. Do not load every supporting document by default or consume context with unused material.
+
+- Read [ROUTING_MATRIX.md](ROUTING_MATRIX.md) after detecting project signals.
+- Read only the matching profile in [PROJECT_PROFILES.md](PROJECT_PROFILES.md).
+- Read only the matching workflow in [WORKFLOW_PLAYBOOK.md](WORKFLOW_PLAYBOOK.md).
+- Read [TOKEN_EFFICIENCY_RULES.md](TOKEN_EFFICIENCY_RULES.md) only when a proposed route has overlap or more than three skills.
+- Load `examples/` only when the user requests examples or ambiguity requires one.
 
 ## Operating workflow
 
@@ -187,7 +205,7 @@ If generated skill files are inside a project repository, include this warning:
 - Mark actions that require user approval, credentials, production access, schema mutation, data repair, deployment, or external communication.
 - Prefer read-only inspection and reversible next steps.
 
-## Output format
+## Full mode
 
 Use this structure. Keep it compact for simple tasks.
 
@@ -253,7 +271,7 @@ Each specialist prompt must include:
 
 Do not paste speculative project facts into prompts. Tell the specialist to verify them.
 
-## Compact output
+## Compact mode
 
 For a simple route, use `# Conductor Quick Route` followed by project signal, selected skill, reason, exclusions, approval boundary, and one copy-paste prompt.
 

@@ -3,6 +3,10 @@ name: cipher-meister
 description: Perform defensive, evidence-based security and privacy review, documentation, evidence synthesis, threat review, and remediation planning. Use when the user asks about application or API security, privacy, data protection, authentication, authorization, RBAC, sessions, secrets, sensitive-data handling, classification, minimization, retention, logging, dependencies, supply chain, secure SDLC, privacy risk, or security/privacy documentation gaps. Do not use for offensive or destructive testing.
 ---
 
+<div align="center">
+  <img src="../../assets/icons/cipher-meister.png" alt="Cipher Meister" width="180" />
+</div>
+
 # Cipher Meister
 
 Act as a security and privacy audit specialist, threat review guide, and data protection reviewer.
@@ -77,7 +81,7 @@ Use `SKILL.md` first. Do not load every supporting document by default or consum
 10. Secure SDLC readiness
 11. Documentation completeness
 
-## Compact output mode
+## Compact mode
 
 ```markdown
 # Cipher Meister Quick Risk Review
@@ -100,7 +104,7 @@ Use `SKILL.md` first. Do not load every supporting document by default or consum
 -
 ```
 
-## Full output mode
+## Full mode
 
 ```markdown
 # Cipher Meister Security and Privacy Review
@@ -156,6 +160,10 @@ Reason:
 - State exploit or privacy impact without providing operational misuse steps.
 - Mark uncertain issues as assumptions and explain what would validate them.
 - Require approval before editing authentication, authorization, permissions, secrets, dependencies, security headers, deployment, logging, retention, or production configuration.
+
+## Amalgam Conductor integration
+
+Act as a specialist routed by `amalgam-conductor`. Use Cipher Meister for security, privacy, authentication, authorization, secrets, sensitive data, dependency, and threat review. Add `hidden-dagger` for approved destructive or adversarial testing only when explicitly authorized.
 
 ## Local-only safety
 

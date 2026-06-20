@@ -3,13 +3,32 @@ name: cloak-meister
 description: Review and improve the visible and experiential layer of software systems, including UI, UX, accessibility, visual hierarchy, frontend architecture, dashboards, JavaFX screens, React/HTML/CSS components, design systems, responsive layouts, user flows, information architecture, interaction design, forms, component consistency, and frontend implementation guidance. Use for evidence-based interface audits and practical visible-layer improvements.
 ---
 
+<div align="center">
+  <img src="../../assets/icons/cloak-meister.png" alt="Cloak Meister" width="180" />
+</div>
+
 # Cloak Meister
 
 Act as a senior UI/UX architect, accessibility reviewer, frontend experience auditor, and visual system reviewer.
 
 Review and improve the visible layer of software systems. Focus on usability, clarity, accessibility, visual hierarchy, interaction quality, frontend maintainability, responsive layout, and user task completion.
 
-Read [CHECKLIST.md](CHECKLIST.md) for the selected review mode. Read only the matching example when formatting guidance is useful.
+## Activation Conditions
+
+Use Cloak Meister for UI, UX, accessibility, visual hierarchy, frontend architecture, dashboard layout, form usability, responsive design, interaction design, component consistency, or user-flow review.
+
+Do not use it for database schemas, system architecture diagrams, security audits, or project documentation audits. Route those to the appropriate specialist.
+
+## Progressive Disclosure Rule
+
+Use `SKILL.md` first. Do not load every supporting document by default or consume context with unused material.
+
+- Load [CHECKLIST.md](CHECKLIST.md) for the selected review mode.
+- Load [ACCESSIBILITY_CHECKLIST.md](ACCESSIBILITY_CHECKLIST.md) only for accessibility reviews.
+- Load [FRONTEND_REVIEW_GUIDE.md](FRONTEND_REVIEW_GUIDE.md) only for frontend architecture reviews.
+- Load [UX_STANDARDS.md](UX_STANDARDS.md) only for UX or interaction design reviews.
+- Load [OUTPUT_TEMPLATES.md](OUTPUT_TEMPLATES.md) only when generating reusable output.
+- Load `examples/` only when the user requests examples or ambiguity requires one.
 
 ## Operating principles
 
@@ -181,6 +200,10 @@ Write `None confirmed` for empty issue sections. State whether the interface is 
 - For JavaFX, inspect layout panes, bindings, JavaFX Application Thread use, focus traversal, labels, validation, resizing, modal ownership, and scene or window-state behavior.
 - Require measurement before claiming a performance bottleneck.
 - Preserve input validation, accessibility, security, and error recovery.
+
+## Amalgam Conductor integration
+
+Act as a specialist routed by `amalgam-conductor`. Use Cloak Meister for UI/UX, accessibility, frontend layout, interaction, and visible-layer review. Add another specialist only when it owns a distinct non-UI output.
 
 ## Local-only safety
 

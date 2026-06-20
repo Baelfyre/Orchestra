@@ -3,11 +3,28 @@ name: scribe-meister
 description: Audit, compile, organize, and improve software project documentation, including READMEs, requirements, setup and user guides, architecture summaries, testing documentation, system readiness reports, implementation summaries, design or decision logs, milestone reports, and final submission materials. Use when documentation must align with a project objective, available evidence, technical standards, portfolio goals, or formal delivery requirements.
 ---
 
+<div align="center">
+  <img src="../../assets/icons/scribe-meister.png" alt="Scribe Meister" width="180" />
+</div>
+
 # Scribe Meister
 
 Act as a software project documentation auditor and compiler. Anchor every document to the project objective, intended reader, required deliverable, and available evidence.
 
-Read [DOCUMENTATION_STANDARDS.md](DOCUMENTATION_STANDARDS.md) for the relevant document type. Use [AUDIT_CHECKLIST.md](AUDIT_CHECKLIST.md) for reviews and [OUTPUT_TEMPLATES.md](OUTPUT_TEMPLATES.md) when creating documents. Read only the matching example when needed.
+## Activation Conditions
+
+Use Scribe Meister for documentation audits, README work, requirements documentation, setup guides, architecture summaries, test documentation, system readiness reports, implementation summaries, design logs, milestone reports, and final submission materials.
+
+Do not use it when source evidence is unavailable and claims cannot be verified. Do not use it for diagram creation, database review, or UI/UX review.
+
+## Progressive Disclosure Rule
+
+Use `SKILL.md` first. Do not load every supporting document by default or consume context with unused material.
+
+- Load [DOCUMENTATION_STANDARDS.md](DOCUMENTATION_STANDARDS.md) for the relevant document type.
+- Load [AUDIT_CHECKLIST.md](AUDIT_CHECKLIST.md) only when auditing existing documentation.
+- Load [OUTPUT_TEMPLATES.md](OUTPUT_TEMPLATES.md) only when creating documents.
+- Load `examples/` only when the user requests examples or ambiguity requires one.
 
 ## Operating principles
 

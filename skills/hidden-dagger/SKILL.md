@@ -3,6 +3,10 @@ name: hidden-dagger
 description: Use only when the user explicitly requests controlled destructive testing, negative testing, fuzz testing, adversarial QA, boundary or failure-mode testing, guardrail or crash testing, invalid-input testing, database constraint stress testing, resilience testing, or pre-production pressure testing. Do not invoke automatically. Operate only on authorized, non-production systems with a completed safety gate and explicit approval for risky execution.
 ---
 
+<div align="center">
+  <img src="../../assets/icons/hidden-dagger.png" alt="Hidden Dagger" width="180" />
+</div>
+
 # Hidden Dagger
 
 Act as a controlled adversarial QA specialist and resilience tester. Find weak validation, hidden failure paths, missing guardrails, database integrity gaps, backend error-handling weaknesses, UI and API validation gaps, and recovery risks before release.
@@ -102,6 +106,26 @@ Use 0 to 100: 90-100 strong with minor gaps; 75-89 generally strong with targete
 
 Weight critical workflow impact, safety, data integrity, security and privacy, likelihood, severity, and recovery difficulty. Mark scores provisional when evidence is incomplete.
 
+## Amalgam Conductor integration
+
+Act as a gated specialist routed by `amalgam-conductor`. Amalgam Conductor may recommend Hidden Dagger when a project is mature enough for pressure testing, but invocation requires the user to choose it explicitly. Do not activate automatically. All safety gates must pass before execution begins.
+
 ## Reference handling
 
 Use public ISO, IEEE, ISTQB, OWASP, NIST, and CWE materials as learning anchors. Summarize public concepts without copying restricted standards. Say "aligned with general testing and security principles," not "compliant," unless formal evidence establishes compliance.
+
+## Local-only safety
+
+- Keep skill files, prompts, test plans, safety-gate records, and generated test artifacts local unless repository tracking is approved.
+- Do not initialize Git, stage, commit, push, create a pull request, or modify `.gitignore`.
+- Prefer `.git/info/exclude` only if approved repo-local placement becomes necessary.
+- Never commit credentials, test data containing personal information, or safety-gate records to a shared repository.
+
+## Examples
+
+- [API fuzzing review](examples/api-fuzzing-review-example.md)
+- [Backend error path testing](examples/backend-error-path-testing-example.md)
+- [Database constraint testing](examples/database-constraint-testing-example.md)
+- [Destructive test report](examples/destructive-test-report-example.md)
+- [Full system resilience review](examples/full-system-resilience-review-example.md)
+- [UI negative testing](examples/ui-negative-testing-example.md)

@@ -1,6 +1,8 @@
-# Orchestra of Amalgamation
-
-A Markdown-first suite of eight specialist AI instructions for routing, review, documentation, diagrams, databases, quality, security/privacy, and gated resilience testing.
+<div align="center">
+  <img src="assets/logo/orchestra-of-amalgamation.png" alt="Orchestra of Amalgamation" width="280" />
+  <h1>Orchestra of Amalgamation</h1>
+  <p>A Markdown-first suite of eight specialist AI instructions for routing, review, documentation, diagrams, databases, quality, security/privacy, and gated resilience testing.</p>
+</div>
 
 ## What this repository is
 
@@ -15,16 +17,40 @@ The repository packages reusable instruction files and adapter guides. Amalgam C
 
 ## Skills
 
-| Skill | Use for | Do not use for |
-|---|---|---|
-| [Amalgam Conductor](skills/amalgam-conductor/SKILL.md) | Routing, sequencing, overlap control, and token efficiency | Replacing domain specialists |
-| [Cloak Meister](skills/cloak-meister/SKILL.md) | UI/UX, accessibility, frontend layout, dashboards, forms, responsiveness | Database or system-diagram ownership |
-| [Scribe Meister](skills/scribe-meister/SKILL.md) | Documentation audits, reports, README files, readiness documents, technical writing | Inventing technical facts |
-| [Meister Weaver](skills/meister-weaver/SKILL.md) | UML, use cases, ERD visuals, architecture, workflow, and process diagrams | Database semantics without a database source |
-| [Meister Chronicler](skills/meister-chronicler/SKILL.md) | Schema, constraints, SQL, seeds, migrations, dictionaries, database documentation | UI review |
-| [Acme Overseer](skills/acme-overseer/SKILL.md) | QA, tests, defects, verification, validation, regression and release readiness | Destructive pressure testing by default |
-| [Cipher Meister](skills/cipher-meister/SKILL.md) | Security/privacy evidence, auth, RBAC, secrets, sensitive data, dependencies, remediation | Offensive or destructive testing |
-| [Hidden Dagger](skills/hidden-dagger/SKILL.md) | Approved destructive, negative, fuzz, boundary, failure-mode, guardrail, and resilience testing | Automatic, production, or unauthorized testing |
+<table>
+  <tr>
+    <td align="center" width="100"><img src="assets/icons/amalgam-conductor.png" alt="Amalgam Conductor" width="80" /><br /><b><a href="skills/amalgam-conductor/SKILL.md">Amalgam Conductor</a></b></td>
+    <td><b>Use for:</b> Routing, sequencing, overlap control, and token efficiency<br /><b>Not for:</b> Replacing domain specialists</td>
+  </tr>
+  <tr>
+    <td align="center" width="100"><img src="assets/icons/cloak-meister.png" alt="Cloak Meister" width="80" /><br /><b><a href="skills/cloak-meister/SKILL.md">Cloak Meister</a></b></td>
+    <td><b>Use for:</b> UI/UX, accessibility, frontend layout, dashboards, forms, responsiveness<br /><b>Not for:</b> Database or system-diagram ownership</td>
+  </tr>
+  <tr>
+    <td align="center" width="100"><img src="assets/icons/scribe-meister.png" alt="Scribe Meister" width="80" /><br /><b><a href="skills/scribe-meister/SKILL.md">Scribe Meister</a></b></td>
+    <td><b>Use for:</b> Documentation audits, reports, README files, readiness documents, technical writing<br /><b>Not for:</b> Inventing technical facts</td>
+  </tr>
+  <tr>
+    <td align="center" width="100"><img src="assets/icons/meister-weaver.png" alt="Meister Weaver" width="80" /><br /><b><a href="skills/meister-weaver/SKILL.md">Meister Weaver</a></b></td>
+    <td><b>Use for:</b> UML, use cases, ERD visuals, architecture, workflow, and process diagrams<br /><b>Not for:</b> Database semantics without a database source</td>
+  </tr>
+  <tr>
+    <td align="center" width="100"><img src="assets/icons/meister-chronicler.png" alt="Meister Chronicler" width="80" /><br /><b><a href="skills/meister-chronicler/SKILL.md">Meister Chronicler</a></b></td>
+    <td><b>Use for:</b> Schema, constraints, SQL, seeds, migrations, dictionaries, database documentation<br /><b>Not for:</b> UI review</td>
+  </tr>
+  <tr>
+    <td align="center" width="100"><img src="assets/icons/acme-overseer.png" alt="Acme Overseer" width="80" /><br /><b><a href="skills/acme-overseer/SKILL.md">Acme Overseer</a></b></td>
+    <td><b>Use for:</b> QA, tests, defects, verification, validation, regression and release readiness<br /><b>Not for:</b> Destructive pressure testing by default</td>
+  </tr>
+  <tr>
+    <td align="center" width="100"><img src="assets/icons/cipher-meister.png" alt="Cipher Meister" width="80" /><br /><b><a href="skills/cipher-meister/SKILL.md">Cipher Meister</a></b></td>
+    <td><b>Use for:</b> Security/privacy evidence, auth, RBAC, secrets, sensitive data, dependencies, remediation<br /><b>Not for:</b> Offensive or destructive testing</td>
+  </tr>
+  <tr>
+    <td align="center" width="100"><img src="assets/icons/hidden-dagger.png" alt="Hidden Dagger" width="80" /><br /><b><a href="skills/hidden-dagger/SKILL.md">Hidden Dagger</a></b></td>
+    <td><b>Use for:</b> Approved destructive, negative, fuzz, boundary, failure-mode, guardrail, and resilience testing<br /><b>Not for:</b> Automatic, production, or unauthorized testing</td>
+  </tr>
+</table>
 
 See [SKILL_INDEX.md](SKILL_INDEX.md) for activation levels and output details.
 
@@ -72,7 +98,8 @@ Run either structure validator, then the stale-reference check:
 ```
 
 ```sh
-./scripts/validate-structure.sh
+sh ./scripts/validate-structure.sh
+sh ./scripts/check-stale-references.sh
 ```
 
 See [VALIDATION.md](VALIDATION.md) for the complete checklist.
@@ -83,7 +110,7 @@ Read [CONTRIBUTING.md](CONTRIBUTING.md), [ROADMAP.md](ROADMAP.md), and [CHANGELO
 
 ## License
 
-No public-release license has been selected. See [LICENSE](LICENSE).
+Licensed under the MIT License. See [LICENSE](LICENSE).
 
 ## External plugin disclaimer
 

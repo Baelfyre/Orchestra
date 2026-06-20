@@ -5,7 +5,8 @@ param(
 $requiredRoot = @(
     'README.md','LICENSE','.gitignore','CONTRIBUTING.md','CHANGELOG.md',
     'SKILL_INDEX.md','FOUNDATION.md','INSTALLATION.md','LOCAL_ONLY_GUIDE.md',
-    'COMPATIBILITY.md','VALIDATION.md','ROADMAP.md'
+    'COMPATIBILITY.md','VALIDATION.md','ROADMAP.md',
+    'assets/logo/orchestra-of-amalgamation.png'
 )
 $skills = @(
     'amalgam-conductor','cloak-meister','scribe-meister','meister-weaver',
@@ -25,6 +26,9 @@ foreach ($file in $requiredRoot) {
 foreach ($skill in $skills) {
     $path = Join-Path $Root "skills/$skill/SKILL.md"
     if (-not (Test-Path -LiteralPath $path)) { $missing.Add("skills/$skill/SKILL.md") }
+
+    $icon = "assets/icons/$skill.png"
+    if (-not (Test-Path -LiteralPath (Join-Path $Root $icon))) { $missing.Add($icon) }
 }
 foreach ($adapter in $adapters) {
     $path = Join-Path $Root "adapters/$adapter"
