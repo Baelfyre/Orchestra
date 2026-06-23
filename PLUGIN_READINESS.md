@@ -1,25 +1,25 @@
 # Plugin Readiness
 
-This document tracks the readiness of the Amalgamatic Orchestra framework for its official release as the **Amalgam Conductor** installable plugin.
+This document tracks the readiness of the Amalgamatic Orchestra framework for its release as the **Amalgam Conductor** installable plugin.
 
 ## Status
 
-- **Installable structure status:** Ã¢Å“â€¦ Completed
+- **Installable structure status:** Completed
   - A root `plugin.json` manifest has been added.
   - The repository layout matches installable plugin expectations.
-- **Command exposure status:** Ã¢Å“â€¦ Completed
+- **Command exposure status:** Completed
   - Top-level `commands/` directory added with clean user-facing entry points (e.g. `amalgam-conductor`, `review-architecture`, `resilience-check`).
   - Commands accurately map to their respective specialized skills.
   - The `resilience-check` command explicitly requires a safety gate and user approval.
-- **Skill coverage status:** Ã¢Å“â€¦ Completed
+- **Skill coverage status:** Completed
   - All 9 core specialist skills are fully documented and integrated.
   - Handled by `plugin.json` skills array correctly.
-- **Validation status:** Ã¢Å“â€¦ Completed
-  - File structure and manifest consistency passed perfectly.
 - **Repository rename status:** Completed
   - GitHub repo has been renamed to `Baelfyre/amalgam-conductor`.
+- **Plugin install validation status:** Completed
+  - `agy plugin install https://github.com/Baelfyre/amalgam-conductor` successfully processed 9 skills and 9 commands.
 - **Remaining step:** Pending
-  - Run real plugin install validation using `agy plugin install https://github.com/Baelfyre/amalgam-conductor`.
+  - Add or refine the final plugin logo/icon if needed.
 
 ---
 
