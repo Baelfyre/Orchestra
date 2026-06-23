@@ -5,6 +5,8 @@
     "version": "1.0.0",
     "license": "MIT",
     "repository": "https://github.com/Baelfyre/amalgam-conductor",
+    "icon_path": "assets/icons/amalgam-conductor.png",
+    "logo_path": "assets/logo/orchestra-of-amalgamation.png",
     "safety_note": "The hidden-dagger skill and resilience-check command execute destructive, negative, fuzz, adversarial QA, and failure-mode testing. They require explicit user approval, non-production scope, and a safety gate before execution. WARNING: There is no automated runtime guardrail script. You must manually enforce safety gates.",
     "commands": [
         "amalgam-conductor",
