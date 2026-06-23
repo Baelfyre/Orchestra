@@ -1,7 +1,7 @@
 {
     "name": "amalgam-conductor",
     "display_name": "Amalgam Conductor",
-    "description": "A plugin for routing complex AI-assisted software work through focused specialist skills. Employs the Amalgamatic Orchestra framework.",
+    "description": "An installable AI workflow plugin that routes complex software tasks through focused specialist skills for architecture, UI/UX, documentation, diagrams, databases, QA, security, and gated resilience review.",
     "version": "1.0.0",
     "license": "MIT",
     "repository": "https://github.com/Baelfyre/amalgam-conductor",
