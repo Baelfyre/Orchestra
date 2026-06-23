@@ -10,6 +10,8 @@ Amalgam Conductor is an installable AI workflow plugin built on the Amalgamatic 
 
 The framework remains Markdown-first so the core instructions can stay reusable across tools. The plugin layer provides clean commands and skill discovery for supported plugin environments while the underlying Markdown files remain portable.
 
+The plugin uses the existing Amalgam Conductor icon at `assets/icons/amalgam-conductor.png`. The broader framework logo remains `assets/logo/orchestra-of-amalgamation.png`.
+
 ## What this repository is
 
 ## Codex compatibility
