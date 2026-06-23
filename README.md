@@ -1,14 +1,14 @@
 <div align="center">
   <img src="assets/logo/orchestra-of-amalgamation.png" alt="Amalgamatic Orchestra" width="280" />
-  <h1>Amalgamatic Orchestra</h1>
-  <p>A portable Markdown-based framework for coordinating specialized AI workflows across review, documentation, diagrams, database work, QA, security, and gated resilience testing.</p>
+  <h1>Amalgam Conductor</h1>
+  <p>An installable AI workflow plugin for routing complex software tasks through focused specialist skills.</p>
 </div>
 
 ## About
 
-Amalgamatic Orchestra is a portable AI workflow framework for coordinating specialist instruction files across different AI coding and review environments. It is designed to help an AI assistant route work to the right specialist, keep outputs focused, and preserve clear ownership across documentation, UI/UX, diagrams, database work, QA, security, and gated resilience testing.
+Amalgam Conductor is an installable AI workflow plugin built on the Amalgamatic Orchestra framework. It routes complex software tasks through focused specialist skills while preserving token efficiency, safety gates, and evidence-based review.
 
-The framework is Markdown-first so the core instructions can remain reusable across tools. Tool-specific adapters or plugins can be added later, but the repository does not depend on a single AI platform or plugin system.
+The framework remains Markdown-first so the core instructions can stay reusable across tools. The plugin layer provides clean commands and skill discovery for supported plugin environments while the underlying Markdown files remain portable.
 
 ## What this repository is
 
@@ -103,7 +103,7 @@ See [INSTALLATION.md](INSTALLATION.md) and [adapters/](adapters/README.md) for m
 
 ## Plugin support
 
-Amalgam Conductor acts as an installable plugin layer over the Amalgamatic Orchestra framework. It provides clean top-level commands to route tasks.
+Amalgam Conductor is an installable plugin layer over the Amalgamatic Orchestra framework. It provides clean top-level commands to route tasks.
 
 Manifest consistency can be checked with:
 `powershell -ExecutionPolicy Bypass -File .\scripts\validate-manifest.ps1`
@@ -128,61 +128,3 @@ See [COMPATIBILITY.md](COMPATIBILITY.md) for more details.
 Keep experimental AI instruction files separate from unrelated repositories.
 
 If local instruction files must live inside a project, use `.git/info/exclude` for machine-local exclusions. Use `.gitignore` only when the exclusion should apply to every clone of the repository.
-
-Before staging or committing changes, always check:
-
-```sh
-git status
-```
-
-## Test prompts
-
-Use these prompts to check whether each skill is being interpreted correctly:
-
-- Amalgam Conductor: `Use $amalgam-conductor to select the smallest skill stack for this task and explain the sequence.`
-- Cloak Meister: `Use $cloak-meister to review this interface for task completion, accessibility, and responsive layout.`
-- Scribe Meister: `Use $scribe-meister to audit this documentation against the supplied source files.`
-- Meister Weaver: `Use $meister-weaver to review this sequence diagram against the supplied workflow.`
-- Meister Chronicler: `Use $meister-chronicler to review this schema and migration for integrity and rollback risk.`
-- Acme Overseer: `Use $acme-overseer to assess this test plan, regression evidence, and release readiness.`
-- Cipher Meister: `Use $cipher-meister to review the supplied authentication, RBAC, secrets, and privacy evidence defensively.`
-- Hidden Dagger: `Use $hidden-dagger to create a safety-gated negative-testing plan for this non-production system. Do not execute tests.`
-- Clockwork Meister: `Use $clockwork-meister to review this codebase for OOP principles, layered architecture, and refactoring safety.`
-
-## Validation
-
-Run the structure validator, then run the stale-reference check.
-
-PowerShell:
-
-```powershell
-./scripts/validate-structure.ps1
-./scripts/check-stale-references.ps1
-```
-
-Shell:
-
-```sh
-sh ./scripts/validate-structure.sh
-sh ./scripts/check-stale-references.sh
-```
-
-See [VALIDATION.md](VALIDATION.md) for the complete checklist.
-
-## Contributing and roadmap
-
-Read the following files before proposing changes:
-
-- [CONTRIBUTING.md](CONTRIBUTING.md)
-- [ROADMAP.md](ROADMAP.md)
-- [CHANGELOG.md](CHANGELOG.md)
-
-## License
-
-Licensed under the MIT License. See [LICENSE](LICENSE).
-
-## External inspiration and plugin disclaimer
-
-[Ponytail](https://github.com/DietrichGebert/ponytail) and [Caveman](https://github.com/juliusbrussee/caveman) are external tools. They are not part of this repository and must be installed separately from their official sources if desired.
-
-This repository is inspired only by the general idea of clear, focused, and low-filler review behavior. It does not bundle, copy, vendor, or install those external tools.
