@@ -1,9 +1,13 @@
 param(
-    [string]$Root = (Split-Path -Parent $PSScriptRoot)
+    [string]$Root = (Split-Path -Parent $PSScriptRoot),
+    [string]$ManifestPath = ".\plugin.json"
 )
 
-$manifestPath = Join-Path $Root "examples/plugin-manifest.example.json"
-if (-not (Test-Path -LiteralPath $manifestPath)) {
+if (-not [System.IO.Path]::IsPathRooted($ManifestPath)) {
+    $ManifestPath = Join-Path $Root $ManifestPath
+}
+
+if (-not (Test-Path -LiteralPath $ManifestPath)) {
     Write-Error "Manifest file not found: $manifestPath"
     exit 1
 }

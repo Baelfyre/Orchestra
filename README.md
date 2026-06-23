@@ -88,26 +88,23 @@ Use this flow when deciding which skill to apply:
 
 If the task is obvious, use the correct specialist directly.
 
-## Installation summary
+## Installation
 
-Clone or download this repository.
+Amalgam Conductor can be installed directly as a plugin:
 
 ```sh
-git clone https://github.com/Baelfyre/Amalgamatic-Orchestra.git
-cd Amalgamatic-Orchestra
+agy plugin install https://github.com/Baelfyre/amalgam-conductor
 ```
 
-Then copy only the skill folders you need from `skills/` into the instruction or skill location supported by your AI environment.
+> **Note:** The current development remote is still `Baelfyre/Amalgamatic-Orchestra` until the repository is officially renamed. You may need to use `https://github.com/Baelfyre/Amalgamatic-Orchestra` for the time being.
 
-For Codex-compatible local skills, copy the selected skill folders into the configured local Codex skills directory.
-
-For tools that do not support local skill folders directly, use the Markdown files as workspace instructions, prompt references, or local context.
+You can also use the framework manually by copying the skill folders from `skills/` into your AI environment's instruction directory.
 
 See [INSTALLATION.md](INSTALLATION.md) and [adapters/](adapters/README.md) for more details.
 
-## Plugin readiness
+## Plugin support
 
-Amalgamatic Orchestra is Markdown-first. The metadata, routing map, and output format files are structured so future plugin loaders can support lazy loading. Plugin support is not required to use the framework, and the framework should not depend on any single runtime plugin system.
+Amalgam Conductor acts as an installable plugin layer over the Amalgamatic Orchestra framework. It provides clean top-level commands to route tasks.
 
 Manifest consistency can be checked with:
 `powershell -ExecutionPolicy Bypass -File .\scripts\validate-manifest.ps1`

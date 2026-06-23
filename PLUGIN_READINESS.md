@@ -1,5 +1,26 @@
 # Plugin Readiness
 
+This document tracks the readiness of the Amalgamatic Orchestra framework for its official release as the **Amalgam Conductor** installable plugin.
+
+## Status
+
+- **Installable structure status:** ✅ Completed
+  - A root `plugin.json` manifest has been added.
+  - The repository layout matches installable plugin expectations.
+- **Command exposure status:** ✅ Completed
+  - Top-level `commands/` directory added with clean user-facing entry points (e.g. `amalgam-conductor`, `review-architecture`, `resilience-check`).
+  - Commands accurately map to their respective specialized skills.
+  - The `resilience-check` command explicitly requires a safety gate and user approval.
+- **Skill coverage status:** ✅ Completed
+  - All 9 core specialist skills are fully documented and integrated.
+  - Handled by `plugin.json` skills array correctly.
+- **Validation status:** ✅ Completed
+  - File structure and manifest consistency passed perfectly.
+- **Remaining step:** ⏳ Pending
+  - Rename GitHub repo from `Baelfyre/Amalgamatic-Orchestra` to `Baelfyre/amalgam-conductor` after final validation.
+
+---
+
 Amalgamatic Orchestra is intentionally designed as a **Markdown-first** framework. By keeping skill instructions, progressive disclosure rules, and routing metadata in standard markdown format, the framework remains universally readable by any AI assistant capable of file reading (e.g., Claude Code, Cursor, Antigravity) without requiring a proprietary runtime plugin.
 
 However, as agentic platforms evolve, automated skill discovery and deterministic loading become valuable. This document outlines how future plugin loaders should interact with the Orchestra without breaking its fundamental architecture.
