@@ -1,53 +1,116 @@
 param(
-    [Parameter(Mandatory=$true)]
-    [ValidateSet("Antigravity", "Codex", "All")]
-    [string]$Target,
+    [ValidateSet('Antigravity', 'Codex', 'All')]
+    [string]$Target = 'All',
 
-    [string]$CodexRepoPath
+    [string]$CodexRepoPath,
+
+    [switch]$Force
 )
 
-if (($Target -eq "Codex" -or $Target -eq "All") -and [string]::IsNullOrWhiteSpace($CodexRepoPath)) {
-    Write-Error "-CodexRepoPath is required when Target is Codex or All."
-    exit 1
+$ErrorActionPreference = 'Stop'
+
+$Root = Split-Path -Parent $PSScriptRoot
+$structureValidator = Join-Path $Root 'scripts\validate-structure.ps1'
+$manifestValidator = Join-Path $Root 'scripts\validate-manifest.ps1'
+$codexInstaller = Join-Path $Root 'adapters\codex\install-to-repo.ps1'
+$pluginUrl = 'https://github.com/Baelfyre/amalgam-conductor'
+$pluginName = 'amalgam-conductor'
+
+function Invoke-RequiredCommand {
+    param(
+        [string]$Command,
+        [string[]]$Arguments
+    )
+
+    Write-Output "> $Command $($Arguments -join ' ')"
+    & $Command @Arguments
+
+    if (-not $?) {
+        throw "Command failed: $Command $($Arguments -join ' ')"
+    }
 }
 
-$ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
-$RepoRoot = Split-Path -Parent $ScriptDir
+function Invoke-PreRefreshValidation {
+    Write-Output "Running pre-refresh validation..."
 
-Write-Host "Running pre-refresh validation..."
-& "$ScriptDir\validate-structure.ps1"
-if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    if (-not (Test-Path -LiteralPath $structureValidator -PathType Leaf)) {
+        throw "Missing validator: $structureValidator"
+    }
 
-& "$ScriptDir\validate-manifest.ps1"
-if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    if (-not (Test-Path -LiteralPath $manifestValidator -PathType Leaf)) {
+        throw "Missing validator: $manifestValidator"
+    }
 
-if ($Target -eq "Antigravity" -or $Target -eq "All") {
-    Write-Host "`n[Antigravity] Refreshing plugin..."
-    # Tolerate uninstall failure if not installed
+    & powershell -ExecutionPolicy Bypass -File $structureValidator
+    if (-not $?) {
+        throw "Structure validation failed."
+    }
+
+    & powershell -ExecutionPolicy Bypass -File $manifestValidator
+    if (-not $?) {
+        throw "Manifest validation failed."
+    }
+
+    Write-Output "Pre-refresh validation passed."
+}
+
+function Refresh-Antigravity {
+    Write-Output "Refreshing Antigravity plugin..."
+
     try {
-        agy plugin uninstall amalgam-conductor *>&1 | Out-Null
-    } catch { }
-
-    agy plugin install https://github.com/Baelfyre/amalgam-conductor
-    agy plugin list
-}
-
-if ($Target -eq "Codex" -or $Target -eq "All") {
-    Write-Host "`n[Codex] Refreshing skills to $CodexRepoPath..."
-    
-    $exportScript = "$RepoRoot\adapters\codex\export-codex-skills.ps1"
-    $installScript = "$RepoRoot\adapters\codex\install-to-repo.ps1"
-    
-    if (Test-Path $exportScript) {
-        Write-Host "Exporting Codex skills first..."
-        & $exportScript
+        & agy plugin uninstall $pluginName
+        Write-Output "Existing Antigravity plugin uninstalled."
+    }
+    catch {
+        Write-Warning "Uninstall failed or plugin was not installed. Continuing with install."
     }
 
-    if (Test-Path $installScript) {
-        & $installScript -TargetRepo $CodexRepoPath -Force
-    } else {
-        Write-Error "Codex install script missing: $installScript"
+    Invoke-RequiredCommand -Command 'agy' -Arguments @('plugin', 'install', $pluginUrl)
+    Invoke-RequiredCommand -Command 'agy' -Arguments @('plugin', 'list')
+
+    Write-Output "Antigravity refresh complete."
+}
+
+function Refresh-Codex {
+    if ([string]::IsNullOrWhiteSpace($CodexRepoPath)) {
+        throw "Codex refresh requires -CodexRepoPath."
+    }
+
+    if (-not (Test-Path -LiteralPath $CodexRepoPath -PathType Container)) {
+        throw "Codex repo path not found: $CodexRepoPath"
+    }
+
+    if (-not (Test-Path -LiteralPath $codexInstaller -PathType Leaf)) {
+        throw "Codex installer not found: $codexInstaller"
+    }
+
+    Write-Output "Refreshing Codex skills into: $CodexRepoPath"
+
+    $args = @('-ExecutionPolicy', 'Bypass', '-File', $codexInstaller, '-TargetRepo', $CodexRepoPath)
+    if ($Force) {
+        $args += '-Force'
+    }
+
+    Invoke-RequiredCommand -Command 'powershell' -Arguments $args
+
+    Write-Output "Codex refresh complete."
+}
+
+Invoke-PreRefreshValidation
+
+switch ($Target) {
+    'Antigravity' {
+        Refresh-Antigravity
+    }
+
+    'Codex' {
+        Refresh-Codex
+    }
+
+    'All' {
+        Refresh-Antigravity
+        Refresh-Codex
     }
 }
 
-Write-Host "`nRefresh complete."
+Write-Output "Refresh complete for target: $Target"
