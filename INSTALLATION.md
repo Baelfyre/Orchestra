@@ -51,3 +51,44 @@ powershell -ExecutionPolicy Bypass -File .\scripts\refresh-installed-integration
 ## Verify
 
 Run the structure validator (`.\scripts\validate-structure.ps1`) and confirm that normal QA routes to Acme Overseer, normal security/privacy review routes to Cipher Meister, and Hidden Dagger remains gated.
+
+## Updates
+
+> [!WARNING]
+> Fully automatic updates are not recommended because plugin metadata, routing behavior, or SKILL.md frontmatter changes can break the ecosystem. Use validated updates instead.
+
+### Safe Update Instructions (Recommended)
+
+To safely update the ecosystem across any framework, run the included update script. This script automatically performs safety checks, fetches the latest changes, and triggers the validation suite:
+
+```sh
+powershell -ExecutionPolicy Bypass -File .\scripts\update-plugin.ps1
+```
+
+*(You can also use `-DryRun` to see what changes would occur without pulling, or `-RepoPath "C:\path"` to run it from a different directory).*
+
+### Manual Update Instructions
+
+If you prefer to manually handle the update sequence:
+
+1. Ensure your working tree is clean.
+2. Pull the latest changes:
+   ```sh
+   git pull origin main
+   ```
+3. Run the validation checks manually to ensure metadata and routing consistency:
+   ```sh
+   powershell -ExecutionPolicy Bypass -File .\scripts\validate-manifest.ps1
+   powershell -ExecutionPolicy Bypass -File .\scripts\validate-structure.ps1
+   ```
+
+### Rollback Instructions
+
+If a safe update or manual pull introduces a breaking change or validation failure, you can roll back the repository to the last known good commit:
+
+1. Identify the previous stable commit hash using `git log`.
+2. Reset the repository:
+   ```sh
+   git reset --hard <PREVIOUS_COMMIT_HASH>
+   ```
+3. Reload or restart your agent workspace (Antigravity or Codex) to revert the ecosystem behavior.
