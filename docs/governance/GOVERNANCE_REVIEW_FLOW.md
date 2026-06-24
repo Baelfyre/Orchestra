@@ -5,11 +5,12 @@ Every request passes through this flow before execution begins. Review depth sca
 ## Adaptive Review Path
 
 ```
-Step 1: Identify project context
-Step 2: Classify risk → LOW | MEDIUM | HIGH
-Step 3: Apply only relevant governance checks
-Step 4: Return shortest sufficient decision
-Step 5: Escalate only when risk, missing docs, or uncertainty requires it
+Step 1: Project Context Discovery
+Step 2: Establish Governance Basis of Review
+Step 3: Classify risk → LOW | MEDIUM | HIGH
+Step 4: Apply only relevant governance checks
+Step 5: Return shortest sufficient decision
+Step 6: Escalate only when risk, missing docs, or uncertainty requires it
 ```
 
 ## Flow Diagram
@@ -18,23 +19,29 @@ Step 5: Escalate only when risk, missing docs, or uncertainty requires it
 Request
   │
   ▼
-┌─────────────────┐
-│ Project Context  │  Identify or request context profile
-│ Identification   │
-└────────┬────────┘
+┌───────────────────┐
+│  Project Context  │  Identify or request context profile
+│    Discovery      │
+└────────┬──────────┘
          │
          ▼
-┌─────────────────┐
-│ Risk             │  LOW → lightweight review
-│ Classification   │  MEDIUM → standard review
-│                  │  HIGH → expanded review
-└────────┬────────┘
+┌───────────────────┐
+│ Governance Basis  │  Establish review dimensions & constraints
+│    of Review      │
+└────────┬──────────┘
          │
          ▼
-┌─────────────────┐
-│  The Steward     │  Business alignment, scope, requirements
-│  Review          │  (depth scaled to risk level)
-└────────┬────────┘
+┌───────────────────┐
+│ Risk              │  LOW → lightweight review
+│ Classification    │  MEDIUM → standard review
+│                   │  HIGH → expanded review
+└────────┬──────────┘
+         │
+         ▼
+┌───────────────────┐
+│   The Steward     │  Business alignment, scope, requirements
+│     Review        │  (depth scaled to risk level)
+└────────┬──────────┘
          │
   BLOCKED ──► STOP
   REVISION_REQUIRED ──► RETURN for revision
@@ -42,10 +49,10 @@ Request
   APPROVED ──► Continue
          │
          ▼
-┌─────────────────┐
-│  The Governor    │  Legal, compliance, privacy, IP, licensing
-│  Review          │  (depth scaled to risk level)
-└────────┬────────┘
+┌───────────────────┐
+│   The Governor    │  Legal, compliance, privacy, IP, licensing
+│     Review        │  (depth scaled to risk level)
+└────────┬──────────┘
          │
   BLOCKED ──► STOP
   REVISION_REQUIRED ──► RETURN for remediation
@@ -54,24 +61,24 @@ Request
   APPROVED ──► Continue
          │
          ▼
-┌─────────────────┐
-│ Amalgam Conductor│  Route to execution skills
-└────────┬────────┘
+┌───────────────────┐
+│ Amalgam Conductor │  Route to execution skills
+└────────┬──────────┘
          │
          ▼
-┌─────────────────┐
-│ Execution        │  Skills perform work
-└────────┬────────┘
+┌───────────────────┐
+│ Execution         │  Skills perform work
+└────────┬──────────┘
          │
          ▼
-┌─────────────────┐
-│ Validation       │  QA, testing, review
-└────────┬────────┘
+┌───────────────────┐
+│ Validation        │  QA, testing, review
+└────────┬──────────┘
          │
          ▼
-┌─────────────────┐
-│ Release Gate     │  Final compliance check
-└─────────────────┘
+┌───────────────────┐
+│ Release Gate      │  Final compliance check
+└───────────────────┘
 ```
 
 ## Fast Path (LOW Risk)

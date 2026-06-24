@@ -51,6 +51,26 @@ Risk Level: [LOW | MEDIUM | HIGH]
 Required Documentation:
 ```
 
+## Governance Basis of Review
+
+The Steward and The Governor do not apply absolute or pre-assumed governance rules. Instead, they first establish the **Governance Basis of Review** from the supplied or discoverable context:
+- Project Context
+- Declared Objectives
+- Requirements and Acceptance Criteria
+- Release Target
+- Data Use
+- Jurisdiction or Applicable Rules
+- Dependencies and Third-Party Assets
+- Documentation Requirements
+- Known Constraints
+
+### No-Assumption Rule
+The governance layer operates contextually. Authorities do not pre-assume jurisdiction, legal obligations, business goals, or requirements. They must review *only* against what is stated or discoverable in the project context.
+
+### Context-Missing Behavior
+If the project context profile is incomplete, unclear, or entirely missing, the Steward and Governor must not guess or make assumptions. Instead, they must return `REVISION_REQUIRED` to request the necessary clarity.
+
+
 ## Risk Classification
 
 | Risk Level | Criteria | Review Depth |

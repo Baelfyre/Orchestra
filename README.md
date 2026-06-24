@@ -26,7 +26,7 @@
 
 ## Core Concept
 
-Amalgam Conductor uses a governance-first workflow. The Steward checks whether a request aligns with project goals, scope, requirements, and SDLC documentation. The Governor checks whether the request raises legal, privacy, IP, licensing, security, or compliance concerns. Once governance review is complete, the Amalgam Conductor routes approved work to the correct specialist skills.
+Amalgam Conductor uses a governance-first workflow, but the governance layer does not assume what rules apply to every project. Before review, The Steward and The Governor identify the project context, declared objectives, release target, data use, dependencies, documentation requirements, and known constraints. The Steward then checks alignment against the project’s stated goals, scope, requirements, acceptance criteria, and SDLC needs. The Governor checks only the applicable legal-risk, privacy, IP, licensing, security, and compliance areas based on the supplied project context. If the scope is unclear, governance returns REVISION_REQUIRED instead of assuming.
 
 ## Architecture
 
@@ -67,10 +67,37 @@ flowchart LR
 
 ## Governance Layer
 
-The Governance Layer sits above the Conductor. It intercepts incoming requests, identifies the minimum project context required, and performs a risk-scaled review (LOW, MEDIUM, or HIGH) before any implementation begins.
+The Governance Layer sits above the Conductor. It intercepts incoming requests, identifies the minimum project context required, and performs a risk-scaled review (LOW, MEDIUM, or HIGH) before any implementation begins. 
+
+The Steward and The Governor are entirely context-driven. They do not pre-assume what rules apply to every project, nor do they apply every governance rule universally. If the project scope is unclear or missing, governance returns `REVISION_REQUIRED` instead of assuming. Conversely, if a risk area does not apply to the current context, the authority returns `NOT_APPLICABLE`.
 
 > [!IMPORTANT]
 > If a request violates alignment, fails scope verification, or breaches compliance boundaries, the Steward or Governor issues a `REVISION_REQUIRED` or `BLOCKED` status. The Conductor will immediately halt execution.
+
+### Compact Decision Examples
+
+#### Example 1: Incomplete Project Scope
+```yaml
+Reviewer: The Steward
+Decision: REVISION_REQUIRED
+Reason: Project scope is incomplete.
+Risks: The request cannot be checked against goals, requirements, or acceptance criteria.
+Required Actions:
+- Provide project type.
+- Provide intended outcome.
+- Provide acceptance criteria.
+Human Review Required: No.
+```
+
+#### Example 2: Non-Applicable Request
+```yaml
+Reviewer: The Governor
+Decision: NOT_APPLICABLE
+Reason: The request is a local formatting-only documentation update with no release, user data, licensing, privacy, IP, or security impact.
+Risks: None.
+Required Actions: None.
+Human Review Required: No.
+```
 
 ### The Steward
 
