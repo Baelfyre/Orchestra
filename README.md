@@ -1,29 +1,15 @@
 <div align="center">
-  <img src="./assets/readme/amalgam-governance-banner.svg" alt="Amalgam Conductor governance banner" width="100%" />
-
-  <h1>Amalgam Conductor</h1>
+  <img src="./assets/readme/amalgam-governance-banner.svg" alt="Amalgam Conductor Hero Banner" width="100%" />
 
   <p>
     <strong>Project-agnostic governance and orchestration framework for AI-assisted development.</strong>
   </p>
 
   <p>
-    Governance-first routing for business alignment, compliance awareness, specialist execution, and token-efficient implementation workflows.
-  </p>
-
-  <p>
-    <a href="#installation">Installation</a> •
-    <a href="#how-to-use">How to Use</a> •
-    <a href="#governance-layer">Governance Layer</a> •
-    <a href="#token-efficient-usage">Token Efficiency</a> •
-    <a href="#validation">Validation</a>
-  </p>
-
-  <p>
-    <img src="https://img.shields.io/badge/Antigravity-Compatible-1f6feb?style=for-the-badge" />
-    <img src="https://img.shields.io/badge/Codex-Compatible-6f42c1?style=for-the-badge" />
-    <img src="https://img.shields.io/badge/Governance-Enabled-c99700?style=for-the-badge" />
-    <img src="https://img.shields.io/badge/Safe_Updates-Supported-238636?style=for-the-badge" />
+    <a href="INSTALLATION.md">Installation</a> •
+    <a href="docs/governance/GOVERNANCE_LAYER.md">Governance</a> •
+    <a href="SKILL_INDEX.md">Skills</a> •
+    <a href="VALIDATION.md">Validation</a>
   </p>
 </div>
 
@@ -42,161 +28,206 @@
 
 Amalgam Conductor uses a governance-first workflow. The Steward checks whether a request aligns with project goals, scope, requirements, and SDLC documentation. The Governor checks whether the request raises legal, privacy, IP, licensing, security, or compliance concerns. Once governance review is complete, the Amalgam Conductor routes approved work to the correct specialist skills.
 
-## Governance and Orchestration Architecture
+## Architecture
 
 ```mermaid
-flowchart TD
-    A[User Request] --> B[Project Context]
-    B --> C[The Steward]
-    C --> D[The Governor]
-    D --> E[Amalgam Conductor]
-    E --> F[Specialist Skills]
-    F --> G[Validation]
-    G --> H[Release or Response]
+flowchart LR
+    classDef input fill:#101010,stroke:#555,color:#f5f5f5,stroke-width:1.5px
+    classDef gov fill:#2b2112,stroke:#d4af37,color:#fff2b2,stroke-width:2px
+    classDef orch fill:#201433,stroke:#9d6cff,color:#eadfff,stroke-width:2px
+    classDef exec fill:#102436,stroke:#58a6ff,color:#d8ecff,stroke-width:2px
+    classDef stop fill:#321414,stroke:#ff6b6b,color:#ffdada,stroke-width:2px
+
+    Request([User Request]):::input
+    Context([Project Context]):::input
+
+    subgraph G[Governance Layer]
+      Steward{{The Steward<br/>Business • Scope • SDLC}}:::gov
+      Governor{{The Governor<br/>Privacy • IP • Compliance}}:::gov
+    end
+
+    subgraph O[Orchestration Layer]
+      Conductor((Amalgam<br/>Conductor)):::orch
+    end
+
+    subgraph E[Execution Layer]
+      Skills[[Specialist Skills]]:::exec
+      Validate[[Validation]]:::exec
+    end
+
+    Output([Release or Response]):::input
+    Revision([Revision Required<br/>or Blocked]):::stop
+
+    Request --> Context --> Steward --> Governor --> Conductor --> Skills --> Validate --> Output
+    Steward -.-> Revision
+    Governor -.-> Revision
 ```
 
 ---
 
 ## Governance Layer
 
-Before any implementation begins, the Governance Layer intercepts the request. It acts as a project-agnostic authority that scales its review depth based on the specific project context and risk level (LOW / MEDIUM / HIGH).
+The Governance Layer sits above the Conductor. It intercepts incoming requests, identifies the minimum project context required, and performs a risk-scaled review (LOW, MEDIUM, or HIGH) before any implementation begins.
 
 > [!IMPORTANT]
-> If a request violates business alignment, misses required documentation, or breaches compliance boundaries, the Governance Layer returns a `REVISION_REQUIRED` or `BLOCKED` decision. The Conductor cannot override these gates and will pause or stop execution until the issues are addressed.
+> If a request violates alignment, fails scope verification, or breaches compliance boundaries, the Steward or Governor issues a `REVISION_REQUIRED` or `BLOCKED` status. The Conductor will immediately halt execution.
 
 ### The Steward
 
-**Primary Mission:** Validates business alignment, scope, and software development lifecycle (SDLC) documentation.
-
-The Steward ensures that every feature or change:
-- Supports the project's core objectives.
-- Meets documented requirements and acceptance criteria.
-- Stays within the defined scope.
-- Includes sufficient documentation for the development phase.
+Validates business alignment, scope boundaries, and software development lifecycle (SDLC) documentation. It ensures changes stay within the scope of work and meet defined acceptance criteria.
 
 ### The Governor
 
-**Primary Mission:** Validates legal compliance, privacy, IP, copyright, licensing, and security boundaries.
-
-The Governor ensures that every change:
-- Complies with open-source licenses and third-party attribution.
-- Protects user privacy and handles data properly.
-- Respects IP and copyright ownership.
-- Flags uncertain regulatory or legal issues for human review (`human_review_required: true`).
-- Validates audit readiness.
-
-*Note: The Governor does not provide legal advice. It identifies risks and required documentation.*
+Evaluates legal compliance, privacy risks, intellectual property (IP), licensing, and security policies. It flags high-risk regulatory or legal matters for manual human review and does not provide formal legal advice.
 
 ---
 
 ## The Amalgam Conductor
 
-The **Amalgam Conductor** acts as the primary Orchestrator. 
-- It evaluates the governance decisions and routes approved work to the correct implementation specialists.
-- It prevents sequencing errors, unauthorized actions, and overlapping reviews.
-- It ensures that code generation defaults to logical implementation paths (e.g., standard libraries before external dependencies).
+The Amalgam Conductor operates in the Orchestration Layer. Once governance clearance is granted:
+- It defines execution steps and establishes architectural boundaries.
+- It sequences actions to prevent multi-file conflicts and overlapping agent reviews.
+- It routes implementation tasks to the correct specialized skills.
 
 ## Specialist Skills
 
-When Amalgam Conductor identifies a cross-domain feature, it routes the task to the appropriate specialist.
+| Skill | Focus |
+|---|---|
+| Amalgam Conductor | Routing and orchestration |
+| The Steward | Business, scope, SDLC, and requirements alignment |
+| The Governor | Privacy, IP, licensing, compliance, and legal-risk review |
+| Clockwork Meister | Architecture, OOP, refactoring |
+| Cloak Meister | UI, UX, layout, accessibility |
+| Scribe Meister | Documentation and technical writing |
+| Acme Overseer | QA, testing, release readiness |
+| Cipher Meister | Security and privacy evidence |
 
-| Specialist | Use Case | Avoid When |
-| :--- | :--- | :--- |
-| <img src="assets/icons/amalgam-conductor.png" width="24" align="absmiddle" /> **Amalgam Conductor** | Routing, overlap control, token efficiency | A single obvious specialist suffices |
-| <img src="assets/icons/clockwork-meister.png" width="24" align="absmiddle" /> **Clockwork Meister** | OOP/Layered architecture, system design, refactoring | Modifying UI or writing docs |
-| <img src="assets/icons/cloak-meister.png" width="24" align="absmiddle" /> **Cloak Meister** | UI/UX, layout, components, accessibility | DB or system-diagram ownership |
-| <img src="assets/icons/meister-chronicler.png" width="24" align="absmiddle" /> **Meister Chronicler**| DB schema, migrations, SQL, constraints | UI review |
-| <img src="assets/icons/scribe-meister.png" width="24" align="absmiddle" /> **Scribe Meister** | Documentation, READMEs, technical writing | Inventing technical facts |
-| <img src="assets/icons/meister-weaver.png" width="24" align="absmiddle" /> **Meister Weaver** | UML, ERD visuals, workflow diagrams | DB semantics without source |
-| <img src="assets/icons/acme-overseer.png" width="24" align="absmiddle" /> **Acme Overseer** | QA, tests, release readiness, regression | Destructive pressure testing |
-| <img src="assets/icons/cipher-meister.png" width="24" align="absmiddle" /> **Cipher Meister** | Security/privacy evidence, auth, secrets | Offensive testing |
-| <img src="assets/icons/hidden-dagger.png" width="24" align="absmiddle" /> **Hidden Dagger** | Approved destructive/resilience testing | Unauthorized testing |
-
-> [!TIP]
-> See [SKILL_INDEX.md](SKILL_INDEX.md) for the full specialist index and their expected behavior.
+For details on all execution skills, routing logic, and behavioral constraints, see the [Specialist Skill Index](SKILL_INDEX.md).
 
 ---
 
 ## Installation
 
-Amalgam Conductor can be installed as a native plugin in both Antigravity and Codex.
+To set up Amalgam Conductor as an installable AI workflow plugin:
 
-### Antigravity Plugin Setup
+### Antigravity Setup
 ```sh
 agy plugin install https://github.com/Baelfyre/amalgam-conductor
 ```
 
-### Codex Plugin Setup
-Clone the repository into your Codex plugins directory:
+### Codex Setup
+Clone this repository directly into your Codex plugins directory:
 ```sh
 git clone https://github.com/Baelfyre/amalgam-conductor.git
 ```
-Codex will automatically detect the `.codex-plugin/plugin.json` manifest and map the `skills/` directory.
 
-*For manual setup, see [INSTALLATION.md](INSTALLATION.md).*
+For manual configurations or environment setup details, see the [Installation Guide](INSTALLATION.md).
 
 ## How to Use
 
-1. **Provide Project Context**: The Governance Layer needs to know what it's reviewing. Provide a basic project context (e.g., "This is an internal prototype" or "This is a public commercial release") so it can scale its review risk appropriately.
-2. **Start with the Orchestrator**: Use the `/amalgam-conductor` skill for any multi-file or cross-domain feature. It will pass your request through the Governance Gate before sequencing the required specialists.
-3. **Use Specialists for Single Tasks**: If you know exactly what you need (e.g., UI layout), route directly to the relevant specialist (e.g., `/cloak-meister`).
-4. **Follow the Gates**: If you hit a `REVISION_REQUIRED` block, address the findings (e.g., missing requirements document, missing NOTICE file) before re-requesting.
+The plugin operates on a structured, context-first prompt pattern. 
+
+### Step 1: Provide Project Context
+Identify the project context profile (Project Type, Sensitivity, Jurisdiction, etc.) so the Governance Layer can properly scale its review risk.
+
+### Step 2: Use the Governance-First Prompt Pattern
+Always structure your requests to invoke the orchestrator with the necessary context and clear execution goals.
 
 ## Recommended Prompt Workflow
 
-The best way to use the ecosystem is to treat the Governance Layer as a partner in refining your prompt and plan:
-1. Submit a raw idea or request.
-2. Let The Steward and The Governor audit it. They will output missing requirements, scope risks, or compliance gaps.
-3. Use their feedback to create the missing artifacts (e.g., a brief Requirements Document or an updated Privacy Policy).
-4. Resubmit the request. It will clear the Governance Gate and the Conductor will orchestrate a smooth, aligned implementation.
+Use this format to initiate tasks:
 
----
+```markdown
+[@ponytail] use amalgam-conductor for this task
+
+Task:
+Describe the work clearly.
+
+Context:
+Provide the project type, current files, constraints, and goal.
+
+Requirements:
+List what must be changed or preserved.
+
+Expected Output:
+Changed Files:
+Summary:
+Validation Results:
+Remaining Risks:
+Next Recommended Step:
+```
 
 ## Token-Efficient Usage
 
 > [!TIP]
-> The ecosystem uses a token-efficient communication standard that strips out conversational filler, ensuring only actionable code and necessary context are passed between agents. All specialist output defaults to a compressed protocol that minimizes token consumption.
-
-## Fast Path
-
-The ecosystem uses a fast-path rule for rapid iteration:
-For trivial requests, typo fixes, formatting edits, or local changes, the Governance Layer returns a compact `NOT_APPLICABLE` message with near-zero overhead.
-
-## Expanded Governance Review
-
-Expanded governance documentation and full audits are only loaded and output when the risk is `MEDIUM` or `HIGH`, or when specific compliance/scope issues are triggered (e.g., public release, handling user data, legal concerns).
+> - Start with a refined prompt.
+> - Provide only relevant context.
+> - Ask for changed files, summary, validation, risks, and next step.
+> - Use expanded governance only for medium-risk or high-risk work.
+> - Use fast path for typo fixes, formatting, and local documentation cleanup.
+> - Link to detailed governance docs instead of repeating them in README.
 
 ---
 
+## Documentation Map
+
+| Area | Start Here | Purpose |
+|---|---|---|
+| Governance | [Governance Layer](docs/governance/GOVERNANCE_LAYER.md) | Understand The Steward, The Governor, risk scaling, and release gates |
+| Skills | [Skill Index](SKILL_INDEX.md) | Review available specialists and routing behavior |
+| Installation | [Installation Guide](INSTALLATION.md) | Set up the plugin in Antigravity or Codex |
+| Validation | [Validation Guide](VALIDATION.md) | Run structure and manifest checks |
+| Disclaimer | [Disclaimer](DISCLAIMER.md) | Understand legal and operational limitations |
+
 ## Validation
 
-Fully automatic updates to skill instructions can silently break AI workflows. Run the included PowerShell script to check your local structure and ensure all required files are present.
+Before releasing or pushing changes, verify the plugin structural integrity and manifest alignment:
 
 ```powershell
+# Verify files, directories, and icon overrides
 powershell -ExecutionPolicy Bypass -File .\scripts\validate-structure.ps1
-```
 
-To verify that the `plugin.json` manifest perfectly matches the actual SKILL.md frontmatter across all skills:
-
-```powershell
+# Verify manifest properties against skill frontmatter
 powershell -ExecutionPolicy Bypass -File .\scripts\validate-manifest.ps1
 ```
+For more information, see the [Validation Guide](VALIDATION.md).
 
-## Repository Structure
+---
 
-- `assets/` - Icons, banners, and logos.
-- `docs/` - System architecture and governance reference documentation.
-- `scripts/` - Validation and update utilities.
-- `skills/` - The source of truth for all specialist and governance skills.
-- `.agents/` - Mirrored skills for IDE agent integration.
-- `tests/` - Validation scenarios and behavior tests.
+## Limitations
 
-## Current Limitations
+- **Instruction-Level Enforcement:** The framework operates at the instruction and documentation level. There are no automated runtime blocks preventing a developer or agent from executing unapproved actions.
+- **Project Profile Requirement:** Governance relies entirely on the accuracy and completeness of the provided project context profile.
 
-**Instruction-Level Enforcement:** 
-Current enforcement relies on instruction-level governance. The Amalgam Conductor is explicitly instructed to follow the governance gate decisions before planning or routing work. However, no automated runtime blocker currently prevents an execution agent from making changes if it hallucinates or ignores the `BLOCKED` status. Automated runtime enforcement (such as CI checks, schema validation, or automated release gates) may be implemented in the future if required.
+## Collapsed Repository Structure
+
+GitHub displays repository files above the README by default. This README keeps detailed documentation layered into linked files and collapsed sections to reduce scrolling.
+
+<details> <summary>Repository structure</summary>
+
+```
+skills/
+├── amalgam-conductor/
+├── the-governor/
+└── the-steward/
+
+docs/governance/
+├── GOVERNANCE_LAYER.md
+├── GOVERNOR.md
+├── STEWARD.md
+├── GOVERNANCE_REVIEW_FLOW.md
+└── RELEASE_GATES.md
+
+tests/behavior/
+└── GOVERNANCE_SCENARIOS.md
+
+assets/readme/
+└── amalgam-governance-banner.svg
+```
+
+</details>
 
 ## Disclaimer
 
 > [!CAUTION]
-> Please read the [DISCLAIMER.md](DISCLAIMER.md) before using this ecosystem in real-world applications or production environments. The Governor provides automated compliance checks but does not provide legal advice.
+> The Governor and Steward skills validate compliance frameworks, scope, and best practices. They do not provide legal advice or absolute security guarantees. Please read [DISCLAIMER.md](DISCLAIMER.md) for full terms.

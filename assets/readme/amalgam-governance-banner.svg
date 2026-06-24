@@ -1,35 +1,97 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 250" width="100%">
     <defs>
-        <linearGradient id="bg-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#050505" />
-            <stop offset="100%" stop-color="#111111" />
-        </linearGradient>
+        <!-- Dark radial gradient for background visual depth -->
+        <radialGradient id="bg-grad" cx="50%" cy="40%" r="60%" fx="50%" fy="30%">
+            <stop offset="0%" stop-color="#181818" />
+            <stop offset="60%" stop-color="#0a0a0a" />
+            <stop offset="100%" stop-color="#020202" />
+        </radialGradient>
+        
+        <!-- Premium Gold Linear Gradient -->
         <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#9a7b32" />
-            <stop offset="50%" stop-color="#dfc776" />
-            <stop offset="100%" stop-color="#9a7b32" />
+            <stop offset="0%" stop-color="#9a7a35" />
+            <stop offset="25%" stop-color="#caa75a" />
+            <stop offset="50%" stop-color="#fdf0cd" />
+            <stop offset="75%" stop-color="#caa75a" />
+            <stop offset="100%" stop-color="#9a7a35" />
         </linearGradient>
-        <linearGradient id="gold-fade" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="rgba(223, 199, 118, 0)" />
-            <stop offset="50%" stop-color="rgba(223, 199, 118, 0.4)" />
-            <stop offset="100%" stop-color="rgba(223, 199, 118, 0)" />
+
+        <!-- Waving Gold Gradient -->
+        <linearGradient id="gold-wave-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#bf953f" stop-opacity="0.08" />
+            <stop offset="50%" stop-color="#fcf6ba" stop-opacity="0.18" />
+            <stop offset="100%" stop-color="#b38728" stop-opacity="0.03" />
         </linearGradient>
+
+        <linearGradient id="wave-border" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#9a7a35" />
+            <stop offset="50%" stop-color="#fdf0cd" />
+            <stop offset="100%" stop-color="#9a7a35" />
+        </linearGradient>
+
+        <!-- Dynamic drop shadow for text -->
+        <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+            <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#000" flood-opacity="0.85" />
+        </filter>
+        
+        <style>
+            .title {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                font-weight: 800;
+                font-size: 52px;
+                fill: url(#gold-grad);
+                text-anchor: middle;
+                letter-spacing: 5px;
+                filter: url(#shadow);
+            }
+            .subtitle {
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+                font-weight: 400;
+                font-size: 18px;
+                fill: #cccccc;
+                text-anchor: middle;
+                letter-spacing: 2px;
+                opacity: 0.95;
+                filter: url(#shadow);
+            }
+            .wave {
+                animation: flow 18s infinite linear;
+            }
+            @keyframes flow {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-1000px); }
+            }
+        </style>
     </defs>
     
-    <!-- Background -->
-    <rect width="1200" height="300" fill="url(#bg-grad)" />
-    
-    <!-- Abstract rings representing governance boundaries -->
-    <circle cx="600" cy="150" r="450" fill="none" stroke="url(#gold-fade)" stroke-width="1" />
-    <circle cx="600" cy="150" r="300" fill="none" stroke="url(#gold-fade)" stroke-width="1.5" />
-    <circle cx="600" cy="150" r="150" fill="none" stroke="url(#gold-fade)" stroke-width="2" />
-    
-    <!-- Orchestration lines -->
-    <path d="M0 150 Q 300 50 600 150 T 1200 150" fill="none" stroke="url(#gold-grad)" stroke-width="2" opacity="0.7" />
-    <path d="M0 170 Q 400 250 800 170 T 1200 170" fill="none" stroke="url(#gold-grad)" stroke-width="1" opacity="0.3" />
-    
-    <!-- Center node -->
-    <circle cx="600" cy="150" r="4" fill="#dfc776" />
-    <circle cx="300" cy="100" r="3" fill="#dfc776" opacity="0.6" />
-    <circle cx="900" cy="200" r="3" fill="#dfc776" opacity="0.6" />
+    <!-- Deep dark background -->
+    <rect width="1000" height="250" fill="url(#bg-grad)" />
+
+    <!-- Subtle Golden Tech Rings/Orchestration circles -->
+    <circle cx="500" cy="-30" r="220" fill="none" stroke="url(#gold-grad)" stroke-width="0.5" opacity="0.12" />
+    <circle cx="500" cy="-30" r="260" fill="none" stroke="url(#gold-grad)" stroke-dasharray="6,4" stroke-width="0.75" opacity="0.08" />
+    <circle cx="500" cy="-30" r="300" fill="none" stroke="url(#gold-grad)" stroke-width="0.5" opacity="0.04" />
+
+    <!-- Animated Waving Shapes at the bottom -->
+    <g class="wave">
+        <!-- Wave 1 (Back) -->
+        <path d="M0,250 L0,210 Q250,150 500,200 T1000,190 L1000,250 Z" fill="url(#gold-wave-grad)" opacity="0.4" />
+        <path d="M1000,250 L1000,210 Q1250,150 1500,200 T2000,190 L2000,250 Z" fill="url(#gold-wave-grad)" opacity="0.4" />
+
+        <!-- Wave 2 (Middle) -->
+        <path d="M0,250 L0,225 Q250,180 500,210 T1000,205 L1000,250 Z" fill="url(#gold-wave-grad)" opacity="0.6" />
+        <path d="M1000,250 L1000,225 Q1250,180 1500,210 T2000,205 L2000,250 Z" fill="url(#gold-wave-grad)" opacity="0.6" />
+
+        <!-- Wave 3 (Front solid gilded edge) -->
+        <path d="M0,250 L0,235 Q250,210 500,230 T1000,225 L1000,250 Z" fill="url(#gold-wave-grad)" opacity="0.8" />
+        <path d="M1000,250 L1000,235 Q1250,210 1500,230 T2000,225 L2000,250 Z" fill="url(#gold-wave-grad)" opacity="0.8" />
+
+        <!-- Highlight line on top of front wave -->
+        <path d="M0,235 Q250,210 500,230 T1000,225" fill="none" stroke="url(#wave-border)" stroke-width="1.25" opacity="0.85" />
+        <path d="M1000,235 Q1250,210 1500,230 T2000,225" fill="none" stroke="url(#wave-border)" stroke-width="1.25" opacity="0.85" />
+    </g>
+
+    <!-- Content / Typography -->
+    <text x="500" y="110" class="title">Amalgam Conductor</text>
+    <text x="500" y="150" class="subtitle">Governance-first orchestration for AI-assisted development</text>
 </svg>
