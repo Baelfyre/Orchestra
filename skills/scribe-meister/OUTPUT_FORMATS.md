@@ -1,30 +1,6 @@
 # Output Formats
 
-## Compact mode
-
-Use for quick audits.
-
-```markdown
-# Scribe Meister Quick Audit
-
-## Objective
--
-
-## Documentation Status
-- Complete:
-- Missing:
-- Risk:
-
-## Priority Fixes
-1.
-2.
-3.
-
-## Next Action
--
-```
-
-## Full mode
+## MODE 1: Long Documentation
 
 Use for final documentation or detailed audits.
 
@@ -67,4 +43,53 @@ Reason:
 ## Missing Evidence
 
 ## Final Recommendation
+```
+
+## MODE 2: Standard Documentation
+
+Use for standard documentation audits.
+
+```markdown
+# Scribe Meister Documentation Audit
+
+## Objective
+-
+
+## Review Confidence
+Confidence Level: High / Medium / Low
+
+## Executive Summary
+
+## Accuracy Issues
+
+## Priority Fix List
+
+## Copy-Ready Revision Notes
+
+## Next Action
+-
+```
+
+## MODE 3: Short Documentation
+
+Use for quick audits.
+
+```markdown
+# Scribe Meister Quick Audit
+
+## Objective
+-
+
+## Documentation Status
+- Complete:
+- Missing:
+- Risk:
+
+## Priority Fixes
+1.
+2.
+3.
+
+## Next Action
+-
 ```

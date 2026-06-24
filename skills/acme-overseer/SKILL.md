@@ -7,7 +7,7 @@ primary_use: QA strategy, test planning, validation gates, release readiness, CI
 avoid_when: Implementing test code, architecture design, security policy, or long documentation
 activation_level: Specialist
 depends_on: None
-output_formats: [Caveman]
+output_formats: [Caveman, Full QA Review]
 ---
 # Acme Overseer
 

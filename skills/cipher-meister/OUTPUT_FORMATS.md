@@ -1,6 +1,6 @@
 # Output Formats
 
-## Compact mode
+## Caveman
 
 ```markdown
 # Cipher Meister Quick Risk Review
@@ -23,7 +23,7 @@
 -
 ```
 
-## Full mode
+## Full Security Review
 
 ```markdown
 # Cipher Meister Security and Privacy Review
@@ -73,9 +73,4 @@ Reason:
 ## Final Recommendation
 ```
 
-## Findings and approvals
 
-- Support each finding with an affected path, configuration, data flow, or verified behavior.
-- State exploit or privacy impact without providing operational misuse steps.
-- Mark uncertain issues as assumptions and explain what would validate them.
-- Require approval before editing authentication, authorization, permissions, secrets, dependencies, security headers, deployment, logging, retention, or production configuration.

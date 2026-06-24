@@ -74,6 +74,34 @@ Classify the user's request into one of the following Task Types and route it ex
 
 *Note: For testing/QA, route to `acme-overseer`.*
 
+## Output Mode Protocol
+
+Before routing final output, determine whether the requested output mode is clear.
+
+Use the following defaults:
+
+- Use compact output for normal review, quick routing, small fixes, status checks, and iterative work.
+- Use full output only when the user explicitly requests a full audit, deep review, detailed report, scoring matrix, formal assessment, or comprehensive analysis.
+- Use specialist-specific output modes when the artifact type or task requires them.
+- Ask a clarification question only when the requested output could reasonably fit multiple output modes.
+
+Do not ask clarification questions when the user already states the expected output, mode, artifact type, or review depth.
+
+## Ambiguous Output Clarification
+
+When output mode is ambiguous, ask one short question with 2 to 4 options.
+
+Example:
+
+Before I proceed, what output style do you want?
+
+A. Compact review: short findings and smallest safe next step.  
+B. Full audit: detailed findings, risks, and recommendations.  
+C. Implementation-ready plan: files, changes, and validation steps.  
+D. Other: specify your preferred format.
+
+Important: this must be used only when ambiguous, not as a default behavior.
+
 ## Global Protocol: Caveman
 By default, **Caveman** is the global communication/output protocol for the entire ecosystem. Apply Caveman-style compression automatically to all outputs, plans, and instructions to save tokens. Do not write essays or verbose explanations. 
 

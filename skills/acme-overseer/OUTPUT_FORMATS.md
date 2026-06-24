@@ -1,6 +1,6 @@
 # Output Formats
 
-## Compact mode
+## Caveman
 
 ```markdown
 # Acme Overseer Quick QA Review
@@ -23,7 +23,7 @@
 -
 ```
 
-## Full mode
+## Full QA Review
 
 ```markdown
 # Acme Overseer Quality Review

@@ -1,6 +1,6 @@
 # Output Formats
 
-## Compact mode
+## Caveman
 
 ```markdown
 # Meister Chronicler Quick DB Review
@@ -20,7 +20,7 @@
 -
 ```
 
-## Full mode
+## Normalization Output
 
 ```markdown
 # Meister Chronicler Database Review

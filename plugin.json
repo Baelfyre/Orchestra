@@ -62,7 +62,8 @@
             "depends_on": "None",
             "icon_path": "assets/icons/acme-overseer.ico",
             "output_formats": [
-                "Caveman"
+                "Caveman",
+                "Full QA Review"
             ]
         },
         {
@@ -93,7 +94,8 @@
             "depends_on": "None",
             "icon_path": "assets/icons/cipher-meister.ico",
             "output_formats": [
-                "Caveman"
+                "Caveman",
+                "Full Security Review"
             ]
         },
         {

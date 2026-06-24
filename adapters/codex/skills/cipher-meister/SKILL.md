@@ -37,6 +37,12 @@ Use `SKILL.md` first. Do not load every supporting document by default or consum
 - Do not invent vulnerabilities, privacy obligations, threat actors, or system guarantees.
 - Explain privacy risk without giving legal advice.
 
+### Findings and approvals
+- Support each finding with an affected path, configuration, data flow, or verified behavior.
+- State exploit or privacy impact without providing operational misuse steps.
+- Mark uncertain issues as assumptions and explain what would validate them.
+- Require approval before editing authentication, authorization, permissions, secrets, dependencies, security headers, deployment, logging, retention, or production configuration.
+
 ## Defensive workflow
 
 1. Identify the security or privacy objective, protected assets or data, system boundary, and review scope.
