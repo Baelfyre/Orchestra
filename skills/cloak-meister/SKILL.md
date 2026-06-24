@@ -7,7 +7,7 @@ primary_use: UI, UX, accessibility, visual hierarchy, responsive layout, interac
 avoid_when: Frontend implementation code, backend logic, security policy, or architecture diagrams
 activation_level: Specialist
 depends_on: None
-output_formats: [Caveman]
+output_formats: [QUICK_UI_HANDOFF, DOCUMENT_REVIEW, FORMAL_UI_AUDIT]
 ---
 # Cloak Meister
 
@@ -28,14 +28,22 @@ Do not use it for:
 - **Long documentation writing** (Route to Scribe Meister)
 - **Architecture diagrams or wireframes** (Route to Meister Weaver)
 
+## Mode Selection
+
+Select exactly one mode before generating any output:
+
+| Mode | When to use |
+|---|---|
+| `QUICK_UI_HANDOFF` | Fast UI, layout, component, accessibility, or frontend specialist handoff. Default for interactive UI surfaces. |
+| `FORMAL_UI_AUDIT` | Only when the user explicitly requests a full UI/UX audit, scoring matrix, or detailed review report. |
+| `DOCUMENT_REVIEW` | Artifact is README.md, SKILL.md, documentation, Markdown files, usage guides, or other static text documents. |
+
+Do not apply `QUICK_UI_HANDOFF` or `FORMAL_UI_AUDIT` fields to Markdown documents. Do not apply `DOCUMENT_REVIEW` fields to interactive UI surfaces.
+
 ## Progressive Disclosure Rule
 
 Use `SKILL.md` first. Do not load every supporting document by default or consume context with unused material.
-- Load OUTPUT_FORMATS.md only when generating the final response.
-- Load [CHECKLIST.md](CHECKLIST.md) for the selected review mode.
-- Load [ACCESSIBILITY_CHECKLIST.md](ACCESSIBILITY_CHECKLIST.md) only for accessibility reviews.
-- Load [FRONTEND_REVIEW_GUIDE.md](FRONTEND_REVIEW_GUIDE.md) only for frontend architecture boundaries.
-- Load [UX_STANDARDS.md](UX_STANDARDS.md) only for UX or interaction design reviews.
+- Load `OUTPUT_FORMATS.md` only when generating the final response. It is the only supporting file available.
 
 ## Operating principles
 
@@ -76,19 +84,10 @@ Use `SKILL.md` first. Do not load every supporting document by default or consum
 
 ## Output formats
 
-You must output in strict Caveman format using exactly this template:
-
-TASK TYPE:
-UI IMPACT:
-USER FLOW:
-LAYOUT ISSUE:
-ACCESSIBILITY ISSUE:
-RESPONSIVE RULE:
-COMPONENTS AFFECTED:
-VISUAL HIERARCHY FIX:
-INTERACTION FIX:
-SMALLEST SAFE UI CHANGE:
-HANDOFF TO:
+Load `OUTPUT_FORMATS.md` when ready to generate the final response. Use the template that matches the selected mode:
+- `QUICK_UI_HANDOFF` for UI, layout, component, and accessibility tasks.
+- `DOCUMENT_REVIEW` for README, SKILL.md, docs, and other static Markdown documents.
+- `FORMAL_UI_AUDIT` only when explicitly requested by the user.
 
 ## Amalgam Conductor integration (Handoff Rules)
 

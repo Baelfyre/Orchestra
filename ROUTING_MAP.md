@@ -27,7 +27,7 @@ If either governance authority returns `BLOCKED`, the Conductor stops. If `human
 | Business alignment, scope, requirements review | `the-steward` | Validating project direction or SDLC |
 | Legal, compliance, privacy, IP, licensing review | `the-governor` | Validating compliance or legal risk |
 | UI/UX review, accessibility, frontend layout | `cloak-meister` | Reviewing user-facing visible layers |
-| README, documentation, final submission | `scribe-meister` | Source evidence is available to verify claims |
+| README, documentation, final submission | `scribe-meister` | Source evidence is available to verify claims. **Fallback**: if source evidence is unavailable, Scribe Meister must stop, report the missing evidence, and return control to the Conductor. It must not generate speculative documentation. |
 | SQL, schemas, database testing, migrations | `meister-chronicler` | Analyzing data layers or database relationships |
 | QA, release readiness, test cases, defects | `acme-overseer` | Normal quality assurance |
 | Security, privacy, RBAC, defensive review | `cipher-meister` | Evaluating defensive posture |

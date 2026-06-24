@@ -108,7 +108,9 @@
             "depends_on": "None",
             "icon_path": "assets/icons/cloak-meister.ico",
             "output_formats": [
-                "Caveman"
+                "QUICK_UI_HANDOFF",
+                "DOCUMENT_REVIEW",
+                "FORMAL_UI_AUDIT"
             ]
         },
         {

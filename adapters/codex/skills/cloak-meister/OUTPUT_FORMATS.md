@@ -1,6 +1,48 @@
 # Output Formats
 
-## Output format
+## QUICK_UI_HANDOFF
+
+Use for fast UI, layout, component, accessibility, or frontend specialist handoff tasks.
+
+```text
+TASK TYPE:
+UI IMPACT:
+USER FLOW:
+LAYOUT ISSUE:
+ACCESSIBILITY ISSUE:
+RESPONSIVE RULE:
+COMPONENTS AFFECTED:
+VISUAL HIERARCHY FIX:
+INTERACTION FIX:
+SMALLEST SAFE UI CHANGE:
+HANDOFF TO:
+```
+
+---
+
+## DOCUMENT_REVIEW
+
+Use when the artifact is README.md, SKILL.md, documentation, Markdown files, usage guides, or other static text documents. Do not use UI component fields for this mode.
+
+```text
+ARTIFACT TYPE:
+DOCUMENT GOAL:
+TARGET READER:
+SCAN HIERARCHY:
+SECTION ORDER ISSUE:
+INFORMATION DENSITY ISSUE:
+NAVIGATION UX:
+MISSING SECTION:
+COGNITIVE LOAD ISSUE:
+SMALLEST SAFE CHANGE:
+HANDOFF TO:
+```
+
+---
+
+## FORMAL_UI_AUDIT
+
+Use only when the user explicitly requests a full UI/UX audit, scoring matrix, or detailed review report.
 
 ```markdown
 # Cloak Meister Review

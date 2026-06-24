@@ -1,25 +1,48 @@
 # Output Formats
 
-## Compact Format (Default)
-*Use this format to save tokens. Exception-only reporting. Omit the scoring matrix and empty sections.*
+## QUICK_UI_HANDOFF
 
-```markdown
-# Cloak Meister Review
+Use for fast UI, layout, component, accessibility, or frontend specialist handoff tasks.
 
-## Critical & Major Issues
-- **[Location/Element]**: [Problem] -> [Fix] (Principle: [Principle])
-
-## AI Anti-Patterns Detected
-- [List any sterile UX, overdecoration, or inconsistent tokens]
-
-## Quick Wins
-- [List 1-2 fast, high-impact UI tweaks]
-
-## Missing Evidence
-- [List unverified assumptions]
+```text
+TASK TYPE:
+UI IMPACT:
+USER FLOW:
+LAYOUT ISSUE:
+ACCESSIBILITY ISSUE:
+RESPONSIVE RULE:
+COMPONENTS AFFECTED:
+VISUAL HIERARCHY FIX:
+INTERACTION FIX:
+SMALLEST SAFE UI CHANGE:
+HANDOFF TO:
 ```
 
-## Full Format (Only when requested)
+---
+
+## DOCUMENT_REVIEW
+
+Use when the artifact is README.md, SKILL.md, documentation, Markdown files, usage guides, or other static text documents. Do not use UI component fields for this mode.
+
+```text
+ARTIFACT TYPE:
+DOCUMENT GOAL:
+TARGET READER:
+SCAN HIERARCHY:
+SECTION ORDER ISSUE:
+INFORMATION DENSITY ISSUE:
+NAVIGATION UX:
+MISSING SECTION:
+COGNITIVE LOAD ISSUE:
+SMALLEST SAFE CHANGE:
+HANDOFF TO:
+```
+
+---
+
+## FORMAL_UI_AUDIT
+
+Use only when the user explicitly requests a full UI/UX audit, scoring matrix, or detailed review report.
 
 ```markdown
 # Cloak Meister Review
@@ -36,16 +59,15 @@ Confidence Level: High / Medium / Low
 Reason:
 
 ## Scoring Matrix
-- Task Completion & Usability: __/100
-- Accessibility & Screen Reader: __/100
-- Cognitive Load & Navigation: __/100
-- Discoverability & States: __/100
-- Visual Hierarchy & Typography: __/100
-- Layout Rhythm (Spacing, Alignment): __/100
-- Color & Contrast: __/100
-- Consistency & Design System: __/100
+- Task Completion: __/100
+- Accessibility: __/100
+- Cognitive Load: __/100
+- Discoverability: __/100
+- Visual Hierarchy: __/100
+- Consistency: __/100
 - Responsiveness: __/100
 - Maintainability: __/100
+- Performance: __/100
 - Overall Score: __/100
 
 ## Executive Summary
@@ -76,11 +98,6 @@ Reason:
 ## Accessibility Notes
 
 ## Information Architecture Notes
-
-## Visual Design & Typography Notes
-
-## AI-Generated Anti-Patterns
-*(e.g., sterile/utilitarian UX, inconsistent design systems, overdecoration)*
 
 ## Design Debt
 
