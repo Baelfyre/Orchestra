@@ -54,13 +54,6 @@
                 opacity: 0.95;
                 filter: url(#shadow);
             }
-            .wave {
-                animation: flow 18s infinite linear;
-            }
-            @keyframes flow {
-                0% { transform: translateX(0); }
-                100% { transform: translateX(-1000px); }
-            }
         </style>
     </defs>
     
@@ -72,24 +65,37 @@
     <circle cx="500" cy="-30" r="260" fill="none" stroke="url(#gold-grad)" stroke-dasharray="6,4" stroke-width="0.75" opacity="0.08" />
     <circle cx="500" cy="-30" r="300" fill="none" stroke="url(#gold-grad)" stroke-width="0.5" opacity="0.04" />
 
-    <!-- Animated Waving Shapes at the bottom -->
-    <g class="wave">
-        <!-- Wave 1 (Back) -->
-        <path d="M0,250 L0,210 Q125,170 250,210 T500,210 T750,210 T1000,210 L1000,250 Z" fill="url(#gold-wave-grad)" opacity="0.4" />
-        <path d="M1000,250 L1000,210 Q1125,170 1250,210 T1500,210 T1750,210 T2000,210 L2000,250 Z" fill="url(#gold-wave-grad)" opacity="0.4" />
+    <!-- Layer 1: Back Morphing Wave -->
+    <path fill="url(#gold-wave-grad)" opacity="0.4">
+        <animate attributeName="d" dur="10s" repeatCount="indefinite"
+            values="M0,250 L0,210 Q250,170 500,210 T1000,210 L1000,250 Z;
+                    M0,250 L0,190 Q250,230 500,190 T1000,190 L1000,250 Z;
+                    M0,250 L0,210 Q250,170 500,210 T1000,210 L1000,250 Z" />
+    </path>
 
-        <!-- Wave 2 (Middle) -->
-        <path d="M0,250 L0,220 Q125,185 250,220 T500,220 T750,220 T1000,220 L1000,250 Z" fill="url(#gold-wave-grad)" opacity="0.6" />
-        <path d="M1000,250 L1000,220 Q1125,185 1250,220 T1500,220 T1750,220 T2000,220 L2000,250 Z" fill="url(#gold-wave-grad)" opacity="0.6" />
+    <!-- Layer 2: Middle Morphing Wave -->
+    <path fill="url(#gold-wave-grad)" opacity="0.6">
+        <animate attributeName="d" dur="7s" repeatCount="indefinite"
+            values="M0,250 L0,220 Q250,200 500,220 T1000,220 L1000,250 Z;
+                    M0,250 L0,205 Q250,235 500,205 T1000,205 L1000,250 Z;
+                    M0,250 L0,220 Q250,200 500,220 T1000,220 L1000,250 Z" />
+    </path>
 
-        <!-- Wave 3 (Front solid gilded edge) -->
-        <path d="M0,250 L0,230 Q125,200 250,230 T500,230 T750,230 T1000,230 L1000,250 Z" fill="url(#gold-wave-grad)" opacity="0.8" />
-        <path d="M1000,250 L1000,230 Q1125,200 1250,230 T1500,230 T1750,230 T2000,230 L2000,250 Z" fill="url(#gold-wave-grad)" opacity="0.8" />
+    <!-- Layer 3: Front Morphing Wave -->
+    <path fill="url(#gold-wave-grad)" opacity="0.8">
+        <animate attributeName="d" dur="12s" repeatCount="indefinite"
+            values="M0,250 L0,230 Q250,210 500,230 T1000,230 L1000,250 Z;
+                    M0,250 L0,215 Q250,240 500,215 T1000,215 L1000,250 Z;
+                    M0,250 L0,230 Q250,210 500,230 T1000,230 L1000,250 Z" />
+    </path>
 
-        <!-- Highlight line on top of front wave -->
-        <path d="M0,230 Q125,200 250,230 T500,230 T750,230 T1000,230" fill="none" stroke="url(#wave-border)" stroke-width="1.25" opacity="0.85" />
-        <path d="M1000,230 Q1125,200 1250,230 T1500,230 T1750,230 T2000,230" fill="none" stroke="url(#wave-border)" stroke-width="1.25" opacity="0.85" />
-    </g>
+    <!-- Front Wave Gilded Highlight Line -->
+    <path fill="none" stroke="url(#wave-border)" stroke-width="1.25" opacity="0.85">
+        <animate attributeName="d" dur="12s" repeatCount="indefinite"
+            values="M0,230 Q250,210 500,230 T1000,230;
+                    M0,215 Q250,240 500,215 T1000,215;
+                    M0,230 Q250,210 500,230 T1000,230" />
+    </path>
 
     <!-- Content / Typography -->
     <text x="500" y="110" class="title">Amalgam Conductor</text>
