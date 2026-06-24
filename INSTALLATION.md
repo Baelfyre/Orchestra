@@ -62,10 +62,11 @@ Run the structure validator (`.\scripts\validate-structure.ps1`) and confirm tha
 To safely update the ecosystem across any framework, run the included update script. This script automatically performs safety checks, fetches the latest changes, and triggers the validation suite:
 
 ```sh
+powershell -ExecutionPolicy Bypass -File .\scripts\update-plugin.ps1 -DryRun
 powershell -ExecutionPolicy Bypass -File .\scripts\update-plugin.ps1
 ```
 
-*(You can also use `-DryRun` to see what changes would occur without pulling, or `-RepoPath "C:\path"` to run it from a different directory).*
+*(You can also append `-RepoPath "C:\path"` to run it from a different directory).*
 
 ### Manual Update Instructions
 
