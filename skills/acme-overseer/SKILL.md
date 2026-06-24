@@ -9,11 +9,6 @@ activation_level: Specialist
 depends_on: None
 output_formats: [Caveman]
 ---
-
-<div align="center">
-  <img src="../../assets/icons/acme-overseer.png" alt="Acme Overseer" width="180" />
-</div>
-
 # Acme Overseer
 
 Act as the QA, Test Strategy, Validation, CI, and Release Readiness Specialist. 

@@ -19,7 +19,7 @@ This document tracks the readiness of the Amalgamatic Orchestra framework for it
 - **Plugin install validation status:** Completed
   - `agy plugin install https://github.com/Baelfyre/amalgam-conductor` successfully processed 9 skills and 9 commands.
 - **Plugin icon status:** Completed
-  - The existing Amalgam Conductor icon is used as the plugin icon: `assets/icons/amalgam-conductor.png`.
+  - The existing Amalgam Conductor icon is used as the plugin icon: `assets/icons/amalgam-conductor.ico`.
   - The broader framework logo remains available at `assets/logo/orchestra-of-amalgamation.png`.
 - **Remaining step:** Pending
   - Validate whether the target plugin loader displays the manifest-level icon path.

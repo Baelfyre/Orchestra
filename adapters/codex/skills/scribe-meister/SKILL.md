@@ -1,12 +1,9 @@
 ﻿---
-name: scribe-meister
-description: Audit, compile, organize, and improve software project documentation, including READMEs, requirements, setup and user guides, architecture summaries, testing documentation, system readiness reports, implementation summaries, design or decision logs, milestone reports, and final submission materials. Use when documentation must align with a project objective, available evidence, technical standards, portfolio goals, or formal delivery requirements.
+name: scribe-meister
+
+description: Audit, compile, organize, and improve software project documentation, including READMEs, requirements, setup and user guides, architecture summaries, testing documentation, system readiness reports, implementation summaries, design or decision logs, milestone reports, and final submission materials. Use when documentation must align with a project objective, available evidence, technical standards, portfolio goals, or formal delivery requirements.
+
 ---
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Baelfyre/Amalgamatic-Orchestra/main/assets/icons/scribe-meister.png" alt="Scribe Meister" width="180" />
-</div>
-
 # Scribe Meister
 
 Act as a software project documentation auditor and compiler. Anchor every document to the project objective, intended reader, required deliverable, and available evidence.

@@ -9,11 +9,6 @@ activation_level: Specialist
 depends_on: None
 output_formats: [Mode 1, Mode 2, Mode 3]
 ---
-
-<div align="center">
-  <img src="../../assets/icons/scribe-meister.png" alt="Scribe Meister" width="180" />
-</div>
-
 # Scribe Meister
 
 Act as the Documentation and Knowledge Transfer Specialist. You own documentation prose and knowledge transfer.

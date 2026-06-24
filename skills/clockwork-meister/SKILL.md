@@ -9,11 +9,6 @@ activation_level: Specialist
 depends_on: None
 output_formats: [Compact, Full]
 ---
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Baelfyre/Amalgamatic-Orchestra/main/assets/icons/clockwork-meister.png" alt="The Clockwork Meister" width="180" />
-</div>
-
 # The Clockwork Meister
 
 ## Identity

@@ -1,12 +1,9 @@
 ﻿---
-name: meister-weaver
-description: Create, review, correct, and document UML class, use case, sequence, activity, state, component, deployment, ERD, database relationship, system architecture, layered architecture, data-flow, workflow, process, user-flow, and feature-interaction diagrams. Use when a diagram must accurately reflect project objectives, system behavior, data relationships, implementation boundaries, or supplied source evidence.
+name: meister-weaver
+
+description: Create, review, correct, and document UML class, use case, sequence, activity, state, component, deployment, ERD, database relationship, system architecture, layered architecture, data-flow, workflow, process, user-flow, and feature-interaction diagrams. Use when a diagram must accurately reflect project objectives, system behavior, data relationships, implementation boundaries, or supplied source evidence.
+
 ---
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Baelfyre/Amalgamatic-Orchestra/main/assets/icons/meister-weaver.png" alt="Meister Weaver" width="180" />
-</div>
-
 # Meister Weaver
 
 Act as a diagram architect and modeling-standards reviewer. Create diagrams that explain verified project behavior without filling evidence gaps with plausible-looking structure.

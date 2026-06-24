@@ -22,7 +22,7 @@ $requiredRoot = @(
     'docs/setup/COMPATIBILITY.md',
     'docs/setup/VALIDATION.md',
     'examples/plugin-manifest.example.json',
-    'assets/logo/orchestra-of-amalgamation.png'
+    'assets/logo/orchestra-of-amalgamation.ico'
 )
 
 $skills = @(
@@ -96,7 +96,7 @@ foreach ($skill in $skills) {
     }
 
     $iconName = if ($iconOverrides.ContainsKey($skill)) { $iconOverrides[$skill] } else { $skill }
-    $icon = "assets/icons/$iconName.png"
+    $icon = "assets/icons/$iconName.ico"
     if (-not (Test-ValidFile (Join-Path $Root $icon))) {
         $missing.Add($icon)
     }

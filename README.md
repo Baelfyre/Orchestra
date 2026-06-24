@@ -310,14 +310,14 @@ The Amalgam Conductor operates in the Orchestration Layer. Once governance clear
 
 | Skill | Focus |
 |---|---|
-| <img src="assets/icons/amalgam-conductor.png" width="24" align="absmiddle" /> **Amalgam Conductor** | Routing and orchestration |
-| <img src="assets/icons/theSteward.png" width="24" align="absmiddle" /> **The Steward** | Business, scope, SDLC, and requirements alignment |
-| <img src="assets/icons/theGovernor.png" width="24" align="absmiddle" /> **The Governor** | Privacy, IP, licensing, compliance, and legal-risk review |
-| <img src="assets/icons/clockwork-meister.png" width="24" align="absmiddle" /> **Clockwork Meister** | Architecture, OOP, refactoring |
-| <img src="assets/icons/cloak-meister.png" width="24" align="absmiddle" /> **Cloak Meister** | UI, UX, layout, accessibility |
-| <img src="assets/icons/scribe-meister.png" width="24" align="absmiddle" /> **Scribe Meister** | Documentation and technical writing |
-| <img src="assets/icons/acme-overseer.png" width="24" align="absmiddle" /> **Acme Overseer** | QA, testing, release readiness |
-| <img src="assets/icons/cipher-meister.png" width="24" align="absmiddle" /> **Cipher Meister** | Security and privacy evidence |
+| **Amalgam Conductor** | Routing and orchestration |
+| **The Steward** | Business, scope, SDLC, and requirements alignment |
+| **The Governor** | Privacy, IP, licensing, compliance, and legal-risk review |
+| **Clockwork Meister** | Architecture, OOP, refactoring |
+| **Cloak Meister** | UI, UX, layout, accessibility |
+| **Scribe Meister** | Documentation and technical writing |
+| **Acme Overseer** | QA, testing, release readiness |
+| **Cipher Meister** | Security and privacy evidence |
 
 For details on all execution skills, routing logic, and behavioral constraints, see the [Specialist Skill Index](SKILL_INDEX.md).
 

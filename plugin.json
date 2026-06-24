@@ -5,8 +5,8 @@
     "version": "1.0.0",
     "license": "MIT",
     "repository": "https://github.com/Baelfyre/amalgam-conductor",
-    "icon_path": "assets/icons/amalgam-conductor.png",
-    "logo_path": "assets/logo/orchestra-of-amalgamation.png",
+    "icon_path": "assets/icons/amalgam-conductor.ico",
+    "logo_path": "assets/logo/orchestra-of-amalgamation.ico",
     "safety_note": "The hidden-dagger skill and resilience-check command execute destructive, negative, fuzz, adversarial QA, and failure-mode testing. They require explicit user approval, non-production scope, and a safety gate before execution. WARNING: There is no automated runtime guardrail script. You must manually enforce safety gates.",
     "commands": [
         "amalgam-conductor",
@@ -30,7 +30,7 @@
             "name": "the-steward",
             "activation_level": "Governor",
             "depends_on": "None",
-            "icon_path": "assets/icons/theSteward.png",
+            "icon_path": "assets/icons/theSteward.ico",
             "output_formats": [
                 "Governance Review"
             ]
@@ -45,7 +45,7 @@
             "name": "the-governor",
             "activation_level": "Governor",
             "depends_on": "None",
-            "icon_path": "assets/icons/theGovernor.png",
+            "icon_path": "assets/icons/theGovernor.ico",
             "output_formats": [
                 "Governance Review"
             ]
@@ -60,7 +60,7 @@
             "name": "acme-overseer",
             "activation_level": "Specialist",
             "depends_on": "None",
-            "icon_path": "assets/icons/acme-overseer.png",
+            "icon_path": "assets/icons/acme-overseer.ico",
             "output_formats": [
                 "Caveman"
             ]
@@ -75,7 +75,7 @@
             "name": "amalgam-conductor",
             "activation_level": "Commander",
             "depends_on": "None",
-            "icon_path": "assets/icons/amalgam-conductor.png",
+            "icon_path": "assets/icons/amalgam-conductor.ico",
             "output_formats": [
                 "Routing Plan",
                 "Prompts"
@@ -91,7 +91,7 @@
             "name": "cipher-meister",
             "activation_level": "Specialist",
             "depends_on": "None",
-            "icon_path": "assets/icons/cipher-meister.png",
+            "icon_path": "assets/icons/cipher-meister.ico",
             "output_formats": [
                 "Caveman"
             ]
@@ -106,7 +106,7 @@
             "name": "cloak-meister",
             "activation_level": "Specialist",
             "depends_on": "None",
-            "icon_path": "assets/icons/cloak-meister.png",
+            "icon_path": "assets/icons/cloak-meister.ico",
             "output_formats": [
                 "Caveman"
             ]
@@ -121,7 +121,7 @@
             "name": "hidden-dagger",
             "activation_level": "Gated",
             "depends_on": "amalgam-conductor",
-            "icon_path": "assets/icons/hidden-dagger.png",
+            "icon_path": "assets/icons/hidden-dagger.ico",
             "output_formats": [
                 "Caveman"
             ]
@@ -136,7 +136,7 @@
             "name": "meister-chronicler",
             "activation_level": "Specialist",
             "depends_on": "None",
-            "icon_path": "assets/icons/meister-chronicler.png",
+            "icon_path": "assets/icons/meister-chronicler.ico",
             "output_formats": [
                 "Caveman",
                 "Normalization Output"
@@ -152,7 +152,7 @@
             "name": "meister-weaver",
             "activation_level": "Specialist",
             "depends_on": "None",
-            "icon_path": "assets/icons/meister-weaver.png",
+            "icon_path": "assets/icons/meister-weaver.ico",
             "output_formats": [
                 "Mermaid",
                 "PlantUML"
@@ -168,7 +168,7 @@
             "name": "scribe-meister",
             "activation_level": "Specialist",
             "depends_on": "None",
-            "icon_path": "assets/icons/scribe-meister.png",
+            "icon_path": "assets/icons/scribe-meister.ico",
             "output_formats": [
                 "Mode 1",
                 "Mode 2",
@@ -185,7 +185,7 @@
             "name": "clockwork-meister",
             "activation_level": "Specialist",
             "depends_on": "None",
-            "icon_path": "assets/icons/clockwork-meister.png",
+            "icon_path": "assets/icons/clockwork-meister.ico",
             "output_formats": [
                 "Compact",
                 "Full"

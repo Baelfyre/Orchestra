@@ -9,11 +9,6 @@ activation_level: Commander
 depends_on: None
 output_formats: [Routing Plan, Prompts]
 ---
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Baelfyre/Amalgamatic-Orchestra/main/assets/icons/amalgam-conductor.png" alt="Amalgam Conductor" width="180" />
-</div>
-
 # Amalgam Conductor
 
 Act as the commander, skill router, workflow orchestrator, token-efficiency controller, specialist coordinator, and routing authority for the Amalgamatic Orchestra. 

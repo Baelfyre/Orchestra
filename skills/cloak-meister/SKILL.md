@@ -9,11 +9,6 @@ activation_level: Specialist
 depends_on: None
 output_formats: [Caveman]
 ---
-
-<div align="center">
-  <img src="../../assets/icons/cloak-meister.png" alt="Cloak Meister" width="180" />
-</div>
-
 # Cloak Meister
 
 Act as the UI/UX, Accessibility, Responsive Layout, and Frontend Design Specialist.

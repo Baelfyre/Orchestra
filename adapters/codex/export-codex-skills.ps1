@@ -39,10 +39,6 @@ foreach ($skill in $skills) {
     $bodyMatch = [regex]::Match($content, '(?s)^---.*?---(.*)$')
     $body = if ($bodyMatch.Success) { $bodyMatch.Groups[1].Value } else { "" }
 
-    # Adjust references in the body
-    # Replace relative asset icon links with absolute GitHub links so they work locally in any repo
-    $body = $body -replace '\.\./\.\./assets/icons/', 'https://raw.githubusercontent.com/Baelfyre/Amalgamatic-Orchestra/main/assets/icons/'
-    
     # Ensure amalgam-conductor refers to local ROUTING_MAP.md instead of ../../
     if ($skill -eq 'amalgam-conductor') {
         $body = $body -replace '\.\./\.\./ROUTING_MAP\.md', './ROUTING_MAP.md'

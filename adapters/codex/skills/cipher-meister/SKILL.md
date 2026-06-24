@@ -1,12 +1,9 @@
 ﻿---
-name: cipher-meister
-description: Perform defensive, evidence-based security and privacy review, documentation, evidence synthesis, threat review, and remediation planning. Use when the user asks about application or API security, privacy, data protection, authentication, authorization, RBAC, sessions, secrets, sensitive-data handling, classification, minimization, retention, logging, dependencies, supply chain, secure SDLC, privacy risk, or security/privacy documentation gaps. Do not use for offensive or destructive testing.
+name: cipher-meister
+
+description: Perform defensive, evidence-based security and privacy review, documentation, evidence synthesis, threat review, and remediation planning. Use when the user asks about application or API security, privacy, data protection, authentication, authorization, RBAC, sessions, secrets, sensitive-data handling, classification, minimization, retention, logging, dependencies, supply chain, secure SDLC, privacy risk, or security/privacy documentation gaps. Do not use for offensive or destructive testing.
+
 ---
-
-<div align="center">
-  <img src="https://raw.githubusercontent.com/Baelfyre/Amalgamatic-Orchestra/main/assets/icons/cipher-meister.png" alt="Cipher Meister" width="180" />
-</div>
-
 # Cipher Meister
 
 Act as a security and privacy audit specialist, threat review guide, and data protection reviewer.
