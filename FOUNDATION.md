@@ -15,3 +15,7 @@ The Amalgamatic Orchestra follows these rules:
 ## External inspiration disclaimer
 
 Ponytail and Caveman are external tools. They are not included, vendored, or required by this repository. Install them separately from their official repositories if desired. The Orchestra adopts only the general principle of clear, focused, and low-filler review behavior.
+
+---
+
+*Please review our [Global Disclaimer](DISCLAIMER.md) regarding the use of these AI-assisted tools.*

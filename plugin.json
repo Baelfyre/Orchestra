@@ -21,17 +21,19 @@
     ],
     "skills": [
         {
-            "primary_use": "Test strategy, test cases, defect triage, regression, release readiness",
+            "primary_use": "QA strategy, test planning, validation gates, release readiness, CI/CD validation",
             "slug": "acme-overseer",
-            "description": "Review quality assurance, test strategy and plans, test cases, acceptance criteria, requirements testability, unit/integration/system/user-acceptance testing, smoke and regression planning, defect triage, verification and validation evidence, CI test workflows, quality gates, release readiness, and quality documentation. Use when project quality or readiness must be assessed from available evidence.",
-            "avoid_when": "Destructive pressure testing is needed",
+            "description": "The QA, Test Strategy, Validation, CI, and Release Readiness Specialist. Owns validation strategy, test planning, QA gates, release readiness, CI checks, smoke tests, regression tests, acceptance criteria, and pass/fail criteria.",
+            "avoid_when": "Implementing test code, architecture design, security policy, or long documentation",
             "skill_path": "skills/acme-overseer/SKILL.md",
-            "role": "Quality assurance auditor and release gatekeeper",
+            "role": "QA, Test Strategy, Validation, CI, and Release Readiness Specialist",
             "name": "acme-overseer",
             "activation_level": "Specialist",
             "depends_on": "None",
             "icon_path": "assets/icons/acme-overseer.png",
-            "output_formats": ["Compact", "Full"]
+            "output_formats": [
+                "Caveman"
+            ]
         },
         {
             "primary_use": "Project orientation, multi-skill routing, workflow planning",
@@ -44,85 +46,104 @@
             "activation_level": "Commander",
             "depends_on": "None",
             "icon_path": "assets/icons/amalgam-conductor.png",
-            "output_formats": ["Routing Plan", "Prompts"]
+            "output_formats": [
+                "Routing Plan",
+                "Prompts"
+            ]
         },
         {
-            "primary_use": "Defensive review, RBAC, data protection, sensitive data handling",
+            "primary_use": "Security policy, RBAC, authorization, authentication risk, privacy, secrets",
             "slug": "cipher-meister",
-            "description": "Perform defensive, evidence-based security and privacy review, documentation, evidence synthesis, threat review, and remediation planning. Use when the user asks about application or API security, privacy, data protection, authentication, authorization, RBAC, sessions, secrets, sensitive-data handling, classification, minimization, retention, logging, dependencies, supply chain, secure SDLC, privacy risk, or security/privacy documentation gaps. Do not use for offensive or destructive testing.",
-            "avoid_when": "Offensive or destructive testing is needed",
+            "description": "The Security, Privacy, Access Control, and Threat Review Specialist. Owns security policy, RBAC, authorization rules, authentication risk review, secrets handling, privacy, threat modeling, abuse-case review, secure configuration, and security remediation requirements. Use when the user asks about application security, privacy, data protection, RBAC, or secrets handling. Do not use for offensive or destructive testing.",
+            "avoid_when": "Offensive testing is needed, or for implementation, database design, or application architecture",
             "skill_path": "skills/cipher-meister/SKILL.md",
-            "role": "Security and privacy auditor",
+            "role": "Security, Privacy, Access Control, and Threat Review Specialist",
             "name": "cipher-meister",
             "activation_level": "Specialist",
             "depends_on": "None",
             "icon_path": "assets/icons/cipher-meister.png",
-            "output_formats": ["Compact", "Full"]
+            "output_formats": [
+                "Caveman"
+            ]
         },
         {
-            "primary_use": "UI, UX, accessibility, frontend architecture, responsive layout",
+            "primary_use": "UI, UX, accessibility, visual hierarchy, responsive layout, interaction design",
             "slug": "cloak-meister",
-            "description": "Review and improve the visible and experiential layer of software systems, including UI, UX, accessibility, visual hierarchy, frontend architecture, dashboards, JavaFX screens, React/HTML/CSS components, design systems, responsive layouts, user flows, information architecture, interaction design, forms, component consistency, and frontend implementation guidance. Use for evidence-based interface audits and practical visible-layer improvements.",
-            "avoid_when": "Database schema or system architecture diagraming is needed",
+            "description": "The UI/UX, Accessibility, Responsive Layout, and Frontend Design Specialist. Owns UI/UX requirements, accessibility, responsive design rules, layout decisions, visual hierarchy, interaction behavior, component usability, and design-system consistency. Use for evidence-based interface audits and practical visible-layer improvements.",
+            "avoid_when": "Frontend implementation code, backend logic, security policy, or architecture diagrams",
             "skill_path": "skills/cloak-meister/SKILL.md",
-            "role": "UI/UX architect and frontend auditor",
+            "role": "UI/UX, Accessibility, Responsive Layout, and Frontend Design Specialist",
             "name": "cloak-meister",
             "activation_level": "Specialist",
             "depends_on": "None",
             "icon_path": "assets/icons/cloak-meister.png",
-            "output_formats": ["Compact", "Full"]
+            "output_formats": [
+                "Caveman"
+            ]
         },
         {
-            "primary_use": "Destructive, negative, fuzz, adversarial QA, failure-mode testing",
+            "primary_use": "Chaos scenarios, resilience weaknesses, failure-paths, negative tests, guardrail gaps",
             "slug": "hidden-dagger",
-            "description": "Use only when the user explicitly requests controlled destructive testing, negative testing, fuzz testing, adversarial QA, boundary or failure-mode testing, guardrail or crash testing, invalid-input testing, database constraint stress testing, resilience testing, or pre-production pressure testing. Do not invoke automatically. Operate only on authorized, non-production systems with a completed safety gate and explicit approval for risky execution.",
-            "avoid_when": "Operating in production, lacking explicit approval, or during early dev",
+            "description": "The Chaos, Resilience, and Adversarial Scenario Specialist. Generates controlled chaos scenarios, failure paths, negative tests, and resilience weaknesses. Use only for finding missing guardrails, crash conditions, and failure modes. Operates strictly within safety boundaries and never executes unauthorized, destructive, or production-impacting tests.",
+            "avoid_when": "Code implementation, QA test planning, CI validation, security policy, database design",
             "skill_path": "skills/hidden-dagger/SKILL.md",
-            "role": "Controlled resilience tester",
+            "role": "Chaos, Resilience, and Adversarial Scenario Specialist",
             "name": "hidden-dagger",
             "activation_level": "Gated",
             "depends_on": "amalgam-conductor",
             "icon_path": "assets/icons/hidden-dagger.png",
-            "output_formats": ["Output"]
+            "output_formats": [
+                "Caveman"
+            ]
         },
         {
-            "primary_use": "Schemas, ERDs, constraints, migrations, SQL validation",
+            "primary_use": "SQL schemas, NoSQL documents, JSON, ORM, migrations, constraints, indexes, normalization",
             "slug": "meister-chronicler",
-            "description": "Review, document, and improve database architecture, schemas, ERDs, tables, columns, keys, constraints, indexes, normalization, reference and seed data, migrations, stored procedures, views, audit tables, reporting tables, SQL, data dictionaries, integration documentation, and database testing plans. Use when database facts must be validated against schema, migration, dump, live metadata, or project requirements.",
-            "avoid_when": "Evaluating visible UI or system-level testing",
+            "description": "The Data Persistence and Database Management Specialist. Owns SQL, NoSQL, JSON, schemas, ERDs, ORM/JPA alignments, migrations, seed data, constraints, indexes, audit log persistence, data validation at the persistence layer, and database normalization. Use when data persistence facts or normalization forms must be reviewed, mapped, or validated against business requirements.",
+            "avoid_when": "Evaluating visible UI, testing plans, business workflows, architecture boundaries, or security policy",
             "skill_path": "skills/meister-chronicler/SKILL.md",
-            "role": "Database architect and schema auditor",
+            "role": "Data Persistence and Database Management Specialist",
             "name": "meister-chronicler",
             "activation_level": "Specialist",
             "depends_on": "None",
             "icon_path": "assets/icons/meister-chronicler.png",
-            "output_formats": ["Compact", "Full"]
+            "output_formats": [
+                "Caveman",
+                "Normalization Output"
+            ]
         },
         {
-            "primary_use": "UML, ERD, architecture, workflow, data-flow diagrams",
+            "primary_use": "Visual modeling, UML, ERD, architecture, workflow, data-flow diagrams via Mermaid/PlantUML",
             "slug": "meister-weaver",
-            "description": "Create, review, correct, and document UML class, use case, sequence, activity, state, component, deployment, ERD, database relationship, system architecture, layered architecture, data-flow, workflow, process, user-flow, and feature-interaction diagrams. Use when a diagram must accurately reflect project objectives, system behavior, data relationships, implementation boundaries, or supplied source evidence.",
-            "avoid_when": "Resolving UI accessibility or evaluating functional code without diagrams",
+            "description": "The Visual Modeling and Diagram Generation Specialist. Owns ERD diagrams, schema diagrams, UML diagrams (class, use case, sequence, activity), component diagrams, deployment diagrams, and workflow diagrams using Mermaid or PlantUML.",
+            "avoid_when": "Database design decisions, documentation prose, code implementation, security policy",
             "skill_path": "skills/meister-weaver/SKILL.md",
-            "role": "Visual modeling and diagram specialist",
+            "role": "Visual Modeling and Diagram Generation Specialist",
             "name": "meister-weaver",
             "activation_level": "Specialist",
             "depends_on": "None",
             "icon_path": "assets/icons/meister-weaver.png",
-            "output_formats": ["Compact", "Full"]
+            "output_formats": [
+                "Mermaid",
+                "PlantUML"
+            ]
         },
         {
-            "primary_use": "READMEs, project reports, readiness summaries, handover docs",
+            "primary_use": "Documentation prose, READMEs, setup guides, release notes, SDLC, technical summaries",
             "slug": "scribe-meister",
-            "description": "Audit, compile, organize, and improve software project documentation, including READMEs, requirements, setup and user guides, architecture summaries, testing documentation, system readiness reports, implementation summaries, design or decision logs, milestone reports, and final submission materials. Use when documentation must align with a project objective, available evidence, technical standards, portfolio goals, or formal delivery requirements.",
-            "avoid_when": "Source evidence is unavailable to verify claims",
+            "description": "The Documentation and Knowledge Transfer Specialist. Owns documentation prose, README updates, setup guides, release notes, changelogs, SDLC documentation, and technical summaries based on input from other specialists.",
+            "avoid_when": "Architecture decisions, database design, normalization analysis, UI design, diagram generation, or code implementation",
             "skill_path": "skills/scribe-meister/SKILL.md",
-            "role": "Documentation compiler and auditor",
+            "role": "Documentation and Knowledge Transfer Specialist",
             "name": "scribe-meister",
             "activation_level": "Specialist",
             "depends_on": "None",
             "icon_path": "assets/icons/scribe-meister.png",
-            "output_formats": ["Compact", "Full"]
+            "output_formats": [
+                "Mode 1",
+                "Mode 2",
+                "Mode 3"
+            ]
         },
         {
             "primary_use": "OOP architecture, layered architecture, system design, refactoring",
@@ -135,7 +156,10 @@
             "activation_level": "Specialist",
             "depends_on": "None",
             "icon_path": "assets/icons/clockwork-meister.png",
-            "output_formats": ["Compact", "Full"]
+            "output_formats": [
+                "Compact",
+                "Full"
+            ]
         }
     ]
 }

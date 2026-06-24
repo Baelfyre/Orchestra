@@ -78,3 +78,9 @@ For manual setup, copy the respective `skills/` folders into your AI's instructi
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\validate-manifest.ps1
 ```
+
+---
+
+## ⚠️ DISCLAIMER
+
+Please read the [DISCLAIMER.md](DISCLAIMER.md) before using this ecosystem in real-world applications or production environments.
