@@ -18,6 +18,16 @@ $manifestSkills = $manifestContent.skills
 $skillsDir = Join-Path $Root "skills"
 $skillFolders = Get-ChildItem -LiteralPath $skillsDir -Directory
 
+$skillIndexLines = Get-Content -LiteralPath (Join-Path $Root "SKILL_INDEX.md")
+
+$exceptions = @{
+    'amalgam-conductor' = 'Semantic routing formats pending dedicated alignment pass'
+    'the-steward'       = 'Governance Review is a semantic format covering compact and expanded templates'
+    'the-governor'      = 'Governance Review is a semantic format covering compact and expanded templates'
+    'hidden-dagger'     = 'Legacy output headings pending dedicated alignment pass'
+    'meister-weaver'    = 'Diagram syntax labels pending dedicated alignment pass'
+}
+
 $errors = 0
 
 # Check that every manifest skill has a real folder
@@ -66,6 +76,7 @@ foreach ($folder in $skillFolders) {
         
         $fields = @("name","description","slug","role","primary_use","avoid_when","activation_level","depends_on","output_formats")
         
+        $skillOutputFormats = @()
         foreach ($field in $fields) {
             # simple regex to extract key: value
             if ($frontmatter -match "(?m)^${field}:\s*(.*)$") {
@@ -77,6 +88,7 @@ foreach ($folder in $skillFolders) {
                     # Handle array comparison (e.g. "[Compact, Full]")
                     $val = $val -replace '\[|\]',''
                     $arr = $val -split ',' | ForEach-Object { $_.Trim() }
+                    $skillOutputFormats = $arr
                     $mArr = $manifestVal
                     
                     $valStr = ($arr -join ',')
@@ -94,6 +106,48 @@ foreach ($folder in $skillFolders) {
                 }
             } else {
                 Write-Error "Missing field '$field' in frontmatter of $skillName"
+                $errors++
+            }
+        }
+        
+        if ($exceptions.ContainsKey($skillName)) {
+            Write-Host "Skipping extended contract checks for $skillName ($($exceptions[$skillName]))"
+        } else {
+            # 1. Check OUTPUT_FORMATS.md headings
+            $formatsPath = Join-Path $folder.FullName "OUTPUT_FORMATS.md"
+            if (Test-Path -LiteralPath $formatsPath) {
+                $formatsContent = Get-Content -LiteralPath $formatsPath -Raw
+                foreach ($format in $skillOutputFormats) {
+                    $escapedFormat = [regex]::Escape($format)
+                    if ($formatsContent -notmatch "(?m)^##\s+${escapedFormat}(?:\s*$|\s*[:\(].*$)") {
+                        Write-Error "Output format drift: Heading '## $format' missing in OUTPUT_FORMATS.md for $skillName"
+                        $errors++
+                    }
+                }
+            }
+
+            # 2. Check SKILL_INDEX.md
+            $escapedSlug = [regex]::Escape($skillName)
+            $indexRow = $skillIndexLines | Where-Object { $_ -match ('\|\s*`' + $escapedSlug + '`\s*\|') } | Select-Object -First 1
+            if ($indexRow) {
+                $columns = $indexRow -split '\|'
+                if ($columns.Count -ge 9) {
+                    $indexFormatsRaw = $columns[-2]
+                    $indexFormatsRaw = $indexFormatsRaw -replace '`',''
+                    $indexArr = $indexFormatsRaw -split ',' | ForEach-Object { $_.Trim() }
+                    $indexValStr = ($indexArr -join ',')
+                    $valStr = ($skillOutputFormats -join ',')
+                    
+                    if ($indexValStr -ne $valStr) {
+                        Write-Error "SKILL_INDEX.md drift: Output formats for $skillName do not match frontmatter. Expected: '$valStr', Found: '$indexValStr'"
+                        $errors++
+                    }
+                } else {
+                    Write-Error "Invalid column count in SKILL_INDEX.md for $skillName"
+                    $errors++
+                }
+            } else {
+                Write-Error "Could not find row for $skillName in SKILL_INDEX.md"
                 $errors++
             }
         }
