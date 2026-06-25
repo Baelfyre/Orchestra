@@ -1,4 +1,4 @@
-# Plugin Readiness
+﻿# Plugin Readiness
 
 This document tracks the readiness of the Orchestra framework for its release as the **Conductor** installable plugin.
 
@@ -15,9 +15,9 @@ This document tracks the readiness of the Orchestra framework for its release as
   - All 9 core specialist skills are fully documented and integrated.
   - Handled by `plugin.json` skills array correctly.
 - **Repository rename status:** Completed
-  - GitHub repo has been renamed to `Baelfyre/amalgam-conductor`.
+  - GitHub repo has been renamed to `Baelfyre/Orchestra`. Internal plugin and command identity remains `amalgam-conductor` for compatibility.
 - **Plugin install validation status:** Completed
-  - `agy plugin install https://github.com/Baelfyre/amalgam-conductor` successfully processed 9 skills and 9 commands.
+  - `agy plugin install https://github.com/Baelfyre/Orchestra` successfully processed 9 skills and 9 commands.
 - **Plugin icon status:** Completed
   - The existing Conductor icon is used as the plugin icon: `assets/icons/amalgam-conductor.ico`.
   - The broader framework logo remains available at `assets/logo/orchestra-of-amalgamation.png`.

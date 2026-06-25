@@ -7,7 +7,7 @@ Conductor can be installed in three ways depending on your environment:
 If you are using the Antigravity ecosystem, install the plugin directly:
 
 ```sh
-agy plugin install https://github.com/Baelfyre/amalgam-conductor
+agy plugin install https://github.com/Baelfyre/Orchestra
 ```
 
 ## 2. Codex Plugin Setup
@@ -17,7 +17,7 @@ Codex compatibility is provided through `.codex-plugin/plugin.json`, `AGENTS.md`
 If cloning manually:
 1. Clone the repository into your global Codex plugins directory or your local workspace's `.agents/plugins` directory.
    ```sh
-   git clone https://github.com/Baelfyre/amalgam-conductor.git
+   git clone https://github.com/Baelfyre/Orchestra.git
    ```
 2. Codex will automatically discover the `.codex-plugin/plugin.json` manifest and map the `skills/` directory into your environment.
 3. The repository's `AGENTS.md` file will provide native instructions to Codex on how to interact with the ecosystem.
@@ -28,7 +28,7 @@ If you prefer not to use a plugin manager or are using an unsupported environmen
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/Baelfyre/amalgam-conductor.git
+   git clone https://github.com/Baelfyre/Orchestra.git
    ```
 2. Copy only the specific folders you need from `skills/` into the local skill or instruction location supported by your tool.
 3. Keep the repository copy separate from unrelated source repositories. Follow [LOCAL_ONLY_GUIDE.md](LOCAL_ONLY_GUIDE.md) if you are deliberately referencing skills repo-locally.

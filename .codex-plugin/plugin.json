@@ -3,5 +3,5 @@
     "description": "An installable AI workflow plugin that routes complex software tasks through focused specialist skills for architecture, UI/UX, documentation, diagrams, databases, QA, security, and gated resilience review.",
     "version": "1.0.0",
     "license": "MIT",
-    "repository": "https://github.com/Baelfyre/amalgam-conductor"
+    "repository": "https://github.com/Baelfyre/Orchestra"
 }

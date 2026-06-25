@@ -30,7 +30,7 @@
             "name": "the-steward",
             "activation_level": "Governor",
             "depends_on": "None",
-            "icon_path": "assets/icons/theSteward.ico",
+            "icon_path": "assets/icons/the-steward.ico",
             "output_formats": [
                 "Governance Review"
             ]
@@ -45,7 +45,7 @@
             "name": "the-governor",
             "activation_level": "Governor",
             "depends_on": "None",
-            "icon_path": "assets/icons/theGovernor.ico",
+            "icon_path": "assets/icons/the-governor.ico",
             "output_formats": [
                 "Governance Review"
             ]

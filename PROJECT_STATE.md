@@ -1,7 +1,7 @@
-# Project State
+﻿# Project State
 
 - **Project Name:** Conductor
-- **Active Repo:** `C:\amalgam-conductor`
+- **Active Repo:** `C:\conductor`
 - **Current Branch:** Main (or active working branch)
 - **Current Stable State:** Governance update pending final review/commit
 - **Related but Forbidden Repo for this task:** `C:\+AA`

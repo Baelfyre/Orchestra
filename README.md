@@ -104,22 +104,22 @@ Conductor uses 5 distinct operating modes to scale governance dynamically, ensur
 
 | Authority | Focus |
 |---|---|
-| <img src="./assets/icons/theSteward.ico" width="16" /> **The Steward** | Business alignment, scope boundaries, and software development lifecycle (SDLC) documentation. |
-| <img src="./assets/icons/theGovernor.ico" width="16" /> **The Governor** | Evaluates legal compliance, privacy risks, intellectual property (IP), licensing, and security policies. |
+| <img src="./assets/readme/icons/the-steward.png" width="16" /> **The Steward** | Business alignment, scope boundaries, and software development lifecycle (SDLC) documentation. |
+| <img src="./assets/readme/icons/the-governor.png" width="16" /> **The Governor** | Evaluates legal compliance, privacy risks, intellectual property (IP), licensing, and security policies. |
 
 ### Specialist Skills
 
 | Skill | Focus |
 |---|---|
-| <img src="./assets/icons/amalgam-conductor.ico" width="16" /> **Conductor** | Routing and orchestration |
-| <img src="./assets/icons/clockwork-meister.ico" width="16" /> **Clockwork** | Architecture, OOP, refactoring |
-| <img src="./assets/icons/cloak-meister.ico" width="16" /> **Cloak** | UI, UX, layout, accessibility |
-| <img src="./assets/icons/scribe-meister.ico" width="16" /> **Scribe** | Documentation and technical writing |
-| <img src="./assets/icons/meister-weaver.ico" width="16" /> **Weaver** | Visual modeling and diagram specialist |
-| <img src="./assets/icons/meister-chronicler.ico" width="16" /> **Chronicler** | Database architect and schema auditor |
-| <img src="./assets/icons/acme-overseer.ico" width="16" /> **Overseer** | QA, testing, release readiness |
-| <img src="./assets/icons/cipher-meister.ico" width="16" /> **Cipher** | Security and privacy evidence |
-| <img src="./assets/icons/hidden-dagger.ico" width="16" /> **Dagger** | Controlled resilience tester |
+| <img src="./assets/readme/icons/amalgam-conductor.png" width="16" /> **Conductor** | Routing and orchestration |
+| <img src="./assets/readme/icons/clockwork-meister.png" width="16" /> **Clockwork** | Architecture, OOP, refactoring |
+| <img src="./assets/readme/icons/cloak-meister.png" width="16" /> **Cloak** | UI, UX, layout, accessibility |
+| <img src="./assets/readme/icons/scribe-meister.png" width="16" /> **Scribe** | Documentation and technical writing |
+| <img src="./assets/readme/icons/meister-weaver.png" width="16" /> **Weaver** | Visual modeling and diagram specialist |
+| <img src="./assets/readme/icons/meister-chronicler.png" width="16" /> **Chronicler** | Database architect and schema auditor |
+| <img src="./assets/readme/icons/acme-overseer.png" width="16" /> **Overseer** | QA, testing, release readiness |
+| <img src="./assets/readme/icons/cipher-meister.png" width="16" /> **Cipher** | Security and privacy evidence |
+| <img src="./assets/readme/icons/hidden-dagger.png" width="16" /> **Dagger** | Controlled resilience tester |
 
 For details on all execution skills, routing logic, and behavioral constraints, see the [Specialist Skill Index](SKILL_INDEX.md).
 

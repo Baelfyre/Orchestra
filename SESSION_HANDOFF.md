@@ -1,7 +1,7 @@
-# Session Handoff
+﻿# Session Handoff
 
 - **Current Task:** Add lightweight project memory files
-- **Current Repo:** `C:\amalgam-conductor`
+- **Current Repo:** `C:\conductor`
 - **Mode:** Implementation with limited file creation
 - **Allowed Files:**
   - `PROJECT_STATE.md`

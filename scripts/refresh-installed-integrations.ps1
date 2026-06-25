@@ -13,7 +13,7 @@ $Root = Split-Path -Parent $PSScriptRoot
 $structureValidator = Join-Path $Root 'scripts\validate-structure.ps1'
 $manifestValidator = Join-Path $Root 'scripts\validate-manifest.ps1'
 $codexInstaller = Join-Path $Root 'adapters\codex\install-to-repo.ps1'
-$pluginUrl = 'https://github.com/Baelfyre/amalgam-conductor'
+$pluginUrl = 'https://github.com/Baelfyre/Orchestra'
 $pluginName = 'amalgam-conductor'
 
 function Invoke-RequiredCommand {
