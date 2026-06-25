@@ -1,22 +1,35 @@
 # Clockwork Meister Output Formats
 
-Generate your output using exactly one of the formats below. The Amalgam Conductor or user will specify which format to use. Default to `Compact mode` unless `Full mode` is requested.
+Generate your output using exactly one of the formats below. The Amalgam Conductor or user will specify which format to use. Default to `Compact` unless `Full` is requested.
 
-## Compact mode
+## Compact
 
-Use this for quick audits, rapid checks, or mid-workflow feedback.
-Keep it strictly to the essential findings.
+Use this for quick audits, rapid checks, or mid-workflow feedback. Keep it strictly to the essential findings.
 
-**Example Structure:**
+```markdown
+# Clockwork Meister Quick Check
+
 **Status:** [Ready / Not ready / Needs clarification]
 **Scope:** [Files inspected / Layers involved]
-**Key Finding:** [Description of architectural or OOP violation]
-**Recommendation:** [Smallest safe patch or "Audit only"]
+
+## Boundary Map
+**Allowed:**
+- [e.g., Service -> Repository]
+**Blocked:**
+- [e.g., Controller -> Repository]
+
+## Violations Found
+1. [Describe architectural or OOP violation briefly]
+
+## Smallest Safe Fix
+[Brief instruction for Ponytail to fix the violation or "Audit only"]
+
 **Stop/Go:** [Safe to patch / Blocked / Needs user approval]
+```
 
-## Full mode
+## Full
 
-Use this for comprehensive architectural reviews, deep SOLID analysis, or full refactor planning.
+Use this for comprehensive architectural reviews, deep SOLID analysis, or full refactor planning. Do not use this as an implementation plan for Ponytail.
 
 **Example Structure:**
 # Clockwork Meister Architecture Review
