@@ -1,0 +1,26 @@
+{
+  "active_repo": "C:\\amalgam-conductor",
+  "mode": "implementation",
+  "current_branch": "main",
+  "last_validation": "manifest and structure passed",
+  "allowed_files": [
+    "PROJECT_STATE.md",
+    "SESSION_HANDOFF.md",
+    "DECISION_LOG.md",
+    ".amalgam/state.json",
+    "skills/amalgam-conductor/SKILL.md"
+  ],
+  "forbidden_repos": [
+    "C:\\+AA"
+  ],
+  "active_gates": [
+    "Workspace Boundary Gate",
+    "Session Isolation Gate",
+    "Audit Mode / No-Edit Gate",
+    "Record Accuracy Gate",
+    "Caveman Public-Content Exclusion",
+    "Ponytail Handoff Restriction",
+    "Acme Readiness Gate Expansion"
+  ],
+  "next_step": "validate structure and manifest after changes"
+}
