@@ -69,6 +69,11 @@ if ($filesToScan.Count -eq 0) {
 
 # 2. Scans
 foreach ($item in $filesToScan) {
+    # Skip self and documentation when scanning for their own documented patterns
+    if ($item.Relative -match 'runtime-guardrail\.ps1|VALIDATION\.md') {
+        continue
+    }
+
     $content = Get-Content -LiteralPath $item.Path -Raw
     $lines = @(Get-Content -LiteralPath $item.Path)
 
@@ -196,12 +201,18 @@ if ($violations.Count -gt 0) {
         foreach ($v in $violations) {
             Write-ColorHost 'ERROR' " - $v"
         }
+        Write-Host "`n[WHAT FAILED] Repository files or changes violated Orchestra's runtime guardrails." -ForegroundColor Red
+        Write-Host "[WHY IT FAILED] Active safety checks blocked the operation due to unsafe patterns (e.g. secrets, copyleft licenses, PII leaks, destructive commands, or stale naming references)." -ForegroundColor Red
+        Write-Host "[HOW TO FIX IT] Review the specific files and line numbers flagged above. Address the violations by removing sensitive strings, cleaning up commands, or replacing legacy names with clean slugs. To run locally without blocking, disable enforcement or omit the -Enforce parameter." -ForegroundColor Yellow
         exit 1
     } else {
         Write-ColorHost 'WARNING' "Guardrail scan found $($violations.Count) potential warnings (Warning-Only Mode):"
         foreach ($v in $violations) {
             Write-ColorHost 'WARNING' " - $v"
         }
+        Write-Host "`n[WHAT FAILED] Potential safety warnings were detected by the guardrail scanner." -ForegroundColor Yellow
+        Write-Host "[WHY IT FAILED] Staged or changed files contain patterns that would block commits under active enforcement." -ForegroundColor Yellow
+        Write-Host "[HOW TO FIX IT] Address the warning details above. To enforce these rules on commits, set the environment variable: `$env:ORCHESTRA_ENFORCE_GUARDRAILS = 'true'` or run with the `-Enforce` parameter." -ForegroundColor Cyan
         exit 0
     }
 }
