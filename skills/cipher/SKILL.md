@@ -42,6 +42,7 @@ Use `SKILL.md` first. Do not load every supporting document by default or consum
 - Load [SECURITY_CHECKLIST.md](SECURITY_CHECKLIST.md) only when auditing security controls.
 - Load [PRIVACY_CHECKLIST.md](PRIVACY_CHECKLIST.md) only when auditing privacy risks.
 - Load [THREAT_REVIEW_GUIDE.md](THREAT_REVIEW_GUIDE.md) only when threat review is required.
+- Load [SECURE_APPLICATION_FOUNDATIONS_GUIDE.md](SECURE_APPLICATION_FOUNDATIONS_GUIDE.md) only when the task involves application security layering, API hardening, frontend vs backend enforcement, rate limiting, traffic filtering, or direct API abuse scenarios.
 
 ## Operating principles
 

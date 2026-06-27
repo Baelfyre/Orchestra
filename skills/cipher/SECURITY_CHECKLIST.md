@@ -40,6 +40,10 @@
 
 ## API Security
 - [ ] Authentication, authorization, object access, validation, rate limits, errors, pagination, and versioning are reviewed where relevant.
+- [ ] UI is not treated as a security boundary; attackers can bypass the UI and call APIs directly.
+- [ ] Frontend validation is not treated as enforcement; backend must enforce auth, authz, RBAC, object ownership, and validation.
+- [ ] API hardening boundaries are defined (rate limiting, throttling, token bucket, sliding window, traffic filtering, WAF/API gateway, backpressure, load shedding, circuit breaker, DDoS mitigation).
+- [ ] Defenses are in place against direct API abuse, request tampering, replay, automation, ID manipulation, and backend injection.
 
 ## Supply Chain Risk
 - [ ] Build sources, provenance, CI permissions, artifacts, release signing, and update workflow are assessed when evidence exists.

@@ -10,6 +10,7 @@
 
 ## Entry Points
 - Inventory authorized interfaces such as UI submissions, APIs, uploads, callbacks, jobs, imports, admin tools, and dependency updates.
+- Assume attackers can bypass the UI and call APIs directly. Consider direct API abuse, request tampering, replay, automation, ID manipulation, and backend injection.
 - Do not probe or test without permission.
 
 ## Actors
@@ -27,6 +28,8 @@
 ## Mitigation Mapping
 - Map each validated risk to preventive, detective, corrective, and recovery controls as needed.
 - Prefer minimal controls at the correct trust boundary and define verification.
+- Ensure API hardening controls are considered (e.g., rate limits, throttling, WAF, backpressure, circuit breakers, DDoS mitigation).
+- Validate that enforcement occurs on the backend, not the frontend.
 
 ## Missing Evidence Handling
 - State whether missing code, configuration, data flow, deployment, logs, or policy reduces confidence or blocks a conclusion.

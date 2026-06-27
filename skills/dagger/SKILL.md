@@ -62,7 +62,7 @@ FAILURE SCENARIO:
 CONTROLLED TEST INPUT / FAILURE TRIGGER:
 EXPECTED FAILURE OR BEHAVIOR:
 SAFETY GATE:
-ACME HANDOFF:
+OVERSEER HANDOFF:
 CIPHER HANDOFF:
 PONYTAIL HANDOFF:
 
@@ -91,7 +91,7 @@ Act as a gated specialist routed by `conductor`.
 1. No chaos engineering essays.
 2. No offensive security tutorials.
 3. No implementation code unless routed to Ponytail.
-4. No formal QA plans unless routed to Acme.
+4. No formal QA plans unless routed to Overseer.
 5. No security policy decisions unless routed to Cipher.
 6. Output only controlled scenarios, expected behavior, safety gates, and handoffs.
 
