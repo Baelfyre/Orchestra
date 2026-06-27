@@ -11,6 +11,7 @@
     "commands": [
         "conductor",
         "amalgam-conductor",
+        "arbiter",
         "clockwork",
         "review-architecture",
         "cloak",
@@ -57,6 +58,21 @@
             "icon_path": "assets/icons/the-governor.ico",
             "output_formats": [
                 "Governance Review"
+            ]
+        },
+        {
+            "primary_use": "Continuity review, validation-state review, branch and merge readiness, source-of-truth checks, handoff readiness",
+            "slug": "arbiter",
+            "description": "Arbiter is the workflow continuity, validation, and transition governance specialist. Use it when work may be interrupted, validation is missing or failed, branch or workspace context changed, merge readiness is uncertain, source of truth is unclear, or handoff state must be verified before continuing.",
+            "avoid_when": "Designing architecture, implementing features, writing documentation content, or replacing normal QA ownership",
+            "skill_path": "skills/arbiter/SKILL.md",
+            "role": "Workflow Continuity, Validation, and Transition Governance Specialist",
+            "name": "arbiter",
+            "activation_level": "Governance",
+            "depends_on": "conductor",
+            "icon_path": "assets/icons/overseer.ico",
+            "output_formats": [
+                "Continuity Review"
             ]
         },
         {

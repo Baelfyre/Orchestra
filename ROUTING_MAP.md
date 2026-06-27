@@ -15,10 +15,14 @@ Mode Selection (Select: Ideation, Prototype, Implementation, Audit, Release)
   ↓
 Need-Based Governance (Dynamic checks by The Steward & The Governor when applicable)
   ↓
+Continuity Gate (Arbiter when transition, validation, branch, source-of-truth, or handoff risk exists)
+  â†“
 Conductor or Specialist Routing (Route task to destination skill)
 ```
 
 If either governance authority returns `BLOCKED`, the Conductor stops. If `human_review_required: true` is flagged, the Conductor pauses until human review completes. In `Ideation` or `Prototype` modes, governance returns `ADVISORY_ONLY` or `NOT_APPLICABLE` and does not block orchestration.
+
+If Arbiter returns `HOLD` or `BLOCKED`, the Conductor pauses continuation, merge, handoff, or context switch until the required validation, context, or remediation is complete.
 
 ## Routing Rules
 
@@ -26,6 +30,7 @@ If either governance authority returns `BLOCKED`, the Conductor stops. If `human
 |-----------|--------------|-----------|
 | Business alignment, scope, requirements review | `the-steward` | Validating project direction or SDLC |
 | Legal, compliance, privacy, IP, licensing review | `the-governor` | Validating compliance or legal risk |
+| Continuity, handoff, merge readiness, branch divergence, source-of-truth review | `arbiter` | Transition, validation, or continuation safety is uncertain |
 | UI/UX review, accessibility, frontend layout | `cloak` | Reviewing user-facing visible layers |
 | README, documentation, final submission | `scribe` | Source evidence is available to verify claims. **Fallback**: if source evidence is unavailable, Scribe must stop, report the missing evidence, and return control to the Conductor. It must not generate speculative documentation. |
 | SQL, schemas, database testing, migrations | `chronicler` | Analyzing data layers or database relationships |
@@ -38,7 +43,7 @@ If either governance authority returns `BLOCKED`, the Conductor stops. If `human
 
 ## Conductor Authority
 
-`conductor` retains routing authority for complex requests, subject to governance gates. The Conductor will evaluate the project constraints and select the smallest effective skill stack from this map. The Conductor **cannot override** governance decisions from The Steward or The Governor.
+`conductor` retains routing authority for complex requests, subject to governance and continuity gates. The Conductor will evaluate the project constraints and select the smallest effective skill stack from this map. The Conductor **cannot override** governance decisions from The Steward, The Governor, or Arbiter.
 
 ## Conflict Resolution
 
