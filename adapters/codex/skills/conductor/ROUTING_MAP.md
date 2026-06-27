@@ -8,15 +8,15 @@ All requests pass through the following routing sequence:
 
 ```text
 Request
-  ↓
+  ->
 Intent Classification (Determine user objective)
-  ↓
+  ->
 Mode Selection (Select: Ideation, Prototype, Implementation, Audit, Release)
-  ↓
+  ->
 Need-Based Governance (Dynamic checks by The Steward & The Governor when applicable)
-  ↓
+  ->
 Continuity Gate (Arbiter when transition, validation, branch, source-of-truth, or handoff risk exists)
-  â†“
+  ->
 Conductor or Specialist Routing (Route task to destination skill)
 ```
 
