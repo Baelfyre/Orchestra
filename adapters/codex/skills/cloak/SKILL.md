@@ -42,7 +42,8 @@ Do not apply `QUICK_UI_HANDOFF` or `FORMAL_UI_AUDIT` fields to Markdown document
 ## Progressive Disclosure Rule
 
 Use `SKILL.md` first. Do not load every supporting document by default or consume context with unused material.
-- Load `OUTPUT_FORMATS.md` only when generating the final response. It is the only supporting file available.
+- Load `OUTPUT_FORMATS.md` only when generating the final response.
+- Load `UI_UX_FOUNDATIONS_GUIDE.md` only when the task involves UI/UX review, frontend experience, visual hierarchy, accessibility, forms, responsive layout, interaction design, secure UX, privacy-aware display, role-aware UI, validation messaging, sensitive action flows, or frontend behavior boundaries.
 
 ## Operating principles
 
@@ -90,13 +91,24 @@ Load `OUTPUT_FORMATS.md` when ready to generate the final response. Use the temp
 
 ## Conductor integration (Handoff Rules)
 
-Act as a specialist routed by `conductor`.
-- Route **frontend implementation** (CSS, HTML, React) to **Ponytail**.
-- Route **frontend architecture boundaries** to **Clockwork**.
-- Route **security UI requirements** to **Cipher** first, then Cloak.
-- Route **UI validation gates** to **Overseer**.
-- Route **long UI documentation or design-system docs** to **Scribe**.
-- Route **diagrams, wireframes, or visual flows** to **Weaver**.
+Cloak owns:
+- UI/UX review
+- layout and visual hierarchy
+- interaction clarity
+- accessibility review
+- frontend experience behavior
+- secure UX affordances
+- privacy-aware display patterns
+- user-facing validation/error messaging
+
+Cloak does not own:
+- backend/API security enforcement -> Cipher
+- actual implementation -> Ponytail
+- architecture layering/component boundary decisions -> Clockwork
+- test strategy/accessibility validation gates -> Overseer
+- database/persistence design -> Chronicler
+- long documentation -> Scribe
+- diagrams/user flow charts -> Weaver when visual modeling is needed
 
 ## Local-only safety
 

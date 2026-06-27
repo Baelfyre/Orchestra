@@ -88,6 +88,17 @@ Use only the sections relevant to the selected review mode. Unchecked items are 
 - [ ] Check rendering, network, media, startup, and thread costs relevant to the artifact.
 - [ ] Avoid optimization that adds complexity without demonstrated benefit.
 
+## Secure UX and Foundational Checks
+- [ ] Accessible labels are present on all inputs and icons.
+- [ ] Highly visible focus states exist for interactive elements.
+- [ ] Full keyboard navigation is supported.
+- [ ] Loading, error, and empty states are designed and handled.
+- [ ] Error messaging is secure and does not leak system details.
+- [ ] Sensitive-data display is masked or privacy-aware.
+- [ ] Role-aware UI hides unauthorized actions (but relies on backend for enforcement).
+- [ ] Destructive actions require explicit confirmation and provide recovery affordances.
+- [ ] Responsive layout checks pass across all expected breakpoints.
+
 ## Design Debt
 - [ ] Identify duplicated patterns, inconsistent variants, workarounds, and stale styles.
 - [ ] Separate intentional tradeoffs from accidental drift.
