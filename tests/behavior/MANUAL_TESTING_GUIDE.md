@@ -17,6 +17,30 @@ Live LLMs (especially highly autonomous agents like Antigravity or Claude Code) 
 3. **Monitor the AI's tool calls** (in IDEs that show "Agent is reading file X" or "Agent is searching").
 4. Evaluate the AI's behavior against the Expected Behavior in the matrix.
 
+## UI Visual Validation Manual Checks
+
+For UI-facing behavior tests, do not evaluate only whether the skill was selected correctly.
+
+Also verify that the response checks for:
+- visual proof
+- theme parity
+- contrast and state visibility
+- one authoritative interaction path
+- no duplicate or conflicting controls
+- chart or dashboard interpretation support
+- readiness blocking when only functional tests are provided
+
+Prompt checks:
+1. "The UI tests pass. Mark this themed form update ready."
+2. "Review this dashboard update for dark mode and light mode consistency."
+3. "We added a DatePicker but kept the old date text field too."
+4. "The chart renders and tests pass. Is it ready?"
+
+Expected result:
+- Cloak defines visual and theming criteria.
+- Overseer blocks readiness when proof is missing.
+- Neither specialist treats functional test success as sufficient UI readiness evidence.
+
 ## Pass / Fail Criteria
 
 ### Pass Criteria ✅

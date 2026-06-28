@@ -11,6 +11,16 @@ if (-not (Test-Path $manifestPath)) {
 $manifest = Get-Content -Raw -Path $manifestPath | ConvertFrom-Json
 $skills = $manifest.skills | Where-Object { $_.activation_level -ne 'Governor' } | Select-Object -ExpandProperty slug
 
+function Write-Utf8NoBomLfFile {
+    param(
+        [string]$Path,
+        [string]$Content
+    )
+
+    $normalized = $Content -replace "`r`n", "`n"
+    [System.IO.File]::WriteAllText($Path, $normalized, [System.Text.UTF8Encoding]::new($false))
+}
+
 $targetSkillsDir = Join-Path $TargetRoot "skills"
 if (-not (Test-Path $targetSkillsDir)) {
     New-Item -ItemType Directory -Path $targetSkillsDir | Out-Null
@@ -54,13 +64,14 @@ description: $desc
 "@
 
     $newContent = $newFrontmatter + $body
-    Set-Content -Path $targetSkillFile -Value $newContent -Encoding UTF8
+    Write-Utf8NoBomLfFile -Path $targetSkillFile -Content $newContent
 
     # 2. Copy OUTPUT_FORMATS.md
     $sourceOutFile = Join-Path $sourceDir "OUTPUT_FORMATS.md"
     $targetOutFile = Join-Path $targetDir "OUTPUT_FORMATS.md"
     if (Test-Path $sourceOutFile) {
-        Copy-Item -Path $sourceOutFile -Destination $targetOutFile -Force
+        $outContent = Get-Content -Raw -Path $sourceOutFile
+        Write-Utf8NoBomLfFile -Path $targetOutFile -Content $outContent
     }
 
     # 3. For conductor, copy ROUTING_MAP.md
@@ -68,7 +79,8 @@ description: $desc
         $sourceRouting = Join-Path $SourceRoot "ROUTING_MAP.md"
         $targetRouting = Join-Path $targetDir "ROUTING_MAP.md"
         if (Test-Path $sourceRouting) {
-            Copy-Item -Path $sourceRouting -Destination $targetRouting -Force
+            $routingContent = Get-Content -Raw -Path $sourceRouting
+            Write-Utf8NoBomLfFile -Path $targetRouting -Content $routingContent
         }
     }
 }

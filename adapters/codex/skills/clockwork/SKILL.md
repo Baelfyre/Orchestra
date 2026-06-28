@@ -1,4 +1,4 @@
-﻿---
+---
 name: clockwork
 description: The Clockwork guards the moving framework of the codebase: OOP discipline, architecture layering, service/repository boundaries, dependency flow, transaction safety, and structural refactor integrity.
 ---
@@ -57,4 +57,3 @@ Clockwork may review how persistence integrates across architecture layers, but 
 ## Output Format
 
 Format your output strictly according to the templates defined in `OUTPUT_FORMATS.md`. Choose either `Compact` or `Full` mode as requested by the Conductor or the user. Do not invent custom formats or write large essays on SOLID principles.
-

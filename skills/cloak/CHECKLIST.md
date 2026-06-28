@@ -19,6 +19,8 @@ Use only the sections relevant to the selected review mode. Unchecked items are 
 - [ ] Use typography, spacing, contrast, and alignment consistently.
 - [ ] Avoid competing calls to action.
 - [ ] Ensure grouping reflects content relationships.
+- [ ] Confirm visual inspection was performed for the changed screen or component, not inferred from functional test success alone.
+- [ ] Confirm supported themes preserve the same visual hierarchy and state meaning.
 
 ## Accessibility
 - [ ] Check text and non-text contrast.
@@ -45,6 +47,7 @@ Use only the sections relevant to the selected review mode. Unchecked items are 
 - [ ] Show units, range, freshness, filters, and comparison baseline.
 - [ ] Prioritize exceptions and actions over decorative metrics.
 - [ ] Provide accessible summaries and data alternatives for charts.
+- [ ] Confirm theme changes do not obscure chart marks, labels, units, legends, tooltips, or accessible summaries.
 
 ## Forms
 - [ ] Use persistent labels and logical field groups.
@@ -52,12 +55,15 @@ Use only the sections relevant to the selected review mode. Unchecked items are 
 - [ ] Validate without erasing input.
 - [ ] Associate specific errors with affected fields.
 - [ ] Prevent duplicate submission and confirm destructive actions.
+- [ ] Confirm each user action has one authoritative interaction path after the change.
+- [ ] Flag duplicate or conflicting controls unless a staged migration is explicitly documented.
 
 ## Design Systems and Component Consistency
 - [ ] Reuse existing tokens and components before adding variants.
 - [ ] Cover default, hover, focus, active, disabled, loading, error, and empty states.
 - [ ] Keep naming, spacing, typography, color, and motion systematic.
 - [ ] Avoid cosmetic variants without a product need.
+- [ ] Confirm new UI elements use existing theme tokens, component patterns, and state styles before adding variants.
 
 ## Frontend Architecture
 - [ ] Align component boundaries with behavior and ownership.

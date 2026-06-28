@@ -41,6 +41,10 @@ If Arbiter returns `HOLD` or `BLOCKED`, the Conductor pauses continuation, merge
 | README, documentation, source-backed prose | `scribe` | Source evidence is available to verify claims. |
 | UML, ERD visuals, architecture workflows, Mermaid/PlantUML | `weaver` | Creating or reviewing system models |
 | Broad, unclear, or multi-skill tasks | `conductor` | When ownership overlaps or dependencies exist |
+| Access, visibility, authorization, route gating, persona permission, delegated authority, reporting-chain access | `conductor` | Use Cipher for policy, Chronicler for authority data, Cloak for navigation visibility, Ponytail for implementation, Overseer for persona tests, and Arbiter for closeout when proof is incomplete. |
+
+**Routing Note for Access/Visibility:**
+- Menu visibility, direct route access, and backend/service authorization must be verified separately.
 
 ## Conductor Authority
 
