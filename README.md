@@ -119,24 +119,24 @@ Conductor uses 5 distinct operating modes to scale governance dynamically, ensur
 
 | Authority | Focus |
 |---|---|
-| <img src="./assets/readme/icons/the-steward.png" width="16" /> **The Steward** | Business alignment, scope boundaries, and software development lifecycle (SDLC) documentation. |
-| <img src="./assets/readme/icons/the-governor.png" width="16" /> **The Governor** | Evaluates legal compliance, privacy risks, intellectual property (IP), licensing, and security policies. |
-| <img src="./assets/readme/icons/arbiter.png" width="16" /> **Arbiter** | Continuity, validation-state review, branch transition, and source-of-truth governance. |
+| <img src="./assets/readme/icons/the-steward.png" width="16" /> **The Steward**, Business Alignment | Business alignment, scope boundaries, and software development lifecycle (SDLC) documentation. |
+| <img src="./assets/readme/icons/the-governor.png" width="16" /> **The Governor**, Legal and Compliance | Evaluates legal compliance, privacy risks, intellectual property (IP), licensing, and security policies. |
+| <img src="./assets/readme/icons/arbiter.png" width="16" /> **Arbiter**, Continuity and Validation | Continuity, validation-state review, branch transition, and source-of-truth governance. |
 
 ### Specialist Skills
 
 | Skill | Focus |
 |---|---|
-| <img src="./assets/readme/icons/amalgam-conductor.png" width="16" /> **Conductor** | Routing and orchestration |
-| <img src="./assets/readme/icons/ponytail.png" width="16" /> **Ponytail** | Implementation and safe code edits |
-| <img src="./assets/readme/icons/clockwork-meister.png" width="16" /> **Clockwork** | Architecture, OOP, refactoring |
-| <img src="./assets/readme/icons/cloak-meister.png" width="16" /> **Cloak** | UI, UX, layout, accessibility |
-| <img src="./assets/readme/icons/scribe-meister.png" width="16" /> **Scribe** | Documentation and technical writing |
-| <img src="./assets/readme/icons/meister-weaver.png" width="16" /> **Weaver** | Visual modeling and diagram specialist |
-| <img src="./assets/readme/icons/meister-chronicler.png" width="16" /> **Chronicler** | Database architect and schema auditor |
-| <img src="./assets/readme/icons/acme-overseer.png" width="16" /> **Overseer** | QA, testing, release readiness |
-| <img src="./assets/readme/icons/cipher-meister.png" width="16" /> **Cipher** | Security and privacy evidence |
-| <img src="./assets/readme/icons/hidden-dagger.png" width="16" /> **Dagger** | Controlled resilience tester |
+| <img src="./assets/readme/icons/amalgam-conductor.png" width="16" /> **Conductor**, Routing | Routing and orchestration |
+| <img src="./assets/readme/icons/ponytail.png" width="16" /> **Ponytail**, Implementation | Implementation and safe code edits |
+| <img src="./assets/readme/icons/clockwork-meister.png" width="16" /> **Clockwork**, Architecture and Refactoring | Architecture, OOP, refactoring |
+| <img src="./assets/readme/icons/cloak-meister.png" width="16" /> **Cloak**, UI and Accessibility | UI, UX, layout, accessibility |
+| <img src="./assets/readme/icons/scribe-meister.png" width="16" /> **Scribe**, Documentation | Documentation and technical writing |
+| <img src="./assets/readme/icons/meister-weaver.png" width="16" /> **Weaver**, Visual Modeling | Visual modeling and diagram specialist |
+| <img src="./assets/readme/icons/meister-chronicler.png" width="16" /> **Chronicler**, Database and Schema | Database architect and schema auditor |
+| <img src="./assets/readme/icons/acme-overseer.png" width="16" /> **Overseer**, QA and Release Readiness | QA, testing, release readiness |
+| <img src="./assets/readme/icons/cipher-meister.png" width="16" /> **Cipher**, Security and Privacy | Security and privacy evidence |
+| <img src="./assets/readme/icons/hidden-dagger.png" width="16" /> **Dagger**, Resilience Testing | Controlled resilience tester |
 
 For details on all execution skills, routing logic, and behavioral constraints, see the [Specialist Skill Index](SKILL_INDEX.md).
 
@@ -394,6 +394,8 @@ Ponytail and Caveman are external tools. They are not included, vendored, or req
 
 Orchestra may reference Ponytail and Caveman as workflow companions for focused implementation and compressed communication, but they remain separate from the Orchestra plugin and skill package.
 
+For more details on the boundary between Orchestra and these tools, see the [External Companions](docs/integrations/EXTERNAL_COMPANIONS.md) guide.
+
 ---
 
 ## Quick Start Usage
@@ -486,10 +488,21 @@ Output from Conductor and its specialists automatically adapts to your intent:
 | Skills | [Skill Index](SKILL_INDEX.md) | Review available specialists and routing behavior |
 | Installation | [Installation Guide](docs/setup/INSTALLATION.md) | Set up the plugin in Antigravity, Codex, VS Code, or JetBrains IDEs |
 | Validation | [Validation Guide](docs/setup/VALIDATION.md) | Run structure and manifest checks |
+| Maturity | [Maturity](docs/MATURITY.md) | Current project stability and roadmap |
 | Contributing | [Contributing Guide](docs/CONTRIBUTING.md) | Guidelines for contributing and safety policies |
 | Disclaimer | [Disclaimer](docs/meta/DISCLAIMER.md) | Understand legal and operational limitations |
 
 ## Validation & Enforceable Governance
+
+Orchestra's rules are divided into clear enforcement levels to distinguish between advisory instruction and guaranteed validation:
+
+### Enforcement Model
+- **Level 1: Instruction governance**. (Advisory) The host AI is instructed to follow The Steward and The Governor. Conductor is instructed to halt if governance returns BLOCKED.
+- **Level 2: Structural validation**. (Enforced Locally/CI) Scripted checks ensure manifests, skills, and formats align.
+- **Level 3: Runtime guardrail scan**. (Warning-only Default) Scripted checks for secrets, PII, and copyleft licenses. Exits with code `0` by default.
+- **Level 4: Strict local enforcement**. (Opt-in) Strict enforcement of guardrails locally (`$env:ORCHESTRA_ENFORCE_GUARDRAILS = "true"`), failing the process on violation.
+- **Level 5: CI release gate**. (Enforced in CI) Build pipeline fails if structural validation or strict guardrails fail.
+- **Level 6: Host-integrated runtime blocker**. (Future) Host platform forcibly blocks output if policies are violated.
 
 Before releasing, staging, or pushing changes, run the centralized behavior validation suite:
 

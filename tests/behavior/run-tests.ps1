@@ -5,6 +5,7 @@ $scripts = @(
     @{ Name = "validate-manifest.ps1"; Path = "scripts/validate-manifest.ps1" },
     @{ Name = "check-stale-references.ps1"; Path = "scripts/check-stale-references.ps1" },
     @{ Name = "validate-codex-export.ps1"; Path = "adapters/codex/validate-codex-export.ps1" },
+    @{ Name = "evaluate-governance.ps1"; Path = "tests/behavior/evaluate-governance.ps1" },
     @{ Name = "runtime-guardrail.ps1"; Path = "scripts/runtime-guardrail.ps1" }
 )
 
@@ -66,7 +67,36 @@ finally {
     }
 }
 
-# Test 2: State Locking tests
+# Test 2: Project Context Validator on mock fixture
+$contextScript = Join-Path $Root "scripts/validate-project-context.ps1"
+$tempDir2 = Join-Path ([System.IO.Path]::GetTempPath()) "orchestra-context-test-$(New-Guid)"
+New-Item -ItemType Directory -Path $tempDir2 | Out-Null
+try {
+    # Test missing file warning mode
+    & $psExe -NoProfile -ExecutionPolicy Bypass -File $contextScript -Mode "Implementation Mode" -ContextFile (Join-Path $tempDir2 "MISSING.md")
+    $warnExit = $LASTEXITCODE
+
+    # Test missing file error mode
+    & $psExe -NoProfile -ExecutionPolicy Bypass -File $contextScript -Mode "Release Mode" -ContextFile (Join-Path $tempDir2 "MISSING.md")
+    $errExit = $LASTEXITCODE
+
+    if ($warnExit -ne 0) {
+        Write-Host "ERROR: Context validator failed in warning mode! (Exit code: $warnExit)" -ForegroundColor Red
+        $failed = $true
+    } elseif ($errExit -ne 1) {
+        Write-Host "ERROR: Context validator did not fail in Release mode! (Exit code: $errExit)" -ForegroundColor Red
+        $failed = $true
+    } else {
+        Write-Host "SUCCESS: Context validator tests passed." -ForegroundColor Green
+    }
+}
+finally {
+    if (Test-Path -LiteralPath $tempDir2) {
+        Remove-Item -LiteralPath $tempDir2 -Recurse -Force | Out-Null
+    }
+}
+
+# Test 3: State Locking tests
 & $psExe -NoProfile -ExecutionPolicy Bypass -File $lockScript -Action Release | Out-Null
 
 & $psExe -NoProfile -ExecutionPolicy Bypass -File $lockScript -Action Acquire -ProcessId $PID | Out-Null

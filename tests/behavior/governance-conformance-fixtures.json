@@ -1,0 +1,44 @@
+[
+    {
+        "scenario": "Conductor halts on Steward BLOCKED",
+        "skill": "conductor",
+        "pattern": "Steward.*BLOCKED.*stops|Steward.*BLOCKED.*halts",
+        "type": "Routing Gate"
+    },
+    {
+        "scenario": "Conductor halts on Governor BLOCKED",
+        "skill": "conductor",
+        "pattern": "Governor.*BLOCKED.*stops|Governor.*BLOCKED.*halts",
+        "type": "Routing Gate"
+    },
+    {
+        "scenario": "Conductor pauses on human_review_required: true",
+        "skill": "conductor",
+        "pattern": "human_review_required.*true.*pauses",
+        "type": "Routing Gate"
+    },
+    {
+        "scenario": "Conductor proceeds on APPROVED",
+        "skill": "conductor",
+        "pattern": "APPROVED.*proceeds",
+        "type": "Routing Gate"
+    },
+    {
+        "scenario": "Conductor does not treat NOT_APPLICABLE as full clearance",
+        "skill": "conductor",
+        "pattern": "NOT_APPLICABLE.*proceeds",
+        "type": "Routing Gate"
+    },
+    {
+        "scenario": "Arbiter returns HOLD when validation evidence is missing",
+        "skill": "arbiter",
+        "pattern": "HOLD.*missing.*proof|HOLD.*when.*missing|missing.*validation.*HOLD",
+        "type": "Continuity Gate"
+    },
+    {
+        "scenario": "Arbiter returns BLOCKED when source-of-truth conflict is unresolved",
+        "skill": "arbiter",
+        "pattern": "BLOCKED",
+        "type": "Continuity Gate"
+    }
+]

@@ -2,6 +2,16 @@
 
 Orchestra uses a multi-layered verification system to programmatically enforce project structure, manifest properties, safety guardrails, and concurrent execution safeguards.
 
+Orchestra's rules are divided into clear enforcement levels to distinguish between advisory instruction and guaranteed validation:
+
+### Enforcement Model
+- **Level 1: Instruction governance**. (Advisory) The host AI is instructed to follow The Steward and The Governor. Conductor is instructed to halt if governance returns BLOCKED.
+- **Level 2: Structural validation**. (Enforced Locally/CI) Scripted checks ensure manifests, skills, and formats align.
+- **Level 3: Runtime guardrail scan**. (Warning-only Default) Scripted checks for secrets, PII, and copyleft licenses. Exits with code `0` by default.
+- **Level 4: Strict local enforcement**. (Opt-in) Strict enforcement of guardrails locally (`$env:ORCHESTRA_ENFORCE_GUARDRAILS = "true"`), failing the process on violation.
+- **Level 5: CI release gate**. (Enforced in CI) Build pipeline fails if structural validation or strict guardrails fail.
+- **Level 6: Host-integrated runtime blocker**. (Future) Host platform forcibly blocks output if policies are violated.
+
 ---
 
 ## 1. Centralized Test Runner (`run-tests.ps1`)
