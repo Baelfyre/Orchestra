@@ -5,6 +5,7 @@ Thumbs.db
 .codex/
 # Local runtime or installed agent copy; should not be tracked
 .agents/
+.amalgam/
 AGENTS.md
 SKILLS.md
 SKILL.md
