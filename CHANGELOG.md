@@ -6,6 +6,7 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 Changes merged after `v1.0.1` and present on `origin/main`:
 
+- Added Codex Marketplace installation instructions to README and setup guides.
 - Expanded specialist foundations for Arbiter, Clockwork, Cipher, Cloak, and Ponytail.
 - Aligned Conductor routing, Codex export, and stale-reference handling, including routing arrow and encoding fixes.
 - Added governance guardrails, access and visibility evidence rules, CI validation notes, and refined visual validation guidance.

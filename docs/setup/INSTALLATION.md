@@ -14,6 +14,27 @@ agy plugin install https://github.com/Baelfyre/Orchestra
 
 Codex compatibility is provided through `.codex-plugin/plugin.json`, `AGENTS.md`, and the shared `skills/` directory. Installation may be done by cloning the repository into the intended Codex workspace or by using Codex plugin discovery/marketplace configuration where available.
 
+### Install in Codex through Marketplace
+
+1. Open Codex.
+2. Go to Plugins.
+3. Open Marketplace.
+4. Paste this GitHub repository URL into the Source field:
+
+   https://github.com/Baelfyre/Orchestra
+
+5. Add the marketplace source.
+6. Restart Codex.
+7. Go back to Plugins.
+8. Open Personal.
+9. Search for Orchestra.
+10. Click Install.
+11. Confirm that Orchestra appears as installed or enabled.
+
+If Orchestra does not appear under Personal after adding the marketplace source, restart Codex again and check that the repository URL was entered correctly.
+
+### Local Installation
+
 If cloning manually:
 1. Clone the repository into your global Codex plugins directory or your local workspace's `.agents/plugins` directory.
    ```sh

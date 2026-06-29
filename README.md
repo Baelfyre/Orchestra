@@ -194,6 +194,29 @@ Notes:
 
 ### Codex Setup
 
+Codex users can install Orchestra globally through the Marketplace, or locally per-project.
+
+#### Install in Codex through Marketplace
+
+1. Open Codex.
+2. Go to Plugins.
+3. Open Marketplace.
+4. Paste this GitHub repository URL into the Source field:
+
+   https://github.com/Baelfyre/Orchestra
+
+5. Add the marketplace source.
+6. Restart Codex.
+7. Go back to Plugins.
+8. Open Personal.
+9. Search for Orchestra.
+10. Click Install.
+11. Confirm that Orchestra appears as installed or enabled.
+
+If Orchestra does not appear under Personal after adding the marketplace source, restart Codex again and check that the repository URL was entered correctly.
+
+#### Install locally per-project
+
 Codex uses a repo-local skill model. Orchestra skills must be installed into the project repo where Codex will run.
 
 The target layout is:
