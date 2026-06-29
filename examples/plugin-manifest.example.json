@@ -6,11 +6,10 @@
     "license": "MIT",
     "repository": "https://github.com/Baelfyre/Orchestra",
     "icon_path": "assets/icons/conductor.ico",
-    "logo_path": "assets/logo/orchestra-of-amalgamation.ico",
+    "logo_path": "assets/logo/orchestra.ico",
     "safety_note": "The dagger skill and resilience-check command execute destructive, negative, fuzz, adversarial QA, and failure-mode testing. They require explicit user approval, non-production scope, and a safety gate before execution. WARNING: There is no automated runtime guardrail script. You must manually enforce safety gates.",
     "commands": [
         "conductor",
-        "amalgam-conductor",
         "arbiter",
         "clockwork",
         "review-architecture",

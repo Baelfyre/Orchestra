@@ -7,7 +7,7 @@ Live LLMs (especially highly autonomous agents like Antigravity or Claude Code) 
 ## Prerequisites
 
 1. **Test Environment**: Any AI coding assistant that natively supports file reading (e.g., Claude Code, Cursor, Antigravity).
-2. **Setup**: Have the `orchestra-of-amalgamation` repository open in your IDE.
+2. **Setup**: Have the `Orchestra` repository open in your IDE.
 3. **Reference**: Open the `BEHAVIOR_TEST_MATRIX.md` to select a test prompt.
 
 ## How to Test

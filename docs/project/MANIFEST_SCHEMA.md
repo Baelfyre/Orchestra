@@ -11,12 +11,12 @@ A future loader might generate a JSON file (e.g., `plugin-manifest.json`) using 
 
 - `name`: Human-readable name of the skill.
 - `description`: Legacy compatibility description of the skill.
-- `slug`: Unique identifier for the skill (e.g., `cloak-meister`).
+- `slug`: Unique identifier for the skill (e.g., `cloak`).
 - `role`: The job description or title of the skill.
 - `primary_use`: The core tasks the skill excels at.
 - `avoid_when`: Conditions under which the skill should not be loaded.
 - `activation_level`: The rank of the skill (e.g., `Commander`, `Specialist`, `Gated`).
-- `depends_on`: Other skills required to function (e.g., `hidden-dagger` depends on `amalgam-conductor`).
+- `depends_on`: Other skills required to function (e.g., `dagger` depends on `conductor`).
 - `output_formats`: Array of supported formats (e.g., `[Compact, Full]`).
 - `skill_path`: The relative path to the `SKILL.md` file.
 - `icon_path`: The relative path to the skill's visual icon.

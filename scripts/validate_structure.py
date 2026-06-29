@@ -10,6 +10,7 @@ def main():
     
     required_root = [
         'README.md',
+        'CHANGELOG.md',
         'LICENSE',
         'plugin.json',
         'AGENTS.md',
@@ -28,7 +29,7 @@ def main():
         'docs/setup/COMPATIBILITY.md',
         'docs/setup/VALIDATION.md',
         'examples/plugin-manifest.example.json',
-        'assets/logo/orchestra-of-amalgamation.ico'
+        'assets/logo/orchestra.ico'
     ]
     
     adapters = ['codex','vscode','antigravity','claude-code','local-ai']

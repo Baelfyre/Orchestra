@@ -21,12 +21,18 @@ $skills = Get-ChildItem -Path $sourceSkillsDir -Directory
 
 foreach ($skill in $skills) {
     $dest = Join-Path $targetAgentsDir $skill.Name
-    if ((Test-Path $dest) -and (-not $Force)) {
-        Write-Warning "Skill $($skill.Name) already exists at $dest. Skipping. Use -Force to overwrite."
-    } else {
-        Copy-Item -Path $skill.FullName -Destination $dest -Recurse -Force
-        Write-Output "Installed: $($skill.Name)"
+    if (Test-Path -LiteralPath $dest) {
+        if (-not $Force) {
+            Write-Warning "Skill $($skill.Name) already exists at $dest. Skipping. Use -Force to overwrite."
+            continue
+        }
+
+        # Replace the existing skill folder instead of nesting another copy inside it.
+        Remove-Item -LiteralPath $dest -Recurse -Force
     }
+
+    Copy-Item -LiteralPath $skill.FullName -Destination $dest -Recurse -Force
+    Write-Output "Installed: $($skill.Name)"
 }
 
 Write-Output "Installation complete!"
