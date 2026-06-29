@@ -8,19 +8,21 @@ This document tracks the readiness of the Orchestra framework for its release as
   - A root `plugin.json` manifest has been added.
   - The repository layout matches installable plugin expectations.
 - **Command exposure status:** Completed
-  - Top-level `commands/` directory added with clean user-facing entry points (e.g. `amalgam-conductor`, `review-architecture`, `resilience-check`).
+  - Top-level `commands/` directory added with clean user-facing entry points (e.g. `conductor`, `review-architecture`, `resilience-check`).
   - Commands accurately map to their respective specialized skills.
   - The `resilience-check` command explicitly requires a safety gate and user approval.
 - **Skill coverage status:** Completed
   - All 9 core specialist skills are fully documented and integrated.
   - Handled by `plugin.json` skills array correctly.
 - **Repository rename status:** Completed
-  - GitHub repo has been renamed to `Baelfyre/Orchestra`. Internal plugin and command identity remains `amalgam-conductor` for compatibility.
+  - GitHub repo has been renamed to `Baelfyre/Orchestra`.
+  - Active plugin and command identity now uses `conductor`.
+  - Legacy names such as `amalgam-conductor` are compatibility aliases only.
 - **Plugin install validation status:** Completed
   - `agy plugin install https://github.com/Baelfyre/Orchestra` successfully processed 9 skills and 9 commands.
 - **Plugin icon status:** Completed
-  - The existing Conductor icon is used as the plugin icon: `assets/icons/amalgam-conductor.ico`.
-  - The broader framework logo remains available at `assets/logo/orchestra-of-amalgamation.png`.
+  - The existing Conductor icon is used as the plugin icon: `assets/icons/conductor.ico`.
+  - The broader framework logo remains available at `assets/logo/orchestra.png`.
 - **Remaining step:** Pending
   - Validate whether the target plugin loader displays the manifest-level icon path.
 
@@ -43,7 +45,7 @@ However, as agentic platforms evolve, automated skill discovery and deterministi
 ## Using the Routing Map
 - The root `ROUTING_MAP.md` is a lightweight lookup table.
 - A future loader should load this file when a task overlaps multiple domains or ownership is unclear.
-- The `amalgam-conductor` skill uses this map as its primary source of truth for delegating complex tasks.
+- The `conductor` skill uses this map as its primary source of truth for delegating complex tasks.
 
 ## Deferring Outputs (Progressive Disclosure)
 - A future loader **must not** greedily load the `OUTPUT_FORMATS.md` file when initializing a skill.

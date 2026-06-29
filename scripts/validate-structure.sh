@@ -16,7 +16,7 @@ adapters="codex vscode antigravity claude-code local-ai"
 templates="generic-skill-template.md review-output-template.md audit-output-template.md routing-output-template.md safety-gate-template.md scorecard-template.md local-install-template.md"
 tests="tests/behavior/BEHAVIOR_TEST_MATRIX.md tests/behavior/MANUAL_TESTING_GUIDE.md tests/behavior/GOVERNANCE_SCENARIOS.md"
 
-for file in README.md LICENSE .gitignore AGENTS.md ROUTING_MAP.md SKILL_INDEX.md docs/CONTRIBUTING.md docs/meta/CHANGELOG.md docs/meta/DISCLAIMER.md docs/project/FOUNDATION.md docs/project/ROADMAP.md docs/project/PLUGIN_READINESS.md docs/project/MANIFEST_SCHEMA.md docs/project/V1_READINESS_CHECKLIST.md docs/setup/INSTALLATION.md docs/setup/LOCAL_ONLY_GUIDE.md docs/setup/COMPATIBILITY.md docs/setup/VALIDATION.md examples/plugin-manifest.example.json assets/logo/orchestra-of-amalgamation.ico; do check "$file"; done
+for file in README.md CHANGELOG.md LICENSE .gitignore AGENTS.md ROUTING_MAP.md SKILL_INDEX.md docs/CONTRIBUTING.md docs/meta/CHANGELOG.md docs/meta/DISCLAIMER.md docs/project/FOUNDATION.md docs/project/ROADMAP.md docs/project/PLUGIN_READINESS.md docs/project/MANIFEST_SCHEMA.md docs/project/V1_READINESS_CHECKLIST.md docs/setup/INSTALLATION.md docs/setup/LOCAL_ONLY_GUIDE.md docs/setup/COMPATIBILITY.md docs/setup/VALIDATION.md examples/plugin-manifest.example.json assets/logo/orchestra.ico; do check "$file"; done
 skill_count=0
 for skill in $skills; do
   check "skills/$skill/SKILL.md"

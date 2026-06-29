@@ -17,6 +17,7 @@ if (-not (Test-Path $helpersPath)) {
 
 $requiredRoot = @(
     'README.md',
+    'CHANGELOG.md',
     'LICENSE',
     'plugin.json',
     'AGENTS.md',
@@ -35,7 +36,7 @@ $requiredRoot = @(
     'docs/setup/COMPATIBILITY.md',
     'docs/setup/VALIDATION.md',
     'examples/plugin-manifest.example.json',
-    'assets/logo/orchestra-of-amalgamation.ico'
+    'assets/logo/orchestra.ico'
 )
 
 $adapters = @('codex','vscode','antigravity','claude-code','local-ai')

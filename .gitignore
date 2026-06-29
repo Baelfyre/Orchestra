@@ -5,6 +5,11 @@ Thumbs.db
 .codex/
 # Local runtime or installed agent copy; should not be tracked
 .agents/
+!.agents/
+.agents/*
+!.agents/plugins/
+.agents/plugins/*
+!.agents/plugins/marketplace.json
 AGENTS.md
 SKILLS.md
 SKILL.md

@@ -127,16 +127,16 @@ Conductor uses 5 distinct operating modes to scale governance dynamically, ensur
 
 | Skill | Focus |
 |---|---|
-| <img src="./assets/readme/icons/amalgam-conductor.png" width="16" /> **Conductor**, Routing | Routing and orchestration |
+| <img src="./assets/readme/icons/conductor.png" width="16" /> **Conductor**, Routing | Routing and orchestration |
 | <img src="./assets/readme/icons/ponytail.png" width="16" /> **Ponytail**, Implementation | Implementation and safe code edits |
-| <img src="./assets/readme/icons/clockwork-meister.png" width="16" /> **Clockwork**, Architecture and Refactoring | Architecture, OOP, refactoring |
-| <img src="./assets/readme/icons/cloak-meister.png" width="16" /> **Cloak**, UI and Accessibility | UI, UX, layout, accessibility |
-| <img src="./assets/readme/icons/scribe-meister.png" width="16" /> **Scribe**, Documentation | Documentation and technical writing |
-| <img src="./assets/readme/icons/meister-weaver.png" width="16" /> **Weaver**, Visual Modeling | Visual modeling and diagram specialist |
-| <img src="./assets/readme/icons/meister-chronicler.png" width="16" /> **Chronicler**, Database and Schema | Database architect and schema auditor |
-| <img src="./assets/readme/icons/acme-overseer.png" width="16" /> **Overseer**, QA and Release Readiness | QA, testing, release readiness |
-| <img src="./assets/readme/icons/cipher-meister.png" width="16" /> **Cipher**, Security and Privacy | Security and privacy evidence |
-| <img src="./assets/readme/icons/hidden-dagger.png" width="16" /> **Dagger**, Resilience Testing | Controlled resilience tester |
+| <img src="./assets/readme/icons/clockwork.png" width="16" /> **Clockwork**, Architecture and Refactoring | Architecture, OOP, refactoring |
+| <img src="./assets/readme/icons/cloak.png" width="16" /> **Cloak**, UI and Accessibility | UI, UX, layout, accessibility |
+| <img src="./assets/readme/icons/scribe.png" width="16" /> **Scribe**, Documentation | Documentation and technical writing |
+| <img src="./assets/readme/icons/weaver.png" width="16" /> **Weaver**, Visual Modeling | Visual modeling and diagram specialist |
+| <img src="./assets/readme/icons/chronicler.png" width="16" /> **Chronicler**, Database and Schema | Database architect and schema auditor |
+| <img src="./assets/readme/icons/overseer.png" width="16" /> **Overseer**, QA and Release Readiness | QA, testing, release readiness |
+| <img src="./assets/readme/icons/cipher.png" width="16" /> **Cipher**, Security and Privacy | Security and privacy evidence |
+| <img src="./assets/readme/icons/dagger.png" width="16" /> **Dagger**, Resilience Testing | Controlled resilience tester |
 
 For details on all execution skills, routing logic, and behavioral constraints, see the [Specialist Skill Index](SKILL_INDEX.md).
 
@@ -487,6 +487,7 @@ Output from Conductor and its specialists automatically adapts to your intent:
 | Governance | [Governance Layer](docs/governance/GOVERNANCE_LAYER.md) | Understand The Steward, The Governor, risk scaling, and release gates |
 | Skills | [Skill Index](SKILL_INDEX.md) | Review available specialists and routing behavior |
 | Installation | [Installation Guide](docs/setup/INSTALLATION.md) | Set up the plugin in Antigravity, Codex, VS Code, or JetBrains IDEs |
+| Changelog | [Changelog](CHANGELOG.md) | Track release history and documented repo milestones |
 | Validation | [Validation Guide](docs/setup/VALIDATION.md) | Run structure and manifest checks |
 | Maturity | [Maturity](docs/MATURITY.md) | Current project stability and roadmap |
 | Contributing | [Contributing Guide](docs/CONTRIBUTING.md) | Guidelines for contributing and safety policies |

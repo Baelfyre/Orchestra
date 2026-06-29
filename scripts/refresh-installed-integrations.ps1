@@ -23,7 +23,6 @@ $structureValidator = Join-Path $Root 'scripts\validate-structure.ps1'
 $manifestValidator = Join-Path $Root 'scripts\validate-manifest.ps1'
 $codexInstaller = Join-Path $Root 'adapters\codex\install-to-repo.ps1'
 $pluginUrl = 'https://github.com/Baelfyre/Orchestra'
-$pluginName = 'amalgam-conductor'
 
 function Invoke-RequiredCommand {
     param(
@@ -77,7 +76,7 @@ function Refresh-Antigravity {
 
     try {
         & agy plugin uninstall 'conductor'
-        Write-ColorHost 'SUCCESS' "Existing Antigravity plugin uninstalled."
+        Write-ColorHost 'SUCCESS' "Existing Antigravity Conductor plugin uninstalled."
     }
     catch {
         Write-ColorHost 'WARNING' "Uninstall failed or plugin was not installed. Continuing with install."
