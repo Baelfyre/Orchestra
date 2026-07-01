@@ -62,7 +62,7 @@
         {
             "primary_use": "Continuity review, validation-state review, branch and merge readiness, source-of-truth checks, handoff readiness, access/visibility closeout",
             "slug": "arbiter",
-            "description": "Arbiter is the workflow continuity, validation, and transition governance specialist. Use it when work may be interrupted, validation is missing or failed, branch or workspace context changed, merge readiness is uncertain, source of truth is unclear, or handoff state must be verified before continuing.",
+            "description": "Arbiter is the workflow continuity, validation, transition, and governance-effectiveness specialist. Use it when work may be interrupted, validation is missing or failed, branch or workspace context changed, merge readiness is uncertain, source of truth is unclear, handoff state must be verified before continuing, or advisory governance reporting needs calibration.",
             "avoid_when": "Designing architecture, implementing features, writing documentation content, or replacing normal QA ownership",
             "skill_path": "skills/arbiter/SKILL.md",
             "role": "Workflow Continuity, Validation, and Transition Governance Specialist",
@@ -71,7 +71,8 @@
             "depends_on": "conductor",
             "icon_path": "assets/icons/arbiter.ico",
             "output_formats": [
-                "Continuity Review"
+                "Continuity Review",
+                "Governance Effectiveness Review"
             ]
         },
         {

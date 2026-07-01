@@ -22,6 +22,10 @@ Changes after `v1.0.1` currently tracked in this checkout:
 - Wired Dagger instructions to require guardrail validation and fail-closed behavior.
 - Added GitHub Actions governance workflow in advisory mode.
 - Confirmed the workflow is non-deployment and does not promote Dagger.
+- Added a Phase 4 Arbiter governance calibration plan covering baseline, scenario expectations, severity rules, and acceptance criteria.
+- Extended Arbiter guidance with a governance-effectiveness review mode and standardized advisory governance output format.
+- Added behavior fixtures to validate Arbiter governance severity buckets and advisory calibration wording.
+- Documented that CI strictness remains deferred until Arbiter calibration is accepted.
 
 ## v1.0.1 - Codex compatibility adapter (2026-06-21)
 

@@ -40,5 +40,23 @@
         "skill": "arbiter",
         "pattern": "BLOCKED",
         "type": "Continuity Gate"
+    },
+    {
+        "scenario": "Arbiter defines governance severity buckets",
+        "skill": "arbiter",
+        "pattern": "Critical findings.*Major findings.*Minor findings.*Cleanup findings",
+        "type": "Governance Calibration"
+    },
+    {
+        "scenario": "Arbiter uses READY_WITH_REQUIRED_FIXES for advisory governance gaps",
+        "skill": "arbiter",
+        "pattern": "READY_WITH_REQUIRED_FIXES",
+        "type": "Governance Calibration"
+    },
+    {
+        "scenario": "Arbiter keeps CI advisory and Dagger simulation-only during calibration",
+        "skill": "arbiter",
+        "pattern": "keep CI advisory|Dagger remains simulation-only and unpromoted",
+        "type": "Governance Calibration"
     }
 ]
