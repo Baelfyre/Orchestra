@@ -28,6 +28,7 @@ The following checks are part of the initial governance validation plan. In Phas
 * **Tests:** Required tests must pass.
 * **Documentation:** Required documentation must exist.
 * **Changelog:** Changelog or context tracker must be updated when relevant.
+* **Local Sync Preflight:** Before starting a new local development phase or repository-editing session, run the preflight sync check against `origin/main`. Do not begin edits if the local branch is behind, diverged, dirty, or unverifiable. Ahead-only state may proceed, but the unpublished commits must be reported.
 
 ### 2. Security & Compliance Gates
 * **Secrets:** No secrets or forbidden files should be committed.
@@ -43,5 +44,7 @@ The following checks are part of the initial governance validation plan. In Phas
 
 ## Execution
 Validation is currently performed via the non-destructive `scripts/governance_check.py` script plus the simulation-only `scripts/dagger_guardrail.py` validator and `scripts/test_dagger_guardrail.py`.
+
+For local development sessions, run `scripts/preflight_sync_check.py` before editing repository files. This preflight is validation-only: it fetches remote refs, reports sync state, and blocks unsafe local starts, but it does not pull, rebase, reset, merge, stash, or push automatically.
 
 Phase 3 has successfully wired these scripts into an automated GitHub Actions CI workflow (`.github/workflows/governance-check.yml`). The workflow is purely advisory, runs all validation gates on push/PR, and generates a unified report artifact (`governance-validation-report`). Strict release enforcement (Phase 4) and live Dagger promotion are still deferred until Arbiter calibration is complete.

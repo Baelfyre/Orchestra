@@ -8,6 +8,7 @@ When operating within this repository or when this plugin is active, adhere to t
 4. **Communication Layer**: `Caveman` controls output compression to preserve context limits during long multi-file operations.
 5. **Domain Specialists**: Specialists (`Clockwork`, `Cloak`, `Cipher`, `Chronicler`, `Weaver`, `Scribe`, `Overseer`, `Dagger`) exclusively own their respective domains.
 6. **Source of Truth**: Do not guess specialist logic or rules. The authoritative source of truth for any skill's behavior is always located in its corresponding `skills/*/SKILL.md` file. Always defer to the explicit instructions in those files.
+7. **Local Sync Preflight Rule**: Before starting a new local development phase or repository-editing session, run `python scripts/preflight_sync_check.py` against `origin/main`. Do not begin edits if the local branch is behind, diverged, dirty, or unverifiable. Ahead-only state may proceed, but the unpublished commits must be reported.
 
 ## Repo Source vs Runtime Rule
 

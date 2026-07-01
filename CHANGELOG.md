@@ -6,6 +6,8 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 Changes merged after `v1.0.1` and present on `origin/main`:
 
+- Added local repository sync preflight governance check (`scripts/preflight_sync_check.py`) for new development phases and editing sessions.
+- Added contributor, agent, and governance rules requiring preflight sync verification against `origin/main` before local editing begins.
 - Added Codex Marketplace installation instructions to README and setup guides.
 - Expanded specialist foundations for Arbiter, Clockwork, Cipher, Cloak, and Ponytail.
 - Aligned Conductor routing, Codex export, and stale-reference handling, including routing arrow and encoding fixes.
