@@ -36,7 +36,7 @@ Changes after `v1.0.1` currently tracked in this checkout:
 - Updated 10 specialist SKILL.md files and 9 active command files with scope-enforcement routing requirements.
 - Updated Conductor routing rules and routing output templates to correctly process and route `SPECIALIST_REROUTE_REQUIRED` responses.
 - Updated Arbiter severity classification to flag specialist-scope misuse without reroute as a Major finding.
-- Updated behavior test fixtures to cover templates, commands, Arbiter severity, and specialist self-boundary reroute contracts.
+- Updated Python and PowerShell behavior test fixtures to cover templates, commands, Arbiter severity, and specialist self-boundary reroute contracts.
 - Cleaned up stale Acme handoff references in Scribe and Dagger.
 - Updated the plugin.json safety note to accurately reflect Phase 2 simulation-only guardrail restrictions.
 

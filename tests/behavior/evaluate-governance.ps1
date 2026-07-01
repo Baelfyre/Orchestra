@@ -14,27 +14,40 @@ $failed = $false
 Write-Host "[INFO] Governance instruction conformance checks: Validating static behavioral expectations in source rules..."
 
 foreach ($eval in $evals) {
-    # Check source repo first, then optional .agents directory alignment
-    $sourcePath = Join-Path $Root "skills\$($eval.skill)\SKILL.md"
-    $agentPath = Join-Path $Root ".agents\skills\$($eval.skill)\SKILL.md"
-    
-    if (Test-Path $sourcePath) {
-        $skillPath = $sourcePath
-    } elseif (Test-Path $agentPath) {
-        $skillPath = $agentPath
-        Write-Host "WARNING: Validating local .agents copy for $($eval.skill), source missing in skills/" -ForegroundColor Yellow
+    $filePath = $eval.file
+
+    if ($filePath) {
+        $sourcePath = Join-Path $Root $filePath
+        if (Test-Path $sourcePath) {
+            $skillPath = $sourcePath
+        } else {
+            Write-Host "FAIL: $($eval.scenario) -> File not found: $sourcePath" -ForegroundColor Red
+            $failed = $true
+            continue
+        }
     } else {
-        Write-Host "FAIL: $($eval.scenario) -> Skill file not found: $sourcePath" -ForegroundColor Red
-        $failed = $true
-        continue
+        # Check source repo first, then optional .agents directory alignment
+        $sourcePath = Join-Path $Root "skills\$($eval.skill)\SKILL.md"
+        $agentPath = Join-Path $Root ".agents\skills\$($eval.skill)\SKILL.md"
+
+        if (Test-Path $sourcePath) {
+            $skillPath = $sourcePath
+        } elseif (Test-Path $agentPath) {
+            $skillPath = $agentPath
+            Write-Host "WARNING: Validating local .agents copy for $($eval.skill), source missing in skills/" -ForegroundColor Yellow
+        } else {
+            Write-Host "FAIL: $($eval.scenario) -> Skill file not found: $sourcePath" -ForegroundColor Red
+            $failed = $true
+            continue
+        }
     }
 
     $content = Get-Content $skillPath -Raw
     
-    if ($content -match $eval.pattern) {
+    if ([regex]::IsMatch($content, $eval.pattern, [System.Text.RegularExpressions.RegexOptions]::Singleline)) {
         Write-Host "PASS: $($eval.scenario)" -ForegroundColor Green
     } else {
-        Write-Host "FAIL: $($eval.scenario) -> Rule missing or contradicted in $($eval.skill)/SKILL.md" -ForegroundColor Red
+        Write-Host "FAIL: $($eval.scenario) -> Rule missing or contradicted in $skillPath" -ForegroundColor Red
         $failed = $true
     }
 }
