@@ -29,6 +29,7 @@ The following checks are part of the initial governance validation plan. In Phas
 * **Documentation:** Required documentation must exist.
 * **Changelog:** Changelog or context tracker must be updated when relevant.
 * **Local Sync Preflight:** Before starting a new local development phase or repository-editing session, run the preflight sync check against `origin/main`. Do not begin edits if the local branch is behind, diverged, dirty, or unverifiable. Ahead-only state may proceed, but the unpublished commits must be reported.
+* **Changelog Process Rule:** Update `CHANGELOG.md` for significant source, workflow, governance, documentation, skill, command, or security changes. If a changelog update is intentionally not needed, document why in the implementation report.
 
 ### 2. Security & Compliance Gates
 * **Secrets:** No secrets or forbidden files should be committed.

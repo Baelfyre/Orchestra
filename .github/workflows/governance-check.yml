@@ -15,6 +15,8 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -54,7 +56,7 @@ jobs:
         run: |
           echo "# Governance Validation Report" >> $GITHUB_STEP_SUMMARY
           echo "## Advisory Mode: ON" >> $GITHUB_STEP_SUMMARY
-          echo "All structural, governance, and simulation checks passed successfully." >> $GITHUB_STEP_SUMMARY
+          echo "Governance validation completed. Review the uploaded artifact and workflow logs for advisory warnings, deferred checks, and non-blocking governance findings." >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Governance Artifacts
         if: always()

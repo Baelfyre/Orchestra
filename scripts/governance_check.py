@@ -1,6 +1,101 @@
 import os
 import json
+import fnmatch
+import subprocess
 import sys
+
+
+SIGNIFICANT_CHANGE_PATTERNS = [
+    ".github/workflows/**",
+    "scripts/**",
+    "skills/**",
+    "commands/**",
+    "templates/**",
+    "docs/governance/**",
+    "docs/CONTRIBUTING.md",
+    "plugin.json",
+    "tests/**",
+]
+
+IGNORED_CHANGE_PATTERNS = [
+    ".agents/**",
+    ".amalgam/**",
+    "artifacts/**",
+    "__pycache__/**",
+    "*.log",
+    "*.tmp",
+]
+
+
+def run_git(repo_root, *args):
+    return subprocess.run(
+        ["git", *args],
+        cwd=repo_root,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+
+def normalize_paths(paths):
+    normalized = []
+    for path in paths:
+        cleaned = path.strip().replace("\\", "/")
+        if cleaned:
+            normalized.append(cleaned)
+    return normalized
+
+
+def get_changed_paths(repo_root, *args):
+    result = run_git(repo_root, *args)
+    if result.returncode != 0:
+        return None
+    return normalize_paths(result.stdout.splitlines())
+
+
+def is_ignored_change(path):
+    return any(fnmatch.fnmatch(path, pattern) for pattern in IGNORED_CHANGE_PATTERNS)
+
+
+def is_significant_change(path):
+    if path == "CHANGELOG.md" or is_ignored_change(path):
+        return False
+    return any(fnmatch.fnmatch(path, pattern) for pattern in SIGNIFICANT_CHANGE_PATTERNS)
+
+
+def get_changelog_freshness(repo_root):
+    if run_git(repo_root, "rev-parse", "--is-inside-work-tree").returncode != 0:
+        return None, None, "Git repository context is unavailable. CHANGELOG.md freshness could not be verified."
+
+    diff_candidates = [
+        ("origin/main...HEAD", ("diff", "--name-only", "origin/main...HEAD")),
+        ("HEAD~1..HEAD", ("diff", "--name-only", "HEAD~1..HEAD")),
+    ]
+
+    comparison_label = None
+    committed_changes = None
+    for label, args in diff_candidates:
+        committed_changes = get_changed_paths(repo_root, *args)
+        if committed_changes is not None:
+            comparison_label = label
+            break
+
+    if committed_changes is None:
+        return None, None, "Git history is unavailable. CHANGELOG.md freshness could not be verified."
+
+    working_tree_changes = get_changed_paths(repo_root, "diff", "--name-only") or []
+    staged_changes = get_changed_paths(repo_root, "diff", "--name-only", "--cached") or []
+
+    combined_changes = []
+    seen = set()
+    for path in committed_changes + staged_changes + working_tree_changes:
+        if path not in seen:
+            seen.add(path)
+            combined_changes.append(path)
+
+    significant_changes = [path for path in combined_changes if is_significant_change(path)]
+    changelog_changed = "CHANGELOG.md" in combined_changes
+    return comparison_label, significant_changes, changelog_changed
 
 def main():
     repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -97,6 +192,27 @@ def main():
         for f in found_forbidden:
             print(f"  [FAIL] Forbidden file detected: {f}")
             errors += 1
+
+    # 7. Changelog Freshness Check
+    print("\n[7] Checking changelog freshness...")
+    comparison_label, freshness_state, freshness_meta = get_changelog_freshness(repo_root)
+    if comparison_label is None:
+        print(f"  [WARN] {freshness_meta}")
+        warnings += 1
+    else:
+        significant_changes = freshness_state
+        changelog_changed = freshness_meta
+        if significant_changes and not changelog_changed:
+            preview = ", ".join(significant_changes[:5])
+            if len(significant_changes) > 5:
+                preview += ", ..."
+            print(f"  [WARN] Significant changes detected in {comparison_label}, but CHANGELOG.md was not updated.")
+            print(f"  [WARN] Significant paths: {preview}")
+            warnings += 1
+        elif significant_changes:
+            print(f"  [PASS] CHANGELOG.md updated alongside significant changes detected in {comparison_label}.")
+        else:
+            print(f"  [PASS] No significant changed files requiring a CHANGELOG.md update were detected in {comparison_label}.")
 
     print("\n========================================")
     print(f" Summary: {errors} Errors, {warnings} Warnings")

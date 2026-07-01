@@ -4,7 +4,7 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased
 
-Changes merged after `v1.0.1` and present on `origin/main`:
+Changes after `v1.0.1` currently tracked in this checkout:
 
 - Added local repository sync preflight governance check (`scripts/preflight_sync_check.py`) for new development phases and editing sessions.
 - Added contributor, agent, and governance rules requiring preflight sync verification against `origin/main` before local editing begins.
@@ -14,6 +14,14 @@ Changes merged after `v1.0.1` and present on `origin/main`:
 - Added governance guardrails, access and visibility evidence rules, CI validation notes, and refined visual validation guidance.
 - Refreshed README presentation and selective skill icons, and added Ponytail and Caveman companion links.
 - Cleaned local-only runtime handling for tracked `.agents/` and `.amalgam/` state.
+- Added CI/CD governance planning documentation for phased advisory validation.
+- Added advisory governance validation script (`scripts/governance_check.py`).
+- Documented the Dagger runtime guardrail gap in governance documentation.
+- Added hardened Dagger runtime guardrail validation in simulation-only mode.
+- Added repeatable Dagger guardrail tests and wired them into behavior validation.
+- Wired Dagger instructions to require guardrail validation and fail-closed behavior.
+- Added GitHub Actions governance workflow in advisory mode.
+- Confirmed the workflow is non-deployment and does not promote Dagger.
 
 ## v1.0.1 - Codex compatibility adapter (2026-06-21)
 
