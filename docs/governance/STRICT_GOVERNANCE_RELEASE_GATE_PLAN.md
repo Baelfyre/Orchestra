@@ -158,7 +158,10 @@ Current state and recommendation:
 - this phase did not broaden or remove that existing setting
 - confirm maintainer and contributor signing readiness before making signed-commit policy a broader rollout requirement in later phases
 - Phase 7.6 records the current solo-maintainer readiness state in `docs/governance/SIGNED_COMMIT_READINESS.md`
-- current readiness is not complete: recent commits remain unsigned and the maintainer signing workflow still requires manual setup
+- Phase 7.6A proved repo-local SSH signing on test branch `test/signed-commit-check`
+- verified test commit: `e43202e21755b9e9e1dd6de511fa4452a93fe27d`
+- GitHub verification result for that test commit: `verified: true`, `reason: valid`
+- no history rewrite and no ruleset change were required to complete readiness
 
 ## Dependabot Auto-Merge Readiness
 

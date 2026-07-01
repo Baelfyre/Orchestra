@@ -2,30 +2,34 @@
 
 ## Purpose
 
-Record the current signed-commit readiness state for the solo maintainer and define the safest next setup path without changing repository rulesets, rewriting history, or weakening recovery options.
+Record the current signed-commit readiness state for the solo maintainer and define the active signed-commit workflow without changing repository rulesets, rewriting history, or weakening recovery options.
 
 ## Current Repository Policy
 
 - The active `Protect main` ruleset already includes `required_signatures`.
 - Maintainer bypass remains enabled for solo-maintainer recovery.
-- Signed-commit readiness is currently a workflow-preparation task, not a new enforcement task.
+- Signed-commit readiness is complete for the current local repository workflow.
 
 ## Readiness Outcome
 
-`SIGNING_NOT_CONFIGURED`
+`SIGNED_COMMIT_READY`
 
 Current evidence:
 
-- `commit.gpgsign` is not configured.
-- `gpg.format` is not configured.
-- `user.signingkey` is not configured.
-- `gpg.ssh.allowedSignersFile` is not configured.
+- `commit.gpgsign` is configured locally as `true`.
+- `gpg.format` is configured locally as `ssh`.
+- `user.signingkey` is configured locally to the dedicated public signing key file `orchestra_signing_ed25519.pub`.
+- `gpg.ssh.allowedSignersFile` is configured locally as `.git\allowed_signers`.
 - local `gpg` is not installed.
 - OpenSSH is installed locally.
-- no local `~/.ssh/*.pub` public keys were found.
-- no GitHub GPG signing keys were found for the authenticated account.
-- no GitHub SSH signing keys were found for the authenticated account.
-- recent commits show `N` in `git log --format="%h %G? %GS %s"`, and GitHub reports the current `main` commit verification as `unsigned`.
+- a dedicated SSH signing key now exists locally for this repository workflow.
+- no GitHub GPG signing key was needed.
+- a GitHub SSH signing key is registered for the maintainer account.
+- signed test branch: `test/signed-commit-check`
+- signed test commit: `e43202e21755b9e9e1dd6de511fa4452a93fe27d`
+- local verification showed `Good "git" signature` and `%G?` status `G`
+- GitHub verification for the test branch commit returned `verified: true` and `reason: "valid"`
+- `main` history was not rewritten and the verified test stayed isolated on a test branch.
 
 ## Recommended Signing Method
 
@@ -38,15 +42,15 @@ Reason:
 - GPG is not installed, so GPG signing would add more tooling work than needed.
 - S/MIME is unnecessary for this repository.
 
-This recommendation does not mean SSH signing is ready now. It is the simplest next method once the maintainer creates or selects a signing-capable SSH key and registers it with GitHub.
+This recommendation is now implemented locally for this repository.
 
-## Manual Setup Still Needed
+## Completed Setup
 
-1. Choose an SSH key to use for commit signing.
-2. Add the public key to GitHub as an SSH signing key.
-3. Configure local Git to use SSH signing.
-4. Create a small signed test commit on a branch.
-5. Verify the commit locally and on GitHub before relying on the workflow.
+1. A dedicated ED25519 SSH signing key was created for commit signing.
+2. The public key was added to GitHub as an SSH signing key.
+3. Local Git was configured for repo-local SSH signing.
+4. A signed test commit was created on a non-`main` test branch.
+5. The commit was verified locally and on GitHub before any `main` history change.
 
 Do not:
 
@@ -54,6 +58,7 @@ Do not:
 - print private key material into logs or docs
 - rewrite or amend old repository history for readiness work
 - use bypass for routine unsigned development
+- merge the signing test branch into `main` without explicit approval
 
 ## Normal Signed-Commit Workflow
 
@@ -97,15 +102,15 @@ gh api repos/Baelfyre/Orchestra/commits/main --jq ".commit.verification"
 
 Expected healthy direction:
 
-- local new commits should no longer show `N`
-- GitHub should no longer report `reason: "unsigned"` for newly signed commits
+- new signed commits should show `G` locally
+- GitHub should report `verified: true` for newly signed commits
 
 ## Optional Local Configuration Examples
 
-Do not run these blindly. Use them only after the maintainer chooses a signing method and confirms the exact key to use.
+These examples match the current repo-local SSH signing setup. Keep them local to the repository unless broader maintainer rollout is explicitly approved.
 
 ```powershell
-git config --global commit.gpgsign true
-git config --global gpg.format ssh
-git config --global user.signingkey "<public signing key or key path>"
+git config --local commit.gpgsign true
+git config --local gpg.format ssh
+git config --local user.signingkey "$env:USERPROFILE\.ssh\orchestra_signing_ed25519.pub"
 ```
