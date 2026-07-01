@@ -21,8 +21,9 @@ This document outlines the governance validation foundation for the Orchestra re
 * Maintain advisory mode (no deployments, no releases).
 
 ## Phase 4 Objectives
-* Calibrate Arbiter against the advisory governance layer before any strict enforcement.
-* Standardize Arbiter governance-effectiveness output, severity labels, and remediation guidance.
+* **Phase 4A: Arbiter Calibration Planning** - Calibrate Arbiter against the advisory governance layer before any strict enforcement.
+* **Phase 4B: Arbiter Output Contract Alignment** - Standardize Arbiter governance-effectiveness output, severity labels, metadata, and remediation guidance.
+* Record that Phase 4 included both planning and implementation-alignment work, not planning-only work.
 * Compare Arbiter findings against known baseline and failure scenarios without converting CI warnings into hard failures.
 
 ## Required Governance Checks
@@ -55,4 +56,4 @@ For local development sessions, run `scripts/preflight_sync_check.py` before edi
 
 Phase 3 has successfully wired these scripts into an automated GitHub Actions CI workflow (`.github/workflows/governance-check.yml`). The workflow is purely advisory, runs all validation gates on push/PR, and generates a unified report artifact (`governance-validation-report`).
 
-Phase 4 calibration is documented in `docs/governance/ARBITER_CALIBRATION_PLAN.md`. CI strictness and live Dagger promotion remain deferred until Arbiter calibration is stable and explicitly accepted.
+Phase 4 calibration is documented in `docs/governance/ARBITER_CALIBRATION_PLAN.md`. The accepted Phase 4 record is split as Phase 4A (calibration planning) and Phase 4B (Arbiter output contract alignment). CI remains advisory, Dagger remains simulation-only and unpromoted, and strict enforcement remains deferred until Arbiter calibration is stable and explicitly accepted.

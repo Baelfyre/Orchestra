@@ -2,6 +2,19 @@
 
 Phase 4 calibrates Arbiter against the advisory CI/CD governance layer before any strict enforcement is introduced.
 
+## Phase Record
+
+The accepted Phase 4 work is intentionally recorded in two parts:
+
+- **Phase 4A: Arbiter Calibration Planning** - added this calibration plan, baseline, scenarios, severity guidance, and acceptance criteria.
+- **Phase 4B: Arbiter Output Contract Alignment** - aligned Arbiter's output contract, severity buckets, metadata, and behavior fixtures with the calibration plan.
+
+This Phase 4 work went beyond planning-only scope, but it remains coherent governance hardening work:
+
+- CI remains advisory.
+- Dagger remains simulation-only and unpromoted.
+- Strict enforcement remains deferred.
+
 ## Objective
 
 Verify that Arbiter can:
