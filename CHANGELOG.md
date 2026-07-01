@@ -44,6 +44,7 @@ Changes after `v1.0.1` currently tracked in this checkout:
 - Added Phase 7.5 solo-maintainer bypass policy documentation to keep bypass available for recovery while preserving branch and pull-request workflow as the default path.
 - Documented Dependabot auto-merge readiness as deferred and limited to a later low-risk dependency-only policy review.
 - Added Phase 7.6 signed-commit readiness guidance for the solo maintainer, including current unsigned status, recommended SSH signing path, verification commands, and emergency bypass boundaries.
+- Added signed-commit verification test documentation for validating the SSH signing readiness workflow.
 
 ## v1.0.1 - Codex compatibility adapter (2026-06-21)
 
