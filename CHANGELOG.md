@@ -27,6 +27,7 @@ Changes after `v1.0.1` currently tracked in this checkout:
 - Added behavior fixtures to validate Arbiter governance severity buckets and advisory calibration wording.
 - Reclassified the accepted Phase 4 work as Phase 4A (Arbiter calibration planning) and Phase 4B (Arbiter output contract alignment) to reflect that it went beyond planning-only work.
 - Documented that CI strictness remains deferred until Arbiter calibration is accepted.
+- Added a Phase 5 strict governance release gate planning document covering merge gates, release gates, branch protection, signed commit policy, Arbiter review policy, and emergency bypass planning.
 
 ## v1.0.1 - Codex compatibility adapter (2026-06-21)
 

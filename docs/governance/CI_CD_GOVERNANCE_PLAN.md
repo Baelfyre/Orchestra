@@ -26,6 +26,12 @@ This document outlines the governance validation foundation for the Orchestra re
 * Record that Phase 4 included both planning and implementation-alignment work, not planning-only work.
 * Compare Arbiter findings against known baseline and failure scenarios without converting CI warnings into hard failures.
 
+## Phase 5 Objectives
+* Plan the strict merge and release governance gates before enabling them.
+* Define which existing advisory checks should become blocking and which should remain advisory.
+* Document recommended `main` branch protection, bypass, signed-commit, pull-request-review, and Arbiter-review policy.
+* Keep CI advisory and Dagger simulation-only until the strict gate plan is explicitly accepted.
+
 ## Required Governance Checks
 
 The following checks are part of the initial governance validation plan. In Phase 1-3, they are evaluated in advisory mode (non-blocking for deployments, though safe technical failures will fail the CI check).
@@ -57,3 +63,5 @@ For local development sessions, run `scripts/preflight_sync_check.py` before edi
 Phase 3 has successfully wired these scripts into an automated GitHub Actions CI workflow (`.github/workflows/governance-check.yml`). The workflow is purely advisory, runs all validation gates on push/PR, and generates a unified report artifact (`governance-validation-report`).
 
 Phase 4 calibration is documented in `docs/governance/ARBITER_CALIBRATION_PLAN.md`. The accepted Phase 4 record is split as Phase 4A (calibration planning) and Phase 4B (Arbiter output contract alignment). CI remains advisory, Dagger remains simulation-only and unpromoted, and strict enforcement remains deferred until Arbiter calibration is stable and explicitly accepted.
+
+Phase 5 planning is documented in `docs/governance/STRICT_GOVERNANCE_RELEASE_GATE_PLAN.md`. It defines the proposed strict merge and release policy, but it does not enable enforcement yet.
