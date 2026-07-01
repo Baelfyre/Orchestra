@@ -139,9 +139,10 @@ Phase 7 implementation status:
 
 Bypass policy recommendation:
 
-- bypass should be limited to the repository owner or explicitly named maintainers
-- every bypass should require a written reason
-- every bypass should trigger follow-up review or postmortem if governance protections were skipped
+- for this solo-maintainer repository, bypass should remain enabled as an emergency recovery path for the maintainer
+- normal development should still use a branch and pull request workflow
+- bypass is not the default development path and should not be used for routine convenience
+- bypass use should be documented afterward in the implementation report or `CHANGELOG.md` when it affects governance behavior, CI behavior, or release state
 
 ## Signed Commit Recommendation
 
@@ -156,6 +157,30 @@ Current state and recommendation:
 - the repository ruleset currently includes `required_signatures`
 - this phase did not broaden or remove that existing setting
 - confirm maintainer and contributor signing readiness before making signed-commit policy a broader rollout requirement in later phases
+
+## Dependabot Auto-Merge Readiness
+
+Current repository state:
+
+- `.github/dependabot.yml` currently enables weekly pull-request creation for `github-actions`
+- repository auto-merge is not enabled by this phase
+- required checks still apply to Dependabot pull requests the same way they apply to human pull requests
+
+Recommended later policy:
+
+- consider auto-merge only for low-risk patch or minor dependency pull requests after all required checks pass
+- keep major version updates manual
+- keep governance-sensitive changes manual even if the change originated from dependency tooling
+
+Do not auto-merge if any of these are touched:
+
+- `.github/workflows/**`
+- `docs/governance/**`
+- `scripts/**`
+- `skills/**`
+- `commands/**`
+- `plugin.json`
+- Dagger guardrail files or specialist routing files
 
 ## Pull Request Review Recommendation
 

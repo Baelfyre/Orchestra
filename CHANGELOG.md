@@ -41,6 +41,8 @@ Changes after `v1.0.1` currently tracked in this checkout:
 - Updated the plugin.json safety note to accurately reflect Phase 2 simulation-only guardrail restrictions.
 - Applied Phase 7 `main` repository protection updates by requiring strict status checks for `governance-check`, `validate`, `Analyze (actions)`, and `Analyze (python)` on the active `Protect main` ruleset.
 - Updated governance and contributor documentation to reflect pull-request-only `main` changes, required review and conversation resolution, and the still-deferred deployment and release posture.
+- Added Phase 7.5 solo-maintainer bypass policy documentation to keep bypass available for recovery while preserving branch and pull-request workflow as the default path.
+- Documented Dependabot auto-merge readiness as deferred and limited to a later low-risk dependency-only policy review.
 
 ## v1.0.1 - Codex compatibility adapter (2026-06-21)
 

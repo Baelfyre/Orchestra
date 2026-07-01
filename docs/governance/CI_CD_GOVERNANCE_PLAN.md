@@ -47,6 +47,13 @@ This document outlines the governance validation foundation for the Orchestra re
 * Keep Dagger simulation-only and unpromoted.
 * Defer any new deployment, release, auto-merge, or Dagger-promotion behavior.
 
+## Phase 7.5 Objectives
+* Document the solo-maintainer bypass policy without changing repository ruleset settings.
+* Keep maintainer bypass available only for recovery-oriented use.
+* Preserve branch and pull-request workflow as the default path.
+* Record that required signatures are already active, while signing readiness remains a follow-up workflow decision.
+* Evaluate Dependabot auto-merge readiness for low-risk dependency pull requests without enabling auto-merge.
+
 ## Required Governance Checks
 
 The following checks are part of the initial governance validation plan. In Phase 1-3, they are evaluated in advisory mode (non-blocking for deployments, though safe technical failures will fail the CI check).
@@ -86,3 +93,5 @@ Phase 6 Stage 1 enables strict deterministic governance failures through `python
 Phase 7 adds repository-level protection on `main` through the active `Protect main` ruleset. The applied Stage 1 protection set requires pull requests, one approval, conversation resolution, strict required status checks, and an up-to-date branch before merge. The required GitHub check contexts are `governance-check`, `validate`, `Analyze (actions)`, and `Analyze (python)`, which correspond to the repository's `Governance Check`, `validate`, and `CodeQL` workflows.
 
 Signed commits and linear history are currently present in the repository ruleset, but this phase did not change or broaden those pre-existing settings. Deployment automation, release automation, and Dagger promotion remain deferred.
+
+Phase 7.5 keeps maintainer bypass available because this repository is currently solo-maintained, but treats bypass as an emergency recovery path rather than the normal development workflow. Routine changes should still move through a branch, required checks, and a pull request. Dependabot auto-merge remains deferred; low-risk patch or minor dependency pull requests may be considered later only if required checks pass and governance-sensitive files are untouched.
