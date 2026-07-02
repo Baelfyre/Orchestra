@@ -39,6 +39,9 @@ The script prints per-file metrics, per-group totals, and a grand total, highlig
 ## Baseline Comparison Use
 This metric script directly proves the benchmarks defined in `ROUTER_VALIDATION_BENCHMARKS.md`, verifying the reduction from "Very High" to "Low" prompt load.
 
+## CI Integration
+Prompt load metrics are measured automatically in the `governance-check.yml` CI workflow. The script output is captured and published as part of the `governance-validation-report` CI artifact (`artifacts/prompt_load_metrics.txt`). Currently, these metrics are for observability only and do not trigger hard CI failures based on prompt size thresholds.
+
 ## Non-Goals
 This method does not measure user prompt sizes, session history sizes, or downstream specialist output token generation costs.
 
