@@ -4,6 +4,12 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased
 
+### Changed
+- Updated GitHub Actions dependencies for the governance workflow:
+  - actions/checkout from v4 to v7
+  - actions/setup-python from v5 to v6
+  - actions/upload-artifact from v4 to v7
+
 Changes after `v1.0.1` currently tracked in this checkout:
 
 - Added local repository sync preflight governance check (`scripts/preflight_sync_check.py`) for new development phases and editing sessions.
