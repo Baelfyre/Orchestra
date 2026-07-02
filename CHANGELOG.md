@@ -4,6 +4,9 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased
 
+- Wired Execution Modes Policy (`docs/routing/EXECUTION_MODES_POLICY.md`) into Conductor.
+- Replaced legacy Ideation/Prototype/Release modes with formal FAST, STANDARD, GOVERNED, AUDIT, and DESTRUCTIVE modes.
+
 - Created `EXECUTION_MODES_POLICY.md` to formalize FAST, STANDARD, GOVERNED, AUDIT, and DESTRUCTIVE modes.
 - Defined mode escalation paths, exclusions, and matrix.
 
