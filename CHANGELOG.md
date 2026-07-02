@@ -4,6 +4,8 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased
 
+- Created `docs/performance/CONDUCTOR_LOAD_REDUCTION_PLAN.md` outlining a strategy to safely reduce `skills/conductor/SKILL.md` prompt load while preserving governance behavior and test fixtures.
+
 - Created `scripts/measure_prompt_load.py` to calculate approximate token sizes of contextual documentation.
 - Added `PROMPT_LOAD_METRICS.md` defining token estimation heuristics and context exclusion groups.
 
