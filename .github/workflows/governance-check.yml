@@ -9,6 +9,10 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: read
+  artifact-metadata: write
+
 jobs:
   governance-check:
     runs-on: ubuntu-latest

@@ -4,6 +4,8 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased
 
+- Added explicit least-privilege permissions to the Governance Check workflow.
+
 ### Changed
 - Updated GitHub Actions dependencies for the governance workflow:
   - actions/checkout from v4 to v7
