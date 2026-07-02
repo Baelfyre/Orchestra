@@ -4,6 +4,8 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased
 
+- Defined `ROUTER_VALIDATION_BENCHMARKS.md` to benchmark the efficiency, accuracy, and safety of the router-first execution model against the legacy monolithic context approach.
+
 - Wired Execution Modes Policy (`docs/routing/EXECUTION_MODES_POLICY.md`) into Conductor.
 - Replaced legacy Ideation/Prototype/Release modes with formal FAST, STANDARD, GOVERNED, AUDIT, and DESTRUCTIVE modes.
 
