@@ -51,6 +51,9 @@ If a soft threshold is exceeded, maintainers should:
 2. **Shorten Phrasing**: Refine the documentation to be more concise without losing governance meaning.
 3. **Move to Selective Retrieval**: Ensure the file is not loaded by default but instead selectively fetched via `ask_question` or `grep_search`.
 
+## Threshold Checker
+To validate current payloads against these thresholds, you can use the dry-run checker. For details on how to run it and interpret its statuses, see [PROMPT_LOAD_THRESHOLD_CHECKER.md](PROMPT_LOAD_THRESHOLD_CHECKER.md).
+
 ## CI Artifact Usage
 The `measure_prompt_load.py` script runs automatically in the `governance-check.yml` CI workflow. Its output is published as `prompt_load_metrics.txt` in the `governance-validation-report` artifact. This ensures continuous observability of prompt load metrics.
 
