@@ -99,5 +99,8 @@ Always verify the uploaded `governance-validation-report` artifact in your Pull 
 ## Non-Goals
 This document does not specify how to write LLM behavior evaluation tests (those reside in `tests/behavior/`). It strictly concerns the maintenance of the JSON benchmark schema definitions.
 
+## Expansion Plan
+For information on planned future benchmarks, see the [ROUTER_BENCHMARK_COVERAGE_EXPANSION_PLAN.md](ROUTER_BENCHMARK_COVERAGE_EXPANSION_PLAN.md).
+
 ## Guide Result
 ROUTER_BENCHMARK_MAINTENANCE_GUIDE_DEFINED
