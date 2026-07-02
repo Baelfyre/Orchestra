@@ -252,6 +252,78 @@
       ],
       "governance_status": "CONDITIONAL",
       "pass_criteria": "Read-only findings and no file edits unless explicitly approved"
+    },
+    {
+      "case_id": "BM-17",
+      "request_type": "frontend requiring Clockwork before Ponytail",
+      "expected_mode": "GOVERNED",
+      "expected_skill_route": "conductor -> clockwork -> ponytail",
+      "required_context": [
+        "routing",
+        "architecture",
+        "frontend",
+        "execution modes"
+      ],
+      "excluded_context": [
+        "destructive-operation context"
+      ],
+      "governance_status": "REQUIRED",
+      "pass_criteria": "Clockwork review before Ponytail when frontend work affects API shape, data flow, service boundaries, backend validation, auth boundary placement, or architectural layering"
+    },
+    {
+      "case_id": "BM-18",
+      "request_type": "frontend requiring Cipher before Ponytail",
+      "expected_mode": "GOVERNED",
+      "expected_skill_route": "conductor -> cipher -> ponytail",
+      "required_context": [
+        "routing",
+        "security",
+        "frontend",
+        "governance"
+      ],
+      "excluded_context": [
+        "destructive-operation context unless destructive scope appears"
+      ],
+      "governance_status": "REQUIRED",
+      "pass_criteria": "Cipher review before Ponytail when frontend work affects authorization, privacy, destructive actions, secrets, security-sensitive workflows, payments, or compliance-sensitive journeys"
+    },
+    {
+      "case_id": "BM-19",
+      "request_type": "frontend requiring Chronicler before Ponytail",
+      "expected_mode": "GOVERNED",
+      "expected_skill_route": "conductor -> chronicler -> ponytail",
+      "required_context": [
+        "routing",
+        "persistence",
+        "database",
+        "frontend",
+        "governance"
+      ],
+      "excluded_context": [
+        "destructive-operation context"
+      ],
+      "governance_status": "REQUIRED",
+      "pass_criteria": "Chronicler review before Ponytail when frontend work affects persistence, schema, migrations, reporting data, ORM behavior, or stored records"
+    },
+    {
+      "case_id": "BM-20",
+      "request_type": "docs-only lightweight routing",
+      "expected_mode": "FAST",
+      "expected_skill_route": "conductor -> scribe",
+      "required_context": [
+        "documentation",
+        "skill index"
+      ],
+      "excluded_context": [
+        "governance",
+        "destructive-operation",
+        "database",
+        "security",
+        "CI/CD",
+        "implementation-heavy context"
+      ],
+      "governance_status": "NOT_REQUIRED",
+      "pass_criteria": "Lightweight docs routing with no unnecessary governance hydration"
     }
   ]
 }

@@ -53,7 +53,7 @@ The following fields must be strictly typed as JSON Arrays (lists):
 ## Validation Rules
 The benchmark fixture is validated by `scripts/router_benchmark_runner.py`, which enforces:
 - The root object is a dictionary containing `schema_version` equal to "1.0".
-- The `benchmarks` array exists and contains exactly 16 benchmark cases.
+- The `benchmarks` array exists and contains exactly 20 benchmark cases.
 - All `case_id` values are unique.
 - All required fields are present in every case.
 - Arrays and strings are of the correct types and non-empty where applicable.

@@ -55,6 +55,7 @@ def main():
             print(f"[ERROR] Fixture {fixture_path} 'benchmarks' must be a list")
             sys.exit(1)
 
+        EXPECTED_BENCHMARK_COUNT = 20
         BENCHMARK_CASES = fixture_data["benchmarks"]
     except Exception as e:
         print(f"[ERROR] Failed to load {fixture_path}: {e}")
@@ -134,8 +135,8 @@ def main():
         print("[ERROR] No destructive-operation benchmarks found! Failing.")
         sys.exit(1)
 
-    if total_cases != 16:
-        print(f"[ERROR] Expected exactly 16 benchmark cases, found {total_cases}.")
+    if total_cases != 20:
+        print(f"[ERROR] Expected exactly 20 benchmark cases, found {total_cases}.")
         sys.exit(1)
 
     print("[SUCCESS] Benchmark definitions are structurally valid.")

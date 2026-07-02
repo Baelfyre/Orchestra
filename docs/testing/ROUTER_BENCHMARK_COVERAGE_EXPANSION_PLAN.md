@@ -40,7 +40,7 @@ Future expansion will target the following categories to close the identified ga
 - **Contextual Escalation**: Starting as a standard task but escalating due to implicit database or security context.
 - **Audit Compliance**: Enforcing read-only behavior for comprehensive review tasks.
 
-### Priority 2 Cases (BM-17 through BM-20)
+### Priority 2 Cases (BM-17 through BM-20) [IMPLEMENTED]
 - **Frontend Guardrails**: Requiring architecture (`Clockwork`), security (`Cipher`), or data (`Chronicler`) review before executing frontend changes (`Ponytail`).
 - **Documentation Efficiency**: Stripping all code files from context for pure documentation updates.
 - **Database Sensitivity**: Aggressive `GOVERNANCE_LAYER.md` loading for schema changes.

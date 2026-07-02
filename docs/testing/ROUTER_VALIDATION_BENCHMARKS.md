@@ -56,6 +56,10 @@ A transition from "Very High" to "Low" prompt load for standard tasks, while ach
 | BM-14 | ambiguous request requiring clarification or reroute | STANDARD | `conductor` | routing, skill index | destructive-operation context, database/security context unless clarified | CONDITIONAL | Ambiguity detection and no premature specialist execution |
 | BM-15 | STANDARD to GOVERNED escalation | GOVERNED | `conductor` -> `the-steward` -> `the-governor` | governance, routing, execution modes | implementation-only context until governance clears | REQUIRED | Escalation when security, database, CI/CD, compliance, or credential-sensitive scope appears |
 | BM-16 | audit-only no-edit task | AUDIT | `conductor` -> `arbiter` | audit, governance, relevant routing context | implementation, destructive-operation context | CONDITIONAL | Read-only findings and no file edits unless explicitly approved |
+| BM-17 | frontend requiring Clockwork before Ponytail | GOVERNED | `conductor` -> `clockwork` -> `ponytail` | routing, architecture, frontend, execution modes | destructive-operation context | REQUIRED | Clockwork review before Ponytail when frontend work affects API shape, data flow, service boundaries, backend validation, auth boundary placement, or architectural layering |
+| BM-18 | frontend requiring Cipher before Ponytail | GOVERNED | `conductor` -> `cipher` -> `ponytail` | routing, security, frontend, governance | destructive-operation context unless destructive scope appears | REQUIRED | Cipher review before Ponytail when frontend work affects authorization, privacy, destructive actions, secrets, security-sensitive workflows, payments, or compliance-sensitive journeys |
+| BM-19 | frontend requiring Chronicler before Ponytail | GOVERNED | `conductor` -> `chronicler` -> `ponytail` | routing, persistence, database, frontend, governance | destructive-operation context | REQUIRED | Chronicler review before Ponytail when frontend work affects persistence, schema, migrations, reporting data, ORM behavior, or stored records |
+| BM-20 | docs-only lightweight routing | FAST | `conductor` -> `scribe` | documentation, skill index | governance, destructive-operation, database, security, CI/CD, implementation-heavy context | NOT_REQUIRED | Lightweight docs routing with no unnecessary governance hydration |
 
 ## Context Exclusion Checks
 1. Assert `GOVERNANCE_LAYER.md` is strictly absent during FAST mode syntax fixes.
@@ -84,7 +88,7 @@ A transition from "Very High" to "Low" prompt load for standard tasks, while ach
 4. CI/CD strict governance script failures.
 
 ## Validation Checklist
-- [ ] Run dry-run prompt captures for BM-01 through BM-16.
+- [ ] Run dry-run prompt captures for BM-01 through BM-20.
 - [ ] Evaluate context inclusion/exclusion mathematically or via manual log inspection.
 - [ ] Run `python tests/behavior/evaluate_governance.py` to confirm behavioral bounds.
 - [ ] Run `python scripts/governance_check.py --strict` to verify policy adherence.
