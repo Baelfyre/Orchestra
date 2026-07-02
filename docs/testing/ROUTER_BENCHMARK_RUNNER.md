@@ -8,6 +8,7 @@ This runner script is scoped exclusively to parsing, validating, and summarizing
 
 ## Source of Truth
 - **Machine-Readable Fixture**: Benchmark definitions live in `tests/fixtures/router_benchmarks.json`. The runner loads and validates this fixture.
+- **Fixture Schema**: The exact schema contract is defined in [ROUTER_BENCHMARK_FIXTURE_SCHEMA.md](ROUTER_BENCHMARK_FIXTURE_SCHEMA.md).
 - **Human-Readable Guide**: `docs/testing/ROUTER_VALIDATION_BENCHMARKS.md` remains the primary human-readable benchmark guide.
 
 ## What It Validates

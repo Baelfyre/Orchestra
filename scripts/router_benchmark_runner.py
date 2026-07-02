@@ -31,15 +31,27 @@ def main():
     try:
         with open(fixture_path, "r", encoding="utf-8") as f:
             fixture_data = json.load(f)
-            
+
+        if not isinstance(fixture_data, dict):
+            print(f"[ERROR] Fixture {fixture_path} root must be a dictionary")
+            sys.exit(1)
+
         if "schema_version" not in fixture_data:
             print(f"[ERROR] Fixture {fixture_path} is missing schema_version")
             sys.exit(1)
-            
+
+        if fixture_data["schema_version"] != "1.0":
+            print(f"[ERROR] Fixture {fixture_path} schema_version must be '1.0'")
+            sys.exit(1)
+
         if "benchmarks" not in fixture_data:
             print(f"[ERROR] Fixture {fixture_path} is missing benchmarks list")
             sys.exit(1)
-            
+
+        if not isinstance(fixture_data["benchmarks"], list):
+            print(f"[ERROR] Fixture {fixture_path} 'benchmarks' must be a list")
+            sys.exit(1)
+
         BENCHMARK_CASES = fixture_data["benchmarks"]
     except Exception as e:
         print(f"[ERROR] Failed to load {fixture_path}: {e}")
