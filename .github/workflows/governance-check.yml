@@ -33,6 +33,11 @@ jobs:
       - name: Create Artifacts Directory
         run: mkdir -p artifacts
 
+      - name: Run Router Benchmark Validation
+        run: |
+          python scripts/router_benchmark_runner.py > artifacts/router_benchmark_report.txt
+          cat artifacts/router_benchmark_report.txt
+
       - name: Run Stage 1 Strict Governance Check
         run: |
           python scripts/governance_check.py --strict > artifacts/governance_report.txt
