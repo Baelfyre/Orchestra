@@ -179,7 +179,10 @@ Before routing any request to execution skills, the Conductor **must** perform *
    -> `cipher` (for RBAC, auth, secrets, API hardening) -> `ponytail`
 
 4. **UI/UX & Frontend**
-   -> `cloak` (for accessibility, responsive layout, secure UX) -> `ponytail`
+   -> `cloak` (for frontend discovery, design strategy, accessibility, responsive layout, semantic structure, visible UX, and design review) -> `ponytail`
+   -> Add `clockwork` before `ponytail` when frontend decisions affect API shape, data flow, authentication boundaries, authorization boundaries, backend validation, service boundaries, persistence coordination, or architecture.
+   -> Add `cipher` before `ponytail` when frontend decisions affect permissions, privacy, security-sensitive flows, destructive actions, payments, secrets, or compliance-sensitive user journeys.
+   -> Add `chronicler` before `ponytail` when frontend decisions affect stored data, schema, migrations, ORM behavior, reporting data, or persistence rules.
 
 5. **QA, Testing & Validation**
    -> `overseer` (for test strategy, validation gates, release readiness)
@@ -199,12 +202,29 @@ Before routing any request to execution skills, the Conductor **must** perform *
 10. **General Implementation & Bug Fixes**
     -> `ponytail` (for safe code navigation and minimal safe edits - no architecture/design decisions)
 
+### Frontend and Backend Alignment Rule
+
+**Trigger:** Any frontend, UI, UX, dashboard, form, portal, onboarding, settings, admin, client-facing, role-aware, payment, integration, reporting, or data-backed interface request.
+
+**Behavior:**
+- Route broad or vague frontend design work to `cloak` first for discovery, strategy, pattern selection, semantic structure, accessibility, and design review.
+- Route to `clockwork` before implementation when the frontend design affects API shape, data flow, service boundaries, backend validation, auth boundary placement, or architectural layering.
+- Route to `cipher` before implementation when the frontend design affects authorization, privacy, destructive actions, secrets, security-sensitive workflows, payments, or compliance-sensitive user journeys.
+- Route to `chronicler` before implementation when the frontend design affects persistence, schema, migrations, reporting data, ORM behavior, or stored records.
+- Route to `ponytail` only after the visible-layer design constraints and backend-sensitive boundaries are clear.
+- Route to `overseer` for validation gates, persona coverage, accessibility checks, and regression readiness.
+
+**Hard rule:**
+Conductor must not route data-aware, auth-aware, API-backed, payment, integration, storage, or compliance-sensitive frontend work directly from `cloak` to `ponytail`. Frontend strategy and backend architecture must be aligned before implementation.
+
 ### Bounded Routing Rules
 
 - **Bounded Task Packets:** Conductor must create small, discrete task packets.
 - **Decision First, Implementation Second:** Conductor should route the decision-making specialist first, then `ponytail` only for implementation.
 - **No Monolithic Handoffs:** Conductor must not collapse all work into `ponytail`. Ponytail is the implementation destination, not a general governance or design authority.
 - **Arbiter Safety:** Conductor must not bypass `arbiter` when transition, merge, or validation risk exists.
+- **Cloak Workflow Preservation:** Conductor must route broad, vague, aesthetic-heavy, or greenfield frontend design work through Cloak's multi-stage design workflow before implementation.
+- **Frontend/Backend Alignment Safety:** Conductor must not route data-aware, auth-aware, API-backed, payment, integration, storage, or compliance-sensitive frontend work directly from `cloak` to `ponytail`; use `clockwork`, `cipher`, and/or `chronicler` before implementation when their boundaries are affected.
 - **Secure UX Routing:** Conductor must not route security-sensitive UI concerns only to `cloak`; use `cipher` first, then `cloak`.
 - **Database Safety:** Conductor must not route database-backed implementation directly to `ponytail` without `chronicler` when schema/persistence rules are unclear.
 - **Architecture Safety:** Conductor must not route architecture refactors directly to `ponytail` without `clockwork` when boundaries are unclear.
@@ -214,6 +234,7 @@ Before routing any request to execution skills, the Conductor **must** perform *
 
 - **"Implement feature with new DB table"** -> `chronicler`, `clockwork` if layering is affected, `ponytail`, `overseer`
 - **"Fix UI form layout and validation messages"** -> `cloak`, `cipher` if security-sensitive, `ponytail`, `overseer`
+- **"Design a client portal dashboard with user records, permissions, and backend data"** -> `cloak`, `clockwork`, `cipher` if role/security-sensitive, `chronicler` if persistence/reporting changes, `ponytail`, `overseer`
 - **"Review API for abuse and overload protection"** -> `cipher`, `dagger` if controlled scenario expansion is approved, `overseer`
 - **"Refactor service/repository logic"** -> `clockwork`, `ponytail`, `overseer`
 - **"Prepare project documentation"** -> `scribe`, with specialist source-of-truth owner first when technical facts are involved
