@@ -6,6 +6,10 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ### Added
 
+- Added branch protection setup guide for configuring Orchestra required status checks on `main`.
+
+### Added
+
 - Added required status checks review for Orchestra branch protection and CI workflow policy.
 
 ### Added
