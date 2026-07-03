@@ -7,7 +7,7 @@ This document describes the Prompt Load Threshold Checker (`scripts/check_prompt
 The checker targets the exact same files and grouping logic defined in `measure_prompt_load.py`, isolating Core Router-First Context (Group A) from secondary governance and documentation groups.
 
 ## Dry-Run Mode
-Currently, the checker operates exclusively in **dry-run/report-only mode**. It will always exit with a successful `0` status code, even if multiple thresholds are exceeded. This ensures that CI is not arbitrarily broken while the team calibrates baseline stability.
+Currently, the checker operates exclusively in **observability-only and report-only mode**. There is no hard CI prompt-load failure threshold yet. It will always exit with a successful `0` status code, even if multiple thresholds are exceeded. This ensures that CI is not arbitrarily broken while the team calibrates baseline stability.
 
 ## What It Checks
 - **Group A (Core Context)**: Total token approximation against a soft limit.

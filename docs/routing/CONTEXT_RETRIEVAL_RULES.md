@@ -11,7 +11,7 @@ This policy governs how Conductor and other executing specialists retrieve archi
 
 ## Context Priority Levels
 - **Required**: Must be loaded for every task in this category.
-- **Conditional**: Loaded only if specific risk triggers or cross-domain dependencies are met.
+- **CONDITIONAL**: Loaded only if specific risk triggers or cross-domain dependencies are met.
 - **Optional**: Loaded only upon explicit user request.
 - **Avoid unless triggered**: Strictly blocked from loading unless a high-risk or specific operational gate is crossed.
 
@@ -32,7 +32,7 @@ This policy governs how Conductor and other executing specialists retrieve archi
 
 ## Task-to-Context Lookup
 
-| Task Type | Required Context | Conditional Context | Avoid Loading By Default |
+| Task Type | Required Context | CONDITIONAL Context | Avoid Loading By Default |
 |---|---|---|---|
 | Simple Q&A | Core manifest context | Skill index context | All other contexts |
 | Documentation updates | Documentation context | Governance context | Database, Security, Frontend |
@@ -57,7 +57,7 @@ This policy governs how Conductor and other executing specialists retrieve archi
 - Release readiness: Require release/readiness and full governance context.
 - Destructive operations: Require destructive-operation context and safety guardrails.
 
-## Conditional Context Rules
+## CONDITIONAL Context Rules
 - If a Code Implementation task touches authentication or database layers, conditionally load Security or Database contexts.
 - If a Documentation task involves public release, conditionally load Governance context.
 - If a CI/CD change affects deployment targets, conditionally load Security context.

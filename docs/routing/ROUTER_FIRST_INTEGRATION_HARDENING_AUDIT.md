@@ -44,7 +44,7 @@ The JSON fixture correctly holds 24 benchmark cases aligned exactly to the `ROUT
 `measure_prompt_load.py` consistently calculates tokens and context length for reporting.
 
 ### Threshold Checker Integration
-`check_prompt_load_thresholds.py` compares metrics against the soft targets in `PROMPT_LOAD_THRESHOLD_POLICY.md`. However, it currently operates as a report-only check, lacking a hard CI failure switch.
+`check_prompt_load_thresholds.py` compares metrics against the soft targets in `PROMPT_LOAD_THRESHOLD_POLICY.md`. However, it currently operates as an observability-only and report-only check. There is no hard CI prompt-load failure threshold yet.
 
 ### CI Artifact Integration
 `governance-check.yml` correctly generates and bundles 8 distinct artifact reports (including benchmark, prompt-load, and negative fixture results) as documented in `CI_ARTIFACT_INDEX.md`.

@@ -18,7 +18,7 @@ Every assembled prompt must include the following metadata block:
 - **Execution Mode**: FAST, STANDARD, GOVERNED, AUDIT, or DESTRUCTIVE.
 - **Risk Level**: Low, Medium, High, or Extreme.
 - **Required Context**: Absolute paths to minimal context documents.
-- **Conditional Context**: Conditionally included paths based on domain overlap.
+- **CONDITIONAL Context**: Conditionally included paths based on domain overlap.
 - **Constraints**: Task boundaries, do-nots, and style locks.
 - **Governance Status**: Current standing of the request.
 - **Expected Output**: The desired artifact or standard response format.
@@ -28,27 +28,27 @@ Every assembled prompt must include the following metadata block:
 ## Execution Mode Formats
 The layout of the prompt package adapts to the execution mode selected during intake.
 
-## FAST Mode Format
+## FAST mode Format
 **Use**: Ideation, prototype, simple Q&A.
 **Include**: Task, Intent, Selected Skill, Result Status.
 **Exclude**: Deep governance context, detailed validation rules.
 
-## STANDARD Mode Format
+## STANDARD mode Format
 **Use**: Routine feature development, documentation, general backend/frontend implementation.
 **Include**: All standard package fields. Minimal required context (e.g., standard testing context).
 **Exclude**: Formal governance audit steps unless explicitly triggered.
 
-## GOVERNED Mode Format
+## GOVERNED mode Format
 **Use**: Security-sensitive logic, database persistence, access control.
 **Include**: All standard package fields, Governance Status, explicit conditional contexts (Security, Database).
 **Exclude**: Broad UI/UX context (unless UI touches security/auth).
 
-## AUDIT Mode Format
+## AUDIT mode Format
 **Use**: Formal compliance, release reviews, read-only inspections.
 **Include**: Task, Intent, `docs/governance/GOVERNANCE_LAYER.md`, Risk Level, Constraints, Expected Output.
 **Exclude**: Implementation commands, destructive operation context.
 
-## DESTRUCTIVE Mode Format
+## DESTRUCTIVE mode Format
 **Use**: Chaos, negative path, resilience testing (e.g., `dagger`).
 **Include**: Task, Intent, Destructive-operation context, Explicit Authorization checks, Validation Requirements.
 **Rule**: Destructive-operation prompts must never proceed without explicit user authorization and required guardrail validation (`scripts/dagger_guardrail.py`).

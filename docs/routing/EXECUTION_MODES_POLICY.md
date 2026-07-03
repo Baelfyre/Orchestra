@@ -11,7 +11,7 @@ The Conductor must select the execution mode that provides the lowest safe frict
 
 ## Execution Modes
 
-## FAST Mode
+## FAST mode
 - **Purpose**: Rapid execution of simple, low-risk, well-defined tasks.
 - **Allowed Task Types**: Syntax formatting, typo fixes, simple UI tweaks, and unambiguous singular code changes.
 - **Required Context**: Only the immediate file being edited and the required specialist `SKILL.md` file.
@@ -21,7 +21,7 @@ The Conductor must select the execution mode that provides the lowest safe frict
 - **Escalation Triggers**: If the task requires architectural changes or touches multiple files, escalate to STANDARD mode.
 - **Expected Result Status**: Task completed directly.
 
-## STANDARD Mode
+## STANDARD mode
 - **Purpose**: Normal multi-step or multi-file development and feature implementation.
 - **Allowed Task Types**: Feature additions, backend logic, standard UI/UX flows, and refactoring within existing architectural boundaries.
 - **Required Context**: Immediate files, relevant specialist files, and architectural dependencies.
@@ -31,7 +31,7 @@ The Conductor must select the execution mode that provides the lowest safe frict
 - **Escalation Triggers**: If the task touches security, privacy, database migrations, or compliance domains, escalate to GOVERNED mode.
 - **Expected Result Status**: Feature implemented and locally validated.
 
-## GOVERNED Mode
+## GOVERNED mode
 - **Purpose**: Execution of tasks that require structural, security, or compliance oversight.
 - **Allowed Task Types**: Database migrations, authentication/authorization updates, secret handling, cross-service APIs, and privacy-impacting features.
 - **Required Context**: Affected files, `docs/governance/GOVERNANCE_LAYER.md` (only when governance triggers are present), and required domain specialist skills.
@@ -41,7 +41,7 @@ The Conductor must select the execution mode that provides the lowest safe frict
 - **Escalation Triggers**: If the task requires formal read-only review or is considered too risky for immediate implementation, escalate to AUDIT mode.
 - **Expected Result Status**: Implementation verified against governance constraints.
 
-## AUDIT Mode
+## AUDIT mode
 - **Purpose**: Formal read-only review, compliance auditing, and risk assessment.
 - **Allowed Task Types**: Security reviews, architecture reviews, compliance audits, and resilience planning.
 - **Required Context**: Entire feature slice, `GOVERNANCE_LAYER.md`, and relevant audit specialist skills (e.g., Arbiter, Cipher, Clockwork).
@@ -51,7 +51,7 @@ The Conductor must select the execution mode that provides the lowest safe frict
 - **Escalation Triggers**: Escalates to DESTRUCTIVE mode if resilience testing requires negative live execution.
 - **Expected Result Status**: Audit report delivered. (AUDIT mode is read-only unless the user explicitly approves remediation work.)
 
-## DESTRUCTIVE Mode
+## DESTRUCTIVE mode
 - **Purpose**: Execution of high-risk tasks that modify production data, perform destructive negative testing, or bypass normal safety constraints.
 - **Allowed Task Types**: Chaos testing, negative path simulation, and authorized live data modification.
 - **Required Context**: Target environment context, guardrail scripts, and Dagger skill.
@@ -78,7 +78,7 @@ The Conductor must select the execution mode that provides the lowest safe frict
 - **any mode to DESTRUCTIVE**: Any task requiring destructive testing, production modification, or guardrail bypass is immediately placed in a DESTRUCTIVE blocked state.
 
 ## Governance Status Mapping
-- **NOT_REQUIRED**: Fast mode tasks without compliance impact.
+- **NOT_REQUIRED**: FAST mode tasks without compliance impact.
 - **CONDITIONAL**: Standard tasks where governance is loaded only if triggers appear.
 - **REQUIRED**: Governed and Audit tasks requiring explicit policy adherence.
 - **BLOCKED_PENDING_AUTHORIZATION**: Destructive tasks.

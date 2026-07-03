@@ -40,7 +40,7 @@ The script prints per-file metrics, per-group totals, and a grand total, highlig
 This metric script directly proves the benchmarks defined in `ROUTER_VALIDATION_BENCHMARKS.md`, verifying the reduction from "Very High" to "Low" prompt load.
 
 ## CI Integration
-Prompt load metrics are measured automatically in the `governance-check.yml` CI workflow. The script output is captured and published as part of the `governance-validation-report` CI artifact (`artifacts/prompt_load_metrics.txt`). CI also executes the threshold checker (`artifacts/prompt_load_threshold_report.txt`), publishing both raw prompt load metrics and threshold status. Currently, these metrics are for observability only and do not trigger hard CI failures based on prompt size thresholds.
+Prompt load metrics are measured automatically in the `governance-check.yml` CI workflow. The script output is captured and published as part of the `governance-validation-report` CI artifact (`artifacts/prompt_load_metrics.txt`). CI also executes the threshold checker (`artifacts/prompt_load_threshold_report.txt`), publishing both raw prompt load metrics and threshold status. Currently, these metrics are for observability-only and do not trigger hard CI failures based on prompt size thresholds.
 
 For a complete guide to accessing and interpreting all governance artifacts, see the [CI Artifact Index](../testing/CI_ARTIFACT_INDEX.md).
 

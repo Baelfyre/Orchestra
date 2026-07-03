@@ -7,7 +7,7 @@ This document outlines the strategic plan for expanding the validation coverage 
 This plan applies to the definition and structured expansion of the machine-readable benchmark cases stored in `tests/fixtures/router_benchmarks.json` and evaluated by `scripts/router_benchmark_runner.py`. It is a planning document and does not actively modify the runtime test suite.
 
 ## Current Coverage Baseline
-As of the initial router-first validation release, the coverage baseline is exactly **12 benchmark cases**:
+As of the initial router-first validation release, the coverage baseline is exactly **24 benchmark cases**:
 - **Execution Modes**: Full coverage established (`FAST`, `STANDARD`, `GOVERNED`, `AUDIT`, `DESTRUCTIVE`).
 - **Governance Statuses**: Full coverage established (`NOT_REQUIRED`, `CONDITIONAL`, `REQUIRED`, `BLOCKED_PENDING_AUTHORIZATION`).
 - **Destructive Operations**: Coverage exists to prove active blocks.

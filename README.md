@@ -98,7 +98,7 @@ Conductor uses 5 distinct operating modes to scale governance dynamically, ensur
 1. **Ideation Mode**: Brainstorming, exploration, planning, concept development, prompt refinement. Returns `ADVISORY_ONLY` or `NOT_APPLICABLE`.
 2. **Prototype Mode**: Local experiments, throwaway proofs-of-concept. Lightweight checks only.
 3. **Implementation Mode**: Making file, code, documentation, or architecture changes. Uses fast path by default. Escalate to expanded review only if risk triggers are met.
-4. **Audit Mode**: Explicit request for a review, compliance check, or risk assessment. Context-heavy.
+4. **AUDIT mode**: Explicit request for a review, compliance check, or risk assessment. Context-heavy.
 5. **Release Mode**: Production deployment, public release, client delivery, or open-source distribution. Strictest path. Escalate uncertain issues for human review.
 
 ### Interpret the Decision

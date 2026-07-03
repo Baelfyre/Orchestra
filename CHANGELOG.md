@@ -4,6 +4,8 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased
 
+- Cleaned router-first documentation terminology and consistency.
+
 - Added router-first documentation cross-links for Phase 8 hardening.
 
 - Added Phase 8A router-first integration hardening audit documentation.

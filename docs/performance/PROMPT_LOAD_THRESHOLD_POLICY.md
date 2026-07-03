@@ -23,7 +23,7 @@ As of the initial measurement, the baseline metrics are:
 - Grand Total: ~17080 estimated tokens
 
 ## Soft Thresholds
-Soft thresholds act as observability triggers.
+Soft thresholds act as observability-only and report-only triggers. There is no hard CI prompt-load failure threshold yet.
 - **Group A (Core Context)**: Should remain under 8,000 estimated tokens.
 - **Group B (Broader Context)**: Should remain under 6,000 estimated tokens.
 - **Group C (Governance Context)**: Allowed to grow as compliance rules evolve, but should remain under 4,000 estimated tokens.
@@ -55,7 +55,7 @@ If a soft threshold is exceeded, maintainers should:
 To validate current payloads against these thresholds, you can use the dry-run checker. For details on how to run it and interpret its statuses, see [PROMPT_LOAD_THRESHOLD_CHECKER.md](PROMPT_LOAD_THRESHOLD_CHECKER.md).
 
 ## CI Artifact Usage
-The `measure_prompt_load.py` script runs automatically in the `governance-check.yml` CI workflow. Its output is published as `prompt_load_metrics.txt` in the `governance-validation-report` artifact. This ensures continuous observability of prompt load metrics. For details on all governance artifacts, see the [CI Artifact Index](../testing/CI_ARTIFACT_INDEX.md).
+The `measure_prompt_load.py` script runs automatically in the `governance-check.yml` CI workflow. Its output is published as `prompt_load_metrics.txt` in the `governance-validation-report` artifact. This ensures continuous observability-only tracking of prompt load metrics. For details on all governance artifacts, see the [CI Artifact Index](../testing/CI_ARTIFACT_INDEX.md).
 
 ## Non-Goals
 This policy does not govern user prompt sizes, session history limits, or downstream specialist output tokens. It only governs the static context injected into the Conductor's routing prompt.

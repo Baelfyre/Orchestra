@@ -30,7 +30,7 @@ This report captures raw prompt load measurements (line count, word count, chara
 
 ## Prompt Load Threshold Report
 **File**: `artifacts/prompt_load_threshold_report.txt`
-This report compares the raw token approximations against established soft thresholds to detect context bloat. It currently operates in report-only (dry-run) mode and does not cause hard CI failures. See [PROMPT_LOAD_THRESHOLD_CHECKER.md](../performance/PROMPT_LOAD_THRESHOLD_CHECKER.md) and [PROMPT_LOAD_THRESHOLD_POLICY.md](../performance/PROMPT_LOAD_THRESHOLD_POLICY.md) for limits.
+This report compares the raw token approximations against established soft thresholds to detect context bloat. It currently operates in observability-only and report-only mode. There is no hard CI prompt-load failure threshold yet. See [PROMPT_LOAD_THRESHOLD_CHECKER.md](../performance/PROMPT_LOAD_THRESHOLD_CHECKER.md) and [PROMPT_LOAD_THRESHOLD_POLICY.md](../performance/PROMPT_LOAD_THRESHOLD_POLICY.md) for limits.
 
 ## Governance Reports
 The remaining artifacts capture standard repository behavior and governance rule conformance:
