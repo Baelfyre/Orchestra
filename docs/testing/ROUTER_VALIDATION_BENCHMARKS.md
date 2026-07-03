@@ -60,6 +60,10 @@ A transition from "Very High" to "Low" prompt load for standard tasks, while ach
 | BM-18 | frontend requiring Cipher before Ponytail | GOVERNED | `conductor` -> `cipher` -> `ponytail` | routing, security, frontend, governance | destructive-operation context unless destructive scope appears | REQUIRED | Cipher review before Ponytail when frontend work affects authorization, privacy, destructive actions, secrets, security-sensitive workflows, payments, or compliance-sensitive journeys |
 | BM-19 | frontend requiring Chronicler before Ponytail | GOVERNED | `conductor` -> `chronicler` -> `ponytail` | routing, persistence, database, frontend, governance | destructive-operation context | REQUIRED | Chronicler review before Ponytail when frontend work affects persistence, schema, migrations, reporting data, ORM behavior, or stored records |
 | BM-20 | docs-only lightweight routing | FAST | `conductor` -> `scribe` | documentation, skill index | governance, destructive-operation, database, security, CI/CD, implementation-heavy context | NOT_REQUIRED | Lightweight docs routing with no unnecessary governance hydration |
+| BM-21 | CI/CD-sensitive request | GOVERNED | `conductor` -> `the-steward` -> `the-governor` -> `overseer` | routing, governance, CI/CD, validation, release/readiness | destructive-operation context unless destructive commands appear | REQUIRED | Requires governance review before CI/CD workflow changes and preserve existing validation gates |
+| BM-22 | release-readiness request | AUDIT | `conductor` -> `arbiter` -> `overseer` | audit, release/readiness, governance, validation, changelog | implementation-heavy, destructive-operation context | CONDITIONAL | Requires read-only release readiness findings and no implementation unless explicitly approved |
+| BM-23 | prompt-load/context-selection scenario | STANDARD | `conductor` | prompt-load metrics, threshold policy, routing, context retrieval rules | destructive-operation, implementation-heavy, database, security context unless triggered | CONDITIONAL | Requires loading only minimal relevant context and avoiding broad hydration |
+| BM-24 | complex destructive-operation request | DESTRUCTIVE | `conductor` -> `dagger` | destructive-operation, governance, safety, authorization | implementation execution context until authorization clears | BLOCKED_PENDING_AUTHORIZATION | Requires blocking execution pending explicit authorization and safety gate evidence |
 
 ## Context Exclusion Checks
 1. Assert `GOVERNANCE_LAYER.md` is strictly absent during FAST mode syntax fixes.
@@ -88,7 +92,7 @@ A transition from "Very High" to "Low" prompt load for standard tasks, while ach
 4. CI/CD strict governance script failures.
 
 ## Validation Checklist
-- [ ] Run dry-run prompt captures for BM-01 through BM-20.
+- [ ] Run dry-run prompt captures for BM-01 through BM-24.
 - [ ] Evaluate context inclusion/exclusion mathematically or via manual log inspection.
 - [ ] Run `python tests/behavior/evaluate_governance.py` to confirm behavioral bounds.
 - [ ] Run `python scripts/governance_check.py --strict` to verify policy adherence.

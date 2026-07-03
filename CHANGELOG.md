@@ -171,4 +171,5 @@ Changes after `v1.0.1` currently tracked in this checkout:
  -   d r a f t e d   r o u t e r   b e n c h m a r k   c o v e r a g e   e x p a n s i o n   p l a n   f o r   f u t u r e   r o u t i n g   s c e n a r i o s  
  -   a d d e d   p r i o r i t y   1   r o u t e r   b e n c h m a r k   c a s e s   B M - 1 3   t h r o u g h   B M - 1 6  
  -   a d d e d   p r i o r i t y   2   r o u t e r   b e n c h m a r k   c a s e s   B M - 1 7   t h r o u g h   B M - 2 0  
+ -   a d d e d   p r i o r i t y   3   r o u t e r   b e n c h m a r k   c a s e s   B M - 2 1   t h r o u g h   B M - 2 4  
  

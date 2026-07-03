@@ -17,7 +17,7 @@ This runner script is scoped exclusively to parsing, validating, and summarizing
 ## What It Validates
 - Ensures every benchmark case has all required keys: `case_id`, `request_type`, `expected_mode`, `expected_skill_route`, `required_context`, `excluded_context`, `governance_status`, and `pass_criteria`.
 - Validates the overall completeness of the defined scenarios.
-- Ensures the fixture contains exactly 20 benchmark cases.
+- Ensures the fixture contains exactly 24 benchmark cases.
 - Verifies that destructive-operation coverage exists.
 
 ## What It Does Not Validate
