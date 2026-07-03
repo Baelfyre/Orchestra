@@ -2,6 +2,7 @@ import argparse
 import fnmatch
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -32,6 +33,12 @@ REQUIRED_VALIDATION_SCRIPTS = [
     "scripts/preflight_sync_check.py",
     "tests/behavior/evaluate_governance.py",
     "tests/behavior/run_tests.py",
+]
+
+REPO_MEMORY_FILES = [
+    "SESSION_HANDOFF.md",
+    "PROJECT_STATE.md",
+    "DECISION_LOG.md",
 ]
 
 STRICT_VALIDATOR_SCRIPTS = [
@@ -77,6 +84,29 @@ FORBIDDEN_REPO_PATTERNS = [
 FORBIDDEN_EXTENSIONS = [".env", ".pem", ".key"]
 ALLOWED_RUNTIME_PATHS = {
     ".agents/plugins/marketplace.json",
+}
+PATH_EXTENSIONS = {
+    ".json",
+    ".md",
+    ".ps1",
+    ".py",
+    ".sh",
+    ".txt",
+    ".yml",
+    ".yaml",
+}
+REPO_PATH_PREFIXES = {
+    ".agents",
+    ".github",
+    "adapters",
+    "assets",
+    "commands",
+    "docs",
+    "examples",
+    "scripts",
+    "skills",
+    "templates",
+    "tests",
 }
 
 
@@ -205,6 +235,63 @@ def run_python_script(repo_root, relative_path):
         text=True,
         check=False,
     )
+
+
+def is_repo_relative_memory_path(path_text):
+    normalized = path_text.strip().strip("`").replace("\\", "/")
+    if not normalized or normalized.startswith(("http://", "https://")):
+        return False
+    if " " in normalized:
+        return False
+    if re.match(r"^[A-Za-z]:/", normalized):
+        return False
+    if normalized.startswith("/") or normalized in {".", ".."}:
+        return False
+    if any(part == ".." for part in normalized.split("/")):
+        return False
+    suffix = Path(normalized).suffix.lower()
+    if suffix in PATH_EXTENSIONS:
+        return True
+    first_segment = normalized.split("/", 1)[0]
+    return "/" in normalized and first_segment in REPO_PATH_PREFIXES
+
+
+def get_memory_path_references(line):
+    references = []
+    references.extend(match.group(1) for match in re.finditer(r"`([^`]+)`", line))
+    references.extend(match.group(0) for match in re.finditer(r"\b[A-Za-z0-9_.-]+(?:[\\/][A-Za-z0-9_.-]+)+(?:[\\/])?", line))
+    return list(dict.fromkeys(references))
+
+
+def run_repo_memory_path_check(repo_root, counters):
+    print("\n[7c] Checking repo-local memory path references...")
+    missing_references = []
+
+    for memory_file in REPO_MEMORY_FILES:
+        memory_path = Path(repo_root) / memory_file
+        if not memory_path.is_file():
+            continue
+
+        for line_number, line in enumerate(memory_path.read_text(encoding="utf-8").splitlines(), 1):
+            for reference in get_memory_path_references(line):
+                normalized = reference.strip().strip("`").replace("\\", "/").rstrip("/")
+                if not is_repo_relative_memory_path(normalized):
+                    continue
+                if (Path(repo_root) / normalized).exists():
+                    continue
+                missing_references.append(f"{memory_file}:{line_number}: {normalized}")
+
+    if not missing_references:
+        print_pass("repo-memory", "No nonexistent repo-relative paths found in startup memory files.")
+        return
+
+    for reference in missing_references:
+        record_failure(
+            counters,
+            reference,
+            "Repo-local memory references a path that does not exist.",
+            "Update or retire the stale memory entry so startup context cannot route future work to missing files.",
+        )
 
 
 def run_strict_validators(repo_root, counters):
@@ -455,6 +542,8 @@ def main():
             )
     else:
         print_pass("repository-content", "No forbidden generated artifacts, runtime folders, caches, or secret-like files detected.")
+
+    run_repo_memory_path_check(repo_root, counters)
 
     print("\n[7b] Checking changelog freshness...")
     comparison_label, freshness_state, freshness_meta = get_changelog_freshness(repo_root)

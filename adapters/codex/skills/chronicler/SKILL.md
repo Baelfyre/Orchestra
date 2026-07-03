@@ -106,6 +106,10 @@ DENORMALIZATION RISK:
 WEAVER HANDOFF:
 SCRIBE HANDOFF:
 
+## Scope Enforcement
+
+If the request is outside this specialist's scope, do not execute it. Return `SPECIALIST_REROUTE_REQUIRED` and recommend the correct specialist or Conductor.
+
 ## Conductor Integration (Routing Rules)
 
 Act as a specialist routed by `conductor`. 

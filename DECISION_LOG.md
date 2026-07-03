@@ -3,7 +3,7 @@
 ## Date: 2026-06-26
 
 **Decision:**
-Add lightweight project memory files (`PROJECT_STATE.md`, `SESSION_HANDOFF.md`, `DECISION_LOG.md`, `.amalgam/state.json`).
+Add lightweight project memory files (`PROJECT_STATE.md`, `SESSION_HANDOFF.md`, `DECISION_LOG.md`).
 
 **Reason:**
 Prevent cross-session drift, preserve latest validated state, and reduce reliance on raw transcript history.
@@ -33,10 +33,10 @@ Address failure caused by cross-repository context drift where an agent edited t
 - Creating new specialist agents to handle these specific gates.
 
 **Affected Components:**
-- `skills/amalgam-conductor/SKILL.md`
-- `skills/meister-chronicler/SKILL.md`
-- `skills/scribe-meister/SKILL.md`
-- `skills/acme-overseer/SKILL.md`
+- `skills/conductor/SKILL.md`
+- `skills/chronicler/SKILL.md`
+- `skills/scribe/SKILL.md`
+- `skills/overseer/SKILL.md`
 
 ---
 
@@ -59,7 +59,28 @@ Repeated prompts, repeated corrections, stale context, and cross-repo drift crea
 - PROJECT_STATE.md
 - SESSION_HANDOFF.md
 - DECISION_LOG.md
-- .amalgam/state.json, if created
-- Amalgam startup workflow
+- Orchestra startup workflow
 - Workspace Boundary Gate
 - Session Isolation Gate
+
+---
+
+## Date: 2026-07-03
+
+**Decision:**
+Strengthen Codex adapter export validation so exported routing, governance skills, and relative Markdown links are verified before Codex installation.
+
+**Reason:**
+The Codex adapter can pass structural validation while missing governance skills or support documents that exported Conductor and specialist skills reference at runtime.
+
+**Rejected Alternatives:**
+- Relying on manual adapter inspection
+- Keeping Governor activation-level skills out of the Codex export
+- Installing Codex skills before export validation
+
+**Affected Components:**
+- adapters/codex/export-codex-skills.ps1
+- adapters/codex/validate_codex_export.py
+- scripts/refresh-installed-integrations.ps1
+- scripts/governance_check.py
+- scripts/runtime_guardrail.py

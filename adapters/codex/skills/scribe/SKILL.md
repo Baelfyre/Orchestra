@@ -42,7 +42,7 @@ Use `SKILL.md` first. Do not load every supporting document by default or consum
 - Database design documentation (after Chronicler defines the design)
 - Architecture documentation (after Clockwork defines boundaries)
 - Security documentation (after Cipher defines security rules)
-- QA documentation (after Acme defines validation gates)
+- QA documentation (after Overseer defines validation gates)
 - UI documentation (after Cloak defines UI rules)
 
 ## Strict Boundaries
@@ -56,6 +56,10 @@ You must **not** own:
 - UI design
 - Diagram generation
 - Code implementation
+
+## Scope Enforcement
+
+If the request is outside this specialist's scope, do not execute it. Return `SPECIALIST_REROUTE_REQUIRED` and recommend the correct specialist or Conductor.
 
 ## Content Preservation & Caveman Exclusion
 

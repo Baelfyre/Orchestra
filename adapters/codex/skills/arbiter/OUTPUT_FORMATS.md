@@ -65,3 +65,61 @@ Justification:
 ```
 
 Keep entries evidence-based. Use `NOT FOUND` when expected evidence is absent and `NEEDS VERIFICATION` when evidence is unclear.
+
+## Governance Effectiveness Review
+
+Use this format for governance layer calibration, CI governance report interpretation, advisory workflow review, and governance-readiness reviews.
+
+```markdown
+Result:
+READY | READY_WITH_MINOR_FIXES | READY_WITH_REQUIRED_FIXES | BLOCKED
+
+Critical findings:
+- Severity:
+- File path:
+- Function/component:
+- Evidence:
+- Reason:
+- Minimal remediation:
+
+Major findings:
+- Severity:
+- File path:
+- Function/component:
+- Evidence:
+- Reason:
+- Minimal remediation:
+
+Minor findings:
+- Severity:
+- File path:
+- Function/component:
+- Evidence:
+- Reason:
+- Minimal remediation:
+
+Cleanup findings:
+- Severity:
+- File path:
+- Function/component:
+- Evidence:
+- Reason:
+- Minimal remediation:
+
+Validation run:
+- Command:
+- Result:
+
+Final recommendation:
+- Merge readiness:
+- CI readiness:
+- Dagger safety status:
+- Next action:
+```
+
+Rules:
+
+- Use `READY_WITH_REQUIRED_FIXES` for major advisory governance gaps that should be corrected before stricter enforcement, but do not currently justify a hard block.
+- Use `BLOCKED` only for unsafe destructive behavior, missing or bypassed critical guardrails, or broken governance execution that prevents review.
+- Keep Dagger safety conclusions evidence-based and do not report live execution risk when the runtime guardrail is still simulation-only and fail-closed.
+- Do not describe advisory CI output as unconditional success when warnings, deferred checks, or non-blocking findings exist.

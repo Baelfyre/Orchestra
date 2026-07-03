@@ -2,12 +2,12 @@
 
 - **Project Name:** Conductor
 - **Active Repo:** `C:\conductor`
-- **Current Branch:** Main (or active working branch)
-- **Current Stable State:** Governance update pending final review/commit
+- **Current Branch:** `fix/codex-governance-export-validation`
+- **Current Stable State:** Local branch synced with `origin/main`; Codex adapter export validation fix in progress
 - **Related but Forbidden Repo for this task:** `C:\+AA`
 - **Latest Validation:**
-  - Manifest validation passed
-  - Structure validation passed
+  - `python scripts/preflight_sync_check.py` passed with `PROCEED`
+  - Full post-change validation pending
 - **Active Governance Gates:**
   - Workspace Boundary Gate
   - Session Isolation Gate
@@ -18,8 +18,8 @@
   - Acme Readiness Gate Expansion
 - **Current Risks:** Cross-repo context drift from long-running sessions.
 - **Do-Not-Touch Areas:** Do not edit website repo files from this task (`C:\+AA`).
-- **Pending Next Steps:** Finalize memory files integration, validate, and wait for commit approval.
-- **Most Recent Checkpoint:** 2026-06-26 - Added lightweight project memory files.
+- **Pending Next Steps:** Regenerate Codex adapter export and run the required validation matrix.
+- **Most Recent Checkpoint:** 2026-07-03 - Started Codex adapter governance export validation fix.
 
 ## Token Efficiency Rationale
 

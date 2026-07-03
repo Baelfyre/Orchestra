@@ -36,7 +36,7 @@ def main():
     if args.staged_only:
         import subprocess
         try:
-            result = subprocess.run(['git', 'diff', '--name-only', '--cached'], capture_output=True, text=True)
+            result = subprocess.run(['git', 'diff', '--name-only', '--cached'], cwd=args.target_dir, capture_output=True, text=True)
             if result.returncode == 0 and result.stdout.strip():
                 staged = result.stdout.strip().split('\n')
                 for f in staged:

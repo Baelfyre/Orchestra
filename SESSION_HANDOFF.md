@@ -1,18 +1,22 @@
 ﻿# Session Handoff
 
-- **Current Task:** Add lightweight project memory files
+- **Current Task:** Codex adapter governance export validation fix
 - **Current Repo:** `C:\conductor`
-- **Mode:** Implementation with limited file creation
+- **Mode:** Implementation with targeted adapter, validation, guardrail, and repo-memory updates
 - **Allowed Files:**
-  - `PROJECT_STATE.md`
+  - `adapters/codex/export-codex-skills.ps1`
+  - `adapters/codex/validate_codex_export.py`
+  - `scripts/refresh-installed-integrations.ps1`
+  - `scripts/runtime_guardrail.py`
+  - `scripts/governance_check.py`
+  - `scripts/test_governance_check.py`
   - `SESSION_HANDOFF.md`
+  - `PROJECT_STATE.md`
   - `DECISION_LOG.md`
-  - `.amalgam/state.json`
-  - `skills/amalgam-conductor/SKILL.md`
 - **Forbidden Repo:** `C:\+AA`
-- **Last Validation:** Manifest and structure validation passed prior to memory file implementation.
+- **Last Validation:** Preflight passed on branch `fix/codex-governance-export-validation`; full validation pending after implementation.
 - **Known Risks:** Potential context drift if previous session history is long.
-- **Next Step:** Validate structure and manifest after changes.
+- **Next Step:** Regenerate Codex adapter export, run required validation matrix, and review git diff.
 - **Fresh-Session Warning:** If the current conversation has long prior history from another repository, enter safe mode and request user confirmation before proceeding with implementation.
 
 ## Token Control Note
