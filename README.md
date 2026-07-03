@@ -151,7 +151,7 @@ Orchestra can be used across different AI-assisted development environments, but
 | Host / IDE                |                     Installation Scope | How Orchestra Loads                                                   | Recommended Setup                                   |
 | ------------------------- | -------------------------------------: | --------------------------------------------------------------------- | --------------------------------------------------- |
 | Antigravity / `agy`       |                                 Global | Installed as an Antigravity plugin                                    | Use `agy plugin install` once                       |
-| Codex                     |                       Per project repo | Reads `.agents/skills` inside the target repo                         | Install only into repos where Codex needs Orchestra |
+| Codex                     |       Marketplace / global plugin first | Installed from Codex Plugins, with repo-local skills as fallback      | Install through Marketplace, then use `@Orchestra`  |
 | VS Code                   | Per extension or per repo instructions | Depends on the AI extension, such as Copilot or Continue              | Use instruction files, not full skill folders       |
 | IntelliJ / JetBrains IDEs | Per plugin or per project instructions | Depends on JetBrains AI Assistant, Copilot, Junie, or similar plugins | Use instruction files or project docs               |
 | Other AI coding tools     |                          Tool-specific | Usually reads repo instructions, rules, or prompt files               | Adapt Orchestra as project instructions             |
@@ -194,13 +194,13 @@ Notes:
 
 ### Codex Setup
 
-Codex users can install Orchestra globally through the Marketplace, or locally per-project.
+For most Codex users, install Orchestra once through the Codex Marketplace. Use repo-local `.agents/skills` only for advanced or fallback workflows.
 
 #### Install in Codex through Marketplace
 
 1. Open Codex.
 2. Go to Plugins.
-3. Open Marketplace.
+3. Add a marketplace or open Marketplace source settings.
 4. Paste this GitHub repository URL into the Source field:
 
    https://github.com/Baelfyre/Orchestra
@@ -213,11 +213,17 @@ Codex users can install Orchestra globally through the Marketplace, or locally p
 10. Click Install.
 11. Confirm that Orchestra appears as installed or enabled.
 
+Use Orchestra in Codex with:
+
+```text
+@Orchestra
+```
+
 If Orchestra does not appear under Personal after adding the marketplace source, restart Codex again and check that the repository URL was entered correctly.
 
-#### Install locally per-project
+#### Advanced: Install locally per-project
 
-Codex uses a repo-local skill model. Orchestra skills must be installed into the project repo where Codex will run.
+Repo-local `.agents/skills` installation is for local testing, custom workspace setups, unsupported Codex workflows, or repos that intentionally want local skill files.
 
 The target layout is:
 
@@ -243,10 +249,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\refresh-installed-
 
 Important:
 
-* Codex installation is per project repo.
-* Only install Codex skills into repos where you actively want Codex to use Orchestra.
-* Do not install Codex skills into every repo by default.
-* If `.agents/` is only for local Codex use, do not commit it.
+* Marketplace installation is the default Codex setup.
+* Use repo-local `.agents/skills` only when a project deliberately needs local skill files.
+* Do not copy Codex skill folders into every repo by default.
+* If `.agents/` is only for local testing, do not commit it.
 
 For local-only Codex installs, add this to the target repo local Git exclude file:
 
@@ -373,8 +379,9 @@ Use this rule of thumb:
 | Scenario                         | Recommended Location              |                     Commit It? |
 | -------------------------------- | --------------------------------- | -----------------------------: |
 | Antigravity global plugin        | `agy plugin install`              |        No project files needed |
-| Codex local-only testing         | `.agents/skills`                  |                             No |
-| Codex shared team workflow       | `.agents/skills`                  |       Yes, only if intentional |
+| Codex Marketplace plugin         | Codex Plugins > Personal          |        No project files needed |
+| Codex repo-local fallback        | `.agents/skills`                  |                             No |
+| Codex shared local skill files   | `.agents/skills`                  |       Yes, only if intentional |
 | Copilot project instructions     | `.github/copilot-instructions.md` | Yes, if useful to contributors |
 | Personal IDE prompt notes        | Outside repo or local notes       |                             No |
 | General project AI workflow docs | `docs/AI_WORKFLOW.md`             | Yes, if useful to contributors |
@@ -390,7 +397,10 @@ Antigravity:
 Install globally with agy.
 
 Codex:
-Install per repo only when needed.
+Install globally through Marketplace, then use @Orchestra.
+
+Codex fallback:
+Use repo-local .agents/skills only when needed.
 
 VS Code:
 Use extension-specific instruction files.
@@ -402,7 +412,7 @@ Other IDEs:
 Check whether the AI host supports repo instructions, skill folders, or plugins.
 ```
 
-Do not assume all IDEs use the same plugin model. Antigravity uses a global plugin model, Codex uses repo-local skills, and most traditional IDEs use extension-specific instructions.
+Do not assume all IDEs use the same plugin model. Antigravity uses `agy`, Codex uses Marketplace plugins with repo-local skills as a fallback, and most traditional IDEs use extension-specific instructions.
 
 For manual configurations or environment setup details, see the [Installation Guide](docs/setup/INSTALLATION.md).
 
@@ -435,12 +445,19 @@ Minimum context:
 - **Dependencies**: e.g., libraries, assets
 - **Constraints**: e.g., files to preserve, style rules
 
-### 2. Use the standard prompt pattern
+### 2. Choose the correct entry command
 
-Add this template to the top of your request:
+Use the command that matches your AI host:
+
+| Host | Entry Command | Notes |
+|---|---|---|
+| Codex | `@Orchestra` | Use after installing Orchestra through Codex Marketplace. Orchestra routes the task internally through Conductor and the appropriate specialist skills. |
+| Antigravity / `agy` | `/ponytail /conductor` | Use in Antigravity because `agy` uses slash commands and direct command routing. |
+
+Codex example:
 
 ```text
-[@ponytail] use conductor for this task
+@Orchestra
 
 Project Context:
 Project Type:
@@ -466,6 +483,37 @@ Remaining Risks:
 Next Recommended Step:
 ```
 
+Antigravity / `agy` example:
+
+```text
+/ponytail /conductor
+
+Project Context:
+Project Type:
+Goal:
+Release Target:
+Data Use:
+Dependencies or Third-Party Assets:
+Constraints:
+
+Task:
+Describe the work clearly.
+
+Requirements:
+- List what must be changed.
+- List what must be preserved.
+- List any rules the implementation must follow.
+
+Expected Output:
+Changed Files:
+Summary:
+Validation Results:
+Remaining Risks:
+Next Recommended Step:
+```
+
+Codex users should start with `@Orchestra`. Antigravity users should start with `/ponytail /conductor`. Do not mix the two invocation styles unless a host explicitly supports both.
+
 ### 3. Review the IDE output and Iterate
 
 Follow this feedback loop:
@@ -476,7 +524,7 @@ Follow this feedback loop:
 5. Commit only after validation passes.
 
 > [!NOTE]
-> When unsure which specialist to use, start with **Conductor**. It can route the task to the correct specialist. Use a specialist directly only when the task is narrow and obvious (e.g., UI only, QA only).
+> When unsure which specialist is needed, use the main Orchestra entry command for your host. In Codex, start with `@Orchestra`. In Antigravity, start with `/ponytail /conductor`. Orchestra can route the task to the correct specialist. Use a specialist directly only when the host supports it and the task is narrow and obvious.
 
 ---
 

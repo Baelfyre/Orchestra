@@ -1,6 +1,6 @@
 # Installation
 
-Conductor can be installed in three ways depending on your environment:
+Orchestra can be installed in several ways depending on your AI host or IDE:
 
 ## 1. Antigravity Plugin Setup
 
@@ -12,13 +12,13 @@ agy plugin install https://github.com/Baelfyre/Orchestra
 
 ## 2. Codex Plugin Setup
 
-Codex compatibility is provided through `.codex-plugin/plugin.json`, `AGENTS.md`, and the shared `skills/` directory. Installation may be done by cloning the repository into the intended Codex workspace or by using Codex plugin discovery/marketplace configuration where available.
+For most Codex users, install Orchestra through the Codex Marketplace and invoke it with `@Orchestra`. Repo-local `.agents/skills` setup is available for local testing, custom workspace setups, unsupported Codex workflows, or repos that intentionally want local skill files.
 
 ### Install in Codex through Marketplace
 
 1. Open Codex.
 2. Go to Plugins.
-3. Open Marketplace.
+3. Add a marketplace or open Marketplace source settings.
 4. Paste this GitHub repository URL into the Source field:
 
    https://github.com/Baelfyre/Orchestra
@@ -31,17 +31,23 @@ Codex compatibility is provided through `.codex-plugin/plugin.json`, `AGENTS.md`
 10. Click Install.
 11. Confirm that Orchestra appears as installed or enabled.
 
+Use Orchestra in Codex with:
+
+```text
+@Orchestra
+```
+
 If Orchestra does not appear under Personal after adding the marketplace source, restart Codex again and check that the repository URL was entered correctly.
 
-### Local Installation
+### Advanced: Install locally per-project
 
-If cloning manually:
-1. Clone the repository into your global Codex plugins directory or your local workspace's `.agents/plugins` directory.
-   ```sh
-   git clone https://github.com/Baelfyre/Orchestra.git
-   ```
-2. Codex will automatically discover the `.codex-plugin/plugin.json` manifest and map the `skills/` directory into your environment.
-3. The repository's `AGENTS.md` file will provide native instructions to Codex on how to interact with the ecosystem.
+Use this path only when the target repo deliberately needs local skill files:
+
+```sh
+powershell -ExecutionPolicy Bypass -File .\scripts\refresh-installed-integrations.ps1 -Target Codex -CodexRepoPath "C:\path\to\your\project" -Force
+```
+
+Do not commit `.agents/` unless the repo intentionally shares those Codex skill files. For local-only setup, add `.agents/` to `.git/info/exclude`.
 
 ## 3. Skills-only Setup (Manual)
 
@@ -52,7 +58,7 @@ If you prefer not to use a plugin manager or are using an unsupported environmen
    git clone https://github.com/Baelfyre/Orchestra.git
    ```
 2. Copy only the specific folders you need from `skills/` into the local skill or instruction location supported by your tool.
-3. Keep the repository copy separate from unrelated source repositories. Follow [LOCAL_ONLY_GUIDE.md](LOCAL_ONLY_GUIDE.md) if you are deliberately referencing skills repo-locally.
+3. Keep the repository copy separate from unrelated source repositories. Follow [LOCAL_ONLY_GUIDE.md](LOCAL_ONLY_GUIDE.md) if you are deliberately using local skill files.
 
 ## Refresh Installed Integrations
 
@@ -63,11 +69,11 @@ To manually refresh your installed skills and run validation checks, use the ref
 powershell -ExecutionPolicy Bypass -File .\scripts\refresh-installed-integrations.ps1 -Target Antigravity
 ```
 
-**For Codex (repo-local installation):**
+**For Codex repo-local fallback only:**
 ```sh
 powershell -ExecutionPolicy Bypass -File .\scripts\refresh-installed-integrations.ps1 -Target Codex -CodexRepoPath "C:\path\to\your\project"
 ```
-*(Do not modify the global `.codex` directory by default.)*
+*(Marketplace installation is the default Codex setup.)*
 
 ## Verify
 
