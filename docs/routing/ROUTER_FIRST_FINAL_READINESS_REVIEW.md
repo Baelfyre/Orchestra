@@ -76,3 +76,7 @@ The following items are explicitly deferred to future phases and will not block 
 
 ## Final Readiness Result
 ROUTER_FIRST_FINAL_READINESS_READY_FOR_ISSUE_56_CLOSEOUT
+
+## Next Steps
+
+For the final GitHub closing comment, see the [Issue #56 Closeout Note](ISSUE_56_CLOSEOUT_NOTE.md).
