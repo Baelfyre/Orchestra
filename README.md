@@ -503,7 +503,32 @@ Output from Conductor and its specialists automatically adapts to your intent:
 
 ---
 
-## Documentation Map
+## Maintainer Entry Points & Documentation Map
+
+### Maintainer Entry Points
+
+- [Router-first architecture](docs/routing/ROUTER_FIRST_ARCHITECTURE.md): Core design of the minimal-context routing model.
+- [Context retrieval rules](docs/routing/CONTEXT_RETRIEVAL_RULES.md): Rules for loading dynamic context by operating mode.
+- [Minimal prompt format](docs/routing/MINIMAL_PROMPT_FORMAT.md): Specifications for the minimal routing prompt.
+- [Execution modes policy](docs/routing/EXECUTION_MODES_POLICY.md): Policies for FAST, STANDARD, GOVERNED, AUDIT, and DESTRUCTIVE modes.
+- [Router benchmark runner](docs/testing/ROUTER_BENCHMARK_RUNNER.md): Execution logic for validating benchmark definitions.
+- [Router benchmark maintenance guide](docs/testing/ROUTER_BENCHMARK_MAINTENANCE_GUIDE.md): Instructions for adding or modifying benchmark cases.
+- [Router benchmark coverage completion review](docs/testing/ROUTER_BENCHMARK_COVERAGE_COMPLETION_REVIEW.md): Analysis of coverage across all 24 benchmark cases.
+- [Prompt load metrics](docs/performance/PROMPT_LOAD_METRICS.md): Documentation on token footprint estimation and tracking.
+- [Prompt load threshold policy](docs/performance/PROMPT_LOAD_THRESHOLD_POLICY.md): Policies and soft limits for prompt load size.
+- [Prompt load threshold checker](docs/performance/PROMPT_LOAD_THRESHOLD_CHECKER.md): Dry-run validation script for tracking prompt load limits.
+- [CI artifact index](docs/testing/CI_ARTIFACT_INDEX.md): Directory of generated CI validation and governance reports.
+- [Phase 8A integration hardening audit](docs/routing/ROUTER_FIRST_INTEGRATION_HARDENING_AUDIT.md): Gap analysis and recommended hardening actions.
+
+### Common Maintainer Tasks
+
+- To understand routing behavior, start with [ROUTER_FIRST_ARCHITECTURE.md](docs/routing/ROUTER_FIRST_ARCHITECTURE.md).
+- To add benchmark cases, start with [ROUTER_BENCHMARK_MAINTENANCE_GUIDE.md](docs/testing/ROUTER_BENCHMARK_MAINTENANCE_GUIDE.md).
+- To inspect CI outputs, start with [CI_ARTIFACT_INDEX.md](docs/testing/CI_ARTIFACT_INDEX.md).
+- To inspect prompt size, start with [PROMPT_LOAD_METRICS.md](docs/performance/PROMPT_LOAD_METRICS.md).
+- To check threshold status, start with [PROMPT_LOAD_THRESHOLD_CHECKER.md](docs/performance/PROMPT_LOAD_THRESHOLD_CHECKER.md).
+- To review Phase 8 hardening gaps, start with [ROUTER_FIRST_INTEGRATION_HARDENING_AUDIT.md](docs/routing/ROUTER_FIRST_INTEGRATION_HARDENING_AUDIT.md).
+
 
 | Area | Start Here | Purpose |
 |---|---|---|
