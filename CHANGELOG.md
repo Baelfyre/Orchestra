@@ -4,6 +4,8 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased
 
+- Added Issue #56 router-first closeout note.
+
 - Added final router-first readiness review for Issue #56 closeout.
 
 - Added Phase 8 router-first hardening completion review.
