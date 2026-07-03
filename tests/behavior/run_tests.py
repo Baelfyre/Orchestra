@@ -78,17 +78,40 @@ def main():
     os.makedirs(temp_dir2, exist_ok=True)
     try:
         missing_file = os.path.join(temp_dir2, "MISSING.md")
-        warn_exit = subprocess.run([sys.executable, context_script, "--mode", "Implementation Mode", "--context-file", missing_file])
-        err_exit = subprocess.run([sys.executable, context_script, "--mode", "Release Mode", "--context-file", missing_file])
-        
+        warn_exit = subprocess.run(
+            [sys.executable, context_script, "--mode", "Implementation Mode", "--context-file", missing_file],
+            capture_output=True,
+            text=True
+        )
+        err_exit = subprocess.run(
+            [sys.executable, context_script, "--mode", "Release Mode", "--context-file", missing_file],
+            capture_output=True,
+            text=True
+        )
+
+        warn_output = f"{warn_exit.stdout}{warn_exit.stderr}"
+        err_output = f"{err_exit.stdout}{err_exit.stderr}"
+
         if warn_exit.returncode != 0:
-            print(f"\033[91mERROR: Context validator failed in warning mode! (Exit code: {warn_exit.returncode})\033[0m")
+            print(f"[91mERROR: Context validator failed in warning mode! (Exit code: {warn_exit.returncode})[0m")
+            print(warn_output)
+            failed = True
+        elif "This is allowed for Implementation Mode" not in warn_output:
+            print("[91mERROR: Context validator warning output did not confirm Implementation Mode allowance![0m")
+            print(warn_output)
             failed = True
         elif err_exit.returncode != 1:
-            print(f"\033[91mERROR: Context validator did not fail in Release mode! (Exit code: {err_exit.returncode})\033[0m")
+            print(f"[91mERROR: Context validator did not fail in Release mode! (Exit code: {err_exit.returncode})[0m")
+            print(err_output)
+            failed = True
+        elif "Cannot proceed with Release Mode without context" not in err_output:
+            print("[91mERROR: Context validator error output did not confirm Release Mode block![0m")
+            print(err_output)
             failed = True
         else:
-            print("\033[92mSUCCESS: Context validator tests passed.\033[0m")
+            print("[92mSUCCESS: Context validator expected-warning path passed.[0m")
+            print("[92mSUCCESS: Context validator expected Release Mode block passed.[0m")
+            print("[92mSUCCESS: Context validator tests passed.[0m")
     finally:
         if os.path.exists(temp_dir2):
             shutil.rmtree(temp_dir2)
