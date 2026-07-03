@@ -518,6 +518,7 @@ Output from Conductor and its specialists automatically adapts to your intent:
 - [Prompt load threshold policy](docs/performance/PROMPT_LOAD_THRESHOLD_POLICY.md): Policies and soft limits for prompt load size.
 - [Prompt load threshold checker](docs/performance/PROMPT_LOAD_THRESHOLD_CHECKER.md): Dry-run validation script for tracking prompt load limits.
 - [CI artifact index](docs/testing/CI_ARTIFACT_INDEX.md): Directory of generated CI validation and governance reports.
+- [Phase 8 router-first hardening completion review](docs/routing/ROUTER_FIRST_HARDENING_COMPLETION_REVIEW.md): Final completion review and deferred items for Phase 8.
 - [Phase 8A integration hardening audit](docs/routing/ROUTER_FIRST_INTEGRATION_HARDENING_AUDIT.md): Gap analysis and recommended hardening actions.
 
 ### Common Maintainer Tasks

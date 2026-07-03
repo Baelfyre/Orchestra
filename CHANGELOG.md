@@ -4,6 +4,8 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased
 
+- Added Phase 8 router-first hardening completion review.
+
 - Added README maintainer entry points for router-first validation and observability docs.
 
 - Cleaned router-first documentation terminology and consistency.

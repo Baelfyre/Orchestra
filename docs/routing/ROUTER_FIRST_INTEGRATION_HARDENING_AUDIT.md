@@ -83,3 +83,7 @@ ROUTER_FIRST_INTEGRATION_HARDENING_AUDIT_DEFINED
 - [Context Retrieval Rules](CONTEXT_RETRIEVAL_RULES.md)
 - [Prompt Load Metrics](../performance/PROMPT_LOAD_METRICS.md)
 - [CI Artifact Index](../testing/CI_ARTIFACT_INDEX.md)
+
+## Next Steps
+
+For the final outcomes of this audit and Phase 8 hardening, see the [Phase 8 Router-First Hardening Completion Review](ROUTER_FIRST_HARDENING_COMPLETION_REVIEW.md).
