@@ -55,8 +55,13 @@ jobs:
 
       - name: Run Stage 1 Strict Governance Check
         run: |
+          set +e
           python scripts/governance_check.py --strict > artifacts/governance_report.txt
+          status=$?
+          set -e
+
           cat artifacts/governance_report.txt
+          exit $status
 
       - name: Run Phase 2 Dagger Guardrail Simulation Test
         run: |
