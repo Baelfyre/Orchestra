@@ -6,6 +6,10 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ### Added
 
+- Added required status checks review for Orchestra branch protection and CI workflow policy.
+
+### Added
+
 - Added CI workflow consolidation review covering validate, Governance Check, and Cross-platform Validation workflow roles.
 
 ### Changed
