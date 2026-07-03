@@ -57,3 +57,7 @@ Clockwork may review how persistence integrates across architecture layers, but 
 ## Output Format
 
 Format your output strictly according to the templates defined in `OUTPUT_FORMATS.md`. Choose either `Compact` or `Full` mode as requested by the Conductor or the user. Do not invent custom formats or write large essays on SOLID principles.
+
+## Scope Enforcement
+
+If the request is outside this specialist's scope, do not execute it. Return `SPECIALIST_REROUTE_REQUIRED` and recommend the correct specialist or Conductor.

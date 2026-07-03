@@ -58,3 +58,21 @@ For a simple route, use `# Conductor Quick Route` followed by project signal, se
 ## Prompts
 
 Provide copy-paste-ready Codex prompts to execute the defined Routing Plan. Do not include commit, push, PR, install, or destructive commands unless explicitly approved.
+
+## Specialist Reroute
+
+When a specialist refuses out-of-scope work, Conductor must classify the `SPECIALIST_REROUTE_REQUIRED` response and route the task to the correct specialist.
+
+```text
+SPECIALIST_REROUTE_REQUIRED
+
+Requested specialist:
+Detected task type:
+Reason for mismatch:
+Recommended specialist:
+Supporting specialist:
+Required handoff:
+Can current specialist proceed: No
+Evidence:
+Next action:
+```

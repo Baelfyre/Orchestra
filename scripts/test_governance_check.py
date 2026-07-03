@@ -31,6 +31,21 @@ def test_tracked_repo_files_only():
         assert_equal("untracked artifact omitted", "artifacts/governance_report.txt" in tracked_paths, False)
 
 
+def test_repo_memory_path_check():
+    with tempfile.TemporaryDirectory(prefix="governance-memory-test-") as temp_dir:
+        repo_root = Path(temp_dir)
+        (repo_root / "scripts").mkdir()
+        (repo_root / "scripts" / "existing.py").write_text("pass\n", encoding="utf-8")
+        (repo_root / "SESSION_HANDOFF.md").write_text(
+            "- Existing: `scripts/existing.py`\n- Missing: `scripts/missing.py`\n",
+            encoding="utf-8",
+        )
+
+        counters = {"warnings": 0, "errors": 0}
+        gc.run_repo_memory_path_check(str(repo_root), counters)
+        assert_equal("missing memory path error", counters["errors"], 1)
+
+
 def main():
     assert_equal("forbidden artifacts", gc.is_forbidden_repo_path("artifacts/governance_report.txt"), True)
     assert_equal("forbidden runtime folder", gc.is_forbidden_repo_path(".agents/skills/dagger/SKILL.md"), True)
@@ -43,7 +58,10 @@ def main():
     assert_equal("present changelog issue", gc.get_changelog_issue(["scripts/governance_check.py"], True), None)
     assert_equal("advisory exit", gc.get_exit_code(False, 3), 0)
     assert_equal("strict exit", gc.get_exit_code(True, 1), 1)
+    assert_equal("repo path detection", gc.is_repo_relative_memory_path("scripts/governance_check.py"), True)
+    assert_equal("external path ignored", gc.is_repo_relative_memory_path("C:/conductor/scripts/governance_check.py"), False)
     test_tracked_repo_files_only()
+    test_repo_memory_path_check()
     print("Governance check helper tests passed.")
     sys.exit(0)
 

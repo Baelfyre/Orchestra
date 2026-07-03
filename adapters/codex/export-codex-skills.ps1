@@ -9,7 +9,7 @@ if (-not (Test-Path $manifestPath)) {
     exit 1
 }
 $manifest = Get-Content -Raw -Path $manifestPath | ConvertFrom-Json
-$skills = $manifest.skills | Where-Object { $_.activation_level -ne 'Governor' } | Select-Object -ExpandProperty slug
+$skills = $manifest.skills | Select-Object -ExpandProperty slug
 
 function Write-Utf8NoBomLfFile {
     param(
@@ -30,9 +30,15 @@ foreach ($skill in $skills) {
     $sourceDir = Join-Path $SourceRoot "skills\$skill"
     $targetDir = Join-Path $targetSkillsDir $skill
 
-    if (-not (Test-Path $targetDir)) {
-        New-Item -ItemType Directory -Path $targetDir | Out-Null
+    if (-not (Test-Path -LiteralPath $sourceDir -PathType Container)) {
+        Write-Error "Source skill directory not found: $sourceDir"
+        exit 1
     }
+
+    if (Test-Path -LiteralPath $targetDir) {
+        Remove-Item -LiteralPath $targetDir -Recurse -Force
+    }
+    New-Item -ItemType Directory -Path $targetDir | Out-Null
 
     # 1. Parse and rewrite SKILL.md
     $sourceSkillFile = Join-Path $sourceDir "SKILL.md"
@@ -66,12 +72,19 @@ description: $desc
     $newContent = $newFrontmatter + $body
     Write-Utf8NoBomLfFile -Path $targetSkillFile -Content $newContent
 
-    # 2. Copy OUTPUT_FORMATS.md
-    $sourceOutFile = Join-Path $sourceDir "OUTPUT_FORMATS.md"
-    $targetOutFile = Join-Path $targetDir "OUTPUT_FORMATS.md"
-    if (Test-Path $sourceOutFile) {
-        $outContent = Get-Content -Raw -Path $sourceOutFile
-        Write-Utf8NoBomLfFile -Path $targetOutFile -Content $outContent
+    # 2. Copy Markdown support files referenced by progressive disclosure links.
+    $supportFiles = Get-ChildItem -Path $sourceDir -Recurse -File -Filter "*.md" | Where-Object { $_.Name -ne "SKILL.md" }
+    foreach ($supportFile in $supportFiles) {
+        $relativePath = $supportFile.FullName.Substring($sourceDir.Length).TrimStart('\', '/')
+        $targetSupportFile = Join-Path $targetDir $relativePath
+        $targetSupportDir = Split-Path -Parent $targetSupportFile
+
+        if (-not (Test-Path -LiteralPath $targetSupportDir -PathType Container)) {
+            New-Item -ItemType Directory -Path $targetSupportDir | Out-Null
+        }
+
+        $supportContent = Get-Content -Raw -Path $supportFile.FullName
+        Write-Utf8NoBomLfFile -Path $targetSupportFile -Content $supportContent
     }
 
     # 3. For conductor, copy ROUTING_MAP.md

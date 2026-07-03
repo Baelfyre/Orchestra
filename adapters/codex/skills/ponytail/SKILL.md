@@ -48,3 +48,7 @@ Ponytail does not own:
 - No changing UI/UX behavior without Cloak requirements.
 - No claiming validation passed unless commands actually ran.
 - No staging, committing, pushing, or PR creation unless explicitly approved.
+
+## Scope Enforcement
+
+If the request is outside this specialist's scope, do not execute it. Return `SPECIALIST_REROUTE_REQUIRED` and recommend the correct specialist or Conductor.

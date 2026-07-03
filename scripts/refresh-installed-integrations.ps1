@@ -21,6 +21,8 @@ if (Test-Path $helpersPath) {
 $Root = Get-ProjectRoot
 $structureValidator = Join-Path $Root 'scripts\validate-structure.ps1'
 $manifestValidator = Join-Path $Root 'scripts\validate-manifest.ps1'
+$codexExporter = Join-Path $Root 'adapters\codex\export-codex-skills.ps1'
+$codexValidator = Join-Path $Root 'adapters\codex\validate_codex_export.py'
 $codexInstaller = Join-Path $Root 'adapters\codex\install-to-repo.ps1'
 $pluginUrl = 'https://github.com/Baelfyre/Orchestra'
 
@@ -101,14 +103,28 @@ function Refresh-Codex {
         throw "Codex installer not found: $codexInstaller"
     }
 
+    if (-not (Test-Path -LiteralPath $codexExporter -PathType Leaf)) {
+        throw "Codex exporter not found: $codexExporter"
+    }
+
+    if (-not (Test-Path -LiteralPath $codexValidator -PathType Leaf)) {
+        throw "Codex export validator not found: $codexValidator"
+    }
+
     Write-ColorHost 'INFO' "Refreshing Codex skills into: $CodexRepoPath"
+
+    $psExe = (Get-Process -Id $PID).Path
+    Invoke-RequiredCommand -Command $psExe -Arguments @('-ExecutionPolicy', 'Bypass', '-File', $codexExporter)
+
+    $pythonExe = (Get-Command python -ErrorAction Stop).Source
+    Invoke-RequiredCommand -Command $pythonExe -Arguments @($codexValidator)
 
     $args = @('-ExecutionPolicy', 'Bypass', '-File', $codexInstaller, '-TargetRepo', $CodexRepoPath)
     if ($Force) {
         $args += '-Force'
     }
 
-    Invoke-RequiredCommand -Command (Get-Process -Id $PID).Path -Arguments $args
+    Invoke-RequiredCommand -Command $psExe -Arguments $args
 
     Write-ColorHost 'SUCCESS' "Codex refresh complete."
 }

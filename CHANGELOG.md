@@ -4,6 +4,8 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased
 
+- Strengthened Codex adapter export validation so governance skills, routable skills, and relative Markdown links are verified before Codex installation.
+
 - Added Issue #56 router-first closeout note.
 
 - Added final router-first readiness review for Issue #56 closeout.
