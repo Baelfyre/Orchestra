@@ -4,6 +4,10 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased
 
+### Changed
+
+- Clarified Steward context-validator negative test output so expected Release Mode blocking no longer appears as an unqualified CI error.
+
 ### Added
 
 - Added native GitHub Actions cross-platform validation for Ubuntu and macOS.
