@@ -4,6 +4,10 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased
 
+### Added
+
+- Added CI workflow consolidation review covering validate, Governance Check, and Cross-platform Validation workflow roles.
+
 ### Changed
 
 - Clarified Steward context-validator negative test output so expected Release Mode blocking no longer appears as an unqualified CI error.
