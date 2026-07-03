@@ -1,0 +1,106 @@
+name: Cross-platform Validation
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  artifact-metadata: write
+
+jobs:
+  native-validation:
+    name: native-${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-latest
+          - macos-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Show Runtime
+        run: |
+          uname -a
+          python --version
+          git --version
+
+      - name: Create Artifacts Directory
+        run: mkdir -p artifacts
+
+      - name: Verify POSIX Scripts
+        run: |
+          file scripts/check-stale-references.sh
+          file scripts/validate-structure.sh
+          file scripts/run-linux-validation.sh
+          test -x scripts/check-stale-references.sh
+          test -x scripts/validate-structure.sh
+          test -x scripts/run-linux-validation.sh
+
+      - name: Run Native Validation
+        run: |
+          run_report () {
+            name="$1"
+            shift
+
+            set +e
+            "$@" > "artifacts/${name}.txt" 2>&1
+            status=$?
+            set -e
+
+            cat "artifacts/${name}.txt"
+            return $status
+          }
+
+          run_report validate_structure python scripts/validate_structure.py
+          run_report validate_manifest python scripts/validate_manifest.py
+          run_report check_stale_references python scripts/check_stale_references.py
+          run_report governance_report python scripts/governance_check.py --strict
+          run_report behavior_tests python tests/behavior/run_tests.py
+          run_report codex_export python adapters/codex/validate_codex_export.py
+          run_report router_benchmark python scripts/router_benchmark_runner.py
+          run_report router_benchmark_negative python tests/behavior/test_router_benchmark_fixture_validation.py
+          run_report runtime_guardrail python scripts/runtime_guardrail.py --enabled --enforce
+          run_report prompt_load_thresholds python scripts/check_prompt_load_thresholds.py
+
+          python -m json.tool plugin.json > /dev/null
+
+          if [ -n "${{ github.base_ref }}" ]; then
+            git diff --check "origin/${{ github.base_ref }}...HEAD"
+          else
+            git diff --check "HEAD~1..HEAD"
+          fi
+
+      - name: Generate CI Summary
+        if: always()
+        run: |
+          echo "# Cross-platform Validation" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Native validation completed on \`${{ matrix.os }}\`." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Review logs and uploaded artifacts for detailed command output." >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Cross-platform Artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: cross-platform-validation-${{ matrix.os }}
+          path: artifacts/
+          retention-days: 14

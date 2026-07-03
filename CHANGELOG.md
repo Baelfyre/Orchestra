@@ -6,6 +6,14 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ### Added
 
+- Added native GitHub Actions cross-platform validation for Ubuntu and macOS.
+
+### Changed
+
+- Improved strict governance workflow logging so failed governance reports are printed before the job exits.
+
+### Added
+
 - Added Docker-based Linux validation support through `scripts/run-linux-validation.sh` and POSIX executable script handling.
 
 - Strengthened Codex adapter export validation so governance skills, routable skills, and relative Markdown links are verified before Codex installation.
