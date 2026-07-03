@@ -47,3 +47,7 @@ This checker does not evaluate downstream specialist prompt loads, session histo
 
 ## Checker Result
 PROMPT_LOAD_THRESHOLD_CHECKER_DEFINED
+
+## Related Documents
+- [Prompt Load Threshold Policy](PROMPT_LOAD_THRESHOLD_POLICY.md)
+- [CI Artifact Index](../testing/CI_ARTIFACT_INDEX.md)

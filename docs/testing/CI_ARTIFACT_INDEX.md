@@ -61,3 +61,8 @@ This index does not document application build artifacts (e.g., compiled binarie
 
 ## Index Result
 CI_ARTIFACT_INDEX_DEFINED
+
+## Related Documents
+- [Prompt Load Metrics](../performance/PROMPT_LOAD_METRICS.md)
+- [Prompt Load Threshold Checker](../performance/PROMPT_LOAD_THRESHOLD_CHECKER.md)
+- [Router Benchmark Runner](ROUTER_BENCHMARK_RUNNER.md)

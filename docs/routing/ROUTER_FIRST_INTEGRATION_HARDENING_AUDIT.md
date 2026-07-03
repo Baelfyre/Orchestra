@@ -77,3 +77,9 @@ To close these gaps in Phase 8B, the following actions are recommended:
 
 ## Audit Result
 ROUTER_FIRST_INTEGRATION_HARDENING_AUDIT_DEFINED
+
+## Related Documents
+- [Router-First Architecture](ROUTER_FIRST_ARCHITECTURE.md)
+- [Context Retrieval Rules](CONTEXT_RETRIEVAL_RULES.md)
+- [Prompt Load Metrics](../performance/PROMPT_LOAD_METRICS.md)
+- [CI Artifact Index](../testing/CI_ARTIFACT_INDEX.md)

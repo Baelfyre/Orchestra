@@ -52,3 +52,9 @@ This method does not measure user prompt sizes, session history sizes, or downst
 
 ## Metrics Result
 PROMPT_LOAD_METRICS_DEFINED
+
+## Related Documents
+- [Prompt Load Threshold Policy](PROMPT_LOAD_THRESHOLD_POLICY.md)
+- [Prompt Load Threshold Checker](PROMPT_LOAD_THRESHOLD_CHECKER.md)
+- [CI Artifact Index](../testing/CI_ARTIFACT_INDEX.md)
+- [Phase 8A Audit](../routing/ROUTER_FIRST_INTEGRATION_HARDENING_AUDIT.md)

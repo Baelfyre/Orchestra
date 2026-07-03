@@ -67,3 +67,9 @@ The new `skills/conductor/SKILL.md` will be refactored to focus solely on the in
 
 ## Architecture Result
 ROUTER_ARCHITECTURE_DEFINED
+
+## Related Documents
+- [Context Retrieval Rules](CONTEXT_RETRIEVAL_RULES.md)
+- [Minimal Prompt Format](MINIMAL_PROMPT_FORMAT.md)
+- [Execution Modes Policy](EXECUTION_MODES_POLICY.md)
+- [Phase 8A Audit](ROUTER_FIRST_INTEGRATION_HARDENING_AUDIT.md)

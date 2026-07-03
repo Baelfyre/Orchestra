@@ -58,3 +58,7 @@ The runner script itself is validated against malformed data inputs by `tests/be
 
 ## Runner Result
 ROUTER_BENCHMARK_RUNNER_DEFINED
+
+## Related Documents
+- [Phase 8A Audit](../routing/ROUTER_FIRST_INTEGRATION_HARDENING_AUDIT.md)
+- [CI Artifact Index](CI_ARTIFACT_INDEX.md)

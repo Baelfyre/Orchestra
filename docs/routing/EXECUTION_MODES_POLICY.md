@@ -99,6 +99,7 @@ This policy does not dictate how the underlying LLM functions, but rather strict
 - [Router-First Architecture](ROUTER_FIRST_ARCHITECTURE.md)
 - [Context Retrieval Rules](CONTEXT_RETRIEVAL_RULES.md)
 - [Governance Layer](../governance/GOVERNANCE_LAYER.md)
+- [Router Validation Benchmarks](../testing/ROUTER_VALIDATION_BENCHMARKS.md)
 
 ## Policy Result
 EXECUTION_MODES_POLICY_DEFINED

@@ -4,6 +4,8 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased
 
+- Added router-first documentation cross-links for Phase 8 hardening.
+
 - Added Phase 8A router-first integration hardening audit documentation.
 
 - Documented the `tests/fixtures/router_benchmarks.json` schema in `ROUTER_BENCHMARK_FIXTURE_SCHEMA.md` and updated the benchmark validation runner to enforce the root shape and `schema_version`.

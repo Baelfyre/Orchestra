@@ -69,3 +69,6 @@ Refer to [ROUTER_BENCHMARK_MAINTENANCE_GUIDE.md](file:///c:/conductor/docs/testi
 
 ## Completion Result
 ROUTER_BENCHMARK_COVERAGE_COMPLETION_REVIEW_DEFINED
+
+## Related Documents
+- [Phase 8A Audit](../routing/ROUTER_FIRST_INTEGRATION_HARDENING_AUDIT.md)

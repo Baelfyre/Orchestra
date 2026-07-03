@@ -88,9 +88,11 @@ By default, the minimal package consists of the Conductor intent classifier and 
 - Altering the strictness of existing safety and governance gates.
 
 ## Canonical References
-- [Governance Layer](docs/governance/GOVERNANCE_LAYER.md)
-- [Routing Map](ROUTING_MAP.md)
-- [Skill Index](SKILL_INDEX.md)
+- [Governance Layer](../governance/GOVERNANCE_LAYER.md)
+- [Routing Map](../../ROUTING_MAP.md)
+- [Skill Index](../../SKILL_INDEX.md)
+- [Prompt Load Metrics](../performance/PROMPT_LOAD_METRICS.md)
+- [Prompt Load Threshold Policy](../performance/PROMPT_LOAD_THRESHOLD_POLICY.md)
 
 ## Retrieval Result
 CONTEXT_RETRIEVAL_RULES_DEFINED

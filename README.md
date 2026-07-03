@@ -512,7 +512,11 @@ Output from Conductor and its specialists automatically adapts to your intent:
 | Installation | [Installation Guide](docs/setup/INSTALLATION.md) | Set up the plugin in Antigravity, Codex, VS Code, or JetBrains IDEs |
 | Changelog | [Changelog](CHANGELOG.md) | Track release history and documented repo milestones |
 | Validation | [Validation Guide](docs/setup/VALIDATION.md) | Run structure and manifest checks |
+| Routing | [Router Architecture](docs/routing/ROUTER_FIRST_ARCHITECTURE.md) | Understand the router-first model and context retrieval |
+| Performance | [Prompt Load Metrics](docs/performance/PROMPT_LOAD_METRICS.md) | Track prompt load and threshold policies |
+| Benchmarks | [Benchmark Validation](docs/testing/ROUTER_VALIDATION_BENCHMARKS.md) | Review the router validation testing suite |
 | CI Artifacts | [CI Artifact Index](docs/testing/CI_ARTIFACT_INDEX.md) | Browse governance reports and validation CI artifacts |
+| Audits | [Phase 8A Audit](docs/routing/ROUTER_FIRST_INTEGRATION_HARDENING_AUDIT.md) | Review the router-first integration hardening audit |
 | Maturity | [Maturity](docs/MATURITY.md) | Current project stability and roadmap |
 | Contributing | [Contributing Guide](docs/CONTRIBUTING.md) | Guidelines for contributing and safety policies |
 | Disclaimer | [Disclaimer](docs/meta/DISCLAIMER.md) | Understand legal and operational limitations |
