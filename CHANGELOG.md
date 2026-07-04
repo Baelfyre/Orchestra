@@ -4,9 +4,15 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased
 
+### Added
+
+- Added README open-source philosophy section clarifying Orchestra's reuse, attribution, and collaborative development stance.
+
+
 ### Changed
 
 - Removed Docker-specific validation artifacts while preserving native Ubuntu/macOS cross-platform validation.
+- Packaged Conductor router context docs into the Codex export and validated required backtick file references before runtime install.
 
 ### Added
 
