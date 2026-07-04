@@ -4,6 +4,10 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased
 
+### Changed
+
+- Removed Docker-specific validation artifacts while preserving native Ubuntu/macOS cross-platform validation.
+
 ### Added
 
 - Added branch protection setup guide for configuring Orchestra required status checks on `main`.

@@ -49,10 +49,8 @@ jobs:
         run: |
           file scripts/check-stale-references.sh
           file scripts/validate-structure.sh
-          file scripts/run-linux-validation.sh
           test -x scripts/check-stale-references.sh
           test -x scripts/validate-structure.sh
-          test -x scripts/run-linux-validation.sh
 
       - name: Run Native Validation
         run: |
