@@ -35,6 +35,16 @@
 
 Orchestra uses freedom-first, need-based governance. Users can ideate freely. Governance review is invoked when the task requires alignment review, implementation readiness, audit, risk review, or release validation. The governance layer does not assume what rules apply to every project. Before review, The Steward and The Governor establish the Governance Basis of Review based on the active operating mode and supplied context. If the scope is unclear and review is required, governance returns `REVISION_REQUIRED` instead of assuming.
 
+## Open Source Philosophy
+
+Orchestra is shared as an open-source project because useful ideas grow when people are free to study, adapt, remix, and improve them.
+
+This project is not meant to restrict creative development. It is meant to give developers, students, builders, and AI-assisted teams a structured foundation they can learn from, extend, or reshape for their own workflows.
+
+The only request is simple: respect the license, preserve proper attribution, and build something useful.
+
+Software engineering grows through openness, iteration, collaboration, and responsible reuse. Orchestra exists in that spirit.
+
 ## Architecture
 
 ```mermaid
