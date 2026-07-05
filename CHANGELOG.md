@@ -8,6 +8,9 @@ This changelog tracks the repository history using git tags, merge history, and 
 - Added Claude Code plugin compatibility files: `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `docs/setup/INSTALLATION.md` with Claude Code installation instructions.
 - Added validation script for Claude Code plugin: `scripts/validate_claude_plugin.py`
 
+### Fixed
+- Fixed Claude Code marketplace source path from "." to "./" and bumped Claude plugin metadata to 1.0.1 so Claude Code can detect and refresh the plugin correctly.
+
 
 
 - Added Cloak progressive disclosure template `bryl-minimal-design` for monochrome, typography-driven UI styling.

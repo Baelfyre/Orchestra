@@ -6,9 +6,9 @@
   "plugins": [
     {
       "name": "orchestra",
-      "source": ".",
+      "source": "./",
       "description": "Governance-first specialist skill framework for routed, auditable AI coding workflows.",
-      "version": "1.0.0"
+      "version": "1.0.1"
     }
   ]
 }
