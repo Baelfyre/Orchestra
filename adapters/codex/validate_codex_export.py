@@ -89,6 +89,11 @@ def get_conductor_required_skills(conductor_skill_path, manifest_skills):
 def validate_markdown_links(skill_dir, root):
     errors = 0
     for markdown_file in skill_dir.rglob("*.md"):
+        if skill_dir.name == "conductor":
+            relative_parts = markdown_file.relative_to(skill_dir).parts
+            if relative_parts and relative_parts[0] == "docs":
+                continue
+
         content = read_text(markdown_file)
         for match in get_markdown_links(content):
             target = normalize_link_target(match.group(1))
@@ -102,6 +107,38 @@ def validate_markdown_links(skill_dir, root):
             relative_file = markdown_file.relative_to(root).as_posix()
             print_error(f"Missing relative link target in {relative_file}: {target}")
             errors += 1
+    return errors
+
+
+def get_backtick_file_refs(content):
+    return re.finditer(r"`([^`]+(?:\.md|\.json))`", content)
+
+
+def should_validate_backtick_ref(target):
+    return (
+        target in {"ROUTING_MAP.md", "SKILL_INDEX.md", "OUTPUT_FORMATS.md", "templates/bryl-minimal-design.md"}
+        or target.startswith("docs/")
+        or target.startswith("./docs/")
+    )
+
+
+def validate_backtick_file_refs(markdown_file, root):
+    errors = 0
+    content = read_text(markdown_file)
+
+    for match in get_backtick_file_refs(content):
+        target = normalize_link_target(match.group(1))
+        if not target or not should_validate_backtick_ref(target):
+            continue
+
+        target_path = (markdown_file.parent / target).resolve()
+        if target_path.exists():
+            continue
+
+        relative_file = markdown_file.relative_to(root).as_posix()
+        print_error(f"Missing backtick file reference in {relative_file}: {target}")
+        errors += 1
+
     return errors
 
 def main():
@@ -134,6 +171,7 @@ def main():
             errors += 1
         else:
             errors += validate_simple_frontmatter(skill, skill_file)
+            errors += validate_backtick_file_refs(skill_file, root)
                 
         out_file = skill_dir / "OUTPUT_FORMATS.md"
         if not out_file.is_file():

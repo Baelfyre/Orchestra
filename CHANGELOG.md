@@ -6,6 +6,10 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ### Added
 
+- Added Cloak progressive disclosure template `bryl-minimal-design` for monochrome, typography-driven UI styling.
+- Added behavior test scenario in `BEHAVIOR_TEST_MATRIX.md` to verify Cloak progressive disclosure template loading.
+- Registered the new template in the Codex export validation allowlist to ensure proper structural verification.
+
 - Added explicit Clockwork foundational OOP guidance and audit checklist coverage for encapsulation, abstraction, polymorphism, and inheritance.
 - Added README open-source philosophy section clarifying Orchestra's reuse, attribution, and collaborative development stance.
 
