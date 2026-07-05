@@ -2,7 +2,7 @@
 
 This branch introduces `orchestra_runtime/` as the reusable runtime core for Orchestra.
 
-Current runtime expansion branch: `feature/portable-runtime-adapter-protocol`
+Release baseline: `release/v1.0.0-portable-runtime`
 
 ## Why this exists
 
@@ -32,6 +32,7 @@ The repository already had adapter-specific validation and export logic spread a
 - the protocol validator checks adapter completeness and packaging/runtime alignment
 - compatibility records document supported, compatible, reserved, and rejected host states
 - `VSCodium` intentionally reuses the `VSCodeAdapter` contract and packaging surface
+- `v1.0.0 Portable Runtime` normalizes host metadata, scaffold manifests, and release-facing documentation around the runtime-core-first model
 
 ## Current integration points
 

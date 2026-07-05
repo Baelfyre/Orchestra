@@ -92,6 +92,24 @@ flowchart LR
 
 Runtime-core-first refactor notes live in [docs/project/OOP_RUNTIME_ARCHITECTURE.md](docs/project/OOP_RUNTIME_ARCHITECTURE.md). The shared `orchestra_runtime/` layer owns manifest parsing, skill loading, routing, governance validation, execution flow, and audit logging, while host adapters stay thin. The versioned Portable Runtime Adapter Protocol is documented in [docs/project/PORTABLE_ADAPTER_PROTOCOL.md](docs/project/PORTABLE_ADAPTER_PROTOCOL.md).
 
+## v1.0.0 Portable Runtime
+
+`v1.0.0 Portable Runtime` is the first Orchestra release built around a reusable runtime core plus thin host adapters.
+
+- `orchestra_runtime/` is the single source of truth for shared orchestration behavior.
+- `PRAP v1` gives adapters one stable metadata and capability contract.
+- Codex, Claude Code, Antigravity, Cursor, Windsurf, VS Code, JetBrains, Zed, and Neovim all map into shared runtime models without duplicating business logic.
+
+```mermaid
+flowchart LR
+    Host["Host / IDE / Tool"] --> Adapter["Thin Adapter"]
+    Adapter --> Runtime["orchestra_runtime"]
+    Runtime --> Routing["Routing + Skill Loading"]
+    Runtime --> Governance["Governance Validation"]
+    Runtime --> Execution["Execution Flow"]
+    Runtime --> Audit["Audit Logging"]
+```
+
 ---
 
 ## Governance Layer

@@ -1,11 +1,19 @@
 # Compatibility
 
-This repository is Markdown-first and portable across AI coding environments that accept instruction files.
+Orchestra `v1.0.0 Portable Runtime` is Markdown-first and runtime-core-first. Hosts integrate through thin adapters and, where available, scaffold packaging metadata that points back to the shared runtime.
 
-- **Codex:** Use direct skill folders when supported by local Codex conventions.
-- **VS Code AI workflows:** Use selected files as workspace instructions, prompt references, or local context.
-- **Antigravity:** Use local skill references where supported, otherwise adapt the selected Markdown.
-- **Claude Code:** Use the supplied CLAUDE template and reference selected skill files through repository context.
-- **Local AI systems:** Load `SKILL.md` through prompt context or retrieval, then load supporting files only when needed.
+| Host | Runtime Adapter | Status | Notes |
+|---|---|---|---|
+| Codex | `codex` | Supported | Marketplace-first, with repo-local fallback. |
+| Claude Code | `claude-code` | Supported | Marketplace metadata included. |
+| Antigravity | `antigravity` | Supported | Plugin install path remains host-native. |
+| Cursor | `cursor` | Supported | Scaffold-only packaging surface. |
+| Windsurf | `windsurf` | Supported | Scaffold-only packaging surface. |
+| VS Code | `vscode` | Supported | Scaffold-only packaging surface. |
+| VSCodium | `vscode` | Compatible | Reuses the VS Code runtime adapter and packaging scaffold. |
+| JetBrains | `jetbrains` | Supported | Scaffold-only plugin surface. |
+| Zed | `zed` | Supported | Scaffold-only packaging surface. |
+| Neovim | `neovim` | Supported | Scaffold-only packaging surface. |
+| Local AI systems | manual | Supported | Load selected Markdown and supporting files manually. |
 
-The repository does not guarantee native integration or automatic discovery in every IDE or model runtime. Tool-specific loading depends on current configuration and capabilities. Use the adapter templates and manual context when uncertain.
+The repository does not guarantee automatic discovery in every IDE or model runtime. Use the adapter templates, packaging scaffolds, and runtime documentation when host behavior is uncertain.

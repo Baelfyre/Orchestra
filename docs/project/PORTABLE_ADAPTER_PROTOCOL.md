@@ -2,7 +2,7 @@
 
 Protocol version: `PRAP v1`
 
-Branch purpose: `feature/portable-runtime-adapter-protocol`
+Release baseline: `release/v1.0.0-portable-runtime`
 
 ## Design Philosophy
 
@@ -82,6 +82,7 @@ Every adapter must declare:
 ## Versioning
 
 - Current protocol version: `PRAP v1`
+- Release baseline: Orchestra `v1.0.0 Portable Runtime`
 - Future versions must remain backward compatible where practical.
 - New fields should be additive first.
 - Breaking changes should move to a new named protocol version rather than silently mutating `PRAP v1`.

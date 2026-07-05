@@ -1,6 +1,6 @@
 # Codex Adapter for Orchestra
 
-This adapter provides a Codex-compatible export of the Orchestra v1.0.1 skills.
+This adapter provides a Codex-compatible export of the Orchestra v1.0.0 Portable Runtime skills.
 
 ## Purpose
 
