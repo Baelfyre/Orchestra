@@ -5,6 +5,7 @@ This changelog tracks the repository history using git tags, merge history, and 
 ## Unreleased
 
 ### Added
+- Added scaffold-only packaging folders and package manifests for Cursor, Windsurf, and VS Code that point to the shared runtime adapters without introducing marketplace publication.
 - Added contract-ready runtime adapters for Cursor, Windsurf, VS Code, JetBrains, Zed, and Neovim without introducing marketplace packaging.
 - Added `orchestra_runtime/` runtime core models, services, factories, repositories, and thin Codex, Antigravity, and Claude Code adapters.
 - Added runtime-core pytest coverage for skill loading, adapter contracts, and governance blocking for destructive and high-risk routes.
@@ -13,6 +14,7 @@ This changelog tracks the repository history using git tags, merge history, and 
 - Added validation script for Claude Code plugin: `scripts/validate_claude_plugin.py`
 
 ### Fixed
+- Added IDE packaging validation so scaffold manifests, required files, and runtime adapter references are checked centrally.
 - Refactored manifest, skill, and adapter validation scripts to use the shared runtime repositories and registry instead of duplicating core loading logic.
 - Fixed Claude Code marketplace source path from "." to "./" and bumped Claude plugin metadata to 1.0.1 so Claude Code can detect and refresh the plugin correctly.
 

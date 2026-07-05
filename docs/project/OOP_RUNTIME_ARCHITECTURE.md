@@ -40,9 +40,17 @@ The repository already had adapter-specific validation and export logic spread a
 5. `RuntimeExecutor` returns an `ExecutionResult`.
 6. `AuditLogger` records the execution outcome through an `IAuditSink`.
 
+## Current packaging boundary
+
+- Cursor, Windsurf, and VS Code now have scaffold-only packaging folders under `adapters/`.
+- Their package manifests point back to the shared runtime adapter classes.
+- Packaging validation checks required files, JSON manifests, and runtime-adapter references.
+- Packaging does not own routing, governance, execution, manifest parsing, or audit behavior.
+
 ## Deferred work
 
 - The runtime currently centralizes Python validation and adapter-contract behavior first.
 - PowerShell installers and Markdown host guides remain in place and unchanged unless they need runtime data.
 - Runtime execution still returns orchestration decisions, not full host-native execution side effects.
-- Marketplace and installer packaging for Cursor, Windsurf, VS Code, JetBrains, Zed, and Neovim remain out of scope for this phase.
+- Marketplace publication remains deferred for Cursor, Windsurf, and VS Code.
+- JetBrains, Zed, and Neovim packaging remain out of scope for this branch.

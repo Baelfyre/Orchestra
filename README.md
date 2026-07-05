@@ -165,7 +165,9 @@ Orchestra can be used across different AI-assisted development environments, but
 | Antigravity / `agy`       |                                 Global | Installed as an Antigravity plugin                                    | Use `agy plugin install` once                       |
 | Claude Code | Marketplace / global plugin | Installed from `.claude-plugin/marketplace.json`; skills load under the `orchestra:` namespace | Use `/plugin marketplace add Baelfyre/Orchestra`, then `/plugin install orchestra@orchestra` |
 | Codex                     |       Marketplace / global plugin first | Installed from Codex Plugins, with repo-local skills as fallback      | Install through Marketplace, then use `@Orchestra`  |
-| VS Code                   | Per extension or per repo instructions | Depends on the AI extension, such as Copilot or Continue              | Use instruction files, not full skill folders       |
+| Cursor                    | Scaffold-only packaging plus repo instructions | Uses a scaffold package manifest and workspace instructions that point at the shared runtime adapter | Use `adapters/cursor` scaffolding, not marketplace publication |
+| Windsurf                  | Scaffold-only packaging plus repo instructions | Uses a scaffold package manifest and workspace instructions that point at the shared runtime adapter | Use `adapters/windsurf` scaffolding, not marketplace publication |
+| VS Code                   | Scaffold-only packaging plus repo instructions | Uses a scaffold package manifest and extension or workspace instructions that point at the shared runtime adapter | Use `adapters/vscode` scaffolding, not full skill folders |
 | IntelliJ / JetBrains IDEs | Per plugin or per project instructions | Depends on JetBrains AI Assistant, Copilot, Junie, or similar plugins | Use instruction files or project docs               |
 | Other AI coding tools     |                          Tool-specific | Usually reads repo instructions, rules, or prompt files               | Adapt Orchestra as project instructions             |
 
@@ -331,6 +333,8 @@ Prioritize:
 
 Commit this file only if the repository should permanently share these AI instructions.
 
+The repository now includes scaffold-only packaging metadata in `adapters/vscode/package.json`. It exists to bind the VS Code packaging surface to the shared `VSCodeAdapter` runtime contract. It is not a published marketplace package yet.
+
 #### Optional: Agentic Skill Installer Extension
 
 VS Code users may optionally use the **Agentic Skill Installer** extension to browse, install, and update Orchestra skills, prompts, and agents from GitHub repositories directly inside VS Code.
@@ -347,6 +351,34 @@ Basic setup flow:
 6. Install or use only the skills needed for the active workspace.
 7. Run git status before committing to confirm no local-only skill files were added unintentionally.
 ```
+
+---
+
+### Cursor Setup
+
+Cursor packaging in this phase is scaffold-only.
+
+Use the files under `adapters/cursor/` to keep host-specific instructions and package metadata aligned to the shared `CursorAdapter` runtime contract:
+
+- `adapters/cursor/package.json`
+- `adapters/cursor/install-guide.md`
+- `adapters/cursor/workspace-instructions.template.md`
+
+This branch does not publish a Cursor marketplace package yet. Keep routing, governance, execution, manifest parsing, and audit behavior in the shared runtime core.
+
+---
+
+### Windsurf Setup
+
+Windsurf packaging in this phase is scaffold-only.
+
+Use the files under `adapters/windsurf/` to keep host-specific instructions and package metadata aligned to the shared `WindsurfAdapter` runtime contract:
+
+- `adapters/windsurf/package.json`
+- `adapters/windsurf/install-guide.md`
+- `adapters/windsurf/workspace-instructions.template.md`
+
+This branch does not publish a Windsurf marketplace package yet. Keep routing, governance, execution, manifest parsing, and audit behavior in the shared runtime core.
 
 ---
 
