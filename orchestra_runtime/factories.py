@@ -64,7 +64,7 @@ class AdapterFactory:
             return CursorAdapter(manifest_repository)
         if normalized == "windsurf":
             return WindsurfAdapter(manifest_repository)
-        if normalized in {"vscode", "vs-code", "vs_code"}:
+        if normalized in {"vscode", "vs-code", "vs_code", "vscodium"}:
             return VSCodeAdapter(manifest_repository)
         if normalized in {"jetbrains", "intellij"}:
             return JetBrainsAdapter(manifest_repository)
@@ -73,3 +73,17 @@ class AdapterFactory:
         if normalized in {"neovim", "nvim"}:
             return NeovimAdapter(manifest_repository)
         raise ValueError(f"Unsupported adapter: {adapter_name}")
+
+    @staticmethod
+    def create_all(repo_root: Path | str) -> tuple:
+        return (
+            AdapterFactory.create("codex", repo_root),
+            AdapterFactory.create("antigravity", repo_root),
+            AdapterFactory.create("claude-code", repo_root),
+            AdapterFactory.create("cursor", repo_root),
+            AdapterFactory.create("windsurf", repo_root),
+            AdapterFactory.create("vscode", repo_root),
+            AdapterFactory.create("jetbrains", repo_root),
+            AdapterFactory.create("zed", repo_root),
+            AdapterFactory.create("neovim", repo_root),
+        )

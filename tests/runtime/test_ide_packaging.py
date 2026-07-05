@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from orchestra_runtime.protocol import ProtocolValidator
 from scripts.validate_ide_packaging import validate_packaging_scaffold
 
 
@@ -28,3 +29,10 @@ def test_zed_and_neovim_packaging_files_exist():
         assert (adapter_dir / "install-guide.md").is_file()
         assert (adapter_dir / "workspace-instructions.template.md").is_file()
         assert (adapter_dir / "package.json").is_file()
+
+
+def test_vscodium_maps_to_vscode_compatibility_record():
+    record = ProtocolValidator.compatibility_for("vscodium")
+
+    assert record.runtime_adapter == "vscode"
+    assert record.compatibility_status == "compatible"

@@ -27,6 +27,18 @@ from .models import (
     Skill,
     ValidationResult,
 )
+from .protocol import (
+    COMPATIBILITY_MATRIX,
+    PRAP_V1,
+    SUPPORTED_PROTOCOL_VERSIONS,
+    AdapterCapabilities,
+    AdapterCompatibilityRecord,
+    AdapterContext,
+    AdapterError,
+    AdapterProtocol,
+    AdapterResponse,
+    ProtocolValidator,
+)
 from .repositories import ManifestRepository, SkillSourceRepository
 from .services import (
     AuditLogger,
@@ -40,9 +52,16 @@ from .services import (
 
 __all__ = [
     "AdapterFactory",
+    "AdapterCapabilities",
+    "AdapterCompatibilityRecord",
+    "AdapterContext",
+    "AdapterError",
+    "AdapterProtocol",
+    "AdapterResponse",
     "AntigravityAdapter",
     "AuditLogger",
     "ClaudeCodeAdapter",
+    "COMPATIBILITY_MATRIX",
     "CodexAdapter",
     "CursorAdapter",
     "Command",
@@ -60,6 +79,8 @@ __all__ = [
     "InMemoryAuditSink",
     "ManifestRepository",
     "NeovimAdapter",
+    "PRAP_V1",
+    "ProtocolValidator",
     "RouteDecision",
     "RouterService",
     "RuntimeExecutor",
@@ -67,6 +88,7 @@ __all__ = [
     "SkillFactory",
     "SkillRegistry",
     "SkillSourceRepository",
+    "SUPPORTED_PROTOCOL_VERSIONS",
     "ValidationResult",
     "VSCodeAdapter",
     "WindsurfAdapter",

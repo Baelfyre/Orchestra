@@ -2,7 +2,7 @@
 
 This branch introduces `orchestra_runtime/` as the reusable runtime core for Orchestra.
 
-Branch purpose: `feature/oop-runtime-core-adapters`
+Current runtime expansion branch: `feature/portable-runtime-adapter-protocol`
 
 ## Why this exists
 
@@ -23,6 +23,15 @@ The repository already had adapter-specific validation and export logic spread a
 ## Adapter ownership
 
 `CodexAdapter`, `AntigravityAdapter`, `ClaudeCodeAdapter`, `CursorAdapter`, `WindsurfAdapter`, `VSCodeAdapter`, `JetBrainsAdapter`, `ZedAdapter`, and `NeovimAdapter` translate host-specific prompts into shared runtime commands and context packages. They do not own routing or governance logic.
+
+## Portable protocol ownership
+
+`orchestra_runtime/protocol/` now defines the Portable Runtime Adapter Protocol (`PRAP v1`).
+
+- adapters declare versioned metadata and capability flags through PRAP
+- the protocol validator checks adapter completeness and packaging/runtime alignment
+- compatibility records document supported, compatible, reserved, and rejected host states
+- `VSCodium` intentionally reuses the `VSCodeAdapter` contract and packaging surface
 
 ## Current integration points
 
@@ -56,6 +65,7 @@ The repository already had adapter-specific validation and export logic spread a
 - The runtime currently centralizes Python validation and adapter-contract behavior first.
 - PowerShell installers and Markdown host guides remain in place and unchanged unless they need runtime data.
 - Runtime execution still returns orchestration decisions, not full host-native execution side effects.
+- PRAP establishes a stable contract first, but does not add an external Adapter SDK yet.
 - Marketplace publication remains deferred for Cursor, Windsurf, and VS Code.
 - JetBrains marketplace publication remains deferred.
 - Zed and Neovim marketplace publication remain deferred.

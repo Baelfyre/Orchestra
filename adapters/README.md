@@ -2,12 +2,15 @@
 
 Adapters bridge the Markdown skills into tool-specific instruction formats. They are not guaranteed native plugins and do not imply automatic discovery.
 
+The runtime-owned Portable Runtime Adapter Protocol (`PRAP v1`) defines the metadata and capability contract for each adapter. Packaging scaffolds point back to runtime adapters rather than duplicating orchestration logic.
+
 - [Codex](codex/README.md)
 - [Cursor packaging scaffold](cursor/README.md)
 - [JetBrains packaging scaffold](jetbrains/README.md)
 - [Neovim packaging scaffold](neovim/README.md)
 - [Windsurf packaging scaffold](windsurf/README.md)
 - [VS Code AI workflows](vscode/README.md)
+- VSCodium compatibility shares the VS Code runtime adapter and packaging surface
 - [Zed packaging scaffold](zed/README.md)
 - [Antigravity](antigravity/README.md)
 - [Claude Code](claude-code/README.md)
