@@ -5,6 +5,9 @@ This changelog tracks the repository history using git tags, merge history, and 
 ## Unreleased
 
 ### Added
+- Added Claude Code plugin compatibility files: `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `scripts/validate_claude_plugin.py`, and updated `docs/setup/INSTALLATION.md` with Claude Code installation instructions.
+
+
 
 - Added Cloak progressive disclosure template `bryl-minimal-design` for monochrome, typography-driven UI styling.
 - Added behavior test scenario in `BEHAVIOR_TEST_MATRIX.md` to verify Cloak progressive disclosure template loading.
