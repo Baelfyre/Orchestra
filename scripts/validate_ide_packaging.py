@@ -24,7 +24,19 @@ PACKAGING_SCAFFOLDS = {
         "plugin.xml",
         "package.json",
     ),
+    "neovim": (
+        "README.md",
+        "install-guide.md",
+        "workspace-instructions.template.md",
+        "package.json",
+    ),
     "windsurf": (
+        "README.md",
+        "install-guide.md",
+        "workspace-instructions.template.md",
+        "package.json",
+    ),
+    "zed": (
         "README.md",
         "install-guide.md",
         "workspace-instructions.template.md",

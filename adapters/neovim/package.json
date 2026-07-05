@@ -1,0 +1,22 @@
+{
+  "name": "orchestra-neovim-scaffold",
+  "displayName": "Orchestra Neovim Scaffold",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Scaffold-only Neovim packaging manifest for Orchestra runtime adapter integration.",
+  "orchestra": {
+    "host": "neovim",
+    "runtime_adapter": "neovim",
+    "runtime_package": "orchestra_runtime",
+    "scaffold_only": true,
+    "install_guide": "install-guide.md",
+    "entry_templates": [
+      "workspace-instructions.template.md"
+    ],
+    "deferred_items": [
+      "marketplace-publication",
+      "host-distribution",
+      "signed-package-metadata"
+    ]
+  }
+}
