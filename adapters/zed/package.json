@@ -1,7 +1,7 @@
 {
   "name": "orchestra-zed-scaffold",
   "displayName": "Orchestra Zed Scaffold",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Scaffold-only Zed packaging manifest for Orchestra runtime adapter integration.",
   "orchestra": {

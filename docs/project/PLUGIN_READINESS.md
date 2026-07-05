@@ -12,14 +12,14 @@ This document tracks the readiness of the Orchestra framework for its release as
   - Commands accurately map to their respective specialized skills.
   - The `resilience-check` command explicitly requires a safety gate and user approval.
 - **Skill coverage status:** Completed
-  - All 9 core specialist skills are fully documented and integrated.
-  - Handled by `plugin.json` skills array correctly.
+  - All manifest-declared skills are fully documented and integrated.
+  - The current `plugin.json` skills array validates against the repository source of truth.
 - **Repository rename status:** Completed
   - GitHub repo has been renamed to `Baelfyre/Orchestra`.
   - Active plugin and command identity now uses `conductor`.
   - Legacy names such as `amalgam-conductor` are compatibility aliases only.
 - **Plugin install validation status:** Completed
-  - `agy plugin install https://github.com/Baelfyre/Orchestra` successfully processed 9 skills and 9 commands.
+  - Install validation is now treated as manifest-driven and verified through repository validators instead of hardcoded historical counts.
 - **Plugin icon status:** Completed
   - The existing Conductor icon is used as the plugin icon: `assets/icons/conductor.ico`.
   - The broader framework logo remains available at `assets/logo/orchestra.png`.

@@ -3,7 +3,7 @@
 Before tagging the `v1.0.0` release of the Orchestra, the following checks must all pass:
 
 - [x] **Markdown-first architecture preserved**: No compiled code, binary requirements, or forced dependencies.
-- [x] **All 11 skills present**: Conductor, Cloak, Scribe, Weaver, Chronicler, Overseer, Cipher, Hidden, Clockwork, Steward, Governor.
+- [x] **All manifest-declared skills present**: The current plugin manifest, skill folders, and command surfaces validate together, including Conductor, governance authorities, specialists, and Ponytail.
 - [x] **Output formats externalized**: `OUTPUT_FORMATS.md` successfully decoupled for progressive disclosure token savings.
 - [x] **Routing map centralized**: `ROUTING_MAP.md` handles all inter-skill delegation and conflict resolution.
 - [x] **Behavior tests present**: `tests/behavior/` contains the matrix and manual guide for validation.

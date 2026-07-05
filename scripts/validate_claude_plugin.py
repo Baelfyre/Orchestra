@@ -133,6 +133,8 @@ def main():
                 # Skip binary files or pyc
                 if file.endswith('.pyc') or file.endswith('.ico') or file.endswith('.png'):
                     continue
+                if os.path.abspath(file_path) == os.path.abspath(__file__):
+                    continue
                 try:
                     with open(file_path, 'r', encoding='utf-8') as f:
                         lines = f.readlines()

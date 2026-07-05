@@ -2,7 +2,18 @@
 
 This changelog tracks the repository history using git tags, merge history, and the prior documented milestone log that lived under `docs/meta/CHANGELOG.md`.
 
-## Unreleased
+## v1.0.0 - Portable Runtime
+
+Portable Runtime is the first Orchestra release that normalizes the repository around a shared runtime core, thin adapters, and a versioned adapter protocol.
+
+### Release Highlights
+- Added `orchestra_runtime/` as the shared runtime core for routing, manifest parsing, skill loading, governance validation, execution flow, and audit logging.
+- Added `PRAP v1` as the stable Portable Runtime Adapter Protocol for host metadata, capabilities, compatibility, and validation.
+- Added thin adapter support for Codex, Claude Code, Antigravity, Cursor, Windsurf, VS Code, VSCodium compatibility, JetBrains, Zed, and Neovim.
+- Added scaffold-only packaging surfaces for Cursor, Windsurf, VS Code, JetBrains, Zed, and Neovim.
+- Normalized release-facing documentation, compatibility guidance, and manifest metadata for the `v1.0.0 Portable Runtime` baseline.
+
+## Pre-release Build History
 
 ### Added
 - Added `orchestra_runtime/protocol/` with the Portable Runtime Adapter Protocol (`PRAP v1`), including versioned adapter metadata, capabilities, compatibility records, and protocol validation.
@@ -22,7 +33,7 @@ This changelog tracks the repository history using git tags, merge history, and 
 - Extended IDE packaging validation so runtime adapter scaffolds are checked against PRAP metadata and packaging/runtime adapter alignment.
 - Added IDE packaging validation so scaffold manifests, required files, and runtime adapter references are checked centrally.
 - Refactored manifest, skill, and adapter validation scripts to use the shared runtime repositories and registry instead of duplicating core loading logic.
-- Fixed Claude Code marketplace source path from "." to "./" and bumped Claude plugin metadata to 1.0.1 so Claude Code can detect and refresh the plugin correctly.
+- Fixed Claude Code marketplace source path from "." to "./" and aligned Claude plugin metadata with the release baseline so Claude Code can detect and refresh the plugin correctly.
 
 
 
@@ -134,7 +145,7 @@ This changelog tracks the repository history using git tags, merge history, and 
   - actions/setup-python from v5 to v6
   - actions/upload-artifact from v4 to v7
 
-Changes after `v1.0.1` currently tracked in this checkout:
+Additional release-prep changes included in this checkout:
 
 - Added local repository sync preflight governance check (`scripts/preflight_sync_check.py`) for new development phases and editing sessions.
 - Added contributor, agent, and governance rules requiring preflight sync verification against `origin/main` before local editing begins.

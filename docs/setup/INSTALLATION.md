@@ -2,6 +2,24 @@
 
 Orchestra can be installed in several ways depending on your AI host or IDE:
 
+## Portable Runtime Release
+
+`v1.0.0 Portable Runtime` standardizes Orchestra around a shared runtime core plus thin host adapters.
+
+| Host | Install Surface | Current Status |
+|---|---|---|
+| Codex | Marketplace or repo-local fallback | Supported |
+| Claude Code | Marketplace plugin | Supported |
+| Antigravity | Native plugin install | Supported |
+| Cursor | Scaffold-only packaging and workspace instructions | Supported |
+| Windsurf | Scaffold-only packaging and workspace instructions | Supported |
+| VS Code | Scaffold-only packaging and workspace instructions | Supported |
+| VSCodium | Reuses VS Code scaffold and runtime adapter | Compatible |
+| JetBrains | Scaffold-only plugin surface | Supported |
+| Zed | Scaffold-only packaging and workspace instructions | Supported |
+| Neovim | Scaffold-only packaging and workspace instructions | Supported |
+| Local AI systems | Manual skill loading | Supported |
+
 ## 1. Antigravity Plugin Setup
 
 If you are using the Antigravity ecosystem, install the plugin directly:
@@ -84,6 +102,12 @@ If you prefer not to use a plugin manager or are using an unsupported environmen
    ```
 2. Copy only the specific folders you need from `skills/` into the local skill or instruction location supported by your tool.
 3. Keep the repository copy separate from unrelated source repositories. Follow [LOCAL_ONLY_GUIDE.md](LOCAL_ONLY_GUIDE.md) if you are deliberately using local skill files.
+
+## 5. Scaffold-Only IDE Packaging
+
+Cursor, Windsurf, VS Code, JetBrains, Zed, and Neovim currently ship scaffold-only packaging folders under `adapters/`. These folders do not duplicate routing, governance, execution, manifest parsing, or audit logic. They point back to the shared runtime adapters in `orchestra_runtime/`.
+
+`VSCodium` intentionally reuses the VS Code runtime adapter and scaffold metadata.
 
 ## Refresh Installed Integrations
 
