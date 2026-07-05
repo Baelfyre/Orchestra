@@ -730,6 +730,33 @@ For full configuration and usage instructions, see the [Validation & Enforceable
 
 ---
 
+## Update Notifications
+
+Orchestra does not auto-update installed files. Update checks are notify-only.
+
+Run the shared update checker manually:
+
+```powershell
+python .\scripts\check_for_updates.py
+```
+
+The checker reads local version metadata from `plugin.json`, `.claude-plugin/plugin.json`, and adapter `package.json` files where applicable, compares that version to the latest GitHub release, and prints:
+
+- current version
+- latest version
+- release URL
+- a host-specific refresh or reinstall reminder
+
+Optional manifest metadata supports:
+
+- `update_check_enabled`
+- `update_check_channel`
+- `update_check_frequency`
+
+Current defaults are `true`, `stable`, and `manual`.
+
+---
+
 ## Limitations
 
 - **Instruction-Level Framework:** Orchestra primarily operates through structured instructions, skills, and documentation.
