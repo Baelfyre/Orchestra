@@ -31,6 +31,7 @@ REQUIRED_VALIDATION_SCRIPTS = [
     "scripts/dagger_guardrail.py",
     "scripts/test_dagger_guardrail.py",
     "scripts/preflight_sync_check.py",
+    "scripts/validate_ide_packaging.py",
     "tests/behavior/evaluate_governance.py",
     "tests/behavior/run_tests.py",
 ]
@@ -44,6 +45,7 @@ REPO_MEMORY_FILES = [
 STRICT_VALIDATOR_SCRIPTS = [
     "scripts/validate_structure.py",
     "scripts/validate_manifest.py",
+    "scripts/validate_ide_packaging.py",
 ]
 
 SIGNIFICANT_CHANGE_PATTERNS = [

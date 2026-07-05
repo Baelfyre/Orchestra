@@ -11,6 +11,7 @@ def main():
     scripts = [
         {"Name": "validate_structure.py", "Path": "scripts/validate_structure.py"},
         {"Name": "validate_manifest.py", "Path": "scripts/validate_manifest.py"},
+        {"Name": "validate_ide_packaging.py", "Path": "scripts/validate_ide_packaging.py"},
         {"Name": "test_governance_check.py", "Path": "scripts/test_governance_check.py"},
         {"Name": "check_stale_references.py", "Path": "scripts/check_stale_references.py"},
         {"Name": "validate_codex_export.py", "Path": "adapters/codex/validate_codex_export.py"},
