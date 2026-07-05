@@ -90,6 +90,8 @@ flowchart LR
     Arbiter -.-> Revision
 ```
 
+Runtime-core-first refactor notes live in [docs/project/OOP_RUNTIME_ARCHITECTURE.md](docs/project/OOP_RUNTIME_ARCHITECTURE.md). The shared `orchestra_runtime/` layer owns manifest parsing, skill loading, routing, governance validation, execution flow, and audit logging, while Codex, Antigravity, and Claude Code remain thin adapters.
+
 ---
 
 ## Governance Layer

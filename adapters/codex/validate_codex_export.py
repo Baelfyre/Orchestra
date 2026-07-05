@@ -3,6 +3,13 @@ import re
 import sys
 from pathlib import Path
 
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from orchestra_runtime.repositories import ManifestRepository, SkillSourceRepository
+from orchestra_runtime.services import SkillRegistry
+
 
 SKILL_NAME_ALIASES = {
     "Steward": "the-steward",
@@ -174,8 +181,8 @@ def main():
         sys.exit(1)
         
     manifest = json.loads(read_text(manifest_path))
-        
-    skills = [s.get("slug") for s in manifest.get("skills", []) if s.get("slug")]
+    registry = SkillRegistry(ManifestRepository(root), SkillSourceRepository(root))
+    skills = [skill.slug for skill in registry.load_skills()]
     skill_set = set(skills)
     
     errors = 0
