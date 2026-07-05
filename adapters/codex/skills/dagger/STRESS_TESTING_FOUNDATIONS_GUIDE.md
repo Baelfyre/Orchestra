@@ -9,7 +9,7 @@ Dagger expands approved QA scenarios into failure-focused scenarios. Dagger must
 ## Dagger and Overseer Boundary
 - **Overseer** owns QA validation gates, formal test planning, pass/fail decisions, regression scope, UAT, and release readiness.
 - **Dagger** does not own formal QA planning or release readiness decisions.
-- Dagger expands Overseerâ€™s QA baseline into stress and failure-mode testing, and hands findings back to Overseer for readiness decisions.
+- Dagger expands Overseer’s QA baseline into stress and failure-mode testing, and hands findings back to Overseer for readiness decisions.
 
 ## Stress Testing vs Load Testing vs Chaos Testing
 - **Stress Testing**: What happens when capacity, limits, resources, or timing are pressured?
@@ -22,7 +22,7 @@ Dagger expands approved QA scenarios into failure-focused scenarios. Dagger must
 Use Dagger to discover edge cases, test guardrails, explore misuse cases, or simulate failure scenarios that go beyond normal functional QA boundaries.
 
 ## Required Overseer Baseline
-Before expanding, consult Overseerâ€™s baseline: requirements, acceptance criteria, pass/fail criteria, regression scope, and existing defect history.
+Before expanding, consult Overseer’s baseline: requirements, acceptance criteria, pass/fail criteria, regression scope, and existing defect history.
 
 ## Stress Testing Scope Expansion
 Identify breaking points in system workflows. Stress scenarios must include expected safe behavior, not only expected failure.

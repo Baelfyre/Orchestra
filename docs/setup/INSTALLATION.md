@@ -49,7 +49,32 @@ powershell -ExecutionPolicy Bypass -File .\scripts\refresh-installed-integration
 
 Do not commit `.agents/` unless the repo intentionally shares those Codex skill files. For local-only setup, add `.agents/` to `.git/info/exclude`.
 
-## 3. Skills-only Setup (Manual)
+## 3. Claude Code Plugin Setup
+
+For Claude Code, you can install the Orchestra plugin directly using its marketplace.
+
+```text
+/plugin marketplace add Baelfyre/Orchestra
+/plugin install orchestra@orchestra
+```
+
+To update or validate your plugin, run the following commands inside Claude Code:
+
+```text
+/plugin marketplace update
+/reload-plugins
+/plugin validate .
+```
+
+You can also run validation from your terminal at the repository root:
+
+```text
+claude plugin validate .
+```
+
+*Note: Claude Code plugin skills are expected to be namespaced after installation.*
+
+## 4. Skills-only Setup (Manual)
 
 If you prefer not to use a plugin manager or are using an unsupported environment, you can install the raw skills manually:
 

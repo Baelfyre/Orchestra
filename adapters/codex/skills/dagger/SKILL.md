@@ -73,7 +73,7 @@ Use `SKILL.md` first. Do not load every supporting document by default or consum
 
 ## Overseer Alignment Rule
 
-Before expanding QA scenarios into stress, chaos, negative, or resilience tests, consult Overseerâ€™s available QA baseline: requirements under test, acceptance criteria, pass/fail criteria, smoke or regression scope, UAT findings, known defects, and readiness gates. If no QA baseline exists, mark the Dagger scope as exploratory and hand missing QA structure back to Overseer. Dagger findings must be handed back to Overseer for QA gate, retest, and readiness decisions.
+Before expanding QA scenarios into stress, chaos, negative, or resilience tests, consult Overseer’s available QA baseline: requirements under test, acceptance criteria, pass/fail criteria, smoke or regression scope, UAT findings, known defects, and readiness gates. If no QA baseline exists, mark the Dagger scope as exploratory and hand missing QA structure back to Overseer. Dagger findings must be handed back to Overseer for QA gate, retest, and readiness decisions.
 
 ## Integration Rules
 

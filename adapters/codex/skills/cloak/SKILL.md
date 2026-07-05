@@ -44,6 +44,7 @@ Do not apply `QUICK_UI_HANDOFF` or `FORMAL_UI_AUDIT` fields to Markdown document
 Use `SKILL.md` first. Do not load every supporting document by default or consume context with unused material.
 - Load `OUTPUT_FORMATS.md` only when generating the final response.
 - Load `UI_UX_FOUNDATIONS_GUIDE.md` only when the task involves UI/UX review, frontend experience, visual hierarchy, accessibility, forms, responsive layout, interaction design, secure UX, privacy-aware display, role-aware UI, validation messaging, sensitive action flows, or frontend behavior boundaries.
+- Load `templates/<template-name>.md` only when the user explicitly requests a specific aesthetic (e.g., `bryl-minimal`). Do not load templates by default.
 
 ## Operating principles
 
@@ -158,6 +159,26 @@ Required handoff language:
 - Layout decisions and Visual hierarchy
 - Component and Form usability
 - Design-system consistency and Navigation usability
+
+## Templates
+
+Cloak supports specialized frontend aesthetic profiles (Templates).
+
+Required rules for templates:
+- Load a template only when the user explicitly requests its aesthetic. Do not apply it by default.
+- If a template is requested, read its corresponding file in `templates/<template-name>.md`.
+- Follow the visual, typography, layout, component, and motion rules defined in the template.
+
+### Template Validation
+Before applying a template, ensure:
+1. The template file exists in the `templates/` directory.
+2. The attribution block is present at the top of the template file.
+3. The aesthetic is explicitly requested (do not apply by default).
+4. All required accessibility gates (semantic HTML, contrast, keyboard support, responsive layout, reduced-motion, preserved stack) are met regardless of the aesthetic.
+
+### Behavior Tests
+- **"Restyle this dashboard with bryl-minimal"** -> Route to Cloak + load `templates/bryl-minimal-design.md`.
+- **"Make this SaaS app colorful and playful"** -> Route to Cloak, but do NOT load `bryl-minimal-design.md` because the aesthetic conflicts with its do-not-use conditions.
 
 ## Required behavior (Token Rules)
 
