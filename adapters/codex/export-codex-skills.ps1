@@ -21,6 +21,14 @@ function Write-Utf8NoBomLfFile {
     [System.IO.File]::WriteAllText($Path, $normalized, [System.Text.UTF8Encoding]::new($false))
 }
 
+function Read-Utf8TextFile {
+    param(
+        [string]$Path
+    )
+
+    return [System.IO.File]::ReadAllText($Path, [System.Text.UTF8Encoding]::new($false))
+}
+
 $targetSkillsDir = Join-Path $TargetRoot "skills"
 if (-not (Test-Path $targetSkillsDir)) {
     New-Item -ItemType Directory -Path $targetSkillsDir | Out-Null
@@ -44,7 +52,7 @@ foreach ($skill in $skills) {
     $sourceSkillFile = Join-Path $sourceDir "SKILL.md"
     $targetSkillFile = Join-Path $targetDir "SKILL.md"
     
-    $content = Get-Content $sourceSkillFile -Raw
+    $content = Read-Utf8TextFile -Path $sourceSkillFile
     
     # Extract name and description using Regex
     $nameMatch = [regex]::Match($content, '(?m)^name:\s*(.+)$')
@@ -83,7 +91,7 @@ description: $desc
             New-Item -ItemType Directory -Path $targetSupportDir | Out-Null
         }
 
-        $supportContent = Get-Content -Raw -Path $supportFile.FullName
+        $supportContent = Read-Utf8TextFile -Path $supportFile.FullName
         Write-Utf8NoBomLfFile -Path $targetSupportFile -Content $supportContent
     }
 
@@ -92,7 +100,7 @@ description: $desc
         $sourceRouting = Join-Path $SourceRoot "ROUTING_MAP.md"
         $targetRouting = Join-Path $targetDir "ROUTING_MAP.md"
         if (Test-Path $sourceRouting) {
-            $routingContent = Get-Content -Raw -Path $sourceRouting
+            $routingContent = Read-Utf8TextFile -Path $sourceRouting
             Write-Utf8NoBomLfFile -Path $targetRouting -Content $routingContent
         }
     }
