@@ -22,7 +22,7 @@ The repository already had adapter-specific validation and export logic spread a
 
 ## Adapter ownership
 
-`CodexAdapter`, `AntigravityAdapter`, and `ClaudeCodeAdapter` now translate host-specific prompts into shared runtime commands and context packages. They do not own routing or governance logic.
+`CodexAdapter`, `AntigravityAdapter`, `ClaudeCodeAdapter`, `CursorAdapter`, `WindsurfAdapter`, `VSCodeAdapter`, `JetBrainsAdapter`, `ZedAdapter`, and `NeovimAdapter` translate host-specific prompts into shared runtime commands and context packages. They do not own routing or governance logic.
 
 ## Current integration points
 
@@ -45,3 +45,4 @@ The repository already had adapter-specific validation and export logic spread a
 - The runtime currently centralizes Python validation and adapter-contract behavior first.
 - PowerShell installers and Markdown host guides remain in place and unchanged unless they need runtime data.
 - Runtime execution still returns orchestration decisions, not full host-native execution side effects.
+- Marketplace and installer packaging for Cursor, Windsurf, VS Code, JetBrains, Zed, and Neovim remain out of scope for this phase.

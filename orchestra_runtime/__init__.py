@@ -1,4 +1,14 @@
-from .adapters import AntigravityAdapter, ClaudeCodeAdapter, CodexAdapter
+from .adapters import (
+    AntigravityAdapter,
+    ClaudeCodeAdapter,
+    CodexAdapter,
+    CursorAdapter,
+    JetBrainsAdapter,
+    NeovimAdapter,
+    VSCodeAdapter,
+    WindsurfAdapter,
+    ZedAdapter,
+)
 from .factories import AdapterFactory, SkillFactory
 from .interfaces import (
     IAuditSink,
@@ -34,6 +44,7 @@ __all__ = [
     "AuditLogger",
     "ClaudeCodeAdapter",
     "CodexAdapter",
+    "CursorAdapter",
     "Command",
     "ContextAssembler",
     "ContextPackage",
@@ -48,6 +59,7 @@ __all__ = [
     "ISkillRegistry",
     "InMemoryAuditSink",
     "ManifestRepository",
+    "NeovimAdapter",
     "RouteDecision",
     "RouterService",
     "RuntimeExecutor",
@@ -56,4 +68,8 @@ __all__ = [
     "SkillRegistry",
     "SkillSourceRepository",
     "ValidationResult",
+    "VSCodeAdapter",
+    "WindsurfAdapter",
+    "ZedAdapter",
+    "JetBrainsAdapter",
 ]
