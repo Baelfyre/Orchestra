@@ -34,6 +34,12 @@ def build_executor(repo_root: Path) -> RuntimeExecutor:
         ("codex", "@Orchestra review-docs"),
         ("antigravity", "/ponytail /conductor review docs"),
         ("claude-code", "Use Conductor for this task"),
+        ("cursor", "@Orchestra review docs"),
+        ("windsurf", "/conductor review docs"),
+        ("vscode", "orchestra: review docs"),
+        ("jetbrains", "Use Conductor to review docs"),
+        ("zed", "@Orchestra review docs"),
+        ("neovim", ":Orchestra review docs"),
     ),
 )
 def test_adapter_contracts(adapter_name: str, prompt: str):
@@ -50,3 +56,24 @@ def test_adapter_contracts(adapter_name: str, prompt: str):
     assert result.adapter_name == adapter_name
     assert result.audit_entry_id
     assert result.output
+
+
+@pytest.mark.parametrize(
+    ("adapter_name", "prompt", "expected_command"),
+    (
+        ("cursor", "@Orchestra review docs", "conductor"),
+        ("windsurf", "/conductor review docs", "conductor"),
+        ("vscode", "orchestra: review docs", "conductor"),
+        ("jetbrains", "Use Conductor to review docs", "conductor"),
+        ("zed", "@Orchestra review docs", "conductor"),
+        ("neovim", ":Orchestra review docs", "conductor"),
+    ),
+)
+def test_new_adapter_command_translation(adapter_name: str, prompt: str, expected_command: str):
+    repo_root = Path(__file__).resolve().parents[2]
+    adapter = AdapterFactory.create(adapter_name, repo_root)
+
+    command = adapter.parse_command(prompt)
+
+    assert command.adapter_name == adapter_name
+    assert command.name == expected_command

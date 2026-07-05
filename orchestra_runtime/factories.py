@@ -2,7 +2,17 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from .adapters import AntigravityAdapter, ClaudeCodeAdapter, CodexAdapter
+from .adapters import (
+    AntigravityAdapter,
+    ClaudeCodeAdapter,
+    CodexAdapter,
+    CursorAdapter,
+    JetBrainsAdapter,
+    NeovimAdapter,
+    VSCodeAdapter,
+    WindsurfAdapter,
+    ZedAdapter,
+)
 from .models import Skill
 from .repositories import ManifestRepository
 
@@ -50,4 +60,16 @@ class AdapterFactory:
             return AntigravityAdapter(manifest_repository)
         if normalized in {"claude", "claude-code"}:
             return ClaudeCodeAdapter(manifest_repository)
+        if normalized == "cursor":
+            return CursorAdapter(manifest_repository)
+        if normalized == "windsurf":
+            return WindsurfAdapter(manifest_repository)
+        if normalized in {"vscode", "vs-code", "vs_code"}:
+            return VSCodeAdapter(manifest_repository)
+        if normalized in {"jetbrains", "intellij"}:
+            return JetBrainsAdapter(manifest_repository)
+        if normalized == "zed":
+            return ZedAdapter(manifest_repository)
+        if normalized in {"neovim", "nvim"}:
+            return NeovimAdapter(manifest_repository)
         raise ValueError(f"Unsupported adapter: {adapter_name}")

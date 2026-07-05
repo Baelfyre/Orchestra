@@ -5,6 +5,7 @@ This changelog tracks the repository history using git tags, merge history, and 
 ## Unreleased
 
 ### Added
+- Added contract-ready runtime adapters for Cursor, Windsurf, VS Code, JetBrains, Zed, and Neovim without introducing marketplace packaging.
 - Added `orchestra_runtime/` runtime core models, services, factories, repositories, and thin Codex, Antigravity, and Claude Code adapters.
 - Added runtime-core pytest coverage for skill loading, adapter contracts, and governance blocking for destructive and high-risk routes.
 - Added `docs/project/OOP_RUNTIME_ARCHITECTURE.md` to document the runtime-core-first branch architecture and current integration points.

@@ -91,3 +91,100 @@ class ClaudeCodeAdapter(BaseAdapter):
         ("security check", "security-check"),
         ("resilience check", "resilience-check"),
     )
+
+
+class CursorAdapter(BaseAdapter):
+    adapter_name = "cursor"
+    trigger_map = (
+        ("@orchestra", "conductor"),
+        ("use conductor", "conductor"),
+        ("review architecture", "review-architecture"),
+        ("review ui", "review-ui"),
+        ("review db", "review-db"),
+        ("review docs", "review-docs"),
+        ("diagram check", "diagram-check"),
+        ("qa check", "qa-check"),
+        ("security check", "security-check"),
+        ("resilience check", "resilience-check"),
+    )
+
+
+class WindsurfAdapter(BaseAdapter):
+    adapter_name = "windsurf"
+    trigger_map = (
+        ("@orchestra", "conductor"),
+        ("use conductor", "conductor"),
+        ("/conductor", "conductor"),
+        ("review architecture", "review-architecture"),
+        ("review ui", "review-ui"),
+        ("review db", "review-db"),
+        ("review docs", "review-docs"),
+        ("diagram check", "diagram-check"),
+        ("qa check", "qa-check"),
+        ("security check", "security-check"),
+        ("resilience check", "resilience-check"),
+    )
+
+
+class VSCodeAdapter(BaseAdapter):
+    adapter_name = "vscode"
+    trigger_map = (
+        ("@orchestra", "conductor"),
+        ("orchestra:", "conductor"),
+        ("review architecture", "review-architecture"),
+        ("review ui", "review-ui"),
+        ("review db", "review-db"),
+        ("review docs", "review-docs"),
+        ("diagram check", "diagram-check"),
+        ("qa check", "qa-check"),
+        ("security check", "security-check"),
+        ("resilience check", "resilience-check"),
+    )
+
+
+class JetBrainsAdapter(BaseAdapter):
+    adapter_name = "jetbrains"
+    trigger_map = (
+        ("@orchestra", "conductor"),
+        ("use conductor", "conductor"),
+        ("review architecture", "review-architecture"),
+        ("review ui", "review-ui"),
+        ("review db", "review-db"),
+        ("review docs", "review-docs"),
+        ("diagram check", "diagram-check"),
+        ("qa check", "qa-check"),
+        ("security check", "security-check"),
+        ("resilience check", "resilience-check"),
+    )
+
+
+class ZedAdapter(BaseAdapter):
+    adapter_name = "zed"
+    trigger_map = (
+        ("@orchestra", "conductor"),
+        ("use conductor", "conductor"),
+        ("review architecture", "review-architecture"),
+        ("review ui", "review-ui"),
+        ("review db", "review-db"),
+        ("review docs", "review-docs"),
+        ("diagram check", "diagram-check"),
+        ("qa check", "qa-check"),
+        ("security check", "security-check"),
+        ("resilience check", "resilience-check"),
+    )
+
+
+class NeovimAdapter(BaseAdapter):
+    adapter_name = "neovim"
+    trigger_map = (
+        ("orchestra ", "conductor"),
+        (":orchestra", "conductor"),
+        ("review architecture", "review-architecture"),
+        ("review ui", "review-ui"),
+        ("review db", "review-db"),
+        ("review docs", "review-docs"),
+        ("diagram check", "diagram-check"),
+        ("qa check", "qa-check"),
+        ("security check", "security-check"),
+        ("resilience check", "resilience-check"),
+    )
