@@ -315,6 +315,8 @@ cd C:\conductor
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\refresh-installed-integrations.ps1 -Target Codex -CodexRepoPath "C:\path\to\your\project" -Force
 ```
 
+The refresh pipeline keeps repository source, generated export output, and installed runtime locations separate. By default it exports Codex skills into a temporary staging directory, validates that staged export, installs from the staged copy, verifies file-list and SHA-256 parity against both repo-local and global Codex runtime locations, and then deletes the temporary staging directory.
+
 Important:
 
 * Marketplace installation is the default Codex setup.
@@ -338,6 +340,8 @@ Recommended local-only entries:
 This keeps the files available locally without adding them to the shared repository.
 
 Use `.gitignore` only if the whole project intentionally wants to share those AI configuration files with all contributors.
+
+Use `-KeepTempExport` only when you need to inspect the staged export during debugging.
 
 ---
 

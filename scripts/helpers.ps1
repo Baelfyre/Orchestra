@@ -118,3 +118,87 @@ function Test-WorkflowLocked {
     catch {}
     return $false
 }
+
+function Get-DirectoryHashIndex {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$Root
+    )
+
+    if (-not (Test-Path -LiteralPath $Root -PathType Container)) {
+        throw "Directory not found: $Root"
+    }
+
+    $rootItem = Get-Item -LiteralPath $Root -ErrorAction Stop
+    $normalizedRoot = $rootItem.FullName.TrimEnd('\', '/')
+    $index = @{}
+
+    Get-ChildItem -LiteralPath $normalizedRoot -Recurse -File | ForEach-Object {
+        $relativePath = $_.FullName.Substring($normalizedRoot.Length).TrimStart('\', '/').Replace('\', '/')
+        $index[$relativePath] = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash
+    }
+
+    return $index
+}
+
+function Compare-DirectoryParity {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$SourceRoot,
+
+        [Parameter(Mandatory=$true)]
+        [string]$DestinationRoot
+    )
+
+    $sourceIndex = Get-DirectoryHashIndex -Root $SourceRoot
+    $destinationIndex = Get-DirectoryHashIndex -Root $DestinationRoot
+    $issues = New-Object System.Collections.Generic.List[string]
+
+    foreach ($relativePath in $sourceIndex.Keys) {
+        if (-not $destinationIndex.ContainsKey($relativePath)) {
+            $issues.Add("Missing file in destination: $relativePath")
+            continue
+        }
+
+        if ($sourceIndex[$relativePath] -ne $destinationIndex[$relativePath]) {
+            $issues.Add("Hash mismatch: $relativePath")
+        }
+    }
+
+    foreach ($relativePath in $destinationIndex.Keys) {
+        if (-not $sourceIndex.ContainsKey($relativePath)) {
+            $issues.Add("Unexpected file in destination: $relativePath")
+        }
+    }
+
+    return $issues
+}
+
+function Copy-SkillTree {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$SourceSkillsDir,
+
+        [Parameter(Mandatory=$true)]
+        [string]$DestinationSkillsDir
+    )
+
+    if (-not (Test-Path -LiteralPath $SourceSkillsDir -PathType Container)) {
+        throw "Source skills directory not found: $SourceSkillsDir"
+    }
+
+    if (-not (Test-Path -LiteralPath $DestinationSkillsDir -PathType Container)) {
+        New-Item -ItemType Directory -Path $DestinationSkillsDir -Force | Out-Null
+    }
+
+    $skills = Get-ChildItem -LiteralPath $SourceSkillsDir -Directory
+    foreach ($skill in $skills) {
+        $dest = Join-Path $DestinationSkillsDir $skill.Name
+        if (Test-Path -LiteralPath $dest) {
+            Remove-Item -LiteralPath $dest -Recurse -Force
+        }
+
+        Copy-Item -LiteralPath $skill.FullName -Destination $dest -Recurse -Force
+        Write-Output "Installed: $($skill.Name)"
+    }
+}

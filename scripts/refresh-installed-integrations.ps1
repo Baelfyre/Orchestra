@@ -3,11 +3,15 @@
 
 param(
     [ValidateSet('Antigravity', 'Codex', 'All')]
-    [string]$Target = 'All',
+    [string]$Target = 'Codex',
 
     [string]$CodexRepoPath,
 
-    [switch]$Force
+    [string]$GlobalCodexSkillsPath = "$HOME\.codex\skills",
+
+    [switch]$Force,
+
+    [switch]$KeepTempExport
 )
 
 $ErrorActionPreference = 'Stop'
@@ -91,12 +95,13 @@ function Refresh-Antigravity {
 }
 
 function Refresh-Codex {
-    if ([string]::IsNullOrWhiteSpace($CodexRepoPath)) {
-        throw "Codex refresh requires -CodexRepoPath."
+    $resolvedCodexRepoPath = $CodexRepoPath
+    if ([string]::IsNullOrWhiteSpace($resolvedCodexRepoPath)) {
+        $resolvedCodexRepoPath = $Root
     }
 
-    if (-not (Test-Path -LiteralPath $CodexRepoPath -PathType Container)) {
-        throw "Codex repo path not found: $CodexRepoPath"
+    if (-not (Test-Path -LiteralPath $resolvedCodexRepoPath -PathType Container)) {
+        throw "Codex repo path not found: $resolvedCodexRepoPath"
     }
 
     if (-not (Test-Path -LiteralPath $codexInstaller -PathType Leaf)) {
@@ -111,22 +116,81 @@ function Refresh-Codex {
         throw "Codex export validator not found: $codexValidator"
     }
 
-    Write-ColorHost 'INFO' "Refreshing Codex skills into: $CodexRepoPath"
-
-    $psExe = (Get-Process -Id $PID).Path
-    Invoke-RequiredCommand -Command $psExe -Arguments @('-ExecutionPolicy', 'Bypass', '-File', $codexExporter)
-
-    $pythonExe = (Get-Command python -ErrorAction Stop).Source
-    Invoke-RequiredCommand -Command $pythonExe -Arguments @($codexValidator)
-
-    $args = @('-ExecutionPolicy', 'Bypass', '-File', $codexInstaller, '-TargetRepo', $CodexRepoPath)
-    if ($Force) {
-        $args += '-Force'
+    if ([string]::IsNullOrWhiteSpace($GlobalCodexSkillsPath)) {
+        throw "Global Codex skills path is required."
     }
 
-    Invoke-RequiredCommand -Command $psExe -Arguments $args
+    if (-not (Test-Path -LiteralPath $GlobalCodexSkillsPath -PathType Container)) {
+        New-Item -ItemType Directory -Path $GlobalCodexSkillsPath -Force | Out-Null
+    }
 
-    Write-ColorHost 'SUCCESS' "Codex refresh complete."
+    Write-ColorHost 'INFO' "Refreshing Codex skills into repo-local and global runtime locations..."
+
+    $psExe = (Get-Process -Id $PID).Path
+    $pythonExe = (Get-Command python -ErrorAction Stop).Source
+    $tempExportRoot = Join-Path ([System.IO.Path]::GetTempPath()) ("orchestra-runtime-export-" + [System.Guid]::NewGuid().ToString("N"))
+    $tempDeleted = $false
+
+    try {
+        New-Item -ItemType Directory -Path $tempExportRoot -Force | Out-Null
+        Write-ColorHost 'INFO' "Temporary export staging: $tempExportRoot"
+
+        Invoke-RequiredCommand -Command $psExe -Arguments @(
+            '-ExecutionPolicy', 'Bypass', '-File', $codexExporter,
+            '-TargetRoot', $tempExportRoot
+        )
+        Invoke-RequiredCommand -Command $pythonExe -Arguments @(
+            $codexValidator, '--export-root', $tempExportRoot
+        )
+
+        $stagedSkillsDir = Join-Path $tempExportRoot 'skills'
+        $localSkillsDir = Join-Path $resolvedCodexRepoPath '.agents\skills'
+
+        Invoke-RequiredCommand -Command $psExe -Arguments @(
+            '-ExecutionPolicy', 'Bypass', '-File', $codexInstaller,
+            '-TargetRepo', $resolvedCodexRepoPath,
+            '-SourceSkillsDir', $stagedSkillsDir,
+            '-Force'
+        )
+
+        Copy-SkillTree -SourceSkillsDir $stagedSkillsDir -DestinationSkillsDir $GlobalCodexSkillsPath | Out-Host
+
+        $localParityIssues = Compare-DirectoryParity -SourceRoot $stagedSkillsDir -DestinationRoot $localSkillsDir
+        if ($localParityIssues.Count -gt 0) {
+            $localParityIssues | ForEach-Object { Write-ColorHost 'ERROR' $_ }
+            throw "Repo-local Codex runtime parity check failed."
+        }
+        Write-ColorHost 'SUCCESS' "Repo-local Codex runtime parity: MATCH"
+
+        $globalStageCompare = Join-Path $tempExportRoot 'global-compare'
+        New-Item -ItemType Directory -Path $globalStageCompare -Force | Out-Null
+        Get-ChildItem -LiteralPath $stagedSkillsDir -Directory | ForEach-Object {
+            Copy-Item -LiteralPath (Join-Path $GlobalCodexSkillsPath $_.Name) -Destination (Join-Path $globalStageCompare $_.Name) -Recurse -Force
+        }
+
+        $globalParityIssues = Compare-DirectoryParity -SourceRoot $stagedSkillsDir -DestinationRoot $globalStageCompare
+        if ($globalParityIssues.Count -gt 0) {
+            $globalParityIssues | ForEach-Object { Write-ColorHost 'ERROR' $_ }
+            throw "Global Codex runtime parity check failed."
+        }
+        Write-ColorHost 'SUCCESS' "Global Codex runtime parity: MATCH"
+
+        if ($KeepTempExport) {
+            Write-ColorHost 'INFO' "Temporary export preserved at: $tempExportRoot"
+        }
+        else {
+            Remove-Item -LiteralPath $tempExportRoot -Recurse -Force
+            $tempDeleted = $true
+            Write-ColorHost 'SUCCESS' "Temporary export deleted."
+        }
+
+        Write-ColorHost 'SUCCESS' "Codex refresh complete."
+    }
+    finally {
+        if (-not $KeepTempExport -and -not $tempDeleted -and (Test-Path -LiteralPath $tempExportRoot -PathType Container)) {
+            Remove-Item -LiteralPath $tempExportRoot -Recurse -Force
+        }
+    }
 }
 
 Invoke-PreRefreshValidation

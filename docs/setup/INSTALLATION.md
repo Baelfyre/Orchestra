@@ -67,6 +67,8 @@ powershell -ExecutionPolicy Bypass -File .\scripts\refresh-installed-integration
 
 Do not commit `.agents/` unless the repo intentionally shares those Codex skill files. For local-only setup, add `.agents/` to `.git/info/exclude`.
 
+The Codex refresh path now uses a temporary staging export by default. It reads tracked repository source, exports into a temp directory outside the repo, validates the staged export, installs from that staged copy, verifies parity, and then removes the temp directory. Generated runtime output is not written into tracked export folders during a normal refresh.
+
 ## 3. Claude Code Plugin Setup
 
 For Claude Code, you can install the Orchestra plugin directly using its marketplace.
@@ -123,6 +125,21 @@ powershell -ExecutionPolicy Bypass -File .\scripts\refresh-installed-integration
 powershell -ExecutionPolicy Bypass -File .\scripts\refresh-installed-integrations.ps1 -Target Codex -CodexRepoPath "C:\path\to\your\project"
 ```
 *(Marketplace installation is the default Codex setup.)*
+
+Default Codex refresh behavior:
+
+- export to a temporary staging directory
+- validate the staged export
+- install staged skills into repo-local `.agents/skills`
+- install staged skills into the global Codex skills directory
+- compare file lists and SHA-256 hashes against the staged export
+- delete the temporary staging directory after a successful refresh
+
+Keep the staged export only when debugging:
+
+```sh
+powershell -ExecutionPolicy Bypass -File .\scripts\refresh-installed-integrations.ps1 -Target Codex -KeepTempExport
+```
 
 ## Check for Updates
 
