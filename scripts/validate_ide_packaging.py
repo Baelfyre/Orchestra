@@ -17,6 +17,13 @@ PACKAGING_SCAFFOLDS = {
         "workspace-instructions.template.md",
         "package.json",
     ),
+    "jetbrains": (
+        "README.md",
+        "install-guide.md",
+        "workspace-instructions.template.md",
+        "plugin.xml",
+        "package.json",
+    ),
     "windsurf": (
         "README.md",
         "install-guide.md",
@@ -99,6 +106,23 @@ def validate_packaging_scaffold(repo_root: Path | str) -> list[str]:
             AdapterFactory.create(adapter_name, root)
         except ValueError as exc:
             errors.append(f"AdapterFactory cannot build '{adapter_name}': {exc}")
+
+        if adapter_name == "jetbrains":
+            plugin_path = adapter_dir / "plugin.xml"
+            if plugin_path.is_file():
+                plugin_text = plugin_path.read_text(encoding="utf-8")
+                if "<idea-plugin>" not in plugin_text or "<id>com.baelfyre.orchestra.scaffold</id>" not in plugin_text:
+                    errors.append("Invalid basic JetBrains plugin scaffold structure in adapters/jetbrains/plugin.xml")
+                forbidden_hits = [
+                    marker
+                    for marker in ("routing", "governance", "execution", "manifest parsing", "audit")
+                    if marker in plugin_text.lower()
+                ]
+                if forbidden_hits:
+                    errors.append(
+                        "JetBrains plugin scaffold mentions core-owned responsibilities in plugin.xml: "
+                        + ", ".join(forbidden_hits)
+                    )
 
     return errors
 

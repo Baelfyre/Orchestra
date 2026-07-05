@@ -43,7 +43,9 @@ The repository already had adapter-specific validation and export logic spread a
 ## Current packaging boundary
 
 - Cursor, Windsurf, and VS Code now have scaffold-only packaging folders under `adapters/`.
+- JetBrains now has a scaffold-only packaging folder under `adapters/jetbrains/`.
 - Their package manifests point back to the shared runtime adapter classes.
+- JetBrains uses `plugin.xml` plus scaffold metadata that still points back to the shared runtime adapter.
 - Packaging validation checks required files, JSON manifests, and runtime-adapter references.
 - Packaging does not own routing, governance, execution, manifest parsing, or audit behavior.
 
@@ -53,4 +55,5 @@ The repository already had adapter-specific validation and export logic spread a
 - PowerShell installers and Markdown host guides remain in place and unchanged unless they need runtime data.
 - Runtime execution still returns orchestration decisions, not full host-native execution side effects.
 - Marketplace publication remains deferred for Cursor, Windsurf, and VS Code.
-- JetBrains, Zed, and Neovim packaging remain out of scope for this branch.
+- JetBrains marketplace publication remains deferred.
+- Zed and Neovim packaging remain out of scope for this branch.

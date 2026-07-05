@@ -4,6 +4,7 @@ Adapters bridge the Markdown skills into tool-specific instruction formats. They
 
 - [Codex](codex/README.md)
 - [Cursor packaging scaffold](cursor/README.md)
+- [JetBrains packaging scaffold](jetbrains/README.md)
 - [Windsurf packaging scaffold](windsurf/README.md)
 - [VS Code AI workflows](vscode/README.md)
 - [Antigravity](antigravity/README.md)

@@ -168,7 +168,7 @@ Orchestra can be used across different AI-assisted development environments, but
 | Cursor                    | Scaffold-only packaging plus repo instructions | Uses a scaffold package manifest and workspace instructions that point at the shared runtime adapter | Use `adapters/cursor` scaffolding, not marketplace publication |
 | Windsurf                  | Scaffold-only packaging plus repo instructions | Uses a scaffold package manifest and workspace instructions that point at the shared runtime adapter | Use `adapters/windsurf` scaffolding, not marketplace publication |
 | VS Code                   | Scaffold-only packaging plus repo instructions | Uses a scaffold package manifest and extension or workspace instructions that point at the shared runtime adapter | Use `adapters/vscode` scaffolding, not full skill folders |
-| IntelliJ / JetBrains IDEs | Per plugin or per project instructions | Depends on JetBrains AI Assistant, Copilot, Junie, or similar plugins | Use instruction files or project docs               |
+| IntelliJ / JetBrains IDEs | Scaffold-only packaging plus project instructions | Uses a scaffold plugin surface and project instructions that point at the shared runtime adapter | Use `adapters/jetbrains` scaffolding, not marketplace publication |
 | Other AI coding tools     |                          Tool-specific | Usually reads repo instructions, rules, or prompt files               | Adapt Orchestra as project instructions             |
 
 ---
@@ -398,6 +398,8 @@ Recommended setup:
 * If the guidance should be shared with contributors, document it in the repo.
 * If it is only for local use, keep it outside Git tracking.
 
+The repository now includes scaffold-only JetBrains packaging metadata in `adapters/jetbrains/`. It binds the JetBrains packaging surface to the shared `JetBrainsAdapter` runtime contract but does not publish a JetBrains Marketplace plugin yet.
+
 Optional shared project file:
 
 ```text
@@ -414,6 +416,13 @@ Preserve existing project structure.
 Validate before summarizing.
 Report changed files, validation results, remaining risks, and next recommended step.
 ```
+
+JetBrains-specific scaffold files in this phase:
+
+- `adapters/jetbrains/plugin.xml`
+- `adapters/jetbrains/package.json`
+- `adapters/jetbrains/install-guide.md`
+- `adapters/jetbrains/workspace-instructions.template.md`
 
 ---
 

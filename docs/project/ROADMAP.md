@@ -3,7 +3,7 @@
 - [ ] Package for a future supported skill marketplace.
 - [ ] Expand the runtime core beyond validation and adapter contracts into more host-native execution paths.
 - [ ] Promote Cursor, Windsurf, and VS Code packaging scaffolds into publishable marketplace or extension distributions.
-- [ ] Keep JetBrains packaging separate from generic editor packaging because IntelliJ Platform distribution is a different ecosystem.
+- [ ] Promote the JetBrains scaffold into an IntelliJ Platform build and distribution flow separately from the generic editor packaging branch.
 - [ ] Keep Zed and Neovim packaging deferred until after the first editor-packaging branch is stable.
 - [ ] Add an optional cross-platform CLI validator.
 - [ ] Add an optional local-model retrieval index.
