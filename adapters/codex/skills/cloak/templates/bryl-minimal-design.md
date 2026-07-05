@@ -9,7 +9,7 @@ Based on bryllim/bryl-minimal-design, MIT License, Copyright (c) 2026 Bryl Lim.
 **License:** MIT
 
 ## Purpose
-Apply the bryl-minimal design language â€” a monochrome, typography-driven minimal aesthetic with halftone dot textures, pixel-font display headings, tiny uppercase monospace labels, soft large-radius cards, and full light/dark theming. Use this whenever building or restyling any web UI (portfolio, landing page, blog, dashboard, docs site, app screen, component) where the user wants a clean, minimal, monochrome, editorial, or terminal-inspired look. Works with any stack (plain HTML/CSS, Tailwind, React, Vue, etc.) â€” it describes the aesthetic in values, not code.
+Apply the bryl-minimal design language — a monochrome, typography-driven minimal aesthetic with halftone dot textures, pixel-font display headings, tiny uppercase monospace labels, soft large-radius cards, and full light/dark theming. Use this whenever building or restyling any web UI (portfolio, landing page, blog, dashboard, docs site, app screen, component) where the user wants a clean, minimal, monochrome, editorial, or terminal-inspired look. Works with any stack (plain HTML/CSS, Tailwind, React, Vue, etc.) — it describes the aesthetic in values, not code.
 
 ## Activation keywords
 Use when: User asks for minimal, monochrome, editorial, terminal-inspired, or bryl-minimal UI.

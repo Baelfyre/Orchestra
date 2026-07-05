@@ -29,29 +29,6 @@ function Read-Utf8TextFile {
     return [System.IO.File]::ReadAllText($Path, [System.Text.UTF8Encoding]::new($false))
 }
 
-function Copy-RelativeMarkdownFile {
-    param(
-        [string]$SourceRoot,
-        [string]$TargetRoot,
-        [string]$RelativePath
-    )
-
-    $sourceFile = Join-Path $SourceRoot $RelativePath
-    if (-not (Test-Path -LiteralPath $sourceFile -PathType Leaf)) {
-        return
-    }
-
-    $targetFile = Join-Path $TargetRoot $RelativePath
-    $targetFileDir = Split-Path -Parent $targetFile
-
-    if (-not (Test-Path -LiteralPath $targetFileDir -PathType Container)) {
-        New-Item -ItemType Directory -Path $targetFileDir | Out-Null
-    }
-
-    $content = Read-Utf8TextFile -Path $sourceFile
-    Write-Utf8NoBomLfFile -Path $targetFile -Content $content
-}
-
 $targetSkillsDir = Join-Path $TargetRoot "skills"
 if (-not (Test-Path $targetSkillsDir)) {
     New-Item -ItemType Directory -Path $targetSkillsDir | Out-Null
@@ -88,11 +65,9 @@ foreach ($skill in $skills) {
     $bodyMatch = [regex]::Match($content, '(?s)^---.*?---(.*)$')
     $body = if ($bodyMatch.Success) { $bodyMatch.Groups[1].Value } else { "" }
 
-    # Package-level Conductor runs without the repo root beside the skill.
+    # Ensure conductor refers to local ROUTING_MAP.md instead of ../../
     if ($skill -eq 'conductor') {
-        $body = $body -replace '\.\./\.\./docs/', 'docs/'
-        $body = $body -replace '\.\./\.\./SKILL_INDEX\.md', 'SKILL_INDEX.md'
-        $body = $body -replace '\.\./\.\./ROUTING_MAP\.md', 'ROUTING_MAP.md'
+        $body = $body -replace '\.\./\.\./ROUTING_MAP\.md', './ROUTING_MAP.md'
     }
 
     $newFrontmatter = @"
@@ -120,24 +95,13 @@ description: $desc
         Write-Utf8NoBomLfFile -Path $targetSupportFile -Content $supportContent
     }
 
-    # 3. For conductor, copy root router docs needed by progressive disclosure.
+    # 3. For conductor, copy ROUTING_MAP.md
     if ($skill -eq 'conductor') {
-        foreach ($rootDoc in @("ROUTING_MAP.md", "SKILL_INDEX.md")) {
-            $sourceDoc = Join-Path $SourceRoot $rootDoc
-            $targetDoc = Join-Path $targetDir $rootDoc
-            if (Test-Path -LiteralPath $sourceDoc -PathType Leaf) {
-                $docContent = Read-Utf8TextFile -Path $sourceDoc
-                Write-Utf8NoBomLfFile -Path $targetDoc -Content $docContent
-            }
-        }
-
-        foreach ($supportDoc in @(
-            "docs\routing\EXECUTION_MODES_POLICY.md",
-            "docs\routing\CONTEXT_RETRIEVAL_RULES.md",
-            "docs\routing\MINIMAL_PROMPT_FORMAT.md",
-            "docs\governance\GOVERNANCE_LAYER.md"
-        )) {
-            Copy-RelativeMarkdownFile -SourceRoot $SourceRoot -TargetRoot $targetDir -RelativePath $supportDoc
+        $sourceRouting = Join-Path $SourceRoot "ROUTING_MAP.md"
+        $targetRouting = Join-Path $targetDir "ROUTING_MAP.md"
+        if (Test-Path $sourceRouting) {
+            $routingContent = Read-Utf8TextFile -Path $sourceRouting
+            Write-Utf8NoBomLfFile -Path $targetRouting -Content $routingContent
         }
     }
 }
