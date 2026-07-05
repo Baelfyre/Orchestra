@@ -5,6 +5,7 @@ This changelog tracks the repository history using git tags, merge history, and 
 ## Unreleased
 
 ### Added
+- Added scaffold-only JetBrains packaging files and metadata that point to the existing `JetBrainsAdapter` runtime contract without introducing marketplace publication.
 - Added scaffold-only packaging folders and package manifests for Cursor, Windsurf, and VS Code that point to the shared runtime adapters without introducing marketplace publication.
 - Added contract-ready runtime adapters for Cursor, Windsurf, VS Code, JetBrains, Zed, and Neovim without introducing marketplace packaging.
 - Added `orchestra_runtime/` runtime core models, services, factories, repositories, and thin Codex, Antigravity, and Claude Code adapters.

@@ -1,0 +1,10 @@
+<idea-plugin>
+  <id>com.baelfyre.orchestra.scaffold</id>
+  <name>Orchestra JetBrains Scaffold</name>
+  <vendor>Baelfyre</vendor>
+  <version>0.0.0</version>
+  <description>Scaffold-only JetBrains packaging metadata for Orchestra runtime adapter integration.</description>
+  <depends>com.intellij.modules.platform</depends>
+  <extensions defaultExtensionNs="com.intellij">
+  </extensions>
+</idea-plugin>

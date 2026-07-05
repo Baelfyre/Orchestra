@@ -1,0 +1,22 @@
+{
+  "name": "orchestra-jetbrains-scaffold",
+  "displayName": "Orchestra JetBrains Scaffold",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Scaffold-only JetBrains packaging manifest for Orchestra runtime adapter integration.",
+  "orchestra": {
+    "host": "jetbrains",
+    "runtime_adapter": "jetbrains",
+    "runtime_package": "orchestra_runtime",
+    "scaffold_only": true,
+    "install_guide": "install-guide.md",
+    "entry_templates": [
+      "workspace-instructions.template.md"
+    ],
+    "deferred_items": [
+      "marketplace-publication",
+      "signed-plugin-distribution",
+      "intellij-platform-build"
+    ]
+  }
+}

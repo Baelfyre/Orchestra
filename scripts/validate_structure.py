@@ -32,7 +32,7 @@ def main():
         'assets/logo/orchestra.ico'
     ]
     
-    adapters = ['codex','cursor','windsurf','vscode','antigravity','claude-code','local-ai']
+    adapters = ['codex','cursor','jetbrains','windsurf','vscode','antigravity','claude-code','local-ai']
     
     templates = [
         'generic-skill-template.md','review-output-template.md','audit-output-template.md',
