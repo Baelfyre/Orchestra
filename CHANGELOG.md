@@ -5,7 +5,8 @@ This changelog tracks the repository history using git tags, merge history, and 
 ## Unreleased
 
 ### Added
-- Added Claude Code plugin compatibility files: `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `scripts/validate_claude_plugin.py`, and updated `docs/setup/INSTALLATION.md` with Claude Code installation instructions.
+- Added Claude Code plugin compatibility files: `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `docs/setup/INSTALLATION.md` with Claude Code installation instructions.
+- Added validation script for Claude Code plugin: `scripts/validate_claude_plugin.py`
 
 
 
