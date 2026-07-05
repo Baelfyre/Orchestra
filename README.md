@@ -90,7 +90,7 @@ flowchart LR
     Arbiter -.-> Revision
 ```
 
-Runtime-core-first refactor notes live in [docs/project/OOP_RUNTIME_ARCHITECTURE.md](docs/project/OOP_RUNTIME_ARCHITECTURE.md). The shared `orchestra_runtime/` layer owns manifest parsing, skill loading, routing, governance validation, execution flow, and audit logging, while Codex, Antigravity, and Claude Code remain thin adapters.
+Runtime-core-first refactor notes live in [docs/project/OOP_RUNTIME_ARCHITECTURE.md](docs/project/OOP_RUNTIME_ARCHITECTURE.md). The shared `orchestra_runtime/` layer owns manifest parsing, skill loading, routing, governance validation, execution flow, and audit logging, while host adapters stay thin. The versioned Portable Runtime Adapter Protocol is documented in [docs/project/PORTABLE_ADAPTER_PROTOCOL.md](docs/project/PORTABLE_ADAPTER_PROTOCOL.md).
 
 ---
 
@@ -168,6 +168,7 @@ Orchestra can be used across different AI-assisted development environments, but
 | Cursor                    | Scaffold-only packaging plus repo instructions | Uses a scaffold package manifest and workspace instructions that point at the shared runtime adapter | Use `adapters/cursor` scaffolding, not marketplace publication |
 | Windsurf                  | Scaffold-only packaging plus repo instructions | Uses a scaffold package manifest and workspace instructions that point at the shared runtime adapter | Use `adapters/windsurf` scaffolding, not marketplace publication |
 | VS Code                   | Scaffold-only packaging plus repo instructions | Uses a scaffold package manifest and extension or workspace instructions that point at the shared runtime adapter | Use `adapters/vscode` scaffolding, not full skill folders |
+| VSCodium                  | Shared VS Code scaffold compatibility | Reuses the `vscode` runtime adapter and packaging metadata through PRAP compatibility | Use the VS Code scaffold and runtime adapter |
 | IntelliJ / JetBrains IDEs | Scaffold-only packaging plus project instructions | Uses a scaffold plugin surface and project instructions that point at the shared runtime adapter | Use `adapters/jetbrains` scaffolding, not marketplace publication |
 | Zed                       | Scaffold-only packaging plus repo instructions | Uses a scaffold package manifest and workspace instructions that point at the shared runtime adapter | Use `adapters/zed` scaffolding, not marketplace publication |
 | Neovim                    | Scaffold-only packaging plus repo instructions | Uses a scaffold package manifest and local editor instructions that point at the shared runtime adapter | Use `adapters/neovim` scaffolding, not marketplace publication |

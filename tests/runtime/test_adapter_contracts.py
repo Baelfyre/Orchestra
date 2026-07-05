@@ -59,21 +59,27 @@ def test_adapter_contracts(adapter_name: str, prompt: str):
 
 
 @pytest.mark.parametrize(
-    ("adapter_name", "prompt", "expected_command"),
+    ("adapter_name", "prompt", "expected_command", "expected_adapter_name"),
     (
-        ("cursor", "@Orchestra review docs", "conductor"),
-        ("windsurf", "/conductor review docs", "conductor"),
-        ("vscode", "orchestra: review docs", "conductor"),
-        ("jetbrains", "Use Conductor to review docs", "conductor"),
-        ("zed", "@Orchestra review docs", "conductor"),
-        ("neovim", ":Orchestra review docs", "conductor"),
+        ("cursor", "@Orchestra review docs", "conductor", "cursor"),
+        ("windsurf", "/conductor review docs", "conductor", "windsurf"),
+        ("vscode", "orchestra: review docs", "conductor", "vscode"),
+        ("vscodium", "orchestra: review docs", "conductor", "vscode"),
+        ("jetbrains", "Use Conductor to review docs", "conductor", "jetbrains"),
+        ("zed", "@Orchestra review docs", "conductor", "zed"),
+        ("neovim", ":Orchestra review docs", "conductor", "neovim"),
     ),
 )
-def test_new_adapter_command_translation(adapter_name: str, prompt: str, expected_command: str):
+def test_new_adapter_command_translation(
+    adapter_name: str,
+    prompt: str,
+    expected_command: str,
+    expected_adapter_name: str,
+):
     repo_root = Path(__file__).resolve().parents[2]
     adapter = AdapterFactory.create(adapter_name, repo_root)
 
     command = adapter.parse_command(prompt)
 
-    assert command.adapter_name == adapter_name
+    assert command.adapter_name == expected_adapter_name
     assert command.name == expected_command

@@ -5,6 +5,9 @@ This changelog tracks the repository history using git tags, merge history, and 
 ## Unreleased
 
 ### Added
+- Added `orchestra_runtime/protocol/` with the Portable Runtime Adapter Protocol (`PRAP v1`), including versioned adapter metadata, capabilities, compatibility records, and protocol validation.
+- Added runtime protocol tests covering metadata completeness, capability validation, compatibility matrix coverage, VSCodium compatibility, and unknown adapter rejection.
+- Added `docs/project/PORTABLE_ADAPTER_PROTOCOL.md` to document protocol flow, ownership boundaries, compatibility guarantees, and future extension points.
 - Added scaffold-only Zed and Neovim packaging files and metadata that point to the existing `ZedAdapter` and `NeovimAdapter` runtime contracts without introducing marketplace publication.
 - Added scaffold-only JetBrains packaging files and metadata that point to the existing `JetBrainsAdapter` runtime contract without introducing marketplace publication.
 - Added scaffold-only packaging folders and package manifests for Cursor, Windsurf, and VS Code that point to the shared runtime adapters without introducing marketplace publication.
@@ -16,6 +19,7 @@ This changelog tracks the repository history using git tags, merge history, and 
 - Added validation script for Claude Code plugin: `scripts/validate_claude_plugin.py`
 
 ### Fixed
+- Extended IDE packaging validation so runtime adapter scaffolds are checked against PRAP metadata and packaging/runtime adapter alignment.
 - Added IDE packaging validation so scaffold manifests, required files, and runtime adapter references are checked centrally.
 - Refactored manifest, skill, and adapter validation scripts to use the shared runtime repositories and registry instead of duplicating core loading logic.
 - Fixed Claude Code marketplace source path from "." to "./" and bumped Claude plugin metadata to 1.0.1 so Claude Code can detect and refresh the plugin correctly.

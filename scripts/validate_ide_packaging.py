@@ -8,6 +8,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from orchestra_runtime.factories import AdapterFactory
+from orchestra_runtime.protocol import ProtocolValidator
 
 
 PACKAGING_SCAFFOLDS = {
@@ -115,9 +116,12 @@ def validate_packaging_scaffold(repo_root: Path | str) -> list[str]:
                     )
 
         try:
-            AdapterFactory.create(adapter_name, root)
+            adapter = AdapterFactory.create(adapter_name, root)
         except ValueError as exc:
             errors.append(f"AdapterFactory cannot build '{adapter_name}': {exc}")
+        else:
+            errors.extend(ProtocolValidator.validate_adapter(adapter))
+            errors.extend(ProtocolValidator.validate_packaging_manifest(adapter_name, orchestra_block, root))
 
         if adapter_name == "jetbrains":
             plugin_path = adapter_dir / "plugin.xml"
