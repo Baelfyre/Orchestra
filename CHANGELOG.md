@@ -21,6 +21,8 @@ Portable Runtime is the first Orchestra release that normalizes the repository a
 - Added `scripts/check_for_updates.py` for notification-only release checks against the latest GitHub release using local manifest and adapter metadata.
 - Added update-check metadata defaults to the root manifest, Claude plugin manifest, and scaffold adapter package metadata.
 - Added runtime tests covering current-version, newer-release, invalid-version, unavailable-GitHub, and disabled-update-check behavior.
+- Added a temp-staged Codex runtime refresh pipeline that exports to a temporary directory, validates staged output, installs into repo-local and global Codex runtime locations, verifies file-list and SHA-256 parity, and deletes staged output by default.
+- Added reusable PowerShell directory parity helpers for recursive file-list and SHA-256 comparison across staged and installed runtime surfaces.
 
 ### Added
 - Added `orchestra_runtime/protocol/` with the Portable Runtime Adapter Protocol (`PRAP v1`), including versioned adapter metadata, capabilities, compatibility records, and protocol validation.
@@ -41,6 +43,7 @@ Portable Runtime is the first Orchestra release that normalizes the repository a
 - Added IDE packaging validation so scaffold manifests, required files, and runtime adapter references are checked centrally.
 - Refactored manifest, skill, and adapter validation scripts to use the shared runtime repositories and registry instead of duplicating core loading logic.
 - Fixed Claude Code marketplace source path from "." to "./" and aligned Claude plugin metadata with the release baseline so Claude Code can detect and refresh the plugin correctly.
+- Fixed Codex refresh so normal installs no longer dirty tracked export folders during runtime refreshes.
 
 
 

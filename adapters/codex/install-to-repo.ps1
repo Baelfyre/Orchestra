@@ -1,12 +1,13 @@
 param(
     [Parameter(Mandatory=$true)]
     [string]$TargetRepo,
+
+    [string]$SourceSkillsDir = (Join-Path $PSScriptRoot "skills"),
     
     [switch]$Force
 )
 
 $targetAgentsDir = Join-Path $TargetRepo ".agents\skills"
-$sourceSkillsDir = Join-Path $PSScriptRoot "skills"
 
 if (-not (Test-Path $sourceSkillsDir)) {
     Write-Error "Source skills directory not found: $sourceSkillsDir. Please run export-codex-skills.ps1 first."

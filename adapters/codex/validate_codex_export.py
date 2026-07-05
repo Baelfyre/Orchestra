@@ -1,4 +1,5 @@
 import json
+import argparse
 import re
 import sys
 from pathlib import Path
@@ -170,10 +171,28 @@ def validate_tracked_export_parity(root):
 
     return errors
 
-def main():
+
+def parse_args(argv=None):
+    parser = argparse.ArgumentParser(description="Validate Codex export output.")
+    parser.add_argument(
+        "--export-root",
+        type=Path,
+        default=None,
+        help="Root directory containing the exported Codex skills folder.",
+    )
+    parser.add_argument(
+        "--skip-tracked-export-parity",
+        action="store_true",
+        help="Skip tracked export parity checks.",
+    )
+    return parser.parse_args(argv)
+
+def main(argv=None):
+    args = parse_args(argv)
     script_dir = Path(__file__).resolve().parent
-    codex_skills_dir = script_dir / "skills"
     root = script_dir.parent.parent
+    export_root = args.export_root.resolve() if args.export_root else script_dir
+    codex_skills_dir = export_root / "skills"
     
     manifest_path = root / "plugin.json"
     if not manifest_path.is_file():
@@ -230,7 +249,8 @@ def main():
             print_error(f"Exported conductor references missing skill: {required_skill}")
             errors += 1
 
-    errors += validate_tracked_export_parity(root)
+    if not args.skip_tracked_export_parity and export_root == script_dir.resolve():
+        errors += validate_tracked_export_parity(root)
                 
     if errors > 0:
         print_error(f"Codex export validation failed with {errors} errors.")

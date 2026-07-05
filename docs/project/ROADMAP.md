@@ -1,6 +1,7 @@
 # Roadmap
 
 - [ ] Add host-specific update commands after the shared notification-only update check stabilizes.
+- [ ] Add host-specific update commands on top of the reproducible temp-staged runtime refresh pipeline.
 - [ ] Publish an Adapter SDK with base classes, helper utilities, templates, and a reference implementation.
 - [ ] Publish a contributor guide covering adapter construction, testing requirements, packaging conventions, and governance expectations.
 - [ ] Add a `PRAP v1 Compatible` certification path with a validation checklist and compliance requirements.
