@@ -2,7 +2,7 @@
   <img src="./assets/readme/orchestra-governance-banner.svg" alt="Orchestra Hero Banner" width="100%" />
 
   <p>
-    <strong>Project-agnostic governance and orchestration framework for AI-assisted development.</strong>
+    <strong>Portable orchestration runtime for AI-assisted software development.</strong>
   </p>
 
   <p>
@@ -31,9 +31,41 @@
 | Execution | Specialist Skills | Performs focused architecture, documentation, QA, security, or design work |
 | Execution | Ponytail | Implementation, code navigation, and safe edits |
 
+## What Orchestra Is
+
+Orchestra is a portable orchestration runtime for AI-assisted software development.
+
+Instead of relying on one large prompt and conversational memory alone, Orchestra gives AI-assisted work a reusable structure:
+
+- specialized responsibilities
+- governance rules
+- routing logic
+- shared runtime behavior
+- reusable workflows across hosts
+
+This makes long-running development work more consistent across multiple iterations, AI models, IDEs, and developer tools.
+
 ## Core Concept
 
-Orchestra uses freedom-first, need-based governance. Users can ideate freely. Governance review is invoked when the task requires alignment review, implementation readiness, audit, risk review, or release validation. The governance layer does not assume what rules apply to every project. Before review, The Steward and The Governor establish the Governance Basis of Review based on the active operating mode and supplied context. If the scope is unclear and review is required, governance returns `REVISION_REQUIRED` instead of assuming.
+Orchestra is a portable orchestration runtime for AI-assisted software development.
+
+Rather than relying on large, monolithic prompts, Orchestra provides a structured and standardized framework that guides AI models through specialized responsibilities, governance rules, and reusable workflows.
+
+It is designed to reduce context drift during long-running development by preserving project structure, architectural decisions, and standardized engineering practices across multiple iterations, AI models, IDEs, and developer tools.
+
+Instead of depending on conversational memory alone, Orchestra maintains consistency through reusable specialist skills, governance, routing, and a shared runtime, helping developers produce more predictable, maintainable, and auditable software.
+
+## Why Use It
+
+Orchestra is useful when AI-assisted development starts to drift, repeat itself, or lose architectural context over time.
+
+It helps developers:
+
+- keep architecture, governance, and implementation responsibilities separate
+- preserve consistent engineering standards across repeated AI sessions
+- route work to the right specialist behavior instead of overloading one generic prompt
+- reduce prompt sprawl by centralizing shared runtime and adapter behavior
+- make results easier to review, validate, and audit
 
 ## Open Source Philosophy
 
