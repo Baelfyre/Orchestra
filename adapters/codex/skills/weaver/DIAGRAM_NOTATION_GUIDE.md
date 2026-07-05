@@ -61,7 +61,7 @@ This guide provides a token-efficient, practical reference for Weaver to ensure 
 - Maintain consistent spacing and flow direction (e.g., Top-Down or Left-Right).
 
 ## ERD Notation
-- **Crowâ€™s foot**: Use for relationship cardinality (1:1, 1:N, M:N).
+- **Crow’s foot**: Use for relationship cardinality (1:1, 1:N, M:N).
 - Display primary keys (PK) and foreign keys (FK) distinctly.
 
 ## UML Class Diagram Notation
