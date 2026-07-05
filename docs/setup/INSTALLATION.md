@@ -124,6 +124,20 @@ powershell -ExecutionPolicy Bypass -File .\scripts\refresh-installed-integration
 ```
 *(Marketplace installation is the default Codex setup.)*
 
+## Check for Updates
+
+Orchestra update checks are notify-only. They do not silently modify installed plugin files.
+
+Run:
+
+```sh
+python .\scripts\check_for_updates.py
+```
+
+The script reads local version metadata from the root manifest, Claude plugin manifest, and adapter package manifests where applicable, then compares it to the latest GitHub release.
+
+If a newer release exists, use your host-specific refresh or reinstall flow to update.
+
 ## Verify
 
 Run the structure validator (`.\scripts\validate-structure.ps1`) and confirm that normal QA routes to Overseer, normal security/privacy review routes to Cipher, and Dagger remains gated.

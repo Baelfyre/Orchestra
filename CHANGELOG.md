@@ -15,6 +15,13 @@ Portable Runtime is the first Orchestra release that normalizes the repository a
 
 ## Pre-release Build History
 
+## Unreleased
+
+### Added
+- Added `scripts/check_for_updates.py` for notification-only release checks against the latest GitHub release using local manifest and adapter metadata.
+- Added update-check metadata defaults to the root manifest, Claude plugin manifest, and scaffold adapter package metadata.
+- Added runtime tests covering current-version, newer-release, invalid-version, unavailable-GitHub, and disabled-update-check behavior.
+
 ### Added
 - Added `orchestra_runtime/protocol/` with the Portable Runtime Adapter Protocol (`PRAP v1`), including versioned adapter metadata, capabilities, compatibility records, and protocol validation.
 - Added runtime protocol tests covering metadata completeness, capability validation, compatibility matrix coverage, VSCodium compatibility, and unknown adapter rejection.
