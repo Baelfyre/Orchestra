@@ -2,6 +2,14 @@ import os
 import json
 import glob
 import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from orchestra_runtime.factories import AdapterFactory
+from orchestra_runtime.repositories import ManifestRepository
 
 def check_file_exists(path):
     if not os.path.exists(path):
@@ -18,6 +26,9 @@ def main():
     workspace_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     plugin_json_path = os.path.join(workspace_root, '.claude-plugin', 'plugin.json')
     marketplace_json_path = os.path.join(workspace_root, '.claude-plugin', 'marketplace.json')
+    manifest_repository = ManifestRepository(workspace_root)
+    repo_manifest = manifest_repository.load_manifest()
+    claude_adapter = AdapterFactory.create('claude-code', workspace_root)
 
     success = True
     success &= check_file_exists(plugin_json_path)
@@ -67,6 +78,21 @@ def main():
             success = False
         else:
             print("PASS: Manifest version and marketplace plugin version match")
+
+    runtime_commands = set(claude_adapter.expose_commands())
+    manifest_commands = set(manifest_repository.load_commands())
+    if runtime_commands != manifest_commands:
+        print("FAIL: Claude Code adapter command surface drifted from plugin manifest")
+        success = False
+    else:
+        print("PASS: Claude Code adapter command surface matches plugin manifest")
+
+    context = claude_adapter.provide_context("Use Conductor for this task")
+    if context.adapter_name != "claude-code" or context.manifest_version != repo_manifest.get("version"):
+        print("FAIL: Claude Code adapter context payload is inconsistent with repository runtime metadata")
+        success = False
+    else:
+        print("PASS: Claude Code adapter context payload matches repository runtime metadata")
 
     # Check skills/*/SKILL.md
     skills_dir = os.path.join(workspace_root, 'skills')

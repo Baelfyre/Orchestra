@@ -1,17 +1,21 @@
 import os
 import json
 import datetime
+import sys
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from orchestra_runtime.repositories import ManifestRepository, SkillSourceRepository
 
 def get_project_root():
-    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    return str(PROJECT_ROOT)
 
 def get_aliases():
-    root = get_project_root()
-    alias_path = os.path.join(root, 'aliases.json')
-    if os.path.exists(alias_path):
-        with open(alias_path, 'r', encoding='utf-8') as f:
-            return json.load(f)
-    return {}
+    root = Path(get_project_root())
+    return ManifestRepository(root).load_aliases()
 
 def resolve_slug(slug):
     aliases = get_aliases()
@@ -40,30 +44,18 @@ def get_json_manifest(path=""):
     root = get_project_root()
     if not path:
         path = os.path.join(root, 'plugin.json')
+    manifest_repo = ManifestRepository(Path(path).parent if Path(path).name == "plugin.json" else Path(root))
+    if os.path.abspath(path) == os.path.join(root, 'plugin.json'):
+        return manifest_repo.load_manifest()
     if not os.path.exists(path):
         raise FileNotFoundError(f"Manifest file not found at: {path}")
     with open(path, 'r', encoding='utf-8') as f:
         return json.load(f)
 
 def parse_frontmatter(path):
-    import re
     if not os.path.exists(path):
         raise FileNotFoundError(f"File not found: {path}")
-    with open(path, 'r', encoding='utf-8') as f:
-        content = f.read()
-    
-    match = re.search(r'^---\s*(.*?)\s*---', content, re.MULTILINE | re.DOTALL)
-    if match:
-        frontmatter_text = match.group(1)
-        fields = {}
-        for line in frontmatter_text.splitlines():
-            m = re.match(r'^([^:]+):\s*(.*)$', line)
-            if m:
-                key = m.group(1).strip()
-                val = m.group(2).strip()
-                fields[key] = val
-        return fields
-    raise ValueError(f"Frontmatter not found in file: {path}")
+    return SkillSourceRepository.parse_frontmatter(Path(path))
 
 def test_workflow_locked():
     root = get_project_root()

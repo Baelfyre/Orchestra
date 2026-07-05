@@ -1,9 +1,13 @@
 import os
 import sys
 import re
+from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import helpers
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from orchestra_runtime.repositories import ManifestRepository, SkillSourceRepository
+from orchestra_runtime.services import SkillRegistry
 
 def main():
     root = helpers.get_project_root()
@@ -18,7 +22,10 @@ def main():
             else:
                 manifest_path = os.path.join(root, path_arg)
                 
+    repo_root = Path(root)
     manifest = helpers.get_json_manifest(manifest_path)
+    skill_registry = SkillRegistry(ManifestRepository(repo_root), SkillSourceRepository(repo_root))
+    registry_skills = {skill.slug: skill for skill in skill_registry.load_skills()}
     manifest_skills = manifest.get('skills', [])
     
     skills_dir = os.path.join(root, "skills")
@@ -58,6 +65,11 @@ def main():
             helpers.write_color_host('ERROR', f"Skill folder '{skill_name}' exists but is not listed in the manifest.")
             errors += 1
             continue
+
+        if skill_name not in registry_skills:
+            helpers.write_color_host('ERROR', f"Skill '{skill_name}' could not be loaded by the runtime registry.")
+            errors += 1
+            continue
             
         expected_skill_path = os.path.join(root, ms.get('skill_path', '').replace('/', os.sep))
         if not os.path.isfile(expected_skill_path):
@@ -71,6 +83,7 @@ def main():
             
         try:
             frontmatter = helpers.parse_frontmatter(skill_md_path)
+            runtime_skill = registry_skills[skill_name]
             fields = ["name","description","slug","role","primary_use","avoid_when","activation_level","depends_on","output_formats"]
             
             skill_output_formats = []
@@ -99,6 +112,12 @@ def main():
                     if str(val) != str(manifest_val):
                         helpers.write_color_host('ERROR', f"Mismatch in {skill_name} -> {field}. Frontmatter: '{val}', Manifest: '{manifest_val}'")
                         errors += 1
+
+            runtime_formats = ",".join(runtime_skill.output_formats)
+            manifest_formats = ",".join([str(x) for x in ms.get("output_formats", [])])
+            if runtime_formats != manifest_formats:
+                helpers.write_color_host('ERROR', f"Runtime registry output format drift for {skill_name}. Runtime: '{runtime_formats}', Manifest: '{manifest_formats}'")
+                errors += 1
                         
             # Check OUTPUT_FORMATS.md headings
             formats_path = os.path.join(skill_folder_path, "OUTPUT_FORMATS.md")
