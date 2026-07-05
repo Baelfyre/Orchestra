@@ -4,7 +4,7 @@
 - [ ] Expand the runtime core beyond validation and adapter contracts into more host-native execution paths.
 - [ ] Promote Cursor, Windsurf, and VS Code packaging scaffolds into publishable marketplace or extension distributions.
 - [ ] Promote the JetBrains scaffold into an IntelliJ Platform build and distribution flow separately from the generic editor packaging branch.
-- [ ] Keep Zed and Neovim packaging deferred until after the first editor-packaging branch is stable.
+- [ ] Promote Zed and Neovim scaffolds into host-native distribution or plugin flows after the editor packaging scaffolds stabilize.
 - [ ] Add an optional cross-platform CLI validator.
 - [ ] Add an optional local-model retrieval index.
 - [ ] Improve adapters as tool capabilities change.

@@ -169,6 +169,8 @@ Orchestra can be used across different AI-assisted development environments, but
 | Windsurf                  | Scaffold-only packaging plus repo instructions | Uses a scaffold package manifest and workspace instructions that point at the shared runtime adapter | Use `adapters/windsurf` scaffolding, not marketplace publication |
 | VS Code                   | Scaffold-only packaging plus repo instructions | Uses a scaffold package manifest and extension or workspace instructions that point at the shared runtime adapter | Use `adapters/vscode` scaffolding, not full skill folders |
 | IntelliJ / JetBrains IDEs | Scaffold-only packaging plus project instructions | Uses a scaffold plugin surface and project instructions that point at the shared runtime adapter | Use `adapters/jetbrains` scaffolding, not marketplace publication |
+| Zed                       | Scaffold-only packaging plus repo instructions | Uses a scaffold package manifest and workspace instructions that point at the shared runtime adapter | Use `adapters/zed` scaffolding, not marketplace publication |
+| Neovim                    | Scaffold-only packaging plus repo instructions | Uses a scaffold package manifest and local editor instructions that point at the shared runtime adapter | Use `adapters/neovim` scaffolding, not marketplace publication |
 | Other AI coding tools     |                          Tool-specific | Usually reads repo instructions, rules, or prompt files               | Adapt Orchestra as project instructions             |
 
 ---
@@ -379,6 +381,34 @@ Use the files under `adapters/windsurf/` to keep host-specific instructions and 
 - `adapters/windsurf/workspace-instructions.template.md`
 
 This branch does not publish a Windsurf marketplace package yet. Keep routing, governance, execution, manifest parsing, and audit behavior in the shared runtime core.
+
+---
+
+### Zed Setup
+
+Zed packaging in this phase is scaffold-only.
+
+Use the files under `adapters/zed/` to keep host-specific instructions and package metadata aligned to the shared `ZedAdapter` runtime contract:
+
+- `adapters/zed/package.json`
+- `adapters/zed/install-guide.md`
+- `adapters/zed/workspace-instructions.template.md`
+
+This branch does not publish a Zed marketplace package yet. Keep routing, governance, execution, manifest parsing, and audit behavior in the shared runtime core.
+
+---
+
+### Neovim Setup
+
+Neovim packaging in this phase is scaffold-only.
+
+Use the files under `adapters/neovim/` to keep host-specific instructions and package metadata aligned to the shared `NeovimAdapter` runtime contract:
+
+- `adapters/neovim/package.json`
+- `adapters/neovim/install-guide.md`
+- `adapters/neovim/workspace-instructions.template.md`
+
+This branch does not publish a Neovim registry package yet. Keep routing, governance, execution, manifest parsing, and audit behavior in the shared runtime core.
 
 ---
 

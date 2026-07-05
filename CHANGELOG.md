@@ -5,6 +5,7 @@ This changelog tracks the repository history using git tags, merge history, and 
 ## Unreleased
 
 ### Added
+- Added scaffold-only Zed and Neovim packaging files and metadata that point to the existing `ZedAdapter` and `NeovimAdapter` runtime contracts without introducing marketplace publication.
 - Added scaffold-only JetBrains packaging files and metadata that point to the existing `JetBrainsAdapter` runtime contract without introducing marketplace publication.
 - Added scaffold-only packaging folders and package manifests for Cursor, Windsurf, and VS Code that point to the shared runtime adapters without introducing marketplace publication.
 - Added contract-ready runtime adapters for Cursor, Windsurf, VS Code, JetBrains, Zed, and Neovim without introducing marketplace packaging.
