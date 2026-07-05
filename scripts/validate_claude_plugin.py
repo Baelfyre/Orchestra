@@ -22,7 +22,7 @@ def main():
     success = True
     success &= check_file_exists(plugin_json_path)
     success &= check_file_exists(marketplace_json_path)
-    
+
     if not success:
         sys.exit(1)
 
@@ -40,7 +40,7 @@ def main():
         success = False
     else:
         print("PASS: Marketplace name is 'orchestra'")
-        
+
     plugins = marketplace_data.get('plugins', [])
     orchestra_plugin = next((p for p in plugins if p.get('name') == 'orchestra'), None)
     if not orchestra_plugin:
@@ -48,7 +48,7 @@ def main():
         success = False
     else:
         print("PASS: Marketplace contains a plugin entry named 'orchestra'")
-        
+
         if orchestra_plugin.get('source') != '.':
             print("FAIL: Marketplace plugin source is not '.'")
             success = False
@@ -105,7 +105,7 @@ def main():
                         lines = f.readlines()
                         for i, line in enumerate(lines):
                             if '..' in line and '.claude-plugin' in file_path:
-                                # Naive check for escaping plugin root. 
+                                # Naive check for escaping plugin root.
                                 print(f"WARNING: Potential path escape '..' found in {file_path}:{i+1}")
                             if 'C:\\' in line or '/Users/' in line:
                                 print(f"WARNING: Potential hardcoded local repo path in {file_path}:{i+1}")
