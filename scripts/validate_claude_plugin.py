@@ -49,11 +49,18 @@ def main():
     else:
         print("PASS: Marketplace contains a plugin entry named 'orchestra'")
 
-        if orchestra_plugin.get('source') != '.':
-            print("FAIL: Marketplace plugin source is not '.'")
+        source = orchestra_plugin.get('source', '')
+        if source == '.':
+            print("FAIL: Marketplace plugin source cannot be '.' (must use './')")
+            success = False
+        elif '..' in source:
+            print("FAIL: Marketplace plugin source cannot contain '..'")
+            success = False
+        elif not source.startswith('./'):
+            print("FAIL: Marketplace plugin source must start with './'")
             success = False
         else:
-            print("PASS: Marketplace plugin source is '.'")
+            print("PASS: Marketplace plugin source is a valid relative path")
 
         if plugin_data.get('version') != orchestra_plugin.get('version'):
             print(f"FAIL: Version mismatch. Plugin: {plugin_data.get('version')}, Marketplace: {orchestra_plugin.get('version')}")

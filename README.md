@@ -161,6 +161,7 @@ Orchestra can be used across different AI-assisted development environments, but
 | Host / IDE                |                     Installation Scope | How Orchestra Loads                                                   | Recommended Setup                                   |
 | ------------------------- | -------------------------------------: | --------------------------------------------------------------------- | --------------------------------------------------- |
 | Antigravity / `agy`       |                                 Global | Installed as an Antigravity plugin                                    | Use `agy plugin install` once                       |
+| Claude Code | Marketplace / global plugin | Installed from `.claude-plugin/marketplace.json`; skills load under the `orchestra:` namespace | Use `/plugin marketplace add Baelfyre/Orchestra`, then `/plugin install orchestra@orchestra` |
 | Codex                     |       Marketplace / global plugin first | Installed from Codex Plugins, with repo-local skills as fallback      | Install through Marketplace, then use `@Orchestra`  |
 | VS Code                   | Per extension or per repo instructions | Depends on the AI extension, such as Copilot or Continue              | Use instruction files, not full skill folders       |
 | IntelliJ / JetBrains IDEs | Per plugin or per project instructions | Depends on JetBrains AI Assistant, Copilot, Junie, or similar plugins | Use instruction files or project docs               |
@@ -651,6 +652,10 @@ GitHub displays repository files above the README by default. This README keeps 
 <details> <summary>Repository structure</summary>
 
 ```
+.claude-plugin/
+├── plugin.json
+└── marketplace.json
+
 skills/
 ├── arbiter/
 ├── chronicler/
