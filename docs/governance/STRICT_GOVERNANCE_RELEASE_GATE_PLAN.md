@@ -6,6 +6,8 @@ Define the policy and enforcement plan for moving Orchestra from advisory govern
 
 This document began as planning-only. Phase 6 Stage 1 enabled strict deterministic CI failures. Phase 7 now adds a repository-level `main` ruleset requirement for pull requests, review, conversation resolution, and strict required status checks. CI remains non-deployment and non-release, Dagger remains simulation-only and unpromoted, and no release automation was added.
 
+For `PROJECT_CONTEXT.md` specifically, use `docs/governance/PROJECT_CONTEXT_DECISION_PROMPT.md` to decide whether the file should stay advisory or later become a governed enforcement candidate before any hard-gate proposal is considered.
+
 ## Phase 6 Stage 1 Status
 
 Phase 6 Stage 1 implements strict deterministic governance gates in CI for:
