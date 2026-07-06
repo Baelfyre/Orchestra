@@ -32,7 +32,14 @@ Unknown
 Unknown
 
 ## Governance Level
-Advisory
+- Advisory
+- Recommended
+- Strict-Governed
+
+Guidance:
+- Choose Advisory for school, prototype, sandbox, learning, or trial projects.
+- Choose Recommended for reusable, internal, or moderate-coordination projects.
+- Choose Strict-Governed for real-world, production, client-facing, real-data, compliance-sensitive, destructive, or release-critical projects.
 
 ## Safety Boundaries
 Unknown
