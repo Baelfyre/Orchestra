@@ -17,6 +17,12 @@ Portable Runtime is the first Orchestra release that normalizes the repository a
 
 ## Unreleased
 
+### Added
+- Added an App Release Compliance Gate plus reusable privacy review, data inventory, IP clearance, privacy policy, terms, and retention/deletion governance templates for app and public release workflows.
+
+### Changed
+- Integrated Release Mode governance docs so The Governor now treats app release compliance artifacts as required when applicable and returns `REVISION_REQUIRED` or `BLOCKED` when release-gate documentation is missing.
+
 ### Changed
 - Clarified optional project governance rulesets so `PROJECT_CONTEXT.md` enforcement depends on project type, risk level, and declared governance level.
 - Wired `tests/runtime` into CI, enforced portable runtime coverage with `pytest-cov --cov-fail-under=90`, switched `validate.yml` to `python tests/behavior/run_tests.py`, and added runtime tests for alias loading, default-command fallback, and unresolved command-to-skill handling.

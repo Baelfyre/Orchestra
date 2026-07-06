@@ -17,6 +17,12 @@ The Governor is the legal, compliance, privacy, IP, copyright, and licensing gov
 
 Sets `human_review_required: true` when legal interpretation is uncertain, regulatory applicability is unclear, license compatibility cannot be confirmed, or public release has compliance implications.
 
+## Release Mode App Compliance
+
+For Release Mode app workflows, The Governor should review the [App Release Compliance Gate](APP_RELEASE_COMPLIANCE_GATE.md).
+
+Missing required privacy, data inventory, retention, deletion, account deletion documentation when accounts exist, platform disclosures, or IP clearance artifacts should return `REVISION_REQUIRED` or `BLOCKED`, depending on release context and severity.
+
 ## Boundaries
 
 - Does not provide legal advice.

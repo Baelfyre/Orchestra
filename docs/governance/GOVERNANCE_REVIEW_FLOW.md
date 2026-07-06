@@ -109,6 +109,12 @@ Arbiter returns `READY`, `READY_WITH_MINOR_FIXES`, `HOLD`, or `BLOCKED`. `HOLD` 
 - Governor checks full compliance, ToS/PP, human review flag.
 - Expanded output format used when findings exist.
 
+## Release Path
+
+- Release Mode includes final release-gate review before public release, client delivery, production deployment, app store submission, or open-source distribution.
+- For app release workflows, The Governor must review the [App Release Compliance Gate](APP_RELEASE_COMPLIANCE_GATE.md).
+- Missing required privacy, data inventory, retention, deletion, account deletion documentation when accounts exist, platform disclosures, or IP clearance artifacts must return `REVISION_REQUIRED` or `BLOCKED`, depending on release context and severity.
+
 ## Re-submission
 
 When `REVISION_REQUIRED`:

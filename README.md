@@ -152,6 +152,8 @@ The Steward and The Governor are entirely context-driven. They do not pre-assume
 
 > [!IMPORTANT]
 > If a request violates alignment, fails scope verification, or breaches compliance boundaries, the Steward or Governor issues a `REVISION_REQUIRED` or `BLOCKED` status. The Conductor will immediately halt execution.
+>
+> For Release Mode app workflows, missing privacy, data inventory, retention, deletion, account deletion documentation when accounts exist, platform disclosures, or IP clearance artifacts are not optional when applicable. The Governor must return `REVISION_REQUIRED` or `BLOCKED` based on release context and severity. See [App Release Compliance Gate](docs/governance/APP_RELEASE_COMPLIANCE_GATE.md).
 
 ### Operating Modes
 
@@ -161,7 +163,7 @@ Conductor uses 5 distinct operating modes to scale governance dynamically, ensur
 2. **Prototype Mode**: Local experiments, throwaway proofs-of-concept. Lightweight checks only.
 3. **Implementation Mode**: Making file, code, documentation, or architecture changes. Uses fast path by default. Escalate to expanded review only if risk triggers are met.
 4. **AUDIT mode**: Explicit request for a review, compliance check, or risk assessment. Context-heavy.
-5. **Release Mode**: Production deployment, public release, client delivery, or open-source distribution. Strictest path. Escalate uncertain issues for human review.
+5. **Release Mode**: Production deployment, public release, client delivery, app store submission, or open-source distribution. Strictest path. The Governor must verify the [App Release Compliance Gate](docs/governance/APP_RELEASE_COMPLIANCE_GATE.md) for app and public release workflows. Escalate uncertain issues for human review.
 
 ### Interpret the Decision
 
