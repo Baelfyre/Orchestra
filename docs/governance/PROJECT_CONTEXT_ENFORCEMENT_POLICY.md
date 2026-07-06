@@ -176,7 +176,7 @@ Current-phase policy direction:
 - recommended projects should warn strongly, not block by default
 - strict-governed projects should block on missing or materially incomplete `PROJECT_CONTEXT.md`
 
-This document defines policy first. It does not require immediate implementation in `scripts/validate_project_context.py`.
+The current Python validator should follow this policy at the governance-level and required-section level without turning advisory repositories into universal hard failures.
 
 ## Examples
 
