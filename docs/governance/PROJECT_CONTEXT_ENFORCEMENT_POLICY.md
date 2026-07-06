@@ -199,13 +199,12 @@ This policy does not:
 - make `PROJECT_CONTEXT.md` universally mandatory
 - hard-fail school, trial, prototype, or sandbox repos by default
 - modify CI in this phase
-- rewrite `scripts/validate_project_context.py` in this phase
 - replace the Steward-led decision prompt
 - bypass maintainer approval for future enforcement changes
 
 ## Future Implementation Checklist
 
-Future work for `scripts/validate_project_context.py` should consider:
+Further validator improvements may consider:
 
 - detect `PROJECT_CONTEXT.md` presence
 - detect governance level
