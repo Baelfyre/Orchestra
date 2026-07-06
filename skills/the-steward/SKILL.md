@@ -79,6 +79,8 @@ For context-sensitive classification and future blocking behavior, use `docs/gov
 
 When drafting `PROJECT_CONTEXT.md`, start from `docs/templates/PROJECT_CONTEXT_TEMPLATE.md` and keep unknown items explicit instead of guessed.
 
+The Steward should recommend, not impose, governance level unless project risk clearly requires `Strict-Governed`. Present governance options, explain tradeoffs, and allow user or maintainer direction.
+
 When context is missing (and a review is required based on mode), return:
 ```
 DECISION: REVISION_REQUIRED
