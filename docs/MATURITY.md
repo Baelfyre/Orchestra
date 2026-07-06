@@ -9,7 +9,8 @@ This document classifies the current maturity level of Orchestra's features and 
 * **Stale-Reference Checks**: Automatic scanning for deprecated naming, legacy roles, and disallowed references.
 * **Guardrail Scanning**: Runtime checks for secrets, PII, destructive operations, copyleft licenses, and unsafe expressions.
 * **Workspace Locking**: Collision protection and state locking mechanisms via `.amalgam/lock.json`.
-* **PowerShell Validation**: The legacy PowerShell `run-tests.ps1` validation suite provides a robust, primary validation path for Windows environments.
+* **Python Behavior Validation**: `tests/behavior/run_tests.py` is the primary cross-platform behavior validation runner used by CI.
+* **Runtime Coverage Enforcement**: `tests/runtime` is enforced in CI with `pytest-cov` and `--cov-fail-under=90`.
 
 ## Beta
 
@@ -19,10 +20,10 @@ This document classifies the current maturity level of Orchestra's features and 
 
 ## Experimental
 
-* **Python Cross-Platform Validation Runner**: A native Python port of the validation suite intended to provide true cross-platform parity without requiring PowerShell Core. This remains experimental until CI processes prove parity across Windows, Linux, and macOS.
+* **PowerShell Validation Wrapper**: The legacy `run-tests.ps1` wrapper remains available for Windows-oriented compatibility flows, but it is no longer the primary CI entry point.
 
 ## Planned
 
-* **CI Matrix Validation**: Implement continuous integration tests across major platforms (Windows, Linux, macOS) for both the PowerShell and Python validation runners.
+* **CI Matrix Validation**: Implement continuous integration tests across major platforms (Windows, Linux, macOS) for the Python behavior runner, the runtime coverage gate, and any remaining compatibility wrapper coverage that still matters.
 * **Deeper Runtime Behavioral Simulation**: Expand static governance checks into true end-to-end routing simulation to prove real runtime governance decisions.
 * **Host-Integrated Enforcement**: Transition from instruction-level and standalone script enforcement to direct host integration blocking capabilities (where feasible).
