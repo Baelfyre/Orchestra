@@ -21,6 +21,7 @@ Portable Runtime is the first Orchestra release that normalizes the repository a
 - Wired `tests/runtime` into CI, enforced portable runtime coverage with `pytest-cov --cov-fail-under=90`, switched `validate.yml` to `python tests/behavior/run_tests.py`, and added runtime tests for alias loading, default-command fallback, and unresolved command-to-skill handling.
 
 ### Added
+- Added a Steward-led `PROJECT_CONTEXT.md` decision prompt for choosing advisory or governed project context workflows before introducing hard enforcement.
 - Added scaffold adapter graduation criteria defining promotion levels, validation requirements, documentation requirements, and recommended graduation order for scaffold-only adapters.
 - Added `scripts/check_for_updates.py` for notification-only release checks against the latest GitHub release using local manifest and adapter metadata.
 - Added update-check metadata defaults to the root manifest, Claude plugin manifest, and scaffold adapter package metadata.
