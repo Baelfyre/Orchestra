@@ -14,7 +14,7 @@ This document classifies the current maturity level of Orchestra's features and 
 ## Beta
 
 * **Governance Instruction Conformance Checks**: Static evaluation of `SKILL.md` instructions against behavioral expectation fixtures (e.g., verifying `BLOCKED`, `HOLD` states are documented).
-* **Project Context Governance Validator**: Validates `PROJECT_CONTEXT.md` presence and required sections against advisory, recommended, and strict-governed governance levels while preserving backward-compatible operating-mode calls.
+* **Project Context Governance Validator**: Validates `PROJECT_CONTEXT.md` presence and required sections against advisory, recommended, and strict-governed governance levels. Advisory and recommended paths remain non-blocking by default; strict-governed remains blocking when declared or explicitly requested.
 * **Codex Export Validation**: Alignment checks for exports specifically intended for the Codex adapter framework.
 
 ## Experimental

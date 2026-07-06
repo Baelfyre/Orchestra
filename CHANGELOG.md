@@ -18,6 +18,7 @@ Portable Runtime is the first Orchestra release that normalizes the repository a
 ## Unreleased
 
 ### Changed
+- Clarified optional project governance rulesets so `PROJECT_CONTEXT.md` enforcement depends on project type, risk level, and declared governance level.
 - Wired `tests/runtime` into CI, enforced portable runtime coverage with `pytest-cov --cov-fail-under=90`, switched `validate.yml` to `python tests/behavior/run_tests.py`, and added runtime tests for alias loading, default-command fallback, and unresolved command-to-skill handling.
 
 ### Added

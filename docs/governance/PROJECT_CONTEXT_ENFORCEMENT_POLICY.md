@@ -6,6 +6,8 @@ This document defines a context-sensitive policy for when `PROJECT_CONTEXT.md` s
 
 The goal is not to make `PROJECT_CONTEXT.md` universally mandatory. The goal is to scale governance according to project type, coordination needs, and real-world risk.
 
+`PROJECT_CONTEXT.md` is recommended for governed projects, but not every project should be treated as `Strict-Governed`. Governance level is project-type dependent, user-confirmed, and only enforceable when strict governance is declared or clearly required by policy.
+
 ## Enforcement Principle
 
 `PROJECT_CONTEXT.md` enforcement should depend on project classification and risk level.
@@ -14,7 +16,30 @@ The goal is not to make `PROJECT_CONTEXT.md` universally mandatory. The goal is 
 - moderate coordination work should receive stronger recommendations without default blocking
 - real-world, real-data, compliance-sensitive, destructive, or release-critical work should require `PROJECT_CONTEXT.md` as a gated validation item
 
-The Steward owns classification and context sufficiency. The Governor should only participate in blocking enforcement after the project is classified as strict-governed, a maintainer explicitly requests strict enforcement, or release governance requires it.
+The Steward owns classification and context sufficiency. The Steward should recommend, not automatically impose, a governance level unless project risk clearly requires strict governance. The user or maintainer confirms the intended governance level. The Governor should only participate in blocking enforcement after the project is classified as strict-governed, a maintainer explicitly requests strict enforcement, or release governance requires it.
+
+## Optional Project Governance Ruleset
+
+Use this ruleset to choose the default governance level before turning `PROJECT_CONTEXT.md` into an enforcement gate.
+
+| Project Type | Recommended Governance Level | Validation Behavior |
+| --- | --- | --- |
+| School project | Advisory | Warning only |
+| Learning repo | Advisory | Warning only |
+| Prototype | Advisory | Warning only |
+| Sandbox or trial project | Advisory | Warning only |
+| Portfolio project intended for reuse | Recommended | Strong warning, non-blocking |
+| Internal tool | Recommended | Strong warning unless configured strict |
+| Multi-agent development repo | Recommended or Strict-Governed | Depends on write permissions and risk |
+| Real-world application | Strict-Governed | Blocking validation |
+| Production project | Strict-Governed | Blocking validation |
+| Client-facing project | Strict-Governed | Blocking validation |
+| Project using real-world user or client data | Strict-Governed | Blocking validation |
+| Compliance-sensitive project | Strict-Governed | Blocking validation |
+| Destructive automation workflow | Strict-Governed | Blocking validation |
+| Release-critical repo | Strict-Governed | Blocking validation |
+
+This table is a default decision aid, not a universal override. Maintainers may choose a stricter path earlier, and The Governor may enforce stricter behavior only when `Strict-Governed` is declared or a release policy clearly requires it.
 
 ## Project Classification Levels
 
@@ -68,6 +93,7 @@ Behavior:
 - missing `PROJECT_CONTEXT.md` should be a blocking validation failure
 - incomplete `PROJECT_CONTEXT.md` should be a blocking validation failure when required sections are missing
 - governance enforcement should be treated as part of release and operational safety, not as optional documentation polish
+- strict mode should be treated as opt-in or policy-triggered, not as the universal default for every repository
 
 ## Risk Signals
 
@@ -145,7 +171,7 @@ The Steward workflow should be:
 2. classify project type
 3. identify risk signals
 4. recommend `Advisory`, `Recommended`, or `Strict-Governed`
-5. ask for or accept user direction
+5. present the recommendation as guidance and allow user or maintainer direction
 6. produce one of the following:
    - `PROJECT_CONTEXT.md`
    - decision summary
@@ -197,6 +223,7 @@ A client-facing automation system that handles credentials, user data, destructi
 This policy does not:
 
 - make `PROJECT_CONTEXT.md` universally mandatory
+- force every repository into `Strict-Governed`
 - hard-fail school, trial, prototype, or sandbox repos by default
 - modify CI in this phase
 - replace the Steward-led decision prompt
