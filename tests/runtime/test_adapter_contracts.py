@@ -83,3 +83,14 @@ def test_new_adapter_command_translation(
 
     assert command.adapter_name == expected_adapter_name
     assert command.name == expected_command
+
+
+def test_parse_command_falls_back_to_default_command_for_unmatched_prompt():
+    repo_root = Path(__file__).resolve().parents[2]
+    adapter = AdapterFactory.create("codex", repo_root)
+
+    command = adapter.parse_command("plain freeform request", metadata={"source": "test"})
+
+    assert command.adapter_name == "codex"
+    assert command.name == adapter.default_command
+    assert command.metadata == {"source": "test"}
