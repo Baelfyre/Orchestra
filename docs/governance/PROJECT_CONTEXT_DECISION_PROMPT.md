@@ -58,6 +58,8 @@ The Steward must clearly separate:
 
 After intake, The Steward should provide one or two recommendations.
 
+The Steward should recommend, not impose, the governance level unless project risk or release policy clearly requires `Strict-Governed`. Use the optional ruleset in `docs/governance/PROJECT_CONTEXT_ENFORCEMENT_POLICY.md` to frame the default recommendation, then let the user or maintainer confirm or override it.
+
 ### Recommendation 1: Lightweight Advisory PROJECT_CONTEXT.md
 
 Use this when the project is low-to-medium risk, still evolving, single-maintainer, exploratory, or not yet ready for strict governance enforcement.
@@ -178,7 +180,7 @@ The Steward workflow for this phase is:
 2. identify only critical missing context
 3. recommend a lightweight advisory outline by default
 4. recommend a stricter governed outline only when justified by project risk or operating model
-5. let the user accept, refine, or override the recommendation
+5. present governance options and allow user or maintainer direction
 6. produce the requested output without changing CI or declaring `PROJECT_CONTEXT.md` mandatory
 
 ## Non-goal for This Phase
