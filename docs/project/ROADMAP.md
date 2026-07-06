@@ -14,6 +14,7 @@
 - [ ] Promote the shared VS Code-family path to cover VSCodium publication when that ecosystem path is worth supporting.
 - [ ] Promote the JetBrains scaffold into an IntelliJ Platform build and distribution flow separately from the generic editor packaging branch.
 - [ ] Promote Zed and Neovim scaffolds into host-native distribution or plugin flows after the editor packaging scaffolds stabilize.
+- [ ] Use `docs/governance/PROJECT_CONTEXT_DECISION_PROMPT.md` before proposing any hard enforcement path for `PROJECT_CONTEXT.md`.
 - [ ] Apply `docs/project/SCAFFOLD_ADAPTER_GRADUATION_CRITERIA.md` before promoting any scaffold-only adapter support level.
 - [ ] Add an optional cross-platform CLI validator.
 - [ ] Add an optional local-model retrieval index.
