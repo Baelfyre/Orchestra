@@ -4,22 +4,22 @@
 
 Thank you for helping improve the security of this project.
 
-If you discover a security vulnerability, please do not create a public issue. Instead, report it privately using one of the following methods:
+If you discover a security vulnerability, please do not create a public issue, public discussion, pull request comment, or any other public disclosure that includes vulnerability details.
 
-1. Use GitHub private vulnerability reporting or GitHub Security Advisories if available for this repository.
-2. If private vulnerability reporting is not available, contact the maintainer directly at:
+Please report vulnerabilities through GitHub Private Vulnerability Reporting for this repository.
 
-```text
-Reach out to the maintainers privately via the project's Community Discussions.
-```
+Do not report security vulnerabilities through public issues, pull request comments, public discussions, or other public channels.
 
-Please include the following information when reporting a vulnerability:
+When reporting a vulnerability, please include the following information:
 
 * A clear description of the vulnerability.
 * Steps to reproduce the issue.
-* The affected file, skill, workflow, or configuration.
-* The possible impact.
+* The affected file, skill, workflow, command, adapter, validation script, or configuration.
+* The possible security impact.
+* Any relevant logs, proof of concept, or screenshots, if safe to share.
 * Any suggested mitigation, if available.
+
+Please do not perform destructive testing, denial-of-service testing, credential attacks, data exfiltration, or testing against systems, repositories, accounts, infrastructure, or third-party services that you do not own or do not have permission to test.
 
 ## Supported Versions
 
