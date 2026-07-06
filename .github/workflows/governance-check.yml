@@ -53,6 +53,11 @@ jobs:
           python scripts/check_prompt_load_thresholds.py > artifacts/prompt_load_threshold_report.txt
           cat artifacts/prompt_load_threshold_report.txt
 
+      - name: Run Project Context Validation
+        run: |
+          python scripts/validate_project_context.py > artifacts/project_context_report.txt
+          cat artifacts/project_context_report.txt
+
       - name: Run Stage 1 Strict Governance Check
         run: |
           set +e
