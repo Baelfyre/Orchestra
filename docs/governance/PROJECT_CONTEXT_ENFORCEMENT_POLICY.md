@@ -135,6 +135,8 @@ Advisory and recommended projects should include, at minimum:
 - Known Constraints
 - Validation Notes
 
+Use `docs/templates/PROJECT_CONTEXT_TEMPLATE.md` as the shared starting point. Low-risk projects may keep strict-only sections lightweight or mark them `Unknown` or `Not yet decided` without being blocked by default.
+
 ## Steward Decision Workflow
 
 The Steward workflow should be:
