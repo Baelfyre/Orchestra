@@ -23,6 +23,8 @@ This document tracks the readiness of the Orchestra framework for its release as
 - **Plugin icon status:** Completed
   - The existing Conductor icon is used as the plugin icon: `assets/icons/conductor.ico`.
   - The broader framework logo remains available at `assets/logo/orchestra.png`.
+- **Scaffold adapter promotion policy:** Defined
+  - Scaffold-only host promotion now follows `docs/project/SCAFFOLD_ADAPTER_GRADUATION_CRITERIA.md` before support or marketplace claims are raised.
 - **Remaining step:** Pending
   - Validate whether the target plugin loader displays the manifest-level icon path.
 
