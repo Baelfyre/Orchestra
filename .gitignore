@@ -24,3 +24,6 @@ CLAUDE.md
 # Python cache
 __pycache__/
 *.py[cod]
+.coverage
+.coverage.*
+htmlcov/

@@ -748,15 +748,23 @@ Orchestra's rules are divided into clear enforcement levels to distinguish betwe
 - **Level 5: CI release gate**. (Enforced in CI) Build pipeline fails if structural validation or strict guardrails fail.
 - **Level 6: Host-integrated runtime blocker**. (Future) Host platform forcibly blocks output if policies are violated.
 
-Before releasing, staging, or pushing changes, run the centralized behavior validation suite:
+Before releasing, staging, or pushing changes, run the primary Python behavior validation runner:
 
 ```powershell
-# Run all validation checks (structure, manifest, stale references, and locking tests)
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\behavior\run-tests.ps1
+# Run the behavior validation suite used by CI
+python .\tests\behavior\run_tests.py
+```
+
+Then run the runtime coverage gate used by `validate.yml`:
+
+```powershell
+python -m pytest tests/runtime --cov=orchestra_runtime --cov-report=term-missing --cov-fail-under=90
 ```
 
 ### Governance Verification Workflow
-- **Centralized Test Runner (`run-tests.ps1`)**: Verifies project directory structure, manifest definitions against skill frontmatter, stale reference checks, Codex skill adapter alignment, and lock/guardrail regression cases.
+- **Primary Behavior Runner (`run_tests.py`)**: Verifies project directory structure, manifest definitions against skill frontmatter, IDE packaging, stale reference checks, Codex skill adapter alignment, governance behavior checks, and lock/guardrail regression cases.
+- **Runtime Coverage Gate (`pytest-cov`)**: Runs `tests/runtime` with `--cov=orchestra_runtime --cov-report=term-missing --cov-fail-under=90`.
+- **Windows Compatibility Wrapper (`run-tests.ps1`)**: Remains available for wrapper-based local runs on Windows, but it is not the primary CI entry point.
 - **Opt-In Runtime Guardrails**: Scans staged or modified files for security risks (secrets, copyleft licenses, PII leaks, destructive commands, or stale naming conventions).
   - *Warning-Only Mode (Default)*: Scans are advisory and exit with code `0`.
   - *Strict Enforcement*: Set `$env:ORCHESTRA_ENFORCE_GUARDRAILS = "true"` to fail the build (exit code `1`) upon safety violations.

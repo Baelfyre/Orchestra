@@ -58,7 +58,7 @@ The validation suite integrates cleanly with the existing CI/CD governance pipel
 None identified. The benchmark suite comprehensively covers the planned scenarios without modifying runtime logic or diluting existing coverage.
 
 ## Maintenance Requirements
-Refer to [ROUTER_BENCHMARK_MAINTENANCE_GUIDE.md](file:///c:/conductor/docs/testing/ROUTER_BENCHMARK_MAINTENANCE_GUIDE.md) for procedures on maintaining and extending the fixture safely.
+Refer to [ROUTER_BENCHMARK_MAINTENANCE_GUIDE.md](ROUTER_BENCHMARK_MAINTENANCE_GUIDE.md) for procedures on maintaining and extending the fixture safely.
 
 ## Phase 7 Completion Criteria
 - [x] 24 benchmark cases defined and integrated.

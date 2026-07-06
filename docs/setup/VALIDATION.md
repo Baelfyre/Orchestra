@@ -14,23 +14,37 @@ Orchestra's rules are divided into clear enforcement levels to distinguish betwe
 
 ---
 
-## 1. Centralized Test Runner (`run-tests.ps1`)
+## 1. Primary Behavior Validation Runner (`run_tests.py`)
 
-The framework provides a unified test runner, [tests/behavior/run-tests.ps1](file:///c:/conductor/tests/behavior/run-tests.ps1), which executes all structural, consistency, and regression checks.
+The framework provides a unified Python behavior runner, [tests/behavior/run_tests.py](../../tests/behavior/run_tests.py), which executes the structural, consistency, and regression checks used by the `validate` workflow job.
 
 ### How to Run Tests Locally
-Open a PowerShell session and execute:
+Run the primary behavior suite locally:
+```powershell
+python .\tests\behavior\run_tests.py
+```
+
+Run the runtime coverage gate used by CI:
+```powershell
+python -m pytest tests/runtime --cov=orchestra_runtime --cov-report=term-missing --cov-fail-under=90
+```
+
+If you specifically need the Windows compatibility wrapper, it remains available:
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\tests\behavior\run-tests.ps1
 ```
 
 ### What is Validated
-The validation suite runs the following checks sequentially:
-1. **Structure Validation (`validate-structure.ps1`)**: Verifies that all expected repository directories, specialist skill files, adapter configurations, command entry points, and templates exist and match schema definitions.
-2. **Manifest Verification (`validate-manifest.ps1`)**: Cross-checks skill manifests in `plugin.json` against the frontmatter definitions in `skills/**/SKILL.md` to ensure active slugs and properties are aligned.
-3. **Stale References Scan (`check-stale-references.ps1`)**: Scans code files for hardcoded obsolete naming references or invalid system identifiers.
-4. **Codex Skill Export Alignment (`validate-codex-export.ps1`)**: Verifies that generated/exported Codex skill definitions match the source rules.
-5. **Guardrail and Locking Regression Tests**: Runs isolated simulations in temporary workspace folders to assert that security, PII, destructive command blocks, and lock acquisition behaviors function correctly.
+The Python behavior runner executes the following checks sequentially:
+1. **Structure Validation (`validate_structure.py`)**: Verifies that all expected repository directories, specialist skill files, adapter configurations, command entry points, and templates exist and match schema definitions.
+2. **Manifest Verification (`validate_manifest.py`)**: Cross-checks skill manifests in `plugin.json` against the frontmatter definitions in `skills/**/SKILL.md` to ensure active slugs and properties are aligned.
+3. **IDE Packaging Validation (`validate_ide_packaging.py`)**: Verifies scaffold packaging metadata against the runtime adapter contracts.
+4. **Governance Check Helper Tests (`test_governance_check.py`)**: Verifies the governance-check helper behavior.
+5. **Stale References Scan (`check_stale_references.py`)**: Scans code files for hardcoded obsolete naming references or invalid system identifiers.
+6. **Codex Skill Export Alignment (`validate_codex_export.py`)**: Verifies that generated/exported Codex skill definitions match the source rules.
+7. **Governance Evaluation (`evaluate_governance.py`)**: Validates source-level governance behavior expectations.
+8. **Runtime Guardrail and Dagger Simulations**: Runs the runtime guardrail scan, Dagger guardrail tests, and isolated regression checks for guardrails, project-context validation, and lock acquisition behavior.
+9. **Runtime Coverage Gate (`pytest-cov`)**: The CI workflow separately runs `tests/runtime` with `--cov=orchestra_runtime --cov-report=term-missing --cov-fail-under=90`.
 
 ---
 

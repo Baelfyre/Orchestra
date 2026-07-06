@@ -102,4 +102,4 @@ This plan does not actively modify the JSON fixture. It serves as a roadmap for 
 ## Plan Result
 ROUTER_BENCHMARK_COVERAGE_EXPANSION_PLAN_DEFINED
 
-See [ROUTER_BENCHMARK_COVERAGE_COMPLETION_REVIEW.md](file:///c:/conductor/docs/testing/ROUTER_BENCHMARK_COVERAGE_COMPLETION_REVIEW.md) for the final outcome.
+See [ROUTER_BENCHMARK_COVERAGE_COMPLETION_REVIEW.md](ROUTER_BENCHMARK_COVERAGE_COMPLETION_REVIEW.md) for the final outcome.
