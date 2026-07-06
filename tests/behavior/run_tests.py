@@ -79,40 +79,74 @@ def main():
     os.makedirs(temp_dir2, exist_ok=True)
     try:
         missing_file = os.path.join(temp_dir2, "MISSING.md")
+        strict_file = os.path.join(temp_dir2, "STRICT.md")
+        with open(strict_file, "w", encoding="utf-8") as f:
+            f.write("## Governance Level\nStrict-Governed\n\n## Project Name\nDemo\n")
+
         warn_exit = subprocess.run(
             [sys.executable, context_script, "--mode", "Implementation Mode", "--context-file", missing_file],
             capture_output=True,
             text=True
         )
-        err_exit = subprocess.run(
+        release_warn_exit = subprocess.run(
             [sys.executable, context_script, "--mode", "Release Mode", "--context-file", missing_file],
+            capture_output=True,
+            text=True
+        )
+        strict_missing_exit = subprocess.run(
+            [sys.executable, context_script, "--mode", "strict-governed", "--context-file", missing_file],
+            capture_output=True,
+            text=True
+        )
+        strict_incomplete_exit = subprocess.run(
+            [sys.executable, context_script, "--context-file", strict_file],
             capture_output=True,
             text=True
         )
 
         warn_output = f"{warn_exit.stdout}{warn_exit.stderr}"
-        err_output = f"{err_exit.stdout}{err_exit.stderr}"
+        release_warn_output = f"{release_warn_exit.stdout}{release_warn_exit.stderr}"
+        strict_missing_output = f"{strict_missing_exit.stdout}{strict_missing_exit.stderr}"
+        strict_incomplete_output = f"{strict_incomplete_exit.stdout}{strict_incomplete_exit.stderr}"
 
         if warn_exit.returncode != 0:
-            print(f"[91mERROR: Context validator failed in warning mode! (Exit code: {warn_exit.returncode})[0m")
+            print(f"\u001b[91mERROR: Context validator failed in advisory warning mode! (Exit code: {warn_exit.returncode})\u001b[0m")
             print(warn_output)
             failed = True
-        elif "This is allowed for Implementation Mode" not in warn_output:
-            print("[91mERROR: Context validator warning output did not confirm Implementation Mode allowance![0m")
+        elif "Defaulting to Advisory governance" not in warn_output:
+            print("\u001b[91mERROR: Context validator warning output did not confirm advisory fallback!\u001b[0m")
             print(warn_output)
             failed = True
-        elif err_exit.returncode != 1:
-            print(f"[91mERROR: Context validator did not fail in Release mode! (Exit code: {err_exit.returncode})[0m")
-            print(err_output)
+        elif release_warn_exit.returncode != 0:
+            print(f"\u001b[91mERROR: Context validator blocked Release Mode without explicit strict governance! (Exit code: {release_warn_exit.returncode})\u001b[0m")
+            print(release_warn_output)
             failed = True
-        elif "Cannot proceed with Release Mode without context" not in err_output:
-            print("[91mERROR: Context validator error output did not confirm Release Mode block![0m")
-            print(err_output)
+        elif "Proceeding for Release Mode." not in release_warn_output:
+            print("\u001b[91mERROR: Context validator warning output did not preserve non-blocking Release Mode behavior!\u001b[0m")
+            print(release_warn_output)
+            failed = True
+        elif strict_missing_exit.returncode != 1:
+            print(f"\u001b[91mERROR: Context validator did not fail for missing strict-governed context! (Exit code: {strict_missing_exit.returncode})\u001b[0m")
+            print(strict_missing_output)
+            failed = True
+        elif "Strict-Governed repositories require project context" not in strict_missing_output:
+            print("\u001b[91mERROR: Context validator strict missing-file output was not specific enough!\u001b[0m")
+            print(strict_missing_output)
+            failed = True
+        elif strict_incomplete_exit.returncode != 1:
+            print(f"\u001b[91mERROR: Context validator did not fail for incomplete strict-governed context! (Exit code: {strict_incomplete_exit.returncode})\u001b[0m")
+            print(strict_incomplete_output)
+            failed = True
+        elif "Missing required sections" not in strict_incomplete_output or "Project Purpose" not in strict_incomplete_output:
+            print("\u001b[91mERROR: Context validator strict missing-section output did not list the required sections!\u001b[0m")
+            print(strict_incomplete_output)
             failed = True
         else:
-            print("[92mSUCCESS: Context validator expected-warning path passed.[0m")
-            print("[92mSUCCESS: Context validator expected Release Mode block passed.[0m")
-            print("[92mSUCCESS: Context validator tests passed.[0m")
+            print("\u001b[92mSUCCESS: Context validator advisory fallback path passed.\u001b[0m")
+            print("\u001b[92mSUCCESS: Context validator non-blocking Release Mode path passed.\u001b[0m")
+            print("\u001b[92mSUCCESS: Context validator strict-governed missing-file block passed.\u001b[0m")
+            print("\u001b[92mSUCCESS: Context validator strict-governed missing-section block passed.\u001b[0m")
+            print("\u001b[92mSUCCESS: Context validator tests passed.\u001b[0m")
     finally:
         if os.path.exists(temp_dir2):
             shutil.rmtree(temp_dir2)
