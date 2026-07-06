@@ -2,6 +2,8 @@
 
 Release gates enforce governance compliance before any release. **Release Mode** is the strictest governance path in the ecosystem. Formal, comprehensive governance review is mandatory before any release, client delivery, open-source distribution, production deployment, or external publication.
 
+For app, marketplace, and other public software releases, The Governor must also verify the [App Release Compliance Gate](APP_RELEASE_COMPLIANCE_GATE.md).
+
 ## Pre-Release Checklist
 
 | Gate | Authority | Must Pass |
@@ -12,6 +14,7 @@ Release gates enforce governance compliance before any release. **Release Mode**
 | Acceptance criteria met | The Steward | Yes |
 | SDLC documentation complete | The Steward | Yes |
 | Legal compliance confirmed | The Governor | Yes |
+| App Release Compliance Gate reviewed | The Governor | Yes, when applicable |
 | Privacy review completed | The Governor | Yes |
 | IP/copyright cleared | The Governor | Yes |
 | License compatibility confirmed | The Governor | Yes |
@@ -34,6 +37,8 @@ Release gates enforce governance compliance before any release. **Release Mode**
 - The Conductor must check for unresolved governance findings before routing release work.
 - The Conductor must call Arbiter before merge, pull request, release handoff, or continuation after uncertain state.
 - Release-related requests (publish, deploy, tag, distribute, client delivery, or public distribution) require explicit governance clearance.
+- For app release workflows, missing privacy, data inventory, retention, deletion, or IP clearance artifacts must result in `BLOCKED`.
+- For app release workflows, privacy, terms, data inventory, retention, deletion, account deletion documentation when accounts exist, platform disclosures, third-party processor disclosures, and IP clearance are not optional when applicable.
 - High-impact releases require both Steward and Governor `APPROVED` decisions.
 - Transition-sensitive releases require Arbiter `READY` or `READY_WITH_MINOR_FIXES`.
 

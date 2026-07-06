@@ -102,8 +102,8 @@ To support this freedom-first model, the ecosystem defines 5 operating modes:
    - **Purpose**: Explicit requests for compliance audits, risk reviews, or structural assessments.
    - **Governance**: Context-heavy. Requires full Basis of Review context.
 5. **Release Mode**
-   - **Purpose**: Deploying to production, public releases, client delivery, or open-source distribution.
-   - **Governance**: Strictest path. Fully enforces compliance, license compatibility, and privacy validation.
+   - **Purpose**: Deploying to production, public releases, client delivery, app store submission, or open-source distribution.
+   - **Governance**: Strictest path. Fully enforces compliance, license compatibility, privacy validation, and the [App Release Compliance Gate](APP_RELEASE_COMPLIANCE_GATE.md) for app or public release workflows.
 
 ## Usage Pattern
 
@@ -170,6 +170,8 @@ Next Recommended Step:
 6. **Execution skills** perform the work.
 7. **Validation** confirms outputs.
 8. **Release Gate** checks governance compliance before release.
+
+For Release Mode app workflows, The Governor must verify privacy, terms, data inventory, retention, deletion, account deletion documentation when accounts exist, platform disclosures, third-party processor disclosures, and IP clearance when applicable. Missing required artifacts must result in `REVISION_REQUIRED` or `BLOCKED`, depending on release context and severity.
 
 ## Decision Model
 
