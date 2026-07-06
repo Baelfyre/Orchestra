@@ -77,6 +77,8 @@ When the task is to decide whether a repository needs `PROJECT_CONTEXT.md` or ho
 
 For context-sensitive classification and future blocking behavior, use `docs/governance/PROJECT_CONTEXT_ENFORCEMENT_POLICY.md` to distinguish advisory, recommended, and strict-governed repositories.
 
+When drafting `PROJECT_CONTEXT.md`, start from `docs/templates/PROJECT_CONTEXT_TEMPLATE.md` and keep unknown items explicit instead of guessed.
+
 When context is missing (and a review is required based on mode), return:
 ```
 DECISION: REVISION_REQUIRED
