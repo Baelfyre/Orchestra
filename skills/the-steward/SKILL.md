@@ -73,6 +73,8 @@ Risk Level: [LOW | MEDIUM | HIGH]
 Required Documentation:
 ```
 
+When the task is to decide whether a repository needs `PROJECT_CONTEXT.md` or how that file should be structured, use `docs/governance/PROJECT_CONTEXT_DECISION_PROMPT.md` as the advisory workflow before proposing any future enforcement.
+
 When context is missing (and a review is required based on mode), return:
 ```
 DECISION: REVISION_REQUIRED
