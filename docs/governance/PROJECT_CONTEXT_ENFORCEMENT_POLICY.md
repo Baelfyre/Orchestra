@@ -135,6 +135,8 @@ Advisory and recommended projects should include, at minimum:
 - Known Constraints
 - Validation Notes
 
+Use `docs/templates/PROJECT_CONTEXT_TEMPLATE.md` as the shared starting point. Low-risk projects may keep strict-only sections lightweight or mark them `Unknown` or `Not yet decided` without being blocked by default.
+
 ## Steward Decision Workflow
 
 The Steward workflow should be:
@@ -174,7 +176,7 @@ Current-phase policy direction:
 - recommended projects should warn strongly, not block by default
 - strict-governed projects should block on missing or materially incomplete `PROJECT_CONTEXT.md`
 
-This document defines policy first. It does not require immediate implementation in `scripts/validate_project_context.py`.
+The current Python validator should follow this policy at the governance-level and required-section level without turning advisory repositories into universal hard failures.
 
 ## Examples
 
@@ -197,13 +199,12 @@ This policy does not:
 - make `PROJECT_CONTEXT.md` universally mandatory
 - hard-fail school, trial, prototype, or sandbox repos by default
 - modify CI in this phase
-- rewrite `scripts/validate_project_context.py` in this phase
 - replace the Steward-led decision prompt
 - bypass maintainer approval for future enforcement changes
 
 ## Future Implementation Checklist
 
-Future work for `scripts/validate_project_context.py` should consider:
+Further validator improvements may consider:
 
 - detect `PROJECT_CONTEXT.md` presence
 - detect governance level

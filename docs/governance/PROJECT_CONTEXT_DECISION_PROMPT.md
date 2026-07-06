@@ -130,6 +130,8 @@ After the recommendation and user direction step, The Steward may produce one of
 - follow-up implementation plan
 - CI hard-gate proposal, only when explicitly requested
 
+When drafting the file itself, start from `docs/templates/PROJECT_CONTEXT_TEMPLATE.md` and trim or annotate sections to match the chosen governance level.
+
 ## Guardrails
 
 - Do not invent project facts.
