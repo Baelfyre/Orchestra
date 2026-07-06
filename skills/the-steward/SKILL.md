@@ -75,6 +75,8 @@ Required Documentation:
 
 When the task is to decide whether a repository needs `PROJECT_CONTEXT.md` or how that file should be structured, use `docs/governance/PROJECT_CONTEXT_DECISION_PROMPT.md` as the advisory workflow before proposing any future enforcement.
 
+For context-sensitive classification and future blocking behavior, use `docs/governance/PROJECT_CONTEXT_ENFORCEMENT_POLICY.md` to distinguish advisory, recommended, and strict-governed repositories.
+
 When context is missing (and a review is required based on mode), return:
 ```
 DECISION: REVISION_REQUIRED

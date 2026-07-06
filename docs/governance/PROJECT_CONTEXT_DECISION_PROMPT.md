@@ -6,7 +6,7 @@ This document defines a Steward-led prompt workflow for deciding whether a repos
 
 `PROJECT_CONTEXT.md` exists to preserve project-specific context, boundaries, assumptions, constraints, and operating rules so governance review does not rely on guesswork.
 
-This phase is decision support only. It does not make `PROJECT_CONTEXT.md` mandatory, and it does not modify CI enforcement.
+This phase is decision support only. It does not make `PROJECT_CONTEXT.md` mandatory, and it does not modify CI enforcement. For context-sensitive enforcement modes after classification, see `docs/governance/PROJECT_CONTEXT_ENFORCEMENT_POLICY.md`.
 
 ## When to Use This Prompt
 
