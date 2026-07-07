@@ -28,6 +28,7 @@ Portable Runtime is the first Orchestra release that normalizes the repository a
 - Normalized Ponytail specialist documentation with explicit activation conditions, supported work, scope enforcement, validation expectations, local-only safety, and direct handoff boundaries for implementation-owned code changes, with matching tracked Codex export parity.
 - Normalized Clockwork specialist documentation with explicit activation conditions, supported work, role boundaries, scope enforcement, validation expectations, local-only safety, and direct architecture-boundary handoff guidance, with matching tracked Codex export parity.
 - Normalized Cipher specialist documentation with explicit defensive-security ownership boundaries, validation expectations, local-only safety, handoff guidance, and output-format selection while preserving its defensive-only scope.
+- Normalized Overseer specialist documentation with explicit validation ownership boundaries, evidence expectations, local-only safety, expanded handoff guidance, and output-format selection while preserving its validation/readiness scope.
 
 ### Changed
 - Clarified optional project governance rulesets so `PROJECT_CONTEXT.md` enforcement depends on project type, risk level, and declared governance level.
