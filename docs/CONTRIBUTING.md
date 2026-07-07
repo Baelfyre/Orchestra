@@ -6,6 +6,7 @@
 - Do not add offensive security content or instructions for unauthorized access.
 - Before starting a new local development phase or repository-editing session, run `python scripts/preflight_sync_check.py` against `origin/main`. Do not begin edits if the local branch is behind, diverged, dirty, or unverifiable. Ahead-only state may proceed, but the unpublished commits must be reported.
 - Preserve specialist ownership, evidence-first findings, progressive disclosure, and local-first safety.
+- When creating or revising repository specialists, follow the shared [Specialist Authoring Standard](project/SPECIALIST_AUTHORING_STANDARD.md).
 - Preserve Dagger's explicit activation, non-production requirement, approval gate, rollback, cleanup, and stop conditions.
 - CI now runs `python scripts/governance_check.py --strict` for deterministic Stage 1 governance failures.
 - `main` is governed by an active repository ruleset that requires pull requests, one approval, conversation resolution, and the required GitHub check contexts `governance-check`, `validate`, `Analyze (actions)`, and `Analyze (python)` before merge.

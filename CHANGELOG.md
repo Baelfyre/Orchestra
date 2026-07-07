@@ -19,6 +19,7 @@ Portable Runtime is the first Orchestra release that normalizes the repository a
 
 ### Added
 - Added an App Release Compliance Gate plus reusable privacy review, data inventory, IP clearance, privacy policy, terms, and retention/deletion governance templates for app and public release workflows.
+- Added a shared `docs/project/SPECIALIST_AUTHORING_STANDARD.md` reference for future specialist authoring, with short cross-links from contributing, plugin-readiness, and manifest-schema documentation.
 
 ### Changed
 - Integrated Release Mode governance docs so The Governor now treats app release compliance artifacts as required when applicable and returns `REVISION_REQUIRED` or `BLOCKED` when release-gate documentation is missing.
