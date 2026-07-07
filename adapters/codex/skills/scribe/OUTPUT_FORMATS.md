@@ -1,6 +1,6 @@
 # Output Formats
 
-## MODE 1: Long Documentation
+## Mode 1
 
 Use for final documentation or detailed audits.
 
@@ -45,7 +45,7 @@ Reason:
 ## Final Recommendation
 ```
 
-## MODE 2: Standard Documentation
+## Mode 2
 
 Use for standard documentation audits.
 
@@ -70,7 +70,7 @@ Confidence Level: High / Medium / Low
 -
 ```
 
-## MODE 3: Short Documentation
+## Mode 3
 
 Use for quick audits.
 
