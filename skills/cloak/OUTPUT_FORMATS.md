@@ -6,15 +6,23 @@ Use for fast UI, layout, component, accessibility, or frontend specialist handof
 
 ```text
 TASK TYPE:
+EVIDENCE REVIEWED:
+ARTIFACT SOURCES:
 UI IMPACT:
 USER FLOW:
+DESIGN-SYSTEM FINDING:
 LAYOUT ISSUE:
 ACCESSIBILITY ISSUE:
+FORM / VALIDATION REVIEW:
+STATE COVERAGE REVIEW:
+PERMISSION-STATE REVIEW:
 RESPONSIVE RULE:
 COMPONENTS AFFECTED:
 VISUAL HIERARCHY FIX:
 INTERACTION FIX:
+BLUEPRINT CLARITY:
 SMALLEST SAFE UI CHANGE:
+HANDOFF BOUNDARIES:
 HANDOFF TO:
 ```
 
@@ -26,14 +34,20 @@ Use when the artifact is README.md, SKILL.md, documentation, Markdown files, usa
 
 ```text
 ARTIFACT TYPE:
+EVIDENCE BASIS:
+ARTIFACT REFERENCES:
 DOCUMENT GOAL:
 TARGET READER:
 SCAN HIERARCHY:
+DESIGN-SYSTEM EVIDENCE GAP:
 SECTION ORDER ISSUE:
 INFORMATION DENSITY ISSUE:
 NAVIGATION UX:
+FORM / VALIDATION FINDING:
+STATE COVERAGE GAP:
 MISSING SECTION:
 COGNITIVE LOAD ISSUE:
+ROUTING BOUNDARY ISSUE:
 SMALLEST SAFE CHANGE:
 HANDOFF TO:
 ```
@@ -49,6 +63,7 @@ Use only when the user explicitly requests a full UI/UX audit, scoring matrix, o
 
 ## Scope Reviewed
 - Artifact Type:
+- Artifact Sources:
 - Primary User Goal:
 - Target User:
 - Review Mode:
@@ -98,6 +113,14 @@ Reason:
 ## Accessibility Notes
 
 ## Information Architecture Notes
+
+## Design-System Evidence Notes
+
+## Form and Validation Notes
+
+## State Coverage Notes
+
+## Routing Boundary Notes
 
 ## Design Debt
 
