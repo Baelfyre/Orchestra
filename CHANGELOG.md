@@ -26,6 +26,7 @@ Portable Runtime is the first Orchestra release that normalizes the repository a
 - Strengthened Cloak's documentation-only frontend review contract with artifact-evidence requirements, clearer form and validation messaging review, explicit loading/empty/error/success/retry/permission-state review, sharper frontend handoff blueprint guidance, and matching tracked Codex export parity for the updated Cloak docs.
 - Normalized Conductor's skill documentation against the shared specialist authoring standard by clarifying activation conditions, supported work, scope enforcement, validation expectations, local-only safety, and direct-route versus orchestration versus reroute guidance, with matching tracked Codex export parity.
 - Normalized Ponytail specialist documentation with explicit activation conditions, supported work, scope enforcement, validation expectations, local-only safety, and direct handoff boundaries for implementation-owned code changes, with matching tracked Codex export parity.
+- Normalized Clockwork specialist documentation with explicit activation conditions, supported work, role boundaries, scope enforcement, validation expectations, local-only safety, and direct architecture-boundary handoff guidance, with matching tracked Codex export parity.
 
 ### Changed
 - Clarified optional project governance rulesets so `PROJECT_CONTEXT.md` enforcement depends on project type, risk level, and declared governance level.
