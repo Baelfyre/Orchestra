@@ -31,6 +31,7 @@ Portable Runtime is the first Orchestra release that normalizes the repository a
 - Normalized Overseer specialist documentation with explicit validation ownership boundaries, evidence expectations, local-only safety, expanded handoff guidance, and output-format selection while preserving its validation/readiness scope.
 - Normalized Chronicler specialist documentation with explicit persistence ownership boundaries, supported work, validation expectations, output-format selection, and expanded handoff guidance while preserving its database and data-integrity scope.
 - Normalized Scribe specialist documentation with explicit documentation ownership boundaries, activation conditions, validation expectations, output-format selection, and expanded handoff guidance while preserving its source-backed documentation scope.
+- Normalized Weaver specialist documentation with explicit diagram ownership boundaries, activation conditions, validation expectations, output-format selection, and expanded handoff guidance while preserving its visual-modeling scope.
 
 ### Changed
 - Clarified optional project governance rulesets so `PROJECT_CONTEXT.md` enforcement depends on project type, risk level, and declared governance level.
