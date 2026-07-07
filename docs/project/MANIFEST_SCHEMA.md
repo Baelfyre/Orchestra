@@ -23,6 +23,8 @@ A future loader might generate a JSON file (e.g., `plugin-manifest.json`) using 
 
 By maintaining this structured YAML metadata directly inside the `SKILL.md` files, the repository ensures zero drift between the human-readable Markdown documentation and any future machine-readable JSON manifests.
 
+The frontmatter schema is only one part of the specialist contract. For the shared authoring rules covering body sections, boundaries, handoffs, safety rules, validation expectations, and routing discipline, see [Specialist Authoring Standard](SPECIALIST_AUTHORING_STANDARD.md).
+
 ## Manifest verification
 
 - The YAML frontmatter in each `SKILL.md` is the **absolute source of truth**.

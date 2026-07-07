@@ -43,6 +43,7 @@ However, as agentic platforms evolve, automated skill discovery and deterministi
 - Loaders should parse this block (which includes `slug`, `role`, `primary_use`, `avoid_when`, `activation_level`, `depends_on`, and `output_formats`) to build an internal routing index.
 - This metadata allows an agent to decide which skill to load before ever reading the `SKILL.md` body.
 - **Note:** Future plugin loaders should treat any generated or verified manifest JSON as discovery hints only. They are not a replacement for reading the authoritative Markdown skill files when performing actual work.
+- For the repository-local authoring contract around specialist frontmatter, boundaries, handoffs, and safety rules, see [Specialist Authoring Standard](SPECIALIST_AUTHORING_STANDARD.md).
 
 ## Using the Routing Map
 - The root `ROUTING_MAP.md` is a lightweight lookup table.
