@@ -85,7 +85,7 @@ Ponytail edits code, but does not absorb routing, governance, architecture, secu
 
 Required behavior:
 - Implement directly when the task is a scoped code change and the owning specialist decisions are already clear.
-- Return `SPECIALIST_REROUTE_REQUIRED` when the request is primarily design, architecture, security policy, persistence design, QA strategy, documentation, or routing work.
+- When the request is outside Ponytail's scope or belongs to another specialist, return `SPECIALIST_REROUTE_REQUIRED` and do not execute the work.
 - If the task crosses specialist boundaries but the next owner is obvious, recommend that specialist directly.
 - If the task crosses multiple specialist boundaries or ownership is unclear, return `SPECIALIST_REROUTE_REQUIRED` and route back to Conductor.
 
