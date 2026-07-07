@@ -4,9 +4,18 @@ Use only the sections relevant to the selected review mode. Unchecked items are 
 
 ## General UX
 - [ ] Identify the primary user, task, entry point, and success state.
+- [ ] Identify which artifact sources were actually reviewed before drawing conclusions.
 - [ ] Confirm the main action is discoverable and uses familiar language.
 - [ ] Check feedback, cancellation, recovery, loading, empty, and error states.
+- [ ] Check success, retry, and permission-denied states when the feature has them.
 - [ ] Remove steps and choices that do not support the task.
+
+## Artifact Evidence
+- [ ] Distinguish inspected evidence from assumptions and missing artifacts.
+- [ ] For Figma evidence, inspect tokens, components, variants, annotations, and linked guidance when available.
+- [ ] For Canva evidence, inspect brand guidance, templates, comments, or approvals only when they are relevant to the review.
+- [ ] For GitHub evidence, inspect screenshots, docs, stories, examples, issues, or PR context instead of inferring behavior from filenames alone.
+- [ ] Mark missing required artifacts as `NEEDS EVIDENCE`.
 
 ## Cognitive Load
 - [ ] Prefer recognition over recall.
@@ -54,6 +63,7 @@ Use only the sections relevant to the selected review mode. Unchecked items are 
 - [ ] Mark required and optional fields clearly.
 - [ ] Validate without erasing input.
 - [ ] Associate specific errors with affected fields.
+- [ ] Review user-facing validation copy, timing, placement, and recovery path.
 - [ ] Prevent duplicate submission and confirm destructive actions.
 - [ ] Confirm each user action has one authoritative interaction path after the change.
 - [ ] Flag duplicate or conflicting controls unless a staged migration is explicitly documented.
@@ -70,6 +80,7 @@ Use only the sections relevant to the selected review mode. Unchecked items are 
 - [ ] Maintain one clear source of truth for shared state.
 - [ ] Avoid duplicated business logic and unnecessary state synchronization.
 - [ ] Reuse framework features and project utilities.
+- [ ] Keep the review at user-visible behavior and handoff level unless Conductor routes architecture ownership elsewhere.
 
 ## JavaFX Screens
 - [ ] Use layout panes and constraints that survive resize and localization.
@@ -99,6 +110,7 @@ Use only the sections relevant to the selected review mode. Unchecked items are 
 - [ ] Highly visible focus states exist for interactive elements.
 - [ ] Full keyboard navigation is supported.
 - [ ] Loading, error, and empty states are designed and handled.
+- [ ] Success, retry, and permission states are designed and handled when the feature has them.
 - [ ] Error messaging is secure and does not leak system details.
 - [ ] Sensitive-data display is masked or privacy-aware.
 - [ ] Role-aware UI hides unauthorized actions (but relies on backend for enforcement).
@@ -109,6 +121,11 @@ Use only the sections relevant to the selected review mode. Unchecked items are 
 - [ ] Identify duplicated patterns, inconsistent variants, workarounds, and stale styles.
 - [ ] Separate intentional tradeoffs from accidental drift.
 - [ ] Prioritize debt affecting tasks, accessibility, responsiveness, or change cost.
+
+## Handoff Blueprint
+- [ ] Define the semantic structure and affected components clearly enough for implementation without writing code.
+- [ ] State design-system constraints, form and validation expectations, and visible state coverage.
+- [ ] Name the downstream owner for implementation, security, architecture, persistence, validation, diagrams, or long-form docs when those concerns appear.
 
 ## Specialist Handoff
 - [ ] Route diagram semantics and modeling to `weaver`.

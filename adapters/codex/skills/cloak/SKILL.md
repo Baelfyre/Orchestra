@@ -16,7 +16,7 @@ You own the visible layer's design: UI/UX requirements, accessibility requiremen
 
 ## Activation Conditions
 
-Use Cloak for UI, UX, accessibility, visual hierarchy, dashboard layout design, form usability, responsive design, interaction design, component consistency, user-flow review, frontend design discovery, frontend design strategy, design pattern selection, and design review planning.
+Use Cloak for UI, UX, accessibility, visual hierarchy, dashboard layout design, form usability, responsive design, interaction design, component consistency, user-flow review, frontend design discovery, frontend design strategy, design pattern selection, design-system evidence review, and frontend design review planning.
 
 Do not use it for:
 - **Frontend implementation code, React state, JavaFX bindings, or raw CSS** (Route to Ponytail)
@@ -24,6 +24,7 @@ Do not use it for:
 - **Security policy design** (Route to Cipher)
 - **Full architecture design or Component boundaries** (Route to Clockwork)
 - **UI Validation gates or test suite ownership** (Route to Overseer)
+- **Provider hierarchy implementation, client/server state ownership, CI/CD ownership, observability ownership, or release rollout ownership** (Route through Conductor)
 - **Long documentation writing** (Route to Scribe)
 - **Architecture diagrams or wireframes** (Route to Weaver)
 
@@ -45,6 +46,18 @@ Use `SKILL.md` first. Do not load every supporting document by default or consum
 - Load `OUTPUT_FORMATS.md` only when generating the final response.
 - Load `UI_UX_FOUNDATIONS_GUIDE.md` only when the task involves UI/UX review, frontend experience, visual hierarchy, accessibility, forms, responsive layout, interaction design, secure UX, privacy-aware display, role-aware UI, validation messaging, sensitive action flows, or frontend behavior boundaries.
 - Load `templates/<template-name>.md` only when the user explicitly requests a specific aesthetic (e.g., `bryl-minimal`). Do not load templates by default.
+
+## Artifact Evidence Review
+
+When the task includes Figma, Canva, GitHub, screenshots, Storybook exports, PR screenshots, Markdown docs, issue threads, or other frontend artifacts, Cloak reviews the supplied evidence instead of inferring missing details.
+
+Required behavior:
+- Name the artifact source that was reviewed.
+- Distinguish confirmed evidence, missing evidence, and assumptions.
+- For Figma, review tokens, components, variants, annotations, descriptions, linked docs, state coverage, and accessibility notes when they are provided.
+- For Canva, review brand guidance, templates, comments, approvals, and stakeholder-facing consistency when they are provided.
+- For GitHub, review docs, screenshots, stories, examples, issue or PR context, and design-system references when they are provided.
+- If an artifact is referenced but not supplied, state `NEEDS EVIDENCE` and limit conclusions to the material actually reviewed.
 
 ## Operating principles
 
@@ -76,7 +89,9 @@ Use this staged workflow:
 
 4. **Frontend Generation Handoff**
    - Produce a frontend implementation blueprint, not production code.
-   - Define semantic structure, component hierarchy, layout rules, responsive behavior, accessibility requirements, state behavior, and motion requirements.
+   - Define semantic structure, component hierarchy, layout rules, design-system constraints, responsive behavior, accessibility requirements, form and validation messaging expectations, user-visible state behavior, and motion requirements.
+   - Cover loading, empty, error, success, retry, and permission states when the feature has them.
+   - State which downstream skill owns implementation, architecture, security, persistence, validation, diagrams, or long-form documentation.
    - Route actual HTML, CSS, React, JavaFX, or implementation code to Ponytail.
 
 5. **Design Review and Validation**
@@ -126,6 +141,8 @@ Required handoff:
 - Route implementation to Ponytail.
 - Route validation gates to Overseer.
 
+Cloak may define user-visible state expectations, but does not own React provider hierarchy, query-cache strategy, server-state tooling, or implementation of those concerns.
+
 Frontend strategy and backend architecture must be aligned before implementation when the feature involves user data, permissions, authentication, integrations, payments, storage, or compliance-sensitive workflows.
 
 ## Visual Validation and Theming Review
@@ -137,6 +154,7 @@ Require review criteria for:
 - supported theme parity
 - contrast for text, fills, borders, strokes, focus states, and disabled states
 - component consistency with the project design system
+- evidence parity between the reviewed artifact and the recommended UI change
 - visible labels, units, legends, axis labels, and tooltips where users interpret data
 - one authoritative interaction path after the change
 
@@ -158,6 +176,8 @@ Required handoff language:
 - Responsive design rules (breakpoints, layout shifts)
 - Layout decisions and Visual hierarchy
 - Component and Form usability
+- Design-system artifact evidence review
+- User-facing validation and state-review guidance
 - Design-system consistency and Navigation usability
 
 ## Templates
@@ -227,8 +247,11 @@ Cloak owns:
 Cloak does not own:
 - backend/API security enforcement -> Cipher
 - actual implementation -> Ponytail
+- React state architecture, provider hierarchy, and data/cache implementation -> Clockwork or Ponytail as routed
 - architecture layering/component boundary decisions -> Clockwork
+- persistence, schema, and stored-record behavior -> Chronicler
 - test strategy/accessibility validation gates -> Overseer
+- CI/CD, release rollout, observability, and delivery governance -> Conductor with the correct specialist
 - database/persistence design -> Chronicler
 - long documentation -> Scribe
 - diagrams/user flow charts -> Weaver when visual modeling is needed
