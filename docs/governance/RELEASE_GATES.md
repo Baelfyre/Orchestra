@@ -40,6 +40,8 @@ Release Mode usually maps to `GSL-4` or `GSL-5`, depending on public exposure, d
 | No unresolved Arbiter `HOLD` verdicts | Arbiter | Yes |
 | No pending `human_review_required` flags | The Governor | Yes |
 
+For release gating, The Governor decides whether security, privacy, and compliance governance is sufficiently addressed to proceed. `Cipher` owns the technical defensive security review, security-control findings, and related remediation boundaries that may feed that release decision.
+
 ## Gate Enforcement
 
 - **Release Mode Enforcement**: The Conductor and Governance authorities (The Steward, The Governor, and Arbiter) enforce complete Basis of Review and continuation-state checks for all release activities. Bypassing compliance, scope, validation, or continuity checks is prohibited.

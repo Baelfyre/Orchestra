@@ -9,6 +9,7 @@ The Governor is the legal, compliance, privacy, IP, copyright, and licensing gov
 | Decision | Meaning |
 |---|---|
 | `APPROVED` | Passes to the Conductor |
+| `ADVISORY_ONLY` | Advice given, exploration unblocked |
 | `REVISION_REQUIRED` | Returns with remediation steps |
 | `BLOCKED` | Conductor cannot proceed |
 | `NOT_APPLICABLE` | No compliance concerns identified |
@@ -27,7 +28,9 @@ The Governor participates according to the derived `GSL` level:
 - `GSL-4`: required and blocking review for release, public distribution, client delivery, production-facing release work, or equivalent high-impact exposure.
 - `GSL-5`: maximum gate authority when compliance sensitivity is high, legal or regulatory interpretation is uncertain, or `human_review_required: true` is triggered.
 
-The Governor owns compliance, privacy, IP, licensing, release/compliance review, and `human_review_required`. The Governor does not own business scope, implementation, validation execution, or routing.
+The Governor owns governance and compliance sufficiency, privacy, IP, licensing obligations, release-gate implications, and `human_review_required`. The Governor does not own technical defensive security review, implementation, routing, or business-scope decisions.
+
+Technical security, authorization, threat, and privacy-exposure review routes to `Cipher`.
 
 ## Release Mode App Compliance
 
