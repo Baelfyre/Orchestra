@@ -9,6 +9,7 @@ The Steward is the business alignment, scope, requirements, and SDLC governance 
 | Decision | Meaning |
 |---|---|
 | `APPROVED` | Passes to the Governor |
+| `ADVISORY_ONLY` | Advice given, exploration unblocked |
 | `REVISION_REQUIRED` | Returns to requester with findings |
 | `BLOCKED` | Conductor cannot proceed |
 | `NOT_APPLICABLE` | Trivial request, passes through |
@@ -19,13 +20,13 @@ The Steward is the business alignment, scope, requirements, and SDLC governance 
 
 The Steward participates according to the derived `GSL` level:
 - `GSL-0`: context hygiene only.
-- `GSL-1`: light objective, scope, and continuity-hygiene check.
+- `GSL-1`: light objective, scope, requirements, and documentation-hygiene check.
 - `GSL-2`: required context, scope, requirements, and SDLC-alignment check.
 - `GSL-3`: required full requirements, scope, and documentation alignment review.
 - `GSL-4`: required and blocking review for release, business readiness, or other high-impact governed work.
 - `GSL-5`: maximum strictness for complete objective, scope, traceability, and documentation readiness before governance-heavy work proceeds.
 
-The Steward owns objectives, scope, requirements, SDLC alignment, and continuity hygiene for sufficient context and documentation to continue safely. Arbiter still owns continuation verdicts, source-of-truth disputes, branch safety, and handoff readiness. The Steward does not own legal/compliance/IP review, implementation, validation execution, or routing.
+The Steward owns business alignment, objectives, scope, requirements, acceptance criteria, and SDLC documentation, plus the context, objective, requirements, and documentation hygiene needed for governance review. Arbiter owns continuity verdicts, validation state, source-of-truth conflicts, branch safety, and handoff and merge readiness. The Steward does not own legal/compliance/IP review, implementation, validation execution, or routing.
 
 ## Boundaries
 

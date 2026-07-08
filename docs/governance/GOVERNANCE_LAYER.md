@@ -231,11 +231,11 @@ Interpretation rules:
 | Governance Strictness Level | Steward | Governor | Arbiter | Overseer | Dagger |
 |---|---|---|---|---|---|
 | `GSL-0` | Context hygiene only | Usually not required | Only if conflict exists | Optional | Not used |
-| `GSL-1` | Light continuity check | Advisory | Optional | Basic validation | Not used |
-| `GSL-2` | Required context check | Conditional | Conflict resolution if needed | Standard checks | Simulation only if relevant |
-| `GSL-3` | Required | Required for release/public claims or material compliance triggers | Required for unresolved conflicts or continuation gaps | Strict validation | Guardrail simulation if risky |
-| `GSL-4` | Required | Required and blocking | Required for evidence disputes, handoff risk, merge risk, or release uncertainty | Strict validation plus evidence | Required simulation when destructive potential exists; no live destructive execution |
-| `GSL-5` | Required | Maximum gate authority | Required for conflicts or source-of-truth disputes | Strict release readiness | Required guardrail proof; live destructive execution blocked unless separately approved |
+| `GSL-1` | Light objective, requirements, and documentation hygiene check | Advisory | Optional | Basic validation | Not used |
+| `GSL-2` | Required context, objective, requirements, and documentation hygiene check | Conditional | Conflict resolution if needed | Standard checks | Simulation only if relevant |
+| `GSL-3` | Required full objective, scope, requirements, and documentation hygiene review | Required for release/public claims or material compliance triggers | Required for unresolved conflicts or continuation gaps | Strict validation | Guardrail simulation if risky |
+| `GSL-4` | Required and blocking objective, scope, requirements, and documentation readiness review | Required and blocking | Required for evidence disputes, handoff risk, merge risk, or release uncertainty | Strict validation plus evidence | Required simulation when destructive potential exists; no live destructive execution |
+| `GSL-5` | Maximum strictness for objective, scope, requirements, traceability, and documentation readiness | Maximum gate authority | Required for conflicts or source-of-truth disputes | Strict release readiness | Required guardrail proof; live destructive execution blocked unless separately approved |
 
 `GSL` changes review depth and specialist participation only. It does not create new decision values and does not override existing skill boundaries.
 
@@ -268,6 +268,8 @@ The Governor adds `human_review_required` for uncertain legal, regulatory, priva
 
 Arbiter adds continuation verdicts: `READY`, `READY_WITH_MINOR_FIXES`, `HOLD`, and `BLOCKED`.
 
+For governance-effectiveness calibration, Arbiter may also use `READY_WITH_REQUIRED_FIXES`. This does not replace the continuation verdict set above and does not create a new governance decision meaning.
+
 ## Default Output Format
 
 ```
@@ -294,7 +296,7 @@ REQUIRED_ACTIONS: [actions needed or "none"]
 |---|---|---|
 | The Steward | Business goals, scope, requirements, SDLC | Legal, compliance, IP, licensing, implementation |
 | The Governor | Legal, compliance, privacy, IP, licensing | Business alignment, scope, implementation |
-| Arbiter | Continuity, validation state, branch safety, source of truth, handoff readiness | Feature implementation, architecture design, legal compliance, business scope |
+| Arbiter | Continuity, validation state, branch safety, source of truth, handoff and merge readiness | Feature implementation, architecture design, legal compliance, business scope |
 | Conductor | Routing, orchestration, skill selection | Governance decisions, implementation |
 | Execution Skills | Implementation, code changes | Governance, routing |
 
