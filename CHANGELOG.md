@@ -15,16 +15,16 @@ Portable Runtime is the first Orchestra release that normalizes the repository a
 
 ## Pre-release Build History
 
-## Unreleased
+## v1.1.0 - Specialist Governance & Boundary Standard
+
+Specialist Governance & Boundary Standard is a documentation-, governance-, metadata-, and specialist-definition-focused release that builds on the `v1.0.0 Portable Runtime` baseline without changing runtime behavior, routing policy, validation logic, CI workflows, Dagger live-execution behavior, or governance decision semantics.
 
 ### Added
-- Added an App Release Compliance Gate plus reusable privacy review, data inventory, IP clearance, privacy policy, terms, and retention/deletion governance templates for app and public release workflows.
 - Added a shared `docs/project/SPECIALIST_AUTHORING_STANDARD.md` reference for future specialist authoring, with short cross-links from contributing, plugin-readiness, and manifest-schema documentation.
 
 ### Changed
 - Clarified governance authority boundaries for Arbiter status vocabulary, Steward hygiene wording, and Governor/Cipher release-security ownership without changing governance semantics.
 - Clarified Governance Strictness Levels as a derived scale over existing project type, operating mode, release stage, and risk classifications without changing governance semantics.
-- Integrated Release Mode governance docs so The Governor now treats app release compliance artifacts as required when applicable and returns `REVISION_REQUIRED` or `BLOCKED` when release-gate documentation is missing.
 - Strengthened Cloak's documentation-only frontend review contract with artifact-evidence requirements, clearer form and validation messaging review, explicit loading/empty/error/success/retry/permission-state review, sharper frontend handoff blueprint guidance, and matching tracked Codex export parity for the updated Cloak docs.
 - Normalized Conductor's skill documentation against the shared specialist authoring standard by clarifying activation conditions, supported work, scope enforcement, validation expectations, local-only safety, and direct-route versus orchestration versus reroute guidance, with matching tracked Codex export parity.
 - Normalized Ponytail specialist documentation with explicit activation conditions, supported work, scope enforcement, validation expectations, local-only safety, and direct handoff boundaries for implementation-owned code changes, with matching tracked Codex export parity.
@@ -35,6 +35,15 @@ Portable Runtime is the first Orchestra release that normalizes the repository a
 - Normalized Scribe specialist documentation with explicit documentation ownership boundaries, activation conditions, validation expectations, output-format selection, and expanded handoff guidance while preserving its source-backed documentation scope.
 - Normalized Weaver specialist documentation with explicit diagram ownership boundaries, activation conditions, validation expectations, output-format selection, and expanded handoff guidance while preserving its visual-modeling scope.
 - Cleaned up cross-specialist consistency by aligning Scribe output-format headings and adding compact Cloak role-boundary and validation-expectation sections without changing specialist behavior.
+- Clarified Governor and Cipher skill-source authority boundaries between governance/compliance sufficiency and technical defensive security review.
+
+## Unreleased
+
+### Added
+- Added an App Release Compliance Gate plus reusable privacy review, data inventory, IP clearance, privacy policy, terms, and retention/deletion governance templates for app and public release workflows.
+
+### Changed
+- Integrated Release Mode governance docs so The Governor now treats app release compliance artifacts as required when applicable and returns `REVISION_REQUIRED` or `BLOCKED` when release-gate documentation is missing.
 
 ### Changed
 - Clarified optional project governance rulesets so `PROJECT_CONTEXT.md` enforcement depends on project type, risk level, and declared governance level.
@@ -178,7 +187,6 @@ Portable Runtime is the first Orchestra release that normalizes the repository a
 - Added explicit least-privilege permissions to the Governance Check workflow.
 
 ### Changed
-- Clarified Governor and Cipher skill-source authority boundaries between governance/compliance sufficiency and technical defensive security review.
 - Updated GitHub Actions dependencies for the governance workflow:
   - actions/checkout from v4 to v7
   - actions/setup-python from v5 to v6

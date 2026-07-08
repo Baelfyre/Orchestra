@@ -1,7 +1,7 @@
 {
   "name": "orchestra-vscode-scaffold",
   "displayName": "Orchestra VS Code Scaffold",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Scaffold-only VS Code packaging manifest for Orchestra runtime adapter integration.",
   "orchestra": {
