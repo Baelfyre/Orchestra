@@ -2,9 +2,9 @@
 
 Orchestra can be installed in several ways depending on your AI host or IDE:
 
-## Portable Runtime Release
+## Current Release
 
-`v1.0.0 Portable Runtime` standardizes Orchestra around a shared runtime core plus thin host adapters.
+`v1.1.0 Specialist Governance & Boundary Standard` builds on the `v1.0.0 Portable Runtime` baseline and focuses on documentation, governance, metadata, and specialist-definition normalization.
 
 | Host | Install Surface | Current Status |
 |---|---|---|
