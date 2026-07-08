@@ -160,6 +160,85 @@ Next Recommended Step:
 | `MEDIUM` | Internal tool, team project, third-party deps, limited exposure | Standard |
 | `HIGH` | Public release, PII, payments, AI outputs, legal/health/finance domain, commercial use | Expanded + human review |
 
+## Governance Strictness Levels
+
+Governance Strictness Levels (`GSL-0` through `GSL-5`) are a **derived scale**, not a new required project-context field. They do not replace `Project Type`, `Operating Mode`, `Release Stage`, `Risk Level`, `Data Sensitivity`, or any existing governance decision values. They normalize the existing inputs into a single shorthand for review depth, evidence expectations, and specialist involvement.
+
+Derivation rule:
+
+```text
+Governance Strictness Level = max(applicable mode baseline, release trigger, risk trigger, compliance/data trigger, continuity trigger)
+```
+
+Interpretation rules:
+- `Operating Mode` is the task-intent baseline.
+- `Release Stage` is the product or repository lifecycle state.
+- Other triggers may raise the derived level above the mode baseline.
+- Existing decision meanings remain unchanged: `APPROVED`, `ADVISORY_ONLY`, `REVISION_REQUIRED`, `BLOCKED`, `NOT_APPLICABLE`, `READY`, `READY_WITH_MINOR_FIXES`, and `HOLD` keep their current semantics.
+
+### Mode Baseline
+
+| Operating Mode | Typical Baseline |
+|---|---|
+| `Ideation` | `GSL-0` |
+| `Prototype` | `GSL-1` |
+| `Implementation` | `GSL-2` |
+| `Audit` | `GSL-3` |
+| `Release` | `GSL-4` |
+
+### Trigger Mapping Guide
+
+| Input or Trigger | Typical Signals | Derived Contribution |
+|---|---|---|
+| `Project Type` | `school`, `personal`, local `research` | Usually `GSL-0` to `GSL-2` |
+| `Project Type` | `internal`, team `open-source` development | Usually `GSL-2` to `GSL-3` |
+| `Project Type` | `commercial`, `client-facing`, public `open-source` distribution | Usually `GSL-3` to `GSL-4` |
+| `Operating Mode` | intent classification only | Sets the baseline before other triggers apply |
+| `Release Stage` | `prototype` | Usually `GSL-1` |
+| `Release Stage` | `development` | Usually `GSL-2` |
+| `Release Stage` | `staging` | Usually `GSL-3` |
+| `Release Stage` | `production` or externally committed `maintenance` | Usually `GSL-4`, or `GSL-5` if other high-impact triggers apply |
+| `LOW` / `MEDIUM` / `HIGH` Risk Level | existing risk model | `LOW` usually keeps work in `GSL-1` to `GSL-2`; `MEDIUM` often raises to `GSL-2` to `GSL-3`; `HIGH` often raises to `GSL-3` to `GSL-4` |
+| `Data Sensitivity` | `none`, `low`, non-sensitive | Usually no raise beyond `GSL-0` to `GSL-2` |
+| `Data Sensitivity` | `medium`, `sensitive` | Often raises to `GSL-2` or `GSL-3` |
+| `Data Sensitivity` | `high`, `PII`, `financial`, `health` | Often raises to `GSL-4` or `GSL-5` |
+| `Public Exposure` | local-only, private, internal-only | Usually no raise beyond `GSL-0` to `GSL-2` |
+| `Public Exposure` | client demo, limited external access, public claims, beta | Often raises to `GSL-3` |
+| `Public Exposure` | public release, external distribution, production-facing operation | Often raises to `GSL-4` or `GSL-5` |
+| `Compliance or Legal Sensitivity` | basic attribution or ordinary dependency review | Usually `GSL-1` to `GSL-2` |
+| `Compliance or Legal Sensitivity` | contractual review, privacy review, license compatibility, IP clearance | Often raises to `GSL-3` or `GSL-4` |
+| `Compliance or Legal Sensitivity` | regulated domain, uncertain obligations, or `human_review_required: true` | Raises to `GSL-5` |
+| `Destructive Potential` | no destructive path in scope | No raise by itself |
+| `Destructive Potential` | guarded local simulation, negative-path chaos work, Dagger review | Often raises to `GSL-3` or `GSL-4` when relevant |
+| `Destructive Potential` | live destructive path requested | Treat as high strictness. Dagger remains simulation-only here unless separately approved through its own guardrails |
+| `Continuity or Validation Gaps` | none | No raise by itself |
+| `Continuity or Validation Gaps` | missing validation, unclear source of truth, handoff risk, branch uncertainty | Often raises to `GSL-2` or `GSL-3` |
+| `Continuity or Validation Gaps` | unresolved evidence dispute, release handoff uncertainty, blocked source-of-truth conflict | Often raises to `GSL-4` or `GSL-5` until resolved |
+
+### Typical Profiles
+
+| Governance Strictness Level | Typical Profile |
+|---|---|
+| `GSL-0` | Ideation, brainstorming, rough planning, no blocking governance path |
+| `GSL-1` | School work, personal sandbox, local prototype, low-risk exploratory work |
+| `GSL-2` | Normal governed implementation with known context and limited exposure |
+| `GSL-3` | Elevated governance because of audit scope, staging, public claims, client-facing work, or material risk triggers |
+| `GSL-4` | Release-critical, production-facing, client delivery, public distribution, or other blocking governance path |
+| `GSL-5` | Maximum governance strictness due to compliance-sensitive domains, human review, destructive risk, or unresolved release evidence conflicts |
+
+### Specialist Involvement by GSL
+
+| Governance Strictness Level | Steward | Governor | Arbiter | Overseer | Dagger |
+|---|---|---|---|---|---|
+| `GSL-0` | Context hygiene only | Usually not required | Only if conflict exists | Optional | Not used |
+| `GSL-1` | Light continuity check | Advisory | Optional | Basic validation | Not used |
+| `GSL-2` | Required context check | Conditional | Conflict resolution if needed | Standard checks | Simulation only if relevant |
+| `GSL-3` | Required | Required for release/public claims or material compliance triggers | Required for unresolved conflicts or continuation gaps | Strict validation | Guardrail simulation if risky |
+| `GSL-4` | Required | Required and blocking | Required for evidence disputes, handoff risk, merge risk, or release uncertainty | Strict validation plus evidence | Required simulation when destructive potential exists; no live destructive execution |
+| `GSL-5` | Required | Maximum gate authority | Required for conflicts or source-of-truth disputes | Strict release readiness | Required guardrail proof; live destructive execution blocked unless separately approved |
+
+`GSL` changes review depth and specialist participation only. It does not create new decision values and does not override existing skill boundaries.
+
 ## Authority Flow
 
 1. **Request enters** the system.

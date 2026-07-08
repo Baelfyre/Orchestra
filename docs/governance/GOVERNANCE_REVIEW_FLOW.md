@@ -2,6 +2,14 @@
 
 Every request passes through this flow before execution begins. Review depth scales to project risk and the active operating mode.
 
+## Governance Strictness Derivation Note
+
+Governance strictness is derived from the highest applicable trigger, not from a new input field. `Operating Mode` identifies task intent, while `Release Stage` identifies lifecycle state. The flow below does not change: the derived strictness only explains why a given request stays on a lightweight path or escalates to stricter governance depth.
+
+```text
+Governance Strictness Level = max(applicable mode baseline, release trigger, risk trigger, compliance/data trigger, continuity trigger)
+```
+
 ## Standard User Flow
 
 ```
@@ -114,6 +122,7 @@ Arbiter returns `READY`, `READY_WITH_MINOR_FIXES`, `HOLD`, or `BLOCKED`. `HOLD` 
 - Release Mode includes final release-gate review before public release, client delivery, production deployment, app store submission, or open-source distribution.
 - For app release workflows, The Governor must review the [App Release Compliance Gate](APP_RELEASE_COMPLIANCE_GATE.md).
 - Missing required privacy, data inventory, retention, deletion, account deletion documentation when accounts exist, platform disclosures, or IP clearance artifacts must return `REVISION_REQUIRED` or `BLOCKED`, depending on release context and severity.
+- Release Mode is task intent. `production` is release-stage state. They are related inputs, but they are not synonyms.
 
 ## Re-submission
 
