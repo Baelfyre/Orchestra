@@ -178,6 +178,7 @@ Portable Runtime is the first Orchestra release that normalizes the repository a
 - Added explicit least-privilege permissions to the Governance Check workflow.
 
 ### Changed
+- Clarified Governor and Cipher skill-source authority boundaries between governance/compliance sufficiency and technical defensive security review.
 - Updated GitHub Actions dependencies for the governance workflow:
   - actions/checkout from v4 to v7
   - actions/setup-python from v5 to v6
