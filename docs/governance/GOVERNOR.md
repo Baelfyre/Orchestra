@@ -1,6 +1,6 @@
-# The Governor — Reference Summary
+# The Governor - Reference Summary
 
-> **Authoritative behavior is defined in [`skills/the-governor/SKILL.md`](../../.agents/skills/the-governor/SKILL.md).** This document is a human-facing quick reference only. Do not use it as a behavior source of truth.
+> **Authoritative behavior is defined in [`skills/the-governor/SKILL.md`](../../skills/the-governor/SKILL.md).** This document is a human-facing quick reference only. Do not use it as a behavior source of truth.
 
 The Governor is the legal, compliance, privacy, IP, copyright, and licensing governance authority. It sits above the Conductor and reviews every request after the Steward approves it.
 
@@ -16,6 +16,18 @@ The Governor is the legal, compliance, privacy, IP, copyright, and licensing gov
 **Risk levels**: `LOW` (lightweight), `MEDIUM` (standard), `HIGH` (expanded with human review).
 
 Sets `human_review_required: true` when legal interpretation is uncertain, regulatory applicability is unclear, license compatibility cannot be confirmed, or public release has compliance implications.
+
+## Governance Strictness Levels
+
+The Governor participates according to the derived `GSL` level:
+- `GSL-0`: usually not required unless a clear compliance or legal trigger is already present.
+- `GSL-1`: advisory or lightweight review.
+- `GSL-2`: conditional or standard review for privacy, licensing, dependencies, attribution, and compliance-sensitive changes.
+- `GSL-3`: required review for public claims, client-facing exposure, release-adjacent work, or material data/compliance triggers.
+- `GSL-4`: required and blocking review for release, public distribution, client delivery, production-facing release work, or equivalent high-impact exposure.
+- `GSL-5`: maximum gate authority when compliance sensitivity is high, legal or regulatory interpretation is uncertain, or `human_review_required: true` is triggered.
+
+The Governor owns compliance, privacy, IP, licensing, release/compliance review, and `human_review_required`. The Governor does not own business scope, implementation, validation execution, or routing.
 
 ## Release Mode App Compliance
 

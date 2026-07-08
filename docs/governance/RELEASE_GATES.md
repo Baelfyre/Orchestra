@@ -4,6 +4,15 @@ Release gates enforce governance compliance before any release. **Release Mode**
 
 For app, marketplace, and other public software releases, The Governor must also verify the [App Release Compliance Gate](APP_RELEASE_COMPLIANCE_GATE.md).
 
+## Governance Strictness Note
+
+Release Mode usually maps to `GSL-4` or `GSL-5`, depending on public exposure, data sensitivity, compliance sensitivity, and human-review triggers.
+
+`Release Mode` and `production` are related but not synonymous:
+- `Release Mode` is the active task intent for release, distribution, deployment, or delivery work.
+- `production` is a release-stage lifecycle state in the project context.
+- A production issue may still be handled outside Release Mode until a release or distribution step begins, while staging or external-delivery work may still enter Release Mode before production.
+
 ## Pre-Release Checklist
 
 | Gate | Authority | Must Pass |

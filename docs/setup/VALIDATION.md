@@ -12,6 +12,8 @@ Orchestra's rules are divided into clear enforcement levels to distinguish betwe
 - **Level 5: CI release gate**. (Enforced in CI) Build pipeline fails if structural validation or strict guardrails fail.
 - **Level 6: Host-integrated runtime blocker**. (Future) Host platform forcibly blocks output if policies are violated.
 
+These validation enforcement levels are separate from the governance-facing `Governance Strictness Levels` (`GSL-0` through `GSL-5`) described in `docs/governance/`. The enforcement ladder describes how validation is applied programmatically. The `GSL` scale describes derived governance review depth from existing project context. The two ladders should not be treated as interchangeable.
+
 ---
 
 ## 1. Primary Behavior Validation Runner (`run_tests.py`)
