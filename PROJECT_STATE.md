@@ -2,7 +2,7 @@
 
 - **Project Name:** Conductor
 - **Active Repo:** `C:\conductor`
-- **Current Branch:** `chore/readme-release-snapshot-metrics`
+- **Current Branch:** `main`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.0`
 - **Target Patch:** `v1.1.1`
