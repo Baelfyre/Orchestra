@@ -2,7 +2,7 @@
 
 - **Current Task:** Wave 1 - Release-surface and startup-state drift remediation
 - **Current Repo:** `C:\conductor`
-- **Current Branch:** `release/v1.1.1-post-release-hardening`
+- **Current Branch:** `main`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.0`
 - **Target Patch:** `v1.1.1`
