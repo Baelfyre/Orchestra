@@ -2,7 +2,7 @@
 
 - **Current Task:** Wave 1 - Release-surface and startup-state drift remediation
 - **Current Repo:** `C:\conductor`
-- **Current Branch:** `main`
+- **Current Branch:** `audit/wave5a-cross-platform-ci-coverage`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.0`
 - **Target Patch:** `v1.1.1`
