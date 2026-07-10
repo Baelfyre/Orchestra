@@ -4,8 +4,8 @@
 - **Current Repo:** `C:\conductor`
 - **Current Branch:** `main`
 - **Base Branch:** `main`
-- **Current Release:** `v1.1.0`
-- **Target Patch:** `v1.1.1`
+- **Current Release:** `v1.1.1`
+- **Target Patch:** `v1.1.2`
 - **Mode:** Implementation with targeted metadata, validation, state, and governance hardening updates
 - **Allowed Files:**
   - Codex `plugin.json`

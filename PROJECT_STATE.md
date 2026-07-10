@@ -4,8 +4,8 @@
 - **Active Repo:** `C:\conductor`
 - **Current Branch:** `main`
 - **Base Branch:** `main`
-- **Current Release:** `v1.1.0`
-- **Target Patch:** `v1.1.1`
+- **Current Release:** `v1.1.1`
+- **Target Patch:** `v1.1.2`
 - **Current Stable State:** `v1.1.0` tagged and published; `main` is clean and aligned; post-release hardening in progress
 - **Related but Forbidden Repo for this task:** `C:\+AA`
 - **Latest Validation:**
