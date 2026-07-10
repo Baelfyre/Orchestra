@@ -47,8 +47,6 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 - Hardened release-surface and startup-state validation by aligning Codex metadata to v1.1.0, removing the drifted example manifest, adding `.codex-plugin/plugin.json` to update consistency checks, and checking structured branch/version claims in repo memory files.
 - Converted PowerShell and shell validation entrypoints into thin wrappers around canonical Python validators to prevent cross-platform validation drift.
 - Hardened update and rollback guidance by requiring fast-forward-only pulls, running canonical validation after updates, and documenting recovery-branch creation before hard resets.
-
-### Changed
 - Clarified optional project governance rulesets so `PROJECT_CONTEXT.md` enforcement depends on project type, risk level, and declared governance level.
 - Wired `tests/runtime` into CI, enforced portable runtime coverage with `pytest-cov --cov-fail-under=90`, switched `validate.yml` to `python tests/behavior/run_tests.py`, and added runtime tests for alias loading, default-command fallback, and unresolved command-to-skill handling.
 
