@@ -1,12 +1,12 @@
 # Session Handoff
 
-- **Current Task:** Wave 5A - Cross-platform CI coverage implementation planning
+- **Current Task:** Post-v1.1.1 maintenance - Wave 5B planning
 - **Current Repo:** `C:\conductor`
-- **Current Branch:** `fix/wave5a-cross-platform-ci-coverage`
+- **Current Branch:** `main`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.1`
 - **Target Patch:** `v1.1.2`
-- **Mode:** Post-v1.1.1 maintenance; audit complete; implementation pending
+- **Mode:** Wave 5A implementation merged; next phase pending
 - **Allowed Files:**
   - Codex `plugin.json`
   - Example manifest (deleted)
@@ -21,7 +21,7 @@
 - **Forbidden Repo:** `C:\+AA`
 - **Last Validation:** All validators passed on `main` at `v1.1.0` baseline (runtime 42/42, 95.51% coverage, behavior pass, governance strict pass).
 - **Known Risks:** Release-surface drift was invisible to validators until this wave; startup state files caused context drift instead of preventing it.
-- **Next Step:** Complete implementation, run full validation suite, review `git diff --stat`, and prepare PR.
+- **Next Step:** Start Wave 5B prompt-load threshold review/reduction from a new audit-first branch.
 - **Fresh-Session Warning:** If the current conversation has long prior history from another repository, enter safe mode and request user confirmation before proceeding with implementation.
 
 ## Token Control Note

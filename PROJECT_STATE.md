@@ -2,11 +2,11 @@
 
 - **Project Name:** Conductor
 - **Active Repo:** `C:\conductor`
-- **Current Branch:** `fix/wave5a-cross-platform-ci-coverage`
+- **Current Branch:** `main`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.1`
 - **Target Patch:** `v1.1.2`
-- **Current Stable State:** `v1.1.1` tagged and published; `main` is clean and aligned; Wave 5A audit complete
+- **Current Stable State:** `v1.1.1` tagged and published; `main` is clean and aligned; Wave 5A implementation merged
 - **Related but Forbidden Repo for this task:** `C:\+AA`
 - **Latest Validation:**
   - `python scripts/preflight_sync_check.py` passed with `PROCEED` on `main` at `v1.1.0`
@@ -22,10 +22,10 @@
   - Caveman Public-Content Exclusion
   - Ponytail Handoff Restriction
   - Acme Readiness Gate Expansion
-- **Current Risks:** Release-surface and startup-state drift identified in post-release audit.
+- **Current Risks:** Prompt-load threshold review/reduction can affect specialist behavior and prompt budget expectations.
 - **Do-Not-Touch Areas:** Do not edit website repo files from this task (`C:\+AA`).
-- **Pending Next Steps:** Complete Wave 1 remediation (release-surface alignment, startup-state refresh, governance hardening), validate, and prepare PR.
-- **Most Recent Checkpoint:** 2026-07-10 - Wave 1 release-surface and startup-state drift remediation.
+- **Pending Next Steps:** Start Wave 5B prompt-load threshold review/reduction as an audit-first branch.
+- **Most Recent Checkpoint:** 2026-07-10 - Wave 5A implementation merged; post-merge startup state realigned.
 
 ## Token Efficiency Rationale
 
