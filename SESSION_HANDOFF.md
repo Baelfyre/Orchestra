@@ -1,12 +1,12 @@
 # Session Handoff
 
-- **Current Task:** Wave 1 - Release-surface and startup-state drift remediation
+- **Current Task:** Wave 5A - Cross-platform CI coverage implementation planning
 - **Current Repo:** `C:\conductor`
 - **Current Branch:** `main`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.1`
 - **Target Patch:** `v1.1.2`
-- **Mode:** Implementation with targeted metadata, validation, state, and governance hardening updates
+- **Mode:** Post-v1.1.1 maintenance; audit complete; implementation pending
 - **Allowed Files:**
   - Codex `plugin.json`
   - Example manifest (deleted)
