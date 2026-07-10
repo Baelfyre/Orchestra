@@ -65,9 +65,12 @@ try {
 
     if ($DryRun) {
         Write-ColorHost 'WARNING' "[DRY RUN] Would run: git fetch"
-        Write-ColorHost 'WARNING' "[DRY RUN] Would run: git pull origin $currentBranch"
-        Write-ColorHost 'WARNING' "[DRY RUN] Would run: .\scripts\validate-manifest.ps1"
-        Write-ColorHost 'WARNING' "[DRY RUN] Would run: .\scripts\validate-structure.ps1"
+        Write-ColorHost 'WARNING' "[DRY RUN] Would run: git pull --ff-only origin $currentBranch"
+        Write-ColorHost 'WARNING' "[DRY RUN] Would run: python scripts/validate_structure.py"
+        Write-ColorHost 'WARNING' "[DRY RUN] Would run: python scripts/validate_manifest.py"
+        Write-ColorHost 'WARNING' "[DRY RUN] Would run: python scripts/check_stale_references.py"
+        Write-ColorHost 'WARNING' "[DRY RUN] Would run: python scripts/governance_check.py --strict"
+        Write-ColorHost 'WARNING' "[DRY RUN] Would run: python adapters/codex/validate_codex_export.py"
         Write-ColorHost 'SUCCESS' "Dry run complete. No changes made."
         exit 0
     }
@@ -87,7 +90,7 @@ try {
     Write-ColorHost 'INFO' "Pulling latest changes for branch '$currentBranch'..."
     $prevErrorAction = $ErrorActionPreference
     $ErrorActionPreference = "Continue"
-    git pull origin $currentBranch
+    git pull --ff-only origin $currentBranch
     if ($LASTEXITCODE -ne 0) {
         Write-ColorHost 'ERROR' "git pull failed. Please check your network or resolve conflicts manually."
         exit 1
@@ -97,31 +100,25 @@ try {
     # 7. Run validations
     Write-ColorHost 'INFO' "Running validation scripts..."
     
-    $manifestScript = Join-Path $repoRoot "scripts\validate-manifest.ps1"
-    $structureScript = Join-Path $repoRoot "scripts\validate-structure.ps1"
+    Write-ColorHost 'INFO' "Running: python scripts/validate_structure.py"
+    & python scripts/validate_structure.py
+    if ($LASTEXITCODE -ne 0) { Write-ColorHost 'ERROR' "Validation failed! Rollback recommended."; exit 1 }
 
-    $psExe = (Get-Process -Id $PID).Path
-    if (Test-Path $manifestScript) {
-        Write-ColorHost 'INFO' "Validating manifest..."
-        & $psExe -ExecutionPolicy Bypass -File $manifestScript
-        if ($LASTEXITCODE -ne 0) {
-            Write-ColorHost 'ERROR' "Manifest validation failed! Rollback recommended."
-            exit 1
-        }
-    } else {
-        Write-ColorHost 'WARNING' "validate-manifest.ps1 not found."
-    }
+    Write-ColorHost 'INFO' "Running: python scripts/validate_manifest.py"
+    & python scripts/validate_manifest.py
+    if ($LASTEXITCODE -ne 0) { Write-ColorHost 'ERROR' "Validation failed! Rollback recommended."; exit 1 }
 
-    if (Test-Path $structureScript) {
-        Write-ColorHost 'INFO' "Validating structure..."
-        & $psExe -ExecutionPolicy Bypass -File $structureScript
-        if ($LASTEXITCODE -ne 0) {
-            Write-ColorHost 'ERROR' "Structure validation failed! Rollback recommended."
-            exit 1
-        }
-    } else {
-        Write-ColorHost 'WARNING' "validate-structure.ps1 not found."
-    }
+    Write-ColorHost 'INFO' "Running: python scripts/check_stale_references.py"
+    & python scripts/check_stale_references.py
+    if ($LASTEXITCODE -ne 0) { Write-ColorHost 'ERROR' "Validation failed! Rollback recommended."; exit 1 }
+
+    Write-ColorHost 'INFO' "Running: python scripts/governance_check.py --strict"
+    & python scripts/governance_check.py --strict
+    if ($LASTEXITCODE -ne 0) { Write-ColorHost 'ERROR' "Validation failed! Rollback recommended."; exit 1 }
+
+    Write-ColorHost 'INFO' "Running: python adapters/codex/validate_codex_export.py"
+    & python adapters/codex/validate_codex_export.py
+    if ($LASTEXITCODE -ne 0) { Write-ColorHost 'ERROR' "Validation failed! Rollback recommended."; exit 1 }
 
     Write-ColorHost 'SUCCESS' "Update and validation completed successfully!"
     Write-ColorHost 'INFO' "Next Steps:"
