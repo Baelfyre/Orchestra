@@ -37,6 +37,14 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 - Cleaned up cross-specialist consistency by aligning Scribe output-format headings and adding compact Cloak role-boundary and validation-expectation sections without changing specialist behavior.
 - Clarified Governor and Cipher skill-source authority boundaries between governance/compliance sufficiency and technical defensive security review.
 
+## v1.1.1 - Post-Release Hardening
+
+### Changed
+- Hardened release-surface and startup-state validation by aligning Codex metadata to v1.1.0, removing the drifted example manifest, adding `.codex-plugin/plugin.json` to update consistency checks, and checking structured branch/version claims in repo memory files.
+- Converted PowerShell and shell validation entrypoints into thin wrappers around canonical Python validators to prevent cross-platform validation drift.
+- Hardened update and rollback guidance by requiring fast-forward-only pulls, running canonical validation after updates, and documenting recovery-branch creation before hard resets.
+- Fixed runtime context assembly so adapter-provided ContextPackage metadata is preserved and enriched instead of bypassed during execution.
+
 ## Unreleased
 
 ### Added
@@ -44,10 +52,6 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 
 ### Changed
 - Integrated Release Mode governance docs so The Governor now treats app release compliance artifacts as required when applicable and returns `REVISION_REQUIRED` or `BLOCKED` when release-gate documentation is missing.
-- Hardened release-surface and startup-state validation by aligning Codex metadata to v1.1.0, removing the drifted example manifest, adding `.codex-plugin/plugin.json` to update consistency checks, and checking structured branch/version claims in repo memory files.
-- Converted PowerShell and shell validation entrypoints into thin wrappers around canonical Python validators to prevent cross-platform validation drift.
-- Hardened update and rollback guidance by requiring fast-forward-only pulls, running canonical validation after updates, and documenting recovery-branch creation before hard resets.
-- Fixed runtime context assembly so adapter-provided ContextPackage metadata is preserved and enriched instead of bypassed during execution.
 - Clarified optional project governance rulesets so `PROJECT_CONTEXT.md` enforcement depends on project type, risk level, and declared governance level.
 - Wired `tests/runtime` into CI, enforced portable runtime coverage with `pytest-cov --cov-fail-under=90`, switched `validate.yml` to `python tests/behavior/run_tests.py`, and added runtime tests for alias loading, default-command fallback, and unresolved command-to-skill handling.
 

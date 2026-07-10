@@ -4,7 +4,7 @@ Orchestra can be installed in several ways depending on your AI host or IDE:
 
 ## Current Release
 
-`v1.1.0 Specialist Governance & Boundary Standard` builds on the `v1.0.0 Portable Runtime` baseline and focuses on documentation, governance, metadata, and specialist-definition normalization.
+`v1.1.1 Post-Release Hardening` builds on the `v1.1.0` baseline and focuses on post-release validation, startup-state accuracy, update safety, and runtime adapter context-contract alignment.
 
 | Host | Install Surface | Current Status |
 |---|---|---|

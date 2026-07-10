@@ -1,7 +1,7 @@
 {
   "name": "orchestra-windsurf-scaffold",
   "displayName": "Orchestra Windsurf Scaffold",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "private": true,
   "description": "Scaffold-only Windsurf packaging manifest for Orchestra runtime adapter integration.",
   "orchestra": {
