@@ -109,6 +109,16 @@ def load_version_surfaces(repo_root: Path) -> tuple[VersionSurface, ...]:
         )
     )
 
+    codex_payload = read_json(repo_root / ".codex-plugin" / "plugin.json")
+    surfaces.append(
+        VersionSurface(
+            surface="codex",
+            path=repo_root / ".codex-plugin" / "plugin.json",
+            version=str(codex_payload.get("version", "")),
+            update_config=read_update_config(codex_payload),
+        )
+    )
+
     for package_path in sorted((repo_root / "adapters").glob("*/package.json")):
         payload = read_json(package_path)
         adapter_name = package_path.parent.name
@@ -158,7 +168,7 @@ def _fetch_latest_release_payload(url: str) -> dict:
         url,
         headers={
             "Accept": "application/vnd.github+json",
-            "User-Agent": "orchestra-update-checker/1.0.0",
+            "User-Agent": "orchestra-update-checker",
         },
     )
     try:

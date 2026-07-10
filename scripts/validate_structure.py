@@ -28,7 +28,6 @@ def main():
         'docs/setup/LOCAL_ONLY_GUIDE.md',
         'docs/setup/COMPATIBILITY.md',
         'docs/setup/VALIDATION.md',
-        'examples/plugin-manifest.example.json',
         'assets/logo/orchestra.ico'
     ]
     

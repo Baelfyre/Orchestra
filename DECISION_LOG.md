@@ -84,3 +84,27 @@ The Codex adapter can pass structural validation while missing governance skills
 - scripts/refresh-installed-integrations.ps1
 - scripts/governance_check.py
 - scripts/runtime_guardrail.py
+
+---
+
+## Date: 2026-07-10
+
+**Decision:**
+Published v1.1.0 (Specialist Governance & Boundary Standard). Opened v1.1.1 post-release hardening track to fix release-surface drift, stale startup state, and validation gaps found in the post-release audit.
+
+**Reason:**
+Post-release audit confirmed core is healthy (42 runtime tests pass, strict governance passes), but Codex metadata and example manifest were stuck at v1.0.0, startup state files referenced a merged branch, and governance only checked path existence in memory files.
+
+**Rejected Alternatives:**
+- Regenerating the drifted example manifest (removed instead; canonical plugin.json and MANIFEST_SCHEMA.md suffice)
+- Advisory-only governance for structured startup-state claims (strict mode chosen because startup-state accuracy is the stated purpose of these files)
+
+**Affected Components:**
+- Codex plugin.json
+- Example manifest (deleted)
+- scripts/check_for_updates.py
+- scripts/validate_structure.py
+- scripts/governance_check.py
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- PROJECT_CONTEXT.md

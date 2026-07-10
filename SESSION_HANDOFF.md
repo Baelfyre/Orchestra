@@ -1,22 +1,27 @@
-﻿# Session Handoff
+# Session Handoff
 
-- **Current Task:** Codex adapter governance export validation fix
+- **Current Task:** Wave 1 - Release-surface and startup-state drift remediation
 - **Current Repo:** `C:\conductor`
-- **Mode:** Implementation with targeted adapter, validation, guardrail, and repo-memory updates
+- **Current Branch:** `fix/v1.1.1-release-surface-state-drift`
+- **Base Branch:** `main`
+- **Current Release:** `v1.1.0`
+- **Target Patch:** `v1.1.1`
+- **Mode:** Implementation with targeted metadata, validation, state, and governance hardening updates
 - **Allowed Files:**
-  - `adapters/codex/export-codex-skills.ps1`
-  - `adapters/codex/validate_codex_export.py`
-  - `scripts/refresh-installed-integrations.ps1`
-  - `scripts/runtime_guardrail.py`
+  - Codex `plugin.json`
+  - Example manifest (deleted)
+  - `scripts/validate_structure.py`
+  - `scripts/check_for_updates.py`
   - `scripts/governance_check.py`
-  - `scripts/test_governance_check.py`
-  - `SESSION_HANDOFF.md`
   - `PROJECT_STATE.md`
+  - `SESSION_HANDOFF.md`
+  - `PROJECT_CONTEXT.md`
   - `DECISION_LOG.md`
+  - `CHANGELOG.md`
 - **Forbidden Repo:** `C:\+AA`
-- **Last Validation:** Preflight passed on branch `fix/codex-governance-export-validation`; full validation pending after implementation.
-- **Known Risks:** Potential context drift if previous session history is long.
-- **Next Step:** Regenerate Codex adapter export, run required validation matrix, and review git diff.
+- **Last Validation:** All validators passed on `main` at `v1.1.0` baseline (runtime 42/42, 95.51% coverage, behavior pass, governance strict pass).
+- **Known Risks:** Release-surface drift was invisible to validators until this wave; startup state files caused context drift instead of preventing it.
+- **Next Step:** Complete implementation, run full validation suite, review `git diff --stat`, and prepare PR.
 - **Fresh-Session Warning:** If the current conversation has long prior history from another repository, enter safe mode and request user confirmation before proceeding with implementation.
 
 ## Token Control Note
