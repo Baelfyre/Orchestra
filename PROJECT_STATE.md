@@ -2,7 +2,7 @@
 
 - **Project Name:** Conductor
 - **Active Repo:** `C:\conductor`
-- **Current Branch:** `fix/v1.1.1-release-surface-state-drift`
+- **Current Branch:** `main`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.0`
 - **Target Patch:** `v1.1.1`
