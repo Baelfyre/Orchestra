@@ -2,7 +2,7 @@
 
 - **Current Task:** Wave 1 - Release-surface and startup-state drift remediation
 - **Current Repo:** `C:\conductor`
-- **Current Branch:** `main`
+- **Current Branch:** `docs/readme-release-snapshot-metrics`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.0`
 - **Target Patch:** `v1.1.1`

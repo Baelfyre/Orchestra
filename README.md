@@ -12,13 +12,32 @@
     <a href="docs/setup/VALIDATION.md">Validation</a>
   </p>
   <p>
+    <img src="https://img.shields.io/badge/release-v1.1.1-blue" alt="release" />
     <a href="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml">
       <img src="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml/badge.svg" alt="validate" />
     </a>
+    <img src="https://img.shields.io/badge/license-MIT-blue" alt="license" />
+    <img src="https://img.shields.io/badge/coverage-95.51%25-success" alt="coverage" />
+    <img src="https://img.shields.io/badge/specialist_skills-13-blue" alt="specialists" />
+    <img src="https://img.shields.io/badge/commands-18-blue" alt="commands" />
+    <img src="https://img.shields.io/badge/adapter_surfaces-10-blue" alt="adapter surfaces" />
   </p>
 </div>
 
 ---
+
+## Release Snapshot
+
+| Area | Status |
+|---|---|
+| Release | `v1.1.1 Post-Release Hardening` |
+| Runtime tests | `43/43 passing` |
+| Runtime coverage | `95.51%` |
+| Specialist skills | `13` |
+| Commands | `18` |
+| Adapter surfaces | `10` |
+| Governance gates | Strict checks passing |
+| Codex export | Validation passing |
 
 ## At a Glance
 
