@@ -51,6 +51,7 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 - Added an App Release Compliance Gate plus reusable privacy review, data inventory, IP clearance, privacy policy, terms, and retention/deletion governance templates for app and public release workflows.
 
 ### Changed
+- Added Windows coverage and runtime test execution to cross-platform CI validation.
 - Integrated Release Mode governance docs so The Governor now treats app release compliance artifacts as required when applicable and returns `REVISION_REQUIRED` or `BLOCKED` when release-gate documentation is missing.
 - Clarified optional project governance rulesets so `PROJECT_CONTEXT.md` enforcement depends on project type, risk level, and declared governance level.
 - Wired `tests/runtime` into CI, enforced portable runtime coverage with `pytest-cov --cov-fail-under=90`, switched `validate.yml` to `python tests/behavior/run_tests.py`, and added runtime tests for alias loading, default-command fallback, and unresolved command-to-skill handling.

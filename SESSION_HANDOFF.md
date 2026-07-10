@@ -2,7 +2,7 @@
 
 - **Current Task:** Wave 5A - Cross-platform CI coverage implementation planning
 - **Current Repo:** `C:\conductor`
-- **Current Branch:** `main`
+- **Current Branch:** `fix/wave5a-cross-platform-ci-coverage`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.1`
 - **Target Patch:** `v1.1.2`

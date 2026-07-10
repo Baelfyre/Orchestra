@@ -47,3 +47,7 @@ Tests were not run. (Initial audit mode only).
 
 ## 7. Recommended next action
 Implement the cross-platform coverage remediations in a follow-up wave. Update the `cross-platform-validation.yml` file to include `windows-latest` in the matrix, skip POSIX checks on Windows, and enforce full `pytest tests/runtime` execution across all platforms.
+
+## 8. Implementation Status
+*Note added during Wave 5A implementation:*
+The cross-platform coverage remediations recommended above were implemented in `fix/wave5a-cross-platform-ci-coverage`. Windows was added to the matrix, POSIX-only checks were skipped on Windows, and runtime tests were added to the native validation suite across all platforms.
