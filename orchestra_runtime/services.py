@@ -100,17 +100,17 @@ class ContextAssembler:
         self._manifest_repository = manifest_repository
 
     def assemble(self, adapter: IIDEAdapter, prompt: str, metadata: dict | None = None) -> ContextPackage:
-        manifest = self._manifest_repository.load_manifest()
-        merged_metadata = dict(metadata or {})
+        context = adapter.provide_context(prompt, metadata)
+        merged_metadata = dict(context.metadata)
         merged_metadata.setdefault("governance_validated", False)
         merged_metadata.setdefault("destructive_validated", False)
         merged_metadata.setdefault("dry_run", False)
         return ContextPackage(
-            adapter_name=adapter.adapter_name,
-            prompt=prompt,
-            project_root=self._manifest_repository.repo_root,
-            available_commands=adapter.expose_commands(),
-            manifest_version=str(manifest.get("version", "")),
+            adapter_name=context.adapter_name,
+            prompt=context.prompt,
+            project_root=context.project_root,
+            available_commands=context.available_commands,
+            manifest_version=context.manifest_version,
             metadata=merged_metadata,
         )
 

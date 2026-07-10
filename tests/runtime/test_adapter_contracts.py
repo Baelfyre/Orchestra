@@ -94,3 +94,27 @@ def test_parse_command_falls_back_to_default_command_for_unmatched_prompt():
     assert command.adapter_name == "codex"
     assert command.name == adapter.default_command
     assert command.metadata == {"source": "test"}
+
+
+def test_context_assembler_preserves_adapter_provided_context_metadata():
+    from orchestra_runtime.adapters import BaseAdapter
+    from orchestra_runtime.models import ContextPackage
+
+    class TestAdapter(BaseAdapter):
+        def provide_context(self, prompt: str, metadata: dict | None = None) -> ContextPackage:
+            context = super().provide_context(prompt, metadata)
+            context.metadata["custom_flag"] = "present"
+            return context
+
+    repo_root = Path(__file__).resolve().parents[2]
+    repository = ManifestRepository(repo_root)
+    assembler = ContextAssembler(repository)
+    adapter = TestAdapter(repository)
+
+    context = assembler.assemble(adapter, "test prompt", {"caller_flag": "present"})
+
+    assert context.metadata.get("custom_flag") == "present"
+    assert context.metadata.get("caller_flag") == "present"
+    assert "governance_validated" in context.metadata
+    assert "destructive_validated" in context.metadata
+    assert "dry_run" in context.metadata
