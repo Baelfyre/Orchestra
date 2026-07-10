@@ -44,6 +44,7 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 
 ### Changed
 - Integrated Release Mode governance docs so The Governor now treats app release compliance artifacts as required when applicable and returns `REVISION_REQUIRED` or `BLOCKED` when release-gate documentation is missing.
+- Hardened release-surface and startup-state validation by aligning Codex metadata to v1.1.0, removing the drifted example manifest, adding `.codex-plugin/plugin.json` to update consistency checks, and checking structured branch/version claims in repo memory files.
 
 ### Changed
 - Clarified optional project governance rulesets so `PROJECT_CONTEXT.md` enforcement depends on project type, risk level, and declared governance level.

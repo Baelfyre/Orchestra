@@ -296,6 +296,95 @@ def run_repo_memory_path_check(repo_root, counters):
         )
 
 
+STARTUP_STATE_FILES = [
+    "PROJECT_STATE.md",
+    "SESSION_HANDOFF.md",
+]
+
+BRANCH_CLAIM_PATTERN = re.compile(
+    r"^\s*[-*]?\s*\*{0,2}Current\s+Branch:?\*{0,2}\s*[:`]*\s*`?([^`\n]+?)`?\s*$",
+    re.IGNORECASE,
+)
+
+STAGE_VERSION_PATTERN = re.compile(
+    r"^\s*v?(\d+\.\d+\.\d+)\b",
+)
+
+
+def get_current_git_branch(repo_root):
+    result = run_git(repo_root, "branch", "--show-current")
+    if result.returncode != 0:
+        return None
+    branch = result.stdout.strip()
+    return branch if branch else None
+
+
+def get_plugin_version(repo_root):
+    plugin_path = os.path.join(repo_root, "plugin.json")
+    try:
+        with open(plugin_path, "r", encoding="utf-8") as handle:
+            data = json.load(handle)
+        return str(data.get("version", ""))
+    except (FileNotFoundError, json.JSONDecodeError):
+        return None
+
+
+def run_startup_state_claim_check(repo_root, counters, strict_mode):
+    print("\n[7d] Checking structured startup-state claims...")
+    issues_found = False
+
+    record_issue = record_failure if strict_mode else record_warning
+
+    current_branch = get_current_git_branch(repo_root)
+    plugin_version = get_plugin_version(repo_root)
+
+    for memory_file in STARTUP_STATE_FILES:
+        memory_path = Path(repo_root) / memory_file
+        if not memory_path.is_file():
+            continue
+
+        for line_number, line in enumerate(memory_path.read_text(encoding="utf-8").splitlines(), 1):
+            match = BRANCH_CLAIM_PATTERN.match(line)
+            if match and current_branch:
+                claimed_branch = match.group(1).strip()
+                if claimed_branch != current_branch:
+                    record_issue(
+                        counters,
+                        f"{memory_file}:{line_number}",
+                        f"Structured branch claim '{claimed_branch}' does not match current branch '{current_branch}'.",
+                        "Update the Current Branch field in the startup-state file to match the active branch.",
+                    )
+                    issues_found = True
+
+    context_path = Path(repo_root) / "PROJECT_CONTEXT.md"
+    if context_path.is_file() and plugin_version:
+        in_stage_section = False
+        for line_number, line in enumerate(context_path.read_text(encoding="utf-8").splitlines(), 1):
+            stripped = line.strip()
+            if stripped.lower().startswith("## current stage"):
+                in_stage_section = True
+                continue
+            if in_stage_section and stripped.startswith("##"):
+                in_stage_section = False
+                continue
+            if in_stage_section and stripped:
+                match = STAGE_VERSION_PATTERN.match(stripped)
+                if match:
+                    claimed_version = match.group(1)
+                    if claimed_version != plugin_version:
+                        record_issue(
+                            counters,
+                            f"PROJECT_CONTEXT.md:{line_number}",
+                            f"Current Stage version '{claimed_version}' does not match plugin.json version '{plugin_version}'.",
+                            "Update the Current Stage field in PROJECT_CONTEXT.md to match the published release version.",
+                        )
+                        issues_found = True
+                in_stage_section = False
+
+    if not issues_found:
+        print_pass("startup-state-claims", "Structured branch and version claims match live repository state.")
+
+
 def run_strict_validators(repo_root, counters):
     print("\n[8] Running strict metadata validators...")
     for script_path in STRICT_VALIDATOR_SCRIPTS:
@@ -546,6 +635,8 @@ def main():
         print_pass("repository-content", "No forbidden generated artifacts, runtime folders, caches, or secret-like files detected.")
 
     run_repo_memory_path_check(repo_root, counters)
+
+    run_startup_state_claim_check(repo_root, counters, args.strict)
 
     print("\n[7b] Checking changelog freshness...")
     comparison_label, freshness_state, freshness_meta = get_changelog_freshness(repo_root)

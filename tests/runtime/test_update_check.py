@@ -42,6 +42,14 @@ def create_repo(tmp_path: Path, version: str = "1.0.0", enabled: bool = True) ->
         },
     )
     write_json(
+        repo_root / ".codex-plugin" / "plugin.json",
+        {
+            "name": "conductor",
+            "version": version,
+            "update_check": update_check,
+        },
+    )
+    write_json(
         repo_root / "adapters" / "vscode" / "package.json",
         {
             "name": "orchestra-vscode-scaffold",

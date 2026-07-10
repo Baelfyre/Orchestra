@@ -1,13 +1,19 @@
-﻿# Project State
+# Project State
 
 - **Project Name:** Conductor
 - **Active Repo:** `C:\conductor`
-- **Current Branch:** `fix/codex-governance-export-validation`
-- **Current Stable State:** Local branch synced with `origin/main`; Codex adapter export validation fix in progress
+- **Current Branch:** `fix/v1.1.1-release-surface-state-drift`
+- **Base Branch:** `main`
+- **Current Release:** `v1.1.0`
+- **Target Patch:** `v1.1.1`
+- **Current Stable State:** `v1.1.0` tagged and published; `main` is clean and aligned; post-release hardening in progress
 - **Related but Forbidden Repo for this task:** `C:\+AA`
 - **Latest Validation:**
-  - `python scripts/preflight_sync_check.py` passed with `PROCEED`
-  - Full post-change validation pending
+  - `python scripts/preflight_sync_check.py` passed with `PROCEED` on `main` at `v1.1.0`
+  - Runtime: 42 tests passed, 95.51% coverage
+  - Behavior: passed
+  - Governance strict: passed
+  - All metadata validators: passed
 - **Active Governance Gates:**
   - Workspace Boundary Gate
   - Session Isolation Gate
@@ -16,10 +22,10 @@
   - Caveman Public-Content Exclusion
   - Ponytail Handoff Restriction
   - Acme Readiness Gate Expansion
-- **Current Risks:** Cross-repo context drift from long-running sessions.
+- **Current Risks:** Release-surface and startup-state drift identified in post-release audit.
 - **Do-Not-Touch Areas:** Do not edit website repo files from this task (`C:\+AA`).
-- **Pending Next Steps:** Regenerate Codex adapter export and run the required validation matrix.
-- **Most Recent Checkpoint:** 2026-07-03 - Started Codex adapter governance export validation fix.
+- **Pending Next Steps:** Complete Wave 1 remediation (release-surface alignment, startup-state refresh, governance hardening), validate, and prepare PR.
+- **Most Recent Checkpoint:** 2026-07-10 - Wave 1 release-surface and startup-state drift remediation.
 
 ## Token Efficiency Rationale
 
