@@ -2,7 +2,7 @@
 
 - **Project Name:** Conductor
 - **Active Repo:** `C:\conductor`
-- **Current Branch:** `main`
+- **Current Branch:** `release/v1.1.1-post-release-hardening`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.0`
 - **Target Patch:** `v1.1.1`

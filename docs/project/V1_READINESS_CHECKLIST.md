@@ -1,6 +1,6 @@
-# V1.1.0 Specialist Governance & Boundary Standard Readiness Checklist
+# V1.1.1 Post-Release Hardening Readiness Checklist
 
-Before tagging the `v1.1.0 Specialist Governance & Boundary Standard` release of the Orchestra, the following checks must all pass:
+Before tagging the `v1.1.1 Post-Release Hardening` release of the Orchestra, the following checks must all pass:
 
 - [x] **Markdown-first architecture preserved**: No compiled code, binary requirements, or forced dependencies.
 - [x] **All manifest-declared skills present**: The current plugin manifest, skill folders, and command surfaces validate together, including Conductor, governance authorities, specialists, and Ponytail.

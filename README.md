@@ -124,10 +124,11 @@ flowchart LR
 
 Runtime-core-first refactor notes live in [docs/project/OOP_RUNTIME_ARCHITECTURE.md](docs/project/OOP_RUNTIME_ARCHITECTURE.md). The shared `orchestra_runtime/` layer owns manifest parsing, skill loading, routing, governance validation, execution flow, and audit logging, while host adapters stay thin. The versioned Portable Runtime Adapter Protocol is documented in [docs/project/PORTABLE_ADAPTER_PROTOCOL.md](docs/project/PORTABLE_ADAPTER_PROTOCOL.md).
 
-## v1.1.0 Specialist Governance & Boundary Standard
+## v1.1.1 Post-Release Hardening
 
-`v1.1.0 Specialist Governance & Boundary Standard` builds on the `v1.0.0 Portable Runtime` baseline with documentation-, governance-, metadata-, and specialist-definition-focused normalization.
+`v1.1.1 Post-Release Hardening` is a targeted patch release that builds on the `v1.1.0 Specialist Governance & Boundary Standard` baseline to close post-release hardening gaps (validation, startup-state accuracy, update safety, and runtime context-contract alignment).
 
+Historical `v1.1.0` highlights:
 - Specialist boundaries were normalized across the documented specialist surfaces, with tracked Codex export parity where applicable.
 - Governance strictness levels and authority boundaries were clarified without changing governance semantics.
 - Runtime behavior, routing policy, validation logic, CI workflows, and Dagger live-execution behavior remain unchanged.

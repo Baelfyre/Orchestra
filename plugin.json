@@ -1,246 +1,246 @@
 {
-    "name": "conductor",
-    "display_name": "Orchestra",
-    "description": "An installable AI workflow plugin that routes tasks through focused specialist skills. See SKILL_INDEX.md and ROUTING_MAP.md for detailed routing behavior.",
-    "version": "1.1.0",
-    "license": "MIT",
-    "repository": "https://github.com/Baelfyre/Orchestra",
-    "icon_path": "assets/icons/conductor.ico",
-    "logo_path": "assets/logo/orchestra.ico",
-    "update_check": {
-        "update_check_enabled": true,
-        "update_check_channel": "stable",
-        "update_check_frequency": "manual"
+  "name": "conductor",
+  "display_name": "Orchestra",
+  "description": "An installable AI workflow plugin that routes tasks through focused specialist skills. See SKILL_INDEX.md and ROUTING_MAP.md for detailed routing behavior.",
+  "version": "1.1.1",
+  "license": "MIT",
+  "repository": "https://github.com/Baelfyre/Orchestra",
+  "icon_path": "assets/icons/conductor.ico",
+  "logo_path": "assets/logo/orchestra.ico",
+  "update_check": {
+    "update_check_enabled": true,
+    "update_check_channel": "stable",
+    "update_check_frequency": "manual"
+  },
+  "safety_note": "The dagger skill and resilience-check command execute destructive, negative, fuzz, adversarial QA, and failure-mode testing. They require explicit user approval, non-production scope, and a passing scripts/dagger_guardrail.py validation before execution. WARNING: Phase 2 allows simulation only and blocks live destructive execution. Do not proceed in a production environment.",
+  "commands": [
+    "conductor",
+    "arbiter",
+    "clockwork",
+    "review-architecture",
+    "cloak",
+    "review-ui",
+    "chronicler",
+    "review-db",
+    "scribe",
+    "review-docs",
+    "weaver",
+    "diagram-check",
+    "overseer",
+    "qa-check",
+    "cipher",
+    "security-check",
+    "dagger",
+    "resilience-check"
+  ],
+  "skills": [
+    {
+      "primary_use": "Business alignment validation, scope validation, requirements traceability, SDLC documentation completeness, acceptance criteria review",
+      "slug": "the-steward",
+      "description": "Business alignment and scope governance authority. See docs/governance/GOVERNANCE_LAYER.md for governance behavior.",
+      "avoid_when": "Legal, regulatory, privacy, licensing, or IP compliance review is needed (route to the-governor)",
+      "skill_path": "skills/the-steward/SKILL.md",
+      "role": "Business Alignment and Scope Governance Authority",
+      "name": "the-steward",
+      "activation_level": "Governor",
+      "depends_on": "None",
+      "icon_path": "assets/icons/the-steward.ico",
+      "output_formats": [
+        "Governance Review"
+      ]
     },
-    "safety_note": "The dagger skill and resilience-check command execute destructive, negative, fuzz, adversarial QA, and failure-mode testing. They require explicit user approval, non-production scope, and a passing scripts/dagger_guardrail.py validation before execution. WARNING: Phase 2 allows simulation only and blocks live destructive execution. Do not proceed in a production environment.",
-    "commands": [
-        "conductor",
-        "arbiter",
-        "clockwork",
-        "review-architecture",
-        "cloak",
-        "review-ui",
-        "chronicler",
-        "review-db",
-        "scribe",
-        "review-docs",
-        "weaver",
-        "diagram-check",
-        "overseer",
-        "qa-check",
-        "cipher",
-        "security-check",
-        "dagger",
-        "resilience-check"
-    ],
-    "skills": [
-        {
-            "primary_use": "Business alignment validation, scope validation, requirements traceability, SDLC documentation completeness, acceptance criteria review",
-            "slug": "the-steward",
-            "description": "Business alignment and scope governance authority. See docs/governance/GOVERNANCE_LAYER.md for governance behavior.",
-            "avoid_when": "Legal, regulatory, privacy, licensing, or IP compliance review is needed (route to the-governor)",
-            "skill_path": "skills/the-steward/SKILL.md",
-            "role": "Business Alignment and Scope Governance Authority",
-            "name": "the-steward",
-            "activation_level": "Governor",
-            "depends_on": "None",
-            "icon_path": "assets/icons/the-steward.ico",
-            "output_formats": [
-                "Governance Review"
-            ]
-        },
-        {
-            "primary_use": "Legal compliance validation, privacy risk review, IP and copyright review, open-source license compatibility, Terms of Service and Privacy Policy impact, audit documentation, security governance",
-            "slug": "the-governor",
-            "description": "Legal, regulatory, privacy, IP, and compliance governance authority. Does not provide legal advice. Sits above Conductor. See docs/governance/GOVERNANCE_LAYER.md.",
-            "avoid_when": "Business alignment, scope, requirements, or SDLC review is needed (route to the-steward)",
-            "skill_path": "skills/the-governor/SKILL.md",
-            "role": "Legal, Compliance, Privacy, and IP Governance Authority",
-            "name": "the-governor",
-            "activation_level": "Governor",
-            "depends_on": "None",
-            "icon_path": "assets/icons/the-governor.ico",
-            "output_formats": [
-                "Governance Review"
-            ]
-        },
-        {
-            "primary_use": "Continuity review, validation-state review, branch and merge readiness, source-of-truth checks, handoff readiness, access/visibility closeout",
-            "slug": "arbiter",
-            "description": "Workflow continuity, validation, and transition governance specialist. See SKILL_INDEX.md.",
-            "avoid_when": "Designing architecture, implementing features, writing documentation content, or replacing normal QA ownership",
-            "skill_path": "skills/arbiter/SKILL.md",
-            "role": "Workflow Continuity, Validation, and Transition Governance Specialist",
-            "name": "arbiter",
-            "activation_level": "Governance",
-            "depends_on": "conductor",
-            "icon_path": "assets/icons/arbiter.ico",
-            "output_formats": [
-                "Continuity Review",
-                "Governance Effectiveness Review"
-            ]
-        },
-        {
-            "primary_use": "QA strategy, test planning, validation gates, release readiness, CI/CD validation, persona validation",
-            "slug": "overseer",
-            "description": "QA, Test Strategy, Validation, CI, and Release Readiness Specialist. See SKILL_INDEX.md.",
-            "avoid_when": "Implementing test code, architecture design, security policy, or long documentation",
-            "skill_path": "skills/overseer/SKILL.md",
-            "role": "QA, Test Strategy, Validation, CI, and Release Readiness Specialist",
-            "name": "overseer",
-            "activation_level": "Specialist",
-            "depends_on": "None",
-            "icon_path": "assets/icons/overseer.ico",
-            "output_formats": [
-                "Caveman",
-                "Full QA Review"
-            ]
-        },
-        {
-            "primary_use": "Project orientation, multi-skill routing, workflow planning, access/visibility routing",
-            "slug": "conductor",
-            "description": "Routing and orchestration layer. Chooses the smallest effective skill stack. See ROUTING_MAP.md and SKILL_INDEX.md for detailed routing behavior.",
-            "avoid_when": "A single obvious specialist suffices",
-            "skill_path": "skills/conductor/SKILL.md",
-            "role": "Routing and orchestration layer",
-            "name": "conductor",
-            "activation_level": "Commander",
-            "depends_on": "None",
-            "icon_path": "assets/icons/conductor.ico",
-            "output_formats": [
-                "Routing Plan",
-                "Prompts"
-            ]
-        },
-        {
-            "primary_use": "Security policy, RBAC, authorization, authentication risk, privacy, secrets, visibility/access-control",
-            "slug": "cipher",
-            "description": "Security, Privacy, Access Control, and Threat Review Specialist. Do not use for offensive or destructive testing. See SKILL_INDEX.md.",
-            "avoid_when": "Offensive testing is needed, or for implementation, database design, or application architecture",
-            "skill_path": "skills/cipher/SKILL.md",
-            "role": "Security, Privacy, Access Control, and Threat Review Specialist",
-            "name": "cipher",
-            "activation_level": "Specialist",
-            "depends_on": "None",
-            "icon_path": "assets/icons/cipher.ico",
-            "output_formats": [
-                "Caveman",
-                "Full Security Review"
-            ]
-        },
-        {
-            "primary_use": "UI, UX, accessibility, visual hierarchy, responsive layout, interaction design",
-            "slug": "cloak",
-            "description": "UI/UX, Accessibility, Responsive Layout, and Frontend Design Specialist. See SKILL_INDEX.md.",
-            "avoid_when": "Frontend implementation code, backend logic, security policy, or architecture diagrams",
-            "skill_path": "skills/cloak/SKILL.md",
-            "role": "UI/UX, Accessibility, Responsive Layout, and Frontend Design Specialist",
-            "name": "cloak",
-            "activation_level": "Specialist",
-            "depends_on": "None",
-            "icon_path": "assets/icons/cloak.ico",
-            "output_formats": [
-                "QUICK_UI_HANDOFF",
-                "DOCUMENT_REVIEW",
-                "FORMAL_UI_AUDIT"
-            ]
-        },
-        {
-            "primary_use": "Chaos scenarios, resilience weaknesses, failure-paths, negative tests, guardrail gaps",
-            "slug": "dagger",
-            "description": "Chaos and resilience specialist. Generates controlled failure paths. Operates strictly within safety boundaries and never executes unauthorized, destructive, or production-impacting tests. See SKILL_INDEX.md.",
-            "avoid_when": "Code implementation, QA test planning, CI validation, security policy, database design",
-            "skill_path": "skills/dagger/SKILL.md",
-            "role": "Chaos, Resilience, and Adversarial Scenario Specialist",
-            "name": "dagger",
-            "activation_level": "Gated",
-            "depends_on": "conductor",
-            "icon_path": "assets/icons/dagger.ico",
-            "output_formats": [
-                "Caveman"
-            ]
-        },
-        {
-            "primary_use": "SQL schemas, NoSQL documents, JSON, ORM, migrations, constraints, indexes, normalization",
-            "slug": "chronicler",
-            "description": "Data Persistence and Database Management Specialist. See SKILL_INDEX.md.",
-            "avoid_when": "Evaluating visible UI, testing plans, business workflows, architecture boundaries, or security policy",
-            "skill_path": "skills/chronicler/SKILL.md",
-            "role": "Data Persistence and Database Management Specialist",
-            "name": "chronicler",
-            "activation_level": "Specialist",
-            "depends_on": "None",
-            "icon_path": "assets/icons/chronicler.ico",
-            "output_formats": [
-                "Caveman",
-                "Normalization Output"
-            ]
-        },
-        {
-            "primary_use": "Visual modeling, UML, ERD, architecture, workflow, data-flow diagrams via Mermaid/PlantUML",
-            "slug": "weaver",
-            "description": "Visual Modeling and Diagram Generation Specialist. See SKILL_INDEX.md.",
-            "avoid_when": "Database design decisions, documentation prose, code implementation, security policy",
-            "skill_path": "skills/weaver/SKILL.md",
-            "role": "Visual Modeling and Diagram Generation Specialist",
-            "name": "weaver",
-            "activation_level": "Specialist",
-            "depends_on": "None",
-            "icon_path": "assets/icons/weaver.ico",
-            "output_formats": [
-                "Mermaid",
-                "PlantUML"
-            ]
-        },
-        {
-            "primary_use": "Documentation prose, READMEs, setup guides, release notes, SDLC, technical summaries",
-            "slug": "scribe",
-            "description": "Documentation and Knowledge Transfer Specialist. See SKILL_INDEX.md.",
-            "avoid_when": "Architecture decisions, database design, normalization analysis, UI design, diagram generation, or code implementation",
-            "skill_path": "skills/scribe/SKILL.md",
-            "role": "Documentation and Knowledge Transfer Specialist",
-            "name": "scribe",
-            "activation_level": "Specialist",
-            "depends_on": "None",
-            "icon_path": "assets/icons/scribe.ico",
-            "output_formats": [
-                "Mode 1",
-                "Mode 2",
-                "Mode 3"
-            ]
-        },
-        {
-            "primary_use": "OOP architecture, layered architecture, system design, refactoring",
-            "slug": "clockwork",
-            "description": "Engineering and Code Structure Specialist (OOP, layering, refactoring). See SKILL_INDEX.md.",
-            "avoid_when": "Modifying UI layouts, testing security boundaries, or writing documentation",
-            "skill_path": "skills/clockwork/SKILL.md",
-            "role": "Engineering / Code Structure",
-            "name": "clockwork",
-            "activation_level": "Specialist",
-            "depends_on": "None",
-            "icon_path": "assets/icons/clockwork.ico",
-            "output_formats": [
-                "Compact",
-                "Full"
-            ]
-        },
-        {
-            "primary_use": "Implementation, code editing, validation",
-            "slug": "ponytail",
-            "description": "Implementation and Navigation Specialist. Owns minimal safe edits. See SKILL_INDEX.md.",
-            "avoid_when": "Architecture design, UI/UX decisions, security policies",
-            "skill_path": "skills/ponytail/SKILL.md",
-            "role": "Implementation and Navigation Specialist",
-            "name": "ponytail",
-            "activation_level": "Specialist",
-            "depends_on": "None",
-            "icon_path": "assets/icons/ponytail.ico",
-            "output_formats": [
-                "IMPLEMENTATION_PLAN",
-                "CODE_REVIEW",
-                "QUICK_FIX"
-            ]
-        }
-    ]
+    {
+      "primary_use": "Legal compliance validation, privacy risk review, IP and copyright review, open-source license compatibility, Terms of Service and Privacy Policy impact, audit documentation, security governance",
+      "slug": "the-governor",
+      "description": "Legal, regulatory, privacy, IP, and compliance governance authority. Does not provide legal advice. Sits above Conductor. See docs/governance/GOVERNANCE_LAYER.md.",
+      "avoid_when": "Business alignment, scope, requirements, or SDLC review is needed (route to the-steward)",
+      "skill_path": "skills/the-governor/SKILL.md",
+      "role": "Legal, Compliance, Privacy, and IP Governance Authority",
+      "name": "the-governor",
+      "activation_level": "Governor",
+      "depends_on": "None",
+      "icon_path": "assets/icons/the-governor.ico",
+      "output_formats": [
+        "Governance Review"
+      ]
+    },
+    {
+      "primary_use": "Continuity review, validation-state review, branch and merge readiness, source-of-truth checks, handoff readiness, access/visibility closeout",
+      "slug": "arbiter",
+      "description": "Workflow continuity, validation, and transition governance specialist. See SKILL_INDEX.md.",
+      "avoid_when": "Designing architecture, implementing features, writing documentation content, or replacing normal QA ownership",
+      "skill_path": "skills/arbiter/SKILL.md",
+      "role": "Workflow Continuity, Validation, and Transition Governance Specialist",
+      "name": "arbiter",
+      "activation_level": "Governance",
+      "depends_on": "conductor",
+      "icon_path": "assets/icons/arbiter.ico",
+      "output_formats": [
+        "Continuity Review",
+        "Governance Effectiveness Review"
+      ]
+    },
+    {
+      "primary_use": "QA strategy, test planning, validation gates, release readiness, CI/CD validation, persona validation",
+      "slug": "overseer",
+      "description": "QA, Test Strategy, Validation, CI, and Release Readiness Specialist. See SKILL_INDEX.md.",
+      "avoid_when": "Implementing test code, architecture design, security policy, or long documentation",
+      "skill_path": "skills/overseer/SKILL.md",
+      "role": "QA, Test Strategy, Validation, CI, and Release Readiness Specialist",
+      "name": "overseer",
+      "activation_level": "Specialist",
+      "depends_on": "None",
+      "icon_path": "assets/icons/overseer.ico",
+      "output_formats": [
+        "Caveman",
+        "Full QA Review"
+      ]
+    },
+    {
+      "primary_use": "Project orientation, multi-skill routing, workflow planning, access/visibility routing",
+      "slug": "conductor",
+      "description": "Routing and orchestration layer. Chooses the smallest effective skill stack. See ROUTING_MAP.md and SKILL_INDEX.md for detailed routing behavior.",
+      "avoid_when": "A single obvious specialist suffices",
+      "skill_path": "skills/conductor/SKILL.md",
+      "role": "Routing and orchestration layer",
+      "name": "conductor",
+      "activation_level": "Commander",
+      "depends_on": "None",
+      "icon_path": "assets/icons/conductor.ico",
+      "output_formats": [
+        "Routing Plan",
+        "Prompts"
+      ]
+    },
+    {
+      "primary_use": "Security policy, RBAC, authorization, authentication risk, privacy, secrets, visibility/access-control",
+      "slug": "cipher",
+      "description": "Security, Privacy, Access Control, and Threat Review Specialist. Do not use for offensive or destructive testing. See SKILL_INDEX.md.",
+      "avoid_when": "Offensive testing is needed, or for implementation, database design, or application architecture",
+      "skill_path": "skills/cipher/SKILL.md",
+      "role": "Security, Privacy, Access Control, and Threat Review Specialist",
+      "name": "cipher",
+      "activation_level": "Specialist",
+      "depends_on": "None",
+      "icon_path": "assets/icons/cipher.ico",
+      "output_formats": [
+        "Caveman",
+        "Full Security Review"
+      ]
+    },
+    {
+      "primary_use": "UI, UX, accessibility, visual hierarchy, responsive layout, interaction design",
+      "slug": "cloak",
+      "description": "UI/UX, Accessibility, Responsive Layout, and Frontend Design Specialist. See SKILL_INDEX.md.",
+      "avoid_when": "Frontend implementation code, backend logic, security policy, or architecture diagrams",
+      "skill_path": "skills/cloak/SKILL.md",
+      "role": "UI/UX, Accessibility, Responsive Layout, and Frontend Design Specialist",
+      "name": "cloak",
+      "activation_level": "Specialist",
+      "depends_on": "None",
+      "icon_path": "assets/icons/cloak.ico",
+      "output_formats": [
+        "QUICK_UI_HANDOFF",
+        "DOCUMENT_REVIEW",
+        "FORMAL_UI_AUDIT"
+      ]
+    },
+    {
+      "primary_use": "Chaos scenarios, resilience weaknesses, failure-paths, negative tests, guardrail gaps",
+      "slug": "dagger",
+      "description": "Chaos and resilience specialist. Generates controlled failure paths. Operates strictly within safety boundaries and never executes unauthorized, destructive, or production-impacting tests. See SKILL_INDEX.md.",
+      "avoid_when": "Code implementation, QA test planning, CI validation, security policy, database design",
+      "skill_path": "skills/dagger/SKILL.md",
+      "role": "Chaos, Resilience, and Adversarial Scenario Specialist",
+      "name": "dagger",
+      "activation_level": "Gated",
+      "depends_on": "conductor",
+      "icon_path": "assets/icons/dagger.ico",
+      "output_formats": [
+        "Caveman"
+      ]
+    },
+    {
+      "primary_use": "SQL schemas, NoSQL documents, JSON, ORM, migrations, constraints, indexes, normalization",
+      "slug": "chronicler",
+      "description": "Data Persistence and Database Management Specialist. See SKILL_INDEX.md.",
+      "avoid_when": "Evaluating visible UI, testing plans, business workflows, architecture boundaries, or security policy",
+      "skill_path": "skills/chronicler/SKILL.md",
+      "role": "Data Persistence and Database Management Specialist",
+      "name": "chronicler",
+      "activation_level": "Specialist",
+      "depends_on": "None",
+      "icon_path": "assets/icons/chronicler.ico",
+      "output_formats": [
+        "Caveman",
+        "Normalization Output"
+      ]
+    },
+    {
+      "primary_use": "Visual modeling, UML, ERD, architecture, workflow, data-flow diagrams via Mermaid/PlantUML",
+      "slug": "weaver",
+      "description": "Visual Modeling and Diagram Generation Specialist. See SKILL_INDEX.md.",
+      "avoid_when": "Database design decisions, documentation prose, code implementation, security policy",
+      "skill_path": "skills/weaver/SKILL.md",
+      "role": "Visual Modeling and Diagram Generation Specialist",
+      "name": "weaver",
+      "activation_level": "Specialist",
+      "depends_on": "None",
+      "icon_path": "assets/icons/weaver.ico",
+      "output_formats": [
+        "Mermaid",
+        "PlantUML"
+      ]
+    },
+    {
+      "primary_use": "Documentation prose, READMEs, setup guides, release notes, SDLC, technical summaries",
+      "slug": "scribe",
+      "description": "Documentation and Knowledge Transfer Specialist. See SKILL_INDEX.md.",
+      "avoid_when": "Architecture decisions, database design, normalization analysis, UI design, diagram generation, or code implementation",
+      "skill_path": "skills/scribe/SKILL.md",
+      "role": "Documentation and Knowledge Transfer Specialist",
+      "name": "scribe",
+      "activation_level": "Specialist",
+      "depends_on": "None",
+      "icon_path": "assets/icons/scribe.ico",
+      "output_formats": [
+        "Mode 1",
+        "Mode 2",
+        "Mode 3"
+      ]
+    },
+    {
+      "primary_use": "OOP architecture, layered architecture, system design, refactoring",
+      "slug": "clockwork",
+      "description": "Engineering and Code Structure Specialist (OOP, layering, refactoring). See SKILL_INDEX.md.",
+      "avoid_when": "Modifying UI layouts, testing security boundaries, or writing documentation",
+      "skill_path": "skills/clockwork/SKILL.md",
+      "role": "Engineering / Code Structure",
+      "name": "clockwork",
+      "activation_level": "Specialist",
+      "depends_on": "None",
+      "icon_path": "assets/icons/clockwork.ico",
+      "output_formats": [
+        "Compact",
+        "Full"
+      ]
+    },
+    {
+      "primary_use": "Implementation, code editing, validation",
+      "slug": "ponytail",
+      "description": "Implementation and Navigation Specialist. Owns minimal safe edits. See SKILL_INDEX.md.",
+      "avoid_when": "Architecture design, UI/UX decisions, security policies",
+      "skill_path": "skills/ponytail/SKILL.md",
+      "role": "Implementation and Navigation Specialist",
+      "name": "ponytail",
+      "activation_level": "Specialist",
+      "depends_on": "None",
+      "icon_path": "assets/icons/ponytail.ico",
+      "output_formats": [
+        "IMPLEMENTATION_PLAN",
+        "CODE_REVIEW",
+        "QUICK_FIX"
+      ]
+    }
+  ]
 }
