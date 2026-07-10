@@ -2,7 +2,7 @@
 
 - **Current Task:** Post-v1.1.1 maintenance - Wave 5B planning
 - **Current Repo:** `C:\conductor`
-- **Current Branch:** `main`
+- **Current Branch:** `audit/wave5b-prompt-load-threshold-review`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.1`
 - **Target Patch:** `v1.1.2`
