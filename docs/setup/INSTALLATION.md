@@ -182,12 +182,15 @@ If you prefer to manually handle the update sequence:
 1. Ensure your working tree is clean.
 2. Pull the latest changes:
    ```sh
-   git pull origin main
+   git pull --ff-only origin main
    ```
 3. Run the validation checks manually to ensure metadata and routing consistency:
    ```sh
-   powershell -ExecutionPolicy Bypass -File .\scripts\validate-manifest.ps1
-   powershell -ExecutionPolicy Bypass -File .\scripts\validate-structure.ps1
+   python scripts/validate_structure.py
+   python scripts/validate_manifest.py
+   python scripts/check_stale_references.py
+   python scripts/governance_check.py --strict
+   python adapters/codex/validate_codex_export.py
    ```
 
 ### Rollback Instructions
@@ -195,8 +198,9 @@ If you prefer to manually handle the update sequence:
 If a safe update or manual pull introduces a breaking change or validation failure, you can roll back the repository to the last known good commit:
 
 1. Identify the previous stable commit hash using `git log`.
-2. Reset the repository:
+2. Create a recovery branch and reset the repository:
    ```sh
+   git branch recovery-before-rollback
    git reset --hard <PREVIOUS_COMMIT_HASH>
    ```
 3. Reload or restart your agent workspace (Antigravity or Codex) to revert the ecosystem behavior.
