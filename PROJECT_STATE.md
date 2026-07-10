@@ -2,7 +2,7 @@
 
 - **Project Name:** Conductor
 - **Active Repo:** `C:\conductor`
-- **Current Branch:** `audit/wave5b-prompt-load-threshold-review`
+- **Current Branch:** `main`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.1`
 - **Target Patch:** `v1.1.2`
