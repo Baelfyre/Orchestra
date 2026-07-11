@@ -6,7 +6,7 @@ To maintain a strict separation of concerns, Artificer operates within rigid bou
 
 | Specialist | Domain Responsibility | Artificer Boundary (What Artificer Must NOT Do) |
 |---|---|---|
-| **Artificer** | Intake, static audit, pattern classification, evolution proposal | Must never write implementation code, modify plugin configs, or run tests. |
+| **Artificer** | Intake, static architecture/pattern audit, classification, evolution proposal | Must never write implementation code, modify plugin configs, or run tests. |
 | **Cloak** | Frontend styling, UI components, layouts, visual reconstruction, and UX behavior | Artificer must not implement UI code. Cloak does not validate ZIP files or sandbox security. |
 | **Cipher** | Encryption, sandboxing, tracking, auth boundaries, secrets, script verification | Artificer does not configure security policy or evaluate sandbox escapes. |
 | **Clockwork** | Runtime boundaries, OOP structures, service layering, backend patterns | Artificer does not rewrite backend frameworks or define component interfaces. |
