@@ -10,6 +10,7 @@ This document details how external repository sources are registered, evaluated,
 4. **License Assessment**: Inspect the license of the target repository.
 5. **Path Mapping**: Define the exact list of files and line ranges to be examined.
 6. **Safety Scans**: Perform a security review of the mapped files to ensure they do not contain adversarial instructions.
+7. **Instance Validation**: Validate the metadata and generated records against the schemas and registry constraints using `scripts/validate_artificer_records.py`.
 
 ## Verification of Source Metadata
 

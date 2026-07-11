@@ -2,6 +2,9 @@
 
 This document is the registry for all external design patterns that have been successfully audited, approved by governance, and adapted into Orchestra.
 
+> [!NOTE]
+> All candidate patterns begin as raw `PATTERN_SCHEMA.json` instances located within bundle directories in `internal/artificer/records/`. Only patterns successfully validated by `scripts/validate_artificer_records.py` and approved by governance are manually promoted to this catalog.
+
 ## Catalog Index
 
 | ID | Pattern Name | Source Repository | Approval Date | Status | Assigned Specialist |

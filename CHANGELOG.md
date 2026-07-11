@@ -47,6 +47,11 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 
 ## Unreleased
 
+### Added
+- Added Phase 3 Artificer record-instance validator (`scripts/validate_artificer_records.py`) with Draft-7 schema subset validation, POSIX-safe repository path constraints, and cross-record registry bundle verification.
+- Added comprehensive behavior tests (`tests/behavior/test_artificer_records.py`) ensuring deterministic failures for invalid json, duplicate keys, broken bundle layouts, and schema drift.
+- Wired `scripts/validate_artificer_records.py` into the CI governance script and automated runner `tests/behavior/run_tests.py`.
+
 ### Changed
 - Completed specialist-boundary polarity enforcement in the Artificer boundary validator (`scripts/validate_artificer_internal.py`), refactoring keyword-only checks in `check_artificer_boundaries_md()` to require explicit Artificer-bound negative polarity.
 - Prevented mixed-polarity bypasses by splitting sentences into clauses and detecting explicit positive permissions alongside prohibitions.
