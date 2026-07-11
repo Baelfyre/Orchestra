@@ -34,6 +34,7 @@ REQUIRED_VALIDATION_SCRIPTS = [
     "scripts/validate_ide_packaging.py",
     "tests/behavior/evaluate_governance.py",
     "tests/behavior/run_tests.py",
+    "scripts/validate_artificer_internal.py",
 ]
 
 REPO_MEMORY_FILES = [
@@ -46,6 +47,7 @@ STRICT_VALIDATOR_SCRIPTS = [
     "scripts/validate_structure.py",
     "scripts/validate_manifest.py",
     "scripts/validate_ide_packaging.py",
+    "scripts/validate_artificer_internal.py",
 ]
 
 SIGNIFICANT_CHANGE_PATTERNS = [
