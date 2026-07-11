@@ -1,19 +1,14 @@
 # Project State
 
 - **Project Name:** Conductor
-- **Active Repo:** `C:\conductor`
-- **Current Branch:** `main`
+- **Active Repo:** `C:\+conductor`
+- **Current Branch:** `fix/wave5b-prompt-load-alignment`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.1`
 - **Target Patch:** `v1.1.2`
-- **Current Stable State:** `v1.1.1` tagged and published; `main` is clean and aligned; Wave 5A implementation merged
+- **Current Stable State:** `v1.1.1` tagged and published; Wave 5A implementation and Wave 5B audit merged; Wave 5B reporting alignment in progress
 - **Related but Forbidden Repo for this task:** `C:\+AA`
-- **Latest Validation:**
-  - `python scripts/preflight_sync_check.py` passed with `PROCEED` on `main` at `v1.1.0`
-  - Runtime: 42 tests passed, 95.51% coverage
-  - Behavior: passed
-  - Governance strict: passed
-  - All metadata validators: passed
+- **Latest Validation:** Post-edit structure, manifest, stale-reference, strict governance, Codex export, behavior, focused prompt-load regression, runtime, and checker validations passed; runtime: 43 tests passed, 95.51% coverage; checker exited `0`; preflight correctly returned `BLOCKED` on the intended dirty worktree.
 - **Active Governance Gates:**
   - Workspace Boundary Gate
   - Session Isolation Gate
@@ -22,10 +17,10 @@
   - Caveman Public-Content Exclusion
   - Ponytail Handoff Restriction
   - Acme Readiness Gate Expansion
-- **Current Risks:** Prompt-load threshold review/reduction can affect specialist behavior and prompt budget expectations.
+- **Current Risks:** Prompt-load thresholds remain advisory and current observed Groups A, B, C, and Grand Total exceed soft limits; no re-baselining decision exists.
 - **Do-Not-Touch Areas:** Do not edit website repo files from this task (`C:\+AA`).
-- **Pending Next Steps:** Start Wave 5B prompt-load threshold review/reduction as an audit-first branch.
-- **Most Recent Checkpoint:** 2026-07-10 - Wave 5A implementation merged; post-merge startup state realigned.
+- **Pending Next Steps:** Complete validation, commit, and push the narrow Wave 5B reporting alignment branch; defer Artificer and threshold re-baselining.
+- **Most Recent Checkpoint:** 2026-07-11 - Fresh clone aligned to origin/main; Wave 5B reporting implementation underway.
 
 ## Token Efficiency Rationale
 

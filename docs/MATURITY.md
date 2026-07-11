@@ -11,6 +11,7 @@ This document classifies the current maturity level of Orchestra's features and 
 * **Workspace Locking**: Collision protection and state locking mechanisms via `.amalgam/lock.json`.
 * **Python Behavior Validation**: `tests/behavior/run_tests.py` is the primary cross-platform behavior validation runner used by CI.
 * **Runtime Coverage Enforcement**: `tests/runtime` is enforced in CI with `pytest-cov` and `--cov-fail-under=90`.
+* **Cross-Platform CI Matrix Validation**: Windows, Linux, and macOS matrix coverage validates the Python behavior runner and native runtime coverage gate.
 
 ## Beta
 
@@ -24,6 +25,5 @@ This document classifies the current maturity level of Orchestra's features and 
 
 ## Planned
 
-* **CI Matrix Validation**: Implement continuous integration tests across major platforms (Windows, Linux, macOS) for the Python behavior runner, the runtime coverage gate, and any remaining compatibility wrapper coverage that still matters.
 * **Deeper Runtime Behavioral Simulation**: Expand static governance checks into true end-to-end routing simulation to prove real runtime governance decisions.
 * **Host-Integrated Enforcement**: Transition from instruction-level and standalone script enforcement to direct host integration blocking capabilities (where feasible).

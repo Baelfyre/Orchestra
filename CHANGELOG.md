@@ -47,6 +47,9 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 
 ## Unreleased
 
+### Changed
+- Improved prompt-load reporting with Group B and Group C status output, largest-contributor reporting, clarified original versus observed baselines, focused regression coverage, and narrow repository-state alignment.
+
 ### Added
 - Added an App Release Compliance Gate plus reusable privacy review, data inventory, IP clearance, privacy policy, terms, and retention/deletion governance templates for app and public release workflows.
 

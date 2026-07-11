@@ -17,7 +17,8 @@ def main():
         {"Name": "validate_codex_export.py", "Path": "adapters/codex/validate_codex_export.py"},
         {"Name": "evaluate_governance.py", "Path": "tests/behavior/evaluate_governance.py"},
         {"Name": "runtime_guardrail.py", "Path": "scripts/runtime_guardrail.py"},
-        {"Name": "test_dagger_guardrail.py", "Path": "scripts/test_dagger_guardrail.py"}
+        {"Name": "test_dagger_guardrail.py", "Path": "scripts/test_dagger_guardrail.py"},
+        {"Name": "test_prompt_load_thresholds.py", "Path": "tests/behavior/test_prompt_load_thresholds.py"}
     ]
     
     failed = False
