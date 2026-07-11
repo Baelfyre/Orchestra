@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ArtificerSourceIntake",
+  "type": "object",
+  "properties": {
+    "repository": {
+      "type": "string",
+      "description": "Name of the repository, format: owner/name."
+    },
+    "repository_owner": {
+      "type": "string",
+      "description": "Owner of the repository."
+    },
+    "canonical_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "The URL of the repository."
+    },
+    "license": {
+      "type": "string",
+      "description": "License under which the repository is distributed."
+    },
+    "default_branch": {
+      "type": "string",
+      "description": "The default branch of the repository."
+    },
+    "reviewed_commit_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{40}$",
+      "description": "The full 40-character SHA of the reviewed commit."
+    },
+    "review_date": {
+      "type": "string",
+      "format": "date",
+      "description": "The date when the review was conducted (YYYY-MM-DD)."
+    },
+    "files_examined": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "file_path": {
+            "type": "string"
+          },
+          "line_ranges": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^\\d+-\\d+$"
+            }
+          }
+        },
+        "required": [
+          "file_path"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "runtime_behavior_tested": {
+      "type": "boolean",
+      "description": "Indicates if runtime behavior was tested."
+    },
+    "source_confidence": {
+      "type": "string",
+      "enum": [
+        "HIGH",
+        "MEDIUM",
+        "LOW"
+      ],
+      "description": "Maintainer confidence score of the source quality."
+    }
+  },
+  "required": [
+    "repository",
+    "repository_owner",
+    "canonical_url",
+    "license",
+    "reviewed_commit_sha",
+    "review_date",
+    "files_examined",
+    "runtime_behavior_tested",
+    "source_confidence"
+  ],
+  "additionalProperties": false
+}

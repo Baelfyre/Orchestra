@@ -2,7 +2,7 @@
 
 - **Project Name:** Conductor
 - **Active Repo:** `C:\+conductor`
-- **Current Branch:** `main`
+- **Current Branch:** `audit/artificer-internal-architecture`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.1`
 - **Target Patch:** `v1.1.2`
