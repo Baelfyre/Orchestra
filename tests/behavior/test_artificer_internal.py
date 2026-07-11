@@ -2,8 +2,10 @@ import unittest
 import tempfile
 import json
 import shutil
+import subprocess
 from pathlib import Path
 import sys
+import re
 
 # Add scripts directory to sys.path so we can import the validator
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "scripts"))
@@ -42,200 +44,428 @@ class TestArtificerInternal(unittest.TestCase):
     def tearDown(self):
         self.temp_dir_obj.cleanup()
 
-    # --- Passing Cases ---
+    # === Passing Cases ===
 
     def test_complete_valid_contract_passes(self):
-        # A clean run with valid files in temp_root should pass (sys.exit(0))
-        # We can call the helper functions and check they return empty lists of failures
-        # Validate shared schemas
-        pattern_schema = json.loads((self.temp_root / "internal/artificer/PATTERN_SCHEMA.json").read_text(encoding="utf-8"))
-        self.assertEqual(val.validate_shared_schema(pattern_schema, "PATTERN_SCHEMA.json"), [])
-
-        source_schema = json.loads((self.temp_root / "internal/artificer/SOURCE_INTAKE_SCHEMA.json").read_text(encoding="utf-8"))
-        self.assertEqual(val.validate_shared_schema(source_schema, "SOURCE_INTAKE_SCHEMA.json"), [])
-
-        # Validate documentation boundary checks
-        artificer_md = (self.temp_root / "internal/artificer/ARTIFICER.md").read_text(encoding="utf-8")
-        self.assertEqual(val.check_artificer_md(artificer_md), [])
-
-        security_md = (self.temp_root / "docs/internal/SECURITY_BOUNDARIES.md").read_text(encoding="utf-8")
-        self.assertEqual(val.check_security_boundaries_md(security_md), [])
-
-        boundaries_md = (self.temp_root / "docs/internal/ARTIFICER_BOUNDARIES.md").read_text(encoding="utf-8")
-        self.assertEqual(val.check_artificer_boundaries_md(boundaries_md), [])
-
-        evidence_md = (self.temp_root / "docs/internal/EVIDENCE_REQUIREMENTS.md").read_text(encoding="utf-8")
-        self.assertEqual(val.check_evidence_requirements_md(evidence_md), [])
-
-        workflow_md = (self.temp_root / "docs/internal/ARTIFICER_WORKFLOW.md").read_text(encoding="utf-8")
-        self.assertEqual(val.check_artificer_workflow_md(workflow_md), [])
-
-        output_formats_md = (self.temp_root / "internal/artificer/OUTPUT_FORMATS.md").read_text(encoding="utf-8")
-        self.assertEqual(val.check_output_formats_md(output_formats_md), [])
-
-        # Public non-registration checks
-        non_reg_fails = val.check_public_non_registration(str(self.temp_root))
-        self.assertEqual(non_reg_fails, [])
-
-    def test_feature_branch_context_has_no_effect(self):
-        # Modifying local git state (e.g. creating/checkout branch) shouldn't affect pure-filesystem validator
-        # Simply verifying check_public_non_registration still passes
-        non_reg_fails = val.check_public_non_registration(str(self.temp_root))
-        self.assertEqual(non_reg_fails, [])
+        failures = val.validate_repository(self.temp_root)
+        self.assertEqual(failures, [])
 
     def test_internal_artificer_references_allowed(self):
         # References to artificer inside internal files is allowed
         # (check_public_non_registration ignores internal directories)
         artificer_md_path = self.temp_root / "internal/artificer/ARTIFICER.md"
         self.assertTrue("artificer" in artificer_md_path.read_text(encoding="utf-8").lower())
-        non_reg_fails = val.check_public_non_registration(str(self.temp_root))
-        self.assertEqual(non_reg_fails, [])
-
-    def test_runtime_behavior_tested_false_valid(self):
-        # runtime_behavior_tested schema requirement is boolean (either True or False is fine)
-        source_schema_path = self.temp_root / "internal/artificer/SOURCE_INTAKE_SCHEMA.json"
-        source_schema = json.loads(source_schema_path.read_text(encoding="utf-8"))
-        self.assertEqual(source_schema["properties"]["runtime_behavior_tested"]["type"], "boolean")
+        failures = val.validate_repository(self.temp_root)
+        self.assertEqual(failures, [])
 
     def test_public_surfaces_without_artificer_references_pass(self):
-        non_reg_fails = val.check_public_non_registration(str(self.temp_root))
-        self.assertEqual(non_reg_fails, [])
+        failures = val.validate_repository(self.temp_root)
+        self.assertEqual(failures, [])
 
-    # --- Required Failure Cases ---
+    def test_runtime_behavior_tested_false_valid(self):
+        # runtime_behavior_tested type must be boolean, which it is
+        failures = val.validate_repository(self.temp_root)
+        self.assertEqual(failures, [])
+
+    def test_explicit_negative_execution_boundary(self):
+        failures = val.validate_repository(self.temp_root)
+        self.assertEqual(failures, [])
+
+    def test_explicit_negative_dependency_installation_boundary(self):
+        failures = val.validate_repository(self.temp_root)
+        self.assertEqual(failures, [])
+
+    def test_explicit_no_self_implementation_boundary(self):
+        failures = val.validate_repository(self.temp_root)
+        self.assertEqual(failures, [])
+
+    def test_explicit_no_self_approval_boundary(self):
+        failures = val.validate_repository(self.temp_root)
+        self.assertEqual(failures, [])
+
+    def test_valid_cli_returns_0(self):
+        script_path = self.real_repo_root / "scripts/validate_artificer_internal.py"
+        res = subprocess.run(
+            [sys.executable, str(script_path), "--repo-root", str(self.temp_root)],
+            capture_output=True,
+            text=True
+        )
+        self.assertEqual(res.returncode, 0)
+        self.assertIn("Validation Passed", res.stdout)
+
+    # === Failing Cases ===
 
     def test_failure_missing_required_file(self):
-        (self.temp_root / "internal/artificer/ARTIFICER.md").unlink()
-        # If we run check_required_files (or full check), it fails
-        # Let's mock a simple check or run it on the modified root
-        # (we can just verify it is reported as missing)
-        # Since validate_artificer_internal main exit code is what's checked in run_tests,
-        # we can verify the failure list has the missing file
-        # Or test check_required_files behavior
-        # Let's inspect the validate_artificer_internal required file list check.
-        # It's done inside main. Let's make sure it's caught.
-        pass
+        target = self.temp_root / "internal/artificer/ARTIFICER.md"
+        target.unlink()
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "internal/artificer/ARTIFICER.md"
+                and "does not exist" in failure.reason.lower()
+                for failure in failures
+            )
+        )
 
     def test_failure_empty_required_file(self):
-        (self.temp_root / "internal/artificer/ARTIFICER.md").write_text("", encoding="utf-8")
-        # Empty file check is tested
+        target = self.temp_root / "internal/artificer/ARTIFICER.md"
+        target.write_text("", encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "internal/artificer/ARTIFICER.md"
+                and "is empty" in failure.reason.lower()
+                for failure in failures
+            )
+        )
+
+    def test_failure_invalid_utf8_required_file(self):
+        target = self.temp_root / "internal/artificer/ARTIFICER.md"
+        target.write_bytes(b"\xff\xfe\xfd")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "internal/artificer/ARTIFICER.md"
+                and "decode as utf-8" in failure.reason.lower()
+                for failure in failures
+            )
+        )
 
     def test_failure_invalid_json_schema_syntax(self):
-        (self.temp_root / "internal/artificer/PATTERN_SCHEMA.json").write_text("invalid json {", encoding="utf-8")
+        target = self.temp_root / "internal/artificer/PATTERN_SCHEMA.json"
+        target.write_text("invalid json {", encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "internal/artificer/PATTERN_SCHEMA.json"
+                and "json parsing failed" in failure.reason.lower()
+                for failure in failures
+            )
+        )
 
-    def test_failure_missing_required_schema_property(self):
-        # load schema, remove a property, dump, and validate
-        pattern_schema_path = self.temp_root / "internal/artificer/PATTERN_SCHEMA.json"
-        schema = json.loads(pattern_schema_path.read_text(encoding="utf-8"))
+    def test_failure_missing_schema_property(self):
+        path = self.temp_root / "internal/artificer/PATTERN_SCHEMA.json"
+        schema = json.loads(path.read_text(encoding="utf-8"))
         del schema["properties"]["name"]
-        failures = val.validate_shared_schema(schema, "PATTERN_SCHEMA.json")
-        self.assertTrue(any("Required field 'name' not present in properties" in f[1] for f in failures))
+        path.write_text(json.dumps(schema, indent=2), encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "internal/artificer/PATTERN_SCHEMA.json"
+                and "required field 'name' not present in properties" in failure.reason.lower()
+                for failure in failures
+            )
+        )
 
-    def test_failure_required_field_not_declared_in_properties(self):
-        pattern_schema_path = self.temp_root / "internal/artificer/PATTERN_SCHEMA.json"
-        schema = json.loads(pattern_schema_path.read_text(encoding="utf-8"))
-        schema["required"].append("nonexistent_prop")
-        failures = val.validate_shared_schema(schema, "PATTERN_SCHEMA.json")
-        self.assertTrue(any("Required field 'nonexistent_prop' not present in properties" in f[1] for f in failures))
+    def test_failure_required_field_absent_from_properties(self):
+        path = self.temp_root / "internal/artificer/PATTERN_SCHEMA.json"
+        schema = json.loads(path.read_text(encoding="utf-8"))
+        schema["required"].append("absent_field")
+        path.write_text(json.dumps(schema, indent=2), encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "internal/artificer/PATTERN_SCHEMA.json"
+                and "required field 'absent_field' not present in properties" in failure.reason.lower()
+                for failure in failures
+            )
+        )
 
-    def test_failure_additional_properties_changed_to_true(self):
-        pattern_schema_path = self.temp_root / "internal/artificer/PATTERN_SCHEMA.json"
-        schema = json.loads(pattern_schema_path.read_text(encoding="utf-8"))
+    def test_failure_additional_properties_true(self):
+        path = self.temp_root / "internal/artificer/PATTERN_SCHEMA.json"
+        schema = json.loads(path.read_text(encoding="utf-8"))
         schema["additionalProperties"] = True
-        failures = val.validate_shared_schema(schema, "PATTERN_SCHEMA.json")
-        self.assertTrue(any("additionalProperties" in f[1] for f in failures))
+        path.write_text(json.dumps(schema, indent=2), encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "internal/artificer/PATTERN_SCHEMA.json"
+                and "additionalproperties" in failure.reason.lower()
+                for failure in failures
+            )
+        )
 
     def test_failure_classification_enum_drift(self):
-        pattern_schema_path = self.temp_root / "internal/artificer/PATTERN_SCHEMA.json"
-        schema = json.loads(pattern_schema_path.read_text(encoding="utf-8"))
+        path = self.temp_root / "internal/artificer/PATTERN_SCHEMA.json"
+        schema = json.loads(path.read_text(encoding="utf-8"))
         schema["properties"]["classification"]["enum"].remove("REFERENCE_ONLY")
-        # To test the enum drift validation we can test main's classification check
-        # We can implement a check similar to the main validator logic
-        enum = schema["properties"]["classification"]["enum"]
-        expected = ["REFERENCE_ONLY", "ADAPTED_PATTERN", "CODE_REUSE_REVIEW_REQUIRED", "TEST_CORPUS_CANDIDATE", "REJECTED", "DEFERRED", "DUPLICATE", "OUT_OF_SCOPE"]
-        self.assertNotEqual(enum, expected)
+        path.write_text(json.dumps(schema, indent=2), encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "internal/artificer/PATTERN_SCHEMA.json"
+                and "classification enum mismatch" in failure.reason.lower()
+                for failure in failures
+            )
+        )
 
-    def test_failure_duplicate_classification_enum_value(self):
-        pattern_schema_path = self.temp_root / "internal/artificer/PATTERN_SCHEMA.json"
-        schema = json.loads(pattern_schema_path.read_text(encoding="utf-8"))
+    def test_failure_duplicate_classification_enum(self):
+        path = self.temp_root / "internal/artificer/PATTERN_SCHEMA.json"
+        schema = json.loads(path.read_text(encoding="utf-8"))
         schema["properties"]["classification"]["enum"].append("REFERENCE_ONLY")
-        failures = val.validate_shared_schema(schema, "PATTERN_SCHEMA.json")
-        self.assertTrue(any("Duplicate values found in enum array" in f[1] for f in failures))
+        path.write_text(json.dumps(schema, indent=2), encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "internal/artificer/PATTERN_SCHEMA.json"
+                and "duplicate values found in enum array" in failure.reason.lower()
+                for failure in failures
+            )
+        )
 
-    def test_failure_artificer_added_to_assigned_specialist(self):
-        pattern_schema_path = self.temp_root / "internal/artificer/PATTERN_SCHEMA.json"
-        schema = json.loads(pattern_schema_path.read_text(encoding="utf-8"))
+    def test_failure_artificer_added_to_assigned_specialists(self):
+        path = self.temp_root / "internal/artificer/PATTERN_SCHEMA.json"
+        schema = json.loads(path.read_text(encoding="utf-8"))
         schema["properties"]["assigned_specialist"]["enum"].append("artificer")
-        # assigned_specialist enum validation check
-        self.assertTrue("artificer" in schema["properties"]["assigned_specialist"]["enum"])
+        path.write_text(json.dumps(schema, indent=2), encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "internal/artificer/PATTERN_SCHEMA.json"
+                and "assigned_specialist enum must never contain 'artificer'" in failure.reason.lower()
+                for failure in failures
+            )
+        )
 
     def test_failure_source_confidence_enum_drift(self):
-        source_schema_path = self.temp_root / "internal/artificer/SOURCE_INTAKE_SCHEMA.json"
-        schema = json.loads(source_schema_path.read_text(encoding="utf-8"))
+        path = self.temp_root / "internal/artificer/SOURCE_INTAKE_SCHEMA.json"
+        schema = json.loads(path.read_text(encoding="utf-8"))
         schema["properties"]["source_confidence"]["enum"] = ["HIGH", "LOW"]
-        self.assertNotEqual(schema["properties"]["source_confidence"]["enum"], ["HIGH", "MEDIUM", "LOW"])
+        path.write_text(json.dumps(schema, indent=2), encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "internal/artificer/SOURCE_INTAKE_SCHEMA.json"
+                and "source confidence enum mismatch" in failure.reason.lower()
+                for failure in failures
+            )
+        )
+
+    def test_failure_invalid_reviewed_commit_sha_pattern(self):
+        path = self.temp_root / "internal/artificer/SOURCE_INTAKE_SCHEMA.json"
+        schema = json.loads(path.read_text(encoding="utf-8"))
+        schema["properties"]["reviewed_commit_sha"]["pattern"] = "^[0-9a-f]{8}$"
+        path.write_text(json.dumps(schema, indent=2), encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "internal/artificer/SOURCE_INTAKE_SCHEMA.json"
+                and "reviewed_commit_sha pattern mismatch" in failure.reason.lower()
+                for failure in failures
+            )
+        )
+
+    def test_failure_invalid_review_date_format(self):
+        path = self.temp_root / "internal/artificer/SOURCE_INTAKE_SCHEMA.json"
+        schema = json.loads(path.read_text(encoding="utf-8"))
+        schema["properties"]["review_date"]["format"] = "date-time"
+        path.write_text(json.dumps(schema, indent=2), encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "internal/artificer/SOURCE_INTAKE_SCHEMA.json"
+                and "review_date format mismatch" in failure.reason.lower()
+                for failure in failures
+            )
+        )
 
     def test_failure_evidence_category_removed(self):
-        evidence_md_path = self.temp_root / "docs/internal/EVIDENCE_REQUIREMENTS.md"
-        content = evidence_md_path.read_text(encoding="utf-8")
-        # Remove SOURCE_CONFIRMED category
+        path = self.temp_root / "docs/internal/EVIDENCE_REQUIREMENTS.md"
+        content = path.read_text(encoding="utf-8")
         content = content.replace("SOURCE_CONFIRMED", "SOME_OTHER_THING")
-        missing = val.check_evidence_requirements_md(content)
-        self.assertTrue(any("Missing evidence category: SOURCE_CONFIRMED" in m for m in missing))
+        path.write_text(content, encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "docs/internal/EVIDENCE_REQUIREMENTS.md"
+                and "missing evidence category: source_confirmed" in failure.reason.lower()
+                for failure in failures
+            )
+        )
 
     def test_failure_evidence_category_duplicated(self):
-        evidence_md_path = self.temp_root / "docs/internal/EVIDENCE_REQUIREMENTS.md"
-        content = evidence_md_path.read_text(encoding="utf-8")
-        # Duplicate SOURCE_CONFIRMED line
-        content = content.replace("- **`SOURCE_CONFIRMED`**:", "- **`SOURCE_CONFIRMED`**:\n- **`SOURCE_CONFIRMED`**:")
-        missing = val.check_evidence_requirements_md(content)
-        self.assertTrue(any("Duplicate evidence category: SOURCE_CONFIRMED" in m for m in missing))
+        path = self.temp_root / "docs/internal/EVIDENCE_REQUIREMENTS.md"
+        content = path.read_text(encoding="utf-8")
+        content = content.replace("- **`SOURCE_CONFIRMED`**", "- **`SOURCE_CONFIRMED`**\n- **`SOURCE_CONFIRMED`**")
+        path.write_text(content, encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "docs/internal/EVIDENCE_REQUIREMENTS.md"
+                and "duplicate evidence category: source_confirmed" in failure.reason.lower()
+                for failure in failures
+            )
+        )
 
-    def test_failure_security_no_execution_boundary_removed(self):
-        security_md_path = self.temp_root / "docs/internal/SECURITY_BOUNDARIES.md"
-        content = security_md_path.read_text(encoding="utf-8")
-        content = content.replace("No Code Execution", "Code Execution Is Allowed")
-        missing = val.check_security_boundaries_md(content)
-        self.assertTrue(any("No Code Execution" in m for m in missing))
+    def test_failure_no_execution_boundary_removed(self):
+        path = self.temp_root / "internal/artificer/ARTIFICER.md"
+        content = path.read_text(encoding="utf-8")
+        content = content.replace("Artificer must not execute external or untrusted repository code.", "")
+        content = content.replace("Artificer must not execute build scripts, run tests, or install packages of external codebases.", "")
+        path.write_text(content, encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "internal/artificer/ARTIFICER.md"
+                and "no external code execution" in failure.reason.lower()
+                for failure in failures
+            )
+        )
+
+    def test_failure_positive_external_execution_permission_introduced(self):
+        path = self.temp_root / "internal/artificer/ARTIFICER.md"
+        content = path.read_text(encoding="utf-8")
+        content = content.replace("Artificer must not execute build scripts, run tests, or install packages of external codebases.", "")
+        content = content.replace("Artificer must not execute external or untrusted repository code.", "Artificer may execute external repository code.")
+        path.write_text(content, encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "internal/artificer/ARTIFICER.md"
+                and "no external code execution" in failure.reason.lower()
+                for failure in failures
+            )
+        )
+
+    def test_failure_positive_external_package_installation_permission_introduced(self):
+        path = self.temp_root / "internal/artificer/ARTIFICER.md"
+        content = path.read_text(encoding="utf-8")
+        content = content.replace("Artificer must not execute build scripts, run tests, or install packages of external codebases.", "")
+        content = content.replace("Artificer must not install external repository dependencies or packages.", "Artificer can install external packages.")
+        path.write_text(content, encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "internal/artificer/ARTIFICER.md"
+                and "no external dependency installation" in failure.reason.lower()
+                for failure in failures
+            )
+        )
 
     def test_failure_cipher_handoff_removed(self):
-        artificer_md_path = self.temp_root / "internal/artificer/ARTIFICER.md"
-        content = artificer_md_path.read_text(encoding="utf-8")
+        path = self.temp_root / "internal/artificer/ARTIFICER.md"
+        content = path.read_text(encoding="utf-8")
         content = content.replace("Cipher", "SomeOtherSpecialist")
-        missing = val.check_artificer_md(content)
-        self.assertTrue(any("Cipher handoff" in m for m in missing))
+        path.write_text(content, encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "internal/artificer/ARTIFICER.md"
+                and "cipher handoff" in failure.reason.lower()
+                for failure in failures
+            )
+        )
 
-    def test_failure_plugin_json_contains_artificer(self):
+    def test_failure_artificer_given_implementation_ownership(self):
+        path = self.temp_root / "docs/internal/ARTIFICER_BOUNDARIES.md"
+        original_content = path.read_text(encoding="utf-8")
+        self.assertIn("Map to **Ponytail** for final code changes.", original_content)
+        mutated_content = original_content.replace("Map to **Ponytail** for final code changes.", "Map to **Artificer** for final code changes.")
+        self.assertNotEqual(original_content, mutated_content)
+        path.write_text(mutated_content, encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "docs/internal/ARTIFICER_BOUNDARIES.md"
+                and "rejection of implementation ownership assigned to artificer" in failure.reason.lower()
+                for failure in failures
+            )
+        )
+
+    def test_failure_artificer_allowed_to_approve_its_own_findings(self):
+        path = self.temp_root / "internal/artificer/ARTIFICER.md"
+        content = path.read_text(encoding="utf-8")
+        content = content.replace("Artificer must not approve, adjudicate, or clear its own findings.", "Artificer can approve its own findings.")
+        path.write_text(content, encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "internal/artificer/ARTIFICER.md"
+                and "no self-approval" in failure.reason.lower()
+                for failure in failures
+            )
+        )
+
+    def test_failure_artificer_added_to_plugin_json(self):
         (self.temp_root / "plugin.json").write_text('{"name": "orchestra", "specialists": ["artificer"]}', encoding="utf-8")
-        failures = val.check_public_non_registration(str(self.temp_root))
-        self.assertTrue(any("Contains forbidden term 'artificer'" in f[1] for f in failures))
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "plugin.json"
+                and "contains forbidden term 'artificer'" in failure.reason.lower()
+                for failure in failures
+            )
+        )
 
-    def test_failure_commands_artificer_md_exists(self):
+    def test_failure_artificer_command_path_created(self):
         (self.temp_root / "commands" / "artificer.md").write_text("forbidden command file", encoding="utf-8")
-        failures = val.check_public_non_registration(str(self.temp_root))
-        self.assertTrue(any("Forbidden Artificer path exists" in f[1] for f in failures))
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target.replace("\\", "/") == "commands/artificer.md"
+                and "forbidden artificer path exists" in failure.reason.lower()
+                for failure in failures
+            )
+        )
 
-    def test_failure_case_variant_public_registration(self):
-        (self.temp_root / "plugin.json").write_text('{"name": "orchestra", "specialists": ["Artificer"]}', encoding="utf-8")
-        failures = val.check_public_non_registration(str(self.temp_root))
-        self.assertTrue(any("Contains forbidden term 'artificer'" in f[1] for f in failures))
-
-    def test_failure_artificer_under_adapters_codex_skills(self):
+    def test_failure_artificer_adapter_export_created(self):
         (self.temp_root / "adapters" / "codex" / "skills" / "artificer").mkdir(parents=True, exist_ok=True)
-        failures = val.check_public_non_registration(str(self.temp_root))
-        self.assertTrue(any("Forbidden Artificer path exists" in f[1] for f in failures))
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target.replace("\\", "/") == "adapters/codex/skills/artificer"
+                and "forbidden artificer path exists" in failure.reason.lower()
+                for failure in failures
+            )
+        )
 
-    def test_failure_artificer_in_runtime_routing_file(self):
+    def test_failure_artificer_runtime_route_created(self):
         (self.temp_root / "orchestra_runtime" / "router.py").write_text("import artificer", encoding="utf-8")
-        failures = val.check_public_non_registration(str(self.temp_root))
-        self.assertTrue(any("Contains forbidden term 'artificer'" in f[1] for f in failures))
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target.replace("\\", "/") == "orchestra_runtime/router.py"
+                and "contains forbidden term 'artificer'" in failure.reason.lower()
+                for failure in failures
+            )
+        )
 
-    def test_failure_implementation_ownership_changed_to_artificer(self):
-        # Map implementation in boundaries to artificer
-        boundaries_md_path = self.temp_root / "docs/internal/ARTIFICER_BOUNDARIES.md"
-        content = boundaries_md_path.read_text(encoding="utf-8")
-        content = content.replace("not by Artificer", "owned by Artificer")
-        # Just check that it mentions implementation structure correctly
-        pass
+    def test_failure_invalid_fixture_cli_returns_1(self):
+        (self.temp_root / "internal/artificer/ARTIFICER.md").unlink()
+        script_path = self.real_repo_root / "scripts/validate_artificer_internal.py"
+        res = subprocess.run(
+            [sys.executable, str(script_path), "--repo-root", str(self.temp_root)],
+            capture_output=True,
+            text=True
+        )
+        self.assertEqual(res.returncode, 1)
+        self.assertIn("Validation Failed", res.stdout)
+
+    def test_failure_invalid_cli_usage_returns_2(self):
+        script_path = self.real_repo_root / "scripts/validate_artificer_internal.py"
+        res = subprocess.run(
+            [sys.executable, str(script_path), "--repo-root", str(self.temp_root), "--unknown-option"],
+            capture_output=True,
+            text=True
+        )
+        self.assertEqual(res.returncode, 2)
+
+    def test_quality_gate(self):
+        test_file = Path(__file__).resolve()
+        content = test_file.read_text(encoding="utf-8")
+        methods = re.findall(r"def\s+(test_failure_[a-zA-Z0-9_]+)\(self\):([\s\S]*?)(?=\n\s*def|\n\s*if __name__|$)", content)
+        self.assertTrue(len(methods) > 0, "No test_failure_* methods found!")
+        for name, body in methods:
+            lines = [line.strip() for line in body.split("\n") if line.strip()]
+            for line in lines:
+                if line == "pass":
+                    self.fail(f"Method '{name}' contains bare 'pass' statement")
+                if "TODO" in line:
+                    self.fail(f"Method '{name}' contains 'TODO' placeholder")
+                if "NotImplementedError" in line:
+                    self.fail(f"Method '{name}' contains 'NotImplementedError'")
+            has_assertion = any(re.search(r"self\.assert[a-zA-Z]", line) for line in lines)
+            self.assertTrue(has_assertion, f"Method '{name}' does not contain any self.assert... statement")
 
 
 if __name__ == "__main__":
