@@ -1,26 +1,28 @@
 # Project State
 
-- **Project Name:** Conductor
-- **Active Repo:** `C:\+conductor`
-- **Current Branch:** `fix/wave5b-prompt-load-alignment`
-- **Base Branch:** `main`
-- **Current Release:** `v1.1.1`
-- **Target Patch:** `v1.1.2`
-- **Current Stable State:** `v1.1.1` tagged and published; Wave 5A implementation and Wave 5B audit merged; Wave 5B reporting alignment completed and pushed for review.
-- **Related but Forbidden Repo for this task:** `C:\+AA`
-- **Latest Validation:** Structure, manifest, stale-reference, strict governance, Codex export, behavior, focused prompt-load regression, runtime, and checker validations passed; runtime: 43 tests passed with 95.51% coverage; prompt-load checker exited `0`.
-- **Active Governance Gates:**
-  - Workspace Boundary Gate
-  - Session Isolation Gate
-  - Audit Mode / No-Edit Gate
-  - Record Accuracy Gate
-  - Caveman Public-Content Exclusion
-  - Ponytail Handoff Restriction
-  - Acme Readiness Gate Expansion
-- **Current Risks:** Prompt-load thresholds remain advisory and current observed Groups A, B, C, and Grand Total exceed soft limits; no re-baselining decision exists.
-- **Do-Not-Touch Areas:** Do not edit website repo files from this task (`C:\+AA`).
-- **Pending Next Steps:** Open the Wave 5B pull request, verify GitHub Actions, merge after required review, then realign startup-state files on main before beginning Artificer.
-- **Most Recent Checkpoint:** 2026-07-11 - Wave 5B implementation committed and pushed at 03e6abd.
+* **Project Name:** Conductor
+* **Active Repo:** `C:\+conductor`
+* **Current Branch:** `chore/post-artificer-main-realignment`
+* **Base Branch:** `main`
+* **Current Release:** `v1.1.1`
+* **Target Patch:** `v1.1.2`
+* **Current Stable State:** Artificer Phase 1 merged through PR #153.
+* **Current Task:** Post-Artificer main realignment and Phase 2 internal-boundary planning.
+* **Related but Forbidden Repo for this task:** `C:\+AA`
+* **Latest Validation:** Structure, manifest, stale-reference, Codex export, behavior, and diff checks passed after the Artificer Phase 1 merge. Strict governance requires the startup-state branch claims to match the active realignment branch.
+* **Active Governance Gates:**
+
+  * Workspace Boundary Gate
+  * Session Isolation Gate
+  * Audit Mode / No-Edit Gate
+  * Record Accuracy Gate
+  * Caveman Public-Content Exclusion
+  * Ponytail Handoff Restriction
+  * Acme Readiness Gate Expansion
+* **Current Risks:** Prompt-load thresholds remain advisory and current observed Groups A, B, C, and Grand Total exceed soft limits; no re-baselining decision exists.
+* **Do-Not-Touch Areas:** Do not edit website repo files from this task (`C:\+AA`).
+* **Pending Next Steps:** Merge the post-Artificer startup-state realignment, then define the Phase 2 internal-boundary validator and focused behavior tests.
+* **Most Recent Checkpoint:** 2026-07-11 - Artificer Phase 1 merged through PR #153.
 
 ## Token Efficiency Rationale
 
