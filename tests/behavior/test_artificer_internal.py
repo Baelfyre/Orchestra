@@ -575,7 +575,145 @@ class TestArtificerInternal(unittest.TestCase):
             )
         )
 
+    def test_failure_and_mixed_polarity(self):
+        """A. 'and' mixed polarity: prohibit implement, permit run tests."""
+        path = self.temp_root / "docs/internal/ARTIFICER_BOUNDARIES.md"
+        original = path.read_text(encoding="utf-8")
+        mutated = original.replace(
+            "Must never write implementation code, modify plugin configs, or run tests.",
+            "Artificer must not implement source code and may run tests."
+        ).replace(
+            "Artificer does not write unit tests or execute test runners.",
+            ""
+        )
+        self.assertNotEqual(original, mutated)
+        path.write_text(mutated, encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "docs/internal/ARTIFICER_BOUNDARIES.md"
+                and "artificer does not run tests statement" in failure.reason.lower()
+                for failure in failures
+            )
+        )
+
+    def test_failure_comma_mixed_polarity(self):
+        """B. Comma-modal mixed polarity: prohibit implement, permit run tests."""
+        path = self.temp_root / "docs/internal/ARTIFICER_BOUNDARIES.md"
+        original = path.read_text(encoding="utf-8")
+        mutated = original.replace(
+            "Must never write implementation code, modify plugin configs, or run tests.",
+            "Artificer must not implement source code, may run tests."
+        ).replace(
+            "Artificer does not write unit tests or execute test runners.",
+            ""
+        )
+        self.assertNotEqual(original, mutated)
+        path.write_text(mutated, encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "docs/internal/ARTIFICER_BOUNDARIES.md"
+                and "artificer does not run tests statement" in failure.reason.lower()
+                for failure in failures
+            )
+        )
+
+    def test_failure_inherited_subject_with_mixed_polarity(self):
+        """C. Inherited subject after leading non-Artificer clause with mixed 'but may'."""
+        path = self.temp_root / "docs/internal/ARTIFICER_BOUNDARIES.md"
+        original = path.read_text(encoding="utf-8")
+        mutated = original.replace(
+            "Must never write implementation code, modify plugin configs, or run tests.",
+            "Although the repository is documented, Artificer must not implement code, but may run tests."
+        ).replace(
+            "Artificer does not write unit tests or execute test runners.",
+            ""
+        )
+        self.assertNotEqual(original, mutated)
+        path.write_text(mutated, encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "docs/internal/ARTIFICER_BOUNDARIES.md"
+                and "artificer does not run tests statement" in failure.reason.lower()
+                for failure in failures
+            )
+        )
+
+    def test_failure_licensing_and_mixed_polarity(self):
+        """D. Licensing mixed polarity: prohibit decide evidence, permit approve licensing."""
+        path = self.temp_root / "docs/internal/ARTIFICER_BOUNDARIES.md"
+        original = path.read_text(encoding="utf-8")
+        self.assertIn("Artificer reports licensing, but cannot approve license compliance or IP clearance.", original)
+        mutated = original.replace(
+            "Artificer does not decide if a pattern is a duplicate or if evidence is complete.",
+            "Artificer must not decide evidence completeness and may approve licensing compliance."
+        ).replace(
+            "Artificer reports licensing, but cannot approve license compliance or IP clearance.",
+            ""
+        )
+        self.assertNotEqual(original, mutated)
+        path.write_text(mutated, encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "docs/internal/ARTIFICER_BOUNDARIES.md"
+                and "artificer does not approve licensing statement" in failure.reason.lower()
+                for failure in failures
+            )
+        )
+
+    def test_failure_adversarial_while_mixed_polarity(self):
+        """E. Adversarial-testing mixed polarity using 'while'."""
+        path = self.temp_root / "docs/internal/ARTIFICER_BOUNDARIES.md"
+        original = path.read_text(encoding="utf-8")
+        self.assertIn("Artificer does not perform penetration testing or live vulnerability runs.", original)
+        mutated = original.replace(
+            "Artificer does not perform penetration testing or live vulnerability runs.",
+            "Artificer must not write implementation code while it performs live adversarial testing."
+        )
+        self.assertNotEqual(original, mutated)
+        path.write_text(mutated, encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "docs/internal/ARTIFICER_BOUNDARIES.md"
+                and "artificer does not perform live adversarial testing statement" in failure.reason.lower()
+                for failure in failures
+            )
+        )
+
+    def test_pass_valid_coordinated_prohibition(self):
+        """F. Valid coordinated prohibition — object list must not be split."""
+        # The real ARTIFICER_BOUNDARIES.md already has proper prohibitions.
+        # Confirm no licensing or IP-related failure using the unmodified file.
+        failures = val.validate_repository(self.temp_root)
+        self.assertFalse(
+            any(
+                failure.target == "docs/internal/ARTIFICER_BOUNDARIES.md"
+                and "artificer does not approve licensing statement" in failure.reason.lower()
+                for failure in failures
+            ),
+            "Unmodified ARTIFICER_BOUNDARIES.md should not produce a licensing approval failure"
+        )
+
+    def test_pass_valid_shared_negative_modality(self):
+        """G. Valid shared negative modality — 'run tests or execute test runners'."""
+        # The real ARTIFICER_BOUNDARIES.md contains the correct shared prohibition.
+        # Confirm no test-execution failure on the unmodified file.
+        failures = val.validate_repository(self.temp_root)
+        self.assertFalse(
+            any(
+                failure.target == "docs/internal/ARTIFICER_BOUNDARIES.md"
+                and "artificer does not run tests statement" in failure.reason.lower()
+                for failure in failures
+            ),
+            "Unmodified ARTIFICER_BOUNDARIES.md should not produce a test-execution failure"
+        )
+
     def test_quality_gate(self):
+
         test_file = Path(__file__).resolve()
         content = test_file.read_text(encoding="utf-8")
         methods = re.findall(r"def\s+(test_failure_[a-zA-Z0-9_]+)\(self\):([\s\S]*?)(?=\n\s*def|\n\s*if __name__|$)", content)
