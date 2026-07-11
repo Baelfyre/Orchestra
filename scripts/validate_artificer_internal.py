@@ -219,49 +219,249 @@ def normalize_contract_text(content: str) -> str:
     content = re.sub(r"\s+", " ", content)
     return content.strip()
 
-def get_sentences(content: str) -> list[str]:
+# Connectors that may introduce a semantically independent action clause.
+# 'and' is listed here but handled carefully — it only separates clauses
+# when followed by a new modal or subject, not when it chains objects.
+_CLAUSE_CONNECTORS = re.compile(
+    r'\b(but|yet|although|though|while|whereas|however|and)\b',
+    re.IGNORECASE,
+)
+
+# Negative modals — these must immediately precede the action in the window.
+_NEGATIVES = [
+    "must not",
+    "does not",
+    "do not",
+    "cannot",
+    "may not",
+    "never",
+    "is prohibited from",
+    "is blocked from",
+]
+
+# Positive modals regex — matches positive permission forms.
+# 'may' only when NOT followed by 'not' (handled via negative lookahead).
+_POSITIVE_RE = re.compile(
+    r'\b(?:may(?!\s+not)|can(?!\s+not)|will|is\s+allowed\s+to|is\s+permitted\s+to)\b',
+    re.IGNORECASE,
+)
+
+def _has_positive_modal(text: str) -> bool:
+    """Return True if text contains a positive permission modal."""
+    return bool(_POSITIVE_RE.search(text))
+
+def _split_into_sub_clauses(sentence: str) -> list[str]:
+    """Split a single (already-split-by-punctuation) sentence into
+    action-independent sub-clauses on connectors, while preserving
+    coordinated object lists in single-prohibition phrases.
+
+    Two-tier connector strategy:
+      - ALWAYS-SPLIT: while, whereas, however, but, yet, although, though
+        These always introduce independent clauses — never re-joined.
+      - CONDITIONAL: and
+        Re-join the next part only when it contains no new modal keyword,
+        which preserves 'licensing compliance and IP clearance' while
+        splitting 'must not implement source code and may run tests'.
+    """
+    # Always-split connectors
+    _ALWAYS_SPLIT = re.compile(
+        r'\b(but|yet|although|though|while|whereas|however)\b',
+        re.IGNORECASE,
+    )
+    # Conditional connector
+    _AND = re.compile(r'\band\b', re.IGNORECASE)
+    # Modal keywords used to detect independent clauses after 'and'
+    _MODAL_RE = re.compile(r'\b(must|may|can|does|do|will|is|never|cannot)\b')
+
+    # First pass: split on always-split connectors
+    raw_parts = _ALWAYS_SPLIT.split(sentence)
+    strong_parts: list[str] = []
+    for p in raw_parts:
+        norm = normalize_contract_text(p)
+        if norm and norm not in {"but", "yet", "although", "though", "while", "whereas", "however"}:
+            strong_parts.append(norm)
+
+    if not strong_parts:
+        return []
+
+    # Second pass: split each strong_part further on 'and', then conditionally re-join
+    final_parts: list[str] = []
+    for sp in strong_parts:
+        and_parts_raw = _AND.split(sp)
+        and_parts: list[str] = []
+        for p in and_parts_raw:
+            norm = normalize_contract_text(p)
+            if norm:
+                and_parts.append(norm)
+
+        if len(and_parts) <= 1:
+            final_parts.extend(and_parts)
+            continue
+
+        # Conditionally merge: if a part has no modal, treat as object continuation
+        merged: list[str] = [and_parts[0]]
+        for part in and_parts[1:]:
+            if not _MODAL_RE.search(part):
+                merged[-1] = merged[-1] + " and " + part
+            else:
+                merged.append(part)
+        final_parts.extend(merged)
+
+    return final_parts
+
+
+def get_clauses(content: str) -> list[tuple[str, bool]]:
+    """Return list of (normalized_clause, has_artificer_subject) tuples.
+
+    Subject inheritance is sequential: once 'artificer' appears in a clause,
+    subsequent clauses in the same sentence inherit the subject until a new
+    sentence boundary (punctuation) resets it.
+    """
     content = re.sub(r"(?:^|\n)\s*#+\s+", ". ", content)
     content = re.sub(r"(?:^|\n)\s*[-*+]\s+", ". ", content)
+    # Normalize comma-modal patterns: ", may V", ", can V", etc.
+    # Replace with " and [modal]" rather than a sentence boundary (;)
+    # so that subject inheritance across the comma is preserved.
+    content = re.sub(r",\s+(?=(?:may|can|will|is\s+allowed|is\s+permitted)\b)", " and ", content, flags=re.IGNORECASE)
     raw_sentences = re.split(r'[.;!\?\n]', content)
-    sentences = []
+
+    clauses = []
     for s in raw_sentences:
-        norm = normalize_contract_text(s)
-        if norm:
-            sentences.append(norm)
-    return sentences
+        s = s.strip()
+        if not s:
+            continue
+        sub_clauses = _split_into_sub_clauses(s)
+        if not sub_clauses:
+            continue
+        # Sequential subject inheritance within the sentence
+        subject_is_artificer = False
+        for sub in sub_clauses:
+            if "artificer" in sub:
+                subject_is_artificer = True
+            clauses.append((sub, subject_is_artificer))
+    return clauses
+
+def _action_polarity(clause: str, action_pattern: str) -> str | None:
+    """Determine the polarity of a specific action within a clause.
+
+    Returns 'prohibited', 'permitted', or None (action not found or no modal binding).
+
+    Uses two-pass detection:
+      1. Look for a direct modal in a 5-token window before each action match.
+      2. If no direct window modal, check whether the ENTIRE clause carries a
+         governing negative modal (shared-negative list, e.g. 'must not V1, V2, or V3').
+         The governing negative is only overridden if a specific positive modal
+         re-assigns just this action occurrence in its local window.
+
+    This lets 'must not execute..., run tests, or install packages' count as
+    a prohibition on ALL three verbs, while
+    'must not implement source code and may run tests' correctly splits.
+    """
+    WINDOW = 5  # token look-back for direct modal
+
+    tokens = clause.split()
+    if not tokens:
+        return None
+
+    # Find all positions where action_pattern matches
+    action_positions: list[int] = []
+    for i, tok in enumerate(tokens):
+        if re.search(action_pattern, tok, re.IGNORECASE):
+            action_positions.append(i)
+
+    if not action_positions:
+        return None
+
+    # Determine clause-level governing negative (applies to all verbs in list)
+    clause_neg = any(neg in clause for neg in _NEGATIVES)
+
+    # For each action occurrence, check the window before it
+    for pos in action_positions:
+        window_start = max(0, pos - WINDOW)
+        window_tokens = tokens[window_start:pos]
+        window_str = " ".join(window_tokens)
+
+        # Check for direct negative binding in window
+        neg_found = any(neg in window_str for neg in _NEGATIVES)
+
+        # Check for direct positive binding in window
+        pos_found = _has_positive_modal(window_str)
+
+        if pos_found and neg_found:
+            # Both in same local window — positive takes precedence (mixed binding)
+            return "permitted"
+        if pos_found:
+            return "permitted"
+        if neg_found:
+            return "prohibited"
+
+        # No direct modal in window — fall back to clause-level governing negative.
+        # If the clause carries a negative modal elsewhere (governing a verb list),
+        # treat this action as also prohibited, UNLESS there is a positive modal
+        # for this specific action anywhere in a reasonable wider window.
+        if clause_neg:
+            # Widen search: look for a positive re-assignment for this specific action
+            wider_window = tokens[max(0, pos - 10):pos]
+            wider_str = " ".join(wider_window)
+            if _has_positive_modal(wider_str):
+                return "permitted"
+            return "prohibited"
+
+    return None
 
 def has_artificer_prohibition(
     content: str,
     action_pattern: str,
     object_pattern: str | None = None,
 ) -> bool:
-    sentences = get_sentences(content)
-    negatives = [
-        "must not",
-        "does not",
-        "do not",
-        "cannot",
-        "may not",
-        "never",
-        "is prohibited from",
-        "is blocked from"
-    ]
-    for s in sentences:
-        if "artificer" not in s:
+    """Return True if any Artificer-subject clause contains an
+    action-bound prohibition for the given action (and optional object).
+    """
+    clauses = get_clauses(content)
+    for clause, has_subject in clauses:
+        if not has_subject:
             continue
-        has_neg = False
-        for neg in negatives:
-            if neg in s:
-                has_neg = True
-                break
-        if not has_neg:
+        if object_pattern and not re.search(object_pattern, clause, re.IGNORECASE):
             continue
-        if not re.search(action_pattern, s, re.IGNORECASE):
+        if not re.search(action_pattern, clause, re.IGNORECASE):
             continue
-        if object_pattern and not re.search(object_pattern, s, re.IGNORECASE):
-            continue
-        return True
+        polarity = _action_polarity(clause, action_pattern)
+        if polarity == "prohibited":
+            return True
     return False
+
+def has_artificer_permission(
+    content: str,
+    action_pattern: str,
+    object_pattern: str | None = None,
+) -> bool:
+    """Return True if any Artificer-subject clause contains an
+    action-bound positive permission for the given action (and optional object).
+    """
+    clauses = get_clauses(content)
+    for clause, has_subject in clauses:
+        if not has_subject:
+            continue
+        if object_pattern and not re.search(object_pattern, clause, re.IGNORECASE):
+            continue
+        if not re.search(action_pattern, clause, re.IGNORECASE):
+            continue
+        polarity = _action_polarity(clause, action_pattern)
+        if polarity == "permitted":
+            return True
+    return False
+
+def check_prohibition_contract(
+    content: str,
+    action_pattern: str,
+    object_pattern: str | None = None,
+) -> bool:
+    if not has_artificer_prohibition(content, action_pattern, object_pattern):
+        return False
+    if has_artificer_permission(content, action_pattern, object_pattern):
+        return False
+    return True
+
 
 def check_artificer_md(content):
     missing = []
@@ -272,17 +472,17 @@ def check_artificer_md(content):
     if not re.search(r"read-only", content, re.IGNORECASE):
         missing.append("read-only external-source auditing")
 
-    if not has_artificer_prohibition(content, r"execute", r"code|script|binary|test|runner"):
+    if not check_prohibition_contract(content, r"execute", r"code|script|binary|test|runner"):
         missing.append("no external code execution")
-    if not has_artificer_prohibition(content, r"install", r"dependency|package"):
+    if not check_prohibition_contract(content, r"install", r"dependency|package"):
         missing.append("no external dependency installation")
-    if not has_artificer_prohibition(content, r"implement", r"recommendation|proposal|own|change|ui"):
+    if not check_prohibition_contract(content, r"implement", r"recommendation|proposal|own|change|ui"):
         missing.append("no self-implementation")
-    if not has_artificer_prohibition(content, r"approve|adjudicate|clear", r"finding|evidence|own"):
+    if not check_prohibition_contract(content, r"approve|adjudicate|clear", r"finding|evidence|own"):
         missing.append("no self-approval")
-    if not (has_artificer_prohibition(content, r"register", r"public|manifest") or has_artificer_prohibition(content, r"visibility|blocked", r"public|manifest|routing")):
+    if not (check_prohibition_contract(content, r"register", r"public|manifest") or check_prohibition_contract(content, r"visibility|blocked", r"public|manifest|routing")):
         missing.append("no manifest registration")
-    if not (has_artificer_prohibition(content, r"expose|route", r"runtime|adapter") or has_artificer_prohibition(content, r"visibility|blocked", r"runtime|adapter")):
+    if not (check_prohibition_contract(content, r"expose|route", r"runtime|adapter") or check_prohibition_contract(content, r"visibility|blocked", r"runtime|adapter")):
         missing.append("no runtime route")
 
     if not (re.search(r"cipher", content, re.IGNORECASE) and (re.search(r"hand", content, re.IGNORECASE) or re.search(r"off", content, re.IGNORECASE))):
@@ -319,15 +519,24 @@ def check_artificer_boundaries_md(content):
     if re.search(r"map to\s+\*?\*?artificer\*?\*?\s+for.*code\s+changes|implementation\s+is\s+owned\s+by\s+artificer|artificer\s+implements", content, re.IGNORECASE):
         missing.append("rejection of implementation ownership assigned to Artificer")
 
-    if not (re.search(r"implement", content, re.IGNORECASE) or re.search(r"write.*code", content, re.IGNORECASE)):
+    # 1. Implementation or source modification
+    if not check_prohibition_contract(content, r"implement|write|modify|edit", r"code|source|change|interface|config"):
         missing.append("Artificer does not implement source changes statement")
-    if not re.search(r"run tests", content, re.IGNORECASE):
+
+    # 2. Test execution or test ownership
+    if not check_prohibition_contract(content, r"run|write|execute", r"test|test runner|test suite"):
         missing.append("Artificer does not run tests statement")
-    if not (re.search(r"evidence is complete", content, re.IGNORECASE) or re.search(r"approve evidence", content, re.IGNORECASE)):
+
+    # 3. Evidence-completeness decisions
+    if not check_prohibition_contract(content, r"decide|approve|adjudicate|determine", r"evidence|complete|completeness|duplicate"):
         missing.append("Artificer does not decide if evidence is complete statement")
-    if not (re.search(r"approve license", content, re.IGNORECASE) or re.search(r"approve licensing", content, re.IGNORECASE)):
+
+    # 4. Licensing or IP approval
+    if not check_prohibition_contract(content, r"approve|clear|authorize|verify", r"license|licensing|compliance|copyright|ip"):
         missing.append("Artificer does not approve licensing statement")
-    if not (re.search(r"adversarial testing", content, re.IGNORECASE) or re.search(r"penetration testing", content, re.IGNORECASE) or re.search(r"vulnerability", content, re.IGNORECASE)):
+
+    # 5. Live adversarial or penetration testing
+    if not check_prohibition_contract(content, r"perform|run|conduct|execute", r"adversarial|penetration|vulnerability|live security"):
         missing.append("Artificer does not perform live adversarial testing statement")
 
     return missing
@@ -450,7 +659,7 @@ def check_public_non_registration(repo_root: Path) -> list[ValidationFailure]:
     ]
     files_to_scan = []
     for target in targets:
-        full_path = repo_root / target
+        full_path = Path(repo_root) / target
         if not full_path.exists():
             continue
         if full_path.is_file():
