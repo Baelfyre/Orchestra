@@ -128,3 +128,25 @@ Transient checkout branches are runtime facts, not durable repository-memory fac
 - scripts/test_governance_check.py
 - PROJECT_STATE.md
 - SESSION_HANDOFF.md
+
+---
+
+## Date: 2026-07-11
+
+**Decision:**
+Implemented a deterministic internal validator script (`scripts/validate_artificer_internal.py`) and integrated it into strict governance checking and the behavior runner. The validator enforces schema integrity, markdown boundaries, and ensures non-registration of Artificer on any public runtime surfaces.
+
+**Reason:**
+Phase 2 introduces strict enforcement of the Artificer Phase 1 specification boundaries. Artificer must remain internal and non-routable to maintain separation of concerns. Since dynamic execution or external audits are not supported in this phase, no external source execution or audit runtime is introduced. Furthermore, standard library tools were used exclusively, avoiding third-party validation dependencies (such as `jsonschema`).
+
+**Rejected Alternatives:**
+- Automatic file repair (rejected; the validator reports failures but does not automatically modify files to prevent accidental configuration rewrites).
+- Advisory-only checking for Artificer specification (rejected; strict validation is required to prevent accidental registration in public command/skill surfaces).
+
+**Affected Components:**
+- scripts/validate_artificer_internal.py
+- tests/behavior/test_artificer_internal.py
+- scripts/governance_check.py
+- tests/behavior/run_tests.py
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md

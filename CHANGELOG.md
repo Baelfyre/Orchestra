@@ -52,6 +52,7 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 - Improved prompt-load reporting with Group B and Group C status output, largest-contributor reporting, clarified original versus observed baselines, focused regression coverage, and narrow repository-state alignment.
 
 ### Added
+- Added the Artificer internal boundary validator (`scripts/validate_artificer_internal.py`) and behavioral test coverage (`tests/behavior/test_artificer_internal.py`) to enforce schema integrity, documentation boundaries, and ensure public non-registration.
 - Added the Phase 1 Artificer internal architecture specification, source-intake schemas, evidence requirements, classification taxonomy, security boundaries, and maintainer-only evolution workflow without exposing Artificer through public commands, routing, runtime registration, or adapter exports.
 - Added an App Release Compliance Gate plus reusable privacy review, data inventory, IP clearance, privacy policy, terms, and retention/deletion governance templates for app and public release workflows.
 
