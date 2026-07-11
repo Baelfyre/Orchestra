@@ -49,7 +49,7 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 
 ### Added
 - Added Phase 3 Artificer record-instance validator (`scripts/validate_artificer_records.py`) with Draft-7 schema subset validation, POSIX-safe repository path constraints, and cross-record registry bundle verification.
-- Added comprehensive behavior tests (`tests/behavior/test_artificer_records.py`) ensuring deterministic failures for invalid json, duplicate keys, broken bundle layouts, and schema drift.
+- Added 54 behavior tests (`tests/behavior/test_artificer_records.py`) providing a rigorous regression matrix that executes real validator instances against real schema copies for passing/failing conditions, empty examined-ranges, cross-platform paths, and strict schema configurations.
 - Wired `scripts/validate_artificer_records.py` into the CI governance script and automated runner `tests/behavior/run_tests.py`.
 
 ### Changed

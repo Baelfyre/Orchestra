@@ -146,40 +146,69 @@ def load_json_without_duplicate_keys(path: Path) -> dict:
 # Schema subset validator
 # ---------------------------------------------------------------------------
 
-def _collect_unsupported_keywords(schema_node: object, path: str = "$") -> list[str]:
-    """Walk a schema node recursively and return any unsupported validation keywords.
+def validate_schema_configuration(schema: dict, schema_target: str) -> None:
+    """Validate that the schema is well-formed against our internal constraints."""
+    if schema.get("$schema") != "http://json-schema.org/draft-07/schema#":
+        raise ValidatorConfigurationError(f"{schema_target}: non-Draft-7 $schema")
 
-    Only schema keyword names are checked — not property names in 'properties',
-    not enum values, not pattern strings.
-    """
-    unsupported = []
-    if not isinstance(schema_node, dict):
-        return unsupported
+    def check_node(node: object, path: str) -> None:
+        if not isinstance(node, dict):
+            return
 
-    for key in schema_node:
-        if key in ANNOTATION_KEYWORDS:
-            continue
-        if key not in SUPPORTED_VALIDATION_KEYWORDS:
-            unsupported.append(f"{path}.{key}")
-        else:
-            # Only recurse into schema-structural values, not raw string/list leaf values
-            child = schema_node[key]
-            if key == "properties" and isinstance(child, dict):
-                # Recurse into each property schema (not the property name as a key)
-                for prop_name, prop_schema in child.items():
-                    unsupported.extend(
-                        _collect_unsupported_keywords(prop_schema, f"{path}.properties.{prop_name}")
-                    )
-            elif key == "items" and isinstance(child, dict):
-                unsupported.extend(
-                    _collect_unsupported_keywords(child, f"{path}.items")
-                )
-            elif key in ("type", "enum", "pattern", "format", "required", "additionalProperties"):
-                # Leaf keywords — do not recurse into their values
-                pass
-            elif isinstance(child, dict):
-                unsupported.extend(_collect_unsupported_keywords(child, f"{path}.{key}"))
-    return unsupported
+        for key in node:
+            if key not in ANNOTATION_KEYWORDS and key not in SUPPORTED_VALIDATION_KEYWORDS:
+                raise ValidatorConfigurationError(f"{schema_target} at {path}: unsupported keyword '{key}'")
+
+        t = node.get("type")
+        if t is not None:
+            if t not in ("object", "array", "string", "boolean"):
+                raise ValidatorConfigurationError(f"{schema_target} at {path}: unsupported schema type '{t}'")
+
+        fmt = node.get("format")
+        if fmt is not None:
+            if fmt not in ("uri", "date"):
+                raise ValidatorConfigurationError(f"{schema_target} at {path}: unsupported format '{fmt}'")
+
+        pat = node.get("pattern")
+        if pat is not None:
+            try:
+                re.compile(pat)
+            except re.error as e:
+                raise ValidatorConfigurationError(f"{schema_target} at {path}: invalid regex '{pat}': {e}")
+
+        props = node.get("properties")
+        if props is not None:
+            if not isinstance(props, dict):
+                raise ValidatorConfigurationError(f"{schema_target} at {path}: 'properties' must be an object")
+            for k, v in props.items():
+                check_node(v, f"{path}.properties.{k}")
+
+        req = node.get("required")
+        if req is not None:
+            if not isinstance(req, list):
+                raise ValidatorConfigurationError(f"{schema_target} at {path}: 'required' must be an array")
+            if props is not None:
+                for r in req:
+                    if r not in props:
+                        raise ValidatorConfigurationError(f"{schema_target} at {path}: required field '{r}' not declared in properties")
+
+        items = node.get("items")
+        if items is not None:
+            if not isinstance(items, dict):
+                raise ValidatorConfigurationError(f"{schema_target} at {path}: 'items' must be an object")
+            check_node(items, f"{path}.items")
+
+        en = node.get("enum")
+        if en is not None:
+            if not isinstance(en, list):
+                raise ValidatorConfigurationError(f"{schema_target} at {path}: 'enum' must be an array")
+
+        addp = node.get("additionalProperties")
+        if addp is not None:
+            if not isinstance(addp, bool):
+                raise ValidatorConfigurationError(f"{schema_target} at {path}: 'additionalProperties' must be a boolean")
+
+    check_node(schema, "$")
 
 
 def _validate_type(value: object, expected_type: str, path: str) -> list[str]:
@@ -816,13 +845,17 @@ def _validate_pattern_semantics(
                 # Coverage check
                 if isinstance(source_file, str) and source_file in examined_files:
                     examined_ranges = examined_files[source_file]
-                    if examined_ranges:  # Only check if line_ranges were provided
-                        if not is_range_covered(ps, pe, examined_ranges):
-                            _fail(
-                                f"'line_range' '{line_range_str}' is not covered by any examined range "
-                                f"for '{source_file}' in source-intake.json",
-                                "Ensure the pattern range falls within an examined line range.",
-                            )
+                    if not examined_ranges:
+                        _fail(
+                            f"Pattern source file '{source_file}' has no examined line ranges in source-intake.json",
+                            "Define covering line_ranges in source-intake.json.",
+                        )
+                    elif not is_range_covered(ps, pe, examined_ranges):
+                        _fail(
+                            f"'line_range' '{line_range_str}' is not covered by any examined range "
+                            f"for '{source_file}' in source-intake.json",
+                            "Ensure the pattern range falls within an examined line range.",
+                        )
 
     # Classification
     classification = pattern.get("classification", "")
@@ -924,18 +957,28 @@ def validate_pattern_instances(
         # Filename must match slugified name
         name = instance.get("name", "")
         if isinstance(name, str) and name.strip():
-            expected_filename = slugify(name) + ".json"
-            if entry.name != expected_filename:
+            slug = slugify(name)
+            if not slug:
                 failures.append(
                     ValidationFailure(
                         target=rel,
-                        reason=f"Pattern filename '{entry.name}' does not match expected '{expected_filename}' derived from pattern name '{name}'",
-                        remediation=f"Rename the file to '{expected_filename}'.",
+                        reason=f"Pattern name '{name}' results in an empty slug",
+                        remediation="Use a name containing alphanumeric characters.",
                     )
                 )
+            else:
+                expected_filename = slug + ".json"
+                if entry.name != expected_filename:
+                    failures.append(
+                        ValidationFailure(
+                            target=rel,
+                            reason=f"Pattern filename '{entry.name}' does not match expected '{expected_filename}' derived from pattern name '{name}'",
+                            remediation=f"Rename the file to '{expected_filename}'.",
+                        )
+                    )
 
             # Uniqueness (case-folded)
-            name_folded = name.lower()
+            name_folded = name.casefold()
             if name_folded in pattern_name_set:
                 failures.append(
                     ValidationFailure(
@@ -1071,11 +1114,7 @@ def validate_record_bundle(
 
 def _load_schema(repo_root: Path, rel_path: str) -> dict:
     """Load and validate a schema file. Raises ValidatorConfigurationError on problems."""
-    schema_path = repo_root / Path(rel_path.replace("/", "\\") if "\\" in rel_path else rel_path)
-    schema_path = Path(str(schema_path).replace("\\", "/")) if False else schema_path
-
-    # Use OS path
-    schema_path = repo_root / rel_path.replace("/", "\\").lstrip("\\")
+    schema_path = repo_root / Path(rel_path)
 
     if not schema_path.is_file():
         raise ValidatorConfigurationError(
@@ -1089,12 +1128,7 @@ def _load_schema(repo_root: Path, rel_path: str) -> dict:
             f"Schema file invalid: {rel_path}: {exc}"
         ) from exc
 
-    # Check for unsupported validation keywords
-    unsupported = _collect_unsupported_keywords(schema)
-    if unsupported:
-        raise ValidatorConfigurationError(
-            f"Schema '{rel_path}' uses unsupported validation keywords: {', '.join(unsupported)}"
-        )
+    validate_schema_configuration(schema, rel_path)
 
     return schema
 

@@ -17,22 +17,22 @@ def main():
     parser.add_argument("--enabled", action="store_true")
     parser.add_argument("--enforce", action="store_true")
     args, _ = parser.parse_known_args()
-    
+
     is_run = args.enabled or os.environ.get('ORCHESTRA_RUN_GUARDRAILS') == 'true'
     is_enforce = args.enforce or os.environ.get('ORCHESTRA_ENFORCE_GUARDRAILS') == 'true'
-    
+
     if not is_run:
         helpers.write_color_host('WARNING', "SKIPPED: Guardrails disabled.")
         sys.exit(0)
-        
+
     helpers.write_color_host('INFO', 'Orchestra Programmatic Guardrail: Commencing scanning...')
     if not is_enforce:
         helpers.write_color_host('INFO', 'Enforcement is disabled (warning-only mode). Warnings will not block commit.')
-        
+
     violations = []
     restricted_pattern_found = False
     files_to_scan = []
-    
+
     if args.staged_only:
         import subprocess
         try:
@@ -45,7 +45,7 @@ def main():
                         files_to_scan.append({"Path": full_path, "Relative": f})
         except Exception:
             helpers.write_color_host('WARNING', 'Git diff failed or not a git repo. Scanning target directory recursively instead.')
-            
+
     if not files_to_scan:
         exclude_dirs = ['.git', '.amalgam', 'tests', 'brain']
         exclude_exts = ['.ico', '.png', '.jpg', '.zip', '.tar', '.gz']
@@ -60,32 +60,32 @@ def main():
                 full_path = os.path.join(dirpath, filename)
                 relative = os.path.relpath(full_path, args.target_dir)
                 files_to_scan.append({"Path": full_path, "Relative": relative})
-                
+
     secret_patterns = {
         'AWS Access Key ID': re.compile(r'\bAKIA[0-9A-Z]{16}\b'),
         'Slack Webhook': re.compile(r'https://hooks\.slack\.com/services/T[A-Z0-9]+/B[A-Z0-9]+/[A-Za-z0-9]+'),
         'Generic API Key': re.compile(r'api[_-]?key\s*[:=]\s*["\'][A-Za-z0-9_\-+=]{16,}["\']', re.IGNORECASE),
         'Private Key Header': re.compile(r'-----BEGIN[ A-Z]+PRIVATE KEY-----')
     }
-    
+
     copyleft_patterns = [re.compile(p, re.IGNORECASE) for p in [r'"gpl', r'"agpl', r'"lgpl', r'"copyleft']]
     pii_patterns = [re.compile(p, re.IGNORECASE) for p in [r'\bSSN\b', r'\bsocial\s+security\b', r'\bcredit\s*card\b', r'\bcard[_-]?number\b']]
-    
+
     destructive_patterns = {
         'Force deletion': re.compile(r'\brm\s+-rf\b', re.IGNORECASE),
         'Destructive Remove-Item': re.compile(r'\bremove-item\b.*\b-force\b', re.IGNORECASE),
         'Raw Disk Formatting': re.compile(r'\bformat-volume\b|\bclear-disk\b', re.IGNORECASE)
     }
-    
+
     unsafe_patterns = {
         'Invoke-Expression': re.compile(r'\binvoke-expression\b|\biex\b', re.IGNORECASE)
     }
-    
+
     legacy_names = [
         'amalgam-conductor', 'cloak-meister', 'scribe-meister', 'clockwork-meister',
         'meister-chronicler', 'acme-overseer', 'hidden-dagger', 'cipher-meister', 'meister-weaver'
     ]
-    
+
     state_path = os.path.join(args.target_dir, ".amalgam", "state.json")
     forbidden_repos = []
     if os.path.isfile(state_path):
@@ -95,61 +95,61 @@ def main():
                 forbidden_repos = state.get('forbidden_repos', [])
         except Exception:
             pass
-            
+
     for item in files_to_scan:
         rel = item['Relative'].replace('\\', '/')
         if re.search(r'runtime[_-]guardrail|VALIDATION\.md', rel):
             continue
-            
+
         try:
             with open(item['Path'], 'r', encoding='utf-8') as f:
                 lines = f.readlines()
         except UnicodeDecodeError:
             continue
-            
+
         has_pii = False
-        
+
         for i, line in enumerate(lines):
             for pattern in secret_patterns.values():
                 if pattern.search(line):
                     restricted_pattern_found = True
-                    
+
             if re.search(r'package\.json|dependencies|plugin\.json', rel):
                 for p in copyleft_patterns:
                     if p.search(line):
                         violations.append(f"COPYLEFT LICENSE DETECTED ({line.strip()}) in {item['Relative']}:L{i+1}. Please confirm compatibility.")
-                        
+
             for p in pii_patterns:
                 if p.search(line):
                     has_pii = True
                     violations.append(f"PII SENSITIVE FIELD DETECTED in {item['Relative']}:L{i+1} -> [REDACTED].")
-                    
+
             for key, pattern in destructive_patterns.items():
                 if pattern.search(line):
                     violations.append(f"DESTRUCTIVE OPERATION DETECTED ({key}) in {item['Relative']}:L{i+1} -> {line.strip()}")
-                    
+
             for key, pattern in unsafe_patterns.items():
                 if pattern.search(line):
                     violations.append(f"UNSAFE EXECUTION DETECTED ({key}) in {item['Relative']}:L{i+1} -> {line.strip()}")
-                    
+
         if has_pii:
             privacy_docs = ['PrivacyPolicy.md', 'PRIVACY_POLICY.md', 'PRIVACY.md', 'docs/PRIVACY.md', 'docs/governance/PRIVACY.md']
             has_privacy_doc = any(os.path.exists(os.path.join(args.target_dir, doc)) for doc in privacy_docs)
             if not has_privacy_doc:
                 violations.append(f"PRIVACY GAPS: PII fields collected in {item['Relative']} but no PRIVACY_POLICY.md file was found.")
-                
+
         for forbidden in forbidden_repos:
             norm_forbidden = forbidden.replace('\\', '/')
             if re.search(re.escape(norm_forbidden), rel):
                 violations.append(f"FORBIDDEN TARGET MUTATION in {item['Relative']}: Modifying forbidden repository area '{forbidden}'.")
-                
+
         is_allowed_alias = re.search(r'aliases\.json|commands/|tests/|plugin\.json|\.codex-plugin/plugin\.json|scripts/refresh-installed-integrations\.ps1|README\.md|ROUTING_MAP\.md|docs/project/|DECISION_LOG\.md|SESSION_HANDOFF\.md|skills/conductor/SKILL\.md|examples/plugin-manifest\.example\.json', rel)
         if not is_allowed_alias:
             for ln in legacy_names:
                 for i, line in enumerate(lines):
                     if re.search(re.escape(ln), line):
                         violations.append(f"STALE REFERENCE DETECTED (Legacy name '{ln}') in {item['Relative']}:L{i+1} -> {line.strip()}")
-                        
+
     if violations or restricted_pattern_found:
         if is_enforce:
             helpers.write_color_host('ERROR', "Guardrail scan failed with safety violations:")
@@ -171,7 +171,7 @@ def main():
             print("\033[93m[WHY IT FAILED] Staged or changed files contain patterns that would block commits under active enforcement.\033[0m")
             print("\033[96m[HOW TO FIX IT] Address the warning details above. To enforce these rules on commits, set the environment variable: `ORCHESTRA_ENFORCE_GUARDRAILS=true` or run with the `--enforce` parameter.\033[0m")
             sys.exit(0)
-            
+
     helpers.write_color_host('SUCCESS', 'Guardrail scan passed successfully! No safety issues found.')
     sys.exit(0)
 

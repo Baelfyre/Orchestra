@@ -27,7 +27,7 @@ The [Execution Modes Policy](EXECUTION_MODES_POLICY.md) formalizes the exact beh
 ## Benchmark Validation Readiness
 A declarative [Router Validation Benchmark](../testing/ROUTER_VALIDATION_BENCHMARKS.md) system is in place:
 - Benchmark fixture is machine-readable JSON.
-- The 
+- The
 outer_benchmark_runner.py script validates definition schemas.
 - Negative fixture validation ensures strict schema compliance.
 - The benchmark count is strictly 24 canonical cases (BM-01 through BM-24).

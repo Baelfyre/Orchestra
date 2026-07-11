@@ -193,26 +193,26 @@ def main(argv=None):
     root = script_dir.parent.parent
     export_root = args.export_root.resolve() if args.export_root else script_dir
     codex_skills_dir = export_root / "skills"
-    
+
     manifest_path = root / "plugin.json"
     if not manifest_path.is_file():
         print_error(f"plugin.json not found at {manifest_path}")
         sys.exit(1)
-        
+
     manifest = json.loads(read_text(manifest_path))
     registry = SkillRegistry(ManifestRepository(root), SkillSourceRepository(root))
     skills = [skill.slug for skill in registry.load_skills()]
     skill_set = set(skills)
-    
+
     errors = 0
-    
+
     for skill in skills:
         skill_dir = codex_skills_dir / skill
         if not skill_dir.is_dir():
             print_error(f"Missing exported skill folder: {skill_dir}")
             errors += 1
             continue
-            
+
         skill_file = skill_dir / "SKILL.md"
         if not skill_file.is_file():
             print_error(f"Missing SKILL.md in exported {skill}")
@@ -220,17 +220,17 @@ def main(argv=None):
         else:
             errors += validate_simple_frontmatter(skill, skill_file)
             errors += validate_allowed_backtick_targets(skill_file, root)
-                
+
         out_file = skill_dir / "OUTPUT_FORMATS.md"
         if not out_file.is_file():
             print_error(f"Missing OUTPUT_FORMATS.md in exported {skill}")
             errors += 1
-            
+
         stale_routing = skill_dir / "ROUTING_MATRIX.md"
         if stale_routing.is_file():
             print_error(f"Found stale ROUTING_MATRIX.md in exported {skill}")
             errors += 1
-            
+
         if skill == "conductor":
             map_file = skill_dir / "ROUTING_MAP.md"
             if not map_file.is_file():
@@ -251,11 +251,11 @@ def main(argv=None):
 
     if not args.skip_tracked_export_parity and export_root == script_dir.resolve():
         errors += validate_tracked_export_parity(root)
-                
+
     if errors > 0:
         print_error(f"Codex export validation failed with {errors} errors.")
         sys.exit(1)
-        
+
     print("\033[92mSUCCESS: Codex export validation passed!\033[0m")
     sys.exit(0)
 

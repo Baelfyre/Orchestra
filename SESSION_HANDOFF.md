@@ -1,12 +1,12 @@
 # Session Handoff
 
-- **Current Task:** Submit Phase 3 Artificer Source-Intake and Pattern-Record Instance Validator
+- **Current Task:** Correct Phase 3 Artificer Source-Intake and Pattern-Record Instance Validation before PR creation
 - **Current Repo:** `C:\+conductor`
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.1`
 - **Target Patch:** `v1.1.2`
-- **Mode:** Phase 3 Completion
+- **Mode:** Phase 3 Corrections
 - **Allowed Files:**
   - `scripts/validate_artificer_records.py`
   - `tests/behavior/test_artificer_records.py`
@@ -20,9 +20,9 @@
   - `PROJECT_STATE.md`
   - `SESSION_HANDOFF.md`
 - **Forbidden Repo:** `C:\+AA`
-- **Last Validation:** Behavior suite and runtime pytest suite passed locally.
+- **Last Validation:** Pending final check of 50+ Phase 3 specific tests.
 - **Known Risks:** Prompt-load thresholds remain advisory and current observed Groups A, B, C, and Grand Total exceed documented soft limits; no replacement baseline has been approved.
-- **Next Step:** Open pull request for Phase 3
+- **Next Step:** Run all validation scripts locally, commit to existing feature branch, and open PR #161
 - **Fresh-Session Warning:** If the current conversation has long prior history from another repository, enter safe mode and request user confirmation before proceeding with implementation.
 
 ## Token Control Note

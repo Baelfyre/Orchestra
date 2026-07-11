@@ -15,7 +15,7 @@ def run_runner(fixture_path):
 
 def test_negative_cases():
     valid_fixture_path = os.path.join(os.path.dirname(__file__), "..", "fixtures", "router_benchmarks.json")
-    
+
     with open(valid_fixture_path, "r", encoding="utf-8") as f:
         valid_data = json.load(f)
 
@@ -30,7 +30,7 @@ def test_negative_cases():
         "governance_status": "NOT_REQUIRED",
         "pass_criteria": "pass"
     }
-    
+
     # helper to generate 24 cases
     def generate_24_cases(override_case=None):
         cases = []
@@ -62,7 +62,7 @@ def test_negative_cases():
         ("empty pass_criteria", {"schema_version": "1.0", "benchmarks": generate_24_cases({"pass_criteria": "   "})}),
         ("benchmark count not equal to 24", {"schema_version": "1.0", "benchmarks": generate_24_cases()[:-1]}),
     ]
-    
+
     # Fix the missing required field test
     cases_missing_field = generate_24_cases()
     del cases_missing_field[0]["request_type"]
@@ -74,7 +74,7 @@ def test_negative_cases():
             tmp_path = os.path.join(tmpdir, f"test_{idx}.json")
             with open(tmp_path, "w", encoding="utf-8") as f:
                 json.dump(data, f)
-            
+
             print(f"[TEST] Negative case: {desc}")
             rc = run_runner(tmp_path)
             if rc == 0:
@@ -86,7 +86,7 @@ def test_negative_cases():
     if failures > 0:
         print(f"\n[SUMMARY] {failures} negative cases failed to trigger an error.")
         sys.exit(1)
-        
+
     print("\n[SUCCESS] All negative validation tests passed.")
 
 if __name__ == "__main__":

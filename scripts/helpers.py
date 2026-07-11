@@ -67,7 +67,7 @@ def test_workflow_locked():
             lock = json.load(f)
         lock_pid = lock.get('pid')
         timestamp_str = lock.get('timestamp')
-        
+
         # Parse ISO 8601 timestamp (simplified)
         from datetime import datetime
         try:

@@ -7,7 +7,7 @@ import tempfile
 
 def main():
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-    
+
     scripts = [
         {"Name": "validate_structure.py", "Path": "scripts/validate_structure.py"},
         {"Name": "validate_manifest.py", "Path": "scripts/validate_manifest.py"},
@@ -24,33 +24,33 @@ def main():
         {"Name": "test_artificer_internal.py", "Path": "tests/behavior/test_artificer_internal.py"},
         {"Name": "test_artificer_records.py", "Path": "tests/behavior/test_artificer_records.py"}
     ]
-    
+
     failed = False
-    
+
     for s in scripts:
         print("========================================")
         print(f"Running {s['Name']}...")
         print("========================================")
-        
+
         full_path = os.path.join(root, s["Path"].replace('/', os.sep))
         result = subprocess.run([sys.executable, full_path])
-        
+
         if result.returncode != 0:
             print(f"\033[91mERROR: {s['Name']} failed with exit code {result.returncode}!\033[0m")
             failed = True
         else:
             print(f"\033[92mSUCCESS: {s['Name']} passed.\033[0m")
-    
+
     # Regression Tests
     print("\n========================================")
     print("Running Guardrail & Lock Regression Tests...")
     print("========================================")
-    
+
     guardrail_script = os.path.join(root, "scripts", "runtime_guardrail.py")
     lock_script = os.path.join(root, "scripts", "manage_state_lock.py")
     sys.path.insert(0, os.path.join(root, "scripts"))
     import runtime_guardrail
-    
+
     # Test 1: Guardrail enforcement
     temp_dir = os.path.join(tempfile.gettempdir(), f"orchestra-guardrail-test-{uuid.uuid4()}")
     os.makedirs(temp_dir, exist_ok=True)
@@ -58,10 +58,10 @@ def main():
         violation_file = os.path.join(temp_dir, "mock_violation.txt")
         with open(violation_file, "w", encoding="utf-8") as f:
             f.write("legacy skill name = amalgam-conductor")
-        
+
         enforce_result = subprocess.run([sys.executable, guardrail_script, "--target-dir", temp_dir, "--enabled", "--enforce"], capture_output=True, text=True)
         warn_result = subprocess.run([sys.executable, guardrail_script, "--target-dir", temp_dir, "--enabled"], capture_output=True, text=True)
-        
+
         redacted_violation = runtime_guardrail.format_suppressed_guardrail_notice()
         if enforce_result.returncode != 1:
             print(f"\033[91mERROR: Guardrail did not fail on violation in enforce mode! (Exit code: {enforce_result.returncode})\033[0m")
@@ -77,7 +77,7 @@ def main():
     finally:
         if os.path.exists(temp_dir):
             shutil.rmtree(temp_dir)
-            
+
     # Test 2: Project Context Validator
     context_script = os.path.join(root, "scripts", "validate_project_context.py")
     temp_dir2 = os.path.join(tempfile.gettempdir(), f"orchestra-context-test-{uuid.uuid4()}")
@@ -155,14 +155,14 @@ def main():
     finally:
         if os.path.exists(temp_dir2):
             shutil.rmtree(temp_dir2)
-            
+
     # Test 3: State Locking tests
     subprocess.run([sys.executable, lock_script, "--action", "Release"], stdout=subprocess.DEVNULL)
     acquire_result = subprocess.run([sys.executable, lock_script, "--action", "Acquire", "--pid", str(os.getpid())], stdout=subprocess.DEVNULL)
     check_result = subprocess.run([sys.executable, lock_script, "--action", "Check"], stdout=subprocess.DEVNULL)
     release_result = subprocess.run([sys.executable, lock_script, "--action", "Release"], stdout=subprocess.DEVNULL)
     check_result_after = subprocess.run([sys.executable, lock_script, "--action", "Check"], stdout=subprocess.DEVNULL)
-    
+
     if acquire_result.returncode != 0:
         print("\033[91mERROR: Lock acquisition failed!\033[0m")
         failed = True
@@ -177,7 +177,7 @@ def main():
         failed = True
     else:
         print("\033[92mSUCCESS: Lock acquisition, collision protection, and release tests passed.\033[0m")
-        
+
     print("\n========================================")
     if failed:
         print("\033[91mValidation suite FAILED.\033[0m")

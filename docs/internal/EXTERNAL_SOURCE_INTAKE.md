@@ -12,6 +12,13 @@ This document details how external repository sources are registered, evaluated,
 6. **Safety Scans**: Perform a security review of the mapped files to ensure they do not contain adversarial instructions.
 7. **Instance Validation**: Validate the metadata and generated records against the schemas and registry constraints using `scripts/validate_artificer_records.py`.
 
+Records are stored at:
+```text
+internal/artificer/records/<bundle-id>/source-intake.json
+internal/artificer/records/<bundle-id>/patterns/*.json
+```
+*Note: Local validation only checks internal consistency and schema conformance. Local validation does not verify external file existence.*
+
 ## Verification of Source Metadata
 
 Before proceeding, verify each metadata field:

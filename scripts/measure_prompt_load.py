@@ -49,33 +49,33 @@ def main():
     print(" Prompt Load Metrics (Approximate)")
     print(" NOTE: Tokens are estimated as char_count / 4.")
     print("================================================================\n")
-    
+
     grand_total_tokens = 0
     grand_total_chars = 0
-    
+
     for group_name, files in groups.items():
         print(f"--- {group_name} ---")
         group_tokens = 0
         group_chars = 0
-        
+
         for file in files:
             metrics = get_file_metrics(file)
             if metrics['error']:
                 print(f"  [ERROR] {file} - {metrics['error']}")
                 continue
-                
+
             print(f"  {file:<50} | Lines: {metrics['lines']:<4} | Words: {metrics['words']:<5} | Chars: {metrics['chars']:<6} | Est. Tokens: {metrics['tokens']:<5}")
             group_tokens += metrics['tokens']
             group_chars += metrics['chars']
-            
+
         print(f"  -> Group Totals: Chars: {group_chars}, Est. Tokens: {group_tokens}\n")
         grand_total_tokens += group_tokens
         grand_total_chars += group_chars
-        
+
     print("================================================================")
     print(f" Grand Total: Chars: {grand_total_chars}, Est. Tokens: {grand_total_tokens}")
     print("================================================================\n")
-    
+
     print("Interpretation Note:")
     print("By default, the Conductor now ONLY loads Group A.")
     print("Legacy execution loaded ALL routing and governance files upfront, incurring massive prompt payload overhead.")

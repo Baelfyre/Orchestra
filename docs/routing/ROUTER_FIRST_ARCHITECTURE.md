@@ -4,7 +4,7 @@
 To define the target execution architecture for the Orchestra ecosystem that mitigates the high token load and instruction dilution identified in the performance baseline. This architecture transitions the `conductor` from a monolithic prompt model to a dynamic, router-first execution model.
 
 ## Problem Statement
-Currently, `skills/conductor/SKILL.md` loads all routing matrices, edge cases, and specialist rules upfront. In parallel, `plugin.json` and governance docs inject heavy context repeatedly. This causes high token consumption, degrades LLM precision due to context dilution, and limits scalability as new skills are introduced. 
+Currently, `skills/conductor/SKILL.md` loads all routing matrices, edge cases, and specialist rules upfront. In parallel, `plugin.json` and governance docs inject heavy context repeatedly. This causes high token consumption, degrades LLM precision due to context dilution, and limits scalability as new skills are introduced.
 
 ## Design Goals
 1. **Minimize Initial Prompt Load**: Conductor should start with the smallest possible intent-classifier prompt.

@@ -1,4 +1,7 @@
 import os
+from pathlib import Path
+
+code = '''import os
 import json
 import shutil
 import sys
@@ -242,7 +245,7 @@ class TestArtificerRecordsValidator(unittest.TestCase):
         bundle = "test__repo__a1b2c3d4e5f6"
         (self.records_dir / bundle).mkdir()
         with open(self.records_dir / bundle / "source-intake.json", "wb") as f:
-            f.write(b"\xff\xfe")
+            f.write(b"\\xff\\xfe")
         failures = validate_repository(self.repo_root)
         self.assertTrue(len(failures) > 0)
 
@@ -392,7 +395,7 @@ class TestArtificerRecordsValidator(unittest.TestCase):
 
     def test_failure_absolute_windows_backslash_dot_and_traversal_paths(self):
         bundle = "test__repo__a1b2c3d4e5f6"
-        paths = ["/abs", "C:\win", "a\b", ".", "..", "../up"]
+        paths = ["/abs", "C:\\win", "a\\b", ".", "..", "../up"]
         for p in paths:
             i = self._valid_intake()
             i["files_examined"][0]["file_path"] = p
@@ -549,3 +552,7 @@ class TestArtificerRecordsValidator(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+'''
+
+with open("c:\\+conductor\\tests\\behavior\\test_artificer_records.py", "w", encoding="utf-8") as f:
+    f.write(code)
