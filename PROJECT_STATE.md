@@ -7,9 +7,9 @@
 * **Current Release:** `v1.1.1`
 * **Target Patch:** `v1.1.2`
 * **Current Stable State:** Artificer Phase 1 merged through PR #153.
-* **Current Task:** Artificer Phase 2 internal boundary and contract validation
+* **Current Task:** Strengthen Artificer validator regression coverage and semantic enforcement
 * **Related but Forbidden Repo for this task:** `C:\+AA`
-* **Latest Validation:** Pending Phase 2 implementation validation
+* **Latest Validation:** Pending follow-up remediation validation
 * **Active Governance Gates:**
 
   * Workspace Boundary Gate
@@ -21,8 +21,8 @@
   * Acme Readiness Gate Expansion
 * **Current Risks:** Prompt-load thresholds remain advisory and current observed Groups A, B, C, and Grand Total exceed soft limits; no re-baselining decision exists.
 * **Do-Not-Touch Areas:** Do not edit website repo files from this task (`C:\+AA`).
-* **Pending Next Steps:** Complete and merge the internal validator, then design Phase 3 source-intake and pattern-record instance validation
-* **Most Recent Checkpoint:** 2026-07-11 - Artificer branch semantics stabilized through PR #157
+* **Pending Next Steps:** Complete and merge the Artificer validator remediation, then proceed to Phase 3 instance validation
+* **Most Recent Checkpoint:** 2026-07-11 - Artificer Phase 2 merged through PR #158; regression audit identified false-positive tests
 
 ## Token Efficiency Rationale
 

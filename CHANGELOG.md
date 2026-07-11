@@ -48,6 +48,9 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 ## Unreleased
 
 ### Changed
+- Strengthened the Artificer boundary validator (`scripts/validate_artificer_internal.py`) by refactoring it into pure functions returning `ValidationFailure` dataclass instances, and introducing strict semantic checks requiring explicit Artificer-bound negative polarity.
+- Hardened the behavior test suite (`tests/behavior/test_artificer_internal.py`) by replacing placeholder `pass` blocks, ensuring all regression tests assert specific validator failures, adding a quality gate check on test source code, and verifying the entire repository via `validate_repository()`.
+- Added explicit no-self-implementation and no-self-approval contract checks and statements to `internal/artificer/ARTIFICER.md`.
 - Changed startup-state validation to use stable canonical-branch semantics instead of comparing committed files with the transient checkout branch.
 - Improved prompt-load reporting with Group B and Group C status output, largest-contributor reporting, clarified original versus observed baselines, focused regression coverage, and narrow repository-state alignment.
 

@@ -150,3 +150,26 @@ Phase 2 introduces strict enforcement of the Artificer Phase 1 specification bou
 - tests/behavior/run_tests.py
 - PROJECT_STATE.md
 - SESSION_HANDOFF.md
+
+---
+
+## Date: 2026-07-11
+
+**Decision:**
+Strengthened the Artificer boundary validator and test suite to resolve false-positive tests identified during a post-merge audit. The validator has been refactored to expose pure, testable functions returning `ValidationFailure` dataclass instances. Documentation-boundary negative safety contracts now require explicit Artificer-bound prohibition statements.
+
+**Reason:**
+PR #158 successfully merged the Phase 2 validator, but subsequent audit revealed that some regression tests used placeholder `pass` blocks, did not assert validator responses, or allowed unrelated negative statements to satisfy negative safety contracts. A narrow follow-up PR was chosen instead of reverting. Passing tests now verify the entire repository via `validate_repository()`, and a quality gate prevents any placeholder or unasserted tests in the test suite.
+
+**Rejected Alternatives:**
+- Reverting PR #158 (rejected; the validator functionality is sound and integration is correct; fixing the tests directly is less disruptive).
+- Allowing implicit or general negative safety contracts (rejected; without explicit Artificer-bound prohibition statements, unrelated negative text can satisfy a contract, risking false-positives).
+
+**Affected Components:**
+- scripts/validate_artificer_internal.py
+- tests/behavior/test_artificer_internal.py
+- internal/artificer/ARTIFICER.md
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
