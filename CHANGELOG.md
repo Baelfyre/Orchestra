@@ -48,6 +48,7 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 ## Unreleased
 
 ### Changed
+- Changed startup-state validation to use stable canonical-branch semantics instead of comparing committed files with the transient checkout branch.
 - Improved prompt-load reporting with Group B and Group C status output, largest-contributor reporting, clarified original versus observed baselines, focused regression coverage, and narrow repository-state alignment.
 
 ### Added
