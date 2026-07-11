@@ -301,7 +301,17 @@ STARTUP_STATE_FILES = [
     "SESSION_HANDOFF.md",
 ]
 
-BRANCH_CLAIM_PATTERN = re.compile(
+CANONICAL_BRANCH_CLAIM_PATTERN = re.compile(
+    r"^\s*[-*]?\s*\*{0,2}Canonical\s+Branch:?\*{0,2}\s*[:`]*\s*`?([^`\n]+?)`?\s*$",
+    re.IGNORECASE,
+)
+
+BASE_BRANCH_CLAIM_PATTERN = re.compile(
+    r"^\s*[-*]?\s*\*{0,2}Base\s+Branch:?\*{0,2}\s*[:`]*\s*`?([^`\n]+?)`?\s*$",
+    re.IGNORECASE,
+)
+
+LEGACY_BRANCH_CLAIM_PATTERN = re.compile(
     r"^\s*[-*]?\s*\*{0,2}Current\s+Branch:?\*{0,2}\s*[:`]*\s*`?([^`\n]+?)`?\s*$",
     re.IGNORECASE,
 )
@@ -317,6 +327,24 @@ def get_current_git_branch(repo_root):
         return None
     branch = result.stdout.strip()
     return branch if branch else None
+
+
+def get_remote_default_branch(repo_root):
+    github_base = os.environ.get("GITHUB_BASE_REF")
+    if github_base:
+        return github_base.strip()
+
+    result = run_git(repo_root, "symbolic-ref", "refs/remotes/origin/HEAD")
+    if result.returncode == 0:
+        ref = result.stdout.strip()
+        if ref.startswith("refs/remotes/origin/"):
+            return ref[len("refs/remotes/origin/"):]
+
+    result = run_git(repo_root, "show-ref", "--verify", "refs/remotes/origin/main")
+    if result.returncode == 0:
+        return "main"
+
+    return None
 
 
 def get_plugin_version(repo_root):
@@ -335,26 +363,97 @@ def run_startup_state_claim_check(repo_root, counters, strict_mode):
 
     record_issue = record_failure if strict_mode else record_warning
 
-    current_branch = get_current_git_branch(repo_root)
     plugin_version = get_plugin_version(repo_root)
+    remote_default = get_remote_default_branch(repo_root)
 
     for memory_file in STARTUP_STATE_FILES:
         memory_path = Path(repo_root) / memory_file
         if not memory_path.is_file():
             continue
 
+        canonical_claims = []
+        base_claims = []
+        legacy_current_lines = []
+
         for line_number, line in enumerate(memory_path.read_text(encoding="utf-8").splitlines(), 1):
-            match = BRANCH_CLAIM_PATTERN.match(line)
-            if match and current_branch:
-                claimed_branch = match.group(1).strip()
-                if claimed_branch != current_branch:
-                    record_issue(
-                        counters,
-                        f"{memory_file}:{line_number}",
-                        f"Structured branch claim '{claimed_branch}' does not match current branch '{current_branch}'.",
-                        "Update the Current Branch field in the startup-state file to match the active branch.",
-                    )
-                    issues_found = True
+            legacy_match = LEGACY_BRANCH_CLAIM_PATTERN.match(line)
+            if legacy_match:
+                legacy_current_lines.append((line_number, legacy_match.group(1).strip()))
+
+            canonical_match = CANONICAL_BRANCH_CLAIM_PATTERN.match(line)
+            if canonical_match:
+                canonical_claims.append((line_number, canonical_match.group(1).strip()))
+
+            base_match = BASE_BRANCH_CLAIM_PATTERN.match(line)
+            if base_match:
+                base_claims.append((line_number, base_match.group(1).strip()))
+
+        if legacy_current_lines:
+            for line_num, val in legacy_current_lines:
+                record_issue(
+                    counters,
+                    f"{memory_file}:{line_num}",
+                    f"Legacy 'Current Branch' claim '{val}' exists in {memory_file}.",
+                    "Remove the legacy 'Current Branch' field and use 'Canonical Branch' instead.",
+                )
+                issues_found = True
+
+        if len(canonical_claims) == 0:
+            record_issue(
+                counters,
+                f"{memory_file}:1",
+                f"Missing required 'Canonical Branch' claim in {memory_file}.",
+                "Add 'Canonical Branch: main' to the startup-state file.",
+            )
+            issues_found = True
+        elif len(canonical_claims) > 1:
+            for line_num, val in canonical_claims:
+                record_issue(
+                    counters,
+                    f"{memory_file}:{line_num}",
+                    f"Duplicate 'Canonical Branch' claim '{val}' found in {memory_file}.",
+                    "Ensure exactly one 'Canonical Branch' claim exists in the startup-state file.",
+                )
+                issues_found = True
+
+        if len(base_claims) == 0:
+            record_issue(
+                counters,
+                f"{memory_file}:1",
+                f"Missing required 'Base Branch' claim in {memory_file}.",
+                "Add 'Base Branch: main' to the startup-state file.",
+            )
+            issues_found = True
+        elif len(base_claims) > 1:
+            for line_num, val in base_claims:
+                record_issue(
+                    counters,
+                    f"{memory_file}:{line_num}",
+                    f"Duplicate 'Base Branch' claim '{val}' found in {memory_file}.",
+                    "Ensure exactly one 'Base Branch' claim exists in the startup-state file.",
+                )
+                issues_found = True
+
+        if len(canonical_claims) == 1 and len(base_claims) == 1:
+            canonical_val = canonical_claims[0][1]
+            base_val = base_claims[0][1]
+            if canonical_val != base_val:
+                record_issue(
+                    counters,
+                    f"{memory_file}:{canonical_claims[0][0]}",
+                    f"Canonical Branch '{canonical_val}' and Base Branch '{base_val}' disagree.",
+                    "Update them to match (e.g., both should be 'main').",
+                )
+                issues_found = True
+
+            if remote_default and canonical_val != remote_default:
+                record_issue(
+                    counters,
+                    f"{memory_file}:{canonical_claims[0][0]}",
+                    f"Canonical Branch '{canonical_val}' conflicts with detected remote default branch '{remote_default}'.",
+                    "Ensure the Canonical Branch aligns with origin/HEAD.",
+                )
+                issues_found = True
 
     context_path = Path(repo_root) / "PROJECT_CONTEXT.md"
     if context_path.is_file() and plugin_version:
@@ -382,7 +481,7 @@ def run_startup_state_claim_check(repo_root, counters, strict_mode):
                 in_stage_section = False
 
     if not issues_found:
-        print_pass("startup-state-claims", "Structured branch and version claims match live repository state.")
+        print_pass("startup-state-claims", "Canonical branch and version claims match repository policy.")
 
 
 def run_strict_validators(repo_root, counters):

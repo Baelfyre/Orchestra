@@ -1,19 +1,23 @@
 # Session Handoff
 
-- **Current Task:** Post-Artificer main realignment and Phase 2 internal-boundary planning
+- **Current Task:** Fix self-invalidating startup-state branch validation
 - **Current Repo:** `C:\+conductor`
-- **Current Branch:** `chore/post-artificer-main-realignment`
+- **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.1`
 - **Target Patch:** `v1.1.2`
-- **Mode:** Artificer Phase 1 merged; correcting startup-state records before Phase 2
+- **Mode:** Stable branch policy validation implementation
 - **Allowed Files:**
+  - `scripts/governance_check.py`
+  - `scripts/test_governance_check.py`
   - `PROJECT_STATE.md`
   - `SESSION_HANDOFF.md`
+  - `DECISION_LOG.md`
+  - `CHANGELOG.md`
 - **Forbidden Repo:** `C:\+AA`
-- **Last Validation:** Artificer Phase 1 pull-request validation passed; post-merge structure, manifest, stale-reference, Codex export, behavior, and diff checks passed. Strict governance requires the startup-state branch claims to be realigned.
+- **Last Validation:** Behavior suite and runtime pytest suite passed locally.
 - **Known Risks:** Prompt-load thresholds remain advisory and current observed Groups A, B, C, and Grand Total exceed documented soft limits; no replacement baseline has been approved.
-- **Next Step:** Complete startup-state realignment, rerun strict validation, commit, push, and open the narrow realignment pull request.
+- **Next Step:** Run the full baseline and merge fix/startup-state-branch-semantics
 - **Fresh-Session Warning:** If the current conversation has long prior history from another repository, enter safe mode and request user confirmation before proceeding with implementation.
 
 ## Token Control Note

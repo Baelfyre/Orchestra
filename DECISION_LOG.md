@@ -108,3 +108,23 @@ Post-release audit confirmed core is healthy (42 runtime tests pass, strict gove
 - PROJECT_STATE.md
 - SESSION_HANDOFF.md
 - PROJECT_CONTEXT.md
+
+---
+
+## Date: 2026-07-11
+
+**Decision:**
+Transition from transient checkout branch validation to stable repository branch policy checking. The validator now parses and verifies `Canonical Branch` and `Base Branch` policy claims in committed files, rather than matching them against `git branch --show-current`.
+
+**Reason:**
+Transient checkout branches are runtime facts, not durable repository-memory facts. Validating them strictly against committed files forces developers to modify committed repository files for every temporary feature branch name, creating self-invalidating state as soon as a pull request merges into the default branch. Using `Canonical Branch: main` avoids making `main` stale immediately post-merge.
+
+**Rejected Alternatives:**
+- Advisory-only startup-state validation (rejected; strict startup-state validation remains required for version and baseline alignment).
+- Bypassing branch policy checks entirely.
+
+**Affected Components:**
+- scripts/governance_check.py
+- scripts/test_governance_check.py
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md

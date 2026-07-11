@@ -46,6 +46,126 @@ def test_repo_memory_path_check():
         assert_equal("missing memory path error", counters["errors"], 1)
 
 
+def test_startup_state_claim_check():
+    with tempfile.TemporaryDirectory(prefix="governance-startup-test-") as temp_dir:
+        repo_root = Path(temp_dir)
+
+        def write_test_files(project_state_content, session_handoff_content, context_content=None, plugin_json_content=None):
+            if project_state_content is not None:
+                (repo_root / "PROJECT_STATE.md").write_text(project_state_content, encoding="utf-8")
+            else:
+                if (repo_root / "PROJECT_STATE.md").is_file():
+                    (repo_root / "PROJECT_STATE.md").unlink()
+            if session_handoff_content is not None:
+                (repo_root / "SESSION_HANDOFF.md").write_text(session_handoff_content, encoding="utf-8")
+            else:
+                if (repo_root / "SESSION_HANDOFF.md").is_file():
+                    (repo_root / "SESSION_HANDOFF.md").unlink()
+            if context_content is not None:
+                (repo_root / "PROJECT_CONTEXT.md").write_text(context_content, encoding="utf-8")
+            else:
+                if (repo_root / "PROJECT_CONTEXT.md").is_file():
+                    (repo_root / "PROJECT_CONTEXT.md").unlink()
+            if plugin_json_content is not None:
+                (repo_root / "plugin.json").write_text(plugin_json_content, encoding="utf-8")
+            else:
+                if (repo_root / "plugin.json").is_file():
+                    (repo_root / "plugin.json").unlink()
+
+        original_get_remote = gc.get_remote_default_branch
+        original_get_current = gc.get_current_git_branch
+        original_get_plugin_version = gc.get_plugin_version
+
+        mock_remote_default = "main"
+        mock_current_branch = "fix/example-feature"
+
+        gc.get_remote_default_branch = lambda r: mock_remote_default
+        gc.get_current_git_branch = lambda r: mock_current_branch
+
+        # 1. Canonical branch matches base branch (main) -> PASS
+        write_test_files(
+            "Canonical Branch: main\nBase Branch: main\n",
+            "Canonical Branch: main\nBase Branch: main\n"
+        )
+        counters = {"warnings": 0, "errors": 0}
+        gc.run_startup_state_claim_check(str(repo_root), counters, strict_mode=True)
+        assert_equal("canonical matches base - pass", counters["errors"], 0)
+
+        # 2. Canonical branch mismatch with base branch -> FAIL
+        write_test_files(
+            "Canonical Branch: main\nBase Branch: dev\n",
+            "Canonical Branch: main\nBase Branch: main\n"
+        )
+        counters = {"warnings": 0, "errors": 0}
+        gc.run_startup_state_claim_check(str(repo_root), counters, strict_mode=True)
+        assert_equal("canonical mismatch base - fail", counters["errors"] > 0, True)
+
+        # 3. Missing canonical branch -> FAIL
+        write_test_files(
+            "Base Branch: main\n",
+            "Canonical Branch: main\nBase Branch: main\n"
+        )
+        counters = {"warnings": 0, "errors": 0}
+        gc.run_startup_state_claim_check(str(repo_root), counters, strict_mode=True)
+        assert_equal("missing canonical - fail", counters["errors"] > 0, True)
+
+        # 4. Duplicate canonical branch claims -> FAIL
+        write_test_files(
+            "Canonical Branch: main\nCanonical Branch: main\nBase Branch: main\n",
+            "Canonical Branch: main\nBase Branch: main\n"
+        )
+        counters = {"warnings": 0, "errors": 0}
+        gc.run_startup_state_claim_check(str(repo_root), counters, strict_mode=True)
+        assert_equal("duplicate canonical - fail", counters["errors"] > 0, True)
+
+        # 5. Rejection of legacy Current Branch -> FAIL
+        write_test_files(
+            "Canonical Branch: main\nBase Branch: main\nCurrent Branch: fix/some-feature\n",
+            "Canonical Branch: main\nBase Branch: main\n"
+        )
+        counters = {"warnings": 0, "errors": 0}
+        gc.run_startup_state_claim_check(str(repo_root), counters, strict_mode=True)
+        assert_equal("rejection of legacy Current Branch - fail", counters["errors"] > 0, True)
+
+        # 6. Remote-default mismatch -> FAIL
+        mock_remote_default = "master"
+        write_test_files(
+            "Canonical Branch: main\nBase Branch: main\n",
+            "Canonical Branch: main\nBase Branch: main\n"
+        )
+        counters = {"warnings": 0, "errors": 0}
+        gc.run_startup_state_claim_check(str(repo_root), counters, strict_mode=True)
+        assert_equal("remote-default mismatch - fail", counters["errors"] > 0, True)
+
+        mock_remote_default = "main"
+
+        # 7. Version checks remain unchanged -> PASS and FAIL scenarios
+        plugin_json = '{"version": "1.1.2"}'
+        write_test_files(
+            "Canonical Branch: main\nBase Branch: main\n",
+            "Canonical Branch: main\nBase Branch: main\n",
+            context_content="## Current Stage\nv1.1.2 - Release\n",
+            plugin_json_content=plugin_json
+        )
+        counters = {"warnings": 0, "errors": 0}
+        gc.run_startup_state_claim_check(str(repo_root), counters, strict_mode=True)
+        assert_equal("version matches - pass", counters["errors"], 0)
+
+        write_test_files(
+            "Canonical Branch: main\nBase Branch: main\n",
+            "Canonical Branch: main\nBase Branch: main\n",
+            context_content="## Current Stage\nv1.1.1 - Release\n",
+            plugin_json_content=plugin_json
+        )
+        counters = {"warnings": 0, "errors": 0}
+        gc.run_startup_state_claim_check(str(repo_root), counters, strict_mode=True)
+        assert_equal("version mismatch - fail", counters["errors"] > 0, True)
+
+        gc.get_remote_default_branch = original_get_remote
+        gc.get_current_git_branch = original_get_current
+        gc.get_plugin_version = original_get_plugin_version
+
+
 def main():
     assert_equal("forbidden artifacts", gc.is_forbidden_repo_path("artifacts/governance_report.txt"), True)
     assert_equal("forbidden runtime folder", gc.is_forbidden_repo_path(".agents/skills/dagger/SKILL.md"), True)
@@ -62,6 +182,7 @@ def main():
     assert_equal("external path ignored", gc.is_repo_relative_memory_path("C:/conductor/scripts/governance_check.py"), False)
     test_tracked_repo_files_only()
     test_repo_memory_path_check()
+    test_startup_state_claim_check()
     print("Governance check helper tests passed.")
     sys.exit(0)
 
