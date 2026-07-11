@@ -173,3 +173,25 @@ PR #158 successfully merged the Phase 2 validator, but subsequent audit revealed
 - DECISION_LOG.md
 - PROJECT_STATE.md
 - SESSION_HANDOFF.md
+
+---
+
+## Date: 2026-07-11
+
+**Decision:**
+Completed the specialist-boundary polarity enforcement within the Artificer internal boundary validator (`scripts/validate_artificer_internal.py`). Refactored all keyword-presence validation checks in `check_artificer_boundaries_md()` to require explicit Artificer-bound negative polarity. Introduced sub-clause split-normalizer capabilities and subject-inheritance to reject mixed-polarity bypasses (e.g. positive permissions paired with unrelated negative clauses).
+
+**Reason:**
+A final review of PR #159 identified that several specialist boundary checks in `check_artificer_boundaries_md()` still validated boundaries using simple keyword presence rather than explicit polarity. Simple keyword presence could allow positive permission statements to satisfy a safety contract. Explicit positive permission detection and mixed-polarity test cases have been added to the behavior test suite, verifying that positive/mixed statements successfully trigger validation failures. A narrow follow-up PR was chosen to preserve the integrated validator structure.
+
+**Rejected Alternatives:**
+- Verbatim paragraph matching (rejected; matching whole paragraphs verbatim reduces flexibility and is brittle to formatting updates in the specs).
+- Deferring the final polarity checks (rejected; keyword-only validation left open potential false-positives for critical safety contracts).
+
+**Affected Components:**
+- scripts/validate_artificer_internal.py
+- tests/behavior/test_artificer_internal.py
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md

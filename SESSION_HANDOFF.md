@@ -1,16 +1,15 @@
 # Session Handoff
 
-- **Current Task:** Strengthen Artificer validator regression coverage and semantic enforcement
+- **Current Task:** Complete Artificer specialist-boundary polarity enforcement
 - **Current Repo:** `C:\+conductor`
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.1`
 - **Target Patch:** `v1.1.2`
-- **Mode:** Post-merge validator remediation
+- **Mode:** Final Phase 2 validator hardening
 - **Allowed Files:**
   - `scripts/validate_artificer_internal.py`
   - `tests/behavior/test_artificer_internal.py`
-  - `internal/artificer/ARTIFICER.md`
   - `CHANGELOG.md`
   - `DECISION_LOG.md`
   - `PROJECT_STATE.md`
@@ -18,7 +17,7 @@
 - **Forbidden Repo:** `C:\+AA`
 - **Last Validation:** Behavior suite and runtime pytest suite passed locally.
 - **Known Risks:** Prompt-load thresholds remain advisory and current observed Groups A, B, C, and Grand Total exceed documented soft limits; no replacement baseline has been approved.
-- **Next Step:** Replace placeholder tests, strengthen polarity checks, run the full baseline, and open the follow-up pull request
+- **Next Step:** Strengthen the remaining boundary checks, run the full baseline, and open the follow-up pull request
 - **Fresh-Session Warning:** If the current conversation has long prior history from another repository, enter safe mode and request user confirmation before proceeding with implementation.
 
 ## Token Control Note

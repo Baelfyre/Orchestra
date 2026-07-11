@@ -219,23 +219,35 @@ def normalize_contract_text(content: str) -> str:
     content = re.sub(r"\s+", " ", content)
     return content.strip()
 
-def get_sentences(content: str) -> list[str]:
+def get_clauses(content: str) -> list[tuple[str, bool]]:
     content = re.sub(r"(?:^|\n)\s*#+\s+", ". ", content)
     content = re.sub(r"(?:^|\n)\s*[-*+]\s+", ". ", content)
     raw_sentences = re.split(r'[.;!\?\n]', content)
-    sentences = []
+    clauses = []
     for s in raw_sentences:
-        norm = normalize_contract_text(s)
-        if norm:
-            sentences.append(norm)
-    return sentences
+        s = s.strip()
+        if not s:
+            continue
+        sub_raw = re.split(r'\b(but|yet|although|though)\b', s, flags=re.IGNORECASE)
+        sub_clauses = []
+        for part in sub_raw:
+            part_norm = normalize_contract_text(part)
+            if part_norm and part_norm not in ["but", "yet", "although", "though"]:
+                sub_clauses.append(part_norm)
+        if not sub_clauses:
+            continue
+        has_subject = "artificer" in sub_clauses[0]
+        for sub in sub_clauses:
+            sub_has_subject = ("artificer" in sub) or has_subject
+            clauses.append((sub, sub_has_subject))
+    return clauses
 
 def has_artificer_prohibition(
     content: str,
     action_pattern: str,
     object_pattern: str | None = None,
 ) -> bool:
-    sentences = get_sentences(content)
+    clauses = get_clauses(content)
     negatives = [
         "must not",
         "does not",
@@ -246,22 +258,66 @@ def has_artificer_prohibition(
         "is prohibited from",
         "is blocked from"
     ]
-    for s in sentences:
-        if "artificer" not in s:
+    for clause, has_subject in clauses:
+        if not has_subject:
             continue
         has_neg = False
         for neg in negatives:
-            if neg in s:
+            if neg in clause:
                 has_neg = True
                 break
         if not has_neg:
             continue
-        if not re.search(action_pattern, s, re.IGNORECASE):
+        if not re.search(action_pattern, clause, re.IGNORECASE):
             continue
-        if object_pattern and not re.search(object_pattern, s, re.IGNORECASE):
+        if object_pattern and not re.search(object_pattern, clause, re.IGNORECASE):
             continue
         return True
     return False
+
+def has_artificer_permission(
+    content: str,
+    action_pattern: str,
+    object_pattern: str | None = None,
+) -> bool:
+    clauses = get_clauses(content)
+    negatives = [
+        "must not",
+        "does not",
+        "do not",
+        "cannot",
+        "may not",
+        "never",
+        "is prohibited from",
+        "is blocked from"
+    ]
+    for clause, has_subject in clauses:
+        if not has_subject:
+            continue
+        has_neg = False
+        for neg in negatives:
+            if neg in clause:
+                has_neg = True
+                break
+        if has_neg:
+            continue
+        if not re.search(action_pattern, clause, re.IGNORECASE):
+            continue
+        if object_pattern and not re.search(object_pattern, clause, re.IGNORECASE):
+            continue
+        return True
+    return False
+
+def check_prohibition_contract(
+    content: str,
+    action_pattern: str,
+    object_pattern: str | None = None,
+) -> bool:
+    if not has_artificer_prohibition(content, action_pattern, object_pattern):
+        return False
+    if has_artificer_permission(content, action_pattern, object_pattern):
+        return False
+    return True
 
 def check_artificer_md(content):
     missing = []
@@ -272,17 +328,17 @@ def check_artificer_md(content):
     if not re.search(r"read-only", content, re.IGNORECASE):
         missing.append("read-only external-source auditing")
 
-    if not has_artificer_prohibition(content, r"execute", r"code|script|binary|test|runner"):
+    if not check_prohibition_contract(content, r"execute", r"code|script|binary|test|runner"):
         missing.append("no external code execution")
-    if not has_artificer_prohibition(content, r"install", r"dependency|package"):
+    if not check_prohibition_contract(content, r"install", r"dependency|package"):
         missing.append("no external dependency installation")
-    if not has_artificer_prohibition(content, r"implement", r"recommendation|proposal|own|change|ui"):
+    if not check_prohibition_contract(content, r"implement", r"recommendation|proposal|own|change|ui"):
         missing.append("no self-implementation")
-    if not has_artificer_prohibition(content, r"approve|adjudicate|clear", r"finding|evidence|own"):
+    if not check_prohibition_contract(content, r"approve|adjudicate|clear", r"finding|evidence|own"):
         missing.append("no self-approval")
-    if not (has_artificer_prohibition(content, r"register", r"public|manifest") or has_artificer_prohibition(content, r"visibility|blocked", r"public|manifest|routing")):
+    if not (check_prohibition_contract(content, r"register", r"public|manifest") or check_prohibition_contract(content, r"visibility|blocked", r"public|manifest|routing")):
         missing.append("no manifest registration")
-    if not (has_artificer_prohibition(content, r"expose|route", r"runtime|adapter") or has_artificer_prohibition(content, r"visibility|blocked", r"runtime|adapter")):
+    if not (check_prohibition_contract(content, r"expose|route", r"runtime|adapter") or check_prohibition_contract(content, r"visibility|blocked", r"runtime|adapter")):
         missing.append("no runtime route")
 
     if not (re.search(r"cipher", content, re.IGNORECASE) and (re.search(r"hand", content, re.IGNORECASE) or re.search(r"off", content, re.IGNORECASE))):
@@ -319,15 +375,24 @@ def check_artificer_boundaries_md(content):
     if re.search(r"map to\s+\*?\*?artificer\*?\*?\s+for.*code\s+changes|implementation\s+is\s+owned\s+by\s+artificer|artificer\s+implements", content, re.IGNORECASE):
         missing.append("rejection of implementation ownership assigned to Artificer")
 
-    if not (re.search(r"implement", content, re.IGNORECASE) or re.search(r"write.*code", content, re.IGNORECASE)):
+    # 1. Implementation or source modification
+    if not check_prohibition_contract(content, r"implement|write|modify|edit", r"code|source|change|interface|config"):
         missing.append("Artificer does not implement source changes statement")
-    if not re.search(r"run tests", content, re.IGNORECASE):
+
+    # 2. Test execution or test ownership
+    if not check_prohibition_contract(content, r"run|write|execute", r"test|test runner|test suite"):
         missing.append("Artificer does not run tests statement")
-    if not (re.search(r"evidence is complete", content, re.IGNORECASE) or re.search(r"approve evidence", content, re.IGNORECASE)):
+
+    # 3. Evidence-completeness decisions
+    if not check_prohibition_contract(content, r"decide|approve|adjudicate|determine", r"evidence|complete|completeness|duplicate"):
         missing.append("Artificer does not decide if evidence is complete statement")
-    if not (re.search(r"approve license", content, re.IGNORECASE) or re.search(r"approve licensing", content, re.IGNORECASE)):
+
+    # 4. Licensing or IP approval
+    if not check_prohibition_contract(content, r"approve|clear|authorize|verify", r"license|licensing|compliance|copyright|ip"):
         missing.append("Artificer does not approve licensing statement")
-    if not (re.search(r"adversarial testing", content, re.IGNORECASE) or re.search(r"penetration testing", content, re.IGNORECASE) or re.search(r"vulnerability", content, re.IGNORECASE)):
+
+    # 5. Live adversarial or penetration testing
+    if not check_prohibition_contract(content, r"perform|run|conduct|execute", r"adversarial|penetration|vulnerability|live security"):
         missing.append("Artificer does not perform live adversarial testing statement")
 
     return missing
@@ -450,7 +515,7 @@ def check_public_non_registration(repo_root: Path) -> list[ValidationFailure]:
     ]
     files_to_scan = []
     for target in targets:
-        full_path = repo_root / target
+        full_path = Path(repo_root) / target
         if not full_path.exists():
             continue
         if full_path.is_file():

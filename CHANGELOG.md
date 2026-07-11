@@ -48,6 +48,9 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 ## Unreleased
 
 ### Changed
+- Completed specialist-boundary polarity enforcement in the Artificer boundary validator (`scripts/validate_artificer_internal.py`), refactoring keyword-only checks in `check_artificer_boundaries_md()` to require explicit Artificer-bound negative polarity.
+- Prevented mixed-polarity bypasses by splitting sentences into clauses and detecting explicit positive permissions alongside prohibitions.
+- Expanded behavior test suite (`tests/behavior/test_artificer_internal.py`) with 6 new regression tests covering positive implementation, test, evidence-decision, licensing, and adversarial-testing permissions, plus mixed-polarity assertions.
 - Strengthened the Artificer boundary validator (`scripts/validate_artificer_internal.py`) by refactoring it into pure functions returning `ValidationFailure` dataclass instances, and introducing strict semantic checks requiring explicit Artificer-bound negative polarity.
 - Hardened the behavior test suite (`tests/behavior/test_artificer_internal.py`) by replacing placeholder `pass` blocks, ensuring all regression tests assert specific validator failures, adding a quality gate check on test source code, and verifying the entire repository via `validate_repository()`.
 - Added explicit no-self-implementation and no-self-approval contract checks and statements to `internal/artificer/ARTIFICER.md`.

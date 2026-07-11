@@ -450,6 +450,131 @@ class TestArtificerInternal(unittest.TestCase):
         )
         self.assertEqual(res.returncode, 2)
 
+    def test_failure_positive_test_permission(self):
+        path = self.temp_root / "docs/internal/ARTIFICER_BOUNDARIES.md"
+        original = path.read_text(encoding="utf-8")
+        self.assertIn("Must never write implementation code, modify plugin configs, or run tests.", original)
+        mutated = original.replace(
+            "Must never write implementation code, modify plugin configs, or run tests.",
+            "Must never write implementation code or modify plugin configs."
+        ).replace(
+            "Artificer does not write unit tests or execute test runners.",
+            "Artificer may run tests."
+        )
+        self.assertNotEqual(original, mutated)
+        path.write_text(mutated, encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "docs/internal/ARTIFICER_BOUNDARIES.md"
+                and "artificer does not run tests statement" in failure.reason.lower()
+                for failure in failures
+            )
+        )
+
+    def test_failure_positive_evidence_decision(self):
+        path = self.temp_root / "docs/internal/ARTIFICER_BOUNDARIES.md"
+        original = path.read_text(encoding="utf-8")
+        self.assertIn("Artificer does not decide if a pattern is a duplicate or if evidence is complete.", original)
+        mutated = original.replace(
+            "Artificer does not decide if a pattern is a duplicate or if evidence is complete.",
+            "Artificer decides when evidence is complete."
+        )
+        self.assertNotEqual(original, mutated)
+        path.write_text(mutated, encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "docs/internal/ARTIFICER_BOUNDARIES.md"
+                and "artificer does not decide if evidence is complete statement" in failure.reason.lower()
+                for failure in failures
+            )
+        )
+
+    def test_failure_positive_licensing_approval(self):
+        path = self.temp_root / "docs/internal/ARTIFICER_BOUNDARIES.md"
+        original = path.read_text(encoding="utf-8")
+        self.assertIn("Artificer reports licensing, but cannot approve license compliance or IP clearance.", original)
+        mutated = original.replace(
+            "Artificer reports licensing, but cannot approve license compliance or IP clearance.",
+            "Artificer may approve licensing compliance and IP clearance."
+        )
+        self.assertNotEqual(original, mutated)
+        path.write_text(mutated, encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "docs/internal/ARTIFICER_BOUNDARIES.md"
+                and "artificer does not approve licensing statement" in failure.reason.lower()
+                for failure in failures
+            )
+        )
+
+    def test_failure_positive_adversarial_testing(self):
+        path = self.temp_root / "docs/internal/ARTIFICER_BOUNDARIES.md"
+        original = path.read_text(encoding="utf-8")
+        self.assertIn("Artificer does not perform penetration testing or live vulnerability runs.", original)
+        mutated = original.replace(
+            "Artificer does not perform penetration testing or live vulnerability runs.",
+            "Artificer performs live adversarial and penetration testing."
+        )
+        self.assertNotEqual(original, mutated)
+        path.write_text(mutated, encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "docs/internal/ARTIFICER_BOUNDARIES.md"
+                and "artificer does not perform live adversarial testing statement" in failure.reason.lower()
+                for failure in failures
+            )
+        )
+
+    def test_failure_positive_implementation_permission(self):
+        path = self.temp_root / "docs/internal/ARTIFICER_BOUNDARIES.md"
+        original = path.read_text(encoding="utf-8")
+        self.assertIn("Artificer must not implement UI code.", original)
+        mutated = original.replace(
+            "Must never write implementation code, modify plugin configs, or run tests.",
+            "Must never modify plugin configs or run tests."
+        ).replace(
+            "Artificer must not implement UI code.",
+            "Artificer may write implementation code."
+        ).replace(
+            "Artificer does not edit source files of the active repository.",
+            "Artificer may modify source files."
+        )
+        self.assertNotEqual(original, mutated)
+        path.write_text(mutated, encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "docs/internal/ARTIFICER_BOUNDARIES.md"
+                and "artificer does not implement source changes statement" in failure.reason.lower()
+                for failure in failures
+            )
+        )
+
+    def test_failure_mixed_polarity(self):
+        path = self.temp_root / "docs/internal/ARTIFICER_BOUNDARIES.md"
+        original = path.read_text(encoding="utf-8")
+        mutated = original.replace(
+            "Must never write implementation code, modify plugin configs, or run tests.",
+            "Artificer must not implement source code, but Artificer may run tests."
+        ).replace(
+            "Artificer does not write unit tests or execute test runners.",
+            ""
+        )
+        self.assertNotEqual(original, mutated)
+        path.write_text(mutated, encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "docs/internal/ARTIFICER_BOUNDARIES.md"
+                and "artificer does not run tests statement" in failure.reason.lower()
+                for failure in failures
+            )
+        )
+
     def test_quality_gate(self):
         test_file = Path(__file__).resolve()
         content = test_file.read_text(encoding="utf-8")
