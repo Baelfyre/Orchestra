@@ -56,6 +56,6 @@ Expected result:
 
 ## Dealing with Live LLM Drift
 
-If an LLM consistently fails the Progressive Disclosure test (e.g., it greedily reads all files in a folder using a wildcard or broad search), this usually indicates a need to strengthen the `## Progressive Disclosure Rule` heading inside `SKILL.md`.
+If an LLM consistently fails the Progressive Disclosure test (e.g., it greedily reads all files in a folder using a wildcard or broad search), this usually indicates a need to strengthen the `## Progressive Disclosure Rule` heading inside `SKILL.md`. 
 
 Do not "fix" the framework by compressing the skills into a single file—this defeats the token-efficiency architecture. Instead, adjust the specific LLM's system prompt or adapt the `conductor` instructions to be firmer about deferred loading.

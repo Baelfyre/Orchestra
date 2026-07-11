@@ -1189,7 +1189,7 @@ def _print_failure(failure: ValidationFailure) -> None:
     print(f"       Remediation: {failure.remediation}")
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Artificer Record-Instance Validator"
     )
@@ -1201,9 +1201,11 @@ def main() -> None:
     )
 
     try:
-        args = parser.parse_args()
-    except SystemExit:
-        sys.exit(2)
+        args = parser.parse_args(argv)
+    except SystemExit as exc:
+        if exc.code == 0:
+            return 0
+        return 2
 
     if args.repo_root is not None:
         repo_root = Path(args.repo_root).resolve()
@@ -1220,7 +1222,7 @@ def main() -> None:
     except ValidatorConfigurationError as exc:
         print(f"[FAIL] Configuration error: {exc}")
         print("       Remediation: Restore the schema files and re-run validation.")
-        sys.exit(2)
+        return 2
 
     records_path = repo_root / RECORDS_DIR
 
@@ -1248,13 +1250,13 @@ def main() -> None:
         print()
         print(f"[5] Summary")
         print(f"Validation Failed: {len(failures)} issue(s) found.")
-        sys.exit(1)
+        return 1
 
     print()
     print(f"[5] Summary")
     print("Validation Passed: All Artificer record instances are valid.")
-    sys.exit(0)
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

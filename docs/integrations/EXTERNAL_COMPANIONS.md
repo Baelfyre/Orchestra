@@ -29,7 +29,7 @@ Orchestra is designed to integrate seamlessly with external workflow companions,
 
 ## Using Orchestra Without Companions
 
-You are not required to use Ponytail or Caveman.
+You are not required to use Ponytail or Caveman. 
 
 * **Without Ponytail**: When a specialist (like Clockwork or Cipher) provides a design or fix plan, you can implement the changes yourself, or use a different code-generation agent provided by your IDE.
 * **Without Caveman**: If you omit Caveman from your workflows, Orchestra and its specialists will simply output longer, conversational responses.

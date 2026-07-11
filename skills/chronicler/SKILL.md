@@ -123,7 +123,7 @@ If the request is outside this specialist's scope, do not execute it. Return `SP
 
 ## Conductor Integration (Routing Rules)
 
-Act as a specialist routed by `conductor`.
+Act as a specialist routed by `conductor`. 
 - Route ambiguous ownership, multi-specialist sequencing, or reroute decisions to **Conductor**.
 - Route backend implementation and executing the migration/SQL to **Ponytail**.
   - **Ponytail Handoff Restriction:** You must not hand off factual or curated records to Ponytail for implementation until you have confirmed: source-of-truth fields, domain/interface fields, UI-rendered fields, fallback behavior, source link structure, and asset availability.

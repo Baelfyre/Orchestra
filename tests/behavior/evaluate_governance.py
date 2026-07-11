@@ -8,25 +8,25 @@ import scripts.helpers as helpers
 def main():
     root = helpers.get_project_root()
     evals_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "governance-conformance-fixtures.json")
-
+    
     if not os.path.isfile(evals_file):
         helpers.write_color_host('ERROR', f"Evals fixture not found at {evals_file}")
         sys.exit(1)
-
+        
     with open(evals_file, 'r', encoding='utf-8') as f:
         evals = json.load(f)
-
+        
     failed = False
     helpers.write_color_host('INFO', "Governance instruction conformance checks: Validating static behavioral expectations in source rules...")
-
+    
     import re
-
+    
     for ev in evals:
         skill = ev.get('skill', '')
         file_path = ev.get('file', '')
         scenario = ev.get('scenario', '')
         pattern = ev.get('pattern', '')
-
+        
         skill_path = None
         if file_path:
             source_path = os.path.join(root, file_path)
@@ -39,7 +39,7 @@ def main():
         else:
             source_path = os.path.join(root, "skills", skill, "SKILL.md")
             agent_path = os.path.join(root, ".agents", "skills", skill, "SKILL.md")
-
+            
             if os.path.isfile(source_path):
                 skill_path = source_path
             elif os.path.isfile(agent_path):
@@ -52,13 +52,13 @@ def main():
 
         with open(skill_path, 'r', encoding='utf-8') as f:
             content = f.read()
-
+            
         if re.search(pattern, content, re.DOTALL):
             helpers.write_color_host('SUCCESS', f"PASS: {scenario}")
         else:
             helpers.write_color_host('ERROR', f"FAIL: {scenario} -> Rule missing or contradicted in {skill_path}")
             failed = True
-
+            
     if failed:
         helpers.write_color_host('ERROR', "Governance instruction conformance checks failed!")
         sys.exit(1)
