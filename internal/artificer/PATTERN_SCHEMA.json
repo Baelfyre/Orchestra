@@ -1,0 +1,68 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ArtificerPattern",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Unique identifier of the pattern."
+    },
+    "description": {
+      "type": "string",
+      "description": "Functional description of the pattern."
+    },
+    "source_file": {
+      "type": "string",
+      "description": "File path in the external repository containing the pattern."
+    },
+    "line_range": {
+      "type": "string",
+      "pattern": "^\\d+-\\d+$",
+      "description": "Start and end lines, format: 'start-end'."
+    },
+    "classification": {
+      "type": "string",
+      "enum": [
+        "REFERENCE_ONLY",
+        "ADAPTED_PATTERN",
+        "CODE_REUSE_REVIEW_REQUIRED",
+        "TEST_CORPUS_CANDIDATE",
+        "REJECTED",
+        "DEFERRED",
+        "DUPLICATE",
+        "OUT_OF_SCOPE"
+      ],
+      "description": "Pattern classification status."
+    },
+    "assigned_specialist": {
+      "type": "string",
+      "enum": [
+        "cloak",
+        "cipher",
+        "clockwork",
+        "ponytail",
+        "overseer",
+        "dagger",
+        "the-governor",
+        "arbiter",
+        "chronicler",
+        "weaver",
+        "scribe",
+        "the-steward"
+      ],
+      "description": "The target specialist owning this domain."
+    },
+    "license_implications": {
+      "type": "string",
+      "description": "Attribution or licensing constraints."
+    }
+  },
+  "required": [
+    "name",
+    "description",
+    "source_file",
+    "classification",
+    "assigned_specialist"
+  ],
+  "additionalProperties": false
+}
