@@ -108,3 +108,20 @@ Post-release audit confirmed core is healthy (42 runtime tests pass, strict gove
 - PROJECT_STATE.md
 - SESSION_HANDOFF.md
 - PROJECT_CONTEXT.md
+
+---
+
+## Date: 2026-07-11
+
+**Decision:**
+Record and document the governance exception for the merge of PR #152. Maintainer bypass was intentionally used to merge the Wave 5B prompt-load alignment changes.
+
+**Reason:**
+To proceed with the next phase of development (Artificer Specialist Architecture Audit and Specification) and unblock startup-state alignment. The lack of a recorded GitHub review submission for PR #152 is acknowledged as a necessary exception due to environment-specific workflow speed needs, and does not indicate a ruleset failure.
+
+**Rejected Alternatives:**
+- Re-opening or re-submitting PR #152 for structured review (already merged).
+- Bypassing documentation of the exception (violates strict governance record accuracy gate).
+
+**Affected Components:**
+- DECISION_LOG.md
