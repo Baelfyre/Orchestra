@@ -27,6 +27,6 @@ The frontmatter schema is only one part of the specialist contract. For the shar
 
 ## Manifest verification
 
-- The YAML frontmatter in each `SKILL.md` is the **absolute source of truth**.
-- The `examples/plugin-manifest.example.json` file must match the frontmatter exactly.
-- The `scripts/validate-manifest.ps1` script explicitly verifies the example JSON manifest against the live skill metadata, preventing documentation drift.
+- `plugin.json` is the active manifest surface, and the YAML frontmatter in each `SKILL.md` remains the source of truth for registered skills.
+- Run `python scripts/validate_manifest.py` to validate skill frontmatter and manifest entries.
+- Runtime loading uses the repository manifest and skill registry. The deleted example manifest is not recreated.

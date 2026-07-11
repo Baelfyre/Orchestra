@@ -141,3 +141,9 @@ Before implementation, maintainers need to decide:
 3. Whether source skills and exported Codex skills should be treated identically for prompt-size reporting.
 4. Whether specialist prompt-load budgets should exist for routed specialist activation.
 5. Whether prompt-load budget status should remain an advisory warning, become a strict gate, or support both modes through an explicit strict flag.
+
+## Implementation Status
+
+Wave 5B implementation branch `fix/wave5b-prompt-load-alignment` implemented Group B and Group C status output, Group D measurement visibility, largest-contributor reporting, clearer advisory wording, a direct policy reference, and focused regression coverage. It also clarified original versus observed baselines.
+
+Thresholds were not changed, strict enforcement was not added, and specialist or Codex-export prompt-size reporting remains deferred. Threshold re-baselining and any accepted exceptions remain subject to an explicit maintainer decision.

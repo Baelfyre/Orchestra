@@ -12,18 +12,29 @@ All thresholds are based on the output of `scripts/measure_prompt_load.py`, whic
 ## Threshold Philosophy
 - The Conductor's default prompt load must remain as small as possible to ensure fast and cheap routing.
 - Hard CI failure thresholds will not be introduced until baseline metrics show long-term stability and predictability.
-- Exceeding a soft threshold does not fail the build, but triggers a mandatory maintainer review.
+- Exceeding a soft threshold does not fail the build or CI, but triggers maintainer review.
 
-## Current Baseline
-As of the initial measurement, the baseline metrics are:
+## Original Baseline
+These historical values are retained for comparison and are not current replacement baselines:
 - Group A (Core Router-First Minimal Context): ~7087 estimated tokens
 - Group B (Broader Routing Context): ~5027 estimated tokens
 - Group C (Governance Context): ~2636 estimated tokens
 - Group D (Baseline Performance Docs): ~2330 estimated tokens
 - Grand Total: ~17080 estimated tokens
 
+## Current Observed Measurements
+Observed on 2026-07-11 from the clean `main` checkout before Wave 5B implementation edits:
+- Group A: 8028 estimated tokens
+- Group B: 6147 estimated tokens
+- Group C: 4411 estimated tokens
+- Group D: 2330 estimated tokens
+- Grand Total: 20916 estimated tokens
+- Conductor: 2248 estimated tokens
+
+These are observations, not automatically approved replacement baselines. Re-baselining requires an explicit maintainer decision.
+
 ## Soft Thresholds
-Soft thresholds act as observability-only and report-only triggers. There is no hard CI prompt-load failure threshold yet.
+Soft thresholds act as observability-only and report-only triggers. The checker reports Group A, Group B, Group C, Grand Total, Conductor growth, and Group D measurement visibility. There is no hard CI prompt-load failure threshold yet.
 - **Group A (Core Context)**: Should remain under 8,000 estimated tokens.
 - **Group B (Broader Context)**: Should remain under 6,000 estimated tokens.
 - **Group C (Governance Context)**: Allowed to grow as compliance rules evolve, but should remain under 4,000 estimated tokens.
