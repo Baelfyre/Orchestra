@@ -27,9 +27,6 @@
         "ADAPTED_PATTERN",
         "CODE_REUSE_REVIEW_REQUIRED",
         "TEST_CORPUS_CANDIDATE",
-        "REJECTED",
-        "DEFERRED",
-        "DUPLICATE",
         "OUT_OF_SCOPE"
       ],
       "description": "Pattern classification status."

@@ -216,3 +216,26 @@ To assure that governance standards strictly enforce metadata shape, registry fo
 - internal/artificer/records/README.md
 - scripts/governance_check.py
 - tests/behavior/run_tests.py
+
+---
+
+## Date: 2026-07-12
+
+**Decision:**
+Implemented the Phase 4A Artificer Governance Contracts foundation. Created native JSON schemas for Audit Reports, Evolution Proposals, Governance Decisions, and Promotion Records, separating governance outcomes from extraction classification. Created isolated read-only registries for the new records and explicitly documented the Phase 4 no-execution and read-only boundaries.
+
+**Reason:**
+Phase 4 separates extraction taxonomy from governance decisions, ensuring a robust, contract-only governance foundation. It avoids altering the legacy Phase 3 schemas and validators (`scripts/validate_artificer_internal.py`), preserving backwards compatibility with existing governance infrastructure while defining the strict Phase 4 boundaries through new, explicit schemas and registry structures.
+
+**Rejected Alternatives:**
+- Modifying legacy schemas and validators (rejected; doing so would break existing tests and validators explicitly forbidden in the original Phase 4A scope).
+
+**Affected Components:**
+- internal/artificer/AUDIT_REPORT_SCHEMA.json
+- internal/artificer/EVOLUTION_PROPOSAL_SCHEMA.json
+- internal/artificer/GOVERNANCE_DECISION_SCHEMA.json
+- internal/artificer/PROMOTION_RECORD_SCHEMA.json
+- docs/internal/SECURITY_BOUNDARIES.md
+- docs/internal/EVIDENCE_REQUIREMENTS.md
+- internal/artificer/CHECKLIST.md
+- docs/internal/PATTERN_CLASSIFICATION.md

@@ -2,6 +2,9 @@
 
 Artificer classifies discovered design patterns using a strict taxonomy to ensure clear licensing, compliance, and architectural alignment.
 
+> [!IMPORTANT]
+> Pattern classification is enforced by `PATTERN_SCHEMA.json` and is separate from governance outcomes. `REJECTED`, `DEFERRED`, and `DUPLICATE` are governance concepts, not valid pattern classifications; they belong in Phase 4B governance decision and cross-record validation.
+
 ## Classifications
 
 ### 1. `REFERENCE_ONLY`
@@ -24,18 +27,10 @@ Artificer classifies discovered design patterns using a strict taxonomy to ensur
 - **Action**: Safe to adapt into tests, mocking fixtures, or validation scripts.
 - **Licensing Impact**: Must verify that test distribution does not violate source license terms.
 
-### 5. `REJECTED`
-- **Definition**: Pattern was reviewed and deemed unsuitable for Orchestra (e.g. over-engineered, insecure, or out of scope).
-- **Action**: Log under rejected status with reason.
-
-### 6. `DEFERRED`
-- **Definition**: Pattern is interesting but not currently prioritized.
-- **Action**: Hold for future evolution phases.
-
-### 7. `DUPLICATE`
-- **Definition**: The pattern is functionally identical to an existing Orchestra feature or a previously analyzed pattern.
-- **Action**: Reference the original pattern and skip new proposal creation.
-
-### 8. `OUT_OF_SCOPE`
+### 5. `OUT_OF_SCOPE`
 - **Definition**: Discovered code relates to domains that Orchestra does not own (e.g., application business logic).
 - **Action**: Stop evaluation.
+
+## Governance Boundary
+
+Phase 4A validates source-intake and pattern schemas only. It does not validate reviews, decisions, proposals, promotions, or cross-record relationships. Phase 4B will validate those governance records and their relationships. Rejection, deferral, and duplicate handling therefore require governance records rather than pattern classification values.

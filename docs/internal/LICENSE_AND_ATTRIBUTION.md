@@ -16,6 +16,9 @@ Every intake audit must evaluate the target repository's licensing state using t
   - Limit intake to **REFERENCE_ONLY** (concept-only).
   - Mandatory Governor escalation is required.
 
+> [!NOTE]
+> In Phase 4, Governor escalation is formally recorded via the `GOVERNANCE_DECISION_SCHEMA.json` contract.
+
 ---
 
 ## 2. License Compatibility Matrix
@@ -43,7 +46,7 @@ Only licenses compatible with Orchestra's MIT license may be considered for code
 - Any direct copying or adaptation of actual code lines:
   - Restricted to compatible licenses (MIT/BSD).
   - Triggers **Attribution Requirements**.
-  - Must be reviewed and approved by The Governor.
+  - Must be reviewed and approved by The Governor via a documented Governance Decision.
 
 ### Dependency Integration
 - If the pattern suggests adding an external package/library as a new dependency:
@@ -55,7 +58,7 @@ Only licenses compatible with Orchestra's MIT license may be considered for code
 ## 4. Asset & Dataset Provenance
 - If the repository includes assets (images, fonts, icons) or datasets (test fixtures, mock data):
   - Do NOT copy them without verifying their individual license terms (Creative Commons, SIL, etc.).
-  - Document their provenance in the Source Audit.
+  - Document their provenance in the Phase 4 `AUDIT_REPORT_SCHEMA.json` Source Audit.
 
 ---
 

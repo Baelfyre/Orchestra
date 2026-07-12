@@ -17,7 +17,7 @@ Use this checklist during every repository audit to evaluate design patterns for
 ## Phase 2: Pattern Analysis
 - [ ] Identify candidate design patterns (separating layout, business logic, persistence, and state).
 - [ ] Map each candidate pattern to a specific Orchestra specialist domain.
-- [ ] Classify each pattern (e.g., `REFERENCE_ONLY`, `ADAPTED_PATTERN`, `CODE_REUSE_REVIEW_REQUIRED`).
+- [ ] Classify extraction type (e.g., `REFERENCE_ONLY`, `ADAPTED_PATTERN`, `CODE_REUSE_REVIEW_REQUIRED`) according to Phase 4 `PATTERN_SCHEMA.json`. (Governance outcomes like `REJECTED` are handled separately).
 - [ ] Document specific files, line ranges, and behavioral context for each pattern.
 
 ## Phase 3: Governance Mapping
@@ -25,8 +25,9 @@ Use this checklist during every repository audit to evaluate design patterns for
 - [ ] Ensure attribution blocks are generated if the pattern relies on adapted code.
 - [ ] Check if the proposed change requires changes to the Orchestra public manifest (`plugin.json`) — if yes, verify why and flag for review.
 
-## Phase 4: Amalgamation and Proposal
-- [ ] Generate the Individual Source Audit report.
-- [ ] Draft the Orchestra-native Evolution Proposal.
+## Phase 4: Amalgamation and Proposal (Phase 4 Contracts)
+- [ ] Generate the Individual Source Audit JSON record (`AUDIT_REPORT_SCHEMA.json`).
+- [ ] Draft the Orchestra-native Evolution Proposal JSON record (`EVOLUTION_PROPOSAL_SCHEMA.json`).
+- [ ] Draft independent Governance Decisions (`GOVERNANCE_DECISION_SCHEMA.json`) for items that are blocked, rejected, deferred, or duplicate.
 - [ ] Route the proposal to Arbiter for validation check.
 - [ ] Route the proposal to Governor and Steward for business and legal clearance.

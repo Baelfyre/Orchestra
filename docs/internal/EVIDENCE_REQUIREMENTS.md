@@ -21,7 +21,7 @@ Every piece of evidence supporting a proposed pattern must be classified into on
 - **`UNVERIFIED`**: The pattern's functional behavior or execution state remains untested and unvalidated.
 
 > [!WARNING]
-> **No-Execution Boundary**: Artificer must never attempt to create `RUNTIME_CONFIRMED` evidence by executing untrusted repository code, scripts, or tests itself. Any dynamic runtime execution must be classified under `RUNTIME_CONFIRMED_BY_AUTHORIZED_EXTERNAL_VALIDATION` and must be performed in an isolated sandbox under a separately authorized maintenance task.
+> **Phase 4 No-Execution Boundary**: Artificer must never attempt to create `RUNTIME_CONFIRMED` evidence by executing untrusted repository code, scripts, or tests itself. Any dynamic runtime execution must be classified under `RUNTIME_CONFIRMED_BY_AUTHORIZED_EXTERNAL_VALIDATION` and must be performed in an isolated sandbox under a separately authorized maintenance task. In Phase 4, Artificer relies entirely on static source-code evaluation.
 
 ### 3. Structural Analysis
 - Document the dependencies required by the pattern.

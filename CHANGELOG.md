@@ -48,6 +48,9 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 ## Unreleased
 
 ### Added
+- Added Phase 4A Artificer governance contracts, including native JSON schemas for Individual Source Audits (`AUDIT_REPORT_SCHEMA.json`), Orchestra Evolution Proposals (`EVOLUTION_PROPOSAL_SCHEMA.json`), Governance Decisions (`GOVERNANCE_DECISION_SCHEMA.json`), and Pattern Catalog Promotion Records (`PROMOTION_RECORD_SCHEMA.json`).
+- Established isolated read-only registries for Phase 4A records (`reviews/`, `decisions/`, `proposals/`, and `promotions/`).
+- Documented Phase 4A read-only and no-execution boundaries in `EXTERNAL_SOURCE_INTAKE.md`, `SECURITY_BOUNDARIES.md`, and `EVIDENCE_REQUIREMENTS.md`.
 - Added Phase 3 Artificer record-instance validator (`scripts/validate_artificer_records.py`) with Draft-7 schema subset validation, POSIX-safe repository path constraints, and cross-record registry bundle verification.
 - Added 54 behavior tests (`tests/behavior/test_artificer_records.py`) providing a rigorous regression matrix that executes real validator instances against real schema copies for passing/failing conditions, empty examined-ranges, cross-platform paths, and strict schema configurations.
 - Wired `scripts/validate_artificer_records.py` into the CI governance script and automated runner `tests/behavior/run_tests.py`.

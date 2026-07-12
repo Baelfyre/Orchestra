@@ -44,6 +44,7 @@ class TestArtificerRecordsValidator(unittest.TestCase):
             "repository_owner": "test",
             "canonical_url": "https://example.com/test/repo",
             "license": "MIT",
+            "default_branch": "main",
             "reviewed_commit_sha": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
             "review_date": "2026-07-11",
             "files_examined": [
@@ -174,15 +175,18 @@ class TestArtificerRecordsValidator(unittest.TestCase):
         failures = validate_repository(self.repo_root)
         self.assertEqual(len(failures), 0)
 
-    def test_pass_omitted_default_branch(self):
+    def test_failure_missing_default_branch(self):
         bundle_dir = self._create_valid_bundle(include_pattern=False)
         bundle_id = bundle_dir.name
         i = self._valid_intake()
-        if "default_branch" in i:
-            del i["default_branch"]
+        del i["default_branch"]
         self._write_intake(bundle_id, i)
         failures = validate_repository(self.repo_root)
-        self.assertEqual(len(failures), 0)
+        self.assert_failure(
+            failures,
+            target_contains="source-intake.json",
+            reason_contains="missing required field 'default_branch'",
+        )
 
     def test_pass_git_url_and_trailing_slash_url(self):
         bundle_dir = self._create_valid_bundle(include_pattern=False)
@@ -412,6 +416,20 @@ class TestArtificerRecordsValidator(unittest.TestCase):
         self._write_intake(bundle_dir.name, i)
         failures = validate_repository(self.repo_root)
         self.assert_failure(failures, target_contains="source-intake.json", reason_contains="is not one of the allowed enum values")
+
+    def test_failure_governance_outcome_classification(self):
+        for classification in ("REJECTED", "DEFERRED", "DUPLICATE"):
+            with self.subTest(classification=classification):
+                bundle_dir = self._create_valid_bundle(include_pattern=True)
+                pattern = self._valid_pattern()
+                pattern["classification"] = classification
+                self._write_pattern(bundle_dir.name, "test-pattern.json", pattern)
+                failures = validate_repository(self.repo_root)
+                self.assert_failure(
+                    failures,
+                    target_contains="test-pattern.json",
+                    reason_contains="is not one of the allowed enum values",
+                )
 
     def test_failure_invalid_sha_pattern(self):
         bundle_dir = self._create_valid_bundle()

@@ -1,0 +1,93 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ArtificerEvolutionProposal",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0"],
+      "description": "The fixed schema version."
+    },
+    "proposal_id": {
+      "type": "string",
+      "description": "Unique identifier for the evolution proposal."
+    },
+    "title": {
+      "type": "string",
+      "description": "Short, descriptive title for the proposal."
+    },
+    "objective": {
+      "type": "string",
+      "description": "The main goal of the evolution."
+    },
+    "source_audit_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of associated audit report IDs."
+    },
+    "selected_patterns": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "decision_id": { "type": "string" },
+          "pattern_record_path": { "type": "string" },
+          "target_component": { "type": "string" },
+          "evolution_mechanism": {
+            "type": "string",
+            "enum": [
+              "CONCEPTUAL_ADAPTATION",
+              "SAFE_REWRITE",
+              "DIRECT_REUSE_REVIEW_REQUIRED",
+              "TEST_CORPUS_ADAPTATION"
+            ]
+          },
+          "owner_specialist": { "type": "string" },
+          "rationale": { "type": "string" }
+        },
+        "required": [
+          "decision_id",
+          "pattern_record_path",
+          "target_component",
+          "evolution_mechanism",
+          "owner_specialist",
+          "rationale"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "verification_plan": {
+      "type": "string",
+      "description": "How the implementation of this proposal will be verified."
+    },
+    "governance_handoff": {
+      "type": "string",
+      "description": "Information required for governance handover."
+    },
+    "proposal_status": {
+      "type": "string",
+      "enum": [
+        "DRAFT",
+        "UNDER_REVIEW",
+        "APPROVED",
+        "REVISION_REQUIRED",
+        "DEFERRED",
+        "REJECTED",
+        "BLOCKED"
+      ],
+      "description": "Overall status of the proposal."
+    }
+  },
+  "required": [
+    "schema_version",
+    "proposal_id",
+    "title",
+    "objective",
+    "source_audit_ids",
+    "selected_patterns",
+    "verification_plan",
+    "governance_handoff",
+    "proposal_status"
+  ],
+  "additionalProperties": false
+}

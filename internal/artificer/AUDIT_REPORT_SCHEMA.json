@@ -1,0 +1,153 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ArtificerAuditReport",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0"],
+      "description": "The fixed schema version."
+    },
+    "audit_report_id": {
+      "type": "string",
+      "description": "Unique identifier for the audit report."
+    },
+    "source_bundle_id": {
+      "type": "string",
+      "description": "Identifier of the source bundle being audited."
+    },
+    "source_intake_path": {
+      "type": "string",
+      "description": "Path to the corresponding source-intake.json."
+    },
+    "source_repository": {
+      "type": "string",
+      "description": "Name of the target repository, format: owner/name."
+    },
+    "reviewed_commit_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-fA-F]{40}$",
+      "description": "The full 40-character SHA of the reviewed commit."
+    },
+    "audit_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the audit in YYYY-MM-DD format."
+    },
+    "executive_summary": {
+      "type": "string",
+      "description": "High-level summary of the audit."
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "finding_id": { "type": "string" },
+          "pattern_record_path": { "type": "string" },
+          "title": { "type": "string" },
+          "finding": { "type": "string" },
+          "recommendation": { "type": "string" },
+          "assigned_specialist": { "type": "string" },
+          "risk_level": {
+            "type": "string",
+            "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"]
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "bucket": {
+                  "type": "string",
+                  "enum": [
+                    "SOURCE_CONFIRMED",
+                    "DOCUMENTATION_CLAIM",
+                    "STATIC_ANALYSIS",
+                    "EXISTING_TEST_EVIDENCE",
+                    "RUNTIME_CONFIRMED_BY_AUTHORIZED_EXTERNAL_VALIDATION",
+                    "INFERENCE",
+                    "UNVERIFIED"
+                  ]
+                },
+                "source_file": { "type": "string" },
+                "line_range": { "type": "string", "pattern": "^\\d+-\\d+$" },
+                "summary": { "type": "string" }
+              },
+              "required": ["bucket", "source_file", "line_range", "summary"],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "finding_id",
+          "pattern_record_path",
+          "title",
+          "finding",
+          "recommendation",
+          "assigned_specialist",
+          "risk_level",
+          "evidence"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "license_analysis": {
+      "type": "object",
+      "properties": {
+        "detected_license": { "type": "string" },
+        "compatibility_assessment": {
+          "type": "string",
+          "enum": [
+            "COMPATIBLE",
+            "GOVERNOR_REVIEW_REQUIRED",
+            "INCOMPATIBLE",
+            "UNDETERMINED"
+          ]
+        },
+        "governor_review_required": { "type": "boolean" },
+        "summary": { "type": "string" }
+      },
+      "required": [
+        "detected_license",
+        "compatibility_assessment",
+        "governor_review_required",
+        "summary"
+      ],
+      "additionalProperties": false
+    },
+    "security_review": {
+      "type": "object",
+      "properties": {
+        "external_execution_performed": {
+          "type": "boolean",
+          "enum": [false],
+          "description": "Must be false to record that external execution was not performed by Artificer."
+        },
+        "summary": { "type": "string" }
+      },
+      "required": ["external_execution_performed", "summary"],
+      "additionalProperties": false
+    },
+    "limitations": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "List of limitations associated with this audit report."
+    }
+  },
+  "required": [
+    "schema_version",
+    "audit_report_id",
+    "source_bundle_id",
+    "source_intake_path",
+    "source_repository",
+    "reviewed_commit_sha",
+    "audit_date",
+    "executive_summary",
+    "findings",
+    "license_analysis",
+    "security_review",
+    "limitations"
+  ],
+  "additionalProperties": false
+}
