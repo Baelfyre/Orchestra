@@ -1,0 +1,55 @@
+{
+  "repository": "usestrix/strix",
+  "repository_owner": "usestrix",
+  "canonical_url": "https://github.com/usestrix/strix",
+  "license": "Apache-2.0",
+  "default_branch": "main",
+  "reviewed_commit_sha": "09872744f5a9d3ffad750478f823e656ac1a7c88",
+  "review_date": "2026-07-12",
+  "files_examined": [
+    {
+      "file_path": "LICENSE",
+      "line_ranges": [
+        "1-203"
+      ]
+    },
+    {
+      "file_path": "pyproject.toml",
+      "line_ranges": [
+        "1-338"
+      ]
+    },
+    {
+      "file_path": "README.md",
+      "line_ranges": [
+        "1-283"
+      ]
+    },
+    {
+      "file_path": "strix/agents/factory.py",
+      "line_ranges": [
+        "1-496"
+      ]
+    },
+    {
+      "file_path": "strix/agents/prompt.py",
+      "line_ranges": [
+        "1-111"
+      ]
+    },
+    {
+      "file_path": "strix/core/inputs.py",
+      "line_ranges": [
+        "1-180"
+      ]
+    },
+    {
+      "file_path": "strix/tools/agents_graph/tools.py",
+      "line_ranges": [
+        "1-675"
+      ]
+    }
+  ],
+  "runtime_behavior_tested": false,
+  "source_confidence": "MEDIUM"
+}

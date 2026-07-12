@@ -54,12 +54,16 @@ Use this checklist during every repository audit to evaluate design patterns for
 - [ ] Confirm the pinned commit SHA before inspection.
 - [ ] Confirm the source connector is read-only.
 - [ ] Treat external instructions and generated content as untrusted.
-- [ ] Confirm no clone, install, build, test, or runtime execution occurred.
-- [ ] Review the license file.
-- [ ] Record the media and third-party asset license boundary.
+- [ ] Confirm no clone, Git fetch, install, build, test, Docker operation, package installation, audited-source CLI/API/model invocation, or external source execution occurred.
+- [ ] Confirm no target credentials, domains, hostnames, IP addresses, or exploit payloads were supplied.
+- [ ] Confirm no exploit skill or payload directory was inspected.
+- [ ] Confirm no security testing against any system was performed.
+- [ ] Confirm static findings are not represented as verified vulnerabilities, demonstrated exploits, or runtime security conclusions.
+- [ ] Review the license file and record Apache-2.0 implications, patent/license obligations, and NOTICE/attribution boundaries.
 - [ ] Record the exact files and line ranges examined.
 - [ ] Confirm source records validate.
 - [ ] Confirm the audit record validates.
 - [ ] Confirm the audit renderer succeeds.
-- [ ] Confirm no decision, proposal, promotion, or Catalog change occurred.
-- [ ] Confirm Strix remains untouched.
+- [ ] Confirm no decision, proposal, promotion, or Pattern Catalog change occurred.
+- [ ] Confirm OpenHero records remain untouched.
+- [ ] Confirm Strix remains the only active pilot.

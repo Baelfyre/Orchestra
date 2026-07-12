@@ -1,0 +1,9 @@
+{
+  "name": "Declared Scope Context",
+  "description": "Builds structured authorization context from configured targets, identifies the declared scope and authorization sources, and states that user-provided instructions do not expand the authorized target set.",
+  "source_file": "strix/core/inputs.py",
+  "line_range": "97-122",
+  "classification": "REFERENCE_ONLY",
+  "assigned_specialist": "arbiter",
+  "license_implications": "The source is Apache-2.0 licensed. Treat the design as conceptual reference only. Substantial reuse requires Governor review of license-copy, notice, modified-file, attribution, patent, and trademark obligations."
+}

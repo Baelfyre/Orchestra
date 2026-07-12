@@ -353,3 +353,59 @@ remain later manual actions.
 - docs/internal/ARTIFICER_PHASE4_GOVERNANCE_CONTRACT.md
 - docs/internal/ARTIFICER_WORKFLOW.md
 - internal/artificer/CHECKLIST.md
+---
+
+## Date: 2026-07-12
+
+**Decision:**
+Conduct the Strix pilot independently from the completed OpenHero pilot. Phase
+4.5-B is pinned to commit
+`09872744f5a9d3ffad750478f823e656ac1a7c88` and is limited to static,
+read-only inspection of selected orchestration and safety-boundary files.
+
+No Strix code, dependency, Docker image, model, agent, scan, target, exploit,
+payload, API, browser, shell, proxy, or external tool may be executed. Offensive
+skill and payload directories remain excluded from the audit.
+
+The reviewed repository and package metadata declare Apache-2.0. Any future
+reuse, adaptation, or distribution requires Governor and maintainer review of
+license-copy, attribution, NOTICE, modified-file, patent, and trademark
+obligations.
+
+The fail-open system-prompt rendering mechanism is recorded as an
+`OUT_OF_SCOPE` source-pattern classification. It is not a governance rejection.
+
+OpenHero records remain unchanged. Strix findings are audit evidence only and
+do not constitute a vulnerability disclosure, governance approval, proposal,
+promotion, Pattern Catalog entry, pentesting authorization, or implementation
+authorization.
+
+**Reason:**
+Strix is a high-risk offensive-security source whose documented capabilities
+include dynamic testing, shell access, Docker-backed execution, exploitation,
+and proof-of-concept generation. Restricting the pilot to pinned static evidence
+keeps the Artificer audit non-executing, independently reviewable, and within
+the approved governance boundary.
+
+**Rejected Alternatives:**
+- Auditing Strix together with OpenHero (rejected; the pilots require separate evidence and review chains).
+- Installing or executing Strix to validate runtime behavior (rejected; external execution is prohibited).
+- Reviewing exploit skills, payloads, targets, or proof-of-concept artifacts (rejected; outside the authorized pilot scope).
+- Treating the prompt-rendering finding as a governance rejection (rejected; this phase creates source and audit evidence only).
+- Advancing directly into decisions, proposals, promotions, Catalog synchronization, or implementation (rejected; those remain later manual actions).
+
+**Affected Components:**
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- docs/internal/ARTIFICER_PHASE4_GOVERNANCE_CONTRACT.md
+- docs/internal/ARTIFICER_WORKFLOW.md
+- internal/artificer/CHECKLIST.md
+- internal/artificer/records/usestrix__strix__09872744f5a9/source-intake.json
+- internal/artificer/records/usestrix__strix__09872744f5a9/patterns/declared-scope-context.json
+- internal/artificer/records/usestrix__strix__09872744f5a9/patterns/validated-specialist-delegation.json
+- internal/artificer/records/usestrix__strix__09872744f5a9/patterns/lifecycle-gated-agent-completion.json
+- internal/artificer/records/usestrix__strix__09872744f5a9/patterns/run-wide-tool-extension-registry.json
+- internal/artificer/records/usestrix__strix__09872744f5a9/patterns/fail-open-system-prompt-rendering.json
+- internal/artificer/reviews/usestrix__strix__09872744f5a9/audit-report.json
