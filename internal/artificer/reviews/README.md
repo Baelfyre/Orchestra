@@ -14,3 +14,17 @@ Files must be placed in a directory corresponding to the source bundle ID:
 *   **No Approval Authority**: No record in this registry grants Artificer approval or implementation authority.
 *   **No External Modifications**: No registry may modify an external repository.
 *   **Empty State**: An empty registry is valid.
+
+## Phase 4C-A Read-Only Rendering
+
+Render one validated audit report to standard output:
+
+```powershell
+python scripts/render_artificer_audit_report.py `
+  --audit internal/artificer/reviews/<bundle-id>/audit-report.json
+```
+
+Use `--repo-root <path>` only when invoking the renderer outside the repository
+root. The renderer creates no file and never updates governance records or
+`docs/internal/PATTERN_CATALOG.md`. Rendered Markdown is a human-readable view,
+not governance authority; validated JSON records remain canonical.

@@ -53,6 +53,7 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 ## Unreleased
 
 ### Added
+- Added Phase 4C-A deterministic, read-only Markdown rendering for validated Artificer audit reports, with stdout-only CLI output, canonical ordering, Markdown safety, governance integration, and behavior coverage.
 - Added Phase 4A Artificer governance contracts, including native JSON schemas for Individual Source Audits (`AUDIT_REPORT_SCHEMA.json`), Orchestra Evolution Proposals (`EVOLUTION_PROPOSAL_SCHEMA.json`), Governance Decisions (`GOVERNANCE_DECISION_SCHEMA.json`), and Pattern Catalog Promotion Records (`PROMOTION_RECORD_SCHEMA.json`).
 - Established isolated read-only registries for Phase 4A records (`reviews/`, `decisions/`, `proposals/`, and `promotions/`).
 - Documented Phase 4A read-only and no-execution boundaries in `EXTERNAL_SOURCE_INTAKE.md`, `SECURITY_BOUNDARIES.md`, and `EVIDENCE_REQUIREMENTS.md`.
