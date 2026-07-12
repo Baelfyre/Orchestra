@@ -1,0 +1,9 @@
+{
+  "name": "Responsive Progressive Gallery",
+  "description": "Combines viewport-derived page sizing, memoized category filtering, and sentinel-based incremental rendering for a responsive media gallery.",
+  "source_file": "components/sections/HeroGallery/index.tsx",
+  "line_range": "12-117",
+  "classification": "REFERENCE_ONLY",
+  "assigned_specialist": "cloak",
+  "license_implications": "The source is MIT-licensed. Any substantial reuse requires preservation of the copyright and permission notice. Prefer an independently implemented Orchestra-native equivalent."
+}

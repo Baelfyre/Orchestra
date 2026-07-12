@@ -82,8 +82,11 @@ The canonical Phase 4.5 pilot repositories are strictly defined as:
 *   `usestrix/strix` (https://github.com/usestrix/strix)
 
 **Explicit constraints on pilot sources:**
-*   Neither repository is being audited before Phase 4.5.
-*   No commit SHA is pinned yet.
+*   Phase 4 is complete through PR #166.
+*   OpenHero is pinned to commit `16ffaa7e6dc39eb390011d81c420353b5d1dbaff`.
+*   OpenHero is the active Phase 4.5-A pilot.
+*   Strix remains unpinned and unaudited.
 *   No files are copied.
 *   No external code is executed.
+*   No governance outcome is implied by the audit.
 *   The repositories will be audited independently after Phase 4 is complete.
