@@ -409,3 +409,36 @@ the approved governance boundary.
 - internal/artificer/records/usestrix__strix__09872744f5a9/patterns/run-wide-tool-extension-registry.json
 - internal/artificer/records/usestrix__strix__09872744f5a9/patterns/fail-open-system-prompt-rendering.json
 - internal/artificer/reviews/usestrix__strix__09872744f5a9/audit-report.json
+
+---
+
+## Date: 2026-07-12
+
+**Decision:**
+Recorded Phase 5B-A OpenHero governance decisions for three approved concept-only reference patterns, one deferred concept-only UI pattern, and one rejected security anti-pattern. No Strix governance decisions, proposals, promotions, Pattern Catalog changes, or implementation authority were created in this Phase 5B-A record set.
+
+**Reason:**
+The Phase 5A independent governance review established the corrected OpenHero dispositions, and the Maintainer adopted those outcomes. Recording OpenHero decisions separately preserves licensing and security review clarity, keeps the MIT-licensed OpenHero governance chain independent from the Apache-2.0 Strix review, and prevents premature proposal, promotion, Pattern Catalog, or implementation advancement.
+
+Approved `REFERENCE_ONLY` patterns remain restricted to `CONCEPT_ONLY`. The deferred UI pattern requires an approved roadmap need before advancement. The `OUT_OF_SCOPE` substring-domain mechanism is rejected and implementation-blocked. No OpenHero source reuse, media reuse, or third-party asset reuse is authorized.
+
+**Rejected Alternatives:**
+- Recording OpenHero and Strix decisions together.
+- Automatically approving all audited patterns.
+- Approving Responsive Progressive Gallery without a roadmap need.
+- Approving the substring allowlist as an implementation pattern.
+- Creating a proposal or promotion in the same phase.
+- Copying external source implementation.
+
+**Affected Components:**
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- docs/internal/ARTIFICER_PHASE4_GOVERNANCE_CONTRACT.md
+- docs/internal/ARTIFICER_WORKFLOW.md
+- internal/artificer/decisions/cristianolivera1__openhero__16ffaa7e6dc3/fallback-backed-code-loading.json
+- internal/artificer/decisions/cristianolivera1__openhero__16ffaa7e6dc3/layered-archive-submission-validation.json
+- internal/artificer/decisions/cristianolivera1__openhero__16ffaa7e6dc3/optimistic-engagement-state-reconciliation.json
+- internal/artificer/decisions/cristianolivera1__openhero__16ffaa7e6dc3/responsive-progressive-gallery.json
+- internal/artificer/decisions/cristianolivera1__openhero__16ffaa7e6dc3/substring-domain-allowlist.json

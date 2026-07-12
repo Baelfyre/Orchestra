@@ -54,6 +54,7 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 
 ### Added
 - Added Phase 4.5-A OpenHero pilot source-intake, pattern, and audit records through a pinned static read-only GitHub inspection with no decisions, proposals, promotions, or Pattern Catalog changes.
+- Added Phase 5B-A governed OpenHero decision records for three approved concept-only patterns, one deferred concept-only UI pattern, and one rejected security anti-pattern, without creating proposals, promotions, Pattern Catalog entries, or implementation authority.
 - Added Phase 4.5-B Strix pilot source-intake, pattern, and audit records through a pinned static high-risk read-only GitHub inspection with no decisions, proposals, promotions, or Pattern Catalog changes.
 - Added Phase 4C-B deterministic, read-only Pattern Catalog synchronization validation, canonical Catalog projection, strict governance integration, and behavior coverage without automatic Catalog writes or promotion authority.
 - Added Phase 4C-A deterministic, read-only Markdown rendering for validated Artificer audit reports, with stdout-only CLI output, canonical ordering, Markdown safety, governance integration, and behavior coverage.
