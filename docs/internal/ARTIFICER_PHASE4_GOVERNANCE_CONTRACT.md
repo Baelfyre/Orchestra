@@ -82,11 +82,12 @@ The canonical Phase 4.5 pilot repositories are strictly defined as:
 *   `usestrix/strix` (https://github.com/usestrix/strix)
 
 **Explicit constraints on pilot sources:**
-*   Phase 4 is complete through PR #166.
-*   OpenHero is pinned to commit `16ffaa7e6dc39eb390011d81c420353b5d1dbaff`.
-*   OpenHero is the active Phase 4.5-A pilot.
-*   Strix remains unpinned and unaudited.
+*   Phase 4C-B is complete through PR #166.
+*   OpenHero Phase 4.5-A is completed through PR #167 and remains frozen for this audit.
+*   Strix is the active Phase 4.5-B pilot and is pinned to commit `09872744f5a9d3ffad750478f823e656ac1a7c88`.
+*   The Strix pilot has a heightened no-execution boundary for offensive-security source inspection.
+*   Offensive skills, payloads, exploit directories, and proof-of-concept content are excluded from inspection.
 *   No files are copied.
 *   No external code is executed.
-*   No governance outcome is implied by the audit.
-*   The repositories will be audited independently after Phase 4 is complete.
+*   The audit implies no governance outcome, approval, proposal, promotion, or Pattern Catalog action.
+*   Both pilot audits remain independently reviewable.

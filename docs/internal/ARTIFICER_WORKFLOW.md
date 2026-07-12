@@ -74,6 +74,6 @@ Approved Decision -> Approved Proposal -> Manual Promotion Record -> Manual Patt
 2. The implementation is owned by the designated Orchestra specialist (e.g. Cloak for frontend, Clockwork for backend structure), not by Artificer.
 
 ### Phase 4.5 Pilot Sequence
-Maintainer Authorization -> Pinned External Commit -> Static Read-Only Inspection -> Immutable Source Intake -> Immutable Pattern Records -> Governed Audit Report -> Independent Audit Review -> Later Manual Governance Decision
+Maintainer Authorization -> High-Risk Source Classification -> Pinned External Commit -> Restricted Static Source Selection -> Read-Only Inspection -> Immutable Source Intake -> Immutable Pattern Records -> Governed Audit Report -> Independent Audit Review -> Later Manual Governance Decision
 
-The OpenHero pilot audit does not advance automatically into proposal, promotion, Catalog synchronization, or implementation.
+The Strix pilot is a high-risk offensive-security audit and does not advance automatically into execution, vulnerability testing, proposals, promotions, Catalog synchronization, or implementation.
