@@ -395,14 +395,26 @@ class GovernanceRecordsTests(unittest.TestCase):
             self.skipTest(
                 "filesystem is case-insensitive in the temporary directory"
             )
-        collision_path = paths["proposal"].with_name("Proposal-1.json")
-        shutil.copy2(paths["proposal"], collision_path)
-        self.assert_validation_failure(
-            root,
+        collision_path1 = paths["proposal"].with_name("Proposal-1.json")
+        shutil.copy2(paths["proposal"], collision_path1)
+        failures1 = validator.validate_repository(root)
+        self.assert_failure(
+            failures1,
             target_contains="proposal-1.json",
             reason_contains="Case-insensitive filename collision",
-            remediation_contains="case sensitivity",
         )
+        collision_path1.unlink()
+
+        # Opposite creation order
+        collision_path2 = paths["proposal"].with_name("PROPOSAL-1.json")
+        shutil.copy2(paths["proposal"], collision_path2)
+        failures2 = validator.validate_repository(root)
+        self.assert_failure(
+            failures2,
+            target_contains="PROPOSAL-1.json",
+            reason_contains="Case-insensitive filename collision",
+        )
+        self.assertEqual(len(failures1), len(failures2))
 
     def test_registry_symlink_fails_when_supported(self):
         root, _ = self.with_repo("audit")
@@ -417,6 +429,51 @@ class GovernanceRecordsTests(unittest.TestCase):
             reason_contains="Symbolic links are not permitted in governance registries",
             remediation_contains="Replace the symbolic link",
         )
+
+    def test_registry_ancestor_symlinks_fail_when_supported(self):
+        root, _ = self.with_repo("audit")
+        reviews_dir = root / "internal/artificer/reviews"
+        temp_reviews = root / "temp_reviews"
+        shutil.move(str(reviews_dir), str(temp_reviews))
+        try:
+            reviews_dir.symlink_to(temp_reviews, target_is_directory=True)
+        except OSError as exc:
+            shutil.move(str(temp_reviews), str(reviews_dir))
+            self.skipTest(f"symbolic links unsupported: {exc}")
+        self.assert_validation_failure(
+            root,
+            target_contains="internal/artificer/reviews",
+            reason_contains="Registry directory is missing or is a symbolic link",
+            remediation_contains="Create the required internal/artificer/reviews/ directory as a regular directory.",
+        )
+        reviews_dir.unlink()
+        shutil.move(str(temp_reviews), str(reviews_dir))
+
+        records_dir = root / "internal/artificer/records"
+        temp_records = root / "temp_records"
+        shutil.move(str(records_dir), str(temp_records))
+        records_dir.symlink_to(temp_records, target_is_directory=True)
+        self.assert_validation_failure(
+            root,
+            target_contains="audit-report.json",
+            reason_contains="Source bundle 'orchestra__orchestra__0123456789ab' is missing",
+            remediation_contains="Restore a valid Phase 3 source bundle",
+        )
+        records_dir.unlink()
+        shutil.move(str(temp_records), str(records_dir))
+
+        patterns_dir = records_dir / BUNDLE / "patterns"
+        temp_patterns = root / "temp_patterns"
+        shutil.move(str(patterns_dir), str(temp_patterns))
+        patterns_dir.symlink_to(temp_patterns, target_is_directory=True)
+        self.assert_validation_failure(
+            root,
+            target_contains="audit-report.json",
+            reason_contains="Source bundle 'orchestra__orchestra__0123456789ab' is missing",
+            remediation_contains="Restore a valid Phase 3 source bundle",
+        )
+        patterns_dir.unlink()
+        shutil.move(str(temp_patterns), str(patterns_dir))
 
     def test_record_safety_schema_and_date_failures(self):
         cases = [

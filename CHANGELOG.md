@@ -15,6 +15,11 @@ Portable Runtime is the first Orchestra release that normalizes the repository a
 
 ## Pre-release Build History
 
+### Phase 4B Post-Merge Hardening
+
+- **Artificer Governance Validators:** Added rigorous rejection of ancestor-directory symlinks for governance registries, records, and pattern bundles.
+- **Artificer Governance Validators:** Corrected cross-platform list stability by introducing dual-key tuples `(item.name.casefold(), item.name)` in deterministic sort tie-breakers.
+
 ## v1.1.0 - Specialist Governance & Boundary Standard
 
 Specialist Governance & Boundary Standard is a documentation-, governance-, metadata-, and specialist-definition-focused release that builds on the `v1.0.0 Portable Runtime` baseline without changing runtime behavior, routing policy, validation logic, CI workflows, Dagger live-execution behavior, or governance decision semantics.
