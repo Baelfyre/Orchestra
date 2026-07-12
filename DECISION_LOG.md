@@ -195,3 +195,24 @@ A final review of PR #159 identified that several specialist boundary checks in 
 - DECISION_LOG.md
 - PROJECT_STATE.md
 - SESSION_HANDOFF.md
+
+---
+
+## Date: 2026-07-11
+
+**Decision:**
+Implemented the Phase 3 Artificer Source-Intake and Pattern-Record Instance Validator, then hardened its schema-configuration defenses, cross-platform path handling, and empty-examined-range tracking. A comprehensive test suite with 54 regression assertions ensures the validator rejects anomalies and missing layouts strictly.
+
+**Reason:**
+To assure that governance standards strictly enforce metadata shape, registry formatting, internal slug and boundary constraints, without ever evaluating external source logic dynamically or communicating with external APIs.
+
+**Rejected Alternatives:**
+- Using an external JSON schema validator (rejected; requires additional external Python dependencies).
+- Live code evaluation of patterns (rejected; explicitly forbidden by governance rules).
+
+**Affected Components:**
+- scripts/validate_artificer_records.py
+- tests/behavior/test_artificer_records.py
+- internal/artificer/records/README.md
+- scripts/governance_check.py
+- tests/behavior/run_tests.py

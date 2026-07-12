@@ -20,7 +20,9 @@ def main():
         {"Name": "test_dagger_guardrail.py", "Path": "scripts/test_dagger_guardrail.py"},
         {"Name": "test_prompt_load_thresholds.py", "Path": "tests/behavior/test_prompt_load_thresholds.py"},
         {"Name": "validate_artificer_internal.py", "Path": "scripts/validate_artificer_internal.py"},
-        {"Name": "test_artificer_internal.py", "Path": "tests/behavior/test_artificer_internal.py"}
+        {"Name": "test_artificer_internal.py", "Path": "tests/behavior/test_artificer_internal.py"},
+        {"Name": "validate_artificer_records.py", "Path": "scripts/validate_artificer_records.py"},
+        {"Name": "test_artificer_records.py", "Path": "tests/behavior/test_artificer_records.py"}
     ]
     
     failed = False

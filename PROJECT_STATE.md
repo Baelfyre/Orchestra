@@ -6,10 +6,12 @@
 * **Base Branch:** `main`
 * **Current Release:** `v1.1.1`
 * **Target Patch:** `v1.1.2`
-* **Current Stable State:** Artificer Phase 2 boundary validator and primary regression remediation merged through PR #159.
-* **Current Task:** Complete Artificer specialist-boundary polarity enforcement.
+* **Current Stable State:** Artificer Phase 2 completed through PR #160.
+* **Current Task:** Artificer Phase 3 source-intake and pattern-record instance validation.
+* **Latest Validation:** PR #161 passed Validate, Governance Check, and the complete Windows, Ubuntu, and macOS Cross-platform Validation matrix.
+* **Pending Next Steps:** Merge PR #161, synchronize local main, and begin design of the next governed Artificer phase.
+* **Most Recent Checkpoint:** 2026-07-12 - PR #161 restored to the approved eleven-file scope; 60 Phase 3 tests and all required CI workflows passed.
 * **Related but Forbidden Repo for this task:** `C:\+AA`
-* **Latest Validation:** Pending final polarity-remediation validation.
 * **Active Governance Gates:**
 
   * Workspace Boundary Gate
@@ -21,8 +23,7 @@
   * Acme Readiness Gate Expansion
 * **Current Risks:** Prompt-load thresholds remain advisory and current observed Groups A, B, C, and Grand Total exceed soft limits; no re-baselining decision exists.
 * **Do-Not-Touch Areas:** Do not edit website repo files from this task (`C:\+AA`).
-* **Pending Next Steps:** Merge the final polarity correction, then proceed to Phase 3 source-intake and pattern-record instance validation.
-* **Most Recent Checkpoint:** 2026-07-11 - PR #159 merged; remaining specialist-boundary polarity gaps identified.
+
 
 ## Token Efficiency Rationale
 
