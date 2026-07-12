@@ -62,7 +62,14 @@ There is no automatic cherry-picking of source code.
 Phase 4B provides deterministic validation for governance records and cross-record relationships, including reviews, decisions, proposals, and promotions. It validates only committed contracts and never rewrites source bundles, executes external code, or grants Artificer approval authority. Empty governance registries remain valid.
 
 ## 13. Phase 4C Renderer and Catalog-Gate Responsibilities
-Phase 4C owns markdown rendering for these records and the Pattern Catalog gate; Phase 4B does not mutate `PATTERN_CATALOG.md`.
+Phase 4C-A renders a validated `audit-report.json` record as deterministic
+Markdown. Rendering is read-only, writes only to standard output, and never
+updates governance JSON, source evidence, or `PATTERN_CATALOG.md`. Rendered
+Markdown is not governance authority; validated JSON records remain canonical.
+
+Phase 4C-B separately owns Pattern Catalog synchronization and its governance
+gate. Phase 4C-A grants no approval, implementation, promotion, or Catalog
+authority.
 
 ## 14. Phase 4.5 Pilot Sources
 The canonical Phase 4.5 pilot repositories are strictly defined as:

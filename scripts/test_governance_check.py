@@ -37,6 +37,12 @@ def test_artificer_governance_validator_is_registered():
     assert_equal("strict governance validator", script in gc.STRICT_VALIDATOR_SCRIPTS, True)
 
 
+def test_artificer_audit_renderer_is_registered_read_only():
+    script = "scripts/render_artificer_audit_report.py"
+    assert_equal("required audit renderer", script in gc.REQUIRED_VALIDATION_SCRIPTS, True)
+    assert_equal("renderer is not a strict validator", script in gc.STRICT_VALIDATOR_SCRIPTS, False)
+
+
 def test_repo_memory_path_check():
     with tempfile.TemporaryDirectory(prefix="governance-memory-test-") as temp_dir:
         repo_root = Path(temp_dir)
@@ -187,6 +193,8 @@ def main():
     assert_equal("repo path detection", gc.is_repo_relative_memory_path("scripts/governance_check.py"), True)
     assert_equal("external path ignored", gc.is_repo_relative_memory_path("C:/conductor/scripts/governance_check.py"), False)
     test_tracked_repo_files_only()
+    test_artificer_governance_validator_is_registered()
+    test_artificer_audit_renderer_is_registered_read_only()
     test_repo_memory_path_check()
     test_startup_state_claim_check()
     print("Governance check helper tests passed.")

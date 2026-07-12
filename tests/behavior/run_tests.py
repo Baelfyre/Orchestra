@@ -24,7 +24,8 @@ def main():
         {"Name": "validate_artificer_records.py", "Path": "scripts/validate_artificer_records.py"},
         {"Name": "test_artificer_records.py", "Path": "tests/behavior/test_artificer_records.py"},
         {"Name": "validate_artificer_governance_records.py", "Path": "scripts/validate_artificer_governance_records.py"},
-        {"Name": "test_artificer_governance_records.py", "Path": "tests/behavior/test_artificer_governance_records.py"}
+        {"Name": "test_artificer_governance_records.py", "Path": "tests/behavior/test_artificer_governance_records.py"},
+        {"Name": "test_artificer_audit_report_renderer.py", "Path": "tests/behavior/test_artificer_audit_report_renderer.py"}
     ]
     
     failed = False

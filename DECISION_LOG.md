@@ -255,3 +255,34 @@ The governance chain must remain traceable and fail closed without cloning, inst
 - tests/behavior/test_artificer_governance_records.py
 - scripts/governance_check.py
 - tests/behavior/run_tests.py
+
+---
+
+## Date: 2026-07-12
+
+**Decision:**
+Implemented Phase 4C-A as a standard-library-only, read-only renderer that
+validates the complete Phase 4B governance repository before converting one
+canonical audit JSON record into deterministic Markdown on standard output.
+
+**Reason:**
+Human-readable audit views must preserve validated JSON as the sole governance
+authority, remain independent of repository location and filesystem order, and
+create no Catalog, governance, source, or runtime writes.
+
+**Rejected Alternatives:**
+- Writing rendered Markdown files (rejected; Phase 4C-A is stdout-only).
+- Combining Catalog synchronization with rendering (rejected; Phase 4C-B owns
+  the separate Pattern Catalog gate).
+- Adding a Markdown or schema dependency (rejected; existing validation and the
+  Python standard library cover the required behavior).
+
+**Affected Components:**
+- scripts/render_artificer_audit_report.py
+- tests/behavior/test_artificer_audit_report_renderer.py
+- scripts/governance_check.py
+- scripts/test_governance_check.py
+- tests/behavior/run_tests.py
+- docs/internal/ARTIFICER_PHASE4_GOVERNANCE_CONTRACT.md
+- docs/internal/ARTIFICER_WORKFLOW.md
+- internal/artificer/reviews/README.md
