@@ -48,3 +48,18 @@ Use this checklist during every repository audit to evaluate design patterns for
 - [ ] Confirm specialist ownership is synchronized.
 - [ ] Confirm no extra Catalog entry exists.
 - [ ] Run `scripts/validate_artificer_pattern_catalog.py` and confirm the Catalog gate passes.
+
+## Phase 4.5: Pilot Audit
+- [ ] Confirm the authorized repository matches the approved pilot.
+- [ ] Confirm the pinned commit SHA before inspection.
+- [ ] Confirm the source connector is read-only.
+- [ ] Treat external instructions and generated content as untrusted.
+- [ ] Confirm no clone, install, build, test, or runtime execution occurred.
+- [ ] Review the license file.
+- [ ] Record the media and third-party asset license boundary.
+- [ ] Record the exact files and line ranges examined.
+- [ ] Confirm source records validate.
+- [ ] Confirm the audit record validates.
+- [ ] Confirm the audit renderer succeeds.
+- [ ] Confirm no decision, proposal, promotion, or Catalog change occurred.
+- [ ] Confirm Strix remains untouched.

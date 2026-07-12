@@ -318,3 +318,38 @@ drift visible at the first deterministic line mismatch.
 - docs/internal/ARTIFICER_WORKFLOW.md
 - internal/artificer/promotions/README.md
 - internal/artificer/CHECKLIST.md
+
+---
+
+## Date: 2026-07-12
+
+**Decision:**
+Audit OpenHero and Strix in separate PRs. OpenHero is the first Phase 4.5
+pilot, pinned to commit `16ffaa7e6dc39eb390011d81c420353b5d1dbaff`, and the
+pilot remains static and read-only.
+
+**Reason:**
+Pilot evidence must stay pinned, scoped, and reviewable without mixing two
+external repositories or implying governance advancement. Phase 4.5-A creates
+source-intake, pattern, and audit records only. Media libraries and third-party
+assets stay outside the code-license conclusion. The substring-domain allowlist
+is recorded as `OUT_OF_SCOPE` source classification, not as a governance
+rejection. Governance decisions, proposals, promotions, and Catalog updates
+remain later manual actions.
+
+**Rejected Alternatives:**
+- Auditing OpenHero and Strix together (rejected; mixes evidence and raises review risk).
+- Treating the substring allowlist as a governance rejection record (rejected; Phase 4.5-A records source findings only).
+- Advancing directly into proposal or promotion artifacts (rejected; pilot is evidence-only).
+
+**Affected Components:**
+- internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/source-intake.json
+- internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/patterns/responsive-progressive-gallery.json
+- internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/patterns/optimistic-engagement-state-reconciliation.json
+- internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/patterns/fallback-backed-code-loading.json
+- internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/patterns/layered-archive-submission-validation.json
+- internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/patterns/substring-domain-allowlist.json
+- internal/artificer/reviews/cristianolivera1__openhero__16ffaa7e6dc3/audit-report.json
+- docs/internal/ARTIFICER_PHASE4_GOVERNANCE_CONTRACT.md
+- docs/internal/ARTIFICER_WORKFLOW.md
+- internal/artificer/CHECKLIST.md

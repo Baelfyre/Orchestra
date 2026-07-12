@@ -1,0 +1,61 @@
+{
+  "repository": "CristianOlivera1/openhero",
+  "repository_owner": "CristianOlivera1",
+  "canonical_url": "https://github.com/CristianOlivera1/openhero",
+  "license": "MIT",
+  "default_branch": "main",
+  "reviewed_commit_sha": "16ffaa7e6dc39eb390011d81c420353b5d1dbaff",
+  "review_date": "2026-07-12",
+  "files_examined": [
+    {
+      "file_path": "app/api/submit/route.ts",
+      "line_ranges": [
+        "1-393"
+      ]
+    },
+    {
+      "file_path": "components/sections/HeroGallery/index.tsx",
+      "line_ranges": [
+        "1-170"
+      ]
+    },
+    {
+      "file_path": "components/sections/HeroGallery/VideoCard.tsx",
+      "line_ranges": [
+        "1-210"
+      ]
+    },
+    {
+      "file_path": "components/sections/HeroGallery/VideoModal.tsx",
+      "line_ranges": [
+        "1-431"
+      ]
+    },
+    {
+      "file_path": "LICENSE",
+      "line_ranges": [
+        "1-23"
+      ]
+    },
+    {
+      "file_path": "package.json",
+      "line_ranges": [
+        "1-41"
+      ]
+    },
+    {
+      "file_path": "public/llms.txt",
+      "line_ranges": [
+        "1-27"
+      ]
+    },
+    {
+      "file_path": "README.md",
+      "line_ranges": [
+        "1-115"
+      ]
+    }
+  ],
+  "runtime_behavior_tested": false,
+  "source_confidence": "MEDIUM"
+}
