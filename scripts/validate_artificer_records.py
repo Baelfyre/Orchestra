@@ -568,13 +568,12 @@ def _validate_source_intake_semantics(
             )
 
     # Optional default_branch — non-empty when present
-    if "default_branch" in instance:
-        db = instance["default_branch"]
-        if isinstance(db, str) and not db.strip():
-            _fail(
-                "'default_branch' must be non-empty when present",
-                "Provide a non-empty branch name or omit 'default_branch'.",
-            )
+    db = instance.get("default_branch", "")
+    if isinstance(db, str) and not db.strip():
+        _fail(
+            "'default_branch' must be non-empty after trimming",
+            "Provide a non-empty default branch.",
+        )
 
     # Repository format: owner/repository
     repo = instance.get("repository", "")

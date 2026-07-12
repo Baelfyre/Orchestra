@@ -188,6 +188,19 @@ class TestArtificerRecordsValidator(unittest.TestCase):
             reason_contains="missing required field 'default_branch'",
         )
 
+    def test_failure_blank_default_branch_requires_a_value(self):
+        bundle_dir = self._create_valid_bundle(include_pattern=False)
+        intake = self._valid_intake()
+        intake["default_branch"] = "  "
+        self._write_intake(bundle_dir.name, intake)
+        failures = validate_repository(self.repo_root)
+        self.assert_failure(
+            failures,
+            target_contains="source-intake.json",
+            reason_contains="default_branch' must be non-empty after trimming",
+        )
+        self.assertNotIn("omit", "\n".join(failure.remediation for failure in failures))
+
     def test_pass_git_url_and_trailing_slash_url(self):
         bundle_dir = self._create_valid_bundle(include_pattern=False)
         bundle_id = bundle_dir.name

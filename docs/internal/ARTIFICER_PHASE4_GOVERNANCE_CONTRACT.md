@@ -59,10 +59,10 @@ Do not clone, fetch, install, compile, or execute the external repository inside
 There is no automatic cherry-picking of source code.
 
 ## 12. Phase 4B Validator Responsibilities
-Phase 4B will introduce deterministic validation for governance records and cross-record relationships, including reviews, decisions, proposals, and promotions. Phase 4A focuses exclusively on the source-intake and pattern contracts and schemas; it does not validate those governance records, decisions, reviews, proposals, or promotions.
+Phase 4B provides deterministic validation for governance records and cross-record relationships, including reviews, decisions, proposals, and promotions. It validates only committed contracts and never rewrites source bundles, executes external code, or grants Artificer approval authority. Empty governance registries remain valid.
 
 ## 13. Phase 4C Renderer and Catalog-Gate Responsibilities
-Phase 4C will introduce markdown rendering for these records and implement the catalog-gate to prevent unapproved implementations.
+Phase 4C owns markdown rendering for these records and the Pattern Catalog gate; Phase 4B does not mutate `PATTERN_CATALOG.md`.
 
 ## 14. Phase 4.5 Pilot Sources
 The canonical Phase 4.5 pilot repositories are strictly defined as:
@@ -70,7 +70,7 @@ The canonical Phase 4.5 pilot repositories are strictly defined as:
 *   `usestrix/strix` (https://github.com/usestrix/strix)
 
 **Explicit constraints on pilot sources:**
-*   Neither repository is being audited in Phase 4A.
+*   Neither repository is being audited before Phase 4.5.
 *   No commit SHA is pinned yet.
 *   No files are copied.
 *   No external code is executed.

@@ -2,7 +2,7 @@
 
 This document defines the structured workflow for importing and evaluating external design patterns to evolve Orchestra.
 
-Phase 4A ends after the source-intake and pattern schema contracts are defined and validated. Reviews, governance decisions, proposals, promotions, and cross-record relationships are not validated in Phase 4A; Phase 4B owns those governance-record checks.
+Phase 4B validates reviews, governance decisions, proposals, promotions, and cross-record relationships deterministically. Empty governance registries remain valid; Artificer has no approval or implementation authority and never clones, installs, compiles, or executes external sources. Phase 4C owns rendering and the Pattern Catalog gate; Phase 4.5 owns the OpenHero and Strix pilot audits.
 
 ## End-to-End Workflow Stages
 

@@ -31,3 +31,8 @@ Use this checklist during every repository audit to evaluate design patterns for
 - [ ] Draft independent Governance Decisions (`GOVERNANCE_DECISION_SCHEMA.json`) for items that are blocked, rejected, deferred, or duplicate.
 - [ ] Route the proposal to Arbiter for validation check.
 - [ ] Route the proposal to Governor and Steward for business and legal clearance.
+
+## Phase 4B: Governance-Record Validation
+- [ ] Run `scripts/validate_artificer_governance_records.py` before governance review; empty governance registries are valid.
+- [ ] Confirm validation only reads committed records, performs no external execution, and grants Artificer no approval or implementation authority.
+- [ ] Leave Pattern Catalog rendering and catalog-gate work to Phase 4C; leave OpenHero and Strix pilot audits to Phase 4.5.

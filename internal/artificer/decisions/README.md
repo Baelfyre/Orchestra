@@ -10,7 +10,7 @@ Files must be placed in a directory corresponding to the source bundle ID, and n
 ## Requirements
 *   **Traceability**: Every decision must reference a specific pattern record and an audit report.
 *   **Manual Creation**: Records are manually created and reviewed by Arbiter, Governor, and Steward before a Maintainer decision.
-*   **Validation**: Phase 4B will introduce deterministic validation for these records.
+*   **Validation**: Phase 4B deterministically validates this registry, required reviews, and cross-record integrity.
 *   **No Approval Authority**: No record in this registry grants Artificer approval or implementation authority automatically.
 *   **No External Modifications**: No registry may modify an external repository.
 *   **Empty State**: An empty registry is valid.

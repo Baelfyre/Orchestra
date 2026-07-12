@@ -6,11 +6,12 @@
 * **Base Branch:** `main`
 * **Current Release:** `v1.1.1`
 * **Target Patch:** `v1.1.2`
-* **Current Stable State:** Artificer Phase 3 completed through PR #161.
-* **Current Task:** Artificer Phase 4A Governance Contracts and Registry Design.
-* **Latest Validation:** Phase 4A schemas and contracts implemented. All legacy Phase 3 validators pass.
-* **Pending Next Steps:** Run full validation matrix and report back for Phase 4A audit approval.
-* **Most Recent Checkpoint:** 2026-07-12 - Phase 4A contracts and registries established.
+* **Current Stable State:** Artificer Phase 4A completed through PR #162
+* **Current Task:** Artificer Phase 4B deterministic governance-record validation
+* **Mode:** Phase 4B implementation and audit
+* **Latest Validation:** Phase 4B validator and focused behavior coverage pass locally.
+* **Pending Next Steps:** Audit Phase 4B before commit and PR creation
+* **Most Recent Checkpoint:** 2026-07-12 - Phase 4B validation implemented.
 * **Related but Forbidden Repo for this task:** `C:\+AA`
 * **Active Governance Gates:**
 
