@@ -31,6 +31,12 @@ def test_tracked_repo_files_only():
         assert_equal("untracked artifact omitted", "artifacts/governance_report.txt" in tracked_paths, False)
 
 
+def test_artificer_governance_validator_is_registered():
+    script = "scripts/validate_artificer_governance_records.py"
+    assert_equal("required governance validator", script in gc.REQUIRED_VALIDATION_SCRIPTS, True)
+    assert_equal("strict governance validator", script in gc.STRICT_VALIDATOR_SCRIPTS, True)
+
+
 def test_repo_memory_path_check():
     with tempfile.TemporaryDirectory(prefix="governance-memory-test-") as temp_dir:
         repo_root = Path(temp_dir)

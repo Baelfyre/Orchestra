@@ -225,10 +225,10 @@ To assure that governance standards strictly enforce metadata shape, registry fo
 Implemented the Phase 4A Artificer Governance Contracts foundation. Created native JSON schemas for Audit Reports, Evolution Proposals, Governance Decisions, and Promotion Records, separating governance outcomes from extraction classification. Created isolated read-only registries for the new records and explicitly documented the Phase 4 no-execution and read-only boundaries.
 
 **Reason:**
-Phase 4 separates extraction taxonomy from governance decisions, ensuring a robust, contract-only governance foundation. It avoids altering the legacy Phase 3 schemas and validators (`scripts/validate_artificer_internal.py`), preserving backwards compatibility with existing governance infrastructure while defining the strict Phase 4 boundaries through new, explicit schemas and registry structures.
+Phase 4 separates extraction taxonomy from governance decisions, ensuring a robust, contract-only governance foundation. Phase 4A made narrow, required changes to `internal/artificer/SOURCE_INTAKE_SCHEMA.json`, `internal/artificer/PATTERN_SCHEMA.json`, `scripts/validate_artificer_internal.py`, and focused regression tests to require `default_branch` and separate extraction classifications from governance outcomes.
 
 **Rejected Alternatives:**
-- Modifying legacy schemas and validators (rejected; doing so would break existing tests and validators explicitly forbidden in the original Phase 4A scope).
+- Broad legacy-validator refactoring (rejected; only the narrow contract and boundary changes required by Phase 4A were made).
 
 **Affected Components:**
 - internal/artificer/AUDIT_REPORT_SCHEMA.json
@@ -239,3 +239,19 @@ Phase 4 separates extraction taxonomy from governance decisions, ensuring a robu
 - docs/internal/EVIDENCE_REQUIREMENTS.md
 - internal/artificer/CHECKLIST.md
 - docs/internal/PATTERN_CLASSIFICATION.md
+
+---
+
+## Date: 2026-07-12
+
+**Decision:**
+Implemented the separate Phase 4B governance-record validator with deterministic registry-layout, schema, semantic, and cross-record checks for audits, decisions, proposals, and promotions.
+
+**Reason:**
+The governance chain must remain traceable and fail closed without cloning, installing, compiling, or executing external sources. Phase 4B does not mutate the Pattern Catalog; strict governance and behavior runners execute the validator.
+
+**Affected Components:**
+- scripts/validate_artificer_governance_records.py
+- tests/behavior/test_artificer_governance_records.py
+- scripts/governance_check.py
+- tests/behavior/run_tests.py

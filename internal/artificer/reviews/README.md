@@ -10,7 +10,7 @@ Files must be placed in a directory corresponding to the source bundle ID:
 ## Requirements
 *   **Traceability**: Every report must trace back to a specific `source-intake.json` record via `source_intake_path` and `source_bundle_id`.
 *   **Manual Creation**: Records are manually created and reviewed.
-*   **Validation**: Phase 4B will introduce deterministic validation for these records.
+*   **Validation**: Phase 4B deterministically validates this registry, source traceability, and cross-record integrity.
 *   **No Approval Authority**: No record in this registry grants Artificer approval or implementation authority.
 *   **No External Modifications**: No registry may modify an external repository.
 *   **Empty State**: An empty registry is valid.

@@ -1,28 +1,18 @@
 # Session Handoff
 
-- **Current Task:** Complete Phase 4A Governance Contracts and Registry Design
+- **Current Stable State:** Artificer Phase 4A completed through PR #162
+- **Current Task:** Artificer Phase 4B deterministic governance-record validation
 - **Current Repo:** `C:\+conductor`
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.1`
 - **Target Patch:** `v1.1.2`
-- **Mode:** Phase 4A Review
-- **Allowed Files:**
-  - `scripts/validate_artificer_records.py`
-  - `tests/behavior/test_artificer_records.py`
-  - `scripts/governance_check.py`
-  - `tests/behavior/run_tests.py`
-  - `internal/artificer/records/README.md`
-  - `docs/internal/EXTERNAL_SOURCE_INTAKE.md`
-  - `docs/internal/PATTERN_CATALOG.md`
-  - `CHANGELOG.md`
-  - `DECISION_LOG.md`
-  - `PROJECT_STATE.md`
-  - `SESSION_HANDOFF.md`
+- **Mode:** Phase 4B implementation and audit
+- **Allowed Files:** Exact Phase 4B scope from the task brief only.
 - **Forbidden Repo:** `C:\+AA`
-- **Last Validation:** Legacy Phase 3 validators pass locally after restoring `scripts/validate_artificer_internal.py`.
+- **Last Validation:** Phase 4B validator and focused behavior coverage pass locally.
 - **Known Risks:** Prompt-load thresholds remain advisory and current observed Groups A, B, C, and Grand Total exceed documented soft limits; no replacement baseline has been approved.
-- **Next Step:** Run the full validation matrix as instructed and await user approval before committing Phase 4A changes.
+- **Next Step:** Audit Phase 4B before commit and PR creation
 - **Fresh-Session Warning:** If the current conversation has long prior history from another repository, enter safe mode and request user confirmation before proceeding with implementation.
 
 ## Token Control Note
