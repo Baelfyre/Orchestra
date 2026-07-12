@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "decision_id": "openhero-fallback-backed-code-loading-decision",
+  "source_bundle_id": "cristianolivera1__openhero__16ffaa7e6dc3",
+  "pattern_record_path": "internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/patterns/fallback-backed-code-loading.json",
+  "audit_report_id": "openhero-16ffaa7e6dc3-audit",
+  "decision_status": "APPROVED",
+  "assigned_specialist": "clockwork",
+  "reviews": {
+    "arbiter": {
+      "status": "APPROVED",
+      "rationale": "The static audit evidence supports a distinct reference-only fallback pattern. The finding and recommendation are properly separated, the Clockwork assignment matches the source and audit records, and the recommendation does not claim runtime confirmation or production readiness.",
+      "review_date": "2026-07-12"
+    },
+    "governor": {
+      "status": "NOT_REQUIRED",
+      "rationale": "The audit marks the OpenHero source as MIT and compatible. This decision permits only concept-level independent implementation, authorizes no OpenHero source reuse, authorizes no media or third-party asset reuse, and does not remove the normal Governor review and notice-preservation requirements for any future direct reuse.",
+      "review_date": "2026-07-12"
+    },
+    "steward": {
+      "status": "APPROVED",
+      "rationale": "Deterministic fallback behavior aligns with Orchestra resilience goals and can improve failure handling without requiring adoption of the source implementation. The concept provides sufficient value to advance into later proposal review.",
+      "review_date": "2026-07-12"
+    }
+  },
+  "maintainer_decision": {
+    "status": "APPROVED",
+    "rationale": "Approve the pattern as concept-only evidence for a fresh Orchestra-native fallback design. No source expression, generated example, or implementation code is approved for reuse, and implementation remains subject to a later proposal, promotion, specialist design, and validation.",
+    "decision_date": "2026-07-12"
+  },
+  "implementation_restriction": "CONCEPT_ONLY",
+  "decision_date": "2026-07-12"
+}

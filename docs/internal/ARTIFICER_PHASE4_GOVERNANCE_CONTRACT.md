@@ -91,3 +91,13 @@ The canonical Phase 4.5 pilot repositories are strictly defined as:
 *   No external code is executed.
 *   The audit implies no governance outcome, approval, proposal, promotion, or Pattern Catalog action.
 *   Both pilot audits remain independently reviewable.
+
+## Phase 5 Governance Decision Records
+Phase 5 records governance outcomes separately from immutable source evidence. Phase 5A provides independent read-only reviewer recommendations; Phase 5B records Maintainer-adopted governance decisions.
+*   Phase 5B-A covers only OpenHero decisions. Strix decisions remain a separate later review.
+*   Decision records are created only in `internal/artificer/decisions/` and reference immutable pattern records and audit reports.
+*   Approved `REFERENCE_ONLY` patterns must use `implementation_restriction: CONCEPT_ONLY`.
+*   `OUT_OF_SCOPE` patterns cannot receive `APPROVED` status; they must be deferred, rejected, or blocked.
+*   A governance decision does not automatically create a proposal, promotion, Pattern Catalog entry, or implementation authority.
+*   Phase 5 records do not modify immutable source-intake, pattern, or audit records.
+*   Phase 5 decision record creation is local and governed; it does not imply external source execution or code reuse authorization.
