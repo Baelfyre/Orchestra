@@ -198,10 +198,10 @@ def validate_registry_layout(repo_root: Path) -> list[ValidationFailure]:
     for name, (root, fixed_file) in REGISTRIES.items():
         root_path = repo_root / root
         failures.extend(_check_readme(repo_root, root))
-        if not root_path.is_dir():
-            failures.append(_failure(root, "Registry directory is missing", f"Create the required {root}/ directory."))
+        if root_path.is_symlink() or not root_path.is_dir():
+            failures.append(_failure(root, "Registry directory is missing or is a symbolic link", f"Create the required {root}/ directory as a regular directory."))
             continue
-        entries = sorted((entry for entry in root_path.iterdir() if entry.name != "README.md"), key=lambda item: item.name.casefold())
+        entries = sorted((entry for entry in root_path.iterdir() if entry.name != "README.md"), key=lambda item: (item.name.casefold(), item.name))
         failures.extend(_casefold_collisions(entries, repo_root))
         for entry in entries:
             target = _rel(repo_root, entry)
@@ -214,7 +214,7 @@ def validate_registry_layout(repo_root: Path) -> list[ValidationFailure]:
                     continue
                 if not BUNDLE_RE.fullmatch(entry.name):
                     failures.append(_failure(target, "Bundle directory name is invalid", "Use <owner-slug>__<repository-slug>__<12-character-lowercase-sha>."))
-                children = sorted(entry.iterdir(), key=lambda item: item.name.casefold())
+                children = sorted(entry.iterdir(), key=lambda item: (item.name.casefold(), item.name))
                 if not children:
                     failures.append(_failure(target, "Bundle directory is empty", "Add the required governance JSON record."))
                 for child in children:
@@ -234,9 +234,9 @@ def validate_registry_layout(repo_root: Path) -> list[ValidationFailure]:
 def _source_index(repo_root: Path, schemas: dict[str, dict]) -> dict[str, SourceBundle]:
     bundles: dict[str, SourceBundle] = {}
     root = repo_root / RECORDS_DIR
-    if not root.is_dir():
+    if root.is_symlink() or not root.is_dir():
         return bundles
-    for bundle_dir in sorted(root.iterdir(), key=lambda item: item.name.casefold()):
+    for bundle_dir in sorted(root.iterdir(), key=lambda item: (item.name.casefold(), item.name)):
         if bundle_dir.name == "README.md" or not bundle_dir.is_dir() or bundle_dir.is_symlink():
             continue
         intake_path = bundle_dir / "source-intake.json"
@@ -245,10 +245,10 @@ def _source_index(repo_root: Path, schemas: dict[str, dict]) -> dict[str, Source
             intake = load_json_without_duplicate_keys(intake_path)
         except (ValueError, ValidatorConfigurationError):
             continue
-        if validate_instance(intake, schemas["intake"], _rel(repo_root, intake_path)) or not patterns_dir.is_dir():
+        if validate_instance(intake, schemas["intake"], _rel(repo_root, intake_path)) or patterns_dir.is_symlink() or not patterns_dir.is_dir():
             continue
         patterns: dict[str, dict] = {}
-        for pattern_path in sorted(patterns_dir.glob("*.json"), key=lambda item: item.name.casefold()):
+        for pattern_path in sorted(patterns_dir.glob("*.json"), key=lambda item: (item.name.casefold(), item.name)):
             try:
                 pattern = load_json_without_duplicate_keys(pattern_path)
             except (ValueError, ValidatorConfigurationError):
@@ -279,10 +279,10 @@ def _load_audits(repo_root: Path, schemas: dict[str, dict], index: dict[str, Sou
     audits: dict[str, tuple[dict, str]] = {}
     failures: list[ValidationFailure] = []
     root = repo_root / REGISTRIES["reviews"][0]
-    if not root.is_dir():
+    if root.is_symlink() or not root.is_dir():
         return audits, failures
     seen: set[str] = set()
-    for bundle_dir in sorted(root.iterdir(), key=lambda item: item.name.casefold()):
+    for bundle_dir in sorted(root.iterdir(), key=lambda item: (item.name.casefold(), item.name)):
         path = bundle_dir / "audit-report.json"
         if bundle_dir.name == "README.md" or not path.is_file() or path.is_symlink():
             continue
@@ -370,13 +370,13 @@ def _load_decisions(repo_root: Path, schemas: dict[str, dict], index: dict[str, 
     decisions: dict[str, tuple[dict, str]] = {}
     failures: list[ValidationFailure] = []
     root = repo_root / REGISTRIES["decisions"][0]
-    if not root.is_dir():
+    if root.is_symlink() or not root.is_dir():
         return decisions, failures
     seen: set[str] = set()
-    for bundle_dir in sorted(root.iterdir(), key=lambda item: item.name.casefold()):
+    for bundle_dir in sorted(root.iterdir(), key=lambda item: (item.name.casefold(), item.name)):
         if bundle_dir.name == "README.md" or not bundle_dir.is_dir() or bundle_dir.is_symlink():
             continue
-        for path in sorted(bundle_dir.glob("*.json"), key=lambda item: item.name.casefold()):
+        for path in sorted(bundle_dir.glob("*.json"), key=lambda item: (item.name.casefold(), item.name)):
             record, record_failures = _load_record(path, schemas["decision"], repo_root)
             failures.extend(record_failures)
             if record is None:
@@ -462,10 +462,10 @@ def _load_proposals(repo_root: Path, schemas: dict[str, dict], index: dict[str, 
     proposals: dict[str, dict] = {}
     failures: list[ValidationFailure] = []
     root = repo_root / REGISTRIES["proposals"][0]
-    if not root.is_dir():
+    if root.is_symlink() or not root.is_dir():
         return proposals, failures
     seen: set[str] = set()
-    for path in sorted(root.glob("*.json"), key=lambda item: item.name.casefold()):
+    for path in sorted(root.glob("*.json"), key=lambda item: (item.name.casefold(), item.name)):
         record, record_failures = _load_record(path, schemas["proposal"], repo_root)
         failures.extend(record_failures)
         if record is None:
@@ -539,11 +539,11 @@ def _load_proposals(repo_root: Path, schemas: dict[str, dict], index: dict[str, 
 def _load_promotions(repo_root: Path, schemas: dict[str, dict], index: dict[str, SourceBundle], decisions: dict[str, tuple[dict, str]], proposals: dict[str, dict], allowlist: set[str]) -> list[ValidationFailure]:
     failures: list[ValidationFailure] = []
     root = repo_root / REGISTRIES["promotions"][0]
-    if not root.is_dir():
+    if root.is_symlink() or not root.is_dir():
         return failures
     promotion_ids: set[str] = set()
     catalog_ids: set[str] = set()
-    for path in sorted(root.glob("*.json"), key=lambda item: item.name.casefold()):
+    for path in sorted(root.glob("*.json"), key=lambda item: (item.name.casefold(), item.name)):
         record, record_failures = _load_record(path, schemas["promotion"], repo_root)
         failures.extend(record_failures)
         if record is None:
@@ -601,10 +601,60 @@ def _load_promotions(repo_root: Path, schemas: dict[str, dict], index: dict[str,
     return failures
 
 
+def validate_source_registry_layout(
+    repo_root: Path,
+) -> list[ValidationFailure]:
+    failures: list[ValidationFailure] = []
+    records_root = repo_root / RECORDS_DIR
+
+    if records_root.is_symlink():
+        failures.append(
+            _failure(
+                RECORDS_DIR,
+                "Source records directory must not be a symbolic link",
+                (
+                    "Replace internal/artificer/records with a regular "
+                    "repository directory."
+                ),
+            )
+        )
+        return failures
+
+    if not records_root.is_dir():
+        return failures
+
+    for bundle_dir in sorted(
+        records_root.iterdir(),
+        key=lambda item: (item.name.casefold(), item.name),
+    ):
+        if (
+            bundle_dir.name == "README.md"
+            or bundle_dir.is_symlink()
+            or not bundle_dir.is_dir()
+        ):
+            continue
+
+        patterns_dir = bundle_dir / "patterns"
+        if patterns_dir.is_symlink():
+            failures.append(
+                _failure(
+                    _rel(repo_root, patterns_dir),
+                    "Source pattern directory must not be a symbolic link",
+                    (
+                        "Replace the source-bundle patterns link with a "
+                        "regular directory."
+                    ),
+                )
+            )
+
+    return failures
+
+
 def validate_repository(repo_root: Path) -> list[ValidationFailure]:
     """Return deterministic Phase 4B governance-record validation failures."""
     schemas = _load_schemas(repo_root)
     failures = validate_registry_layout(repo_root)
+    failures.extend(validate_source_registry_layout(repo_root))
     index = _source_index(repo_root, schemas)
     allowlist = _specialist_allowlist(schemas["pattern"])
     audits, audit_failures = _load_audits(repo_root, schemas, index, allowlist)
@@ -612,7 +662,17 @@ def validate_repository(repo_root: Path) -> list[ValidationFailure]:
     proposals, proposal_failures = _load_proposals(repo_root, schemas, index, audits, decisions, allowlist)
     promotion_failures = _load_promotions(repo_root, schemas, index, decisions, proposals, allowlist)
     failures.extend(audit_failures + decision_failures + proposal_failures + promotion_failures)
-    return sorted(failures, key=lambda item: (item.target.casefold(), item.reason.casefold(), item.remediation.casefold()))
+    return sorted(
+        failures,
+        key=lambda item: (
+            item.target.casefold(),
+            item.target,
+            item.reason.casefold(),
+            item.reason,
+            item.remediation.casefold(),
+            item.remediation,
+        ),
+    )
 
 
 def _print_failure(failure: ValidationFailure) -> None:
