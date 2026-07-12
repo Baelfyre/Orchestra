@@ -79,12 +79,16 @@ Maintainer Authorization -> High-Risk Source Classification -> Pinned External C
 The Strix pilot is a high-risk offensive-security audit and does not advance automatically into execution, vulnerability testing, proposals, promotions, Catalog synchronization, or implementation.
 
 ### Phase 5 Governance Decision Recording
-Completed Audit -> Independent Read-Only Review -> Maintainer Adoption -> Governed Decision Record -> Later Proposal Selection
+Completed Audit -> Independent Read-Only Review -> Maintainer Adoption -> Mandatory Governor Review When Required -> Governed Decision Record -> Later Proposal Selection
 
 *   Phase 5B-A records the five OpenHero decisions only.
-*   Three patterns are approved for concept-only proposal eligibility.
-*   One UI pattern is deferred with concept-only restriction.
-*   One security anti-pattern is rejected and implementation-blocked.
+*   Three OpenHero patterns are approved for concept-only proposal eligibility.
+*   One OpenHero UI pattern is deferred with concept-only restriction.
+*   One OpenHero security anti-pattern is rejected and implementation-blocked.
+*   Phase 5B-B records the five Strix decisions only.
+*   Four Strix patterns are approved for concept-only proposal eligibility.
+*   One Strix prompt-safety anti-pattern is rejected and implementation-blocked.
 *   Decision creation does not automatically create an evolution proposal.
-*   Strix decisions are excluded from Phase 5B-A.
-*   Manual promotion and Pattern Catalog lifecycle remain unchanged and separate from Phase 5B-A.
+*   OpenHero decisions remain unchanged.
+*   Strix authority-related patterns remain separate decision records even when later grouped in a proposal.
+*   Manual promotion and Pattern Catalog lifecycle remain unchanged and separate from Phase 5B-A and Phase 5B-B.

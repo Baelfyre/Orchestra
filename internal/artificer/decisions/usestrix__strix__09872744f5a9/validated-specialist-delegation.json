@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "decision_id": "strix-validated-specialist-delegation-decision",
+  "source_bundle_id": "usestrix__strix__09872744f5a9",
+  "pattern_record_path": "internal/artificer/records/usestrix__strix__09872744f5a9/patterns/validated-specialist-delegation.json",
+  "audit_report_id": "strix-09872744f5a9-audit",
+  "decision_status": "APPROVED",
+  "assigned_specialist": "overseer",
+  "reviews": {
+    "arbiter": {
+      "status": "APPROVED",
+      "rationale": "The audit supports specialist validation, inherited context, and child-agent delegation as a distinct reference-only pattern. The recommendation correctly identifies context minimization, bounded ancestry, and authority validation as necessary conditions rather than treating source delegation as inherently safe.",
+      "review_date": "2026-07-12"
+    },
+    "governor": {
+      "status": "APPROVED",
+      "rationale": "The Strix audit requires Governor review under Apache-2.0. This approval accepts only the concept-level governance disposition and authorizes no Strix delegation code, prompt, payload, exploit, media, documentation expression, or implementation reuse. Any future direct adaptation requires separate review of notices, NOTICE obligations, attribution, patent terms, distribution duties, and dependency licenses.",
+      "review_date": "2026-07-12"
+    },
+    "steward": {
+      "status": "APPROVED",
+      "rationale": "Validated specialist delegation aligns with Orchestra multi-agent governance when authority, context, ancestry, and capability boundaries are explicit and enforceable. The concept is suitable for later proposal review but must remain coordinated with scope and capability governance.",
+      "review_date": "2026-07-12"
+    }
+  },
+  "maintainer_decision": {
+    "status": "APPROVED",
+    "rationale": "Approve validated specialist delegation as concept-only evidence for a fresh Orchestra-native design. Any later proposal must require deterministic specialist validation, bounded context inheritance, authority checks, delegation depth controls, capability scoping, provenance, and auditable rejection of unauthorized delegation.",
+    "decision_date": "2026-07-12"
+  },
+  "implementation_restriction": "CONCEPT_ONLY",
+  "decision_date": "2026-07-12"
+}

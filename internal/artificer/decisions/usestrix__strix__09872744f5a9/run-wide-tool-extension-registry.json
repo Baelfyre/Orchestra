@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "decision_id": "strix-run-wide-tool-extension-registry-decision",
+  "source_bundle_id": "usestrix__strix__09872744f5a9",
+  "pattern_record_path": "internal/artificer/records/usestrix__strix__09872744f5a9/patterns/run-wide-tool-extension-registry.json",
+  "audit_report_id": "strix-09872744f5a9-audit",
+  "decision_status": "APPROVED",
+  "assigned_specialist": "clockwork",
+  "reviews": {
+    "arbiter": {
+      "status": "APPROVED",
+      "rationale": "The static evidence supports a run-level tool-extension registry finding and its effect on agent construction. The audit appropriately identifies mutable global propagation as a risk and recommends a fresh immutable run-scoped design rather than adopting the source mechanism.",
+      "review_date": "2026-07-12"
+    },
+    "governor": {
+      "status": "APPROVED",
+      "rationale": "Mandatory Apache-2.0 review is complete for concept-only governance treatment. No Strix registry code, source expression, prompt, payload, exploit, media, documentation expression, or implementation is approved for reuse. Any future adaptation requires separate Apache-2.0 notice, NOTICE, attribution, patent, distribution, and third-party dependency review.",
+      "review_date": "2026-07-12"
+    },
+    "steward": {
+      "status": "APPROVED",
+      "rationale": "Run-scoped capability registration aligns with Orchestra least-privilege, provenance, and deterministic orchestration goals when redesigned as an immutable authority-controlled manifest. It may advance as a proposal concept without adopting mutable global registry behavior.",
+      "review_date": "2026-07-12"
+    }
+  },
+  "maintainer_decision": {
+    "status": "APPROVED",
+    "rationale": "Approve the capability-registry concept for later proposal consideration under a strict concept-only boundary. A future Orchestra-native design must use immutable run-scoped manifests, explicit provenance, role-based allowlists, deterministic validation, least privilege, and auditable capability grants.",
+    "decision_date": "2026-07-12"
+  },
+  "implementation_restriction": "CONCEPT_ONLY",
+  "decision_date": "2026-07-12"
+}
