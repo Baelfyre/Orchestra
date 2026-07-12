@@ -37,6 +37,7 @@ REQUIRED_VALIDATION_SCRIPTS = [
     "scripts/validate_artificer_internal.py",
     "scripts/validate_artificer_records.py",
     "scripts/validate_artificer_governance_records.py",
+    "scripts/validate_artificer_pattern_catalog.py",
     "scripts/render_artificer_audit_report.py",
 ]
 
@@ -53,6 +54,7 @@ STRICT_VALIDATOR_SCRIPTS = [
     "scripts/validate_artificer_internal.py",
     "scripts/validate_artificer_records.py",
     "scripts/validate_artificer_governance_records.py",
+    "scripts/validate_artificer_pattern_catalog.py",
 ]
 
 SIGNIFICANT_CHANGE_PATTERNS = [

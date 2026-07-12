@@ -286,3 +286,35 @@ create no Catalog, governance, source, or runtime writes.
 - docs/internal/ARTIFICER_PHASE4_GOVERNANCE_CONTRACT.md
 - docs/internal/ARTIFICER_WORKFLOW.md
 - internal/artificer/reviews/README.md
+
+---
+
+## Date: 2026-07-12
+
+**Decision:**
+Implement Phase 4C-B as a deterministic, read-only gate that treats validated
+promotion JSON as canonical and `docs/internal/PATTERN_CATALOG.md` as a manual,
+human-readable projection that must match those records exactly.
+
+**Reason:**
+The Catalog must remain manually synchronized, fully traceable, and unable to
+invent implementation or approval authority in Markdown. Exact whole-file
+comparison keeps stale rows, stale entries, reordered content, and formatting
+drift visible at the first deterministic line mismatch.
+
+**Rejected Alternatives:**
+- Automatic Catalog rewrites (rejected; Phase 4C-B is read-only).
+- Catalog-derived authority (rejected; validated JSON promotion records remain canonical).
+- Advisory-only mismatch reporting (rejected; the Catalog gate is a strict validator).
+
+**Affected Components:**
+- scripts/validate_artificer_pattern_catalog.py
+- tests/behavior/test_artificer_pattern_catalog.py
+- scripts/governance_check.py
+- scripts/test_governance_check.py
+- tests/behavior/run_tests.py
+- docs/internal/PATTERN_CATALOG.md
+- docs/internal/ARTIFICER_PHASE4_GOVERNANCE_CONTRACT.md
+- docs/internal/ARTIFICER_WORKFLOW.md
+- internal/artificer/promotions/README.md
+- internal/artificer/CHECKLIST.md

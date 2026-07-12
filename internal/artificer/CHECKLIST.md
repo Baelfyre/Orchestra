@@ -36,3 +36,15 @@ Use this checklist during every repository audit to evaluate design patterns for
 - [ ] Run `scripts/validate_artificer_governance_records.py` before governance review; empty governance registries are valid.
 - [ ] Confirm validation only reads committed records, performs no external execution, and grants Artificer no approval or implementation authority.
 - [ ] Leave Pattern Catalog rendering and catalog-gate work to Phase 4C; leave OpenHero and Strix pilot audits to Phase 4.5.
+
+## Phase 4C-B: Pattern Catalog Synchronization Gate
+- [ ] Confirm Phase 4B records are valid before loading the Catalog projection.
+- [ ] Confirm the promotion record was manually reviewed.
+- [ ] Confirm the Catalog row is present exactly once.
+- [ ] Confirm the Catalog entry is present exactly once.
+- [ ] Confirm lifecycle status is synchronized.
+- [ ] Confirm source traceability is synchronized.
+- [ ] Confirm license and attribution are synchronized.
+- [ ] Confirm specialist ownership is synchronized.
+- [ ] Confirm no extra Catalog entry exists.
+- [ ] Run `scripts/validate_artificer_pattern_catalog.py` and confirm the Catalog gate passes.

@@ -26,6 +26,8 @@ def main():
         {"Name": "validate_artificer_governance_records.py", "Path": "scripts/validate_artificer_governance_records.py"},
         {"Name": "test_artificer_governance_records.py", "Path": "tests/behavior/test_artificer_governance_records.py"},
         {"Name": "test_artificer_audit_report_renderer.py", "Path": "tests/behavior/test_artificer_audit_report_renderer.py"}
+        ,{"Name": "validate_artificer_pattern_catalog.py", "Path": "scripts/validate_artificer_pattern_catalog.py"}
+        ,{"Name": "test_artificer_pattern_catalog.py", "Path": "tests/behavior/test_artificer_pattern_catalog.py"}
     ]
     
     failed = False

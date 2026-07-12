@@ -43,6 +43,12 @@ def test_artificer_audit_renderer_is_registered_read_only():
     assert_equal("renderer is not a strict validator", script in gc.STRICT_VALIDATOR_SCRIPTS, False)
 
 
+def test_artificer_pattern_catalog_validator_is_registered():
+    script = "scripts/validate_artificer_pattern_catalog.py"
+    assert_equal("required catalog validator", script in gc.REQUIRED_VALIDATION_SCRIPTS, True)
+    assert_equal("strict catalog validator", script in gc.STRICT_VALIDATOR_SCRIPTS, True)
+
+
 def test_repo_memory_path_check():
     with tempfile.TemporaryDirectory(prefix="governance-memory-test-") as temp_dir:
         repo_root = Path(temp_dir)
@@ -195,6 +201,7 @@ def main():
     test_tracked_repo_files_only()
     test_artificer_governance_validator_is_registered()
     test_artificer_audit_renderer_is_registered_read_only()
+    test_artificer_pattern_catalog_validator_is_registered()
     test_repo_memory_path_check()
     test_startup_state_claim_check()
     print("Governance check helper tests passed.")
