@@ -399,7 +399,7 @@ class GovernanceRecordsTests(unittest.TestCase):
         shutil.copy2(paths["proposal"], collision_path)
         self.assert_validation_failure(
             root,
-            target_contains="Proposal-1.json",
+            target_contains="proposal-1.json",
             reason_contains="Case-insensitive filename collision",
             remediation_contains="case sensitivity",
         )
