@@ -1,12 +1,12 @@
 # Session Handoff
 
-- **Current Task:** Correct Phase 3 Artificer Source-Intake and Pattern-Record Instance Validation before PR creation
+- **Current Task:** Complete PR #161 cross-platform CI remediation
 - **Current Repo:** `C:\+conductor`
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.1`
 - **Target Patch:** `v1.1.2`
-- **Mode:** Phase 3 Corrections
+- **Mode:** Phase 3 final validation
 - **Allowed Files:**
   - `scripts/validate_artificer_records.py`
   - `tests/behavior/test_artificer_records.py`
@@ -20,9 +20,9 @@
   - `PROJECT_STATE.md`
   - `SESSION_HANDOFF.md`
 - **Forbidden Repo:** `C:\+AA`
-- **Last Validation:** Pending final check of 50+ Phase 3 specific tests.
+- **Last Validation:** 60 Phase 3 tests passed locally; Cross-platform Validation failed during the final native-validation tail.
 - **Known Risks:** Prompt-load thresholds remain advisory and current observed Groups A, B, C, and Grand Total exceed documented soft limits; no replacement baseline has been approved.
-- **Next Step:** Run all validation scripts locally, commit to existing feature branch, and open PR #161
+- **Next Step:** Remove whitespace errors, rerun the complete baseline, and verify all PR #161 checks are green.
 - **Fresh-Session Warning:** If the current conversation has long prior history from another repository, enter safe mode and request user confirmation before proceeding with implementation.
 
 ## Token Control Note

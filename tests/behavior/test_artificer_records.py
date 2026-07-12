@@ -360,13 +360,10 @@ class TestArtificerRecordsValidator(unittest.TestCase):
             can_symlink = True
         except OSError:
             can_symlink = False
-        
+
         if not can_symlink:
-            # Fake an assertion to satisfy the quality gate
-            failures = [ValidationFailure(target="symlink", reason="symbolic links", remediation="")]
-            self.assert_failure(failures, reason_contains="symbolic links")
-            return
-            
+            self.skipTest("Symlink creation is unavailable on this platform")
+
         bundle_dir = self._create_valid_bundle(include_pattern=True)
         (bundle_dir / "source-intake.json").unlink()
         target = bundle_dir / "real.json"
@@ -374,7 +371,7 @@ class TestArtificerRecordsValidator(unittest.TestCase):
         os.symlink(target, bundle_dir / "source-intake.json")
         failures = validate_repository(self.repo_root)
         self.assert_failure(failures, target_contains="source-intake.json", reason_contains="symbolic links are not permitted")
-        
+
         bundle_dir = self._create_valid_bundle(include_pattern=True)
         (bundle_dir / "patterns" / "test-pattern.json").unlink()
         target = bundle_dir / "real.json"
@@ -673,16 +670,16 @@ class TestArtificerRecordsValidator(unittest.TestCase):
 
     def test_failure_cli_exit_codes(self):
         script = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "scripts", "validate_artificer_records.py")
-        
+
         # Valid fixture
         self._create_valid_bundle(include_pattern=True)
-        r = subprocess.run([sys.executable, script, "--repo", str(self.repo_root)], capture_output=True)
+        r = subprocess.run([sys.executable, script, "--repo-root", str(self.repo_root)], capture_output=True)
         self.assertEqual(r.returncode, 0)
 
         # Invalid record
         self._write_intake("bad_bundle", self._valid_intake())
         (self.records_dir / "bad_bundle" / "patterns").mkdir()
-        r = subprocess.run([sys.executable, script, "--repo", str(self.repo_root)], capture_output=True)
+        r = subprocess.run([sys.executable, script, "--repo-root", str(self.repo_root)], capture_output=True)
         self.assertEqual(r.returncode, 1)
         shutil.rmtree(self.records_dir / "bad_bundle")
 
@@ -691,7 +688,7 @@ class TestArtificerRecordsValidator(unittest.TestCase):
         d["allOf"] = []
         with open(self.schema_dir / "SOURCE_INTAKE_SCHEMA.json", "w") as f:
             json.dump(d, f)
-        r = subprocess.run([sys.executable, script, "--repo", str(self.repo_root)], capture_output=True)
+        r = subprocess.run([sys.executable, script, "--repo-root", str(self.repo_root)], capture_output=True)
         self.assertEqual(r.returncode, 2)
 
         # Invalid option
@@ -723,17 +720,17 @@ class TestArtificerRecordsValidator(unittest.TestCase):
                 self.generic_greater_len(node.test)
                 self.generic_len_failures(node)
                 self.generic_len_failures(node.test)
-                
+
             def generic_len_failures(self, n):
                 if isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id == "len":
                     if isinstance(n.args[0], ast.Name) and n.args[0].id == "failures":
                         self.has_generic_len = True
-                        
+
             def generic_greater_len(self, n):
                 if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute) and n.func.attr == "assertGreater":
                     if isinstance(n.args[0], ast.Call) and isinstance(n.args[0].func, ast.Name) and n.args[0].func.id == "len":
                         self.has_generic_len = True
-                        
+
             def generic_call_len_failures(self, n):
                 for child in ast.walk(n):
                     if isinstance(child, ast.Call) and isinstance(child.func, ast.Name) and child.func.id == "len":
@@ -742,7 +739,7 @@ class TestArtificerRecordsValidator(unittest.TestCase):
 
             def generic_check(self, n):
                 pass
-                
+
             def generic_call_check(self, n):
                 if isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute) and n.func.attr == "assertTrue":
                     pass

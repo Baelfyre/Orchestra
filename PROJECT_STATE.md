@@ -8,9 +8,9 @@
 * **Target Patch:** `v1.1.2`
 * **Current Stable State:** Artificer Phase 2 completed through PR #160.
 * **Current Task:** Artificer Phase 3 source-intake and pattern-record instance validation.
-* **Latest Validation:** Pending corrected Phase 3 baseline and CI validation.
-* **Pending Next Steps:** Complete Phase 3 validation coverage, open the pull request, and verify all GitHub Actions checks.
-* **Most Recent Checkpoint:** 2026-07-11 - Initial Phase 3 implementation committed; review identified cross-platform and regression-coverage gaps.
+* **Latest Validation:** PR #161 Validate and Governance checks passed; Cross-platform Validation requires final whitespace remediation.
+* **Pending Next Steps:** Remove remaining whitespace errors, rerun all PR checks, and merge Phase 3 after the complete CI matrix passes.
+* **Most Recent Checkpoint:** 2026-07-12 - PR #161 restored to the approved eleven-file scope with 60 Phase 3 tests.
 * **Related but Forbidden Repo for this task:** `C:\+AA`
 * **Active Governance Gates:**
 
@@ -23,8 +23,7 @@
   * Acme Readiness Gate Expansion
 * **Current Risks:** Prompt-load thresholds remain advisory and current observed Groups A, B, C, and Grand Total exceed soft limits; no re-baselining decision exists.
 * **Do-Not-Touch Areas:** Do not edit website repo files from this task (`C:\+AA`).
-* **Pending Next Steps:** Merge Phase 3 branch `feat/artificer-record-instance-validation` into main.
-* **Most Recent Checkpoint:** 2026-07-11 - Phase 3 instance validator completed.
+
 
 ## Token Efficiency Rationale
 
