@@ -14,7 +14,10 @@ graph TD
     D --> E[Stage 4: Specialist Mapping & Evidence Recording]
     E --> F[Stage 5: Individual Audit & Proposal Generation]
     F --> G[Stage 6: Governance Review & Approval]
-    G --> H[Stage 7: Specialist-Owned Implementation]
+    G --> H[Stage 7: Manual Promotion Record]
+    H --> I[Stage 8: Manual Pattern Catalog Synchronization]
+    I --> J[Stage 9: Phase 4C-B Catalog Gate]
+    J --> K[Stage 10: Specialist-Owned Implementation]
 ```
 
 ---
@@ -51,6 +54,21 @@ graph TD
 3. **The Steward**: Reviews business alignment and scope.
 4. **Maintainer**: Gives final approval.
 
-### Stage 7: Specialist-Owned Implementation
-1. Once approved, the pattern is implemented on a separate branch.
+### Governed Promotion Sequence
+Approved Decision -> Approved Proposal -> Manual Promotion Record -> Manual Pattern Catalog Synchronization -> Phase 4C-B Catalog Gate -> Specialist-Owned Implementation
+
+### Stage 7: Manual Promotion Record
+1. Once governance approval exists, a maintainer manually creates the promotion record.
+2. Promotion remains manual and the JSON promotion record is canonical.
+
+### Stage 8: Manual Pattern Catalog Synchronization
+1. A maintainer manually synchronizes `docs/internal/PATTERN_CATALOG.md` with the validated promotion registry.
+2. The Catalog is a human-readable projection only and must never be updated automatically by Artificer.
+
+### Stage 9: Phase 4C-B Catalog Gate
+1. Run `python scripts/validate_artificer_pattern_catalog.py`.
+2. `IMPLEMENTING`, `IMPLEMENTED`, and `RETIRED` remain specialist- or maintainer-controlled lifecycle states mirrored from the promotion record.
+
+### Stage 10: Specialist-Owned Implementation
+1. Once the Catalog gate passes, the pattern is implemented on a separate branch.
 2. The implementation is owned by the designated Orchestra specialist (e.g. Cloak for frontend, Clockwork for backend structure), not by Artificer.

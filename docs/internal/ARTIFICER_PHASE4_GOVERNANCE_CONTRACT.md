@@ -68,8 +68,13 @@ updates governance JSON, source evidence, or `PATTERN_CATALOG.md`. Rendered
 Markdown is not governance authority; validated JSON records remain canonical.
 
 Phase 4C-B separately owns Pattern Catalog synchronization and its governance
-gate. Phase 4C-A grants no approval, implementation, promotion, or Catalog
-authority.
+gate. Promotion remains manual. Promotion JSON remains canonical. The Catalog
+is only a deterministic human-readable projection and the validator never edits
+the Catalog. Every validated promotion requires exactly one Catalog index row
+and exactly one Catalog entry. No ungoverned Catalog row or entry is allowed.
+Catalog lifecycle status mirrors the promotion record exactly. `--print-expected`
+is preview-only and writes only to standard output. Artificer receives no
+approval, implementation, or Catalog authority.
 
 ## 14. Phase 4.5 Pilot Sources
 The canonical Phase 4.5 pilot repositories are strictly defined as:
