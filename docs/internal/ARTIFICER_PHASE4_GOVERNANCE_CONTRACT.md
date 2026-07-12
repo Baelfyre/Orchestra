@@ -94,10 +94,17 @@ The canonical Phase 4.5 pilot repositories are strictly defined as:
 
 ## Phase 5 Governance Decision Records
 Phase 5 records governance outcomes separately from immutable source evidence. Phase 5A provides independent read-only reviewer recommendations; Phase 5B records Maintainer-adopted governance decisions.
-*   Phase 5B-A covers only OpenHero decisions. Strix decisions remain a separate later review.
+*   Phase 5B-A covers only OpenHero decisions.
+*   Phase 5B-B covers only Strix decisions and requires Governor review for every record.
 *   Decision records are created only in `internal/artificer/decisions/` and reference immutable pattern records and audit reports.
 *   Approved `REFERENCE_ONLY` patterns must use `implementation_restriction: CONCEPT_ONLY`.
+*   Approved Strix `REFERENCE_ONLY` decisions use `implementation_restriction: CONCEPT_ONLY`.
+*   The Strix `OUT_OF_SCOPE` fail-open prompt-rendering anti-pattern is rejected with `implementation_restriction: IMPLEMENTATION_BLOCKED`.
 *   `OUT_OF_SCOPE` patterns cannot receive `APPROVED` status; they must be deferred, rejected, or blocked.
-*   A governance decision does not automatically create a proposal, promotion, Pattern Catalog entry, or implementation authority.
+*   Governor status `NOT_REQUIRED` is invalid for Strix records.
+*   Apache-2.0 compatibility does not automatically authorize source reuse.
+*   Governor approval accepts the governance disposition and restriction only; it does not approve source, prompt, payload, exploit, media, documentation expression, or implementation reuse.
+*   Direct source adaptation requires separate notice, attribution, patent, distribution, dependency, and reuse review.
+*   Decision creation does not create a proposal, promotion, Pattern Catalog entry, or implementation authority.
 *   Phase 5 records do not modify immutable source-intake, pattern, or audit records.
 *   Phase 5 decision record creation is local and governed; it does not imply external source execution or code reuse authorization.

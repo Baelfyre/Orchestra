@@ -442,3 +442,37 @@ Approved `REFERENCE_ONLY` patterns remain restricted to `CONCEPT_ONLY`. The defe
 - internal/artificer/decisions/cristianolivera1__openhero__16ffaa7e6dc3/optimistic-engagement-state-reconciliation.json
 - internal/artificer/decisions/cristianolivera1__openhero__16ffaa7e6dc3/responsive-progressive-gallery.json
 - internal/artificer/decisions/cristianolivera1__openhero__16ffaa7e6dc3/substring-domain-allowlist.json
+
+---
+
+## Date: 2026-07-12
+
+**Decision:**
+Recorded Phase 5B-B Strix governance decisions for four approved concept-only patterns and one rejected implementation-blocked prompt-safety anti-pattern. Governor review was mandatory for all Strix records. No proposal, promotion, Pattern Catalog update, source reuse, prompt reuse, or implementation authority was created in this phase, and existing OpenHero decisions remain unchanged.
+
+**Reason:**
+The Strix review is security-sensitive and Apache-2.0 licensed, so governance decisions must be recorded separately from OpenHero and require mandatory Governor review. The Phase 5A independent review provided corrected dispositions, and this record preserves evidence, licensing, security, and specialist traceability without advancing any proposals or Catalog lifecycle changes.
+
+Approved `REFERENCE_ONLY` patterns remain restricted to `CONCEPT_ONLY`, while the `OUT_OF_SCOPE` fail-open prompt-rendering pattern cannot receive `APPROVED` status and is therefore rejected with `IMPLEMENTATION_BLOCKED`. Governor approval accepts the governance disposition and restriction only; it does not authorize Strix source, prompt, payload, example, or implementation reuse.
+
+**Rejected Alternatives:**
+- Combining OpenHero and Strix decisions in one PR.
+- Treating Governor review as optional.
+- Automatically promoting approved decisions.
+- Approving the fail-open prompt mechanism.
+- Copying Strix source, prompts, payloads, examples, or implementation.
+- Creating the authority/capability proposal in this same phase.
+- Modifying the Pattern Catalog before promotion.
+
+**Affected Components:**
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- docs/internal/ARTIFICER_PHASE4_GOVERNANCE_CONTRACT.md
+- docs/internal/ARTIFICER_WORKFLOW.md
+- internal/artificer/decisions/usestrix__strix__09872744f5a9/declared-scope-context.json
+- internal/artificer/decisions/usestrix__strix__09872744f5a9/fail-open-system-prompt-rendering.json
+- internal/artificer/decisions/usestrix__strix__09872744f5a9/lifecycle-gated-agent-completion.json
+- internal/artificer/decisions/usestrix__strix__09872744f5a9/run-wide-tool-extension-registry.json
+- internal/artificer/decisions/usestrix__strix__09872744f5a9/validated-specialist-delegation.json

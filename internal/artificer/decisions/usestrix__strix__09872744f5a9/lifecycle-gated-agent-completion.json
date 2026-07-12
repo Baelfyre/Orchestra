@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "decision_id": "strix-lifecycle-gated-agent-completion-decision",
+  "source_bundle_id": "usestrix__strix__09872744f5a9",
+  "pattern_record_path": "internal/artificer/records/usestrix__strix__09872744f5a9/patterns/lifecycle-gated-agent-completion.json",
+  "audit_report_id": "strix-09872744f5a9-audit",
+  "decision_status": "APPROVED",
+  "assigned_specialist": "clockwork",
+  "reviews": {
+    "arbiter": {
+      "status": "APPROVED",
+      "rationale": "The static evidence supports explicit lifecycle completion signals as a reference-only orchestration concept. The audit also records the absence of adversarial lifecycle testing, so the decision does not treat the source behavior as fully validated or production-ready.",
+      "review_date": "2026-07-12"
+    },
+    "governor": {
+      "status": "APPROVED",
+      "rationale": "The Strix source is Apache-2.0 and requires Governor review. This decision approves only concept-level consideration and authorizes no Strix source, prompt, payload, exploit, media, documentation expression, or implementation reuse. Any future direct adaptation requires separate review of notices, NOTICE obligations, attribution, patent provisions, distribution requirements, and dependency licenses.",
+      "review_date": "2026-07-12"
+    },
+    "steward": {
+      "status": "APPROVED",
+      "rationale": "Explicit lifecycle completion aligns with Orchestra deterministic orchestration and auditability goals. The pattern has sufficient architectural value to advance into later proposal review if implemented through typed states, validated transitions, and duplicate-signal controls.",
+      "review_date": "2026-07-12"
+    }
+  },
+  "maintainer_decision": {
+    "status": "APPROVED",
+    "rationale": "Approve lifecycle-gated completion as concept-only evidence for a fresh Orchestra-native lifecycle state machine. Any later proposal must define terminal states, transition validation, idempotency, duplicate-signal behavior, timeout handling, cancellation, and auditable completion evidence.",
+    "decision_date": "2026-07-12"
+  },
+  "implementation_restriction": "CONCEPT_ONLY",
+  "decision_date": "2026-07-12"
+}
