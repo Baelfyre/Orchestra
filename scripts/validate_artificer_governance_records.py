@@ -601,10 +601,60 @@ def _load_promotions(repo_root: Path, schemas: dict[str, dict], index: dict[str,
     return failures
 
 
+def validate_source_registry_layout(
+    repo_root: Path,
+) -> list[ValidationFailure]:
+    failures: list[ValidationFailure] = []
+    records_root = repo_root / RECORDS_DIR
+
+    if records_root.is_symlink():
+        failures.append(
+            _failure(
+                RECORDS_DIR,
+                "Source records directory must not be a symbolic link",
+                (
+                    "Replace internal/artificer/records with a regular "
+                    "repository directory."
+                ),
+            )
+        )
+        return failures
+
+    if not records_root.is_dir():
+        return failures
+
+    for bundle_dir in sorted(
+        records_root.iterdir(),
+        key=lambda item: (item.name.casefold(), item.name),
+    ):
+        if (
+            bundle_dir.name == "README.md"
+            or bundle_dir.is_symlink()
+            or not bundle_dir.is_dir()
+        ):
+            continue
+
+        patterns_dir = bundle_dir / "patterns"
+        if patterns_dir.is_symlink():
+            failures.append(
+                _failure(
+                    _rel(repo_root, patterns_dir),
+                    "Source pattern directory must not be a symbolic link",
+                    (
+                        "Replace the source-bundle patterns link with a "
+                        "regular directory."
+                    ),
+                )
+            )
+
+    return failures
+
+
 def validate_repository(repo_root: Path) -> list[ValidationFailure]:
     """Return deterministic Phase 4B governance-record validation failures."""
     schemas = _load_schemas(repo_root)
     failures = validate_registry_layout(repo_root)
+    failures.extend(validate_source_registry_layout(repo_root))
     index = _source_index(repo_root, schemas)
     allowlist = _specialist_allowlist(schemas["pattern"])
     audits, audit_failures = _load_audits(repo_root, schemas, index, allowlist)

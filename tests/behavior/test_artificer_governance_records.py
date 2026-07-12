@@ -244,16 +244,16 @@ class GovernanceRecordsTests(unittest.TestCase):
         root = Path(temp.name)
         return root, fixture_repo(root, chain, governor_required)
 
-    def assert_validation_failure(
+    def assert_failure(
         self,
-        root: Path,
+        failures: list[validator.ValidationFailure],
         *,
         target_contains: str,
         reason_contains: str,
         remediation_contains: str | None = None,
     ) -> None:
-        failures = validator.validate_repository(root)
         self.assertTrue(failures, "Expected validation to fail")
+
         matching = [
             failure
             for failure in failures
@@ -264,6 +264,7 @@ class GovernanceRecordsTests(unittest.TestCase):
                 or remediation_contains in failure.remediation
             )
         ]
+
         self.assertTrue(
             matching,
             (
@@ -273,9 +274,26 @@ class GovernanceRecordsTests(unittest.TestCase):
                 f"remediation_contains={remediation_contains!r}\n"
                 "Actual failures:\n"
                 + "\n".join(
-                    f"{f.target}: {f.reason} | {f.remediation}" for f in failures
+                    f"{failure.target}: {failure.reason} | "
+                    f"{failure.remediation}"
+                    for failure in failures
                 )
             ),
+        )
+
+    def assert_validation_failure(
+        self,
+        root: Path,
+        *,
+        target_contains: str,
+        reason_contains: str,
+        remediation_contains: str | None = None,
+    ) -> None:
+        self.assert_failure(
+            validator.validate_repository(root),
+            target_contains=target_contains,
+            reason_contains=reason_contains,
+            remediation_contains=remediation_contains,
         )
 
     def capture_main(self, argv: list[str]) -> tuple[int, str]:
@@ -386,35 +404,61 @@ class GovernanceRecordsTests(unittest.TestCase):
         )
 
     def test_registry_case_insensitive_collision_end_to_end_when_supported(self):
-        root, paths = self.with_repo("proposal")
-        probe = root / "CaseProbe"
+        root1, paths1 = self.with_repo("proposal")
+        root2, paths2 = self.with_repo("proposal")
+
+        probe = root1 / "CaseProbe"
         probe.write_text("probe", encoding="utf-8")
-        case_sensitive = not (root / "caseprobe").exists()
+        case_sensitive = not (root1 / "caseprobe").exists()
         probe.unlink()
+
         if not case_sensitive:
             self.skipTest(
                 "filesystem is case-insensitive in the temporary directory"
             )
-        collision_path1 = paths["proposal"].with_name("Proposal-1.json")
-        shutil.copy2(paths["proposal"], collision_path1)
-        failures1 = validator.validate_repository(root)
+
+        def create_collision_fixture(
+            root: Path,
+            proposal_path: Path,
+            order: list[str],
+        ) -> None:
+            content = proposal_path.read_bytes()
+            proposal_path.unlink()
+
+            for filename in order:
+                proposal_path.with_name(filename).write_bytes(content)
+
+        create_collision_fixture(
+            root1,
+            paths1["proposal"],
+            ["proposal-1.json", "Proposal-1.json"],
+        )
+        create_collision_fixture(
+            root2,
+            paths2["proposal"],
+            ["Proposal-1.json", "proposal-1.json"],
+        )
+
+        failures1 = validator.validate_repository(root1)
+        failures2 = validator.validate_repository(root2)
+
         self.assert_failure(
             failures1,
             target_contains="proposal-1.json",
             reason_contains="Case-insensitive filename collision",
+            remediation_contains="case sensitivity",
         )
-        collision_path1.unlink()
 
-        # Opposite creation order
-        collision_path2 = paths["proposal"].with_name("PROPOSAL-1.json")
-        shutil.copy2(paths["proposal"], collision_path2)
-        failures2 = validator.validate_repository(root)
-        self.assert_failure(
-            failures2,
-            target_contains="PROPOSAL-1.json",
-            reason_contains="Case-insensitive filename collision",
-        )
-        self.assertEqual(len(failures1), len(failures2))
+        rendered1 = [
+            (item.target, item.reason, item.remediation)
+            for item in failures1
+        ]
+        rendered2 = [
+            (item.target, item.reason, item.remediation)
+            for item in failures2
+        ]
+
+        self.assertEqual(rendered1, rendered2)
 
     def test_registry_symlink_fails_when_supported(self):
         root, _ = self.with_repo("audit")
@@ -455,9 +499,11 @@ class GovernanceRecordsTests(unittest.TestCase):
         records_dir.symlink_to(temp_records, target_is_directory=True)
         self.assert_validation_failure(
             root,
-            target_contains="audit-report.json",
-            reason_contains="Source bundle 'orchestra__orchestra__0123456789ab' is missing",
-            remediation_contains="Restore a valid Phase 3 source bundle",
+            target_contains="internal/artificer/records",
+            reason_contains=(
+                "Source records directory must not be a symbolic link"
+            ),
+            remediation_contains="regular repository directory",
         )
         records_dir.unlink()
         shutil.move(str(temp_records), str(records_dir))
@@ -468,9 +514,13 @@ class GovernanceRecordsTests(unittest.TestCase):
         patterns_dir.symlink_to(temp_patterns, target_is_directory=True)
         self.assert_validation_failure(
             root,
-            target_contains="audit-report.json",
-            reason_contains="Source bundle 'orchestra__orchestra__0123456789ab' is missing",
-            remediation_contains="Restore a valid Phase 3 source bundle",
+            target_contains=(
+                f"internal/artificer/records/{BUNDLE}/patterns"
+            ),
+            reason_contains=(
+                "Source pattern directory must not be a symbolic link"
+            ),
+            remediation_contains="regular directory",
         )
         patterns_dir.unlink()
         shutil.move(str(temp_patterns), str(patterns_dir))
