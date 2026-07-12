@@ -199,6 +199,20 @@ class TestArtificerInternal(unittest.TestCase):
             )
         )
 
+    def test_failure_deprecated_classification_reintroduced(self):
+        path = self.temp_root / "internal/artificer/PATTERN_SCHEMA.json"
+        schema = json.loads(path.read_text(encoding="utf-8"))
+        schema["properties"]["classification"]["enum"].append("REJECTED")
+        path.write_text(json.dumps(schema, indent=2), encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "internal/artificer/PATTERN_SCHEMA.json"
+                and "classification enum mismatch" in failure.reason.lower()
+                for failure in failures
+            )
+        )
+
     def test_failure_duplicate_classification_enum(self):
         path = self.temp_root / "internal/artificer/PATTERN_SCHEMA.json"
         schema = json.loads(path.read_text(encoding="utf-8"))
@@ -237,6 +251,20 @@ class TestArtificerInternal(unittest.TestCase):
             any(
                 failure.target == "internal/artificer/SOURCE_INTAKE_SCHEMA.json"
                 and "source confidence enum mismatch" in failure.reason.lower()
+                for failure in failures
+            )
+        )
+
+    def test_failure_default_branch_removed_from_required(self):
+        path = self.temp_root / "internal/artificer/SOURCE_INTAKE_SCHEMA.json"
+        schema = json.loads(path.read_text(encoding="utf-8"))
+        schema["required"].remove("default_branch")
+        path.write_text(json.dumps(schema, indent=2), encoding="utf-8")
+        failures = val.validate_repository(self.temp_root)
+        self.assertTrue(
+            any(
+                failure.target == "internal/artificer/SOURCE_INTAKE_SCHEMA.json"
+                and "required list mismatch" in failure.reason.lower()
                 for failure in failures
             )
         )

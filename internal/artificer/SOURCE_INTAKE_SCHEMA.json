@@ -58,7 +58,7 @@
     },
     "runtime_behavior_tested": {
       "type": "boolean",
-      "description": "Indicates if runtime behavior was tested."
+      "description": "Indicates whether separately authorized isolated external validation occurred. This must never imply execution by Artificer in the Orchestra workspace."
     },
     "source_confidence": {
       "type": "string",
@@ -75,6 +75,7 @@
     "repository_owner",
     "canonical_url",
     "license",
+    "default_branch",
     "reviewed_commit_sha",
     "review_date",
     "files_examined",

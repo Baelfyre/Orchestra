@@ -2,6 +2,8 @@
 
 This document defines the structured workflow for importing and evaluating external design patterns to evolve Orchestra.
 
+Phase 4A ends after the source-intake and pattern schema contracts are defined and validated. Reviews, governance decisions, proposals, promotions, and cross-record relationships are not validated in Phase 4A; Phase 4B owns those governance-record checks.
+
 ## End-to-End Workflow Stages
 
 ```mermaid
@@ -23,7 +25,7 @@ graph TD
 3. Stop if metadata is incomplete, or if the license is invalid/incompatible.
 
 ### Stage 2: Static Source Audit & Security Scan
-1. Pull or inspect the target repository.
+1. Inspect the external repository through an approved read-only source connector at a pinned commit SHA. Do not clone, fetch, install, compile, or execute the external repository inside the Orchestra workspace.
 2. Run static analysis only.
 3. Check for security hazards:
    - Secret keys, API tokens, endpoints.

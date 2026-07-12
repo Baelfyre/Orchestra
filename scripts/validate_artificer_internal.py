@@ -129,7 +129,7 @@ def validate_pattern_schema(repo_root: Path) -> list[ValidationFailure]:
             failures.append(ValidationFailure("internal/artificer/PATTERN_SCHEMA.json", reason, "Ensure required list matches exactly the mandatory fields"))
 
         class_enum = properties.get("classification", {}).get("enum", [])
-        expected_class_enum = ["REFERENCE_ONLY", "ADAPTED_PATTERN", "CODE_REUSE_REVIEW_REQUIRED", "TEST_CORPUS_CANDIDATE", "REJECTED", "DEFERRED", "DUPLICATE", "OUT_OF_SCOPE"]
+        expected_class_enum = ["REFERENCE_ONLY", "ADAPTED_PATTERN", "CODE_REUSE_REVIEW_REQUIRED", "TEST_CORPUS_CANDIDATE", "OUT_OF_SCOPE"]
         if class_enum != expected_class_enum:
             reason = "classification enum mismatch"
             failures.append(ValidationFailure("internal/artificer/PATTERN_SCHEMA.json", reason, "Set classification enum to the exact expected values"))
@@ -172,7 +172,7 @@ def validate_source_intake_schema(repo_root: Path) -> list[ValidationFailure]:
             reason = f"Properties mismatch: expected {expected_props}, got {set(properties.keys())}"
             failures.append(ValidationFailure("internal/artificer/SOURCE_INTAKE_SCHEMA.json", reason, "Ensure SOURCE_INTAKE_SCHEMA.json defines exactly the required properties"))
 
-        expected_req = {"repository", "repository_owner", "canonical_url", "license", "reviewed_commit_sha", "review_date", "files_examined", "runtime_behavior_tested", "source_confidence"}
+        expected_req = {"repository", "repository_owner", "canonical_url", "license", "default_branch", "reviewed_commit_sha", "review_date", "files_examined", "runtime_behavior_tested", "source_confidence"}
         if set(required) != expected_req:
             reason = f"Required list mismatch: expected {expected_req}, got {set(required)}"
             failures.append(ValidationFailure("internal/artificer/SOURCE_INTAKE_SCHEMA.json", reason, "Ensure required list matches exactly the mandatory fields"))

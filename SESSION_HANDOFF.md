@@ -1,12 +1,12 @@
 # Session Handoff
 
-- **Current Task:** Complete and merge PR #161
+- **Current Task:** Complete Phase 4A Governance Contracts and Registry Design
 - **Current Repo:** `C:\+conductor`
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.1`
 - **Target Patch:** `v1.1.2`
-- **Mode:** Phase 3 final review
+- **Mode:** Phase 4A Review
 - **Allowed Files:**
   - `scripts/validate_artificer_records.py`
   - `tests/behavior/test_artificer_records.py`
@@ -20,9 +20,9 @@
   - `PROJECT_STATE.md`
   - `SESSION_HANDOFF.md`
 - **Forbidden Repo:** `C:\+AA`
-- **Last Validation:** 60 Phase 3 tests passed; Validate, Governance Check, and all Windows, Ubuntu, and macOS Cross-platform Validation jobs passed.
+- **Last Validation:** Legacy Phase 3 validators pass locally after restoring `scripts/validate_artificer_internal.py`.
 - **Known Risks:** Prompt-load thresholds remain advisory and current observed Groups A, B, C, and Grand Total exceed documented soft limits; no replacement baseline has been approved.
-- **Next Step:** Merge PR #161 and synchronize local main.
+- **Next Step:** Run the full validation matrix as instructed and await user approval before committing Phase 4A changes.
 - **Fresh-Session Warning:** If the current conversation has long prior history from another repository, enter safe mode and request user confirmation before proceeding with implementation.
 
 ## Token Control Note

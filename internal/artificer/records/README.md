@@ -50,6 +50,7 @@ Validation enforces the JSON schema subsets located at:
   "license": "MIT",
   "reviewed_commit_sha": "a1b2c3d4e5f678901234567890abcdef12345678",
   "review_date": "2026-07-11",
+  "default_branch": "main",
   "files_examined": [
     {
       "file_path": "src/main.py",
@@ -76,3 +77,5 @@ Validation enforces the JSON schema subsets located at:
 ```
 
 *Note: The pattern's `source_file` must map exactly to an entry in the intake's `files_examined`, and its `line_range` must fall completely within the examined line ranges.*
+
+The required `default_branch` records the source repository's declared default branch. A `runtime_behavior_tested` value of `true` records only separately authorized isolated external validation; it never indicates execution by Artificer in the Orchestra workspace.
