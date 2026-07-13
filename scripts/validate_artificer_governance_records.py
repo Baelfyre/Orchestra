@@ -137,6 +137,15 @@ def _date(value: object, field: str, target: str) -> list[ValidationFailure]:
     return []
 
 
+def _date_value(value: object) -> date | None:
+    if not isinstance(value, str):
+        return None
+    try:
+        return date.fromisoformat(value)
+    except ValueError:
+        return None
+
+
 def _nonempty_strings(value: object, target: str, field: str = "") -> list[ValidationFailure]:
     failures: list[ValidationFailure] = []
     if isinstance(value, dict):
@@ -488,12 +497,34 @@ def _load_proposals(repo_root: Path, schemas: dict[str, dict], index: dict[str, 
         for audit_id in audit_ids if isinstance(audit_ids, list) else []:
             if audit_id not in audits:
                 failures.append(_failure(target, f"source_audit_id '{audit_id}' does not resolve", "Reference an existing audit_report_id."))
+        proposal_date = _date_value(record.get("proposal_date"))
+        failures.extend(_date(record.get("proposal_date"), "proposal_date", target))
+        reviews = record.get("reviews", {})
+        review_dates: list[date] = []
+        review_statuses: dict[str, object] = {}
+        if isinstance(reviews, dict):
+            for reviewer, review in reviews.items():
+                if not isinstance(review, dict):
+                    continue
+                review_statuses[reviewer] = review.get("status")
+                failures.extend(_date(review.get("review_date"), f"reviews.{reviewer}.review_date", target))
+                review_date = _date_value(review.get("review_date"))
+                if review_date is not None:
+                    review_dates.append(review_date)
+                    if proposal_date is not None and review_date < proposal_date:
+                        failures.append(_failure(target, f"reviews.{reviewer}.review_date precedes proposal_date", "Use a reviewer date on or after proposal_date."))
+        maintainer = record.get("maintainer_decision", {})
+        maintainer_status = maintainer.get("status") if isinstance(maintainer, dict) else None
+        maintainer_rationale = maintainer.get("rationale", "") if isinstance(maintainer, dict) else ""
+        failures.extend(_date(maintainer.get("decision_date") if isinstance(maintainer, dict) else None, "maintainer_decision.decision_date", target))
+        maintainer_date = _date_value(maintainer.get("decision_date")) if isinstance(maintainer, dict) else None
         selected = record.get("selected_patterns")
         if not isinstance(selected, list) or not selected:
             failures.append(_failure(target, "selected_patterns must contain at least one item", "Add an approved decision and pattern selection."))
             continue
         decision_ids: set[str] = set()
         pattern_paths: set[str] = set()
+        selected_decision_dates: list[date] = []
         for number, item in enumerate(selected):
             if not isinstance(item, dict):
                 continue
@@ -512,6 +543,11 @@ def _load_proposals(repo_root: Path, schemas: dict[str, dict], index: dict[str, 
                 failures.append(_failure(target, f"selected_patterns[{number}].decision_id does not resolve", "Reference an existing approved decision."))
                 continue
             decision, bundle_id = pair
+            decision_date = _date_value(decision.get("decision_date"))
+            if decision_date is not None:
+                selected_decision_dates.append(decision_date)
+                if proposal_date is not None and proposal_date < decision_date:
+                    failures.append(_failure(target, f"proposal_date precedes selected decision '{decision_id}' decision_date", "Use a proposal_date on or after every selected decision date."))
             if decision.get("decision_status") != "APPROVED" or decision.get("implementation_restriction") == "IMPLEMENTATION_BLOCKED":
                 failures.append(_failure(target, f"selected_patterns[{number}] must reference an approved non-blocked decision", "Reference a decision with decision_status APPROVED and a non-blocked restriction."))
             if decision.get("audit_report_id") not in audit_ids:
@@ -533,6 +569,53 @@ def _load_proposals(repo_root: Path, schemas: dict[str, dict], index: dict[str, 
                 failures.append(_failure(target, "DIRECT_REUSE_REVIEW_REQUIRED requires a code-reuse decision and source classification", "Use CODE_REUSE_REVIEW_REQUIRED for both the decision restriction and source pattern classification."))
             if mechanism == "TEST_CORPUS_ADAPTATION" and (not pattern or pattern.get("classification") != "TEST_CORPUS_CANDIDATE"):
                 failures.append(_failure(target, "TEST_CORPUS_ADAPTATION requires a TEST_CORPUS_CANDIDATE source pattern", "Use a test-corpus candidate pattern or another evolution mechanism."))
+        status = record.get("proposal_status")
+        final_statuses = {"APPROVED", "REVISION_REQUIRED", "DEFERRED", "REJECTED", "BLOCKED"}
+        if status in final_statuses:
+            if maintainer_status != status:
+                failures.append(_failure(target, "proposal_status must equal maintainer_decision.status for final proposals", "Set proposal_status and maintainer_decision.status to the same final value."))
+            if maintainer_status == "PENDING":
+                failures.append(_failure(target, "Final proposal retains a PENDING Maintainer decision", "Complete the Maintainer disposition before using a final proposal status."))
+            if maintainer_date is not None and any(maintainer_date < review_date for review_date in review_dates):
+                failures.append(_failure(target, "maintainer_decision.decision_date precedes a reviewer date", "Use a final Maintainer decision date on or after every reviewer date."))
+        if status == "DRAFT":
+            if maintainer_status != "PENDING":
+                failures.append(_failure(target, "DRAFT requires Maintainer PENDING", "Set maintainer_decision.status to PENDING."))
+            if "BLOCKED" in review_statuses.values():
+                failures.append(_failure(target, "DRAFT must not contain a BLOCKED reviewer", "Resolve the blocking review or use proposal_status BLOCKED."))
+        elif status == "UNDER_REVIEW":
+            if maintainer_status != "PENDING":
+                failures.append(_failure(target, "UNDER_REVIEW requires Maintainer PENDING", "Set maintainer_decision.status to PENDING."))
+            if "PENDING" not in review_statuses.values():
+                failures.append(_failure(target, "UNDER_REVIEW requires at least one PENDING reviewer", "Keep proposal_status UNDER_REVIEW only while a reviewer remains PENDING."))
+        elif status == "APPROVED":
+            required = {"arbiter": "APPROVED", "steward": "APPROVED"}
+            governor_required = any(
+                isinstance(audits.get(audit_id), tuple)
+                and audits[audit_id][0].get("license_analysis", {}).get("governor_review_required") is True
+                for audit_id in audit_ids if isinstance(audit_ids, list)
+            )
+            for reviewer, expected in required.items():
+                if review_statuses.get(reviewer) != expected:
+                    failures.append(_failure(target, f"APPROVED proposal requires {reviewer} APPROVED", f"Set reviews.{reviewer}.status to APPROVED."))
+            governor_status = review_statuses.get("governor")
+            if governor_required and governor_status != "APPROVED":
+                failures.append(_failure(target, "APPROVED proposal requires Governor APPROVED for a referenced audit", "Set reviews.governor.status to APPROVED."))
+            if not governor_required and governor_status not in {"APPROVED", "NOT_REQUIRED"}:
+                failures.append(_failure(target, "APPROVED proposal requires Governor APPROVED or NOT_REQUIRED", "Set reviews.governor.status to APPROVED or NOT_REQUIRED."))
+            if any(value in {"PENDING", "REVISION_REQUIRED", "BLOCKED"} for value in review_statuses.values()):
+                failures.append(_failure(target, "APPROVED proposal has a pending or blocking reviewer status", "Complete all reviews without PENDING, REVISION_REQUIRED, or BLOCKED."))
+        elif status == "REVISION_REQUIRED":
+            if "REVISION_REQUIRED" not in review_statuses.values() and "revision" not in str(maintainer_rationale).casefold():
+                failures.append(_failure(target, "REVISION_REQUIRED proposal lacks a stated revision condition", "Record a REVISION_REQUIRED reviewer or explain the required revision in the Maintainer rationale."))
+        elif status in {"DEFERRED", "REJECTED"}:
+            if "PENDING" in review_statuses.values():
+                failures.append(_failure(target, f"{status} proposal retains a PENDING reviewer", "Complete all reviewer statuses before final disposition."))
+        elif status == "BLOCKED":
+            if "PENDING" in review_statuses.values():
+                failures.append(_failure(target, "BLOCKED proposal retains a PENDING reviewer", "Complete all reviewer statuses before final disposition."))
+            if "BLOCKED" not in review_statuses.values() and "block" not in str(maintainer_rationale).casefold():
+                failures.append(_failure(target, "BLOCKED proposal lacks a blocking condition", "Record a BLOCKED reviewer or explain the blocking condition in the Maintainer rationale."))
     return proposals, failures
 
 

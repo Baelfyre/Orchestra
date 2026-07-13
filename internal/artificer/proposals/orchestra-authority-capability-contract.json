@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.1",
+  "proposal_id": "orchestra-authority-capability-contract",
+  "title": "Orchestra Authority, Capability, Delegation, and Lifecycle Contract",
+  "objective": "Define one cohesive Orchestra-native governance and design contract connecting declared authority scope, immutable run-scoped capabilities, bounded specialist delegation, and typed lifecycle completion. Declaration is not enforcement; capabilities are least-privilege and immutable per run; child authority cannot exceed parent authority; completion requires validated lifecycle transitions; and no Strix implementation expression is reused.",
+  "proposal_date": "2026-07-12",
+  "source_audit_ids": [
+    "strix-09872744f5a9-audit"
+  ],
+  "selected_patterns": [
+    {
+      "decision_id": "strix-declared-scope-context-decision",
+      "pattern_record_path": "internal/artificer/records/usestrix__strix__09872744f5a9/patterns/declared-scope-context.json",
+      "target_component": "authority.scope_contract",
+      "evolution_mechanism": "CONCEPTUAL_ADAPTATION",
+      "owner_specialist": "arbiter",
+      "rationale": "Create a fresh Orchestra-native design requiring immutable scope, scope provenance, independent enforcement, deny-by-default behavior, rejection of prompt-based authority expansion, and auditable denials. Scope declaration alone is never treated as enforcement."
+    },
+    {
+      "decision_id": "strix-run-wide-tool-extension-registry-decision",
+      "pattern_record_path": "internal/artificer/records/usestrix__strix__09872744f5a9/patterns/run-wide-tool-extension-registry.json",
+      "target_component": "authority.capability_manifest",
+      "evolution_mechanism": "CONCEPTUAL_ADAPTATION",
+      "owner_specialist": "clockwork",
+      "rationale": "Create immutable per-run capability manifests with no process-global mutable registration, role-based allowlists, least privilege, stable capability identity, provenance, deterministic collision rejection, and auditable effective capability sets."
+    },
+    {
+      "decision_id": "strix-validated-specialist-delegation-decision",
+      "pattern_record_path": "internal/artificer/records/usestrix__strix__09872744f5a9/patterns/validated-specialist-delegation.json",
+      "target_component": "orchestration.delegation_contract",
+      "evolution_mechanism": "CONCEPTUAL_ADAPTATION",
+      "owner_specialist": "overseer",
+      "rationale": "Require registered-specialist validation, parent-authority validation, bounded delegation depth, structured task contracts, minimum necessary context, sensitive-data filtering, explicit child capability scope, deterministic rejection, and parent-child provenance."
+    },
+    {
+      "decision_id": "strix-lifecycle-gated-agent-completion-decision",
+      "pattern_record_path": "internal/artificer/records/usestrix__strix__09872744f5a9/patterns/lifecycle-gated-agent-completion.json",
+      "target_component": "orchestration.lifecycle_state_machine",
+      "evolution_mechanism": "CONCEPTUAL_ADAPTATION",
+      "owner_specialist": "clockwork",
+      "rationale": "Require typed lifecycle states, explicit transitions, schema-validated completion signals, idempotent terminal states, duplicate-signal handling, timeout, cancellation, distinct waiting or parked states, and auditable state transitions. Ordinary text cannot implicitly complete an agent."
+    }
+  ],
+  "verification_plan": "Future specialist-owned implementation validation must prove: (1) prompts cannot widen declared authority; (2) undeclared targets are rejected before privileged action; (3) undeclared capabilities are denied before invocation; (4) capability manifests cannot mutate after run initialization; (5) child authority is never broader than parent authority; (6) delegation depth is bounded; (7) unknown specialists are rejected; (8) unauthorized context inheritance is rejected; (9) sensitive context is minimized or filtered; (10) invalid lifecycle transitions fail deterministically; (11) duplicate completion signals are idempotent; (12) timeout, cancellation, and waiting states are distinct; (13) ordinary text cannot complete an agent; (14) invalid or empty system authority fails closed; and (15) denials and transitions create auditable evidence. These are future design verification requirements only and authorize no Phase 5C-A runtime implementation.",
+  "governance_handoff": "Independent Phase 5C-B review is required. Arbiter, Governor, Steward, and Maintainer review remain pending. Even an approved proposal remains design-only. Promotion requires a later manual promotion record; Pattern Catalog synchronization requires a separate later action; and specialist-owned implementation requires separate Maintainer authorization. No source, prompt, payload, exploit, example, media, or documentation-expression reuse is authorized. The rejected strix-fail-open-system-prompt-rendering-decision is not selected: prompt construction must fail closed, startup must stop on invalid or empty system authority, and failures must produce typed, auditable errors.",
+  "reviews": {
+    "arbiter": {
+      "status": "PENDING",
+      "rationale": "Pending independent assessment of evidence traceability, duplicate-pattern analysis, authority-boundary coherence, lifecycle continuity, and selected-pattern consistency.",
+      "review_date": "2026-07-12"
+    },
+    "governor": {
+      "status": "PENDING",
+      "rationale": "Pending mandatory Apache-2.0 review covering the no-source-or-prompt-reuse boundary, NOTICE and attribution implications, patent and distribution obligations, and third-party dependency uncertainty.",
+      "review_date": "2026-07-12"
+    },
+    "steward": {
+      "status": "PENDING",
+      "rationale": "Pending assessment of business and roadmap alignment, scope necessity, proposal cohesion, acceptance criteria, and separation from implementation.",
+      "review_date": "2026-07-12"
+    }
+  },
+  "maintainer_decision": {
+    "status": "PENDING",
+    "rationale": "Pending independent Phase 5C-B Arbiter, Governor, Steward, and Maintainer disposition. This draft creates no promotion, Catalog, source-reuse, prompt-reuse, or implementation authority.",
+    "decision_date": "2026-07-12"
+  },
+  "proposal_status": "UNDER_REVIEW"
+}

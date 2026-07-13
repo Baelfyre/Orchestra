@@ -1,23 +1,23 @@
 # Session Handoff
 
-- **Current Stable State:** Artificer Phase 5B-B completed through PR #170
-- **Current Task:** Issue #171 governance, prompt-load, and routing recalibration before Phase 5C
+- **Current Stable State:** Issue #171 completed through PR #172; the Phase 5C gate is cleared
+- **Current Task:** Issue #173 Artificer Phase 5C-A governed authority/capability proposal lifecycle
 - **Current Repo:** `C:\+conductor`
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.1`
 - **Target Patch:** `v1.1.2`
-- **Mode:** Governed implementation and validation audit
-- **Allowed Files:** Issue #171 governance, routing, prompt-load, validator, test, Codex export, and state-documentation scope only.
+- **Mode:** Phase 5C-A proposal-contract implementation and validation audit
+- **Allowed Files:** The exact 13-file Issue #173 Phase 5C-A schema, proposal, validator, governance-record test, Catalog fixture test, governance, workflow, checklist, changelog, decision-log, and state-documentation scope only.
 - **Forbidden Repo:** `C:\+AA`
-- **Last Validation:** Complete Issue #171 validation chain passed locally, including integrated behavior, strict governance with 0 errors and 0 warnings, and 43 runtime tests.
-- **Known Risks:** Static routing contracts prove deterministic policy consistency, not actual LLM route accuracy. Manual or model-driven dry-run evidence remains separate.
-- **Issue Reference:** `gh issue view 171 --repo Baelfyre/Orchestra`
-- **Exact Branch:** `fix/issue-171-governance-routing-drift`
-- **Boundary Rules:** Do not begin Phase 5C. Do not create Artificer proposal, promotion, decision, or Pattern Catalog changes. Do not weaken governance gates, Governor human-review behavior, Arbiter continuity gates, or Dagger destructive-operation gates. Do not stage, commit, push, open PR, merge, or change release versions.
-- **Audit Scope:** Issue #171 governance, routing, prompt-load, validator, export, and state-documentation changes only.
-- **Governance Advancement:** This issue recalibrates governance and routing policy only. It creates no Artificer proposal, promotion, Pattern Catalog update, source-reuse authority, prompt-reuse authority, or implementation authority.
-- **Next Step:** Maintainer review of the exact unstaged 31-file Issue #171 scope.
+- **Last Validation:** Exact unstaged 13-file Phase 5C-A chain passed locally, including integrated behavior, strict governance with 0 errors and 0 warnings, and 43 runtime tests at 95.51% coverage.
+- **Known Risks:** Phase 5C-B Arbiter, Governor, Steward, and Maintainer disposition remains pending.
+- **Issue Reference:** `gh issue view 173 --repo Baelfyre/Orchestra`
+- **Exact Branch:** `feat/artificer-phase-5c-authority-capability-proposal`
+- **Boundary Rules:** Phase 5C-A may harden the proposal contract and create one `UNDER_REVIEW` proposal only. Do not perform Phase 5C-B disposition, create a promotion, modify the Pattern Catalog, implement runtime features, access external Strix, stage, commit, push, open a PR, merge, or change release versions.
+- **Audit Scope:** Issue #173 Phase 5C-A schema, proposal, validator, focused tests, governance documentation, and repository-state updates only.
+- **Governance Advancement:** Phase 5C-A creates one design-only `UNDER_REVIEW` proposal. It creates no final approval, promotion, Pattern Catalog change, source-reuse authority, prompt-reuse authority, or implementation authority.
+- **Next Step:** Maintainer review of the exact unstaged 13-file Phase 5C-A scope without beginning Phase 5C-B.
 - **Fresh-Session Warning:** If the current conversation has long prior history from another repository, enter safe mode and request user confirmation before proceeding with implementation.
 
 ## Token Control Note

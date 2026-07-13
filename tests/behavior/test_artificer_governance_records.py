@@ -49,6 +49,21 @@ def update_json(path: Path, modify) -> None:
     write_json(path, data)
 
 
+def set_proposal_state(data: dict, status: str) -> None:
+    data["proposal_status"] = status
+    data["maintainer_decision"]["status"] = "PENDING" if status in {"DRAFT", "UNDER_REVIEW"} else status
+    for review in data["reviews"].values():
+        review["status"] = "APPROVED"
+    if status == "UNDER_REVIEW":
+        data["reviews"]["arbiter"]["status"] = "PENDING"
+    elif status == "REVISION_REQUIRED":
+        data["reviews"]["arbiter"]["status"] = "REVISION_REQUIRED"
+        data["maintainer_decision"]["rationale"] = "Revision required before proceeding."
+    elif status == "BLOCKED":
+        data["reviews"]["arbiter"]["status"] = "BLOCKED"
+        data["maintainer_decision"]["rationale"] = "Blocked pending resolution."
+
+
 def add_source_bundle(
     root: Path,
     bundle_id: str,
@@ -187,10 +202,11 @@ def fixture_repo(
     if chain == "decision":
         return paths
     proposal = {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "proposal_id": "proposal-1",
         "title": "Proposal",
         "objective": "Adapt concept.",
+        "proposal_date": "2026-07-03",
         "source_audit_ids": ["audit-1"],
         "selected_patterns": [
             {
@@ -204,6 +220,12 @@ def fixture_repo(
         ],
         "verification_plan": "Run tests.",
         "governance_handoff": "Maintainer review.",
+        "reviews": {
+            "arbiter": {"status": "APPROVED", "rationale": "Reviewed.", "review_date": "2026-07-03"},
+            "governor": {"status": governor_status, "rationale": "Reviewed.", "review_date": "2026-07-03"},
+            "steward": {"status": "APPROVED", "rationale": "Reviewed.", "review_date": "2026-07-03"},
+        },
+        "maintainer_decision": {"status": "APPROVED", "rationale": "Approved.", "decision_date": "2026-07-03"},
         "proposal_status": "APPROVED",
     }
     write_json(paths["proposal"], proposal)
@@ -321,6 +343,78 @@ class GovernanceRecordsTests(unittest.TestCase):
             with self.subTest(name=name):
                 root, _ = self.with_repo(chain, governor_required)
                 self.assertEqual([], validator.validate_repository(root))
+
+    def test_real_repository_with_under_review_proposal_passes(self):
+        self.assertEqual([], validator.validate_repository(REPO_ROOT))
+
+    def test_valid_proposal_lifecycle_states(self):
+        for status in ("DRAFT", "UNDER_REVIEW", "APPROVED"):
+            with self.subTest(status=status):
+                root, paths = self.with_repo("proposal", governor_required=True)
+                update_json(paths["proposal"], lambda data: set_proposal_state(data, status))
+                self.assertEqual([], validator.validate_repository(root))
+
+    def test_proposal_lifecycle_and_date_failures(self):
+        cases = [
+            ("approved without Arbiter approval", False, lambda paths: update_json(paths["proposal"], lambda data: data["reviews"]["arbiter"].__setitem__("status", "NOT_REQUIRED")), "APPROVED proposal requires arbiter APPROVED"),
+            ("approved without Steward approval", False, lambda paths: update_json(paths["proposal"], lambda data: data["reviews"]["steward"].__setitem__("status", "NOT_REQUIRED")), "APPROVED proposal requires steward APPROVED"),
+            ("required Governor review marked not required", True, lambda paths: update_json(paths["proposal"], lambda data: data["reviews"]["governor"].__setitem__("status", "NOT_REQUIRED")), "APPROVED proposal requires Governor APPROVED for a referenced audit"),
+            ("approved with Maintainer pending", False, lambda paths: update_json(paths["proposal"], lambda data: data["maintainer_decision"].__setitem__("status", "PENDING")), "proposal_status must equal maintainer_decision.status for final proposals"),
+            ("approved with pending reviewer", False, lambda paths: update_json(paths["proposal"], lambda data: data["reviews"]["arbiter"].__setitem__("status", "PENDING")), "APPROVED proposal has a pending or blocking reviewer status"),
+            ("proposal and Maintainer final status mismatch", False, lambda paths: update_json(paths["proposal"], lambda data: data.__setitem__("proposal_status", "DEFERRED")), "proposal_status must equal maintainer_decision.status for final proposals"),
+            ("proposal date before selected decision", False, lambda paths: update_json(paths["proposal"], lambda data: data.__setitem__("proposal_date", "2026-07-02")), "proposal_date precedes selected decision 'decision-1' decision_date"),
+            ("reviewer date before proposal date", False, lambda paths: update_json(paths["proposal"], lambda data: data["reviews"]["arbiter"].__setitem__("review_date", "2026-07-02")), "reviews.arbiter.review_date precedes proposal_date"),
+            ("Maintainer final date before reviewer date", False, lambda paths: update_json(paths["proposal"], lambda data: data["reviews"]["arbiter"].__setitem__("review_date", "2026-07-04")), "maintainer_decision.decision_date precedes a reviewer date"),
+            ("impossible proposal calendar date", False, lambda paths: update_json(paths["proposal"], lambda data: data.__setitem__("proposal_date", "2026-02-30")), "proposal_date '2026-02-30' is not a valid ISO calendar date"),
+            ("impossible reviewer calendar date", False, lambda paths: update_json(paths["proposal"], lambda data: data["reviews"]["arbiter"].__setitem__("review_date", "2026-02-30")), "reviews.arbiter.review_date '2026-02-30' is not a valid ISO calendar date"),
+            ("impossible Maintainer calendar date", False, lambda paths: update_json(paths["proposal"], lambda data: data["maintainer_decision"].__setitem__("decision_date", "2026-02-30")), "maintainer_decision.decision_date '2026-02-30' is not a valid ISO calendar date"),
+        ]
+        for name, governor_required, mutate, reason in cases:
+            with self.subTest(name=name):
+                root, paths = self.with_repo("proposal", governor_required)
+                mutate(paths)
+                self.assert_validation_failure(
+                    root,
+                    target_contains="proposal-1.json",
+                    reason_contains=reason,
+                )
+
+    def test_non_approved_proposals_cannot_be_promoted(self):
+        for status in (
+            "DRAFT",
+            "UNDER_REVIEW",
+            "REVISION_REQUIRED",
+            "DEFERRED",
+            "REJECTED",
+            "BLOCKED",
+        ):
+            with self.subTest(status=status):
+                root, paths = self.with_repo()
+                update_json(paths["proposal"], lambda data: set_proposal_state(data, status))
+                self.assert_validation_failure(
+                    root,
+                    target_contains="catalog-pattern.json",
+                    reason_contains="proposal_id must resolve to an approved proposal",
+                    remediation_contains="Reference an existing approved evolution proposal",
+                )
+
+    def test_validator_leaves_governance_chain_and_catalog_byte_identical(self):
+        root, paths = self.with_repo()
+        catalog = root / "docs/internal/PATTERN_CATALOG.md"
+        catalog.parent.mkdir(parents=True)
+        catalog.write_bytes(b"governed catalog\n")
+        tracked = [
+            paths["audit"],
+            paths["decision"],
+            paths["proposal"],
+            paths["promotion"],
+            root / f"internal/artificer/records/{BUNDLE}/source-intake.json",
+            root / PATTERN_PATH,
+            catalog,
+        ]
+        before = {path: path.read_bytes() for path in tracked}
+        self.assertEqual([], validator.validate_repository(root))
+        self.assertEqual(before, {path: path.read_bytes() for path in tracked})
 
     def test_registry_layout_failures(self):
         cases = [

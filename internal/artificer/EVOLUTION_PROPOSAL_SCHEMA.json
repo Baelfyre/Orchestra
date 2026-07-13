@@ -5,7 +5,7 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": ["1.0"],
+      "enum": ["1.1"],
       "description": "The fixed schema version."
     },
     "proposal_id": {
@@ -19,6 +19,11 @@
     "objective": {
       "type": "string",
       "description": "The main goal of the evolution."
+    },
+    "proposal_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the proposal entered the governed proposal lifecycle."
     },
     "source_audit_ids": {
       "type": "array",
@@ -64,17 +69,59 @@
       "type": "string",
       "description": "Information required for governance handover."
     },
+    "reviews": {
+      "type": "object",
+      "properties": {
+        "arbiter": {
+          "type": "object",
+          "properties": {
+            "status": { "type": "string", "enum": ["NOT_REQUIRED", "PENDING", "APPROVED", "REVISION_REQUIRED", "BLOCKED"] },
+            "rationale": { "type": "string" },
+            "review_date": { "type": "string", "format": "date" }
+          },
+          "required": ["status", "rationale", "review_date"],
+          "additionalProperties": false
+        },
+        "governor": {
+          "type": "object",
+          "properties": {
+            "status": { "type": "string", "enum": ["NOT_REQUIRED", "PENDING", "APPROVED", "REVISION_REQUIRED", "BLOCKED"] },
+            "rationale": { "type": "string" },
+            "review_date": { "type": "string", "format": "date" }
+          },
+          "required": ["status", "rationale", "review_date"],
+          "additionalProperties": false
+        },
+        "steward": {
+          "type": "object",
+          "properties": {
+            "status": { "type": "string", "enum": ["NOT_REQUIRED", "PENDING", "APPROVED", "REVISION_REQUIRED", "BLOCKED"] },
+            "rationale": { "type": "string" },
+            "review_date": { "type": "string", "format": "date" }
+          },
+          "required": ["status", "rationale", "review_date"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["arbiter", "governor", "steward"],
+      "additionalProperties": false
+    },
+    "maintainer_decision": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["PENDING", "APPROVED", "REVISION_REQUIRED", "DEFERRED", "REJECTED", "BLOCKED"]
+        },
+        "rationale": { "type": "string" },
+        "decision_date": { "type": "string", "format": "date" }
+      },
+      "required": ["status", "rationale", "decision_date"],
+      "additionalProperties": false
+    },
     "proposal_status": {
       "type": "string",
-      "enum": [
-        "DRAFT",
-        "UNDER_REVIEW",
-        "APPROVED",
-        "REVISION_REQUIRED",
-        "DEFERRED",
-        "REJECTED",
-        "BLOCKED"
-      ],
+      "enum": ["DRAFT", "UNDER_REVIEW", "APPROVED", "REVISION_REQUIRED", "DEFERRED", "REJECTED", "BLOCKED"],
       "description": "Overall status of the proposal."
     }
   },
@@ -83,10 +130,13 @@
     "proposal_id",
     "title",
     "objective",
+    "proposal_date",
     "source_audit_ids",
     "selected_patterns",
     "verification_plan",
     "governance_handoff",
+    "reviews",
+    "maintainer_decision",
     "proposal_status"
   ],
   "additionalProperties": false

@@ -67,3 +67,14 @@ Use this checklist during every repository audit to evaluate design patterns for
 - [ ] Confirm no decision, proposal, promotion, or Pattern Catalog change occurred.
 - [ ] Confirm OpenHero records remain untouched.
 - [ ] Confirm Strix remains the only active pilot.
+
+## Phase 5C: Governed Evolution Proposal
+- [ ] Confirm every selected pattern references an `APPROVED` governance decision.
+- [ ] Confirm every selected decision traces to an audit listed in `source_audit_ids`.
+- [ ] Confirm `CONCEPT_ONLY` decisions use only `CONCEPTUAL_ADAPTATION`.
+- [ ] Confirm Arbiter, Governor, and Steward review records are complete and internally consistent.
+- [ ] Require Governor approval when any referenced audit requires Governor review.
+- [ ] Confirm proposal status matches the final Maintainer disposition.
+- [ ] Confirm proposal, reviewer, and Maintainer dates use real calendar dates in required order.
+- [ ] Confirm Phase 5C-A creates no promotion or Pattern Catalog change.
+- [ ] Confirm proposal records grant no runtime implementation authority.

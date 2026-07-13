@@ -6,12 +6,13 @@
 * **Base Branch:** `main`
 * **Current Release:** `v1.1.1`
 * **Target Patch:** `v1.1.2`
-* **Current Stable State:** Artificer Phase 5B-B completed through PR #170
-* **Current Task:** Issue #171 governance, prompt-load, and routing recalibration before Phase 5C
-* **Mode:** Governed implementation and validation audit
-* **Latest Validation:** Complete Issue #171 validation chain passed locally, including integrated behavior, strict governance with 0 errors and 0 warnings, and 43 runtime tests
-* **Pending Next Steps:** Maintainer review of the exact unstaged 31-file Issue #171 scope; do not stage, commit, push, create a PR, merge, or begin Phase 5C
-* **Most Recent Checkpoint:** 2026-07-12 - Issue #171 canonical governance protocol, routing contracts, and prompt-load baseline implemented locally
+* **Current Stable State:** Issue #171 completed through PR #172; the Phase 5C gate is cleared
+* **Current Task:** Issue #173 Artificer Phase 5C-A governed authority/capability proposal lifecycle
+* **Feature Branch:** `feat/artificer-phase-5c-authority-capability-proposal`
+* **Mode:** Phase 5C-A proposal-contract implementation and validation audit
+* **Latest Validation:** Exact unstaged 13-file Phase 5C-A chain passed locally, including integrated behavior, strict governance with 0 errors and 0 warnings, and 43 runtime tests at 95.51% coverage
+* **Pending Next Steps:** Maintainer review of the exact unstaged 13-file Phase 5C-A scope without beginning Phase 5C-B
+* **Most Recent Checkpoint:** 2026-07-12 - Phase 5C-A proposal contract, `UNDER_REVIEW` authority/capability proposal, and validation audit completed locally
 * **Related but Forbidden Repo for this task:** `C:\+AA`
 * **Active Governance Gates:**
 
@@ -22,7 +23,7 @@
   * Caveman Public-Content Exclusion
   * Ponytail Handoff Restriction
   * Acme Readiness Gate Expansion
-* **Current Risks:** Static routing contracts prove policy consistency, not actual model routing accuracy; manual or model-driven routing evidence remains separate.
+* **Current Risks:** Phase 5C-B Arbiter, Governor, Steward, and Maintainer disposition remains pending. The draft creates no promotion, Pattern Catalog change, source-reuse authority, prompt-reuse authority, or implementation authority.
 * **Do-Not-Touch Areas:** Do not edit website repo files from this task (`C:\+AA`).
 
 
