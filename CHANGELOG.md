@@ -53,6 +53,9 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 ## Unreleased
 
 ### Added
+- Added Issue #176 Phase 6A runtime-gap and trust-boundary architecture for trusted authority, immutable per-run capabilities, bounded delegation, typed lifecycle control, and structured audit evidence without runtime changes.
+- Added implementation-ready authority, runtime capability, delegation, lifecycle, interface, error, compatibility, and fail-closed contracts that remain distinct from PRAP adapter support.
+- Added sequenced Phase 6B through Phase 6D implementation and verification planning; promotions remain `APPROVED`, Catalog content remains unchanged, and no source-expression reuse or implementation authority is introduced.
 - Recorded unanimous Phase 5C-B Arbiter, Governor, and Steward approval plus conditional Butler disposition for the design-only authority/capability proposal, without runtime implementation or source-expression reuse authority.
 - Added four manual Phase 5D `APPROVED` promotion records with pinned Strix provenance, Apache-2.0 attribution boundaries, and `automatic_promotion: false`.
 - Manually synchronized the Phase 5E Pattern Catalog with the four canonical promotion records; Catalog projection remains separate from implementation authority.

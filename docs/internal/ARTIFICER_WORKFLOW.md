@@ -106,3 +106,19 @@ Approved Decisions -> Phase 5C-A Draft Proposal -> Independent Phase 5C-B Review
 *   The Butler is the human repository authority; approval does not imply implementation.
 *   The Strix fail-open system-prompt-rendering decision remains rejected, implementation-blocked, and excluded from selected patterns.
 *   Any reference to fail-open behavior is a negative safety constraint only: invalid or empty system authority must fail closed with typed, auditable errors.
+
+### Phase 6 Specialist Architecture Handoff
+
+Phase 5C-A -> Phase 5C-B -> Phase 5D -> Phase 5E -> Phase 6A Architecture -> Later Butler-Authorized Specialist Implementation
+
+*   Phase 5C-A completed through PR #174.
+*   Phase 5C-B, Phase 5D, and Phase 5E completed through PR #175; Issue #173 is closed.
+*   Phase 6A-A documents current runtime gaps and trust boundaries.
+*   Phase 6A-B defines typed Orchestra-native authority, runtime capability, delegation, lifecycle, audit, interface, and error contracts.
+*   Phase 6A-C defines later implementation batches and verification obligations.
+*   Responsibility has transferred from the completed Artificer governance chain to specialist-owned architecture and later implementation.
+*   Artificer remains non-approving, non-promoting, non-routing, and non-executing.
+*   Promotions remain `APPROVED`; architecture does not change them to `IMPLEMENTING` or `IMPLEMENTED`.
+*   Governance approval, promotion, Catalog projection, routing, and adapter support do not grant runtime authority.
+*   Phase 6B implementation requires separate Butler authorization. The canonical Artificer machine field remains `maintainer_decision`.
+*   No external source expression is reused, and no external concept provides runtime authority.

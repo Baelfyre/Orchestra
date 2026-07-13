@@ -50,6 +50,16 @@ The repository already had adapter-specific validation and export logic spread a
 5. `RuntimeExecutor` returns an `ExecutionResult`.
 6. `AuditLogger` records the execution outcome through an `IAuditSink`.
 
+## Authority and capability architecture
+
+Phase 6A defines future trusted-authority and runtime-capability boundaries without changing the current runtime:
+
+- [Authority and Capability Runtime Architecture](AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md)
+- [Authority and Capability Contracts](AUTHORITY_CAPABILITY_CONTRACTS.md)
+- [Authority and Capability Implementation Plan](AUTHORITY_CAPABILITY_IMPLEMENTATION_PLAN.md)
+
+The current flow above remains authoritative until a separately authorized Phase 6B implementation changes it. Governance validation, routing, PRAP host support, prompt text, and adapter metadata do not grant runtime authority.
+
 ## Current packaging boundary
 
 - Cursor, Windsurf, and VS Code now have scaffold-only packaging folders under `adapters/`.

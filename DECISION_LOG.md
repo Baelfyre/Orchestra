@@ -253,6 +253,40 @@ The governance chain must remain traceable and fail closed without cloning, inst
 **Affected Components:**
 - scripts/validate_artificer_governance_records.py
 - tests/behavior/test_artificer_governance_records.py
+
+---
+
+## Date: 2026-07-13
+
+**Issue:** #176
+
+**Decision:**
+Defined the Phase 6A Orchestra-native authority and capability runtime architecture after Phase 5C-B, Phase 5D, and Phase 5E completed through PR #175. The architecture separates trusted authority from prompts, adapter metadata, routing, governance approval, PRAP host support, and audit evidence; defines immutable per-run runtime capabilities, bounded delegation, typed lifecycle control, and fail-closed initialization; and sequences later specialist-owned implementation without changing runtime behavior.
+
+**Reason:**
+The current runtime provides adapter context, command parsing, routing, generic governance validation, execution results, and audit logging, but it has no trusted authority scope, explicit target or operation decisions, immutable per-run runtime capability manifest, bounded delegation, typed lifecycle state, structured completion signals, or authority-specific audit events. Architecture must define these trust boundaries before implementation so prompt or adapter metadata cannot become authority by accident.
+
+The selected contracts require child authority and capabilities to be intersections of parent grants, keep `RuntimeCapability*` terminology distinct from PRAP `AdapterCapabilities`, prohibit ordinary text from completing a run, and reserve all implementation for separately authorized Phase 6B batches. This is an original Orchestra architecture based on repository-local governance and runtime evidence. No external source expression is reused, promotions remain `APPROVED`, and the Pattern Catalog remains unchanged.
+
+**Rejected Alternatives:**
+- Trusting prompt text, adapter metadata, routing, governance approval, or audit evidence as runtime authority.
+- Treating PRAP adapter support as runtime execution permission.
+- Using a mutable process-global capability registry or silent unlimited compatibility policy.
+- Copying or unioning parent grants into child runs instead of intersecting them.
+- Inferring lifecycle completion from ordinary text.
+- Combining Phase 6A architecture with runtime implementation, test changes, promotion lifecycle changes, or Catalog updates.
+
+**Affected Components:**
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- docs/internal/ARTIFICER_WORKFLOW.md
+- docs/project/AUTHORITY_CAPABILITY_CONTRACTS.md
+- docs/project/AUTHORITY_CAPABILITY_IMPLEMENTATION_PLAN.md
+- docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md
+- docs/project/OOP_RUNTIME_ARCHITECTURE.md
+- docs/project/ROADMAP.md
 - scripts/governance_check.py
 - tests/behavior/run_tests.py
 
