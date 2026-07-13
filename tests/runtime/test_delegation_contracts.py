@@ -6,9 +6,12 @@ from orchestra_runtime.authority import AuthorityProvenance, AuthorityScope, Pro
 from orchestra_runtime.capabilities import RuntimeCapability, RuntimeCapabilityGrant
 from orchestra_runtime.delegation import (
     DelegationDecision,
+    DelegationPolicy,
     DelegationReasonCode,
     DelegationRequest,
+    DelegationResolution,
     DelegationTask,
+    DelegationValidator,
 )
 from orchestra_runtime.errors import DelegationDepthViolationError, DelegationRejectedError
 from orchestra_runtime.models import RunIdentity
@@ -114,13 +117,19 @@ def test_delegation_decision_requires_effective_references_when_accepted():
     assert decision.to_dict()["reason_code"] == "ACCEPTED"
 
 
-def test_delegation_module_exposes_no_validator_implementation():
-    import orchestra_runtime.delegation as delegation
+def test_delegation_module_exposes_immutable_validator_contracts():
+    policy = DelegationPolicy("delegation.policy", "1", 2, ("project_root",), ("secrets",))
 
-    assert not hasattr(delegation, "DelegationValidator")
+    assert DelegationValidator is not None
+    assert DelegationResolution is not None
+    assert policy.to_dict()["max_depth"] == 2
+    with pytest.raises(FrozenInstanceError):
+        policy.max_depth = 3  # type: ignore[misc]
 
 
 def test_delegation_contracts_reject_empty_and_duplicate_values():
+    with pytest.raises(DelegationRejectedError):
+        DelegationPolicy(None, "1", 1)  # type: ignore[arg-type]
     with pytest.raises(DelegationRejectedError):
         DelegationTask("task", ())
     with pytest.raises(DelegationRejectedError):

@@ -8,7 +8,7 @@ from .models import Command, ContextPackage, ExecutionResult, RouteDecision, Ski
 if TYPE_CHECKING:
     from .authority import AuthorityDecision, AuthorityProvenance, AuthorityScope, Constraint, TargetSelector
     from .capabilities import CapabilityDecision, RuntimeCapabilityGrant, RuntimeCapabilityManifest
-    from .delegation import DelegationDecision, DelegationRequest
+    from .delegation import DelegationRequest, DelegationResolution
     from .lifecycle import LifecycleSignal, LifecycleSnapshot, StructuredTerminalResult
 
 
@@ -133,7 +133,12 @@ class ICapabilityResolver(ABC):
 
 class IDelegationValidator(ABC):
     @abstractmethod
-    def validate(self, request: DelegationRequest) -> DelegationDecision:
+    def validate(
+        self,
+        request: DelegationRequest,
+        parent_scope: AuthorityScope,
+        parent_manifest: RuntimeCapabilityManifest,
+    ) -> DelegationResolution:
         raise NotImplementedError
 
 

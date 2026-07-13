@@ -1,6 +1,6 @@
 # Authority and Capability Contracts
 
-Status: Phase 6A implementation-ready contract definition. No runtime code is changed by this document.
+Status: Phase 6B-C implementation-refined contract definition.
 
 ## Contract Rules
 
@@ -122,6 +122,10 @@ Required fields:
 - effective context keys.
 - `reason_code` and provenance.
 
+### `DelegationResolution`
+
+The immutable resolution contains the decision plus the effective child `AuthorityScope` and `RuntimeCapabilityManifest` only when validation succeeds. Rejected resolutions contain neither effective contract. Accepted delegation provenance is created only after parent, registry, depth, authority, capability, and context validation succeeds.
+
 Validation requires a known specialist, valid parent run, structured task, depth not greater than the trusted maximum, explicit context allowlisting, sensitive-context exclusion, and non-empty effective authority and capabilities. Unknown specialists, depth overflow, broader child requests, unauthorized context, or invalid provenance are rejected before child creation. Child authority and capabilities are always intersections, never copies or unions.
 
 ## Lifecycle Contracts
@@ -161,6 +165,8 @@ Only `ILifecycleController` applies a signal. Ordinary text, prompt content, ada
 
 An exact replay of the accepted terminal `signal_id` with identical content returns the existing terminal result without another transition. Reuse of an identifier with different content, or any different terminal signal after termination, raises a conflicting-terminal-signal error and records the conflict. Invalid transitions and malformed signals leave state unchanged. Timeout, cancellation, failure, blocking, and completion remain distinct. `WAITING` requires an explicit validated resume signal to return to `ACTIVE`.
 
+Each lifecycle snapshot retains the accepted signal identifier and its deterministic content fingerprint. Terminal replay compares both values, so identical replay is idempotent while altered or different terminal signals conflict.
+
 ## Audit Contracts
 
 Structured audit event types:
@@ -193,7 +199,8 @@ Every event requires `event_id`, `event_type`, `run_id`, related decision or tra
 
 ### `IDelegationValidator`
 
-- `validate(request, parent_scope, parent_manifest, registry, policy) -> DelegationDecision`
+- constructor dependencies: authority evaluator, capability resolver, skill registry, and immutable delegation policy.
+- `validate(request, parent_scope, parent_manifest) -> DelegationResolution`
 
 ### `ILifecycleController`
 

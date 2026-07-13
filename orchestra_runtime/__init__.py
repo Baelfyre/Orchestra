@@ -36,7 +36,17 @@ from .capabilities import (
     capability_manifest_event,
     load_trusted_capability_manifest,
 )
-from .delegation import DelegationDecision, DelegationReasonCode, DelegationRequest, DelegationTask
+from .delegation import (
+    DelegationDecision,
+    DelegationPolicy,
+    DelegationReasonCode,
+    DelegationRequest,
+    DelegationResolution,
+    DelegationTask,
+    DelegationValidator,
+    delegation_accepted_event,
+    delegation_rejected_event,
+)
 from .errors import (
     AuthorityDeniedError,
     CapabilityCollisionError,
@@ -64,11 +74,17 @@ from .interfaces import (
     ISkillRegistry,
 )
 from .lifecycle import (
+    LIFECYCLE_TRANSITIONS,
+    LifecycleController,
     LifecycleSignal,
     LifecycleSignalType,
     LifecycleSnapshot,
     LifecycleState,
     StructuredTerminalResult,
+    lifecycle_rejection_event,
+    lifecycle_signal_fingerprint,
+    lifecycle_transition_event,
+    terminal_result_event,
 )
 from .models import (
     AuditEventType,
@@ -139,10 +155,13 @@ __all__ = [
     "CursorAdapter",
     "DelegationDecision",
     "DelegationDepthViolationError",
+    "DelegationPolicy",
     "DelegationReasonCode",
     "DelegationRejectedError",
     "DelegationRequest",
+    "DelegationResolution",
     "DelegationTask",
+    "DelegationValidator",
     "ExecutionResult",
     "GovernanceRule",
     "GovernanceValidator",
@@ -162,6 +181,8 @@ __all__ = [
     "InvalidLifecycleSignalError",
     "InvalidLifecycleTransitionError",
     "JetBrainsAdapter",
+    "LIFECYCLE_TRANSITIONS",
+    "LifecycleController",
     "LifecycleSignal",
     "LifecycleSignalType",
     "LifecycleSnapshot",
@@ -195,8 +216,14 @@ __all__ = [
     "authority_decision_event",
     "capability_decision_event",
     "capability_manifest_event",
+    "delegation_accepted_event",
+    "delegation_rejected_event",
     "initialization_failure_event",
     "load_trusted_authority",
     "load_trusted_capability_manifest",
+    "lifecycle_rejection_event",
+    "lifecycle_signal_fingerprint",
+    "lifecycle_transition_event",
     "root_authority_event",
+    "terminal_result_event",
 ]

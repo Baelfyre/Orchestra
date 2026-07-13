@@ -675,3 +675,42 @@ The four promoted contracts moved from `APPROVED` to `IMPLEMENTING` because impl
 - tests/runtime/test_capabilities.py
 - tests/runtime/test_delegation_contracts.py
 - tests/runtime/test_lifecycle_contracts.py
+
+---
+
+## Date: 2026-07-13
+
+**Issue:** #180
+
+**Decision:**
+Implemented Phase 6B-C delegation and lifecycle control after PR #179 merged and Issue #178 closed. Added immutable delegation policy and resolution contracts, constructor-injected bounded validation, accepted and rejected delegation events, the exact lifecycle transition table, deterministic accepted-signal identity, idempotent identical terminal replay, conflicting terminal-signal rejection, and lifecycle transition, rejection, and terminal-result events. Delegation validation and lifecycle control are operational. RuntimeExecutor integration has not started.
+
+**Reason:**
+Phase 6B-A and Phase 6B-B established immutable authority and capability contracts at approved base `f05d7814019c9f2abb188050baf8e9bb67c7d584`. Phase 6B-C completes the separately authorized delegation and lifecycle batch without executing delegated work or integrating runtime execution. Accepted delegation provenance is created only after parent, specialist, depth, authority, capability, and context checks pass; rejected resolutions contain no effective child scope or manifest. Lifecycle changes remain stateless and signal-driven, preserve snapshots on rejection, keep `WAITING` resumable, and keep all terminal states distinct.
+
+The four promotions remain `IMPLEMENTING`. The Pattern Catalog is unchanged. Phase 6B-D is the next separately authorized phase. Phase 6C and release finalization have not started, and no external Strix content was accessed.
+
+**Rejected Alternatives:**
+- Copying parent authority, capabilities, or context into a child without explicit reduction checks.
+- Creating accepted delegation provenance before validation succeeds.
+- Executing child work or modifying `RuntimeExecutor` during Phase 6B-C.
+- Inferring lifecycle state from ordinary text.
+- Treating different terminal states or conflicting terminal signals as equivalent.
+- Modifying promotions, the Pattern Catalog, adapters, compatibility policy, or release versions.
+
+**Affected Components:**
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- docs/project/AUTHORITY_CAPABILITY_CONTRACTS.md
+- docs/project/AUTHORITY_CAPABILITY_IMPLEMENTATION_PLAN.md
+- orchestra_runtime/__init__.py
+- orchestra_runtime/delegation.py
+- orchestra_runtime/interfaces.py
+- orchestra_runtime/lifecycle.py
+- tests/runtime/test_delegation_contracts.py
+- tests/runtime/test_delegation_lifecycle_integration.py
+- tests/runtime/test_delegation_validator.py
+- tests/runtime/test_lifecycle_contracts.py
+- tests/runtime/test_lifecycle_controller.py

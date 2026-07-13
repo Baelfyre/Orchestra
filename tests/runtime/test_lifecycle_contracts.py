@@ -5,6 +5,7 @@ import pytest
 from orchestra_runtime.authority import AuthorityProvenance, ProvenanceSource
 from orchestra_runtime.errors import InvalidLifecycleSignalError
 from orchestra_runtime.lifecycle import (
+    LifecycleController,
     LifecycleSignal,
     LifecycleSignalType,
     LifecycleSnapshot,
@@ -75,15 +76,13 @@ def test_lifecycle_signal_validates_state_and_terminal_payload_placement():
         )
 
 
-def test_lifecycle_snapshot_validates_terminal_result_and_has_no_controller():
+def test_lifecycle_snapshot_validates_terminal_result_and_exposes_controller():
     active = LifecycleSnapshot(RunIdentity("run-1"), LifecycleState.ACTIVE)
     assert active.to_dict()["terminal_result"] is None
     with pytest.raises(InvalidLifecycleSignalError, match="requires matching"):
         LifecycleSnapshot(RunIdentity("run-1"), LifecycleState.COMPLETED)
 
-    import orchestra_runtime.lifecycle as lifecycle
-
-    assert not hasattr(lifecycle, "LifecycleController")
+    assert LifecycleController is not None
 
 
 def test_lifecycle_rejects_empty_fields_terminal_mismatch_and_nonterminal_result():

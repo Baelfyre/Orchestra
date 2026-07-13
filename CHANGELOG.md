@@ -53,6 +53,7 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 ## Unreleased
 
 ### Added
+- Implemented Issue #180 Phase 6B-C bounded delegation validation, immutable effective child resolutions, exact lifecycle control, deterministic terminal replay, conflict rejection, and structured audit-event factories. PR #179 is merged and Issue #178 is closed; promotions remain `IMPLEMENTING`, the Pattern Catalog is unchanged, and RuntimeExecutor integration has not started.
 - Implemented Issue #178 Phase 6B-A immutable runtime domain contracts, typed error taxonomy, authority/capability/delegation/lifecycle models, stable interfaces, deterministic serialization, and additive public exports.
 - Implemented Phase 6B-B repository-contained trusted policy loading, fail-closed authority evaluation and intersection, immutable runtime capability manifest resolution and intersection, deterministic collision rejection, typed enforcement, and structured audit-event creation.
 - Advanced four canonical promotions to `IMPLEMENTING` and manually synchronized the Pattern Catalog; delegation behavior, lifecycle behavior, RuntimeExecutor integration, adapters, and active compatibility policy remain unchanged.
