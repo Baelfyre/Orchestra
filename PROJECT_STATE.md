@@ -6,13 +6,18 @@
 * **Base Branch:** `main`
 * **Current Release:** `v1.1.1`
 * **Target Patch:** `v1.1.2`
-* **Current Stable State:** Issue #171 completed through PR #172; the Phase 5C gate is cleared
-* **Current Task:** Issue #173 Artificer Phase 5C-A governed authority/capability proposal lifecycle
-* **Feature Branch:** `feat/artificer-phase-5c-authority-capability-proposal`
-* **Mode:** Phase 5C-A proposal-contract implementation and validation audit
-* **Latest Validation:** Exact unstaged 13-file Phase 5C-A chain passed locally, including integrated behavior, strict governance with 0 errors and 0 warnings, and 43 runtime tests at 95.51% coverage
-* **Pending Next Steps:** Maintainer review of the exact unstaged 13-file Phase 5C-A scope without beginning Phase 5C-B
-* **Most Recent Checkpoint:** 2026-07-12 - Phase 5C-A proposal contract, `UNDER_REVIEW` authority/capability proposal, and validation audit completed locally
+* **Current Stable State:** Phase 5C-A completed through PR #174
+* **Current Task:** Combined Phase 5C-B / 5D / 5E governance progression
+* **Feature Branch:** `feat/artificer-phase5c-b-promotion-catalog`
+* **Mode:** Governed proposal disposition, manual promotion, and Catalog synchronization audit
+* **Proposal:** `APPROVED`
+* **Promotions:** 4 `APPROVED`
+* **Catalog:** Synchronized
+* **Runtime Implementation:** Not started
+* **Next Planned Phase:** Phase 6A Orchestra-native technical architecture
+* **Latest Validation:** Exact unstaged 13-file chain passed locally, including integrated behavior, strict governance with 0 errors and 0 warnings, and 43 runtime tests at 95.51% coverage
+* **Pending Next Steps:** Butler review of the exact unstaged combined Phase 5C-B / 5D / 5E diff before staging or Phase 6A authorization
+* **Most Recent Checkpoint:** 2026-07-13 - Combined proposal disposition, four manual promotions, and Catalog synchronization completed locally
 * **Related but Forbidden Repo for this task:** `C:\+AA`
 * **Active Governance Gates:**
 
@@ -23,7 +28,7 @@
   * Caveman Public-Content Exclusion
   * Ponytail Handoff Restriction
   * Acme Readiness Gate Expansion
-* **Current Risks:** Phase 5C-B Arbiter, Governor, Steward, and Maintainer disposition remains pending. The draft creates no promotion, Pattern Catalog change, source-reuse authority, prompt-reuse authority, or implementation authority.
+* **Current Risks:** Phase 6A is not authorized. Proposal approval, promotions, and Catalog synchronization grant no implementation or source-expression reuse authority.
 * **Do-Not-Touch Areas:** Do not edit website repo files from this task (`C:\+AA`).
 
 

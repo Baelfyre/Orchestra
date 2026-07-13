@@ -1,23 +1,24 @@
 # Session Handoff
 
-- **Current Stable State:** Issue #171 completed through PR #172; the Phase 5C gate is cleared
-- **Current Task:** Issue #173 Artificer Phase 5C-A governed authority/capability proposal lifecycle
+- **Current Stable State:** Phase 5C-A completed through PR #174
+- **Current Task:** Combined Phase 5C-B / 5D / 5E governance progression
 - **Current Repo:** `C:\+conductor`
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.1`
 - **Target Patch:** `v1.1.2`
-- **Mode:** Phase 5C-A proposal-contract implementation and validation audit
-- **Allowed Files:** The exact 13-file Issue #173 Phase 5C-A schema, proposal, validator, governance-record test, Catalog fixture test, governance, workflow, checklist, changelog, decision-log, and state-documentation scope only.
+- **Mode:** Governed proposal disposition, manual promotion, and Catalog synchronization audit
+- **Allowed Files:** Exact 13-file combined Phase 5C-B / 5D / 5E proposal, promotion, Catalog, governance, checklist, changelog, decision-log, and state-documentation scope only.
 - **Forbidden Repo:** `C:\+AA`
-- **Last Validation:** Exact unstaged 13-file Phase 5C-A chain passed locally, including integrated behavior, strict governance with 0 errors and 0 warnings, and 43 runtime tests at 95.51% coverage.
-- **Known Risks:** Phase 5C-B Arbiter, Governor, Steward, and Maintainer disposition remains pending.
+- **Last Validation:** Exact unstaged 13-file chain passed locally, including integrated behavior, strict governance with 0 errors and 0 warnings, and 43 runtime tests at 95.51% coverage.
+- **Known Risks:** Phase 6A remains unauthorized; no implementation or source-expression reuse authority exists.
 - **Issue Reference:** `gh issue view 173 --repo Baelfyre/Orchestra`
-- **Exact Branch:** `feat/artificer-phase-5c-authority-capability-proposal`
-- **Boundary Rules:** Phase 5C-A may harden the proposal contract and create one `UNDER_REVIEW` proposal only. Do not perform Phase 5C-B disposition, create a promotion, modify the Pattern Catalog, implement runtime features, access external Strix, stage, commit, push, open a PR, merge, or change release versions.
-- **Audit Scope:** Issue #173 Phase 5C-A schema, proposal, validator, focused tests, governance documentation, and repository-state updates only.
-- **Governance Advancement:** Phase 5C-A creates one design-only `UNDER_REVIEW` proposal. It creates no final approval, promotion, Pattern Catalog change, source-reuse authority, prompt-reuse authority, or implementation authority.
-- **Next Step:** Maintainer review of the exact unstaged 13-file Phase 5C-A scope without beginning Phase 5C-B.
+- **Base Commit:** `409e14371b6212e655bc5053ec57d55abbb78c37`
+- **Exact Branch:** `feat/artificer-phase5c-b-promotion-catalog`
+- **Boundary Rules:** Proposal is design-only. Four promotions and Catalog synchronization grant no implementation authority. Do not access external Strix, start Phase 6A, implement runtime features, stage, commit, push, open a PR, merge, or change release versions.
+- **Audit Scope:** Exact 13-file combined Phase 5C-B / 5D / 5E scope.
+- **Governance Advancement:** Proposal `APPROVED`; four promotions `APPROVED`; Catalog synchronized; no implementation or source-expression reuse authorized.
+- **Next Step:** Butler review of the exact unstaged combined Phase 5C-B / 5D / 5E diff before staging or Phase 6A authorization.
 - **Fresh-Session Warning:** If the current conversation has long prior history from another repository, enter safe mode and request user confirmation before proceeding with implementation.
 
 ## Token Control Note

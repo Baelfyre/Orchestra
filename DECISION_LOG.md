@@ -310,6 +310,40 @@ drift visible at the first deterministic line mismatch.
 **Affected Components:**
 - scripts/validate_artificer_pattern_catalog.py
 - tests/behavior/test_artificer_pattern_catalog.py
+
+---
+
+## Date: 2026-07-13
+
+**Decision:**
+Approved the Orchestra authority, capability, delegation, and lifecycle proposal through independent Phase 5C-B Arbiter, Governor, and Steward reviews followed by conditional Butler disposition through the canonical `maintainer_decision` field. Created four separate manual Phase 5D promotion records and synchronized their deterministic Phase 5E Pattern Catalog projection.
+
+**Reason:**
+Arbiter confirmed one pinned audit, four unique approved concept-only decisions, exact pattern and specialist traceability, a coherent authority chain, and exclusion of the rejected fail-open decision. Governor approved the proposal and source traceability only under the recorded Apache-2.0 boundaries, with no source-expression reuse authority. Steward confirmed bounded roadmap alignment, measurable verification constraints, proposal cohesion, and safe later technical decomposition. Conditional Butler authority applied only after all three reviews approved without unresolved material conditions.
+
+Four promotions remain separate because declared authority, run-scoped capabilities, bounded delegation, and lifecycle completion have distinct catalog identities, specialists, source locations, and future design ownership. Catalog synchronization was allowed only after all four manual promotion records validated and remains a human-readable projection of canonical JSON. Proposal approval, promotion, and Catalog synchronization do not authorize implementation. Strix source code, prompts, payloads, examples, media, and documentation expression remain unauthorized for reuse; later applicable adaptation or distribution still requires license, NOTICE, patent, modified-file, attribution, trademark, and dependency review.
+
+**Rejected Alternatives:**
+- Treating one reviewer outcome as a substitute for independent Arbiter, Governor, or Steward analysis.
+- Combining four distinct specialist-owned concepts into one promotion or Catalog identity.
+- Treating proposal approval, promotion, or Catalog synchronization as implementation authority.
+- Authorizing source-expression reuse through conceptual governance approval.
+- Beginning Phase 6A architecture or runtime implementation in this governance progression.
+
+**Affected Components:**
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- docs/internal/ARTIFICER_PHASE4_GOVERNANCE_CONTRACT.md
+- docs/internal/ARTIFICER_WORKFLOW.md
+- docs/internal/PATTERN_CATALOG.md
+- internal/artificer/CHECKLIST.md
+- internal/artificer/promotions/agent-lifecycle-state-machine.json
+- internal/artificer/promotions/authority-scope-contract.json
+- internal/artificer/promotions/run-scoped-capability-manifest.json
+- internal/artificer/promotions/specialist-delegation-contract.json
+- internal/artificer/proposals/orchestra-authority-capability-contract.json
 - scripts/governance_check.py
 - scripts/test_governance_check.py
 - tests/behavior/run_tests.py

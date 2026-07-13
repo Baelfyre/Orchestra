@@ -120,3 +120,9 @@ Phase 5 records governance outcomes separately from immutable source evidence. P
 *   Proposal creation or approval does not grant implementation authority; later specialist-owned work requires separate Maintainer authorization.
 *   Artificer remains internal, non-routable, non-approving, non-executing, and unable to modify external repositories.
 *   Immutable Phase 3 source records, Phase 4.5 audits, and Phase 5B governance decisions remain unchanged.
+*   Phase 5C-B completed only after independent Arbiter, Governor, and Steward reviews all returned `APPROVED` and conditional Butler authority was applied through the canonical `maintainer_decision` field.
+*   The Butler is the human repository authority; Artificer did not approve the proposal or create independent approval authority.
+*   Phase 5D promotions remain manually created governance records and do not authorize implementation.
+*   Phase 5E Catalog content remains a manually synchronized projection of canonical promotion JSON.
+*   No source-expression reuse is authorized; later applicable source adaptation still requires license, NOTICE, patent, modified-file, attribution, trademark, distribution, and dependency review.
+*   Technical architecture and specialist-owned implementation remain separately gated by later Butler authorization.

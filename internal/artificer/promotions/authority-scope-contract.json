@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "promotion_id": "promote-authority-scope-contract",
+  "catalog_pattern_id": "authority-scope-contract",
+  "decision_id": "strix-declared-scope-context-decision",
+  "proposal_id": "orchestra-authority-capability-contract",
+  "source_bundle_id": "usestrix__strix__09872744f5a9",
+  "pattern_record_path": "internal/artificer/records/usestrix__strix__09872744f5a9/patterns/declared-scope-context.json",
+  "approval_date": "2026-07-13",
+  "promotion_status": "APPROVED",
+  "assigned_specialist": "arbiter",
+  "source_traceability": {
+    "repository": "usestrix/strix",
+    "reviewed_commit_sha": "09872744f5a9d3ffad750478f823e656ac1a7c88",
+    "source_file": "strix/core/inputs.py",
+    "line_range": "97-122"
+  },
+  "license_and_attribution": {
+    "original_license": "Apache-2.0",
+    "attribution_required": true,
+    "summary": "Preserve source provenance and Apache-2.0 attribution in governance and Catalog records. This promotion authorizes conceptual Orchestra-native design only and does not authorize reuse of source code, prompts, payloads, examples, media, or documentation expression. Any later source adaptation or distribution requires applicable license, NOTICE, patent, modified-file, attribution, trademark, and third-party dependency review."
+  },
+  "automatic_promotion": false
+}
