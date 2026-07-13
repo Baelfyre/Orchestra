@@ -241,3 +241,12 @@ Additional release-prep changes included in this checkout:
 - Aligned Conductor routing, Codex export, and stale-reference handling, including routing arrow and encoding fixes.
 - Added governance guardrails, access and visibility evidence rules, CI validation notes, and refined visual validation guidance.
 - Refreshed README presentation and selective skill icons, and added Ponytail and Caveman companion links.
+
+Issue #171 follow-up changes in this checkout:
+
+- Added canonical governance decision protocol at `docs/governance/GOVERNANCE_DECISION_PROTOCOL.md`.
+- Deduplicated shared governance rules from governance layer, Steward, and Governor skill files while preserving role-specific output fields.
+- Recalibrated Conductor, `SKILL_INDEX.md`, and `ROUTING_MAP.md` to restore lightweight routing and ordered cross-domain sequencing.
+- Added deterministic routing-contract, governance-protocol-consistency, and prompt-load-budget validators plus focused behavior tests.
+- Added strict prompt-load baseline and recalibration audit artifacts.
+- Synced Codex exports for Conductor, Steward, and Governor governance/routing canon.

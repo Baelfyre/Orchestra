@@ -39,6 +39,9 @@ REQUIRED_VALIDATION_SCRIPTS = [
     "scripts/validate_artificer_governance_records.py",
     "scripts/validate_artificer_pattern_catalog.py",
     "scripts/render_artificer_audit_report.py",
+    "scripts/validate_prompt_load_budget.py",
+    "scripts/validate_governance_protocol_consistency.py",
+    "scripts/validate_routing_contract.py",
 ]
 
 REPO_MEMORY_FILES = [
@@ -55,6 +58,9 @@ STRICT_VALIDATOR_SCRIPTS = [
     "scripts/validate_artificer_records.py",
     "scripts/validate_artificer_governance_records.py",
     "scripts/validate_artificer_pattern_catalog.py",
+    "scripts/validate_prompt_load_budget.py",
+    "scripts/validate_governance_protocol_consistency.py",
+    "scripts/validate_routing_contract.py",
 ]
 
 SIGNIFICANT_CHANGE_PATTERNS = [

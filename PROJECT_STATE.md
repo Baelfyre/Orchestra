@@ -6,12 +6,12 @@
 * **Base Branch:** `main`
 * **Current Release:** `v1.1.1`
 * **Target Patch:** `v1.1.2`
-* **Current Stable State:** Artificer Phase 5B-A completed through PR #169
-* **Current Task:** Artificer Phase 5B-B Strix governance decision records
-* **Mode:** Local governed decision-record creation with mandatory Governor review
-* **Latest Validation:** PR #169 passed Governance Check, Validate, and Cross-platform Validation
-* **Pending Next Steps:** Stage the exact 11-file Phase 5B-B scope, complete the staged audit, then perform commit review, push review, PR validation, and merge without creating proposals, promotions, Pattern Catalog changes, source-reuse authority, prompt-reuse authority, or implementation authority
-* **Most Recent Checkpoint:** 2026-07-12 - Phase 5B-A OpenHero governance decisions merged and local main synchronized
+* **Current Stable State:** Artificer Phase 5B-B completed through PR #170
+* **Current Task:** Issue #171 governance, prompt-load, and routing recalibration before Phase 5C
+* **Mode:** Governed implementation and validation audit
+* **Latest Validation:** Complete Issue #171 validation chain passed locally, including integrated behavior, strict governance with 0 errors and 0 warnings, and 43 runtime tests
+* **Pending Next Steps:** Maintainer review of the exact unstaged 31-file Issue #171 scope; do not stage, commit, push, create a PR, merge, or begin Phase 5C
+* **Most Recent Checkpoint:** 2026-07-12 - Issue #171 canonical governance protocol, routing contracts, and prompt-load baseline implemented locally
 * **Related but Forbidden Repo for this task:** `C:\+AA`
 * **Active Governance Gates:**
 
@@ -22,7 +22,7 @@
   * Caveman Public-Content Exclusion
   * Ponytail Handoff Restriction
   * Acme Readiness Gate Expansion
-* **Current Risks:** Prompt-load thresholds remain advisory and current observed Groups A, B, C, and Grand Total exceed soft limits; no re-baselining decision exists.
+* **Current Risks:** Static routing contracts prove policy consistency, not actual model routing accuracy; manual or model-driven routing evidence remains separate.
 * **Do-Not-Touch Areas:** Do not edit website repo files from this task (`C:\+AA`).
 
 

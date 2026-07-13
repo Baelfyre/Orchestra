@@ -26,6 +26,24 @@ TRACKED_EXPORT_PARITY_PATHS = (
         Path("adapters/codex/skills/cloak/templates/bryl-minimal-design.md"),
     ),
 )
+NORMALIZED_EXPORT_PARITY_PATHS = (
+    (Path("skills/conductor/SKILL.md"), Path("adapters/codex/skills/conductor/SKILL.md")),
+    (Path("ROUTING_MAP.md"), Path("adapters/codex/skills/conductor/ROUTING_MAP.md")),
+    (Path("skills/the-steward/SKILL.md"), Path("adapters/codex/skills/the-steward/SKILL.md")),
+    (Path("skills/the-governor/SKILL.md"), Path("adapters/codex/skills/the-governor/SKILL.md")),
+    (Path("skills/the-steward/OUTPUT_FORMATS.md"), Path("adapters/codex/skills/the-steward/OUTPUT_FORMATS.md")),
+    (Path("skills/the-governor/OUTPUT_FORMATS.md"), Path("adapters/codex/skills/the-governor/OUTPUT_FORMATS.md")),
+)
+APPROVED_REFERENCE_DEPTH_TARGETS = (
+    "docs/routing/EXECUTION_MODES_POLICY.md",
+    "SKILL_INDEX.md",
+    "ROUTING_MAP.md",
+    "docs/routing/MINIMAL_PROMPT_FORMAT.md",
+    "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md",
+    "docs/governance/PROJECT_CONTEXT_DECISION_PROMPT.md",
+    "docs/governance/PROJECT_CONTEXT_ENFORCEMENT_POLICY.md",
+    "docs/templates/PROJECT_CONTEXT_TEMPLATE.md",
+)
 
 
 def print_error(message):
@@ -38,6 +56,28 @@ def read_text(path):
 
 def parse_frontmatter(content):
     return re.search(r"(?s)^---\r?\n(.*?)\r?\n---", content)
+
+
+def strip_frontmatter(content):
+    match = parse_frontmatter(content)
+    if not match:
+        return content.strip()
+    return content[match.end():].strip()
+
+
+def normalize_body_for_parity(content):
+    body = strip_frontmatter(content)
+    normalized = []
+    in_code_fence = False
+    for line in body.splitlines(keepends=True):
+        if line.lstrip().startswith("```"):
+            in_code_fence = not in_code_fence
+        elif not in_code_fence:
+            for target in APPROVED_REFERENCE_DEPTH_TARGETS:
+                line = line.replace(f"`../../{target}`", f"`{target}`")
+                line = line.replace(f"`../../../../{target}`", f"`{target}`")
+        normalized.append(line)
+    return "".join(normalized)
 
 
 def get_markdown_links(content):
@@ -172,6 +212,31 @@ def validate_tracked_export_parity(root):
     return errors
 
 
+def validate_normalized_export_parity(root):
+    errors = 0
+    for source_relative, export_relative in NORMALIZED_EXPORT_PARITY_PATHS:
+        source_path = root / source_relative
+        export_path = root / export_relative
+        if not source_path.is_file():
+            print_error(f"Missing source file for normalized export parity validation: {source_relative.as_posix()}")
+            errors += 1
+            continue
+        if not export_path.is_file():
+            print_error(f"Missing exported file for normalized export parity validation: {export_relative.as_posix()}")
+            errors += 1
+            continue
+
+        source_body = normalize_body_for_parity(read_text(source_path))
+        export_body = normalize_body_for_parity(read_text(export_path))
+        if source_body != export_body:
+            print_error(
+                "Normalized export body differs from source: "
+                f"{export_relative.as_posix()} != {source_relative.as_posix()}"
+            )
+            errors += 1
+    return errors
+
+
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description="Validate Codex export output.")
     parser.add_argument(
@@ -251,6 +316,7 @@ def main(argv=None):
 
     if not args.skip_tracked_export_parity and export_root == script_dir.resolve():
         errors += validate_tracked_export_parity(root)
+        errors += validate_normalized_export_parity(root)
                 
     if errors > 0:
         print_error(f"Codex export validation failed with {errors} errors.")
