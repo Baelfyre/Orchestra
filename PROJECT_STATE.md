@@ -6,20 +6,23 @@
 * **Base Branch:** `main`
 * **Current Release:** `v1.1.1`
 * **Target Patch:** `v1.1.2`
-* **Current Stable State:** Phase 5C-A completed through PR #174
-* **Current Task:** Combined Phase 5C-B / 5D / 5E governance progression
-* **Feature Branch:** `feat/artificer-phase5c-b-promotion-catalog`
-* **Mode:** Governed proposal disposition, manual promotion, and Catalog synchronization audit
+* **Current Stable State:** Phase 5C-B / 5D / 5E completed through merged PR #175; Issue #173 closed
+* **Current Task:** Combined Phase 6A-A / 6A-B / 6A-C authority and capability architecture
+* **Feature Branch Namespace:** `docs`
+* **Feature Branch Name:** `phase6a-authority-capability-architecture`
+* **Mode:** Architecture, typed contract, sequencing, and verification planning only
 * **Proposal:** `APPROVED`
 * **Promotions:** 4 `APPROVED`
 * **Catalog:** Synchronized
 * **Runtime Implementation:** Not started
-* **Next Planned Phase:** Phase 6A Orchestra-native technical architecture
-* **Latest Validation:** Exact unstaged 13-file chain passed locally, including integrated behavior, strict governance with 0 errors and 0 warnings, and 43 runtime tests at 95.51% coverage
-* **Pending Next Steps:** Butler review of the exact unstaged combined Phase 5C-B / 5D / 5E diff before staging or Phase 6A authorization
-* **Most Recent Checkpoint:** 2026-07-13 - Combined proposal disposition, four manual promotions, and Catalog synchronization completed locally
+* **Phase 6A:** 6A-A runtime audit, 6A-B typed contracts, and 6A-C implementation sequencing completed locally
+* **Next Planned Phase:** Phase 6B-A core domain foundation and Phase 6B-B authority/capability enforcement, only after separate Butler authorization
+* **Latest Validation:** Full Phase 6A chain passed locally, including integrated behavior, strict governance with 0 errors and 0 warnings, and 43 runtime tests at 95.51% coverage
+* **Pending Next Steps:** Butler review of the exact unstaged ten-file Phase 6A architecture diff before staging or Phase 6B authorization
+* **Most Recent Checkpoint:** 2026-07-13 - Phase 6A architecture, contracts, implementation batches, and verification matrix completed locally
 * **Related but Forbidden Repo for this task:** `C:\+AA`
 * **Active Governance Gates:**
+* **Issue:** #176 — Phase 6A authority and lifecycle architecture
 
   * Workspace Boundary Gate
   * Session Isolation Gate
@@ -28,7 +31,7 @@
   * Caveman Public-Content Exclusion
   * Ponytail Handoff Restriction
   * Acme Readiness Gate Expansion
-* **Current Risks:** Phase 6A is not authorized. Proposal approval, promotions, and Catalog synchronization grant no implementation or source-expression reuse authority.
+* **Current Risks:** Phase 6B is not authorized. Architecture, governance approval, promotions, and Catalog synchronization grant no implementation or source-expression reuse authority.
 * **Do-Not-Touch Areas:** Do not edit website repo files from this task (`C:\+AA`).
 
 

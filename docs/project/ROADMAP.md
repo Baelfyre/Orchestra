@@ -1,5 +1,19 @@
 # Roadmap
 
+## Authority and Capability Runtime Progression
+
+- [x] Phase 6A-A: audit current runtime gaps and define trust boundaries.
+- [x] Phase 6A-B: define typed authority, runtime capability, delegation, lifecycle, audit, interface, and error contracts.
+- [x] Phase 6A-C: sequence implementation ownership and verification requirements.
+- [ ] Phase 6B-A: add immutable core domain models, typed errors, interfaces, serialization where needed, and focused unit tests.
+- [ ] Phase 6B-B: add trusted root authority loading plus authority and capability enforcement.
+- [ ] Phase 6B-C: add bounded delegation, context minimization, and lifecycle control.
+- [ ] Phase 6B-D: integrate the contracts with `RuntimeExecutor`, adapters, governance separation, and auditing.
+- [ ] Phase 6C: run adversarial authority, capability, delegation, lifecycle, and fail-closed validation.
+- [ ] Phase 6D: finalize promotion lifecycle, Catalog synchronization, release readiness, and target patch preparation after implementation completes.
+
+Phase 6A is architecture-only. Phase 6B requires separate Butler authorization; promotions remain `APPROVED`, runtime implementation has not started, and the Catalog remains unchanged.
+
 - [ ] Add host-specific update commands after the shared notification-only update check stabilizes.
 - [ ] Add host-specific update commands on top of the reproducible temp-staged runtime refresh pipeline.
 - [ ] Publish an Adapter SDK with base classes, helper utilities, templates, and a reference implementation.
