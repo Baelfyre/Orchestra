@@ -1,6 +1,6 @@
 # Authority and Capability Implementation Plan
 
-Status: Phase 6B-A and Phase 6B-B implemented locally for Issue #178. RuntimeExecutor integration has not started.
+Status: Phase 6B-A and Phase 6B-B merged through PR #179; Phase 6B-C implemented locally for Issue #180. RuntimeExecutor integration has not started.
 
 ## Purpose
 
@@ -10,11 +10,14 @@ Sequence specialist-owned implementation of the approved authority, runtime capa
 
 - Phase 6B-A: immutable shared, authority, capability, delegation, lifecycle, error, interface, and serialization contracts complete.
 - Phase 6B-B: trusted policy loading, authority evaluation and intersection, capability manifest resolution and intersection, typed enforcement, and event creation complete.
-- Delegation validation behavior: not started.
-- Lifecycle transition behavior: not started.
+- Phase 6B-C: immutable delegation policy and resolution, bounded validator, exact lifecycle controller, deterministic signal identity, and audit-event factories complete locally.
+- Delegation validation behavior: operational.
+- Lifecycle transition behavior: operational.
 - `RuntimeExecutor` integration: not started.
 - Active compatibility policy: not created.
-- Next separately authorized batch: Phase 6B-C.
+- Promotions: remain `IMPLEMENTING`.
+- Pattern Catalog: unchanged in Phase 6B-C.
+- Next separately authorized batch: Phase 6B-D.
 
 ## Phase 6B-A - Core Domain Foundation
 
@@ -58,6 +61,8 @@ Scope:
 - Focused unit and service-integration tests.
 
 Exit gate: child grants never exceed parent grants, invalid delegation creates no child run, and only validated lifecycle signals change state.
+
+Completion: passed focused delegation, lifecycle, and delegation/lifecycle integration tests. Accepted resolutions return immutable effective child contracts; rejected resolutions return none. Lifecycle snapshots retain deterministic accepted-signal fingerprints, exact terminal replay is idempotent, and conflicting terminal signals preserve the first result.
 
 ## Phase 6B-D - Runtime Integration
 
