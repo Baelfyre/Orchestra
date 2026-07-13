@@ -45,25 +45,25 @@
   "governance_handoff": "Independent Phase 5C-B review is required. Arbiter, Governor, Steward, and Maintainer review remain pending. Even an approved proposal remains design-only. Promotion requires a later manual promotion record; Pattern Catalog synchronization requires a separate later action; and specialist-owned implementation requires separate Maintainer authorization. No source, prompt, payload, exploit, example, media, or documentation-expression reuse is authorized. The rejected strix-fail-open-system-prompt-rendering-decision is not selected: prompt construction must fail closed, startup must stop on invalid or empty system authority, and failures must produce typed, auditable errors.",
   "reviews": {
     "arbiter": {
-      "status": "PENDING",
-      "rationale": "Pending independent assessment of evidence traceability, duplicate-pattern analysis, authority-boundary coherence, lifecycle continuity, and selected-pattern consistency.",
-      "review_date": "2026-07-12"
+      "status": "APPROVED",
+      "rationale": "Approved: one pinned Strix audit traces to four unique APPROVED, CONCEPT_ONLY decisions with exact pattern and owner pairs. Declared authority, immutable capabilities, bounded child authority, and typed completion form a coherent chain; declaration remains separate from enforcement, ordinary text cannot complete an agent, the fail-open decision is excluded, and promotion and implementation remain separate.",
+      "review_date": "2026-07-13"
     },
     "governor": {
-      "status": "PENDING",
-      "rationale": "Pending mandatory Apache-2.0 review covering the no-source-or-prompt-reuse boundary, NOTICE and attribution implications, patent and distribution obligations, and third-party dependency uncertainty.",
-      "review_date": "2026-07-12"
+      "status": "APPROVED",
+      "rationale": "Approved for this proposal and source traceability only: mandatory Apache-2.0 review supports conceptual adaptation with no source, prompt, payload, exploit, example, media, or documentation-expression reuse. NOTICE, attribution, patent, modified-file, distribution, trademark, and third-party dependency obligations remain reserved for later applicable review; fail-open behavior is only a negative safety requirement. No source-expression reuse is authorized.",
+      "review_date": "2026-07-13"
     },
     "steward": {
-      "status": "PENDING",
-      "rationale": "Pending assessment of business and roadmap alignment, scope necessity, proposal cohesion, acceptance criteria, and separation from implementation.",
-      "review_date": "2026-07-12"
+      "status": "APPROVED",
+      "rationale": "Approved: the four concepts form one bounded, roadmap-aligned design proposal with measurable verification constraints and separate specialist ownership. Later technical architecture can decompose the work safely; scope excludes implementation, and promotion or Catalog synchronization grants no implementation authority.",
+      "review_date": "2026-07-13"
     }
   },
   "maintainer_decision": {
-    "status": "PENDING",
-    "rationale": "Pending independent Phase 5C-B Arbiter, Governor, Steward, and Maintainer disposition. This draft creates no promotion, Catalog, source-reuse, prompt-reuse, or implementation authority.",
-    "decision_date": "2026-07-12"
+    "status": "APPROVED",
+    "rationale": "All required Arbiter, Governor, and Steward reviews approved. The proposal remains design-only; promotion is recorded separately and Catalog synchronization remains a projection. Implementation requires later Butler authorization, and no source-expression reuse is authorized.",
+    "decision_date": "2026-07-13"
   },
-  "proposal_status": "UNDER_REVIEW"
+  "proposal_status": "APPROVED"
 }

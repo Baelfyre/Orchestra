@@ -96,9 +96,13 @@ Completed Audit -> Independent Read-Only Review -> Maintainer Adoption -> Mandat
 ### Phase 5C Governed Proposal Lifecycle
 Approved Decisions -> Phase 5C-A Draft Proposal -> Independent Phase 5C-B Review -> Maintainer Proposal Disposition -> Later Manual Promotion -> Later Catalog Synchronization -> Later Specialist-Owned Implementation
 
-*   Phase 5C-A creates a design-only proposal in `UNDER_REVIEW`; it does not complete governance disposition.
-*   Phase 5C-B is required for independent Arbiter, Governor, Steward, and Maintainer review.
+*   Phase 5C-A completed through PR #174 with a design-only proposal in `UNDER_REVIEW`.
+*   Phase 5C-B completed with independent Arbiter, Governor, and Steward approval followed by The Butler's governed `APPROVED` disposition. The canonical machine field remains `maintainer_decision`.
+*   Phase 5D created four manual `APPROVED` promotion records; Artificer did not approve or promote them.
+*   Phase 5E manually synchronized and validated the Pattern Catalog as a projection of canonical promotion JSON.
+*   Next is separately authorized Phase 6A Orchestra-native technical architecture; no implementation has started.
 *   Proposal approval does not promote a pattern, and promotion does not implement it.
-*   Artificer never approves, promotes, routes, or implements a proposal.
+*   Artificer remains non-approving, non-promoting, non-executing, and unable to grant implementation authority.
+*   The Butler is the human repository authority; approval does not imply implementation.
 *   The Strix fail-open system-prompt-rendering decision remains rejected, implementation-blocked, and excluded from selected patterns.
 *   Any reference to fail-open behavior is a negative safety constraint only: invalid or empty system authority must fail closed with typed, auditable errors.
