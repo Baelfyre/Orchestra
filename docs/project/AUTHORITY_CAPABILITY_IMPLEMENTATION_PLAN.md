@@ -1,10 +1,20 @@
 # Authority and Capability Implementation Plan
 
-Status: Phase 6A sequencing and verification plan. Runtime implementation has not started.
+Status: Phase 6B-A and Phase 6B-B implemented locally for Issue #178. RuntimeExecutor integration has not started.
 
 ## Purpose
 
-Sequence later specialist-owned implementation of the approved authority, runtime capability, delegation, and lifecycle architecture. Each batch requires separate Butler authorization, a clean preflight, focused tests, and review before the next batch begins. Promotion records remain `APPROVED` until implementation actually starts.
+Sequence specialist-owned implementation of the approved authority, runtime capability, delegation, and lifecycle architecture. Each batch requires separate Butler authorization, a clean preflight, focused tests, and review before the next batch begins. Phase 6B-A and Phase 6B-B have started implementation, so the four related promotion records are `IMPLEMENTING`.
+
+## Current Implementation Checkpoint
+
+- Phase 6B-A: immutable shared, authority, capability, delegation, lifecycle, error, interface, and serialization contracts complete.
+- Phase 6B-B: trusted policy loading, authority evaluation and intersection, capability manifest resolution and intersection, typed enforcement, and event creation complete.
+- Delegation validation behavior: not started.
+- Lifecycle transition behavior: not started.
+- `RuntimeExecutor` integration: not started.
+- Active compatibility policy: not created.
+- Next separately authorized batch: Phase 6B-C.
 
 ## Phase 6B-A - Core Domain Foundation
 
@@ -19,6 +29,8 @@ Scope:
 
 Exit gate: domain contracts are isolated from adapters and infrastructure, all models fail closed on invalid construction, and focused tests pass.
 
+Completion: passed focused Phase 6B-A contract tests. No delegation validator, lifecycle controller, or RuntimeExecutor integration was added.
+
 ## Phase 6B-B - Authority and Capability Enforcement
 
 Scope:
@@ -31,6 +43,8 @@ Scope:
 - Focused unit and service-integration tests.
 
 Exit gate: prompt and adapter metadata cannot expand authority, manifests freeze after initialization, denials occur before invocation, and audit evidence is complete.
+
+Completion: passed the combined focused suite with 55 tests and 97.12% focused coverage. Trusted file loading is repository-contained and fail-closed; evaluators accept no prompt or adapter metadata.
 
 ## Phase 6B-C - Delegation and Lifecycle
 
