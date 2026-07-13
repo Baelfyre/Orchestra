@@ -108,3 +108,15 @@ Phase 5 records governance outcomes separately from immutable source evidence. P
 *   Decision creation does not create a proposal, promotion, Pattern Catalog entry, or implementation authority.
 *   Phase 5 records do not modify immutable source-intake, pattern, or audit records.
 *   Phase 5 decision record creation is local and governed; it does not imply external source execution or code reuse authorization.
+
+## Phase 5C Governed Evolution Proposals
+*   `internal/artificer/proposals/` is the authoritative registry for governed evolution proposal records; Markdown documentation is not proposal authority.
+*   Phase 5C-A may harden the proposal contract and create an `UNDER_REVIEW` design artifact only. Phase 5C-B performs the independent governance disposition.
+*   Every proposal records structured Arbiter, Governor, and Steward evidence plus a separate Maintainer decision.
+*   Every Strix proposal requires Governor approval before final `APPROVED` status because its referenced audit requires Governor review.
+*   Proposal approval does not authorize source, prompt, payload, exploit, example, media, or documentation-expression reuse.
+*   Proposal creation or approval does not create a promotion record.
+*   Proposal creation or approval does not create or modify a Pattern Catalog row or entry.
+*   Proposal creation or approval does not grant implementation authority; later specialist-owned work requires separate Maintainer authorization.
+*   Artificer remains internal, non-routable, non-approving, non-executing, and unable to modify external repositories.
+*   Immutable Phase 3 source records, Phase 4.5 audits, and Phase 5B governance decisions remain unchanged.

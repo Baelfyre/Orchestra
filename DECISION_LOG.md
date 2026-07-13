@@ -528,3 +528,36 @@ The canonical shared protocol now lives in `docs/governance/GOVERNANCE_DECISION_
 - tests/behavior/test_governance_protocol_consistency.py
 - tests/behavior/test_router_contracts.py
 - tests/behavior/run_tests.py
+
+---
+
+## Date: 2026-07-12
+
+**Decision:**
+Implemented the Phase 5C-A proposal contract for Issue #173 by advancing the Evolution Proposal schema to version `1.1`, adding deterministic lifecycle and date validation, and creating one Orchestra authority/capability proposal in `UNDER_REVIEW`. The proposal connects declared authority scope, immutable run-scoped capabilities, bounded specialist delegation, and typed lifecycle completion as an Orchestra-native design contract.
+
+**Reason:**
+The four approved Strix governance decisions are eligible for design-only proposal consideration, but they do not authorize promotion, reuse, or implementation. Phase 5C-A therefore records reviewer evidence and Maintainer disposition explicitly, enforces lifecycle consistency and real calendar-date ordering, and fails promotion references unless a proposal reaches final `APPROVED` status.
+
+The fail-open system-prompt-rendering decision remains rejected and implementation-blocked. It is not selected or positively adapted; the proposal uses fail-closed prompt construction only as a negative safety constraint. No Strix source, prompt, payload, exploit, example, media, or documentation expression is reused. Independent Arbiter, Governor, Steward, and Maintainer disposition remains pending for Phase 5C-B, and even a later approved proposal would remain design-only until separate manual promotion, Catalog synchronization, and Maintainer-authorized specialist implementation.
+
+**Rejected Alternatives:**
+- Treating an `UNDER_REVIEW` proposal as approved or promotion-eligible.
+- Allowing proposal status to diverge from final Maintainer disposition.
+- Permitting prompt text, mutable process-global registration, or child delegation to expand authority.
+- Selecting or positively adapting the rejected fail-open prompt-rendering decision.
+- Combining Phase 5C-A contract work with Phase 5C-B disposition, promotion, Catalog synchronization, or runtime implementation.
+
+**Affected Components:**
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- docs/internal/ARTIFICER_PHASE4_GOVERNANCE_CONTRACT.md
+- docs/internal/ARTIFICER_WORKFLOW.md
+- internal/artificer/CHECKLIST.md
+- internal/artificer/EVOLUTION_PROPOSAL_SCHEMA.json
+- internal/artificer/proposals/README.md
+- internal/artificer/proposals/orchestra-authority-capability-contract.json
+- scripts/validate_artificer_governance_records.py
+- tests/behavior/test_artificer_governance_records.py

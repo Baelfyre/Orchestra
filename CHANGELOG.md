@@ -53,6 +53,7 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 ## Unreleased
 
 ### Added
+- Added the Phase 5C-A Evolution Proposal schema `1.1`, deterministic proposal lifecycle validation, focused behavior coverage, and one design-only Orchestra authority/capability proposal in `UNDER_REVIEW`, without promotion, Pattern Catalog, source-reuse, prompt-reuse, or implementation authority.
 - Added Phase 4.5-A OpenHero pilot source-intake, pattern, and audit records through a pinned static read-only GitHub inspection with no decisions, proposals, promotions, or Pattern Catalog changes.
 - Added Phase 5B-A governed OpenHero decision records for three approved concept-only patterns, one deferred concept-only UI pattern, and one rejected security anti-pattern, without creating proposals, promotions, Pattern Catalog entries, or implementation authority.
 - Added Phase 5B-B governed Strix decision records for four approved concept-only patterns and one rejected implementation-blocked prompt-safety anti-pattern, with mandatory Apache-2.0 Governor review and no proposal, promotion, Pattern Catalog, source-reuse, or implementation authority.

@@ -92,3 +92,13 @@ Completed Audit -> Independent Read-Only Review -> Maintainer Adoption -> Mandat
 *   OpenHero decisions remain unchanged.
 *   Strix authority-related patterns remain separate decision records even when later grouped in a proposal.
 *   Manual promotion and Pattern Catalog lifecycle remain unchanged and separate from Phase 5B-A and Phase 5B-B.
+
+### Phase 5C Governed Proposal Lifecycle
+Approved Decisions -> Phase 5C-A Draft Proposal -> Independent Phase 5C-B Review -> Maintainer Proposal Disposition -> Later Manual Promotion -> Later Catalog Synchronization -> Later Specialist-Owned Implementation
+
+*   Phase 5C-A creates a design-only proposal in `UNDER_REVIEW`; it does not complete governance disposition.
+*   Phase 5C-B is required for independent Arbiter, Governor, Steward, and Maintainer review.
+*   Proposal approval does not promote a pattern, and promotion does not implement it.
+*   Artificer never approves, promotes, routes, or implements a proposal.
+*   The Strix fail-open system-prompt-rendering decision remains rejected, implementation-blocked, and excluded from selected patterns.
+*   Any reference to fail-open behavior is a negative safety constraint only: invalid or empty system authority must fail closed with typed, auditable errors.

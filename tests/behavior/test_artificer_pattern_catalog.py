@@ -249,10 +249,11 @@ def add_complete_chain(
         "decision_date": "2026-07-03",
     }
     proposal = {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "proposal_id": proposal_id,
         "title": "Proposal",
         "objective": "Adapt concept.",
+        "proposal_date": "2026-07-03",
         "source_audit_ids": [audit_id],
         "selected_patterns": [
             {
@@ -266,6 +267,28 @@ def add_complete_chain(
         ],
         "verification_plan": "Run tests.",
         "governance_handoff": "Maintainer review.",
+        "reviews": {
+            "arbiter": {
+                "status": "APPROVED",
+                "rationale": "Reviewed.",
+                "review_date": "2026-07-03",
+            },
+            "governor": {
+                "status": "NOT_REQUIRED",
+                "rationale": "Not required.",
+                "review_date": "2026-07-03",
+            },
+            "steward": {
+                "status": "APPROVED",
+                "rationale": "Reviewed.",
+                "review_date": "2026-07-03",
+            },
+        },
+        "maintainer_decision": {
+            "status": "APPROVED",
+            "rationale": "Approved.",
+            "decision_date": "2026-07-03",
+        },
         "proposal_status": "APPROVED",
     }
     promotion = {
