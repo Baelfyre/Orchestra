@@ -5,6 +5,12 @@ from pathlib import Path
 
 import governance_check as gc
 
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from adapters.codex import validate_codex_export
+
 
 def assert_equal(name, actual, expected):
     if actual != expected:
@@ -47,6 +53,35 @@ def test_artificer_pattern_catalog_validator_is_registered():
     script = "scripts/validate_artificer_pattern_catalog.py"
     assert_equal("required catalog validator", script in gc.REQUIRED_VALIDATION_SCRIPTS, True)
     assert_equal("strict catalog validator", script in gc.STRICT_VALIDATOR_SCRIPTS, True)
+
+
+def test_issue_171_validators_are_registered():
+    for script in (
+        "scripts/validate_prompt_load_budget.py",
+        "scripts/validate_governance_protocol_consistency.py",
+        "scripts/validate_routing_contract.py",
+    ):
+        assert_equal(f"required {script}", script in gc.REQUIRED_VALIDATION_SCRIPTS, True)
+        assert_equal(f"strict {script}", script in gc.STRICT_VALIDATOR_SCRIPTS, True)
+
+
+def test_codex_parity_normalizes_only_approved_reference_depths():
+    normalize = validate_codex_export.normalize_body_for_parity
+    source = "See `../../docs/routing/EXECUTION_MODES_POLICY.md`.\n"
+    exported = "See `../../../../docs/routing/EXECUTION_MODES_POLICY.md`.\n"
+    assert_equal("approved reference depth", normalize(source), normalize(exported))
+
+    negative_cases = {
+        "changed prose": (source, "Read `../../../../docs/routing/EXECUTION_MODES_POLICY.md`.\n"),
+        "changed filename": (source, "See `../../../../docs/routing/MINIMAL_PROMPT_FORMAT.md`.\n"),
+        "changed code example": (
+            "```text\n../../docs/routing/EXECUTION_MODES_POLICY.md\n```\n",
+            "```text\n../../../../docs/routing/EXECUTION_MODES_POLICY.md\n```\n",
+        ),
+        "unrelated relative path": ("See `../../notes/example.md`.\n", "See `../../../../notes/example.md`.\n"),
+    }
+    for name, (left, right) in negative_cases.items():
+        assert_equal(name, normalize(left) != normalize(right), True)
 
 
 def test_repo_memory_path_check():
@@ -202,6 +237,8 @@ def main():
     test_artificer_governance_validator_is_registered()
     test_artificer_audit_renderer_is_registered_read_only()
     test_artificer_pattern_catalog_validator_is_registered()
+    test_issue_171_validators_are_registered()
+    test_codex_parity_normalizes_only_approved_reference_depths()
     test_repo_memory_path_check()
     test_startup_state_claim_check()
     print("Governance check helper tests passed.")

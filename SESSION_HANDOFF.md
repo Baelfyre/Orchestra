@@ -1,23 +1,23 @@
 # Session Handoff
 
-- **Current Stable State:** Artificer Phase 5B-A completed through PR #169
-- **Current Task:** Artificer Phase 5B-B Strix governance decision records
+- **Current Stable State:** Artificer Phase 5B-B completed through PR #170
+- **Current Task:** Issue #171 governance, prompt-load, and routing recalibration before Phase 5C
 - **Current Repo:** `C:\+conductor`
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.1`
 - **Target Patch:** `v1.1.2`
-- **Mode:** Local governed decision-record creation with mandatory Governor review
-- **Allowed Files:** `CHANGELOG.md`, `DECISION_LOG.md`, `PROJECT_STATE.md`, `SESSION_HANDOFF.md`, `docs/internal/ARTIFICER_PHASE4_GOVERNANCE_CONTRACT.md`, `docs/internal/ARTIFICER_WORKFLOW.md`, `internal/artificer/decisions/usestrix__strix__09872744f5a9/declared-scope-context.json`, `internal/artificer/decisions/usestrix__strix__09872744f5a9/fail-open-system-prompt-rendering.json`, `internal/artificer/decisions/usestrix__strix__09872744f5a9/lifecycle-gated-agent-completion.json`, `internal/artificer/decisions/usestrix__strix__09872744f5a9/run-wide-tool-extension-registry.json`, `internal/artificer/decisions/usestrix__strix__09872744f5a9/validated-specialist-delegation.json` only.
+- **Mode:** Governed implementation and validation audit
+- **Allowed Files:** Issue #171 governance, routing, prompt-load, validator, test, Codex export, and state-documentation scope only.
 - **Forbidden Repo:** `C:\+AA`
-- **Last Validation:** PR #169 passed Governance Check, Validate, and Cross-platform Validation
-- **Known Risks:** Prompt-load thresholds remain advisory and current observed Groups A, B, C, and Grand Total exceed documented soft limits; no replacement baseline has been approved.
-- **Pinned External Pilot:** `usestrix/strix` at `09872744f5a9d3ffad750478f823e656ac1a7c88`
-- **Exact Branch:** `feat/artificer-phase5-strix-governance-decisions`
-- **Boundary Rules:** Strix source-intake, pattern, and audit records remain immutable. OpenHero decisions remain unchanged. No external repository access is required. No Strix execution, scanning, payload inspection, exploit testing, or hosted-service access occurs. Governor review is mandatory for all Strix decisions. No proposal, promotion, Pattern Catalog change, code reuse, prompt reuse, or implementation occurs.
-- **Audit Scope:** Strix governance decisions only; OpenHero decisions remain unchanged.
-- **Governance Advancement:** Phase 5B-B records Strix decisions only. It creates no proposal, promotion, Pattern Catalog modification, source reuse, prompt reuse, or implementation authority, and it does not modify existing OpenHero decisions.
-- **Next Step:** Stage the exact 11-file allowlist, then complete the staged audit before commit.
+- **Last Validation:** Complete Issue #171 validation chain passed locally, including integrated behavior, strict governance with 0 errors and 0 warnings, and 43 runtime tests.
+- **Known Risks:** Static routing contracts prove deterministic policy consistency, not actual LLM route accuracy. Manual or model-driven dry-run evidence remains separate.
+- **Issue Reference:** `gh issue view 171 --repo Baelfyre/Orchestra`
+- **Exact Branch:** `fix/issue-171-governance-routing-drift`
+- **Boundary Rules:** Do not begin Phase 5C. Do not create Artificer proposal, promotion, decision, or Pattern Catalog changes. Do not weaken governance gates, Governor human-review behavior, Arbiter continuity gates, or Dagger destructive-operation gates. Do not stage, commit, push, open PR, merge, or change release versions.
+- **Audit Scope:** Issue #171 governance, routing, prompt-load, validator, export, and state-documentation changes only.
+- **Governance Advancement:** This issue recalibrates governance and routing policy only. It creates no Artificer proposal, promotion, Pattern Catalog update, source-reuse authority, prompt-reuse authority, or implementation authority.
+- **Next Step:** Maintainer review of the exact unstaged 31-file Issue #171 scope.
 - **Fresh-Session Warning:** If the current conversation has long prior history from another repository, enter safe mode and request user confirmation before proceeding with implementation.
 
 ## Token Control Note

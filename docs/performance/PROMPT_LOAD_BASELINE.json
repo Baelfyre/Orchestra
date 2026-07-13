@@ -1,0 +1,193 @@
+{
+  "measurement_method": "utf8_chars_div_4",
+  "packages": {
+    "conductor": {
+      "package_name": "Conductor",
+      "file_list": [
+        "skills/conductor/SKILL.md"
+      ],
+      "approved_baseline_tokens": 1075,
+      "revision_percentage": 5,
+      "maximum_percentage": 10,
+      "measurement_method": "utf8_chars_div_4",
+      "approval_date": "2026-07-12",
+      "approved_reference": "Issue #171 recalibration baseline bootstrap",
+      "change_rationale": "Issue #171 recalibration baseline bootstrap",
+      "decision_log_reference": "Issue #171 recalibration baseline bootstrap",
+      "maintainer_approval": "BOOTSTRAP_PENDING",
+      "baseline_change": {
+        "previous_baseline_tokens": null,
+        "new_baseline_tokens": 1075,
+        "growth_percentage": 0,
+        "reason": "Issue #171 recalibration baseline bootstrap",
+        "alternatives_considered": "Keep advisory-only prompt-load tracking without blocking enforcement.",
+        "maintainer_approval": "BOOTSTRAP_PENDING",
+        "decision_log_reference": "Issue #171 recalibration baseline bootstrap"
+      }
+    },
+    "default_routing": {
+      "package_name": "Default routing package",
+      "file_list": [
+        "skills/conductor/SKILL.md",
+        "SKILL_INDEX.md",
+        "docs/routing/CONTEXT_RETRIEVAL_RULES.md",
+        "docs/routing/MINIMAL_PROMPT_FORMAT.md",
+        "docs/routing/EXECUTION_MODES_POLICY.md"
+      ],
+      "approved_baseline_tokens": 7074,
+      "revision_percentage": 5,
+      "maximum_percentage": 10,
+      "measurement_method": "utf8_chars_div_4",
+      "approval_date": "2026-07-12",
+      "approved_reference": "Issue #171 recalibration baseline bootstrap",
+      "change_rationale": "Issue #171 recalibration baseline bootstrap",
+      "decision_log_reference": "Issue #171 recalibration baseline bootstrap",
+      "maintainer_approval": "BOOTSTRAP_PENDING",
+      "baseline_change": {
+        "previous_baseline_tokens": null,
+        "new_baseline_tokens": 7074,
+        "growth_percentage": 0,
+        "reason": "Issue #171 recalibration baseline bootstrap",
+        "alternatives_considered": "Retain historical advisory-only thresholds without enforcing package-specific budgets.",
+        "maintainer_approval": "BOOTSTRAP_PENDING",
+        "decision_log_reference": "Issue #171 recalibration baseline bootstrap"
+      }
+    },
+    "ambiguous_routing": {
+      "package_name": "Ambiguous-routing package",
+      "file_list": [
+        "skills/conductor/SKILL.md",
+        "SKILL_INDEX.md",
+        "docs/routing/CONTEXT_RETRIEVAL_RULES.md",
+        "docs/routing/MINIMAL_PROMPT_FORMAT.md",
+        "docs/routing/EXECUTION_MODES_POLICY.md",
+        "ROUTING_MAP.md"
+      ],
+      "approved_baseline_tokens": 8033,
+      "revision_percentage": 15,
+      "maximum_percentage": 25,
+      "measurement_method": "utf8_chars_div_4",
+      "approval_date": "2026-07-12",
+      "approved_reference": "Issue #171 recalibration baseline bootstrap",
+      "change_rationale": "Issue #171 recalibration baseline bootstrap",
+      "decision_log_reference": "Issue #171 recalibration baseline bootstrap",
+      "maintainer_approval": "BOOTSTRAP_PENDING",
+      "baseline_change": {
+        "previous_baseline_tokens": null,
+        "new_baseline_tokens": 8033,
+        "growth_percentage": 0,
+        "reason": "Issue #171 recalibration baseline bootstrap",
+        "alternatives_considered": "Fold ambiguous routing into default routing package and lose explicit map budget tracking.",
+        "maintainer_approval": "BOOTSTRAP_PENDING",
+        "decision_log_reference": "Issue #171 recalibration baseline bootstrap"
+      }
+    },
+    "governance_core": {
+      "package_name": "Governance core",
+      "file_list": [
+        "docs/governance/GOVERNANCE_LAYER.md"
+      ],
+      "approved_baseline_tokens": 3981,
+      "revision_percentage": 10,
+      "maximum_percentage": 15,
+      "measurement_method": "utf8_chars_div_4",
+      "approval_date": "2026-07-12",
+      "approved_reference": "Issue #171 recalibration baseline bootstrap",
+      "change_rationale": "Issue #171 recalibration baseline bootstrap",
+      "decision_log_reference": "Issue #171 recalibration baseline bootstrap",
+      "maintainer_approval": "BOOTSTRAP_PENDING",
+      "baseline_change": {
+        "previous_baseline_tokens": null,
+        "new_baseline_tokens": 3981,
+        "growth_percentage": 0,
+        "reason": "Issue #171 recalibration baseline bootstrap",
+        "alternatives_considered": "Continue measuring only legacy governance Group C without canonical package protection.",
+        "maintainer_approval": "BOOTSTRAP_PENDING",
+        "decision_log_reference": "Issue #171 recalibration baseline bootstrap"
+      }
+    },
+    "steward_governance": {
+      "package_name": "Steward governance decision package",
+      "file_list": [
+        "docs/governance/GOVERNANCE_LAYER.md",
+        "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md",
+        "skills/the-steward/SKILL.md",
+        "skills/the-steward/OUTPUT_FORMATS.md"
+      ],
+      "approved_baseline_tokens": 6474,
+      "revision_percentage": 10,
+      "maximum_percentage": 15,
+      "measurement_method": "utf8_chars_div_4",
+      "approval_date": "2026-07-12",
+      "approved_reference": "Issue #171 recalibration baseline bootstrap",
+      "change_rationale": "Issue #171 recalibration baseline bootstrap",
+      "decision_log_reference": "Issue #171 recalibration baseline bootstrap",
+      "maintainer_approval": "BOOTSTRAP_PENDING",
+      "baseline_change": {
+        "previous_baseline_tokens": null,
+        "new_baseline_tokens": 6474,
+        "growth_percentage": 0,
+        "reason": "Issue #171 recalibration baseline bootstrap",
+        "alternatives_considered": "Measure only governance layer and ignore specialist governance execution packages.",
+        "maintainer_approval": "BOOTSTRAP_PENDING",
+        "decision_log_reference": "Issue #171 recalibration baseline bootstrap"
+      }
+    },
+    "governor_governance": {
+      "package_name": "Governor governance decision package",
+      "file_list": [
+        "docs/governance/GOVERNANCE_LAYER.md",
+        "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md",
+        "skills/the-governor/SKILL.md",
+        "skills/the-governor/OUTPUT_FORMATS.md"
+      ],
+      "approved_baseline_tokens": 6811,
+      "revision_percentage": 10,
+      "maximum_percentage": 15,
+      "measurement_method": "utf8_chars_div_4",
+      "approval_date": "2026-07-12",
+      "approved_reference": "Issue #171 recalibration baseline bootstrap",
+      "change_rationale": "Issue #171 recalibration baseline bootstrap",
+      "decision_log_reference": "Issue #171 recalibration baseline bootstrap",
+      "maintainer_approval": "BOOTSTRAP_PENDING",
+      "baseline_change": {
+        "previous_baseline_tokens": null,
+        "new_baseline_tokens": 6811,
+        "growth_percentage": 0,
+        "reason": "Issue #171 recalibration baseline bootstrap",
+        "alternatives_considered": "Measure only governance layer and ignore governor execution package growth.",
+        "maintainer_approval": "BOOTSTRAP_PENDING",
+        "decision_log_reference": "Issue #171 recalibration baseline bootstrap"
+      }
+    },
+    "release_governance": {
+      "package_name": "Release governance package",
+      "file_list": [
+        "docs/governance/GOVERNANCE_LAYER.md",
+        "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md",
+        "skills/the-steward/SKILL.md",
+        "skills/the-steward/OUTPUT_FORMATS.md",
+        "skills/the-governor/SKILL.md",
+        "skills/the-governor/OUTPUT_FORMATS.md"
+      ],
+      "approved_baseline_tokens": 8136,
+      "revision_percentage": 10,
+      "maximum_percentage": 15,
+      "measurement_method": "utf8_chars_div_4",
+      "approval_date": "2026-07-12",
+      "approved_reference": "Issue #171 recalibration baseline bootstrap",
+      "change_rationale": "Issue #171 recalibration baseline bootstrap",
+      "decision_log_reference": "Issue #171 recalibration baseline bootstrap",
+      "maintainer_approval": "BOOTSTRAP_PENDING",
+      "baseline_change": {
+        "previous_baseline_tokens": null,
+        "new_baseline_tokens": 8136,
+        "growth_percentage": 0,
+        "reason": "Issue #171 recalibration baseline bootstrap",
+        "alternatives_considered": "Leave release governance unmeasured and rely on ad hoc review only.",
+        "maintainer_approval": "BOOTSTRAP_PENDING",
+        "decision_log_reference": "Issue #171 recalibration baseline bootstrap"
+      }
+    }
+  }
+}

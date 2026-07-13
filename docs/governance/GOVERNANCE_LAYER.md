@@ -1,3 +1,4 @@
+
 # Governance Layer
 
 The Governor, The Steward, and Arbiter form a reusable governance layer that sits above the Conductor. Their purpose is to ensure that any project, product, repository, or future development effort remains aligned with its objectives, documentation requirements, compliance obligations, legal risk boundaries, privacy expectations, IP and copyright concerns, licensing requirements, release readiness standards, and verified continuation state.
@@ -74,6 +75,14 @@ The governance layer operates contextually. Authorities do not pre-assume jurisd
 If the project context profile is incomplete, unclear, or entirely missing, the Steward and Governor must not guess or make assumptions.
 - In **Audit**, **Release**, or high-risk **Implementation** modes, they must return `REVISION_REQUIRED` to request the necessary clarity.
 - In **Ideation** or **Prototype** mode, they return `ADVISORY_ONLY` or `NOT_APPLICABLE` to allow exploration to proceed without blocking.
+
+## Canonical Governance Decision Protocol
+
+`GOVERNANCE_LAYER.md` is governance-context routing and operating-policy document.
+`GOVERNANCE_DECISION_PROTOCOL.md` is canonical shared governance decision contract.
+
+Load `GOVERNANCE_DECISION_PROTOCOL.md` only when governance decision must be produced, interpreted, or enforced.
+Do not load it for ordinary route classification.
 
 ## Freedom-First Development
 
@@ -252,53 +261,6 @@ Interpretation rules:
 
 For Release Mode app workflows, The Governor must verify privacy, terms, data inventory, retention, deletion, account deletion documentation when accounts exist, platform disclosures, third-party processor disclosures, and IP clearance when applicable. Missing required artifacts must result in `REVISION_REQUIRED` or `BLOCKED`, depending on release context and severity.
 
-## Decision Model
-
-All governance reviews use the same decision values:
-
-| Decision | Meaning |
-|---|---|
-| `APPROVED` | Proceed to next stage |
-| `ADVISORY_ONLY` | Advice given, exploration unblocked |
-| `REVISION_REQUIRED` | Address findings before proceeding |
-| `BLOCKED` | Cannot proceed until resolved |
-| `NOT_APPLICABLE` | No review needed for this request |
-
-The Governor adds `human_review_required` for uncertain legal, regulatory, privacy, licensing, or IP issues.
-
-Arbiter adds continuation verdicts: `READY`, `READY_WITH_MINOR_FIXES`, `HOLD`, and `BLOCKED`.
-
-For governance-effectiveness calibration, Arbiter may also use `READY_WITH_REQUIRED_FIXES`. This does not replace the continuation verdict set above and does not create a new governance decision meaning.
-
-## Default Output Format
-
-```
-REVIEWER: [the-steward | the-governor]
-PROJECT_CONTEXT: [project type] | [risk level]
-DECISION: [APPROVED | ADVISORY_ONLY | REVISION_REQUIRED | BLOCKED | NOT_APPLICABLE]
-REASON: [one-line assessment]
-RISKS: [identified risks or "none"]
-REQUIRED_ACTIONS: [actions needed or "none"]
-```
-
-## Gate Rules
-
-- Conductor stops on `BLOCKED` from either authority.
-- Conductor pauses on `human_review_required: true` until human review completes.
-- Conductor pauses on Arbiter `HOLD` or `BLOCKED` until required validation, context, or remediation is complete.
-- Conductor addresses all findings on `REVISION_REQUIRED`.
-- Execution agents cannot bypass governance gates.
-- Governance authorities produce decisions, not code.
-
-## Separation of Concerns
-
-| Layer | Owns | Does Not Own |
-|---|---|---|
-| The Steward | Business goals, scope, requirements, SDLC | Legal, compliance, IP, licensing, implementation |
-| The Governor | Legal, compliance, privacy, IP, licensing | Business alignment, scope, implementation |
-| Arbiter | Continuity, validation state, branch safety, source of truth, handoff and merge readiness | Feature implementation, architecture design, legal compliance, business scope |
-| Conductor | Routing, orchestration, skill selection | Governance decisions, implementation |
-| Execution Skills | Implementation, code changes | Governance, routing |
 
 ## Enforcement Limitation
 
@@ -306,5 +268,5 @@ Current enforcement is instruction-level governance. The Conductor must follow t
 
 ---
 
-*See [STEWARD.md](STEWARD.md), [GOVERNOR.md](GOVERNOR.md), [GOVERNANCE_REVIEW_FLOW.md](GOVERNANCE_REVIEW_FLOW.md), and [RELEASE_GATES.md](RELEASE_GATES.md) for details.*
+*See [GOVERNANCE_DECISION_PROTOCOL.md](GOVERNANCE_DECISION_PROTOCOL.md), [STEWARD.md](STEWARD.md), [GOVERNOR.md](GOVERNOR.md), [GOVERNANCE_REVIEW_FLOW.md](GOVERNANCE_REVIEW_FLOW.md), and [RELEASE_GATES.md](RELEASE_GATES.md) for details.*
 

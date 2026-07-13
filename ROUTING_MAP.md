@@ -1,69 +1,59 @@
 # Orchestra Routing Map
 
-This file provides a lightweight, scanner-friendly map of common tasks to the correct specialist skill. Load this file when routing is unclear or when multi-skill coordination is required.
+Load this file only when routing is ambiguous, cross-domain, or order-dependent.
+Do not load it for obvious single-owner work.
 
-## Routing Map Flow
+## Direct Route Rules
 
-All requests pass through the following routing sequence:
+- Obvious single-owner work routes directly to owner.
+- Ambiguous ownership stays with `conductor`.
+- Governance context stays out of ordinary low-risk work unless trigger exists.
+- `docs/governance/GOVERNANCE_DECISION_PROTOCOL.md` does not load during initial route classification.
+- `ROUTING_MAP.md` does not load for obvious single-owner tasks.
 
-```text
-Request
-  ->
-Intent Classification (Determine user objective)
-  ->
-Mode Selection (Select: Ideation, Prototype, Implementation, Audit, Release)
-  ->
-Need-Based Governance (Dynamic checks by The Steward & The Governor when applicable)
-  ->
-Continuity Gate (Arbiter when transition, validation, branch, source-of-truth, or handoff risk exists)
-  ->
-Conductor or Specialist Routing (Route task to destination skill)
-```
-
-If either governance authority returns `BLOCKED`, the Conductor stops. If `human_review_required: true` is flagged, the Conductor pauses until human review completes. In `Ideation` or `Prototype` modes, governance returns `ADVISORY_ONLY` or `NOT_APPLICABLE` and does not block orchestration.
-
-If Arbiter returns `HOLD` or `BLOCKED`, the Conductor pauses continuation, merge, handoff, or context switch until the required validation, context, or remediation is complete.
-
-## Routing Rules
+## Canonical Routing Rules
 
 | Task Type | Target Skill | Condition |
-|-----------|--------------|-----------|
-| Business alignment, scope, requirements review | `the-steward` | Validating project direction or SDLC |
-| Legal, compliance, privacy, IP, licensing review | `the-governor` | Validating compliance or legal risk |
-| Continuity, handoff, merge readiness, branch drift, source-of-truth checks | `arbiter` | Transition, validation, or continuation safety is uncertain |
-| Implementation, code editing, minimal safe edits | `ponytail` | Design/architecture is clear and ready for code |
-| OOP, SOLID, code structure, architecture, refactoring | `clockwork` | Reviewing architecture, layering, or object-oriented design |
-| SQL, schemas, persistence, ORM, migrations, normalization | `chronicler` | Analyzing data layers or database relationships |
-| Security, privacy, RBAC, auth, API hardening | `cipher` | Evaluating defensive posture |
-| UI/UX review, accessibility, frontend layout, secure UX | `cloak` | Reviewing user-facing visible layers |
-| QA, release readiness, test cases, defects, validation gates | `overseer` | Normal quality assurance |
-| Controlled stress, failure scenarios, chaos, negative testing | `dagger` | Requires explicit approval and safe environment |
-| README, documentation, source-backed prose | `scribe` | Source evidence is available to verify claims. |
-| UML, ERD visuals, architecture workflows, Mermaid/PlantUML | `weaver` | Creating or reviewing system models |
-| Broad, unclear, or multi-skill tasks | `conductor` | When ownership overlaps or dependencies exist |
-| Access, visibility, authorization, route gating, persona permission, delegated authority, reporting-chain access | `conductor` | Use Cipher for policy, Chronicler for authority data, Cloak for navigation visibility, Ponytail for implementation, Overseer for persona tests, and Arbiter for closeout when proof is incomplete. |
+| --- | --- | --- |
+| Business alignment, scope, requirements, acceptance criteria, SDLC sufficiency | `the-steward` | Governance alignment owner is clear |
+| Legal, regulatory, privacy-obligation, IP, licensing governance | `the-governor` | Governance compliance owner is clear |
+| Continuity, handoff, merge readiness, branch drift, source-of-truth conflict | `arbiter` | Continuation state is uncertain |
+| Architecture, layering, service boundaries, refactor structure | `clockwork` | Technical architecture owner is clear |
+| Technical security, authorization, secrets, privacy-control design | `cipher` | Technical security owner is clear |
+| Database, schema, migration, ORM, persistence semantics | `chronicler` | Persistence owner is clear |
+| UI/UX, accessibility, responsive layout, interaction design | `cloak` | Frontend design owner is clear |
+| QA strategy, validation evidence, release-readiness checks | `overseer` | Validation owner is clear |
+| Documentation production and editing | `scribe` | Documentation execution owner is clear |
+| Diagram and model generation | `weaver` | Visual artifact owner is clear |
+| Minimal implementation after design is ready | `ponytail` | Execution owner is clear and upstream design/governance are ready |
+| Controlled destructive-path simulation | `dagger` | Explicit authorization and guardrail validation are present |
+| Broad, unclear, or overlapping requests | `conductor` | Ownership overlaps, dependencies exist, or route split is unclear |
 
-**Routing Note for Access/Visibility:**
-- Menu visibility, direct route access, and backend/service authorization must be verified separately.
+## Ordered Multi-Skill Sequences
 
-## Conductor Authority
+- `the-governor -> cipher -> ponytail` for governance-sensitive security implementation
+- `clockwork -> ponytail` for architecture-first implementation
+- `chronicler -> overseer` for persistence semantics followed by migration or DB validation
+- `the-steward -> scribe` for required SDLC documentation shaped by business-alignment governance
+- `the-governor -> scribe` for compliance documentation shaped by governance
+- `arbiter -> overseer` when validation evidence must be executed or refreshed before continuation
+- `cloak -> clockwork -> ponytail` when frontend design changes API shape, data flow, or service boundaries
+- `cloak -> cipher -> ponytail` when frontend design affects authorization, privacy, or destructive journeys
 
-`conductor` retains routing authority for complex requests, subject to governance and continuity gates. The Conductor will evaluate the project constraints and select the smallest effective skill stack from this map. The Conductor **cannot override** governance decisions from The Steward, The Governor, or Arbiter.
+## Gate and Conflict Rules
 
-## Conflict Resolution
-
-- Assign one owner per output and sequence dependencies.
-- Prefer `overseer` for normal QA and `cipher` for normal security/privacy review.
-- Use `dagger` only after its safety gate and never as the default QA, security, database, or UI reviewer.
-- For ERDs, use `chronicler` for database semantics and `weaver` for visual notation.
-- Do not load or route specialists whose output is not required.
+- Dagger stays `BLOCKED_PENDING_AUTHORIZATION` until explicit authorization and guardrail validation exist.
+- Governor human-review behavior is blocking.
+- Arbiter `HOLD` and `BLOCKED` are blocking.
+- No architecture, security, database, or governance task defaults directly to `ponytail`.
+- Assign one owner per output and sequence dependencies instead of parallel policy conflicts.
+- Use `dagger` only for guarded destructive-path work, never as default QA, security, DB, or UI reviewer.
+- For ERDs, use `chronicler` for semantics and `weaver` for notation.
 
 ## Legacy Routing Aliases
 
-The Conductor maintains backwards compatibility with legacy multi-word routing keys during transitions. The following aliases are automatically resolved to the new clean slugs using the central registry:
-
 | Legacy Key | Resolved Slug |
-|------------|---------------|
+| --- | --- |
 | `amalgam-conductor` | `conductor` |
 | `cloak-meister` | `cloak` |
 | `scribe-meister` | `scribe` |

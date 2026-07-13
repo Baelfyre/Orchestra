@@ -476,3 +476,55 @@ Approved `REFERENCE_ONLY` patterns remain restricted to `CONCEPT_ONLY`, while th
 - internal/artificer/decisions/usestrix__strix__09872744f5a9/lifecycle-gated-agent-completion.json
 - internal/artificer/decisions/usestrix__strix__09872744f5a9/run-wide-tool-extension-registry.json
 - internal/artificer/decisions/usestrix__strix__09872744f5a9/validated-specialist-delegation.json
+
+---
+
+## Date: 2026-07-12
+
+**Decision:**
+Implemented Issue #171 governance, prompt-load, and routing recalibration before Artificer Phase 5C. Established one canonical shared governance decision protocol, restored Conductor to lightweight routing, added deterministic routing and governance anti-drift validation, and defined the post-cleanup prompt-load bootstrap baseline. No Artificer proposal, promotion, Pattern Catalog update, source-reuse authority, prompt-reuse authority, or implementation authority was created in this issue.
+
+**Reason:**
+Governance decision values, gate rules, ownership statements, and compact output structure had drifted across the governance layer and specialist skill files. Conductor had also grown beyond its historical review baseline and was repeating routing and governance material that already belonged in lighter canonical sources. Issue #171 needed deterministic protection before Phase 5C so future changes cannot silently reintroduce duplicated policy, route architecture or governance work straight to Ponytail, or self-raise prompt-load baselines to hide drift.
+
+The canonical shared protocol now lives in `docs/governance/GOVERNANCE_DECISION_PROTOCOL.md`. Shared decision values remain `APPROVED`, `ADVISORY_ONLY`, `REVISION_REQUIRED`, `BLOCKED`, and `NOT_APPLICABLE`. Shared gates remain blocking for governance `BLOCKED`, pausing for `REVISION_REQUIRED`, pausing for `human_review_required: true`, and blocking for Arbiter `HOLD` or `BLOCKED`. Steward and Governor retain role-specific output fields and review nuance only. The prompt-load bootstrap baseline is explicit configuration enforced by strict governance rather than advisory reporting alone.
+
+**Rejected Alternatives:**
+- Keeping duplicated decision tables and gate rules in multiple governance files.
+- Letting Conductor continue to carry repeated routing and governance policy instead of routing from lighter canonical sources.
+- Treating routing benchmarks as sufficient without deterministic fixture validation.
+- Raising baselines implicitly inside the same feature change that caused growth.
+- Beginning Artificer Phase 5C before governance and routing drift protections were in place.
+
+**Affected Components:**
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- SKILL_INDEX.md
+- ROUTING_MAP.md
+- docs/governance/GOVERNANCE_LAYER.md
+- docs/governance/GOVERNANCE_DECISION_PROTOCOL.md
+- docs/performance/PROMPT_LOAD_BASELINE.json
+- docs/performance/PROMPT_LOAD_RECALIBRATION_AUDIT.md
+- docs/performance/PROMPT_LOAD_THRESHOLD_POLICY.md
+- skills/conductor/SKILL.md
+- skills/the-steward/SKILL.md
+- skills/the-governor/SKILL.md
+- adapters/codex/skills/conductor/SKILL.md
+- adapters/codex/skills/conductor/ROUTING_MAP.md
+- adapters/codex/skills/the-steward/SKILL.md
+- adapters/codex/skills/the-governor/SKILL.md
+- adapters/codex/validate_codex_export.py
+- scripts/measure_prompt_load.py
+- scripts/check_prompt_load_thresholds.py
+- scripts/validate_prompt_load_budget.py
+- scripts/validate_governance_protocol_consistency.py
+- scripts/validate_routing_contract.py
+- scripts/governance_check.py
+- scripts/test_governance_check.py
+- tests/behavior/router-contract-fixtures.json
+- tests/behavior/test_prompt_load_budget.py
+- tests/behavior/test_governance_protocol_consistency.py
+- tests/behavior/test_router_contracts.py
+- tests/behavior/run_tests.py

@@ -11,8 +11,8 @@ All thresholds are based on the output of `scripts/measure_prompt_load.py`, whic
 
 ## Threshold Philosophy
 - The Conductor's default prompt load must remain as small as possible to ensure fast and cheap routing.
-- Hard CI failure thresholds will not be introduced until baseline metrics show long-term stability and predictability.
-- Exceeding a soft threshold does not fail the build or CI, but triggers maintainer review.
+- Historical advisory reporting remains available through `scripts/check_prompt_load_thresholds.py`.
+- Blocking budget enforcement now lives in `scripts/validate_prompt_load_budget.py`.
 
 ## Original Baseline
 These historical values are retained for comparison and are not current replacement baselines:
@@ -22,39 +22,78 @@ These historical values are retained for comparison and are not current replacem
 - Group D (Baseline Performance Docs): ~2330 estimated tokens
 - Grand Total: ~17080 estimated tokens
 
-## Current Observed Measurements
-Observed on 2026-07-11 from the clean `main` checkout before Wave 5B implementation edits:
-- Group A: 8028 estimated tokens
-- Group B: 6147 estimated tokens
-- Group C: 4411 estimated tokens
-- Group D: 2330 estimated tokens
-- Grand Total: 20916 estimated tokens
-- Conductor: 2248 estimated tokens
+## Approved Baseline Packages
 
-These are observations, not automatically approved replacement baselines. Re-baselining requires an explicit maintainer decision.
+Approved bootstrap baselines live in `docs/performance/PROMPT_LOAD_BASELINE.json`.
+They were measured after Issue #171 cleanup and are now strict-governance inputs, not advisory guesses.
 
-## Soft Thresholds
-Soft thresholds act as observability-only and report-only triggers. The checker reports Group A, Group B, Group C, Grand Total, Conductor growth, and Group D measurement visibility. There is no hard CI prompt-load failure threshold yet.
-- **Group A (Core Context)**: Should remain under 8,000 estimated tokens.
-- **Group B (Broader Context)**: Should remain under 6,000 estimated tokens.
-- **Group C (Governance Context)**: Allowed to grow as compliance rules evolve, but should remain under 4,000 estimated tokens.
-- **Grand Total**: Should remain under 20,000 estimated tokens.
+Packages include:
 
-## Warning Thresholds
-- **Group A Growth**: If Group A increases by more than 10% from the baseline, a warning is raised.
-- **Conductor Growth**: If `skills/conductor/SKILL.md` grows by more than 15% from its baseline, a warning is raised.
+- Conductor
+- default routing
+- ambiguous routing
+- governance core
+- Steward governance
+- Governor governance
+- release governance
 
-## Review Thresholds
-Maintainers must conduct a formal review if:
-- A new file is added to Group A without explicit justification for why it cannot live in Group B or C.
-- Any single canonical routing document becomes larger in token size than the Conductor skill itself.
-- Governance-required phrases expand significantly without a corresponding test or policy justification.
+## Blocking Thresholds
 
-## Future Hard-Fail Thresholds
-Hard-fail thresholds will be introduced in a future milestone once:
-1. The router-first architecture has stabilized over multiple release cycles.
-2. The variance in prompt size across normal development activities is well understood.
-3. A formal tokenization library replaces the current approximation script.
+### Conductor and default routing
+
+- `REVISION_REQUIRED`: more than 5% above approved baseline
+- `BLOCKED`: more than 10% above approved baseline
+
+### Governance execution packages
+
+- `REVISION_REQUIRED`: more than 10% above approved baseline
+- `BLOCKED`: more than 15% above approved baseline
+
+### Optional or reference-only packages
+
+- `REVISION_REQUIRED`: more than 15% above approved baseline
+- `BLOCKED`: more than 25% above approved baseline
+
+Threshold equality is non-failing. Only values strictly above a threshold change status.
+
+## Validator Outcomes
+
+`scripts/validate_prompt_load_budget.py` returns:
+
+- `PASS`
+- `REVISION_REQUIRED`
+- `BLOCKED`
+- `CONFIGURATION_ERROR`
+
+Exit codes:
+
+- `0` for `PASS`
+- `1` for `REVISION_REQUIRED` or `BLOCKED`
+- `2` for `CONFIGURATION_ERROR`
+
+Both `REVISION_REQUIRED` and `BLOCKED` fail strict governance.
+
+## Baseline Change Protection
+
+Feature work must not raise its own baseline merely to silence drift.
+Baseline entries must document:
+
+- previous baseline
+- new baseline
+- growth percentage
+- reason
+- alternatives considered
+- Maintainer approval
+- decision-log reference
+
+Undocumented or malformed baseline changes are configuration failures.
+
+Approval states are explicit:
+
+- `BOOTSTRAP_PENDING` is valid only when `previous_baseline_tokens` is `null`.
+- `APPROVED` is required for any later baseline increase.
+- Empty or arbitrary approval text is invalid.
+- Recorded growth percentage must equal the calculated change from previous to new baseline.
 
 ## Recommended Actions When Thresholds Are Exceeded
 If a soft threshold is exceeded, maintainers should:
@@ -63,13 +102,14 @@ If a soft threshold is exceeded, maintainers should:
 3. **Move to Selective Retrieval**: Ensure the file is not loaded by default but instead selectively fetched via `ask_question` or `grep_search`.
 
 ## Threshold Checker
-To validate current payloads against these thresholds, you can use the dry-run checker. For details on how to run it and interpret its statuses, see [PROMPT_LOAD_THRESHOLD_CHECKER.md](PROMPT_LOAD_THRESHOLD_CHECKER.md).
+Use `scripts/check_prompt_load_thresholds.py` for advisory historical reporting.
+Use `scripts/validate_prompt_load_budget.py` for blocking governance enforcement.
 
 ## CI Artifact Usage
 The `measure_prompt_load.py` script runs automatically in the `governance-check.yml` CI workflow. Its output is published as `prompt_load_metrics.txt` in the `governance-validation-report` artifact. This ensures continuous observability-only tracking of prompt load metrics. For details on all governance artifacts, see the [CI Artifact Index](../testing/CI_ARTIFACT_INDEX.md).
 
 ## Non-Goals
-This policy does not govern user prompt sizes, session history limits, or downstream specialist output tokens. It only governs the static context injected into the Conductor's routing prompt.
+This policy does not govern user prompt sizes, session history limits, or downstream specialist output tokens. It governs the static context injected into routing and governance execution packages.
 
 ## Policy Result
 PROMPT_LOAD_THRESHOLD_POLICY_DEFINED
