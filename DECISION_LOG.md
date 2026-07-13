@@ -629,3 +629,49 @@ The fail-open system-prompt-rendering decision remains rejected and implementati
 - internal/artificer/proposals/orchestra-authority-capability-contract.json
 - scripts/validate_artificer_governance_records.py
 - tests/behavior/test_artificer_governance_records.py
+
+---
+
+## Date: 2026-07-13
+
+**Issue:** #178
+
+**Decision:**
+Implemented the bounded Phase 6B-A core domain foundation and Phase 6B-B authority and capability enforcement. Added immutable shared, authority, runtime capability, delegation, lifecycle, error, and audit-event contracts; concrete authority and capability evaluators; repository-contained trusted JSON policy loading; deterministic intersections and collision rejection; typed enforcement; and additive public exports. RuntimeExecutor, adapters, delegation validation behavior, lifecycle transition behavior, and active compatibility policy remain unchanged.
+
+**Reason:**
+Phase 6A established that prompt text, adapter metadata, routing, governance approval, PRAP host support, and audit evidence cannot grant runtime authority. Phase 6B-A implements the smallest immutable domain boundary needed to represent those decisions safely. Phase 6B-B enforces exact target, operation, constraint, and capability checks without accepting prompt or adapter inputs and fails closed for missing, malformed, escaped, untrusted, colliding, or empty policy data.
+
+The four promoted contracts moved from `APPROVED` to `IMPLEMENTING` because implementation has begun. The Pattern Catalog was manually synchronized from canonical promotion JSON. No promotion is `IMPLEMENTED`; delegation and lifecycle remain model-only; RuntimeExecutor integration is deferred to Phase 6B-D. The implementation is original Orchestra code derived from repository-local contracts and reuses no external source expression.
+
+**Rejected Alternatives:**
+- Trusting prompt text, adapter metadata, routing, governance state, or audit records as authority inputs.
+- Adding a process-global mutable capability registry.
+- Using prefix target matching or silent allow-by-default behavior.
+- Activating a default compatibility policy before Phase 6B-D authorization.
+- Implementing delegation validation, lifecycle transitions, RuntimeExecutor integration, or adapter changes in this batch.
+- Marking any promotion `IMPLEMENTED` before later implementation and verification complete.
+
+**Affected Components:**
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- docs/internal/PATTERN_CATALOG.md
+- docs/project/AUTHORITY_CAPABILITY_IMPLEMENTATION_PLAN.md
+- internal/artificer/promotions/agent-lifecycle-state-machine.json
+- internal/artificer/promotions/authority-scope-contract.json
+- internal/artificer/promotions/run-scoped-capability-manifest.json
+- internal/artificer/promotions/specialist-delegation-contract.json
+- orchestra_runtime/__init__.py
+- orchestra_runtime/authority.py
+- orchestra_runtime/capabilities.py
+- orchestra_runtime/delegation.py
+- orchestra_runtime/errors.py
+- orchestra_runtime/interfaces.py
+- orchestra_runtime/lifecycle.py
+- orchestra_runtime/models.py
+- tests/runtime/test_authority.py
+- tests/runtime/test_capabilities.py
+- tests/runtime/test_delegation_contracts.py
+- tests/runtime/test_lifecycle_contracts.py

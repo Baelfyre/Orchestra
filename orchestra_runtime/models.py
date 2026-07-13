@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from enum import Enum
 from pathlib import Path
 from typing import Any
 
@@ -74,3 +75,79 @@ class ExecutionResult:
     validation: ValidationResult
     output: str
     audit_entry_id: str
+
+
+class AuditEventType(str, Enum):
+    ROOT_AUTHORITY_CREATED = "ROOT_AUTHORITY_CREATED"
+    AUTHORITY_DECIDED = "AUTHORITY_DECIDED"
+    CAPABILITY_MANIFEST_CREATED = "CAPABILITY_MANIFEST_CREATED"
+    CAPABILITY_DECIDED = "CAPABILITY_DECIDED"
+    DELEGATION_ACCEPTED = "DELEGATION_ACCEPTED"
+    DELEGATION_REJECTED = "DELEGATION_REJECTED"
+    LIFECYCLE_TRANSITIONED = "LIFECYCLE_TRANSITIONED"
+    TERMINAL_RESULT_RECORDED = "TERMINAL_RESULT_RECORDED"
+    INITIALIZATION_FAILED = "INITIALIZATION_FAILED"
+
+
+@dataclass(frozen=True, slots=True)
+class RunIdentity:
+    run_id: str
+    parent_run_id: str | None = None
+
+    def __post_init__(self) -> None:
+        run_id = self.run_id.strip()
+        parent_run_id = self.parent_run_id.strip() if self.parent_run_id else None
+        if not run_id:
+            raise ValueError("run_id must be non-empty")
+        if parent_run_id == run_id:
+            raise ValueError("parent_run_id must differ from run_id")
+        object.__setattr__(self, "run_id", run_id)
+        object.__setattr__(self, "parent_run_id", parent_run_id)
+
+    def to_dict(self) -> dict[str, str | None]:
+        return {"run_id": self.run_id, "parent_run_id": self.parent_run_id}
+
+
+@dataclass(frozen=True, slots=True)
+class RuntimeAuditEvent:
+    event_id: str
+    event_type: AuditEventType
+    run_id: str
+    related_id: str
+    reason_code: str
+    provenance_ids: tuple[str, ...] = ()
+    details: tuple[tuple[str, str], ...] = ()
+    parent_run_id: str | None = None
+
+    def __post_init__(self) -> None:
+        event_id = self.event_id.strip()
+        run_id = self.run_id.strip()
+        related_id = self.related_id.strip()
+        reason_code = self.reason_code.strip()
+        if not all((event_id, run_id, related_id, reason_code)):
+            raise ValueError("audit event identifiers and reason_code must be non-empty")
+        event_type = AuditEventType(self.event_type)
+        provenance_ids = tuple(sorted({item.strip() for item in self.provenance_ids if item.strip()}))
+        details = tuple(sorted((str(key).strip(), str(value)) for key, value in self.details))
+        if any(not key for key, _ in details) or len({key for key, _ in details}) != len(details):
+            raise ValueError("audit detail keys must be non-empty and unique")
+        object.__setattr__(self, "event_id", event_id)
+        object.__setattr__(self, "event_type", event_type)
+        object.__setattr__(self, "run_id", run_id)
+        object.__setattr__(self, "related_id", related_id)
+        object.__setattr__(self, "reason_code", reason_code)
+        object.__setattr__(self, "provenance_ids", provenance_ids)
+        object.__setattr__(self, "details", details)
+        object.__setattr__(self, "parent_run_id", self.parent_run_id.strip() if self.parent_run_id else None)
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "event_id": self.event_id,
+            "event_type": self.event_type.value,
+            "run_id": self.run_id,
+            "parent_run_id": self.parent_run_id,
+            "related_id": self.related_id,
+            "reason_code": self.reason_code,
+            "provenance_ids": list(self.provenance_ids),
+            "details": {key: value for key, value in self.details},
+        }

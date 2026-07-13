@@ -53,6 +53,9 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 ## Unreleased
 
 ### Added
+- Implemented Issue #178 Phase 6B-A immutable runtime domain contracts, typed error taxonomy, authority/capability/delegation/lifecycle models, stable interfaces, deterministic serialization, and additive public exports.
+- Implemented Phase 6B-B repository-contained trusted policy loading, fail-closed authority evaluation and intersection, immutable runtime capability manifest resolution and intersection, deterministic collision rejection, typed enforcement, and structured audit-event creation.
+- Advanced four canonical promotions to `IMPLEMENTING` and manually synchronized the Pattern Catalog; delegation behavior, lifecycle behavior, RuntimeExecutor integration, adapters, and active compatibility policy remain unchanged.
 - Added Issue #176 Phase 6A runtime-gap and trust-boundary architecture for trusted authority, immutable per-run capabilities, bounded delegation, typed lifecycle control, and structured audit evidence without runtime changes.
 - Added implementation-ready authority, runtime capability, delegation, lifecycle, interface, error, compatibility, and fail-closed contracts that remain distinct from PRAP adapter support.
 - Added sequenced Phase 6B through Phase 6D implementation and verification planning; promotions remain `APPROVED`, Catalog content remains unchanged, and no source-expression reuse or implementation authority is introduced.

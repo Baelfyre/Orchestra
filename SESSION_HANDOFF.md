@@ -1,25 +1,24 @@
 # Session Handoff
 
-- **Current Stable State:** Phase 5C-B / 5D / 5E completed through merged PR #175; Issue #173 closed
-- **Current Task:** Combined Phase 6A-A / 6A-B / 6A-C authority and capability architecture
+- **Current Stable State:** Phase 6A completed through merged PR #177; Issue #176 closed
+- **Current Task:** Issue #178 combined Phase 6B-A / 6B-B authority and capability foundation
 - **Current Repo:** `C:\+conductor`
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Current Release:** `v1.1.1`
 - **Target Patch:** `v1.1.2`
-- **Mode:** Architecture, typed contract, sequencing, and verification planning only
-- **Allowed Files:** Exact ten-file Phase 6A scope: three new architecture documents and seven approved documentation/state updates.
+- **Mode:** Bounded immutable-domain and authority/capability enforcement implementation
+- **Allowed Files:** Exact 22-file Phase 6B-A / 6B-B scope: 13 modified and 9 added.
 - **Forbidden Repo:** `C:\+AA`
-- **Last Validation:** Full Phase 6A chain passed locally, including integrated behavior, strict governance with 0 errors and 0 warnings, and 43 runtime tests at 95.51% coverage.
-- **Known Risks:** Phase 6B is not authorized; architecture grants no runtime or source-expression reuse authority.
-- **Issue Reference:** Issue #176 — `docs(runtime): define Phase 6A authority and lifecycle architecture`
-- **Base Commit:** `0361036c42a5ecfca30c62d60165ba77b3801fe2`
-- **Branch Namespace:** `docs`
-- **Branch Name:** `phase6a-authority-capability-architecture`
-- **Boundary Rules:** Runtime, tests, schemas, validators, promotions, Catalog, adapters, public skills, and commands remain unchanged. Do not access external Strix, start Phase 6B, stage, commit, push, open a PR, merge, or change release versions.
-- **Audit Scope:** Exact ten-file Phase 6A architecture scope.
-- **Architecture Outcome:** Trusted configuration is the only authority source; prompt and adapter metadata cannot expand authority; child scope and capabilities are intersections; lifecycle transitions require typed signals; invalid initialization fails closed.
-- **Next Step:** Butler review of the exact unstaged Phase 6A architecture diff before staging or Phase 6B authorization.
+- **Last Validation:** Full Phase 6B validation passed: 55 focused tests at 97.12% coverage, 98 runtime tests at 95.74% coverage, integrated behavior, strict governance with 0 errors and 0 warnings, import smoke test, and `git diff --check`.
+- **Known Risks:** Phase 6B-C and Phase 6B-D remain unauthorized; delegation behavior, lifecycle behavior, RuntimeExecutor integration, and active compatibility policy are absent.
+- **Issue Reference:** Issue #178 - `feat(runtime): implement Phase 6B authority and capability foundation`
+- **Base Commit:** `fe5aeb8dda6ae20dbf6439cc9ebf14556666d8de`
+- **Exact Branch:** `feat/runtime-phase6b-authority-capability-foundation`
+- **Boundary Rules:** Do not access external Strix, add external dependencies, start Phase 6B-C or 6B-D, modify RuntimeExecutor, adapters, schemas, validators, or release versions, or stage, commit, push, open a PR, or merge.
+- **Audit Scope:** Exact 22-file Phase 6B-A / 6B-B scope.
+- **Implementation Outcome:** Immutable contracts plus fail-closed authority and capability enforcement complete; four promotions are `IMPLEMENTING`; Catalog synchronized; no source-expression reuse.
+- **Next Step:** Butler review of the exact unstaged Phase 6B-A / 6B-B diff before staging.
 - **Fresh-Session Warning:** If the current conversation has long prior history from another repository, enter safe mode and request user confirmation before proceeding with implementation.
 
 ## Token Control Note

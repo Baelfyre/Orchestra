@@ -7,7 +7,7 @@
   "source_bundle_id": "usestrix__strix__09872744f5a9",
   "pattern_record_path": "internal/artificer/records/usestrix__strix__09872744f5a9/patterns/run-wide-tool-extension-registry.json",
   "approval_date": "2026-07-13",
-  "promotion_status": "APPROVED",
+  "promotion_status": "IMPLEMENTING",
   "assigned_specialist": "clockwork",
   "source_traceability": {
     "repository": "usestrix/strix",
