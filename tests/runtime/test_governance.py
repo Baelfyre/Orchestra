@@ -3,13 +3,13 @@ from pathlib import Path
 from orchestra_runtime.factories import AdapterFactory
 from orchestra_runtime.repositories import ManifestRepository, SkillSourceRepository
 from orchestra_runtime.services import (
-    AuditLogger,
     ContextAssembler,
     GovernanceValidator,
     InMemoryAuditSink,
     RouterService,
     RuntimeExecutor,
     SkillRegistry,
+    build_compatibility_composition,
 )
 
 
@@ -17,12 +17,17 @@ def build_executor(repo_root: Path) -> RuntimeExecutor:
     manifest_repository = ManifestRepository(repo_root)
     skill_repository = SkillSourceRepository(repo_root)
     skill_registry = SkillRegistry(manifest_repository, skill_repository)
+    composition = build_compatibility_composition(
+        skill_registry,
+        InMemoryAuditSink(),
+        run_id="governance-compatibility",
+    )
     return RuntimeExecutor(
         skill_registry,
         RouterService(skill_registry),
         GovernanceValidator(),
         ContextAssembler(manifest_repository),
-        AuditLogger(InMemoryAuditSink()),
+        composition,
     )
 
 
@@ -36,6 +41,7 @@ def test_destructive_skill_blocked_without_validation():
     assert result.success is False
     assert result.route.skill_slug == "dagger"
     assert result.validation.status == "BLOCKED_PENDING_VALIDATION"
+    assert result.lifecycle_state == "BLOCKED"
 
 
 def test_destructive_skill_allowed_with_validation():
@@ -51,6 +57,7 @@ def test_destructive_skill_allowed_with_validation():
 
     assert result.success is True
     assert result.validation.status == "APPROVED"
+    assert result.lifecycle_state == "COMPLETED"
 
 
 def test_high_risk_skill_blocked_without_validation():
@@ -63,3 +70,4 @@ def test_high_risk_skill_blocked_without_validation():
     assert result.success is False
     assert result.route.skill_slug == "cipher"
     assert result.validation.status == "BLOCKED_PENDING_VALIDATION"
+    assert result.lifecycle_state == "BLOCKED"

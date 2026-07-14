@@ -714,3 +714,47 @@ The four promotions remain `IMPLEMENTING`. The Pattern Catalog is unchanged. Pha
 - tests/runtime/test_delegation_validator.py
 - tests/runtime/test_lifecycle_contracts.py
 - tests/runtime/test_lifecycle_controller.py
+
+---
+
+## Date: 2026-07-13
+
+**Issue:** #182
+
+**Decision:**
+Implemented the combined Phase 6B-D runtime integration and Phase 6C adversarial-validation batch after PR #181 merged and Issue #180 closed. Runtime composition now requires an explicit finite `ACTIVE` or `COMPATIBILITY` authority mode, immutable trusted route bindings, fail-closed authority and capability checks before governance, single initialization per exact root or child run identity, manifest-grant provenance consistency, binding-to-capability owner consistency, structured lifecycle control, bounded in-process delegated child execution, and deterministic audit evidence. The Butler-authorized corrective expansion also enforces exact lifecycle source states for `ACTIVATE`, `WAIT`, and `RESUME`.
+
+**Reason:**
+Phase 6B-C supplied the immutable authority, capability, delegation, and lifecycle dependencies required for runtime composition. Issue #182 integrates them without moving authority into prompts, adapter metadata, routing, governance, or audit records. Active mode fails before adapter access when trusted composition is missing or invalid. Compatibility mode is explicit and bounded to existing supported commands and specialists. Accepted delegation resolutions alone can initialize child runs, and lifecycle state changes occur only through structured signals.
+
+Adversarial validation covers initialization, repeated root and child execution, prompt and adapter escalation, routing and governance confusion, authority and capability attacks, delegation attacks, lifecycle attacks, execution ordering, and audit-sink failure. Repeated run identities fail before contract revalidation or adapter access and preserve the retained waiting or terminal snapshot. Capability grants must share manifest provenance, and present bound capabilities must be owned by the bound specialist; absent capability identifiers still reach deterministic runtime denial. The lifecycle repair rejects destination-valid signals from the wrong source state with deterministic typed evidence while preserving the immutable snapshot and existing terminal replay and conflict semantics. Promotions remain `IMPLEMENTING`; the Pattern Catalog and README are unchanged; Phase 6D has not started; the target patch remains `v1.1.2`; and the project is intentionally parked after this batch pending Butler review.
+
+**Rejected Alternatives:**
+- Inferring compatibility mode from missing active configuration or treating compatibility as unlimited authority.
+- Constructing trusted bindings from prompts, adapter metadata, routing metadata, governance results, audit entries, or Artificer records.
+- Allowing governance or audit evidence to reverse authority or capability denial.
+- Creating child runs from rejected delegation resolutions or spawning worker processes.
+- Inferring lifecycle completion from ordinary text or accepting structured signals from an invalid source state.
+- Modifying adapters, protocols, authority, capability, delegation, promotions, the Pattern Catalog, README, or release versions.
+- Starting Phase 6D as part of Issue #182.
+
+**Affected Components:**
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- docs/project/AUTHORITY_CAPABILITY_CONTRACTS.md
+- docs/project/AUTHORITY_CAPABILITY_IMPLEMENTATION_PLAN.md
+- docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md
+- orchestra_runtime/__init__.py
+- orchestra_runtime/errors.py
+- orchestra_runtime/interfaces.py
+- orchestra_runtime/lifecycle.py
+- orchestra_runtime/models.py
+- orchestra_runtime/services.py
+- tests/runtime/test_adapter_contracts.py
+- tests/runtime/test_governance.py
+- tests/runtime/test_runtime_adversarial.py
+- tests/runtime/test_runtime_authority_integration.py
+- tests/runtime/test_runtime_core.py
+- tests/runtime/test_runtime_delegated_execution.py

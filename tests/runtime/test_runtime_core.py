@@ -7,13 +7,13 @@ from orchestra_runtime.factories import AdapterFactory
 from orchestra_runtime.models import Command, ContextPackage
 from orchestra_runtime.repositories import ManifestRepository, SkillSourceRepository
 from orchestra_runtime.services import (
-    AuditLogger,
     ContextAssembler,
     GovernanceValidator,
     InMemoryAuditSink,
     RouterService,
     RuntimeExecutor,
     SkillRegistry,
+    build_compatibility_composition,
 )
 
 
@@ -24,8 +24,12 @@ def build_executor(repo_root: Path) -> RuntimeExecutor:
     router = RouterService(skill_registry)
     governance = GovernanceValidator()
     context_assembler = ContextAssembler(manifest_repository)
-    audit_logger = AuditLogger(InMemoryAuditSink())
-    return RuntimeExecutor(skill_registry, router, governance, context_assembler, audit_logger)
+    composition = build_compatibility_composition(
+        skill_registry,
+        InMemoryAuditSink(),
+        run_id="runtime-core-compatibility",
+    )
+    return RuntimeExecutor(skill_registry, router, governance, context_assembler, composition)
 
 
 class EmptySkillRegistry:
@@ -60,6 +64,10 @@ def test_runtime_executor_routes_codex_entrypoint_to_conductor():
     assert result.route.skill_slug == "conductor"
     assert result.validation.status == "NOT_REQUIRED"
     assert result.audit_entry_id
+    assert result.authority_mode == "COMPATIBILITY"
+    assert result.lifecycle_state == "COMPLETED"
+    assert result.authority_decision_id
+    assert result.capability_decision_id
 
 
 def test_manifest_repository_load_aliases_returns_empty_dict_when_missing(tmp_path: Path):

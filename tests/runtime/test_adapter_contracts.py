@@ -5,13 +5,13 @@ import pytest
 from orchestra_runtime.factories import AdapterFactory
 from orchestra_runtime.repositories import ManifestRepository, SkillSourceRepository
 from orchestra_runtime.services import (
-    AuditLogger,
     ContextAssembler,
     GovernanceValidator,
     InMemoryAuditSink,
     RouterService,
     RuntimeExecutor,
     SkillRegistry,
+    build_compatibility_composition,
 )
 
 
@@ -19,12 +19,17 @@ def build_executor(repo_root: Path) -> RuntimeExecutor:
     manifest_repository = ManifestRepository(repo_root)
     skill_repository = SkillSourceRepository(repo_root)
     skill_registry = SkillRegistry(manifest_repository, skill_repository)
+    composition = build_compatibility_composition(
+        skill_registry,
+        InMemoryAuditSink(),
+        run_id="adapter-contract-compatibility",
+    )
     return RuntimeExecutor(
         skill_registry,
         RouterService(skill_registry),
         GovernanceValidator(),
         ContextAssembler(manifest_repository),
-        AuditLogger(InMemoryAuditSink()),
+        composition,
     )
 
 
@@ -56,6 +61,7 @@ def test_adapter_contracts(adapter_name: str, prompt: str):
     assert result.adapter_name == adapter_name
     assert result.audit_entry_id
     assert result.output
+    assert result.lifecycle_state == "COMPLETED"
 
 
 @pytest.mark.parametrize(

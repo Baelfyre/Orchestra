@@ -58,10 +58,20 @@ class IRuntimeExecutor(ABC):
     def execute(self, adapter: IIDEAdapter, prompt: str, metadata: dict | None = None) -> ExecutionResult:
         raise NotImplementedError
 
+    @abstractmethod
+    def execute_delegated(
+        self,
+        adapter: IIDEAdapter,
+        prompt: str,
+        resolution: DelegationResolution,
+        metadata: dict | None = None,
+    ) -> ExecutionResult:
+        raise NotImplementedError
+
 
 class IAuditSink(ABC):
     @abstractmethod
-    def write(self, entry: dict) -> str:
+    def write(self, entry: dict[str, object]) -> str:
         raise NotImplementedError
 
 

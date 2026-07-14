@@ -3,7 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    from .lifecycle import StructuredTerminalResult
 
 
 @dataclass(frozen=True)
@@ -75,6 +78,61 @@ class ExecutionResult:
     validation: ValidationResult
     output: str
     audit_entry_id: str
+    run_identity: RunIdentity | None = None
+    authority_decision_id: str | None = None
+    capability_decision_id: str | None = None
+    authority_mode: str | None = None
+    lifecycle_state: str | None = None
+    terminal_result: StructuredTerminalResult | None = None
+    runtime_audit_event_ids: tuple[str, ...] = ()
+
+    def __post_init__(self) -> None:
+        event_ids = tuple(str(item).strip() for item in self.runtime_audit_event_ids)
+        if any(not item for item in event_ids) or len(set(event_ids)) != len(event_ids):
+            raise ValueError("runtime audit event identifiers must be non-empty and unique")
+        object.__setattr__(self, "runtime_audit_event_ids", event_ids)
+        if self.run_identity is None:
+            if any(
+                (
+                    self.authority_decision_id,
+                    self.capability_decision_id,
+                    self.authority_mode,
+                    self.lifecycle_state,
+                    self.terminal_result,
+                    event_ids,
+                )
+            ):
+                raise ValueError("runtime evidence requires run identity")
+            return
+
+        mode = str(self.authority_mode or "").strip()
+        state = str(self.lifecycle_state or "").strip()
+        if mode not in {"ACTIVE", "COMPATIBILITY"}:
+            raise ValueError("runtime evidence requires a valid authority mode")
+        valid_states = {
+            "INITIALIZING",
+            "ACTIVE",
+            "WAITING",
+            "COMPLETED",
+            "FAILED",
+            "CANCELLED",
+            "TIMED_OUT",
+            "BLOCKED",
+        }
+        if state not in valid_states:
+            raise ValueError("runtime evidence requires a valid lifecycle state")
+        terminal_states = {"COMPLETED", "FAILED", "CANCELLED", "TIMED_OUT", "BLOCKED"}
+        if state in terminal_states:
+            if (
+                self.terminal_result is None
+                or self.terminal_result.run_id != self.run_identity.run_id
+                or self.terminal_result.state.value != state
+            ):
+                raise ValueError("terminal runtime evidence must match lifecycle state")
+        elif self.terminal_result is not None:
+            raise ValueError("non-terminal runtime evidence cannot include a terminal result")
+        object.__setattr__(self, "authority_mode", mode)
+        object.__setattr__(self, "lifecycle_state", state)
 
 
 class AuditEventType(str, Enum):

@@ -61,6 +61,12 @@ SIGNAL_DESTINATIONS = MappingProxyType({
     LifecycleSignalType.BLOCK: LifecycleState.BLOCKED,
 })
 
+SIGNAL_SOURCE_STATES = MappingProxyType({
+    LifecycleSignalType.ACTIVATE: LifecycleState.INITIALIZING,
+    LifecycleSignalType.WAIT: LifecycleState.ACTIVE,
+    LifecycleSignalType.RESUME: LifecycleState.WAITING,
+})
+
 LIFECYCLE_TRANSITIONS = MappingProxyType(
     {
         LifecycleState.INITIALIZING: frozenset(
@@ -282,6 +288,17 @@ class LifecycleController(ILifecycleController):
                 "lifecycle transition is not allowed",
                 "INVALID_TRANSITION",
                 {"from_state": snapshot.state.value, "to_state": signal.requested_state.value},
+            )
+        required_state = SIGNAL_SOURCE_STATES.get(signal.signal_type)
+        if required_state is not None and snapshot.state is not required_state:
+            raise InvalidLifecycleSignalError(
+                "lifecycle signal is invalid for the current source state",
+                "INVALID_SIGNAL_SOURCE_STATE",
+                {
+                    "signal_type": signal.signal_type.value,
+                    "current_state": snapshot.state.value,
+                    "required_state": required_state.value,
+                },
             )
         return LifecycleSnapshot(
             snapshot.run_identity,

@@ -58,7 +58,10 @@ from .errors import (
     InvalidCapabilityConfigurationError,
     InvalidLifecycleSignalError,
     InvalidLifecycleTransitionError,
+    RuntimeAuditError,
+    RuntimeBindingError,
     RuntimeContractError,
+    RuntimeInitializationError,
 )
 from .factories import AdapterFactory, SkillFactory
 from .interfaces import (
@@ -112,13 +115,19 @@ from .protocol import (
 )
 from .repositories import ManifestRepository, SkillSourceRepository
 from .services import (
+    AuthorityMode,
     AuditLogger,
     ContextAssembler,
     GovernanceValidator,
     InMemoryAuditSink,
     RouterService,
+    RuntimeComposition,
+    RuntimeExecutionPolicy,
     RuntimeExecutor,
+    RuntimeOperationResult,
+    RuntimePolicyBinding,
     SkillRegistry,
+    build_compatibility_composition,
 )
 
 __all__ = [
@@ -133,6 +142,7 @@ __all__ = [
     "AuthorityDecision",
     "AuthorityDeniedError",
     "AuthorityEvaluator",
+    "AuthorityMode",
     "AuthorityProvenance",
     "AuthorityReasonCode",
     "AuthorityScope",
@@ -196,11 +206,18 @@ __all__ = [
     "RouterService",
     "RunIdentity",
     "RuntimeAuditEvent",
+    "RuntimeAuditError",
+    "RuntimeBindingError",
     "RuntimeCapability",
     "RuntimeCapabilityGrant",
     "RuntimeCapabilityManifest",
     "RuntimeContractError",
+    "RuntimeComposition",
+    "RuntimeExecutionPolicy",
     "RuntimeExecutor",
+    "RuntimeInitializationError",
+    "RuntimeOperationResult",
+    "RuntimePolicyBinding",
     "Skill",
     "SkillFactory",
     "SkillRegistry",
@@ -214,6 +231,7 @@ __all__ = [
     "WindsurfAdapter",
     "ZedAdapter",
     "authority_decision_event",
+    "build_compatibility_composition",
     "capability_decision_event",
     "capability_manifest_event",
     "delegation_accepted_event",

@@ -1,6 +1,6 @@
 # Authority and Capability Runtime Architecture
 
-Status: Phase 6A architecture definition. Runtime implementation has not started.
+Status: Phase 6B-D runtime integration and Phase 6C adversarial validation implemented locally for Issue #182. Phase 6D has not started.
 
 ## Purpose
 
@@ -17,38 +17,42 @@ Define the Orchestra-native runtime boundaries for trusted authority, immutable 
 
 ## Current Runtime
 
-The current runtime flow is:
+The current trusted runtime flow is:
 
 ```text
-Adapter
--> ContextPackage
+Trusted RuntimeComposition
+-> root authority and capability-manifest validation
+-> lifecycle initialization
+-> Adapter ContextPackage
 -> Command
 -> RouterService
+-> immutable route binding
+-> authority evaluation
+-> capability evaluation
 -> GovernanceValidator
--> RuntimeExecutor
+-> lifecycle activation
+-> in-process operation or bounded child execution
+-> structured lifecycle signal and result
+-> RuntimeAuditEvent evidence
 -> ExecutionResult
--> AuditLogger
 ```
 
-`ContextAssembler` accepts a `ContextPackage` from an adapter and merges generic metadata defaults. `RouterService` maps a parsed `Command` to a specialist. `GovernanceValidator` evaluates the route using generic metadata flags such as `governance_validated`, `destructive_validated`, and `dry_run`. `RuntimeExecutor` coordinates these services and returns an `ExecutionResult`; `AuditLogger` records a generic execution summary.
+`RuntimeExecutor` requires an explicit immutable `RuntimeComposition` before adapter access. The composition carries an `ACTIVE` or `COMPATIBILITY` authority mode, run identity, root authority, capability manifest, evaluators, lifecycle controller, delegation validator, audit integration, and finite trusted route bindings. `ContextAssembler`, `RouterService`, and `GovernanceValidator` retain their existing responsibilities; governance metadata such as `governance_validated`, `destructive_validated`, and `dry_run` cannot grant authority or capabilities.
 
-This flow provides routing and governance checks, but it does not establish runtime authority. `RouteDecision.governance_required` describes governance routing. It does not grant target, operation, capability, delegation, or lifecycle authority.
+`ExecutionResult` retains its original fields and now adds verified run identity, authority and capability decision references, authority mode, lifecycle state, structured terminal result, and runtime audit-event references. `RouteDecision.governance_required` remains governance routing only.
 
-## Current Gaps
+## Implemented Boundaries
 
-- No trusted authority-scope model.
-- No authority provenance.
-- No explicit target or operation authorization.
-- No per-run runtime capability manifest.
-- No capability collision contract.
-- No bounded delegation model.
-- No child-authority intersection.
-- No typed lifecycle state.
-- No structured completion signal.
-- No lifecycle transition validation.
-- No authority-specific audit events.
-- Generic metadata currently carries governance flags.
-- No explicit separation between trusted configuration and prompt or adapter metadata.
+- Trusted authority and capability contracts are immutable and run-scoped.
+- Active mode fails closed for missing, malformed, mismatched, or untrusted composition.
+- Compatibility mode is explicit and bounded to the repository-supported command and specialist routes.
+- Each run identity initializes once. Retained root and child snapshots reject repeat execution before trusted-contract revalidation or adapter access.
+- Every capability grant uses the manifest provenance, and every binding with a present capability uses a grant owned by the bound specialist.
+- Exact immutable bindings map routed work to an authority target and operation plus a runtime capability and operation.
+- Authority and capability decisions occur before governance, and denials stop before runtime operation.
+- Accepted delegation creates a bounded in-process child run; rejected delegation creates no child lifecycle or operation.
+- Lifecycle state changes require structured signals. `ACTIVATE`, `WAIT`, and `RESUME` also enforce exact source states.
+- Structured audit events record initialization, decisions, delegation, transitions, and terminal results without granting authority.
 
 ## Trust Boundaries
 
@@ -67,29 +71,33 @@ The trust boundary sits between trusted runtime composition and all host-provide
 
 ## Phase 6A-A Finding
 
-Current runtime behavior does not contradict the approved architecture premise. It lacks the proposed enforcement contracts, so later integration must add them through explicit dependencies without reclassifying existing metadata or governance results as authority.
+Phase 6B-D preserves this trust boundary through explicit constructor dependencies. Existing metadata and governance results remain untrusted for authority and capability grants.
 
-## Target Runtime
+## Implemented Runtime Sequence
 
-The target sequence is:
+Phase 6B-D implements this sequence:
 
 ```text
 Trusted runtime configuration
 -> Root authority validation
 -> Immutable run identity
 -> Immutable runtime capability manifest
+-> Lifecycle initialization
 -> Adapter context
 -> Command parsing
 -> Routing
+-> Trusted route binding
 -> Authority evaluation
 -> Capability evaluation
 -> Governance validation
--> Execution lifecycle
--> Structured result
--> Audit events
+-> Lifecycle activation
+-> Operation and structured signal
+-> Lifecycle terminal or waiting transition
+-> Audit evidence
+-> ExecutionResult
 ```
 
-Authority and capability evaluation precede governance validation because governance decides whether an otherwise authorized route may proceed; it cannot make an unauthorized target, operation, or capability valid. Adapter context remains after trusted initialization so host input cannot influence root grants.
+Authority and capability evaluation precede governance validation because governance decides whether an otherwise authorized route may proceed; it cannot make an unauthorized target, operation, or capability valid. Adapter context remains after trusted initialization so host input cannot influence root grants. Missing route bindings deny execution.
 
 ## Component Ownership
 
@@ -107,25 +115,28 @@ Authority and capability evaluation precede governance validation because govern
 
 ## Initialization Sequence
 
-1. Trusted runtime composition loads a repository-owned root policy.
-2. The authority evaluator validates a non-empty `AuthorityScope` and its `AuthorityProvenance`.
-3. Runtime composition creates an immutable run identity.
-4. The capability resolver validates grants, rejects identity collisions, calculates the effective set, and freezes a `RuntimeCapabilityManifest`.
-5. The lifecycle controller creates the run in its pre-execution state.
-6. Initialization emits root-authority and capability-manifest audit events.
-7. Invalid or empty trusted policy produces a typed initialization failure before adapter input is accepted.
+1. Trusted runtime composition supplies an explicit authority mode and immutable repository-owned policy.
+2. Composition validation requires each grant provenance to match the manifest and each present bound capability to be owned by the bound specialist.
+3. `RuntimeExecutor` rejects any retained `run_id` before root or manifest revalidation.
+4. The authority evaluator validates a non-empty `AuthorityScope` and its `AuthorityProvenance`.
+5. Runtime composition creates an immutable run identity.
+6. The capability resolver validates grants, rejects identity collisions, calculates the effective set, and freezes a `RuntimeCapabilityManifest` owned by that run.
+7. The lifecycle controller creates the run in its pre-execution state, which is retained by exact run identity through waiting or termination.
+8. Initialization emits root-authority and capability-manifest audit events.
+9. Missing, invalid, empty, mismatched, untrusted, or already initialized composition produces a typed initialization failure before adapter input is accepted.
 
 ## Execution Sequence
 
 1. The adapter supplies context and the command parser creates a `Command`.
 2. `RouterService` selects a route without granting authority.
-3. `IAuthorityEvaluator` evaluates the requested target and operation against the immutable effective scope.
-4. `ICapabilityResolver` evaluates required runtime capability identities and operations against the immutable manifest.
-5. Any denial stops before privileged execution and emits a structured denial event.
-6. `GovernanceValidator` applies governance rules only after authority and capability checks pass.
-7. `ILifecycleController` validates entry to active execution.
-8. Execution returns a structured result plus typed lifecycle signal; ordinary text is output only.
-9. The lifecycle controller validates the terminal or non-terminal transition and audit events record each decision.
+3. The immutable runtime policy resolves the exact command and specialist binding; a missing binding denies execution.
+4. `IAuthorityEvaluator` evaluates the bound target and operation against the immutable effective scope.
+5. `ICapabilityResolver` evaluates the bound runtime capability identity and operation against the immutable manifest.
+6. Any denial stops before runtime operation and emits structured evidence.
+7. `GovernanceValidator` applies governance rules only after authority and capability checks pass.
+8. `ILifecycleController` validates entry to active execution.
+9. Execution returns a structured operation result plus typed lifecycle signal; ordinary text is output only.
+10. The lifecycle controller validates the terminal or waiting transition and audit events record each decision before `ExecutionResult` is returned.
 
 ## Delegation Sequence
 
@@ -143,10 +154,11 @@ Authority and capability evaluation precede governance validation because govern
 2. Only the lifecycle controller may apply a structured signal.
 3. Allowed transitions move the run to active, waiting, or a terminal state.
 4. Waiting is non-terminal and requires an explicit resume signal.
-5. Completion, failure, cancellation, timeout, and blocking use distinct terminal signals and results.
-6. An exact duplicate terminal signal is idempotent; a conflicting terminal signal is rejected and audited.
-7. Invalid transitions fail deterministically without changing state.
-8. Ordinary prompt, adapter, model, or tool text cannot transition lifecycle state.
+5. `ACTIVATE` is valid only from `INITIALIZING`, `WAIT` only from `ACTIVE`, and `RESUME` only from `WAITING`.
+6. Completion, failure, cancellation, timeout, and blocking use distinct terminal signals and results.
+7. An exact duplicate terminal signal is idempotent; a conflicting terminal signal is rejected and audited.
+8. Invalid transitions fail deterministically without changing state.
+9. Ordinary prompt, adapter, model, or tool text cannot transition lifecycle state.
 
 ## Audit Sequence
 
@@ -154,12 +166,12 @@ Audit records are append-only evidence derived from validated actions. Events co
 
 ## Compatibility Strategy
 
-- Trusted runtime composition initially supplies a repository-owned default root policy for existing construction paths.
-- Existing adapters remain unchanged while constructor dependencies introduce authority, capability, and lifecycle services.
+- Trusted runtime composition supplies a repository-owned finite root policy for existing construction paths only through the explicit compatibility helper.
+- Existing adapters remain unchanged while constructor dependencies provide authority, capability, delegation, lifecycle, and audit services.
 - Compatibility mode is explicit, named, and temporary; it is not inferred from missing policy.
 - Active authority mode fails closed when trusted policy is missing, empty, or invalid.
 - Legacy behavior is never represented as unlimited authority. The compatibility policy contains a documented finite scope and capability set.
-- Existing runtime tests that omit authority objects migrate through the trusted composition helper, not through prompt or adapter metadata.
+- Existing runtime tests use the trusted composition helper, not prompt or adapter metadata.
 - PRAP `AdapterCapabilities` continues to describe host integration support. Runtime execution permissions use the distinct `RuntimeCapability*` contracts.
 
 ## Failure Strategy
@@ -170,6 +182,17 @@ Audit records are append-only evidence derived from validated actions. Events co
 - Collision, malformed configuration, and conflicting terminal-signal errors are typed and deterministic.
 - All failures emit auditable evidence without exposing secrets or converting evidence into authority.
 - No fail-open fallback exists for invalid or empty trusted authority.
+
+## Phase 6B-D and Phase 6C Completion
+
+- PR #181 is merged and Issue #180 is closed.
+- Phase 6B-D trusted runtime composition, authority and capability enforcement order, lifecycle control, bounded delegated child execution, structured audit integration, and additive result evidence are complete locally for Issue #182.
+- Phase 6C adversarial validation covers trusted initialization, prompt and adapter escalation, routing and governance confusion, authority and capability attacks, delegation attacks, lifecycle attacks, execution ordering, and audit-sink failure.
+- The Butler-authorized lifecycle correction rejects `RESUME` from `INITIALIZING` and `ACTIVATE` from `WAITING` with `INVALID_SIGNAL_SOURCE_STATE`; existing valid activation, waiting, resume, terminal replay, and conflict behavior remains unchanged.
+- Maintainer corrections retain one lifecycle history per root or child `run_id`, require manifest-grant provenance consistency, require present bound capabilities to be owned by the bound specialist, and preserve runtime `CAPABILITY_DENIED` behavior for absent capability identifiers.
+- Promotions remain `IMPLEMENTING`; the Pattern Catalog and README are unchanged.
+- Phase 6D has not started. The mandatory README refresh and target `v1.1.2` release finalization remain Phase 6D work.
+- The project is intentionally parked after the combined Phase 6B-D and Phase 6C batch.
 
 ## Rejected Alternatives
 
