@@ -1,6 +1,6 @@
 # Authority and Capability Implementation Plan
 
-Status: Phase 6B-A and Phase 6B-B merged through PR #179; Phase 6B-C implemented locally for Issue #180. RuntimeExecutor integration has not started.
+Status: Phase 6B-A through Phase 6B-C merged through PR #181; Issue #180 closed. Phase 6B-D and Phase 6C are implemented locally for Issue #182. Phase 6D has not started.
 
 ## Purpose
 
@@ -10,14 +10,18 @@ Sequence specialist-owned implementation of the approved authority, runtime capa
 
 - Phase 6B-A: immutable shared, authority, capability, delegation, lifecycle, error, interface, and serialization contracts complete.
 - Phase 6B-B: trusted policy loading, authority evaluation and intersection, capability manifest resolution and intersection, typed enforcement, and event creation complete.
-- Phase 6B-C: immutable delegation policy and resolution, bounded validator, exact lifecycle controller, deterministic signal identity, and audit-event factories complete locally.
+- Phase 6B-C: immutable delegation policy and resolution, bounded validator, exact lifecycle controller, deterministic signal identity, and audit-event factories complete and merged through PR #181.
+- Phase 6B-D: explicit active and compatibility runtime composition, immutable route bindings, authority and capability enforcement, lifecycle control, bounded delegated execution, and audit integration complete locally.
+- Phase 6C: adversarial validation and the lifecycle structured-signal source-state repair complete locally.
 - Delegation validation behavior: operational.
 - Lifecycle transition behavior: operational.
-- `RuntimeExecutor` integration: not started.
-- Active compatibility policy: not created.
+- `RuntimeExecutor` integration: complete locally.
+- Compatibility policy: explicit, finite, trusted, and bounded to supported routes.
 - Promotions: remain `IMPLEMENTING`.
-- Pattern Catalog: unchanged in Phase 6B-C.
-- Next separately authorized batch: Phase 6B-D.
+- Pattern Catalog: unchanged in Phase 6B-D and Phase 6C.
+- README: unchanged; refresh remains mandatory in Phase 6D.
+- Next separately authorized batch: Phase 6D, which has not started.
+- Target patch: `v1.1.2`; the project is intentionally parked after Issue #182 pending Butler review.
 
 ## Phase 6B-A - Core Domain Foundation
 
@@ -77,6 +81,10 @@ Scope:
 
 Exit gate: existing supported adapter paths remain functional under trusted composition, active authority mode fails closed, and governance cannot grant runtime authority.
 
+Completion: the Phase 6B-D checkpoint passed 64 focused integration tests at 99.40% coverage. Trusted initialization precedes adapter access and command parsing; authority and capability decisions precede governance; lifecycle transitions use structured signals; delegated children run in-process only from accepted bounded resolutions; and adapter files remain unchanged.
+
+Maintainer correction: runtime snapshots are retained by exact root or child run identity, composition validates manifest-grant provenance and present binding ownership, and absent capability identifiers retain runtime denial behavior. The corrected Phase 6B-D checkpoint passed 69 tests at 99.42% coverage.
+
 ## Phase 6C - Adversarial Validation
 
 Required cases:
@@ -94,10 +102,17 @@ Required cases:
 - Conflicting terminal signal.
 - Distinct timeout, cancellation, and waiting behavior.
 - Fail-closed initialization.
+- Same-run root and child reinitialization.
+- Capability grant provenance mismatch.
+- Binding capability owner mismatch without changing missing-capability denial.
 
 Exit gate: every case fails at its owning boundary, preserves state, produces typed evidence, and grants no partial authority.
 
+Completion: the maintainer-corrected consolidated Phase 6C focused suite passed 101 tests at 99.42% coverage. The adversarial matrix covers trusted initialization, same-run replay, prompt and adapter escalation, routing and governance confusion, authority, capability, delegation, lifecycle, ordering, and audit-sink failure. Composition rejects inconsistent grant provenance and present binding ownership while leaving missing-capability denial unchanged. The corrective lifecycle repair enforces `ACTIVATE` from `INITIALIZING`, `WAIT` from `ACTIVE`, and `RESUME` from `WAITING` without changing terminal replay or conflict semantics.
+
 ## Phase 6D - Lifecycle and Release Finalization
+
+Status: not started. The README refresh remains mandatory in this phase, and the target patch remains `v1.1.2`.
 
 Scope:
 
@@ -148,7 +163,7 @@ These paths are planning targets, not Phase 6A deliverables. Final scope require
 
 ## Batch Validation Discipline
 
-Each future batch must run focused unit tests first, then affected runtime integration tests, full behavior and strict-governance checks, runtime coverage, `git diff --check`, and an exact authorized-scope audit. Failures stop the batch. Tests, validators, promotion records, and Catalog content are not weakened to accommodate implementation.
+Each remaining batch must run focused unit tests first, then affected runtime integration tests, full behavior and strict-governance checks, runtime coverage, `git diff --check`, and an exact authorized-scope audit. Failures stop the batch. Tests, validators, promotion records, and Catalog content are not weakened to accommodate implementation.
 
 ## Revisability
 

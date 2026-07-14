@@ -64,3 +64,15 @@ class InvalidLifecycleSignalError(RuntimeContractError):
 
 class ConflictingTerminalSignalError(RuntimeContractError):
     pass
+
+
+class RuntimeInitializationError(RuntimeContractError):
+    pass
+
+
+class RuntimeBindingError(RuntimeContractError):
+    pass
+
+
+class RuntimeAuditError(RuntimeContractError):
+    pass

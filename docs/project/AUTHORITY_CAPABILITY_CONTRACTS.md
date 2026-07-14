@@ -1,6 +1,6 @@
 # Authority and Capability Contracts
 
-Status: Phase 6B-C implementation-refined contract definition.
+Status: Phase 6B-D runtime integration and Phase 6C adversarial-validation contract, implemented locally for Issue #182.
 
 ## Contract Rules
 
@@ -83,7 +83,7 @@ Required fields:
 - ordered immutable grants.
 - creation provenance.
 
-The builder sorts grants by `(capability_id.casefold(), capability_id)`. Two grants with the same stable identity are rejected even if their fields match. Storage becomes immutable after run initialization. Effective capability calculation intersects requested grants with parent grants for delegated runs, retains only mutually allowed operations, applies the more restrictive compatible constraints, and rejects an empty required result.
+The builder sorts grants by `(capability_id.casefold(), capability_id)`. Two grants with the same stable identity are rejected even if their fields match. Runtime composition requires every grant provenance to equal the manifest provenance. Storage becomes immutable after run initialization. Effective capability calculation intersects requested grants with parent grants for delegated runs, retains only mutually allowed operations, applies the more restrictive compatible constraints, and rejects an empty required result.
 
 ### `CapabilityDecision`
 
@@ -167,6 +167,40 @@ An exact replay of the accepted terminal `signal_id` with identical content retu
 
 Each lifecycle snapshot retains the accepted signal identifier and its deterministic content fingerprint. Terminal replay compares both values, so identical replay is idempotent while altered or different terminal signals conflict.
 
+Structured non-terminal control signals also have exact source-state contracts:
+
+- `ACTIVATE` requires `INITIALIZING`.
+- `WAIT` requires `ACTIVE`.
+- `RESUME` requires `WAITING`.
+
+Destination-valid but source-invalid `ACTIVATE` or `RESUME` signals raise `InvalidLifecycleSignalError` with reason code `INVALID_SIGNAL_SOURCE_STATE` and safe `signal_type`, `current_state`, and `required_state` context. Destination-invalid transitions retain the existing `INVALID_TRANSITION` contract. Every rejection preserves the original immutable snapshot and creates no terminal result.
+
+## Runtime Integration Contracts
+
+### Authority mode and composition
+
+`AuthorityMode` has exactly `ACTIVE` and `COMPATIBILITY`. `RuntimeComposition` is immutable and requires run identity, authority scope, capability manifest, authority evaluator, capability resolver, lifecycle controller, delegation validator, audit integration, and `RuntimeExecutionPolicy`.
+
+`ACTIVE` never infers missing configuration. `COMPATIBILITY` is created only through the trusted helper and uses the finite repository policy for existing supported command and specialist routes. It is not unlimited authority.
+
+Each `RuntimeExecutor` retains lifecycle snapshots by exact `run_id`. Root and delegated child identities initialize once. A repeated identity raises `RuntimeInitializationError` with `RUN_ALREADY_INITIALIZED` and safe `run_id` and `current_state` context before root validation, manifest validation, adapter access, parsing, routing, governance, or runtime operation. The retained waiting or terminal snapshot and terminal result remain unchanged.
+
+### Trusted route bindings
+
+Each immutable `RuntimePolicyBinding` maps one exact command and specialist pair to an authority target and operation plus a runtime capability identifier and operation. When the capability identifier exists in the manifest, its grant owner must equal the binding specialist or composition fails with `CAPABILITY_OWNER_MISMATCH`. A genuinely absent capability identifier remains constructible and reaches the existing runtime `CAPABILITY_DENIED` decision. Missing bindings deny execution. Prompt text, adapter metadata, route metadata, governance results, audit evidence, and Artificer records cannot create or override bindings.
+
+### Runtime execution result
+
+`ExecutionResult` retains its existing fields and adds immutable evidence for run identity, authority decision, capability decision, authority mode, lifecycle state, structured terminal result, and ordered runtime audit-event references. Terminal evidence must match the run and lifecycle state. Waiting remains non-terminal.
+
+### Governance separation
+
+Authority and capability evaluation occur before governance validation. Governance approval grants neither authority nor capabilities and cannot reverse either denial. Governance may still block otherwise authorized work. `governance_validated`, `destructive_validated`, and `dry_run` remain governance-only inputs.
+
+### Delegated execution
+
+Child execution requires an accepted `DelegationResolution` whose parent-child identities and immutable effective authority and capability contracts match. Child manifests receive the same grant-provenance and binding-owner validation as roots. Only allowlisted effective context keys are passed to the in-process child. A rejected, mismatched, or previously initialized child identity creates no new child lifecycle and performs no child operation.
+
 ## Audit Contracts
 
 Structured audit event types:
@@ -181,9 +215,9 @@ Structured audit event types:
 - `TERMINAL_RESULT_RECORDED`
 - `INITIALIZATION_FAILED`
 
-Every event requires `event_id`, `event_type`, `run_id`, related decision or transition identity, stable reason code, provenance references, and structured details. Child events include `parent_run_id`. Ordering uses the sink's append order plus stable event identity; timestamps may describe occurrence but are never authority inputs. Audit failures must not create a grant or hide the underlying denial.
+Every event requires `event_id`, `event_type`, `run_id`, related decision or transition identity, stable reason code, provenance references, and structured details. Child events include `parent_run_id`. Ordering uses the sink's append order plus stable event identity; timestamps may describe occurrence but are never authority inputs. Audit failures are surfaced as typed `RuntimeAuditError` values and cannot create a grant, widen a capability, change lifecycle state, replace an accepted terminal result, or hide the underlying denial.
 
-## Proposed Interfaces
+## Runtime Interfaces
 
 ### `IAuthorityEvaluator`
 
@@ -224,6 +258,9 @@ Interfaces are domain-facing boundaries. Implementations depend on immutable mod
 | `InvalidLifecycleTransitionError` | Transition absent from allowed table. | Preserve state and audit rejection. |
 | `InvalidLifecycleSignalError` | Signal malformed, untrusted, or mismatched to run/state. | Preserve state and audit rejection. |
 | `ConflictingTerminalSignalError` | A terminal signal conflicts with accepted terminal state or signal content. | Preserve first terminal result and audit conflict. |
+| `RuntimeInitializationError` | Composition is missing, malformed, mismatched, untrusted, has inconsistent grant provenance or ownership, or reuses an initialized run identity. | Stop before adapter access or command parsing and preserve retained lifecycle state. |
+| `RuntimeBindingError` | Routed work has no exact trusted binding. | Stop before authority evaluation or runtime operation. |
+| `RuntimeAuditError` | The audit sink rejects deterministic runtime evidence. | Surface failure without changing decisions, lifecycle state, or accepted terminal result. |
 
 ## Core Invariants
 
@@ -234,10 +271,17 @@ prompt_authority_gain == impossible
 adapter_metadata_authority_gain == impossible
 runtime_manifest_mutation_after_initialization == prohibited
 ordinary_text_terminal_transition == prohibited
+run_identity_reinitialization == prohibited
+grant_provenance == manifest_provenance
+present_binding_capability_owner == binding_skill_slug
 ```
 
 Subset checks cover target, operation, and constraint semantics, not only identifier membership.
 
 ## Compatibility Contract
 
-Trusted runtime composition supplies a finite repository-owned default root policy for existing construction paths. Existing adapters initially remain unchanged. Authority, capability, delegation, and lifecycle enforcement enter through constructor dependencies. Compatibility mode is explicit and temporary, and its policy identity is auditable. Active authority mode fails closed without trusted policy. Missing policy is never interpreted as unlimited authority, and adapter metadata cannot populate trusted contracts.
+Trusted runtime composition supplies a finite repository-owned root policy for existing construction paths through an explicit helper. Existing adapters remain unchanged. Authority, capability, delegation, lifecycle, and audit enforcement enter through constructor dependencies. Compatibility mode is explicit and temporary, and its policy identity is auditable. Active authority mode fails closed without trusted policy. Missing policy is never interpreted as unlimited authority, and adapter metadata cannot populate trusted contracts.
+
+## Phase 6C Verification
+
+The Issue #182 adversarial matrix verifies fail-closed initialization, single initialization per root and child identity, prompt and adapter non-escalation, governance separation, grant-provenance and binding-owner consistency, preserved missing-capability denial, bounded delegation, lifecycle source and terminal invariants, execution ordering, immutable state preservation, and deterministic audit failure. Phase 6D and release finalization remain outside this contract batch.
