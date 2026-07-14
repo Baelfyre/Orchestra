@@ -12,8 +12,7 @@
     <a href="CHANGELOG.md">Changelog</a>
   </p>
   <p>
-    <img src="https://img.shields.io/badge/current_release-v1.1.1-blue" alt="Current public release v1.1.1" />
-    <img src="https://img.shields.io/badge/target_release-v1.1.2-purple" alt="Target prepared release v1.1.2" />
+    <img src="https://img.shields.io/badge/current_release-v1.1.2-blue" alt="Current public release v1.1.2" />
     <img src="https://img.shields.io/badge/runtime_tests-194_passed-brightgreen" alt="194 runtime tests passed" />
     <img src="https://img.shields.io/badge/runtime_coverage-97.72%25-brightgreen" alt="97.72 percent runtime coverage" />
     <a href="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml">
@@ -251,6 +250,35 @@ The [Authority and Capability Contracts](docs/project/AUTHORITY_CAPABILITY_CONTR
 |---|---|---|
 | Dagger | Guarded destructive-path simulation and resilience review | Simulation only unless separately authorized with guardrails |
 
+### Internal repository evolution
+
+| Role | Use it for | Key boundary |
+|---|---|---|
+| Artificer | Maintainer-only, static, read-only audits of selected external repositories for useful patterns, risks, provenance, and licensing considerations | Not publicly routable; does not execute external code, implement findings, approve its own recommendations, or appear in runtime and adapter exports |
+
+Artificer is intentionally separate from Orchestra's public runtime specialist roster. Its audit records support transparent repository evolution, specialist review, provenance tracking, licensing analysis, and governed Pattern Catalog decisions.
+
+See the [Artificer workflow](docs/internal/ARTIFICER_WORKFLOW.md), [Artificer boundaries](docs/internal/ARTIFICER_BOUNDARIES.md), and governed [Pattern Catalog](docs/internal/PATTERN_CATALOG.md).
+
+## External Repository Reviews and Incorporated Patterns
+
+Orchestra may inspect selected external open-source repositories through source-pinned, static Artificer audits. A repository can be audited without being incorporated, and an audit does not authorize copying or implementation.
+
+| Source repository | Relationship to Orchestra | Current outcome |
+|---|---|---|
+| [`usestrix/strix`](https://github.com/usestrix/strix) | Reference source for lifecycle-gated completion, declared authority scope, run-scoped capabilities, and validated specialist delegation | Four governed reference-only patterns were independently implemented as Orchestra-native runtime contracts and released in `v1.1.2` |
+| [`CristianOlivera1/openhero`](https://github.com/CristianOlivera1/openhero) | Static review covering UI orchestration, resilience, archive validation, and defensive-security observations | Audit findings were retained for reference; no OpenHero pattern has been promoted or implemented in Orchestra |
+
+### External-source incorporation boundary
+
+Listing a repository here does not mean that its entire codebase, data, or knowledge base was imported into Orchestra. Orchestra does not wholesale-copy external repositories.
+
+Where incorporation occurs, it is limited to approved concepts, useful logic, reusable skills and knowledge, validation lessons, and independently written Orchestra-native components that improve the framework and its governed knowledge base.
+
+External source code, datasets, prompts, payloads, examples, media, assets, and documentation are not incorporated unless a governed record explicitly authorizes reuse and the applicable license, attribution, security, and maintainer-review requirements are satisfied.
+
+The authoritative incorporation record is the governed [Pattern Catalog](docs/internal/PATTERN_CATALOG.md). An Artificer audit alone does not mean that a repository, pattern, or finding has been incorporated into Orchestra.
+
 ## Supported Hosts and Maturity
 
 Support means a validated integration surface. Scaffold-only means the repository contains a thin runtime adapter and packaging or instruction scaffold, not a published marketplace product.
@@ -321,9 +349,9 @@ The first complete Phase 6D validation pass observed 194 runtime tests passing a
 
 These exact values come from the finished Issue #184 tree. The complete chain reproduced them after the evidence update; that second pass is authoritative. See [Validation](docs/setup/VALIDATION.md) for canonical commands.
 
-## v1.1.2 Prepared Release Highlights
+## v1.1.2 Release Highlights
 
-The target <code>v1.1.2</code> patch prepares:
+The published <code>v1.1.2</code> release includes:
 
 - trusted authority and run-scoped runtime capability enforcement;
 - explicit finite <code>ACTIVE</code> and <code>COMPATIBILITY</code> composition;
@@ -335,9 +363,7 @@ The target <code>v1.1.2</code> patch prepares:
 - completion of the four governed Artificer promotions;
 - synchronized README, setup, compatibility, and release surfaces.
 
-The public release remains <code>v1.1.1</code>. No <code>v1.1.2</code> tag or GitHub Release exists as part of this branch preparation.
-
-See the prepared [v1.1.2 Trusted Runtime Authority release notes](docs/releases/v1.1.2-trusted-runtime-authority.md).
+See the [v1.1.2 Trusted Runtime Authority release notes](docs/releases/v1.1.2-trusted-runtime-authority.md) and the published [`v1.1.2` GitHub Release](https://github.com/Baelfyre/Orchestra/releases/tag/v1.1.2).
 
 ## Honest Limitations
 
