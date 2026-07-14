@@ -1,7 +1,7 @@
 {
   "name": "orchestra-jetbrains-scaffold",
   "displayName": "Orchestra JetBrains Scaffold",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "private": true,
   "description": "Scaffold-only JetBrains packaging manifest for Orchestra runtime adapter integration.",
   "orchestra": {

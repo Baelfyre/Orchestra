@@ -1,894 +1,391 @@
 <div align="center">
-  <img src="./assets/readme/orchestra-governance-banner.svg" alt="Orchestra Hero Banner" width="100%" />
+  <img src="./assets/readme/orchestra-governance-banner.svg" alt="Orchestra banner showing coordinated software responsibilities" width="100%" />
+
+  <p><strong>A portable orchestration runtime for structured AI-assisted development.</strong></p>
+  <p>From blind prompting to guided software building.</p>
 
   <p>
-    <strong>Portable orchestration runtime for AI-assisted software development.</strong>
-  </p>
-
-  <p>
-    <a href="docs/setup/INSTALLATION.md">Installation</a> •
-    <a href="docs/governance/GOVERNANCE_LAYER.md">Governance</a> •
-    <a href="SKILL_INDEX.md">Skills</a> •
-    <a href="docs/setup/VALIDATION.md">Validation</a>
+    <a href="docs/setup/INSTALLATION.md">Installation</a> |
+    <a href="docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md">Architecture</a> |
+    <a href="docs/governance/GOVERNANCE_LAYER.md">Governance</a> |
+    <a href="docs/setup/VALIDATION.md">Validation</a> |
+    <a href="CHANGELOG.md">Changelog</a>
   </p>
   <p>
-    <img src="https://img.shields.io/badge/release-v1.1.1-blue" alt="release" />
+    <img src="https://img.shields.io/badge/current_release-v1.1.1-blue" alt="Current public release v1.1.1" />
+    <img src="https://img.shields.io/badge/target_release-v1.1.2-purple" alt="Target prepared release v1.1.2" />
+    <img src="https://img.shields.io/badge/runtime_tests-194_passed-brightgreen" alt="194 runtime tests passed" />
+    <img src="https://img.shields.io/badge/runtime_coverage-97.72%25-brightgreen" alt="97.72 percent runtime coverage" />
     <a href="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml">
-      <img src="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml/badge.svg" alt="validate" />
+      <img src="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml/badge.svg" alt="Repository validation status" />
     </a>
-    <img src="https://img.shields.io/badge/license-MIT-blue" alt="license" />
-    <img src="https://img.shields.io/badge/coverage-95.51%25-success" alt="coverage" />
-    <img src="https://img.shields.io/badge/specialist_skills-13-blue" alt="specialists" />
-    <img src="https://img.shields.io/badge/commands-18-blue" alt="commands" />
-    <img src="https://img.shields.io/badge/adapter_surfaces-10-blue" alt="adapter surfaces" />
+    <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license" />
   </p>
 </div>
 
 ---
 
-## Release Snapshot
+## AI can generate fast. Building well still requires structure.
 
-| Area | Status |
-|---|---|
-| Release | `v1.1.1 Post-Release Hardening` |
-| Runtime tests | `43/43 passing` |
-| Runtime coverage | `95.51%` |
-| Specialist skills | `13` |
-| Commands | `18` |
-| Adapter surfaces | `10` |
-| Governance gates | Strict checks passing |
-| Codex export | Validation passing |
+AI-assisted projects rarely fail because a model cannot produce another answer. They fail when context drifts, architecture and implementation blur together, unchecked output becomes the next input, evidence disappears, decisions arrive out of order, and tool access is mistaken for permission.
 
-## At a Glance
-
-| Layer | Role | Purpose |
-|---|---|---|
-| Governance | The Steward | Business, scope, SDLC, requirements, and value alignment |
-| Governance | The Governor | Legal risk, privacy, IP, licensing, security, and compliance review |
-| Governance | Arbiter | Continuity, validation, transition governance, and merge readiness |
-| Orchestration | Conductor | Routes approved work to the correct specialist skills |
-| Execution | Specialist Skills | Performs focused architecture, documentation, QA, security, or design work |
-| Execution | Ponytail | Implementation, code navigation, and safe edits |
+Orchestra turns those scattered interactions into one coordinated workflow. Like a conductor keeping each section on the same score, it gives every responsibility a defined place, controls when work moves forward, and sends failed work back for correction. After that opening metaphor, the mechanics are precise: trusted runtime composition, explicit routing, bounded authority, immutable capabilities, separate governance, structured lifecycle state, validation, and deterministic evidence.
 
 ## What Orchestra Is
 
-Orchestra is a portable orchestration runtime for AI-assisted software development.
+Orchestra is a structured, standardized, and governance-driven framework for coordinating AI-assisted software work across specialist responsibilities, tools, validation stages, and human approval points.
 
-Instead of relying on one large prompt and conversational memory alone, Orchestra gives AI-assisted work a reusable structure:
+It is not an AI model and does not replace one. The model generates or reviews work. Orchestra is the coordination layer that routes, sequences, constrains, validates, records, and connects that work to the next responsible boundary.
 
-- specialized responsibilities
-- governance rules
-- routing logic
-- shared runtime behavior
-- reusable workflows across hosts
+This structure helps students see which engineering question comes next, helps experienced developers reduce context drift and repeated prompting, and gives maintainers reviewable state and evidence across long-running tasks. It does not replace software fundamentals or engineering judgment.
 
-This makes long-running development work more consistent across multiple iterations, AI models, IDEs, and developer tools.
+## How Orchestra Works
 
-## Core Concept
+The runtime establishes permission before it accepts host-provided context. Routing selects responsibility, but does not grant authority. Authority and capability checks run before governance. Governance may block authorized work, but cannot create a missing permission. Validation failure returns work to its owning boundary before any result is accepted.
 
-Orchestra is a portable orchestration runtime for AI-assisted software development.
+~~~mermaid
+flowchart TD
+    Request["Request + Project Context"]
+    Compose["Trusted Runtime Composition"]
+    Context["Context + Command"]
+    Route["Conductor Routes Work"]
+    Authority{"Authority Allowed?"}
+    Capability{"Capability Granted?"}
+    Governance{"Governance Satisfied?"}
+    Specialist["Specialist Execution"]
+    Validate{"Validation Passed?"}
+    Revise["Return to Owning Boundary"]
+    Lifecycle["Structured Lifecycle Result"]
+    Audit["Deterministic Audit Evidence"]
+    Review["Human Review or Accepted Output"]
 
-Rather than relying on large, monolithic prompts, Orchestra provides a structured and standardized framework that guides AI models through specialized responsibilities, governance rules, and reusable workflows.
+    Request --> Compose --> Context --> Route --> Authority
+    Authority -- No --> Lifecycle
+    Authority -- Yes --> Capability
+    Capability -- No --> Lifecycle
+    Capability -- Yes --> Governance
+    Governance -- No --> Lifecycle
+    Governance -- Yes --> Specialist --> Validate
+    Validate -- No --> Revise --> Specialist
+    Validate -- Yes --> Lifecycle --> Audit --> Review
 
-It is designed to reduce context drift during long-running development by preserving project structure, architectural decisions, and standardized engineering practices across multiple iterations, AI models, IDEs, and developer tools.
+    classDef input fill:#161616,stroke:#777,color:#fff
+    classDef runtime fill:#24143a,stroke:#9d6cff,color:#f3eaff
+    classDef coord fill:#332712,stroke:#d4af37,color:#fff3bd
+    classDef work fill:#102a43,stroke:#58a6ff,color:#e5f2ff
+    classDef pass fill:#12351f,stroke:#4ac26b,color:#e7ffed
+    classDef stop fill:#3b1717,stroke:#ff6b6b,color:#ffe8e8
+    class Request,Context input
+    class Compose,Lifecycle runtime
+    class Route,Authority,Capability,Governance coord
+    class Specialist work
+    class Validate,Audit,Review pass
+    class Revise stop
+~~~
 
-Instead of depending on conversational memory alone, Orchestra maintains consistency through reusable specialist skills, governance, routing, and a shared runtime, helping developers produce more predictable, maintainable, and auditable software.
+Accessible summary: a request moves through trusted composition, context and command parsing, routing, authority, capability, governance, specialist execution, and validation. A failed validation returns to the owning boundary. Allowed, denied, blocked, failed, waiting, or completed work ends in a structured lifecycle result, deterministic audit evidence, and review.
 
-## Why Use It
+The sequence is deliberate:
 
-Orchestra is useful when AI-assisted development starts to drift, repeat itself, or lose architectural context over time.
+1. Project context and the request enter a trusted runtime composition.
+2. Root authority, runtime capabilities, route bindings, and run identity are validated before adapter access.
+3. Host context and a command are parsed, then Conductor selects the smallest effective skill stack.
+4. Exact authority and capability decisions run against immutable trusted contracts.
+5. Governance evaluates whether already-authorized work should proceed.
+6. A specialist executes only inside the accepted boundary.
+7. Validation either returns the work for correction or allows it to continue.
+8. Structured lifecycle signals record waiting or a distinct terminal result.
+9. Run-linked audit events record what happened without granting permission.
 
-It helps developers:
+## One Request, Coordinated Responsibilities
 
-- keep architecture, governance, and implementation responsibilities separate
-- preserve consistent engineering standards across repeated AI sessions
-- route work to the right specialist behavior instead of overloading one generic prompt
-- reduce prompt sprawl by centralizing shared runtime and adapter behavior
-- make results easier to review, validate, and audit
+Consider one request:
 
-## Open Source Philosophy
+> Build a secure employee payroll system.
 
-Orchestra is shared as an open-source project because useful ideas grow when people are free to study, adapt, remix, and improve them.
+That sentence contains business, legal, architecture, data, implementation, security, validation, documentation, and continuity concerns. Orchestra does not activate every specialist automatically. Conductor selects the smallest effective stack, then sequences only the responsibilities supported by the task and project context.
 
-This project is not meant to restrict creative development. It is meant to give developers, students, builders, and AI-assisted teams a structured foundation they can learn from, extend, or reshape for their own workflows.
+| Responsibility | Example contribution | Boundary |
+|---|---|---|
+| The Steward | Confirms business purpose, scope, requirements, and required delivery artifacts | Does not decide legal or technical implementation details |
+| The Governor | Reviews privacy, licensing, IP, and release obligations | Does not provide legal advice or grant runtime authority |
+| Conductor | Chooses and sequences the required specialist work | Routes work but does not implement it |
+| Clockwork | Defines application architecture and service boundaries | Does not write the implementation |
+| Chronicler | Defines payroll data and persistence semantics | Does not own UI or security policy |
+| Ponytail | Applies the approved implementation with minimal safe edits | Does not invent architecture or policy |
+| Cipher | Reviews access control, secrets, and defensive security boundaries | Does not perform offensive testing |
+| Overseer | Defines validation gates and release evidence | Does not write application code |
+| Scribe | Produces source-backed documentation | Does not invent system behavior |
+| Arbiter | Checks continuity, branch state, evidence, and transition readiness | Does not override Steward or Governor decisions |
 
-The only request is simple: respect the license, preserve proper attribution, and build something useful.
+If security validation detects unauthorized payroll access, work does not move directly to approval. It returns to the owning implementation boundary, the access control is corrected, validation runs again, and only passing evidence proceeds to review.
 
-Software engineering grows through openness, iteration, collaboration, and responsible reuse. Orchestra exists in that spirit.
+## Why Orchestra Instead of Direct Prompting?
+
+| Direct prompting | Orchestra |
+|---|---|
+| One answer may mix architecture, code, testing, and assumptions | Defined specialists own distinct responsibilities |
+| Context can drift across prompts, tools, and sessions | Project state, contracts, decisions, and handoffs preserve continuity |
+| Tool access may be mistaken for permission | Exact authority and immutable runtime capability grants define permission |
+| A route can be treated as an implicit grant | Routing selects responsibility only |
+| Governance may be confused with authorization | Governance is a separate blocking layer that cannot create authority or capabilities |
+| Failure may be explained without re-entering the workflow | Validation returns work to correction and revalidation |
+| Completion may be inferred from generated text | Structured lifecycle signals control waiting and terminal state |
+| Logs may be treated as proof of permission | Audit events record evidence but never authorize work |
+
+Orchestra does not make output automatically correct. It makes ownership, ordering, constraints, failure, and evidence visible enough to review.
+
+## Runtime Trust Model
+
+### Trusted composition
+
+Every run starts from an explicit immutable <code>RuntimeComposition</code>. <code>ACTIVE</code> mode requires trusted authority, a run-scoped capability manifest, lifecycle and delegation services, audit integration, and finite route bindings. Missing, malformed, mismatched, or untrusted active configuration fails closed before adapter context or command parsing.
+
+<code>COMPATIBILITY</code> mode is also explicit and trusted. It uses finite repository-owned mappings for documented routes. It is not inferred when active configuration is missing, and it is never unlimited authority.
+
+### Authority, capabilities, and governance
+
+Authority scopes define exact targets, operations, and constraints. Run-scoped capability manifests define exact executable capabilities and allowed operations. Capability grant provenance must match manifest provenance, and a present capability must belong to the specialist binding that uses it.
+
+The distinction is fundamental:
+
+~~~text
+governance_approval != authority_grant
+governance_approval != capability_grant
+governance_denial may block authorized work
+authority_denial cannot be reversed by governance
+capability_denial cannot be reversed by governance
+~~~
+
+Governance asks whether authorized work should proceed. It does not decide what the runtime is permitted to do in the first place.
+
+### One-time run identity
+
+Root and child run identities initialize once. Reusing the same identity raises <code>RUN_ALREADY_INITIALIZED</code> before trusted-contract revalidation, adapter access, parsing, routing, governance, or execution. A distinct run identity remains independently executable.
+
+### Bounded delegation
+
+Child work requires an accepted <code>DelegationResolution</code>. A child receives an authority subset, capability subset, bounded depth, and only explicitly allowlisted context keys. Sensitive or unavailable context requests are rejected. Rejected delegation creates no executable child run. Accepted child execution stays in process; Orchestra does not create remote agents, worker processes, or background infrastructure.
+
+~~~mermaid
+flowchart TD
+    Trusted["Trusted runtime construction or repository-owned policy"]
+    Parent["Parent Run<br/>Authority + Capabilities + Permitted Context Keys"]
+    Bound{"Strict bounded delegation validation"}
+    Child["Child Run<br/>Authority subset<br/>Capability subset<br/>Explicit Context Keys"]
+    Reject["Rejected<br/>No executable child run"]
+    Untrusted["Prompt text<br/>Adapter metadata<br/>Route<br/>Governance approval<br/>Audit record"]
+    NoGrant["Cannot create or widen authority"]
+
+    Trusted --> Parent --> Bound
+    Bound -- Accepted --> Child
+    Bound -- Rejected --> Reject
+    Untrusted -.-> NoGrant
+    NoGrant -.-> Bound
+
+    classDef trusted fill:#24143a,stroke:#9d6cff,color:#f3eaff
+    classDef parent fill:#102a43,stroke:#58a6ff,color:#e5f2ff
+    classDef gate fill:#332712,stroke:#d4af37,color:#fff3bd
+    classDef accepted fill:#12351f,stroke:#4ac26b,color:#e7ffed
+    classDef rejected fill:#3b1717,stroke:#ff6b6b,color:#ffe8e8
+    class Trusted trusted
+    class Parent,Untrusted parent
+    class Bound gate
+    class Child accepted
+    class Reject,NoGrant rejected
+~~~
+
+Accessible summary: trusted construction creates the parent run. Strict validation can create a narrower in-process child or reject the request without creating a child. Prompt text, adapter metadata, routing, governance approval, and audit records cannot create or widen authority.
+
+### Structured lifecycle
+
+A run begins in <code>INITIALIZING</code>. <code>ACTIVATE</code> is accepted only from that state. An active run may <code>WAIT</code>; only a waiting run may <code>RESUME</code>. <code>WAITING</code> is non-terminal. <code>COMPLETED</code>, <code>FAILED</code>, <code>CANCELLED</code>, <code>TIMED_OUT</code>, and <code>BLOCKED</code> remain distinct terminal outcomes. Ordinary generated text cannot transition or complete a run.
+
+Exact replay of an accepted terminal signal is idempotent. Altered or conflicting terminal signals are rejected while the original immutable result remains intact.
+
+### Deterministic evidence
+
+Run-linked events record root authority creation, capability manifests, authority and capability decisions, delegation acceptance or rejection, lifecycle transitions, terminal results, and initialization failure. Audit evidence is non-authorizing. Even an audit sink failure cannot turn denied work into allowed work or replace an accepted terminal result.
 
 ## Architecture
 
-```mermaid
-flowchart LR
-    classDef input fill:#101010,stroke:#555,color:#f5f5f5,stroke-width:1.5px
-    classDef gov fill:#2b2112,stroke:#d4af37,color:#fff2b2,stroke-width:2px
-    classDef orch fill:#201433,stroke:#9d6cff,color:#eadfff,stroke-width:2px
-    classDef exec fill:#102436,stroke:#58a6ff,color:#d8ecff,stroke-width:2px
-    classDef stop fill:#321414,stroke:#ff6b6b,color:#ffdada,stroke-width:2px
+These are ownership layers, not a shortcut around the runtime sequence:
 
-    Request([User Request]):::input
-    Context([Project Context]):::input
-
-    subgraph Orchestra[Orchestra]
-      subgraph G[Governance Layer]
-        Steward{{The Steward<br/>Business • Scope • SDLC}}:::gov
-        Governor{{The Governor<br/>Privacy • IP • Compliance}}:::gov
-        Arbiter{{Arbiter<br/>Continuity • Transition}}:::gov
-      end
-
-      subgraph O[Orchestration Layer]
-        Conductor((<br/>Conductor)):::orch
-      end
-
-      subgraph E[Execution Layer]
-        Skills[[Specialist Skills<br/>Design & Review]]:::exec
-        Ponytail[[Ponytail<br/>Implementation]]:::exec
-        Validate[[Validation]]:::exec
-      end
-    end
-
-    Output([Release or Response]):::input
-    Revision([Revision Required<br/>or Blocked]):::stop
-
-    Request --> Context --> Steward --> Governor --> Conductor
-    Conductor --> Arbiter
-    Conductor --> Skills
-    Arbiter --> Ponytail
-    Skills --> Ponytail
-    Ponytail --> Validate --> Output
-    Steward -.-> Revision
-    Governor -.-> Revision
-    Arbiter -.-> Revision
-```
-
-Runtime-core-first refactor notes live in [docs/project/OOP_RUNTIME_ARCHITECTURE.md](docs/project/OOP_RUNTIME_ARCHITECTURE.md). The shared `orchestra_runtime/` layer owns manifest parsing, skill loading, routing, governance validation, execution flow, and audit logging, while host adapters stay thin. The versioned Portable Runtime Adapter Protocol is documented in [docs/project/PORTABLE_ADAPTER_PROTOCOL.md](docs/project/PORTABLE_ADAPTER_PROTOCOL.md).
-
-## v1.1.1 Post-Release Hardening
-
-`v1.1.1 Post-Release Hardening` is a targeted patch release that builds on the `v1.1.0 Specialist Governance & Boundary Standard` baseline to close post-release hardening gaps (validation, startup-state accuracy, update safety, and runtime context-contract alignment).
-
-Historical `v1.1.0` highlights:
-- Specialist boundaries were normalized across the documented specialist surfaces, with tracked Codex export parity where applicable.
-- Governance strictness levels and authority boundaries were clarified without changing governance semantics.
-- Runtime behavior, routing policy, validation logic, CI workflows, and Dagger live-execution behavior remain unchanged.
-
-```mermaid
-flowchart LR
-    Host["Host / IDE / Tool"] --> Adapter["Thin Adapter"]
-    Adapter --> Runtime["orchestra_runtime"]
-    Runtime --> Routing["Routing + Skill Loading"]
-    Runtime --> Governance["Governance Validation"]
-    Runtime --> Execution["Execution Flow"]
-    Runtime --> Audit["Audit Logging"]
-```
-
----
-
-## Governance Layer
-
-The Governance Layer sits above the Conductor. Orchestra uses freedom-first, need-based governance. Users can ideate freely. Governance review is invoked when the task requires alignment review, implementation readiness, audit, risk review, or release validation.
-
-The Steward and The Governor are entirely context-driven. They do not pre-assume what rules apply to every project, nor do they apply every governance rule universally. If the project scope is unclear or missing, governance returns `REVISION_REQUIRED` instead of assuming. Conversely, if a risk area does not apply to the current context, the authority returns `NOT_APPLICABLE`.
-
-> [!IMPORTANT]
-> If a request violates alignment, fails scope verification, or breaches compliance boundaries, the Steward or Governor issues a `REVISION_REQUIRED` or `BLOCKED` status. The Conductor will immediately halt execution.
->
-> For Release Mode app workflows, missing privacy, data inventory, retention, deletion, account deletion documentation when accounts exist, platform disclosures, or IP clearance artifacts are not optional when applicable. The Governor must return `REVISION_REQUIRED` or `BLOCKED` based on release context and severity. See [App Release Compliance Gate](docs/governance/APP_RELEASE_COMPLIANCE_GATE.md).
-
-### Operating Modes
-
-Conductor uses 5 distinct operating modes to scale governance dynamically, ensuring that ideation and dynamic prototyping are not restricted:
-
-1. **Ideation Mode**: Brainstorming, exploration, planning, concept development, prompt refinement. Returns `ADVISORY_ONLY` or `NOT_APPLICABLE`.
-2. **Prototype Mode**: Local experiments, throwaway proofs-of-concept. Lightweight checks only.
-3. **Implementation Mode**: Making file, code, documentation, or architecture changes. Uses fast path by default. Escalate to expanded review only if risk triggers are met.
-4. **AUDIT mode**: Explicit request for a review, compliance check, or risk assessment. Context-heavy.
-5. **Release Mode**: Production deployment, public release, client delivery, app store submission, or open-source distribution. Strictest path. The Governor must verify the [App Release Compliance Gate](docs/governance/APP_RELEASE_COMPLIANCE_GATE.md) for app and public release workflows. Escalate uncertain issues for human review.
-
-### Interpret the Decision
-
-| Decision | Meaning | User Action |
+| Layer | Responsibility | Canonical detail |
 |---|---|---|
-| **APPROVED** | Work can proceed | Let the conductor route the task |
-| **ADVISORY_ONLY** | Advice given, exploration unblocked | Continue brainstorming or prototyping freely |
-| **REVISION_REQUIRED** | More context or correction is needed | Add missing details and resubmit |
-| **BLOCKED** | Work should not proceed as requested | Resolve the blocking issue first |
-| **NOT_APPLICABLE** | Governance check is not needed | Continue with the fast path |
+| Governance | Business alignment, compliance, privacy obligations, IP, continuity, and release gates | [Governance Layer](docs/governance/GOVERNANCE_LAYER.md) |
+| Orchestration | Intent classification, routing, and ordered specialist handoffs | [Router-First Architecture](docs/routing/ROUTER_FIRST_ARCHITECTURE.md) |
+| Trusted Runtime | Composition, authority, capabilities, delegation, lifecycle, execution, and audit evidence | [Runtime Architecture](docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md) |
+| Specialist Execution | Focused architecture, implementation, data, security, QA, documentation, and visual work | [Skill Index](SKILL_INDEX.md) |
+| Validation and Evidence | Behavior, runtime, packaging, governance, and release-readiness proof | [Validation Guide](docs/setup/VALIDATION.md) |
 
----
+The [Authority and Capability Contracts](docs/project/AUTHORITY_CAPABILITY_CONTRACTS.md) define the immutable runtime rules. The [implementation plan](docs/project/AUTHORITY_CAPABILITY_IMPLEMENTATION_PLAN.md) records their phased delivery. Host integration remains separated by the [Portable Runtime Adapter Protocol](docs/project/PORTABLE_ADAPTER_PROTOCOL.md).
 
-## Governance Authorities and Specialist Skills
+## Roles and Specialist Responsibilities
 
-### Governance Authorities
+### Governance authorities
 
-| Authority | Focus |
-|---|---|
-| <img src="./assets/readme/icons/the-steward.png" width="16" /> **The Steward**, Business Alignment | Business alignment, scope boundaries, and software development lifecycle (SDLC) documentation. |
-| <img src="./assets/readme/icons/the-governor.png" width="16" /> **The Governor**, Legal and Compliance | Evaluates legal compliance, privacy risks, intellectual property (IP), licensing, and security policies. |
-| <img src="./assets/readme/icons/arbiter.png" width="16" /> **Arbiter**, Continuity and Validation | Continuity, validation-state review, branch transition, and source-of-truth governance. |
+| Role | Use it for | Key boundary |
+|---|---|---|
+| The Steward | Business alignment, scope, requirements, acceptance criteria, and SDLC sufficiency | Does not own legal or technical decisions |
+| The Governor | Legal, privacy-obligation, IP, licensing, and compliance governance | Identifies risks and escalation points, not legal advice |
+| Arbiter | Continuity, source of truth, validation state, handoff, and merge readiness | Uses verified repository evidence |
 
-### Specialist Skills
+### Orchestration and execution
 
-| Skill | Focus |
-|---|---|
-| <img src="./assets/readme/icons/conductor.png" width="16" /> **Conductor**, Routing | Routing and orchestration |
-| <img src="./assets/readme/icons/ponytail.png" width="16" /> **Ponytail**, Implementation | Implementation and safe code edits |
-| <img src="./assets/readme/icons/clockwork.png" width="16" /> **Clockwork**, Architecture and Refactoring | Architecture, OOP, refactoring |
-| <img src="./assets/readme/icons/cloak.png" width="16" /> **Cloak**, UI and Accessibility | UI, UX, layout, accessibility |
-| <img src="./assets/readme/icons/scribe.png" width="16" /> **Scribe**, Documentation | Documentation and technical writing |
-| <img src="./assets/readme/icons/weaver.png" width="16" /> **Weaver**, Visual Modeling | Visual modeling and diagram specialist |
-| <img src="./assets/readme/icons/chronicler.png" width="16" /> **Chronicler**, Database and Schema | Database architect and schema auditor |
-| <img src="./assets/readme/icons/overseer.png" width="16" /> **Overseer**, QA and Release Readiness | QA, testing, release readiness |
-| <img src="./assets/readme/icons/cipher.png" width="16" /> **Cipher**, Security and Privacy | Security and privacy evidence |
-| <img src="./assets/readme/icons/dagger.png" width="16" /> **Dagger**, Resilience Testing | Controlled resilience tester |
+| Role | Use it for | Key boundary |
+|---|---|---|
+| Conductor | Routing and multi-skill sequencing | Does not execute specialist work |
+| Clockwork | Architecture, layering, and refactor structure | Does not implement |
+| Cloak | UI, UX, accessibility, and responsive behavior | Does not own backend policy |
+| Chronicler | Database and persistence semantics | Does not own UI or general QA |
+| Ponytail | Minimal, reversible implementation | Requires upstream decisions to be settled |
+| Cipher | Defensive security, access control, secrets, and privacy controls | No offensive testing or legal decisions |
+| Overseer | QA strategy, validation gates, and release readiness | Does not write application code |
+| Scribe | README, release, setup, and handoff documentation | Uses source-backed facts |
+| Weaver | Mermaid and PlantUML diagrams | Does not invent architecture or relationships |
 
-For details on all execution skills, routing logic, and behavioral constraints, see the [Specialist Skill Index](SKILL_INDEX.md).
+### Gated resilience
 
----
+| Role | Use it for | Key boundary |
+|---|---|---|
+| Dagger | Guarded destructive-path simulation and resilience review | Simulation only unless separately authorized with guardrails |
 
-## Installation by AI Host or IDE
+## Supported Hosts and Maturity
 
-Orchestra can be used across different AI-assisted development environments, but each host loads skills differently. The installation method depends on the AI host you are using.
+Support means a validated integration surface. Scaffold-only means the repository contains a thin runtime adapter and packaging or instruction scaffold, not a published marketplace product.
 
-### Installation Summary
+| Host | Maturity | Notes |
+|---|---|---|
+| Codex | Supported | Marketplace-first installation with repo-local fallback |
+| Claude Code | Supported | Marketplace metadata and namespaced plugin skills |
+| Antigravity | Supported | Native <code>agy</code> plugin path |
+| Cursor | Scaffold-only | Runtime adapter and packaging instructions, not marketplace-published |
+| Windsurf | Scaffold-only | Runtime adapter and packaging instructions, not marketplace-published |
+| VS Code / VSCodium | Scaffold-only | Shared VS Code-family adapter and scaffold |
+| JetBrains | Scaffold-only | Runtime adapter and plugin scaffold, not marketplace-published |
+| Zed | Scaffold-only | Runtime adapter and packaging scaffold |
+| Neovim | Scaffold-only | Runtime adapter and local editor scaffold |
+| Local AI systems | Manual documentation surface | Load selected Markdown and supporting files deliberately |
 
-| Host / IDE                |                     Installation Scope | How Orchestra Loads                                                   | Recommended Setup                                   |
-| ------------------------- | -------------------------------------: | --------------------------------------------------------------------- | --------------------------------------------------- |
-| Antigravity / `agy`       |                                 Global | Installed as an Antigravity plugin                                    | Use `agy plugin install` once                       |
-| Claude Code | Marketplace / global plugin | Installed from `.claude-plugin/marketplace.json`; skills load under the `orchestra:` namespace | Use `/plugin marketplace add Baelfyre/Orchestra`, then `/plugin install orchestra@orchestra` |
-| Codex                     |       Marketplace / global plugin first | Installed from Codex Plugins, with repo-local skills as fallback      | Install through Marketplace, then use `@Orchestra`  |
-| Cursor                    | Scaffold-only packaging plus repo instructions | Uses a scaffold package manifest and workspace instructions that point at the shared runtime adapter | Use `adapters/cursor` scaffolding, not marketplace publication |
-| Windsurf                  | Scaffold-only packaging plus repo instructions | Uses a scaffold package manifest and workspace instructions that point at the shared runtime adapter | Use `adapters/windsurf` scaffolding, not marketplace publication |
-| VS Code                   | Scaffold-only packaging plus repo instructions | Uses a scaffold package manifest and extension or workspace instructions that point at the shared runtime adapter | Use `adapters/vscode` scaffolding, not full skill folders |
-| VSCodium                  | Shared VS Code scaffold compatibility | Reuses the `vscode` runtime adapter and packaging metadata through PRAP compatibility | Use the VS Code scaffold and runtime adapter |
-| IntelliJ / JetBrains IDEs | Scaffold-only packaging plus project instructions | Uses a scaffold plugin surface and project instructions that point at the shared runtime adapter | Use `adapters/jetbrains` scaffolding, not marketplace publication |
-| Zed                       | Scaffold-only packaging plus repo instructions | Uses a scaffold package manifest and workspace instructions that point at the shared runtime adapter | Use `adapters/zed` scaffolding, not marketplace publication |
-| Neovim                    | Scaffold-only packaging plus repo instructions | Uses a scaffold package manifest and local editor instructions that point at the shared runtime adapter | Use `adapters/neovim` scaffolding, not marketplace publication |
-| Other AI coding tools     |                          Tool-specific | Usually reads repo instructions, rules, or prompt files               | Adapt Orchestra as project instructions             |
+Orchestra does not claim to work everywhere. See [Compatibility](docs/setup/COMPATIBILITY.md) and the [scaffold graduation criteria](docs/project/SCAFFOLD_ADAPTER_GRADUATION_CRITERIA.md).
 
----
+## Installation
 
-### Antigravity Setup
+Use the host-native path:
 
-Antigravity uses `agy` plugins. This is the cleanest setup because the plugin is installed globally and can be used across Antigravity workspaces.
+- Codex: add <code>https://github.com/Baelfyre/Orchestra</code> as a Marketplace source, install Orchestra, then invoke <code>@Orchestra</code>.
+- Claude Code: run <code>/plugin marketplace add Baelfyre/Orchestra</code>, then <code>/plugin install orchestra@orchestra</code>.
+- Antigravity: run <code>agy plugin install https://github.com/Baelfyre/Orchestra</code>.
+- Manual or scaffold-only hosts: follow the exact host boundary in the [Installation Guide](docs/setup/INSTALLATION.md).
 
-```powershell
-agy plugin install https://github.com/Baelfyre/Orchestra
-```
+Repo-local Codex skill copies are an advanced fallback. Persistent project changes belong in tracked <code>skills/</code> source, not generated <code>.agents/</code> runtime copies.
 
-Verify installation:
+## Quick Start
 
-```powershell
-agy plugin list
-```
-
-Expected result should include:
-
-```text
-conductor
-```
-
-Use Orchestra in Antigravity with:
-
-```text
-/ponytail /conductor
-```
-
-Notes:
-
-* Antigravity does not require `.agents/skills` inside each project repo.
-* Removing local Codex folders from a project does not affect Antigravity.
-* This is the recommended setup for users who want one global Orchestra installation.
-
----
-
-### Codex Setup
-
-For most Codex users, install Orchestra once through the Codex Marketplace. Use repo-local `.agents/skills` only for advanced or fallback workflows.
-
-#### Install in Codex through Marketplace
-
-1. Open Codex.
-2. Go to Plugins.
-3. Add a marketplace or open Marketplace source settings.
-4. Paste this GitHub repository URL into the Source field:
-
-   https://github.com/Baelfyre/Orchestra
-
-5. Add the marketplace source.
-6. Restart Codex.
-7. Go back to Plugins.
-8. Open Personal.
-9. Search for Orchestra.
-10. Click Install.
-11. Confirm that Orchestra appears as installed or enabled.
-
-Use Orchestra in Codex with:
-
-```text
-@Orchestra
-```
-
-If Orchestra does not appear under Personal after adding the marketplace source, restart Codex again and check that the repository URL was entered correctly.
-
-#### Advanced: Install locally per-project
-
-Repo-local `.agents/skills` installation is for local testing, custom workspace setups, unsupported Codex workflows, or repos that intentionally want local skill files.
-
-The target layout is:
-
-```text
-<ProjectRepo>/.agents/skills/
-```
+1. Provide the project type, purpose, release target, data sensitivity, dependencies, and constraints.
+2. Describe the concrete task and acceptance criteria.
+3. Let Conductor select and sequence the smallest effective specialist stack.
+4. Review governance decisions and specialist outputs at their owning boundaries.
+5. Run the required validation before accepting the result.
+6. Preserve project state and a concise handoff before changing session, branch, or maintainer.
 
 Example:
 
-```text
-C:\YourProject\.agents\skills\conductor
-C:\YourProject\.agents\skills\scribe
-C:\YourProject\.agents\skills\clockwork
-```
-
-Install Orchestra Codex skills into a target project repo:
-
-```powershell
-cd C:\conductor
-
-powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\refresh-installed-integrations.ps1 -Target Codex -CodexRepoPath "C:\path\to\your\project" -Force
-```
-
-The refresh pipeline keeps repository source, generated export output, and installed runtime locations separate. By default it exports Codex skills into a temporary staging directory, validates that staged export, installs from the staged copy, verifies file-list and SHA-256 parity against both repo-local and global Codex runtime locations, and then deletes the temporary staging directory.
-
-Important:
-
-* Marketplace installation is the default Codex setup.
-* Use repo-local `.agents/skills` only when a project deliberately needs local skill files.
-* Do not copy Codex skill folders into every repo by default.
-* If `.agents/` is only for local testing, do not commit it.
-
-For local-only Codex installs, add this to the target repo local Git exclude file:
-
-```text
-.git/info/exclude
-```
-
-Recommended local-only entries:
-
-```gitignore
-.agents/
-.amalgam/
-```
-
-This keeps the files available locally without adding them to the shared repository.
-
-Use `.gitignore` only if the whole project intentionally wants to share those AI configuration files with all contributors.
-
-Use `-KeepTempExport` only when you need to inspect the staged export during debugging.
-
----
-
-### VS Code Setup
-
-VS Code does not use `agy` plugins and does not automatically load Orchestra skill folders unless an extension specifically supports them.
-
-Most VS Code AI workflows are extension-driven, such as:
-
-* GitHub Copilot
-* Continue
-* Cody
-* CodeGPT
-* other local or cloud AI extensions
-
-Recommended setup:
-
-* Do not copy the full Orchestra skill folders into every VS Code project.
-* Use a lightweight instruction file if the AI extension supports it.
-* Keep project-specific AI guidance small, clear, and intentional.
-
-For GitHub Copilot, a common project instruction file is:
-
-```text
-.github/copilot-instructions.md
-```
-
-Suggested content:
-
-```markdown
-# Copilot Instructions
-
-Use Orchestra-style workflow guidance.
-
-Default routing pattern:
-`/ponytail /conductor`
-
-Prioritize:
-- Small, targeted changes.
-- SOLID and OOP compliance where applicable.
-- No broad rewrites unless requested.
-- Preserve existing architecture unless the task explicitly asks to refactor.
-- Run available validation before finalizing.
-- Return changed files, summary, validation results, risks, and next step.
-```
-
-Commit this file only if the repository should permanently share these AI instructions.
-
-The repository now includes scaffold-only packaging metadata in `adapters/vscode/package.json`. It exists to bind the VS Code packaging surface to the shared `VSCodeAdapter` runtime contract. It is not a published marketplace package yet.
-
-#### Optional: Agentic Skill Installer Extension
-
-VS Code users may optionally use the **Agentic Skill Installer** extension to browse, install, and update Orchestra skills, prompts, and agents from GitHub repositories directly inside VS Code.
-
-Basic setup flow:
-
-```text
-1. Install the Agentic Skill Installer extension from the VS Code Marketplace.
-2. Open the Agentic Skill Installer panel from the VS Code Activity Bar.
-3. Click Install Source Repository or Add Source Repository.
-4. Paste the Orchestra repository URL:
-   https://github.com/Baelfyre/Orchestra
-5. Let the extension scan the repository and load the available skills / agents.
-6. Install or use only the skills needed for the active workspace.
-7. Run git status before committing to confirm no local-only skill files were added unintentionally.
-```
-
----
-
-### Cursor Setup
-
-Cursor packaging in this phase is scaffold-only.
-
-Use the files under `adapters/cursor/` to keep host-specific instructions and package metadata aligned to the shared `CursorAdapter` runtime contract:
-
-- `adapters/cursor/package.json`
-- `adapters/cursor/install-guide.md`
-- `adapters/cursor/workspace-instructions.template.md`
-
-This branch does not publish a Cursor marketplace package yet. Keep routing, governance, execution, manifest parsing, and audit behavior in the shared runtime core.
-
----
-
-### Windsurf Setup
-
-Windsurf packaging in this phase is scaffold-only.
-
-Use the files under `adapters/windsurf/` to keep host-specific instructions and package metadata aligned to the shared `WindsurfAdapter` runtime contract:
-
-- `adapters/windsurf/package.json`
-- `adapters/windsurf/install-guide.md`
-- `adapters/windsurf/workspace-instructions.template.md`
-
-This branch does not publish a Windsurf marketplace package yet. Keep routing, governance, execution, manifest parsing, and audit behavior in the shared runtime core.
-
----
-
-### Zed Setup
-
-Zed packaging in this phase is scaffold-only.
-
-Use the files under `adapters/zed/` to keep host-specific instructions and package metadata aligned to the shared `ZedAdapter` runtime contract:
-
-- `adapters/zed/package.json`
-- `adapters/zed/install-guide.md`
-- `adapters/zed/workspace-instructions.template.md`
-
-This branch does not publish a Zed marketplace package yet. Keep routing, governance, execution, manifest parsing, and audit behavior in the shared runtime core.
-
----
-
-### Neovim Setup
-
-Neovim packaging in this phase is scaffold-only.
-
-Use the files under `adapters/neovim/` to keep host-specific instructions and package metadata aligned to the shared `NeovimAdapter` runtime contract:
-
-- `adapters/neovim/package.json`
-- `adapters/neovim/install-guide.md`
-- `adapters/neovim/workspace-instructions.template.md`
-
-This branch does not publish a Neovim registry package yet. Keep routing, governance, execution, manifest parsing, and audit behavior in the shared runtime core.
-
----
-
-### IntelliJ / JetBrains IDE Setup
-
-IntelliJ and other JetBrains IDEs do not use `agy` plugins. AI behavior depends on the installed plugin, such as:
-
-* JetBrains AI Assistant
-* GitHub Copilot for JetBrains
-* Junie
-* other third-party AI coding plugins
-
-Recommended setup:
-
-* Do not add `.agents/skills` unless the AI tool specifically requires it.
-* Use IDE chat instructions, project documentation, or a small AI workflow guide.
-* If the guidance should be shared with contributors, document it in the repo.
-* If it is only for local use, keep it outside Git tracking.
-
-The repository now includes scaffold-only JetBrains packaging metadata in `adapters/jetbrains/`. It binds the JetBrains packaging surface to the shared `JetBrainsAdapter` runtime contract but does not publish a JetBrains Marketplace plugin yet.
-
-Optional shared project file:
-
-```text
-docs/AI_WORKFLOW.md
-```
-
-Suggested instruction pattern:
-
-```text
-Use Orchestra-style workflow guidance.
-Default to /ponytail /conductor for multi-step tasks.
-Prefer small, reviewable changes.
-Preserve existing project structure.
-Validate before summarizing.
-Report changed files, validation results, remaining risks, and next recommended step.
-```
-
-JetBrains-specific scaffold files in this phase:
-
-- `adapters/jetbrains/plugin.xml`
-- `adapters/jetbrains/package.json`
-- `adapters/jetbrains/install-guide.md`
-- `adapters/jetbrains/workspace-instructions.template.md`
-
----
-
-### Local-Only vs Shared AI Configuration
-
-Use this rule of thumb:
-
-| Scenario                         | Recommended Location              |                     Commit It? |
-| -------------------------------- | --------------------------------- | -----------------------------: |
-| Antigravity global plugin        | `agy plugin install`              |        No project files needed |
-| Codex Marketplace plugin         | Codex Plugins > Personal          |        No project files needed |
-| Codex repo-local fallback        | `.agents/skills`                  |                             No |
-| Codex shared local skill files   | `.agents/skills`                  |       Yes, only if intentional |
-| Copilot project instructions     | `.github/copilot-instructions.md` | Yes, if useful to contributors |
-| Personal IDE prompt notes        | Outside repo or local notes       |                             No |
-| General project AI workflow docs | `docs/AI_WORKFLOW.md`             | Yes, if useful to contributors |
-
----
-
-### Recommended Default Setup
-
-For most users:
-
-```text
-Antigravity:
-Install globally with agy.
-
-Codex:
-Install globally through Marketplace, then use @Orchestra.
-
-Codex fallback:
-Use repo-local .agents/skills only when needed.
-
-VS Code:
-Use extension-specific instruction files.
-
-IntelliJ:
-Use plugin-specific instructions or project docs.
-
-Other IDEs:
-Check whether the AI host supports repo instructions, skill folders, or plugins.
-```
-
-Do not assume all IDEs use the same plugin model. Antigravity uses `agy`, Codex uses Marketplace plugins with repo-local skills as a fallback, and most traditional IDEs use extension-specific instructions.
-
-For manual configurations or environment setup details, see the [Installation Guide](docs/setup/INSTALLATION.md).
-
----
-
-### Ponytail and Caveman Notice
-
-Ponytail and Caveman are external tools. They are not included, vendored, or required by Orchestra. Install them separately from their official repositories if desired:
-
-- Ponytail: https://github.com/DietrichGebert/ponytail
-- Caveman: https://github.com/JuliusBrussee/caveman
-
-Orchestra may reference Ponytail and Caveman as workflow companions for focused implementation and compressed communication, but they remain separate from the Orchestra plugin and skill package.
-
-For more details on the boundary between Orchestra and these tools, see the [External Companions](docs/integrations/EXTERNAL_COMPANIONS.md) guide.
-
----
-
-## Quick Start Usage
-
-### 1. Start with a project context
-
-The governance layer does not assume what rules apply. Provide enough context for The Steward and The Governor to know what they are reviewing.
-
-Minimum context:
-- **Project Type**: e.g., open-source repo, internal tool
-- **Goal**: What the task should accomplish
-- **Release Target**: e.g., local only, public release
-- **Data Use**: e.g., no user data, sensitive data
-- **Dependencies**: e.g., libraries, assets
-- **Constraints**: e.g., files to preserve, style rules
-
-### 2. Choose the correct entry command
-
-Use the command that matches your AI host:
-
-| Host | Entry Command | Notes |
-|---|---|---|
-| Codex | `@Orchestra` | Use after installing Orchestra through Codex Marketplace. Orchestra routes the task internally through Conductor and the appropriate specialist skills. |
-| Antigravity / `agy` | `/ponytail /conductor` | Use in Antigravity because `agy` uses slash commands and direct command routing. |
-
-Codex example:
-
-```text
+~~~text
 @Orchestra
 
-Project Context:
-Project Type:
-Goal:
-Release Target:
-Data Use:
-Dependencies or Third-Party Assets:
-Constraints:
+Project: Open-source developer tool
+Goal: Add a bounded export command
+Release target: Public patch release
+Data use: No end-user data
+Constraints: Preserve public APIs; no new dependency
 
 Task:
-Describe the work clearly.
+Implement the command, validate it, and leave the diff unstaged for review.
+~~~
 
-Requirements:
-- List what must be changed.
-- List what must be preserved.
-- List any rules the implementation must follow.
+## Validation and Evidence
 
-Expected Output:
-Changed Files:
-Summary:
-Validation Results:
-Remaining Risks:
-Next Recommended Step:
-```
+The first complete Phase 6D validation pass observed 194 runtime tests passing at 97.72 percent coverage. The behavior runner passed with 153 reported unittest cases and one documented skip. Strict governance reported 0 errors and 0 warnings. The validation chain covers:
 
-Antigravity / `agy` example:
+- Artificer internal, record, governance-record, and Pattern Catalog validation;
+- structure, manifests, Claude plugin, IDE packaging, and Codex export;
+- prompt-load thresholds and budget;
+- governance protocol, routing contract, and strict governance;
+- behavior validation;
+- runtime tests with at least 90 percent coverage;
+- runtime import smoke;
+- release-readiness, version, licensing, security, and compatibility review;
+- link checks, <code>git diff --check</code>, and exact authorized scope.
 
-```text
-/ponytail /conductor
+These exact values come from the finished Issue #184 tree. The complete chain reproduced them after the evidence update; that second pass is authoritative. See [Validation](docs/setup/VALIDATION.md) for canonical commands.
 
-Project Context:
-Project Type:
-Goal:
-Release Target:
-Data Use:
-Dependencies or Third-Party Assets:
-Constraints:
+## v1.1.2 Prepared Release Highlights
 
-Task:
-Describe the work clearly.
+The target <code>v1.1.2</code> patch prepares:
 
-Requirements:
-- List what must be changed.
-- List what must be preserved.
-- List any rules the implementation must follow.
+- trusted authority and run-scoped runtime capability enforcement;
+- explicit finite <code>ACTIVE</code> and <code>COMPATIBILITY</code> composition;
+- bounded in-process specialist delegation;
+- structured lifecycle control and same-run replay rejection;
+- <code>RuntimeExecutor</code> integration with authority and capability checks before governance;
+- adversarial fail-closed validation;
+- deterministic non-authorizing audit evidence;
+- completion of the four governed Artificer promotions;
+- synchronized README, setup, compatibility, and release surfaces.
 
-Expected Output:
-Changed Files:
-Summary:
-Validation Results:
-Remaining Risks:
-Next Recommended Step:
-```
+The public release remains <code>v1.1.1</code>. No <code>v1.1.2</code> tag or GitHub Release exists as part of this branch preparation.
 
-Codex users should start with `@Orchestra`. Antigravity users should start with `/ponytail /conductor`. Do not mix the two invocation styles unless a host explicitly supports both.
+See the prepared [v1.1.2 Trusted Runtime Authority release notes](docs/releases/v1.1.2-trusted-runtime-authority.md).
 
-### 3. Review the IDE output and Iterate
+## Honest Limitations
 
-Follow this feedback loop:
-1. Send the refined prompt to the IDE.
-2. Let the IDE inspect files and propose changes.
-3. Review changed files and validation results.
-4. Approve, revise, or ask for another iteration.
-5. Commit only after validation passes.
+- Orchestra does not replace human review or engineering judgment.
+- It does not guarantee correct or secure output and does not eliminate hallucinations.
+- Prompt content, metadata, routes, governance approvals, and audit records do not grant authority.
+- Governance can block work but cannot create authority or capabilities.
+- Orchestra does not create remote workers, background agents, or distributed orchestration infrastructure.
+- Compatibility mode is explicit, finite, and intended for bounded existing routes.
+- Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain scaffold-only.
+- Orchestra is developer tooling and a local runtime. It does not store or transmit downstream project data by default.
+- Data sensitivity, privacy, retention, deletion, platform disclosure, and IP obligations depend on the downstream project and host environment.
+- Release governance may require revision or block publication.
 
-> [!NOTE]
-> When unsure which specialist is needed, use the main Orchestra entry command for your host. In Codex, start with `@Orchestra`. In Antigravity, start with `/ponytail /conductor`. Orchestra can route the task to the correct specialist. Use a specialist directly only when the host supports it and the task is narrow and obvious.
+## Documentation Map
 
----
+### Start here
 
-## Output Mode Behavior
+- [Installation](docs/setup/INSTALLATION.md)
+- [Compatibility](docs/setup/COMPATIBILITY.md)
+- [Validation](docs/setup/VALIDATION.md)
+- [Skill Index](SKILL_INDEX.md)
 
-Output from Conductor and its specialists automatically adapts to your intent:
-- **Compact mode** is the default for normal iterative tasks.
-- **Full mode** is used only when explicitly requested for formal audits, deep reviews, or comprehensive planning.
-- **Specialized modes** (like Diagram formats) are automatically selected when the artifact type is clear.
-- **Clarification** is only asked when output intent is ambiguous.
+### Architecture
 
----
+- [Runtime Architecture](docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md)
+- [Authority and Capability Contracts](docs/project/AUTHORITY_CAPABILITY_CONTRACTS.md)
+- [Portable Runtime Adapter Protocol](docs/project/PORTABLE_ADAPTER_PROTOCOL.md)
+- [Roadmap](docs/project/ROADMAP.md)
 
-## Token-Efficient Usage
+### Governance
 
-> [!TIP]
-> For best token efficiency:
-> - Start with a refined prompt.
-> - Provide only relevant project context.
-> - Ask for changed files, summary, validation, risks, and next step.
-> - Do not request expanded governance analysis unless the task is MEDIUM or HIGH risk.
-> - Use fast path for typo fixes, formatting edits, and local documentation cleanup.
-> - Link to detailed governance docs instead of repeating them in your prompt.
+- [Governance Layer](docs/governance/GOVERNANCE_LAYER.md)
+- [Governance Review Flow](docs/governance/GOVERNANCE_REVIEW_FLOW.md)
+- [Release Gates](docs/governance/RELEASE_GATES.md)
+- [App Release Compliance Gate](docs/governance/APP_RELEASE_COMPLIANCE_GATE.md)
 
----
+### Maintainers
 
-## Maintainer Entry Points & Documentation Map
+- [Contributing](docs/CONTRIBUTING.md)
+- [Project State](PROJECT_STATE.md)
+- [Decision Log](DECISION_LOG.md)
+- [Changelog](CHANGELOG.md)
 
-### Maintainer Entry Points
+## Contributing, Security, and License
 
-- [Router-first architecture](docs/routing/ROUTER_FIRST_ARCHITECTURE.md): Core design of the minimal-context routing model.
-- [Context retrieval rules](docs/routing/CONTEXT_RETRIEVAL_RULES.md): Rules for loading dynamic context by operating mode.
-- [Minimal prompt format](docs/routing/MINIMAL_PROMPT_FORMAT.md): Specifications for the minimal routing prompt.
-- [Execution modes policy](docs/routing/EXECUTION_MODES_POLICY.md): Policies for FAST, STANDARD, GOVERNED, AUDIT, and DESTRUCTIVE modes.
-- [Router benchmark runner](docs/testing/ROUTER_BENCHMARK_RUNNER.md): Execution logic for validating benchmark definitions.
-- [Router benchmark maintenance guide](docs/testing/ROUTER_BENCHMARK_MAINTENANCE_GUIDE.md): Instructions for adding or modifying benchmark cases.
-- [Router benchmark coverage completion review](docs/testing/ROUTER_BENCHMARK_COVERAGE_COMPLETION_REVIEW.md): Analysis of coverage across all 24 benchmark cases.
-- [Prompt load metrics](docs/performance/PROMPT_LOAD_METRICS.md): Documentation on token footprint estimation and tracking.
-- [Prompt load threshold policy](docs/performance/PROMPT_LOAD_THRESHOLD_POLICY.md): Policies and soft limits for prompt load size.
-- [Prompt load threshold checker](docs/performance/PROMPT_LOAD_THRESHOLD_CHECKER.md): Dry-run validation script for tracking prompt load limits.
-- [CI artifact index](docs/testing/CI_ARTIFACT_INDEX.md): Directory of generated CI validation and governance reports.
-- [Issue #56 closeout note](docs/routing/ISSUE_56_CLOSEOUT_NOTE.md): Final closeout note and GitHub closing comment for Issue #56.
-- [Final router-first readiness review](docs/routing/ROUTER_FIRST_FINAL_READINESS_REVIEW.md): Readiness review for closing Issue #56.
-- [Phase 8 router-first hardening completion review](docs/routing/ROUTER_FIRST_HARDENING_COMPLETION_REVIEW.md): Final completion review and deferred items for Phase 8.
-- [Phase 8A integration hardening audit](docs/routing/ROUTER_FIRST_INTEGRATION_HARDENING_AUDIT.md): Gap analysis and recommended hardening actions.
+Contributions should preserve specialist ownership, runtime trust boundaries, validation evidence, and scaffold maturity labels. Start with the [Contributing Guide](docs/CONTRIBUTING.md).
 
-### Common Maintainer Tasks
+Report vulnerabilities privately through the process in [SECURITY.md](SECURITY.md). Do not commit secrets, credentials, personal data, client information, or private project material.
 
-- To understand routing behavior, start with [ROUTER_FIRST_ARCHITECTURE.md](docs/routing/ROUTER_FIRST_ARCHITECTURE.md).
-- To add benchmark cases, start with [ROUTER_BENCHMARK_MAINTENANCE_GUIDE.md](docs/testing/ROUTER_BENCHMARK_MAINTENANCE_GUIDE.md).
-- To inspect CI outputs, start with [CI_ARTIFACT_INDEX.md](docs/testing/CI_ARTIFACT_INDEX.md).
-- To inspect prompt size, start with [PROMPT_LOAD_METRICS.md](docs/performance/PROMPT_LOAD_METRICS.md).
-- To check threshold status, start with [PROMPT_LOAD_THRESHOLD_CHECKER.md](docs/performance/PROMPT_LOAD_THRESHOLD_CHECKER.md).
-- To review Phase 8 hardening gaps, start with [ROUTER_FIRST_INTEGRATION_HARDENING_AUDIT.md](docs/routing/ROUTER_FIRST_INTEGRATION_HARDENING_AUDIT.md).
-
-
-| Area | Start Here | Purpose |
-|---|---|---|
-| Governance | [Governance Layer](docs/governance/GOVERNANCE_LAYER.md) | Understand The Steward, The Governor, risk scaling, and release gates |
-| Skills | [Skill Index](SKILL_INDEX.md) | Review available specialists and routing behavior |
-| Installation | [Installation Guide](docs/setup/INSTALLATION.md) | Set up the plugin in Antigravity, Codex, VS Code, or JetBrains IDEs |
-| Changelog | [Changelog](CHANGELOG.md) | Track release history and documented repo milestones |
-| Validation | [Validation Guide](docs/setup/VALIDATION.md) | Run structure and manifest checks |
-| Routing | [Router Architecture](docs/routing/ROUTER_FIRST_ARCHITECTURE.md) | Understand the router-first model and context retrieval |
-| Performance | [Prompt Load Metrics](docs/performance/PROMPT_LOAD_METRICS.md) | Track prompt load and threshold policies |
-| Benchmarks | [Benchmark Validation](docs/testing/ROUTER_VALIDATION_BENCHMARKS.md) | Review the router validation testing suite |
-| CI Artifacts | [CI Artifact Index](docs/testing/CI_ARTIFACT_INDEX.md) | Browse governance reports and validation CI artifacts |
-| Audits | [Phase 8A Audit](docs/routing/ROUTER_FIRST_INTEGRATION_HARDENING_AUDIT.md) | Review the router-first integration hardening audit |
-| Maturity | [Maturity](docs/MATURITY.md) | Current project stability and roadmap |
-| Contributing | [Contributing Guide](docs/CONTRIBUTING.md) | Guidelines for contributing and safety policies |
-| Disclaimer | [Disclaimer](docs/meta/DISCLAIMER.md) | Understand legal and operational limitations |
-
-## Validation & Enforceable Governance
-
-Orchestra's rules are divided into clear enforcement levels to distinguish between advisory instruction and guaranteed validation:
-
-### Enforcement Model
-- **Level 1: Instruction governance**. (Advisory) The host AI is instructed to follow The Steward and The Governor. Conductor is instructed to halt if governance returns BLOCKED.
-- **Level 2: Structural validation**. (Enforced Locally/CI) Scripted checks ensure manifests, skills, and formats align.
-- **Level 3: Runtime guardrail scan**. (Warning-only Default) Scripted checks for secrets, PII, and copyleft licenses. Exits with code `0` by default.
-- **Level 4: Strict local enforcement**. (Opt-in) Strict enforcement of guardrails locally (`$env:ORCHESTRA_ENFORCE_GUARDRAILS = "true"`), failing the process on violation.
-- **Level 5: CI release gate**. (Enforced in CI) Build pipeline fails if structural validation or strict guardrails fail.
-- **Level 6: Host-integrated runtime blocker**. (Future) Host platform forcibly blocks output if policies are violated.
-
-Before releasing, staging, or pushing changes, run the primary Python behavior validation runner:
-
-```powershell
-# Run the behavior validation suite used by CI
-python .\tests\behavior\run_tests.py
-```
-
-Then run the runtime coverage gate used by `validate.yml`:
-
-```powershell
-python -m pytest tests/runtime --cov=orchestra_runtime --cov-report=term-missing --cov-fail-under=90
-```
-
-### Governance Verification Workflow
-- **Primary Behavior Runner (`run_tests.py`)**: Verifies project directory structure, manifest definitions against skill frontmatter, IDE packaging, stale reference checks, Codex skill adapter alignment, governance behavior checks, and lock/guardrail regression cases.
-- **Runtime Coverage Gate (`pytest-cov`)**: Runs `tests/runtime` with `--cov=orchestra_runtime --cov-report=term-missing --cov-fail-under=90`.
-- **Windows Compatibility Wrapper (`run-tests.ps1`)**: Remains available for wrapper-based local runs on Windows, but it is not the primary CI entry point.
-- **Opt-In Runtime Guardrails**: Scans staged or modified files for security risks (secrets, copyleft licenses, PII leaks, destructive commands, or stale naming conventions).
-  - *Warning-Only Mode (Default)*: Scans are advisory and exit with code `0`.
-  - *Strict Enforcement*: Set `$env:ORCHESTRA_ENFORCE_GUARDRAILS = "true"` to fail the build (exit code `1`) upon safety violations.
-- **Workspace State Locking**: Manages a `.amalgam/lock.json` file during workflow executions to prevent concurrent agent collisions, automatically detecting and cleaning stale locks based on process ID (PID) liveness.
-
-For full configuration and usage instructions, see the [Validation & Enforceable Governance Guide](docs/setup/VALIDATION.md).
-
----
-
-## Update Notifications
-
-Orchestra does not auto-update installed files. Update checks are notify-only.
-
-Run the shared update checker manually:
-
-```powershell
-python .\scripts\check_for_updates.py
-```
-
-The checker reads local version metadata from `plugin.json`, `.claude-plugin/plugin.json`, and adapter `package.json` files where applicable, compares that version to the latest GitHub release, and prints:
-
-- current version
-- latest version
-- release URL
-- a host-specific refresh or reinstall reminder
-
-Optional manifest metadata supports:
-
-- `update_check_enabled`
-- `update_check_channel`
-- `update_check_frequency`
-
-Current defaults are `true`, `stable`, and `manual`.
-
----
-
-## Limitations
-
-- **Instruction-Level Framework:** Orchestra primarily operates through structured instructions, skills, and documentation.
-- **Optional Runtime Guardrails:** Some repository-level checks can be enforced through scripts when explicitly enabled.
-- **Human Review Required:** Guardrails reduce risk but do not replace developer review, secure coding practice, or legal/security review.
-- **Project Profile Requirement:** Governance relies entirely on the accuracy and completeness of the provided project context profile.
-
-## Collapsed Repository Structure
-
-GitHub displays repository files above the README by default. This README keeps detailed documentation layered into linked files and collapsed sections to reduce scrolling.
-
-<details> <summary>Repository structure</summary>
-
-```
-.claude-plugin/
-├── plugin.json
-└── marketplace.json
-
-skills/
-├── arbiter/
-├── chronicler/
-├── cipher/
-├── cloak/
-├── clockwork/
-├── conductor/
-├── dagger/
-├── overseer/
-├── ponytail/
-├── scribe/
-├── the-governor/
-├── the-steward/
-└── weaver/
-
-docs/
-├── CONTRIBUTING.md
-├── governance/
-│   ├── GOVERNANCE_LAYER.md
-│   ├── GOVERNOR.md
-│   ├── STEWARD.md
-│   ├── GOVERNANCE_REVIEW_FLOW.md
-│   └── RELEASE_GATES.md
-├── meta/
-│   ├── CHANGELOG.md
-│   └── DISCLAIMER.md
-├── project/
-│   ├── FOUNDATION.md
-│   ├── ROADMAP.md
-│   ├── PLUGIN_READINESS.md
-│   ├── MANIFEST_SCHEMA.md
-│   └── V1_READINESS_CHECKLIST.md
-└── setup/
-    ├── INSTALLATION.md
-    ├── LOCAL_ONLY_GUIDE.md
-    ├── COMPATIBILITY.md
-    └── VALIDATION.md
-
-tests/behavior/
-└── GOVERNANCE_SCENARIOS.md
-
-assets/readme/
-└── orchestra-governance-banner.svg
-```
-
-</details>
-
-## Disclaimer
-
-> [!CAUTION]
-> The Governor and Steward skills validate compliance frameworks, scope, and best practices. They do not provide legal advice or absolute security guarantees. Please read [docs/meta/DISCLAIMER.md](docs/meta/DISCLAIMER.md) for full terms.
+Orchestra is licensed under the [MIT License](LICENSE). The four finalized Artificer promotions preserve governed conceptual provenance and Apache-2.0 attribution boundaries. They do not authorize copying external source code, prompts, payloads, examples, media, or documentation expression.

@@ -1,6 +1,6 @@
 # Authority and Capability Runtime Architecture
 
-Status: Phase 6B-D runtime integration and Phase 6C adversarial validation implemented locally for Issue #182. Phase 6D has not started.
+Status: Phase 6B-D runtime integration and Phase 6C adversarial validation implemented and merged through PR #183. Phase 6D release preparation is complete locally under Issue #184 and pending maintainer review.
 
 ## Purpose
 
@@ -111,7 +111,7 @@ Authority and capability evaluation precede governance validation because govern
 | Scope and roadmap | Steward | Keeps architecture bounded, necessary, and sequenced. |
 | Repository and implementation authorization | The Butler | Authorizes later implementation; canonical Artificer field remains `maintainer_decision`. |
 | Routing | Conductor and `RouterService` | Selects workflow or specialist; grants no authority. |
-| Runtime implementation | Assigned specialists in later phases | Implements only after separate Butler authorization. |
+| Runtime implementation | Assigned specialists | Implemented through the separately authorized Phase 6B and Phase 6C batches. |
 
 ## Initialization Sequence
 
@@ -185,14 +185,14 @@ Audit records are append-only evidence derived from validated actions. Events co
 
 ## Phase 6B-D and Phase 6C Completion
 
-- PR #181 is merged and Issue #180 is closed.
-- Phase 6B-D trusted runtime composition, authority and capability enforcement order, lifecycle control, bounded delegated child execution, structured audit integration, and additive result evidence are complete locally for Issue #182.
+- PR #181 and PR #183 are merged. Issues #180 and #182 are closed.
+- Phase 6B-D trusted runtime composition, authority and capability enforcement order, lifecycle control, bounded delegated child execution, structured audit integration, and additive result evidence are complete and merged.
 - Phase 6C adversarial validation covers trusted initialization, prompt and adapter escalation, routing and governance confusion, authority and capability attacks, delegation attacks, lifecycle attacks, execution ordering, and audit-sink failure.
 - The Butler-authorized lifecycle correction rejects `RESUME` from `INITIALIZING` and `ACTIVATE` from `WAITING` with `INVALID_SIGNAL_SOURCE_STATE`; existing valid activation, waiting, resume, terminal replay, and conflict behavior remains unchanged.
 - Maintainer corrections retain one lifecycle history per root or child `run_id`, require manifest-grant provenance consistency, require present bound capabilities to be owned by the bound specialist, and preserve runtime `CAPABILITY_DENIED` behavior for absent capability identifiers.
-- Promotions remain `IMPLEMENTING`; the Pattern Catalog and README are unchanged.
-- Phase 6D has not started. The mandatory README refresh and target `v1.1.2` release finalization remain Phase 6D work.
-- The project is intentionally parked after the combined Phase 6B-D and Phase 6C batch.
+- The four promotions are `IMPLEMENTED`, and the Pattern Catalog is synchronized to those canonical records.
+- Phase 6D refreshes the README and prepares target release `v1.1.2` without changing runtime behavior.
+- The `v1.1.2` tag and GitHub Release remain outside this branch and require a separate post-merge publication gate.
 
 ## Rejected Alternatives
 

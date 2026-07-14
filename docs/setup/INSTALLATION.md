@@ -2,22 +2,22 @@
 
 Orchestra can be installed in several ways depending on your AI host or IDE:
 
-## Current Release
+## Release Status
 
-`v1.1.1 Post-Release Hardening` builds on the `v1.1.0` baseline and focuses on post-release validation, startup-state accuracy, update safety, and runtime adapter context-contract alignment.
+The current public release is `v1.1.1`. Target patch `v1.1.2` is in release preparation and is not published until the Phase 6D branch merges and the separate publication gate succeeds.
 
 | Host | Install Surface | Current Status |
 |---|---|---|
 | Codex | Marketplace or repo-local fallback | Supported |
 | Claude Code | Marketplace plugin | Supported |
 | Antigravity | Native plugin install | Supported |
-| Cursor | Scaffold-only packaging and workspace instructions | Supported |
-| Windsurf | Scaffold-only packaging and workspace instructions | Supported |
-| VS Code | Scaffold-only packaging and workspace instructions | Supported |
-| VSCodium | Reuses VS Code scaffold and runtime adapter | Compatible |
-| JetBrains | Scaffold-only plugin surface | Supported |
-| Zed | Scaffold-only packaging and workspace instructions | Supported |
-| Neovim | Scaffold-only packaging and workspace instructions | Supported |
+| Cursor | Scaffold-only packaging and workspace instructions | Scaffold-only |
+| Windsurf | Scaffold-only packaging and workspace instructions | Scaffold-only |
+| VS Code | Scaffold-only packaging and workspace instructions | Scaffold-only |
+| VSCodium | Reuses VS Code scaffold and runtime adapter | Scaffold-only compatibility |
+| JetBrains | Scaffold-only plugin surface | Scaffold-only |
+| Zed | Scaffold-only packaging and workspace instructions | Scaffold-only |
+| Neovim | Scaffold-only packaging and workspace instructions | Scaffold-only |
 | Local AI systems | Manual skill loading | Supported |
 
 ## 1. Antigravity Plugin Setup

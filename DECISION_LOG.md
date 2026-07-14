@@ -758,3 +758,32 @@ Adversarial validation covers initialization, repeated root and child execution,
 - tests/runtime/test_runtime_authority_integration.py
 - tests/runtime/test_runtime_core.py
 - tests/runtime/test_runtime_delegated_execution.py
+
+---
+
+## Date: 2026-07-14
+
+**Issue:** #184
+
+**Decision:**
+Begin the authorized combined Phase 6D-A through Phase 6D-C release-preparation batch from merged commit `96adf09ea898dbc43f55a691f2587cf5ba75084c`. PR #183 is merged and Issue #182 is closed. The four canonical authority, capability, delegation, and lifecycle promotions have sufficient merged implementation and validation evidence to move from `IMPLEMENTING` to `IMPLEMENTED`, and the Pattern Catalog is manually synchronized from those canonical records.
+
+Phase 6D completes locally with a source-backed README and documentation refresh, approved `1.1.2` metadata normalization, release notes, changelog synchronization, release-mode review, two matching complete validation passes around the final evidence update, README acceptance review, and exact 31-file scope audit with zero staged files. Maintainer review, merge, and publication remain pending.
+
+**Reason:**
+PRs #179, #181, and #183 establish the implementation chain for immutable authority and capability contracts, bounded delegation, lifecycle control, RuntimeExecutor integration, fail-closed adversarial validation, and deterministic audit evidence. Promotion traceability, Apache-2.0 attribution language, conceptual-adaptation boundaries, and `automatic_promotion: false` remain unchanged. This branch changes documentation and release metadata only; it does not add runtime behavior.
+
+The current public release remains `v1.1.1`. Target `v1.1.2` is prepared but not published. Staging, committing, pushing, pull-request creation, tag creation, GitHub Release publication, and Issue #184 closure remain outside this mutation gate.
+
+**Rejected Alternatives:**
+- Marking promotions implemented without merged runtime and validation evidence.
+- Automatically mutating the Pattern Catalog.
+- Changing runtime, tests, validators, schemas, workflows, skills, commands, or adapter implementation to support release prose.
+- Claiming unsupported adapter maturity, final validation values, a `v1.1.2` tag, or a published GitHub Release.
+- Reusing external source code, prompts, payloads, examples, media, or documentation expression.
+
+**Affected Components:**
+- Four canonical promotion records and `docs/internal/PATTERN_CATALOG.md`
+- `README.md` and approved authority, setup, compatibility, readiness, state, and handoff documentation
+- Approved version manifests and scaffold package metadata
+- `CHANGELOG.md` and `docs/releases/v1.1.2-trusted-runtime-authority.md`

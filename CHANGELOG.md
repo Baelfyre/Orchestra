@@ -50,17 +50,27 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 - Hardened update and rollback guidance by requiring fast-forward-only pulls, running canonical validation after updates, and documenting recovery-branch creation before hard resets.
 - Fixed runtime context assembly so adapter-provided ContextPackage metadata is preserved and enriched instead of bypassed during execution.
 
+## v1.1.2 - Trusted Runtime Authority
+
+This patch is prepared for maintainer review. The `v1.1.2` tag and GitHub Release remain pending a separate post-merge publication gate.
+
+### Added
+- Implemented Issue #182 Phase 6B-D trusted runtime composition and Phase 6C adversarial validation, including explicit finite authority modes, immutable route bindings, authority and capability enforcement before governance, single initialization per root or child run identity, manifest-grant provenance and binding-owner validation, structured lifecycle and terminal-result integration, bounded in-process delegated execution, deterministic audit evidence, and lifecycle source-state enforcement for `ACTIVATE`, `WAIT`, and `RESUME`. Missing capability identifiers retain runtime `CAPABILITY_DENIED` behavior.
+- Implemented Issue #180 Phase 6B-C bounded delegation validation, immutable effective child resolutions, exact lifecycle control, deterministic terminal replay, conflict rejection, and structured audit-event factories.
+- Implemented Issue #178 Phase 6B-A immutable runtime domain contracts, typed error taxonomy, authority/capability/delegation/lifecycle models, stable interfaces, deterministic serialization, and additive public exports.
+- Implemented Phase 6B-B repository-contained trusted policy loading, fail-closed authority evaluation and intersection, immutable runtime capability manifest resolution and intersection, deterministic collision rejection, typed enforcement, and structured audit-event creation.
+- Added Issue #176 Phase 6A runtime-gap and trust-boundary architecture for trusted authority, immutable per-run capabilities, bounded delegation, typed lifecycle control, and structured audit evidence.
+- Added implementation-ready authority, runtime capability, delegation, lifecycle, interface, error, compatibility, and fail-closed contracts distinct from PRAP adapter support.
+- Added sequenced Phase 6B through Phase 6D implementation and verification planning.
+
+### Changed
+- Finalized the four canonical authority, capability, delegation, and lifecycle promotions as `IMPLEMENTED` and manually synchronized the Pattern Catalog while preserving pinned provenance, Apache-2.0 attribution boundaries, conceptual-adaptation limits, and `automatic_promotion: false`.
+- Refreshed release, setup, compatibility, runtime, project-state, Codex, roadmap, architecture, and handoff documentation for the trusted runtime authority baseline.
+- Normalized approved plugin and scaffold-package version metadata to `1.1.2` without changing adapter maturity: Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain scaffold-only.
+
 ## Unreleased
 
 ### Added
-- Implemented Issue #182 Phase 6B-D trusted runtime composition and Phase 6C adversarial validation, including explicit finite authority modes, immutable route bindings, authority and capability enforcement before governance, single initialization per root or child run identity, manifest-grant provenance and binding-owner validation, structured lifecycle and terminal-result integration, bounded in-process delegated execution, deterministic audit evidence, and lifecycle source-state enforcement for `ACTIVATE`, `WAIT`, and `RESUME`. Missing capability identifiers retain runtime `CAPABILITY_DENIED` behavior. PR #181 is merged and Issue #180 is closed; promotions remain `IMPLEMENTING`, the Pattern Catalog and README are unchanged, Phase 6D has not started, and the target patch remains `v1.1.2`.
-- Implemented Issue #180 Phase 6B-C bounded delegation validation, immutable effective child resolutions, exact lifecycle control, deterministic terminal replay, conflict rejection, and structured audit-event factories. PR #179 is merged and Issue #178 is closed; promotions remain `IMPLEMENTING`, the Pattern Catalog is unchanged, and RuntimeExecutor integration has not started.
-- Implemented Issue #178 Phase 6B-A immutable runtime domain contracts, typed error taxonomy, authority/capability/delegation/lifecycle models, stable interfaces, deterministic serialization, and additive public exports.
-- Implemented Phase 6B-B repository-contained trusted policy loading, fail-closed authority evaluation and intersection, immutable runtime capability manifest resolution and intersection, deterministic collision rejection, typed enforcement, and structured audit-event creation.
-- Advanced four canonical promotions to `IMPLEMENTING` and manually synchronized the Pattern Catalog; delegation behavior, lifecycle behavior, RuntimeExecutor integration, adapters, and active compatibility policy remain unchanged.
-- Added Issue #176 Phase 6A runtime-gap and trust-boundary architecture for trusted authority, immutable per-run capabilities, bounded delegation, typed lifecycle control, and structured audit evidence without runtime changes.
-- Added implementation-ready authority, runtime capability, delegation, lifecycle, interface, error, compatibility, and fail-closed contracts that remain distinct from PRAP adapter support.
-- Added sequenced Phase 6B through Phase 6D implementation and verification planning; promotions remain `APPROVED`, Catalog content remains unchanged, and no source-expression reuse or implementation authority is introduced.
 - Recorded unanimous Phase 5C-B Arbiter, Governor, and Steward approval plus conditional Butler disposition for the design-only authority/capability proposal, without runtime implementation or source-expression reuse authority.
 - Added four manual Phase 5D `APPROVED` promotion records with pinned Strix provenance, Apache-2.0 attribution boundaries, and `automatic_promotion: false`.
 - Manually synchronized the Phase 5E Pattern Catalog with the four canonical promotion records; Catalog projection remains separate from implementation authority.
