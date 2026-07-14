@@ -1,6 +1,6 @@
 # Codex Adapter for Orchestra
 
-This adapter provides a Codex-compatible export of the Orchestra `v1.1.1 Post-Release Hardening` skills.
+This adapter provides a Codex-compatible export of the current Orchestra skills. The repository is preparing `v1.1.2`; the public release remains `v1.1.1` until the separate post-merge publication gate succeeds.
 
 ## Purpose
 

@@ -1,6 +1,6 @@
 # Compatibility
 
-Orchestra `v1.1.1 Post-Release Hardening` keeps the Markdown-first, runtime-core-first baseline from `v1.0.0 Portable Runtime` and `v1.1.0`. Hosts still integrate through thin adapters and, where available, scaffold packaging metadata that points back to the shared runtime.
+The public release remains Orchestra `v1.1.1` while `v1.1.2` is prepared. The prepared patch keeps the Markdown-first, runtime-core-first baseline and adds trusted runtime authority, capabilities, delegation, lifecycle control, and audit evidence without changing host maturity claims.
 
 Scaffold-only hosts are not yet full support claims. Promotion requirements and graduation order live in `docs/project/SCAFFOLD_ADAPTER_GRADUATION_CRITERIA.md`.
 

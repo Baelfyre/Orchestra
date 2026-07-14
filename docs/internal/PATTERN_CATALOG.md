@@ -11,10 +11,10 @@ This document is the governed human-readable projection of validated Artificer p
 
 | ID | Pattern Name | Source Repository | Approval Date | Status | Assigned Specialist |
 | --- | --- | --- | --- | --- | --- |
-| agent\-lifecycle\-state\-machine | Lifecycle\-Gated Agent Completion | usestrix/strix | 2026\-07\-13 | IMPLEMENTING | clockwork |
-| authority\-scope\-contract | Declared Scope Context | usestrix/strix | 2026\-07\-13 | IMPLEMENTING | arbiter |
-| run\-scoped\-capability\-manifest | Run\-Wide Tool Extension Registry | usestrix/strix | 2026\-07\-13 | IMPLEMENTING | clockwork |
-| specialist\-delegation\-contract | Validated Specialist Delegation | usestrix/strix | 2026\-07\-13 | IMPLEMENTING | overseer |
+| agent\-lifecycle\-state\-machine | Lifecycle\-Gated Agent Completion | usestrix/strix | 2026\-07\-13 | IMPLEMENTED | clockwork |
+| authority\-scope\-contract | Declared Scope Context | usestrix/strix | 2026\-07\-13 | IMPLEMENTED | arbiter |
+| run\-scoped\-capability\-manifest | Run\-Wide Tool Extension Registry | usestrix/strix | 2026\-07\-13 | IMPLEMENTED | clockwork |
+| specialist\-delegation\-contract | Validated Specialist Delegation | usestrix/strix | 2026\-07\-13 | IMPLEMENTED | overseer |
 
 ---
 
@@ -22,7 +22,7 @@ This document is the governed human-readable projection of validated Artificer p
 
 ### agent\-lifecycle\-state\-machine: Lifecycle\-Gated Agent Completion
 
-- **Status**: IMPLEMENTING
+- **Status**: IMPLEMENTED
 - **Source Repository**: usestrix/strix
 - **Source URL**: https://github\.com/usestrix/strix
 - **Source Bundle**: usestrix\_\_strix\_\_09872744f5a9
@@ -44,7 +44,7 @@ This document is the governed human-readable projection of validated Artificer p
 
 ### authority\-scope\-contract: Declared Scope Context
 
-- **Status**: IMPLEMENTING
+- **Status**: IMPLEMENTED
 - **Source Repository**: usestrix/strix
 - **Source URL**: https://github\.com/usestrix/strix
 - **Source Bundle**: usestrix\_\_strix\_\_09872744f5a9
@@ -66,7 +66,7 @@ This document is the governed human-readable projection of validated Artificer p
 
 ### run\-scoped\-capability\-manifest: Run\-Wide Tool Extension Registry
 
-- **Status**: IMPLEMENTING
+- **Status**: IMPLEMENTED
 - **Source Repository**: usestrix/strix
 - **Source URL**: https://github\.com/usestrix/strix
 - **Source Bundle**: usestrix\_\_strix\_\_09872744f5a9
@@ -88,7 +88,7 @@ This document is the governed human-readable projection of validated Artificer p
 
 ### specialist\-delegation\-contract: Validated Specialist Delegation
 
-- **Status**: IMPLEMENTING
+- **Status**: IMPLEMENTED
 - **Source Repository**: usestrix/strix
 - **Source URL**: https://github\.com/usestrix/strix
 - **Source Bundle**: usestrix\_\_strix\_\_09872744f5a9

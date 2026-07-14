@@ -5,14 +5,14 @@
 - [x] Phase 6A-A: audit current runtime gaps and define trust boundaries.
 - [x] Phase 6A-B: define typed authority, runtime capability, delegation, lifecycle, audit, interface, and error contracts.
 - [x] Phase 6A-C: sequence implementation ownership and verification requirements.
-- [ ] Phase 6B-A: add immutable core domain models, typed errors, interfaces, serialization where needed, and focused unit tests.
-- [ ] Phase 6B-B: add trusted root authority loading plus authority and capability enforcement.
-- [ ] Phase 6B-C: add bounded delegation, context minimization, and lifecycle control.
-- [ ] Phase 6B-D: integrate the contracts with `RuntimeExecutor`, adapters, governance separation, and auditing.
-- [ ] Phase 6C: run adversarial authority, capability, delegation, lifecycle, and fail-closed validation.
-- [ ] Phase 6D: finalize promotion lifecycle, Catalog synchronization, release readiness, and target patch preparation after implementation completes.
+- [x] Phase 6B-A: add immutable core domain models, typed errors, interfaces, serialization where needed, and focused unit tests.
+- [x] Phase 6B-B: add trusted root authority loading plus authority and capability enforcement.
+- [x] Phase 6B-C: add bounded delegation, context minimization, and lifecycle control.
+- [x] Phase 6B-D: integrate the contracts with `RuntimeExecutor`, adapters, governance separation, and auditing.
+- [x] Phase 6C: run adversarial authority, capability, delegation, lifecycle, and fail-closed validation.
+- [x] Phase 6D: finalize promotion lifecycle, Catalog synchronization, release readiness, and target patch preparation after implementation completes.
 
-Phase 6A is architecture-only. Phase 6B requires separate Butler authorization; promotions remain `APPROVED`, runtime implementation has not started, and the Catalog remains unchanged.
+Phases 6B-A through 6C are complete and merged through PR #183. Phase 6D is complete locally under Issue #184 after promotion, Catalog, documentation, version, two-pass validation, and exact-scope gates. The prepared branch still requires maintainer review, merge, and separate publication authorization.
 
 - [ ] Add host-specific update commands after the shared notification-only update check stabilizes.
 - [ ] Add host-specific update commands on top of the reproducible temp-staged runtime refresh pipeline.
@@ -36,4 +36,4 @@ Phase 6A is architecture-only. Phase 6B requires separate Butler authorization; 
 - [ ] Add an optional local-model retrieval index.
 - [ ] Improve adapters as tool capabilities change.
 - [ ] Expand fictional, project-agnostic examples.
-- [ ] Add release tags after selecting a license and publication workflow.
+- [ ] Publish the `v1.1.2` tag and GitHub Release only after the Phase 6D branch merges and a separate publication gate is authorized.

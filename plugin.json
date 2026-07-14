@@ -2,7 +2,7 @@
   "name": "conductor",
   "display_name": "Orchestra",
   "description": "An installable AI workflow plugin that routes tasks through focused specialist skills. See SKILL_INDEX.md and ROUTING_MAP.md for detailed routing behavior.",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "license": "MIT",
   "repository": "https://github.com/Baelfyre/Orchestra",
   "icon_path": "assets/icons/conductor.ico",

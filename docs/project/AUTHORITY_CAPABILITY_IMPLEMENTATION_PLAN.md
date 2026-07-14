@@ -1,27 +1,27 @@
 # Authority and Capability Implementation Plan
 
-Status: Phase 6B-A through Phase 6B-C merged through PR #181; Issue #180 closed. Phase 6B-D and Phase 6C are implemented locally for Issue #182. Phase 6D has not started.
+Status: Phase 6B-A through Phase 6C implemented and merged through PR #183; Issues #178, #180, and #182 closed. Phase 6D release preparation is complete locally under Issue #184 and pending maintainer review.
 
 ## Purpose
 
-Sequence specialist-owned implementation of the approved authority, runtime capability, delegation, and lifecycle architecture. Each batch requires separate Butler authorization, a clean preflight, focused tests, and review before the next batch begins. Phase 6B-A and Phase 6B-B have started implementation, so the four related promotion records are `IMPLEMENTING`.
+Record the specialist-owned implementation and verification sequence for the authority, runtime capability, delegation, and lifecycle architecture. Each implementation batch required separate authorization, a clean preflight, focused tests, and review before the next batch. The runtime batches are merged; Phase 6D now finalizes promotion, documentation, and release surfaces without changing runtime behavior.
 
 ## Current Implementation Checkpoint
 
 - Phase 6B-A: immutable shared, authority, capability, delegation, lifecycle, error, interface, and serialization contracts complete.
 - Phase 6B-B: trusted policy loading, authority evaluation and intersection, capability manifest resolution and intersection, typed enforcement, and event creation complete.
 - Phase 6B-C: immutable delegation policy and resolution, bounded validator, exact lifecycle controller, deterministic signal identity, and audit-event factories complete and merged through PR #181.
-- Phase 6B-D: explicit active and compatibility runtime composition, immutable route bindings, authority and capability enforcement, lifecycle control, bounded delegated execution, and audit integration complete locally.
-- Phase 6C: adversarial validation and the lifecycle structured-signal source-state repair complete locally.
+- Phase 6B-D: explicit active and compatibility runtime composition, immutable route bindings, authority and capability enforcement, lifecycle control, bounded delegated execution, and audit integration complete and merged through PR #183.
+- Phase 6C: adversarial validation and the lifecycle structured-signal source-state repair complete and merged through PR #183.
 - Delegation validation behavior: operational.
 - Lifecycle transition behavior: operational.
-- `RuntimeExecutor` integration: complete locally.
+- `RuntimeExecutor` integration: complete and merged.
 - Compatibility policy: explicit, finite, trusted, and bounded to supported routes.
-- Promotions: remain `IMPLEMENTING`.
-- Pattern Catalog: unchanged in Phase 6B-D and Phase 6C.
-- README: unchanged; refresh remains mandatory in Phase 6D.
-- Next separately authorized batch: Phase 6D, which has not started.
-- Target patch: `v1.1.2`; the project is intentionally parked after Issue #182 pending Butler review.
+- Promotions: four `IMPLEMENTED` records after merged implementation evidence review.
+- Pattern Catalog: synchronized to the four canonical `IMPLEMENTED` records.
+- README: Phase 6D narrative, trust-model refresh, and two-pass validation evidence complete.
+- Active batch: Phase 6D complete locally under Issue #184; maintainer review pending.
+- Target patch: `v1.1.2`; tag and GitHub Release remain pending a separate post-merge publication gate.
 
 ## Phase 6B-A - Core Domain Foundation
 
@@ -112,15 +112,14 @@ Completion: the maintainer-corrected consolidated Phase 6C focused suite passed 
 
 ## Phase 6D - Lifecycle and Release Finalization
 
-Status: not started. The README refresh remains mandatory in this phase, and the target patch remains `v1.1.2`.
+Status: complete locally under Issue #184. Promotion, Catalog, documentation, release metadata, two complete validation runs, release review, README acceptance, and exact-scope gates passed. Merge and publication remain separate.
 
 Scope:
 
-- Change a promotion to `IMPLEMENTING` only when its authorized implementation begins.
-- Change a promotion to `IMPLEMENTED` only after implementation and verification complete.
+- Confirm each promotion is `IMPLEMENTED` only after merged implementation and verification evidence exists.
 - Manually synchronize the Pattern Catalog after canonical promotion changes.
 - Run release-readiness, licensing, security, compatibility, and governance review.
-- Prepare target patch `v1.1.2` without changing the current release during Phase 6A.
+- Prepare target patch `v1.1.2` without claiming the tag or GitHub Release exists before publication.
 
 ## Planned File Ownership
 

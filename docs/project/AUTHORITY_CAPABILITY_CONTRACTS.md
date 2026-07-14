@@ -1,6 +1,6 @@
 # Authority and Capability Contracts
 
-Status: Phase 6B-D runtime integration and Phase 6C adversarial-validation contract, implemented locally for Issue #182.
+Status: Phase 6B-A through Phase 6C implemented and merged through PR #183. Phase 6D promotion and release preparation is complete locally under Issue #184 and pending maintainer review.
 
 ## Contract Rules
 
@@ -284,4 +284,4 @@ Trusted runtime composition supplies a finite repository-owned root policy for e
 
 ## Phase 6C Verification
 
-The Issue #182 adversarial matrix verifies fail-closed initialization, single initialization per root and child identity, prompt and adapter non-escalation, governance separation, grant-provenance and binding-owner consistency, preserved missing-capability denial, bounded delegation, lifecycle source and terminal invariants, execution ordering, immutable state preservation, and deterministic audit failure. Phase 6D and release finalization remain outside this contract batch.
+The merged Issue #182 adversarial matrix verifies fail-closed initialization, single initialization per root and child identity, prompt and adapter non-escalation, governance separation, grant-provenance and binding-owner consistency, preserved missing-capability denial, bounded delegation, lifecycle source and terminal invariants, execution ordering, immutable state preservation, and deterministic audit failure. Phase 6D changes promotion lifecycle, documentation, and release metadata only; it does not change these runtime contracts.
