@@ -176,6 +176,28 @@ Required handoff language:
 - Implementation goes to Ponytail
 - Readiness gate goes to Overseer
 
+## Static UI Risk Audit
+
+Before a UI-affecting implementation is declared ready, Cloak must perform a source-level static visual-risk audit.
+
+Inspect:
+- stacking contexts, overlays, clipping, positioning, and visibility
+- pointer accessibility and hidden input interception
+- responsive layout risks and breakpoint conflicts
+- focus visibility, keyboard accessibility, and interaction-state consistency
+- visual relationships between containers, ancestors, siblings, backdrops, and interactive descendants
+- source-level conditions that could make the rendered interface inaccessible or unusable
+
+Return exactly one status:
+
+```text
+STATIC_UI_RISK_LOW
+STATIC_UI_RISK_DETECTED
+STATIC_UI_RESULT_INCONCLUSIVE
+```
+
+`STATIC_UI_RISK_LOW` means no probable source-level risk was found. It is not proof of rendered correctness. Cloak must not claim a rendered pass without browser evidence or Butler approval.
+
 ## Supported work
 
 - UI/UX requirements and Interaction design

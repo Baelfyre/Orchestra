@@ -71,6 +71,7 @@ This patch is prepared for maintainer review. The `v1.1.2` tag and GitHub Releas
 ## Unreleased
 
 ### Added
+- Added layered UI engineering and validation ownership across Cloak static risk analysis, Clockwork engineering integrity, renewed Cloak review, Overseer current-commit evidence validation, and explicit human approval boundaries.
 - Recorded unanimous Phase 5C-B Arbiter, Governor, and Steward approval plus conditional Butler disposition for the design-only authority/capability proposal, without runtime implementation or source-expression reuse authority.
 - Added four manual Phase 5D `APPROVED` promotion records with pinned Strix provenance, Apache-2.0 attribution boundaries, and `automatic_promotion: false`.
 - Manually synchronized the Phase 5E Pattern Catalog with the four canonical promotion records; Catalog projection remains separate from implementation authority.
