@@ -39,6 +39,29 @@ Do not load it for obvious single-owner work.
 - `arbiter -> overseer` when validation evidence must be executed or refreshed before continuation
 - `cloak -> clockwork -> ponytail` when frontend design changes API shape, data flow, or service boundaries
 - `cloak -> cipher -> ponytail` when frontend design affects authorization, privacy, or destructive journeys
+- `cloak -> clockwork -> ponytail -> cloak -> overseer` for UI-affecting implementation, correction, renewed static audit, and evidence validation
+
+## UI Engineering and Validation Ownership
+
+Layered UI validation is jointly governed by Cloak, Clockwork, and Overseer because defects can originate from visual relationships, implementation structure, or incomplete evidence.
+
+```text
+Conductor detects UI-affecting change
+-> Cloak performs static UI risk audit
+-> Clockwork owns engineering correction; Ponytail implements when delegated
+-> Cloak repeats static UI risk audit
+-> Butler selects rendered-validation owner
+-> Overseer validates technical and rendered evidence
+-> Caveman enforces explicit stop-condition reporting in the handoff
+-> Butler or maintainer performs final approval
+```
+
+Required boundary:
+- Cloak identifies whether the UI is structurally at risk.
+- Clockwork ensures that the UI is correctly engineered.
+- Overseer proves that implementation claims match current technical and rendered evidence.
+
+No single role may treat successful source inspection, implementation, or automated testing as independent proof of complete rendered correctness.
 
 ## Gate and Conflict Rules
 

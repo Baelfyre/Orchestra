@@ -153,6 +153,24 @@ Required validation proof for UI-facing changes:
 - interaction-path proof
 - known unsupported cases
 
+### UI Evidence Gate
+
+Before accepting a UI readiness claim, Overseer must confirm:
+- the tested branch and commit match the proposed review branch and commit
+- Cloak completed static UI validation
+- build and automated tests passed
+- browser validation used normal, unforced user interactions
+- required responsive viewports were tested when applicable
+- hit testing confirms that the intended interactive layer is topmost
+- backdrops and hidden overlays do not intercept input
+- pointer, keyboard, focus, and scroll behavior were tested
+- console and runtime errors were reviewed
+- screenshots, traces, recordings, or manual approval correspond to the current commit
+- temporary visual-test artifacts are excluded from the final change
+- reported statuses distinguish static analysis from rendered validation
+
+Overseer must reject a complete visual pass based only on DOM presence, keyboard behavior, build success, automated tests, or a single viewport.
+
 ## Validation Expectations
 
 - State the narrowest relevant validation evidence for the requested surface instead of defaulting to a full-suite demand.

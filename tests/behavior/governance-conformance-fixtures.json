@@ -119,5 +119,10 @@
     "skill": "conductor",
     "scenario": "Conductor requires Chronicler for persistence-aware frontend work",
     "pattern": "Route to `chronicler` before implementation when the frontend design affects persistence, schema, migrations, reporting data, ORM behavior, or stored records"
+  },
+  {
+    "file": "ROUTING_MAP.md",
+    "scenario": "Conductor preserves layered UI engineering and validation ownership",
+    "pattern": "UI Engineering and Validation Ownership.*Cloak performs static UI risk audit.*Clockwork owns engineering correction.*Overseer validates technical and rendered evidence"
   }
 ]
