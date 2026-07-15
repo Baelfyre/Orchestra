@@ -58,6 +58,7 @@ Bypass Conductor and route directly when:
 - Route to `cipher` before implementation when the frontend design affects authorization, privacy, destructive actions, secrets, security-sensitive workflows, payments, or compliance-sensitive user journeys.
 - Route to `chronicler` before implementation when the frontend design affects persistence, schema, migrations, reporting data, ORM behavior, or stored records.
 - Keep ambiguous access, visibility, and authority routing with Conductor until ownership split is explicit.
+- UI-affecting implementation must use the layered flow in `../../../../ROUTING_MAP.md`.
 
 ## Scope Routing Enforcement
 
