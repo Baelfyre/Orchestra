@@ -1,6 +1,6 @@
 # Compatibility
 
-The public release remains Orchestra `v1.1.1` while `v1.1.2` is prepared. The prepared patch keeps the Markdown-first, runtime-core-first baseline and adds trusted runtime authority, capabilities, delegation, lifecycle control, and audit evidence without changing host maturity claims.
+The current public release is Orchestra `v1.1.2`. It keeps the Markdown-first, runtime-core-first baseline and adds trusted runtime authority, capabilities, delegation, lifecycle control, and audit evidence without changing host maturity claims.
 
 Scaffold-only hosts are not yet full support claims. Promotion requirements and graduation order live in `docs/project/SCAFFOLD_ADAPTER_GRADUATION_CRITERIA.md`.
 

@@ -10,7 +10,7 @@ A governance-first specialist skill framework that routes complex AI-assisted so
 Open-source developer tooling and AI orchestration framework
 
 ## Current Stage
-Public release `v1.1.1`, with target patch `v1.1.2` in release preparation under Issue #184
+Public release `v1.1.2` (Trusted Runtime Authority), with post-release UI engineering and validation governance merged through PR #187
 
 ## Primary Users
 Developers and maintainers who install Orchestra as a plugin, skill set, or runtime package inside a supported or scaffold-only IDE or coding host (Claude Code, Codex, Antigravity, Cursor, Windsurf, JetBrains, Zed, Neovim)

@@ -4,7 +4,7 @@ Orchestra can be installed in several ways depending on your AI host or IDE:
 
 ## Release Status
 
-The current public release is `v1.1.1`. Target patch `v1.1.2` is in release preparation and is not published until the Phase 6D branch merges and the separate publication gate succeeds.
+The current public release is `v1.1.2`, published July 14, 2026 after the Phase 6D release gate completed.
 
 | Host | Install Surface | Current Status |
 |---|---|---|
