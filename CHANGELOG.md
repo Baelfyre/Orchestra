@@ -52,7 +52,7 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 
 ## v1.1.2 - Trusted Runtime Authority
 
-This patch is prepared for maintainer review. The `v1.1.2` tag and GitHub Release remain pending a separate post-merge publication gate.
+This patch was published on July 14, 2026 as the `v1.1.2` GitHub Release.
 
 ### Added
 - Implemented Issue #182 Phase 6B-D trusted runtime composition and Phase 6C adversarial validation, including explicit finite authority modes, immutable route bindings, authority and capability enforcement before governance, single initialization per root or child run identity, manifest-grant provenance and binding-owner validation, structured lifecycle and terminal-result integration, bounded in-process delegated execution, deterministic audit evidence, and lifecycle source-state enforcement for `ACTIVATE`, `WAIT`, and `RESUME`. Missing capability identifiers retain runtime `CAPABILITY_DENIED` behavior.
