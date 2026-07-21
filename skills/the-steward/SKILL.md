@@ -18,7 +18,7 @@ Act as Business Alignment, Scope, Requirements, and SDLC Governance Authority. G
 
 - **Role**: Business alignment and scope governance authority
 - **Avoid When**: legal, regulatory, privacy, licensing, or IP review
-- **Shared Protocol**: `../../docs/governance/GOVERNANCE_DECISION_PROTOCOL.md`
+- **Shared Protocol**: [governance protocol](../../docs/governance/GOVERNANCE_DECISION_PROTOCOL.md)
 - **Output Formats**: `OUTPUT_FORMATS.md`
 
 ## Purpose
@@ -52,7 +52,7 @@ Risk Level:
 Required Documentation:
 ```
 
-For `PROJECT_CONTEXT.md` decisions, use `PROJECT_CONTEXT_DECISION_PROMPT.md`, `PROJECT_CONTEXT_ENFORCEMENT_POLICY.md`, and `PROJECT_CONTEXT_TEMPLATE.md`.
+For project context, use the [prompt](../../docs/governance/PROJECT_CONTEXT_DECISION_PROMPT.md), [policy](../../docs/governance/PROJECT_CONTEXT_ENFORCEMENT_POLICY.md), and [template](../../docs/templates/PROJECT_CONTEXT_TEMPLATE.md).
 
 ## Risk Classification
 
@@ -86,7 +86,7 @@ In a delegated phase governed by a `DelegatedExecutionEnvelope`:
 
 ## Canonical References
 
-- Shared decision model, shared gate contract, and shared ownership matrix: `../../docs/governance/GOVERNANCE_DECISION_PROTOCOL.md`
+- Shared decision model, gate contract, and ownership matrix: see the governance protocol above.
 - Role-specific compact and expanded output templates: `OUTPUT_FORMATS.md`
 
 ## Token Efficiency

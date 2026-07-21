@@ -8,7 +8,7 @@ Do not load it for obvious single-owner work.
 - Obvious single-owner work routes directly to owner.
 - Ambiguous ownership stays with `conductor`.
 - Governance context stays out of ordinary low-risk work unless trigger exists.
-- `docs/governance/GOVERNANCE_DECISION_PROTOCOL.md` does not load during initial route classification.
+- `REFERENCE_CONTEXT.md#governance-decision-protocol` does not load during initial route classification.
 - `ROUTING_MAP.md` does not load for obvious single-owner tasks.
 
 ## Delegated Phase Progression Routing

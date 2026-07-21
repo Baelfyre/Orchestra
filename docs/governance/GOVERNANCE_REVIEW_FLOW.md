@@ -142,11 +142,13 @@ REQUIRED_ACTIONS: [Provide project type, release target, data collection status]
 ```
 The system does not default to HIGH-risk assumptions for unknown projects.
 
-## Delegated Execution Flow (Phase B Implemented & Locally Validated)
+## Delegated Execution Flow (Phase B Feature Branch, Draft PR #190)
 
 The following flow describes the behavior for delegated autonomous
-governance. Phase B instruction-level behavior is implemented and locally validated;
-remote and host reliability remain pending until separately authorized.
+governance. Phase B instruction-level behavior is implemented on the feature
+branch, under correction in draft PR #190, and is not canonical until merged.
+Remote and host reliability remain pending until separately authorized.
+Phase A contracts are merged; Phase C and Phase D are not started. Phase B has not been merged, released, or deployed.
 
 
 ```
@@ -171,10 +173,10 @@ All approved units accepted
   ->  PHASE_READY_FOR_HUMAN_REVIEW returned
 ```
 
-Current behavior (before Phase B) uses the standard flow documented in this
-file, where each significant decision point involves a human prompt. The
-governance specialist and Arbiter re-entry rules in `GOVERNANCE_LAYER.md`
-apply in both the current and target flows.
+Canonical releases continue to use the standard manual flow until Phase B is
+merged. The feature branch implements the delegated flow above for maintainer
+review. Governance specialist and Arbiter re-entry rules in
+`GOVERNANCE_LAYER.md` apply to both flows.
 
 See `docs/governance/DELEGATED_EXECUTION_POLICY.md` for the canonical contract
 and `docs/project/DELEGATED_GOVERNANCE_IMPLEMENTATION_PLAN.md` for the

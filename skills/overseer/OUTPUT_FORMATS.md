@@ -67,29 +67,32 @@ Reason:
 
 ## Delegated Unit Evidence
 
+### ExecutionEvidencePacket
+
 Use this format when producing or verifying focused validation evidence for a delegated internal unit.
 
 ```markdown
-## Execution Evidence Packet
-- Envelope ID:
-- Phase ID:
-- Unit ID:
-- Repository:
-- Branch:
-- Approved Base SHA:
-- Current Commit SHA:
-- Working Tree Fingerprint:
-- Changed Paths:
-- Implementation Summary:
-- Validation Commands:
-- Validation Results:
-- Skipped Checks:
-- Known Limitations:
-- Scope Audit Result: PASS | FAIL
-- Protected Repository Result: PASS | FAIL
-- Security and Secret Result: PASS | FAIL
-- Design Contradiction State: NONE | PENDING
-- Evidence Producer:
-- Evidence Timestamp:
-- Freshness Reference:
+- schema_version:
+- evidence_id:
+- envelope_id:
+- phase_id:
+- unit_id:
+- repository_identity:
+- branch:
+- approved_base_sha:
+- current_commit_sha:
+- working_tree_fingerprint:
+- changed_paths:
+- implementation_summary:
+- validation_commands:
+- validation_results:
+- skipped_checks:
+- known_limitations:
+- scope_audit_result: PASS | FAIL
+- protected_repository_result: PASS | FAIL
+- security_and_secret_result: PASS | FAIL
+- design_contradiction_state: NONE | PENDING
+- evidence_producer:
+- evidence_timestamp:
+- freshness_reference:
 ```

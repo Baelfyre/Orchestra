@@ -1,5 +1,7 @@
 import argparse
+import re
 import sys
+from collections import Counter
 from pathlib import Path
 
 
@@ -88,12 +90,64 @@ REQUIRED_LAYER_DELEGATED_SECTION = (
     "## Phase-Level Delegated Governance",
     "Phase A",
     "Phase B",
-    "Phase B instruction-level behavior implemented and locally validated",
+    "under correction in draft PR #190",
 )
 REQUIRED_FLOW_DELEGATED_SECTION = (
     "Delegated Execution Flow",
-    "Phase B Implemented & Locally Validated",
+    "Phase B Feature Branch, Draft PR #190",
     "DELEGATED_EXECUTION_POLICY.md",
+)
+
+REQUIRED_RECORD_SCHEMAS = {
+    "ExecutionEvidencePacket": (
+        "schema_version", "evidence_id", "envelope_id", "phase_id", "unit_id",
+        "repository_identity", "branch", "approved_base_sha", "current_commit_sha",
+        "working_tree_fingerprint", "changed_paths", "implementation_summary",
+        "validation_commands", "validation_results", "skipped_checks", "known_limitations",
+        "scope_audit_result", "protected_repository_result", "security_and_secret_result",
+        "design_contradiction_state", "evidence_producer", "evidence_timestamp",
+        "freshness_reference",
+    ),
+    "TransitionDecisionRecord": (
+        "schema_version", "transition_id", "envelope_id", "phase_id", "unit_id",
+        "governance_decision", "continuity_result", "transition_disposition", "reason_code",
+        "evidence_references", "remediation_authority", "remediation_attempt_count",
+        "next_eligible_unit", "resume_requirements", "decision_producer", "decision_timestamp",
+    ),
+    "CheckpointRecord": (
+        "envelope_id", "phase_id", "last_completed_unit", "next_eligible_unit", "branch",
+        "approved_base_sha", "current_execution_sha", "working_tree_state", "changed_paths",
+        "validation_completed", "validation_remaining", "known_limitations", "next_exact_action",
+    ),
+    "CapacityHandoffRecord": (
+        "envelope_validity", "last_completed_unit", "current_incomplete_unit", "current_branch",
+        "current_sha", "working_tree_state", "uncommitted_changes", "validation_completed",
+        "validation_remaining", "exact_next_action", "known_blockers", "resume_prerequisites",
+    ),
+}
+CURRENT_STATE_FILES = (
+    "docs/governance/DELEGATED_EXECUTION_POLICY.md",
+    "docs/governance/GOVERNANCE_REVIEW_FLOW.md",
+    "docs/governance/GOVERNANCE_LAYER.md",
+    "docs/project/DELEGATED_GOVERNANCE_IMPLEMENTATION_PLAN.md",
+)
+STALE_PHASE_B_STATUS_PHRASES = (
+    "phase b is not started",
+    "phase b is not authorized",
+    "phase b is not implemented",
+    "only phase a is authorized",
+    "instruction-level phase b behavior is not implemented",
+)
+REQUIRED_PHASE_B_DRAFT_STATUS = "under correction in draft PR #190"
+REQUIRED_CURRENT_STATE_PHRASES = (
+    "Phase A contracts are merged",
+    "Phase C and Phase D are not started",
+    "Phase B has not been merged, released, or deployed",
+)
+HISTORICAL_PHASE_A_QUALIFIERS = (
+    "at phase a",
+    "historical phase a",
+    "phase a contract-design",
 )
 
 
@@ -122,6 +176,60 @@ def ensure_absent(errors, label, content, needle):
         fail(errors, f"{label}: stale duplicated content `{needle}` must be removed")
 
 
+def section_content(content, heading):
+    match = re.search(rf"(?m)^(?P<marks>##|###) {re.escape(heading)}\s*$", content)
+    if not match:
+        return None
+    level = len(match.group("marks"))
+    next_heading = re.search(rf"(?m)^#{{1,{level}}} ", content[match.end():])
+    end = match.end() + next_heading.start() if next_heading else len(content)
+    return content[match.end():end]
+
+
+def validate_record_schema(errors, label, content, schema_name, required_fields):
+    section = section_content(content, schema_name)
+    if section is None:
+        fail(errors, f"{label}: missing record schema section `{schema_name}`")
+        return
+
+    fields = re.findall(r"(?m)^- ([a-z][a-z0-9_]*):", section)
+    counts = Counter(fields)
+    required = set(required_fields)
+    missing = sorted(required - set(fields))
+    unexpected = sorted(set(fields) - required)
+    duplicates = sorted(field for field, count in counts.items() if count != 1)
+    if missing:
+        fail(errors, f"{label}: `{schema_name}` missing required fields {missing}")
+    if unexpected:
+        fail(errors, f"{label}: `{schema_name}` contains noncanonical fields {unexpected}")
+    if duplicates:
+        fail(errors, f"{label}: `{schema_name}` fields must appear exactly once {duplicates}")
+
+
+def validate_current_phase_status(errors, repo_root):
+    for relative in CURRENT_STATE_FILES:
+        path = repo_root / relative
+        if not path.is_file():
+            continue
+        content = read_text(path)
+        folded = content.casefold()
+        if REQUIRED_PHASE_B_DRAFT_STATUS.casefold() not in folded:
+            fail(errors, f"{relative}: missing current Phase B draft-PR correction status")
+        for required_phrase in REQUIRED_CURRENT_STATE_PHRASES:
+            if required_phrase.casefold() not in folded:
+                fail(errors, f"{relative}: missing current-state statement `{required_phrase}`")
+        for phrase in STALE_PHASE_B_STATUS_PHRASES:
+            for paragraph in re.split(r"\n\s*\n", folded):
+                if phrase not in paragraph:
+                    continue
+                qualified_history = (
+                    any(qualifier in paragraph for qualifier in HISTORICAL_PHASE_A_QUALIFIERS)
+                    and REQUIRED_PHASE_B_DRAFT_STATUS.casefold() in folded
+                )
+                if not qualified_history:
+                    fail(errors, f"{relative}: contradictory current-state wording `{phrase}`")
+
+
 def main(argv=None):
     args = parse_args(argv)
     repo_root = args.repo_root.resolve()
@@ -132,6 +240,8 @@ def main(argv=None):
     governor = read_text(repo_root / "skills" / "the-governor" / "SKILL.md")
     steward_outputs = read_text(repo_root / "skills" / "the-steward" / "OUTPUT_FORMATS.md")
     governor_outputs = read_text(repo_root / "skills" / "the-governor" / "OUTPUT_FORMATS.md")
+    arbiter_outputs = read_text(repo_root / "skills" / "arbiter" / "OUTPUT_FORMATS.md")
+    overseer_outputs = read_text(repo_root / "skills" / "overseer" / "OUTPUT_FORMATS.md")
 
     delegated_policy_path = repo_root / "docs" / "governance" / "DELEGATED_EXECUTION_POLICY.md"
     delegated_policy_exists = delegated_policy_path.exists()
@@ -211,7 +321,7 @@ def main(argv=None):
         )
         ensure_contains(
             errors, DELEGATED_POLICY_FILE, delegated_policy,
-            "Phase B instruction-level behavior is implemented and locally validated"
+            "under correction in draft PR #190"
         )
 
         ensure_absent(
@@ -227,6 +337,24 @@ def main(argv=None):
 
     for section in REQUIRED_FLOW_DELEGATED_SECTION:
         ensure_contains(errors, "GOVERNANCE_REVIEW_FLOW.md", flow, section)
+
+    validate_record_schema(
+        errors,
+        "skills/overseer/OUTPUT_FORMATS.md",
+        overseer_outputs,
+        "ExecutionEvidencePacket",
+        REQUIRED_RECORD_SCHEMAS["ExecutionEvidencePacket"],
+    )
+    for schema_name in ("TransitionDecisionRecord", "CheckpointRecord", "CapacityHandoffRecord"):
+        validate_record_schema(
+            errors,
+            "skills/arbiter/OUTPUT_FORMATS.md",
+            arbiter_outputs,
+            schema_name,
+            REQUIRED_RECORD_SCHEMAS[schema_name],
+        )
+
+    validate_current_phase_status(errors, repo_root)
 
     # Phase B delegated role checks
     arbiter_skill = read_text(repo_root / "skills" / "arbiter" / "SKILL.md")

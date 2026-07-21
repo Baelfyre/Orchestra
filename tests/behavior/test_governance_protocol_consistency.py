@@ -30,13 +30,16 @@ def make_repo_copy():
         Path("docs/governance/GOVERNANCE_LAYER.md"),
         Path("docs/governance/GOVERNANCE_REVIEW_FLOW.md"),
         Path("docs/governance/DELEGATED_EXECUTION_POLICY.md"),
+        Path("docs/project/DELEGATED_GOVERNANCE_IMPLEMENTATION_PLAN.md"),
         Path("skills/the-steward/SKILL.md"),
         Path("skills/the-steward/OUTPUT_FORMATS.md"),
         Path("skills/the-governor/SKILL.md"),
         Path("skills/the-governor/OUTPUT_FORMATS.md"),
         Path("skills/arbiter/SKILL.md"),
+        Path("skills/arbiter/OUTPUT_FORMATS.md"),
         Path("skills/conductor/SKILL.md"),
         Path("skills/overseer/SKILL.md"),
+        Path("skills/overseer/OUTPUT_FORMATS.md"),
     ):
         target = repo_root / relative
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -294,6 +297,92 @@ def test_missing_phase_b_conductor_loop_section_fails():
         temp.cleanup()
 
 
+def test_evidence_schema_identity_and_alias_failures():
+    for original, replacement, expected in (
+        ("- evidence_id:", "- removed_evidence_id:", "evidence_id"),
+        ("- repository_identity:", "- Repository:", "repository_identity"),
+        ("- evidence_producer:", "- removed_producer:", "evidence_producer"),
+        ("- evidence_timestamp:", "- removed_timestamp:", "evidence_timestamp"),
+    ):
+        temp, repo_root = make_repo_copy()
+        try:
+            path = repo_root / "skills/overseer/OUTPUT_FORMATS.md"
+            path.write_text(path.read_text(encoding="utf-8").replace(original, replacement), encoding="utf-8")
+            result = run_validator(repo_root)
+            assert_true(f"evidence schema rejects {replacement}", result.returncode == 1 and expected in result.stdout)
+        finally:
+            temp.cleanup()
+
+
+def test_record_schema_exactly_once_and_transition_identity_failures():
+    cases = (
+        ("- transition_id:", "- removed_transition_id:", "transition_id"),
+        ("- decision_producer:", "- removed_decision_producer:", "decision_producer"),
+        ("- decision_timestamp:", "- removed_decision_timestamp:", "decision_timestamp"),
+        ("- transition_id:", "- transition_id:\n- transition_id:", "exactly once"),
+    )
+    for original, replacement, expected in cases:
+        temp, repo_root = make_repo_copy()
+        try:
+            path = repo_root / "skills/arbiter/OUTPUT_FORMATS.md"
+            path.write_text(path.read_text(encoding="utf-8").replace(original, replacement), encoding="utf-8")
+            result = run_validator(repo_root)
+            assert_true(f"transition schema rejects {replacement}", result.returncode == 1 and expected in result.stdout)
+        finally:
+            temp.cleanup()
+
+
+def test_capacity_schema_cannot_use_checkpoint_alias():
+    temp, repo_root = make_repo_copy()
+    try:
+        path = repo_root / "skills/arbiter/OUTPUT_FORMATS.md"
+        path.write_text(
+            path.read_text(encoding="utf-8").replace("- current_incomplete_unit:", "- next_eligible_unit:"),
+            encoding="utf-8",
+        )
+        result = run_validator(repo_root)
+        assert_true(
+            "capacity schema rejects checkpoint alias",
+            result.returncode == 1 and "current_incomplete_unit" in result.stdout and "next_eligible_unit" in result.stdout,
+        )
+    finally:
+        temp.cleanup()
+
+
+def test_stale_phase_b_status_phrases_fail():
+    phrases = (
+        "Phase B is not started",
+        "Phase B is not authorized",
+        "Phase B is not implemented",
+        "Only Phase A is authorized",
+        "Instruction-level Phase B behavior is not implemented",
+    )
+    for phrase in phrases:
+        temp, repo_root = make_repo_copy()
+        try:
+            path = repo_root / "docs/governance/GOVERNANCE_REVIEW_FLOW.md"
+            path.write_text(path.read_text(encoding="utf-8") + f"\n{phrase}.\n", encoding="utf-8")
+            result = run_validator(repo_root)
+            assert_true(f"stale status rejected: {phrase}", result.returncode == 1 and phrase.casefold() in result.stdout.casefold())
+        finally:
+            temp.cleanup()
+
+
+def test_qualified_phase_a_history_is_allowed():
+    temp, repo_root = make_repo_copy()
+    try:
+        path = repo_root / "docs/governance/GOVERNANCE_REVIEW_FLOW.md"
+        historical = (
+            "\nAt Phase A contract-design time, Phase B is not implemented. "
+            "This is historical Phase A context.\n"
+        )
+        path.write_text(path.read_text(encoding="utf-8") + historical, encoding="utf-8")
+        result = run_validator(repo_root)
+        assert_true("qualified Phase A history allowed", result.returncode == 0)
+    finally:
+        temp.cleanup()
+
+
 def main():
     test_passes_real_repo()
     test_missing_protocol_fails()
@@ -313,6 +402,11 @@ def main():
     test_protocol_missing_delegated_section_fails()
     test_unknown_transition_not_auto_continue()
     test_missing_phase_b_conductor_loop_section_fails()
+    test_evidence_schema_identity_and_alias_failures()
+    test_record_schema_exactly_once_and_transition_identity_failures()
+    test_capacity_schema_cannot_use_checkpoint_alias()
+    test_stale_phase_b_status_phrases_fail()
+    test_qualified_phase_a_history_is_allowed()
     print("Governance protocol consistency tests passed.")
     return 0
 

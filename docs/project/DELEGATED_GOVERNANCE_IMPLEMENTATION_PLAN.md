@@ -1,8 +1,10 @@
 # Delegated Governance Implementation Plan
 
 This document records the multi-phase implementation plan for Orchestra's
-delegated autonomous governance. Only Phase A is authorized in the current
-implementation batch.
+delegated autonomous governance. Phase A contracts are canonical. Phase B
+instruction-level behavior is implemented on the feature branch, under
+correction in draft PR #190, and is not canonical until merged.
+Phase A contracts are merged; Phase C and Phase D are not started. Phase B has not been merged, released, or deployed.
 
 ---
 
@@ -79,9 +81,9 @@ request, merge, tag, release, deployment, or production action authorized.
 
 ---
 
-## Phase B - Instruction-Level Autonomous Loop (Implemented & Locally Validated)
+## Phase B - Instruction-Level Autonomous Loop (Feature Branch, Draft PR #190)
 
-**Status:** Phase B instruction-level behavior implemented, committed (`777eca8`), and locally validated; remote and host reliability remain pending until separately authorized.
+**Status:** Phase B instruction-level behavior is implemented on the feature branch, under correction in draft PR #190, and is not canonical until merged. Remote and host reliability remain pending until separately authorized.
 
 
 **Planned scope:**

@@ -13,7 +13,7 @@ Act as Legal, Compliance, Privacy, IP, Copyright, Licensing, and Security Govern
 
 - **Role**: legal, compliance, privacy-obligation, IP, licensing governance
 - **Avoid When**: business alignment, scope, requirements, or SDLC review
-- **Shared Protocol**: `../../docs/governance/GOVERNANCE_DECISION_PROTOCOL.md`
+- **Shared Protocol**: [governance protocol](REFERENCE_CONTEXT.md#governance-decision-protocol)
 - **Output Formats**: `OUTPUT_FORMATS.md`
 
 ## Purpose
@@ -96,7 +96,7 @@ In a delegated phase governed by a `DelegatedExecutionEnvelope`:
 
 ## Canonical References
 
-- Shared decision model, shared gate contract, and shared ownership matrix: `../../docs/governance/GOVERNANCE_DECISION_PROTOCOL.md`
+- Shared decision model, gate contract, and ownership matrix: see the governance protocol above.
 - Role-specific compact and expanded output templates: `OUTPUT_FORMATS.md`
 
 ## Token Efficiency

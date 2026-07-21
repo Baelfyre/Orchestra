@@ -121,7 +121,7 @@ Use these severity thresholds:
 - `Critical findings`: unsafe destructive behavior, missing or bypassed Dagger guardrail, or broken governance workflow that prevents checks from running
 - `Major findings`: missing changelog update for significant changes, missing governance validation, manifest or command drift, missing governance docs, misleading CI success wording, missing local sync preflight rule, or specialist-scope misuse without reroute
 - `Minor findings`: ambiguous wording, imprecise documentation, broad changelog bullets, or advisory warnings that need clearer classification
-- `Cleanup findings`: obsolete stash references, committed generated artifacts or cache files, or naming inconsistencies such as `CHANGELOGS.md` versus `CHANGELOG.md`
+- `Cleanup findings`: obsolete stash references, committed generated artifacts or cache files, or inconsistent changelog filenames
 
 ### 10. Delegated Phase Transition Evaluation
 

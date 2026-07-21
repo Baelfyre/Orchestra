@@ -19,12 +19,12 @@ Classify intent, select mode, load minimum safe context, route work. Conductor d
 Use Conductor for orientation, cross-domain routing, multi-step orchestration, or governance. Bypass when single specialist owns task and no ambiguity exists.
 
 ## Canonical Routing Algorithm
-1. Classify intent and mode (`EXECUTION_MODES_POLICY.md`).
-2. Consult `SKILL_INDEX.md`. Route directly when single owner is clear.
-3. Consult `ROUTING_MAP.md` only for ambiguity, cross-domain work, or ordered dependencies.
-4. Load governance context only when triggers apply.
-5. Pause on unresolved governance or continuity gates.
-6. Assemble minimum packet (`MINIMAL_PROMPT_FORMAT.md`).
+1. Classify via the [mode policy](../../docs/routing/EXECUTION_MODES_POLICY.md).
+2. Route via the [skill index](../../SKILL_INDEX.md); go direct for one owner.
+3. Use the [routing map](../../ROUTING_MAP.md) for ambiguity, cross-domain work, or dependencies.
+4. Load governance only on triggers.
+5. Pause on unresolved gates.
+6. Build via the [packet format](../../docs/routing/MINIMAL_PROMPT_FORMAT.md).
 
 ## Stop Conditions
 - Governance status: `NOT_REQUIRED`, `CONDITIONAL`, `REQUIRED`, or `BLOCKED_PENDING_AUTHORIZATION`.
@@ -53,13 +53,13 @@ In delegated phase under `DelegatedExecutionEnvelope`:
 - Route to `clockwork` before implementation when the frontend design affects API shape, data flow, service boundaries, backend validation, auth boundary placement, or architectural layering.
 - Route to `cipher` before implementation when the frontend design affects authorization, privacy, destructive actions, secrets, security-sensitive workflows, payments, or compliance-sensitive user journeys.
 - Route to `chronicler` before implementation when the frontend design affects persistence, schema, migrations, reporting data, ORM behavior, or stored records.
-- Keep ambiguous access/authority routing with Conductor until ownership split is explicit. UI changes use `ROUTING_MAP.md`.
+- Keep ambiguous access/authority routing with Conductor until ownership is explicit. UI changes follow the routing map above.
 
 ## Scope Enforcement
 Conductor must classify `SPECIALIST_REROUTE_REQUIRED` and must not allow a specialist to execute outside its documented scope.
 
 ## Output Contract
-Use `MINIMAL_PROMPT_FORMAT.md`:
+Use the minimum packet format above:
 ```text
 Task Type: [Domain]
 Primary Skill: [Skill]
