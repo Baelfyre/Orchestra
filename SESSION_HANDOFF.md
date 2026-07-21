@@ -10,7 +10,8 @@
 - **Approved Base / origin main at Phase B baseline:** `fd19363e257945b9a392e043db45a0fbe284fb9f`
 - **Current Public Release:** `v1.1.2`
 - **Completed Phase B Units:** B0 through B7 completed.
-- **Phase B Status:** Instruction-level behavior implemented and locally validated; remote and host reliability remain pending until separately authorized.
+- **Phase B Implementation Commit:** `777eca8a1dc3a2a6b281f6ebcf16c7cfcde9b4d8` (`777eca8`)
+- **Phase B Status:** Instruction-level behavior implemented, committed (`777eca8`), and locally validated; remote and host reliability remain pending until separately authorized.
 - **Startup Verification Rule:** Resolve current branch tips at session start using:
   ```powershell
   git branch --show-current

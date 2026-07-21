@@ -10,7 +10,11 @@
 - **Release Status:** Published July 14, 2026
 - **Current Task:** Phase B Instruction-Level Delegated Autonomous Loop implementation and local validation
 - **Phase A:** Merged / Canonical (`docs/governance/DELEGATED_EXECUTION_POLICY.md`)
-- **Phase B:** Implemented and locally validated; remote and host reliability remain pending until separately authorized
+- **Phase B:** Implemented, locally validated, and committed (`777eca8`); remote and host reliability remain pending until separately authorized
+- **Implementation Commit:** `777eca8a1dc3a2a6b281f6ebcf16c7cfcde9b4d8` (`777eca8`)
+- **Commit Performed:** Yes (`777eca8`)
+- **Push Performed:** No
+- **Pull Request Performed:** No
 - **Phase C:** Not started
 - **Phase D:** Not started; requires separate authorization
 - **Phase E:** Not started; commit, push, merge, release, deployment separately governed

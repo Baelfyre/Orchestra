@@ -9,7 +9,9 @@ Implement and locally validate Phase B instruction-level delegated autonomous go
 Phase B activates the Phase A canonical contracts across Conductor, Arbiter, Steward, Governor, Overseer, execution modes policy, routing map, skill index, and ecosystem guidelines. Conductor can now consume Arbiter transition dispositions (`AUTO_CONTINUE`, `AUTO_REMEDIATE_AND_REVALIDATE`, `WAIT_FOR_EVIDENCE`, `WAIT_FOR_CAPACITY`, `ESCALATE_HUMAN`, `STOP`) and manage internal unit transitions automatically within authorized phase envelopes.
 
 **Phase Implementation Status:**
-Phase B instruction-level behavior implemented and locally validated; remote and host reliability remain pending until separately authorized.
+Phase B instruction-level behavior implemented, committed (`777eca8`), and locally validated; remote and host reliability remain pending until separately authorized.
+
+**Implementation Commit:** `777eca8a1dc3a2a6b281f6ebcf16c7cfcde9b4d8` (`777eca8`)
 
 **Key changes implemented:**
 - `skills/the-steward/OUTPUT_FORMATS.md`: Added `Delegated Governance Review`.
