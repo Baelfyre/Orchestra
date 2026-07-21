@@ -8,20 +8,24 @@
 - **Active Branch:** `feat/delegated-autonomous-governance-phase-b`
 - **Current Public Release:** `v1.1.2`
 - **Release Status:** Published July 14, 2026
-- **Current Task:** Phase B PR #190 decision-log correction state synchronization for immutable-head mark-ready review
+- **Current Task:** Phase B PR #190 mark-ready continuity synchronization for immutable merge-readiness review
 - **Phase A:** Merged / Canonical (`docs/governance/DELEGATED_EXECUTION_POLICY.md`)
-- **Phase B:** Instruction-level behavior implemented; prior four Major findings remain resolved; Minor decision-log accuracy finding corrected; draft PR #190 remains open and not merged
+- **Phase B:** Instruction-level behavior implemented; all prior findings resolved; PR #190 remains open, ready for review, and not merged
 - **Implementation Commit:** `777eca8a1dc3a2a6b281f6ebcf16c7cfcde9b4d8` (`777eca8`)
 - **State-Sync Commit:** `702ef005946cab69725267d0e4e89abd0c67ae99` (`702ef00`)
 - **Codex Mirror Correction Commit:** `44350ece2989b5dcae9acae9c5658e3cefcb75d5` (`44350ec`)
 - **Maintainer Correction Commit:** `b2d54461c8b37e4e1bc5d3d3df00da3cf2cb9806` (`b2d5446`)
 - **Decision-Log Correction Commit:** `017b79a2cd0893990721a3c8391ca4e743666cac` (`017b79a`)
 - **Latest Validated Content-Correction Head:** `017b79a2cd0893990721a3c8391ca4e743666cac`
+- **Prior Immutable State-Sync Head:** `c3ce31cc37b1f70bcb6e0aa4b3786cdb6c420b0f` (`c3ce31c`)
+- **Latest Validated Mark-Ready Authorization Head:** `c3ce31cc37b1f70bcb6e0aa4b3786cdb6c420b0f`
 - **Decision-Log Correction:** Unsupported Phase B file claims removed; delegated-phase-trace fixture recorded accurately.
 - **Commit Performed:** Yes (`777eca8`, `702ef00`, `44350ec`, `b2d5446`, `017b79a`)
 - **Push Performed:** Yes (`origin/feat/delegated-autonomous-governance-phase-b`)
-- **Pull Request Performed:** Yes (Draft PR #190 open)
-- **CI Status:** All required GitHub Actions checks passed on decision-log correction head `017b79a` (9/9 PASS)
+- **Pull Request Status:** PR #190 open and ready for review (`draft: false`); mark-ready action performed after immutable-head authorization.
+- **Reviewers Requested:** No; no reviewers requested by this workflow or present after the transition.
+- **CI Before Mark-Ready:** All required checks passed on authorization head `c3ce31c` (9/9 PASS).
+- **CI After Mark-Ready Metadata Transition:** PASS; no new runs were created and existing head checks remain 9/9 PASS.
 - **Phase C:** Not started
 - **Phase D:** Not started; requires separate authorization
 - **Phase E:** Not started; merge, release, and deployment not performed
@@ -33,9 +37,9 @@
   - Codex export validation: PASS (`adapters/codex/validate_codex_export.py`)
   - Structure, Manifest, IDE packaging, Governance check, Stale references: PASS
   - Runtime tests & coverage: PASS (194 tests passed; 97.72% coverage)
-  - GitHub Actions CI: PASS (9/9 checks pass on decision-log correction head `017b79a` for PR #190)
-- **Maintainer Findings:** Prior four Major findings remain resolved; Minor decision-log accuracy issue corrected; none pending before the next immutable review.
+  - GitHub Actions CI: PASS (9/9 checks pass on mark-ready authorization head `c3ce31c` for PR #190)
+- **Maintainer Findings:** All prior findings resolved; none pending before the next immutable review.
 - **Publication / Action Flags:** Standing external-action flags set to false (no merge, tag, release, deploy, or destructive operations executed).
-- **Next Gate:** Fresh immutable-head mark-ready review of draft PR #190 after final state-sync CI.
+- **Next Gate:** Fresh immutable-head merge-readiness review after final state-sync CI.
 
 This file records current verified state only. Historical decisions remain in `DECISION_LOG.md` and `CHANGELOG.md`.

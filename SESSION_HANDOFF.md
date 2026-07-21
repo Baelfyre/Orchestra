@@ -1,7 +1,7 @@
 # Session Handoff
 
 - **Current Stable State:** `v1.1.2` published; Phase A canonical delegated governance contracts merged.
-- **Current Task:** Phase B PR #190 decision-log correction state synchronization for immutable-head mark-ready review.
+- **Current Task:** Phase B PR #190 mark-ready continuity synchronization for immutable merge-readiness review.
 - **Current Repo:** `C:\conductor`
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
@@ -16,10 +16,13 @@
 - **Maintainer Correction Commit:** `b2d54461c8b37e4e1bc5d3d3df00da3cf2cb9806` (`b2d5446`)
 - **Decision-Log Correction Commit:** `017b79a2cd0893990721a3c8391ca4e743666cac` (`017b79a`)
 - **Latest Validated Content-Correction Head:** `017b79a2cd0893990721a3c8391ca4e743666cac`
+- **Prior Immutable State-Sync Head:** `c3ce31cc37b1f70bcb6e0aa4b3786cdb6c420b0f` (`c3ce31c`)
+- **Latest Validated Mark-Ready Authorization Head:** `c3ce31cc37b1f70bcb6e0aa4b3786cdb6c420b0f`
 - **Decision-Log Correction:** Unsupported Phase B file claims removed; delegated-phase-trace fixture recorded accurately.
 - **Remote Feature Branch:** `origin/feat/delegated-autonomous-governance-phase-b`
-- **Pull Request Status:** Draft PR #190 open (`https://github.com/Baelfyre/Orchestra/pull/190`)
-- **Phase B Status:** Instruction-level behavior implemented; prior four Major findings remain resolved; Minor decision-log accuracy issue corrected in `017b79a`; no findings remain pending before the next immutable review; draft PR #190 remains open and not merged; 9/9 GitHub Actions checks pass on the content-correction head.
+- **Pull Request Status:** PR #190 open and ready for review (`draft: false`; `https://github.com/Baelfyre/Orchestra/pull/190`); mark-ready action performed after immutable-head authorization.
+- **Reviewers Requested:** No; no reviewers requested by this workflow or present after the transition.
+- **Phase B Status:** Instruction-level behavior implemented; all prior findings resolved; PR #190 remains open, ready for review, and not merged; 9/9 GitHub Actions checks pass on the mark-ready authorization head.
 - **Later Phases:** Phase C and Phase D have not started.
 - **Startup Verification Rule:** Resolve current branch tips at session start using:
   ```powershell
@@ -36,7 +39,8 @@
   - Codex export validation: PASS (`adapters/codex/validate_codex_export.py`)
   - Structure, Manifest, IDE packaging, Governance check, Stale references: PASS
   - Runtime tests & coverage: PASS (194 tests passed; 97.72% coverage)
-  - GitHub Actions CI: PASS (9/9 checks pass on decision-log correction head `017b79a` for PR #190)
+  - CI before mark-ready: PASS (9/9 checks on authorization head `c3ce31c`).
+  - CI after mark-ready metadata transition: PASS (no new runs created; existing head checks remain 9/9 PASS).
 - **Standing Action Flags:** All false (no merge, tag, release, deploy, or destructive operations performed).
 - **Release / Deployment:** Not performed.
-- **Next Step:** Fresh immutable-head mark-ready review of draft PR #190 after final state-sync CI.
+- **Next Step:** Fresh immutable-head merge-readiness review after final state-sync CI.
