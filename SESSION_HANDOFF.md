@@ -1,7 +1,7 @@
 # Session Handoff
 
 - **Current Stable State:** `v1.1.2` published; Phase A canonical delegated governance contracts merged.
-- **Current Task:** Phase B PR #190 maintainer-correction state synchronization for immutable-head review.
+- **Current Task:** Phase B PR #190 decision-log correction state synchronization for immutable-head mark-ready review.
 - **Current Repo:** `C:\conductor`
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
@@ -14,10 +14,12 @@
 - **Phase B State-Sync Commit:** `702ef005946cab69725267d0e4e89abd0c67ae99` (`702ef00`)
 - **Codex Mirror Correction Commit:** `44350ece2989b5dcae9acae9c5658e3cefcb75d5` (`44350ec`)
 - **Maintainer Correction Commit:** `b2d54461c8b37e4e1bc5d3d3df00da3cf2cb9806` (`b2d5446`)
-- **Latest Validated Remote Feature Head:** `b2d54461c8b37e4e1bc5d3d3df00da3cf2cb9806`
+- **Decision-Log Correction Commit:** `017b79a2cd0893990721a3c8391ca4e743666cac` (`017b79a`)
+- **Latest Validated Content-Correction Head:** `017b79a2cd0893990721a3c8391ca4e743666cac`
+- **Decision-Log Correction:** Unsupported Phase B file claims removed; delegated-phase-trace fixture recorded accurately.
 - **Remote Feature Branch:** `origin/feat/delegated-autonomous-governance-phase-b`
 - **Pull Request Status:** Draft PR #190 open (`https://github.com/Baelfyre/Orchestra/pull/190`)
-- **Phase B Status:** Instruction-level behavior implemented; four major and one minor maintainer findings resolved in `b2d5446`; draft PR #190 remains open and not merged; 9/9 GitHub Actions checks pass on the correction head.
+- **Phase B Status:** Instruction-level behavior implemented; prior four Major findings remain resolved; Minor decision-log accuracy issue corrected in `017b79a`; no findings remain pending before the next immutable review; draft PR #190 remains open and not merged; 9/9 GitHub Actions checks pass on the content-correction head.
 - **Later Phases:** Phase C and Phase D have not started.
 - **Startup Verification Rule:** Resolve current branch tips at session start using:
   ```powershell
@@ -34,7 +36,7 @@
   - Codex export validation: PASS (`adapters/codex/validate_codex_export.py`)
   - Structure, Manifest, IDE packaging, Governance check, Stale references: PASS
   - Runtime tests & coverage: PASS (194 tests passed; 97.72% coverage)
-  - GitHub Actions CI: PASS (9/9 checks pass on correction head `b2d5446` for PR #190)
+  - GitHub Actions CI: PASS (9/9 checks pass on decision-log correction head `017b79a` for PR #190)
 - **Standing Action Flags:** All false (no merge, tag, release, deploy, or destructive operations performed).
 - **Release / Deployment:** Not performed.
-- **Next Step:** Fresh immutable-head maintainer review of draft PR #190 after final state-sync CI.
+- **Next Step:** Fresh immutable-head mark-ready review of draft PR #190 after final state-sync CI.
