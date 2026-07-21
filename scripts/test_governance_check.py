@@ -323,13 +323,18 @@ def test_isolated_github_head_ref_and_ref_name_rejection():
         gc.run_git(str(repo_root), "commit", "-m", "initial")
         gc.run_git(str(repo_root), "checkout", "--detach", "HEAD")
 
-        initial_known = gc.get_known_git_branches(str(repo_root))
         feature_branch = "docs/delegated-autonomous-governance-phase-a"
-        assert_equal("feature branch absent from clean git refs", feature_branch in initial_known, False)
 
         old_gh_head = os.environ.get("GITHUB_HEAD_REF")
         old_gh_ref = os.environ.get("GITHUB_REF_NAME")
+
         try:
+            os.environ.pop("GITHUB_HEAD_REF", None)
+            os.environ.pop("GITHUB_REF_NAME", None)
+
+            initial_known = gc.get_known_git_branches(str(repo_root))
+            assert_equal("feature branch absent from clean git refs", feature_branch in initial_known, False)
+
             os.environ["GITHUB_HEAD_REF"] = feature_branch
             os.environ["GITHUB_REF_NAME"] = "189/merge"
 
