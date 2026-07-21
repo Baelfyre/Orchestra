@@ -28,8 +28,10 @@ Phase B instruction-level behavior implemented, committed (`777eca8`), and local
 - `SKILL_INDEX.md`: Added `Progression Modes` section and updated overseer `output_formats`.
 - `AGENTS.md`: Added Delegated Phase Progression Rule #8.
 - `plugin.json`: Added `Delegated Unit Evidence` to overseer `output_formats`.
-- `tests/behavior/router-contract-fixtures.json` and `tests/behavior/governance-conformance-fixtures.json`: Added positive and negative behavior fixtures.
-- `tests/behavior/test_router_contracts.py`, `tests/behavior/test_governance_protocol_consistency.py`, `scripts/validate_governance_protocol_consistency.py`, `scripts/validate_routing_contract.py`, and `tests/behavior/evaluate_governance.py`: Updated validators to enforce Phase B contracts.
+- `tests/behavior/governance-conformance-fixtures.json`: Added four delegated-governance conformance fixtures.
+- `tests/behavior/delegated-phase-trace-fixtures.json`: Added the contract-driven three-unit delegated phase trace, derived phase gate, canonical external-action map, and required negative mutations.
+- `tests/behavior/test_router_contracts.py`, `tests/behavior/test_governance_protocol_consistency.py`, and `scripts/validate_governance_protocol_consistency.py`: Updated behavior and governance validation for the delegated trace, exact record schemas, reference integrity, and Phase B status consistency.
+- `adapters/codex/export-codex-skills.ps1` and `adapters/codex/validate_codex_export.py`: Added package-local reference context generation and operational Markdown/JSON target validation for tracked and arbitrary-depth Codex exports.
 
 ## Date: 2026-07-22
 
