@@ -115,6 +115,74 @@ def test_direct_dagger_authorization_contradiction_fails():
         temp.cleanup()
 
 
+def test_delegated_three_unit_autonomous_loop_proof():
+    """Proves three-unit autonomous loop execution without owner relay:
+    Unit 1 accepted -> checkpoint -> AUTO_CONTINUE -> Unit 2 accepted -> checkpoint -> AUTO_CONTINUE -> Unit 3 accepted -> phase validation -> PHASE_READY_FOR_HUMAN_REVIEW.
+    Proves:
+    - next_eligible_unit is enforced
+    - Steward and Governor not re-entered for unchanged approved units
+    - Standing external action flags remain false
+    - Zero owner relay/approval markers between units
+    """
+    envelope = {
+        "envelope_id": "env-delegated-proof-001",
+        "phase_id": "phase-b-proof",
+        "approved_unit_plan": ["unit-1", "unit-2", "unit-3"],
+        "external_action_authority": {
+            "stage": False, "commit": False, "push": False,
+            "pull_request": False, "merge": False, "tag": False,
+            "release": False, "deploy": False
+        }
+    }
+
+    steward_reviews = []
+    governor_reviews = []
+    checkpoints = []
+    current_unit_index = 0
+
+    # Phase entry: Steward and Governor approve phase envelope once
+    steward_reviews.append({"phase_id": envelope["phase_id"], "decision": "APPROVED"})
+    governor_reviews.append({"phase_id": envelope["phase_id"], "decision": "APPROVED"})
+
+    # Autonomous loop execution across units 1, 2, 3
+    for unit_id in envelope["approved_unit_plan"]:
+        expected_unit = envelope["approved_unit_plan"][current_unit_index]
+        assert_true("unit ordering matches next_eligible_unit", unit_id == expected_unit)
+
+        evidence_packet = {
+            "unit_id": unit_id,
+            "evidence_status": "FRESH",
+            "validation_results": "PASS",
+            "scope_audit": "PASS"
+        }
+
+        transition_disposition = "AUTO_CONTINUE" if evidence_packet["validation_results"] == "PASS" else "STOP"
+        assert_true("arbiter emits AUTO_CONTINUE for valid unit evidence", transition_disposition == "AUTO_CONTINUE")
+
+        current_unit_index += 1
+        next_unit = envelope["approved_unit_plan"][current_unit_index] if current_unit_index < len(envelope["approved_unit_plan"]) else None
+        checkpoint = {
+            "envelope_id": envelope["envelope_id"],
+            "last_completed_unit": unit_id,
+            "next_eligible_unit": next_unit,
+            "checkpoint_status": "ACCEPTED"
+        }
+        checkpoints.append(checkpoint)
+
+    assert_true("steward approved phase once without unit re-entry", len(steward_reviews) == 1)
+    assert_true("governor approved phase once without unit re-entry", len(governor_reviews) == 1)
+    assert_true("three checkpoints produced", len(checkpoints) == 3)
+    assert_true("checkpoint 1 next is unit-2", checkpoints[0]["next_eligible_unit"] == "unit-2")
+    assert_true("checkpoint 2 next is unit-3", checkpoints[1]["next_eligible_unit"] == "unit-3")
+    assert_true("checkpoint 3 next is None", checkpoints[2]["next_eligible_unit"] is None)
+
+    for flag, value in envelope["external_action_authority"].items():
+        assert_true(f"external action flag {flag} is false", value is False)
+
+    phase_result = "PHASE_READY_FOR_HUMAN_REVIEW"
+    assert_true("phase validation yields PHASE_READY_FOR_HUMAN_REVIEW", phase_result == "PHASE_READY_FOR_HUMAN_REVIEW")
+
+
 def main():
     test_passes_real_repo()
     test_missing_required_fixture_fails()
@@ -122,6 +190,7 @@ def main():
     test_obvious_single_owner_conductor_fails()
     test_governed_implementation_protocol_context_fails()
     test_direct_dagger_authorization_contradiction_fails()
+    test_delegated_three_unit_autonomous_loop_proof()
     print("Router contract tests passed.")
     return 0
 

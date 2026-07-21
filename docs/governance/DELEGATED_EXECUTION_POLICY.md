@@ -12,14 +12,11 @@ references this canonical policy.
 Load this document only when a delegated phase envelope must be issued,
 evaluated, or enforced.
 
-## Phase A Status
+## Phase Implementation Status
 
-Phase A defines the canonical contracts required for delegated autonomous
-governance. It does not activate instruction-level autonomous behavior across
-skills and adapters. Phase B instruction-level behavior and Phase D optional
-runtime enforcement are not yet implemented.
+Phase A defines the canonical contracts for delegated autonomous governance.
+Phase B instruction-level behavior is implemented and locally validated; remote and host reliability remain pending until separately authorized.
 
-Do not claim that continuous automatic progression is already active.
 
 ---
 

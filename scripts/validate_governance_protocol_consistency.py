@@ -88,15 +88,14 @@ REQUIRED_LAYER_DELEGATED_SECTION = (
     "## Phase-Level Delegated Governance",
     "Phase A",
     "Phase B",
-    "Not yet implemented",
-    "Do not claim that continuous automatic progression is already active.",
+    "Phase B instruction-level behavior implemented and locally validated",
 )
 REQUIRED_FLOW_DELEGATED_SECTION = (
-    "Target Delegated Execution Flow",
-    "Not Yet Active",
-    "Phase B",
+    "Delegated Execution Flow",
+    "Phase B Implemented & Locally Validated",
     "DELEGATED_EXECUTION_POLICY.md",
 )
+
 
 
 def parse_args(argv=None):
@@ -212,12 +211,9 @@ def main(argv=None):
         )
         ensure_contains(
             errors, DELEGATED_POLICY_FILE, delegated_policy,
-            "Phase A defines the canonical contracts required"
+            "Phase B instruction-level behavior is implemented and locally validated"
         )
-        ensure_contains(
-            errors, DELEGATED_POLICY_FILE, delegated_policy,
-            "Phase B instruction-level behavior"
-        )
+
         ensure_absent(
             errors, DELEGATED_POLICY_FILE, delegated_policy,
             "Continuous automatic progression is now active"
@@ -231,6 +227,18 @@ def main(argv=None):
 
     for section in REQUIRED_FLOW_DELEGATED_SECTION:
         ensure_contains(errors, "GOVERNANCE_REVIEW_FLOW.md", flow, section)
+
+    # Phase B delegated role checks
+    arbiter_skill = read_text(repo_root / "skills" / "arbiter" / "SKILL.md")
+    conductor_skill = read_text(repo_root / "skills" / "conductor" / "SKILL.md")
+    overseer_skill = read_text(repo_root / "skills" / "overseer" / "SKILL.md")
+
+    ensure_contains(errors, "skills/the-steward/SKILL.md", steward, "Delegated Phase Behavior")
+    ensure_contains(errors, "skills/the-governor/SKILL.md", governor, "Delegated Phase Behavior")
+    ensure_contains(errors, "skills/arbiter/SKILL.md", arbiter_skill, "Delegated Phase Transition Evaluation")
+    ensure_contains(errors, "skills/conductor/SKILL.md", conductor_skill, "Delegated Phase Autonomous Loop")
+    ensure_contains(errors, "skills/overseer/SKILL.md", overseer_skill, "Delegated Unit Evidence Role")
+
 
     if errors:
         for error in errors:

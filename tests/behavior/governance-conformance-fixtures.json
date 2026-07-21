@@ -124,5 +124,29 @@
     "file": "ROUTING_MAP.md",
     "scenario": "Conductor preserves layered UI engineering and validation ownership",
     "pattern": "UI Engineering and Validation Ownership.*Cloak performs static UI risk audit.*Clockwork owns engineering correction.*Overseer validates technical and rendered evidence"
+  },
+  {
+    "skill": "conductor",
+    "scenario": "Conductor consumes Arbiter delegated phase transition dispositions",
+    "pattern": "consume Arbiter `TransitionDecisionRecord` dispositions",
+    "type": "Delegated Governance"
+  },
+  {
+    "skill": "arbiter",
+    "scenario": "Arbiter applies strict transition precedence in delegated phase evaluation",
+    "pattern": "strict transition precedence",
+    "type": "Delegated Governance"
+  },
+  {
+    "skill": "the-steward",
+    "scenario": "Steward limits re-entry in delegated phase mode",
+    "pattern": "re-enters only when",
+    "type": "Delegated Governance"
+  },
+  {
+    "skill": "the-governor",
+    "scenario": "Governor removes domain-membership-only escalation",
+    "pattern": "domain membership alone does not trigger escalation without material uncertainty",
+    "type": "Delegated Governance"
   }
 ]

@@ -79,9 +79,10 @@ request, merge, tag, release, deployment, or production action authorized.
 
 ---
 
-## Phase B - Instruction-Level Autonomous Loop (Not Yet Authorized)
+## Phase B - Instruction-Level Autonomous Loop (Implemented & Locally Validated)
 
-**Status:** Not started. Requires separate human authorization.
+**Status:** Phase B instruction-level behavior implemented and locally validated; remote and host reliability remain pending until separately authorized.
+
 
 **Planned scope:**
 

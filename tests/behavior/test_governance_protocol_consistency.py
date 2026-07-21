@@ -34,6 +34,9 @@ def make_repo_copy():
         Path("skills/the-steward/OUTPUT_FORMATS.md"),
         Path("skills/the-governor/SKILL.md"),
         Path("skills/the-governor/OUTPUT_FORMATS.md"),
+        Path("skills/arbiter/SKILL.md"),
+        Path("skills/conductor/SKILL.md"),
+        Path("skills/overseer/SKILL.md"),
     ):
         target = repo_root / relative
         target.parent.mkdir(parents=True, exist_ok=True)
@@ -280,6 +283,17 @@ def test_unknown_transition_not_auto_continue():
         temp.cleanup()
 
 
+def test_missing_phase_b_conductor_loop_section_fails():
+    temp, repo_root = make_repo_copy()
+    try:
+        path = repo_root / "skills/conductor/SKILL.md"
+        path.write_text(path.read_text(encoding="utf-8").replace("Delegated Phase Autonomous Loop", "REMOVED_SECTION"), encoding="utf-8")
+        result = run_validator(repo_root)
+        assert_true("missing phase b conductor loop fail", result.returncode == 1 and "Delegated Phase Autonomous Loop" in result.stdout)
+    finally:
+        temp.cleanup()
+
+
 def main():
     test_passes_real_repo()
     test_missing_protocol_fails()
@@ -298,6 +312,7 @@ def main():
     test_false_runtime_active_claim_fails()
     test_protocol_missing_delegated_section_fails()
     test_unknown_transition_not_auto_continue()
+    test_missing_phase_b_conductor_loop_section_fails()
     print("Governance protocol consistency tests passed.")
     return 0
 

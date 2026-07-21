@@ -64,3 +64,32 @@ Reason:
 
 ## Final Recommendation
 ```
+
+## Delegated Unit Evidence
+
+Use this format when producing or verifying focused validation evidence for a delegated internal unit.
+
+```markdown
+## Execution Evidence Packet
+- Envelope ID:
+- Phase ID:
+- Unit ID:
+- Repository:
+- Branch:
+- Approved Base SHA:
+- Current Commit SHA:
+- Working Tree Fingerprint:
+- Changed Paths:
+- Implementation Summary:
+- Validation Commands:
+- Validation Results:
+- Skipped Checks:
+- Known Limitations:
+- Scope Audit Result: PASS | FAIL
+- Protected Repository Result: PASS | FAIL
+- Security and Secret Result: PASS | FAIL
+- Design Contradiction State: NONE | PENDING
+- Evidence Producer:
+- Evidence Timestamp:
+- Freshness Reference:
+```

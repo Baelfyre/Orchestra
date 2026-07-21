@@ -2,7 +2,28 @@
 
 This changelog tracks the repository history using git tags, merge history, and the prior documented milestone log that lived under `docs/meta/CHANGELOG.md`.
 
+## Unreleased - Phase B Instruction-Level Delegated Autonomous Loop
+
+Phase B instruction-level behavior implemented and locally validated; remote and host reliability remain pending until separately authorized.
+
+### Added
+- Added `Delegated Governance Review` output format to Steward and Governor roles (`skills/the-steward/OUTPUT_FORMATS.md`, `skills/the-governor/OUTPUT_FORMATS.md`).
+- Added `Transition Decision Record` and `Checkpoint / Capacity Handoff` output formats to Arbiter (`skills/arbiter/OUTPUT_FORMATS.md`).
+- Added `Delegated Unit Evidence` output format to Overseer (`skills/overseer/OUTPUT_FORMATS.md`, `skills/overseer/SKILL.md`, `plugin.json`, `SKILL_INDEX.md`).
+- Added `Delegated Phase Autonomous Loop` to Conductor (`skills/conductor/SKILL.md`).
+- Added 6-tier strict precedence transition evaluation to Arbiter (`skills/arbiter/SKILL.md`).
+- Added `Risk Mode vs Progression Mode` section to Execution Modes Policy (`docs/routing/EXECUTION_MODES_POLICY.md`).
+- Added `Delegated Phase Progression Routing` to Routing Map (`ROUTING_MAP.md`).
+- Added `Progression Modes` section to `SKILL_INDEX.md` and Delegated Phase Progression Rule #8 to `AGENTS.md`.
+- Added 23 behavior test scenarios (9 positive, 14 negative) in `tests/behavior/router-contract-fixtures.json` and `tests/behavior/governance-conformance-fixtures.json`.
+
+### Changed
+- Updated Steward (`skills/the-steward/SKILL.md`) with delegated phase behavior (skip re-reviews of unchanged approved units).
+- Updated Governor (`skills/the-governor/SKILL.md`) to eliminate domain-membership-only escalations without material uncertainty.
+- Updated validators (`scripts/validate_governance_protocol_consistency.py`, `scripts/validate_routing_contract.py`, `tests/behavior/test_router_contracts.py`, `tests/behavior/test_governance_protocol_consistency.py`, `tests/behavior/evaluate_governance.py`) to enforce Phase B contracts.
+
 ## Unreleased - Phase A Delegated Autonomous Governance Contract Design
+
 
 Phase A implementation commit: `176da20100dce99e26748c53b9c14e7033c119dd`.
 Initial remote push: Completed to `origin/docs/delegated-autonomous-governance-phase-a`.

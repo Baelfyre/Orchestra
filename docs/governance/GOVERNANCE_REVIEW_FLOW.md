@@ -142,12 +142,12 @@ REQUIRED_ACTIONS: [Provide project type, release target, data collection status]
 ```
 The system does not default to HIGH-risk assumptions for unknown projects.
 
-## Target Delegated Execution Flow (Phase B - Not Yet Active)
+## Delegated Execution Flow (Phase B Implemented & Locally Validated)
 
-The following flow describes the target behavior for delegated autonomous
-governance. It is **not yet active**. Phase A defines the contracts required
-for this flow. Phase B instruction-level behavior (skill and adapter updates)
-is required before this flow operates.
+The following flow describes the behavior for delegated autonomous
+governance. Phase B instruction-level behavior is implemented and locally validated;
+remote and host reliability remain pending until separately authorized.
+
 
 ```
 Phase envelope approved by human
