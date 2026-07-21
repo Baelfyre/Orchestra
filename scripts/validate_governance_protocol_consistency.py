@@ -44,6 +44,60 @@ GOVERNOR_ROLE_FIELDS = (
     "AUDIT_DOCS",
 )
 
+# Phase A: Delegated execution policy checks
+DELEGATED_POLICY_FILE = "docs/governance/DELEGATED_EXECUTION_POLICY.md"
+REQUIRED_DELEGATED_HEADINGS = (
+    "## 2. Authority Principles",
+    "## 3. DelegatedExecutionEnvelope Contract",
+    "## 4. ApprovedUnitPlan Contract",
+    "## 5. ExecutionEvidencePacket Contract",
+    "## 6. TransitionDecisionRecord Contract",
+    "## 7. Transition Precedence",
+    "## 8. Governance-to-Disposition Compatibility Map",
+    "## 9. AutomaticRemediationPolicy",
+    "## 10. Focused and Phase Validation",
+    "## 11. Baseline Lineage",
+    "## 12. CheckpointPolicy and CapacityHandoffRecord",
+    "## 13. ExternalActionAuthorityPolicy",
+    "## 14. LegacyHostFallbackPolicy",
+    "## 15. Delegated Phase State Machine",
+)
+REQUIRED_TRANSITION_DISPOSITIONS = (
+    "`AUTO_CONTINUE`",
+    "`AUTO_REMEDIATE_AND_REVALIDATE`",
+    "`WAIT_FOR_EVIDENCE`",
+    "`WAIT_FOR_CAPACITY`",
+    "`ESCALATE_HUMAN`",
+    "`STOP`",
+)
+REQUIRED_AUTHORITY_PRINCIPLES = (
+    "Authority creation remains human-controlled.",
+    "Governance approval is not runtime authority.",
+    "Validation is evidence of conformance, not authority expansion.",
+    "Prompt text and adapter metadata cannot create or widen an envelope.",
+)
+REQUIRED_PROTOCOL_DELEGATED_SECTION = (
+    "## Delegated Execution Transition Dispositions",
+    "### Decision Versus Disposition Separation",
+    "### Transition Disposition Values",
+    "### Automatic Progression Requirements",
+    "### Fail-Closed Rule",
+    "DELEGATED_EXECUTION_POLICY.md",
+)
+REQUIRED_LAYER_DELEGATED_SECTION = (
+    "## Phase-Level Delegated Governance",
+    "Phase A",
+    "Phase B",
+    "Not yet implemented",
+    "Do not claim that continuous automatic progression is already active.",
+)
+REQUIRED_FLOW_DELEGATED_SECTION = (
+    "Target Delegated Execution Flow",
+    "Not Yet Active",
+    "Phase B",
+    "DELEGATED_EXECUTION_POLICY.md",
+)
+
 
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description="Validate governance protocol consistency.")
@@ -74,10 +128,15 @@ def main(argv=None):
     repo_root = args.repo_root.resolve()
     protocol = read_text(repo_root / "docs" / "governance" / "GOVERNANCE_DECISION_PROTOCOL.md")
     layer = read_text(repo_root / "docs" / "governance" / "GOVERNANCE_LAYER.md")
+    flow = read_text(repo_root / "docs" / "governance" / "GOVERNANCE_REVIEW_FLOW.md")
     steward = read_text(repo_root / "skills" / "the-steward" / "SKILL.md")
     governor = read_text(repo_root / "skills" / "the-governor" / "SKILL.md")
     steward_outputs = read_text(repo_root / "skills" / "the-steward" / "OUTPUT_FORMATS.md")
     governor_outputs = read_text(repo_root / "skills" / "the-governor" / "OUTPUT_FORMATS.md")
+
+    delegated_policy_path = repo_root / "docs" / "governance" / "DELEGATED_EXECUTION_POLICY.md"
+    delegated_policy_exists = delegated_policy_path.exists()
+    delegated_policy = read_text(delegated_policy_path) if delegated_policy_exists else ""
 
     errors = []
 
@@ -120,6 +179,58 @@ def main(argv=None):
         ensure_contains(errors, "skills/the-steward/OUTPUT_FORMATS.md", steward_outputs, field)
     for field in GOVERNOR_ROLE_FIELDS:
         ensure_contains(errors, "skills/the-governor/OUTPUT_FORMATS.md", governor_outputs, field)
+
+    # Phase A: Delegated execution policy checks
+    if not delegated_policy_exists:
+        fail(errors, f"{DELEGATED_POLICY_FILE}: file does not exist")
+    else:
+        for heading in REQUIRED_DELEGATED_HEADINGS:
+            ensure_contains(errors, DELEGATED_POLICY_FILE, delegated_policy, heading)
+        for disposition in REQUIRED_TRANSITION_DISPOSITIONS:
+            ensure_contains(errors, DELEGATED_POLICY_FILE, delegated_policy, disposition)
+        for principle in REQUIRED_AUTHORITY_PRINCIPLES:
+            ensure_contains(errors, DELEGATED_POLICY_FILE, delegated_policy, principle)
+        ensure_contains(
+            errors, DELEGATED_POLICY_FILE, delegated_policy,
+            "Validation is evidence of conformance, not authority expansion."
+        )
+        ensure_contains(
+            errors, DELEGATED_POLICY_FILE, delegated_policy,
+            "maximum_remediation_attempts_per_unit"
+        )
+        ensure_contains(
+            errors, DELEGATED_POLICY_FILE, delegated_policy,
+            "maximum_identical_failure_repetitions"
+        )
+        ensure_contains(
+            errors, DELEGATED_POLICY_FILE, delegated_policy,
+            "default-deny"
+        )
+        ensure_contains(
+            errors, DELEGATED_POLICY_FILE, delegated_policy,
+            "`WAIT_FOR_CAPACITY` is a resumable lifecycle state"
+        )
+        ensure_contains(
+            errors, DELEGATED_POLICY_FILE, delegated_policy,
+            "Phase A defines the canonical contracts required"
+        )
+        ensure_contains(
+            errors, DELEGATED_POLICY_FILE, delegated_policy,
+            "Phase B instruction-level behavior"
+        )
+        ensure_absent(
+            errors, DELEGATED_POLICY_FILE, delegated_policy,
+            "Continuous automatic progression is now active"
+        )
+
+    for section in REQUIRED_PROTOCOL_DELEGATED_SECTION:
+        ensure_contains(errors, "GOVERNANCE_DECISION_PROTOCOL.md", protocol, section)
+
+    for section in REQUIRED_LAYER_DELEGATED_SECTION:
+        ensure_contains(errors, "GOVERNANCE_LAYER.md", layer, section)
+
+    for section in REQUIRED_FLOW_DELEGATED_SECTION:
+        ensure_contains(errors, "GOVERNANCE_REVIEW_FLOW.md", flow, section)
 
     if errors:
         for error in errors:

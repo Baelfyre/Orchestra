@@ -199,52 +199,52 @@ Interpretation rules:
 
 | Input or Trigger | Typical Signals | Derived Contribution |
 |---|---|---|
-| `Project Type` | `school`, `personal`, local `research` | Usually `GSL-0` to `GSL-2` |
-| `Project Type` | `internal`, team `open-source` development | Usually `GSL-2` to `GSL-3` |
-| `Project Type` | `commercial`, `client-facing`, public `open-source` distribution | Usually `GSL-3` to `GSL-4` |
-| `Operating Mode` | intent classification only | Sets the baseline before other triggers apply |
-| `Release Stage` | `prototype` | Usually `GSL-1` |
-| `Release Stage` | `development` | Usually `GSL-2` |
-| `Release Stage` | `staging` | Usually `GSL-3` |
-| `Release Stage` | `production` or externally committed `maintenance` | Usually `GSL-4`, or `GSL-5` if other high-impact triggers apply |
-| `LOW` / `MEDIUM` / `HIGH` Risk Level | existing risk model | `LOW` usually keeps work in `GSL-1` to `GSL-2`; `MEDIUM` often raises to `GSL-2` to `GSL-3`; `HIGH` often raises to `GSL-3` to `GSL-4` |
-| `Data Sensitivity` | `none`, `low`, non-sensitive | Usually no raise beyond `GSL-0` to `GSL-2` |
-| `Data Sensitivity` | `medium`, `sensitive` | Often raises to `GSL-2` or `GSL-3` |
-| `Data Sensitivity` | `high`, `PII`, `financial`, `health` | Often raises to `GSL-4` or `GSL-5` |
-| `Public Exposure` | local-only, private, internal-only | Usually no raise beyond `GSL-0` to `GSL-2` |
-| `Public Exposure` | client demo, limited external access, public claims, beta | Often raises to `GSL-3` |
-| `Public Exposure` | public release, external distribution, production-facing operation | Often raises to `GSL-4` or `GSL-5` |
-| `Compliance or Legal Sensitivity` | basic attribution or ordinary dependency review | Usually `GSL-1` to `GSL-2` |
-| `Compliance or Legal Sensitivity` | contractual review, privacy review, license compatibility, IP clearance | Often raises to `GSL-3` or `GSL-4` |
-| `Compliance or Legal Sensitivity` | regulated domain, uncertain obligations, or `human_review_required: true` | Raises to `GSL-5` |
-| `Destructive Potential` | no destructive path in scope | No raise by itself |
-| `Destructive Potential` | guarded local simulation, negative-path chaos work, Dagger review | Often raises to `GSL-3` or `GSL-4` when relevant |
-| `Destructive Potential` | live destructive path requested | Treat as high strictness. Dagger remains simulation-only here unless separately approved through its own guardrails |
-| `Continuity or Validation Gaps` | none | No raise by itself |
-| `Continuity or Validation Gaps` | missing validation, unclear source of truth, handoff risk, branch uncertainty | Often raises to `GSL-2` or `GSL-3` |
-| `Continuity or Validation Gaps` | unresolved evidence dispute, release handoff uncertainty, blocked source-of-truth conflict | Often raises to `GSL-4` or `GSL-5` until resolved |
+| `Project Type` | `school`, `personal`, local `research` | `GSL-0` to `GSL-2` |
+| `Project Type` | `internal`, team `open-source` | `GSL-2` to `GSL-3` |
+| `Project Type` | `commercial`, `client-facing`, public `open-source` | `GSL-3` to `GSL-4` |
+| `Operating Mode` | intent classification | Sets mode baseline |
+| `Release Stage` | `prototype` | `GSL-1` |
+| `Release Stage` | `development` | `GSL-2` |
+| `Release Stage` | `staging` | `GSL-3` |
+| `Release Stage` | `production` / `maintenance` | `GSL-4` to `GSL-5` |
+| Risk Level | `LOW` / `MEDIUM` / `HIGH` | `LOW`: `GSL-1`-`2`; `MEDIUM`: `GSL-2`-`3`; `HIGH`: `GSL-3`-`4` |
+| `Data Sensitivity` | `none`, `low` | `GSL-0` to `GSL-2` |
+| `Data Sensitivity` | `medium`, `sensitive` | `GSL-2` to `GSL-3` |
+| `Data Sensitivity` | `high`, `PII`, `financial`, `health` | `GSL-4` to `GSL-5` |
+| `Public Exposure` | local, private, internal | `GSL-0` to `GSL-2` |
+| `Public Exposure` | demo, beta, public claims | `GSL-3` |
+| `Public Exposure` | public release, production | `GSL-4` to `GSL-5` |
+| Compliance/Legal | attribution, dependencies | `GSL-1` to `GSL-2` |
+| Compliance/Legal | privacy, license, IP clearance | `GSL-3` to `GSL-4` |
+| Compliance/Legal | regulated domain, `human_review_required: true` | `GSL-5` |
+| Destructive Potential | none | No raise |
+| Destructive Potential | local simulation, Dagger review | `GSL-3` to `GSL-4` |
+| Destructive Potential | live destructive requested | High strictness; Dagger simulation-only unless approved |
+| Continuity Gaps | none | No raise |
+| Continuity Gaps | missing validation, branch uncertainty | `GSL-2` to `GSL-3` |
+| Continuity Gaps | evidence dispute, merge risk | `GSL-4` to `GSL-5` |
 
 ### Typical Profiles
 
 | Governance Strictness Level | Typical Profile |
 |---|---|
-| `GSL-0` | Ideation, brainstorming, rough planning, no blocking governance path |
-| `GSL-1` | School work, personal sandbox, local prototype, low-risk exploratory work |
-| `GSL-2` | Normal governed implementation with known context and limited exposure |
-| `GSL-3` | Elevated governance because of audit scope, staging, public claims, client-facing work, or material risk triggers |
-| `GSL-4` | Release-critical, production-facing, client delivery, public distribution, or other blocking governance path |
-| `GSL-5` | Maximum governance strictness due to compliance-sensitive domains, human review, destructive risk, or unresolved release evidence conflicts |
+| `GSL-0` | Ideation, brainstorming, rough planning |
+| `GSL-1` | School work, personal sandbox, local prototype |
+| `GSL-2` | Normal governed implementation with known context |
+| `GSL-3` | Elevated governance (audit, staging, public claims) |
+| `GSL-4` | Release-critical, production-facing, client delivery |
+| `GSL-5` | Maximum governance (compliance domain, human review, destructive risk) |
 
 ### Specialist Involvement by GSL
 
 | Governance Strictness Level | Steward | Governor | Arbiter | Overseer | Dagger |
 |---|---|---|---|---|---|
-| `GSL-0` | Context hygiene only | Usually not required | Only if conflict exists | Optional | Not used |
-| `GSL-1` | Light objective, requirements, and documentation hygiene check | Advisory | Optional | Basic validation | Not used |
-| `GSL-2` | Required context, objective, requirements, and documentation hygiene check | Conditional | Conflict resolution if needed | Standard checks | Simulation only if relevant |
-| `GSL-3` | Required full objective, scope, requirements, and documentation hygiene review | Required for release/public claims or material compliance triggers | Required for unresolved conflicts or continuation gaps | Strict validation | Guardrail simulation if risky |
-| `GSL-4` | Required and blocking objective, scope, requirements, and documentation readiness review | Required and blocking | Required for evidence disputes, handoff risk, merge risk, or release uncertainty | Strict validation plus evidence | Required simulation when destructive potential exists; no live destructive execution |
-| `GSL-5` | Maximum strictness for objective, scope, requirements, traceability, and documentation readiness | Maximum gate authority | Required for conflicts or source-of-truth disputes | Strict release readiness | Required guardrail proof; live destructive execution blocked unless separately approved |
+| `GSL-0` | Context hygiene | Not required | Conflict only | Optional | Not used |
+| `GSL-1` | Light hygiene | Advisory | Optional | Basic | Not used |
+| `GSL-2` | Required hygiene | Conditional | Conflict resolution | Standard | Simulation only |
+| `GSL-3` | Full hygiene review | Required for release/compliance | Required for continuation gaps | Strict | Simulation if risky |
+| `GSL-4` | Required & blocking | Required & blocking | Required for evidence/merge risk | Strict + evidence | Simulation required |
+| `GSL-5` | Maximum gate | Maximum authority | Required for disputes | Strict release | Proof required; live blocked |
 
 `GSL` changes review depth and specialist participation only. It does not create new decision values and does not override existing skill boundaries.
 
@@ -262,9 +262,45 @@ Interpretation rules:
 For Release Mode app workflows, The Governor must verify privacy, terms, data inventory, retention, deletion, account deletion documentation when accounts exist, platform disclosures, third-party processor disclosures, and IP clearance when applicable. Missing required artifacts must result in `REVISION_REQUIRED` or `BLOCKED`, depending on release context and severity.
 
 
+## Phase-Level Delegated Governance
+
+Orchestra supports a delegated execution model where a human authorizes a bounded envelope permitting internal units to proceed automatically under governance boundaries.
+
+### Freedom-First and Need-Based Governance in Delegated Phases
+
+Freedom-first, need-based governance applies. Specialists (Steward, Governor, Arbiter) re-enter when material governing facts change, not for every unchanged internal unit.
+
+### Governance Specialist Re-Entry Triggers
+
+Specialists re-enter when:
+- Product, legal, privacy, licensing, IP, or compliance facts emerge.
+- Scope or intent changes.
+- A design contradiction is detected.
+- An authority boundary is approached.
+- The envelope approaches expiry or an invalidation condition fires.
+
+### Canonical Policy Reference
+
+`docs/governance/DELEGATED_EXECUTION_POLICY.md` is the single canonical source for envelopes, dispositions, evidence standards, remediation, checkpointing, capacity, authority, invalidation, and fallback. `GOVERNANCE_DECISION_PROTOCOL.md` defines decision-versus-disposition separation.
+
+### Phase Implementation Status
+
+| Phase | Description | Status |
+|---|---|---|
+| Phase A | Contract design: envelopes, dispositions, evidence, remediation, checkpointing, capacity, authority, invalidation, fallback | **Defined (`DELEGATED_EXECUTION_POLICY.md`)** |
+| Phase B | Instruction-level behavior: skill/adapter updates to consume dispositions and loop | **Not yet implemented** |
+| Phase C | Host reliability evaluation: validate host envelope preservation and checkpointing | **Not yet implemented** |
+| Phase D | Optional typed runtime enforcement: typed models for envelopes, units, evidence | **Not yet implemented** |
+| Phase E | Release preparation: commit, push, PR, merge, tag, release, deployment | **Separately governed** |
+
+Do not claim that continuous automatic progression is already active.
+
 ## Enforcement Limitation
 
-Current enforcement is instruction-level governance. The Conductor must follow the governance gate before planning or routing work, but no runtime blocker exists yet. Runtime enforcement may be added later if CI checks, schema validation, or automated release gates become necessary.
+Current enforcement is route-level instruction governance. Conductor follows governance gates before routing, but no automated runtime/CI blocker exists yet.
+
+Phase A defines contract foundations. Phase B instruction-level behavior and Phase D optional typed runtime enforcement are Not yet implemented.
+
 
 ---
 

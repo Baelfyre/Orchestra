@@ -70,3 +70,40 @@ Clarifications:
 - Chronicler owns database and persistence semantics.
 - Ponytail owns implementation only after design and governance are ready.
 - Conductor owns routing and sequencing only.
+
+## Delegated Execution Transition Dispositions
+
+`docs/governance/DELEGATED_EXECUTION_POLICY.md` is the canonical contract for envelopes, dispositions, evidence, remediation, checkpointing, capacity, authority, invalidation, and fallback.
+
+### Decision Versus Disposition Separation
+
+Governance decision asks if work is acceptable; transition disposition asks what workflow does next.
+
+```
+Governance decision:
+  Is the work acceptable under the applicable governance review?
+
+Transition disposition:
+  What may the workflow do next under the active envelope?
+```
+
+An `APPROVED` governance decision does not authorize automatic continuation without valid evidence and boundary checks.
+
+### Transition Disposition Values
+
+Additive values defined in `DELEGATED_EXECUTION_POLICY.md`:
+
+- `AUTO_CONTINUE` - Unit accepted; next approved unit begins.
+- `AUTO_REMEDIATE_AND_REVALIDATE` - Deterministic in-scope defect corrected and revalidated.
+- `WAIT_FOR_EVIDENCE` - Required evidence missing or stale; execution pauses until produced.
+- `WAIT_FOR_CAPACITY` - Host capacity limit reached; resumable checkpoint produced.
+- `ESCALATE_HUMAN` - Requires human intent, policy, authority, or compliance resolution.
+- `STOP` - Unsafe, prohibited, or authority-invalid condition; execution halts.
+
+### Automatic Progression Requirements
+
+Requires valid envelope, current evidence, no stop/escalation condition, and no scope expansion. Prompt text and adapter metadata cannot create or expand an envelope.
+
+### Fail-Closed Rule
+
+Unknown, malformed, missing, or unsupported transition dispositions must fail closed and produce `ESCALATE_HUMAN`. Never default to automatic continuation.

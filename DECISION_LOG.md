@@ -1,5 +1,111 @@
 # Decision Log
 
+## Date: 2026-07-22
+
+**Decision:**
+Define canonical Phase A delegated autonomous governance contracts for Orchestra.
+
+**Reason:**
+The Governance Bottleneck ADR (ADR-009) identified that requiring a human relay for every
+internal work unit was preventing continuous autonomous development. Phase A establishes the
+contract foundation required for a bounded, resumable, fail-closed delegated execution loop
+without weakening governance, authority, capabilities, validation, lifecycle, audit, or
+Dagger safeguards.
+
+**Contracts implemented (local branch only):**
+- `DelegatedExecutionEnvelope` - reduction-only human-authorized phase specification.
+- `ApprovedUnitPlan` - ordered or constrained internal unit authorization.
+- `ExecutionEvidencePacket` - compact evidence per unit; staleness-checked before transition.
+- `TransitionDecisionRecord` - governance decision + transition disposition; six additive
+  disposition values (`AUTO_CONTINUE`, `AUTO_REMEDIATE_AND_REVALIDATE`, `WAIT_FOR_EVIDENCE`,
+  `WAIT_FOR_CAPACITY`, `ESCALATE_HUMAN`, `STOP`) separate from the existing five governance
+  decision values (unchanged: `APPROVED`, `ADVISORY_ONLY`, `REVISION_REQUIRED`, `BLOCKED`,
+  `NOT_APPLICABLE`).
+- `AutomaticRemediationPolicy` - maximum 3 attempts per unit, 2 identical-failure repetitions,
+  0 scope growth; escalates when budget exhausted.
+- `CheckpointPolicy` and `CapacityHandoffRecord` - resumable capacity wait, not a new approval.
+- `ExternalActionAuthorityPolicy` - default-deny; all flags false for Phase A.
+- `LegacyHostFallbackPolicy` - absent or unknown dispositions fail closed, never AUTO_CONTINUE.
+- Delegated phase state machine - bounded; no automatic scope expansion.
+- Token-efficiency requirements - load envelope once, compact evidence, checkpoint every unit.
+
+**Key authority principles enforced:**
+- Authority creation remains human-controlled.
+- Governance approval is not runtime authority.
+- Validation is evidence of conformance, not authority expansion.
+- Prompt text and adapter metadata cannot create or widen an envelope.
+- Unknown or unsupported dispositions fail closed.
+
+**Files changed:**
+- `docs/governance/DELEGATED_EXECUTION_POLICY.md` [new]
+- `docs/project/DELEGATED_GOVERNANCE_IMPLEMENTATION_PLAN.md` [new]
+- `docs/governance/GOVERNANCE_DECISION_PROTOCOL.md` [additive]
+- `docs/governance/GOVERNANCE_LAYER.md` [additive]
+- `docs/governance/GOVERNANCE_REVIEW_FLOW.md` [additive]
+- `scripts/validate_governance_protocol_consistency.py` [additive]
+- `tests/behavior/test_governance_protocol_consistency.py` [additive]
+- `CHANGELOG.md`, `DECISION_LOG.md`, `PROJECT_STATE.md`, `SESSION_HANDOFF.md` [state sync]
+
+**Rejected alternatives:**
+- Adding transition dispositions inside existing governance decision values (rejected: would
+  confuse governance decisions with workflow control and break existing downstream parsing).
+- Duplicating the full contract in each role skill (rejected: one canonical source required).
+- Activating Phase B instruction-level behavior in Phase A (rejected: out of scope; requires
+  separate authorization after Phase A review).
+
+**Authorization:**
+Local Phase A contract-design implementation only. No commit, push, pull request, merge, tag,
+release, or deployment authorized. Branch: `docs/delegated-autonomous-governance-phase-a`.
+Starting SHA: `51c194afd6ea12539a19b05c8785bb155002296f`.
+
+---
+
+## Date: 2026-07-22
+
+**Decision:**
+Phase A contract implementation was reviewed and authorized for commit and remote push.
+
+**Reason:**
+Phase A contract design, governance integration, protocol consistency validator, and behavior test suite passed all validation checks cleanly without error or warning. The commit and push establish the remote review baseline for maintainer inspection.
+
+**Historical State Evidence (at initial Phase A push):**
+- Phase A Implementation Commit: `176da20100dce99e26748c53b9c14e7033c119dd` (`176da20`)
+- Commit subject: `feat: add delegated autonomous governance contracts`
+- Active Branch: `docs/delegated-autonomous-governance-phase-a`
+- Remote Feature Branch: `origin/docs/delegated-autonomous-governance-phase-a`
+- Initial Remote Push: Completed and verified
+- Initial Remote Comparison: At the time of the initial Phase A push, the feature branch was ahead of main by 1 and behind by 0
+- Working Tree at Initial Push: Clean
+- Pull Request: Not authorized and not created
+- Merge: Not authorized and not performed
+- Release/Deployment: Not authorized and not performed
+- Next Decision Gate: Maintainer review followed by separate pull-request authorization
+
+**Authorization Boundary:**
+The commit and push did not authorize a pull request, merge, release, or deployment.
+
+---
+
+## Date: 2026-07-22
+
+**Decision:**
+Fix repository-memory branch reference validation in detached-HEAD PR CI for PR #189.
+
+**Reason:**
+GitHub Actions checked out PR #189's merge ref (`refs/remotes/pull/189/merge`) in detached-HEAD mode. The existing `get_current_git_branch` exception returned `None` in detached HEAD, causing exact feature branch references (`docs/delegated-autonomous-governance-phase-a`) to be misclassified as missing repository paths.
+
+**Remediation Approach:**
+- Introduced `get_known_git_branches(repo_root)` in `scripts/governance_check.py` to build an exact set of known branch identities from local branch refs (`refs/heads/*`), remote-tracking refs (`refs/remotes/*`), and trusted CI environment (`GITHUB_HEAD_REF`).
+- Broad `docs/*` exemptions and workflow modifications were explicitly rejected to avoid weakening stale-path detection.
+
+**State Update:**
+- PR: #189 (open)
+- Active Branch: `docs/delegated-autonomous-governance-phase-a`
+- Fix Status: Implemented locally and validated; awaiting commit authorization
+- Workflow changes: None
+
+---
+
 ## Date: 2026-06-26
 
 **Decision:**
