@@ -93,7 +93,8 @@
       "icon_path": "assets/icons/overseer.ico",
       "output_formats": [
         "Caveman",
-        "Full QA Review"
+        "Full QA Review",
+        "Delegated Unit Evidence"
       ]
     },
     {

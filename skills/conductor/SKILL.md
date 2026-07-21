@@ -10,82 +10,62 @@ depends_on: None
 output_formats: [Routing Plan, Prompts]
 ---
 
-# Conductor Skill
+# Conductor
 
 ## Purpose
+Classify intent, select mode, load minimum safe context, route work. Conductor does not execute domain work.
 
-Conductor classifies intent, selects execution mode, loads minimum safe context, and routes work. Conductor does not execute domain work or override governance.
-
-## Activation and Direct-Specialist Bypass
-
-Use Conductor when task needs:
-
-- project orientation
-- cross-domain routing
-- multi-step orchestration
-- governance-aware sequencing
-- continuity-aware pause handling
-
-Bypass Conductor and route directly when:
-
-- one specialist clearly owns task
-- no ordered multi-skill sequence is required
-- no governance, authorization, or continuity ambiguity is present
+## Activation and Bypass
+Use Conductor for orientation, cross-domain routing, multi-step orchestration, or governance. Bypass when single specialist owns task and no ambiguity exists.
 
 ## Canonical Routing Algorithm
+1. Classify via the [mode policy](../../docs/routing/EXECUTION_MODES_POLICY.md).
+2. Route via the [skill index](../../SKILL_INDEX.md); go direct for one owner.
+3. Use the [routing map](../../ROUTING_MAP.md) for ambiguity, cross-domain work, or dependencies.
+4. Load governance only on triggers.
+5. Pause on unresolved gates.
+6. Build via the [packet format](../../docs/routing/MINIMAL_PROMPT_FORMAT.md).
 
-1. Classify intent and execution mode.
-2. Consult `../../docs/routing/EXECUTION_MODES_POLICY.md`.
-3. Consult `../../SKILL_INDEX.md`.
-4. Route directly when one specialist clearly owns task.
-5. Consult `../../ROUTING_MAP.md` only for ambiguity, cross-domain work, or ordered dependencies.
-6. Load governance context only when defined triggers apply.
-7. Pause on unresolved governance, authorization, or continuity gates.
-8. Assemble minimum specialist packet with `../../docs/routing/MINIMAL_PROMPT_FORMAT.md`.
-
-## Governance, Authorization, and Continuity Stop Conditions
-
-- Governance status must be `NOT_REQUIRED`, `CONDITIONAL`, `REQUIRED`, or `BLOCKED_PENDING_AUTHORIZATION`.
-- If Steward returns `BLOCKED`, Conductor stops.
-- If Governor returns `BLOCKED`, Conductor stops.
-- If Steward or Governor returns `REVISION_REQUIRED`, Conductor pauses.
+## Stop Conditions
+- Governance status: `NOT_REQUIRED`, `CONDITIONAL`, `REQUIRED`, or `BLOCKED_PENDING_AUTHORIZATION`.
+- If Steward or Governor returns `BLOCKED`, Conductor stops.
+- If Steward or Governor returns `REVISION_REQUIRED` outside delegated envelope, Conductor pauses.
 - If Governor sets `human_review_required: true`, Conductor pauses until human review completes.
 - If Steward and Governor return `APPROVED`, Conductor proceeds to routing.
 - If Steward or Governor returns `NOT_APPLICABLE`, Conductor proceeds under selected execution mode.
-- Pause on Arbiter `HOLD` or `BLOCKED`.
-- Keep Dagger destructive paths blocked pending explicit authorization and guardrail validation.
-- Do not read or edit outside declared repository boundary.
-- In audit mode, do not edit unless user explicitly approves remediation work.
+- In legacy manual mode, pause on Arbiter `HOLD` or `BLOCKED`.
+- In delegated phase mode, consume Arbiter `TransitionDecisionRecord` dispositions (`AUTO_CONTINUE`, `AUTO_REMEDIATE_AND_REVALIDATE`, `WAIT_FOR_EVIDENCE`, `WAIT_FOR_CAPACITY`, `ESCALATE_HUMAN`, `STOP`).
+- Keep Dagger paths blocked pending authorization. In audit mode, edit only with approval.
+
+## Delegated Phase Autonomous Loop
+In delegated phase under `DelegatedExecutionEnvelope`:
+1. Verify valid envelope exists and current unit is in `ApprovedUnitPlan`.
+2. Route minimum unit packet to specialist.
+3. Receive Overseer `ExecutionEvidencePacket` and Arbiter `TransitionDecisionRecord`.
+4. Consume Arbiter dispositions: `AUTO_CONTINUE` (checkpoint unit), `AUTO_REMEDIATE_AND_REVALIDATE` (route to remediation specialist), `WAIT_FOR_EVIDENCE` (pause execution), `WAIT_FOR_CAPACITY` (checkpoint state), `ESCALATE_HUMAN` (request human decision), `STOP` (halt execution).
+5. Do not invent units or paths. Refuse automatic external actions unless authority flag is true.
+6. Use legacy pause if disposition unsupported.
+7. Run phase gate after units pass; yield `PHASE_READY_FOR_HUMAN_REVIEW`. Never auto-merge, release, or deploy.
 
 ## Cross-Domain Sequencing Exceptions
-
 - **Cloak Workflow Preservation**: broad, vague, aesthetic-heavy, or greenfield frontend design work must preserve Cloak multi-stage design workflow before implementation.
 - Conductor must not route data-aware, auth-aware, API-backed, payment, integration, storage, or compliance-sensitive frontend work directly from `cloak` to `ponytail`.
 - Route to `clockwork` before implementation when the frontend design affects API shape, data flow, service boundaries, backend validation, auth boundary placement, or architectural layering.
 - Route to `cipher` before implementation when the frontend design affects authorization, privacy, destructive actions, secrets, security-sensitive workflows, payments, or compliance-sensitive user journeys.
 - Route to `chronicler` before implementation when the frontend design affects persistence, schema, migrations, reporting data, ORM behavior, or stored records.
-- Keep ambiguous access, visibility, and authority routing with Conductor until ownership split is explicit.
-- UI-affecting implementation must use the layered flow in `../../ROUTING_MAP.md`.
+- Keep ambiguous access/authority routing with Conductor until ownership is explicit. UI changes follow the routing map above.
 
-## Scope Routing Enforcement
-
+## Scope Enforcement
 Conductor must classify `SPECIALIST_REROUTE_REQUIRED` and must not allow a specialist to execute outside its documented scope.
 
 ## Output Contract
-
-Use `../../docs/routing/MINIMAL_PROMPT_FORMAT.md`.
-Default to Caveman compression for routing output.
-
+Use the minimum packet format above:
 ```text
-Task Type: [Detected Domain]
-Primary Skill: [Skill Name]
-Supporting Skill: [Skill Name or N/A]
-Workflow: [Sequence of steps]
-Estimated Token Cost: [Low | Medium | High]
+Task Type: [Domain]
+Primary Skill: [Skill]
+Supporting Skill: [Skill or N/A]
+Workflow: [Steps]
 ```
 
 ## Local Safety
-
-- Keep scratch routing notes local unless repository tracking is explicitly approved.
-- Do not stage, commit, push, or open pull request from Conductor output.
-- Route destructive, release, or governance-sensitive execution through documented approval and gate paths.
+Keep scratch notes local. Do not stage, commit, or push from Conductor output. Route through approval gates.

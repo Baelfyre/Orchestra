@@ -121,7 +121,27 @@ Use these severity thresholds:
 - `Critical findings`: unsafe destructive behavior, missing or bypassed Dagger guardrail, or broken governance workflow that prevents checks from running
 - `Major findings`: missing changelog update for significant changes, missing governance validation, manifest or command drift, missing governance docs, misleading CI success wording, missing local sync preflight rule, or specialist-scope misuse without reroute
 - `Minor findings`: ambiguous wording, imprecise documentation, broad changelog bullets, or advisory warnings that need clearer classification
-- `Cleanup findings`: obsolete stash references, committed generated artifacts or cache files, or naming inconsistencies such as `CHANGELOGS.md` versus `CHANGELOG.md`
+- `Cleanup findings`: obsolete stash references, committed generated artifacts or cache files, or inconsistent changelog filenames
+
+### 10. Delegated Phase Transition Evaluation
+
+In a delegated phase governed by a `DelegatedExecutionEnvelope`, Arbiter evaluates the unit `ExecutionEvidencePacket` for evidence freshness and repository lineage, and emits a `TransitionDecisionRecord`.
+
+Arbiter applies strict transition precedence:
+1. `STOP` - unsafe, prohibited, destructive, protected-repository, secret-exposing, or authority-invalid conditions.
+2. `ESCALATE_HUMAN` - missing intent, contradiction, scope expansion, policy choice, unresolved legal/privacy/security/licensing/compliance uncertainty, or unauthorized external action required.
+3. `WAIT_FOR_CAPACITY` - insufficient execution capacity with a valid checkpoint path.
+4. `WAIT_FOR_EVIDENCE` - missing, stale, incomplete, or mismatched evidence where current evidence can be produced within the envelope.
+5. `AUTO_REMEDIATE_AND_REVALIDATE` - deterministic in-scope defect with valid remediation authority and remaining remediation attempts (max 3 attempts per unit, max 2 identical failures).
+6. `AUTO_CONTINUE` - complete valid unit with current evidence and no unresolved gate.
+
+Arbiter rules:
+- Preserves continuity results (`READY`, `READY_WITH_MINOR_FIXES`, `HOLD`, `BLOCKED`) for compatibility while emitting exactly one transition disposition.
+- Identifies `next_eligible_unit` on `AUTO_CONTINUE`.
+- Enforces remediation budgets and requires checkpoints after accepted units.
+- Treats capacity waits as resumable, not as new approval requests.
+- Fails closed on absent, malformed, or unsupported dispositions (defaults to `ESCALATE_HUMAN` / pause, never `AUTO_CONTINUE`).
+
 
 ## Authority
 

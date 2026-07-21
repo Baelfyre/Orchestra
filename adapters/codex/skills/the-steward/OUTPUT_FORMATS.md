@@ -33,3 +33,20 @@ REQUIRED_ACTIONS: [list]
 DOCUMENTATION_GAPS: [list]
 TIMESTAMP: [ISO 8601]
 ```
+
+## Delegated Governance Review
+
+Use this format when evaluating or emitting a decision for a delegated phase unit.
+
+```text
+REVIEWER: the-steward
+ENVELOPE_ID: [envelope_id]
+PHASE_ID: [phase_id]
+UNIT_ID: [unit_id]
+DECISION: [APPROVED | ADVISORY_ONLY | REVISION_REQUIRED | BLOCKED | NOT_APPLICABLE]
+HUMAN_REVIEW_REQUIRED: [false | true]
+REASON_CODE: [code]
+CONSTRAINTS: [list or "none"]
+REQUIRED_ACTIONS: [actions or "none"]
+EVIDENCE_REFERENCES: [list or "none"]
+```

@@ -106,6 +106,20 @@ Edge-case persona examples:
 - UI menu hidden but route still accessible
 - UI menu visible but content blocked
 
+### Delegated Unit Evidence Role
+
+In a delegated phase governed by a `DelegatedExecutionEnvelope`:
+
+- Overseer produces or verifies the focused validation portion of the `ExecutionEvidencePacket` for each internal unit (focused syntax, lint, unit tests, `git diff --check`, scope audit, security audit).
+- Overseer distinguishes:
+  - failed validation with defined expected behavior -> candidate for bounded automatic remediation;
+  - missing evidence -> triggers `WAIT_FOR_EVIDENCE`;
+  - missing product intent or scope violation -> produces evidence indicating `ESCALATE_HUMAN`.
+- Overseer authorizes no transition directly (Arbiter consumes the evidence packet and emits the transition disposition).
+- Overseer avoids treating passing tests as authority expansion beyond the envelope's allowed paths.
+- Overseer provides concise failure excerpts suitable for automatic remediation without generating bloated session logs.
+
+
 ## Required behavior (Token Rules)
 
 - **No QA theory essays**: Focus on the task, not theoretical methodology.

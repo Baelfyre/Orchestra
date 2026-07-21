@@ -3,6 +3,40 @@
 ## Date: 2026-07-22
 
 **Decision:**
+Implement and locally validate Phase B instruction-level delegated autonomous governance loop for Orchestra.
+
+**Reason:**
+Phase B activates the Phase A canonical contracts across Conductor, Arbiter, Steward, Governor, Overseer, execution modes policy, routing map, skill index, and ecosystem guidelines. Conductor can now consume Arbiter transition dispositions (`AUTO_CONTINUE`, `AUTO_REMEDIATE_AND_REVALIDATE`, `WAIT_FOR_EVIDENCE`, `WAIT_FOR_CAPACITY`, `ESCALATE_HUMAN`, `STOP`) and manage internal unit transitions automatically within authorized phase envelopes.
+
+**Phase Implementation Status:**
+Phase B instruction-level behavior implemented, committed (`777eca8`), and locally validated; remote and host reliability remain pending until separately authorized.
+
+**Implementation Commit:** `777eca8a1dc3a2a6b281f6ebcf16c7cfcde9b4d8` (`777eca8`)
+
+**Key changes implemented:**
+- `skills/the-steward/OUTPUT_FORMATS.md`: Added `Delegated Governance Review`.
+- `skills/the-governor/OUTPUT_FORMATS.md`: Added `Delegated Governance Review`.
+- `skills/arbiter/OUTPUT_FORMATS.md`: Added `Transition Decision Record` and `Checkpoint / Capacity Handoff`.
+- `skills/overseer/OUTPUT_FORMATS.md`: Added `Delegated Unit Evidence`.
+- `skills/overseer/SKILL.md`: Registered `Delegated Unit Evidence` in frontmatter and added `Delegated Unit Evidence Role`.
+- `skills/the-steward/SKILL.md`: Added `Delegated Phase Behavior` section.
+- `skills/the-governor/SKILL.md`: Removed domain-membership-only escalation; added `Delegated Phase Behavior`.
+- `skills/arbiter/SKILL.md`: Added `Delegated Phase Transition Evaluation` with 6-tier precedence (`STOP` > `ESCALATE_HUMAN` > `WAIT_FOR_CAPACITY` > `WAIT_FOR_EVIDENCE` > `AUTO_REMEDIATE_AND_REVALIDATE` > `AUTO_CONTINUE`).
+- `skills/conductor/SKILL.md`: Added `Delegated Phase Autonomous Loop` section.
+- `docs/routing/EXECUTION_MODES_POLICY.md`: Added `Risk Mode vs Progression Mode` section.
+- `ROUTING_MAP.md`: Added `Delegated Phase Progression Routing` section.
+- `SKILL_INDEX.md`: Added `Progression Modes` section and updated overseer `output_formats`.
+- `AGENTS.md`: Added Delegated Phase Progression Rule #8.
+- `plugin.json`: Added `Delegated Unit Evidence` to overseer `output_formats`.
+- `tests/behavior/governance-conformance-fixtures.json`: Added four delegated-governance conformance fixtures.
+- `tests/behavior/delegated-phase-trace-fixtures.json`: Added the contract-driven three-unit delegated phase trace, derived phase gate, canonical external-action map, and required negative mutations.
+- `tests/behavior/test_router_contracts.py`, `tests/behavior/test_governance_protocol_consistency.py`, and `scripts/validate_governance_protocol_consistency.py`: Updated behavior and governance validation for the delegated trace, exact record schemas, reference integrity, and Phase B status consistency.
+- `adapters/codex/export-codex-skills.ps1` and `adapters/codex/validate_codex_export.py`: Added package-local reference context generation and operational Markdown/JSON target validation for tracked and arbitrary-depth Codex exports.
+
+## Date: 2026-07-22
+
+
+**Decision:**
 Define canonical Phase A delegated autonomous governance contracts for Orchestra.
 
 **Reason:**

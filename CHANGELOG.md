@@ -2,7 +2,32 @@
 
 This changelog tracks the repository history using git tags, merge history, and the prior documented milestone log that lived under `docs/meta/CHANGELOG.md`.
 
+## Unreleased - Phase B Instruction-Level Delegated Autonomous Loop
+
+Phase B instruction-level behavior is implemented on the feature branch, under correction in draft PR #190, and is not canonical until merged. Phase C, Phase D, merge, release, and deployment remain unperformed.
+
+### Added
+- Added `Delegated Governance Review` output format to Steward and Governor roles (`skills/the-steward/OUTPUT_FORMATS.md`, `skills/the-governor/OUTPUT_FORMATS.md`).
+- Added complete, separate `TransitionDecisionRecord`, `CheckpointRecord`, and `CapacityHandoffRecord` templates to Arbiter (`skills/arbiter/OUTPUT_FORMATS.md`).
+- Added the complete canonical `ExecutionEvidencePacket` template and delegated evidence role to Overseer (`skills/overseer/OUTPUT_FORMATS.md`, `skills/overseer/SKILL.md`, `plugin.json`, `SKILL_INDEX.md`).
+- Added `Delegated Phase Autonomous Loop` to Conductor (`skills/conductor/SKILL.md`).
+- Added 6-tier strict precedence transition evaluation to Arbiter (`skills/arbiter/SKILL.md`).
+- Added `Risk Mode vs Progression Mode` section to Execution Modes Policy (`docs/routing/EXECUTION_MODES_POLICY.md`).
+- Added `Delegated Phase Progression Routing` to Routing Map (`ROUTING_MAP.md`).
+- Added `Progression Modes` section to `SKILL_INDEX.md` and Delegated Phase Progression Rule #8 to `AGENTS.md`.
+- Added four delegated-governance conformance fixtures to `tests/behavior/governance-conformance-fixtures.json`.
+- Added `tests/behavior/delegated-phase-trace-fixtures.json`, a contract-driven three-unit trace covering complete evidence, transition, and checkpoint records; derived phase validation; the exact lifecycle event sequence; zero owner relay; one Steward review; one Governor review; and the canonical default-deny external-action map.
+
+### Changed
+- Updated Steward (`skills/the-steward/SKILL.md`) with delegated phase behavior (skip re-reviews of unchanged approved units).
+- Updated Governor (`skills/the-governor/SKILL.md`) to eliminate domain-membership-only escalations without material uncertainty.
+- Updated `adapters/codex/export-codex-skills.ps1` and `adapters/codex/validate_codex_export.py` to package external reference context inside exported skills, rewrite references to package-local targets, reject missing or escaping Markdown/JSON targets, and preserve tracked source-to-export parity at arbitrary installation depth.
+- Updated `scripts/validate_governance_protocol_consistency.py` and `tests/behavior/test_governance_protocol_consistency.py` to enforce exact record schemas and reject unqualified stale Phase B status claims while preserving clearly qualified Phase A history.
+- Updated `tests/behavior/test_router_contracts.py` with reference-integrity cases plus the contract-driven trace evaluator and 11 required negative mutations.
+- Corrected current Phase A-D, draft PR #190, merge, release, and deployment status across the delegated execution policy, governance layer, governance review flow, and implementation plan.
+
 ## Unreleased - Phase A Delegated Autonomous Governance Contract Design
+
 
 Phase A implementation commit: `176da20100dce99e26748c53b9c14e7033c119dd`.
 Initial remote push: Completed to `origin/docs/delegated-autonomous-governance-phase-a`.

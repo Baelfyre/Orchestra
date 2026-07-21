@@ -11,6 +11,18 @@ The Conductor must select the execution mode that provides the lowest safe frict
 
 ## Execution Modes
 
+## Risk Mode vs Progression Mode
+
+Execution classification distinguishes **Risk Mode** from **Progression Mode**:
+
+- **Risk Modes**: `FAST | STANDARD | GOVERNED | AUDIT | DESTRUCTIVE` (classify task risk, required context, and governance strictness).
+- **Progression Modes**: `DIRECT | MANUAL | DELEGATED | LEGACY_FALLBACK` (classify workflow progression model).
+- **Delegated Phase Lifecycle States**:
+  `PHASE_AUTHORIZED | UNIT_READY | UNIT_EXECUTING | UNIT_VALIDATING | UNIT_REMEDIATING | WAITING_FOR_EVIDENCE | WAITING_FOR_CAPACITY | ESCALATED | STOPPED | PHASE_VALIDATING | PHASE_READY_FOR_HUMAN_REVIEW`
+
+Delegated phase execution is permitted in `STANDARD` and `GOVERNED` modes when a valid `DelegatedExecutionEnvelope` exists. `AUDIT` mode remains read-only unless remediation is already authorized in the envelope. `DESTRUCTIVE` mode remains fail-closed and cannot auto-continue.
+
+
 ## FAST mode
 - **Purpose**: Rapid execution of simple, low-risk, well-defined tasks.
 - **Allowed Task Types**: Syntax formatting, typo fixes, simple UI tweaks, and unambiguous singular code changes.

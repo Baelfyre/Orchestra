@@ -123,3 +123,65 @@ Rules:
 - Use `BLOCKED` only for unsafe destructive behavior, missing or bypassed critical guardrails, or broken governance execution that prevents review.
 - Keep Dagger safety conclusions evidence-based and do not report live execution risk when the runtime guardrail is still simulation-only and fail-closed.
 - Do not describe advisory CI output as unconditional success when warnings, deferred checks, or non-blocking findings exist.
+
+## TransitionDecisionRecord
+
+Use this format when emitting a transition disposition at a delegated phase unit boundary.
+
+```markdown
+- schema_version:
+- transition_id:
+- envelope_id:
+- phase_id:
+- unit_id:
+- governance_decision: APPROVED | ADVISORY_ONLY | REVISION_REQUIRED | BLOCKED | NOT_APPLICABLE
+- continuity_result: READY | READY_WITH_MINOR_FIXES | HOLD | BLOCKED
+- transition_disposition: AUTO_CONTINUE | AUTO_REMEDIATE_AND_REVALIDATE | WAIT_FOR_EVIDENCE | WAIT_FOR_CAPACITY | ESCALATE_HUMAN | STOP
+- reason_code:
+- evidence_references:
+- remediation_authority:
+- remediation_attempt_count:
+- next_eligible_unit:
+- resume_requirements:
+- decision_producer:
+- decision_timestamp:
+```
+
+## CheckpointRecord
+
+Use this format when creating a checkpoint after an accepted unit.
+
+```markdown
+- envelope_id:
+- phase_id:
+- last_completed_unit:
+- next_eligible_unit:
+- branch:
+- approved_base_sha:
+- current_execution_sha:
+- working_tree_state: clean | changed
+- changed_paths:
+- validation_completed:
+- validation_remaining:
+- known_limitations:
+- next_exact_action:
+```
+
+## CapacityHandoffRecord
+
+Use this format when recording a resumable capacity wait state.
+
+```markdown
+- envelope_validity: VALID | INVALID
+- last_completed_unit:
+- current_incomplete_unit:
+- current_branch:
+- current_sha:
+- working_tree_state: clean | changed
+- uncommitted_changes:
+- validation_completed:
+- validation_remaining:
+- exact_next_action:
+- known_blockers:
+- resume_prerequisites:
+```

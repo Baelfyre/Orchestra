@@ -23,6 +23,14 @@ Do not load individual `SKILL.md` files during initial classification unless tha
 - **High**: auth, security, persistence, compliance-sensitive changes
 - **Extreme**: destructive-path or production-impacting work
 
+## Progression Modes
+
+- **DIRECT**: single specialist execution outside delegated phases
+- **MANUAL**: standard pause-and-confirm execution
+- **DELEGATED**: autonomous phase execution inside a human-authorized envelope
+- **LEGACY_FALLBACK**: manual fail-closed pause for unsupported hosts or missing dispositions
+
+
 ## Skill Lookup Table
 
 | Skill | Canonical Purpose | Precise Triggers | Avoid When | Governance vs Execution | Context Dependencies | Output Formats |
@@ -35,7 +43,7 @@ Do not load individual `SKILL.md` files during initial classification unless tha
 | `cipher` | Technical security and privacy-control review | authorization model, secrets handling, RBAC, threat exposure, privacy-control design | legal/privacy-obligation governance or offensive testing | Technical review owner | security-sensitive slice only | Caveman,Full Security Review |
 | `cloak` | UI/UX, accessibility, responsive layout, interaction design | accessibility remediation, layout design, user-flow clarity, responsive behavior | backend logic, DB design, security policy | Technical review owner | frontend slice only | QUICK_UI_HANDOFF,DOCUMENT_REVIEW,FORMAL_UI_AUDIT |
 | `chronicler` | Database and persistence semantics | migration semantics, schema design, ORM behavior, data integrity, normalization | UI review or general QA | Technical review owner | persistence slice only | Caveman,Normalization Output |
-| `overseer` | QA strategy, validation evidence, release readiness | test strategy, validation plan, CI readiness, regression evidence, release validation | architecture design or destructive testing | Validation owner | test and validation evidence | Caveman,Full QA Review |
+| `overseer` | QA strategy, validation evidence, release readiness | test strategy, validation plan, CI readiness, regression evidence, release validation | architecture design or destructive testing | Validation owner | test and validation evidence | Caveman,Full QA Review,Delegated Unit Evidence |
 | `dagger` | Guarded destructive-path and resilience simulation | chaos simulation, guarded negative-path validation, resilience stress path | routine QA, security policy, implementation | Guarded execution specialist | `scripts/dagger_guardrail.py` | Caveman |
 | `weaver` | Diagrams and visual models | UML, ERD, Mermaid, PlantUML, workflow visualization | code implementation or policy review | Technical artifact owner | diagram target domain only | Mermaid,PlantUML |
 | `scribe` | Documentation production and editing | README rewrite, changelog prose, docs cleanup, source-backed narrative | business alignment decisions or architecture ownership | Execution owner for docs | source material only | Mode 1,Mode 2,Mode 3 |

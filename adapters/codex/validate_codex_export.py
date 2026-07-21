@@ -19,7 +19,30 @@ SKILL_NAME_ALIASES = {
     "The Governor": "the-governor",
 }
 
-ALLOWED_BACKTICK_EXPORT_TARGETS = {"templates/bryl-minimal-design.md"}
+REFERENCE_VALIDATION_SKILLS = {
+    "conductor",
+    "the-steward",
+    "the-governor",
+    "arbiter",
+    "overseer",
+}
+PORTABLE_REFERENCES = {
+    "conductor": (
+        ("docs/routing/EXECUTION_MODES_POLICY.md", "../../docs/routing/EXECUTION_MODES_POLICY.md", "REFERENCE_CONTEXT.md#execution-modes-policy", "execution-modes-policy"),
+        ("SKILL_INDEX.md", "../../SKILL_INDEX.md", "REFERENCE_CONTEXT.md#skill-index", "skill-index"),
+        ("docs/routing/MINIMAL_PROMPT_FORMAT.md", "../../docs/routing/MINIMAL_PROMPT_FORMAT.md", "REFERENCE_CONTEXT.md#minimal-prompt-format", "minimal-prompt-format"),
+        ("docs/governance/GOVERNANCE_DECISION_PROTOCOL.md", "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md", "REFERENCE_CONTEXT.md#governance-decision-protocol", "governance-decision-protocol"),
+    ),
+    "the-steward": (
+        ("docs/governance/GOVERNANCE_DECISION_PROTOCOL.md", "../../docs/governance/GOVERNANCE_DECISION_PROTOCOL.md", "REFERENCE_CONTEXT.md#governance-decision-protocol", "governance-decision-protocol"),
+        ("docs/governance/PROJECT_CONTEXT_DECISION_PROMPT.md", "../../docs/governance/PROJECT_CONTEXT_DECISION_PROMPT.md", "REFERENCE_CONTEXT.md#project-context-decision-prompt", "project-context-decision-prompt"),
+        ("docs/governance/PROJECT_CONTEXT_ENFORCEMENT_POLICY.md", "../../docs/governance/PROJECT_CONTEXT_ENFORCEMENT_POLICY.md", "REFERENCE_CONTEXT.md#project-context-enforcement-policy", "project-context-enforcement-policy"),
+        ("docs/templates/PROJECT_CONTEXT_TEMPLATE.md", "../../docs/templates/PROJECT_CONTEXT_TEMPLATE.md", "REFERENCE_CONTEXT.md#project-context-template", "project-context-template"),
+    ),
+    "the-governor": (
+        ("docs/governance/GOVERNANCE_DECISION_PROTOCOL.md", "../../docs/governance/GOVERNANCE_DECISION_PROTOCOL.md", "REFERENCE_CONTEXT.md#governance-decision-protocol", "governance-decision-protocol"),
+    ),
+}
 TRACKED_EXPORT_PARITY_PATHS = (
     (
         Path("skills/cloak/templates/bryl-minimal-design.md"),
@@ -29,23 +52,15 @@ TRACKED_EXPORT_PARITY_PATHS = (
 NORMALIZED_EXPORT_PARITY_PATHS = (
     (Path("skills/conductor/SKILL.md"), Path("adapters/codex/skills/conductor/SKILL.md")),
     (Path("ROUTING_MAP.md"), Path("adapters/codex/skills/conductor/ROUTING_MAP.md")),
+    (Path("skills/arbiter/SKILL.md"), Path("adapters/codex/skills/arbiter/SKILL.md")),
+    (Path("skills/arbiter/OUTPUT_FORMATS.md"), Path("adapters/codex/skills/arbiter/OUTPUT_FORMATS.md")),
+    (Path("skills/overseer/SKILL.md"), Path("adapters/codex/skills/overseer/SKILL.md")),
+    (Path("skills/overseer/OUTPUT_FORMATS.md"), Path("adapters/codex/skills/overseer/OUTPUT_FORMATS.md")),
     (Path("skills/the-steward/SKILL.md"), Path("adapters/codex/skills/the-steward/SKILL.md")),
     (Path("skills/the-governor/SKILL.md"), Path("adapters/codex/skills/the-governor/SKILL.md")),
     (Path("skills/the-steward/OUTPUT_FORMATS.md"), Path("adapters/codex/skills/the-steward/OUTPUT_FORMATS.md")),
     (Path("skills/the-governor/OUTPUT_FORMATS.md"), Path("adapters/codex/skills/the-governor/OUTPUT_FORMATS.md")),
 )
-APPROVED_REFERENCE_DEPTH_TARGETS = (
-    "docs/routing/EXECUTION_MODES_POLICY.md",
-    "SKILL_INDEX.md",
-    "ROUTING_MAP.md",
-    "docs/routing/MINIMAL_PROMPT_FORMAT.md",
-    "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md",
-    "docs/governance/PROJECT_CONTEXT_DECISION_PROMPT.md",
-    "docs/governance/PROJECT_CONTEXT_ENFORCEMENT_POLICY.md",
-    "docs/templates/PROJECT_CONTEXT_TEMPLATE.md",
-)
-
-
 def print_error(message):
     print(f"\033[91mERROR: {message}\033[0m")
 
@@ -73,15 +88,35 @@ def normalize_body_for_parity(content):
         if line.lstrip().startswith("```"):
             in_code_fence = not in_code_fence
         elif not in_code_fence:
-            for target in APPROVED_REFERENCE_DEPTH_TARGETS:
-                line = line.replace(f"`../../{target}`", f"`{target}`")
-                line = line.replace(f"`../../../../{target}`", f"`{target}`")
+            references = (reference for group in PORTABLE_REFERENCES.values() for reference in group)
+            for source, canonical, exported, anchor in sorted(references, key=lambda item: len(item[1]), reverse=True):
+                marker = f"__PORTABLE_REFERENCE_{anchor.upper().replace('-', '_')}__"
+                # Retain legacy-depth parity compatibility; operational reference
+                # validation runs first and still rejects that path when unresolved.
+                if canonical.startswith("../../"):
+                    line = line.replace(f"../../{canonical}", marker)
+                line = line.replace(canonical, marker).replace(exported, marker)
+            line = line.replace("../../ROUTING_MAP.md", "ROUTING_MAP.md")
+            line = line.replace("../../../../ROUTING_MAP.md", "ROUTING_MAP.md")
         normalized.append(line)
     return "".join(normalized)
 
 
+def iter_prose_lines(content):
+    in_code_fence = False
+    for line_number, line in enumerate(content.splitlines(), 1):
+        if re.match(r"^\s*(```|~~~)", line):
+            in_code_fence = not in_code_fence
+            continue
+        if in_code_fence or line.startswith(("    ", "\t")):
+            continue
+        yield line_number, line
+
+
 def get_markdown_links(content):
-    return re.finditer(r"!?\[[^\]]*\]\(([^)]+)\)", content)
+    for line_number, line in iter_prose_lines(content):
+        for match in re.finditer(r"!?\[[^\]]*\]\(([^)]+)\)", line):
+            yield line_number, match
 
 
 def normalize_link_target(raw_target):
@@ -93,6 +128,52 @@ def normalize_link_target(raw_target):
     if target.startswith("<") and target.endswith(">"):
         target = target[1:-1]
     return target.split("#", 1)[0]
+
+
+def is_within(path, boundary):
+    try:
+        path.relative_to(boundary)
+        return True
+    except ValueError:
+        return False
+
+
+def validate_reference(markdown_file, raw_target, boundary, root, reference_type):
+    target = normalize_link_target(raw_target)
+    if not target:
+        return 0
+
+    target_path = (markdown_file.parent / target).resolve()
+    relative_file = markdown_file.relative_to(root).as_posix()
+    if not is_within(target_path, boundary):
+        print_error(f"Path escape in {relative_file}: {target}")
+        return 1
+    if not target_path.is_file():
+        print_error(f"Missing {reference_type} target in {relative_file}: {target}")
+        return 1
+    return 0
+
+
+def validate_local_references(markdown_root, boundary, root=None, validate_backticks=True):
+    boundary = boundary.resolve()
+    root = (root or boundary).resolve()
+    markdown_root = markdown_root.resolve()
+    markdown_files = [markdown_root] if markdown_root.is_file() else sorted(markdown_root.rglob("*.md"))
+    errors = 0
+
+    for markdown_file in markdown_files:
+        content = read_text(markdown_file)
+        for _, match in get_markdown_links(content):
+            errors += validate_reference(markdown_file, match.group(1), boundary, root, "Markdown link")
+
+        if not validate_backticks or "examples" in markdown_file.relative_to(markdown_root if markdown_root.is_dir() else markdown_file.parent).parts:
+            continue
+
+        for _, line in iter_prose_lines(content):
+            prose_without_links = re.sub(r"!?\[[^\]]*\]\([^)]+\)", "", line)
+            for match in re.finditer(r"`([^`]+\.(?:md|json))`", prose_without_links, re.IGNORECASE):
+                errors += validate_reference(markdown_file, match.group(1), boundary, root, "backtick file reference")
+    return errors
 
 
 def validate_simple_frontmatter(skill, skill_file):
@@ -142,46 +223,32 @@ def get_conductor_required_skills(conductor_skill_path, manifest_skills):
     return required
 
 
-def validate_markdown_links(skill_dir, root):
+def build_portable_reference_context(root, skill):
+    lines = [
+        "# Portable Reference Context",
+        "",
+        "Generated from canonical Orchestra sources. Indented snapshots are code-only context; file references inside snapshots are not package navigation targets.",
+    ]
+    for source, canonical, exported, anchor in PORTABLE_REFERENCES[skill]:
+        source_path = root / source
+        lines.extend(("", f'<a id="{anchor}"></a>', f"## Source: {source}", ""))
+        source_lines = read_text(source_path).replace("\r\n", "\n").rstrip("\r\n").split("\n")
+        lines.extend(f"    {line.rstrip()}" if line.rstrip() else "" for line in source_lines)
+    return "\n".join(lines) + "\n"
+
+
+def validate_portable_reference_context(root, codex_skills_dir):
     errors = 0
-    for markdown_file in skill_dir.rglob("*.md"):
-        content = read_text(markdown_file)
-        for match in get_markdown_links(content):
-            target = normalize_link_target(match.group(1))
-            if not target:
-                continue
-
-            target_path = (markdown_file.parent / target).resolve()
-            if target_path.exists():
-                continue
-
-            relative_file = markdown_file.relative_to(root).as_posix()
-            print_error(f"Missing relative link target in {relative_file}: {target}")
+    for skill in PORTABLE_REFERENCES:
+        bundle = codex_skills_dir / skill / "REFERENCE_CONTEXT.md"
+        if not bundle.is_file():
+            print_error(f"Missing portable reference bundle: {bundle.relative_to(codex_skills_dir.parent).as_posix()}")
             errors += 1
-    return errors
-
-
-def get_backtick_file_refs(content):
-    return re.finditer(r"`([^`]+(?:\.md|\.json))`", content)
-
-
-def validate_allowed_backtick_targets(markdown_file, root):
-    errors = 0
-    content = read_text(markdown_file)
-
-    for match in get_backtick_file_refs(content):
-        target = normalize_link_target(match.group(1))
-        if target not in ALLOWED_BACKTICK_EXPORT_TARGETS:
             continue
-
-        target_path = (markdown_file.parent / target).resolve()
-        if target_path.exists():
-            continue
-
-        relative_file = markdown_file.relative_to(root).as_posix()
-        print_error(f"Missing backtick file reference in {relative_file}: {target}")
-        errors += 1
-
+        expected = build_portable_reference_context(root, skill)
+        if read_text(bundle) != expected:
+            print_error(f"Portable reference bundle differs from canonical sources: {bundle.relative_to(codex_skills_dir.parent).as_posix()}")
+            errors += 1
     return errors
 
 
@@ -270,6 +337,14 @@ def main(argv=None):
     skill_set = set(skills)
     
     errors = 0
+
+    for skill in sorted(REFERENCE_VALIDATION_SKILLS):
+        errors += validate_local_references(
+            root / "skills" / skill,
+            boundary=root,
+            root=root,
+            validate_backticks=True,
+        )
     
     for skill in skills:
         skill_dir = codex_skills_dir / skill
@@ -284,7 +359,6 @@ def main(argv=None):
             errors += 1
         else:
             errors += validate_simple_frontmatter(skill, skill_file)
-            errors += validate_allowed_backtick_targets(skill_file, root)
                 
         out_file = skill_dir / "OUTPUT_FORMATS.md"
         if not out_file.is_file():
@@ -302,7 +376,14 @@ def main(argv=None):
                 print_error("Missing ROUTING_MAP.md in exported conductor")
                 errors += 1
 
-        errors += validate_markdown_links(skill_dir, root)
+        errors += validate_local_references(
+            skill_dir,
+            boundary=export_root,
+            root=export_root,
+            validate_backticks=skill in REFERENCE_VALIDATION_SKILLS,
+        )
+
+    errors += validate_portable_reference_context(root, codex_skills_dir)
 
     routing_map = codex_skills_dir / "conductor" / "ROUTING_MAP.md"
     conductor_skill = codex_skills_dir / "conductor" / "SKILL.md"

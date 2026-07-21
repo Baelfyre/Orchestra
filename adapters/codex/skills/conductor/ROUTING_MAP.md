@@ -8,8 +8,16 @@ Do not load it for obvious single-owner work.
 - Obvious single-owner work routes directly to owner.
 - Ambiguous ownership stays with `conductor`.
 - Governance context stays out of ordinary low-risk work unless trigger exists.
-- `docs/governance/GOVERNANCE_DECISION_PROTOCOL.md` does not load during initial route classification.
+- `REFERENCE_CONTEXT.md#governance-decision-protocol` does not load during initial route classification.
 - `ROUTING_MAP.md` does not load for obvious single-owner tasks.
+
+## Delegated Phase Progression Routing
+
+- Direct single-specialist routing remains available for simple single-unit work outside delegated phases.
+- Conductor is required when multiple approved units exist, transition dispositions must be consumed, or checkpoint/resume behavior is needed.
+- Conductor loads the full envelope once and passes unit-specific deltas to specialists.
+- Routing metadata does not create or expand authority.
+
 
 ## Canonical Routing Rules
 
