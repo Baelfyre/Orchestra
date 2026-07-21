@@ -21,6 +21,9 @@ Next gate: Maintainer review and separate pull-request authorization.
 - Added `docs/project/DELEGATED_GOVERNANCE_IMPLEMENTATION_PLAN.md` as the multi-phase
   implementation roadmap (Phase A through Phase E) with explicit authorization boundaries.
 
+### Fixed
+- Fixed repository-memory branch reference validation in detached-HEAD pull-request CI by discovering exact known local, remote-tracking, and `GITHUB_HEAD_REF` branch identities without weakening missing-path detection. No workflow changes were required.
+
 ### Changed
 - Updated `docs/governance/GOVERNANCE_DECISION_PROTOCOL.md` with additive delegated
   execution section: decision-versus-disposition separation, six dispositions, automatic

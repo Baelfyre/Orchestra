@@ -1,3 +1,4 @@
+import os
 import subprocess
 import sys
 import tempfile
@@ -244,6 +245,170 @@ def test_active_branch_memory_path_exception():
             gc.get_current_git_branch = original_get_current
 
 
+def test_known_git_branches_detached_head_and_ci():
+    with tempfile.TemporaryDirectory(prefix="governance-detached-test-") as temp_dir:
+        repo_root = Path(temp_dir)
+        (repo_root / "docs" / "governance").mkdir(parents=True)
+        (repo_root / "docs" / "governance" / "GOVERNANCE_LAYER.md").write_text("# Layer\n", encoding="utf-8")
+
+        gc.run_git(str(repo_root), "init")
+        gc.run_git(str(repo_root), "config", "user.name", "Test")
+        gc.run_git(str(repo_root), "config", "user.email", "test@example.com")
+
+        (repo_root / "README.md").write_text("# Test\n", encoding="utf-8")
+        gc.run_git(str(repo_root), "add", ".")
+        gc.run_git(str(repo_root), "commit", "-m", "initial")
+
+        branch_name = "docs/delegated-autonomous-governance-phase-a"
+        gc.run_git(str(repo_root), "update-ref", f"refs/remotes/origin/{branch_name}", "HEAD")
+        gc.run_git(str(repo_root), "checkout", "--detach", "HEAD")
+
+        current_branch = gc.get_current_git_branch(str(repo_root))
+        assert_equal("detached HEAD git branch --show-current is empty", current_branch, None)
+
+        known = gc.get_known_git_branches(str(repo_root))
+        assert_equal("remote tracking branch discovered in detached HEAD", branch_name in known, True)
+        assert_equal("remote prefixed branch discovered in detached HEAD", f"origin/{branch_name}" in known, True)
+
+        memory_content = (
+            f"- Active branch: `{branch_name}`\n"
+            f"- Remote branch: `origin/{branch_name}`\n"
+            "- Similar branch: `docs/delegated-autonomous-governance-phase-b`\n"
+            "- Nonexistent path: `docs/governance/DOES_NOT_EXIST.md`\n"
+            "- Existing path: `docs/governance/GOVERNANCE_LAYER.md`\n"
+            "- Random missing path: `docs/random-missing-value`\n"
+        )
+        (repo_root / "SESSION_HANDOFF.md").write_text(memory_content, encoding="utf-8")
+
+        counters = {"warnings": 0, "errors": 0}
+        gc.run_repo_memory_path_check(str(repo_root), counters)
+        assert_equal("detached HEAD memory check errors count (phase-b, DOES_NOT_EXIST, random-missing-value = 3)", counters["errors"], 3)
+
+        old_gh_head = os.environ.get("GITHUB_HEAD_REF")
+        try:
+            os.environ["GITHUB_HEAD_REF"] = "docs/ci-feature-branch"
+            known_ci = gc.get_known_git_branches(str(repo_root))
+            assert_equal("GITHUB_HEAD_REF recognized in known branches", "docs/ci-feature-branch" in known_ci, True)
+        finally:
+            if old_gh_head is None:
+                os.environ.pop("GITHUB_HEAD_REF", None)
+            else:
+                os.environ["GITHUB_HEAD_REF"] = old_gh_head
+
+        original_run_git = gc.run_git
+        def mock_run_git(root, *args):
+            if args and args[0] == "for-each-ref":
+                class DummyResult:
+                    returncode = 1
+                    stdout = ""
+                return DummyResult()
+            return original_run_git(root, *args)
+
+        gc.run_git = mock_run_git
+        try:
+            known_fallback = gc.get_known_git_branches(str(repo_root))
+            assert_equal("graceful fallback on for-each-ref failure does not crash", isinstance(known_fallback, set), True)
+        finally:
+            gc.run_git = original_run_git
+
+
+def test_isolated_github_head_ref_and_ref_name_rejection():
+    with tempfile.TemporaryDirectory(prefix="governance-gh-head-test-") as temp_dir:
+        repo_root = Path(temp_dir)
+        gc.run_git(str(repo_root), "init")
+        gc.run_git(str(repo_root), "config", "user.name", "Test")
+        gc.run_git(str(repo_root), "config", "user.email", "test@example.com")
+        (repo_root / "README.md").write_text("# Test\n", encoding="utf-8")
+        gc.run_git(str(repo_root), "add", ".")
+        gc.run_git(str(repo_root), "commit", "-m", "initial")
+        gc.run_git(str(repo_root), "checkout", "--detach", "HEAD")
+
+        initial_known = gc.get_known_git_branches(str(repo_root))
+        feature_branch = "docs/delegated-autonomous-governance-phase-a"
+        assert_equal("feature branch absent from clean git refs", feature_branch in initial_known, False)
+
+        old_gh_head = os.environ.get("GITHUB_HEAD_REF")
+        old_gh_ref = os.environ.get("GITHUB_REF_NAME")
+        try:
+            os.environ["GITHUB_HEAD_REF"] = feature_branch
+            os.environ["GITHUB_REF_NAME"] = "189/merge"
+
+            known = gc.get_known_git_branches(str(repo_root))
+            assert_equal("GITHUB_HEAD_REF accepted independently without git refs", feature_branch in known, True)
+            assert_equal("GITHUB_REF_NAME 189/merge is not in known branches", "189/merge" in known, False)
+
+            (repo_root / "SESSION_HANDOFF.md").write_text(f"- Active branch: `{feature_branch}`\n", encoding="utf-8")
+            counters = {"warnings": 0, "errors": 0}
+            gc.run_repo_memory_path_check(str(repo_root), counters)
+            assert_equal("isolated GITHUB_HEAD_REF accepted in memory check", counters["errors"], 0)
+        finally:
+            if old_gh_head is None:
+                os.environ.pop("GITHUB_HEAD_REF", None)
+            else:
+                os.environ["GITHUB_HEAD_REF"] = old_gh_head
+            if old_gh_ref is None:
+                os.environ.pop("GITHUB_REF_NAME", None)
+            else:
+                os.environ["GITHUB_REF_NAME"] = old_gh_ref
+
+
+def test_git_enumeration_failure_fail_closed():
+    with tempfile.TemporaryDirectory(prefix="governance-enum-fail-test-") as temp_dir:
+        repo_root = Path(temp_dir)
+        (repo_root / "docs" / "governance").mkdir(parents=True)
+        (repo_root / "docs" / "governance" / "GOVERNANCE_LAYER.md").write_text("# Layer\n", encoding="utf-8")
+
+        gc.run_git(str(repo_root), "init")
+        gc.run_git(str(repo_root), "config", "user.name", "Test")
+        gc.run_git(str(repo_root), "config", "user.email", "test@example.com")
+        (repo_root / "README.md").write_text("# Test\n", encoding="utf-8")
+        gc.run_git(str(repo_root), "add", ".")
+        gc.run_git(str(repo_root), "commit", "-m", "initial")
+        gc.run_git(str(repo_root), "checkout", "--detach", "HEAD")
+
+        feature_branch = "docs/delegated-autonomous-governance-phase-a"
+        old_gh_head = os.environ.get("GITHUB_HEAD_REF")
+        original_run_git = gc.run_git
+
+        def mock_run_git(root, *args):
+            if args and args[0] == "for-each-ref":
+                class DummyResult:
+                    returncode = 1
+                    stdout = ""
+                return DummyResult()
+            return original_run_git(root, *args)
+
+        gc.run_git = mock_run_git
+        try:
+            os.environ["GITHUB_HEAD_REF"] = feature_branch
+            memory_content = (
+                f"- Active branch: `{feature_branch}`\n"
+                "- Unknown branch: `docs/delegated-autonomous-governance-phase-b`\n"
+                "- Nonexistent path: `docs/governance/DOES_NOT_EXIST.md`\n"
+                "- Existing path: `docs/governance/GOVERNANCE_LAYER.md`\n"
+            )
+            (repo_root / "SESSION_HANDOFF.md").write_text(memory_content, encoding="utf-8")
+
+            counters = {"warnings": 0, "errors": 0}
+            gc.run_repo_memory_path_check(str(repo_root), counters)
+            assert_equal("enumeration failure fail-closed errors count (expects 2 for phase-b and DOES_NOT_EXIST)", counters["errors"], 2)
+        finally:
+            gc.run_git = original_run_git
+            if old_gh_head is None:
+                os.environ.pop("GITHUB_HEAD_REF", None)
+            else:
+                os.environ["GITHUB_HEAD_REF"] = old_gh_head
+
+
+def test_wildcard_glob_handling_regression():
+    assert_equal("glob docs/* excluded", gc.is_repo_relative_memory_path("docs/*"), False)
+    assert_equal("glob scripts/*.py excluded", gc.is_repo_relative_memory_path("scripts/*.py"), False)
+    assert_equal("glob tests/behavior/test_?.py excluded", gc.is_repo_relative_memory_path("tests/behavior/test_?.py"), False)
+
+    assert_equal("ordinary missing path included", gc.is_repo_relative_memory_path("docs/random-missing-value"), True)
+    assert_equal("ordinary missing file included", gc.is_repo_relative_memory_path("docs/governance/DOES_NOT_EXIST.md"), True)
+
+
 def main():
     assert_equal("forbidden artifacts", gc.is_forbidden_repo_path("artifacts/governance_report.txt"), True)
     assert_equal("forbidden runtime folder", gc.is_forbidden_repo_path(".agents/skills/dagger/SKILL.md"), True)
@@ -266,6 +431,10 @@ def main():
     test_codex_parity_normalizes_only_approved_reference_depths()
     test_repo_memory_path_check()
     test_active_branch_memory_path_exception()
+    test_known_git_branches_detached_head_and_ci()
+    test_isolated_github_head_ref_and_ref_name_rejection()
+    test_git_enumeration_failure_fail_closed()
+    test_wildcard_glob_handling_regression()
     test_startup_state_claim_check()
     print("Governance check helper tests passed.")
     sys.exit(0)

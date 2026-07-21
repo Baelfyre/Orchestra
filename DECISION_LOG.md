@@ -86,6 +86,26 @@ The commit and push did not authorize a pull request, merge, release, or deploym
 
 ---
 
+## Date: 2026-07-22
+
+**Decision:**
+Fix repository-memory branch reference validation in detached-HEAD PR CI for PR #189.
+
+**Reason:**
+GitHub Actions checked out PR #189's merge ref (`refs/remotes/pull/189/merge`) in detached-HEAD mode. The existing `get_current_git_branch` exception returned `None` in detached HEAD, causing exact feature branch references (`docs/delegated-autonomous-governance-phase-a`) to be misclassified as missing repository paths.
+
+**Remediation Approach:**
+- Introduced `get_known_git_branches(repo_root)` in `scripts/governance_check.py` to build an exact set of known branch identities from local branch refs (`refs/heads/*`), remote-tracking refs (`refs/remotes/*`), and trusted CI environment (`GITHUB_HEAD_REF`).
+- Broad `docs/*` exemptions and workflow modifications were explicitly rejected to avoid weakening stale-path detection.
+
+**State Update:**
+- PR: #189 (open)
+- Active Branch: `docs/delegated-autonomous-governance-phase-a`
+- Fix Status: Implemented locally and validated; awaiting commit authorization
+- Workflow changes: None
+
+---
+
 ## Date: 2026-06-26
 
 **Decision:**

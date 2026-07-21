@@ -266,6 +266,8 @@ def is_repo_relative_memory_path(path_text):
         return False
     if any(part == ".." for part in normalized.split("/")):
         return False
+    if "*" in normalized or "?" in normalized:
+        return False
     suffix = Path(normalized).suffix.lower()
     if suffix in PATH_EXTENSIONS:
         return True
@@ -280,11 +282,51 @@ def get_memory_path_references(line):
     return list(dict.fromkeys(references))
 
 
+def get_known_git_branches(repo_root):
+    known = set()
+
+    current_branch = get_current_git_branch(repo_root)
+    if current_branch:
+        norm = current_branch.strip().replace("\\", "/").rstrip("/")
+        if norm and norm.lower() != "head":
+            known.add(norm)
+
+    result = run_git(repo_root, "for-each-ref", "--format=%(refname)", "refs/heads", "refs/remotes")
+    if result.returncode == 0:
+        for line in result.stdout.splitlines():
+            ref = line.strip().replace("\\", "/").rstrip("/")
+            if not ref:
+                continue
+
+            if ref.startswith("refs/pull/") or "/pull/" in ref or ref.endswith("/merge"):
+                continue
+
+            if ref.startswith("refs/heads/"):
+                branch_name = ref[len("refs/heads/"):].strip()
+                if branch_name and branch_name.lower() != "head":
+                    known.add(branch_name)
+            elif ref.startswith("refs/remotes/"):
+                remote_ref = ref[len("refs/remotes/"):].strip()
+                if not remote_ref or remote_ref.endswith("/HEAD") or remote_ref == "HEAD":
+                    continue
+                known.add(remote_ref)
+                parts = remote_ref.split("/", 1)
+                if len(parts) == 2 and parts[1] and parts[1].lower() != "head":
+                    known.add(parts[1])
+
+    github_head_ref = os.environ.get("GITHUB_HEAD_REF")
+    if github_head_ref:
+        gh_norm = github_head_ref.strip().replace("\\", "/").rstrip("/")
+        if gh_norm and gh_norm.lower() != "head":
+            known.add(gh_norm)
+
+    return known
+
+
 def run_repo_memory_path_check(repo_root, counters):
     print("\n[7c] Checking repo-local memory path references...")
     missing_references = []
-    current_branch = get_current_git_branch(repo_root)
-    normalized_branch = current_branch.strip().replace("\\", "/").rstrip("/") if current_branch else None
+    known_branches = get_known_git_branches(repo_root)
 
     for memory_file in REPO_MEMORY_FILES:
         memory_path = Path(repo_root) / memory_file
@@ -294,7 +336,7 @@ def run_repo_memory_path_check(repo_root, counters):
         for line_number, line in enumerate(memory_path.read_text(encoding="utf-8").splitlines(), 1):
             for reference in get_memory_path_references(line):
                 normalized = reference.strip().strip("`").replace("\\", "/").rstrip("/")
-                if normalized_branch and normalized == normalized_branch:
+                if known_branches and normalized in known_branches:
                     continue
                 if not is_repo_relative_memory_path(normalized):
                     continue

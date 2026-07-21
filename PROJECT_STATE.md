@@ -15,7 +15,7 @@
 - **Current Public Release:** `v1.1.2`
 - **Release Status:** Published July 14, 2026
 - **Current Stable State:** `v1.1.2` published; README transparency and UI engineering and validation governance merged through PR #187
-- **Current Task:** Phase A post-push maintainer review
+- **Current Task:** PR #189 detached-HEAD CI branch reference correction implemented locally and awaiting review
 - **Phase A:** Implemented, committed, initially pushed, validated, and under maintainer review; all Phase A contracts defined in `docs/governance/DELEGATED_EXECUTION_POLICY.md`
 - **Phase B:** Not started and not authorized
 - **Phase C:** Not started
