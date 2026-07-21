@@ -1,7 +1,7 @@
 # Session Handoff
 
 - **Current Stable State:** `v1.1.2` published; Phase A canonical delegated governance contracts merged.
-- **Current Task:** Phase B Instruction-Level Delegated Autonomous Loop implementation and local validation.
+- **Current Task:** Phase B Instruction-Level Delegated Autonomous Loop PR #190 draft submission and CI validation.
 - **Current Repo:** `C:\conductor`
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
@@ -11,7 +11,11 @@
 - **Current Public Release:** `v1.1.2`
 - **Completed Phase B Units:** B0 through B7 completed.
 - **Phase B Implementation Commit:** `777eca8a1dc3a2a6b281f6ebcf16c7cfcde9b4d8` (`777eca8`)
-- **Phase B Status:** Instruction-level behavior implemented, committed (`777eca8`), and locally validated; remote and host reliability remain pending until separately authorized.
+- **Phase B State-Sync Commit:** `702ef005946cab69725267d0e4e89abd0c67ae99` (`702ef00`)
+- **Codex Mirror Correction Commit:** `44350ece2989b5dcae9acae9c5658e3cefcb75d5` (`44350ec`)
+- **Remote Feature Branch:** `origin/feat/delegated-autonomous-governance-phase-b`
+- **Pull Request Status:** Draft PR #190 open (`https://github.com/Baelfyre/Orchestra/pull/190`)
+- **Phase B Status:** Instruction-level behavior implemented, committed (`777eca8`), synchronized (`702ef00`), Codex mirrors corrected (`44350ec`), pushed to remote, submitted as draft PR #190, and 9/9 GitHub Actions CI checks passing; remote merge and host reliability remain pending until separately authorized.
 - **Startup Verification Rule:** Resolve current branch tips at session start using:
   ```powershell
   git branch --show-current
@@ -24,7 +28,9 @@
   - Routing contract: PASS (`scripts/validate_routing_contract.py`, `tests/behavior/test_router_contracts.py`)
   - Static behavioral expectations: PASS (`tests/behavior/evaluate_governance.py` - 26/26 checks)
   - Prompt load budget: PASS (`scripts/validate_prompt_load_budget.py` - 7/7 packages pass)
+  - Codex export validation: PASS (`adapters/codex/validate_codex_export.py`)
   - Structure, Manifest, IDE packaging, Governance check, Stale references: PASS
-  - Staged Codex export validation: PASS (tested in temp directory & cleaned)
-- **Standing Action Flags:** All false (no commit, push, PR, merge, tag, release, deploy, or destructive operations performed).
-- **Next Step:** Maintainer review of Phase B implementation on `feat/delegated-autonomous-governance-phase-b`.
+  - Runtime tests & coverage: PASS (194 tests passed; 97.72% coverage)
+  - GitHub Actions CI: PASS (9/9 checks pass on PR #190)
+- **Standing Action Flags:** All false (no merge, tag, release, deploy, or destructive operations performed).
+- **Next Step:** Maintainer review of draft PR #190 on `feat/delegated-autonomous-governance-phase-b`.
