@@ -123,3 +123,45 @@ Rules:
 - Use `BLOCKED` only for unsafe destructive behavior, missing or bypassed critical guardrails, or broken governance execution that prevents review.
 - Keep Dagger safety conclusions evidence-based and do not report live execution risk when the runtime guardrail is still simulation-only and fail-closed.
 - Do not describe advisory CI output as unconditional success when warnings, deferred checks, or non-blocking findings exist.
+
+## Transition Decision Record
+
+Use this format when emitting a transition disposition at a delegated phase unit boundary.
+
+```markdown
+## Transition Decision Record
+- Envelope ID:
+- Phase ID:
+- Unit ID:
+- Governance Decision: APPROVED | ADVISORY_ONLY | REVISION_REQUIRED | BLOCKED | NOT_APPLICABLE
+- Continuity Result: READY | READY_WITH_MINOR_FIXES | HOLD | BLOCKED
+- Transition Disposition: AUTO_CONTINUE | AUTO_REMEDIATE_AND_REVALIDATE | WAIT_FOR_EVIDENCE | WAIT_FOR_CAPACITY | ESCALATE_HUMAN | STOP
+- Reason Code:
+- Evidence References:
+- Remediation Authority:
+- Remediation Attempt Count:
+- Next Eligible Unit:
+- Resume Requirements:
+```
+
+## Checkpoint / Capacity Handoff
+
+Use this format when creating a checkpoint after an accepted unit or recording a capacity wait state.
+
+```markdown
+## Checkpoint / Capacity Handoff
+- Envelope ID:
+- Phase ID:
+- Last Completed Unit:
+- Next Eligible Unit:
+- Current Branch:
+- Approved Base SHA:
+- Current Execution SHA:
+- Working Tree State: clean | changed
+- Changed Paths:
+- Validation Completed:
+- Validation Remaining:
+- Known Limitations:
+- Exact Next Action:
+- Envelope Validity: VALID | INVALID
+```
