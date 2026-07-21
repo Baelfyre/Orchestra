@@ -283,6 +283,8 @@ def get_memory_path_references(line):
 def run_repo_memory_path_check(repo_root, counters):
     print("\n[7c] Checking repo-local memory path references...")
     missing_references = []
+    current_branch = get_current_git_branch(repo_root)
+    normalized_branch = current_branch.strip().replace("\\", "/").rstrip("/") if current_branch else None
 
     for memory_file in REPO_MEMORY_FILES:
         memory_path = Path(repo_root) / memory_file
@@ -292,6 +294,8 @@ def run_repo_memory_path_check(repo_root, counters):
         for line_number, line in enumerate(memory_path.read_text(encoding="utf-8").splitlines(), 1):
             for reference in get_memory_path_references(line):
                 normalized = reference.strip().strip("`").replace("\\", "/").rstrip("/")
+                if normalized_branch and normalized == normalized_branch:
+                    continue
                 if not is_repo_relative_memory_path(normalized):
                     continue
                 if (Path(repo_root) / normalized).exists():

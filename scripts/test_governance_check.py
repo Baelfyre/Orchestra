@@ -219,6 +219,31 @@ def test_startup_state_claim_check():
         gc.get_plugin_version = original_get_plugin_version
 
 
+def test_active_branch_memory_path_exception():
+    with tempfile.TemporaryDirectory(prefix="governance-active-branch-test-") as temp_dir:
+        repo_root = Path(temp_dir)
+        (repo_root / "docs" / "governance").mkdir(parents=True)
+        (repo_root / "docs" / "governance" / "GOVERNANCE_LAYER.md").write_text("# Layer\n", encoding="utf-8")
+
+        memory_content = (
+            "- Active branch: `docs/delegated-autonomous-governance-phase-a`\n"
+            "- Similar branch: `docs/delegated-autonomous-governance-phase-b`\n"
+            "- Nonexistent path: `docs/governance/DOES_NOT_EXIST.md`\n"
+            "- Existing path: `docs/governance/GOVERNANCE_LAYER.md`\n"
+        )
+        (repo_root / "SESSION_HANDOFF.md").write_text(memory_content, encoding="utf-8")
+
+        original_get_current = gc.get_current_git_branch
+        gc.get_current_git_branch = lambda r: "docs/delegated-autonomous-governance-phase-a"
+
+        try:
+            counters = {"warnings": 0, "errors": 0}
+            gc.run_repo_memory_path_check(str(repo_root), counters)
+            assert_equal("active branch exception errors count (expects 2 errors for phase-b and DOES_NOT_EXIST)", counters["errors"], 2)
+        finally:
+            gc.get_current_git_branch = original_get_current
+
+
 def main():
     assert_equal("forbidden artifacts", gc.is_forbidden_repo_path("artifacts/governance_report.txt"), True)
     assert_equal("forbidden runtime folder", gc.is_forbidden_repo_path(".agents/skills/dagger/SKILL.md"), True)
@@ -240,6 +265,7 @@ def main():
     test_issue_171_validators_are_registered()
     test_codex_parity_normalizes_only_approved_reference_depths()
     test_repo_memory_path_check()
+    test_active_branch_memory_path_exception()
     test_startup_state_claim_check()
     print("Governance check helper tests passed.")
     sys.exit(0)

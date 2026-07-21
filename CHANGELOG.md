@@ -2,6 +2,38 @@
 
 This changelog tracks the repository history using git tags, merge history, and the prior documented milestone log that lived under `docs/meta/CHANGELOG.md`.
 
+## Unreleased - Phase A Delegated Autonomous Governance Contract Design
+
+Local implementation only. Branch: `docs/delegated-autonomous-governance-phase-a`.
+No commit, push, pull request, merge, tag, release, or deployment performed.
+
+### Added
+- Added `docs/governance/DELEGATED_EXECUTION_POLICY.md` as the single canonical source for
+  delegated phase envelopes, approved unit plans, execution evidence packets, transition
+  decision records, six transition dispositions (`AUTO_CONTINUE`, `AUTO_REMEDIATE_AND_REVALIDATE`,
+  `WAIT_FOR_EVIDENCE`, `WAIT_FOR_CAPACITY`, `ESCALATE_HUMAN`, `STOP`), transition precedence,
+  automatic remediation policy with finite limits, focused and phase validation levels,
+  baseline lineage, checkpoint policy, capacity handoff record, external-action authority
+  policy (default-deny), legacy host fallback policy (fail-closed), delegated phase state
+  machine, and token-efficiency requirements.
+- Added `docs/project/DELEGATED_GOVERNANCE_IMPLEMENTATION_PLAN.md` as the multi-phase
+  implementation roadmap (Phase A through Phase E) with explicit authorization boundaries.
+
+### Changed
+- Updated `docs/governance/GOVERNANCE_DECISION_PROTOCOL.md` with additive delegated
+  execution section: decision-versus-disposition separation, six dispositions, automatic
+  progression requirements, and fail-closed rule. Existing decision values unchanged.
+- Updated `docs/governance/GOVERNANCE_LAYER.md` with additive phase-level delegated
+  governance section, re-entry triggers, phase status table, and corrected enforcement
+  limitation distinguishing route-level from phase-level enforcement.
+- Updated `docs/governance/GOVERNANCE_REVIEW_FLOW.md` with additive target delegated
+  execution flow, clearly labeled as Phase B target behavior and not yet active.
+- Updated `scripts/validate_governance_protocol_consistency.py` with additive Phase A
+  checks for all required contracts, dispositions, authority principles, fail-closed rule,
+  remediation limits, external-action default-deny, and integration references.
+- Updated `tests/behavior/test_governance_protocol_consistency.py` with one positive and
+  nine negative Phase A test cases asserting actual validator behavior.
+
 ## v1.0.0 - Portable Runtime
 
 Portable Runtime is the first Orchestra release that normalizes the repository around a shared runtime core, thin adapters, and a versioned adapter protocol.

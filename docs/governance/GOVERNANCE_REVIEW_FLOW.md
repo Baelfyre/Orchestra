@@ -140,5 +140,42 @@ DECISION: REVISION_REQUIRED
 REASON: Project context incomplete.
 REQUIRED_ACTIONS: [Provide project type, release target, data collection status]
 ```
-
 The system does not default to HIGH-risk assumptions for unknown projects.
+
+## Target Delegated Execution Flow (Phase B - Not Yet Active)
+
+The following flow describes the target behavior for delegated autonomous
+governance. It is **not yet active**. Phase A defines the contracts required
+for this flow. Phase B instruction-level behavior (skill and adapter updates)
+is required before this flow operates.
+
+```
+Phase envelope approved by human
+  ->  Internal unit execution begins
+  ->  Unit work performed within envelope boundaries
+  ->  Focused evidence collected (validation commands, scope audit, security check)
+  ->  Arbiter transition evaluation
+        APPROVED + evidence current + no gate  ->  AUTO_CONTINUE
+        Deterministic in-scope defect + budget remains  ->  AUTO_REMEDIATE_AND_REVALIDATE
+        Missing or stale evidence  ->  WAIT_FOR_EVIDENCE
+        Insufficient host capacity  ->  WAIT_FOR_CAPACITY
+        Missing intent, scope change, policy, or contradiction  ->  ESCALATE_HUMAN
+        Unsafe or prohibited condition  ->  STOP
+  ->  On AUTO_CONTINUE: checkpoint produced, next unit begins
+  ->  On WAIT_*: resumable state held, no new approval required
+  ->  On ESCALATE_HUMAN: human decision obtained, phase resumes or is revised
+  ->  On STOP: phase halts, human review required
+
+All approved units accepted
+  ->  Phase validation gate runs
+  ->  PHASE_READY_FOR_HUMAN_REVIEW returned
+```
+
+Current behavior (before Phase B) uses the standard flow documented in this
+file, where each significant decision point involves a human prompt. The
+governance specialist and Arbiter re-entry rules in `GOVERNANCE_LAYER.md`
+apply in both the current and target flows.
+
+See `docs/governance/DELEGATED_EXECUTION_POLICY.md` for the canonical contract
+and `docs/project/DELEGATED_GOVERNANCE_IMPLEMENTATION_PLAN.md` for the
+multi-phase implementation roadmap.
