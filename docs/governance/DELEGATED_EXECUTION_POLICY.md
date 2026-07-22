@@ -7,7 +7,7 @@ waiting, external-action authority, envelope invalidation, and legacy fallback.
 
 Do not duplicate the full contract defined here in role skills, routing files, or
 governance layer documents. Phase B adds concise role-specific behavior that
-references this canonical policy on its feature branch under draft PR #190.
+references this canonical policy. Phase B is merged and canonical through PR #190.
 
 Load this document only when a delegated phase envelope must be issued,
 evaluated, or enforced.
@@ -15,8 +15,8 @@ evaluated, or enforced.
 ## Phase Implementation Status
 
 Phase A defines the canonical contracts for delegated autonomous governance.
-Phase B instruction-level behavior is implemented on the feature branch, under correction in draft PR #190, and is not canonical until merged. Remote and host reliability remain pending until separately authorized.
-Phase A contracts are merged; Phase C and Phase D are not started. Phase B has not been merged, released, or deployed.
+Phase B instruction-level behavior is now merged and canonical on `main` through PR #190. Remote and host reliability remain pending until separately authorized.
+Phase A contracts are merged; Phase C and Phase D are not started. Phase B has not been released or deployed.
 
 
 ---
@@ -627,15 +627,13 @@ capacity during a delegated phase:
 
 At Phase A contract-design time, instruction-level autonomous behavior in role
 skills and adapters was not yet implemented. Phase B now implements that
-instruction-level behavior on the feature branch under correction in draft PR
-#190; it is not canonical until merged.
+instruction-level behavior, which is merged and canonical on `main` through PR #190.
 
 The following remain outside this document's implementation scope:
 
 - Host reliability evaluation (Phase C).
 - Typed runtime enforcement (Phase D, conditional on separate authorization).
-- Release preparation, commit, push, pull request, merge, tag, or deployment
-  (Phase E and separately governed).
+- Release preparation, tag, or deployment (Phase E and separately governed).
 
 See `docs/project/DELEGATED_GOVERNANCE_IMPLEMENTATION_PLAN.md` for the
 multi-phase implementation roadmap.

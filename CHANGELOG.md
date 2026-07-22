@@ -4,7 +4,7 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased - Phase B Instruction-Level Delegated Autonomous Loop
 
-Phase B instruction-level behavior is implemented on the feature branch, under correction in draft PR #190, and is not canonical until merged. Phase C, Phase D, merge, release, and deployment remain unperformed.
+Phase B instruction-level delegated governance was merged into `main` through PR #190 at merge commit `d37a2f7b31543efacf7a5e81c3f4d08c12da017d`. Phase C and Phase D remain unstarted. No Phase B release or deployment has been performed.
 
 ### Added
 - Added `Delegated Governance Review` output format to Steward and Governor roles (`skills/the-steward/OUTPUT_FORMATS.md`, `skills/the-governor/OUTPUT_FORMATS.md`).
@@ -24,7 +24,7 @@ Phase B instruction-level behavior is implemented on the feature branch, under c
 - Updated `adapters/codex/export-codex-skills.ps1` and `adapters/codex/validate_codex_export.py` to package external reference context inside exported skills, rewrite references to package-local targets, reject missing or escaping Markdown/JSON targets, and preserve tracked source-to-export parity at arbitrary installation depth.
 - Updated `scripts/validate_governance_protocol_consistency.py` and `tests/behavior/test_governance_protocol_consistency.py` to enforce exact record schemas and reject unqualified stale Phase B status claims while preserving clearly qualified Phase A history.
 - Updated `tests/behavior/test_router_contracts.py` with reference-integrity cases plus the contract-driven trace evaluator and 11 required negative mutations.
-- Corrected current Phase A-D, draft PR #190, merge, release, and deployment status across the delegated execution policy, governance layer, governance review flow, and implementation plan.
+- Corrected current Phase A-D and deployment status across the delegated execution policy, governance layer, governance review flow, and implementation plan. PR #190 has been merged.
 
 ## Unreleased - Phase A Delegated Autonomous Governance Contract Design
 

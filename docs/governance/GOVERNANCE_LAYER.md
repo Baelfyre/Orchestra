@@ -288,12 +288,12 @@ Specialists re-enter when:
 | Phase | Description | Status |
 |---|---|---|
 | Phase A | Contract design: envelopes, dispositions, evidence, remediation, checkpointing, capacity, authority, invalidation, fallback | **Defined (`DELEGATED_EXECUTION_POLICY.md`)** |
-| Phase B | Instruction-level behavior: skill/adapter updates to consume dispositions and loop | **Implemented; under correction in draft PR #190; not merged** |
+| Phase B | Instruction-level behavior: skill/adapter updates to consume dispositions and loop | **Merged and canonical through PR #190** |
 | Phase C | Host reliability evaluation: validate host envelope preservation and checkpointing | **Not yet implemented** |
 | Phase D | Optional typed runtime enforcement: typed models for envelopes, units, evidence | **Not yet implemented** |
 | Phase E | Release preparation: commit, push, PR, merge, tag, release, deployment | **Separately governed** |
 
-Phase A contracts are merged; Phase C and Phase D are not started. Phase B has not been merged, released, or deployed.
+Phase A contracts are merged; Phase B is merged and canonical through PR #190; Phase C and Phase D are not started. Phase B has not been released or deployed.
 
 ## Enforcement Limitation
 

@@ -368,6 +368,67 @@ def test_stale_phase_b_status_phrases_fail():
             temp.cleanup()
 
 
+def test_stale_post_merge_draft_wording_fails():
+    """Negative: validator fails when stale draft-PR wording remains in current-state files."""
+    phrases = (
+        "under correction in draft PR #190",
+        "Phase B Feature Branch, Draft PR #190",
+        "not canonical until merged",
+        "Phase B has not been merged",
+        "until Phase B is merged",
+        "PR #190 remains open",
+        "PR #190 open and ready for review",
+    )
+    for phrase in phrases:
+        temp, repo_root = make_repo_copy()
+        try:
+            path = repo_root / "docs/governance/GOVERNANCE_REVIEW_FLOW.md"
+            path.write_text(path.read_text(encoding="utf-8") + f"\n{phrase}.\n", encoding="utf-8")
+            result = run_validator(repo_root)
+            assert_true(f"stale post-merge draft wording rejected: {phrase}", result.returncode == 1 and phrase.casefold() in result.stdout.casefold())
+        finally:
+            temp.cleanup()
+
+
+def test_missing_canonical_merged_status_fails():
+    """Negative: validator fails when canonical merged Phase B status is removed."""
+    temp, repo_root = make_repo_copy()
+    try:
+        path = repo_root / "docs/governance/GOVERNANCE_REVIEW_FLOW.md"
+        content = path.read_text(encoding="utf-8")
+        path.write_text(content.replace("merged and canonical through PR #190", "REMOVED_STATUS"), encoding="utf-8")
+        result = run_validator(repo_root)
+        assert_true("missing canonical merged status fail", result.returncode == 1 and "merged canonical status" in result.stdout.casefold())
+    finally:
+        temp.cleanup()
+
+
+def test_phase_b_not_merged_wording_fails():
+    """Negative: validator fails when Phase-B-not-merged wording appears."""
+    temp, repo_root = make_repo_copy()
+    try:
+        path = repo_root / "docs/governance/DELEGATED_EXECUTION_POLICY.md"
+        content = path.read_text(encoding="utf-8")
+        path.write_text(content + "\nPhase B has not been merged.\n", encoding="utf-8")
+        result = run_validator(repo_root)
+        assert_true("phase-b-not-merged wording fail", result.returncode == 1)
+    finally:
+        temp.cleanup()
+
+
+def test_open_ready_pr_wording_fails():
+    """Negative: validator fails when open/ready PR wording appears."""
+    temp, repo_root = make_repo_copy()
+    try:
+        path = repo_root / "docs/governance/GOVERNANCE_LAYER.md"
+        content = path.read_text(encoding="utf-8")
+        path.write_text(content + "\nPR #190 open and ready for review.\n", encoding="utf-8")
+        result = run_validator(repo_root)
+        assert_true("open/ready PR wording fail", result.returncode == 1)
+    finally:
+        temp.cleanup()
+
+
 def test_qualified_phase_a_history_is_allowed():
     temp, repo_root = make_repo_copy()
     try:
@@ -379,6 +440,32 @@ def test_qualified_phase_a_history_is_allowed():
         path.write_text(path.read_text(encoding="utf-8") + historical, encoding="utf-8")
         result = run_validator(repo_root)
         assert_true("qualified Phase A history allowed", result.returncode == 0)
+    finally:
+        temp.cleanup()
+
+
+def test_phase_cd_not_started_requirement_enforced():
+    """Negative: validator fails when Phase C/D not-started requirement is removed."""
+    temp, repo_root = make_repo_copy()
+    try:
+        path = repo_root / "docs/governance/DELEGATED_EXECUTION_POLICY.md"
+        content = path.read_text(encoding="utf-8")
+        path.write_text(content.replace("Phase C and Phase D are not started", "REMOVED_STATEMENT"), encoding="utf-8")
+        result = run_validator(repo_root)
+        assert_true("phase cd not-started fail", result.returncode == 1 and "Phase C and Phase D are not started" in result.stdout)
+    finally:
+        temp.cleanup()
+
+
+def test_release_deployment_not_performed_requirement_enforced():
+    """Negative: validator fails when release/deployment-not-performed requirement is removed."""
+    temp, repo_root = make_repo_copy()
+    try:
+        path = repo_root / "docs/governance/DELEGATED_EXECUTION_POLICY.md"
+        content = path.read_text(encoding="utf-8")
+        path.write_text(content.replace("Phase B has not been released or deployed", "REMOVED_STATEMENT"), encoding="utf-8")
+        result = run_validator(repo_root)
+        assert_true("release/deployment not-performed fail", result.returncode == 1 and "Phase B has not been released or deployed" in result.stdout)
     finally:
         temp.cleanup()
 
@@ -406,7 +493,13 @@ def main():
     test_record_schema_exactly_once_and_transition_identity_failures()
     test_capacity_schema_cannot_use_checkpoint_alias()
     test_stale_phase_b_status_phrases_fail()
+    test_stale_post_merge_draft_wording_fails()
+    test_missing_canonical_merged_status_fails()
+    test_phase_b_not_merged_wording_fails()
+    test_open_ready_pr_wording_fails()
     test_qualified_phase_a_history_is_allowed()
+    test_phase_cd_not_started_requirement_enforced()
+    test_release_deployment_not_performed_requirement_enforced()
     print("Governance protocol consistency tests passed.")
     return 0
 

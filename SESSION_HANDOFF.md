@@ -1,13 +1,13 @@
 # Session Handoff
 
-- **Current Stable State:** `v1.1.2` published; Phase A canonical delegated governance contracts merged.
-- **Current Task:** Phase B PR #190 mark-ready continuity synchronization for immutable merge-readiness review.
+- **Current Stable State:** `v1.1.2` published; Phase A canonical delegated governance contracts merged; Phase B instruction-level delegated governance merged and canonical through PR #190.
+- **Current Task:** Phase B post-merge canonical state synchronization.
 - **Current Repo:** `C:\conductor`
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
+- **Starting Point:** `main` at `d37a2f7b31543efacf7a5e81c3f4d08c12da017d`
 - **Exact Worktree:** `C:\conductor`
-- **Active Branch:** `feat/delegated-autonomous-governance-phase-b`
-- **Approved Base / origin main at Phase B baseline:** `fd19363e257945b9a392e043db45a0fbe284fb9f`
+- **Active Branch:** `docs/phase-b-post-merge-state-sync`
 - **Current Public Release:** `v1.1.2`
 - **Completed Phase B Units:** B0 through B7 completed.
 - **Phase B Implementation Commit:** `777eca8a1dc3a2a6b281f6ebcf16c7cfcde9b4d8` (`777eca8`)
@@ -15,14 +15,10 @@
 - **Codex Mirror Correction Commit:** `44350ece2989b5dcae9acae9c5658e3cefcb75d5` (`44350ec`)
 - **Maintainer Correction Commit:** `b2d54461c8b37e4e1bc5d3d3df00da3cf2cb9806` (`b2d5446`)
 - **Decision-Log Correction Commit:** `017b79a2cd0893990721a3c8391ca4e743666cac` (`017b79a`)
-- **Latest Validated Content-Correction Head:** `017b79a2cd0893990721a3c8391ca4e743666cac`
-- **Prior Immutable State-Sync Head:** `c3ce31cc37b1f70bcb6e0aa4b3786cdb6c420b0f` (`c3ce31c`)
-- **Latest Validated Mark-Ready Authorization Head:** `c3ce31cc37b1f70bcb6e0aa4b3786cdb6c420b0f`
-- **Decision-Log Correction:** Unsupported Phase B file claims removed; delegated-phase-trace fixture recorded accurately.
-- **Remote Feature Branch:** `origin/feat/delegated-autonomous-governance-phase-b`
-- **Pull Request Status:** PR #190 open and ready for review (`draft: false`; `https://github.com/Baelfyre/Orchestra/pull/190`); mark-ready action performed after immutable-head authorization.
-- **Reviewers Requested:** No; no reviewers requested by this workflow or present after the transition.
-- **Phase B Status:** Instruction-level behavior implemented; all prior findings resolved; PR #190 remains open, ready for review, and not merged; 9/9 GitHub Actions checks pass on the mark-ready authorization head.
+- **Former Feature Head:** `861e70b6f06aa823e0a52f017bc0a39faf76c2e7`
+- **Canonical Merge Commit:** `d37a2f7b31543efacf7a5e81c3f4d08c12da017d`
+- **PR #190:** Merged and closed (`2026-07-21T23:44:55Z`)
+- **Phase B Status:** Merged and canonical on `main` through PR #190.
 - **Later Phases:** Phase C and Phase D have not started.
 - **Startup Verification Rule:** Resolve current branch tips at session start using:
   ```powershell
@@ -39,8 +35,7 @@
   - Codex export validation: PASS (`adapters/codex/validate_codex_export.py`)
   - Structure, Manifest, IDE packaging, Governance check, Stale references: PASS
   - Runtime tests & coverage: PASS (194 tests passed; 97.72% coverage)
-  - CI before mark-ready: PASS (9/9 checks on authorization head `c3ce31c`).
-  - CI after mark-ready metadata transition: PASS (no new runs created; existing head checks remain 9/9 PASS).
-- **Standing Action Flags:** All false (no merge, tag, release, deploy, or destructive operations performed).
+  - CI: PASS (9/9 checks on PR #190 before merge).
+- **Standing Action Flags:** All false (no tag, release, deploy, or destructive operations performed).
 - **Release / Deployment:** Not performed.
-- **Next Step:** Fresh immutable-head merge-readiness review after final state-sync CI.
+- **Next Step:** Maintainer review of the post-merge synchronization PR.

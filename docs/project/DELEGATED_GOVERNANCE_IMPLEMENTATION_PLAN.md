@@ -2,9 +2,8 @@
 
 This document records the multi-phase implementation plan for Orchestra's
 delegated autonomous governance. Phase A contracts are canonical. Phase B
-instruction-level behavior is implemented on the feature branch, under
-correction in draft PR #190, and is not canonical until merged.
-Phase A contracts are merged; Phase C and Phase D are not started. Phase B has not been merged, released, or deployed.
+instruction-level behavior is complete, merged and canonical through PR #190 on `main`.
+Phase A contracts are merged; Phase C and Phase D are not started. Phase B has not been released or deployed.
 
 ---
 
@@ -81,9 +80,9 @@ request, merge, tag, release, deployment, or production action authorized.
 
 ---
 
-## Phase B - Instruction-Level Autonomous Loop (Feature Branch, Draft PR #190)
+## Phase B - Instruction-Level Autonomous Loop (Complete, Merged via PR #190)
 
-**Status:** Phase B instruction-level behavior is implemented on the feature branch, under correction in draft PR #190, and is not canonical until merged. Remote and host reliability remain pending until separately authorized.
+**Status:** Phase B instruction-level behavior is complete and merged into `main` through PR #190 at merge commit `d37a2f7b31543efacf7a5e81c3f4d08c12da017d`. Remote and host reliability remain pending until separately authorized.
 
 
 **Planned scope:**
