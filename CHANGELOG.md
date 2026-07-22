@@ -25,6 +25,8 @@ Phase B instruction-level delegated governance was merged into `main` through PR
 - Updated `scripts/validate_governance_protocol_consistency.py` and `tests/behavior/test_governance_protocol_consistency.py` to enforce exact record schemas and reject unqualified stale Phase B status claims while preserving clearly qualified Phase A history.
 - Updated `tests/behavior/test_router_contracts.py` with reference-integrity cases plus the contract-driven trace evaluator and 11 required negative mutations.
 - Corrected current Phase A-D and deployment status across the delegated execution policy, governance layer, governance review flow, and implementation plan. PR #190 has been merged.
+- Updated `README.md` with the merged delegated phase progression loop, all six transition dispositions, checkpoint behavior, owner-relay reduction, and the preserved external-action boundary.
+- Stabilized `PROJECT_STATE.md` and `SESSION_HANDOFF.md` after the PR #191 post-merge synchronization.
 
 ## Unreleased - Phase A Delegated Autonomous Governance Contract Design
 

@@ -96,6 +96,56 @@ The sequence is deliberate:
 8. Structured lifecycle signals record waiting or a distinct terminal result.
 9. Run-linked audit events record what happened without granting permission.
 
+## Delegated Phase Progression
+
+For an approved delegated phase, a human or maintainer authorizes the phase and its execution envelope once. Conductor may then route only the internal units already approved by that envelope. Specialists execute inside those bounds, while Overseer and repository validators produce current evidence. Arbiter evaluates that evidence and emits the next transition disposition.
+
+Accepted units create checkpoints. Unchanged approved units can continue without repeated owner relay, but Orchestra still escalates missing intent, contradictions, scope expansion, policy decisions, protected actions, and unauthorized external actions.
+
+~~~mermaid
+flowchart TD
+    Authorized["Authorized Phase + Execution Envelope"]
+    Unit["Approved Unit Execution"]
+    Evidence["Current Evidence"]
+    Arbiter{"Arbiter Disposition"}
+    Checkpoint["Checkpoint Accepted Unit"]
+    Next{"Another Approved Unit?"}
+    Remediate["Deterministic In-Scope Remediation"]
+    WaitEvidence["Wait for Evidence"]
+    WaitCapacity["Capacity Checkpoint + Resume Later"]
+    Human["Human Decision or Authority"]
+    Stop["Preserve State + Halt"]
+    PhaseValidation["Phase Validation"]
+    HumanReview["Human Review"]
+
+    Authorized --> Unit --> Evidence --> Arbiter
+    Arbiter -- AUTO_CONTINUE --> Checkpoint --> Next
+    Next -- Yes --> Unit
+    Next -- No --> PhaseValidation --> HumanReview
+    Arbiter -- AUTO_REMEDIATE_AND_REVALIDATE --> Remediate --> Unit
+    Arbiter -- WAIT_FOR_EVIDENCE --> WaitEvidence --> Evidence
+    Arbiter -- WAIT_FOR_CAPACITY --> WaitCapacity --> Unit
+    Arbiter -- ESCALATE_HUMAN --> Human --> Authorized
+    Arbiter -- STOP --> Stop
+~~~
+
+Accessible summary: an authorized phase executes one approved unit, produces evidence, and asks Arbiter for the next disposition. Accepted units checkpoint before the next approved unit. Other dispositions remediate and revalidate, wait for evidence or capacity, escalate for human authority, or stop. After the final accepted unit, phase validation leads to human review.
+
+| Transition disposition | Meaning |
+|---|---|
+| `AUTO_CONTINUE` | Begin the next approved unit. |
+| `AUTO_REMEDIATE_AND_REVALIDATE` | Correct a deterministic in-scope defect and rerun the required checks. |
+| `WAIT_FOR_EVIDENCE` | Pause until required evidence is produced. |
+| `WAIT_FOR_CAPACITY` | Checkpoint safely and resume later without treating capacity as a new owner decision. |
+| `ESCALATE_HUMAN` | Request missing intent, policy, scope, or external-action authority. |
+| `STOP` | Preserve a prohibited, unsafe, or invalid state and halt. |
+
+Validation proves conformance to the authorized envelope; it cannot create authority. Stage, commit, push, pull-request, merge, release, deployment, production, infrastructure, secret, and destructive actions remain separately governed.
+
+Phase B instruction-level delegated progression is merged and canonical on `main` through PR #190. The current public release remains `v1.1.2`; Phase B has not yet been included in a new tagged release or deployment.
+
+See the [Delegated Execution Policy](docs/governance/DELEGATED_EXECUTION_POLICY.md) for the canonical contract and the [Governance Review Flow](docs/governance/GOVERNANCE_REVIEW_FLOW.md) for the review sequence.
+
 ## One Request, Coordinated Responsibilities
 
 Consider one request:
