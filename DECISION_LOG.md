@@ -3,6 +3,21 @@
 ## Date: 2026-07-22
 
 **Decision:**
+Accept PR #190 merge as the canonical completion of Phase B instruction-level delegated autonomous governance.
+
+**Merge Commit:** `d37a2f7b31543efacf7a5e81c3f4d08c12da017d`
+
+**Former Feature Head:** `861e70b6f06aa823e0a52f017bc0a39faf76c2e7`
+
+**Result:**
+Phase B is canonical on `main`.
+
+**Boundaries:**
+Phase C and Phase D remain unstarted. No release or deployment was authorized or performed.
+
+## Date: 2026-07-22
+
+**Decision:**
 Implement and locally validate Phase B instruction-level delegated autonomous governance loop for Orchestra.
 
 **Reason:**

@@ -90,11 +90,11 @@ REQUIRED_LAYER_DELEGATED_SECTION = (
     "## Phase-Level Delegated Governance",
     "Phase A",
     "Phase B",
-    "under correction in draft PR #190",
+    "merged and canonical through PR #190",
 )
 REQUIRED_FLOW_DELEGATED_SECTION = (
     "Delegated Execution Flow",
-    "Phase B Feature Branch, Draft PR #190",
+    "Phase B Merged, PR #190",
     "DELEGATED_EXECUTION_POLICY.md",
 )
 
@@ -138,11 +138,20 @@ STALE_PHASE_B_STATUS_PHRASES = (
     "only phase a is authorized",
     "instruction-level phase b behavior is not implemented",
 )
-REQUIRED_PHASE_B_DRAFT_STATUS = "under correction in draft PR #190"
+STALE_POST_MERGE_PHRASES = (
+    "under correction in draft pr #190",
+    "phase b feature branch, draft pr #190",
+    "not canonical until merged",
+    "phase b has not been merged",
+    "until phase b is merged",
+    "pr #190 remains open",
+    "pr #190 open and ready for review",
+)
+REQUIRED_PHASE_B_MERGED_STATUS = "merged and canonical through PR #190"
 REQUIRED_CURRENT_STATE_PHRASES = (
     "Phase A contracts are merged",
     "Phase C and Phase D are not started",
-    "Phase B has not been merged, released, or deployed",
+    "Phase B has not been released or deployed",
 )
 HISTORICAL_PHASE_A_QUALIFIERS = (
     "at phase a",
@@ -213,8 +222,8 @@ def validate_current_phase_status(errors, repo_root):
             continue
         content = read_text(path)
         folded = content.casefold()
-        if REQUIRED_PHASE_B_DRAFT_STATUS.casefold() not in folded:
-            fail(errors, f"{relative}: missing current Phase B draft-PR correction status")
+        if REQUIRED_PHASE_B_MERGED_STATUS.casefold() not in folded:
+            fail(errors, f"{relative}: missing current Phase B merged canonical status")
         for required_phrase in REQUIRED_CURRENT_STATE_PHRASES:
             if required_phrase.casefold() not in folded:
                 fail(errors, f"{relative}: missing current-state statement `{required_phrase}`")
@@ -224,10 +233,13 @@ def validate_current_phase_status(errors, repo_root):
                     continue
                 qualified_history = (
                     any(qualifier in paragraph for qualifier in HISTORICAL_PHASE_A_QUALIFIERS)
-                    and REQUIRED_PHASE_B_DRAFT_STATUS.casefold() in folded
+                    and REQUIRED_PHASE_B_MERGED_STATUS.casefold() in folded
                 )
                 if not qualified_history:
                     fail(errors, f"{relative}: contradictory current-state wording `{phrase}`")
+        for phrase in STALE_POST_MERGE_PHRASES:
+            if phrase in folded:
+                fail(errors, f"{relative}: stale post-merge wording `{phrase}`")
 
 
 def main(argv=None):
@@ -321,7 +333,11 @@ def main(argv=None):
         )
         ensure_contains(
             errors, DELEGATED_POLICY_FILE, delegated_policy,
-            "under correction in draft PR #190"
+            "merged and canonical through PR #190"
+        )
+        ensure_contains(
+            errors, DELEGATED_POLICY_FILE, delegated_policy,
+            "merged and canonical on `main` through PR #190"
         )
 
         ensure_absent(
