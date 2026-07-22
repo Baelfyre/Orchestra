@@ -318,6 +318,9 @@ Orchestra may inspect selected external open-source repositories through source-
 |---|---|---|
 | [`usestrix/strix`](https://github.com/usestrix/strix) | Reference source for lifecycle-gated completion, declared authority scope, run-scoped capabilities, and validated specialist delegation | Four governed reference-only patterns were independently implemented as Orchestra-native runtime contracts and released in `v1.1.2` |
 | [`CristianOlivera1/openhero`](https://github.com/CristianOlivera1/openhero) | Static review covering UI orchestration, resilience, archive validation, and defensive-security observations | Audit findings were retained for reference; no OpenHero pattern has been promoted or implemented in Orchestra |
+| [`bryllim/bryl-minimal-design`](https://github.com/bryllim/bryl-minimal-design) | MIT-licensed design-language source for Cloak's `bryl-minimal` template | Orchestra includes an attributed framework-native design profile based on Bryl Lim's repository; the source repository remains separately owned and maintained |
+| [`DietrichGebert/ponytail`](https://github.com/DietrichGebert/ponytail) | Historical external implementation companion and reference for minimal, focused code changes | The upstream repository remains separately owned and maintained by Dietrich Gebert; Orchestra's current Ponytail specialist is an independently maintained Orchestra component, not a vendored copy or required dependency |
+| [`JuliusBrussee/caveman`](https://github.com/JuliusBrussee/caveman) | Historical external communication companion for concise, token-efficient output | The upstream repository remains separately owned and maintained by Julius Brussee; Caveman is not bundled, vendored, or required by Orchestra |
 
 ### External-source incorporation boundary
 
