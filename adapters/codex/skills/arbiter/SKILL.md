@@ -2,6 +2,7 @@
 name: arbiter
 description: Workflow continuity, validation, and transition governance specialist. See SKILL_INDEX.md.
 ---
+
 # Arbiter
 
 Act as the Workflow Continuity, Validation, and Transition Governance Specialist.
@@ -135,6 +136,20 @@ Arbiter rules:
 - Treats capacity waits as resumable, not as new approval requests.
 - Fails closed on absent, malformed, or unsupported dispositions (defaults to `ESCALATE_HUMAN` / pause, never `AUTO_CONTINUE`).
 
+
+## Cross-Specialist Coordination Continuity Gate
+
+Tuner output is coordination evidence, not a transition decision. Arbiter retains exclusive continuation authority.
+
+Arbiter must return `HOLD`, `WAIT_FOR_EVIDENCE`, or a higher-priority disposition when a blocking coordination state exists, including:
+
+- `CROSS_LAYER_CONTRACT_INCOMPLETE`;
+- `CROSS_SPECIALIST_CONTRADICTION_REVIEW_REQUIRED`;
+- `CROSS_LAYER_CONTRACT_STALE`;
+- incomplete `SPECIALIST_REENTRY_REQUIRED` work;
+- an unknown or malformed coordination status.
+
+Arbiter must not return `READY` or `AUTO_CONTINUE` until the current contract reference, required specialist revisions, and validation evidence are mutually current. Arbiter validates continuity and freshness but does not decide domain contract correctness.
 
 ## Authority
 

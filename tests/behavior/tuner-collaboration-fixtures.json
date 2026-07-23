@@ -1,0 +1,273 @@
+[
+  {
+    "id": "direct-scribe-bypass",
+    "category": "direct_bypass",
+    "request": "Correct one typo in accepted documentation.",
+    "activation_decision": "BYPASS_SINGLE_OWNER",
+    "primary_router": "scribe",
+    "required_specialists": [
+      "scribe"
+    ],
+    "expected_status": "BYPASSED",
+    "expected_gate": "NONE",
+    "expected_reentry": [],
+    "authority_assertions": [
+      "the-tuner-not-activated"
+    ]
+  },
+  {
+    "id": "direct-ponytail-bypass",
+    "category": "direct_bypass",
+    "request": "Apply a localized bug fix against accepted design.",
+    "activation_decision": "BYPASS_SINGLE_OWNER",
+    "primary_router": "ponytail",
+    "required_specialists": [
+      "ponytail"
+    ],
+    "expected_status": "BYPASSED",
+    "expected_gate": "NONE",
+    "expected_reentry": [],
+    "authority_assertions": [
+      "implementation-authority-separate"
+    ]
+  },
+  {
+    "id": "multi-domain-contract-activation",
+    "category": "multi_domain_activation",
+    "request": "Change authentication across UI, API, persistence, security, and validation.",
+    "activation_decision": "ACTIVATE_MULTI_DOMAIN",
+    "primary_router": "conductor",
+    "required_specialists": [
+      "the-tuner",
+      "cipher",
+      "cloak",
+      "clockwork",
+      "chronicler",
+      "overseer"
+    ],
+    "expected_status": "COLLECTING",
+    "expected_gate": "CROSS_LAYER_CONTRACT_REQUIRED",
+    "expected_reentry": [],
+    "authority_assertions": [
+      "conductor-exclusive-router",
+      "the-tuner-coordination-only"
+    ]
+  },
+  {
+    "id": "late-domain-boundary-activation",
+    "category": "late_activation",
+    "request": "A scoped implementation unexpectedly changes authorization behavior.",
+    "activation_decision": "ACTIVATE_LATE_BOUNDARY_CROSSING",
+    "primary_router": "conductor",
+    "required_specialists": [
+      "the-tuner",
+      "ponytail",
+      "cipher"
+    ],
+    "expected_status": "COLLECTING",
+    "expected_gate": "CROSS_LAYER_CONTRACT_REQUIRED",
+    "expected_reentry": [
+      "cipher"
+    ],
+    "authority_assertions": [
+      "ponytail-cannot-decide-security"
+    ]
+  },
+  {
+    "id": "missing-validation-owner",
+    "category": "ownership_completeness",
+    "request": "An acceptance criterion has no validation owner.",
+    "activation_decision": "ACTIVATE_MISSING_OWNER",
+    "primary_router": "conductor",
+    "required_specialists": [
+      "the-tuner",
+      "overseer"
+    ],
+    "expected_status": "INCOMPLETE",
+    "expected_gate": "CROSS_LAYER_CONTRACT_INCOMPLETE",
+    "expected_reentry": [
+      "overseer"
+    ],
+    "authority_assertions": [
+      "the-tuner-detects-not-decides"
+    ]
+  },
+  {
+    "id": "cipher-cloak-contradiction",
+    "category": "contradiction_detection",
+    "request": "Cipher and Cloak provide incompatible required constraints.",
+    "activation_decision": "ACTIVATE_CONTRADICTION",
+    "primary_router": "conductor",
+    "required_specialists": [
+      "the-tuner",
+      "cipher",
+      "cloak"
+    ],
+    "expected_status": "CONTRADICTED",
+    "expected_gate": "CROSS_SPECIALIST_CONTRADICTION_REVIEW_REQUIRED",
+    "expected_reentry": [
+      "cipher",
+      "cloak"
+    ],
+    "authority_assertions": [
+      "the-tuner-never-resolves",
+      "arbiter-blocks-continuation"
+    ]
+  },
+  {
+    "id": "complete-contract-ready",
+    "category": "contract_readiness",
+    "request": "All required contracts, owners, criteria, and authority references are current.",
+    "activation_decision": "ACTIVATE_MULTI_DOMAIN",
+    "primary_router": "conductor",
+    "required_specialists": [
+      "the-tuner",
+      "clockwork",
+      "cipher",
+      "overseer"
+    ],
+    "expected_status": "READY",
+    "expected_gate": "CROSS_LAYER_CONTRACT_READY",
+    "expected_reentry": [],
+    "authority_assertions": [
+      "ready-is-not-implementation-authority"
+    ]
+  },
+  {
+    "id": "security-rule-invalidates-architecture",
+    "category": "invalidation",
+    "request": "Cipher revises CSP after Clockwork accepted initialization ordering.",
+    "activation_decision": "ACTIVATE_STALE_CONTRACT",
+    "primary_router": "conductor",
+    "required_specialists": [
+      "the-tuner",
+      "cipher",
+      "clockwork",
+      "overseer"
+    ],
+    "expected_status": "STALE",
+    "expected_gate": "SPECIALIST_REENTRY_REQUIRED",
+    "expected_reentry": [
+      "clockwork",
+      "overseer"
+    ],
+    "authority_assertions": [
+      "minimal-reentry",
+      "the-tuner-does-not-route"
+    ]
+  },
+  {
+    "id": "manual-mode-stale-contract",
+    "category": "manual_mode",
+    "request": "Manual evidence references a prior contract revision.",
+    "activation_decision": "ACTIVATE_STALE_CONTRACT",
+    "primary_router": "conductor",
+    "required_specialists": [
+      "the-tuner",
+      "arbiter",
+      "overseer"
+    ],
+    "expected_status": "STALE",
+    "expected_gate": "CROSS_LAYER_CONTRACT_STALE",
+    "expected_reentry": [
+      "overseer"
+    ],
+    "authority_assertions": [
+      "manual-mode-does-not-invent-envelope",
+      "arbiter-transition-owner"
+    ]
+  },
+  {
+    "id": "delegated-envelope-boundary",
+    "category": "delegated_mode",
+    "request": "A collaboration revision would expand beyond the delegated envelope.",
+    "activation_decision": "ACTIVATE_MULTI_DOMAIN",
+    "primary_router": "conductor",
+    "required_specialists": [
+      "the-tuner",
+      "arbiter"
+    ],
+    "expected_status": "CONTRADICTED",
+    "expected_gate": "CROSS_SPECIALIST_CONTRADICTION_REVIEW_REQUIRED",
+    "expected_reentry": [],
+    "authority_assertions": [
+      "the-tuner-cannot-expand-envelope",
+      "human-escalation-required"
+    ]
+  },
+  {
+    "id": "generated-artifact-lifecycle-missing",
+    "category": "artifact_lifecycle",
+    "request": "Validation creates output without an inspection or cleanup owner.",
+    "activation_decision": "ACTIVATE_MISSING_OWNER",
+    "primary_router": "conductor",
+    "required_specialists": [
+      "the-tuner",
+      "overseer"
+    ],
+    "expected_status": "INCOMPLETE",
+    "expected_gate": "CROSS_LAYER_CONTRACT_INCOMPLETE",
+    "expected_reentry": [
+      "overseer"
+    ],
+    "authority_assertions": [
+      "pre-existing-artifacts-preserved"
+    ]
+  },
+  {
+    "id": "change-identity-required-phase2",
+    "category": "change_identity",
+    "request": "A new untracked file exists in a multi-domain handoff.",
+    "activation_decision": "ACTIVATE_LATE_BOUNDARY_CROSSING",
+    "primary_router": "conductor",
+    "required_specialists": [
+      "the-tuner",
+      "arbiter"
+    ],
+    "expected_status": "INCOMPLETE",
+    "expected_gate": "CROSS_LAYER_CONTRACT_INCOMPLETE",
+    "expected_reentry": [
+      "arbiter"
+    ],
+    "authority_assertions": [
+      "phase1-declares-phase2-enforces",
+      "untracked-manifest-required"
+    ]
+  },
+  {
+    "id": "dagger-remains-blocked",
+    "category": "authority_boundary",
+    "request": "Activate Tuner and run destructive validation.",
+    "activation_decision": "ACTIVATE_MULTI_DOMAIN",
+    "primary_router": "conductor",
+    "required_specialists": [
+      "the-tuner"
+    ],
+    "expected_status": "INCOMPLETE",
+    "expected_gate": "CROSS_LAYER_CONTRACT_INCOMPLETE",
+    "expected_reentry": [],
+    "authority_assertions": [
+      "dagger-not-authorized",
+      "external-actions-default-deny"
+    ]
+  },
+  {
+    "id": "unknown-status-fails-closed",
+    "category": "fail_closed",
+    "request": "A host returns an unsupported coordination status.",
+    "activation_decision": "ACTIVATE_MULTI_DOMAIN",
+    "primary_router": "conductor",
+    "required_specialists": [
+      "the-tuner",
+      "arbiter"
+    ],
+    "expected_status": "INCOMPLETE",
+    "expected_gate": "CROSS_LAYER_CONTRACT_INCOMPLETE",
+    "expected_reentry": [
+      "arbiter"
+    ],
+    "authority_assertions": [
+      "unknown-status-fails-closed"
+    ]
+  }
+]

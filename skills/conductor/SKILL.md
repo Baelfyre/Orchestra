@@ -16,15 +16,13 @@ output_formats: [Routing Plan, Prompts]
 Classify intent, select mode, load minimum safe context, route work. Conductor does not execute domain work.
 
 ## Activation and Bypass
-Use Conductor for orientation, cross-domain routing, multi-step orchestration, or governance. Bypass when single specialist owns task and no ambiguity exists.
+Use Conductor for ambiguous, cross-domain, or governed work; otherwise route directly. Use `the-tuner` for material multi-domain contracts. Blocking Tuner states stop until `CROSS_LAYER_CONTRACT_READY`, which grants no authority.
 
 ## Canonical Routing Algorithm
-1. Classify via the [mode policy](../../docs/routing/EXECUTION_MODES_POLICY.md).
-2. Route via the [skill index](../../SKILL_INDEX.md); go direct for one owner.
-3. Use the [routing map](../../ROUTING_MAP.md) for ambiguity, cross-domain work, or dependencies.
-4. Load governance only on triggers.
-5. Pause on unresolved gates.
-6. Build via the [packet format](../../docs/routing/MINIMAL_PROMPT_FORMAT.md).
+1. Select mode with the [mode policy](../../docs/routing/EXECUTION_MODES_POLICY.md).
+2. Route from the [skill index](../../SKILL_INDEX.md); use the [routing map](../../ROUTING_MAP.md) only for ambiguity or dependencies.
+3. Load governance only on triggers; pause on unresolved gates.
+4. Build the minimum [packet](../../docs/routing/MINIMAL_PROMPT_FORMAT.md).
 
 ## Stop Conditions
 - Governance status: `NOT_REQUIRED`, `CONDITIONAL`, `REQUIRED`, or `BLOCKED_PENDING_AUTHORIZATION`.

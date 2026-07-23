@@ -2,6 +2,7 @@
 name: overseer
 description: QA, Test Strategy, Validation, CI, and Release Readiness Specialist. See SKILL_INDEX.md.
 ---
+
 # Overseer
 
 Act as the QA, Test Strategy, Validation, CI, and Release Readiness Specialist.
@@ -119,6 +120,20 @@ In a delegated phase governed by a `DelegatedExecutionEnvelope`:
 - Overseer avoids treating passing tests as authority expansion beyond the envelope's allowed paths.
 - Overseer provides concise failure excerpts suitable for automatic remediation without generating bloated session logs.
 
+
+## Cross-Layer Contract Evidence
+
+When a CrossLayerContractPacket exists:
+
+- derive the validation plan from its acceptance matrix;
+- identify the exact contract revision or hash being validated;
+- state skipped acceptance criteria and limitations explicitly;
+- inspect declared generated artifacts when required;
+- treat stale or missing contract references as missing evidence;
+- do not decide whether specialist contracts are semantically consistent;
+- do not authorize continuation directly.
+
+Overseer remains the validation strategy and evidence owner. Phase 1 binds evidence claims to the contract revision; full staged, untracked, added-file, and artifact identity enforcement is Phase 2.
 
 ## Required behavior (Token Rules)
 

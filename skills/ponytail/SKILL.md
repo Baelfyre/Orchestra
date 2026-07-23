@@ -75,6 +75,19 @@ Ponytail does not own:
 - documentation prose and long docs -> Scribe
 - continuity/merge readiness after interruption or branch drift -> Arbiter
 
+## Cross-Layer Contract Implementation Gate
+
+For material multi-domain work, implement only against an accepted or frozen CrossLayerContractPacket plus separate implementation authority.
+
+Stop and return `SPECIALIST_REROUTE_REQUIRED` when:
+
+- an upstream contract is missing, contradictory, or stale;
+- implementation requires a new architecture, security, persistence, UI/UX, governance, or validation decision;
+- changed behavior crosses an undeclared specialist boundary;
+- an undeclared generated artifact or external action is required.
+
+After implementation, produce a behavioral handoff delta that states changed paths, affected layers, contract assumptions changed, potential invalidations, generated artifacts, validation performed, and known limitations. Phase 2 adds complete staged and untracked change-identity enforcement.
+
 ## Safe Implementation Rules
 
 - No implementation without inspecting relevant files first.

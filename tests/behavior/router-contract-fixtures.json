@@ -7,9 +7,19 @@
     "primary_skill": "the-steward",
     "supporting_skills": [],
     "governance_status": "REQUIRED",
-    "required_context": ["SKILL_INDEX.md", "docs/routing/EXECUTION_MODES_POLICY.md", "docs/governance/GOVERNANCE_LAYER.md"],
-    "forbidden_context": ["ROUTING_MAP.md", "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
-    "forbidden_skills": ["ponytail"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md",
+      "docs/governance/GOVERNANCE_LAYER.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail",
+      "the-tuner"
+    ],
     "expected_gate": "NONE",
     "rationale": "Business alignment owner is clear."
   },
@@ -21,9 +31,19 @@
     "primary_skill": "the-governor",
     "supporting_skills": [],
     "governance_status": "REQUIRED",
-    "required_context": ["SKILL_INDEX.md", "docs/routing/EXECUTION_MODES_POLICY.md", "docs/governance/GOVERNANCE_LAYER.md"],
-    "forbidden_context": ["ROUTING_MAP.md", "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
-    "forbidden_skills": ["ponytail"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md",
+      "docs/governance/GOVERNANCE_LAYER.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail",
+      "the-tuner"
+    ],
     "expected_gate": "NONE",
     "rationale": "Compliance governance owner is clear."
   },
@@ -35,9 +55,19 @@
     "primary_skill": "arbiter",
     "supporting_skills": [],
     "governance_status": "NOT_REQUIRED",
-    "required_context": ["SKILL_INDEX.md", "docs/routing/EXECUTION_MODES_POLICY.md"],
-    "forbidden_context": ["ROUTING_MAP.md", "docs/governance/GOVERNANCE_LAYER.md", "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
-    "forbidden_skills": ["ponytail"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_LAYER.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail",
+      "the-tuner"
+    ],
     "expected_gate": "CONTINUITY_REQUIRED",
     "rationale": "Continuation owner is clear."
   },
@@ -49,9 +79,19 @@
     "primary_skill": "clockwork",
     "supporting_skills": [],
     "governance_status": "CONDITIONAL",
-    "required_context": ["SKILL_INDEX.md", "docs/routing/EXECUTION_MODES_POLICY.md"],
-    "forbidden_context": ["ROUTING_MAP.md", "docs/governance/GOVERNANCE_LAYER.md", "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
-    "forbidden_skills": ["ponytail"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_LAYER.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail",
+      "the-tuner"
+    ],
     "expected_gate": "NONE",
     "rationale": "Architecture owner is clear."
   },
@@ -63,9 +103,19 @@
     "primary_skill": "cipher",
     "supporting_skills": [],
     "governance_status": "REQUIRED",
-    "required_context": ["SKILL_INDEX.md", "docs/routing/EXECUTION_MODES_POLICY.md", "docs/governance/GOVERNANCE_LAYER.md"],
-    "forbidden_context": ["ROUTING_MAP.md", "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
-    "forbidden_skills": ["ponytail"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md",
+      "docs/governance/GOVERNANCE_LAYER.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail",
+      "the-tuner"
+    ],
     "expected_gate": "NONE",
     "rationale": "Technical security owner is clear."
   },
@@ -77,9 +127,19 @@
     "primary_skill": "cloak",
     "supporting_skills": [],
     "governance_status": "CONDITIONAL",
-    "required_context": ["SKILL_INDEX.md", "docs/routing/EXECUTION_MODES_POLICY.md"],
-    "forbidden_context": ["ROUTING_MAP.md", "docs/governance/GOVERNANCE_LAYER.md", "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
-    "forbidden_skills": ["ponytail"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_LAYER.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail",
+      "the-tuner"
+    ],
     "expected_gate": "NONE",
     "rationale": "Frontend design owner is clear."
   },
@@ -91,9 +151,19 @@
     "primary_skill": "chronicler",
     "supporting_skills": [],
     "governance_status": "CONDITIONAL",
-    "required_context": ["SKILL_INDEX.md", "docs/routing/EXECUTION_MODES_POLICY.md"],
-    "forbidden_context": ["ROUTING_MAP.md", "docs/governance/GOVERNANCE_LAYER.md", "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
-    "forbidden_skills": ["ponytail"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_LAYER.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail",
+      "the-tuner"
+    ],
     "expected_gate": "NONE",
     "rationale": "Persistence owner is clear."
   },
@@ -105,9 +175,19 @@
     "primary_skill": "overseer",
     "supporting_skills": [],
     "governance_status": "CONDITIONAL",
-    "required_context": ["SKILL_INDEX.md", "docs/routing/EXECUTION_MODES_POLICY.md"],
-    "forbidden_context": ["ROUTING_MAP.md", "docs/governance/GOVERNANCE_LAYER.md", "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
-    "forbidden_skills": ["ponytail"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_LAYER.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail",
+      "the-tuner"
+    ],
     "expected_gate": "NONE",
     "rationale": "Validation owner is clear."
   },
@@ -119,9 +199,19 @@
     "primary_skill": "dagger",
     "supporting_skills": [],
     "governance_status": "BLOCKED_PENDING_AUTHORIZATION",
-    "required_context": ["SKILL_INDEX.md", "docs/routing/EXECUTION_MODES_POLICY.md"],
-    "forbidden_context": ["ROUTING_MAP.md", "docs/governance/GOVERNANCE_LAYER.md", "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
-    "forbidden_skills": ["ponytail"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_LAYER.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail",
+      "the-tuner"
+    ],
     "expected_gate": "BLOCKED_PENDING_AUTHORIZATION",
     "rationale": "Dagger owns guarded simulation planning, but execution remains blocked until authorization is granted."
   },
@@ -133,9 +223,19 @@
     "primary_skill": "scribe",
     "supporting_skills": [],
     "governance_status": "NOT_REQUIRED",
-    "required_context": ["SKILL_INDEX.md", "docs/routing/EXECUTION_MODES_POLICY.md"],
-    "forbidden_context": ["ROUTING_MAP.md", "docs/governance/GOVERNANCE_LAYER.md", "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
-    "forbidden_skills": ["ponytail"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_LAYER.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail",
+      "the-tuner"
+    ],
     "expected_gate": "NONE",
     "rationale": "Documentation execution owner is clear."
   },
@@ -147,9 +247,23 @@
     "primary_skill": "ponytail",
     "supporting_skills": [],
     "governance_status": "NOT_REQUIRED",
-    "required_context": ["SKILL_INDEX.md", "docs/routing/EXECUTION_MODES_POLICY.md"],
-    "forbidden_context": ["ROUTING_MAP.md", "docs/governance/GOVERNANCE_LAYER.md", "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
-    "forbidden_skills": ["clockwork", "cipher", "chronicler", "the-steward", "the-governor"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_LAYER.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "clockwork",
+      "cipher",
+      "chronicler",
+      "the-steward",
+      "the-governor",
+      "the-tuner"
+    ],
     "expected_gate": "NONE",
     "rationale": "Implementation owner is clear and upstream design is ready."
   },
@@ -161,9 +275,19 @@
     "primary_skill": "weaver",
     "supporting_skills": [],
     "governance_status": "NOT_REQUIRED",
-    "required_context": ["SKILL_INDEX.md", "docs/routing/EXECUTION_MODES_POLICY.md"],
-    "forbidden_context": ["ROUTING_MAP.md", "docs/governance/GOVERNANCE_LAYER.md", "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
-    "forbidden_skills": ["ponytail"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_LAYER.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail",
+      "the-tuner"
+    ],
     "expected_gate": "NONE",
     "rationale": "Diagram owner is clear."
   },
@@ -173,11 +297,23 @@
     "expected_intent": "cross_domain_governance",
     "expected_mode": "Audit",
     "primary_skill": "conductor",
-    "supporting_skills": ["the-steward", "the-governor"],
+    "supporting_skills": [
+      "the-steward",
+      "the-governor"
+    ],
     "governance_status": "REQUIRED",
-    "required_context": ["SKILL_INDEX.md", "ROUTING_MAP.md", "docs/routing/EXECUTION_MODES_POLICY.md", "docs/governance/GOVERNANCE_LAYER.md"],
-    "forbidden_context": ["docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
-    "forbidden_skills": ["ponytail"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md",
+      "docs/governance/GOVERNANCE_LAYER.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail"
+    ],
     "expected_gate": "NONE",
     "rationale": "Business scope and legal obligations overlap."
   },
@@ -187,11 +323,23 @@
     "expected_intent": "privacy_overlap",
     "expected_mode": "Governed",
     "primary_skill": "conductor",
-    "supporting_skills": ["the-governor", "cipher"],
+    "supporting_skills": [
+      "the-governor",
+      "cipher"
+    ],
     "governance_status": "REQUIRED",
-    "required_context": ["SKILL_INDEX.md", "ROUTING_MAP.md", "docs/routing/EXECUTION_MODES_POLICY.md", "docs/governance/GOVERNANCE_LAYER.md"],
-    "forbidden_context": ["docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
-    "forbidden_skills": ["ponytail"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md",
+      "docs/governance/GOVERNANCE_LAYER.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail"
+    ],
     "expected_gate": "NONE",
     "rationale": "Legal privacy obligations and technical privacy controls must stay separate."
   },
@@ -201,11 +349,22 @@
     "expected_intent": "continuity_vs_validation",
     "expected_mode": "Audit",
     "primary_skill": "conductor",
-    "supporting_skills": ["arbiter", "overseer"],
+    "supporting_skills": [
+      "arbiter",
+      "overseer"
+    ],
     "governance_status": "CONDITIONAL",
-    "required_context": ["SKILL_INDEX.md", "ROUTING_MAP.md", "docs/routing/EXECUTION_MODES_POLICY.md"],
-    "forbidden_context": ["docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
-    "forbidden_skills": ["ponytail"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail"
+    ],
     "expected_gate": "CONTINUITY_REQUIRED",
     "rationale": "Arbiter interprets continuation state; Overseer plans evidence refresh."
   },
@@ -215,11 +374,23 @@
     "expected_intent": "governance_then_documentation",
     "expected_mode": "Implementation",
     "primary_skill": "conductor",
-    "supporting_skills": ["the-steward", "scribe"],
+    "supporting_skills": [
+      "the-steward",
+      "scribe"
+    ],
     "governance_status": "REQUIRED",
-    "required_context": ["SKILL_INDEX.md", "ROUTING_MAP.md", "docs/routing/EXECUTION_MODES_POLICY.md", "docs/governance/GOVERNANCE_LAYER.md"],
-    "forbidden_context": ["docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
-    "forbidden_skills": ["ponytail"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md",
+      "docs/governance/GOVERNANCE_LAYER.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail"
+    ],
     "expected_gate": "NONE",
     "rationale": "Steward decides SDLC sufficiency; Scribe produces prose."
   },
@@ -229,10 +400,20 @@
     "expected_intent": "architecture_then_implementation",
     "expected_mode": "Implementation",
     "primary_skill": "conductor",
-    "supporting_skills": ["clockwork", "ponytail"],
+    "supporting_skills": [
+      "clockwork",
+      "ponytail"
+    ],
     "governance_status": "CONDITIONAL",
-    "required_context": ["SKILL_INDEX.md", "ROUTING_MAP.md", "docs/routing/EXECUTION_MODES_POLICY.md"],
-    "forbidden_context": ["docs/governance/GOVERNANCE_LAYER.md", "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_LAYER.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
     "forbidden_skills": [],
     "expected_gate": "NONE",
     "rationale": "Architecture work must not default directly to Ponytail."
@@ -243,11 +424,23 @@
     "expected_intent": "database_then_validation",
     "expected_mode": "Governed",
     "primary_skill": "conductor",
-    "supporting_skills": ["chronicler", "overseer"],
+    "supporting_skills": [
+      "chronicler",
+      "overseer"
+    ],
     "governance_status": "CONDITIONAL",
-    "required_context": ["SKILL_INDEX.md", "ROUTING_MAP.md", "docs/routing/EXECUTION_MODES_POLICY.md"],
-    "forbidden_context": ["docs/governance/GOVERNANCE_LAYER.md", "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
-    "forbidden_skills": ["ponytail"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_LAYER.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail"
+    ],
     "expected_gate": "NONE",
     "rationale": "Persistence semantics and validation evidence are separate owners."
   },
@@ -257,11 +450,23 @@
     "expected_intent": "ui_security_overlap",
     "expected_mode": "Governed",
     "primary_skill": "conductor",
-    "supporting_skills": ["cloak", "cipher"],
+    "supporting_skills": [
+      "cloak",
+      "cipher"
+    ],
     "governance_status": "REQUIRED",
-    "required_context": ["SKILL_INDEX.md", "ROUTING_MAP.md", "docs/routing/EXECUTION_MODES_POLICY.md", "docs/governance/GOVERNANCE_LAYER.md"],
-    "forbidden_context": ["docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
-    "forbidden_skills": ["ponytail"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md",
+      "docs/governance/GOVERNANCE_LAYER.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail"
+    ],
     "expected_gate": "NONE",
     "rationale": "Visible interaction and technical security both matter."
   },
@@ -271,10 +476,21 @@
     "expected_intent": "governed_ordered_implementation",
     "expected_mode": "Governed",
     "primary_skill": "conductor",
-    "supporting_skills": ["the-governor", "cipher", "ponytail"],
+    "supporting_skills": [
+      "the-governor",
+      "cipher",
+      "ponytail"
+    ],
     "governance_status": "REQUIRED",
-    "required_context": ["SKILL_INDEX.md", "ROUTING_MAP.md", "docs/routing/EXECUTION_MODES_POLICY.md", "docs/governance/GOVERNANCE_LAYER.md"],
-    "forbidden_context": ["docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md",
+      "docs/governance/GOVERNANCE_LAYER.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
     "forbidden_skills": [],
     "expected_gate": "NONE",
     "rationale": "Governance-sensitive implementation needs ordered review."
@@ -287,8 +503,14 @@
     "primary_skill": "conductor",
     "supporting_skills": [],
     "governance_status": "CONDITIONAL",
-    "required_context": ["SKILL_INDEX.md", "ROUTING_MAP.md", "docs/routing/EXECUTION_MODES_POLICY.md"],
-    "forbidden_context": ["docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
     "forbidden_skills": [],
     "expected_gate": "NONE",
     "rationale": "Ambiguous cross-domain work stays with Conductor."
@@ -299,10 +521,18 @@
     "expected_intent": "destructive_operation",
     "expected_mode": "Destructive",
     "primary_skill": "conductor",
-    "supporting_skills": ["dagger"],
+    "supporting_skills": [
+      "dagger"
+    ],
     "governance_status": "BLOCKED_PENDING_AUTHORIZATION",
-    "required_context": ["SKILL_INDEX.md", "ROUTING_MAP.md", "docs/routing/EXECUTION_MODES_POLICY.md"],
-    "forbidden_context": ["docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
     "forbidden_skills": [],
     "expected_gate": "BLOCKED_PENDING_AUTHORIZATION",
     "rationale": "Destructive work remains blocked until explicit authorization and guardrail validation."
@@ -313,12 +543,73 @@
     "expected_intent": "governance_decision_enforcement",
     "expected_mode": "Governed",
     "primary_skill": "conductor",
-    "supporting_skills": ["the-governor"],
+    "supporting_skills": [
+      "the-governor"
+    ],
     "governance_status": "REQUIRED",
-    "required_context": ["SKILL_INDEX.md", "ROUTING_MAP.md", "docs/routing/EXECUTION_MODES_POLICY.md", "docs/governance/GOVERNANCE_LAYER.md", "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md",
+      "docs/governance/GOVERNANCE_LAYER.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
     "forbidden_context": [],
     "forbidden_skills": [],
     "expected_gate": "DECISION_PROTOCOL_REQUIRED",
     "rationale": "Protocol loads only when decision must be interpreted or enforced."
+  },
+  {
+    "id": "multi-domain-tuner-coordination",
+    "request": "Coordinate architecture, security, persistence, UI, implementation, and validation contracts for one change.",
+    "expected_intent": "cross_specialist_contract_coordination",
+    "expected_mode": "Governed",
+    "primary_skill": "conductor",
+    "supporting_skills": [
+      "the-tuner",
+      "clockwork",
+      "cipher",
+      "chronicler",
+      "cloak",
+      "overseer"
+    ],
+    "governance_status": "CONDITIONAL",
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md",
+      "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [],
+    "expected_gate": "CROSS_LAYER_CONTRACT_REQUIRED",
+    "rationale": "Conductor retains routing while The Tuner coordinates specialist-owned contracts."
+  },
+  {
+    "id": "late-boundary-crossing-tuner",
+    "request": "A scoped implementation crosses into authorization behavior and requires security re-entry.",
+    "expected_intent": "late_cross_domain_activation",
+    "expected_mode": "Implementation",
+    "primary_skill": "conductor",
+    "supporting_skills": [
+      "the-tuner",
+      "ponytail",
+      "cipher"
+    ],
+    "governance_status": "CONDITIONAL",
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md",
+      "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [],
+    "expected_gate": "CROSS_LAYER_CONTRACT_REQUIRED",
+    "rationale": "Boundary-crossing implementation must return to Conductor and activate Tuner coordination."
   }
 ]

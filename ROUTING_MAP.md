@@ -10,6 +10,7 @@ Do not load it for obvious single-owner work.
 - Governance context stays out of ordinary low-risk work unless trigger exists.
 - `docs/governance/GOVERNANCE_DECISION_PROTOCOL.md` does not load during initial route classification.
 - `ROUTING_MAP.md` does not load for obvious single-owner tasks.
+- Obvious single-owner work bypasses `the-tuner`; a later material boundary crossing returns to `conductor` for Tuner activation.
 
 ## Delegated Phase Progression Routing
 
@@ -36,6 +37,7 @@ Do not load it for obvious single-owner work.
 | Minimal implementation after design is ready | `ponytail` | Execution owner is clear and upstream design/governance are ready |
 | Controlled destructive-path simulation | `dagger` | Explicit authorization and guardrail validation are present |
 | Broad, unclear, or overlapping requests | `conductor` | Ownership overlaps, dependencies exist, or route split is unclear |
+| Cross-specialist contract coordination | `the-tuner` | Conductor has classified material multi-domain dependencies, missing ownership, contradiction, stale contract, or late boundary crossing |
 
 ## Ordered Multi-Skill Sequences
 
@@ -48,6 +50,12 @@ Do not load it for obvious single-owner work.
 - `cloak -> clockwork -> ponytail` when frontend design changes API shape, data flow, or service boundaries
 - `cloak -> cipher -> ponytail` when frontend design affects authorization, privacy, or destructive journeys
 - `cloak -> clockwork -> ponytail -> cloak -> overseer` for UI-affecting implementation, correction, renewed static audit, and evidence validation
+
+- `conductor -> the-tuner -> domain specialists -> the-tuner -> ponytail` for material multi-domain contract assembly before implementation
+- `ponytail -> the-tuner -> overseer -> arbiter` for post-implementation delta reconciliation, evidence, and continuation review
+- `the-tuner -> conductor -> affected specialists or human` when ownership is missing or specialist contracts contradict
+
+The Tuner recommends routes but never invokes specialists directly. Conductor remains the exclusive router.
 
 ## UI Engineering and Validation Ownership
 
@@ -76,6 +84,8 @@ No single role may treat successful source inspection, implementation, or automa
 - Dagger stays `BLOCKED_PENDING_AUTHORIZATION` until explicit authorization and guardrail validation exist.
 - Governor human-review behavior is blocking.
 - Arbiter `HOLD` and `BLOCKED` are blocking.
+- `CROSS_LAYER_CONTRACT_INCOMPLETE`, `CROSS_SPECIALIST_CONTRADICTION_REVIEW_REQUIRED`, `CROSS_LAYER_CONTRACT_STALE`, and `SPECIALIST_REENTRY_REQUIRED` are blocking coordination states.
+- `CROSS_LAYER_CONTRACT_READY` is readiness evidence only and does not create implementation authority.
 - No architecture, security, database, or governance task defaults directly to `ponytail`.
 - Assign one owner per output and sequence dependencies instead of parallel policy conflicts.
 - Use `dagger` only for guarded destructive-path work, never as default QA, security, DB, or UI reviewer.

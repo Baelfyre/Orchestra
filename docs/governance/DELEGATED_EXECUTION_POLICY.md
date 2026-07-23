@@ -640,5 +640,24 @@ multi-phase implementation roadmap.
 
 ---
 
+## 18. Cross-Specialist Coordination Extension
+
+A delegated envelope may reference a CollaborationSession and accepted or frozen CrossLayerContractPacket defined by `docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md`.
+
+The Tuner cannot create or widen envelope authority, allowed paths, allowed roles, allowed behaviors, remediation limits, or external-action flags.
+
+Arbiter must not issue `AUTO_CONTINUE` while any blocking coordination state is active:
+
+- `CROSS_LAYER_CONTRACT_INCOMPLETE`;
+- `CROSS_SPECIALIST_CONTRADICTION_REVIEW_REQUIRED`;
+- `CROSS_LAYER_CONTRACT_STALE`;
+- incomplete `SPECIALIST_REENTRY_REQUIRED` work.
+
+`CROSS_LAYER_CONTRACT_READY` is coordination readiness only. It does not create implementation or external-action authority.
+
+Phase 1 defines instruction-level coordination, activation, contract status, and role boundaries. Full contract-hash, staged-patch, untracked-file, added-blob, and generated-artifact lifecycle enforcement is deferred to separately authorized Phase 2 work.
+
+---
+
 *Canonical references: `GOVERNANCE_DECISION_PROTOCOL.md`, `GOVERNANCE_LAYER.md`,
 `GOVERNANCE_REVIEW_FLOW.md`, `docs/project/DELEGATED_GOVERNANCE_IMPLEMENTATION_PLAN.md`*

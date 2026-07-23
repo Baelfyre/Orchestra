@@ -2,33 +2,29 @@
 
 ## Purpose
 
-Canonical lightweight router lookup for Orchestra. Conductor consults this index first, before loading specialist skills.
-
-## Router Usage
-
-Do not load individual `SKILL.md` files during initial classification unless that specialist will execute or a governance trigger requires deeper review.
+Lightweight routing index. Load a specialist `SKILL.md` only when it will execute or governance requires it.
 
 ## Execution Modes
 
-- **Ideation**: brainstorming, no code edits
-- **Prototype**: experimental local work
-- **Implementation**: standard development
-- **Audit**: read-only formal review
-- **Release**: deployment or public artifacts
+- **Ideation**: no edits
+- **Prototype**: local experiment
+- **Implementation**: development
+- **Audit**: read-only review
+- **Release**: public or deployment work
 
 ## Risk Levels
 
-- **Low**: formatting, simple docs, safe UI tweaks
-- **Medium**: normal implementation, refactors, ordinary validation
-- **High**: auth, security, persistence, compliance-sensitive changes
-- **Extreme**: destructive-path or production-impacting work
+- **Low**: safe formatting or docs
+- **Medium**: ordinary implementation or validation
+- **High**: security, persistence, or compliance
+- **Extreme**: destructive or production-impacting work
 
 ## Progression Modes
 
-- **DIRECT**: single specialist execution outside delegated phases
-- **MANUAL**: standard pause-and-confirm execution
-- **DELEGATED**: autonomous phase execution inside a human-authorized envelope
-- **LEGACY_FALLBACK**: manual fail-closed pause for unsupported hosts or missing dispositions
+- **DIRECT**: one specialist
+- **MANUAL**: pause and confirm
+- **DELEGATED**: authorized envelope
+- **LEGACY_FALLBACK**: fail-closed manual pause
 
 
 ## Skill Lookup Table
@@ -39,6 +35,7 @@ Do not load individual `SKILL.md` files during initial classification unless tha
 | `the-governor` | Legal, regulatory, privacy-obligation, IP, licensing governance | privacy policy impact, ToS impact, license compatibility, IP clearance, compliance obligations | business alignment or scope review | Governance decision owner | `docs/governance/GOVERNANCE_LAYER.md` | Governance Review |
 | `arbiter` | Continuity, source-of-truth, branch, handoff, merge-readiness | handoff readiness, branch uncertainty, merge readiness, missing validation evidence, continuation state conflict | normal implementation or normal QA execution | Continuity owner | git status, diffs, validation outputs | Continuity Review,Governance Effectiveness Review |
 | `conductor` | Routing and sequencing | ambiguous ownership, cross-domain sequencing, access-routing split, workflow orchestration | one obvious specialist owns full task | Routing owner | `SKILL_INDEX.md`; `ROUTING_MAP.md` only for ambiguity | Routing Plan,Prompts |
+| `the-tuner` | Cross-domain contract coordination | multi-domain gap, conflict, or staleness | single-owner work | Coordination only | protocol | Collaboration Review,Cross-Layer Contract Packet,Contradiction Report,Re-entry Recommendation |
 | `clockwork` | Architecture, layering, service boundaries, refactor structure | architecture redesign, layering drift, service boundary change, refactor strategy | straightforward code edit already designed | Technical review owner | none by default | Compact,Full |
 | `cipher` | Technical security and privacy-control review | authorization model, secrets handling, RBAC, threat exposure, privacy-control design | legal/privacy-obligation governance or offensive testing | Technical review owner | security-sensitive slice only | Caveman,Full Security Review |
 | `cloak` | UI/UX, accessibility, responsive layout, interaction design | accessibility remediation, layout design, user-flow clarity, responsive behavior | backend logic, DB design, security policy | Technical review owner | frontend slice only | QUICK_UI_HANDOFF,DOCUMENT_REVIEW,FORMAL_UI_AUDIT |
