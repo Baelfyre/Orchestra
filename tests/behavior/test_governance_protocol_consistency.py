@@ -38,6 +38,7 @@ def make_repo_copy():
         Path("skills/arbiter/SKILL.md"),
         Path("skills/arbiter/OUTPUT_FORMATS.md"),
         Path("skills/conductor/SKILL.md"),
+        Path("skills/the-tuner/SKILL.md"),
         Path("skills/overseer/SKILL.md"),
         Path("skills/overseer/OUTPUT_FORMATS.md"),
     ):

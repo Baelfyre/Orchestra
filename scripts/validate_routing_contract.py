@@ -10,6 +10,7 @@ REQUIRED_SKILLS = {
     "the-governor",
     "arbiter",
     "conductor",
+    "the-tuner",
     "clockwork",
     "cipher",
     "cloak",
@@ -33,17 +34,20 @@ REQUIRED_FIXTURE_IDS = {
     "ambiguous-cross-domain-retained-by-conductor",
     "destructive-blocked-pending-authorization",
     "governance-decision-enforcement",
+    "multi-domain-tuner-coordination",
+    "late-boundary-crossing-tuner",
 }
 
 VALID_MODES = {"Ideation", "Prototype", "Implementation", "Governed", "Audit", "Release", "Destructive"}
 VALID_GOVERNANCE = {"NOT_REQUIRED", "CONDITIONAL", "REQUIRED", "BLOCKED_PENDING_AUTHORIZATION"}
-VALID_GATES = {"NONE", "CONTINUITY_REQUIRED", "BLOCKED_PENDING_AUTHORIZATION", "DECISION_PROTOCOL_REQUIRED"}
+VALID_GATES = {"NONE", "CONTINUITY_REQUIRED", "BLOCKED_PENDING_AUTHORIZATION", "DECISION_PROTOCOL_REQUIRED", "CROSS_LAYER_CONTRACT_REQUIRED"}
 KNOWN_CONTEXTS = {
     "SKILL_INDEX.md",
     "ROUTING_MAP.md",
     "docs/routing/EXECUTION_MODES_POLICY.md",
     "docs/governance/GOVERNANCE_LAYER.md",
     "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md",
+    "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md",
 }
 
 
@@ -148,7 +152,7 @@ def validate_fixture_schema(fixtures, registered, errors):
     if missing_required_ids:
         fail(errors, f"Missing required routing fixtures: {sorted(missing_required_ids)}")
 
-    missing_skill_coverage = REQUIRED_SKILLS - primary_coverage
+    missing_skill_coverage = (REQUIRED_SKILLS - {"the-tuner"}) - primary_coverage
     if missing_skill_coverage:
         fail(errors, f"Missing primary-skill fixture coverage: {sorted(missing_skill_coverage)}")
 
@@ -196,6 +200,8 @@ def validate_expected_routing_rules(fixtures, errors):
         "cloak-vs-cipher-overlap",
         "governance-sensitive-implementation-sequence",
         "ambiguous-cross-domain-retained-by-conductor",
+        "multi-domain-tuner-coordination",
+        "late-boundary-crossing-tuner",
     ):
         fixture = by_id.get(fixture_id)
         if fixture and fixture["primary_skill"] != "conductor":
@@ -217,6 +223,25 @@ def validate_expected_routing_rules(fixtures, errors):
     for fixture in fixtures:
         if fixture["id"] != "governance-decision-enforcement" and "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md" in fixture.get("required_context", []):
             fail(errors, f"{fixture['id']}: decision protocol must not load merely to classify a route")
+
+    for fixture in fixtures:
+        if fixture.get("id", "").startswith("direct-"):
+            if "the-tuner" in fixture.get("supporting_skills", []):
+                fail(errors, "{}: obvious single-owner work must bypass the-tuner".format(fixture.get("id")))
+            if "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md" in fixture.get("required_context", []):
+                fail(errors, "{}: direct route must not load Tuner protocol context".format(fixture.get("id")))
+
+    for fixture_id in ("multi-domain-tuner-coordination", "late-boundary-crossing-tuner"):
+        fixture = by_id.get(fixture_id)
+        if fixture:
+            if fixture.get("primary_skill") != "conductor":
+                fail(errors, f"{fixture_id}: Conductor must remain the primary router")
+            if "the-tuner" not in fixture.get("supporting_skills", []):
+                fail(errors, f"{fixture_id}: must activate the-tuner")
+            if fixture.get("expected_gate") != "CROSS_LAYER_CONTRACT_REQUIRED":
+                fail(errors, f"{fixture_id}: must require a cross-layer contract")
+            if "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md" not in fixture.get("required_context", []):
+                fail(errors, f"{fixture_id}: must load the canonical Tuner protocol")
 
     destructive = by_id.get("destructive-blocked-pending-authorization")
     if destructive:

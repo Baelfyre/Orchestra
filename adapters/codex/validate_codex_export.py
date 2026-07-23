@@ -25,6 +25,7 @@ REFERENCE_VALIDATION_SKILLS = {
     "the-governor",
     "arbiter",
     "overseer",
+    "the-tuner",
 }
 PORTABLE_REFERENCES = {
     "conductor": (
@@ -42,6 +43,9 @@ PORTABLE_REFERENCES = {
     "the-governor": (
         ("docs/governance/GOVERNANCE_DECISION_PROTOCOL.md", "../../docs/governance/GOVERNANCE_DECISION_PROTOCOL.md", "REFERENCE_CONTEXT.md#governance-decision-protocol", "governance-decision-protocol"),
     ),
+    "the-tuner": (
+        ("docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md", "../../docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md", "REFERENCE_CONTEXT.md#cross-specialist-coordination-protocol", "cross-specialist-coordination-protocol"),
+    ),
 }
 TRACKED_EXPORT_PARITY_PATHS = (
     (
@@ -56,6 +60,8 @@ NORMALIZED_EXPORT_PARITY_PATHS = (
     (Path("skills/arbiter/OUTPUT_FORMATS.md"), Path("adapters/codex/skills/arbiter/OUTPUT_FORMATS.md")),
     (Path("skills/overseer/SKILL.md"), Path("adapters/codex/skills/overseer/SKILL.md")),
     (Path("skills/overseer/OUTPUT_FORMATS.md"), Path("adapters/codex/skills/overseer/OUTPUT_FORMATS.md")),
+    (Path("skills/the-tuner/SKILL.md"), Path("adapters/codex/skills/the-tuner/SKILL.md")),
+    (Path("skills/the-tuner/OUTPUT_FORMATS.md"), Path("adapters/codex/skills/the-tuner/OUTPUT_FORMATS.md")),
     (Path("skills/the-steward/SKILL.md"), Path("adapters/codex/skills/the-steward/SKILL.md")),
     (Path("skills/the-governor/SKILL.md"), Path("adapters/codex/skills/the-governor/SKILL.md")),
     (Path("skills/the-steward/OUTPUT_FORMATS.md"), Path("adapters/codex/skills/the-steward/OUTPUT_FORMATS.md")),

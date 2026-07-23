@@ -22,6 +22,8 @@ def main():
         {"Name": "test_prompt_load_budget.py", "Path": "tests/behavior/test_prompt_load_budget.py"},
         {"Name": "test_governance_protocol_consistency.py", "Path": "tests/behavior/test_governance_protocol_consistency.py"},
         {"Name": "test_router_contracts.py", "Path": "tests/behavior/test_router_contracts.py"},
+        {"Name": "validate_tuner_collaboration_contract.py", "Path": "scripts/validate_tuner_collaboration_contract.py"},
+        {"Name": "test_tuner_collaboration_contract.py", "Path": "tests/behavior/test_tuner_collaboration_contract.py"},
         {"Name": "validate_artificer_internal.py", "Path": "scripts/validate_artificer_internal.py"},
         {"Name": "test_artificer_internal.py", "Path": "tests/behavior/test_artificer_internal.py"},
         {"Name": "validate_artificer_records.py", "Path": "scripts/validate_artificer_records.py"},

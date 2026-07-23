@@ -114,6 +114,24 @@
       ]
     },
     {
+      "primary_use": "Cross-domain dependency mapping, specialist-contract assembly, ownership completeness, contradiction detection, invalidation, and specialist re-entry recommendations",
+      "slug": "the-tuner",
+      "description": "Cross-specialist coordination specialist for contract assembly, contradiction detection, semantic invalidation, and re-entry recommendations. See the canonical coordination protocol.",
+      "avoid_when": "One obvious specialist owns the complete task and no material cross-domain dependency or boundary-crossing change exists",
+      "skill_path": "skills/the-tuner/SKILL.md",
+      "role": "Cross-Specialist Coordination Specialist",
+      "name": "the-tuner",
+      "activation_level": "Specialist",
+      "depends_on": "conductor",
+      "icon_path": "assets/icons/conductor.ico",
+      "output_formats": [
+        "Collaboration Review",
+        "Cross-Layer Contract Packet",
+        "Contradiction Report",
+        "Re-entry Recommendation"
+      ]
+    },
+    {
       "primary_use": "Security policy, RBAC, authorization, authentication risk, privacy, secrets, visibility/access-control",
       "slug": "cipher",
       "description": "Security, Privacy, Access Control, and Threat Review Specialist. Do not use for offensive or destructive testing. See SKILL_INDEX.md.",

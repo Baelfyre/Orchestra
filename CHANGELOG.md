@@ -2,6 +2,18 @@
 
 This changelog tracks the repository history using git tags, merge history, and the prior documented milestone log that lived under `docs/meta/CHANGELOG.md`.
 
+## Unreleased - Issue #195 Cross-Specialist Coordination Phase 1
+
+Phase 1 is implemented for review on `design/issue-195-tuner-protocol`. It adds instruction-level coordination only. No release, deployment, marketplace publication, typed runtime, SQLite, RPC, or external-action authority is included.
+
+### Added
+- Added `the-tuner` as a Conductor-dependent coordination specialist with canonical collaboration, contract, contradiction, and re-entry outputs.
+- Added `docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md`, deterministic Tuner fixtures, focused tests, and a collaboration-contract validator.
+
+### Changed
+- Updated routing, Conductor, Arbiter, Overseer, Ponytail, delegated-governance extension points, minimal prompt metadata, and Codex exports to preserve specialist ownership while detecting incomplete, contradictory, or stale cross-layer contracts.
+- Preserved direct single-owner bypass, Arbiter transition authority, Overseer evidence ownership, Dagger gating, and default-deny external actions.
+
 ## Unreleased - Phase B Instruction-Level Delegated Autonomous Loop
 
 Phase B instruction-level delegated governance was merged into `main` through PR #190 at merge commit `d37a2f7b31543efacf7a5e81c3f4d08c12da017d`. Phase C and Phase D remain unstarted. No Phase B release or deployment has been performed.

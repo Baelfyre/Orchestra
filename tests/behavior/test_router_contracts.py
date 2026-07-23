@@ -11,6 +11,7 @@ ROOT = Path(__file__).resolve().parents[2]
 VALIDATOR = ROOT / "scripts" / "validate_routing_contract.py"
 FIXTURES = ROOT / "tests" / "behavior" / "router-contract-fixtures.json"
 DELEGATED_TRACE_FIXTURE = ROOT / "tests" / "behavior" / "delegated-phase-trace-fixtures.json"
+TUNER_FIXTURES = ROOT / "tests" / "behavior" / "tuner-collaboration-fixtures.json"
 CANONICAL_DISPOSITIONS = (
     "STOP",
     "ESCALATE_HUMAN",
@@ -372,6 +373,23 @@ def test_delegated_trace_negative_cases():
         assert_true(f"negative trace rejected: {label}", bool(errors))
 
 
+def test_tuner_routing_activation_and_bypass():
+    router_fixtures = {item["id"]: item for item in json.loads(FIXTURES.read_text(encoding="utf-8"))}
+    for fixture_id in ("direct-scribe", "direct-ponytail"):
+        fixture = router_fixtures[fixture_id]
+        assert_true(f"{fixture_id} bypasses the-tuner", "the-tuner" not in fixture["supporting_skills"])
+        assert_true(f"{fixture_id} forbids the-tuner", "the-tuner" in fixture["forbidden_skills"])
+
+    for fixture_id in ("multi-domain-tuner-coordination", "late-boundary-crossing-tuner"):
+        fixture = router_fixtures[fixture_id]
+        assert_true(f"{fixture_id} remains routed by conductor", fixture["primary_skill"] == "conductor")
+        assert_true(f"{fixture_id} activates the-tuner", "the-tuner" in fixture["supporting_skills"])
+        assert_true(f"{fixture_id} requires contract gate", fixture["expected_gate"] == "CROSS_LAYER_CONTRACT_REQUIRED")
+
+    tuner_fixtures = json.loads(TUNER_FIXTURES.read_text(encoding="utf-8"))
+    assert_true("Tuner fixture suite is present", len(tuner_fixtures) >= 14)
+
+
 def main():
     test_passes_real_repo()
     test_missing_required_fixture_fails()
@@ -382,6 +400,7 @@ def main():
     test_reference_integrity_cases()
     test_delegated_three_unit_contract_trace()
     test_delegated_trace_negative_cases()
+    test_tuner_routing_activation_and_bypass()
     print("Router contract tests passed.")
     return 0
 

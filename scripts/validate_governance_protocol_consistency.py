@@ -254,6 +254,7 @@ def main(argv=None):
     governor_outputs = read_text(repo_root / "skills" / "the-governor" / "OUTPUT_FORMATS.md")
     arbiter_outputs = read_text(repo_root / "skills" / "arbiter" / "OUTPUT_FORMATS.md")
     overseer_outputs = read_text(repo_root / "skills" / "overseer" / "OUTPUT_FORMATS.md")
+    tuner = read_text(repo_root / "skills" / "the-tuner" / "SKILL.md")
 
     delegated_policy_path = repo_root / "docs" / "governance" / "DELEGATED_EXECUTION_POLICY.md"
     delegated_policy_exists = delegated_policy_path.exists()
@@ -273,6 +274,11 @@ def main(argv=None):
     ensure_contains(errors, "GOVERNANCE_DECISION_PROTOCOL.md", protocol, "Scribe produces and edits documentation but does not decide business alignment.")
     ensure_contains(errors, "GOVERNANCE_DECISION_PROTOCOL.md", protocol, "Ponytail owns implementation only after design and governance are ready.")
     ensure_contains(errors, "GOVERNANCE_DECISION_PROTOCOL.md", protocol, "Conductor owns routing and sequencing only.")
+    ensure_contains(errors, "skills/the-tuner/SKILL.md", tuner, "Tuner cannot create or widen authority.")
+    ensure_contains(errors, "skills/the-tuner/SKILL.md", tuner, "Tuner cannot override The Steward or The Governor.")
+    ensure_contains(errors, "skills/the-tuner/SKILL.md", tuner, "Conductor remains the exclusive router.")
+    ensure_contains(errors, "skills/the-tuner/SKILL.md", tuner, "Arbiter remains the continuation and transition-decision authority.")
+    ensure_contains(errors, "skills/the-tuner/SKILL.md", tuner, "Overseer remains the validation strategy and evidence owner.")
 
     ensure_contains(errors, "GOVERNANCE_LAYER.md", layer, "`GOVERNANCE_LAYER.md` is governance-context routing and operating-policy document.")
     ensure_contains(errors, "GOVERNANCE_LAYER.md", layer, "Load `GOVERNANCE_DECISION_PROTOCOL.md` only when governance decision must be produced, interpreted, or enforced.")
