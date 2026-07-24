@@ -4,7 +4,7 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased - Issue #195 Cross-Specialist Coordination Phase 2
 
-Phase 2 is implemented locally for review on `feat/issue-195-tuner-phase2-evidence-continuity`. It adds deterministic evidence identity and continuity enforcement only. No typed Tuner runtime, persistence, SQLite, RPC, release, deployment, or external-action authority is included.
+Phase 2 is implemented, committed, pushed, and under review in PR #197 on `feat/issue-195-tuner-phase2-evidence-continuity`. Merge remains separately authorized. It adds deterministic evidence identity and continuity enforcement only. No typed Tuner runtime, persistence, SQLite, RPC, release, deployment, or external-action authority is included.
 
 ### Added
 - Added the canonical evidence identity and freshness protocol.

@@ -1,12 +1,81 @@
 import os
 import sys
+import json
 import subprocess
 import uuid
 import shutil
 import tempfile
 
+
+def _git_output(root, *args):
+    result = subprocess.run(
+        ["git", "-C", root, *args],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        check=False,
+    )
+    return result.returncode, result.stdout.strip(), result.stderr.strip()
+
+
+def _commit_exists(root, revision):
+    code, _, _ = _git_output(root, "cat-file", "-e", f"{revision}^{{commit}}")
+    return code == 0
+
+
+def resolve_evidence_baseline(root):
+    explicit = os.environ.get("ORCHESTRA_APPROVED_BASE_SHA", "").strip()
+    if explicit:
+        if not _commit_exists(root, explicit):
+            raise RuntimeError("ORCHESTRA_APPROVED_BASE_SHA is not available locally")
+        return explicit
+
+    event_path = os.environ.get("GITHUB_EVENT_PATH", "").strip()
+    if event_path and os.path.isfile(event_path):
+        with open(event_path, "r", encoding="utf-8") as handle:
+            event = json.load(handle)
+
+        event_name = os.environ.get("GITHUB_EVENT_NAME", "").strip()
+        candidates = []
+        pull_request_base = str(
+            event.get("pull_request", {}).get("base", {}).get("sha", "")
+        ).strip()
+        push_before = str(event.get("before", "")).strip()
+        workflow_sha = os.environ.get("GITHUB_SHA", "").strip()
+
+        if pull_request_base:
+            candidates.append(("pull-request base", pull_request_base))
+        if event_name == "push" and push_before and set(push_before) != {"0"}:
+            candidates.append(("push before", push_before))
+        if event_name == "workflow_dispatch" and workflow_sha:
+            candidates.append(("workflow-dispatch SHA", workflow_sha))
+
+        for label, candidate in candidates:
+            if not _commit_exists(root, candidate) and os.environ.get("GITHUB_ACTIONS") == "true":
+                fetch = subprocess.run(
+                    ["git", "-C", root, "fetch", "--no-tags", "--depth=1", "origin", candidate],
+                    check=False,
+                )
+                if fetch.returncode != 0:
+                    raise RuntimeError(f"Could not fetch the explicit {label}")
+            if not _commit_exists(root, candidate):
+                raise RuntimeError(f"The explicit {label} is unavailable")
+            return candidate
+
+    for revision in ("origin/main", "main"):
+        code, value, _ = _git_output(root, "rev-parse", "--verify", f"{revision}^{{commit}}")
+        if code == 0 and value:
+            return value
+
+    raise RuntimeError(
+        "An explicit approved baseline is required. Set ORCHESTRA_APPROVED_BASE_SHA "
+        "or provide a verified GitHub event reference."
+    )
+
+
 def main():
     root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    evidence_base = resolve_evidence_baseline(root)
     
     scripts = [
         {"Name": "validate_structure.py", "Path": "scripts/validate_structure.py"},
@@ -24,7 +93,7 @@ def main():
         {"Name": "test_router_contracts.py", "Path": "tests/behavior/test_router_contracts.py"},
         {"Name": "validate_tuner_collaboration_contract.py", "Path": "scripts/validate_tuner_collaboration_contract.py"},
         {"Name": "test_tuner_collaboration_contract.py", "Path": "tests/behavior/test_tuner_collaboration_contract.py"},
-        {"Name": "validate_evidence_identity.py", "Path": "scripts/validate_evidence_identity.py"},
+        {"Name": "validate_evidence_identity.py", "Path": "scripts/validate_evidence_identity.py", "Args": ["--approved-base-sha", evidence_base]},
         {"Name": "test_evidence_identity.py", "Path": "tests/behavior/test_evidence_identity.py"},
         {"Name": "validate_tuner_evidence_continuity.py", "Path": "scripts/validate_tuner_evidence_continuity.py"},
         {"Name": "test_tuner_evidence_continuity.py", "Path": "tests/behavior/test_tuner_evidence_continuity.py"},
@@ -47,7 +116,7 @@ def main():
         print("========================================")
         
         full_path = os.path.join(root, s["Path"].replace('/', os.sep))
-        result = subprocess.run([sys.executable, full_path])
+        result = subprocess.run([sys.executable, full_path, *s.get("Args", [])])
         
         if result.returncode != 0:
             print(f"\033[91mERROR: {s['Name']} failed with exit code {result.returncode}!\033[0m")

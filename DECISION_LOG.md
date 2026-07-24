@@ -948,7 +948,7 @@ The current public release remains `v1.1.1`. Target `v1.1.2` is prepared but not
 
 ## 2026-07-24: The Tuner Phase 2 evidence identity and continuity integration
 
-**Status:** Implementation authorized, uncommitted.
+**Status:** Implemented, committed, pushed, and under review in PR #197. Merge remains separately authorized.
 
 **Baseline:** `0c5790e3ac55db08c7a97f44d0d29b337e7b6dac`
 

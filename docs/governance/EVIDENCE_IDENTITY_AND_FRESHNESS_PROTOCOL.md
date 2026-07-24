@@ -313,10 +313,21 @@ The following must never default to readiness:
 - cleanup without authority;
 - evidence containing secret material rather than hashes and paths.
 
-## 16. Read-only collector boundary
+## 16. Schema and independent verification clarifications
+
+- Identity, safety, authorization, cleanup, inspection, and readiness flags require exact JSON booleans. Strings, numbers, nulls, objects, arrays, and missing values fail closed.
+- Re-entry triggers, dependency edges, and owners require non-empty declared identifiers. An unknown trigger or missing owner blocks re-entry computation instead of producing an empty route.
+- Windows drive-qualified, UNC, device, POSIX absolute, traversal, and malformed repository paths are prohibited.
+- Repository identity must remove URL user information and credentials. Local paths are represented only by non-reversible hashes.
+- Unexpected Git command failures are blocking. Expected detached-HEAD, absent-origin, and ignored-file states must be distinguished by return code rather than empty output.
+- The approved baseline must be supplied explicitly or derived from an explicit verified CI base reference. `HEAD` is not an implicit baseline.
+- Artifact evidence must be validated against independent artifact lifecycle records and current artifact state. A document cannot validate artifact claims sourced only from itself.
+- Relevant present artifacts require verified SHA-256 content identity, complete lifecycle fields, and freshness binding to the approved baseline, current commit, and contract hash.
+
+## 17. Read-only collector boundary
 
 `scripts/evidence_identity.py` and its validators may read repository state and execute read-only Git commands. They may not stage, restore, reset, clean, remove, commit, amend, push, fetch external content, open pull requests, merge, release, deploy, or modify external systems.
 
-## 17. Phase boundary
+## 18. Phase boundary
 
 Phase 2 provides deterministic evidence and continuity enforcement at the protocol, output-contract, validator, and behavior-test layers. It does not add typed Tuner runtime models, persistent state, SQLite, RPC, host orchestration, release automation, or deployment behavior.

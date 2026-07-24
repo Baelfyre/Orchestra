@@ -26,8 +26,17 @@ def _load_identity_module():
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Validate Orchestra Phase 2 evidence identity contracts.")
     parser.add_argument("--repo-root", type=Path, default=ROOT)
-    parser.add_argument("--approved-base-sha", default="HEAD")
+    parser.add_argument(
+        "--approved-base-sha",
+        required=True,
+        help="Explicit approved baseline commit. No implicit HEAD fallback is permitted.",
+    )
     parser.add_argument("--evidence-json", type=Path)
+    parser.add_argument(
+        "--artifact-records",
+        type=Path,
+        help="Independent authoritative artifact lifecycle records used to validate evidence.",
+    )
     parser.add_argument("--json", action="store_true", dest="json_output")
     return parser.parse_args(argv)
 
@@ -52,6 +61,8 @@ def validate_repository_contract(root: Path) -> list[str]:
             "working_tree_fingerprint",
             "Git clean-filter semantics",
             "Pre-existing artifacts must not be deleted",
+            "independent artifact",
+            "credential",
         ),
         "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md": (
             "Phase 2 evidence and continuity enforcement",
@@ -104,23 +115,39 @@ def validate_repository_contract(root: Path) -> list[str]:
     return errors
 
 
+def _load_artifacts(identity, path: Path | None):
+    if path is None:
+        return None
+    return identity._load_artifacts(path)
+
+
 def main(argv: Sequence[str] | None = None) -> int:
     args = parse_args(argv)
     root = args.repo_root.resolve()
     errors = validate_repository_contract(root)
 
     identity = _load_identity_module()
+    current = None
     try:
-        current = identity.collect_evidence_identity(root, args.approved_base_sha)
+        artifacts = _load_artifacts(identity, args.artifact_records)
+        current = identity.collect_evidence_identity(
+            root,
+            args.approved_base_sha,
+            artifacts or [],
+        )
         self_errors = identity.validate_identity_document(current, current)
         errors.extend(f"self-identity: {item}" for item in self_errors)
         if args.evidence_json:
             errors.extend(
-                identity.validate_evidence_file(root, args.approved_base_sha, args.evidence_json)
+                identity.validate_evidence_file(
+                    root,
+                    args.approved_base_sha,
+                    args.evidence_json,
+                    artifacts,
+                )
             )
     except Exception as exc:  # Fail closed with a compact diagnostic.
         errors.append(str(exc))
-        current = None
 
     if args.json_output:
         print(

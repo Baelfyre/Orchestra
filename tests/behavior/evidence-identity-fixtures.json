@@ -27,6 +27,12 @@
   "unsafe_paths": [
     "../outside.txt",
     "/absolute.txt",
-    "a/../b.txt"
+    "a/../b.txt",
+    "C:\\secret\\file.txt",
+    "C:/secret/file.txt",
+    "\\\\server\\share\\file.txt",
+    "\\\\?\\C:\\secret.txt",
+    "\\\\.\\PhysicalDrive0",
+    "a//b.txt"
   ]
 }
