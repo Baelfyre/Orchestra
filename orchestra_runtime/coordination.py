@@ -7,6 +7,7 @@ import json
 from pathlib import PurePosixPath
 import re
 from types import MappingProxyType
+from urllib.parse import urlsplit, urlunsplit
 
 from .errors import (
     ConflictingCoordinationSignalError,
@@ -19,13 +20,35 @@ from .interfaces import ICoordinationController
 from .models import AuditEventType, RuntimeAuditEvent
 
 
+
 COORDINATION_CANONICALIZATION_VERSION = "orchestra-coordination-runtime-v1"
 IDENTIFIER_PATTERN = re.compile(r"^[a-z0-9][a-z0-9_.:-]*$")
-SHA_PATTERN = re.compile(r"^[0-9a-f]{40}$")
+GIT_OBJECT_ID_PATTERN = re.compile(r"^(?:[0-9a-f]{40}|[0-9a-f]{64})$")
+SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
+CANONICAL_REPOSITORY_DIGEST_PATTERN = re.compile(
+    r"^(?:file-sha256|local-remote-sha256|local-repository-sha256):[0-9a-f]{64}$"
+)
+WINDOWS_DRIVE_PATTERN = re.compile(r"^[A-Za-z]:(?:[/\\]|$)")
+EXTERNAL_AUTHORITY_PREFIXES = ("human:", "governance:", "external:")
+KNOWN_AUTHORITY_REFERENCES = frozenset(
+    {"conductor", "arbiter", "overseer", "the-steward", "the-governor"}
+)
 
 
 def _canonical_json(payload: object) -> str:
-    return json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=True)
+    try:
+        return json.dumps(
+            payload,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=False,
+            allow_nan=False,
+        )
+    except (TypeError, ValueError) as exc:
+        raise InvalidCoordinationContractError(
+            "coordination identity must be canonical JSON",
+            "INVALID_COORDINATION_CANONICAL_JSON",
+        ) from exc
 
 
 def _fingerprint(payload: object) -> str:
@@ -54,31 +77,51 @@ def _identifier(value: object, field_name: str) -> str:
     return text
 
 
-def _sha(value: object, field_name: str = "baseline_sha") -> str:
+def _git_object_id(value: object, field_name: str = "baseline_sha") -> str:
     text = _text(value, field_name).casefold()
-    if not SHA_PATTERN.fullmatch(text):
+    if not GIT_OBJECT_ID_PATTERN.fullmatch(text):
         raise InvalidCoordinationContractError(
-            f"{field_name} must be a full 40-character Git SHA",
+            f"{field_name} must be a canonical 40- or 64-character Git object ID",
             "INVALID_BASELINE_SHA",
             {"field": field_name},
         )
     return text
 
 
-def _sorted_identifiers(values: tuple[str, ...] | list[str], field_name: str) -> tuple[str, ...]:
-    normalized = tuple(sorted({_identifier(item, field_name) for item in values}))
-    if any(not item for item in normalized):
+def _sha256(value: object, field_name: str) -> str:
+    text = _text(value, field_name).casefold()
+    if not SHA256_PATTERN.fullmatch(text):
         raise InvalidCoordinationContractError(
-            f"{field_name} contains an empty identifier",
-            "EMPTY_COORDINATION_FIELD",
+            f"{field_name} must be a SHA-256 digest",
+            "INVALID_COORDINATION_SHA256",
             {"field": field_name},
         )
-    return normalized
+    return text
+
+
+def _unique(values: tuple[str, ...], field_name: str) -> tuple[str, ...]:
+    if len(set(values)) != len(values):
+        raise InvalidCoordinationContractError(
+            f"{field_name} values must be unique",
+            "DUPLICATE_COORDINATION_VALUE",
+            {"field": field_name},
+        )
+    return values
+
+
+def _sorted_identifiers(values: tuple[str, ...] | list[str], field_name: str) -> tuple[str, ...]:
+    normalized = tuple(_identifier(item, field_name) for item in values)
+    return tuple(sorted(_unique(normalized, field_name)))
+
+
+def _ordered_identifiers(values: tuple[str, ...] | list[str], field_name: str) -> tuple[str, ...]:
+    normalized = tuple(_identifier(item, field_name) for item in values)
+    return _unique(normalized, field_name)
 
 
 def _sorted_text(values: tuple[str, ...] | list[str], field_name: str) -> tuple[str, ...]:
-    normalized = tuple(sorted({_text(item, field_name) for item in values}))
-    return normalized
+    normalized = tuple(_text(item, field_name) for item in values)
+    return tuple(sorted(_unique(normalized, field_name)))
 
 
 def _ordered_text(
@@ -94,7 +137,7 @@ def _ordered_text(
             "EMPTY_COORDINATION_COLLECTION",
             {"field": field_name},
         )
-    return normalized
+    return _unique(normalized, field_name)
 
 
 def _exact_bool(value: object, field_name: str) -> bool:
@@ -117,6 +160,16 @@ def _positive_revision(value: object, field_name: str = "revision") -> int:
     return value
 
 
+def _non_negative_sequence(value: object, field_name: str = "sequence") -> int:
+    if type(value) is not int or value < 0:
+        raise InvalidCoordinationContractError(
+            f"{field_name} must be a non-negative integer",
+            "INVALID_COORDINATION_SEQUENCE",
+            {"field": field_name},
+        )
+    return value
+
+
 def _optional_identifier(value: object | None, field_name: str) -> str | None:
     if value is None:
         return None
@@ -134,7 +187,7 @@ def _relative_path(value: object) -> str:
     if (
         text.startswith("/")
         or text.startswith("//")
-        or re.match(r"^[A-Za-z]:", text)
+        or WINDOWS_DRIVE_PATTERN.match(text)
         or ":" in text.split("/", 1)[0]
     ):
         raise InvalidCoordinationContractError(
@@ -142,14 +195,68 @@ def _relative_path(value: object) -> str:
             "UNSAFE_COORDINATION_PATH",
             {"path": text},
         )
-    path = PurePosixPath(text)
-    if any(part in {"", ".", ".."} for part in path.parts):
+    parts = text.split("/")
+    if any(part in {"", ".", ".."} for part in parts):
         raise InvalidCoordinationContractError(
             "artifact path must not contain traversal or empty segments",
             "UNSAFE_COORDINATION_PATH",
             {"path": text},
         )
-    return path.as_posix()
+    return PurePosixPath(*parts).as_posix()
+
+
+def _repository_identity(value: object) -> str:
+    raw = _text(value, "repository_identity")
+    lowered = raw.casefold()
+    if CANONICAL_REPOSITORY_DIGEST_PATTERN.fullmatch(lowered):
+        return lowered
+
+    if "://" in raw:
+        parsed = urlsplit(raw)
+        scheme = parsed.scheme.casefold()
+        if scheme == "file":
+            return f"file-sha256:{sha256(raw.encode('utf-8')).hexdigest()}"
+        if not parsed.hostname:
+            raise InvalidCoordinationContractError(
+                "repository URL must include a hostname",
+                "INVALID_REPOSITORY_IDENTITY",
+            )
+        try:
+            port = parsed.port
+        except ValueError as exc:
+            raise InvalidCoordinationContractError(
+                "repository URL contains an invalid port",
+                "INVALID_REPOSITORY_IDENTITY",
+            ) from exc
+        host = parsed.hostname.casefold()
+        if port is not None:
+            host = f"{host}:{port}"
+        return urlunsplit((scheme, host, parsed.path, "", ""))
+
+    if WINDOWS_DRIVE_PATTERN.match(raw) or raw.startswith(("/", "\\", ".")):
+        return f"local-repository-sha256:{sha256(raw.encode('utf-8')).hexdigest()}"
+
+    scp_like = re.fullmatch(r"(?:(?:[^@/\s]+)@)?([^:/\s]+):(.+)", raw)
+    if scp_like:
+        host, path = scp_like.groups()
+        return f"ssh://{host.casefold()}/{path.lstrip('/')}"
+
+    return f"local-repository-sha256:{sha256(raw.encode('utf-8')).hexdigest()}"
+
+
+def _authority_reference(value: object, field_name: str) -> str:
+    reference = _identifier(value, field_name)
+    if reference == "the-tuner":
+        raise InvalidCoordinationContractError(
+            "The Tuner cannot hold operational or resolution authority",
+            "TUNER_AUTHORITY_EXPANSION",
+            {"field": field_name},
+        )
+    return reference
+
+
+def _is_external_authority(reference: str) -> bool:
+    return reference.startswith(EXTERNAL_AUTHORITY_PREFIXES)
 
 
 class ActivationDecision(str, Enum):
@@ -159,6 +266,19 @@ class ActivationDecision(str, Enum):
     ACTIVATE_CONTRADICTION = "ACTIVATE_CONTRADICTION"
     ACTIVATE_MISSING_OWNER = "ACTIVATE_MISSING_OWNER"
     ACTIVATE_STALE_CONTRACT = "ACTIVATE_STALE_CONTRACT"
+
+
+class ExecutionMode(str, Enum):
+    IDEATION = "IDEATION"
+    PROTOTYPE = "PROTOTYPE"
+    IMPLEMENTATION = "IMPLEMENTATION"
+    AUDIT = "AUDIT"
+    RELEASE = "RELEASE"
+
+
+class ProgressionMode(str, Enum):
+    MANUAL = "MANUAL"
+    DELEGATED = "DELEGATED"
 
 
 class CollaborationStatus(str, Enum):
@@ -221,6 +341,19 @@ class ArtifactLifecycleState(str, Enum):
     CLEANED = "CLEANED"
 
 
+class ArtifactRetentionRequirement(str, Enum):
+    NONE_REQUIRED = "NONE_REQUIRED"
+    RETAIN_REQUIRED = "RETAIN_REQUIRED"
+    CLEANUP_ALLOWED = "CLEANUP_ALLOWED"
+    CLEANUP_REQUIRED = "CLEANUP_REQUIRED"
+
+
+class EvidenceStatus(str, Enum):
+    CURRENT = "CURRENT"
+    STALE = "STALE"
+    SUPERSEDED = "SUPERSEDED"
+
+
 class SpecialistParticipationRole(str, Enum):
     ACCOUNTABLE_OWNER = "ACCOUNTABLE_OWNER"
     COLLABORATOR = "COLLABORATOR"
@@ -242,7 +375,6 @@ class ContradictionStatus(str, Enum):
     OPEN = "OPEN"
     RESOLVED = "RESOLVED"
     SUPERSEDED = "SUPERSEDED"
-
 
 @dataclass(frozen=True, slots=True)
 class CoordinationValidationResult:
@@ -296,12 +428,14 @@ class CollaborationParticipant:
 
     def __post_init__(self) -> None:
         specialist_slug = _identifier(self.specialist_slug, "specialist_slug")
-        roles = tuple(
-            sorted(
-                {SpecialistParticipationRole(item) for item in self.participation_roles},
-                key=lambda item: item.value,
+        raw_roles = tuple(SpecialistParticipationRole(item) for item in self.participation_roles)
+        if len(set(raw_roles)) != len(raw_roles):
+            raise InvalidCoordinationContractError(
+                "participant roles must be unique",
+                "DUPLICATE_PARTICIPATION_ROLE",
+                {"specialist_slug": specialist_slug},
             )
-        )
+        roles = tuple(sorted(raw_roles, key=lambda item: item.value))
         if not roles:
             raise InvalidCoordinationContractError(
                 "participant requires at least one participation role",
@@ -340,6 +474,43 @@ class CollaborationParticipant:
         }
 
 
+
+@dataclass(frozen=True, slots=True)
+class InvalidationRule:
+    target_kind: InvalidationTargetKind
+    target_refs: tuple[str, ...]
+    affected_specialist_refs: tuple[str, ...]
+    required_reentry_refs: tuple[str, ...]
+
+    def __post_init__(self) -> None:
+        target_kind = InvalidationTargetKind(self.target_kind)
+        target_refs = _sorted_identifiers(self.target_refs, "target_ref")
+        affected = _sorted_identifiers(self.affected_specialist_refs, "affected_specialist_ref")
+        reentry = _sorted_identifiers(self.required_reentry_refs, "required_reentry_ref")
+        if not target_refs or not affected or not reentry:
+            raise InvalidCoordinationContractError(
+                "invalidation rule requires targets, affected specialists, and re-entry owners",
+                "INCOMPLETE_INVALIDATION_RULE",
+            )
+        if not set(reentry).issubset(set(affected)):
+            raise InvalidCoordinationContractError(
+                "invalidation rule re-entry owners must be affected specialists",
+                "INVALID_REENTRY_SET",
+            )
+        object.__setattr__(self, "target_kind", target_kind)
+        object.__setattr__(self, "target_refs", target_refs)
+        object.__setattr__(self, "affected_specialist_refs", affected)
+        object.__setattr__(self, "required_reentry_refs", reentry)
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "target_kind": self.target_kind.value,
+            "target_refs": list(self.target_refs),
+            "affected_specialist_refs": list(self.affected_specialist_refs),
+            "required_reentry_refs": list(self.required_reentry_refs),
+        }
+
+
 @dataclass(frozen=True, slots=True)
 class CollaborationDependency:
     dependency_id: str
@@ -349,6 +520,7 @@ class CollaborationDependency:
     contract_section_refs: tuple[str, ...] = ()
     invalidation_triggers: tuple[str, ...] = ()
     blocking: bool = True
+    invalidation_rules: tuple[InvalidationRule, ...] = ()
 
     def __post_init__(self) -> None:
         dependency_id = _identifier(self.dependency_id, "dependency_id")
@@ -360,6 +532,22 @@ class CollaborationDependency:
                 "SELF_COORDINATION_DEPENDENCY",
                 {"dependency_id": dependency_id},
             )
+        rules = tuple(sorted(tuple(self.invalidation_rules), key=lambda item: item.target_kind.value))
+        rule_kinds = tuple(item.target_kind for item in rules)
+        if len(set(rule_kinds)) != len(rule_kinds):
+            raise InvalidCoordinationContractError(
+                "dependency may define only one invalidation rule per target kind",
+                "DUPLICATE_INVALIDATION_RULE",
+                {"dependency_id": dependency_id},
+            )
+        allowed = {source, target}
+        for rule in rules:
+            if not set(rule.affected_specialist_refs).issubset(allowed):
+                raise InvalidCoordinationContractError(
+                    "invalidation rule may affect only specialists declared by the dependency edge",
+                    "INVALID_INVALIDATION_SPECIALIST_SET",
+                    {"dependency_id": dependency_id},
+                )
         object.__setattr__(self, "dependency_id", dependency_id)
         object.__setattr__(self, "source_specialist", source)
         object.__setattr__(self, "target_specialist", target)
@@ -375,6 +563,10 @@ class CollaborationDependency:
             _sorted_identifiers(self.invalidation_triggers, "invalidation_trigger"),
         )
         object.__setattr__(self, "blocking", _exact_bool(self.blocking, "blocking"))
+        object.__setattr__(self, "invalidation_rules", rules)
+
+    def invalidation_rule_for(self, target_kind: InvalidationTargetKind) -> InvalidationRule | None:
+        return next((item for item in self.invalidation_rules if item.target_kind is target_kind), None)
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -385,8 +577,8 @@ class CollaborationDependency:
             "contract_section_refs": list(self.contract_section_refs),
             "invalidation_triggers": list(self.invalidation_triggers),
             "blocking": self.blocking,
+            "invalidation_rules": [item.to_dict() for item in self.invalidation_rules],
         }
-
 
 def _has_blocking_cycle(
     participants: tuple[CollaborationParticipant, ...],
@@ -625,6 +817,7 @@ class ContractSectionRecord:
         }
 
 
+
 @dataclass(frozen=True, slots=True)
 class CrossLayerContractPacket:
     contract_id: str
@@ -644,6 +837,8 @@ class CrossLayerContractPacket:
     owner_refs: tuple[str, ...] = ()
     reviewer_refs: tuple[str, ...] = ()
     status: ContractReadiness = ContractReadiness.COLLECTING
+    change_identity_ref: str = ""
+    declared_reference_refs: tuple[str, ...] = ()
     canonicalization_version: str = COORDINATION_CANONICALIZATION_VERSION
     fingerprint: str = field(init=False)
 
@@ -652,8 +847,8 @@ class CrossLayerContractPacket:
         session_id = _identifier(self.session_id, "session_id")
         revision = _positive_revision(self.revision)
         objective = _text(self.objective, "objective")
-        acceptance_criteria = _ordered_text(self.acceptance_criteria, "acceptance_criterion")
-        baseline_sha = _sha(self.baseline_sha)
+        acceptance_criteria = _ordered_identifiers(self.acceptance_criteria, "acceptance_criterion")
+        baseline_sha = _git_object_id(self.baseline_sha)
         affected_layers = _sorted_identifiers(self.affected_layers, "affected_layer")
         if not affected_layers:
             raise InvalidCoordinationContractError(
@@ -696,6 +891,11 @@ class CrossLayerContractPacket:
         owner_refs = _sorted_identifiers(self.owner_refs, "owner_ref")
         reviewer_refs = _sorted_identifiers(self.reviewer_refs, "reviewer_ref")
         status = ContractReadiness(self.status)
+        change_identity_ref = _identifier(self.change_identity_ref, "change_identity_ref")
+        declared_reference_refs = _sorted_identifiers(
+            self.declared_reference_refs,
+            "declared_reference_ref",
+        )
         canonicalization_version = _text(self.canonicalization_version, "canonicalization_version")
         if canonicalization_version != COORDINATION_CANONICALIZATION_VERSION:
             raise InvalidCoordinationContractError(
@@ -721,6 +921,8 @@ class CrossLayerContractPacket:
         object.__setattr__(self, "owner_refs", owner_refs)
         object.__setattr__(self, "reviewer_refs", reviewer_refs)
         object.__setattr__(self, "status", status)
+        object.__setattr__(self, "change_identity_ref", change_identity_ref)
+        object.__setattr__(self, "declared_reference_refs", declared_reference_refs)
         object.__setattr__(self, "canonicalization_version", canonicalization_version)
         object.__setattr__(self, "fingerprint", _fingerprint(self._identity_payload()))
 
@@ -743,6 +945,8 @@ class CrossLayerContractPacket:
             "owner_refs": list(self.owner_refs),
             "reviewer_refs": list(self.reviewer_refs),
             "status": self.status.value,
+            "change_identity_ref": self.change_identity_ref,
+            "declared_reference_refs": list(self.declared_reference_refs),
             "canonicalization_version": self.canonicalization_version,
         }
 
@@ -751,7 +955,6 @@ class CrossLayerContractPacket:
 
     def to_dict(self) -> dict[str, object]:
         return {**self._identity_payload(), "fingerprint": self.fingerprint}
-
 
 @dataclass(frozen=True, slots=True)
 class SpecialistHandoffDelta:
@@ -926,6 +1129,7 @@ class InvalidationEvent:
         return {**self._identity_payload(), "fingerprint": self.fingerprint}
 
 
+
 @dataclass(frozen=True, slots=True)
 class ArtifactLifecycleRecord:
     artifact_id: str
@@ -935,7 +1139,7 @@ class ArtifactLifecycleRecord:
     source_ref: str
     pre_execution_state: ArtifactLifecycleState
     current_state: ArtifactLifecycleState
-    retention_requirement: str
+    retention_requirement: ArtifactRetentionRequirement
     cleanup_authority_ref: str
     contract_revision: int
     change_identity_ref: str
@@ -943,26 +1147,77 @@ class ArtifactLifecycleRecord:
     fingerprint: str = field(init=False)
 
     def __post_init__(self) -> None:
-        object.__setattr__(self, "artifact_id", _identifier(self.artifact_id, "artifact_id"))
-        object.__setattr__(self, "session_id", _identifier(self.session_id, "session_id"))
-        object.__setattr__(self, "path", _relative_path(self.path))
-        object.__setattr__(self, "producer_ref", _identifier(self.producer_ref, "producer_ref"))
-        object.__setattr__(self, "source_ref", _identifier(self.source_ref, "source_ref"))
-        object.__setattr__(self, "pre_execution_state", ArtifactLifecycleState(self.pre_execution_state))
-        object.__setattr__(self, "current_state", ArtifactLifecycleState(self.current_state))
-        object.__setattr__(
-            self,
-            "retention_requirement",
-            _identifier(self.retention_requirement, "retention_requirement").upper(),
-        )
-        object.__setattr__(
-            self,
-            "cleanup_authority_ref",
-            _identifier(self.cleanup_authority_ref, "cleanup_authority_ref"),
-        )
-        object.__setattr__(self, "contract_revision", _positive_revision(self.contract_revision))
-        object.__setattr__(self, "change_identity_ref", _identifier(self.change_identity_ref, "change_identity_ref"))
-        object.__setattr__(self, "evidence_ref", _identifier(self.evidence_ref, "evidence_ref"))
+        artifact_id = _identifier(self.artifact_id, "artifact_id")
+        session_id = _identifier(self.session_id, "session_id")
+        path = _relative_path(self.path)
+        producer = _identifier(self.producer_ref, "producer_ref")
+        source = _identifier(self.source_ref, "source_ref")
+        before = ArtifactLifecycleState(self.pre_execution_state)
+        current = ArtifactLifecycleState(self.current_state)
+        retention = ArtifactRetentionRequirement(self.retention_requirement)
+        cleanup_authority = _authority_reference(self.cleanup_authority_ref, "cleanup_authority_ref")
+        revision = _positive_revision(self.contract_revision)
+        change_identity = _identifier(self.change_identity_ref, "change_identity_ref")
+        evidence = _identifier(self.evidence_ref, "evidence_ref")
+
+        if before not in {ArtifactLifecycleState.ABSENT, ArtifactLifecycleState.PREEXISTING}:
+            raise InvalidCoordinationContractError(
+                "pre_execution_state must be ABSENT or PREEXISTING",
+                "INVALID_ARTIFACT_PRE_EXECUTION_STATE",
+                {"artifact_id": artifact_id},
+            )
+        if before is ArtifactLifecycleState.PREEXISTING and current is ArtifactLifecycleState.GENERATED:
+            raise InvalidCoordinationContractError(
+                "preexisting artifact cannot become GENERATED",
+                "INVALID_ARTIFACT_STATE_TRANSITION",
+                {"artifact_id": artifact_id},
+            )
+        if retention is ArtifactRetentionRequirement.NONE_REQUIRED and current not in {
+            ArtifactLifecycleState.ABSENT,
+            ArtifactLifecycleState.RETAIN,
+        }:
+            raise InvalidCoordinationContractError(
+                "NONE_REQUIRED artifact must remain absent or use the explicit retain sentinel",
+                "INVALID_ARTIFACT_RETENTION_STATE",
+                {"artifact_id": artifact_id},
+            )
+        if retention is ArtifactRetentionRequirement.RETAIN_REQUIRED and current in {
+            ArtifactLifecycleState.CLEANUP_PENDING,
+            ArtifactLifecycleState.CLEANED,
+        }:
+            raise InvalidCoordinationContractError(
+                "retention-required artifact cannot be pending cleanup or cleaned",
+                "INVALID_ARTIFACT_RETENTION_STATE",
+                {"artifact_id": artifact_id},
+            )
+        if current in {ArtifactLifecycleState.CLEANUP_PENDING, ArtifactLifecycleState.CLEANED} and retention not in {
+            ArtifactRetentionRequirement.CLEANUP_ALLOWED,
+            ArtifactRetentionRequirement.CLEANUP_REQUIRED,
+        }:
+            raise InvalidCoordinationContractError(
+                "cleanup states require explicit cleanup authority in the retention requirement",
+                "INVALID_ARTIFACT_RETENTION_STATE",
+                {"artifact_id": artifact_id},
+            )
+        if current is ArtifactLifecycleState.RETAIN and retention is ArtifactRetentionRequirement.CLEANUP_REQUIRED:
+            raise InvalidCoordinationContractError(
+                "cleanup-required artifact cannot remain retained",
+                "INVALID_ARTIFACT_RETENTION_STATE",
+                {"artifact_id": artifact_id},
+            )
+
+        object.__setattr__(self, "artifact_id", artifact_id)
+        object.__setattr__(self, "session_id", session_id)
+        object.__setattr__(self, "path", path)
+        object.__setattr__(self, "producer_ref", producer)
+        object.__setattr__(self, "source_ref", source)
+        object.__setattr__(self, "pre_execution_state", before)
+        object.__setattr__(self, "current_state", current)
+        object.__setattr__(self, "retention_requirement", retention)
+        object.__setattr__(self, "cleanup_authority_ref", cleanup_authority)
+        object.__setattr__(self, "contract_revision", revision)
+        object.__setattr__(self, "change_identity_ref", change_identity)
+        object.__setattr__(self, "evidence_ref", evidence)
         object.__setattr__(self, "fingerprint", _fingerprint(self._identity_payload()))
 
     def _identity_payload(self) -> dict[str, object]:
@@ -974,7 +1229,7 @@ class ArtifactLifecycleRecord:
             "source_ref": self.source_ref,
             "pre_execution_state": self.pre_execution_state.value,
             "current_state": self.current_state.value,
-            "retention_requirement": self.retention_requirement,
+            "retention_requirement": self.retention_requirement.value,
             "cleanup_authority_ref": self.cleanup_authority_ref,
             "contract_revision": self.contract_revision,
             "change_identity_ref": self.change_identity_ref,
@@ -983,7 +1238,6 @@ class ArtifactLifecycleRecord:
 
     def to_dict(self) -> dict[str, object]:
         return {**self._identity_payload(), "fingerprint": self.fingerprint}
-
 
 @dataclass(frozen=True, slots=True)
 class ContradictionRecord:
@@ -1011,7 +1265,7 @@ class ContradictionRecord:
                 {"contradiction_id": contradiction_id},
             )
         status = ContradictionStatus(self.status)
-        owner = _identifier(self.required_resolution_owner_ref, "required_resolution_owner_ref")
+        owner = _authority_reference(self.required_resolution_owner_ref, "required_resolution_owner_ref")
         reviews = _sorted_identifiers(self.invalidated_review_refs, "invalidated_review_ref")
         resolution = _optional_identifier(self.resolution_ref, "resolution_ref")
         if status is ContradictionStatus.RESOLVED and resolution is None:
@@ -1052,6 +1306,93 @@ class ContradictionRecord:
 
     def to_dict(self) -> dict[str, object]:
         return {**self._identity_payload(), "fingerprint": self.fingerprint}
+
+
+
+@dataclass(frozen=True, slots=True)
+class CoordinationEvidenceRecord:
+    evidence_id: str
+    session_id: str
+    owner_ref: str
+    contract_fingerprint: str
+    contract_revision: int
+    baseline_sha: str
+    change_identity_ref: str
+    status: EvidenceStatus = EvidenceStatus.CURRENT
+    fingerprint: str = field(init=False)
+
+    def __post_init__(self) -> None:
+        evidence_id = _identifier(self.evidence_id, "evidence_id")
+        session_id = _identifier(self.session_id, "session_id")
+        owner = _identifier(self.owner_ref, "owner_ref")
+        if owner != "overseer":
+            raise InvalidCoordinationContractError(
+                "coordination evidence must be owned by Overseer",
+                "INVALID_EVIDENCE_OWNER",
+                {"evidence_id": evidence_id},
+            )
+        contract_fingerprint = _sha256(self.contract_fingerprint, "contract_fingerprint")
+        revision = _positive_revision(self.contract_revision, "contract_revision")
+        baseline_sha = _git_object_id(self.baseline_sha)
+        change_identity_ref = _identifier(self.change_identity_ref, "change_identity_ref")
+        status = EvidenceStatus(self.status)
+        object.__setattr__(self, "evidence_id", evidence_id)
+        object.__setattr__(self, "session_id", session_id)
+        object.__setattr__(self, "owner_ref", owner)
+        object.__setattr__(self, "contract_fingerprint", contract_fingerprint)
+        object.__setattr__(self, "contract_revision", revision)
+        object.__setattr__(self, "baseline_sha", baseline_sha)
+        object.__setattr__(self, "change_identity_ref", change_identity_ref)
+        object.__setattr__(self, "status", status)
+        object.__setattr__(self, "fingerprint", _fingerprint(self._identity_payload()))
+
+    def _identity_payload(self) -> dict[str, object]:
+        return {
+            "evidence_id": self.evidence_id,
+            "session_id": self.session_id,
+            "owner_ref": self.owner_ref,
+            "contract_fingerprint": self.contract_fingerprint,
+            "contract_revision": self.contract_revision,
+            "baseline_sha": self.baseline_sha,
+            "change_identity_ref": self.change_identity_ref,
+            "status": self.status.value,
+        }
+
+    def to_dict(self) -> dict[str, object]:
+        return {**self._identity_payload(), "fingerprint": self.fingerprint}
+
+
+@dataclass(frozen=True, slots=True)
+class AcceptedCoordinationSignal:
+    signal_id: str
+    signal_fingerprint: str
+    sequence: int
+    resulting_status: CollaborationStatus
+    resulting_contract_status: ContractReadiness
+    resulting_contract_fingerprint: str
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "signal_id", _identifier(self.signal_id, "signal_id"))
+        object.__setattr__(self, "signal_fingerprint", _sha256(self.signal_fingerprint, "signal_fingerprint"))
+        object.__setattr__(self, "sequence", _non_negative_sequence(self.sequence))
+        object.__setattr__(self, "resulting_status", CollaborationStatus(self.resulting_status))
+        object.__setattr__(self, "resulting_contract_status", ContractReadiness(self.resulting_contract_status))
+        object.__setattr__(
+            self,
+            "resulting_contract_fingerprint",
+            _sha256(self.resulting_contract_fingerprint, "resulting_contract_fingerprint"),
+        )
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "signal_id": self.signal_id,
+            "signal_fingerprint": self.signal_fingerprint,
+            "sequence": self.sequence,
+            "resulting_status": self.resulting_status.value,
+            "resulting_contract_status": self.resulting_contract_status.value,
+            "resulting_contract_fingerprint": self.resulting_contract_fingerprint,
+        }
+
 
 
 @dataclass(frozen=True, slots=True)
@@ -1103,8 +1444,8 @@ class CollaborationSession:
     repository_identity: str
     branch: str
     baseline_sha: str
-    execution_mode: str
-    progression_mode: str
+    execution_mode: ExecutionMode
+    progression_mode: ProgressionMode
     activation_decision: ActivationDecision
     activation_reason: str
     graph: CollaborationGraph
@@ -1115,6 +1456,10 @@ class CollaborationSession:
     contradictions: tuple[ContradictionRecord, ...] = ()
     status: CollaborationStatus = CollaborationStatus.COLLECTING
     current_revision: int = 1
+    manual_authorization_reference: str | None = None
+    delegated_envelope_id: str | None = None
+    evidence_records: tuple[CoordinationEvidenceRecord, ...] = ()
+    accepted_signals: tuple[AcceptedCoordinationSignal, ...] = ()
     last_signal_id: str | None = None
     accepted_signal_fingerprint: str | None = None
     fingerprint: str = field(init=False)
@@ -1122,11 +1467,30 @@ class CollaborationSession:
     def __post_init__(self) -> None:
         session_id = _identifier(self.session_id, "session_id")
         task_id = _identifier(self.task_id, "task_id")
-        repository_identity = _text(self.repository_identity, "repository_identity")
+        repository_identity = _repository_identity(self.repository_identity)
         branch = _text(self.branch, "branch")
-        baseline_sha = _sha(self.baseline_sha)
-        execution_mode = _identifier(self.execution_mode, "execution_mode").upper()
-        progression_mode = _identifier(self.progression_mode, "progression_mode").upper()
+        baseline_sha = _git_object_id(self.baseline_sha)
+        execution_mode = ExecutionMode(self.execution_mode)
+        progression_mode = ProgressionMode(self.progression_mode)
+        manual_reference = _optional_identifier(
+            self.manual_authorization_reference,
+            "manual_authorization_reference",
+        )
+        delegated_envelope = _optional_identifier(self.delegated_envelope_id, "delegated_envelope_id")
+        if progression_mode is ProgressionMode.MANUAL:
+            if manual_reference is None or delegated_envelope is not None:
+                raise InvalidCoordinationContractError(
+                    "manual progression requires only manual_authorization_reference",
+                    "INVALID_COORDINATION_AUTHORITY_BINDING",
+                    {"session_id": session_id},
+                )
+        elif delegated_envelope is None or manual_reference is not None:
+            raise InvalidCoordinationContractError(
+                "delegated progression requires only delegated_envelope_id",
+                "INVALID_COORDINATION_AUTHORITY_BINDING",
+                {"session_id": session_id},
+            )
+
         activation_decision = ActivationDecision(self.activation_decision)
         if activation_decision is ActivationDecision.BYPASS_SINGLE_OWNER:
             raise InvalidCoordinationContractError(
@@ -1165,21 +1529,17 @@ class CollaborationSession:
         invalidations = tuple(sorted(tuple(self.invalidation_events), key=lambda item: item.event_id))
         artifacts = tuple(sorted(tuple(self.artifact_lifecycle_records), key=lambda item: item.artifact_id))
         contradictions = tuple(sorted(tuple(self.contradictions), key=lambda item: item.contradiction_id))
-        for collection, label in (
-            (handoffs, "handoff"),
-            (invalidations, "invalidation"),
-            (artifacts, "artifact"),
-            (contradictions, "contradiction"),
+        evidence_records = tuple(sorted(tuple(self.evidence_records), key=lambda item: item.evidence_id))
+        accepted_signals = tuple(sorted(tuple(self.accepted_signals), key=lambda item: item.sequence))
+
+        for collection, label, id_field in (
+            (handoffs, "handoff", "delta_id"),
+            (invalidations, "invalidation", "event_id"),
+            (artifacts, "artifact", "artifact_id"),
+            (contradictions, "contradiction", "contradiction_id"),
+            (evidence_records, "evidence", "evidence_id"),
         ):
-            identifiers = tuple(
-                getattr(item, {
-                    "handoff": "delta_id",
-                    "invalidation": "event_id",
-                    "artifact": "artifact_id",
-                    "contradiction": "contradiction_id",
-                }[label])
-                for item in collection
-            )
+            identifiers = tuple(getattr(item, id_field) for item in collection)
             if len(set(identifiers)) != len(identifiers):
                 raise InvalidCoordinationContractError(
                     f"{label} identifiers must be unique",
@@ -1193,10 +1553,84 @@ class CollaborationSession:
                     {"record_type": label},
                 )
 
+        signal_ids = tuple(item.signal_id for item in accepted_signals)
+        signal_sequences = tuple(item.sequence for item in accepted_signals)
+        if len(set(signal_ids)) != len(signal_ids) or signal_sequences != tuple(range(len(accepted_signals))):
+            raise InvalidCoordinationContractError(
+                "accepted signals require unique IDs and contiguous monotonic sequence",
+                "INVALID_ACCEPTED_SIGNAL_LEDGER",
+                {"session_id": session_id},
+            )
+
         participant_ids = {item.specialist_slug for item in self.graph.participants}
-        dependency_ids = {item.dependency_id for item in self.graph.dependencies}
+        dependency_by_id = {item.dependency_id: item for item in self.graph.dependencies}
+        dependency_ids = set(dependency_by_id)
         section_ids = {item.section_id for item in self.contract.section_records}
         artifact_ids = {item.artifact_id for item in artifacts}
+        evidence_ids = {item.evidence_id for item in evidence_records}
+        acceptance_ids = set(self.contract.acceptance_criteria)
+
+        section_owners = set()
+        required_reviewers = set()
+        for section in self.contract.section_records:
+            accountable_owner = self.graph.accountable_owner_for(section.layer)
+            if section.owner_specialist not in participant_ids:
+                raise InvalidCoordinationContractError(
+                    "contract section owner must be a graph participant",
+                    "UNKNOWN_COORDINATION_PARTICIPANT",
+                    {"section_id": section.section_id},
+                )
+            if section.owner_specialist == "the-tuner" or section.owner_specialist != accountable_owner:
+                raise InvalidCoordinationContractError(
+                    "contract section owner must equal the graph accountable owner",
+                    "CONTRACT_SECTION_OWNER_MISMATCH",
+                    {"section_id": section.section_id},
+                )
+            if section.revision != current_revision:
+                raise InvalidCoordinationContractError(
+                    "contract section revision must equal the current packet revision",
+                    "STALE_CONTRACT_SECTION_REVISION",
+                    {"section_id": section.section_id},
+                )
+            if not set(section.dependency_refs).issubset(dependency_ids):
+                raise InvalidCoordinationContractError(
+                    "contract section references an unknown dependency",
+                    "UNKNOWN_COORDINATION_DEPENDENCY",
+                    {"section_id": section.section_id},
+                )
+            if not set(section.acceptance_criteria_refs).issubset(acceptance_ids):
+                raise InvalidCoordinationContractError(
+                    "contract section references an unknown acceptance criterion",
+                    "UNKNOWN_ACCEPTANCE_CRITERION",
+                    {"section_id": section.section_id},
+                )
+            if not set(section.required_reviewer_refs).issubset(participant_ids):
+                raise InvalidCoordinationContractError(
+                    "contract section reviewer must be a graph participant",
+                    "UNKNOWN_COORDINATION_PARTICIPANT",
+                    {"section_id": section.section_id},
+                )
+            section_owners.add(section.owner_specialist)
+            required_reviewers.update(section.required_reviewer_refs)
+
+        if set(self.contract.owner_refs) != section_owners:
+            raise InvalidCoordinationContractError(
+                "contract owner references must exactly match section ownership",
+                "CONTRACT_OWNER_REFERENCE_MISMATCH",
+                {"session_id": session_id},
+            )
+        if not required_reviewers.issubset(set(self.contract.reviewer_refs)):
+            raise InvalidCoordinationContractError(
+                "contract reviewer references do not cover section reviewers",
+                "CONTRACT_REVIEWER_REFERENCE_MISMATCH",
+                {"session_id": session_id},
+            )
+        if not set(self.contract.reviewer_refs).issubset(participant_ids):
+            raise InvalidCoordinationContractError(
+                "contract reviewer must be a graph participant",
+                "UNKNOWN_COORDINATION_PARTICIPANT",
+                {"session_id": session_id},
+            )
 
         for handoff in handoffs:
             if handoff.source_specialist not in participant_ids or handoff.target_specialist not in participant_ids:
@@ -1211,19 +1645,74 @@ class CollaborationSession:
                     "STALE_HANDOFF_REVISION",
                     {"delta_id": handoff.delta_id},
                 )
+
+        declared_refs = set(self.contract.declared_reference_refs)
         for event in invalidations:
-            if not set(event.affected_specialist_refs).issubset(participant_ids):
-                raise InvalidCoordinationContractError(
-                    "invalidation references an unknown specialist",
-                    "UNKNOWN_COORDINATION_PARTICIPANT",
-                    {"event_id": event.event_id},
-                )
-            if event.trigger_ref not in dependency_ids:
+            dependency = dependency_by_id.get(event.trigger_ref)
+            if dependency is None:
                 raise InvalidCoordinationContractError(
                     "invalidation trigger must reference a declared dependency",
                     "UNDECLARED_INVALIDATION_DEPENDENCY",
                     {"event_id": event.event_id},
                 )
+            rule = dependency.invalidation_rule_for(event.target_kind)
+            if rule is None:
+                raise InvalidCoordinationContractError(
+                    "dependency does not declare this invalidation target kind",
+                    "UNDECLARED_INVALIDATION_RULE",
+                    {"event_id": event.event_id},
+                )
+            if (
+                not set(event.target_refs).issubset(set(rule.target_refs))
+                or event.affected_specialist_refs != rule.affected_specialist_refs
+                or event.required_reentry_refs != rule.required_reentry_refs
+            ):
+                raise InvalidCoordinationContractError(
+                    "invalidation event exceeds the dependency's declared propagation rule",
+                    "INVALID_INVALIDATION_PROPAGATION",
+                    {"event_id": event.event_id},
+                )
+            valid_targets = {
+                InvalidationTargetKind.CONTRACT_SECTION: section_ids,
+                InvalidationTargetKind.ARTIFACT: artifact_ids,
+                InvalidationTargetKind.EVIDENCE: evidence_ids,
+            }.get(event.target_kind, declared_refs)
+            if not set(event.target_refs).issubset(valid_targets):
+                raise InvalidCoordinationContractError(
+                    "invalidation event references an undeclared target",
+                    "UNKNOWN_INVALIDATION_TARGET",
+                    {"event_id": event.event_id},
+                )
+
+        for artifact in artifacts:
+            if artifact.producer_ref not in participant_ids:
+                raise InvalidCoordinationContractError(
+                    "artifact producer must be a graph participant",
+                    "UNKNOWN_COORDINATION_PARTICIPANT",
+                    {"artifact_id": artifact.artifact_id},
+                )
+            allowed_cleanup = {"conductor", self.graph.continuity_owner}
+            if artifact.cleanup_authority_ref not in allowed_cleanup and not _is_external_authority(
+                artifact.cleanup_authority_ref
+            ):
+                raise InvalidCoordinationContractError(
+                    "artifact cleanup authority must be Conductor, continuity owner, or explicit external authority",
+                    "INVALID_CLEANUP_AUTHORITY",
+                    {"artifact_id": artifact.artifact_id},
+                )
+            if artifact.contract_revision != current_revision:
+                raise InvalidCoordinationContractError(
+                    "artifact lifecycle record is bound to a stale contract revision",
+                    "STALE_ARTIFACT_REVISION",
+                    {"artifact_id": artifact.artifact_id},
+                )
+            if artifact.change_identity_ref != self.contract.change_identity_ref:
+                raise InvalidCoordinationContractError(
+                    "artifact lifecycle record must bind to the current change identity",
+                    "ARTIFACT_CHANGE_IDENTITY_MISMATCH",
+                    {"artifact_id": artifact.artifact_id},
+                )
+
         for contradiction in contradictions:
             if not set(contradiction.specialist_refs).issubset(participant_ids):
                 raise InvalidCoordinationContractError(
@@ -1237,6 +1726,20 @@ class CollaborationSession:
                     "UNKNOWN_CONTRACT_SECTION",
                     {"contradiction_id": contradiction.contradiction_id},
                 )
+            owner = contradiction.required_resolution_owner_ref
+            if owner not in participant_ids and owner not in KNOWN_AUTHORITY_REFERENCES and not _is_external_authority(owner):
+                raise InvalidCoordinationContractError(
+                    "contradiction resolution owner is not an approved authority reference",
+                    "INVALID_CONTRADICTION_AUTHORITY",
+                    {"contradiction_id": contradiction.contradiction_id},
+                )
+            if owner == "the-tuner":
+                raise InvalidCoordinationContractError(
+                    "The Tuner cannot resolve contradictions",
+                    "TUNER_AUTHORITY_EXPANSION",
+                    {"contradiction_id": contradiction.contradiction_id},
+                )
+
         if not set(self.contract.artifact_lifecycle_refs).issubset(artifact_ids):
             raise InvalidCoordinationContractError(
                 "contract references an unknown artifact lifecycle record",
@@ -1250,24 +1753,59 @@ class CollaborationSession:
                 {"session_id": session_id},
             )
 
+        for evidence in evidence_records:
+            if evidence.baseline_sha != baseline_sha:
+                raise InvalidCoordinationContractError(
+                    "evidence baseline does not match the collaboration session",
+                    "EVIDENCE_BASELINE_MISMATCH",
+                    {"evidence_id": evidence.evidence_id},
+                )
+            if evidence.contract_revision != current_revision:
+                raise InvalidCoordinationContractError(
+                    "evidence revision does not match the collaboration session",
+                    "STALE_COORDINATION_EVIDENCE",
+                    {"evidence_id": evidence.evidence_id},
+                )
+            if evidence.change_identity_ref != self.contract.change_identity_ref:
+                raise InvalidCoordinationContractError(
+                    "evidence change identity does not match the contract",
+                    "EVIDENCE_CHANGE_IDENTITY_MISMATCH",
+                    {"evidence_id": evidence.evidence_id},
+                )
+
         status = CollaborationStatus(self.status)
         last_signal_id = _optional_identifier(self.last_signal_id, "last_signal_id")
         accepted_fingerprint = _optional_text(
             self.accepted_signal_fingerprint,
             "accepted_signal_fingerprint",
         )
-        if bool(last_signal_id) != bool(accepted_fingerprint):
-            raise InvalidCoordinationContractError(
-                "accepted coordination signal requires both identifier and fingerprint",
-                "INVALID_COORDINATION_SIGNAL_IDENTITY",
-                {"session_id": session_id},
-            )
-        if accepted_fingerprint and not re.fullmatch(r"[0-9a-f]{64}", accepted_fingerprint):
-            raise InvalidCoordinationContractError(
-                "accepted signal fingerprint must be SHA-256",
-                "INVALID_COORDINATION_SIGNAL_IDENTITY",
-                {"session_id": session_id},
-            )
+        if accepted_fingerprint is not None:
+            accepted_fingerprint = _sha256(accepted_fingerprint, "accepted_signal_fingerprint")
+        if not accepted_signals:
+            if last_signal_id is not None or accepted_fingerprint is not None or status is not CollaborationStatus.COLLECTING:
+                raise InvalidCoordinationContractError(
+                    "non-initial collaboration state requires accepted transition provenance",
+                    "MISSING_COORDINATION_TRANSITION_PROVENANCE",
+                    {"session_id": session_id},
+                )
+        else:
+            last_receipt = accepted_signals[-1]
+            if last_signal_id is None:
+                last_signal_id = last_receipt.signal_id
+            if accepted_fingerprint is None:
+                accepted_fingerprint = last_receipt.signal_fingerprint
+            if (
+                last_signal_id != last_receipt.signal_id
+                or accepted_fingerprint != last_receipt.signal_fingerprint
+                or status is not last_receipt.resulting_status
+                or self.contract.status is not last_receipt.resulting_contract_status
+                or self.contract.fingerprint != last_receipt.resulting_contract_fingerprint
+            ):
+                raise InvalidCoordinationContractError(
+                    "accepted signal ledger does not match the current collaboration state",
+                    "INVALID_ACCEPTED_SIGNAL_LEDGER",
+                    {"session_id": session_id},
+                )
 
         object.__setattr__(self, "session_id", session_id)
         object.__setattr__(self, "task_id", task_id)
@@ -1276,12 +1814,16 @@ class CollaborationSession:
         object.__setattr__(self, "baseline_sha", baseline_sha)
         object.__setattr__(self, "execution_mode", execution_mode)
         object.__setattr__(self, "progression_mode", progression_mode)
+        object.__setattr__(self, "manual_authorization_reference", manual_reference)
+        object.__setattr__(self, "delegated_envelope_id", delegated_envelope)
         object.__setattr__(self, "activation_decision", activation_decision)
         object.__setattr__(self, "activation_reason", activation_reason)
         object.__setattr__(self, "handoff_deltas", handoffs)
         object.__setattr__(self, "invalidation_events", invalidations)
         object.__setattr__(self, "artifact_lifecycle_records", artifacts)
         object.__setattr__(self, "contradictions", contradictions)
+        object.__setattr__(self, "evidence_records", evidence_records)
+        object.__setattr__(self, "accepted_signals", accepted_signals)
         object.__setattr__(self, "status", status)
         object.__setattr__(self, "current_revision", current_revision)
         object.__setattr__(self, "last_signal_id", last_signal_id)
@@ -1296,6 +1838,12 @@ class CollaborationSession:
     def open_contradictions(self) -> tuple[ContradictionRecord, ...]:
         return tuple(item for item in self.contradictions if item.status is ContradictionStatus.OPEN)
 
+    def evidence_by_id(self) -> dict[str, CoordinationEvidenceRecord]:
+        return {item.evidence_id: item for item in self.evidence_records}
+
+    def accepted_signal_by_id(self) -> dict[str, AcceptedCoordinationSignal]:
+        return {item.signal_id: item for item in self.accepted_signals}
+
     def _identity_payload(self) -> dict[str, object]:
         return {
             "session_id": self.session_id,
@@ -1303,8 +1851,10 @@ class CollaborationSession:
             "repository_identity": self.repository_identity,
             "branch": self.branch,
             "baseline_sha": self.baseline_sha,
-            "execution_mode": self.execution_mode,
-            "progression_mode": self.progression_mode,
+            "execution_mode": self.execution_mode.value,
+            "progression_mode": self.progression_mode.value,
+            "manual_authorization_reference": self.manual_authorization_reference,
+            "delegated_envelope_id": self.delegated_envelope_id,
             "activation_decision": self.activation_decision.value,
             "activation_reason": self.activation_reason,
             "graph": self.graph.to_dict(),
@@ -1313,6 +1863,8 @@ class CollaborationSession:
             "invalidation_events": [item.to_dict() for item in self.invalidation_events],
             "artifact_lifecycle_records": [item.to_dict() for item in self.artifact_lifecycle_records],
             "contradictions": [item.to_dict() for item in self.contradictions],
+            "evidence_records": [item.to_dict() for item in self.evidence_records],
+            "accepted_signals": [item.to_dict() for item in self.accepted_signals],
             "status": self.status.value,
             "current_revision": self.current_revision,
             "last_signal_id": self.last_signal_id,
@@ -1334,6 +1886,27 @@ SIGNAL_DESTINATIONS = MappingProxyType(
         CoordinationSignalType.REOPEN_COLLECTION: CollaborationStatus.COLLECTING,
         CoordinationSignalType.SUPERSEDE: CollaborationStatus.SUPERSEDED,
         CoordinationSignalType.CLOSE: CollaborationStatus.CLOSED,
+    }
+)
+
+SIGNAL_SOURCE_POLICY = MappingProxyType(
+    {
+        CoordinationSignalType.MARK_INCOMPLETE: frozenset({"conductor", "arbiter", "overseer", "the-tuner"}),
+        CoordinationSignalType.MARK_CONTRADICTED: frozenset({"conductor", "arbiter", "the-tuner"}),
+        CoordinationSignalType.MARK_READY: frozenset({"arbiter"}),
+        CoordinationSignalType.FREEZE: frozenset({"arbiter"}),
+        CoordinationSignalType.INVALIDATE: frozenset({"conductor", "arbiter", "overseer", "the-tuner"}),
+        CoordinationSignalType.REOPEN_COLLECTION: frozenset({"conductor", "arbiter"}),
+        CoordinationSignalType.SUPERSEDE: frozenset({"arbiter"}),
+        CoordinationSignalType.CLOSE: frozenset({"arbiter"}),
+    }
+)
+
+EVIDENCE_REQUIRED_SIGNALS = frozenset(
+    {
+        CoordinationSignalType.MARK_READY,
+        CoordinationSignalType.FREEZE,
+        CoordinationSignalType.CLOSE,
     }
 )
 
@@ -1392,7 +1965,12 @@ COORDINATION_TRANSITIONS = MappingProxyType(
 
 
 class CoordinationController(ICoordinationController):
-    def _readiness_blockers(self, session: CollaborationSession) -> tuple[tuple[str, str], ...]:
+    def _readiness_blockers(
+        self,
+        session: CollaborationSession,
+        contract: CrossLayerContractPacket | None = None,
+    ) -> tuple[tuple[str, str], ...]:
+        contract = contract or session.contract
         blockers: list[tuple[str, str]] = []
 
         missing_layers = tuple(
@@ -1415,8 +1993,8 @@ class CoordinationController(ICoordinationController):
                     )
                 )
 
-        section_layers = {item.layer for item in session.contract.section_records}
-        missing_sections = tuple(sorted(set(session.contract.affected_layers) - section_layers))
+        section_layers = {item.layer for item in contract.section_records}
+        missing_sections = tuple(sorted(set(contract.affected_layers) - section_layers))
         if missing_sections:
             blockers.append(
                 (
@@ -1425,34 +2003,25 @@ class CoordinationController(ICoordinationController):
                 )
             )
 
-        section_owners = {item.owner_specialist for item in session.contract.section_records}
-        if not section_owners.issubset(set(session.contract.owner_refs)):
-            blockers.append(
-                (
-                    "MISSING_CONTRACT_OWNER_REFERENCE",
-                    "contract owner references do not cover every section owner",
-                )
-            )
-
-        if not session.contract.acceptance_criteria:
+        if not contract.acceptance_criteria:
             blockers.append(("MISSING_ACCEPTANCE_CRITERIA", "contract requires acceptance criteria"))
-        if not session.contract.prohibited_scope:
+        if not contract.prohibited_scope:
             blockers.append(("MISSING_PROHIBITED_SCOPE", "contract requires explicit prohibited scope"))
-        if not session.contract.validation_requirements:
+        if not contract.validation_requirements:
             blockers.append(
                 (
                     "MISSING_VALIDATION_REQUIREMENTS",
                     "contract requires explicit validation requirements",
                 )
             )
-        if not session.contract.artifact_lifecycle_refs:
+        if not contract.artifact_lifecycle_refs:
             blockers.append(
                 (
                     "MISSING_ARTIFACT_LIFECYCLE",
                     "contract requires an explicit artifact lifecycle record or none-required record",
                 )
             )
-        if session.contract.open_decisions:
+        if contract.open_decisions:
             blockers.append(("OPEN_CONTRACT_DECISIONS", "contract still contains open decisions"))
         if session.open_invalidations:
             blockers.append(("OPEN_INVALIDATION", "open invalidation events require specialist re-entry"))
@@ -1460,6 +2029,37 @@ class CoordinationController(ICoordinationController):
             blockers.append(("OPEN_CONTRADICTION", "open contradictions require external resolution"))
 
         return tuple(sorted(blockers))
+
+    def _evidence_blockers(
+        self,
+        session: CollaborationSession,
+        contract: CrossLayerContractPacket,
+        evidence_refs: tuple[str, ...],
+    ) -> tuple[tuple[str, str], ...]:
+        blockers: list[tuple[str, str]] = []
+        if not evidence_refs:
+            return (("MISSING_COORDINATION_EVIDENCE", "transition requires current Overseer evidence"),)
+        evidence_by_id = session.evidence_by_id()
+        for evidence_ref in evidence_refs:
+            evidence = evidence_by_id.get(evidence_ref)
+            if evidence is None:
+                blockers.append(("UNKNOWN_COORDINATION_EVIDENCE", f"unknown evidence reference: {evidence_ref}"))
+                continue
+            if evidence.status is not EvidenceStatus.CURRENT:
+                blockers.append(("STALE_COORDINATION_EVIDENCE", f"evidence is not current: {evidence_ref}"))
+            if evidence.owner_ref != "overseer":
+                blockers.append(("INVALID_EVIDENCE_OWNER", f"evidence is not owned by Overseer: {evidence_ref}"))
+            if evidence.contract_fingerprint != contract.fingerprint:
+                blockers.append(("EVIDENCE_CONTRACT_MISMATCH", f"evidence targets another contract: {evidence_ref}"))
+            if evidence.contract_revision != session.current_revision:
+                blockers.append(("STALE_COORDINATION_EVIDENCE", f"evidence targets another revision: {evidence_ref}"))
+            if evidence.baseline_sha != session.baseline_sha:
+                blockers.append(("EVIDENCE_BASELINE_MISMATCH", f"evidence targets another baseline: {evidence_ref}"))
+            if evidence.change_identity_ref != contract.change_identity_ref:
+                blockers.append(
+                    ("EVIDENCE_CHANGE_IDENTITY_MISMATCH", f"evidence targets another change identity: {evidence_ref}")
+                )
+        return tuple(sorted(set(blockers)))
 
     def validate(self, session: CollaborationSession) -> CoordinationValidationResult:
         if not isinstance(session, CollaborationSession):
@@ -1473,6 +2073,13 @@ class CoordinationController(ICoordinationController):
             CollaborationStatus.FROZEN,
             CollaborationStatus.CLOSED,
         }
+        if readiness_required:
+            matching_evidence = tuple(
+                item.evidence_id
+                for item in session.evidence_records
+                if item.contract_fingerprint == session.contract.fingerprint
+            )
+            blockers += self._evidence_blockers(session, session.contract, matching_evidence)
         if session.status is CollaborationStatus.CONTRADICTED and not session.open_contradictions:
             blockers += (("MISSING_OPEN_CONTRADICTION", "contradicted status requires an open contradiction"),)
         if session.status is CollaborationStatus.STALE and not session.open_invalidations:
@@ -1519,13 +2126,22 @@ class CoordinationController(ICoordinationController):
                 "COORDINATION_SESSION_ID_MISMATCH",
                 {"signal_id": signal.signal_id},
             )
-        if session.last_signal_id == signal.signal_id:
-            if session.accepted_signal_fingerprint == signal.fingerprint:
+
+        prior_receipt = session.accepted_signal_by_id().get(signal.signal_id)
+        if prior_receipt is not None:
+            if prior_receipt.signal_fingerprint == signal.fingerprint:
                 return session
             raise ConflictingCoordinationSignalError(
-                "signal identifier conflicts with the accepted coordination signal",
+                "signal identifier conflicts with a previously accepted coordination signal",
                 "CONFLICTING_COORDINATION_SIGNAL",
                 {"signal_id": signal.signal_id},
+            )
+
+        if signal.source_component not in SIGNAL_SOURCE_POLICY[signal.signal_type]:
+            raise InvalidCoordinationSignalError(
+                "source component is not authorized for this coordination signal",
+                "UNAUTHORIZED_COORDINATION_SIGNAL_SOURCE",
+                {"signal_type": signal.signal_type.value, "source_component": signal.source_component},
             )
         if signal.expected_status is not session.status:
             raise InvalidCoordinationSignalError(
@@ -1601,11 +2217,29 @@ class CoordinationController(ICoordinationController):
             CollaborationStatus.SUPERSEDED: ContractReadiness.SUPERSEDED,
             CollaborationStatus.CLOSED: ContractReadiness.CLOSED,
         }[signal.requested_status]
+        target_contract = session.contract.with_status(contract_status)
+        if signal.signal_type in EVIDENCE_REQUIRED_SIGNALS:
+            evidence_blockers = self._evidence_blockers(session, target_contract, signal.evidence_refs)
+            if evidence_blockers:
+                raise CoordinationReadinessError(
+                    "coordination transition lacks current Overseer evidence",
+                    "COORDINATION_EVIDENCE_REQUIRED",
+                    {"blocker_codes": ",".join(code for code, _ in evidence_blockers)},
+                )
 
+        receipt = AcceptedCoordinationSignal(
+            signal.signal_id,
+            signal.fingerprint,
+            len(session.accepted_signals),
+            signal.requested_status,
+            contract_status,
+            target_contract.fingerprint,
+        )
         updated = replace(
             session,
-            contract=session.contract.with_status(contract_status),
+            contract=target_contract,
             status=signal.requested_status,
+            accepted_signals=session.accepted_signals + (receipt,),
             last_signal_id=signal.signal_id,
             accepted_signal_fingerprint=signal.fingerprint,
         )
@@ -1628,13 +2262,16 @@ def coordination_transition_event(
     signal: CoordinationSignal,
     current: CollaborationSession,
 ) -> RuntimeAuditEvent:
+    receipt = current.accepted_signal_by_id().get(signal.signal_id)
     if (
         previous.session_id != signal.session_id
         or current.session_id != previous.session_id
         or signal.expected_status is not previous.status
+        or signal.source_revision != previous.current_revision
         or signal.requested_status is not current.status
-        or current.last_signal_id != signal.signal_id
-        or current.accepted_signal_fingerprint != signal.fingerprint
+        or receipt is None
+        or receipt.signal_fingerprint != signal.fingerprint
+        or receipt.resulting_contract_fingerprint != current.contract.fingerprint
     ):
         raise InvalidCoordinationSignalError(
             "coordination transition event requires a matching accepted signal",
@@ -1667,6 +2304,21 @@ def coordination_transition_event(
     )
 
 
+def _stable_rejected_signal_identity(signal: object) -> str:
+    to_dict = getattr(signal, "to_dict", None)
+    if callable(to_dict):
+        try:
+            return _fingerprint({"type": type(signal).__qualname__, "payload": to_dict()})
+        except Exception:
+            pass
+    return _fingerprint(
+        {
+            "module": type(signal).__module__,
+            "type": type(signal).__qualname__,
+        }
+    )
+
+
 def coordination_rejection_event(
     session: CollaborationSession,
     signal: object,
@@ -1677,7 +2329,7 @@ def coordination_rejection_event(
     | ConflictingCoordinationSignalError,
 ) -> RuntimeAuditEvent:
     signal_id = getattr(signal, "signal_id", "invalid-signal")
-    signal_fingerprint = getattr(signal, "fingerprint", _fingerprint({"repr": repr(signal)}))
+    signal_fingerprint = getattr(signal, "fingerprint", None) or _stable_rejected_signal_identity(signal)
     event_id = f"event.{_fingerprint({'type': AuditEventType.COORDINATION_INPUT_REJECTED.value, 'signal': signal_fingerprint, 'reason': error.reason_code})[:24]}"
     return RuntimeAuditEvent(
         event_id,

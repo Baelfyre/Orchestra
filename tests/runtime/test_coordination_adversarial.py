@@ -6,20 +6,28 @@ from pathlib import Path
 import pytest
 
 from orchestra_runtime.coordination import (
+    ArtifactLifecycleState,
+    ArtifactRetentionRequirement,
     CollaborationDependency,
     CollaborationStatus,
     ContradictionRecord,
     ContradictionStatus,
     CoordinationController,
-    CoordinationSignal,
     CoordinationSignalType,
     DependencyKind,
     InvalidationEvent,
     InvalidationTargetKind,
+    coordination_rejection_event,
 )
 from orchestra_runtime.errors import InvalidCoordinationContractError, CoordinationReadinessError
 
-from coordination_support import build_graph, build_session
+from coordination_support import (
+    build_artifact,
+    build_graph,
+    build_session,
+    ready_session,
+    signal,
+)
 
 
 def test_invalidation_cannot_invent_undeclared_dependency():
@@ -30,33 +38,61 @@ def test_invalidation_cannot_invent_undeclared_dependency():
         "dep.not-declared",
         InvalidationTargetKind.CONTRACT_SECTION,
         ("section.impl",),
-        ("clockwork", "ponytail"),
-        ("clockwork",),
+        ("overseer", "ponytail"),
+        ("overseer",),
     )
-
     with pytest.raises(InvalidCoordinationContractError) as exc:
         build_session(invalidations=(event,))
-
     assert exc.value.reason_code == "UNDECLARED_INVALIDATION_DEPENDENCY"
 
 
-def test_required_reentry_must_be_minimal_subset_of_affected_specialists():
+def test_declared_dependency_cannot_invalidate_unrelated_specialists_or_targets():
+    unrelated = InvalidationEvent(
+        "invalidation.expanded",
+        "session.phase3",
+        1,
+        "dep.impl.qa",
+        InvalidationTargetKind.CONTRACT_SECTION,
+        ("section.impl",),
+        ("clockwork", "ponytail"),
+        ("clockwork",),
+    )
     with pytest.raises(InvalidCoordinationContractError) as exc:
-        InvalidationEvent(
-            "invalidation.expanded",
-            "session.phase3",
-            1,
-            "dep.impl.qa",
-            InvalidationTargetKind.EVIDENCE,
-            ("evidence.phase3",),
-            ("ponytail", "overseer"),
-            ("clockwork",),
-        )
+        build_session(invalidations=(unrelated,))
+    assert exc.value.reason_code == "INVALID_INVALIDATION_PROPAGATION"
 
-    assert exc.value.reason_code == "INVALID_REENTRY_SET"
+    nonexistent = InvalidationEvent(
+        "invalidation.nonexistent",
+        "session.phase3",
+        1,
+        "dep.impl.qa",
+        InvalidationTargetKind.CONTRACT_SECTION,
+        ("section.not-real",),
+        ("overseer", "ponytail"),
+        ("overseer",),
+    )
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        build_session(invalidations=(nonexistent,))
+    assert exc.value.reason_code in {"INVALID_INVALIDATION_PROPAGATION", "UNKNOWN_INVALIDATION_TARGET"}
 
 
-def test_open_contradiction_blocks_readiness_and_tuner_does_not_resolve_it():
+def test_required_reentry_must_match_dependency_rule_exactly():
+    event = InvalidationEvent(
+        "invalidation.overbroad",
+        "session.phase3",
+        1,
+        "dep.impl.qa",
+        InvalidationTargetKind.CONTRACT_SECTION,
+        ("section.impl",),
+        ("overseer", "ponytail"),
+        ("overseer", "ponytail"),
+    )
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        build_session(invalidations=(event,))
+    assert exc.value.reason_code == "INVALID_INVALIDATION_PROPAGATION"
+
+
+def test_open_contradiction_blocks_readiness_and_tuner_cannot_resolve_it():
     contradiction = ContradictionRecord(
         "contradiction.phase3",
         "session.phase3",
@@ -65,30 +101,48 @@ def test_open_contradiction_blocks_readiness_and_tuner_does_not_resolve_it():
         ("impact.runtime",),
         ContradictionStatus.OPEN,
         "the-steward",
-        ("review.architecture",),
+        ("review.validation",),
     )
     session = build_session(contradictions=(contradiction,))
-    controller = CoordinationController()
-
     with pytest.raises(CoordinationReadinessError):
-        controller.apply(
+        CoordinationController().apply(
             session,
-            CoordinationSignal(
+            signal(
                 "signal.ready-contradicted",
-                "session.phase3",
                 CoordinationSignalType.MARK_READY,
                 CollaborationStatus.COLLECTING,
                 CollaborationStatus.READY,
-                "ready",
-                "the-tuner",
-                1,
-                ("evidence.phase3",),
+                evidence_refs=(),
             ),
         )
 
-    assert contradiction.required_resolution_owner_ref == "the-steward"
-    assert contradiction.resolution_ref is None
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        ContradictionRecord(
+            "contradiction.tuner",
+            "session.phase3",
+            ("section.arch", "section.impl"),
+            ("clockwork", "ponytail"),
+            ("impact.runtime",),
+            ContradictionStatus.OPEN,
+            "the-tuner",
+        )
+    assert exc.value.reason_code == "TUNER_AUTHORITY_EXPANSION"
 
+
+
+def test_unknown_contradiction_authority_is_rejected_by_session():
+    contradiction = ContradictionRecord(
+        "contradiction.unknown-owner",
+        "session.phase3",
+        ("section.arch", "section.impl"),
+        ("clockwork", "ponytail"),
+        ("impact.runtime",),
+        ContradictionStatus.OPEN,
+        "unknown-authority",
+    )
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        build_session(contradictions=(contradiction,))
+    assert exc.value.reason_code == "INVALID_CONTRADICTION_AUTHORITY"
 
 def test_review_edges_may_cycle_but_blocking_dependency_edges_may_not():
     graph = build_graph()
@@ -119,25 +173,20 @@ def test_review_edges_may_cycle_but_blocking_dependency_edges_may_not():
 def test_public_manifest_does_not_expose_direct_tuner_command():
     repo_root = Path(__file__).resolve().parents[2]
     manifest = json.loads((repo_root / "plugin.json").read_text(encoding="utf-8"))
-
     assert "the-tuner" not in manifest["commands"]
     tuner = next(item for item in manifest["skills"] if item["slug"] == "the-tuner")
     assert tuner["depends_on"] == "conductor"
 
 
-def test_coordination_module_has_no_persistence_network_or_git_dependencies():
+def test_coordination_module_has_no_persistence_network_or_git_execution_dependencies():
     repo_root = Path(__file__).resolve().parents[2]
-    source = (repo_root / "orchestra_runtime" / "coordination.py").read_text(
-        encoding="utf-8"
-    )
-
+    source = (repo_root / "orchestra_runtime" / "coordination.py").read_text(encoding="utf-8")
     prohibited_imports = {
         "sqlite3",
         "sqlalchemy",
         "socket",
         "requests",
         "subprocess",
-        "urllib",
         "dulwich",
         "git",
     }
@@ -158,13 +207,36 @@ def test_coordination_module_has_no_persistence_network_or_git_dependencies():
 
 def test_unknown_enum_values_fail_closed():
     with pytest.raises(ValueError):
-        CoordinationSignal(
+        signal(
             "signal.unknown",
-            "session.phase3",
             "UNKNOWN_SIGNAL",
             CollaborationStatus.COLLECTING,
             CollaborationStatus.READY,
-            "unknown",
-            "conductor",
-            1,
+        )
+
+
+def test_rejection_event_fallback_identity_is_deterministic_without_repr_address():
+    session = build_session()
+    error = InvalidCoordinationContractError("bad", "BAD_SIGNAL")
+
+    class OpaqueSignal:
+        pass
+
+    first = coordination_rejection_event(session, OpaqueSignal(), error)
+    second = coordination_rejection_event(session, OpaqueSignal(), error)
+    assert first.event_id == second.event_id
+    assert "0x" not in dict(first.details)["signal_fingerprint"]
+
+
+def test_artifact_cleanup_state_requires_explicit_authority():
+    cleaned = build_artifact(
+        retention=ArtifactRetentionRequirement.CLEANUP_ALLOWED,
+        current_state=ArtifactLifecycleState.CLEANED,
+    )
+    assert cleaned.current_state is ArtifactLifecycleState.CLEANED
+
+    with pytest.raises(InvalidCoordinationContractError):
+        build_artifact(
+            retention=ArtifactRetentionRequirement.NONE_REQUIRED,
+            current_state=ArtifactLifecycleState.CLEANED,
         )

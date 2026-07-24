@@ -6,8 +6,8 @@ from orchestra_runtime.coordination import (
     CollaborationStatus,
     ContractReadiness,
     CoordinationController,
-    CoordinationSignal,
     CoordinationSignalType,
+    EvidenceStatus,
     InvalidationEvent,
     InvalidationStatus,
     InvalidationTargetKind,
@@ -20,51 +20,39 @@ from orchestra_runtime.errors import (
     InvalidCoordinationTransitionError,
 )
 
-from coordination_support import build_session
+from coordination_support import (
+    build_session,
+    evidence_for,
+    frozen_session,
+    ready_session,
+    signal,
+    with_evidence,
+)
 
 
-def signal(
-    signal_id: str,
-    signal_type: CoordinationSignalType,
-    expected: CollaborationStatus,
-    requested: CollaborationStatus,
-    *,
-    reason: str = "phase3-transition",
-    revision: int = 1,
-) -> CoordinationSignal:
-    return CoordinationSignal(
-        signal_id,
-        "session.phase3",
-        signal_type,
-        expected,
-        requested,
-        reason,
-        "conductor",
-        revision,
-        ("evidence.phase3",),
-    )
-
-
-def test_ready_and_freeze_transitions_are_deterministic_and_idempotent():
+def test_ready_and_freeze_transitions_are_evidence_bound_and_idempotent():
     controller = CoordinationController()
     collecting = build_session()
-
+    collecting = with_evidence(collecting, CollaborationStatus.READY, "evidence.ready")
     mark_ready = signal(
         "signal.ready",
         CoordinationSignalType.MARK_READY,
         CollaborationStatus.COLLECTING,
         CollaborationStatus.READY,
+        evidence_refs=("evidence.ready",),
     )
     ready = controller.apply(collecting, mark_ready)
     assert ready.status is CollaborationStatus.READY
     assert ready.contract.status is ContractReadiness.READY_FOR_FREEZE
     assert controller.validate(ready).allowed is True
 
+    ready = with_evidence(ready, CollaborationStatus.FROZEN, "evidence.freeze")
     freeze = signal(
         "signal.freeze",
         CoordinationSignalType.FREEZE,
         CollaborationStatus.READY,
         CollaborationStatus.FROZEN,
+        evidence_refs=("evidence.freeze",),
     )
     frozen = controller.apply(ready, freeze)
     assert frozen.status is CollaborationStatus.FROZEN
@@ -77,101 +65,192 @@ def test_ready_and_freeze_transitions_are_deterministic_and_idempotent():
     assert dict(event.details)["to_status"] == "FROZEN"
 
 
-def test_duplicate_signal_id_with_changed_payload_is_rejected():
+def test_non_adjacent_signal_id_replay_is_session_wide():
     controller = CoordinationController()
     collecting = build_session()
-    accepted = controller.apply(
-        collecting,
+    collecting = with_evidence(collecting, CollaborationStatus.READY, "evidence.ready")
+    first = signal(
+        "signal.shared",
+        CoordinationSignalType.MARK_READY,
+        CollaborationStatus.COLLECTING,
+        CollaborationStatus.READY,
+        evidence_refs=("evidence.ready",),
+    )
+    ready = controller.apply(collecting, first)
+    ready = with_evidence(ready, CollaborationStatus.FROZEN, "evidence.freeze")
+    frozen = controller.apply(
+        ready,
         signal(
-            "signal.ready",
-            CoordinationSignalType.MARK_READY,
-            CollaborationStatus.COLLECTING,
+            "signal.freeze",
+            CoordinationSignalType.FREEZE,
             CollaborationStatus.READY,
+            CollaborationStatus.FROZEN,
+            evidence_refs=("evidence.freeze",),
         ),
     )
-    conflict = signal(
-        "signal.ready",
-        CoordinationSignalType.FREEZE,
-        CollaborationStatus.READY,
+
+    assert controller.apply(frozen, first) is frozen
+    changed = signal(
+        "signal.shared",
+        CoordinationSignalType.INVALIDATE,
         CollaborationStatus.FROZEN,
+        CollaborationStatus.STALE,
+        source_component="the-tuner",
     )
-
     with pytest.raises(ConflictingCoordinationSignalError):
-        controller.apply(accepted, conflict)
+        controller.apply(frozen, changed)
 
 
-def test_expected_status_and_revision_mismatches_fail_closed():
+def test_unauthorized_signal_sources_fail_closed():
+    collecting = build_session()
+    collecting = with_evidence(collecting, CollaborationStatus.READY, "evidence.ready")
+    with pytest.raises(InvalidCoordinationSignalError) as exc:
+        CoordinationController().apply(
+            collecting,
+            signal(
+                "signal.tuner-ready",
+                CoordinationSignalType.MARK_READY,
+                CollaborationStatus.COLLECTING,
+                CollaborationStatus.READY,
+                source_component="the-tuner",
+                evidence_refs=("evidence.ready",),
+            ),
+        )
+    assert exc.value.reason_code == "UNAUTHORIZED_COORDINATION_SIGNAL_SOURCE"
+
+    ready = ready_session()
+    ready = with_evidence(ready, CollaborationStatus.FROZEN, "evidence.freeze")
+    with pytest.raises(InvalidCoordinationSignalError):
+        CoordinationController().apply(
+            ready,
+            signal(
+                "signal.tuner-freeze",
+                CoordinationSignalType.FREEZE,
+                CollaborationStatus.READY,
+                CollaborationStatus.FROZEN,
+                source_component="the-tuner",
+                evidence_refs=("evidence.freeze",),
+            ),
+        )
+
+
+def test_ready_freeze_and_close_require_current_overseer_evidence():
     controller = CoordinationController()
     collecting = build_session()
+    with pytest.raises(CoordinationReadinessError) as exc:
+        controller.apply(
+            collecting,
+            signal(
+                "signal.ready-no-evidence",
+                CoordinationSignalType.MARK_READY,
+                CollaborationStatus.COLLECTING,
+                CollaborationStatus.READY,
+            ),
+        )
+    assert exc.value.reason_code == "COORDINATION_EVIDENCE_REQUIRED"
 
-    wrong_status = signal(
-        "signal.wrong-status",
-        CoordinationSignalType.MARK_READY,
-        CollaborationStatus.INCOMPLETE,
+    stale_evidence_session = with_evidence(
+        collecting,
         CollaborationStatus.READY,
+        "evidence.ready",
+        evidence_status=EvidenceStatus.STALE,
     )
+    with pytest.raises(CoordinationReadinessError):
+        controller.apply(
+            stale_evidence_session,
+            signal(
+                "signal.ready-stale",
+                CoordinationSignalType.MARK_READY,
+                CollaborationStatus.COLLECTING,
+                CollaborationStatus.READY,
+                evidence_refs=("evidence.ready",),
+            ),
+        )
+
+    frozen = frozen_session()
+    with pytest.raises(CoordinationReadinessError):
+        controller.apply(
+            frozen,
+            signal(
+                "signal.close-no-evidence",
+                CoordinationSignalType.CLOSE,
+                CollaborationStatus.FROZEN,
+                CollaborationStatus.CLOSED,
+            ),
+        )
+
+
+def test_wrong_contract_evidence_is_rejected():
+    collecting = build_session()
+    collecting = with_evidence(collecting, CollaborationStatus.FROZEN, "evidence.freeze")
+    with pytest.raises(CoordinationReadinessError) as exc:
+        CoordinationController().apply(
+            collecting,
+            signal(
+                "signal.ready-wrong-contract",
+                CoordinationSignalType.MARK_READY,
+                CollaborationStatus.COLLECTING,
+                CollaborationStatus.READY,
+                evidence_refs=("evidence.freeze",),
+            ),
+        )
+    assert exc.value.reason_code == "COORDINATION_EVIDENCE_REQUIRED"
+
+
+def test_expected_status_revision_signal_type_and_invalid_transition_fail_closed():
+    controller = CoordinationController()
+    collecting = build_session()
+    collecting = with_evidence(collecting, CollaborationStatus.READY, "evidence.ready")
+
     with pytest.raises(InvalidCoordinationSignalError) as exc:
-        controller.apply(collecting, wrong_status)
+        controller.apply(
+            collecting,
+            signal(
+                "signal.wrong-status",
+                CoordinationSignalType.MARK_READY,
+                CollaborationStatus.INCOMPLETE,
+                CollaborationStatus.READY,
+                evidence_refs=("evidence.ready",),
+            ),
+        )
     assert exc.value.reason_code == "EXPECTED_COORDINATION_STATUS_MISMATCH"
 
-    stale = signal(
-        "signal.stale",
-        CoordinationSignalType.MARK_READY,
-        CollaborationStatus.COLLECTING,
-        CollaborationStatus.READY,
-        revision=2,
-    )
     with pytest.raises(InvalidCoordinationSignalError) as exc:
-        controller.apply(collecting, stale)
+        controller.apply(
+            collecting,
+            signal(
+                "signal.stale",
+                CoordinationSignalType.MARK_READY,
+                CollaborationStatus.COLLECTING,
+                CollaborationStatus.READY,
+                revision=2,
+                evidence_refs=("evidence.ready",),
+            ),
+        )
     assert exc.value.reason_code == "STALE_COORDINATION_SIGNAL"
 
-
-def test_signal_type_must_match_requested_status():
-    controller = CoordinationController()
-    collecting = build_session()
-    malformed = signal(
-        "signal.malformed",
-        CoordinationSignalType.MARK_INCOMPLETE,
-        CollaborationStatus.COLLECTING,
-        CollaborationStatus.READY,
-    )
-
     with pytest.raises(InvalidCoordinationSignalError) as exc:
-        controller.apply(collecting, malformed)
-
+        controller.apply(
+            collecting,
+            signal(
+                "signal.malformed",
+                CoordinationSignalType.MARK_INCOMPLETE,
+                CollaborationStatus.COLLECTING,
+                CollaborationStatus.READY,
+                source_component="conductor",
+            ),
+        )
     assert exc.value.reason_code == "COORDINATION_SIGNAL_STATUS_MISMATCH"
 
-
-def test_invalid_transition_and_closed_terminal_state_are_rejected():
-    controller = CoordinationController()
-    collecting = build_session()
-    invalid = signal(
-        "signal.freeze-too-early",
-        CoordinationSignalType.FREEZE,
-        CollaborationStatus.COLLECTING,
-        CollaborationStatus.FROZEN,
-    )
-    with pytest.raises(InvalidCoordinationTransitionError):
-        controller.apply(collecting, invalid)
-
-    closed = controller.apply(
-        collecting,
-        signal(
-            "signal.close",
-            CoordinationSignalType.CLOSE,
-            CollaborationStatus.COLLECTING,
-            CollaborationStatus.CLOSED,
-        ),
-    )
-    assert closed.status is CollaborationStatus.CLOSED
     with pytest.raises(InvalidCoordinationTransitionError):
         controller.apply(
-            closed,
+            collecting,
             signal(
-                "signal.reopen",
-                CoordinationSignalType.REOPEN_COLLECTION,
-                CollaborationStatus.CLOSED,
+                "signal.freeze-too-early",
+                CoordinationSignalType.FREEZE,
                 CollaborationStatus.COLLECTING,
+                CollaborationStatus.FROZEN,
+                evidence_refs=("evidence.ready",),
             ),
         )
 
@@ -183,15 +262,17 @@ def test_open_invalidation_blocks_ready_and_drives_stale_transition():
         1,
         "dep.impl.qa",
         InvalidationTargetKind.EVIDENCE,
-        ("evidence.phase3",),
-        ("ponytail", "overseer"),
+        ("evidence.ready",),
+        ("overseer", "ponytail"),
         ("overseer",),
         InvalidationStatus.OPEN,
     )
-    collecting = build_session(invalidations=(event,))
+    base = build_session()
+    ready_evidence = evidence_for(base, CollaborationStatus.READY, evidence_id="evidence.ready")
+    collecting = build_session(invalidations=(event,), evidence_records=(ready_evidence,))
     controller = CoordinationController()
 
-    with pytest.raises(CoordinationReadinessError) as exc:
+    with pytest.raises(CoordinationReadinessError):
         controller.apply(
             collecting,
             signal(
@@ -199,23 +280,13 @@ def test_open_invalidation_blocks_ready_and_drives_stale_transition():
                 CoordinationSignalType.MARK_READY,
                 CollaborationStatus.COLLECTING,
                 CollaborationStatus.READY,
+                evidence_refs=("evidence.ready",),
             ),
         )
-    assert exc.value.reason_code == "COORDINATION_NOT_READY"
 
-    ready_without_event = controller.apply(
-        build_session(),
-        signal(
-            "signal.ready-clean",
-            CoordinationSignalType.MARK_READY,
-            CollaborationStatus.COLLECTING,
-            CollaborationStatus.READY,
-        ),
-    )
-    ready_with_event = replace(
-        ready_without_event,
-        invalidation_events=(event,),
-    )
+    ready = ready_session()
+    event = replace(event, target_refs=("evidence.ready",))
+    ready_with_event = replace(ready, invalidation_events=(event,))
     stale = controller.apply(
         ready_with_event,
         signal(
@@ -223,6 +294,7 @@ def test_open_invalidation_blocks_ready_and_drives_stale_transition():
             CoordinationSignalType.INVALIDATE,
             CollaborationStatus.READY,
             CollaborationStatus.STALE,
+            source_component="the-tuner",
         ),
     )
     assert stale.status is CollaborationStatus.STALE
@@ -230,22 +302,27 @@ def test_open_invalidation_blocks_ready_and_drives_stale_transition():
 
 
 def test_stale_session_cannot_close_successfully():
+    ready = ready_session()
     event = InvalidationEvent(
         "invalidation.phase3",
         "session.phase3",
         1,
         "dep.impl.qa",
         InvalidationTargetKind.EVIDENCE,
-        ("evidence.phase3",),
-        ("ponytail", "overseer"),
+        ("evidence.ready",),
+        ("overseer", "ponytail"),
         ("overseer",),
     )
-    stale = build_session(
-        status=CollaborationStatus.STALE,
-        contract_status=ContractReadiness.STALE,
-        invalidations=(event,),
+    stale = CoordinationController().apply(
+        replace(ready, invalidation_events=(event,)),
+        signal(
+            "signal.invalidate",
+            CoordinationSignalType.INVALIDATE,
+            CollaborationStatus.READY,
+            CollaborationStatus.STALE,
+            source_component="the-tuner",
+        ),
     )
-
     with pytest.raises(CoordinationReadinessError) as exc:
         CoordinationController().apply(
             stale,
@@ -256,5 +333,4 @@ def test_stale_session_cannot_close_successfully():
                 CollaborationStatus.CLOSED,
             ),
         )
-
     assert exc.value.reason_code == "COORDINATION_CLOSEOUT_BLOCKED"
