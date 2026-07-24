@@ -942,3 +942,18 @@ The current public release remains `v1.1.1`. Target `v1.1.2` is prepared but not
 - `README.md` and approved authority, setup, compatibility, readiness, state, and handoff documentation
 - Approved version manifests and scaffold package metadata
 - `CHANGELOG.md` and `docs/releases/v1.1.2-trusted-runtime-authority.md`
+
+
+<!-- THE_TUNER_PHASE_2_EVIDENCE_CONTINUITY -->:DECISION_LOG.md
+
+## 2026-07-24: The Tuner Phase 2 evidence identity and continuity integration
+
+**Status:** Implemented, committed, pushed, and under review in PR #197. Merge remains separately authorized.
+
+**Baseline:** `0c5790e3ac55db08c7a97f44d0d29b337e7b6dac`
+
+**Decision:** Use SHA-256 over canonical UTF-8 JSON (`orchestra-evidence-v1`) and Git clean-filter/object semantics for evidence identity. Bind evidence to the frozen contract hash and revision, tracked and staged patch hashes, complete non-ignored untracked manifests, added-file identities, relevant artifact lifecycle records, branch, baseline, current commit, and working-tree fingerprint.
+
+**Authority:** Overseer owns evidence, Arbiter owns continuity and transition decisions, The Tuner detects stale coordination references and recommends minimal re-entry, and Conductor remains the exclusive router. Evidence never creates authority.
+
+**Deferred:** Typed Tuner runtime models, persistence, SQLite, RPC, host orchestration, release, and deployment remain outside Phase 2.

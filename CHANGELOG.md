@@ -2,6 +2,21 @@
 
 This changelog tracks the repository history using git tags, merge history, and the prior documented milestone log that lived under `docs/meta/CHANGELOG.md`.
 
+## Unreleased - Issue #195 Cross-Specialist Coordination Phase 2
+
+Phase 2 is implemented, committed, pushed, and under review in PR #197 on `feat/issue-195-tuner-phase2-evidence-continuity`. Merge remains separately authorized. It adds deterministic evidence identity and continuity enforcement only. No typed Tuner runtime, persistence, SQLite, RPC, release, deployment, or external-action authority is included.
+
+### Added
+- Added the canonical evidence identity and freshness protocol.
+- Added read-only tracked, staged, untracked, added-file, artifact, and working-tree identity validators.
+- Added invalidation, artifact-lifecycle, manual re-entry, delegated-boundary, and fail-closed behavior fixtures.
+
+### Changed
+- Extended Overseer evidence packets and Tuner handoffs with current contract and change identity.
+- Enforced Arbiter blocking on stale or mismatched evidence and Conductor-only minimal re-entry routing.
+- Preserved pre-existing artifacts, single-owner bypass, Dagger gating, and default-deny external actions.
+- Removed implicit current-HEAD, workflow-dispatch, `origin/main`, and local `main` evidence-baseline fallbacks. Local and workflow-dispatch validation now require `ORCHESTRA_APPROVED_BASE_SHA`; verified pull-request base and push-before event SHAs remain supported.
+
 ## Unreleased - Issue #195 Cross-Specialist Coordination Phase 1
 
 Phase 1 is implemented for review on `design/issue-195-tuner-protocol`. It adds instruction-level coordination only. No release, deployment, marketplace publication, typed runtime, SQLite, RPC, or external-action authority is included.

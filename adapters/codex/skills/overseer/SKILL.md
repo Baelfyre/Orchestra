@@ -246,3 +246,23 @@ Act as a specialist routed by `conductor`.
 - Keep skill files, prompts, review notes, and generated QA artifacts local unless repository tracking is approved.
 - Do not initialize Git, stage, commit, push, create a pull request, or modify `.gitignore`.
 - Require approval before modifying CI workflows, release gates, deployment configuration, or external release state.
+
+
+<!-- THE_TUNER_PHASE_2_EVIDENCE_CONTINUITY -->:skills/overseer/SKILL.md
+
+## Phase 2 Evidence Binding
+
+For an active CrossLayerContractPacket, Overseer must bind validation evidence to the current frozen contract hash and revision and to the actual tracked, staged, untracked, added-file, and generated-artifact state.
+
+Overseer must:
+
+- derive required checks from the frozen acceptance matrix;
+- collect or verify the current read-only evidence identity;
+- record the identity canonicalization version;
+- disclose skipped checks and limitations;
+- perform required generated-artifact inspection rather than relying on source-only evidence;
+- preserve pre-existing generated artifacts unless cleanup authority is explicit;
+- mark evidence stale after a relevant invalidation event;
+- produce replacement evidence after affected specialist re-entry is complete.
+
+A complete evidence packet is validation evidence only. Overseer does not issue a transition disposition, route specialists, grant implementation authority, or widen delegated scope.

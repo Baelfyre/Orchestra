@@ -69,7 +69,7 @@ Reason:
 
 ### ExecutionEvidencePacket
 
-Use this format when producing or verifying focused validation evidence for a delegated internal unit.
+Use this format when producing or verifying focused validation evidence for a delegated internal unit or a manual multi-domain handoff governed by the same Phase 2 evidence semantics.
 
 ```markdown
 - schema_version:
@@ -92,7 +92,20 @@ Use this format when producing or verifying focused validation evidence for a de
 - protected_repository_result: PASS | FAIL
 - security_and_secret_result: PASS | FAIL
 - design_contradiction_state: NONE | PENDING
+- identity_canonicalization_version: orchestra-evidence-v1
+- collaboration_session_id:
+- cross_layer_contract_hash:
+- cross_layer_contract_revision:
+- tracked_patch_hash:
+- staged_patch_hash:
+- untracked_file_manifest:
+- added_blob_hashes:
+- artifact_lifecycle_records:
+- specialist_reentry_completed:
+- open_invalidation_events:
 - evidence_producer:
 - evidence_timestamp:
 - freshness_reference:
 ```
+
+Evidence packets contain paths, statuses, commands, and cryptographic identities. They must not embed secrets or private file contents.

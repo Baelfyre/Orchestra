@@ -13,37 +13,39 @@ output_formats: [Routing Plan, Prompts]
 # Conductor
 
 ## Purpose
-Classify intent, select mode, load minimum safe context, route work. Conductor does not execute domain work.
+Classify intent, select mode, load minimum safe context, and route work. Conductor does not execute domain work.
 
 ## Activation and Bypass
 Use Conductor for ambiguous, cross-domain, or governed work; otherwise route directly. Use `the-tuner` for material multi-domain contracts. Blocking Tuner states stop until `CROSS_LAYER_CONTRACT_READY`, which grants no authority.
 
 ## Canonical Routing Algorithm
 1. Select mode with the [mode policy](../../docs/routing/EXECUTION_MODES_POLICY.md).
-2. Route from the [skill index](../../SKILL_INDEX.md); use the [routing map](../../ROUTING_MAP.md) only for ambiguity or dependencies.
+2. Route from the [skill index](../../SKILL_INDEX.md); load the [routing map](../../ROUTING_MAP.md) only for ambiguity or dependencies.
 3. Load governance only on triggers; pause on unresolved gates.
 4. Build the minimum [packet](../../docs/routing/MINIMAL_PROMPT_FORMAT.md).
 
 ## Stop Conditions
-- Governance status: `NOT_REQUIRED`, `CONDITIONAL`, `REQUIRED`, or `BLOCKED_PENDING_AUTHORIZATION`.
 - If Steward or Governor returns `BLOCKED`, Conductor stops.
-- If Steward or Governor returns `REVISION_REQUIRED` outside delegated envelope, Conductor pauses.
-- If Governor sets `human_review_required: true`, Conductor pauses until human review completes.
-- If Steward and Governor return `APPROVED`, Conductor proceeds to routing.
-- If Steward or Governor returns `NOT_APPLICABLE`, Conductor proceeds under selected execution mode.
-- In legacy manual mode, pause on Arbiter `HOLD` or `BLOCKED`.
-- In delegated phase mode, consume Arbiter `TransitionDecisionRecord` dispositions (`AUTO_CONTINUE`, `AUTO_REMEDIATE_AND_REVALIDATE`, `WAIT_FOR_EVIDENCE`, `WAIT_FOR_CAPACITY`, `ESCALATE_HUMAN`, `STOP`).
-- Keep Dagger paths blocked pending authorization. In audit mode, edit only with approval.
+- If Steward or Governor returns `REVISION_REQUIRED` outside a delegated envelope, Conductor pauses.
+- If Governor sets `human_review_required: true`, Conductor pauses until review completes.
+- If Steward and Governor return `APPROVED`, Conductor proceeds.
+- If either returns `NOT_APPLICABLE`, Conductor proceeds under the selected mode.
+- In manual mode, pause on Arbiter `HOLD` or `BLOCKED`.
+- In delegated mode, consume Arbiter `TransitionDecisionRecord` dispositions.
+- Keep Dagger blocked pending authorization. Audit edits require approval.
 
 ## Delegated Phase Autonomous Loop
-In delegated phase under `DelegatedExecutionEnvelope`:
-1. Verify valid envelope exists and current unit is in `ApprovedUnitPlan`.
-2. Route minimum unit packet to specialist.
+Under a `DelegatedExecutionEnvelope`:
+1. Verify the envelope and current `ApprovedUnitPlan` unit.
+2. Route the minimum unit packet.
 3. Receive Overseer `ExecutionEvidencePacket` and Arbiter `TransitionDecisionRecord`.
-4. Consume Arbiter dispositions: `AUTO_CONTINUE` (checkpoint unit), `AUTO_REMEDIATE_AND_REVALIDATE` (route to remediation specialist), `WAIT_FOR_EVIDENCE` (pause execution), `WAIT_FOR_CAPACITY` (checkpoint state), `ESCALATE_HUMAN` (request human decision), `STOP` (halt execution).
-5. Do not invent units or paths. Refuse automatic external actions unless authority flag is true.
-6. Use legacy pause if disposition unsupported.
-7. Run phase gate after units pass; yield `PHASE_READY_FOR_HUMAN_REVIEW`. Never auto-merge, release, or deploy.
+4. Apply `AUTO_CONTINUE`, `AUTO_REMEDIATE_AND_REVALIDATE`, `WAIT_FOR_EVIDENCE`, `WAIT_FOR_CAPACITY`, `ESCALATE_HUMAN`, or `STOP` exactly as issued.
+5. Do not invent units, paths, or external-action authority.
+6. Use legacy pause for unsupported dispositions.
+7. After the phase gate, yield `PHASE_READY_FOR_HUMAN_REVIEW`; never auto-merge, release, or deploy.
+
+## Phase 2 Re-entry Routing
+Conductor remains the exclusive router. On stale or incomplete change identity, open invalidation, or `SPECIALIST_REENTRY_REQUIRED`, pause; preserve the manual authorization or delegated envelope; route only the declared affected specialists; require revised contracts and current Overseer evidence; then return the packet to Arbiter. Never broaden re-entry without evidence or treat evidence as authority.
 
 ## Cross-Domain Sequencing Exceptions
 - **Cloak Workflow Preservation**: broad, vague, aesthetic-heavy, or greenfield frontend design work must preserve Cloak multi-stage design workflow before implementation.
@@ -51,13 +53,12 @@ In delegated phase under `DelegatedExecutionEnvelope`:
 - Route to `clockwork` before implementation when the frontend design affects API shape, data flow, service boundaries, backend validation, auth boundary placement, or architectural layering.
 - Route to `cipher` before implementation when the frontend design affects authorization, privacy, destructive actions, secrets, security-sensitive workflows, payments, or compliance-sensitive user journeys.
 - Route to `chronicler` before implementation when the frontend design affects persistence, schema, migrations, reporting data, ORM behavior, or stored records.
-- Keep ambiguous access/authority routing with Conductor until ownership is explicit. UI changes follow the routing map above.
+- Keep ambiguous access or authority routing with Conductor.
 
 ## Scope Enforcement
 Conductor must classify `SPECIALIST_REROUTE_REQUIRED` and must not allow a specialist to execute outside its documented scope.
 
 ## Output Contract
-Use the minimum packet format above:
 ```text
 Task Type: [Domain]
 Primary Skill: [Skill]

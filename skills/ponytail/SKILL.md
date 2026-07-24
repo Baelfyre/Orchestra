@@ -122,3 +122,23 @@ Required behavior:
 - Keep scratch notes, temporary implementation plans, debug logs, and one-off local artifacts untracked unless repository tracking is explicitly approved.
 - Do not stage, commit, push, create a pull request, or modify `.gitignore` without approval.
 - Edit tracked repository source by default. Do not modify runtime copies, installed-skill copies, or other local mirrors unless the task explicitly targets parity there.
+
+
+<!-- THE_TUNER_PHASE_2_EVIDENCE_CONTINUITY -->:skills/ponytail/SKILL.md
+
+## Phase 2 Complete Handoff Delta
+
+For material multi-domain work, Ponytail must produce a complete SpecialistHandoffDelta after implementation. The handoff must include:
+
+- frozen packet revision and contract hash;
+- approved baseline, current commit, and working-tree fingerprint;
+- tracked, staged, untracked, and ignored-relevant paths;
+- tracked and staged patch hashes;
+- the complete non-ignored untracked file manifest;
+- added-file identities;
+- behavioral deltas and affected layers;
+- potentially and definitely invalidated contracts;
+- generated-artifact lifecycle deltas;
+- required specialist re-entry and known limitations.
+
+Ponytail must stop and return `SPECIALIST_REROUTE_REQUIRED` when an undeclared artifact, cross-domain decision, prohibited path, or unauthorized external action is required. Pre-existing artifacts must not be cleaned merely because the current run reused their path.

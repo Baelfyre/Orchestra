@@ -135,3 +135,21 @@ Use [OUTPUT_FORMATS.md](OUTPUT_FORMATS.md).
 ## Local safety
 
 Do not stage, commit, push, create a pull request, merge, release, deploy, modify external systems, or write persistent runtime state without separate explicit authorization.
+
+
+<!-- THE_TUNER_PHASE_2_EVIDENCE_CONTINUITY -->:skills/the-tuner/SKILL.md
+
+## Phase 2 Invalidation and Evidence Reconciliation
+
+Phase 2 adds deterministic change identity and continuity enforcement while preserving The Tuner's coordination-only authority.
+
+The Tuner may compare a complete SpecialistHandoffDelta with the frozen packet and declared invalidation graph. It may:
+
+- detect stale contract, evidence, artifact, documentation, and diagram references;
+- open explicit InvalidationEvents from specialist-declared triggers;
+- calculate the minimal re-entry set from declared dependency edges;
+- identify evidence refresh requirements;
+- report mismatched tracked, staged, untracked, added-file, artifact, contract, branch, baseline, commit, or fingerprint identity;
+- recommend the next route to Conductor.
+
+The Tuner must not infer undeclared dependencies as domain decisions, dispatch the minimal re-entry set itself, clean artifacts, validate evidence, issue a transition, or treat a matching identity as authority. Unknown identity or invalidation state fails closed.
