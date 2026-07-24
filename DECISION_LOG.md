@@ -1,5 +1,19 @@
 # Decision Log
 
+## Date: 2026-07-24
+
+**Decision:**
+Accept PR #197 merge as the canonical completion of The Tuner Phase 2 evidence and continuity enforcement, then begin the separately authorized Phase 3 typed runtime foundation.
+
+**Phase 2 Merge Commit:** `7423d3e7db7fb8e32dfe91454f5c2c5d10aba9bb`
+
+**Phase 2 Reviewed Head:** `01376a55c15014b6d185d936f41d8006ca7f9713`
+
+**Phase 3 Baseline:** `7423d3e7db7fb8e32dfe91454f5c2c5d10aba9bb`
+
+**Phase 3 Boundary:**
+Immutable in-memory coordination contracts, deterministic transition enforcement, runtime audit facts, public Python exports, and focused runtime tests only. Persistence, SQLite, RPC, host orchestration, public direct Tuner commands, release, deployment, and authority expansion remain prohibited.
+
 ## Date: 2026-07-22
 
 **Decision:**

@@ -3,14 +3,16 @@
 ## Document status
 
 ```text
-Protocol status: PHASE_1_MERGED_PHASE_2_IMPLEMENTATION_IN_PROGRESS
+Protocol status: PHASE_1_AND_PHASE_2_MERGED_PHASE_3_TYPED_RUNTIME_IN_PROGRESS
 Protocol version: tuner-protocol-v1
+Runtime canonicalization version: orchestra-coordination-runtime-v1
 Repository: Baelfyre/Orchestra
 Issue: #195
-Design branch: design/issue-195-tuner-protocol
-Design baseline: 0c5790e3ac55db08c7a97f44d0d29b337e7b6dac
-Audit gate: READY_FOR_ORCHESTRA_THE_TUNER_COLLABORATION_AUDIT_V2_AUTHORIZATION
-Implementation authority: APPROVED_TO_IMPLEMENT_THE_TUNER_PHASE_2
+Phase 1 merge: 0c5790e3ac55db08c7a97f44d0d29b337e7b6dac
+Phase 2 merge: 7423d3e7db7fb8e32dfe91454f5c2c5d10aba9bb
+Phase 3 branch: feat/issue-195-tuner-phase3-typed-runtime-foundation
+Phase 3 baseline: 7423d3e7db7fb8e32dfe91454f5c2c5d10aba9bb
+Implementation authority: APPROVED_TO_IMPLEMENT_THE_TUNER_PHASE_3_TYPED_RUNTIME_FOUNDATION
 Commit authority: NONE
 Push authority: NONE
 PR authority: NONE
@@ -18,7 +20,7 @@ Merge authority: NONE
 Release authority: NONE
 ```
 
-This document is the canonical source of truth for Orchestra's cross-specialist coordination protocol. Role skills and adapters must reference this document rather than duplicate its complete schemas. Phase 1 established the canonical instruction contracts. Phase 2 adds deterministic evidence identity and continuity enforcement; typed Tuner runtime enforcement, persistence, SQLite, RPC, release, and deployment remain separately governed.
+This document is the canonical source of truth for Orchestra's cross-specialist coordination protocol. Role skills and adapters must reference this document rather than duplicate its complete schemas. Phase 1 established the canonical instruction contracts. Phase 2 merged deterministic evidence identity and continuity enforcement. Phase 3 adds immutable in-memory typed coordination contracts and deterministic state enforcement; persistence, SQLite, RPC, host orchestration, release, deployment, and external-action authority remain separately governed.
 
 ---
 

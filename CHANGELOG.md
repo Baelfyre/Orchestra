@@ -2,9 +2,22 @@
 
 This changelog tracks the repository history using git tags, merge history, and the prior documented milestone log that lived under `docs/meta/CHANGELOG.md`.
 
+## Unreleased - Issue #195 Cross-Specialist Coordination Phase 3
+
+Phase 3 typed runtime foundation is authorized for local implementation on `feat/issue-195-tuner-phase3-typed-runtime-foundation` from merge baseline `7423d3e7db7fb8e32dfe91454f5c2c5d10aba9bb`. It adds immutable in-memory coordination records and deterministic state enforcement only. Persistence, SQLite, RPC, host orchestration, release, deployment, and external-action authority remain excluded.
+
+### Added
+- Added typed collaboration graph, contract packet, handoff delta, invalidation, contradiction, artifact lifecycle, signal, session, validation, and audit contracts.
+- Added a stateless coordination controller with deterministic freeze, stale, contradiction, supersede, closeout, and idempotent signal handling.
+- Added focused contract, lifecycle, and adversarial runtime coverage.
+
+### Changed
+- Normalized Phase 1 and Phase 2 merge status before beginning the typed runtime foundation.
+- Preserved Conductor-only routing, Tuner non-authority, Ponytail implementation ownership, Overseer evidence ownership, Arbiter continuity authority, single-owner bypass, Dagger gating, and default-deny external actions.
+
 ## Unreleased - Issue #195 Cross-Specialist Coordination Phase 2
 
-Phase 2 is implemented, committed, pushed, and under review in PR #197 on `feat/issue-195-tuner-phase2-evidence-continuity`. Merge remains separately authorized. It adds deterministic evidence identity and continuity enforcement only. No typed Tuner runtime, persistence, SQLite, RPC, release, deployment, or external-action authority is included.
+Phase 2 is merged through PR #197 at merge commit `7423d3e7db7fb8e32dfe91454f5c2c5d10aba9bb`. It added deterministic evidence identity and continuity enforcement only. No persistence, SQLite, RPC, release, deployment, or external-action authority was introduced.
 
 ### Added
 - Added the canonical evidence identity and freshness protocol.

@@ -76,3 +76,23 @@ class RuntimeBindingError(RuntimeContractError):
 
 class RuntimeAuditError(RuntimeContractError):
     pass
+
+
+class InvalidCoordinationContractError(RuntimeContractError):
+    pass
+
+
+class InvalidCoordinationTransitionError(RuntimeContractError):
+    pass
+
+
+class InvalidCoordinationSignalError(RuntimeContractError):
+    pass
+
+
+class CoordinationReadinessError(RuntimeContractError):
+    pass
+
+
+class ConflictingCoordinationSignalError(RuntimeContractError):
+    pass
