@@ -202,3 +202,27 @@ Use compact output by default. Expand only when risks, blockers, or merge-readin
 ## Scope Enforcement
 
 If the request is outside this specialist's scope, do not execute it. Return `SPECIALIST_REROUTE_REQUIRED` and recommend the correct specialist or Conductor.
+
+
+<!-- THE_TUNER_PHASE_2_EVIDENCE_CONTINUITY -->:skills/arbiter/SKILL.md
+
+## Phase 2 Evidence Freshness Enforcement
+
+The Phase 2 evidence identity contract is fail-closed. Arbiter must return `HOLD`, `WAIT_FOR_EVIDENCE`, or a higher-priority disposition when any current evidence reference is missing, malformed, stale, or mismatched.
+
+Arbiter must block continuation when:
+
+- the cross-layer packet is not `FROZEN`;
+- the contract hash or contract revision is not current;
+- the evidence branch, approved baseline, or current commit differs from repository state;
+- the tracked patch hash differs;
+- the staged patch hash differs;
+- the untracked file manifest omits a non-ignored file;
+- added-file identities are incomplete;
+- the working-tree fingerprint differs;
+- a required generated-artifact lifecycle or inspection record is missing;
+- an invalidation event remains open;
+- required specialist re-entry is incomplete;
+- identity canonicalization is unknown or malformed.
+
+`STOP` and `ESCALATE_HUMAN` retain higher transition precedence. Arbiter verifies freshness and continuity only. It does not compute domain correctness, resolve invalidations, or treat current evidence as authority expansion.

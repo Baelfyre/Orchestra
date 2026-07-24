@@ -661,3 +661,30 @@ Phase 1 defines instruction-level coordination, activation, contract status, and
 
 *Canonical references: `GOVERNANCE_DECISION_PROTOCOL.md`, `GOVERNANCE_LAYER.md`,
 `GOVERNANCE_REVIEW_FLOW.md`, `docs/project/DELEGATED_GOVERNANCE_IMPLEMENTATION_PLAN.md`*
+
+
+<!-- THE_TUNER_PHASE_2_EVIDENCE_CONTINUITY -->:docs/governance/DELEGATED_EXECUTION_POLICY.md
+
+## 18. Cross-Specialist Phase 2 Evidence Extensions
+
+For a delegated unit governed by both a `DelegatedExecutionEnvelope` and a frozen CrossLayerContractPacket, `ExecutionEvidencePacket` additionally records:
+
+```yaml
+identity_canonicalization_version
+collaboration_session_id
+cross_layer_contract_hash
+cross_layer_contract_revision
+tracked_patch_hash
+staged_patch_hash
+untracked_file_manifest
+added_blob_hashes
+artifact_lifecycle_records
+specialist_reentry_completed
+open_invalidation_events
+```
+
+The canonical identity algorithm is [Evidence Identity and Freshness Protocol](EVIDENCE_IDENTITY_AND_FRESHNESS_PROTOCOL.md).
+
+Arbiter must not issue `AUTO_CONTINUE` when the packet or contract is stale, repository identity differs, an invalidation event remains open, re-entry is incomplete, or tracked, staged, untracked, added-file, fingerprint, or artifact identity differs. These fields are evidence and continuity constraints only. They cannot widen the envelope, authorize external actions, or create implementation authority.
+
+Manual multi-domain workflows use the same identity and invalidation semantics without inventing a delegated envelope.

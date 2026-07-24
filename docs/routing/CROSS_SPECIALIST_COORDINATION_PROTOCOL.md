@@ -3,14 +3,14 @@
 ## Document status
 
 ```text
-Protocol status: ACCEPTED_FOR_PHASE_1_IMPLEMENTATION
+Protocol status: PHASE_1_MERGED_PHASE_2_IMPLEMENTATION_IN_PROGRESS
 Protocol version: tuner-protocol-v1
 Repository: Baelfyre/Orchestra
 Issue: #195
 Design branch: design/issue-195-tuner-protocol
-Design baseline: 4c9fc6d43abda7f57ba2af2b9e90e1731568519b
+Design baseline: 0c5790e3ac55db08c7a97f44d0d29b337e7b6dac
 Audit gate: READY_FOR_ORCHESTRA_THE_TUNER_COLLABORATION_AUDIT_V2_AUTHORIZATION
-Implementation authority: NONE
+Implementation authority: APPROVED_TO_IMPLEMENT_THE_TUNER_PHASE_2
 Commit authority: NONE
 Push authority: NONE
 PR authority: NONE
@@ -18,7 +18,7 @@ Merge authority: NONE
 Release authority: NONE
 ```
 
-This document is the canonical source of truth for Orchestra's cross-specialist coordination protocol. Role skills and adapters must reference this document rather than duplicate its complete schemas. Phase 1 implements instruction-level contracts only; typed runtime enforcement, persistence, SQLite, RPC, release, and deployment remain separately governed.
+This document is the canonical source of truth for Orchestra's cross-specialist coordination protocol. Role skills and adapters must reference this document rather than duplicate its complete schemas. Phase 1 established the canonical instruction contracts. Phase 2 adds deterministic evidence identity and continuity enforcement; typed Tuner runtime enforcement, persistence, SQLite, RPC, release, and deployment remain separately governed.
 
 ---
 
@@ -1365,3 +1365,26 @@ The Tuner detects but never resolves a contradiction.
 A frozen contract is not an implementation authorization by itself.
 
 Full contract-hash, staged-patch, untracked-file, added-blob, and artifact-lifecycle enforcement is reserved for Phase 2.
+
+<!-- THE_TUNER_PHASE_2_EVIDENCE_CONTINUITY -->:docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md
+
+## 25. Phase 2 evidence and continuity enforcement
+
+Phase 2 implements the evidence-identity and continuity portions of this protocol at the instruction, output-contract, deterministic-validator, and behavior-test layers.
+
+The canonical algorithm is [Evidence Identity and Freshness Protocol](../governance/EVIDENCE_IDENTITY_AND_FRESHNESS_PROTOCOL.md).
+
+Phase 2 enforces:
+
+- evidence binding to the frozen contract hash and revision;
+- tracked and staged patch identity;
+- complete non-ignored untracked-file identity;
+- added-file blob identity;
+- deterministic working-tree fingerprints;
+- generated-artifact lifecycle records and pre-existing artifact preservation;
+- explicit invalidation-event freshness;
+- minimal specialist re-entry in manual and delegated modes;
+- Arbiter blocking on stale or mismatched evidence;
+- Overseer ownership of refreshed validation evidence.
+
+Phase 2 does not add typed Tuner runtime models, persistent collaboration state, SQLite, RPC, host orchestration, deployment, release, or new authority.

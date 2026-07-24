@@ -1,0 +1,32 @@
+{
+  "canonicalization_version": "orchestra-evidence-v1",
+  "canonical_hash_fixture": {
+    "value": {
+      "repository_identity": "https://github.com/example/repo.git",
+      "branch": "feature/example",
+      "approved_base_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "current_commit_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "tracked_patch_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+      "staged_patch_hash": "2222222222222222222222222222222222222222222222222222222222222222",
+      "untracked_manifest_hash": "3333333333333333333333333333333333333333333333333333333333333333",
+      "added_blob_hashes_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+      "relevant_artifact_lifecycle_hash": "5555555555555555555555555555555555555555555555555555555555555555"
+    },
+    "expected_sha256": "7647e9ba93f1b085492cd91a0e405cf761e0b61a3c6a6b88cd1853c504c6be8d"
+  },
+  "path_normalization": [
+    {
+      "input": "tests\\behavior\\fixture.json",
+      "expected": "tests/behavior/fixture.json"
+    },
+    {
+      "input": "unicodé/例.txt",
+      "expected": "unicodé/例.txt"
+    }
+  ],
+  "unsafe_paths": [
+    "../outside.txt",
+    "/absolute.txt",
+    "a/../b.txt"
+  ]
+}
