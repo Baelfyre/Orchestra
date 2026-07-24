@@ -15,6 +15,7 @@ Phase 2 is implemented, committed, pushed, and under review in PR #197 on `feat/
 - Extended Overseer evidence packets and Tuner handoffs with current contract and change identity.
 - Enforced Arbiter blocking on stale or mismatched evidence and Conductor-only minimal re-entry routing.
 - Preserved pre-existing artifacts, single-owner bypass, Dagger gating, and default-deny external actions.
+- Removed implicit current-HEAD, workflow-dispatch, `origin/main`, and local `main` evidence-baseline fallbacks. Local and workflow-dispatch validation now require `ORCHESTRA_APPROVED_BASE_SHA`; verified pull-request base and push-before event SHAs remain supported.
 
 ## Unreleased - Issue #195 Cross-Specialist Coordination Phase 1
 

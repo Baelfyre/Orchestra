@@ -23,6 +23,45 @@ def _commit_exists(root, revision):
     return code == 0
 
 
+def _verified_event_baseline(root, event_name, event):
+    if event_name in {"pull_request", "pull_request_target"}:
+        candidate = str(
+            event.get("pull_request", {}).get("base", {}).get("sha", "")
+        ).strip()
+        label = "pull-request base"
+    elif event_name == "push":
+        candidate = str(event.get("before", "")).strip()
+        label = "push-before baseline"
+        if candidate and set(candidate) == {"0"}:
+            candidate = ""
+    else:
+        return None
+
+    if not candidate:
+        return None
+
+    if not _commit_exists(root, candidate) and os.environ.get("GITHUB_ACTIONS") == "true":
+        fetch = subprocess.run(
+            [
+                "git",
+                "-C",
+                root,
+                "fetch",
+                "--no-tags",
+                "--depth=1",
+                "origin",
+                candidate,
+            ],
+            check=False,
+        )
+        if fetch.returncode != 0:
+            raise RuntimeError(f"Could not fetch the verified {label}")
+
+    if not _commit_exists(root, candidate):
+        raise RuntimeError(f"The verified {label} is unavailable")
+    return candidate
+
+
 def resolve_evidence_baseline(root):
     explicit = os.environ.get("ORCHESTRA_APPROVED_BASE_SHA", "").strip()
     if explicit:
@@ -31,45 +70,18 @@ def resolve_evidence_baseline(root):
         return explicit
 
     event_path = os.environ.get("GITHUB_EVENT_PATH", "").strip()
+    event_name = os.environ.get("GITHUB_EVENT_NAME", "").strip()
     if event_path and os.path.isfile(event_path):
         with open(event_path, "r", encoding="utf-8") as handle:
             event = json.load(handle)
-
-        event_name = os.environ.get("GITHUB_EVENT_NAME", "").strip()
-        candidates = []
-        pull_request_base = str(
-            event.get("pull_request", {}).get("base", {}).get("sha", "")
-        ).strip()
-        push_before = str(event.get("before", "")).strip()
-        workflow_sha = os.environ.get("GITHUB_SHA", "").strip()
-
-        if pull_request_base:
-            candidates.append(("pull-request base", pull_request_base))
-        if event_name == "push" and push_before and set(push_before) != {"0"}:
-            candidates.append(("push before", push_before))
-        if event_name == "workflow_dispatch" and workflow_sha:
-            candidates.append(("workflow-dispatch SHA", workflow_sha))
-
-        for label, candidate in candidates:
-            if not _commit_exists(root, candidate) and os.environ.get("GITHUB_ACTIONS") == "true":
-                fetch = subprocess.run(
-                    ["git", "-C", root, "fetch", "--no-tags", "--depth=1", "origin", candidate],
-                    check=False,
-                )
-                if fetch.returncode != 0:
-                    raise RuntimeError(f"Could not fetch the explicit {label}")
-            if not _commit_exists(root, candidate):
-                raise RuntimeError(f"The explicit {label} is unavailable")
+        candidate = _verified_event_baseline(root, event_name, event)
+        if candidate:
             return candidate
-
-    for revision in ("origin/main", "main"):
-        code, value, _ = _git_output(root, "rev-parse", "--verify", f"{revision}^{{commit}}")
-        if code == 0 and value:
-            return value
 
     raise RuntimeError(
         "An explicit approved baseline is required. Set ORCHESTRA_APPROVED_BASE_SHA "
-        "or provide a verified GitHub event reference."
+        "for local or workflow-dispatch validation, or provide a verified pull-request "
+        "base or push-before GitHub event reference."
     )
 
 
@@ -95,6 +107,7 @@ def main():
         {"Name": "test_tuner_collaboration_contract.py", "Path": "tests/behavior/test_tuner_collaboration_contract.py"},
         {"Name": "validate_evidence_identity.py", "Path": "scripts/validate_evidence_identity.py", "Args": ["--approved-base-sha", evidence_base]},
         {"Name": "test_evidence_identity.py", "Path": "tests/behavior/test_evidence_identity.py"},
+        {"Name": "test_evidence_baseline_resolution.py", "Path": "tests/behavior/test_evidence_baseline_resolution.py"},
         {"Name": "validate_tuner_evidence_continuity.py", "Path": "scripts/validate_tuner_evidence_continuity.py"},
         {"Name": "test_tuner_evidence_continuity.py", "Path": "tests/behavior/test_tuner_evidence_continuity.py"},
         {"Name": "validate_artificer_internal.py", "Path": "scripts/validate_artificer_internal.py"},
