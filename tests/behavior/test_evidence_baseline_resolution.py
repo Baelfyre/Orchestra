@@ -174,7 +174,7 @@ def test_unavailable_explicit_baseline_fails():
         _cleanup(repo)
 
 
-def test_pull_request_event_base_succeeds():
+def test_fabricated_pull_request_event_outside_github_actions_fails():
     repo, baseline, _ = _make_repo()
     try:
         payload = {"pull_request": {"base": {"sha": baseline}}}
@@ -183,18 +183,62 @@ def test_pull_request_event_base_succeeds():
                 GITHUB_EVENT_PATH=str(event_path),
                 GITHUB_EVENT_NAME="pull_request",
             ):
-                assert runner.resolve_evidence_baseline(str(repo)) == baseline
+                _assert_requires_explicit(repo)
     finally:
         _cleanup(repo)
 
 
-def test_push_before_event_succeeds():
+def test_fabricated_push_event_outside_github_actions_fails():
     repo, baseline, _ = _make_repo()
     try:
         with _event({"before": baseline}) as event_path:
             with _environment(
                 GITHUB_EVENT_PATH=str(event_path),
                 GITHUB_EVENT_NAME="push",
+            ):
+                _assert_requires_explicit(repo)
+    finally:
+        _cleanup(repo)
+
+
+def test_github_actions_false_does_not_verify_event():
+    repo, baseline, _ = _make_repo()
+    try:
+        payload = {"pull_request": {"base": {"sha": baseline}}}
+        with _event(payload) as event_path:
+            with _environment(
+                GITHUB_EVENT_PATH=str(event_path),
+                GITHUB_EVENT_NAME="pull_request",
+                GITHUB_ACTIONS="false",
+            ):
+                _assert_requires_explicit(repo)
+    finally:
+        _cleanup(repo)
+
+
+def test_pull_request_event_base_succeeds_in_github_actions():
+    repo, baseline, _ = _make_repo()
+    try:
+        payload = {"pull_request": {"base": {"sha": baseline}}}
+        with _event(payload) as event_path:
+            with _environment(
+                GITHUB_EVENT_PATH=str(event_path),
+                GITHUB_EVENT_NAME="pull_request",
+                GITHUB_ACTIONS="true",
+            ):
+                assert runner.resolve_evidence_baseline(str(repo)) == baseline
+    finally:
+        _cleanup(repo)
+
+
+def test_push_before_event_succeeds_in_github_actions():
+    repo, baseline, _ = _make_repo()
+    try:
+        with _event({"before": baseline}) as event_path:
+            with _environment(
+                GITHUB_EVENT_PATH=str(event_path),
+                GITHUB_EVENT_NAME="push",
+                GITHUB_ACTIONS="true",
             ):
                 assert runner.resolve_evidence_baseline(str(repo)) == baseline
     finally:
@@ -212,6 +256,7 @@ def test_event_payload_is_not_reused_for_wrong_event_type():
             with _environment(
                 GITHUB_EVENT_PATH=str(event_path),
                 GITHUB_EVENT_NAME="workflow_dispatch",
+                GITHUB_ACTIONS="true",
                 GITHUB_SHA=current,
             ):
                 _assert_requires_explicit(repo)
@@ -224,8 +269,11 @@ def main() -> int:
     test_workflow_dispatch_requires_explicit_baseline()
     test_explicit_environment_baseline_succeeds()
     test_unavailable_explicit_baseline_fails()
-    test_pull_request_event_base_succeeds()
-    test_push_before_event_succeeds()
+    test_fabricated_pull_request_event_outside_github_actions_fails()
+    test_fabricated_push_event_outside_github_actions_fails()
+    test_github_actions_false_does_not_verify_event()
+    test_pull_request_event_base_succeeds_in_github_actions()
+    test_push_before_event_succeeds_in_github_actions()
     test_event_payload_is_not_reused_for_wrong_event_type()
     print("Evidence baseline resolution tests passed.")
     return 0

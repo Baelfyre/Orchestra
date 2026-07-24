@@ -69,14 +69,16 @@ def resolve_evidence_baseline(root):
             raise RuntimeError("ORCHESTRA_APPROVED_BASE_SHA is not available locally")
         return explicit
 
-    event_path = os.environ.get("GITHUB_EVENT_PATH", "").strip()
-    event_name = os.environ.get("GITHUB_EVENT_NAME", "").strip()
-    if event_path and os.path.isfile(event_path):
-        with open(event_path, "r", encoding="utf-8") as handle:
-            event = json.load(handle)
-        candidate = _verified_event_baseline(root, event_name, event)
-        if candidate:
-            return candidate
+    github_actions = os.environ.get("GITHUB_ACTIONS", "").strip()
+    if github_actions == "true":
+        event_path = os.environ.get("GITHUB_EVENT_PATH", "").strip()
+        event_name = os.environ.get("GITHUB_EVENT_NAME", "").strip()
+        if event_path and os.path.isfile(event_path):
+            with open(event_path, "r", encoding="utf-8") as handle:
+                event = json.load(handle)
+            candidate = _verified_event_baseline(root, event_name, event)
+            if candidate:
+                return candidate
 
     raise RuntimeError(
         "An explicit approved baseline is required. Set ORCHESTRA_APPROVED_BASE_SHA "
