@@ -1,5 +1,49 @@
 # Decision Log
 
+## Date: 2026-07-25
+
+**Decision:**
+Merge The Tuner Phase 3 pull request #198 using GitHub's explicit administrator-bypass path after the repository's required external-approval rule could not be satisfied by the pull-request author.
+
+**Reviewed Head:** `ca7c37f33fe20376193a4aff752bbe0795cb6ee9`
+
+**Merge Commit:** `1b73e232930c9289601474a5cddb282e98378261`
+
+**Reason:**
+GitHub required an external approval, but the authenticated repository administrator, `Baelfyre`, was also the pull-request author. GitHub rejected formal self-approval. Before bypass authorization, the final code review reported zero blocking findings, all exact-head workflows passed, all review threads were resolved, the exact 13-path scope was verified, and the applicable repository ruleset exposed an administrator bypass. The owner then explicitly selected and separately authorized the administrator-bypass merge path, pinned to the reviewed head.
+
+**Rejected Alternatives:**
+- Self-approval, because GitHub technically prohibits authors from approving their own pull requests.
+- Weakening or removing the repository approval rule.
+- Enabling auto-merge.
+- Force-pushing or directly moving `main`.
+- Merging without exact-head verification.
+- Treating the bypass as a CI exception or emergency-timing exception.
+- Requesting an external reviewer, which remained available as an alternative but was not selected.
+
+**Boundaries:**
+The bypass authorized only the exact merge of PR #198 as a merge commit. It did not authorize a ruleset change, release, deployment, knowledgebase synchronization, consumer-repository change, or feature-branch deletion.
+
+## Date: 2026-07-25
+
+**Decision:**
+Require `ICoordinationController` as a non-null trusted dependency of `RuntimeComposition` for The Tuner Phase 4 runtime-integration boundary.
+
+**Reason:**
+Orchestra's trusted runtime composition already fails closed when required services are absent. Coordination state is continuity- and authority-sensitive for activated multi-domain work. Making the controller optional would spread nullable handling through the service path, while a no-op implementation could silently convert required coordination into bypass. Single-owner work must bypass through Conductor's route classification rather than through a missing runtime dependency.
+
+**Rejected Alternatives:**
+- Optional nullable controller field.
+- No-op or null-object coordination controller.
+- Host-specific implicit controller construction.
+- Automatic Tuner activation for every command.
+
+**Compatibility Rule:**
+Every trusted runtime composition receives a real coordination controller. Direct single-owner execution does not invoke it. Activated multi-domain execution fails closed when the trusted dependency is missing or invalid.
+
+**Boundaries:**
+This decision does not authorize persistence, SQLite, migrations, RPC, host process integration, routing changes, implementation, commit, push, pull request, merge, release, or deployment.
+
 ## Date: 2026-07-24
 
 **Decision:**

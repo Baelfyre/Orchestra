@@ -2,9 +2,20 @@
 
 This changelog tracks the repository history using git tags, merge history, and the prior documented milestone log that lived under `docs/meta/CHANGELOG.md`.
 
+## Unreleased - Issue #195 Cross-Specialist Coordination Phase 4
+
+Phase 3 is merged through pull request #198 at merge commit `1b73e232930c9289601474a5cddb282e98378261`. Phase 4 post-merge state reconciliation, scenario validation, and Conductor-owned runtime-integration design are accepted for bounded continuation. Phase 4 implementation, persistence, SQLite, migrations, RPC, host orchestration, release, deployment, consumer-repository mutation, and expanded external-action authority remain separately governed and unauthorized.
+
+### Planned
+
+- Reconcile the canonical protocol and Codex reference to the completed Phase 3 state.
+- Require `ICoordinationController` in trusted runtime composition.
+- Add deterministic multi-domain scenario fixtures and mandatory single-owner bypass coverage.
+- Preserve Conductor-only activation, specialist-owned contracts, Ponytail implementation ownership, Overseer evidence ownership, Arbiter continuity authority, Dagger gating, and default-deny external actions.
+
 ## Unreleased - Issue #195 Cross-Specialist Coordination Phase 3
 
-Phase 3 typed runtime foundation is authorized for local implementation on `feat/issue-195-tuner-phase3-typed-runtime-foundation` from merge baseline `7423d3e7db7fb8e32dfe91454f5c2c5d10aba9bb`. It adds immutable in-memory coordination records and deterministic state enforcement only. Persistence, SQLite, RPC, host orchestration, release, deployment, and external-action authority remain excluded.
+The Phase 3 typed runtime foundation was merged through pull request #198 at reviewed head `ca7c37f33fe20376193a4aff752bbe0795cb6ee9` and merge commit `1b73e232930c9289601474a5cddb282e98378261`. The four-commit, 13-path change added immutable in-memory coordination records, deterministic canonical serialization and fingerprints, a stateless coordination controller, fail-closed transition enforcement, audit-event contracts, public runtime exports, and focused contract, lifecycle, and adversarial tests. Governance Check, validate, and Cross-platform Validation passed at the reviewed head. Persistence, SQLite, migrations, RPC, host orchestration, release, deployment, and expanded external-action authority were not added.
 
 ### Added
 - Added typed collaboration graph, contract packet, handoff delta, invalidation, contradiction, artifact lifecycle, signal, session, validation, and audit contracts.
