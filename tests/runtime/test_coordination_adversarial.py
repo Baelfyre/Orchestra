@@ -13,9 +13,12 @@ from orchestra_runtime.coordination import (
     ContradictionRecord,
     ContradictionStatus,
     CoordinationController,
+    CoordinationEvidenceRecord,
+    EvidenceStatus,
     CoordinationSignalType,
     DependencyKind,
     InvalidationEvent,
+    InvalidationStatus,
     InvalidationTargetKind,
     coordination_rejection_event,
 )
@@ -23,8 +26,10 @@ from orchestra_runtime.errors import InvalidCoordinationContractError, Coordinat
 
 from coordination_support import (
     build_artifact,
+    build_contract,
     build_graph,
     build_session,
+    BASELINE_SHA,
     ready_session,
     signal,
 )
@@ -232,6 +237,7 @@ def test_artifact_cleanup_state_requires_explicit_authority():
     cleaned = build_artifact(
         retention=ArtifactRetentionRequirement.CLEANUP_ALLOWED,
         current_state=ArtifactLifecycleState.CLEANED,
+        evidence_ref="evidence.artifact",
     )
     assert cleaned.current_state is ArtifactLifecycleState.CLEANED
 
@@ -240,3 +246,149 @@ def test_artifact_cleanup_state_requires_explicit_authority():
             retention=ArtifactRetentionRequirement.NONE_REQUIRED,
             current_state=ArtifactLifecycleState.CLEANED,
         )
+
+
+def test_open_invalidation_revision_must_equal_current_session_revision():
+    event = InvalidationEvent(
+        "invalidation.future",
+        "session.phase3",
+        999,
+        "dep.impl.qa",
+        InvalidationTargetKind.CONTRACT_SECTION,
+        ("section.impl",),
+        ("overseer", "ponytail"),
+        ("overseer",),
+    )
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        build_session(invalidations=(event,))
+    assert exc.value.reason_code == "INVALID_INVALIDATION_REVISION"
+
+
+def test_resolved_invalidation_requires_current_revision_and_real_refresh_evidence():
+    graph = build_graph(revision=2)
+    contract = build_contract(revision=2)
+    event = InvalidationEvent(
+        "invalidation.resolved",
+        "session.phase3",
+        1,
+        "dep.impl.qa",
+        InvalidationTargetKind.CONTRACT_SECTION,
+        ("section.impl",),
+        ("overseer", "ponytail"),
+        ("overseer",),
+        InvalidationStatus.RESOLVED,
+        resolved_by_revision=2,
+        evidence_refresh_refs=("evidence.refresh",),
+    )
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        build_session(
+            graph=graph,
+            contract=contract,
+            current_revision=2,
+            invalidations=(event,),
+        )
+    assert exc.value.reason_code == "UNKNOWN_COORDINATION_EVIDENCE"
+
+    evidence = CoordinationEvidenceRecord(
+        "evidence.refresh",
+        "session.phase3",
+        "overseer",
+        contract.fingerprint,
+        2,
+        BASELINE_SHA,
+        "change.phase3",
+    )
+    resolved = build_session(
+        graph=graph,
+        contract=contract,
+        current_revision=2,
+        invalidations=(event,),
+        evidence_records=(evidence,),
+    )
+    assert resolved.open_invalidations == ()
+
+
+def test_resolved_invalidation_rejects_stale_refresh_evidence():
+    graph = build_graph(revision=2)
+    contract = build_contract(revision=2)
+    evidence = CoordinationEvidenceRecord(
+        "evidence.refresh-stale",
+        "session.phase3",
+        "overseer",
+        contract.fingerprint,
+        2,
+        BASELINE_SHA,
+        "change.phase3",
+        EvidenceStatus.STALE,
+    )
+    event = InvalidationEvent(
+        "invalidation.resolved-stale",
+        "session.phase3",
+        1,
+        "dep.impl.qa",
+        InvalidationTargetKind.CONTRACT_SECTION,
+        ("section.impl",),
+        ("overseer", "ponytail"),
+        ("overseer",),
+        InvalidationStatus.RESOLVED,
+        resolved_by_revision=2,
+        evidence_refresh_refs=("evidence.refresh-stale",),
+    )
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        build_session(
+            graph=graph,
+            contract=contract,
+            current_revision=2,
+            invalidations=(event,),
+            evidence_records=(evidence,),
+        )
+    assert exc.value.reason_code == "INVALID_INVALIDATION_REFRESH_EVIDENCE"
+
+
+def test_artifact_source_and_evidence_references_must_resolve():
+    unknown_source = build_artifact(source_ref="section.not-real")
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        build_session(artifacts=(unknown_source,))
+    assert exc.value.reason_code == "UNKNOWN_ARTIFACT_SOURCE"
+
+    dangling = build_artifact(
+        retention=ArtifactRetentionRequirement.RETAIN_REQUIRED,
+        current_state=ArtifactLifecycleState.RETAIN,
+        evidence_ref="evidence.missing",
+    )
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        build_session(artifacts=(dangling,))
+    assert exc.value.reason_code == "UNKNOWN_ARTIFACT_EVIDENCE"
+
+
+def test_artifact_evidence_must_be_current_and_contract_bound():
+    contract = build_contract()
+    artifact = build_artifact(
+        retention=ArtifactRetentionRequirement.RETAIN_REQUIRED,
+        current_state=ArtifactLifecycleState.RETAIN,
+        evidence_ref="evidence.artifact",
+    )
+    stale = CoordinationEvidenceRecord(
+        "evidence.artifact",
+        "session.phase3",
+        "overseer",
+        contract.fingerprint,
+        1,
+        BASELINE_SHA,
+        "change.phase3",
+        EvidenceStatus.STALE,
+    )
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        build_session(contract=contract, artifacts=(artifact,), evidence_records=(stale,))
+    assert exc.value.reason_code == "INVALID_ARTIFACT_EVIDENCE"
+
+    current = replace(stale, status=EvidenceStatus.CURRENT)
+    session = build_session(contract=contract, artifacts=(artifact,), evidence_records=(current,))
+    assert session.artifact_lifecycle_records[0].evidence_ref == "evidence.artifact"
+
+
+def test_internal_receipt_type_is_not_exported_as_public_package_api():
+    repo_root = Path(__file__).resolve().parents[2]
+    public_init = (repo_root / "orchestra_runtime" / "__init__.py").read_text(encoding="utf-8")
+    assert '    AcceptedCoordinationSignal,\n' not in public_init
+    assert '    "AcceptedCoordinationSignal",\n' not in public_init

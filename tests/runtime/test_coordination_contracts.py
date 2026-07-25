@@ -3,6 +3,7 @@ from dataclasses import replace
 import pytest
 
 from orchestra_runtime.coordination import (
+    AcceptedCoordinationSignal,
     ActivationDecision,
     ArtifactLifecycleRecord,
     ArtifactLifecycleState,
@@ -331,3 +332,33 @@ def test_direct_non_initial_snapshot_requires_transition_provenance(status, cont
     with pytest.raises(InvalidCoordinationContractError) as exc:
         replace(session, status=status, contract=replace(session.contract, status=contract_status))
     assert exc.value.reason_code == "MISSING_COORDINATION_TRANSITION_PROVENANCE"
+
+
+def test_accepted_signal_receipts_are_controller_minted_only():
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        AcceptedCoordinationSignal(
+            "signal.fabricated",
+            "f" * 64,
+            0,
+            "MARK_READY",
+            CollaborationStatus.COLLECTING,
+            CollaborationStatus.READY,
+            "fabricated",
+            "arbiter",
+            1,
+            ("evidence.fabricated",),
+            "1" * 64,
+            CollaborationStatus.READY,
+            ContractReadiness.READY_FOR_FREEZE,
+            "2" * 64,
+        )
+    assert exc.value.reason_code == "UNTRUSTED_ACCEPTED_SIGNAL_PROVENANCE"
+
+
+def test_none_required_artifact_uses_explicit_no_evidence_representation():
+    artifact = build_artifact()
+    assert artifact.evidence_ref is None
+
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        build_artifact(evidence_ref="evidence.dangling")
+    assert exc.value.reason_code == "UNEXPECTED_ARTIFACT_EVIDENCE"

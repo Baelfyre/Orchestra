@@ -1143,7 +1143,7 @@ class ArtifactLifecycleRecord:
     cleanup_authority_ref: str
     contract_revision: int
     change_identity_ref: str
-    evidence_ref: str
+    evidence_ref: str | None = None
     fingerprint: str = field(init=False)
 
     def __post_init__(self) -> None:
@@ -1158,7 +1158,7 @@ class ArtifactLifecycleRecord:
         cleanup_authority = _authority_reference(self.cleanup_authority_ref, "cleanup_authority_ref")
         revision = _positive_revision(self.contract_revision)
         change_identity = _identifier(self.change_identity_ref, "change_identity_ref")
-        evidence = _identifier(self.evidence_ref, "evidence_ref")
+        evidence = _optional_identifier(self.evidence_ref, "evidence_ref")
 
         if before not in {ArtifactLifecycleState.ABSENT, ArtifactLifecycleState.PREEXISTING}:
             raise InvalidCoordinationContractError(
@@ -1203,6 +1203,18 @@ class ArtifactLifecycleRecord:
             raise InvalidCoordinationContractError(
                 "cleanup-required artifact cannot remain retained",
                 "INVALID_ARTIFACT_RETENTION_STATE",
+                {"artifact_id": artifact_id},
+            )
+        if retention is ArtifactRetentionRequirement.NONE_REQUIRED and evidence is not None:
+            raise InvalidCoordinationContractError(
+                "none-required artifact must use the explicit no-evidence representation",
+                "UNEXPECTED_ARTIFACT_EVIDENCE",
+                {"artifact_id": artifact_id},
+            )
+        if retention is not ArtifactRetentionRequirement.NONE_REQUIRED and evidence is None:
+            raise InvalidCoordinationContractError(
+                "retained or cleanup-managed artifact requires evidence",
+                "MISSING_ARTIFACT_EVIDENCE",
                 {"artifact_id": artifact_id},
             )
 
@@ -1362,37 +1374,167 @@ class CoordinationEvidenceRecord:
         return {**self._identity_payload(), "fingerprint": self.fingerprint}
 
 
-@dataclass(frozen=True, slots=True)
+_ACCEPTED_SIGNAL_CONSTRUCTION_TOKEN = object()
+
+
+def _contract_status_for(status: CollaborationStatus) -> ContractReadiness:
+    return {
+        CollaborationStatus.COLLECTING: ContractReadiness.COLLECTING,
+        CollaborationStatus.INCOMPLETE: ContractReadiness.INCOMPLETE,
+        CollaborationStatus.CONTRADICTED: ContractReadiness.CONTRADICTED,
+        CollaborationStatus.READY: ContractReadiness.READY_FOR_FREEZE,
+        CollaborationStatus.FROZEN: ContractReadiness.FROZEN,
+        CollaborationStatus.STALE: ContractReadiness.STALE,
+        CollaborationStatus.SUPERSEDED: ContractReadiness.SUPERSEDED,
+        CollaborationStatus.CLOSED: ContractReadiness.CLOSED,
+    }[CollaborationStatus(status)]
+
+
+def _contract_fingerprint_family(contract: CrossLayerContractPacket) -> frozenset[str]:
+    return frozenset(contract.with_status(status).fingerprint for status in ContractReadiness)
+
+
+def _evidence_blockers_for_records(
+    evidence_by_id: dict[str, CoordinationEvidenceRecord],
+    evidence_refs: tuple[str, ...],
+    contract: CrossLayerContractPacket,
+    current_revision: int,
+    baseline_sha: str,
+    change_identity_ref: str,
+) -> tuple[tuple[str, str], ...]:
+    blockers: list[tuple[str, str]] = []
+    if not evidence_refs:
+        return (("MISSING_COORDINATION_EVIDENCE", "transition requires current Overseer evidence"),)
+    for evidence_ref in evidence_refs:
+        evidence = evidence_by_id.get(evidence_ref)
+        if evidence is None:
+            blockers.append(("UNKNOWN_COORDINATION_EVIDENCE", f"unknown evidence reference: {evidence_ref}"))
+            continue
+        if evidence.status is not EvidenceStatus.CURRENT:
+            blockers.append(("STALE_COORDINATION_EVIDENCE", f"evidence is not current: {evidence_ref}"))
+        if evidence.owner_ref != "overseer":
+            blockers.append(("INVALID_EVIDENCE_OWNER", f"evidence is not owned by Overseer: {evidence_ref}"))
+        if evidence.contract_fingerprint != contract.fingerprint:
+            blockers.append(("EVIDENCE_CONTRACT_MISMATCH", f"evidence targets another contract: {evidence_ref}"))
+        if evidence.contract_revision != current_revision:
+            blockers.append(("STALE_COORDINATION_EVIDENCE", f"evidence targets another revision: {evidence_ref}"))
+        if evidence.baseline_sha != baseline_sha:
+            blockers.append(("EVIDENCE_BASELINE_MISMATCH", f"evidence targets another baseline: {evidence_ref}"))
+        if evidence.change_identity_ref != change_identity_ref:
+            blockers.append(
+                ("EVIDENCE_CHANGE_IDENTITY_MISMATCH", f"evidence targets another change identity: {evidence_ref}")
+            )
+    return tuple(sorted(set(blockers)))
+
+
+@dataclass(frozen=True, slots=True, init=False)
 class AcceptedCoordinationSignal:
     signal_id: str
     signal_fingerprint: str
     sequence: int
+    signal_type: CoordinationSignalType
+    expected_status: CollaborationStatus
+    requested_status: CollaborationStatus
+    reason_code: str
+    source_component: str
+    source_revision: int
+    evidence_refs: tuple[str, ...]
+    prior_contract_fingerprint: str
     resulting_status: CollaborationStatus
     resulting_contract_status: ContractReadiness
     resulting_contract_fingerprint: str
+    _trusted_provenance: bool = field(init=False, repr=False, compare=False)
 
-    def __post_init__(self) -> None:
-        object.__setattr__(self, "signal_id", _identifier(self.signal_id, "signal_id"))
-        object.__setattr__(self, "signal_fingerprint", _sha256(self.signal_fingerprint, "signal_fingerprint"))
-        object.__setattr__(self, "sequence", _non_negative_sequence(self.sequence))
-        object.__setattr__(self, "resulting_status", CollaborationStatus(self.resulting_status))
-        object.__setattr__(self, "resulting_contract_status", ContractReadiness(self.resulting_contract_status))
+    def __init__(
+        self,
+        signal_id: str,
+        signal_fingerprint: str,
+        sequence: int,
+        signal_type: CoordinationSignalType,
+        expected_status: CollaborationStatus,
+        requested_status: CollaborationStatus,
+        reason_code: str,
+        source_component: str,
+        source_revision: int,
+        evidence_refs: tuple[str, ...],
+        prior_contract_fingerprint: str,
+        resulting_status: CollaborationStatus,
+        resulting_contract_status: ContractReadiness,
+        resulting_contract_fingerprint: str,
+        *,
+        _construction_token: object | None = None,
+    ) -> None:
+        if _construction_token is not _ACCEPTED_SIGNAL_CONSTRUCTION_TOKEN:
+            raise InvalidCoordinationContractError(
+                "accepted coordination signals may be minted only by CoordinationController",
+                "UNTRUSTED_ACCEPTED_SIGNAL_PROVENANCE",
+            )
+        object.__setattr__(self, "signal_id", _identifier(signal_id, "signal_id"))
+        object.__setattr__(self, "signal_fingerprint", _sha256(signal_fingerprint, "signal_fingerprint"))
+        object.__setattr__(self, "sequence", _non_negative_sequence(sequence))
+        object.__setattr__(self, "signal_type", CoordinationSignalType(signal_type))
+        object.__setattr__(self, "expected_status", CollaborationStatus(expected_status))
+        object.__setattr__(self, "requested_status", CollaborationStatus(requested_status))
+        object.__setattr__(self, "reason_code", _identifier(reason_code, "reason_code").upper())
+        object.__setattr__(self, "source_component", _identifier(source_component, "source_component"))
+        object.__setattr__(self, "source_revision", _positive_revision(source_revision, "source_revision"))
+        object.__setattr__(self, "evidence_refs", _sorted_identifiers(evidence_refs, "evidence_ref"))
+        object.__setattr__(
+            self,
+            "prior_contract_fingerprint",
+            _sha256(prior_contract_fingerprint, "prior_contract_fingerprint"),
+        )
+        object.__setattr__(self, "resulting_status", CollaborationStatus(resulting_status))
+        object.__setattr__(self, "resulting_contract_status", ContractReadiness(resulting_contract_status))
         object.__setattr__(
             self,
             "resulting_contract_fingerprint",
-            _sha256(self.resulting_contract_fingerprint, "resulting_contract_fingerprint"),
+            _sha256(resulting_contract_fingerprint, "resulting_contract_fingerprint"),
         )
+        object.__setattr__(self, "_trusted_provenance", True)
 
     def to_dict(self) -> dict[str, object]:
         return {
             "signal_id": self.signal_id,
             "signal_fingerprint": self.signal_fingerprint,
             "sequence": self.sequence,
+            "signal_type": self.signal_type.value,
+            "expected_status": self.expected_status.value,
+            "requested_status": self.requested_status.value,
+            "reason_code": self.reason_code,
+            "source_component": self.source_component,
+            "source_revision": self.source_revision,
+            "evidence_refs": list(self.evidence_refs),
+            "prior_contract_fingerprint": self.prior_contract_fingerprint,
             "resulting_status": self.resulting_status.value,
             "resulting_contract_status": self.resulting_contract_status.value,
             "resulting_contract_fingerprint": self.resulting_contract_fingerprint,
         }
 
+
+def _accepted_coordination_signal(
+    signal: CoordinationSignal,
+    sequence: int,
+    prior_contract: CrossLayerContractPacket,
+    resulting_contract: CrossLayerContractPacket,
+) -> AcceptedCoordinationSignal:
+    return AcceptedCoordinationSignal(
+        signal.signal_id,
+        signal.fingerprint,
+        sequence,
+        signal.signal_type,
+        signal.expected_status,
+        signal.requested_status,
+        signal.reason_code,
+        signal.source_component,
+        signal.source_revision,
+        signal.evidence_refs,
+        prior_contract.fingerprint,
+        signal.requested_status,
+        resulting_contract.status,
+        resulting_contract.fingerprint,
+        _construction_token=_ACCEPTED_SIGNAL_CONSTRUCTION_TOKEN,
+    )
 
 
 @dataclass(frozen=True, slots=True)
@@ -1561,6 +1703,12 @@ class CollaborationSession:
                 "INVALID_ACCEPTED_SIGNAL_LEDGER",
                 {"session_id": session_id},
             )
+        if any(not getattr(item, "_trusted_provenance", False) for item in accepted_signals):
+            raise InvalidCoordinationContractError(
+                "accepted signal ledger contains untrusted provenance",
+                "UNTRUSTED_ACCEPTED_SIGNAL_PROVENANCE",
+                {"session_id": session_id},
+            )
 
         participant_ids = {item.specialist_slug for item in self.graph.participants}
         dependency_by_id = {item.dependency_id: item for item in self.graph.dependencies}
@@ -1683,6 +1831,45 @@ class CollaborationSession:
                     "UNKNOWN_INVALIDATION_TARGET",
                     {"event_id": event.event_id},
                 )
+            if event.status is InvalidationStatus.OPEN and event.source_revision != current_revision:
+                raise InvalidCoordinationContractError(
+                    "open invalidation must originate from the current session revision",
+                    "INVALID_INVALIDATION_REVISION",
+                    {"event_id": event.event_id},
+                )
+            if event.status is InvalidationStatus.RESOLVED:
+                if event.source_revision >= current_revision or event.resolved_by_revision != current_revision:
+                    raise InvalidCoordinationContractError(
+                        "resolved invalidation must originate from an older revision and resolve at the current revision",
+                        "INVALID_INVALIDATION_REVISION",
+                        {"event_id": event.event_id},
+                    )
+                for evidence_ref in event.evidence_refresh_refs:
+                    evidence = next((item for item in evidence_records if item.evidence_id == evidence_ref), None)
+                    if evidence is None:
+                        raise InvalidCoordinationContractError(
+                            "resolved invalidation references unknown refreshed evidence",
+                            "UNKNOWN_COORDINATION_EVIDENCE",
+                            {"event_id": event.event_id, "evidence_id": evidence_ref},
+                        )
+                    if (
+                        evidence.status is not EvidenceStatus.CURRENT
+                        or evidence.contract_revision != current_revision
+                        or evidence.baseline_sha != baseline_sha
+                        or evidence.change_identity_ref != self.contract.change_identity_ref
+                        or evidence.contract_fingerprint not in _contract_fingerprint_family(self.contract)
+                    ):
+                        raise InvalidCoordinationContractError(
+                            "resolved invalidation requires current evidence bound to the refreshed contract",
+                            "INVALID_INVALIDATION_REFRESH_EVIDENCE",
+                            {"event_id": event.event_id, "evidence_id": evidence_ref},
+                        )
+            if event.status is InvalidationStatus.SUPERSEDED and event.source_revision >= current_revision:
+                raise InvalidCoordinationContractError(
+                    "superseded invalidation must originate from an older revision",
+                    "INVALID_INVALIDATION_REVISION",
+                    {"event_id": event.event_id},
+                )
 
         for artifact in artifacts:
             if artifact.producer_ref not in participant_ids:
@@ -1712,6 +1899,33 @@ class CollaborationSession:
                     "ARTIFACT_CHANGE_IDENTITY_MISMATCH",
                     {"artifact_id": artifact.artifact_id},
                 )
+            if artifact.source_ref not in section_ids and artifact.source_ref not in declared_refs:
+                raise InvalidCoordinationContractError(
+                    "artifact lifecycle source must resolve to a current contract section or declared reference",
+                    "UNKNOWN_ARTIFACT_SOURCE",
+                    {"artifact_id": artifact.artifact_id},
+                )
+            if artifact.evidence_ref is not None:
+                evidence = next((item for item in evidence_records if item.evidence_id == artifact.evidence_ref), None)
+                if evidence is None:
+                    raise InvalidCoordinationContractError(
+                        "artifact lifecycle record references unknown evidence",
+                        "UNKNOWN_ARTIFACT_EVIDENCE",
+                        {"artifact_id": artifact.artifact_id},
+                    )
+                if (
+                    evidence.owner_ref != "overseer"
+                    or evidence.status is not EvidenceStatus.CURRENT
+                    or evidence.contract_revision != current_revision
+                    or evidence.baseline_sha != baseline_sha
+                    or evidence.change_identity_ref != self.contract.change_identity_ref
+                    or evidence.contract_fingerprint not in _contract_fingerprint_family(self.contract)
+                ):
+                    raise InvalidCoordinationContractError(
+                        "artifact evidence must be current and bound to the active contract identity",
+                        "INVALID_ARTIFACT_EVIDENCE",
+                        {"artifact_id": artifact.artifact_id, "evidence_id": artifact.evidence_ref},
+                    )
 
         for contradiction in contradictions:
             if not set(contradiction.specialist_refs).issubset(participant_ids):
@@ -1782,13 +1996,100 @@ class CollaborationSession:
         if accepted_fingerprint is not None:
             accepted_fingerprint = _sha256(accepted_fingerprint, "accepted_signal_fingerprint")
         if not accepted_signals:
-            if last_signal_id is not None or accepted_fingerprint is not None or status is not CollaborationStatus.COLLECTING:
+            if (
+                last_signal_id is not None
+                or accepted_fingerprint is not None
+                or status is not CollaborationStatus.COLLECTING
+                or self.contract.status is not ContractReadiness.COLLECTING
+            ):
                 raise InvalidCoordinationContractError(
                     "non-initial collaboration state requires accepted transition provenance",
                     "MISSING_COORDINATION_TRANSITION_PROVENANCE",
                     {"session_id": session_id},
                 )
         else:
+            evidence_by_id = {item.evidence_id: item for item in evidence_records}
+            replay_status = CollaborationStatus.COLLECTING
+            replay_contract = self.contract.with_status(ContractReadiness.COLLECTING)
+            for receipt in accepted_signals:
+                if receipt.expected_status is not replay_status:
+                    raise InvalidCoordinationContractError(
+                        "accepted signal ledger does not preserve the prior collaboration status",
+                        "INVALID_ACCEPTED_SIGNAL_LEDGER",
+                        {"signal_id": receipt.signal_id},
+                    )
+                if receipt.source_component not in SIGNAL_SOURCE_POLICY[receipt.signal_type]:
+                    raise InvalidCoordinationContractError(
+                        "accepted signal ledger contains an unauthorized source",
+                        "UNAUTHORIZED_COORDINATION_SIGNAL_SOURCE",
+                        {"signal_id": receipt.signal_id},
+                    )
+                if receipt.source_revision != current_revision:
+                    raise InvalidCoordinationContractError(
+                        "accepted signal ledger contains a stale source revision",
+                        "STALE_COORDINATION_SIGNAL",
+                        {"signal_id": receipt.signal_id},
+                    )
+                if receipt.requested_status is not SIGNAL_DESTINATIONS[receipt.signal_type]:
+                    raise InvalidCoordinationContractError(
+                        "accepted signal ledger contains a signal/status mismatch",
+                        "COORDINATION_SIGNAL_STATUS_MISMATCH",
+                        {"signal_id": receipt.signal_id},
+                    )
+                if receipt.requested_status not in COORDINATION_TRANSITIONS[replay_status]:
+                    raise InvalidCoordinationContractError(
+                        "accepted signal ledger contains an illegal transition",
+                        "INVALID_COORDINATION_TRANSITION",
+                        {"signal_id": receipt.signal_id},
+                    )
+                target_contract_status = _contract_status_for(receipt.requested_status)
+                target_contract = self.contract.with_status(target_contract_status)
+                if (
+                    receipt.prior_contract_fingerprint != replay_contract.fingerprint
+                    or receipt.resulting_status is not receipt.requested_status
+                    or receipt.resulting_contract_status is not target_contract_status
+                    or receipt.resulting_contract_fingerprint != target_contract.fingerprint
+                ):
+                    raise InvalidCoordinationContractError(
+                        "accepted signal ledger does not preserve the contract transition chain",
+                        "INVALID_ACCEPTED_SIGNAL_LEDGER",
+                        {"signal_id": receipt.signal_id},
+                    )
+                reconstructed = CoordinationSignal(
+                    receipt.signal_id,
+                    session_id,
+                    receipt.signal_type,
+                    receipt.expected_status,
+                    receipt.requested_status,
+                    receipt.reason_code,
+                    receipt.source_component,
+                    receipt.source_revision,
+                    receipt.evidence_refs,
+                )
+                if reconstructed.fingerprint != receipt.signal_fingerprint:
+                    raise InvalidCoordinationContractError(
+                        "accepted signal ledger fingerprint does not match transition identity",
+                        "INVALID_ACCEPTED_SIGNAL_LEDGER",
+                        {"signal_id": receipt.signal_id},
+                    )
+                if receipt.signal_type in EVIDENCE_REQUIRED_SIGNALS:
+                    blockers = _evidence_blockers_for_records(
+                        evidence_by_id,
+                        receipt.evidence_refs,
+                        target_contract,
+                        current_revision,
+                        baseline_sha,
+                        self.contract.change_identity_ref,
+                    )
+                    if blockers:
+                        raise InvalidCoordinationContractError(
+                            "accepted signal ledger lacks current transition evidence",
+                            "COORDINATION_EVIDENCE_REQUIRED",
+                            {"signal_id": receipt.signal_id, "blocker_codes": ",".join(code for code, _ in blockers)},
+                        )
+                replay_status = receipt.requested_status
+                replay_contract = target_contract
+
             last_receipt = accepted_signals[-1]
             if last_signal_id is None:
                 last_signal_id = last_receipt.signal_id
@@ -1797,9 +2098,9 @@ class CollaborationSession:
             if (
                 last_signal_id != last_receipt.signal_id
                 or accepted_fingerprint != last_receipt.signal_fingerprint
-                or status is not last_receipt.resulting_status
-                or self.contract.status is not last_receipt.resulting_contract_status
-                or self.contract.fingerprint != last_receipt.resulting_contract_fingerprint
+                or status is not replay_status
+                or self.contract.status is not replay_contract.status
+                or self.contract.fingerprint != replay_contract.fingerprint
             ):
                 raise InvalidCoordinationContractError(
                     "accepted signal ledger does not match the current collaboration state",
@@ -2036,30 +2337,14 @@ class CoordinationController(ICoordinationController):
         contract: CrossLayerContractPacket,
         evidence_refs: tuple[str, ...],
     ) -> tuple[tuple[str, str], ...]:
-        blockers: list[tuple[str, str]] = []
-        if not evidence_refs:
-            return (("MISSING_COORDINATION_EVIDENCE", "transition requires current Overseer evidence"),)
-        evidence_by_id = session.evidence_by_id()
-        for evidence_ref in evidence_refs:
-            evidence = evidence_by_id.get(evidence_ref)
-            if evidence is None:
-                blockers.append(("UNKNOWN_COORDINATION_EVIDENCE", f"unknown evidence reference: {evidence_ref}"))
-                continue
-            if evidence.status is not EvidenceStatus.CURRENT:
-                blockers.append(("STALE_COORDINATION_EVIDENCE", f"evidence is not current: {evidence_ref}"))
-            if evidence.owner_ref != "overseer":
-                blockers.append(("INVALID_EVIDENCE_OWNER", f"evidence is not owned by Overseer: {evidence_ref}"))
-            if evidence.contract_fingerprint != contract.fingerprint:
-                blockers.append(("EVIDENCE_CONTRACT_MISMATCH", f"evidence targets another contract: {evidence_ref}"))
-            if evidence.contract_revision != session.current_revision:
-                blockers.append(("STALE_COORDINATION_EVIDENCE", f"evidence targets another revision: {evidence_ref}"))
-            if evidence.baseline_sha != session.baseline_sha:
-                blockers.append(("EVIDENCE_BASELINE_MISMATCH", f"evidence targets another baseline: {evidence_ref}"))
-            if evidence.change_identity_ref != contract.change_identity_ref:
-                blockers.append(
-                    ("EVIDENCE_CHANGE_IDENTITY_MISMATCH", f"evidence targets another change identity: {evidence_ref}")
-                )
-        return tuple(sorted(set(blockers)))
+        return _evidence_blockers_for_records(
+            session.evidence_by_id(),
+            evidence_refs,
+            contract,
+            session.current_revision,
+            session.baseline_sha,
+            contract.change_identity_ref,
+        )
 
     def validate(self, session: CollaborationSession) -> CoordinationValidationResult:
         if not isinstance(session, CollaborationSession):
@@ -2207,16 +2492,7 @@ class CoordinationController(ICoordinationController):
                 "COORDINATION_CLOSEOUT_BLOCKED",
             )
 
-        contract_status = {
-            CollaborationStatus.COLLECTING: ContractReadiness.COLLECTING,
-            CollaborationStatus.INCOMPLETE: ContractReadiness.INCOMPLETE,
-            CollaborationStatus.CONTRADICTED: ContractReadiness.CONTRADICTED,
-            CollaborationStatus.READY: ContractReadiness.READY_FOR_FREEZE,
-            CollaborationStatus.FROZEN: ContractReadiness.FROZEN,
-            CollaborationStatus.STALE: ContractReadiness.STALE,
-            CollaborationStatus.SUPERSEDED: ContractReadiness.SUPERSEDED,
-            CollaborationStatus.CLOSED: ContractReadiness.CLOSED,
-        }[signal.requested_status]
+        contract_status = _contract_status_for(signal.requested_status)
         target_contract = session.contract.with_status(contract_status)
         if signal.signal_type in EVIDENCE_REQUIRED_SIGNALS:
             evidence_blockers = self._evidence_blockers(session, target_contract, signal.evidence_refs)
@@ -2227,13 +2503,11 @@ class CoordinationController(ICoordinationController):
                     {"blocker_codes": ",".join(code for code, _ in evidence_blockers)},
                 )
 
-        receipt = AcceptedCoordinationSignal(
-            signal.signal_id,
-            signal.fingerprint,
+        receipt = _accepted_coordination_signal(
+            signal,
             len(session.accepted_signals),
-            signal.requested_status,
-            contract_status,
-            target_contract.fingerprint,
+            session.contract,
+            target_contract,
         )
         updated = replace(
             session,

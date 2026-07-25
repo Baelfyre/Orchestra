@@ -1,3 +1,4 @@
+import copy
 from dataclasses import replace
 
 import pytest
@@ -16,6 +17,7 @@ from orchestra_runtime.coordination import (
 from orchestra_runtime.errors import (
     ConflictingCoordinationSignalError,
     CoordinationReadinessError,
+    InvalidCoordinationContractError,
     InvalidCoordinationSignalError,
     InvalidCoordinationTransitionError,
 )
@@ -334,3 +336,72 @@ def test_stale_session_cannot_close_successfully():
             ),
         )
     assert exc.value.reason_code == "COORDINATION_CLOSEOUT_BLOCKED"
+
+
+def test_controller_receipt_preserves_complete_transition_identity():
+    collecting = build_session()
+    collecting = with_evidence(collecting, CollaborationStatus.READY, "evidence.ready")
+    transition = signal(
+        "signal.ready-complete",
+        CoordinationSignalType.MARK_READY,
+        CollaborationStatus.COLLECTING,
+        CollaborationStatus.READY,
+        evidence_refs=("evidence.ready",),
+    )
+    ready = CoordinationController().apply(collecting, transition)
+    receipt = ready.accepted_signals[0]
+
+    assert receipt.signal_type is transition.signal_type
+    assert receipt.expected_status is transition.expected_status
+    assert receipt.requested_status is transition.requested_status
+    assert receipt.source_component == "arbiter"
+    assert receipt.source_revision == ready.current_revision
+    assert receipt.evidence_refs == ("evidence.ready",)
+    assert receipt.prior_contract_fingerprint == collecting.contract.fingerprint
+
+
+def test_tampered_trusted_receipt_cannot_bypass_source_or_transition_policy():
+    collecting = build_session()
+    collecting = with_evidence(collecting, CollaborationStatus.READY, "evidence.ready")
+    ready = CoordinationController().apply(
+        collecting,
+        signal(
+            "signal.ready-tamper",
+            CoordinationSignalType.MARK_READY,
+            CollaborationStatus.COLLECTING,
+            CollaborationStatus.READY,
+            evidence_refs=("evidence.ready",),
+        ),
+    )
+    forged = copy.copy(ready.accepted_signals[0])
+    object.__setattr__(forged, "source_component", "the-tuner")
+
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        replace(ready, accepted_signals=(forged,))
+    assert getattr(exc.value, "reason_code", None) == "UNAUTHORIZED_COORDINATION_SIGNAL_SOURCE"
+
+
+def test_receipt_chain_cannot_skip_required_intermediate_state():
+    collecting = build_session()
+    collecting = with_evidence(collecting, CollaborationStatus.READY, "evidence.ready")
+    ready = CoordinationController().apply(
+        collecting,
+        signal(
+            "signal.ready-chain",
+            CoordinationSignalType.MARK_READY,
+            CollaborationStatus.COLLECTING,
+            CollaborationStatus.READY,
+            evidence_refs=("evidence.ready",),
+        ),
+    )
+    forged = copy.copy(ready.accepted_signals[0])
+    object.__setattr__(forged, "requested_status", CollaborationStatus.FROZEN)
+    object.__setattr__(forged, "resulting_status", CollaborationStatus.FROZEN)
+
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        replace(ready, accepted_signals=(forged,))
+    assert getattr(exc.value, "reason_code", None) in {
+        "COORDINATION_SIGNAL_STATUS_MISMATCH",
+        "INVALID_COORDINATION_TRANSITION",
+        "INVALID_ACCEPTED_SIGNAL_LEDGER",
+    }

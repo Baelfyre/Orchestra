@@ -226,26 +226,29 @@ def build_contract(
 
 def build_artifact(
     *,
+    artifact_id: str = "artifact.none",
     session_id: str = SESSION_ID,
     revision: int = 1,
     cleanup_authority_ref: str = "arbiter",
     retention: ArtifactRetentionRequirement = ArtifactRetentionRequirement.NONE_REQUIRED,
     current_state: ArtifactLifecycleState = ArtifactLifecycleState.RETAIN,
     change_identity_ref: str = CHANGE_ID,
+    source_ref: str = "section.impl",
+    evidence_ref: str | None = None,
 ) -> ArtifactLifecycleRecord:
     return ArtifactLifecycleRecord(
-        artifact_id="artifact.none",
+        artifact_id=artifact_id,
         session_id=session_id,
         path="docs/.orchestra-none-required",
         producer_ref="ponytail",
-        source_ref="section.impl",
+        source_ref=source_ref,
         pre_execution_state=ArtifactLifecycleState.ABSENT,
         current_state=current_state,
         retention_requirement=retention,
         cleanup_authority_ref=cleanup_authority_ref,
         contract_revision=revision,
         change_identity_ref=change_identity_ref,
-        evidence_ref="evidence.phase3",
+        evidence_ref=evidence_ref,
     )
 
 
@@ -264,10 +267,12 @@ def build_session(
     progression_mode: ProgressionMode = ProgressionMode.MANUAL,
     manual_authorization_reference: str | None = "approval.phase3",
     delegated_envelope_id: str | None = None,
+    current_revision: int | None = None,
 ) -> CollaborationSession:
     graph = graph or build_graph()
-    contract = contract or build_contract(baseline_sha=baseline_sha)
-    artifact_records = (build_artifact(),) if artifacts is None else tuple(artifacts)
+    contract = contract or build_contract(baseline_sha=baseline_sha, revision=graph.revision)
+    revision = current_revision or graph.revision
+    artifact_records = (build_artifact(revision=revision),) if artifacts is None else tuple(artifacts)
     return CollaborationSession(
         session_id=SESSION_ID,
         task_id="issue.195",
@@ -285,7 +290,7 @@ def build_session(
         artifact_lifecycle_records=artifact_records,
         contradictions=tuple(contradictions),
         status=CollaborationStatus.COLLECTING,
-        current_revision=1,
+        current_revision=revision,
         manual_authorization_reference=manual_authorization_reference,
         delegated_envelope_id=delegated_envelope_id,
         evidence_records=tuple(evidence_records),
