@@ -10,6 +10,11 @@ if TYPE_CHECKING:
     from .capabilities import CapabilityDecision, RuntimeCapabilityGrant, RuntimeCapabilityManifest
     from .delegation import DelegationRequest, DelegationResolution
     from .lifecycle import LifecycleSignal, LifecycleSnapshot, StructuredTerminalResult
+    from .coordination import (
+        CollaborationSession,
+        CoordinationSignal,
+        CoordinationValidationResult,
+    )
 
 
 class IIDEAdapter(ABC):
@@ -163,4 +168,17 @@ class ILifecycleController(ABC):
 
     @abstractmethod
     def terminal_result(self, snapshot: LifecycleSnapshot) -> StructuredTerminalResult | None:
+        raise NotImplementedError
+
+class ICoordinationController(ABC):
+    @abstractmethod
+    def validate(self, session: CollaborationSession) -> CoordinationValidationResult:
+        raise NotImplementedError
+
+    @abstractmethod
+    def apply(
+        self,
+        session: CollaborationSession,
+        signal: CoordinationSignal,
+    ) -> CollaborationSession:
         raise NotImplementedError
