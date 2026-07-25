@@ -1,4 +1,5 @@
 from dataclasses import replace
+import copy
 import ast
 import json
 from pathlib import Path
@@ -30,6 +31,7 @@ from coordination_support import (
     build_graph,
     build_session,
     BASELINE_SHA,
+    evidence_for,
     ready_session,
     signal,
 )
@@ -392,3 +394,131 @@ def test_internal_receipt_type_is_not_exported_as_public_package_api():
     public_init = (repo_root / "orchestra_runtime" / "__init__.py").read_text(encoding="utf-8")
     assert '    AcceptedCoordinationSignal,\n' not in public_init
     assert '    "AcceptedCoordinationSignal",\n' not in public_init
+
+def _controller_produced_contradicted_session():
+    contradiction = ContradictionRecord(
+        "contradiction.tamper",
+        "session.phase3",
+        ("section.arch", "section.impl"),
+        ("clockwork", "ponytail"),
+        ("impact.runtime",),
+        ContradictionStatus.OPEN,
+        "the-steward",
+        ("review.validation",),
+    )
+    transition = signal(
+        "signal.contradicted-tamper",
+        CoordinationSignalType.MARK_CONTRADICTED,
+        CollaborationStatus.COLLECTING,
+        CollaborationStatus.CONTRADICTED,
+        source_component="the-tuner",
+    )
+    session = CoordinationController().apply(
+        build_session(contradictions=(contradiction,)),
+        transition,
+    )
+    return session, transition
+
+
+def _controller_produced_stale_session():
+    ready = ready_session()
+    event = InvalidationEvent(
+        "invalidation.tamper",
+        "session.phase3",
+        1,
+        "dep.impl.qa",
+        InvalidationTargetKind.EVIDENCE,
+        ("evidence.ready",),
+        ("overseer", "ponytail"),
+        ("overseer",),
+        InvalidationStatus.OPEN,
+    )
+    transition = signal(
+        "signal.stale-tamper",
+        CoordinationSignalType.INVALIDATE,
+        CollaborationStatus.READY,
+        CollaborationStatus.STALE,
+        source_component="overseer",
+    )
+    session = CoordinationController().apply(
+        replace(ready, invalidation_events=(event,)),
+        transition,
+    )
+    return session, transition
+
+
+def test_apply_rejects_lower_level_tampered_contradicted_snapshot_before_closeout():
+    contradicted, _ = _controller_produced_contradicted_session()
+    tampered = copy.copy(contradicted)
+    object.__setattr__(tampered, "contradictions", ())
+    close_evidence = evidence_for(
+        tampered,
+        CollaborationStatus.CLOSED,
+        evidence_id="evidence.close-tampered",
+    )
+    object.__setattr__(
+        tampered,
+        "evidence_records",
+        tampered.evidence_records + (close_evidence,),
+    )
+
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        CoordinationController().apply(
+            tampered,
+            signal(
+                "signal.close-tampered",
+                CoordinationSignalType.CLOSE,
+                CollaborationStatus.CONTRADICTED,
+                CollaborationStatus.CLOSED,
+                evidence_refs=("evidence.close-tampered",),
+            ),
+        )
+    assert exc.value.reason_code == "INVALID_COORDINATION_SESSION_STATE"
+
+
+@pytest.mark.parametrize(
+    ("signal_type", "requested_status", "source_component"),
+    (
+        (
+            CoordinationSignalType.REOPEN_COLLECTION,
+            CollaborationStatus.COLLECTING,
+            "conductor",
+        ),
+        (
+            CoordinationSignalType.SUPERSEDE,
+            CollaborationStatus.SUPERSEDED,
+            "arbiter",
+        ),
+    ),
+)
+def test_apply_rejects_lower_level_tampered_stale_snapshot(
+    signal_type,
+    requested_status,
+    source_component,
+):
+    stale, _ = _controller_produced_stale_session()
+    tampered = copy.copy(stale)
+    object.__setattr__(tampered, "invalidation_events", ())
+
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        CoordinationController().apply(
+            tampered,
+            signal(
+                f"signal.stale-tampered-{requested_status.value.lower()}",
+                signal_type,
+                CollaborationStatus.STALE,
+                requested_status,
+                source_component=source_component,
+            ),
+        )
+    assert exc.value.reason_code == "INVALID_COORDINATION_SESSION_STATE"
+
+
+def test_idempotent_replay_does_not_return_an_invalid_current_snapshot():
+    contradicted, accepted_transition = _controller_produced_contradicted_session()
+    tampered = copy.copy(contradicted)
+    object.__setattr__(tampered, "contradictions", ())
+
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        CoordinationController().apply(tampered, accepted_transition)
+    assert exc.value.reason_code == "INVALID_COORDINATION_SESSION_STATE"

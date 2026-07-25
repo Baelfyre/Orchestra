@@ -5,6 +5,8 @@ import pytest
 
 from orchestra_runtime.coordination import (
     CollaborationStatus,
+    ContradictionRecord,
+    ContradictionStatus,
     ContractReadiness,
     CoordinationController,
     CoordinationSignalType,
@@ -405,3 +407,133 @@ def test_receipt_chain_cannot_skip_required_intermediate_state():
         "INVALID_COORDINATION_TRANSITION",
         "INVALID_ACCEPTED_SIGNAL_LEDGER",
     }
+
+def _open_current_state_contradiction() -> ContradictionRecord:
+    return ContradictionRecord(
+        "contradiction.current-state",
+        "session.phase3",
+        ("section.arch", "section.impl"),
+        ("clockwork", "ponytail"),
+        ("impact.runtime",),
+        ContradictionStatus.OPEN,
+        "the-steward",
+        ("review.validation",),
+    )
+
+
+def _current_state_invalidation(target_ref: str) -> InvalidationEvent:
+    return InvalidationEvent(
+        "invalidation.current-state",
+        "session.phase3",
+        1,
+        "dep.impl.qa",
+        InvalidationTargetKind.EVIDENCE,
+        (target_ref,),
+        ("overseer", "ponytail"),
+        ("overseer",),
+        InvalidationStatus.OPEN,
+    )
+
+
+def test_status_bound_blocker_records_are_required_during_session_construction():
+    controller = CoordinationController()
+    contradiction = _open_current_state_contradiction()
+    collecting = build_session(contradictions=(contradiction,))
+    contradicted = controller.apply(
+        collecting,
+        signal(
+            "signal.contradicted-construction",
+            CoordinationSignalType.MARK_CONTRADICTED,
+            CollaborationStatus.COLLECTING,
+            CollaborationStatus.CONTRADICTED,
+            source_component="the-tuner",
+        ),
+    )
+
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        replace(contradicted, contradictions=())
+    assert exc.value.reason_code == "INVALID_COORDINATION_SESSION_STATE"
+
+    ready = ready_session()
+    event = _current_state_invalidation("evidence.ready")
+    stale = controller.apply(
+        replace(ready, invalidation_events=(event,)),
+        signal(
+            "signal.stale-construction",
+            CoordinationSignalType.INVALIDATE,
+            CollaborationStatus.READY,
+            CollaborationStatus.STALE,
+            source_component="overseer",
+        ),
+    )
+
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        replace(stale, invalidation_events=())
+    assert exc.value.reason_code == "INVALID_COORDINATION_SESSION_STATE"
+
+
+def test_valid_blocked_sessions_preserve_corrective_transition_paths():
+    controller = CoordinationController()
+    contradiction = _open_current_state_contradiction()
+    collecting = build_session(contradictions=(contradiction,))
+    contradicted = controller.apply(
+        collecting,
+        signal(
+            "signal.contradicted-valid",
+            CoordinationSignalType.MARK_CONTRADICTED,
+            CollaborationStatus.COLLECTING,
+            CollaborationStatus.CONTRADICTED,
+            source_component="the-tuner",
+        ),
+    )
+    reopened = controller.apply(
+        contradicted,
+        signal(
+            "signal.reopen-contradicted",
+            CoordinationSignalType.REOPEN_COLLECTION,
+            CollaborationStatus.CONTRADICTED,
+            CollaborationStatus.COLLECTING,
+            source_component="conductor",
+        ),
+    )
+    assert reopened.status is CollaborationStatus.COLLECTING
+    assert reopened.open_contradictions == (contradiction,)
+
+    ready = ready_session()
+    ready_with_contradiction = replace(ready, contradictions=(contradiction,))
+    contradicted_from_ready = controller.apply(
+        ready_with_contradiction,
+        signal(
+            "signal.ready-to-contradicted",
+            CoordinationSignalType.MARK_CONTRADICTED,
+            CollaborationStatus.READY,
+            CollaborationStatus.CONTRADICTED,
+            source_component="the-tuner",
+        ),
+    )
+    assert contradicted_from_ready.status is CollaborationStatus.CONTRADICTED
+
+    frozen = frozen_session()
+    event = _current_state_invalidation("evidence.freeze")
+    stale = controller.apply(
+        replace(frozen, invalidation_events=(event,)),
+        signal(
+            "signal.frozen-to-stale",
+            CoordinationSignalType.INVALIDATE,
+            CollaborationStatus.FROZEN,
+            CollaborationStatus.STALE,
+            source_component="overseer",
+        ),
+    )
+    reopened_stale = controller.apply(
+        stale,
+        signal(
+            "signal.reopen-stale",
+            CoordinationSignalType.REOPEN_COLLECTION,
+            CollaborationStatus.STALE,
+            CollaborationStatus.COLLECTING,
+            source_component="conductor",
+        ),
+    )
+    assert reopened_stale.status is CollaborationStatus.COLLECTING
+    assert reopened_stale.open_invalidations == (event,)

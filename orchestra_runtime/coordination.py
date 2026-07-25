@@ -1394,6 +1394,25 @@ def _contract_fingerprint_family(contract: CrossLayerContractPacket) -> frozense
     return frozenset(contract.with_status(status).fingerprint for status in ContractReadiness)
 
 
+def _current_status_invariant_blockers(
+    status: CollaborationStatus,
+    invalidations: tuple[InvalidationEvent, ...],
+    contradictions: tuple[ContradictionRecord, ...],
+) -> tuple[tuple[str, str], ...]:
+    blockers: list[tuple[str, str]] = []
+    if status is CollaborationStatus.CONTRADICTED and not any(
+        item.status is ContradictionStatus.OPEN for item in contradictions
+    ):
+        blockers.append(
+            ("MISSING_OPEN_CONTRADICTION", "contradicted status requires an open contradiction")
+        )
+    if status is CollaborationStatus.STALE and not any(
+        item.status is InvalidationStatus.OPEN for item in invalidations
+    ):
+        blockers.append(("MISSING_OPEN_INVALIDATION", "stale status requires an open invalidation"))
+    return tuple(blockers)
+
+
 def _evidence_blockers_for_records(
     evidence_by_id: dict[str, CoordinationEvidenceRecord],
     evidence_refs: tuple[str, ...],
@@ -1988,6 +2007,21 @@ class CollaborationSession:
                 )
 
         status = CollaborationStatus(self.status)
+        status_invariant_blockers = _current_status_invariant_blockers(
+            status,
+            invalidations,
+            contradictions,
+        )
+        if status_invariant_blockers:
+            raise InvalidCoordinationContractError(
+                "collaboration snapshot violates current-status invariants",
+                "INVALID_COORDINATION_SESSION_STATE",
+                {
+                    "session_id": session_id,
+                    "status": status.value,
+                    "blocker_codes": ",".join(code for code, _ in status_invariant_blockers),
+                },
+            )
         last_signal_id = _optional_identifier(self.last_signal_id, "last_signal_id")
         accepted_fingerprint = _optional_text(
             self.accepted_signal_fingerprint,
@@ -2365,10 +2399,11 @@ class CoordinationController(ICoordinationController):
                 if item.contract_fingerprint == session.contract.fingerprint
             )
             blockers += self._evidence_blockers(session, session.contract, matching_evidence)
-        if session.status is CollaborationStatus.CONTRADICTED and not session.open_contradictions:
-            blockers += (("MISSING_OPEN_CONTRADICTION", "contradicted status requires an open contradiction"),)
-        if session.status is CollaborationStatus.STALE and not session.open_invalidations:
-            blockers += (("MISSING_OPEN_INVALIDATION", "stale status requires an open invalidation"),)
+        blockers += _current_status_invariant_blockers(
+            session.status,
+            session.invalidation_events,
+            session.contradictions,
+        )
         if session.status is CollaborationStatus.FROZEN and session.contract.status is not ContractReadiness.FROZEN:
             blockers += (("CONTRACT_NOT_FROZEN", "frozen session requires frozen contract packet"),)
         if session.status is CollaborationStatus.READY and session.contract.status is not ContractReadiness.READY_FOR_FREEZE:
@@ -2410,6 +2445,22 @@ class CoordinationController(ICoordinationController):
                 "signal session_id does not match collaboration session",
                 "COORDINATION_SESSION_ID_MISMATCH",
                 {"signal_id": signal.signal_id},
+            )
+
+        current_status_blockers = _current_status_invariant_blockers(
+            session.status,
+            session.invalidation_events,
+            session.contradictions,
+        )
+        if current_status_blockers:
+            raise InvalidCoordinationContractError(
+                "current collaboration snapshot violates status invariants",
+                "INVALID_COORDINATION_SESSION_STATE",
+                {
+                    "session_id": session.session_id,
+                    "status": session.status.value,
+                    "blocker_codes": ",".join(code for code, _ in current_status_blockers),
+                },
             )
 
         prior_receipt = session.accepted_signal_by_id().get(signal.signal_id)
