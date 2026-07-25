@@ -8,7 +8,6 @@ Phase 3 is merged through pull request #198 at merge commit `1b73e232930c9289601
 
 ### Planned
 
-- Reconcile the canonical protocol and Codex reference to the completed Phase 3 state.
 - Require `ICoordinationController` in trusted runtime composition.
 - Add deterministic multi-domain scenario fixtures and mandatory single-owner bypass coverage.
 - Preserve Conductor-only activation, specialist-owned contracts, Ponytail implementation ownership, Overseer evidence ownership, Arbiter continuity authority, Dagger gating, and default-deny external actions.
