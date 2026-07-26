@@ -105,6 +105,7 @@ def main():
         {"Name": "test_prompt_load_budget.py", "Path": "tests/behavior/test_prompt_load_budget.py"},
         {"Name": "test_governance_protocol_consistency.py", "Path": "tests/behavior/test_governance_protocol_consistency.py"},
         {"Name": "test_router_contracts.py", "Path": "tests/behavior/test_router_contracts.py"},
+        {"Name": "test_codex_export_portable_references.py", "Path": "tests/behavior/test_codex_export_portable_references.py"},
         {"Name": "validate_tuner_collaboration_contract.py", "Path": "scripts/validate_tuner_collaboration_contract.py"},
         {"Name": "test_tuner_collaboration_contract.py", "Path": "tests/behavior/test_tuner_collaboration_contract.py"},
         {"Name": "validate_evidence_identity.py", "Path": "scripts/validate_evidence_identity.py", "Args": ["--approved-base-sha", evidence_base]},

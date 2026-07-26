@@ -2,6 +2,18 @@
 
 This changelog tracks the repository history using git tags, merge history, and the prior documented milestone log that lived under `docs/meta/CHANGELOG.md`.
 
+## Unreleased - Issue #204 Codex Tuner Portable Export
+
+### Fixed
+
+- Added The Tuner's canonical coordination protocol to the PowerShell Codex exporter's portable-reference map.
+- Fresh staged Codex exports now rewrite The Tuner's repository-relative protocol link to a package-local `REFERENCE_CONTEXT.md` anchor and generate the required portable reference bundle.
+- Added cross-language map-parity and real fresh-export regression coverage so the PowerShell exporter and Python validator cannot silently diverge.
+
+### Preserved boundaries
+
+- No routing, runtime authority, specialist ownership, release, deployment, marketplace publication, production, force-push, ruleset, or branch-deletion behavior changed.
+
 ## Unreleased - Issue #195 Cross-Specialist Coordination Phase 4
 
 Phase 3 is merged through pull request #198 at merge commit `1b73e232930c9289601474a5cddb282e98378261`. The authorized Phase 4 scenario validation and Conductor-owned runtime integration have been implemented and locally validated on the feature branch. Persistence, SQLite, migrations, RPC, host orchestration, staging, commit, push, pull request, merge, release, deployment, consumer-repository mutation, and expanded external-action authority are not authorized by this implementation record and remain separately governed.
