@@ -45,6 +45,9 @@ $portableReferences = @{
     "the-governor" = @(
         [pscustomobject]@{ Source = "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"; Canonical = "../../docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"; Export = "REFERENCE_CONTEXT.md#governance-decision-protocol"; Anchor = "governance-decision-protocol" }
     )
+    "the-tuner" = @(
+        [pscustomobject]@{ Source = "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md"; Canonical = "../../docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md"; Export = "REFERENCE_CONTEXT.md#cross-specialist-coordination-protocol"; Anchor = "cross-specialist-coordination-protocol" }
+    )
 }
 
 function Write-PortableReferenceContext {
