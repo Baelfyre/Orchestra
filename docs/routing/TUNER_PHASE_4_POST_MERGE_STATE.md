@@ -152,47 +152,38 @@ Before advancing, the workflow must verify the controls relevant to the action, 
 
 The workflow must stop and report a blocker when any required control fails, becomes unavailable, contradicts the approved scope, or produces uncertain evidence.
 
-## Next planned workstream
+## Next projected portfolio task
 
-The accepted roadmap places the SQLite-first local context runtime after the completed and merged Orchestra collaboration upgrade.
+The accepted external knowledgebase records that the Orchestra explainer video was parked until the current Orchestra refinements were complete. That prerequisite is now satisfied.
 
-The next task is a read-only architecture and decision pass:
-
-```text
-NEXT_WORKSTREAM=SQLITE_FIRST_CONTEXT_RUNTIME
-NEXT_TASK=PHASE_B0_CONTEXT_RUNTIME_ADR
-NEXT_TASK_STATUS=PLANNED_NOT_STARTED
-IMPLEMENTATION_AUTHORITY=NONE_FOR_THIS_RECORD
-SQLITE_SCHEMA_AUTHORITY=NONE
-CLI_IMPLEMENTATION_AUTHORITY=NONE
-RPC_DESIGN_AUTHORITY=NONE
-POSTGRESQL_EVALUATION_AUTHORITY=NONE
-```
-
-Phase B0 must resolve:
-
-- runtime location;
-- populated database storage location;
-- repository registration;
-- source-reference format;
-- Markdown import and export;
-- stale-context detection;
-- token-budget policy;
-- secret exclusion;
-- database-loss recovery.
-
-The roadmap's recommended initial direction is:
+The next projected portfolio task is a separate Remotion explainer for the updated and refined Orchestra:
 
 ```text
-IMPLEMENTATION_LOCATION=ORCHESTRA_REPOSITORY_EXPERIMENTAL_RUNTIME_MODULE
-POPULATED_DATABASE=%LOCALAPPDATA%\Orchestra\context\orchestra-context.db
-DATABASE_DEFAULT=SQLITE
-SOURCE_OF_TRUTH_MODEL=GIT_AND_MARKDOWN_PLUS_LOCAL_SQLITE
+NEXT_PROJECTED_PORTFOLIO_TASK=REMOTION_ORCHESTRA_EXPLAINER
+VIDEO_ENGINE=REMOTION
+PROJECT_WORKSPACE=C:\Projects\orchestra-video
+ORIENTATION=VERTICAL_9_16
+DIMENSIONS=1080x1920
+FPS=30
+TARGET_DURATION=APPROXIMATELY_60_SECONDS
+CURRENT_SUBTASK=V0_PRE_PRODUCTION_BRIEF_AND_STORYBOARD
+ORCHESTRA_REPOSITORY_MODIFIED=NO
 ```
 
-The populated database must never be committed. Future implementation may commit only schemas, migrations, seed definitions, CLI code, tests, and example configuration after a separately defined implementation scope.
+The video narrative should move from the coordination problem through Conductor routing, specialist collaboration, The Tuner’s synchronized contracts, validation and escalation, and an approved evidence-backed result.
 
-Codex App Server RPC work begins only after the SQLite schema, lifecycle model, CLI, deterministic packet selection, JSON and Markdown packet generation, and manual Codex retrieval pilot are proven. PostgreSQL is evaluated only when a measured requirement or reproducible SQLite limitation justifies it.
+The Remotion project must:
+
+- remain separate from this repository;
+- use reusable React and TypeScript scenes;
+- remain understandable without audio through captions and on-screen text;
+- preserve Conductor, The Tuner, specialist ownership, validation, simple-task bypass, and fail-closed governance boundaries;
+- avoid unsupported claims of unlimited autonomy, authority, release, or deployment;
+- leave Orchestra runtime, adapters, skills, tests, workflows, release metadata, and deployment state unchanged.
+
+The next active software implementation task in the ecosystem remains HiveMind Pathway Batch 7A Unit B4. That separate track does not authorize or alter this repository.
+
+The durable-memory and RPC proposal in the external knowledgebase remains an unmerged draft and is not an accepted Orchestra next phase.
 
 ## Actions outside standing progression
 
@@ -247,9 +238,10 @@ PHASE_4_PULL_REQUEST=MERGED
 PHASE_4_DOCUMENTATION_RECORD=POST_MERGE_CONTINUITY_SYNCHRONIZED
 ISSUE_195=CLOSED_COMPLETED
 STANDING_GOVERNED_PROGRESSION=RECORDED
-NEXT_WORKSTREAM=SQLITE_FIRST_CONTEXT_RUNTIME
-NEXT_TASK=PHASE_B0_CONTEXT_RUNTIME_ADR
-NEXT_TASK_STATUS=PLANNED_NOT_STARTED
+NEXT_PROJECTED_PORTFOLIO_TASK=REMOTION_ORCHESTRA_EXPLAINER
+NEXT_VIDEO_SUBTASK=V0_PRE_PRODUCTION_BRIEF_AND_STORYBOARD
+NEXT_ACTIVE_SOFTWARE_IMPLEMENTATION_TASK=PATHWAY_UNIT_B4
+ORCHESTRA_RUNTIME_NEXT_PHASE=NOT_DEFINED
 RELEASE_AUTHORITY=NONE
 DEPLOYMENT_AUTHORITY=NONE
 ```
