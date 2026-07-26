@@ -1,5 +1,38 @@
 # Decision Log
 
+## Date: 2026-07-26
+
+**Decision:**
+Adopt the split Phase 4 runtime-integration boundary for The Tuner: retain a public stateless `CoordinationRuntimeService`, add validation-only executor preflight for explicitly supplied collaboration sessions, and keep signal application explicit.
+
+**Accepted Baseline:** `3cee0e174d2c4106bb024ab09c58b7fae2020334`
+
+**Reason:**
+The public service and executor preflight address different responsibilities. The service preserves an explicit API for validation, signal application, and deterministic coordination audit. The executor preflight prevents activated multi-domain work from reaching lifecycle initialization, adapter access, command parsing, or domain operation when the supplied coordination snapshot is blocked. Direct single-owner work remains a zero-coordination bypass.
+
+**Identity and Audit Rules:**
+- `RuntimeComposition` requires a real non-null `ICoordinationController`.
+- A delegated child composition reuses the exact parent coordination-controller and audit-logger objects.
+- Each `RuntimeExecutor` constructs one `CoordinationRuntimeService` and reuses that exact service for root and delegated execution.
+- `CoordinationRuntimeService.apply()` is the sole Phase 4 signal-application and coordination-audit boundary.
+- Accepted non-idempotent transitions and typed rejections each emit exactly one deterministic audit event.
+- Exact idempotent replay emits no duplicate transition event.
+- Validation-only preflight emits no coordination event.
+
+**Scenario Decision:**
+Retain SCN-01 through SCN-06 as the canonical Phase 4 scenario set. Supersede none. Treat INT-01 through INT-05 as supplemental runtime-boundary checks.
+
+**Rejected Alternatives:**
+- Direct controller access from `RuntimeExecutor`.
+- Service-only integration with no fail-closed execution preflight.
+- Adding the coordination service itself to `RuntimeComposition`.
+- Automatic signal application or prompt-text Tuner activation.
+- Nullable, no-op, or host-constructed controllers.
+- Persistence, SQLite, migrations, RPC, or host orchestration.
+
+**Boundaries:**
+This decision authorizes only the exact Phase 4 implementation gate and 12-path ceiling. It does not grant staging, commit, push, pull-request, merge, release, deployment, branch-deletion, ruleset-change, Dagger, or external-action authority.
+
 ## Date: 2026-07-25
 
 **Decision:**
