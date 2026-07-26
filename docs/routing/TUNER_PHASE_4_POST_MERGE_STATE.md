@@ -98,11 +98,71 @@ UNRESOLVED_REVIEW_THREADS=0
 BLOCKING_REVIEWS=0
 ```
 
-## Progression authority
+## Standing governed progression
 
-The completion sequence followed [`GOVERNED_WORKFLOW_PROGRESSION_POLICY.md`](../governance/GOVERNED_WORKFLOW_PROGRESSION_POLICY.md).
+```text
+POLICY_STATUS=ACCEPTED
+EFFECTIVE_DATE=2026-07-26
+SCOPE=AUTHORIZED_ORCHESTRA_REPOSITORY_WORKFLOWS
+```
 
-Once the user established standing authorization, internal repository gates progressed automatically only while exact scope, validation, strict governance, CI, review state, and guardrails remained satisfied.
+After the user establishes the objective and authorized scope, the repository workflow may continue without requesting a separate approval message at every internal gate only while every required control remains satisfied.
+
+Standing progression may cover:
+
+- implementation and exact-scope corrections;
+- focused and consolidated validation;
+- exact-scope staging and commit creation;
+- non-force push to the same authorized branch;
+- draft pull-request creation and metadata maintenance;
+- draft-to-ready transition;
+- merge when the exact reviewed head is mergeable and all required validation, governance, CI, review, and guardrail conditions pass;
+- post-merge verification and repository/knowledge-base state synchronization.
+
+Standing authorization is not permission to bypass a failed or missing gate.
+
+Before advancing, the workflow must verify the controls relevant to the action, including:
+
+- exact repository, branch, base, head, parent, tree, path, and blob identity;
+- no unauthorized paths, unrelated refactors, or hidden scope expansion;
+- clean working tree and index where local Git state is involved;
+- focused tests and the complete required validation suite;
+- strict governance and repository guardrails;
+- canonical-to-adapter or generated-reference parity when applicable;
+- non-force remote updates and exact remote-head verification;
+- current pull-request metadata, changed-file scope, mergeability, CI, review submissions, and unresolved review threads;
+- durable evidence and knowledge-base updates at each material gate.
+
+The workflow must stop and report a blocker when any required control fails, becomes unavailable, contradicts the approved scope, or produces uncertain evidence.
+
+## Actions outside standing progression
+
+The following remain separate unless explicitly included in the task's approved purpose:
+
+- release, tagging, package publication, marketplace publication, or deployment;
+- production configuration or production-resource changes;
+- destructive data or repository operations;
+- force push, history rewriting, or branch-protection/ruleset changes;
+- branch deletion;
+- secrets, credentials, billing, external accounts, or expanded external-action authority;
+- unrelated consumer-repository changes;
+- expansion beyond the authorized issue, phase, paths, or stated objective.
+
+## Documentation requirement
+
+The repository record and the external project knowledge base must remain consistent.
+
+Continuity records must capture, as applicable:
+
+- the approved scope and applicable standing authorization;
+- base, implementation, correction, merge, and state-sync commit identities;
+- pull-request numbers and final state;
+- changed-path counts and exact correction scope;
+- validation and CI results;
+- blockers and corrections;
+- remaining boundaries and excluded authority.
+
+Transient wording such as `unstaged`, `uncommitted`, or `awaiting approval` must not remain in durable post-action records after the corresponding state has changed.
 
 ## Preserved boundaries
 
