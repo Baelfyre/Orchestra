@@ -98,6 +98,23 @@ UNRESOLVED_REVIEW_THREADS=0
 BLOCKING_REVIEWS=0
 ```
 
+## Issue closeout
+
+Issue #195 was closed as completed after the implementation, correction, exact-head validation, implementation merge, and post-merge documentation synchronization were verified.
+
+```text
+ISSUE_STATE=CLOSED
+ISSUE_STATE_REASON=COMPLETED
+ISSUE_CLOSED_AT=2026-07-26T09:31:04Z
+COMPLETION_COMMENT_ID=5082908431
+IMPLEMENTATION_PR=200
+IMPLEMENTATION_MERGE_COMMIT=32fb67f8b2fd5c3436a1f2738e13e7903fda5328
+POST_MERGE_DOCUMENTATION_PR=201
+POST_MERGE_DOCUMENTATION_MERGE_COMMIT=68217d5e406aee9d5f9b8c3b7f8675458121a38c
+```
+
+The issue completion boundary is satisfied by explicit cross-layer ownership, synchronized specialist contracts, contradiction escalation, stale-evidence invalidation, declared artifact lifecycles, complete change identity, simple-task bypass, adapter parity, and compatibility with delegated governance.
+
 ## Standing governed progression
 
 ```text
@@ -134,6 +151,48 @@ Before advancing, the workflow must verify the controls relevant to the action, 
 - durable evidence and knowledge-base updates at each material gate.
 
 The workflow must stop and report a blocker when any required control fails, becomes unavailable, contradicts the approved scope, or produces uncertain evidence.
+
+## Next planned workstream
+
+The accepted roadmap places the SQLite-first local context runtime after the completed and merged Orchestra collaboration upgrade.
+
+The next task is a read-only architecture and decision pass:
+
+```text
+NEXT_WORKSTREAM=SQLITE_FIRST_CONTEXT_RUNTIME
+NEXT_TASK=PHASE_B0_CONTEXT_RUNTIME_ADR
+NEXT_TASK_STATUS=PLANNED_NOT_STARTED
+IMPLEMENTATION_AUTHORITY=NONE_FOR_THIS_RECORD
+SQLITE_SCHEMA_AUTHORITY=NONE
+CLI_IMPLEMENTATION_AUTHORITY=NONE
+RPC_DESIGN_AUTHORITY=NONE
+POSTGRESQL_EVALUATION_AUTHORITY=NONE
+```
+
+Phase B0 must resolve:
+
+- runtime location;
+- populated database storage location;
+- repository registration;
+- source-reference format;
+- Markdown import and export;
+- stale-context detection;
+- token-budget policy;
+- secret exclusion;
+- database-loss recovery.
+
+The roadmap's recommended initial direction is:
+
+```text
+IMPLEMENTATION_LOCATION=ORCHESTRA_REPOSITORY_EXPERIMENTAL_RUNTIME_MODULE
+POPULATED_DATABASE=%LOCALAPPDATA%\Orchestra\context\orchestra-context.db
+DATABASE_DEFAULT=SQLITE
+SOURCE_OF_TRUTH_MODEL=GIT_AND_MARKDOWN_PLUS_LOCAL_SQLITE
+```
+
+The populated database must never be committed. Future implementation may commit only schemas, migrations, seed definitions, CLI code, tests, and example configuration after a separately defined implementation scope.
+
+Codex App Server RPC work begins only after the SQLite schema, lifecycle model, CLI, deterministic packet selection, JSON and Markdown packet generation, and manual Codex retrieval pilot are proven. PostgreSQL is evaluated only when a measured requirement or reproducible SQLite limitation justifies it.
 
 ## Actions outside standing progression
 
@@ -186,8 +245,11 @@ PHASE_4_IMPLEMENTATION=COMPLETE
 PHASE_4_VALIDATION=PASSED
 PHASE_4_PULL_REQUEST=MERGED
 PHASE_4_DOCUMENTATION_RECORD=POST_MERGE_CONTINUITY_SYNCHRONIZED
+ISSUE_195=CLOSED_COMPLETED
 STANDING_GOVERNED_PROGRESSION=RECORDED
-NEXT_PRODUCT_PHASE=NOT_INFERRED
+NEXT_WORKSTREAM=SQLITE_FIRST_CONTEXT_RUNTIME
+NEXT_TASK=PHASE_B0_CONTEXT_RUNTIME_ADR
+NEXT_TASK_STATUS=PLANNED_NOT_STARTED
 RELEASE_AUTHORITY=NONE
 DEPLOYMENT_AUTHORITY=NONE
 ```
