@@ -181,7 +181,7 @@ The Remotion project must:
 - avoid unsupported claims of unlimited autonomy, authority, release, or deployment;
 - leave Orchestra runtime, adapters, skills, tests, workflows, release metadata, and deployment state unchanged.
 
-The next active software implementation task in the ecosystem remains HiveMind Pathway Batch 7A Unit B4. That separate track does not authorize or alter this repository.
+The next active software implementation task is controlled by the external ecosystem knowledgebase and remains outside this repository. That separate track does not authorize or alter Orchestra.
 
 The durable-memory and RPC proposal in the external knowledgebase remains an unmerged draft and is not an accepted Orchestra next phase.
 
@@ -240,7 +240,7 @@ ISSUE_195=CLOSED_COMPLETED
 STANDING_GOVERNED_PROGRESSION=RECORDED
 NEXT_PROJECTED_PORTFOLIO_TASK=REMOTION_ORCHESTRA_EXPLAINER
 NEXT_VIDEO_SUBTASK=V0_PRE_PRODUCTION_BRIEF_AND_STORYBOARD
-NEXT_ACTIVE_SOFTWARE_IMPLEMENTATION_TASK=PATHWAY_UNIT_B4
+NEXT_ACTIVE_SOFTWARE_IMPLEMENTATION_TASK=EXTERNAL_ECOSYSTEM_KNOWLEDGEBASE_CONTROLLED
 ORCHESTRA_RUNTIME_NEXT_PHASE=NOT_DEFINED
 RELEASE_AUTHORITY=NONE
 DEPLOYMENT_AUTHORITY=NONE
