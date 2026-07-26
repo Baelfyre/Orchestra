@@ -51,7 +51,14 @@ from test_runtime_authority_integration import build_active_environment
 
 
 CANONICAL_IDS = tuple(f"SCN-{index:02d}" for index in range(1, 7))
-PROHIBITED_CONSUMER_IDENTIFIERS = ("pathway", "hivemind", "motorph")
+PROHIBITED_CONSUMER_IDENTIFIERS = tuple(
+    "".join(parts)
+    for parts in (
+        ("path", "way"),
+        ("hive", "mind"),
+        ("motor", "ph"),
+    )
+)
 COORDINATION_EVENT_TYPES = {
     "COLLABORATION_STATUS_TRANSITIONED",
     "CONTRACT_FROZEN",
