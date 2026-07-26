@@ -4,13 +4,16 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased - Issue #195 Cross-Specialist Coordination Phase 4
 
-Phase 3 is merged through pull request #198 at merge commit `1b73e232930c9289601474a5cddb282e98378261`. Phase 4 post-merge state reconciliation, scenario validation, and Conductor-owned runtime-integration design are accepted for bounded continuation. Phase 4 implementation, persistence, SQLite, migrations, RPC, host orchestration, release, deployment, consumer-repository mutation, and expanded external-action authority remain separately governed and unauthorized.
+Phase 3 is merged through pull request #198 at merge commit `1b73e232930c9289601474a5cddb282e98378261`. The authorized Phase 4 scenario validation and Conductor-owned runtime integration have been implemented and locally validated on the feature branch. Persistence, SQLite, migrations, RPC, host orchestration, staging, commit, push, pull request, merge, release, deployment, consumer-repository mutation, and expanded external-action authority are not authorized by this implementation record and remain separately governed.
 
-### Planned
+### Implemented and locally validated
 
-- Require `ICoordinationController` in trusted runtime composition.
-- Add deterministic multi-domain scenario fixtures and mandatory single-owner bypass coverage.
-- Preserve Conductor-only activation, specialist-owned contracts, Ponytail implementation ownership, Overseer evidence ownership, Arbiter continuity authority, Dagger gating, and default-deny external actions.
+- Required a real non-null `ICoordinationController` in trusted runtime composition and preserved exact controller and audit-logger identity across delegated child composition.
+- Added the public stateless `CoordinationRuntimeService` as the explicit validation, signal-application, and coordination-audit boundary.
+- Added optional validation-only runtime preflight for explicitly supplied collaboration sessions while preserving zero-call direct single-owner bypass.
+- Added deterministic transition, rejection, idempotent replay, audit-failure, malformed-result, delegation-identity, and authority-preservation coverage.
+- Added executable consumer-neutral SCN-01 through SCN-06 behavioral proofs for invalidation and minimal re-entry, direct bypass, idempotency ownership, rollback, independent UI/API ownership, compatibility windows, stale evidence, and blocked closeout.
+- Preserved the exact 12-path implementation ceiling without granting commit, push, pull-request, merge, release, deployment, Dagger, or external-action authority.
 
 ## Unreleased - Issue #195 Cross-Specialist Coordination Phase 3
 

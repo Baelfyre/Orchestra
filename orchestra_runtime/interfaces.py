@@ -60,7 +60,14 @@ class IGovernanceValidator(ABC):
 
 class IRuntimeExecutor(ABC):
     @abstractmethod
-    def execute(self, adapter: IIDEAdapter, prompt: str, metadata: dict | None = None) -> ExecutionResult:
+    def execute(
+        self,
+        adapter: IIDEAdapter,
+        prompt: str,
+        metadata: dict | None = None,
+        *,
+        coordination_session: CollaborationSession | None = None,
+    ) -> ExecutionResult:
         raise NotImplementedError
 
     @abstractmethod
@@ -70,6 +77,8 @@ class IRuntimeExecutor(ABC):
         prompt: str,
         resolution: DelegationResolution,
         metadata: dict | None = None,
+        *,
+        coordination_session: CollaborationSession | None = None,
     ) -> ExecutionResult:
         raise NotImplementedError
 

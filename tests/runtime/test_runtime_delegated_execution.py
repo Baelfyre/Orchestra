@@ -7,6 +7,7 @@ import pytest
 
 from orchestra_runtime.authority import AuthorityEvaluator, AuthorityProvenance, AuthorityScope, ProvenanceSource, TargetSelector
 from orchestra_runtime.capabilities import CapabilityResolver, RuntimeCapability, RuntimeCapabilityGrant
+from orchestra_runtime.coordination import CoordinationController
 from orchestra_runtime.delegation import (
     DelegationPolicy,
     DelegationRequest,
@@ -33,6 +34,8 @@ from orchestra_runtime.services import (
     RuntimePolicyBinding,
     SkillRegistry,
 )
+
+from coordination_support import build_session
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
@@ -137,6 +140,7 @@ def build_delegation_environment(run_id: str = "parent-run") -> DelegationEnviro
         ),
     )
     sink = InMemoryAuditSink()
+    coordination_controller = CoordinationController()
     composition = RuntimeComposition(
         AuthorityMode.ACTIVE,
         manifest.run_identity,
@@ -146,6 +150,7 @@ def build_delegation_environment(run_id: str = "parent-run") -> DelegationEnviro
         resolver,
         lifecycle,
         validator,
+        coordination_controller,
         AuditLogger(sink),
         policy,
     )
@@ -479,6 +484,7 @@ def test_delegated_composition_requires_matching_accepted_identity() -> None:
             environment.composition.capability_resolver,
             environment.composition.lifecycle_controller,
             environment.composition.delegation_validator,
+            environment.composition.coordination_controller,
             environment.composition.audit_logger,
             environment.composition.policy,
             "wrong-decision",
@@ -500,3 +506,40 @@ def test_delegation_resolution_serialization_has_no_context_values() -> None:
     assert serialized["decision"]["effective_context_keys"] == ["governance_validated"]
     assert "context_values" not in serialized
     assert "secret" not in str(serialized)
+
+def test_delegated_execution_reuses_coordination_service_and_trusted_dependencies(monkeypatch) -> None:
+    environment = build_delegation_environment()
+    request = delegation_request(environment)
+    session = build_session()
+    parent_service = environment.executor.coordination
+    captured: list[tuple[RuntimeComposition, object, object]] = []
+    original_execute = environment.executor._execute
+
+    def capture_execute(adapter, prompt, metadata, composition, initial_event_ids, coordination_session):
+        captured.append((composition, coordination_session, environment.executor.coordination))
+        return original_execute(
+            adapter,
+            prompt,
+            metadata,
+            composition,
+            initial_event_ids,
+            coordination_session,
+        )
+
+    monkeypatch.setattr(environment.executor, "_execute", capture_execute)
+    result = environment.executor.execute_delegation_request(
+        environment.adapter,
+        "ponytail child work",
+        request,
+        metadata={"governance_validated": True},
+        coordination_session=session,
+    )
+
+    assert result.success is True
+    assert len(captured) == 1
+    child_composition, forwarded_session, observed_service = captured[0]
+    assert observed_service is parent_service
+    assert environment.executor.coordination is parent_service
+    assert forwarded_session is session
+    assert child_composition.coordination_controller is environment.composition.coordination_controller
+    assert child_composition.audit_logger is environment.composition.audit_logger

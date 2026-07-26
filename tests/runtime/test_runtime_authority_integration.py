@@ -23,6 +23,7 @@ from orchestra_runtime.capabilities import (
     RuntimeCapabilityGrant,
     RuntimeCapabilityManifest,
 )
+from orchestra_runtime.coordination import CoordinationController
 from orchestra_runtime.delegation import DelegationPolicy, DelegationValidator
 from orchestra_runtime.errors import (
     InvalidLifecycleSignalError,
@@ -34,6 +35,7 @@ from orchestra_runtime.interfaces import (
     IAuditSink,
     IAuthorityEvaluator,
     ICapabilityResolver,
+    ICoordinationController,
     IDelegationValidator,
     IGovernanceValidator,
     IIDEAdapter,
@@ -195,6 +197,7 @@ def build_active_environment(
     authority_evaluator: IAuthorityEvaluator | None = None,
     capability_resolver: ICapabilityResolver | None = None,
     lifecycle_controller: ILifecycleController | None = None,
+    coordination_controller: ICoordinationController | None = None,
     governance: IGovernanceValidator | None = None,
     audit_sink: RecordingAuditSink | None = None,
     operation=None,
@@ -249,6 +252,7 @@ def build_active_environment(
     authority_evaluator = authority_evaluator or AuthorityEvaluator()
     capability_resolver = capability_resolver or CapabilityResolver()
     lifecycle_controller = lifecycle_controller or LifecycleController()
+    coordination_controller = coordination_controller or CoordinationController()
     validator = DelegationValidator(
         authority_evaluator,
         capability_resolver,
@@ -271,6 +275,7 @@ def build_active_environment(
         capability_resolver,
         lifecycle_controller,
         validator,
+        coordination_controller,
         AuditLogger(sink),
         policy,
     )
@@ -360,6 +365,7 @@ def test_compatibility_mode_is_explicit_and_finite() -> None:
     composition = build_compatibility_composition(registry, InMemoryAuditSink(), run_id="compatibility-run")
 
     assert composition.mode is AuthorityMode.COMPATIBILITY
+    assert isinstance(composition.coordination_controller, CoordinationController)
     assert composition.policy.bindings
     assert composition.policy.binding_for("conductor", "conductor") is not None
     assert composition.policy.binding_for("unknown", "conductor") is None
@@ -826,3 +832,27 @@ def test_abstract_runtime_boundaries_default_to_not_implemented() -> None:
     for call in calls:
         with pytest.raises(NotImplementedError):
             call()
+
+def test_runtime_composition_requires_trusted_coordination_controller() -> None:
+    environment = build_active_environment()
+
+    with pytest.raises(RuntimeInitializationError) as error:
+        replace(environment.composition, coordination_controller=None)  # type: ignore[arg-type]
+
+    assert error.value.reason_code == "MISSING_ACTIVE_CONFIGURATION"
+    assert error.value.context == (("field", "coordination_controller"),)
+
+
+def test_runtime_composition_rejects_wrong_type_coordination_controller_before_adapter_access() -> None:
+    environment = build_active_environment()
+    adapter_sequence = tuple(environment.adapter.sequence)
+
+    with pytest.raises(RuntimeInitializationError) as error:
+        replace(
+            environment.composition,
+            coordination_controller=object(),
+        )  # type: ignore[arg-type]
+
+    assert error.value.reason_code == "MISSING_ACTIVE_CONFIGURATION"
+    assert error.value.context == (("field", "coordination_controller"),)
+    assert tuple(environment.adapter.sequence) == adapter_sequence

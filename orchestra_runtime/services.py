@@ -28,6 +28,14 @@ from .capabilities import (
     capability_decision_event,
     capability_manifest_event,
 )
+from .coordination import (
+    CollaborationSession,
+    CoordinationController,
+    CoordinationSignal,
+    CoordinationValidationResult,
+    coordination_rejection_event,
+    coordination_transition_event,
+)
 from .delegation import (
     DelegationPolicy,
     DelegationRequest,
@@ -37,7 +45,12 @@ from .delegation import (
     delegation_rejected_event,
 )
 from .errors import (
+    ConflictingCoordinationSignalError,
+    CoordinationReadinessError,
     DelegationRejectedError,
+    InvalidCoordinationContractError,
+    InvalidCoordinationSignalError,
+    InvalidCoordinationTransitionError,
     RuntimeAuditError,
     RuntimeBindingError,
     RuntimeContractError,
@@ -49,6 +62,7 @@ from .interfaces import (
     IAuditSink,
     IAuthorityEvaluator,
     ICapabilityResolver,
+    ICoordinationController,
     IDelegationValidator,
     IGovernanceValidator,
     IIDEAdapter,
@@ -431,6 +445,84 @@ class AuditLogger:
         return self._write(entry, result.run_identity.run_id if result.run_identity else result.command_name)
 
 
+_COORDINATION_REJECTION_ERRORS = (
+    InvalidCoordinationContractError,
+    InvalidCoordinationSignalError,
+    InvalidCoordinationTransitionError,
+    CoordinationReadinessError,
+    ConflictingCoordinationSignalError,
+)
+
+
+class CoordinationRuntimeService:
+    """Stateless trusted facade for coordination validation, transitions, and audit."""
+
+    def __init__(
+        self,
+        controller: ICoordinationController,
+        audit_logger: AuditLogger,
+    ) -> None:
+        if not isinstance(controller, ICoordinationController):
+            raise RuntimeInitializationError(
+                "coordination service requires a trusted controller",
+                "MISSING_ACTIVE_CONFIGURATION",
+                {"field": "coordination_controller"},
+            )
+        if not isinstance(audit_logger, AuditLogger):
+            raise RuntimeInitializationError(
+                "coordination service requires a trusted audit logger",
+                "MISSING_ACTIVE_CONFIGURATION",
+                {"field": "audit_logger"},
+            )
+        self._controller = controller
+        self._audit_logger = audit_logger
+
+    def validate(self, session: CollaborationSession) -> CoordinationValidationResult:
+        if not isinstance(session, CollaborationSession):
+            raise InvalidCoordinationContractError(
+                "coordination input must be a CollaborationSession",
+                "INVALID_COORDINATION_SESSION",
+            )
+        result = self._controller.validate(session)
+        if not isinstance(result, CoordinationValidationResult):
+            raise RuntimeContractError(
+                "coordination controller returned an invalid validation result",
+                "INVALID_COORDINATION_VALIDATION_RESULT",
+                {"result_type": type(result).__qualname__},
+            )
+        return result
+
+    def apply(
+        self,
+        session: CollaborationSession,
+        signal: CoordinationSignal,
+    ) -> CollaborationSession:
+        if not isinstance(session, CollaborationSession):
+            raise InvalidCoordinationContractError(
+                "coordination input must be a CollaborationSession",
+                "INVALID_COORDINATION_SESSION",
+            )
+        try:
+            current = self._controller.apply(session, signal)
+        except _COORDINATION_REJECTION_ERRORS as error:
+            try:
+                self._audit_logger.record_event(coordination_rejection_event(session, signal, error))
+            except RuntimeAuditError as audit_error:
+                raise audit_error from error
+            raise
+
+        if current is session:
+            return current
+        if not isinstance(current, CollaborationSession):
+            raise RuntimeContractError(
+                "coordination controller returned an invalid transition result",
+                "INVALID_COORDINATION_TRANSITION_RESULT",
+                {"result_type": type(current).__qualname__},
+            )
+        self._audit_logger.record_event(coordination_transition_event(session, signal, current))
+        return current
+
+
 def _compatibility_bindings() -> tuple[RuntimePolicyBinding, ...]:
     return tuple(sorted((
         RuntimePolicyBinding(
@@ -455,6 +547,7 @@ class RuntimeComposition:
     capability_resolver: ICapabilityResolver
     lifecycle_controller: ILifecycleController
     delegation_validator: IDelegationValidator
+    coordination_controller: ICoordinationController
     audit_logger: AuditLogger
     policy: RuntimeExecutionPolicy
     delegation_decision_id: str | None = None
@@ -475,6 +568,7 @@ class RuntimeComposition:
             ("capability_resolver", self.capability_resolver, ICapabilityResolver),
             ("lifecycle_controller", self.lifecycle_controller, ILifecycleController),
             ("delegation_validator", self.delegation_validator, IDelegationValidator),
+            ("coordination_controller", self.coordination_controller, ICoordinationController),
             ("audit_logger", self.audit_logger, AuditLogger),
             ("policy", self.policy, RuntimeExecutionPolicy),
         )
@@ -646,6 +740,8 @@ def build_compatibility_composition(
             sensitive_context_keys=("credential", "secret", "token"),
         ),
     )
+    audit_logger = AuditLogger(audit_sink)
+    coordination_controller = CoordinationController()
     return RuntimeComposition(
         AuthorityMode.COMPATIBILITY,
         manifest.run_identity,
@@ -655,7 +751,8 @@ def build_compatibility_composition(
         resolver,
         lifecycle_controller,
         delegation_validator,
-        AuditLogger(audit_sink),
+        coordination_controller,
+        audit_logger,
         policy,
     )
 
@@ -685,6 +782,10 @@ class RuntimeExecutor(IRuntimeExecutor):
         self._governance = governance
         self._context_assembler = context_assembler
         self._composition = composition
+        self._coordination = CoordinationRuntimeService(
+            composition.coordination_controller,
+            composition.audit_logger,
+        )
         self._operation = operation or self._default_operation
         self._lifecycle_snapshots: dict[str, LifecycleSnapshot] = {}
         self._last_lifecycle_snapshot: LifecycleSnapshot | None = None
@@ -694,11 +795,29 @@ class RuntimeExecutor(IRuntimeExecutor):
         return self._composition
 
     @property
+    def coordination(self) -> CoordinationRuntimeService:
+        return self._coordination
+
+    @property
     def last_lifecycle_snapshot(self) -> LifecycleSnapshot | None:
         return self._last_lifecycle_snapshot
 
-    def execute(self, adapter: IIDEAdapter, prompt: str, metadata: dict | None = None) -> ExecutionResult:
-        return self._execute(adapter, prompt, metadata, self._composition, ())
+    def execute(
+        self,
+        adapter: IIDEAdapter,
+        prompt: str,
+        metadata: dict | None = None,
+        *,
+        coordination_session: CollaborationSession | None = None,
+    ) -> ExecutionResult:
+        return self._execute(
+            adapter,
+            prompt,
+            metadata,
+            self._composition,
+            (),
+            coordination_session,
+        )
 
     def execute_delegation_request(
         self,
@@ -706,13 +825,21 @@ class RuntimeExecutor(IRuntimeExecutor):
         prompt: str,
         request: DelegationRequest,
         metadata: dict | None = None,
+        *,
+        coordination_session: CollaborationSession | None = None,
     ) -> ExecutionResult:
         resolution = self._composition.delegation_validator.validate(
             request,
             self._composition.root_authority,
             self._composition.capability_manifest,
         )
-        return self.execute_delegated(adapter, prompt, resolution, metadata)
+        return self.execute_delegated(
+            adapter,
+            prompt,
+            resolution,
+            metadata,
+            coordination_session=coordination_session,
+        )
 
     def execute_delegated(
         self,
@@ -720,6 +847,8 @@ class RuntimeExecutor(IRuntimeExecutor):
         prompt: str,
         resolution: DelegationResolution,
         metadata: dict | None = None,
+        *,
+        coordination_session: CollaborationSession | None = None,
     ) -> ExecutionResult:
         if not isinstance(resolution, DelegationResolution):
             raise DelegationRejectedError(
@@ -771,6 +900,7 @@ class RuntimeExecutor(IRuntimeExecutor):
             self._composition.capability_resolver,
             self._composition.lifecycle_controller,
             self._composition.delegation_validator,
+            self._composition.coordination_controller,
             self._composition.audit_logger,
             self._composition.policy,
             decision.decision_id,
@@ -781,7 +911,14 @@ class RuntimeExecutor(IRuntimeExecutor):
             for key, value in (metadata or {}).items()
             if str(key).casefold() in allowed_keys
         }
-        return self._execute(adapter, prompt, child_metadata, child_composition, (delegation_event_id,))
+        return self._execute(
+            adapter,
+            prompt,
+            child_metadata,
+            child_composition,
+            (delegation_event_id,),
+            coordination_session,
+        )
 
     def _execute(
         self,
@@ -790,7 +927,20 @@ class RuntimeExecutor(IRuntimeExecutor):
         metadata: dict | None,
         composition: RuntimeComposition,
         initial_event_ids: tuple[str, ...],
+        coordination_session: CollaborationSession | None,
     ) -> ExecutionResult:
+        if coordination_session is not None:
+            coordination_validation = self._coordination.validate(coordination_session)
+            if not coordination_validation.allowed:
+                raise CoordinationReadinessError(
+                    "coordination session blocks runtime execution",
+                    "RUNTIME_COORDINATION_BLOCKED",
+                    {
+                        "session_id": coordination_session.session_id,
+                        "collaboration_status": coordination_session.status.value,
+                        "blocker_codes": ",".join(coordination_validation.blocker_codes),
+                    },
+                )
         snapshot, event_ids = self._initialize(composition, initial_event_ids)
         context = self._context_assembler.assemble(adapter, prompt, metadata)
         command = adapter.parse_command(prompt, metadata)

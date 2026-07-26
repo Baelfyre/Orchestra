@@ -10,7 +10,7 @@ Generated from canonical Orchestra sources. Indented snapshots are code-only con
     ## Document status
 
     ```text
-    Protocol status: PHASES_1_THROUGH_3_MERGED_PHASE_4_DESIGN_READY_IMPLEMENTATION_NOT_AUTHORIZED
+    Protocol status: PHASES_1_THROUGH_3_MERGED_PHASE_4_IMPLEMENTED_AND_LOCALLY_VALIDATED
     Protocol version: tuner-protocol-v1
     Runtime canonicalization version: orchestra-coordination-runtime-v1
     Repository: Baelfyre/Orchestra
@@ -19,16 +19,17 @@ Generated from canonical Orchestra sources. Indented snapshots are code-only con
     Phase 2 merge: 7423d3e7db7fb8e32dfe91454f5c2c5d10aba9bb
     Phase 3 reviewed head: ca7c37f33fe20376193a4aff752bbe0795cb6ee9
     Phase 3 merge: 1b73e232930c9289601474a5cddb282e98378261
-    Phase 4 design gate: READY_FOR_THE_TUNER_PHASE_4_SCENARIO_AND_INTEGRATION_DESIGN_REVIEW
-    Implementation authority: NONE
-    Commit authority: NONE
-    Push authority: NONE
-    PR authority: NONE
-    Merge authority: NONE
-    Release authority: NONE
+    Phase 4 design gate: THE_TUNER_PHASE_4_DESIGN_RECONCILIATION_ACCEPTED
+    Phase 4 implementation gate: APPROVED_TO_IMPLEMENT_THE_TUNER_PHASE_4_SCENARIO_VALIDATION_AND_RUNTIME_INTEGRATION
+    Implementation authority: CONSUMED_FOR_AUTHORIZED_PHASE_4_IMPLEMENTATION
+    Commit authority: NOT_GRANTED_BY_THIS_PROTOCOL
+    Push authority: NOT_GRANTED_BY_THIS_PROTOCOL
+    PR authority: NOT_GRANTED_BY_THIS_PROTOCOL
+    Merge authority: NOT_GRANTED_BY_THIS_PROTOCOL
+    Release authority: NOT_GRANTED_BY_THIS_PROTOCOL
     ```
 
-    This document is the canonical source of truth for Orchestra's cross-specialist coordination protocol. Role skills and adapters must reference this document rather than duplicate its complete schemas. Phases 1 through 3 are merged. Phase 3 established immutable in-memory typed coordination contracts, deterministic state enforcement, evidence and continuity controls, and a stateless coordination controller. Phase 4 will validate realistic scenarios and add a bounded Conductor-owned runtime-integration boundary only after exact implementation authorization. Persistence, SQLite, migrations, RPC, host orchestration, release, deployment, and external-action authority remain separately governed.
+    This document is the canonical source of truth for Orchestra's cross-specialist coordination protocol. Role skills and adapters must reference this document rather than duplicate its complete schemas. Phases 1 through 3 are merged. Phase 3 established immutable in-memory typed coordination contracts, deterministic state enforcement, evidence and continuity controls, and a stateless coordination controller. Phase 4 has implemented and locally validated the accepted bounded Conductor-owned runtime-integration boundary and the canonical SCN-01 through SCN-06 scenario suite under an exact 12-path authorization. Persistence, SQLite, migrations, RPC, host orchestration, staging, commit, push, pull request, merge, release, deployment, and external-action authority are not authorized by this protocol and remain separately governed.
 
     ---
 
@@ -1398,3 +1399,59 @@ Generated from canonical Orchestra sources. Indented snapshots are code-only con
     - Overseer ownership of refreshed validation evidence.
 
     Phase 2 does not add typed Tuner runtime models, persistent collaboration state, SQLite, RPC, host orchestration, deployment, release, or new authority.
+
+    <!-- THE_TUNER_PHASE_4_RUNTIME_INTEGRATION -->
+
+    ## 26. Phase 4 scenario validation and runtime integration
+
+    ### 26.1 Trusted runtime boundary
+
+    Every trusted `RuntimeComposition` requires a real non-null `ICoordinationController`. Compatibility composition constructs `CoordinationController`. Delegated child composition preserves exact parent identity for the coordination controller and audit logger.
+
+    `RuntimeExecutor` constructs one public stateless `CoordinationRuntimeService` and exposes it through `RuntimeExecutor.coordination`. Root and delegated execution reuse that exact service object. The service does not store sessions, route work, create authority, or perform host orchestration.
+
+    ### 26.2 Validation-only execution preflight
+
+    Runtime execution entrypoints accept an optional keyword-only `coordination_session`.
+
+    ```text
+    None
+      -> direct single-owner bypass
+      -> no coordination validation call
+      -> no coordination audit event
+
+    CollaborationSession
+      -> validate through RuntimeExecutor.coordination
+      -> before lifecycle initialization
+      -> before adapter context and command parsing
+      -> blocked snapshots fail with RUNTIME_COORDINATION_BLOCKED
+    ```
+
+    Preflight does not apply signals or infer transitions. Validation success does not create implementation, Git, governance, Dagger, external-action, release, or deployment authority.
+
+    ### 26.3 Signal application and coordination audit
+
+    Only `CoordinationRuntimeService.apply(session, signal)` applies coordination signals at the runtime boundary.
+
+    - accepted non-idempotent transition: exactly one deterministic transition event;
+    - exact idempotent replay: same immutable session and no duplicate transition event;
+    - typed rejection: exactly one deterministic rejection event, then re-raise the original typed error;
+    - audit-sink failure: fail closed with `RuntimeAuditError`;
+    - validation-only preflight: no coordination event.
+
+    ### 26.4 Canonical Phase 4 scenarios
+
+    ```text
+    SCN-01  strict-CSP and initialization-order incident
+    SCN-02  simple isolated single-owner bypass, Scribe and Ponytail variants
+    SCN-03  retry duplicate record and idempotency ownership
+    SCN-04  partial transaction and rollback boundary
+    SCN-05  UI and API authorization mismatch
+    SCN-06  mixed-version migration and stale-contract handling
+    ```
+
+    None of the six canonical scenarios is superseded. INT-01 through INT-05 provide supplemental proofs for trusted composition, explicit preflight, signal and audit behavior, delegated identity continuity, and authority preservation.
+
+    ### 26.5 Phase 4 boundaries
+
+    Phase 4 adds no persistence, SQLite, migration, RPC, Codex App Server, network or host-process orchestration, prompt-text semantic activation, automatic Tuner routing, Dagger authority, external-action authority, release, or deployment behavior.
