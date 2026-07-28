@@ -479,7 +479,7 @@ See the [v1.1.2 Trusted Runtime Authority release notes](docs/releases/v1.1.2-tr
 ### Architecture and coordination
 
 - [Runtime Architecture](docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md)
-- [Authority and Capability Contracts](docs/project/AUTHITY_CAPABILITY_CONTRACTS.md)
+- [Authority and Capability Contracts](docs/project/AUTHORITY_CAPABILITY_CONTRACTS.md)
 - [Cross-Specialist Coordination Protocol](docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md)
 - [Evidence Identity and Freshness Protocol](docs/governance/EVIDENCE_IDENTITY_AND_FRESHNESS_PROTOCOL.md)
 - [Portable Runtime Adapter Protocol](docs/project/PORTABLE_ADAPTER_PROTOCOL.md)
