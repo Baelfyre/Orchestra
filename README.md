@@ -13,7 +13,6 @@
   </p>
   <p>
     <img src="https://img.shields.io/badge/current_release-v1.1.2-blue" alt="Current public release v1.1.2" />
-    <img src="https://img.shields.io/badge/main-unreleased_coordination_runtime-purple" alt="Main includes unreleased coordination runtime changes" />
     <a href="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml">
       <img src="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml/badge.svg" alt="Repository validation status" />
     </a>
