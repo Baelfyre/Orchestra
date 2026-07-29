@@ -265,7 +265,7 @@ Exact replay of an accepted terminal signal is idempotent. Altered or conflictin
 
 ### Coordination state and evidence freshness
 
-The Tuner's typed coordination runtime records collaboration graphs, specialist-domain contracts, cross-layer packets, contradictions, invalidation events, artifact lifecycles, signals, sessions, and deterministic fingerprints. A supplied collaboration session that is incomplete, contradicted, stale, malformed, or otherwise not ready fails closed at the runtime boundary. Exact idempotent signal replay preserves the existing immutable session without duplicating transition evidence.
+The Tuner's typed coordination runtime records collaboration graphs, specialist-domain contracts, cross-layer packets, contradictions, invalidation events, artifact lifecycles, signals, sessions, and deterministic fingerprints. Runtime execution accepts an explicitly supplied collaboration session only for validation preflight; that preflight does not apply signals or infer transitions. A supplied collaboration session that is incomplete, contradicted, stale, malformed, or otherwise not ready fails closed at the runtime boundary. Exact idempotent signal replay preserves the existing immutable session without duplicating transition evidence.
 
 A ready coordination state does not grant implementation, Git, release, deployment, or external-action authority. Conductor remains the exclusive router, Overseer remains the validation-evidence owner, and Arbiter remains the continuation and transition-decision authority.
 
@@ -457,7 +457,7 @@ See the [v1.1.2 Trusted Runtime Authority release notes](docs/releases/v1.1.2-tr
 - It does not guarantee correct or secure output and does not eliminate hallucinations.
 - Prompt content, metadata, routes, governance approvals, coordination status, and audit records do not grant authority.
 - Governance can block work but cannot create authority or capabilities.
-- The Tuner cannot activate itself, route specialists directly, select a winning domain requirement, implement code, validate its own output, or issue an Arbiter transition disposition.
+- The Tuner cannot activate itself, route specialists directly, select a winning domain requirement, implement code, validate its own output, issue an Arbiter transition disposition, or perform Git, release, deployment, or external actions.
 - The current coordination runtime is in-memory and does not add persistent collaboration storage, SQLite, migrations, RPC, or host-process orchestration.
 - Orchestra does not create remote workers, background agents, or distributed orchestration infrastructure.
 - Compatibility mode is explicit, finite, and intended for bounded existing routes.
