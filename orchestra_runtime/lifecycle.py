@@ -250,8 +250,11 @@ def lifecycle_signal_fingerprint(signal: LifecycleSignal) -> str:
 
 
 class LifecycleController(ILifecycleController):
-    def initialize(self, run_id: str) -> LifecycleSnapshot:
-        return LifecycleSnapshot(RunIdentity(_text(run_id, "run_id")), LifecycleState.INITIALIZING)
+    def initialize(self, run_id: str, correlation_id: str | None = None) -> LifecycleSnapshot:
+        return LifecycleSnapshot(
+            RunIdentity(_text(run_id, "run_id"), correlation_id=correlation_id),
+            LifecycleState.INITIALIZING,
+        )
 
     def apply(self, snapshot: LifecycleSnapshot, signal: object) -> LifecycleSnapshot:
         if not isinstance(signal, LifecycleSignal):

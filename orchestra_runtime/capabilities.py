@@ -246,6 +246,7 @@ class CapabilityResolver(ICapabilityResolver):
         *,
         manifest_id: str,
         policy_version: str,
+        correlation_id: str | None = None,
     ) -> RuntimeCapabilityManifest:
         if provenance.source_type not in {
             ProvenanceSource.TRUSTED_COMPOSITION,
@@ -258,7 +259,7 @@ class CapabilityResolver(ICapabilityResolver):
             )
         return RuntimeCapabilityManifest(
             manifest_id,
-            RunIdentity(run_id, provenance.parent_run_id),
+            RunIdentity(run_id, provenance.parent_run_id, correlation_id=correlation_id),
             policy_version,
             tuple(grants),
             provenance,
@@ -351,6 +352,7 @@ class CapabilityResolver(ICapabilityResolver):
             provenance,
             manifest_id=manifest_id,
             policy_version=parent_manifest.policy_version,
+            correlation_id=parent_manifest.run_identity.correlation_id,
         )
 
 

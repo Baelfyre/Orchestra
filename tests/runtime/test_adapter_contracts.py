@@ -124,3 +124,72 @@ def test_context_assembler_preserves_adapter_provided_context_metadata():
     assert "governance_validated" in context.metadata
     assert "destructive_validated" in context.metadata
     assert "dry_run" in context.metadata
+
+
+@pytest.mark.parametrize("adapter_name", ("codex", "antigravity"))
+def test_supported_adapters_envelope_integration(adapter_name: str):
+    from orchestra_runtime.models import EnvelopeMessageType, OrchestraRuntimeEnvelope
+    from orchestra_runtime.serialization import serialize_runtime_envelope
+
+    repo_root = Path(__file__).resolve().parents[2]
+    adapter = AdapterFactory.create(adapter_name, repo_root)
+
+    # 1. Existing default output remains unchanged
+    cmd = adapter.parse_command("review docs")
+    assert cmd.name in ("conductor", "review-docs")
+
+    # 2. Envelope formatting equals core serializer output
+    env_res = OrchestraRuntimeEnvelope(
+        schema_version="1.0.0",
+        message_type=EnvelopeMessageType.EXECUTION_RESULT,
+        timestamp="2026-08-03T08:00:00Z",
+        run_id="run-adapter-1",
+        specialist=adapter_name,
+        operation="op_test",
+        status="COMPLETED",
+        reason_code="RC_OK",
+        summary="Test summary",
+    )
+    formatted_bytes = adapter.format_envelope(env_res)
+    assert formatted_bytes == serialize_runtime_envelope(env_res)
+
+    # 3. Envelope parsing recovers identical typed object
+    parsed_env = adapter.parse_envelope(formatted_bytes)
+    assert parsed_env == env_res
+
+    # 4. Absent correlation_id omitted, present correlation_id preserved
+    from orchestra_runtime import generate_correlation_id
+    valid_cid = generate_correlation_id()
+    env_corr = OrchestraRuntimeEnvelope(
+        schema_version="1.0.0",
+        message_type=EnvelopeMessageType.TRANSITION_DECISION,
+        timestamp="2026-08-03T08:00:00Z",
+        run_id="run-adapter-2",
+        specialist=adapter_name,
+        operation="transition",
+        disposition="AUTO_CONTINUE",
+        reason_code="GOV_PASS",
+        correlation_id=valid_cid,
+    )
+    corr_bytes = adapter.format_envelope(env_corr)
+    parsed_corr = adapter.parse_envelope(corr_bytes)
+    assert parsed_corr.correlation_id == valid_cid
+
+    # 5. Invalid JSON / invalid envelope raises ValueError without fallback
+    with pytest.raises(ValueError):
+        adapter.parse_envelope(b"{invalid_json")
+
+
+@pytest.mark.parametrize(
+    "scaffold_adapter_name",
+    ("claude-code", "cursor", "windsurf", "vscode", "jetbrains", "zed", "neovim"),
+)
+def test_scaffold_adapters_do_not_expose_envelope_capabilities(scaffold_adapter_name: str):
+    from orchestra_runtime.adapters import RuntimeEnvelopeAdapterMixin
+
+    repo_root = Path(__file__).resolve().parents[2]
+    adapter = AdapterFactory.create(scaffold_adapter_name, repo_root)
+
+    assert not isinstance(adapter, RuntimeEnvelopeAdapterMixin)
+    assert not hasattr(adapter, "format_envelope")
+    assert not hasattr(adapter, "parse_envelope")

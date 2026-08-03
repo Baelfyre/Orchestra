@@ -168,7 +168,7 @@ class IDelegationValidator(ABC):
 
 class ILifecycleController(ABC):
     @abstractmethod
-    def initialize(self, run_id: str) -> LifecycleSnapshot:
+    def initialize(self, run_id: str, correlation_id: str | None = None) -> LifecycleSnapshot:
         raise NotImplementedError
 
     @abstractmethod

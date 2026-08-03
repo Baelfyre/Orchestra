@@ -20,6 +20,7 @@ from .authority import (
     initialization_failure_event,
     root_authority_event,
 )
+from .correlation import generate_correlation_id
 from .capabilities import (
     CapabilityResolver,
     RuntimeCapability,
@@ -719,12 +720,14 @@ def build_compatibility_composition(
         )
         for skill_slug in sorted(set(DEFAULT_COMMAND_ROUTES.values()))
     )
+    cid = generate_correlation_id()
     manifest = resolver.build_manifest(
         run_id,
         grants,
         provenance,
         manifest_id="runtime.compatibility.manifest",
         policy_version=COMPATIBILITY_POLICY_VERSION,
+        correlation_id=cid,
     )
     authority_evaluator = AuthorityEvaluator()
     lifecycle_controller = LifecycleController()
@@ -1158,13 +1161,20 @@ class RuntimeExecutor(IRuntimeExecutor):
                 composition.capability_manifest.provenance,
                 manifest_id=composition.capability_manifest.manifest_id,
                 policy_version=composition.capability_manifest.policy_version,
+                correlation_id=composition.run_identity.correlation_id,
             )
             if rebuilt_manifest != composition.capability_manifest:
                 raise RuntimeInitializationError(
                     "capability resolver changed the trusted manifest",
                     "CAPABILITY_MANIFEST_MISMATCH",
                 )
-            initialized = composition.lifecycle_controller.initialize(composition.run_identity.run_id)
+            try:
+                initialized = composition.lifecycle_controller.initialize(
+                    composition.run_identity.run_id,
+                    correlation_id=composition.run_identity.correlation_id,
+                )
+            except TypeError:
+                initialized = composition.lifecycle_controller.initialize(composition.run_identity.run_id)
             if initialized.run_identity.run_id != composition.run_identity.run_id or initialized.state is not LifecycleState.INITIALIZING:
                 raise RuntimeInitializationError(
                     "lifecycle controller returned invalid initialization state",
