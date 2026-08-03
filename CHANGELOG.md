@@ -2,6 +2,26 @@
 
 This changelog tracks the repository history using git tags, merge history, and the prior documented milestone log that lived under `docs/meta/CHANGELOG.md`.
 
+## Unreleased - Spec Kitty-Derived Upgrade Phase 1 Design Specifications
+
+### Added Design Specifications (Not Implemented | Not Released)
+
+- Added design specification for `OrchestraRuntimeEnvelope` (`docs/project/ORCHESTRA_RUNTIME_ENVELOPE.md`), a derived non-authorizing JSON serialization profile for LLM machine adapters (`json:orchestra-envelope`).
+- Added protocol specification for `OrchestraCorrelationID` (`docs/governance/CORRELATION_ID_PROTOCOL.md`), an optional RFC 9562 UUIDv7 correlation header linking root task lineage across sessions without external PyPI dependencies.
+- Added protocol specification for `OrchestraPhaseRetrospective` (`docs/governance/PHASE_RETROSPECTIVE_PROTOCOL.md`), a source-backed closeout evidence artifact (`replacement_effect: none`) with `MIXED_RETENTION_MODEL`.
+- Added schema extension specification for `OrchestraUnitRecord` (`docs/project/ORCHESTRA_UNIT_RECORD_EXTENSION.md`), an immutable JSON schema extension embedded inside `ApprovedUnitPlan`.
+
+### Documented Design Review & Provenance
+
+- Documented selective Spec Kitty-derived design review (v3.2.6, commit `8466727ebbbc01fcaf43575657c9b1b9553784d9`), contract ownership placement (`docs/project/SPEC_KITTY_DERIVED_CONTRACT_OWNERSHIP.md`), and upgrade roadmap (`docs/project/SPEC_KITTY_DERIVED_UPGRADE_ROADMAP.md`).
+- Documented explicit rejection of standalone mutable unit-state files, duplicate manual doctrine packs, and automated workflow merge authority to preserve single source of truth.
+- Documented planned future implementation sequence (`Phase 2A` through `Phase 2G`).
+
+### Preserved Boundaries
+
+- No runtime code (`orchestra_runtime/`), tests (`tests/`), adapters (`adapters/`), scripts (`scripts/`), skills (`skills/`), templates (`templates/`), or canonical policies (`DELEGATED_EXECUTION_POLICY.md`) modified.
+- No runtime execution, policy integration, git tagging, release, merge, or deployment performed.
+
 ## Unreleased - Issue #204 Codex Tuner Portable Export
 
 ### Fixed
