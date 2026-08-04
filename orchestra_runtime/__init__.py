@@ -203,6 +203,39 @@ from .services import (
     SkillRegistry,
     build_compatibility_composition,
 )
+_LAZY_STATUS_EXPORTS = {
+    "STATUS_PROJECTION_VERSION",
+    "OrchestraStatusProjection",
+    "GitStatus",
+    "ProjectStatus",
+    "ContractStatus",
+    "ValidationStatus",
+    "DiagnosticsStatus",
+    "StatusDiagnostic",
+    "build_status_projection",
+    "collect_git_status",
+    "collect_project_status",
+    "collect_contract_status",
+    "reconcile_validation_status",
+    "serialize_status_projection",
+    "serialize_status_projection_to_str",
+    "render_status_projection",
+}
+
+
+def __getattr__(name: str):
+    if name in _LAZY_STATUS_EXPORTS:
+        from . import status
+
+        val = getattr(status, name)
+        globals()[name] = val
+        return val
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
+
+def __dir__():
+    return sorted(list(globals().keys()) + list(_LAZY_STATUS_EXPORTS))
+
 
 __all__ = [
     "AdapterFactory",
@@ -385,4 +418,20 @@ __all__ = [
     "serialize_phase_retrospective_to_str",
     "should_generate_phase_retrospective",
     "terminal_result_event",
+    "STATUS_PROJECTION_VERSION",
+    "OrchestraStatusProjection",
+    "GitStatus",
+    "ProjectStatus",
+    "ContractStatus",
+    "ValidationStatus",
+    "DiagnosticsStatus",
+    "StatusDiagnostic",
+    "build_status_projection",
+    "collect_git_status",
+    "collect_project_status",
+    "collect_contract_status",
+    "reconcile_validation_status",
+    "serialize_status_projection",
+    "serialize_status_projection_to_str",
+    "render_status_projection",
 ]

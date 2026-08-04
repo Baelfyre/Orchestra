@@ -4,6 +4,17 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased - Spec Kitty-Derived Governed Phase Execution Contracts
 
+### Implemented Candidate Phase 3B Status Projection
+
+- Implemented `OrchestraStatusProjection` as a read-only, deterministic, non-authorizing runtime and CLI surface.
+- Added immutable typed status records with strict runtime validation, explicit unknown and conflict diagnostics, revision-matched validation evidence, and deterministic JSON serialization.
+- Added local Git fact collection without fetch, network access, repository mutation, persistence, or cache writes.
+- Added NUL-delimited Git porcelain parsing for paths containing spaces, tabs, newlines, quotes, and non-ASCII characters.
+- Added warning-clean module and script CLI surfaces through `python -m orchestra_runtime.status` and `python scripts/orchestra_status.py`.
+- Added 28 focused StatusProjection tests with 91% statement and branch coverage for `orchestra_runtime/status.py`.
+- Passed 418 runtime tests with 93.80% overall runtime-package coverage, the full behavior suite, strict governance validation, direct validators, CLI checks, and read-only before-and-after evidence.
+- Phase 3B remains unreleased and unmerged until pull-request review and merge. Phase 3C `OrchestraWorktreeContract` implementation is not included or authorized.
+
 ### Phase 3A Post-Merge State Synchronization
 
 - Merged PR #210 (`1629eaf3cd3f156f8913f84c9229666257a3145a`): Phase 3A deferred-capability design package. One commit, 11 documentation paths, 635 insertions, 18 deletions.
