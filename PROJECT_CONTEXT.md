@@ -10,7 +10,7 @@ A governance-first specialist skill framework that routes complex AI-assisted so
 Open-source developer tooling and AI orchestration framework
 
 ## Current Stage
-Public release `v1.1.2` (Trusted Runtime Authority). Unreleased `main` includes the merged Spec Kitty-derived governed phase execution contracts through PR #208 (merge commit `1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`).
+Public release `v1.1.2` (Trusted Runtime Authority). Unreleased `main` includes the merged Spec Kitty-derived governed phase execution contracts through PR #208 (merge commit `1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`) and the merged Phase 3A deferred-capability design package through PR #210 (merge commit `1629eaf3cd3f156f8913f84c9229666257a3145a`). Phase 3B implementation is not started.
 
 ## Primary Users
 Developers and maintainers who install Orchestra as a plugin, skill set, or runtime package inside a supported or scaffold-only IDE or coding host (Claude Code, Codex, Antigravity, Cursor, Windsurf, JetBrains, Zed, Neovim)
@@ -35,6 +35,8 @@ Guidance used for this classification:
 - State-lock mechanism guards against concurrent write collisions.
 - Scaffold-only adapters (Cursor, Windsurf, JetBrains, Zed, Neovim) must not be represented as production-ready or marketplace-published until formally graduated per `docs/project/SCAFFOLD_ADAPTER_GRADUATION_CRITERIA.md`.
 - Runtime envelopes are transport metadata, not execution authority. Correlation IDs are observational identifiers. Retrospectives are supplementary audit records. `ApprovedUnitPlan` governance decision references do not replace execution-envelope authority.
+- `OrchestraStatusProjection` is read-only and derived; it does not mutate repository state, Git refs, or governance policy. It is not a source of truth. Missing or conflicting data reports UNKNOWN. Exit codes report command execution success only and do not create governance authority.
+- `OrchestraWorktreeContract` is optional and host-capability-dependent. Worktree isolation must not be mandatory for single-agent or lightweight execution. Cleanup is `EXPLICIT_HOST_ACTION_ONLY`; no automatic deletion of dirty or user-owned worktrees is permitted.
 - No vendoring of external plugin code, and no claiming unsupported compatibility or compliance, per `docs/CONTRIBUTING.md`.
 
 ## Validation Requirements
@@ -62,4 +64,4 @@ Guidance used for this classification:
 Not yet decided. No project-specific maintainer preferences beyond `docs/CONTRIBUTING.md` are currently documented for this field.
 
 ## Last Reviewed
-2026-08-04
+2026-08-05

@@ -4,6 +4,14 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased - Spec Kitty-Derived Governed Phase Execution Contracts
 
+### Phase 3A Post-Merge State Synchronization
+
+- Merged PR #210 (`1629eaf3cd3f156f8913f84c9229666257a3145a`): Phase 3A deferred-capability design package. One commit, 11 documentation paths, 635 insertions, 18 deletions.
+- All 9 required CI checks passed before merge: Analyze (actions), Analyze (python), CodeQL, governance-check, native-macos-latest, native-ubuntu-latest, native-windows-latest, runtime-tests, validate.
+- No runtime implementation, no release, no policy activation.
+- Governance deviation: PR #210 was merged by the maintainer after all required technical checks passed. No independent APPROVED review was recorded before merge. The Copilot review state was COMMENTED only due to exhausted quota. This is documented as a governance process deviation and does not retroactively convert the technical self-review into an independent approval.
+- Review findings integrated into Phase 3B and Phase 3C implementation requirements: see `DECISION_LOG.md` for details.
+
 ### Added Candidate Phase 3 Design Specifications (Phase 3A)
 
 - Promoted and specified `OrchestraStatusProjection` (`docs/project/ORCHESTRA_STATUS_PROJECTION.md`), a read-only, deterministic status summary and JSON schema owned canonically by Scribe. Priority 1 target for Candidate Phase 3B.

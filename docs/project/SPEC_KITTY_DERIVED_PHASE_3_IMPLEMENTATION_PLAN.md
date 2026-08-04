@@ -3,10 +3,12 @@
 ## Status
 ```text
 IMPLEMENTATION PLAN
-IMPLEMENTATION NOT STARTED
-POLICY NOT INTEGRATED
+PHASE 3A MERGED (PR #210, SHA 1629eaf3cd3f156f8913f84c9229666257a3145a)
+PHASE 3B NOT STARTED
+IMPLEMENTATION AUTHORITY NOT GRANTED BY THIS DOCUMENT
 NOT RELEASED
-VERDICT: READY_FOR_PHASE_3A_MAINTAINER_REVIEW
+POLICY NOT ACTIVATED
+VERDICT: PHASE_3A_MERGED_PHASE_3B_NOT_STARTED
 ```
 
 ## Purpose
@@ -16,17 +18,27 @@ This document specifies the technical implementation plan for executing the Cand
 
 ## Subphase Sequencing & Scope
 
-### Phase 3A: Deferred-Capability Selection & Design Baseline (`DESIGN_COMPLETE`)
+### Phase 3A: Deferred-Capability Selection & Design Baseline (`DESIGN_ACCEPTED_MERGED`)
 - Read-only repository assessment, capability selection, ownership assignment, security analysis, compatibility definition, and implementation planning.
-- Zero runtime code, script, adapter, test, or policy edits.
+- Design package accepted and merged through PR #210 (`1629eaf3cd3f156f8913f84c9229666257a3145a`). Zero runtime code, script, adapter, test, or policy edits performed.
 
-### Phase 3B: `OrchestraStatusProjection` Implementation (`PLANNED`)
+### Phase 3B: `OrchestraStatusProjection` Implementation (`PLANNED` / `NOT_STARTED`)
 - Implementation of `OrchestraStatusProjection` typed model (`orchestra_runtime/status.py`), JSON serializer, and CLI renderer (`scripts/orchestra_status.py` / `python -m orchestra_runtime.status`).
 - Unit tests in `tests/runtime/test_status_projection.py`.
+- **Mandatory Edge Case Coverage (from PR #210 review finding F-001):**
+  - Multiple remotes, no origin remote, unborn branch
+  - Detached HEAD, shallow clone, CI detached checkout
+  - Git binary unavailable, not a Git repository
+  - Read-only filesystem, worktree checkout
+  - Dirty repository, conflicting canonical files, malformed canonical prose
 
-### Phase 3C: `OrchestraWorktreeContract` Implementation (`PLANNED`)
+### Phase 3C: `OrchestraWorktreeContract` Implementation (`PLANNED` / `NOT_STARTED`)
 - Implementation of `OrchestraWorktreeContract` typed model (`orchestra_runtime/worktree.py`), path confinement validator, base SHA checker, and host adapter metadata integration.
 - Unit tests in `tests/runtime/test_worktree_contract.py`.
+- **Mandatory Scope & Finding Requirements (from PR #210 review findings F-002, F-003):**
+  - Define or remove `ADVISORY_SAFE_SUBSET` from `cleanup_policy` schema in prose before implementation begins. Must not permit automatic destructive cleanup.
+  - Coverage for locked worktrees, nested repositories, submodules
+  - Creation races, cleanup races, case-insensitive path collisions
 
 ### Phase 3D: Consolidated Validation & Safety Audit (`PLANNED`)
 - Consolidated behavior, governance, security, packaging, and backward-compatibility validation across all direct scripts, behavior suite, and runtime tests.

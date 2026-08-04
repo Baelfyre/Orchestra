@@ -7,7 +7,7 @@
 - **Stable Continuation Branch:** `main`
 - **Current Public Release:** `v1.1.2`
 - **Release Status:** Published July 14, 2026
-- **Current Main Status:** Contains unreleased Spec Kitty-derived governed phase execution contracts merged through PR #208
+- **Current Main Status:** Contains unreleased Spec Kitty-derived governed phase execution contracts merged through PR #208, and merged Phase 3A deferred-capability design package through PR #210 (merge commit `1629eaf3cd3f156f8913f84c9229666257a3145a`)
 - **Spec Kitty-Derived Phase 2:** Merged / Canonical (`orchestra_runtime/`)
 - **Spec Kitty-Derived Phase 2 Merge Commit:** `1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`
 - **Spec Kitty-Derived Phase 2 Reviewed Head:** `1a57c489445a9a333e929cae8f857312bb126a62`
@@ -15,7 +15,15 @@
 - **Spec Kitty-Derived Phase 2 Policy Activation:** Not performed
 - **Spec Kitty-Derived Phase 2 Validation:** 390 runtime tests passed (93.72% coverage), behavior suite passed (exit 0), 20 cross-contract integration scenarios passed, cross-platform CI passed (Windows, Ubuntu, macOS)
 - **Implemented Contracts:** `OrchestraRuntimeEnvelope` (execution_result, transition_decision, audit_event), `OrchestraCorrelationID` (RFC 9562 UUIDv7 root generation and child propagation), `OrchestraPhaseRetrospective` (model and deterministic builder), `ApprovedUnitPlan` (15-field extension and contextual validator)
-- **Explicit Deferred Boundaries:** Cross-session correlation restoration, durable correlation persistence, retry/wait/resume state machines, automatic retrospective closeout generation, durable retrospective retention, automatic Steward planning/dispatch integration, revision-history ordering, automatic policy activation, `OrchestraWorktreeContract`, and `OrchestraStatusProjection`
+- **Spec Kitty-Derived Phase 3A:** Design accepted and merged through PR #210
+- **Spec Kitty-Derived Phase 3A Reviewed Head:** `3d8b14aaffa00d66d1faaaef55ec27ecbc10cdc3`
+- **Spec Kitty-Derived Phase 3A Merge Commit:** `1629eaf3cd3f156f8913f84c9229666257a3145a`
+- **Spec Kitty-Derived Phase 3A Merged At:** 2026-08-04T15:48:49Z
+- **OrchestraStatusProjection:** Design specified and accepted. `DESIGN_ACCEPTED_MERGED`. Runtime not implemented. Canonical owner: Scribe. Read-only, derived, non-authorizing, not a source of truth. Missing or conflicting data reports UNKNOWN.
+- **OrchestraWorktreeContract:** Design specified and accepted. `DESIGN_ACCEPTED_MERGED`. Runtime not implemented. Canonical owner: Ponytail. Optional, host-capability-dependent. Cleanup is EXPLICIT_HOST_ACTION_ONLY. No automatic deletion of dirty or user worktrees.
+- **Spec Kitty-Derived Phase 3A Release / Deployment:** Not performed
+- **Spec Kitty-Derived Phase 3A Policy Activation:** Not performed
+- **Explicit Deferred Boundaries:** Cross-session correlation restoration, durable correlation persistence, retry/wait/resume state machines, automatic retrospective closeout generation, durable retrospective retention, automatic Steward planning/dispatch integration, revision-history ordering, automatic policy activation
 - **Delegated Phase A:** Merged / Canonical (`docs/governance/DELEGATED_EXECUTION_POLICY.md`)
 - **Delegated Phase B:** Merged / Canonical through PR #190
 - **Delegated Phase B Merge Commit:** `d37a2f7b31543efacf7a5e81c3f4d08c12da017d`
@@ -41,6 +49,6 @@
   python scripts\preflight_sync_check.py
   ```
 - **Next Projected Portfolio Task:** Separate Remotion Orchestra explainer, beginning with the pre-production brief and storyboard
-- **Next Active Software Task:** Candidate Phase 3A: read-only deferred-capability selection, architecture ownership, and design baseline for `OrchestraWorktreeContract` and `OrchestraStatusProjection` (implementation authority not yet granted)
+- **Next Active Software Task:** Candidate Phase 3B: `OrchestraStatusProjection` implementation, subject to separate maintainer authorization
 
 This file records stable current state only. Historical decisions remain in `DECISION_LOG.md` and `CHANGELOG.md`.

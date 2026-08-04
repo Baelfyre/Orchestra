@@ -1,5 +1,57 @@
 # Decision Log
 
+## Date: 2026-08-05
+
+**Decision:**
+Accept PR #210 merge as canonical Phase 3A design state. The Phase 3A documentation package (`docs(spec-kitty): define Phase 3 deferred capability designs`) is now merged and canonical on `main`.
+
+**Reviewed Head:** `3d8b14aaffa00d66d1faaaef55ec27ecbc10cdc3`
+**Merge Commit:** `1629eaf3cd3f156f8913f84c9229666257a3145a`
+**Merged At:** 2026-08-04T15:48:49Z
+**PR:** #210
+
+**Status:**
+DESIGN_ACCEPTED_MERGED | IMPLEMENTATION NOT STARTED | NOT RELEASED | POLICY NOT ACTIVATED
+
+**Accepted Phase 3A Designs:**
+- `OrchestraStatusProjection`: Read-only status summary and JSON schema (`docs/project/ORCHESTRA_STATUS_PROJECTION.md`). Canonical Owner: Scribe. Secondary Consumers: Conductor, Arbiter, Overseer, Ponytail. Priority 1 target for Candidate Phase 3B.
+- `OrchestraWorktreeContract`: Optional host worktree negotiation and path confinement contract (`docs/project/ORCHESTRA_WORKTREE_CONTRACT.md`). Canonical Owner: Ponytail. Secondary Consumers: Conductor, Arbiter, Overseer, Host Adapters. Priority 2 target for Candidate Phase 3C.
+
+**Technical Validation Before Merge:**
+- All 9 required CI checks passed: Analyze (actions), Analyze (python), CodeQL, governance-check, native-macos-latest, native-ubuntu-latest, native-windows-latest, runtime-tests, validate.
+- 390 runtime tests, 93.72% coverage, behavior suite exit 0, all direct validators passed.
+
+**Governance Process Deviation:**
+All required technical checks passed before merge. No independent APPROVED review was recorded before merge. The maintainer completed the merge after reviewing the passing validation state. The Copilot review state was COMMENTED only because review quota was exhausted; it is not an approval. This record does not treat the technical self-review as an independent approval. This is documented as a governance process deviation and does not retroactively convert the technical self-review into an independent approval. No administrator bypass has been asserted; the GitHub API returned `reviewDecision: REVIEW_REQUIRED` at the time of the immutable-head review.
+
+**Implementation Sequence:**
+- Phase 3B: `OrchestraStatusProjection` model, JSON serializer, CLI renderer, and unit tests
+- Phase 3C: `OrchestraWorktreeContract` model, path confinement validator, base SHA checker, and unit tests
+- Phase 3D: Consolidated cross-platform, behavior, governance, security, and compatibility validation
+- Phase 3E: Maintainer review, commit authorization, push authorization, remote verification, and PR merge
+
+**Review Findings as Implementation Constraints (from Phase 3A immutable-head review):**
+
+Phase 3B mandatory edge-case coverage (F-001 advisory):
+- Multiple remotes, no origin, unborn branch
+- Detached HEAD, shallow clone, CI detached checkout
+- Git binary unavailable, not a Git repository
+- Read-only filesystem, worktree checkout
+- Dirty repository, conflicting canonical files, malformed canonical prose
+
+Before Phase 3C implementation (F-003 non-blocking):
+- Define or remove `ADVISORY_SAFE_SUBSET` from `OrchestraWorktreeContract` cleanup_policy schema. If retained, it MUST NOT permit automatic destructive cleanup; all destructive cleanup remains `EXPLICIT_HOST_ACTION_ONLY`.
+
+Phase 3C mandatory coverage (F-002 advisory):
+- Locked worktrees, nested repositories, submodules
+- Creation races, cleanup races, case-insensitive path collisions
+
+Compatibility advisory (F-004 advisory):
+- JetBrains, Zed, and Neovim adapter rows are absent from the Phase 3 matrix. Acknowledge absence or add NOT_APPLICABLE rows before Phase 3C implementation.
+
+**Decision Boundary:**
+This acceptance records PR #210 merge as canonical Phase 3A design state. It does NOT authorize Phase 3B runtime code edits, script edits, adapter edits, test edits, policy amendments, release, or deployment. Phase 3B requires separate maintainer authorization.
+
 ## Date: 2026-08-04
 
 **Decision:**
