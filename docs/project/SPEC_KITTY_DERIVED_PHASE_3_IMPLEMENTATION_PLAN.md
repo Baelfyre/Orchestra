@@ -4,11 +4,12 @@
 ```text
 IMPLEMENTATION PLAN
 PHASE 3A MERGED (PR #210, SHA 1629eaf3cd3f156f8913f84c9229666257a3145a)
-PHASE 3B NOT STARTED
+PHASE 3B IMPLEMENTED AND MERGED (PR #212, REVIEWED HEAD 2a6c7ea8db16ce73d66fae566672f3681094b0f7, MERGE COMMIT fa1e052d82301e70a5869258c3fc6af765163353)
+PHASE 3C NOT STARTED
 IMPLEMENTATION AUTHORITY NOT GRANTED BY THIS DOCUMENT
 NOT RELEASED
 POLICY NOT ACTIVATED
-VERDICT: PHASE_3A_MERGED_PHASE_3B_NOT_STARTED
+VERDICT: PHASE_3B_IMPLEMENTED_MERGED_PHASE_3C_NOT_STARTED
 ```
 
 ## Purpose
@@ -22,7 +23,7 @@ This document specifies the technical implementation plan for executing the Cand
 - Read-only repository assessment, capability selection, ownership assignment, security analysis, compatibility definition, and implementation planning.
 - Design package accepted and merged through PR #210 (`1629eaf3cd3f156f8913f84c9229666257a3145a`). Zero runtime code, script, adapter, test, or policy edits performed.
 
-### Phase 3B: `OrchestraStatusProjection` Implementation (`IMPLEMENTED_LOCALLY_PENDING_MAINTAINER_REVIEW`)
+### Phase 3B: `OrchestraStatusProjection` Implementation (`IMPLEMENTED_AND_MERGED` via PR #212)
 - Implementation of `OrchestraStatusProjection` typed model (`orchestra_runtime/status.py`), JSON serializer, and CLI renderer (`scripts/orchestra_status.py` / `python -m orchestra_runtime.status`).
 - Unit tests in `tests/runtime/test_status_projection.py`.
 - **Mandatory Edge Case Coverage (from PR #210 review finding F-001):**

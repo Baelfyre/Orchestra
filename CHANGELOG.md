@@ -4,6 +4,13 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased - Spec Kitty-Derived Governed Phase Execution Contracts
 
+### Phase 3B Post-Merge State Synchronization
+
+- Merged PR #212 (`fa1e052d82301e70a5869258c3fc6af765163353`): Phase 3B `OrchestraStatusProjection` implementation. One commit (`2a6c7ea8db16ce73d66fae566672f3681094b0f7`), 8 changed paths, 1617 insertions, 51 deletions.
+- All 9 required CI checks passed before merge: Analyze (actions), Analyze (python), CodeQL, governance-check, native-macos-latest, native-ubuntu-latest, native-windows-latest, runtime-tests, validate.
+- No release, no policy activation.
+- Governance deviation: PR #212 was merged by the maintainer after all required technical checks passed. No independent APPROVED review was recorded before merge. The Copilot review state was COMMENTED only due to exhausted quota. This is documented as a governance process deviation and does not retroactively convert the technical self-review into an independent approval.
+
 ### Implemented Candidate Phase 3B Status Projection
 
 - Implemented `OrchestraStatusProjection` as a read-only, deterministic, non-authorizing runtime and CLI surface.
@@ -13,7 +20,7 @@ This changelog tracks the repository history using git tags, merge history, and 
 - Added warning-clean module and script CLI surfaces through `python -m orchestra_runtime.status` and `python scripts/orchestra_status.py`.
 - Added 28 focused StatusProjection tests with 91% statement and branch coverage for `orchestra_runtime/status.py`.
 - Passed 418 runtime tests with 93.80% overall runtime-package coverage, the full behavior suite, strict governance validation, direct validators, CLI checks, and read-only before-and-after evidence.
-- Phase 3B remains unreleased and unmerged until pull-request review and merge. Phase 3C `OrchestraWorktreeContract` implementation is not included or authorized.
+- Phase 3B merged via PR #212. Phase 3C `OrchestraWorktreeContract` implementation is not included or authorized.
 
 ### Phase 3A Post-Merge State Synchronization
 

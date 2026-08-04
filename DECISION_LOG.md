@@ -3,6 +3,51 @@
 ## Date: 2026-08-05
 
 **Decision:**
+Accept PR #212 merge as canonical Phase 3B implementation state. The Phase 3B `OrchestraStatusProjection` runtime implementation (`feat(runtime): add read-only status projection`) is now merged and canonical on `main`.
+
+**Reviewed Head:** `2a6c7ea8db16ce73d66fae566672f3681094b0f7`
+**Merge Commit:** `fa1e052d82301e70a5869258c3fc6af765163353`
+**Merged At:** 2026-08-04T21:34:29Z
+**PR:** #212
+**Title:** feat(runtime): add read-only status projection
+**Base SHA:** `e55658da698e7b8871dd7851c62b9e22d860fb2f`
+
+**Status:**
+IMPLEMENTED_AND_MERGED | NOT_RELEASED | POLICY_NOT_ACTIVATED
+
+**Implemented Contracts:**
+- `OrchestraStatusProjection`: Read-only, deterministic, non-authorizing runtime and CLI surface (`orchestra_runtime/status.py`). Canonical Owner: Scribe. Surfaces live Git facts, project state, contract implementation status, and revision-matched validation results in human-readable terminal output and structured JSON. Does not mutate repository state, Git refs, or governance policy. Missing or conflicting data reports UNKNOWN. Exit codes report command execution success only and do not create governance authority.
+- CLI surfaces: `python -m orchestra_runtime.status` and `python scripts/orchestra_status.py`.
+- 28 focused unit tests in `tests/runtime/test_status_projection.py` (91% statement and branch coverage for `orchestra_runtime/status.py`).
+- Full lazy package export in `orchestra_runtime/__init__.py` to eliminate module execution runpy warning.
+
+**Changed Paths (8):**
+- `orchestra_runtime/status.py` (added, 839 lines)
+- `orchestra_runtime/__init__.py` (modified, +49)
+- `scripts/orchestra_status.py` (added, 19 lines)
+- `tests/runtime/test_status_projection.py` (added, 530 lines)
+- `docs/project/ORCHESTRA_STATUS_PROJECTION.md` (modified, +87/-50)
+- `docs/project/SPEC_KITTY_DERIVED_PHASE_3_IMPLEMENTATION_PLAN.md` (modified, +1/-1)
+- `CHANGELOG.md` (modified, +11)
+- `docs/artificer/external-sources/SPEC_KITTY_PHASE_3B_IMPLEMENTATION_HANDOFF.md` (added, 81 lines)
+
+**Validation Evidence:**
+- 418 runtime tests passed (93.80% overall runtime-package coverage)
+- 28 focused StatusProjection tests: 91% statement and branch coverage for `orchestra_runtime/status.py`
+- Full behavior suite passed (exit 0)
+- All 9 required CI checks passed: Analyze (actions), Analyze (python), CodeQL, governance-check, native-macos-latest, native-ubuntu-latest, native-windows-latest, runtime-tests, validate.
+
+**Governance Process Deviation:**
+All required technical checks passed before merge. No independent APPROVED review was recorded before merge. The maintainer completed the merge after reviewing the passing validation state. The Copilot review state was COMMENTED only because review quota was exhausted; it is not an approval. This record does not treat the technical self-review as an independent approval. This is documented as a governance process deviation and does not retroactively convert the technical self-review into an independent approval. The GitHub API returned `reviewDecision: REVIEW_REQUIRED` at the time of merge.
+
+**Decision Boundary:**
+This acceptance records PR #212 merge as canonical Phase 3B implementation state. It does NOT authorize Phase 3C runtime code edits, script edits, adapter edits, test edits, policy amendments, release, or deployment. Phase 3C requires separate maintainer authorization.
+
+---
+
+## Date: 2026-08-05
+
+**Decision:**
 Accept PR #210 merge as canonical Phase 3A design state. The Phase 3A documentation package (`docs(spec-kitty): define Phase 3 deferred capability designs`) is now merged and canonical on `main`.
 
 **Reviewed Head:** `3d8b14aaffa00d66d1faaaef55ec27ecbc10cdc3`
