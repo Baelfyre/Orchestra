@@ -35,7 +35,7 @@ This document defines canonical placement, single specialist ownership, and arch
 
 | Contract Name | Canonical Specification | Canonical Owner | Secondary Consumers | Validation Owner | Continuity Consumer | Design Status | Implementation Status | Policy Integration Status | Release Status |
 |---|---|---|---|---|---|---|---|---|---|
-| **OrchestraStatusProjection** | `docs/project/ORCHESTRA_STATUS_PROJECTION.md` | Scribe | Conductor, Arbiter, Overseer, Ponytail | Overseer | Arbiter | `DESIGN_ACCEPTED_MERGED` | `NOT_IMPLEMENTED` | `NOT_APPLICABLE` | `NOT_RELEASED` |
+| **OrchestraStatusProjection** | `docs/project/ORCHESTRA_STATUS_PROJECTION.md` | Scribe | Conductor, Arbiter, Overseer, Ponytail | Overseer | Arbiter | `DESIGN_ACCEPTED_MERGED` | `IMPLEMENTED_MERGED` | `NOT_APPLICABLE` | `NOT_RELEASED` |
 | **OrchestraWorktreeContract** | `docs/project/ORCHESTRA_WORKTREE_CONTRACT.md` | Ponytail | Conductor, Arbiter, Overseer, Host Adapters | Overseer | Arbiter | `DESIGN_ACCEPTED_MERGED` | `NOT_IMPLEMENTED` | `NOT_APPLICABLE` | `NOT_RELEASED` |
 
 ---

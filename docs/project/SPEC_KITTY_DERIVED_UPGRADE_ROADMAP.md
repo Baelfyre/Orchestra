@@ -9,6 +9,9 @@
 > **Merged PR (Phase 3A):** `#210`
 > **Reviewed Head (Phase 3A):** `3d8b14aaffa00d66d1faaaef55ec27ecbc10cdc3`
 > **Merge Commit SHA (Phase 3A):** `1629eaf3cd3f156f8913f84c9229666257a3145a`
+> **Merged PR (Phase 3B):** `#212`
+> **Reviewed Head (Phase 3B):** `2a6c7ea8db16ce73d66fae566672f3681094b0f7`
+> **Merge Commit SHA (Phase 3B):** `fa1e052d82301e70a5869258c3fc6af765163353`
 > **Source Commit:** `8466727ebbbc01fcaf43575657c9b1b9553784d9` (`Priivacy-ai/spec-kitty` v3.2.6)
 
 ---
@@ -66,7 +69,15 @@ This roadmap documents the completed Candidate Phase 1 design specifications and
 - [x] Phase 3A: Read-only capability selection, ownership, architecture, compatibility, security, and implementation planning completed (`docs/project/SPEC_KITTY_DERIVED_PHASE_3_CAPABILITY_ASSESSMENT.md`).
 - [x] Produced design specifications `docs/project/ORCHESTRA_STATUS_PROJECTION.md` and `docs/project/ORCHESTRA_WORKTREE_CONTRACT.md`.
 - [x] Produced implementation plan `docs/project/SPEC_KITTY_DERIVED_PHASE_3_IMPLEMENTATION_PLAN.md` and matrix `docs/project/SPEC_KITTY_DERIVED_PHASE_3_COMPATIBILITY_AND_SECURITY_MATRIX.md`.
-- [x] Design accepted and merged through PR #210 (reviewed head `3d8b14aaffa00d66d1faaaef55ec27ecbc10cdc3`, merge commit `1629eaf3cd3f156f8913f84c9229666257a3145a`). Next gate: Candidate Phase 3B (`OrchestraStatusProjection` implementation, subject to separate maintainer authorization).
+- [x] Design accepted and merged through PR #210 (reviewed head `3d8b14aaffa00d66d1faaaef55ec27ecbc10cdc3`, merge commit `1629eaf3cd3f156f8913f84c9229666257a3145a`).
+
+### Phase 3B: `OrchestraStatusProjection` Implementation (`IMPLEMENTED_AND_MERGED`)
+- [x] Implemented `OrchestraStatusProjection` typed model (`orchestra_runtime/status.py`), JSON serializer, and CLI renderer (`scripts/orchestra_status.py` / `python -m orchestra_runtime.status`).
+- [x] Added 28 focused unit tests in `tests/runtime/test_status_projection.py` (91% statement and branch coverage for `orchestra_runtime/status.py`).
+- [x] Added lazy package exports in `orchestra_runtime/__init__.py` to eliminate module execution runpy warning.
+- [x] NUL-delimited porcelain v1 -z parsing implemented for paths containing spaces, special characters, and non-ASCII.
+- [x] Validated: 418 runtime tests (93.80% coverage), full behavior suite (exit 0), all 9 CI checks passed.
+- [x] Merged through PR #212 (reviewed head `2a6c7ea8db16ce73d66fae566672f3681094b0f7`, merge commit `fa1e052d82301e70a5869258c3fc6af765163353`).
 
 ---
 
@@ -101,9 +112,9 @@ This roadmap documents the completed Candidate Phase 1 design specifications and
 ## 4. Planned Candidate Phase 3 Sequence (`DESIGN_COMPLETE` / `IMPLEMENTATION_NOT_STARTED`)
 
 - **Phase 3A:** Read-only capability selection, ownership, architecture, compatibility, security, and implementation planning (`DESIGN_ACCEPTED_MERGED` via PR #210, merge commit `1629eaf3cd3f156f8913f84c9229666257a3145a`).
-- **Phase 3B:** `OrchestraStatusProjection` model, JSON serializer, CLI renderer, and unit tests (`IMPLEMENTATION_NOT_STARTED`).
+- **Phase 3B:** `OrchestraStatusProjection` model, JSON serializer, CLI renderer, and unit tests (`IMPLEMENTED_AND_MERGED` via PR #212, merge commit `fa1e052d82301e70a5869258c3fc6af765163353`).
 - **Phase 3C:** `OrchestraWorktreeContract` model, path confinement validator, base SHA checker, and unit tests (`IMPLEMENTATION_NOT_STARTED`).
 - **Phase 3D:** Consolidated cross-platform, behavior, governance, security, and compatibility validation (`PLANNED`).
 - **Phase 3E:** Maintainer review, commit authorization, push authorization, remote verification, and PR merge (`PLANNED`).
 
-Phase 3A design accepted and merged; runtime not implemented; not released; no policy activation.
+Phase 3A design accepted and merged; Phase 3B implemented and merged; Phase 3C not started; not released; no policy activation.

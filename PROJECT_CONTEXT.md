@@ -10,7 +10,7 @@ A governance-first specialist skill framework that routes complex AI-assisted so
 Open-source developer tooling and AI orchestration framework
 
 ## Current Stage
-Public release `v1.1.2` (Trusted Runtime Authority). Unreleased `main` includes the merged Spec Kitty-derived governed phase execution contracts through PR #208 (merge commit `1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`) and the merged Phase 3A deferred-capability design package through PR #210 (merge commit `1629eaf3cd3f156f8913f84c9229666257a3145a`). Phase 3B implementation is not started.
+Public release `v1.1.2` (Trusted Runtime Authority). Unreleased `main` includes the merged Spec Kitty-derived governed phase execution contracts through PR #208 (merge commit `1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`), the merged Phase 3A deferred-capability design package through PR #210 (merge commit `1629eaf3cd3f156f8913f84c9229666257a3145a`), and the merged Phase 3B `OrchestraStatusProjection` implementation through PR #212 (merge commit `fa1e052d82301e70a5869258c3fc6af765163353`). Phase 3C implementation is not started.
 
 ## Primary Users
 Developers and maintainers who install Orchestra as a plugin, skill set, or runtime package inside a supported or scaffold-only IDE or coding host (Claude Code, Codex, Antigravity, Cursor, Windsurf, JetBrains, Zed, Neovim)

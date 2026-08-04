@@ -22,12 +22,12 @@ Runtime Status: `IMPLEMENTED_MERGED` | `NOT_RELEASED`
 ### Candidate Phase 3 Sequence (Design & Implementation Planning)
 
 - [x] Phase 3A: Read-only deferred-capability selection, ownership, compatibility, security, and implementation planning for `OrchestraWorktreeContract` and `OrchestraStatusProjection` (`docs/project/SPEC_KITTY_DERIVED_PHASE_3_CAPABILITY_ASSESSMENT.md`). Design accepted and merged through PR #210 (`1629eaf3cd3f156f8913f84c9229666257a3145a`).
-- [ ] Phase 3B: `OrchestraStatusProjection` model, JSON serializer, CLI renderer, and unit tests.
+- [x] Phase 3B: `OrchestraStatusProjection` model, JSON serializer, CLI renderer, and unit tests. Implemented and merged through PR #212 (reviewed head `2a6c7ea8db16ce73d66fae566672f3681094b0f7`, merge commit `fa1e052d82301e70a5869258c3fc6af765163353`).
 - [ ] Phase 3C: `OrchestraWorktreeContract` model, path confinement validator, base SHA checker, and unit tests.
 - [ ] Phase 3D: Consolidated cross-platform, behavior, governance, security, and compatibility validation.
 - [ ] Phase 3E: Maintainer implementation review, commit authorization, push authorization, remote verification, and PR merge.
 
-Phase 3A design and planning only; runtime not implemented; not released; no policy activation.
+Phase 3A design and planning only; Phase 3B implemented and merged; not released; no policy activation.
 
 ## Authority and Capability Runtime Progression
 
