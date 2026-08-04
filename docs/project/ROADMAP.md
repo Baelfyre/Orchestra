@@ -1,5 +1,27 @@
 # Roadmap
 
+## Spec Kitty-Derived Orchestra Contracts
+
+Design Status: `DESIGN_COMPLETE`
+Runtime Status: `NOT_IMPLEMENTED` | `NOT_RELEASED`
+
+- [x] Phase 1A: Architecture Ownership and Contract Placement (`docs/project/SPEC_KITTY_DERIVED_CONTRACT_OWNERSHIP.md`).
+- [x] Phase 1B: `OrchestraRuntimeEnvelope` Schema Specification (`docs/project/ORCHESTRA_RUNTIME_ENVELOPE.md`).
+- [x] Phase 1C: `OrchestraCorrelationID` Format Evaluation and Protocol Specification (`docs/governance/CORRELATION_ID_PROTOCOL.md`).
+- [x] Phase 1D: `OrchestraPhaseRetrospective` Protocol Specification (`docs/governance/PHASE_RETROSPECTIVE_PROTOCOL.md`).
+- [x] Phase 1E: `OrchestraUnitRecord` Schema Extension Specification (`docs/project/ORCHESTRA_UNIT_RECORD_EXTENSION.md`).
+- [x] Phase 1F: Cross-Document Synchronization and Final Design Roadmap (`docs/project/SPEC_KITTY_DERIVED_UPGRADE_ROADMAP.md`).
+
+### Planned Future Implementation Sequence (Requires Maintainer Authorization)
+
+- [ ] Phase 2A: Implementation baseline, compatibility matrix, migration plan, and test plan definition.
+- [ ] Phase 2B: `OrchestraRuntimeEnvelope` runtime model, serializer, parser, and adapter compatibility tests.
+- [ ] Phase 2C: UUIDv7 generator implementation strategy decision, generator validation, propagation, persistence, and mixed-version tests.
+- [ ] Phase 2D: Phase retrospective model, generation boundary, validation, restricted-retention handling, and closeout integration.
+- [ ] Phase 2E: `ApprovedUnitPlan` extension integration, policy amendment (`DELEGATED_EXECUTION_POLICY.md` Section 4), schema validation, routing consumption, migration, and stale-revision tests.
+- [ ] Phase 2F: Consolidated behavior, governance, security, packaging, documentation, and backward-compatibility validation.
+- [ ] Phase 2G: Maintainer implementation review, commit authorization, post-commit validation, push authorization, and remote verification.
+
 ## Authority and Capability Runtime Progression
 
 - [x] Phase 6A-A: audit current runtime gaps and define trust boundaries.

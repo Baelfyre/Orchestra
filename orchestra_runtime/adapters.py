@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 from .interfaces import IIDEAdapter
-from .models import Command, ContextPackage
+from .models import Command, ContextPackage, OrchestraRuntimeEnvelope
 from .protocol import AdapterCapabilities, AdapterProtocol, PRAP_V1
 from .repositories import ManifestRepository
+from .serialization import deserialize_runtime_envelope, serialize_runtime_envelope
 
 
 class BaseAdapter(IIDEAdapter):
@@ -74,7 +75,19 @@ class BaseAdapter(IIDEAdapter):
         )
 
 
-class CodexAdapter(BaseAdapter):
+class RuntimeEnvelopeAdapterMixin:
+    """Mixin for runtime-supported adapters that support machine-readable runtime envelopes."""
+
+    def format_envelope(self, envelope: OrchestraRuntimeEnvelope) -> bytes:
+        """Format an OrchestraRuntimeEnvelope into deterministic JSON bytes using standard runtime serialization."""
+        return serialize_runtime_envelope(envelope)
+
+    def parse_envelope(self, payload: bytes | str) -> OrchestraRuntimeEnvelope:
+        """Parse a runtime envelope payload using standard runtime deserialization."""
+        return deserialize_runtime_envelope(payload)
+
+
+class CodexAdapter(BaseAdapter, RuntimeEnvelopeAdapterMixin):
     adapter_name = "codex"
     display_name = "Codex"
     runtime_adapter_name = "codex"
@@ -95,7 +108,7 @@ class CodexAdapter(BaseAdapter):
     )
 
 
-class AntigravityAdapter(BaseAdapter):
+class AntigravityAdapter(BaseAdapter, RuntimeEnvelopeAdapterMixin):
     adapter_name = "antigravity"
     display_name = "Antigravity"
     runtime_adapter_name = "antigravity"

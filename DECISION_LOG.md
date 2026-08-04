@@ -1,5 +1,39 @@
 # Decision Log
 
+## Date: 2026-08-03
+
+**Decision:**
+Accept the Spec Kitty external pattern review Candidate Phase 1 design specifications (`OrchestraRuntimeEnvelope`, `OrchestraCorrelationID`, `OrchestraPhaseRetrospective`, `OrchestraUnitRecord extension`) as canonical Orchestra-native design specifications.
+
+**Reviewed Head:** `317c9449b2c6d264d0e826f229808439f1549ceb`
+
+**External Source:** `https://github.com/Priivacy-ai/spec-kitty` (v3.2.6, commit `8466727ebbbc01fcaf43575657c9b1b9553784d9`)
+
+**Status:**
+NOT IMPLEMENTED | NOT RELEASED
+
+**Accepted Design Specifications:**
+- `OrchestraRuntimeEnvelope` (`docs/project/ORCHESTRA_RUNTIME_ENVELOPE.md`): Derived non-authorizing serialization profile for LLM machine adapters (`json:orchestra-envelope`). Canonical owner: Clockwork.
+- `OrchestraCorrelationID` (`docs/governance/CORRELATION_ID_PROTOCOL.md`): Optional RFC 9562 UUIDv7 correlation header linking root task lineage across sessions with 0 PyPI dependencies authorized. Canonical owner: Chronicler.
+- `OrchestraPhaseRetrospective` (`docs/governance/PHASE_RETROSPECTIVE_PROTOCOL.md`): Source-backed closeout evidence artifact (`replacement_effect: none`) with `MIXED_RETENTION_MODEL`. Canonical owner: Overseer.
+- `OrchestraUnitRecord extension` (`docs/project/ORCHESTRA_UNIT_RECORD_EXTENSION.md`): Immutable JSON schema extension embedded inside `ApprovedUnitPlan` with canonical `scope_ref` and accepted predecessor eligibility. Canonical owner: The Steward.
+
+**Rejected Concepts:**
+- Standalone mutable unit-state files (e.g. `.orchestra/units/`).
+- Duplicate manual doctrine packs.
+- Workflow-state merge authority or automatic acceptance / policy mutation.
+- Direct runtime dependency on Spec Kitty or copying Spec Kitty code/schemas.
+
+**Deferred Concepts:**
+- `OrchestraWorktreeContract` & `OrchestraStatusProjection`.
+- UUIDv7 generator implementation strategy.
+- Retrospective template & generator implementation.
+- Envelope serializer, parser, adapter integration, and runtime implementation.
+- `docs/governance/DELEGATED_EXECUTION_POLICY.md` Section 4 normative policy integration (deferred to future implementation phases).
+
+**Boundaries:**
+This decision records design acceptance only. It does NOT grant runtime implementation, policy integration, release, merge, deployment, or external-action authority.
+
 ## Date: 2026-07-26
 
 **Decision:**
