@@ -19,11 +19,15 @@ Runtime Status: `IMPLEMENTED_MERGED` | `NOT_RELEASED`
 - [x] Phase 2F: Consolidated behavior, governance, security, packaging, documentation, and backward-compatibility validation.
 - [x] Phase 2G: Maintainer implementation review, commit authorization, post-commit validation, push authorization, remote verification, and PR #208 merge (`1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`).
 
-### Candidate Next Phase
+### Candidate Phase 3 Sequence (Design & Implementation Planning)
 
-- [ ] Phase 3A: Read-only deferred-capability selection, ownership, compatibility, and implementation planning for `OrchestraWorktreeContract` and `OrchestraStatusProjection`.
+- [x] Phase 3A: Read-only deferred-capability selection, ownership, compatibility, security, and implementation planning for `OrchestraWorktreeContract` and `OrchestraStatusProjection` (`docs/project/SPEC_KITTY_DERIVED_PHASE_3_CAPABILITY_ASSESSMENT.md`).
+- [ ] Phase 3B: `OrchestraStatusProjection` model, JSON serializer, CLI renderer, and unit tests.
+- [ ] Phase 3C: `OrchestraWorktreeContract` model, path confinement validator, base SHA checker, and unit tests.
+- [ ] Phase 3D: Consolidated cross-platform, behavior, governance, security, and compatibility validation.
+- [ ] Phase 3E: Maintainer implementation review, commit authorization, push authorization, remote verification, and PR merge.
 
-No Phase 3 runtime work is authorized by this roadmap synchronization.
+Phase 3A design and planning only; runtime not implemented; not released; no policy activation.
 
 ## Authority and Capability Runtime Progression
 
