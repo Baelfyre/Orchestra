@@ -764,6 +764,3 @@ def test_deserialize_non_string_required_field():
     })
     with pytest.raises(ValueError, match="field 'run_id' must be a string"):
         deserialize_runtime_envelope(raw_json)
-
-
-
