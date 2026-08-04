@@ -22,7 +22,7 @@ This document specifies the technical implementation plan for executing the Cand
 - Read-only repository assessment, capability selection, ownership assignment, security analysis, compatibility definition, and implementation planning.
 - Design package accepted and merged through PR #210 (`1629eaf3cd3f156f8913f84c9229666257a3145a`). Zero runtime code, script, adapter, test, or policy edits performed.
 
-### Phase 3B: `OrchestraStatusProjection` Implementation (`PLANNED` / `NOT_STARTED`)
+### Phase 3B: `OrchestraStatusProjection` Implementation (`IMPLEMENTED_LOCALLY_PENDING_MAINTAINER_REVIEW`)
 - Implementation of `OrchestraStatusProjection` typed model (`orchestra_runtime/status.py`), JSON serializer, and CLI renderer (`scripts/orchestra_status.py` / `python -m orchestra_runtime.status`).
 - Unit tests in `tests/runtime/test_status_projection.py`.
 - **Mandatory Edge Case Coverage (from PR #210 review finding F-001):**
