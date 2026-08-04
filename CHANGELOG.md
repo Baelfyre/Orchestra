@@ -2,25 +2,36 @@
 
 This changelog tracks the repository history using git tags, merge history, and the prior documented milestone log that lived under `docs/meta/CHANGELOG.md`.
 
-## Unreleased - Spec Kitty-Derived Upgrade Phase 1 Design Specifications
+## Unreleased - Spec Kitty-Derived Governed Phase Execution Contracts
 
-### Added Design Specifications (Not Implemented | Not Released)
+### Added Implemented Contracts (PR #208)
+
+- Implemented `OrchestraRuntimeEnvelope` (`orchestra_runtime/models.py`, `serialization.py`): Typed variants (`execution_result`, `transition_decision`, `audit_event`) with strict UTF-8 JSON serialization/deserialization and bounded support for Codex and Antigravity runtime adapters (`orchestra_runtime/adapters.py`). Non-authorizing transport metadata.
+- Implemented `OrchestraCorrelationID` (`orchestra_runtime/correlation.py`): Project-owned zero-dependency RFC 9562 UUIDv7 correlation generator with trusted root generation and child propagation (`orchestra_runtime/models.py`). Non-authorizing observational identifier.
+- Implemented `OrchestraPhaseRetrospective` (`orchestra_runtime/retrospective.py`): Typed model and deterministic builder deriving metrics from canonical records. Supplementary audit record.
+- Implemented `ApprovedUnitPlan` extension (`orchestra_runtime/models.py`): 15-field frozen dataclass extension with structural, path, and contextual validation (`validate_approved_unit_plan_context`). Governance decision references do not replace envelope authority; dependency completion is not equivalent to accepted predecessor evidence.
+- Added comprehensive test coverage (`tests/runtime/`): 390 runtime tests (93.72% coverage), 20 cross-contract integration scenarios (`test_spec_kitty_contract_integration.py`), and behavior test suite (exit 0).
+
+### Validation and Quality Assurance
+
+- Merged PR #208 (`1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`) following Phase 2A through Phase 2G lifecycle.
+- Resolved PR #208 cross-platform whitespace check by removing trailing EOF blank line in `tests/runtime/test_runtime_envelope.py` (`1a57c489445a9a333e929cae8f857312bb126a62`).
+- Passed all 9 GitHub Actions status checks: Cross-platform Validation (Windows, Ubuntu, macOS), CodeQL (actions, python), Governance Check, runtime-tests, validate.
+
+### Preserved Boundaries & Explicit Deferrals
+
+- Retained explicit deferral of cross-session correlation restoration, durable correlation persistence, retry/wait/resume state machines, automatic retrospective closeout generation, durable retrospective retention, automatic Steward planning/dispatch integration, revision-history ordering, and automatic policy activation.
+- `docs/governance/DELEGATED_EXECUTION_POLICY.md` remains unamended.
+- No third-party dependencies added; no database, durable storage, or policy changes made.
+- No public release, git tag, or version bump performed (remains unreleased on `main` after `v1.1.2`).
+
+### Historical Design Specifications (Phase 1)
 
 - Added design specification for `OrchestraRuntimeEnvelope` (`docs/project/ORCHESTRA_RUNTIME_ENVELOPE.md`), a derived non-authorizing JSON serialization profile for LLM machine adapters (`json:orchestra-envelope`).
 - Added protocol specification for `OrchestraCorrelationID` (`docs/governance/CORRELATION_ID_PROTOCOL.md`), an optional RFC 9562 UUIDv7 correlation header linking root task lineage across sessions without external PyPI dependencies.
 - Added protocol specification for `OrchestraPhaseRetrospective` (`docs/governance/PHASE_RETROSPECTIVE_PROTOCOL.md`), a source-backed closeout evidence artifact (`replacement_effect: none`) with `MIXED_RETENTION_MODEL`.
 - Added schema extension specification for `OrchestraUnitRecord` (`docs/project/ORCHESTRA_UNIT_RECORD_EXTENSION.md`), an immutable JSON schema extension embedded inside `ApprovedUnitPlan`.
-
-### Documented Design Review & Provenance
-
 - Documented selective Spec Kitty-derived design review (v3.2.6, commit `8466727ebbbc01fcaf43575657c9b1b9553784d9`), contract ownership placement (`docs/project/SPEC_KITTY_DERIVED_CONTRACT_OWNERSHIP.md`), and upgrade roadmap (`docs/project/SPEC_KITTY_DERIVED_UPGRADE_ROADMAP.md`).
-- Documented explicit rejection of standalone mutable unit-state files, duplicate manual doctrine packs, and automated workflow merge authority to preserve single source of truth.
-- Documented planned future implementation sequence (`Phase 2A` through `Phase 2G`).
-
-### Preserved Boundaries
-
-- No runtime code (`orchestra_runtime/`), tests (`tests/`), adapters (`adapters/`), scripts (`scripts/`), skills (`skills/`), templates (`templates/`), or canonical policies (`DELEGATED_EXECUTION_POLICY.md`) modified.
-- No runtime execution, policy integration, git tagging, release, merge, or deployment performed.
 
 ## Unreleased - Issue #204 Codex Tuner Portable Export
 

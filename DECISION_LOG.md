@@ -1,5 +1,43 @@
 # Decision Log
 
+## Date: 2026-08-04
+
+**Decision:**
+Accept PR #208 as the canonical merged implementation of the Spec Kitty-derived Phase 2 Orchestra runtime contracts (`OrchestraRuntimeEnvelope`, `OrchestraCorrelationID`, `OrchestraPhaseRetrospective`, `ApprovedUnitPlan` extension).
+
+**Design Baseline Commit:** `7a3cd1aef86e4edb5194cd68f52d5e26cc2c66fc`
+**Implementation Commit:** `ddd6ce7b3e504b9fc89aa1735a9d561a423341f8`
+**CI Correction Commit:** `1a57c489445a9a333e929cae8f857312bb126a62`
+**Merge Commit:** `1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`
+**Merged PR:** #208
+
+**Status:**
+IMPLEMENTED AND MERGED | NOT RELEASED | POLICY NOT ACTIVATED
+
+**Implemented Contracts:**
+- `OrchestraRuntimeEnvelope`: Typed variants (`execution_result`, `transition_decision`, `audit_event`) with strict UTF-8 JSON serialization/deserialization and bounded support for Codex and Antigravity runtime adapters. Non-authorizing transport metadata.
+- `OrchestraCorrelationID`: Project-owned RFC 9562 UUIDv7 generator with trusted root generation and child propagation. Non-authorizing observational identifier.
+- `OrchestraPhaseRetrospective`: Typed model and deterministic builder deriving metrics from canonical records. Supplementary audit record.
+- `ApprovedUnitPlan`: 15-field extension with structural, path, and contextual validation. Governance decision references do not replace envelope authority; dependency completion is not equivalent to accepted predecessor evidence.
+
+**Validation Evidence:**
+- Runtime tests: 390 passed (93.72% coverage)
+- Behavior suite: passed (exit 0)
+- Cross-contract integration: 20 scenarios passed
+- Cross-platform CI: Windows, Ubuntu, macOS passed
+- CodeQL, Governance Check, validate, runtime-tests passed
+
+**Explicit Deferred Boundaries:**
+- Cross-session correlation restoration and durable correlation persistence
+- Retry, wait, resume, remediation, and escalation continuation engines
+- Automatic retrospective phase-closeout generation and durable retention enforcement
+- Automatic Steward planning/dispatch integration and revision-history ordering integration
+- Automatic policy activation (`docs/governance/DELEGATED_EXECUTION_POLICY.md` remains unamended)
+- `OrchestraWorktreeContract` & `OrchestraStatusProjection`
+
+**Decision Boundary:**
+This acceptance records canonical merged runtime state. It does NOT constitute a release, version bump, policy activation, durable persistence grant, or Phase 3 implementation authorization.
+
 ## Date: 2026-08-03
 
 **Decision:**
