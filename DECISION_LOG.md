@@ -3,6 +3,38 @@
 ## Date: 2026-08-04
 
 **Decision:**
+Accept Candidate Phase 3A capability selection, single specialist ownership assignments (`OrchestraStatusProjection` owned by Scribe, `OrchestraWorktreeContract` owned by Ponytail), design specifications (`docs/project/ORCHESTRA_STATUS_PROJECTION.md`, `docs/project/ORCHESTRA_WORKTREE_CONTRACT.md`), implementation plan (`docs/project/SPEC_KITTY_DERIVED_PHASE_3_IMPLEMENTATION_PLAN.md`), and compatibility/security matrix (`docs/project/SPEC_KITTY_DERIVED_PHASE_3_COMPATIBILITY_AND_SECURITY_MATRIX.md`).
+
+**Baseline Commit:** `0eebe7d7b65708c61c22d9f31c2ea50189407727` (`origin/main` after PR #208 and PR #209)
+**Design Branch:** `design/spec-kitty-phase3-deferred-capabilities`
+**Worktree:** `C:\conductor\.tmp\spec-kitty-phase3-deferred-capabilities`
+
+**Status:**
+DESIGN_COMPLETE | IMPLEMENTATION NOT STARTED | NOT RELEASED | POLICY NOT ACTIVATED
+
+**Promoted Designs:**
+- `OrchestraStatusProjection`: Read-only status summary and JSON schema (`docs/project/ORCHESTRA_STATUS_PROJECTION.md`). Canonical Owner: Scribe. Secondary Consumers: Conductor, Arbiter, Overseer, Ponytail. Priority 1 target for Candidate Phase 3B.
+- `OrchestraWorktreeContract`: Optional host worktree negotiation and path confinement contract (`docs/project/ORCHESTRA_WORKTREE_CONTRACT.md`). Canonical Owner: Ponytail. Secondary Consumers: Conductor, Arbiter, Overseer, Host Adapters. Priority 2 target for Candidate Phase 3C.
+
+**Reconciled Ownership Matrix:**
+- `OrchestraRuntimeEnvelope`: Clockwork (`IMPLEMENTED_MERGED`)
+- `OrchestraCorrelationID`: Chronicler (`IMPLEMENTED_MERGED`)
+- `OrchestraPhaseRetrospective`: Overseer (`MODEL_AND_BUILDER_IMPLEMENTED_MERGED`)
+- `ApprovedUnitPlan extension`: The Steward (`MODEL_AND_CONTEXTUAL_VALIDATOR_IMPLEMENTED_MERGED`)
+- `OrchestraStatusProjection`: Scribe (`DESIGN_SPECIFIED`)
+- `OrchestraWorktreeContract`: Ponytail (`DESIGN_SPECIFIED`)
+
+**Explicit Boundaries & Security Rules:**
+- Read-only status projection NEVER mutates repository state, Git refs, or policy.
+- Worktree contract is optional (`worktree_supported: true/false`). Path confinement strictly enforced to `.tmp/` or `.orchestra/worktrees/`. Zero automatic deletion of dirty or user worktrees (`EXPLICIT_HOST_ACTION_ONLY`).
+- Neither capability creates execution, merge, release, or policy authority.
+
+**Decision Boundary:**
+This acceptance records documentation-only design and planning completeness for Candidate Phase 3A. It does NOT authorize runtime code edits, script edits, adapter edits, test edits, policy amendments, staging, commit, push, PR creation, merge, or release.
+
+## Date: 2026-08-04
+
+**Decision:**
 Accept PR #208 as the canonical merged implementation of the Spec Kitty-derived Phase 2 Orchestra runtime contracts (`OrchestraRuntimeEnvelope`, `OrchestraCorrelationID`, `OrchestraPhaseRetrospective`, `ApprovedUnitPlan` extension).
 
 **Design Baseline Commit:** `7a3cd1aef86e4edb5194cd68f52d5e26cc2c66fc`

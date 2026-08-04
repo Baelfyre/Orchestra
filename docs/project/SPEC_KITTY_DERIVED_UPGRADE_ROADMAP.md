@@ -59,6 +59,11 @@ This roadmap documents the completed Candidate Phase 1 design specifications and
 - [x] Phase 2F: Consolidated behavior, governance, security, packaging, documentation, and backward-compatibility validation completed.
 - [x] Phase 2G: Maintainer review, commit, push, remote verification, and PR #208 merge completed at `1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`.
 
+### Phase 3A: Deferred-Capability Selection & Design Baseline (`DESIGN_COMPLETE`)
+- [x] Phase 3A: Read-only capability selection, ownership, architecture, compatibility, security, and implementation planning completed (`docs/project/SPEC_KITTY_DERIVED_PHASE_3_CAPABILITY_ASSESSMENT.md`).
+- [x] Produced design specifications `docs/project/ORCHESTRA_STATUS_PROJECTION.md` and `docs/project/ORCHESTRA_WORKTREE_CONTRACT.md`.
+- [x] Produced implementation plan `docs/project/SPEC_KITTY_DERIVED_PHASE_3_IMPLEMENTATION_PLAN.md` and matrix `docs/project/SPEC_KITTY_DERIVED_PHASE_3_COMPATIBILITY_AND_SECURITY_MATRIX.md`.
+
 ---
 
 ## 3. Dispositions & Implementation Summary
@@ -69,11 +74,16 @@ This roadmap documents the completed Candidate Phase 1 design specifications and
 3. `OrchestraPhaseRetrospective`: Source-backed phase closeout evidence model and deterministic builder.
 4. `ApprovedUnitPlan extension`: 15-field schema extension and contextual validator.
 
+### Promoted Candidate Phase 3 Designs
+1. `OrchestraStatusProjection`: Read-only status summary & JSON schema (`docs/project/ORCHESTRA_STATUS_PROJECTION.md`). Canonical owner: Scribe. Target for Phase 3B.
+2. `OrchestraWorktreeContract`: Optional host worktree negotiation contract (`docs/project/ORCHESTRA_WORKTREE_CONTRACT.md`). Canonical owner: Ponytail. Target for Phase 3C.
+
 ### Rejected Concepts (Remains Rejected)
 - Standalone mutable unit-state files (`.orchestra/units/`).
 - Manual doctrine packs duplicating `docs/governance/`.
 - Workflow-state merge authority or automatic policy mutation.
 - Spec Kitty runtime dependency or copying Spec Kitty code/schemas.
+- SQLite event stores, RPC network services, background daemons, web dashboards.
 
 ### Explicitly Deferred Concepts
 - Cross-session correlation restoration and durable correlation persistence.
@@ -81,12 +91,15 @@ This roadmap documents the completed Candidate Phase 1 design specifications and
 - Automatic retrospective phase-closeout generation and durable retention enforcement.
 - Automatic Steward planning/dispatch integration and revision-history ordering integration.
 - Automatic policy activation (`docs/governance/DELEGATED_EXECUTION_POLICY.md` Section 4 remains unamended).
-- `OrchestraWorktreeContract` & `OrchestraStatusProjection`.
 
 ---
 
-## 4. Candidate Next Phase (`DESIGN_SELECTION_GATE`)
+## 4. Planned Candidate Phase 3 Sequence (`DESIGN_COMPLETE` / `IMPLEMENTATION_NOT_STARTED`)
 
-- [ ] **Phase 3A:** Read-only deferred-capability selection, architecture ownership, compatibility, and implementation planning for `OrchestraWorktreeContract` and `OrchestraStatusProjection`.
+- **Phase 3A:** Read-only capability selection, ownership, architecture, compatibility, security, and implementation planning (`DESIGN_COMPLETE`).
+- **Phase 3B:** `OrchestraStatusProjection` model, JSON serializer, CLI renderer, and unit tests.
+- **Phase 3C:** `OrchestraWorktreeContract` model, path confinement validator, base SHA checker, and unit tests.
+- **Phase 3D:** Consolidated cross-platform, behavior, governance, security, and compatibility validation.
+- **Phase 3E:** Maintainer review, commit authorization, push authorization, remote verification, and PR merge.
 
-No Phase 3 runtime work is authorized by this roadmap record.
+Phase 3A design and planning only; runtime not implemented; not released; no policy activation.

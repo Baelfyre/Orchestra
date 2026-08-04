@@ -4,6 +4,14 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased - Spec Kitty-Derived Governed Phase Execution Contracts
 
+### Added Candidate Phase 3 Design Specifications (Phase 3A)
+
+- Promoted and specified `OrchestraStatusProjection` (`docs/project/ORCHESTRA_STATUS_PROJECTION.md`), a read-only, deterministic status summary and JSON schema owned canonically by Scribe. Priority 1 target for Candidate Phase 3B.
+- Promoted and specified `OrchestraWorktreeContract` (`docs/project/ORCHESTRA_WORKTREE_CONTRACT.md`), an optional host worktree negotiation and path confinement contract owned canonically by Ponytail. Priority 2 target for Candidate Phase 3C.
+- Produced Phase 3 Capability Assessment (`docs/project/SPEC_KITTY_DERIVED_PHASE_3_CAPABILITY_ASSESSMENT.md`), Implementation Plan (`docs/project/SPEC_KITTY_DERIVED_PHASE_3_IMPLEMENTATION_PLAN.md`), and Compatibility and Security Matrix (`docs/project/SPEC_KITTY_DERIVED_PHASE_3_COMPATIBILITY_AND_SECURITY_MATRIX.md`).
+- Reconciled contract ownership matrix (`docs/project/SPEC_KITTY_DERIVED_CONTRACT_OWNERSHIP.md`) to record merged Phase 2 contracts and Candidate Phase 3 specialist ownership assignments (Scribe & Ponytail).
+- Updated project roadmap (`docs/project/ROADMAP.md`) and upgrade roadmap (`docs/project/SPEC_KITTY_DERIVED_UPGRADE_ROADMAP.md`) to record Phase 3A completion.
+
 ### Added Implemented Contracts (PR #208)
 
 - Implemented `OrchestraRuntimeEnvelope` (`orchestra_runtime/models.py`, `serialization.py`): Typed variants (`execution_result`, `transition_decision`, `audit_event`) with strict UTF-8 JSON serialization/deserialization and bounded support for Codex and Antigravity runtime adapters (`orchestra_runtime/adapters.py`). Non-authorizing transport metadata.
