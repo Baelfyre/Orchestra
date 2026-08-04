@@ -3,10 +3,10 @@
 ## Status
 ```text
 COMPATIBILITY AND SECURITY MATRIX
-DESIGN AND PLANNING ONLY
+DESIGN ACCEPTED AND MERGED (PR #210, SHA 1629eaf3cd3f156f8913f84c9229666257a3145a)
 RUNTIME NOT IMPLEMENTED
 NOT RELEASED
-VERDICT: READY_FOR_PHASE_3A_MAINTAINER_REVIEW
+VERDICT: DESIGN_ACCEPTED_MERGED
 ```
 
 ## 1. Overview
@@ -39,6 +39,9 @@ This document specifies the compatibility and security assessment matrix for Can
 | Windsurf Adapter | `adapters/windsurf/` | `SCAFFOLD_ONLY` | `SUPPORTED` | Scaffold adapter; read-only status projection supported. |
 | Claude Adapter | `adapters/claude/` | `SCAFFOLD_ONLY` | `SUPPORTED` | Scaffold adapter; read-only status projection supported. |
 | VSCode Adapter | `adapters/vscode/` | `SCAFFOLD_ONLY` | `SUPPORTED` | Scaffold adapter; read-only status projection supported. |
+| JetBrains Adapter | `adapters/jetbrains/` | `NOT_APPLICABLE` | `SCAFFOLD_ONLY` | Scaffold adapter; target for future adapter graduation. |
+| Zed Adapter | `adapters/zed/` | `NOT_APPLICABLE` | `SCAFFOLD_ONLY` | Scaffold adapter; target for future adapter graduation. |
+| Neovim Adapter | `adapters/neovim/` | `NOT_APPLICABLE` | `SCAFFOLD_ONLY` | Scaffold adapter; target for future adapter graduation. |
 
 ---
 
@@ -52,10 +55,18 @@ This document specifies the compatibility and security assessment matrix for Can
 | Dirty working tree | Fails teardown (`DIRTY_WORKTREE_BLOCK`) | Reports `dirty_count > 0` | Zero automatic deletion of dirty files |
 | Path traversal (`..`) | Fail closed (`PATH_TRAVERSAL_REJECTED`) | Path normalized before display | Path confinement strictly enforced |
 | Shallow clone / no origin | Base SHA check against local HEAD | `origin_main_sha: "UNKNOWN"` | No remote network calls forced |
+| Multiple remotes | Resolves `origin` or fallback remote | Discovers and reports all named remotes | No hardcoded single remote assumption |
+| Unborn branch (empty repo) | Rejects creation (`UNBORN_BRANCH`) | Reports `current_branch: "master/main (unborn)"` | Base SHA required |
+| Read-only filesystem | Fail closed on creation (`EACCES`) | Operates in read-only mode successfully | No write attempts forced by projection |
+| Git binary unavailable | Fail closed (`GIT_NOT_FOUND`) | Returns `is_git_repo: false`, status `UNKNOWN` | Graceful fallback without crash |
+| Locked worktrees (`.git/worktrees/.../locked`) | Fail closed (`WORKTREE_LOCKED`) | Reports `worktree_locked: true` | Prevents force removal of locked trees |
+| Submodules present | Ignores submodule paths | Reports top-level repo status only | Submodule trees excluded from confinement |
+| Nested repositories | Rejects creation inside child repo | Reports top-level repo status | Root-confinement check prevents nested containment breach |
+| Symlinks / junction points | Resolved to realpath before check | Normalized canonical path displayed | Traversal via symlinks prevented |
 
 ---
 
 ## 5. Security & Privacy Controls
 1. **Zero Secret Leakage:** Status projection redacts credentials embedded in Git remote URLs (e.g. `https://token@github.com/...` -> `https://***@github.com/...`).
 2. **Subprocess Isolation:** All Git commands executed via `run_command` or Python `subprocess.run` use explicit array arguments (no `shell=True`), timeout bounds (10s), and strict path confinement.
-3. **No Unsafe Cleanup:** Automatic worktree cleanup is restricted to empty or known-clean worktrees created under the current execution unit ID (`EXPLICIT_HOST_ACTION_ONLY`).
+3. **Explicit Cleanup Boundaries:** Worktree contract teardown is strictly `EXPLICIT_HOST_ACTION_ONLY`. Orchestra MUST NOT perform automatic destructive cleanup of dirty worktrees, user-created worktrees, or untracked state.

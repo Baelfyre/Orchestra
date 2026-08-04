@@ -4,8 +4,11 @@
 > **Design Status:** `DESIGN_COMPLETE`
 > **Runtime Status:** `IMPLEMENTED_MERGED`
 > **Release Status:** `NOT_RELEASED`
-> **Merged PR:** `#208`
-> **Merge Commit SHA:** `1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`
+> **Merged PR (Phase 2):** `#208`
+> **Merge Commit SHA (Phase 2):** `1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`
+> **Merged PR (Phase 3A):** `#210`
+> **Reviewed Head (Phase 3A):** `3d8b14aaffa00d66d1faaaef55ec27ecbc10cdc3`
+> **Merge Commit SHA (Phase 3A):** `1629eaf3cd3f156f8913f84c9229666257a3145a`
 > **Source Commit:** `8466727ebbbc01fcaf43575657c9b1b9553784d9` (`Priivacy-ai/spec-kitty` v3.2.6)
 
 ---
@@ -59,10 +62,11 @@ This roadmap documents the completed Candidate Phase 1 design specifications and
 - [x] Phase 2F: Consolidated behavior, governance, security, packaging, documentation, and backward-compatibility validation completed.
 - [x] Phase 2G: Maintainer review, commit, push, remote verification, and PR #208 merge completed at `1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`.
 
-### Phase 3A: Deferred-Capability Selection & Design Baseline (`DESIGN_COMPLETE`)
+### Phase 3A: Deferred-Capability Selection & Design Baseline (`DESIGN_ACCEPTED_MERGED`)
 - [x] Phase 3A: Read-only capability selection, ownership, architecture, compatibility, security, and implementation planning completed (`docs/project/SPEC_KITTY_DERIVED_PHASE_3_CAPABILITY_ASSESSMENT.md`).
 - [x] Produced design specifications `docs/project/ORCHESTRA_STATUS_PROJECTION.md` and `docs/project/ORCHESTRA_WORKTREE_CONTRACT.md`.
 - [x] Produced implementation plan `docs/project/SPEC_KITTY_DERIVED_PHASE_3_IMPLEMENTATION_PLAN.md` and matrix `docs/project/SPEC_KITTY_DERIVED_PHASE_3_COMPATIBILITY_AND_SECURITY_MATRIX.md`.
+- [x] Design accepted and merged through PR #210 (reviewed head `3d8b14aaffa00d66d1faaaef55ec27ecbc10cdc3`, merge commit `1629eaf3cd3f156f8913f84c9229666257a3145a`). Next gate: Candidate Phase 3B (`OrchestraStatusProjection` implementation, subject to separate maintainer authorization).
 
 ---
 
@@ -96,10 +100,10 @@ This roadmap documents the completed Candidate Phase 1 design specifications and
 
 ## 4. Planned Candidate Phase 3 Sequence (`DESIGN_COMPLETE` / `IMPLEMENTATION_NOT_STARTED`)
 
-- **Phase 3A:** Read-only capability selection, ownership, architecture, compatibility, security, and implementation planning (`DESIGN_COMPLETE`).
-- **Phase 3B:** `OrchestraStatusProjection` model, JSON serializer, CLI renderer, and unit tests.
-- **Phase 3C:** `OrchestraWorktreeContract` model, path confinement validator, base SHA checker, and unit tests.
-- **Phase 3D:** Consolidated cross-platform, behavior, governance, security, and compatibility validation.
-- **Phase 3E:** Maintainer review, commit authorization, push authorization, remote verification, and PR merge.
+- **Phase 3A:** Read-only capability selection, ownership, architecture, compatibility, security, and implementation planning (`DESIGN_ACCEPTED_MERGED` via PR #210, merge commit `1629eaf3cd3f156f8913f84c9229666257a3145a`).
+- **Phase 3B:** `OrchestraStatusProjection` model, JSON serializer, CLI renderer, and unit tests (`IMPLEMENTATION_NOT_STARTED`).
+- **Phase 3C:** `OrchestraWorktreeContract` model, path confinement validator, base SHA checker, and unit tests (`IMPLEMENTATION_NOT_STARTED`).
+- **Phase 3D:** Consolidated cross-platform, behavior, governance, security, and compatibility validation (`PLANNED`).
+- **Phase 3E:** Maintainer review, commit authorization, push authorization, remote verification, and PR merge (`PLANNED`).
 
-Phase 3A design and planning only; runtime not implemented; not released; no policy activation.
+Phase 3A design accepted and merged; runtime not implemented; not released; no policy activation.

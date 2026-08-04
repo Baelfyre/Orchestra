@@ -3,11 +3,11 @@
 ## Status
 ```text
 CAPABILITY ASSESSMENT
-DESIGN AND PLANNING ONLY
+DESIGN ACCEPTED AND MERGED (PR #210, SHA 1629eaf3cd3f156f8913f84c9229666257a3145a)
 RUNTIME NOT IMPLEMENTED
 NOT RELEASED
 POLICY NOT ACTIVATED
-VERDICT: READY_FOR_PHASE_3A_MAINTAINER_REVIEW
+VERDICT: DESIGN_ACCEPTED_MERGED
 ```
 
 ## 1. Executive Summary
@@ -104,3 +104,17 @@ Both concepts are **PROMOTED FOR DESIGN AND IMPLEMENTATION PLANNING** (`PROMOTE_
 - Cross-session correlation persistence or SQLite event databases.
 - Automatic merge, automatic branch deletion, or automatic policy mutation.
 - Background daemons, web dashboards, or RPC network services.
+
+---
+
+## 8. Post-Review Findings & Implementation Constraints
+
+From the immutable-head maintainer review of PR #210 (reviewed head `3d8b14a`):
+
+- **Blocking Findings:** 0
+- **Non-Blocking Findings (1):**
+  - **F-003 (`docs/project/ORCHESTRA_WORKTREE_CONTRACT.md`):** `ADVISORY_SAFE_SUBSET` in `cleanup_policy` schema lacks prose definition. Must be defined in prose or removed from schema before Phase 3C implementation.
+- **Advisory Findings (3):**
+  - **F-001 (`docs/project/ORCHESTRA_STATUS_PROJECTION.md`):** Expand explicit edge-case coverage (multiple remotes, unborn branch, read-only filesystem, Git binary unavailable, worktree checkout) in Phase 3B planning.
+  - **F-002 (`docs/project/ORCHESTRA_WORKTREE_CONTRACT.md`):** Address locked worktrees, nested repositories, submodules, and race conditions in Phase 3C planning.
+  - **F-004 (`docs/project/SPEC_KITTY_DERIVED_PHASE_3_COMPATIBILITY_AND_SECURITY_MATRIX.md`):** Acknowledge JetBrains, Zed, and Neovim adapter matrix status.

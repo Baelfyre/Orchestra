@@ -3,11 +3,12 @@
 ## Status
 ```text
 DESIGN SPECIFICATION
-DESIGN ONLY
+DESIGN ACCEPTED AND MERGED (PR #210, SHA 1629eaf3cd3f156f8913f84c9229666257a3145a)
 RUNTIME NOT IMPLEMENTED
+PHASE 3C NOT STARTED
 NOT RELEASED
 POLICY NOT ACTIVATED
-VERDICT: READY_FOR_PHASE_3A_MAINTAINER_REVIEW
+VERDICT: DESIGN_ACCEPTED_MERGED
 ```
 
 ## 1. Overview
@@ -74,6 +75,7 @@ This document specifies the `OrchestraWorktreeContract`, an optional, host-capab
 - **Prefix Traversal Check:** `worktree_path` must satisfy `resolved_worktree_path.is_relative_to(authorized_parent_dir)`.
 - **Preflight Verification:** `python scripts/preflight_sync_check.py` must run clean inside the initialized worktree prior to unit execution.
 - **Dirty Worktree Protection:** If a worktree contains dirty uncommitted changes at teardown, cleanup fails closed (`FAILED_CLEANUP`) and requires manual maintainer intervention.
+- **`ADVISORY_SAFE_SUBSET` Cleanup Policy Definition:** `ADVISORY_SAFE_SUBSET` permits reporting cleanup candidates and performing non-destructive verification only. It MUST NOT remove a worktree, delete a branch, delete files, prune administrative metadata, or mutate Git state. Any destructive cleanup remains strictly `EXPLICIT_HOST_ACTION_ONLY` with exact creation-identity proof and explicit maintainer authority.
 
 ---
 
@@ -89,3 +91,14 @@ Host adapters declare worktree support in adapter metadata:
 }
 ```
 If `worktree_supported` is `false`, execution falls back gracefully to standard single-workspace execution.
+
+---
+
+## 7. Mandatory Phase 3C Edge-Case Requirements
+
+Phase 3C implementation MUST handle the following edge cases deterministically:
+
+1. **Locked Worktrees:** If a worktree contains a `.git/worktrees/<id>/locked` file, cleanup MUST fail closed (`WORKTREE_LOCKED`) and require explicit manual unlock before teardown.
+2. **Nested Repositories & Submodules:** Submodules and nested `.git` directories within a worktree tree MUST be detected; cleanup MUST NOT perform recursive deletion into distinct Git repositories.
+3. **Creation & Teardown Race Conditions:** Worktree directory creation MUST verify non-existence before invocation and handle concurrent allocation attempts safely.
+4. **Case-Insensitive Collision Handling:** On Windows and macOS, worktree path comparison MUST account for case-preserving case-insensitive filesystem collisions.

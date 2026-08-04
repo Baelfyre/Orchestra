@@ -3,11 +3,12 @@
 ## Status
 ```text
 DESIGN SPECIFICATION
-DESIGN ONLY
+DESIGN ACCEPTED AND MERGED (PR #210, SHA 1629eaf3cd3f156f8913f84c9229666257a3145a)
 RUNTIME NOT IMPLEMENTED
+PHASE 3B NOT STARTED
 NOT RELEASED
 POLICY NOT ACTIVATED
-VERDICT: READY_FOR_PHASE_3A_MAINTAINER_REVIEW
+VERDICT: DESIGN_ACCEPTED_MERGED
 ```
 
 ## 1. Overview
@@ -114,3 +115,17 @@ This document specifies the `OrchestraStatusProjection`, a read-only, determinis
   - `0`: Projection executed successfully and status output formatted cleanly.
   - `1`: Invalid arguments or failed subprocess execution.
 - Exit codes report command execution success only; they do NOT create governance authority or merge readiness.
+
+---
+
+## 7. Mandatory Phase 3B Edge-Case Requirements
+
+Phase 3B implementation MUST handle the following edge cases deterministically without crashing or leaking unredacted secrets:
+
+1. **Multiple Remotes:** Discover all named remotes via `git remote -v`. Resolve `origin` if present; fallback to first available remote if `origin` is absent.
+2. **Unborn Branch:** When repository is newly initialized (`git init` with 0 commits), report `current_branch: "<default> (unborn)"` and set HEAD SHA to `NONE`.
+3. **Read-Only Filesystem:** Status projection MUST operate strictly in-memory without attempting file writes or temp file creation.
+4. **Git Binary Unavailable:** If `git` executable is not found on PATH, output `is_git_repo: false`, set status to `UNKNOWN`, and exit cleanly with exit code 1.
+5. **Worktree Checkout:** Distinguish secondary worktree HEAD from main worktree HEAD. Report active worktree path in metadata.
+6. **CI Detached Checkout:** Report `current_branch: "(HEAD detached at <SHA>)"` when operating in CI detached-HEAD mode.
+7. **Dirty Working Tree:** Report untracked and modified file counts accurately via `git status --porcelain=v1`.
