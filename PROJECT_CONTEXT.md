@@ -10,7 +10,7 @@ A governance-first specialist skill framework that routes complex AI-assisted so
 Open-source developer tooling and AI orchestration framework
 
 ## Current Stage
-Public release `v1.1.2` (Trusted Runtime Authority), with post-release UI engineering and validation governance merged through PR #187
+Public release `v1.1.2` (Trusted Runtime Authority). Unreleased `main` includes the merged Spec Kitty-derived governed phase execution contracts through PR #208 (merge commit `1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`).
 
 ## Primary Users
 Developers and maintainers who install Orchestra as a plugin, skill set, or runtime package inside a supported or scaffold-only IDE or coding host (Claude Code, Codex, Antigravity, Cursor, Windsurf, JetBrains, Zed, Neovim)
@@ -27,13 +27,14 @@ Recommended
 Guidance used for this classification:
 - Orchestra is a public, multi-agent development repository with write-permission automation surfaces such as Dagger guardrails and state-lock scripts, which is a listed risk signal above pure Advisory.
 - Orchestra does not itself handle real end-user data, client data, production business data, or destructive-by-default operations, so automatic Strict-Governed classification is not required.
-- `main` is already governed by required pull-request review, required status checks (`governance-check`, `validate`, `Analyze (actions)`, `Analyze (python)`), and signed-commit expectations per `docs/CONTRIBUTING.md`, which is consistent with Recommended-tier coordination needs.
+- `main` is already governed by required pull-request review, required status checks (`governance-check`, `validate`, `Analyze (actions)`, `Analyze (python)`, `Cross-platform Validation`), and signed-commit expectations per `docs/CONTRIBUTING.md`, which is consistent with Recommended-tier coordination needs.
 - Maintainers may raise this to Strict-Governed later if adoption, write scope, or release criticality increases.
 
 ## Safety Boundaries
 - Dagger guardrail system enforces warning-first, then blocking, behavior for governance-sensitive actions, per `docs/CONTRIBUTING.md`.
 - State-lock mechanism guards against concurrent write collisions.
 - Scaffold-only adapters (Cursor, Windsurf, JetBrains, Zed, Neovim) must not be represented as production-ready or marketplace-published until formally graduated per `docs/project/SCAFFOLD_ADAPTER_GRADUATION_CRITERIA.md`.
+- Runtime envelopes are transport metadata, not execution authority. Correlation IDs are observational identifiers. Retrospectives are supplementary audit records. `ApprovedUnitPlan` governance decision references do not replace execution-envelope authority.
 - No vendoring of external plugin code, and no claiming unsupported compatibility or compliance, per `docs/CONTRIBUTING.md`.
 
 ## Validation Requirements
@@ -61,4 +62,4 @@ Guidance used for this classification:
 Not yet decided. No project-specific maintainer preferences beyond `docs/CONTRIBUTING.md` are currently documented for this field.
 
 ## Last Reviewed
-2026-07-14
+2026-08-04
