@@ -20,6 +20,8 @@ REQUIRED_METADATA_FIELDS = (
     "supports_audit_trace",
     "supports_streaming",
     "supports_governance",
+    "worktree_supported",
+    "worktree_isolation_mode",
     "packaging_status",
     "marketplace_status",
 )
@@ -34,8 +36,10 @@ class AdapterCapabilities:
     supports_audit_trace: bool
     supports_streaming: bool
     supports_governance: bool
+    worktree_supported: bool = False
+    worktree_isolation_mode: str = "NONE"
 
-    def to_metadata(self) -> dict[str, bool]:
+    def to_metadata(self) -> dict[str, Any]:
         return {
             "supports_commands": self.supports_commands,
             "supports_context": self.supports_context,
@@ -44,6 +48,8 @@ class AdapterCapabilities:
             "supports_audit_trace": self.supports_audit_trace,
             "supports_streaming": self.supports_streaming,
             "supports_governance": self.supports_governance,
+            "worktree_supported": self.worktree_supported,
+            "worktree_isolation_mode": self.worktree_isolation_mode,
         }
 
 
@@ -266,12 +272,22 @@ class ProtocolValidator:
         missing_capabilities = [
             field_name
             for field_name, value in capability_values.items()
-            if not isinstance(value, bool)
+            if field_name != "worktree_isolation_mode" and not isinstance(value, bool)
         ]
         if missing_capabilities:
             errors.append(
                 "Capability metadata must be boolean for: " + ", ".join(sorted(missing_capabilities))
             )
+
+        mode = protocol.capabilities.worktree_isolation_mode
+        if mode not in ("NONE", "OPTIONAL"):
+            errors.append(f"Invalid worktree_isolation_mode: {mode}")
+
+        if not protocol.capabilities.worktree_supported and mode != "NONE":
+            errors.append("worktree_isolation_mode must be NONE when worktree_supported is False.")
+
+        if mode == "OPTIONAL" and not protocol.capabilities.worktree_supported:
+            errors.append("worktree_supported must be True when worktree_isolation_mode is OPTIONAL.")
 
         if protocol.runtime_adapter != protocol.runtime_adapter.lower():
             errors.append("runtime_adapter must be lowercase.")

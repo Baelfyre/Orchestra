@@ -193,3 +193,33 @@ def test_scaffold_adapters_do_not_expose_envelope_capabilities(scaffold_adapter_
     assert not isinstance(adapter, RuntimeEnvelopeAdapterMixin)
     assert not hasattr(adapter, "format_envelope")
     assert not hasattr(adapter, "parse_envelope")
+
+
+@pytest.mark.parametrize(
+    ("adapter_name", "expected_supported", "expected_mode"),
+    (
+        ("codex", True, "OPTIONAL"),
+        ("antigravity", True, "OPTIONAL"),
+        ("claude-code", False, "NONE"),
+        ("cursor", False, "NONE"),
+        ("windsurf", False, "NONE"),
+        ("vscode", False, "NONE"),
+        ("jetbrains", False, "NONE"),
+        ("zed", False, "NONE"),
+        ("neovim", False, "NONE"),
+    ),
+)
+def test_adapter_worktree_capabilities(
+    adapter_name: str, expected_supported: bool, expected_mode: str
+):
+    from orchestra_runtime.protocol import ProtocolValidator
+
+    repo_root = Path(__file__).resolve().parents[2]
+    adapter = AdapterFactory.create(adapter_name, repo_root)
+    protocol = adapter.protocol_metadata()
+
+    assert protocol.capabilities.worktree_supported == expected_supported
+    assert protocol.capabilities.worktree_isolation_mode == expected_mode
+
+    errors = ProtocolValidator.validate_protocol(protocol)
+    assert not errors, f"Protocol validation failed: {errors}"

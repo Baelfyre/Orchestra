@@ -94,6 +94,17 @@ class CodexAdapter(BaseAdapter, RuntimeEnvelopeAdapterMixin):
     host_type = "ai-assistant"
     packaging_status = "marketplace"
     marketplace_status = "available"
+    capabilities = AdapterCapabilities(
+        supports_commands=True,
+        supports_context=True,
+        supports_file_handoff=True,
+        supports_workspace=True,
+        supports_audit_trace=True,
+        supports_streaming=False,
+        supports_governance=True,
+        worktree_supported=True,
+        worktree_isolation_mode="OPTIONAL",
+    )
     trigger_map = (
         ("@orchestra", "conductor"),
         ("@conductor", "conductor"),
@@ -115,6 +126,17 @@ class AntigravityAdapter(BaseAdapter, RuntimeEnvelopeAdapterMixin):
     host_type = "ai-assistant"
     packaging_status = "plugin"
     marketplace_status = "available"
+    capabilities = AdapterCapabilities(
+        supports_commands=True,
+        supports_context=True,
+        supports_file_handoff=True,
+        supports_workspace=True,
+        supports_audit_trace=True,
+        supports_streaming=False,
+        supports_governance=True,
+        worktree_supported=True,
+        worktree_isolation_mode="OPTIONAL",
+    )
     trigger_map = (
         ("/ponytail /conductor", "conductor"),
         ("/conductor", "conductor"),

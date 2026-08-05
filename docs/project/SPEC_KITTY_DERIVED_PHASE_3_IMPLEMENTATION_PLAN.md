@@ -33,8 +33,8 @@ This document specifies the technical implementation plan for executing the Cand
   - Read-only filesystem, worktree checkout
   - Dirty repository, conflicting canonical files, malformed canonical prose
 
-### Phase 3C: `OrchestraWorktreeContract` Implementation (`PLANNED` / `NOT_STARTED`)
-- Implementation of `OrchestraWorktreeContract` typed model (`orchestra_runtime/worktree.py`), path confinement validator, base SHA checker, and host adapter metadata integration.
+### Phase 3C: `OrchestraWorktreeContract` Implementation (`IMPLEMENTED_LOCALLY_UNCOMMITTED`)
+- Implementation of `OrchestraWorktreeContract` typed model (`orchestra_runtime/worktree.py`), path confinement validator, base SHA checker, deterministic serialization, and host adapter metadata integration.
 - Unit tests in `tests/runtime/test_worktree_contract.py`.
 - **Mandatory Scope & Finding Requirements (from PR #210 review findings F-002, F-003):**
   - Define or remove `ADVISORY_SAFE_SUBSET` from `cleanup_policy` schema in prose before implementation begins. Must not permit automatic destructive cleanup.

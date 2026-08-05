@@ -4,6 +4,12 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased - Spec Kitty-Derived Governed Phase Execution Contracts
 
+### Candidate Phase 3C WorktreeContract Implementation (Uncommitted Local State)
+
+- Implemented typed `OrchestraWorktreeContract` model (`orchestra_runtime/worktree.py`), strict path confinement validator, base SHA checker, deterministic serialization, and adapter capability integration.
+- Added 37 focused WorktreeContract unit tests with >90% statement and branch coverage in `tests/runtime/test_worktree_contract.py`.
+- Candidate Phase 3C implemented locally; uncommitted, unpushed, unmerged, unreleased. Policy not activated.
+
 ### Phase 3B Post-Merge State Synchronization
 
 - Merged PR #212 (`fa1e052d82301e70a5869258c3fc6af765163353`): Phase 3B `OrchestraStatusProjection` implementation. One commit (`2a6c7ea8db16ce73d66fae566672f3681094b0f7`), 8 changed paths, 1617 insertions, 51 deletions.
