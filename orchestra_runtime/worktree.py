@@ -473,13 +473,15 @@ def resolve_authorized_worktree_path(
                 break
         except AttributeError:
             # Python < 3.9 fallback
-            try:
-                target_path.relative_to(authorized_parent)
-                if target_path != authorized_parent:
-                    is_authorized = True
-                    break
-            except ValueError:
-                pass
+            target_parts = tuple(os.path.normcase(part) for part in target_path.parts)
+            parent_parts = tuple(os.path.normcase(part) for part in authorized_parent.parts)
+            if (
+                target_path != authorized_parent
+                and len(target_parts) > len(parent_parts)
+                and target_parts[: len(parent_parts)] == parent_parts
+            ):
+                is_authorized = True
+                break
 
     if not is_authorized:
         return None, WorktreeReasonCode.PATH_OUTSIDE_AUTHORIZED_PARENT
