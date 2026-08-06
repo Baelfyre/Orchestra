@@ -177,7 +177,9 @@ class TestWorktreeContractValidation(unittest.TestCase):
 class TestPathConfinement(unittest.TestCase):
     def setUp(self):
         self.temp_dir = tempfile.TemporaryDirectory()
-        self.repo_root = Path(self.temp_dir.name).resolve()
+        self.temp_root = Path(self.temp_dir.name).resolve()
+        self.repo_root = self.temp_root / "repo"
+        self.repo_root.mkdir()
 
     def tearDown(self):
         self.temp_dir.cleanup()
@@ -190,6 +192,51 @@ class TestPathConfinement(unittest.TestCase):
             norm_path, pcode = validate_worktree_path(f"{pdir}/test-sub", self.repo_root)
             self.assertIsNone(pcode)
             self.assertEqual(norm_path, f"{pdir}/test-sub")
+
+    def test_tmp_symlink_escape_rejected(self):
+        outside = self.temp_root / "outside-tmp"
+        outside.mkdir()
+        link = self.repo_root / ".tmp"
+        os.symlink(outside, link, target_is_directory=True)
+
+        target, code = resolve_authorized_worktree_path(".tmp/child", self.repo_root)
+
+        self.assertIsNone(target)
+        self.assertEqual(code, WorktreeReasonCode.PATH_OUTSIDE_AUTHORIZED_PARENT)
+
+    def test_orchestra_worktrees_symlink_escape_rejected(self):
+        outside = self.temp_root / "outside-orchestra"
+        outside.mkdir()
+        orchestra_dir = self.repo_root / ".orchestra"
+        orchestra_dir.mkdir()
+        os.symlink(outside, orchestra_dir / "worktrees", target_is_directory=True)
+
+        target, code = resolve_authorized_worktree_path(
+            ".orchestra/worktrees/child", self.repo_root
+        )
+
+        self.assertIsNone(target)
+        self.assertEqual(code, WorktreeReasonCode.PATH_OUTSIDE_AUTHORIZED_PARENT)
+
+    def test_windows_tmp_junction_escape_rejected(self):
+        if os.name != "nt":
+            return
+
+        outside = self.temp_root / "outside-junction"
+        outside.mkdir()
+        junction = self.repo_root / ".tmp"
+        created = subprocess.run(
+            ["cmd", "/c", "mklink", "/J", str(junction), str(outside)],
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(created.returncode, 0, msg=created.stderr or created.stdout)
+        try:
+            target, code = resolve_authorized_worktree_path(".tmp/child", self.repo_root)
+            self.assertIsNone(target)
+            self.assertEqual(code, WorktreeReasonCode.PATH_OUTSIDE_AUTHORIZED_PARENT)
+        finally:
+            junction.rmdir()
 
     def test_empty_path_rejection(self):
         target, code = resolve_authorized_worktree_path("  ", self.repo_root)
@@ -618,6 +665,79 @@ class TestWorktreeOperationsWithGitMock(unittest.TestCase):
         self.assertFalse(res.success)
         self.assertEqual(res.diagnostics[0].code, WorktreeReasonCode.BASE_SHA_MISMATCH)
 
+    def test_inspect_worktree_status_failure_fails_closed(self):
+        contract = OrchestraWorktreeContract(
+            unit_id="unit-status-inspect",
+            worktree_path=".tmp/wt-status-inspect",
+            worktree_branch="feature/wt-status-inspect",
+            approved_base_sha=self.base_sha,
+            isolation_status=WorktreeIsolationStatus.INITIALIZED,
+        )
+        active_contract = initialize_worktree(
+            contract, self.repo_dir, authorize_creation=True
+        ).contract
+
+        def status_failure_runner(args, cwd):
+            if args == ["git", "status", "--porcelain=v1"]:
+                return 1, "", "sensitive output must not be copied"
+            return _default_command_runner(args, cwd)
+
+        result = inspect_worktree(active_contract, self.repo_dir, status_failure_runner)
+
+        self.assertFalse(result.success)
+        self.assertEqual(
+            result.diagnostics[0].code,
+            WorktreeReasonCode.WORKTREE_STATUS_CHECK_FAILED,
+        )
+        self.assertNotIn("sensitive output", result.diagnostics[0].message)
+        release_worktree(active_contract, self.repo_dir, authorize_cleanup=True)
+
+    def test_release_worktree_status_failure_never_removes(self):
+        contract = OrchestraWorktreeContract(
+            unit_id="unit-status-release",
+            worktree_path=".tmp/wt-status-release",
+            worktree_branch="feature/wt-status-release",
+            approved_base_sha=self.base_sha,
+            isolation_status=WorktreeIsolationStatus.INITIALIZED,
+        )
+        active_contract = initialize_worktree(
+            contract, self.repo_dir, authorize_creation=True
+        ).contract
+        target = self.repo_dir / ".tmp" / "wt-status-release"
+        remove_called = False
+
+        def status_failure_runner(args, cwd):
+            nonlocal remove_called
+            if args == ["git", "status", "--porcelain=v1"]:
+                return 1, "", "status failed"
+            if args[:3] == ["git", "worktree", "remove"]:
+                remove_called = True
+            return _default_command_runner(args, cwd)
+
+        result = release_worktree(
+            active_contract,
+            self.repo_dir,
+            authorize_cleanup=True,
+            runner=status_failure_runner,
+        )
+
+        self.assertFalse(result.success)
+        self.assertEqual(result.contract.isolation_status, WorktreeIsolationStatus.FAILED_CLEANUP)
+        self.assertEqual(
+            result.diagnostics[0].code,
+            WorktreeReasonCode.WORKTREE_STATUS_CHECK_FAILED,
+        )
+        self.assertFalse(remove_called)
+        self.assertTrue(target.exists())
+        self.assertEqual(
+            subprocess.run(
+                ["git", "show-ref", "--verify", "--quiet", "refs/heads/feature/wt-status-release"],
+                cwd=self.repo_dir,
+            ).returncode,
+            0,
+        )
+        release_worktree(active_contract, self.repo_dir, authorize_cleanup=True)
+
     def test_initialize_inspect_release_lifecycle(self):
         contract = OrchestraWorktreeContract(
             unit_id="unit-lifecycle",
@@ -870,6 +990,174 @@ class TestReleaseTwoPhaseVerificationAndRaces(unittest.TestCase):
 
         # Clean up
         release_worktree(active_contract, self.repo_dir, authorize_cleanup=True)
+
+    def test_branch_verification_command_failure_blocks_released(self):
+        contract = OrchestraWorktreeContract(
+            unit_id="unit-branch-check-failure",
+            worktree_path=".tmp/wt-branch-check-failure",
+            worktree_branch="feature/wt-branch-check-failure",
+            approved_base_sha=self.base_sha,
+            isolation_status=WorktreeIsolationStatus.INITIALIZED,
+        )
+        active_contract = initialize_worktree(
+            contract, self.repo_dir, authorize_creation=True
+        ).contract
+
+        def branch_check_failure_runner(args, cwd):
+            if args[:4] == ["git", "show-ref", "--verify", "--quiet"]:
+                return 1, "", "verification unavailable"
+            return _default_command_runner(args, cwd)
+
+        result = release_worktree(
+            active_contract,
+            self.repo_dir,
+            authorize_cleanup=True,
+            runner=branch_check_failure_runner,
+        )
+
+        self.assertFalse(result.success)
+        self.assertEqual(result.contract.isolation_status, WorktreeIsolationStatus.FAILED_CLEANUP)
+        self.assertEqual(result.diagnostics[0].code, WorktreeReasonCode.WORKTREE_REMOVE_FAILED)
+
+    def test_missing_branch_ref_blocks_released(self):
+        contract = OrchestraWorktreeContract(
+            unit_id="unit-branch-missing",
+            worktree_path=".tmp/wt-branch-missing",
+            worktree_branch="feature/wt-branch-missing",
+            approved_base_sha=self.base_sha,
+            isolation_status=WorktreeIsolationStatus.INITIALIZED,
+        )
+        active_contract = initialize_worktree(
+            contract, self.repo_dir, authorize_creation=True
+        ).contract
+
+        def branch_removal_runner(args, cwd):
+            result = _default_command_runner(args, cwd)
+            if args[:3] == ["git", "worktree", "remove"] and result[0] == 0:
+                _default_command_runner(
+                    ["git", "branch", "-D", contract.worktree_branch], self.repo_dir
+                )
+            return result
+
+        result = release_worktree(
+            active_contract,
+            self.repo_dir,
+            authorize_cleanup=True,
+            runner=branch_removal_runner,
+        )
+
+        self.assertFalse(result.success)
+        self.assertEqual(result.contract.isolation_status, WorktreeIsolationStatus.FAILED_CLEANUP)
+        self.assertEqual(result.diagnostics[0].code, WorktreeReasonCode.WORKTREE_REMOVE_FAILED)
+
+    def test_unrelated_worktree_removal_evidence_blocks_released(self):
+        target_contract = OrchestraWorktreeContract(
+            unit_id="unit-target-registration",
+            worktree_path=".tmp/wt-target-registration",
+            worktree_branch="feature/wt-target-registration",
+            approved_base_sha=self.base_sha,
+            isolation_status=WorktreeIsolationStatus.INITIALIZED,
+        )
+        other_contract = OrchestraWorktreeContract(
+            unit_id="unit-other-registration",
+            worktree_path=".tmp/wt-other-registration",
+            worktree_branch="feature/wt-other-registration",
+            approved_base_sha=self.base_sha,
+            isolation_status=WorktreeIsolationStatus.INITIALIZED,
+        )
+        target_active = initialize_worktree(
+            target_contract, self.repo_dir, authorize_creation=True
+        ).contract
+        other_active = initialize_worktree(
+            other_contract, self.repo_dir, authorize_creation=True
+        ).contract
+        other_path = self.repo_dir / ".tmp" / "wt-other-registration"
+        list_count = 0
+
+        def omit_other_after_removal_runner(args, cwd):
+            nonlocal list_count
+            result = _default_command_runner(args, cwd)
+            if args == ["git", "worktree", "list", "--porcelain"]:
+                list_count += 1
+                if list_count == 4:
+                    blocks = result[1].strip().split("\n\n")
+                    filtered = [
+                        block
+                        for block in blocks
+                        if "branch refs/heads/feature/wt-other-registration" not in block
+                    ]
+                    return result[0], "\n\n".join(filtered) + "\n\n", result[2]
+            return result
+
+        result = release_worktree(
+            target_active,
+            self.repo_dir,
+            authorize_cleanup=True,
+            runner=omit_other_after_removal_runner,
+        )
+
+        self.assertFalse(result.success)
+        self.assertEqual(result.contract.isolation_status, WorktreeIsolationStatus.FAILED_CLEANUP)
+        self.assertEqual(result.diagnostics[0].code, WorktreeReasonCode.WORKTREE_REMOVE_FAILED)
+        self.assertTrue(other_path.exists())
+        release_worktree(other_active, self.repo_dir, authorize_cleanup=True)
+
+    def test_unrelated_worktree_head_and_branch_drift_blocks_released(self):
+        target_contract = OrchestraWorktreeContract(
+            unit_id="unit-target-drift",
+            worktree_path=".tmp/wt-target-drift",
+            worktree_branch="feature/wt-target-drift",
+            approved_base_sha=self.base_sha,
+            isolation_status=WorktreeIsolationStatus.INITIALIZED,
+        )
+        other_contract = OrchestraWorktreeContract(
+            unit_id="unit-other-drift",
+            worktree_path=".tmp/wt-other-drift",
+            worktree_branch="feature/wt-other-drift",
+            approved_base_sha=self.base_sha,
+            isolation_status=WorktreeIsolationStatus.INITIALIZED,
+        )
+        target_active = initialize_worktree(
+            target_contract, self.repo_dir, authorize_creation=True
+        ).contract
+        other_active = initialize_worktree(
+            other_contract, self.repo_dir, authorize_creation=True
+        ).contract
+        other_path = self.repo_dir / ".tmp" / "wt-other-drift"
+        list_count = 0
+
+        def drift_other_after_removal_runner(args, cwd):
+            nonlocal list_count
+            result = _default_command_runner(args, cwd)
+            if args == ["git", "worktree", "list", "--porcelain"]:
+                list_count += 1
+                if list_count == 4:
+                    blocks = result[1].strip().split("\n\n")
+                    changed = []
+                    for block in blocks:
+                        if "branch refs/heads/feature/wt-other-drift" in block:
+                            block = block.replace(
+                                f"HEAD {self.base_sha}", f"HEAD {'0' * 40}"
+                            ).replace(
+                                "branch refs/heads/feature/wt-other-drift",
+                                "branch refs/heads/feature/wt-other-drift-observed",
+                            )
+                        changed.append(block)
+                    return result[0], "\n\n".join(changed) + "\n\n", result[2]
+            return result
+
+        result = release_worktree(
+            target_active,
+            self.repo_dir,
+            authorize_cleanup=True,
+            runner=drift_other_after_removal_runner,
+        )
+
+        self.assertFalse(result.success)
+        self.assertEqual(result.contract.isolation_status, WorktreeIsolationStatus.FAILED_CLEANUP)
+        self.assertEqual(result.diagnostics[0].code, WorktreeReasonCode.WORKTREE_REMOVE_FAILED)
+        self.assertTrue(other_path.exists())
+        release_worktree(other_active, self.repo_dir, authorize_cleanup=True)
 
 
 class TestCoverageEdgeCases(unittest.TestCase):
@@ -1305,13 +1593,13 @@ class TestCoverageEdgeCases(unittest.TestCase):
                 return 0, "", ""
             if "status" in args:
                 return 0, "", ""
-            if "branch" in args:
-                return 0, "feature/sub", ""
+            if args[:4] == ["git", "show-ref", "--verify", "--quiet"]:
+                return 0, "", ""
             return _default_command_runner(args, cwd)
 
         with patch("orchestra_runtime.worktree._require_transition", side_effect=mock_require_transition_released), \
              patch("orchestra_runtime.worktree.derive_worktree_creation_identity", return_value="fake-identity"), \
-             patch("orchestra_runtime.worktree._get_worktree_list", side_effect=[({os.path.normcase(str(target_p)): wt_info}, None), ({os.path.normcase(str(target_p)): wt_info}, None), ({}, None)]):
+             patch("orchestra_runtime.worktree._get_worktree_list", side_effect=[({os.path.normcase(str(target_p)): wt_info}, None), ({os.path.normcase(str(target_p)): wt_info}, None), ({os.path.normcase(str(target_p)): wt_info}, None), ({}, None)]):
             res_rel = release_worktree(c_release, self.repo_dir, authorize_cleanup=True, runner=success_runner)
             self.assertFalse(res_rel.success)
             self.assertEqual(res_rel.diagnostics[0].code, WorktreeReasonCode.INVALID_STATE_TRANSITION)

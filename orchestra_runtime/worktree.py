@@ -77,6 +77,7 @@ class WorktreeReasonCode(str, enum.Enum):
     WORKTREE_NOT_REGISTERED = "WORKTREE_NOT_REGISTERED"
     WORKTREE_IDENTITY_MISMATCH = "WORKTREE_IDENTITY_MISMATCH"
     WORKTREE_DIRTY = "WORKTREE_DIRTY"
+    WORKTREE_STATUS_CHECK_FAILED = "WORKTREE_STATUS_CHECK_FAILED"
     WORKTREE_LOCKED = "WORKTREE_LOCKED"
     NESTED_REPOSITORY_DETECTED = "NESTED_REPOSITORY_DETECTED"
     SUBMODULE_BOUNDARY_DETECTED = "SUBMODULE_BOUNDARY_DETECTED"
@@ -438,6 +439,19 @@ def derive_worktree_creation_identity(
 # Path Confinement
 # ---------------------------------------------------------------------------
 
+def _is_path_within(candidate: Path, parent: Path, *, strict: bool = False) -> bool:
+    """Return whether candidate is inside parent without string-prefix checks."""
+    try:
+        is_within = candidate.is_relative_to(parent)
+    except AttributeError:
+        candidate_parts = tuple(os.path.normcase(part) for part in candidate.parts)
+        parent_parts = tuple(os.path.normcase(part) for part in parent.parts)
+        is_within = (
+            len(candidate_parts) >= len(parent_parts)
+            and candidate_parts[: len(parent_parts)] == parent_parts
+        )
+    return is_within and (not strict or candidate != parent)
+
 def resolve_authorized_worktree_path(
     relative_or_absolute_path: str | Path, repo_root: Path | str
 ) -> tuple[Path | None, WorktreeReasonCode | None]:
@@ -467,21 +481,13 @@ def resolve_authorized_worktree_path(
     is_authorized = False
     for parent_dir in AUTHORIZED_PARENT_DIRS:
         authorized_parent = (resolved_repo / parent_dir).resolve()
-        try:
-            if target_path.is_relative_to(authorized_parent) and target_path != authorized_parent:
-                is_authorized = True
-                break
-        except AttributeError:
-            # Python < 3.9 fallback
-            target_parts = tuple(os.path.normcase(part) for part in target_path.parts)
-            parent_parts = tuple(os.path.normcase(part) for part in authorized_parent.parts)
-            if (
-                target_path != authorized_parent
-                and len(target_parts) > len(parent_parts)
-                and target_parts[: len(parent_parts)] == parent_parts
-            ):
-                is_authorized = True
-                break
+        if (
+            _is_path_within(authorized_parent, resolved_repo, strict=True)
+            and _is_path_within(target_path, resolved_repo, strict=True)
+            and _is_path_within(target_path, authorized_parent, strict=True)
+        ):
+            is_authorized = True
+            break
 
     if not is_authorized:
         return None, WorktreeReasonCode.PATH_OUTSIDE_AUTHORIZED_PARENT
@@ -699,6 +705,29 @@ def _get_worktree_list(
     return _parse_worktree_list(stdout), None
 
 
+def _snapshot_unrelated_worktrees(
+    registered: dict[str, dict[str, str]], target_path: Path
+) -> tuple[tuple[str, str, str, str, bool], ...]:
+    """Capture complete stable state for every registration except target_path."""
+    target_key = derive_path_collision_key(str(target_path))
+    snapshot = []
+    for info in registered.values():
+        path = info.get("worktree", "")
+        path_key = derive_path_collision_key(path)
+        if path_key == target_key:
+            continue
+        snapshot.append(
+            (
+                path_key,
+                path,
+                info.get("head", "").lower(),
+                info.get("branch", ""),
+                bool(info.get("locked")),
+            )
+        )
+    return tuple(sorted(snapshot))
+
+
 # ---------------------------------------------------------------------------
 # Release Precondition Fingerprint (F-TOCTOU-001)
 # ---------------------------------------------------------------------------
@@ -850,7 +879,14 @@ def inspect_worktree(
 
         # Check dirty status
         code, stdout, _ = runner_fn(["git", "status", "--porcelain=v1"], cwd=target_path)
-        if code == 0 and stdout.strip():
+        if code != 0:
+            diagnostics.append(
+                WorktreeDiagnostic(
+                    code=WorktreeReasonCode.WORKTREE_STATUS_CHECK_FAILED,
+                    message="Worktree cleanliness could not be verified.",
+                )
+            )
+        elif stdout.strip():
             diagnostics.append(
                 WorktreeDiagnostic(
                     code=WorktreeReasonCode.WORKTREE_DIRTY,
@@ -949,8 +985,15 @@ def _inspect_for_release(
             )
 
         code, stdout, _ = runner_fn(["git", "status", "--porcelain=v1"], cwd=target_path)
-        is_clean = not (code == 0 and stdout.strip())
-        if not is_clean:
+        is_clean = code == 0 and not stdout.strip()
+        if code != 0:
+            diagnostics.append(
+                WorktreeDiagnostic(
+                    code=WorktreeReasonCode.WORKTREE_STATUS_CHECK_FAILED,
+                    message="Worktree cleanliness could not be verified.",
+                )
+            )
+        elif not is_clean:
             diagnostics.append(
                 WorktreeDiagnostic(
                     code=WorktreeReasonCode.WORKTREE_DIRTY,
@@ -1174,6 +1217,30 @@ def plan_worktree_release(
 # Release Worktree (Two-Phase Verification — F-TOCTOU-001)
 # ---------------------------------------------------------------------------
 
+def _failed_cleanup_result(
+    contract: OrchestraWorktreeContract,
+    message: str,
+    code: WorktreeReasonCode = WorktreeReasonCode.WORKTREE_REMOVE_FAILED,
+) -> WorktreeOperationResult:
+    failed_contract = OrchestraWorktreeContract(
+        unit_id=contract.unit_id,
+        worktree_path=contract.worktree_path,
+        worktree_branch=contract.worktree_branch,
+        approved_base_sha=contract.approved_base_sha,
+        isolation_status=WorktreeIsolationStatus.FAILED_CLEANUP,
+        contract_version=contract.contract_version,
+        correlation_id=contract.correlation_id,
+        is_clean_at_start=contract.is_clean_at_start,
+        cleanup_policy=contract.cleanup_policy,
+        creation_identity=contract.creation_identity,
+    )
+    return WorktreeOperationResult(
+        success=False,
+        contract=failed_contract,
+        diagnostics=(WorktreeDiagnostic(code=code, message=message),),
+    )
+
+
 def release_worktree(
     contract: OrchestraWorktreeContract,
     repo_root: Path | str,
@@ -1341,6 +1408,24 @@ def release_worktree(
             diagnostics=diags2,
         )
 
+    # Phase 4b: Snapshot all registrations immediately before removal.
+    pre_registered, pre_list_err = _get_worktree_list(resolved_repo, runner_fn)
+    if pre_list_err or pre_registered is None:
+        return _failed_cleanup_result(
+            contract, "Pre-removal worktree registration verification failed."
+        )
+
+    target_key = derive_path_collision_key(str(target_path))
+    target_registered = any(
+        derive_path_collision_key(info.get("worktree", "")) == target_key
+        for info in pre_registered.values()
+    )
+    if not target_registered:
+        return _failed_cleanup_result(
+            contract, "Target registration disappeared before worktree removal."
+        )
+    unrelated_before = _snapshot_unrelated_worktrees(pre_registered, target_path)
+
     # Phase 5: Execute git worktree remove <exact-path>
     # (NO --force, NO branch deletion, NO prune, NO recursive delete)
     if not target_path.exists():
@@ -1359,28 +1444,7 @@ def release_worktree(
         ["git", "worktree", "remove", str(target_path)], cwd=resolved_repo
     )
     if code != 0:
-        failed_contract = OrchestraWorktreeContract(
-            unit_id=contract.unit_id,
-            worktree_path=contract.worktree_path,
-            worktree_branch=contract.worktree_branch,
-            approved_base_sha=contract.approved_base_sha,
-            isolation_status=WorktreeIsolationStatus.FAILED_CLEANUP,
-            contract_version=contract.contract_version,
-            correlation_id=contract.correlation_id,
-            is_clean_at_start=contract.is_clean_at_start,
-            cleanup_policy=contract.cleanup_policy,
-            creation_identity=contract.creation_identity,
-        )
-        return WorktreeOperationResult(
-            success=False,
-            contract=failed_contract,
-            diagnostics=(
-                WorktreeDiagnostic(
-                    code=WorktreeReasonCode.WORKTREE_REMOVE_FAILED,
-                    message="git worktree remove command failed.",
-                ),
-            ),
-        )
+        return _failed_cleanup_result(contract, "git worktree remove command failed.")
 
     # NB-003 / Phase 6: Post-release verification
     # Verify deregistration, branch preservation, other worktrees unchanged
@@ -1410,8 +1474,10 @@ def release_worktree(
             ),
         )
 
-    norm_target = os.path.normcase(str(target_path))
-    if norm_target in post_registered:
+    if any(
+        derive_path_collision_key(info.get("worktree", "")) == target_key
+        for info in post_registered.values()
+    ):
         failed_contract = OrchestraWorktreeContract(
             unit_id=contract.unit_id,
             worktree_path=contract.worktree_path,
@@ -1435,11 +1501,62 @@ def release_worktree(
             ),
         )
 
-    # Verify branch still exists
-    code_br, br_out, _ = runner_fn(
-        ["git", "branch", "--list", contract.worktree_branch], cwd=resolved_repo
+    if _snapshot_unrelated_worktrees(post_registered, target_path) != unrelated_before:
+        return WorktreeOperationResult(
+            success=False,
+            contract=OrchestraWorktreeContract(
+                unit_id=contract.unit_id,
+                worktree_path=contract.worktree_path,
+                worktree_branch=contract.worktree_branch,
+                approved_base_sha=contract.approved_base_sha,
+                isolation_status=WorktreeIsolationStatus.FAILED_CLEANUP,
+                contract_version=contract.contract_version,
+                correlation_id=contract.correlation_id,
+                is_clean_at_start=contract.is_clean_at_start,
+                cleanup_policy=contract.cleanup_policy,
+                creation_identity=contract.creation_identity,
+            ),
+            diagnostics=(
+                WorktreeDiagnostic(
+                    code=WorktreeReasonCode.WORKTREE_REMOVE_FAILED,
+                    message="Unrelated worktree registrations changed during removal.",
+                ),
+            ),
+        )
+
+    # Verify the exact branch ref still exists.
+    code_br, _, _ = runner_fn(
+        [
+            "git",
+            "show-ref",
+            "--verify",
+            "--quiet",
+            f"refs/heads/{contract.worktree_branch}",
+        ],
+        cwd=resolved_repo,
     )
-    branch_preserved = code_br == 0 and contract.worktree_branch in br_out
+    if code_br != 0:
+        return WorktreeOperationResult(
+            success=False,
+            contract=OrchestraWorktreeContract(
+                unit_id=contract.unit_id,
+                worktree_path=contract.worktree_path,
+                worktree_branch=contract.worktree_branch,
+                approved_base_sha=contract.approved_base_sha,
+                isolation_status=WorktreeIsolationStatus.FAILED_CLEANUP,
+                contract_version=contract.contract_version,
+                correlation_id=contract.correlation_id,
+                is_clean_at_start=contract.is_clean_at_start,
+                cleanup_policy=contract.cleanup_policy,
+                creation_identity=contract.creation_identity,
+            ),
+            diagnostics=(
+                WorktreeDiagnostic(
+                    code=WorktreeReasonCode.WORKTREE_REMOVE_FAILED,
+                    message="Worktree branch preservation verification failed.",
+                ),
+            ),
+        )
 
     # NB-004: Enforce transition ACTIVE -> RELEASED
     transition_err = _require_transition(

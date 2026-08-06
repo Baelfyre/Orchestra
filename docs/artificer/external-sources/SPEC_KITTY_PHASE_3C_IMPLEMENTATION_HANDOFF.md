@@ -2,13 +2,13 @@
 
 ## Summary
 - **Phase:** Candidate Phase 3C (`OrchestraWorktreeContract` implementation)
-- **Verdict:** `PENDING_PR214_FINAL_IMMUTABLE_REVIEW`
+- **Verdict:** `READY_FOR_PR214_MAJOR_FINDINGS_COMMIT_AUTHORIZATION`
 - **Repository:** `Baelfyre/Orchestra`
 - **Baseline:** `da196ba13eafe30777c261f1329945768a3e0520` (`main`)
 - **Branch:** `feature/spec-kitty-phase3c-worktree-contract`
 - **Worktree:** `C:\conductor\.tmp\spec-kitty-phase3c-worktree-contract`
-- **Delivery State:** Committed and pushed to PR #214
-- **Pull Request:** #214 open; pending final immutable review and separate merge authorization
+- **Delivery State:** Prior PR head committed and pushed; validated three-file remediation is local and unstaged
+- **Pull Request:** #214 open; separate remediation commit authorization pending
 
 ---
 
@@ -32,7 +32,27 @@
 ### F-TOCTOU-001: Cleanup Race Condition
 - **Verification Status:** RESOLVED
 - **Resolution:** Implemented a two-phase check in `release_worktree`. The target state is inspected first (`_inspect_for_release`), collecting a baseline fingerprint. A fresh second fingerprint is collected right before git worktree removal and compared with the first. Any state change (dirty state or modification) halts removal with zero removal calls executed.
-- **Evidence:** Fingerprint verification, post-remove list deregistration, branch preservation, and other-worktree preservation are fully validated.
+- **Evidence:** The original automated suite validated fingerprint comparison and target deregistration. Final immutable review identified additional fail-closed requirements for status-command failure, branch preservation, and unrelated-worktree preservation; the bounded remediation below addresses those findings.
+
+---
+
+## Major Fail-Closed Findings Remediation
+
+**Remediation State:** Prepared and validated locally, pending separate commit authorization. It is not committed, merged, or released, and policy is not activated.
+
+- **F-CLEAN-001:** A failed `git status --porcelain=v1` inspection now returns `WORKTREE_STATUS_CHECK_FAILED`, marks release cleanup as failed, and blocks the removal command.
+- **F-PARENT-ESCAPE-001:** Resolved authorized parents and targets must each remain strictly under `resolved_repo`; symlink and junction escapes fail with `PATH_OUTSIDE_AUTHORIZED_PARENT`.
+- **F-POSTRELEASE-001:** Release snapshots all unrelated worktree registrations immediately before removal, compares the complete post-removal snapshot, and verifies the exact branch ref before transitioning to `RELEASED`.
+
+Automated validation supports remediation readiness but does not constitute immutable approval or merge authorization.
+
+Validation evidence for the remediation diff:
+
+- 9 exact finding regressions passed, including the Windows junction case with no skips.
+- 2 Python compatibility regressions passed.
+- 68 worktree-contract tests and 104 focused tests passed.
+- 495 runtime tests passed with 94.29% package coverage.
+- Behavior validation exited 0; all 12 direct validators and all 5 compile/import checks passed.
 
 ---
 
@@ -123,9 +143,9 @@
   11. `docs/artificer/external-sources/SPEC_KITTY_PHASE_3C_IMPLEMENTATION_HANDOFF.md` [MODIFY]
 - **Unexpected Paths:** None
 - **Staged Paths:** 0
-- **Local and Uncommitted:** False
-- **Commits in PR Before Documentation Reconciliation:** 3
-- **Delivery State:** Committed and pushed
+- **Local and Uncommitted:** True, limited to the three authorized remediation paths
+- **Commits in PR Before Remediation:** 4
+- **Delivery State:** Prior PR head committed and pushed; remediation not committed or pushed
 - **Merge:** Not performed
 - **Release:** Not performed
 - **Policy Activation:** Not performed
