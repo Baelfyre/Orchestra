@@ -5,11 +5,13 @@
 IMPLEMENTATION PLAN
 PHASE 3A MERGED (PR #210, SHA 1629eaf3cd3f156f8913f84c9229666257a3145a)
 PHASE 3B IMPLEMENTED AND MERGED (PR #212, REVIEWED HEAD 2a6c7ea8db16ce73d66fae566672f3681094b0f7, MERGE COMMIT fa1e052d82301e70a5869258c3fc6af765163353)
-PHASE 3C NOT STARTED
-IMPLEMENTATION AUTHORITY NOT GRANTED BY THIS DOCUMENT
+PHASE 3C IMPLEMENTED, COMMITTED, AND PUSHED IN PR #214
+PHASE 3D IMPLEMENTATION-HEAD CONSOLIDATED VALIDATION PASSED; FINAL DOCUMENTATION-INCLUSIVE PR HEAD REQUIRES FRESH VALIDATION
+PHASE 3E PENDING FINAL IMMUTABLE REVIEW AND SEPARATE MERGE AUTHORIZATION
+NOT MERGED
 NOT RELEASED
 POLICY NOT ACTIVATED
-VERDICT: PHASE_3B_IMPLEMENTED_MERGED_PHASE_3C_NOT_STARTED
+VERDICT: PENDING_PR214_FINAL_IMMUTABLE_REVIEW
 ```
 
 ## Purpose
@@ -33,7 +35,7 @@ This document specifies the technical implementation plan for executing the Cand
   - Read-only filesystem, worktree checkout
   - Dirty repository, conflicting canonical files, malformed canonical prose
 
-### Phase 3C: `OrchestraWorktreeContract` Implementation (`IMPLEMENTED_LOCALLY_UNCOMMITTED`)
+### Phase 3C: `OrchestraWorktreeContract` Implementation (`IMPLEMENTED_COMMITTED_PUSHED_PR_OPEN`)
 - Implementation of `OrchestraWorktreeContract` typed model (`orchestra_runtime/worktree.py`), path confinement validator, base SHA checker, deterministic serialization, and host adapter metadata integration.
 - Unit tests in `tests/runtime/test_worktree_contract.py`.
 - **Mandatory Scope & Finding Requirements (from PR #210 review findings F-002, F-003):**
@@ -41,11 +43,12 @@ This document specifies the technical implementation plan for executing the Cand
   - Coverage for locked worktrees, nested repositories, submodules
   - Creation races, cleanup races, case-insensitive path collisions
 
-### Phase 3D: Consolidated Validation & Safety Audit (`PLANNED`)
-- Consolidated behavior, governance, security, packaging, and backward-compatibility validation across all direct scripts, behavior suite, and runtime tests.
+### Phase 3D: Consolidated Validation & Safety Audit (`IMPLEMENTATION_HEAD_VALIDATED_FINAL_HEAD_PENDING`)
+- Consolidated behavior, governance, security, packaging, and backward-compatibility validation passed on the delivered implementation head.
+- Validation is revision-specific; the final documentation-inclusive PR head must pass fresh validation.
 
-### Phase 3E: Maintainer Review, PR & Merge (`PLANNED`)
-- Maintainer code review, commit authorization, push authorization, remote verification, and PR merge.
+### Phase 3E: Maintainer Review, PR & Merge (`PENDING_FINAL_IMMUTABLE_REVIEW_AND_SEPARATE_MERGE_AUTHORIZATION`)
+- Final immutable review and separate merge authorization remain pending. Merge has not been performed.
 
 ---
 

@@ -2,11 +2,13 @@
 
 ## Summary
 - **Phase:** Candidate Phase 3C (`OrchestraWorktreeContract` implementation)
-- **Verdict:** `READY_FOR_PHASE_3C_REAUDIT`
+- **Verdict:** `PENDING_PR214_FINAL_IMMUTABLE_REVIEW`
 - **Repository:** `Baelfyre/Orchestra`
 - **Baseline:** `da196ba13eafe30777c261f1329945768a3e0520` (`main`)
 - **Branch:** `feature/spec-kitty-phase3c-worktree-contract`
 - **Worktree:** `C:\conductor\.tmp\spec-kitty-phase3c-worktree-contract`
+- **Delivery State:** Committed and pushed to PR #214
+- **Pull Request:** #214 open; pending final immutable review and separate merge authorization
 
 ---
 
@@ -24,7 +26,7 @@
 
 ### F-NESTED-001: Untracked Parent Path-Escape
 - **Verification Status:** RESOLVED
-- **Resolution:** Implemented containment checks in `resolve_authorized_worktree_path` using `Path.is_relative_to` (with a clean fallback path for Python < 3.9 using `resolve()` and parent comparison). The path resolver raises `PATH_OUTSIDE_AUTHORIZED_PARENT` on path-escape attempts. Additionally, `find_nested_git_boundary` and `_check_submodule_boundary` detect git boundaries in the target directories to prevent nested repository or submodule contamination.
+- **Resolution:** Implemented containment checks in `resolve_authorized_worktree_path` using `Path.is_relative_to` with a normalized-parts fallback when that API is unavailable. The final relative-path conversion uses guarded `os.path.relpath`, preserving containment while avoiding the Python 3.12 `pathlib` interaction exercised by the compatibility regressions. The path resolver raises `PATH_OUTSIDE_AUTHORIZED_PARENT` on path-escape attempts. Additionally, `find_nested_git_boundary` and `_check_submodule_boundary` detect git boundaries in the target directories to prevent nested repository or submodule contamination.
 - **Evidence:** Descendant `.git` files/directories and nested submodule directories are rejected, while root linked-worktree `.git` metadata files are parsed correctly. Symlinks are resolved to their absolute target destination prior to containment verification to prevent link traversal escapes.
 
 ### F-TOCTOU-001: Cleanup Race Condition
@@ -80,7 +82,8 @@
 ## Full Runtime Validation Results
 - **RUNTIME_EXIT_CODE:** 0
 - **RUNTIME_TEST_COUNT:** 486 tests passed
-- **RUNTIME_PACKAGE_COVERAGE:** 94.34%
+- **RUNTIME_PACKAGE_COVERAGE:** 94.32%
+- **FRESH_IMPLEMENTATION_HEAD_CI:** All 9 required checks passed
 
 ---
 
@@ -106,7 +109,7 @@
 
 ## Authorized Scope Verification
 - **Authorized Path Count:** 11
-- **Changed Paths (Local & Uncommitted):** 11
+- **Changed Paths (PR #214):** 11
   1. `CHANGELOG.md`
   2. `orchestra_runtime/worktree.py` [NEW]
   3. `orchestra_runtime/__init__.py`
@@ -120,4 +123,9 @@
   11. `docs/artificer/external-sources/SPEC_KITTY_PHASE_3C_IMPLEMENTATION_HANDOFF.md` [MODIFY]
 - **Unexpected Paths:** None
 - **Staged Paths:** 0
-- **Commits Ahead:** 0
+- **Local and Uncommitted:** False
+- **Commits in PR Before Documentation Reconciliation:** 3
+- **Delivery State:** Committed and pushed
+- **Merge:** Not performed
+- **Release:** Not performed
+- **Policy Activation:** Not performed
