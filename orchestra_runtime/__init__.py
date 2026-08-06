@@ -221,6 +221,29 @@ _LAZY_STATUS_EXPORTS = {
     "serialize_status_projection_to_str",
     "render_status_projection",
 }
+_LAZY_WORKTREE_EXPORTS = {
+    "WORKTREE_CONTRACT_VERSION",
+    "AUTHORIZED_PARENT_DIRS",
+    "WorktreeIsolationStatus",
+    "WorktreeCleanupPolicy",
+    "WorktreeReasonCode",
+    "WorktreeDiagnostic",
+    "OrchestraWorktreeContract",
+    "WorktreeValidationResult",
+    "WorktreeOperationResult",
+    "derive_worktree_creation_identity",
+    "resolve_authorized_worktree_path",
+    "validate_worktree_path",
+    "verify_worktree_base_sha",
+    "validate_worktree_contract",
+    "inspect_worktree",
+    "initialize_worktree",
+    "plan_worktree_release",
+    "release_worktree",
+    "serialize_worktree_contract",
+    "serialize_worktree_contract_to_str",
+    "deserialize_worktree_contract",
+}
 
 
 def __getattr__(name: str):
@@ -230,11 +253,17 @@ def __getattr__(name: str):
         val = getattr(status, name)
         globals()[name] = val
         return val
+    if name in _LAZY_WORKTREE_EXPORTS:
+        from . import worktree
+
+        val = getattr(worktree, name)
+        globals()[name] = val
+        return val
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
 def __dir__():
-    return sorted(list(globals().keys()) + list(_LAZY_STATUS_EXPORTS))
+    return sorted(list(globals().keys()) + list(_LAZY_STATUS_EXPORTS) + list(_LAZY_WORKTREE_EXPORTS))
 
 
 __all__ = [
@@ -434,4 +463,25 @@ __all__ = [
     "serialize_status_projection",
     "serialize_status_projection_to_str",
     "render_status_projection",
+    "WORKTREE_CONTRACT_VERSION",
+    "AUTHORIZED_PARENT_DIRS",
+    "WorktreeIsolationStatus",
+    "WorktreeCleanupPolicy",
+    "WorktreeReasonCode",
+    "WorktreeDiagnostic",
+    "OrchestraWorktreeContract",
+    "WorktreeValidationResult",
+    "WorktreeOperationResult",
+    "derive_worktree_creation_identity",
+    "resolve_authorized_worktree_path",
+    "validate_worktree_path",
+    "verify_worktree_base_sha",
+    "validate_worktree_contract",
+    "inspect_worktree",
+    "initialize_worktree",
+    "plan_worktree_release",
+    "release_worktree",
+    "serialize_worktree_contract",
+    "serialize_worktree_contract_to_str",
+    "deserialize_worktree_contract",
 ]
