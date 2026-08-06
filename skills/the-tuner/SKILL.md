@@ -18,6 +18,8 @@ Coordinate specialist-owned contracts for multi-domain work without absorbing ro
 
 The canonical protocol is [CROSS_SPECIALIST_COORDINATION_PROTOCOL.md](../../docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md). Load it only when a multi-domain coordination session is active or a contract status must be interpreted.
 
+Frontend-to-backend workflow reconciliation follows [CROSS_MODULE_LOGIC_AUDIT_PROTOCOL.md](../../docs/validation/CROSS_MODULE_LOGIC_AUDIT_PROTOCOL.md). The Tuner reuses the existing packet, identity, contradiction, invalidation, and re-entry contracts; it does not create a parallel authority or resolve findings owned by domain specialists.
+
 ## Activation and bypass
 
 Conductor activates The Tuner when:

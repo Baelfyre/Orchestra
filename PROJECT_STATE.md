@@ -7,7 +7,7 @@
 - **Stable Continuation Branch:** `main`
 - **Current Public Release:** `v1.1.2`
 - **Release Status:** Published July 14, 2026
-- **Current Main Status:** Contains unreleased Spec Kitty-derived governed phase execution contracts merged through PR #208, merged Phase 3A deferred-capability design package through PR #210 (merge commit `1629eaf3cd3f156f8913f84c9229666257a3145a`), and merged Phase 3B `OrchestraStatusProjection` implementation through PR #212 (merge commit `fa1e052d82301e70a5869258c3fc6af765163353`)
+- **Current Main Status:** Contains unreleased Spec Kitty-derived governed phase execution contracts through merged Phase 3C / PR #214 (merge commit `6bce297c7469f9c08ce41308cbb993cc863ac540`)
 - **Spec Kitty-Derived Phase 2:** Merged / Canonical (`orchestra_runtime/`)
 - **Spec Kitty-Derived Phase 2 Merge Commit:** `1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`
 - **Spec Kitty-Derived Phase 2 Reviewed Head:** `1a57c489445a9a333e929cae8f857312bb126a62`
@@ -20,7 +20,7 @@
 - **Spec Kitty-Derived Phase 3A Merge Commit:** `1629eaf3cd3f156f8913f84c9229666257a3145a`
 - **Spec Kitty-Derived Phase 3A Merged At:** 2026-08-04T15:48:49Z
 - **OrchestraStatusProjection:** Implemented and merged through PR #212 (reviewed head `2a6c7ea8db16ce73d66fae566672f3681094b0f7`, merge commit `fa1e052d82301e70a5869258c3fc6af765163353`). `IMPLEMENTED_MERGED`. Canonical owner: Scribe. Read-only, derived, non-authorizing, not a source of truth. Missing or conflicting data reports UNKNOWN. Exit codes report command execution success only. Not released. Policy not activated.
-- **OrchestraWorktreeContract:** Design specified and accepted. `DESIGN_ACCEPTED_MERGED`. Runtime not implemented. Canonical owner: Ponytail. Optional, host-capability-dependent. Cleanup is EXPLICIT_HOST_ACTION_ONLY. No automatic deletion of dirty or user worktrees.
+- **OrchestraWorktreeContract:** Implemented and merged through PR #214 (reviewed head `646111325e6de7c5d31915789fdc22a644125b7b`, merge commit `6bce297c7469f9c08ce41308cbb993cc863ac540`). `IMPLEMENTED_MERGED`. Canonical owner: Ponytail. Optional, host-capability-dependent, path-confined, non-authorizing, and no automatic deletion of dirty or user worktrees.
 - **Spec Kitty-Derived Phase 3A Release / Deployment:** Not performed
 - **Spec Kitty-Derived Phase 3A Policy Activation:** Not performed
 - **Explicit Deferred Boundaries:** Cross-session correlation restoration, durable correlation persistence, retry/wait/resume state machines, automatic retrospective closeout generation, durable retrospective retention, automatic Steward planning/dispatch integration, revision-history ordering, automatic policy activation
@@ -56,6 +56,7 @@
 - **Spec Kitty-Derived Phase 3B Release / Deployment:** Not performed
 - **Spec Kitty-Derived Phase 3B Policy Activation:** Not performed
 - **Governance Deviation (Phase 3B):** PR #212 merged by maintainer after all required technical checks passed. No independent APPROVED review was recorded before merge. Copilot review state was COMMENTED only due to exhausted quota. This does not retroactively convert the technical self-review into an independent approval.
-- **Next Active Software Task:** Candidate Phase 3C: `OrchestraWorktreeContract` implementation, subject to separate maintainer authorization
+- **Frontend-to-Backend Synchronicity:** First implementation slice is active on `codex/frontend-backend-synchronicity-v1` from baseline `6bce297c7469f9c08ce41308cbb993cc863ac540`. Scope is protocol, checklist, deterministic fixtures/validator/tests, routing/export/governance integration, and current-state documentation only. Runtime and persistence are unchanged.
+- **Next Active Software Task:** Human review and separate commit authorization for the validated frontend-to-backend synchronicity implementation
 
 This file records stable current state only. Historical decisions remain in `DECISION_LOG.md` and `CHANGELOG.md`.

@@ -1,6 +1,6 @@
 ---
 name: the-tuner
-description: Cross-specialist coordination specialist for contract assembly, contradiction detection, semantic invalidation, and re-entry recommendations.
+description: Cross-specialist coordination specialist for contract assembly, contradiction detection, semantic invalidation, and re-entry recommendations. See the canonical coordination protocol.
 ---
 
 # The Tuner
@@ -10,6 +10,8 @@ description: Cross-specialist coordination specialist for contract assembly, con
 Coordinate specialist-owned contracts for multi-domain work without absorbing routing, governance, domain, implementation, validation, continuity, Git, or release authority.
 
 The canonical protocol is [CROSS_SPECIALIST_COORDINATION_PROTOCOL.md](REFERENCE_CONTEXT.md#cross-specialist-coordination-protocol). Load it only when a multi-domain coordination session is active or a contract status must be interpreted.
+
+Frontend-to-backend workflow reconciliation follows [CROSS_MODULE_LOGIC_AUDIT_PROTOCOL.md](REFERENCE_CONTEXT.md#cross-module-logic-audit-protocol). The Tuner reuses the existing packet, identity, contradiction, invalidation, and re-entry contracts; it does not create a parallel authority or resolve findings owned by domain specialists.
 
 ## Activation and bypass
 

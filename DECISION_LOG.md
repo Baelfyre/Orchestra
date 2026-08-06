@@ -1238,6 +1238,18 @@ The current public release remains `v1.1.1`. Target `v1.1.2` is prepared but not
 
 <!-- THE_TUNER_PHASE_2_EVIDENCE_CONTINUITY -->:DECISION_LOG.md
 
+## 2026-08-06: Frontend-to-backend synchronicity first slice
+
+**Status:** Implemented and locally validated on an isolated feature worktree; commit, push, pull request, merge, release, deployment, and policy activation remain separately authorized.
+
+**Baseline:** `6bce297c7469f9c08ce41308cbb993cc863ac540`
+
+**Decision:** Extend the existing Tuner cross-layer packet with one shared cross-module audit protocol and a first frontend-to-backend checklist. Preserve the eleven-stage UI-to-render trace, exactly one specialist owner per finding, deterministic fail-closed statuses, executable workflow evidence, evidence identity, invalidation, and minimal re-entry. Do not create a new specialist, plugin, command, runtime model, or persistence contract.
+
+**Authority:** Conductor routes; The Tuner coordinates and detects contradictions; domain specialists own findings; Ponytail implements; Overseer owns evidence; Arbiter owns continuation. The protocol and passing validation do not create Git or release authority.
+
+**Deferred:** Backend-persistence expansion, broader cross-module checklists, runtime changes, installed integration refresh, release, deployment, and policy activation.
+
 ## 2026-07-24: The Tuner Phase 2 evidence identity and continuity integration
 
 **Status:** Implemented, committed, pushed, and under review in PR #197. Merge remains separately authorized.

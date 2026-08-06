@@ -1,0 +1,84 @@
+{
+  "schema_version": "orchestra-synchronicity-v1",
+  "workflow_stages": [
+    "UI_CONTROL",
+    "CLIENT_EVENT",
+    "CLIENT_STATE_OR_FORM_MODEL",
+    "SERIALIZED_REQUEST",
+    "API_ROUTE",
+    "BACKEND_HANDLER",
+    "SERVICE_OPERATION",
+    "REPOSITORY_AND_PERSISTENCE",
+    "API_RESPONSE",
+    "CLIENT_CACHE_OR_STATE_UPDATE",
+    "FINAL_RENDERED_STATE"
+  ],
+  "statuses": [
+    "CROSS_LAYER_ALIGNMENT_CONFIRMED",
+    "CROSS_LAYER_ALIGNMENT_GAPS_FOUND",
+    "CROSS_LAYER_CONTRACT_INCOMPLETE",
+    "CROSS_LAYER_CONTRADICTION_REVIEW_REQUIRED",
+    "CROSS_LAYER_EVIDENCE_INSUFFICIENT",
+    "CROSS_LAYER_CONTRACT_STALE",
+    "SPECIALIST_REENTRY_REQUIRED"
+  ],
+  "required_evidence": [
+    "field_mapping",
+    "validation_parity",
+    "authorization_parity",
+    "state_coverage",
+    "accessibility",
+    "executable_workflow"
+  ],
+  "cases": [
+    {
+      "id": "happy-path-aligned",
+      "expected_status": "CROSS_LAYER_ALIGNMENT_CONFIRMED",
+      "finding_owner": null,
+      "evidence": {"field_mapping": true, "validation_parity": true, "authorization_parity": true, "state_coverage": true, "accessibility": true, "executable_workflow": true},
+      "expected_reentry": []
+    },
+    {
+      "id": "request-field-mismatch",
+      "expected_status": "CROSS_LAYER_ALIGNMENT_GAPS_FOUND",
+      "finding_owner": "clockwork",
+      "evidence": {"field_mapping": false, "validation_parity": true, "authorization_parity": true, "state_coverage": true, "accessibility": true, "executable_workflow": true},
+      "expected_reentry": ["clockwork", "overseer"]
+    },
+    {
+      "id": "missing-executable-evidence",
+      "expected_status": "CROSS_LAYER_EVIDENCE_INSUFFICIENT",
+      "finding_owner": "overseer",
+      "evidence": {"field_mapping": true, "validation_parity": true, "authorization_parity": true, "state_coverage": true, "accessibility": true, "executable_workflow": false},
+      "expected_reentry": ["overseer"]
+    },
+    {
+      "id": "authorization-mismatch",
+      "expected_status": "CROSS_LAYER_ALIGNMENT_GAPS_FOUND",
+      "finding_owner": "cipher",
+      "evidence": {"field_mapping": true, "validation_parity": true, "authorization_parity": false, "state_coverage": true, "accessibility": true, "executable_workflow": true},
+      "expected_reentry": ["cipher", "cloak", "overseer"]
+    },
+    {
+      "id": "stale-contract-identity",
+      "expected_status": "CROSS_LAYER_CONTRACT_STALE",
+      "finding_owner": "the-tuner",
+      "evidence": {"field_mapping": true, "validation_parity": true, "authorization_parity": true, "state_coverage": true, "accessibility": true, "executable_workflow": true},
+      "expected_reentry": ["the-tuner", "overseer", "arbiter"]
+    },
+    {
+      "id": "inaccessible-backend-state",
+      "expected_status": "CROSS_LAYER_ALIGNMENT_GAPS_FOUND",
+      "finding_owner": "cloak",
+      "evidence": {"field_mapping": true, "validation_parity": true, "authorization_parity": true, "state_coverage": false, "accessibility": false, "executable_workflow": true},
+      "expected_reentry": ["cloak", "overseer"]
+    },
+    {
+      "id": "persistence-scope-expansion",
+      "expected_status": "SPECIALIST_REENTRY_REQUIRED",
+      "finding_owner": "chronicler",
+      "evidence": {"field_mapping": true, "validation_parity": true, "authorization_parity": true, "state_coverage": true, "accessibility": true, "executable_workflow": true},
+      "expected_reentry": ["chronicler", "conductor"]
+    }
+  ]
+}

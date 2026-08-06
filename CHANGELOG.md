@@ -4,6 +4,12 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased - Spec Kitty-Derived Governed Phase Execution Contracts
 
+### Frontend-to-Backend Synchronicity Contract
+
+- Added the shared cross-module logic audit protocol and first frontend-to-backend synchronicity checklist without changing runtime or persistence behavior.
+- Added deterministic fixtures, a focused validator, behavior tests, routing integration, strict-governance wiring, and portable Codex export parity.
+- Reconciled current project state through merged Spec Kitty Phase 3C / PR #214. Implementation remains uncommitted and requires separate human Git authorization.
+
 ### Candidate Phase 3C WorktreeContract Implementation (PR #214 Open)
 
 - Implemented typed `OrchestraWorktreeContract` model (`orchestra_runtime/worktree.py`), strict path confinement validator, base SHA checker, deterministic serialization, and adapter capability integration.
