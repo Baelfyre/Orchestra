@@ -497,10 +497,21 @@ def validate_worktree_path(
         return None, code
     resolved_repo = Path(repo_root).resolve()
     try:
-        rel = resolved.relative_to(resolved_repo).as_posix()
-        return rel, None
+        relative_path = os.path.relpath(
+            os.fspath(resolved),
+            start=os.fspath(resolved_repo),
+        )
     except ValueError:
         return None, WorktreeReasonCode.PATH_OUTSIDE_AUTHORIZED_PARENT
+
+    if (
+        os.path.isabs(relative_path)
+        or relative_path == os.pardir
+        or relative_path.startswith(f"{os.pardir}{os.sep}")
+    ):
+        return None, WorktreeReasonCode.PATH_OUTSIDE_AUTHORIZED_PARENT
+
+    return Path(relative_path).as_posix(), None
 
 
 # ---------------------------------------------------------------------------
