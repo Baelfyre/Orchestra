@@ -2,6 +2,20 @@
 
 This changelog tracks the repository history using git tags, merge history, and the prior documented milestone log that lived under `docs/meta/CHANGELOG.md`.
 
+## Unreleased - Delegated Host Reliability Phase C
+
+### Added
+
+- Added a deterministic delegated-host reliability protocol and checklist for repository-verifiable same-host reset/resume, active-host handoff, capacity waits, stale identity, incomplete checkpoints, authority expansion, scaffold-only host routing, and duplicate replay scenarios.
+- Added fail-closed fixtures, validation, and runtime regression coverage for portable checkpoint and handoff evidence without introducing persistence, RPC, daemon, network orchestration, or new runtime authority.
+- Corrected the first-run fixture defects so all SHA-256 evidence identifiers satisfy the validator's lowercase 64-character contract.
+
+### Evidence Boundary
+
+- Repository CI proves only deterministic repository contract behavior. Actual installed Codex, Antigravity, and cross-host reset/resume evidence remains `PENDING_LOCAL_HOST_VALIDATION`.
+- Claude Code remains `SCAFFOLD_ONLY` for Phase C runtime-continuity purposes and cannot produce `AUTO_CONTINUE` as an active receiving host.
+- The capability remains unreleased; no deployment, installed-host mutation, policy activation, or history rewrite is part of Phase C.
+
 ## Unreleased - Cross-Layer Integrity Phase F2
 
 ### Added
