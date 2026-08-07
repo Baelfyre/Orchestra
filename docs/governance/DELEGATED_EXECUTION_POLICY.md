@@ -15,8 +15,8 @@ evaluated, or enforced.
 ## Phase Implementation Status
 
 Phase A defines the canonical contracts for delegated autonomous governance.
-Phase B instruction-level behavior is now merged and canonical on `main` through PR #190. Remote and host reliability remain pending until separately authorized.
-Phase A contracts are merged; Phase C and Phase D are not started. Phase B has not been released or deployed.
+Phase B instruction-level behavior is merged and canonical on `main` through PR #190. The Phase C repository host-reliability contract is complete through PR #225, while live installed-host evidence remains `PENDING_LOCAL_HOST_VALIDATION`. Phase D overlap reconciliation is complete through PR #226 and found no justified duplicate Phase D runtime extension for v1.2.0.
+Phase A contracts are merged. Phase B is merged and canonical through PR #190. Phase C repository contract is complete through PR #225. Phase C live installed-host evidence remains `PENDING_LOCAL_HOST_VALIDATION`. Phase D overlap reconciliation is complete through PR #226. No additional Phase D runtime implementation is justified for v1.2.0. v1.2.0 has not been released or deployed.
 
 
 ---

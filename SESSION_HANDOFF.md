@@ -33,29 +33,16 @@ The replay then completed:
 - **R3 / replay PR #225:** Delegated Phase C repository host-reliability contract. An initial replay head failed runtime validation and was not merged. The malformed SHA fixture was corrected, all old evidence was invalidated, the entire fresh matrix reran successfully, and only the corrected exact head was merged.
 - **R4 / replay PR #226:** Delegated Phase D runtime-overlap assessment. No duplicate runtime extension is justified; the phase merged only from a green baseline with a fresh all-green matrix.
 
-## Active Phase — R5 Cleanup and Autonomous Merge Hardening
+## Active Phase - R5B Delegated Governance State Reconciliation
 
-R5 is implementing the lessons learned from the first experiment as repository contracts rather than relying only on operator memory.
+R5 merged through PR #227 at `467008db683c346cd086442dbb909c20a9248a3a`. R5B is the bounded prerequisite that reconciles delegated-governance current-state documentation and executable consistency checks before R6.
 
-The central invariant is:
-
-```text
-GITHUB_CAN_MERGE != GOVERNANCE_READY_TO_MERGE
-```
-
-The R5 scope includes:
-
-- fail-closed autonomous merge-readiness protocol;
-- machine-readable required-check fixtures;
-- deterministic evaluator and runtime regression coverage;
-- current required-status-check and branch-protection guidance;
-- canonical project-state reconciliation;
-- stale-current-state cleanup without rewriting historical handoffs.
-
-Once R5 is canonical, autonomous/delegated merges must treat missing or pending check data as `WAIT_FOR_EVIDENCE`, any failed required check as blocking, stale-head evidence as invalid, and a red canonical baseline as `REMEDIATE_BASELINE_FIRST`.
-
-`mergeable: true` is informational only. Merge API acceptance is not completion evidence. The PR and canonical `main` must be independently re-read before `MERGED_VERIFIED` can be recorded.
-
+Current verified state:
+- Phase C repository contract: complete through PR #225.
+- Phase C live installed-host evidence: `PENDING_LOCAL_HOST_VALIDATION`.
+- Phase D overlap reconciliation: complete through PR #226.
+- Phase D runtime extension: `NO_DUPLICATE_RUNTIME_EXTENSION_REQUIRED` for v1.2.0.
+- v1.2.0: not released or deployed.
 ## Phase C Evidence Boundary
 
 Repository CI proves deterministic repository contract behavior only.
@@ -99,10 +86,10 @@ After synchronization, R7 must exercise the real installed-host continuity/parit
 ## Remaining Sequence
 
 ```text
-R5  cleanup + autonomous merge-readiness hardening
-R6  README + changelog + version + v1.2.0 release-candidate preparation
-R7  live installed Codex/Antigravity/Claude compatibility evidence
-R8  tag/GitHub Release only from independently verified release state
+R5   merged - autonomous merge-readiness hardening
+R5B  delegated-governance state reconciliation
+R6   README + changelog + version + v1.2.0 release-candidate preparation
+R7   live installed Codex/Antigravity/Claude compatibility evidence
+R8   tag/GitHub Release only from independently verified release state
 ```
-
 Historical first-run failures remain preserved as audit evidence in the KB and archive branch. They must not be silently rewritten or deleted during cleanup.
