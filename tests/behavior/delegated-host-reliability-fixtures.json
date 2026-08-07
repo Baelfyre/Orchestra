@@ -219,7 +219,7 @@
       "host_to_maturity": "SCAFFOLD_ONLY",
       "evidence_level": "SIMULATED_REPOSITORY_EVIDENCE",
       "repo_commit_sha": "9999999999999999999999999999999999999999",
-      "runtime_bundle_sha256": "bdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbdbd",
+      "runtime_bundle_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "correlation_id": "019c3d6a-0000-7000-8000-000000000008",
       "run_id": "run-scaffold-host-001",
       "checkpoint_id": "checkpoint-scaffold-host-001",
