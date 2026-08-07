@@ -1,3 +1,4 @@
+import copy
 import json
 import re
 import sys
@@ -31,6 +32,10 @@ def check_key(check):
     return (str(check.get("workflow", "")), str(check.get("job", "")))
 
 
+def check_token(check):
+    return f"{check.get('workflow', '')}/{check.get('job', '')}"
+
+
 def evaluate_pre_merge(snapshot):
     if snapshot.get("base_health") != "GREEN":
         return "REMEDIATE_BASELINE_FIRST"
@@ -45,8 +50,7 @@ def evaluate_pre_merge(snapshot):
     if snapshot.get("changelog_required") and not snapshot.get("changelog_updated"):
         return "BLOCK"
 
-    mergeable = snapshot.get("mergeable")
-    if mergeable is False:
+    if snapshot.get("mergeable") is False:
         return "BLOCK"
 
     if not snapshot.get("head_reconfirmed"):
@@ -101,6 +105,29 @@ def evaluate_post_merge(snapshot):
     return "MERGED_VERIFIED"
 
 
+def materialize_pre_merge_case(data, case):
+    snapshot = copy.deepcopy(data["base_snapshot"])
+
+    for key, value in case.get("overrides", {}).items():
+        snapshot[key] = copy.deepcopy(value)
+
+    remove_check = case.get("remove_check")
+    if remove_check:
+        snapshot["checks"] = [
+            item for item in snapshot.get("checks", [])
+            if check_token(item) != remove_check
+        ]
+
+    check_overrides = case.get("check_overrides", {})
+    if check_overrides:
+        for check in snapshot.get("checks", []):
+            patch = check_overrides.get(check_token(check))
+            if patch:
+                check.update(copy.deepcopy(patch))
+
+    return snapshot
+
+
 def validate_fixtures(data):
     errors = []
 
@@ -115,6 +142,12 @@ def validate_fixtures(data):
         errors.append(
             "required_checks must match the canonical exact required-check inventory"
         )
+
+    base_snapshot = data.get("base_snapshot")
+    if not isinstance(base_snapshot, dict):
+        errors.append("base_snapshot must be an object")
+    elif evaluate_pre_merge(base_snapshot) != "READY_FOR_MERGE":
+        errors.append("base_snapshot must represent a fully green ready-to-merge state")
 
     cases = data.get("pre_merge_cases")
     if not isinstance(cases, list) or not cases:
@@ -131,7 +164,8 @@ def validate_fixtures(data):
             if expected not in PRE_MERGE_DISPOSITIONS:
                 errors.append(f"{case_id}: unknown expected pre-merge disposition")
                 continue
-            actual = evaluate_pre_merge(case["snapshot"])
+            snapshot = materialize_pre_merge_case(data, case)
+            actual = evaluate_pre_merge(snapshot)
             if actual != expected:
                 errors.append(
                     f"{case_id}: expected {expected} but evaluator returned {actual}"
