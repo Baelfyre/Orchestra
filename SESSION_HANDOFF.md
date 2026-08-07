@@ -23,7 +23,7 @@
 - **Spec Kitty Phase 3C Status:** `OrchestraWorktreeContract` implemented and merged through PR #214.
 - **Spec Kitty Phase 3C Reviewed Head:** `646111325e6de7c5d31915789fdc22a644125b7b`
 - **Spec Kitty Phase 3C Merge Commit:** `6bce297c7469f9c08ce41308cbb993cc863ac540`
-- **Release / Deployment:** Not performed; Spec Kitty Phase 2 and Phase 3A are not included in a new tagged release.
+- **Release / Deployment:** Not performed; the post-`v1.1.2` capability set remains unreleased.
 - **Policy Activation:** Not performed; `docs/governance/DELEGATED_EXECUTION_POLICY.md` remains unamended.
 - **Former Phase 2 Feature Branches:** Historical only; do not resume `feature/spec-kitty-derived-runtime` for future work.
 - **Former Phase 3A Design Branch:** `design/spec-kitty-phase3-deferred-capabilities` is historical after merge. Do not resume this branch for Phase 3B.
@@ -36,6 +36,8 @@
   ```
 - **Active Implementation Worktree:** `D:\Dev\Repositories\+conductor-worktrees\frontend-backend-synchronicity-v1`
 - **Active Implementation Branch:** `codex/frontend-backend-synchronicity-v1`
-- **Next Continuation:** Review the validated frontend-to-backend synchronicity diff and provide separate commit authorization if accepted.
+- **Active Pull Request:** #216, `feat: add frontend-backend synchronicity audit contract`
+- **Current Review State:** Bounded immutable-review corrections strengthen executable workflow traces, finding contracts, status coverage, identity binding, and current-state documentation. Exact-head CI and renewed immutable review are required.
+- **Next Continuation:** Verify the current PR #216 head, require all exact-head checks to pass, complete immutable review, and stop for separate merge authorization.
 
-This handoff grants no commit, push, pull-request, merge, release, deployment, or policy-activation authority.
+This handoff grants no merge, release, deployment, publication, installed-integration refresh, policy activation, force push, history rewrite, or branch-deletion authority.
