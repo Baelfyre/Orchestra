@@ -4,13 +4,28 @@
 
 This protocol defines Orchestra's fail-closed evidence gate for autonomous or delegated pull-request merges. It exists because GitHub may technically accept a merge even when repository validation is missing or red. Platform capability is not governance readiness.
 
-Canonical rule:
+Canonical merge rule:
 
 ```text
 GITHUB_CAN_MERGE != GOVERNANCE_READY_TO_MERGE
 ```
 
 This protocol does not grant merge authority. It constrains how already-authorized merge authority may be exercised.
+
+## Parent Governing Rule
+
+This protocol is the merge-specific specialization of Orchestra's Evidence-Bound Governed Transition Rule.
+
+```text
+PLATFORM_CAN_EXECUTE != GOVERNANCE_READY_TO_TRANSITION
+GITHUB_CAN_MERGE != GOVERNANCE_READY_TO_MERGE
+API_SUCCESS != VERIFIED_STATE
+NO_EVIDENCE != APPROVAL
+```
+
+The parent rule applies to governed phase advancement and other material state transitions, including merge, release, deployment, policy activation, protected-state mutation, destructive operations, permanent deletion, and history rewrite. Missing, pending, stale, contradictory, or failed required evidence never grants permission. Evidence belongs to the exact current state and becomes invalid when that state changes. A red canonical baseline blocks ordinary progression except for explicitly authorized bounded remediation. A successful write is not a completed transition until an independent canonical read verifies the resulting state.
+
+Neither this protocol nor its parent rule creates or widens authority.
 
 ## Required Evidence Snapshot
 
