@@ -256,7 +256,7 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 
 ### Changed
 - Clarified governance authority boundaries for Arbiter status vocabulary, Steward hygiene wording, and Governor/Cipher release-security ownership without changing governance semantics.
-- Clarified Governance Strictness Levels as a derived scale over existing project context. The two ladders should not be treated as interchangeable.
+- Clarified Governance Strictness Levels as a derived scale over existing project type, operating mode, release stage, and risk classifications without changing governance semantics.
 - Strengthened Cloak's documentation-only frontend review contract with artifact-evidence requirements, clearer form and validation messaging review, explicit loading/empty/error/success/retry/permission-state review, sharper frontend handoff blueprint guidance, and matching tracked Codex export parity for the updated Cloak docs.
 - Normalized Conductor's skill documentation against the shared specialist authoring standard by clarifying activation conditions, supported work, scope enforcement, validation expectations, local-only safety, and direct-route versus orchestration versus reroute guidance, with matching tracked Codex export parity.
 - Normalized Ponytail specialist documentation with explicit activation conditions, supported work, scope enforcement, validation expectations, local-only safety, and direct handoff boundaries for implementation-owned code changes, with matching tracked Codex export parity.
@@ -300,7 +300,7 @@ This patch was published on July 14, 2026 as the `v1.1.2` GitHub Release.
 ### Added
 - Added layered UI engineering and validation ownership across Cloak static risk analysis, Clockwork engineering integrity, renewed Cloak review, Overseer current-commit evidence validation, and explicit human approval boundaries.
 - Recorded unanimous Phase 5C-B Arbiter, Governor, and Steward approval plus conditional Butler disposition for the design-only authority/capability proposal, without runtime implementation or source-expression reuse authority.
-- Added four manual Phase 5D `APPROVED` promotion records with pinned Strix provenance, Apache-2.0 attribution boundaries, conceptual-adaptation limits, and `automatic_promotion: false`.
+- Added four manual Phase 5D `APPROVED` promotion records with pinned Strix provenance, Apache-2.0 attribution boundaries, and `automatic_promotion: false`.
 - Manually synchronized the Phase 5E Pattern Catalog with the four canonical promotion records; Catalog projection remains separate from implementation authority.
 - Added the Phase 5C-A Evolution Proposal schema `1.1`, deterministic proposal lifecycle validation, focused behavior coverage, and one design-only Orchestra authority/capability proposal in `UNDER_REVIEW`, without promotion, Pattern Catalog, source-reuse, prompt-reuse, or implementation authority.
 - Added Phase 4.5-A OpenHero pilot source-intake, pattern, and audit records through a pinned static read-only GitHub inspection with no decisions, proposals, promotions, or Pattern Catalog changes.
@@ -336,7 +336,7 @@ This patch was published on July 14, 2026 as the `v1.1.2` GitHub Release.
 ### Changed
 - Added Windows coverage and runtime test execution to cross-platform CI validation.
 - Integrated Release Mode governance docs so The Governor now treats app release compliance artifacts as required when applicable and returns `REVISION_REQUIRED` or `BLOCKED` when release-gate documentation is missing.
-- Clarified optional project governance rulesets so `PROJECT_CONTEXT.md` enforcement depends on project type, risk level, and declared governance level.
+- Clarified optional project governance rulesets so `PROJECT_CONTEXT.md` enforcement depends on project type and risk level.
 - Wired `tests/runtime` into CI, enforced portable runtime coverage with `pytest-cov --cov-fail-under=90`, switched `validate.yml` to `python tests/behavior/run_tests.py`, and added runtime tests for alias loading, default-command fallback, and unresolved command-to-skill handling.
 
 ### Added
