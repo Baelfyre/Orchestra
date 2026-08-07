@@ -110,6 +110,8 @@ def main():
         {"Name": "test_tuner_collaboration_contract.py", "Path": "tests/behavior/test_tuner_collaboration_contract.py"},
         {"Name": "validate_cross_layer_synchronicity_contract.py", "Path": "scripts/validate_cross_layer_synchronicity_contract.py"},
         {"Name": "test_cross_layer_synchronicity_contract.py", "Path": "tests/behavior/test_cross_layer_synchronicity_contract.py"},
+        {"Name": "validate_cross_layer_integrity_contract.py", "Path": "scripts/validate_cross_layer_integrity_contract.py"},
+        {"Name": "test_cross_layer_integrity_contract.py", "Path": "tests/behavior/test_cross_layer_integrity_contract.py"},
         {"Name": "validate_evidence_identity.py", "Path": "scripts/validate_evidence_identity.py", "Args": ["--approved-base-sha", evidence_base]},
         {"Name": "test_evidence_identity.py", "Path": "tests/behavior/test_evidence_identity.py"},
         {"Name": "test_evidence_baseline_resolution.py", "Path": "tests/behavior/test_evidence_baseline_resolution.py"},
