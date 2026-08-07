@@ -22,7 +22,8 @@ def fixtures():
 
 
 def protocol_bytes():
-    return PROTOCOL_PATH.read_bytes()
+    text = PROTOCOL_PATH.read_text(encoding="utf-8")
+    return text.replace("\r\n", "\n").replace("\r", "\n").encode("utf-8")
 
 
 def cases_by_id():
