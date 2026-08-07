@@ -1,0 +1,114 @@
+{
+  "schema_version": "orchestra-cross-layer-integrity-v1",
+  "contract_identity": {
+    "approved_baseline": "2bc63308415221c54babba578e812ec95bc65f4c",
+    "contract_revision": "cross-layer-integrity-f2-v3",
+    "protocol_sha256": "9402ffe1d44f0ba19c04c1f255f3746a68e1f4a19877041acbcd421d5ef30736",
+    "source_branch": "feat/cross-layer-integrity-f2-v3"
+  },
+  "statuses": [
+    "CROSS_LAYER_ALIGNMENT_CONFIRMED",
+    "CROSS_LAYER_ALIGNMENT_GAPS_FOUND",
+    "CROSS_LAYER_CONTRACT_INCOMPLETE",
+    "CROSS_LAYER_CONTRADICTION_REVIEW_REQUIRED",
+    "CROSS_LAYER_EVIDENCE_INSUFFICIENT",
+    "CROSS_LAYER_CONTRACT_STALE",
+    "SPECIALIST_REENTRY_REQUIRED"
+  ],
+  "profiles": {
+    "backend_persistence": {
+      "stages": ["SERVICE_INPUT","DOMAIN_VALIDATION","TRANSACTION_BOUNDARY","REPOSITORY_OPERATION","MAPPING_OR_QUERY","SCHEMA_CONSTRAINT","PERSISTENCE_EXECUTION","COMMIT_OR_ROLLBACK","READBACK_OR_PROJECTION","SERVICE_RESULT"],
+      "required_evidence": ["contract_mapping","validation_and_constraint_parity","transaction_semantics","query_mapping","error_mapping","concurrency_and_idempotency","executable_workflow"],
+      "executable_workflows": [
+        {
+          "id": "bp-happy",
+          "kind": "HAPPY_PATH",
+          "trace": [
+            {"stage":"SERVICE_INPUT","owner":"clockwork","source_ref":"fixture://bp/service-input","evidence_ref":"fixture://bp/evidence/service-input","result":"accepted service input"},
+            {"stage":"DOMAIN_VALIDATION","owner":"clockwork","source_ref":"fixture://bp/domain-validation","evidence_ref":"fixture://bp/evidence/domain-validation","result":"domain validation passes"},
+            {"stage":"TRANSACTION_BOUNDARY","owner":"clockwork","source_ref":"fixture://bp/transaction","evidence_ref":"fixture://bp/evidence/transaction","result":"one transaction owns the write"},
+            {"stage":"REPOSITORY_OPERATION","owner":"clockwork","source_ref":"fixture://bp/repository","evidence_ref":"fixture://bp/evidence/repository","result":"repository operation matches service intent"},
+            {"stage":"MAPPING_OR_QUERY","owner":"chronicler","source_ref":"fixture://bp/mapping","evidence_ref":"fixture://bp/evidence/mapping","result":"mapping preserves fields and types"},
+            {"stage":"SCHEMA_CONSTRAINT","owner":"chronicler","source_ref":"fixture://bp/schema","evidence_ref":"fixture://bp/evidence/schema","result":"schema constraints match validation"},
+            {"stage":"PERSISTENCE_EXECUTION","owner":"chronicler","source_ref":"fixture://bp/persist","evidence_ref":"fixture://bp/evidence/persist","result":"exactly one write executes"},
+            {"stage":"COMMIT_OR_ROLLBACK","owner":"chronicler","source_ref":"fixture://bp/commit","evidence_ref":"fixture://bp/evidence/commit","result":"transaction commits once"},
+            {"stage":"READBACK_OR_PROJECTION","owner":"chronicler","source_ref":"fixture://bp/readback","evidence_ref":"fixture://bp/evidence/readback","result":"stored data projects without drift"},
+            {"stage":"SERVICE_RESULT","owner":"clockwork","source_ref":"fixture://bp/result","evidence_ref":"fixture://bp/evidence/result","result":"service returns canonical saved result"}
+          ],
+          "expected_final_state": "one validated write commits and returns the saved result"
+        },
+        {
+          "id": "bp-failure",
+          "kind": "FAILURE_PATH",
+          "trace": [
+            {"stage":"SERVICE_INPUT","owner":"clockwork","source_ref":"fixture://bp-fail/service-input","evidence_ref":"fixture://bp-fail/evidence/service-input","result":"accepted service input"},
+            {"stage":"DOMAIN_VALIDATION","owner":"clockwork","source_ref":"fixture://bp-fail/domain-validation","evidence_ref":"fixture://bp-fail/evidence/domain-validation","result":"domain validation passes"},
+            {"stage":"TRANSACTION_BOUNDARY","owner":"clockwork","source_ref":"fixture://bp-fail/transaction","evidence_ref":"fixture://bp-fail/evidence/transaction","result":"transaction begins"},
+            {"stage":"REPOSITORY_OPERATION","owner":"clockwork","source_ref":"fixture://bp-fail/repository","evidence_ref":"fixture://bp-fail/evidence/repository","result":"repository operation starts"},
+            {"stage":"MAPPING_OR_QUERY","owner":"chronicler","source_ref":"fixture://bp-fail/mapping","evidence_ref":"fixture://bp-fail/evidence/mapping","result":"query mapping is canonical"},
+            {"stage":"SCHEMA_CONSTRAINT","owner":"chronicler","source_ref":"fixture://bp-fail/schema","evidence_ref":"fixture://bp-fail/evidence/schema","result":"constraint rejects invalid persistence state"},
+            {"stage":"PERSISTENCE_EXECUTION","owner":"chronicler","source_ref":"fixture://bp-fail/persist","evidence_ref":"fixture://bp-fail/evidence/persist","result":"write fails deterministically"},
+            {"stage":"COMMIT_OR_ROLLBACK","owner":"chronicler","source_ref":"fixture://bp-fail/rollback","evidence_ref":"fixture://bp-fail/evidence/rollback","result":"transaction rolls back"},
+            {"stage":"READBACK_OR_PROJECTION","owner":"chronicler","source_ref":"fixture://bp-fail/readback","evidence_ref":"fixture://bp-fail/evidence/readback","result":"no partial write is visible"},
+            {"stage":"SERVICE_RESULT","owner":"clockwork","source_ref":"fixture://bp-fail/result","evidence_ref":"fixture://bp-fail/evidence/result","result":"service returns deterministic failure"}
+          ],
+          "expected_final_state": "failure rolls back with no duplicate or partial write"
+        }
+      ],
+      "cases": [
+        {"id":"backend-persistence-happy-path","expected_status":"CROSS_LAYER_ALIGNMENT_CONFIRMED","finding_owner":null,"finding":null,"evidence":{"contract_mapping":true,"validation_and_constraint_parity":true,"transaction_semantics":true,"query_mapping":true,"error_mapping":true,"concurrency_and_idempotency":true,"executable_workflow":true},"workflow_id":"bp-happy","expected_reentry":[]},
+        {"id":"backend-contract-mapping-gap","expected_status":"CROSS_LAYER_ALIGNMENT_GAPS_FOUND","finding_owner":"chronicler","finding":{"finding_id":"F-BP-MAP-001","severity":"MAJOR","owner":"chronicler","affected_stages":["MAPPING_OR_QUERY","SCHEMA_CONSTRAINT"],"evidence":["fixture://finding/bp-map"],"impact":"service and persistence semantics disagree","minimal_remediation":"align mapping and constraints with the accepted service contract","required_validation":"mapping and constraint evidence proves parity"},"evidence":{"contract_mapping":false,"validation_and_constraint_parity":false,"transaction_semantics":true,"query_mapping":true,"error_mapping":true,"concurrency_and_idempotency":true,"executable_workflow":true},"workflow_id":"bp-happy","expected_reentry":["chronicler","clockwork","overseer"]},
+        {"id":"backend-owner-contract-missing","expected_status":"CROSS_LAYER_CONTRACT_INCOMPLETE","finding_owner":"the-tuner","finding":{"finding_id":"F-BP-CONTRACT-001","severity":"MAJOR","owner":"the-tuner","affected_stages":["REPOSITORY_OPERATION"],"evidence":["missing://bp-owner"],"impact":"a persistence decision lacks singular ownership","minimal_remediation":"route the incomplete contract through Conductor","required_validation":"complete ownership and criteria are present"},"evidence":{"contract_mapping":true,"validation_and_constraint_parity":true,"transaction_semantics":true,"query_mapping":true,"error_mapping":true,"concurrency_and_idempotency":true,"executable_workflow":true},"workflow_id":"bp-happy","expected_reentry":["conductor","chronicler"]},
+        {"id":"backend-persistence-contradiction","expected_status":"CROSS_LAYER_CONTRADICTION_REVIEW_REQUIRED","finding_owner":"the-tuner","finding":{"finding_id":"F-BP-CONTRA-001","severity":"CRITICAL","owner":"the-tuner","affected_stages":["DOMAIN_VALIDATION","SCHEMA_CONSTRAINT"],"evidence":["fixture://finding/bp-contradiction"],"impact":"specialist contracts require incompatible behavior","minimal_remediation":"route conflicting clauses without choosing a winner","required_validation":"revised contracts remove the contradiction"},"evidence":{"contract_mapping":true,"validation_and_constraint_parity":true,"transaction_semantics":true,"query_mapping":true,"error_mapping":true,"concurrency_and_idempotency":true,"executable_workflow":true},"workflow_id":"bp-happy","expected_reentry":["conductor","clockwork","chronicler"]},
+        {"id":"backend-evidence-missing","expected_status":"CROSS_LAYER_EVIDENCE_INSUFFICIENT","finding_owner":"overseer","finding":{"finding_id":"F-BP-EVIDENCE-001","severity":"MAJOR","owner":"overseer","affected_stages":["SERVICE_INPUT","SERVICE_RESULT"],"evidence":["missing://bp-executable"],"impact":"backend-to-persistence alignment cannot be demonstrated","minimal_remediation":"produce current executable happy and failure traces","required_validation":"Overseer verifies both traces against current identity"},"evidence":{"contract_mapping":true,"validation_and_constraint_parity":true,"transaction_semantics":true,"query_mapping":true,"error_mapping":true,"concurrency_and_idempotency":true,"executable_workflow":false},"workflow_id":null,"expected_reentry":["overseer"]},
+        {"id":"backend-contract-stale","expected_status":"CROSS_LAYER_CONTRACT_STALE","finding_owner":"the-tuner","finding":{"finding_id":"F-BP-STALE-001","severity":"MAJOR","owner":"the-tuner","affected_stages":["SERVICE_INPUT","SERVICE_RESULT"],"evidence":["fixture://finding/bp-stale"],"impact":"evidence is bound to a superseded profile revision","minimal_remediation":"refresh packet and dependent evidence","required_validation":"Tuner, Overseer, and Arbiter verify current identity"},"evidence":{"contract_mapping":true,"validation_and_constraint_parity":true,"transaction_semantics":true,"query_mapping":true,"error_mapping":true,"concurrency_and_idempotency":true,"executable_workflow":true},"workflow_id":"bp-happy","expected_reentry":["the-tuner","overseer","arbiter"]},
+        {"id":"backend-transaction-reentry","expected_status":"SPECIALIST_REENTRY_REQUIRED","finding_owner":"chronicler","finding":{"finding_id":"F-BP-TX-001","severity":"CRITICAL","owner":"chronicler","affected_stages":["TRANSACTION_BOUNDARY","COMMIT_OR_ROLLBACK"],"evidence":["fixture://finding/bp-transaction"],"impact":"write can partially commit or duplicate under retry","minimal_remediation":"define atomic transaction and idempotency semantics","required_validation":"failure and duplicate-execution evidence proves one logical write"},"evidence":{"contract_mapping":true,"validation_and_constraint_parity":true,"transaction_semantics":false,"query_mapping":true,"error_mapping":true,"concurrency_and_idempotency":false,"executable_workflow":true},"workflow_id":"bp-failure","expected_reentry":["chronicler","clockwork","overseer"]}
+      ]
+    },
+    "cross_module_logic": {
+      "stages": ["ENTRYPOINT","INPUT_CONTRACT","MODULE_A_DECISION","HANDOFF_PAYLOAD","MODULE_B_DECISION","SHARED_STATE_OR_SIDE_EFFECT","RESULT_PROPAGATION","ERROR_PROPAGATION","FINAL_OBSERVABLE_OUTCOME"],
+      "required_evidence": ["input_contract","handoff_contract","control_flow","state_and_side_effects","error_propagation","dependency_direction","executable_workflow"],
+      "executable_workflows": [
+        {
+          "id":"cm-happy","kind":"HAPPY_PATH",
+          "trace":[
+            {"stage":"ENTRYPOINT","owner":"clockwork","source_ref":"fixture://cm/entry","evidence_ref":"fixture://cm/evidence/entry","result":"entrypoint receives intended input"},
+            {"stage":"INPUT_CONTRACT","owner":"clockwork","source_ref":"fixture://cm/input","evidence_ref":"fixture://cm/evidence/input","result":"input contract is valid"},
+            {"stage":"MODULE_A_DECISION","owner":"clockwork","source_ref":"fixture://cm/a","evidence_ref":"fixture://cm/evidence/a","result":"module A chooses expected branch"},
+            {"stage":"HANDOFF_PAYLOAD","owner":"clockwork","source_ref":"fixture://cm/handoff","evidence_ref":"fixture://cm/evidence/handoff","result":"handoff preserves contract"},
+            {"stage":"MODULE_B_DECISION","owner":"clockwork","source_ref":"fixture://cm/b","evidence_ref":"fixture://cm/evidence/b","result":"module B interprets handoff consistently"},
+            {"stage":"SHARED_STATE_OR_SIDE_EFFECT","owner":"clockwork","source_ref":"fixture://cm/side-effect","evidence_ref":"fixture://cm/evidence/side-effect","result":"side effect occurs once"},
+            {"stage":"RESULT_PROPAGATION","owner":"clockwork","source_ref":"fixture://cm/result","evidence_ref":"fixture://cm/evidence/result","result":"success propagates without drift"},
+            {"stage":"ERROR_PROPAGATION","owner":"clockwork","source_ref":"fixture://cm/error","evidence_ref":"fixture://cm/evidence/error","result":"no hidden error path"},
+            {"stage":"FINAL_OBSERVABLE_OUTCOME","owner":"clockwork","source_ref":"fixture://cm/outcome","evidence_ref":"fixture://cm/evidence/outcome","result":"caller observes intended result"}
+          ],
+          "expected_final_state":"one coherent module flow returns the intended result"
+        },
+        {
+          "id":"cm-failure","kind":"FAILURE_PATH",
+          "trace":[
+            {"stage":"ENTRYPOINT","owner":"clockwork","source_ref":"fixture://cm-fail/entry","evidence_ref":"fixture://cm-fail/evidence/entry","result":"entrypoint receives intended input"},
+            {"stage":"INPUT_CONTRACT","owner":"clockwork","source_ref":"fixture://cm-fail/input","evidence_ref":"fixture://cm-fail/evidence/input","result":"input contract is valid"},
+            {"stage":"MODULE_A_DECISION","owner":"clockwork","source_ref":"fixture://cm-fail/a","evidence_ref":"fixture://cm-fail/evidence/a","result":"module A enters failure branch"},
+            {"stage":"HANDOFF_PAYLOAD","owner":"clockwork","source_ref":"fixture://cm-fail/handoff","evidence_ref":"fixture://cm-fail/evidence/handoff","result":"failure handoff is explicit"},
+            {"stage":"MODULE_B_DECISION","owner":"clockwork","source_ref":"fixture://cm-fail/b","evidence_ref":"fixture://cm-fail/evidence/b","result":"module B preserves failure semantics"},
+            {"stage":"SHARED_STATE_OR_SIDE_EFFECT","owner":"clockwork","source_ref":"fixture://cm-fail/side-effect","evidence_ref":"fixture://cm-fail/evidence/side-effect","result":"no duplicate side effect occurs"},
+            {"stage":"RESULT_PROPAGATION","owner":"clockwork","source_ref":"fixture://cm-fail/result","evidence_ref":"fixture://cm-fail/evidence/result","result":"false success is not emitted"},
+            {"stage":"ERROR_PROPAGATION","owner":"clockwork","source_ref":"fixture://cm-fail/error","evidence_ref":"fixture://cm-fail/evidence/error","result":"error propagates deterministically"},
+            {"stage":"FINAL_OBSERVABLE_OUTCOME","owner":"clockwork","source_ref":"fixture://cm-fail/outcome","evidence_ref":"fixture://cm-fail/evidence/outcome","result":"caller observes failure"}
+          ],
+          "expected_final_state":"failure propagates without false success or duplicate side effect"
+        }
+      ],
+      "cases":[
+        {"id":"cross-module-happy-path","expected_status":"CROSS_LAYER_ALIGNMENT_CONFIRMED","finding_owner":null,"finding":null,"evidence":{"input_contract":true,"handoff_contract":true,"control_flow":true,"state_and_side_effects":true,"error_propagation":true,"dependency_direction":true,"executable_workflow":true},"workflow_id":"cm-happy","expected_reentry":[]},
+        {"id":"cross-module-flow-gap","expected_status":"CROSS_LAYER_ALIGNMENT_GAPS_FOUND","finding_owner":"clockwork","finding":{"finding_id":"F-CM-FLOW-001","severity":"MAJOR","owner":"clockwork","affected_stages":["HANDOFF_PAYLOAD","MODULE_B_DECISION","ERROR_PROPAGATION"],"evidence":["fixture://finding/cm-flow"],"impact":"handoff or branch semantics drift across modules","minimal_remediation":"align handoff and error semantics","required_validation":"boundary tests prove exact handoff and error propagation"},"evidence":{"input_contract":true,"handoff_contract":false,"control_flow":false,"state_and_side_effects":true,"error_propagation":false,"dependency_direction":true,"executable_workflow":true},"workflow_id":"cm-happy","expected_reentry":["clockwork","overseer"]},
+        {"id":"cross-module-owner-contract-missing","expected_status":"CROSS_LAYER_CONTRACT_INCOMPLETE","finding_owner":"the-tuner","finding":{"finding_id":"F-CM-CONTRACT-001","severity":"MAJOR","owner":"the-tuner","affected_stages":["MODULE_A_DECISION"],"evidence":["missing://cm-owner"],"impact":"a module decision lacks singular ownership","minimal_remediation":"route the incomplete contract through Conductor","required_validation":"complete ownership and criteria are present"},"evidence":{"input_contract":true,"handoff_contract":true,"control_flow":true,"state_and_side_effects":true,"error_propagation":true,"dependency_direction":true,"executable_workflow":true},"workflow_id":"cm-happy","expected_reentry":["conductor","clockwork"]},
+        {"id":"cross-module-contradiction","expected_status":"CROSS_LAYER_CONTRADICTION_REVIEW_REQUIRED","finding_owner":"the-tuner","finding":{"finding_id":"F-CM-CONTRA-001","severity":"CRITICAL","owner":"the-tuner","affected_stages":["MODULE_A_DECISION","HANDOFF_PAYLOAD","MODULE_B_DECISION"],"evidence":["fixture://finding/cm-contradiction"],"impact":"module contracts prescribe incompatible handoff behavior","minimal_remediation":"route conflicting clauses without choosing a winner","required_validation":"revised contracts agree on one handoff"},"evidence":{"input_contract":true,"handoff_contract":true,"control_flow":true,"state_and_side_effects":true,"error_propagation":true,"dependency_direction":true,"executable_workflow":true},"workflow_id":"cm-happy","expected_reentry":["conductor","clockwork"]},
+        {"id":"cross-module-evidence-missing","expected_status":"CROSS_LAYER_EVIDENCE_INSUFFICIENT","finding_owner":"overseer","finding":{"finding_id":"F-CM-EVIDENCE-001","severity":"MAJOR","owner":"overseer","affected_stages":["ENTRYPOINT","FINAL_OBSERVABLE_OUTCOME"],"evidence":["missing://cm-executable"],"impact":"cross-module flow cannot be demonstrated","minimal_remediation":"produce current happy and failure traces","required_validation":"Overseer verifies both traces against current identity"},"evidence":{"input_contract":true,"handoff_contract":true,"control_flow":true,"state_and_side_effects":true,"error_propagation":true,"dependency_direction":true,"executable_workflow":false},"workflow_id":null,"expected_reentry":["overseer"]},
+        {"id":"cross-module-contract-stale","expected_status":"CROSS_LAYER_CONTRACT_STALE","finding_owner":"the-tuner","finding":{"finding_id":"F-CM-STALE-001","severity":"MAJOR","owner":"the-tuner","affected_stages":["ENTRYPOINT","FINAL_OBSERVABLE_OUTCOME"],"evidence":["fixture://finding/cm-stale"],"impact":"module-flow evidence is bound to a superseded revision","minimal_remediation":"refresh packet and dependent evidence","required_validation":"Tuner, Overseer, and Arbiter verify current identity"},"evidence":{"input_contract":true,"handoff_contract":true,"control_flow":true,"state_and_side_effects":true,"error_propagation":true,"dependency_direction":true,"executable_workflow":true},"workflow_id":"cm-happy","expected_reentry":["the-tuner","overseer","arbiter"]},
+        {"id":"cross-module-side-effect-reentry","expected_status":"SPECIALIST_REENTRY_REQUIRED","finding_owner":"clockwork","finding":{"finding_id":"F-CM-SIDEFX-001","severity":"CRITICAL","owner":"clockwork","affected_stages":["SHARED_STATE_OR_SIDE_EFFECT","ERROR_PROPAGATION"],"evidence":["fixture://finding/cm-side-effect"],"impact":"retry or error flow can duplicate a side effect or report false success","minimal_remediation":"make side-effect ordering and idempotency explicit","required_validation":"failure evidence proves one side effect and correct error propagation"},"evidence":{"input_contract":true,"handoff_contract":true,"control_flow":true,"state_and_side_effects":false,"error_propagation":true,"dependency_direction":true,"executable_workflow":true},"workflow_id":"cm-failure","expected_reentry":["clockwork","overseer"]}
+      ]
+    }
+  }
+}

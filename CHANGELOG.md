@@ -2,6 +2,20 @@
 
 This changelog tracks the repository history using git tags, merge history, and the prior documented milestone log that lived under `docs/meta/CHANGELOG.md`.
 
+## Unreleased - Cross-Layer Integrity Phase F2
+
+### Added
+
+- Added an additive backend-to-persistence integrity profile covering service input, domain validation, transaction ownership, repository operations, mapping or query behavior, schema constraints, persistence execution, commit or rollback, readback or projection, and service-result propagation.
+- Added a language-neutral cross-module logical-flow integrity profile covering entrypoints, input contracts, module decisions, handoff payloads, shared state or side effects, result propagation, error propagation, and final observable outcomes.
+- Added dedicated backend-persistence and cross-module checklists, deterministic executable happy/failure traces, a fail-closed validator, and focused behavior coverage.
+
+### Preserved Boundaries
+
+- Reused the existing Conductor -> The Tuner -> domain specialist -> Overseer -> Arbiter authority model; no new specialist, command, plugin, runtime model, persistence implementation, migration, or policy authority was added.
+- Kept the existing frontend/backend protocol, fixture identity, and Codex portable reference bundle unchanged; the new profiles are additive extensions.
+- The capability remains unreleased. No deployment, installed-integration mutation, policy activation, or history rewrite is part of F2.
+
 ## Unreleased - Spec Kitty-Derived Governed Phase Execution Contracts
 
 ### Frontend-to-Backend Synchronicity Contract
