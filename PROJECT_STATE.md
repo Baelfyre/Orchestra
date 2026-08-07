@@ -8,7 +8,8 @@
 - **Current Public Release:** `v1.1.2`
 - **Release Status:** Published July 14, 2026
 - **Target Release:** `v1.2.0`
-- **Post-`v1.1.2` Release State:** `NOT_RELEASED`
+- **Release-Candidate Metadata:** `1.2.0`
+- **Post-`v1.1.2` Release State:** `PREPARED_NOT_RELEASED`
 - **Policy Activation State:** `NOT_PERFORMED`
 
 ## Canonical Capability State
@@ -68,7 +69,8 @@ Clean replay results:
 - **R3:** host-reliability replay initially failed runtime validation; the merge was blocked, the malformed fixture was corrected, all earlier evidence was discarded, a completely fresh all-green matrix ran, and the remediated head merged through PR #225.
 - **R4:** Phase D overlap assessment merged through PR #226 only after the canonical baseline was green and every fresh required check passed.
 - **R5:** autonomous merge-readiness hardening merged through PR #227 at merge commit `467008db683c346cd086442dbb909c20a9248a3a`.
-- **R5B:** delegated-governance current-state reconciliation is the bounded baseline-remediation phase required before R6.
+- **R5B:** delegated-governance current-state reconciliation merged and was independently verified through PR #228 at merge commit `fbe4532ba2083feaa7ed9fcda2988843f1237a78`.
+- **R6:** `v1.2.0` release-candidate metadata and documentation are prepared on the governed release-preparation revision. This state is `PREPARED_NOT_RELEASED` and does not authorize publication.
 
 The incident-derived invariant is:
 
@@ -76,7 +78,7 @@ The incident-derived invariant is:
 GITHUB_CAN_MERGE != GOVERNANCE_READY_TO_MERGE
 ```
 
-Autonomous merges must follow `docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md` once R5 is canonical.
+Autonomous merges follow `docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md`.
 
 ## Validation and Continuation
 
@@ -85,10 +87,9 @@ Autonomous merges must follow `docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOC
 - **Baseline Rule:** A new phase must not begin from a red canonical `main`.
 - **Post-Merge Rule:** An API response is not completion evidence; the PR and canonical `main` must be independently re-read before state advances.
 - **Issue #215:** Open umbrella finalization issue targeting `v1.2.0`.
-- **Active Remote Task:** R5B delegated-governance state reconciliation.
-- **Next Remote Task:** R6 README, changelog, version, and release-candidate preparation only after R5B is merged and independently verified.
-- **Next Local Task:** Fast-forward local Orchestra and KB, run preflight, refresh installed integrations as governed, and execute the R7 live installed-host validation matrix.
-- **Publication Boundary:** `v1.2.0` tag/GitHub Release remains blocked until R7 live-host evidence is reconciled and release state is independently verified.
+- **R6 Repository State:** `PREPARED_NOT_RELEASED`; candidate version surfaces are `1.2.0`, while the current public GitHub Release remains `v1.1.2`.
+- **Next Required Gate:** R7 live installed Codex/Antigravity continuity and Claude Code compatibility evidence.
+- **Publication Boundary:** R8 `v1.2.0` tag/GitHub Release remains blocked until R7 host-derived evidence is reconciled and release state is independently verified.
 
 ## Local Startup Verification
 
@@ -99,4 +100,4 @@ git pull --ff-only origin main
 python scripts\preflight_sync_check.py
 ```
 
-This file records stable current state and the active replay phase only. Historical decisions remain in `DECISION_LOG.md`, `CHANGELOG.md`, the archived autonomous-run branch, and immutable handoff evidence.
+This file records stable current state. Historical decisions remain in `DECISION_LOG.md`, `CHANGELOG.md`, the archived autonomous-run branch, and immutable handoff evidence.
