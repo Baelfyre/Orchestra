@@ -47,14 +47,18 @@ The Python behavior runner executes the following checks sequentially:
 7. **Governance Evaluation (`evaluate_governance.py`)**: Validates source-level governance behavior expectations.
 8. **Runtime Guardrail and Dagger Simulations**: Runs the runtime guardrail scan, Dagger guardrail tests, and isolated regression checks for guardrails, project-context validation, and lock acquisition behavior.
 9. **Runtime Coverage Gate (`pytest-cov`)**: The CI workflow separately runs `tests/runtime` with `--cov=orchestra_runtime --cov-report=term-missing --cov-fail-under=90`.
-10. **Cross-Layer Synchronicity Contract**: Runs `scripts/validate_cross_layer_synchronicity_contract.py` and `tests/behavior/test_cross_layer_synchronicity_contract.py` to enforce the canonical workflow stages, deterministic statuses, single-owner findings, executable evidence, and fail-closed re-entry behavior.
+10. **Cross-Layer Synchronicity Contract**: Runs `scripts/validate_cross_layer_synchronicity_contract.py` and `tests/behavior/test_cross_layer_synchronicity_contract.py` to enforce the frontend-to-backend workflow stages, deterministic statuses, single-owner findings, executable evidence, and fail-closed re-entry behavior.
+11. **Cross-Layer Integrity Profiles**: The same focused behavior test loads `scripts/validate_cross_layer_integrity_contract.py` and validates the backend-to-persistence and language-neutral cross-module logical-flow profiles, including ordered traces, contract identity, transaction/constraint parity, handoff/error propagation, deterministic statuses, singular finding ownership, and fail-closed re-entry.
 
 Run the focused cross-layer checks directly:
 
 ```powershell
 python .\scripts\validate_cross_layer_synchronicity_contract.py
+python .\scripts\validate_cross_layer_integrity_contract.py
 python .\tests\behavior\test_cross_layer_synchronicity_contract.py
 ```
+
+The three implemented audit profiles reuse `docs/validation/CROSS_MODULE_LOGIC_AUDIT_PROTOCOL.md` and its common evidence, invalidation, ownership, and continuation rules. The focused integrity validator does not grant persistence, implementation, Git, merge, release, deployment, or policy authority.
 
 ---
 
@@ -100,7 +104,7 @@ Runtime lock files and session state are local-only and are written under `.amal
 
 ### How State Locking Works
 1. **Lock File**: When an agent begins a workflow task (e.g. implementation or audit), it checks for the existence of `.amalgam/lock.json`.
-2. **Process Liveness Verification**: If a lock file exists, `manage-state-lock.ps1` parses the PID and verifies if that process is still running on the system.
+2. **Process Liveness Verification**: If a lock file exists, `manage-state-lock.ps1` parses the PID and verifies if that process is still running.
    - If the process is dead or the lock is older than 1 hour, the lock is treated as **stale** and automatically ignored.
    - If the process is alive, it blocks the current run and raises a **lock collision** error.
 3. **Acquisition & Release**: The active session writes its unique Session ID, PID, and timestamp to the lock. Upon task completion or test suite termination, the lock is released.
