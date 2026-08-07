@@ -2,6 +2,26 @@
 
 This changelog tracks the repository history using git tags, merge history, and the prior documented milestone log that lived under `docs/meta/CHANGELOG.md`.
 
+## Unreleased - Autonomous Replay Merge Hardening R5
+
+### Added
+
+- Added a fail-closed autonomous merge-readiness protocol that requires a green canonical baseline, exact-head validation evidence, complete successful required checks, changelog freshness, an expected-head merge guard where supported, and independent post-merge verification before `MERGED_VERIFIED` can be recorded.
+- Added a deterministic autonomous merge-readiness evaluator, compact machine-readable fixtures, and runtime regressions covering missing or pending checks, governance/runtime/cross-platform failures, stale heads, red baselines, changelog omissions, mergeability misuse, unresolved blockers, and unverified merge API results.
+- Added repository automation guidance requiring the exact-head fail-closed protocol for autonomous or delegated merges.
+
+### Changed
+
+- Updated required-status-check guidance to treat Governance Check, behavior validation, runtime tests, and native Windows/Ubuntu/macOS validation as the minimum autonomous merge evidence inventory while keeping additional repository-required checks additive.
+- Updated branch-protection guidance to require live settings verification and blocked-merge tests rather than treating documentation or a configured rule name as proof of enforcement.
+- Reconciled current project state, session handoff, and delegated-governance implementation planning through the clean R1-R4 replay while preserving historical handoff evidence.
+
+### Incident Boundary
+
+- The first autonomous finalization experiment remains preserved as learning evidence. Its fail-open merges are not treated as successful validation precedent.
+- `mergeable: true` and merge-API acceptance are explicitly non-authorizing signals. Missing or pending evidence maps to `WAIT_FOR_EVIDENCE`; failed required evidence blocks merge; a red canonical baseline must be remediated before the next phase.
+- The capability remains unreleased. Live installed-host continuity remains `PENDING_LOCAL_HOST_VALIDATION` and is not replaced by repository simulation.
+
 ## Unreleased - Delegated Host Reliability Phase C
 
 ### Added
@@ -117,7 +137,6 @@ This changelog tracks the repository history using git tags, merge history, and 
 - Added cross-language map-parity and real fresh-export regression coverage so the PowerShell exporter and Python validator cannot silently diverge.
 
 ### Preserved boundaries
-
 - No routing, runtime authority, specialist ownership, release, deployment, marketplace publication, production, force-push, ruleset, or branch-deletion behavior changed.
 
 ## Unreleased - Issue #195 Cross-Specialist Coordination Phase 4
@@ -477,7 +496,6 @@ This patch was published on July 14, 2026 as the `v1.1.2` GitHub Release.
 - Synced plugin manifest, `SKILL_INDEX.md`, and skill frontmatter metadata for precise validation parity.
 
 - Added behavior fixtures validating Conductor routing for Cloak multi-stage workflow preservation and frontend/backend alignment with Clockwork, Cipher, and Chronicler.
-
 - Added Conductor routing rules for Cloak and backend alignment, requiring Clockwork, Cipher, and/or Chronicler before implementation when frontend work affects data, auth, APIs, persistence, security, privacy, integrations, payments, or compliance-sensitive workflows.
 
 - Added Cloak multi-stage frontend design workflow guidance covering discovery, strategy, pattern intelligence, semantic HTML, design review, and backend alignment triggers.
