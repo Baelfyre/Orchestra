@@ -151,7 +151,7 @@ Phase 2 is merged through PR #197 at merge commit `7423d3e7db7fb8e32dfe91454f5c2
 - Extended Overseer evidence packets and Tuner handoffs with current contract and change identity.
 - Enforced Arbiter blocking on stale or mismatched evidence and Conductor-only minimal re-entry routing.
 - Preserved pre-existing artifacts, single-owner bypass, Dagger gating, and default-deny external actions.
-- Removed implicit current-HEAD, workflow-dispatch, `origin/main`, and local `main` evidence-baseline fallbacks. Local and workflow-dispatch validation now require `ORCHESTRA_APPROVED_BASE_SHA`; verified pull-request base and push-before GitHub event reference remain supported.
+- Removed implicit current-HEAD, workflow-dispatch, `origin/main`, and local `main` evidence-baseline fallbacks. Local and workflow-dispatch validation now require `ORCHESTRA_APPROVED_BASE_SHA`; verified pull-request base and push-before event SHAs remain supported.
 
 ## Unreleased - Issue #195 Cross-Specialist Coordination Phase 1
 
@@ -256,7 +256,7 @@ Specialist Governance & Boundary Standard is a documentation-, governance-, meta
 
 ### Changed
 - Clarified governance authority boundaries for Arbiter status vocabulary, Steward hygiene wording, and Governor/Cipher release-security ownership without changing governance semantics.
-- Clarified Governance Strictness Levels as a derived scale over existing project type, operating mode, release stage, and risk classifications without changing governance semantics.
+- Clarified Governance Strictness Levels as a derived scale over existing project context. The two ladders should not be treated as interchangeable.
 - Strengthened Cloak's documentation-only frontend review contract with artifact-evidence requirements, clearer form and validation messaging review, explicit loading/empty/error/success/retry/permission-state review, sharper frontend handoff blueprint guidance, and matching tracked Codex export parity for the updated Cloak docs.
 - Normalized Conductor's skill documentation against the shared specialist authoring standard by clarifying activation conditions, supported work, scope enforcement, validation expectations, local-only safety, and direct-route versus orchestration versus reroute guidance, with matching tracked Codex export parity.
 - Normalized Ponytail specialist documentation with explicit activation conditions, supported work, scope enforcement, validation expectations, local-only safety, and direct handoff boundaries for implementation-owned code changes, with matching tracked Codex export parity.
@@ -300,7 +300,7 @@ This patch was published on July 14, 2026 as the `v1.1.2` GitHub Release.
 ### Added
 - Added layered UI engineering and validation ownership across Cloak static risk analysis, Clockwork engineering integrity, renewed Cloak review, Overseer current-commit evidence validation, and explicit human approval boundaries.
 - Recorded unanimous Phase 5C-B Arbiter, Governor, and Steward approval plus conditional Butler disposition for the design-only authority/capability proposal, without runtime implementation or source-expression reuse authority.
-- Added four manual Phase 5D `APPROVED` promotion records with pinned Strix provenance, Apache-2.0 attribution boundaries, and `automatic_promotion: false`.
+- Added four manual Phase 5D `APPROVED` promotion records with pinned Strix provenance, Apache-2.0 attribution boundaries, conceptual-adaptation limits, and `automatic_promotion: false`.
 - Manually synchronized the Phase 5E Pattern Catalog with the four canonical promotion records; Catalog projection remains separate from implementation authority.
 - Added the Phase 5C-A Evolution Proposal schema `1.1`, deterministic proposal lifecycle validation, focused behavior coverage, and one design-only Orchestra authority/capability proposal in `UNDER_REVIEW`, without promotion, Pattern Catalog, source-reuse, prompt-reuse, or implementation authority.
 - Added Phase 4.5-A OpenHero pilot source-intake, pattern, and audit records through a pinned static read-only GitHub inspection with no decisions, proposals, promotions, or Pattern Catalog changes.
@@ -431,7 +431,7 @@ This patch was published on July 14, 2026 as the `v1.1.2` GitHub Release.
 
 - Added Phase 8A router-first integration hardening audit documentation.
 
-- Documented `tests/fixtures/router_benchmarks.json` schema in `ROUTER_BENCHMARK_FIXTURE_SCHEMA.md` and updated the benchmark validation runner to enforce the root shape and `schema_version`.
+- Documented the `tests/fixtures/router_benchmarks.json` schema in `ROUTER_BENCHMARK_FIXTURE_SCHEMA.md` and updated the benchmark validation runner to enforce the root shape and `schema_version`.
 
 - Refactored `scripts/router_benchmark_runner.py` to extract hardcoded definitions into a machine-readable fixture at `tests/fixtures/router_benchmarks.json`, preserving existing validation capabilities.
 
