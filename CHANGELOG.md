@@ -2,6 +2,26 @@
 
 This changelog tracks the repository history using git tags, merge history, and the prior documented milestone log that lived under `docs/meta/CHANGELOG.md`.
 
+## Unreleased - Cross-Layer Integrity Phase F2
+
+### Backend-to-Persistence Integrity
+
+- Added an additive backend-to-persistence audit profile covering service input, domain validation, transaction ownership, repository operations, ORM/query mapping, schema constraints, persistence execution, commit/rollback, readback/projection, and service-result propagation.
+- Added a dedicated backend-to-persistence checklist plus executable happy-path and rollback/failure traces with deterministic finding ownership across Clockwork, Chronicler, The Tuner, and Overseer.
+- Added fail-closed evidence for mapping/constraint drift, missing ownership, specialist contradiction, missing executable evidence, stale profile identity, transaction atomicity, and retry/idempotency risk.
+
+### Cross-Module Logical-Flow Integrity
+
+- Added a language-neutral cross-module audit profile covering entrypoints, input contracts, module decisions, handoff payloads, shared state or side effects, result propagation, error propagation, and final observable outcomes.
+- Added executable happy/failure traces and deterministic findings for handoff drift, missing owners, contradictory module contracts, stale evidence, swallowed/error-path drift, and duplicate side effects.
+- Added `scripts/validate_cross_layer_integrity_contract.py`, focused behavior coverage, and behavior-runner integration so normal validation exercises the new backend/persistence and cross-module profiles alongside the existing frontend/backend contract.
+
+### Preserved Boundaries
+
+- Reused the existing Conductor -> The Tuner -> domain specialist -> Overseer -> Arbiter authority model; no new specialist, command, plugin, runtime model, persistence implementation, or policy authority was added.
+- Kept the original frontend/backend protocol, fixture identity, and Codex portable reference bundle unchanged; F2 is an additive profile extension.
+- The capability remains unreleased. No deployment, installed-integration mutation, force push, history rewrite, or policy activation is part of Phase F2.
+
 ## Unreleased - Spec Kitty-Derived Governed Phase Execution Contracts
 
 ### Frontend-to-Backend Synchronicity Contract
@@ -94,7 +114,7 @@ This changelog tracks the repository history using git tags, merge history, and 
 
 ## Unreleased - Issue #195 Cross-Specialist Coordination Phase 4
 
-Phase 3 is merged through pull request #198 at merge commit `1b73e232930c9289601474a5cddb282e98378261`. The authorized Phase 4 scenario validation and Conductor-owned runtime integration have been implemented and locally validated on the feature branch. Persistence, SQLite, migrations, RPC, host orchestration, staging, commit, push, pull request, merge, release, deployment, consumer-repository mutation, and expanded external-action authority are not authorized by this implementation record and remain separately governed.
+Phase 3 is merged through pull request #198 at merge commit `1b73e232930c9289601474a5cddb282e98378261`. The authorized Phase 4 scenario validation and Conductor-owned runtime integration have been implemented and locally validated on the feature branch. Persistence, SQLite, migrations, RPC, host orchestration, staging, commit, push, pull request, merge, release, deployment, consumer-repository mutation, Dagger authority expansion, and expanded external-action authority are not authorized by this implementation record and remain separately governed.
 
 ### Implemented and locally validated
 
@@ -131,7 +151,7 @@ Phase 2 is merged through PR #197 at merge commit `7423d3e7db7fb8e32dfe91454f5c2
 - Extended Overseer evidence packets and Tuner handoffs with current contract and change identity.
 - Enforced Arbiter blocking on stale or mismatched evidence and Conductor-only minimal re-entry routing.
 - Preserved pre-existing artifacts, single-owner bypass, Dagger gating, and default-deny external actions.
-- Removed implicit current-HEAD, workflow-dispatch, `origin/main`, and local `main` evidence-baseline fallbacks. Local and workflow-dispatch validation now require `ORCHESTRA_APPROVED_BASE_SHA`; verified pull-request base and push-before event SHAs remain supported.
+- Removed implicit current-HEAD, workflow-dispatch, `origin/main`, and local `main` evidence-baseline fallbacks. Local and workflow-dispatch validation now require `ORCHESTRA_APPROVED_BASE_SHA`; verified pull-request base and push-before GitHub event reference remain supported.
 
 ## Unreleased - Issue #195 Cross-Specialist Coordination Phase 1
 
@@ -280,7 +300,7 @@ This patch was published on July 14, 2026 as the `v1.1.2` GitHub Release.
 ### Added
 - Added layered UI engineering and validation ownership across Cloak static risk analysis, Clockwork engineering integrity, renewed Cloak review, Overseer current-commit evidence validation, and explicit human approval boundaries.
 - Recorded unanimous Phase 5C-B Arbiter, Governor, and Steward approval plus conditional Butler disposition for the design-only authority/capability proposal, without runtime implementation or source-expression reuse authority.
-- Added four manual Phase 5D `APPROVED` promotion records with pinned Strix provenance, Apache-2.0 attribution boundaries, and `automatic_promotion: false`.
+- Added four manual Phase 5D `APPROVED` promotion records with pinned Strix provenance, Apache-2.0 attribution boundaries, conceptual-adaptation limits, and `automatic_promotion: false`.
 - Manually synchronized the Phase 5E Pattern Catalog with the four canonical promotion records; Catalog projection remains separate from implementation authority.
 - Added the Phase 5C-A Evolution Proposal schema `1.1`, deterministic proposal lifecycle validation, focused behavior coverage, and one design-only Orchestra authority/capability proposal in `UNDER_REVIEW`, without promotion, Pattern Catalog, source-reuse, prompt-reuse, or implementation authority.
 - Added Phase 4.5-A OpenHero pilot source-intake, pattern, and audit records through a pinned static read-only GitHub inspection with no decisions, proposals, promotions, or Pattern Catalog changes.
