@@ -1,43 +1,60 @@
 # Session Handoff
 
-- **Current Stable State:** `v1.1.2` published; unreleased `main` contains Spec Kitty-derived governed phase execution contracts through Phase 3C merged by PR #214 (merge commit `6bce297c7469f9c08ce41308cbb993cc863ac540`).
-- **Current Repo:** `C:\conductor`
+- **Current Stable State:** `v1.1.2` is the current public release. Unreleased `main` contains completed Spec Kitty-derived Phase 2 and Phase 3 contracts plus the merged frontend-to-backend synchronicity audit contract.
+- **Canonical Repo:** `Baelfyre/Orchestra`
 - **Canonical Branch:** `main`
-- **Base Branch:** `main`
-- **Stable Continuation Branch:** `main`
-- **Exact Worktree:** `C:\conductor`
+- **Current Remote Main:** `3a2f8b7e65cdab0f7e6a3113d1096ec9dccc23d3`
 - **Current Public Release:** `v1.1.2`
-- **Spec Kitty Phase 2 Status:** Resolved, merged, and canonical through PR #208.
-- **Spec Kitty Phase 2 Merge Commit:** `1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`
-- **Spec Kitty Phase 2 Reviewed Head:** `1a57c489445a9a333e929cae8f857312bb126a62`
-- **PR #208:** Merged the Phase 2 implementation and is closed.
-- **Spec Kitty Phase 3A Status:** Design accepted and merged through PR #210.
-- **Spec Kitty Phase 3A Reviewed Head:** `3d8b14aaffa00d66d1faaaef55ec27ecbc10cdc3`
-- **Spec Kitty Phase 3A Merge Commit:** `1629eaf3cd3f156f8913f84c9229666257a3145a`
-- **Spec Kitty Phase 3A Merged At:** 2026-08-04T15:48:49Z
-- **Spec Kitty Phase 3B Status:** Implemented and merged through PR #212.
-- **Spec Kitty Phase 3B Reviewed Head:** `2a6c7ea8db16ce73d66fae566672f3681094b0f7`
-- **Spec Kitty Phase 3B Merge Commit:** `fa1e052d82301e70a5869258c3fc6af765163353`
-- **Spec Kitty Phase 3B Merged At:** 2026-08-04T21:34:29Z
-- **PR #212:** Merged the Phase 3B `OrchestraStatusProjection` implementation and is closed.
-- **Spec Kitty Phase 3C Status:** `OrchestraWorktreeContract` implemented and merged through PR #214.
-- **Spec Kitty Phase 3C Reviewed Head:** `646111325e6de7c5d31915789fdc22a644125b7b`
-- **Spec Kitty Phase 3C Merge Commit:** `6bce297c7469f9c08ce41308cbb993cc863ac540`
-- **Release / Deployment:** Not performed; the post-`v1.1.2` capability set remains unreleased.
-- **Policy Activation:** Not performed; `docs/governance/DELEGATED_EXECUTION_POLICY.md` remains unamended.
-- **Former Phase 2 Feature Branches:** Historical only; do not resume `feature/spec-kitty-derived-runtime` for future work.
-- **Former Phase 3A Design Branch:** `design/spec-kitty-phase3-deferred-capabilities` is historical after merge. Do not resume this branch for Phase 3B.
-- **Default Continuation Point:**
-  ```powershell
-  git switch main
-  git fetch origin
-  git rev-parse origin/main
-  python scripts\preflight_sync_check.py
-  ```
-- **Active Implementation Worktree:** `D:\Dev\Repositories\+conductor-worktrees\frontend-backend-synchronicity-v1`
-- **Active Implementation Branch:** `codex/frontend-backend-synchronicity-v1`
-- **Active Pull Request:** #216, `feat: add frontend-backend synchronicity audit contract`
-- **Current Review State:** Bounded immutable-review corrections strengthen executable workflow traces, finding contracts, status coverage, identity binding, and current-state documentation. Exact-head CI and renewed immutable review are required.
-- **Next Continuation:** Verify the current PR #216 head, require all exact-head checks to pass, complete immutable review, and stop for separate merge authorization.
+- **Post-`v1.1.2` Capability State:** `IMPLEMENTED_MERGED_NOT_RELEASED`
 
-This handoff grants no merge, release, deployment, publication, installed-integration refresh, policy activation, force push, history rewrite, or branch-deletion authority.
+## Spec Kitty Closeout
+
+- **Phase 2:** Merged through PR #208 at `1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`.
+- **Phase 3A:** Merged through PR #210 at `1629eaf3cd3f156f8913f84c9229666257a3145a`.
+- **Phase 3B:** `OrchestraStatusProjection` merged through PR #212 at `fa1e052d82301e70a5869258c3fc6af765163353`.
+- **Phase 3C:** `OrchestraWorktreeContract` merged through PR #214.
+- **Phase 3C Reviewed Head:** `646111325e6de7c5d31915789fdc22a644125b7b`
+- **Phase 3C Merge Commit:** `6bce297c7469f9c08ce41308cbb993cc863ac540`
+- **Phase 3D:** Consolidated exact-head validation complete.
+- **Phase 3E:** Immutable review, bounded remediation, and merge complete.
+- **Spec Kitty Release / Deployment:** Not performed.
+- **Spec Kitty Policy Activation:** Not performed.
+
+## Synchronicity Closeout
+
+- **Pull Request:** #216, `feat: add frontend-backend synchronicity audit contract`
+- **Reviewed Head:** `52d47c2b10770cb5a85dab2eab9e81ce8851adb1`
+- **Merge Commit:** `3a2f8b7e65cdab0f7e6a3113d1096ec9dccc23d3`
+- **Merged At:** 2026-08-07T04:39:28Z
+- **Validation:** Governance, behavior, runtime, Windows, Ubuntu, and macOS checks passed on the exact reviewed head.
+- **Boundaries:** Runtime, persistence, installed integrations, release, deployment, and policy activation were not expanded.
+
+## Local Continuation
+
+The local repositories may remain behind while remote finalization continues. When local access resumes:
+
+```powershell
+Set-Location -LiteralPath "D:\Dev\Repositories\+conductor"
+git status --porcelain=v1 --untracked-files=all
+git fetch origin --prune
+git switch main
+git pull --ff-only origin main
+python scripts\preflight_sync_check.py
+
+Set-Location -LiteralPath "D:\Dev\Repositories\+KB"
+git status --porcelain=v1 --untracked-files=all
+git fetch origin --prune
+git switch main
+git pull --ff-only origin main
+```
+
+Do not run a destructive reset, clean, force push, or branch deletion as part of synchronization.
+
+## Next Governed Phase
+
+- **Issue:** #215 — Orchestra finalization and `v1.2.0` preparation.
+- **Next Phase:** F2 — read-only design and exact scope freeze for backend-to-persistence integrity and broader cross-module logical-flow auditing.
+- **Following Hybrid Phase:** F3 — delegated host reliability, requiring Codex, Antigravity, Claude Code, installed-skill, context-reset, and Windows host evidence.
+- **Release Preparation:** F5 only after F2-F4 dispositions are complete.
+
+This handoff grants no merge, release, deployment, publication, installed-integration refresh, policy activation, force push, history rewrite, destructive cleanup, or branch-deletion authority.
