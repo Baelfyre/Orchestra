@@ -3,7 +3,7 @@
 This document records the multi-phase implementation plan for Orchestra's
 delegated autonomous governance. Phase A contracts are canonical. Phase B
 instruction-level behavior is complete, merged and canonical through PR #190 on `main`.
-Phase A contracts are merged; Phase C and Phase D are not started. Phase B has not been released or deployed.
+Phase A contracts are merged. Phase B is merged and canonical through PR #190. Phase C repository contract is complete through PR #225. Phase C live installed-host evidence remains `PENDING_LOCAL_HOST_VALIDATION`. Phase D overlap reconciliation is complete through PR #226. No additional Phase D runtime implementation is justified for v1.2.0. v1.2.0 has not been released or deployed.
 
 ---
 
@@ -114,11 +114,13 @@ adapter parity validation
 
 ---
 
-## Phase C - Host Reliability Evaluation (Not Yet Authorized)
+## Phase C - Host Reliability Evaluation
 
-**Status:** Not started. Requires Phase B completion and separate authorization.
+**Repository contract status:** Complete and merged through PR #225.
 
-**Planned scope:**
+**Live installed-host status:** `PENDING_LOCAL_HOST_VALIDATION`. Repository CI proves deterministic contract behavior only; it does not prove an installed Codex reset/resume, installed Antigravity reset/resume, real Codex-to-Antigravity continuation, or active Claude Code host continuity.
+
+**Evaluated scope:**
 
 Validate whether supported hosts (Antigravity, Claude Code, Codex, etc.)
 reliably:
@@ -132,38 +134,36 @@ reliably:
 
 ---
 
-## Phase D - Optional Typed Runtime Enforcement (Not Yet Authorized)
+## Phase D - Runtime Overlap Reconciliation
 
-**Status:** Not started. Requires Phase B and C evaluation and separate
-authorization.
+**Status:** Complete and merged through PR #226.
 
-**Planned scope (conditional on authorization):**
+**Verdict:** `NO_DUPLICATE_RUNTIME_EXTENSION_REQUIRED` for v1.2.0.
 
-Add typed runtime models for:
+The reconciliation in `docs/project/DELEGATED_PHASE_D_RUNTIME_OVERLAP_ASSESSMENT.md` found that existing trusted authority, capability, delegation, lifecycle, runtime-envelope, `ApprovedUnitPlan`, audit, Tuner coordination, status/worktree, and cross-layer contracts already satisfy the material runtime requirements.
 
-```
-DelegatedExecutionEnvelope
-ApprovedUnitPlan
-ExecutionEvidencePacket
-TransitionDecisionRecord
-AuditEvent
-LifecycleIntegration
-AdversarialEnforcementTests
-```
+`ExecutionEvidencePacket`, `TransitionDecisionRecord`, `CheckpointRecord`, and `CapacityHandoffRecord` remain governance/evidence artifacts unless a concrete missing runtime consumer is established.
 
-This phase is optional. Phase A contracts and Phase B instruction-level behavior
-may be sufficient without runtime enforcement.
+Additional Phase D runtime implementation for v1.2.0 is **not required**.
 
 ---
 
-## Phase E - Release Preparation (Not Yet Authorized)
+## Phase E - Release Preparation
 
-**Status:** Not started. Requires Phase A-D decisions and separate authorization.
+**Status:** Not started by R5B. Release preparation remains separately governed.
 
-**Scope:**
+**Clean replay continuation:**
+
+```text
+R5   autonomous merge-readiness hardening â€” merged through PR #227
+R5B  delegated governance state reconciliation â€” current bounded remediation
+R6   release-candidate repository preparation
+R7   live installed-host validation
+R8   tag/GitHub Release from independently verified release state
+```
 
 Commit, push, pull request, merge, tag, GitHub Release, marketplace publication,
-and deployment remain separately governed and are not authorized in Phases A-D.
+and deployment remain separately governed. R5B does not authorize release or publication.
 
 ---
 

@@ -67,7 +67,8 @@ Clean replay results:
 - **R2:** additive cross-layer integrity merged through replay PR #224 with the previously missing focused changelog update.
 - **R3:** host-reliability replay initially failed runtime validation; the merge was blocked, the malformed fixture was corrected, all earlier evidence was discarded, a completely fresh all-green matrix ran, and the remediated head merged through PR #225.
 - **R4:** Phase D overlap assessment merged through PR #226 only after the canonical baseline was green and every fresh required check passed.
-- **R5:** repository cleanup and autonomous merge-readiness hardening is the active remote phase.
+- **R5:** autonomous merge-readiness hardening merged through PR #227 at merge commit `467008db683c346cd086442dbb909c20a9248a3a`.
+- **R5B:** delegated-governance current-state reconciliation is the bounded baseline-remediation phase required before R6.
 
 The incident-derived invariant is:
 
@@ -84,8 +85,8 @@ Autonomous merges must follow `docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOC
 - **Baseline Rule:** A new phase must not begin from a red canonical `main`.
 - **Post-Merge Rule:** An API response is not completion evidence; the PR and canonical `main` must be independently re-read before state advances.
 - **Issue #215:** Open umbrella finalization issue targeting `v1.2.0`.
-- **Active Remote Task:** R5 cleanup and autonomous merge-readiness hardening.
-- **Next Remote Task:** R6 README, changelog, version, and release-candidate preparation after R5 passes and merges cleanly.
+- **Active Remote Task:** R5B delegated-governance state reconciliation.
+- **Next Remote Task:** R6 README, changelog, version, and release-candidate preparation only after R5B is merged and independently verified.
 - **Next Local Task:** Fast-forward local Orchestra and KB, run preflight, refresh installed integrations as governed, and execute the R7 live installed-host validation matrix.
 - **Publication Boundary:** `v1.2.0` tag/GitHub Release remains blocked until R7 live-host evidence is reconciled and release state is independently verified.
 

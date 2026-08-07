@@ -285,21 +285,19 @@ Specialists re-enter when:
 
 ### Phase Implementation Status
 
-| Phase | Description | Status |
-|---|---|---|
-| Phase A | Contract design: envelopes, dispositions, evidence, remediation, checkpointing, capacity, authority, invalidation, fallback | **Defined (`DELEGATED_EXECUTION_POLICY.md`)** |
-| Phase B | Instruction-level behavior: skill/adapter updates to consume dispositions and loop | **Merged and canonical through PR #190** |
-| Phase C | Host reliability evaluation: validate host envelope preservation and checkpointing | **Not yet implemented** |
-| Phase D | Optional typed runtime enforcement: typed models for envelopes, units, evidence | **Not yet implemented** |
-| Phase E | Release preparation: commit, push, PR, merge, tag, release, deployment | **Separately governed** |
+| Phase | Status |
+|---|---|
+| A | Contracts defined and merged |
+| B | Merged and canonical through PR #190 |
+| C | Repository contract complete through PR #225; live evidence `PENDING_LOCAL_HOST_VALIDATION` |
+| D | Reconciled through PR #226; `NO_DUPLICATE_RUNTIME_EXTENSION_REQUIRED` for v1.2.0 |
+| E | Separately governed |
 
-Phase A contracts are merged; Phase B is merged and canonical through PR #190; Phase C and Phase D are not started. Phase B has not been released or deployed.
+Phase A contracts are merged. Phase B is merged and canonical through PR #190. Phase C repository contract is complete through PR #225. Phase C live installed-host evidence remains `PENDING_LOCAL_HOST_VALIDATION`. Phase D overlap reconciliation is complete through PR #226. No additional Phase D runtime implementation is justified for v1.2.0. v1.2.0 has not been released or deployed.
 
 ## Enforcement Limitation
 
-Current enforcement is route-level instruction governance. Conductor follows governance gates before routing, but no automated runtime/CI blocker exists yet.
-
-Current enforcement is instruction-level; Phase D typed runtime enforcement has not started.
+Existing trusted runtime contracts cover the material Phase D requirements; PR #226 found no duplicate runtime extension necessary. Repository simulation is not live installed-host evidence, so R7 remains the publication gate.
 
 
 

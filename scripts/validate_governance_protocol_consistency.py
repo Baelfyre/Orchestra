@@ -154,8 +154,25 @@ STALE_POST_MERGE_PHRASES = (
 REQUIRED_PHASE_B_MERGED_STATUS = "merged and canonical through PR #190"
 REQUIRED_CURRENT_STATE_PHRASES = (
     "Phase A contracts are merged",
-    "Phase C and Phase D are not started",
-    "Phase B has not been released or deployed",
+    "Phase C repository contract is complete through PR #225",
+    "PENDING_LOCAL_HOST_VALIDATION",
+    "Phase D overlap reconciliation is complete through PR #226",
+    "No additional Phase D runtime implementation is justified for v1.2.0",
+    "v1.2.0 has not been released or deployed",
+)
+STALE_PHASE_CD_STATUS_PHRASES = (
+    "phase c and phase d are not started",
+    "phase c is not started",
+    "phase d is not started",
+    "phase c is not implemented",
+    "phase d is not implemented",
+    "until phase c evaluates host reliability",
+    "phase d typed runtime enforcement has not started",
+)
+FALSE_LIVE_HOST_STATUS_PHRASES = (
+    "live_validated",
+    "live installed-host validation is complete",
+    "live installed-host evidence is complete",
 )
 HISTORICAL_PHASE_A_QUALIFIERS = (
     "at phase a",
@@ -244,6 +261,12 @@ def validate_current_phase_status(errors, repo_root):
         for phrase in STALE_POST_MERGE_PHRASES:
             if phrase in folded:
                 fail(errors, f"{relative}: stale post-merge wording `{phrase}`")
+        for phrase in STALE_PHASE_CD_STATUS_PHRASES:
+            if phrase in folded:
+                fail(errors, f"{relative}: stale Phase C/D current-state wording `{phrase}`")
+        for phrase in FALSE_LIVE_HOST_STATUS_PHRASES:
+            if phrase in folded:
+                fail(errors, f"{relative}: false live-host validation claim `{phrase}`")
 
 
 def main(argv=None):

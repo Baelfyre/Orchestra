@@ -1,6 +1,15 @@
 # Changelog
 
 This changelog tracks the repository history using git tags, merge history, and the prior documented milestone log that lived under `docs/meta/CHANGELOG.md`.
+## Unreleased - Delegated Governance State Reconciliation R5B
+
+### Changed
+
+- Reconciled canonical delegated-governance Phase C and Phase D status with the verified clean replay state: Phase C repository contract complete through PR #225, live installed-host evidence still `PENDING_LOCAL_HOST_VALIDATION`, and Phase D overlap reconciliation complete through PR #226.
+- Updated governance consistency validation so obsolete current-state claims such as `Phase C and Phase D are not started` are rejected rather than required.
+- Added regressions preventing stale Phase C/D wording and false promotion of pending live-host evidence.
+- Preserved the Phase D `NO_DUPLICATE_RUNTIME_EXTENSION_REQUIRED` conclusion for v1.2.0 and the R7 live installed-host publication gate.
+- No runtime, adapter, manifest/version, workflow, release, deployment, policy activation, installed-host mutation, or history rewrite is part of R5B.
 
 ## Unreleased - Autonomous Replay Merge Hardening R5
 

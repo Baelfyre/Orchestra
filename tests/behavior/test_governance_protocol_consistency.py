@@ -445,28 +445,86 @@ def test_qualified_phase_a_history_is_allowed():
         temp.cleanup()
 
 
-def test_phase_cd_not_started_requirement_enforced():
-    """Negative: validator fails when Phase C/D not-started requirement is removed."""
+def test_current_phase_cd_requirements_enforced():
+    """Negative: validator fails when any verified current Phase C/D state fact is removed."""
+    requirements = (
+        "Phase C repository contract is complete through PR #225",
+        "PENDING_LOCAL_HOST_VALIDATION",
+        "Phase D overlap reconciliation is complete through PR #226",
+        "No additional Phase D runtime implementation is justified for v1.2.0",
+        "v1.2.0 has not been released or deployed",
+    )
+    for required in requirements:
+        temp, repo_root = make_repo_copy()
+        try:
+            path = repo_root / "docs/governance/DELEGATED_EXECUTION_POLICY.md"
+            content = path.read_text(encoding="utf-8")
+            path.write_text(content.replace(required, "REMOVED_CURRENT_STATE"), encoding="utf-8")
+            result = run_validator(repo_root)
+            assert_true(
+                f"current Phase C/D requirement rejected when removed: {required}",
+                result.returncode == 1 and required.casefold() in result.stdout.casefold(),
+            )
+        finally:
+            temp.cleanup()
+
+
+def test_stale_phase_cd_current_state_wording_fails():
+    """Negative: validator rejects obsolete Phase C/D current-state claims."""
+    phrases = (
+        "Phase C and Phase D are not started",
+        "Phase C is not started",
+        "Phase D is not started",
+        "Phase C is not implemented",
+        "Phase D is not implemented",
+        "until Phase C evaluates host reliability",
+        "Phase D typed runtime enforcement has not started",
+    )
+    for phrase in phrases:
+        temp, repo_root = make_repo_copy()
+        try:
+            path = repo_root / "docs/governance/GOVERNANCE_REVIEW_FLOW.md"
+            path.write_text(path.read_text(encoding="utf-8") + f"\n{phrase}.\n", encoding="utf-8")
+            result = run_validator(repo_root)
+            assert_true(
+                f"stale Phase C/D wording rejected: {phrase}",
+                result.returncode == 1 and phrase.casefold() in result.stdout.casefold(),
+            )
+        finally:
+            temp.cleanup()
+
+
+def test_false_live_host_validation_claim_fails():
+    """Negative: repository current state cannot promote pending live-host evidence."""
     temp, repo_root = make_repo_copy()
     try:
         path = repo_root / "docs/governance/DELEGATED_EXECUTION_POLICY.md"
         content = path.read_text(encoding="utf-8")
-        path.write_text(content.replace("Phase C and Phase D are not started", "REMOVED_STATEMENT"), encoding="utf-8")
+        path.write_text(content.replace("PENDING_LOCAL_HOST_VALIDATION", "LIVE_VALIDATED"), encoding="utf-8")
         result = run_validator(repo_root)
-        assert_true("phase cd not-started fail", result.returncode == 1 and "Phase C and Phase D are not started" in result.stdout)
+        assert_true(
+            "false live-host validation claim rejected",
+            result.returncode == 1 and (
+                "PENDING_LOCAL_HOST_VALIDATION" in result.stdout
+                or "live_validated" in result.stdout.casefold()
+            ),
+        )
     finally:
         temp.cleanup()
 
 
 def test_release_deployment_not_performed_requirement_enforced():
-    """Negative: validator fails when release/deployment-not-performed requirement is removed."""
+    """Negative: validator fails when the v1.2.0 unreleased/undeployed boundary is removed."""
     temp, repo_root = make_repo_copy()
     try:
         path = repo_root / "docs/governance/DELEGATED_EXECUTION_POLICY.md"
         content = path.read_text(encoding="utf-8")
-        path.write_text(content.replace("Phase B has not been released or deployed", "REMOVED_STATEMENT"), encoding="utf-8")
+        path.write_text(content.replace("v1.2.0 has not been released or deployed", "REMOVED_STATEMENT"), encoding="utf-8")
         result = run_validator(repo_root)
-        assert_true("release/deployment not-performed fail", result.returncode == 1 and "Phase B has not been released or deployed" in result.stdout)
+        assert_true(
+            "release/deployment not-performed fail",
+            result.returncode == 1 and "v1.2.0 has not been released or deployed" in result.stdout,
+        )
     finally:
         temp.cleanup()
 
@@ -499,7 +557,9 @@ def main():
     test_phase_b_not_merged_wording_fails()
     test_open_ready_pr_wording_fails()
     test_qualified_phase_a_history_is_allowed()
-    test_phase_cd_not_started_requirement_enforced()
+    test_current_phase_cd_requirements_enforced()
+    test_stale_phase_cd_current_state_wording_fails()
+    test_false_live_host_validation_claim_fails()
     test_release_deployment_not_performed_requirement_enforced()
     print("Governance protocol consistency tests passed.")
     return 0
