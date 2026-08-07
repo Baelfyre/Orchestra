@@ -218,6 +218,11 @@ def validate(root):
 
     protocol = protocol_path.read_text(encoding="utf-8")
     required_terms = (
+        "Platform capability is not governance readiness",
+        "PLATFORM_CAN_EXECUTE != GOVERNANCE_READY_TO_TRANSITION",
+        "GITHUB_CAN_MERGE != GOVERNANCE_READY_TO_MERGE",
+        "API_SUCCESS != VERIFIED_STATE",
+        "NO_EVIDENCE != APPROVAL",
         "NO_CHECK_DATA = WAIT_FOR_EVIDENCE",
         "mergeable",
         "expected_head_sha",
