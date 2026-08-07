@@ -1,6 +1,7 @@
 import copy
 import importlib.util
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -8,11 +9,9 @@ ROOT = Path(__file__).resolve().parents[2]
 VALIDATOR_PATH = ROOT / "scripts/validate_cross_layer_synchronicity_contract.py"
 FIXTURES_PATH = ROOT / "tests/behavior/cross-layer-synchronicity-fixtures.json"
 PROTOCOL_PATH = ROOT / "docs/validation/CROSS_MODULE_LOGIC_AUDIT_PROTOCOL.md"
+INTEGRITY_TEST_PATH = ROOT / "tests/behavior/test_cross_layer_integrity_contract.py"
 
-spec = importlib.util.spec_from_file_location(
-    "synchronicity_validator",
-    VALIDATOR_PATH,
-)
+spec = importlib.util.spec_from_file_location("synchronicity_validator", VALIDATOR_PATH)
 validator = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(validator)
 
@@ -41,9 +40,7 @@ def test_all_statuses_have_cases():
 
 def test_executable_workflows_trace_all_stages():
     for workflow in fixtures()["executable_workflows"]:
-        assert [entry["stage"] for entry in workflow["trace"]] == list(
-            validator.REQUIRED_STAGES
-        )
+        assert [entry["stage"] for entry in workflow["trace"]] == list(validator.REQUIRED_STAGES)
         assert all(entry["source_ref"] for entry in workflow["trace"])
         assert all(entry["evidence_ref"] for entry in workflow["trace"])
         assert all(entry["result"] for entry in workflow["trace"])
@@ -83,19 +80,12 @@ def test_stale_identity_reenters_continuity_chain():
 def test_unknown_status_fails_closed():
     data = fixtures()
     data["cases"][0]["expected_status"] = "AUTO_CONTINUE_UNKNOWN"
-    assert any(
-        "unknown status" in error
-        for error in validator.validate_fixtures(data, protocol_bytes())
-    )
+    assert any("unknown status" in error for error in validator.validate_fixtures(data, protocol_bytes()))
 
 
 def test_missing_executable_evidence_fails_closed():
     data = copy.deepcopy(fixtures())
-    case = next(
-        item
-        for item in data["cases"]
-        if item["id"] == "missing-executable-evidence"
-    )
+    case = next(item for item in data["cases"] if item["id"] == "missing-executable-evidence")
     case["evidence"]["executable_workflow"] = True
     assert any(
         "executable evidence requires workflow_id" in error
@@ -123,11 +113,7 @@ def test_incomplete_trace_fails_closed():
 
 def test_incomplete_finding_fails_closed():
     data = fixtures()
-    case = next(
-        item
-        for item in data["cases"]
-        if item["id"] == "request-field-mismatch"
-    )
+    case = next(item for item in data["cases"] if item["id"] == "request-field-mismatch")
     del case["finding"]["required_validation"]
     assert any(
         "complete finding object" in error
@@ -137,16 +123,28 @@ def test_incomplete_finding_fails_closed():
 
 def test_unknown_reentry_owner_fails_closed():
     data = fixtures()
-    case = next(
-        item
-        for item in data["cases"]
-        if item["id"] == "persistence-scope-expansion"
-    )
+    case = next(item for item in data["cases"] if item["id"] == "persistence-scope-expansion")
     case["expected_reentry"].append("unknown-specialist")
     assert any(
         "unique valid specialist list" in error
         for error in validator.validate_fixtures(data, protocol_bytes())
     )
+
+
+def test_f2_integrity_profile_suite():
+    result = subprocess.run(
+        [sys.executable, str(INTEGRITY_TEST_PATH)],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        raise AssertionError(
+            "F2 cross-layer integrity profile suite failed:\n"
+            + result.stdout
+            + result.stderr
+        )
 
 
 def main():
@@ -163,6 +161,7 @@ def main():
     test_incomplete_trace_fails_closed()
     test_incomplete_finding_fails_closed()
     test_unknown_reentry_owner_fails_closed()
+    test_f2_integrity_profile_suite()
     print("Cross-layer synchronicity contract tests passed.")
     return 0
 
