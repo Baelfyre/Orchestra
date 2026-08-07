@@ -12,7 +12,8 @@
     <a href="CHANGELOG.md">Changelog</a>
   </p>
   <p>
-    <img src="https://img.shields.io/badge/current_release-v1.1.2-blue" alt="Current public release v1.1.2" />
+    <img src="https://img.shields.io/badge/public_release-v1.1.2-blue" alt="Current public release v1.1.2" />
+    <img src="https://img.shields.io/badge/release_candidate-v1.2.0-orange" alt="Repository release candidate v1.2.0" />
     <a href="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml">
       <img src="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml/badge.svg" alt="Repository validation status" />
     </a>
@@ -22,29 +23,31 @@
 
 ---
 
+> [!IMPORTANT]
+> Repository metadata is prepared for `v1.2.0`, but the latest published GitHub Release remains `v1.1.2`. The `v1.2.0` candidate is `PREPARED_NOT_RELEASED`. Live installed-host evidence remains `PENDING_LOCAL_HOST_VALIDATION`; no `v1.2.0` tag, GitHub Release, deployment, marketplace graduation, or policy activation is implied by the version bump.
+
 ## AI can generate fast. Building well still requires structure.
 
 AI-assisted projects rarely fail because a model cannot produce another answer. They fail when context drifts, architecture and implementation blur together, specialist assumptions conflict, unchecked output becomes the next input, evidence goes stale, decisions arrive out of order, and tool access is mistaken for permission.
 
-Orchestra turns those scattered interactions into one coordinated workflow. Like a conductor keeping each section on the same score, it gives every responsibility a defined place, controls when work moves forward, and sends failed or invalidated work back to the correct owner. After that opening metaphor, the mechanics are precise: trusted runtime composition, explicit routing, bounded authority, immutable capabilities, conditional cross-specialist coordination, separate governance, structured lifecycle state, validation, and deterministic evidence.
+Orchestra turns those scattered interactions into one coordinated workflow. It gives each responsibility a defined owner, controls when work may move forward, sends invalidated work back to the correct boundary, and preserves reviewable state across long-running tasks.
 
 ## What Orchestra Is
 
-Orchestra is a structured, standardized, and governance-driven framework for coordinating AI-assisted software work across specialist responsibilities, tools, validation stages, and human approval points.
+Orchestra is a structured, governance-driven framework for coordinating AI-assisted software work across specialist responsibilities, tools, validation stages, and human approval points.
 
 It is not an AI model and does not replace one. The model generates or reviews work. Orchestra is the coordination layer that routes, sequences, constrains, coordinates, validates, records, and connects that work to the next responsible boundary.
 
-This structure helps students see which engineering question comes next, helps experienced developers reduce context drift and repeated prompting, and gives maintainers reviewable state and evidence across long-running tasks. It does not replace software fundamentals or engineering judgment.
+The framework is designed to help developers reduce context drift, make cross-domain dependencies explicit, keep permission separate from routing and governance, and produce evidence that can be reviewed instead of inferred from generated text.
 
 ## How Orchestra Works
 
-The runtime establishes permission before it accepts work. Routing selects responsibility, but does not grant authority. Authority and capability checks run before governance. Governance may block authorized work, but cannot create a missing permission. For material multi-domain work, Conductor activates The Tuner to assemble specialist-owned contracts, expose missing ownership or contradictions, and identify stale dependent evidence. Single-owner work bypasses that coordination overhead. Validation failure returns work to its owning boundary before any result is accepted.
+The runtime establishes permission before execution. Routing selects responsibility but does not grant authority. Authority and capability checks run before governance. Governance may block already-authorized work, but cannot create missing permission. For material multi-domain work, Conductor activates The Tuner to assemble specialist-owned contracts, expose missing ownership or contradictions, and identify stale dependent evidence. Single-owner work bypasses that coordination overhead.
 
 ~~~mermaid
 flowchart TD
     Request["Request + Project Context"]
     Compose["Trusted Runtime Composition"]
-    Context["Context + Command"]
     Route["Conductor Routes Work"]
     Authority{"Authority Allowed?"}
     Capability{"Capability Granted?"}
@@ -55,10 +58,10 @@ flowchart TD
     Validate{"Validation Passed?"}
     Revise["Return to Owning Boundary"]
     Lifecycle["Structured Lifecycle Result"]
-    Audit["Deterministic Audit Evidence"]
+    Evidence["Deterministic Evidence"]
     Review["Human Review or Accepted Output"]
 
-    Request --> Compose --> Context --> Route --> Authority
+    Request --> Compose --> Route --> Authority
     Authority -- No --> Lifecycle
     Authority -- Yes --> Capability
     Capability -- No --> Lifecycle
@@ -71,285 +74,97 @@ flowchart TD
     Tuner -- Yes --> Specialist
     Specialist --> Validate
     Validate -- No --> Revise --> Specialist
-    Validate -- Yes --> Lifecycle --> Audit --> Review
-
-    classDef input fill:#161616,stroke:#777,color:#fff
-    classDef runtime fill:#24143a,stroke:#9d6cff,color:#f3eaff
-    classDef coord fill:#332712,stroke:#d4af37,color:#fff3bd
-    classDef work fill:#102a43,stroke:#58a6ff,color:#e5f2ff
-    classDef pass fill:#12351f,stroke:#4ac26b,color:#e7ffed
-    classDef stop fill:#3b1717,stroke:#ff6b6b,color:#ffe8e8
-    class Request,Context input
-    class Compose,Lifecycle runtime
-    class Route,Authority,Capability,Governance,Multi,Tuner coord
-    class Specialist work
-    class Validate,Audit,Review pass
-    class Revise stop
+    Validate -- Yes --> Lifecycle --> Evidence --> Review
 ~~~
 
-Accessible summary: a request moves through trusted composition, context and command parsing, routing, authority, capability, and governance. Direct single-owner work proceeds to its specialist. Material cross-domain work must first reach a ready cross-layer coordination state. A failed validation returns to the owning boundary. Allowed, denied, blocked, failed, waiting, or completed work ends in a structured lifecycle result, deterministic audit evidence, and review.
+Accessible summary: a request moves through trusted composition, routing, authority, capability, and governance. Single-owner work proceeds directly to its specialist. Material cross-domain work must first reach a ready coordination state. Validation failure returns work to the owning boundary. Accepted or blocked work ends in structured lifecycle state and deterministic evidence.
 
-The sequence is deliberate:
+## v1.2.0 Release Candidate Capability Set
 
-1. Project context and the request enter a trusted runtime composition.
-2. Root authority, runtime capabilities, route bindings, coordination services, and run identity are validated before execution.
-3. Host context and a command are parsed, then Conductor selects the smallest effective skill stack.
-4. Exact authority and capability decisions run against immutable trusted contracts.
-5. Governance evaluates whether already-authorized work should proceed.
-6. Conductor routes single-owner work directly or activates The Tuner when the change has material cross-domain dependencies.
-7. The Tuner assembles immutable references to specialist-owned contracts, detects missing ownership, contradictions, stale revisions, and invalidated evidence, then returns a coordination status and next-route recommendation.
-8. Specialists execute only inside their accepted boundaries. The Tuner does not implement, route specialists directly, resolve domain tradeoffs, validate its own work, or authorize continuation.
-9. Validation either returns the work for correction or allows it to continue.
-10. Structured lifecycle signals record waiting or a distinct terminal result.
-11. Run-linked audit events record what happened without granting permission.
+The candidate consolidates the substantial backward-compatible work merged after `v1.1.2`:
+
+- **Delegated Phase B progression:** approved units, six transition dispositions, checkpoints, bounded remediation, capacity handoff, evidence freshness, and fail-closed external-action authority.
+- **The Tuner Phases 1-4:** cross-specialist contract assembly, contradiction detection, semantic invalidation, minimal specialist re-entry, typed in-memory coordination, and bounded Conductor-owned runtime integration.
+- **Spec Kitty-derived governed execution contracts:** `OrchestraRuntimeEnvelope`, `OrchestraCorrelationID`, `OrchestraPhaseRetrospective`, the 15-field `ApprovedUnitPlan` extension, `OrchestraStatusProjection`, and `OrchestraWorktreeContract`.
+- **Cross-layer integrity auditing:** frontend-to-backend, backend-to-persistence, and language-neutral cross-module logical-flow profiles using the existing Conductor -> Tuner -> specialist -> Overseer -> Arbiter ownership model.
+- **Delegated Phase C repository reliability:** deterministic repository-verifiable reset/resume, handoff, capacity, stale identity, incomplete checkpoint, authority expansion, scaffold-only host, and replay behavior.
+- **Delegated Phase D reconciliation:** `NO_DUPLICATE_RUNTIME_EXTENSION_REQUIRED` for `v1.2.0`; existing trusted runtime contracts cover the material overlap.
+- **Autonomous merge-readiness hardening:** green canonical baseline, exact-head evidence, complete required checks, expected-head merge guard where supported, and independent post-merge verification.
+- **Current-state reconciliation:** stale Phase C/D status and false live-host promotion are rejected by executable governance consistency checks.
+
+See [v1.2.0 release-candidate notes](docs/releases/v1.2.0-governed-orchestration-release-candidate.md).
 
 ## Delegated Phase Progression
 
-For an approved delegated phase, a human or maintainer authorizes the phase and its execution envelope once. Conductor may then route only the internal units already approved by that envelope. Specialists execute inside those bounds, while Overseer and repository validators produce current evidence. Arbiter evaluates that evidence and emits the next transition disposition.
-
-Accepted units create checkpoints. Unchanged approved units can continue without repeated owner relay, but Orchestra still escalates missing intent, contradictions, scope expansion, policy decisions, protected actions, and unauthorized external actions. The Tuner is activated only when an approved unit has material cross-specialist dependencies or when a change invalidates another specialist's contract, evidence, documentation, diagram, or generated artifact.
-
-~~~mermaid
-flowchart TD
-    Authorized["Authorized Phase + Execution Envelope"]
-    Unit["Approved Unit Execution"]
-    Evidence["Current Evidence"]
-    Arbiter{"Arbiter Disposition"}
-    Checkpoint["Checkpoint Accepted Unit"]
-    Next{"Another Approved Unit?"}
-    Remediate["Deterministic In-Scope Remediation"]
-    WaitEvidence["Wait for Evidence"]
-    WaitCapacity["Capacity Checkpoint + Resume Later"]
-    Human["Human Decision or Authority"]
-    Stop["Preserve State + Halt"]
-    PhaseValidation["Phase Validation"]
-    HumanReview["Human Review"]
-
-    Authorized --> Unit --> Evidence --> Arbiter
-    Arbiter -- AUTO_CONTINUE --> Checkpoint --> Next
-    Next -- Yes --> Unit
-    Next -- No --> PhaseValidation --> HumanReview
-    Arbiter -- AUTO_REMEDIATE_AND_REVALIDATE --> Remediate --> Unit
-    Arbiter -- WAIT_FOR_EVIDENCE --> WaitEvidence --> Evidence
-    Arbiter -- WAIT_FOR_CAPACITY --> WaitCapacity --> Unit
-    Arbiter -- ESCALATE_HUMAN --> Human --> Authorized
-    Arbiter -- STOP --> Stop
-~~~
-
-Accessible summary: an authorized phase executes one approved unit, produces evidence, and asks Arbiter for the next disposition. Accepted units checkpoint before the next approved unit. Other dispositions remediate and revalidate, wait for evidence or capacity, escalate for human authority, or stop. After the final accepted unit, phase validation leads to human review.
+For an approved delegated phase, a maintainer authorizes the phase and its execution envelope once. Conductor may then route only internal units already allowed by that envelope. Specialists execute inside those bounds, Overseer and repository validators produce current evidence, and Arbiter emits the next transition disposition.
 
 | Transition disposition | Meaning |
 |---|---|
 | `AUTO_CONTINUE` | Begin the next approved unit. |
-| `AUTO_REMEDIATE_AND_REVALIDATE` | Correct a deterministic in-scope defect and rerun the required checks. |
+| `AUTO_REMEDIATE_AND_REVALIDATE` | Correct a deterministic in-scope defect and rerun required checks. |
 | `WAIT_FOR_EVIDENCE` | Pause until required evidence is produced. |
-| `WAIT_FOR_CAPACITY` | Checkpoint safely and resume later without treating capacity as a new owner decision. |
+| `WAIT_FOR_CAPACITY` | Checkpoint safely and resume later without inventing new authority. |
 | `ESCALATE_HUMAN` | Request missing intent, policy, scope, or external-action authority. |
 | `STOP` | Preserve a prohibited, unsafe, or invalid state and halt. |
 
-Validation proves conformance to the authorized envelope; it cannot create authority. Stage, commit, push, pull-request, merge, release, deployment, production, infrastructure, secret, and destructive actions remain separately governed.
+Validation proves conformance to an authorized envelope; it cannot create authority. Stage, commit, push, pull-request, merge, tag, release, deployment, production, infrastructure, secret, and destructive actions remain separately governed.
 
-Phase B instruction-level delegated progression is merged and canonical on `main` through PR #190. The current public release remains `v1.1.2`; Phase B has not yet been included in a new tagged release or deployment.
-
-See the [Delegated Execution Policy](docs/governance/DELEGATED_EXECUTION_POLICY.md) for the canonical contract and the [Governance Review Flow](docs/governance/GOVERNANCE_REVIEW_FLOW.md) for the review sequence.
-
-## One Request, Coordinated Responsibilities
-
-Consider one request:
-
-> Build a secure employee payroll system.
-
-That sentence contains business, legal, architecture, data, implementation, security, validation, documentation, and continuity concerns. Orchestra does not activate every specialist automatically. Conductor selects the smallest effective stack and activates The Tuner only because this example contains material dependencies across several specialist-owned domains.
-
-| Responsibility | Example contribution | Boundary |
-|---|---|---|
-| The Steward | Confirms business purpose, scope, requirements, and required delivery artifacts | Does not decide legal or technical implementation details |
-| The Governor | Reviews privacy, licensing, IP, and release obligations | Does not provide legal advice or grant runtime authority |
-| Conductor | Chooses and sequences the required specialist work | Routes work but does not implement it |
-| The Tuner | Assembles cross-layer contract references, detects missing ownership or contradictions, and marks dependent evidence or documentation stale when an accepted decision changes | Does not route specialists, rewrite domain decisions, implement, validate, or authorize continuation |
-| Clockwork | Defines application architecture and service boundaries | Does not write the implementation |
-| Chronicler | Defines payroll data and persistence semantics | Does not own UI or security policy |
-| Ponytail | Applies the approved implementation with minimal safe edits | Does not invent architecture or policy |
-| Cipher | Reviews access control, secrets, and defensive security boundaries | Does not perform offensive testing |
-| Overseer | Defines validation gates and release evidence | Does not write application code |
-| Scribe | Produces source-backed documentation | Does not invent system behavior |
-| Arbiter | Checks continuity, branch state, evidence freshness, and transition readiness | Does not override Steward, Governor, or specialist-owned decisions |
-
-If security validation detects unauthorized payroll access, work does not move directly to approval. It returns to the owning implementation boundary, the access control is corrected, validation runs again, and any contracts or evidence invalidated by that correction are refreshed before review.
-
-## Why Orchestra Instead of Direct Prompting?
-
-| Direct prompting | Orchestra |
-|---|---|
-| One answer may mix architecture, code, testing, and assumptions | Defined specialists own distinct responsibilities |
-| Several locally valid answers may still conflict at the system boundary | The Tuner exposes missing owners, contradictions, stale contracts, and required specialist re-entry |
-| Context can drift across prompts, tools, and sessions | Project state, contracts, decisions, and handoffs preserve continuity |
-| Tool access may be mistaken for permission | Exact authority and immutable runtime capability grants define permission |
-| A route can be treated as an implicit grant | Routing selects responsibility only |
-| Governance may be confused with authorization | Governance is a separate blocking layer that cannot create authority or capabilities |
-| Failure may be explained without re-entering the workflow | Validation returns work to correction and revalidation |
-| Completion may be inferred from generated text | Structured lifecycle signals control waiting and terminal state |
-| Logs may be treated as proof of permission | Audit events record evidence but never authorize work |
-
-Orchestra does not make output automatically correct. It makes ownership, ordering, coordination, constraints, failure, and evidence visible enough to review.
+See the [Delegated Execution Policy](docs/governance/DELEGATED_EXECUTION_POLICY.md) and [Governance Review Flow](docs/governance/GOVERNANCE_REVIEW_FLOW.md).
 
 ## Runtime Trust Model
 
 ### Trusted composition
 
-Every run starts from an explicit immutable <code>RuntimeComposition</code>. <code>ACTIVE</code> mode requires trusted authority, a run-scoped capability manifest, lifecycle and delegation services, coordination services, audit integration, and finite route bindings. Missing, malformed, mismatched, or untrusted active configuration fails closed before execution.
+Every active run starts from an explicit immutable `RuntimeComposition`. `ACTIVE` mode requires trusted authority, a run-scoped capability manifest, lifecycle and delegation services, coordination services, audit integration, and finite route bindings. Missing, malformed, mismatched, or untrusted active configuration fails closed before execution.
 
-<code>COMPATIBILITY</code> mode is also explicit and trusted. It uses finite repository-owned mappings for documented routes. It is not inferred when active configuration is missing, and it is never unlimited authority.
+`COMPATIBILITY` mode is also explicit and trusted. It uses finite repository-owned mappings for documented routes. It is not inferred when active configuration is missing, and it is never unlimited authority.
 
 ### Authority, capabilities, governance, and coordination
 
-Authority scopes define exact targets, operations, and constraints. Run-scoped capability manifests define exact executable capabilities and allowed operations. Capability grant provenance must match manifest provenance, and a present capability must belong to the specialist binding that uses it.
-
-The distinction is fundamental:
+Authority scopes define exact targets, operations, and constraints. Run-scoped capability manifests define exact executable capabilities and allowed operations. Governance asks whether already-authorized work should proceed. Coordination asks whether specialist-owned contracts are complete, consistent, and current enough to proceed.
 
 ~~~text
 governance_approval != authority_grant
 governance_approval != capability_grant
 coordination_ready != authority_grant
 coordination_ready != capability_grant
-governance_denial may block authorized work
-authority_denial cannot be reversed by governance
-capability_denial cannot be reversed by governance
+validation_success != authority_grant
+GITHUB_CAN_MERGE != GOVERNANCE_READY_TO_MERGE
+REPOSITORY_SIMULATION != LIVE_HOST_EVIDENCE
 ~~~
-
-Governance asks whether authorized work should proceed. Coordination asks whether specialist-owned contracts are complete, consistent, and current enough to proceed. Neither layer decides what the runtime is permitted to do in the first place.
-
-### One-time run identity
-
-Root and child run identities initialize once. Reusing the same identity raises <code>RUN_ALREADY_INITIALIZED</code> before trusted-contract revalidation, adapter access, parsing, routing, governance, or execution. A distinct run identity remains independently executable.
 
 ### Bounded delegation
 
-Child work requires an accepted <code>DelegationResolution</code>. A child receives an authority subset, capability subset, bounded depth, and only explicitly allowlisted context keys. Sensitive or unavailable context requests are rejected. Rejected delegation creates no executable child run. Accepted child execution stays in process; Orchestra does not create remote agents, worker processes, or background infrastructure.
+Accepted child work receives an authority subset, capability subset, bounded depth, and only explicitly allowlisted context keys. Rejected delegation creates no executable child run. Accepted child execution stays in process; Orchestra does not create remote workers or background infrastructure.
 
-~~~mermaid
-flowchart TD
-    Trusted["Trusted runtime construction or repository-owned policy"]
-    Parent["Parent Run<br/>Authority + Capabilities + Permitted Context Keys"]
-    Bound{"Strict bounded delegation validation"}
-    Child["Child Run<br/>Authority subset<br/>Capability subset<br/>Explicit Context Keys"]
-    Reject["Rejected<br/>No executable child run"]
-    Untrusted["Prompt text<br/>Adapter metadata<br/>Route<br/>Governance approval<br/>Coordination status<br/>Audit record"]
-    NoGrant["Cannot create or widen authority"]
+### Structured lifecycle and deterministic evidence
 
-    Trusted --> Parent --> Bound
-    Bound -- Accepted --> Child
-    Bound -- Rejected --> Reject
-    Untrusted -.-> NoGrant
-    NoGrant -.-> Bound
-
-    classDef trusted fill:#24143a,stroke:#9d6cff,color:#f3eaff
-    classDef parent fill:#102a43,stroke:#58a6ff,color:#e5f2ff
-    classDef gate fill:#332712,stroke:#d4af37,color:#fff3bd
-    classDef accepted fill:#12351f,stroke:#4ac26b,color:#e7ffed
-    classDef rejected fill:#3b1717,stroke:#ff6b6b,color:#ffe8e8
-    class Trusted trusted
-    class Parent,Untrusted parent
-    class Bound gate
-    class Child accepted
-    class Reject,NoGrant rejected
-~~~
-
-Accessible summary: trusted construction creates the parent run. Strict validation can create a narrower in-process child or reject the request without creating a child. Prompt text, adapter metadata, routing, governance approval, coordination status, and audit records cannot create or widen authority.
-
-### Structured lifecycle
-
-A run begins in <code>INITIALIZING</code>. <code>ACTIVATE</code> is accepted only from that state. An active run may <code>WAIT</code>; only a waiting run may <code>RESUME</code>. <code>WAITING</code> is non-terminal. <code>COMPLETED</code>, <code>FAILED</code>, <code>CANCELLED</code>, <code>TIMED_OUT</code>, and <code>BLOCKED</code> remain distinct terminal outcomes. Ordinary generated text cannot transition or complete a run.
-
-Exact replay of an accepted terminal signal is idempotent. Altered or conflicting terminal signals are rejected while the original immutable result remains intact.
+Runs use typed lifecycle signals and distinct waiting or terminal states. Exact replay of an accepted terminal signal is idempotent; conflicting replay is rejected. Run-linked audit events record authority, capabilities, delegation, coordination, lifecycle, and terminal outcomes without granting permission.
 
 ### Coordination state and evidence freshness
 
-The Tuner's typed coordination runtime records collaboration graphs, specialist-domain contracts, cross-layer packets, contradictions, invalidation events, artifact lifecycles, signals, sessions, and deterministic fingerprints. Runtime execution accepts an explicitly supplied collaboration session only for validation preflight; that preflight does not apply signals or infer transitions. A supplied collaboration session that is incomplete, contradicted, stale, malformed, or otherwise not ready fails closed at the runtime boundary. Exact idempotent signal replay preserves the existing immutable session without duplicating transition evidence.
-
-A ready coordination state does not grant implementation, Git, release, deployment, or external-action authority. Conductor remains the exclusive router, Overseer remains the validation-evidence owner, and Arbiter remains the continuation and transition-decision authority.
-
-### Deterministic evidence
-
-Run-linked events record root authority creation, capability manifests, authority and capability decisions, delegation acceptance or rejection, coordination transitions or rejections, lifecycle transitions, terminal results, and initialization failure. Audit evidence is non-authorizing. Even an audit sink failure cannot turn denied work into allowed work or replace an accepted terminal result.
-
-## Architecture
-
-These are ownership layers, not a shortcut around the runtime sequence:
-
-| Layer | Responsibility | Canonical detail |
-|---|---|---|
-| Governance | Business alignment, compliance, privacy obligations, IP, continuity, and release gates | [Governance Layer](docs/governance/GOVERNANCE_LAYER.md) |
-| Orchestration | Intent classification, routing, and ordered specialist handoffs | [Router-First Architecture](docs/routing/ROUTER_FIRST_ARCHITECTURE.md) |
-| Cross-Specialist Coordination | Contract assembly, missing-owner detection, contradiction reporting, invalidation, and re-entry recommendations | [Cross-Specialist Coordination Protocol](docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md) |
-| Trusted Runtime | Composition, authority, capabilities, coordination, delegation, lifecycle, execution, and audit evidence | [Runtime Architecture](docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md) |
-| Specialist Execution | Focused architecture, implementation, data, security, QA, documentation, and visual work | [Skill Index](SKILL_INDEX.md) |
-| Validation and Evidence | Behavior, runtime, packaging, governance, and release-readiness proof | [Validation Guide](docs/setup/VALIDATION.md) |
-
-The [Authority and Capability Contracts](docs/project/AUTHORITY_CAPABILITY_CONTRACTS.md) define the immutable runtime rules. The [Cross-Specialist Coordination Protocol](docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md) defines the coordination contract and strict ownership boundaries. The [Evidence Identity and Freshness Protocol](docs/governance/EVIDENCE_IDENTITY_AND_FRESHNESS_PROTOCOL.md) defines change identity and stale-evidence handling. Host integration remains separated by the [Portable Runtime Adapter Protocol](docs/project/PORTABLE_ADAPTER_PROTOCOL.md).
+The Tuner's coordination runtime records specialist-owned contracts, dependencies, contradictions, invalidations, artifact lifecycles, evidence, and deterministic fingerprints. A supplied collaboration session that is incomplete, contradicted, stale, malformed, or otherwise not ready fails closed. Conductor remains the exclusive router, Overseer remains the validation-evidence owner, and Arbiter remains the continuation authority.
 
 ## Roles and Specialist Responsibilities
 
-### Governance authorities
-
-| Role | Use it for | Key boundary |
+| Role | Primary responsibility | Key boundary |
 |---|---|---|
-| The Steward | Business alignment, scope, requirements, acceptance criteria, and SDLC sufficiency | Does not own legal or technical decisions |
-| The Governor | Legal, privacy-obligation, IP, licensing, and compliance governance | Identifies risks and escalation points, not legal advice |
-| Arbiter | Continuity, source of truth, validation state, handoff, and merge readiness | Uses verified repository evidence and does not override specialist-owned decisions |
-
-### Orchestration and execution
-
-| Role | Use it for | Key boundary |
-|---|---|---|
-| Conductor | Routing and multi-skill sequencing | Does not execute specialist work |
-| The Tuner | Cross-specialist contract assembly, contradiction detection, invalidation, and re-entry recommendations | Cannot route, implement, validate itself, grant authority, or issue an Arbiter disposition |
-| Clockwork | Architecture, layering, and refactor structure | Does not implement |
-| Cloak | UI, UX, accessibility, and responsive behavior | Does not own backend policy |
+| The Steward | Business alignment, scope, requirements, acceptance criteria | Does not decide legal or technical implementation details |
+| The Governor | Legal, privacy-obligation, IP, licensing, compliance governance | Does not provide legal advice or grant runtime authority |
+| Conductor | Routing and ordered specialist handoffs | Routes work but does not implement it |
+| The Tuner | Cross-specialist contract assembly, contradictions, invalidation, re-entry recommendations | Cannot route, implement, validate itself, or grant authority |
+| Clockwork | Architecture, layering, code structure | Does not implement |
+| Cloak | UI/UX, accessibility, responsive behavior | Does not own backend policy |
 | Chronicler | Database and persistence semantics | Does not own UI or general QA |
 | Ponytail | Minimal, reversible implementation | Requires upstream decisions to be settled |
-| Cipher | Defensive security, access control, secrets, and privacy controls | No offensive testing or legal decisions |
-| Overseer | QA strategy, validation gates, and release readiness | Does not write application code |
-| Scribe | README, release, setup, and handoff documentation | Uses source-backed facts |
-| Weaver | Mermaid and PlantUML diagrams | Does not invent architecture or relationships |
-
-### Gated resilience
-
-| Role | Use it for | Key boundary |
-|---|---|---|
+| Cipher | Defensive security, access control, secrets, privacy controls | No offensive testing or legal decisions |
+| Overseer | QA strategy, validation gates, release readiness | Does not write application code |
+| Scribe | Source-backed documentation and knowledge transfer | Does not invent system behavior |
+| Weaver | Mermaid and PlantUML visual models | Does not invent architecture |
+| Arbiter | Continuity, evidence freshness, transition and merge readiness | Does not override specialist-owned decisions |
 | Dagger | Guarded destructive-path simulation and resilience review | Simulation only unless separately authorized with guardrails |
 
-### Internal repository evolution
-
-| Role | Use it for | Key boundary |
-|---|---|---|
-| Artificer | Maintainer-only, static, read-only audits of selected external repositories for useful patterns, risks, provenance, and licensing considerations | Not publicly routable; does not execute external code, implement findings, approve its own recommendations, or appear in runtime and adapter exports |
-
-Artificer is intentionally separate from Orchestra's public runtime specialist roster. Its audit records support transparent repository evolution, specialist review, provenance tracking, licensing analysis, and governed Pattern Catalog decisions.
-
-See the [Artificer workflow](docs/internal/ARTIFICER_WORKFLOW.md), [Artificer boundaries](docs/internal/ARTIFICER_BOUNDARIES.md), and governed [Pattern Catalog](docs/internal/PATTERN_CATALOG.md).
-
-## External Repository Reviews and Incorporated Patterns
-
-Orchestra may inspect selected external open-source repositories through source-pinned, static Artificer audits. A repository can be audited without being incorporated, and an audit does not authorize copying or implementation.
-
-| Source repository | Relationship to Orchestra | Current outcome |
-|---|---|---|
-| [`usestrix/strix`](https://github.com/usestrix/strix) | Reference source for lifecycle-gated completion, declared authority scope, run-scoped capabilities, and validated specialist delegation | Four governed reference-only patterns were independently implemented as Orchestra-native runtime contracts and released in `v1.1.2` |
-| [`CristianOlivera1/openhero`](https://github.com/CristianOlivera1/openhero) | Static review covering UI orchestration, resilience, archive validation, and defensive-security observations | Audit findings were retained for reference; no OpenHero pattern has been promoted or implemented in Orchestra |
-| [`bryllim/bryl-minimal-design`](https://github.com/bryllim/bryl-minimal-design) | MIT-licensed design-language source for Cloak's `bryl-minimal` template | Orchestra includes an attributed framework-native design profile based on Bryl Lim's repository; the source repository remains separately owned and maintained |
-| [`DietrichGebert/ponytail`](https://github.com/DietrichGebert/ponytail) | Historical external implementation companion and reference for minimal, focused code changes | The upstream repository remains separately owned and maintained by Dietrich Gebert; Orchestra's current Ponytail specialist is an independently maintained Orchestra component, not a vendored copy or required dependency |
-| [`JuliusBrussee/caveman`](https://github.com/JuliusBrussee/caveman) | Historical external communication companion for concise, token-efficient output | The upstream repository remains separately owned and maintained by Julius Brussee; Caveman is not bundled, vendored, or required by Orchestra |
-
-### External-source incorporation boundary
-
-Listing a repository here does not mean that its entire codebase, data, or knowledge base was imported into Orchestra. Orchestra does not wholesale-copy external repositories.
-
-Where incorporation occurs, it is limited to approved concepts, useful logic, reusable skills and knowledge, validation lessons, and independently written Orchestra-native components that improve the framework and its governed knowledge base.
-
-External source code, datasets, prompts, payloads, examples, media, assets, and documentation are not incorporated unless a governed record explicitly authorizes reuse and the applicable license, attribution, security, and maintainer-review requirements are satisfied.
-
-The authoritative incorporation record is the governed [Pattern Catalog](docs/internal/PATTERN_CATALOG.md). An Artificer audit alone does not mean that a repository, pattern, or finding has been incorporated into Orchestra.
+Artificer remains a maintainer-only internal repository-evolution surface. It is not publicly routable and does not execute external code, implement its own findings, or approve its own recommendations. See the governed [Pattern Catalog](docs/internal/PATTERN_CATALOG.md).
 
 ## Supported Hosts and Maturity
 
@@ -357,9 +172,9 @@ Support means a validated integration surface. Scaffold-only means the repositor
 
 | Host | Maturity | Notes |
 |---|---|---|
-| Codex | Supported | Marketplace-first installation with repo-local fallback |
-| Claude Code | Supported | Marketplace metadata and namespaced plugin skills |
-| Antigravity | Supported | Native <code>agy</code> plugin path |
+| Codex | Supported | Marketplace-first installation with repo-local fallback; R7 live continuity evidence remains pending for publication. |
+| Claude Code | Supported packaging/integration | Marketplace metadata and namespaced plugin skills; Phase C active runtime continuity is not inferred from packaging support. |
+| Antigravity | Supported | Native `agy` plugin path; R7 live continuity evidence remains pending for publication. |
 | Cursor | Scaffold-only | Runtime adapter and packaging instructions, not marketplace-published |
 | Windsurf | Scaffold-only | Runtime adapter and packaging instructions, not marketplace-published |
 | VS Code / VSCodium | Scaffold-only | Shared VS Code-family adapter and scaffold |
@@ -368,18 +183,18 @@ Support means a validated integration surface. Scaffold-only means the repositor
 | Neovim | Scaffold-only | Runtime adapter and local editor scaffold |
 | Local AI systems | Manual documentation surface | Load selected Markdown and supporting files deliberately |
 
-Orchestra does not claim to work everywhere. See [Compatibility](docs/setup/COMPATIBILITY.md) and the [scaffold graduation criteria](docs/project/SCAFFOLD_ADAPTER_GRADUATION_CRITERIA.md).
+Repository CI and Phase C fixtures are not live installed-host evidence. R7 must reconcile the applicable installed Codex/Antigravity continuity evidence before `v1.2.0` publication. See [Compatibility](docs/setup/COMPATIBILITY.md).
 
 ## Installation
 
 Use the host-native path:
 
-- Codex: add <code>https://github.com/Baelfyre/Orchestra</code> as a Marketplace source, install Orchestra, then invoke <code>@Orchestra</code>.
-- Claude Code: run <code>/plugin marketplace add Baelfyre/Orchestra</code>, then <code>/plugin install orchestra@orchestra</code>.
-- Antigravity: run <code>agy plugin install https://github.com/Baelfyre/Orchestra</code>.
+- Codex: add `https://github.com/Baelfyre/Orchestra` as a Marketplace source, install Orchestra, then invoke `@Orchestra`.
+- Claude Code: run `/plugin marketplace add Baelfyre/Orchestra`, then `/plugin install orchestra@orchestra`.
+- Antigravity: run `agy plugin install https://github.com/Baelfyre/Orchestra`.
 - Manual or scaffold-only hosts: follow the exact host boundary in the [Installation Guide](docs/setup/INSTALLATION.md).
 
-Repo-local Codex skill copies are an advanced fallback. Persistent project changes belong in tracked <code>skills/</code> source, not generated <code>.agents/</code> runtime copies.
+During R6, repository manifests identify the candidate as `1.2.0`; the latest public GitHub Release remains `v1.1.2`. See the Installation Guide for the candidate/public-release distinction.
 
 ## Quick Start
 
@@ -387,7 +202,7 @@ Repo-local Codex skill copies are an advanced fallback. Persistent project chang
 2. Describe the concrete task and acceptance criteria.
 3. Let Conductor select the smallest effective specialist stack and activate The Tuner only when material cross-domain coordination is required.
 4. Review governance decisions and specialist outputs at their owning boundaries.
-5. Run the required validation before accepting the result.
+5. Run required validation before accepting the result.
 6. Preserve project state and a concise handoff before changing session, branch, or maintainer.
 
 Example:
@@ -407,61 +222,46 @@ Implement the command, validate it, and leave the diff unstaged for review.
 
 ## Validation and Evidence
 
-Validation results are revision-specific. The README intentionally avoids treating an older test count or coverage percentage as the current result for a newer `main` revision. Use the repository workflow status and the canonical commands in [Validation](docs/setup/VALIDATION.md) for the exact revision being reviewed.
+Validation results are revision-specific. An older green run cannot authorize a newer head. Use repository workflow status and the canonical commands in [Validation](docs/setup/VALIDATION.md) for the exact revision being reviewed.
 
 The validation chain covers:
 
-- Artificer internal, record, governance-record, and Pattern Catalog validation;
 - structure, manifests, Claude plugin, IDE packaging, and Codex export;
+- Artificer internal, record, governance-record, and Pattern Catalog validation;
 - prompt-load thresholds and budget;
-- governance protocol, routing contract, Tuner collaboration contract, evidence identity, and strict governance;
-- behavior validation;
-- runtime tests with the required coverage threshold;
-- runtime import smoke;
-- release-readiness, version, licensing, security, and compatibility review;
-- link checks, <code>git diff --check</code>, and exact authorized scope.
+- governance protocol, routing contracts, Tuner collaboration, evidence identity, and strict governance;
+- behavior validation and runtime tests with the required coverage threshold;
+- security, compatibility, licensing, version consistency, stale references, and release readiness;
+- native Windows, Ubuntu, and macOS validation;
+- `git diff --check` and exact authorized scope.
 
-## Current Main After v1.1.2
+For autonomous or delegated merges, Orchestra additionally requires the fail-closed [Autonomous Merge Readiness Protocol](docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md): a green canonical baseline, exact-head evidence, complete successful required checks, expected-head merge guard where supported, and independent post-merge verification.
 
-The current public release remains <code>v1.1.2</code>. The canonical `main` branch also includes later, unreleased work:
+## Release Status
 
-- Phase B instruction-level delegated progression merged through PR #190;
-- The Tuner's cross-specialist coordination protocol, evidence-continuity controls, typed in-memory coordination contracts, and bounded Conductor-owned runtime integration;
-- deterministic coordination transition and rejection evidence;
-- fail-closed handling for incomplete, contradicted, stale, or malformed supplied collaboration sessions;
-- direct single-owner bypass with no unnecessary coordination calls or coordination audit events;
-- canonical SCN-01 through SCN-06 scenario coverage;
-- portable Codex export support for The Tuner's canonical protocol references.
+### Current public release: v1.1.2
 
-The Tuner Phase 4 implementation merged through PR #200, and its post-merge continuity record merged through PR #201. These changes have not been included in a new tagged release or deployment. See the [Cross-Specialist Coordination Protocol](docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md) and [Phase 4 Post-Merge State](docs/routing/TUNER_PHASE_4_POST_MERGE_STATE.md).
+The published `v1.1.2` release established trusted runtime authority, run-scoped capabilities, bounded delegation, structured lifecycle control, `RuntimeExecutor` authority/capability ordering, adversarial fail-closed validation, deterministic non-authorizing audit evidence, and four governed Artificer promotions.
 
-## v1.1.2 Release Highlights
+See [v1.1.2 Trusted Runtime Authority release notes](docs/releases/v1.1.2-trusted-runtime-authority.md) and the published [`v1.1.2` GitHub Release](https://github.com/Baelfyre/Orchestra/releases/tag/v1.1.2).
 
-The published <code>v1.1.2</code> release includes:
+### Repository release candidate: v1.2.0
 
-- trusted authority and run-scoped runtime capability enforcement;
-- explicit finite <code>ACTIVE</code> and <code>COMPATIBILITY</code> composition;
-- bounded in-process specialist delegation;
-- structured lifecycle control and same-run replay rejection;
-- <code>RuntimeExecutor</code> integration with authority and capability checks before governance;
-- adversarial fail-closed validation;
-- deterministic non-authorizing audit evidence;
-- completion of the four governed Artificer promotions;
-- synchronized README, setup, compatibility, and release surfaces.
+`v1.2.0` candidate metadata is prepared, but publication remains blocked. Phase C repository reliability is complete through PR #225; live installed-host evidence remains `PENDING_LOCAL_HOST_VALIDATION`. Phase D reconciliation is complete through PR #226 with no duplicate runtime extension required. R5/R5B added merge-readiness hardening and canonical current-state reconciliation.
 
-See the [v1.1.2 Trusted Runtime Authority release notes](docs/releases/v1.1.2-trusted-runtime-authority.md) and the published [`v1.1.2` GitHub Release](https://github.com/Baelfyre/Orchestra/releases/tag/v1.1.2).
+The candidate becomes a public release only after R6 is merged and independently verified, R7 host-derived evidence is reconciled, and the separately authorized R8 annotated-tag/GitHub-Release gate completes.
 
 ## Honest Limitations
 
 - Orchestra does not replace human review or engineering judgment.
 - It does not guarantee correct or secure output and does not eliminate hallucinations.
-- Prompt content, metadata, routes, governance approvals, coordination status, and audit records do not grant authority.
-- Governance can block work but cannot create authority or capabilities.
+- Prompt content, metadata, routes, governance approvals, coordination status, validation success, audit records, GitHub mergeability, and API success do not create authority.
 - The Tuner cannot activate itself, route specialists directly, select a winning domain requirement, implement code, validate its own output, issue an Arbiter transition disposition, or perform Git, release, deployment, or external actions.
 - The current coordination runtime is in-memory and does not add persistent collaboration storage, SQLite, migrations, RPC, or host-process orchestration.
 - Orchestra does not create remote workers, background agents, or distributed orchestration infrastructure.
 - Compatibility mode is explicit, finite, and intended for bounded existing routes.
 - Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain scaffold-only.
+- Repository simulation is not live installed-host evidence; R7 remains required before `v1.2.0` publication.
 - Orchestra is developer tooling and a local runtime. It does not store or transmit downstream project data by default.
 - Data sensitivity, privacy, retention, deletion, platform disclosure, and IP obligations depend on the downstream project and host environment.
 - Release governance may require revision or block publication.
@@ -489,16 +289,25 @@ See the [v1.1.2 Trusted Runtime Authority release notes](docs/releases/v1.1.2-tr
 - [Governance Layer](docs/governance/GOVERNANCE_LAYER.md)
 - [Governance Review Flow](docs/governance/GOVERNANCE_REVIEW_FLOW.md)
 - [Delegated Execution Policy](docs/governance/DELEGATED_EXECUTION_POLICY.md)
+- [Autonomous Merge Readiness Protocol](docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md)
 - [Release Gates](docs/governance/RELEASE_GATES.md)
 - [App Release Compliance Gate](docs/governance/APP_RELEASE_COMPLIANCE_GATE.md)
 
-### Maintainers
+### Release and maintainers
 
+- [v1.2.0 Release Candidate Notes](docs/releases/v1.2.0-governed-orchestration-release-candidate.md)
+- [v1.1.2 Release Notes](docs/releases/v1.1.2-trusted-runtime-authority.md)
 - [Contributing](docs/CONTRIBUTING.md)
 - [Project State](PROJECT_STATE.md)
-- [The Tuner Phase 4 Post-Merge State](docs/routing/TUNER_PHASE_4_POST_MERGE_STATE.md)
+- [Session Handoff](SESSION_HANDOFF.md)
 - [Decision Log](DECISION_LOG.md)
 - [Changelog](CHANGELOG.md)
+
+## External Pattern Governance
+
+Orchestra may inspect selected external open-source repositories through source-pinned, static Artificer audits. An audit does not authorize copying or implementation. Where a concept is incorporated, it must pass governed provenance, licensing, security, ownership, and maintainer-review boundaries and be independently implemented as Orchestra-native work.
+
+The authoritative incorporation record is the governed [Pattern Catalog](docs/internal/PATTERN_CATALOG.md). External source code, datasets, prompts, payloads, examples, media, assets, or documentation expression are not incorporated unless a governed record explicitly authorizes that reuse.
 
 ## Contributing, Security, and License
 
@@ -506,4 +315,4 @@ Contributions should preserve specialist ownership, cross-specialist contract bo
 
 Report vulnerabilities privately through the process in [SECURITY.md](SECURITY.md). Do not commit secrets, credentials, personal data, client information, or private project material.
 
-Orchestra is licensed under the [MIT License](LICENSE). The four finalized Artificer promotions preserve governed conceptual provenance and Apache-2.0 attribution boundaries. They do not authorize copying external source code, prompts, payloads, examples, media, or documentation expression.
+Orchestra is licensed under the [MIT License](LICENSE). Governed external-pattern records preserve applicable provenance and attribution boundaries; they do not authorize wholesale copying of external projects.

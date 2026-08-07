@@ -1,15 +1,17 @@
 # Installation
 
-Orchestra can be installed in several ways depending on your AI host or IDE:
+Orchestra can be installed in several ways depending on your AI host or IDE.
 
 ## Release Status
 
-The current public release is `v1.1.2`, published July 14, 2026 after the Phase 6D release gate completed.
+The current public GitHub Release is `v1.1.2`, published July 14, 2026. Repository manifests are normalized to release-candidate version `1.2.0` during R6, but `v1.2.0` is `PREPARED_NOT_RELEASED`: no `v1.2.0` tag or GitHub Release exists until the separate R8 publication gate is authorized and completed.
+
+If you install directly from the repository's `main` branch during this preparation window, treat `1.2.0` metadata as candidate state rather than proof of a published stable release. The update checker compares against the latest GitHub Release, which remains the publication source of truth.
 
 | Host | Install Surface | Current Status |
 |---|---|---|
 | Codex | Marketplace or repo-local fallback | Supported |
-| Claude Code | Marketplace plugin | Supported |
+| Claude Code | Marketplace plugin | Supported packaging/integration |
 | Antigravity | Native plugin install | Supported |
 | Cursor | Scaffold-only packaging and workspace instructions | Scaffold-only |
 | Windsurf | Scaffold-only packaging and workspace instructions | Scaffold-only |
@@ -19,6 +21,8 @@ The current public release is `v1.1.2`, published July 14, 2026 after the Phase 
 | Zed | Scaffold-only packaging and workspace instructions | Scaffold-only |
 | Neovim | Scaffold-only packaging and workspace instructions | Scaffold-only |
 | Local AI systems | Manual skill loading | Supported |
+
+R7 live installed-host continuity evidence remains a publication gate for `v1.2.0`; repository validation does not replace that evidence.
 
 ## 1. Antigravity Plugin Setup
 
@@ -67,7 +71,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\refresh-installed-integration
 
 Do not commit `.agents/` unless the repo intentionally shares those Codex skill files. For local-only setup, add `.agents/` to `.git/info/exclude`.
 
-The Codex refresh path now uses a temporary staging export by default. It reads tracked repository source, exports into a temp directory outside the repo, validates the staged export, installs from that staged copy, verifies parity, and then removes the temp directory. Generated runtime output is not written into tracked export folders during a normal refresh.
+The Codex refresh path uses a temporary staging export by default. It reads tracked repository source, exports into a temp directory outside the repo, validates the staged export, installs from that staged copy, verifies parity, and then removes the temp directory. Generated runtime output is not written into tracked export folders during a normal refresh.
 
 ## 3. Claude Code Plugin Setup
 
@@ -151,9 +155,9 @@ Run:
 python .\scripts\check_for_updates.py
 ```
 
-The script reads local version metadata from the root manifest, Claude plugin manifest, and adapter package manifests where applicable, then compares it to the latest GitHub release.
+The script reads local version metadata from the root manifest, Claude and Codex plugin manifests, and adapter package manifests, then compares it to the latest GitHub Release. During R6, local candidate metadata can be newer than the latest published release; that does not publish or downgrade either state.
 
-If a newer release exists, use your host-specific refresh or reinstall flow to update.
+If a newer public release exists, use your host-specific refresh or reinstall flow to update.
 
 ## Verify
 

@@ -1,539 +1,151 @@
 # Changelog
 
-This changelog tracks the repository history using git tags, merge history, and the prior documented milestone log that lived under `docs/meta/CHANGELOG.md`.
-## Unreleased - Delegated Governance State Reconciliation R5B
+This changelog records release-level Orchestra history. Detailed implementation chronology remains available in Git history, merged pull requests, `DECISION_LOG.md`, `PROJECT_STATE.md`, and immutable handoff records.
 
-### Changed
+## v1.2.0 Release Candidate - NOT RELEASED
 
-- Reconciled canonical delegated-governance Phase C and Phase D status with the verified clean replay state: Phase C repository contract complete through PR #225, live installed-host evidence still `PENDING_LOCAL_HOST_VALIDATION`, and Phase D overlap reconciliation complete through PR #226.
-- Updated governance consistency validation so obsolete current-state claims such as `Phase C and Phase D are not started` are rejected rather than required.
-- Added regressions preventing stale Phase C/D wording and false promotion of pending live-host evidence.
-- Preserved the Phase D `NO_DUPLICATE_RUNTIME_EXTENSION_REQUIRED` conclusion for v1.2.0 and the R7 live installed-host publication gate.
-- No runtime, adapter, manifest/version, workflow, release, deployment, policy activation, installed-host mutation, or history rewrite is part of R5B.
-
-## Unreleased - Autonomous Replay Merge Hardening R5
+`v1.2.0` is prepared as a minor release candidate. Repository manifests are normalized to `1.2.0`, but the latest published GitHub Release remains `v1.1.2` until R7 live installed-host evidence is reconciled and the separately governed R8 publication gate completes.
 
 ### Added
 
-- Added a fail-closed autonomous merge-readiness protocol that requires a green canonical baseline, exact-head validation evidence, complete successful required checks, changelog freshness, an expected-head merge guard where supported, and independent post-merge verification before `MERGED_VERIFIED` can be recorded.
-- Added a deterministic autonomous merge-readiness evaluator, compact machine-readable fixtures, and runtime regressions covering missing or pending checks, governance/runtime/cross-platform failures, stale heads, red baselines, changelog omissions, mergeability misuse, unresolved blockers, and unverified merge API results.
-- Added repository automation guidance requiring the exact-head fail-closed protocol for autonomous or delegated merges.
+- Delegated Phase B instruction-level autonomous progression with approved execution envelopes, six transition dispositions, checkpoints, bounded remediation, capacity handoff, current evidence requirements, and default-deny external-action authority.
+- The Tuner cross-specialist coordination stack through Phases 1-4: contract assembly, missing-owner and contradiction detection, semantic invalidation, evidence continuity, typed in-memory coordination records, deterministic transitions/rejections, minimal specialist re-entry, and bounded Conductor-owned runtime integration.
+- Spec Kitty-derived governed phase execution contracts: `OrchestraRuntimeEnvelope`, `OrchestraCorrelationID`, `OrchestraPhaseRetrospective`, the 15-field `ApprovedUnitPlan` extension, `OrchestraStatusProjection`, and `OrchestraWorktreeContract`.
+- Cross-layer integrity audit profiles for frontend-to-backend synchronicity, backend-to-persistence integrity, and language-neutral cross-module logical flow using the existing Conductor -> Tuner -> specialist -> Overseer -> Arbiter ownership model.
+- Delegated Phase C repository host-reliability contracts and deterministic adversarial fixtures covering reset/resume, active-host handoff, capacity waits, stale identity, incomplete checkpoints, scaffold-only hosts, authority expansion, and duplicate replay.
+- Fail-closed autonomous merge-readiness protocol, machine-readable evaluation fixtures, and runtime regressions requiring green canonical baseline, exact-head evidence, complete successful required checks, changelog freshness, expected-head merge guards where supported, and independent post-merge verification.
+- `docs/releases/v1.2.0-governed-orchestration-release-candidate.md` as the source-backed candidate release note and publication-boundary record.
 
 ### Changed
 
-- Updated required-status-check guidance to treat Governance Check, behavior validation, runtime tests, and native Windows/Ubuntu/macOS validation as the minimum autonomous merge evidence inventory while keeping additional repository-required checks additive.
-- Updated branch-protection guidance to require live settings verification and blocked-merge tests rather than treating documentation or a configured rule name as proof of enforcement.
-- Reconciled current project state, session handoff, and delegated-governance implementation planning through the clean R1-R4 replay while preserving historical handoff evidence.
+- Reconciled Delegated Phase D against the existing trusted runtime. PR #226 concluded `NO_DUPLICATE_RUNTIME_EXTENSION_REQUIRED` for `v1.2.0`; no competing runtime model was added.
+- Reconciled canonical delegated-governance state so stale Phase C/D not-started claims and false live-host promotion are rejected by executable consistency validation.
+- Normalized the root, Claude Code, Codex, and scaffold adapter version surfaces to `1.2.0` without changing adapter maturity or publishing any IDE marketplace package.
+- Updated README, project context/state, session handoff, roadmap, compatibility, installation, and Codex adapter documentation to distinguish release-candidate metadata from the current public release.
+- Consolidated the previously fragmented post-`v1.1.2` unreleased changelog entries into this release-candidate record while preserving detailed implementation evidence in Git and pull-request history.
 
-### Incident Boundary
+### Clean Replay and Governance Hardening
 
-- The first autonomous finalization experiment remains preserved as learning evidence. Its fail-open merges are not treated as successful validation precedent.
-- `mergeable: true` and merge-API acceptance are explicitly non-authorizing signals. Missing or pending evidence maps to `WAIT_FOR_EVIDENCE`; failed required evidence blocks merge; a red canonical baseline must be remediated before the next phase.
-- The capability remains unreleased. Live installed-host continuity remains `PENDING_LOCAL_HOST_VALIDATION` and is not replaced by repository simulation.
+The first autonomous finalization experiment was rolled back to the verified recovery point and preserved as audit evidence. The accepted clean replay and hardening sequence is:
 
-## Unreleased - Delegated Host Reliability Phase C
+- R1 / PR #223 - Spec Kitty Phase 3 and roadmap reconciliation.
+- R2 / PR #224 - backend-to-persistence and cross-module logical-flow integrity.
+- R3 / PR #225 - delegated Phase C repository host-reliability contract after bounded fixture remediation and a fully fresh exact-head matrix.
+- R4 / PR #226 - Phase D runtime-overlap reconciliation with no duplicate runtime extension required.
+- R5 / PR #227 - autonomous merge-readiness hardening.
+- R5B / PR #228 - delegated-governance current-state reconciliation, merged at `fbe4532ba2083feaa7ed9fcda2988843f1237a78` and independently verified on canonical `main`.
+- R6 - `v1.2.0` release-candidate metadata, public documentation, changelog, and release-note preparation.
 
-### Added
+Historical fail-open merge behavior from the first experiment is not successful validation precedent.
 
-- Added a deterministic delegated-host reliability protocol and checklist for repository-verifiable same-host reset/resume, active-host handoff, capacity waits, stale identity, incomplete checkpoints, authority expansion, scaffold-only host routing, and duplicate replay scenarios.
-- Added fail-closed fixtures, validation, and runtime regression coverage for portable checkpoint and handoff evidence without introducing persistence, RPC, daemon, network orchestration, or new runtime authority.
-- Corrected the first-run fixture defects so all SHA-256 evidence identifiers satisfy the validator's lowercase 64-character contract.
+### Capability Merge Map
+
+Key post-`v1.1.2` canonical milestones include:
+
+- PR #190 - Delegated Phase B instruction-level progression.
+- PR #191 - Phase B post-merge synchronization.
+- PR #197 - The Tuner Phase 2 evidence identity and continuity.
+- PR #198 - The Tuner Phase 3 typed in-memory coordination runtime.
+- PR #200 - The Tuner Phase 4 scenario validation and runtime integration.
+- PR #201 - Tuner Phase 4 post-merge continuity state.
+- PR #208 - Spec Kitty-derived Phase 2 governed execution contracts.
+- PR #210 - Spec Kitty-derived Phase 3A design and ownership package.
+- PR #212 - `OrchestraStatusProjection`.
+- PR #214 - `OrchestraWorktreeContract` and Phase 3 completion.
+- PR #216 - frontend-to-backend synchronicity contract.
+- PR #223 - clean replay roadmap/state closeout.
+- PR #224 - backend-to-persistence and cross-module logical-flow profiles.
+- PR #225 - Delegated Phase C repository host-reliability contract.
+- PR #226 - Delegated Phase D overlap reconciliation.
+- PR #227 - autonomous merge-readiness hardening.
+- PR #228 - delegated-governance current-state reconciliation.
+
+### Compatibility and Authority Boundaries
+
+- Codex, Claude Code, and Antigravity retain supported integration surfaces; version normalization does not by itself prove live installed-host continuity.
+- Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain scaffold-only. No scaffold is graduated or marketplace-published by R6.
+- Existing authority, immutable run-scoped capabilities, bounded delegation, lifecycle, coordination ownership, evidence identity, and default-deny external-action controls remain unchanged.
+- No persistent collaboration storage, SQLite, migrations, RPC, network daemon, remote worker, background agent, production deployment, or automatic policy activation is added by the release candidate.
 
 ### Evidence Boundary
 
-- Repository CI proves only deterministic repository contract behavior. Actual installed Codex, Antigravity, and cross-host reset/resume evidence remains `PENDING_LOCAL_HOST_VALIDATION`.
-- Claude Code remains `SCAFFOLD_ONLY` for Phase C runtime-continuity purposes and cannot produce `AUTO_CONTINUE` as an active receiving host.
-- The capability remains unreleased; no deployment, installed-host mutation, policy activation, or history rewrite is part of Phase C.
+Repository CI proves deterministic repository behavior for the exact candidate revision. It does not prove an installed Codex reset/resume, installed Antigravity reset/resume, real live cross-host continuation, or active Claude Code runtime continuity.
 
-## Unreleased - Cross-Layer Integrity Phase F2
+```text
+REPOSITORY_SIMULATION != LIVE_HOST_EVIDENCE
+LIVE_INSTALLED_HOST_VALIDATION=PENDING_LOCAL_HOST_VALIDATION
+```
 
-### Added
+R7 host-derived evidence remains a publication gate.
 
-- Added an additive backend-to-persistence integrity profile covering service input, domain validation, transaction ownership, repository operations, mapping or query behavior, schema constraints, persistence execution, commit or rollback, readback or projection, and service-result propagation.
-- Added a language-neutral cross-module logical-flow integrity profile covering entrypoints, input contracts, module decisions, handoff payloads, shared state or side effects, result propagation, error propagation, and final observable outcomes.
-- Added dedicated backend-persistence and cross-module checklists, deterministic executable happy/failure traces, a fail-closed validator, and focused behavior coverage.
+### Publication Boundary
 
-### Preserved Boundaries
+R6 does **not** create or publish `v1.2.0`. It performs no tag creation, GitHub Release publication, deployment, marketplace graduation, installed-host mutation, policy activation, force push, or history rewrite.
 
-- Reused the existing Conductor -> The Tuner -> domain specialist -> Overseer -> Arbiter authority model; no new specialist, command, plugin, runtime model, persistence implementation, migration, or policy authority was added.
-- Kept the existing frontend/backend protocol, fixture identity, and Codex portable reference bundle unchanged; the new profiles are additive extensions.
-- The capability remains unreleased. No deployment, installed-integration mutation, policy activation, or history rewrite is part of F2.
+Publication requires a separately authorized R8 gate after R6 is merged and independently verified and R7 live-host evidence is reconciled.
 
-## Unreleased - Spec Kitty-Derived Governed Phase Execution Contracts
+---
 
-### Frontend-to-Backend Synchronicity Contract
+## v1.1.2 - Trusted Runtime Authority
 
-- Added the shared cross-module logic audit protocol and first frontend-to-backend synchronicity checklist without changing runtime or persistence behavior.
-- Added deterministic executable workflow traces, complete finding records, a focused validator, behavior tests, routing integration, strict-governance wiring, portable Codex export parity, and cross-platform canonical evidence hashing.
-- Merged through PR #216 at reviewed head `52d47c2b10770cb5a85dab2eab9e81ce8851adb1` and merge commit `3a2f8b7e65cdab0f7e6a3113d1096ec9dccc23d3`. The capability remains unreleased; no deployment or policy activation occurred.
-
-### Phase 3C WorktreeContract Post-Merge Closeout
-
-- Implemented the typed `OrchestraWorktreeContract` model (`orchestra_runtime/worktree.py`), strict path confinement, exact-base validation, deterministic identity and serialization, lifecycle enforcement, and adapter capability integration.
-- Added focused WorktreeContract and compatibility regressions covering locked and nested repositories, submodules, creation and cleanup races, case collisions, symlink and junction escapes, inspection failure, branch preservation, unrelated-worktree preservation, and post-release verification.
-- Completed consolidated behavior, runtime, coverage, governance, packaging, security, and cross-platform validation on the final reviewed revision.
-- Merged through PR #214 at reviewed head `646111325e6de7c5d31915789fdc22a644125b7b` and merge commit `6bce297c7469f9c08ce41308cbb993cc863ac540`. Phase 3A through Phase 3E are complete and merged, but not released; policy remains inactive.
-
-### Phase 3B Post-Merge State Synchronization
-
-- Merged PR #212 (`fa1e052d82301e70a5869258c3fc6af765163353`): Phase 3B `OrchestraStatusProjection` implementation. One commit (`2a6c7ea8db16ce73d66fae566672f3681094b0f7`), 8 changed paths, 1617 insertions, 51 deletions.
-- All 9 required CI checks passed before merge: Analyze (actions), Analyze (python), CodeQL, governance-check, native-macos-latest, native-ubuntu-latest, native-windows-latest, runtime-tests, validate.
-- No release, no policy activation.
-- Governance deviation: PR #212 was merged by the maintainer after all required technical checks passed. No independent APPROVED review was recorded before merge. The Copilot review state was COMMENTED only due to exhausted quota. This is documented as a governance process deviation and does not retroactively convert the technical self-review into an independent approval.
-
-### Implemented Candidate Phase 3B Status Projection
-
-- Implemented `OrchestraStatusProjection` as a read-only, deterministic, non-authorizing runtime and CLI surface.
-- Added immutable typed status records with strict runtime validation, explicit unknown and conflict diagnostics, revision-matched validation evidence, and deterministic JSON serialization.
-- Added local Git fact collection without fetch, network access, repository mutation, persistence, or cache writes.
-- Added NUL-delimited Git porcelain parsing for paths containing spaces, tabs, newlines, quotes, and non-ASCII characters.
-- Added warning-clean module and script CLI surfaces through `python -m orchestra_runtime.status` and `python scripts/orchestra_status.py`.
-- Added 28 focused StatusProjection tests with 91% statement and branch coverage for `orchestra_runtime/status.py`.
-- Passed 418 runtime tests with 93.80% overall runtime-package coverage, the full behavior suite, strict governance validation, direct validators, CLI checks, and read-only before-and-after evidence.
-- At the Phase 3B merge boundary, Phase 3C was not included. `OrchestraWorktreeContract` was subsequently implemented and merged through PR #214.
-
-### Phase 3A Post-Merge State Synchronization
-
-- Merged PR #210 (`1629eaf3cd3f156f8913f84c9229666257a3145a`): Phase 3A deferred-capability design package. One commit, 11 documentation paths, 635 insertions, 18 deletions.
-- All 9 required CI checks passed before merge: Analyze (actions), Analyze (python), CodeQL, governance-check, native-macos-latest, native-ubuntu-latest, native-windows-latest, runtime-tests, validate.
-- No runtime implementation, no release, no policy activation.
-- Governance deviation: PR #210 was merged by the maintainer after all required technical checks passed. No independent APPROVED review was recorded before merge. The Copilot review state was COMMENTED only due to exhausted quota. This is documented as a governance process deviation and does not retroactively convert the technical self-review into an independent approval.
-- Review findings integrated into Phase 3B and Phase 3C implementation requirements: see `DECISION_LOG.md` for details.
-
-### Added Candidate Phase 3 Design Specifications (Phase 3A)
-
-- Promoted and specified `OrchestraStatusProjection` (`docs/project/ORCHESTRA_STATUS_PROJECTION.md`), a read-only, deterministic status summary and JSON schema owned canonically by Scribe. Priority 1 target for Candidate Phase 3B.
-- Promoted and specified `OrchestraWorktreeContract` (`docs/project/ORCHESTRA_WORKTREE_CONTRACT.md`), an optional host worktree negotiation and path confinement contract owned canonically by Ponytail. Priority 2 target for Candidate Phase 3C.
-- Produced Phase 3 Capability Assessment (`docs/project/SPEC_KITTY_DERIVED_PHASE_3_CAPABILITY_ASSESSMENT.md`), Implementation Plan (`docs/project/SPEC_KITTY_DERIVED_PHASE_3_IMPLEMENTATION_PLAN.md`), and Compatibility and Security Matrix (`docs/project/SPEC_KITTY_DERIVED_PHASE_3_COMPATIBILITY_AND_SECURITY_MATRIX.md`).
-- Reconciled contract ownership matrix (`docs/project/SPEC_KITTY_DERIVED_CONTRACT_OWNERSHIP.md`) to record merged Phase 2 contracts and Candidate Phase 3 specialist ownership assignments (Scribe & Ponytail).
-- Updated project roadmap (`docs/project/ROADMAP.md`) and upgrade roadmap (`docs/project/SPEC_KITTY_DERIVED_UPGRADE_ROADMAP.md`) to record Phase 3A completion.
-
-### Added Implemented Contracts (PR #208)
-
-- Implemented `OrchestraRuntimeEnvelope` (`orchestra_runtime/models.py`, `serialization.py`): Typed variants (`execution_result`, `transition_decision`, `audit_event`) with strict UTF-8 JSON serialization/deserialization and bounded support for Codex and Antigravity runtime adapters (`orchestra_runtime/adapters.py`). Non-authorizing transport metadata.
-- Implemented `OrchestraCorrelationID` (`orchestra_runtime/correlation.py`): Project-owned zero-dependency RFC 9562 UUIDv7 correlation generator with trusted root generation and child propagation (`orchestra_runtime/models.py`). Non-authorizing observational identifier.
-- Implemented `OrchestraPhaseRetrospective` (`orchestra_runtime/retrospective.py`): Typed model and deterministic builder deriving metrics from canonical records. Supplementary audit record.
-- Implemented `ApprovedUnitPlan` extension (`orchestra_runtime/models.py`): 15-field frozen dataclass extension with structural, path, and contextual validation (`validate_approved_unit_plan_context`). Governance decision references do not replace envelope authority; dependency completion is not equivalent to accepted predecessor evidence.
-- Added comprehensive test coverage (`tests/runtime/`): 390 runtime tests (93.72% coverage), 20 cross-contract integration scenarios (`test_spec_kitty_contract_integration.py`), and behavior test suite (exit 0).
-
-### Validation and Quality Assurance
-
-- Merged PR #208 (`1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`) following Phase 2A through Phase 2G lifecycle.
-- Resolved PR #208 cross-platform whitespace check by removing trailing EOF blank line in `tests/runtime/test_runtime_envelope.py` (`1a57c489445a9a333e929cae8f857312bb126a62`).
-- Passed all 9 GitHub Actions status checks: Cross-platform Validation (Windows, Ubuntu, macOS), CodeQL (actions, python), Governance Check, runtime-tests, validate.
-
-### Preserved Boundaries & Explicit Deferrals
-
-- Retained explicit deferral of cross-session correlation restoration, durable correlation persistence, retry/wait/resume state machines, automatic retrospective closeout generation, durable retrospective retention, automatic Steward planning/dispatch integration, revision-history ordering, and automatic policy activation.
-- `docs/governance/DELEGATED_EXECUTION_POLICY.md` remains unamended.
-- No third-party dependencies added; no database, durable storage, or policy changes made.
-- No public release, git tag, or version bump performed (remains unreleased on `main` after `v1.1.2`).
-
-### Historical Design Specifications (Phase 1)
-
-- Added design specification for `OrchestraRuntimeEnvelope` (`docs/project/ORCHESTRA_RUNTIME_ENVELOPE.md`), a derived non-authorizing JSON serialization profile for LLM machine adapters (`json:orchestra-envelope`).
-- Added protocol specification for `OrchestraCorrelationID` (`docs/governance/CORRELATION_ID_PROTOCOL.md`), an optional RFC 9562 UUIDv7 correlation header linking root task lineage across sessions without external PyPI dependencies.
-- Added protocol specification for `OrchestraPhaseRetrospective` (`docs/governance/PHASE_RETROSPECTIVE_PROTOCOL.md`), a source-backed closeout evidence artifact (`replacement_effect: none`) with `MIXED_RETENTION_MODEL`.
-- Added schema extension specification for `OrchestraUnitRecord` (`docs/project/ORCHESTRA_UNIT_RECORD_EXTENSION.md`), an immutable JSON schema extension embedded inside `ApprovedUnitPlan`.
-- Documented selective Spec Kitty-derived design review (v3.2.6, commit `8466727ebbbc01fcaf43575657c9b1b9553784d9`), contract ownership placement (`docs/project/SPEC_KITTY_DERIVED_CONTRACT_OWNERSHIP.md`), and upgrade roadmap (`docs/project/SPEC_KITTY_DERIVED_UPGRADE_ROADMAP.md`).
-
-## Unreleased - Issue #204 Codex Tuner Portable Export
-
-### Fixed
-
-- Added The Tuner's canonical coordination protocol to the PowerShell Codex exporter's portable-reference map.
-- Fresh staged Codex exports now rewrite The Tuner's repository-relative protocol link to a package-local `REFERENCE_CONTEXT.md` anchor and generate the required portable reference bundle.
-- Added cross-language map-parity and real fresh-export regression coverage so the PowerShell exporter and Python validator cannot silently diverge.
-
-### Preserved boundaries
-
-- No routing, runtime authority, specialist ownership, release, deployment, marketplace publication, production, force-push, ruleset, or branch-deletion behavior changed.
-
-## Unreleased - Issue #195 Cross-Specialist Coordination Phase 4
-
-Phase 3 is merged through pull request #198 at merge commit `1b73e232930c9289601474a5cddb282e98378261`. The authorized Phase 4 scenario validation and Conductor-owned runtime integration have been implemented and locally validated on the feature branch. Persistence, SQLite, migrations, RPC, host orchestration, staging, commit, push, pull request, merge, release, deployment, consumer-repository mutation, and expanded external-action authority are not authorized by this implementation record and remain separately governed.
-
-### Implemented and locally validated
-
-- Required a real non-null `ICoordinationController` in trusted runtime composition and preserved exact controller and audit-logger identity across delegated child composition.
-- Added the public stateless `CoordinationRuntimeService` as the explicit validation, signal-application, and coordination-audit boundary.
-- Added optional validation-only runtime preflight for explicitly supplied collaboration sessions while preserving zero-call direct single-owner bypass.
-- Added deterministic transition, rejection, idempotent replay, audit-failure, malformed-result, delegation-identity, and authority-preservation coverage.
-- Added executable consumer-neutral SCN-01 through SCN-06 behavioral proofs for invalidation and minimal re-entry, direct bypass, idempotency ownership, rollback, independent UI/API ownership, compatibility windows, stale evidence, and blocked closeout.
-- Preserved the exact 12-path implementation ceiling without granting commit, push, pull-request, merge, release, deployment, Dagger, or external-action authority.
-
-## Unreleased - Issue #195 Cross-Specialist Coordination Phase 3
-
-The Phase 3 typed runtime foundation was merged through pull request #198 at reviewed head `ca7c37f33fe20376193a4aff752bbe0795cb6ee9` and merge commit `1b73e232930c9289601474a5cddb282e98378261`. The four-commit, 13-path change added immutable in-memory coordination records, deterministic canonical serialization and fingerprints, a stateless coordination controller, fail-closed transition enforcement, audit-event contracts, public runtime exports, and focused contract, lifecycle, and adversarial tests. Governance Check, validate, and Cross-platform Validation passed at the reviewed head. Persistence, SQLite, migrations, RPC, host orchestration, release, deployment, and expanded external-action authority were not added.
+Published July 14, 2026.
 
 ### Added
-- Added typed collaboration graph, contract packet, handoff delta, invalidation, contradiction, artifact lifecycle, signal, session, validation, and audit contracts.
-- Added a stateless coordination controller with deterministic freeze, stale, contradiction, supersede, closeout, and idempotent signal handling.
-- Added focused contract, lifecycle, and adversarial runtime coverage.
+
+- Trusted runtime composition with explicit finite `ACTIVE` and `COMPATIBILITY` authority modes.
+- Immutable run-scoped runtime capability manifests and fail-closed authority/capability enforcement before governance.
+- Bounded in-process specialist delegation with authority and capability subset enforcement, depth limits, specialist identity checks, and explicit context minimization.
+- Structured lifecycle control with deterministic terminal replay, conflict rejection, and exact state transitions.
+- `RuntimeExecutor` integration with authority and capability checks before governance and adapter execution.
+- Adversarial validation for initialization, escalation, provenance, binding ownership, delegation, lifecycle, execution ordering, replay, and audit-sink failure paths.
+- Deterministic non-authorizing audit events.
+- Four governed Artificer promotions finalized as `IMPLEMENTED` with synchronized Pattern Catalog records and preserved provenance/attribution boundaries.
 
 ### Changed
-- Normalized Phase 1 and Phase 2 merge status before beginning the typed runtime foundation.
-- Preserved Conductor-only routing, Tuner non-authority, Ponytail implementation ownership, Overseer evidence ownership, Arbiter continuity authority, single-owner bypass, Dagger gating, and default-deny external actions.
 
-## Unreleased - Issue #195 Cross-Specialist Coordination Phase 2
+- Normalized approved plugin and scaffold-package metadata to `1.1.2` without changing scaffold maturity.
+- Refreshed release, setup, compatibility, runtime, project-state, Codex, roadmap, architecture, and handoff documentation for the trusted runtime authority baseline.
 
-Phase 2 is merged through PR #197 at merge commit `7423d3e7db7fb8e32dfe91454f5c2c5d10aba9bb`. It added deterministic evidence identity and continuity enforcement only. No persistence, SQLite, RPC, release, deployment, or external-action authority was introduced.
+See [v1.1.2 release notes](docs/releases/v1.1.2-trusted-runtime-authority.md).
 
-### Added
-- Added the canonical evidence identity and freshness protocol.
-- Added read-only tracked, staged, untracked, added-file, artifact, and working-tree identity validators.
-- Added invalidation, artifact-lifecycle, manual re-entry, delegated-boundary, and fail-closed behavior fixtures.
-
-### Changed
-- Extended Overseer evidence packets and Tuner handoffs with current contract and change identity.
-- Enforced Arbiter blocking on stale or mismatched evidence and Conductor-only minimal re-entry routing.
-- Preserved pre-existing artifacts, single-owner bypass, Dagger gating, and default-deny external actions.
-- Removed implicit current-HEAD, workflow-dispatch, `origin/main`, and local `main` evidence-baseline fallbacks. Local and workflow-dispatch validation now require `ORCHESTRA_APPROVED_BASE_SHA`; verified pull-request base and push-before event SHAs remain supported.
-
-## Unreleased - Issue #195 Cross-Specialist Coordination Phase 1
-
-Phase 1 is implemented for review on `design/issue-195-tuner-protocol`. It adds instruction-level coordination only. No release, deployment, marketplace publication, typed runtime, SQLite, RPC, or external-action authority is included.
-
-### Added
-- Added `the-tuner` as a Conductor-dependent coordination specialist with canonical collaboration, contract, contradiction, and re-entry outputs.
-- Added `docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md`, deterministic Tuner fixtures, focused tests, and a collaboration-contract validator.
-
-### Changed
-- Updated routing, Conductor, Arbiter, Overseer, Ponytail, delegated-governance extension points, minimal prompt metadata, and Codex exports to preserve specialist ownership while detecting incomplete, contradictory, or stale cross-layer contracts.
-- Preserved direct single-owner bypass, Arbiter transition authority, Overseer evidence ownership, Dagger gating, and default-deny external actions.
-
-## Unreleased - Phase B Instruction-Level Delegated Autonomous Loop
-
-Phase B instruction-level delegated governance was merged into `main` through PR #190 at merge commit `d37a2f7b31543efacf7a5e81c3f4d08c12da017d`. Phase C and Phase D remain unstarted. No Phase B release or deployment has been performed.
-
-### Added
-- Added `Delegated Governance Review` output format to Steward and Governor roles (`skills/the-steward/OUTPUT_FORMATS.md`, `skills/the-governor/OUTPUT_FORMATS.md`).
-- Added complete, separate `TransitionDecisionRecord`, `CheckpointRecord`, and `CapacityHandoffRecord` templates to Arbiter (`skills/arbiter/OUTPUT_FORMATS.md`).
-- Added the complete canonical `ExecutionEvidencePacket` template and delegated evidence role to Overseer (`skills/overseer/OUTPUT_FORMATS.md`, `skills/overseer/SKILL.md`, `plugin.json`, `SKILL_INDEX.md`).
-- Added `Delegated Phase Autonomous Loop` to Conductor (`skills/conductor/SKILL.md`).
-- Added 6-tier strict precedence transition evaluation to Arbiter (`skills/arbiter/SKILL.md`).
-- Added `Risk Mode vs Progression Mode` section to Execution Modes Policy (`docs/routing/EXECUTION_MODES_POLICY.md`).
-- Added `Delegated Phase Progression Routing` to Routing Map (`ROUTING_MAP.md`).
-- Added `Progression Modes` section to `SKILL_INDEX.md` and Delegated Phase Progression Rule #8 to `AGENTS.md`.
-- Added four delegated-governance conformance fixtures to `tests/behavior/governance-conformance-fixtures.json`.
-- Added `tests/behavior/delegated-phase-trace-fixtures.json`, a contract-driven three-unit trace covering complete evidence, transition, and checkpoint records; derived phase validation; the exact lifecycle event sequence; zero owner relay; one Steward review; one Governor review; and the canonical default-deny external-action map.
-
-### Changed
-- Updated Steward (`skills/the-steward/SKILL.md`) with delegated phase behavior (skip re-reviews of unchanged approved units).
-- Updated Governor (`skills/the-governor/SKILL.md`) to eliminate domain-membership-only escalations without material uncertainty.
-- Updated `adapters/codex/export-codex-skills.ps1` and `adapters/codex/validate_codex_export.py` to package external reference context inside exported skills, rewrite references to package-local targets, reject missing or escaping Markdown/JSON targets, and preserve tracked source-to-export parity at arbitrary installation depth.
-- Updated `scripts/validate_governance_protocol_consistency.py` and `tests/behavior/test_governance_protocol_consistency.py` to enforce exact record schemas and reject unqualified stale Phase B status claims while preserving clearly qualified Phase A history.
-- Updated `tests/behavior/test_router_contracts.py` with reference-integrity cases plus the contract-driven trace evaluator and 11 required negative mutations.
-- Corrected current Phase A-D and deployment status across the delegated execution policy, governance layer, governance review flow, and implementation plan. PR #190 has been merged.
-- Updated `README.md` with the merged delegated phase progression loop, all six transition dispositions, checkpoint behavior, owner-relay reduction, and the preserved external-action boundary.
-- Stabilized `PROJECT_STATE.md` and `SESSION_HANDOFF.md` after the PR #191 post-merge synchronization.
-
-## Unreleased - Phase A Delegated Autonomous Governance Contract Design
-
-
-Phase A implementation commit: `176da20100dce99e26748c53b9c14e7033c119dd`.
-Initial remote push: Completed to `origin/docs/delegated-autonomous-governance-phase-a`.
-Pull request: Not created. Merge: Not performed. Tag: Not created. Release: Not performed. Deployment: Not performed.
-Next gate: Maintainer review and separate pull-request authorization.
-
-### Added
-- Added `docs/governance/DELEGATED_EXECUTION_POLICY.md` as the single canonical source for
-  delegated phase envelopes, approved unit plans, execution evidence packets, transition
-  decision records, six transition dispositions (`AUTO_CONTINUE`, `AUTO_REMEDIATE_AND_REVALIDATE`,
-  `WAIT_FOR_EVIDENCE`, `WAIT_FOR_CAPACITY`, `ESCALATE_HUMAN`, `STOP`), transition precedence,
-  automatic remediation policy with finite limits, focused and phase validation levels,
-  baseline lineage, checkpoint policy, capacity handoff record, external-action authority
-  policy (default-deny), legacy host fallback policy (fail-closed), delegated phase state
-  machine, and token-efficiency requirements.
-- Added `docs/project/DELEGATED_GOVERNANCE_IMPLEMENTATION_PLAN.md` as the multi-phase
-  implementation roadmap (Phase A through Phase E) with explicit authorization boundaries.
-
-### Fixed
-- Fixed repository-memory branch reference validation in detached-HEAD pull-request CI by discovering exact known local, remote-tracking, and `GITHUB_HEAD_REF` branch identities without weakening missing-path detection. No workflow changes were required.
-
-### Changed
-- Updated `docs/governance/GOVERNANCE_DECISION_PROTOCOL.md` with additive delegated
-  execution section: decision-versus-disposition separation, six dispositions, automatic
-  progression requirements, and fail-closed rule. Existing decision values unchanged.
-- Updated `docs/governance/GOVERNANCE_LAYER.md` with additive phase-level delegated
-  governance section, re-entry triggers, phase status table, and corrected enforcement
-  limitation distinguishing route-level from phase-level enforcement.
-- Updated `docs/governance/GOVERNANCE_REVIEW_FLOW.md` with additive target delegated
-  execution flow, clearly labeled as Phase B target behavior and not yet active.
-- Updated `scripts/validate_governance_protocol_consistency.py` with additive Phase A
-  checks for all required contracts, dispositions, authority principles, fail-closed rule,
-  remediation limits, external-action default-deny, and integration references.
-- Updated `tests/behavior/test_governance_protocol_consistency.py` with one positive and
-  nine negative Phase A test cases asserting actual validator behavior.
-
-## v1.0.0 - Portable Runtime
-
-Portable Runtime is the first Orchestra release that normalizes the repository around a shared runtime core, thin adapters, and a versioned adapter protocol.
-
-### Release Highlights
-- Added `orchestra_runtime/` as the shared runtime core for routing, manifest parsing, skill loading, governance validation, execution flow, and audit logging.
-- Added `PRAP v1` as the stable Portable Runtime Adapter Protocol for host metadata, capabilities, compatibility, and validation.
-- Added thin adapter support for Codex, Claude Code, Antigravity, Cursor, Windsurf, VS Code, VSCodium compatibility, JetBrains, Zed, and Neovim.
-- Added scaffold-only packaging surfaces for Cursor, Windsurf, VS Code, JetBrains, Zed, and Neovim.
-- Normalized release-facing documentation, compatibility guidance, and manifest metadata for the `v1.0.0 Portable Runtime` baseline.
-
-## Pre-release Build History
-
-### Phase 4B Post-Merge Hardening
-
-- **Artificer Governance Validators:** Added rigorous rejection of ancestor-directory symlinks for governance registries, records, and pattern bundles.
-- **Artificer Governance Validators:** Corrected cross-platform list stability by introducing dual-key tuples `(item.name.casefold(), item.name)` in deterministic sort tie-breakers.
-
-## v1.1.0 - Specialist Governance & Boundary Standard
-
-Specialist Governance & Boundary Standard is a documentation-, governance-, metadata-, and specialist-definition-focused release that builds on the `v1.0.0 Portable Runtime` baseline without changing runtime behavior, routing policy, validation logic, CI workflows, Dagger live-execution behavior, or governance decision semantics.
-
-### Added
-- Added a shared `docs/project/SPECIALIST_AUTHORING_STANDARD.md` reference for future specialist authoring, with short cross-links from contributing, plugin-readiness, and manifest-schema documentation.
-
-### Changed
-- Clarified governance authority boundaries for Arbiter status vocabulary, Steward hygiene wording, and Governor/Cipher release-security ownership without changing governance semantics.
-- Clarified Governance Strictness Levels as a derived scale over existing project type, operating mode, release stage, and risk classifications without changing governance semantics.
-- Strengthened Cloak's documentation-only frontend review contract with artifact-evidence requirements, clearer form and validation messaging review, explicit loading/empty/error/success/retry/permission-state review, sharper frontend handoff blueprint guidance, and matching tracked Codex export parity for the updated Cloak docs.
-- Normalized Conductor's skill documentation against the shared specialist authoring standard by clarifying activation conditions, supported work, scope enforcement, validation expectations, local-only safety, and direct-route versus orchestration versus reroute guidance, with matching tracked Codex export parity.
-- Normalized Ponytail specialist documentation with explicit activation conditions, supported work, scope enforcement, validation expectations, local-only safety, and direct handoff boundaries for implementation-owned code changes, with matching tracked Codex export parity.
-- Normalized Clockwork specialist documentation with explicit activation conditions, supported work, role boundaries, scope enforcement, validation expectations, local-only safety, and direct architecture-boundary handoff guidance, with matching tracked Codex export parity.
-- Normalized Cipher specialist documentation with explicit defensive-security ownership boundaries, validation expectations, local-only safety, handoff guidance, and output-format selection while preserving its defensive-only scope.
-- Normalized Overseer specialist documentation with explicit validation ownership boundaries, evidence expectations, local-only safety, expanded handoff guidance, and output-format selection while preserving its validation/readiness scope.
-- Normalized Chronicler specialist documentation with explicit persistence ownership boundaries, supported work, validation expectations, output-format selection, and expanded handoff guidance while preserving its database and data-integrity scope.
-- Normalized Scribe specialist documentation with explicit documentation ownership boundaries, activation conditions, validation expectations, output-format selection, and expanded handoff guidance while preserving its source-backed documentation scope.
-- Normalized Weaver specialist documentation with explicit diagram ownership boundaries, activation conditions, validation expectations, output-format selection, and expanded handoff guidance while preserving its visual-modeling scope.
-- Cleaned up cross-specialist consistency by aligning Scribe output-format headings and adding compact Cloak role-boundary and validation-expectation sections without changing specialist behavior.
-- Clarified Governor and Cipher skill-source authority boundaries between governance/compliance sufficiency and technical defensive security review.
+---
 
 ## v1.1.1 - Post-Release Hardening
 
 ### Changed
-- Hardened release-surface and startup-state validation by aligning Codex metadata to v1.1.0, removing the drifted example manifest, adding `.codex-plugin/plugin.json` to update consistency checks, and checking structured branch/version claims in repo memory files.
-- Converted PowerShell and shell validation entrypoints into thin wrappers around canonical Python validators to prevent cross-platform validation drift.
-- Hardened update and rollback guidance by requiring fast-forward-only pulls, running canonical validation after updates, and documenting recovery-branch creation before hard resets.
-- Fixed runtime context assembly so adapter-provided ContextPackage metadata is preserved and enriched instead of bypassed during execution.
 
-## v1.1.2 - Trusted Runtime Authority
+- Hardened release-surface and startup-state validation, including Codex metadata and structured branch/version claims.
+- Converted PowerShell and shell validation entrypoints into thin wrappers around canonical Python validators to reduce cross-platform drift.
+- Hardened update and rollback guidance with fast-forward-only pulls, canonical post-update validation, and recovery-branch guidance.
+- Fixed runtime context assembly so adapter-provided `ContextPackage` metadata is preserved and enriched rather than bypassed.
 
-This patch was published on July 14, 2026 as the `v1.1.2` GitHub Release.
+---
 
-### Added
-- Implemented Issue #182 Phase 6B-D trusted runtime composition and Phase 6C adversarial validation, including explicit finite authority modes, immutable route bindings, authority and capability enforcement before governance, single initialization per root or child run identity, manifest-grant provenance and binding-owner validation, structured lifecycle and terminal-result integration, bounded in-process delegated execution, deterministic audit evidence, and lifecycle source-state enforcement for `ACTIVATE`, `WAIT`, and `RESUME`. Missing capability identifiers retain runtime `CAPABILITY_DENIED` behavior.
-- Implemented Issue #180 Phase 6B-C bounded delegation validation, immutable effective child resolutions, exact lifecycle control, deterministic terminal replay, conflict rejection, and structured audit-event factories.
-- Implemented Issue #178 Phase 6B-A immutable runtime domain contracts, typed error taxonomy, authority/capability/delegation/lifecycle models, stable interfaces, deterministic serialization, and additive public exports.
-- Implemented Phase 6B-B repository-contained trusted policy loading, fail-closed authority evaluation and intersection, immutable runtime capability manifest resolution and intersection, deterministic collision rejection, typed enforcement, and structured audit-event creation.
-- Added Issue #176 Phase 6A runtime-gap and trust-boundary architecture for trusted authority, immutable per-run capabilities, bounded delegation, typed lifecycle control, and structured audit evidence.
-- Added implementation-ready authority, runtime capability, delegation, lifecycle, interface, error, compatibility, and fail-closed contracts distinct from PRAP adapter support.
-- Added sequenced Phase 6B through Phase 6D implementation and verification planning.
-
-### Changed
-- Finalized the four canonical authority, capability, delegation, and lifecycle promotions as `IMPLEMENTED` and manually synchronized the Pattern Catalog while preserving pinned provenance, Apache-2.0 attribution boundaries, conceptual-adaptation limits, and `automatic_promotion: false`.
-- Refreshed release, setup, compatibility, runtime, project-state, Codex, roadmap, architecture, and handoff documentation for the trusted runtime authority baseline.
-- Normalized approved plugin and scaffold-package version metadata to `1.1.2` without changing adapter maturity: Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain scaffold-only.
-
-## Unreleased
+## v1.1.0 - Specialist Governance & Boundary Standard
 
 ### Added
-- Added layered UI engineering and validation ownership across Cloak static risk analysis, Clockwork engineering integrity, renewed Cloak review, Overseer current-commit evidence validation, and explicit human approval boundaries.
-- Recorded unanimous Phase 5C-B Arbiter, Governor, and Steward approval plus conditional Butler disposition for the design-only authority/capability proposal, without runtime implementation or source-expression reuse authority.
-- Added four manual Phase 5D `APPROVED` promotion records with pinned Strix provenance, Apache-2.0 attribution boundaries, and `automatic_promotion: false`.
-- Manually synchronized the Phase 5E Pattern Catalog with the four canonical promotion records; Catalog projection remains separate from implementation authority.
-- Added the Phase 5C-A Evolution Proposal schema `1.1`, deterministic proposal lifecycle validation, focused behavior coverage, and one design-only Orchestra authority/capability proposal in `UNDER_REVIEW`, without promotion, Pattern Catalog, source-reuse, prompt-reuse, or implementation authority.
-- Added Phase 4.5-A OpenHero pilot source-intake, pattern, and audit records through a pinned static read-only GitHub inspection with no decisions, proposals, promotions, or Pattern Catalog changes.
-- Added Phase 5B-A governed OpenHero decision records for three approved concept-only patterns, one deferred concept-only UI pattern, and one rejected security anti-pattern, without creating proposals, promotions, Pattern Catalog entries, or implementation authority.
-- Added Phase 5B-B governed Strix decision records for four approved concept-only patterns and one rejected implementation-blocked prompt-safety anti-pattern, with mandatory Apache-2.0 Governor review and no proposal, promotion, Pattern Catalog, source-reuse, or implementation authority.
-- Added Phase 4.5-B Strix pilot source-intake, pattern, and audit records through a pinned static high-risk read-only GitHub inspection with no decisions, proposals, promotions, or Pattern Catalog changes.
-- Added Phase 4C-B deterministic, read-only Pattern Catalog synchronization validation, canonical Catalog projection, strict governance integration, and behavior coverage without automatic Catalog writes or promotion authority.
-- Added Phase 4C-A deterministic, read-only Markdown rendering for validated Artificer audit reports, with stdout-only CLI output, canonical ordering, Markdown safety, governance integration, and behavior coverage.
-- Added Phase 4A Artificer governance contracts, including native JSON schemas for Individual Source Audits (`AUDIT_REPORT_SCHEMA.json`), Orchestra Evolution Proposals (`EVOLUTION_PROPOSAL_SCHEMA.json`), Governance Decisions (`GOVERNANCE_DECISION_SCHEMA.json`), and Pattern Catalog Promotion Records (`PROMOTION_RECORD_SCHEMA.json`).
-- Established isolated read-only registries for Phase 4A records (`reviews/`, `decisions/`, `proposals/`, and `promotions/`).
-- Documented Phase 4A read-only and no-execution boundaries in `EXTERNAL_SOURCE_INTAKE.md`, `SECURITY_BOUNDARIES.md`, and `EVIDENCE_REQUIREMENTS.md`.
-- Added Phase 3 Artificer record-instance validator (`scripts/validate_artificer_records.py`) with Draft-7 schema subset validation, POSIX-safe repository path constraints, and cross-record registry bundle verification.
-- Added 61 behavior tests (`tests/behavior/test_artificer_records.py`) providing a rigorous regression matrix that executes real validator instances against real schema copies for passing/failing conditions, empty examined-ranges, cross-platform paths, and strict schema configurations.
-- Wired `scripts/validate_artificer_records.py` into the CI governance script and automated runner `tests/behavior/run_tests.py`.
-- Added Phase 4B deterministic governance-record validation for audit reports, decisions, proposals, promotions, and cross-record integrity.
-- Added Phase 4B behavior coverage and strict-governance/behavior-runner integration without external execution or Pattern Catalog mutation.
 
-### Changed
-- Completed specialist-boundary polarity enforcement in the Artificer boundary validator (`scripts/validate_artificer_internal.py`), refactoring keyword-only checks in `check_artificer_boundaries_md()` to require explicit Artificer-bound negative polarity.
-- Prevented mixed-polarity bypasses by splitting sentences into clauses and detecting explicit positive permissions alongside prohibitions.
-- Expanded behavior test suite (`tests/behavior/test_artificer_internal.py`) with 6 new regression tests covering positive implementation, test, evidence-decision, licensing, and adversarial-testing permissions, plus mixed-polarity assertions.
-- Strengthened the Artificer boundary validator (`scripts/validate_artificer_internal.py`) by refactoring it into pure functions returning `ValidationFailure` dataclass instances, and introducing strict semantic checks requiring explicit Artificer-bound negative polarity.
-- Hardened the behavior test suite (`tests/behavior/test_artificer_internal.py`) by replacing placeholder `pass` blocks, ensuring all regression tests assert specific validator failures, adding a quality gate check on test source code, and verifying the entire repository via `validate_repository()`.
-- Added explicit no-self-implementation and no-self-approval contract checks and statements to `internal/artificer/ARTIFICER.md`.
-- Changed startup-state validation to use stable canonical-branch semantics instead of comparing committed files with the transient checkout branch.
-- Improved prompt-load reporting with Group B and Group C status output, largest-contributor reporting, clarified original versus observed baselines, focused regression coverage, and narrow repository-state alignment.
-
-### Added
-- Added the Artificer internal boundary validator (`scripts/validate_artificer_internal.py`) and behavioral test coverage (`tests/behavior/test_artificer_internal.py`) to enforce schema integrity, documentation boundaries, and ensure public non-registration.
-- Added the Phase 1 Artificer internal architecture specification, source-intake schemas, evidence requirements, classification taxonomy, security boundaries, and maintainer-only evolution workflow without exposing Artificer through public commands, routing, runtime registration, or adapter exports.
-- Added an App Release Compliance Gate plus reusable privacy review, data inventory, IP clearance, privacy policy, terms, and retention/deletion governance templates for app and public release workflows.
-
-### Changed
-- Added Windows coverage and runtime test execution to cross-platform CI validation.
-- Integrated Release Mode governance docs so The Governor now treats app release compliance artifacts as required when applicable and returns `REVISION_REQUIRED` or `BLOCKED` when release-gate documentation is missing.
-- Clarified optional project governance rulesets so `PROJECT_CONTEXT.md` enforcement depends on project type, risk level, and declared governance level.
-- Wired `tests/runtime` into CI, enforced portable runtime coverage with `pytest-cov --cov-fail-under=90`, switched `validate.yml` to `python tests/behavior/run_tests.py`, and added runtime tests for alias loading, default-command fallback, and unresolved command-to-skill handling.
-
-### Added
-- Added root `PROJECT_CONTEXT.md` for Orchestra and wired project-context validation into governance CI.
-- Added a reusable `PROJECT_CONTEXT.md` template and aligned the Python project-context validator with advisory, recommended, and strict-governed enforcement behavior.
-- Added a context-sensitive `PROJECT_CONTEXT.md` enforcement policy defining advisory, recommended, and strict-governed validation modes based on project type and risk level.
-- Added a Steward-led `PROJECT_CONTEXT.md` decision prompt for choosing advisory or governed project context workflows before introducing hard enforcement.
-- Added scaffold adapter graduation criteria defining promotion levels, validation requirements, documentation requirements, and recommended graduation order for scaffold-only adapters.
-- Added `scripts/check_for_updates.py` for notification-only release checks against the latest GitHub release using local manifest and adapter metadata.
-- Added update-check metadata defaults to the root manifest, Claude plugin manifest, and scaffold adapter package metadata.
-- Added runtime tests covering current-version, newer-release, invalid-version, unavailable-GitHub, and disabled-update-check behavior.
-- Added a temp-staged Codex runtime refresh pipeline that exports to a temporary directory, validates staged output, installs into repo-local and global Codex runtime locations, verifies file-list and SHA-256 parity, and deletes staged output by default.
-- Added reusable PowerShell directory parity helpers for recursive file-list and SHA-256 comparison across staged and installed runtime surfaces.
-
-### Added
-- Added `orchestra_runtime/protocol/` with the Portable Runtime Adapter Protocol (`PRAP v1`), including versioned adapter metadata, capabilities, compatibility records, and protocol validation.
-- Added runtime protocol tests covering metadata completeness, capability validation, compatibility matrix coverage, VSCodium compatibility, and unknown adapter rejection.
-- Added `docs/project/PORTABLE_ADAPTER_PROTOCOL.md` to document protocol flow, ownership boundaries, compatibility guarantees, and future extension points.
-- Added scaffold-only Zed and Neovim packaging files and metadata that point to the existing `ZedAdapter` and `NeovimAdapter` runtime contracts without introducing marketplace publication.
-- Added scaffold-only JetBrains packaging files and metadata that point to the existing `JetBrainsAdapter` runtime contract without introducing marketplace publication.
-- Added scaffold-only packaging folders and package manifests for Cursor, Windsurf, and VS Code that point to the shared runtime adapters without introducing marketplace publication.
-- Added contract-ready runtime adapters for Cursor, Windsurf, VS Code, JetBrains, Zed, and Neovim without introducing marketplace packaging.
-- Added `orchestra_runtime/` runtime core models, services, factories, repositories, and thin Codex, Antigravity, and Claude Code adapters.
-- Added runtime-core pytest coverage for skill loading, adapter contracts, and governance blocking for destructive and high-risk routes.
-- Added `docs/project/OOP_RUNTIME_ARCHITECTURE.md` to document the runtime-core-first branch architecture and current integration points.
-- Added Claude Code plugin compatibility files: `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json`, `docs/setup/INSTALLATION.md` with Claude Code installation instructions.
-- Added validation script for Claude Code plugin: `scripts/validate_claude_plugin.py`
-
-### Fixed
-- Extended IDE packaging validation so runtime adapter scaffolds are checked against PRAP metadata and packaging/runtime adapter alignment.
-- Added IDE packaging validation so scaffold manifests, required files, and runtime adapter references are checked centrally.
-- Refactored manifest, skill, and adapter validation scripts to use the shared runtime repositories and registry instead of duplicating core loading logic.
-- Fixed Claude Code marketplace source path from "." to "./" and aligned Claude plugin metadata with the release baseline so Claude Code can detect and refresh the plugin correctly.
-- Fixed Codex refresh so normal installs no longer dirty tracked export folders during runtime refreshes.
-
-
-
-- Added Cloak progressive disclosure template `bryl-minimal-design` for monochrome, typography-driven UI styling.
-- Added behavior test scenario in `BEHAVIOR_TEST_MATRIX.md` to verify Cloak progressive disclosure template loading.
-- Registered the new template in the Codex export validation allowlist to ensure proper structural verification.
-
-- Added explicit Clockwork foundational OOP guidance and audit checklist coverage for encapsulation, abstraction, polymorphism, and inheritance.
-- Added README open-source philosophy section clarifying Orchestra's reuse, attribution, and collaborative development stance.
-
+- Added the shared `docs/project/SPECIALIST_AUTHORING_STANDARD.md` and normalized specialist authoring expectations.
 
 ### Changed
 
-- Removed Docker-specific validation artifacts while preserving native Ubuntu/macOS cross-platform validation.
-- Packaged Conductor router context docs into the Codex export and validated required backtick file references before runtime install.
+- Clarified governance, specialist, routing, validation, local-safety, and handoff boundaries across the public specialist set and Codex exports without changing trusted runtime behavior.
+- Strengthened Cloak, Conductor, Ponytail, Clockwork, Cipher, Overseer, Chronicler, Scribe, Weaver, Governor, and Steward documentation consistency.
 
-### Added
+---
 
-- Added branch protection setup guide for configuring Orchestra required status checks on `main`.
+## v1.0.0 - Portable Runtime
 
-### Added
+### Release Highlights
 
-- Added required status checks review for Orchestra branch protection and CI workflow policy.
+- Added `orchestra_runtime/` as the shared runtime core for routing, manifest parsing, skill loading, governance validation, execution flow, and audit logging.
+- Added `PRAP v1` as the stable Portable Runtime Adapter Protocol for host metadata, capabilities, compatibility, and validation.
+- Added thin adapter support for Codex, Claude Code, Antigravity, Cursor, Windsurf, VS Code/VSCodium compatibility, JetBrains, Zed, and Neovim.
+- Added scaffold-only packaging surfaces for Cursor, Windsurf, VS Code, JetBrains, Zed, and Neovim.
+- Normalized release-facing documentation, compatibility guidance, and manifest metadata for the Portable Runtime baseline.
 
-### Added
+---
 
-- Added CI workflow consolidation review covering validate, Governance Check, and Cross-platform Validation workflow roles.
+## Earlier Repository History
 
-### Changed
-
-- Clarified Steward context-validator negative test output so expected Release Mode blocking no longer appears as an unqualified CI error.
-
-### Added
-
-- Added native GitHub Actions cross-platform validation for Ubuntu and macOS.
-
-### Changed
-
-- Improved strict governance workflow logging so failed governance reports are printed before the job exits.
-
-### Added
-
-- Added Docker-based Linux validation support through `scripts/run-linux-validation.sh` and POSIX executable script handling.
-
-- Strengthened Codex adapter export validation so governance skills, routable skills, and relative Markdown links are verified before Codex installation.
-
-- Added Issue #56 router-first closeout note.
-
-- Added final router-first readiness review for Issue #56 closeout.
-
-- Added Phase 8 router-first hardening completion review.
-
-- Added README maintainer entry points for router-first validation and observability docs.
-
-- Cleaned router-first documentation terminology and consistency.
-
-- Added router-first documentation cross-links for Phase 8 hardening.
-
-- Added Phase 8A router-first integration hardening audit documentation.
-
-- Documented the `tests/fixtures/router_benchmarks.json` schema in `ROUTER_BENCHMARK_FIXTURE_SCHEMA.md` and updated the benchmark validation runner to enforce the root shape and `schema_version`.
-
-- Refactored `scripts/router_benchmark_runner.py` to extract hardcoded definitions into a machine-readable fixture at `tests/fixtures/router_benchmarks.json`, preserving existing validation capabilities.
-
-- Documented CI artifact outputs in `CI_ARTIFACT_INDEX.md` to explain the reports generated during governance validation.
-
-- Configured `governance-check.yml` CI workflow to run and publish the dry-run prompt load threshold checker report as a downloadable artifact.
-
-- Added `scripts/check_prompt_load_thresholds.py` as a dry-run prompt load threshold checker to validate current metrics against documented soft limits without breaking CI.
-
-- Defined `PROMPT_LOAD_THRESHOLD_POLICY.md` to establish soft limits and review triggers for context sizes in the router-first architecture, without introducing hard CI enforcement yet.
-
-- Configured `governance-check.yml` CI workflow to run and publish `measure_prompt_load.py` output as a downloadable artifact for observability, without introducing hard prompt-size failure thresholds yet.
-
-- Wired router benchmark validation (`scripts/router_benchmark_runner.py`) into the `governance-check.yml` CI workflow to automatically verify benchmark definitions on pull requests.
-
-- Added structured automated router benchmark runner (`scripts/router_benchmark_runner.py`) to validate test case definitions without triggering live LLM behavior.
-
-- Reduced `skills/conductor/SKILL.md` prompt payload by consolidating duplicate execution mode rules into canonical pointers, while preserving strict behavior conformance.
-
-- Created `docs/performance/CONDUCTOR_LOAD_REDUCTION_PLAN.md` outlining a strategy to safely reduce `skills/conductor/SKILL.md` prompt load while preserving governance behavior and test fixtures.
-
-- Created `scripts/measure_prompt_load.py` to calculate approximate token sizes of contextual documentation.
-- Added `PROMPT_LOAD_METRICS.md` defining token estimation heuristics and context exclusion groups.
-
-- Defined `ROUTER_VALIDATION_BENCHMARKS.md` to benchmark the efficiency, accuracy, and safety of the router-first execution model against the legacy monolithic context approach.
-
-- Wired Execution Modes Policy (`docs/routing/EXECUTION_MODES_POLICY.md`) into Conductor.
-- Replaced legacy Ideation/Prototype/Release modes with formal FAST, STANDARD, GOVERNED, AUDIT, and DESTRUCTIVE modes.
-
-- Created `EXECUTION_MODES_POLICY.md` to formalize FAST, STANDARD, GOVERNED, AUDIT, and DESTRUCTIVE modes.
-- Defined mode escalation paths, exclusions, and matrix.
-
-- Implemented router-first execution and selective context loading policy to optimize Conductor prompt payload.
-- Added `ROUTER_FIRST_ARCHITECTURE.md`, `CONTEXT_RETRIEVAL_RULES.md`, and `MINIMAL_PROMPT_FORMAT.md`.
-- Synced plugin manifest, `SKILL_INDEX.md`, and skill frontmatter metadata for precise validation parity.
-
-- Added behavior fixtures validating Conductor routing for Cloak multi-stage workflow preservation and frontend/backend alignment with Clockwork, Cipher, and Chronicler.
-
-- Added Conductor routing rules for Cloak and backend alignment, requiring Clockwork, Cipher, and/or Chronicler before implementation when frontend work affects data, auth, APIs, persistence, security, privacy, integrations, payments, or compliance-sensitive workflows.
-
-- Added Cloak multi-stage frontend design workflow guidance covering discovery, strategy, pattern intelligence, semantic HTML, design review, and backend alignment triggers.
-
-- Added explicit least-privilege permissions to the Governance Check workflow.
-
-### Changed
-- Updated GitHub Actions dependencies for the governance workflow:
-  - actions/checkout from v4 to v7
-  - actions/setup-python from v5 to v6
-  - actions/upload-artifact from v4 to v7
-
-Additional release-prep changes included in this checkout:
-
-- Added local repository sync preflight governance check (`scripts/preflight_sync_check.py`) for new development phases and editing sessions.
-- Added contributor, agent, and governance rules requiring preflight sync verification against `origin/main` before local editing begins.
-- Added Codex Marketplace installation instructions to README and setup guides.
-- Expanded specialist foundations for Arbiter, Clockwork, Cipher, Cloak, and Ponytail.
-- Aligned Conductor routing, Codex export, and stale-reference handling, including routing arrow and encoding fixes.
-- Added governance guardrails, access and visibility evidence rules, CI validation notes, and refined visual validation guidance.
-- Refreshed README presentation and selective skill icons, and added Ponytail and Caveman companion links.
-
-Issue #171 follow-up changes in this checkout:
-
-- Added canonical governance decision protocol at `docs/governance/GOVERNANCE_DECISION_PROTOCOL.md`.
-- Deduplicated shared governance rules from governance layer, Steward, and Governor skill files while preserving role-specific output fields.
-- Recalibrated Conductor, `SKILL_INDEX.md`, and `ROUTING_MAP.md` to restore lightweight routing and ordered cross-domain sequencing.
-- Added deterministic routing-contract, governance-protocol-consistency, and prompt-load-budget validators plus focused behavior tests.
-- Added strict prompt-load baseline and recalibration audit artifacts.
-- Synced Codex exports for Conductor, Steward, and Governor governance/routing canon.
+Pre-`v1.0.0` implementation detail, router-first evolution, Artificer phases, governance calibration, prompt-load work, cross-platform validation changes, and specialist foundation history remain preserved in Git history and the repository's decision, roadmap, governance, and handoff records. The changelog is intentionally release-oriented rather than a duplicate of every commit.

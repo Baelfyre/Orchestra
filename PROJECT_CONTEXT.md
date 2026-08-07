@@ -10,7 +10,7 @@ A governance-first specialist skill framework that routes complex AI-assisted so
 Open-source developer tooling and AI orchestration framework
 
 ## Current Stage
-Public release `v1.1.2` (Trusted Runtime Authority). Unreleased `main` includes the merged Spec Kitty-derived governed phase execution contracts through PR #208, the completed Phase 3 design and implementation sequence through PRs #210, #212, and #214, and the merged frontend-to-backend synchronicity audit contract through PR #216 (merge commit `3a2f8b7e65cdab0f7e6a3113d1096ec9dccc23d3`). Phase 3A through Phase 3E are complete and merged. The post-`v1.1.2` capability set remains unreleased and no policy activation has occurred.
+Release-candidate metadata `v1.2.0` (`PREPARED_NOT_RELEASED`). The current public GitHub Release remains `v1.1.2` until the separate publication gate completes. Canonical `main` includes the clean replay through R5B/PR #228: Spec Kitty-derived governed phase execution contracts, The Tuner Phases 1-4, frontend/backend plus backend/persistence and cross-module integrity contracts, the delegated Phase C repository continuity contract, the Phase D `NO_DUPLICATE_RUNTIME_EXTENSION_REQUIRED` disposition, and fail-closed autonomous merge-readiness hardening. Phase C live installed-host evidence remains `PENDING_LOCAL_HOST_VALIDATION`; R7 is still required before tag or GitHub Release publication. No deployment or policy activation has occurred.
 
 ## Primary Users
 Developers and maintainers who install Orchestra as a plugin, skill set, or runtime package inside a supported or scaffold-only IDE or coding host (Claude Code, Codex, Antigravity, Cursor, Windsurf, JetBrains, Zed, Neovim)
@@ -38,6 +38,7 @@ Guidance used for this classification:
 - `OrchestraStatusProjection` is read-only and derived; it does not mutate repository state, Git refs, or governance policy. It is not a source of truth. Missing or conflicting data reports UNKNOWN. Exit codes report command execution success only and do not create governance authority.
 - `OrchestraWorktreeContract` is optional and host-capability-dependent. Worktree isolation must not be mandatory for single-agent or lightweight execution. Cleanup is `EXPLICIT_HOST_ACTION_ONLY`; no automatic deletion of dirty, unrelated, or user-owned worktrees is permitted.
 - The cross-module audit protocol coordinates specialist-owned findings and evidence; it creates no implementation, Git, merge, release, deployment, or policy authority.
+- Repository simulation and GitHub CI are not live installed-host evidence. Installed Codex/Antigravity continuity and Claude Code Phase C runtime-continuity claims remain subject to R7 evidence.
 - No vendoring of external plugin code, and no claiming unsupported compatibility or compliance, per `docs/CONTRIBUTING.md`.
 
 ## Validation Requirements
@@ -53,12 +54,13 @@ Guidance used for this classification:
 - `tests/behavior/run-tests.ps1` is intentionally maintained in parallel with `run_tests.py` as the primary validation path for Windows environments, per `docs/MATURITY.md`.
 - Direct pushes to `main` are not part of the normal workflow; changes go through a branch and pull request except for documented maintainer bypass recovery cases.
 - Installed Codex and Antigravity parity, host context-reset behavior, and Windows filesystem-specific behavior require host-local evidence in addition to repository CI.
+- `v1.2.0` metadata in the repository is release-candidate state, not evidence of a published tag or GitHub Release.
 
 ## Known Non-Goals
 - Orchestra does not store, process, or transmit end-user or client data itself.
 - Orchestra does not aim to make `PROJECT_CONTEXT.md` universally mandatory for every project that adopts it, per `docs/governance/PROJECT_CONTEXT_ENFORCEMENT_POLICY.md`.
 - This document does not modify CI enforcement on its own.
-- A merged implementation is not a released capability until the separate version, tag, and GitHub Release gates complete.
+- A merged implementation or version bump is not a released capability until the separate tag and GitHub Release gates complete.
 
 ## Maintainer Approval Rules
 - Changes to governance level, scaffold graduation status, CI enforcement gates, merge state, or release state require their applicable pull-request and human-authorization gates.
@@ -68,4 +70,4 @@ Guidance used for this classification:
 Not yet decided. No project-specific maintainer preferences beyond `docs/CONTRIBUTING.md` are currently documented for this field.
 
 ## Last Reviewed
-2026-08-07
+2026-08-08
