@@ -2,6 +2,26 @@
 
 This changelog tracks the repository history using git tags, merge history, and the prior documented milestone log that lived under `docs/meta/CHANGELOG.md`.
 
+## Unreleased - Cross-Layer Integrity Phase F2
+
+### Backend-to-Persistence Integrity
+
+- Extended the shared cross-module audit protocol with a deterministic backend-to-persistence profile covering service input, domain validation, transaction ownership, repository operations, ORM/query mapping, schema constraints, persistence execution, commit/rollback, readback/projection, and service-result propagation.
+- Added a dedicated backend-to-persistence checklist plus executable happy-path and rollback/failure traces with deterministic finding ownership across Clockwork, Chronicler, The Tuner, and Overseer.
+- Added fail-closed evidence for mapping/constraint drift, missing ownership, specialist contradiction, missing executable evidence, stale contract identity, transaction atomicity, and retry/idempotency risk.
+
+### Cross-Module Logical-Flow Integrity
+
+- Added a language-neutral cross-module profile covering entrypoints, input contracts, module decisions, handoff payloads, shared state or side effects, result propagation, error propagation, and final observable outcomes.
+- Added executable happy/failure traces and deterministic findings for handoff drift, missing owners, contradictory module contracts, stale evidence, swallowed/error-path drift, and duplicate side effects.
+- Added `scripts/validate_cross_layer_integrity_contract.py` and extended the existing focused cross-layer behavior suite so normal behavior validation exercises the frontend/backend, backend/persistence, and broader cross-module profiles together.
+
+### Preserved Boundaries
+
+- Reused the existing Conductor -> The Tuner -> domain specialist -> Overseer -> Arbiter authority model; no new specialist, command, plugin, runtime model, persistence implementation, or policy authority was added.
+- Rebound the original frontend/backend fixture identity to the expanded canonical protocol without changing its workflow semantics.
+- The capability remains unreleased. No deployment, installed-integration mutation, force push, history rewrite, or policy activation is part of Phase F2.
+
 ## Unreleased - Spec Kitty-Derived Governed Phase Execution Contracts
 
 ### Frontend-to-Backend Synchronicity Contract
@@ -215,7 +235,7 @@ Portable Runtime is the first Orchestra release that normalizes the repository a
 
 ### Release Highlights
 - Added `orchestra_runtime/` as the shared runtime core for routing, manifest parsing, skill loading, governance validation, execution flow, and audit logging.
-- Added `PRAP v1` as the stable Portable Runtime Adapter Protocol for host metadata, capabilities, compatibility, and validation.
+- Added `PRAP v1` as the stable Portable Runtime Adapter Protocol for host metadata, capabilities, compatibility records, and protocol validation.
 - Added thin adapter support for Codex, Claude Code, Antigravity, Cursor, Windsurf, VS Code, VSCodium compatibility, JetBrains, Zed, and Neovim.
 - Added scaffold-only packaging surfaces for Cursor, Windsurf, VS Code, JetBrains, Zed, and Neovim.
 - Normalized release-facing documentation, compatibility guidance, and manifest metadata for the `v1.0.0 Portable Runtime` baseline.
@@ -429,7 +449,7 @@ This patch was published on July 14, 2026 as the `v1.1.2` GitHub Release.
 
 - Added structured automated router benchmark runner (`scripts/router_benchmark_runner.py`) to validate test case definitions without triggering live LLM behavior.
 
-- Reduced `skills/conductor/SKILL.md` prompt payload by consolidating duplicate execution mode rules into canonical pointers, while preserving strict behavior conformance.
+- Reduced `skills/conductor/SKILL.md` prompt payload by consolidating duplicate execution mode rules into canonical pointers, while preserving governance behavior and test fixtures.
 
 - Created `docs/performance/CONDUCTOR_LOAD_REDUCTION_PLAN.md` outlining a strategy to safely reduce `skills/conductor/SKILL.md` prompt load while preserving governance behavior and test fixtures.
 
