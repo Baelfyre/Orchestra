@@ -47,6 +47,14 @@ The Python behavior runner executes the following checks sequentially:
 7. **Governance Evaluation (`evaluate_governance.py`)**: Validates source-level governance behavior expectations.
 8. **Runtime Guardrail and Dagger Simulations**: Runs the runtime guardrail scan, Dagger guardrail tests, and isolated regression checks for guardrails, project-context validation, and lock acquisition behavior.
 9. **Runtime Coverage Gate (`pytest-cov`)**: The CI workflow separately runs `tests/runtime` with `--cov=orchestra_runtime --cov-report=term-missing --cov-fail-under=90`.
+10. **Cross-Layer Synchronicity Contract**: Runs `scripts/validate_cross_layer_synchronicity_contract.py` and `tests/behavior/test_cross_layer_synchronicity_contract.py` to enforce the canonical workflow stages, deterministic statuses, single-owner findings, executable evidence, and fail-closed re-entry behavior.
+
+Run the focused cross-layer checks directly:
+
+```powershell
+python .\scripts\validate_cross_layer_synchronicity_contract.py
+python .\tests\behavior\test_cross_layer_synchronicity_contract.py
+```
 
 ---
 

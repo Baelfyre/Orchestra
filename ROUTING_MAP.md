@@ -38,6 +38,7 @@ Do not load it for obvious single-owner work.
 | Controlled destructive-path simulation | `dagger` | Explicit authorization and guardrail validation are present |
 | Broad, unclear, or overlapping requests | `conductor` | Ownership overlaps, dependencies exist, or route split is unclear |
 | Cross-specialist contract coordination | `the-tuner` | Conductor has classified material multi-domain dependencies, missing ownership, contradiction, stale contract, or late boundary crossing |
+| Frontend/backend synchronicity | `conductor` -> `the-tuner` | Frozen packet and authority exist |
 
 ## Ordered Multi-Skill Sequences
 

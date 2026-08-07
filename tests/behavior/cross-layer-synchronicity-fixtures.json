@@ -1,0 +1,516 @@
+{
+  "schema_version": "orchestra-synchronicity-v1",
+  "contract_identity": {
+    "approved_baseline": "6bce297c7469f9c08ce41308cbb993cc863ac540",
+    "contract_revision": "frontend-backend-synchronicity-v1",
+    "protocol_sha256": "a866820fcfd4901d128db3e5f3568f0d9067277693e9e68d2f9b49371336fbb9",
+    "source_branch": "codex/frontend-backend-synchronicity-v1"
+  },
+  "workflow_stages": [
+    "UI_CONTROL",
+    "CLIENT_EVENT",
+    "CLIENT_STATE_OR_FORM_MODEL",
+    "SERIALIZED_REQUEST",
+    "API_ROUTE",
+    "BACKEND_HANDLER",
+    "SERVICE_OPERATION",
+    "REPOSITORY_AND_PERSISTENCE",
+    "API_RESPONSE",
+    "CLIENT_CACHE_OR_STATE_UPDATE",
+    "FINAL_RENDERED_STATE"
+  ],
+  "statuses": [
+    "CROSS_LAYER_ALIGNMENT_CONFIRMED",
+    "CROSS_LAYER_ALIGNMENT_GAPS_FOUND",
+    "CROSS_LAYER_CONTRACT_INCOMPLETE",
+    "CROSS_LAYER_CONTRADICTION_REVIEW_REQUIRED",
+    "CROSS_LAYER_EVIDENCE_INSUFFICIENT",
+    "CROSS_LAYER_CONTRACT_STALE",
+    "SPECIALIST_REENTRY_REQUIRED"
+  ],
+  "required_evidence": [
+    "field_mapping",
+    "validation_parity",
+    "authorization_parity",
+    "state_coverage",
+    "accessibility",
+    "executable_workflow"
+  ],
+  "executable_workflows": [
+    {
+      "id": "profile-update-happy-path",
+      "case_id": "happy-path-aligned",
+      "kind": "HAPPY_PATH",
+      "trace": [
+        {
+          "stage": "UI_CONTROL",
+          "owner": "cloak",
+          "source_ref": "fixture://ui/save-button",
+          "evidence_ref": "fixture://evidence/ui-control",
+          "result": "enabled control exposes accessible name"
+        },
+        {
+          "stage": "CLIENT_EVENT",
+          "owner": "cloak",
+          "source_ref": "fixture://client/save-click",
+          "evidence_ref": "fixture://evidence/client-event",
+          "result": "single click produces one submit intent"
+        },
+        {
+          "stage": "CLIENT_STATE_OR_FORM_MODEL",
+          "owner": "clockwork",
+          "source_ref": "fixture://client/profile-form",
+          "evidence_ref": "fixture://evidence/client-model",
+          "result": "normalized model passes client validation"
+        },
+        {
+          "stage": "SERIALIZED_REQUEST",
+          "owner": "clockwork",
+          "source_ref": "fixture://http/profile-request",
+          "evidence_ref": "fixture://evidence/request",
+          "result": "request contains canonical fields and types"
+        },
+        {
+          "stage": "API_ROUTE",
+          "owner": "cipher",
+          "source_ref": "fixture://api/profile-route",
+          "evidence_ref": "fixture://evidence/route",
+          "result": "authenticated authorized request reaches handler"
+        },
+        {
+          "stage": "BACKEND_HANDLER",
+          "owner": "clockwork",
+          "source_ref": "fixture://backend/profile-handler",
+          "evidence_ref": "fixture://evidence/handler",
+          "result": "handler parses and validates canonical request"
+        },
+        {
+          "stage": "SERVICE_OPERATION",
+          "owner": "clockwork",
+          "source_ref": "fixture://service/update-profile",
+          "evidence_ref": "fixture://evidence/service",
+          "result": "operation applies one idempotent update"
+        },
+        {
+          "stage": "REPOSITORY_AND_PERSISTENCE",
+          "owner": "chronicler",
+          "source_ref": "fixture://repository/profile-store",
+          "evidence_ref": "fixture://evidence/repository",
+          "result": "existing repository contract records update"
+        },
+        {
+          "stage": "API_RESPONSE",
+          "owner": "clockwork",
+          "source_ref": "fixture://http/profile-response",
+          "evidence_ref": "fixture://evidence/response",
+          "result": "response maps canonical saved profile"
+        },
+        {
+          "stage": "CLIENT_CACHE_OR_STATE_UPDATE",
+          "owner": "clockwork",
+          "source_ref": "fixture://client/profile-cache",
+          "evidence_ref": "fixture://evidence/cache",
+          "result": "cache reconciles server response without stale overwrite"
+        },
+        {
+          "stage": "FINAL_RENDERED_STATE",
+          "owner": "cloak",
+          "source_ref": "fixture://ui/profile-success",
+          "evidence_ref": "fixture://evidence/render",
+          "result": "success state is visible and announced"
+        }
+      ],
+      "expected_final_state": "profile update is persisted, reconciled, visible, and announced"
+    },
+    {
+      "id": "admin-update-authorization-failure",
+      "case_id": "authorization-mismatch",
+      "kind": "FAILURE_PATH",
+      "trace": [
+        {
+          "stage": "UI_CONTROL",
+          "owner": "cloak",
+          "source_ref": "fixture://ui/admin-save-button",
+          "evidence_ref": "fixture://evidence/auth-ui-control",
+          "result": "control is visible only to authorized persona"
+        },
+        {
+          "stage": "CLIENT_EVENT",
+          "owner": "cloak",
+          "source_ref": "fixture://client/admin-save-click",
+          "evidence_ref": "fixture://evidence/auth-client-event",
+          "result": "event produces one protected request"
+        },
+        {
+          "stage": "CLIENT_STATE_OR_FORM_MODEL",
+          "owner": "clockwork",
+          "source_ref": "fixture://client/admin-form",
+          "evidence_ref": "fixture://evidence/auth-client-model",
+          "result": "model passes client validation"
+        },
+        {
+          "stage": "SERIALIZED_REQUEST",
+          "owner": "clockwork",
+          "source_ref": "fixture://http/admin-request",
+          "evidence_ref": "fixture://evidence/auth-request",
+          "result": "request shape is canonical"
+        },
+        {
+          "stage": "API_ROUTE",
+          "owner": "cipher",
+          "source_ref": "fixture://api/admin-route",
+          "evidence_ref": "fixture://evidence/auth-route",
+          "result": "backend rejects unauthorized persona"
+        },
+        {
+          "stage": "BACKEND_HANDLER",
+          "owner": "clockwork",
+          "source_ref": "fixture://backend/admin-handler",
+          "evidence_ref": "fixture://evidence/auth-handler",
+          "result": "handler returns deterministic forbidden response"
+        },
+        {
+          "stage": "SERVICE_OPERATION",
+          "owner": "clockwork",
+          "source_ref": "fixture://service/admin-update",
+          "evidence_ref": "fixture://evidence/auth-service",
+          "result": "service is not invoked"
+        },
+        {
+          "stage": "REPOSITORY_AND_PERSISTENCE",
+          "owner": "chronicler",
+          "source_ref": "fixture://repository/admin-store",
+          "evidence_ref": "fixture://evidence/auth-repository",
+          "result": "repository is not invoked"
+        },
+        {
+          "stage": "API_RESPONSE",
+          "owner": "clockwork",
+          "source_ref": "fixture://http/admin-forbidden",
+          "evidence_ref": "fixture://evidence/auth-response",
+          "result": "response is 403 with canonical error"
+        },
+        {
+          "stage": "CLIENT_CACHE_OR_STATE_UPDATE",
+          "owner": "clockwork",
+          "source_ref": "fixture://client/admin-cache",
+          "evidence_ref": "fixture://evidence/auth-cache",
+          "result": "cache remains unchanged"
+        },
+        {
+          "stage": "FINAL_RENDERED_STATE",
+          "owner": "cloak",
+          "source_ref": "fixture://ui/admin-forbidden",
+          "evidence_ref": "fixture://evidence/auth-render",
+          "result": "forbidden state is visible and announced"
+        }
+      ],
+      "expected_final_state": "unauthorized request is rejected, no side effect occurs, and the denial is visible"
+    }
+  ],
+  "cases": [
+    {
+      "id": "happy-path-aligned",
+      "expected_status": "CROSS_LAYER_ALIGNMENT_CONFIRMED",
+      "finding_owner": null,
+      "finding": null,
+      "evidence": {
+        "field_mapping": true,
+        "validation_parity": true,
+        "authorization_parity": true,
+        "state_coverage": true,
+        "accessibility": true,
+        "executable_workflow": true
+      },
+      "workflow_id": "profile-update-happy-path",
+      "expected_reentry": []
+    },
+    {
+      "id": "request-field-mismatch",
+      "expected_status": "CROSS_LAYER_ALIGNMENT_GAPS_FOUND",
+      "finding_owner": "clockwork",
+      "finding": {
+        "finding_id": "F-REQUEST-001",
+        "severity": "MAJOR",
+        "owner": "clockwork",
+        "affected_stages": [
+          "CLIENT_STATE_OR_FORM_MODEL",
+          "SERIALIZED_REQUEST",
+          "BACKEND_HANDLER"
+        ],
+        "evidence": [
+          "fixture://evidence/request-field-mismatch"
+        ],
+        "impact": "client field is omitted and backend applies an unintended default",
+        "minimal_remediation": "align the request mapping with the accepted API contract",
+        "required_validation": "request serialization and handler tests prove the canonical field mapping"
+      },
+      "evidence": {
+        "field_mapping": false,
+        "validation_parity": true,
+        "authorization_parity": true,
+        "state_coverage": true,
+        "accessibility": true,
+        "executable_workflow": true
+      },
+      "workflow_id": "profile-update-happy-path",
+      "expected_reentry": [
+        "clockwork",
+        "overseer"
+      ]
+    },
+    {
+      "id": "missing-executable-evidence",
+      "expected_status": "CROSS_LAYER_EVIDENCE_INSUFFICIENT",
+      "finding_owner": "overseer",
+      "finding": {
+        "finding_id": "F-EVIDENCE-001",
+        "severity": "MAJOR",
+        "owner": "overseer",
+        "affected_stages": [
+          "UI_CONTROL",
+          "CLIENT_EVENT",
+          "CLIENT_STATE_OR_FORM_MODEL",
+          "SERIALIZED_REQUEST",
+          "API_ROUTE",
+          "BACKEND_HANDLER",
+          "SERVICE_OPERATION",
+          "REPOSITORY_AND_PERSISTENCE",
+          "API_RESPONSE",
+          "CLIENT_CACHE_OR_STATE_UPDATE",
+          "FINAL_RENDERED_STATE"
+        ],
+        "evidence": [
+          "missing://executable-workflow"
+        ],
+        "impact": "alignment cannot be demonstrated across the complete user-visible workflow",
+        "minimal_remediation": "produce current happy-path and failure-path executable traces",
+        "required_validation": "Overseer verifies traces against the frozen packet identity"
+      },
+      "evidence": {
+        "field_mapping": true,
+        "validation_parity": true,
+        "authorization_parity": true,
+        "state_coverage": true,
+        "accessibility": true,
+        "executable_workflow": false
+      },
+      "workflow_id": null,
+      "expected_reentry": [
+        "overseer"
+      ]
+    },
+    {
+      "id": "authorization-mismatch",
+      "expected_status": "CROSS_LAYER_ALIGNMENT_GAPS_FOUND",
+      "finding_owner": "cipher",
+      "finding": {
+        "finding_id": "F-AUTH-001",
+        "severity": "CRITICAL",
+        "owner": "cipher",
+        "affected_stages": [
+          "UI_CONTROL",
+          "API_ROUTE",
+          "BACKEND_HANDLER",
+          "FINAL_RENDERED_STATE"
+        ],
+        "evidence": [
+          "fixture://evidence/authorization-mismatch"
+        ],
+        "impact": "frontend visibility and backend authorization disagree",
+        "minimal_remediation": "align persona visibility and backend authorization under the accepted policy",
+        "required_validation": "authorized and unauthorized persona traces prove consistent UI and backend enforcement"
+      },
+      "evidence": {
+        "field_mapping": true,
+        "validation_parity": true,
+        "authorization_parity": false,
+        "state_coverage": true,
+        "accessibility": true,
+        "executable_workflow": true
+      },
+      "workflow_id": "admin-update-authorization-failure",
+      "expected_reentry": [
+        "cipher",
+        "cloak",
+        "overseer"
+      ]
+    },
+    {
+      "id": "stale-contract-identity",
+      "expected_status": "CROSS_LAYER_CONTRACT_STALE",
+      "finding_owner": "the-tuner",
+      "finding": {
+        "finding_id": "F-IDENTITY-001",
+        "severity": "MAJOR",
+        "owner": "the-tuner",
+        "affected_stages": [
+          "UI_CONTROL",
+          "CLIENT_EVENT",
+          "CLIENT_STATE_OR_FORM_MODEL",
+          "SERIALIZED_REQUEST",
+          "API_ROUTE",
+          "BACKEND_HANDLER",
+          "SERVICE_OPERATION",
+          "REPOSITORY_AND_PERSISTENCE",
+          "API_RESPONSE",
+          "CLIENT_CACHE_OR_STATE_UPDATE",
+          "FINAL_RENDERED_STATE"
+        ],
+        "evidence": [
+          "fixture://evidence/stale-contract-hash"
+        ],
+        "impact": "evidence is bound to a superseded contract revision",
+        "minimal_remediation": "reconcile the packet and refresh all dependent evidence",
+        "required_validation": "Tuner, Overseer, and Arbiter verify the current identity chain"
+      },
+      "evidence": {
+        "field_mapping": true,
+        "validation_parity": true,
+        "authorization_parity": true,
+        "state_coverage": true,
+        "accessibility": true,
+        "executable_workflow": true
+      },
+      "workflow_id": "profile-update-happy-path",
+      "expected_reentry": [
+        "the-tuner",
+        "overseer",
+        "arbiter"
+      ]
+    },
+    {
+      "id": "inaccessible-backend-state",
+      "expected_status": "CROSS_LAYER_ALIGNMENT_GAPS_FOUND",
+      "finding_owner": "cloak",
+      "finding": {
+        "finding_id": "F-STATE-001",
+        "severity": "MAJOR",
+        "owner": "cloak",
+        "affected_stages": [
+          "API_RESPONSE",
+          "CLIENT_CACHE_OR_STATE_UPDATE",
+          "FINAL_RENDERED_STATE"
+        ],
+        "evidence": [
+          "fixture://evidence/inaccessible-backend-state"
+        ],
+        "impact": "backend failure is not exposed as an actionable accessible UI state",
+        "minimal_remediation": "render and announce the backend failure without reporting success",
+        "required_validation": "failure-path UI test proves focus, status announcement, and recovery action"
+      },
+      "evidence": {
+        "field_mapping": true,
+        "validation_parity": true,
+        "authorization_parity": true,
+        "state_coverage": false,
+        "accessibility": false,
+        "executable_workflow": true
+      },
+      "workflow_id": "profile-update-happy-path",
+      "expected_reentry": [
+        "cloak",
+        "overseer"
+      ]
+    },
+    {
+      "id": "persistence-scope-expansion",
+      "expected_status": "SPECIALIST_REENTRY_REQUIRED",
+      "finding_owner": "chronicler",
+      "finding": {
+        "finding_id": "F-PERSISTENCE-001",
+        "severity": "MAJOR",
+        "owner": "chronicler",
+        "affected_stages": [
+          "REPOSITORY_AND_PERSISTENCE"
+        ],
+        "evidence": [
+          "fixture://evidence/new-persistence-requirement"
+        ],
+        "impact": "the requested behavior exceeds the existing persistence contract and frozen scope",
+        "minimal_remediation": "return to Chronicler and Conductor for a separately authorized persistence contract",
+        "required_validation": "new scope, migration, and persistence evidence are reviewed before implementation"
+      },
+      "evidence": {
+        "field_mapping": true,
+        "validation_parity": true,
+        "authorization_parity": true,
+        "state_coverage": true,
+        "accessibility": true,
+        "executable_workflow": true
+      },
+      "workflow_id": "profile-update-happy-path",
+      "expected_reentry": [
+        "chronicler",
+        "conductor"
+      ]
+    },
+    {
+      "id": "missing-owner-contract",
+      "expected_status": "CROSS_LAYER_CONTRACT_INCOMPLETE",
+      "finding_owner": "the-tuner",
+      "finding": {
+        "finding_id": "F-OWNER-001",
+        "severity": "MAJOR",
+        "owner": "the-tuner",
+        "affected_stages": [
+          "SERVICE_OPERATION"
+        ],
+        "evidence": [
+          "missing://service-operation-owner"
+        ],
+        "impact": "the packet cannot assign decision accountability for the service operation",
+        "minimal_remediation": "Conductor routes the missing domain contract and the packet is re-frozen",
+        "required_validation": "Tuner and Overseer verify complete ownership and current evidence"
+      },
+      "evidence": {
+        "field_mapping": true,
+        "validation_parity": true,
+        "authorization_parity": true,
+        "state_coverage": true,
+        "accessibility": true,
+        "executable_workflow": true
+      },
+      "workflow_id": "profile-update-happy-path",
+      "expected_reentry": [
+        "conductor",
+        "the-tuner"
+      ]
+    },
+    {
+      "id": "contradictory-api-requirement",
+      "expected_status": "CROSS_LAYER_CONTRADICTION_REVIEW_REQUIRED",
+      "finding_owner": "the-tuner",
+      "finding": {
+        "finding_id": "F-CONTRADICTION-001",
+        "severity": "CRITICAL",
+        "owner": "the-tuner",
+        "affected_stages": [
+          "API_ROUTE",
+          "BACKEND_HANDLER"
+        ],
+        "evidence": [
+          "fixture://evidence/clockwork-api-contract",
+          "fixture://evidence/cipher-authorization-contract"
+        ],
+        "impact": "accepted specialist contracts prescribe incompatible route behavior",
+        "minimal_remediation": "Conductor routes specialist revision or human resolution without Tuner choosing a winner",
+        "required_validation": "revised specialist contracts remove the contradiction and dependent evidence is refreshed"
+      },
+      "evidence": {
+        "field_mapping": true,
+        "validation_parity": true,
+        "authorization_parity": true,
+        "state_coverage": true,
+        "accessibility": true,
+        "executable_workflow": true
+      },
+      "workflow_id": "admin-update-authorization-failure",
+      "expected_reentry": [
+        "conductor",
+        "clockwork",
+        "cipher"
+      ]
+    }
+  ]
+}

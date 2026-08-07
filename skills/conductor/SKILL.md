@@ -47,6 +47,10 @@ Under a `DelegatedExecutionEnvelope`:
 ## Phase 2 Re-entry Routing
 Conductor remains the exclusive router. On stale or incomplete change identity, open invalidation, or `SPECIALIST_REENTRY_REQUIRED`, pause; preserve the manual authorization or delegated envelope; route only the declared affected specialists; require revised contracts and current Overseer evidence; then return the packet to Arbiter. Never broaden re-entry without evidence or treat evidence as authority.
 
+## Synchronicity routing
+
+Use the Tuner packet. One owner/finding; Overseer evidence; Arbiter continuation. Missing/stale/contradicted/scope-drift blocks. No authority.
+
 ## Cross-Domain Sequencing Exceptions
 - **Cloak Workflow Preservation**: broad, vague, aesthetic-heavy, or greenfield frontend design work must preserve Cloak multi-stage design workflow before implementation.
 - Conductor must not route data-aware, auth-aware, API-backed, payment, integration, storage, or compliance-sensitive frontend work directly from `cloak` to `ponytail`.

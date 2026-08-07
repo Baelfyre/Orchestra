@@ -45,6 +45,7 @@ PORTABLE_REFERENCES = {
     ),
     "the-tuner": (
         ("docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md", "../../docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md", "REFERENCE_CONTEXT.md#cross-specialist-coordination-protocol", "cross-specialist-coordination-protocol"),
+        ("docs/validation/CROSS_MODULE_LOGIC_AUDIT_PROTOCOL.md", "../../docs/validation/CROSS_MODULE_LOGIC_AUDIT_PROTOCOL.md", "REFERENCE_CONTEXT.md#cross-module-logic-audit-protocol", "cross-module-logic-audit-protocol"),
     ),
 }
 TRACKED_EXPORT_PARITY_PATHS = (

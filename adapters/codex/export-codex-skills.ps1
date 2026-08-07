@@ -46,7 +46,8 @@ $portableReferences = @{
         [pscustomobject]@{ Source = "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"; Canonical = "../../docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"; Export = "REFERENCE_CONTEXT.md#governance-decision-protocol"; Anchor = "governance-decision-protocol" }
     )
     "the-tuner" = @(
-        [pscustomobject]@{ Source = "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md"; Canonical = "../../docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md"; Export = "REFERENCE_CONTEXT.md#cross-specialist-coordination-protocol"; Anchor = "cross-specialist-coordination-protocol" }
+        [pscustomobject]@{ Source = "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md"; Canonical = "../../docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md"; Export = "REFERENCE_CONTEXT.md#cross-specialist-coordination-protocol"; Anchor = "cross-specialist-coordination-protocol" },
+        [pscustomobject]@{ Source = "docs/validation/CROSS_MODULE_LOGIC_AUDIT_PROTOCOL.md"; Canonical = "../../docs/validation/CROSS_MODULE_LOGIC_AUDIT_PROTOCOL.md"; Export = "REFERENCE_CONTEXT.md#cross-module-logic-audit-protocol"; Anchor = "cross-module-logic-audit-protocol" }
     )
 }
 
