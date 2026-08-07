@@ -151,7 +151,7 @@ Phase 2 is merged through PR #197 at merge commit `7423d3e7db7fb8e32dfe91454f5c2
 - Extended Overseer evidence packets and Tuner handoffs with current contract and change identity.
 - Enforced Arbiter blocking on stale or mismatched evidence and Conductor-only minimal re-entry routing.
 - Preserved pre-existing artifacts, single-owner bypass, Dagger gating, and default-deny external actions.
-- Removed implicit current-HEAD, workflow-dispatch, `origin/main`, and local `main` evidence-baseline fallbacks. Local and workflow-dispatch validation now require `ORCHESTRA_APPROVED_BASE_SHA`; verified pull-request base and push-before event SHAs remain supported.
+- Removed implicit current-HEAD, workflow-dispatch, `origin/main`, and local `main` evidence-baseline fallbacks. Local and workflow-dispatch validation now require `ORCHESTRA_APPROVED_BASE_SHA`; verified pull-request base and push-before GitHub event reference remain supported.
 
 ## Unreleased - Issue #195 Cross-Specialist Coordination Phase 1
 
@@ -235,7 +235,7 @@ Portable Runtime is the first Orchestra release that normalizes the repository a
 
 ### Release Highlights
 - Added `orchestra_runtime/` as the shared runtime core for routing, manifest parsing, skill loading, governance validation, execution flow, and audit logging.
-- Added `PRAP v1` as the stable Portable Runtime Adapter Protocol for host metadata, capabilities, compatibility records, and protocol validation.
+- Added `PRAP v1` as the stable Portable Runtime Adapter Protocol for host metadata, capabilities, compatibility, and validation.
 - Added thin adapter support for Codex, Claude Code, Antigravity, Cursor, Windsurf, VS Code, VSCodium compatibility, JetBrains, Zed, and Neovim.
 - Added scaffold-only packaging surfaces for Cursor, Windsurf, VS Code, JetBrains, Zed, and Neovim.
 - Normalized release-facing documentation, compatibility guidance, and manifest metadata for the `v1.0.0 Portable Runtime` baseline.
@@ -431,7 +431,7 @@ This patch was published on July 14, 2026 as the `v1.1.2` GitHub Release.
 
 - Added Phase 8A router-first integration hardening audit documentation.
 
-- Documented the `tests/fixtures/router_benchmarks.json` schema in `ROUTER_BENCHMARK_FIXTURE_SCHEMA.md` and updated the benchmark validation runner to enforce the root shape and `schema_version`.
+- Documented `tests/fixtures/router_benchmarks.json` schema in `ROUTER_BENCHMARK_FIXTURE_SCHEMA.md` and updated the benchmark validation runner to enforce the root shape and `schema_version`.
 
 - Refactored `scripts/router_benchmark_runner.py` to extract hardcoded definitions into a machine-readable fixture at `tests/fixtures/router_benchmarks.json`, preserving existing validation capabilities.
 
@@ -449,7 +449,7 @@ This patch was published on July 14, 2026 as the `v1.1.2` GitHub Release.
 
 - Added structured automated router benchmark runner (`scripts/router_benchmark_runner.py`) to validate test case definitions without triggering live LLM behavior.
 
-- Reduced `skills/conductor/SKILL.md` prompt payload by consolidating duplicate execution mode rules into canonical pointers, while preserving governance behavior and test fixtures.
+- Reduced `skills/conductor/SKILL.md` prompt payload by consolidating duplicate execution mode rules into canonical pointers, while preserving strict behavior conformance.
 
 - Created `docs/performance/CONDUCTOR_LOAD_REDUCTION_PLAN.md` outlining a strategy to safely reduce `skills/conductor/SKILL.md` prompt load while preserving governance behavior and test fixtures.
 
