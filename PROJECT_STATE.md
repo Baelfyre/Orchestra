@@ -40,7 +40,7 @@
 - **The Tuner Runtime Boundary:** In-memory typed coordination, deterministic transitions and rejections, stale-evidence invalidation, minimal specialist re-entry recommendations, fail-closed supplied-session preflight, and direct single-owner bypass
 - **The Tuner Excluded Scope:** No persistent collaboration storage, SQLite, migrations, RPC, network or host-process orchestration, consumer-repository mutation, Dagger authority expansion, release, or deployment
 - **Current Validation Rule:** Validation results are revision-specific. Use the current GitHub Actions result and the canonical commands in `docs/setup/VALIDATION.md`; do not reuse historical test counts or coverage percentages as the result for a newer revision.
-- **Current Validation Coverage:** Governance protocol consistency, routing contracts, Tuner collaboration contracts, evidence identity, static behavioral expectations, prompt-load budget, Codex export parity, structure, manifests, IDE packaging, strict governance, stale-reference checks, behavior validation, runtime tests and coverage threshold, runtime import smoke, release-readiness checks, links, and exact-scope diff checks
+- **Current Validation Coverage:** Governance protocol consistency, routing contracts, Tuner collaboration contracts, frontend-to-backend synchronicity contracts, evidence identity, static behavioral expectations, prompt-load budget, Codex export parity, structure, manifests, IDE packaging, strict governance, stale-reference checks, behavior validation, runtime tests and coverage threshold, runtime import smoke, release-readiness checks, links, and exact-scope diff checks
 - **Startup Verification Rule:** Resolve current `main` rather than recording a self-referential closeout SHA:
   ```powershell
   git switch main
@@ -56,7 +56,7 @@
 - **Spec Kitty-Derived Phase 3B Release / Deployment:** Not performed
 - **Spec Kitty-Derived Phase 3B Policy Activation:** Not performed
 - **Governance Deviation (Phase 3B):** PR #212 merged by maintainer after all required technical checks passed. No independent APPROVED review was recorded before merge. Copilot review state was COMMENTED only due to exhausted quota. This does not retroactively convert the technical self-review into an independent approval.
-- **Frontend-to-Backend Synchronicity:** First implementation slice is active on `codex/frontend-backend-synchronicity-v1` from baseline `6bce297c7469f9c08ce41308cbb993cc863ac540`. Scope is protocol, checklist, deterministic fixtures/validator/tests, routing/export/governance integration, and current-state documentation only. Runtime and persistence are unchanged.
-- **Next Active Software Task:** Human review and separate commit authorization for the validated frontend-to-backend synchronicity implementation
+- **Frontend-to-Backend Synchronicity:** Implemented, committed, pushed, and under review in PR #216 from baseline `6bce297c7469f9c08ce41308cbb993cc863ac540`. Scope remains exactly the original 21 paths: protocol, checklist, deterministic executable fixtures, validator/tests, routing/export/governance integration, and current-state documentation. Runtime and persistence are unchanged.
+- **Next Active Software Task:** Complete exact-head CI and immutable review for PR #216, then stop for separate merge authorization.
 
 This file records stable current state only. Historical decisions remain in `DECISION_LOG.md` and `CHANGELOG.md`.
