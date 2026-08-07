@@ -3,6 +3,7 @@
 - **Current Stable State:** `v1.1.2` is the current public release. Unreleased `main` contains completed Spec Kitty-derived Phase 2 and Phase 3 contracts plus the merged frontend-to-backend synchronicity audit contract.
 - **Canonical Repo:** `Baelfyre/Orchestra`
 - **Canonical Branch:** `main`
+- **Base Branch:** `main`
 - **Current Remote Main:** `3a2f8b7e65cdab0f7e6a3113d1096ec9dccc23d3`
 - **Current Public Release:** `v1.1.2`
 - **Post-`v1.1.2` Capability State:** `IMPLEMENTED_MERGED_NOT_RELEASED`
