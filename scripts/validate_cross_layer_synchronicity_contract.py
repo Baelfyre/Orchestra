@@ -45,6 +45,11 @@ def _nonempty(value):
     return isinstance(value, str) and bool(value.strip())
 
 
+def _canonical_text_bytes(path):
+    text = path.read_text(encoding="utf-8")
+    return text.replace("\r\n", "\n").replace("\r", "\n").encode("utf-8")
+
+
 def _validate_contract_identity(identity, protocol_bytes):
     errors = []
     if not isinstance(identity, dict):
@@ -261,7 +266,7 @@ def validate(repo_root):
     if errors:
         return errors
 
-    protocol_bytes = paths["protocol"].read_bytes()
+    protocol_bytes = _canonical_text_bytes(paths["protocol"])
     protocol = protocol_bytes.decode("utf-8")
     checklist = paths["checklist"].read_text(encoding="utf-8")
     for token in (
