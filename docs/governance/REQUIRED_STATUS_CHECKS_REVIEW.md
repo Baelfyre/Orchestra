@@ -2,60 +2,91 @@
 
 ## Purpose
 
-This document defines the recommended required GitHub status checks for Orchestra before merging changes into `main`.
+This document defines Orchestra's current minimum validation evidence for pull requests targeting `main` and the recommended GitHub protection that should mirror it.
 
-It follows the CI workflow consolidation review and keeps validation policy explicit before any workflow is retired, renamed, or converted to manual-only execution.
+The first autonomous finalization experiment demonstrated that GitHub may technically accept a merge while repository validation is red. Therefore required-check policy is fail-closed at both the automation layer and, where configured, the GitHub branch-protection/ruleset layer.
 
-## Current Validation Workflows
+Canonical rule:
 
-| Workflow | Recommended requirement status | Reason |
-|---|---|---|
-| Governance Check | Required | Primary strict governance and release-readiness gate |
-| Cross-platform Validation | Required | Confirms native Ubuntu and macOS validation coverage |
-| validate | Temporarily required or compatibility-only | Legacy/simple behavior validation check; keep until branch-protection dependencies are confirmed |
+```text
+GITHUB_CAN_MERGE != GOVERNANCE_READY_TO_MERGE
+```
 
-## Recommended Required Checks
+## Current Validation Workflows and Minimum Jobs
 
-The following checks should be required for pull requests targeting `main`:
+| Workflow | Required job | Requirement | Reason |
+| --- | --- | --- | --- |
+| Governance Check | `governance-check` | Required | Strict governance, changelog freshness, routing, prompt-load, packaging, and repository policy evidence |
+| validate | `validate` | Required | Canonical behavior validation suite |
+| validate | `runtime-tests` | Required | Runtime regression and coverage gate |
+| Cross-platform Validation | `native-windows-latest` | Required | Native Windows repository/runtime validation |
+| Cross-platform Validation | `native-ubuntu-latest` | Required | Native Ubuntu repository/runtime validation |
+| Cross-platform Validation | `native-macos-latest` | Required | Native macOS repository/runtime validation |
 
-1. `Governance Check`
-2. `Cross-platform Validation`
+Additional checks required by repository rules, security tooling, CodeQL, or a specific phase remain additive. This table is the minimum autonomous merge evidence inventory, not a bypass list.
 
-If GitHub branch protection currently requires `validate`, keep it enabled until a separate branch-protection update confirms it can be safely removed.
+## Fail-Closed Interpretation
 
-## Policy
+Every required job must be positively present for the exact current PR head SHA and must satisfy:
 
-Do not remove or rename a workflow that may be configured as a required status check unless one of the following is true:
+```text
+status == completed
+conclusion == success
+```
 
-1. Branch protection has been reviewed and updated.
-2. The replacement workflow is already passing on `main`.
-3. The migration is documented in `CHANGELOG.md`.
-4. A PR confirms the old and new check names are both visible before removing the old one.
+The following states do not authorize merge:
 
-## Migration Path
+- check data absent or unavailable;
+- required job missing;
+- queued or in-progress job;
+- failed, cancelled, timed-out, action-required, or skipped required job;
+- check evidence tied to an earlier PR head;
+- red canonical `main` baseline;
+- unresolved blocking finding;
+- missing changelog update when strict governance classifies changed paths as significant.
 
-### Step 1: Keep all checks active
+Missing or pending evidence maps to `WAIT_FOR_EVIDENCE`. Failed required evidence maps to `BLOCK` or bounded remediation followed by complete revalidation.
 
-Current safe state:
+## Exact-Head Requirement
 
-- `Governance Check`: active
-- `Cross-platform Validation`: active
-- `validate`: active
+A remediation commit invalidates prior check evidence. The complete minimum matrix must be collected again on the new head.
 
-### Step 2: Confirm branch protection
+Immediately before merge:
 
-Confirm whether `validate` is configured as a required status check in GitHub repository settings.
+1. Re-read the PR and confirm its exact head SHA.
+2. Re-read every required workflow/job for that SHA.
+3. Require all minimum jobs and any additional repository-required checks to be completed and successful.
+4. Use `expected_head_sha` or the platform's equivalent compare-and-swap guard where supported.
+5. After the merge write, independently re-read the PR and canonical `main` before recording `MERGED_VERIFIED`.
 
-### Step 3: Decide future treatment for `validate`
+`mergeable: true` is informational only. It means Git can construct a merge; it does not prove validation or governance readiness.
 
-Choose one:
+The executable companion contract is `docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md` with `scripts/validate_autonomous_merge_readiness_contract.py` and its regression fixtures/tests.
 
-1. Keep `validate` as a lightweight compatibility workflow.
-2. Convert `validate` to manual-only after required status checks are updated.
-3. Retire `validate` after confirming no required protection depends on it.
+## GitHub Protection Recommendation
+
+GitHub branch protection or rulesets for `main` should require the active check contexts corresponding to the minimum jobs above and should apply to administrators and automation identities where practical.
+
+Do not infer that repository protection is configured merely because this document exists. The live repository settings must be inspected and tested separately.
+
+The automation-side fail-closed protocol remains mandatory even when GitHub protection is configured, because governance must not rely on a platform merge button or API call as its only safety boundary.
+
+## Workflow Migration Policy
+
+Do not remove, rename, consolidate, or convert a workflow to manual-only while it supplies a required merge signal unless all of the following are true:
+
+1. The replacement workflow/job is already running successfully on `main` and pull requests.
+2. Branch protection/rulesets have been reviewed and updated.
+3. The autonomous merge-readiness inventory has been updated.
+4. The migration is recorded in `CHANGELOG.md`.
+5. A PR proves the old and new check names are observable before the old check disappears.
 
 ## Current Recommendation
 
-Require `Governance Check` and `Cross-platform Validation`.
+Keep all three workflow families active:
 
-Keep `validate` active until branch protection is confirmed.
+- Governance Check;
+- validate;
+- Cross-platform Validation.
+
+Treat all six minimum jobs listed above as required autonomous merge evidence until a separately validated CI consolidation changes this contract.

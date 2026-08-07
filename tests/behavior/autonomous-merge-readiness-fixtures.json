@@ -1,0 +1,98 @@
+{
+  "schema_version": "orchestra-autonomous-merge-readiness-v1",
+  "required_checks": [
+    {"workflow": "Governance Check", "job": "governance-check"},
+    {"workflow": "validate", "job": "validate"},
+    {"workflow": "validate", "job": "runtime-tests"},
+    {"workflow": "Cross-platform Validation", "job": "native-windows-latest"},
+    {"workflow": "Cross-platform Validation", "job": "native-ubuntu-latest"},
+    {"workflow": "Cross-platform Validation", "job": "native-macos-latest"}
+  ],
+  "base_snapshot": {
+    "base_health": "GREEN",
+    "current_head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "head_reconfirmed": true,
+    "changelog_required": true,
+    "changelog_updated": true,
+    "unresolved_blockers": 0,
+    "mergeable": true,
+    "checks": [
+      {"workflow": "Governance Check", "job": "governance-check", "head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "status": "completed", "conclusion": "success"},
+      {"workflow": "validate", "job": "validate", "head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "status": "completed", "conclusion": "success"},
+      {"workflow": "validate", "job": "runtime-tests", "head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "status": "completed", "conclusion": "success"},
+      {"workflow": "Cross-platform Validation", "job": "native-windows-latest", "head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "status": "completed", "conclusion": "success"},
+      {"workflow": "Cross-platform Validation", "job": "native-ubuntu-latest", "head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "status": "completed", "conclusion": "success"},
+      {"workflow": "Cross-platform Validation", "job": "native-macos-latest", "head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "status": "completed", "conclusion": "success"}
+    ]
+  },
+  "pre_merge_cases": [
+    {"id": "fully-green", "expected_disposition": "READY_FOR_MERGE"},
+    {"id": "no-check-data", "overrides": {"checks": null}, "expected_disposition": "WAIT_FOR_EVIDENCE"},
+    {"id": "missing-runtime", "remove_check": "validate/runtime-tests", "expected_disposition": "WAIT_FOR_EVIDENCE"},
+    {"id": "queued-windows", "check_overrides": {"Cross-platform Validation/native-windows-latest": {"status": "queued", "conclusion": null}}, "expected_disposition": "WAIT_FOR_EVIDENCE"},
+    {"id": "in-progress-macos", "check_overrides": {"Cross-platform Validation/native-macos-latest": {"status": "in_progress", "conclusion": null}}, "expected_disposition": "WAIT_FOR_EVIDENCE"},
+    {"id": "governance-failed", "check_overrides": {"Governance Check/governance-check": {"conclusion": "failure"}}, "expected_disposition": "BLOCK"},
+    {"id": "runtime-failed", "check_overrides": {"validate/runtime-tests": {"conclusion": "failure"}}, "expected_disposition": "BLOCK"},
+    {"id": "cross-platform-failed", "check_overrides": {"Cross-platform Validation/native-ubuntu-latest": {"conclusion": "failure"}}, "expected_disposition": "BLOCK"},
+    {"id": "required-skipped", "check_overrides": {"validate/validate": {"conclusion": "skipped"}}, "expected_disposition": "BLOCK"},
+    {"id": "required-cancelled", "check_overrides": {"validate/runtime-tests": {"conclusion": "cancelled"}}, "expected_disposition": "BLOCK"},
+    {"id": "required-timed-out", "check_overrides": {"Cross-platform Validation/native-windows-latest": {"conclusion": "timed_out"}}, "expected_disposition": "BLOCK"},
+    {"id": "stale-head", "check_overrides": {"validate/runtime-tests": {"head_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"}}, "expected_disposition": "STALE_EVIDENCE"},
+    {"id": "red-main", "overrides": {"base_health": "RED"}, "expected_disposition": "REMEDIATE_BASELINE_FIRST"},
+    {"id": "changelog-missing", "overrides": {"changelog_required": true, "changelog_updated": false}, "expected_disposition": "BLOCK"},
+    {"id": "head-not-reconfirmed", "overrides": {"head_reconfirmed": false}, "expected_disposition": "WAIT_FOR_EVIDENCE"},
+    {"id": "merge-conflict", "overrides": {"mergeable": false}, "expected_disposition": "BLOCK"},
+    {"id": "mergeable-is-not-enough", "overrides": {"checks": null, "mergeable": true}, "expected_disposition": "WAIT_FOR_EVIDENCE"},
+    {"id": "unresolved-blocker", "overrides": {"unresolved_blockers": 1}, "expected_disposition": "BLOCK"}
+  ],
+  "post_merge_cases": [
+    {
+      "id": "verified",
+      "expected_disposition": "MERGED_VERIFIED",
+      "snapshot": {
+        "merge_api_result": "success",
+        "canonical_read_completed": true,
+        "pr_merged": true,
+        "main_contains_reviewed_head": true,
+        "reviewed_head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "canonical_main_sha": "cccccccccccccccccccccccccccccccccccccccc"
+      }
+    },
+    {
+      "id": "api-success-only",
+      "expected_disposition": "MERGE_STATE_UNVERIFIED",
+      "snapshot": {
+        "merge_api_result": "success",
+        "canonical_read_completed": false,
+        "pr_merged": false,
+        "main_contains_reviewed_head": false,
+        "reviewed_head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "canonical_main_sha": "cccccccccccccccccccccccccccccccccccccccc"
+      }
+    },
+    {
+      "id": "pr-not-merged",
+      "expected_disposition": "MERGE_STATE_UNVERIFIED",
+      "snapshot": {
+        "merge_api_result": "success",
+        "canonical_read_completed": true,
+        "pr_merged": false,
+        "main_contains_reviewed_head": true,
+        "reviewed_head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "canonical_main_sha": "cccccccccccccccccccccccccccccccccccccccc"
+      }
+    },
+    {
+      "id": "main-missing-reviewed-head",
+      "expected_disposition": "MERGE_STATE_UNVERIFIED",
+      "snapshot": {
+        "merge_api_result": "success",
+        "canonical_read_completed": true,
+        "pr_merged": true,
+        "main_contains_reviewed_head": false,
+        "reviewed_head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "canonical_main_sha": "cccccccccccccccccccccccccccccccccccccccc"
+      }
+    }
+  ]
+}
