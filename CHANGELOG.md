@@ -7,15 +7,15 @@ This changelog tracks the repository history using git tags, merge history, and 
 ### Frontend-to-Backend Synchronicity Contract
 
 - Added the shared cross-module logic audit protocol and first frontend-to-backend synchronicity checklist without changing runtime or persistence behavior.
-- Added deterministic fixtures, a focused validator, behavior tests, routing integration, strict-governance wiring, and portable Codex export parity.
-- Reconciled current project state through merged Spec Kitty Phase 3C / PR #214. Implementation remains uncommitted and requires separate human Git authorization.
+- Added deterministic executable workflow traces, complete finding records, a focused validator, behavior tests, routing integration, strict-governance wiring, portable Codex export parity, and cross-platform canonical evidence hashing.
+- Merged through PR #216 at reviewed head `52d47c2b10770cb5a85dab2eab9e81ce8851adb1` and merge commit `3a2f8b7e65cdab0f7e6a3113d1096ec9dccc23d3`. The capability remains unreleased; no deployment or policy activation occurred.
 
-### Candidate Phase 3C WorktreeContract Implementation (PR #214 Open)
+### Phase 3C WorktreeContract Post-Merge Closeout
 
-- Implemented typed `OrchestraWorktreeContract` model (`orchestra_runtime/worktree.py`), strict path confinement validator, base SHA checker, deterministic serialization, and adapter capability integration.
-- Added 58 focused WorktreeContract tests in `tests/runtime/test_worktree_contract.py`; the combined focused suite passes 95 tests.
-- The delivered implementation revision passes 486 runtime tests with 94.32% runtime-package coverage, and all 9 required fresh exact-head checks passed.
-- Candidate Phase 3C is committed and pushed to PR #214. The PR remains open pending final immutable review and separate merge authorization; it is not merged or released, and policy is not activated.
+- Implemented the typed `OrchestraWorktreeContract` model (`orchestra_runtime/worktree.py`), strict path confinement, exact-base validation, deterministic identity and serialization, lifecycle enforcement, and adapter capability integration.
+- Added focused WorktreeContract and compatibility regressions covering locked and nested repositories, submodules, creation and cleanup races, case collisions, symlink and junction escapes, inspection failure, branch preservation, unrelated-worktree preservation, and post-release verification.
+- Completed consolidated behavior, runtime, coverage, governance, packaging, security, and cross-platform validation on the final reviewed revision.
+- Merged through PR #214 at reviewed head `646111325e6de7c5d31915789fdc22a644125b7b` and merge commit `6bce297c7469f9c08ce41308cbb993cc863ac540`. Phase 3A through Phase 3E are complete and merged, but not released; policy remains inactive.
 
 ### Phase 3B Post-Merge State Synchronization
 
@@ -33,7 +33,7 @@ This changelog tracks the repository history using git tags, merge history, and 
 - Added warning-clean module and script CLI surfaces through `python -m orchestra_runtime.status` and `python scripts/orchestra_status.py`.
 - Added 28 focused StatusProjection tests with 91% statement and branch coverage for `orchestra_runtime/status.py`.
 - Passed 418 runtime tests with 93.80% overall runtime-package coverage, the full behavior suite, strict governance validation, direct validators, CLI checks, and read-only before-and-after evidence.
-- Phase 3B merged via PR #212. Phase 3C `OrchestraWorktreeContract` implementation is not included or authorized.
+- At the Phase 3B merge boundary, Phase 3C was not included. `OrchestraWorktreeContract` was subsequently implemented and merged through PR #214.
 
 ### Phase 3A Post-Merge State Synchronization
 
