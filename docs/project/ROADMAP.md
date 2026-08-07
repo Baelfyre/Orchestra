@@ -19,15 +19,15 @@ Runtime Status: `IMPLEMENTED_MERGED` | `NOT_RELEASED`
 - [x] Phase 2F: Consolidated behavior, governance, security, packaging, documentation, and backward-compatibility validation.
 - [x] Phase 2G: Maintainer implementation review, commit authorization, post-commit validation, push authorization, remote verification, and PR #208 merge (`1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`).
 
-### Candidate Phase 3 Sequence (Design & Implementation Planning)
+### Completed Phase 3 Sequence
 
 - [x] Phase 3A: Read-only deferred-capability selection, ownership, compatibility, security, and implementation planning for `OrchestraWorktreeContract` and `OrchestraStatusProjection` (`docs/project/SPEC_KITTY_DERIVED_PHASE_3_CAPABILITY_ASSESSMENT.md`). Design accepted and merged through PR #210 (`1629eaf3cd3f156f8913f84c9229666257a3145a`).
 - [x] Phase 3B: `OrchestraStatusProjection` model, JSON serializer, CLI renderer, and unit tests. Implemented and merged through PR #212 (reviewed head `2a6c7ea8db16ce73d66fae566672f3681094b0f7`, merge commit `fa1e052d82301e70a5869258c3fc6af765163353`).
-- [ ] Phase 3C: `OrchestraWorktreeContract` model, path confinement validator, base SHA checker, and unit tests.
-- [ ] Phase 3D: Consolidated cross-platform, behavior, governance, security, and compatibility validation.
-- [ ] Phase 3E: Maintainer implementation review, commit authorization, push authorization, remote verification, and PR merge.
+- [x] Phase 3C: `OrchestraWorktreeContract` model, path confinement validator, base SHA checker, host capability integration, and unit tests. Implemented and merged through PR #214 (reviewed head `646111325e6de7c5d31915789fdc22a644125b7b`, merge commit `6bce297c7469f9c08ce41308cbb993cc863ac540`).
+- [x] Phase 3D: Consolidated cross-platform, behavior, governance, security, packaging, compatibility, and exact-head validation completed for the final PR #214 revision.
+- [x] Phase 3E: Maintainer immutable review, bounded remediation, commit and push authorization, remote verification, and PR #214 merge completed on August 6, 2026.
 
-Phase 3A design and planning only; Phase 3B implemented and merged; not released; no policy activation.
+Phase 3A through Phase 3E are complete and merged. The Spec Kitty-derived capability set remains unreleased and no policy activation has occurred.
 
 ## Authority and Capability Runtime Progression
 
@@ -65,4 +65,4 @@ Phases 6B-A through 6C are complete and merged through PR #183. Phase 6D is comp
 - [ ] Add an optional local-model retrieval index.
 - [ ] Improve adapters as tool capabilities change.
 - [ ] Expand fictional, project-agnostic examples.
-- [ ] Publish the `v1.1.2` tag and GitHub Release only after the Phase 6D branch merges and a separate publication gate is authorized.
+- [ ] Prepare and publish `v1.2.0` only after Issue #215 release preparation, exact-head validation, and the separate F6 publication gate are completed.
