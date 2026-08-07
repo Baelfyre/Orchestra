@@ -12,13 +12,16 @@
 > **Merged PR (Phase 3B):** `#212`
 > **Reviewed Head (Phase 3B):** `2a6c7ea8db16ce73d66fae566672f3681094b0f7`
 > **Merge Commit SHA (Phase 3B):** `fa1e052d82301e70a5869258c3fc6af765163353`
+> **Merged PR (Phase 3C-3E):** `#214`
+> **Reviewed Head (Phase 3C-3E):** `646111325e6de7c5d31915789fdc22a644125b7b`
+> **Merge Commit SHA (Phase 3C-3E):** `6bce297c7469f9c08ce41308cbb993cc863ac540`
 > **Source Commit:** `8466727ebbbc01fcaf43575657c9b1b9553784d9` (`Priivacy-ai/spec-kitty` v3.2.6)
 
 ---
 
 ## 1. Document Overview
 
-This roadmap documents the completed Candidate Phase 1 design specifications and the merged Phase 2 runtime contract implementation sequence for Orchestra-native adaptations derived from the Spec Kitty pattern review.
+This roadmap documents the completed Candidate Phase 1 design specifications, merged Phase 2 runtime contracts, and completed Phase 3 implementation sequence for Orchestra-native adaptations derived from the Spec Kitty pattern review.
 
 ---
 
@@ -53,7 +56,7 @@ This roadmap documents the completed Candidate Phase 1 design specifications and
 - [x] Standardized 15-field JSON schema extension embedded inside `ApprovedUnitPlan` with canonical `scope_ref` and predecessor acceptance rules.
 
 ### Phase 1F: Cross-Document Synchronization & Final Design Roadmap (`DESIGN_COMPLETE`)
-- [x] Synchronized decision log (`DECISION_LOG.md`), changelog (`CHANGELOG.md`), roadmap (`docs/project/ROADMAP.md`), ownership matrix (`docs/project/SPEC_KITTY_DERIVED_CONTRACT_OWNERSHIP.md`), and upgrade roadmap (`docs/project/SPEC_KITTY_DERIVED_UPGRADE_ROADMAP.md`).
+- [x] Synchronized decision log, changelog, roadmap, ownership matrix, and upgrade roadmap.
 - [x] Produced final Phase 1F handoff report `docs/artificer/external-sources/SPEC_KITTY_PHASE_1F_HANDOFF.md`.
 
 ### Phase 2A through 2G: Governed Phase Execution Contracts (`IMPLEMENTED_MERGED`)
@@ -66,39 +69,46 @@ This roadmap documents the completed Candidate Phase 1 design specifications and
 - [x] Phase 2G: Maintainer review, commit, push, remote verification, and PR #208 merge completed at `1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`.
 
 ### Phase 3A: Deferred-Capability Selection & Design Baseline (`DESIGN_ACCEPTED_MERGED`)
-- [x] Phase 3A: Read-only capability selection, ownership, architecture, compatibility, security, and implementation planning completed (`docs/project/SPEC_KITTY_DERIVED_PHASE_3_CAPABILITY_ASSESSMENT.md`).
-- [x] Produced design specifications `docs/project/ORCHESTRA_STATUS_PROJECTION.md` and `docs/project/ORCHESTRA_WORKTREE_CONTRACT.md`.
-- [x] Produced implementation plan `docs/project/SPEC_KITTY_DERIVED_PHASE_3_IMPLEMENTATION_PLAN.md` and matrix `docs/project/SPEC_KITTY_DERIVED_PHASE_3_COMPATIBILITY_AND_SECURITY_MATRIX.md`.
-- [x] Design accepted and merged through PR #210 (reviewed head `3d8b14aaffa00d66d1faaaef55ec27ecbc10cdc3`, merge commit `1629eaf3cd3f156f8913f84c9229666257a3145a`).
+- [x] Read-only capability selection, ownership, architecture, compatibility, security, and implementation planning completed.
+- [x] Produced `ORCHESTRA_STATUS_PROJECTION.md`, `ORCHESTRA_WORKTREE_CONTRACT.md`, the Phase 3 implementation plan, and the compatibility/security matrix.
+- [x] Design accepted and merged through PR #210.
 
-### Phase 3B: `OrchestraStatusProjection` Implementation (`IMPLEMENTED_AND_MERGED`)
-- [x] Implemented `OrchestraStatusProjection` typed model (`orchestra_runtime/status.py`), JSON serializer, and CLI renderer (`scripts/orchestra_status.py` / `python -m orchestra_runtime.status`).
-- [x] Added 28 focused unit tests in `tests/runtime/test_status_projection.py` (91% statement and branch coverage for `orchestra_runtime/status.py`).
-- [x] Added lazy package exports in `orchestra_runtime/__init__.py` to eliminate module execution runpy warning.
-- [x] NUL-delimited porcelain v1 -z parsing implemented for paths containing spaces, special characters, and non-ASCII.
-- [x] Validated: 418 runtime tests (93.80% coverage), full behavior suite (exit 0), all 9 CI checks passed.
-- [x] Merged through PR #212 (reviewed head `2a6c7ea8db16ce73d66fae566672f3681094b0f7`, merge commit `fa1e052d82301e70a5869258c3fc6af765163353`).
+### Phase 3B: `OrchestraStatusProjection` Implementation (`IMPLEMENTED_MERGED`)
+- [x] Implemented typed model, JSON serializer, CLI renderer, lazy package exports, deterministic Git fact collection, and focused tests.
+- [x] Validated 418 runtime tests with 93.80% package coverage and all required CI checks.
+- [x] Merged through PR #212.
+
+### Phase 3C: `OrchestraWorktreeContract` Implementation (`IMPLEMENTED_MERGED`)
+- [x] Implemented the typed contract, path confinement, exact-base validation, deterministic identity and serialization, lifecycle enforcement, adapter capability integration, and focused tests.
+- [x] Remediated immutable-review findings covering cleanup inspection failure, path escape, branch and unrelated-worktree preservation, identity verification, filesystem case behavior, and release TOCTOU checks.
+- [x] Merged through PR #214 at reviewed head `646111325e6de7c5d31915789fdc22a644125b7b` and merge commit `6bce297c7469f9c08ce41308cbb993cc863ac540`.
+
+### Phase 3D: Consolidated Validation & Safety Audit (`COMPLETE`)
+- [x] Completed exact-head behavior, governance, security, packaging, compatibility, runtime, coverage, and cross-platform validation.
+- [x] Verified Windows junction behavior and Python compatibility regressions.
+
+### Phase 3E: Maintainer Review, PR & Merge (`COMPLETE`)
+- [x] Completed immutable review, bounded remediation, commit and push authorization, remote verification, and PR #214 merge.
+- [x] Preserved separate release, deployment, and policy-activation gates.
 
 ---
 
 ## 3. Dispositions & Implementation Summary
 
 ### Accepted & Merged Implemented Contracts
-1. `OrchestraRuntimeEnvelope`: Non-authorizing JSON result serialization profile with discriminated variants (`execution_result`, `transition_decision`, `audit_event`).
-2. `OrchestraCorrelationID`: Project-owned zero-dependency RFC 9562 UUIDv7 correlation generator and child propagation.
+1. `OrchestraRuntimeEnvelope`: Non-authorizing JSON result serialization profile with discriminated variants.
+2. `OrchestraCorrelationID`: Zero-dependency RFC 9562 UUIDv7 correlation generator and child propagation.
 3. `OrchestraPhaseRetrospective`: Source-backed phase closeout evidence model and deterministic builder.
 4. `ApprovedUnitPlan extension`: 15-field schema extension and contextual validator.
+5. `OrchestraStatusProjection`: Read-only, deterministic, non-authorizing status projection and CLI.
+6. `OrchestraWorktreeContract`: Optional host-capability-dependent, path-confined, fail-closed worktree lifecycle contract.
 
-### Promoted Candidate Phase 3 Designs
-1. `OrchestraStatusProjection`: Read-only status summary & JSON schema (`docs/project/ORCHESTRA_STATUS_PROJECTION.md`). Canonical owner: Scribe. Target for Phase 3B.
-2. `OrchestraWorktreeContract`: Optional host worktree negotiation contract (`docs/project/ORCHESTRA_WORKTREE_CONTRACT.md`). Canonical owner: Ponytail. Target for Phase 3C.
-
-### Rejected Concepts (Remains Rejected)
+### Rejected Concepts (Remain Rejected)
 - Standalone mutable unit-state files (`.orchestra/units/`).
 - Manual doctrine packs duplicating `docs/governance/`.
 - Workflow-state merge authority or automatic policy mutation.
-- Spec Kitty runtime dependency or copying Spec Kitty code/schemas.
-- SQLite event stores, RPC network services, background daemons, web dashboards.
+- Spec Kitty runtime dependency or copying Spec Kitty code or schemas.
+- SQLite event stores, RPC network services, background daemons, and web dashboards.
 
 ### Explicitly Deferred Concepts
 - Cross-session correlation restoration and durable correlation persistence.
@@ -109,12 +119,12 @@ This roadmap documents the completed Candidate Phase 1 design specifications and
 
 ---
 
-## 4. Planned Candidate Phase 3 Sequence (`DESIGN_COMPLETE` / `IMPLEMENTATION_NOT_STARTED`)
+## 4. Completed Candidate Phase 3 Sequence
 
-- **Phase 3A:** Read-only capability selection, ownership, architecture, compatibility, security, and implementation planning (`DESIGN_ACCEPTED_MERGED` via PR #210, merge commit `1629eaf3cd3f156f8913f84c9229666257a3145a`).
-- **Phase 3B:** `OrchestraStatusProjection` model, JSON serializer, CLI renderer, and unit tests (`IMPLEMENTED_AND_MERGED` via PR #212, merge commit `fa1e052d82301e70a5869258c3fc6af765163353`).
-- **Phase 3C:** `OrchestraWorktreeContract` model, path confinement validator, base SHA checker, and unit tests (`IMPLEMENTATION_NOT_STARTED`).
-- **Phase 3D:** Consolidated cross-platform, behavior, governance, security, and compatibility validation (`PLANNED`).
-- **Phase 3E:** Maintainer review, commit authorization, push authorization, remote verification, and PR merge (`PLANNED`).
+- **Phase 3A:** `DESIGN_ACCEPTED_MERGED` via PR #210.
+- **Phase 3B:** `IMPLEMENTED_MERGED` via PR #212.
+- **Phase 3C:** `IMPLEMENTED_MERGED` via PR #214.
+- **Phase 3D:** `VALIDATION_COMPLETE` on the final reviewed PR #214 head.
+- **Phase 3E:** `REVIEW_AND_MERGE_COMPLETE` via PR #214.
 
-Phase 3A design accepted and merged; Phase 3B implemented and merged; Phase 3C not started; not released; no policy activation.
+Phase 3A through Phase 3E are complete and merged. The capability set remains `NOT_RELEASED`; no deployment or policy activation has occurred.
