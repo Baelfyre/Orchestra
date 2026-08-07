@@ -137,6 +137,7 @@ This changelog tracks the repository history using git tags, merge history, and 
 - Added cross-language map-parity and real fresh-export regression coverage so the PowerShell exporter and Python validator cannot silently diverge.
 
 ### Preserved boundaries
+
 - No routing, runtime authority, specialist ownership, release, deployment, marketplace publication, production, force-push, ruleset, or branch-deletion behavior changed.
 
 ## Unreleased - Issue #195 Cross-Specialist Coordination Phase 4
@@ -496,6 +497,7 @@ This patch was published on July 14, 2026 as the `v1.1.2` GitHub Release.
 - Synced plugin manifest, `SKILL_INDEX.md`, and skill frontmatter metadata for precise validation parity.
 
 - Added behavior fixtures validating Conductor routing for Cloak multi-stage workflow preservation and frontend/backend alignment with Clockwork, Cipher, and Chronicler.
+
 - Added Conductor routing rules for Cloak and backend alignment, requiring Clockwork, Cipher, and/or Chronicler before implementation when frontend work affects data, auth, APIs, persistence, security, privacy, integrations, payments, or compliance-sensitive workflows.
 
 - Added Cloak multi-stage frontend design workflow guidance covering discovery, strategy, pattern intelligence, semantic HTML, design review, and backend alignment triggers.
