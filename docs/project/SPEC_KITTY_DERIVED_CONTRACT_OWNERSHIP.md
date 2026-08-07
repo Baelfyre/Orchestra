@@ -4,8 +4,9 @@
 > **Design Status:** `DESIGN_COMPLETE`
 > **Runtime Status:** `IMPLEMENTED_MERGED`
 > **Release Status:** `NOT_RELEASED`
-> **Merged PR:** `#208`
-> **Merge Commit SHA:** `1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`
+> **Phase 2 Merge:** PR `#208`, commit `1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`
+> **Phase 3B Merge:** PR `#212`, commit `fa1e052d82301e70a5869258c3fc6af765163353`
+> **Phase 3C-3E Merge:** PR `#214`, reviewed head `646111325e6de7c5d31915789fdc22a644125b7b`, merge commit `6bce297c7469f9c08ce41308cbb993cc863ac540`
 > **External Source Commit:** `8466727ebbbc01fcaf43575657c9b1b9553784d9` (`Priivacy-ai/spec-kitty` v3.2.6)
 
 ---
@@ -31,12 +32,12 @@ This document defines canonical placement, single specialist ownership, and arch
 
 ---
 
-## 2.1 Candidate Phase 3 Contract Ownership Matrix (Design Baseline)
+## 2.1 Phase 3 Contract Ownership Matrix
 
 | Contract Name | Canonical Specification | Canonical Owner | Secondary Consumers | Validation Owner | Continuity Consumer | Design Status | Implementation Status | Policy Integration Status | Release Status |
 |---|---|---|---|---|---|---|---|---|---|
 | **OrchestraStatusProjection** | `docs/project/ORCHESTRA_STATUS_PROJECTION.md` | Scribe | Conductor, Arbiter, Overseer, Ponytail | Overseer | Arbiter | `DESIGN_ACCEPTED_MERGED` | `IMPLEMENTED_MERGED` | `NOT_APPLICABLE` | `NOT_RELEASED` |
-| **OrchestraWorktreeContract** | `docs/project/ORCHESTRA_WORKTREE_CONTRACT.md` | Ponytail | Conductor, Arbiter, Overseer, Host Adapters | Overseer | Arbiter | `DESIGN_ACCEPTED_MERGED` | `NOT_IMPLEMENTED` | `NOT_APPLICABLE` | `NOT_RELEASED` |
+| **OrchestraWorktreeContract** | `docs/project/ORCHESTRA_WORKTREE_CONTRACT.md` | Ponytail | Conductor, Arbiter, Overseer, Host Adapters | Overseer | Arbiter | `DESIGN_ACCEPTED_MERGED` | `IMPLEMENTED_MERGED` | `NOT_APPLICABLE` | `NOT_RELEASED` |
 
 ---
 
@@ -70,7 +71,7 @@ This document defines canonical placement, single specialist ownership, and arch
 
 ## 4. Rejected & Deferred Dispositions
 
-- **Rejected:** Standalone unit state files (`.orchestra/units/`), duplicate manual doctrine packs, workflow-state merge authority, automatic policy mutation, SQLite event stores, RPC network services, background daemons.
-- **Deferred (Phase 2 Implementations):** Cross-session correlation restoration, durable correlation persistence, automatic retrospective closeout generation, durable retrospective retention, automatic Steward planning/dispatch integration, revision-history ordering, `DELEGATED_EXECUTION_POLICY.md` Section 4 normative integration.
-- **Promoted for Phase 3 Design:** `OrchestraStatusProjection` (Phase 3B target), `OrchestraWorktreeContract` (Phase 3C target).
-- **Out of Scope:** `OrchestraProviderContract` (separate unscheduled concept).
+- **Rejected:** Standalone unit state files (`.orchestra/units/`), duplicate manual doctrine packs, workflow-state merge authority, automatic policy mutation, SQLite event stores, RPC network services, and background daemons.
+- **Deferred:** Cross-session correlation restoration, durable correlation persistence, automatic retrospective closeout generation, durable retrospective retention, automatic Steward planning/dispatch integration, revision-history ordering, and `DELEGATED_EXECUTION_POLICY.md` Section 4 normative integration.
+- **Implemented in Phase 3:** `OrchestraStatusProjection` and `OrchestraWorktreeContract` under their original canonical owners and non-authorizing boundaries.
+- **Out of Scope:** `OrchestraProviderContract` remains a separate unscheduled concept.

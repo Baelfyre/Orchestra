@@ -5,16 +5,16 @@
 COMPATIBILITY AND SECURITY MATRIX
 DESIGN ACCEPTED AND MERGED (PR #210, SHA 1629eaf3cd3f156f8913f84c9229666257a3145a)
 PHASE 3B IMPLEMENTED AND MERGED (PR #212, SHA fa1e052d82301e70a5869258c3fc6af765163353)
-PHASE 3C IMPLEMENTED, COMMITTED, AND PUSHED IN PR #214
-FINAL STATUS IS REVISION-SPECIFIC AND MUST BE VERIFIED ON THE CURRENT PR HEAD
-NOT MERGED
+PHASE 3C IMPLEMENTED AND MERGED (PR #214, REVIEWED HEAD 646111325e6de7c5d31915789fdc22a644125b7b, MERGE COMMIT 6bce297c7469f9c08ce41308cbb993cc863ac540)
+PHASE 3D EXACT-HEAD VALIDATION COMPLETE
+PHASE 3E REVIEW AND MERGE COMPLETE
 NOT RELEASED
 POLICY NOT ACTIVATED
-VERDICT: PENDING_PR214_FINAL_IMMUTABLE_REVIEW
+VERDICT: PHASE_3_COMPLETE_MERGED_NOT_RELEASED
 ```
 
 ## 1. Overview
-This document specifies the compatibility and security assessment matrix for Candidate Phase 3 capabilities (`OrchestraWorktreeContract` and `OrchestraStatusProjection`) across operating systems, Python runtimes, host adapters, Git environments, and safety boundaries.
+This document specifies the compatibility and security assessment matrix for the implemented Phase 3 capabilities (`OrchestraWorktreeContract` and `OrchestraStatusProjection`) across operating systems, Python runtimes, host adapters, Git environments, and safety boundaries.
 
 ---
 
@@ -22,13 +22,13 @@ This document specifies the compatibility and security assessment matrix for Can
 
 | Dimension | Target Variant | Assessment Status | Notes & Security Boundaries |
 |---|---|---|---|
-| Python Runtime | Python 3.11 (3.11.9) | `DESIGN_TARGET` | Standard local development baseline. Zero PyPI dependencies. |
-| Python Runtime | Python 3.12 | `DESIGN_TARGET` | CI target platform. |
-| Python Runtime | Python 3.13 | `DESIGN_TARGET` | Repository declared matrix target. |
-| Python Runtime | Python 3.14+ | `DESIGN_TARGET` | Forward compatibility target. |
-| Operating System | Windows 11 (Win32 x86_64) | `DESIGN_TARGET` | Primary local environment. Path normalization handles drive letters, backslashes, and UNC paths safely. |
-| Operating System | Linux (Ubuntu 24.04) | `DESIGN_TARGET` | Primary CI runner platform. Standard POSIX path semantics. |
-| Operating System | macOS (Darwin) | `DESIGN_TARGET` | CI runner platform. Case-preserving path checks. |
+| Python Runtime | Python 3.11 (3.11.9) | `VALIDATED_TARGET` | Standard local development baseline. Zero PyPI dependencies. |
+| Python Runtime | Python 3.12 | `VALIDATED_TARGET` | CI target platform. |
+| Python Runtime | Python 3.13 | `DECLARED_TARGET` | Repository declared matrix target. |
+| Python Runtime | Python 3.14+ | `FORWARD_COMPATIBILITY_TARGET` | Requires revision-specific validation when adopted. |
+| Operating System | Windows 11 (Win32 x86_64) | `VALIDATED_TARGET` | Primary local environment. Path normalization handles drive letters, backslashes, UNC paths, junctions, and case-insensitive collisions safely. |
+| Operating System | Linux (Ubuntu 24.04) | `VALIDATED_TARGET` | Primary CI runner platform. Standard POSIX path semantics. |
+| Operating System | macOS (Darwin) | `VALIDATED_TARGET` | CI runner platform. Case-preserving path checks. |
 
 ---
 
@@ -36,8 +36,8 @@ This document specifies the compatibility and security assessment matrix for Can
 
 | Adapter Name | Directory Path | Worktree Support | Status Projection Support | Notes |
 |---|---|---|---|---|
-| Codex Adapter | `adapters/codex/` | `OPTIONAL` | `SUPPORTED` | Active runtime adapter (`orchestra_runtime/adapters.py`). |
-| Antigravity Adapter | `adapters/antigravity/` | `OPTIONAL` | `SUPPORTED` | Active runtime adapter (`orchestra_runtime/adapters.py`). |
+| Codex Adapter | `adapters/codex/` | `OPTIONAL` | `SUPPORTED` | Active runtime adapter (`orchestra_runtime/adapters.py`). Installed parity remains separately validated. |
+| Antigravity Adapter | `adapters/antigravity/` | `OPTIONAL` | `SUPPORTED` | Active runtime adapter (`orchestra_runtime/adapters.py`). Installed import verification remains a host-local action. |
 | Gemini Adapter | `adapters/gemini/` | `SCAFFOLD_ONLY` | `SUPPORTED` | Scaffold adapter; read-only status projection supported. |
 | Cursor Adapter | `adapters/cursor/` | `SCAFFOLD_ONLY` | `SUPPORTED` | Scaffold adapter; read-only status projection supported. |
 | Windsurf Adapter | `adapters/windsurf/` | `SCAFFOLD_ONLY` | `SUPPORTED` | Scaffold adapter; read-only status projection supported. |
@@ -55,22 +55,26 @@ This document specifies the compatibility and security assessment matrix for Can
 |---|---|---|---|
 | Standard Git repo | Allowed (`worktree add`) | Normal status projection | Path confinement verified |
 | Non-Git directory | Fail closed (`NOT_A_GIT_REPO`) | Returns `is_git_repo: false`, status `UNKNOWN` | No subprocess errors leaked |
-| Detached HEAD | Allowed with explicit base SHA | Returns `current_branch: "(HEAD detached at ...)"` | Exact SHA recorded |
-| Dirty working tree | Fails teardown (`DIRTY_WORKTREE_BLOCK`) | Reports `dirty_count > 0` | Zero automatic deletion of dirty files |
-| Path traversal (`..`) | Fail closed (`PATH_TRAVERSAL_REJECTED`) | Path normalized before display | Path confinement strictly enforced |
-| Shallow clone / no origin | Base SHA check against local HEAD | `origin_main_sha: "UNKNOWN"` | No remote network calls forced |
-| Multiple remotes | Resolves `origin` or fallback remote | Discovers and reports all named remotes | No hardcoded single remote assumption |
-| Unborn branch (empty repo) | Rejects creation (`UNBORN_BRANCH`) | Reports `current_branch: "master/main (unborn)"` | Base SHA required |
-| Read-only filesystem | Fail closed on creation (`EACCES`) | Operates in read-only mode successfully | No write attempts forced by projection |
-| Git binary unavailable | Fail closed (`GIT_NOT_FOUND`) | Returns `is_git_repo: false`, status `UNKNOWN` | Graceful fallback without crash |
-| Locked worktrees (`.git/worktrees/.../locked`) | Fail closed (`WORKTREE_LOCKED`) | Reports `worktree_locked: true` | Prevents force removal of locked trees |
-| Submodules present | Ignores submodule paths | Reports top-level repo status only | Submodule trees excluded from confinement |
-| Nested repositories | Rejects creation inside child repo | Reports top-level repo status | Root-confinement check prevents nested containment breach |
-| Symlinks / junction points | Resolved to realpath before check | Normalized canonical path displayed | Traversal via symlinks prevented |
+| Detached HEAD | Allowed with explicit base SHA | Reports detached identity | Exact SHA recorded |
+| Dirty working tree | Fails teardown (`DIRTY_WORKTREE_BLOCK`) | Reports dirty paths | Zero automatic deletion of dirty files |
+| Path traversal (`..`) | Fail closed (`PATH_OUTSIDE_AUTHORIZED_PARENT`) | Path normalized before display | Path confinement strictly enforced |
+| Shallow clone / no origin | Base SHA check against available local identity | Reports unavailable remote identity as unknown | No remote network calls forced |
+| Multiple remotes | Uses verified repository identity | Discovers named remotes | No hardcoded single-remote authority |
+| Unborn branch (empty repo) | Rejects creation without an approved commit | Reports unborn state | Base SHA required |
+| Read-only filesystem | Fail closed on creation | Projection remains read-only | No write attempts forced by projection |
+| Git binary unavailable | Fail closed (`GIT_NOT_FOUND`) | Returns unknown state | Graceful fallback without crash |
+| Locked worktrees | Fail closed (`WORKTREE_LOCKED`) | Reports available lock evidence | Prevents force removal of locked trees |
+| Submodules present | Detects and preserves submodule boundaries | Reports top-level repository status | Distinct repositories are not recursively removed |
+| Nested repositories | Rejects unsafe nested boundaries | Reports top-level repository status | Root-confinement checks prevent containment breach |
+| Symlinks / junction points | Resolves canonical destinations before confinement checks | Displays normalized canonical path | Link traversal and authorized-parent escape fail closed |
+| State change during release | Fails two-phase fingerprint verification | Not applicable | TOCTOU mutation blocks removal |
+| Status inspection failure | Fails closed before removal | Reports unknown when applicable | No cleanup on incomplete evidence |
 
 ---
 
 ## 5. Security & Privacy Controls
-1. **Zero Secret Leakage:** Status projection redacts credentials embedded in Git remote URLs (e.g. `https://token@github.com/...` -> `https://***@github.com/...`).
-2. **Subprocess Isolation:** All Git commands executed via `run_command` or Python `subprocess.run` use explicit array arguments (no `shell=True`), timeout bounds (10s), and strict path confinement.
-3. **Explicit Cleanup Boundaries:** Worktree contract teardown is strictly `EXPLICIT_HOST_ACTION_ONLY`. Orchestra MUST NOT perform automatic destructive cleanup of dirty worktrees, user-created worktrees, or untracked state.
+1. **Zero Secret Leakage:** Status projection redacts credentials embedded in Git remote URLs.
+2. **Subprocess Isolation:** Git commands use explicit argument arrays, bounded execution, and repository/path confinement; no `shell=True` execution is required.
+3. **Explicit Cleanup Boundaries:** Worktree teardown is strictly `EXPLICIT_HOST_ACTION_ONLY`. Orchestra does not automatically delete dirty, user-created, unrelated, or identity-mismatched worktrees or branches.
+4. **Revision-Specific Evidence:** Compatibility and validation claims bind to the reviewed implementation revision. A later release candidate requires fresh exact-head validation.
+5. **Release Boundary:** Merged implementation does not imply publication, deployment, installed-host refresh, or policy activation.

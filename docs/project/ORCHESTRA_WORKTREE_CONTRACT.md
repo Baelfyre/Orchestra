@@ -4,13 +4,13 @@
 ```text
 DESIGN SPECIFICATION ACCEPTED (PR #210, SHA 1629eaf3cd3f156f8913f84c9229666257a3145a)
 RUNTIME IMPLEMENTED (Phase 3C)
-COMMITTED AND PUSHED TO PR #214
-PR OPEN
-PENDING FINAL IMMUTABLE REVIEW AND SEPARATE MERGE AUTHORIZATION
-NOT MERGED
+IMMUTABLE REVIEW AND BOUNDED REMEDIATION COMPLETE
+MERGED THROUGH PR #214
+REVIEWED HEAD 646111325e6de7c5d31915789fdc22a644125b7b
+MERGE COMMIT 6bce297c7469f9c08ce41308cbb993cc863ac540
 NOT RELEASED
 POLICY NOT ACTIVATED
-VERDICT: PENDING_PR214_FINAL_IMMUTABLE_REVIEW
+VERDICT: IMPLEMENTED_MERGED_NOT_RELEASED
 ```
 
 ## 1. Overview
@@ -98,9 +98,9 @@ If `worktree_supported` is `false`, execution falls back gracefully to standard 
 
 ## 7. Mandatory Phase 3C Edge-Case Requirements
 
-Phase 3C implementation MUST handle the following edge cases deterministically:
+The merged Phase 3C implementation handles the following edge cases deterministically:
 
-1. **Locked Worktrees:** If a worktree contains a `.git/worktrees/<id>/locked` file, cleanup MUST fail closed (`WORKTREE_LOCKED`) and require explicit manual unlock before teardown.
-2. **Nested Repositories & Submodules:** Submodules and nested `.git` directories within a worktree tree MUST be detected; cleanup MUST NOT perform recursive deletion into distinct Git repositories.
-3. **Creation & Teardown Race Conditions:** Worktree directory creation MUST verify non-existence before invocation and handle concurrent allocation attempts safely.
-4. **Case-Insensitive Collision Handling:** On Windows and macOS, worktree path comparison MUST account for case-preserving case-insensitive filesystem collisions.
+1. **Locked Worktrees:** If a worktree contains a `.git/worktrees/<id>/locked` file, cleanup fails closed (`WORKTREE_LOCKED`) and requires explicit manual unlock before teardown.
+2. **Nested Repositories & Submodules:** Submodules and nested `.git` directories within a worktree tree are detected; cleanup does not recursively delete distinct Git repositories.
+3. **Creation & Teardown Race Conditions:** Worktree directory creation verifies non-existence before invocation and handles concurrent allocation attempts safely.
+4. **Case-Insensitive Collision Handling:** On Windows and macOS, worktree path comparison accounts for case-preserving case-insensitive filesystem collisions.
