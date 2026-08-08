@@ -49,12 +49,12 @@ Phases 6B-A through 6C are complete and merged through PR #183. Phase 6D produce
 - [x] F1/R1: Spec Kitty Phase 3 and roadmap closeout through replay PR #223.
 - [x] F2/R2: backend-to-persistence and cross-module logical-flow integrity through replay PR #224.
 - [x] F3/R3 repository contract: delegated host-reliability protocol and deterministic repository evidence through replay PR #225.
-- [ ] F3/R7 live host evidence: installed Codex/Antigravity continuity and applicable cross-host verification remain `PENDING_LOCAL_HOST_VALIDATION`.
+- [x] F3/R7 live host evidence: installed Codex/Antigravity continuity and applicable cross-host verification are `VERIFIED / RECONCILED LOCALLY` in the source-controlled R7 evidence record; the repository fixture remains simulated and pending/empty by design.
 - [x] F4/R4: delegated Phase D overlap reconciliation through PR #226 with `NO_DUPLICATE_RUNTIME_EXTENSION_REQUIRED` for v1.2.0.
 - [x] R5: autonomous merge-readiness hardening through PR #227.
 - [x] R5B: delegated-governance current-state reconciliation through PR #228.
 - [x] R6 repository preparation: version surfaces, public current-state documentation, compatibility/install boundaries, changelog consolidation, and `v1.2.0` release-candidate notes prepared as `PREPARED_NOT_RELEASED`.
-- [ ] R7: reconcile live installed-host evidence and complete the publication readiness gate.
+- [x] R7: reconcile live installed-host evidence locally; maintainer review, repository reconciliation merge, and independent post-merge verification remain pending.
 - [ ] R8: create annotated `v1.2.0` tag and GitHub Release only from independently verified release state.
 
 ## Deferred and Future Work

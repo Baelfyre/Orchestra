@@ -38,7 +38,7 @@
 - **Delegated Phase A:** Merged / canonical.
 - **Delegated Phase B:** Merged through PR #190; post-merge synchronization through PR #191.
 - **Delegated Phase C Repository Contract:** Clean replay completed through PR #225. Deterministic repository simulation covers same-host reset/resume, active-host handoff, capacity waits, stale identity, incomplete checkpoints, scaffold-only hosts, authority expansion, and duplicate replay.
-- **Delegated Phase C Live Host Evidence:** `PENDING_LOCAL_HOST_VALIDATION`. Repository CI does not prove an actual installed Codex reset, Antigravity reset, or live cross-host continuation.
+- **Delegated Phase C Live Host Evidence:** `VERIFIED / RECONCILED LOCALLY` through the accepted R7 record in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`. The repository fixture remains simulated with live validation pending/empty by design; repository CI does not prove live host behavior.
 - **Delegated Phase D:** Runtime overlap reconciliation completed through PR #226. No duplicate Phase D runtime extension is justified for `v1.2.0`.
 - **Phase D Result:** Existing authority, capability, delegation, lifecycle, runtime-envelope, `ApprovedUnitPlan`, audit, Tuner coordination, status/worktree, and cross-layer contracts satisfy the material runtime requirements. Evidence/decision/checkpoint/handoff records remain governance artifacts unless a concrete missing runtime consumer is established.
 
@@ -88,8 +88,8 @@ Autonomous merges follow `docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md
 - **Post-Merge Rule:** An API response is not completion evidence; the PR and canonical `main` must be independently re-read before state advances.
 - **Issue #215:** Open umbrella finalization issue targeting `v1.2.0`.
 - **R6 Repository State:** `PREPARED_NOT_RELEASED`; candidate version surfaces are `1.2.0`, while the current public GitHub Release remains `v1.1.2`.
-- **Next Required Gate:** R7 live installed Codex/Antigravity continuity and Claude Code compatibility evidence.
-- **Publication Boundary:** R8 `v1.2.0` tag/GitHub Release remains blocked until R7 host-derived evidence is reconciled and release state is independently verified.
+- **R7 State:** Live installed-host evidence is verified and reconciled locally on the dedicated reconciliation worktree. Repository reconciliation merge and independent post-merge verification remain pending.
+- **Publication Boundary:** R8 `v1.2.0` tag/GitHub Release remains separately blocked pending independent post-R7 release verification and separate authorization.
 
 ## Local Startup Verification
 

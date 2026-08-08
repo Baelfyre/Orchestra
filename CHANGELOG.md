@@ -4,7 +4,14 @@ This changelog records release-level Orchestra history. Detailed implementation 
 
 ## v1.2.0 Release Candidate - NOT RELEASED
 
-`v1.2.0` is prepared as a minor release candidate. Repository manifests are normalized to `1.2.0`, but the latest published GitHub Release remains `v1.1.2` until R7 live installed-host evidence is reconciled and the separately governed R8 publication gate completes.
+`v1.2.0` is prepared as a minor release candidate. Repository manifests are normalized to `1.2.0`, but the latest published GitHub Release remains `v1.1.2`. Accepted R7 live installed-host evidence is verified and reconciled locally; repository merge/post-merge verification and the separately governed R8 publication gate remain pending.
+
+### R7 Live-Host Evidence Reconciliation - Unreleased
+
+- Reconciled accepted locally installed-host evidence for Antigravity same-host reset/resume, Codex same-host reset/resume, and Codex -> Antigravity portable handoff.
+- Recorded Claude Code `SCAFFOLD_ONLY` packaging/contract compatibility without claiming active runtime continuity.
+- Preserved the repository-simulation/live-evidence boundary, including the unchanged pending/empty fixture live record set and canonical validator.
+- Performed no publication, tag creation, deployment, installed-integration refresh, or policy activation.
 
 ### Added
 
@@ -69,14 +76,14 @@ Key post-`v1.1.2` canonical milestones include:
 
 ### Evidence Boundary
 
-Repository CI proves deterministic repository behavior for the exact candidate revision. It does not prove an installed Codex reset/resume, installed Antigravity reset/resume, real live cross-host continuation, or active Claude Code runtime continuity.
+Repository CI proves deterministic repository behavior for the exact candidate revision. The accepted locally installed-host records are documented separately in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`; they do not promote Claude Code beyond `SCAFFOLD_ONLY` or change what repository-only validation can prove.
 
 ```text
 REPOSITORY_SIMULATION != LIVE_HOST_EVIDENCE
-LIVE_INSTALLED_HOST_VALIDATION=PENDING_LOCAL_HOST_VALIDATION
+LIVE_INSTALLED_HOST_VALIDATION=VERIFIED_RECONCILED_LOCALLY
 ```
 
-R7 host-derived evidence remains a publication gate.
+R7 host-derived evidence is verified and reconciled locally. Repository merge/post-merge verification and the separately authorized R8 publication gate remain required for publication.
 
 ### Publication Boundary
 

@@ -47,12 +47,12 @@ Use this checklist with `docs/validation/DELEGATED_HOST_RELIABILITY_PROTOCOL.md`
 
 ## Live validation
 
-- [ ] Codex active-host reset/resume has actual installed-host evidence.
-- [ ] Antigravity active-host reset/resume has actual installed-host evidence.
-- [ ] At least one supported active-host cross-host handoff has actual evidence when the current implementation permits it.
-- [ ] Claude Code packaging/contract compatibility is checked without overstating runtime maturity.
-- [ ] Live evidence identifies observation timestamp and host-produced artifact source.
-- [ ] Phase C remains `PENDING_LOCAL_HOST_VALIDATION` until required live evidence exists.
+- [x] Codex active-host reset/resume has actual installed-host evidence in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`.
+- [x] Antigravity active-host reset/resume has actual installed-host evidence in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`.
+- [x] At least one supported active-host cross-host handoff has actual evidence when the current implementation permits it.
+- [x] Claude Code packaging/contract compatibility is checked without overstating runtime maturity; active runtime continuity remains unclaimed under `SCAFFOLD_ONLY`.
+- [x] Live evidence identifies observation timestamp and host-produced artifact source.
+- [x] Phase C remains `PENDING_LOCAL_HOST_VALIDATION` for the repository simulation only; accepted R7 live evidence is reconciled separately and the fixture retains empty live records by design.
 
 ## Closeout
 

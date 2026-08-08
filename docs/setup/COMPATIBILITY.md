@@ -6,9 +6,9 @@ Scaffold-only hosts are not full support claims. Promotion requirements and grad
 
 | Host | Runtime Adapter | Status | Notes |
 |---|---|---|---|
-| Codex | `codex` | Supported | Marketplace-first, with repo-local fallback. R7 live continuity evidence remains pending for the v1.2.0 publication gate. |
+| Codex | `codex` | Supported | Marketplace-first, with repo-local fallback. R7 same-host and cross-host continuity evidence is verified locally; repository merge/post-merge verification remains pending for publication. |
 | Claude Code | `claude-code` | Supported packaging/integration | Marketplace metadata included. Phase C active runtime-continuity capability is not promoted beyond repository/scaffold evidence. |
-| Antigravity | `antigravity` | Supported | Plugin install path remains host-native. R7 live continuity evidence remains pending for the v1.2.0 publication gate. |
+| Antigravity | `antigravity` | Supported | Plugin install path remains host-native. R7 same-host and cross-host continuity evidence is verified locally; repository merge/post-merge verification remains pending for publication. |
 | Cursor | `cursor` | Scaffold-only | Runtime adapter exists; packaging surface remains scaffold-only. |
 | Windsurf | `windsurf` | Scaffold-only | Runtime adapter exists; packaging surface remains scaffold-only. |
 | VS Code | `vscode` | Scaffold-only | Shared VS Code-family runtime adapter and packaging scaffold. |
@@ -18,6 +18,6 @@ Scaffold-only hosts are not full support claims. Promotion requirements and grad
 | Neovim | `neovim` | Scaffold-only | Runtime adapter exists; packaging surface remains scaffold-only. |
 | Local AI systems | manual | Supported | Load selected Markdown and supporting files manually. |
 
-Repository CI and deterministic host-reliability fixtures prove repository contracts only. They are not live installed-host evidence. R7 must reconcile the applicable installed Codex/Antigravity continuity evidence before `v1.2.0` publication.
+Repository CI and deterministic host-reliability fixtures prove repository contracts only. They are not live installed-host evidence. Accepted R7 records are reconciled separately in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`; the fixture remains pending/empty by design.
 
 The repository does not guarantee automatic discovery in every IDE or model runtime. Use the adapter templates, packaging scaffolds, and runtime documentation when host behavior is uncertain.
