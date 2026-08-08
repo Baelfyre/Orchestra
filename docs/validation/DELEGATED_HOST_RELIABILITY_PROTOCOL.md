@@ -8,7 +8,7 @@ This protocol defines Phase C reliability evidence for delegated Orchestra execu
 Protocol revision: delegated-host-reliability-v1
 Phase: Delegated Phase C
 Repository-simulated contract status: IMPLEMENTED
-Live installed-host validation status: PENDING_LOCAL_HOST_VALIDATION
+Live installed-host validation status: VERIFIED_RECONCILED_LOCALLY (accepted R7 evidence record)
 Routing owner: Conductor
 Continuity coordination: The Tuner
 Evidence owner: Overseer
@@ -140,7 +140,7 @@ Phase C final live validation must record actual evidence for the host targets r
 - an active-host cross-host portable handoff where supported;
 - Claude Code packaging/contract compatibility, without claiming active runtime continuity while its runtime maturity remains scaffold-only.
 
-The matrix remains `PENDING_LOCAL_HOST_VALIDATION` until those records exist and validate against the exact installed revision.
+The repository simulation remains `PENDING_LOCAL_HOST_VALIDATION` with an empty live-record list by design. The accepted R7 live-host records now exist in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md` and validate against the exact installed candidate revision. This separate record does not change the repository fixture or permit repository-only runs to claim live validation.
 
 ## Repository artifacts
 

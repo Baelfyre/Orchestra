@@ -8,7 +8,7 @@
 - **Target Release:** `v1.2.0`
 - **Post-`v1.1.2` Capability State:** `PREPARED_NOT_RELEASED`
 - **Policy Activation:** `NOT_PERFORMED`
-- **Live Installed-Host Validation:** `PENDING_LOCAL_HOST_VALIDATION`
+- **Live Installed-Host Validation:** `VERIFIED / RECONCILED LOCALLY` in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`
 
 ## Clean Autonomous Replay State
 
@@ -45,14 +45,14 @@ RELEASE_CANDIDATE_VERSION=1.2.0
 CURRENT_PUBLIC_RELEASE=v1.1.2
 RELEASE_STATE=PREPARED_NOT_RELEASED
 POLICY_ACTIVATION=NOT_PERFORMED
-LIVE_INSTALLED_HOST_VALIDATION=PENDING_LOCAL_HOST_VALIDATION
+LIVE_INSTALLED_HOST_VALIDATION=VERIFIED_RECONCILED_LOCALLY
 ```
 
-Phase C repository continuity is complete through PR #225, but repository simulation and GitHub CI do not prove installed-host continuity. Phase D reconciliation is complete through PR #226 and requires no duplicate runtime extension for v1.2.0.
+Phase C repository continuity is complete through PR #225. Accepted R7 live installed-host evidence is verified and reconciled locally in the dedicated evidence record; the repository simulation remains pending/empty by design and GitHub CI does not prove installed-host continuity. Phase D reconciliation is complete through PR #226 and requires no duplicate runtime extension for v1.2.0.
 
 ## R7 Live-Host Gate
 
-Before a `v1.2.0` tag or GitHub Release can be created, R7 must produce host-derived evidence for the applicable installed Codex and Antigravity reset/resume and cross-host continuation cases. Claude Code packaging remains supported, while Phase C active runtime-continuity capability must not be promoted beyond the evidence actually obtained.
+R7 live-host validation is `VERIFIED`, pending repository reconciliation merge and independent post-merge verification. Accepted evidence covers Antigravity same-host reset/resume, Codex same-host reset/resume, Codex -> Antigravity portable handoff, and Claude Code packaging/contract compatibility. Claude Code remains `SCAFFOLD_ONLY`; active runtime continuity is not claimed. R8 publication remains blocked pending independent post-R7 release verification and separate authorization.
 
 ## Local Continuation
 
@@ -79,8 +79,8 @@ git pull --ff-only origin main
 R5   merged - autonomous merge-readiness hardening
 R5B  merged - delegated-governance state reconciliation
 R6   v1.2.0 release-candidate repository preparation
-R7   live installed Codex/Antigravity/Claude compatibility evidence
-R8   tag/GitHub Release only from independently verified release state
+R7   live installed Codex/Antigravity/Claude compatibility evidence - verified and reconciled locally; merge/post-merge verification pending
+R8   tag/GitHub Release only from independently verified release state and separate authorization
 ```
 
 Historical first-run failures remain preserved as audit evidence in the KB and archive branch. They must not be silently rewritten or deleted during cleanup.

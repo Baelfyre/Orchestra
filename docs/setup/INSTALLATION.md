@@ -22,7 +22,7 @@ If you install directly from the repository's `main` branch during this preparat
 | Neovim | Scaffold-only packaging and workspace instructions | Scaffold-only |
 | Local AI systems | Manual skill loading | Supported |
 
-R7 live installed-host continuity evidence remains a publication gate for `v1.2.0`; repository validation does not replace that evidence.
+Accepted R7 live installed-host continuity evidence is verified and reconciled locally in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`; repository validation does not replace that evidence. Repository merge/post-merge verification and separate R8 authorization remain publication gates for `v1.2.0`.
 
 ## 1. Antigravity Plugin Setup
 

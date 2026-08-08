@@ -146,11 +146,11 @@ The system does not default to HIGH-risk assumptions for unknown projects.
 
 The following flow describes the behavior for delegated autonomous
 governance. The Phase B instruction-level delegated flow is merged and canonical through PR #190 on `main`.
-Hosts without verified live continuity evidence must continue to use the
+Hosts without accepted live continuity evidence must continue to use the
 fail-closed LegacyHostFallbackPolicy. The Phase C repository reliability
-contract is complete through PR #225, but live installed-host evidence
-remains `PENDING_LOCAL_HOST_VALIDATION` until R7.
-Phase A contracts are merged. Phase B is merged and canonical through PR #190. Phase C repository contract is complete through PR #225. Phase C live installed-host evidence remains `PENDING_LOCAL_HOST_VALIDATION`. Phase D overlap reconciliation is complete through PR #226. No additional Phase D runtime implementation is justified for v1.2.0. v1.2.0 has not been released or deployed.
+contract is complete through PR #225, and accepted R7 live installed-host
+evidence is verified and reconciled locally in the separate evidence record.
+Phase A contracts are merged. Phase B is merged and canonical through PR #190. Phase C repository contract is complete through PR #225. The repository simulation remains `PENDING_LOCAL_HOST_VALIDATION` with empty live records by design. Phase D overlap reconciliation is complete through PR #226. No additional Phase D runtime implementation is justified for v1.2.0. v1.2.0 has not been released or deployed.
 
 
 ```

@@ -24,7 +24,7 @@
 ---
 
 > [!IMPORTANT]
-> Repository metadata is prepared for `v1.2.0`, but the latest published GitHub Release remains `v1.1.2`. The `v1.2.0` candidate is `PREPARED_NOT_RELEASED`. Live installed-host evidence remains `PENDING_LOCAL_HOST_VALIDATION`; no `v1.2.0` tag, GitHub Release, deployment, marketplace graduation, or policy activation is implied by the version bump.
+> Repository metadata is prepared for `v1.2.0`, but the latest published GitHub Release remains `v1.1.2`. The `v1.2.0` candidate is `PREPARED_NOT_RELEASED`. Accepted R7 live installed-host evidence is `VERIFIED / RECONCILED LOCALLY`, pending repository merge and independent post-merge verification; no `v1.2.0` tag, GitHub Release, deployment, marketplace graduation, or policy activation is implied.
 
 ## AI can generate fast. Building well still requires structure.
 
@@ -172,9 +172,9 @@ Support means a validated integration surface. Scaffold-only means the repositor
 
 | Host | Maturity | Notes |
 |---|---|---|
-| Codex | Supported | Marketplace-first installation with repo-local fallback; R7 live continuity evidence remains pending for publication. |
+| Codex | Supported | Marketplace-first installation with repo-local fallback; R7 same-host and cross-host continuity evidence is verified locally, pending repository merge/post-merge verification. |
 | Claude Code | Supported packaging/integration | Marketplace metadata and namespaced plugin skills; Phase C active runtime continuity is not inferred from packaging support. |
-| Antigravity | Supported | Native `agy` plugin path; R7 live continuity evidence remains pending for publication. |
+| Antigravity | Supported | Native `agy` plugin path; R7 same-host and cross-host continuity evidence is verified locally, pending repository merge/post-merge verification. |
 | Cursor | Scaffold-only | Runtime adapter and packaging instructions, not marketplace-published |
 | Windsurf | Scaffold-only | Runtime adapter and packaging instructions, not marketplace-published |
 | VS Code / VSCodium | Scaffold-only | Shared VS Code-family adapter and scaffold |
@@ -183,7 +183,7 @@ Support means a validated integration surface. Scaffold-only means the repositor
 | Neovim | Scaffold-only | Runtime adapter and local editor scaffold |
 | Local AI systems | Manual documentation surface | Load selected Markdown and supporting files deliberately |
 
-Repository CI and Phase C fixtures are not live installed-host evidence. R7 must reconcile the applicable installed Codex/Antigravity continuity evidence before `v1.2.0` publication. See [Compatibility](docs/setup/COMPATIBILITY.md).
+Repository CI and Phase C fixtures are not live installed-host evidence. Accepted R7 records are reconciled in [R7 live installed-host validation evidence](docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md); the fixture remains pending/empty by design. See [Compatibility](docs/setup/COMPATIBILITY.md).
 
 ## Installation
 
@@ -247,9 +247,9 @@ See [v1.1.2 Trusted Runtime Authority release notes](docs/releases/v1.1.2-truste
 
 ### Repository release candidate: v1.2.0
 
-`v1.2.0` candidate metadata is prepared, but publication remains blocked. Phase C repository reliability is complete through PR #225; live installed-host evidence remains `PENDING_LOCAL_HOST_VALIDATION`. Phase D reconciliation is complete through PR #226 with no duplicate runtime extension required. R5/R5B added merge-readiness hardening and canonical current-state reconciliation.
+`v1.2.0` candidate metadata is prepared, but publication remains blocked. Phase C repository reliability is complete through PR #225; accepted R7 live installed-host evidence is verified and reconciled locally, pending repository merge and independent post-merge verification. Phase D reconciliation is complete through PR #226 with no duplicate runtime extension required. R5/R5B added merge-readiness hardening and canonical current-state reconciliation.
 
-The candidate becomes a public release only after R6 is merged and independently verified, R7 host-derived evidence is reconciled, and the separately authorized R8 annotated-tag/GitHub-Release gate completes.
+The candidate becomes a public release only after the R7 reconciliation is merged and independently verified, a fresh release state is verified, and the separately authorized R8 annotated-tag/GitHub-Release gate completes.
 
 ## Honest Limitations
 
@@ -261,7 +261,7 @@ The candidate becomes a public release only after R6 is merged and independently
 - Orchestra does not create remote workers, background agents, or distributed orchestration infrastructure.
 - Compatibility mode is explicit, finite, and intended for bounded existing routes.
 - Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain scaffold-only.
-- Repository simulation is not live installed-host evidence; R7 remains required before `v1.2.0` publication.
+- Repository simulation is not live installed-host evidence. R7 evidence is verified and reconciled locally, while repository merge/post-merge verification and the separately authorized R8 publication gate remain required before `v1.2.0` publication.
 - Orchestra is developer tooling and a local runtime. It does not store or transmit downstream project data by default.
 - Data sensitivity, privacy, retention, deletion, platform disclosure, and IP obligations depend on the downstream project and host environment.
 - Release governance may require revision or block publication.

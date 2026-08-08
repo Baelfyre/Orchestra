@@ -10,7 +10,7 @@ A governance-first specialist skill framework that routes complex AI-assisted so
 Open-source developer tooling and AI orchestration framework
 
 ## Current Stage
-Release-candidate metadata `v1.2.0` (`PREPARED_NOT_RELEASED`). The current public GitHub Release remains `v1.1.2` until the separate publication gate completes. Canonical `main` includes the clean replay through R5B/PR #228: Spec Kitty-derived governed phase execution contracts, The Tuner Phases 1-4, frontend/backend plus backend/persistence and cross-module integrity contracts, the delegated Phase C repository continuity contract, the Phase D `NO_DUPLICATE_RUNTIME_EXTENSION_REQUIRED` disposition, and fail-closed autonomous merge-readiness hardening. Phase C live installed-host evidence remains `PENDING_LOCAL_HOST_VALIDATION`; R7 is still required before tag or GitHub Release publication. No deployment or policy activation has occurred.
+Release-candidate metadata `v1.2.0` (`PREPARED_NOT_RELEASED`). The current public GitHub Release remains `v1.1.2` until the separate publication gate completes. Canonical `main` includes the clean replay through R5B/PR #228: Spec Kitty-derived governed phase execution contracts, The Tuner Phases 1-4, frontend/backend plus backend/persistence and cross-module integrity contracts, the delegated Phase C repository continuity contract, the Phase D `NO_DUPLICATE_RUNTIME_EXTENSION_REQUIRED` disposition, and fail-closed autonomous merge-readiness hardening. Accepted R7 live installed-host evidence is `VERIFIED / RECONCILED LOCALLY` in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`; repository reconciliation merge and independent post-merge verification remain pending. No deployment or policy activation has occurred.
 
 ## Primary Users
 Developers and maintainers who install Orchestra as a plugin, skill set, or runtime package inside a supported or scaffold-only IDE or coding host (Claude Code, Codex, Antigravity, Cursor, Windsurf, JetBrains, Zed, Neovim)
@@ -38,7 +38,7 @@ Guidance used for this classification:
 - `OrchestraStatusProjection` is read-only and derived; it does not mutate repository state, Git refs, or governance policy. It is not a source of truth. Missing or conflicting data reports UNKNOWN. Exit codes report command execution success only and do not create governance authority.
 - `OrchestraWorktreeContract` is optional and host-capability-dependent. Worktree isolation must not be mandatory for single-agent or lightweight execution. Cleanup is `EXPLICIT_HOST_ACTION_ONLY`; no automatic deletion of dirty, unrelated, or user-owned worktrees is permitted.
 - The cross-module audit protocol coordinates specialist-owned findings and evidence; it creates no implementation, Git, merge, release, deployment, or policy authority.
-- Repository simulation and GitHub CI are not live installed-host evidence. Installed Codex/Antigravity continuity and Claude Code Phase C runtime-continuity claims remain subject to R7 evidence.
+- Repository simulation and GitHub CI are not live installed-host evidence. Accepted R7 evidence is recorded separately for installed Codex and Antigravity continuity and Claude Code packaging compatibility; Claude Code active runtime continuity remains unclaimed under `SCAFFOLD_ONLY` maturity.
 - No vendoring of external plugin code, and no claiming unsupported compatibility or compliance, per `docs/CONTRIBUTING.md`.
 
 ## Validation Requirements

@@ -10,7 +10,7 @@ This adapter exports Codex-compatible skills with only `name` and `description` 
 
 ## Release-Candidate Boundary
 
-The `1.2.0` repository version is preparation metadata, not proof of a published release or installed-host parity. R7 live-host evidence and the separate R8 tag/GitHub Release gate remain required before `v1.2.0` is represented as published.
+The `1.2.0` repository version is preparation metadata, not proof of a published release. Accepted R7 live-host evidence is verified and reconciled locally in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`; repository merge/post-merge verification and the separate R8 tag/GitHub Release gate remain required before `v1.2.0` is represented as published.
 
 ## Note
 

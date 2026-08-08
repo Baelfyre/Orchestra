@@ -3,7 +3,7 @@
 This document records the multi-phase implementation plan for Orchestra's
 delegated autonomous governance. Phase A contracts are canonical. Phase B
 instruction-level behavior is complete, merged and canonical through PR #190 on `main`.
-Phase A contracts are merged. Phase B is merged and canonical through PR #190. Phase C repository contract is complete through PR #225. Phase C live installed-host evidence remains `PENDING_LOCAL_HOST_VALIDATION`. Phase D overlap reconciliation is complete through PR #226. No additional Phase D runtime implementation is justified for v1.2.0. v1.2.0 has not been released or deployed.
+Phase A contracts are merged. Phase B is merged and canonical through PR #190. Phase C repository contract is complete through PR #225. Accepted R7 live installed-host evidence is `VERIFIED / RECONCILED LOCALLY` in the separate source-controlled evidence record; the repository simulation remains `PENDING_LOCAL_HOST_VALIDATION` with empty live records by design. Phase D overlap reconciliation is complete through PR #226. No additional Phase D runtime implementation is justified for v1.2.0. v1.2.0 has not been released or deployed.
 
 ---
 
@@ -118,7 +118,7 @@ adapter parity validation
 
 **Repository contract status:** Complete and merged through PR #225.
 
-**Live installed-host status:** `PENDING_LOCAL_HOST_VALIDATION`. Repository CI proves deterministic contract behavior only; it does not prove an installed Codex reset/resume, installed Antigravity reset/resume, real Codex-to-Antigravity continuation, or active Claude Code host continuity.
+**Live installed-host status:** `VERIFIED_RECONCILED_LOCALLY` in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`. Repository CI and the simulation fixture remain repository evidence only; Claude Code active runtime continuity is not claimed because its maturity remains `SCAFFOLD_ONLY`.
 
 **Evaluated scope:**
 
@@ -150,7 +150,7 @@ Additional Phase D runtime implementation for v1.2.0 is **not required**.
 
 ## Phase E - Release Preparation
 
-**Status:** Not started by R5B. Release preparation remains separately governed.
+**Status:** R6 release-candidate preparation is complete. R7 live-host evidence reconciliation is prepared on the isolated reconciliation branch and pending maintainer review, repository merge, and independent post-merge verification. R8 publication remains blocked and requires separate authorization.
 
 **Clean replay continuation:**
 
@@ -158,8 +158,8 @@ Additional Phase D runtime implementation for v1.2.0 is **not required**.
 R5   autonomous merge-readiness hardening â€” merged through PR #227
 R5B  delegated governance state reconciliation â€” current bounded remediation
 R6   release-candidate repository preparation
-R7   live installed-host validation
-R8   tag/GitHub Release from independently verified release state
+R7   live installed-host validation - VERIFIED_RECONCILED_LOCALLY; merge/post-merge verification pending
+R8   tag/GitHub Release from independently verified release state and separate authorization
 ```
 
 Commit, push, pull request, merge, tag, GitHub Release, marketplace publication,

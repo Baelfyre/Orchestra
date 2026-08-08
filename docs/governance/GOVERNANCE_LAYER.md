@@ -289,15 +289,15 @@ Specialists re-enter when:
 |---|---|
 | A | Contracts defined and merged |
 | B | Merged and canonical through PR #190 |
-| C | Repository contract complete through PR #225; live evidence `PENDING_LOCAL_HOST_VALIDATION` |
+| C | Repository contract complete through PR #225; accepted R7 live evidence `VERIFIED_RECONCILED_LOCALLY` |
 | D | Reconciled through PR #226; `NO_DUPLICATE_RUNTIME_EXTENSION_REQUIRED` for v1.2.0 |
 | E | Separately governed |
 
-Phase A contracts are merged. Phase B is merged and canonical through PR #190. Phase C repository contract is complete through PR #225. Phase C live installed-host evidence remains `PENDING_LOCAL_HOST_VALIDATION`. Phase D overlap reconciliation is complete through PR #226. No additional Phase D runtime implementation is justified for v1.2.0. v1.2.0 has not been released or deployed.
+Phase A contracts are merged. Phase B is merged and canonical through PR #190. Phase C repository contract is complete through PR #225. Accepted R7 live installed-host evidence is verified and reconciled locally in the separate evidence record; the repository simulation remains `PENDING_LOCAL_HOST_VALIDATION` with empty live records by design. Phase D overlap reconciliation is complete through PR #226. No additional Phase D runtime implementation is justified for v1.2.0. v1.2.0 has not been released or deployed.
 
 ## Enforcement Limitation
 
-Existing trusted runtime contracts cover the material Phase D requirements; PR #226 found no duplicate runtime extension necessary. Repository simulation is not live installed-host evidence, so R7 remains the publication gate.
+Existing trusted runtime contracts cover the material Phase D requirements; PR #226 found no duplicate runtime extension necessary. Repository simulation is not live installed-host evidence. Accepted R7 evidence is reconciled locally, while repository merge/post-merge verification and separately authorized R8 publication remain gates.
 
 
 
