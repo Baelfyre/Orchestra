@@ -55,15 +55,15 @@ Phases 6B-A through 6C are complete and merged through PR #183. Phase 6D produce
 - [x] R5B: delegated-governance current-state reconciliation through PR #228.
 - [x] R6 repository preparation: version surfaces, public current-state documentation, compatibility/install boundaries, changelog consolidation, and `v1.2.0` release-candidate notes prepared as `PREPARED_NOT_RELEASED`.
 - [x] R7 evidence reconciliation: PR #230 merged accepted live-host evidence into canonical `main`; reviewed and canonical trees are byte-equivalent.
-- [ ] R7R merge-governance remediation: close the PR #230 ancestry/signature incident forward-only by aligning autonomous merge verification with the current Squash-only `Protect main` ruleset, eight required status checks, signed/linear history, and non-authorizing bypass capability.
-- [ ] GA-0: Governed Autonomy Modes architecture and overlap audit; prove `NO_DUPLICATE_AUTHORITY_MODEL` before implementation.
-- [ ] GA-1: Canonical `HUMAN_GOVERNED`, `SEMI_AUTONOMOUS`, and `FULL_AUTONOMOUS` profile contract.
-- [ ] GA-2: Authority-envelope integration and precedence enforcement.
-- [ ] GA-3: Host-neutral user mode-selection gate with safe Human-Governed default.
-- [ ] GA-4: Autonomous transition integration across implementation, remediation, commit, push, PR, CI, Squash merge, post-merge verification, and authorized next-phase progression.
-- [ ] GA-5: Audit, provenance, interruption recovery, delegation inheritance, and portable-resume preservation.
-- [ ] GA-6: Adversarial validation, including solo-maintainer approvals=0, ruleset drift, bypass capability without authority, missing/stale CI, non-Squash merge attempts, unsigned canonical commits, and scope escalation.
-- [ ] GA-7: Documentation and adoption after the implemented architecture is validated.
+- [x] R7R merge-governance remediation: PR #231 was independently verified as a signed, no-bypass Squash at `8163c64838d369ea5c4abf45df36f6d6504db9fd`.
+- [x] GA-0: Governed Autonomy Modes architecture and overlap audit concluded `NO_DUPLICATE_AUTHORITY_MODEL`.
+- [x] GA-1: Canonical `HUMAN_GOVERNED`, `SEMI_AUTONOMOUS`, and `FULL_AUTONOMOUS` profile contract.
+- [x] GA-2: Authority-envelope integration and precedence enforcement at the instruction/effective-action layer.
+- [x] GA-3: Host-neutral user selection gate with effective-authority preview and safe default.
+- [x] GA-4: Profile-aware transition integration through Squash-aware post-merge verification.
+- [x] GA-5: Audit, provenance, interruption recovery, delegation inheritance, and portable-resume preservation.
+- [x] GA-6: Adversarial fixture validation for authority, profile, policy, evidence, bypass, merge-method, signature, scope, and continuity boundaries.
+- [x] GA-7: Governance, routing, Conductor/Codex parity, project-state, README, roadmap, and release-candidate documentation.
 - [ ] Refresh every release-readiness artifact invalidated by R7R or GA implementation and independently verify the final candidate.
 - [ ] R8: create annotated `v1.2.0` tag and GitHub Release only after the refreshed candidate is independently verified and separate publication authority is granted.
 

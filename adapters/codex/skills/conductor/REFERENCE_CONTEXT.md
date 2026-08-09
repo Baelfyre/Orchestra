@@ -29,6 +29,10 @@ Generated from canonical Orchestra sources. Indented snapshots are code-only con
 
     Delegated phase execution is permitted in `STANDARD` and `GOVERNED` modes when a valid `DelegatedExecutionEnvelope` exists. `AUDIT` mode remains read-only unless remediation is already authorized in the envelope. `DESTRUCTIVE` mode remains fail-closed and cannot auto-continue.
 
+    ## Risk Mode != Governance Profile
+
+    Governance Profile is orthogonal: `HUMAN_GOVERNED` (default), `SEMI_AUTONOMOUS` (through granted PR/CI), or `FULL_AUTONOMOUS` (through granted merge/phase progression). Profiles only reduce effective authority; increases require human authority, children cannot exceed parents, and hard boundaries remain separate. See [Governed Autonomy Modes](../governance/GOVERNED_AUTONOMY_MODES.md).
+
 
     ## FAST mode
     - **Purpose**: Rapid execution of simple, low-risk, well-defined tasks.
@@ -97,13 +101,10 @@ Generated from canonical Orchestra sources. Indented snapshots are code-only con
     - **any mode to DESTRUCTIVE**: Any task requiring destructive testing, production modification, or guardrail bypass is immediately placed in a DESTRUCTIVE blocked state.
 
     ## Governance Status Mapping
-    - **NOT_REQUIRED**: FAST mode tasks without compliance impact.
-    - **CONDITIONAL**: Standard tasks where governance is loaded only if triggers appear.
-    - **REQUIRED**: Governed and Audit tasks requiring explicit policy adherence.
-    - **BLOCKED_PENDING_AUTHORIZATION**: Destructive tasks.
+    `NOT_REQUIRED` applies to FAST without compliance impact; `CONDITIONAL` to ordinary Standard work; `REQUIRED` to Governed/Audit; and `BLOCKED_PENDING_AUTHORIZATION` to Destructive work.
 
     ## Validation Requirements
-    Mode selection dictates the stringency of validation. FAST mode relies on compilation, while GOVERNED and DESTRUCTIVE modes require programmatic guardrail validation and full suite testing.
+    Risk mode sets validation depth; Governed and Destructive require programmatic guardrails and the applicable full suite.
 
     ## Required Exclusions
     - FAST mode cannot be used for security, CI/CD, release, destructive, database migration, credential, compliance, or governance tasks.
@@ -112,12 +113,13 @@ Generated from canonical Orchestra sources. Indented snapshots are code-only con
     - DESTRUCTIVE mode must remain BLOCKED_PENDING_AUTHORIZATION unless explicit user authorization and required guardrail validation are present.
 
     ## Non-Goals
-    This policy does not dictate how the underlying LLM functions, but rather strict routing requirements for context provision, safety gating, and intent classification prior to execution.
+    This policy governs routing context, safety gates, and classification, not model internals.
 
     ## Canonical References
     - [Router-First Architecture](ROUTER_FIRST_ARCHITECTURE.md)
     - [Context Retrieval Rules](CONTEXT_RETRIEVAL_RULES.md)
     - [Governance Layer](../governance/GOVERNANCE_LAYER.md)
+    - [Governed Autonomy Modes](../governance/GOVERNED_AUTONOMY_MODES.md)
     - [Router Validation Benchmarks](../testing/ROUTER_VALIDATION_BENCHMARKS.md)
 
     ## Policy Result

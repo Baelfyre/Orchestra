@@ -50,9 +50,13 @@ LIVE_INSTALLED_HOST_VALIDATION=VERIFIED_RECONCILED_LOCALLY
 
 Phase C repository continuity is complete through PR #225. Accepted R7 live installed-host evidence is verified and reconciled locally in the dedicated evidence record; the repository simulation remains pending/empty by design and GitHub CI does not prove installed-host continuity. Phase D reconciliation is complete through PR #226 and requires no duplicate runtime extension for v1.2.0.
 
-## R7 Live-Host Gate
+## R7 and R7R Closeout
 
-R7 live-host validation is `VERIFIED`, pending repository reconciliation merge and independent post-merge verification. Accepted evidence covers Antigravity same-host reset/resume, Codex same-host reset/resume, Codex -> Antigravity portable handoff, and Claude Code packaging/contract compatibility. Claude Code remains `SCAFFOLD_ONLY`; active runtime continuity is not claimed. R8 publication remains blocked pending independent post-R7 release verification and separate authorization.
+R7 live-host validation and repository reconciliation are `MERGED_VERIFIED`. PR #230 is preserved as forward-only incident evidence; PR #231 is the signed, no-bypass Squash remediation at `8163c64838d369ea5c4abf45df36f6d6504db9fd`. Accepted evidence covers Antigravity same-host reset/resume, Codex same-host reset/resume, Codex -> Antigravity portable handoff, and Claude Code packaging/contract compatibility. Claude Code remains `SCAFFOLD_ONLY`; active runtime continuity is not claimed.
+
+## Governed Autonomy Modes
+
+GA-0 concluded `NO_DUPLICATE_AUTHORITY_MODEL`. GA-1 through GA-7 are implemented on `codex/governed-autonomy-modes-v1.2.0` as instruction-level profile/effective-action contracts, deterministic fixtures/validation, Conductor selection behavior, Codex export parity, and current-state documentation. Runtime authority, plugin manifests, versions, the R7 fixture/validator, and installed integrations remain unchanged.
 
 ## Local Continuation
 
@@ -79,7 +83,9 @@ git pull --ff-only origin main
 R5   merged - autonomous merge-readiness hardening
 R5B  merged - delegated-governance state reconciliation
 R6   v1.2.0 release-candidate repository preparation
-R7   live installed Codex/Antigravity/Claude compatibility evidence - verified and reconciled locally; merge/post-merge verification pending
+R7   live installed Codex/Antigravity/Claude compatibility evidence - merged verified
+R7R  signed Squash-aware merge-governance remediation - merged verified
+GA-0..GA-7  governed autonomy profiles - implementation and exact-head validation in progress
 R8   tag/GitHub Release only from independently verified release state and separate authorization
 ```
 

@@ -24,7 +24,7 @@
 ---
 
 > [!IMPORTANT]
-> Repository metadata is prepared for `v1.2.0`, but the latest published GitHub Release remains `v1.1.2`. The `v1.2.0` candidate is `PREPARED_NOT_RELEASED`. Accepted R7 live installed-host evidence is `VERIFIED / RECONCILED LOCALLY`, pending repository merge and independent post-merge verification; no `v1.2.0` tag, GitHub Release, deployment, marketplace graduation, or policy activation is implied.
+> Repository metadata is prepared for `v1.2.0`, but the latest published GitHub Release remains `v1.1.2`. The `v1.2.0` candidate is `PREPARED_NOT_RELEASED`. R7 and its signed Squash-aware merge-governance remediation are `MERGED_VERIFIED`; no `v1.2.0` tag, GitHub Release, deployment, marketplace graduation, installed-integration refresh, or policy activation is implied.
 
 ## AI can generate fast. Building well still requires structure.
 
@@ -91,8 +91,17 @@ The candidate consolidates the substantial backward-compatible work merged after
 - **Delegated Phase D reconciliation:** `NO_DUPLICATE_RUNTIME_EXTENSION_REQUIRED` for `v1.2.0`; existing trusted runtime contracts cover the material overlap.
 - **Autonomous merge-readiness hardening:** green canonical baseline, exact-head evidence, complete required checks, expected-head merge guard where supported, and independent post-merge verification.
 - **Current-state reconciliation:** stale Phase C/D status and false live-host promotion are rejected by executable governance consistency checks.
+- **Governed Autonomy Modes:** user-selectable Human-Governed, Semi-Autonomous, and Full Autonomous profiles reduce repetitive gates without creating authority or weakening evidence, repository-policy, release, deployment, destructive-action, or policy-activation boundaries.
 
 See [v1.2.0 release-candidate notes](docs/releases/v1.2.0-governed-orchestration-release-candidate.md).
+
+## Governed Autonomy Profiles
+
+- **Human-Governed:** safe default; Orchestra pauses before material Git/remote transitions and major phase progression.
+- **Semi-Autonomous:** may implement, validate, commit, push, create PRs, monitor exact-head CI, and bounded-remediate when explicitly granted; stops before merge and major phase progression.
+- **Full Autonomous:** may also merge and continue through later explicitly granted development phases while repository policy and exact-state evidence remain green.
+
+Profiles are reduction-only. Effective authority is the intersection of the selected profile, explicit user grant, repository/project policy, host capability, current phase, and evidence. No profile independently authorizes release, deployment, policy activation, destructive action, force push, history rewrite, or authority expansion. See [Governed Autonomy Modes](docs/governance/GOVERNED_AUTONOMY_MODES.md).
 
 ## Delegated Phase Progression
 
@@ -172,9 +181,9 @@ Support means a validated integration surface. Scaffold-only means the repositor
 
 | Host | Maturity | Notes |
 |---|---|---|
-| Codex | Supported | Marketplace-first installation with repo-local fallback; R7 same-host and cross-host continuity evidence is verified locally, pending repository merge/post-merge verification. |
+| Codex | Supported | Marketplace-first installation with repo-local fallback; R7 same-host and cross-host continuity evidence is verified and merged. |
 | Claude Code | Supported packaging/integration | Marketplace metadata and namespaced plugin skills; Phase C active runtime continuity is not inferred from packaging support. |
-| Antigravity | Supported | Native `agy` plugin path; R7 same-host and cross-host continuity evidence is verified locally, pending repository merge/post-merge verification. |
+| Antigravity | Supported | Native `agy` plugin path; R7 same-host and cross-host continuity evidence is verified and merged. |
 | Cursor | Scaffold-only | Runtime adapter and packaging instructions, not marketplace-published |
 | Windsurf | Scaffold-only | Runtime adapter and packaging instructions, not marketplace-published |
 | VS Code / VSCodium | Scaffold-only | Shared VS Code-family adapter and scaffold |
@@ -247,9 +256,9 @@ See [v1.1.2 Trusted Runtime Authority release notes](docs/releases/v1.1.2-truste
 
 ### Repository release candidate: v1.2.0
 
-`v1.2.0` candidate metadata is prepared, but publication remains blocked. Phase C repository reliability is complete through PR #225; accepted R7 live installed-host evidence is verified and reconciled locally, pending repository merge and independent post-merge verification. Phase D reconciliation is complete through PR #226 with no duplicate runtime extension required. R5/R5B added merge-readiness hardening and canonical current-state reconciliation.
+`v1.2.0` candidate metadata is prepared, but publication remains blocked. Phase C repository reliability is complete through PR #225; accepted R7 live installed-host evidence and the signed Squash-aware R7R remediation are `MERGED_VERIFIED`. Phase D reconciliation is complete through PR #226 with no duplicate runtime extension required. R5/R5B added merge-readiness hardening and canonical current-state reconciliation.
 
-The candidate becomes a public release only after the R7 reconciliation is merged and independently verified, a fresh release state is verified, and the separately authorized R8 annotated-tag/GitHub-Release gate completes.
+The candidate becomes a public release only after Governed Autonomy Modes is merged and independently verified, fresh release evidence is green, and the separately authorized R8 annotated-tag/GitHub-Release gate completes.
 
 ## Honest Limitations
 

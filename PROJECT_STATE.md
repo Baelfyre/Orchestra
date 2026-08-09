@@ -82,7 +82,7 @@ FORCE_PUSH=false
 PR230_REBASE_RESULT_IS_NOT_FUTURE_PRECEDENT=true
 ```
 
-The incident exposed an ancestry-only post-merge verification assumption. R7 is not recorded as fully `MERGED_VERIFIED` until the forward-only merge-governance remediation is merged and independently verified under the current Squash-only ruleset.
+The incident exposed an ancestry-only post-merge verification assumption. PR #231 remediated that assumption forward-only and was independently verified as a signed, no-bypass Squash at canonical commit `8163c64838d369ea5c4abf45df36f6d6504db9fd`. R7 and R7R are `MERGED_VERIFIED`; PR #230 remains historical incident evidence and not future precedent.
 
 The incident-derived invariants are:
 
@@ -92,6 +92,19 @@ BYPASS_CAPABILITY != GOVERNANCE_AUTHORIZATION
 ```
 
 Autonomous merges follow `docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md`.
+
+## Governed Autonomy Modes
+
+- **GA-0:** `NO_DUPLICATE_AUTHORITY_MODEL`; no `orchestra_runtime/**` extension is justified.
+- **GA-1:** `HUMAN_GOVERNED`, `SEMI_AUTONOMOUS`, and `FULL_AUTONOMOUS` canonical profiles.
+- **GA-2:** Effective transition authority is the intersection of profile, explicit grant, repository/project policy, host capability, phase scope, and evidence.
+- **GA-3:** Conductor selection gate with Human-Governed default, effective authority preview, explicit confirmation for increases, and immediate reductions.
+- **GA-4:** Profile-aware progression through the existing delegated and Squash-aware merge-readiness protocols.
+- **GA-5:** Profile/grant provenance and fail-closed same-host/portable continuity preservation.
+- **GA-6:** Deterministic adversarial fixtures and focused validator/runtime regressions.
+- **GA-7:** Governance, routing, adapter, project-state, README, roadmap, and release-candidate documentation reconciliation.
+
+No profile creates authority. Claude Code remains `SCAFFOLD_ONLY`; runtime authority, plugin manifests, versions, host fixtures, and installed integrations are unchanged.
 
 ## Current `Protect main` Ruleset
 
@@ -138,8 +151,8 @@ The current bypass list is intentionally retained for repository-operational acc
 - **Post-Merge Rule:** An API response is not completion evidence. For Squash, canonical parent/tree/content/signature evidence and a canonical remote read are required before state advances.
 - **Issue #215:** Open umbrella finalization issue targeting `v1.2.0`.
 - **R6 Repository State:** `PREPARED_NOT_RELEASED`; candidate version surfaces are `1.2.0`, while the current public GitHub Release remains `v1.1.2`.
-- **R7 State:** Live host evidence is accepted and PR #230 content is canonical, but the post-merge governance incident requires forward-only remediation before R7 closeout is recorded as `MERGED_VERIFIED`.
-- **Governed Autonomy Modes:** GA-0 through GA-7 are now part of the `v1.2.0` scope after R7 closeout and before R8 publication.
+- **R7 State:** R7 and R7R are `MERGED_VERIFIED`; PR #230 incident history is preserved forward-only and PR #231 is the signed Squash trust anchor.
+- **Governed Autonomy Modes:** GA-0 through GA-7 are implemented on the active candidate branch and require exact-head validation/merge before canonical completion is recorded.
 - **Publication Boundary:** R8 `v1.2.0` tag/GitHub Release remains blocked until Governed Autonomy Modes is implemented, invalidated release evidence is refreshed, release state is independently verified, and separate publication authorization is granted.
 
 ## Local Startup Verification
