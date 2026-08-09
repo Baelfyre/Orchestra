@@ -24,7 +24,7 @@
 ---
 
 > [!IMPORTANT]
-> Repository metadata is prepared for `v1.2.0`, but the latest published GitHub Release remains `v1.1.2`. The `v1.2.0` candidate is `PREPARED_NOT_RELEASED`. R7 and its signed Squash-aware merge-governance remediation are `MERGED_VERIFIED`; no `v1.2.0` tag, GitHub Release, deployment, marketplace graduation, installed-integration refresh, or policy activation is implied.
+> Repository metadata is prepared for `v1.2.0`, but the latest published GitHub Release remains `v1.1.2`. The `v1.2.0` candidate is `PREPARED_NOT_RELEASED`. R7, its signed Squash-aware R7R merge-governance remediation, and GA-0 through GA-7 are `MERGED_VERIFIED`. Release-readiness evidence is revision-bound and must be refreshed after any repository-hygiene merge. No `v1.2.0` tag, GitHub Release, deployment, marketplace graduation, installed-integration refresh, or policy activation is implied.
 
 ## AI can generate fast. Building well still requires structure.
 
@@ -90,6 +90,7 @@ The candidate consolidates the substantial backward-compatible work merged after
 - **Delegated Phase C repository reliability:** deterministic repository-verifiable reset/resume, handoff, capacity, stale identity, incomplete checkpoint, authority expansion, scaffold-only host, and replay behavior.
 - **Delegated Phase D reconciliation:** `NO_DUPLICATE_RUNTIME_EXTENSION_REQUIRED` for `v1.2.0`; existing trusted runtime contracts cover the material overlap.
 - **Autonomous merge-readiness hardening:** green canonical baseline, exact-head evidence, complete required checks, expected-head merge guard where supported, and independent post-merge verification.
+- **R7R Squash-aware verification:** exact pre-merge parent, reviewed/canonical tree equality, empty reviewed-to-canonical content diff, verified canonical signature, and no-bypass evidence replace ancestry-only assumptions.
 - **Current-state reconciliation:** stale Phase C/D status and false live-host promotion are rejected by executable governance consistency checks.
 - **Governed Autonomy Modes:** user-selectable Human-Governed, Semi-Autonomous, and Full Autonomous profiles reduce repetitive gates without creating authority or weakening evidence, repository-policy, release, deployment, destructive-action, or policy-activation boundaries.
 
@@ -182,7 +183,7 @@ Support means a validated integration surface. Scaffold-only means the repositor
 | Host | Maturity | Notes |
 |---|---|---|
 | Codex | Supported | Marketplace-first installation with repo-local fallback; R7 same-host and cross-host continuity evidence is verified and merged. |
-| Claude Code | Supported packaging/integration | Marketplace metadata and namespaced plugin skills; Phase C active runtime continuity is not inferred from packaging support. |
+| Claude Code | Scaffold-only | Marketplace metadata, namespaced plugin skills, and R7-H package/contract compatibility; active runtime continuity is not claimed. |
 | Antigravity | Supported | Native `agy` plugin path; R7 same-host and cross-host continuity evidence is verified and merged. |
 | Cursor | Scaffold-only | Runtime adapter and packaging instructions, not marketplace-published |
 | Windsurf | Scaffold-only | Runtime adapter and packaging instructions, not marketplace-published |
@@ -314,7 +315,15 @@ Governed Autonomy Modes is merged and independently verified, and refreshed cand
 
 ## External Pattern Governance
 
-Orchestra may inspect selected external open-source repositories through source-pinned, static Artificer audits. An audit does not authorize copying or implementation. Where a concept is incorporated, it must pass governed provenance, licensing, security, ownership, and maintainer-review boundaries and be independently implemented as Orchestra-native work.
+Orchestra may inspect selected external open-source repositories through source-pinned, static Artificer audits. The current repository contains provenance evidence for the following external sources:
+
+| External source | Pinned evidence | Orchestra disposition |
+|---|---|---|
+| [Priivacy-ai/spec-kitty](https://github.com/Priivacy-ai/spec-kitty) | Commit `8466727ebbbc01fcaf43575657c9b1b9553784d9` in the Spec Kitty promotion records | Selected work-package, runtime-envelope, correlation, retrospective, and worktree-isolation concepts were adapted into independently designed Orchestra-native contracts. The records explicitly reject copied code, copied field names or state machines, and new Spec Kitty or event-library dependencies. |
+| [CristianOlivera1/openhero](https://github.com/CristianOlivera1/openhero) | Commit `16ffaa7e6dc39eb390011d81c420353b5d1dbaff` in canonical Artificer intake, audit, and decision records | Static reference review only. Some patterns are eligible for later concept-only proposal consideration, while others are deferred or rejected. The records do not establish an Orchestra promotion, copied source, media reuse, or dependency adoption. |
+| [usestrix/strix](https://github.com/usestrix/strix) | Commit `09872744f5a9d3ffad750478f823e656ac1a7c88` in canonical Artificer intake, audit, decision, proposal, promotion, and Pattern Catalog records | Four selected concepts were promoted and implemented as Orchestra-native authority-scope, lifecycle, run-scoped capability, and specialist-delegation contracts. The records authorize conceptual design only and explicitly exclude reuse of Strix source code, prompts, payloads, examples, media, and documentation expression. |
+
+These acknowledgements describe selected patterns or concepts, not wholesale integration. They do not claim copied code, schemas, dependencies, datasets, prompts, assets, or documentation; endorsement or affiliation; trademark permission; or a blanket licensing conclusion. Each source retains its own identity and license. Any future direct reuse requires a new source-pinned governance, licensing, attribution, security, and maintainer review.
 
 The authoritative incorporation record is the governed [Pattern Catalog](docs/internal/PATTERN_CATALOG.md). External source code, datasets, prompts, payloads, examples, media, assets, or documentation expression are not incorporated unless a governed record explicitly authorizes that reuse.
 
