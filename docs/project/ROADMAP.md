@@ -3,7 +3,7 @@
 ## Spec Kitty-Derived Orchestra Contracts
 
 Design Status: `DESIGN_COMPLETE`
-Runtime Status: `IMPLEMENTED_MERGED` | `NOT_RELEASED`
+Runtime Status: `IMPLEMENTED_MERGED_RELEASED_IN_V1_2_0`
 
 - [x] Phase 1A: Architecture Ownership and Contract Placement (`docs/project/SPEC_KITTY_DERIVED_CONTRACT_OWNERSHIP.md`).
 - [x] Phase 1B: `OrchestraRuntimeEnvelope` Schema Specification (`docs/project/ORCHESTRA_RUNTIME_ENVELOPE.md`).
@@ -27,7 +27,7 @@ Runtime Status: `IMPLEMENTED_MERGED` | `NOT_RELEASED`
 - [x] Phase 3D: Consolidated cross-platform, behavior, governance, security, packaging, compatibility, and exact-head validation completed for the final PR #214 revision.
 - [x] Phase 3E: Maintainer immutable review, bounded remediation, commit and push authorization, remote verification, and PR #214 merge completed on August 6, 2026.
 
-Phase 3A through Phase 3E are complete and merged. The Spec Kitty-derived capability set remains unreleased and no policy activation has occurred.
+Phase 3A through Phase 3E are complete and merged. The Spec Kitty-derived capability set was released in `v1.2.0`; no policy activation occurred.
 
 ## Authority and Capability Runtime Progression
 
@@ -43,7 +43,7 @@ Phase 3A through Phase 3E are complete and merged. The Spec Kitty-derived capabi
 
 Phases 6B-A through 6C are complete and merged through PR #183. Phase 6D produced the published `v1.1.2` baseline after PR #185 and the separate publication gate.
 
-## v1.2.0 Finalization
+## v1.2.0 Finalization - Complete
 
 - [x] F0/R0: preserve and verify the recovery baseline after the first autonomous-run incident.
 - [x] F1/R1: Spec Kitty Phase 3 and roadmap closeout through replay PR #223.
@@ -65,7 +65,7 @@ Phases 6B-A through 6C are complete and merged through PR #183. Phase 6D produce
 - [x] GA-6: Adversarial fixture validation for authority, profile, policy, evidence, bypass, merge-method, signature, scope, and continuity boundaries.
 - [x] GA-7: Governance, routing, Conductor/Codex parity, project-state, README, roadmap, and release-candidate documentation.
 - [x] Refresh every release-readiness artifact invalidated by R7R or GA implementation and independently verify the final candidate; canonical evidence is recorded in `docs/validation/V1_2_0_RELEASE_READINESS_EVIDENCE.md`.
-- [x] R8: annotated `v1.2.0` tag and immutable GitHub Release published and independently verified at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`.
+- [x] R8: annotated `v1.2.0` tag and immutable [GitHub Release](https://github.com/Baelfyre/Orchestra/releases/tag/v1.2.0) published and independently verified at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`.
 
 ### Current `Protect main` Development Baseline
 

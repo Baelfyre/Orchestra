@@ -41,59 +41,57 @@ The framework is designed to help developers reduce context drift, make cross-do
 
 ## How Orchestra Works
 
-The runtime establishes permission before execution. Routing selects responsibility but does not grant authority. Authority and capability checks run before governance. Governance may block already-authorized work, but cannot create missing permission. For material multi-domain work, Conductor activates The Tuner to assemble specialist-owned contracts, expose missing ownership or contradictions, and identify stale dependent evidence. Single-owner work bypasses that coordination overhead.
+Each run begins with project context and three separate choices: risk mode, progression mode, and governance profile. Those choices affect review depth and pause frequency, but they do not create permission. Orchestra composes the trusted runtime, calculates effective authority as the intersection of explicit grants and all applicable constraints, and only then lets Conductor route work. Material multi-domain work uses The Tuner to coordinate specialist-owned contracts; single-owner work bypasses that overhead.
 
 ~~~mermaid
 flowchart TD
     Request["Request + Project Context"]
+    Select["Select Risk Mode + Progression Mode + Governance Profile"]
     Compose["Trusted Runtime Composition"]
-    Route["Conductor Routes Work"]
-    Authority{"Authority Allowed?"}
-    Capability{"Capability Granted?"}
-    Governance{"Governance Satisfied?"}
-    Multi{"Material Cross-Domain Work?"}
-    Tuner{"Cross-Layer Contract Ready?"}
-    Specialist["Specialist Execution"]
-    Validate{"Validation Passed?"}
+    Effective{"Effective Authority Intersection Allows Action?"}
+    Route["Conductor Routes Smallest Responsible Stack"]
+    Multi{"Material Multi-Domain Work?"}
+    Tuner{"Tuner Contract Ready and Current?"}
+    Specialist["Owning Specialist Execution"]
+    Validate{"Current Validation + Evidence Pass?"}
     Revise["Return to Owning Boundary"]
-    Lifecycle["Structured Lifecycle Result"]
-    Evidence["Deterministic Evidence"]
-    Review["Human Review or Accepted Output"]
+    Arbiter{"Arbiter Transition Disposition"}
+    Continue["Bounded Continuation to Next Approved Unit"]
+    Remediate["In-Scope Remediation + Revalidation"]
+    Wait["Checkpoint and Wait for Evidence or Capacity"]
+    Escalate["Escalate Missing Intent, Scope, Policy, or Authority"]
+    Stop["Stop and Preserve Safe State"]
 
-    Request --> Compose --> Route --> Authority
-    Authority -- No --> Lifecycle
-    Authority -- Yes --> Capability
-    Capability -- No --> Lifecycle
-    Capability -- Yes --> Governance
-    Governance -- No --> Lifecycle
-    Governance -- Yes --> Multi
+    Request --> Select --> Compose --> Effective
+    Effective -- No --> Escalate
+    Effective -- Yes --> Route --> Multi
     Multi -- No --> Specialist
     Multi -- Yes --> Tuner
-    Tuner -- No --> Lifecycle
+    Tuner -- No --> Wait
     Tuner -- Yes --> Specialist
     Specialist --> Validate
     Validate -- No --> Revise --> Specialist
-    Validate -- Yes --> Lifecycle --> Evidence --> Review
+    Validate -- Yes --> Arbiter
+    Arbiter -- AUTO_CONTINUE --> Continue --> Route
+    Arbiter -- AUTO_REMEDIATE_AND_REVALIDATE --> Remediate --> Specialist
+    Arbiter -- WAIT_FOR_EVIDENCE / WAIT_FOR_CAPACITY --> Wait
+    Arbiter -- ESCALATE_HUMAN --> Escalate
+    Arbiter -- STOP --> Stop
 ~~~
 
-Accessible summary: a request moves through trusted composition, routing, authority, capability, and governance. Single-owner work proceeds directly to its specialist. Material cross-domain work must first reach a ready coordination state. Validation failure returns work to the owning boundary. Accepted or blocked work ends in structured lifecycle state and deterministic evidence.
+Accessible summary: a request supplies project context and selects separate risk, progression, and governance-profile settings. Trusted composition and the effective-authority intersection run before Conductor routes work. Single-owner work goes directly to its specialist; material multi-domain work first requires current Tuner coordination. Validation failure returns to the owning boundary. Current evidence goes to Arbiter, which may continue or remediate inside existing authority, wait for evidence or capacity, escalate to a human, or stop safely.
 
-## v1.2.0 Capability Set
+## What v1.2.0 Gives You
 
-The release consolidates the substantial backward-compatible work merged after `v1.1.2`:
+- **Governed autonomy without invented permission:** choose Human-Governed, Semi-Autonomous, or Full Autonomous pause behavior while effective authority remains the most restrictive intersection of explicit grant, policy, host capability, phase scope, and current evidence.
+- **Delegated progression with predictable outcomes:** approved phases can advance through six explicit Arbiter dispositions, bounded remediation, checkpoints, and resumable capacity waits instead of relying on ambiguous generated prose.
+- **Integrated multi-specialist coordination:** Conductor activates The Tuner only for material multi-domain work so ownership gaps, contradictions, stale contracts, generated artifacts, and minimal specialist re-entry remain visible.
+- **Cross-layer integrity review:** reusable frontend-to-backend, backend-to-persistence, and cross-module logical-flow profiles connect findings to one owner, validation evidence, and fail-closed re-entry.
+- **Revision-bound validation and merge safety:** canonical baseline health, exact-head checks, evidence freshness, expected-head merge guards, signed Squash verification, and independent canonical reads prevent stale green results from authorizing a newer state.
+- **Portable governed execution contracts:** runtime envelopes, correlation identity, phase retrospectives, approved-unit plans, status projections, and worktree contracts preserve bounded context and reviewable state.
+- **Evidence-backed host continuity boundaries:** accepted Codex and Antigravity continuity evidence is separated from repository simulation, while Claude Code remains explicitly `SCAFFOLD_ONLY` for active runtime continuity.
 
-- **Delegated Phase B progression:** approved units, six transition dispositions, checkpoints, bounded remediation, capacity handoff, evidence freshness, and fail-closed external-action authority.
-- **The Tuner Phases 1-4:** cross-specialist contract assembly, contradiction detection, semantic invalidation, minimal specialist re-entry, typed in-memory coordination, and bounded Conductor-owned runtime integration.
-- **Spec Kitty-derived governed execution contracts:** `OrchestraRuntimeEnvelope`, `OrchestraCorrelationID`, `OrchestraPhaseRetrospective`, the 15-field `ApprovedUnitPlan` extension, `OrchestraStatusProjection`, and `OrchestraWorktreeContract`.
-- **Cross-layer integrity auditing:** frontend-to-backend, backend-to-persistence, and language-neutral cross-module logical-flow profiles using the existing Conductor -> Tuner -> specialist -> Overseer -> Arbiter ownership model.
-- **Delegated Phase C repository reliability:** deterministic repository-verifiable reset/resume, handoff, capacity, stale identity, incomplete checkpoint, authority expansion, scaffold-only host, and replay behavior.
-- **Delegated Phase D reconciliation:** `NO_DUPLICATE_RUNTIME_EXTENSION_REQUIRED` for `v1.2.0`; existing trusted runtime contracts cover the material overlap.
-- **Autonomous merge-readiness hardening:** green canonical baseline, exact-head evidence, complete required checks, expected-head merge guard where supported, and independent post-merge verification.
-- **R7R Squash-aware verification:** exact pre-merge parent, reviewed/canonical tree equality, empty reviewed-to-canonical content diff, verified canonical signature, and no-bypass evidence replace ancestry-only assumptions.
-- **Current-state reconciliation:** stale Phase C/D status and false live-host promotion are rejected by executable governance consistency checks.
-- **Governed Autonomy Modes:** user-selectable Human-Governed, Semi-Autonomous, and Full Autonomous profiles reduce repetitive gates without creating authority or weakening evidence, repository-policy, release, deployment, destructive-action, or policy-activation boundaries.
-
-See [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration-release-candidate.md).
+Implementation chronology and source provenance remain available in [Project State](PROJECT_STATE.md), the [Roadmap](docs/project/ROADMAP.md), and the stable [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration.md).
 
 ## Governed Autonomy Profiles
 
@@ -207,12 +205,12 @@ Repository manifests identify the current published release as `1.2.0`. See the 
 
 ## Quick Start
 
-1. Provide the project type, purpose, release target, data sensitivity, dependencies, and constraints.
-2. Describe the concrete task and acceptance criteria.
-3. Let Conductor select the smallest effective specialist stack and activate The Tuner only when material cross-domain coordination is required.
-4. Review governance decisions and specialist outputs at their owning boundaries.
-5. Run required validation before accepting the result.
-6. Preserve project state and a concise handoff before changing session, branch, or maintainer.
+Start by defining four things:
+
+1. **Governance profile:** use `HUMAN_GOVERNED` unless a human explicitly grants a more autonomous profile.
+2. **Authorized scope:** name the repository, branch or baseline, allowed paths, behaviors, and external actions.
+3. **Hard boundaries:** state what must not happen, such as release, deployment, policy activation, destructive action, force push, or history rewrite.
+4. **Terminal boundary:** say exactly where Orchestra must stop, such as an unstaged diff, validated commit, open PR, or independently verified merge.
 
 Example:
 
@@ -220,14 +218,18 @@ Example:
 @Orchestra
 
 Project: Open-source developer tool
-Goal: Add a bounded export command
-Release target: Public patch release
-Data use: No end-user data
-Constraints: Preserve public APIs; no new dependency
+Governance profile: HUMAN_GOVERNED
+Repository: example/tool
+Authorized scope: src/export/** and tests/export/**
+Allowed actions: inspect, implement, and validate
+Hard boundaries: no dependency change, push, merge, release, or deployment
+Terminal boundary: validated unstaged diff ready for human review
 
 Task:
-Implement the command, validate it, and leave the diff unstaged for review.
+Add a bounded export command without changing public APIs.
 ~~~
+
+With `HUMAN_GOVERNED`, material Git and phase transitions pause for approval. `SEMI_AUTONOMOUS` may continue through explicitly granted commit, push, PR, exact-head CI, and bounded remediation, but still stops before merge and major phase progression. `FULL_AUTONOMOUS` may also merge and continue through later explicitly granted phases when every current governance gate passes. All three profiles remain inside the same explicit scope and hard boundaries.
 
 ## Validation and Evidence
 
@@ -252,7 +254,7 @@ For autonomous or delegated merges, Orchestra additionally requires the fail-clo
 
 `v1.2.0` is published from annotated tag `v1.2.0` at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`. Phase C repository reliability, accepted R7 live installed-host evidence, the signed Squash-aware R7R remediation, Phase D overlap reconciliation, R5/R5B merge-readiness hardening, Governed Autonomy Modes, pre-R8 repository hygiene, and final release readiness are complete and independently verified.
 
-See the [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration-release-candidate.md) and the published [`v1.2.0` GitHub Release](https://github.com/Baelfyre/Orchestra/releases/tag/v1.2.0). The previous [`v1.1.2` release](https://github.com/Baelfyre/Orchestra/releases/tag/v1.1.2) remains historical release evidence.
+See the [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration.md) and the published [`v1.2.0` GitHub Release](https://github.com/Baelfyre/Orchestra/releases/tag/v1.2.0). The previous [`v1.1.2` release](https://github.com/Baelfyre/Orchestra/releases/tag/v1.1.2) remains historical release evidence.
 
 ## Honest Limitations
 
@@ -298,7 +300,7 @@ See the [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration-relea
 
 ### Release and maintainers
 
-- [v1.2.0 Release Notes](docs/releases/v1.2.0-governed-orchestration-release-candidate.md)
+- [v1.2.0 Release Notes](docs/releases/v1.2.0-governed-orchestration.md)
 - [v1.1.2 Release Notes](docs/releases/v1.1.2-trusted-runtime-authority.md)
 - [Contributing](docs/CONTRIBUTING.md)
 - [Project State](PROJECT_STATE.md)
