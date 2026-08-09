@@ -3,15 +3,15 @@
 ## Disposition
 
 ```text
-EVIDENCE_REVISION=2026-08-09-PRE-R8-HYGIENE-REFRESH
+EVIDENCE_REVISION=2026-08-09-R8-PUBLICATION-CLOSEOUT
 RELEASE_CANDIDATE=v1.2.0
-RELEASE_STATE=PREPARED_NOT_RELEASED
-CURRENT_PUBLIC_RELEASE=v1.1.2
+RELEASE_STATE=PUBLISHED_VERIFIED
+CURRENT_PUBLIC_RELEASE=v1.2.0
 RELEASE_READINESS=VERIFIED
-R8_PUBLICATION=BLOCKED_REQUIRES_SEPARATE_HUMAN_AUTHORIZATION
+R8_PUBLICATION=COMPLETE_VERIFIED
 ```
 
-This record refreshes release evidence invalidated by the pre-R8 repository-hygiene merge. It records readiness for the separate R8 human gate. It does not authorize or perform tag creation, publication, deployment, installed-integration refresh, or policy activation.
+This record preserves the pre-R8 release-readiness evidence and records independently verified R8 publication. Publication created annotated tag and immutable GitHub Release `v1.2.0`; it did not perform deployment, marketplace publication, installed-integration refresh, or policy activation.
 
 ## Canonical Identity
 
@@ -123,9 +123,9 @@ UNIQUE_COMMIT_BRANCHES_PRESERVED=true
 RELEASE_AND_RECOVERY_HISTORY_PRESERVED=true
 ```
 
-## Publication Boundary Verification
+## Pre-Publication Boundary Verification
 
-Canonical GitHub reads after the hygiene merge established:
+Canonical GitHub reads after the hygiene merge established this historical pre-publication state:
 
 ```text
 LATEST_PUBLIC_RELEASE=v1.1.2
@@ -136,7 +136,7 @@ V1_2_0_GITHUB_RELEASE=NOT_FOUND
 TAG_AT_HYGIENE_CANONICAL_HEAD=NONE
 ```
 
-## Required Stop State
+## Publication State
 
 ```text
 RUNTIME_CODE_CHANGED=false
@@ -145,16 +145,19 @@ R7_FIXTURE_LIVE_RECORDS_CHANGED=false
 R7_VALIDATOR_CHANGED=false
 CLAUDE_MATURITY=SCAFFOLD_ONLY
 CLAUDE_ACTIVE_RUNTIME_CONTINUITY_CLAIMED=false
-CURRENT_PUBLIC_RELEASE=v1.1.2
+CURRENT_PUBLIC_RELEASE=v1.2.0
 TARGET_RELEASE=v1.2.0
-RELEASE_STATE=PREPARED_NOT_RELEASED
-TAG_CREATED=false
-RELEASE_CREATED=false
+RELEASE_STATE=PUBLISHED_VERIFIED
+TAG_CREATED=true
+TAG_OBJECT=01cb771fee49a4e19b1791062718e32f77df153c
+TAG_PEELED_COMMIT=4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76
+RELEASE_CREATED=true
+GITHUB_RELEASE_URL=https://github.com/Baelfyre/Orchestra/releases/tag/v1.2.0
 DEPLOYMENT_PERFORMED=false
 MARKETPLACE_PUBLICATION_PERFORMED=false
 INSTALLED_INTEGRATION_REFRESHED=false
 POLICY_ACTIVATION_PERFORMED=false
-R8_PUBLICATION=BLOCKED_REQUIRES_SEPARATE_HUMAN_AUTHORIZATION
+R8_PUBLICATION=COMPLETE_VERIFIED
 ```
 
-The next permitted transition is a separately authorized human R8 publication decision. No profile, hygiene classification, or prior green evidence creates that authority.
+R8 publication completed under separate explicit human authority. The published tag remains fixed at the independently verified release commit; later documentation closeout commits do not move it.

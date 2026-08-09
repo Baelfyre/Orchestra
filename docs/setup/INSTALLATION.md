@@ -4,9 +4,9 @@ Orchestra can be installed in several ways depending on your AI host or IDE.
 
 ## Release Status
 
-The current public GitHub Release is `v1.1.2`, published July 14, 2026. Repository manifests are normalized to release-candidate version `1.2.0` during R6, but `v1.2.0` is `PREPARED_NOT_RELEASED`: no `v1.2.0` tag or GitHub Release exists until the separate R8 publication gate is authorized and completed.
+The current public GitHub Release is `v1.2.0`, published August 9, 2026 from annotated tag `v1.2.0` at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`. Repository manifests and the published release are normalized to version `1.2.0`.
 
-If you install directly from the repository's `main` branch during this preparation window, treat `1.2.0` metadata as candidate state rather than proof of a published stable release. The update checker compares against the latest GitHub Release, which remains the publication source of truth.
+The latest GitHub Release remains the publication source of truth. Installing directly from `main` may include post-release documentation or later unreleased work, so use tag `v1.2.0` when exact released content is required.
 
 | Host | Install Surface | Current Status |
 |---|---|---|
@@ -22,7 +22,7 @@ If you install directly from the repository's `main` branch during this preparat
 | Neovim | Scaffold-only packaging and workspace instructions | Scaffold-only |
 | Local AI systems | Manual skill loading | Supported |
 
-Accepted R7 live installed-host continuity evidence is verified and reconciled locally in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`; repository validation does not replace that evidence. Repository merge/post-merge verification and separate R8 authorization remain publication gates for `v1.2.0`.
+Accepted R7 live installed-host continuity evidence is verified and reconciled locally in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`; repository validation does not replace that evidence. R8 publication is complete, but the repository simulation fixture remains pending/empty by design and is not live evidence.
 
 ## 1. Antigravity Plugin Setup
 

@@ -3,7 +3,7 @@
 This document records the multi-phase implementation plan for Orchestra's
 delegated autonomous governance. Phase A contracts are canonical. Phase B
 instruction-level behavior is complete, merged and canonical through PR #190 on `main`.
-Phase A contracts are merged. Phase B is merged and canonical through PR #190. Phase C repository contract is complete through PR #225. Accepted R7 live installed-host evidence is `VERIFIED / RECONCILED LOCALLY` in the separate source-controlled evidence record; the repository simulation remains `PENDING_LOCAL_HOST_VALIDATION` with empty live records by design. Phase D overlap reconciliation is complete through PR #226. No additional Phase D runtime implementation is justified for v1.2.0. v1.2.0 has not been released or deployed.
+Phase A contracts are merged. Phase B is merged and canonical through PR #190. Phase C repository contract is complete through PR #225. Accepted R7 evidence is `VERIFIED / RECONCILED LOCALLY`; the repository simulation remains `PENDING_LOCAL_HOST_VALIDATION` with empty live records by design. Phase D overlap reconciliation is complete through PR #226. No additional Phase D runtime implementation is justified for v1.2.0. `v1.2.0 has not been released or deployed` was the pre-R8 state; `v1.2.0` is now published, with deployment and policy activation unperformed.
 
 ---
 
@@ -150,7 +150,7 @@ Additional Phase D runtime implementation for v1.2.0 is **not required**.
 
 ## Phase E - Release Preparation
 
-**Status:** R6 release-candidate preparation is complete. R7 and R7R are `MERGED_VERIFIED`. Governed Autonomy Modes GA-0 through GA-7 are `MERGED_VERIFIED` through PR #232, and invalidated release-readiness evidence is refreshed and independently green. R8 publication remains blocked and requires separate human authorization.
+**Status:** R6-R8 and GA-0 through GA-7 are complete. Tag and GitHub Release `v1.2.0` are `PUBLISHED_VERIFIED` at `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`.
 
 **Clean replay continuation:**
 
@@ -160,7 +160,7 @@ R5B  delegated governance state reconciliation â€” current bounded remediat
 R6   release-candidate repository preparation
 R7   live installed-host validation and reconciliation - MERGED_VERIFIED
 GA-0..GA-7  governed autonomy profiles - MERGED_VERIFIED; release evidence refreshed
-R8   tag/GitHub Release from independently verified release state and separate human authorization
+R8   annotated tag and GitHub Release - PUBLISHED_VERIFIED
 ```
 
 Commit, push, pull request, merge, tag, GitHub Release, marketplace publication,

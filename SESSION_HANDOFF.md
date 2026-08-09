@@ -3,10 +3,10 @@
 - **Canonical Repo:** `Baelfyre/Orchestra`
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
-- **Current Public Release:** `v1.1.2`
+- **Current Public Release:** `v1.2.0`
 - **Release-Candidate Metadata:** `v1.2.0`
 - **Target Release:** `v1.2.0`
-- **Post-`v1.1.2` Capability State:** `PREPARED_NOT_RELEASED`
+- **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
 - **Policy Activation:** `NOT_PERFORMED`
 - **Live Installed-Host Validation:** `VERIFIED / RECONCILED LOCALLY` in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`
 
@@ -42,8 +42,8 @@ This is preparation, not publication:
 
 ```text
 RELEASE_CANDIDATE_VERSION=1.2.0
-CURRENT_PUBLIC_RELEASE=v1.1.2
-RELEASE_STATE=PREPARED_NOT_RELEASED
+CURRENT_PUBLIC_RELEASE=v1.2.0
+RELEASE_STATE=PUBLISHED_VERIFIED
 POLICY_ACTIVATION=NOT_PERFORMED
 LIVE_INSTALLED_HOST_VALIDATION=VERIFIED_RECONCILED_LOCALLY
 ```
@@ -60,7 +60,7 @@ GA-0 concluded `NO_DUPLICATE_AUTHORITY_MODEL`. GA-1 through GA-7 are `MERGED_VER
 
 ## Pre-R8 Repository Hygiene
 
-PR #234 reconciled README R7/R7R/GA state, Claude `SCAFFOLD_ONLY` maturity, source-pinned Spec Kitty/OpenHero/Strix acknowledgements, and complete conservative tracked-file/local-branch/remote-branch classifications. It is `MERGED_VERIFIED` as signed no-bypass Squash commit `8cca62109b10aa06abaf25fc4c9982a02160bcbf`. Canonical behavior, 541 runtime tests at 94.31% coverage, strict governance, packaging, Artificer, autonomy, host-reliability, JSON, and diff validation are green. No tracked file or branch was deleted. Release readiness was refreshed against this exact canonical revision; R8 remains the next separate human gate.
+PR #234 reconciled README R7/R7R/GA state, Claude `SCAFFOLD_ONLY` maturity, source-pinned Spec Kitty/OpenHero/Strix acknowledgements, and complete conservative tracked-file/local-branch/remote-branch classifications. It is `MERGED_VERIFIED` as signed no-bypass Squash commit `8cca62109b10aa06abaf25fc4c9982a02160bcbf`. Canonical behavior, 541 runtime tests at 94.31% coverage, strict governance, packaging, Artificer, autonomy, host-reliability, JSON, and diff validation are green. No tracked file or branch was deleted. Release readiness was refreshed and R8 published annotated tag `v1.2.0` and the immutable GitHub Release from exact release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`.
 
 ## Local Continuation
 
@@ -91,7 +91,7 @@ R7   live installed Codex/Antigravity/Claude compatibility evidence - merged ver
 R7R  signed Squash-aware merge-governance remediation - merged verified
 GA-0..GA-7  governed autonomy profiles - merged verified
 R7H  pre-R8 repository hygiene - merged verified; release evidence refreshed
-R8   next gate - tag/GitHub Release only with separate human authorization
+R8   annotated tag and GitHub Release - published verified
 ```
 
 Historical first-run failures remain preserved as audit evidence in the KB and archive branch. They must not be silently rewritten or deleted during cleanup.
