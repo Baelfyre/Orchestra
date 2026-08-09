@@ -54,8 +54,33 @@ Phases 6B-A through 6C are complete and merged through PR #183. Phase 6D produce
 - [x] R5: autonomous merge-readiness hardening through PR #227.
 - [x] R5B: delegated-governance current-state reconciliation through PR #228.
 - [x] R6 repository preparation: version surfaces, public current-state documentation, compatibility/install boundaries, changelog consolidation, and `v1.2.0` release-candidate notes prepared as `PREPARED_NOT_RELEASED`.
-- [x] R7: reconcile live installed-host evidence locally; maintainer review, repository reconciliation merge, and independent post-merge verification remain pending.
-- [ ] R8: create annotated `v1.2.0` tag and GitHub Release only from independently verified release state.
+- [x] R7 evidence reconciliation: PR #230 merged accepted live-host evidence into canonical `main`; reviewed and canonical trees are byte-equivalent.
+- [ ] R7R merge-governance remediation: close the PR #230 ancestry/signature incident forward-only by aligning autonomous merge verification with the current Squash-only `Protect main` ruleset, eight required status checks, signed/linear history, and non-authorizing bypass capability.
+- [ ] GA-0: Governed Autonomy Modes architecture and overlap audit; prove `NO_DUPLICATE_AUTHORITY_MODEL` before implementation.
+- [ ] GA-1: Canonical `HUMAN_GOVERNED`, `SEMI_AUTONOMOUS`, and `FULL_AUTONOMOUS` profile contract.
+- [ ] GA-2: Authority-envelope integration and precedence enforcement.
+- [ ] GA-3: Host-neutral user mode-selection gate with safe Human-Governed default.
+- [ ] GA-4: Autonomous transition integration across implementation, remediation, commit, push, PR, CI, Squash merge, post-merge verification, and authorized next-phase progression.
+- [ ] GA-5: Audit, provenance, interruption recovery, delegation inheritance, and portable-resume preservation.
+- [ ] GA-6: Adversarial validation, including solo-maintainer approvals=0, ruleset drift, bypass capability without authority, missing/stale CI, non-Squash merge attempts, unsigned canonical commits, and scope escalation.
+- [ ] GA-7: Documentation and adoption after the implemented architecture is validated.
+- [ ] Refresh every release-readiness artifact invalidated by R7R or GA implementation and independently verify the final candidate.
+- [ ] R8: create annotated `v1.2.0` tag and GitHub Release only after the refreshed candidate is independently verified and separate publication authority is granted.
+
+### Current `Protect main` Development Baseline
+
+The current repository policy is a solo-maintainer ruleset with zero required approvals, conversation resolution, Squash-only merge, signed commits, linear history, branch-up-to-date enforcement, restricted deletion, blocked force pushes, and these eight required check contexts:
+
+- `governance-check`;
+- `validate`;
+- `runtime-tests`;
+- `native-windows-latest`;
+- `native-ubuntu-latest`;
+- `native-macos-latest`;
+- `Analyze (actions)`;
+- `Analyze (python)`.
+
+The existing bypass list remains operationally available. Orchestra governance must not treat bypass capability as transition authority.
 
 ## Deferred and Future Work
 
@@ -81,4 +106,4 @@ Phases 6B-A through 6C are complete and merged through PR #183. Phase 6D produce
 - [ ] Add an optional local-model retrieval index.
 - [ ] Improve adapters as tool capabilities change.
 - [ ] Expand fictional, project-agnostic examples.
-- [ ] Publish `v1.2.0` only after R7 host-derived evidence, exact-head release verification, and the separate R8 publication gate are completed.
+- [ ] Publish `v1.2.0` only after R7R, GA-0 through GA-7, refreshed release evidence, independent final verification, and the separate R8 publication gate are completed.

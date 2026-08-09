@@ -46,6 +46,7 @@ def test_missing_and_pending_evidence_waits():
     for case_id in (
         "no-check-data",
         "missing-runtime",
+        "missing-codeql-actions",
         "queued-windows",
         "in-progress-macos",
         "head-not-reconfirmed",
@@ -60,6 +61,7 @@ def test_any_required_check_failure_blocks():
     for case_id in (
         "governance-failed",
         "runtime-failed",
+        "codeql-python-failed",
         "cross-platform-failed",
         "required-skipped",
         "required-cancelled",
@@ -96,8 +98,25 @@ def test_merge_conflict_blocks():
     assert validator.evaluate_pre_merge(snapshot) == "BLOCK"
 
 
-def test_unresolved_blocker_blocks():
-    _, snapshot = pre_case("unresolved-blocker")
+def test_unresolved_blocker_and_thread_block():
+    for case_id in ("unresolved-blocker", "unresolved-thread"):
+        _, snapshot = pre_case(case_id)
+        assert validator.evaluate_pre_merge(snapshot) == "BLOCK"
+
+
+def test_ruleset_and_merge_method_drift_block():
+    for case_id in (
+        "approval-requirement-drift",
+        "merge-method-drift",
+        "selected-rebase",
+        "signature-rule-disabled",
+    ):
+        _, snapshot = pre_case(case_id)
+        assert validator.evaluate_pre_merge(snapshot) == "BLOCK"
+
+
+def test_bypass_capability_is_not_governance_authority():
+    _, snapshot = pre_case("bypass-used")
     assert validator.evaluate_pre_merge(snapshot) == "BLOCK"
 
 
@@ -106,14 +125,21 @@ def test_merge_api_success_alone_is_not_verified():
     assert validator.evaluate_post_merge(case["snapshot"]) == "MERGE_STATE_UNVERIFIED"
 
 
-def test_post_merge_requires_canonical_read_and_containment():
-    for case_id in ("pr-not-merged", "main-missing-reviewed-head"):
+def test_post_merge_requires_squash_equivalence_and_signature():
+    for case_id in (
+        "pr-not-merged",
+        "wrong-merge-method",
+        "tree-mismatch",
+        "content-diff-not-empty",
+        "parent-drift",
+        "unsigned-canonical-commit",
+    ):
         case = post_case(case_id)
         assert validator.evaluate_post_merge(case["snapshot"]) == "MERGE_STATE_UNVERIFIED"
 
 
-def test_verified_post_merge_state_is_accepted():
-    case = post_case("verified")
+def test_verified_squash_post_merge_state_is_accepted():
+    case = post_case("verified-squash")
     assert validator.evaluate_post_merge(case["snapshot"]) == "MERGED_VERIFIED"
 
 
