@@ -2,17 +2,18 @@
 
 ## Purpose
 
-This document defines Orchestra's current minimum validation evidence for pull requests targeting `main` and the recommended GitHub protection that should mirror it.
+This document defines Orchestra's current validation evidence for pull requests targeting `main` and the live GitHub `Protect main` ruleset that mirrors it.
 
-The first autonomous finalization experiment demonstrated that GitHub may technically accept a merge while repository validation is red. Therefore required-check policy is fail-closed at both the automation layer and, where configured, the GitHub branch-protection/ruleset layer.
+The autonomous finalization incidents demonstrated that GitHub may technically accept a merge while repository validation is red, while a privileged actor has bypass capability, or while the selected merge method does not preserve the evidence assumptions used by the controller. Required-check policy is therefore fail-closed at both the automation layer and the GitHub ruleset layer.
 
-Canonical rule:
+Canonical rules:
 
 ```text
 GITHUB_CAN_MERGE != GOVERNANCE_READY_TO_MERGE
+BYPASS_CAPABILITY != GOVERNANCE_AUTHORIZATION
 ```
 
-## Current Validation Workflows and Minimum Jobs
+## Current Required Validation Signals
 
 | Workflow | Required job | Requirement | Reason |
 | --- | --- | --- | --- |
@@ -22,8 +23,33 @@ GITHUB_CAN_MERGE != GOVERNANCE_READY_TO_MERGE
 | Cross-platform Validation | `native-windows-latest` | Required | Native Windows repository/runtime validation |
 | Cross-platform Validation | `native-ubuntu-latest` | Required | Native Ubuntu repository/runtime validation |
 | Cross-platform Validation | `native-macos-latest` | Required | Native macOS repository/runtime validation |
+| CodeQL | `Analyze (actions)` | Required | GitHub Actions security/code-analysis signal required by the live ruleset |
+| CodeQL | `Analyze (python)` | Required | Python security/code-analysis signal required by the live ruleset |
 
-Additional checks required by repository rules, security tooling, CodeQL, or a specific phase remain additive. This table is the minimum autonomous merge evidence inventory, not a bypass list.
+Additional checks required by a stricter future repository rule or a specific phase remain additive. This table is the current exact autonomous merge evidence inventory, not a bypass list.
+
+## Current `Protect main` Ruleset Baseline
+
+The live Orchestra ruleset is intentionally configured for a solo maintainer:
+
+```text
+Required approvals: 0
+Dismiss stale PR approvals when new commits are pushed: ON
+Require review from specific teams: OFF
+Require Code Owner review: OFF
+Require approval of most recent reviewable push: OFF
+Require conversation resolution: ON
+Allowed merge methods: Squash only
+Restrict deletions: ON
+Require linear history: ON
+Require signed commits: ON
+Require pull request before merging: ON
+Require status checks to pass: ON
+Require branches to be up to date before merging: ON
+Block force pushes: ON
+```
+
+The repository bypass list remains available for operational access by trusted roles/apps. Its existence does not grant Orchestra governance authority and does not make a bypassed transition valid. Ordinary governed automation records and requires `bypass_used=false`; any future deliberate bypass requires separate explicit authority and evidence.
 
 ## Fail-Closed Interpretation
 
@@ -43,50 +69,53 @@ The following states do not authorize merge:
 - check evidence tied to an earlier PR head;
 - red canonical `main` baseline;
 - unresolved blocking finding;
-- missing changelog update when strict governance classifies changed paths as significant.
+- unresolved review thread;
+- missing changelog update when strict governance classifies changed paths as significant;
+- live ruleset drift from the accepted protection profile;
+- merge method other than Squash;
+- use of bypass without separate explicit authority.
 
 Missing or pending evidence maps to `WAIT_FOR_EVIDENCE`. Failed required evidence maps to `BLOCK` or bounded remediation followed by complete revalidation.
 
 ## Exact-Head Requirement
 
-A remediation commit invalidates prior check evidence. The complete minimum matrix must be collected again on the new head.
+A remediation commit invalidates prior check evidence. The complete required matrix must be collected again on the new head.
 
 Immediately before merge:
 
 1. Re-read the PR and confirm its exact head SHA.
-2. Re-read every required workflow/job for that SHA.
-3. Require all minimum jobs and any additional repository-required checks to be completed and successful.
-4. Use `expected_head_sha` or the platform's equivalent compare-and-swap guard where supported.
-5. After the merge write, independently re-read the PR and canonical `main` before recording `MERGED_VERIFIED`.
+2. Re-read the live ruleset and selected merge method.
+3. Require all eight current required jobs and any additional repository-required checks to be completed and successful for that exact head.
+4. Require zero unresolved review threads.
+5. Require Squash as the selected merge method.
+6. Require no bypass for ordinary governed execution.
+7. Use `expected_head_sha` or the platform's equivalent compare-and-swap guard where supported.
+8. After the merge write, independently re-read the PR and canonical `main` before recording `MERGED_VERIFIED`.
 
 `mergeable: true` is informational only. It means Git can construct a merge; it does not prove validation or governance readiness.
 
+Because Squash creates a new canonical commit identity, post-merge verification follows `AUTONOMOUS_MERGE_READINESS_PROTOCOL.md`: verify the exact canonical parent, tree/content equivalence to the reviewed head, and verified signature on the canonical squash commit rather than requiring the reviewed head SHA itself to remain in `main` ancestry.
+
 The executable companion contract is `docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md` with `scripts/validate_autonomous_merge_readiness_contract.py` and its regression fixtures/tests.
 
-## GitHub Protection Recommendation
+## GitHub Protection Alignment
 
-GitHub branch protection or rulesets for `main` should require the active check contexts corresponding to the minimum jobs above and should apply to administrators and automation identities where practical.
+The live `Protect main` ruleset should continue to require the active contexts listed above, Squash-only merging, signed and linear canonical history, current-base testing, conversation resolution, pull-request flow, restricted deletion, and blocked force pushes.
 
-Do not infer that repository protection is configured merely because this document exists. The live repository settings must be inspected and tested separately.
+The current bypass list is an operational repository setting. The automation-side fail-closed protocol remains mandatory even for actors technically capable of bypassing the ruleset.
 
-The automation-side fail-closed protocol remains mandatory even when GitHub protection is configured, because governance must not rely on a platform merge button or API call as its only safety boundary.
+Do not infer that the repository settings still match this document merely because the document exists. The live ruleset must be re-read before an autonomous merge.
 
 ## Workflow Migration Policy
 
 Do not remove, rename, consolidate, or convert a workflow to manual-only while it supplies a required merge signal unless all of the following are true:
 
 1. The replacement workflow/job is already running successfully on `main` and pull requests.
-2. Branch protection/rulesets have been reviewed and updated.
+2. The live ruleset has been reviewed and updated.
 3. The autonomous merge-readiness inventory has been updated.
 4. The migration is recorded in `CHANGELOG.md`.
 5. A PR proves the old and new check names are observable before the old check disappears.
 
 ## Current Recommendation
 
-Keep all three workflow families active:
-
-- Governance Check;
-- validate;
-- Cross-platform Validation.
-
-Treat all six minimum jobs listed above as required autonomous merge evidence until a separately validated CI consolidation changes this contract.
+Keep Governance Check, validate, Cross-platform Validation, and the two CodeQL Analyze jobs active. Treat all eight jobs listed above as required autonomous merge evidence until a separately validated CI or ruleset change replaces this contract.
