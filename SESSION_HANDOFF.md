@@ -34,14 +34,15 @@ The clean replay then completed R1 through R5B:
 - **R5 / PR #227:** fail-closed autonomous merge-readiness hardening.
 - **R5B / PR #228:** delegated-governance current-state reconciliation, merged at `fbe4532ba2083feaa7ed9fcda2988843f1237a78` and independently verified on canonical `main`.
 
-## Current Release-Candidate State - R6
+## Historical R6 Release-Candidate Preparation
 
-R6 normalizes repository release-candidate metadata to `1.2.0`, consolidates README/setup/current-state/release notes, and prepares exact-head release-readiness evidence.
+R6 normalized repository release-candidate metadata to `1.2.0`, consolidated README/setup/current-state/release notes, and prepared exact-head release-readiness evidence. This section records the pre-publication checkpoint; it is not the current release state.
 
-This is preparation, not publication:
+Historical R6 and current publication state:
 
 ```text
 RELEASE_CANDIDATE_VERSION=1.2.0
+HISTORICAL_R6_RELEASE_STATE=PREPARED_NOT_RELEASED
 CURRENT_PUBLIC_RELEASE=v1.2.0
 RELEASE_STATE=PUBLISHED_VERIFIED
 POLICY_ACTIVATION=NOT_PERFORMED
@@ -58,9 +59,9 @@ R7 live-host validation and repository reconciliation are `MERGED_VERIFIED`. PR 
 
 GA-0 concluded `NO_DUPLICATE_AUTHORITY_MODEL`. GA-1 through GA-7 are `MERGED_VERIFIED` through PR #232 and signed Squash commit `900f88d7a3ed480ae8b910e6ba204008a72d2784`. Exact-head checks and canonical release-readiness validation are green. Runtime authority, plugin manifests, versions, the R7 fixture/validator, and installed integrations remain unchanged.
 
-## Pre-R8 Repository Hygiene
+## Historical Pre-R8 Repository Hygiene and Publication
 
-PR #234 reconciled README R7/R7R/GA state, Claude `SCAFFOLD_ONLY` maturity, source-pinned Spec Kitty/OpenHero/Strix acknowledgements, and complete conservative tracked-file/local-branch/remote-branch classifications. It is `MERGED_VERIFIED` as signed no-bypass Squash commit `8cca62109b10aa06abaf25fc4c9982a02160bcbf`. Canonical behavior, 541 runtime tests at 94.31% coverage, strict governance, packaging, Artificer, autonomy, host-reliability, JSON, and diff validation are green. No tracked file or branch was deleted. Release readiness was refreshed and R8 published annotated tag `v1.2.0` and the immutable GitHub Release from exact release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`.
+PR #234 reconciled README R7/R7R/GA state, Claude `SCAFFOLD_ONLY` maturity, source-pinned Spec Kitty/OpenHero/Strix acknowledgements, and complete conservative tracked-file/local-branch/remote-branch classifications. It is `MERGED_VERIFIED` as signed no-bypass Squash commit `8cca62109b10aa06abaf25fc4c9982a02160bcbf`. Canonical behavior, 541 runtime tests at 94.31% coverage, strict governance, packaging, Artificer, autonomy, host-reliability, JSON, and diff validation were green. No tracked file or branch was deleted. Release readiness was refreshed, R8 published annotated tag `v1.2.0` and the immutable GitHub Release from exact release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`, and Issue #215 is `CLOSED_VERIFIED`.
 
 ## Local Continuation
 

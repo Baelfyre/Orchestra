@@ -7,7 +7,9 @@
 - Preserved R7-E2, R7-F, R7-G, and R7-H evidence identities, Claude Code `SCAFFOLD_ONLY` maturity, and the repository simulation fixture as pending/empty by design.
 - Performed no deployment, marketplace publication, installed-integration refresh, policy activation, force push, history rewrite, or branch deletion.
 
-## [Unreleased] - Governed Autonomy Modes and Release-Readiness Closeout
+## v1.2.0 Pre-Publication History - Governed Autonomy Modes and Release-Readiness Closeout
+
+The following entries preserve the verified candidate chronology before the separately authorized August 9, 2026 publication. They are historical release evidence, not current unpublished state.
 
 - Reconciled the README across R7, the R7R Squash-aware governance remediation, GA-0 through GA-7, revision-bound release readiness, host maturity, and the separately authorized R8 publication boundary.
 - Added source-pinned acknowledgements for Spec Kitty, OpenHero, and Strix with explicit concept-only, no-wholesale-integration, no-affiliation, and no-unsupported-reuse boundaries.
@@ -16,19 +18,19 @@
 - Completed the GA-0 architecture and overlap assessment at baseline `8163c64838d369ea5c4abf45df36f6d6504db9fd`.
 - Recorded `NO_DUPLICATE_AUTHORITY_MODEL`: existing runtime authority, delegation, lifecycle, evidence, host-continuity, and Squash-aware merge contracts remain canonical.
 - Authorized only an instruction-level profile/effective-action contract, deterministic fixture validation, Conductor selection behavior, and documentation parity for GA-1 through GA-7.
-- Preserved `v1.2.0` as `PREPARED_NOT_RELEASED`, Claude Code as `SCAFFOLD_ONLY`, and R8 as a separate human publication gate.
+- At that checkpoint, preserved `v1.2.0` as `PREPARED_NOT_RELEASED`, Claude Code as `SCAFFOLD_ONLY`, and R8 as a separate human publication gate.
 - Added the GA-1 through GA-7 profile, execution, selection, continuity, adversarial-validation, Codex-parity, and adoption contracts without changing `orchestra_runtime/**`.
 - Squash-merged GA-0 through GA-7 through PR #232 as signed canonical commit `900f88d7a3ed480ae8b910e6ba204008a72d2784`, with exact reviewed/canonical tree equivalence, an empty content diff, green exact-head CI, and a passing rulesuite.
 - Refreshed the canonical behavior, runtime-coverage, strict-governance, packaging, R7 reliability, GA, and merge-readiness evidence after the GA merge; recorded the result in `docs/validation/V1_2_0_RELEASE_READINESS_EVIDENCE.md`.
-- Independently verified that the latest public release remains `v1.1.2`, no `v1.2.0` tag or GitHub Release exists, and R8 remains blocked pending separate human authorization.
+- Before R8, independently verified that the latest public release remained `v1.1.2`, no `v1.2.0` tag or GitHub Release existed, and publication remained blocked pending separate human authorization.
 
 This changelog records release-level Orchestra history. Detailed implementation chronology remains available in Git history, merged pull requests, `DECISION_LOG.md`, `PROJECT_STATE.md`, and immutable handoff records.
 
-## v1.2.0 Release Candidate - NOT RELEASED
+## v1.2.0 Pre-Publication Release-Candidate History
 
-`v1.2.0` is prepared as a minor release candidate. Repository manifests are normalized to `1.2.0`, but the latest published GitHub Release remains `v1.1.2`. R7, R7R, and Governed Autonomy Modes are `MERGED_VERIFIED`, and invalidated release evidence has been refreshed and independently verified. Release publication remains blocked at the separately authorized R8 publication gate.
+This section records the final pre-publication candidate state. Repository manifests had been normalized to `1.2.0` while the latest public release was still `v1.1.2`. R7, R7R, and Governed Autonomy Modes were `MERGED_VERIFIED`, and invalidated release evidence had been refreshed. R8 later published `v1.2.0` under separate authority.
 
-### R7 Live-Host Evidence Reconciliation - Unreleased
+### R7 Live-Host Evidence Reconciliation - Pre-Publication History
 
 - Reconciled accepted locally installed-host evidence for Antigravity same-host reset/resume, Codex same-host reset/resume, and Codex -> Antigravity portable handoff.
 - Recorded Claude Code `SCAFFOLD_ONLY` packaging/contract compatibility without claiming active runtime continuity.
@@ -52,7 +54,7 @@ This changelog records release-level Orchestra history. Detailed implementation 
 - Cross-layer integrity audit profiles for frontend-to-backend synchronicity, backend-to-persistence integrity, and language-neutral cross-module logical flow using the existing Conductor -> Tuner -> specialist -> Overseer -> Arbiter ownership model.
 - Delegated Phase C repository host-reliability contracts and deterministic adversarial fixtures covering reset/resume, active-host handoff, capacity waits, stale identity, incomplete checkpoints, scaffold-only hosts, authority expansion, and duplicate replay.
 - Fail-closed autonomous merge-readiness protocol, machine-readable evaluation fixtures, and runtime regressions requiring green canonical baseline, exact-head evidence, complete successful required checks, changelog freshness, expected-head merge guards where supported, and independent post-merge verification.
-- `docs/releases/v1.2.0-governed-orchestration-release-candidate.md` as the source-backed candidate release note and publication-boundary record.
+- Source-backed candidate notes later promoted to stable `docs/releases/v1.2.0-governed-orchestration.md`; the former candidate path remains as a compatibility pointer for immutable historical references.
 
 ### Changed
 
@@ -118,13 +120,13 @@ REPOSITORY_SIMULATION != LIVE_HOST_EVIDENCE
 LIVE_INSTALLED_HOST_VALIDATION=VERIFIED_RECONCILED_LOCALLY
 ```
 
-R7 host-derived evidence and the forward-only merge-governance remediation are verified and canonical. Governed Autonomy Modes, refreshed release verification, and the separately authorized R8 publication gate remain required for publication.
+At this pre-publication checkpoint, R7 host-derived evidence and the forward-only merge-governance remediation were verified and canonical. Governed Autonomy Modes, refreshed release verification, and separate R8 authority still remained required.
 
-### Publication Boundary
+### Historical Publication Boundary
 
-The `v1.2.0` candidate is not a public release. No `v1.2.0` tag, GitHub Release publication, deployment, marketplace graduation, installed-host mutation, policy activation, force push, or history rewrite is authorized by the current finalization work.
+At this recorded pre-R8 checkpoint, the `v1.2.0` candidate was not yet a public release. The finalization work itself authorized no tag, GitHub Release publication, deployment, marketplace graduation, installed-host mutation, policy activation, force push, or history rewrite.
 
-Publication requires GA-0 through GA-7 canonical completion, refreshed release-readiness evidence, independent final verification, and a separately authorized R8 gate.
+Publication subsequently required and received GA-0 through GA-7 canonical completion, refreshed release-readiness evidence, independent final verification, and separate R8 authority.
 
 ---
 

@@ -11,7 +11,7 @@ The latest GitHub Release remains the publication source of truth. Installing di
 | Host | Install Surface | Current Status |
 |---|---|---|
 | Codex | Marketplace or repo-local fallback | Supported |
-| Claude Code | Marketplace plugin | Supported packaging/integration |
+| Claude Code | Marketplace plugin | Supported packaging/integration; runtime continuity `SCAFFOLD_ONLY` |
 | Antigravity | Native plugin install | Supported |
 | Cursor | Scaffold-only packaging and workspace instructions | Scaffold-only |
 | Windsurf | Scaffold-only packaging and workspace instructions | Scaffold-only |
@@ -96,7 +96,7 @@ You can also run validation from your terminal at the repository root:
 claude plugin validate .
 ```
 
-*Note: Claude Code plugin skills are expected to be namespaced after installation.*
+*Note: Claude Code plugin skills are expected to be namespaced after installation. Packaging and contract compatibility are supported, but active runtime continuity remains `SCAFFOLD_ONLY` and is not claimed.*
 
 ## 4. Skills-only Setup (Manual)
 
@@ -155,7 +155,7 @@ Run:
 python .\scripts\check_for_updates.py
 ```
 
-The script reads local version metadata from the root manifest, Claude and Codex plugin manifests, and adapter package manifests, then compares it to the latest GitHub Release. During R6, local candidate metadata can be newer than the latest published release; that does not publish or downgrade either state.
+The script reads local version metadata from the root manifest, Claude and Codex plugin manifests, and adapter package manifests, then compares it to the latest GitHub Release. A post-release `main` revision may contain documentation or later unreleased work; local metadata alone never publishes or downgrades a release.
 
 If a newer public release exists, use your host-specific refresh or reinstall flow to update.
 

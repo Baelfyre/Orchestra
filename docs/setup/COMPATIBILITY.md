@@ -6,9 +6,9 @@ Scaffold-only hosts are not full support claims. Promotion requirements and grad
 
 | Host | Runtime Adapter | Status | Notes |
 |---|---|---|---|
-| Codex | `codex` | Supported | Marketplace-first, with repo-local fallback. R7 same-host and cross-host continuity evidence is verified locally; repository merge/post-merge verification remains pending for publication. |
-| Claude Code | `claude-code` | Supported packaging/integration | Marketplace metadata included. Phase C active runtime-continuity capability is not promoted beyond repository/scaffold evidence. |
-| Antigravity | `antigravity` | Supported | Plugin install path remains host-native. R7 same-host and cross-host continuity evidence is verified locally; repository merge/post-merge verification remains pending for publication. |
+| Codex | `codex` | Supported | Marketplace-first, with repo-local fallback. Accepted R7 same-host and cross-host continuity evidence is merged and verified. |
+| Claude Code | `claude-code` | Supported packaging/integration; runtime continuity `SCAFFOLD_ONLY` | Marketplace metadata and package/contract compatibility are verified. Active runtime continuity is not claimed. |
+| Antigravity | `antigravity` | Supported | Plugin install path remains host-native. Accepted R7 same-host and cross-host continuity evidence is merged and verified. |
 | Cursor | `cursor` | Scaffold-only | Runtime adapter exists; packaging surface remains scaffold-only. |
 | Windsurf | `windsurf` | Scaffold-only | Runtime adapter exists; packaging surface remains scaffold-only. |
 | VS Code | `vscode` | Scaffold-only | Shared VS Code-family runtime adapter and packaging scaffold. |

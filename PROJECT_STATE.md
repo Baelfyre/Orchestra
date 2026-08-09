@@ -23,7 +23,7 @@
 - **Phase 3C:** `OrchestraWorktreeContract` implemented and merged through PR #214.
 - **Phase 3D:** Consolidated exact-head validation complete.
 - **Phase 3E:** Immutable review, bounded remediation, and merge complete.
-- **Phase 3 Verdict:** `COMPLETE_MERGED_NOT_RELEASED`.
+- **Phase 3 Verdict:** `COMPLETE_MERGED_RELEASED_IN_V1_2_0`.
 
 ### Cross-Layer Integrity
 
@@ -70,7 +70,7 @@ Clean replay results:
 - **R4:** Phase D overlap assessment merged through PR #226 only after the canonical baseline was green and every fresh required check passed.
 - **R5:** autonomous merge-readiness hardening merged through PR #227 at merge commit `467008db683c346cd086442dbb909c20a9248a3a`.
 - **R5B:** delegated-governance current-state reconciliation merged and was independently verified through PR #228 at merge commit `fbe4532ba2083feaa7ed9fcda2988843f1237a78`.
-- **R6:** `v1.2.0` release-candidate metadata and documentation were prepared as `PREPARED_NOT_RELEASED` without publication authority.
+- **Historical R6:** `v1.2.0` release-candidate metadata and documentation were prepared as `PREPARED_NOT_RELEASED` without publication authority. R8 later published the separately authorized release.
 - **R7 / PR #230:** accepted live-host evidence was reviewed at head `f49a03c929be7df7c10c457a227a46532ef47854` and merged to canonical `main` as `80f9bc71f00cc86c0021fd9da258f2eec596d7e0`. GitHub's then-used rebase merge rewrote the reviewed commit identity. The reviewed and canonical trees are equal and their content diff is empty, but the canonical rebase commit is unsigned and the reviewed head is not in `main` ancestry.
 
 Maintainer disposition for the PR #230 incident is forward-only:
@@ -149,7 +149,7 @@ The current bypass list is intentionally retained for repository-operational acc
 - **Ruleset Rule:** Live ruleset drift, non-Squash merge selection, unresolved review threads, or unauthorized bypass use blocks ordinary autonomous merge.
 - **Baseline Rule:** A new phase must not begin from a red canonical `main`.
 - **Post-Merge Rule:** An API response is not completion evidence. For Squash, canonical parent/tree/content/signature evidence and a canonical remote read are required before state advances.
-- **Issue #215:** Publication closeout is in progress; close only after repository and KB state synchronization are merged and verified.
+- **Issue #215:** `CLOSED_VERIFIED` after the published release, Orchestra post-publication PR #236, KB publication-closeout PR #32, and the evidence-backed completion comment were independently verified.
 - **R6 Repository State:** Release-candidate preparation completed with version surfaces normalized to `1.2.0`.
 - **R7 State:** R7 and R7R are `MERGED_VERIFIED`; PR #230 incident history is preserved forward-only and PR #231 is the signed Squash trust anchor.
 - **Governed Autonomy Modes:** GA-0 through GA-7 are `MERGED_VERIFIED` through PR #232 and signed canonical Squash commit `900f88d7a3ed480ae8b910e6ba204008a72d2784`.
