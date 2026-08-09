@@ -1,18 +1,21 @@
 # Changelog
 
-## [Unreleased] - Governed Autonomy Modes GA-0
+## [Unreleased] - Governed Autonomy Modes and Release-Readiness Closeout
 
 - Completed the GA-0 architecture and overlap assessment at baseline `8163c64838d369ea5c4abf45df36f6d6504db9fd`.
 - Recorded `NO_DUPLICATE_AUTHORITY_MODEL`: existing runtime authority, delegation, lifecycle, evidence, host-continuity, and Squash-aware merge contracts remain canonical.
 - Authorized only an instruction-level profile/effective-action contract, deterministic fixture validation, Conductor selection behavior, and documentation parity for GA-1 through GA-7.
 - Preserved `v1.2.0` as `PREPARED_NOT_RELEASED`, Claude Code as `SCAFFOLD_ONLY`, and R8 as a separate human publication gate.
 - Added the GA-1 through GA-7 profile, execution, selection, continuity, adversarial-validation, Codex-parity, and adoption contracts without changing `orchestra_runtime/**`.
+- Squash-merged GA-0 through GA-7 through PR #232 as signed canonical commit `900f88d7a3ed480ae8b910e6ba204008a72d2784`, with exact reviewed/canonical tree equivalence, an empty content diff, green exact-head CI, and a passing rulesuite.
+- Refreshed the canonical behavior, runtime-coverage, strict-governance, packaging, R7 reliability, GA, and merge-readiness evidence after the GA merge; recorded the result in `docs/validation/V1_2_0_RELEASE_READINESS_EVIDENCE.md`.
+- Independently verified that the latest public release remains `v1.1.2`, no `v1.2.0` tag or GitHub Release exists, and R8 remains blocked pending separate human authorization.
 
 This changelog records release-level Orchestra history. Detailed implementation chronology remains available in Git history, merged pull requests, `DECISION_LOG.md`, `PROJECT_STATE.md`, and immutable handoff records.
 
 ## v1.2.0 Release Candidate - NOT RELEASED
 
-`v1.2.0` is prepared as a minor release candidate. Repository manifests are normalized to `1.2.0`, but the latest published GitHub Release remains `v1.1.2`. Accepted R7 live installed-host evidence and the signed Squash-aware R7R remediation are `MERGED_VERIFIED`; release publication remains blocked pending Governed Autonomy Modes, refreshed release evidence, and the separately authorized R8 publication gate.
+`v1.2.0` is prepared as a minor release candidate. Repository manifests are normalized to `1.2.0`, but the latest published GitHub Release remains `v1.1.2`. R7, R7R, and Governed Autonomy Modes are `MERGED_VERIFIED`, and invalidated release evidence has been refreshed and independently verified. Release publication remains blocked at the separately authorized R8 publication gate.
 
 ### R7 Live-Host Evidence Reconciliation - Unreleased
 

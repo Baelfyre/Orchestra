@@ -150,7 +150,7 @@ Additional Phase D runtime implementation for v1.2.0 is **not required**.
 
 ## Phase E - Release Preparation
 
-**Status:** R6 release-candidate preparation is complete. R7 live-host evidence reconciliation is prepared on the isolated reconciliation branch and pending maintainer review, repository merge, and independent post-merge verification. R8 publication remains blocked and requires separate authorization.
+**Status:** R6 release-candidate preparation is complete. R7 and R7R are `MERGED_VERIFIED`. Governed Autonomy Modes GA-0 through GA-7 are `MERGED_VERIFIED` through PR #232, and invalidated release-readiness evidence is refreshed and independently green. R8 publication remains blocked and requires separate human authorization.
 
 **Clean replay continuation:**
 
@@ -158,8 +158,9 @@ Additional Phase D runtime implementation for v1.2.0 is **not required**.
 R5   autonomous merge-readiness hardening â€” merged through PR #227
 R5B  delegated governance state reconciliation â€” current bounded remediation
 R6   release-candidate repository preparation
-R7   live installed-host validation - VERIFIED_RECONCILED_LOCALLY; merge/post-merge verification pending
-R8   tag/GitHub Release from independently verified release state and separate authorization
+R7   live installed-host validation and reconciliation - MERGED_VERIFIED
+GA-0..GA-7  governed autonomy profiles - MERGED_VERIFIED; release evidence refreshed
+R8   tag/GitHub Release from independently verified release state and separate human authorization
 ```
 
 Commit, push, pull request, merge, tag, GitHub Release, marketplace publication,

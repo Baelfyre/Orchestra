@@ -56,7 +56,7 @@ R7 live-host validation and repository reconciliation are `MERGED_VERIFIED`. PR 
 
 ## Governed Autonomy Modes
 
-GA-0 concluded `NO_DUPLICATE_AUTHORITY_MODEL`. GA-1 through GA-7 are implemented on `codex/governed-autonomy-modes-v1.2.0` as instruction-level profile/effective-action contracts, deterministic fixtures/validation, Conductor selection behavior, Codex export parity, and current-state documentation. Runtime authority, plugin manifests, versions, the R7 fixture/validator, and installed integrations remain unchanged.
+GA-0 concluded `NO_DUPLICATE_AUTHORITY_MODEL`. GA-1 through GA-7 are `MERGED_VERIFIED` through PR #232 and signed Squash commit `900f88d7a3ed480ae8b910e6ba204008a72d2784`. Exact-head checks and canonical release-readiness validation are green. Runtime authority, plugin manifests, versions, the R7 fixture/validator, and installed integrations remain unchanged.
 
 ## Local Continuation
 
@@ -85,8 +85,8 @@ R5B  merged - delegated-governance state reconciliation
 R6   v1.2.0 release-candidate repository preparation
 R7   live installed Codex/Antigravity/Claude compatibility evidence - merged verified
 R7R  signed Squash-aware merge-governance remediation - merged verified
-GA-0..GA-7  governed autonomy profiles - implementation and exact-head validation in progress
-R8   tag/GitHub Release only from independently verified release state and separate authorization
+GA-0..GA-7  governed autonomy profiles - merged verified; release evidence refreshed
+R8   next gate - tag/GitHub Release only with separate human authorization
 ```
 
 Historical first-run failures remain preserved as audit evidence in the KB and archive branch. They must not be silently rewritten or deleted during cleanup.
