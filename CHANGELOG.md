@@ -5,6 +5,7 @@
 - Reconciled the README across R7, the R7R Squash-aware governance remediation, GA-0 through GA-7, revision-bound release readiness, host maturity, and the separately authorized R8 publication boundary.
 - Added source-pinned acknowledgements for Spec Kitty, OpenHero, and Strix with explicit concept-only, no-wholesale-integration, no-affiliation, and no-unsupported-reuse boundaries.
 - Classified every tracked candidate path and every observed local and remote branch, preserving canonical, recovery, archive, open-PR, active-worktree, unique-commit, and release-history refs; no file or branch deletion was performed.
+- Squash-merged the pre-R8 hygiene reconciliation through PR #234 as signed no-bypass canonical commit `8cca62109b10aa06abaf25fc4c9982a02160bcbf`, then refreshed the full revision-bound release-readiness matrix against that exact canonical revision.
 - Completed the GA-0 architecture and overlap assessment at baseline `8163c64838d369ea5c4abf45df36f6d6504db9fd`.
 - Recorded `NO_DUPLICATE_AUTHORITY_MODEL`: existing runtime authority, delegation, lifecycle, evidence, host-continuity, and Squash-aware merge contracts remain canonical.
 - Authorized only an instruction-level profile/effective-action contract, deterministic fixture validation, Conductor selection behavior, and documentation parity for GA-1 through GA-7.

@@ -259,7 +259,7 @@ See [v1.1.2 Trusted Runtime Authority release notes](docs/releases/v1.1.2-truste
 
 `v1.2.0` candidate metadata is prepared, but publication remains blocked. Phase C repository reliability is complete through PR #225; accepted R7 live installed-host evidence and the signed Squash-aware R7R remediation are `MERGED_VERIFIED`. Phase D reconciliation is complete through PR #226 with no duplicate runtime extension required. R5/R5B added merge-readiness hardening and canonical current-state reconciliation.
 
-Governed Autonomy Modes is merged and independently verified, and refreshed candidate evidence is green. The candidate becomes a public release only when the separately authorized R8 annotated-tag/GitHub-Release gate completes.
+Governed Autonomy Modes and the pre-R8 repository-hygiene reconciliation are merged and independently verified. Candidate evidence has been refreshed against hygiene canonical revision `8cca62109b10aa06abaf25fc4c9982a02160bcbf` and is green. The candidate becomes a public release only when the separately authorized R8 annotated-tag/GitHub-Release gate completes.
 
 ## Honest Limitations
 

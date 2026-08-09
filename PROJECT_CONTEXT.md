@@ -10,7 +10,7 @@ A governance-first specialist skill framework that routes complex AI-assisted so
 Open-source developer tooling and AI orchestration framework
 
 ## Current Stage
-Release-candidate metadata `v1.2.0` (`PREPARED_NOT_RELEASED`). The current public GitHub Release remains `v1.1.2` until the separate publication gate completes. Canonical `main` includes R7/R7R and Governed Autonomy Modes through signed Squash commit `900f88d7a3ed480ae8b910e6ba204008a72d2784` from PR #232. GA-0 concluded `NO_DUPLICATE_AUTHORITY_MODEL`; GA-1 through GA-7 are `MERGED_VERIFIED`, and invalidated release evidence is refreshed and independently green. No release, deployment, installed-integration refresh, or policy activation has occurred. R8 remains separately human-authorized.
+Release-candidate metadata `v1.2.0` (`PREPARED_NOT_RELEASED`). The current public GitHub Release remains `v1.1.2` until the separate publication gate completes. Canonical `main` includes R7/R7R, Governed Autonomy Modes, and pre-R8 repository hygiene through signed Squash commit `8cca62109b10aa06abaf25fc4c9982a02160bcbf` from PR #234. GA-0 concluded `NO_DUPLICATE_AUTHORITY_MODEL`; GA-1 through GA-7 and the source-pinned README/hygiene reconciliation are `MERGED_VERIFIED`, and revision-bound release evidence has been refreshed against the hygiene canonical revision. No release, deployment, installed-integration refresh, branch deletion, or policy activation has occurred. R8 remains separately human-authorized.
 
 ## Primary Users
 Developers and maintainers who install Orchestra as a plugin, skill set, or runtime package inside a supported or scaffold-only IDE or coding host (Claude Code, Codex, Antigravity, Cursor, Windsurf, JetBrains, Zed, Neovim)

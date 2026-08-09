@@ -58,6 +58,10 @@ R7 live-host validation and repository reconciliation are `MERGED_VERIFIED`. PR 
 
 GA-0 concluded `NO_DUPLICATE_AUTHORITY_MODEL`. GA-1 through GA-7 are `MERGED_VERIFIED` through PR #232 and signed Squash commit `900f88d7a3ed480ae8b910e6ba204008a72d2784`. Exact-head checks and canonical release-readiness validation are green. Runtime authority, plugin manifests, versions, the R7 fixture/validator, and installed integrations remain unchanged.
 
+## Pre-R8 Repository Hygiene
+
+PR #234 reconciled README R7/R7R/GA state, Claude `SCAFFOLD_ONLY` maturity, source-pinned Spec Kitty/OpenHero/Strix acknowledgements, and complete conservative tracked-file/local-branch/remote-branch classifications. It is `MERGED_VERIFIED` as signed no-bypass Squash commit `8cca62109b10aa06abaf25fc4c9982a02160bcbf`. Canonical behavior, 541 runtime tests at 94.31% coverage, strict governance, packaging, Artificer, autonomy, host-reliability, JSON, and diff validation are green. No tracked file or branch was deleted. Release readiness was refreshed against this exact canonical revision; R8 remains the next separate human gate.
+
 ## Local Continuation
 
 When local access resumes, synchronize without rewriting local state:
@@ -85,7 +89,8 @@ R5B  merged - delegated-governance state reconciliation
 R6   v1.2.0 release-candidate repository preparation
 R7   live installed Codex/Antigravity/Claude compatibility evidence - merged verified
 R7R  signed Squash-aware merge-governance remediation - merged verified
-GA-0..GA-7  governed autonomy profiles - merged verified; release evidence refreshed
+GA-0..GA-7  governed autonomy profiles - merged verified
+R7H  pre-R8 repository hygiene - merged verified; release evidence refreshed
 R8   next gate - tag/GitHub Release only with separate human authorization
 ```
 
