@@ -1,5 +1,12 @@
 # Changelog
 
+## [Unreleased] - Governed Autonomy Modes GA-0
+
+- Completed the GA-0 architecture and overlap assessment at baseline `8163c64838d369ea5c4abf45df36f6d6504db9fd`.
+- Recorded `NO_DUPLICATE_AUTHORITY_MODEL`: existing runtime authority, delegation, lifecycle, evidence, host-continuity, and Squash-aware merge contracts remain canonical.
+- Authorized only an instruction-level profile/effective-action contract, deterministic fixture validation, Conductor selection behavior, and documentation parity for GA-1 through GA-7.
+- Preserved `v1.2.0` as `PREPARED_NOT_RELEASED`, Claude Code as `SCAFFOLD_ONLY`, and R8 as a separate human publication gate.
+
 This changelog records release-level Orchestra history. Detailed implementation chronology remains available in Git history, merged pull requests, `DECISION_LOG.md`, `PROJECT_STATE.md`, and immutable handoff records.
 
 ## v1.2.0 Release Candidate - NOT RELEASED
