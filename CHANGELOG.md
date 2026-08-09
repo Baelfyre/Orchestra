@@ -4,14 +4,23 @@ This changelog records release-level Orchestra history. Detailed implementation 
 
 ## v1.2.0 Release Candidate - NOT RELEASED
 
-`v1.2.0` is prepared as a minor release candidate. Repository manifests are normalized to `1.2.0`, but the latest published GitHub Release remains `v1.1.2`. Accepted R7 live installed-host evidence is verified and reconciled locally; repository merge/post-merge verification and the separately governed R8 publication gate remain pending.
+`v1.2.0` is prepared as a minor release candidate. Repository manifests are normalized to `1.2.0`, but the latest published GitHub Release remains `v1.1.2`. Accepted R7 live installed-host evidence is verified and reconciled; release publication remains blocked pending merge-governance remediation, Governed Autonomy Modes, refreshed release evidence, and the separately authorized R8 publication gate.
 
 ### R7 Live-Host Evidence Reconciliation - Unreleased
 
 - Reconciled accepted locally installed-host evidence for Antigravity same-host reset/resume, Codex same-host reset/resume, and Codex -> Antigravity portable handoff.
 - Recorded Claude Code `SCAFFOLD_ONLY` packaging/contract compatibility without claiming active runtime continuity.
 - Preserved the repository-simulation/live-evidence boundary, including the unchanged pending/empty fixture live record set and canonical validator.
+- PR #230 merged the reviewed R7 content to canonical `main`; reviewed and canonical trees are equivalent, but GitHub's then-used rebase merge rewrote the reviewed commit identity and produced an unsigned canonical commit.
+- The maintainer chose a forward-only disposition: preserve canonical history, perform no force push/history rewrite, and treat PR #230 as incident evidence rather than future merge precedent.
 - Performed no publication, tag creation, deployment, installed-integration refresh, or policy activation.
+
+### R7 Merge-Governance Remediation - Unreleased
+
+- Align the autonomous merge-readiness contract with the current solo-maintainer `Protect main` ruleset: zero required approvals, conversation resolution, Squash-only merge, signed commits, linear history, branch-up-to-date enforcement, restricted deletion, and blocked force pushes.
+- Mirror all eight current required status checks: `governance-check`, `validate`, `runtime-tests`, native Windows/Ubuntu/macOS, `Analyze (actions)`, and `Analyze (python)`.
+- Replace ancestry-only post-merge verification with Squash-aware proof of exact pre-merge base, reviewed/canonical tree equivalence, empty content diff, and verified canonical commit signature.
+- Preserve the existing bypass list as operational repository capability while making `BYPASS_CAPABILITY != GOVERNANCE_AUTHORIZATION` an explicit fail-closed rule.
 
 ### Added
 
@@ -30,6 +39,7 @@ This changelog records release-level Orchestra history. Detailed implementation 
 - Normalized the root, Claude Code, Codex, and scaffold adapter version surfaces to `1.2.0` without changing adapter maturity or publishing any IDE marketplace package.
 - Updated README, project context/state, session handoff, roadmap, compatibility, installation, and Codex adapter documentation to distinguish release-candidate metadata from the current public release.
 - Consolidated the previously fragmented post-`v1.1.2` unreleased changelog entries into this release-candidate record while preserving detailed implementation evidence in Git and pull-request history.
+- Added Governed Autonomy Modes to the `v1.2.0` scope after R7 closeout and before R8 publication; affected release evidence must be refreshed after implementation.
 
 ### Clean Replay and Governance Hardening
 
@@ -42,8 +52,9 @@ The first autonomous finalization experiment was rolled back to the verified rec
 - R5 / PR #227 - autonomous merge-readiness hardening.
 - R5B / PR #228 - delegated-governance current-state reconciliation, merged at `fbe4532ba2083feaa7ed9fcda2988843f1237a78` and independently verified on canonical `main`.
 - R6 - `v1.2.0` release-candidate metadata, public documentation, changelog, and release-note preparation.
+- R7 / PR #230 - accepted live-host evidence merged; subsequent verification exposed the ancestry/signature mismatch caused by the then-used rebase merge and triggered forward-only ruleset/protocol remediation.
 
-Historical fail-open merge behavior from the first experiment is not successful validation precedent.
+Historical fail-open or bypass-capable platform behavior is not successful validation precedent.
 
 ### Capability Merge Map
 
@@ -66,12 +77,14 @@ Key post-`v1.1.2` canonical milestones include:
 - PR #226 - Delegated Phase D overlap reconciliation.
 - PR #227 - autonomous merge-readiness hardening.
 - PR #228 - delegated-governance current-state reconciliation.
+- PR #230 - R7 live installed-host evidence reconciliation.
 
 ### Compatibility and Authority Boundaries
 
 - Codex, Claude Code, and Antigravity retain supported integration surfaces; version normalization does not by itself prove live installed-host continuity.
 - Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain scaffold-only. No scaffold is graduated or marketplace-published by R6.
 - Existing authority, immutable run-scoped capabilities, bounded delegation, lifecycle, coordination ownership, evidence identity, and default-deny external-action controls remain unchanged.
+- Repository ruleset bypass capability is operational access only and does not itself authorize Orchestra to skip governance evidence or transitions.
 - No persistent collaboration storage, SQLite, migrations, RPC, network daemon, remote worker, background agent, production deployment, or automatic policy activation is added by the release candidate.
 
 ### Evidence Boundary
@@ -83,13 +96,13 @@ REPOSITORY_SIMULATION != LIVE_HOST_EVIDENCE
 LIVE_INSTALLED_HOST_VALIDATION=VERIFIED_RECONCILED_LOCALLY
 ```
 
-R7 host-derived evidence is verified and reconciled locally. Repository merge/post-merge verification and the separately authorized R8 publication gate remain required for publication.
+R7 host-derived evidence is verified and canonical content is merged. Forward-only merge-governance remediation, Governed Autonomy Modes, refreshed release verification, and the separately authorized R8 publication gate remain required for publication.
 
 ### Publication Boundary
 
-R6 does **not** create or publish `v1.2.0`. It performs no tag creation, GitHub Release publication, deployment, marketplace graduation, installed-host mutation, policy activation, force push, or history rewrite.
+The `v1.2.0` candidate is not a public release. No `v1.2.0` tag, GitHub Release publication, deployment, marketplace graduation, installed-host mutation, policy activation, force push, or history rewrite is authorized by the current finalization work.
 
-Publication requires a separately authorized R8 gate after R6 is merged and independently verified and R7 live-host evidence is reconciled.
+Publication requires R7 merge-governance remediation, GA-0 through GA-7 completion, refreshed release-readiness evidence, independent final verification, and a separately authorized R8 gate.
 
 ---
 
