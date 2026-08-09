@@ -64,7 +64,7 @@ Phases 6B-A through 6C are complete and merged through PR #183. Phase 6D produce
 - [x] GA-5: Audit, provenance, interruption recovery, delegation inheritance, and portable-resume preservation.
 - [x] GA-6: Adversarial fixture validation for authority, profile, policy, evidence, bypass, merge-method, signature, scope, and continuity boundaries.
 - [x] GA-7: Governance, routing, Conductor/Codex parity, project-state, README, roadmap, and release-candidate documentation.
-- [ ] Refresh every release-readiness artifact invalidated by R7R or GA implementation and independently verify the final candidate.
+- [x] Refresh every release-readiness artifact invalidated by R7R or GA implementation and independently verify the final candidate; canonical evidence is recorded in `docs/validation/V1_2_0_RELEASE_READINESS_EVIDENCE.md`.
 - [ ] R8: create annotated `v1.2.0` tag and GitHub Release only after the refreshed candidate is independently verified and separate publication authority is granted.
 
 ### Current `Protect main` Development Baseline

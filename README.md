@@ -258,7 +258,7 @@ See [v1.1.2 Trusted Runtime Authority release notes](docs/releases/v1.1.2-truste
 
 `v1.2.0` candidate metadata is prepared, but publication remains blocked. Phase C repository reliability is complete through PR #225; accepted R7 live installed-host evidence and the signed Squash-aware R7R remediation are `MERGED_VERIFIED`. Phase D reconciliation is complete through PR #226 with no duplicate runtime extension required. R5/R5B added merge-readiness hardening and canonical current-state reconciliation.
 
-The candidate becomes a public release only after Governed Autonomy Modes is merged and independently verified, fresh release evidence is green, and the separately authorized R8 annotated-tag/GitHub-Release gate completes.
+Governed Autonomy Modes is merged and independently verified, and refreshed candidate evidence is green. The candidate becomes a public release only when the separately authorized R8 annotated-tag/GitHub-Release gate completes.
 
 ## Honest Limitations
 
@@ -270,7 +270,7 @@ The candidate becomes a public release only after Governed Autonomy Modes is mer
 - Orchestra does not create remote workers, background agents, or distributed orchestration infrastructure.
 - Compatibility mode is explicit, finite, and intended for bounded existing routes.
 - Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain scaffold-only.
-- Repository simulation is not live installed-host evidence. R7 evidence is verified and reconciled locally, while repository merge/post-merge verification and the separately authorized R8 publication gate remain required before `v1.2.0` publication.
+- Repository simulation is not live installed-host evidence. Accepted R7 evidence is `MERGED_VERIFIED`; the simulated fixture remains pending/empty by design. The separately authorized R8 publication gate remains required before `v1.2.0` publication.
 - Orchestra is developer tooling and a local runtime. It does not store or transmit downstream project data by default.
 - Data sensitivity, privacy, retention, deletion, platform disclosure, and IP obligations depend on the downstream project and host environment.
 - Release governance may require revision or block publication.
