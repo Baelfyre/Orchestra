@@ -5,11 +5,11 @@
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Stable Continuation Branch:** `main`
-- **Current Public Release:** `v1.1.2`
-- **Release Status:** Published July 14, 2026
+- **Current Public Release:** `v1.2.0`
+- **Release Status:** `PUBLISHED_VERIFIED` on August 9, 2026
 - **Target Release:** `v1.2.0`
 - **Release-Candidate Metadata:** `1.2.0`
-- **Post-`v1.1.2` Release State:** `PREPARED_NOT_RELEASED`
+- **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
 - **Policy Activation State:** `NOT_PERFORMED`
 
 ## Canonical Capability State
@@ -149,13 +149,13 @@ The current bypass list is intentionally retained for repository-operational acc
 - **Ruleset Rule:** Live ruleset drift, non-Squash merge selection, unresolved review threads, or unauthorized bypass use blocks ordinary autonomous merge.
 - **Baseline Rule:** A new phase must not begin from a red canonical `main`.
 - **Post-Merge Rule:** An API response is not completion evidence. For Squash, canonical parent/tree/content/signature evidence and a canonical remote read are required before state advances.
-- **Issue #215:** Open umbrella finalization issue targeting `v1.2.0`.
-- **R6 Repository State:** `PREPARED_NOT_RELEASED`; candidate version surfaces are `1.2.0`, while the current public GitHub Release remains `v1.1.2`.
+- **Issue #215:** Publication closeout is in progress; close only after repository and KB state synchronization are merged and verified.
+- **R6 Repository State:** Release-candidate preparation completed with version surfaces normalized to `1.2.0`.
 - **R7 State:** R7 and R7R are `MERGED_VERIFIED`; PR #230 incident history is preserved forward-only and PR #231 is the signed Squash trust anchor.
 - **Governed Autonomy Modes:** GA-0 through GA-7 are `MERGED_VERIFIED` through PR #232 and signed canonical Squash commit `900f88d7a3ed480ae8b910e6ba204008a72d2784`.
 - **Pre-R8 Repository Hygiene:** README provenance/host/release state and complete conservative file/branch classifications are `MERGED_VERIFIED` through PR #234 and signed canonical Squash commit `8cca62109b10aa06abaf25fc4c9982a02160bcbf`. No tracked file or branch was deleted.
 - **Release Readiness:** Hygiene-invalidated candidate evidence has been refreshed against canonical `8cca62109b10aa06abaf25fc4c9982a02160bcbf`; behavior, 541 runtime tests at 94.31% coverage, strict governance, packaging, exact-head CI, signature/tree/base verification, and release-boundary reads are green. See `docs/validation/V1_2_0_RELEASE_READINESS_EVIDENCE.md`.
-- **Publication Boundary:** `v1.2.0` remains `PREPARED_NOT_RELEASED`. R8 tag/GitHub Release publication is blocked and requires separate human authorization.
+- **Publication State:** Annotated tag `v1.2.0` and the immutable, non-draft, non-prerelease GitHub Release are `PUBLISHED_VERIFIED` at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`. No deployment, marketplace publication, installed-integration refresh, or policy activation was performed.
 
 ## Local Startup Verification
 

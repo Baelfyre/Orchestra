@@ -1,6 +1,6 @@
 # Compatibility
 
-The current public GitHub Release is Orchestra `v1.1.2`. Repository release-candidate metadata is normalized to `1.2.0` for R6 preparation, but `v1.2.0` is `PREPARED_NOT_RELEASED` until the separate R8 tag/GitHub Release gate completes.
+The current public GitHub Release is Orchestra `v1.2.0`, published from annotated tag `v1.2.0` at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`. Publication did not graduate scaffold-only hosts or perform marketplace publication.
 
 Scaffold-only hosts are not full support claims. Promotion requirements and graduation order live in `docs/project/SCAFFOLD_ADAPTER_GRADUATION_CRITERIA.md`.
 

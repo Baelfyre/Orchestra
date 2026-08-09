@@ -12,8 +12,7 @@
     <a href="CHANGELOG.md">Changelog</a>
   </p>
   <p>
-    <img src="https://img.shields.io/badge/public_release-v1.1.2-blue" alt="Current public release v1.1.2" />
-    <img src="https://img.shields.io/badge/release_candidate-v1.2.0-orange" alt="Repository release candidate v1.2.0" />
+    <img src="https://img.shields.io/badge/public_release-v1.2.0-blue" alt="Current public release v1.2.0" />
     <a href="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml">
       <img src="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml/badge.svg" alt="Repository validation status" />
     </a>
@@ -24,7 +23,7 @@
 ---
 
 > [!IMPORTANT]
-> Repository metadata is prepared for `v1.2.0`, but the latest published GitHub Release remains `v1.1.2`. The `v1.2.0` candidate is `PREPARED_NOT_RELEASED`. R7, its signed Squash-aware R7R merge-governance remediation, and GA-0 through GA-7 are `MERGED_VERIFIED`. Release-readiness evidence is revision-bound and must be refreshed after any repository-hygiene merge. No `v1.2.0` tag, GitHub Release, deployment, marketplace graduation, installed-integration refresh, or policy activation is implied.
+> `v1.2.0` is the current published GitHub Release, created from annotated tag `v1.2.0` at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`. R7, its signed Squash-aware R7R merge-governance remediation, GA-0 through GA-7, pre-R8 hygiene, and release readiness are verified. Publication did not perform deployment, marketplace graduation, installed-integration refresh, or policy activation.
 
 ## AI can generate fast. Building well still requires structure.
 
@@ -79,9 +78,9 @@ flowchart TD
 
 Accessible summary: a request moves through trusted composition, routing, authority, capability, and governance. Single-owner work proceeds directly to its specialist. Material cross-domain work must first reach a ready coordination state. Validation failure returns work to the owning boundary. Accepted or blocked work ends in structured lifecycle state and deterministic evidence.
 
-## v1.2.0 Release Candidate Capability Set
+## v1.2.0 Capability Set
 
-The candidate consolidates the substantial backward-compatible work merged after `v1.1.2`:
+The release consolidates the substantial backward-compatible work merged after `v1.1.2`:
 
 - **Delegated Phase B progression:** approved units, six transition dispositions, checkpoints, bounded remediation, capacity handoff, evidence freshness, and fail-closed external-action authority.
 - **The Tuner Phases 1-4:** cross-specialist contract assembly, contradiction detection, semantic invalidation, minimal specialist re-entry, typed in-memory coordination, and bounded Conductor-owned runtime integration.
@@ -94,7 +93,7 @@ The candidate consolidates the substantial backward-compatible work merged after
 - **Current-state reconciliation:** stale Phase C/D status and false live-host promotion are rejected by executable governance consistency checks.
 - **Governed Autonomy Modes:** user-selectable Human-Governed, Semi-Autonomous, and Full Autonomous profiles reduce repetitive gates without creating authority or weakening evidence, repository-policy, release, deployment, destructive-action, or policy-activation boundaries.
 
-See [v1.2.0 release-candidate notes](docs/releases/v1.2.0-governed-orchestration-release-candidate.md).
+See [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration-release-candidate.md).
 
 ## Governed Autonomy Profiles
 
@@ -204,7 +203,7 @@ Use the host-native path:
 - Antigravity: run `agy plugin install https://github.com/Baelfyre/Orchestra`.
 - Manual or scaffold-only hosts: follow the exact host boundary in the [Installation Guide](docs/setup/INSTALLATION.md).
 
-During R6, repository manifests identify the candidate as `1.2.0`; the latest public GitHub Release remains `v1.1.2`. See the Installation Guide for the candidate/public-release distinction.
+Repository manifests identify the current published release as `1.2.0`. See the Installation Guide for supported installation paths and host-maturity boundaries.
 
 ## Quick Start
 
@@ -249,17 +248,11 @@ For autonomous or delegated merges, Orchestra additionally requires the fail-clo
 
 ## Release Status
 
-### Current public release: v1.1.2
+### Current public release: v1.2.0
 
-The published `v1.1.2` release established trusted runtime authority, run-scoped capabilities, bounded delegation, structured lifecycle control, `RuntimeExecutor` authority/capability ordering, adversarial fail-closed validation, deterministic non-authorizing audit evidence, and four governed Artificer promotions.
+`v1.2.0` is published from annotated tag `v1.2.0` at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`. Phase C repository reliability, accepted R7 live installed-host evidence, the signed Squash-aware R7R remediation, Phase D overlap reconciliation, R5/R5B merge-readiness hardening, Governed Autonomy Modes, pre-R8 repository hygiene, and final release readiness are complete and independently verified.
 
-See [v1.1.2 Trusted Runtime Authority release notes](docs/releases/v1.1.2-trusted-runtime-authority.md) and the published [`v1.1.2` GitHub Release](https://github.com/Baelfyre/Orchestra/releases/tag/v1.1.2).
-
-### Repository release candidate: v1.2.0
-
-`v1.2.0` candidate metadata is prepared, but publication remains blocked. Phase C repository reliability is complete through PR #225; accepted R7 live installed-host evidence and the signed Squash-aware R7R remediation are `MERGED_VERIFIED`. Phase D reconciliation is complete through PR #226 with no duplicate runtime extension required. R5/R5B added merge-readiness hardening and canonical current-state reconciliation.
-
-Governed Autonomy Modes and the pre-R8 repository-hygiene reconciliation are merged and independently verified. Candidate evidence has been refreshed against hygiene canonical revision `8cca62109b10aa06abaf25fc4c9982a02160bcbf` and is green. The candidate becomes a public release only when the separately authorized R8 annotated-tag/GitHub-Release gate completes.
+See the [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration-release-candidate.md) and the published [`v1.2.0` GitHub Release](https://github.com/Baelfyre/Orchestra/releases/tag/v1.2.0). The previous [`v1.1.2` release](https://github.com/Baelfyre/Orchestra/releases/tag/v1.1.2) remains historical release evidence.
 
 ## Honest Limitations
 
@@ -271,7 +264,7 @@ Governed Autonomy Modes and the pre-R8 repository-hygiene reconciliation are mer
 - Orchestra does not create remote workers, background agents, or distributed orchestration infrastructure.
 - Compatibility mode is explicit, finite, and intended for bounded existing routes.
 - Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain scaffold-only.
-- Repository simulation is not live installed-host evidence. Accepted R7 evidence is `MERGED_VERIFIED`; the simulated fixture remains pending/empty by design. The separately authorized R8 publication gate remains required before `v1.2.0` publication.
+- Repository simulation is not live installed-host evidence. Accepted R7 evidence is `MERGED_VERIFIED`; the simulated fixture remains pending/empty by design.
 - Orchestra is developer tooling and a local runtime. It does not store or transmit downstream project data by default.
 - Data sensitivity, privacy, retention, deletion, platform disclosure, and IP obligations depend on the downstream project and host environment.
 - Release governance may require revision or block publication.
@@ -305,7 +298,7 @@ Governed Autonomy Modes and the pre-R8 repository-hygiene reconciliation are mer
 
 ### Release and maintainers
 
-- [v1.2.0 Release Candidate Notes](docs/releases/v1.2.0-governed-orchestration-release-candidate.md)
+- [v1.2.0 Release Notes](docs/releases/v1.2.0-governed-orchestration-release-candidate.md)
 - [v1.1.2 Release Notes](docs/releases/v1.1.2-trusted-runtime-authority.md)
 - [Contributing](docs/CONTRIBUTING.md)
 - [Project State](PROJECT_STATE.md)

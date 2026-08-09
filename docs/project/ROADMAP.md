@@ -65,7 +65,7 @@ Phases 6B-A through 6C are complete and merged through PR #183. Phase 6D produce
 - [x] GA-6: Adversarial fixture validation for authority, profile, policy, evidence, bypass, merge-method, signature, scope, and continuity boundaries.
 - [x] GA-7: Governance, routing, Conductor/Codex parity, project-state, README, roadmap, and release-candidate documentation.
 - [x] Refresh every release-readiness artifact invalidated by R7R or GA implementation and independently verify the final candidate; canonical evidence is recorded in `docs/validation/V1_2_0_RELEASE_READINESS_EVIDENCE.md`.
-- [ ] R8: create annotated `v1.2.0` tag and GitHub Release only after the refreshed candidate is independently verified and separate publication authority is granted.
+- [x] R8: annotated `v1.2.0` tag and immutable GitHub Release published and independently verified at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`.
 
 ### Current `Protect main` Development Baseline
 
@@ -106,4 +106,4 @@ The existing bypass list remains operationally available. Orchestra governance m
 - [ ] Add an optional local-model retrieval index.
 - [ ] Improve adapters as tool capabilities change.
 - [ ] Expand fictional, project-agnostic examples.
-- [ ] Publish `v1.2.0` only after R7R, GA-0 through GA-7, refreshed release evidence, independent final verification, and the separate R8 publication gate are completed.
+- [x] Publish `v1.2.0` after R7R, GA-0 through GA-7, refreshed release evidence, independent final verification, and the separate R8 publication gate completed.

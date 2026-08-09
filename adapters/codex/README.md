@@ -1,6 +1,6 @@
 # Codex Adapter for Orchestra
 
-This adapter provides a Codex-compatible export of the current Orchestra skills. Repository release-candidate metadata is `1.2.0`; the latest public GitHub Release remains `v1.1.2` until the separate publication gate completes.
+This adapter provides a Codex-compatible export of the current Orchestra skills. The current published GitHub Release and repository metadata are `v1.2.0`.
 
 ## Purpose
 
@@ -10,7 +10,7 @@ This adapter exports Codex-compatible skills with only `name` and `description` 
 
 ## Release-Candidate Boundary
 
-The `1.2.0` repository version is preparation metadata, not proof of a published release. Accepted R7 live-host evidence is verified and reconciled locally in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`; repository merge/post-merge verification and the separate R8 tag/GitHub Release gate remain required before `v1.2.0` is represented as published.
+The `1.2.0` repository version corresponds to published annotated tag and GitHub Release `v1.2.0`. Accepted R7 live-host evidence is verified and reconciled locally in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`; the repository simulation fixture remains pending/empty by design and is not live evidence.
 
 ## Note
 

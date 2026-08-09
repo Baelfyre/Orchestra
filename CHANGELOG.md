@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.2.0 - Published 2026-08-09
+
+- Published the stable minor release from annotated tag `v1.2.0` at exact release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`.
+- Published [Orchestra v1.2.0: Governed Orchestration](https://github.com/Baelfyre/Orchestra/releases/tag/v1.2.0) as a non-draft, non-prerelease, immutable GitHub Release.
+- Preserved R7-E2, R7-F, R7-G, and R7-H evidence identities, Claude Code `SCAFFOLD_ONLY` maturity, and the repository simulation fixture as pending/empty by design.
+- Performed no deployment, marketplace publication, installed-integration refresh, policy activation, force push, history rewrite, or branch deletion.
+
 ## [Unreleased] - Governed Autonomy Modes and Release-Readiness Closeout
 
 - Reconciled the README across R7, the R7R Squash-aware governance remediation, GA-0 through GA-7, revision-bound release readiness, host maturity, and the separately authorized R8 publication boundary.
