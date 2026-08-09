@@ -4,7 +4,7 @@ import re
 import sys
 from pathlib import Path
 
-SCHEMA_VERSION = "orchestra-autonomous-merge-readiness-v1"
+SCHEMA_VERSION = "orchestra-autonomous-merge-readiness-v2"
 
 REQUIRED_CHECKS = (
     ("Governance Check", "governance-check"),
@@ -13,7 +13,26 @@ REQUIRED_CHECKS = (
     ("Cross-platform Validation", "native-windows-latest"),
     ("Cross-platform Validation", "native-ubuntu-latest"),
     ("Cross-platform Validation", "native-macos-latest"),
+    ("CodeQL", "Analyze (actions)"),
+    ("CodeQL", "Analyze (python)"),
 )
+
+EXPECTED_RULESET = {
+    "required_approvals": 0,
+    "dismiss_stale_approvals": True,
+    "require_specific_teams": False,
+    "require_code_owner_review": False,
+    "require_latest_push_approval": False,
+    "require_conversation_resolution": True,
+    "allowed_merge_methods": ["squash"],
+    "require_linear_history": True,
+    "require_signed_commits": True,
+    "require_pull_request": True,
+    "require_status_checks": True,
+    "require_branches_up_to_date": True,
+    "block_force_pushes": True,
+    "restrict_deletions": True,
+}
 
 CHECK_STATUSES = {"queued", "in_progress", "completed"}
 PASS_CONCLUSION = "success"
@@ -36,6 +55,13 @@ def check_token(check):
     return f"{check.get('workflow', '')}/{check.get('job', '')}"
 
 
+def ruleset_matches(snapshot):
+    ruleset = snapshot.get("ruleset")
+    if not isinstance(ruleset, dict):
+        return False
+    return all(ruleset.get(key) == value for key, value in EXPECTED_RULESET.items())
+
+
 def evaluate_pre_merge(snapshot):
     if snapshot.get("base_health") != "GREEN":
         return "REMEDIATE_BASELINE_FIRST"
@@ -44,7 +70,19 @@ def evaluate_pre_merge(snapshot):
     if not SHA40.fullmatch(current_head):
         return "BLOCK"
 
+    if not ruleset_matches(snapshot):
+        return "BLOCK"
+
+    if snapshot.get("selected_merge_method") != "squash":
+        return "BLOCK"
+
+    if snapshot.get("bypass_used") is not False:
+        return "BLOCK"
+
     if snapshot.get("unresolved_blockers", 0) != 0:
+        return "BLOCK"
+
+    if snapshot.get("unresolved_review_threads", 0) != 0:
         return "BLOCK"
 
     if snapshot.get("changelog_required") and not snapshot.get("changelog_updated"):
@@ -94,12 +132,34 @@ def evaluate_post_merge(snapshot):
         return "MERGE_STATE_UNVERIFIED"
     if snapshot.get("pr_merged") is not True:
         return "MERGE_STATE_UNVERIFIED"
-    if snapshot.get("main_contains_reviewed_head") is not True:
+    if snapshot.get("merge_method") != "squash":
         return "MERGE_STATE_UNVERIFIED"
 
     reviewed = str(snapshot.get("reviewed_head_sha", ""))
     canonical_main = str(snapshot.get("canonical_main_sha", ""))
-    if not SHA40.fullmatch(reviewed) or not SHA40.fullmatch(canonical_main):
+    reviewed_tree = str(snapshot.get("reviewed_tree_sha", ""))
+    canonical_tree = str(snapshot.get("canonical_tree_sha", ""))
+    pre_merge_base = str(snapshot.get("pre_merge_base_sha", ""))
+    canonical_parent = str(snapshot.get("canonical_parent_sha", ""))
+
+    for value in (
+        reviewed,
+        canonical_main,
+        reviewed_tree,
+        canonical_tree,
+        pre_merge_base,
+        canonical_parent,
+    ):
+        if not SHA40.fullmatch(value):
+            return "MERGE_STATE_UNVERIFIED"
+
+    if reviewed_tree != canonical_tree:
+        return "MERGE_STATE_UNVERIFIED"
+    if snapshot.get("content_diff_empty") is not True:
+        return "MERGE_STATE_UNVERIFIED"
+    if canonical_parent != pre_merge_base:
+        return "MERGE_STATE_UNVERIFIED"
+    if snapshot.get("canonical_signature_verified") is not True:
         return "MERGE_STATE_UNVERIFIED"
 
     return "MERGED_VERIFIED"
@@ -110,6 +170,10 @@ def materialize_pre_merge_case(data, case):
 
     for key, value in case.get("overrides", {}).items():
         snapshot[key] = copy.deepcopy(value)
+
+    ruleset_overrides = case.get("ruleset_overrides", {})
+    if ruleset_overrides:
+        snapshot.setdefault("ruleset", {}).update(copy.deepcopy(ruleset_overrides))
 
     remove_check = case.get("remove_check")
     if remove_check:
@@ -142,6 +206,9 @@ def validate_fixtures(data):
         errors.append(
             "required_checks must match the canonical exact required-check inventory"
         )
+
+    if data.get("expected_ruleset") != EXPECTED_RULESET:
+        errors.append("expected_ruleset must match the canonical Protect main profile")
 
     base_snapshot = data.get("base_snapshot")
     if not isinstance(base_snapshot, dict):
@@ -223,11 +290,14 @@ def validate(root):
         "GITHUB_CAN_MERGE != GOVERNANCE_READY_TO_MERGE",
         "API_SUCCESS != VERIFIED_STATE",
         "NO_EVIDENCE != APPROVAL",
+        "BYPASS_CAPABILITY != GOVERNANCE_AUTHORIZATION",
         "NO_CHECK_DATA = WAIT_FOR_EVIDENCE",
-        "mergeable",
+        "Squash",
         "expected_head_sha",
         "MERGED_VERIFIED",
         "canonical remote read",
+        "canonical tree",
+        "verified signature",
         "red canonical baseline",
     )
     for term in required_terms:
