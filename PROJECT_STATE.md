@@ -153,7 +153,8 @@ The current bypass list is intentionally retained for repository-operational acc
 - **R6 Repository State:** `PREPARED_NOT_RELEASED`; candidate version surfaces are `1.2.0`, while the current public GitHub Release remains `v1.1.2`.
 - **R7 State:** R7 and R7R are `MERGED_VERIFIED`; PR #230 incident history is preserved forward-only and PR #231 is the signed Squash trust anchor.
 - **Governed Autonomy Modes:** GA-0 through GA-7 are `MERGED_VERIFIED` through PR #232 and signed canonical Squash commit `900f88d7a3ed480ae8b910e6ba204008a72d2784`.
-- **Release Readiness:** Invalidated candidate evidence has been refreshed on canonical `main`; behavior, 541 runtime tests at 94.31% coverage, strict governance, packaging, exact-head CI, signature/tree/base verification, and release-boundary reads are green. See `docs/validation/V1_2_0_RELEASE_READINESS_EVIDENCE.md`.
+- **Pre-R8 Repository Hygiene:** README provenance/host/release state and complete conservative file/branch classifications are `MERGED_VERIFIED` through PR #234 and signed canonical Squash commit `8cca62109b10aa06abaf25fc4c9982a02160bcbf`. No tracked file or branch was deleted.
+- **Release Readiness:** Hygiene-invalidated candidate evidence has been refreshed against canonical `8cca62109b10aa06abaf25fc4c9982a02160bcbf`; behavior, 541 runtime tests at 94.31% coverage, strict governance, packaging, exact-head CI, signature/tree/base verification, and release-boundary reads are green. See `docs/validation/V1_2_0_RELEASE_READINESS_EVIDENCE.md`.
 - **Publication Boundary:** `v1.2.0` remains `PREPARED_NOT_RELEASED`. R8 tag/GitHub Release publication is blocked and requires separate human authorization.
 
 ## Local Startup Verification
