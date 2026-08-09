@@ -18,6 +18,8 @@ Phase A defines the canonical contracts for delegated autonomous governance.
 Phase B instruction-level behavior is merged and canonical on `main` through PR #190. The Phase C repository host-reliability contract is complete through PR #225, and accepted R7 live installed-host evidence is verified and reconciled locally in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`. The repository simulation remains `PENDING_LOCAL_HOST_VALIDATION` with empty live records by design. Phase D overlap reconciliation is complete through PR #226 and found no justified duplicate Phase D runtime extension for v1.2.0.
 Phase A contracts are merged. Phase B is merged and canonical through PR #190. Phase C repository contract is complete through PR #225. Accepted R7 live installed-host evidence is `VERIFIED / RECONCILED LOCALLY`; the repository simulation remains `PENDING_LOCAL_HOST_VALIDATION` with empty live records by design. Phase D overlap reconciliation is complete through PR #226. No additional Phase D runtime implementation is justified for v1.2.0. v1.2.0 has not been released or deployed.
 
+Governed Autonomy Modes is an additive instruction-level progression contract for v1.2.0. It reuses this policy's envelope, authority, disposition, remediation, evidence, checkpoint, and fallback semantics. It does not add a second runtime authority model.
+
 
 ---
 
@@ -688,3 +690,17 @@ The canonical identity algorithm is [Evidence Identity and Freshness Protocol](E
 Arbiter must not issue `AUTO_CONTINUE` when the packet or contract is stale, repository identity differs, an invalidation event remains open, re-entry is incomplete, or tracked, staged, untracked, added-file, fingerprint, or artifact identity differs. These fields are evidence and continuity constraints only. They cannot widen the envelope, authorize external actions, or create implementation authority.
 
 Manual multi-domain workflows use the same identity and invalidation semantics without inventing a delegated envelope.
+
+## 19. Governed Autonomy Profile Extension
+
+The selected Governance Profile limits which envelope-authorized transitions may proceed automatically:
+
+- `HUMAN_GOVERNED` pauses before material Git/remote transitions and major phase progression.
+- `SEMI_AUTONOMOUS` may continue through granted commit, push, PR, CI, and bounded remediation, then pauses before merge and major phase progression.
+- `FULL_AUTONOMOUS` may continue through explicitly granted merge and later phases while exact-state evidence and repository policy remain green.
+
+The profile is not an authority source. Effective authority is the intersection of profile, envelope, repository policy, project policy, host capability, current phase, and evidence. Increasing autonomy requires explicit human authority; reductions apply immediately; child profile and grant cannot exceed the parent.
+
+External-action flags remain default-deny. A profile cannot turn a false or absent action flag into permission. Release, deployment, policy activation, destructive action, force push, history rewrite, and authority expansion remain separately governed.
+
+The canonical contracts are [Governed Autonomy Modes](GOVERNED_AUTONOMY_MODES.md) and the [Governed Autonomous Execution Protocol](GOVERNED_AUTONOMOUS_EXECUTION_PROTOCOL.md).

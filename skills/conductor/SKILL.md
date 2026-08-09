@@ -13,16 +13,20 @@ output_formats: [Routing Plan, Prompts]
 # Conductor
 
 ## Purpose
-Classify intent, select mode, load minimum safe context, and route work. Conductor does not execute domain work.
+Classify mode and route. No domain execution.
 
 ## Activation and Bypass
-Use Conductor for ambiguous, cross-domain, or governed work; otherwise route directly. Use `the-tuner` for material multi-domain contracts. Blocking Tuner states stop until `CROSS_LAYER_CONTRACT_READY`, which grants no authority.
+Use Conductor for ambiguous, cross-domain, or governed work; otherwise route directly. Use `the-tuner` for multi-domain contracts. Blocking states stop; `CROSS_LAYER_CONTRACT_READY` grants no authority.
 
 ## Canonical Routing Algorithm
-1. Select mode with the [mode policy](../../docs/routing/EXECUTION_MODES_POLICY.md).
+1. Select the [mode](../../docs/routing/EXECUTION_MODES_POLICY.md).
 2. Route from the [skill index](../../SKILL_INDEX.md); load the [routing map](../../ROUTING_MAP.md) only for ambiguity or dependencies.
-3. Load governance only on triggers; pause on unresolved gates.
+3. Load governance on triggers; pause on unresolved gates.
 4. Build the minimum [packet](../../docs/routing/MINIMAL_PROMPT_FORMAT.md).
+
+## Governance Profile Selection Gate
+
+Resolve `HUMAN_GOVERNED` (default), `SEMI_AUTONOMOUS`, or `FULL_AUTONOMOUS` at run/phase start or change. Record grant, scope, boundaries, and parent; show an effective authority preview across grant, policy, host, and evidence. Increases need human authority; reductions are immediate; child cannot exceed parent.
 
 ## Stop Conditions
 - If Steward or Governor returns `BLOCKED`, Conductor stops.
@@ -35,21 +39,19 @@ Use Conductor for ambiguous, cross-domain, or governed work; otherwise route dir
 - Keep Dagger blocked pending authorization. Audit edits require approval.
 
 ## Delegated Phase Autonomous Loop
-Under a `DelegatedExecutionEnvelope`:
-1. Verify the envelope and current `ApprovedUnitPlan` unit.
-2. Route the minimum unit packet.
-3. Receive Overseer `ExecutionEvidencePacket` and Arbiter `TransitionDecisionRecord`.
-4. Apply `AUTO_CONTINUE`, `AUTO_REMEDIATE_AND_REVALIDATE`, `WAIT_FOR_EVIDENCE`, `WAIT_FOR_CAPACITY`, `ESCALATE_HUMAN`, or `STOP` exactly as issued.
-5. Do not invent units, paths, or external-action authority.
-6. Use legacy pause for unsupported dispositions.
-7. After the phase gate, yield `PHASE_READY_FOR_HUMAN_REVIEW`; never auto-merge, release, or deploy.
+With a `DelegatedExecutionEnvelope`:
+1. Verify envelope/unit; route minimum packet.
+2. Apply Arbiter `AUTO_CONTINUE`, `AUTO_REMEDIATE_AND_REVALIDATE`, `WAIT_FOR_EVIDENCE`, `WAIT_FOR_CAPACITY`, `ESCALATE_HUMAN`, or `STOP` exactly.
+3. Never invent scope/authority; unsupported dispositions pause.
+4. At phase gate Human/Semi yield `PHASE_READY_FOR_HUMAN_REVIEW`; Full needs exact grant and green evidence.
+5. Merge needs Full, explicit authority, and merge-readiness. Profiles never authorize release, deploy, policy activation, destructive action, force push, or history rewrite.
 
 ## Phase 2 Re-entry Routing
-Conductor remains the exclusive router. On stale or incomplete change identity, open invalidation, or `SPECIALIST_REENTRY_REQUIRED`, pause; preserve the manual authorization or delegated envelope; route only the declared affected specialists; require revised contracts and current Overseer evidence; then return the packet to Arbiter. Never broaden re-entry without evidence or treat evidence as authority.
+Conductor remains router. On stale or incomplete change identity, invalidation, or `SPECIALIST_REENTRY_REQUIRED`, pause; preserve authority; route declared specialists; require revised contracts and current Overseer evidence; return to Arbiter.
 
 ## Synchronicity routing
 
-Use the Tuner packet. One owner/finding; Overseer evidence; Arbiter continuation. Missing/stale/contradicted/scope-drift blocks. No authority.
+Use the Tuner packet. One owner/finding; Overseer evidence; Arbiter continuation. Missing/stale/contradicted/scope-drift blocks.
 
 ## Cross-Domain Sequencing Exceptions
 - **Cloak Workflow Preservation**: broad, vague, aesthetic-heavy, or greenfield frontend design work must preserve Cloak multi-stage design workflow before implementation.
@@ -71,4 +73,4 @@ Workflow: [Steps]
 ```
 
 ## Local Safety
-Keep scratch notes local. Do not stage, commit, or push from Conductor output. Route through approval gates.
+Keep scratch notes local. Gate external actions.

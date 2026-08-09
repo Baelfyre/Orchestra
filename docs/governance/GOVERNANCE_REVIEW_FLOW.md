@@ -172,7 +172,10 @@ Phase envelope approved by human
 
 All approved units accepted
   ->  Phase validation gate runs
-  ->  PHASE_READY_FOR_HUMAN_REVIEW returned
+  ->  Governance Profile applied
+        HUMAN_GOVERNED or SEMI_AUTONOMOUS  ->  PHASE_READY_FOR_HUMAN_REVIEW
+        FULL_AUTONOMOUS + explicit phase authority + green evidence  ->  AUTO_CONTINUE
+        hard boundary or authority gap  ->  ESCALATE_HUMAN
 ```
 
 The delegated flow above is canonical on `main` through PR #190. Governance
@@ -182,3 +185,5 @@ specialist and Arbiter re-entry rules in
 See `docs/governance/DELEGATED_EXECUTION_POLICY.md` for the canonical contract
 and `docs/project/DELEGATED_GOVERNANCE_IMPLEMENTATION_PLAN.md` for the
 multi-phase implementation roadmap.
+
+Governed profile selection and effective-action evaluation are defined in `docs/governance/GOVERNED_AUTONOMY_MODES.md` and `docs/governance/GOVERNED_AUTONOMOUS_EXECUTION_PROTOCOL.md`. A profile never bypasses Steward/Governor blockers, Arbiter evidence gates, repository policy, or separate release authority.

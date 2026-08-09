@@ -43,6 +43,7 @@ REQUIRED_VALIDATION_SCRIPTS = [
     "scripts/validate_governance_protocol_consistency.py",
     "scripts/validate_routing_contract.py",
     "scripts/validate_cross_layer_synchronicity_contract.py",
+    "scripts/validate_governed_autonomy_modes_contract.py",
 ]
 
 REPO_MEMORY_FILES = [
@@ -63,6 +64,7 @@ STRICT_VALIDATOR_SCRIPTS = [
     "scripts/validate_governance_protocol_consistency.py",
     "scripts/validate_routing_contract.py",
     "scripts/validate_cross_layer_synchronicity_contract.py",
+    "scripts/validate_governed_autonomy_modes_contract.py",
 ]
 
 SIGNIFICANT_CHANGE_PATTERNS = [

@@ -10,7 +10,7 @@ A governance-first specialist skill framework that routes complex AI-assisted so
 Open-source developer tooling and AI orchestration framework
 
 ## Current Stage
-Release-candidate metadata `v1.2.0` (`PREPARED_NOT_RELEASED`). The current public GitHub Release remains `v1.1.2` until the separate publication gate completes. Canonical `main` includes the clean replay through R5B/PR #228: Spec Kitty-derived governed phase execution contracts, The Tuner Phases 1-4, frontend/backend plus backend/persistence and cross-module integrity contracts, the delegated Phase C repository continuity contract, the Phase D `NO_DUPLICATE_RUNTIME_EXTENSION_REQUIRED` disposition, and fail-closed autonomous merge-readiness hardening. Accepted R7 live installed-host evidence is `VERIFIED / RECONCILED LOCALLY` in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`; repository reconciliation merge and independent post-merge verification remain pending. No deployment or policy activation has occurred.
+Release-candidate metadata `v1.2.0` (`PREPARED_NOT_RELEASED`). The current public GitHub Release remains `v1.1.2` until the separate publication gate completes. Canonical `main` includes R7 live-host reconciliation and the signed Squash-aware R7R merge-governance remediation through PR #231 at `8163c64838d369ea5c4abf45df36f6d6504db9fd`. Governed Autonomy Modes is the active candidate extension: GA-0 concluded `NO_DUPLICATE_AUTHORITY_MODEL`, and GA-1 through GA-7 add instruction-level profiles, deterministic validation, Conductor selection behavior, and documentation without changing runtime authority. No release, deployment, installed-integration refresh, or policy activation has occurred.
 
 ## Primary Users
 Developers and maintainers who install Orchestra as a plugin, skill set, or runtime package inside a supported or scaffold-only IDE or coding host (Claude Code, Codex, Antigravity, Cursor, Windsurf, JetBrains, Zed, Neovim)
@@ -39,6 +39,7 @@ Guidance used for this classification:
 - `OrchestraWorktreeContract` is optional and host-capability-dependent. Worktree isolation must not be mandatory for single-agent or lightweight execution. Cleanup is `EXPLICIT_HOST_ACTION_ONLY`; no automatic deletion of dirty, unrelated, or user-owned worktrees is permitted.
 - The cross-module audit protocol coordinates specialist-owned findings and evidence; it creates no implementation, Git, merge, release, deployment, or policy authority.
 - Repository simulation and GitHub CI are not live installed-host evidence. Accepted R7 evidence is recorded separately for installed Codex and Antigravity continuity and Claude Code packaging compatibility; Claude Code active runtime continuity remains unclaimed under `SCAFFOLD_ONLY` maturity.
+- Governed Autonomy Profiles are reduction-only workflow gates. `HUMAN_GOVERNED` is the safe default, children cannot exceed parents, and no profile creates release, deployment, policy, destructive, force-push, history-rewrite, or authority-expansion permission.
 - No vendoring of external plugin code, and no claiming unsupported compatibility or compliance, per `docs/CONTRIBUTING.md`.
 
 ## Validation Requirements
@@ -47,6 +48,7 @@ Guidance used for this classification:
 - `python scripts/governance_check.py --strict` must pass as enforced in CI via `governance-check.yml`.
 - Manifest and packaging validators (`validate_claude_plugin.py`, `validate_ide_packaging.py`, `validate_manifest.py`, `validate_structure.py`) must pass.
 - Cross-layer contract validators and their behavior tests must pass for affected revisions.
+- `python scripts/validate_governed_autonomy_modes_contract.py` and its focused runtime tests must pass when autonomy-profile contracts change.
 - `python scripts/preflight_sync_check.py` must be run against `origin/main` before starting a new local editing session, per `docs/CONTRIBUTING.md`.
 
 ## Known Constraints
@@ -70,4 +72,4 @@ Guidance used for this classification:
 Not yet decided. No project-specific maintainer preferences beyond `docs/CONTRIBUTING.md` are currently documented for this field.
 
 ## Last Reviewed
-2026-08-08
+2026-08-09
