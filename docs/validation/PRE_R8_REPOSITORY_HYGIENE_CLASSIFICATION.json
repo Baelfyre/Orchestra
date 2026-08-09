@@ -3,7 +3,7 @@
     "evidence_revision":  "2026-08-09",
     "repository":  "Baelfyre/Orchestra",
     "audited_base_sha":  "81ce2b440fc4e1091637045a7227f6192e93a042",
-    "open_pull_request_count":  0,
+    "open_pull_request_count":  1,
     "classification_policy":  {
                                   "categories":  [
                                                      "KEEP_ACTIVE",
@@ -3754,14 +3754,14 @@
                           }
                       ],
     "branch_summary":  {
-                           "KEEP_ACTIVE":  10,
+                           "KEEP_ACTIVE":  11,
                            "KEEP_HISTORICAL_EVIDENCE":  20,
                            "ARCHIVE_SUPERSEDED":  0,
                            "DELETE_PROVEN_STALE":  283,
                            "CONSOLIDATE_DUPLICATE":  0,
                            "REVIEW_REQUIRED":  0
                        },
-    "branch_count":  313,
+    "branch_count":  314,
     "branches":  [
                      {
                          "scope":  "local",
@@ -3958,14 +3958,14 @@
                      {
                          "scope":  "local",
                          "name":  "codex/pre-r8-repository-hygiene",
-                         "sha":  "81ce2b440fc4e1091637045a7227f6192e93a042",
-                         "upstream":  "origin/main",
+                         "sha":  "a31851fa980a3d75ebb9c42dedd5b4d6dce7ce02",
+                         "upstream":  "origin/codex/pre-r8-repository-hygiene",
                          "active_worktree":  true,
-                         "open_pr":  false,
-                         "unique_commits_vs_origin_main":  0,
-                         "tip_reachable_from_origin_main":  true,
+                         "open_pr":  true,
+                         "unique_commits_vs_origin_main":  1,
+                         "tip_reachable_from_origin_main":  false,
                          "classification":  "KEEP_ACTIVE",
-                         "evidence":  "Checked out by an active registered worktree; preservation is mandatory."
+                         "evidence":  "Open PR #234 head; preservation is mandatory. The local ref is also checked out by an active registered worktree."
                      },
                      {
                          "scope":  "local",
@@ -4581,9 +4581,9 @@
                      },
                      {
                          "scope":  "local",
-                         "name":  "feat/issue-195-tuner-phase4-scenario-runtime-integration",
-                         "sha":  "455f5272734f6091ab686bc0aa56094b684511eb",
-                         "upstream":  "origin/feat/issue-195-tuner-phase4-scenario-runtime-integration",
+                         "name":  "feat/issue-195-tuner-phase4a-post-merge-state-sync",
+                         "sha":  "e5a64db7c4967d20d479501a494f3d73cc74c0aa",
+                         "upstream":  "origin/feat/issue-195-tuner-phase4a-post-merge-state-sync",
                          "active_worktree":  false,
                          "open_pr":  false,
                          "unique_commits_vs_origin_main":  0,
@@ -4593,9 +4593,9 @@
                      },
                      {
                          "scope":  "local",
-                         "name":  "feat/issue-195-tuner-phase4a-post-merge-state-sync",
-                         "sha":  "e5a64db7c4967d20d479501a494f3d73cc74c0aa",
-                         "upstream":  "origin/feat/issue-195-tuner-phase4a-post-merge-state-sync",
+                         "name":  "feat/issue-195-tuner-phase4-scenario-runtime-integration",
+                         "sha":  "455f5272734f6091ab686bc0aa56094b684511eb",
+                         "upstream":  "origin/feat/issue-195-tuner-phase4-scenario-runtime-integration",
                          "active_worktree":  false,
                          "open_pr":  false,
                          "unique_commits_vs_origin_main":  0,
@@ -5193,30 +5193,6 @@
                      },
                      {
                          "scope":  "remote",
-                         "name":  "Baelfyre-patch-1",
-                         "sha":  "f0d33e853dc2239025dbd2016c8786fc508af4a9",
-                         "upstream":  "",
-                         "active_worktree":  false,
-                         "open_pr":  false,
-                         "unique_commits_vs_origin_main":  0,
-                         "tip_reachable_from_origin_main":  true,
-                         "classification":  "DELETE_PROVEN_STALE",
-                         "evidence":  "Fully reachable from canonical main, not checked out, not an open PR head, and no protected recovery or release-history role was identified. Classification only; deletion requires separate exact-state authorization."
-                     },
-                     {
-                         "scope":  "remote",
-                         "name":  "The_Governor_Compliance_Refinements",
-                         "sha":  "ca935d3629e6755f198374c4f7844948064ac931",
-                         "upstream":  "",
-                         "active_worktree":  false,
-                         "open_pr":  false,
-                         "unique_commits_vs_origin_main":  0,
-                         "tip_reachable_from_origin_main":  true,
-                         "classification":  "DELETE_PROVEN_STALE",
-                         "evidence":  "Fully reachable from canonical main, not checked out, not an open PR head, and no protected recovery or release-history role was identified. Classification only; deletion requires separate exact-state authorization."
-                     },
-                     {
-                         "scope":  "remote",
                          "name":  "agent/readme-badge-correction",
                          "sha":  "e52caffd54e46c75e287e3adcfc502866773aebc",
                          "upstream":  "",
@@ -5334,6 +5310,18 @@
                          "tip_reachable_from_origin_main":  true,
                          "classification":  "KEEP_HISTORICAL_EVIDENCE",
                          "evidence":  "Explicit recovery backup branch; preservation is mandatory."
+                     },
+                     {
+                         "scope":  "remote",
+                         "name":  "Baelfyre-patch-1",
+                         "sha":  "f0d33e853dc2239025dbd2016c8786fc508af4a9",
+                         "upstream":  "",
+                         "active_worktree":  false,
+                         "open_pr":  false,
+                         "unique_commits_vs_origin_main":  0,
+                         "tip_reachable_from_origin_main":  true,
+                         "classification":  "DELETE_PROVEN_STALE",
+                         "evidence":  "Fully reachable from canonical main, not checked out, not an open PR head, and no protected recovery or release-history role was identified. Classification only; deletion requires separate exact-state authorization."
                      },
                      {
                          "scope":  "remote",
@@ -5493,18 +5481,6 @@
                      },
                      {
                          "scope":  "remote",
-                         "name":  "codex-adapter-v1.0.1",
-                         "sha":  "1c39b7a08247b282910296c5206ba03a533f30d2",
-                         "upstream":  "",
-                         "active_worktree":  false,
-                         "open_pr":  false,
-                         "unique_commits_vs_origin_main":  1,
-                         "tip_reachable_from_origin_main":  false,
-                         "classification":  "KEEP_HISTORICAL_EVIDENCE",
-                         "evidence":  "Contains 1 commit(s) not reachable from canonical main; strict unique-history preservation applies."
-                     },
-                     {
-                         "scope":  "remote",
                          "name":  "codex/Cloak-Skill-Enhancement-2.0",
                          "sha":  "79fcd842e175fa480b05c4b914aadc59abaf350f",
                          "upstream":  "",
@@ -5553,6 +5529,18 @@
                      },
                      {
                          "scope":  "remote",
+                         "name":  "codex/pre-r8-repository-hygiene",
+                         "sha":  "a31851fa980a3d75ebb9c42dedd5b4d6dce7ce02",
+                         "upstream":  "",
+                         "active_worktree":  false,
+                         "open_pr":  true,
+                         "unique_commits_vs_origin_main":  1,
+                         "tip_reachable_from_origin_main":  false,
+                         "classification":  "KEEP_ACTIVE",
+                         "evidence":  "Open PR #234 head; preservation is mandatory."
+                     },
+                     {
+                         "scope":  "remote",
                          "name":  "codex/readme-install-cleanup",
                          "sha":  "4ad1949715db615748d076ebcc51f1c0fdf53eeb",
                          "upstream":  "",
@@ -5586,6 +5574,18 @@
                          "tip_reachable_from_origin_main":  true,
                          "classification":  "DELETE_PROVEN_STALE",
                          "evidence":  "Fully reachable from canonical main, not checked out, not an open PR head, and no protected recovery or release-history role was identified. Classification only; deletion requires separate exact-state authorization."
+                     },
+                     {
+                         "scope":  "remote",
+                         "name":  "codex-adapter-v1.0.1",
+                         "sha":  "1c39b7a08247b282910296c5206ba03a533f30d2",
+                         "upstream":  "",
+                         "active_worktree":  false,
+                         "open_pr":  false,
+                         "unique_commits_vs_origin_main":  1,
+                         "tip_reachable_from_origin_main":  false,
+                         "classification":  "KEEP_HISTORICAL_EVIDENCE",
+                         "evidence":  "Contains 1 commit(s) not reachable from canonical main; strict unique-history preservation applies."
                      },
                      {
                          "scope":  "remote",
@@ -5865,6 +5865,18 @@
                      },
                      {
                          "scope":  "remote",
+                         "name":  "docs/phase6a-authority-capability-architecture",
+                         "sha":  "fe8a370215b14b5933134de29cc5f7affa77d1c5",
+                         "upstream":  "",
+                         "active_worktree":  false,
+                         "open_pr":  false,
+                         "unique_commits_vs_origin_main":  0,
+                         "tip_reachable_from_origin_main":  true,
+                         "classification":  "DELETE_PROVEN_STALE",
+                         "evidence":  "Fully reachable from canonical main, not checked out, not an open PR head, and no protected recovery or release-history role was identified. Classification only; deletion requires separate exact-state authorization."
+                     },
+                     {
+                         "scope":  "remote",
                          "name":  "docs/phase-b-post-merge-state-sync",
                          "sha":  "9854bd9b4f736dc4934c75486ea42114186c5a40",
                          "upstream":  "",
@@ -5879,18 +5891,6 @@
                          "scope":  "remote",
                          "name":  "docs/phase-b-readme-closeout",
                          "sha":  "94831bd8e0ff01d13c02c690fc3401e94ff7bff7",
-                         "upstream":  "",
-                         "active_worktree":  false,
-                         "open_pr":  false,
-                         "unique_commits_vs_origin_main":  0,
-                         "tip_reachable_from_origin_main":  true,
-                         "classification":  "DELETE_PROVEN_STALE",
-                         "evidence":  "Fully reachable from canonical main, not checked out, not an open PR head, and no protected recovery or release-history role was identified. Classification only; deletion requires separate exact-state authorization."
-                     },
-                     {
-                         "scope":  "remote",
-                         "name":  "docs/phase6a-authority-capability-architecture",
-                         "sha":  "fe8a370215b14b5933134de29cc5f7affa77d1c5",
                          "upstream":  "",
                          "active_worktree":  false,
                          "open_pr":  false,
@@ -6105,8 +6105,8 @@
                      },
                      {
                          "scope":  "remote",
-                         "name":  "docs/spec-kitty-phase2-post-merge-kb-sync",
-                         "sha":  "ebeb27004bc64f90023deac7383bb1688a8d5a8e",
+                         "name":  "docs/specialist-authoring-standard",
+                         "sha":  "34416a135095a44441a19509d8d8702a714b3253",
                          "upstream":  "",
                          "active_worktree":  false,
                          "open_pr":  false,
@@ -6117,8 +6117,20 @@
                      },
                      {
                          "scope":  "remote",
-                         "name":  "docs/spec-kitty-phase3-closeout",
-                         "sha":  "8a70ac1730936203ca261051fe6e2021f44f41e2",
+                         "name":  "docs/specialist-boundary-consistency-audit",
+                         "sha":  "451fe75656b2debb24bf08246558e86dfd8d47a0",
+                         "upstream":  "",
+                         "active_worktree":  false,
+                         "open_pr":  false,
+                         "unique_commits_vs_origin_main":  0,
+                         "tip_reachable_from_origin_main":  true,
+                         "classification":  "DELETE_PROVEN_STALE",
+                         "evidence":  "Fully reachable from canonical main, not checked out, not an open PR head, and no protected recovery or release-history role was identified. Classification only; deletion requires separate exact-state authorization."
+                     },
+                     {
+                         "scope":  "remote",
+                         "name":  "docs/spec-kitty-phase2-post-merge-kb-sync",
+                         "sha":  "ebeb27004bc64f90023deac7383bb1688a8d5a8e",
                          "upstream":  "",
                          "active_worktree":  false,
                          "open_pr":  false,
@@ -6153,20 +6165,8 @@
                      },
                      {
                          "scope":  "remote",
-                         "name":  "docs/specialist-authoring-standard",
-                         "sha":  "34416a135095a44441a19509d8d8702a714b3253",
-                         "upstream":  "",
-                         "active_worktree":  false,
-                         "open_pr":  false,
-                         "unique_commits_vs_origin_main":  0,
-                         "tip_reachable_from_origin_main":  true,
-                         "classification":  "DELETE_PROVEN_STALE",
-                         "evidence":  "Fully reachable from canonical main, not checked out, not an open PR head, and no protected recovery or release-history role was identified. Classification only; deletion requires separate exact-state authorization."
-                     },
-                     {
-                         "scope":  "remote",
-                         "name":  "docs/specialist-boundary-consistency-audit",
-                         "sha":  "451fe75656b2debb24bf08246558e86dfd8d47a0",
+                         "name":  "docs/spec-kitty-phase3-closeout",
+                         "sha":  "8a70ac1730936203ca261051fe6e2021f44f41e2",
                          "upstream":  "",
                          "active_worktree":  false,
                          "open_pr":  false,
@@ -6249,18 +6249,6 @@
                      },
                      {
                          "scope":  "remote",
-                         "name":  "feat/artificer-phase-5c-authority-capability-proposal",
-                         "sha":  "bd2d8b9259098d3e9d2c645fa1c76075d9ff59f1",
-                         "upstream":  "",
-                         "active_worktree":  false,
-                         "open_pr":  false,
-                         "unique_commits_vs_origin_main":  0,
-                         "tip_reachable_from_origin_main":  true,
-                         "classification":  "DELETE_PROVEN_STALE",
-                         "evidence":  "Fully reachable from canonical main, not checked out, not an open PR head, and no protected recovery or release-history role was identified. Classification only; deletion requires separate exact-state authorization."
-                     },
-                     {
-                         "scope":  "remote",
                          "name":  "feat/artificer-phase4-5-openhero-pilot-audit",
                          "sha":  "6e35d10bfed2f0d9655f0bc9a200178deb07afc5",
                          "upstream":  "",
@@ -6333,6 +6321,30 @@
                      },
                      {
                          "scope":  "remote",
+                         "name":  "feat/artificer-phase-5c-authority-capability-proposal",
+                         "sha":  "bd2d8b9259098d3e9d2c645fa1c76075d9ff59f1",
+                         "upstream":  "",
+                         "active_worktree":  false,
+                         "open_pr":  false,
+                         "unique_commits_vs_origin_main":  0,
+                         "tip_reachable_from_origin_main":  true,
+                         "classification":  "DELETE_PROVEN_STALE",
+                         "evidence":  "Fully reachable from canonical main, not checked out, not an open PR head, and no protected recovery or release-history role was identified. Classification only; deletion requires separate exact-state authorization."
+                     },
+                     {
+                         "scope":  "remote",
+                         "name":  "feat/artificer-phase5c-b-promotion-catalog",
+                         "sha":  "37d7cf7c41a1c595009d4a5c5d5ce4f7460beab5",
+                         "upstream":  "",
+                         "active_worktree":  false,
+                         "open_pr":  false,
+                         "unique_commits_vs_origin_main":  0,
+                         "tip_reachable_from_origin_main":  true,
+                         "classification":  "DELETE_PROVEN_STALE",
+                         "evidence":  "Fully reachable from canonical main, not checked out, not an open PR head, and no protected recovery or release-history role was identified. Classification only; deletion requires separate exact-state authorization."
+                     },
+                     {
+                         "scope":  "remote",
                          "name":  "feat/artificer-phase5-openhero-governance-decisions",
                          "sha":  "fd9a083ecf2e138792b8c671e60f400736b8f697",
                          "upstream":  "",
@@ -6347,18 +6359,6 @@
                          "scope":  "remote",
                          "name":  "feat/artificer-phase5-strix-governance-decisions",
                          "sha":  "a7a7cf8fff48278c2c22bc40fdc0bcbf6ee23d42",
-                         "upstream":  "",
-                         "active_worktree":  false,
-                         "open_pr":  false,
-                         "unique_commits_vs_origin_main":  0,
-                         "tip_reachable_from_origin_main":  true,
-                         "classification":  "DELETE_PROVEN_STALE",
-                         "evidence":  "Fully reachable from canonical main, not checked out, not an open PR head, and no protected recovery or release-history role was identified. Classification only; deletion requires separate exact-state authorization."
-                     },
-                     {
-                         "scope":  "remote",
-                         "name":  "feat/artificer-phase5c-b-promotion-catalog",
-                         "sha":  "37d7cf7c41a1c595009d4a5c5d5ce4f7460beab5",
                          "upstream":  "",
                          "active_worktree":  false,
                          "open_pr":  false,
@@ -6549,8 +6549,8 @@
                      },
                      {
                          "scope":  "remote",
-                         "name":  "feat/issue-195-tuner-phase4-scenario-runtime-integration",
-                         "sha":  "455f5272734f6091ab686bc0aa56094b684511eb",
+                         "name":  "feat/issue-195-tuner-phase4a-post-merge-state-sync",
+                         "sha":  "e5a64db7c4967d20d479501a494f3d73cc74c0aa",
                          "upstream":  "",
                          "active_worktree":  false,
                          "open_pr":  false,
@@ -6561,8 +6561,8 @@
                      },
                      {
                          "scope":  "remote",
-                         "name":  "feat/issue-195-tuner-phase4a-post-merge-state-sync",
-                         "sha":  "e5a64db7c4967d20d479501a494f3d73cc74c0aa",
+                         "name":  "feat/issue-195-tuner-phase4-scenario-runtime-integration",
+                         "sha":  "455f5272734f6091ab686bc0aa56094b684511eb",
                          "upstream":  "",
                          "active_worktree":  false,
                          "open_pr":  false,
@@ -7518,6 +7518,18 @@
                          "tip_reachable_from_origin_main":  true,
                          "classification":  "DELETE_PROVEN_STALE",
                          "evidence":  "Fully reachable from canonical main, not checked out, not an open PR head, and no protected recovery or release-history role was identified. Classification only; deletion requires separate exact-state authorization."
+                     },
+                     {
+                         "scope":  "remote",
+                         "name":  "The_Governor_Compliance_Refinements",
+                         "sha":  "ca935d3629e6755f198374c4f7844948064ac931",
+                         "upstream":  "",
+                         "active_worktree":  false,
+                         "open_pr":  false,
+                         "unique_commits_vs_origin_main":  0,
+                         "tip_reachable_from_origin_main":  true,
+                         "classification":  "DELETE_PROVEN_STALE",
+                         "evidence":  "Fully reachable from canonical main, not checked out, not an open PR head, and no protected recovery or release-history role was identified. Classification only; deletion requires separate exact-state authorization."
                      }
                  ],
     "protected_branch_assertions":  {
@@ -7525,7 +7537,7 @@
                                         "recovery_backup":  "origin/backup/main-pre-v1.2-autonomous-2026-08-07",
                                         "autonomous_run_archive":  "origin/archive/autonomous-run-2026-08-07-pre-rollback",
                                         "open_pr_heads":  [
-
+                                                              "codex/pre-r8-repository-hygiene"
                                                           ],
                                         "active_worktree_branches":  [
                                                                          "codex/frontend-backend-synchronicity-v1",
@@ -7539,5 +7551,7 @@
                                                                          "replay/delegated-governance-state-r5b-local"
                                                                      ],
                                         "deletion_performed":  false
-                                    }
+                                    },
+    "branch_inventory_snapshot_head_sha":  "a31851fa980a3d75ebb9c42dedd5b4d6dce7ce02",
+    "branch_inventory_snapshot_origin_main_sha":  "81ce2b440fc4e1091637045a7227f6192e93a042"
 }

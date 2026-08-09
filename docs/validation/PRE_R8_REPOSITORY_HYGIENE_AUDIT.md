@@ -6,14 +6,14 @@
 AUDITED_BASE_SHA=81ce2b440fc4e1091637045a7227f6192e93a042
 README_RECONCILIATION=COMPLETE
 TRACKED_FILE_CLASSIFICATION=COMPLETE
-LOCAL_REMOTE_BRANCH_CLASSIFICATION=COMPLETE_AT_AUDIT_SNAPSHOT
+LOCAL_REMOTE_BRANCH_CLASSIFICATION=COMPLETE_AT_PR_234_HEAD_SNAPSHOT
 FILE_DELETION_PERFORMED=false
 BRANCH_DELETION_PERFORMED=false
 RELEASE_EVIDENCE_REFRESH_REQUIRED_AFTER_HYGIENE_MERGE=true
 R8_PUBLICATION=BLOCKED_REQUIRES_SEPARATE_HUMAN_AUTHORIZATION
 ```
 
-The machine-readable inventory is [PRE_R8_REPOSITORY_HYGIENE_CLASSIFICATION.json](PRE_R8_REPOSITORY_HYGIENE_CLASSIFICATION.json). It records every tracked candidate path and every local or `origin` branch observed after a fresh fetch. Classification is evidence, not deletion authority.
+The machine-readable inventory is [PRE_R8_REPOSITORY_HYGIENE_CLASSIFICATION.json](PRE_R8_REPOSITORY_HYGIENE_CLASSIFICATION.json). It records every tracked candidate path and every local or `origin` branch observed after a fresh fetch, including the PR #234 head branch. Classification is evidence, not deletion authority.
 
 ## Tracked Files
 
@@ -32,11 +32,11 @@ Exact adapter/source mirrors and legacy-named icons are retained because reposit
 
 ## Branches
 
-The audit snapshot contains 313 classified refs: 118 local branches and 195 `origin` branches.
+The PR-head audit snapshot contains 314 classified refs: 118 local branches and 196 `origin` branches.
 
 | Classification | Count | Disposition |
 |---|---:|---|
-| `KEEP_ACTIVE` | 10 | Local and remote `main`, plus every branch checked out by a registered worktree. |
+| `KEEP_ACTIVE` | 11 | Local and remote `main`, every branch checked out by a registered worktree, and the PR #234 head. |
 | `KEEP_HISTORICAL_EVIDENCE` | 20 | Unique-commit refs, release-history refs, the recovery backup, and the autonomous-run archive. |
 | `DELETE_PROVEN_STALE` | 283 | Classification candidates only: tips are fully reachable from `origin/main`, have no unique commits, no active worktree, no open PR, and no protected recovery or release role. |
 | all other categories | 0 | No branch met another disposition at this snapshot. |
