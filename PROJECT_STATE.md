@@ -70,26 +70,77 @@ Clean replay results:
 - **R4:** Phase D overlap assessment merged through PR #226 only after the canonical baseline was green and every fresh required check passed.
 - **R5:** autonomous merge-readiness hardening merged through PR #227 at merge commit `467008db683c346cd086442dbb909c20a9248a3a`.
 - **R5B:** delegated-governance current-state reconciliation merged and was independently verified through PR #228 at merge commit `fbe4532ba2083feaa7ed9fcda2988843f1237a78`.
-- **R6:** `v1.2.0` release-candidate metadata and documentation are prepared on the governed release-preparation revision. This state is `PREPARED_NOT_RELEASED` and does not authorize publication.
+- **R6:** `v1.2.0` release-candidate metadata and documentation were prepared as `PREPARED_NOT_RELEASED` without publication authority.
+- **R7 / PR #230:** accepted live-host evidence was reviewed at head `f49a03c929be7df7c10c457a227a46532ef47854` and merged to canonical `main` as `80f9bc71f00cc86c0021fd9da258f2eec596d7e0`. GitHub's then-used rebase merge rewrote the reviewed commit identity. The reviewed and canonical trees are equal and their content diff is empty, but the canonical rebase commit is unsigned and the reviewed head is not in `main` ancestry.
 
-The incident-derived invariant is:
+Maintainer disposition for the PR #230 incident is forward-only:
+
+```text
+PRESERVE_CURRENT_CANONICAL_HISTORY=true
+HISTORY_REWRITE=false
+FORCE_PUSH=false
+PR230_REBASE_RESULT_IS_NOT_FUTURE_PRECEDENT=true
+```
+
+The incident exposed an ancestry-only post-merge verification assumption. R7 is not recorded as fully `MERGED_VERIFIED` until the forward-only merge-governance remediation is merged and independently verified under the current Squash-only ruleset.
+
+The incident-derived invariants are:
 
 ```text
 GITHUB_CAN_MERGE != GOVERNANCE_READY_TO_MERGE
+BYPASS_CAPABILITY != GOVERNANCE_AUTHORIZATION
 ```
 
 Autonomous merges follow `docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md`.
+
+## Current `Protect main` Ruleset
+
+The accepted solo-maintainer ruleset is:
+
+```text
+Required approvals: 0
+Dismiss stale approvals on new reviewable commits: ON
+Specific-team review: OFF
+Code Owner review: OFF
+Most-recent-push approval: OFF
+Conversation resolution: ON
+Allowed merge method: Squash only
+Restrict deletions: ON
+Linear history: ON
+Signed commits: ON
+Pull request required: ON
+Required status checks: ON
+Branch up to date before merge: ON
+Force pushes blocked: ON
+```
+
+Required status checks are:
+
+```text
+governance-check
+validate
+runtime-tests
+native-windows-latest
+native-ubuntu-latest
+native-macos-latest
+Analyze (actions)
+Analyze (python)
+```
+
+The current bypass list is intentionally retained for repository-operational access. Bypass capability is not governance authorization; ordinary governed automation must not rely on it to skip evidence or policy gates.
 
 ## Validation and Continuation
 
 - **Validation Rule:** Validation results are revision-specific. Historical green runs cannot authorize a newer head.
 - **Fail-Closed Rule:** Missing, pending, stale, skipped, cancelled, timed-out, or failed required checks cannot authorize merge.
+- **Ruleset Rule:** Live ruleset drift, non-Squash merge selection, unresolved review threads, or unauthorized bypass use blocks ordinary autonomous merge.
 - **Baseline Rule:** A new phase must not begin from a red canonical `main`.
-- **Post-Merge Rule:** An API response is not completion evidence; the PR and canonical `main` must be independently re-read before state advances.
+- **Post-Merge Rule:** An API response is not completion evidence. For Squash, canonical parent/tree/content/signature evidence and a canonical remote read are required before state advances.
 - **Issue #215:** Open umbrella finalization issue targeting `v1.2.0`.
 - **R6 Repository State:** `PREPARED_NOT_RELEASED`; candidate version surfaces are `1.2.0`, while the current public GitHub Release remains `v1.1.2`.
-- **R7 State:** Live installed-host evidence is verified and reconciled locally on the dedicated reconciliation worktree. Repository reconciliation merge and independent post-merge verification remain pending.
-- **Publication Boundary:** R8 `v1.2.0` tag/GitHub Release remains separately blocked pending independent post-R7 release verification and separate authorization.
+- **R7 State:** Live host evidence is accepted and PR #230 content is canonical, but the post-merge governance incident requires forward-only remediation before R7 closeout is recorded as `MERGED_VERIFIED`.
+- **Governed Autonomy Modes:** GA-0 through GA-7 are now part of the `v1.2.0` scope after R7 closeout and before R8 publication.
+- **Publication Boundary:** R8 `v1.2.0` tag/GitHub Release remains blocked until Governed Autonomy Modes is implemented, invalidated release evidence is refreshed, release state is independently verified, and separate publication authorization is granted.
 
 ## Local Startup Verification
 
