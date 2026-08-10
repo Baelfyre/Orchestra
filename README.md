@@ -2,7 +2,6 @@
   <img src="./assets/readme/orchestra-governance-banner.svg" alt="Orchestra banner showing coordinated software responsibilities" width="100%" />
 
   <p><strong>A portable orchestration runtime for structured AI-assisted development.</strong></p>
-  <p>From blind prompting to guided software building.</p>
 
   <p>
     <a href="docs/setup/INSTALLATION.md">Installation</a> |
@@ -22,9 +21,6 @@
 
 ---
 
-> [!IMPORTANT]
-> `v1.2.0` is the current published GitHub Release, created from annotated tag `v1.2.0` at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`. R7, its signed Squash-aware R7R merge-governance remediation, GA-0 through GA-7, pre-R8 hygiene, and release readiness are verified. Publication did not perform deployment, marketplace graduation, installed-integration refresh, or policy activation.
-
 ## AI can generate fast. Building well still requires structure.
 
 AI-assisted projects rarely fail because a model cannot produce another answer. They fail when context drifts, architecture and implementation blur together, specialist assumptions conflict, unchecked output becomes the next input, evidence goes stale, decisions arrive out of order, and tool access is mistaken for permission.
@@ -38,6 +34,8 @@ Orchestra is a structured, governance-driven framework for coordinating AI-assis
 It is not an AI model and does not replace one. The model generates or reviews work. Orchestra is the coordination layer that routes, sequences, constrains, coordinates, validates, records, and connects that work to the next responsible boundary.
 
 The framework is designed to help developers reduce context drift, make cross-domain dependencies explicit, keep permission separate from routing and governance, and produce evidence that can be reviewed instead of inferred from generated text.
+
+> **Core trust boundary:** governance approval, coordination readiness, validation success, and GitHub mergeability are state or evidence signals. None of them grants or expands authority.
 
 ## How Orchestra Works
 
@@ -81,15 +79,17 @@ flowchart TD
 
 Accessible summary: a request supplies project context and selects separate risk, progression, and governance-profile settings. Trusted composition and the effective-authority intersection run before Conductor routes work. Single-owner work goes directly to its specialist; material multi-domain work first requires current Tuner coordination. Validation failure returns to the owning boundary. Current evidence goes to Arbiter, which may continue or remediate inside existing authority, wait for evidence or capacity, escalate to a human, or stop safely.
 
-## What v1.2.0 Gives You
+## v1.2.0 Technical Scope
 
-- **Governed autonomy without invented permission:** choose Human-Governed, Semi-Autonomous, or Full Autonomous pause behavior while effective authority remains the most restrictive intersection of explicit grant, policy, host capability, phase scope, and current evidence.
-- **Delegated progression with predictable outcomes:** approved phases can advance through six explicit Arbiter dispositions, bounded remediation, checkpoints, and resumable capacity waits instead of relying on ambiguous generated prose.
-- **Integrated multi-specialist coordination:** Conductor activates The Tuner only for material multi-domain work so ownership gaps, contradictions, stale contracts, generated artifacts, and minimal specialist re-entry remain visible.
-- **Cross-layer integrity review:** reusable frontend-to-backend, backend-to-persistence, and cross-module logical-flow profiles connect findings to one owner, validation evidence, and fail-closed re-entry.
-- **Revision-bound validation and merge safety:** canonical baseline health, exact-head checks, evidence freshness, expected-head merge guards, signed Squash verification, and independent canonical reads prevent stale green results from authorizing a newer state.
-- **Portable governed execution contracts:** runtime envelopes, correlation identity, phase retrospectives, approved-unit plans, status projections, and worktree contracts preserve bounded context and reviewable state.
-- **Evidence-backed host continuity boundaries:** accepted Codex and Antigravity continuity evidence is separated from repository simulation, while Claude Code remains explicitly `SCAFFOLD_ONLY` for active runtime continuity.
+v1.2.0 extends Orchestra's governed runtime, delegated progression, specialist coordination, validation, merge-readiness, and host-continuity contracts while preserving explicit authority boundaries.
+
+- **Governed autonomy:** Human-Governed, Semi-Autonomous, and Full Autonomous profiles control permitted continuation and pause behavior. Effective authority remains the intersection of the selected profile, explicit grant, repository or project policy, host capability, current phase, and current evidence.
+- **Delegated execution:** approved phase envelopes use six explicit Arbiter dispositions for continuation, bounded remediation, evidence waits, capacity waits, human escalation, and safe termination.
+- **Multi-specialist coordination:** The Tuner participates only in material multi-domain work and requires complete, consistent, and current specialist-owned contracts before coordinated execution proceeds.
+- **Cross-layer integrity validation:** reusable frontend-to-backend, backend-to-persistence, and cross-module logical-flow profiles connect findings to responsible owners, validation evidence, and governed re-entry.
+- **Revision-bound validation and merge readiness:** canonical baseline health, exact-head evidence, evidence freshness, expected-head merge guards, signed Squash verification, and independent canonical reads prevent evidence from a different revision from authorizing a newer state.
+- **Portable execution state:** runtime envelopes, correlation identity, phase retrospectives, approved-unit plans, status projections, and worktree contracts preserve bounded execution context and reviewable state.
+- **Host-continuity evidence:** accepted Codex and Antigravity continuity evidence is distinguished from repository simulation. Claude Code remains `SCAFFOLD_ONLY` for active runtime continuity.
 
 Implementation chronology and source provenance remain available in [Project State](PROJECT_STATE.md), the [Roadmap](docs/project/ROADMAP.md), and the stable [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration.md).
 
@@ -102,6 +102,8 @@ Implementation chronology and source provenance remain available in [Project Sta
 Profiles are reduction-only. Effective authority is the intersection of the selected profile, explicit user grant, repository/project policy, host capability, current phase, and evidence. No profile independently authorizes release, deployment, policy activation, destructive action, force push, history rewrite, or authority expansion. See [Governed Autonomy Modes](docs/governance/GOVERNED_AUTONOMY_MODES.md).
 
 ## Delegated Phase Progression
+
+Delegated phase progression applies only when the selected autonomy profile and an explicit maintainer grant permit Orchestra to advance within a defined phase envelope. Delegation controls progression inside that envelope; it does not expand the envelope or create additional authority.
 
 For an approved delegated phase, a maintainer authorizes the phase and its execution envelope once. Conductor may then route only internal units already allowed by that envelope. Specialists execute inside those bounds, Overseer and repository validators produce current evidence, and Arbiter emits the next transition disposition.
 
@@ -190,6 +192,8 @@ Support means a validated integration surface. Scaffold-only means the repositor
 | Neovim | Scaffold-only | Runtime adapter and local editor scaffold |
 | Local AI systems | Manual documentation surface | Load selected Markdown and supporting files deliberately |
 
+> **Maturity labels:** `Supported` means Orchestra has a validated integration surface for that host. `Scaffold-only` does not mean partially supported; it means repository-owned integration scaffolding exists, but Orchestra does not claim a published marketplace product or validated active-runtime continuity for that host unless the row explicitly states otherwise.
+
 Repository CI and Phase C fixtures are not live installed-host evidence. Accepted R7 records are reconciled in [R7 live installed-host validation evidence](docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md); the fixture remains pending/empty by design. See [Compatibility](docs/setup/COMPATIBILITY.md).
 
 ## Installation
@@ -254,6 +258,8 @@ For autonomous or delegated merges, Orchestra additionally requires the fail-clo
 
 `v1.2.0` is published from annotated tag `v1.2.0` at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`. Phase C repository reliability, accepted R7 live installed-host evidence, the signed Squash-aware R7R remediation, Phase D overlap reconciliation, R5/R5B merge-readiness hardening, Governed Autonomy Modes, pre-R8 repository hygiene, and final release readiness are complete and independently verified.
 
+Publication did not perform deployment, marketplace graduation, installed-integration refresh, or policy activation.
+
 See the [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration.md) and the published [`v1.2.0` GitHub Release](https://github.com/Baelfyre/Orchestra/releases/tag/v1.2.0). The previous [`v1.1.2` release](https://github.com/Baelfyre/Orchestra/releases/tag/v1.1.2) remains historical release evidence.
 
 ## Honest Limitations
@@ -310,17 +316,11 @@ See the [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration.md) a
 
 ## External Pattern Governance
 
-Orchestra may inspect selected external open-source repositories through source-pinned, static Artificer audits. The current repository contains provenance evidence for the following external sources:
+Orchestra uses source-pinned, static Artificer reviews to govern selected concepts observed in external open-source projects. Current governed records cover [Priivacy-ai/spec-kitty](https://github.com/Priivacy-ai/spec-kitty), [CristianOlivera1/openhero](https://github.com/CristianOlivera1/openhero), and [usestrix/strix](https://github.com/usestrix/strix).
 
-| External source | Pinned evidence | Orchestra disposition |
-|---|---|---|
-| [Priivacy-ai/spec-kitty](https://github.com/Priivacy-ai/spec-kitty) | Commit `8466727ebbbc01fcaf43575657c9b1b9553784d9` in the Spec Kitty promotion records | Selected work-package, runtime-envelope, correlation, retrospective, and worktree-isolation concepts were adapted into independently designed Orchestra-native contracts. The records explicitly reject copied code, copied field names or state machines, and new Spec Kitty or event-library dependencies. |
-| [CristianOlivera1/openhero](https://github.com/CristianOlivera1/openhero) | Commit `16ffaa7e6dc39eb390011d81c420353b5d1dbaff` in canonical Artificer intake, audit, and decision records | Static reference review only. Some patterns are eligible for later concept-only proposal consideration, while others are deferred or rejected. The records do not establish an Orchestra promotion, copied source, media reuse, or dependency adoption. |
-| [usestrix/strix](https://github.com/usestrix/strix) | Commit `09872744f5a9d3ffad750478f823e656ac1a7c88` in canonical Artificer intake, audit, decision, proposal, promotion, and Pattern Catalog records | Four selected concepts were promoted and implemented as Orchestra-native authority-scope, lifecycle, run-scoped capability, and specialist-delegation contracts. The records authorize conceptual design only and explicitly exclude reuse of Strix source code, prompts, payloads, examples, media, and documentation expression. |
+These records distinguish static reference review, concept-only adaptation, and Orchestra-native implementation from direct reuse. They do not establish wholesale integration, source-code copying, dependency adoption, endorsement, affiliation, trademark permission, or a blanket licensing conclusion.
 
-These acknowledgements describe selected patterns or concepts, not wholesale integration. They do not claim copied code, schemas, dependencies, datasets, prompts, assets, or documentation; endorsement or affiliation; trademark permission; or a blanket licensing conclusion. Each source retains its own identity and license. Any future direct reuse requires a new source-pinned governance, licensing, attribution, security, and maintainer review.
-
-The authoritative incorporation record is the governed [Pattern Catalog](docs/internal/PATTERN_CATALOG.md). External source code, datasets, prompts, payloads, examples, media, assets, or documentation expression are not incorporated unless a governed record explicitly authorizes that reuse.
+The authoritative incorporation record is the governed [Pattern Catalog](docs/internal/PATTERN_CATALOG.md). Source-pinned audit and decision records preserve the detailed provenance and disposition for each reviewed pattern. External source code, datasets, prompts, payloads, examples, media, assets, or documentation expression are not incorporated unless a governed record explicitly authorizes that reuse.
 
 ## Contributing, Security, and License
 
