@@ -1,5 +1,15 @@
 # Changelog
 
+## Post-v1.2.0 README direct-main governance reconciliation - Pending
+
+- Preserved canonical README commit `807bda608d65cb10bf65cdf313916d9d0fd62320` after exact local content validation confirmed the intended public-facing documentation change.
+- Recorded that the commit changed only `README.md`, passed the full behavior suite, passed all 541 runtime tests at 94.31% coverage, and passed strict governance with 0 errors and 0 warnings.
+- Recorded the canonical commit as unsigned and the direct-main transition as outside the prescribed pull-request path.
+- Applied a forward-only disposition: preserve canonical history, perform no force push or history rewrite, and do not treat the unsigned direct-main result as future precedent.
+- Requires a normal exact-head validated pull request and signed Squash canonical result before this remediation is `MERGED_VERIFIED`.
+- KB synchronization remains held until the Orchestra remediation is merged and independently verified.
+- Performs no release, tag, deployment, marketplace graduation, installed-integration refresh, policy activation, or branch deletion.
+
 ## v1.2.0 - Published 2026-08-09
 
 - Published the stable minor release from annotated tag `v1.2.0` at exact release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`.

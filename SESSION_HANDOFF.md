@@ -8,6 +8,22 @@
 - **Target Release:** `v1.2.0`
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
 - **Policy Activation:** `NOT_PERFORMED`
+
+## Active README Governance Reconciliation
+
+Canonical Orchestra `main` currently contains accepted README refinement commit `807bda608d65cb10bf65cdf313916d9d0fd62320`. The change is README-only and exact local validation is green, including 541 runtime tests at 94.31% coverage and strict governance with 0 errors and 0 warnings.
+
+The canonical commit is unsigned and the transition occurred directly on `main`, so it is not governance-complete. Preserve the current history and remediate forward-only through a normal exact-head validated PR and signed Squash result.
+
+```text
+PRESERVE_CURRENT_CANONICAL_HISTORY=true
+HISTORY_REWRITE=false
+FORCE_PUSH=false
+KB_SYNC=HELD_UNTIL_ORCHESTRA_REMEDIATION_MERGED_VERIFIED
+```
+
+Evidence: `docs/validation/README_DIRECT_MAIN_GOVERNANCE_RECONCILIATION_2026_08_10.md`.
+
 - **Live Installed-Host Validation:** `VERIFIED / RECONCILED LOCALLY` in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`
 
 ## Clean Autonomous Replay State
