@@ -53,6 +53,25 @@
 
 ## Autonomous Replay and Incident Learning
 
+### README Direct-Main Governance Incident - 2026-08-10
+
+Canonical commit `807bda608d65cb10bf65cdf313916d9d0fd62320` contains the accepted public-facing README refinement and changes only `README.md`. Exact local validation is green: the behavior suite passed, 541 runtime tests passed at 94.31% coverage, and strict governance passed with 0 errors and 0 warnings.
+
+Post-validation commit verification reported the canonical commit as unsigned. The README transition also occurred directly on `main` rather than through the repository's required pull-request path.
+
+Maintainer disposition is forward-only:
+
+```text
+PRESERVE_CURRENT_CANONICAL_HISTORY=true
+HISTORY_REWRITE=false
+FORCE_PUSH=false
+UNSIGNED_DIRECT_MAIN_RESULT_IS_NOT_FUTURE_PRECEDENT=true
+```
+
+No README reversal is required because the content itself validated successfully. Governance closeout requires a separate normal PR from `807bda608d65cb10bf65cdf313916d9d0fd62320`, fresh exact-head checks, Squash-only merge, a signature-verified canonical result, and independent post-merge verification. KB reconciliation remains pending until that closeout is `MERGED_VERIFIED`.
+
+See `docs/validation/README_DIRECT_MAIN_GOVERNANCE_RECONCILIATION_2026_08_10.md`.
+
 The first autonomous finalization experiment was archived at:
 
 ```text
