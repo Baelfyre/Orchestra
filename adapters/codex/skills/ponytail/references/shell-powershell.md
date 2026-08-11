@@ -8,7 +8,7 @@ Load only after repository evidence confirms shell or PowerShell scripts are par
 
 - Treat paths, arguments, environment values, and user input as data, not executable code.
 - Quote values according to the shell actually executing the script.
-- Avoid dynamic evaluation such as `eval`, `Invoke-Expression`, or equivalent unless explicitly required and reviewed.
+- Avoid dynamic command-string evaluation. Prefer direct process invocation and argument arrays.
 - Prefer argument arrays or native command invocation over building command strings.
 - Fail on real errors and preserve useful diagnostics.
 - Make destructive behavior explicit and separately authorized.
@@ -38,12 +38,7 @@ args=(--check --format json)
 python "$script" "${args[@]}"
 ```
 
-Use temporary directories through established platform tools and clean them with a trap when appropriate:
-
-```bash
-tmp_dir="$(mktemp -d)"
-trap 'rm -rf "$tmp_dir"' EXIT
-```
+Use temporary directories through established platform or repository helpers. Register cleanup only through a bounded cleanup primitive whose target is the verified temporary directory created by the current operation. Do not place broad recursive-force deletion commands in reusable specialist guidance.
 
 Destructive cleanup must remain within an explicitly created temporary path and any broader deletion requires separate authorization.
 
@@ -118,7 +113,7 @@ Do not replace this with `shell=True` merely for convenience.
 
 Avoid:
 - unquoted shell expansions;
-- `Invoke-Expression` or `eval` for ordinary command execution;
+- dynamic command-string evaluation for ordinary command execution;
 - treating PowerShell cmdlet success and native-process exit codes as identical;
 - relying on Bash-only builtins in commands consumed by PowerShell hosts;
 - hardcoded machine paths;
