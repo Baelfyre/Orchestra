@@ -33,7 +33,7 @@ Do not use it for:
 - long-form documentation -> Scribe
 - ambiguous ownership or multi-specialist routing -> Conductor
 
-If implementation depends on an unresolved specialist decision, stop and return `SPECIALIST_REROUTE_REQUIRED` instead of guessing.
+If implementation depends on an unresolved specialist decision, return `SPECIALIST_REROUTE_REQUIRED` and do not execute the work. Do not guess.
 
 ## Supported Work
 
