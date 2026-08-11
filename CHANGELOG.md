@@ -1,5 +1,15 @@
 # Changelog
 
+## Post-v1.2.0 Specialist Knowledge Layer - SK1 Ponytail - Pending
+
+- Added an Orchestra-native Ponytail implementation knowledge layer while preserving Ponytail's established specialist ownership and upstream minimalism principles.
+- Added stack discovery, implementation foundations, language/runtime references for JavaScript/TypeScript, Python, Java/JVM, Go/Rust, shell/PowerShell, and browser/web runtime work, plus build/test tooling and worked cross-specialist implementation patterns.
+- Added progressive-disclosure loading so stack-specific references are loaded only after repository evidence confirms they are relevant.
+- Preserved source/Codex portable parity by mirroring the Markdown support files under `adapters/codex/skills/ponytail/**` without changing exporter semantics.
+- Recorded the August 12, 2026 upstream check: `Baelfyre/ponytail` remained on package `4.8.4`, upstream `DietrichGebert/ponytail` was on package `4.9.0`, and the core upstream Ponytail skill blob was unchanged between the reviewed revisions.
+- Adopted Markdown-primary, JSON-selective knowledge storage for this campaign. No prose-heavy JSON knowledge files were added.
+- No routing, runtime, manifest contract, package version, workflow, release, deployment, installed-integration, policy, production, force-push, history-rewrite, or branch-deletion behavior is changed by SK1.
+
 ## Post-v1.2.0 README direct-main governance reconciliation - Pending
 
 - Preserved canonical README commit `807bda608d65cb10bf65cdf313916d9d0fd62320` after exact local content validation confirmed the intended public-facing documentation change.
