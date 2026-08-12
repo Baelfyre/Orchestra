@@ -127,6 +127,42 @@ Use only the sections relevant to the selected review mode. Unchecked items are 
 - [ ] State design-system constraints, form and validation expectations, and visible state coverage.
 - [ ] Name the downstream owner for implementation, security, architecture, persistence, validation, diagrams, or long-form docs when those concerns appear.
 
+## SK4 Deep-Dive Checks
+
+### Semantic HTML, ARIA, Keyboard, and Focus
+- [ ] Native semantic elements are used when they already provide the required role and keyboard behavior.
+- [ ] Accessible names align with visible labels; descriptions and errors are connected only when they add supporting information.
+- [ ] ARIA state such as expanded, current, selected, pressed, or invalid matches the visible state.
+- [ ] Composite widgets follow a recognized keyboard model and do not use positive tabindex to manufacture order.
+- [ ] Dialogs establish initial focus, contain focus while modal, support safe cancellation, and return focus appropriately.
+- [ ] Route/view changes, form failures, and dynamic updates move focus only when the context change requires it.
+- [ ] Sticky/fixed/overlay UI does not obscure the focused element.
+
+### Responsive CSS Containment
+- [ ] Flex/grid choice matches the dimensional layout need and preserves semantic source order.
+- [ ] Intrinsic sizing, long content, media, and nested containers cannot force accidental page-level horizontal overflow.
+- [ ] Overflow/clipping cannot hide actions, focus rings, errors, menus, or required content.
+- [ ] Breakpoints preserve task order under intermediate widths, zoom, text enlargement, orientation, and localization pressure.
+- [ ] Fixed/sticky surfaces account for safe areas, on-screen keyboards, and focused content.
+
+### Form, Validation, and Submission State
+- [ ] Validation timing does not punish reasonable incomplete input while authoritative constraints are still checked on submission/server response.
+- [ ] Error summaries and field errors provide an explicit recovery path and preserve valid input.
+- [ ] Failed submission has a deliberate focus target; successful state does not leave focus on removed content.
+- [ ] One authoritative submission path owns an in-flight mutation and duplicate activation is prevented.
+- [ ] Disabled, read-only, loading, and permission-restricted states remain visually and semantically distinct.
+
+### Tokens, Themes, and Component States
+- [ ] Primitive, semantic, and component token responsibilities are not mixed without evidence.
+- [ ] Default, hover, focus-visible, active, selected/current, disabled, loading, error, and success states are covered when the component can enter them.
+- [ ] Supported themes preserve semantic meaning, contrast, hierarchy, focus visibility, and chart/state legibility.
+- [ ] New variants represent a reusable product need rather than page-specific cosmetic drift.
+
+### Frontend Routes and Component Boundaries
+- [ ] Direct links, menu navigation, Back/Forward, permission, not-found, loading, and error states preserve route orientation.
+- [ ] Client-side navigation provides a predictable focus/context destination when the prior focused element disappears.
+- [ ] Permission-aware navigation is treated as UX only, not authorization enforcement.
+- [ ] Cloak limits component-boundary advice to the user-visible contract and routes state/data architecture to Clockwork.
 ## Specialist Handoff
 - [ ] Route diagram semantics and modeling to `weaver`.
 - [ ] Route database design and SQL to `chronicler`.

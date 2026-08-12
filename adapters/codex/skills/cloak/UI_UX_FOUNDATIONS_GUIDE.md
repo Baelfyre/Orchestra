@@ -57,6 +57,17 @@
 - **Secure Onboarding/Recovery**: Provide safe, clear flows for login, onboarding, and password recovery.
 - **Audit Clarity**: Ensure actions that generate an audit log are clear to the user if relevant.
 
+## Deep Reference Loading
+
+Use the base guide for broad UI review, then load only the specialized reference needed by the evidence:
+
+- `SEMANTIC_HTML_ARIA_KEYBOARD_GUIDE.md` for semantic structure, accessible names/descriptions, ARIA states, keyboard patterns, dialogs, or focus movement.
+- `RESPONSIVE_CSS_LAYOUT_GUIDE.md` for flex/grid containment, intrinsic sizing, overflow/clipping, responsive reflow, fixed/sticky UI, or data-heavy surfaces.
+- `FORM_FOCUS_VALIDATION_GUIDE.md` for field identity, validation timing, error recovery, focus after submission, duplicate submission, multi-step forms, or destructive confirmations.
+- `DESIGN_TOKENS_COMPONENT_STATES_GUIDE.md` for tokens, themes, reusable component variants, and state matrices.
+- `FRONTEND_ROUTING_COMPONENT_BOUNDARIES_GUIDE.md` for route orientation, deep links, focus transitions, history/recovery, responsive navigation, or component-boundary review.
+
+Do not load all five by default. Progressive disclosure remains the context-efficiency rule.
 ## Handoff Blueprint Requirements
 - **Blueprint over Code**: Cloak hands off semantic structure, component intent, visible state expectations, and review findings, not production code.
 - **Design-System Constraints**: Name the token, component, and variant constraints that the implementation should preserve.

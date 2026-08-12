@@ -1,12 +1,23 @@
 # Accessibility Checklist
 
-- [ ] Keyboard order and visible focus follow the task.
-- [ ] Controls have accessible names and appropriate semantics.
-- [ ] Errors identify the field, correction, and recovery path.
-- [ ] Status changes are perceivable without color alone.
+- [ ] Page landmarks and heading structure match the content hierarchy.
+- [ ] DOM/source order, reading order, and keyboard order remain logical and aligned.
+- [ ] Native controls and semantic HTML are preferred before custom ARIA widgets.
+- [ ] Controls have accessible names that align with visible labels.
+- [ ] Supporting instructions and errors use an accessible description relationship when needed.
+- [ ] ARIA roles, states, and properties match the visible component state and expected interaction contract.
+- [ ] No focusable or interactive content is hidden from the accessibility tree.
+- [ ] Keyboard order and visible focus follow the task without positive-tabindex reordering.
+- [ ] Composite widgets use a recognized keyboard interaction pattern rather than an invented key model.
+- [ ] Dialogs manage initial focus, contained focus where modal, cancellation, and focus return.
+- [ ] Route or major view changes provide a predictable focus/context destination when needed.
+- [ ] Focus is not obscured by sticky, fixed, or overlay content.
+- [ ] Errors identify the field, correction, and recovery path without erasing valid input.
+- [ ] Dynamic status changes are perceivable without color alone or unnecessary focus movement.
+- [ ] Live-region behavior is limited to information users need to perceive asynchronously.
 - [ ] Contrast, text scaling, zoom, and reflow remain usable.
 - [ ] Touch and pointer targets have adequate size and spacing.
 - [ ] Images, charts, and icons have meaningful alternatives when needed.
-- [ ] Motion respects reduced-motion preferences.
-- [ ] Loading, empty, error, disabled, and success states are covered.
-- [ ] Claims distinguish inspected evidence from untested behavior.
+- [ ] Motion respects reduced-motion preferences and is not the sole state cue.
+- [ ] Loading, empty, error, disabled, read-only, success, retry, and permission states are covered when applicable.
+- [ ] Claims distinguish inspected evidence from untested rendered or assistive-technology behavior.
