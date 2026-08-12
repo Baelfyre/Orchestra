@@ -2,6 +2,12 @@
 
 Apply these standards to confirmed requirements and database evidence, not hypothetical scale.
 
+## Engine and Mapping Identity
+
+- Record the database product, major version, deployment topology, schema revision, migration tool, and ORM/provider version before engine-specific conclusions.
+- Compare ORM mappings and generated SQL with the canonical schema, including names, types, nullability, defaults, keys, cascades, concurrency tokens, and value generation.
+- Treat ORM auto-generation and schema synchronization as environment-sensitive behavior, not a substitute for reviewed migrations.
+
 ## Tables and Columns
 
 - Give each table one coherent subject and stable ownership.
@@ -33,6 +39,19 @@ Apply these standards to confirmed requirements and database evidence, not hypot
 - Tie indexes to known joins, filters, ordering, uniqueness, or measured bottlenecks.
 - Review selectivity, column order, covering needs, write cost, and overlap.
 - Avoid speculative or duplicate indexes.
+- Use actual or safely captured query plans to distinguish scans, seeks, join choices, row-estimate errors, spills, and sort or lookup cost before changing an index.
+
+## Transactions and Concurrency
+
+- Choose isolation from required anomaly prevention and confirmed engine semantics, not from a portable label alone.
+- Keep transactions bounded and define retry ownership, idempotency, lock order, timeout handling, and post-failure readback where contention is possible.
+- Diagnose deadlocks from wait and victim evidence. Do not mask deterministic lock-order defects with unbounded retries.
+
+## Tenant Isolation
+
+- Carry tenant identity through keys, unique constraints, foreign keys, indexes, and every tenant-scoped query when the data model is shared.
+- Validate database-enforced row policies against connection and pooling behavior when row-level security is used.
+- Route tenant authorization policy to Cipher while Chronicler owns persistence enforcement mechanics.
 
 ## Normalization
 
@@ -57,6 +76,8 @@ Apply these standards to confirmed requirements and database evidence, not hypot
 - Make order, prerequisites, data transformation, rollback or recovery, and deployment impact explicit.
 - Separate destructive steps and require approval.
 - Test migrations against representative data and verify constraints afterward.
+- Prefer expand, migrate, validate, contract sequencing when old and new application versions overlap.
+- Bound backfills by stable keys, make checkpoints resumable, measure lock and replication impact, and delay incompatible cleanup until all readers and writers have moved.
 
 ## Data Dictionaries and Documentation
 

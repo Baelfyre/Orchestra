@@ -73,6 +73,10 @@ Use `SKILL.md` first. Do not load every supporting document by default or consum
 - Load [DATABASE_STANDARDS.md](DATABASE_STANDARDS.md) and [DATABASE_CHECKLIST.md](DATABASE_CHECKLIST.md) for reviews.
 - Load [SQL_REVIEW_GUIDE.md](SQL_REVIEW_GUIDE.md) only for SQL review.
 - Load [SQL_FOUNDATIONS_GUIDE.md](SQL_FOUNDATIONS_GUIDE.md) only when the task involves SQL reasoning, query design, report generation, joins, subqueries, views, aggregation, validation queries, or business-report data logic.
+- Load [DATABASE_DIALECT_ORM_GUIDE.md](DATABASE_DIALECT_ORM_GUIDE.md) when engine/version behavior, ORM mappings, generated SQL, or migration-state tracking is material.
+- Load [TRANSACTION_ISOLATION_LOCKING_GUIDE.md](TRANSACTION_ISOLATION_LOCKING_GUIDE.md) for isolation, MVCC, concurrency anomalies, locks, deadlocks, retries, or long-running transaction review.
+- Load [QUERY_PLAN_TENANT_ISOLATION_GUIDE.md](QUERY_PLAN_TENANT_ISOLATION_GUIDE.md) for plan analysis, index evidence, row-estimate errors, tenant predicates, or database-enforced tenant isolation.
+- Load [ZERO_DOWNTIME_MIGRATION_GUIDE.md](ZERO_DOWNTIME_MIGRATION_GUIDE.md) for compatibility-window, backfill, expand-contract, online DDL, or phased schema-change planning.
 
 ## Operating principles
 
@@ -81,6 +85,8 @@ Use `SKILL.md` first. Do not load every supporting document by default or consum
 - Do not invent tables, collections, columns, constraints, indexes, relationships, query patterns, or data rules.
 - Separate confirmed facts, assumptions, and missing evidence.
 - Prefer data integrity and migration safety over complete-looking output.
+- Confirm the database engine, major version, schema revision, ORM/provider version, and migration tool before making dialect-specific claims.
+- Treat example SQL and migration patterns as planning guidance until the exact non-production environment and execution authority are confirmed.
 
 ## Supported work
 
@@ -100,6 +106,7 @@ Use `SKILL.md` first. Do not load every supporting document by default or consum
 - **No redundant comments**: Maximize signal, minimize noise.
 - Apply least-privilege awareness when permissions are in scope and use Codex Security for a security audit.
 - Do not run destructive SQL or expose credentials, production data, or sensitive records.
+- Do not present generic isolation, locking, online-DDL, ORM, or query-plan behavior as portable across engines.
 
 ## Output formats
 

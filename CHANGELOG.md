@@ -1,5 +1,16 @@
 # Changelog
 
+## Post-v1.2.0 Specialist Knowledge Layer - SK6 Chronicler - Pending
+
+- Deepened Chronicler's persistence knowledge without changing routing, runtime architecture, schema state, or database execution authority.
+- Added engine-evidence guidance for PostgreSQL, MySQL, SQL Server, and SQLite plus ORM mapping and migration-state semantics.
+- Added progressive-disclosure guidance for transaction isolation, MVCC, locking, deadlock analysis, query-plan evidence, tenant isolation, and expand-contract zero-downtime migrations.
+- Expanded database standards and review checks for dialect/version identity, ORM/schema parity, lock and retry behavior, tenant predicates and composite integrity, plan estimates, backfill checkpoints, and compatibility windows.
+- Added a planning-only worked expand-contract migration example with bounded batches, read/write compatibility, validation, rollback boundaries, and no executable production command.
+- Kept the campaign Markdown-primary and JSON-selective: the SK6 audit found no deterministic machine-parsing need that justified a Chronicler JSON catalog.
+- Added focused regression coverage for Chronicler knowledge depth, progressive disclosure, source/Codex parity, and the no-execution boundary.
+- No schema change, migration execution, live-data access, destructive SQL, release/tag publication, deployment/production mutation, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK6.
+
 ## Post-v1.2.0 Specialist Knowledge Layer - SK5 Dagger - Pending
 
 - Deepened Dagger's safe resilience knowledge without changing routing, runtime architecture, or execution authority.
