@@ -3,12 +3,14 @@
 - **Canonical Repo:** `Baelfyre/Orchestra`
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
-- **Current Public Release:** `v1.2.0`
+- **Current Public Release:** `v1.3.0`
 - **Release-Candidate Metadata:** `v1.3.0`
 - **Target Release:** `v1.3.0`
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
-- **v1.3.0 Preparation State:** `PREPARED_NOT_RELEASED`
-- **v1.3.0 Canonical Preparation Commit:** `32257723d6ca72847e4581d8b927c7b14c77039e`
+- **v1.3.0 Release State:** `PUBLISHED_VERIFIED`
+- **v1.3.0 Release Commit:** `3c6155c111981632649a3c3207fac8ac1edcea74`
+- **v1.3.0 Release Tree:** `5ae72f6ab9ddf5284afdc3d8675f67fc23c24281`
+- **v1.3.0 Tag Object:** `c66afec49990036d9deb2f07e3363cd664e2dcb1` (`UNSIGNED`, exact target verified)
 - **Policy Activation:** `NOT_PERFORMED`
 
 ## v1.3.0 Specialist Intelligence Continuity
@@ -19,26 +21,35 @@ Canonical preparation tree `0fdf39920a8c48a779971c8c97690985bb875d42` is exactly
 
 The earlier PR #253 is intentionally retained as fail-closed evidence. It was closed unmerged after Stage 1 Strict Governance correctly detected missing changelog freshness. Its validation was not reused.
 
-Current publication boundary:
+Revision-bound readiness was merged through PR #257 at signed canonical commit `db351796684789987eb5bce85e641ce31c91993b`. README alignment was then reviewed through PR #259 at signed head `b7b8bfeced7c0719558eb95c0797f0685f0c98f2`, passed all nine exact-head checks with zero review threads, and Squash-merged with an expected-head guard as signed release commit `3c6155c111981632649a3c3207fac8ac1edcea74`.
+
+Current publication state:
 
 ```text
-CURRENT_PUBLIC_RELEASE=v1.2.0
+CURRENT_PUBLIC_RELEASE=v1.3.0
 TARGET_VERSION=1.3.0
 TARGET_TAG=v1.3.0
 V1_3_0_RELEASE_PREPARATION=MERGED_VERIFIED
-V1_3_0_RELEASE_STATE=PREPARED_NOT_RELEASED
-V1_3_0_TAG_EXISTS=NO
-V1_3_0_GITHUB_RELEASE_EXISTS=NO
-V1_3_0_PUBLICATION=AWAITING_SEPARATE_AUTHORIZATION
+V1_3_0_RELEASE_STATE=PUBLISHED_VERIFIED
+V1_3_0_TAG_OBJECT=c66afec49990036d9deb2f07e3363cd664e2dcb1
+V1_3_0_TAG_TARGET=3c6155c111981632649a3c3207fac8ac1edcea74
+V1_3_0_TAG_OBJECT_SIGNATURE=UNSIGNED
+V1_3_0_RELEASE_COMMIT_SIGNATURE=VERIFIED_VALID
+V1_3_0_GITHUB_RELEASE_IMMUTABLE=true
+V1_3_0_PUBLICATION=COMPLETE_VERIFIED
 ```
 
-Do not create the tag or GitHub Release without a separate explicit publication authorization. Before any future publication action, independently re-read live Orchestra `main`, this handoff, the v1.3.0 candidate, and `docs/validation/V1_3_0_RELEASE_READINESS_EVIDENCE.md`, then detect drift.
+The GitHub Release is non-draft, non-prerelease, immutable, and the latest public release. The annotated tag object is unsigned, as was the prior v1.2.0 annotated tag object; the exact target is verified and the release commit itself is GitHub-verified and valid.
 
-## Active README Governance Reconciliation
+No deployment, production mutation, marketplace publication, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite was performed.
 
-Canonical Orchestra `main` currently contains accepted README refinement commit `807bda608d65cb10bf65cdf313916d9d0fd62320`. The change is README-only and exact local validation is green, including 541 runtime tests at 94.31% coverage and strict governance with 0 errors and 0 warnings.
+Evidence: `docs/validation/V1_3_0_PUBLICATION_CLOSEOUT.md`.
 
-The canonical commit is unsigned and the transition occurred directly on `main` rather than through the repository's required pull-request path, so it is not governance-complete. Preserve the current history and remediate forward-only through a normal exact-head validated PR and signed Squash result.
+## Historical README Governance Reconciliation
+
+Canonical Orchestra history contains accepted README refinement commit `807bda608d65cb10bf65cdf313916d9d0fd62320`. The change was README-only and exact local validation was green, including 541 runtime tests at 94.31% coverage and strict governance with 0 errors and 0 warnings.
+
+The canonical commit was unsigned and the transition occurred directly on `main` rather than through the repository's required pull-request path. The incident was remediated forward-only through later normal PR/Squash governance; history was preserved without force push or rewrite.
 
 ```text
 PRESERVE_CURRENT_CANONICAL_HISTORY=true
@@ -67,7 +78,7 @@ backup/main-pre-v1.2-autonomous-2026-08-07
 
 The clean replay then completed R1 through R5B:
 
-- **R1 / PR #223:** Spec Kitty Phase 3 and roadmap reconciliation.
+- **R1 / PR #223:** Spec Kitty Phase 3 and roadmap closeout.
 - **R2 / PR #224:** additive backend-persistence and cross-module logical-flow integrity.
 - **R3 / PR #225:** delegated Phase C repository host-reliability contract after bounded fixture remediation and a fully fresh validation matrix.
 - **R4 / PR #226:** delegated Phase D runtime-overlap reconciliation with `NO_DUPLICATE_RUNTIME_EXTENSION_REQUIRED` for v1.2.0.
@@ -83,8 +94,9 @@ Historical R6 and current publication state:
 ```text
 HISTORICAL_RELEASE_CANDIDATE_VERSION=1.2.0
 HISTORICAL_R6_RELEASE_STATE=PREPARED_NOT_RELEASED
-CURRENT_PUBLIC_RELEASE=v1.2.0
+CURRENT_PUBLIC_RELEASE=v1.3.0
 V1_2_0_RELEASE_STATE=PUBLISHED_VERIFIED
+V1_3_0_RELEASE_STATE=PUBLISHED_VERIFIED
 POLICY_ACTIVATION=NOT_PERFORMED
 LIVE_INSTALLED_HOST_VALIDATION=VERIFIED_RECONCILED_LOCALLY
 ```
@@ -122,13 +134,15 @@ git switch main
 git pull --ff-only origin main
 ```
 
-## Remaining Sequence
+## Completed Sequence
 
 ```text
-SK1..SK10  specialist knowledge campaign - merged verified
-V1.3-PREP   package/version preparation and exact-head validation - merged verified
-V1.3-READY  revision-bound readiness and continuity reconciliation - current closeout
-V1.3-PUBLISH  annotated tag and GitHub Release - awaiting separate authorization
+SK1..SK10    specialist knowledge campaign - merged verified
+V1.3-PREP    package/version preparation and exact-head validation - merged verified
+V1.3-READY   revision-bound readiness and continuity reconciliation - merged verified
+V1.3-README  pre-publication README alignment - merged verified
+V1.3-PUBLISH annotated tag and immutable GitHub Release - complete verified
+V1.3-CLOSE   post-publication repository and KB continuity - current closeout
 ```
 
 Historical first-run failures remain preserved as audit evidence. They must not be silently rewritten or deleted during cleanup.

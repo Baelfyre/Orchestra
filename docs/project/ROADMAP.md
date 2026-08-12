@@ -63,11 +63,11 @@ Phases 6B-A through 6C are complete and merged through PR #183. Phase 6D produce
 - [x] GA-4: Profile-aware transition integration through Squash-aware post-merge verification.
 - [x] GA-5: Audit, provenance, interruption recovery, delegation inheritance, and portable-resume preservation.
 - [x] GA-6: Adversarial fixture validation for authority, profile, policy, evidence, bypass, merge-method, signature, scope, and continuity boundaries.
-- [x] GA-7: Governance, routing, Conductor/Codex parity, project-state, README, roadmap, and release-candidate documentation.
+- [x] GA-7: Governance, routing, Conductor/Codex parity, project-state, README, roadmap, and release-candidate documentation reconciliation.
 - [x] Refresh every release-readiness artifact invalidated by R7R or GA implementation and independently verify the final candidate; canonical evidence is recorded in `docs/validation/V1_2_0_RELEASE_READINESS_EVIDENCE.md`.
 - [x] R8: annotated `v1.2.0` tag and immutable [GitHub Release](https://github.com/Baelfyre/Orchestra/releases/tag/v1.2.0) published and independently verified at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`.
 
-## v1.3.0 Specialist Intelligence - Prepared, Publication Gated
+## v1.3.0 Specialist Intelligence - Published Verified
 
 - [x] Complete the SK1-SK10 Specialist Knowledge Layer campaign and independently record every phase as `MERGED_VERIFIED`.
 - [x] Select `1.3.0` as the stable minor version for the additive Specialist Intelligence release theme.
@@ -78,9 +78,15 @@ Phases 6B-A through 6C are complete and merged through PR #183. Phase 6D produce
 - [x] Correct changelog freshness without rewriting historical release evidence and rematerialize the exact tree as a signed commit.
 - [x] Validate corrected PR #255 on its exact signed head with governance, behavior, 542 runtime tests at 94.33% coverage, native Windows/Ubuntu/macOS, Analyze actions/python, and CodeQL all passing.
 - [x] Squash-merge PR #255 with expected-head guard and independently verify canonical signed commit `32257723d6ca72847e4581d8b927c7b14c77039e`, parent `650b8bff00d7808bc13fd82a51c7bf0cffa7616e`, and exact reviewed/canonical tree `0fdf39920a8c48a779971c8c97690985bb875d42`.
-- [x] Independently verify that no `v1.3.0` tag or GitHub Release exists after package preparation and that `v1.2.0` remains the public release.
-- [x] Prepare revision-bound release-readiness evidence and stable continuity surfaces.
-- [ ] Publication gate: after separate explicit authorization, reverify live canonical state, create the annotated `v1.3.0` tag, publish `Orchestra v1.3.0: Specialist Intelligence`, and independently verify publication. This item is not authorized by release preparation alone.
+- [x] Independently verify that no `v1.3.0` tag or GitHub Release existed after package preparation and that `v1.2.0` remained the public release at that checkpoint.
+- [x] Prepare revision-bound release-readiness evidence and stable continuity surfaces through PR #257.
+- [x] Align README public-facing scope with the completed Specialist Intelligence campaign through PR #259, pass all nine exact-head checks, and merge exact signed release commit `3c6155c111981632649a3c3207fac8ac1edcea74`.
+- [x] Under separate explicit publication authority, create annotated tag `v1.3.0` targeting exact release commit `3c6155c111981632649a3c3207fac8ac1edcea74`.
+- [x] Publish `Orchestra v1.3.0: Specialist Intelligence` as a non-draft, non-prerelease, immutable GitHub Release and independently verify it as the latest public release.
+- [x] Record the annotated tag object as unsigned while preserving the GitHub-verified signed release commit as the release trust anchor, consistent with the v1.2.0 tag pattern.
+- [x] Confirm publication performed no deployment, marketplace publication, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite.
+
+Publication closeout evidence is recorded in `docs/validation/V1_3_0_PUBLICATION_CLOSEOUT.md`.
 
 ### Current `Protect main` Development Baseline
 
@@ -122,3 +128,4 @@ The existing bypass list remains operationally available. Orchestra governance m
 - [ ] Improve adapters as tool capabilities change.
 - [ ] Expand fictional, project-agnostic examples.
 - [x] Publish `v1.2.0` after R7R, GA-0 through GA-7, refreshed release evidence, independent final verification, and the separate R8 publication gate completed.
+- [x] Publish `v1.3.0` after the SK1-SK10 Specialist Intelligence campaign, release preparation, revision-bound readiness, README alignment, and separate publication authority completed.

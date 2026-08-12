@@ -10,7 +10,7 @@ A governance-first specialist skill framework that routes complex AI-assisted so
 Open-source developer tooling and AI orchestration framework
 
 ## Current Stage
-Published release `v1.2.0` (`PUBLISHED_VERIFIED`) from annotated tag `v1.2.0` at exact release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`. Canonical release history includes R7/R7R, Governed Autonomy Modes, pre-R8 repository hygiene through PR #234, and final release-readiness refresh through PR #235. GA-0 concluded `NO_DUPLICATE_AUTHORITY_MODEL`; GA-1 through GA-7 and the source-pinned README/hygiene reconciliation are `MERGED_VERIFIED`. Publication performed no deployment, installed-integration refresh, branch deletion, marketplace publication, or policy activation.
+Published release `v1.3.0` (`PUBLISHED_VERIFIED`) from annotated tag `v1.3.0` at exact release commit `3c6155c111981632649a3c3207fac8ac1edcea74`. The release packages the completed SK1-SK10 Specialist Intelligence campaign, 11 aligned package/version surfaces at `1.3.0`, 542 runtime tests at 94.33% coverage, revision-bound release-readiness evidence, and the README-alignment gate through PR #259. The GitHub Release is non-draft, non-prerelease, and immutable. Publication performed no deployment, installed-integration refresh, branch deletion, marketplace publication, or policy activation.
 
 ## Primary Users
 Developers and maintainers who install Orchestra as a plugin, skill set, or runtime package inside a supported or scaffold-only IDE or coding host (Claude Code, Codex, Antigravity, Cursor, Windsurf, JetBrains, Zed, Neovim)
@@ -56,7 +56,7 @@ Guidance used for this classification:
 - `tests/behavior/run-tests.ps1` is intentionally maintained in parallel with `run_tests.py` as the primary validation path for Windows environments, per `docs/MATURITY.md`.
 - Direct pushes to `main` are not part of the normal workflow; changes go through a branch and pull request except for documented maintainer bypass recovery cases.
 - Installed Codex and Antigravity parity, host context-reset behavior, and Windows filesystem-specific behavior require host-local evidence in addition to repository CI.
-- `v1.2.0` metadata in the repository is release-candidate state, not evidence of a published tag or GitHub Release.
+- Repository package metadata is `1.3.0`, and public release `v1.3.0` is independently verified. Later `main` commits may contain post-release documentation or future unreleased work and do not move the `v1.3.0` tag.
 
 ## Known Non-Goals
 - Orchestra does not store, process, or transmit end-user or client data itself.
@@ -72,4 +72,4 @@ Guidance used for this classification:
 Not yet decided. No project-specific maintainer preferences beyond `docs/CONTRIBUTING.md` are currently documented for this field.
 
 ## Last Reviewed
-2026-08-09
+2026-08-13
