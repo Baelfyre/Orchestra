@@ -45,6 +45,11 @@ Do not apply `QUICK_UI_HANDOFF` or `FORMAL_UI_AUDIT` fields to Markdown document
 Use `SKILL.md` first. Do not load every supporting document by default or consume context with unused material.
 - Load `OUTPUT_FORMATS.md` only when generating the final response.
 - Load `UI_UX_FOUNDATIONS_GUIDE.md` only when the task involves UI/UX review, frontend experience, visual hierarchy, accessibility, forms, responsive layout, interaction design, secure UX, privacy-aware display, role-aware UI, validation messaging, sensitive action flows, or frontend behavior boundaries.
+- Load `SEMANTIC_HTML_ARIA_KEYBOARD_GUIDE.md` only for semantic HTML, accessible-name, ARIA state, keyboard-pattern, dialog, or focus-management depth.
+- Load `RESPONSIVE_CSS_LAYOUT_GUIDE.md` only for flex/grid containment, intrinsic sizing, overflow, clipping, breakpoints, sticky/fixed UI, or responsive data-heavy surfaces.
+- Load `FORM_FOCUS_VALIDATION_GUIDE.md` only for form labels, validation timing, errors, focus recovery, duplicate submission, multi-step flows, or destructive confirmations.
+- Load `DESIGN_TOKENS_COMPONENT_STATES_GUIDE.md` only for design-system tokens, variants, theme parity, component state matrices, or reusable state semantics.
+- Load `FRONTEND_ROUTING_COMPONENT_BOUNDARIES_GUIDE.md` only for user-visible route behavior, deep links, route focus, browser history, responsive navigation, or component-boundary review.
 - Load `templates/<template-name>.md` only when the user explicitly requests a specific aesthetic (e.g., `bryl-minimal`). Do not load templates by default.
 
 ## Artifact Evidence Review
@@ -130,6 +135,17 @@ Required rules:
 
 Cloak provides semantic structure requirements and review criteria. Ponytail owns the implementation code.
 
+## Deep Frontend Knowledge References
+
+Load only the smallest reference needed for the active UI problem:
+
+- `SEMANTIC_HTML_ARIA_KEYBOARD_GUIDE.md`: native semantics, accessible names/descriptions, ARIA state literacy, keyboard conventions, dialog/focus behavior.
+- `RESPONSIVE_CSS_LAYOUT_GUIDE.md`: flex/grid review, intrinsic sizing, overflow/clipping, responsive reflow, sticky/fixed surfaces, data-heavy layouts.
+- `FORM_FOCUS_VALIDATION_GUIDE.md`: field identity, validation timing, error recovery, focus after submission, duplicate-submission prevention, multi-step/destructive flows.
+- `DESIGN_TOKENS_COMPONENT_STATES_GUIDE.md`: token layers, theme parity, component states, variant discipline, density, and motion conventions.
+- `FRONTEND_ROUTING_COMPONENT_BOUNDARIES_GUIDE.md`: route experience, deep links, history, focus transitions, responsive navigation, permission-aware UX, and user-visible component boundaries.
+
+These are review and handoff references. They do not transfer implementation, architecture, security-policy, persistence, or readiness ownership to Cloak.
 ## Backend Alignment Trigger
 
 When a frontend design decision affects data flow, authentication, authorization, persistence, API shape, backend validation, audit logging, security, privacy, payments, integrations, or compliance-sensitive workflows, Cloak must not decide those backend-sensitive details independently.

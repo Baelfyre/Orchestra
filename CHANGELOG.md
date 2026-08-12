@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.2.0 Specialist Knowledge Layer - SK4 Cloak - Pending
+
+- Deepened Cloak's frontend design knowledge without changing specialist ownership, routing authority, package version, or runtime architecture.
+- Added progressive-disclosure guidance for semantic HTML, ARIA/accessibility state, keyboard and focus behavior, responsive CSS layout/overflow, forms and validation recovery, design tokens/component states, and frontend routing/component-boundary literacy.
+- Expanded four previously minimal Cloak worked examples covering responsive layout, destructive dialog interaction, navigation structure, and checkout recovery.
+- Kept the campaign Markdown-primary and JSON-selective: the SK4 audit found no concrete machine-parsing need that justified a new Cloak JSON catalog.
+- Preserved implementation ownership with Ponytail, architecture/state ownership with Clockwork, security policy with Cipher, persistence with Chronicler, readiness gates with Overseer, and diagram/documentation ownership with Weaver/Scribe.
+- Added focused regression coverage for Cloak knowledge depth and canonical/Codex support-file parity.
+- No release/publication, deployment/production mutation, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK4.
 ## Post-v1.2.0 Specialist Knowledge Layer - SK3 Cipher - Pending
 
 - Expanded Cipher from general security/privacy review into deeper authentication, session, OAuth/OIDC, authorization, web/API, sensitive-business-flow, SSRF, secrets/cryptographic-misuse, framework-aware, and security-tooling interpretation guidance while preserving defensive-only specialist ownership.
