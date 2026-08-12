@@ -1,5 +1,15 @@
 # Changelog
 
+## Post-v1.2.0 Specialist Knowledge Layer - SK8 Scribe - Pending
+
+- Deepened Scribe's technical-documentation knowledge without changing routing, runtime architecture, publication state, or domain-specialist ownership.
+- Added progressive-disclosure guidance for CommonMark/GitHub-Flavored Markdown, changelog and ADR conventions, API/reference documentation, versioned documentation, deprecation/sunset records, claim freshness, and cross-link/anchor validation.
+- Expanded documentation standards and audit checks for heading/anchor stability, fenced code and tables, source revisions, effective dates, verified commands, API examples, version selectors, redirects, and broken-link reporting.
+- Added a worked source-backed API change example that separates verified current behavior, compatibility status, planned work, and release authority.
+- Kept the campaign Markdown-primary and JSON-selective: the SK8 audit found no deterministic machine-parsing need that justified a Scribe JSON catalog.
+- Added focused regression coverage for Scribe knowledge depth, progressive disclosure, source/Codex parity, link/claim discipline, and no-publication boundaries.
+- No release/tag publication, documentation-site deployment, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK8.
+
 ## Post-v1.2.0 Specialist Knowledge Layer - SK7 Overseer - Pending
 
 - Deepened Overseer's validation-strategy knowledge without changing routing, runtime architecture, CI workflows, release gates, or test-code ownership.

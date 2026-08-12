@@ -6,6 +6,14 @@ Use only the sections relevant to the document. Evidence and project requirement
 - Map important claims to source evidence, specialist output, or verified project artifacts.
 - Mark unverified, draft, planned, blocked, skipped, or not-run items explicitly.
 - Do not present proposals, assumptions, or planned work as completed behavior.
+- Record source revision, last-verified date, and effective date where claims can drift.
+
+## Markdown and Rendering
+
+- Use one document title, hierarchical headings without skipped levels, fenced code blocks with language identifiers, and blank lines that render consistently under the target CommonMark/GFM implementation.
+- Prefer descriptive link text and repository-relative links for versioned local content. Keep explicit HTML rare and renderer-tested.
+- Keep tables simple, escape literal pipes, and provide a list or prose alternative when a wide table harms accessibility or narrow rendering.
+- Treat generated heading anchors as renderer-specific. Validate fragments after renaming headings.
 
 ## README
 
@@ -63,12 +71,27 @@ Use only the sections relevant to the document. Evidence and project requirement
 - Separate added, changed, fixed, deprecated, removed, and security items when useful.
 - Link changes to verified commits, issues, or release evidence.
 - Do not use the change log as a raw commit dump.
+- Keep an `Unreleased` or pending section when the repository uses one; move entries only when release evidence exists.
+- Distinguish deprecation from removal and include migration guidance when user action is required.
 
 ## Decision Log
 
 - Record context, decision, alternatives, rationale, consequences, status, and date.
 - Preserve superseded decisions and link replacements.
 - Avoid presenting an unapproved proposal as a decision.
+- Give ADRs stable identifiers and immutable accepted content; supersede with a new decision that links both directions.
+
+## API and Versioned Documentation
+
+- Derive operations, schemas, examples, errors, authentication references, and compatibility claims from the reviewed API contract and implementation evidence.
+- Label example values and redact credentials or personal data. Verify examples against the documented version where executable validation is available.
+- Keep current, previous-supported, and archived documentation visibly distinct. Define version selector, canonical URL, redirects, deprecation, migration, and sunset behavior from approved policy.
+
+## Link and Claim Validation
+
+- Check local targets, case sensitivity, fragments, reference definitions, image/media paths, redirects, and external-source authority.
+- Report inaccessible external links as unverified rather than silently replacing or deleting supported claims.
+- Revalidate commands, versions, dates, status badges, screenshots, and release claims after their source revision changes.
 
 ## Final Project or Release Submission
 
