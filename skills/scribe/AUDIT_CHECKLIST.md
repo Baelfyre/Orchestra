@@ -20,6 +20,12 @@
 - [ ] Technical claims cite current artifacts.
 - [ ] Test results identify real commands or evidence.
 - [ ] Assumptions and unverified claims are marked.
+- [ ] Drift-prone claims record source revision, last-verified date, and effective date when relevant.
+
+## Markdown and Links
+- [ ] Heading hierarchy, generated anchors, reference links, images, code fences, lists, and tables render under the target Markdown engine.
+- [ ] Relative links resolve from the containing file with correct case and fragments.
+- [ ] External links identify authoritative sources and inaccessible targets are marked unverified.
 
 ## Traceability
 - [ ] Objectives map to requirements, implementation, tests, and readiness evidence.
@@ -41,6 +47,13 @@
 ## Versioning
 - [ ] Current status, version, branch, or release is identifiable when needed.
 - [ ] Stale version claims and screenshots are removed or updated.
+- [ ] Current, supported-previous, archived, deprecated, and removed content are distinguished.
+- [ ] Redirects, canonical URLs, migration guidance, and sunset/effective dates match approved evidence.
+
+## Changelog, ADR, and API Reference
+- [ ] Changelog entries describe verified user impact and do not imply an unpublished release.
+- [ ] ADR identifiers, status, context, decision, consequences, and supersession links are complete.
+- [ ] API operations, parameters, schemas, examples, errors, and authentication references match the exact documented contract revision.
 
 ## Diagrams Referenced Correctly
 - [ ] Diagram names, links, legends, scope, and current or proposed status match written claims.

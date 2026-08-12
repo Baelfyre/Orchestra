@@ -59,6 +59,10 @@ You must select exactly one of these three documentation output modes depending 
 Use `SKILL.md` first. Do not load every supporting document by default or consume context with unused material.
 - Load [DOCUMENTATION_STANDARDS.md](DOCUMENTATION_STANDARDS.md) only when the task involves document structure, README standards, requirements documentation, architecture summaries, system readiness, testing documentation, user guides, developer guides, changelogs, decision logs, or final project/release submission.
 - Load [SOURCE_BACKED_DOCUMENTATION_GUIDE.md](SOURCE_BACKED_DOCUMENTATION_GUIDE.md) only when the task involves thesis/capstone documentation, final submission packaging, source-backed writing, claim verification, citation discipline, evidence mapping, README accuracy, technical summaries, or handoff documentation.
+- Load [MARKDOWN_TECHNICAL_SYNTAX_GUIDE.md](MARKDOWN_TECHNICAL_SYNTAX_GUIDE.md) for Markdown structure, headings, links, anchors, code fences, tables, lists, callouts, or rendering portability.
+- Load [CHANGELOG_ADR_GUIDE.md](CHANGELOG_ADR_GUIDE.md) for changelog entries, release notes, architecture decision records, supersession, or decision-history maintenance.
+- Load [API_VERSIONED_DOCUMENTATION_GUIDE.md](API_VERSIONED_DOCUMENTATION_GUIDE.md) for API/reference content, versioned documentation, compatibility, deprecation, migration, or sunset communication.
+- Load [LINK_CLAIM_VALIDATION_GUIDE.md](LINK_CLAIM_VALIDATION_GUIDE.md) for source revision, effective-date, citation, internal-link, anchor, redirect, or documentation freshness validation.
 
 ## Supported work
 
@@ -119,6 +123,8 @@ Act as a specialist routed by `conductor`.
 
 - Base documentation claims on source-backed prose inputs, verified artifacts, specialist-provided facts, validated results, links, changelog entries, and documentation diffs that actually exist.
 - Keep documentation claims traceable to the reviewed file, command result, screenshot, specialist output, or repository evidence that supports them.
+- Record the exact source revision and last-verified date when a claim, command, API, compatibility statement, or external rule can drift.
+- Validate local links and generated heading anchors under the target renderer instead of assuming that a visible label proves the target exists.
 - Use explicit placeholder labels only under the allowed operating modes and never present placeholders as confirmed facts.
 - If downstream specialists provide the source facts, keep Scribe validation claims limited to transcription accuracy, traceability, and reviewed evidence rather than re-owning their decisions.
 
