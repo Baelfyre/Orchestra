@@ -112,6 +112,7 @@ def main():
         {"Name": "test_overseer_specialist_knowledge.py", "Path": "tests/behavior/test_overseer_specialist_knowledge.py"},
         {"Name": "test_scribe_specialist_knowledge.py", "Path": "tests/behavior/test_scribe_specialist_knowledge.py"},
         {"Name": "test_steward_governor_specialist_knowledge.py", "Path": "tests/behavior/test_steward_governor_specialist_knowledge.py"},
+        {"Name": "test_specialist_hardening_evaluation.py", "Path": "tests/behavior/test_specialist_hardening_evaluation.py"},
         {"Name": "validate_tuner_collaboration_contract.py", "Path": "scripts/validate_tuner_collaboration_contract.py"},
         {"Name": "test_tuner_collaboration_contract.py", "Path": "tests/behavior/test_tuner_collaboration_contract.py"},
         {"Name": "validate_cross_layer_synchronicity_contract.py", "Path": "scripts/validate_cross_layer_synchronicity_contract.py"},

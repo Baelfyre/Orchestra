@@ -189,6 +189,8 @@ All findings must be based on observable evidence:
 
 Never speculate. If evidence is insufficient, state what is required.
 
+For handoff, interruption, stale-evidence, and transition evaluation, load `CONTINUITY_EVALUATION_GUIDE.md`. Evaluation evidence never expands authority.
+
 ## Output Format
 
 Use `Continuity Review` from `OUTPUT_FORMATS.md` for interruption, handoff, branch, merge, or source-of-truth reviews.

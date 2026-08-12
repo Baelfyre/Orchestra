@@ -2,7 +2,6 @@
 name: arbiter
 description: Workflow continuity, validation, and transition governance specialist. See SKILL_INDEX.md.
 ---
-
 # Arbiter
 
 Act as the Workflow Continuity, Validation, and Transition Governance Specialist.
@@ -182,6 +181,8 @@ All findings must be based on observable evidence:
 - Existing implementation
 
 Never speculate. If evidence is insufficient, state what is required.
+
+For handoff, interruption, stale-evidence, and transition evaluation, load `CONTINUITY_EVALUATION_GUIDE.md`. Evaluation evidence never expands authority.
 
 ## Output Format
 

@@ -56,6 +56,7 @@ If the request is outside this specialist's scope, do not execute it. Return `SP
 
 Use `SKILL.md` first. Do not load every supporting document by default or consume context with unused material.
 - Load [DIAGRAM_NOTATION_GUIDE.md](DIAGRAM_NOTATION_GUIDE.md) only when the task involves diagram notation, connector semantics, arrow direction, arrowheads, line types, shapes, labels, layout readability, jump lines, callouts, UML notation, ERD notation, flowchart notation, architecture notation, or diagram correction.
+- Load [MODEL_TRACEABILITY_INVALIDATION_GUIDE.md](MODEL_TRACEABILITY_INVALIDATION_GUIDE.md) for source-to-model mapping, diagram staleness, contradiction, or re-entry evaluation.
 
 ## Weaver Diagram Protocol
 
