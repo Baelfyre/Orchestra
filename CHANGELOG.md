@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.3.0 Specialist Intelligence - Release Preparation - Pending
+
+- Normalized the root, Claude Code, Codex, Cursor, JetBrains, Neovim, VS Code, Windsurf, and Zed package/version surfaces to `1.3.0` for the Specialist Intelligence release candidate without changing host maturity.
+- Added a deterministic runtime regression that requires all 11 live package/version surfaces to agree on `1.3.0`.
+- Added the source-backed `docs/releases/v1.3.0-specialist-intelligence-release-candidate.md` preparation record covering the completed SK1-SK10 Specialist Knowledge Layer campaign and its validation baseline.
+- Preserved `v1.2.0` as the current public release until a separately authorized publication gate creates `v1.3.0`; this preparation performs no tag creation, GitHub Release publication, deployment, production mutation, marketplace publication, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite.
+
 ## Post-v1.2.0 Specialist Knowledge Layer - SK10 Hardening and Evaluation - Pending
 
 - Added evidence-driven hardening guides for Weaver model/source traceability, Conductor routing evaluation, The Tuner contradiction/invalidation coordination, and Arbiter continuity/handoff evaluation.
@@ -181,7 +188,7 @@ The first autonomous finalization experiment was rolled back to the verified rec
 - R1 / PR #223 - Spec Kitty Phase 3 and roadmap reconciliation.
 - R2 / PR #224 - backend-to-persistence and cross-module logical-flow integrity.
 - R3 / PR #225 - delegated Phase C repository host-reliability contract after bounded fixture remediation and a fully fresh exact-head matrix.
-- R4 / PR #226 - Phase D runtime-overlap reconciliation with no duplicate runtime extension required.
+- R4 / PR #226 - Delegated Phase D runtime-overlap reconciliation with no duplicate runtime extension required.
 - R5 / PR #227 - autonomous merge-readiness hardening.
 - R5B / PR #228 - delegated-governance current-state reconciliation, merged at `fbe4532ba2083feaa7ed9fcda2988843f1237a78` and independently verified on canonical `main`.
 - R6 - `v1.2.0` release-candidate metadata, public documentation, changelog, and release-note preparation.
