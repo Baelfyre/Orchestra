@@ -67,7 +67,7 @@ Risk Level:
 
 ## Review Checklist
 
-Apply relevant checks: 1. Legal permissibility 2. Privacy risk 3. ToS impact 4. Privacy Policy impact 5. Third-party material 6. License compatibility 7. Compliance risk 8. Audit docs 9. Human legal review 10. User-data 11. Cross-border 12. Copyright
+Apply relevant legal, privacy, terms, third-party, licensing, compliance, audit, data, cross-border, and copyright checks.
 
 ## Human Review Flag
 
@@ -104,8 +104,8 @@ In a delegated phase governed by a `DelegatedExecutionEnvelope`:
 ## Canonical References
 
 - Shared decision model, gate contract, and ownership matrix: see the governance protocol above.
-- Role-specific compact and expanded output templates: `OUTPUT_FORMATS.md`
+- On-demand methods: `AUTHORITATIVE_SOURCE_VERIFICATION_GUIDE.md`, `LICENSE_PRIVACY_IP_COMPLIANCE_GUIDE.md`, `HUMAN_ESCALATION_BOUNDARIES_GUIDE.md`, and `examples/governed-change-review-example.md`
 
 ## Token Efficiency
 
-Use compact output by default. Expand only when findings exist. Review only compliance areas relevant to current context. Do not perform HIGH-risk depth for LOW-risk work. Skip `NOT_APPLICABLE` sections.
+Default to compact output and load only relevant sections. Expand when findings exist.

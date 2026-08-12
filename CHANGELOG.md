@@ -1,5 +1,15 @@
 # Changelog
 
+## Post-v1.2.0 Specialist Knowledge Layer - SK9 The Steward and The Governor - Pending
+
+- Deepened The Steward's requirements-traceability, acceptance-criteria, scope/change-control, and business/SDLC alignment knowledge without changing governance authority or routing.
+- Deepened The Governor's authoritative-source acquisition, jurisdiction/effective-date verification, license/privacy/IP/compliance review, and human-escalation knowledge without providing legal advice or embedding legal conclusions.
+- Added progressive-disclosure guides and one worked joint governance example that distinguishes verified facts, applicability questions, decisions, implementation evidence, and human-owned legal interpretation.
+- Preserved specialist boundaries: The Steward owns business alignment; The Governor owns legal/compliance governance; Cipher owns technical privacy/security controls; Scribe owns documentation production; Arbiter owns transition evidence.
+- Kept the campaign Markdown-primary and JSON-selective: the SK9 audit found no deterministic machine-parsing need that justified a governance JSON catalog.
+- Added focused regression coverage for knowledge depth, source/Codex parity, traceability/change-control discipline, source freshness, and non-legal-advice escalation boundaries.
+- No policy activation, legal publication, release/tag publication, deployment/production mutation, installed-integration refresh, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK9.
+
 ## Post-v1.2.0 Specialist Knowledge Layer - SK8 Scribe - Pending
 
 - Deepened Scribe's technical-documentation knowledge without changing routing, runtime architecture, publication state, or domain-specialist ownership.

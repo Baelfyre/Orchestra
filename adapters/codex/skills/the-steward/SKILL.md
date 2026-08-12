@@ -80,7 +80,7 @@ In a delegated phase governed by a `DelegatedExecutionEnvelope`:
 ## Canonical References
 
 - Shared decision model, gate contract, and ownership matrix: see the governance protocol above.
-- Role-specific compact and expanded output templates: `OUTPUT_FORMATS.md`
+- On-demand methods: `REQUIREMENTS_TRACEABILITY_ACCEPTANCE_GUIDE.md`, `SCOPE_CHANGE_CONTROL_SDLC_GUIDE.md`, and `examples/governed-change-review-example.md`
 
 ## Token Efficiency
 
