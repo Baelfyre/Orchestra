@@ -1,73 +1,96 @@
 # Clockwork Output Formats
 
-Generate your output using exactly one of the formats below. The Conductor or user will specify which format to use. Default to `Compact` unless `Full` is requested.
+Generate output using exactly one format below. Default to `Compact` unless `Full` is requested.
 
 ## Compact
 
-Use this for quick audits, rapid checks, or mid-workflow feedback. Keep it strictly to the essential findings.
+Use for quick audits, narrow architecture decisions, or mid-workflow boundary checks.
 
 ```markdown
 # Clockwork Quick Check
 
 **Status:** [Ready / Not ready / Needs clarification]
-**Scope:** [Files inspected / Layers involved]
+**Scope:** [Files inspected / Boundaries involved]
 
 ## Boundary Map
 **Allowed:**
-- [e.g., Service -> Repository]
-**Blocked:**
-- [e.g., Controller -> Repository]
+- [Observed or accepted dependency / ownership direction]
 
-## Violations Found
-1. [Describe architectural or OOP violation briefly]
+**Blocked:**
+- [Observed or proposed boundary that violates the architecture contract]
+
+## Findings
+1. [Evidence-based architecture finding]
 
 ## Smallest Safe Fix
-[Brief instruction for Ponytail to fix the violation or "Audit only"]
+[Architecture correction or "Audit only"]
 
-**Stop/Go:** [Safe to patch / Blocked / Needs user approval]
+## Handoff
+- [Owning specialist and decision or implementation needed]
+
+**Stop/Go:** [Safe for downstream implementation / Audit only / Blocked / Needs user approval]
 ```
 
 ## Full
 
-Use this for comprehensive architectural reviews, deep SOLID analysis, or full refactor planning. Do not use this as an implementation plan for Ponytail.
+Use for comprehensive architecture reviews, distributed-boundary reviews, deep OOP/SOLID analysis, or material refactor planning. This is an architecture review, not a Ponytail implementation plan and not an Overseer QA plan.
 
-**Example Structure:**
+```markdown
 # Clockwork Architecture Review
 
 ## 1. Readiness status
 [Ready / Not ready / Ready with minor notes / Needs clarification]
 
 ## 2. Scope observed
-- **Files inspected:** [List of files]
-- **Layers involved:** [UI, Application, Domain, Repository, Infrastructure]
-- **Frameworks detected:** [e.g., Spring Boot, React, Express]
-- **Assumptions:** [Any unverified dependencies or hidden state]
+- **Files inspected:** [List]
+- **Boundaries involved:** [UI, Application, Domain, Repository, Infrastructure, Service, API, Event, Cache, Job, Workflow]
+- **Runtime topology observed:** [In-process / Multi-process / Distributed / Unknown]
+- **State owners observed:** [List]
+- **Assumptions:** [Only unverified assumptions]
 
 ## 3. Architecture findings
 [For each finding:]
 - **Finding:** [Description]
-- **Layer involved:** [Layer name]
-- **Principle affected:** [e.g., Single Responsibility, Dependency Inversion, Encapsulation]
+- **Evidence:** [File/module/service/API/event/state evidence]
+- **Boundary involved:** [Boundary]
+- **Principle affected:** [Ownership, cohesion, coupling, dependency direction, compatibility, concurrency, idempotency, etc.]
 - **Risk level:** [low / medium / high / blocker]
-- **Why it matters:** [Explanation]
-- **Smallest safe fix:** [Recommendation]
-- **Files likely affected:** [List]
+- **Why it matters:** [Architecture impact]
+- **Smallest safe fix:** [Architecture correction]
+- **Likely implementation surface:** [Files/modules/services likely affected]
+- **Required handoff:** [Ponytail/Cipher/Chronicler/Cloak/Overseer/Conductor/None]
 
 ## 4. Boundary map
-- **UI/presentation responsibilities:** [Observed]
-- **Application/service responsibilities:** [Observed]
-- **Domain responsibilities:** [Observed]
-- **Repository responsibilities:** [Observed]
-- **Infrastructure responsibilities:** [Observed]
+- **Presentation/UI ownership:** [Observed]
+- **Application/service ownership:** [Observed]
+- **Domain ownership:** [Observed]
+- **Persistence/infrastructure boundary:** [Observed]
+- **State/concurrency ownership:** [Observed]
+- **External/API/event/job/workflow boundaries:** [Observed]
 
-## 5. Refactor recommendation
-[No refactor needed / Small patch recommended / Refactor recommended later / Refactor unsafe right now]
+## 5. Pattern decision
+- **Pattern considered:** [Pattern or None]
+- **Decision:** [Use / Reject / Defer]
+- **Repository evidence:** [Why]
+- **Complexity introduced:** [New failure/operational boundaries]
 
-## 6. Validation plan
-- **Compile/build command:** [e.g., `mvn clean compile`]
-- **Test command:** [e.g., `mvn test`]
-- **Focused tests:** [List specific test classes]
-- **Manual checks if needed:** [Any non-automated checks]
+## 6. Refactor recommendation
+[No refactor needed / Small patch recommended / Incremental refactor recommended / Broad refactor requires separate approval / Refactor unsafe now]
 
-## 7. Stop/go decision
-[Safe to patch / Audit only / Needs user approval before broad changes / Blocked]
+## 7. Downstream validation properties
+- [Architecture property downstream implementation or QA should preserve or prove]
+- [Compatibility, idempotency, ordering, failure isolation, cache invalidation, tenant propagation, etc.]
+
+Clockwork does not own the QA strategy. Route test scope, gate selection, and release readiness to Overseer.
+
+## 8. Specialist handoffs
+- **Ponytail:** [Implementation boundary or None]
+- **Cipher:** [Security decision or None]
+- **Chronicler:** [Persistence decision or None]
+- **Cloak:** [UI/UX decision or None]
+- **Overseer:** [Validation ownership or None]
+- **Conductor:** [Sequencing/routing need or None]
+
+## 9. Stop/go decision
+[Safe for downstream implementation / Audit only / Needs user approval before broad changes / Blocked]
+```
