@@ -18,6 +18,8 @@ Dagger expands approved QA scenarios into failure-focused scenarios. Dagger must
 - **Negative Testing**: How does the system behave when invalid, unexpected, malformed, missing, excessive, repeated, conflicting, or unauthorized inputs occur?
 - **Resilience Testing**: Can the system continue, degrade safely, recover, retry, rollback, or fail closed?
 
+Keep the test question explicit. Load testing measures behavior under a defined workload. Stress testing searches for a bounded capacity or failure threshold. Soak testing looks for time-dependent degradation. Spike testing applies a controlled arrival-rate change. Concurrency testing coordinates competing operations. Fault injection introduces one bounded failure condition. A scenario may combine these only when the combined interaction is the stated hypothesis and the safety envelope permits it.
+
 ## When to Use Dagger
 Use Dagger to discover edge cases, test guardrails, explore misuse cases, or simulate failure scenarios that go beyond normal functional QA boundaries.
 
@@ -26,6 +28,8 @@ Before expanding, consult Overseer’s baseline: requirements, acceptance criter
 
 ## Stress Testing Scope Expansion
 Identify breaking points in system workflows. Stress scenarios must include expected safe behavior, not only expected failure.
+
+Define the workload before selecting a tool: actor mix, operation mix, arrival rate or active users, payload distribution, data cardinality, think time, ramp, warm-up, steady-state window, duration, and ceiling. State whether the model is open, where arrivals continue independently of response time, or closed, where a fixed population waits before starting more work. Do not compare results from materially different models as though they were equivalent.
 
 ## Negative Testing Expansion
 Evaluate behavior against unexpected inputs. This is not about functional correctness but about failure handling.
@@ -36,6 +40,8 @@ Assume components will fail. Identify target boundaries, triggers, and the expec
 ## Resource Pressure Categories
 Resource pressure may include CPU, memory, disk, network, database connection pool, file handles, queue depth, timeout limits, rate limits, session limits, and concurrent users.
 
+Measure demand, utilization, saturation, errors, latency distribution, throughput, queue depth, retry volume, rejection/degradation behavior, and recovery. Averages hide tail behavior; record relevant percentiles and sample counts. Correct for client-side queueing or coordinated omission when the load generator fails to represent requests that would have arrived during slow responses.
+
 ## Dependency Failure Scenarios
 Simulate API latency, timeout, missing services, corrupted data payloads, and authentication rejections from third-party or internal dependencies.
 
@@ -45,8 +51,12 @@ Recovery checks should include retry, rollback, reconnect, resume, cleanup, rest
 ## Timeout, Retry, and Recovery Behavior
 Verify that systems do not hang indefinitely and that retries are bounded and back off gracefully.
 
+Check per-attempt timeout, overall deadline, maximum attempts, backoff, jitter, retryable classifications, idempotency, and retry budget. A retry that improves one request while multiplying dependency load is not safe recovery.
+
 ## Concurrency and Race Condition Pressure
 Simulate simultaneous actions that compete for the same resource or state.
+
+Use barriers, deterministic seeds, controlled clocks, dependency stubs, or repeated bounded schedules to make failures reproducible. Inspect lost updates, duplicate work, stale reads, ordering violations, deadlocks, starvation, lock waits, and cleanup after cancellation.
 
 ## Data Integrity Under Stress
 Verify that partial failures do not leave data in an invalid or orphaned state. Rollbacks must be complete.
@@ -59,6 +69,8 @@ Unapproved destructive tests remain planning-only. Real user data, production sy
 
 ## Evidence Requirements
 Test evidence must include: revision, environment, trigger, input class, expected safe behavior, observed behavior if executed, safety gate status, and handoff owner. A planned or unrun stress test must never be marked as passed.
+
+Also record workload model, ceilings, duration, warm-up, measurement window, tool and version, configuration hash, telemetry sources, clock alignment, baseline, stop event, cleanup proof, and known measurement limitations. Separate system saturation from generator saturation.
 
 ## Severity and Risk Framing
 Evaluate the likelihood and impact of the discovered failure mode. Provide actionable evidence for prioritization.

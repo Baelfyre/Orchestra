@@ -107,6 +107,7 @@ def main():
         {"Name": "test_router_contracts.py", "Path": "tests/behavior/test_router_contracts.py"},
         {"Name": "test_codex_export_portable_references.py", "Path": "tests/behavior/test_codex_export_portable_references.py"},
         {"Name": "test_cloak_specialist_knowledge.py", "Path": "tests/behavior/test_cloak_specialist_knowledge.py"},
+        {"Name": "test_dagger_specialist_knowledge.py", "Path": "tests/behavior/test_dagger_specialist_knowledge.py"},
         {"Name": "validate_tuner_collaboration_contract.py", "Path": "scripts/validate_tuner_collaboration_contract.py"},
         {"Name": "test_tuner_collaboration_contract.py", "Path": "tests/behavior/test_tuner_collaboration_contract.py"},
         {"Name": "validate_cross_layer_synchronicity_contract.py", "Path": "scripts/validate_cross_layer_synchronicity_contract.py"},
