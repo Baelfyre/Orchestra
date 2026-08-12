@@ -20,6 +20,10 @@ Use these concepts as review guidance. This skill does not certify compliance wi
 - Integration: interfaces and collaboration among components or external systems.
 - System: end-to-end behavior of the assembled system.
 - Acceptance: stakeholder-facing evidence against agreed criteria.
+- Contract: provider/consumer compatibility at a versioned interface without claiming the assembled workflow passed.
+- End-to-end: a minimal critical journey across real integration boundaries in a representative environment.
+
+Choose the lowest level that can observe the risk. Preserve integration, contract, E2E, visual, security, persistence, and performance evidence when the behavior exists only at those boundaries.
 
 ## Test Types
 
@@ -37,6 +41,26 @@ Use these concepts as review guidance. This skill does not certify compliance wi
 - Record revision, environment, data, command or procedure, expected result, actual result, and outcome.
 - Keep logs, screenshots, reports, or traces only when they support a decision and protect sensitive data.
 - Never convert a planned or unrun test into a pass.
+- Record reruns and retries separately from the first outcome, including attempt count and failure signature.
+- Bind property failures to seed and minimized counterexample, mutation results to tool/config/baseline, and coverage to the exact instrumented revision.
+
+## Advanced Test Effectiveness
+
+- Use property tests for stable invariants across generated input spaces, with bounded generators and reproducible shrinking.
+- Use mutation testing selectively to reveal assertions that execute code without detecting meaningful faults.
+- Interpret line, branch, condition, path, and risk coverage separately. A percentage is not a completeness claim.
+- Quarantine only with owner, reason, issue, scope, expiry, and continued visibility. Quarantine is not a pass.
+
+## Isolation and Test Data
+
+- Control time, randomness, concurrency, locale, network, storage, and shared state where determinism matters.
+- Prefer synthetic or minimized fixtures. Protect sensitive data and define creation, reset, retention, and disposal.
+- Verify parallel workers cannot collide through shared identifiers, ports, queues, caches, accounts, or database rows.
+
+## Matrices and Performance
+
+- Derive CI, platform, browser, and device matrices from supported contracts, risk, telemetry, and change surface rather than Cartesian completeness.
+- Define performance gates with workload, warm-up, sample count, percentile, error/throughput constraints, environment identity, baseline tolerance, and stop conditions.
 
 ## Defect Management
 

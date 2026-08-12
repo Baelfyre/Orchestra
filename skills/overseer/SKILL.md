@@ -81,6 +81,10 @@ Use `SKILL.md` first. Do not load every supporting document by default or consum
 - Load [TESTING_CHECKLIST.md](TESTING_CHECKLIST.md) only when auditing quality evidence.
 - Load [QA_REVIEW_GUIDE.md](QA_REVIEW_GUIDE.md) only when planning a QA workflow.
 - Load [USER_TESTING_FOUNDATIONS_GUIDE.md](USER_TESTING_FOUNDATIONS_GUIDE.md) only when the task involves user testing, usability testing, UAT, participant scenarios, task observation, user feedback, acceptance testing, usability defects, or stakeholder validation.
+- Load [TEST_LEVEL_CONTRACT_GUIDE.md](TEST_LEVEL_CONTRACT_GUIDE.md) when choosing unit, integration, contract, system, or E2E boundaries and avoiding duplicate evidence.
+- Load [PROPERTY_MUTATION_COVERAGE_GUIDE.md](PROPERTY_MUTATION_COVERAGE_GUIDE.md) for generators, invariants, shrinking, mutation testing, or coverage interpretation.
+- Load [FLAKY_ISOLATION_TEST_DATA_GUIDE.md](FLAKY_ISOLATION_TEST_DATA_GUIDE.md) for intermittent failures, quarantine, deterministic isolation, fixtures, clocks, randomness, or test-data lifecycle.
+- Load [CI_BROWSER_PERFORMANCE_MATRIX_GUIDE.md](CI_BROWSER_PERFORMANCE_MATRIX_GUIDE.md) for CI job design, platform/browser/device coverage, sharding, retries, or performance acceptance.
 
 ## Operating principles
 
@@ -88,6 +92,8 @@ Use `SKILL.md` first. Do not load every supporting document by default or consum
 - Do not invent tests, test results, defects, requirements, or release status.
 - Mark assumptions and missing evidence instead of filling gaps.
 - Recommend the smallest practical QA actions needed for confidence.
+- Tie every evidence claim to an exact revision, environment, data/configuration identity, command or procedure, and result state.
+- Use the cheapest test level that can observe the risk without replacing necessary cross-boundary or user-visible evidence.
 
 ## Supported work
 
@@ -150,6 +156,7 @@ Overseer remains the validation strategy and evidence owner. Phase 1 binds evide
 - **No repeated CI explanations**: Just list the CI impact or checks.
 - **No release readiness reports for simple tasks**: Just state the pass/fail gate.
 - **No test implementation code**: Output only actionable validation gates and handoffs. Ponytail writes the tests.
+- Do not treat retries, reruns, quarantine, coverage percentage, mutation score, or a large matrix as proof without interpreting what the evidence can and cannot establish.
 
 ## Review priorities
 
