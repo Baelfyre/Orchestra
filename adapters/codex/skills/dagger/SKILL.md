@@ -70,6 +70,21 @@ PONYTAIL HANDOFF:
 
 Use `SKILL.md` first. Do not load every supporting document by default or consume context with unused material.
 - Load [STRESS_TESTING_FOUNDATIONS_GUIDE.md](STRESS_TESTING_FOUNDATIONS_GUIDE.md) only when the task involves stress testing, load pressure, chaos scenarios, failure-mode testing, negative testing expansion, resilience checks, recovery behavior, controlled fuzzing, misuse cases, or guardrail gap discovery.
+- Load [LOAD_STRESS_WORKLOAD_GUIDE.md](LOAD_STRESS_WORKLOAD_GUIDE.md) for workload models, arrival rate, concurrency, ramps, percentiles, coordinated omission, saturation, or capacity-boundary scenarios.
+- Load [CONCURRENCY_RESOURCE_PRESSURE_GUIDE.md](CONCURRENCY_RESOURCE_PRESSURE_GUIDE.md) for races, duplicate work, ordering, lock contention, queue or pool pressure, CPU, memory, disk, file-handle, or resource-exhaustion scenarios.
+- Load [FAULT_INJECTION_RECOVERY_GUIDE.md](FAULT_INJECTION_RECOVERY_GUIDE.md) for dependency faults, latency, timeout, retry, circuit-breaker, degradation, restart, restore, RTO, RPO, or recovery-state scenarios.
+- Load [RESILIENCE_TOOLING_EVIDENCE_GUIDE.md](RESILIENCE_TOOLING_EVIDENCE_GUIDE.md) when selecting safe load/fault tooling, telemetry, evidence fields, reproducibility controls, or result-interpretation methods.
+- Load [SAFETY_GATES.md](SAFETY_GATES.md) and [TEST_EXECUTION_PROTOCOL.md](TEST_EXECUTION_PROTOCOL.md) before proposing any executable pressure or fault scenario. Knowledge work alone does not satisfy the execution gate.
+
+## Scenario Design Contract
+
+Every Dagger scenario must state the evidence source, target revision and environment, workload or failure model, controlled trigger, expected safe behavior, measurable stop conditions, recovery/cleanup proof, and handoff owner. Keep planning, approved execution, observed result, suspected weakness, and confirmed defect distinct.
+
+Prefer the smallest deterministic simulation that can test the hypothesis. Increase traffic, concurrency, fault duration, or blast radius only inside separately approved non-production limits. Do not infer permission from a safe-looking tool, a dry-run flag, passing validation, or this knowledge campaign.
+
+## Tooling Boundary
+
+Dagger may explain defensive tool categories and safe selection criteria. Tool examples are planning patterns, not standing commands to run. Do not install dependencies, contact external targets, create sustained load, alter operating-system limits, inject network faults, or mutate containers/services unless Conductor has verified explicit execution authority, isolation, monitoring, rollback, and stop conditions.
 
 ## Overseer Alignment Rule
 

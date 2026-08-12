@@ -12,6 +12,10 @@ Score only evidenced areas. Use `N/A` when out of scope and `Provisional` when e
 | Security Hardening |  | Defensive control and denial evidence |  |
 | Privacy Safety |  | Data-flow, access, logging, and redaction evidence |  |
 | Reliability Under Failure |  | Timeout, retry, partial-failure, and recovery evidence |  |
+| Workload Model Validity |  | Actor mix, rate/concurrency, distribution, ramp, duration, and model evidence |  |
+| Capacity and Saturation |  | Throughput, tail latency, errors, utilization, saturation, and queue evidence |  |
+| Concurrency Correctness |  | Coordinated operation results, ordering, idempotency, locks, and final state |  |
+| Retry and Backpressure |  | Deadlines, attempts, budgets, queue behavior, shedding, and amplification evidence |  |
 | Observability and Logging |  | Correlated, redacted failure events |  |
 | Recovery Readiness |  | Executed rollback or recovery evidence |  |
 | Overall Resilience Score |  | Weighted evidence from applicable areas |  |
@@ -32,6 +36,9 @@ Score only evidenced areas. Use `N/A` when out of scope and `Provisional` when e
 - Confirmed failures:
 - Missing evidence:
 - Untested areas:
+- Workload and fault-model limitations:
+- Generator or telemetry limitations:
+- Recovery objective and measured result:
 - Highest-risk corrective action:
 
 Weight critical workflow impact, safety, data integrity, security and privacy, likelihood, severity, and recovery difficulty. Never average missing areas into a deceptively high score.

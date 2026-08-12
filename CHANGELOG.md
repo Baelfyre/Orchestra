@@ -1,5 +1,17 @@
 # Changelog
 
+## Post-v1.2.0 Specialist Knowledge Layer - SK5 Dagger - Pending
+
+- Deepened Dagger's safe resilience knowledge without changing routing, runtime architecture, or execution authority.
+- Added progressive-disclosure guidance for workload modeling, load/stress/soak interpretation, concurrency and resource pressure, bounded fault injection, recovery objectives and timelines, resilience tooling, and evidence identity.
+- Expanded safety gates and the execution protocol with observable ceilings, generator health, abort controls, blast-radius checks, retry amplification, recovery windows, residual-state verification, and measurement limitations.
+- Added failure-matrix and resilience-scorecard coverage for queue, connection-pool, memory, storage, retry, concurrency, generator, and post-fault recovery behavior.
+- Added a planning-only bounded load/recovery example that defines an open workload model, thresholds, telemetry, recovery evidence, and cross-specialist handoffs without generating traffic.
+- Preserved `scripts/dagger_guardrail.py` and its simulation-only live-execution block unchanged. Knowledge and tool examples do not grant permission to run destructive, disruptive, externally targeted, or production tests.
+- Kept the campaign Markdown-primary and JSON-selective: the SK5 audit found no deterministic machine-parsing need that justified a Dagger JSON catalog.
+- Added focused regression coverage for Dagger knowledge depth, source/Codex support parity, progressive disclosure, state/evidence separation, and safety-boundary language.
+- No release/tag publication, deployment/production mutation, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK5.
+
 ## Post-v1.2.0 Specialist Knowledge Layer - SK4 Cloak - Pending
 
 - Deepened Cloak's frontend design knowledge without changing specialist ownership, routing authority, package version, or runtime architecture.

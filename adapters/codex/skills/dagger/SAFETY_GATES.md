@@ -11,6 +11,9 @@ Complete this gate before recommending or executing destructive tests. Unknown a
 - Mock services:
 - Disposable test data:
 - Real user or customer data present:
+- Environment owner confirmed:
+- Production connectivity blocked or explicitly isolated:
+- Shared dependency and cross-tenant blast radius:
 
 ## QA Baseline Alignment
 
@@ -28,6 +31,9 @@ Complete this gate before recommending or executing destructive tests. Unknown a
 - In scope:
 - Out of scope:
 - Time and resource limits:
+- Workload or fault ceiling:
+- Ramp, duration, and steady-state window:
+- Allowed concurrency and request rate:
 - Explicit approval required before execution:
 
 ## Protection and recovery
@@ -39,6 +45,10 @@ Complete this gate before recommending or executing destructive tests. Unknown a
 - Rollback procedure verified:
 - Cleanup owner and procedure:
 - Monitoring available:
+- Load-generator health monitored separately:
+- Abort control tested:
+- Recovery objectives and verification window:
+- Residual-state check:
 
 ## Approval checkpoint
 
@@ -47,6 +57,8 @@ Obtain explicit approval before deletion, corruption simulation, schema changes,
 ## Stop conditions
 
 Stop immediately if production is targeted; authorization or scope is unclear; real data may be damaged; credentials may be exposed; access would be unauthorized; disruption exceeds limits; rollback fails; unexpected cross-system effects appear; or approval is missing.
+
+Before execution, translate stop conditions into observable thresholds with an owner: error rate, latency percentile, saturation, queue depth, retry amplification, memory growth, disk floor, data-integrity signal, cross-tenant effect, health-check failure, generator overload, or elapsed time. Unknown telemetry or an untested abort path blocks execution.
 
 ## Forbidden actions
 
