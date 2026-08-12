@@ -1,5 +1,15 @@
 # Changelog
 
+## Post-v1.2.0 Specialist Knowledge Layer - SK2 Clockwork - Pending
+
+- Expanded Clockwork from OOP/layering foundations into modern application architecture review covering modular and distributed service boundaries, state and concurrency ownership, API compatibility/versioning, caching, multi-tenancy, background jobs, event-driven flows, outbox/inbox placement, and durable workflow patterns.
+- Added progressive-disclosure Markdown guides for modern application architecture and event-driven/workflow reliability while preserving Clockwork as an audit-first boundary specialist rather than an implementation, persistence, security, or QA owner.
+- Added `skills/clockwork/patterns/architecture-patterns.json` as selective machine-readable pattern metadata under the campaign's Markdown-primary, JSON-selective storage policy; the JSON catalog does not replace repository evidence or Markdown guidance.
+- Extended the Codex exporter to copy `.json` specialist support files alongside Markdown and added regression coverage proving the Clockwork JSON catalog is valid and portable.
+- Preserved source/Codex portable parity for all SK2 Clockwork support files without changing routing, manifest contracts, package version, or runtime authority semantics.
+- Reconciled Clockwork output ownership so it reports downstream validation properties while Overseer retains QA strategy, test scope, validation-gate, and release-readiness ownership.
+- No release/publication, deployment/production mutation, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK2.
+
 ## Post-v1.2.0 Specialist Knowledge Layer - SK1 Ponytail - Pending
 
 - Added an Orchestra-native Ponytail implementation knowledge layer while preserving Ponytail's established specialist ownership and upstream minimalism principles.
