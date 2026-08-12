@@ -5,72 +5,96 @@
 ```markdown
 # Cipher Quick Risk Review
 
-## Security or Privacy Objective
+## Objective
 -
 
 ## Evidence Reviewed
 -
 
-## Confirmed Risks
-1.
-2.
-3.
+## Confirmed Findings
+1. **[severity] finding**
+   - Evidence:
+   - Boundary/control gap:
+   - Impact:
+   - Confidence:
+   - Optional mapping: CWE / ASVS versioned ID / OWASP API / RFC
+   - Remediation owner:
 
-## Highest-Risk Gap
+## Missing Evidence
 -
 
 ## Defensive Next Action
 -
 ```
 
+Use optional standards/taxonomy mapping only when supported by evidence.
+
 ## Full Security Review
 
 ```markdown
 # Cipher Security and Privacy Review
 
-## Scope Reviewed
+## Scope
 - Project:
-- Security or Privacy Objective:
-- Review Mode:
-- Evidence Reviewed:
+- Objective:
+- Review mode:
+- Evidence reviewed:
 
-## Review Confidence
-Confidence Level: High / Medium / Low
-Reason:
+## Confidence
+- Overall:
+- Material missing evidence:
 
 ## Executive Summary
 
-## Confirmed Security Strengths
+## Assets and Trust Boundaries
 
-## Confirmed Privacy Strengths
+## Confirmed Strengths
 
-## Threat Surface
+## Findings
 
-## Authentication Issues
+### Finding CIPHER-001
+- Status: Confirmed / Needs verification / Hardening / False positive
+- Severity:
+- Confidence:
+- Evidence:
+- Security objective:
+- Trust boundary:
+- Technical impact:
+- Existing safeguards:
+- Optional weakness/standard mapping:
+- Remediation boundary:
+- Implementation owner:
+- Verification handoff:
 
-## Authorization and Access Control Issues
+## Authentication / Session / OAuth Notes
 
-## Sensitive Data Handling Issues
+## Authorization / RBAC / Tenant Notes
 
-## Secrets and Credential Issues
+## Web and API Notes
 
-## API Security Issues
+## Secrets / Cryptography Notes
 
-## Dependency and Supply Chain Notes
+## Dependency and Security-Tool Notes
 
-## Logging and Auditability Notes
+## Logging / Auditability Notes
 
-## Privacy Risk Notes
+## Technical Privacy-Exposure Notes
 
-## Secure SDLC Notes
+## Threat / Abuse-Case Notes
 
 ## Missing Evidence
 
-## Priority Fixes
+## Prioritized Defensive Actions
 
-## Defensive Recommendations
+## Specialist Handoffs
 
 ## Final Recommendation
 ```
 
+### Finding Rules
 
+- A scanner result is not automatically a confirmed finding.
+- Severity and confidence are separate.
+- CWE/ASVS/OWASP/RFC mappings are contextual, not proof.
+- Do not include exploit payloads or secret values.
+- Route implementation and validation ownership rather than absorbing them into Cipher.

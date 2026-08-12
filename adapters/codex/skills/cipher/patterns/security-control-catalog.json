@@ -1,0 +1,151 @@
+{
+  "schema_version": "1.0.0",
+  "specialist": "cipher",
+  "purpose": "Deterministic lookup metadata for defensive security review. Repository evidence and current primary standards remain authoritative.",
+  "authority": "NON_AUTHORIZING_REFERENCE_METADATA",
+  "control_families": [
+    {
+      "id": "authentication-boundary",
+      "trigger": "identity login recovery MFA or credential review",
+      "inspect": [
+        "identity source",
+        "credential handling",
+        "recovery path",
+        "automation controls",
+        "disablement"
+      ],
+      "primary_handoff": "ponytail"
+    },
+    {
+      "id": "session-token-boundary",
+      "trigger": "session cookie bearer token JWT or revocation review",
+      "inspect": [
+        "transport",
+        "storage",
+        "expiry",
+        "rotation/revocation",
+        "issuer/audience when applicable"
+      ],
+      "primary_handoff": "ponytail"
+    },
+    {
+      "id": "oauth-oidc-boundary",
+      "trigger": "OAuth or OpenID Connect flow",
+      "inspect": [
+        "client type",
+        "redirect URI",
+        "PKCE/state/nonce as applicable",
+        "token purpose",
+        "refresh-token exposure"
+      ],
+      "primary_handoff": "clockwork"
+    },
+    {
+      "id": "object-authorization",
+      "trigger": "resource identifier or object access",
+      "inspect": [
+        "subject",
+        "action",
+        "object",
+        "ownership",
+        "tenant boundary"
+      ],
+      "primary_handoff": "ponytail"
+    },
+    {
+      "id": "function-property-authorization",
+      "trigger": "privileged action or sensitive field read/write",
+      "inspect": [
+        "function permission",
+        "property exposure",
+        "mass assignment",
+        "admin/support privilege"
+      ],
+      "primary_handoff": "ponytail"
+    },
+    {
+      "id": "sensitive-business-flow",
+      "trigger": "scarce resource queue booking invitation recovery quota promotion or approval flow",
+      "inspect": [
+        "eligibility",
+        "ordering",
+        "uniqueness",
+        "replay/automation",
+        "server-owned state transition"
+      ],
+      "primary_handoff": "clockwork"
+    },
+    {
+      "id": "ssrf-outbound-request",
+      "trigger": "server-side fetch to user-influenced destination",
+      "inspect": [
+        "scheme/destination constraints",
+        "redirects",
+        "network trust",
+        "resource limits",
+        "response validation"
+      ],
+      "primary_handoff": "clockwork"
+    },
+    {
+      "id": "input-output-boundary",
+      "trigger": "untrusted data reaches parser query template command path or renderer",
+      "inspect": [
+        "type/size/business validation",
+        "parameterization",
+        "context encoding",
+        "deserialization",
+        "path handling"
+      ],
+      "primary_handoff": "ponytail"
+    },
+    {
+      "id": "secrets-crypto-boundary",
+      "trigger": "secret key credential encryption signing hashing or password storage",
+      "inspect": [
+        "secret exposure",
+        "approved storage",
+        "primitive purpose",
+        "key/nonce use",
+        "rotation/revocation ownership"
+      ],
+      "primary_handoff": "ponytail"
+    },
+    {
+      "id": "dependency-security-triage",
+      "trigger": "SCA advisory dependency or SBOM finding",
+      "inspect": [
+        "resolved version",
+        "direct/transitive",
+        "prod/dev exposure",
+        "affected/fixed range",
+        "reachability/runtime use"
+      ],
+      "primary_handoff": "ponytail"
+    },
+    {
+      "id": "static-dynamic-finding-triage",
+      "trigger": "SAST CodeQL DAST or configuration scanner finding",
+      "inspect": [
+        "rule identity",
+        "reachable path/environment",
+        "existing controls",
+        "confidence",
+        "security impact"
+      ],
+      "primary_handoff": "overseer"
+    },
+    {
+      "id": "technical-privacy-exposure",
+      "trigger": "personal or sensitive data collection access sharing logging retention or export",
+      "inspect": [
+        "data category",
+        "purpose",
+        "access",
+        "copies/sharing",
+        "retention/deletion implementation"
+      ],
+      "primary_handoff": "the-governor"
+    }
+  ]
+}

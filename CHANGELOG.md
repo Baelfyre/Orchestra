@@ -1,5 +1,15 @@
 # Changelog
 
+## Post-v1.2.0 Specialist Knowledge Layer - SK3 Cipher - Pending
+
+- Expanded Cipher from general security/privacy review into deeper authentication, session, OAuth/OIDC, authorization, web/API, sensitive-business-flow, SSRF, secrets/cryptographic-misuse, framework-aware, and security-tooling interpretation guidance while preserving defensive-only specialist ownership.
+- Updated standards framing around current primary references including OWASP ASVS 5.0.0, OWASP API Security Top 10 2023, MITRE CWE, OAuth 2.0 Security BCP RFC 9700, JWT BCP RFC 8725, and OpenID Connect Core without claiming automatic compliance or vulnerability proof.
+- Added progressive-disclosure guides for authentication/session/OAuth, web/API controls, SAST/DAST/SCA/SBOM interpretation, and framework-aware review cues.
+- Added `skills/cipher/patterns/security-control-catalog.json` as selective non-authorizing control-family metadata and extended the existing Codex selective-JSON regression to verify Clockwork and Cipher catalogs.
+- Preserved source/Codex portability by regenerating tracked Codex specialist mirrors through the repository exporter.
+- Preserved Cipher's defensive-only boundary: no offensive/destructive testing, implementation ownership, architecture ownership, persistence ownership, QA ownership, legal/compliance sufficiency, release approval, deployment, or production mutation is introduced by SK3.
+- No release/publication, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK3.
+
 ## Post-v1.2.0 Specialist Knowledge Layer - SK2 Clockwork - Pending
 
 - Expanded Clockwork from OOP/layering foundations into modern application architecture review covering modular and distributed service boundaries, state and concurrency ownership, API compatibility/versioning, caching, multi-tenancy, background jobs, event-driven flows, outbox/inbox placement, and durable workflow patterns.

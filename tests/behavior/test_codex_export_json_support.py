@@ -7,7 +7,10 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 EXPORTER = ROOT / "adapters" / "codex" / "export-codex-skills.ps1"
-SOURCE_JSON = ROOT / "skills" / "clockwork" / "patterns" / "architecture-patterns.json"
+CATALOGS = {
+    "clockwork": ROOT / "skills" / "clockwork" / "patterns" / "architecture-patterns.json",
+    "cipher": ROOT / "skills" / "cipher" / "patterns" / "security-control-catalog.json",
+}
 
 
 def assert_true(name, condition, details=""):
@@ -24,18 +27,21 @@ def resolve_powershell():
     )
 
 
-def test_clockwork_pattern_catalog_is_valid_json():
-    data = json.loads(SOURCE_JSON.read_text(encoding="utf-8"))
-    assert_true("Clockwork JSON schema version is present", data.get("schema_version") == "1.0.0")
-    assert_true("Clockwork JSON specialist is clockwork", data.get("specialist") == "clockwork")
-    assert_true("Clockwork JSON pattern catalog is non-empty", bool(data.get("patterns")))
+def test_selective_json_catalogs_are_valid():
+    for specialist, path in CATALOGS.items():
+        data = json.loads(path.read_text(encoding="utf-8"))
+        assert_true(f"{specialist} JSON schema version is present", data.get("schema_version") == "1.0.0")
+        assert_true(f"{specialist} JSON specialist identity matches", data.get("specialist") == specialist)
 
-    pattern_ids = [item.get("id") for item in data["patterns"]]
-    assert_true(
-        "Clockwork JSON pattern ids are unique",
-        len(pattern_ids) == len(set(pattern_ids)),
-        f"pattern ids: {pattern_ids}",
-    )
+        items = data.get("patterns") if specialist == "clockwork" else data.get("control_families")
+        assert_true(f"{specialist} JSON catalog is non-empty", bool(items))
+
+        item_ids = [item.get("id") for item in items]
+        assert_true(
+            f"{specialist} JSON ids are unique",
+            len(item_ids) == len(set(item_ids)),
+            f"ids: {item_ids}",
+        )
 
 
 def test_exporter_declares_json_support():
@@ -46,7 +52,7 @@ def test_exporter_declares_json_support():
     )
 
 
-def test_fresh_export_copies_clockwork_json_when_powershell_is_available():
+def test_fresh_export_copies_selective_json_when_powershell_is_available():
     host = resolve_powershell()
     if host is None:
         print("SKIP: PowerShell is unavailable; JSON parse and exporter declaration checks still executed.")
@@ -78,24 +84,29 @@ def test_fresh_export_copies_clockwork_json_when_powershell_is_available():
             check=False,
         )
         assert_true(
-            "Fresh Codex export succeeds with JSON support",
+            "Fresh Codex export succeeds with selective JSON support",
             result.returncode == 0,
             f"stdout:\n{result.stdout}\nstderr:\n{result.stderr}",
         )
 
-        exported = export_root / "skills" / "clockwork" / "patterns" / "architecture-patterns.json"
-        assert_true("Fresh export contains Clockwork JSON catalog", exported.is_file())
+        for specialist, source_path in CATALOGS.items():
+            filename = source_path.name
+            exported = export_root / "skills" / specialist / "patterns" / filename
+            assert_true(f"Fresh export contains {specialist} JSON catalog", exported.is_file())
 
-        source_data = json.loads(SOURCE_JSON.read_text(encoding="utf-8"))
-        exported_data = json.loads(exported.read_text(encoding="utf-8"))
-        assert_true("Fresh export preserves Clockwork JSON content", exported_data == source_data)
+            source_data = json.loads(source_path.read_text(encoding="utf-8"))
+            exported_data = json.loads(exported.read_text(encoding="utf-8"))
+            assert_true(
+                f"Fresh export preserves {specialist} JSON content",
+                exported_data == source_data,
+            )
 
 
 def main():
-    test_clockwork_pattern_catalog_is_valid_json()
+    test_selective_json_catalogs_are_valid()
     test_exporter_declares_json_support()
-    test_fresh_export_copies_clockwork_json_when_powershell_is_available()
-    print("Codex JSON support tests passed.")
+    test_fresh_export_copies_selective_json_when_powershell_is_available()
+    print("Codex selective JSON support tests passed.")
     return 0
 
 
