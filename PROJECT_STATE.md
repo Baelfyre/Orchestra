@@ -7,10 +7,35 @@
 - **Stable Continuation Branch:** `main`
 - **Current Public Release:** `v1.2.0`
 - **Release Status:** `PUBLISHED_VERIFIED` on August 9, 2026
-- **Target Release:** `v1.2.0`
-- **Release-Candidate Metadata:** `1.2.0`
+- **Target Release:** `v1.3.0`
+- **Release-Candidate Metadata:** `1.3.0`
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
+- **v1.3.0 Preparation State:** `PREPARED_NOT_RELEASED`
+- **v1.3.0 Canonical Preparation Commit:** `32257723d6ca72847e4581d8b927c7b14c77039e`
+- **v1.3.0 Canonical Preparation Tree:** `0fdf39920a8c48a779971c8c97690985bb875d42`
 - **Policy Activation State:** `NOT_PERFORMED`
+
+## v1.3.0 Specialist Intelligence Release Preparation
+
+The SK1-SK10 Specialist Knowledge Layer campaign is `MERGED_VERIFIED`. The bounded v1.3.0 package/version preparation was reviewed through PR #255 at signed head `f63daf49add4887d7fbd1b581959ebf8654150db` and Squash-merged with an expected-head guard as canonical commit `32257723d6ca72847e4581d8b927c7b14c77039e`.
+
+Reviewed and canonical trees are exactly `0fdf39920a8c48a779971c8c97690985bb875d42`; the canonical commit has a valid GitHub signature. The exact reviewed head passed all nine observed checks: governance, validate, runtime-tests, native Windows/Ubuntu/macOS, Analyze actions/python, and CodeQL. The current runtime suite is 542 passing tests at 94.33% coverage, including deterministic `1.3.0` parity across all 11 live package/version surfaces.
+
+The first candidate PR #253 is preserved as fail-closed evidence: Stage 1 Strict Governance correctly rejected the 13-file candidate because significant package/test changes lacked a matching changelog update. The corrected tree added the focused changelog entry, restored historical wording, discarded stale validation, and reran the full exact-head matrix through PR #255.
+
+Publication remains separately gated:
+
+```text
+CURRENT_PUBLIC_RELEASE=v1.2.0
+TARGET_VERSION=1.3.0
+TARGET_TAG=v1.3.0
+V1_3_0_RELEASE_STATE=PREPARED_NOT_RELEASED
+V1_3_0_TAG_EXISTS=NO
+V1_3_0_GITHUB_RELEASE_EXISTS=NO
+V1_3_0_PUBLICATION=AWAITING_SEPARATE_AUTHORIZATION
+```
+
+See `docs/releases/v1.3.0-specialist-intelligence-release-candidate.md` and `docs/validation/V1_3_0_RELEASE_READINESS_EVIDENCE.md`.
 
 ## Canonical Capability State
 
@@ -175,6 +200,7 @@ The current bypass list is intentionally retained for repository-operational acc
 - **Pre-R8 Repository Hygiene:** README provenance/host/release state and complete conservative file/branch classifications are `MERGED_VERIFIED` through PR #234 and signed canonical Squash commit `8cca62109b10aa06abaf25fc4c9982a02160bcbf`. No tracked file or branch was deleted.
 - **Release Readiness:** Hygiene-invalidated candidate evidence has been refreshed against canonical `8cca62109b10aa06abaf25fc4c9982a02160bcbf`; behavior, 541 runtime tests at 94.31% coverage, strict governance, packaging, exact-head CI, signature/tree/base verification, and release-boundary reads are green. See `docs/validation/V1_2_0_RELEASE_READINESS_EVIDENCE.md`.
 - **Publication State:** Annotated tag `v1.2.0` and the immutable, non-draft, non-prerelease GitHub Release are `PUBLISHED_VERIFIED` at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`. No deployment, marketplace publication, installed-integration refresh, or policy activation was performed.
+- **v1.3.0 Preparation:** SK1-SK10 are `MERGED_VERIFIED`; package/version preparation is canonical through PR #255 at signed Squash `32257723d6ca72847e4581d8b927c7b14c77039e`, with 542 runtime tests at 94.33% coverage and all 9 observed exact-head checks passing. Publication remains `AWAITING_SEPARATE_AUTHORIZATION`.
 
 ## Local Startup Verification
 

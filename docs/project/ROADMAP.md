@@ -67,6 +67,21 @@ Phases 6B-A through 6C are complete and merged through PR #183. Phase 6D produce
 - [x] Refresh every release-readiness artifact invalidated by R7R or GA implementation and independently verify the final candidate; canonical evidence is recorded in `docs/validation/V1_2_0_RELEASE_READINESS_EVIDENCE.md`.
 - [x] R8: annotated `v1.2.0` tag and immutable [GitHub Release](https://github.com/Baelfyre/Orchestra/releases/tag/v1.2.0) published and independently verified at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`.
 
+## v1.3.0 Specialist Intelligence - Prepared, Publication Gated
+
+- [x] Complete the SK1-SK10 Specialist Knowledge Layer campaign and independently record every phase as `MERGED_VERIFIED`.
+- [x] Select `1.3.0` as the stable minor version for the additive Specialist Intelligence release theme.
+- [x] Normalize all 11 live package/version surfaces to `1.3.0` without changing host maturity or installed integrations.
+- [x] Add deterministic runtime validation for cross-package `1.3.0` version parity.
+- [x] Add source-backed v1.3.0 release-candidate notes covering SK1-SK10 and preserving `MARKDOWN_PRIMARY_JSON_SELECTIVE`.
+- [x] Fail closed on the first signed candidate when Strict Governance detects missing changelog freshness; preserve PR #253 as unmerged evidence and discard its stale validation.
+- [x] Correct changelog freshness without rewriting historical release evidence and rematerialize the exact tree as a signed commit.
+- [x] Validate corrected PR #255 on its exact signed head with governance, behavior, 542 runtime tests at 94.33% coverage, native Windows/Ubuntu/macOS, Analyze actions/python, and CodeQL all passing.
+- [x] Squash-merge PR #255 with expected-head guard and independently verify canonical signed commit `32257723d6ca72847e4581d8b927c7b14c77039e`, parent `650b8bff00d7808bc13fd82a51c7bf0cffa7616e`, and exact reviewed/canonical tree `0fdf39920a8c48a779971c8c97690985bb875d42`.
+- [x] Independently verify that no `v1.3.0` tag or GitHub Release exists after package preparation and that `v1.2.0` remains the public release.
+- [x] Prepare revision-bound release-readiness evidence and stable continuity surfaces.
+- [ ] Publication gate: after separate explicit authorization, reverify live canonical state, create the annotated `v1.3.0` tag, publish `Orchestra v1.3.0: Specialist Intelligence`, and independently verify publication. This item is not authorized by release preparation alone.
+
 ### Current `Protect main` Development Baseline
 
 The current repository policy is a solo-maintainer ruleset with zero required approvals, conversation resolution, Squash-only merge, signed commits, linear history, branch-up-to-date enforcement, restricted deletion, blocked force pushes, and these eight required check contexts:
