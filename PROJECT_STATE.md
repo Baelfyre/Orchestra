@@ -5,37 +5,48 @@
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Stable Continuation Branch:** `main`
-- **Current Public Release:** `v1.2.0`
-- **Release Status:** `PUBLISHED_VERIFIED` on August 9, 2026
+- **Current Public Release:** `v1.3.0`
+- **Release Status:** `PUBLISHED_VERIFIED` on August 12, 2026 UTC / August 13, 2026 Asia/Manila
 - **Target Release:** `v1.3.0`
 - **Release-Candidate Metadata:** `1.3.0`
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
-- **v1.3.0 Preparation State:** `PREPARED_NOT_RELEASED`
-- **v1.3.0 Canonical Preparation Commit:** `32257723d6ca72847e4581d8b927c7b14c77039e`
-- **v1.3.0 Canonical Preparation Tree:** `0fdf39920a8c48a779971c8c97690985bb875d42`
+- **v1.3.0 Release State:** `PUBLISHED_VERIFIED`
+- **v1.3.0 Release Commit:** `3c6155c111981632649a3c3207fac8ac1edcea74`
+- **v1.3.0 Release Tree:** `5ae72f6ab9ddf5284afdc3d8675f67fc23c24281`
+- **v1.3.0 Annotated Tag Object:** `c66afec49990036d9deb2f07e3363cd664e2dcb1` (`UNSIGNED`, exact target verified)
+- **v1.3.0 GitHub Release:** `PUBLISHED_VERIFIED`, immutable, non-draft, non-prerelease
 - **Policy Activation State:** `NOT_PERFORMED`
 
-## v1.3.0 Specialist Intelligence Release Preparation
+## v1.3.0 Specialist Intelligence Publication
 
 The SK1-SK10 Specialist Knowledge Layer campaign is `MERGED_VERIFIED`. The bounded v1.3.0 package/version preparation was reviewed through PR #255 at signed head `f63daf49add4887d7fbd1b581959ebf8654150db` and Squash-merged with an expected-head guard as canonical commit `32257723d6ca72847e4581d8b927c7b14c77039e`.
 
-Reviewed and canonical trees are exactly `0fdf39920a8c48a779971c8c97690985bb875d42`; the canonical commit has a valid GitHub signature. The exact reviewed head passed all nine observed checks: governance, validate, runtime-tests, native Windows/Ubuntu/macOS, Analyze actions/python, and CodeQL. The current runtime suite is 542 passing tests at 94.33% coverage, including deterministic `1.3.0` parity across all 11 live package/version surfaces.
+Revision-bound readiness was reviewed through PR #257 and merged as signed canonical commit `db351796684789987eb5bce85e641ce31c91993b`. README alignment was then reviewed through PR #259 at signed head `b7b8bfeced7c0719558eb95c0797f0685f0c98f2`, passed all nine exact-head checks, and Squash-merged with an expected-head guard as exact release commit `3c6155c111981632649a3c3207fac8ac1edcea74` with tree `5ae72f6ab9ddf5284afdc3d8675f67fc23c24281`.
+
+The current runtime suite is 542 passing tests at 94.33% coverage, including deterministic `1.3.0` parity across all 11 live package/version surfaces.
 
 The first candidate PR #253 is preserved as fail-closed evidence: Stage 1 Strict Governance correctly rejected the 13-file candidate because significant package/test changes lacked a matching changelog update. The corrected tree added the focused changelog entry, restored historical wording, discarded stale validation, and reran the full exact-head matrix through PR #255.
 
-Publication remains separately gated:
+Publication completed under separate explicit maintainer authority:
 
 ```text
-CURRENT_PUBLIC_RELEASE=v1.2.0
+CURRENT_PUBLIC_RELEASE=v1.3.0
 TARGET_VERSION=1.3.0
 TARGET_TAG=v1.3.0
-V1_3_0_RELEASE_STATE=PREPARED_NOT_RELEASED
-V1_3_0_TAG_EXISTS=NO
-V1_3_0_GITHUB_RELEASE_EXISTS=NO
-V1_3_0_PUBLICATION=AWAITING_SEPARATE_AUTHORIZATION
+V1_3_0_RELEASE_STATE=PUBLISHED_VERIFIED
+V1_3_0_TAG_OBJECT=c66afec49990036d9deb2f07e3363cd664e2dcb1
+V1_3_0_TAG_TARGET=3c6155c111981632649a3c3207fac8ac1edcea74
+V1_3_0_TAG_OBJECT_SIGNATURE=UNSIGNED
+V1_3_0_RELEASE_COMMIT_SIGNATURE=VERIFIED_VALID
+V1_3_0_GITHUB_RELEASE_IMMUTABLE=true
+V1_3_0_PUBLICATION=COMPLETE_VERIFIED
 ```
 
-See `docs/releases/v1.3.0-specialist-intelligence-release-candidate.md` and `docs/validation/V1_3_0_RELEASE_READINESS_EVIDENCE.md`.
+The unsigned annotated-tag-object state is recorded accurately and is consistent with the prior v1.2.0 annotated tag pattern. Trust remains anchored to the exact tag target and the GitHub-verified signed release commit.
+
+No deployment, marketplace publication, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite was performed.
+
+See `docs/releases/v1.3.0-specialist-intelligence-release-candidate.md`, `docs/validation/V1_3_0_RELEASE_READINESS_EVIDENCE.md`, and `docs/validation/V1_3_0_PUBLICATION_CLOSEOUT.md`.
 
 ## Canonical Capability State
 
@@ -148,7 +159,7 @@ Autonomous merges follow `docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md
 - **GA-6:** Deterministic adversarial fixtures and focused validator/runtime regressions.
 - **GA-7:** Governance, routing, adapter, project-state, README, roadmap, and release-candidate documentation reconciliation.
 
-No profile creates authority. Claude Code remains `SCAFFOLD_ONLY`; runtime authority, plugin manifests, versions, host fixtures, and installed integrations are unchanged.
+No profile creates authority. Claude Code remains `SCAFFOLD_ONLY`; runtime authority, plugin manifests, versions, host fixtures, and installed integrations are unchanged by the autonomy-profile implementation itself.
 
 ## Current `Protect main` Ruleset
 
@@ -193,14 +204,14 @@ The current bypass list is intentionally retained for repository-operational acc
 - **Ruleset Rule:** Live ruleset drift, non-Squash merge selection, unresolved review threads, or unauthorized bypass use blocks ordinary autonomous merge.
 - **Baseline Rule:** A new phase must not begin from a red canonical `main`.
 - **Post-Merge Rule:** An API response is not completion evidence. For Squash, canonical parent/tree/content/signature evidence and a canonical remote read are required before state advances.
-- **Issue #215:** `CLOSED_VERIFIED` after the published release, Orchestra post-publication PR #236, KB publication-closeout PR #32, and the evidence-backed completion comment were independently verified.
+- **Issue #215:** `CLOSED_VERIFIED` after the published v1.2.0 release, Orchestra post-publication PR #236, KB publication-closeout PR #32, and the evidence-backed completion comment were independently verified.
 - **R6 Repository State:** Release-candidate preparation completed with version surfaces normalized to `1.2.0`.
 - **R7 State:** R7 and R7R are `MERGED_VERIFIED`; PR #230 incident history is preserved forward-only and PR #231 is the signed Squash trust anchor.
 - **Governed Autonomy Modes:** GA-0 through GA-7 are `MERGED_VERIFIED` through PR #232 and signed canonical Squash commit `900f88d7a3ed480ae8b910e6ba204008a72d2784`.
 - **Pre-R8 Repository Hygiene:** README provenance/host/release state and complete conservative file/branch classifications are `MERGED_VERIFIED` through PR #234 and signed canonical Squash commit `8cca62109b10aa06abaf25fc4c9982a02160bcbf`. No tracked file or branch was deleted.
-- **Release Readiness:** Hygiene-invalidated candidate evidence has been refreshed against canonical `8cca62109b10aa06abaf25fc4c9982a02160bcbf`; behavior, 541 runtime tests at 94.31% coverage, strict governance, packaging, exact-head CI, signature/tree/base verification, and release-boundary reads are green. See `docs/validation/V1_2_0_RELEASE_READINESS_EVIDENCE.md`.
-- **Publication State:** Annotated tag `v1.2.0` and the immutable, non-draft, non-prerelease GitHub Release are `PUBLISHED_VERIFIED` at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`. No deployment, marketplace publication, installed-integration refresh, or policy activation was performed.
-- **v1.3.0 Preparation:** SK1-SK10 are `MERGED_VERIFIED`; package/version preparation is canonical through PR #255 at signed Squash `32257723d6ca72847e4581d8b927c7b14c77039e`, with 542 runtime tests at 94.33% coverage and all 9 observed exact-head checks passing. Publication remains `AWAITING_SEPARATE_AUTHORIZATION`.
+- **v1.2.0 Publication State:** Annotated tag `v1.2.0` and the immutable, non-draft, non-prerelease GitHub Release are historical `PUBLISHED_VERIFIED` evidence at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`.
+- **v1.3.0 Preparation:** SK1-SK10 are `MERGED_VERIFIED`; package/version preparation is canonical through PR #255 at signed Squash `32257723d6ca72847e4581d8b927c7b14c77039e`, with 542 runtime tests at 94.33% coverage and all 9 observed exact-head checks passing.
+- **v1.3.0 Publication State:** Annotated tag `v1.3.0` targets exact signed release commit `3c6155c111981632649a3c3207fac8ac1edcea74`; the immutable, non-draft, non-prerelease GitHub Release `Orchestra v1.3.0: Specialist Intelligence` is `PUBLISHED_VERIFIED`. No deployment, marketplace publication, installed-integration refresh, or policy activation was performed.
 
 ## Local Startup Verification
 
