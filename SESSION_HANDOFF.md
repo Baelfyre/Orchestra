@@ -4,22 +4,46 @@
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Current Public Release:** `v1.2.0`
-- **Release-Candidate Metadata:** `v1.2.0`
-- **Target Release:** `v1.2.0`
+- **Release-Candidate Metadata:** `v1.3.0`
+- **Target Release:** `v1.3.0`
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
+- **v1.3.0 Preparation State:** `PREPARED_NOT_RELEASED`
+- **v1.3.0 Canonical Preparation Commit:** `32257723d6ca72847e4581d8b927c7b14c77039e`
 - **Policy Activation:** `NOT_PERFORMED`
+
+## v1.3.0 Specialist Intelligence Continuity
+
+The SK1-SK10 Specialist Knowledge Layer campaign is complete and `MERGED_VERIFIED`. Release-preparation PR #255 reviewed signed head `f63daf49add4887d7fbd1b581959ebf8654150db`, passed all nine observed exact-head checks, and Squash-merged with an expected-head guard as signed canonical commit `32257723d6ca72847e4581d8b927c7b14c77039e`.
+
+Canonical preparation tree `0fdf39920a8c48a779971c8c97690985bb875d42` is exactly equal to the reviewed tree. The exact reviewed head passed 542 runtime tests at 94.33% coverage, including the deterministic version-surface parity regression for all 11 live package/version surfaces.
+
+The earlier PR #253 is intentionally retained as fail-closed evidence. It was closed unmerged after Stage 1 Strict Governance correctly detected missing changelog freshness. Its validation was not reused.
+
+Current publication boundary:
+
+```text
+CURRENT_PUBLIC_RELEASE=v1.2.0
+TARGET_VERSION=1.3.0
+TARGET_TAG=v1.3.0
+V1_3_0_RELEASE_PREPARATION=MERGED_VERIFIED
+V1_3_0_RELEASE_STATE=PREPARED_NOT_RELEASED
+V1_3_0_TAG_EXISTS=NO
+V1_3_0_GITHUB_RELEASE_EXISTS=NO
+V1_3_0_PUBLICATION=AWAITING_SEPARATE_AUTHORIZATION
+```
+
+Do not create the tag or GitHub Release without a separate explicit publication authorization. Before any future publication action, independently re-read live Orchestra `main`, this handoff, the v1.3.0 candidate, and `docs/validation/V1_3_0_RELEASE_READINESS_EVIDENCE.md`, then detect drift.
 
 ## Active README Governance Reconciliation
 
 Canonical Orchestra `main` currently contains accepted README refinement commit `807bda608d65cb10bf65cdf313916d9d0fd62320`. The change is README-only and exact local validation is green, including 541 runtime tests at 94.31% coverage and strict governance with 0 errors and 0 warnings.
 
-The canonical commit is unsigned and the transition occurred directly on `main`, so it is not governance-complete. Preserve the current history and remediate forward-only through a normal exact-head validated PR and signed Squash result.
+The canonical commit is unsigned and the transition occurred directly on `main` rather than through the repository's required pull-request path, so it is not governance-complete. Preserve the current history and remediate forward-only through a normal exact-head validated PR and signed Squash result.
 
 ```text
 PRESERVE_CURRENT_CANONICAL_HISTORY=true
 HISTORY_REWRITE=false
 FORCE_PUSH=false
-KB_SYNC=HELD_UNTIL_ORCHESTRA_REMEDIATION_MERGED_VERIFIED
 ```
 
 Evidence: `docs/validation/README_DIRECT_MAIN_GOVERNANCE_RECONCILIATION_2026_08_10.md`.
@@ -52,15 +76,15 @@ The clean replay then completed R1 through R5B:
 
 ## Historical R6 Release-Candidate Preparation
 
-R6 normalized repository release-candidate metadata to `1.2.0`, consolidated README/setup/current-state/release notes, and prepared exact-head release-readiness evidence. This section records the pre-publication checkpoint; it is not the current release state.
+R6 normalized repository release-candidate metadata to `1.2.0`, consolidated README/setup/current-state/release notes, and prepared exact-head release-readiness evidence. This section records the pre-publication checkpoint; it is not the current release-candidate state.
 
 Historical R6 and current publication state:
 
 ```text
-RELEASE_CANDIDATE_VERSION=1.2.0
+HISTORICAL_RELEASE_CANDIDATE_VERSION=1.2.0
 HISTORICAL_R6_RELEASE_STATE=PREPARED_NOT_RELEASED
 CURRENT_PUBLIC_RELEASE=v1.2.0
-RELEASE_STATE=PUBLISHED_VERIFIED
+V1_2_0_RELEASE_STATE=PUBLISHED_VERIFIED
 POLICY_ACTIVATION=NOT_PERFORMED
 LIVE_INSTALLED_HOST_VALIDATION=VERIFIED_RECONCILED_LOCALLY
 ```
@@ -73,7 +97,7 @@ R7 live-host validation and repository reconciliation are `MERGED_VERIFIED`. PR 
 
 ## Governed Autonomy Modes
 
-GA-0 concluded `NO_DUPLICATE_AUTHORITY_MODEL`. GA-1 through GA-7 are `MERGED_VERIFIED` through PR #232 and signed Squash commit `900f88d7a3ed480ae8b910e6ba204008a72d2784`. Exact-head checks and canonical release-readiness validation are green. Runtime authority, plugin manifests, versions, the R7 fixture/validator, and installed integrations remain unchanged.
+GA-0 concluded `NO_DUPLICATE_AUTHORITY_MODEL`. GA-1 through GA-7 are `MERGED_VERIFIED` through PR #232 and signed Squash commit `900f88d7a3ed480ae8b910e6ba204008a72d2784`. Exact-head checks and canonical release-readiness validation are green. Runtime authority and installed integrations remain unchanged.
 
 ## Historical Pre-R8 Repository Hygiene and Publication
 
@@ -101,14 +125,10 @@ git pull --ff-only origin main
 ## Remaining Sequence
 
 ```text
-R5   merged - autonomous merge-readiness hardening
-R5B  merged - delegated-governance state reconciliation
-R6   v1.2.0 release-candidate repository preparation
-R7   live installed Codex/Antigravity/Claude compatibility evidence - merged verified
-R7R  signed Squash-aware merge-governance remediation - merged verified
-GA-0..GA-7  governed autonomy profiles - merged verified
-R7H  pre-R8 repository hygiene - merged verified; release evidence refreshed
-R8   annotated tag and GitHub Release - published verified
+SK1..SK10  specialist knowledge campaign - merged verified
+V1.3-PREP   package/version preparation and exact-head validation - merged verified
+V1.3-READY  revision-bound readiness and continuity reconciliation - current closeout
+V1.3-PUBLISH  annotated tag and GitHub Release - awaiting separate authorization
 ```
 
-Historical first-run failures remain preserved as audit evidence in the KB and archive branch. They must not be silently rewritten or deleted during cleanup.
+Historical first-run failures remain preserved as audit evidence. They must not be silently rewritten or deleted during cleanup.
