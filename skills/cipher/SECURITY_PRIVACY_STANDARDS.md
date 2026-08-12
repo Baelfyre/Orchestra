@@ -1,75 +1,113 @@
 # Security and Privacy Standards
 
-Use these concepts as defensive review guidance. This skill does not certify compliance with ISO, OWASP, NIST, CIS, GDPR, or any other framework or law.
+Use these sources as defensive review anchors. Cipher does not certify compliance with OWASP, NIST, ISO, CIS, GDPR, or any other standard, framework, contract, policy, or law.
 
-## Application Security Review
-- Define scope, assets, trust boundaries, entry points, data flows, dependencies, and deployment context.
-- Validate findings against reachable code and existing controls.
-- Prioritize by impact, likelihood, exposure, and confidence.
+## Source Hierarchy
+
+1. Repository evidence and explicit project requirements.
+2. Applicable protocol or platform specification.
+3. Current primary security standard or taxonomy.
+4. Secondary guidance only when primary material is insufficient.
+
+A generic checklist never overrides repository evidence or a protocol's normative requirements.
+
+## OWASP ASVS
+
+The current stable OWASP Application Security Verification Standard is ASVS 5.0.0 at the time of this SK3 update.
+
+Use ASVS to:
+- frame technical verification objectives;
+- identify missing control classes;
+- communicate a specific verification requirement when the mapping is supported.
+
+When citing a requirement identifier, include its ASVS version, for example `v5.0.0-x.y.z`, because identifiers can move between versions.
+
+Do not state that an application is "ASVS compliant" unless the required verification scope and evidence actually support that conclusion.
+
+Reference:
+- https://owasp.org/www-project-application-security-verification-standard/
+
+## OWASP API Security Top 10
+
+Use the 2023 API Security Top 10 as an awareness taxonomy for API-specific review, including:
+- object-level authorization;
+- authentication;
+- object-property authorization;
+- resource consumption;
+- function-level authorization;
+- sensitive business flows;
+- SSRF;
+- security misconfiguration;
+- inventory/version exposure;
+- unsafe consumption of third-party APIs.
+
+A Top 10 category is not proof of a vulnerability and is not a complete API security specification.
+
+Reference:
+- https://owasp.org/API-Security/editions/2023/en/0x11-t10/
+
+## MITRE CWE
+
+Use CWE to name a demonstrated or strongly supported weakness at the most appropriate level.
+
+Prefer a specific root-cause mapping over a generic umbrella category when evidence supports it. Do not choose a CWE solely because its title resembles a symptom.
+
+The current CWE Top 25 can inform review attention, but ranking is not project-specific severity.
+
+References:
+- https://cwe.mitre.org/
+- https://cwe.mitre.org/top25/
+
+## OAuth 2.0 Security
+
+Use RFC 9700 / BCP 240 as the current OAuth 2.0 security best-current-practice anchor.
+
+Review the actual client type and flow before applying protocol guidance. Pay particular attention to redirect-based flows, authorization-code handling, PKCE where applicable, refresh-token protections, sender-constrained or replay-resistant mechanisms when required by the deployment model, and deprecated/insecure flow patterns identified by the BCP.
+
+Reference:
+- https://datatracker.ietf.org/doc/rfc9700/
+
+## JWT
+
+When JSON Web Tokens are actually used, RFC 8725 is the JWT security BCP anchor.
+
+Review intended token type, accepted algorithms, issuer, audience, signature verification, key selection, expiry/time claims and cross-protocol confusion risks according to the application's token model.
+
+Reference:
+- https://datatracker.ietf.org/doc/rfc8725/
+
+## OpenID Connect
+
+When OIDC is used, distinguish authentication/identity claims from OAuth authorization. Review nonce/state/redirect/issuer/audience and token-use boundaries according to the actual flow and implementation.
+
+Reference:
+- https://openid.net/specs/openid-connect-core-1_0.html
+
+## NIST Secure Software Development
+
+Use NIST SSDF as process guidance for secure software-development practices, not as proof that an individual control is implemented.
+
+Reference:
+- https://csrc.nist.gov/pubs/sp/800/218/final
 
 ## Privacy Risk Review
-- Identify personal and sensitive data, purpose, actors, flows, storage, sharing, retention, and deletion behavior.
-- Minimize data and access while preserving the stated objective.
-- Treat legal basis and rights as documentation questions for qualified review, not legal conclusions.
 
-## Secure SDLC and Threat Modeling
-- Integrate security requirements, design review, implementation safeguards, testing, dependency controls, release gates, and response ownership.
-- Model assets, boundaries, entry points, actors, abuse cases, mitigations, and residual risk at a defensive level.
+Cipher may review technical privacy exposure:
+- collection and data minimization;
+- access and visibility;
+- transport/storage exposure;
+- logging and telemetry;
+- retention/deletion implementation;
+- sharing and third-party data flow;
+- backups, exports and support access.
 
-## Authentication
-- Review identity proofing assumptions, credential storage, recovery, multifactor support, rate controls, error messages, and auditability.
-- Prevent account discovery and unsafe recovery behavior where applicable.
+Legal basis, statutory rights, jurisdictional obligations, contract interpretation and compliance sufficiency belong to The Governor through Conductor.
 
-## Authorization and RBAC
-- Enforce access server-side at every protected operation and object boundary.
-- Default deny, minimize privilege, separate roles from ownership checks, and test horizontal and vertical access decisions defensively.
+## Mapping Rules
 
-## Session Handling
-- Review token generation, storage, transport, rotation, expiry, revocation, logout, concurrent sessions, and cross-site protections where relevant.
-
-## Input Validation and Output Encoding
-- Validate untrusted input by type, format, range, size, and business rule at the trust boundary.
-- Encode output for its destination context and prefer safe framework APIs.
-- Do not rely on client-side checks for server-side protection.
-
-## Secrets Management
-- Keep credentials out of source, logs, artifacts, client bundles, and documentation.
-- Use approved secret storage, scoped access, rotation, revocation, and incident procedures.
-
-## Sensitive Data Handling
-- Limit collection, access, copies, exports, logging, and retention.
-- Protect data in transit and at rest according to risk and environment.
-- Define deletion, backup, and recovery behavior.
-
-## Dependency and Supply Chain Security
-- Use trusted sources, lockfiles, reviewable updates, provenance evidence when available, scoped build permissions, and timely vulnerability triage.
-- Validate scanner findings and avoid automatic trust in scores.
-
-## Logging and Auditability
-- Record security-relevant actions with actor, target, time, result, and correlation context when required.
-- Exclude secrets and unnecessary personal data.
-- Protect integrity, access, retention, and alerting paths.
-
-## Data Minimization and Retention
-- Collect and retain only data needed for a documented purpose.
-- Define retention, deletion, backup expiry, archive access, and legal or policy exceptions through qualified governance.
-
-## Public Reference Links
-
-Use these clean URLs as learning anchors. Do not reproduce restricted standard text.
-
-- https://owasp.org/www-project-application-security-verification-standard/
-- https://owasp.org/www-project-web-security-testing-guide/
-- https://owasp.org/www-project-top-ten/
-- https://owasp.org/API-Security/editions/2023/en/0x11-t10/
-- https://csrc.nist.gov/pubs/sp/800/218/final
-- https://www.nist.gov/cyberframework
-- https://www.nist.gov/privacy-framework
-- https://www.iso.org/standard/27001
-- https://www.iso.org/standard/27701
-- https://www.cisecurity.org/controls
-- https://scorecard.dev/
-- https://slsa.dev/
-- https://gdpr-info.eu/art-5-gdpr/
-
-Describe reviews as aligned with general security and privacy principles unless formal audit evidence supports a stronger claim.
+- Map only when the evidence supports the mapping.
+- Record the mapping as contextual evidence, not authority.
+- Keep version-specific identifiers versioned.
+- Separate weakness taxonomy from severity.
+- Separate technical security review from legal/compliance conclusions.
+- Prefer primary-source links over copied restricted standard text.
