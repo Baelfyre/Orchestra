@@ -11,7 +11,7 @@
     <a href="CHANGELOG.md">Changelog</a>
   </p>
   <p>
-    <img src="https://img.shields.io/badge/public_release-v1.2.0-blue" alt="Current public release v1.2.0" />
+    <img src="https://img.shields.io/badge/package_version-v1.3.0-blue" alt="Repository package version v1.3.0" />
     <a href="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml">
       <img src="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml/badge.svg" alt="Repository validation status" />
     </a>
@@ -79,9 +79,36 @@ flowchart TD
 
 Accessible summary: a request supplies project context and selects separate risk, progression, and governance-profile settings. Trusted composition and the effective-authority intersection run before Conductor routes work. Single-owner work goes directly to its specialist; material multi-domain work first requires current Tuner coordination. Validation failure returns to the owning boundary. Current evidence goes to Arbiter, which may continue or remediate inside existing authority, wait for evidence or capacity, escalate to a human, or stop safely.
 
-## v1.2.0 Technical Scope
+## v1.3.0 Specialist Intelligence
 
-v1.2.0 extends Orchestra's governed runtime, delegated progression, specialist coordination, validation, merge-readiness, and host-continuity contracts while preserving explicit authority boundaries.
+v1.3.0 deepens the knowledge available to Orchestra's existing specialists without broadening their authority or redesigning the routing and runtime architecture by default. The completed SK1 through SK10 campaign adds progressive-disclosure references, worked examples, stronger evidence discipline, selective machine-readable catalogs where deterministic parsing helps, and adversarial evaluation of routing and coordination boundaries.
+
+- **Ponytail:** deeper stack discovery, language/runtime references, build and test tooling, implementation foundations, and worked implementation patterns.
+- **Clockwork:** modular and distributed architecture, concurrency ownership, caching, API compatibility/versioning, multi-tenancy, jobs, event-driven flows, outbox/inbox placement, and durable workflow patterns.
+- **Cipher:** defensive threat modeling, authentication/session/OAuth/OIDC boundaries, authorization and tenant controls, web/API security, secrets and cryptographic misuse, framework-aware review, and security-tool interpretation.
+- **Cloak:** semantic HTML, ARIA, keyboard and focus behavior, responsive CSS containment, forms and validation recovery, design tokens, component states, frontend routing, and component-boundary literacy.
+- **Dagger:** safe non-production workload, stress, soak, concurrency, resource-pressure, bounded fault-injection, retry-amplification, recovery-measurement, RTO/RPO, and resilience-tooling guidance while preserving simulation and authorization guardrails.
+- **Chronicler:** database dialect and ORM/migration semantics, transaction isolation, MVCC, locking/deadlock analysis, tenant isolation, query-plan evidence, and expand-migrate-contract schema-change planning.
+- **Overseer:** unit/integration/contract/E2E strategy, property and mutation testing, flaky-test diagnosis, deterministic isolation, coverage interpretation, CI/browser/device matrices, performance acceptance, and test-data lifecycle management.
+- **Scribe:** Markdown and technical-documentation syntax, changelog/ADR conventions, API/reference documentation, versioned documentation, deprecation/sunset records, source-backed claims, and link/anchor freshness.
+- **The Steward and The Governor:** stronger requirements traceability, acceptance criteria, scope/change control, authoritative-source acquisition, jurisdiction/effective-date verification, license/privacy/IP/compliance review frameworks, and explicit human-escalation boundaries.
+- **Weaver, Conductor, The Tuner, and Arbiter:** adversarial hardening for model/source traceability, routing ownership, contradiction and invalidation, specialist re-entry, handoff identity, continuity, and protected-action boundaries.
+
+The campaign uses `MARKDOWN_PRIMARY_JSON_SELECTIVE`: prose-heavy specialist knowledge remains Markdown-first, while JSON is used selectively for schemas, deterministic catalogs, fixtures, and metadata that materially benefit from structured parsing.
+
+Stronger specialist knowledge does not create broader authority:
+
+~~~text
+specialist_knowledge_depth != authority_expansion
+validation_success != authority_grant
+mergeability != publication_authority
+~~~
+
+See the [v1.3.0 release candidate](docs/releases/v1.3.0-specialist-intelligence-release-candidate.md) and [v1.3.0 release-readiness evidence](docs/validation/V1_3_0_RELEASE_READINESS_EVIDENCE.md) for the completed campaign and preparation record.
+
+## v1.2.0 Governed Runtime Baseline
+
+v1.2.0 established the governed-runtime baseline that v1.3.0 builds on: delegated progression, specialist coordination, validation, merge-readiness, and host-continuity contracts with explicit authority boundaries.
 
 - **Governed autonomy:** Human-Governed, Semi-Autonomous, and Full Autonomous profiles control permitted continuation and pause behavior. Effective authority remains the intersection of the selected profile, explicit grant, repository or project policy, host capability, current phase, and current evidence.
 - **Delegated execution:** approved phase envelopes use six explicit Arbiter dispositions for continuation, bounded remediation, evidence waits, capacity waits, human escalation, and safe termination.
@@ -158,20 +185,20 @@ The Tuner's coordination runtime records specialist-owned contracts, dependencie
 
 | Role | Primary responsibility | Key boundary |
 |---|---|---|
-| The Steward | Business alignment, scope, requirements, acceptance criteria | Does not decide legal or technical implementation details |
-| The Governor | Legal, privacy-obligation, IP, licensing, compliance governance | Does not provide legal advice or grant runtime authority |
+| The Steward | Business alignment, requirements traceability, scope, change control, acceptance criteria | Does not decide legal or technical implementation details |
+| The Governor | Legal/compliance governance, source/applicability verification, privacy-obligation, IP and licensing review | Does not provide legal advice or grant runtime authority |
 | Conductor | Routing and ordered specialist handoffs | Routes work but does not implement it |
-| The Tuner | Cross-specialist contract assembly, contradictions, invalidation, re-entry recommendations | Cannot route, implement, validate itself, or grant authority |
-| Clockwork | Architecture, layering, code structure | Does not implement |
-| Cloak | UI/UX, accessibility, responsive behavior | Does not own backend policy |
-| Chronicler | Database and persistence semantics | Does not own UI or general QA |
-| Ponytail | Minimal, reversible implementation | Requires upstream decisions to be settled |
-| Cipher | Defensive security, access control, secrets, privacy controls | No offensive testing or legal decisions |
-| Overseer | QA strategy, validation gates, release readiness | Does not write application code |
-| Scribe | Source-backed documentation and knowledge transfer | Does not invent system behavior |
-| Weaver | Mermaid and PlantUML visual models | Does not invent architecture |
+| The Tuner | Cross-specialist contract assembly, contradictions, invalidation, and re-entry recommendations | Cannot route, implement, validate itself, or grant authority |
+| Clockwork | Architecture, service boundaries, distributed patterns, concurrency, API compatibility, and structural design | Does not implement |
+| Cloak | UI/UX, accessibility, responsive behavior, forms, design states, and frontend interaction boundaries | Does not own backend policy |
+| Chronicler | Database dialects, transactions, persistence semantics, migrations, query plans, and tenant isolation | Does not own UI or general QA |
+| Ponytail | Stack-aware minimal, reversible implementation and implementation-tooling execution | Requires upstream decisions to be settled |
+| Cipher | Defensive security, threat modeling, access control, sessions, secrets, privacy controls, and security-tool interpretation | No offensive testing or legal decisions |
+| Overseer | QA strategy, test architecture, evidence quality, coverage interpretation, CI matrices, and release readiness | Does not write application code |
+| Scribe | Source-backed technical documentation, versioned knowledge, changelog/ADR discipline, and knowledge transfer | Does not invent system behavior |
+| Weaver | Mermaid and PlantUML visual models with source traceability | Does not invent architecture |
 | Arbiter | Continuity, evidence freshness, transition and merge readiness | Does not override specialist-owned decisions |
-| Dagger | Guarded destructive-path simulation and resilience review | Simulation only unless separately authorized with guardrails |
+| Dagger | Guarded resilience review and destructive-path simulation in explicitly authorized non-production boundaries | Simulation only unless separately authorized with guardrails |
 
 Artificer remains a maintainer-only internal repository-evolution surface. It is not publicly routable and does not execute external code, implement its own findings, or approve its own recommendations. See the governed [Pattern Catalog](docs/internal/PATTERN_CATALOG.md).
 
@@ -205,7 +232,7 @@ Use the host-native path:
 - Antigravity: run `agy plugin install https://github.com/Baelfyre/Orchestra`.
 - Manual or scaffold-only hosts: follow the exact host boundary in the [Installation Guide](docs/setup/INSTALLATION.md).
 
-Repository manifests identify the current published release as `1.2.0`. See the Installation Guide for supported installation paths and host-maturity boundaries.
+Repository manifests identify package version `1.3.0`. GitHub Release publication, marketplace publication, and installed-integration refresh are separate governed actions and are not implied by the package version. Check the repository's Releases page for the currently published GitHub release, and see the Installation Guide for supported installation paths and host-maturity boundaries.
 
 ## Quick Start
 
@@ -252,15 +279,23 @@ The validation chain covers:
 
 For autonomous or delegated merges, Orchestra additionally requires the fail-closed [Autonomous Merge Readiness Protocol](docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md): a green canonical baseline, exact-head evidence, complete successful required checks, expected-head merge guard where supported, and independent post-merge verification.
 
-## Release Status
+## Release Lineage
 
-### Current public release: v1.2.0
+### v1.3.0 Specialist Intelligence
 
-`v1.2.0` is published from annotated tag `v1.2.0` at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`. Phase C repository reliability, accepted R7 live installed-host evidence, the signed Squash-aware R7R remediation, Phase D overlap reconciliation, R5/R5B merge-readiness hardening, Governed Autonomy Modes, pre-R8 repository hygiene, and final release readiness are complete and independently verified.
+Repository package/version surfaces are aligned at `1.3.0` for the Specialist Intelligence release. The release packages the completed SK1 through SK10 specialist-knowledge campaign while preserving Orchestra's established governance, routing, Tuner coordination, validation, Arbiter, and authority boundaries.
 
-Publication did not perform deployment, marketplace graduation, installed-integration refresh, or policy activation.
+Package version, validation success, or mergeability does not independently establish public-release state. GitHub Release publication is a separate governed transition. See the repository's Releases page for the current publication state.
 
-See the [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration.md) and the published [`v1.2.0` GitHub Release](https://github.com/Baelfyre/Orchestra/releases/tag/v1.2.0). The previous [`v1.1.2` release](https://github.com/Baelfyre/Orchestra/releases/tag/v1.1.2) remains historical release evidence.
+Release preparation and revision-bound evidence are recorded in the [v1.3.0 release candidate](docs/releases/v1.3.0-specialist-intelligence-release-candidate.md) and [v1.3.0 release-readiness evidence](docs/validation/V1_3_0_RELEASE_READINESS_EVIDENCE.md).
+
+### v1.2.0 Governed Orchestration
+
+`v1.2.0` established the governed-orchestration baseline from annotated tag `v1.2.0` at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`. Phase C repository reliability, accepted R7 live installed-host evidence, the signed Squash-aware R7R remediation, Phase D overlap reconciliation, R5/R5B merge-readiness hardening, Governed Autonomy Modes, pre-R8 repository hygiene, and final release readiness were completed and independently verified.
+
+That publication did not perform deployment, marketplace graduation, installed-integration refresh, or policy activation.
+
+See the [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration.md). The previous v1.1.2 release remains historical release evidence.
 
 ## Honest Limitations
 
@@ -306,6 +341,8 @@ See the [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration.md) a
 
 ### Release and maintainers
 
+- [v1.3.0 Release Candidate](docs/releases/v1.3.0-specialist-intelligence-release-candidate.md)
+- [v1.3.0 Release Readiness Evidence](docs/validation/V1_3_0_RELEASE_READINESS_EVIDENCE.md)
 - [v1.2.0 Release Notes](docs/releases/v1.2.0-governed-orchestration.md)
 - [v1.1.2 Release Notes](docs/releases/v1.1.2-trusted-runtime-authority.md)
 - [Contributing](docs/CONTRIBUTING.md)
