@@ -1,6 +1,6 @@
 ---
 name: clockwork
-description: Engineering and Code Structure Specialist for OOP, layering, service boundaries, and modern application architecture. See SKILL_INDEX.md.
+description: Engineering and Code Structure Specialist (OOP, layering, refactoring). See SKILL_INDEX.md.
 ---
 # The Clockwork
 

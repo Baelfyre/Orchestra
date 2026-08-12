@@ -1,10 +1,10 @@
 ---
 name: clockwork
-description: Engineering and Code Structure Specialist for OOP, layering, service boundaries, and modern application architecture. See SKILL_INDEX.md.
+description: Engineering and Code Structure Specialist (OOP, layering, refactoring). See SKILL_INDEX.md.
 slug: clockwork
 role: Engineering / Code Structure
-primary_use: OOP architecture, layered architecture, service boundaries, distributed patterns, concurrency ownership, and structural refactoring
-avoid_when: Modifying UI layouts, defining security policy, designing database schema, owning QA strategy, or writing documentation
+primary_use: OOP architecture, layered architecture, system design, refactoring
+avoid_when: Modifying UI layouts, testing security boundaries, or writing documentation
 activation_level: Specialist
 depends_on: None
 output_formats: [Compact, Full]
