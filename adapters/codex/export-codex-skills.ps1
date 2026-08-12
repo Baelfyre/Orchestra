@@ -116,16 +116,16 @@ foreach ($skill in $skills) {
     # 1. Parse and rewrite SKILL.md
     $sourceSkillFile = Join-Path $sourceDir "SKILL.md"
     $targetSkillFile = Join-Path $targetDir "SKILL.md"
-    
+
     $content = Read-Utf8TextFile -Path $sourceSkillFile
-    
+
     # Extract name and description using Regex
     $nameMatch = [regex]::Match($content, '(?m)^name:\s*(.+)$')
     $descMatch = [regex]::Match($content, '(?m)^description:\s*(.+)$')
-    
+
     $name = if ($nameMatch.Success) { $nameMatch.Groups[1].Value } else { $skill }
     $desc = if ($descMatch.Success) { $descMatch.Groups[1].Value } else { "" }
-    
+
     # Extract the body (everything after the second ---)
     $bodyMatch = [regex]::Match($content, '(?s)^---.*?---(.*)$')
     $body = if ($bodyMatch.Success) { $bodyMatch.Groups[1].Value } else { "" }
@@ -152,8 +152,12 @@ description: $desc
 
     Write-PortableReferenceContext -Skill $skill -TargetDir $targetDir
 
-    # 2. Copy Markdown support files referenced by progressive disclosure links.
-    $supportFiles = Get-ChildItem -Path $sourceDir -Recurse -File -Filter "*.md" | Where-Object { $_.Name -ne "SKILL.md" }
+    # 2. Copy progressive-disclosure support files that are portable text knowledge.
+    # Markdown remains primary. JSON is copied selectively for machine-readable
+    # metadata, schemas, indexes, fixtures, or deterministic capability data.
+    $supportFiles = Get-ChildItem -Path $sourceDir -Recurse -File | Where-Object {
+        $_.Name -ne "SKILL.md" -and $_.Extension.ToLowerInvariant() -in @(".md", ".json")
+    }
     foreach ($supportFile in $supportFiles) {
         $relativePath = $supportFile.FullName.Substring($sourceDir.Length).TrimStart('\', '/')
         $targetSupportFile = Join-Path $targetDir $relativePath
