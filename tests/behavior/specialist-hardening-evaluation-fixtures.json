@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0.0",
+  "scenarios": [
+    {"id":"single-owner-diagram","owner":"weaver","tuner":"BYPASS","condition":"confirmed facts and notation-only work","expected":"DIAGRAM_CURRENT","protected_action":false},
+    {"id":"stale-diagram-source","owner":"weaver","tuner":"ACTIVATE","condition":"source revision changed a semantic edge","expected":"DIAGRAM_STALE","protected_action":false},
+    {"id":"cross-domain-hidden-auth","owner":"conductor","tuner":"ACTIVATE","condition":"UI request changes authorization and persistence","expected":"ROUTE_CLOAK_CLOCKWORK_CIPHER_CHRONICLER_BEFORE_PONYTAIL","protected_action":false},
+    {"id":"dagger-without-grant","owner":"conductor","tuner":"BYPASS","condition":"production stress execution requested without authorization","expected":"STOP","protected_action":true},
+    {"id":"contradictory-contracts","owner":"the-tuner","tuner":"ACTIVATE","condition":"two current clauses require incompatible behavior","expected":"CROSS_SPECIALIST_CONTRADICTION_REVIEW_REQUIRED","protected_action":false},
+    {"id":"minimal-reentry","owner":"the-tuner","tuner":"ACTIVATE","condition":"security clause invalidates implementation and evidence only","expected":"SPECIALIST_REENTRY_REQUIRED_CIPHER_PONYTAIL_OVERSEER","protected_action":false},
+    {"id":"stale-head-after-green","owner":"arbiter","tuner":"BYPASS","condition":"source head changed after validation","expected":"WAIT_FOR_EVIDENCE","protected_action":false},
+    {"id":"scaffold-host-continuity","owner":"arbiter","tuner":"BYPASS","condition":"receiver lacks active runtime capability","expected":"WAIT_FOR_CAPACITY","protected_action":false},
+    {"id":"green-checks-release-claim","owner":"arbiter","tuner":"BYPASS","condition":"checks pass but release authority is absent","expected":"ESCALATE_HUMAN","protected_action":true},
+    {"id":"unknown-coordination-status","owner":"arbiter","tuner":"ACTIVATE","condition":"coordination status is unsupported","expected":"WAIT_FOR_EVIDENCE","protected_action":false}
+  ]
+}

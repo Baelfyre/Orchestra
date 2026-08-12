@@ -127,6 +127,8 @@ If asked to implement, route, approve governance, validate evidence, issue a tra
 
 Use [OUTPUT_FORMATS.md](OUTPUT_FORMATS.md).
 
+For contradiction, invalidation, and minimal re-entry evaluation, load `COORDINATION_EVALUATION_GUIDE.md`. The guide does not add coordination authority.
+
 ## Local safety
 
 Do not stage, commit, push, create a pull request, merge, release, deploy, modify external systems, or write persistent runtime state without separate explicit authorization.

@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.2.0 Specialist Knowledge Layer - SK10 Hardening and Evaluation - Pending
+
+- Added evidence-driven hardening guides for Weaver model/source traceability, Conductor routing evaluation, The Tuner contradiction/invalidation coordination, and Arbiter continuity/handoff evaluation.
+- Added a selective JSON adversarial scenario catalog with deterministic regression coverage for routing, ownership, contradiction, re-entry, stale diagrams, handoff identity, and protected-action boundaries.
+- Preserved existing orchestration and governance contracts; no routing, authority, runtime, manifest, policy, release, or deployment redesign was introduced.
+- No release/tag publication, deployment/production mutation, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK10.
+
 ## Post-v1.2.0 Specialist Knowledge Layer - SK9 The Steward and The Governor - Pending
 
 - Deepened The Steward's requirements-traceability, acceptance-criteria, scope/change-control, and business/SDLC alignment knowledge without changing governance authority or routing.

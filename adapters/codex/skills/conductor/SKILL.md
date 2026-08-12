@@ -44,7 +44,7 @@ Conductor remains router. On stale or incomplete change identity, invalidation, 
 
 ## Synchronicity routing
 
-Use the Tuner packet. One owner/finding; Overseer evidence; Arbiter continuation. Missing/stale/contradicted/scope-drift blocks.
+Use `ROUTING_EVALUATION_GUIDE.md`. Tuner coordinates; Overseer validates; Arbiter gates. Gaps block.
 
 ## Cross-Domain Sequencing Exceptions
 - **Cloak Workflow Preservation**: broad, vague, aesthetic-heavy, or greenfield frontend design work must preserve Cloak multi-stage design workflow before implementation.
