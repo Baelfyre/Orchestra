@@ -188,7 +188,7 @@ The first autonomous finalization experiment was rolled back to the verified rec
 - R1 / PR #223 - Spec Kitty Phase 3 and roadmap reconciliation.
 - R2 / PR #224 - backend-to-persistence and cross-module logical-flow integrity.
 - R3 / PR #225 - delegated Phase C repository host-reliability contract after bounded fixture remediation and a fully fresh exact-head matrix.
-- R4 / PR #226 - Delegated Phase D runtime-overlap reconciliation with no duplicate runtime extension required.
+- R4 / PR #226 - Phase D runtime-overlap reconciliation with no duplicate runtime extension required.
 - R5 / PR #227 - autonomous merge-readiness hardening.
 - R5B / PR #228 - delegated-governance current-state reconciliation, merged at `fbe4532ba2083feaa7ed9fcda2988843f1237a78` and independently verified on canonical `main`.
 - R6 - `v1.2.0` release-candidate metadata, public documentation, changelog, and release-note preparation.
