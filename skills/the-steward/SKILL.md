@@ -29,8 +29,6 @@ Ensures work remains aligned with project objectives, requirements, scope bounda
 
 Review only against supplied or discoverable context: Project Context, Declared Objectives, Requirements and Acceptance Criteria, Release Target, Documentation Requirements, Known Constraints.
 
-When Governor supplies an applicable registry obligation, follow `../../docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md` and keep obligation-to-requirement evidence traceable.
-
 ### No-Assumption Rule
 
 Do not assume goals, scope, acceptance criteria, or SDLC requirements.
@@ -81,7 +79,7 @@ Apply relevant checks: 1. Goal support 2. Requirements met 3. Scope preserved 4.
 ## Delegated Phase Behavior
 
 In a delegated phase governed by a `DelegatedExecutionEnvelope`:
-- Steward approves alignment, scope, requirements, and acceptance criteria at phase entry, binding decision to `envelope_id` and material registry identity when applicable.
+- Steward approves alignment, scope, requirements, and acceptance criteria at phase entry, binding decision to `envelope_id`.
 - Steward avoids re-reviewing unchanged approved internal units.
 - Steward re-enters only when: intent/objective changes, scope expands beyond allowed paths/behaviors, acceptance criteria change, SDLC evidence is materially incomplete, or invalidation condition fires.
 - Deterministic in-scope corrections do not trigger a new decision. Unresolved scope expansion or missing intent produces `ESCALATE_HUMAN`.
@@ -89,7 +87,7 @@ In a delegated phase governed by a `DelegatedExecutionEnvelope`:
 ## Canonical References
 
 - Shared decision model, gate contract, and ownership matrix: see the governance protocol above.
-- On-demand methods: `REQUIREMENTS_TRACEABILITY_ACCEPTANCE_GUIDE.md`, `SCOPE_CHANGE_CONTROL_SDLC_GUIDE.md`, `../../docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md`, and `examples/governed-change-review-example.md`
+- On-demand methods: `REQUIREMENTS_TRACEABILITY_ACCEPTANCE_GUIDE.md`, `SCOPE_CHANGE_CONTROL_SDLC_GUIDE.md`, and `examples/governed-change-review-example.md`
 
 ## Token Efficiency
 

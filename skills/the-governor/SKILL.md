@@ -31,8 +31,6 @@ Ensures work remains within legal, regulatory, privacy, IP, licensing, and relea
 
 Review only against supplied or discoverable context: Project Context, Declared Objectives, Requirements and Acceptance Criteria, Release Target, Data Use, Jurisdiction or Applicable Rules, Dependencies/Assets, Documentation Requirements, Known Constraints.
 
-When compliance-registry evidence is material, follow `../../docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md` and bind the decision to current registry and source identity.
-
 ### No-Assumption Rule
 
 Do not assume jurisdiction, legal obligations, privacy requirements, licensing status, or compliance frameworks.
@@ -97,7 +95,7 @@ Set `human_review_required: true` when:
 ## Delegated Phase Behavior
 
 In a delegated phase governed by a `DelegatedExecutionEnvelope`:
-- Governor reviews legal, privacy, licensing, IP, compliance, and release boundaries at phase entry, binding decision to `envelope_id` and any material registry identity.
+- Governor reviews legal, privacy, licensing, IP, compliance, and release boundaries at phase entry, binding decision to `envelope_id`.
 - Governor avoids repeated review when internal units do not alter approved risk posture.
 - Domain membership alone (e.g. legal, financial, health, employment, or education domains) does not interrupt an otherwise authorized internal unit.
 - Governor sets `human_review_required: true` only when material legal/regulatory interpretation, privacy obligations, licensing, or IP decisions require human authority (`ESCALATE_HUMAN`).
@@ -106,7 +104,7 @@ In a delegated phase governed by a `DelegatedExecutionEnvelope`:
 ## Canonical References
 
 - Shared decision model, gate contract, and ownership matrix: see the governance protocol above.
-- On-demand methods: `AUTHORITATIVE_SOURCE_VERIFICATION_GUIDE.md`, `LICENSE_PRIVACY_IP_COMPLIANCE_GUIDE.md`, `HUMAN_ESCALATION_BOUNDARIES_GUIDE.md`, `../../docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md`, and `examples/governed-change-review-example.md`
+- On-demand methods: `AUTHORITATIVE_SOURCE_VERIFICATION_GUIDE.md`, `LICENSE_PRIVACY_IP_COMPLIANCE_GUIDE.md`, `HUMAN_ESCALATION_BOUNDARIES_GUIDE.md`, and `examples/governed-change-review-example.md`
 
 ## Token Efficiency
 
