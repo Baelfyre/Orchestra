@@ -29,6 +29,8 @@ Ensures work remains aligned with project objectives, requirements, scope bounda
 
 Review only against supplied or discoverable context: Project Context, Declared Objectives, Requirements and Acceptance Criteria, Release Target, Documentation Requirements, Known Constraints.
 
+When Governor supplies an applicable registry obligation, follow `../../docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md` and keep obligation-to-requirement evidence traceable.
+
 ### No-Assumption Rule
 
 Do not assume goals, scope, acceptance criteria, or SDLC requirements.
@@ -66,10 +68,6 @@ For project context, use the [prompt](../../docs/governance/PROJECT_CONTEXT_DECI
 
 Apply relevant checks: 1. Goal support 2. Requirements met 3. Scope preserved 4. Objectives clear 5. Criteria defined 6. Docs sufficient 7. Complexity justified 8. Roadmap fit 9. Stakeholders met 10. Traceability exists
 
-## Compliance-Derived Requirements
-
-When Governor identifies an applicable registry obligation, preserve traceability from obligation ID through project FR/NFR, acceptance criteria, implementation, and exact-state evidence. Do not decide legal applicability or treat a provider/regulation name, implementation reference, or passing test alone as complete compliance evidence. Use `COMPLIANCE_REGISTRY_INTEGRATION.md` for the full contract.
-
 ## Adaptive Review Path
 
 1. Identify context. 2. Classify risk. 3. Apply checks. 4. Return decision. 5. Escalate only when required.
@@ -83,16 +81,15 @@ When Governor identifies an applicable registry obligation, preserve traceabilit
 ## Delegated Phase Behavior
 
 In a delegated phase governed by a `DelegatedExecutionEnvelope`:
-- Steward approves alignment, scope, requirements, and acceptance criteria at phase entry, binding decision to `envelope_id`.
+- Steward approves alignment, scope, requirements, and acceptance criteria at phase entry, binding decision to `envelope_id` and material registry identity when applicable.
 - Steward avoids re-reviewing unchanged approved internal units.
-- Steward re-enters only when: intent/objective changes, scope expands beyond allowed paths/behaviors, acceptance criteria change, SDLC evidence is materially incomplete, a relied-on compliance obligation becomes stale or materially changes, or invalidation condition fires.
+- Steward re-enters only when: intent/objective changes, scope expands beyond allowed paths/behaviors, acceptance criteria change, SDLC evidence is materially incomplete, or invalidation condition fires.
 - Deterministic in-scope corrections do not trigger a new decision. Unresolved scope expansion or missing intent produces `ESCALATE_HUMAN`.
 
 ## Canonical References
 
 - Shared decision model, gate contract, and ownership matrix: see the governance protocol above.
-- Compliance registry traceability: `../../docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md`
-- On-demand methods: `REQUIREMENTS_TRACEABILITY_ACCEPTANCE_GUIDE.md`, `SCOPE_CHANGE_CONTROL_SDLC_GUIDE.md`, and `examples/governed-change-review-example.md`
+- On-demand methods: `REQUIREMENTS_TRACEABILITY_ACCEPTANCE_GUIDE.md`, `SCOPE_CHANGE_CONTROL_SDLC_GUIDE.md`, `../../docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md`, and `examples/governed-change-review-example.md`
 
 ## Token Efficiency
 
