@@ -8,7 +8,7 @@ The public registry is readable by anyone. Canonical mutation authority is a sep
 
 ## Local-first rule
 
-Governor and Steward should consume the verified active local registry for ordinary compliance review. Network access is reserved for synchronization, update checks, or authoritative-source verification when the registry cannot resolve a material currentness question.
+Governor and Steward should use the verified active local registry for ordinary compliance review. Network access is reserved for synchronization, update checks, or authoritative-source verification when the registry cannot resolve a material currentness question.
 
 Record these identities whenever a compliance decision relies on registry knowledge:
 
