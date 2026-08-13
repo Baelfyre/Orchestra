@@ -29,7 +29,7 @@ It provides a normalized synthesis of execution outcomes, remediation cycles (`A
 ### 2.2 Core Invariants
 1. **Advisory Closeout Evidence Invariant:** Retrospective findings summarize execution history for human maintainers and policy tuning. They do NOT automatically grant authority or alter project state.
 2. **Replacement Effect Invariant (`replacement_effect: none`):** Existing handoff records, post-merge state files, and decision logs remain authoritative continuity references. A retrospective normalizes learning without replacing canonical records.
-3. **Single Canonical Owner Invariant:** Overseer is the single canonical owner of the retrospective protocol. Downstream roles (Arbiter, Steward, Scribe) do not become co-owners.
+3. **Single Canonical Owner Invariant:** Overseer is the single canonical owner of the retrospective protocol. Secondary consumers (Arbiter, Steward, Scribe) do not become co-owners.
 4. **Source Provenance Invariant:** Every retrospective metric and finding MUST cite its canonical source record (`ExecutionResult`, `TransitionDecisionRecord`, `ExecutionEvidencePacket`, `ApprovedUnitPlan`).
 
 ---
