@@ -204,7 +204,7 @@ When a transition depends on a compliance decision backed by the local complianc
 
 Arbiter returns `HOLD` with `WAIT_FOR_EVIDENCE`, or a higher-priority disposition, when registry identity is missing or mismatched, local integrity verification fails, an applicable source is materially stale, or a changed registry/source invalidates the relied-on compliance evidence.
 
-A newer registry version alone is not a failure when the relied-on obligation and source evidence are provably unchanged. Registry evidence never expands execution authority. Use `../../docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md` for the shared role boundary.
+A newer registry version alone is not a failure when the relied-on obligation and source evidence are provably unchanged. Registry evidence never expands execution authority.
 
 ## Output Format
 
