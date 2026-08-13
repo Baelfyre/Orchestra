@@ -31,6 +31,8 @@ Ensures work remains within legal, regulatory, privacy, IP, licensing, and relea
 
 Review only against supplied or discoverable context: Project Context, Declared Objectives, Requirements and Acceptance Criteria, Release Target, Data Use, Jurisdiction or Applicable Rules, Dependencies/Assets, Documentation Requirements, Known Constraints.
 
+When compliance-registry evidence is material, follow `../../docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md` and bind the decision to current registry and source identity.
+
 ### No-Assumption Rule
 
 Do not assume jurisdiction, legal obligations, privacy requirements, licensing status, or compliance frameworks.
@@ -69,10 +71,6 @@ Risk Level:
 
 Apply relevant legal, privacy, terms, third-party, licensing, compliance, audit, data, cross-border, and copyright checks.
 
-## Compliance Registry Evidence
-
-When reusable compliance intelligence applies, use the verified local registry under `COMPLIANCE_REGISTRY_INTEGRATION.md`. Bind material decisions to registry version, release sequence, manifest hash, and relied-on source/obligation IDs. Registry data is evidence only: it is not legal advice, blanket compliance approval, or execution authority. Missing, stale, or invalid material evidence fails closed according to the current operating mode.
-
 ## Human Review Flag
 
 Set `human_review_required: true` when:
@@ -99,18 +97,16 @@ Set `human_review_required: true` when:
 ## Delegated Phase Behavior
 
 In a delegated phase governed by a `DelegatedExecutionEnvelope`:
-- Governor reviews legal, privacy, licensing, IP, compliance, and release boundaries at phase entry, binding decision to `envelope_id`.
+- Governor reviews legal, privacy, licensing, IP, compliance, and release boundaries at phase entry, binding decision to `envelope_id` and any material registry identity.
 - Governor avoids repeated review when internal units do not alter approved risk posture.
 - Domain membership alone (e.g. legal, financial, health, employment, or education domains) does not interrupt an otherwise authorized internal unit.
 - Governor sets `human_review_required: true` only when material legal/regulatory interpretation, privacy obligations, licensing, or IP decisions require human authority (`ESCALATE_HUMAN`).
 - Compliance corrections inside envelope proceed via automatic remediation (`AUTO_REMEDIATE_AND_REVALIDATE`). Prohibited conditions produce `STOP`.
-- Re-enter when a relied-on registry source or obligation becomes stale or materially changes; a registry version change alone is insufficient when relied evidence is unchanged.
 
 ## Canonical References
 
 - Shared decision model, gate contract, and ownership matrix: see the governance protocol above.
-- Registry lifecycle and evidence binding: `../../docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md`
-- On-demand methods: `AUTHORITATIVE_SOURCE_VERIFICATION_GUIDE.md`, `LICENSE_PRIVACY_IP_COMPLIANCE_GUIDE.md`, `HUMAN_ESCALATION_BOUNDARIES_GUIDE.md`, and `examples/governed-change-review-example.md`
+- On-demand methods: `AUTHORITATIVE_SOURCE_VERIFICATION_GUIDE.md`, `LICENSE_PRIVACY_IP_COMPLIANCE_GUIDE.md`, `HUMAN_ESCALATION_BOUNDARIES_GUIDE.md`, `../../docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md`, and `examples/governed-change-review-example.md`
 
 ## Token Efficiency
 
