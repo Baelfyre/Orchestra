@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.4.0 Governance and Compliance Registry Cross-Integration - Release Preparation - Pending
+
+- Normalized the root, Claude Code, Codex, Cursor, JetBrains, Neovim, VS Code, Windsurf, and Zed package/version surfaces to `1.4.0` for the governance release candidate without changing host maturity.
+- Added a deterministic runtime regression that requires all 11 live package/version surfaces to agree on `1.4.0`.
+- Elevated the Compliance Registry from a local-cache integration into an explicitly documented Orchestra cross-integration across Governor, Steward, Arbiter, Conductor/The Tuner coordination, and downstream project handoffs while preserving specialist and authority boundaries.
+- Added the fail-closed README Impact Gate to Governance Check: significant runtime, specialist, host-integration, governance/routing/setup/release, version, or CI/governance changes must update `README.md` in the same revision; tests and validation-evidence-only changes do not force README churn.
+- Added `docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md` and preserved `v1.3.0` as the current public release until separately authorized `v1.4.0` tag and GitHub Release publication.
+- Registry repository protection, Registry PR #1 merge, trusted Registry release/tag publication, Orchestra `v1.4.0` public release, marketplace publication, installed-integration refresh, deployment, policy activation, destructive cleanup, branch deletion, force push, and history rewrite remain separately gated and are not performed by this preparation.
+
 ## Post-v1.3.0 Compliance Registry Local Cache - Pending
 
 - Added an offline-first verified local client for `Baelfyre/Orchestra-Compliance-Registry` with status, verification, controlled synchronization, local bundle installation, query, project pinning, and update-check operations.

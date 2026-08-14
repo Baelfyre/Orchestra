@@ -11,7 +11,7 @@
     <a href="CHANGELOG.md">Changelog</a>
   </p>
   <p>
-    <img src="https://img.shields.io/badge/package_version-v1.3.0-blue" alt="Repository package version v1.3.0" />
+    <img src="https://img.shields.io/badge/package_version-v1.4.0-blue" alt="Repository package version v1.4.0" />
     <a href="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml">
       <img src="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml/badge.svg" alt="Repository validation status" />
     </a>
@@ -42,6 +42,14 @@ The framework is designed to help developers reduce context drift, make cross-do
 Compliance decisions are especially vulnerable to stale context. Laws, platform policies, licensing terms, privacy obligations, provider requirements, and effective dates can change independently of application code. If those facts are copied into prompts or project documents without provenance and freshness metadata, a previously correct assumption can quietly become the next project's bad input.
 
 The **Orchestra Compliance Registry** is designed to prevent that failure mode. It gives Governor, Steward, and Arbiter a reusable, versioned compliance-intelligence layer whose source identity, release identity, file integrity, freshness state, and project pinning can be checked independently of the project being reviewed.
+
+The important part is the **cross-integration**. The Registry is not a sidecar knowledge dump and it is not a new authority layer. It provides one verifiable compliance substrate that Orchestra can carry across projects and specialist handoffs while each responsibility keeps its existing owner:
+
+- **The Governor** consumes source identity, applicability, jurisdiction/provider scope, effective dates, and freshness evidence for compliance review.
+- **The Steward** maps current, Governor-qualified obligations into requirements, FR/NFR traceability, acceptance criteria, and change-control impact without becoming the legal/compliance authority.
+- **Arbiter** carries the exact pinned Registry version and freshness state into continuity, evidence-freshness, transition, and release-readiness decisions so stale compliance evidence cannot silently authorize a later transition.
+- **Conductor and The Tuner** can route and coordinate work that depends on those specialist-owned contracts, but Registry facts never become routing authority, execution permission, or a substitute for specialist decisions.
+- **Downstream projects** can reuse the same verified compliance knowledge instead of copying conclusions into each repository, while the downstream project's own tracker and repository remain authoritative for project state and implementation evidence.
 
 That separation is important because it lets Orchestra:
 
@@ -96,6 +104,18 @@ flowchart TD
 ~~~
 
 Accessible summary: a request supplies project context and selects separate risk, progression, and governance-profile settings. Trusted composition and the effective-authority intersection run before Conductor routes work. Single-owner work goes directly to its specialist; material multi-domain work first requires current Tuner coordination. Validation failure returns to the owning boundary. Current evidence goes to Arbiter, which may continue or remediate inside existing authority, wait for evidence or capacity, escalate to a human, or stop safely.
+
+## v1.4.0 Governance and Compliance Registry Cross-Integration
+
+The repository/package version is prepared at `1.4.0` for the governance upgrade. **The current public GitHub release remains `v1.3.0` until a separate release/tag publication gate is explicitly authorized and completed.**
+
+v1.4.0 packages the Compliance Registry cross-integration as an Orchestra governance capability: offline-first verified local Registry consumption, explicit integrity/provenance/freshness state, project pinning, progressive-disclosure integration across Governor, Steward, and Arbiter, and preserved routing/authority boundaries.
+
+It also adds a fail-closed **README Impact Gate** to the Governance Check workflow. Changes classified as significant to Orchestra's runtime, specialist skills, host adapters/manifests, governance/routing/setup/release contracts, version surfaces, or CI/governance scripts must update `README.md` in the same revision. Tests and validation-evidence-only changes do not force documentation churn.
+
+This documentation gate complements the existing changelog-freshness gate: significant changes must remain visible both as historical change records and as current public-facing project documentation.
+
+See the [v1.4.0 governance upgrade release candidate](docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md) for the preparation scope and publication boundary.
 
 ## v1.3.0 Specialist Intelligence
 
@@ -250,7 +270,7 @@ Use the host-native path:
 - Antigravity: run `agy plugin install https://github.com/Baelfyre/Orchestra`.
 - Manual or scaffold-only hosts: follow the exact host boundary in the [Installation Guide](docs/setup/INSTALLATION.md).
 
-Repository manifests identify package version `1.3.0`. GitHub Release publication, marketplace publication, and installed-integration refresh are separate governed actions and are not implied by the package version. Check the repository's Releases page for the currently published GitHub release, and see the Installation Guide for supported installation paths and host-maturity boundaries.
+Repository manifests identify package version `1.4.0`. The current public GitHub release remains `v1.3.0` until a separately authorized publication transition creates and verifies `v1.4.0`. GitHub Release publication, marketplace publication, and installed-integration refresh are separate governed actions and are not implied by the package version. See the Installation Guide for supported installation paths and host-maturity boundaries.
 
 ## Quick Start
 
@@ -290,6 +310,7 @@ The validation chain covers:
 - Artificer internal, record, governance-record, and Pattern Catalog validation;
 - prompt-load thresholds and budget;
 - governance protocol, routing contracts, Tuner collaboration, evidence identity, and strict governance;
+- the fail-closed **README Impact Gate**, which requires `README.md` in the same revision whenever significant runtime, specialist, host-integration, governance/routing/setup/release, version, or CI/governance surfaces change;
 - behavior validation and runtime tests with the required coverage threshold;
 - security, compatibility, licensing, version consistency, stale references, and release readiness;
 - native Windows, Ubuntu, and macOS validation;
@@ -298,6 +319,14 @@ The validation chain covers:
 For autonomous or delegated merges, Orchestra additionally requires the fail-closed [Autonomous Merge Readiness Protocol](docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md): a green canonical baseline, exact-head evidence, complete successful required checks, expected-head merge guard where supported, and independent post-merge verification.
 
 ## Release Lineage
+
+### v1.4.0 Governance and Compliance Registry Cross-Integration
+
+Repository package/version surfaces are prepared at `1.4.0` for the governance upgrade. The scope cross-integrates verified Compliance Registry evidence into Orchestra's established governance responsibilities and adds the README Impact Gate so significant project changes cannot pass normal governance validation while leaving the public README stale.
+
+This repository/package version does **not** by itself establish a public `v1.4.0` release. The current public release remains `v1.3.0`; tag creation and GitHub Release publication remain separate protected actions.
+
+Preparation scope and boundaries are recorded in the [v1.4.0 governance upgrade release candidate](docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md).
 
 ### v1.3.0 Specialist Intelligence
 
@@ -329,6 +358,7 @@ See the [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration.md). 
 - Orchestra is developer tooling and a local runtime. It does not store or transmit downstream project data by default.
 - Data sensitivity, privacy, retention, deletion, platform disclosure, and IP obligations depend on the downstream project and host environment.
 - Release governance may require revision or block publication.
+- Package metadata at `1.4.0` does not mean the public `v1.4.0` release has been published.
 
 ## Documentation Map
 
@@ -360,6 +390,7 @@ See the [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration.md). 
 
 ### Release and maintainers
 
+- [v1.4.0 Governance Upgrade Release Candidate](docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md)
 - [v1.3.0 Release Candidate](docs/releases/v1.3.0-specialist-intelligence-release-candidate.md)
 - [v1.3.0 Release Readiness Evidence](docs/validation/V1_3_0_RELEASE_READINESS_EVIDENCE.md)
 - [v1.2.0 Release Notes](docs/releases/v1.2.0-governed-orchestration.md)
