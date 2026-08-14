@@ -1,0 +1,26 @@
+name: Materialize v1.4.0 Publication Closeout V2
+
+on:
+  push:
+    branches:
+      - docs/v1-4-publication-closeout-20260814-v2
+    paths:
+      - .github/workflows/materialize-v1-4-publication-closeout-v2.yml
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout closeout branch
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 3
+      - name: Run bounded closeout materializer
+        shell: bash
+        run: |
+          set -euo pipefail
+          git reset --soft HEAD^
+          python scripts/materialize_v1_4_publication_closeout.py
