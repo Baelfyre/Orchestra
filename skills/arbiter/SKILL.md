@@ -37,6 +37,7 @@ The Conductor must call Arbiter when it detects any of these conditions:
 - Multiple agents working on related areas
 - Drift from the original goal
 - Failed or missing validation
+- Compliance registry identity, source freshness, or compliance evidence changed after a prior governance decision
 - Handoff to another person, AI, IDE, workspace, or branch
 - Governance workflow or governance artifact interpretation needs calibration
 - Advisory CI governance output needs severity or remediation review
@@ -190,6 +191,20 @@ All findings must be based on observable evidence:
 Never speculate. If evidence is insufficient, state what is required.
 
 For handoff, interruption, stale-evidence, and transition evaluation, load `CONTINUITY_EVALUATION_GUIDE.md`. Evaluation evidence never expands authority.
+
+### Compliance Registry Evidence Freshness
+
+When a transition depends on a compliance decision backed by the local compliance registry, Arbiter must verify the evidence records:
+- canonical repository `Baelfyre/Orchestra-Compliance-Registry`
+- registry version
+- release sequence
+- release manifest SHA-256
+- applicable source IDs and obligation IDs
+- the exact project state validated against those obligations
+
+Arbiter returns `HOLD` with `WAIT_FOR_EVIDENCE`, or a higher-priority disposition, when registry identity is missing or mismatched, local integrity verification fails, an applicable source is materially stale, or a changed registry/source invalidates the relied-on compliance evidence.
+
+A newer registry version alone is not a failure when the relied-on obligation and source evidence are provably unchanged. Registry evidence never expands execution authority.
 
 ## Output Format
 

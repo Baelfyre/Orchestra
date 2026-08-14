@@ -1,5 +1,13 @@
 # Changelog
 
+## Post-v1.3.0 Compliance Registry Local Cache - Pending
+
+- Added an offline-first verified local client for `Baelfyre/Orchestra-Compliance-Registry` with status, verification, controlled synchronization, local bundle installation, query, project pinning, and update-check operations.
+- Added candidate-before-activation, exact release-manifest identity, file-hash verification, last-known-good cache retention, safe ZIP extraction, and default anti-rollback behavior without granting registry data execution authority.
+- Added progressive-disclosure Governor, Steward, and Arbiter integration for compliance applicability evidence, FR/NFR and acceptance traceability, and stale or mismatched registry-evidence invalidation.
+- Added runtime contract coverage for local install/query/pin and rollback behavior; development validation also covered wrong canonical repository, content tampering, unsafe archive paths, and release-tag mismatch.
+- Established the public registry foundation in the separately governed `Baelfyre/Orchestra-Compliance-Registry` repository; no trusted registry release, release/tag publication, deployment, policy activation, installed-integration refresh, destructive cleanup, branch deletion, force push, or history rewrite is performed by this work.
+
 ## v1.3.0 Specialist Intelligence - Release Preparation - Pending
 
 - Normalized the root, Claude Code, Codex, Cursor, JetBrains, Neovim, VS Code, Windsurf, and Zed package/version surfaces to `1.3.0` for the Specialist Intelligence release candidate without changing host maturity.
