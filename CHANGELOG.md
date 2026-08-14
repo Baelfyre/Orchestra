@@ -48,7 +48,7 @@
 - Expanded documentation standards and audit checks for heading/anchor stability, fenced code and tables, source revisions, effective dates, verified commands, API examples, version selectors, redirects, and broken-link reporting.
 - Added a worked source-backed API change example that separates verified current behavior, compatibility status, planned work, and release authority.
 - Kept the campaign Markdown-primary and JSON-selective: the SK8 audit found no deterministic machine-parsing need that justified a Scribe JSON catalog.
-- Added focused regression coverage for Scribe knowledge depth, source/Codex parity, link/claim discipline, and no-publication boundaries.
+- Added focused regression coverage for Scribe knowledge depth, progressive disclosure, source/Codex parity, link/claim discipline, and no-publication boundaries.
 - No release/tag publication, documentation-site deployment, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK8.
 
 ## Post-v1.2.0 Specialist Knowledge Layer - SK7 Overseer - Pending
@@ -58,7 +58,7 @@
 - Expanded quality standards and testing checks with contract identity, shrinking and reproducibility, mutation-score interpretation, quarantine controls, environment matrices, percentile evidence, and privacy-safe test-data lifecycle requirements.
 - Added a worked risk-based validation matrix example that separates planned evidence from executed results and preserves domain-specialist ownership.
 - Kept the campaign Markdown-primary and JSON-selective: the SK7 audit found no deterministic machine-parsing need that justified an Overseer JSON catalog.
-- Added focused regression coverage for Overseer knowledge depth, source/Codex parity, and evidence-state discipline.
+- Added focused regression coverage for Overseer knowledge depth, progressive disclosure, source/Codex parity, and evidence-state discipline.
 - No CI/release-gate mutation, test execution beyond repository validation, deployment, release/tag publication, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK7.
 
 ## Post-v1.2.0 Specialist Knowledge Layer - SK6 Chronicler - Pending
@@ -69,7 +69,7 @@
 - Expanded database standards and review checks for dialect/version identity, ORM/schema parity, lock and retry behavior, tenant predicates and composite integrity, plan estimates, backfill checkpoints, and compatibility windows.
 - Added a planning-only worked expand-contract migration example with bounded batches, read/write compatibility, validation, rollback boundaries, and no executable production command.
 - Kept the campaign Markdown-primary and JSON-selective: the SK6 audit found no deterministic machine-parsing need that justified a Chronicler JSON catalog.
-- Added focused regression coverage for Chronicler knowledge depth, source/Codex parity, and the no-execution boundary.
+- Added focused regression coverage for Chronicler knowledge depth, progressive disclosure, source/Codex parity, and the no-execution boundary.
 - No schema change, migration execution, live-data access, destructive SQL, release/tag publication, deployment/production mutation, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK6.
 
 ## Post-v1.2.0 Specialist Knowledge Layer - SK5 Dagger - Pending
