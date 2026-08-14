@@ -4,7 +4,9 @@
 
 Orchestra's reusable compliance-intelligence source is `Baelfyre/Orchestra-Compliance-Registry`. Normal IDE governance uses a verified local snapshot managed by `scripts/compliance_registry.py`.
 
-The public registry is readable by anyone. Canonical mutation authority is a separate repository-control concern. A fork, pull request, source-monitor result, or arbitrary `main` snapshot is not a trusted registry release.
+The public registry is readable by anyone. Canonical mutation authority is a separate repository-control concern. A fork, pull request, source-monitor result, arbitrary `main` snapshot, or self-consistent local ZIP is not a trusted registry release.
+
+A trusted network distribution must come from a non-draft, non-prerelease, immutable GitHub Release in the canonical registry repository. An air-gapped or pre-downloaded ZIP must be bound to a separately verified release-manifest SHA-256 supplied out of band. Internal hashes prove content integrity; the immutable canonical release or external manifest digest supplies provenance.
 
 ## Local-first rule
 
@@ -15,6 +17,7 @@ Record these identities whenever a compliance decision relies on registry knowle
 - canonical repository
 - registry version
 - release sequence
+- release tag
 - release manifest SHA-256
 - selected jurisdictions and providers
 - applicable source IDs and obligation IDs
@@ -23,7 +26,7 @@ Record these identities whenever a compliance decision relies on registry knowle
 
 Governor owns applicability, authoritative-source state, legal/regulatory/privacy/licensing/IP/provider-policy governance, and material interpretation escalation. Governor must not treat a registry record as legal advice or blanket compliance approval.
 
-At Audit or Release boundaries, missing registry integrity or materially stale applicable source evidence requires `REVISION_REQUIRED`, `WAIT_FOR_EVIDENCE`, or `human_review_required: true` as appropriate. Domain membership alone does not require escalation.
+At Audit or Release boundaries, missing registry integrity, unresolved review-required source state, or materially stale applicable source evidence requires `REVISION_REQUIRED`, `WAIT_FOR_EVIDENCE`, or `human_review_required: true` as appropriate. Domain membership alone does not require escalation.
 
 ## Steward
 
