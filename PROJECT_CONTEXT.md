@@ -10,7 +10,7 @@ A governance-first specialist skill framework that routes complex AI-assisted so
 Open-source developer tooling and AI orchestration framework
 
 ## Current Stage
-Published release `v1.3.0` (`PUBLISHED_VERIFIED`) from annotated tag `v1.3.0` at exact release commit `3c6155c111981632649a3c3207fac8ac1edcea74`. The release packages the completed SK1-SK10 Specialist Intelligence campaign, 11 aligned package/version surfaces at `1.3.0`, 542 runtime tests at 94.33% coverage, revision-bound release-readiness evidence, and the README-alignment gate through PR #259. The GitHub Release is non-draft, non-prerelease, and immutable. Publication performed no deployment, installed-integration refresh, branch deletion, marketplace publication, or policy activation.
+v1.4.0 - Governance and Compliance Registry Cross-Integration package/version preparation (`PREPARED_NOT_RELEASED`). Repository package surfaces are aligned to `1.4.0` for the governance upgrade while the current public release remains `v1.3.0`. The candidate cross-integrates verified Compliance Registry provenance, integrity, freshness, and project-pinning evidence across Governor, Steward, Arbiter, and Conductor/The Tuner coordination boundaries, and adds a fail-closed README Impact Gate for significant Orchestra changes. The separately governed Registry foundation remains held pending authorized `main` protection and fresh exact-head validation; no `v1.4.0` tag or GitHub Release publication is authorized by package preparation.
 
 ## Primary Users
 Developers and maintainers who install Orchestra as a plugin, skill set, or runtime package inside a supported or scaffold-only IDE or coding host (Claude Code, Codex, Antigravity, Cursor, Windsurf, JetBrains, Zed, Neovim)
@@ -38,6 +38,7 @@ Guidance used for this classification:
 - `OrchestraStatusProjection` is read-only and derived; it does not mutate repository state, Git refs, or governance policy. It is not a source of truth. Missing or conflicting data reports UNKNOWN. Exit codes report command execution success only and do not create governance authority.
 - `OrchestraWorktreeContract` is optional and host-capability-dependent. Worktree isolation must not be mandatory for single-agent or lightweight execution. Cleanup is `EXPLICIT_HOST_ACTION_ONLY`; no automatic deletion of dirty, unrelated, or user-owned worktrees is permitted.
 - The cross-module audit protocol coordinates specialist-owned findings and evidence; it creates no implementation, Git, merge, release, deployment, or policy authority.
+- Compliance Registry evidence is reusable governance input, not a new authority layer. Governor retains compliance/source-applicability ownership, Steward retains requirements/change-control ownership, Arbiter retains transition/evidence-freshness ownership, and Conductor/The Tuner retain routing/coordination boundaries. Registry state cannot authorize release, deployment, policy activation, destructive operations, or legal conclusions.
 - Repository simulation and GitHub CI are not live installed-host evidence. Accepted R7 evidence is recorded separately for installed Codex and Antigravity continuity and Claude Code packaging compatibility; Claude Code active runtime continuity remains unclaimed under `SCAFFOLD_ONLY` maturity.
 - Governed Autonomy Profiles are reduction-only workflow gates. `HUMAN_GOVERNED` is the safe default, children cannot exceed parents, and no profile creates release, deployment, policy, destructive, force-push, history-rewrite, or authority-expansion permission.
 - No vendoring of external plugin code, and no claiming unsupported compatibility or compliance, per `docs/CONTRIBUTING.md`.
@@ -46,6 +47,7 @@ Guidance used for this classification:
 - `pytest tests/runtime` must pass with `--cov-fail-under=90` as enforced in CI via `validate.yml`.
 - `python tests/behavior/run_tests.py` must pass.
 - `python scripts/governance_check.py --strict` must pass as enforced in CI via `governance-check.yml`.
+- `python scripts/check_readme_impact.py` must pass for pull-request and push revisions; significant Orchestra runtime, specialist, host-integration, governance/routing/setup/release, version, or CI/governance changes require `README.md` in the same revision.
 - Manifest and packaging validators (`validate_claude_plugin.py`, `validate_ide_packaging.py`, `validate_manifest.py`, `validate_structure.py`) must pass.
 - Cross-layer contract validators and their behavior tests must pass for affected revisions.
 - `python scripts/validate_governed_autonomy_modes_contract.py` and its focused runtime tests must pass when autonomy-profile contracts change.
@@ -56,7 +58,8 @@ Guidance used for this classification:
 - `tests/behavior/run-tests.ps1` is intentionally maintained in parallel with `run_tests.py` as the primary validation path for Windows environments, per `docs/MATURITY.md`.
 - Direct pushes to `main` are not part of the normal workflow; changes go through a branch and pull request except for documented maintainer bypass recovery cases.
 - Installed Codex and Antigravity parity, host context-reset behavior, and Windows filesystem-specific behavior require host-local evidence in addition to repository CI.
-- Repository package metadata is `1.3.0`, and public release `v1.3.0` is independently verified. Later `main` commits may contain post-release documentation or future unreleased work and do not move the `v1.3.0` tag.
+- Repository package metadata is prepared at `1.4.0`; public release `v1.3.0` remains independently verified until a separately authorized and validated `v1.4.0` publication transition. Later `main` commits do not move the immutable `v1.3.0` tag.
+- The Compliance Registry foundation is validated but held until its repository `main` protection/ruleset is separately authorized and independently verified; trusted Registry publication is a separate protected action.
 
 ## Known Non-Goals
 - Orchestra does not store, process, or transmit end-user or client data itself.
@@ -72,4 +75,4 @@ Guidance used for this classification:
 Not yet decided. No project-specific maintainer preferences beyond `docs/CONTRIBUTING.md` are currently documented for this field.
 
 ## Last Reviewed
-2026-08-13
+2026-08-14
