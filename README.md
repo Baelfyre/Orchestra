@@ -377,3 +377,11 @@ Orchestra uses source-pinned, static Artificer reviews to govern selected concep
 These records distinguish static reference review, concept-only adaptation, and Orchestra-native implementation from direct reuse. They do not establish wholesale integration, source-code copying, dependency adoption, endorsement, affiliation, trademark permission, or a blanket licensing conclusion.
 
 The authoritative incorporation record is the governed [Pattern Catalog](docs/internal/PATTERN_CATALOG.md). Source-pinned audit and decision records preserve the detailed provenance and disposition for each reviewed pattern. External source code, datasets, prompts, payloads, examples, media, assets, or documentation expression are not incorporated unless a governed record explicitly authorizes that reuse.
+
+## Contributing, Security, and License
+
+Contributions should preserve specialist ownership, cross-specialist contract boundaries, runtime trust boundaries, validation evidence, and scaffold maturity labels. Start with the [Contributing Guide](docs/CONTRIBUTING.md).
+
+Report vulnerabilities privately through the process in [SECURITY.md](SECURITY.md). Do not commit secrets, credentials, personal data, client information, or private project material.
+
+Orchestra is licensed under the [MIT License](LICENSE). Governed external-pattern records preserve applicable provenance and attribution boundaries; they do not authorize wholesale copying of external projects.
