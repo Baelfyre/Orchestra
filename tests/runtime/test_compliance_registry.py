@@ -153,6 +153,14 @@ def test_unsafe_archive_path_is_rejected(tmp_path):
         compliance_registry.install_bundle(archive, tmp_path / "cache")
 
 
+def test_windows_style_archive_path_is_rejected(tmp_path):
+    archive = tmp_path / "unsafe-windows.zip"
+    with zipfile.ZipFile(archive, "w") as handle:
+        handle.writestr("..\\escape.txt", "escape")
+    with pytest.raises(compliance_registry.RegistryError, match="cross-platform ZIP path"):
+        compliance_registry.install_bundle(archive, tmp_path / "cache")
+
+
 def test_unsafe_registry_version_is_rejected_before_install_path_use(tmp_path):
     with pytest.raises(compliance_registry.RegistryError, match="safe version token"):
         compliance_registry.install_bundle(
