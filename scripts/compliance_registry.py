@@ -151,8 +151,7 @@ def verify_bundle(root: Path, *, expected_tag: str | None = None) -> VerifiedBun
         path = _safe_child(root, relative)
         if not path.is_file():
             raise RegistryError(f"release bundle missing hashed file: {relative}")
-        actual = _sha256(path)
-        if actual != expected:
+        if _sha256(path) != expected:
             raise RegistryError(f"release bundle hash mismatch: {relative}")
     actual_files = {
         path.relative_to(root).as_posix()
@@ -233,7 +232,15 @@ def _write_json_atomic(path: Path, payload: dict[str, Any]) -> None:
     os.replace(temp, path)
 
 
-def install_bundle(bundle_zip: Path, cache_root: Path, *, expected_tag: str | None = None, allow_rollback: bool = False) -> dict[str, Any]:
+def _activate_bundle(
+    bundle_zip: Path,
+    cache_root: Path,
+    *,
+    expected_tag: str | None,
+    allow_rollback: bool,
+    expected_manifest_sha256: str | None,
+    trusted_distribution: bool,
+) -> dict[str, Any]:
     cache_root.mkdir(parents=True, exist_ok=True)
     candidate_parent = cache_root / "candidate"
     candidate_parent.mkdir(parents=True, exist_ok=True)
@@ -241,6 +248,14 @@ def install_bundle(bundle_zip: Path, cache_root: Path, *, expected_tag: str | No
         candidate = Path(temp_dir)
         _safe_extract(bundle_zip, candidate)
         verified = verify_bundle(candidate, expected_tag=expected_tag)
+        if not trusted_distribution:
+            expected_manifest = _validate_sha256(expected_manifest_sha256, "expected release manifest")
+            if verified.manifest_sha256 != expected_manifest:
+                raise RegistryError("local registry manifest SHA-256 does not match the expected trust anchor")
+        elif expected_manifest_sha256 is not None:
+            expected_manifest = _validate_sha256(expected_manifest_sha256, "expected release manifest")
+            if verified.manifest_sha256 != expected_manifest:
+                raise RegistryError("registry manifest SHA-256 does not match the expected trust anchor")
         version = _validate_version_token(verified.manifest["registry_version"])
         sequence = verified.manifest["release_sequence"]
         release_tag = verified.manifest["release_tag"]
@@ -274,6 +289,26 @@ def install_bundle(bundle_zip: Path, cache_root: Path, *, expected_tag: str | No
         return active_payload
 
 
+def install_bundle(
+    bundle_zip: Path,
+    cache_root: Path,
+    *,
+    expected_manifest_sha256: str | None = None,
+    expected_tag: str | None = None,
+    allow_rollback: bool = False,
+) -> dict[str, Any]:
+    if expected_manifest_sha256 is None:
+        raise RegistryError("local registry install requires an expected release-manifest SHA-256 trust anchor")
+    return _activate_bundle(
+        bundle_zip,
+        cache_root,
+        expected_tag=expected_tag,
+        allow_rollback=allow_rollback,
+        expected_manifest_sha256=expected_manifest_sha256,
+        trusted_distribution=False,
+    )
+
+
 def _fetch_json(url: str) -> dict[str, Any]:
     request = urllib.request.Request(url, headers={"Accept": "application/vnd.github+json", "User-Agent": "Orchestra-Compliance-Registry-Client"})
     try:
@@ -292,6 +327,8 @@ def _latest_release() -> dict[str, Any]:
         raise RegistryError("latest registry release is a draft")
     if release.get("prerelease"):
         raise RegistryError("latest registry release is a prerelease")
+    if release.get("immutable") is not True:
+        raise RegistryError("latest registry release is not immutable")
     if not isinstance(release.get("tag_name"), str):
         raise RegistryError("latest registry release has no tag_name")
     return release
@@ -321,7 +358,14 @@ def sync(cache_root: Path, *, asset_name: str = DEFAULT_ASSET_NAME) -> dict[str,
                 shutil.copyfileobj(response, out)
         except (urllib.error.URLError, TimeoutError) as exc:
             raise RegistryError(f"registry asset download failed: {exc}") from exc
-        return install_bundle(temp_path, cache_root, expected_tag=release["tag_name"])
+        return _activate_bundle(
+            temp_path,
+            cache_root,
+            expected_tag=release["tag_name"],
+            allow_rollback=False,
+            expected_manifest_sha256=None,
+            trusted_distribution=True,
+        )
     finally:
         temp_path.unlink(missing_ok=True)
 
@@ -386,13 +430,28 @@ def status(cache_root: Path) -> dict[str, Any]:
         if active is None:
             return {"registry_status": "NO_REGISTRY", "canonical_repository": CANONICAL_REPOSITORY}
         verified = _active_bundle(cache_root)
-        fresh = freshness_summary(verified)
-        return {"registry_status": "VERIFIED", "canonical_repository": CANONICAL_REPOSITORY, "registry_version": verified.manifest["registry_version"], "release_sequence": verified.manifest["release_sequence"], "release_tag": verified.manifest["release_tag"], "manifest_sha256": verified.manifest_sha256, "freshness": fresh}
+        return {
+            "registry_status": "VERIFIED",
+            "canonical_repository": CANONICAL_REPOSITORY,
+            "registry_version": verified.manifest["registry_version"],
+            "release_sequence": verified.manifest["release_sequence"],
+            "release_tag": verified.manifest["release_tag"],
+            "manifest_sha256": verified.manifest_sha256,
+            "freshness": freshness_summary(verified),
+        }
     except RegistryError as exc:
         return {"registry_status": "INTEGRITY_FAILED", "canonical_repository": CANONICAL_REPOSITORY, "error": str(exc)}
 
 
-def query(cache_root: Path, *, jurisdiction: str | None = None, provider: str | None = None, domain: str | None = None, source_id: str | None = None, obligation_id: str | None = None) -> dict[str, Any]:
+def query(
+    cache_root: Path,
+    *,
+    jurisdiction: str | None = None,
+    provider: str | None = None,
+    domain: str | None = None,
+    source_id: str | None = None,
+    obligation_id: str | None = None,
+) -> dict[str, Any]:
     bundle = _active_bundle(cache_root)
     sources = _json_load(bundle.root / "registry" / "sources.json").get("sources", [])
     obligations = _json_load(bundle.root / "registry" / "obligations.json").get("obligations", [])
@@ -405,7 +464,12 @@ def query(cache_root: Path, *, jurisdiction: str | None = None, provider: str | 
     def obligation_match(item: Any) -> bool:
         return isinstance(item, dict) and (not obligation_id or item.get("obligation_id") == obligation_id) and (not jurisdiction or jurisdiction in item.get("jurisdiction_ids", [])) and (not provider or provider in item.get("provider_ids", [])) and (not domain or domain in item.get("domains", []))
 
-    return {"registry_version": bundle.manifest["registry_version"], "release_sequence": bundle.manifest["release_sequence"], "sources": [item for item in sources if source_match(item)], "obligations": [item for item in obligations if obligation_match(item)]}
+    return {
+        "registry_version": bundle.manifest["registry_version"],
+        "release_sequence": bundle.manifest["release_sequence"],
+        "sources": [item for item in sources if source_match(item)],
+        "obligations": [item for item in obligations if obligation_match(item)],
+    }
 
 
 def pin(cache_root: Path, project_root: Path, jurisdictions: list[str], providers: list[str]) -> dict[str, Any]:
@@ -465,6 +529,7 @@ def build_parser() -> argparse.ArgumentParser:
     install_parser = sub.add_parser("install")
     install_parser.add_argument("bundle")
     install_parser.add_argument("--expected-tag")
+    install_parser.add_argument("--expected-manifest-sha256", required=True)
     install_parser.add_argument("--allow-rollback", action="store_true")
     query_parser = sub.add_parser("query")
     query_parser.add_argument("--jurisdiction")
@@ -488,11 +553,24 @@ def main(argv: list[str] | None = None) -> int:
             _emit(status(cache_root))
         elif args.command == "verify":
             bundle = _active_bundle(cache_root)
-            _emit({"registry_status": "VERIFIED", "registry_version": bundle.manifest["registry_version"], "release_sequence": bundle.manifest["release_sequence"], "release_tag": bundle.manifest["release_tag"], "manifest_sha256": bundle.manifest_sha256, "freshness": freshness_summary(bundle)})
+            _emit({
+                "registry_status": "VERIFIED",
+                "registry_version": bundle.manifest["registry_version"],
+                "release_sequence": bundle.manifest["release_sequence"],
+                "release_tag": bundle.manifest["release_tag"],
+                "manifest_sha256": bundle.manifest_sha256,
+                "freshness": freshness_summary(bundle),
+            })
         elif args.command == "sync":
             _emit(sync(cache_root, asset_name=args.asset_name))
         elif args.command == "install":
-            _emit(install_bundle(Path(args.bundle).resolve(), cache_root, expected_tag=args.expected_tag, allow_rollback=args.allow_rollback))
+            _emit(install_bundle(
+                Path(args.bundle).resolve(),
+                cache_root,
+                expected_manifest_sha256=args.expected_manifest_sha256,
+                expected_tag=args.expected_tag,
+                allow_rollback=args.allow_rollback,
+            ))
         elif args.command == "query":
             _emit(query(cache_root, jurisdiction=args.jurisdiction, provider=args.provider, domain=args.domain, source_id=args.source_id, obligation_id=args.obligation_id))
         elif args.command == "pin":
