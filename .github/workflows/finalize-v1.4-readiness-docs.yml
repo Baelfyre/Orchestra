@@ -1,0 +1,131 @@
+name: Finalize v1.4 readiness documentation
+
+on:
+  push:
+    branches:
+      - docs/orchestra-v1-4-final-release-readiness-20260814
+    paths:
+      - release-readiness/trigger.txt
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Guard expected source lineage
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git merge-base HEAD b5d0790fc714f53c4561a91b158c13c625768e05)" = "b5d0790fc714f53c4561a91b158c13c625768e05"
+          test -f docs/validation/V1_4_0_RELEASE_READINESS_EVIDENCE.md
+
+      - name: Advance current-facing readiness surfaces
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path: str, old: str, new: str) -> None:
+              p = Path(path)
+              text = p.read_text(encoding="utf-8")
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f"{path}: expected exactly one replacement target, found {count}")
+              p.write_text(text.replace(old, new, 1), encoding="utf-8")
+
+          replace_once(
+              "README.md",
+              "The Registry foundation, source/freshness pilot, deterministic packaging, and v0.1.0 release-readiness stack are now canonical in `Baelfyre/Orchestra-Compliance-Registry`. The deterministic `registry-v0.1.0` candidate is preserved as revision-bound CI evidence, but **no trusted Registry GitHub Release exists yet**. Orchestra therefore remains in prepublication readiness pending separately authorized Registry publication and real network-provenance validation against the resulting immutable canonical release.",
+              "The Registry foundation, source/freshness pilot, deterministic packaging, and v0.1.0 release-readiness stack are canonical in `Baelfyre/Orchestra-Compliance-Registry`. The trusted `registry-v0.1.0` GitHub Release is now published as non-draft, non-prerelease, and immutable at Registry commit `3821bcb55125b4d8864f28b6423650e6e17ac67b`. Orchestra has completed real network-provenance validation from canonical source baseline `b5d0790fc714f53c4561a91b158c13c625768e05`, confirming the exact release identity, manifest and bundle hashes, `CURRENT` freshness, source query, project pinning, update-check behavior, and idempotent re-sync. The Orchestra package remains `1.4.0` while the public GitHub release remains `v1.3.0` until the separate `v1.4.0` publication gate is explicitly authorized and completed."
+          )
+
+          replace_once(
+              "README.md",
+              "See the [v1.4.0 governance upgrade release candidate](docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md) and [v1.4.0 prepublication readiness evidence](docs/validation/V1_4_0_PREPUBLICATION_READINESS_EVIDENCE.md) for the current preparation scope, canonical Registry dependency, and remaining publication boundary.",
+              "See the [v1.4.0 governance upgrade release candidate](docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md), the preserved [prepublication readiness evidence](docs/validation/V1_4_0_PREPUBLICATION_READINESS_EVIDENCE.md), and the [final release-readiness evidence](docs/validation/V1_4_0_RELEASE_READINESS_EVIDENCE.md) for the trusted Registry boundary, real network-provenance result, and remaining Orchestra publication gate."
+          )
+
+          replace_once(
+              "CHANGELOG.md",
+              "- Added `docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md` and preserved `v1.3.0` as the current public release until separately authorized `v1.4.0` tag and GitHub Release publication.\n- Registry repository protection, Registry PR #1 merge, trusted Registry release/tag publication, Orchestra `v1.4.0` public release, marketplace publication, installed-integration refresh, deployment, policy activation, destructive cleanup, branch deletion, force push, and history rewrite remain separately gated and are not performed by this preparation.",
+              "- Added `docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md` and preserved `v1.3.0` as the current public release until separately authorized `v1.4.0` tag and GitHub Release publication.\n- Published and independently verified the trusted immutable Registry release `registry-v0.1.0` at canonical Registry commit `3821bcb55125b4d8864f28b6423650e6e17ac67b`, then validated Orchestra's real network sync, exact provenance, freshness, source query, project pinning, update-check, and idempotent re-sync from canonical Orchestra source baseline `b5d0790fc714f53c4561a91b158c13c625768e05`.\n- Added `docs/validation/V1_4_0_RELEASE_READINESS_EVIDENCE.md`; Orchestra `v1.4.0` public release/tag publication, marketplace publication, installed-integration refresh, deployment, policy activation, destructive cleanup, branch deletion, force push, and history rewrite remain separately gated and are not performed by this readiness closeout."
+          )
+
+          candidate = Path("docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md")
+          text = candidate.read_text(encoding="utf-8")
+          text = text.replace("`WAITING_FOR_TRUSTED_REGISTRY_PUBLICATION`", "`READY_FOR_SEPARATE_ORCHESTRA_PUBLICATION_GATE`", 1)
+          text = text.replace("Current Orchestra candidate baseline: `8008eeb87f54b12136fab1563e0c97061459cf61`", "Canonical Orchestra source baseline validated for real Registry provenance: `b5d0790fc714f53c4561a91b158c13c625768e05`", 1)
+          text = text.replace("Publication is not authorized by this preparation record. Registry trusted release publication and Orchestra tag/GitHub Release publication remain separate protected actions.", "The trusted Registry publication gate has been separately authorized and completed. Orchestra tag/GitHub Release publication remains a separate protected action and is not authorized by this readiness record.", 1)
+          old_registry = "No trusted Registry GitHub Release exists yet. Candidate integrity and readiness therefore do not yet establish network distribution provenance."
+          new_registry = "The trusted Registry GitHub Release now exists and is independently verified: release id `370610859`, tag `registry-v0.1.0`, exact target `3821bcb55125b4d8864f28b6423650e6e17ac67b`, non-draft, non-prerelease, and immutable, published at `2026-08-14T14:44:51Z`. The published ZIP and release-manifest asset digests match the reviewed candidate hashes exactly."
+          if text.count(old_registry) != 1:
+              raise SystemExit("release candidate: Registry publication paragraph target mismatch")
+          text = text.replace(old_registry, new_registry, 1)
+
+          start = text.index("## Remaining Publication Dependency")
+          end = text.index("## Authority and Publication Boundary")
+          replacement = """## Final Release-Readiness State
+
+The trusted Registry dependency and real distribution-provenance evidence are now complete.
+
+Completed final dependency chain:
+
+1. `registry-v0.1.0` was published from exact Registry canonical `3821bcb55125b4d8864f28b6423650e6e17ac67b`;
+2. the GitHub Release is non-draft, non-prerelease, and immutable;
+3. the reviewed ZIP, release manifest, and SHA-256 evidence are published as release assets;
+4. Orchestra network-provenance run `31811353512` / job `94802485762` exercised the canonical Registry client from Orchestra source baseline `b5d0790fc714f53c4561a91b158c13c625768e05`;
+5. the run verified exact release identity, immutable provenance, real downloaded bundle hash, manifest identity, `CURRENT` freshness, PH source query, project pinning, update-check behavior, and idempotent re-sync;
+6. `docs/validation/V1_4_0_RELEASE_READINESS_EVIDENCE.md` records the final evidence chain while preserving the historical prepublication record unchanged.
+
+Current state:
+
+`IMPLEMENTATION_COMPLETE`
+
+`TRUSTED_REGISTRY_PUBLICATION_COMPLETE`
+
+`REAL_NETWORK_PROVENANCE_COMPLETE`
+
+`FINAL_EXACT_HEAD_RELEASE_MATRIX_REQUIRED`
+
+`ORCHESTRA_PUBLICATION_GATE_PENDING`
+
+"""
+          text = text[:start] + replacement + text[end:]
+
+          old_auth = "- Registry `registry-v0.1.0` tag/GitHub Release publication;\n- Orchestra `v1.4.0` tag creation;"
+          new_auth = "- Orchestra `v1.4.0` tag creation;"
+          if text.count(old_auth) != 1:
+              raise SystemExit("release candidate: authority list target mismatch")
+          text = text.replace(old_auth, new_auth, 1)
+          text = text.replace("`REGISTRY_CANDIDATE_READY != TRUSTED_REGISTRY_RELEASE_PUBLISHED`\n\n", "`TRUSTED_REGISTRY_RELEASE_PUBLISHED_IMMUTABLE_VERIFIED = TRUE`\n\n`REAL_NETWORK_PROVENANCE_VALIDATED = TRUE`\n\n", 1)
+          text = text.replace("`V1_4_IMPLEMENTATION_AND_PREPUBLICATION_PREPARATION_COMPLETE_WAITING_FOR_TRUSTED_REGISTRY_PUBLICATION`", "`V1_4_RELEASE_READY_PENDING_SEPARATE_ORCHESTRA_PUBLICATION_GATE`", 1)
+          candidate.write_text(text, encoding="utf-8")
+          PY
+
+      - name: Remove one-shot trigger scaffolding
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/finalize-v1.4-readiness-docs.yml
+          rm -f release-readiness/trigger.txt
+          rmdir release-readiness 2>/dev/null || true
+
+      - name: Commit finalized readiness documentation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          git status --short
+          git config user.name "JEO"
+          git config user.email "192281269+Baelfyre@users.noreply.github.com"
+          git add README.md CHANGELOG.md docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md docs/validation/V1_4_0_RELEASE_READINESS_EVIDENCE.md .github/workflows/finalize-v1.4-readiness-docs.yml release-readiness/trigger.txt
+          git commit -m "docs: finalize Orchestra v1.4 release readiness"
+          git push origin HEAD:docs/orchestra-v1-4-final-release-readiness-20260814
