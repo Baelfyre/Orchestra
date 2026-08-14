@@ -1,0 +1,184 @@
+name: Registry v0.1.0 network provenance validation
+
+on:
+  push:
+    branches:
+      - validation/registry-v0.1.0-network-provenance-20260814
+    paths:
+      - .github/workflows/registry-v0.1.0-network-provenance.yml
+
+permissions:
+  contents: read
+
+jobs:
+  network-provenance:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact validation branch
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 2
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Verify canonical Orchestra source parent
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD^)" = "b5d0790fc714f53c4561a91b158c13c625768e05"
+          git diff --exit-code HEAD^ HEAD -- scripts/compliance_registry.py
+
+      - name: Verify immutable Registry release boundary and asset digest
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p evidence
+          python - <<'PY'
+          import hashlib
+          import json
+          import urllib.request
+          from pathlib import Path
+
+          API = "https://api.github.com/repos/Baelfyre/Orchestra-Compliance-Registry/releases/latest"
+          EXPECTED_TAG = "registry-v0.1.0"
+          EXPECTED_TARGET = "3821bcb55125b4d8864f28b6423650e6e17ac67b"
+          EXPECTED_BUNDLE = "b64889933d30a8dea27bcbbb95c952e4f053c14a4f345e1e04b27777b5025ec0"
+          EXPECTED_MANIFEST = "9922ddcce77dfac0c01cac80fe6669aaffe37636826a56a4b54a8312558ee2d1"
+
+          req = urllib.request.Request(API, headers={"Accept": "application/vnd.github+json", "User-Agent": "Orchestra-v1.4-Provenance-Validation"})
+          with urllib.request.urlopen(req, timeout=30) as response:
+              release = json.loads(response.read().decode("utf-8"))
+
+          assert release["draft"] is False
+          assert release["prerelease"] is False
+          assert release["immutable"] is True
+          assert release["tag_name"] == EXPECTED_TAG
+          assert release["target_commitish"] == EXPECTED_TARGET
+          assert release.get("published_at")
+
+          assets = {a["name"]: a for a in release["assets"]}
+          assert set(assets) == {
+              "orchestra-compliance-registry.zip",
+              "orchestra-compliance-registry.zip.sha256",
+              "release-manifest.json",
+              "release-manifest.sha256",
+          }
+          assert assets["orchestra-compliance-registry.zip"].get("digest") == f"sha256:{EXPECTED_BUNDLE}"
+          assert assets["release-manifest.json"].get("digest") == f"sha256:{EXPECTED_MANIFEST}"
+
+          asset_url = assets["orchestra-compliance-registry.zip"]["browser_download_url"]
+          req = urllib.request.Request(asset_url, headers={"User-Agent": "Orchestra-v1.4-Provenance-Validation"})
+          with urllib.request.urlopen(req, timeout=60) as response:
+              payload = response.read()
+          actual = hashlib.sha256(payload).hexdigest()
+          assert actual == EXPECTED_BUNDLE, (actual, EXPECTED_BUNDLE)
+
+          evidence = {
+              "release_id": release["id"],
+              "tag_name": release["tag_name"],
+              "target_commitish": release["target_commitish"],
+              "immutable": release["immutable"],
+              "draft": release["draft"],
+              "prerelease": release["prerelease"],
+              "published_at": release["published_at"],
+              "bundle_sha256": actual,
+              "manifest_sha256": EXPECTED_MANIFEST,
+          }
+          Path("evidence/release-boundary.json").write_text(json.dumps(evidence, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          print(json.dumps(evidence, indent=2, sort_keys=True))
+          PY
+
+      - name: Exercise Orchestra network sync and governance lifecycle
+        shell: bash
+        run: |
+          set -euo pipefail
+          CACHE="$RUNNER_TEMP/orchestra-registry-cache"
+          PROJECT="$RUNNER_TEMP/orchestra-project"
+          mkdir -p "$CACHE" "$PROJECT" evidence
+
+          python scripts/compliance_registry.py --cache-root "$CACHE" sync | tee evidence/sync.json
+          python scripts/compliance_registry.py --cache-root "$CACHE" verify | tee evidence/verify.json
+          python scripts/compliance_registry.py --cache-root "$CACHE" status | tee evidence/status.json
+          python scripts/compliance_registry.py --cache-root "$CACHE" query --source-id PH-DPA-RA10173 | tee evidence/query.json
+          python scripts/compliance_registry.py --cache-root "$CACHE" pin --project-root "$PROJECT" --jurisdiction PH | tee evidence/pin.json
+          python scripts/compliance_registry.py --cache-root "$CACHE" update-check | tee evidence/update-check.json
+          python scripts/compliance_registry.py --cache-root "$CACHE" sync | tee evidence/resync.json
+
+          python - "$PROJECT" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+
+          evidence = Path("evidence")
+          load = lambda name: json.loads((evidence / name).read_text(encoding="utf-8"))
+          expected_manifest = "9922ddcce77dfac0c01cac80fe6669aaffe37636826a56a4b54a8312558ee2d1"
+          expected_tag = "registry-v0.1.0"
+
+          sync = load("sync.json")
+          assert sync["registry_version"] == "0.1.0"
+          assert sync["release_sequence"] == 1
+          assert sync["release_tag"] == expected_tag
+          assert sync["manifest_sha256"] == expected_manifest
+
+          verify = load("verify.json")
+          assert verify["registry_status"] == "VERIFIED"
+          assert verify["manifest_sha256"] == expected_manifest
+          assert verify["freshness"]["state"] == "CURRENT"
+          assert verify["freshness"]["tracked_source_count"] == 4
+          assert verify["freshness"]["stale_source_ids"] == []
+
+          status = load("status.json")
+          assert status["registry_status"] == "VERIFIED"
+          assert status["release_tag"] == expected_tag
+
+          query = load("query.json")
+          assert query["registry_version"] == "0.1.0"
+          assert query["release_sequence"] == 1
+          assert len(query["sources"]) == 1
+          assert query["sources"][0]["source_id"] == "PH-DPA-RA10173"
+          assert len(query["obligations"]) == 6
+
+          pin = load("pin.json")
+          assert pin["release_tag"] == expected_tag
+          assert pin["manifest_sha256"] == expected_manifest
+          assert pin["jurisdictions"] == ["PH"]
+          assert pin["providers"] == []
+
+          lock = json.loads((Path(sys.argv[1]) / ".orchestra" / "compliance.lock.json").read_text(encoding="utf-8"))
+          assert lock["release_tag"] == expected_tag
+          assert lock["manifest_sha256"] == expected_manifest
+
+          update = load("update-check.json")
+          assert update["latest_tag"] == expected_tag
+          assert update["active_tag"] == expected_tag
+          assert update["update_available"] is False
+
+          resync = load("resync.json")
+          assert resync["release_sequence"] == 1
+          assert resync["release_tag"] == expected_tag
+          assert resync["manifest_sha256"] == expected_manifest
+
+          print("NETWORK_PROVENANCE_VALIDATION=PASS")
+          print("IMMUTABLE_RELEASE_BOUNDARY=PASS")
+          print("NETWORK_SYNC=PASS")
+          print("FRESHNESS=PASS")
+          print("QUERY=PASS")
+          print("PIN=PASS")
+          print("UPDATE_CHECK=PASS")
+          print("IDEMPOTENT_RESYNC=PASS")
+          PY
+
+      - name: Write validation summary
+        if: always()
+        shell: bash
+        run: |
+          echo "# Registry v0.1.0 Network Provenance" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Validation source parent: \`b5d0790fc714f53c4561a91b158c13c625768e05\`." >> "$GITHUB_STEP_SUMMARY"
+          echo "Trusted Registry target: \`3821bcb55125b4d8864f28b6423650e6e17ac67b\`." >> "$GITHUB_STEP_SUMMARY"
+          echo "Release: \`registry-v0.1.0\`." >> "$GITHUB_STEP_SUMMARY"
+          echo "Expected manifest SHA-256: \`9922ddcce77dfac0c01cac80fe6669aaffe37636826a56a4b54a8312558ee2d1\`." >> "$GITHUB_STEP_SUMMARY"
+          echo "Expected bundle SHA-256: \`b64889933d30a8dea27bcbbb95c952e4f053c14a4f345e1e04b27777b5025ec0\`." >> "$GITHUB_STEP_SUMMARY"
