@@ -113,11 +113,13 @@ The repository/package version is prepared at `1.4.0` for the governance upgrade
 
 v1.4.0 packages the Compliance Registry cross-integration as an Orchestra governance capability: offline-first verified local Registry consumption, explicit integrity/provenance/freshness state, project pinning, progressive-disclosure integration across Governor, Steward, and Arbiter, and preserved routing/authority boundaries.
 
+The Registry foundation, source/freshness pilot, deterministic packaging, and v0.1.0 release-readiness stack are now canonical in `Baelfyre/Orchestra-Compliance-Registry`. The deterministic `registry-v0.1.0` candidate is preserved as revision-bound CI evidence, but **no trusted Registry GitHub Release exists yet**. Orchestra therefore remains in prepublication readiness pending separately authorized Registry publication and real network-provenance validation against the resulting immutable canonical release.
+
 It also adds a fail-closed **README Impact Gate** to the Governance Check workflow. Changes classified as significant to Orchestra's runtime, specialist skills, host adapters/manifests, governance/routing/setup/release contracts, version surfaces, or CI/governance scripts must update `README.md` in the same revision. Tests and validation-evidence-only changes do not force documentation churn.
 
 This documentation gate complements the existing changelog-freshness gate: significant changes must remain visible both as historical change records and as current public-facing project documentation.
 
-See the [v1.4.0 governance upgrade release candidate](docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md) for the preparation scope and publication boundary.
+See the [v1.4.0 governance upgrade release candidate](docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md) and [v1.4.0 prepublication readiness evidence](docs/validation/V1_4_0_PREPUBLICATION_READINESS_EVIDENCE.md) for the current preparation scope, canonical Registry dependency, and remaining publication boundary.
 
 ## v1.3.0 Specialist Intelligence
 
@@ -326,9 +328,11 @@ For autonomous or delegated merges, Orchestra additionally requires the fail-clo
 
 Repository package/version surfaces are prepared at `1.4.0` for the governance upgrade. The scope cross-integrates verified Compliance Registry evidence into Orchestra's established governance responsibilities and adds the README Impact Gate so significant project changes cannot pass normal governance validation while leaving the public README stale.
 
+The Registry implementation and v0.1.0 deterministic candidate preparation are canonical, but a trusted Registry GitHub Release has not yet been published. Orchestra `v1.4.0` therefore remains a prepublication candidate pending that separately authorized Registry release and real network-provenance validation against it.
+
 This repository/package version does **not** by itself establish a public `v1.4.0` release. The current public release remains `v1.3.0`; tag creation and GitHub Release publication remain separate protected actions.
 
-Preparation scope and boundaries are recorded in the [v1.4.0 governance upgrade release candidate](docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md).
+Preparation scope and boundaries are recorded in the [v1.4.0 governance upgrade release candidate](docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md) and [v1.4.0 prepublication readiness evidence](docs/validation/V1_4_0_PREPUBLICATION_READINESS_EVIDENCE.md).
 
 ### v1.3.0 Specialist Intelligence
 
@@ -336,7 +340,7 @@ Repository package/version surfaces are aligned at `1.3.0` for the Specialist In
 
 Package version, validation success, or mergeability does not independently establish public-release state. GitHub Release publication is a separate governed transition. See the repository's Releases page for the current publication state.
 
-Release preparation and revision-bound evidence are recorded in the [v1.3.0 release candidate](docs/releases/v1.3.0-specialist-intelligence-release-candidate.md) and [v1.3.0 release-readiness evidence](docs/validation/V1_3_0_RELEASE_READINESS_EVIDENCE.md).
+Release preparation and revision-bound evidence are recorded in the [v1.3.0 release candidate](docs/releases/v1.3.0-specialist-intelligence-release-candidate.md) and [v1.3.0 release-readiness evidence](docs/validation/V1_3_0_RELEASE_READINESS_EVIDENCE.md) for the completed campaign and preparation record.
 
 ### v1.2.0 Governed Orchestration
 
@@ -393,6 +397,7 @@ See the [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration.md). 
 ### Release and maintainers
 
 - [v1.4.0 Governance Upgrade Release Candidate](docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md)
+- [v1.4.0 Prepublication Readiness Evidence](docs/validation/V1_4_0_PREPUBLICATION_READINESS_EVIDENCE.md)
 - [v1.3.0 Release Candidate](docs/releases/v1.3.0-specialist-intelligence-release-candidate.md)
 - [v1.3.0 Release Readiness Evidence](docs/validation/V1_3_0_RELEASE_READINESS_EVIDENCE.md)
 - [v1.2.0 Release Notes](docs/releases/v1.2.0-governed-orchestration.md)
