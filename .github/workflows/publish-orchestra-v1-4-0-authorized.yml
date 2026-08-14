@@ -1,0 +1,144 @@
+name: Publish Orchestra v1.4.0 Authorized
+
+on:
+  push:
+    branches:
+      - ops/publish-orchestra-v1-4-0-20260814
+    paths:
+      - .github/workflows/publish-orchestra-v1-4-0-authorized.yml
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish exact immutable v1.4.0 release
+        shell: bash
+        env:
+          EXPECTED_MAIN_SHA: 93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50
+          TAG: v1.4.0
+          RELEASE_NAME: "Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration"
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          API="https://api.github.com/repos/${GITHUB_REPOSITORY}"
+          auth=(-H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28")
+
+          current_main="$(curl -fsS "${auth[@]}" "${API}/commits/main" | jq -r '.sha')"
+          echo "CURRENT_MAIN=${current_main}"
+          test "${current_main}" = "${EXPECTED_MAIN_SHA}"
+
+          release_code="$(curl -sS -o /tmp/existing-release.json -w '%{http_code}' "${auth[@]}" "${API}/releases/tags/${TAG}")"
+          test "${release_code}" = "404"
+
+          tag_code="$(curl -sS -o /tmp/existing-tag.json -w '%{http_code}' "${auth[@]}" "${API}/git/ref/tags/${TAG}")"
+          test "${tag_code}" = "404"
+
+          cat > /tmp/release-notes.md <<'EOF'
+          ## Release Theme
+
+          Orchestra v1.4.0 packages the Compliance Registry as a cross-integrated governance capability rather than a standalone data feature. It combines an offline-first verified Registry client, source freshness and provenance boundaries, project pinning, deterministic trusted-release compatibility, and fail-closed README freshness enforcement.
+
+          The release remains reduction-only with respect to authority: compliance knowledge can inform specialist-owned decisions and transition evidence, but it does not create routing, execution, release, deployment, policy, destructive-operation, or legal authority.
+
+          ## Compliance Registry Cross-Integration
+
+          - **The Governor** owns compliance source/applicability review and consumes Registry identity, jurisdiction/provider scope, effective dates, and freshness evidence.
+          - **The Steward** maps Governor-qualified obligations into FR/NFR traceability, acceptance criteria, and change-control impact without taking over compliance authority.
+          - **Arbiter** carries pinned Registry identity and freshness into continuity, validation-state, transition, and release-readiness evidence.
+          - **Conductor and The Tuner** may route and coordinate work that depends on those specialist-owned contracts without gaining authority from Registry content.
+          - **Downstream projects** can reuse verified compliance knowledge while their own repositories and trackers remain authoritative for project state and implementation evidence.
+
+          Trusted network synchronization requires the canonical Registry's non-draft, non-prerelease, immutable GitHub Release boundary. Local or air-gapped installation requires a separately verified release-manifest SHA-256 trust anchor.
+
+          ## Governance and Packaging
+
+          - All 11 live Orchestra package/version surfaces are aligned to `1.4.0`.
+          - The README Impact Gate fails closed when significant Orchestra runtime, specialist, governance, routing, setup, release, host-adapter, package/version, or CI/governance changes omit matching README updates.
+          - Public terminology uses **Downstream Roles** for specialist/adapter recipients while preserving genuine technical provider/consumer semantics.
+          - Registry trust handling includes exact release identity, SHA-256 content verification, anti-rollback controls, freshness propagation, and project pinning.
+
+          ## Trusted Registry Boundary
+
+          - Registry release: `registry-v0.1.0`
+          - Registry canonical target: `3821bcb55125b4d8864f28b6423650e6e17ac67b`
+          - Release state: non-draft, non-prerelease, immutable
+          - Release-manifest SHA-256: `9922ddcce77dfac0c01cac80fe6669aaffe37636826a56a4b54a8312558ee2d1`
+          - Bundle SHA-256: `b64889933d30a8dea27bcbbb95c952e4f053c14a4f345e1e04b27777b5025ec0`
+          - Real Orchestra network-provenance validation: run `31811353512`, job `94802485762`, PASS
+
+          ## Final Validation
+
+          Release source commit: `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`
+
+          Canonical post-merge validation on that exact source revision:
+
+          - Governance Check / README Impact Gate: PASS
+          - behavior validation: PASS
+          - runtime tests: **568 passed**
+          - runtime coverage: **94.31%**
+          - CodeQL Analyze (actions): PASS
+          - CodeQL Analyze (Python): PASS
+          - native Ubuntu: PASS
+          - native macOS: PASS
+          - native Windows: PASS
+
+          ## Authority and Host Boundaries
+
+          This release does not perform marketplace/package publication, installed-integration refresh, deployment or production mutation, policy activation, destructive cleanup, branch deletion, force push, or history rewrite. Registry evidence informs governed decisions without broadening specialist or host authority.
+          EOF
+
+          sed -i 's/^          //' /tmp/release-notes.md
+
+          jq -n \
+            --arg tag "${TAG}" \
+            --arg target "${EXPECTED_MAIN_SHA}" \
+            --arg name "${RELEASE_NAME}" \
+            --rawfile body /tmp/release-notes.md \
+            '{tag_name:$tag,target_commitish:$target,name:$name,body:$body,draft:false,prerelease:false,make_latest:"true"}' \
+            > /tmp/release-payload.json
+
+          curl -fsS -X POST "${auth[@]}" \
+            -H 'Content-Type: application/json' \
+            --data-binary @/tmp/release-payload.json \
+            "${API}/releases" > /tmp/published-release.json
+
+          release_id="$(jq -r '.id' /tmp/published-release.json)"
+          published_tag="$(jq -r '.tag_name' /tmp/published-release.json)"
+          published_draft="$(jq -r '.draft' /tmp/published-release.json)"
+          published_prerelease="$(jq -r '.prerelease' /tmp/published-release.json)"
+          test -n "${release_id}"
+          test "${published_tag}" = "${TAG}"
+          test "${published_draft}" = "false"
+          test "${published_prerelease}" = "false"
+
+          immutable="false"
+          for _ in $(seq 1 24); do
+            curl -fsS "${auth[@]}" "${API}/releases/tags/${TAG}" > /tmp/verified-release.json
+            immutable="$(jq -r '.immutable // false' /tmp/verified-release.json)"
+            if [ "${immutable}" = "true" ]; then
+              break
+            fi
+            sleep 5
+          done
+          test "${immutable}" = "true"
+
+          curl -fsS "${auth[@]}" "${API}/git/ref/tags/${TAG}" > /tmp/tag-ref.json
+          tag_type="$(jq -r '.object.type' /tmp/tag-ref.json)"
+          tag_sha="$(jq -r '.object.sha' /tmp/tag-ref.json)"
+          if [ "${tag_type}" = "tag" ]; then
+            tag_sha="$(curl -fsS "${auth[@]}" "${API}/git/tags/${tag_sha}" | jq -r '.object.sha')"
+          fi
+          test "${tag_sha}" = "${EXPECTED_MAIN_SHA}"
+
+          curl -fsS "${auth[@]}" "${API}/releases/latest" > /tmp/latest-release.json
+          test "$(jq -r '.tag_name' /tmp/latest-release.json)" = "${TAG}"
+
+          echo "RELEASE_ID=${release_id}"
+          echo "TAG=${TAG}"
+          echo "TARGET_SHA=${tag_sha}"
+          echo "IMMUTABLE=${immutable}"
+          echo "PUBLISH_VERIFICATION=PASS"
