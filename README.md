@@ -37,6 +37,24 @@ The framework is designed to help developers reduce context drift, make cross-do
 
 > **Core trust boundary:** governance approval, coordination readiness, validation success, and GitHub mergeability are state or evidence signals. None of them grants or expands authority.
 
+## Why the Compliance Registry Matters
+
+Compliance decisions are especially vulnerable to stale context. Laws, platform policies, licensing terms, privacy obligations, provider requirements, and effective dates can change independently of application code. If those facts are copied into prompts or project documents without provenance and freshness metadata, a previously correct assumption can quietly become the next project's bad input.
+
+The **Orchestra Compliance Registry** is designed to prevent that failure mode. It gives Governor, Steward, and Arbiter a reusable, versioned compliance-intelligence layer whose source identity, release identity, file integrity, freshness state, and project pinning can be checked independently of the project being reviewed.
+
+That separation is important because it lets Orchestra:
+
+- reuse source-backed compliance knowledge across projects without duplicating legal or policy conclusions into every repository;
+- distinguish **content integrity** from **distribution provenance**, so a self-consistent local bundle is not automatically treated as trusted;
+- detect stale, unavailable, moved, overdue, or review-required sources instead of silently treating old evidence as current;
+- pin a project to the exact registry version, release sequence, release tag, manifest SHA-256, jurisdictions, and providers used for a governed decision;
+- keep compliance knowledge separate from execution authority: registry records can inform requirements and review, but they cannot authorize release, deployment, policy activation, destructive operations, or other protected actions.
+
+Normal use is local-first: Orchestra reviews a verified active cache and uses network access only for synchronization, update checks, or authoritative-source verification when currentness cannot be established locally. A trusted network sync must come from the canonical registry's immutable GitHub Release boundary; local or air-gapped installation requires a separately verified release-manifest SHA-256 trust anchor.
+
+See [Compliance Registry Integration](docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md) for the trust model, owner responsibilities, freshness behavior, and release boundaries.
+
 ## How Orchestra Works
 
 Each run begins with project context and three separate choices: risk mode, progression mode, and governance profile. Those choices affect review depth and pause frequency, but they do not create permission. Orchestra composes the trusted runtime, calculates effective authority as the intersection of explicit grants and all applicable constraints, and only then lets Conductor route work. Material multi-domain work uses The Tuner to coordinate specialist-owned contracts; single-owner work bypasses that overhead.
@@ -336,6 +354,7 @@ See the [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration.md). 
 - [Governance Review Flow](docs/governance/GOVERNANCE_REVIEW_FLOW.md)
 - [Delegated Execution Policy](docs/governance/DELEGATED_EXECUTION_POLICY.md)
 - [Autonomous Merge Readiness Protocol](docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md)
+- [Compliance Registry Integration](docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md)
 - [Release Gates](docs/governance/RELEASE_GATES.md)
 - [App Release Compliance Gate](docs/governance/APP_RELEASE_COMPLIANCE_GATE.md)
 
