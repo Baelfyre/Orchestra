@@ -21,7 +21,7 @@ This document specifies the `OrchestraWorktreeContract`, an optional, host-capab
 ## 2. Canonical Ownership & Responsibilities
 - **Canonical Owner:** **Ponytail** (Implementation and Navigation Specialist).
 - **Responsibility:** Owns codebase navigation, targeted file changes, Git worktree operations, path confinement validation, and safe workspace boundaries.
-- **Secondary Consumers:** Conductor (routing context), Arbiter (transition verification), Overseer (evidence validation), Host Adapters (capability declaration).
+- **Downstream Roles:** Conductor (routing context), Arbiter (transition verification), Overseer (evidence validation), Host Adapters (capability declaration).
 
 ---
 

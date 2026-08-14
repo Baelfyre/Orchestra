@@ -22,7 +22,7 @@ This document specifies the `OrchestraStatusProjection`, a read-only, determinis
 - **Canonical Owner:** **Scribe** (Documentation and Knowledge Transfer Specialist).
 - **Responsibility:** Owns status summary formats, state projection schemas, knowledge base alignment, and presentation formats.
 - **Implementation Specialist:** **Ponytail** (Implementation and Navigation Specialist).
-- **Secondary Consumers:** Conductor (routing context), Arbiter (continuity validation), Overseer (release readiness check).
+- **Downstream Roles:** Conductor (routing context), Arbiter (continuity validation), Overseer (release readiness check).
 
 ---
 

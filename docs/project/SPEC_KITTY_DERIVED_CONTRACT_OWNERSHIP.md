@@ -16,14 +16,14 @@
 This document defines canonical placement, single specialist ownership, and architectural boundaries for the Spec Kitty-derived Orchestra upgrade contracts.
 
 1. **Single Source of Truth Invariant:** No new contract creates a second source of truth for existing state or policy.
-2. **Single Canonical Owner Invariant:** Every contract has exactly ONE canonical specialist owner. Secondary consumers or validators are recorded separately.
+2. **Single Canonical Owner Invariant:** Every contract has exactly ONE canonical specialist owner. Downstream roles or validators are recorded separately.
 3. **No Inferred Authority Invariant:** Machine-readable formats, correlation headers, retrospective artifacts, worktree contracts, and status projections track execution; they do NOT grant execution, merge, release, or policy mutation authority.
 
 ---
 
 ## 2. Canonical Phase 2 Contract Ownership Matrix
 
-| Contract Name | Canonical Specification | Canonical Owner | Secondary Consumers | Validation Owner | Continuity Consumer | Design Status | Implementation Status | Policy Integration Status | Release Status |
+| Contract Name | Canonical Specification | Canonical Owner | Downstream Roles | Validation Owner | Continuity Consumer | Design Status | Implementation Status | Policy Integration Status | Release Status |
 |---|---|---|---|---|---|---|---|---|---|
 | **OrchestraRuntimeEnvelope** | `docs/project/ORCHESTRA_RUNTIME_ENVELOPE.md` | Clockwork | Conductor, Arbiter | Overseer | Arbiter | `DESIGN_SPECIFIED` | `IMPLEMENTED_MERGED` | `NOT_APPLICABLE` | `NOT_RELEASED` |
 | **OrchestraCorrelationID** | `docs/governance/CORRELATION_ID_PROTOCOL.md` | Chronicler | Conductor, Overseer | Overseer | Arbiter | `DESIGN_SPECIFIED` | `IMPLEMENTED_MERGED` | `NOT_APPLICABLE` | `NOT_RELEASED` |
@@ -34,7 +34,7 @@ This document defines canonical placement, single specialist ownership, and arch
 
 ## 2.1 Phase 3 Contract Ownership Matrix
 
-| Contract Name | Canonical Specification | Canonical Owner | Secondary Consumers | Validation Owner | Continuity Consumer | Design Status | Implementation Status | Policy Integration Status | Release Status |
+| Contract Name | Canonical Specification | Canonical Owner | Downstream Roles | Validation Owner | Continuity Consumer | Design Status | Implementation Status | Policy Integration Status | Release Status |
 |---|---|---|---|---|---|---|---|---|---|
 | **OrchestraStatusProjection** | `docs/project/ORCHESTRA_STATUS_PROJECTION.md` | Scribe | Conductor, Arbiter, Overseer, Ponytail | Overseer | Arbiter | `DESIGN_ACCEPTED_MERGED` | `IMPLEMENTED_MERGED` | `NOT_APPLICABLE` | `NOT_RELEASED` |
 | **OrchestraWorktreeContract** | `docs/project/ORCHESTRA_WORKTREE_CONTRACT.md` | Ponytail | Conductor, Arbiter, Overseer, Host Adapters | Overseer | Arbiter | `DESIGN_ACCEPTED_MERGED` | `IMPLEMENTED_MERGED` | `NOT_APPLICABLE` | `NOT_RELEASED` |

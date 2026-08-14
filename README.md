@@ -37,6 +37,8 @@ The framework is designed to help developers reduce context drift, make cross-do
 
 > **Core trust boundary:** governance approval, coordination readiness, validation success, and GitHub mergeability are state or evidence signals. None of them grants or expands authority.
 
+> **Terminology:** Orchestra uses **Downstream Roles** for specialists or adapters that receive governed outputs from another canonical owner. The word **consumer** is reserved for genuine technical provider/consumer or message-consumer semantics.
+
 ## Why the Compliance Registry Matters
 
 Compliance decisions are especially vulnerable to stale context. Laws, platform policies, licensing terms, privacy obligations, provider requirements, and effective dates can change independently of application code. If those facts are copied into prompts or project documents without provenance and freshness metadata, a previously correct assumption can quietly become the next project's bad input.
