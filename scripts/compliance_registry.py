@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import shutil
 import sys
 import tempfile
@@ -21,6 +22,21 @@ LATEST_RELEASE_API = f"https://api.github.com/repos/{CANONICAL_REPOSITORY}/relea
 DEFAULT_ASSET_NAME = "orchestra-compliance-registry.zip"
 SUPPORTED_RELEASE_SCHEMA = 1
 ACTIVE_SCHEMA = 1
+VERSION_TOKEN_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._+-]{0,127}$")
+SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+SOURCE_STATES = {
+    "VERIFIED_CURRENT",
+    "CURRENT_WITH_PENDING_CHANGE",
+    "NOT_EFFECTIVE_YET",
+    "SUPERSEDED",
+    "REPEALED",
+    "SOURCE_UNAVAILABLE",
+    "SOURCE_MOVED",
+    "APPLICABILITY_UNRESOLVED",
+    "HUMAN_INTERPRETATION_REQUIRED",
+    "REVIEW_OVERDUE",
+}
+STALE_SOURCE_STATES = {"SOURCE_UNAVAILABLE", "SOURCE_MOVED", "REVIEW_OVERDUE"}
 
 
 class RegistryError(RuntimeError):
@@ -67,6 +83,18 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _validate_version_token(value: Any) -> str:
+    if not isinstance(value, str) or VERSION_TOKEN_RE.fullmatch(value) is None:
+        raise RegistryError("registry_version must be a safe version token")
+    return value
+
+
+def _validate_sha256(value: Any, label: str) -> str:
+    if not isinstance(value, str) or SHA256_RE.fullmatch(value) is None:
+        raise RegistryError(f"invalid SHA-256 for {label}")
+    return value
+
+
 def _safe_child(root: Path, relative: str) -> Path:
     if not isinstance(relative, str) or not relative:
         raise RegistryError("manifest file path must be a non-empty string")
@@ -88,9 +116,7 @@ def _validate_release_manifest(manifest: dict[str, Any], *, expected_tag: str | 
         raise RegistryError("release canonical_repository mismatch")
     if manifest.get("status") != "TRUSTED_RELEASE":
         raise RegistryError("registry bundle is not a TRUSTED_RELEASE")
-    version = manifest.get("registry_version")
-    if not isinstance(version, str) or not version.strip():
-        raise RegistryError("registry_version must be a non-empty string")
+    _validate_version_token(manifest.get("registry_version"))
     sequence = manifest.get("release_sequence")
     if not isinstance(sequence, int) or isinstance(sequence, bool) or sequence <= 0:
         raise RegistryError("trusted release requires positive release_sequence")
@@ -103,8 +129,12 @@ def _validate_release_manifest(manifest: dict[str, Any], *, expected_tag: str | 
     if not isinstance(files, dict) or not files:
         raise RegistryError("release manifest files map must be non-empty")
     for relative, expected in files.items():
-        if not isinstance(expected, str) or len(expected) != 64:
-            raise RegistryError(f"invalid SHA-256 for {relative}")
+        if not isinstance(relative, str) or not relative or relative == "release-manifest.json":
+            raise RegistryError(f"invalid release manifest file path: {relative!r}")
+        pure = PurePosixPath(relative)
+        if pure.is_absolute() or ".." in pure.parts:
+            raise RegistryError(f"unsafe manifest path: {relative}")
+        _validate_sha256(expected, relative)
 
 
 def verify_bundle(root: Path, *, expected_tag: str | None = None) -> VerifiedBundle:
@@ -112,6 +142,7 @@ def verify_bundle(root: Path, *, expected_tag: str | None = None) -> VerifiedBun
     manifest_path = root / "release-manifest.json"
     manifest = _json_load(manifest_path)
     _validate_release_manifest(manifest, expected_tag=expected_tag)
+    expected_files = set(manifest["files"])
     for relative, expected in manifest["files"].items():
         path = _safe_child(root, relative)
         if not path.is_file():
@@ -119,6 +150,20 @@ def verify_bundle(root: Path, *, expected_tag: str | None = None) -> VerifiedBun
         actual = _sha256(path)
         if actual != expected:
             raise RegistryError(f"release bundle hash mismatch: {relative}")
+    actual_files = {
+        path.relative_to(root).as_posix()
+        for path in root.rglob("*")
+        if path.is_file() and path.resolve() != manifest_path.resolve()
+    }
+    if actual_files != expected_files:
+        unlisted = sorted(actual_files - expected_files)
+        missing = sorted(expected_files - actual_files)
+        details: list[str] = []
+        if unlisted:
+            details.append(f"unlisted files={unlisted}")
+        if missing:
+            details.append(f"missing files={missing}")
+        raise RegistryError("release bundle file inventory mismatch: " + "; ".join(details))
     return VerifiedBundle(root=root, manifest=manifest, manifest_sha256=_sha256(manifest_path))
 
 
@@ -145,6 +190,18 @@ def _active_record(cache_root: Path) -> dict[str, Any] | None:
         raise RegistryError("unsupported active registry state schema")
     if data.get("canonical_repository") != CANONICAL_REPOSITORY:
         raise RegistryError("active registry canonical_repository mismatch")
+    _validate_version_token(data.get("registry_version"))
+    sequence = data.get("release_sequence")
+    if not isinstance(sequence, int) or isinstance(sequence, bool) or sequence <= 0:
+        raise RegistryError("active registry release_sequence is invalid")
+    _validate_sha256(data.get("manifest_sha256"), "active registry manifest")
+    release_tag = data.get("release_tag")
+    if not isinstance(release_tag, str) or not release_tag:
+        raise RegistryError("active registry release_tag is missing")
+    relative = data.get("path")
+    if not isinstance(relative, str):
+        raise RegistryError("active registry state missing path")
+    _safe_child(cache_root, relative)
     return data
 
 
@@ -152,11 +209,8 @@ def _active_bundle(cache_root: Path) -> VerifiedBundle:
     active = _active_record(cache_root)
     if active is None:
         raise RegistryError("NO_REGISTRY")
-    relative = active.get("path")
-    if not isinstance(relative, str):
-        raise RegistryError("active registry state missing path")
-    bundle_root = _safe_child(cache_root, relative)
-    verified = verify_bundle(bundle_root)
+    bundle_root = _safe_child(cache_root, active["path"])
+    verified = verify_bundle(bundle_root, expected_tag=active["release_tag"])
     if verified.manifest_sha256 != active.get("manifest_sha256"):
         raise RegistryError("active registry manifest identity mismatch")
     if verified.manifest.get("registry_version") != active.get("registry_version"):
@@ -181,27 +235,31 @@ def install_bundle(bundle_zip: Path, cache_root: Path, *, expected_tag: str | No
         candidate = Path(temp_dir)
         _safe_extract(bundle_zip, candidate)
         verified = verify_bundle(candidate, expected_tag=expected_tag)
-        version = verified.manifest["registry_version"]
+        version = _validate_version_token(verified.manifest["registry_version"])
         sequence = verified.manifest["release_sequence"]
+        release_tag = verified.manifest["release_tag"]
         active = _active_record(cache_root)
         if active is not None:
-            current_sequence = active.get("release_sequence")
-            if isinstance(current_sequence, int) and sequence < current_sequence and not allow_rollback:
+            current_sequence = active["release_sequence"]
+            if sequence < current_sequence and not allow_rollback:
                 raise RegistryError(f"rollback rejected: candidate sequence {sequence} < active sequence {current_sequence}")
-        install_root = cache_root / "registry" / version
+            if sequence == current_sequence and active["manifest_sha256"] != verified.manifest_sha256:
+                raise RegistryError(f"release sequence collision at {sequence}")
+        install_root = _safe_child(cache_root, f"registry/{version}")
         if install_root.exists():
-            existing = verify_bundle(install_root, expected_tag=expected_tag)
+            existing = verify_bundle(install_root, expected_tag=release_tag)
             if existing.manifest_sha256 != verified.manifest_sha256:
                 raise RegistryError(f"version collision for {version}")
         else:
             install_root.parent.mkdir(parents=True, exist_ok=True)
             shutil.copytree(candidate, install_root)
-            verify_bundle(install_root, expected_tag=expected_tag)
+            verify_bundle(install_root, expected_tag=release_tag)
         active_payload = {
             "schema_version": ACTIVE_SCHEMA,
             "canonical_repository": CANONICAL_REPOSITORY,
             "registry_version": version,
             "release_sequence": sequence,
+            "release_tag": release_tag,
             "manifest_sha256": verified.manifest_sha256,
             "path": str(Path("registry") / version).replace("\\", "/"),
             "installed_at": _now_iso(),
@@ -267,32 +325,63 @@ def freshness_summary(bundle: VerifiedBundle) -> dict[str, Any]:
     status_path = bundle.root / "registry" / "source-status.json"
     due_entries = _json_load(due_path).get("entries", []) if due_path.is_file() else []
     status_entries = _json_load(status_path).get("entries", []) if status_path.is_file() else []
+    if not isinstance(due_entries, list) or not isinstance(status_entries, list):
+        raise RegistryError("registry freshness stores must contain entry lists")
     today = date.today()
     overdue: list[str] = []
-    if isinstance(due_entries, list):
-        for entry in due_entries:
-            if not isinstance(entry, dict):
-                continue
-            value = entry.get("next_review_due")
-            source_id = entry.get("source_id")
-            if isinstance(value, str) and isinstance(source_id, str):
-                try:
-                    if date.fromisoformat(value) < today:
-                        overdue.append(source_id)
-                except ValueError:
-                    overdue.append(source_id)
-    state = "STALE" if overdue else ("CURRENT" if status_entries else "NO_TRACKED_SOURCES")
-    return {"state": state, "overdue_source_ids": sorted(overdue), "tracked_source_count": len(status_entries) if isinstance(status_entries, list) else 0}
+    for entry in due_entries:
+        if not isinstance(entry, dict):
+            raise RegistryError("review-due entry must be an object")
+        value = entry.get("next_review_due")
+        source_id = entry.get("source_id")
+        if not isinstance(value, str) or not isinstance(source_id, str) or not source_id:
+            raise RegistryError("review-due entry is malformed")
+        try:
+            if date.fromisoformat(value) < today:
+                overdue.append(source_id)
+        except ValueError as exc:
+            raise RegistryError(f"invalid next_review_due for {source_id}: {value}") from exc
+    source_states: dict[str, str] = {}
+    attention: list[str] = []
+    stale: list[str] = []
+    for entry in status_entries:
+        if not isinstance(entry, dict):
+            raise RegistryError("source-status entry must be an object")
+        source_id = entry.get("source_id")
+        source_state = entry.get("status")
+        if not isinstance(source_id, str) or not source_id or source_state not in SOURCE_STATES:
+            raise RegistryError("source-status entry is malformed")
+        source_states[source_id] = source_state
+        if source_state != "VERIFIED_CURRENT":
+            attention.append(source_id)
+        if source_state in STALE_SOURCE_STATES:
+            stale.append(source_id)
+    stale_ids = sorted(set(overdue) | set(stale))
+    attention_ids = sorted(set(attention) - set(stale_ids))
+    if stale_ids:
+        state = "STALE"
+    elif attention_ids:
+        state = "REVIEW_REQUIRED"
+    else:
+        state = "CURRENT" if status_entries else "NO_TRACKED_SOURCES"
+    return {
+        "state": state,
+        "overdue_source_ids": sorted(set(overdue)),
+        "stale_source_ids": stale_ids,
+        "attention_source_ids": attention_ids,
+        "source_states": source_states,
+        "tracked_source_count": len(status_entries),
+    }
 
 
 def status(cache_root: Path) -> dict[str, Any]:
-    active = _active_record(cache_root)
-    if active is None:
-        return {"registry_status": "NO_REGISTRY", "canonical_repository": CANONICAL_REPOSITORY}
     try:
+        active = _active_record(cache_root)
+        if active is None:
+            return {"registry_status": "NO_REGISTRY", "canonical_repository": CANONICAL_REPOSITORY}
         verified = _active_bundle(cache_root)
         fresh = freshness_summary(verified)
-        return {"registry_status": "VERIFIED", "canonical_repository": CANONICAL_REPOSITORY, "registry_version": verified.manifest["registry_version"], "release_sequence": verified.manifest["release_sequence"], "manifest_sha256": verified.manifest_sha256, "freshness": fresh}
+        return {"registry_status": "VERIFIED", "canonical_repository": CANONICAL_REPOSITORY, "registry_version": verified.manifest["registry_version"], "release_sequence": verified.manifest["release_sequence"], "release_tag": verified.manifest["release_tag"], "manifest_sha256": verified.manifest_sha256, "freshness": fresh}
     except RegistryError as exc:
         return {"registry_status": "INTEGRITY_FAILED", "canonical_repository": CANONICAL_REPOSITORY, "error": str(exc)}
 
@@ -303,16 +392,40 @@ def query(cache_root: Path, *, jurisdiction: str | None = None, provider: str | 
     obligations = _json_load(bundle.root / "registry" / "obligations.json").get("obligations", [])
     if not isinstance(sources, list) or not isinstance(obligations, list):
         raise RegistryError("registry source or obligation store is malformed")
+
     def source_match(item: Any) -> bool:
         return isinstance(item, dict) and (not source_id or item.get("source_id") == source_id) and (not jurisdiction or jurisdiction in item.get("jurisdiction_ids", [])) and (not domain or domain in item.get("domains", []))
+
     def obligation_match(item: Any) -> bool:
         return isinstance(item, dict) and (not obligation_id or item.get("obligation_id") == obligation_id) and (not jurisdiction or jurisdiction in item.get("jurisdiction_ids", [])) and (not provider or provider in item.get("provider_ids", [])) and (not domain or domain in item.get("domains", []))
+
     return {"registry_version": bundle.manifest["registry_version"], "release_sequence": bundle.manifest["release_sequence"], "sources": [item for item in sources if source_match(item)], "obligations": [item for item in obligations if obligation_match(item)]}
 
 
 def pin(cache_root: Path, project_root: Path, jurisdictions: list[str], providers: list[str]) -> dict[str, Any]:
     bundle = _active_bundle(cache_root)
-    lock = {"schema_version": 1, "canonical_repository": CANONICAL_REPOSITORY, "registry_version": bundle.manifest["registry_version"], "release_sequence": bundle.manifest["release_sequence"], "manifest_sha256": bundle.manifest_sha256, "jurisdictions": sorted(set(jurisdictions)), "providers": sorted(set(providers))}
+    jurisdiction_store = _json_load(bundle.root / "registry" / "jurisdictions.json").get("jurisdictions", [])
+    provider_store = _json_load(bundle.root / "registry" / "providers.json").get("providers", [])
+    if not isinstance(jurisdiction_store, list) or not isinstance(provider_store, list):
+        raise RegistryError("registry taxonomy stores are malformed")
+    known_jurisdictions = {item.get("jurisdiction_id") for item in jurisdiction_store if isinstance(item, dict)}
+    known_providers = {item.get("provider_id") for item in provider_store if isinstance(item, dict)}
+    unknown_jurisdictions = sorted(set(jurisdictions) - known_jurisdictions)
+    unknown_providers = sorted(set(providers) - known_providers)
+    if unknown_jurisdictions:
+        raise RegistryError(f"unknown jurisdiction IDs: {unknown_jurisdictions}")
+    if unknown_providers:
+        raise RegistryError(f"unknown provider IDs: {unknown_providers}")
+    lock = {
+        "schema_version": 1,
+        "canonical_repository": CANONICAL_REPOSITORY,
+        "registry_version": bundle.manifest["registry_version"],
+        "release_sequence": bundle.manifest["release_sequence"],
+        "release_tag": bundle.manifest["release_tag"],
+        "manifest_sha256": bundle.manifest_sha256,
+        "jurisdictions": sorted(set(jurisdictions)),
+        "providers": sorted(set(providers)),
+    }
     path = project_root.resolve() / ".orchestra" / "compliance.lock.json"
     _write_json_atomic(path, lock)
     return {"lockfile": str(path), **lock}
@@ -321,7 +434,14 @@ def pin(cache_root: Path, project_root: Path, jurisdictions: list[str], provider
 def update_check(cache_root: Path) -> dict[str, Any]:
     release = _latest_release()
     active = _active_record(cache_root)
-    return {"canonical_repository": CANONICAL_REPOSITORY, "latest_tag": release["tag_name"], "active_version": active.get("registry_version") if active else None, "update_available": active is None or active.get("registry_version") != release["tag_name"]}
+    active_tag = active.get("release_tag") if active else None
+    return {
+        "canonical_repository": CANONICAL_REPOSITORY,
+        "latest_tag": release["tag_name"],
+        "active_tag": active_tag,
+        "active_version": active.get("registry_version") if active else None,
+        "update_available": active is None or active_tag != release["tag_name"],
+    }
 
 
 def _emit(payload: dict[str, Any]) -> None:
@@ -358,15 +478,23 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     cache_root = _cache_root(args.cache_root)
     try:
-        if args.command == "status": _emit(status(cache_root))
+        if args.command == "status":
+            _emit(status(cache_root))
         elif args.command == "verify":
-            bundle = _active_bundle(cache_root); _emit({"registry_status": "VERIFIED", "registry_version": bundle.manifest["registry_version"], "release_sequence": bundle.manifest["release_sequence"], "manifest_sha256": bundle.manifest_sha256, "freshness": freshness_summary(bundle)})
-        elif args.command == "sync": _emit(sync(cache_root, asset_name=args.asset_name))
-        elif args.command == "install": _emit(install_bundle(Path(args.bundle).resolve(), cache_root, expected_tag=args.expected_tag, allow_rollback=args.allow_rollback))
-        elif args.command == "query": _emit(query(cache_root, jurisdiction=args.jurisdiction, provider=args.provider, domain=args.domain, source_id=args.source_id, obligation_id=args.obligation_id))
-        elif args.command == "pin": _emit(pin(cache_root, Path(args.project_root), args.jurisdiction, args.provider))
-        elif args.command == "update-check": _emit(update_check(cache_root))
-        else: raise RegistryError(f"unsupported command: {args.command}")
+            bundle = _active_bundle(cache_root)
+            _emit({"registry_status": "VERIFIED", "registry_version": bundle.manifest["registry_version"], "release_sequence": bundle.manifest["release_sequence"], "release_tag": bundle.manifest["release_tag"], "manifest_sha256": bundle.manifest_sha256, "freshness": freshness_summary(bundle)})
+        elif args.command == "sync":
+            _emit(sync(cache_root, asset_name=args.asset_name))
+        elif args.command == "install":
+            _emit(install_bundle(Path(args.bundle).resolve(), cache_root, expected_tag=args.expected_tag, allow_rollback=args.allow_rollback))
+        elif args.command == "query":
+            _emit(query(cache_root, jurisdiction=args.jurisdiction, provider=args.provider, domain=args.domain, source_id=args.source_id, obligation_id=args.obligation_id))
+        elif args.command == "pin":
+            _emit(pin(cache_root, Path(args.project_root), args.jurisdiction, args.provider))
+        elif args.command == "update-check":
+            _emit(update_check(cache_root))
+        else:
+            raise RegistryError(f"unsupported command: {args.command}")
         return 0
     except RegistryError as exc:
         _emit({"registry_status": "ERROR", "error": str(exc)})
