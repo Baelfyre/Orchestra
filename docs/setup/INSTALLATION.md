@@ -4,11 +4,11 @@ Orchestra can be installed in several ways depending on your AI host or IDE.
 
 ## Release Status
 
-The current public GitHub Release is `v1.3.0: Specialist Intelligence`, published from annotated tag `v1.3.0` at exact release commit `3c6155c111981632649a3c3207fac8ac1edcea74`. Repository manifests and the published release are normalized to version `1.3.0`. The GitHub Release is non-draft, non-prerelease, and immutable.
+The current public GitHub Release is `v1.4.0: Governance & Compliance Registry Cross-Integration`, published from lightweight tag `v1.4.0` at exact signed release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`. Repository manifests and the published release are normalized to version `1.4.0`. The GitHub Release is non-draft, non-prerelease, immutable, and independently verified as latest.
 
-The annotated tag object targets the GitHub-verified signed release commit above; the tag object itself is unsigned and is not represented as a signed tag.
+Unlike the historical annotated `v1.3.0` tag, `v1.4.0` is a lightweight tag ref whose object type is `commit` and whose SHA is the exact GitHub-verified signed release commit above; there is no separate tag object to represent as signed or unsigned.
 
-The latest GitHub Release remains the publication source of truth. Installing directly from `main` may include post-release documentation or later unreleased work, so use tag `v1.3.0` when exact released content is required.
+The latest GitHub Release remains the publication source of truth. Installing directly from `main` may include post-release documentation or later unreleased work, so use tag `v1.4.0` when exact released content is required.
 
 | Host | Install Surface | Current Status |
 |---|---|---|
@@ -24,7 +24,7 @@ The latest GitHub Release remains the publication source of truth. Installing di
 | Neovim | Scaffold-only packaging and workspace instructions | Scaffold-only |
 | Local AI systems | Manual skill loading | Supported |
 
-Accepted R7 live installed-host continuity evidence is verified and reconciled locally in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`; repository validation does not replace that evidence. The v1.3.0 GitHub publication is complete, but the repository simulation fixture remains pending/empty by design and is not live evidence.
+Accepted R7 live installed-host continuity evidence is verified and reconciled locally in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`; repository validation does not replace that evidence. The v1.4.0 GitHub publication is complete, but the repository simulation fixture remains pending/empty by design and is not live evidence.
 
 ## 1. Antigravity Plugin Setup
 

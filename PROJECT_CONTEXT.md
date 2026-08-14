@@ -10,7 +10,7 @@ A governance-first specialist skill framework that routes complex AI-assisted so
 Open-source developer tooling and AI orchestration framework
 
 ## Current Stage
-v1.4.0 - Governance and Compliance Registry Cross-Integration package/version preparation (`PREPARED_NOT_RELEASED`). Repository package surfaces are aligned to `1.4.0` for the governance upgrade while the current public release remains `v1.3.0`. The candidate cross-integrates verified Compliance Registry provenance, integrity, freshness, and project-pinning evidence across Governor, Steward, Arbiter, and Conductor/The Tuner coordination boundaries, and adds a fail-closed README Impact Gate for significant Orchestra changes. The separately governed Registry foundation remains held pending authorized `main` protection and fresh exact-head validation; no `v1.4.0` tag or GitHub Release publication is authorized by package preparation.
+v1.4.0 - Governance and Compliance Registry Cross-Integration (`PUBLISHED_VERIFIED`). Repository package surfaces and the current public GitHub Release are aligned to `1.4.0`. The immutable, non-draft, non-prerelease release `Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration` is published from lightweight tag `v1.4.0`, which resolves directly to exact signed canonical release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`. Trusted Registry publication and real Orchestra network provenance are complete. No marketplace publication, installed-integration refresh, deployment/production mutation, or policy activation was performed.
 
 ## Primary Users
 Developers and maintainers who install Orchestra as a plugin, skill set, or runtime package inside a supported or scaffold-only IDE or coding host (Claude Code, Codex, Antigravity, Cursor, Windsurf, JetBrains, Zed, Neovim)
@@ -58,8 +58,8 @@ Guidance used for this classification:
 - `tests/behavior/run-tests.ps1` is intentionally maintained in parallel with `run_tests.py` as the primary validation path for Windows environments, per `docs/MATURITY.md`.
 - Direct pushes to `main` are not part of the normal workflow; changes go through a branch and pull request except for documented maintainer bypass recovery cases.
 - Installed Codex and Antigravity parity, host context-reset behavior, and Windows filesystem-specific behavior require host-local evidence in addition to repository CI.
-- Repository package metadata is prepared at `1.4.0`; public release `v1.3.0` remains independently verified until a separately authorized and validated `v1.4.0` publication transition. Later `main` commits do not move the immutable `v1.3.0` tag.
-- The Compliance Registry foundation is validated but held until its repository `main` protection/ruleset is separately authorized and independently verified; trusted Registry publication is a separate protected action.
+- Repository package metadata and the current public GitHub Release are `1.4.0`; lightweight tag `v1.4.0` resolves directly to signed release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`. Later `main` commits must not move that fixed release tag.
+- The Compliance Registry foundation, source/freshness pilot, deterministic packaging, immutable `registry-v0.1.0` publication, and Orchestra real network-provenance validation are complete; future Registry releases remain separately governed transitions.
 
 ## Known Non-Goals
 - Orchestra does not store, process, or transmit end-user or client data itself.

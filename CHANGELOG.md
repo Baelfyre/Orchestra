@@ -1,6 +1,6 @@
 # Changelog
 
-## v1.4.0 Governance and Compliance Registry Cross-Integration - Release Preparation - Pending
+## v1.4.0 Governance and Compliance Registry Cross-Integration - Published 2026-08-14
 
 - Normalized the root, Claude Code, Codex, Cursor, JetBrains, Neovim, VS Code, Windsurf, and Zed package/version surfaces to `1.4.0` for the governance release candidate without changing host maturity.
 - Added a deterministic runtime regression that requires all 11 live package/version surfaces to agree on `1.4.0`.
@@ -9,7 +9,9 @@
 - Added Registry `0.1.0` release-candidate compatibility regressions covering manifest trust anchoring, install/query/project pinning, populated Philippine source/obligation identity, current freshness, and explicit `REVIEW_OVERDUE` propagation without changing Orchestra runtime behavior or publishing a Registry release.
 - Added `docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md` and preserved `v1.3.0` as the current public release until separately authorized `v1.4.0` tag and GitHub Release publication.
 - Published and independently verified the trusted immutable Registry release `registry-v0.1.0` at canonical Registry commit `3821bcb55125b4d8864f28b6423650e6e17ac67b`, then validated Orchestra's real network sync, exact provenance, freshness, source query, project pinning, update-check, and idempotent re-sync from canonical Orchestra source baseline `b5d0790fc714f53c4561a91b158c13c625768e05`.
-- Added `docs/validation/V1_4_0_RELEASE_READINESS_EVIDENCE.md`; Orchestra `v1.4.0` public release/tag publication, marketplace publication, installed-integration refresh, deployment, policy activation, destructive cleanup, branch deletion, force push, and history rewrite remain separately gated and are not performed by this readiness closeout.
+- Added `docs/validation/V1_4_0_RELEASE_READINESS_EVIDENCE.md`; at that readiness checkpoint, Orchestra `v1.4.0` public release/tag publication remained a separate protected transition.
+- Published `Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration` as GitHub Release id `370658917` from lightweight tag `v1.4.0`, which resolves directly to exact signed canonical release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`; independently verified non-draft, non-prerelease, immutable, and latest.
+- Added `docs/validation/V1_4_0_PUBLICATION_CLOSEOUT.md` and reconciled current-facing release, setup, roadmap, project-state, and handoff documentation without moving the fixed release tag or performing marketplace publication, installed-integration refresh, deployment, policy activation, destructive cleanup, branch deletion, force push, or history rewrite.
 
 ## Post-v1.3.0 Compliance Registry Local Cache - Pending
 
