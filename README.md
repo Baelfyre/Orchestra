@@ -113,13 +113,13 @@ The repository/package version is prepared at `1.4.0` for the governance upgrade
 
 v1.4.0 packages the Compliance Registry cross-integration as an Orchestra governance capability: offline-first verified local Registry consumption, explicit integrity/provenance/freshness state, project pinning, progressive-disclosure integration across Governor, Steward, and Arbiter, and preserved routing/authority boundaries.
 
-The Registry foundation, source/freshness pilot, deterministic packaging, and v0.1.0 release-readiness stack are now canonical in `Baelfyre/Orchestra-Compliance-Registry`. The deterministic `registry-v0.1.0` candidate is preserved as revision-bound CI evidence, but **no trusted Registry GitHub Release exists yet**. Orchestra therefore remains in prepublication readiness pending separately authorized Registry publication and real network-provenance validation against the resulting immutable canonical release.
+The Registry foundation, source/freshness pilot, deterministic packaging, and v0.1.0 release-readiness stack are canonical in `Baelfyre/Orchestra-Compliance-Registry`. The trusted `registry-v0.1.0` GitHub Release is now published as non-draft, non-prerelease, and immutable at Registry commit `3821bcb55125b4d8864f28b6423650e6e17ac67b`. Orchestra has completed real network-provenance validation from canonical source baseline `b5d0790fc714f53c4561a91b158c13c625768e05`, confirming the exact release identity, manifest and bundle hashes, `CURRENT` freshness, source query, project pinning, update-check behavior, and idempotent re-sync. The Orchestra package remains `1.4.0` while the public GitHub release remains `v1.3.0` until the separate `v1.4.0` publication gate is explicitly authorized and completed.
 
 It also adds a fail-closed **README Impact Gate** to the Governance Check workflow. Changes classified as significant to Orchestra's runtime, specialist skills, host adapters/manifests, governance/routing/setup/release contracts, version surfaces, or CI/governance scripts must update `README.md` in the same revision. Tests and validation-evidence-only changes do not force documentation churn.
 
 This documentation gate complements the existing changelog-freshness gate: significant changes must remain visible both as historical change records and as current public-facing project documentation.
 
-See the [v1.4.0 governance upgrade release candidate](docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md) and [v1.4.0 prepublication readiness evidence](docs/validation/V1_4_0_PREPUBLICATION_READINESS_EVIDENCE.md) for the current preparation scope, canonical Registry dependency, and remaining publication boundary.
+See the [v1.4.0 governance upgrade release candidate](docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md), the preserved [prepublication readiness evidence](docs/validation/V1_4_0_PREPUBLICATION_READINESS_EVIDENCE.md), and the [final release-readiness evidence](docs/validation/V1_4_0_RELEASE_READINESS_EVIDENCE.md) for the trusted Registry boundary, real network-provenance result, and remaining Orchestra publication gate.
 
 ## v1.3.0 Specialist Intelligence
 
