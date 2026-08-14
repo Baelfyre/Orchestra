@@ -33,6 +33,16 @@ jobs:
       - name: Create Artifacts Directory
         run: mkdir -p artifacts
 
+      - name: Enforce README Impact Gate
+        run: |
+          set +e
+          python scripts/check_readme_impact.py > artifacts/readme_impact_report.txt
+          status=$?
+          set -e
+
+          cat artifacts/readme_impact_report.txt
+          exit $status
+
       - name: Run Router Benchmark Validation
         run: |
           python scripts/router_benchmark_runner.py > artifacts/router_benchmark_report.txt
@@ -90,7 +100,7 @@ jobs:
         run: |
           echo "# Governance Validation Report" >> $GITHUB_STEP_SUMMARY
           echo "## Stage 1 Strict Deterministic Gates: ON" >> $GITHUB_STEP_SUMMARY
-          echo "Governance validation completed with Stage 1 strict deterministic gates. Review artifacts and logs for advisory findings that remain non-blocking." >> $GITHUB_STEP_SUMMARY
+          echo "README Impact Gate and Stage 1 strict deterministic governance validation completed. Review artifacts and logs for any fail-closed documentation or governance findings." >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Governance Artifacts
         if: always()
