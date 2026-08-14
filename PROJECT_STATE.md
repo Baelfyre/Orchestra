@@ -5,17 +5,43 @@
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Stable Continuation Branch:** `main`
-- **Current Public Release:** `v1.3.0`
-- **Release Status:** `PUBLISHED_VERIFIED` on August 12, 2026 UTC / August 13, 2026 Asia/Manila
-- **Target Release:** `v1.3.0`
-- **Release-Candidate Metadata:** `1.3.0`
+- **Current Public Release:** `v1.4.0`
+- **Release Status:** `PUBLISHED_VERIFIED` on August 14, 2026 UTC / August 14, 2026 Asia/Manila
+- **Target Release:** `v1.4.0`
+- **Release-Candidate Metadata:** `1.4.0`
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.3.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.3.0 Release Commit:** `3c6155c111981632649a3c3207fac8ac1edcea74`
 - **v1.3.0 Release Tree:** `5ae72f6ab9ddf5284afdc3d8675f67fc23c24281`
 - **v1.3.0 Annotated Tag Object:** `c66afec49990036d9deb2f07e3363cd664e2dcb1` (`UNSIGNED`, exact target verified)
 - **v1.3.0 GitHub Release:** `PUBLISHED_VERIFIED`, immutable, non-draft, non-prerelease
+- **v1.4.0 Release State:** `PUBLISHED_VERIFIED`
+- **v1.4.0 Release Commit:** `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`
+- **v1.4.0 Release Tree:** `1ef60b00e3ac6deba5da57c47d2a0850872d41a9`
+- **v1.4.0 Tag Ref:** lightweight `commit` ref, exact target verified
+- **v1.4.0 GitHub Release:** id `370658917`, immutable, non-draft, non-prerelease, latest
 - **Policy Activation State:** `NOT_PERFORMED`
+
+## v1.4.0 Governance and Compliance Registry Cross-Integration Publication
+
+The v1.4.0 governance upgrade is `PUBLISHED_VERIFIED`. The public GitHub Release `Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration` was published under separate explicit authority as release id `370658917` at `2026-08-14T15:21:25Z`. Lightweight tag `v1.4.0` resolves directly to exact signed canonical release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50` with tree `1ef60b00e3ac6deba5da57c47d2a0850872d41a9`. The release is non-draft, non-prerelease, immutable, and independently verified as latest.
+
+The trusted Registry dependency is also complete: immutable `registry-v0.1.0` targets Registry canonical `3821bcb55125b4d8864f28b6423650e6e17ac67b`, and Orchestra network-provenance run `31811353512` / job `94802485762` passed exact release identity, real bundle integrity, `CURRENT` freshness, PH source query, project pinning, update-check, and idempotent re-sync. Final Orchestra PR #271 then passed the full exact-head matrix and merged as the signed release commit above; its canonical post-merge matrix passed Governance, validate, 568 runtime tests at 94.31% coverage, CodeQL actions/Python, and native Ubuntu/macOS/Windows.
+
+```text
+CURRENT_PUBLIC_RELEASE=v1.4.0
+V1_4_0_RELEASE_STATE=PUBLISHED_VERIFIED
+V1_4_0_TAG_REF_TYPE=commit
+V1_4_0_TAG_TARGET=93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50
+V1_4_0_RELEASE_COMMIT_SIGNATURE=VERIFIED_VALID
+V1_4_0_GITHUB_RELEASE_ID=370658917
+V1_4_0_GITHUB_RELEASE_IMMUTABLE=true
+V1_4_0_PUBLICATION=COMPLETE_VERIFIED
+```
+
+No marketplace publication, installed-integration refresh, deployment/production mutation, policy activation, destructive cleanup, branch deletion, force push, or history rewrite was performed.
+
+See `docs/validation/V1_4_0_PUBLICATION_CLOSEOUT.md`.
 
 ## v1.3.0 Specialist Intelligence Publication
 
@@ -212,6 +238,7 @@ The current bypass list is intentionally retained for repository-operational acc
 - **v1.2.0 Publication State:** Annotated tag `v1.2.0` and the immutable, non-draft, non-prerelease GitHub Release are historical `PUBLISHED_VERIFIED` evidence at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`.
 - **v1.3.0 Preparation:** SK1-SK10 are `MERGED_VERIFIED`; package/version preparation is canonical through PR #255 at signed Squash `32257723d6ca72847e4581d8b927c7b14c77039e`, with 542 runtime tests at 94.33% coverage and all 9 observed exact-head checks passing.
 - **v1.3.0 Publication State:** Annotated tag `v1.3.0` targets exact signed release commit `3c6155c111981632649a3c3207fac8ac1edcea74`; the immutable, non-draft, non-prerelease GitHub Release `Orchestra v1.3.0: Specialist Intelligence` is `PUBLISHED_VERIFIED`. No deployment, marketplace publication, installed-integration refresh, or policy activation was performed.
+- **v1.4.0 Publication State:** Lightweight tag `v1.4.0` resolves directly to exact signed release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`; GitHub Release id `370658917`, `Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration`, is immutable, non-draft, non-prerelease, latest, and `PUBLISHED_VERIFIED`. No marketplace publication, installed-integration refresh, deployment, or policy activation was performed.
 
 ## Local Startup Verification
 

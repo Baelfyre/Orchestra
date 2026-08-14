@@ -1,8 +1,8 @@
 # Compatibility
 
-The current public GitHub Release is Orchestra `v1.3.0: Specialist Intelligence`, published from annotated tag `v1.3.0` at exact release commit `3c6155c111981632649a3c3207fac8ac1edcea74`. The release is non-draft, non-prerelease, and immutable. Publication did not graduate scaffold-only hosts or perform marketplace publication.
+The current public GitHub Release is Orchestra `v1.4.0: Governance & Compliance Registry Cross-Integration`, published from lightweight tag `v1.4.0` at exact signed release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`. The release is non-draft, non-prerelease, immutable, and latest. Publication did not graduate scaffold-only hosts or perform marketplace publication.
 
-The annotated `v1.3.0` tag object is unsigned and targets the GitHub-verified signed release commit above. This is consistent with the prior v1.2.0 annotated-tag pattern and is not represented as a signed tag.
+The `v1.4.0` tag is a lightweight `commit` ref resolving directly to the GitHub-verified signed release commit above; there is no separate tag object. Historical v1.2.0/v1.3.0 annotated-tag evidence remains unchanged.
 
 Scaffold-only hosts are not full support claims. Promotion requirements and graduation order live in `docs/project/SCAFFOLD_ADAPTER_GRADUATION_CRITERIA.md`.
 

@@ -3,15 +3,32 @@
 - **Canonical Repo:** `Baelfyre/Orchestra`
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
-- **Current Public Release:** `v1.3.0`
-- **Release-Candidate Metadata:** `v1.3.0`
-- **Target Release:** `v1.3.0`
+- **Current Public Release:** `v1.4.0`
+- **Release-Candidate Metadata:** `v1.4.0`
+- **Target Release:** `v1.4.0`
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.3.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.3.0 Release Commit:** `3c6155c111981632649a3c3207fac8ac1edcea74`
 - **v1.3.0 Release Tree:** `5ae72f6ab9ddf5284afdc3d8675f67fc23c24281`
 - **v1.3.0 Tag Object:** `c66afec49990036d9deb2f07e3363cd664e2dcb1` (`UNSIGNED`, exact target verified)
+- **v1.4.0 Release State:** `PUBLISHED_VERIFIED`
+- **v1.4.0 Release Commit:** `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`
+- **v1.4.0 Release Tree:** `1ef60b00e3ac6deba5da57c47d2a0850872d41a9`
+- **v1.4.0 Tag Ref:** lightweight `commit` ref targeting the exact release commit
+- **v1.4.0 GitHub Release:** id `370658917`, immutable, non-draft, non-prerelease, latest
 - **Policy Activation:** `NOT_PERFORMED`
+
+## v1.4.0 Governance and Compliance Registry Publication Continuity
+
+Orchestra `v1.4.0` is now `PUBLISHED_VERIFIED`. Release id `370658917`, `Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration`, was published at `2026-08-14T15:21:25Z`. Lightweight tag `v1.4.0` resolves directly to exact signed canonical release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`; the release is non-draft, non-prerelease, immutable, and latest.
+
+Publication used the separately authorized guarded workflow run `31814065248`, job `94811383024`. That publisher first required canonical `main` to equal the exact release commit and required both the tag and release to be absent, then independently verified immutability, latest-release state, and the exact tag target. External reads after the workflow confirmed the same state.
+
+The trusted Registry and network-provenance dependency chain is complete. `registry-v0.1.0` is immutable at Registry canonical `3821bcb55125b4d8864f28b6423650e6e17ac67b`; Orchestra run `31811353512` / job `94802485762` passed the real network path. Final readiness PR #271 merged as the release commit and passed the complete exact-head and post-merge matrix.
+
+No marketplace publication, installed-integration refresh, deployment/production mutation, policy activation, destructive cleanup, branch deletion, force push, or history rewrite was performed.
+
+Evidence: `docs/validation/V1_4_0_PUBLICATION_CLOSEOUT.md`.
 
 ## v1.3.0 Specialist Intelligence Continuity
 
@@ -142,7 +159,13 @@ V1.3-PREP    package/version preparation and exact-head validation - merged veri
 V1.3-READY   revision-bound readiness and continuity reconciliation - merged verified
 V1.3-README  pre-publication README alignment - merged verified
 V1.3-PUBLISH annotated tag and immutable GitHub Release - complete verified
-V1.3-CLOSE   post-publication repository and KB continuity - current closeout
+V1.3-CLOSE   post-publication repository and KB continuity - complete
+V1.4-PREP    governance and Compliance Registry cross-integration - merged verified
+V1.4-REGISTRY trusted immutable registry-v0.1.0 dependency - complete verified
+V1.4-PROVENANCE real Orchestra network provenance - complete verified
+V1.4-READY   exact-head and canonical release readiness - complete verified
+V1.4-PUBLISH lightweight tag and immutable GitHub Release - complete verified
+V1.4-CLOSE   post-publication repository and Padayon continuity - current closeout
 ```
 
 Historical first-run failures remain preserved as audit evidence. They must not be silently rewritten or deleted during cleanup.

@@ -88,6 +88,22 @@ Phases 6B-A through 6C are complete and merged through PR #183. Phase 6D produce
 
 Publication closeout evidence is recorded in `docs/validation/V1_3_0_PUBLICATION_CLOSEOUT.md`.
 
+## v1.4.0 Governance and Compliance Registry Cross-Integration - Published Verified
+
+- [x] Integrate the offline-first Compliance Registry client and governance ownership boundaries.
+- [x] Explain Compliance Registry cross-integration in the public README.
+- [x] Normalize all 11 live package/version surfaces to `1.4.0` and enforce deterministic parity.
+- [x] Add and exercise the fail-closed README Impact Gate.
+- [x] Validate Registry `0.1.0` candidate compatibility, freshness propagation, source query, and project pinning.
+- [x] Activate and independently verify the Registry `compliance-ruleset`, then merge foundation, source/freshness pilot, deterministic packaging, and publication-readiness phases.
+- [x] Publish immutable trusted Registry release `registry-v0.1.0` at exact Registry canonical `3821bcb55125b4d8864f28b6423650e6e17ac67b`.
+- [x] Run real Orchestra network provenance against the immutable Registry release and verify exact identity, bundle/manifest trust, `CURRENT` freshness, PH source query, pinning, update-check, and idempotent re-sync.
+- [x] Finalize Orchestra exact-head release readiness through PR #271 and signed canonical `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50` with the complete validation matrix green.
+- [x] Under separate explicit publication authority, publish lightweight tag `v1.4.0` resolving directly to the exact release commit and GitHub Release id `370658917`, then independently verify non-draft, non-prerelease, immutable, and latest state.
+- [x] Confirm publication performed no marketplace publication, installed-integration refresh, deployment/production mutation, policy activation, destructive cleanup, branch deletion, force push, or history rewrite.
+
+Publication closeout evidence is recorded in `docs/validation/V1_4_0_PUBLICATION_CLOSEOUT.md`.
+
 ### Current `Protect main` Development Baseline
 
 The current repository policy is a solo-maintainer ruleset with zero required approvals, conversation resolution, Squash-only merge, signed commits, linear history, branch-up-to-date enforcement, restricted deletion, blocked force pushes, and these eight required check contexts:
@@ -129,3 +145,4 @@ The existing bypass list remains operationally available. Orchestra governance m
 - [ ] Expand fictional, project-agnostic examples.
 - [x] Publish `v1.2.0` after R7R, GA-0 through GA-7, refreshed release evidence, independent final verification, and the separate R8 publication gate completed.
 - [x] Publish `v1.3.0` after the SK1-SK10 Specialist Intelligence campaign, release preparation, revision-bound readiness, README alignment, and separate publication authority completed.
+- [x] Publish `v1.4.0` after Compliance Registry cross-integration, trusted immutable Registry publication, real network-provenance validation, final exact-head readiness, and separate Orchestra publication authority completed.
