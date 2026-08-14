@@ -17,11 +17,11 @@ jobs:
       - name: Checkout closeout branch
         uses: actions/checkout@v7
         with:
-          fetch-depth: 4
+          fetch-depth: 5
       - name: Run bounded closeout materializer
         shell: bash
         run: |
           set -euo pipefail
-          git reset --soft HEAD~2
+          sed -i 's/^parent = sh("git", "rev-parse", "HEAD^")$/parent = EXPECTED_MAIN_SHA/' scripts/materialize_v1_4_publication_closeout.py
           sed -i '/actual = sorted/i\subprocess.check_call(["git", "add", "-N", "docs/validation/V1_4_0_PUBLICATION_CLOSEOUT.md"])' scripts/materialize_v1_4_publication_closeout.py
           python scripts/materialize_v1_4_publication_closeout.py
