@@ -98,6 +98,8 @@ def _validate_sha256(value: Any, label: str) -> str:
 def _safe_child(root: Path, relative: str) -> Path:
     if not isinstance(relative, str) or not relative:
         raise RegistryError("manifest file path must be a non-empty string")
+    if "\\" in relative:
+        raise RegistryError(f"ambiguous cross-platform path is not allowed: {relative}")
     pure = PurePosixPath(relative)
     if pure.is_absolute() or ".." in pure.parts:
         raise RegistryError(f"unsafe manifest path: {relative}")
@@ -131,6 +133,8 @@ def _validate_release_manifest(manifest: dict[str, Any], *, expected_tag: str | 
     for relative, expected in files.items():
         if not isinstance(relative, str) or not relative or relative == "release-manifest.json":
             raise RegistryError(f"invalid release manifest file path: {relative!r}")
+        if "\\" in relative:
+            raise RegistryError(f"ambiguous cross-platform path is not allowed: {relative}")
         pure = PurePosixPath(relative)
         if pure.is_absolute() or ".." in pure.parts:
             raise RegistryError(f"unsafe manifest path: {relative}")
@@ -171,6 +175,8 @@ def _safe_extract(zip_path: Path, destination: Path) -> None:
     with zipfile.ZipFile(zip_path) as archive:
         for member in archive.infolist():
             name = member.filename
+            if "\\" in name:
+                raise RegistryError(f"ambiguous cross-platform ZIP path is not allowed: {name}")
             pure = PurePosixPath(name)
             if pure.is_absolute() or ".." in pure.parts:
                 raise RegistryError(f"unsafe ZIP path: {name}")
