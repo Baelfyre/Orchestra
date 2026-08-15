@@ -87,6 +87,7 @@ def build_evidence(
     baseline_exit_code: int,
     exec_exit_code: int,
     dump_exit_code: int,
+    classification_exit_code: int,
     tool_version: str,
     tested_sha: str,
     source_head_sha: str,
@@ -139,13 +140,20 @@ def build_evidence(
     report_complete = _extract_count(_COMPLETE_RE, report_text)
     raw_score = round((raw_killed / (raw_killed + raw_survived)) * 100.0, 2) if raw_killed + raw_survived else None
 
-    tools_ok = all(code == 0 for code in (int(init_exit_code), int(baseline_exit_code), int(exec_exit_code), int(dump_exit_code)))
+    tool_codes = (
+        int(init_exit_code),
+        int(baseline_exit_code),
+        int(exec_exit_code),
+        int(dump_exit_code),
+        int(classification_exit_code),
+    )
+    tools_ok = all(code == 0 for code in tool_codes)
     report_complete_ok = report_total is not None and report_complete is not None and report_total == report_complete == raw_total
     classification_status = classification.get("score_status")
 
     if not tools_ok:
         score_status = "UNSCORED_TOOL_FAILURE"
-        interpretation = "Cosmic Ray init, baseline, execution, or detailed dump failed; mutation score is not authoritative."
+        interpretation = "Cosmic Ray init, baseline, execution, detailed dump, or classifier failed; mutation score is not authoritative."
         runtime_score = None
     elif not report_complete_ok:
         score_status = "UNSCORED_INCOMPLETE"
@@ -179,34 +187,19 @@ def build_evidence(
             "ref_name": str(ref_name or "").strip(),
         },
         "tool": {"name": "cosmic-ray", "version": version},
-        "scope": {
-            "modules": modules,
-            "test_command": test_command,
-            "configuration": config_path.name,
-            "pilot": True,
-        },
+        "scope": {"modules": modules, "test_command": test_command, "configuration": config_path.name, "pilot": True},
         "execution": {
             "init_exit_code": int(init_exit_code),
             "baseline_exit_code": int(baseline_exit_code),
             "exec_exit_code": int(exec_exit_code),
             "dump_exit_code": int(dump_exit_code),
+            "classification_exit_code": int(classification_exit_code),
             "score_status": score_status,
             "interpretation": interpretation,
         },
         "mutation_summary": {
-            "raw": {
-                "total": raw_total,
-                "killed": raw_killed,
-                "survived": raw_survived,
-                "other": raw_other,
-                "score_percent": raw_score,
-            },
-            "runtime_relevant": {
-                "total": runtime_total,
-                "killed": runtime_killed,
-                "survived": runtime_survived,
-                "score_percent": runtime_score,
-            },
+            "raw": {"total": raw_total, "killed": raw_killed, "survived": raw_survived, "other": raw_other, "score_percent": raw_score},
+            "runtime_relevant": {"total": runtime_total, "killed": runtime_killed, "survived": runtime_survived, "score_percent": runtime_score},
             "excluded_equivalent": excluded_count,
         },
         "reports": {
@@ -242,6 +235,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--baseline-exit-code", type=int, required=True)
     parser.add_argument("--exec-exit-code", type=int, required=True)
     parser.add_argument("--dump-exit-code", type=int, required=True)
+    parser.add_argument("--classification-exit-code", type=int, required=True)
     parser.add_argument("--tool-version", required=True)
     parser.add_argument("--tested-sha", required=True)
     parser.add_argument("--source-head-sha", required=True)
@@ -266,6 +260,7 @@ def main(argv: list[str] | None = None) -> int:
         baseline_exit_code=args.baseline_exit_code,
         exec_exit_code=args.exec_exit_code,
         dump_exit_code=args.dump_exit_code,
+        classification_exit_code=args.classification_exit_code,
         tool_version=args.tool_version,
         tested_sha=args.tested_sha,
         source_head_sha=args.source_head_sha,
