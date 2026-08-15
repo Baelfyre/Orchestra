@@ -11,6 +11,7 @@ from typing import Any
 
 SCHEMA_VERSION = "orchestra.cosmic-ray-classification.v1"
 _SHA_RE = re.compile(r"^[0-9a-f]{40}$")
+_JOB_ID_RE = re.compile(r"^[0-9a-f]{32}$")
 _BITOR_PREFIX = "core/ReplaceBinaryOperator_BitOr_"
 _KILLED = "KILLED"
 _SURVIVED = "SURVIVED"
@@ -20,6 +21,15 @@ def _git_sha(value: str) -> str:
     cleaned = str(value or "").strip().lower()
     if _SHA_RE.fullmatch(cleaned) is None:
         raise ValueError("source_head_sha must be an exact 40-character Git SHA")
+    return cleaned
+
+
+def _job_id(value: Any, line_number: int) -> str:
+    if not isinstance(value, str):
+        raise ValueError(f"dump line {line_number} has invalid job_id")
+    cleaned = value.strip().lower()
+    if _JOB_ID_RE.fullmatch(cleaned) is None:
+        raise ValueError(f"dump line {line_number} has invalid job_id")
     return cleaned
 
 
@@ -122,12 +132,10 @@ def classify_dump(*, dump_path: Path, repository_root: Path, source_head_sha: st
             "score_status": "UNSCORED_EMPTY",
         }
 
-    seen_job_ids: set[int] = set()
+    seen_job_ids: set[str] = set()
     for line_number, raw_line in enumerate(lines, start=1):
         spec, result = _parse_dump_line(raw_line, line_number)
-        job_id = spec.get("job_id")
-        if isinstance(job_id, bool) or not isinstance(job_id, int) or job_id < 0:
-            raise ValueError(f"dump line {line_number} has invalid job_id")
+        job_id = _job_id(spec.get("job_id"), line_number)
         if job_id in seen_job_ids:
             raise ValueError(f"duplicate Cosmic Ray job_id {job_id}")
         seen_job_ids.add(job_id)
@@ -135,21 +143,25 @@ def classify_dump(*, dump_path: Path, repository_root: Path, source_head_sha: st
         mutation = spec["mutations"][0]
         module_path = mutation.get("module_path")
         operator_name = mutation.get("operator_name")
-        outcome = result.get("worker_outcome")
+        worker_outcome = result.get("worker_outcome")
+        test_outcome = result.get("test_outcome")
         if not isinstance(module_path, str) or not module_path.strip():
             raise ValueError(f"dump line {line_number} has invalid module_path")
         if not isinstance(operator_name, str) or not operator_name.strip():
             raise ValueError(f"dump line {line_number} has invalid operator_name")
-        if not isinstance(outcome, str) or not outcome.strip():
+        if not isinstance(worker_outcome, str) or not worker_outcome.strip():
             raise ValueError(f"dump line {line_number} has invalid worker_outcome")
+        if not isinstance(test_outcome, str) or not test_outcome.strip():
+            raise ValueError(f"dump line {line_number} has invalid test_outcome")
         module_path = module_path.strip().replace("\\", "/")
         operator_name = operator_name.strip()
-        outcome = outcome.strip().upper()
-        raw_outcomes[outcome] += 1
+        worker_outcome = worker_outcome.strip().upper()
+        test_outcome = test_outcome.strip().upper()
+        raw_outcomes[test_outcome] += 1
 
         classification: str
         rationale: str
-        if outcome in {_KILLED, _SURVIVED} and operator_name.startswith(_BITOR_PREFIX) and _bit_or_is_proven_annotation_only(
+        if test_outcome in {_KILLED, _SURVIVED} and operator_name.startswith(_BITOR_PREFIX) and _bit_or_is_proven_annotation_only(
             module_path=module_path,
             repository_root=repository_root,
             module_profiles=module_profiles,
@@ -160,22 +172,23 @@ def classify_dump(*, dump_path: Path, repository_root: Path, source_head_sha: st
                 "from __future__ import annotations; AST analysis found no runtime BitOr expression."
             )
             excluded[classification] += 1
-        elif outcome == _KILLED:
+        elif test_outcome == _KILLED:
             classification = "RUNTIME_RELEVANT_KILLED"
             rationale = "Mutation was killed by the configured test command."
-        elif outcome == _SURVIVED:
+        elif test_outcome == _SURVIVED:
             classification = "RUNTIME_RELEVANT_SURVIVED"
             rationale = "Mutation survived and is runtime-relevant unless explicitly proven equivalent."
         else:
             classification = "UNRECOGNIZED_OUTCOME"
-            rationale = f"Worker outcome {outcome!r} is not KILLED or SURVIVED; score must fail closed."
+            rationale = f"Test outcome {test_outcome!r} is not KILLED or SURVIVED; score must fail closed."
 
         jobs.append(
             {
                 "job_id": job_id,
                 "module_path": module_path,
                 "operator_name": operator_name,
-                "worker_outcome": outcome,
+                "worker_outcome": worker_outcome,
+                "test_outcome": test_outcome,
                 "classification": classification,
                 "rationale": rationale,
             }
