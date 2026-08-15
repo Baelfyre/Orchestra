@@ -107,6 +107,12 @@ flowchart TD
 
 Accessible summary: a request supplies project context and selects separate risk, progression, and governance-profile settings. Trusted composition and the effective-authority intersection run before Conductor routes work. Single-owner work goes directly to its specialist; material multi-domain work first requires current Tuner coordination. Validation failure returns to the owning boundary. Current evidence goes to Arbiter, which may continue or remediate inside existing authority, wait for evidence or capacity, escalate to a human, or stop safely.
 
+## Control Plane Re-foundation Migration
+
+The cumulative P0/P1 through P9 control-plane re-foundation is canonical through PR #294, with post-merge evidence parity through PR #295. Migration authority progresses only through the explicit sequence `SHADOW -> ADVISORY -> VALIDATION_AUTHORITY -> CANONICAL_PROMOTION_AUTHORITY -> LEGACY_RETIRED`; no stage is inferred from test success or mergeability.
+
+The migration state in this revision is `VALIDATION_AUTHORITY`. The versioned machine governance policy supplies Arbiter transition precedence and remediation defaults, while the compatibility enums remain fail-closed parity surfaces during migration. Machine routing and specialist identity are not yet canonical-promotion authority, legacy runtime authorities are not yet retired, and installed integrations are not mutated by this stage.
+
 ## v1.4.0 Governance and Compliance Registry Cross-Integration
 
 The repository/package version and current public GitHub release are both `v1.4.0`. The immutable, non-draft, non-prerelease release `Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration` is published from exact signed canonical commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`; tag `v1.4.0` resolves directly to that commit.
@@ -219,7 +225,7 @@ Accepted child work receives an authority subset, capability subset, bounded dep
 
 Runs use typed lifecycle signals and distinct waiting or terminal states. Exact replay of an accepted terminal signal is idempotent; conflicting replay is rejected. Run-linked audit events record authority, capabilities, delegation, coordination, lifecycle, and terminal outcomes without granting permission.
 
-The control-plane re-foundation now begins hardening this boundary with versioned machine evidence receipts. Source-state receipts bind exact 40-character Git identities to observed repository state, while validation-execution receipts derive `PASS`/`FAIL` from process exit codes and hash command output. Agent prose may explain those receipts, but it cannot override their identities or verdicts. See [Control Plane Re-foundation P0-P1](docs/project/CONTROL_PLANE_REFOUNDATION_P0_P1.md).
+The control-plane re-foundation binds exact identities, validation outcomes, governance vocabulary, transition precedence, and remediation defaults to versioned machine contracts. Agent prose may explain those records, but it cannot override their identities or verdicts. The migration remains staged so machine validation authority does not imply routing promotion, legacy retirement, release authority, or installed-host mutation.
 
 ### Coordination state and evidence freshness
 
@@ -276,7 +282,7 @@ Use the host-native path:
 - Antigravity: run `agy plugin install https://github.com/Baelfyre/Orchestra`.
 - Manual or scaffold-only hosts: follow the exact host boundary in the [Installation Guide](docs/setup/INSTALLATION.md).
 
-Repository manifests identify package version `1.4.0`. The current public GitHub release remains `v1.3.0` until a separately authorized publication transition creates and verifies `v1.4.0`. GitHub Release publication, marketplace publication, and installed-integration refresh are separate governed actions and are not implied by the package version. See the Installation Guide for supported installation paths and host-maturity boundaries.
+Repository manifests identify package version `1.4.0`, and the current public GitHub release is `v1.4.0`. GitHub Release publication, marketplace publication, installed-integration refresh, and later control-plane migration stages remain separate governed actions. See the Installation Guide for supported installation paths and host-maturity boundaries.
 
 ## Quick Start
 
@@ -328,13 +334,9 @@ For autonomous or delegated merges, Orchestra additionally requires the fail-clo
 
 ### v1.4.0 Governance and Compliance Registry Cross-Integration
 
-Repository package/version surfaces are prepared at `1.4.0` for the governance upgrade. The scope cross-integrates verified Compliance Registry evidence into Orchestra's established governance responsibilities and adds the README Impact Gate so significant project changes cannot pass normal governance validation while leaving the public README stale.
+`v1.4.0` is the current published Orchestra release. It packages the verified Compliance Registry cross-integration and README Impact Gate from exact signed release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`. The GitHub Release is immutable, non-draft, and non-prerelease. Subsequent control-plane re-foundation work is post-v1.4.0 development and does not move the v1.4.0 tag.
 
-The Registry implementation and v0.1.0 deterministic candidate preparation are canonical, but a trusted Registry GitHub Release has not yet been published. Orchestra `v1.4.0` therefore remains a prepublication candidate pending that separately authorized Registry release and real network-provenance validation against it.
-
-This repository/package version does **not** by itself establish a public `v1.4.0` release. The current public release remains `v1.3.0`; tag creation and GitHub Release publication remain separate protected actions.
-
-Preparation scope and boundaries are recorded in the [v1.4.0 governance upgrade release candidate](docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md) and [v1.4.0 prepublication readiness evidence](docs/validation/V1_4_0_PREPUBLICATION_READINESS_EVIDENCE.md).
+Release preparation and publication evidence are recorded in the [v1.4.0 governance upgrade release candidate](docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md), [v1.4.0 release-readiness evidence](docs/validation/V1_4_0_RELEASE_READINESS_EVIDENCE.md), and [v1.4.0 publication closeout](docs/validation/V1_4_0_PUBLICATION_CLOSEOUT.md).
 
 ### v1.3.0 Specialist Intelligence
 
@@ -366,7 +368,7 @@ See the [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration.md). 
 - Orchestra is developer tooling and a local runtime. It does not store or transmit downstream project data by default.
 - Data sensitivity, privacy, retention, deletion, platform disclosure, and IP obligations depend on the downstream project and host environment.
 - Release governance may require revision or block publication.
-- Package metadata at `1.4.0` does not mean the public `v1.4.0` release has been published.
+- The current public release is `v1.4.0`; post-v1.4.0 control-plane migration work is not a new release until a separately governed publication completes.
 
 ## Documentation Map
 
