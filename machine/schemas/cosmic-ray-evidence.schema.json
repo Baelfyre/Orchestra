@@ -15,37 +15,29 @@
       "type": "object", "additionalProperties": false,
       "required": ["run_id", "run_attempt", "event_name", "ref_name"],
       "properties": {
-        "run_id": {"type": "string", "minLength": 1},
-        "run_attempt": {"type": "string", "minLength": 1},
-        "event_name": {"type": "string", "minLength": 1},
-        "ref_name": {"type": "string", "minLength": 1}
+        "run_id": {"type": "string", "minLength": 1}, "run_attempt": {"type": "string", "minLength": 1},
+        "event_name": {"type": "string", "minLength": 1}, "ref_name": {"type": "string", "minLength": 1}
       }
     },
     "tool": {
       "type": "object", "additionalProperties": false, "required": ["name", "version"],
-      "properties": {
-        "name": {"type": "string", "const": "cosmic-ray"},
-        "version": {"type": "string", "minLength": 1}
-      }
+      "properties": {"name": {"type": "string", "const": "cosmic-ray"}, "version": {"type": "string", "minLength": 1}}
     },
     "scope": {
-      "type": "object", "additionalProperties": false,
-      "required": ["modules", "test_command", "configuration", "pilot"],
+      "type": "object", "additionalProperties": false, "required": ["modules", "test_command", "configuration", "pilot"],
       "properties": {
         "modules": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-        "test_command": {"type": "string", "minLength": 1},
-        "configuration": {"type": "string", "minLength": 1},
+        "test_command": {"type": "string", "minLength": 1}, "configuration": {"type": "string", "minLength": 1},
         "pilot": {"type": "boolean"}
       }
     },
     "execution": {
       "type": "object", "additionalProperties": false,
-      "required": ["init_exit_code", "baseline_exit_code", "exec_exit_code", "dump_exit_code", "score_status", "interpretation"],
+      "required": ["init_exit_code", "baseline_exit_code", "exec_exit_code", "dump_exit_code", "classification_exit_code", "score_status", "interpretation"],
       "properties": {
-        "init_exit_code": {"type": "integer"},
-        "baseline_exit_code": {"type": "integer"},
-        "exec_exit_code": {"type": "integer"},
-        "dump_exit_code": {"type": "integer"},
+        "init_exit_code": {"type": "integer"}, "baseline_exit_code": {"type": "integer"},
+        "exec_exit_code": {"type": "integer"}, "dump_exit_code": {"type": "integer"},
+        "classification_exit_code": {"type": "integer"},
         "score_status": {"type": "string", "enum": ["VALID_CLASSIFIED_SCORE", "UNSCORED_TOOL_FAILURE", "UNSCORED_INCOMPLETE", "UNSCORED_UNKNOWN_OUTCOME"]},
         "interpretation": {"type": "string", "minLength": 1}
       }
@@ -55,22 +47,17 @@
       "required": ["raw", "runtime_relevant", "excluded_equivalent"],
       "properties": {
         "raw": {
-          "type": "object", "additionalProperties": false,
-          "required": ["total", "killed", "survived", "other", "score_percent"],
+          "type": "object", "additionalProperties": false, "required": ["total", "killed", "survived", "other", "score_percent"],
           "properties": {
-            "total": {"type": "integer", "minimum": 0},
-            "killed": {"type": "integer", "minimum": 0},
-            "survived": {"type": "integer", "minimum": 0},
-            "other": {"type": "integer", "minimum": 0},
+            "total": {"type": "integer", "minimum": 0}, "killed": {"type": "integer", "minimum": 0},
+            "survived": {"type": "integer", "minimum": 0}, "other": {"type": "integer", "minimum": 0},
             "score_percent": {"type": ["number", "null"], "minimum": 0, "maximum": 100}
           }
         },
         "runtime_relevant": {
-          "type": "object", "additionalProperties": false,
-          "required": ["total", "killed", "survived", "score_percent"],
+          "type": "object", "additionalProperties": false, "required": ["total", "killed", "survived", "score_percent"],
           "properties": {
-            "total": {"type": "integer", "minimum": 0},
-            "killed": {"type": "integer", "minimum": 0},
+            "total": {"type": "integer", "minimum": 0}, "killed": {"type": "integer", "minimum": 0},
             "survived": {"type": "integer", "minimum": 0},
             "score_percent": {"type": ["number", "null"], "minimum": 0, "maximum": 100}
           }
