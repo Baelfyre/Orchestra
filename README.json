@@ -24,14 +24,17 @@
     {"order": 3, "path": "machine/specialists/registry.v1.json", "purpose": "Compiled specialist identities and routing-relevant metadata"},
     {"order": 4, "path": "machine/routing/routes.v1.json", "purpose": "Deterministic command routing, direct routes, ordered sequences, aliases, and fallback"},
     {"order": 5, "path": "machine/governance/policy.v1.json", "purpose": "Governance vocabulary, precedence, ownership, validation rules, and remediation defaults"},
-    {"order": 6, "path": "machine/schemas/", "purpose": "JSON Schema contracts for machine-authoritative records"},
-    {"order": 7, "path": "PROJECT_STATE.md", "purpose": "Human-readable project continuity and implementation chronology"},
-    {"order": 8, "path": "README.md", "purpose": "Human-oriented project overview, rationale, architecture explanation, and release narrative"}
+    {"order": 6, "path": "machine/provenance/third-party.v1.json", "purpose": "Third-party dependencies, references, source-use classification, license identifiers, and incorporation boundaries"},
+    {"order": 7, "path": "machine/schemas/", "purpose": "JSON Schema contracts for machine-authoritative records"},
+    {"order": 8, "path": "PROJECT_STATE.md", "purpose": "Human-readable project continuity and implementation chronology"},
+    {"order": 9, "path": "README.md", "purpose": "Human-oriented project overview, rationale, architecture explanation, and release narrative"}
   ],
   "machine_contracts": {
     "specialist_registry": "machine/specialists/registry.v1.json",
     "routing_contract": "machine/routing/routes.v1.json",
     "governance_policy": "machine/governance/policy.v1.json",
+    "third_party_provenance": "machine/provenance/third-party.v1.json",
+    "third_party_provenance_schema": "machine/schemas/third-party-provenance.schema.json",
     "schemas_directory": "machine/schemas",
     "source_state_receipt_schema": "machine/schemas/source-state-receipt.schema.json",
     "validation_execution_receipt_schema": "machine/schemas/validation-execution-receipt.schema.json",
@@ -74,11 +77,12 @@
     "roadmap": "docs/project/ROADMAP.md",
     "changelog": "CHANGELOG.md",
     "release_docs": "docs/releases/",
-    "validation_evidence": "docs/validation/"
+    "validation_evidence": "docs/validation/",
+    "third_party_provenance": "docs/THIRD_PARTY_PROVENANCE.md"
   },
   "representation_policy": {
     "markdown": "Human-readable explanation, rationale, examples, and nuanced specialist guidance",
-    "json": "Machine-readable state, identity, routing, governance, receipts, manifests, and indexes",
+    "json": "Machine-readable state, identity, routing, governance, receipts, manifests, provenance, and indexes",
     "json_schema": "Validation contract for machine-readable records",
     "jsonl": "Append-only event/history records where incremental retrieval is preferable",
     "parity_rule": "When the same deterministic fact appears in more than one representation, CI must validate parity or derive the projection from one authoritative source."
@@ -89,6 +93,7 @@
     "do_not_synthesize_full_git_identifiers": true,
     "prefer_machine_contracts_for_exact_values": true,
     "retrieve_human_docs_for_rationale": true,
+    "review_third_party_provenance_before_attributing_external_code_or_dependencies": true,
     "treat_generated_or_derived_views_as_non_authoritative_when_their_source_contract_is_available": true
   }
 }
