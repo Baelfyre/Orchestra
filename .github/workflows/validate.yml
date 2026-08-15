@@ -71,7 +71,7 @@ jobs:
           --coverage artifacts/runtime/coverage.json
           --junit artifacts/runtime/runtime-junit.xml
           --output artifacts/runtime/test-evidence.json
-          --minimum-statement-coverage 90
+          --minimum-statement-coverage 95
 
       - name: Upload runtime test evidence
         if: always()
