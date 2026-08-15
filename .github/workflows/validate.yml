@@ -73,6 +73,17 @@ jobs:
           --output artifacts/runtime/test-evidence.json
           --minimum-statement-coverage 95
 
+      - name: Build and enforce machine-readable critical coverage inventory
+        id: critical_coverage
+        if: always()
+        continue-on-error: true
+        run: >-
+          python scripts/validation/build_coverage_inventory.py
+          --coverage artifacts/runtime/coverage.json
+          --output artifacts/runtime/coverage-inventory.json
+          --critical-statement-floor 98
+          --critical-branch-floor 95
+
       - name: Upload runtime test evidence
         if: always()
         uses: actions/upload-artifact@v7
@@ -88,3 +99,4 @@ jobs:
         run: |
           test "${{ steps.runtime.outcome }}" = "success"
           test "${{ steps.evidence.outcome }}" = "success"
+          test "${{ steps.critical_coverage.outcome }}" = "success"
