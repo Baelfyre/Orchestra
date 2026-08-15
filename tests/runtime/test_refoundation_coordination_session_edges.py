@@ -130,7 +130,7 @@ def test_graph_rejects_unknown_dependency_participant_and_blocking_cycle():
     )
     with pytest.raises(InvalidCoordinationContractError) as exc:
         replace(graph, dependencies=graph.dependencies + (unknown,))
-    assert exc.value.reason_code == "UNKNOWN_DEPENDENCY_PARTICIPANT"
+    assert exc.value.reason_code == "UNKNOWN_COORDINATION_PARTICIPANT"
 
     reverse = CollaborationDependency(
         "dep.reverse",
