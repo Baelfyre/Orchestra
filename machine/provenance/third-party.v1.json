@@ -15,7 +15,7 @@
   "summary": {
     "re_foundation_vendored_or_copied_third_party_source_count": 0,
     "re_foundation_new_runtime_dependency_count": 0,
-    "re_foundation_test_tool_dependency_count": 2
+    "re_foundation_test_tool_dependency_count": 3
   },
   "items": [
     {
@@ -57,16 +57,20 @@
     {
       "id": "cosmic-ray",
       "name": "Cosmic Ray",
-      "classification": "REFERENCE_ONLY",
+      "classification": "TEST_TOOL_DEPENDENCY",
       "version": "8.7.0",
       "upstream_repository": "https://github.com/sixty-north/cosmic-ray",
       "package_source": "https://pypi.org/project/cosmic-ray/8.7.0/",
       "license_spdx": "MIT",
-      "purpose": "Candidate replacement mutation runner under evaluation after the mutmut 3.6.0 instrumentation incompatibility; not yet incorporated as an Orchestra test dependency or authority source.",
+      "purpose": "Bounded compatibility pilot and candidate mutation-confidence runner for Orchestra trust-boundary modules after the mutmut instrumentation incompatibility. Mutation scores are accepted only from complete, baseline-passing, machine-evidenced sessions.",
       "runtime_dependency": false,
       "source_copied_or_vendored": false,
       "upstream_source_adapted": false,
       "orchestra_surfaces": [
+        "cosmic-ray.toml",
+        ".github/workflows/cosmic-ray-confidence.yml",
+        "scripts/validation/build_cosmic_ray_evidence.py",
+        "machine/schemas/cosmic-ray-evidence.schema.json",
         "docs/THIRD_PARTY_PROVENANCE.md"
       ]
     }
