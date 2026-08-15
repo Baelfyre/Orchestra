@@ -65,7 +65,7 @@
 ## Post-v1.2.0 Specialist Knowledge Layer - SK7 Overseer - Pending
 
 - Deepened Overseer's validation-strategy knowledge without changing routing, runtime architecture, CI workflows, release gates, or test-code ownership.
-- Added progressive-disclosure guidance for unit/integration/contract/E2E boundaries, property and mutation testing, coverage interpretation, flaky-test diagnosis, deterministic isolation, test-data management, CI/browser/device matrices, performance acceptance.
+- Added progressive-disclosure guidance for unit/integration/contract/E2E boundaries, property and mutation testing, coverage interpretation, flaky-test diagnosis, deterministic isolation, test-data management, CI/browser/device matrices, and performance acceptance.
 - Expanded quality standards and testing checks with contract identity, shrinking and reproducibility, mutation-score interpretation, quarantine controls, environment matrices, percentile evidence, and privacy-safe test-data lifecycle requirements.
 - Added a worked risk-based validation matrix example that separates planned evidence from executed results and preserves domain-specialist ownership.
 - Kept the campaign Markdown-primary and JSON-selective: the SK7 audit found no deterministic machine-parsing need that justified an Overseer JSON catalog.
