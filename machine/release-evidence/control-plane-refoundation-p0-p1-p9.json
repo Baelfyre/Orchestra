@@ -36,7 +36,9 @@
       "branches": 2250,
       "covered_branches": 2138,
       "minimum_branch_coverage": 95.0,
-      "critical_module_inventory": "PASS"
+      "critical_ready": true,
+      "critical_minimum_statement_percent": 98.0,
+      "critical_minimum_branch_percent": 95.0
     },
     "python_version": "3.12.13"
   },
