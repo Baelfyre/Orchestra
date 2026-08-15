@@ -1,0 +1,33 @@
+{
+  "schema_version": "orchestra.control-plane-migration.v1",
+  "stage_order": [
+    "SHADOW",
+    "ADVISORY",
+    "VALIDATION_AUTHORITY",
+    "CANONICAL_PROMOTION_AUTHORITY",
+    "LEGACY_RETIRED"
+  ],
+  "current_stage": "ADVISORY",
+  "previous_stage": "SHADOW",
+  "transition_policy": {
+    "adjacent_stage_only": true,
+    "exact_conformance_evidence_required": true,
+    "separate_governance_authorization_required": true,
+    "automatic_stage_progression_allowed": false
+  },
+  "transition_evidence": {
+    "integration_pull_request": 294,
+    "integration_canonical_sha": "76eb96b27439700a517f75c5a921465e5c2987e6",
+    "post_merge_closeout_sha": "452572f16f232147d05fe0202cbaea8e82b88e56",
+    "validated_source_head_sha": "862ba871d900fe7e31591bec068c8830170dd774",
+    "runtime_evidence_index": "machine/release-evidence/control-plane-refoundation-p0-p1-p9.json",
+    "shadow_fixture_suite": "PASS"
+  },
+  "authority_effect": {
+    "machine_contracts_may_inform_runtime_decisions": true,
+    "machine_contracts_are_validation_authority": false,
+    "machine_contracts_are_canonical_promotion_authority": false,
+    "legacy_runtime_authorities_retired": false,
+    "installed_integrations_mutated": false
+  }
+}
