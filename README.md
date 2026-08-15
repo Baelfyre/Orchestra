@@ -233,7 +233,7 @@ The Tuner's coordination runtime records specialist-owned contracts, dependencie
 | The Governor | Legal/compliance governance, source/applicability verification, privacy-obligation, IP and licensing review | Does not provide legal advice or grant runtime authority |
 | Conductor | Routing and ordered specialist handoffs | Routes work but does not implement it |
 | The Tuner | Cross-specialist contract assembly, contradictions, invalidation, and re-entry recommendations | Cannot route, implement, validate itself, or grant authority |
-| Clockwork | Architecture, service boundaries, distributed patterns, concurrency, API compatibility/versioning, and structural design | Does not implement |
+| Clockwork | Architecture, service boundaries, distributed patterns, concurrency, API compatibility, and structural design | Does not implement |
 | Cloak | UI/UX, accessibility, responsive behavior, forms, design states, and frontend interaction boundaries | Does not own backend policy |
 | Chronicler | Database dialects, transactions, persistence semantics, migrations, query plans, and tenant isolation | Does not own UI or general QA |
 | Ponytail | Stack-aware minimal, reversible implementation and implementation-tooling execution | Requires upstream decisions to be settled |
