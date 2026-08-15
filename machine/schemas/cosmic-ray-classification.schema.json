@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/cosmic-ray-classification.schema.json",
+  "title": "Orchestra Cosmic Ray Mutation Classification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "source_head_sha",
+    "raw",
+    "runtime_relevant",
+    "excluded_equivalent",
+    "jobs",
+    "score_status"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "const": "orchestra.cosmic-ray-classification.v1"},
+    "source_head_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "raw": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total", "killed", "survived", "other"],
+      "properties": {
+        "total": {"type": "integer", "minimum": 0},
+        "killed": {"type": "integer", "minimum": 0},
+        "survived": {"type": "integer", "minimum": 0},
+        "other": {"type": "integer", "minimum": 0}
+      }
+    },
+    "runtime_relevant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total", "killed", "survived", "score_percent"],
+      "properties": {
+        "total": {"type": "integer", "minimum": 0},
+        "killed": {"type": "integer", "minimum": 0},
+        "survived": {"type": "integer", "minimum": 0},
+        "score_percent": {"type": ["number", "null"], "minimum": 0, "maximum": 100}
+      }
+    },
+    "excluded_equivalent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["count", "classifications"],
+      "properties": {
+        "count": {"type": "integer", "minimum": 0},
+        "classifications": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    "jobs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["job_id", "module_path", "operator_name", "worker_outcome", "classification", "rationale"],
+        "properties": {
+          "job_id": {"type": "integer", "minimum": 0},
+          "module_path": {"type": "string", "minLength": 1},
+          "operator_name": {"type": "string", "minLength": 1},
+          "worker_outcome": {"type": "string", "minLength": 1},
+          "classification": {
+            "type": "string",
+            "enum": [
+              "RUNTIME_RELEVANT_KILLED",
+              "RUNTIME_RELEVANT_SURVIVED",
+              "NON_RUNTIME_POSTPONED_ANNOTATION",
+              "UNRECOGNIZED_OUTCOME"
+            ]
+          },
+          "rationale": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "score_status": {
+      "type": "string",
+      "enum": ["VALID_RUNTIME_RELEVANT_SCORE", "UNSCORED_UNKNOWN_OUTCOME", "UNSCORED_EMPTY"]
+    }
+  }
+}
