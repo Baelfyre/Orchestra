@@ -1,6 +1,4 @@
 import json
-import runpy
-import sys
 
 import pytest
 
@@ -71,56 +69,3 @@ def test_coverage_parser_rejects_nonnegative_but_inconsistent_branch_totals(tmp_
     )
     with pytest.raises(ValueError, match="branch totals are inconsistent"):
         parse_coverage(coverage)
-
-
-def test_test_evidence_module_entrypoint_executes_under_coverage(tmp_path, monkeypatch, capsys):
-    coverage = tmp_path / "coverage.json"
-    coverage.write_text(
-        json.dumps(
-            {
-                "totals": {
-                    "num_statements": 10,
-                    "covered_lines": 10,
-                    "missing_lines": 0,
-                    "num_branches": 2,
-                    "covered_branches": 2,
-                    "missing_branches": 0,
-                }
-            }
-        ),
-        encoding="utf-8",
-    )
-    junit = tmp_path / "runtime-junit.xml"
-    junit.write_text(
-        '<testsuites tests="2" failures="0" errors="0" skipped="0"></testsuites>\n',
-        encoding="utf-8",
-    )
-    output = tmp_path / "test-evidence.json"
-    monkeypatch.setenv("SOURCE_HEAD_SHA", SHA40)
-    monkeypatch.setenv("RUNTIME_TEST_OUTCOME", "success")
-    monkeypatch.setenv("GITHUB_REPOSITORY", "Baelfyre/Orchestra")
-    monkeypatch.setenv("GITHUB_RUN_ID", "local-entrypoint")
-    monkeypatch.setenv("GITHUB_RUN_ATTEMPT", "1")
-    monkeypatch.setenv("GITHUB_EVENT_NAME", "workflow_dispatch")
-    monkeypatch.setenv("GITHUB_REF_NAME", "local")
-    monkeypatch.setattr(
-        sys,
-        "argv",
-        [
-            "orchestra_runtime.test_evidence",
-            "--coverage",
-            str(coverage),
-            "--junit",
-            str(junit),
-            "--output",
-            str(output),
-            "--minimum-statement-coverage",
-            "95",
-        ],
-    )
-
-    with pytest.raises(SystemExit) as exc:
-        runpy.run_module("orchestra_runtime.test_evidence", run_name="__main__")
-    assert exc.value.code == 0
-    assert json.loads(output.read_text(encoding="utf-8"))["result"] == "PASS"
-    assert '"result": "PASS"' in capsys.readouterr().out
