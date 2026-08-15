@@ -26,36 +26,38 @@ The absence of an item from this file must not be interpreted as permission to c
 - Source copied or vendored into Orchestra: **No**
 - Adapted upstream source: **No**
 - Orchestra integration surface: `.github/workflows/mutation-confidence.yml`, `setup.cfg`, and Orchestra-owned mutation evidence tooling.
-- Current disposition: **UNSCORED / TOOL-INCOMPATIBILITY UNDER REMEDIATION**.
-- Notes: Orchestra invokes the published package as an external CI tool. The current pilot reaches mutmut's statistics-collection phase but fails when Python dataclass-generated `"<string>"` frames are inspected. Orchestra records this as tool failure evidence rather than treating workflow completion as a mutation-quality PASS. Orchestra production/runtime code is not being modified to work around this third-party instrumentation defect.
+- Current disposition: **UNSCORED / TOOL INCOMPATIBILITY PRESERVED AS EVIDENCE**.
+- Notes: Orchestra invokes the published package as an external CI tool. The pilot reaches mutmut's statistics-collection phase but fails when Python dataclass-generated `"<string>"` frames are inspected. Orchestra records this as tool failure evidence rather than treating workflow completion as a mutation-quality PASS. Orchestra production/runtime code is not modified to work around this third-party instrumentation defect.
 
 ### Hypothesis 6.163.0
 
 - Classification: **TEST_TOOL_DEPENDENCY**
 - Purpose: property-based testing of machine-contract and governance invariants.
 - Upstream project: `HypothesisWorks/hypothesis`
-- Installed version in the mutation-confidence workflow: `6.163.0`
+- Installed version in CI: `6.163.0`
 - License: MPL-2.0
 - Runtime incorporation: **No**
 - Source copied or vendored into Orchestra: **No**
 - Adapted upstream source: **No**
 - Orchestra integration surface: property-based tests under `tests/runtime/` and CI test environments.
 
-## Evaluated but not incorporated
-
 ### Cosmic Ray 8.7.0
 
-- Classification: **REFERENCE_ONLY**
-- Purpose: candidate replacement mutation runner under evaluation after the mutmut 3.6.0 statistics-instrumentation incompatibility.
+- Classification: **TEST_TOOL_DEPENDENCY**
+- Purpose: bounded compatibility pilot and candidate mutation-confidence runner for Orchestra trust-boundary modules after the mutmut instrumentation incompatibility.
 - Upstream project: `sixty-north/cosmic-ray`
-- Candidate version: `8.7.0`
+- Installed version: `8.7.0`
 - License: MIT
-- Python support: Python 3.9+; upstream package classifiers include Python 3.12 and Python 3.13.
+- Python support: Python 3.9+; the current upstream package lists Python 3.12 and Python 3.13 support.
 - Runtime incorporation: **No**
-- Current test-tool incorporation: **No**
 - Source copied or vendored into Orchestra: **No**
 - Adapted upstream source: **No**
-- Promotion rule: Cosmic Ray becomes a `TEST_TOOL_DEPENDENCY` only after a bounded pilot successfully baselines unmutated Orchestra tests, executes real mutants, produces interpretable results, and preserves machine-readable run evidence.
+- Orchestra integration surface: `cosmic-ray.toml`, `.github/workflows/cosmic-ray-confidence.yml`, `scripts/validation/build_cosmic_ray_evidence.py`, and `machine/schemas/cosmic-ray-evidence.schema.json`.
+- Initial scope: `orchestra_runtime/evidence.py`, `orchestra_runtime/governance_kernel.py`, and `orchestra_runtime/preexecution.py` with their module-owned tests.
+- Evidence rule: a mutation score is valid only when initialization succeeds, the unmutated baseline succeeds, mutation execution completes, all scheduled jobs complete, and the resulting session/report is preserved in machine-readable CI evidence.
+- Promotion rule: the three-module compatibility pilot does not establish a repository-wide mutation score. Broader use requires a separately evidenced scope expansion after the pilot is scoreable and interpretable.
+
+## Evaluated but not incorporated
 
 The re-foundation architecture has also evaluated external technologies and standards for potential future use. Evaluation does not make them Orchestra dependencies or authority sources. Examples include policy engines, sandbox technologies, MCP transport patterns, structured-output frameworks, and schema tooling discussed in architecture records. Any future incorporation must be promoted into the machine-readable provenance registry with an exact role, version or revision where applicable, and license/provenance review.
 
