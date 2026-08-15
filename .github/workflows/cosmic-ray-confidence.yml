@@ -90,15 +90,18 @@ jobs:
           echo "$code" | tee artifacts/cosmic-ray/exec-exit-code.txt
           exit 0
 
-      - name: Record mutation report
+      - name: Record mutation report and detailed dump
         if: always()
         shell: bash
         run: |
           set +e
           if [ -f artifacts/cosmic-ray/session.sqlite ]; then
             cr-report artifacts/cosmic-ray/session.sqlite --show-pending 2>&1 | tee artifacts/cosmic-ray/report.txt
+            cosmic-ray dump artifacts/cosmic-ray/session.sqlite > artifacts/cosmic-ray/dump.jsonl 2> artifacts/cosmic-ray/dump-stderr.txt
           else
             echo "No Cosmic Ray session database was produced." | tee artifacts/cosmic-ray/report.txt
+            echo '{"error":"no session database"}' > artifacts/cosmic-ray/dump.jsonl
+            echo "No Cosmic Ray session database was produced." > artifacts/cosmic-ray/dump-stderr.txt
           fi
           exit 0
 
@@ -113,6 +116,7 @@ jobs:
             --baseline-output artifacts/cosmic-ray/baseline.txt \
             --exec-output artifacts/cosmic-ray/exec.txt \
             --report-output artifacts/cosmic-ray/report.txt \
+            --dump-output artifacts/cosmic-ray/dump.jsonl \
             --session-database artifacts/cosmic-ray/session.sqlite \
             --config cosmic-ray.toml \
             --init-exit-code "$(cat artifacts/cosmic-ray/init-exit-code.txt)" \
