@@ -78,6 +78,26 @@ def _parse_dump_line(raw_line: str, line_number: int) -> tuple[dict[str, Any], d
     return spec, result
 
 
+def _bit_or_is_proven_annotation_only(
+    *,
+    module_path: str,
+    repository_root: Path,
+    module_profiles: dict[str, tuple[bool, int, int]],
+) -> bool:
+    if module_path not in module_profiles:
+        source_path = (repository_root / module_path).resolve()
+        root = repository_root.resolve()
+        try:
+            source_path.relative_to(root)
+        except ValueError as exc:
+            raise ValueError(f"mutation module_path escapes repository root: {module_path}") from exc
+        if not source_path.is_file():
+            raise ValueError(f"mutation source module does not exist: {module_path}")
+        module_profiles[module_path] = _module_bit_or_profile(source_path)
+    postponed, annotation_count, runtime_count = module_profiles[module_path]
+    return postponed and annotation_count > 0 and runtime_count == 0
+
+
 def classify_dump(*, dump_path: Path, repository_root: Path, source_head_sha: str) -> dict[str, Any]:
     if not dump_path.is_file():
         raise ValueError("Cosmic Ray dump file does not exist")
@@ -129,31 +149,20 @@ def classify_dump(*, dump_path: Path, repository_root: Path, source_head_sha: st
 
         classification: str
         rationale: str
-        if outcome == _KILLED:
+        if outcome in {_KILLED, _SURVIVED} and operator_name.startswith(_BITOR_PREFIX) and _bit_or_is_proven_annotation_only(
+            module_path=module_path,
+            repository_root=repository_root,
+            module_profiles=module_profiles,
+        ):
+            classification = "NON_RUNTIME_POSTPONED_ANNOTATION"
+            rationale = (
+                "BitOr mutation is confined to annotations in a module using "
+                "from __future__ import annotations; AST analysis found no runtime BitOr expression."
+            )
+            excluded[classification] += 1
+        elif outcome == _KILLED:
             classification = "RUNTIME_RELEVANT_KILLED"
             rationale = "Mutation was killed by the configured test command."
-        elif outcome == _SURVIVED and operator_name.startswith(_BITOR_PREFIX):
-            if module_path not in module_profiles:
-                source_path = (repository_root / module_path).resolve()
-                root = repository_root.resolve()
-                try:
-                    source_path.relative_to(root)
-                except ValueError as exc:
-                    raise ValueError(f"mutation module_path escapes repository root: {module_path}") from exc
-                if not source_path.is_file():
-                    raise ValueError(f"mutation source module does not exist: {module_path}")
-                module_profiles[module_path] = _module_bit_or_profile(source_path)
-            postponed, annotation_count, runtime_count = module_profiles[module_path]
-            if postponed and annotation_count > 0 and runtime_count == 0:
-                classification = "NON_RUNTIME_POSTPONED_ANNOTATION"
-                rationale = (
-                    "BitOr mutation is confined to annotations in a module using "
-                    "from __future__ import annotations; AST analysis found no runtime BitOr expression."
-                )
-                excluded[classification] += 1
-            else:
-                classification = "RUNTIME_RELEVANT_SURVIVED"
-                rationale = "Surviving BitOr mutation cannot be proven annotation-only and remains runtime-relevant."
         elif outcome == _SURVIVED:
             classification = "RUNTIME_RELEVANT_SURVIVED"
             rationale = "Mutation survived and is runtime-relevant unless explicitly proven equivalent."
@@ -179,7 +188,13 @@ def classify_dump(*, dump_path: Path, repository_root: Path, source_head_sha: st
     runtime_survived = sum(1 for job in jobs if job["classification"] == "RUNTIME_RELEVANT_SURVIVED")
     runtime_total = runtime_killed + runtime_survived
     score = round((runtime_killed / runtime_total) * 100.0, 2) if runtime_total else None
-    score_status = "VALID_RUNTIME_RELEVANT_SCORE" if raw_other == 0 and runtime_total > 0 else "UNSCORED_UNKNOWN_OUTCOME"
+    if raw_other:
+        score_status = "UNSCORED_UNKNOWN_OUTCOME"
+        score = None
+    elif runtime_total:
+        score_status = "VALID_RUNTIME_RELEVANT_SCORE"
+    else:
+        score_status = "UNSCORED_EMPTY"
 
     return {
         "schema_version": SCHEMA_VERSION,
