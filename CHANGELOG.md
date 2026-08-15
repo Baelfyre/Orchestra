@@ -50,7 +50,7 @@
 - Preserved specialist boundaries: The Steward owns business alignment; The Governor owns legal/compliance governance; Cipher owns technical privacy/security controls; Scribe owns documentation production; Arbiter owns transition evidence.
 - Kept the campaign Markdown-primary and JSON-selective: the SK9 audit found no deterministic machine-parsing need that justified a governance JSON catalog.
 - Added focused regression coverage for knowledge depth, source/Codex parity, traceability/change-control discipline, source freshness, and non-legal-advice escalation boundaries.
-- No policy activation, legal publication, release/tag publication, deployment/production mutation, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK9.
+- No policy activation, legal publication, release/tag publication, deployment/production mutation, installed-integration refresh, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK9.
 
 ## Post-v1.2.0 Specialist Knowledge Layer - SK8 Scribe - Pending
 
@@ -65,7 +65,7 @@
 ## Post-v1.2.0 Specialist Knowledge Layer - SK7 Overseer - Pending
 
 - Deepened Overseer's validation-strategy knowledge without changing routing, runtime architecture, CI workflows, release gates, or test-code ownership.
-- Added progressive-disclosure guidance for unit/integration/contract/E2E boundaries, property and mutation testing, coverage interpretation, flaky-test diagnosis, deterministic isolation, test-data management, CI/browser/device matrices, and performance acceptance.
+- Added progressive-disclosure guidance for unit/integration/contract/E2E boundaries, property and mutation testing, coverage interpretation, flaky-test diagnosis, deterministic isolation, test-data management, CI/browser/device matrices, performance acceptance.
 - Expanded quality standards and testing checks with contract identity, shrinking and reproducibility, mutation-score interpretation, quarantine controls, environment matrices, percentile evidence, and privacy-safe test-data lifecycle requirements.
 - Added a worked risk-based validation matrix example that separates planned evidence from executed results and preserves domain-specialist ownership.
 - Kept the campaign Markdown-primary and JSON-selective: the SK7 audit found no deterministic machine-parsing need that justified an Overseer JSON catalog.
@@ -92,7 +92,7 @@
 - Added a planning-only bounded load/recovery example that defines an open workload model, thresholds, telemetry, recovery evidence, and cross-specialist handoffs without generating traffic.
 - Preserved `scripts/dagger_guardrail.py` and its simulation-only live-execution block unchanged. Knowledge and tool examples do not grant permission to run destructive, disruptive, externally targeted, or production tests.
 - Kept the campaign Markdown-primary and JSON-selective: the SK5 audit found no deterministic machine-parsing need that justified a Dagger JSON catalog.
-- Added focused regression coverage for Dagger knowledge depth, source/Codex support-file parity, progressive disclosure, state/evidence separation, and safety-boundary language.
+- Added focused regression coverage for Dagger knowledge depth, source/Codex support parity, progressive disclosure, state/evidence separation, and safety-boundary language.
 - No release/tag publication, deployment/production mutation, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK5.
 
 ## Post-v1.2.0 Specialist Knowledge Layer - SK4 Cloak - Pending
