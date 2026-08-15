@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/control-plane-migration.schema.json",
+  "title": "Orchestra Control Plane Migration State",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "stage_order",
+    "current_stage",
+    "previous_stage",
+    "transition_policy",
+    "transition_evidence",
+    "authority_effect"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "const": "orchestra.control-plane-migration.v1"},
+    "stage_order": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "prefixItems": [
+        {"const": "SHADOW"},
+        {"const": "ADVISORY"},
+        {"const": "VALIDATION_AUTHORITY"},
+        {"const": "CANONICAL_PROMOTION_AUTHORITY"},
+        {"const": "LEGACY_RETIRED"}
+      ],
+      "items": false
+    },
+    "current_stage": {"type": "string", "const": "ADVISORY"},
+    "previous_stage": {"type": "string", "const": "SHADOW"},
+    "transition_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "adjacent_stage_only",
+        "exact_conformance_evidence_required",
+        "separate_governance_authorization_required",
+        "automatic_stage_progression_allowed"
+      ],
+      "properties": {
+        "adjacent_stage_only": {"const": true},
+        "exact_conformance_evidence_required": {"const": true},
+        "separate_governance_authorization_required": {"const": true},
+        "automatic_stage_progression_allowed": {"const": false}
+      }
+    },
+    "transition_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "integration_pull_request",
+        "integration_canonical_sha",
+        "post_merge_closeout_sha",
+        "validated_source_head_sha",
+        "runtime_evidence_index",
+        "shadow_fixture_suite"
+      ],
+      "properties": {
+        "integration_pull_request": {"type": "integer", "const": 294},
+        "integration_canonical_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "post_merge_closeout_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "validated_source_head_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "runtime_evidence_index": {"type": "string", "minLength": 1},
+        "shadow_fixture_suite": {"type": "string", "const": "PASS"}
+      }
+    },
+    "authority_effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "machine_contracts_may_inform_runtime_decisions",
+        "machine_contracts_are_validation_authority",
+        "machine_contracts_are_canonical_promotion_authority",
+        "legacy_runtime_authorities_retired",
+        "installed_integrations_mutated"
+      ],
+      "properties": {
+        "machine_contracts_may_inform_runtime_decisions": {"const": true},
+        "machine_contracts_are_validation_authority": {"const": false},
+        "machine_contracts_are_canonical_promotion_authority": {"const": false},
+        "legacy_runtime_authorities_retired": {"const": false},
+        "installed_integrations_mutated": {"const": false}
+      }
+    }
+  }
+}
