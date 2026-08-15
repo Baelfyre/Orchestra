@@ -5,11 +5,18 @@ from enum import Enum
 from typing import Any
 
 from .evidence import receipt_digest
+from .machine_contracts import (
+    default_remediation_limits,
+    governance_decision_values,
+    transition_disposition_values,
+    transition_precedence,
+)
 
 
 GOVERNANCE_KERNEL_SCHEMA_VERSION = "1.0.0"
-DEFAULT_MAX_REMEDIATION_ATTEMPTS = 3
-DEFAULT_MAX_IDENTICAL_FAILURE_REPETITIONS = 2
+_POLICY_REMEDIATION = default_remediation_limits()
+DEFAULT_MAX_REMEDIATION_ATTEMPTS = _POLICY_REMEDIATION["maximum_remediation_attempts_per_unit"]
+DEFAULT_MAX_IDENTICAL_FAILURE_REPETITIONS = _POLICY_REMEDIATION["maximum_identical_failure_repetitions"]
 
 
 class GovernanceDecision(str, Enum):
@@ -27,6 +34,12 @@ class TransitionDisposition(str, Enum):
     WAIT_FOR_CAPACITY = "WAIT_FOR_CAPACITY"
     ESCALATE_HUMAN = "ESCALATE_HUMAN"
     STOP = "STOP"
+
+
+if tuple(item.value for item in GovernanceDecision) != governance_decision_values():
+    raise RuntimeError("GovernanceDecision compatibility enum differs from machine governance policy")
+if set(item.value for item in TransitionDisposition) != set(transition_disposition_values()):
+    raise RuntimeError("TransitionDisposition compatibility enum differs from machine governance policy")
 
 
 class ArbiterReasonCode(str, Enum):
@@ -250,45 +263,23 @@ def _result(
     )
 
 
-def evaluate_arbiter(kernel_input: ArbiterKernelInput) -> ArbiterKernelResult:
+def _candidate_results(kernel_input: ArbiterKernelInput) -> dict[TransitionDisposition, ArbiterKernelResult]:
     decisions = tuple(record.decision for record in kernel_input.governance_decisions)
+    candidates: dict[TransitionDisposition, ArbiterKernelResult] = {}
 
-    # Canonical precedence 1: STOP.
     if not kernel_input.authority_valid:
-        return _result(kernel_input, TransitionDisposition.STOP, ArbiterReasonCode.AUTHORITY_INVALID)
-    if not kernel_input.protected_boundary_clear:
-        return _result(
+        candidates[TransitionDisposition.STOP] = _result(
+            kernel_input, TransitionDisposition.STOP, ArbiterReasonCode.AUTHORITY_INVALID
+        )
+    elif not kernel_input.protected_boundary_clear:
+        candidates[TransitionDisposition.STOP] = _result(
             kernel_input,
             TransitionDisposition.STOP,
             ArbiterReasonCode.PROTECTED_BOUNDARY_VIOLATION,
         )
-    if GovernanceDecision.BLOCKED in decisions:
-        return _result(kernel_input, TransitionDisposition.STOP, ArbiterReasonCode.GOVERNANCE_BLOCKED)
-
-    # Canonical precedence 2: ESCALATE_HUMAN.
-    if any(record.human_review_required for record in kernel_input.governance_decisions):
-        return _result(
-            kernel_input,
-            TransitionDisposition.ESCALATE_HUMAN,
-            ArbiterReasonCode.HUMAN_REVIEW_REQUIRED,
-        )
-    if kernel_input.scope_or_policy_decision_required:
-        return _result(
-            kernel_input,
-            TransitionDisposition.ESCALATE_HUMAN,
-            ArbiterReasonCode.SCOPE_OR_POLICY_DECISION_REQUIRED,
-        )
-    if kernel_input.external_authority_missing:
-        return _result(
-            kernel_input,
-            TransitionDisposition.ESCALATE_HUMAN,
-            ArbiterReasonCode.EXTERNAL_AUTHORITY_REQUIRED,
-        )
-    if kernel_input.contradiction_unresolved:
-        return _result(
-            kernel_input,
-            TransitionDisposition.ESCALATE_HUMAN,
-            ArbiterReasonCode.CONTRADICTION_UNRESOLVED,
+    elif GovernanceDecision.BLOCKED in decisions:
+        candidates[TransitionDisposition.STOP] = _result(
+            kernel_input, TransitionDisposition.STOP, ArbiterReasonCode.GOVERNANCE_BLOCKED
         )
 
     revision_required = GovernanceDecision.REVISION_REQUIRED in decisions
@@ -298,82 +289,73 @@ def evaluate_arbiter(kernel_input: ArbiterKernelInput) -> ArbiterKernelResult:
         and kernel_input.remediation_authorized
         and kernel_input.remediation_in_scope
     )
-    if kernel_input.remediation_attempt_count >= kernel_input.maximum_remediation_attempts:
-        return _result(
-            kernel_input,
-            TransitionDisposition.ESCALATE_HUMAN,
-            ArbiterReasonCode.REMEDIATION_BUDGET_EXHAUSTED,
-        )
-    if (
-        kernel_input.identical_failure_repetitions
-        > kernel_input.maximum_identical_failure_repetitions
-    ):
-        return _result(
-            kernel_input,
-            TransitionDisposition.ESCALATE_HUMAN,
-            ArbiterReasonCode.IDENTICAL_FAILURE_LIMIT_EXCEEDED,
-        )
-    if revision_required and not remediation_candidate:
-        return _result(
-            kernel_input,
-            TransitionDisposition.ESCALATE_HUMAN,
-            ArbiterReasonCode.REVISION_NOT_AUTOREMEDIABLE,
+
+    escalation_reason: ArbiterReasonCode | None = None
+    if any(record.human_review_required for record in kernel_input.governance_decisions):
+        escalation_reason = ArbiterReasonCode.HUMAN_REVIEW_REQUIRED
+    elif kernel_input.scope_or_policy_decision_required:
+        escalation_reason = ArbiterReasonCode.SCOPE_OR_POLICY_DECISION_REQUIRED
+    elif kernel_input.external_authority_missing:
+        escalation_reason = ArbiterReasonCode.EXTERNAL_AUTHORITY_REQUIRED
+    elif kernel_input.contradiction_unresolved:
+        escalation_reason = ArbiterReasonCode.CONTRADICTION_UNRESOLVED
+    elif kernel_input.remediation_attempt_count >= kernel_input.maximum_remediation_attempts:
+        escalation_reason = ArbiterReasonCode.REMEDIATION_BUDGET_EXHAUSTED
+    elif kernel_input.identical_failure_repetitions > kernel_input.maximum_identical_failure_repetitions:
+        escalation_reason = ArbiterReasonCode.IDENTICAL_FAILURE_LIMIT_EXCEEDED
+    elif revision_required and not remediation_candidate:
+        escalation_reason = ArbiterReasonCode.REVISION_NOT_AUTOREMEDIABLE
+    if escalation_reason is not None:
+        candidates[TransitionDisposition.ESCALATE_HUMAN] = _result(
+            kernel_input, TransitionDisposition.ESCALATE_HUMAN, escalation_reason
         )
 
-    # Canonical precedence 3: WAIT_FOR_CAPACITY.
     if not kernel_input.host_capacity_available:
-        return _result(
+        candidates[TransitionDisposition.WAIT_FOR_CAPACITY] = _result(
             kernel_input,
             TransitionDisposition.WAIT_FOR_CAPACITY,
             ArbiterReasonCode.HOST_CAPACITY_UNAVAILABLE,
         )
 
-    # Canonical precedence 4: WAIT_FOR_EVIDENCE.
+    evidence_reason: ArbiterReasonCode | None = None
     if not kernel_input.governance_evidence_complete:
-        return _result(
-            kernel_input,
-            TransitionDisposition.WAIT_FOR_EVIDENCE,
-            ArbiterReasonCode.GOVERNANCE_EVIDENCE_INCOMPLETE,
-        )
-    if not kernel_input.required_receipts_present:
-        return _result(
-            kernel_input,
-            TransitionDisposition.WAIT_FOR_EVIDENCE,
-            ArbiterReasonCode.REQUIRED_RECEIPT_MISSING,
-        )
-    if not kernel_input.exact_state_valid:
-        return _result(
-            kernel_input,
-            TransitionDisposition.WAIT_FOR_EVIDENCE,
-            ArbiterReasonCode.EXACT_STATE_MISMATCH,
-        )
-    if not kernel_input.evidence_fresh:
-        return _result(
-            kernel_input,
-            TransitionDisposition.WAIT_FOR_EVIDENCE,
-            ArbiterReasonCode.EVIDENCE_STALE,
+        evidence_reason = ArbiterReasonCode.GOVERNANCE_EVIDENCE_INCOMPLETE
+    elif not kernel_input.required_receipts_present:
+        evidence_reason = ArbiterReasonCode.REQUIRED_RECEIPT_MISSING
+    elif not kernel_input.exact_state_valid:
+        evidence_reason = ArbiterReasonCode.EXACT_STATE_MISMATCH
+    elif not kernel_input.evidence_fresh:
+        evidence_reason = ArbiterReasonCode.EVIDENCE_STALE
+    elif not kernel_input.validation_passed and not remediation_candidate:
+        evidence_reason = ArbiterReasonCode.VALIDATION_FAILED
+    if evidence_reason is not None:
+        candidates[TransitionDisposition.WAIT_FOR_EVIDENCE] = _result(
+            kernel_input, TransitionDisposition.WAIT_FOR_EVIDENCE, evidence_reason
         )
 
-    # Canonical precedence 5: AUTO_REMEDIATE_AND_REVALIDATE.
     if remediation_candidate:
-        return _result(
+        candidates[TransitionDisposition.AUTO_REMEDIATE_AND_REVALIDATE] = _result(
             kernel_input,
             TransitionDisposition.AUTO_REMEDIATE_AND_REVALIDATE,
             ArbiterReasonCode.BOUNDED_REMEDIATION_AVAILABLE,
         )
-    if not kernel_input.validation_passed:
-        return _result(
-            kernel_input,
-            TransitionDisposition.WAIT_FOR_EVIDENCE,
-            ArbiterReasonCode.VALIDATION_FAILED,
-        )
 
-    # Canonical precedence 6: AUTO_CONTINUE.
-    return _result(
+    candidates[TransitionDisposition.AUTO_CONTINUE] = _result(
         kernel_input,
         TransitionDisposition.AUTO_CONTINUE,
         ArbiterReasonCode.CONTINUATION_READY,
     )
+    return candidates
+
+
+def evaluate_arbiter(kernel_input: ArbiterKernelInput) -> ArbiterKernelResult:
+    candidates = _candidate_results(kernel_input)
+    for disposition_name in transition_precedence():
+        disposition = TransitionDisposition(disposition_name)
+        result = candidates.get(disposition)
+        if result is not None:
+            return result
+    raise RuntimeError("machine governance policy did not select an Arbiter disposition")
 
 
 def safe_evaluate_arbiter(candidate: ArbiterKernelInput | Any) -> ArbiterKernelResult:
