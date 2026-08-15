@@ -72,6 +72,7 @@ jobs:
           --junit artifacts/runtime/runtime-junit.xml
           --output artifacts/runtime/test-evidence.json
           --minimum-statement-coverage 97
+          --minimum-branch-coverage 95
 
       - name: Build and enforce machine-readable critical coverage inventory
         id: critical_coverage
