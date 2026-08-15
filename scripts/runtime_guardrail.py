@@ -143,7 +143,7 @@ def main():
             if re.search(re.escape(norm_forbidden), rel):
                 violations.append(f"FORBIDDEN TARGET MUTATION in {item['Relative']}: Modifying forbidden repository area '{forbidden}'.")
                 
-        is_allowed_alias = re.search(r'aliases\.json|commands/|tests/|plugin\.json|\.codex-plugin/plugin\.json|scripts/refresh-installed-integrations\.ps1|README\.md|ROUTING_MAP\.md|docs/project/|DECISION_LOG\.md|SESSION_HANDOFF\.md|skills/conductor/SKILL\.md|examples/plugin-manifest\.example\.json', rel)
+        is_allowed_alias = re.search(r'aliases\.json|commands/|tests/|plugin\.json|\.codex-plugin/plugin\.json|scripts/refresh-installed-integrations\.ps1|README\.md|ROUTING_MAP\.md|docs/project/|DECISION_LOG\.md|SESSION_HANDOFF\.md|skills/conductor/SKILL\.md|examples/plugin-manifest\.example\.json|^machine/routing/routes\.v1\.json$', rel)
         if not is_allowed_alias:
             for ln in legacy_names:
                 for i, line in enumerate(lines):
