@@ -41,8 +41,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install test dependencies
-        run: python -m pip install --upgrade pip pytest pytest-cov
+      - name: Install runtime test dependencies
+        run: python -m pip install --upgrade pip pytest pytest-cov hypothesis==6.163.0
 
       - name: Prepare runtime evidence directory
         run: mkdir -p artifacts/runtime
