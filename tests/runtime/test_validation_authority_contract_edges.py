@@ -32,20 +32,21 @@ def test_unique_governance_values_fail_closed(monkeypatch):
 
 
 def test_route_map_rejects_missing_and_malformed_records(monkeypatch):
+    routing_template = _routing()
     for routes in ({}, [], None):
-        routing = _routing()
+        routing = deepcopy(routing_template)
         routing["command_routes"] = routes
         monkeypatch.setattr(mc, "load_routing_contract", lambda root=None, routing=routing: routing)
         with pytest.raises(ValueError, match="contains no command routes"):
             mc.command_route_map()
 
-    routing = _routing()
+    routing = deepcopy(routing_template)
     routing["command_routes"] = {"bad": []}
     monkeypatch.setattr(mc, "load_routing_contract", lambda root=None: routing)
     with pytest.raises(ValueError, match="must be an object"):
         mc.command_route_map()
 
-    routing = _routing()
+    routing = deepcopy(routing_template)
     routing["command_routes"] = {"bad": {"specialist": ""}}
     monkeypatch.setattr(mc, "load_routing_contract", lambda root=None: routing)
     with pytest.raises(ValueError, match="has no specialist"):
@@ -53,14 +54,15 @@ def test_route_map_rejects_missing_and_malformed_records(monkeypatch):
 
 
 def test_route_record_rejects_missing_fallback_and_malformed_record(monkeypatch):
-    routing = _routing()
+    routing_template = _routing()
+    routing = deepcopy(routing_template)
     routing["command_routes"] = {}
     routing["ambiguity_fallback"] = ""
     monkeypatch.setattr(mc, "load_routing_contract", lambda root=None: routing)
     with pytest.raises(ValueError, match="no ambiguity fallback"):
         mc.command_route_record("unknown")
 
-    routing = _routing()
+    routing = deepcopy(routing_template)
     routing["command_routes"] = {"bad": []}
     monkeypatch.setattr(mc, "load_routing_contract", lambda root=None: routing)
     with pytest.raises(ValueError, match="must be an object"):
@@ -68,20 +70,21 @@ def test_route_record_rejects_missing_fallback_and_malformed_record(monkeypatch)
 
 
 def test_governance_required_and_validation_rules_fail_closed(monkeypatch):
-    policy = _policy()
+    policy_template = _policy()
+    policy = deepcopy(policy_template)
     policy["governance_required_specialists"] = ["dagger", "dagger"]
     monkeypatch.setattr(mc, "load_governance_policy", lambda root=None: policy)
     with pytest.raises(ValueError, match="invalid governance_required_specialists"):
         mc.governance_required_specialists()
 
-    policy = _policy()
+    policy = deepcopy(policy_template)
     policy["governance_required_specialists"] = [""]
     monkeypatch.setattr(mc, "load_governance_policy", lambda root=None: policy)
     with pytest.raises(ValueError, match="invalid governance_required_specialists"):
         mc.governance_required_specialists()
 
     for rules in (None, {}, []):
-        policy = _policy()
+        policy = deepcopy(policy_template)
         policy["runtime_validation_rules"] = rules
         monkeypatch.setattr(mc, "load_governance_policy", lambda root=None, policy=policy: policy)
         with pytest.raises(ValueError, match="contains no runtime validation rules"):
@@ -97,7 +100,8 @@ def test_transition_precedence_requires_exact_disposition_set(monkeypatch):
 
 
 def test_remediation_limits_validate_shape_types_and_bounds(monkeypatch):
-    policy = _policy()
+    policy_template = _policy()
+    policy = deepcopy(policy_template)
     policy["default_remediation"] = []
     monkeypatch.setattr(mc, "load_governance_policy", lambda root=None: policy)
     with pytest.raises(ValueError, match="must be an object"):
@@ -108,7 +112,7 @@ def test_remediation_limits_validate_shape_types_and_bounds(monkeypatch):
         ("maximum_identical_failure_repetitions", "2"),
         ("maximum_scope_growth", None),
     ):
-        policy = _policy()
+        policy = deepcopy(policy_template)
         policy["default_remediation"][key] = value
         monkeypatch.setattr(mc, "load_governance_policy", lambda root=None, policy=policy: policy)
         with pytest.raises(ValueError, match=f"{key} must be an integer"):
@@ -119,7 +123,7 @@ def test_remediation_limits_validate_shape_types_and_bounds(monkeypatch):
         ("maximum_identical_failure_repetitions", 0, "must be > 0"),
         ("maximum_scope_growth", -1, "must be >= 0"),
     ):
-        policy = _policy()
+        policy = deepcopy(policy_template)
         policy["default_remediation"][key] = value
         monkeypatch.setattr(mc, "load_governance_policy", lambda root=None, policy=policy: policy)
         with pytest.raises(ValueError, match=message):
@@ -127,12 +131,13 @@ def test_remediation_limits_validate_shape_types_and_bounds(monkeypatch):
 
 
 def test_machine_contract_error_surfaces_cover_policy_set_and_rule_shape(monkeypatch):
-    policy = _policy()
+    policy_template = _policy()
+    policy = deepcopy(policy_template)
     policy["compatibility_rules"].pop("APPROVED")
     monkeypatch.setattr(mc, "load_governance_policy", lambda root=None: policy)
     assert "GOVERNANCE_COMPATIBILITY_DECISION_SET_MISMATCH" in mc.machine_contract_errors()
 
-    policy = _policy()
+    policy = deepcopy(policy_template)
     policy["compatibility_rules"]["APPROVED"] = []
     monkeypatch.setattr(mc, "load_governance_policy", lambda root=None: policy)
     assert "GOVERNANCE_COMPATIBILITY_INVALID:APPROVED" in mc.machine_contract_errors()
