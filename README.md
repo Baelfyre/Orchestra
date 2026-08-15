@@ -219,6 +219,8 @@ Accepted child work receives an authority subset, capability subset, bounded dep
 
 Runs use typed lifecycle signals and distinct waiting or terminal states. Exact replay of an accepted terminal signal is idempotent; conflicting replay is rejected. Run-linked audit events record authority, capabilities, delegation, coordination, lifecycle, and terminal outcomes without granting permission.
 
+The control-plane re-foundation now begins hardening this boundary with versioned machine evidence receipts. Source-state receipts bind exact 40-character Git identities to observed repository state, while validation-execution receipts derive `PASS`/`FAIL` from process exit codes and hash command output. Agent prose may explain those receipts, but it cannot override their identities or verdicts. See [Control Plane Re-foundation P0-P1](docs/project/CONTROL_PLANE_REFOUNDATION_P0_P1.md).
+
 ### Coordination state and evidence freshness
 
 The Tuner's coordination runtime records specialist-owned contracts, dependencies, contradictions, invalidations, artifact lifecycles, evidence, and deterministic fingerprints. A supplied collaboration session that is incomplete, contradicted, stale, malformed, or otherwise not ready fails closed. Conductor remains the exclusive router, Overseer remains the validation-evidence owner, and Arbiter remains the continuation authority.

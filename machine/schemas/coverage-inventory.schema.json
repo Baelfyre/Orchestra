@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/coverage-inventory.schema.json",
+  "title": "Orchestra Coverage Inventory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "coverage_source",
+    "critical_policy",
+    "aggregate",
+    "critical_ready",
+    "critical_failures",
+    "modules"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "const": "orchestra.coverage-inventory.v1"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "coverage_source": {"type": "string", "minLength": 1},
+    "critical_policy": {"type": "object"},
+    "aggregate": {"type": "object"},
+    "critical_ready": {"type": "boolean"},
+    "critical_failures": {"type": "array", "items": {"type": "object"}},
+    "modules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "critical",
+          "statements",
+          "covered_statements",
+          "missing_statements",
+          "statement_percent",
+          "branches",
+          "covered_branches",
+          "missing_branches",
+          "branch_percent",
+          "missing_lines",
+          "excluded_lines"
+        ]
+      }
+    }
+  }
+}

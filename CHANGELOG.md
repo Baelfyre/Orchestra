@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.4.0 Control Plane Re-foundation P0/P1-P9 - Integration Candidate
+
+- Consolidated the control-plane re-foundation tracked by #273 into PR #294, covering exact source and validation receipts, typed governance and deterministic Arbiter Kernel enforcement, machine specialist/routing/governance contracts, exact compliance set-equality receipts, host capability/conformance contracts, typed continuity and JSONL context state, persistent remediation circuit breakers, deterministic pre-execution policy gating, and P9 shadow conformance.
+- P9 begins and remains in `SHADOW`; this integration does not advance authority to advisory, validation authority, canonical-promotion authority, or legacy retirement.
+- Release hardening persists machine-readable runtime evidence with statement and branch coverage, critical-module floors, property-based regressions, workflow-sanity coverage, bounded mutation-confidence evidence, and cross-platform validation. These measurements are confidence evidence, not proof of correctness.
+- The integration candidate preserves `v1.4.0` as the current published release. PR #294 is not canonical until governed Squash merge and independent canonical readback succeed, and this work does not create a new tag, version, or GitHub Release.
+
 ## v1.4.0 Governance and Compliance Registry Cross-Integration - Published 2026-08-14
 
 - Normalized the root, Claude Code, Codex, Cursor, JetBrains, Neovim, VS Code, Windsurf, and Zed package/version surfaces to `1.4.0` for the governance release candidate without changing host maturity.

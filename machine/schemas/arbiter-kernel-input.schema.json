@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.orchestra.dev/machine/arbiter-kernel-input/1.0.0",
+  "title": "Orchestra Arbiter Kernel Input",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "project_id", "unit_id", "governance_decisions", "authority_valid", "protected_boundary_clear", "scope_or_policy_decision_required", "external_authority_missing", "contradiction_unresolved", "governance_evidence_complete", "required_receipts_present", "exact_state_valid", "evidence_fresh", "validation_passed", "host_capacity_available", "deterministic_defect", "remediation_authorized", "remediation_in_scope", "remediation_attempt_count", "identical_failure_repetitions", "maximum_remediation_attempts", "maximum_identical_failure_repetitions"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "project_id": {"type": "string", "minLength": 1},
+    "unit_id": {"type": "string", "minLength": 1},
+    "governance_decisions": {"type": "array", "items": {"$ref": "governance-decision.schema.json"}},
+    "authority_valid": {"type": "boolean"},
+    "protected_boundary_clear": {"type": "boolean"},
+    "scope_or_policy_decision_required": {"type": "boolean"},
+    "external_authority_missing": {"type": "boolean"},
+    "contradiction_unresolved": {"type": "boolean"},
+    "governance_evidence_complete": {"type": "boolean"},
+    "required_receipts_present": {"type": "boolean"},
+    "exact_state_valid": {"type": "boolean"},
+    "evidence_fresh": {"type": "boolean"},
+    "validation_passed": {"type": "boolean"},
+    "host_capacity_available": {"type": "boolean"},
+    "deterministic_defect": {"type": "boolean"},
+    "remediation_authorized": {"type": "boolean"},
+    "remediation_in_scope": {"type": "boolean"},
+    "remediation_attempt_count": {"type": "integer", "minimum": 0},
+    "identical_failure_repetitions": {"type": "integer", "minimum": 0},
+    "maximum_remediation_attempts": {"type": "integer", "minimum": 1},
+    "maximum_identical_failure_repetitions": {"type": "integer", "minimum": 1}
+  }
+}

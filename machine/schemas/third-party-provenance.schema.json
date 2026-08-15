@@ -1,0 +1,106 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/third-party-provenance.schema.json",
+  "title": "Orchestra Third-Party Provenance Registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "updated_on", "policy", "summary", "items"],
+  "properties": {
+    "schema_version": {
+      "const": "orchestra.third-party-provenance.v1"
+    },
+    "updated_on": {
+      "type": "string",
+      "format": "date"
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowed_classifications",
+        "new_incorporation_requires_provenance_update",
+        "vendored_or_copied_code_requires_license_review",
+        "reference_only_is_not_runtime_authority"
+      ],
+      "properties": {
+        "allowed_classifications": {
+          "type": "array",
+          "minItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "TEST_TOOL_DEPENDENCY",
+              "REFERENCE_ONLY",
+              "INTEGRATED_RUNTIME_DEPENDENCY",
+              "VENDORED_OR_COPIED_CODE"
+            ]
+          }
+        },
+        "new_incorporation_requires_provenance_update": {"const": true},
+        "vendored_or_copied_code_requires_license_review": {"const": true},
+        "reference_only_is_not_runtime_authority": {"const": true}
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "re_foundation_vendored_or_copied_third_party_source_count",
+        "re_foundation_new_runtime_dependency_count",
+        "re_foundation_test_tool_dependency_count"
+      ],
+      "properties": {
+        "re_foundation_vendored_or_copied_third_party_source_count": {"type": "integer", "minimum": 0},
+        "re_foundation_new_runtime_dependency_count": {"type": "integer", "minimum": 0},
+        "re_foundation_test_tool_dependency_count": {"type": "integer", "minimum": 0}
+      }
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "classification",
+          "version",
+          "upstream_repository",
+          "package_source",
+          "license_spdx",
+          "purpose",
+          "runtime_dependency",
+          "source_copied_or_vendored",
+          "upstream_source_adapted",
+          "orchestra_surfaces"
+        ],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "name": {"type": "string", "minLength": 1},
+          "classification": {
+            "enum": [
+              "TEST_TOOL_DEPENDENCY",
+              "REFERENCE_ONLY",
+              "INTEGRATED_RUNTIME_DEPENDENCY",
+              "VENDORED_OR_COPIED_CODE"
+            ]
+          },
+          "version": {"type": "string", "minLength": 1},
+          "upstream_repository": {"type": "string", "format": "uri"},
+          "package_source": {"type": "string", "format": "uri"},
+          "license_spdx": {"type": "string", "minLength": 1},
+          "purpose": {"type": "string", "minLength": 1},
+          "runtime_dependency": {"type": "boolean"},
+          "source_copied_or_vendored": {"type": "boolean"},
+          "upstream_source_adapted": {"type": "boolean"},
+          "orchestra_surfaces": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    }
+  }
+}

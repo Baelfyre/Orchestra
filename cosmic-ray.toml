@@ -1,0 +1,12 @@
+[cosmic-ray]
+module-path = [
+  "orchestra_runtime/evidence.py",
+  "orchestra_runtime/governance_kernel.py",
+  "orchestra_runtime/preexecution.py",
+]
+timeout = 90.0
+excluded-modules = []
+test-command = "python -m pytest -q tests/runtime/test_evidence_kernel.py tests/runtime/test_governance_kernel.py tests/runtime/test_preexecution.py"
+
+[cosmic-ray.distributor]
+name = "local"

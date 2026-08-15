@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/mutation-evidence.schema.json",
+  "title": "Orchestra Mutation Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "repository",
+    "tested_sha",
+    "source_head_sha",
+    "workflow",
+    "tool",
+    "scope",
+    "execution",
+    "reports"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "const": "orchestra.mutation-evidence.v1"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "repository": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+    "tested_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "source_head_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "workflow": {"type": "object"},
+    "tool": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": {"type": "string", "const": "mutmut"},
+        "version": {"type": "string", "minLength": 1}
+      }
+    },
+    "scope": {"type": "object"},
+    "execution": {
+      "type": "object",
+      "required": ["run_exit_code", "score_status", "interpretation"],
+      "properties": {
+        "run_exit_code": {"type": "integer"},
+        "score_status": {"type": "string", "const": "UNSCORED_BASELINE"},
+        "interpretation": {"type": "string", "minLength": 1}
+      }
+    },
+    "reports": {"type": "object"}
+  }
+}
