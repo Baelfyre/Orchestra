@@ -158,8 +158,13 @@ class PreExecutionPolicy:
         prohibited = _paths(self.prohibited_paths, "prohibited_paths")
         for left in allowed:
             for right in prohibited:
-                if _is_within(left, right) or _is_within(right, left):
-                    raise ValueError(f"allowed/prohibited path overlap: {left!r} / {right!r}")
+                # A prohibited descendant is a valid deny-subtree carve-out from an
+                # otherwise allowed root (for example: allow ``src`` but deny
+                # ``src/secrets``). The inverse is ambiguous/unsafe: an allowed
+                # path may not live inside a prohibited root, and exact overlap is
+                # rejected by the same rule.
+                if _is_within(left, right):
+                    raise ValueError(f"allowed path is inside prohibited path: {left!r} / {right!r}")
         object.__setattr__(self, "allowed_paths", allowed)
         object.__setattr__(self, "prohibited_paths", prohibited)
         for field_name in (
