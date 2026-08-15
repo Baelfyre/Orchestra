@@ -26,7 +26,8 @@ The absence of an item from this file must not be interpreted as permission to c
 - Source copied or vendored into Orchestra: **No**
 - Adapted upstream source: **No**
 - Orchestra integration surface: `.github/workflows/mutation-confidence.yml`, `setup.cfg`, and Orchestra-owned mutation evidence tooling.
-- Notes: Orchestra invokes the published package as an external CI tool. Current mutation-confidence work also records tool failures as evidence rather than treating workflow completion as a mutation-quality PASS.
+- Current disposition: **UNSCORED / TOOL-INCOMPATIBILITY UNDER REMEDIATION**.
+- Notes: Orchestra invokes the published package as an external CI tool. The current pilot reaches mutmut's statistics-collection phase but fails when Python dataclass-generated `"<string>"` frames are inspected. Orchestra records this as tool failure evidence rather than treating workflow completion as a mutation-quality PASS. Orchestra production/runtime code is not being modified to work around this third-party instrumentation defect.
 
 ### Hypothesis 6.163.0
 
@@ -41,6 +42,20 @@ The absence of an item from this file must not be interpreted as permission to c
 - Orchestra integration surface: property-based tests under `tests/runtime/` and CI test environments.
 
 ## Evaluated but not incorporated
+
+### Cosmic Ray 8.7.0
+
+- Classification: **REFERENCE_ONLY**
+- Purpose: candidate replacement mutation runner under evaluation after the mutmut 3.6.0 statistics-instrumentation incompatibility.
+- Upstream project: `sixty-north/cosmic-ray`
+- Candidate version: `8.7.0`
+- License: MIT
+- Python support: Python 3.9+; upstream package classifiers include Python 3.12 and Python 3.13.
+- Runtime incorporation: **No**
+- Current test-tool incorporation: **No**
+- Source copied or vendored into Orchestra: **No**
+- Adapted upstream source: **No**
+- Promotion rule: Cosmic Ray becomes a `TEST_TOOL_DEPENDENCY` only after a bounded pilot successfully baselines unmutated Orchestra tests, executes real mutants, produces interpretable results, and preserves machine-readable run evidence.
 
 The re-foundation architecture has also evaluated external technologies and standards for potential future use. Evaluation does not make them Orchestra dependencies or authority sources. Examples include policy engines, sandbox technologies, MCP transport patterns, structured-output frameworks, and schema tooling discussed in architecture records. Any future incorporation must be promoted into the machine-readable provenance registry with an exact role, version or revision where applicable, and license/provenance review.
 
