@@ -5,17 +5,8 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "schema_version",
-    "generated_at",
-    "repository",
-    "tested_sha",
-    "source_head_sha",
-    "workflow",
-    "tool",
-    "scope",
-    "execution",
-    "mutation_summary",
-    "reports"
+    "schema_version", "generated_at", "repository", "tested_sha", "source_head_sha",
+    "workflow", "tool", "scope", "execution", "mutation_summary", "reports"
   ],
   "properties": {
     "schema_version": {"type": "string", "const": "orchestra.cosmic-ray-evidence.v1"},
@@ -24,81 +15,57 @@
     "tested_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
     "source_head_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
     "workflow": {
-      "type": "object",
-      "additionalProperties": false,
+      "type": "object", "additionalProperties": false,
       "required": ["run_id", "run_attempt", "event_name", "ref_name"],
       "properties": {
-        "run_id": {"type": "string", "minLength": 1},
-        "run_attempt": {"type": "string", "minLength": 1},
-        "event_name": {"type": "string", "minLength": 1},
-        "ref_name": {"type": "string", "minLength": 1}
+        "run_id": {"type": "string", "minLength": 1}, "run_attempt": {"type": "string", "minLength": 1},
+        "event_name": {"type": "string", "minLength": 1}, "ref_name": {"type": "string", "minLength": 1}
       }
     },
     "tool": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["name", "version"],
-      "properties": {
-        "name": {"type": "string", "const": "cosmic-ray"},
-        "version": {"type": "string", "minLength": 1}
-      }
+      "type": "object", "additionalProperties": false, "required": ["name", "version"],
+      "properties": {"name": {"type": "string", "const": "cosmic-ray"}, "version": {"type": "string", "minLength": 1}}
     },
     "scope": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["modules", "test_command", "configuration", "pilot"],
+      "type": "object", "additionalProperties": false, "required": ["modules", "test_command", "configuration", "pilot"],
       "properties": {
         "modules": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-        "test_command": {"type": "string", "minLength": 1},
-        "configuration": {"type": "string", "minLength": 1},
+        "test_command": {"type": "string", "minLength": 1}, "configuration": {"type": "string", "minLength": 1},
         "pilot": {"type": "boolean"}
       }
     },
     "execution": {
-      "type": "object",
-      "additionalProperties": false,
+      "type": "object", "additionalProperties": false,
       "required": ["init_exit_code", "baseline_exit_code", "exec_exit_code", "score_status", "interpretation"],
       "properties": {
-        "init_exit_code": {"type": "integer"},
-        "baseline_exit_code": {"type": "integer"},
-        "exec_exit_code": {"type": "integer"},
+        "init_exit_code": {"type": "integer"}, "baseline_exit_code": {"type": "integer"}, "exec_exit_code": {"type": "integer"},
         "score_status": {"type": "string", "enum": ["VALID_SCORE", "UNSCORED_TOOL_FAILURE", "UNSCORED_INCOMPLETE"]},
         "interpretation": {"type": "string", "minLength": 1}
       }
     },
     "mutation_summary": {
-      "type": "object",
-      "additionalProperties": false,
+      "type": "object", "additionalProperties": false,
       "required": ["total_jobs", "complete_jobs", "surviving_mutants", "killed_mutants", "mutation_score_percent"],
       "properties": {
-        "total_jobs": {"type": ["integer", "null"], "minimum": 0},
-        "complete_jobs": {"type": ["integer", "null"], "minimum": 0},
-        "surviving_mutants": {"type": ["integer", "null"], "minimum": 0},
-        "killed_mutants": {"type": ["integer", "null"], "minimum": 0},
+        "total_jobs": {"type": ["integer", "null"], "minimum": 0}, "complete_jobs": {"type": ["integer", "null"], "minimum": 0},
+        "surviving_mutants": {"type": ["integer", "null"], "minimum": 0}, "killed_mutants": {"type": ["integer", "null"], "minimum": 0},
         "mutation_score_percent": {"type": ["number", "null"], "minimum": 0, "maximum": 100}
       }
     },
     "reports": {
-      "type": "object",
-      "additionalProperties": false,
+      "type": "object", "additionalProperties": false,
       "required": [
-        "init_output", "init_output_sha256",
-        "baseline_output", "baseline_output_sha256",
-        "exec_output", "exec_output_sha256",
-        "report_output", "report_output_sha256",
-        "session_database", "session_database_sha256"
+        "init_output", "init_output_sha256", "baseline_output", "baseline_output_sha256",
+        "exec_output", "exec_output_sha256", "report_output", "report_output_sha256",
+        "dump_output", "dump_output_sha256", "session_database", "session_database_sha256"
       ],
       "properties": {
-        "init_output": {"type": "string", "minLength": 1},
-        "init_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-        "baseline_output": {"type": "string", "minLength": 1},
-        "baseline_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-        "exec_output": {"type": "string", "minLength": 1},
-        "exec_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-        "report_output": {"type": "string", "minLength": 1},
-        "report_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-        "session_database": {"type": "string", "minLength": 1},
-        "session_database_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+        "init_output": {"type": "string", "minLength": 1}, "init_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "baseline_output": {"type": "string", "minLength": 1}, "baseline_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "exec_output": {"type": "string", "minLength": 1}, "exec_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "report_output": {"type": "string", "minLength": 1}, "report_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "dump_output": {"type": "string", "minLength": 1}, "dump_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "session_database": {"type": "string", "minLength": 1}, "session_database_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
       }
     }
   }
