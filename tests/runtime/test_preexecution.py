@@ -69,10 +69,20 @@ def test_allowed_write_inside_scope_with_host_capability_is_ready():
 
 
 def test_absolute_and_traversal_paths_are_rejected_before_gate():
-    with pytest.raises(ValueError, match="repository-relative"):
-        ExecutionIntent("bad", ExecutionAction.FILE_READ, ("/etc/passwd",))
+    for path in ("/etc/passwd", "\\server\\share", "file://tmp/data", "C:/Windows/system.ini"):
+        with pytest.raises(ValueError, match="repository-relative"):
+            ExecutionIntent("bad", ExecutionAction.FILE_READ, (path,))
     with pytest.raises(ValueError, match="unsafe path traversal"):
         ExecutionIntent("bad2", ExecutionAction.FILE_READ, ("src/../secret",))
+
+
+def test_repository_relative_path_boundary_accepts_one_character_and_non_drive_colon_position():
+    single = ExecutionIntent("one-char", ExecutionAction.FILE_READ, ("x",))
+    ordinary = ExecutionIntent("ordinary", ExecutionAction.FILE_READ, ("ab/c",))
+    assert single.requested_paths == ("x",)
+    assert ordinary.requested_paths == ("ab/c",)
+    with pytest.raises(ValueError, match="repository-relative"):
+        ExecutionIntent("drive-like", ExecutionAction.FILE_READ, ("a:b",))
 
 
 def test_path_outside_allowed_scope_stops():
