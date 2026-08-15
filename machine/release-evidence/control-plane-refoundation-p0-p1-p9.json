@@ -1,0 +1,82 @@
+{
+  "format_version": 1,
+  "campaign": "control-plane-refoundation-p0-p1-p9",
+  "integration_status": "MERGED_VERIFIED",
+  "canonical": {
+    "pull_request": 294,
+    "merge_commit_sha": "76eb96b27439700a517f75c5a921465e5c2987e6",
+    "tree_sha": "6f98b380d984430303d630462ad4535cda483925",
+    "source_head_sha": "862ba871d900fe7e31591bec068c8830170dd774",
+    "tested_pr_merge_sha": "7fcbf8a6d497c6c6b97ed3170266df5b7897a09b",
+    "merge_commit_signature_verified": true
+  },
+  "runtime_evidence": {
+    "result": "PASS",
+    "workflow_run_id": 31905614753,
+    "run_attempt": 1,
+    "artifact": {
+      "id": 9252243432,
+      "name": "runtime-test-evidence-31905614753-1",
+      "digest": "sha256:823435de0ca7cfe589a825b9fbb462e9569506108185bb7b6ffe22fe812a50bc"
+    },
+    "manifest": "test-evidence.json",
+    "tests": {
+      "total": 944,
+      "passed": 944,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "coverage": {
+      "statement_percent": 98.31,
+      "statements": 6696,
+      "covered_statements": 6583,
+      "minimum_statement_coverage": 97.0,
+      "branch_percent": 95.02,
+      "branches": 2250,
+      "covered_branches": 2138,
+      "minimum_branch_coverage": 95.0,
+      "critical_module_inventory": "PASS"
+    },
+    "python_version": "3.12.13"
+  },
+  "mutation_evidence": {
+    "result": "PASS",
+    "workflow_run_id": 31905614751,
+    "run_attempt": 1,
+    "artifact": {
+      "id": 9252337259,
+      "name": "cosmic-ray-confidence-31905614751-1",
+      "digest": "sha256:ee86b6c2a65656025794e922d3ca5dcad8c547ea18b73846ab3b484bc21dfb48"
+    },
+    "manifest": "cosmic-ray-evidence.json",
+    "tool": {
+      "name": "cosmic-ray",
+      "version": "8.7.0"
+    },
+    "score_status": "VALID_CLASSIFIED_SCORE",
+    "raw": {
+      "total": 691,
+      "killed": 405,
+      "survived": 286,
+      "score_percent": 58.61
+    },
+    "excluded_equivalent": {
+      "count": 154,
+      "classification": "NON_RUNTIME_POSTPONED_ANNOTATION"
+    },
+    "runtime_relevant": {
+      "total": 537,
+      "killed": 405,
+      "survived": 132,
+      "score_percent": 75.42
+    }
+  },
+  "boundaries": {
+    "confidence_evidence_is_not_proof_of_correctness": true,
+    "p9_migration_stage": "SHADOW",
+    "authority_stage_advanced_by_closeout": false,
+    "current_public_release": "v1.4.0",
+    "new_version_or_tag_published_by_refoundation": false
+  }
+}
