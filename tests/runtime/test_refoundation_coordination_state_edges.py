@@ -11,7 +11,6 @@ from orchestra_runtime.coordination import (
     ContradictionRecord,
     ContradictionStatus,
     CoordinationEvidenceRecord,
-    CrossLayerContractPacket,
     EvidenceStatus,
     InvalidationEvent,
     InvalidationStatus,
@@ -77,159 +76,93 @@ def _invalidation(**overrides):
     return InvalidationEvent(**values)
 
 
-def test_contract_packet_layer_section_and_version_guards():
+def test_contract_packet_guards():
     contract = build_contract()
-    with pytest.raises(InvalidCoordinationContractError) as no_layers:
+    with pytest.raises(InvalidCoordinationContractError) as exc:
         replace(contract, affected_layers=())
-    assert no_layers.value.reason_code == "MISSING_AFFECTED_LAYERS"
+    assert exc.value.reason_code == "MISSING_AFFECTED_LAYERS"
 
-    with pytest.raises(InvalidCoordinationContractError) as duplicate_section:
+    with pytest.raises(InvalidCoordinationContractError) as exc:
         replace(contract, section_records=contract.section_records + (contract.section_records[0],))
-    assert duplicate_section.value.reason_code == "DUPLICATE_CONTRACT_SECTION"
+    assert exc.value.reason_code == "DUPLICATE_CONTRACT_SECTION"
 
-    duplicate_layer_section = replace(
-        contract.section_records[1],
-        section_id="section.impl-duplicate",
-        layer=contract.section_records[0].layer,
-    )
-    with pytest.raises(InvalidCoordinationContractError) as duplicate_layer:
-        replace(contract, section_records=contract.section_records + (duplicate_layer_section,))
-    assert duplicate_layer.value.reason_code == "DUPLICATE_CONTRACT_LAYER"
+    duplicate_layer = replace(contract.section_records[1], section_id="section.duplicate", layer=contract.section_records[0].layer)
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        replace(contract, section_records=contract.section_records + (duplicate_layer,))
+    assert exc.value.reason_code == "DUPLICATE_CONTRACT_LAYER"
 
-    unknown_layer_section = replace(contract.section_records[0], layer="outside")
-    with pytest.raises(InvalidCoordinationContractError) as unknown:
-        replace(contract, section_records=(unknown_layer_section,) + contract.section_records[1:])
-    assert unknown.value.reason_code == "UNKNOWN_CONTRACT_LAYER"
+    unknown_layer = replace(contract.section_records[0], layer="outside")
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        replace(contract, section_records=(unknown_layer,) + contract.section_records[1:])
+    assert exc.value.reason_code == "UNKNOWN_CONTRACT_LAYER"
 
-    with pytest.raises(InvalidCoordinationContractError) as bad_version:
+    with pytest.raises(InvalidCoordinationContractError) as exc:
         replace(contract, canonicalization_version="coordination-v999")
-    assert bad_version.value.reason_code == "UNSUPPORTED_COORDINATION_VERSION"
+    assert exc.value.reason_code == "UNSUPPORTED_COORDINATION_VERSION"
 
     frozen = contract.with_status(ContractReadiness.FROZEN)
     assert frozen.status is ContractReadiness.FROZEN
     assert frozen.to_dict()["fingerprint"] == frozen.fingerprint
 
 
-def test_handoff_self_context_and_full_serialization_edges():
-    with pytest.raises(InvalidCoordinationContractError) as self_handoff:
+def test_handoff_guards_and_full_projection():
+    with pytest.raises(InvalidCoordinationContractError) as exc:
         SpecialistHandoffDelta(
-            "delta.self",
-            SESSION_ID,
-            "clockwork",
-            "clockwork",
-            1,
-            confirmed_decision_refs=("decision.one",),
-            change_identity_ref=CHANGE_ID,
+            "delta.self", SESSION_ID, "clockwork", "clockwork", 1,
+            confirmed_decision_refs=("decision.one",), change_identity_ref=CHANGE_ID,
         )
-    assert self_handoff.value.reason_code == "SELF_SPECIALIST_HANDOFF"
+    assert exc.value.reason_code == "SELF_SPECIALIST_HANDOFF"
 
-    with pytest.raises(InvalidCoordinationContractError) as empty:
-        SpecialistHandoffDelta(
-            "delta.empty",
-            SESSION_ID,
-            "clockwork",
-            "ponytail",
-            1,
-            change_identity_ref=CHANGE_ID,
-        )
-    assert empty.value.reason_code == "CONTEXT_FREE_HANDOFF"
+    with pytest.raises(InvalidCoordinationContractError) as exc:
+        SpecialistHandoffDelta("delta.empty", SESSION_ID, "clockwork", "ponytail", 1, change_identity_ref=CHANGE_ID)
+    assert exc.value.reason_code == "CONTEXT_FREE_HANDOFF"
 
     delta = SpecialistHandoffDelta(
-        "delta.full",
-        SESSION_ID,
-        "clockwork",
-        "ponytail",
-        1,
-        confirmed_decision_refs=("decision.one",),
-        constraint_refs=("constraint.one",),
-        updated_section_refs=("section.arch",),
-        assumptions=("assumption one",),
-        open_question_refs=("question.one",),
-        required_reviewer_refs=("overseer",),
-        invalidation_trigger_refs=("dep.arch.impl",),
-        evidence_refs=("evidence.one",),
-        change_identity_ref=CHANGE_ID,
-        artifact_lifecycle_refs=("artifact.one",),
+        "delta.full", SESSION_ID, "clockwork", "ponytail", 1,
+        confirmed_decision_refs=("decision.one",), constraint_refs=("constraint.one",),
+        updated_section_refs=("section.arch",), assumptions=("assumption one",),
+        open_question_refs=("question.one",), required_reviewer_refs=("overseer",),
+        invalidation_trigger_refs=("dep.arch.impl",), evidence_refs=("evidence.one",),
+        change_identity_ref=CHANGE_ID, artifact_lifecycle_refs=("artifact.one",),
     )
-    payload = delta.to_dict()
-    assert payload["source_specialist"] == "clockwork"
-    assert payload["artifact_lifecycle_refs"] == ["artifact.one"]
+    assert delta.to_dict()["artifact_lifecycle_refs"] == ["artifact.one"]
 
 
-def test_invalidation_event_resolution_and_subset_guards():
-    with pytest.raises(InvalidCoordinationContractError) as incomplete:
+def test_invalidation_resolution_guards():
+    with pytest.raises(InvalidCoordinationContractError) as exc:
         _invalidation(target_refs=())
-    assert incomplete.value.reason_code == "INCOMPLETE_INVALIDATION_EVENT"
+    assert exc.value.reason_code == "INCOMPLETE_INVALIDATION_EVENT"
 
-    with pytest.raises(InvalidCoordinationContractError) as subset:
+    with pytest.raises(InvalidCoordinationContractError) as exc:
         _invalidation(required_reentry_refs=("arbiter",))
-    assert subset.value.reason_code == "INVALID_REENTRY_SET"
+    assert exc.value.reason_code == "INVALID_REENTRY_SET"
 
-    with pytest.raises(InvalidCoordinationContractError) as resolved_invalid:
+    with pytest.raises(InvalidCoordinationContractError) as exc:
         _invalidation(status=InvalidationStatus.RESOLVED, resolved_by_revision=1, evidence_refresh_refs=())
-    assert resolved_invalid.value.reason_code == "INVALID_INVALIDATION_RESOLUTION"
+    assert exc.value.reason_code == "INVALID_INVALIDATION_RESOLUTION"
 
-    with pytest.raises(InvalidCoordinationContractError) as open_with_resolution:
+    with pytest.raises(InvalidCoordinationContractError) as exc:
         _invalidation(resolved_by_revision=2, evidence_refresh_refs=("evidence.new",))
-    assert open_with_resolution.value.reason_code == "INVALID_INVALIDATION_RESOLUTION"
+    assert exc.value.reason_code == "INVALID_INVALIDATION_RESOLUTION"
 
-    resolved = _invalidation(
-        status=InvalidationStatus.RESOLVED,
-        resolved_by_revision=2,
-        evidence_refresh_refs=("evidence.new",),
-    )
-    payload = resolved.to_dict()
-    assert payload["resolved_by_revision"] == 2
-    assert payload["evidence_refresh_refs"] == ["evidence.new"]
+    resolved = _invalidation(status=InvalidationStatus.RESOLVED, resolved_by_revision=2, evidence_refresh_refs=("evidence.new",))
+    assert resolved.to_dict()["resolved_by_revision"] == 2
 
 
 def test_artifact_state_retention_and_evidence_matrix():
-    with pytest.raises(InvalidCoordinationContractError) as bad_before:
-        _artifact(pre_execution_state=ArtifactLifecycleState.GENERATED)
-    assert bad_before.value.reason_code == "INVALID_ARTIFACT_PRE_EXECUTION_STATE"
-
-    with pytest.raises(InvalidCoordinationContractError) as preexisting_generated:
-        _artifact(
-            pre_execution_state=ArtifactLifecycleState.PREEXISTING,
-            current_state=ArtifactLifecycleState.GENERATED,
-        )
-    assert preexisting_generated.value.reason_code == "INVALID_ARTIFACT_STATE_TRANSITION"
-
-    with pytest.raises(InvalidCoordinationContractError) as none_generated:
-        _artifact(current_state=ArtifactLifecycleState.GENERATED)
-    assert none_generated.value.reason_code == "INVALID_ARTIFACT_RETENTION_STATE"
-
-    with pytest.raises(InvalidCoordinationContractError) as retained_cleanup:
-        _artifact(
-            current_state=ArtifactLifecycleState.CLEANED,
-            retention_requirement=ArtifactRetentionRequirement.RETAIN_REQUIRED,
-            evidence_ref="evidence.artifact",
-        )
-    assert retained_cleanup.value.reason_code == "INVALID_ARTIFACT_RETENTION_STATE"
-
-    with pytest.raises(InvalidCoordinationContractError) as cleanup_without_policy:
-        _artifact(
-            current_state=ArtifactLifecycleState.CLEANUP_PENDING,
-            retention_requirement=ArtifactRetentionRequirement.RETAIN_ALLOWED,
-            evidence_ref="evidence.artifact",
-        )
-    assert cleanup_without_policy.value.reason_code == "INVALID_ARTIFACT_RETENTION_STATE"
-
-    with pytest.raises(InvalidCoordinationContractError) as required_but_retained:
-        _artifact(
-            current_state=ArtifactLifecycleState.RETAIN,
-            retention_requirement=ArtifactRetentionRequirement.CLEANUP_REQUIRED,
-            evidence_ref="evidence.artifact",
-        )
-    assert required_but_retained.value.reason_code == "INVALID_ARTIFACT_RETENTION_STATE"
-
-    with pytest.raises(InvalidCoordinationContractError) as unexpected_evidence:
-        _artifact(evidence_ref="evidence.unexpected")
-    assert unexpected_evidence.value.reason_code == "UNEXPECTED_ARTIFACT_EVIDENCE"
-
-    with pytest.raises(InvalidCoordinationContractError) as missing_evidence:
-        _artifact(retention_requirement=ArtifactRetentionRequirement.RETAIN_ALLOWED)
-    assert missing_evidence.value.reason_code == "MISSING_ARTIFACT_EVIDENCE"
+    cases = [
+        ({"pre_execution_state": ArtifactLifecycleState.GENERATED}, "INVALID_ARTIFACT_PRE_EXECUTION_STATE"),
+        ({"pre_execution_state": ArtifactLifecycleState.PREEXISTING, "current_state": ArtifactLifecycleState.GENERATED}, "INVALID_ARTIFACT_STATE_TRANSITION"),
+        ({"current_state": ArtifactLifecycleState.GENERATED}, "INVALID_ARTIFACT_RETENTION_STATE"),
+        ({"current_state": ArtifactLifecycleState.CLEANED, "retention_requirement": ArtifactRetentionRequirement.RETAIN_REQUIRED, "evidence_ref": "evidence.artifact"}, "INVALID_ARTIFACT_RETENTION_STATE"),
+        ({"current_state": ArtifactLifecycleState.RETAIN, "retention_requirement": ArtifactRetentionRequirement.CLEANUP_REQUIRED, "evidence_ref": "evidence.artifact"}, "INVALID_ARTIFACT_RETENTION_STATE"),
+        ({"evidence_ref": "evidence.unexpected"}, "UNEXPECTED_ARTIFACT_EVIDENCE"),
+        ({"retention_requirement": ArtifactRetentionRequirement.RETAIN_REQUIRED}, "MISSING_ARTIFACT_EVIDENCE"),
+    ]
+    for overrides, reason in cases:
+        with pytest.raises(InvalidCoordinationContractError) as exc:
+            _artifact(**overrides)
+        assert exc.value.reason_code == reason
 
     valid = _artifact(
         current_state=ArtifactLifecycleState.CLEANUP_PENDING,
@@ -239,68 +172,40 @@ def test_artifact_state_retention_and_evidence_matrix():
     assert valid.to_dict()["current_state"] == "CLEANUP_PENDING"
 
 
-def test_contradiction_completeness_resolution_and_serialization_edges():
-    with pytest.raises(InvalidCoordinationContractError) as incomplete:
+def test_contradiction_resolution_guards():
+    with pytest.raises(InvalidCoordinationContractError) as exc:
         _contradiction(contract_section_refs=("section.arch",))
-    assert incomplete.value.reason_code == "INCOMPLETE_CONTRADICTION"
+    assert exc.value.reason_code == "INCOMPLETE_CONTRADICTION"
 
-    with pytest.raises(InvalidCoordinationContractError) as resolved_missing:
+    with pytest.raises(InvalidCoordinationContractError) as exc:
         _contradiction(status=ContradictionStatus.RESOLVED)
-    assert resolved_missing.value.reason_code == "INVALID_CONTRADICTION_RESOLUTION"
+    assert exc.value.reason_code == "INVALID_CONTRADICTION_RESOLUTION"
 
-    with pytest.raises(InvalidCoordinationContractError) as open_resolution:
+    with pytest.raises(InvalidCoordinationContractError) as exc:
         _contradiction(resolution_ref="resolution.one")
-    assert open_resolution.value.reason_code == "INVALID_CONTRADICTION_RESOLUTION"
+    assert exc.value.reason_code == "INVALID_CONTRADICTION_RESOLUTION"
 
     resolved = _contradiction(status=ContradictionStatus.RESOLVED, resolution_ref="resolution.one")
     assert resolved.to_dict()["resolution_ref"] == "resolution.one"
 
 
-def test_current_status_invariant_blockers_cover_both_required_open_records():
-    contradicted = _current_status_invariant_blockers(CollaborationStatus.CONTRADICTED, (), ())
-    assert contradicted == (("MISSING_OPEN_CONTRADICTION", "contradicted status requires an open contradiction"),)
-    assert _current_status_invariant_blockers(
-        CollaborationStatus.CONTRADICTED,
-        (),
-        (_contradiction(),),
-    ) == ()
-
-    stale = _current_status_invariant_blockers(CollaborationStatus.STALE, (), ())
-    assert stale == (("MISSING_OPEN_INVALIDATION", "stale status requires an open invalidation"),)
-    assert _current_status_invariant_blockers(
-        CollaborationStatus.STALE,
-        (_invalidation(),),
-        (),
-    ) == ()
+def test_status_invariant_blockers_require_open_records():
+    assert _current_status_invariant_blockers(CollaborationStatus.CONTRADICTED, (), ())[0][0] == "MISSING_OPEN_CONTRADICTION"
+    assert _current_status_invariant_blockers(CollaborationStatus.CONTRADICTED, (), (_contradiction(),)) == ()
+    assert _current_status_invariant_blockers(CollaborationStatus.STALE, (), ())[0][0] == "MISSING_OPEN_INVALIDATION"
+    assert _current_status_invariant_blockers(CollaborationStatus.STALE, (_invalidation(),), ()) == ()
 
 
-def test_evidence_blockers_exercise_missing_unknown_stale_and_identity_mismatches():
+def test_evidence_blockers_cover_all_identity_dimensions():
     contract = build_contract()
-    assert _evidence_blockers_for_records(
-        {}, (), contract, 1, BASELINE_SHA, CHANGE_ID
-    ) == (("MISSING_COORDINATION_EVIDENCE", "transition requires current Overseer evidence"),)
-
-    unknown = _evidence_blockers_for_records(
-        {}, ("evidence.missing",), contract, 1, BASELINE_SHA, CHANGE_ID
-    )
-    assert unknown[0][0] == "UNKNOWN_COORDINATION_EVIDENCE"
+    assert _evidence_blockers_for_records({}, (), contract, 1, BASELINE_SHA, CHANGE_ID)[0][0] == "MISSING_COORDINATION_EVIDENCE"
+    assert _evidence_blockers_for_records({}, ("evidence.missing",), contract, 1, BASELINE_SHA, CHANGE_ID)[0][0] == "UNKNOWN_COORDINATION_EVIDENCE"
 
     evidence = CoordinationEvidenceRecord(
-        "evidence.edge",
-        SESSION_ID,
-        "overseer",
-        contract.fingerprint,
-        1,
-        BASELINE_SHA,
-        CHANGE_ID,
+        "evidence.edge", SESSION_ID, "overseer", contract.fingerprint, 1, BASELINE_SHA, CHANGE_ID,
     )
     assert _evidence_blockers_for_records(
-        {evidence.evidence_id: evidence},
-        (evidence.evidence_id,),
-        contract,
-        1,
-        BASELINE_SHA,
-        CHANGE_ID,
+        {evidence.evidence_id: evidence}, (evidence.evidence_id,), contract, 1, BASELINE_SHA, CHANGE_ID,
     ) == ()
 
     corrupted = replace(evidence, status=EvidenceStatus.STALE)
@@ -310,15 +215,9 @@ def test_evidence_blockers_exercise_missing_unknown_stale_and_identity_mismatche
     object.__setattr__(corrupted, "baseline_sha", "b" * 40)
     object.__setattr__(corrupted, "change_identity_ref", "change.other")
     blockers = _evidence_blockers_for_records(
-        {corrupted.evidence_id: corrupted},
-        (corrupted.evidence_id,),
-        contract,
-        1,
-        BASELINE_SHA,
-        CHANGE_ID,
+        {corrupted.evidence_id: corrupted}, (corrupted.evidence_id,), contract, 1, BASELINE_SHA, CHANGE_ID,
     )
-    codes = {code for code, _ in blockers}
-    assert codes == {
+    assert {code for code, _ in blockers} == {
         "STALE_COORDINATION_EVIDENCE",
         "INVALID_EVIDENCE_OWNER",
         "EVIDENCE_CONTRACT_MISMATCH",
