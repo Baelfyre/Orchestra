@@ -7,7 +7,9 @@ on:
       - "cosmic-ray.toml"
       - ".github/workflows/cosmic-ray-confidence.yml"
       - "scripts/validation/build_cosmic_ray_evidence.py"
+      - "scripts/validation/classify_cosmic_ray_dump.py"
       - "machine/schemas/cosmic-ray-evidence.schema.json"
+      - "machine/schemas/cosmic-ray-classification.schema.json"
       - "machine/provenance/third-party.v1.json"
       - "docs/THIRD_PARTY_PROVENANCE.md"
       - "README.json"
@@ -17,6 +19,7 @@ on:
       - "tests/runtime/test_evidence_kernel.py"
       - "tests/runtime/test_governance_kernel.py"
       - "tests/runtime/test_preexecution.py"
+      - "tests/runtime/test_cosmic_ray_classifier.py"
 
 permissions:
   contents: read
@@ -51,7 +54,6 @@ jobs:
           | tee artifacts/cosmic-ray/tool-version.txt
 
       - name: Initialize bounded mutation session
-        id: init
         shell: bash
         run: |
           set +e
@@ -62,7 +64,6 @@ jobs:
           exit 0
 
       - name: Baseline unmutated tests
-        id: baseline
         shell: bash
         run: |
           set +e
@@ -73,7 +74,6 @@ jobs:
           exit 0
 
       - name: Execute bounded mutation pilot
-        id: exec
         shell: bash
         run: |
           init_code="$(cat artifacts/cosmic-ray/init-exit-code.txt)"
@@ -98,12 +98,60 @@ jobs:
           if [ -f artifacts/cosmic-ray/session.sqlite ]; then
             cr-report artifacts/cosmic-ray/session.sqlite --show-pending 2>&1 | tee artifacts/cosmic-ray/report.txt
             cosmic-ray dump artifacts/cosmic-ray/session.sqlite > artifacts/cosmic-ray/dump.jsonl 2> artifacts/cosmic-ray/dump-stderr.txt
+            dump_code=$?
           else
             echo "No Cosmic Ray session database was produced." | tee artifacts/cosmic-ray/report.txt
-            echo '{"error":"no session database"}' > artifacts/cosmic-ray/dump.jsonl
+            : > artifacts/cosmic-ray/dump.jsonl
             echo "No Cosmic Ray session database was produced." > artifacts/cosmic-ray/dump-stderr.txt
+            dump_code=98
+          fi
+          echo "$dump_code" | tee artifacts/cosmic-ray/dump-exit-code.txt
+          exit 0
+
+      - name: Classify detailed mutation outcomes
+        if: always()
+        env:
+          SOURCE_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        shell: bash
+        run: |
+          set +e
+          python scripts/validation/classify_cosmic_ray_dump.py \
+            --dump artifacts/cosmic-ray/dump.jsonl \
+            --repository-root . \
+            --source-head-sha "$SOURCE_HEAD_SHA" \
+            --output artifacts/cosmic-ray/classification.json
+          code=$?
+          echo "$code" | tee artifacts/cosmic-ray/classification-exit-code.txt
+          if [ "$code" != "0" ]; then
+            SOURCE_HEAD_SHA="$SOURCE_HEAD_SHA" python - <<'PY'
+          import json, os
+          from pathlib import Path
+          payload = {
+              "schema_version": "orchestra.cosmic-ray-classification.v1",
+              "source_head_sha": os.environ["SOURCE_HEAD_SHA"].lower(),
+              "raw": {"total": 0, "killed": 0, "survived": 0, "other": 0},
+              "runtime_relevant": {"total": 0, "killed": 0, "survived": 0, "score_percent": None},
+              "excluded_equivalent": {"count": 0, "classifications": {}},
+              "jobs": [],
+              "score_status": "UNSCORED_EMPTY"
+          }
+          Path("artifacts/cosmic-ray/classification.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+          PY
           fi
           exit 0
+
+      - name: Validate mutation classification schema
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import jsonschema
+          schema = json.loads(Path('machine/schemas/cosmic-ray-classification.schema.json').read_text())
+          classification = json.loads(Path('artifacts/cosmic-ray/classification.json').read_text())
+          jsonschema.validate(classification, schema)
+          print('COSMIC_RAY_CLASSIFICATION_SCHEMA=PASS')
+          PY
 
       - name: Build machine-readable Cosmic Ray evidence
         if: always()
@@ -117,11 +165,14 @@ jobs:
             --exec-output artifacts/cosmic-ray/exec.txt \
             --report-output artifacts/cosmic-ray/report.txt \
             --dump-output artifacts/cosmic-ray/dump.jsonl \
+            --classification-output artifacts/cosmic-ray/classification.json \
             --session-database artifacts/cosmic-ray/session.sqlite \
             --config cosmic-ray.toml \
             --init-exit-code "$(cat artifacts/cosmic-ray/init-exit-code.txt)" \
             --baseline-exit-code "$(cat artifacts/cosmic-ray/baseline-exit-code.txt)" \
             --exec-exit-code "$(cat artifacts/cosmic-ray/exec-exit-code.txt)" \
+            --dump-exit-code "$(cat artifacts/cosmic-ray/dump-exit-code.txt)" \
+            --classification-exit-code "$(cat artifacts/cosmic-ray/classification-exit-code.txt)" \
             --tool-version "$(cat artifacts/cosmic-ray/tool-version.txt)" \
             --tested-sha "$(git rev-parse HEAD)" \
             --source-head-sha "$SOURCE_HEAD_SHA" \
@@ -162,9 +213,13 @@ jobs:
           from pathlib import Path
           evidence = json.loads(Path('artifacts/cosmic-ray/cosmic-ray-evidence.json').read_text())
           status = evidence['execution']['score_status']
-          score = evidence['mutation_summary']['mutation_score_percent']
+          raw_score = evidence['mutation_summary']['raw']['score_percent']
+          runtime_score = evidence['mutation_summary']['runtime_relevant']['score_percent']
+          excluded = evidence['mutation_summary']['excluded_equivalent']
           print(f'COSMIC_RAY_SCORE_STATUS={status}')
-          print(f'COSMIC_RAY_MUTATION_SCORE={score}')
-          if status != 'VALID_SCORE':
+          print(f'COSMIC_RAY_RAW_SCORE={raw_score}')
+          print(f'COSMIC_RAY_RUNTIME_RELEVANT_SCORE={runtime_score}')
+          print(f'COSMIC_RAY_EXCLUDED_EQUIVALENT={excluded}')
+          if status != 'VALID_CLASSIFIED_SCORE':
               raise SystemExit(1)
           PY
