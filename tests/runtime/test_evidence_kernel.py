@@ -67,6 +67,47 @@ class TestSourceStateReceipt(unittest.TestCase):
         self.assertEqual(receipt.digest, self.build_receipt().digest)
         self.assertEqual(len(receipt.digest), 64)
 
+    def test_nonempty_text_accepts_internal_space_but_rejects_control_character(self):
+        receipt = SourceStateReceipt(
+            repository="Baelfyre/Orderly",
+            canonical_branch="main",
+            live_canonical_sha=REAL_MAIN,
+            verification_timestamp="2026-08-14T19:35:00Z",
+            verification_method="REMOTE API",
+        )
+        self.assertEqual(receipt.verification_method, "REMOTE API")
+        with self.assertRaises(ValueError, msg="ASCII control U+001F must fail closed"):
+            SourceStateReceipt(
+                repository="Baelfyre/Orderly",
+                canonical_branch="main",
+                live_canonical_sha=REAL_MAIN,
+                verification_timestamp="2026-08-14T19:35:00Z",
+                verification_method="REMOTE\x1fAPI",
+            )
+
+    def test_pull_request_number_positive_integer_boundary(self):
+        receipt = SourceStateReceipt(
+            repository="Baelfyre/Orderly",
+            canonical_branch="main",
+            live_canonical_sha=REAL_MAIN,
+            pull_request_number=1,
+            exact_pr_head=REAL_HEAD,
+            verification_timestamp="2026-08-14T19:35:00Z",
+            verification_method="GITHUB_API",
+        )
+        self.assertEqual(receipt.pull_request_number, 1)
+        for invalid in (0, -1):
+            with self.subTest(invalid=invalid), self.assertRaises(ValueError):
+                SourceStateReceipt(
+                    repository="Baelfyre/Orderly",
+                    canonical_branch="main",
+                    live_canonical_sha=REAL_MAIN,
+                    pull_request_number=invalid,
+                    exact_pr_head=REAL_HEAD,
+                    verification_timestamp="2026-08-14T19:35:00Z",
+                    verification_method="GITHUB_API",
+                )
+
 
 class TestValidationExecutionReceipt(unittest.TestCase):
     def test_exit_code_derives_authoritative_verdict(self):
