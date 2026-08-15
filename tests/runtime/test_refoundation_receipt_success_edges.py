@@ -52,6 +52,20 @@ def _host(*capabilities):
     )
 
 
+def _validation_receipt(**overrides):
+    values = dict(
+        command_id="optional-heads",
+        command=("git", "status"),
+        exit_code=0,
+        started_at="2026-08-15T11:00:00Z",
+        finished_at="2026-08-15T11:00:01Z",
+        stdout_sha256=A64,
+        stderr_sha256=B64,
+    )
+    values.update(overrides)
+    return ValidationExecutionReceipt(**values)
+
+
 def test_full_source_receipt_success_surface_and_assertions():
     receipt = SourceStateReceipt(
         repository="Baelfyre/Orchestra",
@@ -95,6 +109,20 @@ def test_validation_receipt_full_success_and_changed_state_surfaces():
     assert payload["evidence_ref"] == "receipt:validation"
     assert payload["verdict"] == "PASS"
     assert len(receipt.digest) == 64
+
+
+def test_validation_receipt_serializes_each_optional_head_independently():
+    before_only = _validation_receipt(head_before=A40)
+    before_payload = before_only.to_dict()
+    assert before_payload["head_before"] == A40
+    assert "head_after" not in before_payload
+    assert before_only.exact_state_preserved is None
+
+    after_only = _validation_receipt(head_after=B40)
+    after_payload = after_only.to_dict()
+    assert "head_before" not in after_payload
+    assert after_payload["head_after"] == B40
+    assert after_only.exact_state_preserved is None
 
 
 def test_arbiter_remediation_candidate_from_validation_failure():
