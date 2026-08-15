@@ -10,11 +10,11 @@ import tomllib
 from typing import Any
 
 
-SCHEMA_VERSION = "orchestra.cosmic-ray-evidence.v1"
+SCHEMA_VERSION = "orchestra.cosmic-ray-evidence.v2"
+_CLASSIFICATION_SCHEMA_VERSION = "orchestra.cosmic-ray-classification.v1"
 _SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 _TOTAL_RE = re.compile(r"total jobs:\s*(\d+)", re.IGNORECASE)
 _COMPLETE_RE = re.compile(r"complete:\s*(\d+)\s*\(", re.IGNORECASE)
-_SURVIVING_RE = re.compile(r"surviving mutants:\s*(\d+)\s*\(", re.IGNORECASE)
 
 
 def _sha256(path: Path) -> str:
@@ -58,6 +58,21 @@ def _extract_count(pattern: re.Pattern[str], text: str) -> int | None:
     return int(match.group(1)) if match else None
 
 
+def _load_classification(path: Path, source_head_sha: str) -> dict[str, Any]:
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        raise ValueError("classification_output must be readable JSON") from exc
+    if not isinstance(data, dict) or data.get("schema_version") != _CLASSIFICATION_SCHEMA_VERSION:
+        raise ValueError("classification_output has unsupported schema_version")
+    if data.get("source_head_sha") != source_head_sha:
+        raise ValueError("classification_output source_head_sha does not match requested source head")
+    for key in ("raw", "runtime_relevant", "excluded_equivalent"):
+        if not isinstance(data.get(key), dict):
+            raise ValueError(f"classification_output missing {key}")
+    return data
+
+
 def build_evidence(
     *,
     init_output: Path,
@@ -65,11 +80,13 @@ def build_evidence(
     exec_output: Path,
     report_output: Path,
     dump_output: Path,
+    classification_output: Path,
     session_database: Path,
     config_path: Path,
     init_exit_code: int,
     baseline_exit_code: int,
     exec_exit_code: int,
+    dump_exit_code: int,
     tool_version: str,
     tested_sha: str,
     source_head_sha: str,
@@ -79,7 +96,7 @@ def build_evidence(
     event_name: str,
     ref_name: str,
 ) -> dict[str, Any]:
-    for path in (init_output, baseline_output, exec_output, report_output, dump_output, config_path):
+    for path in (init_output, baseline_output, exec_output, report_output, dump_output, classification_output, config_path):
         if not path.is_file():
             raise ValueError(f"required evidence file missing: {path}")
 
@@ -90,34 +107,71 @@ def build_evidence(
     if repo.count("/") != 1:
         raise ValueError("repository must use owner/name form")
 
+    tested = _git_sha(tested_sha, "tested_sha")
+    source = _git_sha(source_head_sha, "source_head_sha")
     modules, test_command = _config_scope(config_path)
+    classification = _load_classification(classification_output, source)
+    raw = classification["raw"]
+    runtime = classification["runtime_relevant"]
+    excluded = classification["excluded_equivalent"]
+
+    raw_total = int(raw.get("total", -1))
+    raw_killed = int(raw.get("killed", -1))
+    raw_survived = int(raw.get("survived", -1))
+    raw_other = int(raw.get("other", -1))
+    runtime_total = int(runtime.get("total", -1))
+    runtime_killed = int(runtime.get("killed", -1))
+    runtime_survived = int(runtime.get("survived", -1))
+    excluded_count = int(excluded.get("count", -1))
+    runtime_score = runtime.get("score_percent")
+
+    if min(raw_total, raw_killed, raw_survived, raw_other, runtime_total, runtime_killed, runtime_survived, excluded_count) < 0:
+        raise ValueError("classification_output contains negative or missing counts")
+    if raw_total != raw_killed + raw_survived + raw_other:
+        raise ValueError("classification raw outcome counts do not sum to total")
+    if runtime_total != runtime_killed + runtime_survived:
+        raise ValueError("classification runtime-relevant counts do not sum to total")
+    if raw_total != runtime_total + excluded_count + raw_other:
+        raise ValueError("classification runtime/excluded/other counts do not reconcile with raw total")
+
     report_text = report_output.read_text(encoding="utf-8", errors="replace")
-    total = _extract_count(_TOTAL_RE, report_text)
-    complete = _extract_count(_COMPLETE_RE, report_text)
-    surviving = _extract_count(_SURVIVING_RE, report_text)
+    report_total = _extract_count(_TOTAL_RE, report_text)
+    report_complete = _extract_count(_COMPLETE_RE, report_text)
+    raw_score = round((raw_killed / (raw_killed + raw_survived)) * 100.0, 2) if raw_killed + raw_survived else None
 
-    killed: int | None = None
-    score: float | None = None
-    score_status = "UNSCORED_TOOL_FAILURE"
-    interpretation = "Cosmic Ray did not produce a complete, scoreable mutation session."
+    tools_ok = all(code == 0 for code in (int(init_exit_code), int(baseline_exit_code), int(exec_exit_code), int(dump_exit_code)))
+    report_complete_ok = report_total is not None and report_complete is not None and report_total == report_complete == raw_total
+    classification_status = classification.get("score_status")
 
-    tools_ok = int(init_exit_code) == 0 and int(baseline_exit_code) == 0 and int(exec_exit_code) == 0
-    counts_ok = total is not None and complete is not None and surviving is not None
-    if tools_ok and counts_ok and total > 0 and complete == total and 0 <= surviving <= total:
-        killed = total - surviving
-        score = round((killed / total) * 100.0, 2)
-        score_status = "VALID_SCORE"
-        interpretation = "Complete bounded mutation pilot. Score is evidence for the configured pilot scope only."
-    elif tools_ok and counts_ok:
+    if not tools_ok:
+        score_status = "UNSCORED_TOOL_FAILURE"
+        interpretation = "Cosmic Ray init, baseline, execution, or detailed dump failed; mutation score is not authoritative."
+        runtime_score = None
+    elif not report_complete_ok:
         score_status = "UNSCORED_INCOMPLETE"
-        interpretation = "Cosmic Ray completed its commands but the mutation session was incomplete or contained no scoreable jobs."
+        interpretation = "Cosmic Ray report/dump counts are incomplete or disagree; mutation score is not authoritative."
+        runtime_score = None
+    elif classification_status == "UNSCORED_UNKNOWN_OUTCOME" or raw_other:
+        score_status = "UNSCORED_UNKNOWN_OUTCOME"
+        interpretation = "Detailed dump contains unrecognized mutation outcomes; fail closed instead of inferring killed mutants."
+        runtime_score = None
+    elif classification_status != "VALID_RUNTIME_RELEVANT_SCORE":
+        score_status = "UNSCORED_INCOMPLETE"
+        interpretation = "Classified mutation session did not produce a runtime-relevant score."
+        runtime_score = None
+    else:
+        score_status = "VALID_CLASSIFIED_SCORE"
+        interpretation = (
+            "Complete bounded mutation session. Raw and runtime-relevant scores are preserved separately; "
+            "only mutations conservatively proven equivalent/non-runtime are excluded from the runtime-relevant denominator."
+        )
 
     return {
         "schema_version": SCHEMA_VERSION,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
         "repository": repo,
-        "tested_sha": _git_sha(tested_sha, "tested_sha"),
-        "source_head_sha": _git_sha(source_head_sha, "source_head_sha"),
+        "tested_sha": tested,
+        "source_head_sha": source,
         "workflow": {
             "run_id": str(workflow_run_id or "").strip(),
             "run_attempt": str(workflow_run_attempt or "").strip(),
@@ -135,15 +189,25 @@ def build_evidence(
             "init_exit_code": int(init_exit_code),
             "baseline_exit_code": int(baseline_exit_code),
             "exec_exit_code": int(exec_exit_code),
+            "dump_exit_code": int(dump_exit_code),
             "score_status": score_status,
             "interpretation": interpretation,
         },
         "mutation_summary": {
-            "total_jobs": total,
-            "complete_jobs": complete,
-            "surviving_mutants": surviving,
-            "killed_mutants": killed,
-            "mutation_score_percent": score,
+            "raw": {
+                "total": raw_total,
+                "killed": raw_killed,
+                "survived": raw_survived,
+                "other": raw_other,
+                "score_percent": raw_score,
+            },
+            "runtime_relevant": {
+                "total": runtime_total,
+                "killed": runtime_killed,
+                "survived": runtime_survived,
+                "score_percent": runtime_score,
+            },
+            "excluded_equivalent": excluded_count,
         },
         "reports": {
             "init_output": init_output.name,
@@ -156,6 +220,8 @@ def build_evidence(
             "report_output_sha256": _sha256(report_output),
             "dump_output": dump_output.name,
             "dump_output_sha256": _sha256(dump_output),
+            "classification_output": classification_output.name,
+            "classification_output_sha256": _sha256(classification_output),
             "session_database": session_database.name,
             "session_database_sha256": _optional_sha256(session_database),
         },
@@ -169,11 +235,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--exec-output", type=Path, required=True)
     parser.add_argument("--report-output", type=Path, required=True)
     parser.add_argument("--dump-output", type=Path, required=True)
+    parser.add_argument("--classification-output", type=Path, required=True)
     parser.add_argument("--session-database", type=Path, required=True)
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--init-exit-code", type=int, required=True)
     parser.add_argument("--baseline-exit-code", type=int, required=True)
     parser.add_argument("--exec-exit-code", type=int, required=True)
+    parser.add_argument("--dump-exit-code", type=int, required=True)
     parser.add_argument("--tool-version", required=True)
     parser.add_argument("--tested-sha", required=True)
     parser.add_argument("--source-head-sha", required=True)
@@ -191,11 +259,13 @@ def main(argv: list[str] | None = None) -> int:
         exec_output=args.exec_output,
         report_output=args.report_output,
         dump_output=args.dump_output,
+        classification_output=args.classification_output,
         session_database=args.session_database,
         config_path=args.config,
         init_exit_code=args.init_exit_code,
         baseline_exit_code=args.baseline_exit_code,
         exec_exit_code=args.exec_exit_code,
+        dump_exit_code=args.dump_exit_code,
         tool_version=args.tool_version,
         tested_sha=args.tested_sha,
         source_head_sha=args.source_head_sha,
@@ -209,7 +279,8 @@ def main(argv: list[str] | None = None) -> int:
     args.output.write_text(json.dumps(evidence, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps({
         "score_status": evidence["execution"]["score_status"],
-        "mutation_score_percent": evidence["mutation_summary"]["mutation_score_percent"],
+        "raw_score_percent": evidence["mutation_summary"]["raw"]["score_percent"],
+        "runtime_relevant_score_percent": evidence["mutation_summary"]["runtime_relevant"]["score_percent"],
         "tested_sha": evidence["tested_sha"],
         "source_head_sha": evidence["source_head_sha"],
     }, sort_keys=True))
