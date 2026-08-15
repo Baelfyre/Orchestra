@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.orchestra.dev/machine/governance-decision/1.0.0",
+  "title": "Orchestra Governance Decision Record",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "reviewer", "project_context", "decision", "reason", "risks", "required_actions", "human_review_required", "evidence_refs"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "reviewer": {"type": "string", "minLength": 1},
+    "project_context": {"type": "string", "minLength": 1},
+    "decision": {"enum": ["APPROVED", "ADVISORY_ONLY", "REVISION_REQUIRED", "BLOCKED", "NOT_APPLICABLE"]},
+    "reason": {"type": "string", "minLength": 1},
+    "risks": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "required_actions": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "human_review_required": {"type": "boolean"},
+    "evidence_refs": {"type": "array", "items": {"type": "string", "minLength": 1}}
+  }
+}
