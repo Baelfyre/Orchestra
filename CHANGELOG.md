@@ -3,10 +3,11 @@
 ## Post-v1.4.0 Control Plane Re-foundation P0/P1-P9 - Canonical Integration
 
 - Consolidated the control-plane re-foundation tracked by #273 into PR #294, covering exact source and validation receipts, typed governance and deterministic Arbiter Kernel enforcement, machine specialist/routing/governance contracts, exact compliance set-equality receipts, host capability/conformance contracts, typed continuity and JSONL context state, persistent remediation circuit breakers, deterministic pre-execution policy gating, and P9 shadow conformance.
-- P9 begins and remains in `SHADOW`; this integration does not advance authority to advisory, validation authority, canonical-promotion authority, or legacy retirement.
+- P9 begins in `SHADOW`; the separately governed migration now records an `ADVISORY` checkpoint candidate without granting validation authority, canonical-promotion authority, legacy retirement, or installed-integration mutation.
 - Release hardening persists machine-readable runtime evidence with statement and branch coverage, critical-module floors, property-based regressions, workflow-sanity coverage, bounded mutation-confidence evidence, and cross-platform validation. These measurements are confidence evidence, not proof of correctness.
 - PR #294 is canonical through governed Squash merge and independent readback at signed commit `76eb96b27439700a517f75c5a921465e5c2987e6` with tree `6f98b380d984430303d630462ad4535cda483925`. This post-`v1.4.0` integration preserves `v1.4.0` as the current published release and creates no new tag, version, or GitHub Release.
 - Added the compact machine release-evidence index at `machine/release-evidence/control-plane-refoundation-p0-p1-p9.json`, referencing the exact final integrated candidate runtime and bounded Cosmic Ray evidence without treating coverage or mutation score as proof of correctness.
+- Added a typed migration-state checkpoint and regression coverage for the adjacent `SHADOW -> ADVISORY` transition while preserving later authority stages as separately governed decisions.
 
 ## v1.4.0 Governance and Compliance Registry Cross-Integration - Published 2026-08-14
 
@@ -93,7 +94,7 @@
 - Added a planning-only bounded load/recovery example that defines an open workload model, thresholds, telemetry, recovery evidence, and cross-specialist handoffs without generating traffic.
 - Preserved `scripts/dagger_guardrail.py` and its simulation-only live-execution block unchanged. Knowledge and tool examples do not grant permission to run destructive, disruptive, externally targeted, or production tests.
 - Kept the campaign Markdown-primary and JSON-selective: the SK5 audit found no deterministic machine-parsing need that justified a Dagger JSON catalog.
-- Added focused regression coverage for Dagger knowledge depth, source/Codex support parity, progressive disclosure, state/evidence separation, and safety-boundary language.
+- Added focused regression coverage for Dagger knowledge depth, source/Codex support-file parity, progressive disclosure, state/evidence separation, and safety-boundary language.
 - No release/tag publication, deployment/production mutation, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK5.
 
 ## Post-v1.2.0 Specialist Knowledge Layer - SK4 Cloak - Pending
