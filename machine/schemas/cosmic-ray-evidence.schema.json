@@ -98,7 +98,7 @@
         "report_output": {"type": "string", "minLength": 1},
         "report_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
         "session_database": {"type": "string", "minLength": 1},
-        "session_database_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        "session_database_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
       }
     }
   }
