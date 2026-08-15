@@ -29,8 +29,14 @@
       ],
       "items": false
     },
-    "current_stage": {"type": "string", "const": "ADVISORY"},
-    "previous_stage": {"type": "string", "const": "SHADOW"},
+    "current_stage": {
+      "type": "string",
+      "enum": ["SHADOW", "ADVISORY", "VALIDATION_AUTHORITY", "CANONICAL_PROMOTION_AUTHORITY", "LEGACY_RETIRED"]
+    },
+    "previous_stage": {
+      "type": "string",
+      "enum": ["SHADOW", "ADVISORY", "VALIDATION_AUTHORITY", "CANONICAL_PROMOTION_AUTHORITY"]
+    },
     "transition_policy": {
       "type": "object",
       "additionalProperties": false,
@@ -54,6 +60,7 @@
         "integration_pull_request",
         "integration_canonical_sha",
         "post_merge_closeout_sha",
+        "previous_stage_canonical_sha",
         "validated_source_head_sha",
         "runtime_evidence_index",
         "shadow_fixture_suite"
@@ -62,6 +69,7 @@
         "integration_pull_request": {"type": "integer", "const": 294},
         "integration_canonical_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
         "post_merge_closeout_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "previous_stage_canonical_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
         "validated_source_head_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
         "runtime_evidence_index": {"type": "string", "minLength": 1},
         "shadow_fixture_suite": {"type": "string", "const": "PASS"}
@@ -79,9 +87,9 @@
       ],
       "properties": {
         "machine_contracts_may_inform_runtime_decisions": {"const": true},
-        "machine_contracts_are_validation_authority": {"const": false},
-        "machine_contracts_are_canonical_promotion_authority": {"const": false},
-        "legacy_runtime_authorities_retired": {"const": false},
+        "machine_contracts_are_validation_authority": {"type": "boolean"},
+        "machine_contracts_are_canonical_promotion_authority": {"type": "boolean"},
+        "legacy_runtime_authorities_retired": {"type": "boolean"},
         "installed_integrations_mutated": {"const": false}
       }
     }

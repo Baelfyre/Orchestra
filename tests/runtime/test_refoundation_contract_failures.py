@@ -75,8 +75,24 @@ def _machine_repo(tmp_path: Path):
         "legacy_aliases": {},
         "ambiguity_fallback": "conductor",
     }
+    dispositions = [
+        "AUTO_CONTINUE",
+        "AUTO_REMEDIATE_AND_REVALIDATE",
+        "WAIT_FOR_EVIDENCE",
+        "WAIT_FOR_CAPACITY",
+        "ESCALATE_HUMAN",
+        "STOP",
+    ]
     policy = {
         "schema_version": mc.GOVERNANCE_POLICY_SCHEMA_VERSION,
+        "governance_decisions": [
+            "APPROVED",
+            "ADVISORY_ONLY",
+            "REVISION_REQUIRED",
+            "BLOCKED",
+            "NOT_APPLICABLE",
+        ],
+        "transition_dispositions": dispositions,
         "role_ownership": {},
         "specialist_controls": {},
         "governance_required_specialists": ["dagger"],
@@ -87,9 +103,17 @@ def _machine_repo(tmp_path: Path):
             "STOP", "ESCALATE_HUMAN", "WAIT_FOR_CAPACITY", "WAIT_FOR_EVIDENCE",
             "AUTO_REMEDIATE_AND_REVALIDATE", "AUTO_CONTINUE",
         ],
+        "compatibility_rules": {
+            "APPROVED": ["AUTO_CONTINUE"],
+            "ADVISORY_ONLY": ["AUTO_CONTINUE"],
+            "REVISION_REQUIRED": ["AUTO_REMEDIATE_AND_REVALIDATE"],
+            "BLOCKED": ["STOP"],
+            "NOT_APPLICABLE": ["AUTO_CONTINUE"],
+        },
         "default_remediation": {
             "maximum_remediation_attempts_per_unit": 3,
             "maximum_identical_failure_repetitions": 2,
+            "maximum_scope_growth": 0,
         },
     }
     _write_json(tmp_path / "machine/routing/routes.v1.json", routing)
@@ -176,11 +200,7 @@ def test_machine_contract_errors_detect_governance_corruption(tmp_path):
         {"rule_id": "dup", "skill_slugs": ["ghost"]},
         {"rule_id": "dup", "skill_slugs": []},
     ]
-    policy["transition_precedence"] = ["AUTO_CONTINUE"]
-    policy["default_remediation"] = {
-        "maximum_remediation_attempts_per_unit": 99,
-        "maximum_identical_failure_repetitions": 99,
-    }
+    policy["compatibility_rules"]["APPROVED"] = ["UNKNOWN_DISPOSITION"]
     _write_json(tmp_path / "machine/governance/policy.v1.json", policy)
     errors = mc.machine_contract_errors(tmp_path)
     assert "GOVERNANCE_OWNERSHIP_UNKNOWN_SPECIALIST" in errors
@@ -188,9 +208,7 @@ def test_machine_contract_errors_detect_governance_corruption(tmp_path):
     assert "GOVERNANCE_REQUIRED_UNKNOWN_SPECIALIST" in errors
     assert any(item.startswith("GOVERNANCE_RULE_ID_INVALID_OR_DUPLICATE") for item in errors)
     assert any(item.startswith("GOVERNANCE_RULE_UNKNOWN_SPECIALIST") for item in errors)
-    assert "GOVERNANCE_PRECEDENCE_DRIFT" in errors
-    assert "REMEDIATION_ATTEMPT_DEFAULT_DRIFT" in errors
-    assert "IDENTICAL_FAILURE_DEFAULT_DRIFT" in errors
+    assert "GOVERNANCE_COMPATIBILITY_INVALID:APPROVED" in errors
     with pytest.raises(ValueError, match="machine contract validation failed"):
         mc.assert_machine_contracts(tmp_path)
 

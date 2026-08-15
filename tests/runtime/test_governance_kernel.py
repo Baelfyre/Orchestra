@@ -2,7 +2,10 @@ from dataclasses import FrozenInstanceError
 import json
 from pathlib import Path
 import unittest
+from unittest.mock import patch
 
+import orchestra_runtime.governance_kernel as governance_kernel
+from orchestra_runtime import machine_contracts
 from orchestra_runtime.governance_kernel import (
     ArbiterKernelInput,
     ArbiterReasonCode,
@@ -56,6 +59,27 @@ class ArbiterKernelTests(unittest.TestCase):
             )
         )
         self.assertEqual(TransitionDisposition.WAIT_FOR_CAPACITY, result.disposition)
+
+    def test_machine_policy_precedence_selects_between_valid_candidates(self):
+        candidate = ArbiterKernelInput(
+            "project",
+            "unit",
+            (decision(),),
+            authority_valid=False,
+            evidence_fresh=False,
+        )
+        reordered = (
+            "WAIT_FOR_EVIDENCE",
+            "STOP",
+            "ESCALATE_HUMAN",
+            "WAIT_FOR_CAPACITY",
+            "AUTO_REMEDIATE_AND_REVALIDATE",
+            "AUTO_CONTINUE",
+        )
+        with patch.object(governance_kernel, "transition_precedence", return_value=reordered):
+            result = evaluate_arbiter(candidate)
+        self.assertEqual(TransitionDisposition.WAIT_FOR_EVIDENCE, result.disposition)
+        self.assertIn(ArbiterReasonCode.EVIDENCE_STALE, result.reason_codes)
 
     def test_revision_required_autoremediates_only_when_bounded(self):
         result = evaluate_arbiter(
@@ -125,12 +149,22 @@ class ArbiterKernelTests(unittest.TestCase):
         self.assertEqual(TransitionDisposition.ESCALATE_HUMAN, beyond.disposition)
         self.assertIn(ArbiterReasonCode.IDENTICAL_FAILURE_LIMIT_EXCEEDED, beyond.reason_codes)
 
-    def test_default_remediation_limits_are_contract_values(self):
+    def test_default_remediation_limits_are_machine_policy_values(self):
         kernel_input = ArbiterKernelInput("project", "unit", (decision(),))
-        self.assertEqual(3, DEFAULT_MAX_REMEDIATION_ATTEMPTS)
-        self.assertEqual(2, DEFAULT_MAX_IDENTICAL_FAILURE_REPETITIONS)
-        self.assertEqual(3, kernel_input.maximum_remediation_attempts)
-        self.assertEqual(2, kernel_input.maximum_identical_failure_repetitions)
+        remediation = machine_contracts.default_remediation_limits()
+        self.assertEqual(
+            remediation["maximum_remediation_attempts_per_unit"],
+            DEFAULT_MAX_REMEDIATION_ATTEMPTS,
+        )
+        self.assertEqual(
+            remediation["maximum_identical_failure_repetitions"],
+            DEFAULT_MAX_IDENTICAL_FAILURE_REPETITIONS,
+        )
+        self.assertEqual(DEFAULT_MAX_REMEDIATION_ATTEMPTS, kernel_input.maximum_remediation_attempts)
+        self.assertEqual(
+            DEFAULT_MAX_IDENTICAL_FAILURE_REPETITIONS,
+            kernel_input.maximum_identical_failure_repetitions,
+        )
 
     def test_positive_limit_boundaries_accept_one_and_reject_zero_or_negative(self):
         valid = ArbiterKernelInput(

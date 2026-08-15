@@ -57,6 +57,15 @@ def _frontmatter_list(value: str, *, none_is_empty: bool = False) -> list[str]:
     return [item.strip() for item in cleaned.split(",") if item.strip()]
 
 
+def _unique_strings(values: object, field_name: str) -> tuple[str, ...]:
+    if not isinstance(values, list) or not values:
+        raise ValueError(f"governance policy {field_name} must be a non-empty list")
+    cleaned = tuple(str(item).strip() for item in values)
+    if any(not item for item in cleaned) or len(set(cleaned)) != len(cleaned):
+        raise ValueError(f"governance policy {field_name} contains empty or duplicate values")
+    return cleaned
+
+
 def compile_specialist_registry(root: Path | str | None = None) -> dict[str, Any]:
     repo_root = _root(root)
     manifest = ManifestRepository(repo_root).load_manifest()
@@ -182,6 +191,50 @@ def runtime_validation_rule_records(root: Path | str | None = None) -> tuple[dic
     return tuple(dict(item) for item in rules)
 
 
+def governance_decision_values(root: Path | str | None = None) -> tuple[str, ...]:
+    return _unique_strings(load_governance_policy(root).get("governance_decisions"), "governance_decisions")
+
+
+def transition_disposition_values(root: Path | str | None = None) -> tuple[str, ...]:
+    return _unique_strings(
+        load_governance_policy(root).get("transition_dispositions"),
+        "transition_dispositions",
+    )
+
+
+def transition_precedence(root: Path | str | None = None) -> tuple[str, ...]:
+    policy = load_governance_policy(root)
+    precedence = _unique_strings(policy.get("transition_precedence"), "transition_precedence")
+    dispositions = transition_disposition_values(root)
+    if set(precedence) != set(dispositions) or len(precedence) != len(dispositions):
+        raise ValueError("transition_precedence must contain every transition disposition exactly once")
+    return precedence
+
+
+def default_remediation_limits(root: Path | str | None = None) -> dict[str, int]:
+    remediation = load_governance_policy(root).get("default_remediation", {})
+    if not isinstance(remediation, dict):
+        raise ValueError("default_remediation must be an object")
+    required = (
+        "maximum_remediation_attempts_per_unit",
+        "maximum_identical_failure_repetitions",
+        "maximum_scope_growth",
+    )
+    values: dict[str, int] = {}
+    for key in required:
+        value = remediation.get(key)
+        if isinstance(value, bool) or not isinstance(value, int):
+            raise ValueError(f"default_remediation {key} must be an integer")
+        values[key] = value
+    if values["maximum_remediation_attempts_per_unit"] <= 0:
+        raise ValueError("maximum_remediation_attempts_per_unit must be > 0")
+    if values["maximum_identical_failure_repetitions"] <= 0:
+        raise ValueError("maximum_identical_failure_repetitions must be > 0")
+    if values["maximum_scope_growth"] < 0:
+        raise ValueError("maximum_scope_growth must be >= 0")
+    return values
+
+
 def machine_contract_errors(root: Path | str | None = None) -> tuple[str, ...]:
     repo_root = _root(root)
     errors: list[str] = []
@@ -248,6 +301,10 @@ def machine_contract_errors(root: Path | str | None = None) -> tuple[str, ...]:
 
     try:
         policy = load_governance_policy(repo_root)
+        decisions = governance_decision_values(repo_root)
+        dispositions = transition_disposition_values(repo_root)
+        transition_precedence(repo_root)
+        default_remediation_limits(repo_root)
         if set(policy.get("role_ownership", {})) - specialist_ids:
             errors.append("GOVERNANCE_OWNERSHIP_UNKNOWN_SPECIALIST")
         if set(policy.get("specialist_controls", {})) - specialist_ids:
@@ -264,21 +321,14 @@ def machine_contract_errors(root: Path | str | None = None) -> tuple[str, ...]:
             unknown = set(rule.get("skill_slugs", [])) - specialist_ids
             if unknown:
                 errors.append(f"GOVERNANCE_RULE_UNKNOWN_SPECIALIST:{rule_id}:{','.join(sorted(unknown))}")
-        expected_precedence = [
-            "STOP",
-            "ESCALATE_HUMAN",
-            "WAIT_FOR_CAPACITY",
-            "WAIT_FOR_EVIDENCE",
-            "AUTO_REMEDIATE_AND_REVALIDATE",
-            "AUTO_CONTINUE",
-        ]
-        if policy.get("transition_precedence") != expected_precedence:
-            errors.append("GOVERNANCE_PRECEDENCE_DRIFT")
-        remediation = policy.get("default_remediation", {})
-        if remediation.get("maximum_remediation_attempts_per_unit") != 3:
-            errors.append("REMEDIATION_ATTEMPT_DEFAULT_DRIFT")
-        if remediation.get("maximum_identical_failure_repetitions") != 2:
-            errors.append("IDENTICAL_FAILURE_DEFAULT_DRIFT")
+        compatibility = policy.get("compatibility_rules", {})
+        if not isinstance(compatibility, dict) or set(compatibility) != set(decisions):
+            errors.append("GOVERNANCE_COMPATIBILITY_DECISION_SET_MISMATCH")
+        else:
+            known_dispositions = set(dispositions)
+            for decision, allowed in compatibility.items():
+                if not isinstance(allowed, list) or not allowed or set(allowed) - known_dispositions:
+                    errors.append(f"GOVERNANCE_COMPATIBILITY_INVALID:{decision}")
     except (ValueError, OSError) as exc:
         errors.append(f"GOVERNANCE_POLICY_INVALID:{exc}")
 
