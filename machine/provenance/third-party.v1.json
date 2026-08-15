@@ -26,7 +26,7 @@
       "upstream_repository": "https://github.com/boxed/mutmut",
       "package_source": "https://pypi.org/project/mutmut/3.6.0/",
       "license_spdx": "BSD-3-Clause",
-      "purpose": "Bounded mutation testing of Orchestra trust-boundary modules during release-confidence hardening.",
+      "purpose": "Bounded mutation testing of Orchestra trust-boundary modules during release-confidence hardening; current pilot is recorded as unscored because mutmut 3.6.0 statistics collection is incompatible with Python dataclass-generated <string> frames in the selected Orchestra trust modules.",
       "runtime_dependency": false,
       "source_copied_or_vendored": false,
       "upstream_source_adapted": false,
@@ -52,6 +52,22 @@
       "orchestra_surfaces": [
         "tests/runtime/test_refoundation_properties.py",
         ".github/workflows/mutation-confidence.yml"
+      ]
+    },
+    {
+      "id": "cosmic-ray",
+      "name": "Cosmic Ray",
+      "classification": "REFERENCE_ONLY",
+      "version": "8.7.0",
+      "upstream_repository": "https://github.com/sixty-north/cosmic-ray",
+      "package_source": "https://pypi.org/project/cosmic-ray/8.7.0/",
+      "license_spdx": "MIT",
+      "purpose": "Candidate replacement mutation runner under evaluation after the mutmut 3.6.0 instrumentation incompatibility; not yet incorporated as an Orchestra test dependency or authority source.",
+      "runtime_dependency": false,
+      "source_copied_or_vendored": false,
+      "upstream_source_adapted": false,
+      "orchestra_surfaces": [
+        "docs/THIRD_PARTY_PROVENANCE.md"
       ]
     }
   ]
