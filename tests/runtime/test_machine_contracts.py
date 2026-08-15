@@ -31,20 +31,22 @@ def test_machine_contracts_are_internally_consistent():
     contracts.assert_machine_contracts(ROOT)
 
 
-def test_governance_policy_matches_arbiter_kernel_vocabulary_and_defaults():
-    policy = contracts.load_governance_policy(ROOT)
-    assert policy["governance_decisions"] == [item.value for item in GovernanceDecision]
-    assert set(policy["transition_dispositions"]) == {item.value for item in TransitionDisposition}
-    assert policy["transition_precedence"] == [
+def test_governance_policy_is_arbiter_kernel_validation_authority():
+    assert contracts.governance_decision_values(ROOT) == tuple(item.value for item in GovernanceDecision)
+    assert set(contracts.transition_disposition_values(ROOT)) == {
+        item.value for item in TransitionDisposition
+    }
+    assert contracts.transition_precedence(ROOT) == (
         "STOP",
         "ESCALATE_HUMAN",
         "WAIT_FOR_CAPACITY",
         "WAIT_FOR_EVIDENCE",
         "AUTO_REMEDIATE_AND_REVALIDATE",
         "AUTO_CONTINUE",
-    ]
-    assert policy["default_remediation"]["maximum_remediation_attempts_per_unit"] == DEFAULT_MAX_REMEDIATION_ATTEMPTS
-    assert policy["default_remediation"]["maximum_identical_failure_repetitions"] == DEFAULT_MAX_IDENTICAL_FAILURE_REPETITIONS
+    )
+    remediation = contracts.default_remediation_limits(ROOT)
+    assert remediation["maximum_remediation_attempts_per_unit"] == DEFAULT_MAX_REMEDIATION_ATTEMPTS
+    assert remediation["maximum_identical_failure_repetitions"] == DEFAULT_MAX_IDENTICAL_FAILURE_REPETITIONS
 
 
 def test_routing_contract_resolves_only_known_specialists():
@@ -87,11 +89,19 @@ def test_unknown_alias_target_fails_validation(monkeypatch):
     assert "ALIAS_UNKNOWN_SPECIALIST:old-ghost:ghost-specialist" in contracts.machine_contract_errors(ROOT)
 
 
-def test_governance_precedence_drift_fails_validation(monkeypatch):
+def test_governance_precedence_must_be_exact_disposition_permutation(monkeypatch):
     policy = deepcopy(contracts.load_governance_policy(ROOT))
-    policy["transition_precedence"] = list(reversed(policy["transition_precedence"]))
+    policy["transition_precedence"][-1] = policy["transition_precedence"][0]
     monkeypatch.setattr(contracts, "load_governance_policy", lambda root=None: policy)
-    assert "GOVERNANCE_PRECEDENCE_DRIFT" in contracts.machine_contract_errors(ROOT)
+    errors = contracts.machine_contract_errors(ROOT)
+    assert any(error.startswith("GOVERNANCE_POLICY_INVALID:") for error in errors)
+
+
+def test_governance_compatibility_rejects_unknown_disposition(monkeypatch):
+    policy = deepcopy(contracts.load_governance_policy(ROOT))
+    policy["compatibility_rules"]["APPROVED"].append("UNKNOWN_DISPOSITION")
+    monkeypatch.setattr(contracts, "load_governance_policy", lambda root=None: policy)
+    assert "GOVERNANCE_COMPATIBILITY_INVALID:APPROVED" in contracts.machine_contract_errors(ROOT)
 
 
 def test_registry_duplicate_slug_is_rejected(monkeypatch):
