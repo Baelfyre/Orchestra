@@ -106,8 +106,11 @@ def test_wait_remediation_oscillation_escalates_beyond_bound():
     second = request_remediation(wait1.state, failure_digest=_sig("B"))
     wait2 = record_evidence_wait(second.state)
     third = request_remediation(wait2.state, failure_digest=_sig("C"))
-    assert third.constraint is CircuitConstraint.ESCALATE_HUMAN
-    assert third.reason is CircuitReason.WAIT_REMEDIATION_LOOP_LIMIT_EXCEEDED
+    assert third.constraint is CircuitConstraint.ALLOW_REMEDIATION
+    assert third.state.wait_remediation_transitions == 4
+    wait3 = record_evidence_wait(third.state)
+    assert wait3.constraint is CircuitConstraint.ESCALATE_HUMAN
+    assert wait3.reason is CircuitReason.WAIT_REMEDIATION_LOOP_LIMIT_EXCEEDED
 
 
 def test_success_resets_local_loop_counters_but_preserves_total_attempt_audit():
