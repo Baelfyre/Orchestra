@@ -39,6 +39,8 @@
     "source_state_receipt_schema": "machine/schemas/source-state-receipt.schema.json",
     "validation_execution_receipt_schema": "machine/schemas/validation-execution-receipt.schema.json",
     "test_evidence_schema": "machine/schemas/test-evidence.schema.json",
+    "cosmic_ray_evidence_schema": "machine/schemas/cosmic-ray-evidence.schema.json",
+    "mutation_evidence_schema": "machine/schemas/mutation-evidence.schema.json",
     "readme_machine_index_schema": "machine/schemas/readme-machine-index.schema.json"
   },
   "specialists": {
@@ -67,8 +69,11 @@
     "runtime_suite": "tests/runtime",
     "cross_platform_workflow": ".github/workflows/cross-platform-validation.yml",
     "governance_workflow": ".github/workflows/governance-check.yml",
+    "cosmic_ray_confidence_workflow": ".github/workflows/cosmic-ray-confidence.yml",
+    "legacy_mutmut_evidence_workflow": ".github/workflows/mutation-confidence.yml",
     "test_evidence_schema": "machine/schemas/test-evidence.schema.json",
     "test_evidence_schema_version": "orchestra.test-evidence.v1",
+    "mutation_evidence_policy": "Mutation scores are scope-specific and valid only when the configured unmutated baseline passes, all scheduled mutation jobs complete, and the machine-readable evidence artifact binds the tested checkout SHA and source-head SHA.",
     "evidence_policy": "Runtime confidence claims must be derived from persisted machine-readable CI evidence bound to the tested checkout SHA and source-head SHA."
   },
   "documentation": {
@@ -94,6 +99,7 @@
     "prefer_machine_contracts_for_exact_values": true,
     "retrieve_human_docs_for_rationale": true,
     "review_third_party_provenance_before_attributing_external_code_or_dependencies": true,
+    "treat_mutation_scores_as_scope_specific_evidence": true,
     "treat_generated_or_derived_views_as_non_authoritative_when_their_source_contract_is_available": true
   }
 }
