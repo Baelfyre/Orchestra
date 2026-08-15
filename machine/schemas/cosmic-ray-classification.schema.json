@@ -55,12 +55,13 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["job_id", "module_path", "operator_name", "worker_outcome", "classification", "rationale"],
+        "required": ["job_id", "module_path", "operator_name", "worker_outcome", "test_outcome", "classification", "rationale"],
         "properties": {
-          "job_id": {"type": "integer", "minimum": 0},
+          "job_id": {"type": "string", "pattern": "^[0-9a-f]{32}$"},
           "module_path": {"type": "string", "minLength": 1},
           "operator_name": {"type": "string", "minLength": 1},
           "worker_outcome": {"type": "string", "minLength": 1},
+          "test_outcome": {"type": "string", "minLength": 1},
           "classification": {
             "type": "string",
             "enum": [
