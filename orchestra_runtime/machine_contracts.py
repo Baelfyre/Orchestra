@@ -134,6 +134,54 @@ def valid_specialist_ids(root: Path | str | None = None) -> frozenset[str]:
     return frozenset(values)
 
 
+def command_route_map(root: Path | str | None = None) -> dict[str, str]:
+    routing = load_routing_contract(root)
+    routes = routing.get("command_routes", {})
+    if not isinstance(routes, dict) or not routes:
+        raise ValueError("routing contract contains no command routes")
+    result: dict[str, str] = {}
+    for command, record in routes.items():
+        if not isinstance(record, dict):
+            raise ValueError(f"command route {command!r} must be an object")
+        specialist = str(record.get("specialist", "")).strip()
+        if not specialist:
+            raise ValueError(f"command route {command!r} has no specialist")
+        result[str(command)] = specialist
+    return result
+
+
+def command_route_record(command: str, root: Path | str | None = None) -> dict[str, str]:
+    routing = load_routing_contract(root)
+    record = routing.get("command_routes", {}).get(command)
+    if record is None:
+        fallback = str(routing.get("ambiguity_fallback", "")).strip()
+        if not fallback:
+            raise ValueError("routing contract has no ambiguity fallback")
+        return {"specialist": fallback, "route_id": "ambiguous-overlapping"}
+    if not isinstance(record, dict):
+        raise ValueError(f"command route {command!r} must be an object")
+    return {
+        "specialist": str(record.get("specialist", "")).strip(),
+        "route_id": str(record.get("route_id", "")).strip(),
+    }
+
+
+def governance_required_specialists(root: Path | str | None = None) -> frozenset[str]:
+    policy = load_governance_policy(root)
+    values = tuple(str(item).strip() for item in policy.get("governance_required_specialists", []))
+    if any(not item for item in values) or len(set(values)) != len(values):
+        raise ValueError("invalid governance_required_specialists contract")
+    return frozenset(values)
+
+
+def runtime_validation_rule_records(root: Path | str | None = None) -> tuple[dict[str, Any], ...]:
+    policy = load_governance_policy(root)
+    rules = policy.get("runtime_validation_rules", [])
+    if not isinstance(rules, list) or not rules:
+        raise ValueError("governance policy contains no runtime validation rules")
+    return tuple(dict(item) for item in rules)
+
+
 def machine_contract_errors(root: Path | str | None = None) -> tuple[str, ...]:
     repo_root = _root(root)
     errors: list[str] = []
@@ -156,15 +204,35 @@ def machine_contract_errors(root: Path | str | None = None) -> tuple[str, ...]:
 
     try:
         routing = load_routing_contract(repo_root)
+        route_ids: set[str] = set()
         for route in routing.get("direct_routes", []):
+            route_id = str(route.get("route_id", "")).strip()
+            if not route_id or route_id in route_ids:
+                errors.append(f"ROUTE_ID_INVALID_OR_DUPLICATE:{route_id}")
+            route_ids.add(route_id)
             target = route.get("target")
             via = route.get("via")
             if target not in specialist_ids:
-                errors.append(f"ROUTE_UNKNOWN_SPECIALIST:{route.get('route_id')}:{target}")
+                errors.append(f"ROUTE_UNKNOWN_SPECIALIST:{route_id}:{target}")
             if via is not None and via not in specialist_ids:
-                errors.append(f"ROUTE_UNKNOWN_VIA:{route.get('route_id')}:{via}")
+                errors.append(f"ROUTE_UNKNOWN_VIA:{route_id}:{via}")
             if target == "dagger" and route.get("explicit_authority_required") is not True:
-                errors.append(f"DAGGER_ROUTE_MISSING_EXPLICIT_AUTHORITY:{route.get('route_id')}")
+                errors.append(f"DAGGER_ROUTE_MISSING_EXPLICIT_AUTHORITY:{route_id}")
+
+        command_routes = routing.get("command_routes", {})
+        if not isinstance(command_routes, dict) or not command_routes:
+            errors.append("COMMAND_ROUTES_MISSING")
+        else:
+            for command, record in command_routes.items():
+                if not isinstance(record, dict):
+                    errors.append(f"COMMAND_ROUTE_INVALID:{command}")
+                    continue
+                specialist = record.get("specialist")
+                route_id = record.get("route_id")
+                if specialist not in specialist_ids:
+                    errors.append(f"COMMAND_ROUTE_UNKNOWN_SPECIALIST:{command}:{specialist}")
+                if route_id not in route_ids:
+                    errors.append(f"COMMAND_ROUTE_UNKNOWN_ROUTE_ID:{command}:{route_id}")
 
         for route in routing.get("ordered_sequences", []):
             for node in route.get("sequence", []):
@@ -184,6 +252,18 @@ def machine_contract_errors(root: Path | str | None = None) -> tuple[str, ...]:
             errors.append("GOVERNANCE_OWNERSHIP_UNKNOWN_SPECIALIST")
         if set(policy.get("specialist_controls", {})) - specialist_ids:
             errors.append("GOVERNANCE_CONTROL_UNKNOWN_SPECIALIST")
+        governance_required = set(policy.get("governance_required_specialists", []))
+        if governance_required - specialist_ids:
+            errors.append("GOVERNANCE_REQUIRED_UNKNOWN_SPECIALIST")
+        rule_ids: set[str] = set()
+        for rule in policy.get("runtime_validation_rules", []):
+            rule_id = str(rule.get("rule_id", "")).strip()
+            if not rule_id or rule_id in rule_ids:
+                errors.append(f"GOVERNANCE_RULE_ID_INVALID_OR_DUPLICATE:{rule_id}")
+            rule_ids.add(rule_id)
+            unknown = set(rule.get("skill_slugs", [])) - specialist_ids
+            if unknown:
+                errors.append(f"GOVERNANCE_RULE_UNKNOWN_SPECIALIST:{rule_id}:{','.join(sorted(unknown))}")
         expected_precedence = [
             "STOP",
             "ESCALATE_HUMAN",
