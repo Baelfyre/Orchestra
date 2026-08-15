@@ -1,5 +1,13 @@
 # Changelog
 
+## Control Plane Re-foundation P0-P1 - In Progress
+
+- Added versioned JSON Schema contracts and immutable Python runtime models for source-state and validation-execution receipts as the first bounded slice of the control-plane re-foundation tracked by issues #273 and #274.
+- Source-state receipts require exact 40-character Git identities and fail closed when a candidate canonical SHA or PR head differs from the observed machine-bound receipt, including the incident pattern where an incorrect full SHA shares the correct seven-character prefix.
+- Validation-execution receipts derive `PASS` or `FAIL` from the actual integer process exit code and hash stdout/stderr; agent or human prose cannot override a non-zero command result into `PASS`.
+- Added incident-shaped regression coverage and deterministic canonical JSON/SHA-256 receipt identities without introducing a new structured-output framework dependency.
+- This slice does not change Padayon canonical promotion, Arbiter authority, compliance routing, host adapters, hard execution enforcement, or release/version state.
+
 ## v1.4.0 Governance and Compliance Registry Cross-Integration - Published 2026-08-14
 
 - Normalized the root, Claude Code, Codex, Cursor, JetBrains, Neovim, VS Code, Windsurf, and Zed package/version surfaces to `1.4.0` for the governance release candidate without changing host maturity.
