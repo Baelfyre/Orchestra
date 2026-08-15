@@ -1,0 +1,94 @@
+{
+  "$schema": "./machine/schemas/readme-machine-index.schema.json",
+  "schema_version": "orchestra.readme-machine-index.v1",
+  "document_role": "machine_repository_index",
+  "authority": "derived_and_parity_validated_projection",
+  "human_readme": "README.md",
+  "repository": {
+    "name": "Orchestra",
+    "owner": "Baelfyre",
+    "full_name": "Baelfyre/Orchestra",
+    "url": "https://github.com/Baelfyre/Orchestra",
+    "license": "MIT",
+    "package_version_source": "plugin.json#/version"
+  },
+  "purpose": {
+    "summary": "Portable orchestration runtime for structured AI-assisted software development.",
+    "runtime_role": "Routes, sequences, constrains, validates, records, and coordinates specialist AI-assisted development work without treating tool access or validation success as authority.",
+    "not_an_ai_model": true,
+    "core_trust_boundary": "Governance approval, coordination readiness, validation success, GitHub mergeability, and host capability are evidence or state signals and do not independently grant or expand authority."
+  },
+  "machine_scan_order": [
+    {"order": 1, "path": "README.json", "purpose": "Repository orientation and canonical machine-surface index"},
+    {"order": 2, "path": "plugin.json", "purpose": "Package identity, version, command manifest, and installable specialist manifest"},
+    {"order": 3, "path": "machine/specialists/registry.v1.json", "purpose": "Compiled specialist identities and routing-relevant metadata"},
+    {"order": 4, "path": "machine/routing/routes.v1.json", "purpose": "Deterministic command routing, direct routes, ordered sequences, aliases, and fallback"},
+    {"order": 5, "path": "machine/governance/policy.v1.json", "purpose": "Governance vocabulary, precedence, ownership, validation rules, and remediation defaults"},
+    {"order": 6, "path": "machine/schemas/", "purpose": "JSON Schema contracts for machine-authoritative records"},
+    {"order": 7, "path": "PROJECT_STATE.md", "purpose": "Human-readable project continuity and implementation chronology"},
+    {"order": 8, "path": "README.md", "purpose": "Human-oriented project overview, rationale, architecture explanation, and release narrative"}
+  ],
+  "machine_contracts": {
+    "specialist_registry": "machine/specialists/registry.v1.json",
+    "routing_contract": "machine/routing/routes.v1.json",
+    "governance_policy": "machine/governance/policy.v1.json",
+    "schemas_directory": "machine/schemas",
+    "source_state_receipt_schema": "machine/schemas/source-state-receipt.schema.json",
+    "validation_execution_receipt_schema": "machine/schemas/validation-execution-receipt.schema.json",
+    "test_evidence_schema": "machine/schemas/test-evidence.schema.json",
+    "readme_machine_index_schema": "machine/schemas/readme-machine-index.schema.json"
+  },
+  "specialists": {
+    "count": 14,
+    "registry_source": "machine/specialists/registry.v1.json",
+    "human_index": "SKILL_INDEX.md",
+    "routing_reference": "ROUTING_MAP.md",
+    "source_of_truth_note": "Specialist prose and reasoning guidance remain in skills/*/SKILL.md; machine routing-critical metadata is compiled and parity-validated."
+  },
+  "governance": {
+    "human_overview": "docs/governance/GOVERNANCE_LAYER.md",
+    "machine_policy": "machine/governance/policy.v1.json",
+    "effective_authority_model": "selected_profile INTERSECTION explicit_grant INTERSECTION repository_policy INTERSECTION host_capability INTERSECTION current_phase INTERSECTION current_evidence",
+    "transition_dispositions": ["AUTO_CONTINUE", "AUTO_REMEDIATE_AND_REVALIDATE", "WAIT_FOR_EVIDENCE", "WAIT_FOR_CAPACITY", "ESCALATE_HUMAN", "STOP"],
+    "protected_actions_require_separate_authority": true
+  },
+  "architecture": {
+    "primary_reference": "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md",
+    "routing_reference": "ROUTING_MAP.md",
+    "governance_reference": "docs/governance/GOVERNANCE_LAYER.md",
+    "compliance_registry_reference": "docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md"
+  },
+  "validation": {
+    "workflow": ".github/workflows/validate.yml",
+    "behavior_suite": "tests/behavior/run_tests.py",
+    "runtime_suite": "tests/runtime",
+    "cross_platform_workflow": ".github/workflows/cross-platform-validation.yml",
+    "governance_workflow": ".github/workflows/governance-check.yml",
+    "test_evidence_schema": "machine/schemas/test-evidence.schema.json",
+    "test_evidence_schema_version": "orchestra.test-evidence.v1",
+    "evidence_policy": "Runtime confidence claims must be derived from persisted machine-readable CI evidence bound to the tested checkout SHA and source-head SHA."
+  },
+  "documentation": {
+    "installation": "docs/setup/INSTALLATION.md",
+    "validation": "docs/setup/VALIDATION.md",
+    "roadmap": "docs/project/ROADMAP.md",
+    "changelog": "CHANGELOG.md",
+    "release_docs": "docs/releases/",
+    "validation_evidence": "docs/validation/"
+  },
+  "representation_policy": {
+    "markdown": "Human-readable explanation, rationale, examples, and nuanced specialist guidance",
+    "json": "Machine-readable state, identity, routing, governance, receipts, manifests, and indexes",
+    "json_schema": "Validation contract for machine-readable records",
+    "jsonl": "Append-only event/history records where incremental retrieval is preferable",
+    "parity_rule": "When the same deterministic fact appears in more than one representation, CI must validate parity or derive the projection from one authoritative source."
+  },
+  "ai_review_guidance": {
+    "preferred_entrypoint": "README.json",
+    "do_not_infer_authority_from_prose": true,
+    "do_not_synthesize_full_git_identifiers": true,
+    "prefer_machine_contracts_for_exact_values": true,
+    "retrieve_human_docs_for_rationale": true,
+    "treat_generated_or_derived_views_as_non_authoritative_when_their_source_contract_is_available": true
+  }
+}

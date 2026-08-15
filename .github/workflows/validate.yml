@@ -44,5 +44,47 @@ jobs:
       - name: Install test dependencies
         run: python -m pip install --upgrade pip pytest pytest-cov
 
-      - name: Run runtime test suite
-        run: python -m pytest tests/runtime --cov=orchestra_runtime --cov-report=term-missing --cov-fail-under=90
+      - name: Prepare runtime evidence directory
+        run: mkdir -p artifacts/runtime
+
+      - name: Run runtime test suite with statement and branch measurement
+        id: runtime
+        continue-on-error: true
+        run: >-
+          python -m pytest tests/runtime
+          --cov=orchestra_runtime
+          --cov-branch
+          --cov-report=term-missing
+          --cov-report=json:artifacts/runtime/coverage.json
+          --junitxml=artifacts/runtime/runtime-junit.xml
+          --cov-fail-under=0
+
+      - name: Build machine-readable runtime test evidence
+        id: evidence
+        if: always()
+        continue-on-error: true
+        env:
+          SOURCE_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          RUNTIME_TEST_OUTCOME: ${{ steps.runtime.outcome }}
+        run: >-
+          python -m orchestra_runtime.test_evidence
+          --coverage artifacts/runtime/coverage.json
+          --junit artifacts/runtime/runtime-junit.xml
+          --output artifacts/runtime/test-evidence.json
+          --minimum-statement-coverage 90
+
+      - name: Upload runtime test evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: runtime-test-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/runtime/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Enforce runtime and evidence result
+        if: always()
+        shell: bash
+        run: |
+          test "${{ steps.runtime.outcome }}" = "success"
+          test "${{ steps.evidence.outcome }}" = "success"

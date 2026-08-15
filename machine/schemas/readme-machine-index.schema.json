@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/readme-machine-index.schema.json",
+  "title": "Orchestra Machine README Index",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "document_role",
+    "authority",
+    "human_readme",
+    "repository",
+    "purpose",
+    "machine_scan_order",
+    "machine_contracts",
+    "specialists",
+    "governance",
+    "architecture",
+    "validation",
+    "documentation",
+    "representation_policy",
+    "ai_review_guidance"
+  ],
+  "properties": {
+    "$schema": {"type": "string", "const": "./machine/schemas/readme-machine-index.schema.json"},
+    "schema_version": {"type": "string", "const": "orchestra.readme-machine-index.v1"},
+    "document_role": {"type": "string", "const": "machine_repository_index"},
+    "authority": {"type": "string", "const": "derived_and_parity_validated_projection"},
+    "human_readme": {"type": "string", "const": "README.md"},
+    "repository": {"type": "object"},
+    "purpose": {"type": "object"},
+    "machine_scan_order": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["order", "path", "purpose"],
+        "properties": {
+          "order": {"type": "integer", "minimum": 1},
+          "path": {"type": "string", "minLength": 1},
+          "purpose": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "machine_contracts": {"type": "object"},
+    "specialists": {"type": "object"},
+    "governance": {"type": "object"},
+    "architecture": {"type": "object"},
+    "validation": {"type": "object"},
+    "documentation": {"type": "object"},
+    "representation_policy": {"type": "object"},
+    "ai_review_guidance": {"type": "object"}
+  }
+}
