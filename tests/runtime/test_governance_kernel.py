@@ -143,7 +143,7 @@ class ArbiterKernelTests(unittest.TestCase):
             remediation_in_scope=True,
             maximum_identical_failure_repetitions=2,
         )
-        at = evaluate_arbiter(AriterKernelInput("project", "at", identical_failure_repetitions=2, **bounded))
+        at = evaluate_arbiter(ArbiterKernelInput("project", "at", identical_failure_repetitions=2, **bounded))
         beyond = evaluate_arbiter(ArbiterKernelInput("project", "beyond", identical_failure_repetitions=3, **bounded))
         self.assertEqual(TransitionDisposition.AUTO_REMEDIATE_AND_REVALIDATE, at.disposition)
         self.assertEqual(TransitionDisposition.ESCALATE_HUMAN, beyond.disposition)
