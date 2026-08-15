@@ -5,8 +5,6 @@ import pytest
 from orchestra_runtime.models import (
     ApprovedUnitPlan,
     AuditEventType,
-    Command,
-    ContextPackage,
     EnvelopeMessageType,
     ExecutionResult,
     OrchestraRuntimeEnvelope,
@@ -17,8 +15,8 @@ from orchestra_runtime.models import (
     validate_approved_unit_plan_context,
 )
 from orchestra_runtime.protocol.adapter_protocol import (
+    PRAP_V1,
     AdapterCapabilities,
-    AdapterCompatibilityRecord,
     AdapterError,
     AdapterProtocol,
     ProtocolValidator,
@@ -178,7 +176,7 @@ def test_execution_result_requires_run_identity_for_runtime_evidence():
         )
 
 
-def test_execution_result_rejects_bad_event_ids_mode_state_and_nonterminal_result():
+def test_execution_result_rejects_bad_event_ids_mode_and_state():
     identity = RunIdentity("run-1")
     with pytest.raises(ValueError, match="non-empty and unique"):
         ExecutionResult(True, "codex", "x", _route(), _validation(), "ok", "audit", runtime_audit_event_ids=("",))
@@ -255,9 +253,12 @@ def test_runtime_envelope_optional_fields_serialize_only_when_present():
 
 def _capabilities(**overrides):
     values = dict(
-        supports_cli=True,
-        supports_runtime=True,
-        supports_routing=True,
+        supports_commands=True,
+        supports_context=True,
+        supports_file_handoff=True,
+        supports_workspace=True,
+        supports_audit_trace=True,
+        supports_streaming=True,
         supports_governance=True,
         worktree_supported=False,
         worktree_isolation_mode="NONE",
@@ -272,7 +273,7 @@ def _protocol(**overrides):
         display_name="Fixture",
         runtime_adapter="fixture",
         host_type="ide",
-        protocol_version="prap-v1",
+        protocol_version=PRAP_V1,
         packaging_status="scaffold-only",
         marketplace_status="deferred",
         capabilities=_capabilities(),
@@ -289,7 +290,7 @@ def test_adapter_protocol_metadata_includes_optional_aliases_and_metadata():
 
 def test_protocol_validator_exercises_invalid_metadata_capability_and_case_edges():
     capabilities = _capabilities(worktree_supported=False, worktree_isolation_mode="OPTIONAL")
-    object.__setattr__(capabilities, "supports_cli", "yes")
+    object.__setattr__(capabilities, "supports_commands", "yes")
     protocol = _protocol(
         adapter_id="UPPER",
         runtime_adapter="UPPER",
