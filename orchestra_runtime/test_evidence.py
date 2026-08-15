@@ -129,6 +129,7 @@ def build_test_evidence(
     workflow_run_attempt: str,
     event_name: str,
     ref_name: str,
+    minimum_branch_coverage: float | None = None,
 ) -> dict[str, Any]:
     tests = parse_junit(junit_path)
     coverage = parse_coverage(coverage_path)
@@ -138,12 +139,20 @@ def build_test_evidence(
     minimum = float(minimum_statement_coverage)
     if not 0 <= minimum <= 100:
         raise ValueError("minimum_statement_coverage must be between 0 and 100")
+    branch_minimum = None if minimum_branch_coverage is None else float(minimum_branch_coverage)
+    if branch_minimum is not None and not 0 <= branch_minimum <= 100:
+        raise ValueError("minimum_branch_coverage must be between 0 and 100")
+    branch_gate_enabled = branch_minimum is not None
 
     passed = (
         outcome == "success"
         and tests["failures"] == 0
         and tests["errors"] == 0
         and float(coverage["statement_percent"]) >= minimum
+        and (
+            not branch_gate_enabled
+            or float(coverage["branch_percent"]) >= float(branch_minimum)
+        )
     )
     return {
         "schema_version": TEST_EVIDENCE_SCHEMA_VERSION,
@@ -165,7 +174,8 @@ def build_test_evidence(
         "coverage": {
             **coverage,
             "minimum_statement_coverage": minimum,
-            "branch_gate_enabled": False,
+            "minimum_branch_coverage": branch_minimum,
+            "branch_gate_enabled": branch_gate_enabled,
         },
         "reports": {
             "coverage_json": coverage_path.name,
@@ -183,6 +193,7 @@ def write_test_evidence(
     junit_path: Path,
     output_path: Path,
     minimum_statement_coverage: float,
+    minimum_branch_coverage: float | None = None,
 ) -> dict[str, Any]:
     source_head = os.getenv("SOURCE_HEAD_SHA") or os.getenv("GITHUB_SHA") or _actual_tested_sha()
     evidence = build_test_evidence(
@@ -192,6 +203,7 @@ def write_test_evidence(
         source_head_sha=source_head,
         runtime_test_outcome=os.getenv("RUNTIME_TEST_OUTCOME", "success"),
         minimum_statement_coverage=minimum_statement_coverage,
+        minimum_branch_coverage=minimum_branch_coverage,
         repository=os.getenv("GITHUB_REPOSITORY", "unknown/unknown"),
         workflow_run_id=os.getenv("GITHUB_RUN_ID", "local"),
         workflow_run_attempt=os.getenv("GITHUB_RUN_ATTEMPT", "1"),
@@ -209,12 +221,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--junit", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--minimum-statement-coverage", type=float, default=90.0)
+    parser.add_argument("--minimum-branch-coverage", type=float)
     args = parser.parse_args(argv)
     evidence = write_test_evidence(
         coverage_path=args.coverage,
         junit_path=args.junit,
         output_path=args.output,
         minimum_statement_coverage=args.minimum_statement_coverage,
+        minimum_branch_coverage=args.minimum_branch_coverage,
     )
     print(json.dumps({
         "result": evidence["result"],
