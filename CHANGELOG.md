@@ -1,12 +1,11 @@
 # Changelog
 
-## Control Plane Re-foundation P0-P1 - In Progress
+## Post-v1.4.0 Control Plane Re-foundation P0/P1-P9 - Integration Candidate
 
-- Added versioned JSON Schema contracts and immutable Python runtime models for source-state and validation-execution receipts as the first bounded slice of the control-plane re-foundation tracked by issues #273 and #274.
-- Source-state receipts require exact 40-character Git identities and fail closed when a candidate canonical SHA or PR head differs from the observed machine-bound receipt, including the incident pattern where an incorrect full SHA shares the correct seven-character prefix.
-- Validation-execution receipts derive `PASS` or `FAIL` from the actual integer process exit code and hash stdout/stderr; agent or human prose cannot override a non-zero command result into `PASS`.
-- Added incident-shaped regression coverage and deterministic canonical JSON/SHA-256 receipt identities without introducing a new structured-output framework dependency.
-- This slice does not change Padayon canonical promotion, Arbiter authority, compliance routing, host adapters, hard execution enforcement, or release/version state.
+- Consolidated the control-plane re-foundation tracked by #273 into PR #294, covering exact source and validation receipts, typed governance and deterministic Arbiter Kernel enforcement, machine specialist/routing/governance contracts, exact compliance set-equality receipts, host capability/conformance contracts, typed continuity and JSONL context state, persistent remediation circuit breakers, deterministic pre-execution policy gating, and P9 shadow conformance.
+- P9 begins and remains in `SHADOW`; this integration does not advance authority to advisory, validation authority, canonical-promotion authority, or legacy retirement.
+- Release hardening persists machine-readable runtime evidence with statement and branch coverage, critical-module floors, property-based regressions, workflow-sanity coverage, bounded mutation-confidence evidence, and cross-platform validation. These measurements are confidence evidence, not proof of correctness.
+- The integration candidate preserves `v1.4.0` as the current published release. PR #294 is not canonical until governed Squash merge and independent canonical readback succeed, and this work does not create a new tag, version, or GitHub Release.
 
 ## v1.4.0 Governance and Compliance Registry Cross-Integration - Published 2026-08-14
 
@@ -51,7 +50,7 @@
 - Preserved specialist boundaries: The Steward owns business alignment; The Governor owns legal/compliance governance; Cipher owns technical privacy/security controls; Scribe owns documentation production; Arbiter owns transition evidence.
 - Kept the campaign Markdown-primary and JSON-selective: the SK9 audit found no deterministic machine-parsing need that justified a governance JSON catalog.
 - Added focused regression coverage for knowledge depth, source/Codex parity, traceability/change-control discipline, source freshness, and non-legal-advice escalation boundaries.
-- No policy activation, legal publication, release/tag publication, deployment/production mutation, installed-integration refresh, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK9.
+- No policy activation, legal publication, release/tag publication, deployment/production mutation, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK9.
 
 ## Post-v1.2.0 Specialist Knowledge Layer - SK8 Scribe - Pending
 
@@ -93,7 +92,7 @@
 - Added a planning-only bounded load/recovery example that defines an open workload model, thresholds, telemetry, recovery evidence, and cross-specialist handoffs without generating traffic.
 - Preserved `scripts/dagger_guardrail.py` and its simulation-only live-execution block unchanged. Knowledge and tool examples do not grant permission to run destructive, disruptive, externally targeted, or production tests.
 - Kept the campaign Markdown-primary and JSON-selective: the SK5 audit found no deterministic machine-parsing need that justified a Dagger JSON catalog.
-- Added focused regression coverage for Dagger knowledge depth, source/Codex support parity, progressive disclosure, state/evidence separation, and safety-boundary language.
+- Added focused regression coverage for Dagger knowledge depth, source/Codex support-file parity, progressive disclosure, state/evidence separation, and safety-boundary language.
 - No release/tag publication, deployment/production mutation, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK5.
 
 ## Post-v1.2.0 Specialist Knowledge Layer - SK4 Cloak - Pending
