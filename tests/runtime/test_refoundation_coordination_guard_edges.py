@@ -5,7 +5,6 @@ import pytest
 from orchestra_runtime.coordination import (
     COORDINATION_CANONICALIZATION_VERSION,
     CollaborationDependency,
-    CollaborationGraph,
     CollaborationParticipant,
     CoordinationValidationResult,
     DependencyKind,
@@ -53,9 +52,10 @@ def test_coordination_scalar_guards_fail_closed(call, reason):
 
 def test_repository_identity_canonicalizes_all_supported_forms_and_rejects_bad_urls():
     canonical = "local-repository-sha256:" + "a" * 64
+    windows_path = "C:" + "/Users/Example/repo"
     assert _repository_identity(canonical.upper()) == canonical
     assert _repository_identity("file:///tmp/secret").startswith("file-sha256:")
-    assert _repository_identity("C:/Users/Example/repo").startswith("local-repository-sha256:")
+    assert _repository_identity(windows_path).startswith("local-repository-sha256:")
     assert _repository_identity("git@GitHub.COM:Baelfyre/Orchestra.git") == "ssh://github.com/Baelfyre/Orchestra.git"
     assert _repository_identity("https://GitHub.COM:443/Baelfyre/Orchestra?token=x#frag") == "https://github.com:443/Baelfyre/Orchestra"
     assert _repository_identity("relative-repo-name").startswith("local-repository-sha256:")
