@@ -64,6 +64,7 @@ def build_evidence(
     baseline_output: Path,
     exec_output: Path,
     report_output: Path,
+    dump_output: Path,
     session_database: Path,
     config_path: Path,
     init_exit_code: int,
@@ -78,7 +79,7 @@ def build_evidence(
     event_name: str,
     ref_name: str,
 ) -> dict[str, Any]:
-    for path in (init_output, baseline_output, exec_output, report_output, config_path):
+    for path in (init_output, baseline_output, exec_output, report_output, dump_output, config_path):
         if not path.is_file():
             raise ValueError(f"required evidence file missing: {path}")
 
@@ -153,6 +154,8 @@ def build_evidence(
             "exec_output_sha256": _sha256(exec_output),
             "report_output": report_output.name,
             "report_output_sha256": _sha256(report_output),
+            "dump_output": dump_output.name,
+            "dump_output_sha256": _sha256(dump_output),
             "session_database": session_database.name,
             "session_database_sha256": _optional_sha256(session_database),
         },
@@ -165,6 +168,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--baseline-output", type=Path, required=True)
     parser.add_argument("--exec-output", type=Path, required=True)
     parser.add_argument("--report-output", type=Path, required=True)
+    parser.add_argument("--dump-output", type=Path, required=True)
     parser.add_argument("--session-database", type=Path, required=True)
     parser.add_argument("--config", type=Path, required=True)
     parser.add_argument("--init-exit-code", type=int, required=True)
@@ -186,6 +190,7 @@ def main(argv: list[str] | None = None) -> int:
         baseline_output=args.baseline_output,
         exec_output=args.exec_output,
         report_output=args.report_output,
+        dump_output=args.dump_output,
         session_database=args.session_database,
         config_path=args.config,
         init_exit_code=args.init_exit_code,
