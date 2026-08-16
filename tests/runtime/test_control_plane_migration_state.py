@@ -16,7 +16,7 @@ def _load(path: Path) -> dict:
     return value
 
 
-def test_validation_authority_checkpoint_is_adjacent_and_bounded():
+def test_canonical_promotion_authority_checkpoint_is_adjacent_and_bounded():
     state = _load(STATE_PATH)
     assert state["schema_version"] == "orchestra.control-plane-migration.v1"
     assert state["stage_order"] == [
@@ -26,8 +26,8 @@ def test_validation_authority_checkpoint_is_adjacent_and_bounded():
         "CANONICAL_PROMOTION_AUTHORITY",
         "LEGACY_RETIRED",
     ]
-    assert state["previous_stage"] == "ADVISORY"
-    assert state["current_stage"] == "VALIDATION_AUTHORITY"
+    assert state["previous_stage"] == "VALIDATION_AUTHORITY"
+    assert state["current_stage"] == "CANONICAL_PROMOTION_AUTHORITY"
     previous_index = state["stage_order"].index(state["previous_stage"])
     current_index = state["stage_order"].index(state["current_stage"])
     assert current_index == previous_index + 1
@@ -40,20 +40,20 @@ def test_validation_authority_checkpoint_is_adjacent_and_bounded():
     assert state["authority_effect"] == {
         "machine_contracts_may_inform_runtime_decisions": True,
         "machine_contracts_are_validation_authority": True,
-        "machine_contracts_are_canonical_promotion_authority": False,
+        "machine_contracts_are_canonical_promotion_authority": True,
         "legacy_runtime_authorities_retired": False,
         "installed_integrations_mutated": False,
     }
 
 
-def test_validation_authority_transition_preserves_prior_evidence_chain():
+def test_canonical_promotion_transition_preserves_prior_evidence_chain():
     state = _load(STATE_PATH)
     evidence = _load(EVIDENCE_PATH)
     transition = state["transition_evidence"]
     assert transition["integration_pull_request"] == evidence["canonical"]["pull_request"] == 294
     assert transition["integration_canonical_sha"] == evidence["canonical"]["merge_commit_sha"]
     assert transition["post_merge_closeout_sha"] == "452572f16f232147d05fe0202cbaea8e82b88e56"
-    assert transition["previous_stage_canonical_sha"] == "2b77ccf1a393030c7d4755e64bc5045385de2fde"
+    assert transition["previous_stage_canonical_sha"] == "14eab40029e3409dcfe813b398fe8fc3e5295db9"
     assert transition["validated_source_head_sha"] == evidence["canonical"]["source_head_sha"]
     assert transition["runtime_evidence_index"] == "machine/release-evidence/control-plane-refoundation-p0-p1-p9.json"
     assert evidence["runtime_evidence"]["result"] == "PASS"
