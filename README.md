@@ -111,7 +111,7 @@ Accessible summary: a request supplies project context and selects separate risk
 
 The cumulative P0/P1 through P9 control-plane re-foundation is canonical through PR #294, with post-merge evidence parity through PR #295. Migration authority progresses only through the explicit sequence `SHADOW -> ADVISORY -> VALIDATION_AUTHORITY -> CANONICAL_PROMOTION_AUTHORITY -> LEGACY_RETIRED`; no stage is inferred from test success or mergeability.
 
-The migration state in this revision is `VALIDATION_AUTHORITY`. The versioned machine governance policy supplies Arbiter transition precedence and remediation defaults, while the compatibility enums remain fail-closed parity surfaces during migration. Machine routing and specialist identity are not yet canonical-promotion authority, legacy runtime authorities are not yet retired, and installed integrations are not mutated by this stage.
+The migration state in this revision is `CANONICAL_PROMOTION_AUTHORITY`. The versioned machine specialist registry, routing contract, and governance policy now supply the runtime's default specialist identity, command routing and ambiguity fallback, governance-required specialist classification, and governance validation rules. Backward-compatible runtime names remain available as derived surfaces rather than independently maintained authority. Legacy runtime surfaces are not yet retired, and installed integrations are not mutated by this stage.
 
 ## v1.4.0 Governance and Compliance Registry Cross-Integration
 
@@ -174,7 +174,7 @@ Implementation chronology and source provenance remain available in [Project Sta
 - **Semi-Autonomous:** may implement, validate, commit, push, create PRs, monitor exact-head CI, and bounded-remediate when explicitly granted; stops before merge and major phase progression.
 - **Full Autonomous:** may also merge and continue through later explicitly granted development phases while repository policy and exact-state evidence remain green.
 
-Profiles are reduction-only. Effective authority is the intersection of the selected profile, explicit user grant, repository/project policy, host capability, current phase, and evidence. No profile independently authorizes release, deployment, policy activation, destructive action, force push, history rewrite, or authority expansion. See [Governed Autonomy Modes](docs/governance/GOVERNED_AUTONOMY_MODES.md).
+Profiles are reduction-only. Effective authority is the intersection of the selected profile, explicit grant, repository/project policy, host capability, current phase, and evidence. No profile independently authorizes release, deployment, policy activation, destructive action, force push, history rewrite, or authority expansion. See [Governed Autonomy Modes](docs/governance/GOVERNED_AUTONOMY_MODES.md).
 
 ## Delegated Phase Progression
 
@@ -201,7 +201,7 @@ See the [Delegated Execution Policy](docs/governance/DELEGATED_EXECUTION_POLICY.
 
 Every active run starts from an explicit immutable `RuntimeComposition`. `ACTIVE` mode requires trusted authority, a run-scoped capability manifest, lifecycle and delegation services, coordination services, audit integration, and finite route bindings. Missing, malformed, mismatched, or untrusted active configuration fails closed before execution.
 
-`COMPATIBILITY` mode is also explicit and trusted. It uses finite repository-owned mappings for documented routes. It is not inferred when active configuration is missing, and it is never unlimited authority.
+`COMPATIBILITY` mode is also explicit and trusted. Its finite documented route bindings are derived from the versioned machine routing contract. It is not inferred when active configuration is missing, and it is never unlimited authority.
 
 ### Authority, capabilities, governance, and coordination
 
@@ -225,7 +225,7 @@ Accepted child work receives an authority subset, capability subset, bounded dep
 
 Runs use typed lifecycle signals and distinct waiting or terminal states. Exact replay of an accepted terminal signal is idempotent; conflicting replay is rejected. Run-linked audit events record authority, capabilities, delegation, coordination, lifecycle, and terminal outcomes without granting permission.
 
-The control-plane re-foundation binds exact identities, validation outcomes, governance vocabulary, transition precedence, and remediation defaults to versioned machine contracts. Agent prose may explain those records, but it cannot override their identities or verdicts. The migration remains staged so machine validation authority does not imply routing promotion, legacy retirement, release authority, or installed-host mutation.
+The control-plane re-foundation now binds exact identities, validation outcomes, specialist identity, routing defaults, governance classification, validation rules, transition precedence, and remediation defaults to versioned machine contracts. Agent prose may explain those records, but it cannot override their identities or verdicts. The migration remains staged so canonical-promotion authority does not imply legacy retirement, release authority, or installed-host mutation.
 
 ### Coordination state and evidence freshness
 
