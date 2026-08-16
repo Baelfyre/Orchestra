@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "orchestra.signed-materialization-evidence.v1",
+  "title": "Orchestra Signed Materialization Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "repository",
+    "event",
+    "base",
+    "source",
+    "reviewed_tree",
+    "changed_paths",
+    "authority",
+    "disposition"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.signed-materialization-evidence.v1"},
+    "repository": {"type": "string", "minLength": 1},
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "action", "pull_request_number"],
+      "properties": {
+        "name": {"const": "pull_request"},
+        "action": {"enum": ["opened", "synchronize", "reopened"]},
+        "pull_request_number": {"type": "integer", "minimum": 1}
+      }
+    },
+    "base": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "sha", "role"],
+      "properties": {
+        "ref": {"type": "string", "pattern": "^materialize/.+"},
+        "sha": {"$ref": "#/$defs/gitSha"},
+        "role": {"const": "ISOLATED_SIGNING_TARGET_NOT_CANONICAL"}
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "sha", "signature_requirement"],
+      "properties": {
+        "ref": {"type": "string", "minLength": 1},
+        "sha": {"$ref": "#/$defs/gitSha"},
+        "signature_requirement": {"const": "NOT_REQUIRED_PRE_MATERIALIZATION"}
+      }
+    },
+    "reviewed_tree": {"$ref": "#/$defs/gitSha"},
+    "changed_paths": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical_merge_readiness", "project_state_promotion", "release", "bypass"],
+      "properties": {
+        "canonical_merge_readiness": {"const": false},
+        "project_state_promotion": {"const": false},
+        "release": {"const": false},
+        "bypass": {"const": false}
+      }
+    },
+    "disposition": {"const": "REVIEWED_UNSIGNED_SOURCE_READY_FOR_GITHUB_SQUASH_MATERIALIZATION"}
+  },
+  "$defs": {
+    "gitSha": {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+  }
+}
