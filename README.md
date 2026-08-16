@@ -113,6 +113,8 @@ The cumulative P0/P1 through P9 control-plane re-foundation is canonical through
 
 The migration state in this revision is `LEGACY_RETIRED`. The versioned machine specialist registry, routing contract, and governance policy are the runtime's normative sources for specialist identity, command routing and ambiguity fallback, governance-required specialist classification, and governance validation rules. Runtime construction reads those contracts directly instead of consuming independently maintained compatibility tables. The legacy `VALID_SPECIALISTS` import remains available only as an on-demand machine-derived compatibility view. Installed integrations are not mutated by this stage, and release publication remains a separate governed transition.
 
+Merge readiness is also machine-bound rather than inferred from a successful API call. For an ordinary protected Squash merge, the current PR read must report both `mergeable == true` and `mergeable_state == clean`. Missing or unknown mergeability waits for evidence; `blocked`, `behind`, `dirty`, `unstable`, or any other observed non-clean state blocks ordinary progression. A bypass-capable identity and a signed resulting commit do not retroactively convert a failed pre-merge gate into governed readiness. See the [Autonomous Merge Readiness Protocol](docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md).
+
 ## v1.4.0 Governance and Compliance Registry Cross-Integration
 
 The repository/package version and current public GitHub release are both `v1.4.0`. The immutable, non-draft, non-prerelease release `Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration` is published from exact signed canonical commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`; tag `v1.4.0` resolves directly to that commit.
@@ -328,7 +330,7 @@ The validation chain covers:
 - native Windows, Ubuntu, and macOS validation;
 - `git diff --check` and exact authorized scope.
 
-For autonomous or delegated merges, Orchestra additionally requires the fail-closed [Autonomous Merge Readiness Protocol](docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md): a green canonical baseline, exact-head evidence, complete successful required checks, expected-head merge guard where supported, and independent post-merge verification.
+For autonomous or delegated merges, Orchestra additionally requires the fail-closed [Autonomous Merge Readiness Protocol](docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md): a green canonical baseline, exact-head evidence, a raw current PR state with `mergeable == true` and `mergeable_state == clean`, complete successful required checks, expected-head merge guard where supported, no governed bypass use, and independent post-merge verification.
 
 ## Release Lineage
 
