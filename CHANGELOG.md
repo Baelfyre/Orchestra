@@ -1,5 +1,13 @@
 # Changelog
 
+## Post-v1.4.0 Governance Stabilization - Merge-State Fail-Closed Repair
+
+- Repairs autonomous merge readiness so `mergeable=true` is insufficient for ordinary governed progression; the current PR read must also report `mergeable_state=clean`.
+- Treats missing or unknown mergeability as `WAIT_FOR_EVIDENCE` and fails closed on `blocked`, `behind`, `dirty`, `unstable`, or any other observed non-clean merge state.
+- Carries the accepted pre-merge disposition, mergeable state, and bypass-use record into post-merge verification so API success, a signed canonical commit, or matching tree content cannot retroactively satisfy a failed pre-merge gate.
+- Adds regression coverage for the PR #299 incident shape and documents a forward-only stabilization boundary under #302 without claiming a GitHub-recorded bypass event that is not independently available.
+- Does not rewrite PR #299 history, change the `Protect main` ruleset, weaken validation or coverage, select a version, publish a release, deploy, refresh installed integrations, or begin Murmurs or MCP work.
+
 ## Post-v1.4.0 Control Plane Re-foundation - LEGACY_RETIRED Candidate
 
 - Advances the separately governed migration from `CANONICAL_PROMOTION_AUTHORITY` to `LEGACY_RETIRED` without changing the published `v1.4.0` release.
