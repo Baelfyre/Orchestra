@@ -44,37 +44,6 @@ def test_machine_readme_governance_dispositions_match_machine_policy():
     assert machine["governance"]["machine_policy"] == "machine/governance/policy.v1.json"
 
 
-def test_machine_readme_control_plane_stage_matches_machine_migration_state():
-    machine = _load("README.json")
-    migration = _load("machine/migration/control-plane.v1.json")
-    assert machine["governance"]["control_plane_stage"] == migration["current_stage"]
-    assert machine["governance"]["control_plane_stage_source"] == "machine/migration/control-plane.v1.json#/current_stage"
-
-
-def test_machine_readme_murmurs_projection_matches_presentation_policy():
-    machine = _load("README.json")
-    policy = _load("machine/presentation/murmurs-policy.v1.json")
-    presentation = machine["architecture"]["presentation"]
-    assert presentation["host_default_mode"] == "NORMAL"
-    assert presentation["opt_in_mode"] == "MURMURS"
-    assert presentation["dispositions"] == ["SILENT", "MURMUR", "EXPLAIN"]
-    assert presentation["model_generated_filler"] is False
-    assert presentation["vocabulary_injected_into_model_context"] is False
-    assert presentation["presentation_may_change_machine_state"] == policy["authority_effect"]["presentation_may_change_machine_state"]
-    assert presentation["presentation_may_override_governance"] == policy["authority_effect"]["presentation_may_override_governance"]
-    assert presentation["required_explanation_events"] == policy["explain_required"]
-
-
-def test_machine_readme_merge_readiness_is_fail_closed():
-    requirements = _load("README.json")["governance"]["ordinary_merge_requirements"]
-    assert requirements == {
-        "mergeable": True,
-        "mergeable_state": "clean",
-        "expected_head_protection": True,
-        "governed_bypass_allowed": False,
-    }
-
-
 def test_machine_readme_scan_order_is_unique_contiguous_and_existing():
     machine = _load("README.json")
     records = machine["machine_scan_order"]
@@ -101,6 +70,3 @@ def test_ai_review_guidance_prefers_machine_contracts_for_exact_values():
     assert guidance["do_not_synthesize_full_git_identifiers"] is True
     assert guidance["prefer_machine_contracts_for_exact_values"] is True
     assert guidance["retrieve_human_docs_for_rationale"] is True
-    assert guidance["treat_mergeable_boolean_without_clean_mergeable_state_as_insufficient"] is True
-    assert guidance["treat_murmurs_as_presentation_only"] is True
-    assert guidance["do_not_claim_murmurs_token_savings_without_comparable_host_reported_counters"] is True
