@@ -17,7 +17,7 @@ def _config(tmp_path: Path) -> Path:
         "only_mutate=\n"
         "    orchestra_runtime/services.py\n"
         "mutate_only_covered_lines=true\n"
-        "max_stack_depth=8\n",
+        "max_stack_depth=-1\n",
         encoding="utf-8",
     )
     return path
@@ -68,6 +68,8 @@ def test_classified_exact_head_run_builds_valid_baseline(tmp_path: Path):
     assert evidence["tested_sha"] == SHA
     assert evidence["source_head_sha"] == SHA
     assert evidence["scope"]["modules"] == ["orchestra_runtime/services.py"]
+    assert evidence["scope"]["mutate_only_covered_lines"] is True
+    assert evidence["scope"]["max_stack_depth"] == -1
     assert evidence["execution"]["classification_status"] == "COMPLETE"
     assert evidence["execution"]["result_record_count"] == 2
     assert evidence["execution"]["not_checked_count"] == 0
