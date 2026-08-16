@@ -111,7 +111,7 @@ Accessible summary: a request supplies project context and selects separate risk
 
 The cumulative P0/P1 through P9 control-plane re-foundation is canonical through PR #294, with post-merge evidence parity through PR #295. Migration authority progresses only through the explicit sequence `SHADOW -> ADVISORY -> VALIDATION_AUTHORITY -> CANONICAL_PROMOTION_AUTHORITY -> LEGACY_RETIRED`; no stage is inferred from test success or mergeability.
 
-The migration state in this revision is `LEGACY_RETIRED`. The versioned machine specialist registry, routing contract, and governance policy are the runtime's normative sources for specialist identity, command routing and ambiguity fallback, governance-required specialist classification, and governance validation rules. Runtime construction reads those contracts directly instead of consuming independently maintained compatibility tables. The legacy `VALID_SPECIALISTS` import remains available only as an on-demand machine-derived compatibility view. Installed integrations are not mutated by this stage, and release publication remains a separate governed transition.
+The migration state in this revision is `LEGACY_RETIRED`. The versioned machine specialist registry, routing contract, and governance policy are the runtime's normative sources for specialist identity, command routing and ambiguity fallback, governance-required specialist classification, and governance validation rules. Runtime construction reads those contracts directly instead of consuming independently maintained compatibility tables. The legacy `VALID_SPECIALISTS` import remains available only as an on-demand machine-derived compatibility view. Installed integrations were not mutated by this migration, and v1.5.0 publication was completed through its separate governed transition.
 
 Merge readiness is also machine-bound rather than inferred from a successful API call. For an ordinary protected Squash merge, the current PR read must report both `mergeable == true` and `mergeable_state == clean`. Missing or unknown mergeability waits for evidence; `blocked`, `behind`, `dirty`, `unstable`, or any other observed non-clean state blocks ordinary progression. A bypass-capable identity and a signed resulting commit do not retroactively convert a failed pre-merge gate into governed readiness. See the [Autonomous Merge Readiness Protocol](docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md).
 
@@ -129,21 +129,21 @@ Caveman-inspired semantic tool/log compression is deliberately not enabled by th
 
 ## v1.5.0 Machine-Verifiable Control Plane and Murmurs
 
-Repository package/version surfaces are prepared at `1.5.0` for the next governed release candidate. **The current public GitHub release remains `v1.4.0` until the separate final publication gate completes.**
+**`v1.5.0` is the current public GitHub release.** The immutable, non-draft, non-prerelease release `Orchestra v1.5.0: Machine-Verifiable Control Plane and Murmurs` was published from lightweight tag `v1.5.0`, which resolves directly to exact signed canonical release commit `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`.
 
-v1.5.0 packages the completed machine-verifiable control-plane re-foundation, the fail-closed merge-readiness stabilization, and the additive Murmurs communication budget. Public package, command, specialist, and host surfaces remain present; compatibility names retained by the re-foundation are machine-derived rather than independently authoritative; Murmurs remains opt-in with `NORMAL` as the default. That compatibility evidence supports a minor release rather than an intentional breaking major release.
+v1.5.0 packages the completed machine-verifiable control-plane re-foundation, the fail-closed merge-readiness stabilization, and the additive Murmurs communication budget. Public package, command, specialist, and host surfaces remain present; compatibility names retained by the re-foundation are machine-derived rather than independently authoritative; Murmurs remains opt-in with `NORMAL` as the default. That compatibility evidence supported a minor release rather than an intentional breaking major release.
 
-Fresh post-Murmurs release hardening is required on the exact final candidate. A diagnostic pre-version checkpoint reached 1,055 passing runtime tests, 98.47% statement coverage, and 95.36% branch coverage, with the critical coverage floor passing. Those numbers are not final release authority because release metadata and documentation change the source head. Final values will come from the separately validated signed release candidate.
+The final publication boundary recorded 1,058 passing runtime tests, 98.47% statement coverage, and 95.36% branch coverage, together with the required critical-module, workflow-sanity, P9 conformance, Mutmut, integrated Cosmic Ray, native Windows/Ubuntu/macOS, CodeQL, governance, package/version, Registry compatibility, signed canonical merge, tag-identity, and release-identity evidence.
 
-See the [v1.5.0 release candidate](docs/releases/v1.5.0-machine-verifiable-control-plane-murmurs-release-candidate.md). MCP is intentionally deferred until this release is published and independently verified.
+See the [v1.5.0 release candidate](docs/releases/v1.5.0-machine-verifiable-control-plane-murmurs-release-candidate.md), [v1.5.0 release-readiness evidence](docs/validation/V1_5_0_RELEASE_READINESS_EVIDENCE.md), and [v1.5.0 publication closeout](docs/validation/V1_5_0_PUBLICATION_CLOSEOUT.md). MCP was intentionally excluded from v1.5.0. Publication satisfies its sequencing prerequisite only; any MCP work still requires a fresh post-release priority and design decision.
 
 ## v1.4.0 Governance and Compliance Registry Cross-Integration
 
-`v1.4.0` remains the current public GitHub release while v1.5.0 is prepared. The immutable, non-draft, non-prerelease release `Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration` is published from exact signed canonical commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`; tag `v1.4.0` resolves directly to that commit.
+`v1.4.0` is a historical published release after v1.5.0. The immutable, non-draft, non-prerelease release `Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration` is published from exact signed canonical commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`; tag `v1.4.0` resolves directly to that commit.
 
 v1.4.0 packages the Compliance Registry cross-integration as an Orchestra governance capability: offline-first verified local Registry consumption, explicit integrity/provenance/freshness state, project pinning, progressive-disclosure integration across Governor, Steward, and Arbiter, and preserved routing/authority boundaries.
 
-The Registry foundation, source/freshness pilot, deterministic packaging, and v0.1.0 release-readiness stack are canonical in `Baelfyre/Orchestra-Compliance-Registry`. The trusted `registry-v0.1.0` GitHub Release is published as non-draft, non-prerelease, and immutable at Registry commit `3821bcb55125b4d8864f28b6423650e6e17ac67b`. Orchestra completed real network-provenance validation from canonical source baseline `b5d0790fc714f53c4561a91b158c13c625768e05`, confirming the exact release identity, manifest and bundle hashes, `CURRENT` freshness, source query, project pinning, update-check behavior, and idempotent re-sync. At the v1.4.0 publication checkpoint, Orchestra's package and public release were both `1.4.0`; current repository package metadata may advance for a later unreleased candidate without moving the immutable v1.4.0 tag.
+The Registry foundation, source/freshness pilot, deterministic packaging, and v0.1.0 release-readiness stack are canonical in `Baelfyre/Orchestra-Compliance-Registry`. The trusted `registry-v0.1.0` GitHub Release is published as non-draft, non-prerelease, and immutable at Registry commit `3821bcb55125b4d8864f28b6423650e6e17ac67b`. Orchestra completed real network-provenance validation from canonical source baseline `b5d0790fc714f53c4561a91b158c13c625768e05`, confirming the exact release identity, manifest and bundle hashes, `CURRENT` freshness, source query, project pinning, update-check behavior, and idempotent re-sync. At the v1.4.0 publication checkpoint, Orchestra's package and public release were both `1.4.0`; subsequent repository package metadata advanced for v1.5.0 without moving the immutable v1.4.0 tag.
 
 It also adds a fail-closed **README Impact Gate** to the Governance Check workflow. Changes classified as significant to Orchestra's runtime, specialist skills, host adapters/manifests, governance/routing/setup/release contracts, version surfaces, or CI/governance scripts must update `README.md` in the same revision. Tests and validation-evidence-only changes do not force documentation churn.
 
@@ -306,7 +306,7 @@ Use the host-native path:
 - Antigravity: run `agy plugin install https://github.com/Baelfyre/Orchestra`.
 - Manual or scaffold-only hosts: follow the exact host boundary in the [Installation Guide](docs/setup/INSTALLATION.md).
 
-Repository manifests identify package version `1.5.0`. The current public GitHub release remains `v1.4.0` until the separately governed v1.5.0 publication transition succeeds. The version bump does not promote scaffold-only hosts, publish marketplaces, deploy anything, or refresh installed integrations.
+Repository manifests and the current public GitHub release identify package version `1.5.0`. The release publication did not promote scaffold-only hosts, publish marketplaces, deploy anything, or refresh installed integrations.
 
 ## Quick Start
 
@@ -359,13 +359,13 @@ For autonomous or delegated merges, Orchestra additionally requires the fail-clo
 
 ### v1.5.0 Machine-Verifiable Control Plane and Murmurs
 
-Repository package/version surfaces are prepared at `1.5.0`; publication is not yet complete. The candidate packages the machine-verifiable control plane, `LEGACY_RETIRED` migration closeout, merge-state fail-closed stabilization, and additive Murmurs communication budget. Fresh post-Murmurs exact-head release evidence and a signed protected canonical candidate are required before a `v1.5.0` tag or GitHub Release may be created.
+`v1.5.0` is the current published Orchestra release. It packages the machine-verifiable control plane, `LEGACY_RETIRED` migration closeout, merge-state fail-closed stabilization, and additive Murmurs communication budget from exact signed release commit `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`. The GitHub Release is immutable, non-draft, and non-prerelease, and the fixed lightweight tag resolves directly to that commit.
 
-See the [v1.5.0 release candidate](docs/releases/v1.5.0-machine-verifiable-control-plane-murmurs-release-candidate.md).
+Release preparation and publication evidence are recorded in the [v1.5.0 release candidate](docs/releases/v1.5.0-machine-verifiable-control-plane-murmurs-release-candidate.md), [v1.5.0 release-readiness evidence](docs/validation/V1_5_0_RELEASE_READINESS_EVIDENCE.md), and [v1.5.0 publication closeout](docs/validation/V1_5_0_PUBLICATION_CLOSEOUT.md).
 
 ### v1.4.0 Governance and Compliance Registry Cross-Integration
 
-`v1.4.0` is the current published Orchestra release. It packages the verified Compliance Registry cross-integration and README Impact Gate from exact signed release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`. The GitHub Release is immutable, non-draft, and non-prerelease. Subsequent control-plane, Murmurs, and v1.5.0 preparation work does not move the v1.4.0 tag.
+`v1.4.0` is a historical published Orchestra release. It packages the verified Compliance Registry cross-integration and README Impact Gate from exact signed release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`. The GitHub Release is immutable, non-draft, and non-prerelease. Subsequent control-plane, Murmurs, and v1.5.0 publication work does not move the v1.4.0 tag.
 
 Release preparation and publication evidence are recorded in the [v1.4.0 governance upgrade release candidate](docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md), [v1.4.0 release-readiness evidence](docs/validation/V1_4_0_RELEASE_READINESS_EVIDENCE.md), and [v1.4.0 publication closeout](docs/validation/V1_4_0_PUBLICATION_CLOSEOUT.md).
 
@@ -400,7 +400,7 @@ See the [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration.md). 
 - Data sensitivity, privacy, retention, deletion, platform disclosure, and IP obligations depend on the downstream project and host environment.
 - Release governance may require revision or block publication.
 - Murmurs repository simulation does not prove a billing-token savings percentage; comparable host-reported counters are required for token claims.
-- Repository package metadata is prepared at `1.5.0`, while the current public release remains `v1.4.0` until the separately governed publication gate completes.
+- Repository package metadata and the current public release are `1.5.0`. Later `main` commits do not move the fixed v1.5.0 release tag.
 
 ## Documentation Map
 
@@ -434,6 +434,8 @@ See the [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration.md). 
 ### Release and maintainers
 
 - [v1.5.0 Machine-Verifiable Control Plane and Murmurs Release Candidate](docs/releases/v1.5.0-machine-verifiable-control-plane-murmurs-release-candidate.md)
+- [v1.5.0 Release Readiness Evidence](docs/validation/V1_5_0_RELEASE_READINESS_EVIDENCE.md)
+- [v1.5.0 Publication Closeout](docs/validation/V1_5_0_PUBLICATION_CLOSEOUT.md)
 - [v1.4.0 Governance Upgrade Release Candidate](docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md)
 - [v1.4.0 Prepublication Readiness Evidence](docs/validation/V1_4_0_PREPUBLICATION_READINESS_EVIDENCE.md)
 - [v1.3.0 Release Candidate](docs/releases/v1.3.0-specialist-intelligence-release-candidate.md)
