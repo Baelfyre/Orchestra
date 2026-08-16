@@ -19,6 +19,11 @@ _PRESENTATION_POLICY = _MACHINE_ROOT / "presentation" / "murmurs-policy.v1.json"
 _MURMURS_VOCABULARY = _MACHINE_ROOT / "presentation" / "murmurs-vocabulary.v1.json"
 
 
+class PresentationMode(str, Enum):
+    NORMAL = "NORMAL"
+    MURMURS = "MURMURS"
+
+
 class PresentationDisposition(str, Enum):
     SILENT = "SILENT"
     MURMUR = "MURMUR"
@@ -166,10 +171,10 @@ def _validate_vocabulary(vocabulary: dict[str, Any]) -> dict[str, Any]:
     if len(set(cleaned)) != len(cleaned):
         raise ValueError("Murmurs vocabulary entries must be unique")
     for entry in cleaned:
-        if not entry or entry != entry.strip():
-            raise ValueError("Murmurs vocabulary entries must be non-empty and trimmed")
         if len(entry) > 12 or "\n" in entry or "\r" in entry:
             raise ValueError("Murmurs vocabulary entry violates length/newline constraints")
+        if not entry or entry != entry.strip():
+            raise ValueError("Murmurs vocabulary entries must be non-empty and trimmed")
         words = set(re.findall(r"[a-z]+", entry.lower()))
         if words & _FORBIDDEN_STATUS_TERMS:
             raise ValueError("Murmurs vocabulary entries cannot contain status or completion claims")
@@ -259,7 +264,19 @@ def _select_murmur(event: PresentationEvent, entries: tuple[str, ...]) -> str:
     return entries[index]
 
 
-def decide_presentation(event: PresentationEvent, root: Path | str | None = None) -> PresentationDecision:
+def decide_presentation(
+    event: PresentationEvent,
+    root: Path | str | None = None,
+    mode: PresentationMode | str = PresentationMode.MURMURS,
+) -> PresentationDecision:
+    try:
+        active_mode = PresentationMode(mode)
+    except ValueError:
+        return PresentationDecision(event, PresentationDisposition.EXPLAIN, "PRESENTATION_MODE_INVALID")
+
+    if active_mode is PresentationMode.NORMAL:
+        return PresentationDecision(event, PresentationDisposition.EXPLAIN, "MODE_NORMAL")
+
     try:
         policy = load_presentation_policy(root)
         disposition = PresentationDisposition(policy["events"][event.event_kind.value])
@@ -294,5 +311,10 @@ def lifecycle_presentation_event(signal: LifecycleSignal, sequence: int) -> Pres
     )
 
 
-def decide_lifecycle_presentation(signal: LifecycleSignal, sequence: int, root: Path | str | None = None) -> PresentationDecision:
-    return decide_presentation(lifecycle_presentation_event(signal, sequence), root)
+def decide_lifecycle_presentation(
+    signal: LifecycleSignal,
+    sequence: int,
+    root: Path | str | None = None,
+    mode: PresentationMode | str = PresentationMode.MURMURS,
+) -> PresentationDecision:
+    return decide_presentation(lifecycle_presentation_event(signal, sequence), root, mode)
