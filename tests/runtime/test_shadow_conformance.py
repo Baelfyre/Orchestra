@@ -7,9 +7,10 @@ from orchestra_runtime.governance_kernel import (
     GovernanceDecisionRecord,
     evaluate_arbiter,
 )
+from orchestra_runtime.machine_contracts import command_route_map
 from orchestra_runtime.models import Command, ContextPackage
 from orchestra_runtime.repositories import ManifestRepository, SkillSourceRepository
-from orchestra_runtime.services import DEFAULT_COMMAND_ROUTES, GovernanceValidator, RouterService, SkillRegistry
+from orchestra_runtime.services import GovernanceValidator, RouterService, SkillRegistry
 from orchestra_runtime.shadow_conformance import (
     LegacyWorkflowClaim,
     MigrationStage,
@@ -25,6 +26,7 @@ EVIDENCE_B = "b" * 64
 
 
 def _runtime(command_name: str, metadata: dict | None = None):
+    routes = command_route_map(ROOT)
     registry = SkillRegistry(ManifestRepository(ROOT), SkillSourceRepository(ROOT))
     router = RouterService(registry)
     governance = GovernanceValidator()
@@ -33,7 +35,7 @@ def _runtime(command_name: str, metadata: dict | None = None):
         adapter_name="codex",
         prompt=command_name,
         project_root=ROOT,
-        available_commands=tuple(DEFAULT_COMMAND_ROUTES),
+        available_commands=tuple(routes),
         manifest_version="1.4.0",
         metadata=metadata or {},
     )
