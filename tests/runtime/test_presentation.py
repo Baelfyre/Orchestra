@@ -206,6 +206,85 @@ def test_invalid_policy_fails_closed_to_explain(tmp_path: Path):
     assert render_presentation(decision) is None
 
 
+@pytest.mark.parametrize(
+    ("case", "message"),
+    [
+        ("schema_version", "schema_version"),
+        ("default_disposition", "default disposition"),
+        ("events_type", "events must be an object"),
+        ("event_set", "event set"),
+        ("event_disposition", "invalid disposition"),
+        ("explain_type", "explain_required must be a list"),
+        ("explain_values", "explain_required does not match"),
+        ("authority_effect", "cannot create authority"),
+    ],
+)
+def test_policy_contract_rejects_every_fail_closed_boundary(tmp_path: Path, case: str, message: str):
+    policy = _load(POLICY_PATH)
+    if case == "schema_version":
+        policy["schema_version"] = "orchestra.presentation-policy.v0"
+    elif case == "default_disposition":
+        policy["default_disposition"] = "MURMUR"
+    elif case == "events_type":
+        policy["events"] = []
+    elif case == "event_set":
+        del policy["events"]["TOOL_STARTED"]
+    elif case == "event_disposition":
+        policy["events"]["TOOL_STARTED"] = "UNKNOWN"
+    elif case == "explain_type":
+        policy["explain_required"] = "TASK_COMPLETED"
+    elif case == "explain_values":
+        policy["explain_required"] = policy["explain_required"][:-1]
+    elif case == "authority_effect":
+        policy["authority_effect"]["presentation_may_change_machine_state"] = True
+    else:  # pragma: no cover - parametrization owns the finite cases
+        raise AssertionError(case)
+    _write_contracts(tmp_path, policy=policy)
+    with pytest.raises(ValueError, match=message):
+        load_presentation_policy(tmp_path)
+
+
+@pytest.mark.parametrize(
+    ("case", "message"),
+    [
+        ("schema_version", "schema_version"),
+        ("selection", "selection strategy"),
+        ("constraints", "constraints"),
+        ("entries_type", "non-empty list"),
+        ("entries_empty", "non-empty list"),
+        ("duplicate", "unique"),
+        ("untrimmed", "trimmed"),
+        ("too_long", "length/newline"),
+        ("newline", "length/newline"),
+    ],
+)
+def test_vocabulary_contract_rejects_nonsemantic_boundary_violations(tmp_path: Path, case: str, message: str):
+    vocabulary = _load(VOCABULARY_PATH)
+    if case == "schema_version":
+        vocabulary["schema_version"] = "orchestra.murmurs-vocabulary.v0"
+    elif case == "selection":
+        vocabulary["selection"] = "RANDOM"
+    elif case == "constraints":
+        vocabulary["constraints"]["allow_status_claims"] = True
+    elif case == "entries_type":
+        vocabulary["entries"] = "hm..."
+    elif case == "entries_empty":
+        vocabulary["entries"] = []
+    elif case == "duplicate":
+        vocabulary["entries"] = ["hm...", "hm..."]
+    elif case == "untrimmed":
+        vocabulary["entries"] = [" hm..."]
+    elif case == "too_long":
+        vocabulary["entries"] = ["abcdefghijklmnop"]
+    elif case == "newline":
+        vocabulary["entries"] = ["hm...\n"]
+    else:  # pragma: no cover - parametrization owns the finite cases
+        raise AssertionError(case)
+    _write_contracts(tmp_path, vocabulary=vocabulary)
+    with pytest.raises(ValueError, match=message):
+        load_murmurs_vocabulary(tmp_path)
+
+
 def test_status_claim_in_vocabulary_fails_closed_to_explain(tmp_path: Path):
     vocabulary = _load(VOCABULARY_PATH)
     vocabulary["entries"] = ["done"]
