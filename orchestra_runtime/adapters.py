@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 from .interfaces import IIDEAdapter
 from .models import Command, ContextPackage, OrchestraRuntimeEnvelope
+from .presentation import PresentationDecision, PresentationEvent, PresentationMode, decide_presentation
 from .protocol import AdapterCapabilities, AdapterProtocol, PRAP_V1
 from .repositories import ManifestRepository
 from .serialization import deserialize_runtime_envelope, serialize_runtime_envelope
@@ -17,6 +20,7 @@ class BaseAdapter(IIDEAdapter):
     aliases: tuple[str, ...] = ()
     default_command = "conductor"
     trigger_map: tuple[tuple[str, str], ...] = ()
+    presentation_mode_metadata_key = "orchestra.presentation_mode"
     capabilities = AdapterCapabilities(
         supports_commands=True,
         supports_context=True,
@@ -73,6 +77,15 @@ class BaseAdapter(IIDEAdapter):
             adapter_name=self.adapter_name,
             metadata=dict(metadata or {}),
         )
+
+    def presentation_decision(
+        self,
+        event: PresentationEvent,
+        metadata: dict | None = None,
+        root: Path | str | None = None,
+    ) -> PresentationDecision:
+        raw_mode = dict(metadata or {}).get(self.presentation_mode_metadata_key, PresentationMode.NORMAL.value)
+        return decide_presentation(event, root=root, mode=raw_mode)
 
 
 class RuntimeEnvelopeAdapterMixin:

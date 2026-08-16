@@ -1,0 +1,16 @@
+{
+  "schema_version": "orchestra.murmurs-vocabulary.v1",
+  "selection": "SHA256_MODULO",
+  "entries": [
+    "...",
+    "hm...",
+    "mhm...",
+    "mm...",
+    "ah..."
+  ],
+  "constraints": {
+    "maximum_characters": 12,
+    "allow_newlines": false,
+    "allow_status_claims": false
+  }
+}

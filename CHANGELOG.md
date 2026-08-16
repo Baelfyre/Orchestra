@@ -1,5 +1,16 @@
 # Changelog
 
+## Post-v1.4.0 Murmurs Communication Budget - Candidate
+
+- Adds a machine-owned presentation policy with `NORMAL` and opt-in `MURMURS` modes plus deterministic `SILENT`, local `MURMUR`, and required `EXPLAIN` dispositions.
+- Keeps human-action, authority, validation-failure, blocker, governance-stop, handoff, completion, and failure events hard-bound to explanation; malformed presentation contracts fail closed to explanation.
+- Selects short non-semantic murmurs locally with deterministic SHA-256 indexing instead of asking the model to generate filler or loading the vocabulary into model context.
+- Integrates presentation selection at the shared adapter boundary so supported and scaffold hosts consume the same machine policy; adapters default to normal explanation unless Murmurs is explicitly selected.
+- Adds source-aware communication measurements for progress messages, model progress calls, bytes, repeated reads, elapsed communication overhead, outcome identity, and optional host-reported token counters. Token deltas are calculated only for matching host-reported counter identities; unavailable counters remain null and no percentage saving is invented.
+- Adds controlled repository-simulation coverage showing routine model-progress calls can be structurally eliminated by Murmurs while preserving outcome, validation, and governance identities; repository CI does not represent this as billing-token evidence.
+- Evaluates Caveman-inspired semantic tool/log compression but does not promote lossy compaction or repeated-read stubs until original content is preserved behind an immutable retrievable reference.
+- Performs no SemVer selection, release/tag publication, ruleset change/bypass, deployment, marketplace publication, installed-integration refresh, destructive cleanup, force push, history rewrite, branch deletion, or MCP implementation.
+
 ## Post-v1.4.0 Governance Stabilization - Merge-State Fail-Closed Repair
 
 - Repairs autonomous merge readiness so `mergeable=true` is insufficient for ordinary governed progression; the current PR read must also report `mergeable_state=clean`.
