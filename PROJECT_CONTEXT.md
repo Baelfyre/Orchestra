@@ -10,7 +10,7 @@ A governance-first specialist skill framework that routes complex AI-assisted so
 Open-source developer tooling and AI orchestration framework
 
 ## Current Stage
-v1.4.0 - Governance and Compliance Registry Cross-Integration (`PUBLISHED_VERIFIED`). Repository package surfaces and the current public GitHub Release are aligned to `1.4.0`. The immutable, non-draft, non-prerelease release `Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration` is published from lightweight tag `v1.4.0`, which resolves directly to exact signed canonical release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`. Trusted Registry publication and real Orchestra network provenance are complete. No marketplace publication, installed-integration refresh, deployment/production mutation, or policy activation was performed.
+v1.5.0 - Machine-Verifiable Control Plane and Murmurs (`PREPARED_NOT_RELEASED`). Repository package/version surfaces are prepared at `1.5.0`, while the current public GitHub Release remains `v1.4.0` until the separate final publication gate completes. The control-plane migration is `LEGACY_RETIRED`, fail-closed ordinary merge readiness requires `mergeable=true` and `mergeable_state=clean`, and Murmurs is canonical as an additive opt-in presentation mode with `NORMAL` as the default. Fresh post-Murmurs release hardening, exact signed canonical merge, tag publication, and GitHub Release verification remain required. MCP is deferred until v1.5.0 is independently `PUBLISHED_VERIFIED`. No marketplace publication, installed-integration refresh, deployment/production mutation, or policy activation is performed by candidate preparation.
 
 ## Primary Users
 Developers and maintainers who install Orchestra as a plugin, skill set, or runtime package inside a supported or scaffold-only IDE or coding host (Claude Code, Codex, Antigravity, Cursor, Windsurf, JetBrains, Zed, Neovim)
@@ -41,16 +41,19 @@ Guidance used for this classification:
 - Compliance Registry evidence is reusable governance input, not a new authority layer. Governor retains compliance/source-applicability ownership, Steward retains requirements/change-control ownership, Arbiter retains transition/evidence-freshness ownership, and Conductor/The Tuner retain routing/coordination boundaries. Registry state cannot authorize release, deployment, policy activation, destructive operations, or legal conclusions.
 - Repository simulation and GitHub CI are not live installed-host evidence. Accepted R7 evidence is recorded separately for installed Codex and Antigravity continuity and Claude Code packaging compatibility; Claude Code active runtime continuity remains unclaimed under `SCAFFOLD_ONLY` maturity.
 - Governed Autonomy Profiles are reduction-only workflow gates. `HUMAN_GOVERNED` is the safe default, children cannot exceed parents, and no profile creates release, deployment, policy, destructive, force-push, history-rewrite, or authority-expansion permission.
+- Murmurs is presentation-only. It cannot modify machine state, authority, governance, validation, blockers, handoffs, or terminal outcomes, and it must not claim token savings without comparable host-reported counters.
+- MCP remains a future transport/integration boundary and must not become a source of authority. MCP implementation is deferred until v1.5.0 publication is complete and independently verified.
 - No vendoring of external plugin code, and no claiming unsupported compatibility or compliance, per `docs/CONTRIBUTING.md`.
 
 ## Validation Requirements
-- `pytest tests/runtime` must pass with `--cov-fail-under=90` as enforced in CI via `validate.yml`.
+- `pytest tests/runtime` must pass with the repository's enforced statement, branch, and critical-module coverage requirements.
 - `python tests/behavior/run_tests.py` must pass.
 - `python scripts/governance_check.py --strict` must pass as enforced in CI via `governance-check.yml`.
 - `python scripts/check_readme_impact.py` must pass for pull-request and push revisions; significant Orchestra runtime, specialist, host-integration, governance/routing/setup/release, version, or CI/governance changes require `README.md` in the same revision.
 - Manifest and packaging validators (`validate_claude_plugin.py`, `validate_ide_packaging.py`, `validate_manifest.py`, `validate_structure.py`) must pass.
 - Cross-layer contract validators and their behavior tests must pass for affected revisions.
 - `python scripts/validate_governed_autonomy_modes_contract.py` and its focused runtime tests must pass when autonomy-profile contracts change.
+- Final v1.5.0 release evidence must include fresh exact-head runtime/coverage, workflow-sanity, P9 conformance, Mutmut, integrated Cosmic Ray, native Windows/Ubuntu/macOS, CodeQL, governance, documentation parity, package-version parity, signed canonical merge, tag identity, and GitHub Release identity.
 - `python scripts/preflight_sync_check.py` must be run against `origin/main` before starting a new local editing session, per `docs/CONTRIBUTING.md`.
 
 ## Known Constraints
@@ -58,14 +61,16 @@ Guidance used for this classification:
 - `tests/behavior/run-tests.ps1` is intentionally maintained in parallel with `run_tests.py` as the primary validation path for Windows environments, per `docs/MATURITY.md`.
 - Direct pushes to `main` are not part of the normal workflow; changes go through a branch and pull request except for documented maintainer bypass recovery cases.
 - Installed Codex and Antigravity parity, host context-reset behavior, and Windows filesystem-specific behavior require host-local evidence in addition to repository CI.
-- Repository package metadata and the current public GitHub Release are `1.4.0`; lightweight tag `v1.4.0` resolves directly to signed release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`. Later `main` commits must not move that fixed release tag.
+- Repository package metadata is prepared at `1.5.0`, but the current public GitHub Release remains `v1.4.0`; lightweight tag `v1.4.0` continues to resolve to signed release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`. Candidate work must not move that fixed release tag.
 - The Compliance Registry foundation, source/freshness pilot, deterministic packaging, immutable `registry-v0.1.0` publication, and Orchestra real network-provenance validation are complete; future Registry releases remain separately governed transitions.
+- Repository Murmurs simulation demonstrates structural progress-call reduction and outcome parity but does not prove a billing-token savings percentage.
 
 ## Known Non-Goals
 - Orchestra does not store, process, or transmit end-user or client data itself.
 - Orchestra does not aim to make `PROJECT_CONTEXT.md` universally mandatory for every project that adopts it, per `docs/governance/PROJECT_CONTEXT_ENFORCEMENT_POLICY.md`.
 - This document does not modify CI enforcement on its own.
 - A merged implementation or version bump is not a released capability until the separate tag and GitHub Release gates complete.
+- v1.5.0 does not include MCP implementation.
 
 ## Maintainer Approval Rules
 - Changes to governance level, scaffold graduation status, CI enforcement gates, merge state, or release state require their applicable pull-request and human-authorization gates.
@@ -75,4 +80,4 @@ Guidance used for this classification:
 Not yet decided. No project-specific maintainer preferences beyond `docs/CONTRIBUTING.md` are currently documented for this field.
 
 ## Last Reviewed
-2026-08-14
+2026-08-16

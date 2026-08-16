@@ -12,6 +12,13 @@ from orchestra_runtime.machine_contracts import (
     runtime_validation_rule_records,
 )
 from orchestra_runtime.models import Command, ContextPackage
+from orchestra_runtime.presentation import (
+    PresentationDisposition,
+    PresentationEvent,
+    PresentationEventKind,
+    PresentationMode,
+    decide_presentation,
+)
 from orchestra_runtime.repositories import ManifestRepository, SkillSourceRepository
 from orchestra_runtime.services import GovernanceValidator, RouterService, SkillRegistry
 from orchestra_runtime.workflow_contracts import build_workflow_sanity_receipt
@@ -230,3 +237,44 @@ def test_bounded_revision_remediates_then_escalates_on_budget_exhaustion():
     )
     assert exhausted_receipt.arbiter_disposition == "ESCALATE_HUMAN"
     assert exhausted_receipt.arbiter_reason_codes == ("REMEDIATION_BUDGET_EXHAUSTED",)
+
+
+def test_murmurs_compresses_routine_presentation_without_changing_workflow_truth():
+    route, validation = _route("review-architecture")
+    arbiter = _arbiter()
+    receipt = build_workflow_sanity_receipt(
+        route,
+        validation,
+        arbiter_result=arbiter,
+        evidence_refs=("receipt:source", "receipt:validation"),
+    )
+    workflow_identity = receipt.digest
+
+    routine = decide_presentation(
+        PresentationEvent(
+            "release-sanity",
+            PresentationEventKind.ROUTINE_VALIDATION_PASSED,
+            1,
+            evidence_refs=(f"workflow:{workflow_identity}",),
+        ),
+        ROOT,
+        PresentationMode.MURMURS,
+    )
+    assert routine.disposition is PresentationDisposition.MURMUR
+    assert receipt.digest == workflow_identity
+    assert receipt.arbiter_disposition == "AUTO_CONTINUE"
+    assert receipt.validation_status == "NOT_REQUIRED"
+
+    terminal = decide_presentation(
+        PresentationEvent(
+            "release-sanity",
+            PresentationEventKind.TASK_COMPLETED,
+            2,
+            evidence_refs=(f"workflow:{workflow_identity}",),
+        ),
+        ROOT,
+        PresentationMode.MURMURS,
+    )
+    assert terminal.disposition is PresentationDisposition.EXPLAIN
+    assert terminal.requires_explanation is True
+    assert receipt.digest == workflow_identity

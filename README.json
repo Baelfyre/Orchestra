@@ -10,7 +10,11 @@
     "full_name": "Baelfyre/Orchestra",
     "url": "https://github.com/Baelfyre/Orchestra",
     "license": "MIT",
-    "package_version_source": "plugin.json#/version"
+    "package_version": "1.5.0",
+    "package_version_source": "plugin.json#/version",
+    "current_public_release": "v1.4.0",
+    "release_candidate": "v1.5.0",
+    "release_candidate_status": "PREPARED_NOT_RELEASED"
   },
   "purpose": {
     "summary": "Portable orchestration runtime for structured AI-assisted software development.",
@@ -44,6 +48,10 @@
     "schemas_directory": "machine/schemas",
     "source_state_receipt_schema": "machine/schemas/source-state-receipt.schema.json",
     "validation_execution_receipt_schema": "machine/schemas/validation-execution-receipt.schema.json",
+    "compliance_query_receipt_schema": "machine/schemas/compliance-query-receipt.schema.json",
+    "compliance_consumption_receipt_schema": "machine/schemas/compliance-consumption-receipt.schema.json",
+    "steward_traceability_receipt_schema": "machine/schemas/steward-traceability-receipt.schema.json",
+    "compliance_set_equality_gate_schema": "machine/schemas/compliance-set-equality-gate.schema.json",
     "test_evidence_schema": "machine/schemas/test-evidence.schema.json",
     "cosmic_ray_evidence_schema": "machine/schemas/cosmic-ray-evidence.schema.json",
     "mutation_evidence_schema": "machine/schemas/mutation-evidence.schema.json",
@@ -80,6 +88,7 @@
     "routing_reference": "ROUTING_MAP.md",
     "governance_reference": "docs/governance/GOVERNANCE_LAYER.md",
     "compliance_registry_reference": "docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md",
+    "compliance_protocol_runtime": "orchestra_runtime/compliance_protocol.py",
     "murmurs_reference": "docs/project/MURMURS_COMMUNICATION_BUDGET.md",
     "presentation": {
       "host_default_mode": "NORMAL",
@@ -110,10 +119,12 @@
     "governance_workflow": ".github/workflows/governance-check.yml",
     "cosmic_ray_confidence_workflow": ".github/workflows/cosmic-ray-confidence.yml",
     "legacy_mutmut_evidence_workflow": ".github/workflows/mutation-confidence.yml",
+    "command_surface_parity_test": "tests/runtime/test_command_surface_parity.py",
     "test_evidence_schema": "machine/schemas/test-evidence.schema.json",
     "test_evidence_schema_version": "orchestra.test-evidence.v1",
     "communication_measurement_schema": "machine/schemas/communication-measurement.schema.json",
     "murmurs_measurement_policy": "Repository simulation may prove deterministic structural reductions such as fewer model-progress calls, but billing/model token deltas are reportable only when comparable live host-reported counters share the same counter identity. Unavailable token evidence remains unavailable rather than estimated.",
+    "release_candidate_policy": "v1.5.0 publication requires fresh exact-head runtime, branch, critical-module, mutation, Cosmic Ray, cross-platform, CodeQL, governance, documentation-parity, and release-identity evidence. Pre-version evidence is diagnostic only after source-head movement.",
     "mutation_evidence_policy": "Mutation scores are scope-specific and valid only when the configured unmutated baseline passes, all scheduled mutation jobs complete, and the machine-readable evidence artifact binds the tested checkout SHA and source-head SHA.",
     "evidence_policy": "Runtime confidence claims must be derived from persisted machine-readable CI evidence bound to the tested checkout SHA and source-head SHA."
   },
@@ -123,6 +134,7 @@
     "roadmap": "docs/project/ROADMAP.md",
     "changelog": "CHANGELOG.md",
     "release_docs": "docs/releases/",
+    "release_candidate_v1_5_0": "docs/releases/v1.5.0-machine-verifiable-control-plane-murmurs-release-candidate.md",
     "validation_evidence": "docs/validation/",
     "third_party_provenance": "docs/THIRD_PARTY_PROVENANCE.md",
     "merge_readiness": "docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md",
@@ -146,6 +158,7 @@
     "treat_generated_or_derived_views_as_non_authoritative_when_their_source_contract_is_available": true,
     "treat_mergeable_boolean_without_clean_mergeable_state_as_insufficient": true,
     "treat_murmurs_as_presentation_only": true,
-    "do_not_claim_murmurs_token_savings_without_comparable_host_reported_counters": true
+    "do_not_claim_murmurs_token_savings_without_comparable_host_reported_counters": true,
+    "treat_v1_5_0_as_prepared_not_released_until_tag_and_release_identity_are_independently_verified": true
   }
 }
