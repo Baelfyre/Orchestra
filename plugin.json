@@ -31,7 +31,9 @@
     "cipher",
     "security-check",
     "dagger",
-    "resilience-check"
+    "resilience-check",
+    "compliance-registry",
+    "compliance-review"
   ],
   "skills": [
     {
