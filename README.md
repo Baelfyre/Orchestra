@@ -158,7 +158,7 @@ v1.3.0 deepens the knowledge available to Orchestra's existing specialists witho
 - **Ponytail:** deeper stack discovery, language/runtime references, build and test tooling, implementation foundations, and worked implementation patterns.
 - **Clockwork:** modular and distributed architecture, concurrency ownership, caching, API compatibility/versioning, multi-tenancy, jobs, event-driven flows, outbox/inbox placement, and durable workflow patterns.
 - **Cipher:** defensive threat modeling, authentication/session/OAuth/OIDC boundaries, authorization and tenant controls, web/API security, secrets and cryptographic misuse, framework-aware review, and security-tool interpretation.
-- **Cloak:** semantic HTML, ARIA, keyboard and focus behavior, responsive CSS containment, forms and validation recovery, design tokens, component states, frontend routing, and component-boundary literacy.
+- **Cloak:** semantic HTML, ARIA, keyboard and focus behavior, responsive CSS containment, forms and validation recovery, design tokens/component states, frontend routing, and component-boundary literacy.
 - **Dagger:** safe non-production workload, stress, soak, concurrency, resource-pressure, bounded fault-injection, retry-amplification, recovery-measurement, RTO/RPO, and resilience-tooling guidance while preserving simulation and authorization guardrails.
 - **Chronicler:** database dialect and ORM/migration semantics, transaction isolation, MVCC, locking/deadlock analysis, tenant isolation, query-plan evidence, and expand-migrate-contract schema-change planning.
 - **Overseer:** unit/integration/contract/E2E strategy, property and mutation testing, flaky-test diagnosis, deterministic isolation, coverage interpretation, CI/browser/device matrices, performance acceptance, and test-data lifecycle management.
@@ -353,6 +353,8 @@ The validation chain covers:
 - native Windows, Ubuntu, and macOS validation;
 - `git diff --check` and exact authorized scope.
 
+For API-authored changes whose initial source head is unsigned, Orchestra uses a two-PR signed-materialization transport. The source branch is reviewed directly against an isolated `materialize/**` branch, where the bounded `signed-materialization` workflow emits non-authorizing machine evidence instead of rerunning the full behavior/runtime and mutation matrix. After GitHub Squash creates a verified signed commit with exact reviewed-tree and canonical-parent parity, that signed head opens a fresh PR to `main` and must pass the complete protected-main matrix. Materialization evidence never substitutes for canonical exact-head validation. See [Signed Materialization Optimization](docs/validation/SIGNED_MATERIALIZATION_OPTIMIZATION_2026_08_16.md).
+
 For autonomous or delegated merges, Orchestra additionally requires the fail-closed [Autonomous Merge Readiness Protocol](docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md): a green canonical baseline, exact-head evidence, a raw current PR state with `mergeable == true` and `mergeable_state == clean`, complete successful required checks, expected-head merge guard where supported, no governed bypass use, and independent post-merge verification.
 
 ## Release Lineage
@@ -433,6 +435,7 @@ See the [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration.md). 
 
 ### Release and maintainers
 
+- [Signed Materialization Optimization](docs/validation/SIGNED_MATERIALIZATION_OPTIMIZATION_2026_08_16.md)
 - [v1.5.0 Machine-Verifiable Control Plane and Murmurs Release Candidate](docs/releases/v1.5.0-machine-verifiable-control-plane-murmurs-release-candidate.md)
 - [v1.5.0 Release Readiness Evidence](docs/validation/V1_5_0_RELEASE_READINESS_EVIDENCE.md)
 - [v1.5.0 Publication Closeout](docs/validation/V1_5_0_PUBLICATION_CLOSEOUT.md)
