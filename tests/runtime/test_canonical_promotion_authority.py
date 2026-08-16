@@ -3,6 +3,8 @@ from __future__ import annotations
 import inspect
 from pathlib import Path
 
+import pytest
+
 from orchestra_runtime import machine_contracts as contracts
 from orchestra_runtime.models import (
     ContextPackage,
@@ -10,6 +12,7 @@ from orchestra_runtime.models import (
     VALID_SPECIALISTS,
 )
 from orchestra_runtime import services
+from orchestra_runtime.errors import RuntimeInitializationError
 from orchestra_runtime.services import GovernanceValidator
 
 
@@ -83,6 +86,36 @@ def test_default_governance_validator_rules_match_machine_policy():
         for record in contracts.runtime_validation_rule_records(ROOT)
     )
     assert actual == expected
+
+
+def test_default_governance_rules_fail_closed_on_duplicate_rule_identity(monkeypatch):
+    records = (
+        {
+            "rule_id": "duplicate-rule",
+            "skill_slugs": ["cipher"],
+            "command_names": [],
+            "validator_key": "governance_validated",
+            "dry_run_required": False,
+        },
+        {
+            "rule_id": "duplicate-rule",
+            "skill_slugs": ["the-governor"],
+            "command_names": [],
+            "validator_key": "governance_validated",
+            "dry_run_required": False,
+        },
+    )
+    monkeypatch.setattr(services, "_DEFAULT_RUNTIME_VALIDATION_RULE_RECORDS", records)
+
+    with pytest.raises(RuntimeInitializationError, match="machine governance validation rule is invalid"):
+        services._default_governance_rules()
+
+
+def test_default_governance_rules_fail_closed_when_machine_policy_has_no_runtime_rules(monkeypatch):
+    monkeypatch.setattr(services, "_DEFAULT_RUNTIME_VALIDATION_RULE_RECORDS", ())
+
+    with pytest.raises(RuntimeInitializationError, match="machine governance policy contains no runtime validation rules"):
+        services._default_governance_rules()
 
 
 def test_machine_dry_run_requirement_is_enforced_without_rule_name_special_case():
