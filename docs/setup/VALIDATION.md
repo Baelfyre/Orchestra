@@ -56,6 +56,20 @@ python .\scripts\validate_cross_layer_synchronicity_contract.py
 python .\tests\behavior\test_cross_layer_synchronicity_contract.py
 ```
 
+### API-authored signed materialization
+
+When API/file-level repository authoring produces an unsigned source head, Orchestra uses the machine policy in `machine/governance/policy.v1.json` and the two-PR signed-materialization flow documented in `docs/validation/SIGNED_MATERIALIZATION_OPTIMIZATION_2026_08_16.md`.
+
+A pull request targeting `materialize/**` runs only `.github/workflows/signed-materialization.yml`. It validates the exact source head, target branch class, changed-path set, `git diff --check`, and machine transport policy, then uploads `signed-materialization-evidence`. That evidence is signing-transport evidence only and cannot satisfy canonical merge readiness.
+
+The full `validate` and `runtime-tests` jobs, plus path-triggered Mutmut and Cosmic Ray campaigns, run on pull requests targeting `main`. The signed materialized commit must therefore open a fresh canonical PR to `main` and pass the complete protected-main matrix on its exact signed head.
+
+Run the focused transport regression directly:
+
+```powershell
+python .\tests\behavior\test_signed_materialization.py
+```
+
 ---
 
 ## 2. Programmatic Runtime Guardrails

@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.5.0 Signed Materialization Optimization - Candidate
+
+- Replaces the historical three-PR API-authored signing pattern with a two-PR transport: the unsigned source branch is reviewed directly against an isolated `materialize/**` target, then the verified GitHub-signed Squash result becomes the head of the canonical PR to `main`.
+- Adds machine-owned signed-materialization transport rules to `machine/governance/policy.v1.json`, explicitly denying canonical merge-readiness, project-state promotion, release, and bypass authority to the materialization lane.
+- Adds `orchestra.signed-materialization-evidence.v1`, a fail-closed validator, regression coverage, and the bounded `signed-materialization` workflow for exact source-head, target-branch, changed-path, tree, and `git diff --check` evidence.
+- Scopes the full `validate`/`runtime-tests`, Mutmut, and Cosmic Ray pull-request workflows to `main`, so intermediate signing PRs no longer repeat canonical validation or mutation campaigns.
+- Preserves the complete protected-main matrix on the final signed PR, including current `mergeable=true`, `mergeable_state=clean`, signed-commit, exact-head, review-thread, expected-head Squash, and independent canonical-read requirements. Materialization evidence is never reusable as canonical exact-head evidence.
+- Does not change the `Protect main` ruleset, grant bypass authority, move the fixed `v1.5.0` release/tag, deploy, activate policy, refresh installed integrations, perform destructive cleanup, force push, rewrite history, delete branches, or implement MCP.
+
 ## v1.5.0 Machine-Verifiable Control Plane and Murmurs - Published 2026-08-16
 
 - Published `Orchestra v1.5.0: Machine-Verifiable Control Plane and Murmurs` as immutable, non-draft, non-prerelease GitHub Release id `371314544` from lightweight tag `v1.5.0`, which resolves directly to exact signed canonical release commit `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`.
@@ -24,7 +33,7 @@
 ## Post-v1.4.0 Governance Stabilization - Merge-State Fail-Closed Repair
 
 - Repairs autonomous merge readiness so `mergeable=true` is insufficient for ordinary governed progression; the current PR read must also report `mergeable_state=clean`.
-- Treats missing or unknown mergeability as `WAIT_FOR_EVIDENCE` and fails closed on `blocked`, `behind`, `dirty`, `unstable`, or any other observed non-clean merge state.
+- Treats missing or unknown mergeability as `WAIT_FOR_EVIDENCE` and fails closed on `blocked`, `behind`, `dirty`, `unstable`, or any other observed non-clean state.
 - Carries the accepted pre-merge disposition, mergeable state, and bypass-use record into post-merge verification so API success, a signed canonical commit, or matching tree content cannot retroactively satisfy a failed pre-merge gate.
 - Adds regression coverage for the PR #299 incident shape and documents a forward-only stabilization boundary under #302 without claiming a GitHub-recorded bypass event that is not independently available.
 - Does not rewrite PR #299 history, change the `Protect main` ruleset, weaken validation or coverage, select a version, publish a release, deploy, refresh installed integrations, or begin Murmurs or MCP work.
@@ -42,7 +51,7 @@
 
 - Consolidated the control-plane re-foundation tracked by #273 into PR #294, covering exact source and validation receipts, typed governance and deterministic Arbiter Kernel enforcement, machine specialist/routing/governance contracts, exact compliance set-equality receipts, host capability/conformance contracts, typed continuity and JSONL context state, persistent remediation circuit breakers, deterministic pre-execution policy gating, and P9 shadow conformance.
 - P9 began in `SHADOW`, advanced through separately governed `ADVISORY` and `VALIDATION_AUTHORITY` checkpoints, and this candidate advances only to `CANONICAL_PROMOTION_AUTHORITY`; it does not grant legacy retirement or installed-integration mutation.
-- The versioned machine specialist registry, routing contract, and governance policy now supply runtime default specialist identity, command routes and ambiguity fallback, governance-required specialist classification, runtime validation rules, Arbiter transition precedence, and remediation defaults. Backward-compatible runtime names remain derived compatibility surfaces rather than independent authority.
+- The versioned machine specialist registry, routing contract, and governance policy now supply runtime default specialist identity, command routes and ambiguity fallback, governance-required specialist classification, governance validation rules, Arbiter transition precedence, and remediation defaults. Backward-compatible runtime names remain derived compatibility surfaces rather than independent authority.
 - Release hardening persists machine-readable runtime evidence with statement and branch coverage, critical-module floors, property-based regressions, workflow-sanity coverage, bounded mutation-confidence evidence, and cross-platform validation. These measurements are confidence evidence, not proof of correctness.
 - PR #294 is canonical through governed Squash merge and independent readback at signed commit `76eb96b27439700a517f75c5a921465e5c2987e6` with tree `6f98b380d984430303d630462ad4535cda483925`. This post-`v1.4.0` integration preserves `v1.4.0` as the current published release at that checkpoint and creates no new tag, version, or GitHub Release.
 - Added the compact machine release-evidence index at `machine/release-evidence/control-plane-refoundation-p0-p1-p9.json`, referencing the exact final integrated candidate runtime and bounded Cosmic Ray evidence without treating coverage or mutation score as proof of correctness.
@@ -96,7 +105,7 @@
 ## Post-v1.2.0 Specialist Knowledge Layer - SK8 Scribe - Pending
 
 - Deepened Scribe's technical-documentation knowledge without changing routing, runtime architecture, publication state, or domain-specialist ownership.
-- Added progressive-disclosure guidance for CommonMark/GitHub-Flavored Markdown, changelog and ADR conventions, API/reference documentation, versioned documentation, deprecation/sunset records, claim freshness, and cross-link/anchor validation.
+- Added progressive-disclosure guidance for CommonMark/GitHub-Flavored Markdown, changelog and ADR conventions, API/reference documentation, versioned documentation, deprecation/sunset records, source-backed claims, and link/anchor freshness.
 - Expanded documentation standards and audit checks for heading/anchor stability, fenced code and tables, source revisions, effective dates, verified commands, API examples, version selectors, redirects, and broken-link reporting.
 - Added a worked source-backed API change example that separates verified current behavior, compatibility status, planned work, and release authority.
 - Kept the campaign Markdown-primary and JSON-selective: the SK8 audit found no deterministic machine-parsing need that justified a Scribe JSON catalog.

@@ -3,6 +3,8 @@ name: cosmic-ray-confidence
 on:
   workflow_dispatch:
   pull_request:
+    branches:
+      - main
     paths:
       - "cosmic-ray.toml"
       - ".github/workflows/cosmic-ray-confidence.yml"
