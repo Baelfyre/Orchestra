@@ -19,7 +19,6 @@ Do not load it for obvious single-owner work.
 - Conductor loads the full envelope once and passes unit-specific deltas to specialists.
 - Routing metadata does not create or expand authority.
 
-
 ## Canonical Routing Rules
 
 | Task Type | Target Skill | Condition |
@@ -36,9 +35,13 @@ Do not load it for obvious single-owner work.
 | Diagram and model generation | `weaver` | Visual artifact owner is clear |
 | Minimal implementation after design is ready | `ponytail` | Execution owner is clear and upstream design/governance are ready |
 | Controlled destructive-path simulation | `dagger` | Explicit authorization and guardrail validation are present |
+| Compliance Registry cache lifecycle and query operations | `conductor` -> deterministic `scripts/compliance_registry.py` | Explicit `/compliance-registry` command; Registry data remains evidence, not authority |
+| Registry-backed governed compliance review | `conductor` | Explicit `/compliance-review` command; Governor applicability, Steward traceability, and Arbiter freshness/set-equality review are required |
 | Broad, unclear, or overlapping requests | `conductor` | Ownership overlaps, dependencies exist, or route split is unclear |
 | Cross-specialist contract coordination | `the-tuner` | Conductor has classified material multi-domain dependencies, missing ownership, contradiction, stale contract, or late boundary crossing |
 | Frontend/backend synchronicity | `conductor` -> `the-tuner` | Frozen packet and authority exist |
+
+The two compliance commands are explicit public commands. They must not rely on the unknown-command ambiguity fallback. `/compliance-registry` uses Conductor only as the command entry boundary and delegates data lifecycle work to the deterministic Registry script. `/compliance-review` follows the governed ordered sequence below; no role may treat Registry evidence as release, deployment, execution, or legal authority.
 
 ## Ordered Multi-Skill Sequences
 
@@ -47,11 +50,11 @@ Do not load it for obvious single-owner work.
 - `chronicler -> overseer` for persistence semantics followed by migration or DB validation
 - `the-steward -> scribe` for required SDLC documentation shaped by business-alignment governance
 - `the-governor -> scribe` for compliance documentation shaped by governance
+- `conductor -> the-governor -> the-steward -> arbiter` for Registry-backed governed compliance review
 - `arbiter -> overseer` when validation evidence must be executed or refreshed before continuation
 - `cloak -> clockwork -> ponytail` when frontend design changes API shape, data flow, or service boundaries
 - `cloak -> cipher -> ponytail` when frontend design affects authorization, privacy, or destructive journeys
 - `cloak -> clockwork -> ponytail -> cloak -> overseer` for UI-affecting implementation, correction, renewed static audit, and evidence validation
-
 - `conductor -> the-tuner -> domain specialists -> the-tuner -> ponytail` for material multi-domain contract assembly before implementation
 - `ponytail -> the-tuner -> overseer -> arbiter` for post-implementation delta reconciliation, evidence, and continuation review
 - `the-tuner -> conductor -> affected specialists or human` when ownership is missing or specialist contracts contradict
