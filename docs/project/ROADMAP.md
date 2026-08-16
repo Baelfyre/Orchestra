@@ -96,7 +96,7 @@ Publication closeout evidence is recorded in `docs/validation/V1_3_0_PUBLICATION
 - [x] Add and exercise the fail-closed README Impact Gate.
 - [x] Validate Registry `0.1.0` candidate compatibility, freshness propagation, source query, and project pinning.
 - [x] Activate and independently verify the Registry `compliance-ruleset`, then merge foundation, source/freshness pilot, deterministic packaging, and publication-readiness phases.
-- [x] Publish immutable trusted Registry release `registry-v0.1.0` at exact Registry canonical `3821bcb55125b4df28b6423650e6e17ac67b`.
+- [x] Publish immutable trusted Registry release `registry-v0.1.0` at exact Registry canonical `3821bcb55125b4d8864f28b6423650e6e17ac67b`.
 - [x] Run real Orchestra network provenance against the immutable Registry release and verify exact identity, bundle/manifest trust, `CURRENT` freshness, PH source query, pinning, update-check, and idempotent re-sync.
 - [x] Finalize Orchestra exact-head release readiness through PR #271 and signed canonical `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50` with the complete validation matrix green.
 - [x] Under separate explicit publication authority, publish lightweight tag `v1.4.0` resolving directly to the exact release commit and GitHub Release id `370658917`, then independently verify non-draft, non-prerelease, immutable, and latest state at that checkpoint.
