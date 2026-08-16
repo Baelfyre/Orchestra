@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/murmurs-vocabulary.schema.json",
+  "title": "Orchestra Murmurs Vocabulary",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "selection",
+    "entries",
+    "constraints"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "orchestra.murmurs-vocabulary.v1"
+    },
+    "selection": {
+      "type": "string",
+      "const": "SHA256_MODULO"
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 12,
+        "pattern": "^[^\\r\\n]+$"
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maximum_characters",
+        "allow_newlines",
+        "allow_status_claims"
+      ],
+      "properties": {
+        "maximum_characters": {"type": "integer", "const": 12},
+        "allow_newlines": {"const": false},
+        "allow_status_claims": {"const": false}
+      }
+    }
+  }
+}
