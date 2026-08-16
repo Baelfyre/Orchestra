@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/presentation-policy.schema.json",
+  "title": "Orchestra Presentation Policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "default_disposition",
+    "events",
+    "explain_required",
+    "authority_effect"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "orchestra.presentation-policy.v1"
+    },
+    "default_disposition": {
+      "type": "string",
+      "const": "EXPLAIN"
+    },
+    "events": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "EXECUTION_HEARTBEAT",
+        "TOOL_STARTED",
+        "TOOL_COMPLETED",
+        "ROUTINE_VALIDATION_PASSED",
+        "HUMAN_ACTION_REQUIRED",
+        "AUTHORITY_REQUIRED",
+        "VALIDATION_FAILED",
+        "UNRECOVERABLE_BLOCKER",
+        "GOVERNANCE_STOP",
+        "HANDOFF_REQUIRED",
+        "TASK_COMPLETED",
+        "TASK_FAILED"
+      ],
+      "properties": {
+        "EXECUTION_HEARTBEAT": {"enum": ["SILENT", "MURMUR", "EXPLAIN"]},
+        "TOOL_STARTED": {"enum": ["SILENT", "MURMUR", "EXPLAIN"]},
+        "TOOL_COMPLETED": {"enum": ["SILENT", "MURMUR", "EXPLAIN"]},
+        "ROUTINE_VALIDATION_PASSED": {"enum": ["SILENT", "MURMUR", "EXPLAIN"]},
+        "HUMAN_ACTION_REQUIRED": {"const": "EXPLAIN"},
+        "AUTHORITY_REQUIRED": {"const": "EXPLAIN"},
+        "VALIDATION_FAILED": {"const": "EXPLAIN"},
+        "UNRECOVERABLE_BLOCKER": {"const": "EXPLAIN"},
+        "GOVERNANCE_STOP": {"const": "EXPLAIN"},
+        "HANDOFF_REQUIRED": {"const": "EXPLAIN"},
+        "TASK_COMPLETED": {"const": "EXPLAIN"},
+        "TASK_FAILED": {"const": "EXPLAIN"}
+      }
+    },
+    "explain_required": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "prefixItems": [
+        {"const": "HUMAN_ACTION_REQUIRED"},
+        {"const": "AUTHORITY_REQUIRED"},
+        {"const": "VALIDATION_FAILED"},
+        {"const": "UNRECOVERABLE_BLOCKER"},
+        {"const": "GOVERNANCE_STOP"},
+        {"const": "HANDOFF_REQUIRED"},
+        {"const": "TASK_COMPLETED"},
+        {"const": "TASK_FAILED"}
+      ],
+      "items": false
+    },
+    "authority_effect": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "presentation_may_change_machine_state",
+        "presentation_may_override_governance",
+        "presentation_may_suppress_required_explanation"
+      ],
+      "properties": {
+        "presentation_may_change_machine_state": {"const": false},
+        "presentation_may_override_governance": {"const": false},
+        "presentation_may_suppress_required_explanation": {"const": false}
+      }
+    }
+  }
+}
