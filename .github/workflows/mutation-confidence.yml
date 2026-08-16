@@ -128,6 +128,7 @@ jobs:
             (
               cd "$workspace" || exit 1
               : > "$run_output"
+              : > "$results_output"
               run_code=0
               target_index=0
               builder_args=()
@@ -137,6 +138,8 @@ jobs:
                 mutmut_selector="${target_spec#*=}"
                 target_index=$((target_index + 1))
                 target_output="$artifact_root/${label}-target-${target_index}-run.txt"
+                target_results="$artifact_root/${label}-target-${target_index}-results.txt"
+
                 echo "MUTATION_TARGET_PATTERN=$public_pattern" | tee -a "$run_output"
                 echo "MUTMUT_SELECTOR=$mutmut_selector" | tee -a "$run_output"
                 mutmut run "$mutmut_selector" 2>&1 | tee "$target_output"
@@ -144,17 +147,23 @@ jobs:
                 cat "$target_output" >> "$run_output"
                 echo "MUTATION_TARGET_EXIT_CODE=$target_code" | tee -a "$run_output"
                 echo "$target_code" > "$artifact_root/${label}-target-${target_index}-exit-code.txt"
+
+                mutmut results 2>&1 | tee "$target_results"
+                target_results_code=${PIPESTATUS[0]}
+                echo "$target_results_code" > "$artifact_root/${label}-target-${target_index}-results-exit-code.txt"
+                echo "TARGET_RESULTS_BEGIN=$public_pattern" >> "$results_output"
+                cat "$target_results" >> "$results_output"
+                echo "TARGET_RESULTS_END=$public_pattern" >> "$results_output"
+
                 builder_args+=(--target-run "$public_pattern=$target_output")
-                if [ "$target_code" != "0" ]; then
+                builder_args+=(--target-result "$public_pattern=$target_results")
+                if [ "$target_code" != "0" ] || [ "$target_results_code" != "0" ]; then
                   run_code=1
                 fi
               done
 
               echo "$run_code" | tee "$artifact_root/${label}-mutmut-run-exit-code.txt"
-
-              mutmut results 2>&1 | tee "$results_output"
-              results_code=${PIPESTATUS[0]}
-              echo "$results_code" | tee "$artifact_root/${label}-mutmut-results-exit-code.txt"
+              echo "$run_code" | tee "$artifact_root/${label}-mutmut-results-exit-code.txt"
 
               python scripts/validation/build_mutation_evidence.py \
                 --run-output "$run_output" \
@@ -174,7 +183,7 @@ jobs:
               evidence_code=$?
               echo "$evidence_code" | tee "$artifact_root/${label}-evidence-exit-code.txt"
 
-              if [ "$run_code" != "0" ] || [ "$results_code" != "0" ] || [ "$evidence_code" != "0" ]; then
+              if [ "$run_code" != "0" ] || [ "$evidence_code" != "0" ]; then
                 exit 1
               fi
               exit 0
@@ -203,7 +212,7 @@ jobs:
           fi
           exit 0
 
-      - name: Upload mutation evidence baseline
+      - name: Upload mutation evidence
         if: always()
         uses: actions/upload-artifact@v7
         with:
