@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+from collections import Counter
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -11,6 +12,12 @@ from typing import Any
 
 MUTATION_EVIDENCE_SCHEMA_VERSION = "orchestra.mutation-evidence.v1"
 _SHA_RE = re.compile(r"^[0-9a-f]{40}$")
+_RESULT_RE = re.compile(r"^\s*(?P<mutant>\S+):\s*(?P<status>.+?)\s*$")
+_FATAL_RUN_MARKERS = (
+    "failed to collect stats",
+    "failed to collect stats, no active tests found",
+    "stopping early, because we could not find any test case for any mutant",
+)
 
 
 def _sha256(path: Path) -> str:
@@ -42,10 +49,22 @@ def _read_modules(config_path: Path) -> list[str]:
                 break
             modules.append(stripped)
     if not modules:
-        raise ValueError("setup.cfg contains no only_mutate entries")
+        raise ValueError("mutation configuration contains no only_mutate entries")
     if len(modules) != len(set(modules)):
         raise ValueError("mutation scope contains duplicate modules")
     return modules
+
+
+def _read_mutant_statuses(results_output: Path) -> list[str]:
+    statuses: list[str] = []
+    for line in results_output.read_text(encoding="utf-8", errors="replace").splitlines():
+        match = _RESULT_RE.match(line)
+        if match is None:
+            continue
+        statuses.append(match.group("status").strip().casefold())
+    if not statuses:
+        raise ValueError("mutation results contain no mutant classification records")
+    return statuses
 
 
 def build_mutation_evidence(
@@ -71,12 +90,34 @@ def build_mutation_evidence(
     repo = str(repository or "").strip()
     if "/" not in repo:
         raise ValueError("repository must use owner/name form")
+
+    tested = _git_sha(tested_sha, "tested_sha")
+    source_head = _git_sha(source_head_sha, "source_head_sha")
+    if tested != source_head:
+        raise ValueError("tested_sha must exactly match source_head_sha")
+    if int(run_exit_code) != 0:
+        raise ValueError(f"mutation execution failed with exit code {int(run_exit_code)}")
+
+    run_text = run_output.read_text(encoding="utf-8", errors="replace").casefold()
+    fatal_markers = [marker for marker in _FATAL_RUN_MARKERS if marker in run_text]
+    if fatal_markers:
+        raise ValueError(f"mutation execution contains fatal instrumentation marker: {fatal_markers[0]}")
+
+    statuses = _read_mutant_statuses(results_output)
+    status_counts = Counter(statuses)
+    not_checked_count = status_counts.get("not checked", 0)
+    interrupted_count = status_counts.get("check was interrupted by user", 0)
+    if not_checked_count:
+        raise ValueError(f"mutation results contain {not_checked_count} not checked mutants")
+    if interrupted_count:
+        raise ValueError(f"mutation results contain {interrupted_count} interrupted mutants")
+
     return {
         "schema_version": MUTATION_EVIDENCE_SCHEMA_VERSION,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z"),
         "repository": repo,
-        "tested_sha": _git_sha(tested_sha, "tested_sha"),
-        "source_head_sha": _git_sha(source_head_sha, "source_head_sha"),
+        "tested_sha": tested,
+        "source_head_sha": source_head,
         "workflow": {
             "run_id": str(workflow_run_id or "").strip(),
             "run_attempt": str(workflow_run_attempt or "").strip(),
@@ -93,7 +134,14 @@ def build_mutation_evidence(
         "execution": {
             "run_exit_code": int(run_exit_code),
             "score_status": "UNSCORED_BASELINE",
-            "interpretation": "Raw mutation baseline only. Surviving and suspicious mutants require classification before a release score or gate is defined."
+            "classification_status": "COMPLETE",
+            "result_record_count": len(statuses),
+            "not_checked_count": not_checked_count,
+            "status_counts": dict(sorted(status_counts.items())),
+            "interpretation": (
+                "Mutmut completed on the exact source head and every reported mutant record was classified. "
+                "This remains an unscored baseline; surviving or suspicious mutants remain explicit confidence findings."
+            ),
         },
         "reports": {
             "run_output": run_output.name,
@@ -136,7 +184,20 @@ def main(argv: list[str] | None = None) -> int:
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(evidence, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    print(json.dumps({"tested_sha": evidence["tested_sha"], "source_head_sha": evidence["source_head_sha"], "run_exit_code": evidence["execution"]["run_exit_code"], "score_status": evidence["execution"]["score_status"]}, sort_keys=True))
+    print(
+        json.dumps(
+            {
+                "tested_sha": evidence["tested_sha"],
+                "source_head_sha": evidence["source_head_sha"],
+                "run_exit_code": evidence["execution"]["run_exit_code"],
+                "score_status": evidence["execution"]["score_status"],
+                "classification_status": evidence["execution"]["classification_status"],
+                "result_record_count": evidence["execution"]["result_record_count"],
+                "not_checked_count": evidence["execution"]["not_checked_count"],
+            },
+            sort_keys=True,
+        )
+    )
     return 0
 
 
