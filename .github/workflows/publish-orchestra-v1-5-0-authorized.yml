@@ -1,0 +1,159 @@
+name: Publish Orchestra v1.5.0 Authorized
+
+on:
+  push:
+    branches:
+      - ops/publish-orchestra-v1-5-0-20260816
+    paths:
+      - .github/workflows/publish-orchestra-v1-5-0-authorized.yml
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish exact immutable v1.5.0 release
+        shell: bash
+        env:
+          EXPECTED_MAIN_SHA: b0a56cc7af8ad78234754bcb29ed07f6ab54d920
+          TAG: v1.5.0
+          RELEASE_NAME: "Orchestra v1.5.0: Machine-Verifiable Control Plane and Murmurs"
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          API="https://api.github.com/repos/${GITHUB_REPOSITORY}"
+          auth=(-H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28")
+
+          current_main="$(curl -fsS "${auth[@]}" "${API}/commits/main" | jq -r '.sha')"
+          echo "CURRENT_MAIN=${current_main}"
+          test "${current_main}" = "${EXPECTED_MAIN_SHA}"
+
+          release_code="$(curl -sS -o /tmp/existing-release.json -w '%{http_code}' "${auth[@]}" "${API}/releases/tags/${TAG}")"
+          test "${release_code}" = "404"
+
+          tag_code="$(curl -sS -o /tmp/existing-tag.json -w '%{http_code}' "${auth[@]}" "${API}/git/ref/tags/${TAG}")"
+          test "${tag_code}" = "404"
+
+          cat > /tmp/release-notes.md <<'EOF'
+          ## Release Theme
+
+          Orchestra v1.5.0 delivers the machine-verifiable control-plane re-foundation and the additive Murmurs presentation budget. The release moves exact identifiers, validation outcomes, routing, compliance consumption, governance dispositions, continuity state, and canonical promotion further out of the model integrity boundary and into deterministic machine contracts and receipts.
+
+          Core principle: **Agents reason. Machines attest.**
+
+          ## Machine-Verifiable Control Plane
+
+          - Completes the controlled P0/P1-P9 re-foundation and reaches `LEGACY_RETIRED`.
+          - Uses versioned machine contracts for evidence, governance, routing, compliance, host capabilities, continuity, remediation, and pre-execution policy boundaries.
+          - Preserves human-readable Markdown as documentation while JSON, schemas, receipts, and deterministic validators own machine state.
+          - Adds exact-state binding, stale-evidence rejection, fail-closed validation-result derivation, Registry set equality, canonical routing receipts, and bounded remediation controls.
+          - Preserves backward-compatible public package, command, specialist, and host surfaces while deriving retained compatibility views from canonical machine contracts.
+
+          ## Murmurs Communication Budget
+
+          - Adds explicit `NORMAL` and opt-in `MURMURS` modes.
+          - Adds deterministic local `SILENT`, `MURMUR`, and required `EXPLAIN` presentation dispositions.
+          - Keeps human action, authority escalation, validation failure, blockers, governance stops, handoff, completion, and failure hard-bound to substantive explanation.
+          - Keeps execution, validation, governance state, receipts, and digests unchanged by presentation compression.
+          - Controlled repository evidence records routine modeled progress calls changing from `4` in NORMAL to `0` in MURMURS while execution, validation, and governance identities remain equal.
+          - Comparable trustworthy live-host token counters were unavailable in this campaign, so no percentage token-saving claim is made. Live-host effectiveness measurement continues separately after release.
+
+          ## Compliance Registry Alignment
+
+          - Explicitly registers the existing `compliance-registry` and `compliance-review` commands in the public command surface.
+          - Adds canonical machine routes for Registry lifecycle/query and governed compliance review ownership.
+          - Adds command-to-route parity regression coverage.
+          - Updates machine discovery/indexing and compliance integration documentation to the current receipt, digest, freshness, exact-set, Steward traceability, and Arbiter Kernel architecture.
+          - Remains compatible with immutable trusted Registry release `registry-v0.1.0`; no Registry v0.1 data-format rebuild is required for v1.5.0.
+
+          ## Final Validation
+
+          Release source commit: `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`
+
+          Exact signed release-candidate and canonical evidence:
+
+          - runtime tests: **1,058 / 1,058 PASS**
+          - statement coverage: **98.47%**
+          - branch coverage: **95.36%**
+          - critical control-plane statement floor: **>=98% PASS**
+          - critical control-plane branch floor: **>=95% PASS**
+          - current coverage misses classified with no broad denominator exclusions
+          - workflow sanity: PASS
+          - P9 shadow conformance: PASS
+          - Governance Check / README Impact Gate: PASS
+          - CodeQL: PASS
+          - native Windows: PASS
+          - native Ubuntu: PASS
+          - native macOS: PASS
+          - Mutmut bounded exact-head evidence: COMPLETE
+          - integrated Cosmic Ray bounded evidence: COMPLETE
+          - canonical release tree: `4045bde297951b6cafa107ea39c227555e13bd02`
+          - canonical commit signature: VERIFIED VALID
+
+          Mutation scores remain confidence evidence, not proof of correctness. Surviving classified mutants remain visible in the release evidence.
+
+          ## Post-Release Boundary
+
+          MCP begins only after v1.5.0 is independently `PUBLISHED_VERIFIED`, and remains a transport/integration boundary rather than a source of authority.
+
+          TrueSheet specialist knowledge enrichment, broader Registry protocol/schema hardening, host-specific update commands, Adapter SDK work, PRAP certification, developer-portal work, CI mutation-run optimization, and live-host Murmurs token-effectiveness measurement remain post-v1.5 backlog work.
+
+          ## Authority and Host Boundaries
+
+          This publication creates the exact `v1.5.0` tag and immutable GitHub Release only. It does not perform marketplace/package publication, installed-integration refresh, deployment or production mutation, policy activation, destructive cleanup, branch deletion, force push, history rewrite, or MCP implementation.
+          EOF
+
+          sed -i 's/^          //' /tmp/release-notes.md
+
+          jq -n \
+            --arg tag "${TAG}" \
+            --arg target "${EXPECTED_MAIN_SHA}" \
+            --arg name "${RELEASE_NAME}" \
+            --rawfile body /tmp/release-notes.md \
+            '{tag_name:$tag,target_commitish:$target,name:$name,body:$body,draft:false,prerelease:false,make_latest:"true"}' \
+            > /tmp/release-payload.json
+
+          curl -fsS -X POST "${auth[@]}" \
+            -H 'Content-Type: application/json' \
+            --data-binary @/tmp/release-payload.json \
+            "${API}/releases" > /tmp/published-release.json
+
+          release_id="$(jq -r '.id' /tmp/published-release.json)"
+          published_tag="$(jq -r '.tag_name' /tmp/published-release.json)"
+          published_draft="$(jq -r '.draft' /tmp/published-release.json)"
+          published_prerelease="$(jq -r '.prerelease' /tmp/published-release.json)"
+          test -n "${release_id}"
+          test "${published_tag}" = "${TAG}"
+          test "${published_draft}" = "false"
+          test "${published_prerelease}" = "false"
+
+          immutable="false"
+          for _ in $(seq 1 24); do
+            curl -fsS "${auth[@]}" "${API}/releases/tags/${TAG}" > /tmp/verified-release.json
+            immutable="$(jq -r '.immutable // false' /tmp/verified-release.json)"
+            if [ "${immutable}" = "true" ]; then
+              break
+            fi
+            sleep 5
+          done
+          test "${immutable}" = "true"
+
+          curl -fsS "${auth[@]}" "${API}/git/ref/tags/${TAG}" > /tmp/tag-ref.json
+          tag_type="$(jq -r '.object.type' /tmp/tag-ref.json)"
+          tag_sha="$(jq -r '.object.sha' /tmp/tag-ref.json)"
+          if [ "${tag_type}" = "tag" ]; then
+            tag_sha="$(curl -fsS "${auth[@]}" "${API}/git/tags/${tag_sha}" | jq -r '.object.sha')"
+          fi
+          test "${tag_sha}" = "${EXPECTED_MAIN_SHA}"
+
+          curl -fsS "${auth[@]}" "${API}/releases/latest" > /tmp/latest-release.json
+          test "$(jq -r '.tag_name' /tmp/latest-release.json)" = "${TAG}"
+
+          echo "RELEASE_ID=${release_id}"
+          echo "TAG=${TAG}"
+          echo "TARGET_SHA=${tag_sha}"
+          echo "IMMUTABLE=${immutable}"
+          echo "PUBLISH_VERIFICATION=PASS"
