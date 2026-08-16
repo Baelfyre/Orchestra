@@ -6,14 +6,11 @@ from pathlib import Path
 import pytest
 
 from orchestra_runtime import machine_contracts as contracts
-from orchestra_runtime.models import (
-    ContextPackage,
-    RouteDecision,
-    VALID_SPECIALISTS,
-)
-from orchestra_runtime import services
+from orchestra_runtime import models, services
 from orchestra_runtime.errors import RuntimeInitializationError
-from orchestra_runtime.services import GovernanceValidator
+from orchestra_runtime.models import ContextPackage, RouteDecision, VALID_SPECIALISTS
+from orchestra_runtime.repositories import ManifestRepository, SkillSourceRepository
+from orchestra_runtime.services import GovernanceValidator, RouterService, SkillRegistry
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -39,28 +36,42 @@ def _decision(command: str, specialist: str) -> RouteDecision:
     )
 
 
-def test_compatibility_specialist_identity_is_derived_from_machine_registry():
+def test_legacy_specialist_identity_import_is_a_derived_compatibility_view():
     assert VALID_SPECIALISTS == contracts.valid_specialist_ids(ROOT)
-    source = inspect.getsource(__import__("orchestra_runtime.models", fromlist=["VALID_SPECIALISTS"]))
-    assert "VALID_SPECIALISTS = frozenset({" not in source
-    assert "VALID_SPECIALISTS = valid_specialist_ids()" in source
+    source = inspect.getsource(models)
+    assert "VALID_SPECIALISTS =" not in source
+    assert 'if name == "VALID_SPECIALISTS"' in source
+    assert "return valid_specialist_ids()" in source
 
 
-def test_compatibility_command_routes_are_derived_from_machine_routing_contract():
-    assert services.DEFAULT_COMMAND_ROUTES == contracts.command_route_map(ROOT)
-    assert services.DEFAULT_AMBIGUITY_FALLBACK == contracts.command_route_record(
-        "__canonical-promotion-unknown__", ROOT
-    )["specialist"]
-    source = inspect.getsource(services)
-    assert "DEFAULT_COMMAND_ROUTES = {" not in source
-    assert "DEFAULT_COMMAND_ROUTES = command_route_map()" in source
+def test_legacy_service_authority_snapshots_are_absent():
+    for name in (
+        "DEFAULT_COMMAND_ROUTES",
+        "DEFAULT_AMBIGUITY_FALLBACK",
+        "DEFAULT_GOVERNANCE_REQUIRED_SPECIALISTS",
+        "_DEFAULT_RUNTIME_VALIDATION_RULE_RECORDS",
+        "_DEFAULT_DRY_RUN_REQUIRED_RULES",
+    ):
+        assert not hasattr(services, name)
 
 
-def test_router_governance_required_specialists_are_machine_derived():
-    assert services.DEFAULT_GOVERNANCE_REQUIRED_SPECIALISTS == contracts.governance_required_specialists(ROOT)
+def test_skill_registry_and_router_read_machine_routing_contract_directly():
+    expected_routes = contracts.command_route_map(ROOT)
+    expected_fallback = contracts.command_route_record("__legacy-retired-unknown__", ROOT)["specialist"]
+    expected_governance = contracts.governance_required_specialists(ROOT)
+
+    registry = SkillRegistry(ManifestRepository(ROOT), SkillSourceRepository(ROOT))
+    router = RouterService(registry)
+
+    assert registry._command_routes == expected_routes
+    assert router._command_routes == expected_routes
+    assert router._fallback_specialist == expected_fallback
+    assert router._governance_required_specialists == expected_governance
+
     source = inspect.getsource(services.RouterService)
-    assert "{\"dagger\", \"cipher\", \"the-steward\", \"the-governor\"}" not in source
-    assert "DEFAULT_GOVERNANCE_REQUIRED_SPECIALISTS" in source
+    assert "command_route_map()" in source
+    assert "command_route_record(" in source
+    assert "governance_required_specialists()" in source
 
 
 def test_default_governance_validator_rules_match_machine_policy():
@@ -88,7 +99,7 @@ def test_default_governance_validator_rules_match_machine_policy():
     assert actual == expected
 
 
-def test_default_governance_rules_fail_closed_on_duplicate_rule_identity(monkeypatch):
+def test_default_governance_rules_fail_closed_on_duplicate_rule_identity():
     records = (
         {
             "rule_id": "duplicate-rule",
@@ -105,17 +116,14 @@ def test_default_governance_rules_fail_closed_on_duplicate_rule_identity(monkeyp
             "dry_run_required": False,
         },
     )
-    monkeypatch.setattr(services, "_DEFAULT_RUNTIME_VALIDATION_RULE_RECORDS", records)
 
     with pytest.raises(RuntimeInitializationError, match="machine governance validation rule is invalid"):
-        services._default_governance_rules()
+        services._default_governance_rules(records)
 
 
-def test_default_governance_rules_fail_closed_when_machine_policy_has_no_runtime_rules(monkeypatch):
-    monkeypatch.setattr(services, "_DEFAULT_RUNTIME_VALIDATION_RULE_RECORDS", ())
-
+def test_default_governance_rules_fail_closed_when_machine_policy_has_no_runtime_rules():
     with pytest.raises(RuntimeInitializationError, match="machine governance policy contains no runtime validation rules"):
-        services._default_governance_rules()
+        services._default_governance_rules(())
 
 
 def test_machine_dry_run_requirement_is_enforced_without_rule_name_special_case():
@@ -152,7 +160,9 @@ def test_machine_policy_does_not_require_dry_run_for_high_risk_security_rule():
     assert result.status == "APPROVED"
 
 
-def test_runtime_services_assert_complete_machine_contracts_before_deriving_defaults():
+def test_runtime_services_fail_closed_before_consuming_machine_contracts():
     source = inspect.getsource(services)
     assert "assert_machine_contracts()" in source
-    assert source.index("assert_machine_contracts()") < source.index("DEFAULT_COMMAND_ROUTES = command_route_map()")
+    assert source.index("assert_machine_contracts()") < source.index("class SkillRegistry")
+    assert source.index("assert_machine_contracts()") < source.index("class RouterService")
+    assert source.index("assert_machine_contracts()") < source.index("class GovernanceValidator")
