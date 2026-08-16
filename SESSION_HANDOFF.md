@@ -41,7 +41,7 @@ Orchestra `v1.4.0` is historical `PUBLISHED_VERIFIED` release evidence after v1.
 
 Publication used the separately authorized guarded workflow run `31814065248`, job `94811383024`. That publisher first required canonical `main` to equal the exact release commit and required both the tag and release to be absent, then independently verified immutability, latest-release state at that publication checkpoint, and the exact tag target. External reads after the workflow confirmed the same state.
 
-The trusted Registry and network-provenance dependency chain is complete. `registry-v0.1.0` is immutable at Registry canonical `3821bcb55125b4df28b6423650e6e17ac67b`; Orchestra run `31811353512` / job `94802485762` passed the real network path. Final readiness PR #271 merged as the release commit and passed the complete exact-head and post-merge matrix.
+The trusted Registry and network-provenance dependency chain is complete. `registry-v0.1.0` is immutable at Registry canonical `3821bcb55125b4d8864f28b6423650e6e17ac67b`; Orchestra run `31811353512` / job `94802485762` passed the real network path. Final readiness PR #271 merged as the release commit and passed the complete exact-head and post-merge matrix.
 
 No marketplace publication, installed-integration refresh, deployment/production mutation, policy activation, destructive cleanup, branch deletion, force push, or history rewrite was performed.
 
