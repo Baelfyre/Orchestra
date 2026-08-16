@@ -93,7 +93,7 @@ jobs:
           python -c "import importlib.metadata; print(importlib.metadata.version('mutmut'))"
           | tee artifacts/mutation/mutmut-version.txt
 
-      - name: Run workspace-isolated LEGACY_RETIRED mutation evidence
+      - name: Run retirement-targeted LEGACY_RETIRED mutation evidence
         env:
           SOURCE_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         shell: bash
@@ -107,6 +107,7 @@ jobs:
           run_target() {
             label="$1"
             config="$2"
+            shift 2
             workspace="$RUNNER_TEMP/orchestra-mutmut-${label}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
             run_output="$artifact_root/${label}-mutmut-run.txt"
             results_output="$artifact_root/${label}-mutmut-results.txt"
@@ -126,9 +127,26 @@ jobs:
 
             (
               cd "$workspace" || exit 1
+              : > "$run_output"
+              run_code=0
+              target_index=0
+              builder_args=()
 
-              mutmut run 2>&1 | tee "$run_output"
-              run_code=${PIPESTATUS[0]}
+              for pattern in "$@"; do
+                target_index=$((target_index + 1))
+                target_output="$artifact_root/${label}-target-${target_index}-run.txt"
+                echo "MUTATION_TARGET_PATTERN=$pattern" | tee -a "$run_output"
+                mutmut run "$pattern" 2>&1 | tee "$target_output"
+                target_code=${PIPESTATUS[0]}
+                cat "$target_output" >> "$run_output"
+                echo "MUTATION_TARGET_EXIT_CODE=$target_code" | tee -a "$run_output"
+                echo "$target_code" > "$artifact_root/${label}-target-${target_index}-exit-code.txt"
+                builder_args+=(--target-run "$pattern=$target_output")
+                if [ "$target_code" != "0" ]; then
+                  run_code=1
+                fi
+              done
+
               echo "$run_code" | tee "$artifact_root/${label}-mutmut-run-exit-code.txt"
 
               mutmut results 2>&1 | tee "$results_output"
@@ -139,6 +157,7 @@ jobs:
                 --run-output "$run_output" \
                 --results-output "$results_output" \
                 --config "$config_copy" \
+                "${builder_args[@]}" \
                 --run-exit-code "$run_code" \
                 --tool-version "$tool_version" \
                 --tested-sha "$SOURCE_HEAD_SHA" \
@@ -152,16 +171,25 @@ jobs:
               evidence_code=$?
               echo "$evidence_code" | tee "$artifact_root/${label}-evidence-exit-code.txt"
 
-              if [ "$results_code" != "0" ] || [ "$evidence_code" != "0" ]; then
+              if [ "$run_code" != "0" ] || [ "$results_code" != "0" ] || [ "$evidence_code" != "0" ]; then
                 exit 1
               fi
               exit 0
             )
           }
 
-          run_target models mutation/legacy-retired-models.cfg
+          run_target models mutation/legacy-retired-models.cfg \
+            "orchestra_runtime.models.__getattr__*"
           models_code=$?
-          run_target services mutation/legacy-retired-services.cfg
+
+          run_target services mutation/legacy-retired-services.cfg \
+            "orchestra_runtime.services._default_governance_rules*" \
+            "orchestra_runtime.services.SkillRegistry.__init__*" \
+            "orchestra_runtime.services.RouterService.__init__*" \
+            "orchestra_runtime.services.RouterService.route*" \
+            "orchestra_runtime.services.GovernanceValidator.__init__*" \
+            "orchestra_runtime.services._compatibility_bindings*" \
+            "orchestra_runtime.services.build_compatibility_composition*"
           services_code=$?
 
           echo "$models_code" | tee "$artifact_root/models-target-exit-code.txt"
