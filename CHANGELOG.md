@@ -1,5 +1,13 @@
 # Changelog
 
+## Post-v1.4.0 Governance Stabilization - Merge-State Fail-Closed Repair
+
+- Repairs autonomous merge readiness so `mergeable=true` is insufficient for ordinary governed progression; the current PR read must also report `mergeable_state=clean`.
+- Treats missing or unknown mergeability as `WAIT_FOR_EVIDENCE` and fails closed on `blocked`, `behind`, `dirty`, `unstable`, or any other observed non-clean merge state.
+- Carries the accepted pre-merge disposition, mergeable state, and bypass-use record into post-merge verification so API success, a signed canonical commit, or matching tree content cannot retroactively satisfy a failed pre-merge gate.
+- Adds regression coverage for the PR #299 incident shape and documents a forward-only stabilization boundary under #302 without claiming a GitHub-recorded bypass event that is not independently available.
+- Does not rewrite PR #299 history, change the `Protect main` ruleset, weaken validation or coverage, select a version, publish a release, deploy, refresh installed integrations, or begin Murmurs or MCP work.
+
 ## Post-v1.4.0 Control Plane Re-foundation - LEGACY_RETIRED Candidate
 
 - Advances the separately governed migration from `CANONICAL_PROMOTION_AUTHORITY` to `LEGACY_RETIRED` without changing the published `v1.4.0` release.
@@ -50,7 +58,7 @@
 ## Post-v1.2.0 Specialist Knowledge Layer - SK10 Hardening and Evaluation - Pending
 
 - Added evidence-driven hardening guides for Weaver model/source traceability, Conductor routing evaluation, The Tuner contradiction/invalidation coordination, and Arbiter continuity/handoff evaluation.
-- Added a selective JSON adversarial scenario catalog with deterministic regression coverage for routing, ownership, contradiction, re-entry, stale diagrams, handoff identity, and protected-action boundaries.
+- Added a selective JSON adversarial scenario catalog with deterministic regression coverage for routing, ownership, contradiction, re-entry, stale diagrams, handoff identity, continuity, and protected-action boundaries.
 - Preserved existing orchestration and governance contracts; no routing, authority, runtime, manifest, policy, release, or deployment redesign was introduced.
 - No release/tag publication, deployment/production mutation, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK10.
 
@@ -157,7 +165,6 @@
 - Performs no release, tag, deployment, marketplace graduation, installed-integration refresh, policy activation, or branch deletion.
 
 ## v1.2.0 - Published 2026-08-09
-
 - Published the stable minor release from annotated tag `v1.2.0` at exact release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`.
 - Published [Orchestra v1.2.0: Governed Orchestration](https://github.com/Baelfyre/Orchestra/releases/tag/v1.2.0) as a non-draft, non-prerelease, immutable GitHub Release.
 - Preserved R7-E2, R7-F, R7-G, and R7-H evidence identities, Claude Code `SCAFFOLD_ONLY` maturity, and the repository simulation fixture as pending/empty by design.
@@ -237,7 +244,6 @@ The first autonomous finalization experiment was rolled back to the verified rec
 Historical fail-open or bypass-capable platform behavior is not successful validation precedent.
 
 ### Capability Merge Map
-
 Key post-`v1.1.2` canonical milestones include:
 
 - PR #190 - Delegated Phase B instruction-level progression.
