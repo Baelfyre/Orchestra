@@ -1,5 +1,11 @@
 # Changelog
 
+## Post-v1.4.0 Integrated Release Candidate Hardening - In Progress
+
+- Adds a cross-layer release-sanity regression proving that Murmurs routine-progress compression does not change the workflow receipt digest, validation result, or Arbiter disposition, while terminal completion remains hard-bound to `EXPLAIN`.
+- Starts fresh post-Murmurs release evidence generation under #292 and #300. Any validation attached to an earlier source head remains stale after subsequent RC changes and cannot authorize the final release.
+- Selects `1.5.0` as the additive minor release candidate from compatibility evidence; no tag or GitHub Release is published by preparation, and no marketplace publication, deployment, installed-integration refresh, ruleset mutation/bypass, branch deletion, force push, history rewrite, destructive cleanup, or MCP implementation is performed.
+
 ## Post-v1.4.0 Murmurs Communication Budget - Candidate
 
 - Adds a machine-owned presentation policy with `NORMAL` and opt-in `MURMURS` modes plus deterministic `SILENT`, local `MURMUR`, and required `EXPLAIN` dispositions.

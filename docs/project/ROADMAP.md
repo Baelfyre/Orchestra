@@ -63,7 +63,7 @@ Phases 6B-A through 6C are complete and merged through PR #183. Phase 6D produce
 - [x] GA-4: Profile-aware transition integration through Squash-aware post-merge verification.
 - [x] GA-5: Audit, provenance, interruption recovery, delegation inheritance, and portable-resume preservation.
 - [x] GA-6: Adversarial fixture validation for authority, profile, policy, evidence, bypass, merge-method, signature, scope, and continuity boundaries.
-- [x] GA-7: Governance, routing, Conductor/Codex parity, project-state, README, roadmap, and release-candidate documentation reconciliation.
+- [x] GA-7: Governance, routing, adapter, project-state, README, roadmap, and release-candidate documentation reconciliation.
 - [x] Refresh every release-readiness artifact invalidated by R7R or GA implementation and independently verify the final candidate; canonical evidence is recorded in `docs/validation/V1_2_0_RELEASE_READINESS_EVIDENCE.md`.
 - [x] R8: annotated `v1.2.0` tag and immutable [GitHub Release](https://github.com/Baelfyre/Orchestra/releases/tag/v1.2.0) published and independently verified at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`.
 
@@ -104,6 +104,26 @@ Publication closeout evidence is recorded in `docs/validation/V1_3_0_PUBLICATION
 
 Publication closeout evidence is recorded in `docs/validation/V1_4_0_PUBLICATION_CLOSEOUT.md`.
 
+## v1.5.0 Machine-Verifiable Control Plane and Murmurs - Release Preparation
+
+- [x] Complete the controlled P0/P1-P9 control-plane re-foundation and advance the migration through separately governed checkpoints to `LEGACY_RETIRED`.
+- [x] Repair merge readiness forward-only so ordinary progression requires both `mergeable=true` and a current `mergeable_state=clean` without ruleset bypass.
+- [x] Implement and canonically merge the additive Murmurs communication budget with `NORMAL` default, deterministic local rendering, required explanation safety events, and source-qualified measurement contracts.
+- [x] Synchronize README.md and README.json for the control-plane and Murmurs architecture.
+- [x] Add post-Murmurs release-sanity regressions binding workflow truth to presentation-only compression and covering remaining executable critical trust edges.
+- [x] Produce a fresh pre-version diagnostic runtime baseline: 1,055 tests passing, 98.47% statement coverage, 95.36% branch coverage, and all critical module floors passing.
+- [x] Produce complete exact-head LEGACY_RETIRED Mutmut evidence on the pre-version diagnostic candidate with no not-checked, interrupted, timeout, suspicious, skipped, or unknown outcomes accepted.
+- [x] Select `1.5.0` from compatibility evidence: package/command/specialist/host surfaces remain present, retained compatibility views are derived rather than removed, and Murmurs is opt-in.
+- [x] Prepare all 11 package/version surfaces and release-candidate notes for `1.5.0` without changing host maturity or installed integrations.
+- [ ] Classify the final current coverage misses without removing them from the denominator or using broad exclusions.
+- [ ] Generate fresh final-candidate runtime, branch, critical-module, Mutmut, integrated Cosmic Ray, workflow-sanity, P9 conformance, Windows/Ubuntu/macOS, CodeQL, and governance evidence after release metadata is complete.
+- [ ] Persist machine release evidence and revision-bound `V1_5_0_RELEASE_READINESS_EVIDENCE.md`.
+- [ ] Materialize the reviewed release tree as a GitHub-signed commit and validate it through a fresh protected canonical PR.
+- [ ] Squash-merge only from a current ordinary `mergeable_state=clean` state with exact-head protection and independently verify canonical parent/tree/signature/state.
+- [ ] Close #292 and #300 only when their evidence exit criteria are truthfully satisfied; advance #273 to release readiness only then.
+- [ ] Under the already-approved release campaign, publish tag `v1.5.0` and a non-draft, non-prerelease GitHub Release from the exact signed validated canonical commit, then independently verify identity.
+- [ ] Begin MCP only after v1.5.0 is `PUBLISHED_VERIFIED`; MCP is a possible transport, not a source of authority.
+
 ### Current `Protect main` Development Baseline
 
 The current repository policy is a solo-maintainer ruleset with zero required approvals, conversation resolution, Squash-only merge, signed commits, linear history, branch-up-to-date enforcement, restricted deletion, blocked force pushes, and these eight required check contexts:
@@ -121,6 +141,7 @@ The existing bypass list remains operationally available. Orchestra governance m
 
 ## Deferred and Future Work
 
+- [ ] After v1.5.0 publication, evaluate and implement MCP as a portable transport/integration boundary without making it an authority source.
 - [ ] Add host-specific update commands after the shared notification-only update check stabilizes.
 - [ ] Add host-specific update commands on top of the reproducible temp-staged runtime refresh pipeline.
 - [ ] Publish an Adapter SDK with base classes, helper utilities, templates, and a reference implementation.
