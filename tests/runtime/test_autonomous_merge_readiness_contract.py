@@ -39,6 +39,8 @@ def test_real_repository_contract_passes():
 
 def test_fully_green_exact_head_is_ready():
     case, snapshot = pre_case("fully-green")
+    assert snapshot["mergeable"] is True
+    assert snapshot["mergeable_state"] == "clean"
     assert validator.evaluate_pre_merge(snapshot) == case["expected_disposition"]
 
 
@@ -50,6 +52,9 @@ def test_missing_and_pending_evidence_waits():
         "queued-windows",
         "in-progress-macos",
         "head-not-reconfirmed",
+        "mergeability-missing",
+        "mergeable-state-missing",
+        "mergeable-state-unknown",
         "mergeable-is-not-enough",
     ):
         case, snapshot = pre_case(case_id)
@@ -90,12 +95,26 @@ def test_required_changelog_omission_blocks():
 def test_mergeable_true_cannot_shortcut_missing_checks():
     _, snapshot = pre_case("mergeable-is-not-enough")
     assert snapshot["mergeable"] is True
+    assert snapshot["mergeable_state"] == "clean"
     assert validator.evaluate_pre_merge(snapshot) == "WAIT_FOR_EVIDENCE"
 
 
 def test_merge_conflict_blocks():
     _, snapshot = pre_case("merge-conflict")
     assert validator.evaluate_pre_merge(snapshot) == "BLOCK"
+
+
+def test_non_clean_mergeable_states_fail_closed():
+    for case_id in (
+        "mergeable-state-blocked",
+        "mergeable-state-behind",
+        "mergeable-state-dirty",
+        "mergeable-state-unstable",
+    ):
+        _, snapshot = pre_case(case_id)
+        assert snapshot["mergeable"] is True
+        assert snapshot["mergeable_state"] != "clean"
+        assert validator.evaluate_pre_merge(snapshot) == "BLOCK"
 
 
 def test_unresolved_blocker_and_thread_block():
@@ -123,6 +142,12 @@ def test_bypass_capability_is_not_governance_authority():
 def test_merge_api_success_alone_is_not_verified():
     case = post_case("api-success-only")
     assert validator.evaluate_post_merge(case["snapshot"]) == "MERGE_STATE_UNVERIFIED"
+
+
+def test_post_merge_requires_clean_pre_merge_state_and_no_bypass():
+    for case_id in ("blocked-pre-merge-state", "bypass-post-merge-state"):
+        case = post_case(case_id)
+        assert validator.evaluate_post_merge(case["snapshot"]) == "MERGE_STATE_UNVERIFIED"
 
 
 def test_post_merge_requires_squash_equivalence_and_signature():
