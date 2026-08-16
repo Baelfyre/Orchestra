@@ -8,6 +8,8 @@ from scripts.validation import build_mutation_evidence as mutation_evidence
 SHA = "a" * 40
 OTHER_SHA = "b" * 40
 PATTERN = "orchestra_runtime.services.RouterService.route*"
+SURVIVOR = "orchestra_runtime.services.xǁRouterServiceǁroute__mutmut_3"
+KILLED = "orchestra_runtime.services.xǁRouterServiceǁroute__mutmut_4"
 
 
 def _config(tmp_path: Path) -> Path:
@@ -27,38 +29,42 @@ def _config(tmp_path: Path) -> Path:
 def _raw_outputs(
     tmp_path: Path,
     *,
-    results: str,
-    target_progress: str = "13/13",
-) -> tuple[Path, Path, Path]:
+    target_output: str | None = None,
+    target_results: str | None = None,
+) -> tuple[Path, Path, Path, Path]:
     run_output = tmp_path / "run.txt"
-    target_output = tmp_path / "target-run.txt"
     results_output = tmp_path / "results.txt"
-    target_text = f"Generating mutants\nRunning stats done\n{target_progress}  🎉 10  🙁 3\n"
-    run_output.write_text(target_text, encoding="utf-8")
-    target_output.write_text(target_text, encoding="utf-8")
-    results_output.write_text(results, encoding="utf-8")
-    return run_output, results_output, target_output
+    target_run = tmp_path / "target-run.txt"
+    target_result = tmp_path / "target-results.txt"
+    target_output = target_output or f"Mutant results\n🎉 {KILLED}\n🙁 {SURVIVOR}\n"
+    target_results = target_results if target_results is not None else f"    {SURVIVOR}: survived\n"
+    run_output.write_text(target_output, encoding="utf-8")
+    results_output.write_text(target_results, encoding="utf-8")
+    target_run.write_text(target_output, encoding="utf-8")
+    target_result.write_text(target_results, encoding="utf-8")
+    return run_output, results_output, target_run, target_result
 
 
 def _build(
     tmp_path: Path,
     *,
-    results: str,
+    target_output: str | None = None,
+    target_results: str | None = None,
     run_exit_code: int = 0,
     tested_sha: str = SHA,
     source_head_sha: str = SHA,
-    target_progress: str = "13/13",
 ):
-    run_output, results_output, target_output = _raw_outputs(
+    run_output, results_output, target_run, target_result = _raw_outputs(
         tmp_path,
-        results=results,
-        target_progress=target_progress,
+        target_output=target_output,
+        target_results=target_results,
     )
     return mutation_evidence.build_mutation_evidence(
         run_output=run_output,
         results_output=results_output,
         config_path=_config(tmp_path),
-        target_run_specs=[f"{PATTERN}={target_output}"],
+        target_run_specs=[f"{PATTERN}={target_run}"],
+        target_result_specs=[f"{PATTERN}={target_result}"],
         run_exit_code=run_exit_code,
         tool_version="3.6.0",
         tested_sha=tested_sha,
@@ -71,31 +77,23 @@ def _build(
     )
 
 
-def test_classified_exact_head_target_builds_bounded_evidence(tmp_path: Path):
-    evidence = _build(
-        tmp_path,
-        results=(
-            "    orchestra_runtime.services.xǁRouterServiceǁroute__mutmut_3: survived\n"
-            "    orchestra_runtime.services.xǁRouterServiceǁroute__mutmut_5: survived\n"
-            "    orchestra_runtime.services.xǁRouterServiceǁroute__mutmut_9: survived\n"
-            "    orchestra_runtime.services.xǁRuntimeExecutorǁ_execute__mutmut_1: not checked\n"
-        ),
-    )
+def test_classified_exact_head_target_builds_valid_score(tmp_path: Path):
+    evidence = _build(tmp_path)
 
+    assert evidence["schema_version"] == "orchestra.mutation-evidence.v2"
     assert evidence["tested_sha"] == SHA
     assert evidence["source_head_sha"] == SHA
     assert evidence["scope"]["modules"] == ["orchestra_runtime/services.py"]
     assert evidence["scope"]["mutant_patterns"] == [PATTERN]
     assert evidence["scope"]["mutate_only_covered_lines"] is True
     assert evidence["scope"]["max_stack_depth"] == -1
+    assert evidence["execution"]["score_status"] == "VALID_CLASSIFIED_SCORE"
     assert evidence["execution"]["classification_status"] == "COMPLETE"
-    assert evidence["execution"]["target_mutant_total"] == 13
-    assert evidence["execution"]["target_killed_count"] == 10
-    assert evidence["execution"]["target_survived_count"] == 3
-    assert evidence["execution"]["target_score_percent"] == 76.92
+    assert evidence["execution"]["target_mutant_total"] == 2
+    assert evidence["execution"]["target_killed_count"] == 1
+    assert evidence["execution"]["target_survived_count"] == 1
+    assert evidence["execution"]["target_score_percent"] == 50.0
     assert evidence["execution"]["not_checked_count"] == 0
-    assert evidence["execution"]["out_of_scope_result_record_count"] == 1
-    assert evidence["execution"]["status_counts"] == {"survived": 3}
 
 
 def test_top_level_and_class_mutant_identifiers_normalize_to_public_patterns():
@@ -121,57 +119,56 @@ def test_top_level_and_class_mutant_identifiers_normalize_to_public_patterns():
 
 def test_nonzero_mutmut_run_is_rejected(tmp_path: Path):
     with pytest.raises(ValueError, match="mutation execution failed with exit code 1"):
-        _build(tmp_path, results="", run_exit_code=1)
+        _build(tmp_path, run_exit_code=1)
 
 
-def test_scoped_not_checked_mutants_are_rejected(tmp_path: Path):
-    with pytest.raises(ValueError, match="scoped mutation results contain 1 not checked mutants"):
-        _build(
-            tmp_path,
-            results="    orchestra_runtime.services.xǁRouterServiceǁroute__mutmut_3: not checked\n",
-        )
+def test_target_not_checked_result_is_rejected(tmp_path: Path):
+    with pytest.raises(ValueError, match="non-classified statuses: not checked"):
+        _build(tmp_path, target_results=f"    {SURVIVOR}: not checked\n")
 
 
-def test_scoped_suspicious_outcome_is_rejected(tmp_path: Path):
-    with pytest.raises(ValueError, match="non-classified outcomes: suspicious"):
-        _build(
-            tmp_path,
-            results="    orchestra_runtime.services.xǁRouterServiceǁroute__mutmut_3: suspicious\n",
-        )
+def test_target_timeout_outcome_is_rejected(tmp_path: Path):
+    with pytest.raises(ValueError, match="non-classified outcomes"):
+        _build(tmp_path, target_output=f"Mutant results\n⏰ {SURVIVOR}\n")
 
 
 def test_all_killed_target_is_valid_with_empty_results(tmp_path: Path):
-    evidence = _build(tmp_path, results="")
-    assert evidence["execution"]["target_mutant_total"] == 13
-    assert evidence["execution"]["target_killed_count"] == 13
+    evidence = _build(
+        tmp_path,
+        target_output=f"Mutant results\n🎉 {KILLED}\n",
+        target_results="",
+    )
+    assert evidence["execution"]["target_mutant_total"] == 1
+    assert evidence["execution"]["target_killed_count"] == 1
     assert evidence["execution"]["target_survived_count"] == 0
     assert evidence["execution"]["target_score_percent"] == 100.0
 
 
-def test_incomplete_target_run_is_rejected(tmp_path: Path):
-    with pytest.raises(ValueError, match="incomplete: completed 12 of 13 mutants"):
-        _build(tmp_path, results="", target_progress="12/13")
+def test_target_run_without_classified_mutants_is_rejected(tmp_path: Path):
+    with pytest.raises(ValueError, match="contains no classified target mutants"):
+        _build(tmp_path, target_output="Running mutation testing\n", target_results="")
 
 
-def test_zero_mutant_target_run_is_rejected(tmp_path: Path):
-    with pytest.raises(ValueError, match="executed zero mutants"):
-        _build(tmp_path, results="", target_progress="0/0")
+def test_survivor_results_must_reconcile_with_run_output(tmp_path: Path):
+    with pytest.raises(ValueError, match="do not reconcile with run-output survivors"):
+        _build(tmp_path, target_results="")
 
 
 def test_synthetic_merge_sha_cannot_substitute_for_source_head(tmp_path: Path):
     with pytest.raises(ValueError, match="tested_sha must exactly match source_head_sha"):
-        _build(tmp_path, results="", tested_sha=OTHER_SHA)
+        _build(tmp_path, tested_sha=OTHER_SHA)
 
 
 def test_fatal_stats_collection_marker_is_rejected(tmp_path: Path):
-    run_output, results_output, target_output = _raw_outputs(tmp_path, results="")
+    run_output, results_output, target_run, target_result = _raw_outputs(tmp_path)
     run_output.write_text("failed to collect stats. runner returned 1\n", encoding="utf-8")
     with pytest.raises(ValueError, match="fatal instrumentation marker"):
         mutation_evidence.build_mutation_evidence(
             run_output=run_output,
             results_output=results_output,
             config_path=_config(tmp_path),
-            target_run_specs=[f"{PATTERN}={target_output}"],
+            target_run_specs=[f"{PATTERN}={target_run}"],
+            target_result_specs=[f"{PATTERN}={target_result}"],
             run_exit_code=0,
             tool_version="3.6.0",
             tested_sha=SHA,
