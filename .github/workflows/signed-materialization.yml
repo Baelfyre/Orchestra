@@ -1,0 +1,44 @@
+name: signed-materialization
+
+on:
+  pull_request:
+    branches:
+      - "materialize/**"
+
+permissions:
+  contents: read
+
+jobs:
+  signed-materialization:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout exact source head
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Prepare materialization evidence directory
+        run: mkdir -p artifacts/signed-materialization
+
+      - name: Validate bounded materialization source and emit evidence
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: >-
+          python scripts/validate_signed_materialization.py
+          --event "$GITHUB_EVENT_PATH"
+          --output artifacts/signed-materialization/evidence.json
+
+      - name: Upload signed materialization evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: signed-materialization-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/signed-materialization/evidence.json
+          if-no-files-found: error
+          retention-days: 90
