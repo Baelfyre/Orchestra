@@ -39,6 +39,22 @@ The framework is designed to help developers reduce context drift, make cross-do
 
 > **Terminology:** Orchestra uses **Downstream Roles** for specialists or adapters that receive governed outputs from another canonical owner. The word **consumer** is reserved for genuine technical provider/consumer or message-consumer semantics.
 
+## External specialist knowledge references
+
+Orchestra can adapt useful patterns from external open-source projects without making those projects runtime dependencies or authority sources. External reference identity, provenance, feature ownership, and scope boundaries are kept in machine-readable records; specialist Markdown files are progressive-disclosure human guidance.
+
+The current TrueSheet reference is pinned through Padayon to `lodev09/react-native-true-sheet` commit `23e119c026e2040d960725bd260e6cd4bf680b95`, license MIT. Orchestra's machine catalog is `machine/knowledge/truesheet-specialist-reference.v1.json`.
+
+The adapted guidance is distributed only to the existing responsible specialists:
+
+- **Cloak:** sheet/panel interaction, responsive presentation, scrolling/fixed chrome, keyboard/focus, background interaction, lifecycle, and native/web interaction differences.
+- **Ponytail:** scoped consumer APIs, navigation/Expo Router, Reanimated coordination, typed/native contracts, platform implementation boundaries, testing mocks, migration references, and worked examples.
+- **Clockwork:** navigation/platform boundaries, Fabric/Codegen/TurboModule references, typed native interfaces, iOS/Android host architecture, and shared native-state patterns.
+- **Overseer:** keyboard/focus and lifecycle regressions, platform matrices, mocks, mobile E2E, migration/troubleshooting hypotheses, and evidence separation.
+- **Scribe:** progressive-disclosure knowledge packaging, source provenance, and migration/troubleshooting organization.
+
+Conductor remains routing-only and The Tuner remains coordination-only. No TrueSheet domain guide is added to either role. External test results do not count as Orchestra validation evidence, external `AGENTS.md` instructions do not become Orchestra governance, and no external source code or wholesale implementation is copied by this knowledge adaptation.
+
 ## Why the Compliance Registry Matters
 
 Compliance decisions are especially vulnerable to stale context. Laws, platform policies, licensing terms, privacy obligations, provider requirements, and effective dates can change independently of application code. If those facts are copied into prompts or project documents without provenance and freshness metadata, a previously correct assumption can quietly become the next project's bad input.
@@ -182,7 +198,7 @@ See the [v1.3.0 release candidate](docs/releases/v1.3.0-specialist-intelligence-
 
 v1.2.0 established the governed-runtime baseline that v1.3.0 builds on: delegated progression, specialist coordination, validation, merge-readiness, and host-continuity contracts with explicit authority boundaries.
 
-- **Governed autonomy:** Human-Governed, Semi-Autonomous, and Full Autonomous profiles control permitted continuation and pause behavior. Effective authority remains the intersection of the selected profile, explicit grant, repository or project policy, host capability, current phase, and current evidence.
+- **Governed autonomy:** Human-Governed, Semi-Autonomous, and Full Autonomous profiles control permitted continuation and pause frequency. Effective authority remains the intersection of the selected profile, explicit grant, repository or project policy, host capability, current phase, and current evidence.
 - **Delegated execution:** approved phase envelopes use six explicit Arbiter dispositions for continuation, bounded remediation, evidence waits, capacity waits, human escalation, and safe termination.
 - **Multi-specialist coordination:** The Tuner participates only in material multi-domain work and requires complete, consistent, and current specialist-owned contracts before coordinated execution proceeds.
 - **Cross-layer integrity validation:** reusable frontend-to-backend, backend-to-persistence, and cross-module logical-flow profiles connect findings to responsible owners, validation evidence, and governed re-entry.

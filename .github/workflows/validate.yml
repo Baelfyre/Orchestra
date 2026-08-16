@@ -34,6 +34,9 @@ jobs:
       - name: Test signed materialization contract
         run: python tests/behavior/test_signed_materialization.py
 
+      - name: Test TrueSheet specialist machine reference
+        run: python tests/behavior/test_truesheet_reference.py
+
   runtime-tests:
     runs-on: ubuntu-latest
 
