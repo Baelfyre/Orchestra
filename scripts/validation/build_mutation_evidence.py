@@ -35,8 +35,12 @@ def _git_sha(value: str, field: str) -> str:
     return cleaned
 
 
+def _config_lines(config_path: Path) -> list[str]:
+    return config_path.read_text(encoding="utf-8").splitlines()
+
+
 def _read_modules(config_path: Path) -> list[str]:
-    lines = config_path.read_text(encoding="utf-8").splitlines()
+    lines = _config_lines(config_path)
     modules: list[str] = []
     collecting = False
     for line in lines:
@@ -53,6 +57,32 @@ def _read_modules(config_path: Path) -> list[str]:
     if len(modules) != len(set(modules)):
         raise ValueError("mutation scope contains duplicate modules")
     return modules
+
+
+def _read_config_value(config_path: Path, key: str) -> str:
+    prefix = f"{key}="
+    for line in _config_lines(config_path):
+        stripped = line.strip()
+        if stripped.startswith(prefix):
+            return stripped[len(prefix) :].strip()
+    raise ValueError(f"mutation configuration is missing {key}")
+
+
+def _read_bool_config(config_path: Path, key: str) -> bool:
+    value = _read_config_value(config_path, key).casefold()
+    if value == "true":
+        return True
+    if value == "false":
+        return False
+    raise ValueError(f"mutation configuration {key} must be true or false")
+
+
+def _read_int_config(config_path: Path, key: str) -> int:
+    value = _read_config_value(config_path, key)
+    try:
+        return int(value)
+    except ValueError as exc:
+        raise ValueError(f"mutation configuration {key} must be an integer") from exc
 
 
 def _read_mutant_statuses(results_output: Path) -> list[str]:
@@ -128,8 +158,8 @@ def build_mutation_evidence(
         "scope": {
             "modules": _read_modules(config_path),
             "configuration": config_path.name,
-            "mutate_only_covered_lines": True,
-            "max_stack_depth": 8,
+            "mutate_only_covered_lines": _read_bool_config(config_path, "mutate_only_covered_lines"),
+            "max_stack_depth": _read_int_config(config_path, "max_stack_depth"),
         },
         "execution": {
             "run_exit_code": int(run_exit_code),
