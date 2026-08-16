@@ -160,9 +160,30 @@ def test_machine_policy_does_not_require_dry_run_for_high_risk_security_rule():
     assert result.status == "APPROVED"
 
 
-def test_runtime_services_fail_closed_before_consuming_machine_contracts():
+def test_runtime_machine_guard_is_deferred_from_module_import():
     source = inspect.getsource(services)
-    assert "assert_machine_contracts()" in source
-    assert source.index("assert_machine_contracts()") < source.index("class SkillRegistry")
-    assert source.index("assert_machine_contracts()") < source.index("class RouterService")
-    assert source.index("assert_machine_contracts()") < source.index("class GovernanceValidator")
+    preamble = source[: source.index("def _stable_id")]
+    assert "\nassert_machine_contracts()\n" not in preamble
+    assert "def _assert_runtime_machine_contracts()" in preamble
+    assert "    assert_machine_contracts()" in preamble
+
+
+def test_runtime_consumers_guard_machine_contracts_before_defaults():
+    registry_source = inspect.getsource(services.SkillRegistry.__init__)
+    router_source = inspect.getsource(services.RouterService.__init__)
+    governance_source = inspect.getsource(services.GovernanceValidator.__init__)
+    compatibility_source = inspect.getsource(services._compatibility_bindings)
+
+    assert registry_source.index("_assert_runtime_machine_contracts()") < registry_source.index("command_route_map()")
+    assert router_source.index("_assert_runtime_machine_contracts()") < router_source.index("command_route_map()")
+    assert governance_source.index("_assert_runtime_machine_contracts()") < governance_source.index("_default_governance_rules()")
+    assert compatibility_source.index("_assert_runtime_machine_contracts()") < compatibility_source.index("command_route_map()")
+
+
+def test_runtime_machine_guard_fails_closed_at_construction_boundary(monkeypatch):
+    def reject_drift() -> None:
+        raise ValueError("synthetic machine-contract drift")
+
+    monkeypatch.setattr(services, "assert_machine_contracts", reject_drift)
+    with pytest.raises(ValueError, match="synthetic machine-contract drift"):
+        GovernanceValidator()
