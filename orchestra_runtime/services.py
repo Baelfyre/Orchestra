@@ -103,22 +103,10 @@ from .models import (
 from .repositories import ManifestRepository, SkillSourceRepository
 
 
-# Promotion authority is fail-closed: runtime defaults are admitted only after
-# the complete machine specialist/routing/governance contract set conforms.
+# Legacy authority snapshots are retired. Runtime defaults are accepted only
+# after the complete machine specialist/routing/governance contract set conforms,
+# and each runtime boundary derives its effective values from those contracts.
 assert_machine_contracts()
-
-# Backward-compatible public/runtime names remain available during this stage,
-# but their values are derived from machine contracts rather than maintained as
-# independent normative tables.
-DEFAULT_COMMAND_ROUTES = command_route_map()
-DEFAULT_AMBIGUITY_FALLBACK = command_route_record("__orchestra_ambiguity_fallback__")["specialist"]
-DEFAULT_GOVERNANCE_REQUIRED_SPECIALISTS = governance_required_specialists()
-_DEFAULT_RUNTIME_VALIDATION_RULE_RECORDS = runtime_validation_rule_records()
-_DEFAULT_DRY_RUN_REQUIRED_RULES = frozenset(
-    str(record.get("rule_id", "")).strip()
-    for record in _DEFAULT_RUNTIME_VALIDATION_RULE_RECORDS
-    if record.get("dry_run_required") is True
-)
 
 COMPATIBILITY_POLICY_ID = "orchestra.runtime.compatibility"
 COMPATIBILITY_POLICY_VERSION = "1"
@@ -143,10 +131,13 @@ def _runtime_identifier(value: object, field_name: str, *, route: bool = False) 
     return text
 
 
-def _default_governance_rules() -> tuple[GovernanceRule, ...]:
+def _default_governance_rules(
+    records: Iterable[dict[str, object]] | None = None,
+) -> tuple[GovernanceRule, ...]:
+    rule_records = tuple(records) if records is not None else runtime_validation_rule_records()
     rules: list[GovernanceRule] = []
     seen_rule_ids: set[str] = set()
-    for record in _DEFAULT_RUNTIME_VALIDATION_RULE_RECORDS:
+    for record in rule_records:
         rule_id = str(record.get("rule_id", "")).strip()
         validator_key = str(record.get("validator_key", "")).strip()
         skill_slugs = tuple(str(item).strip() for item in record.get("skill_slugs", ()))
@@ -312,7 +303,7 @@ class SkillRegistry(ISkillRegistry):
     ):
         self._manifest_repository = manifest_repository
         self._skill_repository = skill_repository
-        self._command_routes = command_routes or DEFAULT_COMMAND_ROUTES
+        self._command_routes = command_routes or command_route_map()
         self._cache: dict[str, object] | None = None
 
     def load_skills(self) -> tuple:
@@ -342,15 +333,17 @@ class SkillRegistry(ISkillRegistry):
 class RouterService(IRouterService):
     def __init__(self, skill_registry: ISkillRegistry, command_routes: dict[str, str] | None = None):
         self._skill_registry = skill_registry
-        self._command_routes = command_routes or DEFAULT_COMMAND_ROUTES
+        self._command_routes = command_routes or command_route_map()
+        self._fallback_specialist = str(command_route_record("__orchestra_ambiguity_fallback__")["specialist"])
+        self._governance_required_specialists = governance_required_specialists()
 
     def route(self, command: Command, context: ContextPackage) -> RouteDecision:
-        skill_slug = self._command_routes.get(command.name, DEFAULT_AMBIGUITY_FALLBACK)
-        skill = self._skill_registry.get_skill(skill_slug) or self._skill_registry.get_skill(DEFAULT_AMBIGUITY_FALLBACK)
+        skill_slug = self._command_routes.get(command.name, self._fallback_specialist)
+        skill = self._skill_registry.get_skill(skill_slug) or self._skill_registry.get_skill(self._fallback_specialist)
         if skill is None:
             raise ValueError(f"Unable to resolve skill for command '{command.name}'")
 
-        governance_required = skill.slug in DEFAULT_GOVERNANCE_REQUIRED_SPECIALISTS
+        governance_required = skill.slug in self._governance_required_specialists
         reason = (
             f"{context.adapter_name} command '{command.name}' maps to skill '{skill.slug}' via runtime router"
         )
@@ -386,8 +379,13 @@ class ContextAssembler:
 class GovernanceValidator(IGovernanceValidator):
     def __init__(self, rules: Iterable[GovernanceRule] | None = None):
         self._rules = tuple(rules) if rules is not None else _default_governance_rules()
+        dry_run_required_rules = frozenset(
+            str(record.get("rule_id", "")).strip()
+            for record in runtime_validation_rule_records()
+            if record.get("dry_run_required") is True
+        )
         self._dry_run_required_rules = frozenset(
-            rule.name for rule in self._rules if rule.name in _DEFAULT_DRY_RUN_REQUIRED_RULES
+            rule.name for rule in self._rules if rule.name in dry_run_required_rules
         )
 
     def validate(self, decision: RouteDecision, context: ContextPackage) -> ValidationResult:
@@ -548,6 +546,7 @@ class CoordinationRuntimeService:
 
 
 def _compatibility_bindings() -> tuple[RuntimePolicyBinding, ...]:
+    routes = command_route_map()
     return tuple(sorted((
         RuntimePolicyBinding(
             command_name=command_name,
@@ -557,7 +556,7 @@ def _compatibility_bindings() -> tuple[RuntimePolicyBinding, ...]:
             capability_id=f"runtime.execute.{skill_slug}",
             capability_operation="execute",
         )
-        for command_name, skill_slug in DEFAULT_COMMAND_ROUTES.items()
+        for command_name, skill_slug in routes.items()
     ), key=lambda item: (item.command_name, item.skill_slug)))
 
 
@@ -741,7 +740,7 @@ def build_compatibility_composition(
             ("execute",),
             provenance,
         )
-        for skill_slug in sorted(set(DEFAULT_COMMAND_ROUTES.values()))
+        for skill_slug in sorted({binding.skill_slug for binding in bindings})
     )
     cid = generate_correlation_id()
     manifest = resolver.build_manifest(
