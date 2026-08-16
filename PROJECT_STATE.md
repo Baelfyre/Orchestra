@@ -6,9 +6,9 @@
 - **Base Branch:** `main`
 - **Stable Continuation Branch:** `main`
 - **Current Public Release:** `v1.4.0`
-- **Release Status:** `PUBLISHED_VERIFIED` on August 14, 2026 UTC / August 14, 2026 Asia/Manila
-- **Target Release:** `v1.4.0`
-- **Release-Candidate Metadata:** `1.4.0`
+- **Release Status:** `v1.5.0 PREPARED_NOT_RELEASED`; `v1.4.0 PUBLISHED_VERIFIED`
+- **Target Release:** `v1.5.0`
+- **Release-Candidate Metadata:** `1.5.0`
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.3.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.3.0 Release Commit:** `3c6155c111981632649a3c3207fac8ac1edcea74`
@@ -19,12 +19,38 @@
 - **v1.4.0 Release Commit:** `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`
 - **v1.4.0 Release Tree:** `1ef60b00e3ac6deba5da57c47d2a0850872d41a9`
 - **v1.4.0 Tag Ref:** lightweight `commit` ref, exact target verified
-- **v1.4.0 GitHub Release:** id `370658917`, immutable, non-draft, non-prerelease, latest
+- **v1.4.0 GitHub Release:** id `370658917`, immutable, non-draft, non-prerelease, latest until v1.5.0 publication
+- **v1.5.0 Candidate State:** `PREPARED_NOT_RELEASED`
+- **v1.5.0 Candidate Theme:** Machine-Verifiable Control Plane and Murmurs
+- **MCP State:** `DEFERRED_UNTIL_V1_5_0_PUBLISHED_VERIFIED`
 - **Policy Activation State:** `NOT_PERFORMED`
+
+## v1.5.0 Machine-Verifiable Control Plane and Murmurs - Release Candidate
+
+The post-v1.4.0 control-plane re-foundation has reached `LEGACY_RETIRED` and the forward governance stabilization has repaired merge readiness so `mergeable=true` is insufficient without a current `mergeable_state=clean`. Murmurs is canonical as an additive opt-in presentation layer with `NORMAL` as the default and hard-required explanation for authority, human-action, failure, blocker, governance-stop, handoff, and terminal events.
+
+Package/version metadata is prepared at `1.5.0` across all 11 release surfaces without changing public command identity, specialist identity, supported/scaffold host maturity, marketplace publication state, deployment state, or installed integrations. Compatibility evidence therefore supports a minor release rather than an intentional breaking major release.
+
+Fresh post-Murmurs release hardening is active under #292 and #300. A pre-version diagnostic checkpoint on exact source head `754d0183289fd543e9696aeb3c84bb94a42b130f` produced 1,055 passing runtime tests, 98.47% statement coverage, 95.36% branch coverage, all critical coverage floors green, Windows/Ubuntu/macOS validation green, Governance and validate green, and complete classified LEGACY_RETIRED Mutmut evidence. Those results are diagnostic only after release-metadata source movement and must be regenerated on the actual final candidate.
+
+```text
+CURRENT_PUBLIC_RELEASE=v1.4.0
+TARGET_VERSION=1.5.0
+TARGET_TAG=v1.5.0
+V1_5_0_RELEASE_STATE=PREPARED_NOT_RELEASED
+CONTROL_PLANE_STAGE=LEGACY_RETIRED
+MURMURS_DEFAULT=NORMAL
+MURMURS_TOKEN_PERCENT_CLAIM=UNAVAILABLE_WITHOUT_COMPARABLE_HOST_COUNTERS
+MCP_IMPLEMENTATION=DEFERRED_UNTIL_RELEASE_COMPLETE
+```
+
+Release publication remains separately gated. No v1.5.0 tag or GitHub Release exists merely because package metadata is prepared. The final candidate must pass fresh exact-head runtime/coverage, workflow-sanity, mutation and Cosmic Ray, cross-platform, CodeQL, governance, documentation-parity, signature, protected-merge, tag-identity, and release-identity verification.
+
+See `docs/releases/v1.5.0-machine-verifiable-control-plane-murmurs-release-candidate.md`.
 
 ## v1.4.0 Governance and Compliance Registry Cross-Integration Publication
 
-The v1.4.0 governance upgrade is `PUBLISHED_VERIFIED`. The public GitHub Release `Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration` was published under separate explicit authority as release id `370658917` at `2026-08-14T15:21:25Z`. Lightweight tag `v1.4.0` resolves directly to exact signed canonical release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50` with tree `1ef60b00e3ac6deba5da57c47d2a0850872d41a9`. The release is non-draft, non-prerelease, immutable, and independently verified as latest.
+The v1.4.0 governance upgrade is `PUBLISHED_VERIFIED`. The public GitHub Release `Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration` was published under separate explicit authority as release id `370658917` at `2026-08-14T15:21:25Z`. Lightweight tag `v1.4.0` resolves directly to exact signed canonical release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50` with tree `1ef60b00e3ac6deba5da57c47d2a0850872d41a9`. The release is non-draft, non-prerelease, immutable, and independently verified as latest at its publication checkpoint.
 
 The trusted Registry dependency is also complete: immutable `registry-v0.1.0` targets Registry canonical `3821bcb55125b4d8864f28b6423650e6e17ac67b`, and Orchestra network-provenance run `31811353512` / job `94802485762` passed exact release identity, real bundle integrity, `CURRENT` freshness, PH source query, project pinning, update-check, and idempotent re-sync. Final Orchestra PR #271 then passed the full exact-head matrix and merged as the signed release commit above; its canonical post-merge matrix passed Governance, validate, 568 runtime tests at 94.31% coverage, CodeQL actions/Python, and native Ubuntu/macOS/Windows.
 
@@ -49,7 +75,7 @@ The SK1-SK10 Specialist Knowledge Layer campaign is `MERGED_VERIFIED`. The bound
 
 Revision-bound readiness was reviewed through PR #257 and merged as signed canonical commit `db351796684789987eb5bce85e641ce31c91993b`. README alignment was then reviewed through PR #259 at signed head `b7b8bfeced7c0719558eb95c0797f0685f0c98f2`, passed all nine exact-head checks, and Squash-merged with an expected-head guard as exact release commit `3c6155c111981632649a3c3207fac8ac1edcea74` with tree `5ae72f6ab9ddf5284afdc3d8675f67fc23c24281`.
 
-The current runtime suite is 542 passing tests at 94.33% coverage, including deterministic `1.3.0` parity across all 11 live package/version surfaces.
+The current runtime suite at the v1.3.0 release checkpoint was 542 passing tests at 94.33% coverage, including deterministic `1.3.0` parity across all 11 live package/version surfaces.
 
 The first candidate PR #253 is preserved as fail-closed evidence: Stage 1 Strict Governance correctly rejected the 13-file candidate because significant package/test changes lacked a matching changelog update. The corrected tree added the focused changelog entry, restored historical wording, discarded stale validation, and reran the full exact-head matrix through PR #255.
 
@@ -238,7 +264,8 @@ The current bypass list is intentionally retained for repository-operational acc
 - **v1.2.0 Publication State:** Annotated tag `v1.2.0` and the immutable, non-draft, non-prerelease GitHub Release are historical `PUBLISHED_VERIFIED` evidence at release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`.
 - **v1.3.0 Preparation:** SK1-SK10 are `MERGED_VERIFIED`; package/version preparation is canonical through PR #255 at signed Squash `32257723d6ca72847e4581d8b927c7b14c77039e`, with 542 runtime tests at 94.33% coverage and all 9 observed exact-head checks passing.
 - **v1.3.0 Publication State:** Annotated tag `v1.3.0` targets exact signed release commit `3c6155c111981632649a3c3207fac8ac1edcea74`; the immutable, non-draft, non-prerelease GitHub Release `Orchestra v1.3.0: Specialist Intelligence` is `PUBLISHED_VERIFIED`. No deployment, marketplace publication, installed-integration refresh, or policy activation was performed.
-- **v1.4.0 Publication State:** Lightweight tag `v1.4.0` resolves directly to exact signed release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`; GitHub Release id `370658917`, `Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration`, is immutable, non-draft, non-prerelease, latest, and `PUBLISHED_VERIFIED`. No marketplace publication, installed-integration refresh, deployment, or policy activation was performed.
+- **v1.4.0 Publication State:** Lightweight tag `v1.4.0` resolves directly to exact signed release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`; GitHub Release id `370658917`, `Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration`, is immutable, non-draft, non-prerelease, and `PUBLISHED_VERIFIED`. No marketplace publication, installed-integration refresh, deployment, or policy activation was performed.
+- **v1.5.0 Preparation:** Package surfaces are prepared at `1.5.0`; fresh final exact-head evidence, signed canonical merge, tag publication, and GitHub Release verification remain pending. MCP remains deferred until that publication is complete.
 
 ## Local Startup Verification
 
