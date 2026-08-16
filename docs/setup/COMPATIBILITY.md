@@ -1,8 +1,10 @@
 # Compatibility
 
-The current public GitHub Release is Orchestra `v1.4.0: Governance & Compliance Registry Cross-Integration`, published from lightweight tag `v1.4.0` at exact signed release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`. The release is non-draft, non-prerelease, immutable, and latest. Publication did not graduate scaffold-only hosts or perform marketplace publication.
+The current public GitHub Release is Orchestra `v1.5.0: Machine-Verifiable Control Plane and Murmurs`, published from lightweight tag `v1.5.0` at exact signed release commit `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`. The release is non-draft, non-prerelease, immutable, and independently verified as latest. Publication did not graduate scaffold-only hosts or perform marketplace publication.
 
-The `v1.4.0` tag is a lightweight `commit` ref resolving directly to the GitHub-verified signed release commit above; there is no separate tag object. Historical v1.2.0/v1.3.0 annotated-tag evidence remains unchanged.
+The `v1.5.0` tag is a lightweight `commit` ref resolving directly to the GitHub-verified signed release commit above; there is no separate tag object. Historical v1.2.0/v1.3.0 annotated-tag evidence and the v1.4.0 lightweight-tag evidence remain unchanged.
+
+v1.5.0 preserves the existing public package, command, specialist, and host surfaces while making the machine contracts and deterministic kernel the canonical control-plane boundary at `LEGACY_RETIRED`. Murmurs is additive and opt-in with `NORMAL` as the default presentation mode. MCP is not part of v1.5.0 and remains a post-publication transport/integration candidate, not a source of authority.
 
 Scaffold-only hosts are not full support claims. Promotion requirements and graduation order live in `docs/project/SCAFFOLD_ADAPTER_GRADUATION_CRITERIA.md`.
 
