@@ -4,7 +4,7 @@ import re
 import sys
 from pathlib import Path
 
-SCHEMA_VERSION = "orchestra-autonomous-merge-readiness-v2"
+SCHEMA_VERSION = "orchestra-autonomous-merge-readiness-v3"
 
 REQUIRED_CHECKS = (
     ("Governance Check", "governance-check"),
@@ -36,6 +36,8 @@ EXPECTED_RULESET = {
 
 CHECK_STATUSES = {"queued", "in_progress", "completed"}
 PASS_CONCLUSION = "success"
+ORDINARY_MERGEABLE_STATE = "clean"
+PENDING_MERGEABLE_STATES = {"unknown"}
 PRE_MERGE_DISPOSITIONS = {
     "READY_FOR_MERGE",
     "WAIT_FOR_EVIDENCE",
@@ -60,6 +62,25 @@ def ruleset_matches(snapshot):
     if not isinstance(ruleset, dict):
         return False
     return all(ruleset.get(key) == value for key, value in EXPECTED_RULESET.items())
+
+
+def evaluate_mergeability(snapshot):
+    mergeable = snapshot.get("mergeable")
+    if mergeable is False:
+        return "BLOCK"
+    if mergeable is not True:
+        return "WAIT_FOR_EVIDENCE"
+
+    mergeable_state = snapshot.get("mergeable_state")
+    if not isinstance(mergeable_state, str) or not mergeable_state.strip():
+        return "WAIT_FOR_EVIDENCE"
+
+    normalized_state = mergeable_state.strip().lower()
+    if normalized_state in PENDING_MERGEABLE_STATES:
+        return "WAIT_FOR_EVIDENCE"
+    if normalized_state != ORDINARY_MERGEABLE_STATE:
+        return "BLOCK"
+    return None
 
 
 def evaluate_pre_merge(snapshot):
@@ -88,8 +109,9 @@ def evaluate_pre_merge(snapshot):
     if snapshot.get("changelog_required") and not snapshot.get("changelog_updated"):
         return "BLOCK"
 
-    if snapshot.get("mergeable") is False:
-        return "BLOCK"
+    mergeability_disposition = evaluate_mergeability(snapshot)
+    if mergeability_disposition is not None:
+        return mergeability_disposition
 
     if not snapshot.get("head_reconfirmed"):
         return "WAIT_FOR_EVIDENCE"
@@ -126,6 +148,12 @@ def evaluate_pre_merge(snapshot):
 
 
 def evaluate_post_merge(snapshot):
+    if snapshot.get("pre_merge_disposition") != "READY_FOR_MERGE":
+        return "MERGE_STATE_UNVERIFIED"
+    if str(snapshot.get("pre_merge_mergeable_state", "")).strip().lower() != ORDINARY_MERGEABLE_STATE:
+        return "MERGE_STATE_UNVERIFIED"
+    if snapshot.get("bypass_used") is not False:
+        return "MERGE_STATE_UNVERIFIED"
     if snapshot.get("merge_api_result") != "success":
         return "MERGE_STATE_UNVERIFIED"
     if not snapshot.get("canonical_read_completed"):
@@ -292,6 +320,8 @@ def validate(root):
         "NO_EVIDENCE != APPROVAL",
         "BYPASS_CAPABILITY != GOVERNANCE_AUTHORIZATION",
         "NO_CHECK_DATA = WAIT_FOR_EVIDENCE",
+        "MERGEABLE_STATE_BLOCKED = BLOCK",
+        "mergeable_state == clean",
         "Squash",
         "expected_head_sha",
         "MERGED_VERIFIED",

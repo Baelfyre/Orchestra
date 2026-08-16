@@ -1,5 +1,5 @@
 {
-  "schema_version": "orchestra-autonomous-merge-readiness-v2",
+  "schema_version": "orchestra-autonomous-merge-readiness-v3",
   "required_checks": [
     {"workflow": "Governance Check", "job": "governance-check"},
     {"workflow": "validate", "job": "validate"},
@@ -35,6 +35,7 @@
     "unresolved_blockers": 0,
     "unresolved_review_threads": 0,
     "mergeable": true,
+    "mergeable_state": "clean",
     "selected_merge_method": "squash",
     "bypass_used": false,
     "ruleset": {
@@ -83,7 +84,14 @@
     {"id": "changelog-missing", "overrides": {"changelog_required": true, "changelog_updated": false}, "expected_disposition": "BLOCK"},
     {"id": "head-not-reconfirmed", "overrides": {"head_reconfirmed": false}, "expected_disposition": "WAIT_FOR_EVIDENCE"},
     {"id": "merge-conflict", "overrides": {"mergeable": false}, "expected_disposition": "BLOCK"},
-    {"id": "mergeable-is-not-enough", "overrides": {"checks": null, "mergeable": true}, "expected_disposition": "WAIT_FOR_EVIDENCE"},
+    {"id": "mergeability-missing", "overrides": {"mergeable": null}, "expected_disposition": "WAIT_FOR_EVIDENCE"},
+    {"id": "mergeable-state-missing", "overrides": {"mergeable_state": null}, "expected_disposition": "WAIT_FOR_EVIDENCE"},
+    {"id": "mergeable-state-unknown", "overrides": {"mergeable_state": "unknown"}, "expected_disposition": "WAIT_FOR_EVIDENCE"},
+    {"id": "mergeable-state-blocked", "overrides": {"mergeable": true, "mergeable_state": "blocked"}, "expected_disposition": "BLOCK"},
+    {"id": "mergeable-state-behind", "overrides": {"mergeable": true, "mergeable_state": "behind"}, "expected_disposition": "BLOCK"},
+    {"id": "mergeable-state-dirty", "overrides": {"mergeable": true, "mergeable_state": "dirty"}, "expected_disposition": "BLOCK"},
+    {"id": "mergeable-state-unstable", "overrides": {"mergeable": true, "mergeable_state": "unstable"}, "expected_disposition": "BLOCK"},
+    {"id": "mergeable-is-not-enough", "overrides": {"checks": null, "mergeable": true, "mergeable_state": "clean"}, "expected_disposition": "WAIT_FOR_EVIDENCE"},
     {"id": "unresolved-blocker", "overrides": {"unresolved_blockers": 1}, "expected_disposition": "BLOCK"},
     {"id": "unresolved-thread", "overrides": {"unresolved_review_threads": 1}, "expected_disposition": "BLOCK"},
     {"id": "approval-requirement-drift", "ruleset_overrides": {"required_approvals": 1}, "expected_disposition": "BLOCK"},
@@ -97,6 +105,51 @@
       "id": "verified-squash",
       "expected_disposition": "MERGED_VERIFIED",
       "snapshot": {
+        "pre_merge_disposition": "READY_FOR_MERGE",
+        "pre_merge_mergeable_state": "clean",
+        "bypass_used": false,
+        "merge_api_result": "success",
+        "canonical_read_completed": true,
+        "pr_merged": true,
+        "merge_method": "squash",
+        "reviewed_head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "canonical_main_sha": "cccccccccccccccccccccccccccccccccccccccc",
+        "reviewed_tree_sha": "dddddddddddddddddddddddddddddddddddddddd",
+        "canonical_tree_sha": "dddddddddddddddddddddddddddddddddddddddd",
+        "pre_merge_base_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "canonical_parent_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "content_diff_empty": true,
+        "canonical_signature_verified": true
+      }
+    },
+    {
+      "id": "blocked-pre-merge-state",
+      "expected_disposition": "MERGE_STATE_UNVERIFIED",
+      "snapshot": {
+        "pre_merge_disposition": "BLOCK",
+        "pre_merge_mergeable_state": "blocked",
+        "bypass_used": false,
+        "merge_api_result": "success",
+        "canonical_read_completed": true,
+        "pr_merged": true,
+        "merge_method": "squash",
+        "reviewed_head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "canonical_main_sha": "cccccccccccccccccccccccccccccccccccccccc",
+        "reviewed_tree_sha": "dddddddddddddddddddddddddddddddddddddddd",
+        "canonical_tree_sha": "dddddddddddddddddddddddddddddddddddddddd",
+        "pre_merge_base_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "canonical_parent_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "content_diff_empty": true,
+        "canonical_signature_verified": true
+      }
+    },
+    {
+      "id": "bypass-post-merge-state",
+      "expected_disposition": "MERGE_STATE_UNVERIFIED",
+      "snapshot": {
+        "pre_merge_disposition": "READY_FOR_MERGE",
+        "pre_merge_mergeable_state": "clean",
+        "bypass_used": true,
         "merge_api_result": "success",
         "canonical_read_completed": true,
         "pr_merged": true,
