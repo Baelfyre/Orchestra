@@ -13,12 +13,7 @@ from orchestra_runtime.machine_contracts import (
 )
 from orchestra_runtime.models import Command, ContextPackage
 from orchestra_runtime.repositories import ManifestRepository, SkillSourceRepository
-from orchestra_runtime.services import (
-    DEFAULT_COMMAND_ROUTES,
-    GovernanceValidator,
-    RouterService,
-    SkillRegistry,
-)
+from orchestra_runtime.services import GovernanceValidator, RouterService, SkillRegistry
 from orchestra_runtime.workflow_contracts import build_workflow_sanity_receipt
 
 
@@ -26,6 +21,7 @@ ROOT = Path(__file__).resolve().parents[2]
 
 
 def _route(command_name: str, metadata: dict | None = None):
+    routes = command_route_map(ROOT)
     registry = SkillRegistry(ManifestRepository(ROOT), SkillSourceRepository(ROOT))
     router = RouterService(registry)
     governance = GovernanceValidator()
@@ -34,7 +30,7 @@ def _route(command_name: str, metadata: dict | None = None):
         adapter_name="codex",
         prompt=command_name,
         project_root=ROOT,
-        available_commands=tuple(DEFAULT_COMMAND_ROUTES),
+        available_commands=tuple(routes),
         manifest_version="1.4.0",
         metadata=metadata or {},
     )
@@ -63,28 +59,37 @@ def _arbiter(**overrides):
     return evaluate_arbiter(ArbiterKernelInput(**values))
 
 
-def test_machine_command_routes_match_existing_runtime_table_exactly():
-    assert command_route_map(ROOT) == DEFAULT_COMMAND_ROUTES
+def test_machine_command_routes_are_runtime_router_defaults():
+    routes = command_route_map(ROOT)
+    registry = SkillRegistry(ManifestRepository(ROOT), SkillSourceRepository(ROOT))
+    router = RouterService(registry)
+    assert registry._command_routes == routes
+    assert router._command_routes == routes
 
 
 def test_machine_governance_required_set_matches_runtime_router_behavior():
     expected = governance_required_specialists(ROOT)
-    for command_name, specialist in DEFAULT_COMMAND_ROUTES.items():
+    for command_name, specialist in command_route_map(ROOT).items():
         route, _ = _route(command_name)
         assert route.skill_slug == specialist
         assert route.governance_required is (specialist in expected)
 
 
-def test_machine_validation_rules_match_existing_governance_validator():
+def test_machine_validation_rules_are_runtime_governance_defaults():
     runtime_rules = GovernanceValidator()._rules
     machine_rules = runtime_validation_rule_records(ROOT)
+    dry_run_required = {
+        str(record["rule_id"])
+        for record in machine_rules
+        if record.get("dry_run_required") is True
+    }
     normalized_runtime = [
         {
             "rule_id": rule.name,
             "skill_slugs": list(rule.skill_slugs),
             "command_names": list(rule.command_names),
             "validator_key": rule.validator_key,
-            "dry_run_required": rule.name == "destructive-skill-approval",
+            "dry_run_required": rule.name in dry_run_required,
         }
         for rule in runtime_rules
     ]

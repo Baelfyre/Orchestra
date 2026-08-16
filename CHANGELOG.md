@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.4.0 Control Plane Re-foundation - LEGACY_RETIRED Candidate
+
+- Advances the separately governed migration from `CANONICAL_PROMOTION_AUTHORITY` to `LEGACY_RETIRED` without changing the published `v1.4.0` release.
+- Removes the runtime's independently addressable service-level authority snapshots for default command routes, ambiguity fallback, governance-required specialist classification, governance validation-rule records, and dry-run rule identity. `SkillRegistry`, `RouterService`, `GovernanceValidator`, compatibility policy bindings, and compatibility capability grants now consume the versioned machine contracts directly.
+- Replaces the stored `models.py::VALID_SPECIALISTS` snapshot with an on-demand machine-derived compatibility view so the legacy import can remain available without becoming an independent specialist-identity authority.
+- Converts routing, shadow-conformance, governance, and migration-state regressions from legacy-table parity checks to direct machine-authority consumption checks, including fail-closed invalid-rule coverage.
+- Marks the machine migration state `LEGACY_RETIRED` only after the adjacent `CANONICAL_PROMOTION_AUTHORITY` checkpoint became signed canonical through PR #298 at `529639beefd8fa0cc153b6e94649b487de4f7bc2`.
+- This candidate does not select or publish a new SemVer, tag, or GitHub Release and does not perform marketplace publication, installed-integration refresh, deployment, production mutation, ruleset bypass, force push, history rewrite, branch deletion, or destructive cleanup.
+
 ## Post-v1.4.0 Control Plane Re-foundation P0/P1-P9 - Canonical Integration
 
 - Consolidated the control-plane re-foundation tracked by #273 into PR #294, covering exact source and validation receipts, typed governance and deterministic Arbiter Kernel enforcement, machine specialist/routing/governance contracts, exact compliance set-equality receipts, host capability/conformance contracts, typed continuity and JSONL context state, persistent remediation circuit breakers, deterministic pre-execution policy gating, and P9 shadow conformance.

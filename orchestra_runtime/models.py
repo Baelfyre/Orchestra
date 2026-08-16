@@ -6,7 +6,6 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from .correlation import validate_correlation_id
-from .machine_contracts import valid_specialist_ids
 
 if TYPE_CHECKING:
     from .lifecycle import StructuredTerminalResult
@@ -14,10 +13,14 @@ if TYPE_CHECKING:
 
 APPROVED_UNIT_PLAN_SCHEMA_VERSION = "1.0.0"
 
-# Backward-compatible runtime surface derived from the canonical machine registry.
-# This name is intentionally retained during CANONICAL_PROMOTION_AUTHORITY; it is
-# no longer an independently maintained specialist identity authority.
-VALID_SPECIALISTS = valid_specialist_ids()
+
+def __getattr__(name: str) -> object:
+    """Preserve the legacy specialist-identity import as a derived compatibility view."""
+    if name == "VALID_SPECIALISTS":
+        from .machine_contracts import valid_specialist_ids
+
+        return valid_specialist_ids()
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
 def _validate_repository_relative_path(p: str, field_name: str) -> str:

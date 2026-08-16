@@ -111,7 +111,7 @@ Accessible summary: a request supplies project context and selects separate risk
 
 The cumulative P0/P1 through P9 control-plane re-foundation is canonical through PR #294, with post-merge evidence parity through PR #295. Migration authority progresses only through the explicit sequence `SHADOW -> ADVISORY -> VALIDATION_AUTHORITY -> CANONICAL_PROMOTION_AUTHORITY -> LEGACY_RETIRED`; no stage is inferred from test success or mergeability.
 
-The migration state in this revision is `CANONICAL_PROMOTION_AUTHORITY`. The versioned machine specialist registry, routing contract, and governance policy now supply the runtime's default specialist identity, command routing and ambiguity fallback, governance-required specialist classification, and governance validation rules. Backward-compatible runtime names remain available as derived surfaces rather than independently maintained authority. Legacy runtime surfaces are not yet retired, and installed integrations are not mutated by this stage.
+The migration state in this revision is `LEGACY_RETIRED`. The versioned machine specialist registry, routing contract, and governance policy are the runtime's normative sources for specialist identity, command routing and ambiguity fallback, governance-required specialist classification, and governance validation rules. Runtime construction reads those contracts directly instead of consuming independently maintained compatibility tables. The legacy `VALID_SPECIALISTS` import remains available only as an on-demand machine-derived compatibility view. Installed integrations are not mutated by this stage, and release publication remains a separate governed transition.
 
 ## v1.4.0 Governance and Compliance Registry Cross-Integration
 
@@ -225,7 +225,7 @@ Accepted child work receives an authority subset, capability subset, bounded dep
 
 Runs use typed lifecycle signals and distinct waiting or terminal states. Exact replay of an accepted terminal signal is idempotent; conflicting replay is rejected. Run-linked audit events record authority, capabilities, delegation, coordination, lifecycle, and terminal outcomes without granting permission.
 
-The control-plane re-foundation now binds exact identities, validation outcomes, specialist identity, routing defaults, governance classification, validation rules, transition precedence, and remediation defaults to versioned machine contracts. Agent prose may explain those records, but it cannot override their identities or verdicts. The migration remains staged so canonical-promotion authority does not imply legacy retirement, release authority, or installed-host mutation.
+The control-plane re-foundation now binds exact identities, validation outcomes, specialist identity, routing defaults, governance classification, validation rules, transition precedence, and remediation defaults to versioned machine contracts. Agent prose may explain those records, but it cannot override their identities or verdicts. The migration has reached `LEGACY_RETIRED`; that retirement of duplicate runtime authority does not grant release authority, mutate installed hosts, or authorize deployment.
 
 ### Coordination state and evidence freshness
 
@@ -239,7 +239,7 @@ The Tuner's coordination runtime records specialist-owned contracts, dependencie
 | The Governor | Legal/compliance governance, source/applicability verification, privacy-obligation, IP and licensing review | Does not provide legal advice or grant runtime authority |
 | Conductor | Routing and ordered specialist handoffs | Routes work but does not implement it |
 | The Tuner | Cross-specialist contract assembly, contradictions, invalidation, and re-entry recommendations | Cannot route, implement, validate itself, or grant authority |
-| Clockwork | Architecture, service boundaries, distributed patterns, concurrency, API compatibility, and structural design | Does not implement |
+| Clockwork | Architecture, service boundaries, distributed patterns, concurrency, API compatibility/versioning, and structural design | Does not implement |
 | Cloak | UI/UX, accessibility, responsive behavior, forms, design states, and frontend interaction boundaries | Does not own backend policy |
 | Chronicler | Database dialects, transactions, persistence semantics, migrations, query plans, and tenant isolation | Does not own UI or general QA |
 | Ponytail | Stack-aware minimal, reversible implementation and implementation-tooling execution | Requires upstream decisions to be settled |
@@ -282,7 +282,7 @@ Use the host-native path:
 - Antigravity: run `agy plugin install https://github.com/Baelfyre/Orchestra`.
 - Manual or scaffold-only hosts: follow the exact host boundary in the [Installation Guide](docs/setup/INSTALLATION.md).
 
-Repository manifests identify package version `1.4.0`, and the current public GitHub release is `v1.4.0`. GitHub Release publication, marketplace publication, installed-integration refresh, and later control-plane migration stages remain separate governed actions. See the Installation Guide for supported installation paths and host-maturity boundaries.
+Repository manifests identify package version `1.4.0`, and the current public GitHub release is `v1.4.0`. The completed control-plane migration does not itself publish a new version; GitHub Release publication, marketplace publication, and installed-integration refresh remain separate governed actions. See the Installation Guide for supported installation paths and host-maturity boundaries.
 
 ## Quick Start
 

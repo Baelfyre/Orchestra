@@ -22,7 +22,7 @@ def test_checked_registry_is_exact_frontmatter_compilation():
     assert contracts.load_specialist_registry(ROOT) == contracts.compile_specialist_registry(ROOT)
 
 
-def test_specialist_identity_set_matches_existing_runtime_constant_during_migration():
+def test_legacy_specialist_identity_import_remains_machine_derived_compatibility():
     assert contracts.valid_specialist_ids(ROOT) == VALID_SPECIALISTS
 
 
