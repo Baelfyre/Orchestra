@@ -17,7 +17,7 @@
     "reports"
   ],
   "properties": {
-    "schema_version": {"type": "string", "const": "orchestra.mutation-evidence.v1"},
+    "schema_version": {"type": "string", "const": "orchestra.mutation-evidence.v2"},
     "generated_at": {"type": "string", "format": "date-time"},
     "repository": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
     "tested_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
@@ -28,16 +28,36 @@
       "required": ["name", "version"],
       "properties": {
         "name": {"type": "string", "const": "mutmut"},
-        "version": {"type": "string", "minLength": 1}
+        "version": {"type": "string", "minLength": 1
+        }
       }
     },
-    "scope": {"type": "object"},
+    "scope": {
+      "type": "object",
+      "required": ["modules", "mutant_patterns", "target_runs", "configuration", "mutate_only_covered_lines", "max_stack_depth"]
+    },
     "execution": {
       "type": "object",
-      "required": ["run_exit_code", "score_status", "interpretation"],
+      "required": [
+        "run_exit_code",
+        "score_status",
+        "classification_status",
+        "target_mutant_total",
+        "target_killed_count",
+        "target_survived_count",
+        "target_score_percent",
+        "not_checked_count",
+        "interpretation"
+      ],
       "properties": {
-        "run_exit_code": {"type": "integer"},
-        "score_status": {"type": "string", "const": "UNSCORED_BASELINE"},
+        "run_exit_code": {"type": "integer", "const": 0},
+        "score_status": {"type": "string", "const": "VALID_CLASSIFIED_SCORE"},
+        "classification_status": {"type": "string", "const": "COMPLETE"},
+        "target_mutant_total": {"type": "integer", "minimum": 1},
+        "target_killed_count": {"type": "integer", "minimum": 0},
+        "target_survived_count": {"type": "integer", "minimum": 0},
+        "target_score_percent": {"type": "number", "minimum": 0, "maximum": 100},
+        "not_checked_count": {"type": "integer", "const": 0},
         "interpretation": {"type": "string", "minLength": 1}
       }
     },
