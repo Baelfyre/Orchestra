@@ -24,15 +24,21 @@
     {"order": 3, "path": "machine/specialists/registry.v1.json", "purpose": "Compiled specialist identities and routing-relevant metadata"},
     {"order": 4, "path": "machine/routing/routes.v1.json", "purpose": "Deterministic command routing, direct routes, ordered sequences, aliases, and fallback"},
     {"order": 5, "path": "machine/governance/policy.v1.json", "purpose": "Governance vocabulary, precedence, ownership, validation rules, and remediation defaults"},
-    {"order": 6, "path": "machine/provenance/third-party.v1.json", "purpose": "Third-party dependencies, references, source-use classification, license identifiers, and incorporation boundaries"},
-    {"order": 7, "path": "machine/schemas/", "purpose": "JSON Schema contracts for machine-authoritative records"},
-    {"order": 8, "path": "PROJECT_STATE.md", "purpose": "Human-readable project continuity and implementation chronology"},
-    {"order": 9, "path": "README.md", "purpose": "Human-oriented project overview, rationale, architecture explanation, and release narrative"}
+    {"order": 6, "path": "machine/migration/control-plane.v1.json", "purpose": "Current control-plane migration stage and transition evidence"},
+    {"order": 7, "path": "machine/presentation/murmurs-policy.v1.json", "purpose": "Deterministic Murmurs presentation dispositions and required-explanation safety boundaries"},
+    {"order": 8, "path": "machine/presentation/murmurs-vocabulary.v1.json", "purpose": "Local deterministic non-semantic Murmurs vocabulary"},
+    {"order": 9, "path": "machine/provenance/third-party.v1.json", "purpose": "Third-party dependencies, references, source-use classification, license identifiers, and incorporation boundaries"},
+    {"order": 10, "path": "machine/schemas/", "purpose": "JSON Schema contracts for machine-authoritative records"},
+    {"order": 11, "path": "PROJECT_STATE.md", "purpose": "Human-readable project continuity and implementation chronology"},
+    {"order": 12, "path": "README.md", "purpose": "Human-oriented project overview, rationale, architecture explanation, and release narrative"}
   ],
   "machine_contracts": {
     "specialist_registry": "machine/specialists/registry.v1.json",
     "routing_contract": "machine/routing/routes.v1.json",
     "governance_policy": "machine/governance/policy.v1.json",
+    "control_plane_migration": "machine/migration/control-plane.v1.json",
+    "murmurs_presentation_policy": "machine/presentation/murmurs-policy.v1.json",
+    "murmurs_vocabulary": "machine/presentation/murmurs-vocabulary.v1.json",
     "third_party_provenance": "machine/provenance/third-party.v1.json",
     "third_party_provenance_schema": "machine/schemas/third-party-provenance.schema.json",
     "schemas_directory": "machine/schemas",
@@ -41,6 +47,9 @@
     "test_evidence_schema": "machine/schemas/test-evidence.schema.json",
     "cosmic_ray_evidence_schema": "machine/schemas/cosmic-ray-evidence.schema.json",
     "mutation_evidence_schema": "machine/schemas/mutation-evidence.schema.json",
+    "presentation_policy_schema": "machine/schemas/presentation-policy.schema.json",
+    "murmurs_vocabulary_schema": "machine/schemas/murmurs-vocabulary.schema.json",
+    "communication_measurement_schema": "machine/schemas/communication-measurement.schema.json",
     "readme_machine_index_schema": "machine/schemas/readme-machine-index.schema.json"
   },
   "specialists": {
@@ -53,6 +62,15 @@
   "governance": {
     "human_overview": "docs/governance/GOVERNANCE_LAYER.md",
     "machine_policy": "machine/governance/policy.v1.json",
+    "control_plane_stage": "LEGACY_RETIRED",
+    "control_plane_stage_source": "machine/migration/control-plane.v1.json#/current_stage",
+    "merge_readiness_protocol": "docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md",
+    "ordinary_merge_requirements": {
+      "mergeable": true,
+      "mergeable_state": "clean",
+      "expected_head_protection": true,
+      "governed_bypass_allowed": false
+    },
     "effective_authority_model": "selected_profile INTERSECTION explicit_grant INTERSECTION repository_policy INTERSECTION host_capability INTERSECTION current_phase INTERSECTION current_evidence",
     "transition_dispositions": ["AUTO_CONTINUE", "AUTO_REMEDIATE_AND_REVALIDATE", "WAIT_FOR_EVIDENCE", "WAIT_FOR_CAPACITY", "ESCALATE_HUMAN", "STOP"],
     "protected_actions_require_separate_authority": true
@@ -61,7 +79,28 @@
     "primary_reference": "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md",
     "routing_reference": "ROUTING_MAP.md",
     "governance_reference": "docs/governance/GOVERNANCE_LAYER.md",
-    "compliance_registry_reference": "docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md"
+    "compliance_registry_reference": "docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md",
+    "murmurs_reference": "docs/project/MURMURS_COMMUNICATION_BUDGET.md",
+    "presentation": {
+      "host_default_mode": "NORMAL",
+      "opt_in_mode": "MURMURS",
+      "host_selector": "orchestra.presentation_mode",
+      "dispositions": ["SILENT", "MURMUR", "EXPLAIN"],
+      "model_generated_filler": false,
+      "vocabulary_injected_into_model_context": false,
+      "presentation_may_change_machine_state": false,
+      "presentation_may_override_governance": false,
+      "required_explanation_events": [
+        "HUMAN_ACTION_REQUIRED",
+        "AUTHORITY_REQUIRED",
+        "VALIDATION_FAILED",
+        "UNRECOVERABLE_BLOCKER",
+        "GOVERNANCE_STOP",
+        "HANDOFF_REQUIRED",
+        "TASK_COMPLETED",
+        "TASK_FAILED"
+      ]
+    }
   },
   "validation": {
     "workflow": ".github/workflows/validate.yml",
@@ -73,6 +112,8 @@
     "legacy_mutmut_evidence_workflow": ".github/workflows/mutation-confidence.yml",
     "test_evidence_schema": "machine/schemas/test-evidence.schema.json",
     "test_evidence_schema_version": "orchestra.test-evidence.v1",
+    "communication_measurement_schema": "machine/schemas/communication-measurement.schema.json",
+    "murmurs_measurement_policy": "Repository simulation may prove deterministic structural reductions such as fewer model-progress calls, but billing/model token deltas are reportable only when comparable live host-reported counters share the same counter identity. Unavailable token evidence remains unavailable rather than estimated.",
     "mutation_evidence_policy": "Mutation scores are scope-specific and valid only when the configured unmutated baseline passes, all scheduled mutation jobs complete, and the machine-readable evidence artifact binds the tested checkout SHA and source-head SHA.",
     "evidence_policy": "Runtime confidence claims must be derived from persisted machine-readable CI evidence bound to the tested checkout SHA and source-head SHA."
   },
@@ -83,11 +124,13 @@
     "changelog": "CHANGELOG.md",
     "release_docs": "docs/releases/",
     "validation_evidence": "docs/validation/",
-    "third_party_provenance": "docs/THIRD_PARTY_PROVENANCE.md"
+    "third_party_provenance": "docs/THIRD_PARTY_PROVENANCE.md",
+    "merge_readiness": "docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md",
+    "murmurs": "docs/project/MURMURS_COMMUNICATION_BUDGET.md"
   },
   "representation_policy": {
     "markdown": "Human-readable explanation, rationale, examples, and nuanced specialist guidance",
-    "json": "Machine-readable state, identity, routing, governance, receipts, manifests, provenance, and indexes",
+    "json": "Machine-readable state, identity, routing, governance, receipts, manifests, provenance, presentation contracts, and indexes",
     "json_schema": "Validation contract for machine-readable records",
     "jsonl": "Append-only event/history records where incremental retrieval is preferable",
     "parity_rule": "When the same deterministic fact appears in more than one representation, CI must validate parity or derive the projection from one authoritative source."
@@ -100,6 +143,9 @@
     "retrieve_human_docs_for_rationale": true,
     "review_third_party_provenance_before_attributing_external_code_or_dependencies": true,
     "treat_mutation_scores_as_scope_specific_evidence": true,
-    "treat_generated_or_derived_views_as_non_authoritative_when_their_source_contract_is_available": true
+    "treat_generated_or_derived_views_as_non_authoritative_when_their_source_contract_is_available": true,
+    "treat_mergeable_boolean_without_clean_mergeable_state_as_insufficient": true,
+    "treat_murmurs_as_presentation_only": true,
+    "do_not_claim_murmurs_token_savings_without_comparable_host_reported_counters": true
   }
 }
