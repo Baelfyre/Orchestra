@@ -132,16 +132,19 @@ jobs:
               target_index=0
               builder_args=()
 
-              for pattern in "$@"; do
+              for target_spec in "$@"; do
+                public_pattern="${target_spec%%=*}"
+                mutmut_selector="${target_spec#*=}"
                 target_index=$((target_index + 1))
                 target_output="$artifact_root/${label}-target-${target_index}-run.txt"
-                echo "MUTATION_TARGET_PATTERN=$pattern" | tee -a "$run_output"
-                mutmut run "$pattern" 2>&1 | tee "$target_output"
+                echo "MUTATION_TARGET_PATTERN=$public_pattern" | tee -a "$run_output"
+                echo "MUTMUT_SELECTOR=$mutmut_selector" | tee -a "$run_output"
+                mutmut run "$mutmut_selector" 2>&1 | tee "$target_output"
                 target_code=${PIPESTATUS[0]}
                 cat "$target_output" >> "$run_output"
                 echo "MUTATION_TARGET_EXIT_CODE=$target_code" | tee -a "$run_output"
                 echo "$target_code" > "$artifact_root/${label}-target-${target_index}-exit-code.txt"
-                builder_args+=(--target-run "$pattern=$target_output")
+                builder_args+=(--target-run "$public_pattern=$target_output")
                 if [ "$target_code" != "0" ]; then
                   run_code=1
                 fi
@@ -179,17 +182,17 @@ jobs:
           }
 
           run_target models mutation/legacy-retired-models.cfg \
-            "orchestra_runtime.models.__getattr__*"
+            "orchestra_runtime.models.__getattr__*=orchestra_runtime.models.x___getattr__*"
           models_code=$?
 
           run_target services mutation/legacy-retired-services.cfg \
-            "orchestra_runtime.services._default_governance_rules*" \
-            "orchestra_runtime.services.SkillRegistry.__init__*" \
-            "orchestra_runtime.services.RouterService.__init__*" \
-            "orchestra_runtime.services.RouterService.route*" \
-            "orchestra_runtime.services.GovernanceValidator.__init__*" \
-            "orchestra_runtime.services._compatibility_bindings*" \
-            "orchestra_runtime.services.build_compatibility_composition*"
+            "orchestra_runtime.services._default_governance_rules*=orchestra_runtime.services.x__default_governance_rules*" \
+            "orchestra_runtime.services.SkillRegistry.__init__*=orchestra_runtime.services.xǁSkillRegistryǁ__init__*" \
+            "orchestra_runtime.services.RouterService.__init__*=orchestra_runtime.services.xǁRouterServiceǁ__init__*" \
+            "orchestra_runtime.services.RouterService.route*=orchestra_runtime.services.xǁRouterServiceǁroute*" \
+            "orchestra_runtime.services.GovernanceValidator.__init__*=orchestra_runtime.services.xǁGovernanceValidatorǁ__init__*" \
+            "orchestra_runtime.services._compatibility_bindings*=orchestra_runtime.services.x__compatibility_bindings*" \
+            "orchestra_runtime.services.build_compatibility_composition*=orchestra_runtime.services.x_build_compatibility_composition*"
           services_code=$?
 
           echo "$models_code" | tee "$artifact_root/models-target-exit-code.txt"
