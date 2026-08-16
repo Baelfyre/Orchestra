@@ -82,7 +82,7 @@ Phases 6B-A through 6C are complete and merged through PR #183. Phase 6D produce
 - [x] Prepare revision-bound release-readiness evidence and stable continuity surfaces through PR #257.
 - [x] Align README public-facing scope with the completed Specialist Intelligence campaign through PR #259, pass all nine exact-head checks, and merge exact signed release commit `3c6155c111981632649a3c3207fac8ac1edcea74`.
 - [x] Under separate explicit publication authority, create annotated tag `v1.3.0` targeting exact release commit `3c6155c111981632649a3c3207fac8ac1edcea74`.
-- [x] Publish `Orchestra v1.3.0: Specialist Intelligence` as a non-draft, non-prerelease, immutable GitHub Release and independently verify it as the latest public release.
+- [x] Publish `Orchestra v1.3.0: Specialist Intelligence` as a non-draft, non-prerelease, immutable GitHub Release and independently verify it as the latest public release at that checkpoint.
 - [x] Record the annotated tag object as unsigned while preserving the GitHub-verified signed release commit as the release trust anchor, consistent with the v1.2.0 tag pattern.
 - [x] Confirm publication performed no deployment, marketplace publication, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite.
 
@@ -96,15 +96,15 @@ Publication closeout evidence is recorded in `docs/validation/V1_3_0_PUBLICATION
 - [x] Add and exercise the fail-closed README Impact Gate.
 - [x] Validate Registry `0.1.0` candidate compatibility, freshness propagation, source query, and project pinning.
 - [x] Activate and independently verify the Registry `compliance-ruleset`, then merge foundation, source/freshness pilot, deterministic packaging, and publication-readiness phases.
-- [x] Publish immutable trusted Registry release `registry-v0.1.0` at exact Registry canonical `3821bcb55125b4d8864f28b6423650e6e17ac67b`.
+- [x] Publish immutable trusted Registry release `registry-v0.1.0` at exact Registry canonical `3821bcb55125b4df28b6423650e6e17ac67b`.
 - [x] Run real Orchestra network provenance against the immutable Registry release and verify exact identity, bundle/manifest trust, `CURRENT` freshness, PH source query, pinning, update-check, and idempotent re-sync.
 - [x] Finalize Orchestra exact-head release readiness through PR #271 and signed canonical `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50` with the complete validation matrix green.
-- [x] Under separate explicit publication authority, publish lightweight tag `v1.4.0` resolving directly to the exact release commit and GitHub Release id `370658917`, then independently verify non-draft, non-prerelease, immutable, and latest state.
+- [x] Under separate explicit publication authority, publish lightweight tag `v1.4.0` resolving directly to the exact release commit and GitHub Release id `370658917`, then independently verify non-draft, non-prerelease, immutable, and latest state at that checkpoint.
 - [x] Confirm publication performed no marketplace publication, installed-integration refresh, deployment/production mutation, policy activation, destructive cleanup, branch deletion, force push, or history rewrite.
 
 Publication closeout evidence is recorded in `docs/validation/V1_4_0_PUBLICATION_CLOSEOUT.md`.
 
-## v1.5.0 Machine-Verifiable Control Plane and Murmurs - Release Preparation
+## v1.5.0 Machine-Verifiable Control Plane and Murmurs - Published Verified
 
 - [x] Complete the controlled P0/P1-P9 control-plane re-foundation and advance the migration through separately governed checkpoints to `LEGACY_RETIRED`.
 - [x] Repair merge readiness forward-only so ordinary progression requires both `mergeable=true` and a current `mergeable_state=clean` without ruleset bypass.
@@ -115,14 +115,17 @@ Publication closeout evidence is recorded in `docs/validation/V1_4_0_PUBLICATION
 - [x] Produce complete exact-head LEGACY_RETIRED Mutmut evidence on the pre-version diagnostic candidate with no not-checked, interrupted, timeout, suspicious, skipped, or unknown outcomes accepted.
 - [x] Select `1.5.0` from compatibility evidence: package/command/specialist/host surfaces remain present, retained compatibility views are derived rather than removed, and Murmurs is opt-in.
 - [x] Prepare all 11 package/version surfaces and release-candidate notes for `1.5.0` without changing host maturity or installed integrations.
-- [ ] Classify the final current coverage misses without removing them from the denominator or using broad exclusions.
-- [ ] Generate fresh final-candidate runtime, branch, critical-module, Mutmut, integrated Cosmic Ray, workflow-sanity, P9 conformance, Windows/Ubuntu/macOS, CodeQL, and governance evidence after release metadata is complete.
-- [ ] Persist machine release evidence and revision-bound `V1_5_0_RELEASE_READINESS_EVIDENCE.md`.
-- [ ] Materialize the reviewed release tree as a GitHub-signed commit and validate it through a fresh protected canonical PR.
-- [ ] Squash-merge only from a current ordinary `mergeable_state=clean` state with exact-head protection and independently verify canonical parent/tree/signature/state.
-- [ ] Close #292 and #300 only when their evidence exit criteria are truthfully satisfied; advance #273 to release readiness only then.
-- [ ] Under the already-approved release campaign, publish tag `v1.5.0` and a non-draft, non-prerelease GitHub Release from the exact signed validated canonical commit, then independently verify identity.
-- [ ] Begin MCP only after v1.5.0 is `PUBLISHED_VERIFIED`; MCP is a possible transport, not a source of authority.
+- [x] Classify the final current coverage misses without removing them from the denominator or using broad exclusions.
+- [x] Generate fresh final-candidate runtime, branch, critical-module, Mutmut, integrated Cosmic Ray, workflow-sanity, P9 conformance, Windows/Ubuntu/macOS, CodeQL, and governance evidence after release metadata is complete.
+- [x] Persist machine release evidence and revision-bound `V1_5_0_RELEASE_READINESS_EVIDENCE.md`.
+- [x] Materialize the reviewed release tree as a GitHub-signed commit and validate it through a fresh protected canonical PR.
+- [x] Squash-merge only from a current ordinary `mergeable_state=clean` state with exact-head protection and independently verify canonical parent/tree/signature/state.
+- [x] Close #292 and #300 only after their evidence exit criteria were satisfied; advance #273 to post-publication documentation closeout only from verified canonical state.
+- [x] Under the approved release campaign, publish lightweight tag `v1.5.0` and a non-draft, non-prerelease immutable GitHub Release from exact signed validated canonical commit `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`, then independently verify identity.
+- [x] Record final publication evidence: release id `371314544`, 1,058 runtime tests, 98.47% statement coverage, 95.36% branch coverage, passing critical-module floors, Governance, CodeQL and native platforms, complete Mutmut and Cosmic Ray, and immutable fixed-tag identity.
+- [x] Reconcile current-facing human and machine documentation through `docs/validation/V1_5_0_PUBLICATION_CLOSEOUT.md` without moving the release tag or changing runtime behavior.
+
+MCP was not part of v1.5.0. Publication completes its sequencing prerequisite only; the next implementation phase must be selected by a fresh post-release dependency/risk/value review.
 
 ### Current `Protect main` Development Baseline
 
@@ -141,7 +144,7 @@ The existing bypass list remains operationally available. Orchestra governance m
 
 ## Deferred and Future Work
 
-- [ ] After v1.5.0 publication, evaluate and implement MCP as a portable transport/integration boundary without making it an authority source.
+- [ ] Perform a fresh post-v1.5 dependency/risk/value and architecture review before any MCP implementation; if selected, keep MCP a transport/integration boundary rather than an authority source.
 - [ ] Add host-specific update commands after the shared notification-only update check stabilizes.
 - [ ] Add host-specific update commands on top of the reproducible temp-staged runtime refresh pipeline.
 - [ ] Publish an Adapter SDK with base classes, helper utilities, templates, and a reference implementation.
@@ -167,3 +170,4 @@ The existing bypass list remains operationally available. Orchestra governance m
 - [x] Publish `v1.2.0` after R7R, GA-0 through GA-7, refreshed release evidence, independent final verification, and the separate R8 publication gate completed.
 - [x] Publish `v1.3.0` after the SK1-SK10 Specialist Intelligence campaign, release preparation, revision-bound readiness, README alignment, and separate publication authority completed.
 - [x] Publish `v1.4.0` after Compliance Registry cross-integration, trusted immutable Registry publication, real network-provenance validation, final exact-head readiness, and separate Orchestra publication authority completed.
+- [x] Publish `v1.5.0` after the machine-verifiable control-plane re-foundation, merge-readiness stabilization, Murmurs, fresh exact-head release evidence, signed canonicalization, and separate publication transition completed.
