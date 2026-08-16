@@ -2,35 +2,41 @@
   "format_version": 1,
   "release": "v1.5.0",
   "title": "Machine-Verifiable Control Plane and Murmurs",
-  "status": "EVIDENCE_COMPLETE_SIGNED_CANONICALIZATION_PENDING",
+  "status": "CONTENT_EVIDENCE_COMPLETE_FINAL_DOCUMENTATION_MATRIX_PENDING",
   "current_public_release": "v1.4.0",
   "package_version": "1.5.0",
   "evidence_source": {
-    "source_head_sha": "8cf6a1e5c7ed6658642320d8a9b3219729c8f929",
-    "source_tree_sha": "fbefa531035bad9fa761f3d1431665fb03cf771e",
+    "source_head_sha": "808b2721f83c3aab277b21f83fa08cd994004801",
+    "source_tree_sha": "36c44324ea71b514a3bccea6fd4a02e0409e261c",
     "pr_number": 312,
     "base_main_sha": "b7e5ac26dacc00f63315446bff906e9f76b7b8b0",
-    "note": "This is the fully validated unsigned content candidate. The release record and readiness document are added afterward, so final publication still requires a fresh matrix on the documentation-complete head and a GitHub-signed canonical merge."
+    "note": "This is the fully validated post-Registry-reconciliation content candidate. Updating this machine record and the human readiness record changes the source head, so the documentation-complete head still requires one fresh protected matrix before signed materialization and canonicalization."
   },
   "runtime_evidence": {
-    "workflow_run_id": 31935966476,
-    "artifact_id": 9260653852,
-    "artifact_name": "runtime-test-evidence-31935966476-1",
-    "artifact_digest": "sha256:cbd621074927f8c17268c7af75b7996145669d12be99e4ab74418281630bdfb4",
-    "tests_total": 1055,
-    "tests_passed": 1055,
+    "workflow_run_id": 31942183854,
+    "artifact_id": 9262317323,
+    "artifact_name": "runtime-test-evidence-31942183854-1",
+    "artifact_digest": "sha256:28d3d3c15ffba71910b19c4fff106784422e242cd3c89144911fed9405a0fb06",
+    "tested_sha": "ee2545f7b00f5efb81f912b749a5dadf0f0076c8",
+    "source_head_sha": "808b2721f83c3aab277b21f83fa08cd994004801",
+    "tests_total": 1058,
+    "tests_passed": 1058,
     "tests_failed": 0,
     "tests_errors": 0,
     "tests_skipped": 0,
     "statement_coverage_percent": 98.47,
     "branch_coverage_percent": 95.36,
+    "missing_statements": 109,
+    "missing_branches": 110,
     "critical_ready": true,
     "critical_statement_floor_percent": 98.0,
     "critical_branch_floor_percent": 95.0,
-    "workflow_sanity_and_p9_conformance_included": true
+    "workflow_sanity_and_p9_conformance_included": true,
+    "command_surface_parity_included": true
   },
   "coverage_miss_classification": {
     "path": "machine/release-evidence/v1.5.0-coverage-miss-disposition.json",
+    "fresh_inventory_matches_classified_inventory": true,
     "missing_statements": 109,
     "missing_branches": 110,
     "unclassified_statement_misses": 0,
@@ -39,38 +45,46 @@
     "misses_remain_in_denominator": true
   },
   "mutmut_evidence": {
-    "workflow_run_id": 31935966484,
-    "artifact_id": 9260682301,
-    "artifact_name": "mutation-confidence-31935966484-1",
-    "artifact_digest": "sha256:e7e3647ac3b83a203e70d04b933044980b73e88bd3af34c54e1683540783c35a",
+    "workflow_run_id": 31942183688,
+    "artifact_id": 9262342165,
+    "artifact_name": "mutation-confidence-31942183688-1",
+    "artifact_digest": "sha256:a2ce1f796659713df820b8918eef704989dd63ea3bfbe23e19390c7245b9f7fb",
     "schema_version": "orchestra.mutation-evidence.v2",
+    "tested_sha": "808b2721f83c3aab277b21f83fa08cd994004801",
+    "source_head_sha": "808b2721f83c3aab277b21f83fa08cd994004801",
     "classification_status": "COMPLETE",
     "score_status": "VALID_CLASSIFIED_SCORE",
     "models": {
       "total": 4,
       "killed": 1,
       "survived": 3,
-      "not_checked": 0
+      "not_checked": 0,
+      "score_percent": 25.0
     },
     "services": {
       "total": 323,
       "killed": 226,
       "survived": 97,
-      "not_checked": 0
+      "not_checked": 0,
+      "score_percent": 69.97
     },
     "numeric_acceptance_threshold": "NOT_DEFINED_BY_POLICY"
   },
   "cosmic_ray_evidence": {
-    "workflow_run_id": 31935966459,
-    "artifact_id": 9260751199,
-    "artifact_name": "cosmic-ray-confidence-31935966459-1",
-    "artifact_digest": "sha256:98fad4a08b22d0eabafdb8327a2336e921a75cfd05f4d040cde65f2be45b9250",
+    "workflow_run_id": 31942183702,
+    "artifact_id": 9262409360,
+    "artifact_name": "cosmic-ray-confidence-31942183702-1",
+    "artifact_digest": "sha256:d099b9adb92b1bc20b58c4645d2a0a49c042fa3b1de7fc2bf21ffeeaba14f541",
     "schema_version": "orchestra.cosmic-ray-evidence.v2",
+    "tested_sha": "ee2545f7b00f5efb81f912b749a5dadf0f0076c8",
+    "source_head_sha": "808b2721f83c3aab277b21f83fa08cd994004801",
     "score_status": "VALID_CLASSIFIED_SCORE",
+    "baseline_exit_code": 0,
     "raw": {
       "total": 700,
       "killed": 407,
       "survived": 293,
+      "other": 0,
       "score_percent": 58.14
     },
     "excluded_equivalent_non_runtime": 154,
@@ -82,13 +96,43 @@
     }
   },
   "platform_and_security": {
-    "cross_platform_workflow_run_id": 31935966452,
+    "cross_platform_workflow_run_id": 31942183582,
     "windows": "SUCCESS",
     "ubuntu": "SUCCESS",
     "macos": "SUCCESS",
-    "governance_workflow_run_id": 31935966492,
+    "governance_workflow_run_id": 31942183583,
     "governance": "SUCCESS",
+    "validate_workflow_run_id": 31942183854,
+    "validate": "SUCCESS",
+    "codeql_check_id": 95152921041,
     "codeql": "SUCCESS_NO_NEW_PR_ALERTS"
+  },
+  "registry_compatibility_reconciliation": {
+    "status": "COMPATIBLE_REQUIRED_FIXES_RECONCILED_FOR_V1_5_0",
+    "orchestra_command_registration": "RECONCILED",
+    "canonical_machine_command_routing": "RECONCILED",
+    "command_surface_route_parity_regression": "PASS",
+    "compliance_protocol_machine_index": "RECONCILED",
+    "integration_documentation": "RECONCILED_TO_LEGACY_RETIRED_RECEIPT_KERNEL_ARCHITECTURE",
+    "registry_repository": "Baelfyre/Orchestra-Compliance-Registry",
+    "registry_canonical_main": "b1f181cef862f9dcb4df225e90f69ac970f708c3",
+    "registry_canonical_tree": "f08379485154f241ad1d3785e55a89d732125dad",
+    "registry_readme_publication_state": "RECONCILED",
+    "trusted_release": {
+      "tag": "registry-v0.1.0",
+      "release_id": 370610859,
+      "target_commit": "3821bcb55125b4d8864f28b6423650e6e17ac67b",
+      "release_sequence": 1,
+      "immutable": true,
+      "release_manifest_sha256": "9922ddcce77dfac0c01cac80fe6669aaffe37636826a56a4b54a8312558ee2d1",
+      "bundle_sha256": "b64889933d30a8dea27bcbbb95c952e4f053c14a4f345e1e04b27777b5025ec0"
+    },
+    "release_blocking_data_model_rebuild_required": false,
+    "deferred_hardening": [
+      "explicit cross-repository protocol and capability negotiation before a future schema-v2 boundary",
+      "broader Registry JSON Schema coverage for manifests, ledgers, registries, and compatibility declarations",
+      "a future true cross-repository conformance fixture using the immutable published Registry release when the release campaign no longer needs source-head stability"
+    ]
   },
   "murmurs": {
     "default_mode": "NORMAL",

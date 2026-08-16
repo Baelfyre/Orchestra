@@ -1,20 +1,22 @@
 {
   "format_version": 1,
   "campaign": "v1.5.0-post-murmurs-integrated-release-candidate",
-  "status": "RELEASE_CLASSIFICATION_COMPLETE_PARENT_EVIDENCE_BOUND",
+  "status": "RELEASE_CLASSIFICATION_COMPLETE_CURRENT_INVENTORY_MATCHED",
   "basis": {
-    "source_head_sha": "8cf6a1e5c7ed6658642320d8a9b3219729c8f929",
-    "runtime_workflow_run_id": 31935966476,
-    "runtime_artifact_id": 9260653852,
-    "runtime_artifact_name": "runtime-test-evidence-31935966476-1",
-    "runtime_artifact_digest": "sha256:cbd621074927f8c17268c7af75b7996145669d12be99e4ab74418281630bdfb4",
-    "tests_total": 1055,
-    "tests_passed": 1055,
+    "source_head_sha": "808b2721f83c3aab277b21f83fa08cd994004801",
+    "runtime_workflow_run_id": 31942183854,
+    "runtime_artifact_id": 9262317323,
+    "runtime_artifact_name": "runtime-test-evidence-31942183854-1",
+    "runtime_artifact_digest": "sha256:28d3d3c15ffba71910b19c4fff106784422e242cd3c89144911fed9405a0fb06",
+    "tests_total": 1058,
+    "tests_passed": 1058,
     "statement_percent": 98.47,
     "branch_percent": 95.36,
     "missing_statements": 109,
     "missing_branches": 110,
-    "critical_ready": true
+    "critical_ready": true,
+    "runtime_source_classification_unchanged": true,
+    "note": "The post-Registry-reconciliation source changes affect manifest, routing contract, documentation, Codex export, and regression coverage, not orchestra_runtime implementation lines. The fresh inventory retains the same 109 statement and 110 branch misses, so the existing line-level dispositions remain applicable and are rebound to this current evidence source."
   },
   "policy": {
     "allowed_dispositions": ["TESTED", "REMOVED_DEAD_CODE", "JUSTIFIED_EXCLUSION"],
@@ -22,6 +24,7 @@
     "broad_coverage_pragmas_added": false,
     "misses_remain_in_metric_denominator": true,
     "classification_is_not_proof_of_correctness": true,
+    "fresh_inventory_matches_classified_inventory": true,
     "final_release_requires_matching_fresh_inventory": true
   },
   "critical_justified_exclusions": [
@@ -62,6 +65,7 @@
     "critical_statement_minimum_met": true,
     "critical_branch_minimum_met": true,
     "unclassified_statement_misses": 0,
+    "fresh_inventory_match": true,
     "release_blocked_by_coverage_classification": false,
     "source_head_movement_requires_fresh_evidence": true
   }
