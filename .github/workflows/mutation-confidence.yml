@@ -93,56 +93,70 @@ jobs:
           python -c "import importlib.metadata; print(importlib.metadata.version('mutmut'))"
           | tee artifacts/mutation/mutmut-version.txt
 
-      - name: Run module-isolated LEGACY_RETIRED mutation evidence
+      - name: Run workspace-isolated LEGACY_RETIRED mutation evidence
         env:
           SOURCE_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         shell: bash
         run: |
           set +e
           set -o pipefail
-          cp setup.cfg artifacts/mutation/repository-setup.cfg
+
+          artifact_root="$GITHUB_WORKSPACE/artifacts/mutation"
+          tool_version="$(cat "$artifact_root/mutmut-version.txt")"
 
           run_target() {
             label="$1"
             config="$2"
-            run_output="artifacts/mutation/${label}-mutmut-run.txt"
-            results_output="artifacts/mutation/${label}-mutmut-results.txt"
-            config_copy="artifacts/mutation/${label}-config.cfg"
-            evidence_output="artifacts/mutation/${label}-mutation-evidence.json"
+            workspace="$RUNNER_TEMP/orchestra-mutmut-${label}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+            run_output="$artifact_root/${label}-mutmut-run.txt"
+            results_output="$artifact_root/${label}-mutmut-results.txt"
+            config_copy="$artifact_root/${label}-config.cfg"
+            evidence_output="$artifact_root/${label}-mutation-evidence.json"
 
-            rm -rf mutants
-            cp "$config" setup.cfg
-            cp "$config" "$config_copy"
-
-            mutmut run 2>&1 | tee "$run_output"
-            run_code=${PIPESTATUS[0]}
-            echo "$run_code" | tee "artifacts/mutation/${label}-mutmut-run-exit-code.txt"
-
-            mutmut results 2>&1 | tee "$results_output"
-            results_code=${PIPESTATUS[0]}
-            echo "$results_code" | tee "artifacts/mutation/${label}-mutmut-results-exit-code.txt"
-
-            python scripts/validation/build_mutation_evidence.py \
-              --run-output "$run_output" \
-              --results-output "$results_output" \
-              --config "$config_copy" \
-              --run-exit-code "$run_code" \
-              --tool-version "$(cat artifacts/mutation/mutmut-version.txt)" \
-              --tested-sha "$(git rev-parse HEAD)" \
-              --source-head-sha "$SOURCE_HEAD_SHA" \
-              --repository "$GITHUB_REPOSITORY" \
-              --workflow-run-id "$GITHUB_RUN_ID" \
-              --workflow-run-attempt "$GITHUB_RUN_ATTEMPT" \
-              --event-name "$GITHUB_EVENT_NAME" \
-              --ref-name "$GITHUB_REF_NAME" \
-              --output "$evidence_output"
-            evidence_code=$?
-            echo "$evidence_code" | tee "artifacts/mutation/${label}-evidence-exit-code.txt"
-
-            if [ "$results_code" != "0" ] || [ "$evidence_code" != "0" ]; then
+            mkdir -p "$workspace"
+            git archive "$SOURCE_HEAD_SHA" | tar -x -C "$workspace"
+            archive_code=$?
+            echo "$archive_code" | tee "$artifact_root/${label}-workspace-export-exit-code.txt"
+            if [ "$archive_code" != "0" ]; then
               return 1
             fi
-            return 0
+
+            cp "$GITHUB_WORKSPACE/$config" "$workspace/setup.cfg"
+            cp "$GITHUB_WORKSPACE/$config" "$config_copy"
+
+            (
+              cd "$workspace" || exit 1
+
+              mutmut run 2>&1 | tee "$run_output"
+              run_code=${PIPESTATUS[0]}
+              echo "$run_code" | tee "$artifact_root/${label}-mutmut-run-exit-code.txt"
+
+              mutmut results 2>&1 | tee "$results_output"
+              results_code=${PIPESTATUS[0]}
+              echo "$results_code" | tee "$artifact_root/${label}-mutmut-results-exit-code.txt"
+
+              python scripts/validation/build_mutation_evidence.py \
+                --run-output "$run_output" \
+                --results-output "$results_output" \
+                --config "$config_copy" \
+                --run-exit-code "$run_code" \
+                --tool-version "$tool_version" \
+                --tested-sha "$SOURCE_HEAD_SHA" \
+                --source-head-sha "$SOURCE_HEAD_SHA" \
+                --repository "$GITHUB_REPOSITORY" \
+                --workflow-run-id "$GITHUB_RUN_ID" \
+                --workflow-run-attempt "$GITHUB_RUN_ATTEMPT" \
+                --event-name "$GITHUB_EVENT_NAME" \
+                --ref-name "$GITHUB_REF_NAME" \
+                --output "$evidence_output"
+              evidence_code=$?
+              echo "$evidence_code" | tee "$artifact_root/${label}-evidence-exit-code.txt"
+
+              if [ "$results_code" != "0" ] || [ "$evidence_code" != "0" ]; then
+                exit 1
+              fi
+              exit 0
+            )
           }
 
           run_target models mutation/legacy-retired-models.cfg
@@ -150,11 +164,8 @@ jobs:
           run_target services mutation/legacy-retired-services.cfg
           services_code=$?
 
-          cp artifacts/mutation/repository-setup.cfg setup.cfg
-          rm -rf mutants
-
-          echo "$models_code" | tee artifacts/mutation/models-target-exit-code.txt
-          echo "$services_code" | tee artifacts/mutation/services-target-exit-code.txt
+          echo "$models_code" | tee "$artifact_root/models-target-exit-code.txt"
+          echo "$services_code" | tee "$artifact_root/services-target-exit-code.txt"
 
           if [ "$models_code" != "0" ] || [ "$services_code" != "0" ]; then
             exit 1
