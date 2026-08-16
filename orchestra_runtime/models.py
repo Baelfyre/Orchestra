@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from .correlation import validate_correlation_id
+from .machine_contracts import valid_specialist_ids
 
 if TYPE_CHECKING:
     from .lifecycle import StructuredTerminalResult
@@ -13,22 +14,10 @@ if TYPE_CHECKING:
 
 APPROVED_UNIT_PLAN_SCHEMA_VERSION = "1.0.0"
 
-VALID_SPECIALISTS = frozenset({
-    "ponytail",
-    "clockwork",
-    "cloak",
-    "chronicler",
-    "cipher",
-    "overseer",
-    "dagger",
-    "weaver",
-    "scribe",
-    "conductor",
-    "the-steward",
-    "the-governor",
-    "the-tuner",
-    "arbiter",
-})
+# Backward-compatible runtime surface derived from the canonical machine registry.
+# This name is intentionally retained during CANONICAL_PROMOTION_AUTHORITY; it is
+# no longer an independently maintained specialist identity authority.
+VALID_SPECIALISTS = valid_specialist_ids()
 
 
 def _validate_repository_relative_path(p: str, field_name: str) -> str:
