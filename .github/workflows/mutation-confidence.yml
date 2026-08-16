@@ -5,9 +5,13 @@ on:
   pull_request:
     paths:
       - "setup.cfg"
+      - "mutation/legacy-retired-models.cfg"
+      - "mutation/legacy-retired-services.cfg"
       - ".github/workflows/mutation-confidence.yml"
       - "scripts/validation/build_mutation_evidence.py"
       - "machine/schemas/mutation-evidence.schema.json"
+      - "orchestra_runtime/models.py"
+      - "orchestra_runtime/services.py"
       - "orchestra_runtime/evidence.py"
       - "orchestra_runtime/machine_contracts.py"
       - "orchestra_runtime/compliance_protocol.py"
@@ -37,6 +41,13 @@ on:
       - "tests/runtime/test_refoundation_final_critical_gaps.py"
       - "tests/runtime/test_refoundation_branch_gate.py"
       - "tests/runtime/test_refoundation_properties.py"
+      - "tests/runtime/test_canonical_promotion_authority.py"
+      - "tests/runtime/test_control_plane_migration_state.py"
+      - "tests/runtime/test_runtime_core.py"
+      - "tests/runtime/test_runtime_authority_integration.py"
+      - "tests/runtime/test_governance.py"
+      - "tests/runtime/test_adapter_contracts.py"
+      - "tests/runtime/test_mutation_evidence.py"
 
 permissions:
   contents: read
@@ -47,8 +58,20 @@ jobs:
     timeout-minutes: 120
 
     steps:
-      - name: Checkout repository
+      - name: Checkout exact source head
         uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Verify exact source checkout
+        env:
+          SOURCE_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        shell: bash
+        run: |
+          checked_sha="$(git rev-parse HEAD)"
+          echo "CHECKED_SHA=$checked_sha"
+          echo "SOURCE_HEAD_SHA=$SOURCE_HEAD_SHA"
+          test "$checked_sha" = "$SOURCE_HEAD_SHA"
 
       - name: Set up Python
         uses: actions/setup-python@v6
@@ -70,45 +93,73 @@ jobs:
           python -c "import importlib.metadata; print(importlib.metadata.version('mutmut'))"
           | tee artifacts/mutation/mutmut-version.txt
 
-      - name: Run bounded trust-module mutation baseline
-        id: mutation
-        shell: bash
-        run: |
-          set +e
-          set -o pipefail
-          mutmut run 2>&1 | tee artifacts/mutation/mutmut-run.txt
-          code=${PIPESTATUS[0]}
-          echo "$code" | tee artifacts/mutation/mutmut-run-exit-code.txt
-          exit 0
-
-      - name: Record raw mutation results
-        if: always()
-        shell: bash
-        run: |
-          set +e
-          mutmut results 2>&1 | tee artifacts/mutation/mutmut-results.txt
-          exit 0
-
-      - name: Build machine-readable mutation evidence
-        if: always()
+      - name: Run module-isolated LEGACY_RETIRED mutation evidence
         env:
           SOURCE_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         shell: bash
         run: |
-          python scripts/validation/build_mutation_evidence.py \
-            --run-output artifacts/mutation/mutmut-run.txt \
-            --results-output artifacts/mutation/mutmut-results.txt \
-            --config setup.cfg \
-            --run-exit-code "$(cat artifacts/mutation/mutmut-run-exit-code.txt)" \
-            --tool-version "$(cat artifacts/mutation/mutmut-version.txt)" \
-            --tested-sha "$(git rev-parse HEAD)" \
-            --source-head-sha "$SOURCE_HEAD_SHA" \
-            --repository "$GITHUB_REPOSITORY" \
-            --workflow-run-id "$GITHUB_RUN_ID" \
-            --workflow-run-attempt "$GITHUB_RUN_ATTEMPT" \
-            --event-name "$GITHUB_EVENT_NAME" \
-            --ref-name "$GITHUB_REF_NAME" \
-            --output artifacts/mutation/mutation-evidence.json
+          set +e
+          set -o pipefail
+          cp setup.cfg artifacts/mutation/repository-setup.cfg
+
+          run_target() {
+            label="$1"
+            config="$2"
+            run_output="artifacts/mutation/${label}-mutmut-run.txt"
+            results_output="artifacts/mutation/${label}-mutmut-results.txt"
+            config_copy="artifacts/mutation/${label}-config.cfg"
+            evidence_output="artifacts/mutation/${label}-mutation-evidence.json"
+
+            rm -rf mutants
+            cp "$config" setup.cfg
+            cp "$config" "$config_copy"
+
+            mutmut run 2>&1 | tee "$run_output"
+            run_code=${PIPESTATUS[0]}
+            echo "$run_code" | tee "artifacts/mutation/${label}-mutmut-run-exit-code.txt"
+
+            mutmut results 2>&1 | tee "$results_output"
+            results_code=${PIPESTATUS[0]}
+            echo "$results_code" | tee "artifacts/mutation/${label}-mutmut-results-exit-code.txt"
+
+            python scripts/validation/build_mutation_evidence.py \
+              --run-output "$run_output" \
+              --results-output "$results_output" \
+              --config "$config_copy" \
+              --run-exit-code "$run_code" \
+              --tool-version "$(cat artifacts/mutation/mutmut-version.txt)" \
+              --tested-sha "$(git rev-parse HEAD)" \
+              --source-head-sha "$SOURCE_HEAD_SHA" \
+              --repository "$GITHUB_REPOSITORY" \
+              --workflow-run-id "$GITHUB_RUN_ID" \
+              --workflow-run-attempt "$GITHUB_RUN_ATTEMPT" \
+              --event-name "$GITHUB_EVENT_NAME" \
+              --ref-name "$GITHUB_REF_NAME" \
+              --output "$evidence_output"
+            evidence_code=$?
+            echo "$evidence_code" | tee "artifacts/mutation/${label}-evidence-exit-code.txt"
+
+            if [ "$results_code" != "0" ] || [ "$evidence_code" != "0" ]; then
+              return 1
+            fi
+            return 0
+          }
+
+          run_target models mutation/legacy-retired-models.cfg
+          models_code=$?
+          run_target services mutation/legacy-retired-services.cfg
+          services_code=$?
+
+          cp artifacts/mutation/repository-setup.cfg setup.cfg
+          rm -rf mutants
+
+          echo "$models_code" | tee artifacts/mutation/models-target-exit-code.txt
+          echo "$services_code" | tee artifacts/mutation/services-target-exit-code.txt
+
+          if [ "$models_code" != "0" ] || [ "$services_code" != "0" ]; then
+            exit 1
+          fi
+          exit 0
 
       - name: Upload mutation evidence baseline
         if: always()
