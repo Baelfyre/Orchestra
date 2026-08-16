@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 from collections import Counter
 from datetime import datetime, timezone
+from fnmatch import fnmatchcase
 import hashlib
 import json
 from pathlib import Path
@@ -13,6 +14,8 @@ from typing import Any
 MUTATION_EVIDENCE_SCHEMA_VERSION = "orchestra.mutation-evidence.v1"
 _SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 _RESULT_RE = re.compile(r"^\s*(?P<mutant>\S+):\s*(?P<status>.+?)\s*$")
+_MUTANT_SUFFIX_RE = re.compile(r"__mutmut_\d+$")
+_PROGRESS_RE = re.compile(r"(?P<done>\d+)\s*/\s*(?P<total>\d+)")
 _FATAL_RUN_MARKERS = (
     "failed to collect stats",
     "failed to collect stats, no active tests found",
@@ -85,16 +88,79 @@ def _read_int_config(config_path: Path, key: str) -> int:
         raise ValueError(f"mutation configuration {key} must be an integer") from exc
 
 
-def _read_mutant_statuses(results_output: Path) -> list[str]:
-    statuses: list[str] = []
+def _normalize_mutant_identifier(identifier: str) -> str:
+    normalized = _MUTANT_SUFFIX_RE.sub("", identifier.strip())
+    if ".xǁ" in normalized:
+        normalized = normalized.replace(".xǁ", ".", 1).replace("ǁ", ".")
+    elif ".x_" in normalized:
+        normalized = normalized.replace(".x_", ".", 1)
+    return normalized
+
+
+def _parse_result_records(results_output: Path) -> list[tuple[str, str]]:
+    records: list[tuple[str, str]] = []
     for line in results_output.read_text(encoding="utf-8", errors="replace").splitlines():
         match = _RESULT_RE.match(line)
         if match is None:
             continue
-        statuses.append(match.group("status").strip().casefold())
-    if not statuses:
-        raise ValueError("mutation results contain no mutant classification records")
-    return statuses
+        records.append(
+            (
+                _normalize_mutant_identifier(match.group("mutant")),
+                match.group("status").strip().casefold(),
+            )
+        )
+    return records
+
+
+def _parse_target_run_spec(raw: str) -> tuple[str, Path]:
+    pattern, separator, path_text = str(raw or "").partition("=")
+    pattern = pattern.strip()
+    path_text = path_text.strip()
+    if not separator or not pattern or not path_text:
+        raise ValueError("target_run must use PATTERN=PATH form")
+    return pattern, Path(path_text)
+
+
+def _read_target_runs(target_run_specs: list[str]) -> list[dict[str, Any]]:
+    if not target_run_specs:
+        raise ValueError("at least one target_run is required")
+    summaries: list[dict[str, Any]] = []
+    seen_patterns: set[str] = set()
+    for raw_spec in target_run_specs:
+        pattern, path = _parse_target_run_spec(raw_spec)
+        if pattern in seen_patterns:
+            raise ValueError(f"duplicate mutation target pattern: {pattern}")
+        seen_patterns.add(pattern)
+        if not path.is_file():
+            raise ValueError(f"target mutation run output does not exist: {path}")
+        text = path.read_text(encoding="utf-8", errors="replace")
+        folded = text.casefold()
+        fatal_markers = [marker for marker in _FATAL_RUN_MARKERS if marker in folded]
+        if fatal_markers:
+            raise ValueError(
+                f"target mutation run {pattern} contains fatal instrumentation marker: {fatal_markers[0]}"
+            )
+        progress = list(_PROGRESS_RE.finditer(text))
+        if not progress:
+            raise ValueError(f"target mutation run {pattern} contains no completion count")
+        done = int(progress[-1].group("done"))
+        total = int(progress[-1].group("total"))
+        if total <= 0:
+            raise ValueError(f"target mutation run {pattern} executed zero mutants")
+        if done != total:
+            raise ValueError(
+                f"target mutation run {pattern} incomplete: completed {done} of {total} mutants"
+            )
+        summaries.append(
+            {
+                "pattern": pattern,
+                "completed": done,
+                "total": total,
+                "output": path.name,
+                "output_sha256": _sha256(path),
+            }
+        )
+    return summaries
 
 
 def build_mutation_evidence(
@@ -102,6 +168,7 @@ def build_mutation_evidence(
     run_output: Path,
     results_output: Path,
     config_path: Path,
+    target_run_specs: list[str],
     run_exit_code: int,
     tool_version: str,
     tested_sha: str,
@@ -133,14 +200,34 @@ def build_mutation_evidence(
     if fatal_markers:
         raise ValueError(f"mutation execution contains fatal instrumentation marker: {fatal_markers[0]}")
 
-    statuses = _read_mutant_statuses(results_output)
-    status_counts = Counter(statuses)
-    not_checked_count = status_counts.get("not checked", 0)
-    interrupted_count = status_counts.get("check was interrupted by user", 0)
+    target_runs = _read_target_runs(target_run_specs)
+    patterns = [item["pattern"] for item in target_runs]
+    all_records = _parse_result_records(results_output)
+    scoped_records = [
+        (identifier, status)
+        for identifier, status in all_records
+        if any(fnmatchcase(identifier, pattern) for pattern in patterns)
+    ]
+    scoped_status_counts = Counter(status for _, status in scoped_records)
+    not_checked_count = scoped_status_counts.get("not checked", 0)
+    interrupted_count = scoped_status_counts.get("check was interrupted by user", 0)
     if not_checked_count:
-        raise ValueError(f"mutation results contain {not_checked_count} not checked mutants")
+        raise ValueError(f"scoped mutation results contain {not_checked_count} not checked mutants")
     if interrupted_count:
-        raise ValueError(f"mutation results contain {interrupted_count} interrupted mutants")
+        raise ValueError(f"scoped mutation results contain {interrupted_count} interrupted mutants")
+
+    unexpected_statuses = sorted(status for status in scoped_status_counts if status != "survived")
+    if unexpected_statuses:
+        raise ValueError(
+            "scoped mutation results contain non-classified outcomes: " + ", ".join(unexpected_statuses)
+        )
+
+    target_total = sum(int(item["total"]) for item in target_runs)
+    survived_count = scoped_status_counts.get("survived", 0)
+    if survived_count > target_total:
+        raise ValueError("scoped survivor count exceeds executed target mutant count")
+    killed_count = target_total - survived_count
+    score_percent = round((killed_count / target_total) * 100.0, 2)
 
     return {
         "schema_version": MUTATION_EVIDENCE_SCHEMA_VERSION,
@@ -157,6 +244,8 @@ def build_mutation_evidence(
         "tool": {"name": "mutmut", "version": version},
         "scope": {
             "modules": _read_modules(config_path),
+            "mutant_patterns": patterns,
+            "target_runs": target_runs,
             "configuration": config_path.name,
             "mutate_only_covered_lines": _read_bool_config(config_path, "mutate_only_covered_lines"),
             "max_stack_depth": _read_int_config(config_path, "max_stack_depth"),
@@ -165,12 +254,19 @@ def build_mutation_evidence(
             "run_exit_code": int(run_exit_code),
             "score_status": "UNSCORED_BASELINE",
             "classification_status": "COMPLETE",
-            "result_record_count": len(statuses),
+            "target_mutant_total": target_total,
+            "target_killed_count": killed_count,
+            "target_survived_count": survived_count,
+            "target_score_percent": score_percent,
+            "scoped_result_record_count": len(scoped_records),
+            "out_of_scope_result_record_count": len(all_records) - len(scoped_records),
             "not_checked_count": not_checked_count,
-            "status_counts": dict(sorted(status_counts.items())),
+            "status_counts": dict(sorted(scoped_status_counts.items())),
             "interpretation": (
-                "Mutmut completed on the exact source head and every reported mutant record was classified. "
-                "This remains an unscored baseline; surviving or suspicious mutants remain explicit confidence findings."
+                "Mutmut completed every declared LEGACY_RETIRED target pattern on the exact source head. "
+                "Scoped non-killed results contain only survived mutants; no scoped not-checked, interrupted, "
+                "timeout, suspicious, or unknown outcome is accepted. The percentage is diagnostic and no "
+                "numeric acceptance threshold is introduced by this bounded evidence."
             ),
         },
         "reports": {
@@ -183,10 +279,17 @@ def build_mutation_evidence(
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Build Orchestra mutation evidence baseline")
+    parser = argparse.ArgumentParser(description="Build Orchestra bounded mutation evidence")
     parser.add_argument("--run-output", type=Path, required=True)
     parser.add_argument("--results-output", type=Path, required=True)
     parser.add_argument("--config", type=Path, default=Path("setup.cfg"))
+    parser.add_argument(
+        "--target-run",
+        action="append",
+        dest="target_run_specs",
+        default=[],
+        help="Required bounded Mutmut target in PATTERN=PATH form; repeat for each target pattern.",
+    )
     parser.add_argument("--run-exit-code", type=int, required=True)
     parser.add_argument("--tool-version", required=True)
     parser.add_argument("--tested-sha", required=True)
@@ -202,6 +305,7 @@ def main(argv: list[str] | None = None) -> int:
         run_output=args.run_output,
         results_output=args.results_output,
         config_path=args.config,
+        target_run_specs=args.target_run_specs,
         run_exit_code=args.run_exit_code,
         tool_version=args.tool_version,
         tested_sha=args.tested_sha,
@@ -222,7 +326,10 @@ def main(argv: list[str] | None = None) -> int:
                 "run_exit_code": evidence["execution"]["run_exit_code"],
                 "score_status": evidence["execution"]["score_status"],
                 "classification_status": evidence["execution"]["classification_status"],
-                "result_record_count": evidence["execution"]["result_record_count"],
+                "target_mutant_total": evidence["execution"]["target_mutant_total"],
+                "target_killed_count": evidence["execution"]["target_killed_count"],
+                "target_survived_count": evidence["execution"]["target_survived_count"],
+                "target_score_percent": evidence["execution"]["target_score_percent"],
                 "not_checked_count": evidence["execution"]["not_checked_count"],
             },
             sort_keys=True,
