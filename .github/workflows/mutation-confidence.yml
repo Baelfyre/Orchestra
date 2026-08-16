@@ -3,6 +3,8 @@ name: mutation-confidence
 on:
   workflow_dispatch:
   pull_request:
+    branches:
+      - main
     paths:
       - "setup.cfg"
       - "mutation/legacy-retired-models.cfg"
