@@ -1,10 +1,14 @@
 # Changelog
 
-## Post-v1.4.0 Integrated Release Candidate Hardening - In Progress
+## v1.5.0 Machine-Verifiable Control Plane and Murmurs - Published 2026-08-16
 
-- Adds a cross-layer release-sanity regression proving that Murmurs routine-progress compression does not change the workflow receipt digest, validation result, or Arbiter disposition, while terminal completion remains hard-bound to `EXPLAIN`.
-- Starts fresh post-Murmurs release evidence generation under #292 and #300. Any validation attached to an earlier source head remains stale after subsequent RC changes and cannot authorize the final release.
-- Selects `1.5.0` as the additive minor release candidate from compatibility evidence; no tag or GitHub Release is published by preparation, and no marketplace publication, deployment, installed-integration refresh, ruleset mutation/bypass, branch deletion, force push, history rewrite, destructive cleanup, or MCP implementation is performed.
+- Published `Orchestra v1.5.0: Machine-Verifiable Control Plane and Murmurs` as immutable, non-draft, non-prerelease GitHub Release id `371314544` from lightweight tag `v1.5.0`, which resolves directly to exact signed canonical release commit `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`.
+- Completed the machine-verifiable control-plane re-foundation through `LEGACY_RETIRED`, preserving the versioned machine specialist registry, routing contract, governance policy, exact evidence/receipt stack, deterministic Arbiter Kernel, continuity/context state, persistent remediation circuit, pre-execution policy gate, and host conformance boundaries.
+- Published the fail-closed merge-readiness stabilization requiring current `mergeable=true` and `mergeable_state=clean` for ordinary governed progression, with prior accepted pre-merge state carried into post-merge verification.
+- Published the additive Murmurs communication budget with `NORMAL` as the default and deterministic `SILENT`, local `MURMUR`, and required `EXPLAIN` dispositions; no billing-token savings percentage is claimed without comparable host-reported counters.
+- Final release evidence recorded 1,058 passing runtime tests, 98.47% statement coverage, 95.36% branch coverage, passing critical-module floors, governance, CodeQL and native-platform validation, plus complete Mutmut and Cosmic Ray campaigns.
+- Added `docs/validation/V1_5_0_PUBLICATION_CLOSEOUT.md` and reconciled human/machine current-facing release, setup, roadmap, project-state, context, and handoff documentation without moving the fixed release tag or performing marketplace publication, installed-integration refresh, deployment, policy activation, destructive cleanup, branch deletion, force push, history rewrite, or MCP implementation.
+- MCP was intentionally excluded from v1.5.0. Publication satisfies its sequencing prerequisite only; any MCP work requires a fresh post-release dependency/risk/value and design decision.
 
 ## Post-v1.4.0 Murmurs Communication Budget - Candidate
 
@@ -40,7 +44,7 @@
 - P9 began in `SHADOW`, advanced through separately governed `ADVISORY` and `VALIDATION_AUTHORITY` checkpoints, and this candidate advances only to `CANONICAL_PROMOTION_AUTHORITY`; it does not grant legacy retirement or installed-integration mutation.
 - The versioned machine specialist registry, routing contract, and governance policy now supply runtime default specialist identity, command routes and ambiguity fallback, governance-required specialist classification, runtime validation rules, Arbiter transition precedence, and remediation defaults. Backward-compatible runtime names remain derived compatibility surfaces rather than independent authority.
 - Release hardening persists machine-readable runtime evidence with statement and branch coverage, critical-module floors, property-based regressions, workflow-sanity coverage, bounded mutation-confidence evidence, and cross-platform validation. These measurements are confidence evidence, not proof of correctness.
-- PR #294 is canonical through governed Squash merge and independent readback at signed commit `76eb96b27439700a517f75c5a921465e5c2987e6` with tree `6f98b380d984430303d630462ad4535cda483925`. This post-`v1.4.0` integration preserves `v1.4.0` as the current published release and creates no new tag, version, or GitHub Release.
+- PR #294 is canonical through governed Squash merge and independent readback at signed commit `76eb96b27439700a517f75c5a921465e5c2987e6` with tree `6f98b380d984430303d630462ad4535cda483925`. This post-`v1.4.0` integration preserves `v1.4.0` as the current published release at that checkpoint and creates no new tag, version, or GitHub Release.
 - Added the compact machine release-evidence index at `machine/release-evidence/control-plane-refoundation-p0-p1-p9.json`, referencing the exact final integrated candidate runtime and bounded Cosmic Ray evidence without treating coverage or mutation score as proof of correctness.
 - Added typed migration-state checkpoints and regression coverage for the adjacent `SHADOW -> ADVISORY -> VALIDATION_AUTHORITY -> CANONICAL_PROMOTION_AUTHORITY` progression while preserving `LEGACY_RETIRED` as a separately governed decision.
 
@@ -54,7 +58,7 @@
 - Added `docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md` and preserved `v1.3.0` as the current public release until separately authorized `v1.4.0` tag and GitHub Release publication.
 - Published and independently verified the trusted immutable Registry release `registry-v0.1.0` at canonical Registry commit `3821bcb55125b4d8864f28b6423650e6e17ac67b`, then validated Orchestra's real network sync, exact provenance, freshness, source query, project pinning, update-check, and idempotent re-sync from canonical Orchestra source baseline `b5d0790fc714f53c4561a91b158c13c625768e05`.
 - Added `docs/validation/V1_4_0_RELEASE_READINESS_EVIDENCE.md`; at that readiness checkpoint, Orchestra `v1.4.0` public release/tag publication remained a separate protected transition.
-- Published `Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration` as GitHub Release id `370658917` from lightweight tag `v1.4.0`, which resolves directly to exact signed canonical release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`; independently verified non-draft, non-prerelease, immutable, and latest.
+- Published `Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration` as GitHub Release id `370658917` from lightweight tag `v1.4.0`, which resolves directly to exact signed canonical release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`; independently verified non-draft, non-prerelease, immutable, and latest at that publication checkpoint.
 - Added `docs/validation/V1_4_0_PUBLICATION_CLOSEOUT.md` and reconciled current-facing release, setup, roadmap, project-state, and handoff documentation without moving the fixed release tag or performing marketplace publication, installed-integration refresh, deployment, policy activation, destructive cleanup, branch deletion, force push, or history rewrite.
 
 ## Post-v1.3.0 Compliance Registry Local Cache - Pending
