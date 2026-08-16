@@ -9,6 +9,7 @@ from orchestra_runtime.communication_budget import (
 from orchestra_runtime.compliance_protocol import ComplianceConsumptionReceipt
 from orchestra_runtime.governance_kernel import (
     ArbiterKernelInput,
+    GovernanceDecision,
     GovernanceDecisionRecord,
 )
 from orchestra_runtime.presentation import PresentationMode, load_presentation_policy
@@ -68,6 +69,16 @@ def test_compliance_consumption_rejects_duplicate_classification_keys():
         )
 
 
+def test_governance_record_accepts_already_normalized_decision_enum():
+    record = GovernanceDecisionRecord(
+        reviewer="release-sanity",
+        project_context="post-murmurs-rc",
+        decision=GovernanceDecision.APPROVED,
+        reason="already normalized decision fixture",
+    )
+    assert record.decision is GovernanceDecision.APPROVED
+
+
 def test_governance_record_rejects_unknown_decision_enum():
     with pytest.raises(ValueError, match="unsupported decision"):
         GovernanceDecisionRecord(
@@ -75,6 +86,16 @@ def test_governance_record_rejects_unknown_decision_enum():
             project_context="post-murmurs-rc",
             decision="PASS_WITH_FINDINGS",
             reason="unsupported decision fixture",
+        )
+
+
+def test_arbiter_input_rejects_boolean_integer_counter():
+    with pytest.raises(TypeError, match="remediation_attempt_count must be int"):
+        ArbiterKernelInput(
+            project_id="orchestra",
+            unit_id="post-murmurs-rc",
+            governance_decisions=(_approved_decision(),),
+            remediation_attempt_count=True,
         )
 
 
