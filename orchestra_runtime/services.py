@@ -103,15 +103,18 @@ from .models import (
 from .repositories import ManifestRepository, SkillSourceRepository
 
 
-# Legacy authority snapshots are retired. Runtime defaults are accepted only
-# after the complete machine specialist/routing/governance contract set conforms,
-# and each runtime boundary derives its effective values from those contracts.
-assert_machine_contracts()
-
+# Legacy authority snapshots are retired. Runtime boundaries validate the
+# complete machine specialist/routing/governance contract set immediately
+# before consuming machine-derived defaults. This preserves fail-closed runtime
+# construction without introducing import-time execution side effects.
 COMPATIBILITY_POLICY_ID = "orchestra.runtime.compatibility"
 COMPATIBILITY_POLICY_VERSION = "1"
 RUNTIME_IDENTIFIER_PATTERN = re.compile(r"^[a-z0-9][a-z0-9_.:-]*$")
 ROUTE_IDENTIFIER_PATTERN = re.compile(r"^[a-z0-9][a-z0-9_.:-]*$")
+
+
+def _assert_runtime_machine_contracts() -> None:
+    assert_machine_contracts()
 
 
 def _stable_id(prefix: str, payload: object) -> str:
@@ -301,6 +304,7 @@ class SkillRegistry(ISkillRegistry):
         skill_repository: SkillSourceRepository,
         command_routes: dict[str, str] | None = None,
     ):
+        _assert_runtime_machine_contracts()
         self._manifest_repository = manifest_repository
         self._skill_repository = skill_repository
         self._command_routes = command_routes or command_route_map()
@@ -332,6 +336,7 @@ class SkillRegistry(ISkillRegistry):
 
 class RouterService(IRouterService):
     def __init__(self, skill_registry: ISkillRegistry, command_routes: dict[str, str] | None = None):
+        _assert_runtime_machine_contracts()
         self._skill_registry = skill_registry
         self._command_routes = command_routes or command_route_map()
         self._fallback_specialist = str(command_route_record("__orchestra_ambiguity_fallback__")["specialist"])
@@ -378,6 +383,7 @@ class ContextAssembler:
 
 class GovernanceValidator(IGovernanceValidator):
     def __init__(self, rules: Iterable[GovernanceRule] | None = None):
+        _assert_runtime_machine_contracts()
         self._rules = tuple(rules) if rules is not None else _default_governance_rules()
         dry_run_required_rules = frozenset(
             str(record.get("rule_id", "")).strip()
@@ -546,6 +552,7 @@ class CoordinationRuntimeService:
 
 
 def _compatibility_bindings() -> tuple[RuntimePolicyBinding, ...]:
+    _assert_runtime_machine_contracts()
     routes = command_route_map()
     return tuple(sorted((
         RuntimePolicyBinding(
