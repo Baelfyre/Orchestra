@@ -1,0 +1,127 @@
+{
+  "format_version": 1,
+  "release": "v1.5.0",
+  "title": "Machine-Verifiable Control Plane and Murmurs",
+  "status": "EVIDENCE_COMPLETE_SIGNED_CANONICALIZATION_PENDING",
+  "current_public_release": "v1.4.0",
+  "package_version": "1.5.0",
+  "evidence_source": {
+    "source_head_sha": "8cf6a1e5c7ed6658642320d8a9b3219729c8f929",
+    "source_tree_sha": "fbefa531035bad9fa761f3d1431665fb03cf771e",
+    "pr_number": 312,
+    "base_main_sha": "b7e5ac26dacc00f63315446bff906e9f76b7b8b0",
+    "note": "This is the fully validated unsigned content candidate. The release record and readiness document are added afterward, so final publication still requires a fresh matrix on the documentation-complete head and a GitHub-signed canonical merge."
+  },
+  "runtime_evidence": {
+    "workflow_run_id": 31935966476,
+    "artifact_id": 9260653852,
+    "artifact_name": "runtime-test-evidence-31935966476-1",
+    "artifact_digest": "sha256:cbd621074927f8c17268c7af75b7996145669d12be99e4ab74418281630bdfb4",
+    "tests_total": 1055,
+    "tests_passed": 1055,
+    "tests_failed": 0,
+    "tests_errors": 0,
+    "tests_skipped": 0,
+    "statement_coverage_percent": 98.47,
+    "branch_coverage_percent": 95.36,
+    "critical_ready": true,
+    "critical_statement_floor_percent": 98.0,
+    "critical_branch_floor_percent": 95.0,
+    "workflow_sanity_and_p9_conformance_included": true
+  },
+  "coverage_miss_classification": {
+    "path": "machine/release-evidence/v1.5.0-coverage-miss-disposition.json",
+    "missing_statements": 109,
+    "missing_branches": 110,
+    "unclassified_statement_misses": 0,
+    "coverage_exclusion_applied": false,
+    "broad_coverage_pragmas_added": false,
+    "misses_remain_in_denominator": true
+  },
+  "mutmut_evidence": {
+    "workflow_run_id": 31935966484,
+    "artifact_id": 9260682301,
+    "artifact_name": "mutation-confidence-31935966484-1",
+    "artifact_digest": "sha256:e7e3647ac3b83a203e70d04b933044980b73e88bd3af34c54e1683540783c35a",
+    "schema_version": "orchestra.mutation-evidence.v2",
+    "classification_status": "COMPLETE",
+    "score_status": "VALID_CLASSIFIED_SCORE",
+    "models": {
+      "total": 4,
+      "killed": 1,
+      "survived": 3,
+      "not_checked": 0
+    },
+    "services": {
+      "total": 323,
+      "killed": 226,
+      "survived": 97,
+      "not_checked": 0
+    },
+    "numeric_acceptance_threshold": "NOT_DEFINED_BY_POLICY"
+  },
+  "cosmic_ray_evidence": {
+    "workflow_run_id": 31935966459,
+    "artifact_id": 9260751199,
+    "artifact_name": "cosmic-ray-confidence-31935966459-1",
+    "artifact_digest": "sha256:98fad4a08b22d0eabafdb8327a2336e921a75cfd05f4d040cde65f2be45b9250",
+    "schema_version": "orchestra.cosmic-ray-evidence.v2",
+    "score_status": "VALID_CLASSIFIED_SCORE",
+    "raw": {
+      "total": 700,
+      "killed": 407,
+      "survived": 293,
+      "score_percent": 58.14
+    },
+    "excluded_equivalent_non_runtime": 154,
+    "runtime_relevant": {
+      "total": 546,
+      "killed": 407,
+      "survived": 139,
+      "score_percent": 74.54
+    }
+  },
+  "platform_and_security": {
+    "cross_platform_workflow_run_id": 31935966452,
+    "windows": "SUCCESS",
+    "ubuntu": "SUCCESS",
+    "macos": "SUCCESS",
+    "governance_workflow_run_id": 31935966492,
+    "governance": "SUCCESS",
+    "codeql": "SUCCESS_NO_NEW_PR_ALERTS"
+  },
+  "murmurs": {
+    "default_mode": "NORMAL",
+    "opt_in_mode": "MURMURS",
+    "model_generated_filler": false,
+    "vocabulary_in_model_context": false,
+    "controlled_normal_model_progress_calls": 4,
+    "controlled_murmurs_model_progress_calls": 0,
+    "task_validation_governance_identity_parity": true,
+    "comparable_live_host_token_counters_available": false,
+    "token_savings_percentage_claimed": false
+  },
+  "compatibility": {
+    "semver_decision": "MINOR",
+    "selected_version": "1.5.0",
+    "public_package_surfaces_removed": false,
+    "public_command_surfaces_removed": false,
+    "specialist_surfaces_removed": false,
+    "host_maturity_changed": false,
+    "retained_compatibility_views_are_derived": true,
+    "murmurs_is_additive_and_opt_in": true
+  },
+  "migration": {
+    "current_stage": "LEGACY_RETIRED",
+    "installed_integrations_mutated": false
+  },
+  "publication_boundary": {
+    "tag_created": false,
+    "github_release_created": false,
+    "marketplace_published": false,
+    "deployment_performed": false,
+    "installed_integrations_refreshed": false,
+    "mcp_implemented": false,
+    "required_next_state": "FRESH_DOCUMENTATION_COMPLETE_MATRIX_THEN_SIGNED_PROTECTED_CANONICALIZATION"
+  }
+}

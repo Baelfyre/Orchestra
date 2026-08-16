@@ -1,5 +1,11 @@
 # Changelog
 
+## Post-v1.4.0 Integrated Release Candidate Hardening - In Progress
+
+- Adds a cross-layer release-sanity regression proving that Murmurs routine-progress compression does not change the workflow receipt digest, validation result, or Arbiter disposition, while terminal completion remains hard-bound to `EXPLAIN`.
+- Starts fresh post-Murmurs release evidence generation under #292 and #300. Any validation attached to an earlier source head remains stale after subsequent RC changes and cannot authorize the final release.
+- Does not yet select or publish a new SemVer, tag, or GitHub Release and performs no marketplace publication, deployment, installed-integration refresh, ruleset mutation/bypass, branch deletion, force push, history rewrite, destructive cleanup, or MCP implementation.
+
 ## Post-v1.4.0 Murmurs Communication Budget - Candidate
 
 - Adds a machine-owned presentation policy with `NORMAL` and opt-in `MURMURS` modes plus deterministic `SILENT`, local `MURMUR`, and required `EXPLAIN` dispositions.
@@ -124,7 +130,7 @@
 - Preserved `scripts/dagger_guardrail.py` and its simulation-only live-execution block unchanged. Knowledge and tool examples do not grant permission to run destructive, disruptive, externally targeted, or production tests.
 - Kept the campaign Markdown-primary and JSON-selective: the SK5 audit found no deterministic machine-parsing need that justified a Dagger JSON catalog.
 - Added focused regression coverage for Dagger knowledge depth, source/Codex support-file parity, progressive disclosure, state/evidence separation, and safety-boundary language.
-- No release/tag publication, deployment/production mutation, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK5.
+- No release/tag publication, deployment/production mutation, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, history rewrite is performed by SK5.
 
 ## Post-v1.2.0 Specialist Knowledge Layer - SK4 Cloak - Pending
 

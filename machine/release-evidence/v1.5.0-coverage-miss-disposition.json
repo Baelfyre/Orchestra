@@ -1,0 +1,68 @@
+{
+  "format_version": 1,
+  "campaign": "v1.5.0-post-murmurs-integrated-release-candidate",
+  "status": "RELEASE_CLASSIFICATION_COMPLETE_PARENT_EVIDENCE_BOUND",
+  "basis": {
+    "source_head_sha": "8cf6a1e5c7ed6658642320d8a9b3219729c8f929",
+    "runtime_workflow_run_id": 31935966476,
+    "runtime_artifact_id": 9260653852,
+    "runtime_artifact_name": "runtime-test-evidence-31935966476-1",
+    "runtime_artifact_digest": "sha256:cbd621074927f8c17268c7af75b7996145669d12be99e4ab74418281630bdfb4",
+    "tests_total": 1055,
+    "tests_passed": 1055,
+    "statement_percent": 98.47,
+    "branch_percent": 95.36,
+    "missing_statements": 109,
+    "missing_branches": 110,
+    "critical_ready": true
+  },
+  "policy": {
+    "allowed_dispositions": ["TESTED", "REMOVED_DEAD_CODE", "JUSTIFIED_EXCLUSION"],
+    "coverage_exclusion_applied": false,
+    "broad_coverage_pragmas_added": false,
+    "misses_remain_in_metric_denominator": true,
+    "classification_is_not_proof_of_correctness": true,
+    "final_release_requires_matching_fresh_inventory": true
+  },
+  "critical_justified_exclusions": [
+    {
+      "path": "orchestra_runtime/governance_kernel.py",
+      "lines": [40, 42],
+      "disposition": "JUSTIFIED_EXCLUSION",
+      "reason": "Import-time machine/runtime enum parity traps. Normal successful import mechanically demonstrates parity; forcing these raise arms would require deliberately corrupting module-load authority state. The lines remain in the coverage denominator."
+    },
+    {
+      "path": "orchestra_runtime/test_evidence.py",
+      "lines": [244],
+      "disposition": "JUSTIFIED_EXCLUSION",
+      "reason": "Direct-module CLI guard. Runtime evidence behavior is exercised through repository validation entrypoints; the __main__ dispatch line remains in the coverage denominator."
+    }
+  ],
+  "noncritical_justified_exclusions": [
+    {"path":"orchestra_runtime/__init__.py","lines":[266],"disposition":"JUSTIFIED_EXCLUSION","reason":"Introspection-only compatibility helper branch retained outside the critical trust set."},
+    {"path":"orchestra_runtime/authority.py","lines":[87,186,219,307,315,337,481],"disposition":"JUSTIFIED_EXCLUSION","reason":"Rare malformed-input and defensive authority validation paths retained as noncritical debt; core authority invariants and critical control-plane consumers remain explicitly tested."},
+    {"path":"orchestra_runtime/capabilities.py","lines":[128,322,334,381,392],"disposition":"JUSTIFIED_EXCLUSION","reason":"Rare capability validation and defensive branches retained as noncritical debt with no coverage suppression."},
+    {"path":"orchestra_runtime/coordination.py","lines":[1197,1720,1726,1745,1775,1784,1790,1796,1803,1804,1809,1810,1827,1848,1861,1887,1895,1910,1916,1951,1957,1970,1977,1983,1991,1997,2003,2050,2062,2074,2087,2104,2119,2129,2131,2139,2315,2334,2342,2344,2346,2353,2360,2385,2408,2410,2412,2434,2439,2444,2529,2534,2577,2601,2635,2636,2637,2638],"disposition":"JUSTIFIED_EXCLUSION","reason":"Legacy and rare coordination recovery, contradiction, invalidation, malformed-output, replay, and fallback paths. Coordination remains above the release minimum but below the critical-module floor because it is not part of the machine-authoritative critical set. These lines remain visible release debt and are not excluded from coverage."},
+    {"path":"orchestra_runtime/delegation.py","lines":[73,75,82,218,260,271],"disposition":"JUSTIFIED_EXCLUSION","reason":"Rare delegation validation and defensive branches retained as noncritical debt with no coverage suppression."},
+    {"path":"orchestra_runtime/interfaces.py","lines":[185,193],"disposition":"JUSTIFIED_EXCLUSION","reason":"Abstract interface NotImplemented guards. Concrete implementations are tested; forcing abstract method bodies adds no runtime confidence."},
+    {"path":"orchestra_runtime/lifecycle.py","lines":[229],"disposition":"JUSTIFIED_EXCLUSION","reason":"Rare terminal snapshot signal-identity defensive guard retained in the denominator; lifecycle terminal/replay invariants are otherwise exercised."},
+    {"path":"orchestra_runtime/models.py","lines":[366],"disposition":"JUSTIFIED_EXCLUSION","reason":"Rare runtime-evidence run-identity defensive guard retained in the denominator; evidence identity is covered through the machine-authoritative evidence stack."},
+    {"path":"orchestra_runtime/protocol/adapter_protocol.py","lines":[312,313],"disposition":"JUSTIFIED_EXCLUSION","reason":"Environment-specific import fallback for unavailable adapter dependency. Supported adapter behavior is validated through the host parity suite."},
+    {"path":"orchestra_runtime/repositories.py","lines":[50],"disposition":"JUSTIFIED_EXCLUSION","reason":"Malformed specialist-frontmatter repository guard retained as noncritical defensive debt."},
+    {"path":"orchestra_runtime/services.py","lines":[494,500,510,529,538,539,545,619,699,827],"disposition":"JUSTIFIED_EXCLUSION","reason":"Rare compatibility, routing, registry, and service error branches. Canonical routing/governance authority is machine-contract-backed and explicitly covered; these noncritical compatibility/error paths remain visible in the denominator."},
+    {"path":"orchestra_runtime/status.py","lines":[384,549,839],"disposition":"JUSTIFIED_EXCLUSION","reason":"Rare status projection and fallback branches retained as noncritical release debt with no coverage suppression."},
+    {"path":"orchestra_runtime/worktree.py","lines":[510,511,518,795,1047,1326,1424,1454,1466],"disposition":"JUSTIFIED_EXCLUSION","reason":"Rare filesystem, environment, and defensive worktree branches. Core confinement/base/recovery behavior is tested; host-specific edge paths remain in the denominator."}
+  ],
+  "branch_only_residuals": [
+    {"path":"orchestra_runtime/remediation_circuit.py","missing_branches":1,"disposition":"JUSTIFIED_EXCLUSION","reason":"One residual defensive branch remains while statement coverage is 100%; remediation monotonicity, exhaustion, persistence, and Arbiter integration are explicitly tested."}
+  ],
+  "release_disposition": {
+    "statement_minimum_met": true,
+    "branch_minimum_met": true,
+    "critical_statement_minimum_met": true,
+    "critical_branch_minimum_met": true,
+    "unclassified_statement_misses": 0,
+    "release_blocked_by_coverage_classification": false,
+    "source_head_movement_requires_fresh_evidence": true
+  }
+}
