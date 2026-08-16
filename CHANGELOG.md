@@ -58,7 +58,7 @@
 ## Post-v1.2.0 Specialist Knowledge Layer - SK10 Hardening and Evaluation - Pending
 
 - Added evidence-driven hardening guides for Weaver model/source traceability, Conductor routing evaluation, The Tuner contradiction/invalidation coordination, and Arbiter continuity/handoff evaluation.
-- Added a selective JSON adversarial scenario catalog with deterministic regression coverage for routing, ownership, contradiction, re-entry, stale diagrams, handoff identity, continuity, and protected-action boundaries.
+- Added a selective JSON adversarial scenario catalog with deterministic regression coverage for routing, ownership, contradiction, re-entry, stale diagrams, handoff identity, and protected-action boundaries.
 - Preserved existing orchestration and governance contracts; no routing, authority, runtime, manifest, policy, release, or deployment redesign was introduced.
 - No release/tag publication, deployment/production mutation, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK10.
 
@@ -121,7 +121,7 @@
 - Added progressive-disclosure guidance for semantic HTML, ARIA/accessibility state, keyboard and focus behavior, responsive CSS layout/overflow, forms and validation recovery, design tokens/component states, and frontend routing/component-boundary literacy.
 - Expanded four previously minimal Cloak worked examples covering responsive layout, destructive dialog interaction, navigation structure, and checkout recovery.
 - Kept the campaign Markdown-primary and JSON-selective: the SK4 audit found no concrete machine-parsing need that justified a new Cloak JSON catalog.
-- Preserved implementation ownership with Ponytail, architecture/state ownership with Clockwork, security policy with Cipher, persistence with Chronicler, readiness gates with Overseer, and diagram/documentation ownership with Weaver/Scribe.
+- Preserved implementation ownership with Ponytail, architecture/state ownership with Clockwork, security policy with Cipher, persistence with Chronicler, and diagram/documentation ownership with Weaver/Scribe.
 - Added focused regression coverage for Cloak knowledge depth and canonical/Codex support-file parity.
 - No release/publication, deployment/production mutation, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK4.
 ## Post-v1.2.0 Specialist Knowledge Layer - SK3 Cipher - Pending
@@ -165,6 +165,7 @@
 - Performs no release, tag, deployment, marketplace graduation, installed-integration refresh, policy activation, or branch deletion.
 
 ## v1.2.0 - Published 2026-08-09
+
 - Published the stable minor release from annotated tag `v1.2.0` at exact release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`.
 - Published [Orchestra v1.2.0: Governed Orchestration](https://github.com/Baelfyre/Orchestra/releases/tag/v1.2.0) as a non-draft, non-prerelease, immutable GitHub Release.
 - Preserved R7-E2, R7-F, R7-G, and R7-H evidence identities, Claude Code `SCAFFOLD_ONLY` maturity, and the repository simulation fixture as pending/empty by design.
@@ -244,6 +245,7 @@ The first autonomous finalization experiment was rolled back to the verified rec
 Historical fail-open or bypass-capable platform behavior is not successful validation precedent.
 
 ### Capability Merge Map
+
 Key post-`v1.1.2` canonical milestones include:
 
 - PR #190 - Delegated Phase B instruction-level progression.
