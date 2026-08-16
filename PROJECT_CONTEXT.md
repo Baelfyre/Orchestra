@@ -10,7 +10,7 @@ A governance-first specialist skill framework that routes complex AI-assisted so
 Open-source developer tooling and AI orchestration framework
 
 ## Current Stage
-v1.5.0 - Machine-Verifiable Control Plane and Murmurs (`PREPARED_NOT_RELEASED`). Repository package/version surfaces are prepared at `1.5.0`, while the current public GitHub Release remains `v1.4.0` until the separate final publication gate completes. The control-plane migration is `LEGACY_RETIRED`, fail-closed ordinary merge readiness requires `mergeable=true` and `mergeable_state=clean`, and Murmurs is canonical as an additive opt-in presentation mode with `NORMAL` as the default. Fresh post-Murmurs release hardening, exact signed canonical merge, tag publication, and GitHub Release verification remain required. MCP is deferred until v1.5.0 is independently `PUBLISHED_VERIFIED`. No marketplace publication, installed-integration refresh, deployment/production mutation, or policy activation is performed by candidate preparation.
+v1.5.0 - Machine-Verifiable Control Plane and Murmurs (`PUBLISHED_VERIFIED`). Repository package/version surfaces and the current public GitHub Release are aligned to `1.5.0`. The immutable, non-draft, non-prerelease release `Orchestra v1.5.0: Machine-Verifiable Control Plane and Murmurs` is published from lightweight tag `v1.5.0`, which resolves directly to exact signed canonical release commit `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`. The control-plane migration is `LEGACY_RETIRED`, fail-closed ordinary merge readiness requires `mergeable=true` and `mergeable_state=clean`, and Murmurs is canonical as an additive opt-in presentation mode with `NORMAL` as the default. MCP is not part of v1.5.0; its publication prerequisite is satisfied, but any MCP work still requires a fresh post-release priority and design decision. No marketplace publication, installed-integration refresh, deployment/production mutation, or policy activation was performed by release publication.
 
 ## Primary Users
 Developers and maintainers who install Orchestra as a plugin, skill set, or runtime package inside a supported or scaffold-only IDE or coding host (Claude Code, Codex, Antigravity, Cursor, Windsurf, JetBrains, Zed, Neovim)
@@ -42,7 +42,7 @@ Guidance used for this classification:
 - Repository simulation and GitHub CI are not live installed-host evidence. Accepted R7 evidence is recorded separately for installed Codex and Antigravity continuity and Claude Code packaging compatibility; Claude Code active runtime continuity remains unclaimed under `SCAFFOLD_ONLY` maturity.
 - Governed Autonomy Profiles are reduction-only workflow gates. `HUMAN_GOVERNED` is the safe default, children cannot exceed parents, and no profile creates release, deployment, policy, destructive, force-push, history-rewrite, or authority-expansion permission.
 - Murmurs is presentation-only. It cannot modify machine state, authority, governance, validation, blockers, handoffs, or terminal outcomes, and it must not claim token savings without comparable host-reported counters.
-- MCP remains a future transport/integration boundary and must not become a source of authority. MCP implementation is deferred until v1.5.0 publication is complete and independently verified.
+- MCP remains a future transport/integration boundary and must not become a source of authority. The v1.5.0 publication prerequisite is complete, but implementation is not automatic and requires a fresh post-release priority/design gate.
 - No vendoring of external plugin code, and no claiming unsupported compatibility or compliance, per `docs/CONTRIBUTING.md`.
 
 ## Validation Requirements
@@ -53,7 +53,7 @@ Guidance used for this classification:
 - Manifest and packaging validators (`validate_claude_plugin.py`, `validate_ide_packaging.py`, `validate_manifest.py`, `validate_structure.py`) must pass.
 - Cross-layer contract validators and their behavior tests must pass for affected revisions.
 - `python scripts/validate_governed_autonomy_modes_contract.py` and its focused runtime tests must pass when autonomy-profile contracts change.
-- Final v1.5.0 release evidence must include fresh exact-head runtime/coverage, workflow-sanity, P9 conformance, Mutmut, integrated Cosmic Ray, native Windows/Ubuntu/macOS, CodeQL, governance, documentation parity, package-version parity, signed canonical merge, tag identity, and GitHub Release identity.
+- Published v1.5.0 release evidence records fresh exact-head runtime/coverage, workflow-sanity, P9 conformance, Mutmut, integrated Cosmic Ray, native Windows/Ubuntu/macOS, CodeQL, governance, documentation parity, package-version parity, signed canonical merge, tag identity, and GitHub Release identity.
 - `python scripts/preflight_sync_check.py` must be run against `origin/main` before starting a new local editing session, per `docs/CONTRIBUTING.md`.
 
 ## Known Constraints
@@ -61,7 +61,7 @@ Guidance used for this classification:
 - `tests/behavior/run-tests.ps1` is intentionally maintained in parallel with `run_tests.py` as the primary validation path for Windows environments, per `docs/MATURITY.md`.
 - Direct pushes to `main` are not part of the normal workflow; changes go through a branch and pull request except for documented maintainer bypass recovery cases.
 - Installed Codex and Antigravity parity, host context-reset behavior, and Windows filesystem-specific behavior require host-local evidence in addition to repository CI.
-- Repository package metadata is prepared at `1.5.0`, but the current public GitHub Release remains `v1.4.0`; lightweight tag `v1.4.0` continues to resolve to signed release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`. Candidate work must not move that fixed release tag.
+- Repository package metadata and the current public GitHub Release are `1.5.0`; lightweight tag `v1.5.0` resolves directly to signed release commit `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`. Later `main` commits must not move that fixed release tag.
 - The Compliance Registry foundation, source/freshness pilot, deterministic packaging, immutable `registry-v0.1.0` publication, and Orchestra real network-provenance validation are complete; future Registry releases remain separately governed transitions.
 - Repository Murmurs simulation demonstrates structural progress-call reduction and outcome parity but does not prove a billing-token savings percentage.
 

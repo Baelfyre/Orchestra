@@ -12,9 +12,9 @@
     "license": "MIT",
     "package_version": "1.5.0",
     "package_version_source": "plugin.json#/version",
-    "current_public_release": "v1.4.0",
+    "current_public_release": "v1.5.0",
     "release_candidate": "v1.5.0",
-    "release_candidate_status": "PREPARED_NOT_RELEASED"
+    "release_candidate_status": "PUBLISHED_VERIFIED"
   },
   "purpose": {
     "summary": "Portable orchestration runtime for structured AI-assisted software development.",
@@ -124,7 +124,7 @@
     "test_evidence_schema_version": "orchestra.test-evidence.v1",
     "communication_measurement_schema": "machine/schemas/communication-measurement.schema.json",
     "murmurs_measurement_policy": "Repository simulation may prove deterministic structural reductions such as fewer model-progress calls, but billing/model token deltas are reportable only when comparable live host-reported counters share the same counter identity. Unavailable token evidence remains unavailable rather than estimated.",
-    "release_candidate_policy": "v1.5.0 publication requires fresh exact-head runtime, branch, critical-module, mutation, Cosmic Ray, cross-platform, CodeQL, governance, documentation-parity, and release-identity evidence. Pre-version evidence is diagnostic only after source-head movement.",
+    "release_candidate_policy": "v1.5.0 is published and independently verified at signed release commit b0a56cc7af8ad78234754bcb29ed07f6ab54d920 with immutable tag and GitHub Release identity. Any future release candidate requires fresh exact-head runtime, branch, critical-module, mutation, Cosmic Ray, cross-platform, CodeQL, governance, documentation-parity, and release-identity evidence.",
     "mutation_evidence_policy": "Mutation scores are scope-specific and valid only when the configured unmutated baseline passes, all scheduled mutation jobs complete, and the machine-readable evidence artifact binds the tested checkout SHA and source-head SHA.",
     "evidence_policy": "Runtime confidence claims must be derived from persisted machine-readable CI evidence bound to the tested checkout SHA and source-head SHA."
   },
@@ -135,6 +135,7 @@
     "changelog": "CHANGELOG.md",
     "release_docs": "docs/releases/",
     "release_candidate_v1_5_0": "docs/releases/v1.5.0-machine-verifiable-control-plane-murmurs-release-candidate.md",
+    "publication_closeout_v1_5_0": "docs/validation/V1_5_0_PUBLICATION_CLOSEOUT.md",
     "validation_evidence": "docs/validation/",
     "third_party_provenance": "docs/THIRD_PARTY_PROVENANCE.md",
     "merge_readiness": "docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md",
@@ -159,6 +160,6 @@
     "treat_mergeable_boolean_without_clean_mergeable_state_as_insufficient": true,
     "treat_murmurs_as_presentation_only": true,
     "do_not_claim_murmurs_token_savings_without_comparable_host_reported_counters": true,
-    "treat_v1_5_0_as_prepared_not_released_until_tag_and_release_identity_are_independently_verified": true
+    "treat_v1_5_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true
   }
 }

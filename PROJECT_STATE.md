@@ -5,8 +5,8 @@
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Stable Continuation Branch:** `main`
-- **Current Public Release:** `v1.4.0`
-- **Release Status:** `v1.5.0 PREPARED_NOT_RELEASED`; `v1.4.0 PUBLISHED_VERIFIED`
+- **Current Public Release:** `v1.5.0`
+- **Release Status:** `v1.5.0 PUBLISHED_VERIFIED`
 - **Target Release:** `v1.5.0`
 - **Release-Candidate Metadata:** `1.5.0`
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
@@ -19,34 +19,39 @@
 - **v1.4.0 Release Commit:** `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`
 - **v1.4.0 Release Tree:** `1ef60b00e3ac6deba5da57c47d2a0850872d41a9`
 - **v1.4.0 Tag Ref:** lightweight `commit` ref, exact target verified
-- **v1.4.0 GitHub Release:** id `370658917`, immutable, non-draft, non-prerelease, latest until v1.5.0 publication
-- **v1.5.0 Candidate State:** `PREPARED_NOT_RELEASED`
-- **v1.5.0 Candidate Theme:** Machine-Verifiable Control Plane and Murmurs
-- **MCP State:** `DEFERRED_UNTIL_V1_5_0_PUBLISHED_VERIFIED`
+- **v1.4.0 GitHub Release:** id `370658917`, immutable, non-draft, non-prerelease, historical after v1.5.0 publication
+- **v1.5.0 Release State:** `PUBLISHED_VERIFIED`
+- **v1.5.0 Release Theme:** Machine-Verifiable Control Plane and Murmurs
+- **v1.5.0 Release Commit:** `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`
+- **v1.5.0 Tag Ref:** lightweight `commit` ref, exact target verified
+- **v1.5.0 GitHub Release:** id `371314544`, immutable, non-draft, non-prerelease, independently verified latest
+- **MCP State:** `POST_V1_5_PRIORITY_REVIEW_REQUIRED`
 - **Policy Activation State:** `NOT_PERFORMED`
 
-## v1.5.0 Machine-Verifiable Control Plane and Murmurs - Release Candidate
+## v1.5.0 Machine-Verifiable Control Plane and Murmurs Publication
 
-The post-v1.4.0 control-plane re-foundation has reached `LEGACY_RETIRED` and the forward governance stabilization has repaired merge readiness so `mergeable=true` is insufficient without a current `mergeable_state=clean`. Murmurs is canonical as an additive opt-in presentation layer with `NORMAL` as the default and hard-required explanation for authority, human-action, failure, blocker, governance-stop, handoff, and terminal events.
+The post-v1.4.0 control-plane re-foundation is complete through `LEGACY_RETIRED`. Forward governance stabilization requires both `mergeable=true` and a current `mergeable_state=clean` for ordinary governed merge progression. Murmurs is canonical as an additive opt-in presentation layer with `NORMAL` as the default and hard-required explanation for authority, human-action, failure, blocker, governance-stop, handoff, and terminal events.
 
-Package/version metadata is prepared at `1.5.0` across all 11 release surfaces without changing public command identity, specialist identity, supported/scaffold host maturity, marketplace publication state, deployment state, or installed integrations. Compatibility evidence therefore supports a minor release rather than an intentional breaking major release.
+Package/version metadata is `1.5.0` across all 11 release surfaces without changing public command identity, specialist identity, supported/scaffold host maturity, marketplace publication state, deployment state, or installed integrations. Compatibility evidence supported a minor release rather than an intentional breaking major release.
 
-Fresh post-Murmurs release hardening is active under #292 and #300. A pre-version diagnostic checkpoint on exact source head `754d0183289fd543e9696aeb3c84bb94a42b130f` produced 1,055 passing runtime tests, 98.47% statement coverage, 95.36% branch coverage, all critical coverage floors green, Windows/Ubuntu/macOS validation green, Governance and validate green, and complete classified LEGACY_RETIRED Mutmut evidence. Those results are diagnostic only after release-metadata source movement and must be regenerated on the actual final candidate.
+The final published candidate passed the release campaign's exact-head runtime, statement/branch coverage, critical-module, workflow-sanity, P9 conformance, Mutmut, integrated Cosmic Ray, native Windows/Ubuntu/macOS, CodeQL, governance, package/version, Registry compatibility, signed canonical merge, tag-identity, and GitHub Release identity gates. The immutable GitHub Release was published from exact signed canonical release commit `b0a56cc7af8ad78234754bcb29ed07f6ab54d920` and independently verified.
 
 ```text
-CURRENT_PUBLIC_RELEASE=v1.4.0
+CURRENT_PUBLIC_RELEASE=v1.5.0
 TARGET_VERSION=1.5.0
 TARGET_TAG=v1.5.0
-V1_5_0_RELEASE_STATE=PREPARED_NOT_RELEASED
+V1_5_0_RELEASE_STATE=PUBLISHED_VERIFIED
+V1_5_0_RELEASE_COMMIT=b0a56cc7af8ad78234754bcb29ed07f6ab54d920
+V1_5_0_GITHUB_RELEASE_ID=371314544
 CONTROL_PLANE_STAGE=LEGACY_RETIRED
 MURMURS_DEFAULT=NORMAL
 MURMURS_TOKEN_PERCENT_CLAIM=UNAVAILABLE_WITHOUT_COMPARABLE_HOST_COUNTERS
-MCP_IMPLEMENTATION=DEFERRED_UNTIL_RELEASE_COMPLETE
+MCP_IMPLEMENTATION=NOT_INCLUDED_IN_V1_5_0
 ```
 
-Release publication remains separately gated. No v1.5.0 tag or GitHub Release exists merely because package metadata is prepared. The final candidate must pass fresh exact-head runtime/coverage, workflow-sanity, mutation and Cosmic Ray, cross-platform, CodeQL, governance, documentation-parity, signature, protected-merge, tag-identity, and release-identity verification.
+The v1.5.0 release tag is fixed. Post-publication documentation or later implementation may advance `main`, but must not move the immutable release identity. MCP publication dependency is satisfied, but no MCP implementation is implied or authorized by publication alone. It remains subject to a fresh post-v1.5 dependency/risk/value and design decision.
 
-See `docs/releases/v1.5.0-machine-verifiable-control-plane-murmurs-release-candidate.md`.
+See `docs/releases/v1.5.0-machine-verifiable-control-plane-murmurs-release-candidate.md`, `docs/validation/V1_5_0_RELEASE_READINESS_EVIDENCE.md`, and `docs/validation/V1_5_0_PUBLICATION_CLOSEOUT.md`.
 
 ## v1.4.0 Governance and Compliance Registry Cross-Integration Publication
 
@@ -55,7 +60,7 @@ The v1.4.0 governance upgrade is `PUBLISHED_VERIFIED`. The public GitHub Release
 The trusted Registry dependency is also complete: immutable `registry-v0.1.0` targets Registry canonical `3821bcb55125b4d8864f28b6423650e6e17ac67b`, and Orchestra network-provenance run `31811353512` / job `94802485762` passed exact release identity, real bundle integrity, `CURRENT` freshness, PH source query, project pinning, update-check, and idempotent re-sync. Final Orchestra PR #271 then passed the full exact-head matrix and merged as the signed release commit above; its canonical post-merge matrix passed Governance, validate, 568 runtime tests at 94.31% coverage, CodeQL actions/Python, and native Ubuntu/macOS/Windows.
 
 ```text
-CURRENT_PUBLIC_RELEASE=v1.4.0
+CURRENT_PUBLIC_RELEASE_AT_CHECKPOINT=v1.4.0
 V1_4_0_RELEASE_STATE=PUBLISHED_VERIFIED
 V1_4_0_TAG_REF_TYPE=commit
 V1_4_0_TAG_TARGET=93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50
@@ -82,7 +87,7 @@ The first candidate PR #253 is preserved as fail-closed evidence: Stage 1 Strict
 Publication completed under separate explicit maintainer authority:
 
 ```text
-CURRENT_PUBLIC_RELEASE=v1.3.0
+CURRENT_PUBLIC_RELEASE_AT_CHECKPOINT=v1.3.0
 TARGET_VERSION=1.3.0
 TARGET_TAG=v1.3.0
 V1_3_0_RELEASE_STATE=PUBLISHED_VERIFIED
@@ -265,7 +270,7 @@ The current bypass list is intentionally retained for repository-operational acc
 - **v1.3.0 Preparation:** SK1-SK10 are `MERGED_VERIFIED`; package/version preparation is canonical through PR #255 at signed Squash `32257723d6ca72847e4581d8b927c7b14c77039e`, with 542 runtime tests at 94.33% coverage and all 9 observed exact-head checks passing.
 - **v1.3.0 Publication State:** Annotated tag `v1.3.0` targets exact signed release commit `3c6155c111981632649a3c3207fac8ac1edcea74`; the immutable, non-draft, non-prerelease GitHub Release `Orchestra v1.3.0: Specialist Intelligence` is `PUBLISHED_VERIFIED`. No deployment, marketplace publication, installed-integration refresh, or policy activation was performed.
 - **v1.4.0 Publication State:** Lightweight tag `v1.4.0` resolves directly to exact signed release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`; GitHub Release id `370658917`, `Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration`, is immutable, non-draft, non-prerelease, and `PUBLISHED_VERIFIED`. No marketplace publication, installed-integration refresh, deployment, or policy activation was performed.
-- **v1.5.0 Preparation:** Package surfaces are prepared at `1.5.0`; fresh final exact-head evidence, signed canonical merge, tag publication, and GitHub Release verification remain pending. MCP remains deferred until that publication is complete.
+- **v1.5.0 Publication State:** Lightweight tag `v1.5.0` resolves directly to exact signed release commit `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`; GitHub Release id `371314544`, `Orchestra v1.5.0: Machine-Verifiable Control Plane and Murmurs`, is immutable, non-draft, non-prerelease, and `PUBLISHED_VERIFIED`. MCP remains unimplemented and requires a fresh post-release priority/design gate.
 
 ## Local Startup Verification
 
