@@ -2,7 +2,7 @@
 
 Load this file only when reviewing bottom sheets, drawers, modal panels, mobile overlays, native/web presentation differences, keyboard/focus behavior, or related responsive interaction patterns.
 
-Machine identity and ownership live in `machine/knowledge/truesheet-specialist-reference.v1.json`. External source: `lodev09/react-native-true-sheet` at `23e119c026e2040d960725bd260e6cd4bf680b95`, MIT. This guide is paraphrased Orchestra-native guidance, not external authority.
+Machine identity and ownership live in `../../machine/knowledge/truesheet-specialist-reference.v1.json`. External source: `lodev09/react-native-true-sheet` at `23e119c026e2040d960725bd260e6cd4bf680b95`, MIT. This guide is paraphrased Orchestra-native guidance, not external authority.
 
 ## Owned feature references
 

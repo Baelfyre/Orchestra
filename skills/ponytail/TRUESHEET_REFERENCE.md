@@ -2,7 +2,7 @@
 
 Load this file only for React Native sheet/panel implementation, navigation integration, Reanimated coordination, typed native interfaces, native/web implementation divergence, test mocks, or worked-example adaptation.
 
-Machine identity and ownership live in `machine/knowledge/truesheet-specialist-reference.v1.json`. External source: `lodev09/react-native-true-sheet` at `23e119c026e2040d960725bd260e6cd4bf680b95`, MIT. This guide is paraphrased Orchestra-native guidance, not copied implementation.
+Machine identity and ownership live in `../../machine/knowledge/truesheet-specialist-reference.v1.json`. External source: `lodev09/react-native-true-sheet` at `23e119c026e2040d960725bd260e6cd4bf680b95`, MIT. This guide is paraphrased Orchestra-native guidance, not copied implementation.
 
 ## Owned feature references
 

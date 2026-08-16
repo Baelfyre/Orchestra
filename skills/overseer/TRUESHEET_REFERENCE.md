@@ -2,7 +2,7 @@
 
 Load this file only when designing validation for sheets/panels, keyboard/focus behavior, lifecycle events, navigation integration, platform divergence, mocks, mobile E2E flows, or migration/troubleshooting regressions.
 
-Machine identity and ownership live in `machine/knowledge/truesheet-specialist-reference.v1.json`. External source: `lodev09/react-native-true-sheet` at `23e119c026e2040d960725bd260e6cd4bf680b95`, MIT. External test results are reference inputs only and never Orchestra validation evidence.
+Machine identity and ownership live in `../../machine/knowledge/truesheet-specialist-reference.v1.json`. External source: `lodev09/react-native-true-sheet` at `23e119c026e2040d960725bd260e6cd4bf680b95`, MIT. External test results are reference inputs only and never Orchestra validation evidence.
 
 ## Owned feature references
 

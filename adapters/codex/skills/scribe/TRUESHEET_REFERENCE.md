@@ -2,7 +2,7 @@
 
 Load this file only when packaging specialist knowledge, migration guidance, troubleshooting references, source provenance, or version-scoped external-reference documentation.
 
-Machine identity and ownership live in `machine/knowledge/truesheet-specialist-reference.v1.json`. External source: `lodev09/react-native-true-sheet` at `23e119c026e2040d960725bd260e6cd4bf680b95`, MIT. This guide describes documentation patterns, not source ownership.
+Machine identity and ownership live in `../../machine/knowledge/truesheet-specialist-reference.v1.json`. External source: `lodev09/react-native-true-sheet` at `23e119c026e2040d960725bd260e6cd4bf680b95`, MIT. This guide describes documentation patterns, not source ownership.
 
 ## Owned feature references
 

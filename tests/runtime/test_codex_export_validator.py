@@ -10,6 +10,7 @@ def copy_export_tree(tmp_path: Path) -> Path:
     repo_root = Path(__file__).resolve().parents[2]
     export_root = tmp_path / "export"
     shutil.copytree(repo_root / "adapters" / "codex" / "skills", export_root / "skills")
+    shutil.copytree(repo_root / "adapters" / "codex" / "machine", export_root / "machine")
     return export_root
 
 

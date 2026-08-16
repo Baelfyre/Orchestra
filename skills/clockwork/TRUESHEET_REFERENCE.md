@@ -2,7 +2,7 @@
 
 Load this file only for React Native native-component architecture, navigation/platform boundaries, Fabric/Codegen/TurboModule design, typed native contracts, iOS/Android host architecture, or shared native state.
 
-Machine identity and ownership live in `machine/knowledge/truesheet-specialist-reference.v1.json`. External source: `lodev09/react-native-true-sheet` at `23e119c026e2040d960725bd260e6cd4bf680b95`, MIT. This guide adapts architecture patterns only.
+Machine identity and ownership live in `../../machine/knowledge/truesheet-specialist-reference.v1.json`. External source: `lodev09/react-native-true-sheet` at `23e119c026e2040d960725bd260e6cd4bf680b95`, MIT. This guide adapts architecture patterns only.
 
 ## Owned feature references
 
