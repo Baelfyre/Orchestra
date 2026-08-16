@@ -83,6 +83,13 @@ from .lifecycle import (
     lifecycle_transition_event,
     terminal_result_event,
 )
+from .machine_contracts import (
+    assert_machine_contracts,
+    command_route_map,
+    command_route_record,
+    governance_required_specialists,
+    runtime_validation_rule_records,
+)
 from .models import (
     Command,
     ContextPackage,
@@ -96,29 +103,22 @@ from .models import (
 from .repositories import ManifestRepository, SkillSourceRepository
 
 
-DEFAULT_COMMAND_ROUTES = {
-    "conductor": "conductor",
-    "arbiter": "arbiter",
-    "clockwork": "clockwork",
-    "review-architecture": "clockwork",
-    "cloak": "cloak",
-    "review-ui": "cloak",
-    "chronicler": "chronicler",
-    "review-db": "chronicler",
-    "scribe": "scribe",
-    "review-docs": "scribe",
-    "weaver": "weaver",
-    "diagram-check": "weaver",
-    "overseer": "overseer",
-    "qa-check": "overseer",
-    "cipher": "cipher",
-    "security-check": "cipher",
-    "dagger": "dagger",
-    "resilience-check": "dagger",
-    "ponytail": "ponytail",
-    "the-steward": "the-steward",
-    "the-governor": "the-governor",
-}
+# Promotion authority is fail-closed: runtime defaults are admitted only after
+# the complete machine specialist/routing/governance contract set conforms.
+assert_machine_contracts()
+
+# Backward-compatible public/runtime names remain available during this stage,
+# but their values are derived from machine contracts rather than maintained as
+# independent normative tables.
+DEFAULT_COMMAND_ROUTES = command_route_map()
+DEFAULT_AMBIGUITY_FALLBACK = command_route_record("__orchestra_ambiguity_fallback__")["specialist"]
+DEFAULT_GOVERNANCE_REQUIRED_SPECIALISTS = governance_required_specialists()
+_DEFAULT_RUNTIME_VALIDATION_RULE_RECORDS = runtime_validation_rule_records()
+_DEFAULT_DRY_RUN_REQUIRED_RULES = frozenset(
+    str(record.get("rule_id", "")).strip()
+    for record in _DEFAULT_RUNTIME_VALIDATION_RULE_RECORDS
+    if record.get("dry_run_required") is True
+)
 
 COMPATIBILITY_POLICY_ID = "orchestra.runtime.compatibility"
 COMPATIBILITY_POLICY_VERSION = "1"
@@ -141,6 +141,44 @@ def _runtime_identifier(value: object, field_name: str, *, route: bool = False) 
             {"field": field_name},
         )
     return text
+
+
+def _default_governance_rules() -> tuple[GovernanceRule, ...]:
+    rules: list[GovernanceRule] = []
+    seen_rule_ids: set[str] = set()
+    for record in _DEFAULT_RUNTIME_VALIDATION_RULE_RECORDS:
+        rule_id = str(record.get("rule_id", "")).strip()
+        validator_key = str(record.get("validator_key", "")).strip()
+        skill_slugs = tuple(str(item).strip() for item in record.get("skill_slugs", ()))
+        command_names = tuple(str(item).strip() for item in record.get("command_names", ()))
+        if (
+            not rule_id
+            or rule_id in seen_rule_ids
+            or any(not item for item in skill_slugs)
+            or any(not item for item in command_names)
+            or not (skill_slugs or command_names)
+        ):
+            raise RuntimeInitializationError(
+                "machine governance validation rule is invalid",
+                "INVALID_RUNTIME_POLICY",
+                {"rule_id": rule_id or "<missing>"},
+            )
+        seen_rule_ids.add(rule_id)
+        rules.append(
+            GovernanceRule(
+                name=rule_id,
+                description=f"Runtime validation rule derived from machine governance policy: {rule_id}.",
+                skill_slugs=skill_slugs,
+                command_names=command_names,
+                validator_key=validator_key,
+            )
+        )
+    if not rules:
+        raise RuntimeInitializationError(
+            "machine governance policy contains no runtime validation rules",
+            "INVALID_RUNTIME_POLICY",
+        )
+    return tuple(rules)
 
 
 class AuthorityMode(str, Enum):
@@ -307,12 +345,12 @@ class RouterService(IRouterService):
         self._command_routes = command_routes or DEFAULT_COMMAND_ROUTES
 
     def route(self, command: Command, context: ContextPackage) -> RouteDecision:
-        skill_slug = self._command_routes.get(command.name, "conductor")
-        skill = self._skill_registry.get_skill(skill_slug) or self._skill_registry.get_skill("conductor")
+        skill_slug = self._command_routes.get(command.name, DEFAULT_AMBIGUITY_FALLBACK)
+        skill = self._skill_registry.get_skill(skill_slug) or self._skill_registry.get_skill(DEFAULT_AMBIGUITY_FALLBACK)
         if skill is None:
             raise ValueError(f"Unable to resolve skill for command '{command.name}'")
 
-        governance_required = skill.slug in {"dagger", "cipher", "the-steward", "the-governor"}
+        governance_required = skill.slug in DEFAULT_GOVERNANCE_REQUIRED_SPECIALISTS
         reason = (
             f"{context.adapter_name} command '{command.name}' maps to skill '{skill.slug}' via runtime router"
         )
@@ -347,24 +385,9 @@ class ContextAssembler:
 
 class GovernanceValidator(IGovernanceValidator):
     def __init__(self, rules: Iterable[GovernanceRule] | None = None):
-        self._rules = tuple(
-            rules
-            or (
-                GovernanceRule(
-                    name="destructive-skill-approval",
-                    description="Destructive skills require explicit validation and dry-run mode.",
-                    skill_slugs=("dagger",),
-                    command_names=("resilience-check", "dagger"),
-                    validator_key="destructive_validated",
-                ),
-                GovernanceRule(
-                    name="high-risk-skill-approval",
-                    description="High-risk security and governance skills require explicit validation.",
-                    skill_slugs=("cipher", "the-steward", "the-governor"),
-                    command_names=("security-check",),
-                    validator_key="governance_validated",
-                ),
-            )
+        self._rules = tuple(rules) if rules is not None else _default_governance_rules()
+        self._dry_run_required_rules = frozenset(
+            rule.name for rule in self._rules if rule.name in _DEFAULT_DRY_RUN_REQUIRED_RULES
         )
 
     def validate(self, decision: RouteDecision, context: ContextPackage) -> ValidationResult:
@@ -379,7 +402,7 @@ class GovernanceValidator(IGovernanceValidator):
             triggered_rules.append(rule.name)
             if rule.validator_key and not context.metadata.get(rule.validator_key):
                 reasons.append(f"{rule.name} blocked execution")
-            if rule.name == "destructive-skill-approval" and not context.metadata.get("dry_run"):
+            if rule.name in self._dry_run_required_rules and not context.metadata.get("dry_run"):
                 reasons.append("destructive execution requires dry-run mode")
 
         if reasons:
