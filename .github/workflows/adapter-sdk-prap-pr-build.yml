@@ -1,0 +1,70 @@
+name: Adapter SDK PRAP PR build
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact source branch
+        uses: actions/checkout@v7
+        with:
+          ref: feature/adapter-sdk-prap-certification-vnext-20260817
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Execute bounded implementation payload
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import textwrap
+
+          workflow = Path('.github/workflows/adapter-sdk-prap-build-once.yml').read_text(encoding='utf-8')
+          start_marker = "          python - <<'PY'\n"
+          end_marker = "\n          PY\n"
+          if start_marker not in workflow or end_marker not in workflow:
+              raise SystemExit('bounded implementation payload markers missing')
+          payload = workflow.split(start_marker, 1)[1].split(end_marker, 1)[0]
+          exec(compile(textwrap.dedent(payload), '<adapter-sdk-prap-build>', 'exec'), {})
+          PY
+
+      - name: Remove temporary build workflows from final source tree
+        run: git rm .github/workflows/adapter-sdk-prap-build-once.yml .github/workflows/adapter-sdk-prap-pr-build.yml
+
+      - name: Install focused test dependencies
+        run: python -m pip install --upgrade pip pytest
+
+      - name: Compile new Python surfaces
+        run: python -m py_compile orchestra_runtime/protocol/certification.py orchestra_runtime/protocol/sdk.py scripts/certify_adapter.py tests/runtime/test_adapter_certification.py
+
+      - name: Run focused PRAP tests
+        run: python -m pytest tests/runtime/test_adapter_protocol.py tests/runtime/test_adapter_certification.py
+
+      - name: Run canonical structure and governance smoke checks
+        run: |
+          python scripts/validate_structure.py
+          python scripts/validate_manifest.py
+          python scripts/check_stale_references.py
+          python scripts/governance_check.py --strict
+          git diff --check
+
+      - name: Commit bounded implementation
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'feat: add Adapter SDK and PRAP certification contract'
+          git push origin HEAD:feature/adapter-sdk-prap-certification-vnext-20260817
