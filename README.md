@@ -315,6 +315,14 @@ Support means a validated integration surface. Scaffold-only means the repositor
 
 Repository CI and Phase C fixtures are not live installed-host evidence. Accepted R7 records are reconciled in [R7 live installed-host validation evidence](docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md); the fixture remains pending/empty by design. See [Compatibility](docs/setup/COMPATIBILITY.md).
 
+## Host Update Planning
+
+Host Update behavior is now defined by a versioned machine-owned contract at `machine/hosts/update-contract.v1.json`, with deterministic read-only planning exposed by `scripts/host_update.py`. Planning reports host maturity, package/version status, update instructions, post-update validation, and recovery guidance. It does not itself authorize or mutate an installed integration.
+
+Codex and Antigravity are the only `SUPPORTED` Host Update targets. Claude Code, Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain `SCAFFOLD_ONLY` and instruction-only. Unknown hosts fail closed. Supported Git/local guidance is fast-forward-only and requires post-update validation; installed-host refresh remains a separately authorized action and is never automatic.
+
+See [Host Update Contract](docs/setup/HOST_UPDATES.md) for the canonical contract, maturity matrix, planner interface, validation requirements, and recovery boundary.
+
 ## Installation
 
 Use the host-native path:
@@ -428,6 +436,7 @@ See the [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration.md). 
 
 - [Installation](docs/setup/INSTALLATION.md)
 - [Compatibility](docs/setup/COMPATIBILITY.md)
+- [Host Update Contract](docs/setup/HOST_UPDATES.md)
 - [Validation](docs/setup/VALIDATION.md)
 - [Skill Index](SKILL_INDEX.md)
 

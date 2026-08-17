@@ -1,0 +1,161 @@
+{
+  "schema_version": "orchestra.host-update-contract.v1",
+  "contract_id": "orchestra-host-update",
+  "package_version": "1.5.0",
+  "default_behavior": "READ_ONLY_PLAN",
+  "unknown_host_policy": "FAIL_CLOSED",
+  "authority": {
+    "planning_grants_mutation_authority": false,
+    "explicit_mutation_authorization_required": true,
+    "automatic_installed_integration_refresh": false
+  },
+  "hosts": [
+    {
+      "host_id": "codex",
+      "aliases": ["codex"],
+      "maturity": "SUPPORTED",
+      "adapter_path": "adapters/codex",
+      "update_mechanism": "GIT_FAST_FORWARD_THEN_MANUAL_HOST_REFRESH",
+      "execution_support": "EXPLICIT_AUTHORIZATION_REQUIRED",
+      "automatic_installed_integration_refresh": false,
+      "plan_command": "python scripts/host_update.py --host codex --json",
+      "update_instructions": [
+        "Record the current repository HEAD and confirm the working tree is clean before any separately authorized update.",
+        "Run git fetch origin, then git pull --ff-only origin <current-branch>; do not merge, rebase, force-push, or rewrite history as part of the update flow.",
+        "Run the canonical post-update validation commands before treating the repository update as usable.",
+        "Refresh or reinstall the active Codex integration only under separate explicit authorization; this contract never performs that refresh automatically."
+      ],
+      "validation_commands": [
+        "python scripts/validate_structure.py",
+        "python scripts/validate_manifest.py",
+        "python scripts/check_stale_references.py",
+        "python scripts/governance_check.py --strict",
+        "python adapters/codex/validate_codex_export.py"
+      ],
+      "recovery_hints": [
+        "Preserve the recorded pre-update HEAD and stop on any fast-forward or validation failure.",
+        "Use an explicitly authorized recovery workflow to return to the recorded state; do not use force push, history rewrite, or destructive cleanup as an implicit rollback."
+      ]
+    },
+    {
+      "host_id": "antigravity",
+      "aliases": ["antigravity", "agy"],
+      "maturity": "SUPPORTED",
+      "adapter_path": "adapters/antigravity",
+      "update_mechanism": "GIT_FAST_FORWARD_THEN_MANUAL_HOST_REFRESH",
+      "execution_support": "EXPLICIT_AUTHORIZATION_REQUIRED",
+      "automatic_installed_integration_refresh": false,
+      "plan_command": "python scripts/host_update.py --host antigravity --json",
+      "update_instructions": [
+        "Record the current repository HEAD and confirm the working tree is clean before any separately authorized update.",
+        "Run git fetch origin, then git pull --ff-only origin <current-branch>; do not merge, rebase, force-push, or rewrite history as part of the update flow.",
+        "Run the canonical post-update validation commands before treating the repository update as usable.",
+        "Reload or reinstall the active Antigravity integration only under separate explicit authorization; this contract never performs that refresh automatically."
+      ],
+      "validation_commands": [
+        "python scripts/validate_structure.py",
+        "python scripts/validate_manifest.py",
+        "python scripts/check_stale_references.py",
+        "python scripts/governance_check.py --strict"
+      ],
+      "recovery_hints": [
+        "Preserve the recorded pre-update HEAD and stop on any fast-forward or validation failure.",
+        "Use an explicitly authorized recovery workflow to return to the recorded state; do not use force push, history rewrite, or destructive cleanup as an implicit rollback."
+      ]
+    },
+    {
+      "host_id": "claude-code",
+      "aliases": ["claude-code", "claude"],
+      "maturity": "SCAFFOLD_ONLY",
+      "adapter_path": "adapters/claude-code",
+      "update_mechanism": "INSTRUCTION_ONLY",
+      "execution_support": "INSTRUCTION_ONLY",
+      "automatic_installed_integration_refresh": false,
+      "plan_command": "python scripts/host_update.py --host claude-code --json",
+      "update_instructions": [
+        "Use this scaffold only to inspect repository update guidance for active runtime continuity.",
+        "Do not represent this scaffold as marketplace installation or live installed-host mutation capability."
+      ],
+      "validation_commands": ["python scripts/validate_claude_plugin.py"],
+      "recovery_hints": ["Stop if scaffold validation fails; no installed-host rollback is implied by this instruction-only surface."]
+    },
+    {
+      "host_id": "cursor",
+      "aliases": ["cursor"],
+      "maturity": "SCAFFOLD_ONLY",
+      "adapter_path": "adapters/cursor",
+      "update_mechanism": "INSTRUCTION_ONLY",
+      "execution_support": "INSTRUCTION_ONLY",
+      "automatic_installed_integration_refresh": false,
+      "plan_command": "python scripts/host_update.py --host cursor --json",
+      "update_instructions": ["Inspect the Cursor packaging scaffold and repository release state; no live installed-host mutation is implemented."],
+      "validation_commands": ["python scripts/validate_ide_packaging.py"],
+      "recovery_hints": ["Stop on scaffold validation failure; no installed-host rollback is implied."]
+    },
+    {
+      "host_id": "windsurf",
+      "aliases": ["windsurf"],
+      "maturity": "SCAFFOLD_ONLY",
+      "adapter_path": "adapters/windsurf",
+      "update_mechanism": "INSTRUCTION_ONLY",
+      "execution_support": "INSTRUCTION_ONLY",
+      "automatic_installed_integration_refresh": false,
+      "plan_command": "python scripts/host_update.py --host windsurf --json",
+      "update_instructions": ["Inspect the Windsurf packaging scaffold and repository release state; no live installed-host mutation is implemented."],
+      "validation_commands": ["python scripts/validate_ide_packaging.py"],
+      "recovery_hints": ["Stop on scaffold validation failure; no installed-host rollback is implied."]
+    },
+    {
+      "host_id": "vscode",
+      "aliases": ["vscode", "vscodium"],
+      "maturity": "SCAFFOLD_ONLY",
+      "adapter_path": "adapters/vscode",
+      "update_mechanism": "INSTRUCTION_ONLY",
+      "execution_support": "INSTRUCTION_ONLY",
+      "automatic_installed_integration_refresh": false,
+      "plan_command": "python scripts/host_update.py --host vscode --json",
+      "update_instructions": ["Inspect the VS Code/VSCodium packaging scaffold and repository release state; no live installed-host mutation is implemented."],
+      "validation_commands": ["python scripts/validate_ide_packaging.py"],
+      "recovery_hints": ["Stop on scaffold validation failure; no installed-host rollback is implied."]
+    },
+    {
+      "host_id": "jetbrains",
+      "aliases": ["jetbrains"],
+      "maturity": "SCAFFOLD_ONLY",
+      "adapter_path": "adapters/jetbrains",
+      "update_mechanism": "INSTRUCTION_ONLY",
+      "execution_support": "INSTRUCTION_ONLY",
+      "automatic_installed_integration_refresh": false,
+      "plan_command": "python scripts/host_update.py --host jetbrains --json",
+      "update_instructions": ["Inspect the JetBrains packaging scaffold and repository release state; no live installed-host mutation is implemented."],
+      "validation_commands": ["python scripts/validate_ide_packaging.py"],
+      "recovery_hints": ["Stop on scaffold validation failure; no installed-host rollback is implied."]
+    },
+    {
+      "host_id": "zed",
+      "aliases": ["zed"],
+      "maturity": "SCAFFOLD_ONLY",
+      "adapter_path": "adapters/zed",
+      "update_mechanism": "INSTRUCTION_ONLY",
+      "execution_support": "INSTRUCTION_ONLY",
+      "automatic_installed_integration_refresh": false,
+      "plan_command": "python scripts/host_update.py --host zed --json",
+      "update_instructions": ["Inspect the Zed packaging scaffold and repository release state; no live installed-host mutation is implemented."],
+      "validation_commands": ["python scripts/validate_ide_packaging.py"],
+      "recovery_hints": ["Stop on scaffold validation failure; no installed-host rollback is implied."]
+    },
+    {
+      "host_id": "neovim",
+      "aliases": ["neovim", "nvim"],
+      "maturity": "SCAFFOLD_ONLY",
+      "adapter_path": "adapters/neovim",
+      "update_mechanism": "INSTRUCTION_ONLY",
+      "execution_support": "INSTRUCTION_ONLY",
+      "automatic_installed_integration_refresh": false,
+      "plan_command": "python scripts/host_update.py --host neovim --json",
+      "update_instructions": ["Inspect the Neovim packaging scaffold and repository release state; no live installed-host mutation is implemented."],
+      "validation_commands": ["python scripts/validate_ide_packaging.py"],
+      "recovery_hints": ["Stop on scaffold validation failure; no installed-host rollback is implied."]
+    }
+  ]
+}
