@@ -15,9 +15,10 @@
     "package_version_source": "plugin.json#/version",
     "current_public_release": "v1.5.0",
     "current_public_release_commit": "b0a56cc7af8ad78234754bcb29ed07f6ab54d920",
+    "current_public_release_state_scope": "SOURCE_VALIDATION_SNAPSHOT_BEFORE_V1_6_PUBLICATION",
     "main_contains_post_release_work": true,
     "next_release_plan": "v1.6.0",
-    "next_release_plan_status": "RELEASE_CANDIDATE_IN_PREPARATION"
+    "next_release_plan_status": "PUBLICATION_AUTHORIZED_PENDING_EXACT_HEAD_VALIDATION_AND_IDENTITY_CREATION"
   },
   "purpose": {
     "summary": "Portable orchestration runtime for structured AI-assisted software development.",
@@ -31,9 +32,29 @@
     "cross_specialist_coordination": {"status": "IMPLEMENTED", "human_sources": ["docs/governance/TUNER_PROTOCOL.md", "ROUTING_MAP.md"]},
     "validation_and_evidence": {"status": "IMPLEMENTED", "machine_sources": ["machine/schemas/", "machine/release-evidence/"], "human_sources": ["docs/setup/VALIDATION.md", "docs/validation/"]},
     "host_update_planning": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "machine_sources": ["machine/hosts/update-contract.v1.json"], "human_sources": ["docs/setup/HOST_UPDATES.md"]},
-    "adapter_sdk_and_prap_certification": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "machine_sources": ["machine/protocol/prap-certification-contract.v1.json", "machine/schemas/prap-certification-evidence.schema.json"], "human_sources": ["docs/setup/ADAPTER_SDK_PRAP.md"]},
+    "adapter_sdk_and_prap_certification": {
+      "status": "INCLUDED_IN_V1_6_CANDIDATE",
+      "purpose": "Stable SDK import surface and read-only PRAP v1 compatibility certification for host and adapter integration authors.",
+      "stable_import_surface": "orchestra_runtime.protocol.sdk",
+      "quickstart_commands": [
+        "python scripts/certify_adapter.py --adapter codex --json",
+        "python scripts/certify_adapter.py --all --json"
+      ],
+      "machine_sources": ["machine/protocol/prap-certification-contract.v1.json", "machine/schemas/prap-certification-evidence.schema.json"],
+      "human_sources": ["docs/setup/ADAPTER_SDK_PRAP.md"],
+      "authority_note": "Certification proves compatibility only. It does not grant runtime authority, host maturity, deployment permission, policy activation, or installed refresh authority."
+    },
     "developer_portal": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "machine_sources": ["machine/developer-portal/catalog.v1.json"], "human_sources": ["docs/developer/README.md"]},
-    "mcp_stdio_transport": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "protocol_revision": "2026-07-28", "transport": "stdio", "surface": ["server/discover", "tools/list", "tools/call"], "human_sources": ["docs/developer/MCP_STDIO_TRANSPORT.md"], "authority_note": "MCP is transport, not authority."},
+    "mcp_stdio_transport": {
+      "status": "INCLUDED_IN_V1_6_CANDIDATE",
+      "purpose": "Expose a bounded Orchestra tool surface to MCP-compatible clients while preserving existing PRAP, governance, runtime, and authority boundaries.",
+      "protocol_revision": "2026-07-28",
+      "transport": "stdio",
+      "quickstart_command": "python scripts/mcp_server.py --adapter codex",
+      "surface": ["server/discover", "tools/list", "tools/call"],
+      "human_sources": ["docs/developer/MCP_STDIO_TRANSPORT.md"],
+      "authority_note": "MCP is transport, not authority."
+    },
     "murmurs_presentation": {"status": "IMPLEMENTED_OPT_IN", "machine_sources": ["machine/presentation/murmurs-policy.v1.json", "machine/presentation/murmurs-vocabulary.v1.json"], "human_sources": ["docs/project/MURMURS_COMMUNICATION_BUDGET.md"], "token_savings_claim": "NOT_CLAIMED_WITHOUT_TRUSTWORTHY_COMPARABLE_LIVE_HOST_COUNTERS"},
     "hybrid_context_representation": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "human_sources": ["docs/HYBRID_CONTEXT_FORMATS.md"], "json_authority": "CANONICAL_FOR_STRUCTURED_MACHINE_STATE", "toon_authority": "DERIVED_VALIDATED_NON_AUTHORITATIVE"}
   },
@@ -48,7 +69,7 @@
     {"order": 8, "path": "machine/developer-portal/catalog.v1.json", "purpose": "Machine Developer Portal discovery catalog"},
     {"order": 9, "path": "machine/knowledge/", "purpose": "Machine-readable specialist knowledge references and provenance-bound catalogs"},
     {"order": 10, "path": "machine/presentation/murmurs-policy.v1.json", "purpose": "Deterministic Murmurs presentation dispositions and required-explanation safety boundaries"},
-    {"order": 11, "path": "machine/provenance/third-party.v1.json", "purpose": "Third-party dependencies, references, source-use classification, licenses, and incorporation boundaries"},
+    {"order": 11, "path": "machine/provenance/third-party.v1.json", "purpose": "Canonical semantic record of third-party dependencies, references, protocol sources, historical research, planned research, reviewed revisions, license state, learned patterns, affected surfaces, evidence, and incorporation boundaries"},
     {"order": 12, "path": "machine/release-evidence/", "purpose": "Structured release and confidence evidence"},
     {"order": 13, "path": "machine/schemas/", "purpose": "JSON Schema contracts for machine-readable records"},
     {"order": 14, "path": "docs/README.md", "purpose": "Human documentation map and current entry-point classification"},
@@ -66,6 +87,7 @@
     "murmurs_presentation_policy": "machine/presentation/murmurs-policy.v1.json",
     "murmurs_vocabulary": "machine/presentation/murmurs-vocabulary.v1.json",
     "third_party_provenance": "machine/provenance/third-party.v1.json",
+    "third_party_provenance_schema": "machine/schemas/third-party-provenance.schema.json",
     "truesheet_specialist_reference": "machine/knowledge/truesheet-specialist-reference.v1.json",
     "release_evidence_directory": "machine/release-evidence",
     "schemas_directory": "machine/schemas",
@@ -101,8 +123,35 @@
     "required_analysis_ruleset_drift_state": "OPEN_COMPATIBILITY_WORKFLOW_ACTIVE"
   },
   "architecture": {"current_overview": "docs/architecture/README.md", "detailed_authority_capability_design": "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md", "routing_reference": "ROUTING_MAP.md", "governance_reference": "docs/governance/README.md", "compliance_registry_reference": "docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md", "compliance_protocol_runtime": "orchestra_runtime/compliance_protocol.py", "mcp_transport_reference": "docs/developer/MCP_STDIO_TRANSPORT.md", "historical_status_policy": "Phase documents may retain phase-era status wording. Current exact state comes from live machine contracts, release evidence, and Git identity."},
-  "hosts_integrations": {"host_update_contract": "machine/hosts/update-contract.v1.json", "adapter_sdk_reference": "docs/setup/ADAPTER_SDK_PRAP.md", "prap_certification_contract": "machine/protocol/prap-certification-contract.v1.json", "developer_portal": "docs/developer/README.md", "developer_portal_catalog": "machine/developer-portal/catalog.v1.json", "mcp_transport": "docs/developer/MCP_STDIO_TRANSPORT.md", "supported_hosts": ["codex", "antigravity"], "scaffold_only_hosts": ["claude-code", "cursor", "windsurf", "vscode", "vscodium", "jetbrains", "zed", "neovim"], "certification_is_authority": false, "host_maturity_is_authority": false, "installed_refresh_automatic": false},
-  "knowledge_provenance": {"third_party_machine_source": "machine/provenance/third-party.v1.json", "third_party_human_source": "docs/THIRD_PARTY_PROVENANCE.md", "machine_knowledge_directory": "machine/knowledge", "truesheet_reference": "machine/knowledge/truesheet-specialist-reference.v1.json", "external_reference_authority": "KNOWLEDGE_REFERENCE_ONLY_NOT_RUNTIME_OR_GOVERNANCE_AUTHORITY", "source_copy_policy": "External references do not authorize wholesale source copying; provenance and incorporation boundaries remain explicit."},
+  "hosts_integrations": {
+    "host_update_contract": "machine/hosts/update-contract.v1.json",
+    "adapter_sdk_reference": "docs/setup/ADAPTER_SDK_PRAP.md",
+    "adapter_sdk_stable_import_surface": "orchestra_runtime.protocol.sdk",
+    "adapter_certification_commands": ["python scripts/certify_adapter.py --adapter codex --json", "python scripts/certify_adapter.py --all --json"],
+    "prap_certification_contract": "machine/protocol/prap-certification-contract.v1.json",
+    "developer_portal": "docs/developer/README.md",
+    "developer_portal_catalog": "machine/developer-portal/catalog.v1.json",
+    "mcp_transport": "docs/developer/MCP_STDIO_TRANSPORT.md",
+    "mcp_stdio_quickstart": "python scripts/mcp_server.py --adapter codex",
+    "supported_hosts": ["codex", "antigravity"],
+    "scaffold_only_hosts": ["claude-code", "cursor", "windsurf", "vscode", "vscodium", "jetbrains", "zed", "neovim"],
+    "certification_is_authority": false,
+    "host_maturity_is_authority": false,
+    "installed_refresh_automatic": false
+  },
+  "knowledge_provenance": {
+    "third_party_machine_source": "machine/provenance/third-party.v1.json",
+    "third_party_machine_role": "CANONICAL_SEMANTIC_PROVENANCE_RECORD",
+    "third_party_human_source": "docs/THIRD_PARTY_PROVENANCE.md",
+    "third_party_human_role": "CURATED_HUMAN_PROJECTION",
+    "machine_knowledge_directory": "machine/knowledge",
+    "truesheet_reference": "machine/knowledge/truesheet-specialist-reference.v1.json",
+    "classification_model": ["TEST_TOOL_DEPENDENCY", "REFERENCE_ONLY", "PROTOCOL_STANDARD_REFERENCE", "HISTORICAL_RESEARCH_REFERENCE", "EVALUATED_OR_PLANNED_REFERENCE", "INTEGRATED_RUNTIME_DEPENDENCY", "VENDORED_OR_COPIED_CODE"],
+    "semantic_context_contract": "Each provenance item records why Orchestra consulted it, reviewed revision state, license state, learned or incorporated patterns, affected Orchestra surfaces, evidence, and explicit source/runtime incorporation boundaries.",
+    "historical_uncertainty_rule": "Unknown historical facts remain explicitly unknown instead of being guessed.",
+    "external_reference_authority": "KNOWLEDGE_REFERENCE_ONLY_NOT_RUNTIME_OR_GOVERNANCE_AUTHORITY",
+    "source_copy_policy": "External references do not authorize wholesale source copying; provenance and incorporation boundaries remain explicit."
+  },
   "validation": {
     "workflow": ".github/workflows/validate.yml",
     "behavior_suite": "tests/behavior/run_tests.py",
@@ -113,6 +162,7 @@
     "cosmic_ray_confidence_workflow": ".github/workflows/cosmic-ray-confidence.yml",
     "legacy_mutmut_evidence_workflow": ".github/workflows/mutation-confidence.yml",
     "command_surface_parity_test": "tests/runtime/test_command_surface_parity.py",
+    "third_party_provenance_regression_test": "tests/runtime/test_third_party_provenance.py",
     "test_evidence_schema": "machine/schemas/test-evidence.schema.json",
     "test_evidence_schema_version": "orchestra.test-evidence.v1",
     "communication_measurement_schema": "machine/schemas/communication-measurement.schema.json",
@@ -124,11 +174,15 @@
   "release_state": {
     "current_public_release": "v1.5.0",
     "release_commit": "b0a56cc7af8ad78234754bcb29ed07f6ab54d920",
+    "state_scope": "SOURCE_VALIDATION_SNAPSHOT_BEFORE_V1_6_PUBLICATION",
     "release_evidence": "machine/release-evidence/v1.5.0.json",
     "publication_closeout": "docs/validation/V1_5_0_PUBLICATION_CLOSEOUT.md",
     "post_release_main_contains_significant_changes": true,
     "provisional_next_release": "v1.6.0",
-    "provisional_next_release_status": "RELEASE_CANDIDATE_IN_PREPARATION",
+    "provisional_next_release_status": "PUBLICATION_AUTHORIZED_PENDING_EXACT_HEAD_VALIDATION_AND_IDENTITY_CREATION",
+    "publication_authorized": true,
+    "publication_target": "v1.6.0",
+    "publication_identity_rule": "Public v1.6.0 state becomes authoritative only when the exact tag, GitHub Release, and approved signed canonical commit identity are created and independently verified.",
     "v1_5_0_must_remain_immutable": true,
     "murmurs_measurement_issue": 316,
     "murmurs_measurement_issue_state": "OPEN",
@@ -153,13 +207,15 @@
     "publication_closeout_v1_5_0": "docs/validation/V1_5_0_PUBLICATION_CLOSEOUT.md",
     "validation_evidence": "docs/validation/",
     "third_party_provenance": "docs/THIRD_PARTY_PROVENANCE.md",
+    "third_party_provenance_machine": "machine/provenance/third-party.v1.json",
     "merge_readiness": "docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md",
     "murmurs": "docs/project/MURMURS_COMMUNICATION_BUDGET.md",
     "release_candidate_v1_6_0": "docs/releases/v1.6.0-integration-developer-experience-release-candidate.md"
   },
   "representation_policy": {"markdown": "Human-readable explanation, rationale, examples, and nuanced specialist guidance", "json": "Canonical structured machine state, identity, routing, governance, receipts, manifests, provenance, presentation contracts, evidence, and indexes", "json_schema": "Validation contract for machine-readable records", "jsonl": "Append-only event/history records where incremental retrieval is preferable", "toon": "Derived validated non-authoritative model-context projection only when bounded compilation provides measured context benefit", "parity_rule": "When the same deterministic fact appears in more than one representation, CI must validate parity or derive the projection from one authoritative source."},
   "maturity": {
-    "current_public_release": "PUBLISHED_VERIFIED",
+    "current_public_release": "PUBLISHED_VERIFIED_V1_5_AT_SOURCE_VALIDATION_SNAPSHOT",
+    "v1_6_publication": "AUTHORIZED_PENDING_EXACT_HEAD_VALIDATION_AND_IDENTITY_CREATION",
     "mcp_stdio_transport": "INCLUDED_IN_V1_6_CANDIDATE",
     "host_update_commands": "INCLUDED_IN_V1_6_CANDIDATE",
     "adapter_sdk_prap_certification": "INCLUDED_IN_V1_6_CANDIDATE",
@@ -167,6 +223,7 @@
     "truesheet_specialist_enrichment": "INCLUDED_IN_V1_6_CANDIDATE",
     "hybrid_context_compilation": "INCLUDED_IN_V1_6_CANDIDATE",
     "documentation_architecture_v2": "INCLUDED_IN_V1_6_CANDIDATE",
+    "documentation_and_provenance_closeout": "INCLUDED_IN_V1_6_CANDIDATE",
     "adaptive_governed_orchestration": "DEFERRED_PLANNING_ONLY_ISSUE_340",
     "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316"
   },
@@ -179,6 +236,9 @@
     "retrieve_human_docs_for_rationale": true,
     "treat_phase_status_headers_as_historical_unless_identified_as_current_state": true,
     "review_third_party_provenance_before_attributing_external_code_or_dependencies": true,
+    "third_party_provenance_machine_source_is_semantically_canonical": true,
+    "do_not_equate_reference_only_research_or_protocol_use_with_runtime_dependency_or_copied_source": true,
+    "preserve_unknown_historical_revision_or_license_facts_as_unknown": true,
     "treat_mutation_scores_as_scope_specific_evidence": true,
     "treat_generated_or_derived_views_as_non_authoritative_when_their_source_contract_is_available": true,
     "treat_mergeable_boolean_without_clean_mergeable_state_as_insufficient": true,
@@ -186,6 +246,7 @@
     "treat_murmurs_as_presentation_only": true,
     "do_not_claim_murmurs_token_savings_without_comparable_host_reported_counters": true,
     "treat_v1_5_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
-    "treat_v1_6_0_as_release_candidate_not_published_until_exact_tag_release_and_commit_identity_exist": true
+    "treat_v1_6_0_source_snapshot_as_publication_authorized_not_published_until_exact_tag_release_and_commit_identity_exist": true,
+    "when_evaluating_a_published_tag_or_release_prefer_live_verified_git_and_release_identity_over_prepublication_snapshot_fields": true
   }
 }
