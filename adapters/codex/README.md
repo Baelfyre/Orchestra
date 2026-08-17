@@ -1,6 +1,6 @@
 # Codex Adapter for Orchestra
 
-This adapter provides a Codex-compatible export of the current Orchestra skills. The current published GitHub Release and repository metadata are `v1.2.0`.
+This adapter provides a Codex-compatible export of the current Orchestra skills. The current published GitHub Release is `v1.5.0`; repository `main` may contain post-release candidate work without moving that immutable release.
 
 ## Purpose
 
@@ -8,9 +8,15 @@ Codex may reject extended frontmatter fields (like `role`, `activation_level`, e
 
 This adapter exports Codex-compatible skills with only `name` and `description` in the frontmatter while preserving the original Markdown body, instructions, and progressive disclosure boundaries of the canonical skills.
 
-## Release-Candidate Boundary
+## Host update planning
 
-The `1.2.0` repository version corresponds to published annotated tag and GitHub Release `v1.2.0`. Accepted R7 live-host evidence is verified and reconciled locally in `docs/validation/R7_LIVE_INSTALLED_HOST_VALIDATION_EVIDENCE.md`; the repository simulation fixture remains pending/empty by design and is not live evidence.
+Codex is a supported Host Update maturity target. Generate the deterministic read-only plan with:
+
+```text
+python scripts/host_update.py --host codex --json
+```
+
+The plan may describe the existing fast-forward repository update and Codex validation path, but it never refreshes or reinstalls the active Codex integration. Installed-host mutation requires separate explicit authorization. See `docs/setup/HOST_UPDATES.md`.
 
 ## Note
 

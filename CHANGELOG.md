@@ -1,5 +1,15 @@
 # Changelog
 
+## Post-v1.5.0 Governed Host Update Commands - Candidate
+
+- Adds `machine/hosts/update-contract.v1.json` and its canonical JSON Schema as the machine-owned Host Update contract for Codex, Antigravity, Claude Code, Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim.
+- Preserves the exact host maturity boundary: Codex and Antigravity are `SUPPORTED`; Claude Code, Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain `SCAFFOLD_ONLY` and instruction-only for Host Update behavior.
+- Adds a deterministic read-only Host Update planner that resolves host aliases, local package/version parity, optional observed-latest status, update instructions, post-update validation, and non-destructive recovery guidance without performing network access or installed-host mutation by default.
+- Keeps Git/local supported-host guidance fast-forward-only with a recorded pre-update revision, clean working tree, `git fetch origin`, `git pull --ff-only`, required post-update validation, and fail-closed handling for unknown hosts or validation failure.
+- Requires separate explicit authorization before any supported-host installed-integration refresh and forbids automatic installed-integration refresh, implicit marketplace promotion, release/tag publication, deployment, policy activation, destructive cleanup, branch deletion, force push, history rewrite, ruleset bypass, or MCP implementation.
+- Adds deterministic regression coverage for host-set parity, package/version parity, maturity preservation, authority non-expansion, VS Code/VSCodium alias behavior, unknown-host fail-closed behavior, status comparison, recovery safety, and rejection of an execution flag.
+- Adds Host Update setup documentation and supported-host adapter guidance while keeping public release `v1.5.0` fixed at `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`.
+
 ## Post-v1.5.0 Hybrid Context and Required-Check Identity Repair - Candidate
 
 - Adds an internal hybrid context compiler that preserves canonical JSON evidence while using derived TOON only when measured size savings justify it, with compact JSON fallback for small or irregular payloads.

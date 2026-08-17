@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Orchestra Host Update Contract v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_id",
+    "package_version",
+    "default_behavior",
+    "unknown_host_policy",
+    "authority",
+    "hosts"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.host-update-contract.v1"},
+    "contract_id": {"const": "orchestra-host-update"},
+    "package_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "default_behavior": {"const": "READ_ONLY_PLAN"},
+    "unknown_host_policy": {"const": "FAIL_CLOSED"},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "planning_grants_mutation_authority",
+        "explicit_mutation_authorization_required",
+        "automatic_installed_integration_refresh"
+      ],
+      "properties": {
+        "planning_grants_mutation_authority": {"const": false},
+        "explicit_mutation_authorization_required": {"const": true},
+        "automatic_installed_integration_refresh": {"const": false}
+      }
+    },
+    "hosts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/host"}
+    }
+  },
+  "$defs": {
+    "nonEmptyStringArray": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "host": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "host_id",
+        "aliases",
+        "maturity",
+        "adapter_path",
+        "update_mechanism",
+        "execution_support",
+        "automatic_installed_integration_refresh",
+        "plan_command",
+        "update_instructions",
+        "validation_commands",
+        "recovery_hints"
+      ],
+      "properties": {
+        "host_id": {"type": "string", "minLength": 1},
+        "aliases": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "maturity": {"enum": ["SUPPORTED", "SCAFFOLD_ONLY"]},
+        "adapter_path": {"type": "string", "pattern": "^adapters/[^/]+$"},
+        "update_mechanism": {"enum": ["GIT_FAST_FORWARD_THEN_MANUAL_HOST_REFRESH", "INSTRUCTION_ONLY"]},
+        "execution_support": {"enum": ["EXPLICIT_AUTHORIZATION_REQUIRED", "INSTRUCTION_ONLY"]},
+        "automatic_installed_integration_refresh": {"const": false},
+        "plan_command": {"type": "string", "minLength": 1},
+        "update_instructions": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "validation_commands": {"$ref": "#/$defs/nonEmptyStringArray"},
+        "recovery_hints": {"$ref": "#/$defs/nonEmptyStringArray"}
+      }
+    }
+  }
+}
