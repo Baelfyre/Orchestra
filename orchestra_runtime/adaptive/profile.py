@@ -52,6 +52,13 @@ def materialize_profile(
             )
             continue
 
+        # Inferred lifecycle events remain append-only evidence, but they may not
+        # displace an explicit preference for the same exact scope and subject.
+        # This keeps future shadow learning observable without weakening explicit
+        # user intent in the materialized profile consumed by A2.
+        if event.startswith("INFERRED_PATTERN_") and _is_explicit_pattern(prior):
+            continue
+
         if event in {"INFERRED_PATTERN_CANDIDATE", "INFERRED_PATTERN_CONFIRMED"}:
             if "value" not in payload:
                 raise ValueError(f"{event} requires payload.value")
@@ -99,6 +106,13 @@ def materialize_profile(
         source_head_digest=source_head,
         memory_rule_version=memory_rule_version,
     )
+
+
+def _is_explicit_pattern(pattern: AdaptivePattern | None) -> bool:
+    return pattern is not None and pattern.evidence_class in {
+        "EXPLICIT_CURRENT_INSTRUCTION",
+        "EXPLICIT_SCOPED_PREFERENCE",
+    }
 
 
 def _pattern(

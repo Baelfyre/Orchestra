@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.6.0 Pre-A3 Precedence Hardening and State Reconciliation - Candidate
+
+- Hardens adaptive profile materialization so inferred candidate/confirmation/deprecation/rejection events remain append-only evidence but cannot replace, downgrade, suppress, or mutate an explicit preference at the same exact scope and subject.
+- Adds a focused regression covering same-scope/same-subject inferred lifecycle events after an explicit scoped preference while proving the inferred events remain present in the observation log for later shadow evaluation.
+- Reconciles current-facing adaptive state: A1 is canonical at `d3b98ecd127f8da562df8cf21385beca33b520f9`; A2 is canonical and advisory at `0bae83812bdab17ac4cf346d1b35b84c8e361a79`; A3 remains not started by this unit.
+- Reconciles the AI-facing repository index with the immutable published `v1.6.0` release at `ba35764a14111518c7da729b5a4c69c6af485a9b` instead of preserving the older pre-publication v1.5/v1.6 snapshot.
+- Clarifies that issue #340 defines A3 as behavioral-pattern learning in shadow mode; route/model/worker/strategy ranking, automatic promotion, provider integration, training, learned Tuner topology, and recursive/test-time compute remain separately governed later-phase work.
+- Performs no A3 learner implementation, automatic inferred-pattern promotion, routing change, model/worker selection, authority/capability/governance expansion, deployment, release movement, ruleset bypass, force push, history rewrite, or branch deletion.
+
 ## Post-v1.6.0 Adaptive Specialist Context A2 - Candidate
 
 - Adds opt-in, read-only adaptive specialist context after deterministic routing, trusted authority/capability evaluation, and governance validation, without changing the default `RuntimeExecutor` path.
