@@ -85,7 +85,7 @@ See [Compliance Registry Integration](docs/governance/COMPLIANCE_REGISTRY_INTEGR
 
 ## Developer Portal
 
-The repository-native [Developer Portal](docs/developer/README.md) is the discovery index for stabilized adapter, PRAP certification, host maturity, specialist, governance, and validation contracts. Its machine catalog is `machine/developer-portal/catalog.v1.json`. The portal is documentation and discovery only: it cannot grant authority, promote hosts, publish marketplace content, deploy, refresh integrations, move releases, or implement MCP.
+The repository-native [Developer Portal](docs/developer/README.md) is the discovery index for stabilized adapter, PRAP certification, host maturity, specialist, governance, and validation contracts. Its machine catalog is `machine/developer-portal/catalog.v1.json`. The portal remains documentation and discovery only: it cannot grant authority, promote hosts, publish marketplace content, deploy, refresh integrations, move releases, or authorize the separately governed MCP transport.
 
 ## Adapter SDK and PRAP v1 Compatibility Certification
 
@@ -93,7 +93,15 @@ Orchestra's post-v1.5 Adapter SDK formalizes the existing PRAP v1 boundary inste
 
 PRAP compatibility is deliberately separate from host maturity. A certification pass validates declared adapter metadata and compatibility, but it cannot promote a scaffold host, grant runtime authority or capabilities, mutate a repository or installed integration, or imply marketplace availability. Host Update maturity continues to come only from `machine/hosts/update-contract.v1.json`: Codex and Antigravity remain `SUPPORTED`; Claude Code, Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain `SCAFFOLD_ONLY`.
 
-See [Adapter SDK and PRAP v1 Compatibility Certification](docs/setup/ADAPTER_SDK_PRAP.md). MCP remains deferred to the final integration phase and, if later justified, must map to this stabilized protocol boundary rather than replace it or become an authority layer.
+See [Adapter SDK and PRAP v1 Compatibility Certification](docs/setup/ADAPTER_SDK_PRAP.md). The post-v1.5 MCP candidate maps to this stabilized protocol boundary rather than replacing it or becoming an authority layer.
+
+## MCP stdio governed tool transport
+
+The first bounded MCP integration candidate targets protocol revision `2026-07-28` over stdio and exposes only `server/discover`, `tools/list`, and `tools/call`. Start the local transport with `python scripts/mcp_server.py --adapter codex`, or select another existing Orchestra adapter identity without changing its PRAP or host-maturity status.
+
+MCP tools are a deterministic projection of commands that are both exposed by the selected existing adapter and present in Orchestra's trusted runtime policy. Each tool accepts a single `prompt` field with no arbitrary additional metadata, and each accepted call creates a fresh trusted `RuntimeExecutor` composition so existing route binding, authority, runtime-capability, governance, lifecycle, operation, and audit ordering remain authoritative. MCP client metadata, discovery information, tool names, and tool arguments cannot grant or expand Orchestra authority.
+
+This unit does not add Streamable HTTP, resources, prompts, Tasks/extensions, remote authorization, deployment, policy activation, installed-integration refresh, host-maturity promotion, issue #316 closure, or token-savings claims. The current public release remains fixed at `v1.5.0`; this is a post-release candidate only. See [MCP stdio governed tool transport](docs/developer/MCP_STDIO_TRANSPORT.md).
 
 ## How Orchestra Works
 
@@ -167,7 +175,7 @@ v1.5.0 packages the completed machine-verifiable control-plane re-foundation, th
 
 The final publication boundary recorded 1,058 passing runtime tests, 98.47% statement coverage, and 95.36% branch coverage, together with the required critical-module, workflow-sanity, P9 conformance, Mutmut, integrated Cosmic Ray, native Windows/Ubuntu/macOS, CodeQL, governance, package/version, Registry compatibility, signed canonical merge, tag-identity, and release-identity evidence.
 
-See the [v1.5.0 release candidate](docs/releases/v1.5.0-machine-verifiable-control-plane-murmurs-release-candidate.md), [v1.5.0 release-readiness evidence](docs/validation/V1_5_0_RELEASE_READINESS_EVIDENCE.md), and [v1.5.0 publication closeout](docs/validation/V1_5_0_PUBLICATION_CLOSEOUT.md). MCP was intentionally excluded from v1.5.0. Publication satisfies its sequencing prerequisite only; any MCP work still requires a fresh post-release priority and design decision.
+See the [v1.5.0 release candidate](docs/releases/v1.5.0-machine-verifiable-control-plane-murmurs-release-candidate.md), [v1.5.0 release-readiness evidence](docs/validation/V1_5_0_RELEASE_READINESS_EVIDENCE.md), and [v1.5.0 publication closeout](docs/validation/V1_5_0_PUBLICATION_CLOSEOUT.md). MCP was intentionally excluded from v1.5.0. The later MCP stdio candidate is a separately governed post-release integration and does not move or republish the fixed v1.5.0 release.
 
 ## v1.4.0 Governance and Compliance Registry Cross-Integration
 
@@ -290,7 +298,7 @@ The Tuner's coordination runtime records specialist-owned contracts, dependencie
 ## Roles and Specialist Responsibilities
 
 | Role | Primary responsibility | Key boundary |
-|---|---|---|
+| --- | --- | --- |
 | The Steward | Business alignment, requirements traceability, scope, change control, acceptance criteria | Does not decide legal or technical implementation details |
 | The Governor | Legal/compliance governance, source/applicability verification, privacy-obligation, IP and licensing review | Does not provide legal advice or grant runtime authority |
 | Conductor | Routing and ordered specialist handoffs | Routes work but does not implement it |
@@ -313,7 +321,7 @@ Artificer remains a maintainer-only internal repository-evolution surface. It is
 Support means a validated integration surface. Scaffold-only means the repository contains a thin runtime adapter and packaging or instruction scaffold, not a published marketplace product.
 
 | Host | Maturity | Notes |
-|---|---|---|
+| --- | --- | --- |
 | Codex | Supported | Marketplace-first installation with repo-local fallback; R7 same-host and cross-host continuity evidence is verified and merged. |
 | Claude Code | Scaffold-only | Marketplace metadata, namespaced plugin skills, and R7-H package/contract compatibility; active runtime continuity is not claimed. |
 | Antigravity | Supported | Native `agy` plugin path; R7 same-host and cross-host continuity evidence is verified and merged. |
@@ -436,6 +444,7 @@ See the [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration.md). 
 - The current coordination runtime is in-memory and does not add persistent collaboration storage, SQLite, migrations, RPC, or host-process orchestration.
 - Orchestra does not create remote workers, background agents, or distributed orchestration infrastructure.
 - Compatibility mode is explicit, finite, and intended for bounded existing routes.
+- The current MCP candidate is stdio-only and tools-only; it does not provide Streamable HTTP, resources, prompts, Tasks/extensions, remote authorization, deployment, or host promotion.
 - Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain scaffold-only.
 - Repository simulation is not live installed-host evidence. Accepted R7 evidence is `MERGED_VERIFIED`; the simulated fixture remains pending/empty by design.
 - Orchestra is developer tooling and a local runtime. It does not store or transmit downstream project data by default.
@@ -451,6 +460,7 @@ See the [v1.2.0 release notes](docs/releases/v1.2.0-governed-orchestration.md). 
 - [Installation](docs/setup/INSTALLATION.md)
 - [Compatibility](docs/setup/COMPATIBILITY.md)
 - [Host Update Contract](docs/setup/HOST_UPDATES.md)
+- [MCP stdio governed tool transport](docs/developer/MCP_STDIO_TRANSPORT.md)
 - [Validation](docs/setup/VALIDATION.md)
 - [Skill Index](SKILL_INDEX.md)
 
