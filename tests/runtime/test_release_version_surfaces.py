@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-EXPECTED_VERSION = "1.5.0"
+EXPECTED_VERSION = "1.6.0"
 
 JSON_VERSION_SURFACES = (
     "plugin.json",
@@ -37,3 +37,6 @@ def test_release_package_versions_are_consistent() -> None:
 
     assert set(observed.values()) == {EXPECTED_VERSION}, observed
     assert len(observed) == 11
+
+    host_update_contract = _load_json("machine/hosts/update-contract.v1.json")
+    assert host_update_contract.get("package_version") == EXPECTED_VERSION

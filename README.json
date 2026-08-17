@@ -11,13 +11,13 @@
     "full_name": "Baelfyre/Orchestra",
     "url": "https://github.com/Baelfyre/Orchestra",
     "license": "MIT",
-    "package_version": "1.5.0",
+    "package_version": "1.6.0",
     "package_version_source": "plugin.json#/version",
     "current_public_release": "v1.5.0",
     "current_public_release_commit": "b0a56cc7af8ad78234754bcb29ed07f6ab54d920",
     "main_contains_post_release_work": true,
     "next_release_plan": "v1.6.0",
-    "next_release_plan_status": "PLANNED_AFTER_DOCUMENTATION_REFACTOR_CANONICAL_VERIFICATION"
+    "next_release_plan_status": "RELEASE_CANDIDATE_IN_PREPARATION"
   },
   "purpose": {
     "summary": "Portable orchestration runtime for structured AI-assisted software development.",
@@ -26,60 +26,16 @@
     "core_trust_boundary": "Permission and execution authority are explicit bounded inputs. Routing, host capability, governance disposition, validation evidence, compatibility certification, presentation mode, and GitHub state cannot independently grant or expand authority."
   },
   "capabilities": {
-    "specialist_orchestration": {
-      "status": "IMPLEMENTED",
-      "machine_sources": ["machine/specialists/registry.v1.json", "machine/routing/routes.v1.json"],
-      "human_sources": ["SKILL_INDEX.md", "ROUTING_MAP.md"]
-    },
-    "governed_runtime": {
-      "status": "IMPLEMENTED",
-      "machine_sources": ["machine/governance/policy.v1.json"],
-      "human_sources": ["docs/architecture/README.md", "docs/governance/GOVERNANCE_LAYER.md", "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md"]
-    },
-    "cross_specialist_coordination": {
-      "status": "IMPLEMENTED",
-      "human_sources": ["docs/governance/TUNER_PROTOCOL.md", "ROUTING_MAP.md"]
-    },
-    "validation_and_evidence": {
-      "status": "IMPLEMENTED",
-      "machine_sources": ["machine/schemas/", "machine/release-evidence/"],
-      "human_sources": ["docs/setup/VALIDATION.md", "docs/validation/"]
-    },
-    "host_update_planning": {
-      "status": "IMPLEMENTED_READ_ONLY",
-      "machine_sources": ["machine/hosts/update-contract.v1.json"],
-      "human_sources": ["docs/setup/HOST_UPDATES.md"]
-    },
-    "adapter_sdk_and_prap_certification": {
-      "status": "IMPLEMENTED_READ_ONLY_CERTIFICATION",
-      "machine_sources": ["machine/protocol/prap-certification-contract.v1.json", "machine/schemas/prap-certification-evidence.schema.json"],
-      "human_sources": ["docs/setup/ADAPTER_SDK_PRAP.md"]
-    },
-    "developer_portal": {
-      "status": "IMPLEMENTED_DISCOVERY_ONLY",
-      "machine_sources": ["machine/developer-portal/catalog.v1.json"],
-      "human_sources": ["docs/developer/README.md"]
-    },
-    "mcp_stdio_transport": {
-      "status": "IMPLEMENTED_POST_V1_5_UNRELEASED",
-      "protocol_revision": "2026-07-28",
-      "transport": "stdio",
-      "surface": ["server/discover", "tools/list", "tools/call"],
-      "human_sources": ["docs/developer/MCP_STDIO_TRANSPORT.md"],
-      "authority_note": "MCP is transport, not authority."
-    },
-    "murmurs_presentation": {
-      "status": "IMPLEMENTED_OPT_IN",
-      "machine_sources": ["machine/presentation/murmurs-policy.v1.json", "machine/presentation/murmurs-vocabulary.v1.json"],
-      "human_sources": ["docs/project/MURMURS_COMMUNICATION_BUDGET.md"],
-      "token_savings_claim": "NOT_CLAIMED_WITHOUT_TRUSTWORTHY_COMPARABLE_LIVE_HOST_COUNTERS"
-    },
-    "hybrid_context_representation": {
-      "status": "IMPLEMENTED_POLICY",
-      "human_sources": ["docs/HYBRID_CONTEXT_FORMATS.md"],
-      "json_authority": "CANONICAL_FOR_STRUCTURED_MACHINE_STATE",
-      "toon_authority": "DERIVED_VALIDATED_NON_AUTHORITATIVE"
-    }
+    "specialist_orchestration": {"status": "IMPLEMENTED", "machine_sources": ["machine/specialists/registry.v1.json", "machine/routing/routes.v1.json"], "human_sources": ["SKILL_INDEX.md", "ROUTING_MAP.md"]},
+    "governed_runtime": {"status": "IMPLEMENTED", "machine_sources": ["machine/governance/policy.v1.json"], "human_sources": ["docs/architecture/README.md", "docs/governance/GOVERNANCE_LAYER.md", "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md"]},
+    "cross_specialist_coordination": {"status": "IMPLEMENTED", "human_sources": ["docs/governance/TUNER_PROTOCOL.md", "ROUTING_MAP.md"]},
+    "validation_and_evidence": {"status": "IMPLEMENTED", "machine_sources": ["machine/schemas/", "machine/release-evidence/"], "human_sources": ["docs/setup/VALIDATION.md", "docs/validation/"]},
+    "host_update_planning": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "machine_sources": ["machine/hosts/update-contract.v1.json"], "human_sources": ["docs/setup/HOST_UPDATES.md"]},
+    "adapter_sdk_and_prap_certification": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "machine_sources": ["machine/protocol/prap-certification-contract.v1.json", "machine/schemas/prap-certification-evidence.schema.json"], "human_sources": ["docs/setup/ADAPTER_SDK_PRAP.md"]},
+    "developer_portal": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "machine_sources": ["machine/developer-portal/catalog.v1.json"], "human_sources": ["docs/developer/README.md"]},
+    "mcp_stdio_transport": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "protocol_revision": "2026-07-28", "transport": "stdio", "surface": ["server/discover", "tools/list", "tools/call"], "human_sources": ["docs/developer/MCP_STDIO_TRANSPORT.md"], "authority_note": "MCP is transport, not authority."},
+    "murmurs_presentation": {"status": "IMPLEMENTED_OPT_IN", "machine_sources": ["machine/presentation/murmurs-policy.v1.json", "machine/presentation/murmurs-vocabulary.v1.json"], "human_sources": ["docs/project/MURMURS_COMMUNICATION_BUDGET.md"], "token_savings_claim": "NOT_CLAIMED_WITHOUT_TRUSTWORTHY_COMPARABLE_LIVE_HOST_COUNTERS"},
+    "hybrid_context_representation": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "human_sources": ["docs/HYBRID_CONTEXT_FORMATS.md"], "json_authority": "CANONICAL_FOR_STRUCTURED_MACHINE_STATE", "toon_authority": "DERIVED_VALIDATED_NON_AUTHORITATIVE"}
   },
   "machine_scan_order": [
     {"order": 1, "path": "README.json", "purpose": "AI-facing repository orientation and machine-surface discovery graph"},
@@ -129,62 +85,24 @@
     "developer_portal_catalog_schema": "machine/schemas/developer-portal-catalog.schema.json",
     "readme_machine_index_schema": "machine/schemas/readme-machine-index.schema.json"
   },
-  "specialists": {
-    "count": 14,
-    "registry_source": "machine/specialists/registry.v1.json",
-    "human_index": "SKILL_INDEX.md",
-    "routing_reference": "ROUTING_MAP.md",
-    "knowledge_root": "skills/",
-    "source_of_truth_note": "Specialist prose and reasoning guidance remain in skills/*/SKILL.md; machine routing-critical metadata is compiled and parity-validated."
-  },
+  "specialists": {"count": 14, "registry_source": "machine/specialists/registry.v1.json", "human_index": "SKILL_INDEX.md", "routing_reference": "ROUTING_MAP.md", "knowledge_root": "skills/", "source_of_truth_note": "Specialist prose and reasoning guidance remain in skills/*/SKILL.md; machine routing-critical metadata is compiled and parity-validated."},
   "governance": {
-    "human_overview": "docs/governance/GOVERNANCE_LAYER.md",
+    "human_overview": "docs/governance/README.md",
     "current_architecture_overview": "docs/architecture/README.md",
     "machine_policy": "machine/governance/policy.v1.json",
     "control_plane_stage": "LEGACY_RETIRED",
     "control_plane_stage_source": "machine/migration/control-plane.v1.json#/current_stage",
     "merge_readiness_protocol": "docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md",
-    "ordinary_merge_requirements": {
-      "mergeable": true,
-      "mergeable_state": "clean",
-      "expected_head_protection": true,
-      "governed_bypass_allowed": false
-    },
+    "ordinary_merge_requirements": {"mergeable": true, "mergeable_state": "clean", "expected_head_protection": true, "governed_bypass_allowed": false},
     "effective_authority_model": "selected_profile INTERSECTION explicit_grant INTERSECTION repository_policy INTERSECTION host_capability INTERSECTION current_phase INTERSECTION current_evidence",
     "transition_dispositions": ["AUTO_CONTINUE", "AUTO_REMEDIATE_AND_REVALIDATE", "WAIT_FOR_EVIDENCE", "WAIT_FOR_CAPACITY", "ESCALATE_HUMAN", "STOP"],
-    "protected_actions_require_separate_authority": true
+    "protected_actions_require_separate_authority": true,
+    "required_analysis_ruleset_drift_issue": 331,
+    "required_analysis_ruleset_drift_state": "OPEN_COMPATIBILITY_WORKFLOW_ACTIVE"
   },
-  "architecture": {
-    "current_overview": "docs/architecture/README.md",
-    "detailed_authority_capability_design": "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md",
-    "routing_reference": "ROUTING_MAP.md",
-    "governance_reference": "docs/governance/GOVERNANCE_LAYER.md",
-    "compliance_registry_reference": "docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md",
-    "compliance_protocol_runtime": "orchestra_runtime/compliance_protocol.py",
-    "mcp_transport_reference": "docs/developer/MCP_STDIO_TRANSPORT.md",
-    "historical_status_policy": "Phase documents may retain phase-era status wording. Current exact state comes from live machine contracts, release evidence, and Git identity."
-  },
-  "hosts_integrations": {
-    "host_update_contract": "machine/hosts/update-contract.v1.json",
-    "adapter_sdk_reference": "docs/setup/ADAPTER_SDK_PRAP.md",
-    "prap_certification_contract": "machine/protocol/prap-certification-contract.v1.json",
-    "developer_portal": "docs/developer/README.md",
-    "developer_portal_catalog": "machine/developer-portal/catalog.v1.json",
-    "mcp_transport": "docs/developer/MCP_STDIO_TRANSPORT.md",
-    "supported_hosts": ["codex", "antigravity"],
-    "scaffold_only_hosts": ["claude-code", "cursor", "windsurf", "vscode", "vscodium", "jetbrains", "zed", "neovim"],
-    "certification_is_authority": false,
-    "host_maturity_is_authority": false,
-    "installed_refresh_automatic": false
-  },
-  "knowledge_provenance": {
-    "third_party_machine_source": "machine/provenance/third-party.v1.json",
-    "third_party_human_source": "docs/THIRD_PARTY_PROVENANCE.md",
-    "machine_knowledge_directory": "machine/knowledge",
-    "truesheet_reference": "machine/knowledge/truesheet-specialist-reference.v1.json",
-    "external_reference_authority": "KNOWLEDGE_REFERENCE_ONLY_NOT_RUNTIME_OR_GOVERNANCE_AUTHORITY",
-    "source_copy_policy": "External references do not authorize wholesale source copying; provenance and incorporation boundaries remain explicit."
-  },
+  "architecture": {"current_overview": "docs/architecture/README.md", "detailed_authority_capability_design": "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md", "routing_reference": "ROUTING_MAP.md", "governance_reference": "docs/governance/README.md", "compliance_registry_reference": "docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md", "compliance_protocol_runtime": "orchestra_runtime/compliance_protocol.py", "mcp_transport_reference": "docs/developer/MCP_STDIO_TRANSPORT.md", "historical_status_policy": "Phase documents may retain phase-era status wording. Current exact state comes from live machine contracts, release evidence, and Git identity."},
+  "hosts_integrations": {"host_update_contract": "machine/hosts/update-contract.v1.json", "adapter_sdk_reference": "docs/setup/ADAPTER_SDK_PRAP.md", "prap_certification_contract": "machine/protocol/prap-certification-contract.v1.json", "developer_portal": "docs/developer/README.md", "developer_portal_catalog": "machine/developer-portal/catalog.v1.json", "mcp_transport": "docs/developer/MCP_STDIO_TRANSPORT.md", "supported_hosts": ["codex", "antigravity"], "scaffold_only_hosts": ["claude-code", "cursor", "windsurf", "vscode", "vscodium", "jetbrains", "zed", "neovim"], "certification_is_authority": false, "host_maturity_is_authority": false, "installed_refresh_automatic": false},
+  "knowledge_provenance": {"third_party_machine_source": "machine/provenance/third-party.v1.json", "third_party_human_source": "docs/THIRD_PARTY_PROVENANCE.md", "machine_knowledge_directory": "machine/knowledge", "truesheet_reference": "machine/knowledge/truesheet-specialist-reference.v1.json", "external_reference_authority": "KNOWLEDGE_REFERENCE_ONLY_NOT_RUNTIME_OR_GOVERNANCE_AUTHORITY", "source_copy_policy": "External references do not authorize wholesale source copying; provenance and incorporation boundaries remain explicit."},
   "validation": {
     "workflow": ".github/workflows/validate.yml",
     "behavior_suite": "tests/behavior/run_tests.py",
@@ -202,14 +120,7 @@
     "future_release_candidate_policy": "Any future release candidate requires fresh exact-head runtime, branch, critical-module, mutation, Cosmic Ray, cross-platform, CodeQL/required-analysis, governance, documentation-parity, and release-identity evidence.",
     "evidence_policy": "Runtime confidence claims must be derived from persisted machine-readable CI evidence bound to the tested checkout SHA and source-head SHA."
   },
-  "continuity": {
-    "repository_human_state": "PROJECT_STATE.md",
-    "repository_human_handoff": "SESSION_HANDOFF.md",
-    "decision_log": "DECISION_LOG.md",
-    "cross_repository_continuity_owner": "Baelfyre/Padayon",
-    "active_machine_handoff_external": "Padayon Relay v2",
-    "continuity_rule": "Repository memory and handoffs cannot promote source state without verified Git/source evidence."
-  },
+  "continuity": {"repository_human_state": "PROJECT_STATE.md", "repository_human_handoff": "SESSION_HANDOFF.md", "decision_log": "DECISION_LOG.md", "cross_repository_continuity_owner": "Baelfyre/Padayon", "active_machine_handoff_external": "Padayon Relay v2", "continuity_rule": "Repository memory and handoffs cannot promote source state without verified Git/source evidence."},
   "release_state": {
     "current_public_release": "v1.5.0",
     "release_commit": "b0a56cc7af8ad78234754bcb29ed07f6ab54d920",
@@ -217,10 +128,12 @@
     "publication_closeout": "docs/validation/V1_5_0_PUBLICATION_CLOSEOUT.md",
     "post_release_main_contains_significant_changes": true,
     "provisional_next_release": "v1.6.0",
-    "provisional_next_release_status": "PLANNED_NOT_PUBLISHED",
+    "provisional_next_release_status": "RELEASE_CANDIDATE_IN_PREPARATION",
     "v1_5_0_must_remain_immutable": true,
     "murmurs_measurement_issue": 316,
-    "murmurs_measurement_issue_state": "OPEN"
+    "murmurs_measurement_issue_state": "OPEN",
+    "adaptive_governed_orchestration_issue": 340,
+    "adaptive_governed_orchestration_state": "DEFERRED_PLANNING_ONLY"
   },
   "documentation": {
     "documentation_map": "docs/README.md",
@@ -241,24 +154,19 @@
     "validation_evidence": "docs/validation/",
     "third_party_provenance": "docs/THIRD_PARTY_PROVENANCE.md",
     "merge_readiness": "docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md",
-    "murmurs": "docs/project/MURMURS_COMMUNICATION_BUDGET.md"
+    "murmurs": "docs/project/MURMURS_COMMUNICATION_BUDGET.md",
+    "release_candidate_v1_6_0": "docs/releases/v1.6.0-integration-developer-experience-release-candidate.md"
   },
-  "representation_policy": {
-    "markdown": "Human-readable explanation, rationale, examples, and nuanced specialist guidance",
-    "json": "Canonical structured machine state, identity, routing, governance, receipts, manifests, provenance, presentation contracts, evidence, and indexes",
-    "json_schema": "Validation contract for machine-readable records",
-    "jsonl": "Append-only event/history records where incremental retrieval is preferable",
-    "toon": "Derived validated non-authoritative model-context projection only when bounded compilation provides measured context benefit",
-    "parity_rule": "When the same deterministic fact appears in more than one representation, CI must validate parity or derive the projection from one authoritative source."
-  },
+  "representation_policy": {"markdown": "Human-readable explanation, rationale, examples, and nuanced specialist guidance", "json": "Canonical structured machine state, identity, routing, governance, receipts, manifests, provenance, presentation contracts, evidence, and indexes", "json_schema": "Validation contract for machine-readable records", "jsonl": "Append-only event/history records where incremental retrieval is preferable", "toon": "Derived validated non-authoritative model-context projection only when bounded compilation provides measured context benefit", "parity_rule": "When the same deterministic fact appears in more than one representation, CI must validate parity or derive the projection from one authoritative source."},
   "maturity": {
     "current_public_release": "PUBLISHED_VERIFIED",
-    "mcp_stdio_transport": "POST_RELEASE_IMPLEMENTED_UNRELEASED",
-    "host_update_commands": "POST_RELEASE_IMPLEMENTED_UNRELEASED",
-    "adapter_sdk_prap_certification": "POST_RELEASE_IMPLEMENTED_UNRELEASED",
-    "developer_portal": "POST_RELEASE_IMPLEMENTED_UNRELEASED",
-    "truesheet_specialist_enrichment": "POST_RELEASE_IMPLEMENTED_UNRELEASED",
-    "hybrid_context_compilation": "POST_RELEASE_IMPLEMENTED_UNRELEASED",
+    "mcp_stdio_transport": "INCLUDED_IN_V1_6_CANDIDATE",
+    "host_update_commands": "INCLUDED_IN_V1_6_CANDIDATE",
+    "adapter_sdk_prap_certification": "INCLUDED_IN_V1_6_CANDIDATE",
+    "developer_portal": "INCLUDED_IN_V1_6_CANDIDATE",
+    "truesheet_specialist_enrichment": "INCLUDED_IN_V1_6_CANDIDATE",
+    "hybrid_context_compilation": "INCLUDED_IN_V1_6_CANDIDATE",
+    "documentation_architecture_v2": "INCLUDED_IN_V1_6_CANDIDATE",
     "adaptive_governed_orchestration": "DEFERRED_PLANNING_ONLY_ISSUE_340",
     "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316"
   },
@@ -278,6 +186,6 @@
     "treat_murmurs_as_presentation_only": true,
     "do_not_claim_murmurs_token_savings_without_comparable_host_reported_counters": true,
     "treat_v1_5_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
-    "treat_v1_6_0_as_planned_not_published_until_exact_tag_release_and_commit_identity_exist": true
+    "treat_v1_6_0_as_release_candidate_not_published_until_exact_tag_release_and_commit_identity_exist": true
   }
 }

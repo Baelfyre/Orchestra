@@ -12,7 +12,7 @@
     <a href="CHANGELOG.md">Changelog</a>
   </p>
   <p>
-    <img src="https://img.shields.io/badge/package_version-v1.5.0-blue" alt="Repository package version v1.5.0" />
+    <img src="https://img.shields.io/badge/package_version-v1.6.0-blue" alt="Repository package version v1.6.0" />
     <a href="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml">
       <img src="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml/badge.svg" alt="Repository validation status" />
     </a>
@@ -73,7 +73,7 @@ agy plugin install https://github.com/Baelfyre/Orchestra
 
 **Other hosts and local setups:** see the [Installation Guide](docs/setup/INSTALLATION.md) and [Compatibility Guide](docs/setup/COMPATIBILITY.md).
 
-The current public release is **v1.5.0**. `main` may contain verified post-release work, so use the release tag when exact published content is required.
+Repository package surfaces are prepared for **v1.6.0**. The current public GitHub Release remains **v1.5.0** until the separately governed publication gate creates and verifies the `v1.6.0` tag and release.
 
 ## Explore the framework
 

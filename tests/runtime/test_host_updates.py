@@ -29,7 +29,7 @@ def _write_contract_repo(
     tmp_path: Path,
     contract: object,
     *,
-    plugin_version: object = "1.5.0",
+    plugin_version: object = "1.6.0",
 ) -> Path:
     contract_path = tmp_path / "machine" / "hosts" / "update-contract.v1.json"
     contract_path.parent.mkdir(parents=True, exist_ok=True)
@@ -106,13 +106,13 @@ def test_unknown_host_fails_closed_for_record_and_plan() -> None:
 
 
 def test_update_status_is_deterministic_without_network_or_mutation() -> None:
-    available = build_host_update_plan("codex", latest_version="v1.6.0", root=ROOT)
-    current = build_host_update_plan("codex", latest_version="1.5.0", root=ROOT)
-    ahead = build_host_update_plan("codex", latest_version="1.4.0", root=ROOT)
+    available = build_host_update_plan("codex", latest_version="v1.7.0", root=ROOT)
+    current = build_host_update_plan("codex", latest_version="1.6.0", root=ROOT)
+    ahead = build_host_update_plan("codex", latest_version="1.5.0", root=ROOT)
     unchecked = build_host_update_plan("codex", root=ROOT)
 
     assert available.update_status == "UPDATE_AVAILABLE"
-    assert available.latest_version == "1.6.0"
+    assert available.latest_version == "1.7.0"
     assert current.update_status == "UP_TO_DATE"
     assert ahead.update_status == "LOCAL_AHEAD"
     assert unchecked.update_status == "NOT_CHECKED"
@@ -162,7 +162,7 @@ def test_contract_top_level_identity_and_version_fail_closed(tmp_path: Path) -> 
             load_host_update_contract(tmp_path)
 
     contract = _canonical_contract()
-    _write_contract_repo(tmp_path, contract, plugin_version="1.5.1")
+    _write_contract_repo(tmp_path, contract, plugin_version="1.6.1")
     with pytest.raises(HostUpdateError, match="HOST_UPDATE_PACKAGE_VERSION_MISMATCH"):
         load_host_update_contract(tmp_path)
 
@@ -287,7 +287,7 @@ def test_cli_emits_machine_plan_and_has_no_execute_flag() -> None:
         "--host",
         "antigravity",
         "--latest-version",
-        "1.5.0",
+        "1.6.0",
         "--json",
     ]
     completed = subprocess.run(command, cwd=ROOT, capture_output=True, text=True, check=False)
