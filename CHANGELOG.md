@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.5.0 MCP stdio Governed Tool Transport - Candidate
+
+- Adds the first bounded MCP integration for protocol revision `2026-07-28`, using stdio only and exposing `server/discover`, `tools/list`, and `tools/call`.
+- Maps MCP tools to a deterministic intersection of an existing PRAP adapter command surface and Orchestra's trusted runtime policy; no parallel adapter registry, authority model, or permission source is introduced.
+- Creates a fresh trusted runtime composition per accepted tool call and preserves existing route binding, authority, runtime-capability, governance, lifecycle, operation, and audit ordering.
+- Restricts MCP tool arguments to a single `prompt` field with `additionalProperties: false`; client MCP metadata and arbitrary tool metadata cannot inject Orchestra governance validation, authority, or runtime-capability grants.
+- Adds `scripts/mcp_server.py`, focused runtime regressions, and developer/Adapter SDK documentation while keeping stdout protocol-only and diagnostics on stderr.
+- Keeps Streamable HTTP, resources, prompts, Tasks/extensions, deployment, policy activation, installed-integration refresh, host-maturity promotion, issue #316 closure, and token-savings claims outside this unit.
+- Keeps public release `v1.5.0` fixed at `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`; this is a post-release candidate and does not move or republish the release.
 
 ## Post-v1.5.0 Developer Portal - Candidate
 
