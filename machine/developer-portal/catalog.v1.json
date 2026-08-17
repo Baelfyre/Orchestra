@@ -1,0 +1,149 @@
+{
+  "schema_version": "orchestra.developer-portal-catalog.v1",
+  "portal_mode": "REPOSITORY_NATIVE_DISCOVERY",
+  "description": "Discovery index over stabilized Orchestra extension, governance, host, and validation contracts.",
+  "authority": {
+    "documentation_and_discovery_only": true,
+    "grants_runtime_authority": false,
+    "grants_runtime_capabilities": false,
+    "grants_mutation_authority": false,
+    "promotes_host_maturity": false,
+    "publishes_marketplace_listings": false,
+    "implements_mcp": false,
+    "activates_policy": false,
+    "deploys_or_mutates_production": false,
+    "refreshes_installed_integrations": false
+  },
+  "public_release_boundary": {
+    "release": "v1.5.0",
+    "target_commit": "b0a56cc7af8ad78234754bcb29ed07f6ab54d920",
+    "moved_by_portal": false
+  },
+  "surfaces": [
+    {
+      "id": "adapter-sdk-guide",
+      "title": "Adapter SDK and PRAP v1 guide",
+      "kind": "human_guide",
+      "path": "docs/setup/ADAPTER_SDK_PRAP.md",
+      "authority_role": "GUIDANCE_OVER_EXISTING_PROTOCOL"
+    },
+    {
+      "id": "prap-certification-contract",
+      "title": "PRAP certification contract",
+      "kind": "machine_contract",
+      "path": "machine/protocol/prap-certification-contract.v1.json",
+      "authority_role": "CERTIFICATION_CONTRACT"
+    },
+    {
+      "id": "prap-certification-schema",
+      "title": "PRAP certification evidence schema",
+      "kind": "machine_schema",
+      "path": "machine/schemas/prap-certification-evidence.schema.json",
+      "authority_role": "EVIDENCE_SCHEMA"
+    },
+    {
+      "id": "host-update-contract",
+      "title": "Host Update maturity contract",
+      "kind": "machine_contract",
+      "path": "machine/hosts/update-contract.v1.json",
+      "authority_role": "HOST_MATURITY_AUTHORITY"
+    },
+    {
+      "id": "host-update-guide",
+      "title": "Host Update guide",
+      "kind": "human_guide",
+      "path": "docs/setup/HOST_UPDATES.md",
+      "authority_role": "GUIDANCE_OVER_HOST_CONTRACT"
+    },
+    {
+      "id": "specialist-registry",
+      "title": "Specialist registry",
+      "kind": "machine_contract",
+      "path": "machine/specialists/registry.v1.json",
+      "authority_role": "SPECIALIST_IDENTITY_AUTHORITY"
+    },
+    {
+      "id": "governance-policy",
+      "title": "Governance policy",
+      "kind": "machine_contract",
+      "path": "machine/governance/policy.v1.json",
+      "authority_role": "GOVERNANCE_POLICY_AUTHORITY"
+    },
+    {
+      "id": "governance-guide",
+      "title": "Governance layer guide",
+      "kind": "human_guide",
+      "path": "docs/governance/GOVERNANCE_LAYER.md",
+      "authority_role": "GUIDANCE_OVER_GOVERNANCE_POLICY"
+    },
+    {
+      "id": "authority-architecture",
+      "title": "Authority, capability, runtime architecture",
+      "kind": "human_guide",
+      "path": "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md",
+      "authority_role": "ARCHITECTURE_GUIDANCE"
+    },
+    {
+      "id": "validation-guide",
+      "title": "Validation guide",
+      "kind": "human_guide",
+      "path": "docs/setup/VALIDATION.md",
+      "authority_role": "VALIDATION_GUIDANCE"
+    }
+  ],
+  "journeys": [
+    {
+      "id": "understand-adapter-contract",
+      "title": "Understand or build an adapter",
+      "surface_ids": [
+        "adapter-sdk-guide",
+        "prap-certification-contract",
+        "specialist-registry",
+        "authority-architecture"
+      ]
+    },
+    {
+      "id": "certify-adapter",
+      "title": "Produce read-only PRAP compatibility evidence",
+      "surface_ids": [
+        "adapter-sdk-guide",
+        "prap-certification-contract",
+        "prap-certification-schema",
+        "validation-guide"
+      ]
+    },
+    {
+      "id": "inspect-host-maturity",
+      "title": "Inspect host support without promoting maturity",
+      "surface_ids": [
+        "host-update-contract",
+        "host-update-guide",
+        "adapter-sdk-guide"
+      ]
+    },
+    {
+      "id": "understand-specialist-extension",
+      "title": "Understand specialist and Downstream Role boundaries",
+      "surface_ids": [
+        "specialist-registry",
+        "authority-architecture",
+        "governance-policy",
+        "governance-guide"
+      ]
+    },
+    {
+      "id": "review-governance-and-validation",
+      "title": "Review governance and validation boundaries",
+      "surface_ids": [
+        "governance-policy",
+        "governance-guide",
+        "validation-guide",
+        "authority-architecture"
+      ]
+    }
+  ],
+  "future_phase_boundaries": {
+    "third_party_specialist_marketplace": "NOT_IMPLEMENTED",
+    "mcp_server": "NOT_IMPLEMENTED_FINAL_PHASE"
+  }
+}
