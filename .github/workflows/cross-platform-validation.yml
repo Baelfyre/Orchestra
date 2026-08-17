@@ -38,7 +38,9 @@ jobs:
           python-version: "3.12"
 
       - name: Install Dependencies
-        run: python -m pip install --upgrade pip pytest pytest-cov hypothesis==6.163.0
+        run: >-
+          python -m pip install --upgrade pip pytest pytest-cov hypothesis==6.163.0
+          "jsonschema[format]>=4.21,<5"
 
       - name: Show Runtime
         run: |
