@@ -99,6 +99,19 @@ if (-not (Test-Path $targetSkillsDir)) {
     New-Item -ItemType Directory -Path $targetSkillsDir | Out-Null
 }
 
+$sourceMachineCatalog = Join-Path $SourceRoot "machine/knowledge/truesheet-specialist-reference.v1.json"
+if (-not (Test-Path -LiteralPath $sourceMachineCatalog -PathType Leaf)) {
+    Write-Error "TrueSheet machine catalog not found: $sourceMachineCatalog"
+    exit 1
+}
+$targetMachineDir = Join-Path $TargetRoot "machine/knowledge"
+if (-not (Test-Path -LiteralPath $targetMachineDir -PathType Container)) {
+    New-Item -ItemType Directory -Path $targetMachineDir -Force | Out-Null
+}
+$targetMachineCatalog = Join-Path $targetMachineDir "truesheet-specialist-reference.v1.json"
+$machineCatalogContent = Read-Utf8TextFile -Path $sourceMachineCatalog
+Write-Utf8NoBomLfFile -Path $targetMachineCatalog -Content $machineCatalogContent
+
 foreach ($skill in $skills) {
     $sourceDir = Join-Path $SourceRoot "skills\$skill"
     $targetDir = Join-Path $targetSkillsDir $skill

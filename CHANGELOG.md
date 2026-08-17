@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.5.0 TrueSheet Specialist Knowledge Adaptation - Candidate
+
+- Pins the Orchestra-native machine catalog `machine/knowledge/truesheet-specialist-reference.v1.json` to canonical Padayon TrueSheet V2 reference commit `1fa5b773b04877bcbc3b85e22b6af70a0a8dd738` and upstream `lodev09/react-native-true-sheet` commit `23e119c026e2040d960725bd260e6cd4bf680b95`, with the MIT license and no-source-drift state preserved as explicit machine provenance.
+- Adds progressive-disclosure TrueSheet reference guides for Cloak, Ponytail, Clockwork, Overseer, and Scribe, with byte-equivalent Codex mirrors and exact `TSF-*` feature ownership mapped back to the machine catalog.
+- Keeps Conductor routing-only and The Tuner coordination-only; neither receives duplicated TrueSheet domain guidance, specialist authority is not expanded, and external `AGENTS.md` instructions do not become Orchestra governance.
+- Adapts patterns through paraphrased or independently derived Orchestra-native guidance only. No TrueSheet runtime dependency, vendoring, external source-code copying, wholesale licensed-material copying, or external-test-evidence substitution is introduced.
+- Adds `tests/behavior/test_truesheet_reference.py` and a canonical validation step enforcing Padayon/upstream provenance, MIT identity, exactly 18 declared feature IDs, five approved specialist mappings, source/Codex guide parity, machine-guide feature parity, and the no-Conductor/no-Tuner duplication boundary.
+- Updates README parity for the new specialist knowledge surface while keeping `v1.5.0` fixed and published. No release/tag movement, deployment, policy activation, installed-integration refresh, destructive cleanup, force push, history rewrite, branch deletion, or MCP implementation is performed.
+
 ## Post-v1.5.0 Signed Materialization Optimization - Candidate
 
 - Replaces the historical three-PR API-authored signing pattern with a two-PR transport: the unsigned source branch is reviewed directly against an isolated `materialize/**` target, then the verified GitHub-signed Squash result becomes the head of the canonical PR to `main`.
@@ -26,7 +35,7 @@
 - Selects short non-semantic murmurs locally with deterministic SHA-256 indexing instead of asking the model to generate filler or loading the vocabulary into model context.
 - Integrates presentation selection at the shared adapter boundary so supported and scaffold hosts consume the same machine policy; adapters default to normal explanation unless Murmurs is explicitly selected.
 - Adds source-aware communication measurements for progress messages, model progress calls, bytes, repeated reads, elapsed communication overhead, outcome identity, and optional host-reported token counters. Token deltas are calculated only for matching host-reported counter identities; unavailable counters remain null and no percentage saving is invented.
-- Adds controlled repository-simulation coverage showing routine model-progress calls can be structurally eliminated by Murmurs while preserving outcome, validation, and governance identities; repository CI does not represent this as billing-token evidence.
+- Adds controlled repository-simulation coverage showing routine modeled progress calls can be structurally eliminated by Murmurs while preserving outcome, validation, and governance identities; repository CI does not represent this as billing-token evidence.
 - Evaluates Caveman-inspired semantic tool/log compression but does not promote lossy compaction or repeated-read stubs until original content is preserved behind an immutable retrievable reference.
 - Performs no SemVer selection, release/tag publication, ruleset change/bypass, deployment, marketplace publication, installed-integration refresh, destructive cleanup, force push, history rewrite, branch deletion, or MCP implementation.
 
@@ -65,7 +74,7 @@
 - Added the fail-closed README Impact Gate to Governance Check: significant runtime, specialist, host-integration, governance/routing/setup/release, version, or CI/governance changes must update `README.md` in the same revision; tests and validation-evidence-only changes do not force README churn.
 - Added Registry `0.1.0` release-candidate compatibility regressions covering manifest trust anchoring, install/query/project pinning, populated Philippine source/obligation identity, current freshness, and explicit `REVIEW_OVERDUE` propagation without changing Orchestra runtime behavior or publishing a Registry release.
 - Added `docs/releases/v1.4.0-governance-compliance-registry-release-candidate.md` and preserved `v1.3.0` as the current public release until separately authorized `v1.4.0` tag and GitHub Release publication.
-- Published and independently verified the trusted immutable Registry release `registry-v0.1.0` at canonical Registry commit `3821bcb55125b4d8864f28b6423650e6e17ac67b`, then validated Orchestra's real network sync, exact provenance, freshness, source query, project pinning, update-check, and idempotent re-sync from canonical Orchestra source baseline `b5d0790fc714f53c4561a91b158c13c625768e05`.
+- Published and independently verified the trusted immutable Registry release `registry-v0.1.0` at canonical Registry commit `3821bcb55125b4df225596ebed80a6dbbf6e09903a`, then validated Orchestra's real network sync, exact provenance, freshness, source query, project pinning, update-check, and idempotent re-sync from canonical Orchestra source baseline `b5d0790fc714f53c4561a91b158c13c625768e05`.
 - Added `docs/validation/V1_4_0_RELEASE_READINESS_EVIDENCE.md`; at that readiness checkpoint, Orchestra `v1.4.0` public release/tag publication remained a separate protected transition.
 - Published `Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration` as GitHub Release id `370658917` from lightweight tag `v1.4.0`, which resolves directly to exact signed canonical release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`; independently verified non-draft, non-prerelease, immutable, and latest at that publication checkpoint.
 - Added `docs/validation/V1_4_0_PUBLICATION_CLOSEOUT.md` and reconciled current-facing release, setup, roadmap, project-state, and handoff documentation without moving the fixed release tag or performing marketplace publication, installed-integration refresh, deployment, policy activation, destructive cleanup, branch deletion, force push, or history rewrite.
