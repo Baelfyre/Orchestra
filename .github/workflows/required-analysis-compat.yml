@@ -1,0 +1,98 @@
+name: Required Analysis Compatibility
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  checks: read
+
+jobs:
+  analyze-actions:
+    name: Analyze (actions)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Require current CodeQL success
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 30); do
+            state="$(gh api \
+              -H 'Accept: application/vnd.github+json' \
+              "/repos/${GITHUB_REPOSITORY}/commits/${TARGET_SHA}/check-runs?per_page=100" \
+              --jq '[.check_runs[] | select(.name == "CodeQL")] | if length == 0 then "MISSING" elif any(.conclusion == "failure" or .conclusion == "cancelled" or .conclusion == "timed_out" or .conclusion == "action_required") then "FAILED" elif any(.conclusion == "success") then "SUCCESS" else "PENDING" end')"
+            echo "CODEQL_COMPAT_STATE=${state} attempt=${attempt} target=${TARGET_SHA}"
+            case "$state" in
+              SUCCESS) exit 0 ;;
+              FAILED) exit 1 ;;
+            esac
+            sleep 10
+          done
+          echo "CODEQL_COMPAT_STATE=TIMEOUT target=${TARGET_SHA}"
+          exit 1
+
+      - name: Validate workflow-governance surface
+        run: |
+          python scripts/validate_structure.py
+          python scripts/validate_manifest.py
+          python scripts/governance_check.py --strict
+
+  analyze-python:
+    name: Analyze (python)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Require current CodeQL success
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TARGET_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 30); do
+            state="$(gh api \
+              -H 'Accept: application/vnd.github+json' \
+              "/repos/${GITHUB_REPOSITORY}/commits/${TARGET_SHA}/check-runs?per_page=100" \
+              --jq '[.check_runs[] | select(.name == "CodeQL")] | if length == 0 then "MISSING" elif any(.conclusion == "failure" or .conclusion == "cancelled" or .conclusion == "timed_out" or .conclusion == "action_required") then "FAILED" elif any(.conclusion == "success") then "SUCCESS" else "PENDING" end')"
+            echo "CODEQL_COMPAT_STATE=${state} attempt=${attempt} target=${TARGET_SHA}"
+            case "$state" in
+              SUCCESS) exit 0 ;;
+              FAILED) exit 1 ;;
+            esac
+            sleep 10
+          done
+          echo "CODEQL_COMPAT_STATE=TIMEOUT target=${TARGET_SHA}"
+          exit 1
+
+      - name: Validate Python surface
+        run: |
+          python -m compileall -q orchestra_runtime scripts internal/context
+          python tests/behavior/run_tests.py
