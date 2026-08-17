@@ -20,6 +20,8 @@ TOON is selected only when the source is large enough and the encoded projection
 
 The default compiler thresholds are 4 KiB of compact JSON and at least 10 percent measured byte savings. These are context-transport defaults, not authority rules, and may be benchmarked later against live host tokenization.
 
+The compiler and execution wrapper live under `internal/context/` because they are implementation plumbing, not a new public Orchestra command surface.
+
 ## Long command, Git, test, and CI output
 
 Raw stdout/stderr remains evidence and is written to files. The PowerShell execution wrapper creates:
@@ -47,14 +49,14 @@ Successful runs therefore do not require an agent to ingest thousands of raw con
 Compile an existing JSON context record:
 
 ```powershell
-python scripts/context_compiler.py compile input.json context.compiled context-manifest.json
-python scripts/context_compiler.py verify input.json context.compiled context-manifest.json
+python internal/context/context_compiler.py compile input.json context.compiled context-manifest.json
+python internal/context/context_compiler.py verify input.json context.compiled context-manifest.json
 ```
 
 Run a verbose command without sending the full output to the AI by default:
 
 ```powershell
-./scripts/invoke-contextual-command.ps1 `
+./internal/context/invoke-contextual-command.ps1 `
   -CommandId validate-runtime `
   -FilePath python `
   -ArgumentList @("-m", "pytest", "-q")
