@@ -1,0 +1,183 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.orchestra.dev/machine/developer-portal-catalog/v1",
+  "title": "Orchestra Developer Portal Catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "portal_mode",
+    "description",
+    "authority",
+    "public_release_boundary",
+    "surfaces",
+    "journeys",
+    "future_phase_boundaries"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "orchestra.developer-portal-catalog.v1"
+    },
+    "portal_mode": {
+      "const": "REPOSITORY_NATIVE_DISCOVERY"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "documentation_and_discovery_only",
+        "grants_runtime_authority",
+        "grants_runtime_capabilities",
+        "grants_mutation_authority",
+        "promotes_host_maturity",
+        "publishes_marketplace_listings",
+        "implements_mcp",
+        "activates_policy",
+        "deploys_or_mutates_production",
+        "refreshes_installed_integrations"
+      ],
+      "properties": {
+        "documentation_and_discovery_only": {
+          "const": true
+        },
+        "grants_runtime_authority": {
+          "const": false
+        },
+        "grants_runtime_capabilities": {
+          "const": false
+        },
+        "grants_mutation_authority": {
+          "const": false
+        },
+        "promotes_host_maturity": {
+          "const": false
+        },
+        "publishes_marketplace_listings": {
+          "const": false
+        },
+        "implements_mcp": {
+          "const": false
+        },
+        "activates_policy": {
+          "const": false
+        },
+        "deploys_or_mutates_production": {
+          "const": false
+        },
+        "refreshes_installed_integrations": {
+          "const": false
+        }
+      }
+    },
+    "public_release_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "release",
+        "target_commit",
+        "moved_by_portal"
+      ],
+      "properties": {
+        "release": {
+          "const": "v1.5.0"
+        },
+        "target_commit": {
+          "const": "b0a56cc7af8ad78234754bcb29ed07f6ab54d920"
+        },
+        "moved_by_portal": {
+          "const": false
+        }
+      }
+    },
+    "surfaces": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "kind",
+          "path",
+          "authority_role"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": [
+              "human_guide",
+              "machine_contract",
+              "machine_schema"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "pattern": "^(docs|machine)/[^\\\\]+$"
+          },
+          "authority_role": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "journeys": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "surface_ids"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "surface_ids": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "future_phase_boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "third_party_specialist_marketplace",
+        "mcp_server"
+      ],
+      "properties": {
+        "third_party_specialist_marketplace": {
+          "const": "NOT_IMPLEMENTED"
+        },
+        "mcp_server": {
+          "const": "NOT_IMPLEMENTED_FINAL_PHASE"
+        }
+      }
+    }
+  }
+}

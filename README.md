@@ -6,6 +6,7 @@
   <p>
     <a href="docs/setup/INSTALLATION.md">Installation</a> |
     <a href="docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md">Architecture</a> |
+    <a href="docs/developer/README.md">Developer Portal</a> |
     <a href="docs/governance/GOVERNANCE_LAYER.md">Governance</a> |
     <a href="docs/setup/VALIDATION.md">Validation</a> |
     <a href="CHANGELOG.md">Changelog</a>
@@ -81,6 +82,10 @@ Normal use is local-first: Orchestra reviews a verified active cache and uses ne
 
 See [Compliance Registry Integration](docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md) for the trust model, owner responsibilities, freshness behavior, and release boundaries.
 
+
+## Developer Portal
+
+The repository-native [Developer Portal](docs/developer/README.md) is the discovery index for stabilized adapter, PRAP certification, host maturity, specialist, governance, and validation contracts. Its machine catalog is `machine/developer-portal/catalog.v1.json`. The portal is documentation and discovery only: it cannot grant authority, promote hosts, publish marketplace content, deploy, refresh integrations, move releases, or implement MCP.
 
 ## Adapter SDK and PRAP v1 Compatibility Certification
 

@@ -1,6 +1,15 @@
 # Changelog
 
 
+## Post-v1.5.0 Developer Portal - Candidate
+
+- Adds a repository-native Developer Portal for discovery of stabilized adapter, PRAP certification, host-maturity, specialist, governance, and validation contracts without introducing a new authority layer.
+- Adds a machine-readable portal catalog and JSON Schema plus deterministic tests that require referenced paths, journey references, domain-owner boundaries, and fixed release identity to remain valid.
+- Provides adapter, certification, host-maturity, specialist-extension, governance, and validation contributor journeys by linking canonical surfaces rather than copying their semantics.
+- Keeps PRAP v1, the Host Update contract, the specialist registry, and governance policy authoritative for their existing domains.
+- Explicitly excludes marketplace listing/publication and MCP implementation; both remain separately governed later phases.
+- Performs no release/tag movement, deployment, policy activation, installed-integration refresh, host-maturity promotion, destructive cleanup, branch deletion, force push, or history rewrite. Public `v1.5.0` remains fixed at `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`.
+
 ## Post-v1.5.0 Adapter SDK and PRAP Compatibility Certification - Candidate
 
 - Formalizes the existing `PRAP v1` adapter protocol as the single Adapter SDK boundary through `orchestra_runtime.protocol.sdk`; no parallel adapter abstraction is introduced.
