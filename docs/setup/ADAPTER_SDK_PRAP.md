@@ -42,6 +42,10 @@ PRAP `AdapterCapabilities` describe adapter interface characteristics. They are 
 
 Adapter metadata, packaging metadata, validation success, and compatibility evidence cannot expand authority. Existing trusted runtime composition and authority controls remain separate.
 
-## Future transports
+## MCP transport mapping
 
-MCP remains a future transport-integration concern. If a later governed phase justifies MCP implementation, MCP must map stabilized Orchestra capabilities to this Adapter SDK/PRAP boundary. It must not replace PRAP, become an authority source, or reinterpret certification as permission.
+The post-v1.5 MCP candidate adds a bounded stdio transport for MCP protocol revision `2026-07-28`. It does not create a parallel adapter protocol. The MCP server selects an existing Orchestra adapter through `AdapterFactory`, projects only commands that are both exposed by that adapter and present in the current trusted runtime policy, and routes every accepted tool call through a fresh existing `RuntimeExecutor` composition.
+
+MCP therefore remains transport rather than authority. MCP client metadata, MCP capabilities, tool names, tool arguments, discovery responses, PRAP certification, and Host Update maturity cannot grant runtime authority or runtime capability. Client-supplied tool arguments cannot inject Orchestra governance-validation metadata.
+
+The first bounded transport exposes only `server/discover`, `tools/list`, and `tools/call` over stdio. Streamable HTTP, resources, prompts, Tasks/extensions, deployment, policy activation, and installed-integration refresh remain outside this unit. See `docs/developer/MCP_STDIO_TRANSPORT.md`.
