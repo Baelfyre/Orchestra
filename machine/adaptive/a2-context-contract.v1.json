@@ -1,0 +1,96 @@
+{
+  "schema_version": "orchestra.adaptive-context-contract.v1",
+  "phase": "A2_SPECIALIST_CONTEXT_ADAPTATION",
+  "dependency": {
+    "a1_exit_gate_required": true,
+    "validated_a1_head": "a6fc709ea3ff25b10c0087093a887f815f510bbe",
+    "validated_a1_tree": "61e17acfa7b370814ea2f22da1550d0ebe0440c7",
+    "canonical_a1_head": "d3b98ecd127f8da562df8cf21385beca33b520f9",
+    "canonical_a1_tree": "61e17acfa7b370814ea2f22da1550d0ebe0440c7",
+    "a1_canonical_merge_required_for_a2_branching": false,
+    "a1_canonical_for_this_candidate": true
+  },
+  "authority": {
+    "mode": "READ_ONLY_ADVISORY",
+    "routing_authority_change": false,
+    "authority_change": false,
+    "capability_change": false,
+    "governance_change": false,
+    "lifecycle_authority_change": false,
+    "automatic_inferred_promotion": false,
+    "provider_integration": "NONE",
+    "training": "NONE"
+  },
+  "runtime_attachment": {
+    "implementation": "ADAPTIVE_RUNTIME_EXECUTOR_OPERATION_WRAPPER",
+    "attachment_point": "AFTER_ROUTE_BINDING_AUTHORITY_CAPABILITY_AND_GOVERNANCE_BEFORE_OPERATION",
+    "canonical_route_mutated": false,
+    "operation_receives_advisory_route_copy": true,
+    "default_runtime_executor_changed": false,
+    "blocked_governance_invokes_adaptive_provider": false,
+    "delegated_adaptive_context": "DEFERRED_IN_A2_FAIL_CLOSED"
+  },
+  "precedence": [
+    "EXPLICIT_CURRENT_INSTRUCTION",
+    "EXPLICIT_SCOPED_PREFERENCE",
+    "CONFIRMED_LEARNED_PATTERN",
+    "INFERRED_CANDIDATE",
+    "DEFAULT"
+  ],
+  "equal_precedence_scope_specificity": [
+    "task_session",
+    "specialist",
+    "project",
+    "global_user"
+  ],
+  "scope_isolation": {
+    "user_key": "EXACT",
+    "project_key": "EXACT_WHEN_SCOPED",
+    "specialist_slug": "EXACT_WHEN_SCOPED",
+    "task_session_key": "EXACT_FOR_TASK_SESSION_SCOPE"
+  },
+  "candidate_policy": {
+    "candidate_context_is_advisory": true,
+    "minimum_confidence": "CALLER_SUPPLIED_ONLY",
+    "default_when_threshold_absent": "EXCLUDE_INFERRED_CANDIDATES",
+    "a2_invents_confidence_threshold": false
+  },
+  "context_bounds": {
+    "max_items": "CALLER_SUPPLIED_WITH_FINITE_DEFAULT",
+    "max_outcome_evidence": "CALLER_SUPPLIED_WITH_FINITE_DEFAULT",
+    "raw_prompt_copied_into_adaptive_packet": false,
+    "repository_refs": "CALLER_CURATED_REFERENCES_ONLY",
+    "current_instruction_refs": "CALLER_CURATED_REFERENCES_ONLY"
+  },
+  "integrity": {
+    "observation_log_must_validate_hash_chain": true,
+    "profile_source_head_must_match_observation_head": true,
+    "memory_rule_version_must_match": true,
+    "stale_or_incompatible_profile": "DETERMINISTIC_FALLBACK"
+  },
+  "fallback": {
+    "missing_invocation_context": "BASE_RUNTIME_OPERATION_WITHOUT_ADAPTIVE_CONTEXT",
+    "missing_profile": "DETERMINISTIC_FALLBACK",
+    "stale_profile": "DETERMINISTIC_FALLBACK",
+    "provider_error": "GENERIC_DETERMINISTIC_FALLBACK_WITHOUT_EXCEPTION_DETAIL",
+    "routing_authority_on_fallback": "UNCHANGED"
+  },
+  "governed_outcomes": {
+    "source": "GOVERNED_OUTCOME_RECORDED",
+    "use": "BOUNDED_STRUCTURED_ADVISORY_EVIDENCE_ONLY",
+    "becomes_preference_automatically": false,
+    "grants_authority": false
+  },
+  "a3_boundary": {
+    "adaptive_route_ranking": "NOT_IMPLEMENTED_IN_A2",
+    "worker_or_model_selection": "NOT_IMPLEMENTED_IN_A2",
+    "strategy_ranking": "NOT_IMPLEMENTED_IN_A2",
+    "automatic_promotion": "NOT_IMPLEMENTED_IN_A2",
+    "provider_integration": "NOT_IMPLEMENTED_IN_A2",
+    "training": "NOT_IMPLEMENTED_IN_A2",
+    "recursive_or_test_time_compute": "NOT_IMPLEMENTED_IN_A2",
+    "a3_authorized": false
+  },
+  "schema": "machine/schemas/adaptive-context.schema.json",
+  "human_documentation": "docs/architecture/ADAPTIVE_CONTEXT_A2.md"
+}
