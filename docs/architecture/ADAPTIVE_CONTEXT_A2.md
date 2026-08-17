@@ -2,11 +2,14 @@
 
 ## Status
 
-A2 is implemented on the bounded canonical-base candidate branch `agent/adaptive-context-a2-canonical-base-20260818`.
+A1 and A2 are canonical on `main`.
 
-A2 now depends on canonical A1 at commit `d3b98ecd127f8da562df8cf21385beca33b520f9`, tree `61e17acfa7b370814ea2f22da1550d0ebe0440c7`. The original A2 implementation was validated while stacked on the exact A1 source head `a6fc709ea3ff25b10c0087093a887f815f510bbe`; this candidate reparents the A2 implementation onto canonical A1 and updates only dependency/status metadata before fresh exact-head validation.
+- canonical A1: `d3b98ecd127f8da562df8cf21385beca33b520f9`, tree `61e17acfa7b370814ea2f22da1550d0ebe0440c7`;
+- canonical A2: `0bae83812bdab17ac4cf346d1b35b84c8e361a79`, tree `8a67a13a994c5cc6ed59d24c7908ffdc1ba03063`.
 
-A1 is canonical. A2 remains a candidate until its own governed validation, signed materialization, clean protected merge, and canonical readback complete. A3 and later phases are not authorized by this unit.
+A2 completed governed source validation, signed materialization, protected exact-head validation, Squash merge, GitHub signature verification, and canonical tree readback. The current pre-A3 hardening unit may refine A1/A2 invariants and stale status documentation, but it does not implement A3 behavioral learning.
+
+A3 and later phases remain separately governed under issue #340.
 
 ## Purpose
 
@@ -85,6 +88,8 @@ At equal precedence, the more specific matching scope wins:
 
 The final deterministic tie break uses the record update timestamp and stable pattern identity.
 
+An inferred lifecycle event must never replace, downgrade, suppress, or otherwise displace an explicit preference for the same exact scope and subject in the materialized profile. The inferred event may remain in append-only observation evidence for later shadow evaluation, but A2 must continue to consume the explicit materialized preference. If that explicit preference is later removed, stale ignored candidate evidence is not silently resurrected; a later governed inference must establish a new candidate.
+
 A2 does not create confirmed learned patterns. It can only consume a confirmed pattern if a separately governed process created one under a later authorized phase.
 
 ## Profile and evidence integrity
@@ -131,6 +136,7 @@ A2 validation must prove at minimum:
 
 - exact user, project, specialist, and task/session scope isolation;
 - explicit-current versus scoped versus inferred precedence;
+- an inferred lifecycle cannot displace an explicit preference at the same exact scope and subject;
 - specialist-scoped state cannot leak to another specialist;
 - inferred candidates require an explicit caller threshold;
 - stale profile state fails to deterministic fallback without partial adaptive items;
@@ -140,19 +146,21 @@ A2 validation must prove at minimum:
 - operation-time adaptive metadata does not mutate the canonical runtime route;
 - delegated adaptive context fails closed in A2;
 - the default `RuntimeExecutor` remains unchanged;
-- A3 behaviors are absent.
+- A3 behaviors are absent unless separately authorized.
 
-## A3 stop boundary
+## Post-A2 future adaptive behavior boundary
 
-A2 must not implement:
+Issue #340 defines A3 specifically as behavioral-pattern learning in shadow mode. A3 may infer and record scoped candidate patterns and shadow recommendations, but those candidates do not silently control execution or create new permission.
+
+The following behaviors remain outside A2 and are not implicitly authorized by the A3 label:
 
 - adaptive route ranking;
 - worker or model selection;
-- strategy ranking;
+- strategy ranking that controls execution;
 - automatic pattern promotion;
 - provider integration;
 - training;
 - recursive or test-time compute;
 - learned Tuner topology.
 
-Those remain separately governed future work under issue #340 and require fresh authorization.
+Those capabilities belong to separately governed later phases in issue #340, including A4 and beyond where applicable, and require their own entry and exit gates.
