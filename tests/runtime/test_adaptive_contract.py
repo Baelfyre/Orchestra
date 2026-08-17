@@ -22,6 +22,8 @@ USER = "fixture-user"
 T0 = "2026-08-17T10:00:00Z"
 T1 = "2026-08-17T10:01:00Z"
 T2 = "2026-08-17T10:02:00Z"
+T3 = "2026-08-17T10:03:00Z"
+T4 = "2026-08-17T10:04:00Z"
 
 
 def load_json(path: Path) -> dict:
@@ -180,6 +182,76 @@ def test_explicit_inferred_and_governed_outcomes_remain_distinct(tmp_path: Path)
     assert patterns["docs.response_style"].confidence == 1.0
     assert patterns["docs.example_density"].status == "candidate"
     assert patterns["docs.example_density"].confidence == 0.75
+
+
+def test_inferred_lifecycle_cannot_displace_explicit_same_scope_subject(tmp_path: Path):
+    store = make_store(tmp_path)
+    record_scope = project_scope()
+    append_explicit_preference(
+        store,
+        scope=record_scope,
+        subject_key="docs.response_style",
+        value="compact",
+        occurred_at=T0,
+        source_ref="test:explicit-precedence",
+    )
+    append_inferred_candidate(
+        store,
+        scope=record_scope,
+        subject_key="docs.response_style",
+        value="detailed",
+        confidence=0.8,
+        evidence_refs=("test:shadow-a",),
+        occurred_at=T1,
+        source_ref="test:shadow-candidate",
+    )
+    store.append(
+        event_type="INFERRED_PATTERN_CONFIRMED",
+        scope=record_scope,
+        subject_key="docs.response_style",
+        evidence_class="INFERRED_CANDIDATE",
+        source_type="governed_pattern_materializer",
+        source_ref="test:shadow-confirmed",
+        occurred_at=T2,
+        payload={"value": "detailed", "confidence": 0.9, "evidence_refs": ["test:shadow-a"]},
+    )
+    store.append(
+        event_type="INFERRED_PATTERN_DEPRECATED",
+        scope=record_scope,
+        subject_key="docs.response_style",
+        evidence_class="INFERRED_CANDIDATE",
+        source_type="governed_pattern_materializer",
+        source_ref="test:shadow-deprecated",
+        occurred_at=T3,
+        payload={},
+    )
+    store.append(
+        event_type="INFERRED_PATTERN_REJECTED",
+        scope=record_scope,
+        subject_key="docs.response_style",
+        evidence_class="INFERRED_CANDIDATE",
+        source_type="governed_pattern_materializer",
+        source_ref="test:shadow-rejected",
+        occurred_at=T4,
+        payload={},
+    )
+
+    observations = store.load_observations()
+    profile = materialize_profile(USER, observations, generated_at=T4)
+    assert len(profile.patterns) == 1
+    retained = profile.patterns[0]
+    assert retained.subject_key == "docs.response_style"
+    assert retained.value == "compact"
+    assert retained.status == "confirmed"
+    assert retained.evidence_class == "EXPLICIT_SCOPED_PREFERENCE"
+    assert retained.confidence == 1.0
+    assert retained.observation_count == 1
+    assert [item.event_type for item in observations[1:]] == [
+        "INFERRED_PATTERN_CANDIDATE",
+        "INFERRED_PATTERN_CONFIRMED",
+        "INFERRED_PATTERN_DEPRECATED",
+        "INFERRED_PATTERN_REJECTED",
+    ]
 
 
 def test_invalid_confidence_and_unknown_schema_versions_fail_closed(tmp_path: Path):
