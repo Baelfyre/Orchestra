@@ -17,6 +17,10 @@ function Get-Sha256([string] $Path) {
     return (Get-FileHash -Algorithm SHA256 -LiteralPath $Path).Hash.ToLowerInvariant()
 }
 
+function Convert-ToPortablePath([string] $Path) {
+    return $Path.Replace('\', '/')
+}
+
 $root = (Resolve-Path (Join-Path $PSScriptRoot "../..")).Path
 $compiler = Join-Path $root "internal/context/context_compiler.py"
 $evidenceRoot = Join-Path $root $EvidenceDir
@@ -48,9 +52,14 @@ foreach ($arg in $ArgumentList) {
 $process = [System.Diagnostics.Process]::new()
 $process.StartInfo = $psi
 [void] $process.Start()
-$stdout = $process.StandardOutput.ReadToEnd()
-$stderr = $process.StandardError.ReadToEnd()
+
+# Read both redirected streams concurrently. Sequential ReadToEnd calls can block
+# when a verbose child process fills the other redirected stream's buffer.
+$stdoutTask = $process.StandardOutput.ReadToEndAsync()
+$stderrTask = $process.StandardError.ReadToEndAsync()
 $process.WaitForExit()
+$stdout = $stdoutTask.GetAwaiter().GetResult()
+$stderr = $stderrTask.GetAwaiter().GetResult()
 $exitCode = $process.ExitCode
 $finished = [DateTimeOffset]::UtcNow
 
@@ -78,7 +87,7 @@ $receipt = [ordered]@{
     stderr_sha256 = Get-Sha256 $stderrPath
     head_before = $headBefore
     head_after = $headAfter
-    evidence_ref = $runDir.Replace("\", "/")
+    evidence_ref = Convert-ToPortablePath $runDir
 }
 $receipt | ConvertTo-Json -Depth 10 | Set-Content -Encoding utf8NoBOM -LiteralPath $receiptPath
 
@@ -92,11 +101,11 @@ $contextSource = [ordered]@{
     finished_at = $receipt.finished_at
     head_before = $headBefore
     head_after = $headAfter
-    receipt_path = $receiptPath.Replace("\", "/")
+    receipt_path = Convert-ToPortablePath $receiptPath
     raw_evidence = [ordered]@{
-        stdout_path = $stdoutPath.Replace("\", "/")
+        stdout_path = Convert-ToPortablePath $stdoutPath
         stdout_sha256 = $receipt.stdout_sha256
-        stderr_path = $stderrPath.Replace("\", "/")
+        stderr_path = Convert-ToPortablePath $stderrPath
         stderr_sha256 = $receipt.stderr_sha256
     }
     stdout = $stdoutSummary
@@ -105,7 +114,7 @@ $contextSource = [ordered]@{
 $contextSource | ConvertTo-Json -Depth 20 | Set-Content -Encoding utf8NoBOM -LiteralPath $contextSourcePath
 
 & $Python $compiler compile $contextSourcePath $contextPath $contextManifestPath `
-    --source-identity $receiptPath.Replace("\", "/") `
+    --source-identity (Convert-ToPortablePath $receiptPath) `
     --min-bytes $MinContextBytes `
     --min-savings-percent $MinToonSavingsPercent
 if ($LASTEXITCODE -ne 0) { throw "context compilation failed" }
@@ -116,8 +125,8 @@ if ($LASTEXITCODE -ne 0) { throw "context projection parity failed" }
 Write-Output "ORCHESTRA_COMMAND_ID=$CommandId"
 Write-Output "ORCHESTRA_VERDICT=$($receipt.verdict)"
 Write-Output "ORCHESTRA_EXIT_CODE=$exitCode"
-Write-Output "ORCHESTRA_RECEIPT=$($receiptPath.Replace('\', '/'))"
-Write-Output "ORCHESTRA_CONTEXT=$($contextPath.Replace('\', '/'))"
-Write-Output "ORCHESTRA_CONTEXT_MANIFEST=$($contextManifestPath.Replace('\', '/'))"
+Write-Output "ORCHESTRA_RECEIPT=$(Convert-ToPortablePath $receiptPath)"
+Write-Output "ORCHESTRA_CONTEXT=$(Convert-ToPortablePath $contextPath)"
+Write-Output "ORCHESTRA_CONTEXT_MANIFEST=$(Convert-ToPortablePath $contextManifestPath)"
 
 exit $exitCode
