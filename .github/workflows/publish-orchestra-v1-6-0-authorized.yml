@@ -1,0 +1,164 @@
+name: Publish Orchestra v1.6.0 Authorized
+
+on:
+  push:
+    branches:
+      - ops/publish-orchestra-v1-6-0-20260817
+    paths:
+      - .github/workflows/publish-orchestra-v1-6-0-authorized.yml
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish exact immutable v1.6.0 release
+        shell: bash
+        env:
+          EXPECTED_MAIN_SHA: ba35764a14111518c7da729b5a4c69c6af485a9b
+          EXPECTED_MAIN_TREE: 0d569c57f77254c01af15c063e1e6582ff9e8d02
+          EXPECTED_PARENT_SHA: 0cf742cfea787e85a4210c01ef6c6bcce3dc7a59
+          TAG: v1.6.0
+          RELEASE_NAME: "Orchestra v1.6.0: Integration & Developer Experience"
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          API="https://api.github.com/repos/${GITHUB_REPOSITORY}"
+          auth=(-H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28")
+
+          curl -fsS "${auth[@]}" "${API}/commits/main" > /tmp/current-main.json
+          current_main="$(jq -r '.sha' /tmp/current-main.json)"
+          current_tree="$(jq -r '.commit.tree.sha' /tmp/current-main.json)"
+          current_parent="$(jq -r '.parents[0].sha' /tmp/current-main.json)"
+          current_verified="$(jq -r '.commit.verification.verified' /tmp/current-main.json)"
+          current_reason="$(jq -r '.commit.verification.reason' /tmp/current-main.json)"
+
+          echo "CURRENT_MAIN=${current_main}"
+          echo "CURRENT_TREE=${current_tree}"
+          echo "CURRENT_PARENT=${current_parent}"
+          echo "CURRENT_VERIFIED=${current_verified}"
+          echo "CURRENT_VERIFICATION_REASON=${current_reason}"
+
+          test "${current_main}" = "${EXPECTED_MAIN_SHA}"
+          test "${current_tree}" = "${EXPECTED_MAIN_TREE}"
+          test "${current_parent}" = "${EXPECTED_PARENT_SHA}"
+          test "${current_verified}" = "true"
+          test "${current_reason}" = "valid"
+
+          release_code="$(curl -sS -o /tmp/existing-release.json -w '%{http_code}' "${auth[@]}" "${API}/releases/tags/${TAG}")"
+          test "${release_code}" = "404"
+
+          tag_code="$(curl -sS -o /tmp/existing-tag.json -w '%{http_code}' "${auth[@]}" "${API}/git/ref/tags/${TAG}")"
+          test "${tag_code}" = "404"
+
+          cat > /tmp/release-notes.md <<'EOF'
+          ## Summary
+
+          Orchestra v1.6.0 packages the significant integration and developer-experience work completed after v1.5.0. It keeps the existing governance and authority architecture intact while making the stabilized control plane easier to integrate with, extend, update, document, and consume through machine-readable contracts.
+
+          ## Integration and developer experience
+
+          - Adds the two-step signed-materialization boundary for API-authored changes while preserving exact-head validation, signed identity, clean mergeability, expected-head Squash protection, and post-merge verification.
+          - Adds governed Host Update planning with fail-closed unknown-host behavior and no automatic installed-integration refresh.
+          - Exposes the stable Adapter SDK surface at `orchestra_runtime.protocol.sdk` with deterministic read-only PRAP v1 compatibility certification.
+          - Adds the repository-native Developer Portal as a documentation and discovery surface, not a marketplace, deployment plane, or permission source.
+          - Adds bounded MCP stdio governed tool transport v1 for protocol revision `2026-07-28`, limited to `server/discover`, `tools/list`, and `tools/call`.
+
+          ## Knowledge, provenance, and context
+
+          - Adds TrueSheet specialist knowledge enrichment with explicit provenance and bounded incorporation guidance for Cloak, Ponytail, Clockwork, Overseer, and Scribe.
+          - Makes `machine/provenance/third-party.v1.json` the canonical semantic provenance record, with `docs/THIRD_PARTY_PROVENANCE.md` as its curated human-readable projection.
+          - Distinguishes incorporated references, protocol standards, historical research, and evaluated or deferred research, including Sakana AI Fugu as deferred planning-only work for issue #340.
+          - Keeps JSON canonical for structured machine state and permits TOON only as a derived, validated, non-authoritative projection when measured context savings justify it.
+
+          ## Documentation architecture
+
+          - Refactors the root README into a concise landing page with detailed documentation indexed through `docs/README.md`.
+          - Advances `README.json` to the v2 machine index for structured discovery across architecture, capabilities, specialists, routing, governance, hosts, PRAP, MCP, provenance, validation, continuity, release state, and maturity.
+          - Refines documentation-impact validation so meaningful changes update the documentation surface they actually affect instead of forcing unrelated README churn.
+
+          ## Validation and release identity
+
+          Final canonical release commit: `ba35764a14111518c7da729b5a4c69c6af485a9b`
+
+          Final canonical tree: `0d569c57f77254c01af15c063e1e6582ff9e8d02`
+
+          Exact release-candidate validation completed successfully for:
+
+          - Governance Check
+          - validate/runtime
+          - Required Analysis Compatibility with real CodeQL analysis
+          - Cross-platform Validation on Ubuntu, macOS, and Windows
+          - Cosmic Ray confidence
+
+          Fresh signed-materialization evidence was produced by run `32027215800` with artifact `signed-materialization-evidence-32027215800-1` and SHA-256 digest `6e925bf754326910b88321e8f37245439b900ad0bdb3873f532dd712d7616a24`.
+
+          The canonical Squash commit is GitHub signature-verified, has the exact reviewed tree, and has sole parent `0cf742cfea787e85a4210c01ef6c6bcce3dc7a59`.
+
+          ## Preserved boundaries and open work
+
+          - v1.5.0 remains immutable and is not moved or rewritten.
+          - Issue #331 remains open for direct protected-ruleset status-context normalization.
+          - Murmurs live-host measurement issue #316 remains open, with no token-savings percentage claim without trustworthy comparable counters.
+          - Adaptive Governed Orchestration and Fugu issue #340 remain planning-only and are not part of v1.6.0 runtime behavior.
+          - This release performs no deployment, production mutation, policy activation, installed-integration refresh, host maturity promotion, ruleset bypass, force push, history rewrite, or branch deletion.
+          EOF
+
+          sed -i 's/^          //' /tmp/release-notes.md
+
+          jq -n \
+            --arg tag "${TAG}" \
+            --arg target "${EXPECTED_MAIN_SHA}" \
+            --arg name "${RELEASE_NAME}" \
+            --rawfile body /tmp/release-notes.md \
+            '{tag_name:$tag,target_commitish:$target,name:$name,body:$body,draft:false,prerelease:false,make_latest:"true"}' \
+            > /tmp/release-payload.json
+
+          curl -fsS -X POST "${auth[@]}" \
+            -H 'Content-Type: application/json' \
+            --data-binary @/tmp/release-payload.json \
+            "${API}/releases" > /tmp/published-release.json
+
+          release_id="$(jq -r '.id' /tmp/published-release.json)"
+          published_tag="$(jq -r '.tag_name' /tmp/published-release.json)"
+          published_target="$(jq -r '.target_commitish' /tmp/published-release.json)"
+          published_draft="$(jq -r '.draft' /tmp/published-release.json)"
+          published_prerelease="$(jq -r '.prerelease' /tmp/published-release.json)"
+
+          test -n "${release_id}"
+          test "${published_tag}" = "${TAG}"
+          test "${published_target}" = "${EXPECTED_MAIN_SHA}"
+          test "${published_draft}" = "false"
+          test "${published_prerelease}" = "false"
+
+          immutable="false"
+          for _ in $(seq 1 24); do
+            curl -fsS "${auth[@]}" "${API}/releases/tags/${TAG}" > /tmp/verified-release.json
+            immutable="$(jq -r '.immutable // false' /tmp/verified-release.json)"
+            if [ "${immutable}" = "true" ]; then
+              break
+            fi
+            sleep 5
+          done
+          test "${immutable}" = "true"
+
+          curl -fsS "${auth[@]}" "${API}/git/ref/tags/${TAG}" > /tmp/tag-ref.json
+          tag_type="$(jq -r '.object.type' /tmp/tag-ref.json)"
+          tag_sha="$(jq -r '.object.sha' /tmp/tag-ref.json)"
+          if [ "${tag_type}" = "tag" ]; then
+            tag_sha="$(curl -fsS "${auth[@]}" "${API}/git/tags/${tag_sha}" | jq -r '.object.sha')"
+          fi
+          test "${tag_sha}" = "${EXPECTED_MAIN_SHA}"
+
+          curl -fsS "${auth[@]}" "${API}/releases/latest" > /tmp/latest-release.json
+          test "$(jq -r '.tag_name' /tmp/latest-release.json)" = "${TAG}"
+          test "$(jq -r '.target_commitish' /tmp/latest-release.json)" = "${EXPECTED_MAIN_SHA}"
+
+          echo "RELEASE_ID=${release_id}"
+          echo "TAG=${TAG}"
+          echo "TARGET_SHA=${tag_sha}"
+          echo "IMMUTABLE=${immutable}"
+          echo "PUBLISH_VERIFICATION=PASS"
