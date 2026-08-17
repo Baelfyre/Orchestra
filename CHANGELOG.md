@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.6.0 Integration & Developer Experience - Release Candidate
+
+- Normalizes all 11 repository-enforced package/version surfaces to `1.6.0` without changing host maturity, runtime authority, deployment state, or the still-published `v1.5.0` tag/Release identity.
+- Packages the verified post-v1.5 two-step signed-materialization optimization, preserving isolated signing evidence and a fresh complete protected-main validation matrix on the signed canonical PR.
+- Packages the TrueSheet specialist knowledge enrichment with pinned Padayon/upstream provenance, MIT licensing identity, selective machine reference data, and progressive-disclosure guidance for the five approved specialist owners without vendoring or runtime dependency adoption.
+- Packages hybrid context representation with JSON as canonical structured machine state and TOON only as a derived, validated, non-authoritative projection when measured context savings justify it.
+- Packages the Required Analysis Compatibility workflow that runs real exact-head CodeQL before emitting the historical `Analyze (actions)` and `Analyze (python)` contexts. Issue #331 remains open; this release does not claim direct ruleset identity normalization.
+- Packages governed Host Update commands with deterministic read-only planning, preserved host maturity, fail-closed unknown-host behavior, explicit recovery guidance, and no automatic installed-integration refresh.
+- Packages the Adapter SDK / PRAP v1 compatibility certification surface with deterministic read-only evidence while keeping certification, host maturity, transport support, and runtime authority separate.
+- Packages the repository-native Developer Portal as a discovery/indexing surface only; it is not a marketplace, registry, deployment plane, or permission source.
+- Packages MCP stdio governed tool transport v1 for protocol revision `2026-07-28`, limited to `server/discover`, `tools/list`, and `tools/call`, with fresh trusted runtime composition per accepted call and no authority expansion from MCP metadata or arguments.
+- Packages documentation architecture v2: a concise root README, general human documentation map, current architecture/governance entry points, `README.json` machine index v2, and deterministic documentation-impact validation that updates the correct human or machine surface instead of forcing blanket README churn.
+- Adds `docs/releases/v1.6.0-integration-developer-experience-release-candidate.md` and refreshes current package/release context while keeping public publication separate from package preparation.
+- Preserves Murmurs issue #316 as open with no token-savings percentage claim and preserves Adaptive Governed Orchestration issue #340 as deferred planning-only work outside v1.6.0.
+- Final release readiness remains revision-bound: historical feature validation is implementation evidence only. Publication requires a fresh exact signed candidate, complete protected validation, clean merge state, expected-head Squash merge, signed canonical identity, and independent tag/Release verification.
+
 ## Post-v1.5.0 Documentation Architecture Refactor - Candidate
 
 - Refactors the root `README.md` into a concise human landing page while preserving the existing banner, navigation style, badges, trust-boundary message, installation entry points, and release identity.
