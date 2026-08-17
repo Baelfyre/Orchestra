@@ -1,5 +1,17 @@
 # Changelog
 
+
+## Post-v1.5.0 Adapter SDK and PRAP Compatibility Certification - Candidate
+
+- Formalizes the existing `PRAP v1` adapter protocol as the single Adapter SDK boundary through `orchestra_runtime.protocol.sdk`; no parallel adapter abstraction is introduced.
+- Adds a machine-owned read-only PRAP compatibility certification contract and evidence schema plus deterministic CLI evidence for canonical adapter targets.
+- Fails closed on unknown, reserved, rejected, malformed, unsupported-version, runtime-mapping, host-mapping, or contract-drift conditions.
+- Keeps compatibility certification separate from Host Update maturity: Codex and Antigravity remain `SUPPORTED`; Claude Code, Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain `SCAFFOLD_ONLY` for Host Update behavior.
+- Preserves VSCodium as a compatible identity through the VS Code runtime adapter without promoting its scaffold maturity.
+- Makes certification non-authorizing and non-mutating: no runtime authority or capability grant, installed-integration refresh, release/tag movement, deployment, policy activation, force push/history rewrite, branch cleanup, or host promotion is performed.
+- Keeps MCP deferred to the final integration phase; future transports must map to the stabilized Adapter SDK/PRAP boundary and cannot become authority.
+- Keeps public release `v1.5.0` fixed at `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`.
+
 ## Post-v1.5.0 Governed Host Update Commands - Candidate
 
 - Adds `machine/hosts/update-contract.v1.json` and its canonical JSON Schema as the machine-owned Host Update contract for Codex, Antigravity, Claude Code, Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim.

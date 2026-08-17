@@ -81,6 +81,15 @@ Normal use is local-first: Orchestra reviews a verified active cache and uses ne
 
 See [Compliance Registry Integration](docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md) for the trust model, owner responsibilities, freshness behavior, and release boundaries.
 
+
+## Adapter SDK and PRAP v1 Compatibility Certification
+
+Orchestra's post-v1.5 Adapter SDK formalizes the existing PRAP v1 boundary instead of introducing another adapter abstraction. The stable SDK import surface is `orchestra_runtime.protocol.sdk`; deterministic read-only certification is provided by `scripts/certify_adapter.py` and the machine contract at `machine/protocol/prap-certification-contract.v1.json`.
+
+PRAP compatibility is deliberately separate from host maturity. A certification pass validates declared adapter metadata and compatibility, but it cannot promote a scaffold host, grant runtime authority or capabilities, mutate a repository or installed integration, or imply marketplace availability. Host Update maturity continues to come only from `machine/hosts/update-contract.v1.json`: Codex and Antigravity remain `SUPPORTED`; Claude Code, Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain `SCAFFOLD_ONLY`.
+
+See [Adapter SDK and PRAP v1 Compatibility Certification](docs/setup/ADAPTER_SDK_PRAP.md). MCP remains deferred to the final integration phase and, if later justified, must map to this stabilized protocol boundary rather than replace it or become an authority layer.
+
 ## How Orchestra Works
 
 Each run begins with project context and three separate choices: risk mode, progression mode, and governance profile. Those choices affect review depth and pause frequency, but they do not create permission. Orchestra composes the trusted runtime, calculates effective authority as the intersection of explicit grants and all applicable constraints, and only then lets Conductor route work. Material multi-domain work uses The Tuner to coordinate specialist-owned contracts; single-owner work bypasses that overhead.

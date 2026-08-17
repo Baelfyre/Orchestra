@@ -1,9 +1,8 @@
+from __future__ import annotations
+
 from .adapter_protocol import (
-    COMPATIBILITY_MATRIX,
     PRAP_V1,
-    SUPPORTED_PROTOCOL_VERSIONS,
     AdapterCapabilities,
-    AdapterCompatibilityRecord,
     AdapterContext,
     AdapterError,
     AdapterProtocol,
@@ -12,32 +11,26 @@ from .adapter_protocol import (
 )
 from .certification import (
     ADAPTER_SDK_SURFACE_VERSION,
-    PRAP_CERTIFICATION_CONTRACT_SCHEMA_VERSION,
-    PRAP_CERTIFICATION_EVIDENCE_SCHEMA_VERSION,
     AdapterCertificationEvidence,
     CertificationError,
     certify_adapter,
     certify_all_adapters,
-    load_prap_certification_contract,
 )
 
+SDK_SURFACE_VERSION = ADAPTER_SDK_SURFACE_VERSION
+SDK_PROTOCOL_VERSION = PRAP_V1
+
 __all__ = [
-    'COMPATIBILITY_MATRIX',
-    'PRAP_V1',
-    'SUPPORTED_PROTOCOL_VERSIONS',
+    'SDK_SURFACE_VERSION',
+    'SDK_PROTOCOL_VERSION',
     'AdapterCapabilities',
-    'AdapterCompatibilityRecord',
-    'AdapterContext',
-    'AdapterError',
     'AdapterProtocol',
+    'AdapterContext',
     'AdapterResponse',
+    'AdapterError',
     'ProtocolValidator',
-    'ADAPTER_SDK_SURFACE_VERSION',
-    'PRAP_CERTIFICATION_CONTRACT_SCHEMA_VERSION',
-    'PRAP_CERTIFICATION_EVIDENCE_SCHEMA_VERSION',
     'AdapterCertificationEvidence',
     'CertificationError',
     'certify_adapter',
     'certify_all_adapters',
-    'load_prap_certification_contract',
 ]
