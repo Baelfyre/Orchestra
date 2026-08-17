@@ -33,8 +33,10 @@ jobs:
       - name: Create Artifacts Directory
         run: mkdir -p artifacts
 
-      - name: Test Documentation Impact Contract
-        run: python tests/behavior/test_readme_impact.py
+      - name: Test Documentation Contracts
+        run: |
+          python tests/behavior/test_readme_impact.py
+          python tests/behavior/test_readme_machine_index.py
 
       - name: Enforce Documentation Impact Gate
         run: |
