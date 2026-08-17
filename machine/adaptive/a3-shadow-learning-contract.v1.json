@@ -1,14 +1,16 @@
 {
   "schema_version": "orchestra.adaptive-shadow-learning-contract.v1",
   "phase": "A3_BEHAVIORAL_PATTERN_LEARNING_SHADOW_MODE",
-  "status": "CONTRACT_ONLY_NO_RUNTIME_ACTIVATION",
+  "status": "SHADOW_IMPLEMENTATION_COMPLETE_NO_RUNTIME_EXECUTION_CONTROL",
   "dependency": {
     "canonical_a1_head": "d3b98ecd127f8da562df8cf21385beca33b520f9",
     "canonical_a1_tree": "61e17acfa7b370814ea2f22da1550d0ebe0440c7",
     "canonical_a2_head": "0bae83812bdab17ac4cf346d1b35b84c8e361a79",
     "canonical_a2_tree": "8a67a13a994c5cc6ed59d24c7908ffdc1ba03063",
     "canonical_pre_a3_hardening_head": "8402a5acbafe923c73904dcdb90f7faca90ced9c",
-    "canonical_pre_a3_hardening_tree": "1d56e1623f3662c59817146092c4135e37dd50ed"
+    "canonical_pre_a3_hardening_tree": "1d56e1623f3662c59817146092c4135e37dd50ed",
+    "canonical_a3_0_contract_head": "07989ef6473657ab37530462ce7d2a9ef1c5f8e2",
+    "canonical_a3_0_contract_tree": "5a5bddd42961b1d7119350e31fc18e3b4b575fa2"
   },
   "authority": {
     "mode": "SHADOW_OBSERVATION_ONLY",
@@ -50,6 +52,19 @@
     "candidate": "machine/schemas/adaptive-shadow-candidate.schema.json",
     "comparison": "machine/schemas/adaptive-shadow-comparison.schema.json"
   },
+  "implementation": {
+    "runtime_surface": "orchestra_runtime/adaptive/shadow.py",
+    "validation_surface": "tests/runtime/test_adaptive_shadow.py",
+    "a3_1_signal_extraction": "IMPLEMENTED_OPT_IN_SHADOW_ONLY",
+    "a3_2_candidate_learner": "IMPLEMENTED_OPT_IN_SHADOW_ONLY",
+    "a3_3_shadow_comparator": "IMPLEMENTED_OPT_IN_SHADOW_ONLY",
+    "a3_4_adversarial_correction_validation": "IMPLEMENTED",
+    "automatic_runtime_wiring": false,
+    "a1_profile_mutation": false,
+    "a2_context_mutation": false,
+    "routing_mutation": false,
+    "promotion_bridge": "NONE"
+  },
   "signal_policy": {
     "allowed_signal_types": [
       "USER_SELECTION",
@@ -81,10 +96,12 @@
   "candidate_policy": {
     "minimum_distinct_support_count": 2,
     "one_off_event_can_create_durable_candidate": false,
+    "duplicate_source_evidence_counts_once": true,
     "confidence_range": [0.0, 1.0],
     "confidence_is_authority": false,
     "confidence_threshold_automatically_promotes": false,
-    "universal_promotion_threshold": "NOT_DEFINED_IN_A3_0",
+    "universal_promotion_threshold": "NOT_DEFINED_IN_A3",
+    "confidence_method": "BOUNDED_EVIDENCE_ACCUMULATION_V1",
     "allowed_candidate_types": [
       "USER_PREFERENCE_TENDENCY",
       "WORKFLOW_TENDENCY",
@@ -99,7 +116,8 @@
     "confirmed_status_available_in_shadow_candidate_schema": false,
     "explicit_preference_dominates": true,
     "blocked_candidate_auto_reactivates_after_explicit_removal": false,
-    "new_post_removal_evidence_required_for_new_candidate": true
+    "new_post_removal_evidence_required_for_new_candidate": true,
+    "latest_explicit_negative_evidence_can_reject_candidate": true
   },
   "scope_policy": {
     "scopes": ["global_user", "project", "specialist", "task_session"],
@@ -131,18 +149,19 @@
     "record_shadow_recommendation": true,
     "record_actual_deterministic_choice": true,
     "record_match_or_mismatch": true,
+    "record_blocked_candidate_disposition": true,
     "shadow_choice_controls_execution": false,
     "outcome_evidence_may_be_attached_after_execution": true,
     "comparison_record_grants_promotion": false
   },
   "promotion_boundary": {
-    "promotion_bridge": "NOT_IMPLEMENTED_OR_AUTHORIZED_BY_A3_0",
+    "promotion_bridge": "NOT_IMPLEMENTED_OR_AUTHORIZED_IN_A3",
     "append_inferred_candidate_to_a1": false,
     "confirm_inferred_pattern": false,
     "materialize_shadow_candidate_into_a1_profile": false,
     "attach_shadow_candidate_to_a2_context": false,
     "automatic_promotion": false,
-    "promotion_criteria_definition": "DEFERRED_TO_LATER_A3_EXIT_WORK_AND_SEPARATE_AUTHORIZATION",
+    "promotion_criteria_definition": "DEFERRED_TO_SEPARATELY_GOVERNED_LATER_WORK",
     "successful_execution_directly_rewrites_active_policy": false
   },
   "required_adversarial_validation_for_a3_implementation": [
@@ -160,9 +179,10 @@
     "no_authority_capability_governance_or_gate_expansion"
   ],
   "future_boundary": {
-    "a3_signal_extraction": "NOT_IMPLEMENTED_IN_A3_0",
-    "a3_candidate_learner": "NOT_IMPLEMENTED_IN_A3_0",
-    "a3_shadow_comparator": "NOT_IMPLEMENTED_IN_A3_0",
+    "a3_signal_extraction": "IMPLEMENTED_SHADOW_ONLY",
+    "a3_candidate_learner": "IMPLEMENTED_SHADOW_ONLY",
+    "a3_shadow_comparator": "IMPLEMENTED_SHADOW_ONLY",
+    "a3_adversarial_correction_validation": "IMPLEMENTED",
     "a4_strategy_model_worker_ranking": "NOT_AUTHORIZED",
     "a5_tuner_topology_learning": "NOT_AUTHORIZED",
     "a6_adaptive_context_routing": "NOT_AUTHORIZED",
