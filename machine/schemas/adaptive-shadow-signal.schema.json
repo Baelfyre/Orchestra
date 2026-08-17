@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/adaptive-shadow-signal.schema.json",
+  "title": "Orchestra Adaptive Shadow Signal v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "learner_rule_version",
+    "signal_id",
+    "scope",
+    "signal_type",
+    "subject_key",
+    "observed_value",
+    "source_kind",
+    "source_ref",
+    "source_digest",
+    "observed_at"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.adaptive-shadow-signal.v1"},
+    "learner_rule_version": {"const": "orchestra.adaptive-shadow-rules.v1"},
+    "signal_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "scope": {"$ref": "#/$defs/scope"},
+    "signal_type": {
+      "enum": [
+        "USER_SELECTION",
+        "USER_REJECTION",
+        "USER_CORRECTION",
+        "SPECIALIST_STRATEGY_ACCEPTED",
+        "SPECIALIST_STRATEGY_REJECTED",
+        "VALIDATION_OUTCOME",
+        "REMEDIATION_REQUIRED",
+        "ITERATION_OUTCOME",
+        "TERMINAL_DISPOSITION",
+        "MEASURED_LATENCY",
+        "MEASURED_COST"
+      ]
+    },
+    "subject_key": {
+      "type": "string",
+      "pattern": "^(?!(?:authority|capability|required_specialist|governance|human_gate|security_prohibition|mandatory_validation|evidence_integrity|audit_requirement|fail_closed|exact_head|release_gate|merge_gate|privacy_restriction|provider_restriction|resource_ceiling)(?:[.:]|$))[a-z0-9][a-z0-9_.:-]{0,127}$"
+    },
+    "observed_value": {
+      "oneOf": [
+        {"type": "string", "minLength": 1, "maxLength": 512},
+        {"type": "number"},
+        {"type": "boolean"}
+      ]
+    },
+    "source_kind": {
+      "enum": [
+        "A1_VALIDATED_OBSERVATION",
+        "GOVERNED_RETROSPECTIVE",
+        "STRATEGY_DECISION_EVIDENCE",
+        "VALIDATION_EVIDENCE",
+        "REMEDIATION_EVIDENCE",
+        "MEASURED_TELEMETRY"
+      ]
+    },
+    "source_ref": {"type": "string", "minLength": 1, "maxLength": 512},
+    "source_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["measurement_status", "metric", "numeric_value", "unit"],
+      "properties": {
+        "measurement_status": {"const": "TRUSTWORTHY_MEASURED"},
+        "metric": {"enum": ["LATENCY", "COST"]},
+        "numeric_value": {"type": "number", "minimum": 0},
+        "unit": {"type": "string", "minLength": 1, "maxLength": 64}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "signal_type": {"enum": ["SPECIALIST_STRATEGY_ACCEPTED", "SPECIALIST_STRATEGY_REJECTED"]}
+        },
+        "required": ["signal_type"]
+      },
+      "then": {
+        "properties": {"source_kind": {"const": "STRATEGY_DECISION_EVIDENCE"}}
+      }
+    },
+    {
+      "if": {
+        "properties": {"signal_type": {"enum": ["MEASURED_LATENCY", "MEASURED_COST"]}},
+        "required": ["signal_type"]
+      },
+      "then": {
+        "required": ["measurement"],
+        "properties": {"source_kind": {"const": "MEASURED_TELEMETRY"}}
+      }
+    },
+    {
+      "if": {
+        "properties": {"signal_type": {"const": "MEASURED_LATENCY"}},
+        "required": ["signal_type"]
+      },
+      "then": {
+        "properties": {"measurement": {"properties": {"metric": {"const": "LATENCY"}}}}
+      }
+    },
+    {
+      "if": {
+        "properties": {"signal_type": {"const": "MEASURED_COST"}},
+        "required": ["signal_type"]
+      },
+      "then": {
+        "properties": {"measurement": {"properties": {"metric": {"const": "COST"}}}}
+      }
+    }
+  ],
+  "$defs": {
+    "scope": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scope_type", "user_key"],
+          "properties": {
+            "scope_type": {"const": "global_user"},
+            "user_key": {"type": "string", "minLength": 1}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scope_type", "user_key", "project_key"],
+          "properties": {
+            "scope_type": {"const": "project"},
+            "user_key": {"type": "string", "minLength": 1},
+            "project_key": {"type": "string", "minLength": 1}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scope_type", "user_key", "specialist_slug"],
+          "properties": {
+            "scope_type": {"const": "specialist"},
+            "user_key": {"type": "string", "minLength": 1},
+            "project_key": {"type": "string", "minLength": 1},
+            "specialist_slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]{0,127}$"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scope_type", "user_key", "task_session_key"],
+          "properties": {
+            "scope_type": {"const": "task_session"},
+            "user_key": {"type": "string", "minLength": 1},
+            "project_key": {"type": "string", "minLength": 1},
+            "specialist_slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]{0,127}$"},
+            "task_session_key": {"type": "string", "minLength": 1}
+          }
+        }
+      ]
+    }
+  }
+}
