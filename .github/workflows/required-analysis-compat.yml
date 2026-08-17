@@ -1,0 +1,79 @@
+name: Required Analysis Compatibility
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compatibility-codeql:
+    name: Compatibility CodeQL (python)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: python
+          build-mode: none
+
+      - name: Analyze Python without uploading duplicate SARIF
+        uses: github/codeql-action/analyze@v4
+        with:
+          upload: never
+          upload-database: false
+
+  analyze-actions:
+    name: Analyze (actions)
+    needs: compatibility-codeql
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Validate workflow-governance surface
+        run: |
+          python scripts/validate_structure.py
+          python scripts/validate_manifest.py
+          python scripts/governance_check.py --strict
+
+  analyze-python:
+    name: Analyze (python)
+    needs: compatibility-codeql
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Validate Python surface
+        run: |
+          python -m compileall -q orchestra_runtime scripts internal/context
+          python tests/behavior/run_tests.py
