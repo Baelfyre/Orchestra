@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.6.0 Adaptive Behavioral Pattern Learning A3 - Candidate
+
+- Implements A3.1 machine-local shadow signal extraction from validated A1 evidence plus explicitly bounded governed-evidence constructors, without treating raw conversation or generic phase success as specialist-strategy success.
+- Implements A3.2 non-authorizing shadow candidate learning with exact scope isolation, at least two distinct supporting source digests, duplicate-evidence suppression, deterministic bounded confidence metadata, explicit-preference dominance, post-removal re-evidence requirements, and explicit negative-evidence rejection.
+- Implements A3.3 shadow comparison against an already-selected deterministic Orchestra choice while hard-coding deterministic execution control and `shadow_influenced_execution=false`.
+- Implements A3.4 adversarial/correction regressions covering one-off and duplicate evidence, user/project isolation, explicit corrections/removal, malformed evidence, measured telemetry, strategy-evidence provenance, schema validity, A1/profile isolation, and forged promotion/execution-control rejection.
+- Keeps all A3 state under the machine-local adaptive root and separate from the A1 materialized profile and A2 context; normal A3 shadow learning creates no repository diffs.
+- Preserves canonical A3.0 contract baseline `07989ef6473657ab37530462ce7d2a9ef1c5f8e2` / tree `5a5bddd42961b1d7119350e31fc18e3b4b575fa2` and implements no A1 inferred-pattern promotion bridge, automatic confirmation, A2 attachment, routing/model/worker/strategy execution selection, authority/capability/governance/gate expansion, provider integration, training, learned Tuner topology, recursive/test-time compute, release/tag movement, deployment, or ruleset bypass.
+
 ## Post-v1.6.0 Pre-A3 Precedence Hardening and State Reconciliation - Candidate
 
 - Hardens adaptive profile materialization so inferred candidate/confirmation/deprecation/rejection events remain append-only evidence but cannot replace, downgrade, suppress, or mutate an explicit preference at the same exact scope and subject.
@@ -403,7 +412,7 @@ Key post-`v1.1.2` canonical milestones include:
 - PR #223 - clean replay roadmap/state closeout.
 - PR #224 - backend-to-persistence and cross-module logical-flow profiles.
 - PR #225 - Delegated Phase C repository host-reliability contract.
-- PR #226 - Delegated Phase D overlap reconciliation.
+- PR #226 - Phase D overlap reconciliation.
 - PR #227 - autonomous merge-readiness hardening.
 - PR #228 - delegated-governance current-state reconciliation.
 - PR #230 - R7 live installed-host evidence reconciliation.
