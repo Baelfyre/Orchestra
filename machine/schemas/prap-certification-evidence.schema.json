@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/prap-certification-evidence.schema.json",
+  "title": "Orchestra PRAP Compatibility Certification Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_schema_version",
+    "contract_id",
+    "sdk_surface_version",
+    "requested_adapter_id",
+    "protocol_adapter_id",
+    "runtime_adapter",
+    "protocol_version",
+    "compatibility_status",
+    "certification_status",
+    "observed_host_id",
+    "observed_host_maturity",
+    "certification_promotes_host_maturity",
+    "prap_compatible",
+    "runtime_authority_granted",
+    "runtime_capabilities_granted",
+    "mutation_performed",
+    "installed_integration_refresh_performed",
+    "capabilities",
+    "reasons"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "orchestra.prap-certification-evidence.v1"
+    },
+    "contract_schema_version": {
+      "const": "orchestra.prap-certification-contract.v1"
+    },
+    "contract_id": {
+      "const": "orchestra-prap-v1-certification"
+    },
+    "sdk_surface_version": {
+      "const": "orchestra.adapter-sdk.v1"
+    },
+    "requested_adapter_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "protocol_adapter_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "runtime_adapter": {
+      "type": "string",
+      "minLength": 1
+    },
+    "protocol_version": {
+      "const": "PRAP v1"
+    },
+    "compatibility_status": {
+      "enum": [
+        "supported",
+        "compatible"
+      ]
+    },
+    "certification_status": {
+      "const": "PASS"
+    },
+    "observed_host_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "observed_host_maturity": {
+      "enum": [
+        "SUPPORTED",
+        "SCAFFOLD_ONLY"
+      ]
+    },
+    "certification_promotes_host_maturity": {
+      "const": false
+    },
+    "prap_compatible": {
+      "const": true
+    },
+    "runtime_authority_granted": {
+      "const": false
+    },
+    "runtime_capabilities_granted": {
+      "const": false
+    },
+    "mutation_performed": {
+      "const": false
+    },
+    "installed_integration_refresh_performed": {
+      "const": false
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "supports_commands",
+        "supports_context",
+        "supports_file_handoff",
+        "supports_workspace",
+        "supports_audit_trace",
+        "supports_streaming",
+        "supports_governance",
+        "worktree_supported",
+        "worktree_isolation_mode"
+      ],
+      "properties": {
+        "supports_commands": {
+          "type": "boolean"
+        },
+        "supports_context": {
+          "type": "boolean"
+        },
+        "supports_file_handoff": {
+          "type": "boolean"
+        },
+        "supports_workspace": {
+          "type": "boolean"
+        },
+        "supports_audit_trace": {
+          "type": "boolean"
+        },
+        "supports_streaming": {
+          "type": "boolean"
+        },
+        "supports_governance": {
+          "type": "boolean"
+        },
+        "worktree_supported": {
+          "type": "boolean"
+        },
+        "worktree_isolation_mode": {
+          "enum": [
+            "NONE",
+            "OPTIONAL"
+          ]
+        }
+      }
+    },
+    "reasons": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "schema_version": "orchestra.prap-certification-contract.v1",
+  "contract_id": "orchestra-prap-v1-certification",
+  "sdk_surface_version": "orchestra.adapter-sdk.v1",
+  "protocol_version": "PRAP v1",
+  "certification_behavior": "READ_ONLY_EVIDENCE",
+  "unknown_adapter_policy": "FAIL_CLOSED",
+  "certifiable_compatibility_statuses": [
+    "supported",
+    "compatible"
+  ],
+  "non_certifiable_compatibility_statuses": [
+    "reserved",
+    "rejected"
+  ],
+  "certification_targets": [
+    "codex",
+    "antigravity",
+    "claude-code",
+    "cursor",
+    "windsurf",
+    "vscode",
+    "vscodium",
+    "jetbrains",
+    "zed",
+    "neovim"
+  ],
+  "sdk_exports": [
+    "AdapterCapabilities",
+    "AdapterProtocol",
+    "AdapterContext",
+    "AdapterResponse",
+    "AdapterError",
+    "ProtocolValidator",
+    "AdapterCertificationEvidence",
+    "CertificationError",
+    "certify_adapter",
+    "certify_all_adapters"
+  ],
+  "authority": {
+    "certification_grants_runtime_authority": false,
+    "certification_grants_runtime_capabilities": false,
+    "certification_grants_mutation_authority": false,
+    "automatic_installed_integration_refresh": false
+  },
+  "host_maturity": {
+    "source": "machine/hosts/update-contract.v1.json",
+    "certification_can_promote": false
+  },
+  "future_transport": {
+    "mcp_is_transport_not_authority": true,
+    "mcp_implementation_in_this_contract": false,
+    "mapping_rule": "Future transports map to the stabilized Adapter SDK and PRAP boundary; they do not replace it."
+  },
+  "evidence_schema": "machine/schemas/prap-certification-evidence.schema.json"
+}
