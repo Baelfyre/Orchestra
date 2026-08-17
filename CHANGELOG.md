@@ -1,5 +1,15 @@
 # Changelog
 
+## Post-v1.5.0 Documentation Architecture Refactor - Candidate
+
+- Refactors the root `README.md` into a concise human landing page while preserving the existing banner, navigation style, badges, trust-boundary message, installation entry points, and release identity.
+- Adds `docs/README.md` as the general human framework map plus current architecture and governance overview entry points so detailed phase documents can remain historical design evidence without acting as current machine-state authority.
+- Evolves `README.json` to `orchestra.readme-machine-index.v2`, expanding AI discovery across capabilities, hosts/integrations, knowledge/provenance, continuity, release state, maturity, and current human entry points without duplicating the referenced canonical machine contracts.
+- Preserves the hybrid representation rule: Markdown explains; JSON carries canonical structured machine state; JSON Schema validates; TOON remains derived, validated, and non-authoritative.
+- Replaces the blanket README-impact rule with a deterministic documentation-impact contract: public identity/headline changes require `README.md`, machine-facing contract/discovery changes require `README.json`, and domain behavior changes require detailed documentation without forcing unrelated root README churn.
+- Adds regression coverage for the documentation-impact contract and README machine-index v2 parity, including package-version parity, sequential scan order, required machine-contract references, and referenced-path existence.
+- Keeps the current public release fixed at `v1.5.0`; no package/version surface, tag, GitHub Release, deployment, policy activation, installed-integration refresh, force push, history rewrite, branch cleanup, Murmurs token-savings claim, or Adaptive Governed Orchestration implementation is performed by this documentation unit.
+
 ## Post-v1.5.0 MCP stdio Governed Tool Transport - Candidate
 
 - Adds the first bounded MCP integration for protocol revision `2026-07-28`, using stdio only and exposing `server/discover`, `tools/list`, and `tools/call`.
