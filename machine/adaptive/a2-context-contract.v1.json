@@ -5,7 +5,10 @@
     "a1_exit_gate_required": true,
     "validated_a1_head": "a6fc709ea3ff25b10c0087093a887f815f510bbe",
     "validated_a1_tree": "61e17acfa7b370814ea2f22da1550d0ebe0440c7",
-    "a1_canonical_merge_required_for_a2_branching": false
+    "canonical_a1_head": "d3b98ecd127f8da562df8cf21385beca33b520f9",
+    "canonical_a1_tree": "61e17acfa7b370814ea2f22da1550d0ebe0440c7",
+    "a1_canonical_merge_required_for_a2_branching": false,
+    "a1_canonical_for_this_candidate": true
   },
   "authority": {
     "mode": "READ_ONLY_ADVISORY",
