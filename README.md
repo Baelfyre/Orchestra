@@ -141,7 +141,7 @@ Adapters default to `NORMAL`. A host can explicitly select `MURMURS` through `or
 
 Safety-critical and terminal events remain explanatory, including human-action and authority gates, validation failures, unrecoverable blockers, governance stops, handoffs, completion, and failure. Invalid presentation configuration also fails closed to explanation.
 
-The communication-budget measurement contract separates deterministic communication metrics from model-specific token counts. Token deltas are calculated only when a host supplies comparable input/output counters with the same counter identity. Orchestra does not infer model tokens from characters, bytes, words, or another model's tokenizer and doesn't claim an unmeasured percentage saving.
+The communication-budget measurement contract separates deterministic communication metrics from model-specific token counts. Token deltas are calculated only when a host supplies comparable input/output counters with the same counter identity. Orchestra does not infer model tokens from characters, bytes, words, or another model's tokenizer and does not claim an unmeasured percentage saving.
 
 Caveman-inspired semantic tool/log compression is deliberately not enabled by the initial Murmurs implementation. Lossy compaction or repeated-read stubs require an immutable retrievable reference to the original content before they can replace authoritative context. See [Murmurs Communication Budget](docs/project/MURMURS_COMMUNICATION_BUDGET.md) for the architecture, measurement boundary, and promotion requirements.
 
