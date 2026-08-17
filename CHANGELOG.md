@@ -200,7 +200,7 @@
 
 ## v1.3.0 Specialist Intelligence - Release Preparation - Pending
 
-- Normalized the root, Claude Code, Codex, Cursor, JetBrains, Neovim, VS Code, Windsurf, and Zed package/version surfaces to `1.3.0` for the Specialist Intelligence release candidate without changing host maturity.
+- Normalizes the root, Claude Code, Codex, Cursor, JetBrains, Neovim, VS Code, Windsurf, and Zed package/version surfaces to `1.3.0` for the Specialist Intelligence release candidate without changing host maturity.
 - Added a deterministic runtime regression that requires all 11 live package/version surfaces to agree on `1.3.0`.
 - Added the source-backed `docs/releases/v1.3.0-specialist-intelligence-release-candidate.md` preparation record covering the completed SK1-SK10 Specialist Knowledge Layer campaign and its validation baseline.
 - Preserved `v1.2.0` as the current public release until a separately authorized publication gate creates `v1.3.0`; this preparation performs no tag creation, GitHub Release publication, deployment, production mutation, marketplace publication, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite.
@@ -412,7 +412,7 @@ Key post-`v1.1.2` canonical milestones include:
 - PR #223 - clean replay roadmap/state closeout.
 - PR #224 - backend-to-persistence and cross-module logical-flow profiles.
 - PR #225 - Delegated Phase C repository host-reliability contract.
-- PR #226 - Phase D overlap reconciliation.
+- PR #226 - Delegated Phase D overlap reconciliation.
 - PR #227 - autonomous merge-readiness hardening.
 - PR #228 - delegated-governance current-state reconciliation.
 - PR #230 - R7 live installed-host evidence reconciliation.
