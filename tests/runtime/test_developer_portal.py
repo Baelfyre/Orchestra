@@ -40,7 +40,7 @@ def test_portal_cannot_expand_authority_or_future_phase_scope():
     assert authority["documentation_and_discovery_only"] is True
     for key, value in authority.items():
         if key != "documentation_and_discovery_only":
-  assert value is False, key
+            assert value is False, key
     assert catalog["future_phase_boundaries"] == {
         "third_party_specialist_marketplace": "NOT_IMPLEMENTED",
         "mcp_server": "NOT_IMPLEMENTED_FINAL_PHASE",
