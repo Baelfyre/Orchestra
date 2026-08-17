@@ -1,27 +1,50 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
-
-from jsonschema import Draft202012Validator
 
 ROOT = Path(__file__).resolve().parents[2]
 CATALOG_PATH = ROOT / "machine/developer-portal/catalog.v1.json"
 SCHEMA_PATH = ROOT / "machine/schemas/developer-portal-catalog.schema.json"
 DOC_PATH = ROOT / "docs/developer/README.md"
+ID_PATTERN = re.compile(r"^[a-z0-9][a-z0-9-]*$")
 
 
 def load(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def test_developer_portal_catalog_schema_and_referenced_paths():
+def test_developer_portal_catalog_schema_contract_and_referenced_paths():
     catalog = load(CATALOG_PATH)
     schema = load(SCHEMA_PATH)
-    Draft202012Validator(schema).validate(catalog)
+
+    assert schema["$schema"] == "https://json-schema.org/draft/2020-12/schema"
+    assert schema["type"] == "object"
+    assert schema["additionalProperties"] is False
+    assert set(schema["required"]) <= set(catalog)
+    assert schema["properties"]["schema_version"]["const"] == catalog["schema_version"]
+    assert schema["properties"]["portal_mode"]["const"] == catalog["portal_mode"]
+
+    authority_schema = schema["properties"]["authority"]
+    assert set(authority_schema["required"]) == set(catalog["authority"])
+    for key, value in catalog["authority"].items():
+        assert authority_schema["properties"][key]["const"] is value
+
+    release_schema = schema["properties"]["public_release_boundary"]["properties"]
+    for key, value in catalog["public_release_boundary"].items():
+        assert release_schema[key]["const"] == value
+
+    future_schema = schema["properties"]["future_phase_boundaries"]["properties"]
+    for key, value in catalog["future_phase_boundaries"].items():
+        assert future_schema[key]["const"] == value
+
     ids = [item["id"] for item in catalog["surfaces"]]
     assert len(ids) == len(set(ids))
     for surface in catalog["surfaces"]:
+        assert ID_PATTERN.fullmatch(surface["id"])
+        assert surface["kind"] in {"human_guide", "machine_contract", "machine_schema"}
+        assert surface["path"].startswith(("docs/", "machine/"))
         assert (ROOT / surface["path"]).is_file(), surface
 
 
@@ -31,6 +54,7 @@ def test_journeys_reference_declared_surfaces_only():
     journey_ids = [item["id"] for item in catalog["journeys"]]
     assert len(journey_ids) == len(set(journey_ids))
     for journey in catalog["journeys"]:
+        assert ID_PATTERN.fullmatch(journey["id"])
         assert set(journey["surface_ids"]) <= surface_ids
 
 
