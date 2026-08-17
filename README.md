@@ -96,6 +96,4 @@ When prose and a machine contract disagree on an exact deterministic fact, use t
 
 ---
 
-**License:** [MIT](LICENSE)  
-**Changelog:** [CHANGELOG.md](CHANGELOG.md)  
-**Security:** [SECURITY.md](SECURITY.md)
+**License:** [MIT](LICENSE) | **Changelog:** [CHANGELOG.md](CHANGELOG.md) | **Security:** [SECURITY.md](SECURITY.md)
