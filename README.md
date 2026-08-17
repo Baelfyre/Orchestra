@@ -131,6 +131,8 @@ The migration state in this revision is `LEGACY_RETIRED`. The versioned machine 
 
 Merge readiness is also machine-bound rather than inferred from a successful API call. For an ordinary protected Squash merge, the current PR read must report both `mergeable == true` and `mergeable_state == clean`. Missing or unknown mergeability waits for evidence; `blocked`, `behind`, `dirty`, `unstable`, or any other observed non-clean state blocks ordinary progression. A bypass-capable identity and a signed resulting commit do not retroactively convert a failed pre-merge gate into governed readiness. See the [Autonomous Merge Readiness Protocol](docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md).
 
+The active `Protect main` ruleset still carries two historical GitHub Actions check identities, `Analyze (actions)` and `Analyze (python)`. The compatibility workflow at `.github/workflows/required-analysis-compat.yml` preserves those required identities without weakening security. It first runs an exact-head Python CodeQL analysis with the GitHub CodeQL Action and duplicate SARIF upload disabled. Only after that analysis succeeds do the two required compatibility jobs run their focused workflow-governance or Python validations. The compatibility workflow does not accept a neutral default-setup result as security success, does not replace repository CodeQL configuration, and does not grant bypass authority; it bridges the ruleset identity until the repository ruleset can be normalized directly.
+
 ## Murmurs Communication Budget
 
 Murmurs is an opt-in presentation mode for reducing routine conversational progress narration while preserving machine state, validation evidence, governance decisions, blockers, handoffs, and final reporting.
@@ -155,7 +157,7 @@ See the [v1.5.0 release candidate](docs/releases/v1.5.0-machine-verifiable-contr
 
 ## v1.4.0 Governance and Compliance Registry Cross-Integration
 
-`v1.4.0` is a historical published release after v1.5.0. The immutable, non-draft, non-prerelease release `Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration` is published from exact signed canonical commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`; tag `v1.4.0` resolves directly to that commit.
+`v1.4.0` is a historical published release after v1.5.0. The immutable, non-draft, non-prerelease release `Orchestra v1.4.0: Governance & Compliance Registry Cross-Integration` is published from exact signed release commit `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`; tag `v1.4.0` resolves directly to that commit.
 
 v1.4.0 packages the Compliance Registry cross-integration as an Orchestra governance capability: offline-first verified local Registry consumption, explicit integrity/provenance/freshness state, project pinning, progressive-disclosure integration across Governor, Steward, and Arbiter, and preserved routing/authority boundaries.
 
