@@ -1,0 +1,56 @@
+name: Developer Portal build v4
+
+on:
+  push:
+    branches:
+      - feature/developer-portal-vnext-20260817
+    paths:
+      - .github/workflows/developer-portal-build-v4.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/developer-portal-vnext-20260817
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build portal
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python .github/scripts/developer_portal_recover.py
+      - name: Bootstrap-safe validation
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          python -m json.tool machine/developer-portal/catalog.v1.json >/dev/null
+          python -m json.tool machine/schemas/developer-portal-catalog.schema.json >/dev/null
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path('.')
+          catalog = json.loads((root/'machine/developer-portal/catalog.v1.json').read_text())
+          for surface in catalog['surfaces']:
+              assert (root/surface['path']).is_file(), surface['path']
+          assert catalog['authority']['documentation_and_discovery_only'] is True
+          assert not any(v for k,v in catalog['authority'].items() if k != 'documentation_and_discovery_only')
+          PY
+          git diff --check
+      - name: Finalize candidate
+        run: |
+          git rm .github/workflows/developer-portal-build-once.yml
+          git rm .github/workflows/developer-portal-build-v2.yml
+          git rm .github/workflows/developer-portal-build-v3.yml
+          git rm .github/workflows/developer-portal-build-v4.yml
+          git rm .github/scripts/developer_portal_recover.py
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add README.md CHANGELOG.md docs/developer/README.md machine/developer-portal/catalog.v1.json machine/schemas/developer-portal-catalog.schema.json tests/runtime/test_developer_portal.py
+          git commit -m 'feat: add repository-native Developer Portal'
+          git push origin HEAD:feature/developer-portal-vnext-20260817
