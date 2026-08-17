@@ -1,0 +1,173 @@
+{
+  "schema_version": "orchestra.adaptive-shadow-learning-contract.v1",
+  "phase": "A3_BEHAVIORAL_PATTERN_LEARNING_SHADOW_MODE",
+  "status": "CONTRACT_ONLY_NO_RUNTIME_ACTIVATION",
+  "dependency": {
+    "canonical_a1_head": "d3b98ecd127f8da562df8cf21385beca33b520f9",
+    "canonical_a1_tree": "61e17acfa7b370814ea2f22da1550d0ebe0440c7",
+    "canonical_a2_head": "0bae83812bdab17ac4cf346d1b35b84c8e361a79",
+    "canonical_a2_tree": "8a67a13a994c5cc6ed59d24c7908ffdc1ba03063",
+    "canonical_pre_a3_hardening_head": "8402a5acbafe923c73904dcdb90f7faca90ced9c",
+    "canonical_pre_a3_hardening_tree": "1d56e1623f3662c59817146092c4135e37dd50ed"
+  },
+  "authority": {
+    "mode": "SHADOW_OBSERVATION_ONLY",
+    "runtime_execution_control": false,
+    "routing_authority_change": false,
+    "specialist_selection_change": false,
+    "model_or_worker_selection_change": false,
+    "strategy_execution_change": false,
+    "authority_change": false,
+    "capability_change": false,
+    "governance_change": false,
+    "lifecycle_authority_change": false,
+    "mandatory_gate_change": false,
+    "provider_integration": "NONE",
+    "training": "NONE",
+    "recursive_or_test_time_compute": "NONE"
+  },
+  "isolation": {
+    "shadow_state_separate_from_a1_materialized_profile": true,
+    "shadow_state_consumed_by_a2_context": false,
+    "shadow_learner_writes_a1_observation_log": false,
+    "shadow_learner_writes_repository": false,
+    "shadow_recommendation_influences_execution": false,
+    "actual_execution_choice_source": "EXISTING_DETERMINISTIC_ORCHESTRA_PATH"
+  },
+  "persistence": {
+    "adaptive_root": "~/.orchestra/adaptive",
+    "environment_override": "ORCHESTRA_ADAPTIVE_HOME",
+    "shadow_relative_root": "shadow/a3",
+    "store_must_be_outside_repository": true,
+    "signal_evidence": "JSONL_APPEND_ONLY",
+    "candidate_state": "JSON_DERIVED_OR_VERSIONED_LOCAL_STATE",
+    "comparison_evidence": "JSONL_APPEND_ONLY",
+    "sqlite": "DEFERRED_UNTIL_SCALE_QUERY_OR_CONCURRENCY_EVIDENCE_JUSTIFIES_IT",
+    "toon": "DERIVED_NON_AUTHORITATIVE_ONLY_IF_INTRODUCED_LATER"
+  },
+  "record_types": {
+    "signal": "machine/schemas/adaptive-shadow-signal.schema.json",
+    "candidate": "machine/schemas/adaptive-shadow-candidate.schema.json",
+    "comparison": "machine/schemas/adaptive-shadow-comparison.schema.json"
+  },
+  "signal_policy": {
+    "allowed_signal_types": [
+      "USER_SELECTION",
+      "USER_REJECTION",
+      "USER_CORRECTION",
+      "SPECIALIST_STRATEGY_ACCEPTED",
+      "SPECIALIST_STRATEGY_REJECTED",
+      "VALIDATION_OUTCOME",
+      "REMEDIATION_REQUIRED",
+      "ITERATION_OUTCOME",
+      "TERMINAL_DISPOSITION",
+      "MEASURED_LATENCY",
+      "MEASURED_COST"
+    ],
+    "allowed_source_kinds": [
+      "A1_VALIDATED_OBSERVATION",
+      "GOVERNED_RETROSPECTIVE",
+      "STRATEGY_DECISION_EVIDENCE",
+      "VALIDATION_EVIDENCE",
+      "REMEDIATION_EVIDENCE",
+      "MEASURED_TELEMETRY"
+    ],
+    "raw_conversation_authority": false,
+    "generic_phase_success_proves_strategy_success": false,
+    "specialist_strategy_signal_requires_strategy_decision_evidence": true,
+    "latency_or_cost_requires_trustworthy_measurement": true,
+    "unknown_or_unavailable_measurements_are_inferred": false
+  },
+  "candidate_policy": {
+    "minimum_distinct_support_count": 2,
+    "one_off_event_can_create_durable_candidate": false,
+    "confidence_range": [0.0, 1.0],
+    "confidence_is_authority": false,
+    "confidence_threshold_automatically_promotes": false,
+    "universal_promotion_threshold": "NOT_DEFINED_IN_A3_0",
+    "allowed_candidate_types": [
+      "USER_PREFERENCE_TENDENCY",
+      "WORKFLOW_TENDENCY",
+      "SPECIALIST_STRATEGY_TENDENCY"
+    ],
+    "allowed_statuses": [
+      "CANDIDATE",
+      "BLOCKED_BY_EXPLICIT_PREFERENCE",
+      "REJECTED",
+      "DEPRECATED"
+    ],
+    "confirmed_status_available_in_shadow_candidate_schema": false,
+    "explicit_preference_dominates": true,
+    "blocked_candidate_auto_reactivates_after_explicit_removal": false,
+    "new_post_removal_evidence_required_for_new_candidate": true
+  },
+  "scope_policy": {
+    "scopes": ["global_user", "project", "specialist", "task_session"],
+    "user_key": "EXACT",
+    "project_key": "EXACT_WHEN_SCOPED",
+    "specialist_slug": "EXACT_WHEN_SCOPED",
+    "task_session_key": "EXACT_FOR_TASK_SESSION_SCOPE",
+    "cross_scope_leakage": "PROHIBITED"
+  },
+  "non_learnable_subject_roots": [
+    "authority",
+    "capability",
+    "required_specialist",
+    "governance",
+    "human_gate",
+    "security_prohibition",
+    "mandatory_validation",
+    "evidence_integrity",
+    "audit_requirement",
+    "fail_closed",
+    "exact_head",
+    "release_gate",
+    "merge_gate",
+    "privacy_restriction",
+    "provider_restriction",
+    "resource_ceiling"
+  ],
+  "comparison_policy": {
+    "record_shadow_recommendation": true,
+    "record_actual_deterministic_choice": true,
+    "record_match_or_mismatch": true,
+    "shadow_choice_controls_execution": false,
+    "outcome_evidence_may_be_attached_after_execution": true,
+    "comparison_record_grants_promotion": false
+  },
+  "promotion_boundary": {
+    "promotion_bridge": "NOT_IMPLEMENTED_OR_AUTHORIZED_BY_A3_0",
+    "append_inferred_candidate_to_a1": false,
+    "confirm_inferred_pattern": false,
+    "materialize_shadow_candidate_into_a1_profile": false,
+    "attach_shadow_candidate_to_a2_context": false,
+    "automatic_promotion": false,
+    "promotion_criteria_definition": "DEFERRED_TO_LATER_A3_EXIT_WORK_AND_SEPARATE_AUTHORIZATION",
+    "successful_execution_directly_rewrites_active_policy": false
+  },
+  "required_adversarial_validation_for_a3_implementation": [
+    "one_off_choice_does_not_become_durable_candidate",
+    "duplicated_evidence_does_not_inflate_distinct_support",
+    "conflicting_evidence_remains_reviewable",
+    "cross_user_project_specialist_task_leakage_fails_closed",
+    "explicit_preference_dominates_shadow_candidate",
+    "explicit_correction_blocks_conflicting_candidate",
+    "stale_or_invalid_evidence_fails_closed",
+    "strategy_success_not_inferred_from_generic_phase_success",
+    "unmeasured_latency_or_cost_not_invented",
+    "shadow_recommendation_never_changes_execution",
+    "no_a1_profile_or_a2_context_mutation",
+    "no_authority_capability_governance_or_gate_expansion"
+  ],
+  "future_boundary": {
+    "a3_signal_extraction": "NOT_IMPLEMENTED_IN_A3_0",
+    "a3_candidate_learner": "NOT_IMPLEMENTED_IN_A3_0",
+    "a3_shadow_comparator": "NOT_IMPLEMENTED_IN_A3_0",
+    "a4_strategy_model_worker_ranking": "NOT_AUTHORIZED",
+    "a5_tuner_topology_learning": "NOT_AUTHORIZED",
+    "a6_adaptive_context_routing": "NOT_AUTHORIZED",
+    "a7_route_ranking_policy_promotion": "NOT_AUTHORIZED",
+    "a8_recursive_test_time_compute": "NOT_AUTHORIZED"
+  },
+  "human_documentation": "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3.md"
+}
