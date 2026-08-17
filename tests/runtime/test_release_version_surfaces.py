@@ -37,3 +37,6 @@ def test_release_package_versions_are_consistent() -> None:
 
     assert set(observed.values()) == {EXPECTED_VERSION}, observed
     assert len(observed) == 11
+
+    host_update_contract = _load_json("machine/hosts/update-contract.v1.json")
+    assert host_update_contract.get("package_version") == EXPECTED_VERSION
