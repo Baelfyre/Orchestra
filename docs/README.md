@@ -30,13 +30,15 @@ Specialist prose and progressive-disclosure knowledge remain under `../skills/*/
 
 ## Governance and authority
 
-- [Governance Layer](governance/GOVERNANCE_LAYER.md): human governance model and operating modes.
-- `../machine/governance/policy.v1.json`: machine governance policy.
+Start with the current [Governance Overview](governance/README.md).
+
+- `../machine/governance/policy.v1.json`: machine governance policy and exact structured authority.
+- [Governance Layer](governance/GOVERNANCE_LAYER.md): detailed human operating model, roles, modes, and risk scaling.
 - [Autonomous Merge Readiness Protocol](governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md): exact-head merge-readiness rules.
 - [Compliance Registry Integration](governance/COMPLIANCE_REGISTRY_INTEGRATION.md): registry boundary and evidence flow.
-- [Authority and Capability Runtime Architecture](project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md): trusted runtime authority and capability model.
+- [Authority and Capability Runtime Architecture](project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md): trusted runtime authority and capability design record.
 
-Structured machine governance, runtime state, receipts, and evidence use JSON. Markdown remains the explanation and rationale layer.
+Structured machine governance, runtime state, receipts, and evidence use JSON. Markdown remains the explanation, rationale, and instruction layer.
 
 ## Validation, evidence, and continuity
 
