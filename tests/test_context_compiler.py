@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from scripts.context_compiler import (
+from internal.context.context_compiler import (
     choose_representation,
     compile_context,
     encode_toon,
