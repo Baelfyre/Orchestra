@@ -66,6 +66,17 @@
       "runtime_integration": false,
       "a2_authorized": false,
       "authority_note": "A1 adaptive memory is local evidence and derived preference state only. It cannot grant authority, alter governance, change deterministic routing, or automatically promote inferred candidates."
+    },
+    "specialist_adaptive_context_a2": {
+      "status": "IMPLEMENTED_ON_BOUNDED_A2_CANDIDATE_BRANCH_ADVISORY_ONLY",
+      "purpose": "Opt-in read-only specialist context compiled from exact-scope A1 local state after existing route binding, authority, capability, and governance gates.",
+      "machine_sources": ["machine/adaptive/a2-context-contract.v1.json", "machine/schemas/adaptive-context.schema.json"],
+      "human_sources": ["docs/architecture/ADAPTIVE_CONTEXT_A2.md"],
+      "runtime_attachment": "POST_GOVERNANCE_PRE_OPERATION",
+      "default_runtime_executor_changed": false,
+      "canonical_route_mutation": false,
+      "a3_authorized": false,
+      "authority_note": "A2 context is advisory only. It cannot select a different route, grant authority or capability, alter governance, or promote learned patterns."
     }
   },
   "machine_scan_order": [
@@ -104,6 +115,8 @@
     "adaptive_profile_schema": "machine/schemas/adaptive-profile.schema.json",
     "adaptive_export_schema": "machine/schemas/adaptive-export.schema.json",
     "adaptive_store_meta_schema": "machine/schemas/adaptive-store-meta.schema.json",
+    "adaptive_context_a2_contract": "machine/adaptive/a2-context-contract.v1.json",
+    "adaptive_context_schema": "machine/schemas/adaptive-context.schema.json",
     "release_evidence_directory": "machine/release-evidence",
     "schemas_directory": "machine/schemas",
     "source_state_receipt_schema": "machine/schemas/source-state-receipt.schema.json",
@@ -137,7 +150,7 @@
     "required_analysis_ruleset_drift_issue": 331,
     "required_analysis_ruleset_drift_state": "OPEN_COMPATIBILITY_WORKFLOW_ACTIVE"
   },
-  "architecture": {"current_overview": "docs/architecture/README.md", "detailed_authority_capability_design": "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md", "routing_reference": "ROUTING_MAP.md", "governance_reference": "docs/governance/README.md", "compliance_registry_reference": "docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md", "compliance_protocol_runtime": "orchestra_runtime/compliance_protocol.py", "mcp_transport_reference": "docs/developer/MCP_STDIO_TRANSPORT.md", "historical_status_policy": "Phase documents may retain phase-era status wording. Current exact state comes from live machine contracts, release evidence, and Git identity."},
+  "architecture": {"current_overview": "docs/architecture/README.md", "detailed_authority_capability_design": "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md", "routing_reference": "ROUTING_MAP.md", "governance_reference": "docs/governance/README.md", "compliance_registry_reference": "docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md", "compliance_protocol_runtime": "orchestra_runtime/compliance_protocol.py", "mcp_transport_reference": "docs/developer/MCP_STDIO_TRANSPORT.md", "adaptive_context_reference": "docs/architecture/ADAPTIVE_CONTEXT_A2.md", "historical_status_policy": "Phase documents may retain phase-era status wording. Current exact state comes from live machine contracts, release evidence, and Git identity."},
   "hosts_integrations": {
     "host_update_contract": "machine/hosts/update-contract.v1.json",
     "adapter_sdk_reference": "docs/setup/ADAPTER_SDK_PRAP.md",
@@ -201,7 +214,7 @@
     "murmurs_measurement_issue": 316,
     "murmurs_measurement_issue_state": "OPEN",
     "adaptive_governed_orchestration_issue": 340,
-    "adaptive_governed_orchestration_state": "DEFERRED_PLANNING_ONLY"
+    "adaptive_governed_orchestration_state": "A2_CANDIDATE_IMPLEMENTED_A3_PLUS_NOT_AUTHORIZED"
   },
   "documentation": {
     "documentation_map": "docs/README.md",
@@ -215,6 +228,7 @@
     "host_updates": "docs/setup/HOST_UPDATES.md",
     "hybrid_context_formats": "docs/HYBRID_CONTEXT_FORMATS.md",
     "adaptive_memory_a0_a1": "docs/architecture/ADAPTIVE_MEMORY_A0_A1.md",
+    "adaptive_context_a2": "docs/architecture/ADAPTIVE_CONTEXT_A2.md",
     "roadmap": "docs/project/ROADMAP.md",
     "changelog": "CHANGELOG.md",
     "release_docs": "docs/releases/",
@@ -240,7 +254,8 @@
     "documentation_architecture_v2": "INCLUDED_IN_V1_6_CANDIDATE",
     "documentation_and_provenance_closeout": "INCLUDED_IN_V1_6_CANDIDATE",
     "adaptive_local_memory_a1": "IMPLEMENTED_ON_BOUNDED_CANDIDATE_BRANCH_NO_RUNTIME_EFFECT",
-    "adaptive_governed_orchestration": "DEFERRED_PLANNING_ONLY_ISSUE_340",
+    "adaptive_specialist_context_a2": "IMPLEMENTED_ON_BOUNDED_CANDIDATE_BRANCH_ADVISORY_ONLY",
+    "adaptive_governed_orchestration": "A2_IMPLEMENTED_CANDIDATE_LATER_PHASES_DEFERRED_ISSUE_340",
     "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316"
   },
   "ai_review_guidance": {
@@ -262,6 +277,7 @@
     "treat_murmurs_as_presentation_only": true,
     "do_not_claim_murmurs_token_savings_without_comparable_host_reported_counters": true,
     "treat_adaptive_a1_memory_as_non_authorizing_local_data_not_runtime_policy": true,
+    "treat_adaptive_a2_context_as_advisory_only_after_existing_runtime_gates": true,
     "treat_v1_5_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "treat_v1_6_0_source_snapshot_as_publication_authorized_not_published_until_exact_tag_release_and_commit_identity_exist": true,
     "when_evaluating_a_published_tag_or_release_prefer_live_verified_git_and_release_identity_over_prepublication_snapshot_fields": true
