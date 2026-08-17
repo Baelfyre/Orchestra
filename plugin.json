@@ -47,7 +47,9 @@
       "activation_level": "Governor",
       "depends_on": "None",
       "icon_path": "assets/icons/the-steward.ico",
-      "output_formats": ["Governance Review"]
+      "output_formats": [
+        "Governance Review"
+      ]
     },
     {
       "primary_use": "Legal compliance validation, privacy risk review, IP and copyright review, open-source license compatibility, Terms of Service and Privacy Policy impact, audit documentation, security governance",
@@ -60,7 +62,9 @@
       "activation_level": "Governor",
       "depends_on": "None",
       "icon_path": "assets/icons/the-governor.ico",
-      "output_formats": ["Governance Review"]
+      "output_formats": [
+        "Governance Review"
+      ]
     },
     {
       "primary_use": "Continuity review, validation-state review, branch and merge readiness, source-of-truth checks, handoff readiness, access/visibility closeout",
@@ -73,7 +77,10 @@
       "activation_level": "Governance",
       "depends_on": "conductor",
       "icon_path": "assets/icons/arbiter.ico",
-      "output_formats": ["Continuity Review", "Governance Effectiveness Review"]
+      "output_formats": [
+        "Continuity Review",
+        "Governance Effectiveness Review"
+      ]
     },
     {
       "primary_use": "QA strategy, test planning, validation gates, release readiness, CI/CD validation, persona validation",
@@ -86,7 +93,11 @@
       "activation_level": "Specialist",
       "depends_on": "None",
       "icon_path": "assets/icons/overseer.ico",
-      "output_formats": ["Caveman", "Full QA Review", "Delegated Unit Evidence"]
+      "output_formats": [
+        "Caveman",
+        "Full QA Review",
+        "Delegated Unit Evidence"
+      ]
     },
     {
       "primary_use": "Project orientation, multi-skill routing, workflow planning, access/visibility routing",
@@ -99,7 +110,10 @@
       "activation_level": "Commander",
       "depends_on": "None",
       "icon_path": "assets/icons/conductor.ico",
-      "output_formats": ["Routing Plan", "Prompts"]
+      "output_formats": [
+        "Routing Plan",
+        "Prompts"
+      ]
     },
     {
       "primary_use": "Cross-domain dependency mapping, specialist-contract assembly, ownership completeness, contradiction detection, invalidation, and specialist re-entry recommendations",
@@ -112,7 +126,12 @@
       "activation_level": "Specialist",
       "depends_on": "conductor",
       "icon_path": "assets/icons/conductor.ico",
-      "output_formats": ["Collaboration Review", "Cross-Layer Contract Packet", "Contradiction Report", "Re-entry Recommendation"]
+      "output_formats": [
+        "Collaboration Review",
+        "Cross-Layer Contract Packet",
+        "Contradiction Report",
+        "Re-entry Recommendation"
+      ]
     },
     {
       "primary_use": "Security policy, RBAC, authorization, authentication risk, privacy, secrets, visibility/access-control",
@@ -125,7 +144,10 @@
       "activation_level": "Specialist",
       "depends_on": "None",
       "icon_path": "assets/icons/cipher.ico",
-      "output_formats": ["Caveman", "Full Security Review"]
+      "output_formats": [
+        "Caveman",
+        "Full Security Review"
+      ]
     },
     {
       "primary_use": "UI, UX, accessibility, visual hierarchy, responsive layout, interaction design",
@@ -138,7 +160,11 @@
       "activation_level": "Specialist",
       "depends_on": "None",
       "icon_path": "assets/icons/cloak.ico",
-      "output_formats": ["QUICK_UI_HANDOFF", "DOCUMENT_REVIEW", "FORMAL_UI_AUDIT"]
+      "output_formats": [
+        "QUICK_UI_HANDOFF",
+        "DOCUMENT_REVIEW",
+        "FORMAL_UI_AUDIT"
+      ]
     },
     {
       "primary_use": "Chaos scenarios, resilience weaknesses, failure-paths, negative tests, guardrail gaps",
@@ -151,7 +177,9 @@
       "activation_level": "Gated",
       "depends_on": "conductor",
       "icon_path": "assets/icons/dagger.ico",
-      "output_formats": ["Caveman"]
+      "output_formats": [
+        "Caveman"
+      ]
     },
     {
       "primary_use": "SQL schemas, NoSQL documents, JSON, ORM, migrations, constraints, indexes, normalization",
@@ -164,7 +192,10 @@
       "activation_level": "Specialist",
       "depends_on": "None",
       "icon_path": "assets/icons/chronicler.ico",
-      "output_formats": ["Caveman", "Normalization Output"]
+      "output_formats": [
+        "Caveman",
+        "Normalization Output"
+      ]
     },
     {
       "primary_use": "Visual modeling, UML, ERD, architecture, workflow, data-flow diagrams via Mermaid/PlantUML",
@@ -177,7 +208,10 @@
       "activation_level": "Specialist",
       "depends_on": "None",
       "icon_path": "assets/icons/weaver.ico",
-      "output_formats": ["Mermaid", "PlantUML"]
+      "output_formats": [
+        "Mermaid",
+        "PlantUML"
+      ]
     },
     {
       "primary_use": "Documentation prose, READMEs, setup guides, release notes, SDLC, technical summaries",
@@ -190,7 +224,11 @@
       "activation_level": "Specialist",
       "depends_on": "None",
       "icon_path": "assets/icons/scribe.ico",
-      "output_formats": ["Mode 1", "Mode 2", "Mode 3"]
+      "output_formats": [
+        "Mode 1",
+        "Mode 2",
+        "Mode 3"
+      ]
     },
     {
       "primary_use": "OOP architecture, layered architecture, system design, refactoring",
@@ -203,7 +241,10 @@
       "activation_level": "Specialist",
       "depends_on": "None",
       "icon_path": "assets/icons/clockwork.ico",
-      "output_formats": ["Compact", "Full"]
+      "output_formats": [
+        "Compact",
+        "Full"
+      ]
     },
     {
       "primary_use": "Implementation, code editing, validation",
@@ -216,7 +257,11 @@
       "activation_level": "Specialist",
       "depends_on": "None",
       "icon_path": "assets/icons/ponytail.ico",
-      "output_formats": ["IMPLEMENTATION_PLAN", "CODE_REVIEW", "QUICK_FIX"]
+      "output_formats": [
+        "IMPLEMENTATION_PLAN",
+        "CODE_REVIEW",
+        "QUICK_FIX"
+      ]
     }
   ]
 }
