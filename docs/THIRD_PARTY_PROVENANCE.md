@@ -52,7 +52,7 @@ Historical Orchestra evidence: commit `7a6e63702a469f4d72261dffa19800c9f75b60dd`
 
 `Priivacy-ai/spec-kitty` | MIT | **REFERENCE_ONLY**
 
-Reviewed version: `v3.2.6`  
+Reviewed version: `v3.2.6`
 Reviewed commit: `8466727ebbbc01fcaf43575657c9b1b9553784d9`
 
 Independently adapted concepts include work packages, runtime envelopes, correlation identifiers, retrospectives, and worktree/status projection. Direct runtime dependency and wholesale copying of upstream schemas or state machines were rejected.
@@ -107,7 +107,7 @@ Detailed canonical mapping: [`machine/knowledge/truesheet-specialist-reference.v
 
 `modelcontextprotocol/modelcontextprotocol` | MIT | **PROTOCOL_STANDARD_REFERENCE**
 
-Protocol revision: `2026-07-28`  
+Protocol revision: `2026-07-28`
 Official tagged commit: `d9fb94d3df5112ad1a52278685841486480b138d`
 
 Orchestra's v1.6 MCP implementation uses this specification for its bounded stdio transport and exposes only the declared tool surface. MCP remains transport, not authority, and is not recorded as an Orchestra runtime package dependency.
