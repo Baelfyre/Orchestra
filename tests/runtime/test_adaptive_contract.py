@@ -84,7 +84,7 @@ def test_non_learnable_sensitive_and_raw_sources_fail_closed(tmp_path: Path):
             store,
             scope=project_scope(),
             subject_key="tool.preference",
-            value={"api_token": "should-not-be-stored"},
+            value={"access_token": "should-not-be-stored"},
             occurred_at=T0,
             source_ref="test:sensitive",
         )
@@ -112,7 +112,7 @@ def test_non_learnable_sensitive_and_raw_sources_fail_closed(tmp_path: Path):
 
 def test_current_instruction_requires_task_session_scope(tmp_path: Path):
     store = make_store(tmp_path)
-    with pytest.raises(ValueError, match="task_session"):
+    with pytest.raises(ValueError, match="task/session"):
         append_explicit_preference(
             store,
             scope=project_scope(),
