@@ -91,13 +91,14 @@ def test_store_fails_closed_on_blank_malformed_sequence_and_user(tmp_path: Path)
         "source_ref": "test:fixture",
         "occurred_at": T0,
         "payload": {"value": "compact"},
-        "previous_observation_digest": None,
+        "previous_observation_digest": "0" * 64,
     }
     store.observations_path.write_text(json.dumps(fixture) + "\n", encoding="utf-8")
     with pytest.raises(ValueError, match="sequence gap"):
         store.load_observations()
 
     fixture["sequence"] = 1
+    fixture["previous_observation_digest"] = None
     fixture["scope"]["user_key"] = "other-user"
     store.observations_path.write_text(json.dumps(fixture) + "\n", encoding="utf-8")
     with pytest.raises(ValueError, match="user mismatch"):
