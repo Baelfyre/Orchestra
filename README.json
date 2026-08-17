@@ -56,7 +56,17 @@
       "authority_note": "MCP is transport, not authority."
     },
     "murmurs_presentation": {"status": "IMPLEMENTED_OPT_IN", "machine_sources": ["machine/presentation/murmurs-policy.v1.json", "machine/presentation/murmurs-vocabulary.v1.json"], "human_sources": ["docs/project/MURMURS_COMMUNICATION_BUDGET.md"], "token_savings_claim": "NOT_CLAIMED_WITHOUT_TRUSTWORTHY_COMPARABLE_LIVE_HOST_COUNTERS"},
-    "hybrid_context_representation": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "human_sources": ["docs/HYBRID_CONTEXT_FORMATS.md"], "json_authority": "CANONICAL_FOR_STRUCTURED_MACHINE_STATE", "toon_authority": "DERIVED_VALIDATED_NON_AUTHORITATIVE"}
+    "hybrid_context_representation": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "human_sources": ["docs/HYBRID_CONTEXT_FORMATS.md"], "json_authority": "CANONICAL_FOR_STRUCTURED_MACHINE_STATE", "toon_authority": "DERIVED_VALIDATED_NON_AUTHORITATIVE"},
+    "local_adaptive_memory_a1": {
+      "status": "IMPLEMENTED_ON_BOUNDED_A1_CANDIDATE_BRANCH_NO_RUNTIME_EFFECT",
+      "purpose": "Machine-local scoped adaptive observation evidence and derived preference profiles without routing, policy, authority, governance, specialist-context, provider, lifecycle, or training activation.",
+      "machine_sources": ["machine/adaptive/a1-memory-contract.v1.json", "machine/schemas/adaptive-observation.schema.json", "machine/schemas/adaptive-profile.schema.json", "machine/schemas/adaptive-export.schema.json", "machine/schemas/adaptive-store-meta.schema.json"],
+      "human_sources": ["docs/architecture/ADAPTIVE_MEMORY_A0_A1.md"],
+      "storage_authority": "MACHINE_LOCAL_JSON_JSONL_ONLY",
+      "runtime_integration": false,
+      "a2_authorized": false,
+      "authority_note": "A1 adaptive memory is local evidence and derived preference state only. It cannot grant authority, alter governance, change deterministic routing, or automatically promote inferred candidates."
+    }
   },
   "machine_scan_order": [
     {"order": 1, "path": "README.json", "purpose": "AI-facing repository orientation and machine-surface discovery graph"},
@@ -89,6 +99,11 @@
     "third_party_provenance": "machine/provenance/third-party.v1.json",
     "third_party_provenance_schema": "machine/schemas/third-party-provenance.schema.json",
     "truesheet_specialist_reference": "machine/knowledge/truesheet-specialist-reference.v1.json",
+    "adaptive_memory_a1_contract": "machine/adaptive/a1-memory-contract.v1.json",
+    "adaptive_observation_schema": "machine/schemas/adaptive-observation.schema.json",
+    "adaptive_profile_schema": "machine/schemas/adaptive-profile.schema.json",
+    "adaptive_export_schema": "machine/schemas/adaptive-export.schema.json",
+    "adaptive_store_meta_schema": "machine/schemas/adaptive-store-meta.schema.json",
     "release_evidence_directory": "machine/release-evidence",
     "schemas_directory": "machine/schemas",
     "source_state_receipt_schema": "machine/schemas/source-state-receipt.schema.json",
@@ -199,6 +214,7 @@
     "adapter_sdk_prap": "docs/setup/ADAPTER_SDK_PRAP.md",
     "host_updates": "docs/setup/HOST_UPDATES.md",
     "hybrid_context_formats": "docs/HYBRID_CONTEXT_FORMATS.md",
+    "adaptive_memory_a0_a1": "docs/architecture/ADAPTIVE_MEMORY_A0_A1.md",
     "roadmap": "docs/project/ROADMAP.md",
     "changelog": "CHANGELOG.md",
     "release_docs": "docs/releases/",
@@ -223,6 +239,7 @@
     "hybrid_context_compilation": "INCLUDED_IN_V1_6_CANDIDATE",
     "documentation_architecture_v2": "INCLUDED_IN_V1_6_CANDIDATE",
     "documentation_and_provenance_closeout": "INCLUDED_IN_V1_6_CANDIDATE",
+    "adaptive_local_memory_a1": "IMPLEMENTED_ON_BOUNDED_CANDIDATE_BRANCH_NO_RUNTIME_EFFECT",
     "adaptive_governed_orchestration": "DEFERRED_PLANNING_ONLY_ISSUE_340",
     "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316"
   },
@@ -244,6 +261,7 @@
     "treat_mcp_prap_adapters_and_host_maturity_as_transport_or_compatibility_not_authority": true,
     "treat_murmurs_as_presentation_only": true,
     "do_not_claim_murmurs_token_savings_without_comparable_host_reported_counters": true,
+    "treat_adaptive_a1_memory_as_non_authorizing_local_data_not_runtime_policy": true,
     "treat_v1_5_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "treat_v1_6_0_source_snapshot_as_publication_authorized_not_published_until_exact_tag_release_and_commit_identity_exist": true,
     "when_evaluating_a_published_tag_or_release_prefer_live_verified_git_and_release_identity_over_prepublication_snapshot_fields": true
