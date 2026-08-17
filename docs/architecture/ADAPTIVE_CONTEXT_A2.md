@@ -2,11 +2,11 @@
 
 ## Status
 
-A2 is implemented on the bounded stacked candidate branch `agent/adaptive-context-a2-20260818`.
+A2 is implemented on the bounded canonical-base candidate branch `agent/adaptive-context-a2-canonical-base-20260818`.
 
-A2 depends on the exact-head validated A1 foundation at commit `a6fc709ea3ff25b10c0087093a887f815f510bbe`, tree `61e17acfa7b370814ea2f22da1550d0ebe0440c7`. A1 remains a separate draft, unmerged candidate. A2 validation does not grant merge authority for A1 or A2.
+A2 now depends on canonical A1 at commit `d3b98ecd127f8da562df8cf21385beca33b520f9`, tree `61e17acfa7b370814ea2f22da1550d0ebe0440c7`. The original A2 implementation was validated while stacked on the exact A1 source head `a6fc709ea3ff25b10c0087093a887f815f510bbe`; this candidate reparents the A2 implementation onto canonical A1 and updates only dependency/status metadata before fresh exact-head validation.
 
-A3 and later phases are not authorized by this unit.
+A1 is canonical. A2 remains a candidate until its own governed validation, signed materialization, clean protected merge, and canonical readback complete. A3 and later phases are not authorized by this unit.
 
 ## Purpose
 
