@@ -1,7 +1,7 @@
 <div align="center">
   <img src="./assets/readme/orchestra-governance-banner.svg" alt="Orchestra banner showing coordinated software responsibilities" width="100%" />
 
-  <p><strong>A portable orchestration runtime for structured AI-assisted development.</strong></p>
+  <p><strong>A portable governance and orchestration runtime for structured AI-assisted development.</strong></p>
 
   <p>
     <a href="docs/setup/INSTALLATION.md">Installation</a> |
@@ -9,6 +9,7 @@
     <a href="docs/developer/README.md">Developer Portal</a> |
     <a href="docs/README.md#governance-and-authority">Governance</a> |
     <a href="docs/setup/VALIDATION.md">Validation</a> |
+    <a href="docs/THIRD_PARTY_PROVENANCE.md">Acknowledgements</a> |
     <a href="CHANGELOG.md">Changelog</a>
   </p>
   <p>
@@ -22,13 +23,15 @@
 
 ---
 
-## AI can generate fast. Building well still requires structure.
+## Purpose
 
-Orchestra coordinates AI-assisted software work across specialist responsibilities, governance, validation, evidence, and human approval boundaries.
+AI can generate quickly. Reliable software development still needs ownership, constraints, evidence, and explicit authority.
 
-It is **not an AI model**. Models generate and review work. Orchestra decides how permitted work is routed, sequenced, constrained, validated, recorded, and handed to the next responsible boundary.
+**Orchestra coordinates AI-assisted development across specialist responsibilities, governance, validation, evidence, host integrations, and human approval boundaries.**
 
-> **Core rule:** routing, tool access, validation success, and mergeability are not authority.
+It is **not an AI model**. Models generate and review work. Orchestra determines how permitted work is routed, sequenced, constrained, validated, recorded, and handed to the next responsible boundary.
+
+> **Core rule:** routing, tool access, compatibility, validation success, and mergeability are not authority.
 
 ## Core capabilities
 
@@ -61,7 +64,7 @@ Next bounded action or human gate
 
 The deterministic control plane defines what is allowed. Specialists decide how to perform their owned work inside those boundaries. Validation proves outcomes; it does not grant permission.
 
-## Get started
+## Install Orchestra
 
 **Codex:** add this repository as a Marketplace source, install Orchestra, then invoke `@Orchestra`.
 
@@ -71,24 +74,75 @@ The deterministic control plane defines what is allowed. Specialists decide how 
 agy plugin install https://github.com/Baelfyre/Orchestra
 ```
 
-**Other hosts and local setups:** see the [Installation Guide](docs/setup/INSTALLATION.md) and [Compatibility Guide](docs/setup/COMPATIBILITY.md).
+**Other hosts and local setups:** use the [Installation Guide](docs/setup/INSTALLATION.md) and [Compatibility Guide](docs/setup/COMPATIBILITY.md).
 
-Repository package surfaces are prepared for **v1.6.0**. The current public GitHub Release remains **v1.5.0** until the separately governed publication gate creates and verifies the `v1.6.0` tag and release.
+## Use Orchestra through MCP
+
+**Purpose:** expose a bounded Orchestra tool surface to an MCP-compatible client while preserving the same PRAP adapter, runtime, governance, and authority boundaries.
+
+Launch the stdio server with an existing adapter identity:
+
+```sh
+python scripts/mcp_server.py --adapter codex
+```
+
+The v1.6 transport targets MCP protocol revision `2026-07-28` and exposes only `server/discover`, `tools/list`, and `tools/call`.
+
+**MCP is transport, not authority.** Client metadata, tool arguments, discovery, or compatibility cannot grant Orchestra runtime authority.
+
+See [MCP stdio governed tool transport](docs/developer/MCP_STDIO_TRANSPORT.md) for framing, protocol-version handling, safety boundaries, and non-goals.
+
+## Build or certify an adapter with the SDK / PRAP
+
+**Purpose:** give integration authors a stable import surface and read-only compatibility certification for Orchestra's existing PRAP v1 adapter contract.
+
+Use the stable SDK import surface:
+
+```text
+orchestra_runtime.protocol.sdk
+```
+
+Certify one adapter:
+
+```sh
+python scripts/certify_adapter.py --adapter codex --json
+```
+
+Or certify every contract-declared adapter:
+
+```sh
+python scripts/certify_adapter.py --all --json
+```
+
+Certification validates compatibility. It does not install integrations, promote host maturity, deploy, activate policy, or grant runtime authority.
+
+See [Adapter SDK and PRAP v1 Compatibility Certification](docs/setup/ADAPTER_SDK_PRAP.md) for the full contract and authority boundary.
+
+## Acknowledgements & provenance
+
+Orchestra has been built and refined with help from open-source tools, implementation references, protocol specifications, and research repositories.
+
+A reference does **not** automatically mean Orchestra copied its source, vendors it, depends on it at runtime, or inherits authority from it. Orchestra records the relationship, reviewed revision where recoverable, license status, learned or incorporated patterns, affected surfaces, evidence, and explicit incorporation boundaries.
+
+The provenance reconstruction includes current dependencies and references plus historically documented projects such as Strix, OpenHero, Spec-Kitty, Bryl Minimal Design, Ponytail, Caveman, TrueSheet, the MCP specification, and earlier governance/integration research. Deferred research such as Sakana AI Fugu is classified separately from already incorporated references.
+
+- **Human-readable ledger:** [Third-Party Provenance and Acknowledgements](docs/THIRD_PARTY_PROVENANCE.md)
+- **Canonical machine record:** [`machine/provenance/third-party.v1.json`](machine/provenance/third-party.v1.json)
 
 ## Explore the framework
 
 Start with the [Documentation Map](docs/README.md) for architecture, specialists, governance, validation, hosts, MCP, knowledge, provenance, releases, and historical design records.
 
-Developers extending Orchestra should use the [Developer Portal](docs/developer/README.md), which indexes the stabilized Adapter SDK, PRAP certification, host, specialist, governance, and validation contracts.
+Developers extending Orchestra should use the [Developer Portal](docs/developer/README.md), which indexes the Adapter SDK, PRAP certification, host, specialist, governance, and validation contracts.
 
 ## Machine-readable reference
 
-AI systems should start with [`README.json`](README.json), then follow its ordered references into `machine/` contracts and JSON Schemas.
+AI systems should start with [`README.json`](README.json), then follow its ordered references into `machine/` contracts and JSON Schemas. For third-party attribution and upstream influence, use [`machine/provenance/third-party.v1.json`](machine/provenance/third-party.v1.json) as the canonical semantic provenance record.
 
 Orchestra uses a hybrid representation policy:
 
 - **Markdown** for human explanation, rationale, examples, and specialist guidance.
-- **JSON** for canonical structured machine state, contracts, indexes, receipts, and evidence.
+- **JSON** for canonical structured machine state, contracts, indexes, receipts, provenance, and evidence.
 - **JSON Schema** for deterministic validation.
 - **TOON** only as a derived, validated, non-authoritative model-context projection when it provides measured context benefit.
 
