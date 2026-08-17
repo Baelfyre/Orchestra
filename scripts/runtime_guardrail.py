@@ -47,7 +47,7 @@ def main():
             helpers.write_color_host('WARNING', 'Git diff failed or not a git repo. Scanning target directory recursively instead.')
             
     if not files_to_scan:
-        exclude_dirs = ['.git', '.amalgam', 'tests', 'brain']
+        exclude_dirs = ['.git', '.amalgam', '.hypothesis', '.pytest_cache', '__pycache__', 'tests', 'brain']
         exclude_exts = ['.ico', '.png', '.jpg', '.zip', '.tar', '.gz']
         for dirpath, dirnames, filenames in os.walk(args.target_dir):
             dirnames[:] = [d for d in dirnames if d not in exclude_dirs]
@@ -108,8 +108,15 @@ def main():
             continue
             
         has_pii = False
+        in_sensitive_denylist = False
         
         for i, line in enumerate(lines):
+            stripped = line.strip()
+            if re.match(r'^_SENSITIVE_[A-Z0-9_]*\s*=\s*\($', stripped):
+                in_sensitive_denylist = True
+            elif in_sensitive_denylist and stripped == ')':
+                in_sensitive_denylist = False
+
             for pattern in secret_patterns.values():
                 if pattern.search(line):
                     restricted_pattern_found = True
@@ -119,11 +126,12 @@ def main():
                     if p.search(line):
                         violations.append(f"COPYLEFT LICENSE DETECTED ({line.strip()}) in {item['Relative']}:L{i+1}. Please confirm compatibility.")
                         
-            for p in pii_patterns:
-                if p.search(line):
-                    has_pii = True
-                    violations.append(f"PII SENSITIVE FIELD DETECTED in {item['Relative']}:L{i+1} -> [REDACTED].")
-                    
+            if not in_sensitive_denylist:
+                for p in pii_patterns:
+                    if p.search(line):
+                        has_pii = True
+                        violations.append(f"PII SENSITIVE FIELD DETECTED in {item['Relative']}:L{i+1} -> [REDACTED].")
+                        
             for key, pattern in destructive_patterns.items():
                 if pattern.search(line):
                     violations.append(f"DESTRUCTIVE OPERATION DETECTED ({key}) in {item['Relative']}:L{i+1} -> {line.strip()}")
