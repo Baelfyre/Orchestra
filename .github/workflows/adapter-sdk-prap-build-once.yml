@@ -1,0 +1,865 @@
+name: Adapter SDK PRAP build once
+
+on:
+  push:
+    branches:
+      - feature/adapter-sdk-prap-certification-vnext-20260817
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v7
+        with:
+          ref: feature/adapter-sdk-prap-certification-vnext-20260817
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Write bounded implementation
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          import textwrap
+
+          def write(path: str, content: str) -> None:
+              target = Path(path)
+              target.parent.mkdir(parents=True, exist_ok=True)
+              target.write_text(textwrap.dedent(content).lstrip(), encoding='utf-8')
+
+          contract = {
+              'schema_version': 'orchestra.prap-certification-contract.v1',
+              'contract_id': 'orchestra-prap-v1-certification',
+              'sdk_surface_version': 'orchestra.adapter-sdk.v1',
+              'protocol_version': 'PRAP v1',
+              'certification_behavior': 'READ_ONLY_EVIDENCE',
+              'unknown_adapter_policy': 'FAIL_CLOSED',
+              'certifiable_compatibility_statuses': ['supported', 'compatible'],
+              'non_certifiable_compatibility_statuses': ['reserved', 'rejected'],
+              'certification_targets': [
+                  'codex', 'antigravity', 'claude-code', 'cursor', 'windsurf',
+                  'vscode', 'vscodium', 'jetbrains', 'zed', 'neovim'
+              ],
+              'sdk_exports': [
+                  'AdapterCapabilities', 'AdapterProtocol', 'AdapterContext',
+                  'AdapterResponse', 'AdapterError', 'ProtocolValidator',
+                  'AdapterCertificationEvidence', 'CertificationError',
+                  'certify_adapter', 'certify_all_adapters'
+              ],
+              'authority': {
+                  'certification_grants_runtime_authority': False,
+                  'certification_grants_runtime_capabilities': False,
+                  'certification_grants_mutation_authority': False,
+                  'automatic_installed_integration_refresh': False
+              },
+              'host_maturity': {
+                  'source': 'machine/hosts/update-contract.v1.json',
+                  'certification_can_promote': False
+              },
+              'future_transport': {
+                  'mcp_is_transport_not_authority': True,
+                  'mcp_implementation_in_this_contract': False,
+                  'mapping_rule': 'Future transports map to the stabilized Adapter SDK and PRAP boundary; they do not replace it.'
+              },
+              'evidence_schema': 'machine/schemas/prap-certification-evidence.schema.json'
+          }
+          Path('machine/protocol').mkdir(parents=True, exist_ok=True)
+          Path('machine/protocol/prap-certification-contract.v1.json').write_text(
+              json.dumps(contract, indent=2) + '\n', encoding='utf-8'
+          )
+
+          schema = {
+              '$schema': 'https://json-schema.org/draft/2020-12/schema',
+              '$id': 'https://orchestra.local/schemas/prap-certification-evidence.schema.json',
+              'title': 'Orchestra PRAP Compatibility Certification Evidence',
+              'type': 'object',
+              'additionalProperties': False,
+              'required': [
+                  'schema_version', 'contract_schema_version', 'contract_id',
+                  'sdk_surface_version', 'requested_adapter_id', 'protocol_adapter_id',
+                  'runtime_adapter', 'protocol_version', 'compatibility_status',
+                  'certification_status', 'observed_host_id', 'observed_host_maturity',
+                  'certification_promotes_host_maturity', 'prap_compatible',
+                  'runtime_authority_granted', 'runtime_capabilities_granted',
+                  'mutation_performed', 'installed_integration_refresh_performed',
+                  'capabilities', 'reasons'
+              ],
+              'properties': {
+                  'schema_version': {'const': 'orchestra.prap-certification-evidence.v1'},
+                  'contract_schema_version': {'const': 'orchestra.prap-certification-contract.v1'},
+                  'contract_id': {'const': 'orchestra-prap-v1-certification'},
+                  'sdk_surface_version': {'const': 'orchestra.adapter-sdk.v1'},
+                  'requested_adapter_id': {'type': 'string', 'minLength': 1},
+                  'protocol_adapter_id': {'type': 'string', 'minLength': 1},
+                  'runtime_adapter': {'type': 'string', 'minLength': 1},
+                  'protocol_version': {'const': 'PRAP v1'},
+                  'compatibility_status': {'enum': ['supported', 'compatible']},
+                  'certification_status': {'const': 'PASS'},
+                  'observed_host_id': {'type': 'string', 'minLength': 1},
+                  'observed_host_maturity': {'enum': ['SUPPORTED', 'SCAFFOLD_ONLY']},
+                  'certification_promotes_host_maturity': {'const': False},
+                  'prap_compatible': {'const': True},
+                  'runtime_authority_granted': {'const': False},
+                  'runtime_capabilities_granted': {'const': False},
+                  'mutation_performed': {'const': False},
+                  'installed_integration_refresh_performed': {'const': False},
+                  'capabilities': {
+                      'type': 'object',
+                      'additionalProperties': False,
+                      'required': [
+                          'supports_commands', 'supports_context', 'supports_file_handoff',
+                          'supports_workspace', 'supports_audit_trace', 'supports_streaming',
+                          'supports_governance', 'worktree_supported', 'worktree_isolation_mode'
+                      ],
+                      'properties': {
+                          'supports_commands': {'type': 'boolean'},
+                          'supports_context': {'type': 'boolean'},
+                          'supports_file_handoff': {'type': 'boolean'},
+                          'supports_workspace': {'type': 'boolean'},
+                          'supports_audit_trace': {'type': 'boolean'},
+                          'supports_streaming': {'type': 'boolean'},
+                          'supports_governance': {'type': 'boolean'},
+                          'worktree_supported': {'type': 'boolean'},
+                          'worktree_isolation_mode': {'enum': ['NONE', 'OPTIONAL']}
+                      }
+                  },
+                  'reasons': {
+                      'type': 'array', 'minItems': 1, 'uniqueItems': True,
+                      'items': {'type': 'string', 'minLength': 1}
+                  }
+              }
+          }
+          Path('machine/schemas/prap-certification-evidence.schema.json').write_text(
+              json.dumps(schema, indent=2) + '\n', encoding='utf-8'
+          )
+
+          write('orchestra_runtime/protocol/certification.py', r'''
+          from __future__ import annotations
+
+          import json
+          from dataclasses import asdict, dataclass
+          from pathlib import Path
+          from typing import Any
+
+          from orchestra_runtime.host_updates import HostUpdateError, resolve_host_update_record
+
+          from .adapter_protocol import PRAP_V1, AdapterError, ProtocolValidator
+
+
+          PRAP_CERTIFICATION_CONTRACT_SCHEMA_VERSION = 'orchestra.prap-certification-contract.v1'
+          PRAP_CERTIFICATION_EVIDENCE_SCHEMA_VERSION = 'orchestra.prap-certification-evidence.v1'
+          ADAPTER_SDK_SURFACE_VERSION = 'orchestra.adapter-sdk.v1'
+          _CONTRACT_ID = 'orchestra-prap-v1-certification'
+          _CONTRACT_PATH = Path('machine') / 'protocol' / 'prap-certification-contract.v1.json'
+          _SCHEMA_PATH = Path('machine') / 'schemas' / 'prap-certification-evidence.schema.json'
+          _HOST_MATURITY_SOURCE = 'machine/hosts/update-contract.v1.json'
+          _CERTIFIABLE_STATUSES = frozenset({'supported', 'compatible'})
+          _NON_CERTIFIABLE_STATUSES = frozenset({'reserved', 'rejected'})
+          _EXPECTED_TARGETS = (
+              'codex',
+              'antigravity',
+              'claude-code',
+              'cursor',
+              'windsurf',
+              'vscode',
+              'vscodium',
+              'jetbrains',
+              'zed',
+              'neovim',
+          )
+          _EXPECTED_SDK_EXPORTS = frozenset(
+              {
+                  'AdapterCapabilities',
+                  'AdapterProtocol',
+                  'AdapterContext',
+                  'AdapterResponse',
+                  'AdapterError',
+                  'ProtocolValidator',
+                  'AdapterCertificationEvidence',
+                  'CertificationError',
+                  'certify_adapter',
+                  'certify_all_adapters',
+              }
+          )
+
+
+          class CertificationError(ValueError):
+              pass
+
+
+          @dataclass(frozen=True)
+          class AdapterCertificationEvidence:
+              schema_version: str
+              contract_schema_version: str
+              contract_id: str
+              sdk_surface_version: str
+              requested_adapter_id: str
+              protocol_adapter_id: str
+              runtime_adapter: str
+              protocol_version: str
+              compatibility_status: str
+              certification_status: str
+              observed_host_id: str
+              observed_host_maturity: str
+              certification_promotes_host_maturity: bool
+              prap_compatible: bool
+              runtime_authority_granted: bool
+              runtime_capabilities_granted: bool
+              mutation_performed: bool
+              installed_integration_refresh_performed: bool
+              capabilities: dict[str, Any]
+              reasons: tuple[str, ...]
+
+              def to_dict(self) -> dict[str, Any]:
+                  payload = asdict(self)
+                  payload['reasons'] = list(self.reasons)
+                  return payload
+
+
+          def repository_root() -> Path:
+              return Path(__file__).resolve().parents[2]
+
+
+          def _root(root: Path | str | None) -> Path:
+              return repository_root() if root is None else Path(root)
+
+
+          def _load_json(path: Path, *, label: str) -> dict[str, Any]:
+              try:
+                  value = json.loads(path.read_text(encoding='utf-8'))
+              except FileNotFoundError as exc:
+                  raise CertificationError(f'{label}_MISSING:{path}') from exc
+              except json.JSONDecodeError as exc:
+                  raise CertificationError(f'{label}_INVALID_JSON:{path}:{exc}') from exc
+              if not isinstance(value, dict):
+                  raise CertificationError(f'{label}_INVALID:root must be an object')
+              return value
+
+
+          def _string_list(value: object, field: str) -> tuple[str, ...]:
+              if not isinstance(value, list) or not value:
+                  raise CertificationError(f'PRAP_CERTIFICATION_CONTRACT_INVALID:{field}')
+              if not all(isinstance(item, str) and item.strip() for item in value):
+                  raise CertificationError(f'PRAP_CERTIFICATION_CONTRACT_INVALID:{field}')
+              items = tuple(item.strip() for item in value)
+              if len(set(items)) != len(items):
+                  raise CertificationError(f'PRAP_CERTIFICATION_CONTRACT_INVALID:{field}:duplicates')
+              return items
+
+
+          def load_prap_certification_contract(root: Path | str | None = None) -> dict[str, Any]:
+              repo_root = _root(root)
+              contract = _load_json(repo_root / _CONTRACT_PATH, label='PRAP_CERTIFICATION_CONTRACT')
+              if contract.get('schema_version') != PRAP_CERTIFICATION_CONTRACT_SCHEMA_VERSION:
+                  raise CertificationError('PRAP_CERTIFICATION_CONTRACT_SCHEMA_UNSUPPORTED')
+              if contract.get('contract_id') != _CONTRACT_ID:
+                  raise CertificationError('PRAP_CERTIFICATION_CONTRACT_INVALID:contract_id')
+              if contract.get('sdk_surface_version') != ADAPTER_SDK_SURFACE_VERSION:
+                  raise CertificationError('PRAP_CERTIFICATION_CONTRACT_INVALID:sdk_surface_version')
+              if contract.get('protocol_version') != PRAP_V1:
+                  raise CertificationError('PRAP_CERTIFICATION_PROTOCOL_VERSION_DRIFT')
+              if contract.get('certification_behavior') != 'READ_ONLY_EVIDENCE':
+                  raise CertificationError('PRAP_CERTIFICATION_CONTRACT_INVALID:certification_behavior')
+              if contract.get('unknown_adapter_policy') != 'FAIL_CLOSED':
+                  raise CertificationError('PRAP_CERTIFICATION_CONTRACT_INVALID:unknown_adapter_policy')
+
+              certifiable = frozenset(_string_list(contract.get('certifiable_compatibility_statuses'), 'certifiable_compatibility_statuses'))
+              if certifiable != _CERTIFIABLE_STATUSES:
+                  raise CertificationError('PRAP_CERTIFICATION_STATUS_SET_DRIFT:certifiable')
+              non_certifiable = frozenset(_string_list(contract.get('non_certifiable_compatibility_statuses'), 'non_certifiable_compatibility_statuses'))
+              if non_certifiable != _NON_CERTIFIABLE_STATUSES:
+                  raise CertificationError('PRAP_CERTIFICATION_STATUS_SET_DRIFT:non_certifiable')
+              targets = _string_list(contract.get('certification_targets'), 'certification_targets')
+              if targets != _EXPECTED_TARGETS:
+                  raise CertificationError('PRAP_CERTIFICATION_TARGET_SET_DRIFT')
+              exports = frozenset(_string_list(contract.get('sdk_exports'), 'sdk_exports'))
+              if exports != _EXPECTED_SDK_EXPORTS:
+                  raise CertificationError('ADAPTER_SDK_EXPORT_SET_DRIFT')
+
+              authority = contract.get('authority')
+              if not isinstance(authority, dict):
+                  raise CertificationError('PRAP_CERTIFICATION_CONTRACT_INVALID:authority')
+              authority_invariants = {
+                  'certification_grants_runtime_authority': False,
+                  'certification_grants_runtime_capabilities': False,
+                  'certification_grants_mutation_authority': False,
+                  'automatic_installed_integration_refresh': False,
+              }
+              for key, expected in authority_invariants.items():
+                  if authority.get(key) is not expected:
+                      raise CertificationError(f'PRAP_CERTIFICATION_AUTHORITY_INVARIANT:{key}')
+
+              host_maturity = contract.get('host_maturity')
+              if not isinstance(host_maturity, dict):
+                  raise CertificationError('PRAP_CERTIFICATION_CONTRACT_INVALID:host_maturity')
+              if host_maturity.get('source') != _HOST_MATURITY_SOURCE:
+                  raise CertificationError('PRAP_CERTIFICATION_HOST_MATURITY_SOURCE_DRIFT')
+              if host_maturity.get('certification_can_promote') is not False:
+                  raise CertificationError('PRAP_CERTIFICATION_HOST_PROMOTION_FORBIDDEN')
+
+              future_transport = contract.get('future_transport')
+              if not isinstance(future_transport, dict):
+                  raise CertificationError('PRAP_CERTIFICATION_CONTRACT_INVALID:future_transport')
+              if future_transport.get('mcp_is_transport_not_authority') is not True:
+                  raise CertificationError('PRAP_CERTIFICATION_MCP_AUTHORITY_DRIFT')
+              if future_transport.get('mcp_implementation_in_this_contract') is not False:
+                  raise CertificationError('PRAP_CERTIFICATION_MCP_IMPLEMENTATION_FORBIDDEN')
+
+              if contract.get('evidence_schema') != str(_SCHEMA_PATH).replace('\\', '/'):
+                  raise CertificationError('PRAP_CERTIFICATION_EVIDENCE_SCHEMA_DRIFT')
+              schema = _load_json(repo_root / _SCHEMA_PATH, label='PRAP_CERTIFICATION_EVIDENCE_SCHEMA')
+              if schema.get('type') != 'object':
+                  raise CertificationError('PRAP_CERTIFICATION_EVIDENCE_SCHEMA_INVALID')
+              return contract
+
+
+          def certify_adapter(
+              adapter_name: str,
+              *,
+              root: Path | str | None = None,
+          ) -> AdapterCertificationEvidence:
+              if not isinstance(adapter_name, str) or not adapter_name.strip():
+                  raise CertificationError('PRAP_CERTIFICATION_ADAPTER_REQUIRED')
+              requested = adapter_name.strip().lower()
+              repo_root = _root(root)
+              contract = load_prap_certification_contract(repo_root)
+
+              try:
+                  record = ProtocolValidator.compatibility_for(requested)
+              except AdapterError as exc:
+                  raise CertificationError(f'UNKNOWN_ADAPTER_FAIL_CLOSED:{requested}') from exc
+              if record.compatibility_status not in _CERTIFIABLE_STATUSES:
+                  raise CertificationError(
+                      f'PRAP_CERTIFICATION_NOT_CERTIFIABLE:{requested}:{record.compatibility_status}'
+                  )
+              if record.protocol_version != contract['protocol_version']:
+                  raise CertificationError(f'PRAP_CERTIFICATION_MATRIX_PROTOCOL_DRIFT:{requested}')
+
+              from orchestra_runtime.factories import AdapterFactory
+
+              try:
+                  adapter = AdapterFactory.create(requested, repo_root)
+              except ValueError as exc:
+                  raise CertificationError(f'PRAP_CERTIFICATION_RUNTIME_ADAPTER_UNAVAILABLE:{requested}') from exc
+              errors = ProtocolValidator.validate_adapter(adapter)
+              if errors:
+                  raise CertificationError('PRAP_CERTIFICATION_PROTOCOL_INVALID:' + '|'.join(errors))
+              protocol = adapter.protocol_metadata()
+
+              if protocol.protocol_version != contract['protocol_version']:
+                  raise CertificationError(f'PRAP_CERTIFICATION_PROTOCOL_VERSION_DRIFT:{requested}')
+              if record.runtime_adapter != protocol.runtime_adapter:
+                  raise CertificationError(f'PRAP_CERTIFICATION_RUNTIME_MAPPING_DRIFT:{requested}')
+              if record.host_type != protocol.host_type:
+                  raise CertificationError(f'PRAP_CERTIFICATION_HOST_TYPE_DRIFT:{requested}')
+              if requested == 'vscodium':
+                  if protocol.adapter_id != 'vscode' or record.compatibility_status != 'compatible':
+                      raise CertificationError('PRAP_CERTIFICATION_VSCODIUM_MAPPING_DRIFT')
+              elif record.adapter_id != protocol.adapter_id:
+                  raise CertificationError(f'PRAP_CERTIFICATION_ADAPTER_ID_DRIFT:{requested}')
+
+              try:
+                  host_record = resolve_host_update_record(requested, repo_root)
+              except HostUpdateError as exc:
+                  raise CertificationError(f'PRAP_CERTIFICATION_HOST_MATURITY_UNAVAILABLE:{requested}:{exc}') from exc
+              host_id = str(host_record.get('host_id', ''))
+              maturity = str(host_record.get('maturity', ''))
+              if maturity not in {'SUPPORTED', 'SCAFFOLD_ONLY'}:
+                  raise CertificationError(f'PRAP_CERTIFICATION_HOST_MATURITY_DRIFT:{requested}:{maturity}')
+              if requested == 'vscodium':
+                  if host_id != 'vscode':
+                      raise CertificationError('PRAP_CERTIFICATION_VSCODIUM_HOST_MAPPING_DRIFT')
+              elif host_id != requested:
+                  raise CertificationError(f'PRAP_CERTIFICATION_HOST_MAPPING_DRIFT:{requested}:{host_id}')
+
+              return AdapterCertificationEvidence(
+                  schema_version=PRAP_CERTIFICATION_EVIDENCE_SCHEMA_VERSION,
+                  contract_schema_version=PRAP_CERTIFICATION_CONTRACT_SCHEMA_VERSION,
+                  contract_id=_CONTRACT_ID,
+                  sdk_surface_version=ADAPTER_SDK_SURFACE_VERSION,
+                  requested_adapter_id=requested,
+                  protocol_adapter_id=protocol.adapter_id,
+                  runtime_adapter=protocol.runtime_adapter,
+                  protocol_version=protocol.protocol_version,
+                  compatibility_status=record.compatibility_status,
+                  certification_status='PASS',
+                  observed_host_id=host_id,
+                  observed_host_maturity=maturity,
+                  certification_promotes_host_maturity=False,
+                  prap_compatible=True,
+                  runtime_authority_granted=False,
+                  runtime_capabilities_granted=False,
+                  mutation_performed=False,
+                  installed_integration_refresh_performed=False,
+                  capabilities=protocol.capabilities.to_metadata(),
+                  reasons=(
+                      'PRAP_PROTOCOL_VALID',
+                      'COMPATIBILITY_STATUS_CERTIFIABLE',
+                      'HOST_MATURITY_PRESERVED',
+                      'READ_ONLY_CERTIFICATION',
+                  ),
+              )
+
+
+          def certify_all_adapters(
+              *,
+              root: Path | str | None = None,
+          ) -> tuple[AdapterCertificationEvidence, ...]:
+              repo_root = _root(root)
+              contract = load_prap_certification_contract(repo_root)
+              return tuple(certify_adapter(adapter_id, root=repo_root) for adapter_id in contract['certification_targets'])
+          ''')
+
+          write('orchestra_runtime/protocol/sdk.py', r'''
+          from __future__ import annotations
+
+          from .adapter_protocol import (
+              PRAP_V1,
+              AdapterCapabilities,
+              AdapterContext,
+              AdapterError,
+              AdapterProtocol,
+              AdapterResponse,
+              ProtocolValidator,
+          )
+          from .certification import (
+              ADAPTER_SDK_SURFACE_VERSION,
+              AdapterCertificationEvidence,
+              CertificationError,
+              certify_adapter,
+              certify_all_adapters,
+          )
+
+          SDK_SURFACE_VERSION = ADAPTER_SDK_SURFACE_VERSION
+          SDK_PROTOCOL_VERSION = PRAP_V1
+
+          __all__ = [
+              'SDK_SURFACE_VERSION',
+              'SDK_PROTOCOL_VERSION',
+              'AdapterCapabilities',
+              'AdapterProtocol',
+              'AdapterContext',
+              'AdapterResponse',
+              'AdapterError',
+              'ProtocolValidator',
+              'AdapterCertificationEvidence',
+              'CertificationError',
+              'certify_adapter',
+              'certify_all_adapters',
+          ]
+          ''')
+
+          write('orchestra_runtime/protocol/__init__.py', r'''
+          from .adapter_protocol import (
+              COMPATIBILITY_MATRIX,
+              PRAP_V1,
+              SUPPORTED_PROTOCOL_VERSIONS,
+              AdapterCapabilities,
+              AdapterCompatibilityRecord,
+              AdapterContext,
+              AdapterError,
+              AdapterProtocol,
+              AdapterResponse,
+              ProtocolValidator,
+          )
+          from .certification import (
+              ADAPTER_SDK_SURFACE_VERSION,
+              PRAP_CERTIFICATION_CONTRACT_SCHEMA_VERSION,
+              PRAP_CERTIFICATION_EVIDENCE_SCHEMA_VERSION,
+              AdapterCertificationEvidence,
+              CertificationError,
+              certify_adapter,
+              certify_all_adapters,
+              load_prap_certification_contract,
+          )
+
+          __all__ = [
+              'COMPATIBILITY_MATRIX',
+              'PRAP_V1',
+              'SUPPORTED_PROTOCOL_VERSIONS',
+              'AdapterCapabilities',
+              'AdapterCompatibilityRecord',
+              'AdapterContext',
+              'AdapterError',
+              'AdapterProtocol',
+              'AdapterResponse',
+              'ProtocolValidator',
+              'ADAPTER_SDK_SURFACE_VERSION',
+              'PRAP_CERTIFICATION_CONTRACT_SCHEMA_VERSION',
+              'PRAP_CERTIFICATION_EVIDENCE_SCHEMA_VERSION',
+              'AdapterCertificationEvidence',
+              'CertificationError',
+              'certify_adapter',
+              'certify_all_adapters',
+              'load_prap_certification_contract',
+          ]
+          ''')
+
+          write('scripts/certify_adapter.py', r'''
+          #!/usr/bin/env python3
+          from __future__ import annotations
+
+          import argparse
+          import json
+          import sys
+          from pathlib import Path
+
+          ROOT = Path(__file__).resolve().parents[1]
+          if str(ROOT) not in sys.path:
+              sys.path.insert(0, str(ROOT))
+
+          from orchestra_runtime.protocol.certification import (
+              CertificationError,
+              certify_adapter,
+              certify_all_adapters,
+          )
+
+
+          def _print_human(evidence: dict[str, object]) -> None:
+              print(f"Adapter: {evidence['requested_adapter_id']}")
+              print(f"PRAP: {evidence['protocol_version']} ({evidence['certification_status']})")
+              print(f"Compatibility: {evidence['compatibility_status']}")
+              print(f"Host maturity: {evidence['observed_host_maturity']}")
+              print('Certification promotes host maturity: false')
+              print('Runtime authority granted: false')
+              print('Runtime capabilities granted: false')
+              print('Mutation performed: false')
+              print('Installed integration refresh performed: false')
+
+
+          def main(argv: list[str] | None = None) -> int:
+              parser = argparse.ArgumentParser(
+                  prog='orchestra-certify-adapter',
+                  description='Produce deterministic read-only PRAP v1 compatibility certification evidence.',
+              )
+              selection = parser.add_mutually_exclusive_group(required=True)
+              selection.add_argument('--adapter', help='Canonical adapter id to certify')
+              selection.add_argument('--all', action='store_true', help='Certify all contract-declared adapter targets')
+              parser.add_argument('--json', action='store_true', help='Emit machine-readable certification evidence')
+              args = parser.parse_args(argv)
+
+              try:
+                  if args.all:
+                      records = [item.to_dict() for item in certify_all_adapters(root=ROOT)]
+                      if args.json:
+                          print(json.dumps(records, indent=2, sort_keys=True))
+                      else:
+                          for index, record in enumerate(records):
+                              if index:
+                                  print()
+                              _print_human(record)
+                  else:
+                      record = certify_adapter(args.adapter, root=ROOT).to_dict()
+                      if args.json:
+                          print(json.dumps(record, indent=2, sort_keys=True))
+                      else:
+                          _print_human(record)
+              except CertificationError as exc:
+                  print(f'ORCHESTRA_PRAP_CERTIFICATION=FAIL:{exc}', file=sys.stderr)
+                  return 2
+
+              print('ORCHESTRA_PRAP_CERTIFICATION=READ_ONLY_PASS', file=sys.stderr)
+              return 0
+
+
+          if __name__ == '__main__':
+              raise SystemExit(main())
+          ''')
+
+          write('tests/runtime/test_adapter_certification.py', r'''
+          import json
+          import subprocess
+          import sys
+          from pathlib import Path
+
+          import pytest
+
+          from orchestra_runtime.factories import AdapterFactory
+          from orchestra_runtime.protocol import PRAP_V1, AdapterCapabilities, AdapterProtocol
+          from orchestra_runtime.protocol import certification as certification_module
+          from orchestra_runtime.protocol.certification import (
+              ADAPTER_SDK_SURFACE_VERSION,
+              CertificationError,
+              certify_adapter,
+              certify_all_adapters,
+              load_prap_certification_contract,
+          )
+          from orchestra_runtime.protocol.sdk import (
+              SDK_PROTOCOL_VERSION,
+              SDK_SURFACE_VERSION,
+              AdapterCapabilities as SdkAdapterCapabilities,
+              AdapterProtocol as SdkAdapterProtocol,
+          )
+
+
+          ROOT = Path(__file__).resolve().parents[2]
+          EXPECTED_TARGETS = {
+              'codex', 'antigravity', 'claude-code', 'cursor', 'windsurf',
+              'vscode', 'vscodium', 'jetbrains', 'zed', 'neovim'
+          }
+
+
+          def test_sdk_surface_reuses_existing_prap_v1_contract_types():
+              assert SDK_SURFACE_VERSION == ADAPTER_SDK_SURFACE_VERSION
+              assert SDK_PROTOCOL_VERSION == PRAP_V1
+              assert SdkAdapterCapabilities is AdapterCapabilities
+              assert SdkAdapterProtocol is AdapterProtocol
+
+
+          def test_certification_contract_is_read_only_fail_closed_and_non_authorizing():
+              contract = load_prap_certification_contract(ROOT)
+              assert contract['certification_behavior'] == 'READ_ONLY_EVIDENCE'
+              assert contract['unknown_adapter_policy'] == 'FAIL_CLOSED'
+              assert contract['protocol_version'] == PRAP_V1
+              assert contract['authority'] == {
+                  'certification_grants_runtime_authority': False,
+                  'certification_grants_runtime_capabilities': False,
+                  'certification_grants_mutation_authority': False,
+                  'automatic_installed_integration_refresh': False,
+              }
+              assert contract['host_maturity']['certification_can_promote'] is False
+              assert contract['future_transport']['mcp_is_transport_not_authority'] is True
+              assert contract['future_transport']['mcp_implementation_in_this_contract'] is False
+
+
+          def test_all_declared_targets_certify_without_promoting_host_maturity():
+              evidence = certify_all_adapters(root=ROOT)
+              by_id = {item.requested_adapter_id: item for item in evidence}
+              assert set(by_id) == EXPECTED_TARGETS
+              assert {key for key, item in by_id.items() if item.observed_host_maturity == 'SUPPORTED'} == {
+                  'codex', 'antigravity'
+              }
+              for item in evidence:
+                  assert item.certification_status == 'PASS'
+                  assert item.prap_compatible is True
+                  assert item.certification_promotes_host_maturity is False
+                  assert item.runtime_authority_granted is False
+                  assert item.runtime_capabilities_granted is False
+                  assert item.mutation_performed is False
+                  assert item.installed_integration_refresh_performed is False
+              for adapter_id in EXPECTED_TARGETS - {'codex', 'antigravity'}:
+                  assert by_id[adapter_id].observed_host_maturity == 'SCAFFOLD_ONLY'
+
+
+          def test_vscodium_certification_preserves_vscode_runtime_and_scaffold_mapping():
+              evidence = certify_adapter('vscodium', root=ROOT)
+              assert evidence.requested_adapter_id == 'vscodium'
+              assert evidence.protocol_adapter_id == 'vscode'
+              assert evidence.runtime_adapter == 'vscode'
+              assert evidence.compatibility_status == 'compatible'
+              assert evidence.observed_host_id == 'vscode'
+              assert evidence.observed_host_maturity == 'SCAFFOLD_ONLY'
+
+
+          @pytest.mark.parametrize('adapter_id, marker', [
+              ('totally-unknown', 'UNKNOWN_ADAPTER_FAIL_CLOSED'),
+              ('future', 'PRAP_CERTIFICATION_NOT_CERTIFIABLE:future:reserved'),
+              ('unknown', 'PRAP_CERTIFICATION_NOT_CERTIFIABLE:unknown:rejected'),
+          ])
+          def test_unknown_reserved_and_rejected_adapters_fail_closed(adapter_id, marker):
+              with pytest.raises(CertificationError, match=marker):
+                  certify_adapter(adapter_id, root=ROOT)
+
+
+          def test_contract_host_promotion_tampering_fails_closed(tmp_path):
+              contract = load_prap_certification_contract(ROOT)
+              contract['host_maturity']['certification_can_promote'] = True
+              target = tmp_path / 'machine' / 'protocol' / 'prap-certification-contract.v1.json'
+              target.parent.mkdir(parents=True)
+              target.write_text(json.dumps(contract), encoding='utf-8')
+              with pytest.raises(CertificationError, match='PRAP_CERTIFICATION_HOST_PROMOTION_FORBIDDEN'):
+                  load_prap_certification_contract(tmp_path)
+
+
+          def test_runtime_protocol_validation_failure_is_not_certified(monkeypatch):
+              class InvalidAdapter:
+                  def protocol_metadata(self):
+                      return AdapterProtocol(
+                          adapter_id='codex',
+                          display_name='Codex',
+                          runtime_adapter='codex',
+                          host_type='ai-assistant',
+                          protocol_version='PRAP v2',
+                          packaging_status='marketplace',
+                          marketplace_status='available',
+                          capabilities=AdapterCapabilities(
+                              supports_commands=True,
+                              supports_context=True,
+                              supports_file_handoff=True,
+                              supports_workspace=True,
+                              supports_audit_trace=True,
+                              supports_streaming=False,
+                              supports_governance=True,
+                          ),
+                      )
+
+              monkeypatch.setattr(AdapterFactory, 'create', staticmethod(lambda *_args, **_kwargs: InvalidAdapter()))
+              with pytest.raises(CertificationError, match='PRAP_CERTIFICATION_PROTOCOL_INVALID'):
+                  certify_adapter('codex', root=ROOT)
+
+
+          def test_unrecognized_host_maturity_fails_closed(monkeypatch):
+              monkeypatch.setattr(
+                  certification_module,
+                  'resolve_host_update_record',
+                  lambda *_args, **_kwargs: {'host_id': 'codex', 'maturity': 'PROMOTED'},
+              )
+              with pytest.raises(CertificationError, match='PRAP_CERTIFICATION_HOST_MATURITY_DRIFT'):
+                  certify_adapter('codex', root=ROOT)
+
+
+          def test_evidence_matches_machine_schema_required_and_constant_fields():
+              schema = json.loads((ROOT / 'machine' / 'schemas' / 'prap-certification-evidence.schema.json').read_text(encoding='utf-8'))
+              evidence = certify_adapter('codex', root=ROOT).to_dict()
+              assert set(schema['required']) == set(evidence)
+              for key, definition in schema['properties'].items():
+                  if 'const' in definition:
+                      assert evidence[key] == definition['const']
+
+
+          def test_cli_emits_read_only_json_and_has_no_execute_surface():
+              command = [sys.executable, str(ROOT / 'scripts' / 'certify_adapter.py'), '--adapter', 'codex', '--json']
+              completed = subprocess.run(command, cwd=ROOT, check=False, capture_output=True, text=True)
+              assert completed.returncode == 0
+              payload = json.loads(completed.stdout)
+              assert payload['certification_status'] == 'PASS'
+              assert payload['mutation_performed'] is False
+              assert 'ORCHESTRA_PRAP_CERTIFICATION=READ_ONLY_PASS' in completed.stderr
+
+              rejected = subprocess.run(command + ['--execute'], cwd=ROOT, check=False, capture_output=True, text=True)
+              assert rejected.returncode != 0
+              assert 'unrecognized arguments: --execute' in rejected.stderr
+          ''')
+
+          write('docs/setup/ADAPTER_SDK_PRAP.md', r'''
+          # Adapter SDK and PRAP v1 Compatibility Certification
+
+          Orchestra's Adapter SDK is a stable import surface over the existing PRAP v1 protocol. It does not replace `AdapterProtocol`, `AdapterCapabilities`, `ProtocolValidator`, or the compatibility matrix. Those existing contracts remain authoritative.
+
+          ## SDK surface
+
+          Adapter authors should import the stable SDK surface from `orchestra_runtime.protocol.sdk`. The SDK currently exposes the existing PRAP protocol types plus read-only certification functions. `SDK_PROTOCOL_VERSION` remains `PRAP v1`; `SDK_SURFACE_VERSION` versions only the SDK-facing export surface.
+
+          A new adapter must still declare canonical `AdapterProtocol` metadata, use typed `AdapterCapabilities`, and pass `ProtocolValidator`. Certification does not create missing protocol metadata and does not infer compatibility from a host name.
+
+          ## Read-only certification
+
+          Run one target:
+
+          ```text
+          python scripts/certify_adapter.py --adapter codex --json
+          ```
+
+          Run every contract-declared target:
+
+          ```text
+          python scripts/certify_adapter.py --all --json
+          ```
+
+          Certification reads `machine/protocol/prap-certification-contract.v1.json`, validates the runtime adapter against PRAP v1 and the existing compatibility matrix, and reads `machine/hosts/update-contract.v1.json` only to report the already-declared host maturity. Evidence conforms to `machine/schemas/prap-certification-evidence.schema.json`.
+
+          The command has no execution flag. It does not edit repository files, install or refresh a host integration, publish marketplace packages, move a release or tag, deploy, activate policy, or grant runtime authority.
+
+          ## Compatibility is not host support
+
+          PRAP compatibility and Host Update maturity are separate dimensions.
+
+          - Codex and Antigravity are currently `SUPPORTED` in the Host Update contract.
+          - Claude Code, Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain `SCAFFOLD_ONLY` for Host Update behavior.
+          - A `PASS` certification means that the adapter's declared runtime metadata is compatible with PRAP v1 under the certification contract. It never promotes host maturity.
+          - VSCodium remains a compatibility identity that maps through the VS Code runtime adapter and VS Code scaffold maturity.
+          - `future`, `unknown`, unregistered identities, unsupported protocol versions, contract drift, or malformed metadata fail closed.
+
+          ## Authority boundary
+
+          PRAP `AdapterCapabilities` describe adapter interface characteristics. They are not Orchestra runtime capability grants. Certification therefore emits `runtime_authority_granted=false`, `runtime_capabilities_granted=false`, `mutation_performed=false`, and `installed_integration_refresh_performed=false`.
+
+          Adapter metadata, packaging metadata, validation success, and compatibility evidence cannot expand authority. Existing trusted runtime composition and authority controls remain separate.
+
+          ## Future transports
+
+          MCP remains a future transport-integration concern. If a later governed phase justifies MCP implementation, MCP must map stabilized Orchestra capabilities to this Adapter SDK/PRAP boundary. It must not replace PRAP, become an authority source, or reinterpret certification as permission.
+          ''')
+
+          readme_path = Path('README.md')
+          readme = readme_path.read_text(encoding='utf-8')
+          heading = '## Adapter SDK and PRAP v1 Compatibility Certification\n'
+          if heading not in readme:
+              anchor = '## How Orchestra Works\n'
+              if anchor not in readme:
+                  raise SystemExit('README anchor missing')
+              section = textwrap.dedent(r'''
+              ## Adapter SDK and PRAP v1 Compatibility Certification
+
+              Orchestra's post-v1.5 Adapter SDK formalizes the existing PRAP v1 boundary instead of introducing another adapter abstraction. The stable SDK import surface is `orchestra_runtime.protocol.sdk`; deterministic read-only certification is provided by `scripts/certify_adapter.py` and the machine contract at `machine/protocol/prap-certification-contract.v1.json`.
+
+              PRAP compatibility is deliberately separate from host maturity. A certification pass validates declared adapter metadata and compatibility, but it cannot promote a scaffold host, grant runtime authority or capabilities, mutate a repository or installed integration, or imply marketplace availability. Host Update maturity continues to come only from `machine/hosts/update-contract.v1.json`: Codex and Antigravity remain `SUPPORTED`; Claude Code, Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain `SCAFFOLD_ONLY`.
+
+              See [Adapter SDK and PRAP v1 Compatibility Certification](docs/setup/ADAPTER_SDK_PRAP.md). MCP remains deferred to the final integration phase and, if later justified, must map to this stabilized protocol boundary rather than replace it or become an authority layer.
+
+              ''')
+              readme = readme.replace(anchor, section + anchor, 1)
+              readme_path.write_text(readme, encoding='utf-8')
+
+          changelog_path = Path('CHANGELOG.md')
+          changelog = changelog_path.read_text(encoding='utf-8')
+          candidate_heading = '## Post-v1.5.0 Adapter SDK and PRAP Compatibility Certification - Candidate\n'
+          if candidate_heading not in changelog:
+              anchor = '# Changelog\n\n'
+              section = textwrap.dedent(r'''
+              ## Post-v1.5.0 Adapter SDK and PRAP Compatibility Certification - Candidate
+
+              - Formalizes the existing `PRAP v1` adapter protocol as the single Adapter SDK boundary through `orchestra_runtime.protocol.sdk`; no parallel adapter abstraction is introduced.
+              - Adds a machine-owned read-only PRAP compatibility certification contract and evidence schema plus deterministic CLI evidence for canonical adapter targets.
+              - Fails closed on unknown, reserved, rejected, malformed, unsupported-version, runtime-mapping, host-mapping, or contract-drift conditions.
+              - Keeps compatibility certification separate from Host Update maturity: Codex and Antigravity remain `SUPPORTED`; Claude Code, Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain `SCAFFOLD_ONLY` for Host Update behavior.
+              - Preserves VSCodium as a compatible identity through the VS Code runtime adapter without promoting its scaffold maturity.
+              - Makes certification non-authorizing and non-mutating: no runtime authority or capability grant, installed-integration refresh, release/tag movement, deployment, policy activation, force push/history rewrite, branch cleanup, or host promotion is performed.
+              - Keeps MCP deferred to the final integration phase; future transports must map to the stabilized Adapter SDK/PRAP boundary and cannot become authority.
+              - Keeps public release `v1.5.0` fixed at `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`.
+
+              ''')
+              if anchor not in changelog:
+                  raise SystemExit('CHANGELOG anchor missing')
+              changelog = changelog.replace(anchor, anchor + section, 1)
+              changelog_path.write_text(changelog, encoding='utf-8')
+          PY
+
+      - name: Remove one-shot workflow from final source tree
+        run: git rm .github/workflows/adapter-sdk-prap-build-once.yml
+
+      - name: Install focused test dependencies
+        run: python -m pip install --upgrade pip pytest
+
+      - name: Compile new Python surfaces
+        run: python -m py_compile orchestra_runtime/protocol/certification.py orchestra_runtime/protocol/sdk.py scripts/certify_adapter.py tests/runtime/test_adapter_certification.py
+
+      - name: Run focused PRAP tests
+        run: python -m pytest tests/runtime/test_adapter_protocol.py tests/runtime/test_adapter_certification.py
+
+      - name: Run canonical structure and governance smoke checks
+        run: |
+          python scripts/validate_structure.py
+          python scripts/validate_manifest.py
+          python scripts/check_stale_references.py
+          python scripts/governance_check.py --strict
+          git diff --check
+
+      - name: Commit bounded implementation
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'feat: add Adapter SDK and PRAP certification contract'
+          git push origin HEAD:feature/adapter-sdk-prap-certification-vnext-20260817
