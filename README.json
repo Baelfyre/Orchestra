@@ -162,7 +162,7 @@
     "cosmic_ray_confidence_workflow": ".github/workflows/cosmic-ray-confidence.yml",
     "legacy_mutmut_evidence_workflow": ".github/workflows/mutation-confidence.yml",
     "command_surface_parity_test": "tests/runtime/test_command_surface_parity.py",
-    "third_party_provenance_regression_test": "tests/runtime/test_third_party_provenance.py",
+    "third_party_provenance_regression_test": "tests/behavior/test_readme_machine_index.py",
     "test_evidence_schema": "machine/schemas/test-evidence.schema.json",
     "test_evidence_schema_version": "orchestra.test-evidence.v1",
     "communication_measurement_schema": "machine/schemas/communication-measurement.schema.json",
