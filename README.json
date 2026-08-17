@@ -81,6 +81,21 @@
       "canonical_route_mutation": false,
       "a3_authorized": false,
       "authority_note": "A2 context is advisory only. It cannot select a different route, grant authority or capability, alter governance, or promote learned patterns."
+    },
+    "behavioral_pattern_learning_a3": {
+      "status": "CONTRACT_ONLY_SHADOW_NO_RUNTIME_EFFECT",
+      "purpose": "Machine-local shadow signal, candidate, and comparison contracts for future behavioral pattern learning without inserting shadow state into the A1 materialized profile, A2 specialist context, routing, or execution.",
+      "machine_sources": ["machine/adaptive/a3-shadow-learning-contract.v1.json", "machine/schemas/adaptive-shadow-signal.schema.json", "machine/schemas/adaptive-shadow-candidate.schema.json", "machine/schemas/adaptive-shadow-comparison.schema.json"],
+      "human_sources": ["docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3.md"],
+      "canonical_pre_a3_hardening_commit": "8402a5acbafe923c73904dcdb90f7faca90ced9c",
+      "canonical_pre_a3_hardening_tree": "1d56e1623f3662c59817146092c4135e37dd50ed",
+      "runtime_execution_control": false,
+      "a3_signal_extraction_implemented": false,
+      "a3_candidate_learner_implemented": false,
+      "a3_shadow_comparator_implemented": false,
+      "shadow_state_consumed_by_a2": false,
+      "promotion_bridge": "NONE",
+      "authority_note": "A3.0 defines shadow evidence contracts only. Confidence is not authority; generic task success is not strategy-success evidence; shadow recommendations cannot affect execution or promote learned patterns."
     }
   },
   "machine_scan_order": [
@@ -121,6 +136,10 @@
     "adaptive_store_meta_schema": "machine/schemas/adaptive-store-meta.schema.json",
     "adaptive_context_a2_contract": "machine/adaptive/a2-context-contract.v1.json",
     "adaptive_context_schema": "machine/schemas/adaptive-context.schema.json",
+    "adaptive_shadow_learning_a3_contract": "machine/adaptive/a3-shadow-learning-contract.v1.json",
+    "adaptive_shadow_signal_schema": "machine/schemas/adaptive-shadow-signal.schema.json",
+    "adaptive_shadow_candidate_schema": "machine/schemas/adaptive-shadow-candidate.schema.json",
+    "adaptive_shadow_comparison_schema": "machine/schemas/adaptive-shadow-comparison.schema.json",
     "release_evidence_directory": "machine/release-evidence",
     "schemas_directory": "machine/schemas",
     "source_state_receipt_schema": "machine/schemas/source-state-receipt.schema.json",
@@ -154,7 +173,7 @@
     "required_analysis_ruleset_drift_issue": 331,
     "required_analysis_ruleset_drift_state": "OPEN_COMPATIBILITY_WORKFLOW_ACTIVE"
   },
-  "architecture": {"current_overview": "docs/architecture/README.md", "detailed_authority_capability_design": "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md", "routing_reference": "ROUTING_MAP.md", "governance_reference": "docs/governance/README.md", "compliance_registry_reference": "docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md", "compliance_protocol_runtime": "orchestra_runtime/compliance_protocol.py", "mcp_transport_reference": "docs/developer/MCP_STDIO_TRANSPORT.md", "adaptive_context_reference": "docs/architecture/ADAPTIVE_CONTEXT_A2.md", "historical_status_policy": "Phase documents may retain phase-era status wording. Current exact state comes from live machine contracts, release evidence, and Git identity."},
+  "architecture": {"current_overview": "docs/architecture/README.md", "detailed_authority_capability_design": "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md", "routing_reference": "ROUTING_MAP.md", "governance_reference": "docs/governance/README.md", "compliance_registry_reference": "docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md", "compliance_protocol_runtime": "orchestra_runtime/compliance_protocol.py", "mcp_transport_reference": "docs/developer/MCP_STDIO_TRANSPORT.md", "adaptive_context_reference": "docs/architecture/ADAPTIVE_CONTEXT_A2.md", "adaptive_shadow_learning_reference": "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3.md", "historical_status_policy": "Phase documents may retain phase-era status wording. Current exact state comes from live machine contracts, release evidence, and Git identity."},
   "hosts_integrations": {
     "host_update_contract": "machine/hosts/update-contract.v1.json",
     "adapter_sdk_reference": "docs/setup/ADAPTER_SDK_PRAP.md",
@@ -218,7 +237,7 @@
     "murmurs_measurement_issue": 316,
     "murmurs_measurement_issue_state": "OPEN",
     "adaptive_governed_orchestration_issue": 340,
-    "adaptive_governed_orchestration_state": "A2_CANONICAL_PRE_A3_HARDENING_IN_PROGRESS_A3_NOT_STARTED"
+    "adaptive_governed_orchestration_state": "A2_AND_PRE_A3_HARDENING_CANONICAL_A3_0_CONTRACT_ONLY"
   },
   "documentation": {
     "documentation_map": "docs/README.md",
@@ -233,6 +252,7 @@
     "hybrid_context_formats": "docs/HYBRID_CONTEXT_FORMATS.md",
     "adaptive_memory_a0_a1": "docs/architecture/ADAPTIVE_MEMORY_A0_A1.md",
     "adaptive_context_a2": "docs/architecture/ADAPTIVE_CONTEXT_A2.md",
+    "adaptive_shadow_learning_a3": "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3.md",
     "roadmap": "docs/project/ROADMAP.md",
     "changelog": "CHANGELOG.md",
     "release_docs": "docs/releases/",
@@ -259,7 +279,7 @@
     "documentation_and_provenance_closeout": "INCLUDED_IN_V1_6_CANDIDATE",
     "adaptive_local_memory_a1": "CANONICAL_FOUNDATION_NO_DIRECT_RUNTIME_EFFECT",
     "adaptive_specialist_context_a2": "CANONICAL_ADVISORY_OPT_IN",
-    "adaptive_governed_orchestration": "A2_CANONICAL_PRE_A3_HARDENING_IN_PROGRESS_A3_NOT_STARTED_ISSUE_340",
+    "adaptive_governed_orchestration": "A2_AND_PRE_A3_HARDENING_CANONICAL_A3_0_CONTRACT_ONLY_ISSUE_340",
     "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316"
   },
   "ai_review_guidance": {
@@ -283,6 +303,9 @@
     "treat_adaptive_a1_memory_as_non_authorizing_local_data_not_runtime_policy": true,
     "treat_adaptive_a2_context_as_advisory_only_after_existing_runtime_gates": true,
     "preserve_explicit_adaptive_precedence_over_same_scope_inferred_lifecycle": true,
+    "treat_a3_shadow_state_as_non_authorizing_and_separate_from_a1_profile_and_a2_context": true,
+    "do_not_infer_specialist_strategy_success_from_generic_phase_or_task_success": true,
+    "do_not_treat_a3_confidence_as_promotion_or_execution_authority": true,
     "treat_v1_5_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "treat_v1_6_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "when_evaluating_a_published_tag_or_release_prefer_live_verified_git_and_release_identity_over_prepublication_snapshot_fields": true

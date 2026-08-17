@@ -18,6 +18,17 @@ Primary machine and runtime surfaces:
 
 Older phase documents may retain the status language of the phase in which they were written. Treat those status headers as historical evidence unless a current machine contract or this documentation map identifies the document as a live state source.
 
+## Adaptive intelligence
+
+- [Adaptive Memory A0/A1](architecture/ADAPTIVE_MEMORY_A0_A1.md): research boundary and machine-local adaptive-memory foundation.
+- [Adaptive Specialist Context A2](architecture/ADAPTIVE_CONTEXT_A2.md): opt-in read-only specialist context after deterministic runtime gates.
+- [Adaptive Behavioral Pattern Learning A3](architecture/ADAPTIVE_SHADOW_LEARNING_A3.md): A3.0 shadow-learning contract and non-authorizing signal/candidate/comparison model.
+- `../machine/adaptive/a1-memory-contract.v1.json`: A1 machine contract.
+- `../machine/adaptive/a2-context-contract.v1.json`: A2 machine contract.
+- `../machine/adaptive/a3-shadow-learning-contract.v1.json`: A3.0 machine contract.
+
+A1 and A2 are canonical. The pre-A3 precedence/materialization hardening is canonical at `8402a5acbafe923c73904dcdb90f7faca90ced9c`. A3 shadow state is defined as separate from the A1 materialized profile and A2 specialist context; contract definition does not activate an A3 learner or grant execution authority.
+
 ## Specialists, routing, and coordination
 
 - [Skill Index](../SKILL_INDEX.md): lightweight human specialist-routing index.
@@ -89,7 +100,7 @@ Murmurs changes presentation only. It does not alter authority, governance, vali
 - `../machine/release-evidence/`: structured release evidence.
 - [Decision Log](../DECISION_LOG.md): architectural and governance decisions.
 
-The current public release is `v1.5.0`. Later canonical commits on `main` remain post-release work until a separately governed release is published.
+The current public release is `v1.6.0`. Later canonical commits on `main` remain post-release work until a separately governed release is published.
 
 ## Developer extension path
 
