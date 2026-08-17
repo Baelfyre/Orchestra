@@ -200,7 +200,7 @@
 
 ## v1.3.0 Specialist Intelligence - Release Preparation - Pending
 
-- Normalizes the root, Claude Code, Codex, Cursor, JetBrains, Neovim, VS Code, Windsurf, and Zed package/version surfaces to `1.3.0` for the Specialist Intelligence release candidate without changing host maturity.
+- Normalized the root, Claude Code, Codex, Cursor, JetBrains, Neovim, VS Code, Windsurf, and Zed package/version surfaces to `1.3.0` for the Specialist Intelligence release candidate without changing host maturity.
 - Added a deterministic runtime regression that requires all 11 live package/version surfaces to agree on `1.3.0`.
 - Added the source-backed `docs/releases/v1.3.0-specialist-intelligence-release-candidate.md` preparation record covering the completed SK1-SK10 Specialist Knowledge Layer campaign and its validation baseline.
 - Preserved `v1.2.0` as the current public release until a separately authorized publication gate creates `v1.3.0`; this preparation performs no tag creation, GitHub Release publication, deployment, production mutation, marketplace publication, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite.
@@ -374,7 +374,7 @@ This section records the final pre-publication candidate state. Repository manif
 
 - Reconciled Delegated Phase D against the existing trusted runtime. PR #226 concluded `NO_DUPLICATE_RUNTIME_EXTENSION_REQUIRED` for `v1.2.0`; no competing runtime model was added.
 - Reconciled canonical delegated-governance state so stale Phase C/D not-started claims and false live-host promotion are rejected by executable consistency validation.
-- Normalized the root, Claude Code, Codex, and scaffold adapter version surfaces to `1.2.0` without changing adapter maturity or publishing any IDE marketplace package.
+- Normalized approved plugin and scaffold-package metadata to `1.2.0` without changing adapter maturity or publishing any IDE marketplace package.
 - Updated README, project context/state, session handoff, roadmap, compatibility, installation, and Codex adapter documentation to distinguish release-candidate metadata from the current public release.
 - Consolidated the previously fragmented post-`v1.1.2` unreleased changelog entries into this release-candidate record while preserving detailed implementation evidence in Git and pull-request history.
 - Added Governed Autonomy Modes to the `v1.2.0` scope after R7 closeout and before R8 publication; affected release evidence must be refreshed after implementation.
