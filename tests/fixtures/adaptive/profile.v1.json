@@ -1,0 +1,28 @@
+{
+  "generated_at": "2026-08-17T10:01:00Z",
+  "memory_rule_version": "orchestra.adaptive-memory-rules.v1",
+  "patterns": [
+    {
+      "confidence": 1.0,
+      "created_at": "2026-08-17T10:00:00Z",
+      "evidence_class": "EXPLICIT_SCOPED_PREFERENCE",
+      "evidence_refs": ["fixture:explicit-1"],
+      "memory_rule_version": "orchestra.adaptive-memory-rules.v1",
+      "observation_count": 1,
+      "pattern_id": "pattern-61984ee274e877d1aac36177",
+      "scope": {
+        "project_key": "Baelfyre/Orchestra",
+        "scope_type": "project",
+        "user_key": "fixture-user"
+      },
+      "status": "confirmed",
+      "subject_key": "docs.response_style",
+      "updated_at": "2026-08-17T10:00:00Z",
+      "value": "compact"
+    }
+  ],
+  "profile_id": "profile-bde635a134370dc019281c9c",
+  "schema_version": "orchestra.adaptive-profile.v1",
+  "source_head_digest": "059c176d4dd05ddaaccc8865f487c4f57e049d31fedcf4c75d1ce1cb619f2f8e",
+  "user_key": "fixture-user"
+}

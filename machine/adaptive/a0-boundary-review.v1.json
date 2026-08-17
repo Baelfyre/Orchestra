@@ -1,0 +1,162 @@
+{
+  "schema_version": "orchestra.adaptive-a0-boundary-review.v1",
+  "review_date": "2026-08-17",
+  "status": "A0_COMPLETE_A1_AUTHORIZED",
+  "orchestra_source": {
+    "repository": "Baelfyre/Orchestra",
+    "canonical_branch": "main",
+    "canonical_sha": "ba35764a14111518c7da729b5a4c69c6af485a9b",
+    "canonical_tree": "0d569c57f77254c01af15c063e1e6582ff9e8d02",
+    "public_release": "v1.6.0",
+    "tag_target_verified": true,
+    "release_id": 371748233,
+    "release_object_direct_read": "UNAVAILABLE_TO_CONNECTED_INTEGRATION"
+  },
+  "padayon_source": {
+    "repository": "Baelfyre/Padayon",
+    "expected_main": "6ad0502aeec135e837ed569de688913888029da1",
+    "verification": "MERGED_PR_146_CLOSEOUT_IDENTITY",
+    "direct_main_ref_read": "UNAVAILABLE_TO_CONNECTED_INTEGRATION",
+    "pr_146_merge_commit_sha": "6ad0502aeec135e837ed569de688913888029da1"
+  },
+  "open_work": {
+    "issue_340": "LOCAL_ADAPTIVE_INTELLIGENCE_AND_LEARNED_ORCHESTRATION",
+    "issue_316": "MURMURS_LIVE_HOST_MEASUREMENT_REMAINS_SEPARATE",
+    "issue_331": "REQUIRED_CHECK_IDENTITY_MAINTENANCE_DEBT_WITH_CANONICAL_COMPATIBILITY_BRIDGE",
+    "pr_312": "STALE_SUPERSEDED_DO_NOT_MERGE"
+  },
+  "architecture": {
+    "deterministic_runtime_order": [
+      "coordination_validation",
+      "trusted_initialization",
+      "adapter_context_assembly",
+      "command_parsing",
+      "deterministic_routing",
+      "trusted_runtime_binding",
+      "authority",
+      "capability",
+      "governance",
+      "lifecycle_activation",
+      "operation",
+      "audit_evidence_result"
+    ],
+    "router_service_remains_deterministic": true,
+    "tuner_remains_coordination_only": true,
+    "current_project_state_repurposed_for_learning": false,
+    "context_assembler_becomes_learning_authority": false,
+    "future_adaptive_attachment_point": "AFTER_DETERMINISTIC_ELIGIBILITY_AUTHORITY_CAPABILITY_AND_GOVERNANCE_CEILINGS_BEFORE_OPERATION",
+    "attachment_implemented_in_a1": false
+  },
+  "reuse_vs_new": {
+    "reuse_patterns": [
+      "canonical_json_bytes_and_digests",
+      "hash_chained_jsonl_integrity",
+      "bounded_scope_and_context_principles",
+      "retrospective_governed_outcome_signals",
+      "evidence_fingerprints_and_fail_closed_parsing"
+    ],
+    "new_a1_surfaces": [
+      "adaptive_scope_model",
+      "adaptive_observation_model",
+      "machine_local_jsonl_store",
+      "materialized_adaptive_profile",
+      "privacy_export_delete_compaction",
+      "profile_recovery"
+    ],
+    "deferred": [
+      "adaptive_context_compiler",
+      "worker_or_strategy_ranking",
+      "tuner_topology_learning",
+      "conductor_route_ranking",
+      "model_provider_integration",
+      "training",
+      "recursive_test_time_compute"
+    ]
+  },
+  "research_provenance": [
+    {
+      "id": "sakana-fugu-repository",
+      "source": "https://github.com/SakanaAI/fugu",
+      "reviewed_revision": "ca7f1884b400e39018c6884d40b45c66cd78413e",
+      "revision_type": "PINNED_COMMIT",
+      "license": "NOASSERTION",
+      "license_note": "GitHub repository license metadata did not assert a repository license during A0.",
+      "source_copied_or_vendored": false,
+      "runtime_dependency": false,
+      "upstream_source_adapted": false
+    },
+    {
+      "id": "fugu-technical-report",
+      "source": "https://arxiv.org/abs/2606.21228",
+      "reviewed_version": "v2",
+      "reviewed_revision_date": "2026-06-23",
+      "license": "CC-BY-4.0"
+    },
+    {
+      "id": "trinity",
+      "source": "https://arxiv.org/abs/2512.04695",
+      "reviewed_version": "v3",
+      "reviewed_revision_date": "2026-04-27",
+      "license": "CC-BY-4.0"
+    },
+    {
+      "id": "conductor-paper",
+      "source": "https://arxiv.org/abs/2512.04388",
+      "reviewed_version": "v5",
+      "reviewed_revision_date": "2026-05-06",
+      "license": "CC-BY-4.0"
+    }
+  ],
+  "source_independence": {
+    "research_is_runtime_authority": false,
+    "source_copy_required": false,
+    "code_dependency_required": false,
+    "orchestra_contracts_are_independently_specified": true
+  },
+  "observation_contract": {
+    "raw_conversation_is_authoritative_learning_evidence": false,
+    "governed_retrospective_fields_allowed": [
+      "phase_id",
+      "phase_status",
+      "total_units_planned",
+      "units_accepted",
+      "remediation_cycle_count",
+      "capacity_wait_count",
+      "human_escalation_count",
+      "evidence_fingerprint"
+    ],
+    "trustworthy_measured_performance_values_only": true,
+    "unknown_or_unavailable_metrics_are_not_inferred": true
+  },
+  "privacy_and_threats": {
+    "primary_threats": [
+      "scope_leakage",
+      "poisoned_observations",
+      "authority_escalation_through_preferences",
+      "tampering_or_replay",
+      "one_off_preference_promotion",
+      "sensitive_data_retention",
+      "cross_project_disclosure",
+      "provider_leakage",
+      "unbounded_compute_growth"
+    ],
+    "controls": [
+      "exact_scope_identity",
+      "allowlisted_normalized_sources",
+      "hash_chained_observations",
+      "non_learnable_subject_rejection",
+      "explicit_vs_inferred_evidence_classes",
+      "no_a1_automatic_inferred_promotion",
+      "credential_like_value_rejection",
+      "local_export_delete_and_compaction",
+      "deterministic_fallback"
+    ],
+    "retention_period": "NOT_INVENTED",
+    "physical_delete_semantics": "LOCAL_COMPACTION_REMOVES_ACTIVE_RECORDS_BUT_FORENSIC_SECURE_ERASE_IS_NOT_GUARANTEED"
+  },
+  "a1_entry": {
+    "human_authorization": "APPROVED_2026-08-17",
+    "scope": "A0_A1_ONLY",
+    "a2_or_later_authority": false
+  }
+}
