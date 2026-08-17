@@ -9,15 +9,17 @@ def _load(path):
     return json.loads((ROOT / path).read_text(encoding="utf-8"))
 
 
-def test_machine_readme_is_strictly_versioned_and_points_to_human_readme():
+def test_machine_readme_is_strictly_versioned_and_points_to_human_entrypoints():
     machine = _load("README.json")
     schema = _load("machine/schemas/readme-machine-index.schema.json")
-    assert machine["schema_version"] == "orchestra.readme-machine-index.v1"
+    assert machine["schema_version"] == "orchestra.readme-machine-index.v2"
     assert machine["document_role"] == "machine_repository_index"
     assert machine["authority"] == "derived_and_parity_validated_projection"
     assert machine["human_readme"] == "README.md"
+    assert machine["human_documentation_map"] == "docs/README.md"
     assert schema["$schema"] == "https://json-schema.org/draft/2020-12/schema"
     assert schema["additionalProperties"] is False
+    assert schema["properties"]["schema_version"]["const"] == machine["schema_version"]
 
 
 def test_machine_readme_repository_identity_matches_plugin_manifest():
@@ -27,6 +29,7 @@ def test_machine_readme_repository_identity_matches_plugin_manifest():
     assert repo["name"] == plugin["display_name"]
     assert repo["url"] == plugin["repository"]
     assert repo["license"] == plugin["license"]
+    assert repo["package_version"] == plugin["version"]
     assert repo["package_version_source"] == "plugin.json#/version"
 
 
@@ -51,17 +54,19 @@ def test_machine_readme_scan_order_is_unique_contiguous_and_existing():
     assert orders == list(range(1, len(records) + 1))
     assert len({record["path"] for record in records}) == len(records)
     for record in records:
-        path = ROOT / record["path"]
+        path = ROOT / record["path"].rstrip("/")
         assert path.exists(), record["path"]
 
 
 def test_machine_readme_contract_references_exist():
     machine = _load("README.json")
     for key, value in machine["machine_contracts"].items():
-        if key == "schemas_directory":
-            assert (ROOT / value).is_dir()
+        path = ROOT / value.rstrip("/")
+        assert path.exists(), f"{key}: {value}"
+        if key.endswith("_directory") or key == "schemas_directory":
+            assert path.is_dir(), f"{key}: {value}"
         else:
-            assert (ROOT / value).is_file(), f"{key}: {value}"
+            assert path.is_file(), f"{key}: {value}"
 
 
 def test_ai_review_guidance_prefers_machine_contracts_for_exact_values():
@@ -70,3 +75,4 @@ def test_ai_review_guidance_prefers_machine_contracts_for_exact_values():
     assert guidance["do_not_synthesize_full_git_identifiers"] is True
     assert guidance["prefer_machine_contracts_for_exact_values"] is True
     assert guidance["retrieve_human_docs_for_rationale"] is True
+    assert guidance["do_not_infer_authority_from_prose"] is True

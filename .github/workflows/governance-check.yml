@@ -33,7 +33,12 @@ jobs:
       - name: Create Artifacts Directory
         run: mkdir -p artifacts
 
-      - name: Enforce README Impact Gate
+      - name: Test Documentation Contracts
+        run: |
+          python tests/behavior/test_readme_impact.py
+          python tests/behavior/test_readme_machine_index.py
+
+      - name: Enforce Documentation Impact Gate
         run: |
           set +e
           python scripts/check_readme_impact.py > artifacts/readme_impact_report.txt
@@ -100,7 +105,7 @@ jobs:
         run: |
           echo "# Governance Validation Report" >> $GITHUB_STEP_SUMMARY
           echo "## Stage 1 Strict Deterministic Gates: ON" >> $GITHUB_STEP_SUMMARY
-          echo "README Impact Gate and Stage 1 strict deterministic governance validation completed. Review artifacts and logs for any fail-closed documentation or governance findings." >> $GITHUB_STEP_SUMMARY
+          echo "Documentation Impact Gate and Stage 1 strict deterministic governance validation completed. Review artifacts and logs for any fail-closed documentation or governance findings." >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Governance Artifacts
         if: always()

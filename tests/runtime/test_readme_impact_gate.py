@@ -1,23 +1,30 @@
 from scripts import check_readme_impact as gate
 
 
-def test_significant_runtime_change_requires_readme() -> None:
+def test_runtime_change_requires_machine_index_and_detailed_documentation() -> None:
     result = gate.evaluate_changed_paths(["orchestra_runtime/runtime.py"])
     assert result["passed"] is False
     assert result["readme_updated"] is False
-    assert result["significant"] == ["orchestra_runtime/runtime.py"]
+    assert result["machine_impacts"] == ["orchestra_runtime/runtime.py"]
+    assert result["detail_impacts"] == ["orchestra_runtime/runtime.py"]
+    assert set(result["missing"]) == {"README.json", "detailed-documentation"}
 
 
-def test_significant_change_passes_with_readme() -> None:
+def test_runtime_change_passes_without_root_readme_when_affected_docs_are_updated() -> None:
     result = gate.evaluate_changed_paths(
-        ["docs/governance/GOVERNANCE_LAYER.md", "README.md"]
+        [
+            "orchestra_runtime/runtime.py",
+            "README.json",
+            "docs/architecture/README.md",
+        ]
     )
     assert result["passed"] is True
-    assert result["readme_updated"] is True
-    assert result["significant"] == ["docs/governance/GOVERNANCE_LAYER.md"]
+    assert result["readme_updated"] is False
+    assert result["machine_index_updated"] is True
+    assert result["detailed_docs_updated"] is True
 
 
-def test_test_and_validation_evidence_only_changes_do_not_require_readme() -> None:
+def test_test_and_validation_evidence_only_changes_do_not_require_documentation() -> None:
     result = gate.evaluate_changed_paths(
         [
             "tests/runtime/test_example.py",
@@ -26,22 +33,27 @@ def test_test_and_validation_evidence_only_changes_do_not_require_readme() -> No
         ]
     )
     assert result["passed"] is True
-    assert result["significant"] == []
+    assert result["public_impacts"] == []
+    assert result["machine_impacts"] == []
+    assert result["detail_impacts"] == []
 
 
-def test_version_and_host_surfaces_are_significant() -> None:
+def test_package_and_public_release_surfaces_require_root_and_machine_entrypoints() -> None:
     paths = [
         "plugin.json",
         ".claude-plugin/plugin.json",
-        "adapters/vscode/package.json",
-        "docs/releases/v1.4.0-governance-upgrade.md",
+        "docs/releases/v1.6.0-example.md",
     ]
     result = gate.evaluate_changed_paths(paths)
     assert result["passed"] is False
-    assert result["significant"] == sorted(paths)
+    assert "plugin.json" in result["public_impacts"]
+    assert ".claude-plugin/plugin.json" in result["public_impacts"]
+    assert "docs/releases/v1.6.0-example.md" in result["public_impacts"]
+    assert "README.md" in result["missing"]
+    assert "README.json" in result["missing"]
 
 
-def test_governance_and_ci_changes_are_significant() -> None:
+def test_governance_ci_and_specialist_changes_require_machine_parity_and_domain_docs() -> None:
     paths = [
         ".github/workflows/governance-check.yml",
         "scripts/check_readme_impact.py",
@@ -49,4 +61,6 @@ def test_governance_and_ci_changes_are_significant() -> None:
     ]
     result = gate.evaluate_changed_paths(paths)
     assert result["passed"] is False
-    assert result["significant"] == sorted(paths)
+    assert result["machine_impacts"] == sorted(paths)
+    assert result["detail_impacts"] == ["skills/the-governor/SKILL.md"]
+    assert set(result["missing"]) == {"README.json", "detailed-documentation"}

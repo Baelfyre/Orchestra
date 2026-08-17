@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""Fail closed when significant Orchestra changes omit README.md.
+"""Fail closed when Orchestra changes omit the documentation surfaces they affect.
 
-The gate is intentionally deterministic. It classifies repository paths whose
-changes materially affect Orchestra's user-facing capabilities, governance,
-routing, installation, host integrations, release/version contract, or CI
-policy. Any such change must update README.md in the same revision.
+The historical gate required README.md for nearly every significant change. That
+made the root landing page accumulate implementation detail. This contract keeps
+README.md stable and concise while requiring machine-index parity and detailed
+documentation when the changed surface needs them.
 """
 from __future__ import annotations
 
@@ -18,23 +18,34 @@ from typing import Iterable
 
 
 README_PATH = "README.md"
+MACHINE_INDEX_PATH = "README.json"
 
-SIGNIFICANT_CHANGE_PATTERNS = (
+# Changes that materially alter the public package/release/install identity must
+# keep the concise landing page current.
+PUBLIC_README_PATTERNS = (
+    ".agents/plugins/marketplace.json",
+    ".claude-plugin/**",
+    ".codex-plugin/**",
+    "assets/readme/**",
+    "docs/releases/**",
+    "docs/setup/INSTALLATION.md",
+    "plugin.json",
+)
+
+# Machine-facing discovery must track changes to executable, routed, governed,
+# integrated, or machine-contract surfaces. README.json is an index, not a copy.
+MACHINE_INDEX_PATTERNS = (
     ".agents/plugins/marketplace.json",
     ".claude-plugin/**",
     ".codex-plugin/**",
     ".github/workflows/**",
     "adapters/**",
     "commands/**",
+    "machine/**",
     "orchestra_runtime/**",
     "scripts/**",
     "skills/**",
     "templates/**",
-    "docs/governance/**",
-    "docs/project/**",
-    "docs/releases/**",
-    "docs/routing/**",
-    "docs/setup/**",
     "AGENTS.md",
     "PROJECT_CONTEXT.md",
     "PROJECT_STATE.md",
@@ -43,16 +54,37 @@ SIGNIFICANT_CHANGE_PATTERNS = (
     "plugin.json",
 )
 
-# These paths are evidence, tests, or documentation maintenance that should not
-# force meaningless README churn when changed by themselves.
+# Domain behavior should not become discoverable only through code. A changed
+# implementation/contract surface must be accompanied by at least one detailed
+# human documentation surface. This intentionally does not force README.md.
+DETAIL_SOURCE_PATTERNS = (
+    "adapters/**",
+    "commands/**",
+    "machine/developer-portal/**",
+    "machine/governance/**",
+    "machine/hosts/**",
+    "machine/protocol/**",
+    "machine/routing/**",
+    "orchestra_runtime/**",
+    "skills/**",
+)
+
+DETAIL_DOCUMENTATION_PATTERNS = (
+    "docs/**",
+    "AGENTS.md",
+    "ROUTING_MAP.md",
+    "SKILL_INDEX.md",
+)
+
+# Evidence-only/test-only changes remain outside documentation-impact forcing.
 NON_SIGNIFICANT_PATTERNS = (
     "README.md",
+    "README.json",
     "CHANGELOG.md",
     "DECISION_LOG.md",
     "SESSION_HANDOFF.md",
-    "assets/**",
+    "artifacts/**",
     "docs/validation/**",
-    "docs/artificer/**",
     "tests/**",
 )
 
@@ -72,23 +104,42 @@ def _matches(path: str, patterns: Iterable[str]) -> bool:
     return any(fnmatch.fnmatch(path, pattern) for pattern in patterns)
 
 
-def is_significant_change(path: str) -> bool:
-    path = path.strip().replace("\\", "/")
-    if not path or _matches(path, NON_SIGNIFICANT_PATTERNS):
-        return False
-    return _matches(path, SIGNIFICANT_CHANGE_PATTERNS)
+def _impact_paths(changed: list[str], patterns: Iterable[str]) -> list[str]:
+    return sorted(
+        path
+        for path in changed
+        if not _matches(path, NON_SIGNIFICANT_PATTERNS) and _matches(path, patterns)
+    )
 
 
 def evaluate_changed_paths(paths: Iterable[str]) -> dict[str, object]:
     changed = normalize_paths(paths)
-    significant = sorted(path for path in changed if is_significant_change(path))
+    public_impacts = _impact_paths(changed, PUBLIC_README_PATTERNS)
+    machine_impacts = _impact_paths(changed, MACHINE_INDEX_PATTERNS)
+    detail_impacts = _impact_paths(changed, DETAIL_SOURCE_PATTERNS)
+
     readme_updated = README_PATH in changed
-    passed = not significant or readme_updated
+    machine_index_updated = MACHINE_INDEX_PATH in changed
+    detailed_docs_updated = any(_matches(path, DETAIL_DOCUMENTATION_PATTERNS) for path in changed)
+
+    missing: list[str] = []
+    if public_impacts and not readme_updated:
+        missing.append(README_PATH)
+    if machine_impacts and not machine_index_updated:
+        missing.append(MACHINE_INDEX_PATH)
+    if detail_impacts and not detailed_docs_updated:
+        missing.append("detailed-documentation")
+
     return {
-        "passed": passed,
+        "passed": not missing,
         "changed": changed,
-        "significant": significant,
+        "public_impacts": public_impacts,
+        "machine_impacts": machine_impacts,
+        "detail_impacts": detail_impacts,
         "readme_updated": readme_updated,
+        "machine_index_updated": machine_index_updated,
+        "detailed_docs_updated": detailed_docs_updated,
+        "missing": missing,
     }
 
 
@@ -138,7 +189,6 @@ def resolve_change_range(repo_root: Path) -> tuple[str, str, str] | None:
         if not isinstance(base_obj, dict):
             raise RuntimeError("Pull-request event payload is missing base data")
         base = str(base_obj.get("sha", "")).strip()
-        # GITHUB_SHA is the tested merge revision for pull_request workflows.
         head = os.environ.get("GITHUB_SHA", "").strip() or "HEAD"
         _ensure_commit(repo_root, base, "pull-request base")
         _ensure_commit(repo_root, head, "pull-request tested head")
@@ -150,13 +200,11 @@ def resolve_change_range(repo_root: Path) -> tuple[str, str, str] | None:
         if base and set(base) == {"0"}:
             base = ""
         if not base:
-            raise RuntimeError("Push event has no usable before commit; README impact cannot be verified")
+            raise RuntimeError("Push event has no usable before commit; documentation impact cannot be verified")
         _ensure_commit(repo_root, base, "push-before")
         _ensure_commit(repo_root, head, "push-after")
         return "push-before..push-after", base, head
 
-    # workflow_dispatch has no trustworthy change range. The gate remains
-    # enforced on pull_request and push, where a revision transition exists.
     return None
 
 
@@ -164,7 +212,7 @@ def changed_paths_for_range(repo_root: Path, base: str, head: str) -> list[str]:
     result = _git(repo_root, "diff", "--name-only", base, head)
     if result.returncode != 0:
         raise RuntimeError(
-            "Could not enumerate changed paths for README impact validation: "
+            "Could not enumerate changed paths for documentation impact validation: "
             + (result.stderr.strip() or "git diff failed")
         )
     return normalize_paths(result.stdout.splitlines())
@@ -180,25 +228,31 @@ def main() -> int:
 
         label, base, head = change_range
         result = evaluate_changed_paths(changed_paths_for_range(repo_root, base, head))
-        significant = result["significant"]
+
         if result["passed"]:
             print(
                 "README_IMPACT_GATE=PASS "
-                f"comparison={label} significant={len(significant)} "
-                f"readme_updated={str(result['readme_updated']).lower()}"
+                f"comparison={label} public={len(result['public_impacts'])} "
+                f"machine={len(result['machine_impacts'])} detail={len(result['detail_impacts'])} "
+                f"readme_updated={str(result['readme_updated']).lower()} "
+                f"machine_index_updated={str(result['machine_index_updated']).lower()} "
+                f"detailed_docs_updated={str(result['detailed_docs_updated']).lower()}"
             )
-            if significant:
-                print("SIGNIFICANT_PATHS=" + ",".join(significant))
             return 0
 
         print(
             "README_IMPACT_GATE=FAIL "
-            f"comparison={label} significant={len(significant)} readme_updated=false"
+            f"comparison={label} missing={','.join(result['missing'])}"
         )
-        print("SIGNIFICANT_PATHS=" + ",".join(significant))
+        if result["public_impacts"]:
+            print("PUBLIC_IMPACT_PATHS=" + ",".join(result["public_impacts"]))
+        if result["machine_impacts"]:
+            print("MACHINE_IMPACT_PATHS=" + ",".join(result["machine_impacts"]))
+        if result["detail_impacts"]:
+            print("DETAIL_IMPACT_PATHS=" + ",".join(result["detail_impacts"]))
         print(
-            "REMEDIATION=Update README.md in the same change so public documentation "
-            "reflects the significant Orchestra capability/governance change."
+            "REMEDIATION=Update only the affected documentation surfaces: README.md for public identity/headline changes, "
+            "README.json for machine discovery parity, and detailed documentation for changed domain behavior."
         )
         return 1
     except (OSError, RuntimeError, json.JSONDecodeError) as exc:
