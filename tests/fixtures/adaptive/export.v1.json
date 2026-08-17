@@ -1,0 +1,58 @@
+{
+  "schema_version": "orchestra.adaptive-export.v1",
+  "user_key": "fixture-user",
+  "profile": {
+    "schema_version": "orchestra.adaptive-profile.v1",
+    "memory_rule_version": "orchestra.adaptive-memory-rules.v1",
+    "profile_id": "profile-bde635a134370dc019281c9c",
+    "user_key": "fixture-user",
+    "generated_at": "2026-08-17T10:01:00Z",
+    "source_head_digest": "059c176d4dd05ddaaccc8865f487c4f57e049d31fedcf4c75d1ce1cb619f2f8e",
+    "patterns": [
+      {
+        "pattern_id": "pattern-61984ee274e877d1aac36177",
+        "scope": {
+          "scope_type": "project",
+          "user_key": "fixture-user",
+          "project_key": "Baelfyre/Orchestra"
+        },
+        "subject_key": "docs.response_style",
+        "value": "compact",
+        "status": "confirmed",
+        "evidence_class": "EXPLICIT_SCOPED_PREFERENCE",
+        "evidence_refs": [
+          "fixture:explicit-1"
+        ],
+        "observation_count": 1,
+        "confidence": 1.0,
+        "created_at": "2026-08-17T10:00:00Z",
+        "updated_at": "2026-08-17T10:00:00Z",
+        "memory_rule_version": "orchestra.adaptive-memory-rules.v1"
+      }
+    ]
+  },
+  "observations": [
+    {
+      "schema_version": "orchestra.adaptive-observation.v1",
+      "memory_rule_version": "orchestra.adaptive-memory-rules.v1",
+      "observation_id": "obs-d1d0516f8868df7dbe72748e",
+      "sequence": 1,
+      "event_type": "EXPLICIT_PREFERENCE_SET",
+      "scope": {
+        "scope_type": "project",
+        "user_key": "fixture-user",
+        "project_key": "Baelfyre/Orchestra"
+      },
+      "subject_key": "docs.response_style",
+      "evidence_class": "EXPLICIT_SCOPED_PREFERENCE",
+      "source_type": "explicit_user_instruction",
+      "source_ref": "fixture:explicit-1",
+      "occurred_at": "2026-08-17T10:00:00Z",
+      "payload": {
+        "value": "compact"
+      },
+      "previous_observation_digest": null
+    }
+  ],
+  "forensic_secure_erase_guaranteed": false
+}

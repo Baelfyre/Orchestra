@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.6.0 Local Adaptive Memory A1 - Candidate
+
+- Adds the bounded A1 machine-local adaptive-memory foundation with JSONL observation evidence, derived JSON profiles, explicit global-user/project/specialist/task-session scopes, and storage outside the repository working tree by default.
+- Keeps adaptive state non-authorizing and disconnected from routing, authority, capability, governance, specialist-context assembly, lifecycle activation, provider behavior, training, and automatic inferred-pattern promotion; A2 and later phases remain outside this candidate.
+- Adds fail-closed adaptive observation, profile, export, and store-metadata schemas plus deterministic observation/profile/export fixtures and runtime validation against JSON Schema Draft 2020-12.
+- Preserves non-learnable governance/security boundaries, explicit-versus-inferred evidence semantics, hash-chained JSONL integrity, stale-profile rejection and recovery, scoped compaction/deletion, expiry pruning, structured export, and an explicit statement that forensic secure erasure is not guaranteed.
+- Extends the existing runtime validation environment only with the JSON Schema validator needed by the new fixture tests; the protected-main runtime statement and branch coverage floors remain unchanged.
+- Keeps this work on a draft feature PR pending exact-head validation and separate human merge authorization; it does not move the `v1.6.0` tag/Release, deploy, activate adaptive runtime behavior, bypass repository governance, or begin A2.
+
 ## v1.6.0 Integration & Developer Experience - Release Candidate
 
 - Normalizes all 11 repository-enforced package/version surfaces to `1.6.0` without changing host maturity, runtime authority, deployment state, or the still-published `v1.5.0` tag/Release identity.
