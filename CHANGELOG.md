@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.6.0 Adaptive Selection A4 Execution Attachment - Candidate
+
+- Adds an opt-in post-execution A4 shadow attachment that runs only after deterministic routing, authority, capability, governance, lifecycle activation, and runtime operation have completed.
+- Keeps default `RuntimeExecutor`, canonical `RouteDecision`, operation inputs, and deterministic runtime output unchanged; the attachment remains non-authorizing with `selection_effective=false` and `shadow_influenced_execution=false`.
+- Requires caller-supplied immutable A4 eligibility and evidence, validates command and specialist binding against the deterministic route, fails adaptive attachment closed without changing the completed deterministic result, and leaves delegated attachment disabled.
+- Adds focused runtime regressions, machine discovery parity, architecture documentation, and a machine implementation record while deferring persistent audit integration, execution-effective promotion, A5-A8 behavior, release, deployment, and publication.
+
 ## Post-v1.6.0 Adaptive Selection A4.1 - Candidate
 
 - Implements the bounded A4.1 shadow-only selector and evidence-qualification surface under the canonical A4.0 contracts without changing deterministic execution control.
