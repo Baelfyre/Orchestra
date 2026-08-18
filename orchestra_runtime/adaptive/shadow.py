@@ -192,7 +192,18 @@ class ShadowSignal:
             "observed_at": normalize_timestamp(observed_at, "observed_at"),
             "measurement": None if measurement is None else dict(measurement),
         }
-        return cls(signal_id=f"signal-{receipt_digest(identity)[:24]}", **identity)
+        return cls(
+            signal_id=f"signal-{receipt_digest(identity)[:24]}",
+            scope=scope,
+            signal_type=identity["signal_type"],
+            subject_key=identity["subject_key"],
+            observed_value=identity["observed_value"],
+            source_kind=identity["source_kind"],
+            source_ref=identity["source_ref"],
+            source_digest=identity["source_digest"],
+            observed_at=identity["observed_at"],
+            measurement=identity["measurement"],
+        )
 
     @classmethod
     def from_dict(cls, payload: Mapping[str, Any]) -> "ShadowSignal":
