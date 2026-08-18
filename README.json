@@ -98,8 +98,22 @@
       "a3_adversarial_correction_validation_implemented": true,
       "shadow_state_consumed_by_a2": false,
       "promotion_bridge": "NONE",
-      "a4_authorized": false,
+      "a4_authorized": true,
       "authority_note": "A3 is shadow-only. Confidence is not authority; generic task success is not strategy-success evidence; shadow recommendations cannot affect deterministic execution or promote learned patterns."
+    },
+    "bounded_adaptive_selection_a4": {
+      "status": "CONTRACT_FREEZE_SOURCE_CANDIDATE_NO_RUNTIME_EFFECT",
+      "purpose": "Freeze deterministic eligibility-before-ranking, bounded evidence qualification, shadow selection decisions, deterministic fallback, and adversarial boundaries for future specialist-strategy, model, and worker ranking.",
+      "machine_sources": ["machine/adaptive/a4-bounded-selection-contract.v1.json", "machine/schemas/adaptive-selection-eligibility-envelope.schema.json", "machine/schemas/adaptive-selection-evidence.schema.json", "machine/schemas/adaptive-selection-decision.schema.json"],
+      "human_sources": ["docs/architecture/ADAPTIVE_SELECTION_A4.md"],
+      "entry_canonical_head": "a520beabe6761161baf3179c1f6de5f055adbfc2",
+      "entry_canonical_tree": "b81703473e2350c9c41fecd7b459de6097d24fee",
+      "runtime_execution_control": false,
+      "specialist_strategy_direct_a3_evidence_available": true,
+      "model_worker_direct_a3_tendency_evidence_available": false,
+      "deterministic_fallback_without_qualified_evidence": true,
+      "a5_authorized": false,
+      "authority_note": "A4.0 is a non-authorizing contract freeze. Adaptive ranking cannot create eligibility, restore filtered options, expand authority/capability/provider access, change required specialist ownership, or affect execution."
     }
   },
   "machine_scan_order": [
@@ -144,6 +158,10 @@
     "adaptive_shadow_signal_schema": "machine/schemas/adaptive-shadow-signal.schema.json",
     "adaptive_shadow_candidate_schema": "machine/schemas/adaptive-shadow-candidate.schema.json",
     "adaptive_shadow_comparison_schema": "machine/schemas/adaptive-shadow-comparison.schema.json",
+    "adaptive_bounded_selection_a4_contract": "machine/adaptive/a4-bounded-selection-contract.v1.json",
+    "adaptive_selection_eligibility_envelope_schema": "machine/schemas/adaptive-selection-eligibility-envelope.schema.json",
+    "adaptive_selection_evidence_schema": "machine/schemas/adaptive-selection-evidence.schema.json",
+    "adaptive_selection_decision_schema": "machine/schemas/adaptive-selection-decision.schema.json",
     "release_evidence_directory": "machine/release-evidence",
     "schemas_directory": "machine/schemas",
     "source_state_receipt_schema": "machine/schemas/source-state-receipt.schema.json",
@@ -177,7 +195,7 @@
     "required_analysis_ruleset_drift_issue": 331,
     "required_analysis_ruleset_drift_state": "OPEN_COMPATIBILITY_WORKFLOW_ACTIVE"
   },
-  "architecture": {"current_overview": "docs/architecture/README.md", "detailed_authority_capability_design": "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md", "routing_reference": "ROUTING_MAP.md", "governance_reference": "docs/governance/README.md", "compliance_registry_reference": "docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md", "compliance_protocol_runtime": "orchestra_runtime/compliance_protocol.py", "mcp_transport_reference": "docs/developer/MCP_STDIO_TRANSPORT.md", "adaptive_context_reference": "docs/architecture/ADAPTIVE_CONTEXT_A2.md", "adaptive_shadow_learning_reference": "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3.md", "adaptive_shadow_implementation_reference": "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3_IMPLEMENTATION.md", "historical_status_policy": "Phase documents may retain phase-era status wording. Current exact state comes from live machine contracts, release evidence, and Git identity."},
+  "architecture": {"current_overview": "docs/architecture/README.md", "detailed_authority_capability_design": "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md", "routing_reference": "ROUTING_MAP.md", "governance_reference": "docs/governance/README.md", "compliance_registry_reference": "docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md", "compliance_protocol_runtime": "orchestra_runtime/compliance_protocol.py", "mcp_transport_reference": "docs/developer/MCP_STDIO_TRANSPORT.md", "adaptive_context_reference": "docs/architecture/ADAPTIVE_CONTEXT_A2.md", "adaptive_shadow_learning_reference": "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3.md", "adaptive_shadow_implementation_reference": "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3_IMPLEMENTATION.md", "adaptive_selection_a4_reference": "docs/architecture/ADAPTIVE_SELECTION_A4.md", "historical_status_policy": "Phase documents may retain phase-era status wording. Current exact state comes from live machine contracts, release evidence, and Git identity."},
   "hosts_integrations": {
     "host_update_contract": "machine/hosts/update-contract.v1.json",
     "adapter_sdk_reference": "docs/setup/ADAPTER_SDK_PRAP.md",
@@ -241,7 +259,7 @@
     "murmurs_measurement_issue": 316,
     "murmurs_measurement_issue_state": "OPEN",
     "adaptive_governed_orchestration_issue": 340,
-    "adaptive_governed_orchestration_state": "A3_SHADOW_IMPLEMENTED_NO_EXECUTION_CONTROL_A4_NOT_AUTHORIZED"
+    "adaptive_governed_orchestration_state": "A4_0_CONTRACT_FREEZE_SOURCE_CANDIDATE_NO_RUNTIME_EFFECT"
   },
   "documentation": {
     "documentation_map": "docs/README.md",
@@ -258,6 +276,7 @@
     "adaptive_context_a2": "docs/architecture/ADAPTIVE_CONTEXT_A2.md",
     "adaptive_shadow_learning_a3": "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3.md",
     "adaptive_shadow_learning_a3_implementation": "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3_IMPLEMENTATION.md",
+    "adaptive_selection_a4": "docs/architecture/ADAPTIVE_SELECTION_A4.md",
     "roadmap": "docs/project/ROADMAP.md",
     "changelog": "CHANGELOG.md",
     "release_docs": "docs/releases/",
@@ -284,7 +303,7 @@
     "documentation_and_provenance_closeout": "INCLUDED_IN_V1_6_CANDIDATE",
     "adaptive_local_memory_a1": "CANONICAL_FOUNDATION_NO_DIRECT_RUNTIME_EFFECT",
     "adaptive_specialist_context_a2": "CANONICAL_ADVISORY_OPT_IN",
-    "adaptive_governed_orchestration": "A3_SHADOW_IMPLEMENTED_NO_EXECUTION_CONTROL_A4_NOT_AUTHORIZED_ISSUE_340",
+    "adaptive_governed_orchestration": "A4_0_CONTRACT_FREEZE_SOURCE_CANDIDATE_NO_RUNTIME_EFFECT_ISSUE_340",
     "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316"
   },
   "ai_review_guidance": {
@@ -313,6 +332,10 @@
     "do_not_treat_a3_confidence_as_promotion_or_execution_authority": true,
     "do_not_treat_a3_shadow_comparison_as_execution_selection": true,
     "do_not_infer_an_a1_or_a2_promotion_bridge_from_a3_completion": true,
+    "treat_a4_eligibility_as_deterministic_input_not_learned_output": true,
+    "do_not_allow_a4_ranking_to_restore_or_create_eligibility": true,
+    "do_not_repurpose_a3_strategy_evidence_as_model_or_worker_performance_evidence": true,
+    "treat_a4_0_shadow_decisions_as_non_execution_effective_and_not_promoted": true,
     "treat_v1_5_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "treat_v1_6_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "when_evaluating_a_published_tag_or_release_prefer_live_verified_git_and_release_identity_over_prepublication_snapshot_fields": true
