@@ -127,8 +127,8 @@
       "authority_note": "A4 remains shadow-only and non-authorizing. Its canonical post-execution attachment cannot influence operation inputs, create eligibility, restore filtered options, expand authority/capability/provider access, change required specialist ownership, or control deterministic execution."
     },
     "adaptive_tuner_topology_a5": {
-      "status": "A5_1_SHADOW_RANKER_IMPLEMENTED_SOURCE_CANDIDATE_NO_EXECUTION_CONTROL",
-      "purpose": "Implement the bounded A5.1 shadow topology scorer and exact evidence-qualification layer under the frozen A5.0 deterministic coordination contracts, with deterministic fallback and no execution or dispatch authority.",
+      "status": "A5_CLOSED_AT_SHADOW_MATURITY_EXECUTION_PROMOTION_DEFERRED_BENEFIT_NOT_ESTABLISHED",
+      "purpose": "Canonical bounded A5 shadow topology scorer and exact evidence-qualification layer under the frozen deterministic coordination contracts, closed without execution promotion because qualifying comparative benefit evidence was not established.",
       "machine_sources": ["machine/adaptive/a5-tuner-topology-contract.v1.json", "machine/adaptive/a5-shadow-topology-ranker-implementation.v1.json", "machine/schemas/adaptive-topology-eligibility-envelope.schema.json", "machine/schemas/adaptive-topology-evidence.schema.json", "machine/schemas/adaptive-topology-decision.schema.json"],
       "human_sources": ["docs/architecture/ADAPTIVE_TUNER_A5.md", "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md"],
       "canonical_entry_head": "fb0ace102d3ab0e662937bb4d824a40b103c1976",
@@ -138,8 +138,14 @@
       "validation_surfaces": ["tests/runtime/test_adaptive_topology.py", "tests/runtime/test_adaptive_topology_edges.py"],
       "source_baseline_head": "8a365eea7dd52022c427b83d7f3b484aba7152ff",
       "source_baseline_tree": "5a8a2b66a44eb233643a37aa9365222d50a732df",
+      "canonical_a5_1_head": "8acb03802834e9e56b078496a3e5e0f1aa498ebf",
+      "canonical_a5_1_tree": "e493b260ba2def53fb46298109637f8635f99970",
       "scorer": "orchestra.adaptive-topology-scorer.v1",
       "a5_shadow_ranker_implemented": true,
+      "topology_parity_and_adversarial_validation": "SATISFIED",
+      "measurable_benefit_over_fixed_eligible_sequences": "NOT_ESTABLISHED",
+      "benefit_evidence_disposition": "NO_GOVERNED_EXACT_TOPOLOGY_COMPARATIVE_MEASUREMENT_SET_AVAILABLE_TO_A5_CLOSEOUT",
+      "execution_effective_promotion": "DEFERRED_NOT_PROMOTED",
       "runtime_topology_control": false,
       "topology_effective": false,
       "shadow_influenced_execution": false,
@@ -152,7 +158,7 @@
       "new_parallel_execution_capability": false,
       "a5_2_authorized": false,
       "a6_authorized": false,
-      "authority_note": "A5.1 is shadow-only and non-authorizing. It ranks only already-eligible deterministic topology candidates, cannot alter specialist ownership or deterministic ceilings, and has no attachment to Conductor dispatch or RuntimeExecutor execution."
+      "authority_note": "A5 is canonical and closed at shadow maturity. The shadow ranker cannot alter specialist ownership or deterministic ceilings, has no attachment to Conductor dispatch or RuntimeExecutor execution, and cannot be promoted from synthetic, generic, or unmeasured benefit evidence."
     }
   },
   "machine_scan_order": [
@@ -305,7 +311,7 @@
     "murmurs_measurement_issue": 316,
     "murmurs_measurement_issue_state": "OPEN",
     "adaptive_governed_orchestration_issue": 340,
-    "adaptive_governed_orchestration_state": "A5_1_SHADOW_RANKER_IMPLEMENTED_SOURCE_CANDIDATE_NO_EXECUTION_CONTROL"
+    "adaptive_governed_orchestration_state": "A5_CLOSED_AT_SHADOW_MATURITY_EXECUTION_PROMOTION_DEFERRED_BENEFIT_NOT_ESTABLISHED"
   },
   "documentation": {
     "documentation_map": "docs/README.md",
@@ -351,7 +357,7 @@
     "documentation_and_provenance_closeout": "INCLUDED_IN_V1_6_CANDIDATE",
     "adaptive_local_memory_a1": "CANONICAL_FOUNDATION_NO_DIRECT_RUNTIME_EFFECT",
     "adaptive_specialist_context_a2": "CANONICAL_ADVISORY_OPT_IN",
-    "adaptive_governed_orchestration": "A5_1_SHADOW_RANKER_IMPLEMENTED_SOURCE_CANDIDATE_NO_EXECUTION_CONTROL_ISSUE_340",
+    "adaptive_governed_orchestration": "A5_CLOSED_AT_SHADOW_MATURITY_EXECUTION_PROMOTION_DEFERRED_BENEFIT_NOT_ESTABLISHED_ISSUE_340",
     "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316"
   },
   "ai_review_guidance": {
@@ -393,6 +399,8 @@
     "treat_a5_1_shadow_topology_ranker_as_non_authorizing_and_separate_from_dispatch_execution": true,
     "do_not_allow_a5_1_ranking_to_create_restore_or_execute_topology_candidates": true,
     "do_not_treat_a3_workflow_tendency_as_direct_topology_performance_evidence": true,
+    "do_not_treat_a5_closeout_as_measurable_benefit_or_execution_promotion": true,
+    "require_new_governed_exact_topology_comparative_evidence_before_reconsidering_a5_execution_promotion": true,
     "treat_v1_5_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "treat_v1_6_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "when_evaluating_a_published_tag_or_release_prefer_live_verified_git_and_release_identity_over_prepublication_snapshot_fields": true
