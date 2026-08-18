@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/adaptive-topology-decision.schema.json",
+  "title": "Orchestra Adaptive Tuner Topology Decision v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "decision_id",
+    "session_id",
+    "coordination_contract_revision",
+    "eligibility_envelope_id",
+    "eligibility_digest",
+    "evidence_packet_id",
+    "evidence_digest",
+    "evaluated_at",
+    "scorer_version",
+    "required_specialists",
+    "ranked_candidate_ids",
+    "actual_deterministic_candidate_id",
+    "disposition",
+    "execution_controlled_by",
+    "dispatch_controlled_by",
+    "transition_controlled_by",
+    "topology_effective",
+    "shadow_influenced_execution",
+    "promotion_state",
+    "reason_codes",
+    "digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.adaptive-topology-decision.v1"},
+    "decision_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "session_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "coordination_contract_revision": {"type": "integer", "minimum": 1},
+    "eligibility_envelope_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "eligibility_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "evidence_packet_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "evidence_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "evaluated_at": {"type": "string", "format": "date-time"},
+    "scorer_version": {"type": "string", "minLength": 1, "maxLength": 128},
+    "required_specialists": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]{0,127}$"}
+    },
+    "ranked_candidate_ids": {
+      "type": "array",
+      "maxItems": 128,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1, "maxLength": 256}
+    },
+    "actual_deterministic_candidate_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "shadow_recommendation_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "disposition": {"enum": ["SHADOW_RANKED", "DETERMINISTIC_FALLBACK", "NO_ELIGIBLE_TOPOLOGIES", "ADAPTIVE_UNAVAILABLE"]},
+    "execution_controlled_by": {"const": "DETERMINISTIC_ORCHESTRA"},
+    "dispatch_controlled_by": {"const": "CONDUCTOR"},
+    "transition_controlled_by": {"const": "ARBITER"},
+    "topology_effective": {"const": false},
+    "shadow_influenced_execution": {"const": false},
+    "promotion_state": {"const": "NOT_PROMOTED"},
+    "reason_codes": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[A-Z0-9][A-Z0-9_:-]{0,127}$"}
+    },
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
