@@ -1,0 +1,96 @@
+{
+  "schema_version": "orchestra.comparative-benchmark-manifest.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "experiment_id": "b3-murmurs-isolated-calibration-plan-only",
+  "experiment_kind": "MURMURS_ISOLATED",
+  "stage": "CALIBRATION",
+  "randomization_seed": 1908202603,
+  "repetitions_per_arm": 2,
+  "executor_timeout_seconds": 30,
+  "common_control_identity": {
+    "orchestra_revision": "6ec1a549370eaf73249eb3ddcffe5e464c5eb4ae",
+    "repository_revision": "SYNTHETIC_PLAN_ONLY_NO_WORKLOAD_REPOSITORY",
+    "system_instruction_digest": "58a363c35256170d2c8932b464fe1c589ed5cd79c0f9efb7e75c2a91779b125c",
+    "provider": "NO_PROVIDER_PLAN_ONLY",
+    "model": "NO_MODEL_PLAN_ONLY",
+    "model_revision": null,
+    "reasoning_setting": null,
+    "temperature": null,
+    "tool_access_digest": "48a0d1d18a2ddd20d1d331498e0ddc687d57c3d7b985ff3b8661a2de157d4fca",
+    "specialist_set_digest": "73cb67781415f1878f270311a4649862dad1ee10e18e8caa6dad5a7505ded697",
+    "required_specialist_set_digest": "ca6103a03d396f4b90a2909198bf0737a768780087b8b5c74da7670c2439cae3",
+    "authority_digest": "4251754510a572492088d477481503396028634b7768cb5f6741268bfe23e50b",
+    "governance_digest": "74beafc4bb3d758b44ae1dd89c205def73209c31303612087347500180a73bb7",
+    "validation_contract_digest": "8910423410213a14817331738965735851b971c80a16cdb114678d5bd13dc80c",
+    "environment_digest": "cbf40277d13c95b6410bd98d0f60245022218ada90a7a9b98bd3f754484321f7",
+    "retry_policy_digest": "a7cfae01ec79b8751150503e965d0c59ff5c087bd5e2e223ed584673b68d7f27",
+    "resource_budget_digest": "c42db5d3708f837daaa959d27d28bf7f9c45741db501b1ad567b9c13ed77fbb8"
+  },
+  "arms": [
+    {
+      "arm_id": "default-communication",
+      "topology_candidate_id": "synthetic-fixed-topology",
+      "topology_class": "FIXED_DETERMINISTIC",
+      "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462",
+      "communication_mode": "DEFAULT"
+    },
+    {
+      "arm_id": "caveman-communication",
+      "topology_candidate_id": "synthetic-fixed-topology",
+      "topology_class": "FIXED_DETERMINISTIC",
+      "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462",
+      "communication_mode": "CAVEMAN"
+    },
+    {
+      "arm_id": "murmurs-communication",
+      "topology_candidate_id": "synthetic-fixed-topology",
+      "topology_class": "FIXED_DETERMINISTIC",
+      "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462",
+      "communication_mode": "MURMURS"
+    }
+  ],
+  "tasks": [
+    {
+      "task_id": "b3-cal-single-domain",
+      "task_class": "SINGLE_DOMAIN",
+      "starting_state_digest": "40d950da83c03acdd63c346598a98eb3924e2f54dc7634a237c2033fc516db2e",
+      "task_prompt_digest": "6610d3f766cbbd5dcfeaa84946c57f6bd7c0c9a596a0d791bfaa67b137f1a035",
+      "task_payload": {"synthetic": true, "scenario": "single-domain bounded implementation communication plan", "execution_allowed": false}
+    },
+    {
+      "task_id": "b3-cal-multi-domain",
+      "task_class": "MULTI_DOMAIN",
+      "starting_state_digest": "c3e9fc67ba632006bcda6409d10f2dd78a6d74bcbd3c31902e46cb90c3a4f10a",
+      "task_prompt_digest": "99c171d430788e3171c8106776224142dfb9640848e30cf6c91e00a319aff953",
+      "task_payload": {"synthetic": true, "scenario": "multi-domain coordination and handoff communication plan", "execution_allowed": false}
+    },
+    {
+      "task_id": "b3-cal-debug",
+      "task_class": "DEBUGGING",
+      "starting_state_digest": "663a494720a0c873bd8a5bfe100150745431428effc4cd23bd13b8bbf97a909d",
+      "task_prompt_digest": "e4108a31e319316b6d6c6956d5af12e728fcde8c33f85b580788efbb1bc2af65",
+      "task_payload": {"synthetic": true, "scenario": "debugging progress and remediation communication plan", "execution_allowed": false}
+    },
+    {
+      "task_id": "b3-cal-doc-implementation",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "starting_state_digest": "7e7b86a3dd35a876632329df8f0fa52fbe986938c5442bf28283cb99ad95d496",
+      "task_prompt_digest": "f30844a7594eaeaa56d81d998832649609e9706f7d6b35a103e125584b99f472",
+      "task_payload": {"synthetic": true, "scenario": "implementation plus documentation transfer communication plan", "execution_allowed": false}
+    },
+    {
+      "task_id": "b3-cal-high-coordination",
+      "task_class": "HIGH_COORDINATION",
+      "starting_state_digest": "cf3257f2a05c665f2dd48c6c45c0fb292490484f487eff0c54dbec7c17e9e29c",
+      "task_prompt_digest": "31bf40cf27557c370844bc70d03b54cebd27e37a7e158611198475e2f4626acd",
+      "task_payload": {"synthetic": true, "scenario": "high-coordination progress handoff and contradiction communication plan", "execution_allowed": false}
+    }
+  ],
+  "a5_evaluation": null,
+  "murmurs_evaluation": {
+    "same_counter_identity_for_token_delta": true
+  },
+  "interaction_evaluation": null,
+  "preregistration_digest": null,
+  "benefit_thresholds": null
+}
