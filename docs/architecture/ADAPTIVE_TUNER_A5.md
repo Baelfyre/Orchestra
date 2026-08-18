@@ -3,15 +3,18 @@
 ## Status
 
 ```text
-Phase: A5.0
-State: CONTRACT_FREEZE_NO_RUNTIME_TOPOLOGY_SELECTION
+Phase: A5.1
+State: SHADOW_TOPOLOGY_RANKER_IMPLEMENTED_SOURCE_CANDIDATE_NO_EXECUTION_CONTROL
 Issue: #340
-Canonical entry head: fb0ace102d3ab0e662937bb4d824a40b103c1976
-Canonical entry tree: c3f8b2efa4e1e75b64d5fc1ae10c92402a5b47f8
+A5.0 canonical content tree: 5a8a2b66a44eb233643a37aa9365222d50a732df
+A5.1 source baseline: 8a365eea7dd52022c427b83d7f3b484aba7152ff
+A5.1 source baseline tree: 5a8a2b66a44eb233643a37aa9365222d50a732df
 A4 execution-effective promotion: DEFERRED_NOT_PROMOTED
 ```
 
-A5 begins only after the explicit A4 exit decision to retain the canonical A4 selector in shadow-only, non-authorizing mode. A5.0 defines the machine contracts needed to evaluate permitted coordination topologies later. It introduces no learned topology runtime behavior.
+A5 begins only after the explicit A4 exit decision to retain the canonical A4 selector in shadow-only, non-authorizing mode. A5.0 defines the machine contracts needed to evaluate permitted coordination topologies. A5.1 implements the first bounded shadow scorer and exact topology evidence-qualification surface under those frozen contracts.
+
+A5.1 does not make learned topology execution-effective.
 
 ## Existing authority reused
 
@@ -32,17 +35,44 @@ The canonical existing surfaces are:
 - `docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md`
 - `orchestra_runtime/services.py`
 
-## A5.0 purpose
+A5.1 adds no attachment to any of those execution or dispatch surfaces.
 
-A5.0 freezes three record types:
+## A5.0 contract purpose
+
+A5.0 froze three record types:
 
 1. an immutable topology eligibility envelope;
 2. an exact-option topology evidence packet;
 3. a shadow topology decision.
 
-The contract allows later A5 work to compare already-permitted coordination patterns such as sequential ordering, permitted parallel grouping, bounded decomposition, join/review points, required re-entry ordering, and permitted prior-output disclosure.
+The contract allows A5 work to compare already-permitted coordination patterns such as sequential ordering, permitted parallel grouping, bounded decomposition, join/review points, required re-entry ordering, and permitted prior-output disclosure.
 
-A5.0 does not rank or execute those patterns.
+A5.0 itself does not rank or execute those patterns.
+
+## A5.1 implementation surface
+
+A5.1 adds:
+
+- runtime scorer and evidence qualification: `orchestra_runtime/adaptive/topology.py`;
+- primary validation: `tests/runtime/test_adaptive_topology.py`;
+- adversarial and fail-closed validation: `tests/runtime/test_adaptive_topology_edges.py`;
+- machine implementation record: `machine/adaptive/a5-shadow-topology-ranker-implementation.v1.json`;
+- scorer identity: `orchestra.adaptive-topology-scorer.v1`.
+
+The A5.1 module is a pure bounded shadow surface. The caller supplies an eligibility envelope that has already been established by the deterministic coordination control plane. A5.1 neither discovers participants nor constructs new routing, authority, capability, provider, privacy, governance, lifecycle, or resource permissions.
+
+The output remains structurally non-authorizing:
+
+```text
+execution_controlled_by = DETERMINISTIC_ORCHESTRA
+dispatch_controlled_by = CONDUCTOR
+transition_controlled_by = ARBITER
+topology_effective = false
+shadow_influenced_execution = false
+promotion_state = NOT_PROMOTED
+```
+
+There is no A5.1 `RuntimeExecutor` attachment and no Conductor dispatch attachment.
 
 ## Eligibility before ranking
 
@@ -61,7 +91,9 @@ Before a candidate can be considered eligible, the caller must establish that:
 - deterministic resource and parallelism ceilings remain satisfied;
 - context disclosure remains inside the existing ceiling.
 
-The adaptive layer cannot add an unpermitted specialist, restore a blocked participant, omit a required specialist, change ownership, create authority, bypass a contradiction, suppress required re-entry, increase parallelism beyond deterministic ceilings, or expand context disclosure.
+A5.1 requires every frozen invariant field to be present and exactly true before the envelope is accepted.
+
+The adaptive layer cannot add an unpermitted specialist, restore a blocked participant, omit a required specialist, change ownership, create authority, bypass a contradiction, suppress required re-entry, increase parallelism beyond deterministic ceilings, or expand context disclosure. A5.1 only reorders candidate identifiers that are already present in the immutable envelope.
 
 ## Topology candidate boundary
 
@@ -78,24 +110,30 @@ A candidate may describe:
 
 The candidate is not a new authority envelope. It cannot grant capabilities, create a participant, change required specialist status, or alter a domain decision.
 
+A5.1 additionally verifies that every candidate carries the exact envelope coordination-contract revision and exact required-specialist set, and that every required specialist appears in the candidate topology. The ranker never adds a candidate that was absent from the envelope.
+
 ## Evidence qualification
 
 A5 evidence must bind the exact topology candidate, collaboration session, and coordination-contract revision.
 
-Allowed evidence classes at A5.0 are:
+Allowed evidence classes remain:
 
 - governed coordination outcomes;
 - validation evidence;
 - remediation evidence;
 - trustworthy measured telemetry.
 
-Generic phase success is not topology-performance evidence. Raw conversation is not authority. Duplicate source digests count once. Latency, cost, token, iteration, remediation, validation-failure, or parallelism measurements may be used only when directly measured and provenance-bound.
+A5.1 exposes explicit qualification for those evidence classes only. Generic phase success is not topology-performance evidence. Raw conversation is not authority. Duplicate source digests count once. A single source digest cannot support multiple topology candidates in one decision.
 
-A3 `WORKFLOW_TENDENCY` is not automatically topology evidence. The current A3 record does not guarantee exact topology identity binding, so A5.0 records no direct A3 topology-evidence support. A later unit may qualify such evidence only if the exact candidate identity and scope can be proven without inventing a bridge.
+Latency, cost, tokens, iterations, remediations, validation failures, or parallelism measurements may be used only when they are directly measured and provenance-bound. Telemetry evidence without a validated measurement record is rejected rather than inferred.
+
+A3 `WORKFLOW_TENDENCY` is not topology evidence in A5.1. The A3 record does not guarantee exact topology identity binding, and A5.1 adds no invented bridge from generic workflow tendency to topology performance.
+
+Evidence marked qualified is rechecked by the ranker. A candidate, session, or coordination-contract revision mismatch causes deterministic fallback even if an upstream caller incorrectly labeled the item as qualified.
 
 ## Precedence
 
-The frozen precedence order is:
+The frozen precedence order remains:
 
 ```text
 Deterministic authority/capability/governance/privacy/ownership/resource ceilings
@@ -108,9 +146,44 @@ Deterministic authority/capability/governance/privacy/ownership/resource ceiling
 
 Confidence or score is never authority.
 
+An explicit current constraint prevents adaptive evidence from reordering the deterministic topology set. An explicit scoped preference may be a shadow preference only when that candidate is already eligible. It cannot restore or create a candidate.
+
+## A5.1 deterministic shadow scoring
+
+The named scorer is:
+
+```text
+orchestra.adaptive-topology-scorer.v1
+```
+
+The scorer:
+
+- requires at least two distinct positive source digests before evidence can create an adaptive shadow preference;
+- counts duplicate source digests once;
+- scores each eligible candidate by net positive versus negative qualified evidence, then positive support, then neutral evidence;
+- uses the existing deterministic eligible order as the stable tie break;
+- returns deterministic fallback when qualified evidence does not meet the support floor;
+- returns deterministic fallback for stale, mismatched, malformed, or cross-bound evidence;
+- records `ADAPTIVE_UNAVAILABLE` when the adaptive layer is explicitly unavailable;
+- fails closed with `NO_ELIGIBLE_TOPOLOGIES` when the immutable eligible set is empty.
+
+A shadow recommendation is descriptive evidence only. It cannot change the actual deterministic topology.
+
+## Parallel topology boundary
+
+A candidate may contain a `PARALLEL` stage only when the deterministic caller has already established that the topology is eligible under the existing resource and parallelism ceilings.
+
+A5.1 does not create a new parallel execution mechanism. Even when a parallel candidate ranks first in shadow mode:
+
+```text
+topology_effective = false
+shadow_influenced_execution = false
+dispatch_controlled_by = CONDUCTOR
+```
+
 ## Shadow decision
 
-Any later A5 shadow decision must preserve:
+Every A5.1 decision preserves:
 
 ```text
 execution_controlled_by = DETERMINISTIC_ORCHESTRA
@@ -121,7 +194,7 @@ shadow_influenced_execution = false
 promotion_state = NOT_PROMOTED
 ```
 
-Missing evidence, invalid evidence, an unavailable adaptive layer, or no eligible topologies must fall back to the existing deterministic coordination behavior or fail closed when no deterministic candidate exists.
+Missing evidence, invalid evidence, an unavailable adaptive layer, or insufficient distinct support falls back to the existing deterministic coordination order. No eligible topology fails closed rather than creating one.
 
 ## A4 boundary at A5 entry
 
@@ -129,39 +202,47 @@ A4 remains canonical but intentionally non-promoted for execution control. A5 do
 
 The A4 post-execution attachment may be used as historical architecture evidence only. It is not an A5 authority source.
 
-## Required adversarial validation for A5 implementation
+## A5.1 adversarial validation
 
-Any A5.1 or later implementation must prove at minimum that:
+A5.1 tests prove at minimum that:
 
-- required specialists cannot be omitted;
-- unpermitted specialists cannot be added;
-- domain ownership cannot be reassigned;
-- The Tuner cannot become a router or transition authority;
-- open contradictions, missing ownership, and stale contracts cannot be bypassed;
-- authority, capability, governance, privacy, disclosure, and resource ceilings cannot expand;
-- required specialist re-entry cannot be suppressed;
+- every frozen deterministic coordination invariant must be present and true;
+- required specialists cannot be omitted from a candidate topology;
+- all candidates preserve the exact required-specialist set and coordination-contract revision;
+- an ineligible candidate cannot be created or restored by evidence;
+- the actual deterministic topology must bind the immutable eligible set;
+- an explicit current constraint dominates adaptive evidence;
+- a scoped preference cannot restore an ineligible topology;
+- evidence qualification requires exact candidate, session, and revision binding;
 - duplicate evidence does not inflate support;
-- generic phase success does not become topology success;
-- unmeasured metrics are not invented;
-- cross-scope evidence fails closed;
-- shadow topology cannot alter execution or dispatch;
-- malformed or stale coordination identity fails closed;
-- deterministic fallback preserves current coordination behavior.
+- one source digest cannot support multiple topology candidates;
+- manually mislabeled cross-session or stale-revision evidence fails closed;
+- A3 `WORKFLOW_TENDENCY` cannot be used as direct topology evidence;
+- generic phase success cannot be used as topology evidence;
+- unmeasured telemetry cannot be invented;
+- stale evidence and predated evaluation fall back deterministically;
+- an unavailable adaptive layer preserves deterministic order;
+- an empty eligible set fails closed;
+- a shadow recommendation containing permitted parallel grouping does not activate parallel execution;
+- identical inputs produce identical rank and decision identity;
+- every decision remains structurally non-authorizing.
 
 ## Future boundary
 
-A5.0 authorizes only this contract freeze.
+A5.1 implements only the shadow topology ranker and evidence-qualification unit authorized by issue #340.
 
-Not implemented by A5.0:
+Not implemented or authorized by A5.1:
 
-- A5.1 shadow topology ranker;
 - topology-effective coordination selection;
+- A5.2 or any later A5 execution-control bridge;
 - automatic policy promotion;
 - additional parallel execution capability;
 - learned specialist omission or ownership changes;
+- attachment to Conductor dispatch;
+- attachment to `RuntimeExecutor`;
 - A6 adaptive context routing;
 - A7 Conductor route ranking or offline policy promotion;
 - A8 recursive or test-time compute;
 - release, deployment, or publication.
 
-Each later transition requires a fresh canonical reread and separately bounded authorization.
+Any source validation for A5.1 binds only the exact source head tested. Any remediation that changes the source head requires fresh exact-head validation. Signed materialization or canonical integration remains a separately governed transition.
