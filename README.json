@@ -102,18 +102,26 @@
       "authority_note": "A3 is shadow-only. Confidence is not authority; generic task success is not strategy-success evidence; shadow recommendations cannot affect deterministic execution or promote learned patterns."
     },
     "bounded_adaptive_selection_a4": {
-      "status": "CANONICAL_CONTRACT_FROZEN_NO_RUNTIME_EFFECT",
-      "purpose": "Freeze deterministic eligibility-before-ranking, bounded evidence qualification, shadow selection decisions, deterministic fallback, and adversarial boundaries for future specialist-strategy, model, and worker ranking.",
-      "machine_sources": ["machine/adaptive/a4-bounded-selection-contract.v1.json", "machine/schemas/adaptive-selection-eligibility-envelope.schema.json", "machine/schemas/adaptive-selection-evidence.schema.json", "machine/schemas/adaptive-selection-decision.schema.json"],
+      "status": "SHADOW_RANKER_IMPLEMENTED_NO_EXECUTION_CONTROL",
+      "purpose": "Implement the bounded A4.1 shadow selector and evidence-qualification layer under the canonical A4.0 eligibility-before-ranking contracts, with deterministic fallback and no execution authority.",
+      "machine_sources": ["machine/adaptive/a4-bounded-selection-contract.v1.json", "machine/adaptive/a4-shadow-ranker-implementation.v1.json", "machine/schemas/adaptive-selection-eligibility-envelope.schema.json", "machine/schemas/adaptive-selection-evidence.schema.json", "machine/schemas/adaptive-selection-decision.schema.json"],
       "human_sources": ["docs/architecture/ADAPTIVE_SELECTION_A4.md"],
+      "runtime_surface": "orchestra_runtime/adaptive/selection.py",
+      "validation_surface": "tests/runtime/test_adaptive_selection.py",
       "entry_canonical_head": "a520beabe6761161baf3179c1f6de5f055adbfc2",
       "entry_canonical_tree": "b81703473e2350c9c41fecd7b459de6097d24fee",
+      "source_baseline_head": "d6c342049b4a92fe07f2f6875cfe421ad05c1bb6",
+      "source_baseline_tree": "c8ca50d5e0a25991aca4d3fdabd8dbbae16fda29",
+      "scorer": "orchestra.adaptive-selection-scorer.v1",
+      "a4_shadow_ranker_implemented": true,
       "runtime_execution_control": false,
       "specialist_strategy_direct_a3_evidence_available": true,
       "model_worker_direct_a3_tendency_evidence_available": false,
       "deterministic_fallback_without_qualified_evidence": true,
+      "model_worker_without_direct_qualified_evidence": "DETERMINISTIC_FALLBACK",
+      "promotion_bridge": "NONE",
       "a5_authorized": false,
-      "authority_note": "A4.0 is a non-authorizing contract freeze. Adaptive ranking cannot create eligibility, restore filtered options, expand authority/capability/provider access, change required specialist ownership, or affect execution."
+      "authority_note": "A4.1 is shadow-only and non-authorizing. Adaptive ranking cannot create eligibility, restore filtered options, expand authority/capability/provider access, change required specialist ownership, or affect deterministic execution."
     }
   },
   "machine_scan_order": [
@@ -159,6 +167,7 @@
     "adaptive_shadow_candidate_schema": "machine/schemas/adaptive-shadow-candidate.schema.json",
     "adaptive_shadow_comparison_schema": "machine/schemas/adaptive-shadow-comparison.schema.json",
     "adaptive_bounded_selection_a4_contract": "machine/adaptive/a4-bounded-selection-contract.v1.json",
+    "adaptive_selection_a4_shadow_implementation": "machine/adaptive/a4-shadow-ranker-implementation.v1.json",
     "adaptive_selection_eligibility_envelope_schema": "machine/schemas/adaptive-selection-eligibility-envelope.schema.json",
     "adaptive_selection_evidence_schema": "machine/schemas/adaptive-selection-evidence.schema.json",
     "adaptive_selection_decision_schema": "machine/schemas/adaptive-selection-decision.schema.json",
@@ -259,7 +268,7 @@
     "murmurs_measurement_issue": 316,
     "murmurs_measurement_issue_state": "OPEN",
     "adaptive_governed_orchestration_issue": 340,
-    "adaptive_governed_orchestration_state": "A4_0_CONTRACT_FROZEN_CANONICAL_NO_RUNTIME_EFFECT"
+    "adaptive_governed_orchestration_state": "A4_1_SHADOW_RANKER_IMPLEMENTED_NO_EXECUTION_CONTROL"
   },
   "documentation": {
     "documentation_map": "docs/README.md",
@@ -303,7 +312,7 @@
     "documentation_and_provenance_closeout": "INCLUDED_IN_V1_6_CANDIDATE",
     "adaptive_local_memory_a1": "CANONICAL_FOUNDATION_NO_DIRECT_RUNTIME_EFFECT",
     "adaptive_specialist_context_a2": "CANONICAL_ADVISORY_OPT_IN",
-    "adaptive_governed_orchestration": "A4_0_CONTRACT_FROZEN_CANONICAL_NO_RUNTIME_EFFECT_ISSUE_340",
+    "adaptive_governed_orchestration": "A4_1_SHADOW_RANKER_IMPLEMENTED_NO_EXECUTION_CONTROL_ISSUE_340",
     "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316"
   },
   "ai_review_guidance": {
@@ -335,7 +344,8 @@
     "treat_a4_eligibility_as_deterministic_input_not_learned_output": true,
     "do_not_allow_a4_ranking_to_restore_or_create_eligibility": true,
     "do_not_repurpose_a3_strategy_evidence_as_model_or_worker_performance_evidence": true,
-    "treat_a4_0_shadow_decisions_as_non_execution_effective_and_not_promoted": true,
+    "treat_a4_shadow_decisions_as_non_execution_effective_and_not_promoted": true,
+    "treat_a4_1_shadow_ranker_as_non_authorizing_and_separate_from_execution_control": true,
     "treat_v1_5_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "treat_v1_6_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "when_evaluating_a_published_tag_or_release_prefer_live_verified_git_and_release_identity_over_prepublication_snapshot_fields": true
