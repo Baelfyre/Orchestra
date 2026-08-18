@@ -16,6 +16,7 @@ from orchestra_runtime.adaptive.selection_runtime import (
     AdaptiveSelectionInvocation,
     AdaptiveSelectionRuntimeExecutor,
     BoundedAdaptiveSelectionProvider,
+    SelectionExecutionAttachment,
 )
 from orchestra_runtime.factories import AdapterFactory
 from orchestra_runtime.lifecycle import LifecycleState
@@ -317,6 +318,217 @@ def test_a4_attachment_is_not_enabled_for_delegated_execution():
     executor = build_executor(run_id="a4-attachment-delegation")
     with pytest.raises(ValueError, match="not enabled for delegated execution"):
         executor.execute_delegated(
+            AdapterFactory.create("codex", ROOT),
+            "@Orchestra rerun the prompt",
+            None,  # type: ignore[arg-type]
+            adaptive_selection=build_invocation(),
+        )
+
+
+def test_a4_invocation_validation_covers_fail_closed_inputs():
+    valid = build_invocation()
+
+    with pytest.raises(TypeError, match="eligibility_envelope"):
+        AdaptiveSelectionInvocation(
+            eligibility_envelope=object(),  # type: ignore[arg-type]
+            evidence_packet=valid.evidence_packet,
+            actual_deterministic_choice_id=None,
+            evaluated_at=EVALUATED_AT,
+        )
+    with pytest.raises(TypeError, match="evidence_packet"):
+        AdaptiveSelectionInvocation(
+            eligibility_envelope=valid.eligibility_envelope,
+            evidence_packet=object(),  # type: ignore[arg-type]
+            actual_deterministic_choice_id=None,
+            evaluated_at=EVALUATED_AT,
+        )
+    with pytest.raises(ValueError, match="evaluated_at"):
+        AdaptiveSelectionInvocation(
+            eligibility_envelope=valid.eligibility_envelope,
+            evidence_packet=valid.evidence_packet,
+            actual_deterministic_choice_id=None,
+            evaluated_at=" ",
+        )
+    with pytest.raises(ValueError, match="evaluated_at"):
+        AdaptiveSelectionInvocation(
+            eligibility_envelope=valid.eligibility_envelope,
+            evidence_packet=valid.evidence_packet,
+            actual_deterministic_choice_id=None,
+            evaluated_at=object(),  # type: ignore[arg-type]
+        )
+    with pytest.raises(ValueError, match="actual_deterministic_choice_id"):
+        AdaptiveSelectionInvocation(
+            eligibility_envelope=valid.eligibility_envelope,
+            evidence_packet=valid.evidence_packet,
+            actual_deterministic_choice_id=" ",
+            evaluated_at=EVALUATED_AT,
+        )
+    with pytest.raises(ValueError, match="explicit_scoped_preference_candidate_id"):
+        AdaptiveSelectionInvocation(
+            eligibility_envelope=valid.eligibility_envelope,
+            evidence_packet=valid.evidence_packet,
+            actual_deterministic_choice_id=None,
+            evaluated_at=EVALUATED_AT,
+            explicit_scoped_preference_candidate_id=" ",
+        )
+
+    normalized = AdaptiveSelectionInvocation(
+        eligibility_envelope=valid.eligibility_envelope,
+        evidence_packet=valid.evidence_packet,
+        actual_deterministic_choice_id=" strategy:deterministic ",
+        evaluated_at=f" {EVALUATED_AT} ",
+        explicit_scoped_preference_candidate_id=" strategy:shadow ",
+    )
+    assert normalized.actual_deterministic_choice_id == "strategy:deterministic"
+    assert normalized.explicit_scoped_preference_candidate_id == "strategy:shadow"
+    assert normalized.evaluated_at == EVALUATED_AT
+
+
+def test_a4_attachment_record_validation_covers_invalid_states():
+    kwargs = {
+        "run_id": None,
+        "authority_decision_ref": None,
+        "capability_decision_ref": None,
+        "lifecycle_state": None,
+    }
+
+    with pytest.raises(ValueError, match="unsupported attachment schema"):
+        SelectionExecutionAttachment(
+            status="UNAVAILABLE",
+            reason_code="TEST",
+            schema_version="unsupported",
+            **kwargs,
+        )
+    with pytest.raises(ValueError, match="unsupported attachment status"):
+        SelectionExecutionAttachment(
+            status="unknown",
+            reason_code="TEST",
+            **kwargs,
+        )
+    with pytest.raises(ValueError, match="reason_code"):
+        SelectionExecutionAttachment(
+            status="UNAVAILABLE",
+            reason_code=" ",
+            **kwargs,
+        )
+    with pytest.raises(ValueError, match="ATTACHED status requires"):
+        SelectionExecutionAttachment(
+            status="ATTACHED",
+            reason_code="TEST",
+            **kwargs,
+        )
+    with pytest.raises(ValueError, match="non-attached status"):
+        SelectionExecutionAttachment(
+            status="UNAVAILABLE",
+            reason_code="TEST",
+            decision=object(),  # type: ignore[arg-type]
+            **kwargs,
+        )
+
+    normalized = SelectionExecutionAttachment(
+        status=" unavailable ",
+        reason_code=" test_reason ",
+        run_id=" ",
+        authority_decision_ref=" authority ",
+        capability_decision_ref=" ",
+        lifecycle_state=" completed ",
+    )
+    assert normalized.status == "UNAVAILABLE"
+    assert normalized.reason_code == "TEST_REASON"
+    assert normalized.run_id is None
+    assert normalized.authority_decision_ref == "authority"
+    assert normalized.capability_decision_ref is None
+    assert normalized.lifecycle_state == "completed"
+
+
+def test_a4_provider_and_executor_fail_closed_validation_paths():
+    provider = BoundedAdaptiveSelectionProvider()
+    invocation = build_invocation()
+
+    with pytest.raises(TypeError, match="result must be ExecutionResult"):
+        provider.compile(object(), invocation)  # type: ignore[arg-type]
+
+    executor = build_executor(run_id="a4-no-invocation")
+    result = executor.execute(
+        AdapterFactory.create("codex", ROOT),
+        "@Orchestra rerun the prompt",
+    )
+    assert not isinstance(result, AdaptiveSelectionExecutionResult)
+
+    with pytest.raises(TypeError, match="invocation must be AdaptiveSelectionInvocation"):
+        provider.compile(result, object())  # type: ignore[arg-type]
+
+    class BlockingGovernance:
+        def validate(self, decision, context):
+            return ValidationResult(
+                False,
+                "BLOCKED_PENDING_VALIDATION",
+                ("blocked",),
+                ("test",),
+            )
+
+    blocked = build_executor(
+        governance=BlockingGovernance(),
+        run_id="a4-provider-blocked",
+    ).execute(
+        AdapterFactory.create("codex", ROOT),
+        "@Orchestra rerun the prompt",
+    )
+    with pytest.raises(ValueError, match="requires an allowed deterministic validation"):
+        provider.compile(blocked, invocation)
+
+    with pytest.raises(TypeError, match="adaptive_selection_provider"):
+        build_executor(provider=object(), run_id="a4-provider-invalid")
+
+
+def test_a4_invalid_invocation_and_provider_result_degrade_attachment_only():
+    def operation(adapter_name, decision, validation):
+        return RuntimeOperationResult(
+            LifecycleState.COMPLETED,
+            "deterministic-output",
+            "TEST_COMPLETED",
+        )
+
+    invalid_invocation_result = build_executor(
+        operation=operation,
+        run_id="a4-invalid-invocation",
+    ).execute(
+        AdapterFactory.create("codex", ROOT),
+        "@Orchestra rerun the prompt",
+        adaptive_selection=object(),  # type: ignore[arg-type]
+    )
+    assert invalid_invocation_result.success is True
+    assert invalid_invocation_result.output == "deterministic-output"
+    invalid_attachment = invalid_invocation_result.adaptive_selection_attachment
+    assert invalid_attachment is not None
+    assert invalid_attachment.status == "UNAVAILABLE"
+    assert invalid_attachment.reason_code == "ADAPTIVE_SELECTION_INVOCATION_INVALID"
+
+    class InvalidDecisionProvider:
+        def compile(self, result, invocation):
+            return object()
+
+    invalid_provider_result = build_executor(
+        operation=operation,
+        provider=InvalidDecisionProvider(),
+        run_id="a4-invalid-provider-result",
+    ).execute(
+        AdapterFactory.create("codex", ROOT),
+        "@Orchestra rerun the prompt",
+        adaptive_selection=build_invocation(),
+    )
+    assert invalid_provider_result.success is True
+    assert invalid_provider_result.output == "deterministic-output"
+    invalid_provider_attachment = invalid_provider_result.adaptive_selection_attachment
+    assert invalid_provider_attachment is not None
+    assert invalid_provider_attachment.status == "UNAVAILABLE"
+    assert invalid_provider_attachment.reason_code == "ADAPTIVE_SELECTION_UNAVAILABLE"
+
+
+def test_a4_delegation_request_attachment_remains_disabled():
+    executor = build_executor(run_id="a4-attachment-delegation-request")
+    with pytest.raises(ValueError, match="not enabled for delegated execution"):
+        executor.execute_delegation_request(
             AdapterFactory.create("codex", ROOT),
             "@Orchestra rerun the prompt",
             None,  # type: ignore[arg-type]
