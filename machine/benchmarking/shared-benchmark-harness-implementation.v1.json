@@ -1,0 +1,112 @@
+{
+  "schema_version": "orchestra.shared-benchmark-harness-implementation.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "phase": "BENCHMARK_B1_SHARED_HARNESS",
+  "status": "IMPLEMENTED_NON_PRODUCTION_NO_PROVIDER_ADAPTERS",
+  "canonical_entry_head": "3037b6207c844b75a6246fc5c1074cf849e7df82",
+  "canonical_entry_tree": "f39c4fe5d299ba76dce9d3b577c0705807c4efe9",
+  "contract": "machine/benchmarking/comparative-measurement-contract.v1.json",
+  "runner": "scripts/comparative_benchmark_runner.py",
+  "machine_surfaces": [
+    "machine/schemas/comparative-benchmark-manifest.schema.json",
+    "machine/schemas/comparative-benchmark-executor-request.schema.json",
+    "machine/schemas/comparative-benchmark-executor-result.schema.json",
+    "machine/schemas/comparative-benchmark-run.schema.json",
+    "machine/schemas/comparative-benchmark-experiment.schema.json"
+  ],
+  "validation_surface": "tests/runtime/test_comparative_benchmark_runner.py",
+  "human_documentation": "docs/benchmarking/COMPARATIVE_MEASUREMENT_B1.md",
+  "implementation_discovered_contract_corrections": [
+    {
+      "schema": "machine/schemas/comparative-benchmark-experiment.schema.json",
+      "correction": "MURMURS_ISOLATED_REQUIRES_FIXED_TOPOLOGY_TRUE_WHILE_A5_MURMURS_INTERACTION_REQUIRES_FALSE",
+      "intent_changed": false,
+      "authority_changed": false
+    },
+    {
+      "schema": "machine/schemas/comparative-benchmark-run.schema.json",
+      "correction": "INVALID_A5_RUN_MAY_RECORD_NULL_SHADOW_OBSERVATION_WHILE_PASS_OR_FAIL_A5_RUN_REQUIRES_OBJECT",
+      "intent_changed": false,
+      "authority_changed": false
+    }
+  ],
+  "execution_model": {
+    "production_runtime_attachment": false,
+    "conductor_dispatch_attachment": false,
+    "runtime_executor_attachment": false,
+    "provider_adapter_bundled": false,
+    "provider_credentials_required_by_core_harness": false,
+    "network_access_required_by_core_harness": false,
+    "shell_execution": false,
+    "executor_invocation": "EXPLICIT_JSON_ARRAY_SUBPROCESS_COMMAND",
+    "executor_request_transport": "ONE_JSON_OBJECT_OVER_STDIN_PER_RUN",
+    "executor_result_transport": "ONE_JSON_OBJECT_OVER_STDOUT_PER_RUN",
+    "executor_stderr": "CAPTURED_AS_PARTIAL_EVIDENCE",
+    "task_payload": "OPAQUE_ADAPTER_PAYLOAD_IDENTICAL_ACROSS_PAIRED_ARMS",
+    "a5_frozen_candidate_set_transport": "a5_evaluation.eligible_topology_candidate_ids"
+  },
+  "isolation_enforcement": {
+    "paired_task_cartesian_execution": true,
+    "all_configured_arms_executed_for_every_task_and_repetition": true,
+    "arm_order_randomized_within_task_repetition_block": true,
+    "randomization_reproducible_from_manifest_seed": true,
+    "a5_isolated_requires_default_communication": true,
+    "a5_isolated_requires_shadow_observation_for_non_invalid_runs": true,
+    "a5_ranked_candidates_must_equal_configured_topology_candidates": true,
+    "a5_shadow_observation_must_be_identical_across_arms_in_same_paired_block": true,
+    "a5_top_candidate_may_reduce_executed_arms": false,
+    "murmurs_isolated_requires_fixed_identical_topology": true,
+    "murmurs_isolated_requires_exact_communication_arms": ["DEFAULT", "CAVEMAN", "MURMURS"],
+    "combined_requires_isolated_evidence_digests": true
+  },
+  "measurement_enforcement": {
+    "provider_native_token_source_values": ["HOST_REPORTED", "UNAVAILABLE"],
+    "unavailable_token_counts_must_be_null": true,
+    "host_reported_tokens_require_counter_identity_and_input_output_counts": true,
+    "provider_reported_cost_or_unavailable_only": true,
+    "raw_executor_evidence_digest_computed_by_harness": true,
+    "run_record_digest_computed_by_harness": true,
+    "invalid_executor_or_capture_failure_is_retained": true,
+    "invalid_runs_silently_dropped": false
+  },
+  "output_layout": {
+    "plan": "plan.json",
+    "runs": "runs/*.json",
+    "run_index": "run-index.json",
+    "experiment": "experiment.json",
+    "partial_evidence": "partial-evidence/*.json"
+  },
+  "claim_boundary": {
+    "calibration_can_establish_benefit": false,
+    "pilot_raw_collection_can_establish_confirmatory_benefit": false,
+    "core_harness_computes_promotion_decision": false,
+    "external_published_scores_are_orchestra_measurements": false,
+    "synthetic_fixture_execution_is_benefit_evidence": false,
+    "measurement_evidence_is_promotion_authority": false
+  },
+  "authority_boundary": {
+    "a5_topology_effective": false,
+    "a5_shadow_influenced_execution": false,
+    "a5_runtime_topology_control": false,
+    "murmurs_runtime_semantics_changed": false,
+    "required_specialist_omission_allowed": false,
+    "authority_expansion_allowed": false,
+    "capability_expansion_allowed": false,
+    "provider_privacy_expansion_allowed": false,
+    "mandatory_gate_suppression_allowed": false,
+    "a6_authorized": false,
+    "release_or_deployment_authorized": false
+  },
+  "resource_boundary": {
+    "paid_provider_calls_authorized_by_b1_implementation": false,
+    "external_compute_spend_authorized_by_b1_implementation": false,
+    "live_measurement_requires_explicit_counter_eligible_executor_and_resource_ceiling": true
+  },
+  "future_boundary": {
+    "b2_a5_isolated_experiment": "AUTHORIZED_AFTER_B1_VALIDATION_BUT_LIVE_EXECUTION_REQUIRES_COUNTER_ELIGIBLE_RESOURCE_BOUNDARY_WHERE_COST_EXISTS",
+    "b3_murmurs_isolated_experiment": "AUTHORIZED_AFTER_B1_VALIDATION_BUT_LIVE_EXECUTION_REQUIRES_COUNTER_ELIGIBLE_RESOURCE_BOUNDARY_WHERE_COST_EXISTS",
+    "b4_interaction": "NOT_BEFORE_VALID_B2_AND_B3_EVIDENCE",
+    "a5_execution_effective_selection": "NOT_AUTHORIZED",
+    "a6_adaptive_context_routing": "NOT_AUTHORIZED"
+  }
+}

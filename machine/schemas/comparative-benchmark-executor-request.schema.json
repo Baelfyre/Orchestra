@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/comparative-benchmark-executor-request.schema.json",
+  "title": "Orchestra Comparative Benchmark Executor Request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "program_id", "experiment_id", "experiment_kind", "stage", "request_id",
+    "task_id", "task_class", "repetition_index", "execution_order_index", "arm", "control_identity",
+    "task_payload", "task_payload_digest", "a5_evaluation", "murmurs_evaluation", "interaction_evaluation"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.comparative-benchmark-executor-request.v1"},
+    "program_id": {"const": "orchestra.shared-comparative-benchmark.v1"},
+    "experiment_id": {"type": "string", "minLength": 1},
+    "experiment_kind": {"enum": ["A5_ISOLATED", "MURMURS_ISOLATED", "A5_MURMURS_INTERACTION"]},
+    "stage": {"enum": ["CALIBRATION", "PILOT", "CONFIRMATORY"]},
+    "request_id": {"type": "string", "minLength": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "task_class": {"enum": ["SINGLE_DOMAIN", "MULTI_DOMAIN", "ARCHITECTURE_HEAVY", "DEBUGGING", "SECURITY_SENSITIVE", "VALIDATION_HEAVY", "DOCUMENTATION_AND_IMPLEMENTATION", "DEPENDENCY_HEAVY", "PARALLEL_FRIENDLY", "HIGH_COORDINATION"]},
+    "repetition_index": {"type": "integer", "minimum": 1},
+    "execution_order_index": {"type": "integer", "minimum": 1},
+    "arm": {"$ref": "#/$defs/arm"},
+    "control_identity": {"$ref": "#/$defs/control_identity"},
+    "task_payload": {"type": "object"},
+    "task_payload_digest": {"$ref": "#/$defs/digest"},
+    "a5_evaluation": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["eligibility_envelope_digest", "eligible_topology_candidate_ids"],
+      "properties": {
+        "eligibility_envelope_digest": {"$ref": "#/$defs/digest"},
+        "eligible_topology_candidate_ids": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "murmurs_evaluation": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["same_counter_identity_for_token_delta"],
+      "properties": {"same_counter_identity_for_token_delta": {"const": true}}
+    },
+    "interaction_evaluation": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["isolated_a5_evidence_digest", "isolated_murmurs_evidence_digest"],
+      "properties": {
+        "isolated_a5_evidence_digest": {"$ref": "#/$defs/digest"},
+        "isolated_murmurs_evidence_digest": {"$ref": "#/$defs/digest"}
+      }
+    }
+  },
+  "$defs": {
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "arm": {
+      "type": "object", "additionalProperties": false,
+      "required": ["arm_id", "topology_candidate_id", "topology_class", "topology_digest", "communication_mode"],
+      "properties": {
+        "arm_id": {"type": "string", "minLength": 1},
+        "topology_candidate_id": {"type": "string", "minLength": 1},
+        "topology_class": {"enum": ["FIXED_DETERMINISTIC", "SEQUENTIAL", "CENTRALIZED_STAR", "HIERARCHICAL_DECOMPOSITION", "PARALLEL_JOIN", "OTHER_PERMITTED"]},
+        "topology_digest": {"$ref": "#/$defs/digest"},
+        "communication_mode": {"enum": ["DEFAULT", "CAVEMAN", "MURMURS"]}
+      }
+    },
+    "control_identity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["orchestra_revision", "repository_revision", "starting_state_digest", "task_prompt_digest", "system_instruction_digest", "provider", "model", "model_revision", "reasoning_setting", "temperature", "tool_access_digest", "specialist_set_digest", "required_specialist_set_digest", "authority_digest", "governance_digest", "validation_contract_digest", "environment_digest", "retry_policy_digest", "resource_budget_digest"],
+      "properties": {
+        "orchestra_revision": {"type": "string", "minLength": 1},
+        "repository_revision": {"type": "string", "minLength": 1},
+        "starting_state_digest": {"$ref": "#/$defs/digest"},
+        "task_prompt_digest": {"$ref": "#/$defs/digest"},
+        "system_instruction_digest": {"$ref": "#/$defs/digest"},
+        "provider": {"type": "string", "minLength": 1},
+        "model": {"type": "string", "minLength": 1},
+        "model_revision": {"type": ["string", "null"]},
+        "reasoning_setting": {"type": ["string", "null"]},
+        "temperature": {"type": ["number", "null"]},
+        "tool_access_digest": {"$ref": "#/$defs/digest"},
+        "specialist_set_digest": {"$ref": "#/$defs/digest"},
+        "required_specialist_set_digest": {"$ref": "#/$defs/digest"},
+        "authority_digest": {"$ref": "#/$defs/digest"},
+        "governance_digest": {"$ref": "#/$defs/digest"},
+        "validation_contract_digest": {"$ref": "#/$defs/digest"},
+        "environment_digest": {"$ref": "#/$defs/digest"},
+        "retry_policy_digest": {"$ref": "#/$defs/digest"},
+        "resource_budget_digest": {"$ref": "#/$defs/digest"}
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"experiment_kind": {"const": "A5_ISOLATED"}}},
+      "then": {"properties": {"a5_evaluation": {"type": "object"}, "murmurs_evaluation": {"type": ["null"]}, "interaction_evaluation": {"type": ["null"]}, "arm": {"properties": {"communication_mode": {"const": "DEFAULT"}}}}}
+    },
+    {
+      "if": {"properties": {"experiment_kind": {"const": "MURMURS_ISOLATED"}}},
+      "then": {"properties": {"a5_evaluation": {"type": ["null"]}, "murmurs_evaluation": {"type": "object"}, "interaction_evaluation": {"type": ["null"]}, "arm": {"properties": {"topology_class": {"const": "FIXED_DETERMINISTIC"}}}}}
+    },
+    {
+      "if": {"properties": {"experiment_kind": {"const": "A5_MURMURS_INTERACTION"}}},
+      "then": {"properties": {"a5_evaluation": {"type": "object"}, "murmurs_evaluation": {"type": "object"}, "interaction_evaluation": {"type": "object"}}}
+    }
+  ]
+}
