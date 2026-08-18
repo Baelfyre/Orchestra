@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.6.0 Shared Comparative Benchmark B1 Harness - Candidate
+
+- Implements the shared non-production comparative benchmark harness authorized after the canonical B0 contract freeze, with one common manifest/adapter/evidence protocol for the later isolated A5 topology experiment, isolated Murmurs communication experiment, and controlled A5 x Murmurs interaction experiment.
+- Executes every configured arm for every task and repetition under a reproducible randomized paired-block plan; A5 shadow ranking cannot select or suppress benchmark arms, and Murmurs-isolated runs require one identical fixed topology with exactly `DEFAULT`, `CAVEMAN`, and `MURMURS` communication arms.
+- Adds machine schemas for benchmark manifests and executor request/result interchange, preserves provider-native token/cost counters as the only authoritative live measurement source, retains invalid-run partial evidence, and emits provenance-bound run and experiment records without interpreting collection output as promotion authority.
+- Adds deterministic local fixture coverage for schema validity, all-arm execution, A5 shadow separation, Murmurs fixed-topology separation, host-counter transport, interaction transport, and invalid-run retention; synthetic fixture measurements are explicitly not A5 or Murmurs benefit evidence.
+- Corrects two B0 schema edge cases discovered during implementation: interaction experiments record `murmurs_evaluation.fixed_topology=false`, while Murmurs-isolated experiments require `true`; invalid A5 runs may record `a5_shadow_observation=null` rather than inventing a ranking, while non-invalid A5-capable runs still require a real observation.
+- Preserves the canonical A5 `BENEFIT_NOT_ESTABLISHED` closeout, Murmurs no-token-savings-claim boundary, all authority/capability/governance/provider/privacy/validation ceilings, required-specialist ownership, and `a6_authorized=false`; B1 authorizes no paid provider calls, external compute spend, deployment, release, or production runtime attachment.
+
 ## Post-v1.6.0 Adaptive Tuner A5.1 Shadow Topology Ranker - Candidate
 
 - Implements the bounded A5.1 shadow-only topology scorer and exact evidence-qualification surface under the frozen A5.0 contracts without changing deterministic coordination, dispatch, or execution control.
@@ -191,7 +200,7 @@
 - Replaces the stored `models.py::VALID_SPECIALISTS` snapshot with an on-demand machine-derived compatibility view so the legacy import can remain available without becoming an independent specialist-identity authority.
 - Converts routing, shadow-conformance, governance, and migration-state regressions from legacy-table parity checks to direct machine-authority consumption checks, including fail-closed invalid-rule coverage.
 - Marks the machine migration state `LEGACY_RETIRED` only after the adjacent `CANONICAL_PROMOTION_AUTHORITY` checkpoint became signed canonical through PR #298 at `529639beefd8fa0cc153b6e94649b487de4f7bc2`.
-- This candidate does not select or publish a new SemVer, tag, or GitHub Release and does not perform marketplace publication, installed-integration refresh, deployment, production mutation, ruleset bypass, force push, history rewrite, branch deletion, or destructive cleanup.
+- This candidate does not select or publish a new SemVer, tag, or GitHub Release and does not perform marketplace publication, installed-integration mutation, deployment, production mutation, ruleset bypass, force push, history rewrite, branch deletion, or destructive cleanup.
 
 ## Post-v1.4.0 Control Plane Re-foundation P0/P1-P9 - Canonical Integration
 
