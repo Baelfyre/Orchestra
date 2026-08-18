@@ -136,7 +136,7 @@
   },
   "future_boundary": {
     "a5_1_execution_effect": "NONE",
-    "a5_2_or_execution_effective_selection": "DEFERRED_NOT_PROMOTED",
+    "a5_2_or_execution_effective_selection": "NOT_INTRODUCED",
     "automatic_promotion": "NOT_INTRODUCED",
     "a6_behavior": "NOT_AUTHORIZED_BY_A5_CLOSEOUT",
     "a7_behavior": "NOT_AUTHORIZED_BY_A5_CLOSEOUT",
