@@ -441,3 +441,250 @@ def test_required_specialist_set_cannot_change_across_candidates():
     )
     with pytest.raises(ValueError, match="required_specialists"):
         env(candidates=(deterministic, different), deterministic="deterministic")
+
+
+def test_scalar_and_identifier_guards_fail_closed_on_malformed_stage_inputs():
+    invalid_cases = (
+        ({"stage_id": 7, "mode": "SEQUENTIAL", "specialists": ("clockwork",), "join_required": True}, TypeError),
+        ({"stage_id": "", "mode": "SEQUENTIAL", "specialists": ("clockwork",), "join_required": True}, ValueError),
+        ({"stage_id": "x" * 129, "mode": "SEQUENTIAL", "specialists": ("clockwork",), "join_required": True}, ValueError),
+        ({"stage_id": "bad stage", "mode": "SEQUENTIAL", "specialists": ("clockwork",), "join_required": True}, ValueError),
+        ({"stage_id": "empty-specialists", "mode": "SEQUENTIAL", "specialists": (), "join_required": True}, ValueError),
+        ({"stage_id": "control", "mode": "SEQUENTIAL", "specialists": ("clockwork\n",), "join_required": True}, ValueError),
+    )
+    for kwargs, error in invalid_cases:
+        with pytest.raises(error):
+            TopologyStage(**kwargs)
+
+    with pytest.raises(ValueError, match="exceeds 64 items"):
+        TopologyStage(
+            stage_id="too-many-specialists",
+            mode="PARALLEL",
+            specialists=tuple(f"s{i}" for i in range(65)),
+            join_required=True,
+        )
+
+
+def test_candidate_collection_guards_cover_empty_invalid_duplicate_and_bounded_shapes():
+    valid_stage = TopologyStage(
+        stage_id="candidate.valid",
+        mode="PARALLEL",
+        specialists=REQUIRED,
+        join_required=True,
+    )
+    base = dict(
+        candidate_id="candidate",
+        coordination_contract_revision=REVISION,
+        required_specialists=REQUIRED,
+        reentry_order=(),
+        prior_output_disclosure_refs=(),
+        eligibility_evidence_refs=("coordination:eligible",),
+    )
+
+    with pytest.raises(ValueError, match="between 1 and 64"):
+        TopologyCandidate(stages=(), **base)
+    with pytest.raises(TypeError, match="TopologyStage"):
+        TopologyCandidate(stages=(object(),), **base)
+    with pytest.raises(ValueError, match="stage ids must be unique"):
+        TopologyCandidate(stages=(valid_stage, valid_stage), **base)
+    with pytest.raises(ValueError, match="duplicate"):
+        TopologyCandidate(stages=(valid_stage,), reentry_order=("clockwork", "clockwork"), **{k: v for k, v in base.items() if k != "reentry_order"})
+    with pytest.raises(ValueError, match="eligibility_evidence_ref must not be empty"):
+        TopologyCandidate(stages=(valid_stage,), eligibility_evidence_refs=(), **{k: v for k, v in base.items() if k != "eligibility_evidence_refs"})
+    with pytest.raises(ValueError, match="duplicate"):
+        TopologyCandidate(stages=(valid_stage,), prior_output_disclosure_refs=("same", "same"), **{k: v for k, v in base.items() if k != "prior_output_disclosure_refs"})
+    with pytest.raises(ValueError, match="exceeds 128 items"):
+        TopologyCandidate(stages=(valid_stage,), prior_output_disclosure_refs=tuple(f"ref:{i}" for i in range(129)), **{k: v for k, v in base.items() if k != "prior_output_disclosure_refs"})
+
+
+def test_revision_and_envelope_identity_guards_reject_invalid_shapes():
+    for invalid_revision in (True, "7", 0):
+        with pytest.raises(ValueError, match="positive integer"):
+            candidate("bad-revision") if invalid_revision == REVISION else TopologyCandidate(
+                candidate_id=f"bad-revision-{str(invalid_revision).lower()}",
+                coordination_contract_revision=invalid_revision,
+                required_specialists=REQUIRED,
+                stages=(TopologyStage(stage_id="revision.parallel", mode="PARALLEL", specialists=REQUIRED, join_required=True),),
+                reentry_order=(),
+                prior_output_disclosure_refs=(),
+                eligibility_evidence_refs=("coordination:eligible",),
+            )
+
+    envelope = env()
+    with pytest.raises(ValueError, match="unsupported topology eligibility schema"):
+        replace(envelope, schema_version="orchestra.adaptive-topology-eligibility-envelope.v0")
+    with pytest.raises(ValueError, match="candidate ids must be unique"):
+        env(candidates=(candidate("same"), candidate("same")), deterministic="same")
+    with pytest.raises(TypeError, match="TopologyCandidate"):
+        build_topology_eligibility_envelope(
+            session_id=SESSION,
+            created_at=T0,
+            user_key="user",
+            coordination_contract_ref="coordination:contract:a5",
+            coordination_contract_revision=REVISION,
+            required_specialists=REQUIRED,
+            invariant_evidence_refs=("coordination:validated",),
+            candidates=(object(),),
+            deterministic_topology_candidate_id="deterministic",
+            invariants_applied={key: True for key in REQUIRED_TOPOLOGY_INVARIANTS},
+        )
+    with pytest.raises(ValueError, match="requires deterministic_topology_candidate_id"):
+        env(candidates=(candidate("only"),), deterministic=None)
+    with pytest.raises(ValueError, match="immutable eligible set"):
+        env(candidates=(candidate("only"),), deterministic="missing")
+
+
+def test_metric_and_evidence_item_scalar_guards_reject_untrusted_shapes():
+    for value in (True, "12"):
+        with pytest.raises(TypeError, match="numeric"):
+            TopologyMeasuredMetric(
+                metric_name="LATENCY",
+                value=value,
+                unit="ms",
+                measurement_ref="telemetry:bad",
+            )
+    with pytest.raises(ValueError, match="non-negative"):
+        TopologyMeasuredMetric(
+            metric_name="LATENCY",
+            value=-1,
+            unit="ms",
+            measurement_ref="telemetry:negative",
+        )
+
+    metric = TopologyMeasuredMetric(
+        metric_name="LATENCY",
+        value=1,
+        unit="ms",
+        measurement_ref="telemetry:measured",
+    )
+    base = dict(
+        evidence_id="guard",
+        source_kind="GOVERNED_COORDINATION_OUTCOME",
+        source_ref="outcome:guard",
+        source_digest=D0,
+        candidate_id="adaptive",
+        session_id=SESSION,
+        coordination_contract_revision=REVISION,
+        qualification_status="QUALIFIED",
+        reason_code="EXACT_TOPOLOGY_BOUND_GOVERNED_EVIDENCE",
+        direction="POSITIVE",
+    )
+    with pytest.raises(ValueError, match="qualification status"):
+        TopologyEvidenceItem(**{**base, "qualification_status": "UNKNOWN"})
+    with pytest.raises(ValueError, match="evidence direction"):
+        TopologyEvidenceItem(**{**base, "direction": "UP"})
+    with pytest.raises(ValueError, match="measured_metric is valid only"):
+        TopologyEvidenceItem(**base, measured_metric=metric)
+    with pytest.raises(ValueError, match="reason_code"):
+        TopologyEvidenceItem(**{**base, "reason_code": "bad reason"})
+
+
+def test_packet_collection_guards_reject_schema_type_and_duplicate_identity_errors():
+    envelope = env()
+    first = item(envelope, evidence_id="same", digest=D1, candidate_id="adaptive")
+    second = item(envelope, evidence_id="same", digest=D2, candidate_id="adaptive")
+    exact = packet(envelope)
+    with pytest.raises(ValueError, match="unsupported topology evidence schema"):
+        replace(exact, schema_version="orchestra.adaptive-topology-evidence.v0")
+    with pytest.raises(TypeError, match="TopologyEvidenceItem"):
+        build_topology_evidence_packet(envelope, collected_at=T1, items=(object(),))
+    with pytest.raises(ValueError, match="ids must be unique"):
+        build_topology_evidence_packet(envelope, collected_at=T1, items=(first, second))
+    with pytest.raises(TypeError, match="TopologyEligibilityEnvelope"):
+        build_topology_evidence_packet(object(), collected_at=T1, items=())
+
+
+def test_qualifier_reports_absent_candidate_and_each_supported_evidence_class():
+    envelope = env()
+    absent = qualify_topology_evidence(
+        envelope,
+        candidate_id="absent",
+        source_kind="GOVERNED_COORDINATION_OUTCOME",
+        source_ref="outcome:absent",
+        source_digest=D0,
+        session_id=SESSION,
+        coordination_contract_revision=REVISION,
+        direction="NEGATIVE",
+    )
+    assert absent.qualification_status == "REJECTED"
+    assert absent.reason_code == "TOPOLOGY_CANDIDATE_NOT_ELIGIBLE"
+
+    validation = qualify_topology_evidence(
+        envelope,
+        candidate_id="adaptive",
+        source_kind="VALIDATION_EVIDENCE",
+        source_ref="validation:exact",
+        source_digest=D1,
+        session_id=SESSION,
+        coordination_contract_revision=REVISION,
+        direction="NEUTRAL",
+    )
+    remediation = qualify_topology_evidence(
+        envelope,
+        candidate_id="adaptive",
+        source_kind="REMEDIATION_EVIDENCE",
+        source_ref="remediation:exact",
+        source_digest=D2,
+        session_id=SESSION,
+        coordination_contract_revision=REVISION,
+        direction="POSITIVE",
+    )
+    telemetry = qualify_topology_evidence(
+        envelope,
+        candidate_id="adaptive",
+        source_kind="TRUSTWORTHY_MEASURED_TELEMETRY",
+        source_ref="telemetry:exact",
+        source_digest=D3,
+        session_id=SESSION,
+        coordination_contract_revision=REVISION,
+        direction="POSITIVE",
+        measured_metric=TopologyMeasuredMetric(
+            metric_name="TOKENS",
+            value=10,
+            unit="tokens",
+            measurement_ref="telemetry:exact:measurement",
+        ),
+    )
+    assert validation.reason_code == "EXACT_TOPOLOGY_BOUND_VALIDATION_EVIDENCE"
+    assert remediation.reason_code == "EXACT_TOPOLOGY_BOUND_REMEDIATION_EVIDENCE"
+    assert telemetry.reason_code == "EXACT_TOPOLOGY_BOUND_MEASURED_TELEMETRY"
+
+
+def test_ranker_type_and_identity_guards_fail_closed_without_adaptive_authority():
+    envelope = env()
+    evidence_packet = packet(envelope)
+    with pytest.raises(TypeError, match="TopologyEligibilityEnvelope"):
+        rank_shadow_topologies(object(), evidence_packet, actual_deterministic_candidate_id="deterministic", evaluated_at=T2)
+    with pytest.raises(TypeError, match="TopologyEvidencePacket"):
+        rank_shadow_topologies(envelope, object(), actual_deterministic_candidate_id="deterministic", evaluated_at=T2)
+    with pytest.raises(TypeError, match="adaptive_available"):
+        rank_shadow_topologies(envelope, evidence_packet, actual_deterministic_candidate_id="deterministic", evaluated_at=T2, adaptive_available=1)
+
+    alternate_identity = env(deterministic="adaptive")
+    decision = rank_shadow_topologies(
+        alternate_identity,
+        packet(alternate_identity),
+        actual_deterministic_candidate_id="deterministic",
+        evaluated_at=T2,
+    )
+    assert decision.disposition == "DETERMINISTIC_FALLBACK"
+    assert decision.reason_codes == ("DETERMINISTIC_TOPOLOGY_IDENTITY_MISMATCH",)
+
+
+def test_supported_candidate_cannot_authorize_an_unsupported_higher_scoring_candidate():
+    envelope = env()
+    items = (
+        item(envelope, evidence_id="det-pos-1", digest=D0, candidate_id="deterministic", direction="POSITIVE"),
+        item(envelope, evidence_id="det-pos-2", digest=D1, candidate_id="deterministic", direction="POSITIVE"),
+        item(envelope, evidence_id="det-neg-1", digest=D2, candidate_id="deterministic", direction="NEGATIVE"),
+        item(envelope, evidence_id="adaptive-only", digest=D3, candidate_id="adaptive", direction="POSITIVE"),
+    )
+    decision = rank_shadow_topologies(
+        envelope,
+        packet(envelope, items),
+        actual_deterministic_candidate_id="deterministic",
+        evaluated_at=T2,
+    )
+    assert decision.disposition == "DETERMINISTIC_FALLBACK"
+    assert decision.shadow_recommendation_id is None
+    assert decision.reason_codes == ("NO_QUALIFIED_SHADOW_RECOMMENDATION",)
