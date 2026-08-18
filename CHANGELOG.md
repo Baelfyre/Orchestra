@@ -76,7 +76,7 @@
 - Preserves fail-closed profile/evidence integrity, deterministic fallback on missing, stale, incompatible, cross-user, or provider-failure state, and keeps governed outcome evidence advisory rather than automatically converting it into preferences.
 - Adds the A2 adaptive-context machine contract/schema, architecture documentation, focused runtime regressions, and edge-case coverage for scope leakage, precedence, provider failure, canonical-route immutability, delegated-context rejection, and A3 absence.
 - Keeps A2 non-authorizing and non-promoting: it cannot select another specialist, expand authority, grant capabilities, alter governance or lifecycle permissions, promote inferred patterns, add provider integration or training, rank routes/models/workers/strategies, or learn Tuner topology.
-- Keeps this work on an unsigned draft source-validation lane pending a fresh exact-head validation matrix and separate human merge authorization; it does not move the `v1.6.0` tag/Release, deploy, activate policy, bypass repository governance, or begin A3.
+- Keeps this work on an unsigned draft source-validation lane pending a fresh exact-head validation matrix and separate signed materialization; it does not move the `v1.6.0` tag/Release, deploy, activate policy, bypass repository governance, or begin A3.
 
 ## Post-v1.6.0 Local Adaptive Memory A1 - Candidate
 
@@ -458,11 +458,11 @@ Key post-`v1.1.2` canonical milestones include:
 - PR #208 - Spec Kitty-derived Phase 2 governed execution contracts.
 - PR #210 - Spec Kitty-derived Phase 3A design and ownership package.
 - PR #212 - `OrchestraStatusProjection`.
-- PR #214 - `OrchestraWorktreeContract`.
+- PR #214 - `OrchestraWorktreeContract` and Phase 3 completion.
 - PR #216 - frontend-to-backend synchronicity contract.
 - PR #223 - clean replay roadmap/state closeout.
 - PR #224 - backend-to-persistence and cross-module logical-flow profiles.
-- PR #225 - delegated Phase C repository host-reliability contract.
+- PR #225 - Delegated Phase C repository host-reliability contract.
 - PR #226 - Delegated Phase D overlap reconciliation.
 - PR #227 - autonomous merge-readiness hardening.
 - PR #228 - delegated-governance current-state reconciliation.
