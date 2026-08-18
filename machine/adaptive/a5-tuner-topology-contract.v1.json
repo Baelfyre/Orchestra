@@ -71,7 +71,7 @@
     "join_point_cannot_replace_required_validation_or_human_gate": true,
     "reentry_order_cannot_suppress_required_reentry": true,
     "prior_output_disclosure_must_remain_inside_existing_context_ceiling": true,
-    "bounded_decomposition_cannot_create_new authority_or_capability": true,
+    "bounded_decomposition_cannot_create_new_authority_or_capability": true,
     "malformed_or_unavailable_adaptive_layer_disposition": "DETERMINISTIC_COORDINATION_FALLBACK"
   },
   "evidence_policy": {
