@@ -4,29 +4,7 @@
   "title": "Orchestra Comparative Benchmark Run",
   "type": "object",
   "additionalProperties": false,
-  "required": [
-    "schema_version",
-    "program_id",
-    "run_id",
-    "experiment_id",
-    "experiment_kind",
-    "stage",
-    "task_id",
-    "task_class",
-    "repetition_index",
-    "execution_order_index",
-    "arm",
-    "control_identity",
-    "outcome",
-    "quality",
-    "tokens",
-    "cost",
-    "latency",
-    "coordination",
-    "communication",
-    "safety",
-    "evidence"
-  ],
+  "required": ["schema_version", "program_id", "run_id", "experiment_id", "experiment_kind", "stage", "task_id", "task_class", "repetition_index", "execution_order_index", "arm", "control_identity", "outcome", "quality", "tokens", "cost", "latency", "coordination", "communication", "safety", "evidence"],
   "properties": {
     "schema_version": {"const": "orchestra.comparative-benchmark-run.v1"},
     "program_id": {"const": "orchestra.shared-comparative-benchmark.v1"},
@@ -35,20 +13,7 @@
     "experiment_kind": {"enum": ["A5_ISOLATED", "MURMURS_ISOLATED", "A5_MURMURS_INTERACTION"]},
     "stage": {"enum": ["CALIBRATION", "PILOT", "CONFIRMATORY"]},
     "task_id": {"type": "string", "minLength": 1},
-    "task_class": {
-      "enum": [
-        "SINGLE_DOMAIN",
-        "MULTI_DOMAIN",
-        "ARCHITECTURE_HEAVY",
-        "DEBUGGING",
-        "SECURITY_SENSITIVE",
-        "VALIDATION_HEAVY",
-        "DOCUMENTATION_AND_IMPLEMENTATION",
-        "DEPENDENCY_HEAVY",
-        "PARALLEL_FRIENDLY",
-        "HIGH_COORDINATION"
-      ]
-    },
+    "task_class": {"enum": ["SINGLE_DOMAIN", "MULTI_DOMAIN", "ARCHITECTURE_HEAVY", "DEBUGGING", "SECURITY_SENSITIVE", "VALIDATION_HEAVY", "DOCUMENTATION_AND_IMPLEMENTATION", "DEPENDENCY_HEAVY", "PARALLEL_FRIENDLY", "HIGH_COORDINATION"]},
     "repetition_index": {"type": "integer", "minimum": 1},
     "execution_order_index": {"type": "integer", "minimum": 1},
     "started_at": {"type": ["string", "null"], "format": "date-time"},
@@ -56,26 +21,11 @@
     "arm": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "arm_id",
-        "topology_candidate_id",
-        "topology_class",
-        "topology_digest",
-        "communication_mode"
-      ],
+      "required": ["arm_id", "topology_candidate_id", "topology_class", "topology_digest", "communication_mode"],
       "properties": {
         "arm_id": {"type": "string", "minLength": 1},
         "topology_candidate_id": {"type": "string", "minLength": 1},
-        "topology_class": {
-          "enum": [
-            "FIXED_DETERMINISTIC",
-            "SEQUENTIAL",
-            "CENTRALIZED_STAR",
-            "HIERARCHICAL_DECOMPOSITION",
-            "PARALLEL_JOIN",
-            "OTHER_PERMITTED"
-          ]
-        },
+        "topology_class": {"enum": ["FIXED_DETERMINISTIC", "SEQUENTIAL", "CENTRALIZED_STAR", "HIERARCHICAL_DECOMPOSITION", "PARALLEL_JOIN", "OTHER_PERMITTED"]},
         "topology_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
         "communication_mode": {"enum": ["DEFAULT", "CAVEMAN", "MURMURS"]}
       }
@@ -83,27 +33,7 @@
     "control_identity": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "orchestra_revision",
-        "repository_revision",
-        "starting_state_digest",
-        "task_prompt_digest",
-        "system_instruction_digest",
-        "provider",
-        "model",
-        "model_revision",
-        "reasoning_setting",
-        "temperature",
-        "tool_access_digest",
-        "specialist_set_digest",
-        "required_specialist_set_digest",
-        "authority_digest",
-        "governance_digest",
-        "validation_contract_digest",
-        "environment_digest",
-        "retry_policy_digest",
-        "resource_budget_digest"
-      ],
+      "required": ["orchestra_revision", "repository_revision", "starting_state_digest", "task_prompt_digest", "system_instruction_digest", "provider", "model", "model_revision", "reasoning_setting", "temperature", "tool_access_digest", "specialist_set_digest", "required_specialist_set_digest", "authority_digest", "governance_digest", "validation_contract_digest", "environment_digest", "retry_policy_digest", "resource_budget_digest"],
       "properties": {
         "orchestra_revision": {"type": "string", "minLength": 1},
         "repository_revision": {"type": "string", "minLength": 1},
@@ -132,18 +62,7 @@
       "required": ["status", "invalid_reason", "task_completed", "validation_passed", "governance_valid"],
       "properties": {
         "status": {"enum": ["PASS", "FAIL", "INVALID_RUN"]},
-        "invalid_reason": {
-          "type": ["string", "null"],
-          "enum": [
-            null,
-            "PROVIDER_OUTAGE",
-            "INFRASTRUCTURE_OUTAGE",
-            "HARNESS_FAILURE",
-            "CORRUPTED_STARTING_STATE",
-            "UNRESOLVABLE_EXTERNAL_DEPENDENCY_FAILURE",
-            "MEASUREMENT_CAPTURE_FAILURE"
-          ]
-        },
+        "invalid_reason": {"type": ["string", "null"], "enum": [null, "PROVIDER_OUTAGE", "INFRASTRUCTURE_OUTAGE", "HARNESS_FAILURE", "CORRUPTED_STARTING_STATE", "UNRESOLVABLE_EXTERNAL_DEPENDENCY_FAILURE", "MEASUREMENT_CAPTURE_FAILURE"]},
         "task_completed": {"type": "boolean"},
         "validation_passed": {"type": "boolean"},
         "governance_valid": {"type": "boolean"}
@@ -152,13 +71,7 @@
     "quality": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "requirements_satisfied",
-        "requirements_missed",
-        "remediation_iterations",
-        "validation_failures",
-        "regressions_introduced"
-      ],
+      "required": ["requirements_satisfied", "requirements_missed", "remediation_iterations", "validation_failures", "regressions_introduced"],
       "properties": {
         "requirements_satisfied": {"type": "integer", "minimum": 0},
         "requirements_missed": {"type": "integer", "minimum": 0},
@@ -170,15 +83,7 @@
     "tokens": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "source",
-        "counter_id",
-        "input_tokens",
-        "output_tokens",
-        "cached_input_tokens",
-        "reasoning_tokens",
-        "fresh_billable_tokens"
-      ],
+      "required": ["source", "counter_id", "input_tokens", "output_tokens", "cached_input_tokens", "reasoning_tokens", "fresh_billable_tokens"],
       "properties": {
         "source": {"enum": ["HOST_REPORTED", "UNAVAILABLE"]},
         "counter_id": {"type": ["string", "null"]},
@@ -213,16 +118,7 @@
     "coordination": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "specialist_messages",
-        "cross_specialist_messages",
-        "handoffs",
-        "handoff_failures",
-        "duplicate_work_events",
-        "contradiction_events",
-        "join_wait_ms",
-        "specialist_reentry_events"
-      ],
+      "required": ["specialist_messages", "cross_specialist_messages", "handoffs", "handoff_failures", "duplicate_work_events", "contradiction_events", "join_wait_ms", "specialist_reentry_events"],
       "properties": {
         "specialist_messages": {"type": "integer", "minimum": 0},
         "cross_specialist_messages": {"type": "integer", "minimum": 0},
@@ -237,14 +133,7 @@
     "communication": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "progress_messages",
-        "model_progress_calls",
-        "user_visible_bytes",
-        "context_transfer_bytes",
-        "semantic_preservation_failures",
-        "required_information_omissions"
-      ],
+      "required": ["progress_messages", "model_progress_calls", "user_visible_bytes", "context_transfer_bytes", "semantic_preservation_failures", "required_information_omissions"],
       "properties": {
         "progress_messages": {"type": "integer", "minimum": 0},
         "model_progress_calls": {"type": "integer", "minimum": 0},
@@ -257,14 +146,7 @@
     "safety": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "required_specialist_omission",
-        "authority_expansion",
-        "capability_expansion",
-        "governance_violation",
-        "provider_privacy_expansion",
-        "mandatory_gate_suppression"
-      ],
+      "required": ["required_specialist_omission", "authority_expansion", "capability_expansion", "governance_violation", "provider_privacy_expansion", "mandatory_gate_suppression"],
       "properties": {
         "required_specialist_omission": {"const": false},
         "authority_expansion": {"const": false},
@@ -280,12 +162,7 @@
       "required": ["eligibility_digest", "ranked_topology_candidate_ids", "top_candidate_id", "decision_digest"],
       "properties": {
         "eligibility_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
-        "ranked_topology_candidate_ids": {
-          "type": "array",
-          "minItems": 1,
-          "uniqueItems": true,
-          "items": {"type": "string", "minLength": 1}
-        },
+        "ranked_topology_candidate_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
         "top_candidate_id": {"type": "string", "minLength": 1},
         "decision_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
       }
@@ -309,47 +186,15 @@
     },
     {
       "if": {"properties": {"tokens": {"properties": {"source": {"const": "HOST_REPORTED"}}}}},
-      "then": {
-        "properties": {
-          "tokens": {
-            "properties": {
-              "counter_id": {"type": "string", "minLength": 1},
-              "input_tokens": {"type": "integer", "minimum": 0},
-              "output_tokens": {"type": "integer", "minimum": 0}
-            }
-          }
-        }
-      }
+      "then": {"properties": {"tokens": {"properties": {"counter_id": {"type": "string", "minLength": 1}, "input_tokens": {"type": "integer", "minimum": 0}, "output_tokens": {"type": "integer", "minimum": 0}}}}}
     },
     {
       "if": {"properties": {"tokens": {"properties": {"source": {"const": "UNAVAILABLE"}}}}},
-      "then": {
-        "properties": {
-          "tokens": {
-            "properties": {
-              "counter_id": {"const": null},
-              "input_tokens": {"const": null},
-              "output_tokens": {"const": null},
-              "cached_input_tokens": {"const": null},
-              "reasoning_tokens": {"const": null},
-              "fresh_billable_tokens": {"const": null}
-            }
-          }
-        }
-      }
+      "then": {"properties": {"tokens": {"properties": {"counter_id": {"const": null}, "input_tokens": {"const": null}, "output_tokens": {"const": null}, "cached_input_tokens": {"const": null}, "reasoning_tokens": {"const": null}, "fresh_billable_tokens": {"const": null}}}}}
     },
     {
       "if": {"properties": {"cost": {"properties": {"source": {"const": "PROVIDER_REPORTED"}}}}},
-      "then": {
-        "properties": {
-          "cost": {
-            "properties": {
-              "amount": {"type": "number", "minimum": 0},
-              "currency": {"type": "string", "pattern": "^[A-Z]{3}$"}
-            }
-          }
-        }
-      }
+      "then": {"properties": {"cost": {"properties": {"amount": {"type": "number", "minimum": 0}, "currency": {"type": "string", "pattern": "^[A-Z]{3}$"}}}}}
     },
     {
       "if": {"properties": {"cost": {"properties": {"source": {"const": "UNAVAILABLE"}}}}},
@@ -357,22 +202,20 @@
     },
     {
       "if": {"properties": {"experiment_kind": {"const": "A5_ISOLATED"}}},
-      "then": {
-        "required": ["a5_shadow_observation"],
-        "properties": {
-          "arm": {"properties": {"communication_mode": {"const": "DEFAULT"}}},
-          "a5_shadow_observation": {"type": "object"}
-        }
-      }
+      "then": {"properties": {"arm": {"properties": {"communication_mode": {"const": "DEFAULT"}}}}}
+    },
+    {
+      "if": {
+        "allOf": [
+          {"properties": {"experiment_kind": {"enum": ["A5_ISOLATED", "A5_MURMURS_INTERACTION"]}}},
+          {"properties": {"outcome": {"properties": {"status": {"enum": ["PASS", "FAIL"]}}}}}
+        ]
+      },
+      "then": {"required": ["a5_shadow_observation"], "properties": {"a5_shadow_observation": {"type": "object"}}}
     },
     {
       "if": {"properties": {"experiment_kind": {"const": "MURMURS_ISOLATED"}}},
-      "then": {
-        "properties": {
-          "arm": {"properties": {"topology_class": {"const": "FIXED_DETERMINISTIC"}}},
-          "a5_shadow_observation": {"type": ["null"]}
-        }
-      }
+      "then": {"properties": {"arm": {"properties": {"topology_class": {"const": "FIXED_DETERMINISTIC"}}}, "a5_shadow_observation": {"type": ["null"]}}}
     }
   ]
 }
