@@ -1,5 +1,15 @@
 # Changelog
 
+## Post-v1.6.0 Adaptive Selection A4.1 - Candidate
+
+- Implements the bounded A4.1 shadow-only selector and evidence-qualification surface under the canonical A4.0 contracts without changing deterministic execution control.
+- Requires the immutable candidate envelope to arrive only after ownership, route binding, authority, capability, governance, provider/privacy, lifecycle, and resource-ceiling filters have already succeeded; adaptive logic cannot create or restore eligibility.
+- Qualifies A3 `SPECIALIST_STRATEGY_TENDENCY` evidence only with exact scope, candidate identity, option binding, shadow-only state, and non-promoted state, while rejecting A3 workflow/user-preference tendencies as strategy-performance evidence.
+- Explicitly rejects A3 evidence as model or worker performance evidence; model and worker selection falls back deterministically when direct qualified option evidence is unavailable.
+- Adds deterministic scoring with duplicate-digest suppression, a two-distinct-positive-support floor, explicit-current-constraint and scoped-preference precedence, stable deterministic tie ordering, and structurally non-authorizing shadow decisions.
+- Adds frozen-schema serialization, adversarial runtime regressions, fail-closed edge coverage, machine discovery parity, and the machine implementation record `machine/adaptive/a4-shadow-ranker-implementation.v1.json`.
+- Preserves `selection_effective=false`, `shadow_influenced_execution=false`, `promotion_state=NOT_PROMOTED`, and makes no RouterService, RuntimeExecutor, Tuner routing, Conductor routing, authority, capability, governance, provider eligibility, specialist ownership, A5-A8, release, deployment, or publication change.
+
 ## Post-v1.6.0 Adaptive Behavioral Pattern Learning A3 - Candidate
 
 - Implements A3.1 machine-local shadow signal extraction from validated A1 evidence plus explicitly bounded governed-evidence constructors, without treating raw conversation or generic phase success as specialist-strategy success.
