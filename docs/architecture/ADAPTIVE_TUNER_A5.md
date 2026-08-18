@@ -3,18 +3,21 @@
 ## Status
 
 ```text
-Phase: A5.1
-State: SHADOW_TOPOLOGY_RANKER_IMPLEMENTED_SOURCE_CANDIDATE_NO_EXECUTION_CONTROL
+Phase: A5 closeout
+State: A5_CLOSED_AT_SHADOW_MATURITY_EXECUTION_PROMOTION_DEFERRED_BENEFIT_NOT_ESTABLISHED
 Issue: #340
 A5.0 canonical content tree: 5a8a2b66a44eb233643a37aa9365222d50a732df
 A5.1 source baseline: 8a365eea7dd52022c427b83d7f3b484aba7152ff
 A5.1 source baseline tree: 5a8a2b66a44eb233643a37aa9365222d50a732df
-A4 execution-effective promotion: DEFERRED_NOT_PROMOTED
+A5.1 canonical head: 8acb03802834e9e56b078496a3e5e0f1aa498ebf
+A5.1 canonical tree: e493b260ba2def53fb46298109637f8635f99970
+A5 execution-effective promotion: DEFERRED_NOT_PROMOTED
+A6 authorization from A5 closeout: NONE
 ```
 
-A5 begins only after the explicit A4 exit decision to retain the canonical A4 selector in shadow-only, non-authorizing mode. A5.0 defines the machine contracts needed to evaluate permitted coordination topologies. A5.1 implements the first bounded shadow scorer and exact topology evidence-qualification surface under those frozen contracts.
+A5 begins only after the explicit A4 exit decision to retain the canonical A4 selector in shadow-only, non-authorizing mode. A5.0 defines the machine contracts needed to evaluate permitted coordination topologies. A5.1 implements and canonically integrates the bounded shadow scorer and exact topology evidence-qualification surface under those frozen contracts.
 
-A5.1 does not make learned topology execution-effective.
+A5 closes at shadow maturity. The required topology parity and adversarial validation is satisfied, but measurable benefit over fixed eligible sequences is not established because no governed exact-topology comparative measurement set was available to the A5 closeout under the frozen evidence contract. Synthetic or generic phase success is not accepted as a substitute. Execution-effective topology selection therefore remains deferred and not promoted.
 
 ## Existing authority reused
 
@@ -35,7 +38,7 @@ The canonical existing surfaces are:
 - `docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md`
 - `orchestra_runtime/services.py`
 
-A5.1 adds no attachment to any of those execution or dispatch surfaces.
+A5 adds no attachment to any of those execution or dispatch surfaces.
 
 ## A5.0 contract purpose
 
@@ -72,7 +75,7 @@ shadow_influenced_execution = false
 promotion_state = NOT_PROMOTED
 ```
 
-There is no A5.1 `RuntimeExecutor` attachment and no Conductor dispatch attachment.
+There is no A5 `RuntimeExecutor` attachment and no Conductor dispatch attachment.
 
 ## Eligibility before ranking
 
@@ -227,14 +230,52 @@ A5.1 tests prove at minimum that:
 - identical inputs produce identical rank and decision identity;
 - every decision remains structurally non-authorizing.
 
+## A5 canonical validation
+
+A5.1 was source-validated, signed through the isolated materialization lane, and independently validated on the signed protected-main candidate before canonical integration.
+
+Canonical identity:
+
+```text
+canonical head = 8acb03802834e9e56b078496a3e5e0f1aa498ebf
+canonical tree = e493b260ba2def53fb46298109637f8635f99970
+canonical parent = 8a365eea7dd52022c427b83d7f3b484aba7152ff
+canonical signature = GitHub verified / valid
+```
+
+Protected-main exact-head validation on signed candidate `4d035ed80fab3400a5d2365c5f4f803675652c0c`:
+
+- Governance Check `32153174122`: PASS
+- validate `32153173966`: PASS
+- Required Analysis Compatibility `32153174005`: PASS
+- Cross-platform Validation `32153174063`: PASS
+- cosmic-ray-confidence `32153174102`: PASS
+- Cosmic Ray artifact digest: `sha256:e97af168f4669241393e676edbb8e364afa009b647c2da6a2ec3239db89c0f6f`
+
+## A5 exit decision
+
+The A5 exit gate has two distinct parts and they are recorded separately rather than conflated.
+
+```text
+topology parity and adversarial validation = SATISFIED
+measurable benefit over fixed eligible sequences = NOT_ESTABLISHED
+execution-effective topology promotion = DEFERRED_NOT_PROMOTED
+A5 phase disposition = CLOSED_AT_SHADOW_MATURITY
+```
+
+The measurable-benefit result is intentionally not upgraded from synthetic tests, generic task success, A3 workflow tendency, or unmeasured estimates. Under the frozen A5 evidence policy, a benefit claim requires trustworthy evidence bound to the exact topology candidate, collaboration session, coordination-contract revision, and any claimed measurement. No governed comparative measurement set satisfying that boundary was available to this closeout.
+
+Because measurable benefit is not established, A5 does not create an execution-control bridge. There is no learned topology scheduler, no RuntimeExecutor attachment, no Conductor dispatch attachment, and no new parallel execution capability.
+
+Closing A5 at shadow maturity is a negative promotion decision, not a positive performance claim. It preserves the validated shadow research surface while refusing to make topology-effective selection authoritative without the required evidence.
+
 ## Future boundary
 
-A5.1 implements only the shadow topology ranker and evidence-qualification unit authorized by issue #340.
+A5 is closed at shadow maturity with execution-effective promotion deferred and not promoted.
 
-Not implemented or authorized by A5.1:
+Not authorized or introduced by this closeout:
 
 - topology-effective coordination selection;
-- A5.2 or any later A5 execution-control bridge;
 - automatic policy promotion;
 - additional parallel execution capability;
 - learned specialist omission or ownership changes;
@@ -245,4 +286,4 @@ Not implemented or authorized by A5.1:
 - A8 recursive or test-time compute;
 - release, deployment, or publication.
 
-Any source validation for A5.1 binds only the exact source head tested. Any remediation that changes the source head requires fresh exact-head validation. Signed materialization or canonical integration remains a separately governed transition.
+A later phase cannot treat this closeout as evidence that adaptive topology is measurably better than fixed eligible sequences. Any future reconsideration of topology-effective promotion requires new governed comparative evidence under the A5 exact-topology evidence contract and a separately authorized transition.
