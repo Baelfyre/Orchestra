@@ -31,7 +31,7 @@
 ## Post-v1.6.0 Adaptive Specialist Context A2 - Candidate
 
 - Adds opt-in, read-only adaptive specialist context after deterministic routing, trusted authority/capability evaluation, and governance validation, without changing the default `RuntimeExecutor` path.
-- Compiles bounded advisory context from canonical A1 machine-local adaptive state with exact user/project/specialist/task-session scope isolation, deterministic precedence, explicit caller bounds, and inferred-candidate exclusion unless a caller supplies a confidence threshold.
+- Compiles bounded advisory context from canonical A1 machine-local state with exact user/project/specialist/task-session scope isolation, deterministic precedence, explicit caller bounds, and inferred-candidate exclusion unless a caller supplies a confidence threshold.
 - Preserves fail-closed profile/evidence integrity, deterministic fallback on missing, stale, incompatible, cross-user, or provider-failure state, and keeps governed outcome evidence advisory rather than automatically converting it into preferences.
 - Adds the A2 adaptive-context machine contract/schema, architecture documentation, focused runtime regressions, and edge-case coverage for scope leakage, precedence, provider failure, canonical-route immutability, delegated-context rejection, and A3 absence.
 - Keeps A2 non-authorizing and non-promoting: it cannot select another specialist, expand authority, grant capabilities, alter governance or lifecycle permissions, promote inferred patterns, add provider integration or training, rank routes/models/workers/strategies, or learn Tuner topology.
@@ -400,7 +400,7 @@ The first autonomous finalization experiment was rolled back to the verified rec
 - R5 / PR #227 - autonomous merge-readiness hardening.
 - R5B / PR #228 - delegated-governance current-state reconciliation, merged at `fbe4532ba2083feaa7ed9fcda2988843f1237a78` and independently verified on canonical `main`.
 - R6 - `v1.2.0` release-candidate metadata, public documentation, changelog, and release-note preparation.
-- R7 / PR #230 - accepted live installed-host evidence merged; subsequent verification exposed the ancestry/signature mismatch caused by the then-used rebase merge and triggered forward-only ruleset/protocol remediation.
+- R7 / PR #230 - accepted live-host evidence merged; subsequent verification exposed the ancestry/signature mismatch caused by the then-used rebase merge and triggered forward-only ruleset/protocol remediation.
 
 Historical fail-open or bypass-capable platform behavior is not successful validation precedent.
 
@@ -422,7 +422,7 @@ Key post-`v1.1.2` canonical milestones include:
 - PR #223 - clean replay roadmap/state closeout.
 - PR #224 - backend-to-persistence and cross-module logical-flow profiles.
 - PR #225 - Delegated Phase C repository host-reliability contract.
-- PR #226 - Phase D runtime-overlap reconciliation.
+- PR #226 - Delegated Phase D overlap reconciliation.
 - PR #227 - autonomous merge-readiness hardening.
 - PR #228 - delegated-governance current-state reconciliation.
 - PR #230 - R7 live installed-host evidence reconciliation.
