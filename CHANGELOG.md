@@ -31,7 +31,7 @@
 ## Post-v1.6.0 Adaptive Specialist Context A2 - Candidate
 
 - Adds opt-in, read-only adaptive specialist context after deterministic routing, trusted authority/capability evaluation, and governance validation, without changing the default `RuntimeExecutor` path.
-- Compiles bounded advisory context from canonical A1 machine-local state with exact user/project/specialist/task-session scope isolation, deterministic precedence, explicit caller bounds, and inferred-candidate exclusion unless a caller supplies a confidence threshold.
+- Compiles bounded advisory context from canonical A1 machine-local adaptive state with exact user/project/specialist/task-session scope isolation, deterministic precedence, explicit caller bounds, and inferred-candidate exclusion unless a caller supplies a confidence threshold.
 - Preserves fail-closed profile/evidence integrity, deterministic fallback on missing, stale, incompatible, cross-user, or provider-failure state, and keeps governed outcome evidence advisory rather than automatically converting it into preferences.
 - Adds the A2 adaptive-context machine contract/schema, architecture documentation, focused runtime regressions, and edge-case coverage for scope leakage, precedence, provider failure, canonical-route immutability, delegated-context rejection, and A3 absence.
 - Keeps A2 non-authorizing and non-promoting: it cannot select another specialist, expand authority, grant capabilities, alter governance or lifecycle permissions, promote inferred patterns, add provider integration or training, rank routes/models/workers/strategies, or learn Tuner topology.
