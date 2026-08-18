@@ -64,13 +64,13 @@ _REASON_RE = re.compile(r"^[A-Z0-9][A-Z0-9_:-]{0,127}$")
 def _text(value: object, field_name: str, *, max_length: int = 512) -> str:
     if not isinstance(value, str):
         raise TypeError(f"{field_name} must be a string")
+    if any(ord(ch) < 32 for ch in value):
+        raise ValueError(f"{field_name} must not contain control characters")
     text = value.strip()
     if not text:
         raise ValueError(f"{field_name} must be non-empty")
     if len(text) > max_length:
         raise ValueError(f"{field_name} exceeds {max_length} characters")
-    if any(ord(ch) < 32 for ch in text):
-        raise ValueError(f"{field_name} must not contain control characters")
     return text
 
 
@@ -773,6 +773,8 @@ def build_topology_eligibility_envelope(
     explicit_current_constraint_ref: str | None = None,
 ) -> TopologyEligibilityEnvelope:
     candidate_tuple = tuple(candidates)
+    if any(not isinstance(candidate, TopologyCandidate) for candidate in candidate_tuple):
+        raise TypeError("candidates must contain TopologyCandidate values")
     normalized_required = _stable_identifiers(
         required_specialists,
         "required_specialist",
@@ -892,6 +894,8 @@ def build_topology_evidence_packet(
     if not isinstance(envelope, TopologyEligibilityEnvelope):
         raise TypeError("envelope must be TopologyEligibilityEnvelope")
     item_tuple = tuple(items)
+    if any(not isinstance(item, TopologyEvidenceItem) for item in item_tuple):
+        raise TypeError("items must contain TopologyEvidenceItem values")
     normalized_at = normalize_timestamp(collected_at, "collected_at")
     return TopologyEvidencePacket(
         packet_id=_stable_id(
@@ -1196,6 +1200,24 @@ def rank_shadow_topologies(
         negative = sum(item.direction == "NEGATIVE" for item in items)
         neutral = sum(item.direction == "NEUTRAL" for item in items)
         return (positive - negative, positive, neutral)
+
+    best_supported_net_score = max(
+        score(candidate_id)[0] for candidate_id in supported_candidates
+    )
+    if any(
+        candidate_id not in supported_candidates
+        and score(candidate_id)[0] >= best_supported_net_score
+        for candidate_id in deterministic_order
+    ):
+        return _decision(
+            envelope,
+            packet,
+            evaluated_at=evaluated_at,
+            disposition="DETERMINISTIC_FALLBACK",
+            ranked_candidate_ids=deterministic_order,
+            actual_deterministic_candidate_id=actual,
+            reason_codes=("NO_QUALIFIED_SHADOW_RECOMMENDATION",),
+        )
 
     ranked = tuple(
         sorted(
