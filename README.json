@@ -36,10 +36,7 @@
       "status": "INCLUDED_IN_V1_6_CANDIDATE",
       "purpose": "Stable SDK import surface and read-only PRAP v1 compatibility certification for host and adapter integration authors.",
       "stable_import_surface": "orchestra_runtime.protocol.sdk",
-      "quickstart_commands": [
-        "python scripts/certify_adapter.py --adapter codex --json",
-        "python scripts/certify_adapter.py --all --json"
-      ],
+      "quickstart_commands": ["python scripts/certify_adapter.py --adapter codex --json", "python scripts/certify_adapter.py --all --json"],
       "machine_sources": ["machine/protocol/prap-certification-contract.v1.json", "machine/schemas/prap-certification-evidence.schema.json"],
       "human_sources": ["docs/setup/ADAPTER_SDK_PRAP.md"],
       "authority_note": "Certification proves compatibility only. It does not grant runtime authority, host maturity, deployment permission, policy activation, or installed refresh authority."
@@ -130,20 +127,32 @@
       "authority_note": "A4 remains shadow-only and non-authorizing. Its canonical post-execution attachment cannot influence operation inputs, create eligibility, restore filtered options, expand authority/capability/provider access, change required specialist ownership, or control deterministic execution."
     },
     "adaptive_tuner_topology_a5": {
-      "status": "CONTRACT_FREEZE_SOURCE_CANDIDATE_NO_RUNTIME_TOPOLOGY_SELECTION",
-      "purpose": "Freeze A5 topology eligibility, exact evidence, and shadow-decision contracts over the existing deterministic Tuner coordination model without introducing learned topology runtime behavior.",
-      "machine_sources": ["machine/adaptive/a5-tuner-topology-contract.v1.json", "machine/schemas/adaptive-topology-eligibility-envelope.schema.json", "machine/schemas/adaptive-topology-evidence.schema.json", "machine/schemas/adaptive-topology-decision.schema.json"],
+      "status": "A5_1_SHADOW_RANKER_IMPLEMENTED_SOURCE_CANDIDATE_NO_EXECUTION_CONTROL",
+      "purpose": "Implement the bounded A5.1 shadow topology scorer and exact evidence-qualification layer under the frozen A5.0 deterministic coordination contracts, with deterministic fallback and no execution or dispatch authority.",
+      "machine_sources": ["machine/adaptive/a5-tuner-topology-contract.v1.json", "machine/adaptive/a5-shadow-topology-ranker-implementation.v1.json", "machine/schemas/adaptive-topology-eligibility-envelope.schema.json", "machine/schemas/adaptive-topology-evidence.schema.json", "machine/schemas/adaptive-topology-decision.schema.json"],
       "human_sources": ["docs/architecture/ADAPTIVE_TUNER_A5.md", "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md"],
       "canonical_entry_head": "fb0ace102d3ab0e662937bb4d824a40b103c1976",
       "canonical_entry_tree": "c3f8b2efa4e1e75b64d5fc1ae10c92402a5b47f8",
       "existing_coordination_runtime_surface": "orchestra_runtime/coordination.py",
+      "runtime_surface": "orchestra_runtime/adaptive/topology.py",
+      "validation_surfaces": ["tests/runtime/test_adaptive_topology.py", "tests/runtime/test_adaptive_topology_edges.py"],
+      "source_baseline_head": "8a365eea7dd52022c427b83d7f3b484aba7152ff",
+      "source_baseline_tree": "5a8a2b66a44eb233643a37aa9365222d50a732df",
+      "scorer": "orchestra.adaptive-topology-scorer.v1",
+      "a5_shadow_ranker_implemented": true,
       "runtime_topology_control": false,
+      "topology_effective": false,
+      "shadow_influenced_execution": false,
+      "runtime_executor_attachment": false,
+      "conductor_dispatch_attachment": false,
       "required_specialist_omission_allowed": false,
       "tuner_routing_authority": false,
       "a3_direct_topology_evidence_available": false,
       "deterministic_coordination_fallback": true,
+      "new_parallel_execution_capability": false,
+      "a5_2_authorized": false,
       "a6_authorized": false,
-      "authority_note": "A5.0 is contract-only. Conductor remains dispatch owner, Arbiter remains transition owner, Overseer remains validation owner, domain ownership is unchanged, and adaptive topology cannot omit required specialists or expand deterministic ceilings."
+      "authority_note": "A5.1 is shadow-only and non-authorizing. It ranks only already-eligible deterministic topology candidates, cannot alter specialist ownership or deterministic ceilings, and has no attachment to Conductor dispatch or RuntimeExecutor execution."
     }
   },
   "machine_scan_order": [
@@ -195,6 +204,7 @@
     "adaptive_selection_evidence_schema": "machine/schemas/adaptive-selection-evidence.schema.json",
     "adaptive_selection_decision_schema": "machine/schemas/adaptive-selection-decision.schema.json",
     "adaptive_tuner_a5_contract": "machine/adaptive/a5-tuner-topology-contract.v1.json",
+    "adaptive_tuner_a5_shadow_implementation": "machine/adaptive/a5-shadow-topology-ranker-implementation.v1.json",
     "adaptive_topology_eligibility_envelope_schema": "machine/schemas/adaptive-topology-eligibility-envelope.schema.json",
     "adaptive_topology_evidence_schema": "machine/schemas/adaptive-topology-evidence.schema.json",
     "adaptive_topology_decision_schema": "machine/schemas/adaptive-topology-decision.schema.json",
@@ -295,7 +305,7 @@
     "murmurs_measurement_issue": 316,
     "murmurs_measurement_issue_state": "OPEN",
     "adaptive_governed_orchestration_issue": 340,
-    "adaptive_governed_orchestration_state": "A5_0_CONTRACT_FREEZE_SOURCE_CANDIDATE_NO_RUNTIME_TOPOLOGY_SELECTION"
+    "adaptive_governed_orchestration_state": "A5_1_SHADOW_RANKER_IMPLEMENTED_SOURCE_CANDIDATE_NO_EXECUTION_CONTROL"
   },
   "documentation": {
     "documentation_map": "docs/README.md",
@@ -341,7 +351,7 @@
     "documentation_and_provenance_closeout": "INCLUDED_IN_V1_6_CANDIDATE",
     "adaptive_local_memory_a1": "CANONICAL_FOUNDATION_NO_DIRECT_RUNTIME_EFFECT",
     "adaptive_specialist_context_a2": "CANONICAL_ADVISORY_OPT_IN",
-    "adaptive_governed_orchestration": "A5_0_CONTRACT_FREEZE_SOURCE_CANDIDATE_NO_RUNTIME_TOPOLOGY_SELECTION_ISSUE_340",
+    "adaptive_governed_orchestration": "A5_1_SHADOW_RANKER_IMPLEMENTED_SOURCE_CANDIDATE_NO_EXECUTION_CONTROL_ISSUE_340",
     "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316"
   },
   "ai_review_guidance": {
@@ -377,10 +387,12 @@
     "treat_a4_1_shadow_ranker_as_non_authorizing_and_separate_from_execution_control": true,
     "treat_a4_execution_attachment_as_post_execution_observation_only": true,
     "do_not_use_a4_execution_attachment_to_influence_operation_inputs_or_attribute_runtime_outcomes": true,
-    "treat_a5_topology_as_contract_only_until_separately_implemented": true,
     "do_not_allow_a5_topology_to_omit_required_specialists_or_change_domain_ownership": true,
     "preserve_conductor_dispatch_arbiter_transition_and_overseer_validation_ownership_in_a5": true,
     "do_not_treat_a3_workflow_tendency_as_topology_performance_without_exact_topology_binding": true,
+    "treat_a5_1_shadow_topology_ranker_as_non_authorizing_and_separate_from_dispatch_execution": true,
+    "do_not_allow_a5_1_ranking_to_create_restore_or_execute_topology_candidates": true,
+    "do_not_treat_a3_workflow_tendency_as_direct_topology_performance_evidence": true,
     "treat_v1_5_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "treat_v1_6_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "when_evaluating_a_published_tag_or_release_prefer_live_verified_git_and_release_identity_over_prepublication_snapshot_fields": true

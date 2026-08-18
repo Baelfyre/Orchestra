@@ -1,0 +1,113 @@
+{
+  "schema_version": "orchestra.adaptive-topology-implementation.v1",
+  "phase": "A5.1_SHADOW_TOPOLOGY_RANKER_AND_EVIDENCE_QUALIFICATION",
+  "status": "IMPLEMENTED_SHADOW_ONLY_SOURCE_CANDIDATE",
+  "source_baseline": {
+    "canonical_branch": "main",
+    "canonical_head": "8a365eea7dd52022c427b83d7f3b484aba7152ff",
+    "canonical_tree": "5a8a2b66a44eb233643a37aa9365222d50a732df",
+    "contract": "machine/adaptive/a5-tuner-topology-contract.v1.json",
+    "issue": 340,
+    "authorization_comment": 5327234054,
+    "incident_recovery_closeout_comment": 5327388233
+  },
+  "surfaces": {
+    "runtime": "orchestra_runtime/adaptive/topology.py",
+    "validation": [
+      "tests/runtime/test_adaptive_topology.py",
+      "tests/runtime/test_adaptive_topology_edges.py"
+    ],
+    "human_documentation": "docs/architecture/ADAPTIVE_TUNER_A5.md",
+    "machine_discovery": "README.json"
+  },
+  "scorer": {
+    "version": "orchestra.adaptive-topology-scorer.v1",
+    "mode": "DETERMINISTIC_SHADOW_ONLY",
+    "minimum_distinct_positive_support": 2,
+    "duplicate_source_digest_counts_once": true,
+    "stable_tie_break": "DETERMINISTIC_ELIGIBLE_TOPOLOGY_ORDER"
+  },
+  "eligibility": {
+    "source": "EXISTING_DETERMINISTIC_TUNER_COORDINATION_STATE",
+    "required_invariants": [
+      "coordination_validated",
+      "required_specialists_complete",
+      "ownership_complete",
+      "authority_external_to_tuner",
+      "governance_complete",
+      "contradictions_resolved",
+      "stale_contracts_resolved",
+      "provider_privacy",
+      "lifecycle",
+      "resource_ceilings",
+      "context_disclosure_ceiling"
+    ],
+    "adaptive_candidate_creation": false,
+    "adaptive_candidate_restoration": false,
+    "required_specialist_omission": false,
+    "specialist_ownership_change": false,
+    "authority_or_resolution_owner_change": false,
+    "parallel_execution_capability_activation": false,
+    "context_disclosure_expansion": false
+  },
+  "evidence": {
+    "allowed_source_kinds": [
+      "GOVERNED_COORDINATION_OUTCOME",
+      "VALIDATION_EVIDENCE",
+      "REMEDIATION_EVIDENCE",
+      "TRUSTWORTHY_MEASURED_TELEMETRY"
+    ],
+    "exact_candidate_session_revision_binding_required": true,
+    "a3_workflow_tendency_direct_topology_performance_evidence": false,
+    "generic_phase_success_is_topology_success": false,
+    "duplicate_source_digest_counts_once": true,
+    "trustworthy_measured_telemetry_required_for_measurements": true,
+    "unmeasured_latency_cost_tokens_or_parallelism_inferred": false,
+    "cross_session_or_revision_evidence_qualifies": false
+  },
+  "decision_boundary": {
+    "execution_controlled_by": "DETERMINISTIC_ORCHESTRA",
+    "dispatch_controlled_by": "CONDUCTOR",
+    "transition_controlled_by": "ARBITER",
+    "topology_effective": false,
+    "shadow_influenced_execution": false,
+    "promotion_state": "NOT_PROMOTED",
+    "conductor_dispatch_attachment": false,
+    "runtime_executor_attachment": false,
+    "coordination_runtime_mutated": false,
+    "authority_capability_governance_changed": false,
+    "provider_privacy_changed": false,
+    "resource_ceiling_changed": false,
+    "new_parallel_execution_capability": false
+  },
+  "adversarial_validation": [
+    "frozen_schema_serialization_matches_a5_contracts",
+    "all_frozen_coordination_invariants_required",
+    "required_specialist_set_preserved_across_candidates",
+    "required_specialists_present_in_each_candidate_topology",
+    "adaptive_ranker_cannot_create_or_restore_candidate",
+    "actual_deterministic_topology_must_match_eligible_identity",
+    "explicit_current_constraint_dominates_adaptive_score",
+    "scoped_preference_cannot_restore_ineligible_topology",
+    "evidence_requires_exact_candidate_session_and_revision",
+    "duplicate_digest_does_not_inflate_support",
+    "one_digest_cannot_support_multiple_topologies",
+    "qualified_cross_session_or_revision_evidence_fails_closed",
+    "a3_workflow_tendency_is_not_direct_topology_evidence",
+    "generic_phase_success_is_not_topology_evidence",
+    "unmeasured_telemetry_is_not_invented",
+    "malformed_or_stale_evidence_falls_back_deterministically",
+    "parallel_topology_recommendation_does_not_activate_parallel_execution",
+    "same_inputs_same_rank_and_stable_tie_order",
+    "shadow_decision_is_structurally_non_authorizing"
+  ],
+  "future_boundary": {
+    "a5_1_execution_effect": "NONE",
+    "a5_2_or_execution_effective_selection": "NOT_INTRODUCED",
+    "automatic_promotion": "NOT_INTRODUCED",
+    "a6_behavior": "NOT_INTRODUCED",
+    "a7_behavior": "NOT_INTRODUCED",
+    "a8_behavior": "NOT_INTRODUCED",
+    "release_deployment_publication": "PROHIBITED"
+  }
+}

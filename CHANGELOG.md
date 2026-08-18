@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.6.0 Adaptive Tuner A5.1 Shadow Topology Ranker - Candidate
+
+- Implements the bounded A5.1 shadow-only topology scorer and exact evidence-qualification surface under the frozen A5.0 contracts without changing deterministic coordination, dispatch, or execution control.
+- Requires an immutable deterministic eligibility envelope with every frozen coordination invariant satisfied, the exact required-specialist set preserved, and every candidate bound to the same collaboration session and coordination-contract revision.
+- Qualifies only governed coordination outcomes, validation evidence, remediation evidence, and provenance-bound measured telemetry; duplicate source digests count once, one digest cannot support multiple topology candidates, and A3 `WORKFLOW_TENDENCY` is not direct topology-performance evidence.
+- Adds deterministic fallback, a two-distinct-positive-support floor, explicit-current-constraint and scoped-preference precedence, stable deterministic tie ordering, and fail-closed handling for stale, cross-session, cross-revision, malformed, unsupported, unavailable, and empty-set conditions.
+- Preserves `topology_effective=false`, `shadow_influenced_execution=false`, and `promotion_state=NOT_PROMOTED`; no Conductor dispatch attachment, `RuntimeExecutor` attachment, required-specialist omission, specialist ownership change, authority/capability/governance/provider/privacy/resource-ceiling expansion, or new parallel-execution capability is introduced.
+- Adds frozen-schema serialization, adversarial runtime coverage, machine discovery parity, architecture documentation, and the machine implementation record `machine/adaptive/a5-shadow-topology-ranker-implementation.v1.json` while deferring A5.2, A6-A8, automatic promotion, release, deployment, and publication.
+
 ## Post-v1.6.0 Adaptive Selection A4 Execution Attachment - Candidate
 
 - Adds an opt-in post-execution A4 shadow attachment that runs only after deterministic routing, authority, capability, governance, lifecycle activation, and runtime operation have completed.
@@ -407,7 +416,7 @@ The first autonomous finalization experiment was rolled back to the verified rec
 - R5 / PR #227 - autonomous merge-readiness hardening.
 - R5B / PR #228 - delegated-governance current-state reconciliation, merged at `fbe4532ba2083feaa7ed9fcda2988843f1237a78` and independently verified on canonical `main`.
 - R6 - `v1.2.0` release-candidate metadata, public documentation, changelog, and release-note preparation.
-- R7 / PR #230 - accepted live-host evidence merged; subsequent verification exposed the ancestry/signature mismatch caused by the then-used rebase merge and triggered forward-only ruleset/protocol remediation.
+- R7 / PR #230 - accepted live installed-host evidence merged; subsequent verification exposed the ancestry/signature mismatch caused by the then-used rebase merge and triggered forward-only ruleset/protocol remediation.
 
 Historical fail-open or bypass-capable platform behavior is not successful validation precedent.
 
