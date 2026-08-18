@@ -1,7 +1,7 @@
 {
   "schema_version": "orchestra.adaptive-topology-implementation.v1",
   "phase": "A5.1_SHADOW_TOPOLOGY_RANKER_AND_EVIDENCE_QUALIFICATION",
-  "status": "IMPLEMENTED_SHADOW_ONLY_SOURCE_CANDIDATE",
+  "status": "CANONICAL_SHADOW_IMPLEMENTATION_A5_CLOSED_NOT_PROMOTED",
   "source_baseline": {
     "canonical_branch": "main",
     "canonical_head": "8a365eea7dd52022c427b83d7f3b484aba7152ff",
@@ -10,6 +10,29 @@
     "issue": 340,
     "authorization_comment": 5327234054,
     "incident_recovery_closeout_comment": 5327388233
+  },
+  "canonical_closeout": {
+    "source_pr": 407,
+    "source_pr_disposition": "CLOSED_UNMERGED_DIRECTLY",
+    "validated_source_head": "5c38ca498a89ed3d247daa24479472dd31ac72fe",
+    "reviewed_source_tree": "e493b260ba2def53fb46298109637f8635f99970",
+    "materialization_pr": 408,
+    "materialization_workflow": 32152976451,
+    "materialization_evidence_digest": "sha256:fc4479b07e9e998cf90581f29169b5d329bc8e5738d1c02f84e2d82d7333b8aa",
+    "signed_materialized_head": "4d035ed80fab3400a5d2365c5f4f803675652c0c",
+    "canonical_pr": 409,
+    "canonical_head": "8acb03802834e9e56b078496a3e5e0f1aa498ebf",
+    "canonical_tree": "e493b260ba2def53fb46298109637f8635f99970",
+    "canonical_parent": "8a365eea7dd52022c427b83d7f3b484aba7152ff",
+    "canonical_signature": "GITHUB_VERIFIED_VALID",
+    "protected_main_validation": {
+      "governance_check": 32153174122,
+      "validate": 32153173966,
+      "required_analysis_compatibility": 32153174005,
+      "cross_platform_validation": 32153174063,
+      "cosmic_ray_confidence": 32153174102,
+      "cosmic_ray_artifact_digest": "sha256:e97af168f4669241393e676edbb8e364afa009b647c2da6a2ec3239db89c0f6f"
+    }
   },
   "surfaces": {
     "runtime": "orchestra_runtime/adaptive/topology.py",
@@ -101,13 +124,23 @@
     "same_inputs_same_rank_and_stable_tie_order",
     "shadow_decision_is_structurally_non_authorizing"
   ],
+  "a5_exit_evaluation": {
+    "topology_parity_and_adversarial_validation": "SATISFIED",
+    "measurable_benefit_over_fixed_eligible_sequences": "NOT_ESTABLISHED",
+    "benefit_evidence_disposition": "NO_GOVERNED_EXACT_TOPOLOGY_COMPARATIVE_MEASUREMENT_SET_AVAILABLE_TO_A5_CLOSEOUT",
+    "synthetic_or_generic_success_may_satisfy_benefit_gate": false,
+    "unmeasured_benefit_may_be_inferred": false,
+    "execution_effective_promotion": "DEFERRED_NOT_PROMOTED",
+    "phase_disposition": "A5_CLOSED_AT_SHADOW_MATURITY",
+    "reason": "A5 has a canonical validated shadow ranker and adversarial evidence, but the frozen A5 evidence contract does not permit a measurable-benefit claim without trustworthy exact-topology comparative measurements. No such governed comparative measurement set was available to this closeout, so execution-effective topology selection remains deferred."
+  },
   "future_boundary": {
     "a5_1_execution_effect": "NONE",
-    "a5_2_or_execution_effective_selection": "NOT_INTRODUCED",
+    "a5_2_or_execution_effective_selection": "DEFERRED_NOT_PROMOTED",
     "automatic_promotion": "NOT_INTRODUCED",
-    "a6_behavior": "NOT_INTRODUCED",
-    "a7_behavior": "NOT_INTRODUCED",
-    "a8_behavior": "NOT_INTRODUCED",
+    "a6_behavior": "NOT_AUTHORIZED_BY_A5_CLOSEOUT",
+    "a7_behavior": "NOT_AUTHORIZED_BY_A5_CLOSEOUT",
+    "a8_behavior": "NOT_AUTHORIZED_BY_A5_CLOSEOUT",
     "release_deployment_publication": "PROHIBITED"
   }
 }
