@@ -1,5 +1,13 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B2.0 A5 Calibration Readiness - Candidate
+
+- Adds a no-spend A5-isolated calibration-readiness boundary on top of the canonical B1 harness without performing provider/model execution or creating benchmark run evidence.
+- Adds an explicitly synthetic, schema-valid plan-only manifest covering five calibration task classes, two repetitions per arm, three representative topology arms, `DEFAULT` communication only, and a deterministic 30-run paired schedule.
+- Adds focused runtime regression coverage proving every configured arm is planned in every task/repetition block, randomization is reproducible for the same seed, and `plan_only=True` emits only `plan.json` without invoking the configured executor or producing run/experiment evidence.
+- Keeps synthetic topology/task identities out of A5 evidence and eligibility authority; real B2 calibration remains gated on validated coordination state, one frozen exact A5 eligibility envelope, real workload identities, and a bounded resource ceiling where execution is paid or metered.
+- Preserves `MEASUREMENT_NOT_STARTED`, A5 shadow-only/non-effective state, `a6_authorized=false`, required-specialist ownership, governance/authority/capability/provider/privacy ceilings, and the no-benefit-claim boundary.
+
 ## Post-v1.6.0 Shared Comparative Benchmark B1 Harness - Candidate
 
 - Implements the shared non-production comparative benchmark harness authorized after the canonical B0 contract freeze, with one common manifest/adapter/evidence protocol for the later isolated A5 topology experiment, isolated Murmurs communication experiment, and controlled A5 x Murmurs interaction experiment.

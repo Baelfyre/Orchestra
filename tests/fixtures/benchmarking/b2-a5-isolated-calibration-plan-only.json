@@ -1,0 +1,101 @@
+{
+  "schema_version": "orchestra.comparative-benchmark-manifest.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "experiment_id": "b2-a5-isolated-calibration-plan-only",
+  "experiment_kind": "A5_ISOLATED",
+  "stage": "CALIBRATION",
+  "randomization_seed": 19082026,
+  "repetitions_per_arm": 2,
+  "executor_timeout_seconds": 30,
+  "common_control_identity": {
+    "orchestra_revision": "eed2e870dbfbc2782f941015761886e55c849185",
+    "repository_revision": "SYNTHETIC_PLAN_ONLY_NO_WORKLOAD_REPOSITORY",
+    "system_instruction_digest": "c17604c63abaaa7cf826efe812c30032e3b9edfec8e932dcefa77d4f2621841a",
+    "provider": "NO_PROVIDER_PLAN_ONLY",
+    "model": "NO_MODEL_PLAN_ONLY",
+    "model_revision": null,
+    "reasoning_setting": null,
+    "temperature": null,
+    "tool_access_digest": "3f6eb0c0b391e9a246265e1b0022626f6c036ab4dddad3c3ff2ef939c5944c5a",
+    "specialist_set_digest": "53f1b62e2e5cc2c4967401e4c54b9055c4e358afc3d1dbfc37415ca9fbc608ae",
+    "required_specialist_set_digest": "93295280ff646adf4ba0ef18042e0994ba51fcc5e180193adf96d603ae88c72c",
+    "authority_digest": "9e2517c2614c9f3fc52c95fd1afe385c0f97a2805814ad20bb17974e5e681c1d",
+    "governance_digest": "16f55c8019bfe5248563e6f37f4a711fff7e5d8ecc4afd831dc0bf541dcec9cf",
+    "validation_contract_digest": "3b13e51e152ef5e62165c1c7e77b4b89c7b28a694a4a8a9432ba75b941ccdbd8",
+    "environment_digest": "b6fd1bf69900c820dd6288766ebdb876910c7ec4753e5e22dff466d7c7626b90",
+    "retry_policy_digest": "d83bfe59ea70048232d37d8a80abd3e5b7d44e0316b6307d0a4fdcff52d01d66",
+    "resource_budget_digest": "59be84da834eda825cffc38d8cebb6c4662113af2442dfe4d1aeb0b30a20b26e"
+  },
+  "arms": [
+    {
+      "arm_id": "synthetic-sequential",
+      "topology_candidate_id": "synthetic-topology-sequential",
+      "topology_class": "SEQUENTIAL",
+      "topology_digest": "5d20d4c04fd783a6f82e5c3838317fe9648a5161c3d38d0134ec085aa4a0f1cd",
+      "communication_mode": "DEFAULT"
+    },
+    {
+      "arm_id": "synthetic-hierarchical",
+      "topology_candidate_id": "synthetic-topology-hierarchical",
+      "topology_class": "HIERARCHICAL_DECOMPOSITION",
+      "topology_digest": "477dc13daa4b8631fe2833b15e0bfe7ce1f8b9a7f84d4a2d8288d8063b140d64",
+      "communication_mode": "DEFAULT"
+    },
+    {
+      "arm_id": "synthetic-parallel-join",
+      "topology_candidate_id": "synthetic-topology-parallel-join",
+      "topology_class": "PARALLEL_JOIN",
+      "topology_digest": "5bf4479acb4e94b032cdcca72d71404ad60fdb76d67a41c504570096ca224c0c",
+      "communication_mode": "DEFAULT"
+    }
+  ],
+  "tasks": [
+    {
+      "task_id": "b2-cal-arch",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "starting_state_digest": "7051187290f74da0030c401b8c5934083087e02a2c6e9de54663da2fb4bf454c",
+      "task_prompt_digest": "488fbf8fb03276259643924e7d77c67bf1c3ac53d63aeeb51c5b7483b73f1b47",
+      "task_payload": {"synthetic": true, "scenario": "architecture-heavy multi-specialist coordination plan", "execution_allowed": false}
+    },
+    {
+      "task_id": "b2-cal-debug",
+      "task_class": "DEBUGGING",
+      "starting_state_digest": "ddefb7d0f9483e3835b6f8827fe833956158e8a4fcec87b9e27de95f5c1e825a",
+      "task_prompt_digest": "2b79e5426a388362ec0f45a6d49fa3e562fb4fbadb6556b31ff0f92a2865e5ce",
+      "task_payload": {"synthetic": true, "scenario": "cross-layer debugging coordination plan", "execution_allowed": false}
+    },
+    {
+      "task_id": "b2-cal-validation",
+      "task_class": "VALIDATION_HEAVY",
+      "starting_state_digest": "4c38cab17a8730a348c59d881466f5d943ad672b5f7b4ec3751c7fd458991c31",
+      "task_prompt_digest": "9dd76646575516f8062952efdf2c8ba2a32477705c1c6bcf13b888d226aaf348",
+      "task_payload": {"synthetic": true, "scenario": "validation-heavy remediation coordination plan", "execution_allowed": false}
+    },
+    {
+      "task_id": "b2-cal-parallel",
+      "task_class": "PARALLEL_FRIENDLY",
+      "starting_state_digest": "1eb1ec06f4c2dde03bc56b7f2fa25283bf5e9667c98eded9c8a38039a1d31579",
+      "task_prompt_digest": "bb5ee590d695787f321e6c0bcf952cacca8c532db65407cafb2314745fd76a2a",
+      "task_payload": {"synthetic": true, "scenario": "parallel-friendly independent findings and join plan", "execution_allowed": false}
+    },
+    {
+      "task_id": "b2-cal-coordination",
+      "task_class": "HIGH_COORDINATION",
+      "starting_state_digest": "2b158ef350671e9c8e102b5faf16b6c3f547188e9b994338bac2f8cc4fa16127",
+      "task_prompt_digest": "c9b38ae6cbaf04eb7d94a2dc2ddb84e8641d5ddd57025a8d059d91204ca3df6d",
+      "task_payload": {"synthetic": true, "scenario": "high-coordination multi-domain contradiction resolution plan", "execution_allowed": false}
+    }
+  ],
+  "a5_evaluation": {
+    "eligibility_envelope_digest": "1563d344b03ab01250471665008ce5e039fc0b0dabf69a93bdbfae79bad35379",
+    "eligible_topology_candidate_ids": [
+      "synthetic-topology-sequential",
+      "synthetic-topology-hierarchical",
+      "synthetic-topology-parallel-join"
+    ]
+  },
+  "murmurs_evaluation": null,
+  "interaction_evaluation": null,
+  "preregistration_digest": null,
+  "benefit_thresholds": null
+}
