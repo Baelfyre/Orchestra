@@ -1,0 +1,91 @@
+{
+  "schema_version": "orchestra.adaptive-selection-implementation.v1",
+  "phase": "A4.1_SHADOW_RANKER_AND_EVIDENCE_QUALIFICATION",
+  "status": "IMPLEMENTED_SHADOW_ONLY_CANDIDATE",
+  "source_baseline": {
+    "canonical_branch": "main",
+    "canonical_head": "d6c342049b4a92fe07f2f6875cfe421ad05c1bb6",
+    "canonical_tree": "c8ca50d5e0a25991aca4d3fdabd8dbbae16fda29",
+    "contract": "machine/adaptive/a4-bounded-selection-contract.v1.json",
+    "issue": 340
+  },
+  "surfaces": {
+    "runtime": "orchestra_runtime/adaptive/selection.py",
+    "validation": "tests/runtime/test_adaptive_selection.py",
+    "human_documentation": "docs/architecture/ADAPTIVE_SELECTION_A4.md"
+  },
+  "scorer": {
+    "version": "orchestra.adaptive-selection-scorer.v1",
+    "mode": "DETERMINISTIC_SHADOW_ONLY",
+    "minimum_distinct_positive_support": 2,
+    "duplicate_source_digest_counts_once": true,
+    "stable_tie_break": "DETERMINISTIC_ELIGIBLE_ORDER"
+  },
+  "eligibility": {
+    "source": "EXISTING_DETERMINISTIC_ORCHESTRA",
+    "required_filters": [
+      "ownership",
+      "route_binding",
+      "authority",
+      "capability",
+      "governance",
+      "provider_privacy",
+      "lifecycle",
+      "resource_ceilings"
+    ],
+    "adaptive_candidate_creation": false,
+    "adaptive_candidate_restoration": false,
+    "adaptive_owner_change": false,
+    "adaptive_capability_change": false
+  },
+  "evidence": {
+    "a3_specialist_strategy_tendency": "QUALIFIABLE_ONLY_WITH_EXACT_SCOPE_OPTION_AND_SHADOW_STATE",
+    "a3_user_preference_tendency_as_strategy_performance": false,
+    "a3_workflow_tendency_as_strategy_performance": false,
+    "a3_model_tendency_available": false,
+    "a3_worker_tendency_available": false,
+    "model_worker_without_direct_qualified_evidence": "DETERMINISTIC_FALLBACK",
+    "trustworthy_measured_telemetry_required": true,
+    "generic_phase_success_is_option_success": false
+  },
+  "decision_boundary": {
+    "execution_controlled_by": "DETERMINISTIC_ORCHESTRA",
+    "selection_effective": false,
+    "shadow_influenced_execution": false,
+    "promotion_state": "NOT_PROMOTED",
+    "runtime_router_changed": false,
+    "runtime_executor_changed": false,
+    "authority_capability_governance_changed": false,
+    "provider_or_worker_eligibility_expanded": false,
+    "tuner_or_conductor_authority_changed": false
+  },
+  "adversarial_validation": [
+    "schema_serialization_matches_frozen_a4_contracts",
+    "all_deterministic_filters_required",
+    "routed_specialist_ownership_preserved",
+    "selection_type_candidate_kind_match_required",
+    "deterministic_choice_must_be_in_eligibility_envelope",
+    "explicit_current_constraint_dominates_adaptive_score",
+    "scoped_preference_cannot_restore_filtered_option",
+    "a3_strategy_evidence_requires_exact_scope_and_option",
+    "a3_non_strategy_tendency_cannot_be_repurposed",
+    "a3_evidence_cannot_be_model_or_worker_performance",
+    "model_worker_without_direct_evidence_falls_back",
+    "duplicate_digest_does_not_inflate_support",
+    "one_digest_cannot_support_multiple_options",
+    "evidence_cannot_add_ineligible_candidate",
+    "unmeasured_telemetry_rejected",
+    "mismatched_or_stale_evidence_fails_closed",
+    "same_inputs_same_rank_and_stable_tie_order",
+    "shadow_decision_is_structurally_non_authorizing"
+  ],
+  "future_boundary": {
+    "a4_1_execution_effect": "NONE",
+    "a4_execution_effective_promotion": "NOT_GRANTED_BY_THIS_UNIT",
+    "a5_behavior": "NOT_INTRODUCED",
+    "a6_behavior": "NOT_INTRODUCED",
+    "a7_behavior": "NOT_INTRODUCED",
+    "a8_behavior": "NOT_INTRODUCED",
+    "release_deployment_publication": "PROHIBITED"
+  }
+}
