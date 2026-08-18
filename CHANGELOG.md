@@ -1,5 +1,15 @@
 # Changelog
 
+## Post-v1.6.0 Adaptive Selection A4.1 - Candidate
+
+- Implements the bounded A4.1 shadow-only selector and evidence-qualification surface under the canonical A4.0 contracts without changing deterministic execution control.
+- Requires the immutable candidate envelope to arrive only after ownership, route binding, authority, capability, governance, provider/privacy, lifecycle, and resource-ceiling filters have already succeeded; adaptive logic cannot create or restore eligibility.
+- Qualifies A3 `SPECIALIST_STRATEGY_TENDENCY` evidence only with exact scope, candidate identity, option binding, shadow-only state, and non-promoted state, while rejecting A3 workflow/user-preference tendencies as strategy-performance evidence.
+- Explicitly rejects A3 evidence as model or worker performance evidence; model and worker selection falls back deterministically when direct qualified option evidence is unavailable.
+- Adds deterministic scoring with duplicate-digest suppression, a two-distinct-positive-support floor, explicit-current-constraint and scoped-preference precedence, stable deterministic tie ordering, and structurally non-authorizing shadow decisions.
+- Adds frozen-schema serialization, adversarial runtime regressions, fail-closed edge coverage, machine discovery parity, and the machine implementation record `machine/adaptive/a4-shadow-ranker-implementation.v1.json`.
+- Preserves `selection_effective=false`, `shadow_influenced_execution=false`, `promotion_state=NOT_PROMOTED`, and makes no RouterService, RuntimeExecutor, Tuner routing, Conductor routing, authority, capability, governance, provider eligibility, specialist ownership, A5-A8, release, deployment, or publication change.
+
 ## Post-v1.6.0 Adaptive Behavioral Pattern Learning A3 - Candidate
 
 - Implements A3.1 machine-local shadow signal extraction from validated A1 evidence plus explicitly bounded governed-evidence constructors, without treating raw conversation or generic phase success as specialist-strategy success.
@@ -390,7 +400,7 @@ The first autonomous finalization experiment was rolled back to the verified rec
 - R5 / PR #227 - autonomous merge-readiness hardening.
 - R5B / PR #228 - delegated-governance current-state reconciliation, merged at `fbe4532ba2083feaa7ed9fcda2988843f1237a78` and independently verified on canonical `main`.
 - R6 - `v1.2.0` release-candidate metadata, public documentation, changelog, and release-note preparation.
-- R7 / PR #230 - accepted live-host evidence merged; subsequent verification exposed the ancestry/signature mismatch caused by the then-used rebase merge and triggered forward-only ruleset/protocol remediation.
+- R7 / PR #230 - accepted live installed-host evidence merged; subsequent verification exposed the ancestry/signature mismatch caused by the then-used rebase merge and triggered forward-only ruleset/protocol remediation.
 
 Historical fail-open or bypass-capable platform behavior is not successful validation precedent.
 
@@ -412,7 +422,7 @@ Key post-`v1.1.2` canonical milestones include:
 - PR #223 - clean replay roadmap/state closeout.
 - PR #224 - backend-to-persistence and cross-module logical-flow profiles.
 - PR #225 - Delegated Phase C repository host-reliability contract.
-- PR #226 - Delegated Phase D overlap reconciliation.
+- PR #226 - Phase D runtime-overlap reconciliation.
 - PR #227 - autonomous merge-readiness hardening.
 - PR #228 - delegated-governance current-state reconciliation.
 - PR #230 - R7 live installed-host evidence reconciliation.
