@@ -4,7 +4,7 @@ module-path = [
 ]
 timeout = 90.0
 excluded-modules = []
-test-command = "python -m pytest -q tests/runtime/test_adaptive_shadow.py tests/runtime/test_adaptive_shadow_edges.py"
+test-command = "python -m pytest -q tests/runtime/test_adaptive_shadow.py tests/runtime/test_adaptive_shadow_edges.py tests/runtime/test_adaptive_shadow_mutation_strength.py"
 
 [cosmic-ray.distributor]
 name = "local"
