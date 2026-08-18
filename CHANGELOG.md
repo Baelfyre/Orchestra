@@ -336,7 +336,7 @@
 - Published the stable minor release from annotated tag `v1.2.0` at exact release commit `4f3c45f6d1e5f290aca108ddf5810c1b18f1dc76`.
 - Published [Orchestra v1.2.0: Governed Orchestration](https://github.com/Baelfyre/Orchestra/releases/tag/v1.2.0) as a non-draft, non-prerelease, immutable GitHub Release.
 - Preserved R7-E2, R7-F, R7-G, and R7-H evidence identities, Claude Code `SCAFFOLD_ONLY` maturity, and the repository simulation fixture as pending/empty by design.
-- Performed no deployment, marketplace publication, installed-integration refresh, or policy activation.
+- Performed no deployment, marketplace publication, installed-integration refresh, policy activation, force push, history rewrite, or branch deletion.
 
 ## v1.2.0 Pre-Publication History - Governed Autonomy Modes and Release-Readiness Closeout
 
@@ -407,7 +407,7 @@ The first autonomous finalization experiment was rolled back to the verified rec
 - R5 / PR #227 - autonomous merge-readiness hardening.
 - R5B / PR #228 - delegated-governance current-state reconciliation, merged at `fbe4532ba2083feaa7ed9fcda2988843f1237a78` and independently verified on canonical `main`.
 - R6 - `v1.2.0` release-candidate metadata, public documentation, changelog, and release-note preparation.
-- R7 / PR #230 - accepted live installed-host evidence merged; subsequent verification exposed the ancestry/signature mismatch caused by the then-used rebase merge and triggered forward-only ruleset/protocol remediation.
+- R7 / PR #230 - accepted live-host evidence merged; subsequent verification exposed the ancestry/signature mismatch caused by the then-used rebase merge and triggered forward-only ruleset/protocol remediation.
 
 Historical fail-open or bypass-capable platform behavior is not successful validation precedent.
 
