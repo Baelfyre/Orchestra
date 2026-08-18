@@ -6,16 +6,17 @@
 Program: Orchestra Shared Comparative Benchmark
 Phase: B2 A5 Isolated Comparative Experiment
 Current bounded unit: B2.0 Calibration Readiness
-State: CALIBRATION_PLAN_FROZEN_NO_EXECUTION
+State: PLAN_ONLY_READY_NO_MEASUREMENT
 Canonical entry: eed2e870dbfbc2782f941015761886e55c849185
 Canonical entry tree: 57cf92b239a05402ecf191537e2e398a236cadb5
+Authoritative benchmark machine state: B0/B1 only
 Measurement maturity after plan-only validation: MEASUREMENT_NOT_STARTED
 A5 execution-effective selection: NOT AUTHORIZED
 A6: NOT AUTHORIZED
 Paid provider calls: NOT AUTHORIZED BY THIS UNIT
 ```
 
-B2.0 freezes the next executable measurement boundary without performing a live benchmark. It validates the A5-isolated calibration design, task-class floor, paired all-arm schedule, deterministic randomization, and no-executor `--plan-only` path.
+B2.0 freezes the next executable measurement boundary without creating a new authoritative benchmark maturity state and without performing a live benchmark. It validates the A5-isolated calibration design, task-class floor, paired all-arm schedule, deterministic randomization, and no-executor `--plan-only` path.
 
 It does not establish A5 benefit, complete measured calibration, provide a production topology scheduler, attach A5 to Conductor dispatch or `RuntimeExecutor`, authorize A6, spend paid provider resources, deploy, or publish a release.
 
@@ -31,7 +32,7 @@ SYNTHETIC FIXTURE != A5 PERFORMANCE EVIDENCE
 MEASUREMENT_NOT_STARTED remains current after B2.0
 ```
 
-This separation prevents test fixtures from being misreported as adaptive-performance evidence.
+This separation prevents test fixtures from being misreported as adaptive-performance evidence. No new canonical machine measurement record is introduced by B2.0; the authoritative machine state remains the B0 contract plus the B1 harness implementation until real B2 evidence exists.
 
 ## B2 causal variable
 
@@ -76,9 +77,9 @@ The planning fixture covers five task structures:
 
 These fixture scenarios are synthetic planning records only. They do not assert that their synthetic topology candidates are currently eligible for any production task.
 
-## Plan-only fixture
+## Machine-readable plan-only fixture
 
-The deterministic fixture is:
+The deterministic machine-readable fixture is:
 
 ```text
 tests/fixtures/benchmarking/b2-a5-isolated-calibration-plan-only.json
@@ -94,7 +95,7 @@ It deliberately uses:
 - no network requirement;
 - no allowed task execution.
 
-The fixture exists only to validate the experiment scheduler and manifest boundary.
+The fixture exists only to validate the experiment scheduler and manifest boundary. It is a test input, not a canonical measurement result, not an A5 evidence packet, and not a promotion record.
 
 The regression invokes the runner with an executor path that does not exist and uses `plan_only=True`. Success therefore proves the plan-only path does not invoke the configured executor.
 
@@ -187,29 +188,21 @@ The fixture includes three synthetic topology classes to exercise the planner:
 
 These are representative test inputs only. Real A5 eligibility is produced by existing deterministic coordination state under the A5 contract. The fixture cannot create eligibility, activate parallelism, omit required specialists, change ownership, or increase any resource ceiling.
 
-## Machine record
+## State ownership
 
-The B2.0 readiness contract is:
+B2.0 intentionally does not add a new `machine/benchmarking/**` maturity record. The current authoritative benchmark records remain:
 
 ```text
-machine/benchmarking/a5-isolated-calibration-plan.v1.json
+machine/benchmarking/comparative-measurement-contract.v1.json
+machine/benchmarking/shared-benchmark-harness-implementation.v1.json
 ```
 
-It records:
-
-- the canonical B1 dependency;
-- calibration sample floor;
-- real execution entry requirements;
-- synthetic fixture boundary;
-- no-spend state;
-- no-promotion authority boundary;
-- the block on measured calibration until real eligibility/workload identity and any required resource ceiling exist.
+The plan-only manifest is machine-readable validation input under `tests/fixtures/**`. A real B2 execution may introduce provenance-bound run/experiment evidence only after the real execution entry gate is satisfied.
 
 ## Exit condition for B2.0
 
 B2.0 is complete when fresh exact-head repository validation proves:
 
-- the machine readiness record is present;
 - the plan-only manifest is schema-valid;
 - at least five synthetic planning tasks are present;
 - exactly two repetitions per arm are configured;
@@ -217,6 +210,7 @@ B2.0 is complete when fresh exact-head repository validation proves:
 - every configured arm is scheduled in every task/repetition block;
 - repeated plan generation is deterministic for the same seed;
 - no executor is invoked by plan-only validation;
+- no run index or experiment evidence is emitted by plan-only validation;
 - no measured calibration or benefit claim is recorded.
 
 Only after that closeout may the workflow consider a real B2 calibration executor and bounded live-resource authorization.
