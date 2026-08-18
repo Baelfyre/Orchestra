@@ -102,7 +102,7 @@
       "authority_note": "A3 is shadow-only. Confidence is not authority; generic task success is not strategy-success evidence; shadow recommendations cannot affect deterministic execution or promote learned patterns."
     },
     "bounded_adaptive_selection_a4": {
-      "status": "CONTRACT_FREEZE_SOURCE_CANDIDATE_NO_RUNTIME_EFFECT",
+      "status": "CANONICAL_CONTRACT_FROZEN_NO_RUNTIME_EFFECT",
       "purpose": "Freeze deterministic eligibility-before-ranking, bounded evidence qualification, shadow selection decisions, deterministic fallback, and adversarial boundaries for future specialist-strategy, model, and worker ranking.",
       "machine_sources": ["machine/adaptive/a4-bounded-selection-contract.v1.json", "machine/schemas/adaptive-selection-eligibility-envelope.schema.json", "machine/schemas/adaptive-selection-evidence.schema.json", "machine/schemas/adaptive-selection-decision.schema.json"],
       "human_sources": ["docs/architecture/ADAPTIVE_SELECTION_A4.md"],
@@ -259,7 +259,7 @@
     "murmurs_measurement_issue": 316,
     "murmurs_measurement_issue_state": "OPEN",
     "adaptive_governed_orchestration_issue": 340,
-    "adaptive_governed_orchestration_state": "A4_0_CONTRACT_FREEZE_SOURCE_CANDIDATE_NO_RUNTIME_EFFECT"
+    "adaptive_governed_orchestration_state": "A4_0_CONTRACT_FROZEN_CANONICAL_NO_RUNTIME_EFFECT"
   },
   "documentation": {
     "documentation_map": "docs/README.md",
@@ -303,7 +303,7 @@
     "documentation_and_provenance_closeout": "INCLUDED_IN_V1_6_CANDIDATE",
     "adaptive_local_memory_a1": "CANONICAL_FOUNDATION_NO_DIRECT_RUNTIME_EFFECT",
     "adaptive_specialist_context_a2": "CANONICAL_ADVISORY_OPT_IN",
-    "adaptive_governed_orchestration": "A4_0_CONTRACT_FREEZE_SOURCE_CANDIDATE_NO_RUNTIME_EFFECT_ISSUE_340",
+    "adaptive_governed_orchestration": "A4_0_CONTRACT_FROZEN_CANONICAL_NO_RUNTIME_EFFECT_ISSUE_340",
     "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316"
   },
   "ai_review_guidance": {
