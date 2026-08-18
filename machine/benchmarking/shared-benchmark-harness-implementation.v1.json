@@ -9,12 +9,27 @@
   "runner": "scripts/comparative_benchmark_runner.py",
   "machine_surfaces": [
     "machine/schemas/comparative-benchmark-manifest.schema.json",
+    "machine/schemas/comparative-benchmark-executor-request.schema.json",
     "machine/schemas/comparative-benchmark-executor-result.schema.json",
     "machine/schemas/comparative-benchmark-run.schema.json",
     "machine/schemas/comparative-benchmark-experiment.schema.json"
   ],
   "validation_surface": "tests/runtime/test_comparative_benchmark_runner.py",
   "human_documentation": "docs/benchmarking/COMPARATIVE_MEASUREMENT_B1.md",
+  "implementation_discovered_contract_corrections": [
+    {
+      "schema": "machine/schemas/comparative-benchmark-experiment.schema.json",
+      "correction": "MURMURS_ISOLATED_REQUIRES_FIXED_TOPOLOGY_TRUE_WHILE_A5_MURMURS_INTERACTION_REQUIRES_FALSE",
+      "intent_changed": false,
+      "authority_changed": false
+    },
+    {
+      "schema": "machine/schemas/comparative-benchmark-run.schema.json",
+      "correction": "INVALID_A5_RUN_MAY_RECORD_NULL_SHADOW_OBSERVATION_WHILE_PASS_OR_FAIL_A5_RUN_REQUIRES_OBJECT",
+      "intent_changed": false,
+      "authority_changed": false
+    }
+  ],
   "execution_model": {
     "production_runtime_attachment": false,
     "conductor_dispatch_attachment": false,
@@ -27,7 +42,8 @@
     "executor_request_transport": "ONE_JSON_OBJECT_OVER_STDIN_PER_RUN",
     "executor_result_transport": "ONE_JSON_OBJECT_OVER_STDOUT_PER_RUN",
     "executor_stderr": "CAPTURED_AS_PARTIAL_EVIDENCE",
-    "task_payload": "OPAQUE_ADAPTER_PAYLOAD_IDENTICAL_ACROSS_PAIRED_ARMS"
+    "task_payload": "OPAQUE_ADAPTER_PAYLOAD_IDENTICAL_ACROSS_PAIRED_ARMS",
+    "a5_frozen_candidate_set_transport": "a5_evaluation.eligible_topology_candidate_ids"
   },
   "isolation_enforcement": {
     "paired_task_cartesian_execution": true,
@@ -35,8 +51,9 @@
     "arm_order_randomized_within_task_repetition_block": true,
     "randomization_reproducible_from_manifest_seed": true,
     "a5_isolated_requires_default_communication": true,
-    "a5_isolated_requires_shadow_observation": true,
+    "a5_isolated_requires_shadow_observation_for_non_invalid_runs": true,
     "a5_ranked_candidates_must_equal_configured_topology_candidates": true,
+    "a5_shadow_observation_must_be_identical_across_arms_in_same_paired_block": true,
     "a5_top_candidate_may_reduce_executed_arms": false,
     "murmurs_isolated_requires_fixed_identical_topology": true,
     "murmurs_isolated_requires_exact_communication_arms": ["DEFAULT", "CAVEMAN", "MURMURS"],
