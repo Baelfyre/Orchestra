@@ -170,6 +170,20 @@
       "a5_execution_effective_promotion": false,
       "a6_authorized": false,
       "authority_note": "B0 freezes measurement and evidence contracts only. Benchmark evidence is not authority, A5 remains shadow-only, Murmurs benefit is not assumed, and A6 remains unauthorized."
+    },
+    "comparative_measurement_b1": {
+      "status": "IMPLEMENTED_NON_PRODUCTION_NO_PROVIDER_ADAPTERS",
+      "purpose": "Shared non-production harness for provenance-bound paired comparative benchmark execution and evidence collection across isolated A5, isolated Murmurs, and later controlled interaction experiments.",
+      "program_id": "orchestra.shared-comparative-benchmark.v1",
+      "runner": "scripts/comparative_benchmark_runner.py",
+      "machine_sources": ["machine/benchmarking/shared-benchmark-harness-implementation.v1.json", "machine/schemas/comparative-benchmark-manifest.schema.json", "machine/schemas/comparative-benchmark-executor-request.schema.json", "machine/schemas/comparative-benchmark-executor-result.schema.json", "machine/schemas/comparative-benchmark-run.schema.json", "machine/schemas/comparative-benchmark-experiment.schema.json"],
+      "human_sources": ["docs/benchmarking/COMPARATIVE_MEASUREMENT_B1.md"],
+      "provider_adapter_bundled": false,
+      "production_runtime_attachment": false,
+      "paid_provider_calls_authorized": false,
+      "a5_execution_effective_promotion": false,
+      "a6_authorized": false,
+      "authority_note": "B1 is evidence infrastructure only. It executes configured non-production benchmark arms, cannot let A5 select or suppress arms, does not establish A5 or Murmurs benefit, and grants no production runtime or promotion authority."
     }
   },
   "machine_scan_order": [
@@ -228,6 +242,10 @@
     "comparative_measurement_contract": "machine/benchmarking/comparative-measurement-contract.v1.json",
     "comparative_benchmark_run_schema": "machine/schemas/comparative-benchmark-run.schema.json",
     "comparative_benchmark_experiment_schema": "machine/schemas/comparative-benchmark-experiment.schema.json",
+    "comparative_benchmark_harness_implementation": "machine/benchmarking/shared-benchmark-harness-implementation.v1.json",
+    "comparative_benchmark_manifest_schema": "machine/schemas/comparative-benchmark-manifest.schema.json",
+    "comparative_benchmark_executor_request_schema": "machine/schemas/comparative-benchmark-executor-request.schema.json",
+    "comparative_benchmark_executor_result_schema": "machine/schemas/comparative-benchmark-executor-result.schema.json",
     "release_evidence_directory": "machine/release-evidence",
     "schemas_directory": "machine/schemas",
     "source_state_receipt_schema": "machine/schemas/source-state-receipt.schema.json",
@@ -346,6 +364,7 @@
     "adaptive_selection_a4_execution_attachment": "docs/architecture/ADAPTIVE_SELECTION_A4_EXECUTION_ATTACHMENT.md",
     "adaptive_tuner_a5": "docs/architecture/ADAPTIVE_TUNER_A5.md",
     "comparative_measurement_b0": "docs/benchmarking/COMPARATIVE_MEASUREMENT_B0.md",
+    "comparative_measurement_b1": "docs/benchmarking/COMPARATIVE_MEASUREMENT_B1.md",
     "roadmap": "docs/project/ROADMAP.md",
     "changelog": "CHANGELOG.md",
     "release_docs": "docs/releases/",
@@ -374,6 +393,7 @@
     "adaptive_specialist_context_a2": "CANONICAL_ADVISORY_OPT_IN",
     "adaptive_governed_orchestration": "A5_CLOSED_AT_SHADOW_MATURITY_EXECUTION_PROMOTION_DEFERRED_BENEFIT_NOT_ESTABLISHED_ISSUE_340",
     "comparative_measurement_b0": "CONTRACT_FROZEN_NO_BENCHMARK_EXECUTION",
+    "comparative_measurement_b1": "IMPLEMENTED_NON_PRODUCTION_NO_PROVIDER_ADAPTERS",
     "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316"
   },
   "ai_review_guidance": {
@@ -419,6 +439,9 @@
     "require_new_governed_exact_topology_comparative_evidence_before_reconsidering_a5_execution_promotion": true,
     "treat_comparative_benchmark_evidence_as_measurement_not_promotion_authority": true,
     "keep_a5_and_murmurs_primary_experiments_isolated_before_combined_interaction_testing": true,
+    "treat_b1_harness_as_non_production_evidence_infrastructure": true,
+    "do_not_treat_synthetic_b1_fixture_measurements_as_benefit_evidence": true,
+    "require_explicit_resource_ceiling_before_paid_live_benchmark_execution": true,
     "treat_v1_5_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "treat_v1_6_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "when_evaluating_a_published_tag_or_release_prefer_live_verified_git_and_release_identity_over_prepublication_snapshot_fields": true
