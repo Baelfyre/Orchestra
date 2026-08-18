@@ -1,5 +1,13 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B3.0 Murmurs Calibration Readiness - Candidate
+
+- Adds a no-spend Murmurs-isolated calibration-readiness boundary on top of canonical B1/B2.0 without provider/model execution or benchmark run evidence.
+- Adds an explicitly synthetic schema-valid plan-only manifest with five task classes, two repetitions per arm, one identical `FIXED_DETERMINISTIC` topology, and exactly `DEFAULT`, `CAVEMAN`, and `MURMURS` communication arms for a deterministic 30-run paired schedule.
+- Adds regression coverage proving identical fixed-topology identity across all communication arms, reproducible randomized scheduling, all three modes in every task/repetition block, and zero executor invocation or run/experiment evidence under `plan_only=True`.
+- Keeps Caveman at pinned external comparison baseline `ae405e872270acc57484693612ae038b16c8f6cd` without vendoring, installation, runtime dependency adoption, authority transfer, or import of published savings percentages into Orchestra evidence.
+- Preserves `MEASUREMENT_NOT_STARTED`, no Murmurs token-savings claim, provider-native counter authority for valid token/cost deltas, A5 shadow-only/non-effective state, `a6_authorized=false`, and the explicit live-resource ceiling gate.
+
 ## Post-v1.6.0 Comparative Benchmark B2.0 A5 Calibration Readiness - Candidate
 
 - Adds a no-spend A5-isolated calibration-readiness boundary on top of the canonical B1 harness without performing provider/model execution or creating benchmark run evidence.
