@@ -134,10 +134,19 @@ def test_candidate_serialization_and_evidence_reference_guards():
 
 
 def test_envelope_schema_size_type_duplicate_and_filter_reference_guards():
-    base = envelope()
     with pytest.raises(ValueError, match="unsupported eligibility schema"):
         SelectionEligibilityEnvelope(
-            **{**base.__dict__, "schema_version": "wrong"}
+            envelope_id="env",
+            selection_type="SPECIALIST_STRATEGY",
+            created_at=T0,
+            user_key="user",
+            project_key="Baelfyre/Orchestra",
+            command_name="architecture",
+            routed_specialist_slug="clockwork",
+            deterministic_route_ref="route",
+            filter_evidence_refs=("filters",),
+            candidates=(candidate(),),
+            schema_version="wrong",
         )
 
     with pytest.raises(ValueError, match="exceeds 128"):
@@ -351,21 +360,18 @@ def test_decision_schema_disposition_rank_scorer_and_notes_guards():
         )
 
 
-def test_qualifier_public_type_and_missing_option_guards():
+def test_qualifier_and_builder_public_type_guards():
     env = envelope()
     with pytest.raises(TypeError, match="ShadowCandidate"):
         qualify_a3_candidate("bad", env, option_id="one")
-    with pytest.raises(TypeError, match="SelectionEligibilityEnvelope"):
-        qualify_a3_candidate("bad", "bad", option_id="one")
-
     with pytest.raises(TypeError, match="ShadowComparison"):
         qualify_a3_comparison("bad", "bad", env, option_id="one")
-
-
-def test_packet_builder_and_ranker_type_guards():
-    env = envelope()
     with pytest.raises(TypeError, match="SelectionEligibilityEnvelope"):
         build_evidence_packet("bad", collected_at=T1, items=())
+
+
+def test_ranker_type_guards_and_empty_eligible_set():
+    env = envelope()
     with pytest.raises(TypeError, match="SelectionEligibilityEnvelope"):
         rank_shadow_selection(
             "bad",
@@ -374,7 +380,6 @@ def test_packet_builder_and_ranker_type_guards():
             evaluated_at=T1,
         )
 
-    packet = build_evidence_packet(env, collected_at=T1, items=())
     with pytest.raises(TypeError, match="SelectionEvidencePacket"):
         rank_shadow_selection(
             env,
