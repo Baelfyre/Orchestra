@@ -22,7 +22,7 @@
   },
   "purpose": {
     "summary": "Portable orchestration runtime for structured AI-assisted software development.",
-    "runtime_role": "Routes, sequences, constrains, validates, records, and coordinates specialist AI-assisted software development work without treating tool access, routing, governance success, validation success, or mergeability as authority.",
+    "runtime_role": "Routes, sequences, constrains, validates, records, and coordinates specialist AI-assisted development work without treating tool access, routing, governance success, validation success, or mergeability as authority.",
     "not_an_ai_model": true,
     "core_trust_boundary": "Permission and execution authority are explicit bounded inputs. Routing, host capability, governance disposition, validation evidence, compatibility certification, presentation mode, and GitHub state cannot independently grant or expand authority."
   },
@@ -398,7 +398,7 @@
     "treat_adaptive_a2_context_as_advisory_only_after_existing_runtime_gates": true,
     "preserve_explicit_adaptive_precedence_over_same_scope_inferred_lifecycle": true,
     "treat_a3_shadow_state_as_non_authorizing_and_separate_from_a1_profile_and_a2_context": true,
-    "do_not_infer_specialist_strategy_success_from_generic_phase_or_task success": true,
+    "do_not_infer_specialist_strategy_success_from_generic_phase_or_task_success": true,
     "do_not_treat_a3_confidence_as_promotion_or_execution_authority": true,
     "do_not_treat_a3_shadow_comparison_as_execution_selection": true,
     "do_not_infer_an_a1_or_a2_promotion_bridge_from_a3_completion": true,
@@ -406,7 +406,7 @@
     "do_not_allow_a4_ranking_to_restore_or_create_eligibility": true,
     "do_not_repurpose_a3_strategy_evidence_as_model_or_worker_performance_evidence": true,
     "treat_a4_shadow_decisions_as_non_execution_effective_and_not_promoted": true,
-    "treat_a4_1_shadow_ranker_as_non_authorizing_and_separate_from_execution_control": true,
+    "treat_a4_1_shadow_ranker_as_non-authorizing_and_separate_from_execution_control": true,
     "treat_a4_execution_attachment_as_post_execution_observation_only": true,
     "do_not_use_a4_execution_attachment_to_influence_operation_inputs_or_attribute_runtime_outcomes": true,
     "do_not_allow_a5_topology_to_omit_required_specialists_or_change_domain_ownership": true,
