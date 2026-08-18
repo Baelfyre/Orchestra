@@ -1,0 +1,10 @@
+[cosmic-ray]
+module-path = [
+  "orchestra_runtime/adaptive/shadow.py",
+]
+timeout = 90.0
+excluded-modules = []
+test-command = "python -m pytest -q tests/runtime/test_adaptive_shadow.py tests/runtime/test_adaptive_shadow_edges.py"
+
+[cosmic-ray.distributor]
+name = "local"
