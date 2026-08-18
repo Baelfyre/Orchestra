@@ -1,0 +1,304 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/comparative-benchmark-experiment.schema.json",
+  "title": "Orchestra Comparative Benchmark Experiment",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "program_id",
+    "experiment_id",
+    "experiment_kind",
+    "stage",
+    "status",
+    "contract_revision",
+    "task_manifest_digest",
+    "task_count",
+    "repetitions_per_arm",
+    "paired_task_design",
+    "randomized_arm_order",
+    "arms",
+    "control_policy",
+    "analysis_policy",
+    "regression_guards",
+    "run_evidence_digests",
+    "conclusion"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.comparative-benchmark-experiment.v1"},
+    "program_id": {"const": "orchestra.shared-comparative-benchmark.v1"},
+    "experiment_id": {"type": "string", "minLength": 1},
+    "experiment_kind": {"enum": ["A5_ISOLATED", "MURMURS_ISOLATED", "A5_MURMURS_INTERACTION"]},
+    "stage": {"enum": ["CALIBRATION", "PILOT", "CONFIRMATORY"]},
+    "status": {"enum": ["PLANNED", "RUNNING", "COMPLETE", "INVALIDATED"]},
+    "contract_revision": {"type": "string", "minLength": 1},
+    "preregistration_digest": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "task_manifest_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "task_count": {"type": "integer", "minimum": 1},
+    "repetitions_per_arm": {"type": "integer", "minimum": 1},
+    "paired_task_design": {"const": true},
+    "randomized_arm_order": {"const": true},
+    "randomization_seed_digest": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "arms": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["arm_id", "topology_candidate_id", "topology_class", "topology_digest", "communication_mode"],
+        "properties": {
+          "arm_id": {"type": "string", "minLength": 1},
+          "topology_candidate_id": {"type": "string", "minLength": 1},
+          "topology_class": {
+            "enum": [
+              "FIXED_DETERMINISTIC",
+              "SEQUENTIAL",
+              "CENTRALIZED_STAR",
+              "HIERARCHICAL_DECOMPOSITION",
+              "PARALLEL_JOIN",
+              "OTHER_PERMITTED"
+            ]
+          },
+          "topology_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "communication_mode": {"enum": ["DEFAULT", "CAVEMAN", "MURMURS"]}
+        }
+      }
+    },
+    "control_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "same_model",
+        "same_provider",
+        "same_reasoning_setting_when_configurable",
+        "same_temperature_when_configurable",
+        "same_tool_access",
+        "same_starting_state",
+        "same_task_prompt",
+        "same_specialist_set",
+        "same_required_specialist_set",
+        "same_authority_envelope",
+        "same_governance_state",
+        "same_validation_contract",
+        "same_retry_policy",
+        "same_resource_budget_when_configurable",
+        "experimental_mechanic_is_only_intentional_difference"
+      ],
+      "properties": {
+        "same_model": {"const": true},
+        "same_provider": {"const": true},
+        "same_reasoning_setting_when_configurable": {"const": true},
+        "same_temperature_when_configurable": {"const": true},
+        "same_tool_access": {"const": true},
+        "same_starting_state": {"const": true},
+        "same_task_prompt": {"const": true},
+        "same_specialist_set": {"const": true},
+        "same_required_specialist_set": {"const": true},
+        "same_authority_envelope": {"const": true},
+        "same_governance_state": {"const": true},
+        "same_validation_contract": {"const": true},
+        "same_retry_policy": {"const": true},
+        "same_resource_budget_when_configurable": {"const": true},
+        "experimental_mechanic_is_only_intentional_difference": {"const": true}
+      }
+    },
+    "analysis_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "paired_analysis",
+        "report_absolute_difference",
+        "report_relative_difference",
+        "report_uncertainty",
+        "report_task_class_strata",
+        "report_tail_metrics",
+        "quality_precedes_efficiency"
+      ],
+      "properties": {
+        "paired_analysis": {"const": true},
+        "report_absolute_difference": {"const": true},
+        "report_relative_difference": {"const": true},
+        "report_uncertainty": {"const": true},
+        "report_task_class_strata": {"const": true},
+        "report_tail_metrics": {"const": true},
+        "quality_precedes_efficiency": {"const": true}
+      }
+    },
+    "benefit_thresholds": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": [
+        "task_success_absolute_improvement",
+        "remediation_relative_reduction",
+        "fresh_token_relative_reduction",
+        "latency_relative_reduction",
+        "threshold_role"
+      ],
+      "properties": {
+        "task_success_absolute_improvement": {"type": ["number", "null"], "minimum": 0},
+        "remediation_relative_reduction": {"type": ["number", "null"], "minimum": 0},
+        "fresh_token_relative_reduction": {"type": ["number", "null"], "minimum": 0},
+        "latency_relative_reduction": {"type": ["number", "null"], "minimum": 0},
+        "threshold_role": {"enum": ["PILOT_SIGNAL_ONLY", "CONFIRMATORY_PREREGISTERED"]}
+      }
+    },
+    "regression_guards": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_specialist_omission_allowed",
+        "authority_expansion_allowed",
+        "capability_expansion_allowed",
+        "governance_violation_allowed",
+        "provider_privacy_expansion_allowed",
+        "mandatory_gate_suppression_allowed",
+        "tail_regression_review_required",
+        "information_preservation_review_required"
+      ],
+      "properties": {
+        "required_specialist_omission_allowed": {"const": false},
+        "authority_expansion_allowed": {"const": false},
+        "capability_expansion_allowed": {"const": false},
+        "governance_violation_allowed": {"const": false},
+        "provider_privacy_expansion_allowed": {"const": false},
+        "mandatory_gate_suppression_allowed": {"const": false},
+        "tail_regression_review_required": {"const": true},
+        "information_preservation_review_required": {"const": true}
+      }
+    },
+    "a5_evaluation": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": [
+        "shadow_only",
+        "eligibility_envelope_digest",
+        "run_all_eligible_candidates",
+        "a5_may_select_execution_arm",
+        "record_ranked_order",
+        "record_empirical_best",
+        "record_top1_match",
+        "record_topk_match",
+        "record_regret"
+      ],
+      "properties": {
+        "shadow_only": {"const": true},
+        "eligibility_envelope_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "run_all_eligible_candidates": {"const": true},
+        "a5_may_select_execution_arm": {"const": false},
+        "record_ranked_order": {"const": true},
+        "record_empirical_best": {"const": true},
+        "record_top1_match": {"const": true},
+        "record_topk_match": {"const": true},
+        "record_regret": {"const": true}
+      }
+    },
+    "murmurs_evaluation": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": [
+        "fixed_topology",
+        "required_communication_arms",
+        "same_counter_identity_for_token_delta",
+        "caveman_published_percentage_import_allowed",
+        "semantic_preservation_required"
+      ],
+      "properties": {
+        "fixed_topology": {"const": true},
+        "required_communication_arms": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "DEFAULT"},
+            {"const": "CAVEMAN"},
+            {"const": "MURMURS"}
+          ],
+          "items": false,
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "same_counter_identity_for_token_delta": {"const": true},
+        "caveman_published_percentage_import_allowed": {"const": false},
+        "semantic_preservation_required": {"const": true}
+      }
+    },
+    "interaction_evaluation": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "required": ["factorial_design", "isolated_a5_evidence_digest", "isolated_murmurs_evidence_digest", "interaction_state"],
+      "properties": {
+        "factorial_design": {"const": true},
+        "isolated_a5_evidence_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "isolated_murmurs_evidence_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "interaction_state": {"enum": ["POSITIVE", "NEUTRAL", "NEGATIVE", "INCONCLUSIVE", "NOT_YET_EVALUATED"]}
+      }
+    },
+    "run_evidence_digests": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    },
+    "excluded_run_ids": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "conclusion": {
+      "enum": [
+        "MEASUREMENT_NOT_STARTED",
+        "MEASUREMENT_CALIBRATED",
+        "PILOT_EVIDENCE_INSUFFICIENT",
+        "PILOT_BENEFIT_SIGNAL",
+        "CONFIRMATORY_BENEFIT_ESTABLISHED",
+        "CONFIRMATORY_BENEFIT_NOT_ESTABLISHED",
+        "CONFIRMATORY_REGRESSION_DETECTED",
+        "INVALIDATED"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"stage": {"const": "CONFIRMATORY"}}},
+      "then": {
+        "properties": {
+          "preregistration_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "benefit_thresholds": {
+            "type": "object",
+            "properties": {"threshold_role": {"const": "CONFIRMATORY_PREREGISTERED"}}
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"experiment_kind": {"const": "A5_ISOLATED"}}},
+      "then": {
+        "required": ["a5_evaluation"],
+        "properties": {
+          "a5_evaluation": {"type": "object"},
+          "murmurs_evaluation": {"type": ["null"]},
+          "interaction_evaluation": {"type": ["null"]}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"experiment_kind": {"const": "MURMURS_ISOLATED"}}},
+      "then": {
+        "required": ["murmurs_evaluation"],
+        "properties": {
+          "a5_evaluation": {"type": ["null"]},
+          "murmurs_evaluation": {"type": "object"},
+          "interaction_evaluation": {"type": ["null"]}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"experiment_kind": {"const": "A5_MURMURS_INTERACTION"}}},
+      "then": {
+        "required": ["a5_evaluation", "murmurs_evaluation", "interaction_evaluation"],
+        "properties": {
+          "a5_evaluation": {"type": "object"},
+          "murmurs_evaluation": {"type": "object"},
+          "interaction_evaluation": {"type": "object"}
+        }
+      }
+    }
+  ]
+}

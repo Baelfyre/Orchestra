@@ -159,6 +159,17 @@
       "a5_2_authorized": false,
       "a6_authorized": false,
       "authority_note": "A5 is canonical and closed at shadow maturity. The shadow ranker cannot alter specialist ownership or deterministic ceilings, has no attachment to Conductor dispatch or RuntimeExecutor execution, and cannot be promoted from synthetic, generic, or unmeasured benefit evidence."
+    },
+    "comparative_measurement_b0": {
+      "status": "CONTRACT_FROZEN_NO_BENCHMARK_EXECUTION",
+      "purpose": "Shared provenance-bound comparative measurement contract for isolated A5 topology testing, isolated Murmurs communication testing, and a later controlled interaction experiment without granting runtime promotion authority.",
+      "program_id": "orchestra.shared-comparative-benchmark.v1",
+      "machine_sources": ["machine/benchmarking/comparative-measurement-contract.v1.json", "machine/schemas/comparative-benchmark-run.schema.json", "machine/schemas/comparative-benchmark-experiment.schema.json"],
+      "human_sources": ["docs/benchmarking/COMPARATIVE_MEASUREMENT_B0.md"],
+      "benchmark_execution_active": false,
+      "a5_execution_effective_promotion": false,
+      "a6_authorized": false,
+      "authority_note": "B0 freezes measurement and evidence contracts only. Benchmark evidence is not authority, A5 remains shadow-only, Murmurs benefit is not assumed, and A6 remains unauthorized."
     }
   },
   "machine_scan_order": [
@@ -214,6 +225,9 @@
     "adaptive_topology_eligibility_envelope_schema": "machine/schemas/adaptive-topology-eligibility-envelope.schema.json",
     "adaptive_topology_evidence_schema": "machine/schemas/adaptive-topology-evidence.schema.json",
     "adaptive_topology_decision_schema": "machine/schemas/adaptive-topology-decision.schema.json",
+    "comparative_measurement_contract": "machine/benchmarking/comparative-measurement-contract.v1.json",
+    "comparative_benchmark_run_schema": "machine/schemas/comparative-benchmark-run.schema.json",
+    "comparative_benchmark_experiment_schema": "machine/schemas/comparative-benchmark-experiment.schema.json",
     "release_evidence_directory": "machine/release-evidence",
     "schemas_directory": "machine/schemas",
     "source_state_receipt_schema": "machine/schemas/source-state-receipt.schema.json",
@@ -331,6 +345,7 @@
     "adaptive_selection_a4": "docs/architecture/ADAPTIVE_SELECTION_A4.md",
     "adaptive_selection_a4_execution_attachment": "docs/architecture/ADAPTIVE_SELECTION_A4_EXECUTION_ATTACHMENT.md",
     "adaptive_tuner_a5": "docs/architecture/ADAPTIVE_TUNER_A5.md",
+    "comparative_measurement_b0": "docs/benchmarking/COMPARATIVE_MEASUREMENT_B0.md",
     "roadmap": "docs/project/ROADMAP.md",
     "changelog": "CHANGELOG.md",
     "release_docs": "docs/releases/",
@@ -358,6 +373,7 @@
     "adaptive_local_memory_a1": "CANONICAL_FOUNDATION_NO_DIRECT_RUNTIME_EFFECT",
     "adaptive_specialist_context_a2": "CANONICAL_ADVISORY_OPT_IN",
     "adaptive_governed_orchestration": "A5_CLOSED_AT_SHADOW_MATURITY_EXECUTION_PROMOTION_DEFERRED_BENEFIT_NOT_ESTABLISHED_ISSUE_340",
+    "comparative_measurement_b0": "CONTRACT_FROZEN_NO_BENCHMARK_EXECUTION",
     "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316"
   },
   "ai_review_guidance": {
@@ -401,6 +417,8 @@
     "do_not_treat_a3_workflow_tendency_as_direct_topology_performance_evidence": true,
     "do_not_treat_a5_closeout_as_measurable_benefit_or_execution_promotion": true,
     "require_new_governed_exact_topology_comparative_evidence_before_reconsidering_a5_execution_promotion": true,
+    "treat_comparative_benchmark_evidence_as_measurement_not_promotion_authority": true,
+    "keep_a5_and_murmurs_primary_experiments_isolated_before_combined_interaction_testing": true,
     "treat_v1_5_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "treat_v1_6_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "when_evaluating_a_published_tag_or_release_prefer_live_verified_git_and_release_identity_over_prepublication_snapshot_fields": true
