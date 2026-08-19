@@ -1,5 +1,15 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B3.1.1 Antigravity Live Invocation Hardening - Candidate
+
+- Hardens the live Antigravity CLI invocation path in `scripts/antigravity_benchmark_executor.py` to use validated print-mode syntax: `["agy", "--model", "gemini-3.7-flash-high", "-p", prompt, "--output-format", "json"]`.
+- Removes prompt passing via subprocess stdin and removes unvalidated `--no-use-g1-credits` command-line argument.
+- Implements fail-closed host preflight verifying exact CLI version (1.1.14), `settings.json` parsing, explicit `useG1Credits: false`, model pinning, and deterministic counter identity (`antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high`) before model execution.
+- Establishes explicit provenance semantics across CLI version (`PREFLIGHT_COMMAND`), model (`PINNED_COMMAND_ARGUMENT`), usage counters (`HOST_REPORTED_JSON_USAGE`), and counter ID (`ORCHESTRA_ASSIGNED_MEASUREMENT_SURFACE`).
+- Enforces quality boundaries ensuring host `SUCCESS` alone does not produce benchmark `PASS` by requiring explicit task completion, validation, and governance evidence.
+- Accurately measures response bytes from the Antigravity `response` payload field.
+- Adds comprehensive deterministic runtime test coverage in `tests/runtime/test_comparative_benchmark_antigravity_executor.py` without live model or provider execution.
+
 ## Post-v1.6.0 Comparative Benchmark B3.1 Antigravity Measurement Executor Binding - Candidate
 
 - Implements the bounded Antigravity measurement executor binding in `scripts/antigravity_benchmark_executor.py` for the Orchestra comparative benchmark harness under the canonical B0/B1/B3.0 contracts.
