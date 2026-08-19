@@ -606,12 +606,13 @@ def test_22_preflight_fails_closed_on_malformed_or_missing_settings(tmp_path: Pa
     assert res2["outcome"]["status"] == "INVALID_RUN"
     assert res2["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
 
-    missing_key_settings = _create_mock_settings(tmp_path / "sub", use_g1_credits=None)
+    non_object_settings = tmp_path / "list_settings.json"
+    non_object_settings.write_text("[1, 2, 3]", encoding="utf-8")
     req3 = _base_request(prompt="Sample prompt")
     res3 = executor.execute_request(
         req3,
         expected_cli_version="1.1.15",
-        settings_path=missing_key_settings,
+        settings_path=non_object_settings,
         version_runner_fn=mock_version_runner,
     )
     _validate_result_schema(res3)
@@ -1518,3 +1519,508 @@ def test_59_host_success_alone_cannot_become_benchmark_task_pass() -> None:
     assert res["outcome"]["validation_passed"] is False
     assert res["outcome"]["governance_valid"] is False
     assert res["tokens"]["source"] == "HOST_REPORTED"
+
+
+def test_60_resolve_use_g1_credits_helper_state_table() -> None:
+    # State A: key absent -> effective false, SYSTEM_DEFAULT_SPARSE_PERSISTENCE
+    ok, err, policy = executor.resolve_use_g1_credits({})
+    assert ok is True
+    assert err is None
+    assert policy == {
+        "setting_name": "useG1Credits",
+        "key_present": False,
+        "observed_value": None,
+        "effective_value": False,
+        "effective_source": "SYSTEM_DEFAULT_SPARSE_PERSISTENCE",
+        "fallback_allowed": False,
+    }
+
+    # State B: key explicitly false -> effective false, EXPLICIT_SETTING
+    ok, err, policy = executor.resolve_use_g1_credits({"useG1Credits": False})
+    assert ok is True
+    assert err is None
+    assert policy == {
+        "setting_name": "useG1Credits",
+        "key_present": True,
+        "observed_value": False,
+        "effective_value": False,
+        "effective_source": "EXPLICIT_SETTING",
+        "fallback_allowed": False,
+    }
+
+    # State C: key explicitly true -> fails closed, fallback_allowed True
+    ok, err, policy = executor.resolve_use_g1_credits({"useG1Credits": True})
+    assert ok is False
+    assert "explicitly true" in str(err)
+    assert policy == {
+        "setting_name": "useG1Credits",
+        "key_present": True,
+        "observed_value": True,
+        "effective_value": True,
+        "effective_source": "EXPLICIT_SETTING",
+        "fallback_allowed": True,
+    }
+
+    # State D: key present with invalid/non-boolean values
+    invalid_cases = [
+        None,
+        0,
+        1,
+        "false",
+        "true",
+        {},
+        [],
+        3.14,
+    ]
+    for val in invalid_cases:
+        ok, err, policy = executor.resolve_use_g1_credits({"useG1Credits": val})
+        assert ok is False
+        assert err is not None
+        assert policy["key_present"] is True
+        assert policy["observed_value"] == val
+        assert policy["effective_value"] is None
+        assert policy["effective_source"] == "MALFORMED_EXPLICIT_SETTING"
+        assert policy["fallback_allowed"] is False
+
+    # Non-dict inputs
+    for non_dict in (None, [1, 2], "string", 42):
+        ok, err, policy = executor.resolve_use_g1_credits(non_dict)
+        assert ok is False
+        assert "not an object" in str(err)
+
+
+def test_61_preflight_passes_on_sparse_omitted_use_g1_credits(tmp_path: Path) -> None:
+    # Key absent in settings.json passes preflight and preserves sparse provenance
+    settings_file = _create_mock_settings(tmp_path, use_g1_credits=None)
+    model_called = False
+
+    def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "1.1.15\n", "")
+
+    def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
+        nonlocal model_called
+        model_called = True
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    req = _base_request(prompt="Sparse settings verification")
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        runner_fn=mock_model_runner,
+        settings_path=settings_file,
+        version_runner_fn=mock_version_runner,
+    )
+    _validate_result_schema(res)
+
+    assert model_called is True
+    assert res["outcome"]["status"] == "PASS"
+    raw_ev = res["raw_evidence"]
+    assert raw_ev["useG1Credits"] is False
+    assert raw_ev["credit_fallback_policy"] == {
+        "setting_name": "useG1Credits",
+        "key_present": False,
+        "observed_value": None,
+        "effective_value": False,
+        "effective_source": "SYSTEM_DEFAULT_SPARSE_PERSISTENCE",
+        "fallback_allowed": False,
+    }
+
+
+def test_62_preflight_passes_on_explicit_false_use_g1_credits(tmp_path: Path) -> None:
+    # Explicit false in settings.json passes preflight and preserves explicit provenance
+    settings_file = _create_mock_settings(tmp_path, use_g1_credits=False)
+    model_called = False
+
+    def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "1.1.15\n", "")
+
+    def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
+        nonlocal model_called
+        model_called = True
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    req = _base_request(prompt="Explicit false verification")
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        runner_fn=mock_model_runner,
+        settings_path=settings_file,
+        version_runner_fn=mock_version_runner,
+    )
+    _validate_result_schema(res)
+
+    assert model_called is True
+    assert res["outcome"]["status"] == "PASS"
+    raw_ev = res["raw_evidence"]
+    assert raw_ev["useG1Credits"] is False
+    assert raw_ev["credit_fallback_policy"] == {
+        "setting_name": "useG1Credits",
+        "key_present": True,
+        "observed_value": False,
+        "effective_value": False,
+        "effective_source": "EXPLICIT_SETTING",
+        "fallback_allowed": False,
+    }
+
+
+def test_63_preflight_fails_closed_on_explicit_true_use_g1_credits(tmp_path: Path) -> None:
+    # Explicit true in settings.json fails closed as INVALID_RUN / MEASUREMENT_CAPTURE_FAILURE
+    settings_file = _create_mock_settings(tmp_path, use_g1_credits=True)
+    model_called = False
+
+    def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "1.1.15\n", "")
+
+    def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
+        nonlocal model_called
+        model_called = True
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    req = _base_request(prompt="Explicit true verification")
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        runner_fn=mock_model_runner,
+        settings_path=settings_file,
+        version_runner_fn=mock_version_runner,
+    )
+    _validate_result_schema(res)
+
+    assert model_called is False
+    assert res["outcome"]["status"] == "INVALID_RUN"
+    assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+    detail = res["raw_evidence"]["detail"]
+    assert detail["credit_fallback_policy"]["fallback_allowed"] is True
+    assert detail["credit_fallback_policy"]["effective_value"] is True
+    assert detail["credit_fallback_policy"]["key_present"] is True
+
+
+def test_64_preflight_fails_closed_on_null_use_g1_credits(tmp_path: Path) -> None:
+    # JSON null (None in Python) fails closed without coercion
+    settings_file = tmp_path / "settings_null.json"
+    settings_file.write_text(json.dumps({"useG1Credits": None}), encoding="utf-8")
+    model_called = False
+
+    def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "1.1.15\n", "")
+
+    def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
+        nonlocal model_called
+        model_called = True
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    req = _base_request(prompt="Null check")
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        runner_fn=mock_model_runner,
+        settings_path=settings_file,
+        version_runner_fn=mock_version_runner,
+    )
+    _validate_result_schema(res)
+
+    assert model_called is False
+    assert res["outcome"]["status"] == "INVALID_RUN"
+    assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+
+def test_65_preflight_fails_closed_on_numeric_0_use_g1_credits(tmp_path: Path) -> None:
+    # Numeric 0 fails closed (not coerced to False)
+    settings_file = tmp_path / "settings_zero.json"
+    settings_file.write_text(json.dumps({"useG1Credits": 0}), encoding="utf-8")
+    model_called = False
+
+    def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "1.1.15\n", "")
+
+    def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
+        nonlocal model_called
+        model_called = True
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    req = _base_request()
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        runner_fn=mock_model_runner,
+        settings_path=settings_file,
+        version_runner_fn=mock_version_runner,
+    )
+    _validate_result_schema(res)
+    assert model_called is False
+    assert res["outcome"]["status"] == "INVALID_RUN"
+    assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+
+def test_66_preflight_fails_closed_on_numeric_1_use_g1_credits(tmp_path: Path) -> None:
+    # Numeric 1 fails closed (not coerced to True)
+    settings_file = tmp_path / "settings_one.json"
+    settings_file.write_text(json.dumps({"useG1Credits": 1}), encoding="utf-8")
+    model_called = False
+
+    def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "1.1.15\n", "")
+
+    def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
+        nonlocal model_called
+        model_called = True
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    req = _base_request()
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        runner_fn=mock_model_runner,
+        settings_path=settings_file,
+        version_runner_fn=mock_version_runner,
+    )
+    _validate_result_schema(res)
+    assert model_called is False
+    assert res["outcome"]["status"] == "INVALID_RUN"
+    assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+
+def test_67_preflight_fails_closed_on_string_false_use_g1_credits(tmp_path: Path) -> None:
+    # String "false" fails closed (not coerced to False)
+    settings_file = tmp_path / "settings_str_false.json"
+    settings_file.write_text(json.dumps({"useG1Credits": "false"}), encoding="utf-8")
+    model_called = False
+
+    def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "1.1.15\n", "")
+
+    def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
+        nonlocal model_called
+        model_called = True
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    req = _base_request()
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        runner_fn=mock_model_runner,
+        settings_path=settings_file,
+        version_runner_fn=mock_version_runner,
+    )
+    _validate_result_schema(res)
+    assert model_called is False
+    assert res["outcome"]["status"] == "INVALID_RUN"
+    assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+
+def test_68_preflight_fails_closed_on_string_true_use_g1_credits(tmp_path: Path) -> None:
+    # String "true" fails closed (not coerced to True)
+    settings_file = tmp_path / "settings_str_true.json"
+    settings_file.write_text(json.dumps({"useG1Credits": "true"}), encoding="utf-8")
+    model_called = False
+
+    def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "1.1.15\n", "")
+
+    def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
+        nonlocal model_called
+        model_called = True
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    req = _base_request()
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        runner_fn=mock_model_runner,
+        settings_path=settings_file,
+        version_runner_fn=mock_version_runner,
+    )
+    _validate_result_schema(res)
+    assert model_called is False
+    assert res["outcome"]["status"] == "INVALID_RUN"
+    assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+
+def test_69_preflight_fails_closed_on_object_or_list_use_g1_credits(tmp_path: Path) -> None:
+    # Object or list value fails closed
+    def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "1.1.15\n", "")
+
+    for val in ({}, [1, 2]):
+        sf = tmp_path / f"settings_{type(val).__name__}.json"
+        sf.write_text(json.dumps({"useG1Credits": val}), encoding="utf-8")
+        req = _base_request()
+        res = executor.execute_request(
+            req,
+            expected_cli_version="1.1.15",
+            settings_path=sf,
+            version_runner_fn=mock_version_runner,
+        )
+        _validate_result_schema(res)
+        assert res["outcome"]["status"] == "INVALID_RUN"
+        assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+
+def test_70_missing_settings_file_fails_closed(tmp_path: Path) -> None:
+    # Non-existent settings.json file fails closed
+    missing_file = tmp_path / "does_not_exist" / "settings.json"
+    req = _base_request()
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        settings_path=missing_file,
+        version_runner_fn=lambda cmd: (0, "1.1.15\n", ""),
+    )
+    _validate_result_schema(res)
+    assert res["outcome"]["status"] == "INVALID_RUN"
+    assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+
+def test_71_malformed_json_settings_file_fails_closed(tmp_path: Path) -> None:
+    # Malformed JSON syntax in settings.json fails closed
+    bad_file = tmp_path / "bad.json"
+    bad_file.write_text("{ unclosed json", encoding="utf-8")
+    req = _base_request()
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        settings_path=bad_file,
+        version_runner_fn=lambda cmd: (0, "1.1.15\n", ""),
+    )
+    _validate_result_schema(res)
+    assert res["outcome"]["status"] == "INVALID_RUN"
+    assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+
+def test_72_exact_cli_version_mismatch_fails_closed_before_model_invocation(tmp_path: Path) -> None:
+    # CLI version mismatch fails closed before model execution
+    settings_file = _create_mock_settings(tmp_path, use_g1_credits=None)
+    model_called = False
+
+    def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
+        nonlocal model_called
+        model_called = True
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    req = _base_request()
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        runner_fn=mock_model_runner,
+        settings_path=settings_file,
+        version_runner_fn=lambda cmd: (0, "antigravity-cli 1.1.16\n", ""),
+    )
+    _validate_result_schema(res)
+    assert model_called is False
+    assert res["outcome"]["status"] == "INVALID_RUN"
+    assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+
+def test_73_model_mismatch_fails_closed_before_model_invocation(tmp_path: Path) -> None:
+    # Model mismatch fails closed
+    settings_file = _create_mock_settings(tmp_path, use_g1_credits=None)
+    req = _base_request()
+    req["control_identity"]["model"] = "gemini-2.5-pro"
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        settings_path=settings_file,
+        version_runner_fn=lambda cmd: (0, "1.1.15\n", ""),
+    )
+    _validate_result_schema(res)
+    assert res["outcome"]["status"] == "INVALID_RUN"
+    assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+
+def test_74_counter_identity_invariants_preserved() -> None:
+    # Counter identities remain deterministic and exact
+    json_counter = executor.compute_counter_id(cli_version="1.1.15", transport="json-usage")
+    stream_counter = executor.compute_counter_id(cli_version="1.1.15", transport="stream-json-usage")
+    assert json_counter == "antigravity-cli-1.1.15:json-usage:gemini-3.7-flash-high"
+    assert stream_counter == "antigravity-cli-1.1.15:stream-json-usage:gemini-3.7-flash-high"
+
+
+def test_75_provenance_distinguishes_explicit_setting_from_system_default_sparse(tmp_path: Path) -> None:
+    # Provenance semantics distinguish EXPLICIT_SETTING from SYSTEM_DEFAULT_SPARSE_PERSISTENCE
+    settings_sparse = tmp_path / "sparse.json"
+    settings_sparse.write_text("{}", encoding="utf-8")
+
+    settings_explicit = tmp_path / "explicit.json"
+    settings_explicit.write_text(json.dumps({"useG1Credits": False}), encoding="utf-8")
+
+    def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "1.1.15\n", "")
+
+    def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    res_sparse = executor.execute_request(
+        _base_request(prompt="sparse test"),
+        expected_cli_version="1.1.15",
+        runner_fn=mock_model_runner,
+        settings_path=settings_sparse,
+        version_runner_fn=mock_version_runner,
+    )
+    res_explicit = executor.execute_request(
+        _base_request(prompt="explicit test"),
+        expected_cli_version="1.1.15",
+        runner_fn=mock_model_runner,
+        settings_path=settings_explicit,
+        version_runner_fn=mock_version_runner,
+    )
+
+    _validate_result_schema(res_sparse)
+    _validate_result_schema(res_explicit)
+
+    pol_sparse = res_sparse["raw_evidence"]["credit_fallback_policy"]
+    pol_explicit = res_explicit["raw_evidence"]["credit_fallback_policy"]
+
+    assert pol_sparse["effective_source"] == "SYSTEM_DEFAULT_SPARSE_PERSISTENCE"
+    assert pol_sparse["key_present"] is False
+    assert pol_sparse["observed_value"] is None
+    assert pol_sparse["effective_value"] is False
+
+    assert pol_explicit["effective_source"] == "EXPLICIT_SETTING"
+    assert pol_explicit["key_present"] is True
+    assert pol_explicit["observed_value"] is False
+    assert pol_explicit["effective_value"] is False
+
+
+def test_76_stream_json_sparse_settings_provenance(tmp_path: Path) -> None:
+    # Stream-json transport preserves sparse settings provenance
+    settings_file = tmp_path / "sparse_stream.json"
+    settings_file.write_text("{}", encoding="utf-8")
+
+    events = [
+        {"type": "step_update", "content": "Working..."},
+        {
+            "type": "result",
+            "status": "SUCCESS",
+            "cli_version": "1.1.15",
+            "usage": {"input_tokens": 1200, "output_tokens": 300, "thinking_tokens": 50, "cache_read_tokens": 100, "total_tokens": 1650},
+            "task_completed": True,
+            "validation_passed": True,
+            "governance_valid": True,
+            "response": "Done with task",
+        },
+    ]
+    raw_stream = "\n".join(json.dumps(ev) for ev in events)
+
+    def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "1.1.15\n", "")
+
+    def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
+        return (0, raw_stream, "")
+
+    req = _base_request(prompt="Stream sparse test", transport="stream-json")
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        runner_fn=mock_model_runner,
+        settings_path=settings_file,
+        version_runner_fn=mock_version_runner,
+        transport="stream-json",
+    )
+    _validate_result_schema(res)
+
+    assert res["outcome"]["status"] == "PASS"
+    assert res["tokens"]["counter_id"] == "antigravity-cli-1.1.15:stream-json-usage:gemini-3.7-flash-high"
+    pol = res["raw_evidence"]["credit_fallback_policy"]
+    assert pol["effective_source"] == "SYSTEM_DEFAULT_SPARSE_PERSISTENCE"
+    assert pol["key_present"] is False
+    assert pol["effective_value"] is False

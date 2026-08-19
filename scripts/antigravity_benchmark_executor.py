@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Antigravity measurement executor binding for Orchestra comparative benchmark.
 
-Provides the B3.1.3 executor adapter for Antigravity CLI host-native execution,
+Provides the B3.1.4 executor adapter for Antigravity CLI host-native execution,
 deterministic communication-arm binding (DEFAULT, CAVEMAN, MURMURS), fail-closed
-preflight validation, externalized exact CLI version expectation, structured
-usage parsing, stream-json event parsing, and Orchestra-compatible benchmark
-result construction.
+preflight validation with sparse settings semantic interpretation for useG1Credits,
+externalized exact CLI version expectation, structured usage parsing, stream-json
+event parsing, and Orchestra-compatible benchmark result construction.
 
 Measurement Surface Provenance:
 - Counter ID format: "antigravity-cli-{cli_version}:{transport}:{model}"
@@ -126,6 +126,87 @@ def compute_counter_id(
 def get_default_settings_path() -> Path:
     """Return default settings path: ~/.gemini/antigravity-cli/settings.json."""
     return Path.home() / ".gemini" / "antigravity-cli" / "settings.json"
+
+
+def resolve_use_g1_credits(
+    settings: Any,
+) -> tuple[bool, str | None, dict[str, Any]]:
+    """Resolve and validate useG1Credits according to Antigravity sparse-settings semantics.
+
+    Official Antigravity semantics:
+    1. `useG1Credits` has system default `false`.
+    2. `settings.json` uses sparse persistence: values equal to system defaults may be omitted.
+    3. Key absent and key explicitly `false` represent the same effective host policy:
+       `effective_use_g1_credits = false` (credit fallback disabled).
+    4. Key explicitly `true` enables personal credit fallback: fails closed as INVALID_RUN.
+    5. Key present with non-boolean values (e.g. null, 0, 1, "false", "true", {}, []) fails closed
+       without silent coercion.
+
+    Returns:
+        (is_valid, error_message, credit_fallback_policy)
+    """
+    if not isinstance(settings, dict):
+        policy = {
+            "setting_name": "useG1Credits",
+            "key_present": False,
+            "observed_value": None,
+            "effective_value": None,
+            "effective_source": "INVALID_SETTINGS_ROOT",
+            "fallback_allowed": False,
+        }
+        return False, "settings.json root is not an object", policy
+
+    if "useG1Credits" not in settings:
+        policy = {
+            "setting_name": "useG1Credits",
+            "key_present": False,
+            "observed_value": None,
+            "effective_value": False,
+            "effective_source": "SYSTEM_DEFAULT_SPARSE_PERSISTENCE",
+            "fallback_allowed": False,
+        }
+        return True, None, policy
+
+    raw_val = settings["useG1Credits"]
+    if type(raw_val) is not bool:
+        policy = {
+            "setting_name": "useG1Credits",
+            "key_present": True,
+            "observed_value": raw_val,
+            "effective_value": None,
+            "effective_source": "MALFORMED_EXPLICIT_SETTING",
+            "fallback_allowed": False,
+        }
+        return (
+            False,
+            f"useG1Credits has invalid non-boolean value in settings.json: {raw_val!r}",
+            policy,
+        )
+
+    if raw_val is True:
+        policy = {
+            "setting_name": "useG1Credits",
+            "key_present": True,
+            "observed_value": True,
+            "effective_value": True,
+            "effective_source": "EXPLICIT_SETTING",
+            "fallback_allowed": True,
+        }
+        return (
+            False,
+            "useG1Credits is explicitly true in settings.json; benchmark measurement requires personal credit fallback disabled",
+            policy,
+        )
+
+    policy = {
+        "setting_name": "useG1Credits",
+        "key_present": True,
+        "observed_value": False,
+        "effective_value": False,
+        "effective_source": "EXPLICIT_SETTING",
+        "fallback_allowed": False,
+    }
+    return True, None, policy
 
 
 def repository_root() -> Path:
@@ -469,7 +550,7 @@ def run_host_preflight(
     1. Expected CLI version is explicitly provided, non-empty, and valid format.
     2. Resolved Antigravity CLI version from `agy --version` exactly equals expected_cli_version.
     3. settings.json exists and parses successfully.
-    4. useG1Credits is explicitly False.
+    4. useG1Credits resolves to effective False under sparse settings semantics (omitted or explicit False).
     5. Benchmark model in request control_identity remains exactly gemini-3.7-flash-high.
     6. Expected counter identity matches the specified transport and version.
 
@@ -527,25 +608,15 @@ def run_host_preflight(
             None,
         )
 
-    if not isinstance(settings, dict):
+    valid_credits, credit_err, credit_policy = resolve_use_g1_credits(settings)
+    if not valid_credits:
         return (
             False,
             "MEASUREMENT_CAPTURE_FAILURE",
             {
-                "error": "settings.json root is not an object",
-                "settings_path": str(target_settings),
-            },
-            None,
-        )
-
-    use_g1 = settings.get("useG1Credits")
-    if use_g1 is not False or isinstance(use_g1, bool) is False:
-        return (
-            False,
-            "MEASUREMENT_CAPTURE_FAILURE",
-            {
-                "error": "useG1Credits must be explicitly false in settings.json",
-                "observed_useG1Credits": use_g1,
+                "error": credit_err,
+                "observed_useG1Credits": credit_policy.get("observed_value"),
+                "credit_fallback_policy": credit_policy,
                 "settings_path": str(target_settings),
             },
             None,
@@ -815,6 +886,7 @@ def parse_stream_json_output(
     validated_cli_version: str | None = None,
     binding: dict[str, Any] | None = None,
     presentation_root: Path | str | None = None,
+    credit_policy: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Parse Antigravity NDJSON event stream and compute deterministic metrics."""
     req_id = request.get("request_id", "unknown-request")
@@ -1057,6 +1129,10 @@ def parse_stream_json_output(
 
     safety = {field: False for field in SAFETY_FIELDS}
 
+    effective_credit_policy = credit_policy
+    if effective_credit_policy is None:
+        _, _, effective_credit_policy = resolve_use_g1_credits(terminal_envelope)
+
     effective_binding = binding or {}
     raw_evidence = {
         "host": "Antigravity CLI",
@@ -1098,7 +1174,8 @@ def parse_stream_json_output(
         "outer_envelope": copy.deepcopy(terminal_envelope),
         "stream_events": copy.deepcopy(events),
         "total_tokens": usage.get("total_tokens"),
-        "useG1Credits": terminal_envelope.get("useG1Credits", False),
+        "useG1Credits": effective_credit_policy.get("effective_value", False),
+        "credit_fallback_policy": copy.deepcopy(effective_credit_policy),
     }
 
     val_basis = {
@@ -1140,6 +1217,7 @@ def parse_antigravity_output(
     binding: dict[str, Any] | None = None,
     transport: str = PINNED_TRANSPORT_JSON,
     presentation_root: Path | str | None = None,
+    credit_policy: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Parse raw Antigravity output (JSON or stream-json) and construct Orchestra benchmark result."""
     # Ensure treatment binding exists
@@ -1167,6 +1245,7 @@ def parse_antigravity_output(
             validated_cli_version=validated_cli_version,
             binding=binding,
             presentation_root=presentation_root,
+            credit_policy=credit_policy,
         )
 
     # Detect multi-line stream-json string
@@ -1181,6 +1260,7 @@ def parse_antigravity_output(
                 validated_cli_version=validated_cli_version,
                 binding=binding,
                 presentation_root=presentation_root,
+                credit_policy=credit_policy,
             )
 
     task_payload = request.get("task_payload", {})
@@ -1365,6 +1445,10 @@ def parse_antigravity_output(
 
     safety = {field: False for field in SAFETY_FIELDS}
 
+    effective_credit_policy = credit_policy
+    if effective_credit_policy is None:
+        _, _, effective_credit_policy = resolve_use_g1_credits(envelope)
+
     effective_binding = binding or {}
     raw_evidence = {
         "host": "Antigravity CLI",
@@ -1405,7 +1489,8 @@ def parse_antigravity_output(
         "topology_digest": request.get("arm", {}).get("topology_digest"),
         "outer_envelope": copy.deepcopy(envelope),
         "total_tokens": usage.get("total_tokens"),
-        "useG1Credits": envelope.get("useG1Credits", False),
+        "useG1Credits": effective_credit_policy.get("effective_value", False),
+        "credit_fallback_policy": copy.deepcopy(effective_credit_policy),
     }
 
     val_basis = {
@@ -1615,6 +1700,16 @@ def execute_request(
             expected_cli_version=expected_ver,
         )
 
+    active_credit_policy = None
+    target_settings = settings_path or get_default_settings_path()
+    if target_settings.is_file():
+        try:
+            raw_settings = target_settings.read_text(encoding="utf-8")
+            parsed_settings = json.loads(raw_settings)
+            _, _, active_credit_policy = resolve_use_g1_credits(parsed_settings)
+        except Exception:
+            active_credit_policy = None
+
     return parse_antigravity_output(
         stdout,
         request,
@@ -1624,6 +1719,7 @@ def execute_request(
         binding=binding,
         transport=transport_counter,
         presentation_root=presentation_root,
+        credit_policy=active_credit_policy,
     )
 
 
