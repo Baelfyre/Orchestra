@@ -2,7 +2,11 @@
 
 ## Status
 
-Candidate implementation after the frozen Antigravity B3 closeout. This program does not reopen B3, merge Registry PR #23, publish a Registry release, promote A5, authorize A6, unblock B4, deploy, or grant Registry evidence any execution authority.
+O1-O6 are canonical on Orchestra `main` from implementation merge `955a4b4918e28638a50e9564d1e3ea0127ae5f73` / tree `4cba8642eb63b38b283db67010e01f204c92780b`. Registry R1-R6 are also canonical and current-facing state is reconciled at `20eb859db153f17e24c052a13765e982d51cedbf` / tree `763be9062a0c23031c794403dc4592f5db4389b0`.
+
+The cross-repository R5 capability interface was verified by exact Git blob identity: Registry `registry/capabilities.json` and Orchestra `tests/fixtures/compliance-registry/r5-capabilities.json` both use blob `978c1a6eecffe802df79e6d110a16b780ec6bd3f`. The immutable trusted Registry release remains `registry-v0.2.0`; it predates R1-R6 and is not changed or republished by this alignment.
+
+This program does not reopen B3, promote A5, authorize A6, unblock B4, deploy, publish a Registry release, or grant Registry evidence any execution authority.
 
 ## Architecture
 
@@ -91,4 +95,4 @@ This supplements, rather than replaces, the existing compliance query and consum
 
 ## Joint Contract Fixture
 
-`tests/fixtures/compliance-registry/r5-capabilities.json` is an exact copy of the R5 candidate capability manifest used for the cross-repository interface test. Joint tests cover current v0.2 fallback, required/optional capability behavior, multi-jurisdiction selection, scoped freshness, breaking and compatible deltas, specialist resolution, unresolved domains, and authority-expansion rejection.
+`tests/fixtures/compliance-registry/r5-capabilities.json` is the exact R5 capability manifest used for the cross-repository interface test. Its Git blob is identical to canonical Registry `registry/capabilities.json` at the reconciled R1-R6 state. Joint tests cover current v0.2 fallback, required/optional capability behavior, multi-jurisdiction selection, scoped freshness, breaking and compatible deltas, specialist resolution, unresolved domains, and authority-expansion rejection.
