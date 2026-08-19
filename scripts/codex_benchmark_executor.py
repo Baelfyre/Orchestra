@@ -1,14 +1,10 @@
 #!/usr/bin/env python3
 """Codex measurement executor binding for Orchestra comparative benchmarks.
 
-This adapter is readiness-only until a separate human gate freezes the exact
-Codex CLI version, model, reasoning effort, counter identity, and live resource
-budget. It reuses Orchestra's accepted Antigravity communication-treatment and
-response-validation functions so host/provider/model remains the primary
-comparison variable.
-
-No frozen B3 task, prompt, task-set digest, Antigravity evidence, or control
-identity is changed by this adapter.
+Readiness-only until a separate human gate freezes exact Codex CLI version,
+model, reasoning effort, counter identity, authentication surface, workspace,
+and resource/stop ceilings. Frozen B3 tasks and accepted Antigravity evidence
+are not changed by this adapter.
 """
 
 from __future__ import annotations
@@ -40,12 +36,7 @@ PROVIDER_ID = "openai-codex"
 TRANSPORT_ID = "jsonl-usage"
 VERSION_PATTERN = re.compile(r"\d+\.\d+\.\d+(?:[-.][0-9A-Za-z]+)*")
 ALLOWED_REASONING_EFFORTS = {"minimal", "low", "medium", "high", "xhigh"}
-DISALLOWED_ITEM_TYPES = {
-    "command_execution",
-    "file_change",
-    "mcp_tool_call",
-    "web_search",
-}
+DISALLOWED_ITEM_TYPES = {"command_execution", "file_change", "mcp_tool_call", "web_search"}
 
 BENCHMARK_SUBJECT_SHA = "d95f677dbf23ab79c4698c26645ea30cea9b3019"
 BENCHMARK_SUBJECT_TREE = "ceab55bd512ea6fde4e8e76877cbb7006d18500e"
@@ -55,7 +46,6 @@ TASKSET_DIGEST = "fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931
 
 
 def compute_counter_id(cli_version: str, model: str, reasoning_effort: str) -> str:
-    """Return Orchestra-assigned provenance for one Codex measurement surface."""
     return f"codex-cli-{cli_version}:{TRANSPORT_ID}:{model}:{reasoning_effort}"
 
 
@@ -63,11 +53,7 @@ def _empty_safety() -> dict[str, bool]:
     return {field: False for field in SAFETY_FIELDS}
 
 
-def _invalid_result(
-    request: dict[str, Any],
-    invalid_reason: str,
-    evidence: dict[str, Any],
-) -> dict[str, Any]:
+def _invalid_result(request: dict[str, Any], invalid_reason: str, evidence: dict[str, Any]) -> dict[str, Any]:
     outcome = {
         "status": "INVALID_RUN",
         "invalid_reason": invalid_reason,
@@ -131,7 +117,6 @@ def _invalid_result(
 
 
 def parse_cli_version(raw: str) -> str:
-    """Extract exactly one semantic version from Codex CLI version output."""
     matches = VERSION_PATTERN.findall(raw or "")
     unique = sorted(set(matches))
     if len(unique) != 1:
@@ -139,14 +124,8 @@ def parse_cli_version(raw: str) -> str:
     return unique[0]
 
 
-def build_codex_command(
-    *,
-    prompt: str,
-    workspace_dir: Path,
-    model: str,
-    reasoning_effort: str,
-) -> list[str]:
-    """Build the bounded non-interactive Codex command for one benchmark turn."""
+def build_codex_command(*, prompt: str, workspace_dir: Path, model: str, reasoning_effort: str) -> list[str]:
+    """Build one bounded Codex non-interactive benchmark invocation."""
     return [
         "codex",
         "exec",
@@ -154,14 +133,14 @@ def build_codex_command(
         "--json",
         "--sandbox",
         "read-only",
-        "--ask-for-approval",
-        "never",
         "--ignore-user-config",
         "--ignore-rules",
         "--model",
         model,
         "--cd",
         str(workspace_dir),
+        "-c",
+        'approval_policy="never"',
         "-c",
         "agents.enabled=false",
         "-c",
@@ -175,7 +154,7 @@ def build_codex_command(
 
 
 def parse_codex_jsonl(raw_output: str) -> dict[str, Any]:
-    """Parse one Codex JSONL turn and fail closed on missing or unsafe evidence."""
+    """Parse one Codex JSONL turn and fail closed on unsafe/missing evidence."""
     events: list[dict[str, Any]] = []
     for line_number, raw_line in enumerate((raw_output or "").splitlines(), start=1):
         line = raw_line.strip()
@@ -199,16 +178,10 @@ def parse_codex_jsonl(raw_output: str) -> dict[str, Any]:
     completed = [event for event in events if event.get("type") == "turn.completed"]
     if len(completed) != 1:
         raise ValueError(f"Codex JSONL requires exactly one turn.completed event; observed {len(completed)}")
-
     usage = completed[0].get("usage")
     if not isinstance(usage, dict):
         raise ValueError("Codex turn.completed is missing usage")
-    usage_fields = (
-        "input_tokens",
-        "cached_input_tokens",
-        "output_tokens",
-        "reasoning_output_tokens",
-    )
+    usage_fields = ("input_tokens", "cached_input_tokens", "output_tokens", "reasoning_output_tokens")
     for field in usage_fields:
         value = usage.get(field)
         if not isinstance(value, int) or isinstance(value, bool) or value < 0:
@@ -234,7 +207,6 @@ def parse_codex_jsonl(raw_output: str) -> dict[str, Any]:
         raise PermissionError(f"Codex emitted disallowed tool events: {sorted(set(unexpected_tools))}")
     if not agent_messages:
         raise ValueError("Codex JSONL is missing a completed agent message")
-
     return {
         "events": events,
         "usage": {field: usage[field] for field in usage_fields},
@@ -244,10 +216,7 @@ def parse_codex_jsonl(raw_output: str) -> dict[str, Any]:
 
 
 def _validate_request_identity(
-    request: dict[str, Any],
-    *,
-    expected_model: str,
-    expected_reasoning_effort: str,
+    request: dict[str, Any], *, expected_model: str, expected_reasoning_effort: str
 ) -> str | None:
     if request.get("schema_version") != EXECUTOR_REQUEST_VERSION:
         return "unsupported executor request schema"
@@ -296,17 +265,30 @@ def execute_request(
         "live_execution_authorized_by_adapter": False,
     }
 
-    if not all(isinstance(value, str) and value.strip() for value in (expected_cli_version, expected_model, expected_reasoning_effort)):
-        return _invalid_result(request, "MEASUREMENT_CAPTURE_FAILURE", {**evidence, "error": "exact Codex CLI version, model, and reasoning effort must be frozen before execution"})
+    freeze_values = (expected_cli_version, expected_model, expected_reasoning_effort)
+    if not all(isinstance(value, str) and value.strip() for value in freeze_values):
+        return _invalid_result(
+            request,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {**evidence, "error": "exact Codex CLI version, model, and reasoning effort must be frozen before execution"},
+        )
     assert expected_cli_version is not None
     assert expected_model is not None
     assert expected_reasoning_effort is not None
     if expected_reasoning_effort not in ALLOWED_REASONING_EFFORTS:
-        return _invalid_result(request, "MEASUREMENT_CAPTURE_FAILURE", {**evidence, "error": f"unsupported reasoning effort: {expected_reasoning_effort}"})
+        return _invalid_result(
+            request,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {**evidence, "error": f"unsupported reasoning effort: {expected_reasoning_effort}"},
+        )
 
     workspace = Path(workspace_dir) if workspace_dir is not None else None
     if workspace is None or not workspace.is_dir():
-        return _invalid_result(request, "CORRUPTED_STARTING_STATE", {**evidence, "error": "workspace_dir must resolve to an existing directory"})
+        return _invalid_result(
+            request,
+            "CORRUPTED_STARTING_STATE",
+            {**evidence, "error": "workspace_dir must resolve to an existing directory"},
+        )
 
     identity_error = _validate_request_identity(
         request,
@@ -324,7 +306,11 @@ def execute_request(
         presentation_root=presentation_root,
     )
     if not treatment_ok or not isinstance(binding, dict):
-        return _invalid_result(request, treatment_reason or "MEASUREMENT_CAPTURE_FAILURE", {**evidence, "communication_treatment_error": treatment_detail})
+        return _invalid_result(
+            request,
+            treatment_reason or "MEASUREMENT_CAPTURE_FAILURE",
+            {**evidence, "communication_treatment_error": treatment_detail},
+        )
     prompt = str(binding.get("effective_prompt") or "")
     evidence["communication_binding"] = binding
 
@@ -338,21 +324,37 @@ def execute_request(
                 shell=False,
             )
         except OSError as exc:
-            return _invalid_result(request, "INFRASTRUCTURE_OUTAGE", {**evidence, "error": f"cannot execute codex --version: {exc}"})
+            return _invalid_result(
+                request,
+                "INFRASTRUCTURE_OUTAGE",
+                {**evidence, "error": f"cannot execute codex --version: {exc}"},
+            )
         if version_cp.returncode != 0:
-            return _invalid_result(request, "INFRASTRUCTURE_OUTAGE", {**evidence, "error": "codex --version failed", "stderr": version_cp.stderr})
+            return _invalid_result(
+                request,
+                "INFRASTRUCTURE_OUTAGE",
+                {**evidence, "error": "codex --version failed", "stderr": version_cp.stderr},
+            )
         try:
             observed_cli_version = parse_cli_version(version_cp.stdout or version_cp.stderr)
         except ValueError as exc:
             return _invalid_result(request, "MEASUREMENT_CAPTURE_FAILURE", {**evidence, "error": str(exc)})
 
-    evidence["expected_cli_version"] = expected_cli_version
-    evidence["observed_cli_version"] = observed_cli_version
-    evidence["model"] = expected_model
-    evidence["reasoning_effort"] = expected_reasoning_effort
-    evidence["workspace"] = str(workspace.resolve())
+    evidence.update(
+        {
+            "expected_cli_version": expected_cli_version,
+            "observed_cli_version": observed_cli_version,
+            "model": expected_model,
+            "reasoning_effort": expected_reasoning_effort,
+            "workspace": str(workspace.resolve()),
+        }
+    )
     if observed_cli_version != expected_cli_version:
-        return _invalid_result(request, "CORRUPTED_STARTING_STATE", {**evidence, "error": "Codex CLI version mismatch"})
+        return _invalid_result(
+            request,
+            "CORRUPTED_STARTING_STATE",
+            {**evidence, "error": "Codex CLI version mismatch"},
+        )
 
     command = build_codex_command(
         prompt=prompt,
@@ -361,8 +363,8 @@ def execute_request(
         reasoning_effort=expected_reasoning_effort,
     )
     evidence["command"] = command
-
     started = time.perf_counter()
+
     if raw_jsonl is None:
         try:
             cp = run_command(
@@ -374,9 +376,22 @@ def execute_request(
                 shell=False,
             )
         except OSError as exc:
-            return _invalid_result(request, "INFRASTRUCTURE_OUTAGE", {**evidence, "error": f"Codex execution failed to start: {exc}"})
+            return _invalid_result(
+                request,
+                "INFRASTRUCTURE_OUTAGE",
+                {**evidence, "error": f"Codex execution failed to start: {exc}"},
+            )
         if cp.returncode != 0:
-            return _invalid_result(request, "PROVIDER_OUTAGE", {**evidence, "error": "codex exec returned non-zero", "returncode": cp.returncode, "stderr": cp.stderr})
+            return _invalid_result(
+                request,
+                "PROVIDER_OUTAGE",
+                {
+                    **evidence,
+                    "error": "codex exec returned non-zero",
+                    "returncode": cp.returncode,
+                    "stderr": cp.stderr,
+                },
+            )
         raw_jsonl = cp.stdout
         evidence["stderr"] = cp.stderr
     wall_clock_ms = max(0, int((time.perf_counter() - started) * 1000))
@@ -384,11 +399,23 @@ def execute_request(
     try:
         parsed = parse_codex_jsonl(raw_jsonl)
     except PermissionError as exc:
-        return _invalid_result(request, "MEASUREMENT_CAPTURE_FAILURE", {**evidence, "error": str(exc), "raw_jsonl": raw_jsonl})
+        return _invalid_result(
+            request,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {**evidence, "error": str(exc), "raw_jsonl": raw_jsonl},
+        )
     except RuntimeError as exc:
-        return _invalid_result(request, "PROVIDER_OUTAGE", {**evidence, "error": str(exc), "raw_jsonl": raw_jsonl})
+        return _invalid_result(
+            request,
+            "PROVIDER_OUTAGE",
+            {**evidence, "error": str(exc), "raw_jsonl": raw_jsonl},
+        )
     except ValueError as exc:
-        return _invalid_result(request, "MEASUREMENT_CAPTURE_FAILURE", {**evidence, "error": str(exc), "raw_jsonl": raw_jsonl})
+        return _invalid_result(
+            request,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {**evidence, "error": str(exc), "raw_jsonl": raw_jsonl},
+        )
 
     task_payload = request.get("task_payload")
     if not isinstance(task_payload, dict):
@@ -399,19 +426,24 @@ def execute_request(
     )
     usage = parsed["usage"]
     counter_id = compute_counter_id(observed_cli_version, expected_model, expected_reasoning_effort)
-    evidence.update({
-        "jsonl_events": parsed["events"],
-        "final_agent_message": parsed["response"],
-        "counter_identity_provenance": "ORCHESTRA_ASSIGNED_MEASUREMENT_SURFACE",
-        "codex_adapter_revision": "TO_BE_FROZEN_AFTER_READINESS_CANONICALIZATION",
-    })
-
-    validation_digest = digest_json({
-        "validator": task_payload.get("validation_contract", {}).get("validator_type") if isinstance(task_payload.get("validation_contract"), dict) else None,
-        "outcome": outcome,
-        "taskset_digest": TASKSET_DIGEST,
-    })
-    governance_digest = digest_json({"governance_valid": outcome["governance_valid"], "safety": safety})
+    evidence.update(
+        {
+            "jsonl_events": parsed["events"],
+            "final_agent_message": parsed["response"],
+            "counter_identity_provenance": "ORCHESTRA_ASSIGNED_MEASUREMENT_SURFACE",
+            "codex_adapter_revision": "TO_BE_FROZEN_AFTER_READINESS_CANONICALIZATION",
+        }
+    )
+    validator_type = None
+    validation_contract = task_payload.get("validation_contract")
+    if isinstance(validation_contract, dict):
+        validator_type = validation_contract.get("validator_type")
+    validation_digest = digest_json(
+        {"validator": validator_type, "outcome": outcome, "taskset_digest": TASKSET_DIGEST}
+    )
+    governance_digest = digest_json(
+        {"governance_valid": outcome["governance_valid"], "safety": safety}
+    )
 
     return {
         "schema_version": EXECUTOR_RESULT_VERSION,
@@ -461,10 +493,16 @@ def execute_request(
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="Codex measurement executor readiness binding for Orchestra benchmark.")
+    parser = argparse.ArgumentParser(
+        description="Codex measurement executor readiness binding for Orchestra benchmark."
+    )
     parser.add_argument("--expected-cli-version", required=True)
     parser.add_argument("--expected-model", required=True)
-    parser.add_argument("--expected-reasoning-effort", required=True, choices=sorted(ALLOWED_REASONING_EFFORTS))
+    parser.add_argument(
+        "--expected-reasoning-effort",
+        required=True,
+        choices=sorted(ALLOWED_REASONING_EFFORTS),
+    )
     parser.add_argument("--workspace-dir", type=Path, required=True)
     parser.add_argument("--caveman-policy-path", type=Path)
     parser.add_argument("--caveman-repo-path", type=Path)
@@ -474,10 +512,11 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     try:
-        if args.request_file:
-            request = json.loads(args.request_file.read_text(encoding="utf-8"))
-        else:
-            request = json.load(sys.stdin)
+        request = (
+            json.loads(args.request_file.read_text(encoding="utf-8"))
+            if args.request_file
+            else json.load(sys.stdin)
+        )
     except (OSError, json.JSONDecodeError) as exc:
         print(json.dumps({"error": f"cannot load benchmark request: {exc}"}), file=sys.stderr)
         return 2
