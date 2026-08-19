@@ -3,7 +3,12 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+import sys
 from typing import Any, Iterable
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 from orchestra_runtime.compliance_protocol import ComplianceQueryReceipt
 from orchestra_runtime.registry_adaptive import (
