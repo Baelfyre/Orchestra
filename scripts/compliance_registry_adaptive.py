@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 from typing import Any, Iterable
 
+from orchestra_runtime.compliance_protocol import ComplianceQueryReceipt
 from orchestra_runtime.registry_adaptive import (
     RegistryAdaptiveError,
     assess_release_delta,
@@ -106,8 +107,16 @@ def adaptive_query(
         "source_id": source_id,
         "obligation_id": obligation_id,
     }
-    receipt = build_adaptive_receipt(
-        registry_identity=_registry_identity(bundle),
+    receipt_filters = {
+        "jurisdictions": ",".join(jurisdiction_ids),
+        "providers": ",".join(provider_ids),
+        "domains": ",".join(domain_ids),
+        "source_id": source_id or "",
+        "obligation_id": obligation_id or "",
+    }
+    registry_identity = _registry_identity(bundle)
+    adaptive_receipt = build_adaptive_receipt(
+        registry_identity=registry_identity,
         filters=filters,
         source_ids=source_ids,
         obligation_ids=obligation_ids,
@@ -115,19 +124,24 @@ def adaptive_query(
         freshness=freshness,
         routing=routing,
     )
+    query_payload = {
+        "registry_version": bundle.manifest["registry_version"],
+        "release_sequence": bundle.manifest["release_sequence"],
+        "sources": selected_sources,
+        "obligations": selected_obligations,
+    }
+    compliance_receipt = ComplianceQueryReceipt.from_registry_result(
+        {"registry_status": "VERIFIED", **registry_identity},
+        query_payload,
+        filters=receipt_filters,
+    )
     return {
         "registry_version": bundle.manifest["registry_version"],
         "release_sequence": bundle.manifest["release_sequence"],
         "release_tag": bundle.manifest["release_tag"],
         "manifest_sha256": bundle.manifest_sha256,
         "filters": filters,
-        "receipt_filters": {
-            "jurisdictions": ",".join(jurisdiction_ids),
-            "providers": ",".join(provider_ids),
-            "domains": ",".join(domain_ids),
-            "source_id": source_id or "",
-            "obligation_id": obligation_id or "",
-        },
+        "receipt_filters": receipt_filters,
         "sources": selected_sources,
         "obligations": selected_obligations,
         "source_ids": list(source_ids),
@@ -135,7 +149,9 @@ def adaptive_query(
         "freshness": freshness,
         "capability_negotiation": negotiation,
         "routing": routing,
-        "adaptive_receipt": receipt,
+        "compliance_query_receipt": compliance_receipt.to_dict(),
+        "compliance_query_receipt_digest": compliance_receipt.digest,
+        "adaptive_receipt": adaptive_receipt,
     }
 
 
