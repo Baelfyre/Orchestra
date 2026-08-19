@@ -1,5 +1,16 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B3.1.3 Exact Host Version Pin Externalization - Candidate
+
+- Externalizes the exact expected Antigravity host CLI version via `--expected-cli-version` CLI argument in `scripts/antigravity_benchmark_executor.py`, removing operational hard-coding while preserving exact fail-closed version matching.
+- Rejects loose, range, wildcard, and operator version strings (e.g., empty, latest, `>=1.1.15`, `^1.1.15`) in `validate_version_format`.
+- Qualifies Antigravity CLI 1.1.15 host surface via zero-turn structured preflight probes (`/model`, `/effort`, `/usage`, `num_turns=0`, `usage_counters=0`, `model=gemini-3.7-flash-high`).
+- Derives measurement surface counter identity dynamically from validated exact version: `antigravity-cli-1.1.15:json-usage:gemini-3.7-flash-high` and `antigravity-cli-1.1.15:stream-json-usage:gemini-3.7-flash-high`.
+- Separates provenance in `raw_evidence`: `expected_cli_version` (`EXECUTOR_ARGUMENT` / `DEFAULT_QUALIFIED_HOST`) and `observed_cli_version` (`PREFLIGHT_COMMAND` / `HOST_REPORTED_*`).
+- Preserves all B3.1.2 communication treatments (`DEFAULT`, `CAVEMAN`, `MURMURS`), stream-json transport, fail-closed settings preflight (`useG1Credits: false`), and independent task outcome evaluation.
+- Expands deterministic test suite in `tests/runtime/test_comparative_benchmark_antigravity_executor.py` with zero live model turns.
+- Updates machine discovery in `README.json`, machine binding record `machine/benchmarking/antigravity-executor-binding.v1.json`, and documentation `docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md`.
+
 ## Post-v1.6.0 Comparative Benchmark B3.1.2 Communication Arm Operationalization - Candidate
 
 - Operationalizes `DEFAULT`, `CAVEMAN`, and `MURMURS` communication treatments in `scripts/antigravity_benchmark_executor.py` into distinct, machine-verifiable benchmark treatments.
