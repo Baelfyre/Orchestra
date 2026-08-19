@@ -8,7 +8,7 @@
   "repetitions_per_arm": 2,
   "executor_timeout_seconds": 30,
   "common_control_identity": {
-    "orchestra_revision": "6ec1a549370eaf73249eb3ddcffe5e464c5eb4ae",
+    "orchestra_revision": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
     "repository_revision": "SYNTHETIC_PLAN_ONLY_NO_WORKLOAD_REPOSITORY",
     "system_instruction_digest": "58a363c35256170d2c8932b464fe1c589ed5cd79c0f9efb7e75c2a91779b125c",
     "provider": "NO_PROVIDER_PLAN_ONLY",

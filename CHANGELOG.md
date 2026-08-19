@@ -1,5 +1,16 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B3.2 Diagnostic Attempt 4 Evidence Closeout & Calibration Plan-Only Readiness - Candidate
+
+- Records B3.2 Diagnostic Attempt 4 as a valid, completed 3-arm instrumentation diagnostic (`VALID_COMPLETE` / `diagnostic_execution=PASS` / `accepted_measurements=3` / `invalid_runs=0` / `live_host_turns=3` / `cumulative_total_tokens=92630` / `weekly_remaining_fraction_drop=0.0006388425827026367 <= 0.05`).
+- Verifies and anchors Attempt 4 empirical evidence from external disk directory with exact file SHA-256 digests across report, manifest, plan, resource-budget, run-index, executor-results, requests, runs, preflight, and quota files without committing raw external test traces.
+- Confirms headless workspace binding via `--add-dir` successfully bounds host print-mode context to minimal task workspace, establishing minimal workspace resource ceiling within the 45,000 token per-call budget (DEFAULT=29908, MURMURS=29668, CAVEMAN=33054).
+- Preserves paired comparability invariants: identical counter identity (`antigravity-cli-1.1.15:stream-json-usage:gemini-3.7-flash-high`), identical fixed deterministic topology digest, invariant task prompt digest, disabled credit fallback (`effective_use_g1_credits=false`), and independent task outcome evaluation (`FAIL / FAIL / FAIL`).
+- Reconciles B3 machine discovery and binding contracts (`antigravity-executor-binding.v1.json`, `README.json`) so diagnostic execution is marked completed (`diagnostic_executed=true`, `b3_valid_diagnostic=COMPLETED`, `b3_diagnostic_execution=VALID_COMPLETE`).
+- Updates the frozen B3 Murmurs-isolated calibration plan-only fixture (`tests/fixtures/benchmarking/b3-murmurs-isolated-calibration-plan-only.json`) and test suite (`tests/runtime/test_comparative_benchmark_b3_plan.py`) to the canonical entry baseline `d95f677dbf23ab79c4698c26645ea30cea9b3019`.
+- Proves deterministically that the plan-only calibration schedules exactly 30 runs (5 tasks x 2 repetitions x 3 arms in 10 paired blocks) with zero live model turns using an impossible executor sentinel.
+- Preserves all core governance boundaries: `MEASUREMENT_NOT_STARTED` remains active, live calibration remains unauthorized without separate human authorization and frozen resource budget, Murmurs benefit remains unestablished, token savings remain unclaimed, A5 execution promotion remains deferred, A6 remains unauthorized, and B4 remains blocked.
+
 ## Post-v1.6.0 Comparative Benchmark B3.1.6 Explicit Antigravity Headless Workspace Binding - Candidate
 
 - Implements deterministic explicit Antigravity headless workspace binding in `scripts/antigravity_benchmark_executor.py` via `resolve_workspace` and the verified native AGY CLI 1.1.15 `--add-dir <path>` argument interface.
