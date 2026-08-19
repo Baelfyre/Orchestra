@@ -689,6 +689,156 @@ def run_host_preflight(
     return True, None, None, resolved_version
 
 
+def resolve_workspace(
+    workspace_path: Path | str | None = None,
+    task_payload: dict[str, Any] | None = None,
+    request: dict[str, Any] | None = None,
+    require_explicit: bool = False,
+) -> tuple[bool, str | None, dict[str, Any] | None, Path | None, dict[str, Any] | None]:
+    """Resolve and validate explicit Antigravity workspace path for headless execution.
+
+    Invariants and fail-closed rules:
+    1. If require_explicit is True or task_payload requires workspace, an explicit workspace is strictly required.
+    2. If workspace is provided, it must be a non-empty string or Path.
+    3. The resolved workspace path must exist on the local filesystem.
+    4. The resolved workspace path must be a directory (not a file).
+    5. The workspace directory must be deterministically resolved (Path.resolve()).
+    6. AGY scratch fallback (~/.gemini/antigravity-cli/scratch) is strictly prohibited when workspace is required.
+
+    Returns:
+        (is_valid, invalid_reason, detail, resolved_path, binding_provenance)
+    """
+    raw_ws: Any = None
+    source_name = "NONE"
+    payload = task_payload or {}
+    must_require = require_explicit or bool(payload.get("require_workspace") or payload.get("require_explicit_workspace"))
+
+    if workspace_path is not None:
+        raw_ws = workspace_path
+        source_name = "EXECUTOR_ARGUMENT"
+    elif (
+        payload.get("workspace_dir") is not None
+        or payload.get("workspace_path") is not None
+        or payload.get("workspace") is not None
+    ):
+        raw_ws = (
+            payload.get("workspace_dir")
+            if payload.get("workspace_dir") is not None
+            else payload.get("workspace_path")
+            if payload.get("workspace_path") is not None
+            else payload.get("workspace")
+        )
+        source_name = "TASK_PAYLOAD"
+    elif request and (
+        request.get("workspace_dir") is not None
+        or request.get("workspace_path") is not None
+        or request.get("workspace") is not None
+    ):
+        raw_ws = (
+            request.get("workspace_dir")
+            if request.get("workspace_dir") is not None
+            else request.get("workspace_path")
+            if request.get("workspace_path") is not None
+            else request.get("workspace")
+        )
+        source_name = "REQUEST_ROOT"
+    elif os.environ.get("ORCHESTRA_WORKSPACE_DIR"):
+        raw_ws = os.environ.get("ORCHESTRA_WORKSPACE_DIR")
+        source_name = "ENVIRONMENT_VARIABLE"
+    elif os.environ.get("ANTIGRAVITY_WORKSPACE_DIR"):
+        raw_ws = os.environ.get("ANTIGRAVITY_WORKSPACE_DIR")
+        source_name = "ENVIRONMENT_VARIABLE"
+
+    if raw_ws is None:
+        if must_require:
+            return (
+                False,
+                "MEASUREMENT_CAPTURE_FAILURE",
+                {"error": "explicit workspace directory is required but was not supplied"},
+                None,
+                None,
+            )
+        unbound_provenance = {
+            "bound": False,
+            "workspace_path": None,
+            "workspace_flag": "--add-dir",
+            "workspace_mechanism": "CLI_ADD_DIR",
+            "provenance": {
+                "source": "NONE",
+                "resolved_path": None,
+                "is_directory": False,
+            },
+        }
+        return True, None, None, None, unbound_provenance
+
+    if not isinstance(raw_ws, (str, Path)):
+        return (
+            False,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {"error": f"invalid workspace path type: {type(raw_ws).__name__}"},
+            None,
+            None,
+        )
+
+    str_ws = str(raw_ws).strip()
+    if not str_ws:
+        return (
+            False,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {"error": "workspace directory path is empty"},
+            None,
+            None,
+        )
+
+    try:
+        resolved_path = Path(str_ws).resolve()
+    except Exception as exc:
+        return (
+            False,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {"error": f"failed to resolve workspace path: {exc}", "workspace_path": str_ws},
+            None,
+            None,
+        )
+
+    if not resolved_path.exists():
+        return (
+            False,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {
+                "error": f"workspace directory does not exist: {resolved_path}",
+                "workspace_path": str(resolved_path),
+            },
+            None,
+            None,
+        )
+
+    if not resolved_path.is_dir():
+        return (
+            False,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {
+                "error": f"workspace path is not a directory: {resolved_path}",
+                "workspace_path": str(resolved_path),
+            },
+            None,
+            None,
+        )
+
+    bound_provenance = {
+        "bound": True,
+        "workspace_path": str(resolved_path),
+        "workspace_flag": "--add-dir",
+        "workspace_mechanism": "CLI_ADD_DIR",
+        "provenance": {
+            "source": source_name,
+            "resolved_path": str(resolved_path),
+            "is_directory": True,
+        },
+    }
+    return True, None, None, resolved_path, bound_provenance
+
+
 def map_antigravity_tokens(usage: dict[str, Any], counter_id: str) -> dict[str, Any]:
     """Map Antigravity native structured usage to Orchestra token schema.
 
@@ -943,6 +1093,7 @@ def parse_stream_json_output(
     binding: dict[str, Any] | None = None,
     presentation_root: Path | str | None = None,
     credit_policy: dict[str, Any] | None = None,
+    workspace_binding: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Parse Antigravity NDJSON event stream and compute deterministic metrics."""
     req_id = request.get("request_id", "unknown-request")
@@ -1300,6 +1451,18 @@ def parse_stream_json_output(
             normalized_payload if "useG1Credits" in normalized_payload else terminal_envelope
         )
 
+    effective_ws_binding = workspace_binding or {
+        "bound": False,
+        "workspace_path": None,
+        "workspace_flag": "--add-dir",
+        "workspace_mechanism": "CLI_ADD_DIR",
+        "provenance": {
+            "source": "NONE",
+            "resolved_path": None,
+            "is_directory": False,
+        },
+    }
+
     effective_binding = binding or {}
     raw_evidence = {
         "host": "Antigravity CLI",
@@ -1338,6 +1501,7 @@ def parse_stream_json_output(
         "effective_prompt_or_policy_digest": effective_binding.get("effective_prompt_or_policy_digest", ""),
         "topology_candidate_id": request.get("arm", {}).get("topology_candidate_id"),
         "topology_digest": request.get("arm", {}).get("topology_digest"),
+        "workspace_binding": copy.deepcopy(effective_ws_binding),
         "terminal_event_envelope": copy.deepcopy(terminal_envelope),
         "terminal_result_payload": copy.deepcopy(normalized_payload),
         "outer_envelope": copy.deepcopy(terminal_envelope),
@@ -1387,6 +1551,7 @@ def parse_antigravity_output(
     transport: str = PINNED_TRANSPORT_JSON,
     presentation_root: Path | str | None = None,
     credit_policy: dict[str, Any] | None = None,
+    workspace_binding: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Parse raw Antigravity output (JSON or stream-json) and construct Orchestra benchmark result."""
     # Ensure treatment binding exists
@@ -1415,6 +1580,7 @@ def parse_antigravity_output(
             binding=binding,
             presentation_root=presentation_root,
             credit_policy=credit_policy,
+            workspace_binding=workspace_binding,
         )
 
     # Detect stream-json transport
@@ -1428,6 +1594,7 @@ def parse_antigravity_output(
             binding=binding,
             presentation_root=presentation_root,
             credit_policy=credit_policy,
+            workspace_binding=workspace_binding,
         )
 
     # Detect multi-line stream-json string
@@ -1443,6 +1610,7 @@ def parse_antigravity_output(
                 binding=binding,
                 presentation_root=presentation_root,
                 credit_policy=credit_policy,
+                workspace_binding=workspace_binding,
             )
 
     task_payload = request.get("task_payload", {})
@@ -1631,6 +1799,18 @@ def parse_antigravity_output(
     if effective_credit_policy is None:
         _, _, effective_credit_policy = resolve_use_g1_credits(envelope)
 
+    effective_ws_binding = workspace_binding or {
+        "bound": False,
+        "workspace_path": None,
+        "workspace_flag": "--add-dir",
+        "workspace_mechanism": "CLI_ADD_DIR",
+        "provenance": {
+            "source": "NONE",
+            "resolved_path": None,
+            "is_directory": False,
+        },
+    }
+
     effective_binding = binding or {}
     raw_evidence = {
         "host": "Antigravity CLI",
@@ -1669,6 +1849,7 @@ def parse_antigravity_output(
         "effective_prompt_or_policy_digest": effective_binding.get("effective_prompt_or_policy_digest", ""),
         "topology_candidate_id": request.get("arm", {}).get("topology_candidate_id"),
         "topology_digest": request.get("arm", {}).get("topology_digest"),
+        "workspace_binding": copy.deepcopy(effective_ws_binding),
         "outer_envelope": copy.deepcopy(envelope),
         "total_tokens": usage.get("total_tokens"),
         "useG1Credits": effective_credit_policy.get("effective_value", False),
@@ -1716,6 +1897,7 @@ def execute_request(
     caveman_repo_path: Path | str | None = None,
     presentation_root: Path | str | None = None,
     transport: str | None = None,
+    workspace_dir: Path | str | None = None,
 ) -> dict[str, Any]:
     """Execute a single comparative benchmark request with Antigravity binding."""
     if not isinstance(request, dict):
@@ -1795,6 +1977,22 @@ def execute_request(
         or task_payload.get("mock_antigravity_response")
         or os.environ.get("ANTIGRAVITY_BENCHMARK_MOCK_OUTPUT")
     )
+
+    # Resolve and validate explicit Antigravity workspace
+    ws_valid, ws_reason, ws_detail, resolved_workspace, ws_binding_info = resolve_workspace(
+        workspace_path=workspace_dir,
+        task_payload=task_payload,
+        request=request,
+        require_explicit=False,
+    )
+    if not ws_valid:
+        return build_invalid_result(
+            request,
+            ws_reason or "MEASUREMENT_CAPTURE_FAILURE",
+            ws_detail or {"error": "workspace validation failed"},
+            expected_cli_version=expected_ver,
+        )
+
     if mock_output is not None:
         return parse_antigravity_output(
             mock_output,
@@ -1804,6 +2002,7 @@ def execute_request(
             binding=binding,
             transport=transport_counter,
             presentation_root=presentation_root,
+            workspace_binding=ws_binding_info,
         )
 
     # Live execution requires an explicitly supplied expected CLI version
@@ -1834,16 +2033,18 @@ def execute_request(
     cli_version = validated_version or expected_ver
     effective_prompt = binding["effective_prompt"]
 
-    # Validated Antigravity print-mode command interface
-    cmd = [
-        "agy",
+    # Validated Antigravity print-mode command interface with explicit workspace binding
+    cmd = ["agy"]
+    if resolved_workspace is not None:
+        cmd.extend(["--add-dir", str(resolved_workspace)])
+    cmd.extend([
         "--model",
         PINNED_MODEL,
         "-p",
         effective_prompt,
         "--output-format",
         transport_format,
-    ]
+    ])
 
     started = time.monotonic()
 
@@ -1902,6 +2103,7 @@ def execute_request(
         transport=transport_counter,
         presentation_root=presentation_root,
         credit_policy=active_credit_policy,
+        workspace_binding=ws_binding_info,
     )
 
 
@@ -1909,6 +2111,7 @@ def main(argv: list[str] | None = None) -> int:
     """CLI entrypoint reading one JSON request on stdin and writing JSON result on stdout."""
     parser = argparse.ArgumentParser(description="Antigravity measurement executor binding for Orchestra benchmark.")
     parser.add_argument("--expected-cli-version", type=str, default=None, help="Exact expected Antigravity CLI version (e.g. 1.1.15)")
+    parser.add_argument("--workspace-dir", type=Path, default=None, help="Explicit Antigravity workspace directory to bind via --add-dir")
     parser.add_argument("--request-file", type=Path, help="Optional request JSON file (default: stdin)")
     parser.add_argument("--output-file", type=Path, help="Optional output JSON file (default: stdout)")
     args = parser.parse_args(argv)
@@ -1932,7 +2135,11 @@ def main(argv: list[str] | None = None) -> int:
             print(json.dumps(err_res, indent=2))
         return 0
 
-    result = execute_request(request, expected_cli_version=args.expected_cli_version)
+    result = execute_request(
+        request,
+        expected_cli_version=args.expected_cli_version,
+        workspace_dir=args.workspace_dir,
+    )
     out_str = json.dumps(result, indent=2) + "\n"
 
     if args.output_file:
