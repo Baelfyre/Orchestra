@@ -1,12 +1,14 @@
 {
   "schema_version": "orchestra.antigravity-executor-binding.v1",
   "program_id": "orchestra.shared-comparative-benchmark.v1",
-  "phase": "BENCHMARK_B3_1_2_COMMUNICATION_ARM_OPERATIONALIZATION",
+  "phase": "BENCHMARK_B3_1_3_EXACT_HOST_VERSION_PIN_EXTERNALIZATION",
   "status": "IMPLEMENTED_NON_CALIBRATED",
-  "canonical_entry_baseline": "dfeb94ee8dccd1e812b7e2c2a5ae8ae1c40b5874",
+  "canonical_entry_baseline": "48007cbbbbfa6ce84747ed8b413b1d4af8ac895f",
   "binding": {
     "host": "Antigravity CLI",
-    "cli_version": "1.1.14",
+    "cli_version": "1.1.15",
+    "validated_cli_version": "1.1.15",
+    "expected_cli_version_externalized": true,
     "model": "gemini-3.7-flash-high",
     "supported_transports": ["json-usage", "stream-json-usage"],
     "default_transport": "json-usage",
@@ -14,7 +16,15 @@
     "non_interactive": true,
     "personal_credit_fallback": "disabled",
     "use_g1_credits": false,
-    "executor_script": "scripts/antigravity_benchmark_executor.py"
+    "executor_script": "scripts/antigravity_benchmark_executor.py",
+    "qualification_method": "ZERO_TURN_STRUCTURED_PREFLIGHT_PROBES",
+    "qualification_evidence": {
+      "structured_command_probes": ["/model", "/effort", "/usage"],
+      "num_turns": 0,
+      "usage_counters": 0,
+      "model": "gemini-3.7-flash-high",
+      "status": "QUALIFIED"
+    }
   },
   "communication_arms": {
     "default": {
@@ -45,8 +55,8 @@
     }
   },
   "counter_identity": {
-    "canonical_json_counter_id": "antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high",
-    "canonical_stream_json_counter_id": "antigravity-cli-1.1.14:stream-json-usage:gemini-3.7-flash-high",
+    "canonical_json_counter_id": "antigravity-cli-1.1.15:json-usage:gemini-3.7-flash-high",
+    "canonical_stream_json_counter_id": "antigravity-cli-1.1.15:stream-json-usage:gemini-3.7-flash-high",
     "provenance": "ORCHESTRA_ASSIGNED_MEASUREMENT_SURFACE",
     "vendor_assigned_claim": false,
     "paired_comparability_rule": "IDENTICAL_COUNTER_IDENTITY_REQUIRED_ACROSS_ALL_ARMS"
@@ -71,6 +81,8 @@
     "fail_closed_on_counter_identity_drift": true,
     "fail_closed_on_corrupted_starting_state": true,
     "fail_closed_on_caveman_policy_mismatch": true,
+    "fail_closed_on_missing_expected_cli_version": true,
+    "fail_closed_on_cli_version_mismatch": true,
     "raw_outer_envelope_preserved": true,
     "no_metric_inference": true
   },
@@ -84,9 +96,13 @@
     ]
   },
   "governance_boundaries": {
-    "b3_1_2_communication_arm_operationalization": "IMPLEMENTED",
+    "b3_1_3_exact_host_version_pin": "IMPLEMENTED_SOURCE_ONLY",
+    "current_validated_agy_version": "1.1.15",
     "b3_measurement_maturity": "MEASUREMENT_NOT_STARTED",
+    "b3_diagnostic_execution": "NOT_STARTED",
+    "b3_calibration_execution": "NOT_STARTED",
     "murmurs_benefit": "NOT_ESTABLISHED",
+    "murmurs_token_savings": "NOT_CLAIMED",
     "a5_benefit": "NOT_ESTABLISHED",
     "a5_execution_promotion": "NOT_AUTHORIZED",
     "a6_authorized": false,
