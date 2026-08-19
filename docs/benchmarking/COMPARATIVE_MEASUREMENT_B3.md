@@ -5,26 +5,23 @@
 ```text
 Program: Orchestra Shared Comparative Benchmark
 Phase: B3 Murmurs Isolated Comparative Experiment
-Current bounded unit: B3.2 Diagnostic Attempt 4 Evidence Closeout + Calibration Plan-Only Readiness
-State: B3_2_DIAGNOSTIC_ATTEMPT_4_VALID_COMPLETE_CALIBRATION_PLAN_READY
+Current bounded unit: B3 Calibration Execution Closeout & Baseline Evidence Freeze
+State: B3_CALIBRATION_COMPLETED_AND_VALIDATED
 Canonical entry: d95f677dbf23ab79c4698c26645ea30cea9b3019
 Canonical entry tree: ceab55bd512ea6fde4e8e76877cbb7006d18500e
-Authoritative benchmark machine state: B0/B1/B3.2 Attempt 4 diagnostic closeout + B3 calibration plan-only
+Authoritative benchmark machine state: B0/B1/B3.2 Attempt 4 diagnostic closeout + B3 calibration completed
 Validated local Antigravity host: Antigravity CLI 1.1.15
-Measurement maturity after unit implementation: MEASUREMENT_NOT_STARTED
-Murmurs benefit: NOT ESTABLISHED
+Measurement maturity after unit implementation: CALIBRATION_COMPLETED_AND_VALIDATED
+Murmurs benefit: NOT ESTABLISHED (INCONCLUSIVE / CALIBRATION BASELINE ONLY)
+Token savings: EVIDENCE_DERIVED_ONLY
 A5 execution-effective selection: NOT AUTHORIZED
 A6: NOT AUTHORIZED
 Paid provider calls: NOT AUTHORIZED BY THIS UNIT
-Diagnostic execution: VALID_COMPLETE (3/3 calls accepted, minimal workspace ceiling established)
-Calibration execution: PLAN_ONLY_READY (NOT EXECUTED LIVE)
+Diagnostic execution: VALID_COMPLETE (3/3 calls accepted)
+Calibration execution: VALID_COMPLETE (30/30 runs completed & validated)
 ```
 
-B3.2 Diagnostic Attempt 4 records a valid, completed 3-arm instrumentation diagnostic closeout for the Orchestra comparative benchmark harness under Antigravity CLI 1.1.15 and `gemini-3.7-flash-high` stream-json transport. It confirms that native `--add-dir <path>` headless workspace binding successfully isolates host operations to the configured minimal task directory, bounding per-call host consumption well within the 45,000 token limit (DEFAULT=29908, MURMURS=29668, CAVEMAN=33054; cumulative=92630 <= 120000; weekly remaining fraction drop=0.0006388425827026367 <= 0.05). All 3 planned arm calls completed with identical counter identity (`antigravity-cli-1.1.15:stream-json-usage:gemini-3.7-flash-high`) and zero invalid runs.
-
-In addition, B3 calibration readiness is established by refreshing the frozen plan-only calibration fixture (`tests/fixtures/benchmarking/b3-murmurs-isolated-calibration-plan-only.json`) and test suite (`tests/runtime/test_comparative_benchmark_b3_plan.py`) against canonical entry baseline `d95f677dbf23ab79c4698c26645ea30cea9b3019`, deterministically verifying 30 scheduled runs (5 tasks x 2 repetitions x 3 arms in 10 paired blocks) with zero live model turns.
-
-It does not execute live calibration calls, does not measure live token savings or comparative benefit, does not vendor Caveman, and does not alter production runtime routing.
+B3 Calibration Execution records a valid, completed 30-run calibration execution (5 Padayon-grounded tasks x 2 repetitions x 3 communication arms across 10 paired blocks) for the Orchestra comparative benchmark harness under Antigravity CLI 1.1.15 and `gemini-3.7-flash-high` stream-json transport. It confirms that native `--add-dir <path>` headless workspace binding and the `EXACT_JSON_CONFORMANCE_V1` deterministic validator derive 100% semantic pass rates (30/30) with zero invalid runs, zero safety violations, and cumulative token consumption (877,582 tokens) well within the 1,200,000 ceiling. All 30 planned arm calls completed with identical counter identity (`antigravity-cli-1.1.15:stream-json-usage:gemini-3.7-flash-high`).
 
 ## Evidence boundary
 
@@ -341,9 +338,9 @@ The Caveman arm must be executed on Orchestra's own controlled workload under th
 
 B3.1.2 does not vendor Caveman, copy its source, install it, execute it, or introduce it as an Orchestra runtime dependency.
 
-## Calibration floor & Plan-Only Readiness
+## Calibration Floor & Empirical Calibration Execution
 
-B3 inherits the B0 calibration floor and establishes zero-turn plan-only readiness under the Padayon-grounded task set:
+B3 inherits the B0 calibration floor and has completed full empirical calibration execution under the Padayon-grounded task set:
 
 ```text
 task-set version = orchestra.b3-calibration-task-set.v1
@@ -355,27 +352,48 @@ repetitions per arm = 2
 fixed topology = required
 communication arms = DEFAULT / CAVEMAN / MURMURS
 arm order = randomized reproducibly
-claims allowed = false
 canonical entry baseline = d95f677dbf23ab79c4698c26645ea30cea9b3019
-calibration plan-only fixture = tests/fixtures/benchmarking/b3-murmurs-isolated-calibration-plan-only.json
+calibration plan fixture = tests/fixtures/benchmarking/b3-murmurs-isolated-calibration-plan-only.json
 calibration test suite = tests/runtime/test_comparative_benchmark_b3_plan.py
-planned runs = 30 (5 tasks x 2 repetitions x 3 communication arms)
-paired task/repetition blocks = 10
-live model turns during dry run = 0
-executor sentinel = impossible executor verified
+scheduled runs = 30 (5 tasks x 2 repetitions x 3 communication arms)
+completed runs = 30
+accepted measurements = 30
+invalid runs = 0
+pass rate = 100.0% (30/30)
+governance validity = 100.0% (30/30)
+cumulative total tokens = 877582 (ceiling: 1200000)
+per-call peak tokens = 31268 (ceiling: 45000)
 ```
 
-Expected plan size:
+### Empirical Calibration Per-Arm Summary (30 Runs)
 
-```text
-5 tasks x 2 repetitions x 3 communication arms = 30 planned runs
-```
+| Metric | DEFAULT (Baseline) | CAVEMAN (External Pinned) | MURMURS (Canonical Presentation) |
+|---|---|---|---|
+| **Runs / Completed** | 10 / 10 | 10 / 10 | 10 / 10 |
+| **Pass Rate (`EXACT_JSON_CONFORMANCE_V1`)** | 100.0% (10/10) | 100.0% (10/10) | 100.0% (10/10) |
+| **Mean Total Tokens** | 29,049.1 | 29,864.6 (+2.81%) | 28,844.5 (-0.70%) |
+| **Mean Input Tokens** | 27,751.3 | 28,597.9 (+3.05%) | 27,752.8 (+0.01%) |
+| **Mean Output Tokens** | 1,297.8 | 1,266.7 (-2.40%) | 1,091.7 (-15.88%) |
+| **Mean Reasoning Tokens** | 1,120.0 | 1,092.4 (-2.46%) | 913.9 (-18.40%) |
+| **Mean User-Visible Bytes** | 469.6 | 469.6 | 469.6 |
+| **Safety Violations (Authority/Cap/Gov)** | 0 | 0 | 0 |
 
-Deterministic dry-run validation proves that running the plan-only calibration against an impossible executor sentinel creates no `runs/`, `run-index.json`, `experiment.json`, or `partial-evidence/` artifacts and executes zero live provider/model turns.
+### Local Evidence Digests (Frozen Calibration Execution)
 
-The five calibration tasks are grounded in Padayon's approved work sequence (R5 capability manifest, R6/O1/O2 compatibility, O3/O4 freshness, Issue #115 assurance drift, and O5/O6 routing), each carrying a deterministic validation contract (`EXACT_JSON_CONFORMANCE_V1`) to derive task completion, validation, and governance outcomes directly from model responses rather than relying on pre-seeded booleans or self-reported status.
+The external calibration execution directory (`_orchestra-benchmark-evidence/b3-calibration-live-30-runs`) records:
 
-Live calibration execution remains **NOT AUTHORIZED** until a separate human-gated decision freezes the live calibration workload, per-call and cumulative resource budgets, and stop conditions.
+- `manifest.json`: `2b49ce2c4680d82190f7d7a249067d971cbeb79cbffa75c9d8fb167f90e70fcc`
+- `plan.json`: `16704` bytes
+- `experiment.json`: `d21c7ee23c9a6ae72584200fdddff69ae685773129e9cbc3afbf5fca146555eb`
+- `run-index.json`: `2700d2c4fd6fa3f422f43d3104437381af1a141a873e7c77658b8a5857ca2108`
+- `calibration_summary.json`: `3143e0c5d59472f062d308a0b79f35e86c39d800c7ec57a81918a50e01bb17de`
+
+### Non-Inference and Measurement Boundary Rule
+
+The calibration dataset above validates host instrumentation, bounds resource consumption, and establishes exact baseline comparability across all three arms with 100% semantic task pass rates. In accordance with the pre-registered B0 measurement policy:
+- Murmurs benefit remains **NOT ESTABLISHED** from calibration sample evidence alone (status: `INCONCLUSIVE`).
+- Token savings are **EVIDENCE-DERIVED ONLY**.
+- A confirmatory benchmark under human authorization is required before establishing production efficiency or benefit claims.
 
 ## Quality and preservation gates
 
