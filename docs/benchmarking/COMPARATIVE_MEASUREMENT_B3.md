@@ -343,9 +343,13 @@ B3.1.2 does not vendor Caveman, copy its source, install it, execute it, or intr
 
 ## Calibration floor & Plan-Only Readiness
 
-B3 inherits the B0 calibration floor and establishes zero-turn plan-only readiness:
+B3 inherits the B0 calibration floor and establishes zero-turn plan-only readiness under the Padayon-grounded task set:
 
 ```text
+task-set version = orchestra.b3-calibration-task-set.v1
+task-set status = PADAYON_GROUNDED_V1_FROZEN
+task-set aggregate digest = fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8
+validator type = EXACT_JSON_CONFORMANCE_V1
 minimum tasks = 5
 repetitions per arm = 2
 fixed topology = required
@@ -368,6 +372,8 @@ Expected plan size:
 ```
 
 Deterministic dry-run validation proves that running the plan-only calibration against an impossible executor sentinel creates no `runs/`, `run-index.json`, `experiment.json`, or `partial-evidence/` artifacts and executes zero live provider/model turns.
+
+The five calibration tasks are grounded in Padayon's approved work sequence (R5 capability manifest, R6/O1/O2 compatibility, O3/O4 freshness, Issue #115 assurance drift, and O5/O6 routing), each carrying a deterministic validation contract (`EXACT_JSON_CONFORMANCE_V1`) to derive task completion, validation, and governance outcomes directly from model responses rather than relying on pre-seeded booleans or self-reported status.
 
 Live calibration execution remains **NOT AUTHORIZED** until a separate human-gated decision freezes the live calibration workload, per-call and cumulative resource budgets, and stop conditions.
 

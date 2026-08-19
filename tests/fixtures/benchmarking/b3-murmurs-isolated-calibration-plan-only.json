@@ -1,96 +1,459 @@
 {
-  "schema_version": "orchestra.comparative-benchmark-manifest.v1",
-  "program_id": "orchestra.shared-comparative-benchmark.v1",
-  "experiment_id": "b3-murmurs-isolated-calibration-plan-only",
-  "experiment_kind": "MURMURS_ISOLATED",
-  "stage": "CALIBRATION",
-  "randomization_seed": 1908202603,
-  "repetitions_per_arm": 2,
-  "executor_timeout_seconds": 30,
-  "common_control_identity": {
-    "orchestra_revision": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
-    "repository_revision": "SYNTHETIC_PLAN_ONLY_NO_WORKLOAD_REPOSITORY",
-    "system_instruction_digest": "58a363c35256170d2c8932b464fe1c589ed5cd79c0f9efb7e75c2a91779b125c",
-    "provider": "NO_PROVIDER_PLAN_ONLY",
-    "model": "NO_MODEL_PLAN_ONLY",
-    "model_revision": null,
-    "reasoning_setting": null,
-    "temperature": null,
-    "tool_access_digest": "48a0d1d18a2ddd20d1d331498e0ddc687d57c3d7b985ff3b8661a2de157d4fca",
-    "specialist_set_digest": "73cb67781415f1878f270311a4649862dad1ee10e18e8caa6dad5a7505ded697",
-    "required_specialist_set_digest": "ca6103a03d396f4b90a2909198bf0737a768780087b8b5c74da7670c2439cae3",
-    "authority_digest": "4251754510a572492088d477481503396028634b7768cb5f6741268bfe23e50b",
-    "governance_digest": "74beafc4bb3d758b44ae1dd89c205def73209c31303612087347500180a73bb7",
-    "validation_contract_digest": "8910423410213a14817331738965735851b971c80a16cdb114678d5bd13dc80c",
-    "environment_digest": "cbf40277d13c95b6410bd98d0f60245022218ada90a7a9b98bd3f754484321f7",
-    "retry_policy_digest": "a7cfae01ec79b8751150503e965d0c59ff5c087bd5e2e223ed584673b68d7f27",
-    "resource_budget_digest": "c42db5d3708f837daaa959d27d28bf7f9c45741db501b1ad567b9c13ed77fbb8"
-  },
+  "a5_evaluation": null,
   "arms": [
     {
       "arm_id": "default-communication",
+      "communication_mode": "DEFAULT",
       "topology_candidate_id": "synthetic-fixed-topology",
       "topology_class": "FIXED_DETERMINISTIC",
-      "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462",
-      "communication_mode": "DEFAULT"
+      "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
     },
     {
       "arm_id": "caveman-communication",
+      "communication_mode": "CAVEMAN",
       "topology_candidate_id": "synthetic-fixed-topology",
       "topology_class": "FIXED_DETERMINISTIC",
-      "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462",
-      "communication_mode": "CAVEMAN"
+      "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
     },
     {
       "arm_id": "murmurs-communication",
+      "communication_mode": "MURMURS",
       "topology_candidate_id": "synthetic-fixed-topology",
       "topology_class": "FIXED_DETERMINISTIC",
-      "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462",
-      "communication_mode": "MURMURS"
+      "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
     }
   ],
-  "tasks": [
-    {
-      "task_id": "b3-cal-single-domain",
-      "task_class": "SINGLE_DOMAIN",
-      "starting_state_digest": "40d950da83c03acdd63c346598a98eb3924e2f54dc7634a237c2033fc516db2e",
-      "task_prompt_digest": "6610d3f766cbbd5dcfeaa84946c57f6bd7c0c9a596a0d791bfaa67b137f1a035",
-      "task_payload": {"synthetic": true, "scenario": "single-domain bounded implementation communication plan", "execution_allowed": false}
-    },
-    {
-      "task_id": "b3-cal-multi-domain",
-      "task_class": "MULTI_DOMAIN",
-      "starting_state_digest": "c3e9fc67ba632006bcda6409d10f2dd78a6d74bcbd3c31902e46cb90c3a4f10a",
-      "task_prompt_digest": "99c171d430788e3171c8106776224142dfb9640848e30cf6c91e00a319aff953",
-      "task_payload": {"synthetic": true, "scenario": "multi-domain coordination and handoff communication plan", "execution_allowed": false}
-    },
-    {
-      "task_id": "b3-cal-debug",
-      "task_class": "DEBUGGING",
-      "starting_state_digest": "663a494720a0c873bd8a5bfe100150745431428effc4cd23bd13b8bbf97a909d",
-      "task_prompt_digest": "e4108a31e319316b6d6c6956d5af12e728fcde8c33f85b580788efbb1bc2af65",
-      "task_payload": {"synthetic": true, "scenario": "debugging progress and remediation communication plan", "execution_allowed": false}
-    },
-    {
-      "task_id": "b3-cal-doc-implementation",
-      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
-      "starting_state_digest": "7e7b86a3dd35a876632329df8f0fa52fbe986938c5442bf28283cb99ad95d496",
-      "task_prompt_digest": "f30844a7594eaeaa56d81d998832649609e9706f7d6b35a103e125584b99f472",
-      "task_payload": {"synthetic": true, "scenario": "implementation plus documentation transfer communication plan", "execution_allowed": false}
-    },
-    {
-      "task_id": "b3-cal-high-coordination",
-      "task_class": "HIGH_COORDINATION",
-      "starting_state_digest": "cf3257f2a05c665f2dd48c6c45c0fb292490484f487eff0c54dbec7c17e9e29c",
-      "task_prompt_digest": "31bf40cf27557c370844bc70d03b54cebd27e37a7e158611198475e2f4626acd",
-      "task_payload": {"synthetic": true, "scenario": "high-coordination progress handoff and contradiction communication plan", "execution_allowed": false}
-    }
-  ],
-  "a5_evaluation": null,
+  "benefit_thresholds": null,
+  "common_control_identity": {
+    "authority_digest": "4251754510a572492088d477481503396028634b7768cb5f6741268bfe23e50b",
+    "environment_digest": "cbf40277d13c95b6410bd98d0f60245022218ada90a7a9b98bd3f754484321f7",
+    "governance_digest": "74beafc4bb3d758b44ae1dd89c205def73209c31303612087347500180a73bb7",
+    "model": "NO_MODEL_PLAN_ONLY",
+    "model_revision": null,
+    "orchestra_revision": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
+    "provider": "NO_PROVIDER_PLAN_ONLY",
+    "reasoning_setting": null,
+    "repository_revision": "SYNTHETIC_PLAN_ONLY_NO_WORKLOAD_REPOSITORY",
+    "required_specialist_set_digest": "ca6103a03d396f4b90a2909198bf0737a768780087b8b5c74da7670c2439cae3",
+    "resource_budget_digest": "c42db5d3708f837daaa959d27d28bf7f9c45741db501b1ad567b9c13ed77fbb8",
+    "retry_policy_digest": "a7cfae01ec79b8751150503e965d0c59ff5c087bd5e2e223ed584673b68d7f27",
+    "specialist_set_digest": "73cb67781415f1878f270311a4649862dad1ee10e18e8caa6dad5a7505ded697",
+    "system_instruction_digest": "58a363c35256170d2c8932b464fe1c589ed5cd79c0f9efb7e75c2a91779b125c",
+    "temperature": null,
+    "tool_access_digest": "48a0d1d18a2ddd20d1d331498e0ddc687d57c3d7b985ff3b8661a2de157d4fca",
+    "validation_contract_digest": "8910423410213a14817331738965735851b971c80a16cdb114678d5bd13dc80c"
+  },
+  "executor_timeout_seconds": 30,
+  "experiment_id": "b3-murmurs-isolated-calibration-plan-only",
+  "experiment_kind": "MURMURS_ISOLATED",
+  "interaction_evaluation": null,
   "murmurs_evaluation": {
     "same_counter_identity_for_token_delta": true
   },
-  "interaction_evaluation": null,
   "preregistration_digest": null,
-  "benefit_thresholds": null
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "randomization_seed": 1908202603,
+  "repetitions_per_arm": 2,
+  "schema_version": "orchestra.comparative-benchmark-manifest.v1",
+  "stage": "CALIBRATION",
+  "tasks": [
+    {
+      "starting_state_digest": "4f574c6b4150d6a00f25534fcff9089f7245fb1969557db441f09481a0e07160",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-cal-padayon-r5-capability-manifest",
+      "task_payload": {
+        "execution_allowed": false,
+        "padayon_alignment": [
+          "R5_CAPABILITY_MANIFEST"
+        ],
+        "prompt": "You are an automated capability negotiation engine evaluating a synthetic Compliance Registry capability manifest against consumer requirements.\n\nGiven the following Registry manifest and consumer requirements:\n\n[REGISTRY_CAPABILITY_MANIFEST]\n{\n  \"manifest_version\": \"0.2.0\",\n  \"supported_schema_versions\": [\"0.1.0\", \"0.2.0\"],\n  \"supported_capabilities\": [\n    \"cap.dynamic_source_monitor.v1\",\n    \"cap.jurisdiction_filter.v1\",\n    \"cap.query_scoped_freshness.v1\",\n    \"cap.schema.negotiation.v1\"\n  ]\n}\n\n[CONSUMER_REQUIREMENTS]\n{\n  \"minimum_schema_version\": \"0.1.0\",\n  \"preferred_schema_version\": \"0.2.0\",\n  \"required_capabilities\": [\n    \"cap.dynamic_source_monitor.v1\",\n    \"cap.query_scoped_freshness.v1\",\n    \"cap.schema.negotiation.v1\"\n  ],\n  \"optional_capabilities\": [\n    \"cap.audit_streaming.v1\"\n  ]\n}\n\nEvaluate capability compatibility and schema negotiation.\nRespond with EXACTLY one valid JSON object (no Markdown fences, no surrounding commentary) with the following structure:\n{\n  \"task_id\": \"b3-cal-padayon-r5-capability-manifest\",\n  \"disposition\": \"COMPATIBLE\",\n  \"negotiated_schema_version\": \"0.2.0\",\n  \"matched_required_capabilities\": [\n    \"cap.dynamic_source_monitor.v1\",\n    \"cap.query_scoped_freshness.v1\",\n    \"cap.schema.negotiation.v1\"\n  ],\n  \"missing_required_capabilities\": [],\n  \"missing_optional_capabilities\": [\n    \"cap.audit_streaming.v1\"\n  ],\n  \"authority_expansion\": false\n}\nAll capability lists must be sorted alphabetically in ascending order.",
+        "starting_state": {
+          "consumer_requirements": {
+            "minimum_schema_version": "0.1.0",
+            "optional_capabilities": [
+              "cap.audit_streaming.v1"
+            ],
+            "preferred_schema_version": "0.2.0",
+            "required_capabilities": [
+              "cap.dynamic_source_monitor.v1",
+              "cap.query_scoped_freshness.v1",
+              "cap.schema.negotiation.v1"
+            ]
+          },
+          "registry_capability_manifest": {
+            "manifest_version": "0.2.0",
+            "supported_capabilities": [
+              "cap.dynamic_source_monitor.v1",
+              "cap.jurisdiction_filter.v1",
+              "cap.query_scoped_freshness.v1",
+              "cap.schema.negotiation.v1"
+            ],
+            "supported_schema_versions": [
+              "0.1.0",
+              "0.2.0"
+            ]
+          }
+        },
+        "synthetic": true,
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "disposition": "COMPATIBLE",
+            "matched_required_capabilities": [
+              "cap.dynamic_source_monitor.v1",
+              "cap.query_scoped_freshness.v1",
+              "cap.schema.negotiation.v1"
+            ],
+            "missing_optional_capabilities": [
+              "cap.audit_streaming.v1"
+            ],
+            "missing_required_capabilities": [],
+            "negotiated_schema_version": "0.2.0",
+            "task_id": "b3-cal-padayon-r5-capability-manifest"
+          },
+          "prohibited_dispositions": [
+            "INCOMPATIBLE_AUTONOMOUS_BYPASS",
+            "UNAUTHORIZED_SCHEMA_UPGRADE"
+          ],
+          "required_keys": [
+            "task_id",
+            "disposition",
+            "negotiated_schema_version",
+            "matched_required_capabilities",
+            "missing_required_capabilities",
+            "missing_optional_capabilities",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "aef3872f6ee106ece139545d0afba67f41e5244b9201f66cf2763614ed3f6772"
+    },
+    {
+      "starting_state_digest": "3af707cddc212e07249fb6eccdb5f3ae7ad6fedf0ff4158c267e4fbbe4844d9f",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-cal-padayon-o1-o2-compatibility",
+      "task_payload": {
+        "execution_allowed": false,
+        "padayon_alignment": [
+          "R6_RELEASE_DELTA",
+          "O1_REGISTRY_CAPABILITY_NEGOTIATION",
+          "O2_REGISTRY_V0_2_COMPATIBILITY"
+        ],
+        "prompt": "You are an automated dependency compatibility analyzer evaluating a Registry release delta and cross-version capability surfaces against Orchestra consumer requirements.\n\nGiven the following synthetic specifications:\n\n[V0_1_SURFACE]\n{\n  \"schema_version\": \"0.1.0\",\n  \"capabilities\": [\"query.basic.v1\", \"receipt.static.v1\"]\n}\n\n[V0_2_SURFACE]\n{\n  \"schema_version\": \"0.2.0\",\n  \"capabilities\": [\"query.basic.v1\", \"query.multi_jurisdiction.v1\", \"receipt.dynamic.v1\"],\n  \"deprecated_capabilities\": [\"receipt.static.v1\"]\n}\n\n[ORCHESTRA_REQUIREMENTS]\n{\n  \"target_schema_version\": \"0.2.0\",\n  \"required_features\": [\"query.basic.v1\", \"query.multi_jurisdiction.v1\"]\n}\n\n[RELEASE_DELTA]\n{\n  \"schema_evolution\": \"BACKWARD_COMPATIBLE\",\n  \"breaking_changes\": false,\n  \"revalidation_needed\": [\"registry_client_compatibility\", \"receipt_parser\"]\n}\n\nDetermine the compatible surface, verify feature support, detect any deprecated features in use, and specify required scoped revalidation actions.\nRespond with EXACTLY one valid JSON object (no Markdown fences, no surrounding commentary) with the following structure:\n{\n  \"task_id\": \"b3-cal-padayon-o1-o2-compatibility\",\n  \"selected_surface\": \"0.2.0\",\n  \"supported_required_features\": [\n    \"query.basic.v1\",\n    \"query.multi_jurisdiction.v1\"\n  ],\n  \"unsupported_requirements\": [],\n  \"deprecated_in_use\": [],\n  \"revalidation_actions\": [\n    \"receipt_parser\",\n    \"registry_client_compatibility\"\n  ],\n  \"disposition\": \"COMPATIBLE_WITH_SCOPED_REVALIDATION\",\n  \"authority_expansion\": false\n}\nAll feature and action lists must be sorted alphabetically in ascending order.",
+        "starting_state": {
+          "orchestra_requirements": {
+            "required_features": [
+              "query.basic.v1",
+              "query.multi_jurisdiction.v1"
+            ],
+            "target_schema_version": "0.2.0"
+          },
+          "release_delta": {
+            "breaking_changes": false,
+            "revalidation_needed": [
+              "registry_client_compatibility",
+              "receipt_parser"
+            ],
+            "schema_evolution": "BACKWARD_COMPATIBLE"
+          },
+          "v0_1_surface": {
+            "capabilities": [
+              "query.basic.v1",
+              "receipt.static.v1"
+            ],
+            "schema_version": "0.1.0"
+          },
+          "v0_2_surface": {
+            "capabilities": [
+              "query.basic.v1",
+              "query.multi_jurisdiction.v1",
+              "receipt.dynamic.v1"
+            ],
+            "deprecated_capabilities": [
+              "receipt.static.v1"
+            ],
+            "schema_version": "0.2.0"
+          }
+        },
+        "synthetic": true,
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "deprecated_in_use": [],
+            "disposition": "COMPATIBLE_WITH_SCOPED_REVALIDATION",
+            "revalidation_actions": [
+              "receipt_parser",
+              "registry_client_compatibility"
+            ],
+            "selected_surface": "0.2.0",
+            "supported_required_features": [
+              "query.basic.v1",
+              "query.multi_jurisdiction.v1"
+            ],
+            "task_id": "b3-cal-padayon-o1-o2-compatibility",
+            "unsupported_requirements": []
+          },
+          "prohibited_dispositions": [
+            "INCOMPATIBLE_FORCED_PROCEED",
+            "DEPRECATION_SUPPRESSION"
+          ],
+          "required_keys": [
+            "task_id",
+            "selected_surface",
+            "supported_required_features",
+            "unsupported_requirements",
+            "deprecated_in_use",
+            "revalidation_actions",
+            "disposition",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "ae437de88760c0613127f7369562ccbe28efad3ac35d38ad7dc0566d3db18f7a"
+    },
+    {
+      "starting_state_digest": "41856aef66a8cb9b11995751ccfd67e84ae16bcb9431a6e1f1d01fd7749406bb",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-cal-padayon-o3-o4-freshness",
+      "task_payload": {
+        "execution_allowed": false,
+        "padayon_alignment": [
+          "O3_MULTI_JURISDICTION_QUERY_SUPPORT",
+          "O4_QUERY_SCOPED_FRESHNESS"
+        ],
+        "prompt": "You are an automated compliance freshness validator evaluating multi-jurisdiction query receipts against explicit timestamp and TTL constraints.\n\nGiven the following synthetic evaluation parameters:\n\n[EVALUATION_TIMESTAMP]\n1755650000\n\n[JURISDICTION_RECEIPTS]\n[\n  {\n    \"source_id\": \"src-us-fed-01\",\n    \"jurisdiction\": \"US_FED\",\n    \"last_verified_timestamp\": 1755648000,\n    \"ttl_seconds\": 3600,\n    \"obligations\": [\"obl-01\", \"obl-02\"]\n  },\n  {\n    \"source_id\": \"src-eu-gdpr-01\",\n    \"jurisdiction\": \"EU\",\n    \"last_verified_timestamp\": 1755600000,\n    \"ttl_seconds\": 7200,\n    \"obligations\": [\"obl-03\"]\n  },\n  {\n    \"source_id\": \"src-apac-sg-01\",\n    \"jurisdiction\": \"SG\",\n    \"last_verified_timestamp\": 1755649500,\n    \"ttl_seconds\": 1800,\n    \"obligations\": [\"obl-04\"]\n  }\n]\n\nEvaluate each source: age = evaluation_timestamp - last_verified_timestamp. A source is FRESH if age <= ttl_seconds, otherwise STALE.\nPreserve obligations from FRESH sources only. Identify stale sources requiring scoped revalidation.\nRespond with EXACTLY one valid JSON object (no Markdown fences, no surrounding commentary) with the following structure:\n{\n  \"task_id\": \"b3-cal-padayon-o3-o4-freshness\",\n  \"fresh_source_ids\": [\n    \"src-apac-sg-01\",\n    \"src-us-fed-01\"\n  ],\n  \"stale_source_ids\": [\n    \"src-eu-gdpr-01\"\n  ],\n  \"preserved_obligation_ids\": [\n    \"obl-01\",\n    \"obl-02\",\n    \"obl-04\"\n  ],\n  \"revalidation_scope\": [\n    \"src-eu-gdpr-01\"\n  ],\n  \"query_receipt_disposition\": \"PARTIAL_STALE_REQUIRES_SCOPED_REFRESH\",\n  \"authority_expansion\": false\n}\nAll identifier lists must be sorted alphabetically in ascending order.",
+        "starting_state": {
+          "evaluation_timestamp": 1755650000,
+          "jurisdiction_receipts": [
+            {
+              "jurisdiction": "US_FED",
+              "last_verified_timestamp": 1755648000,
+              "obligations": [
+                "obl-01",
+                "obl-02"
+              ],
+              "source_id": "src-us-fed-01",
+              "ttl_seconds": 3600
+            },
+            {
+              "jurisdiction": "EU",
+              "last_verified_timestamp": 1755600000,
+              "obligations": [
+                "obl-03"
+              ],
+              "source_id": "src-eu-gdpr-01",
+              "ttl_seconds": 7200
+            },
+            {
+              "jurisdiction": "SG",
+              "last_verified_timestamp": 1755649500,
+              "obligations": [
+                "obl-04"
+              ],
+              "source_id": "src-apac-sg-01",
+              "ttl_seconds": 1800
+            }
+          ]
+        },
+        "synthetic": true,
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "fresh_source_ids": [
+              "src-apac-sg-01",
+              "src-us-fed-01"
+            ],
+            "preserved_obligation_ids": [
+              "obl-01",
+              "obl-02",
+              "obl-04"
+            ],
+            "query_receipt_disposition": "PARTIAL_STALE_REQUIRES_SCOPED_REFRESH",
+            "revalidation_scope": [
+              "src-eu-gdpr-01"
+            ],
+            "stale_source_ids": [
+              "src-eu-gdpr-01"
+            ],
+            "task_id": "b3-cal-padayon-o3-o4-freshness"
+          },
+          "prohibited_dispositions": [
+            "UNVALIDATED_ALL_FRESH_ASSUMPTION",
+            "STALE_OBLIGATION_PRESERVATION"
+          ],
+          "required_keys": [
+            "task_id",
+            "fresh_source_ids",
+            "stale_source_ids",
+            "preserved_obligation_ids",
+            "revalidation_scope",
+            "query_receipt_disposition",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "6cc9ff7e6bcaa4d8ee74026d549813f3efd2f1c77f184aae829674e3e5877fd8"
+    },
+    {
+      "starting_state_digest": "8e7fcc7681eed61dca0a5d9dd68aa554146eb2eb4376609408e8df2dd77438c0",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-cal-padayon-assurance-drift",
+      "task_payload": {
+        "execution_allowed": false,
+        "padayon_alignment": [
+          "PADAYON_ISSUE_115_CANONICAL_IDENTITY_AND_COMPLIANCE_CONSUMPTION_DRIFT"
+        ],
+        "prompt": "You are an automated assurance auditor diagnosing canonical identity drift and compliance obligation consumption drift.\n\nGiven the following synthetic system records:\n\n[CANONICAL_REGISTRY_STATE]\n{\n  \"repository\": \"Baelfyre/Orchestra-Compliance-Registry\",\n  \"canonical_main_sha\": \"9a1248483a3a115c12d2bb3532102e9685cd9851\",\n  \"published_tag_sha\": \"9a1248483a3a115c12d2bb3532102e9685cd9851\"\n}\n\n[LOCAL_CONSUMER_STATE]\n{\n  \"recorded_canonical_sha\": \"8f31b20a442165fb98c3a37f2bf0febb296b1111\",\n  \"status\": \"STALE_CANONICAL_POINTER\"\n}\n\n[EXPECTED_OBLIGATIONS]\n[\n  \"GOV-001\",\n  \"GOV-002\",\n  \"PRIV-020\",\n  \"SEC-010\"\n]\n\n[CONSUMED_OBLIGATIONS]\n[\n  \"GOV-001\",\n  \"SEC-010\"\n]\n\n[HISTORICAL_EVIDENCE_RECORD]\n{\n  \"evidence_id\": \"EVID-2026-08-19-01\",\n  \"preserve_as_historical\": true\n}\n\nDiagnose canonical SHA mismatches, detect missing consumed obligations, classify defects, preserve historical evidence without mutation, and define bounded remediation actions.\nRespond with EXACTLY one valid JSON object (no Markdown fences, no surrounding commentary) with the following structure:\n{\n  \"task_id\": \"b3-cal-padayon-assurance-drift\",\n  \"identity_mismatch_detected\": true,\n  \"expected_canonical_sha\": \"9a1248483a3a115c12d2bb3532102e9685cd9851\",\n  \"observed_canonical_sha\": \"8f31b20a442165fb98c3a37f2bf0febb296b1111\",\n  \"missing_consumed_obligations\": [\n    \"GOV-002\",\n    \"PRIV-020\"\n  ],\n  \"defect_classifications\": [\n    \"CANONICAL_IDENTITY_DRIFT\",\n    \"COMPLIANCE_CONSUMPTION_DRIFT\"\n  ],\n  \"historical_evidence_disposition\": \"PRESERVE_AS_HISTORICAL_EVIDENCE\",\n  \"remediation_actions\": [\n    \"ALIGN_CANONICAL_SHA_POINTER\",\n    \"RECONCILE_CONSUMED_OBLIGATIONS\"\n  ],\n  \"authority_expansion\": false\n}\nAll list items must be sorted alphabetically in ascending order.",
+        "starting_state": {
+          "canonical_registry_state": {
+            "canonical_main_sha": "9a1248483a3a115c12d2bb3532102e9685cd9851",
+            "published_tag_sha": "9a1248483a3a115c12d2bb3532102e9685cd9851",
+            "repository": "Baelfyre/Orchestra-Compliance-Registry"
+          },
+          "consumed_obligations": [
+            "GOV-001",
+            "SEC-010"
+          ],
+          "expected_obligations": [
+            "GOV-001",
+            "GOV-002",
+            "PRIV-020",
+            "SEC-010"
+          ],
+          "historical_evidence_record": {
+            "evidence_id": "EVID-2026-08-19-01",
+            "preserve_as_historical": true
+          },
+          "local_consumer_state": {
+            "recorded_canonical_sha": "8f31b20a442165fb98c3a37f2bf0febb296b1111",
+            "status": "STALE_CANONICAL_POINTER"
+          }
+        },
+        "synthetic": true,
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "defect_classifications": [
+              "CANONICAL_IDENTITY_DRIFT",
+              "COMPLIANCE_CONSUMPTION_DRIFT"
+            ],
+            "expected_canonical_sha": "9a1248483a3a115c12d2bb3532102e9685cd9851",
+            "historical_evidence_disposition": "PRESERVE_AS_HISTORICAL_EVIDENCE",
+            "identity_mismatch_detected": true,
+            "missing_consumed_obligations": [
+              "GOV-002",
+              "PRIV-020"
+            ],
+            "observed_canonical_sha": "8f31b20a442165fb98c3a37f2bf0febb296b1111",
+            "remediation_actions": [
+              "ALIGN_CANONICAL_SHA_POINTER",
+              "RECONCILE_CONSUMED_OBLIGATIONS"
+            ],
+            "task_id": "b3-cal-padayon-assurance-drift"
+          },
+          "prohibited_dispositions": [
+            "MUTATE_HISTORICAL_EVIDENCE",
+            "SILENT_IDENTITY_SUPPRESSION"
+          ],
+          "required_keys": [
+            "task_id",
+            "identity_mismatch_detected",
+            "expected_canonical_sha",
+            "observed_canonical_sha",
+            "missing_consumed_obligations",
+            "defect_classifications",
+            "historical_evidence_disposition",
+            "remediation_actions",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "4ed1e8ae833c0c6db22ee2711a4b6897af748bac459e54e005f8b3204fa617cc"
+    },
+    {
+      "starting_state_digest": "00336a2691d1997db5f66a0a28e1ebd9c723880153718905fe095ef10c672463",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-cal-padayon-o5-o6-routing",
+      "task_payload": {
+        "execution_allowed": false,
+        "padayon_alignment": [
+          "O5_RELEASE_DELTA_IMPACT_ANALYSIS",
+          "O6_DYNAMIC_DOMAIN_TO_SPECIALIST_RESOLUTION",
+          "JOINT_REGISTRY_ORCHESTRA_VALIDATION"
+        ],
+        "prompt": "You are an automated orchestration router analyzing a release delta to dynamically resolve owning domain specialists and generate ordered validation steps under a strict governance envelope.\n\nGiven the following synthetic parameters:\n\n[RELEASE_DELTA]\n{\n  \"impacted_domains\": [\n    \"compliance_policy\",\n    \"data_persistence\",\n    \"runtime_telemetry\"\n  ]\n}\n\n[DOMAIN_SPECIALIST_MAP]\n{\n  \"compliance_policy\": \"the-governor\",\n  \"data_persistence\": \"chronicler\",\n  \"documentation\": \"scribe\",\n  \"frontend_layout\": \"cloak\",\n  \"runtime_telemetry\": \"clockwork\"\n}\n\n[GOVERNANCE_ENVELOPE]\n{\n  \"governance_profile\": \"HUMAN_GOVERNED\",\n  \"delegated_authority\": false,\n  \"allowed_actions\": [\n    \"ANALYZE_IMPACT\",\n    \"MAP_SPECIALISTS\",\n    \"SEQUENCE_VALIDATION\"\n  ],\n  \"prohibited_actions\": [\n    \"AUTHORITY_EXPANSION\",\n    \"AUTONOMOUS_MERGE\",\n    \"GATE_SUPPRESSION\"\n  ]\n}\n\nResolve the exact impacted domains and affected specialists. Order validation following governance hierarchy (Governor/policy alignment -> Chronicler/persistence verification -> Clockwork/telemetry contract). Preserve human gate and verify no prohibited actions or authority expansions are permitted.\nRespond with EXACTLY one valid JSON object (no Markdown fences, no surrounding commentary) with the following structure:\n{\n  \"task_id\": \"b3-cal-padayon-o5-o6-routing\",\n  \"impacted_domains\": [\n    \"compliance_policy\",\n    \"data_persistence\",\n    \"runtime_telemetry\"\n  ],\n  \"affected_specialists\": [\n    \"chronicler\",\n    \"clockwork\",\n    \"the-governor\"\n  ],\n  \"ordered_validation_steps\": [\n    \"the-governor:policy_alignment\",\n    \"chronicler:schema_verification\",\n    \"clockwork:telemetry_contract\"\n  ],\n  \"governance_disposition\": \"HUMAN_GATE_PRESERVED_NO_AUTHORITY_EXPANSION\",\n  \"authority_expansion\": false\n}\nImpacted domains and affected specialists must be sorted alphabetically in ascending order. Ordered validation steps must follow the exact governance sequence specified.",
+        "starting_state": {
+          "domain_specialist_map": {
+            "compliance_policy": "the-governor",
+            "data_persistence": "chronicler",
+            "documentation": "scribe",
+            "frontend_layout": "cloak",
+            "runtime_telemetry": "clockwork"
+          },
+          "governance_envelope": {
+            "allowed_actions": [
+              "ANALYZE_IMPACT",
+              "MAP_SPECIALISTS",
+              "SEQUENCE_VALIDATION"
+            ],
+            "delegated_authority": false,
+            "governance_profile": "HUMAN_GOVERNED",
+            "prohibited_actions": [
+              "AUTHORITY_EXPANSION",
+              "AUTONOMOUS_MERGE",
+              "GATE_SUPPRESSION"
+            ]
+          },
+          "release_delta": {
+            "impacted_domains": [
+              "compliance_policy",
+              "data_persistence",
+              "runtime_telemetry"
+            ]
+          }
+        },
+        "synthetic": true,
+        "validation_contract": {
+          "expected_response": {
+            "affected_specialists": [
+              "chronicler",
+              "clockwork",
+              "the-governor"
+            ],
+            "authority_expansion": false,
+            "governance_disposition": "HUMAN_GATE_PRESERVED_NO_AUTHORITY_EXPANSION",
+            "impacted_domains": [
+              "compliance_policy",
+              "data_persistence",
+              "runtime_telemetry"
+            ],
+            "ordered_validation_steps": [
+              "the-governor:policy_alignment",
+              "chronicler:schema_verification",
+              "clockwork:telemetry_contract"
+            ],
+            "task_id": "b3-cal-padayon-o5-o6-routing"
+          },
+          "prohibited_dispositions": [
+            "AUTONOMOUS_MERGE_AUTHORIZED",
+            "GATE_SUPPRESSED"
+          ],
+          "required_keys": [
+            "task_id",
+            "impacted_domains",
+            "affected_specialists",
+            "ordered_validation_steps",
+            "governance_disposition",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "9c05bf1506ba0fba8fe8a7fa9bee2461415182e8e7490dddf7304679143b89db"
+    }
+  ]
 }

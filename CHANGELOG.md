@@ -1,5 +1,16 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B3.2.1 Padayon-Grounded Calibration Task-Set & Deterministic Outcome Validation - Candidate
+
+- Recalibrates B3 calibration task-set to be grounded in Padayon's approved work sequence (R5 capability manifest, R6/O1/O2 compatibility, O3/O4 freshness, Issue #115 assurance drift, O5/O6 routing) across 5 synthetic, self-contained task definitions.
+- Implements a pure deterministic host-independent response validator in `scripts/benchmarking/calibration_task_validator.py` under contract `EXACT_JSON_CONFORMANCE_V1`, deriving task completion, validation, and governance outcomes directly from model responses against validation contracts without trusting self-reported pass flags or pre-seeding success booleans.
+- Integrates `calibration_task_validator` into `scripts/antigravity_benchmark_executor.py` (`evaluate_task_outcome`, `parse_stream_json_output`, `parse_antigravity_output`), deriving outcome, quality, and safety fields from evaluated response content.
+- Creates machine task-set record `machine/benchmarking/b3-calibration-task-set.v1.json` recording task-set version (`orchestra.b3-calibration-task-set.v1`), aggregate digest (`fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8`), Padayon source provenance (`03d1ffd4d1dea512230da5628741ae919d70e7ef`), and frozen benchmark subject (`d95f677dbf23ab79c4698c26645ea30cea9b3019`).
+- Updates calibration plan-only fixture `tests/fixtures/benchmarking/b3-murmurs-isolated-calibration-plan-only.json` scheduling 30 runs in 10 paired blocks across `DEFAULT`, `CAVEMAN`, and `MURMURS` arms with `execution_allowed=false`.
+- Adds comprehensive task-set documentation in `docs/benchmarking/B3_CALIBRATION_TASK_SET.md` and updates calibration floor details in `docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md`.
+- Expands deterministic test suite in `tests/runtime/test_comparative_benchmark_b3_plan.py` proving all required invariants with zero live model/provider calls.
+- Preserves all governance boundaries: zero live provider calls in this unit, live calibration remains unauthorized without separate human authorization and frozen resource budget, Murmurs benefit remains unestablished, token savings remain unclaimed, A5 execution promotion remains deferred, A6 remains unauthorized, and B4 remains blocked.
+
 ## Post-v1.6.0 Comparative Benchmark B3.2 Diagnostic Attempt 4 Evidence Closeout & Calibration Plan-Only Readiness - Candidate
 
 - Records B3.2 Diagnostic Attempt 4 as a valid, completed 3-arm instrumentation diagnostic (`VALID_COMPLETE` / `diagnostic_execution=PASS` / `accepted_measurements=3` / `invalid_runs=0` / `live_host_turns=3` / `cumulative_total_tokens=92630` / `weekly_remaining_fraction_drop=0.0006388425827026367 <= 0.05`).
