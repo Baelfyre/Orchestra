@@ -973,7 +973,7 @@ def build_invalid_result(
 def evaluate_task_outcome(
     antigravity_output: dict[str, Any],
     task_payload: dict[str, Any],
-) -> tuple[dict[str, Any], dict[str, Any]]:
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, bool]]:
     """Determine benchmark task outcome independently from host execution status.
 
     Quality Boundary:
@@ -986,6 +986,21 @@ def evaluate_task_outcome(
     - validation_passed
     - governance_valid
     """
+    safety = {field: False for field in SAFETY_FIELDS}
+
+    val_contract = task_payload.get("validation_contract")
+    if isinstance(val_contract, dict) and val_contract.get("validator_type") == "EXACT_JSON_CONFORMANCE_V1":
+        from scripts.benchmarking.calibration_task_validator import validate_calibration_task_response
+
+        raw_resp = (
+            antigravity_output.get("response")
+            if "response" in antigravity_output
+            else antigravity_output.get("content")
+        )
+        if raw_resp is None and "task_id" in antigravity_output:
+            raw_resp = antigravity_output
+        return validate_calibration_task_response(raw_resp, val_contract)
+
     raw_completed = (
         antigravity_output.get("task_completed")
         if "task_completed" in antigravity_output
@@ -1025,7 +1040,7 @@ def evaluate_task_outcome(
         "regressions_introduced": int(quality_source.get("regressions_introduced", 0)),
     }
 
-    return outcome, quality
+    return outcome, quality, safety
 
 
 def normalize_stream_terminal_event(
@@ -1323,7 +1338,7 @@ def parse_stream_json_output(
             expected_cli_version=target_expected_version,
         )
 
-    outcome, quality = evaluate_task_outcome(normalized_payload, task_payload)
+    outcome, quality, derived_safety = evaluate_task_outcome(normalized_payload, task_payload)
 
     # Process progress events according to presentation mode
     pres_mode = binding.get("presentation_mode", "NORMAL") if binding else "NORMAL"
@@ -1444,6 +1459,8 @@ def parse_stream_json_output(
     }
 
     safety = {field: False for field in SAFETY_FIELDS}
+    if derived_safety:
+        safety.update(derived_safety)
 
     effective_credit_policy = credit_policy
     if effective_credit_policy is None:
@@ -1750,7 +1767,7 @@ def parse_antigravity_output(
             expected_cli_version=target_expected_version,
         )
 
-    outcome, quality = evaluate_task_outcome(envelope, task_payload)
+    outcome, quality, derived_safety = evaluate_task_outcome(envelope, task_payload)
 
     latency_source = envelope.get("latency") or {}
     latency = {
@@ -1794,6 +1811,8 @@ def parse_antigravity_output(
     }
 
     safety = {field: False for field in SAFETY_FIELDS}
+    if derived_safety:
+        safety.update(derived_safety)
 
     effective_credit_policy = credit_policy
     if effective_credit_policy is None:

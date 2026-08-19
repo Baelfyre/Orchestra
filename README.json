@@ -187,7 +187,7 @@
     },
     "comparative_measurement_b3_1": {
       "status": "DIAGNOSTIC_COMPLETED_CALIBRATION_PLAN_READY_NON_CALIBRATED",
-      "purpose": "Bounded Antigravity measurement executor binding, B3.1.3 exact host version pin externalization, B3.1.4 sparse settings semantic preflight, B3.1.5 stream-json result envelope normalization, B3.1.6 explicit headless workspace binding, B3.2 Diagnostic Attempt 4 valid evidence closeout, and B3 calibration plan-only readiness for the Orchestra comparative benchmark harness with explicit --expected-cli-version and --workspace-dir CLI arguments, verified native CLI --add-dir workspace binding, exact fail-closed version and workspace matching, qualified 1.1.15 host surface, sparse useG1Credits resolution (system default false), wrapped and flat stream result envelope normalization, dual wrapper and payload evidence retention, explicit DEFAULT, CAVEMAN, and MURMURS treatments, pinned Caveman external baseline, canonical Murmurs presentation binding, stream-json transport support, hardened print-mode invocation, fail-closed preflight, explicit provenance semantics, verified Attempt 4 instrumentation diagnostic evidence (3/3 accepted runs), and zero-turn plan-only calibration readiness (30 scheduled runs).",
+      "purpose": "Bounded Antigravity measurement executor binding, B3.1.3 exact host version pin externalization, B3.1.4 sparse settings semantic preflight, B3.1.5 stream-json result envelope normalization, B3.1.6 explicit headless workspace binding, B3.2 Diagnostic Attempt 4 valid evidence closeout, B3.2.1 Padayon-grounded calibration task-set and deterministic outcome validation, and B3 calibration plan-only readiness for the Orchestra comparative benchmark harness with explicit --expected-cli-version and --workspace-dir CLI arguments, verified native CLI --add-dir workspace binding, exact fail-closed version and workspace matching, qualified 1.1.15 host surface, sparse useG1Credits resolution (system default false), wrapped and flat stream result envelope normalization, dual wrapper and payload evidence retention, explicit DEFAULT, CAVEMAN, and MURMURS treatments, pinned Caveman external baseline, canonical Murmurs presentation binding, stream-json transport support, hardened print-mode invocation, fail-closed preflight, explicit provenance semantics, verified Attempt 4 instrumentation diagnostic evidence (3/3 accepted runs), Padayon-grounded calibration task-set V1 (5 tasks), deterministic EXACT_JSON_CONFORMANCE_V1 outcome validator, and zero-turn plan-only calibration readiness (30 scheduled runs).",
       "program_id": "orchestra.shared-comparative-benchmark.v1",
       "executor": "scripts/antigravity_benchmark_executor.py",
       "communication_arms": ["DEFAULT", "CAVEMAN", "MURMURS"],
@@ -198,8 +198,8 @@
         "skill_path": "skills/caveman/SKILL.md",
         "blob_identity": "bd22d86b32e4a99e09ff7482a35509faac7a6f65"
       },
-      "machine_sources": ["machine/benchmarking/antigravity-executor-binding.v1.json"],
-      "human_sources": ["docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md"],
+      "machine_sources": ["machine/benchmarking/antigravity-executor-binding.v1.json", "machine/benchmarking/b3-calibration-task-set.v1.json"],
+      "human_sources": ["docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md", "docs/benchmarking/B3_CALIBRATION_TASK_SET.md"],
       "canonical_json_counter_id": "antigravity-cli-1.1.15:json-usage:gemini-3.7-flash-high",
       "canonical_stream_json_counter_id": "antigravity-cli-1.1.15:stream-json-usage:gemini-3.7-flash-high",
       "counter_identity_provenance": "ORCHESTRA_ASSIGNED_MEASUREMENT_SURFACE",
@@ -212,7 +212,7 @@
       "a5_execution_promotion": "NOT_AUTHORIZED",
       "a6_authorized": false,
       "b4_state": "BLOCKED",
-      "authority_note": "B3.2 Attempt 4 records valid instrumentation diagnostic closeout and zero-turn calibration plan-only readiness. Measurement maturity remains MEASUREMENT_NOT_STARTED until genuine live calibration is executed under separate human authorization. Live calibration is not executed in this unit, Murmurs benefit is not established, fresh_billable_tokens and cost remain unavailable, personal credit fallback remains disabled, A5 remains shadow-only, and B4 remains blocked."
+      "authority_note": "B3.2 Attempt 4 records valid instrumentation diagnostic closeout and zero-turn calibration plan-only readiness under the Padayon-grounded task-set. Measurement maturity remains MEASUREMENT_NOT_STARTED until genuine live calibration is executed under separate human authorization. Live calibration is not executed in this unit, Murmurs benefit is not established, fresh_billable_tokens and cost remain unavailable, personal credit fallback remains disabled, A5 remains shadow-only, and B4 remains blocked."
     }
   },
   "machine_scan_order": [
@@ -276,6 +276,7 @@
     "comparative_benchmark_executor_request_schema": "machine/schemas/comparative-benchmark-executor-request.schema.json",
     "comparative_benchmark_executor_result_schema": "machine/schemas/comparative-benchmark-executor-result.schema.json",
     "comparative_benchmark_antigravity_executor_binding": "machine/benchmarking/antigravity-executor-binding.v1.json",
+    "comparative_benchmark_calibration_task_set": "machine/benchmarking/b3-calibration-task-set.v1.json",
     "release_evidence_directory": "machine/release-evidence",
     "schemas_directory": "machine/schemas",
     "source_state_receipt_schema": "machine/schemas/source-state-receipt.schema.json",
