@@ -878,6 +878,62 @@ def evaluate_task_outcome(
     return outcome, quality
 
 
+def normalize_stream_terminal_event(
+    event: dict[str, Any],
+) -> tuple[bool, str | None, dict[str, Any] | None]:
+    """Normalize wrapped or flat Antigravity stream terminal event into canonical result payload.
+
+    Supports:
+    - Current AGY 1.1.15 wrapped result:
+      {"event": "result", "result": {"status": "SUCCESS", "usage": {...}, ...}}
+    - Legacy / flat compatibility:
+      {"type": "result", "status": "SUCCESS", "usage": {...}, ...} or {"status": "SUCCESS", "usage": {...}, ...}
+
+    Fails closed if:
+    - event is not a JSON object
+    - result payload is not a JSON object
+    - missing result payload when event=result
+    - conflicting outer wrapper and nested result critical fields (status, usage, cli_version, model)
+    """
+    if not isinstance(event, dict):
+        return False, "terminal stream event is not a JSON object", None
+
+    is_wrapped = (event.get("event") == "result") or ("result" in event)
+
+    if is_wrapped:
+        if "result" not in event:
+            return False, "wrapped terminal event missing result payload", None
+        result_payload = event["result"]
+        if not isinstance(result_payload, dict):
+            return False, "nested result payload is not a JSON object", None
+
+        # Fail closed on conflicting critical fields between outer wrapper and nested payload
+        for field in ("status", "usage", "cli_version", "model"):
+            if field in event and field in result_payload:
+                if event[field] != result_payload[field]:
+                    return False, f"conflicting outer wrapper and nested result critical field: {field}", None
+
+        normalized = copy.deepcopy(result_payload)
+        for field in (
+            "cli_version",
+            "model",
+            "task_completed",
+            "validation_passed",
+            "governance_valid",
+            "latency",
+            "coordination",
+            "useG1Credits",
+        ):
+            if field in event and field not in normalized:
+                normalized[field] = copy.deepcopy(event[field])
+
+        return True, None, normalized
+
+    # Flat event compatibility
+    normalized = copy.deepcopy(event)
+    return True, None, normalized
+
+
 def parse_stream_json_output(
     raw_output: str | list[Any],
     request: dict[str, Any],
@@ -944,54 +1000,139 @@ def parse_stream_json_output(
             expected_cli_version=expected_cli_version,
         )
 
-    # Locate terminal result
-    terminal_envelope: dict[str, Any] | None = None
-    for ev in reversed(events):
-        if "usage" in ev and "status" in ev:
-            terminal_envelope = ev
-            break
-        if ev.get("type") in ("result", "terminal", "completion") and ("usage" in ev or "status" in ev):
-            terminal_envelope = ev
-            break
+    # Discover candidate terminal events
+    candidate_terminal_events: list[dict[str, Any]] = []
+    for ev in events:
+        if ev.get("event") == "result":
+            candidate_terminal_events.append(ev)
+        elif ev.get("type") in ("result", "terminal", "completion"):
+            candidate_terminal_events.append(ev)
+        elif (
+            "usage" in ev
+            and "status" in ev
+            and ev.get("event") not in ("step_update", "init", "tool_start", "tool_complete", "heartbeat")
+            and ev.get("type") not in ("step_update", "model_call")
+        ):
+            candidate_terminal_events.append(ev)
+        elif (
+            "result" in ev
+            and ev.get("event") not in ("step_update", "init", "tool_start", "tool_complete", "heartbeat")
+            and ev.get("type") not in ("step_update", "model_call")
+        ):
+            candidate_terminal_events.append(ev)
 
-    if terminal_envelope is None:
-        terminal_envelope = events[-1]
-
-    status = terminal_envelope.get("status")
-    if not isinstance(status, str) or not status.strip() or status.upper() != "SUCCESS":
+    if not candidate_terminal_events:
         return build_invalid_result(
             request,
             "MEASUREMENT_CAPTURE_FAILURE",
-            {"error": f"terminal stream status is not SUCCESS: {status}", "terminal_envelope": terminal_envelope},
+            {"error": "no terminal result event found in stream"},
             elapsed_ms,
             expected_cli_version=expected_cli_version,
         )
 
-    usage = terminal_envelope.get("usage")
+    # If multiple candidate terminal events exist, check for conflicts
+    if len(candidate_terminal_events) > 1:
+        normalized_candidates: list[dict[str, Any]] = []
+        for cand in candidate_terminal_events:
+            ok, err_msg, cand_norm = normalize_stream_terminal_event(cand)
+            if not ok or cand_norm is None:
+                return build_invalid_result(
+                    request,
+                    "MEASUREMENT_CAPTURE_FAILURE",
+                    {"error": f"invalid terminal event among candidates: {err_msg}", "candidate": cand},
+                    elapsed_ms,
+                    expected_cli_version=expected_cli_version,
+                )
+            normalized_candidates.append(cand_norm)
+
+        # Check if candidate payloads conflict on critical measurement fields
+        first_cand = normalized_candidates[0]
+        for other_cand in normalized_candidates[1:]:
+            for field in ("status", "usage", "cli_version", "model", "response"):
+                if first_cand.get(field) != other_cand.get(field):
+                    return build_invalid_result(
+                        request,
+                        "MEASUREMENT_CAPTURE_FAILURE",
+                        {
+                            "error": f"multiple conflicting terminal results in event stream for field: {field}",
+                            "candidate_count": len(candidate_terminal_events),
+                        },
+                        elapsed_ms,
+                        expected_cli_version=expected_cli_version,
+                    )
+
+    terminal_envelope = candidate_terminal_events[-1]
+    is_valid_terminal, norm_error, normalized_payload = normalize_stream_terminal_event(terminal_envelope)
+    if not is_valid_terminal or normalized_payload is None:
+        return build_invalid_result(
+            request,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {
+                "error": norm_error or "failed to normalize terminal stream event",
+                "terminal_envelope": terminal_envelope,
+            },
+            elapsed_ms,
+            expected_cli_version=expected_cli_version,
+        )
+
+    status = normalized_payload.get("status")
+    if not isinstance(status, str) or not status.strip() or status.upper() != "SUCCESS":
+        return build_invalid_result(
+            request,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {
+                "error": f"terminal stream status is not SUCCESS: {status}",
+                "terminal_envelope": terminal_envelope,
+                "terminal_result_payload": normalized_payload,
+            },
+            elapsed_ms,
+            expected_cli_version=expected_cli_version,
+        )
+
+    usage = normalized_payload.get("usage")
     if not isinstance(usage, dict):
         return build_invalid_result(
             request,
             "MEASUREMENT_CAPTURE_FAILURE",
-            {"error": "usage object missing from terminal event", "terminal_envelope": terminal_envelope},
+            {
+                "error": "usage object missing from terminal event",
+                "terminal_envelope": terminal_envelope,
+                "terminal_result_payload": normalized_payload,
+            },
             elapsed_ms,
             expected_cli_version=expected_cli_version,
         )
 
     target_expected_version = expected_cli_version or QUALIFIED_CLI_VERSION
+    host_cli_version = normalized_payload.get("cli_version") or terminal_envelope.get("cli_version")
     effective_cli_version = (
         validated_cli_version
-        or terminal_envelope.get("cli_version")
+        or host_cli_version
         or target_expected_version
     )
 
-    if "cli_version" in terminal_envelope and terminal_envelope["cli_version"] != target_expected_version:
+    if host_cli_version is not None and host_cli_version != target_expected_version:
         return build_invalid_result(
             request,
             "MEASUREMENT_CAPTURE_FAILURE",
             {
                 "error": "terminal stream cli_version mismatch",
-                "host_cli_version": terminal_envelope["cli_version"],
+                "host_cli_version": host_cli_version,
                 "expected_cli_version": target_expected_version,
+            },
+            elapsed_ms,
+            expected_cli_version=target_expected_version,
+        )
+
+    host_model = normalized_payload.get("model") or terminal_envelope.get("model")
+    if host_model is not None and host_model != PINNED_MODEL:
+        return build_invalid_result(
+            request,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {
+                "error": "terminal stream model mismatch",
+                "host_model": host_model,
+                "expected_model": PINNED_MODEL,
             },
             elapsed_ms,
             expected_cli_version=target_expected_version,
@@ -1031,7 +1172,7 @@ def parse_stream_json_output(
             expected_cli_version=target_expected_version,
         )
 
-    outcome, quality = evaluate_task_outcome(terminal_envelope, task_payload)
+    outcome, quality = evaluate_task_outcome(normalized_payload, task_payload)
 
     # Process progress events according to presentation mode
     pres_mode = binding.get("presentation_mode", "NORMAL") if binding else "NORMAL"
@@ -1039,7 +1180,14 @@ def parse_stream_json_output(
     model_progress_calls = 0
     user_visible_bytes = 0
 
-    intermediate_events = [ev for ev in events if ev is not terminal_envelope]
+    intermediate_events = [
+        ev
+        for ev in events
+        if ev is not terminal_envelope
+        and ev not in candidate_terminal_events
+        and ev.get("event") != "result"
+        and ev.get("type") not in ("result", "terminal", "completion")
+    ]
 
     if pres_mode == "MURMURS":
         root = presentation_root or repository_root()
@@ -1052,7 +1200,7 @@ def parse_stream_json_output(
             decide_presentation,
         )
         for seq_idx, ev in enumerate(intermediate_events, start=1):
-            raw_kind = ev.get("event_kind") or ev.get("kind") or ev.get("type")
+            raw_kind = ev.get("event_kind") or ev.get("kind") or ev.get("type") or ev.get("event")
             if raw_kind == "tool_start" or raw_kind == "TOOL_STARTED":
                 event_kind = PresentationEventKind.TOOL_STARTED
             elif raw_kind == "tool_complete" or raw_kind == "TOOL_COMPLETED":
@@ -1080,19 +1228,25 @@ def parse_stream_json_output(
                 user_visible_bytes += len(content.encode("utf-8"))
             elif decision.disposition.value == "SILENT":
                 pass
-            if ev.get("type") in ("step_update", "model_call") or "content" in ev:
+            if ev.get("type") in ("step_update", "model_call") or ev.get("event") in ("step_update", "model_call") or "content" in ev:
                 model_progress_calls += 1
     else:
         # NORMAL mode (DEFAULT and CAVEMAN)
         for ev in intermediate_events:
             progress_messages += 1
-            if ev.get("type") in ("step_update", "model_call") or "content" in ev:
+            if ev.get("type") in ("step_update", "model_call") or ev.get("event") in ("step_update", "model_call") or "content" in ev:
                 model_progress_calls += 1
             content = str(ev.get("content", ev.get("response", ev.get("message", ""))))
             user_visible_bytes += len(content.encode("utf-8"))
 
     # Add terminal response user_visible_bytes (terminal is always EXPLAIN)
-    terminal_resp = terminal_envelope.get("response") or terminal_envelope.get("content") or ""
+    terminal_resp = (
+        normalized_payload.get("response")
+        or normalized_payload.get("content")
+        or terminal_envelope.get("response")
+        or terminal_envelope.get("content")
+        or ""
+    )
     if isinstance(terminal_resp, str):
         user_visible_bytes += len(terminal_resp.encode("utf-8"))
     else:
@@ -1102,20 +1256,31 @@ def parse_stream_json_output(
         "progress_messages": progress_messages,
         "model_progress_calls": model_progress_calls,
         "user_visible_bytes": user_visible_bytes,
-        "context_transfer_bytes": int(terminal_envelope.get("context_transfer_bytes", 0)),
+        "context_transfer_bytes": int(
+            normalized_payload.get("context_transfer_bytes", terminal_envelope.get("context_transfer_bytes", 0))
+        ),
         "semantic_preservation_failures": 0,
         "required_information_omissions": 0,
     }
 
-    latency_source = terminal_envelope.get("latency") or {}
+    latency_source = normalized_payload.get("latency") or terminal_envelope.get("latency") or {}
+    wall_clock_ms = latency_source.get("wall_clock_ms")
+    if wall_clock_ms is None:
+        if elapsed_ms is not None:
+            wall_clock_ms = int(elapsed_ms)
+        elif "duration_seconds" in normalized_payload and isinstance(normalized_payload["duration_seconds"], (int, float)):
+            wall_clock_ms = int(normalized_payload["duration_seconds"] * 1000)
+        else:
+            wall_clock_ms = 0
+
     latency = {
-        "wall_clock_ms": int(latency_source.get("wall_clock_ms", elapsed_ms if elapsed_ms is not None else 0)),
+        "wall_clock_ms": wall_clock_ms,
         "model_execution_ms": latency_source.get("model_execution_ms"),
         "tool_execution_ms": latency_source.get("tool_execution_ms"),
         "coordination_overhead_ms": latency_source.get("coordination_overhead_ms"),
     }
 
-    coord_source = terminal_envelope.get("coordination") or {}
+    coord_source = normalized_payload.get("coordination") or terminal_envelope.get("coordination") or {}
     coordination = {
         "specialist_messages": int(coord_source.get("specialist_messages", 0)),
         "cross_specialist_messages": int(coord_source.get("cross_specialist_messages", 0)),
@@ -1131,7 +1296,9 @@ def parse_stream_json_output(
 
     effective_credit_policy = credit_policy
     if effective_credit_policy is None:
-        _, _, effective_credit_policy = resolve_use_g1_credits(terminal_envelope)
+        _, _, effective_credit_policy = resolve_use_g1_credits(
+            normalized_payload if "useG1Credits" in normalized_payload else terminal_envelope
+        )
 
     effective_binding = binding or {}
     raw_evidence = {
@@ -1171,6 +1338,8 @@ def parse_stream_json_output(
         "effective_prompt_or_policy_digest": effective_binding.get("effective_prompt_or_policy_digest", ""),
         "topology_candidate_id": request.get("arm", {}).get("topology_candidate_id"),
         "topology_digest": request.get("arm", {}).get("topology_digest"),
+        "terminal_event_envelope": copy.deepcopy(terminal_envelope),
+        "terminal_result_payload": copy.deepcopy(normalized_payload),
         "outer_envelope": copy.deepcopy(terminal_envelope),
         "stream_events": copy.deepcopy(events),
         "total_tokens": usage.get("total_tokens"),
@@ -1237,6 +1406,19 @@ def parse_antigravity_output(
 
     # Detect stream-json list
     if isinstance(raw_output, list):
+        return parse_stream_json_output(
+            raw_output,
+            request,
+            elapsed_ms=elapsed_ms,
+            expected_cli_version=expected_cli_version,
+            validated_cli_version=validated_cli_version,
+            binding=binding,
+            presentation_root=presentation_root,
+            credit_policy=credit_policy,
+        )
+
+    # Detect stream-json transport
+    if transport in ("stream-json", "stream-json-usage", PINNED_TRANSPORT_STREAM) and isinstance(raw_output, str):
         return parse_stream_json_output(
             raw_output,
             request,
