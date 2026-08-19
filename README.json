@@ -184,6 +184,24 @@
       "a5_execution_effective_promotion": false,
       "a6_authorized": false,
       "authority_note": "B1 is evidence infrastructure only. It executes configured non-production benchmark arms, cannot let A5 select or suppress arms, does not establish A5 or Murmurs benefit, and grants no production runtime or promotion authority."
+    },
+    "comparative_measurement_b3_1": {
+      "status": "IMPLEMENTED_NON_CALIBRATED",
+      "purpose": "Bounded Antigravity measurement executor binding for the Orchestra comparative benchmark harness, supporting structured token usage mapping and deterministic counter identity provenance.",
+      "program_id": "orchestra.shared-comparative-benchmark.v1",
+      "executor": "scripts/antigravity_benchmark_executor.py",
+      "machine_sources": ["machine/benchmarking/antigravity-executor-binding.v1.json"],
+      "human_sources": ["docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md"],
+      "counter_identity": "antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high",
+      "counter_identity_provenance": "ORCHESTRA_ASSIGNED_MEASUREMENT_SURFACE",
+      "measurement_maturity": "MEASUREMENT_NOT_STARTED",
+      "calibration_executed": false,
+      "murmurs_benefit": "NOT_ESTABLISHED",
+      "a5_benefit": "NOT_ESTABLISHED",
+      "a5_execution_promotion": "NOT_AUTHORIZED",
+      "a6_authorized": false,
+      "b4_state": "BLOCKED",
+      "authority_note": "B3.1 provides the bounded Antigravity measurement executor binding only. Calibration is not executed in this unit, Murmurs benefit is not established, fresh_billable_tokens and cost remain unavailable, A5 remains shadow-only, and B4 remains blocked."
     }
   },
   "machine_scan_order": [
@@ -246,6 +264,7 @@
     "comparative_benchmark_manifest_schema": "machine/schemas/comparative-benchmark-manifest.schema.json",
     "comparative_benchmark_executor_request_schema": "machine/schemas/comparative-benchmark-executor-request.schema.json",
     "comparative_benchmark_executor_result_schema": "machine/schemas/comparative-benchmark-executor-result.schema.json",
+    "comparative_benchmark_antigravity_executor_binding": "machine/benchmarking/antigravity-executor-binding.v1.json",
     "release_evidence_directory": "machine/release-evidence",
     "schemas_directory": "machine/schemas",
     "source_state_receipt_schema": "machine/schemas/source-state-receipt.schema.json",
