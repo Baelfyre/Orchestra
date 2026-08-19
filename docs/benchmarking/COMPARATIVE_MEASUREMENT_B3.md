@@ -1,36 +1,124 @@
-# Comparative Measurement B3 - Murmurs Isolated Calibration Readiness
+# Comparative Measurement B3 - Murmurs Isolated Comparative Experiment
 
 ## Status
 
 ```text
 Program: Orchestra Shared Comparative Benchmark
 Phase: B3 Murmurs Isolated Comparative Experiment
-Current bounded unit: B3.0 Calibration Readiness
-State: PLAN_ONLY_READY_NO_MEASUREMENT
-Canonical entry: 6ec1a549370eaf73249eb3ddcffe5e464c5eb4ae
-Canonical entry tree: 1b9f835889ae4c81e97a48df5f4fd0b2ada1ddf9
-Authoritative benchmark machine state: B0/B1 only
-Measurement maturity after plan-only validation: MEASUREMENT_NOT_STARTED
+Current bounded unit: B3.1 Antigravity Measurement Executor Binding
+State: B3_1_ANTIGRAVITY_EXECUTOR_BINDING_IMPLEMENTED
+Canonical entry: 06ede6bde3aa7682194950ba9130ba52e4fb0ea5
+Canonical entry tree: baf159c27e4149ff2453f20f92245b4d963b4f19
+Authoritative benchmark machine state: B0/B1/B3.1 executor binding
+Measurement maturity after unit implementation: MEASUREMENT_NOT_STARTED
 Murmurs benefit: NOT ESTABLISHED
 A5 execution-effective selection: NOT AUTHORIZED
 A6: NOT AUTHORIZED
 Paid provider calls: NOT AUTHORIZED BY THIS UNIT
 ```
 
-B3.0 validates the Murmurs-isolated calibration schedule without running a model or provider. It proves that the canonical B1 harness can hold topology fixed while scheduling exactly three communication arms: `DEFAULT`, `CAVEMAN`, and `MURMURS`.
+B3.1 implements the bounded Antigravity measurement executor binding needed for the Orchestra comparative benchmark harness.
 
-It does not measure token use, cost, latency, task quality, semantic preservation, or Murmurs benefit.
+It does not execute the 30-run B3 calibration in this unit, does not measure live token savings or benefit, does not vendor Caveman, and does not alter production runtime routing.
 
 ## Evidence boundary
 
 ```text
+EXECUTOR BINDING IMPLEMENTATION != MEASURED CALIBRATION
 PLAN-ONLY VALIDATION != MEASURED CALIBRATION
 SYNTHETIC FIXTURE != MURMURS BENEFIT EVIDENCE
 CAVEMAN PUBLISHED RESULTS != ORCHESTRA RESULTS
-MEASUREMENT_NOT_STARTED remains current after B3.0
+MEASUREMENT_NOT_STARTED remains current after B3.1
 ```
 
-No new canonical machine measurement record is introduced by B3.0. The authoritative benchmark machine state remains the B0 contract and B1 harness until real B3 run and experiment evidence exists.
+The authoritative benchmark machine state incorporates the B3.1 executor binding record (`machine/benchmarking/antigravity-executor-binding.v1.json`) alongside the B0 contract and B1 harness. Measurement maturity remains `MEASUREMENT_NOT_STARTED` until genuine calibrated evidence is collected.
+
+## B3.1 Host Smoke Baseline
+
+The host smoke establishes the baseline environment:
+
+```text
+host: Antigravity CLI
+cli_version: 1.1.14
+model: gemini-3.7-flash-high
+structured_transport: JSON
+native usage fields observed:
+  - input_tokens
+  - output_tokens
+  - thinking_tokens
+  - cache_read_tokens
+  - total_tokens
+useG1Credits: false
+smoke_result: SUCCESS
+```
+
+Smoke execution was non-evidentiary and is not added to B3 calibration evidence.
+
+## Host-Native Token Mapping
+
+The Antigravity executor maps native structured usage fields as follows:
+
+```text
+Antigravity input_tokens       -> Orchestra tokens.input_tokens
+Antigravity output_tokens      -> Orchestra tokens.output_tokens
+Antigravity cache_read_tokens  -> Orchestra tokens.cached_input_tokens
+Antigravity thinking_tokens    -> Orchestra tokens.reasoning_tokens
+Antigravity total_tokens       -> preserved in raw_evidence only
+```
+
+Rules:
+- `total_tokens` is preserved in `raw_evidence` only and is NOT mapped to `fresh_billable_tokens`.
+- `fresh_billable_tokens` remains `null` unless Antigravity exposes a native field representing billable consumption.
+- Cost remains `source = UNAVAILABLE`, `amount = null`, `currency = null` unless provider-reported monetary cost is exposed.
+
+## Deterministic Counter Identity
+
+Antigravity does not expose a vendor-assigned counter identifier in the observed structured result.
+
+Orchestra assigns the deterministic measurement-surface identity:
+
+```text
+antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high
+```
+
+Provenance rules:
+- This identifier represents Orchestra-assigned provenance identifying the exact host-native measurement surface.
+- It is NOT claimed to be an Antigravity/provider-issued identifier.
+- Paired B3 token deltas are valid only while this counter identity remains identical across `DEFAULT`, `CAVEMAN`, and `MURMURS` arms.
+- If the CLI version, model identity, usage-field semantics, provider/host, or structured-output mechanism changes, the counter identity must change and the affected paired batch must not be combined as one comparable counter population.
+
+## Execution Controls
+
+The B3 Antigravity executor pins:
+
+```text
+model: gemini-3.7-flash-high
+output_format: json
+personal_credit_fallback: disabled (useG1Credits: false)
+mode: non-interactive
+```
+
+Fail-closed invariants:
+The executor fails closed as `INVALID_RUN` with `MEASUREMENT_CAPTURE_FAILURE` (or `CORRUPTED_STARTING_STATE` / `HARNESS_FAILURE`) when:
+1. Outer JSON cannot be parsed;
+2. Host status is not usable (or not `SUCCESS`);
+3. Native usage object is missing;
+4. `input_tokens` is missing or invalid;
+5. `output_tokens` is missing or invalid;
+6. Model identity changes or mismatches the pinned model;
+7. Counter identity changes inside a paired batch;
+8. Canonical starting-state identity is corrupted.
+
+## Quality Boundary: Host Status != Task Outcome
+
+Antigravity status `SUCCESS` does NOT imply benchmark task `PASS`.
+
+The benchmark task outcome is determined independently from:
+- Task completion (`task_completed`);
+- Required validation (`validation_passed`);
+- Governance preservation (`governance_valid`).
+
+When host execution succeeds but benchmark validation fails, the run is recorded as a valid execution with outcome `FAIL` (not `PASS`, and not `INVALID_RUN`).
 
 ## Causal variable
 
@@ -68,7 +156,7 @@ Orchestra authority source: false
 
 The Caveman arm must be executed on Orchestra's own controlled workload under the same provider/model and measurement identity as the other arms. Published Caveman percentages cannot be imported as Orchestra benefit evidence.
 
-B3.0 does not vendor Caveman, copy its source, install it, execute it, or introduce it as an Orchestra runtime dependency.
+B3.1 does not vendor Caveman, copy its source, install it, execute it, or introduce it as an Orchestra runtime dependency.
 
 ## Calibration floor
 
@@ -83,79 +171,11 @@ arm order = randomized reproducibly
 claims allowed = false
 ```
 
-The plan-only fixture covers five communication-relevant task classes:
-
-1. `SINGLE_DOMAIN`
-2. `MULTI_DOMAIN`
-3. `DEBUGGING`
-4. `DOCUMENTATION_AND_IMPLEMENTATION`
-5. `HIGH_COORDINATION`
-
-These are synthetic planning scenarios only.
-
-## Machine-readable plan-only fixture
-
-The fixture is:
-
-```text
-tests/fixtures/benchmarking/b3-murmurs-isolated-calibration-plan-only.json
-```
-
-It deliberately uses:
-
-- synthetic task identities and digests;
-- one synthetic fixed topology identity;
-- `NO_PROVIDER_PLAN_ONLY`;
-- `NO_MODEL_PLAN_ONLY`;
-- no provider credentials;
-- no network requirement;
-- `execution_allowed=false` for every task.
-
 Expected plan size:
 
 ```text
 5 tasks x 2 repetitions x 3 communication arms = 30 planned runs
 ```
-
-Each of the ten task/repetition blocks must contain exactly one `DEFAULT`, one `CAVEMAN`, and one `MURMURS` arm on the same topology identity.
-
-The regression supplies an executor path that does not exist while `plan_only=True`. Successful plan generation therefore proves the executor is not invoked.
-
-## Real B3 calibration entry gate
-
-A real measured B3 calibration must replace all synthetic fixture identities with evidence-bound values and satisfy all B0/B1 controls.
-
-Required entry evidence includes:
-
-1. one fixed deterministic topology that is already permitted for the controlled workload;
-2. identical topology candidate identity and digest across all three communication arms;
-3. exact starting-state digest for every task;
-4. exact task-prompt digest for every task;
-5. identical provider and model identity across paired arms;
-6. identical specialist set and required-specialist set;
-7. identical authority, governance, validation, tool-access, retry, environment, and resource-budget identities;
-8. identical system instructions except for the bounded communication mechanism under test;
-9. same provider-native counter identity for any token delta claim;
-10. a bounded resource ceiling before any paid or metered provider/model execution.
-
-A general benchmark authorization is not interpreted as unlimited spend authority.
-
-## Measurement authority
-
-Provider or host-native counters are authoritative when available.
-
-The following values must remain unavailable rather than estimated when the provider does not expose trustworthy comparable counters:
-
-- input tokens;
-- output tokens;
-- cached input tokens;
-- reasoning tokens;
-- fresh or billable tokens;
-- monetary cost.
-
-A token or cost delta is valid only when the compared arms share the same provider counter identity.
-
-Repository-side byte counts or token estimates may be descriptive diagnostics, but they cannot substitute for provider-native counters in a live token-savings claim.
 
 ## Quality and preservation gates
 
@@ -184,70 +204,17 @@ The B0 lexicographic winner hierarchy remains authoritative:
 8. Deterministic baseline tie-break
 ```
 
-## Resource boundary
+## Governance Boundary
 
-B3.0 operates in:
+This unit authorizes no:
+- Live 30-run B3 calibration execution;
+- Paid model calls or metered compute spend;
+- Caveman installation or vendoring;
+- Token savings or Murmurs benefit claims;
+- Changes to Murmurs production semantics;
+- A5 execution-effective selection;
+- A6 initiation;
+- B4 interaction experiment execution;
+- Release publication or deployment.
 
-```text
-NO_SPEND_PLAN_ONLY
-```
-
-It authorizes no:
-
-- paid model call;
-- metered provider call;
-- external benchmark compute spend;
-- provider credential use;
-- Caveman installation or execution;
-- production runtime execution.
-
-A later live calibration using paid or metered resources requires an explicit machine-bindable ceiling. Useful dimensions include maximum spend, maximum run count, permitted provider/model identity, token ceiling when exposed, timeout, and fail-closed termination when the ceiling is exhausted.
-
-## Future measured calibration outputs
-
-A valid measured calibration should capture at minimum:
-
-- validated governed task outcome;
-- remediation iterations;
-- validation failures;
-- regressions introduced;
-- wall-clock latency;
-- provider-native token counters when available;
-- provider-reported cost when available;
-- specialist and cross-specialist message counts;
-- handoffs and handoff failures;
-- duplicate work and contradiction events;
-- context transfer bytes;
-- semantic preservation failures;
-- required information omissions.
-
-Calibration validates capture quality and estimates variance. It does not establish confirmatory benefit.
-
-## B4 remains blocked
-
-The combined A5 x Murmurs experiment cannot start from plan-only readiness alone.
-
-```text
-B4 requires valid measured B2 evidence
-AND valid measured B3 evidence
-```
-
-B2.0 and B3.0 plan-only fixtures are not sufficient evidence for B4 entry.
-
-## Exit condition for B3.0
-
-B3.0 is complete when fresh exact-head validation proves:
-
-- the plan-only manifest is schema-valid;
-- at least five synthetic planning tasks are present;
-- exactly two repetitions per arm are configured;
-- exactly three communication arms exist;
-- those arms are exactly `DEFAULT`, `CAVEMAN`, and `MURMURS`;
-- all arms share one identical `FIXED_DETERMINISTIC` topology identity;
-- same-counter-identity requirement is preserved;
-- repeated plan generation is deterministic for the same seed;
-- no executor is invoked;
-- no run index or experiment evidence is emitted;
-- no token-savings or benefit claim is recorded.
-
-Only after that closeout may the workflow consider a real B3 calibration executor and bounded live-resource authorization.
+B4 remains BLOCKED until valid measured B2 and B3 evidence exists.

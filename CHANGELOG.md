@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B3.1 Antigravity Measurement Executor Binding - Candidate
+
+- Implements the bounded Antigravity measurement executor binding in `scripts/antigravity_benchmark_executor.py` for the Orchestra comparative benchmark harness under the canonical B0/B1/B3.0 contracts.
+- Adds host-native structured token usage mapping: `input_tokens` -> `tokens.input_tokens`, `output_tokens` -> `tokens.output_tokens`, `cache_read_tokens` -> `tokens.cached_input_tokens`, `thinking_tokens` -> `tokens.reasoning_tokens`, and preserves `total_tokens` in raw evidence only with `fresh_billable_tokens=null` and `cost=UNAVAILABLE`.
+- Assigns the deterministic measurement-surface provenance identity `antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high`, enforcing that paired token deltas are valid only while counter identity is invariant across `DEFAULT`, `CAVEMAN`, and `MURMURS` arms.
+- Enforces fail-closed execution controls (`INVALID_RUN` / `MEASUREMENT_CAPTURE_FAILURE` / `CORRUPTED_STARTING_STATE`) and preserves the quality boundary where host `SUCCESS` does not imply benchmark task `PASS`.
+- Adds deterministic mock test coverage in `tests/runtime/test_comparative_benchmark_antigravity_executor.py`, machine discovery record `machine/benchmarking/antigravity-executor-binding.v1.json`, machine index parity in `README.json`, and updated documentation in `docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md`.
+- Authorizes no live 30-run B3 calibration execution, no paid/metered calls, no token savings/benefit claims, no A5 promotion, no A6, and keeps B4 blocked.
+
 ## Post-v1.6.0 Comparative Benchmark B3.0 Murmurs Calibration Readiness - Candidate
 
 - Adds a no-spend Murmurs-isolated calibration-readiness boundary on top of canonical B1/B2.0 without provider/model execution or benchmark run evidence.
