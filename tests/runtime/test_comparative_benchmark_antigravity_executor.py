@@ -2542,3 +2542,335 @@ def test_88_zero_live_model_calls_across_all_stream_tests() -> None:
     # When mock output is provided, runner is never called
     assert len(call_records) == 0
     assert res["outcome"]["status"] == "PASS"
+
+
+def test_89_explicit_valid_workspace_binding(tmp_path: Path) -> None:
+    # Requirement: explicit valid workspace binding via task_payload or argument
+    ws_dir = tmp_path / "valid_workspace"
+    ws_dir.mkdir()
+    settings_file = _create_mock_settings(tmp_path)
+
+    captured_cmds: list[list[str]] = []
+
+    def mock_runner(cmd: list[str], prompt: str = "") -> tuple[int, str, str]:
+        captured_cmds.append(cmd)
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    def mock_version(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "1.1.15", "")
+
+    req = _base_request(workspace_dir=str(ws_dir))
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        runner_fn=mock_runner,
+        settings_path=settings_file,
+        version_runner_fn=mock_version,
+    )
+    _validate_result_schema(res)
+
+    assert res["outcome"]["status"] == "PASS"
+    assert res["raw_evidence"]["workspace_binding"]["bound"] is True
+    assert res["raw_evidence"]["workspace_binding"]["workspace_path"] == str(ws_dir.resolve())
+    assert res["raw_evidence"]["workspace_binding"]["workspace_flag"] == "--add-dir"
+    assert res["raw_evidence"]["workspace_binding"]["workspace_mechanism"] == "CLI_ADD_DIR"
+    assert res["raw_evidence"]["workspace_binding"]["provenance"]["source"] == "TASK_PAYLOAD"
+    assert len(captured_cmds) == 1
+    cmd = captured_cmds[0]
+    assert "--add-dir" in cmd
+    idx = cmd.index("--add-dir")
+    assert cmd[idx + 1] == str(ws_dir.resolve())
+
+
+def test_90_missing_workspace_in_live_execution_fails_closed(tmp_path: Path) -> None:
+    # Requirement: missing workspace in live execution fails closed before runner invocation
+    settings_file = _create_mock_settings(tmp_path)
+    runner_called = False
+
+    def mock_runner(cmd: list[str], prompt: str = "") -> tuple[int, str, str]:
+        nonlocal runner_called
+        runner_called = True
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    req = _base_request(require_workspace=True)  # Workspace required but not provided
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        runner_fn=mock_runner,
+        settings_path=settings_file,
+    )
+    _validate_result_schema(res)
+
+    assert res["outcome"]["status"] == "INVALID_RUN"
+    assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+    assert "workspace" in res["raw_evidence"]["detail"]["error"].lower()
+    assert not runner_called
+
+
+def test_91_nonexistent_workspace_fails_closed(tmp_path: Path) -> None:
+    # Requirement: nonexistent workspace path fails closed before runner invocation
+    nonexistent = tmp_path / "does_not_exist_dir"
+    settings_file = _create_mock_settings(tmp_path)
+    runner_called = False
+
+    def mock_runner(cmd: list[str], prompt: str = "") -> tuple[int, str, str]:
+        nonlocal runner_called
+        runner_called = True
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    req = _base_request(workspace_dir=str(nonexistent))
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        runner_fn=mock_runner,
+        settings_path=settings_file,
+    )
+    _validate_result_schema(res)
+
+    assert res["outcome"]["status"] == "INVALID_RUN"
+    assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+    assert "does not exist" in res["raw_evidence"]["detail"]["error"].lower()
+    assert not runner_called
+
+
+def test_92_file_path_instead_of_directory_fails_closed(tmp_path: Path) -> None:
+    # Requirement: workspace pointing to a regular file instead of directory fails closed
+    file_path = tmp_path / "not_a_dir.txt"
+    file_path.write_text("hello", encoding="utf-8")
+    settings_file = _create_mock_settings(tmp_path)
+    runner_called = False
+
+    def mock_runner(cmd: list[str], prompt: str = "") -> tuple[int, str, str]:
+        nonlocal runner_called
+        runner_called = True
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    req = _base_request(workspace_dir=str(file_path))
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        runner_fn=mock_runner,
+        settings_path=settings_file,
+    )
+    _validate_result_schema(res)
+
+    assert res["outcome"]["status"] == "INVALID_RUN"
+    assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+    assert "not a directory" in res["raw_evidence"]["detail"]["error"].lower()
+    assert not runner_called
+
+
+def test_93_workspace_path_containing_spaces_safe(tmp_path: Path) -> None:
+    # Requirement: workspace directory with spaces is safely bound in argument array
+    ws_spaces = tmp_path / "my isolated test workspace"
+    ws_spaces.mkdir()
+    settings_file = _create_mock_settings(tmp_path)
+
+    captured_cmds: list[list[str]] = []
+
+    def mock_runner(cmd: list[str], prompt: str = "") -> tuple[int, str, str]:
+        captured_cmds.append(cmd)
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    def mock_version(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "1.1.15", "")
+
+    req = _base_request(workspace_dir=str(ws_spaces))
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        runner_fn=mock_runner,
+        settings_path=settings_file,
+        version_runner_fn=mock_version,
+    )
+    _validate_result_schema(res)
+
+    assert res["outcome"]["status"] == "PASS"
+    assert len(captured_cmds) == 1
+    cmd = captured_cmds[0]
+    idx = cmd.index("--add-dir")
+    assert cmd[idx + 1] == str(ws_spaces.resolve())
+    assert isinstance(cmd, list)
+
+
+def test_94_command_is_argument_array_with_shell_false(tmp_path: Path) -> None:
+    # Requirement: command remains argument list with no shell string concatenation
+    ws_dir = tmp_path / "safe_ws"
+    ws_dir.mkdir()
+    settings_file = _create_mock_settings(tmp_path)
+
+    captured_cmds: list[list[str]] = []
+
+    def mock_runner(cmd: list[str], prompt: str = "") -> tuple[int, str, str]:
+        captured_cmds.append(cmd)
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    def mock_version(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "1.1.15", "")
+
+    req = _base_request(workspace_dir=str(ws_dir))
+    executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        runner_fn=mock_runner,
+        settings_path=settings_file,
+        version_runner_fn=mock_version,
+    )
+
+    assert len(captured_cmds) == 1
+    cmd = captured_cmds[0]
+    assert isinstance(cmd, list)
+    assert all(isinstance(token, str) for token in cmd)
+    assert cmd[0] == "agy"
+    assert "--add-dir" in cmd
+    assert cmd[cmd.index("--add-dir") + 1] == str(ws_dir.resolve())
+    assert "--model" in cmd
+    assert cmd[cmd.index("--model") + 1] == "gemini-3.7-flash-high"
+    assert "-p" in cmd
+    assert "--output-format" in cmd
+
+
+def test_95_treatments_and_invariants_unaffected_by_workspace_binding(tmp_path: Path) -> None:
+    # Requirement: DEFAULT, CAVEMAN, MURMURS treatment identity, prompt digest, topology digest remain unaffected by workspace binding
+    ws1 = tmp_path / "ws_arm1"
+    ws2 = tmp_path / "ws_arm2"
+    ws1.mkdir()
+    ws2.mkdir()
+
+    for mode in ("DEFAULT", "CAVEMAN", "MURMURS"):
+        req1 = _base_request(
+            communication_mode=mode,
+            workspace_dir=str(ws1),
+            caveman_policy_content=VALID_CAVEMAN_SKILL_MD if mode == "CAVEMAN" else None,
+            raw_host_output=_mock_host_envelope(),
+        )
+        req2 = _base_request(
+            communication_mode=mode,
+            workspace_dir=str(ws2),
+            caveman_policy_content=VALID_CAVEMAN_SKILL_MD if mode == "CAVEMAN" else None,
+            raw_host_output=_mock_host_envelope(),
+        )
+        res1 = executor.execute_request(req1)
+        res2 = executor.execute_request(req2)
+        _validate_result_schema(res1)
+        _validate_result_schema(res2)
+
+        # Invariants preserved across distinct workspace directories
+        assert res1["raw_evidence"]["task_prompt_digest"] == res2["raw_evidence"]["task_prompt_digest"]
+        assert res1["raw_evidence"]["treatment_identity"] == res2["raw_evidence"]["treatment_identity"]
+        assert res1["raw_evidence"]["topology_digest"] == res2["raw_evidence"]["topology_digest"]
+        assert res1["governance_digest"] == res2["governance_digest"]
+        assert res1["validation_digest"] == res2["validation_digest"]
+
+
+def test_96_workspace_failure_preempts_live_host_call(tmp_path: Path) -> None:
+    # Requirement: workspace failure happens before live host invocation or preflight
+    invalid_ws = tmp_path / "non_existent_folder_xyz"
+    settings_file = _create_mock_settings(tmp_path)
+    version_runner_called = False
+    runner_called = False
+
+    def mock_version(cmd: list[str]) -> tuple[int, str, str]:
+        nonlocal version_runner_called
+        version_runner_called = True
+        return (0, "1.1.15", "")
+
+    def mock_runner(cmd: list[str], prompt: str = "") -> tuple[int, str, str]:
+        nonlocal runner_called
+        runner_called = True
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    req = _base_request(workspace_dir=str(invalid_ws))
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        runner_fn=mock_runner,
+        settings_path=settings_file,
+        version_runner_fn=mock_version,
+    )
+    _validate_result_schema(res)
+
+    assert res["outcome"]["status"] == "INVALID_RUN"
+    assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+    assert not version_runner_called
+    assert not runner_called
+
+
+def test_97_no_fallback_to_scratch_directory(tmp_path: Path) -> None:
+    # Requirement: no implicit fallback to ~/.gemini/antigravity-cli/scratch
+    settings_file = _create_mock_settings(tmp_path)
+    runner_called = False
+
+    def mock_runner(cmd: list[str], prompt: str = "") -> tuple[int, str, str]:
+        nonlocal runner_called
+        runner_called = True
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    req = _base_request(workspace_dir="")  # empty string workspace
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        runner_fn=mock_runner,
+        settings_path=settings_file,
+    )
+    _validate_result_schema(res)
+
+    assert res["outcome"]["status"] == "INVALID_RUN"
+    assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+    assert not runner_called
+
+
+def test_98_workspace_via_task_payload_and_cli_argument(tmp_path: Path) -> None:
+    # Requirement: workspace can be provided via task_payload, request root, or executor argument
+    ws_arg = tmp_path / "ws_arg"
+    ws_payload = tmp_path / "ws_payload"
+    ws_arg.mkdir()
+    ws_payload.mkdir()
+    settings_file = _create_mock_settings(tmp_path)
+
+    captured_cmds: list[list[str]] = []
+
+    def mock_runner(cmd: list[str], prompt: str = "") -> tuple[int, str, str]:
+        captured_cmds.append(cmd)
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    def mock_version(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "1.1.15", "")
+
+    # Argument overrides payload
+    req = _base_request(workspace_dir=str(ws_payload))
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        workspace_dir=ws_arg,
+        runner_fn=mock_runner,
+        settings_path=settings_file,
+        version_runner_fn=mock_version,
+    )
+    _validate_result_schema(res)
+
+    assert res["outcome"]["status"] == "PASS"
+    assert res["raw_evidence"]["workspace_binding"]["workspace_path"] == str(ws_arg.resolve())
+    assert res["raw_evidence"]["workspace_binding"]["provenance"]["source"] == "EXECUTOR_ARGUMENT"
+    assert captured_cmds[-1][captured_cmds[-1].index("--add-dir") + 1] == str(ws_arg.resolve())
+
+
+def test_99_zero_live_antigravity_invocation_across_all_workspace_tests(tmp_path: Path) -> None:
+    # Requirement: no test executes real Antigravity model turn
+    ws = tmp_path / "zero_live_ws"
+    ws.mkdir()
+    called = False
+
+    def spy_runner(cmd: list[str], prompt: str = "") -> tuple[int, str, str]:
+        nonlocal called
+        called = True
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    # When mock output is provided, runner is not called
+    req = _base_request(workspace_dir=str(ws), raw_host_output=_mock_host_envelope())
+    res = executor.execute_request(req, runner_fn=spy_runner)
+    _validate_result_schema(res)
+
+    assert not called
+    assert res["outcome"]["status"] == "PASS"
+    assert res["raw_evidence"]["workspace_binding"]["bound"] is True

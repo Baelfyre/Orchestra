@@ -5,11 +5,11 @@
 ```text
 Program: Orchestra Shared Comparative Benchmark
 Phase: B3 Murmurs Isolated Comparative Experiment
-Current bounded unit: B3.1.5 Stream Result Envelope Normalization
-State: B3_1_5_STREAM_RESULT_NORMALIZATION_IMPLEMENTED_SOURCE_ONLY
-Canonical entry: f77734aa8047a4c2c374a5702df3caacc4ec4a37
-Canonical entry tree: 2bb9bf9e59d92a1b2d79c8ba3605a1446379ff56
-Authoritative benchmark machine state: B0/B1/B3.1.5 executor binding
+Current bounded unit: B3.1.6 Explicit Antigravity Headless Workspace Binding
+State: B3_1_6_HEADLESS_WORKSPACE_BINDING_IMPLEMENTED_SOURCE_ONLY
+Canonical entry: 13350b1be10e115fb95abc5f2cecc66dd95427bc
+Canonical entry tree: cee417e44db96ec8425929fbeb3299d4b74b7cc9
+Authoritative benchmark machine state: B0/B1/B3.1.6 executor binding
 Validated local Antigravity host: Antigravity CLI 1.1.15
 Measurement maturity after unit implementation: MEASUREMENT_NOT_STARTED
 Murmurs benefit: NOT ESTABLISHED
@@ -20,9 +20,9 @@ Diagnostic execution: DIAGNOSTIC_READINESS_ONLY (NOT COMPLETED)
 Calibration execution: NOT EXECUTED
 ```
 
-B3.1.5 introduces deterministic stream-json terminal envelope normalization in `scripts/antigravity_benchmark_executor.py` via `normalize_stream_terminal_event`, resolving wrapped Antigravity CLI 1.1.15 terminal events (`{"event": "result", "result": {"status": "SUCCESS", "usage": {...}, ...}}`) while preserving flat legacy compatibility, fail-closed conflict handling, intermediate event discrimination, dual wrapper/payload raw evidence retention, and all previous B3.1.4 sparse settings and B3.1.3 exact host version qualification invariants.
+B3.1.6 introduces deterministic explicit Antigravity headless workspace binding in `scripts/antigravity_benchmark_executor.py` via `resolve_workspace` and the verified `--add-dir <path>` native AGY CLI 1.1.15 argument interface, binding relative workspace-scoped file tool invocations to explicit external directory targets rather than defaulting to `~/.gemini/antigravity-cli/scratch`. It enforces fail-closed validation on missing, non-existent, or non-directory workspace paths before live host execution while preserving B3.1.5 stream-json envelope normalization, B3.1.4 sparse settings, and B3.1.3 exact host qualification invariants.
 
-It does not execute Antigravity model turns, does not execute the 3-run diagnostic, does not execute the 30-run calibration, does not measure live token savings or benefit, does not vendor Caveman, and does not alter production runtime routing.
+It does not execute Antigravity model turns, does not execute the 3-run diagnostic (Attempt 4 is not authorized), does not execute the 30-run calibration, does not measure live token savings or benefit, does not vendor Caveman, and does not alter production runtime routing.
 
 ## Evidence boundary
 
@@ -31,10 +31,10 @@ ARM OPERATIONALIZATION IMPLEMENTATION != MEASURED CALIBRATION
 PLAN-ONLY VALIDATION != MEASURED CALIBRATION
 SYNTHETIC FIXTURE != MURMURS BENEFIT EVIDENCE
 CAVEMAN PUBLISHED RESULTS != ORCHESTRA RESULTS
-MEASUREMENT_NOT_STARTED remains current after B3.1.5
+MEASUREMENT_NOT_STARTED remains current after B3.1.6
 ```
 
-The authoritative benchmark machine state incorporates the B3.1.5 executor binding record (`machine/benchmarking/antigravity-executor-binding.v1.json`) alongside the B0 contract and B1 harness. Measurement maturity remains `MEASUREMENT_NOT_STARTED` until genuine calibrated evidence is collected.
+The authoritative benchmark machine state incorporates the B3.1.6 executor binding record (`machine/benchmarking/antigravity-executor-binding.v1.json`) alongside the B0 contract and B1 harness. Measurement maturity remains `MEASUREMENT_NOT_STARTED` until genuine calibrated evidence is collected.
 
 ## B3.1.2 / B3.1.3 Communication Treatments
 
@@ -114,6 +114,18 @@ Key normalization and invariant rules:
 - **Fail-Closed Conflict Handling**: Fails closed if outer wrapper and nested result contain conflicting measurement-critical fields (`status`, `usage`, `cli_version`, `model`).
 - **Fail-Closed Malformation**: Fails closed if terminal result is missing, result payload is not an object, status is missing/non-SUCCESS, usage is missing/malformed, or multiple conflicting terminal results exist in the stream.
 
+## B3.1.6 Explicit Antigravity Headless Workspace Binding
+
+B3.1.6 introduces deterministic explicit workspace binding for Antigravity headless print-mode execution in `scripts/antigravity_benchmark_executor.py` via `resolve_workspace` and the verified `--add-dir <path>` native AGY CLI 1.1.15 argument interface.
+
+Key workspace binding and invariant rules:
+- **Explicit Binding Mechanism**: Passes `--add-dir <resolved_workspace_path>` as discrete argument tokens without shell concatenation (`shell=False`).
+- **No Implicit CWD Derivation**: Does not derive the AGY workspace implicitly from process working directory or the Orchestra repository root.
+- **Deterministic Validation**: Resolves and validates the workspace path before model invocation. Fails closed (`INVALID_RUN` / `MEASUREMENT_CAPTURE_FAILURE`) before real turns if the workspace is missing, non-existent, or not a directory.
+- **Independent Workspace Selection**: Allows external diagnostic minimal workspaces to be bound independently from Orchestra runtime contract resolution.
+- **Provenance Retention**: Records complete workspace binding provenance in `raw_evidence.workspace_binding` (`bound`, `workspace_path`, `workspace_flag`, `workspace_mechanism`, `provenance.source`, `provenance.resolved_path`, `provenance.is_directory`).
+- **Scratch Fallback Prohibition**: Fails closed rather than silently falling back to `~/.gemini/antigravity-cli/scratch`.
+
 ## B3.2 Diagnostic Attempt 2 Compatibility Disposition
 
 Empirical diagnostic evidence from B3.2 Attempt 2 recorded the following compatibility finding (external evidence directory remains uncommitted):
@@ -142,6 +154,39 @@ live_host_turns_consumed:
 
 accepted_benchmark_measurements:
 0
+
+benefit evidence:
+NONE
+```
+
+## B3.2 Diagnostic Attempt 3 Compatibility Disposition
+
+Empirical diagnostic evidence from B3.2 Attempt 3 recorded the following compatibility finding (external evidence directory remains uncommitted):
+
+```text
+B3_2_DIAGNOSTIC_ATTEMPT_3 = INVALID_RUN
+
+cause:
+HEADLESS_WORKSPACE_BINDING_FAILURE
+
+observed host counters:
+input_tokens = 59833
+output_tokens = 1397
+thinking_tokens = 1183
+cache_read_tokens = 48900
+total_tokens = 61230
+
+configured diagnostic ceiling:
+45000 total_tokens per call
+
+live_host_turns_consumed:
+1
+
+accepted_benchmark_measurements:
+0
+
+minimal_workspace_resource_ceiling:
+NOT_ESTABLISHED
 
 benefit evidence:
 NONE
