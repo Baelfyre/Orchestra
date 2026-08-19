@@ -214,6 +214,31 @@
       "b4_state": "BLOCKED",
       "authority_note": "B3 records completed and validated 30-run empirical calibration and baseline evidence freeze under the Padayon-grounded task-set. Murmurs benefit remains not established from calibration sample evidence alone, token savings are evidence-derived only, fresh_billable_tokens and cost remain unavailable, personal credit fallback remains disabled, A5 remains shadow-only, and B4 remains blocked."
     },
+    "comparative_measurement_codex_baseline_readiness": {
+      "status": "READINESS_ONLY_NO_LIVE_CALLS",
+      "purpose": "Host-specific Codex CLI measurement adapter readiness for the controlled cross-host baseline without changing the frozen benchmark subject, task set, common runner, deterministic response validator, communication treatments, or accepted Antigravity evidence.",
+      "executor": "scripts/codex_benchmark_executor.py",
+      "machine_sources": ["machine/benchmarking/codex-executor-binding.v1.json"],
+      "human_sources": ["docs/benchmarking/CODEX_BASELINE_READINESS.md"],
+      "frozen_benchmark_subject": {
+        "sha": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
+        "tree": "ceab55bd512ea6fde4e8e76877cbb7006d18500e"
+      },
+      "common_measurement_core_baseline": {
+        "sha": "e182e478988c77125127811375aa1b69278cca63",
+        "tree": "9e1d9c0dcf5e615c4b16dfd95bb72f63eaacc33e"
+      },
+      "taskset_digest": "fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8",
+      "validator": "EXACT_JSON_CONFORMANCE_V1",
+      "live_execution_authorized": false,
+      "exact_cli_version": "TO_BE_FROZEN_BY_HUMAN_GATE",
+      "exact_model": "TO_BE_FROZEN_BY_HUMAN_GATE",
+      "exact_reasoning_effort": "TO_BE_FROZEN_BY_HUMAN_GATE",
+      "a5_execution_promotion": "NOT_AUTHORIZED",
+      "a6_authorized": false,
+      "b4_state": "BLOCKED",
+      "authority_note": "Readiness infrastructure and host-counter transport are measurement evidence plumbing only. The frozen control_identity.orchestra_revision remains d95f; Codex adapter provenance is separate and cannot become benchmark-subject authority."
+    },
     "registry_adaptive_consumption_o1_o6": {
       "status": "CANONICAL_IMPLEMENTED_VALIDATED_AND_REGISTRY_RECONCILED",
       "purpose": "Negotiated Registry capability consumption, explicit trusted Registry v0.2.0 compatibility, multi-jurisdiction query selection, query-scoped freshness, release-delta impact analysis, and governed domain-to-specialist resolution.",
@@ -290,6 +315,7 @@
     "comparative_benchmark_executor_request_schema": "machine/schemas/comparative-benchmark-executor-request.schema.json",
     "comparative_benchmark_executor_result_schema": "machine/schemas/comparative-benchmark-executor-result.schema.json",
     "comparative_benchmark_antigravity_executor_binding": "machine/benchmarking/antigravity-executor-binding.v1.json",
+    "comparative_benchmark_codex_executor_binding": "machine/benchmarking/codex-executor-binding.v1.json",
     "comparative_benchmark_calibration_task_set": "machine/benchmarking/b3-calibration-task-set.v1.json",
     "release_evidence_directory": "machine/release-evidence",
     "schemas_directory": "machine/schemas",
@@ -411,6 +437,7 @@
     "comparative_measurement_b0": "docs/benchmarking/COMPARATIVE_MEASUREMENT_B0.md",
     "comparative_measurement_b1": "docs/benchmarking/COMPARATIVE_MEASUREMENT_B1.md",
     "comparative_measurement_b3": "docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md",
+    "codex_baseline_readiness": "docs/benchmarking/CODEX_BASELINE_READINESS.md",
     "registry_adaptive_consumption_o1_o6": "docs/architecture/REGISTRY_ADAPTIVE_CONSUMPTION_O1_O6.md",
     "roadmap": "docs/project/ROADMAP.md",
     "changelog": "CHANGELOG.md",
@@ -441,6 +468,7 @@
     "adaptive_governed_orchestration": "A5_CLOSED_AT_SHADOW_MATURITY_EXECUTION_PROMOTION_DEFERRED_BENEFIT_NOT_ESTABLISHED_ISSUE_340",
     "comparative_measurement_b0": "CONTRACT_FROZEN_NO_BENCHMARK_EXECUTION",
     "comparative_measurement_b1": "IMPLEMENTED_NON_PRODUCTION_NO_PROVIDER_ADAPTERS",
+    "codex_baseline_readiness": "READINESS_ONLY_NO_LIVE_CALLS",
     "registry_adaptive_consumption_o1_o6": "CANONICAL_IMPLEMENTED_VALIDATED_AND_REGISTRY_RECONCILED",
     "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316"
   },
@@ -490,6 +518,10 @@
     "treat_b1_harness_as_non_production_evidence_infrastructure": true,
     "do_not_treat_synthetic_b1_fixture_measurements_as_benefit_evidence": true,
     "require_explicit_resource_ceiling_before_paid_live_benchmark_execution": true,
+    "preserve_d95f_as_frozen_cross_host_benchmark_subject_identity": true,
+    "treat_e182_as_common_measurement_core_baseline_not_benchmark_subject": true,
+    "record_codex_host_adapter_revision_separately_from_control_identity_orchestra_revision": true,
+    "do_not_execute_codex_baseline_until_exact_host_surface_and_resource_stop_conditions_are_frozen": true,
     "treat_registry_capability_delta_freshness_and_routing_evidence_as_non_authorizing": true,
     "require_explicit_v0_2_legacy_profile_instead_of_inventing_missing_registry_capability_metadata": true,
     "require_query_scoped_registry_freshness_to_bind_to_the_exact_consumed_source_set": true,
