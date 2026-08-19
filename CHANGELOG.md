@@ -1,5 +1,16 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B3.1.6 Explicit Antigravity Headless Workspace Binding - Candidate
+
+- Implements deterministic explicit Antigravity headless workspace binding in `scripts/antigravity_benchmark_executor.py` via `resolve_workspace` and the verified native AGY CLI 1.1.15 `--add-dir <path>` argument interface.
+- Prevents headless print-mode file tool calls from defaulting to the CLI scratch workspace (`~/.gemini/antigravity-cli/scratch`) by binding workspace-scoped operations directly to an explicit target directory without deriving workspace implicitly from process working directory or the Orchestra repository root.
+- Enforces fail-closed validation (`INVALID_RUN` / `MEASUREMENT_CAPTURE_FAILURE`) when a configured workspace directory is missing, non-existent, or points to a file before model invocation or host preflight.
+- Records full workspace-binding provenance in `raw_evidence.workspace_binding` (`bound`, `workspace_path`, `workspace_flag`, `workspace_mechanism`, `provenance.source`, `provenance.resolved_path`, `provenance.is_directory`).
+- Preserves all B3.1.5 stream-json envelope normalization, B3.1.4 sparse settings semantics, B3.1.3 exact host qualification, communication treatments (`DEFAULT`, `CAVEMAN`, `MURMURS`), and governance boundaries.
+- Records B3.2 Diagnostic Attempt 3 compatibility disposition (`INVALID_RUN` / `HEADLESS_WORKSPACE_BINDING_FAILURE` / `observed_total_tokens=61230` / `accepted_measurements=0` / `minimal_workspace_resource_ceiling=NOT_ESTABLISHED`) as diagnostic compatibility evidence without altering prior attempt records.
+- Adds comprehensive deterministic runtime unit tests in `tests/runtime/test_comparative_benchmark_antigravity_executor.py` with zero live model turns.
+- Updates machine binding record `machine/benchmarking/antigravity-executor-binding.v1.json`, machine discovery in `README.json`, and human documentation `docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md`.
+
 ## Post-v1.6.0 Comparative Benchmark B3.1.5 Antigravity Stream-JSON Result Envelope Normalization - Candidate
 
 - Normalizes stream-json terminal result envelopes in `scripts/antigravity_benchmark_executor.py` via `normalize_stream_terminal_event` to correctly recognize wrapped Antigravity CLI 1.1.15 terminal events (`{"event": "result", "result": {"status": "SUCCESS", "usage": {...}, ...}}`).
