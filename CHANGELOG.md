@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark Codex Baseline Readiness - Candidate
+
+- Adds a zero-live-call Codex CLI executor binding in `scripts/codex_benchmark_executor.py` for the controlled cross-host baseline while preserving the exact frozen `d95f677dbf23ab79c4698c26645ea30cea9b3019` benchmark-subject identity and the `e182e478988c77125127811375aa1b69278cca63` common measurement-core baseline as separate provenance fields.
+- Reuses canonical `DEFAULT` / `CAVEMAN` / `MURMURS` treatment binding and `EXACT_JSON_CONFORMANCE_V1` response-derived outcome validation from the unchanged Antigravity measurement core rather than introducing host-specific task-success semantics.
+- Maps Codex JSONL `turn.completed` host usage counters into the shared executor-result schema and fails closed on CLI/model/reasoning drift, malformed or missing usage, host errors, missing final response, or any tool activity under the synthetic no-tool baseline.
+- Adds deterministic zero-live-call regression coverage and machine/human readiness records without modifying the frozen task-set digest `fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8`, accepted Antigravity evidence, or existing B3 measurements.
+- Keeps exact Codex CLI version, model, reasoning effort, authentication/counter identity, workspace, resource ceilings, and stop conditions unfrozen pending a separate human live-execution gate.
+- Authorizes no live Codex/provider calls, A5 execution promotion, A6, B4, release publication, deployment, installed-integration refresh, or destructive operation.
+
 ## Post-v1.6.0 Registry Adaptive Consumption O1-O6 Realignment - Candidate
 
 - Implements deterministic Registry capability negotiation with explicit required/optional contracts, fail-closed incompatible required capabilities, and a bounded legacy compatibility profile for the immutable trusted Registry v0.2.0 surface without inventing unpublished R5 metadata.
