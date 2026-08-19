@@ -1,9 +1,9 @@
 {
   "schema_version": "orchestra.antigravity-executor-binding.v1",
   "program_id": "orchestra.shared-comparative-benchmark.v1",
-  "phase": "BENCHMARK_B3_1_4_SPARSE_SETTINGS_SEMANTIC_PREFLIGHT",
+  "phase": "BENCHMARK_B3_1_5_STREAM_RESULT_NORMALIZATION",
   "status": "IMPLEMENTED_NON_CALIBRATED",
-  "canonical_entry_baseline": "b0f14ade2ce9bb2b5b25ae7c653cb94345af5dcb",
+  "canonical_entry_baseline": "f77734aa8047a4c2c374a5702df3caacc4ec4a37",
   "binding": {
     "host": "Antigravity CLI",
     "cli_version": "1.1.15",
@@ -89,7 +89,9 @@
     "fail_closed_on_use_g1_credits_true": true,
     "fail_closed_on_malformed_use_g1_credits": true,
     "sparse_settings_default_fallback_disabled": true,
+    "stream_result_normalization_enabled": true,
     "raw_outer_envelope_preserved": true,
+    "raw_terminal_result_payload_preserved": true,
     "no_metric_inference": true
   },
   "quality_boundary": {
@@ -102,11 +104,15 @@
     ]
   },
   "governance_boundaries": {
-    "b3_1_4_sparse_settings_preflight": "IMPLEMENTED_SOURCE_ONLY",
+    "b3_1_5_stream_result_normalization": "IMPLEMENTED_SOURCE_ONLY",
+    "b3_2_diagnostic_attempt_2_disposition": "INVALID_RUN",
+    "b3_2_diagnostic_attempt_2_cause": "AGY_STREAM_RESULT_ENVELOPE_SCHEMA_MISMATCH",
+    "b3_2_diagnostic_attempt_2_resource_ceiling_exceeded": true,
     "current_validated_agy_version": "1.1.15",
     "credit_fallback_effective": false,
     "b3_measurement_maturity": "MEASUREMENT_NOT_STARTED",
-    "b3_diagnostic_execution": "NOT_STARTED",
+    "b3_valid_diagnostic": "NOT_COMPLETED",
+    "b3_diagnostic_execution": "NOT_COMPLETED",
     "b3_calibration_execution": "NOT_STARTED",
     "murmurs_benefit": "NOT_ESTABLISHED",
     "murmurs_token_savings": "NOT_CLAIMED",
