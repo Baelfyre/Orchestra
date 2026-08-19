@@ -1,0 +1,115 @@
+{
+  "schema_version": "orchestra.codex-executor-binding.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "status": "READINESS_ONLY_NO_LIVE_CALLS",
+  "recorded_at": "2026-08-20",
+  "purpose": "Define a host-specific Codex CLI executor binding for the controlled cross-host baseline without changing the frozen benchmark subject, task set, communication treatments, shared runner, deterministic response validator, or accepted Antigravity evidence.",
+  "live_execution": {
+    "authorized": false,
+    "live_calls_in_readiness_unit": 0,
+    "required_human_freeze_before_any_live_call": [
+      "EXACT_CODEX_CLI_VERSION",
+      "EXACT_CODEX_MODEL",
+      "EXACT_REASONING_EFFORT",
+      "COUNTER_IDENTITY",
+      "AUTHENTICATION_SURFACE",
+      "WORKSPACE_BINDING",
+      "PER_CALL_TOKEN_CEILING",
+      "CUMULATIVE_TOKEN_CEILING",
+      "INVALID_RUN_STOP_CONDITIONS"
+    ]
+  },
+  "identity_model": {
+    "frozen_benchmark_subject": {
+      "repository": "Baelfyre/Orchestra",
+      "sha": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
+      "tree": "ceab55bd512ea6fde4e8e76877cbb7006d18500e",
+      "semantic_role": "CONTROL_IDENTITY_ORCHESTRA_REVISION_AND_BENCHMARK_SUBJECT"
+    },
+    "common_measurement_core_baseline": {
+      "repository": "Baelfyre/Orchestra",
+      "sha": "e182e478988c77125127811375aa1b69278cca63",
+      "tree": "9e1d9c0dcf5e615c4b16dfd95bb72f63eaacc33e",
+      "semantic_role": "FIRST_CANONICAL_REVISION_CONTAINING_THE_ACCEPTED_DETERMINISTIC_TASKSET_VALIDATOR_AND_EXECUTOR_INTEGRATION"
+    },
+    "codex_host_adapter_revision": "TO_BE_FROZEN_AFTER_CODEX_READINESS_CANONICALIZATION",
+    "rule": "The frozen control_identity.orchestra_revision remains d95f for cross-host comparison. Host adapter provenance is recorded separately and must never be substituted into that frozen field."
+  },
+  "frozen_taskset": {
+    "schema_version": "orchestra.b3-calibration-task-set.v1",
+    "path": "machine/benchmarking/b3-calibration-task-set.v1.json",
+    "aggregate_digest": "fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8",
+    "task_count": 5,
+    "repetitions_per_arm": 2,
+    "communication_arms": ["DEFAULT", "CAVEMAN", "MURMURS"],
+    "planned_runs": 30,
+    "validator_type": "EXACT_JSON_CONFORMANCE_V1",
+    "mutation_allowed": false
+  },
+  "common_measurement_core_blobs": {
+    "scripts/benchmarking/calibration_task_validator.py": "0011e6034f482a8f32ab0ba5623fa36f63026af6",
+    "scripts/comparative_benchmark_runner.py": "6de55d48fd2e37f8106ff64eecb522cde30b7a58",
+    "machine/benchmarking/b3-calibration-task-set.v1.json": "b0f4fd6c2ad14d5a38db61851303e58d80577ccf",
+    "scripts/antigravity_benchmark_executor.py": "4186683bee6732ee6af7d4c7a0aa331f9802a24d"
+  },
+  "codex_binding": {
+    "executor": "scripts/codex_benchmark_executor.py",
+    "provider_id": "openai-codex",
+    "transport": "jsonl-usage",
+    "expected_cli_version": "TO_BE_FROZEN_BY_HUMAN_GATE",
+    "expected_model": "TO_BE_FROZEN_BY_HUMAN_GATE",
+    "expected_reasoning_effort": "TO_BE_FROZEN_BY_HUMAN_GATE",
+    "counter_id_template": "codex-cli-{exact_cli_version}:jsonl-usage:{exact_model}:{exact_reasoning_effort}",
+    "token_mapping": {
+      "input_tokens": "turn.completed.usage.input_tokens",
+      "cached_input_tokens": "turn.completed.usage.cached_input_tokens",
+      "output_tokens": "turn.completed.usage.output_tokens",
+      "reasoning_tokens": "turn.completed.usage.reasoning_output_tokens",
+      "fresh_billable_tokens": null,
+      "cost": "UNAVAILABLE"
+    },
+    "host_controls": {
+      "non_interactive": true,
+      "ephemeral": true,
+      "jsonl_events": true,
+      "sandbox": "read-only",
+      "ignore_user_config": true,
+      "ignore_execpolicy_rules": true,
+      "approval_policy": "never",
+      "agents_enabled": false,
+      "web_search": "disabled",
+      "shell_tool": false,
+      "output_schema_enforcement": false,
+      "reason": "Synthetic calibration tasks require no host tools, network, repository mutation, or host-enforced answer schema. Outcome validation remains Orchestra response-derived and identical across hosts."
+    }
+  },
+  "fail_closed_conditions": [
+    "CLI_VERSION_MISMATCH",
+    "MODEL_MISMATCH",
+    "REASONING_EFFORT_MISMATCH",
+    "FROZEN_BENCHMARK_SUBJECT_DRIFT",
+    "MISSING_OR_INVALID_WORKSPACE",
+    "MALFORMED_JSONL",
+    "MISSING_THREAD_STARTED",
+    "TURN_FAILED_OR_ERROR_EVENT",
+    "MISSING_OR_DUPLICATE_TURN_COMPLETED",
+    "MISSING_OR_MALFORMED_HOST_USAGE",
+    "MISSING_FINAL_AGENT_MESSAGE",
+    "UNEXPECTED_TOOL_EVENT",
+    "COMMUNICATION_TREATMENT_BINDING_FAILURE"
+  ],
+  "authority": {
+    "measurement_evidence_is_promotion_authority": false,
+    "murmurs_benefit_established_by_readiness": false,
+    "a5_execution_promotion": "NOT_AUTHORIZED",
+    "a6": "NOT_AUTHORIZED",
+    "b4": "BLOCKED",
+    "release_publication": false,
+    "deployment": false
+  },
+  "official_codex_references": [
+    "https://developers.openai.com/codex/cli/reference",
+    "https://developers.openai.com/codex/non-interactive-mode",
+    "https://developers.openai.com/codex/config-reference"
+  ]
+}
