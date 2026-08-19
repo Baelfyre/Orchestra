@@ -98,8 +98,9 @@ def _mock_host_envelope(
     task_completed: bool = True,
     validation_passed: bool = True,
     governance_valid: bool = True,
+    response: str | None = "Sample structured response payload",
 ) -> dict[str, Any]:
-    return {
+    envelope: dict[str, Any] = {
         "status": status,
         "model": model,
         "cli_version": cli_version,
@@ -111,11 +112,23 @@ def _mock_host_envelope(
             "cache_read_tokens": cache_read_tokens,
             "total_tokens": total_tokens,
         },
-        "content": "Sample structured response payload",
         "task_completed": task_completed,
         "validation_passed": validation_passed,
         "governance_valid": governance_valid,
     }
+    if response is not None:
+        envelope["response"] = response
+    return envelope
+
+
+def _create_mock_settings(tmp_path: Path, use_g1_credits: Any = False) -> Path:
+    settings_file = tmp_path / "settings.json"
+    settings_file.parent.mkdir(parents=True, exist_ok=True)
+    data = {}
+    if use_g1_credits is not None:
+        data["useG1Credits"] = use_g1_credits
+    settings_file.write_text(json.dumps(data), encoding="utf-8")
+    return settings_file
 
 
 def test_01_valid_antigravity_usage_maps_to_host_reported_tokens() -> None:
@@ -245,14 +258,48 @@ def test_10_antigravity_success_does_not_automatically_set_task_outcome_pass() -
     assert res2["outcome"]["task_completed"] is False
 
 
-def test_11_counter_identity_is_deterministic() -> None:
+def test_11_host_success_without_independent_evidence_cannot_produce_pass() -> None:
+    # Regression test for Objective 5: Host envelope has status=SUCCESS and valid tokens,
+    # but no task_completed, validation_passed, or governance_valid fields.
+    # The executor must NOT default missing fields to True or manufacture benchmark PASS.
+    bare_envelope = {
+        "status": "SUCCESS",
+        "usage": {
+            "input_tokens": 1200,
+            "output_tokens": 350,
+            "thinking_tokens": 50,
+            "cache_read_tokens": 100,
+            "total_tokens": 1700,
+        },
+        "response": "Completed the request successfully.",
+    }
+    req = _base_request(raw_host_output=bare_envelope)
+    # Ensure task_payload contains no manufactured outcome flags
+    req["task_payload"].pop("task_completed", None)
+    req["task_payload"].pop("validation_passed", None)
+    req["task_payload"].pop("governance_valid", None)
+
+    res = executor.execute_request(req)
+    _validate_result_schema(res)
+
+    assert res["outcome"]["status"] == "FAIL"
+    assert res["outcome"]["invalid_reason"] is None
+    assert res["outcome"]["task_completed"] is False
+    assert res["outcome"]["validation_passed"] is False
+    assert res["outcome"]["governance_valid"] is False
+    assert res["tokens"]["source"] == "HOST_REPORTED"
+    assert res["tokens"]["input_tokens"] == 1200
+    assert res["tokens"]["output_tokens"] == 350
+
+
+def test_12_counter_identity_is_deterministic() -> None:
     cid1 = executor.compute_counter_id()
     cid2 = executor.compute_counter_id("1.1.14", "gemini-3.7-flash-high", "json-usage")
     assert cid1 == "antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high"
     assert cid1 == cid2 == executor.DEFAULT_COUNTER_ID
 
 
-def test_12_changed_cli_or_model_identity_changes_counter_identity() -> None:
+def test_13_changed_cli_or_model_identity_changes_counter_identity() -> None:
     base_cid = executor.DEFAULT_COUNTER_ID
 
     cid_cli_change = executor.compute_counter_id(cli_version="1.2.0")
@@ -271,8 +318,7 @@ def test_12_changed_cli_or_model_identity_changes_counter_identity() -> None:
     assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
 
 
-def test_13_no_live_antigravity_invocation_occurs_during_tests() -> None:
-    # Supply a runner_fn that records if it was called; in unit test mode with mock payload, runner_fn is never invoked
+def test_14_no_live_antigravity_invocation_occurs_during_tests() -> None:
     called = []
 
     def fake_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
@@ -285,7 +331,7 @@ def test_13_no_live_antigravity_invocation_occurs_during_tests() -> None:
     assert res["outcome"]["status"] == "PASS"
 
 
-def test_14_corrupted_starting_state_fails_closed() -> None:
+def test_15_corrupted_starting_state_fails_closed() -> None:
     req = _base_request(corrupted_starting_state=True, raw_host_output=_mock_host_envelope())
     res = executor.execute_request(req)
     _validate_result_schema(res)
@@ -301,7 +347,7 @@ def test_14_corrupted_starting_state_fails_closed() -> None:
     assert res2["outcome"]["invalid_reason"] == "CORRUPTED_STARTING_STATE"
 
 
-def test_15_model_mismatch_fails_closed() -> None:
+def test_16_model_mismatch_fails_closed() -> None:
     # Request control_identity model != pinned model
     req = _base_request(raw_host_output=_mock_host_envelope())
     req["control_identity"]["model"] = "unpinned-model-variant"
@@ -319,7 +365,247 @@ def test_15_model_mismatch_fails_closed() -> None:
     assert res2["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
 
 
-def test_16_runner_integration_with_antigravity_executor(tmp_path: Path) -> None:
+def test_17_live_argv_construction_and_no_stdin_prompt(tmp_path: Path) -> None:
+    # Tests Objective 1:
+    # Command is: ["agy", "--model", "gemini-3.7-flash-high", "-p", prompt, "--output-format", "json"]
+    # Prompt is passed via -p, prompt is not passed on stdin, --no-use-g1-credits is absent.
+    settings_file = _create_mock_settings(tmp_path, use_g1_credits=False)
+    captured_calls: list[dict[str, Any]] = []
+
+    def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "1.1.14\n", "")
+
+    def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
+        captured_calls.append({"cmd": cmd, "prompt": prompt})
+        envelope = _mock_host_envelope(
+            task_completed=True,
+            validation_passed=True,
+            governance_valid=True,
+        )
+        return (0, json.dumps(envelope), "")
+
+    test_prompt = "Refactor the authentication middleware."
+    req = _base_request(prompt=test_prompt)
+    res = executor.execute_request(
+        req,
+        runner_fn=mock_model_runner,
+        settings_path=settings_file,
+        version_runner_fn=mock_version_runner,
+    )
+    _validate_result_schema(res)
+
+    assert len(captured_calls) == 1
+    call_info = captured_calls[0]
+    cmd = call_info["cmd"]
+
+    expected_cmd = [
+        "agy",
+        "--model",
+        "gemini-3.7-flash-high",
+        "-p",
+        test_prompt,
+        "--output-format",
+        "json",
+    ]
+    assert cmd == expected_cmd
+    assert "-p" in cmd
+    assert cmd[cmd.index("-p") + 1] == test_prompt
+    assert "--no-use-g1-credits" not in cmd
+    assert res["outcome"]["status"] == "PASS"
+
+
+def test_18_preflight_accepts_exact_cli_version_1_1_14(tmp_path: Path) -> None:
+    # Tests Objective 2: Preflight accepts exact version 1.1.14
+    settings_file = _create_mock_settings(tmp_path, use_g1_credits=False)
+    model_called = False
+
+    def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
+        assert cmd == ["agy", "--version"]
+        return (0, "antigravity-cli 1.1.14\n", "")
+
+    def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
+        nonlocal model_called
+        model_called = True
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    req = _base_request(prompt="Sample prompt")
+    res = executor.execute_request(
+        req,
+        runner_fn=mock_model_runner,
+        settings_path=settings_file,
+        version_runner_fn=mock_version_runner,
+    )
+    _validate_result_schema(res)
+
+    assert model_called is True
+    assert res["outcome"]["status"] == "PASS"
+    assert res["raw_evidence"]["cli_version"] == "1.1.14"
+
+
+def test_19_preflight_fails_closed_on_different_cli_version(tmp_path: Path) -> None:
+    # Tests Objective 2: CLI version mismatch fails closed before model invocation
+    settings_file = _create_mock_settings(tmp_path, use_g1_credits=False)
+    model_called = False
+
+    def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "1.2.0\n", "")
+
+    def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
+        nonlocal model_called
+        model_called = True
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    req = _base_request(prompt="Sample prompt")
+    res = executor.execute_request(
+        req,
+        runner_fn=mock_model_runner,
+        settings_path=settings_file,
+        version_runner_fn=mock_version_runner,
+    )
+    _validate_result_schema(res)
+
+    assert model_called is False
+    assert res["outcome"]["status"] == "INVALID_RUN"
+    assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+    assert "1.2.0" in str(res["raw_evidence"]["detail"])
+
+
+def test_20_preflight_accepts_explicit_use_g1_credits_false(tmp_path: Path) -> None:
+    # Tests Objective 2: useG1Credits: false in settings.json passes preflight
+    settings_file = _create_mock_settings(tmp_path, use_g1_credits=False)
+    model_called = False
+
+    def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "1.1.14\n", "")
+
+    def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
+        nonlocal model_called
+        model_called = True
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    req = _base_request(prompt="Sample prompt")
+    res = executor.execute_request(
+        req,
+        runner_fn=mock_model_runner,
+        settings_path=settings_file,
+        version_runner_fn=mock_version_runner,
+    )
+    _validate_result_schema(res)
+
+    assert model_called is True
+    assert res["outcome"]["status"] == "PASS"
+
+
+def test_21_preflight_fails_closed_on_use_g1_credits_true(tmp_path: Path) -> None:
+    # Tests Objective 2: useG1Credits: true fails closed before model invocation
+    settings_file = _create_mock_settings(tmp_path, use_g1_credits=True)
+    model_called = False
+
+    def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "1.1.14\n", "")
+
+    def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
+        nonlocal model_called
+        model_called = True
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    req = _base_request(prompt="Sample prompt")
+    res = executor.execute_request(
+        req,
+        runner_fn=mock_model_runner,
+        settings_path=settings_file,
+        version_runner_fn=mock_version_runner,
+    )
+    _validate_result_schema(res)
+
+    assert model_called is False
+    assert res["outcome"]["status"] == "INVALID_RUN"
+    assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+    assert "useG1Credits" in str(res["raw_evidence"]["detail"])
+
+
+def test_22_preflight_fails_closed_on_malformed_or_missing_settings(tmp_path: Path) -> None:
+    # Tests Objective 2: Missing settings file, malformed JSON, and missing useG1Credits key
+    def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "1.1.14\n", "")
+
+    # 1. Missing settings file
+    missing_settings = tmp_path / "non_existent_settings.json"
+    req1 = _base_request(prompt="Sample prompt")
+    res1 = executor.execute_request(
+        req1,
+        settings_path=missing_settings,
+        version_runner_fn=mock_version_runner,
+    )
+    _validate_result_schema(res1)
+    assert res1["outcome"]["status"] == "INVALID_RUN"
+    assert res1["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+    # 2. Malformed settings file
+    malformed_settings = tmp_path / "bad_settings.json"
+    malformed_settings.write_text("{not-valid-json", encoding="utf-8")
+    req2 = _base_request(prompt="Sample prompt")
+    res2 = executor.execute_request(
+        req2,
+        settings_path=malformed_settings,
+        version_runner_fn=mock_version_runner,
+    )
+    _validate_result_schema(res2)
+    assert res2["outcome"]["status"] == "INVALID_RUN"
+    assert res2["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+    # 3. Missing useG1Credits key (e.g. empty object)
+    missing_key_settings = _create_mock_settings(tmp_path / "sub", use_g1_credits=None)
+    req3 = _base_request(prompt="Sample prompt")
+    res3 = executor.execute_request(
+        req3,
+        settings_path=missing_key_settings,
+        version_runner_fn=mock_version_runner,
+    )
+    _validate_result_schema(res3)
+    assert res3["outcome"]["status"] == "INVALID_RUN"
+    assert res3["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+
+def test_23_provenance_semantics_explicitly_preserved() -> None:
+    # Tests Objective 3: Explicit provenance for CLI version, model, usage, and counter ID
+    envelope = _mock_host_envelope()
+    # Remove model and cli_version from envelope to ensure they are not claimed to be host-returned
+    del envelope["model"]
+    del envelope["cli_version"]
+
+    req = _base_request(raw_host_output=envelope)
+    res = executor.execute_request(req)
+    _validate_result_schema(res)
+
+    raw_ev = res["raw_evidence"]
+    assert raw_ev["cli_version_provenance"]["source"] == "PREFLIGHT_COMMAND"
+    assert raw_ev["cli_version_provenance"]["value"] == "1.1.14"
+    assert raw_ev["model_provenance"]["source"] == "PINNED_COMMAND_ARGUMENT"
+    assert raw_ev["model_provenance"]["value"] == "gemini-3.7-flash-high"
+    assert raw_ev["usage_provenance"]["source"] == "HOST_REPORTED_JSON_USAGE"
+    assert raw_ev["counter_id_provenance"]["provenance"] == "ORCHESTRA_ASSIGNED_MEASUREMENT_SURFACE"
+    assert raw_ev["counter_id_provenance"]["vendor_assigned_claim"] is False
+    assert raw_ev["counter_id_provenance"]["identifier"] == "antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high"
+
+
+def test_24_response_bytes_captured_from_response_field() -> None:
+    # Tests Objective 6: Observed Antigravity envelope uses 'response' field
+    # user_visible_bytes is calculated from 'response' field, not zero
+    response_text = "Here is the refactored code and summary."
+    envelope = _mock_host_envelope(response=response_text)
+    envelope.pop("content", None)
+
+    req = _base_request(raw_host_output=envelope)
+    res = executor.execute_request(req)
+    _validate_result_schema(res)
+
+    expected_bytes = len(response_text.encode("utf-8"))
+    assert res["communication"]["user_visible_bytes"] == expected_bytes
+    assert res["communication"]["user_visible_bytes"] > 0
+
+
+def test_25_runner_integration_with_antigravity_executor(tmp_path: Path) -> None:
     # Test runner execution with scripts/antigravity_benchmark_executor.py
     manifest_path = tmp_path / "manifest.json"
     manifest = {

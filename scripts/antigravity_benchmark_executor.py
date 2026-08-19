@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
 """Antigravity measurement executor binding for Orchestra comparative benchmark.
 
-Provides the B3.1 executor adapter for Antigravity CLI host-native execution,
-structured usage parsing, and Orchestra-compatible benchmark result construction.
+Provides the B3.1.1 executor adapter for Antigravity CLI host-native execution,
+fail-closed preflight validation, structured usage parsing, and Orchestra-compatible
+benchmark result construction.
 
 Measurement Surface Provenance:
 - Counter ID format: "antigravity-cli-{cli_version}:json-usage:{model}"
 - Canonical default: "antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high"
+- Provenance semantics:
+  - CLI version: source = PREFLIGHT_COMMAND (exact validated `agy --version`)
+  - Model: source = PINNED_COMMAND_ARGUMENT (gemini-3.7-flash-high)
+  - Usage counters: source = HOST_REPORTED_JSON_USAGE
+  - Counter ID: provenance = ORCHESTRA_ASSIGNED_MEASUREMENT_SURFACE
 - Note: This counter ID is Orchestra-assigned provenance identifying the exact
   host-native measurement surface; it is NOT claimed to be an Antigravity/provider-issued
   identifier. Paired B3 token deltas are valid only while this identity remains
@@ -75,6 +81,157 @@ def compute_counter_id(
     It is not claimed to be a vendor/provider-issued counter ID.
     """
     return f"antigravity-cli-{cli_version}:{transport}:{model}"
+
+
+def get_default_settings_path() -> Path:
+    """Return default settings path: ~/.gemini/antigravity-cli/settings.json."""
+    return Path.home() / ".gemini" / "antigravity-cli" / "settings.json"
+
+
+def run_host_preflight(
+    request: dict[str, Any],
+    settings_path: Path | None = None,
+    version_runner_fn: Callable[[list[str]], tuple[int, str, str]] | None = None,
+) -> tuple[bool, str | None, dict[str, Any] | None, str | None]:
+    """Execute fail-closed host preflight before real model invocation.
+
+    Invariants verified:
+    1. Resolved Antigravity CLI version is exactly 1.1.14.
+    2. settings.json exists and parses successfully.
+    3. useG1Credits is explicitly False.
+    4. Benchmark model in request control_identity remains exactly gemini-3.7-flash-high.
+    5. Expected counter identity remains antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high.
+
+    Returns:
+        (is_valid, invalid_reason, detail, validated_cli_version)
+    """
+    req_control = request.get("control_identity", {})
+    req_model = req_control.get("model", PINNED_MODEL)
+    if req_model != PINNED_MODEL:
+        return (
+            False,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {
+                "error": f"request model {req_model!r} does not match pinned model {PINNED_MODEL!r}",
+                "pinned_model": PINNED_MODEL,
+                "request_model": req_model,
+            },
+            None,
+        )
+
+    target_settings = settings_path or get_default_settings_path()
+    if not target_settings.is_file():
+        return (
+            False,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {
+                "error": f"settings file not found: {target_settings}",
+                "settings_path": str(target_settings),
+            },
+            None,
+        )
+
+    try:
+        raw_settings = target_settings.read_text(encoding="utf-8")
+        settings = json.loads(raw_settings)
+    except Exception as exc:
+        return (
+            False,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {
+                "error": f"failed to parse settings.json: {exc}",
+                "settings_path": str(target_settings),
+            },
+            None,
+        )
+
+    if not isinstance(settings, dict):
+        return (
+            False,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {
+                "error": "settings.json root is not an object",
+                "settings_path": str(target_settings),
+            },
+            None,
+        )
+
+    use_g1 = settings.get("useG1Credits")
+    if use_g1 is not False or isinstance(use_g1, bool) is False:
+        return (
+            False,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {
+                "error": "useG1Credits must be explicitly false in settings.json",
+                "observed_useG1Credits": use_g1,
+                "settings_path": str(target_settings),
+            },
+            None,
+        )
+
+    version_cmd = ["agy", "--version"]
+    if version_runner_fn is not None:
+        rc, stdout, stderr = version_runner_fn(version_cmd)
+    else:
+        try:
+            completed = subprocess.run(
+                version_cmd,
+                capture_output=True,
+                text=True,
+                check=False,
+                shell=False,
+            )
+            rc, stdout, stderr = completed.returncode, completed.stdout, completed.stderr
+        except OSError as exc:
+            return (
+                False,
+                "HARNESS_FAILURE",
+                {"error": f"failed to execute agy --version: {exc}"},
+                None,
+            )
+
+    if rc != 0:
+        return (
+            False,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {
+                "error": f"agy --version returned non-zero exit code {rc}",
+                "returncode": rc,
+                "stdout": stdout,
+                "stderr": stderr,
+            },
+            None,
+        )
+
+    raw_version = stdout.strip()
+    tokens = raw_version.split()
+    resolved_version = tokens[-1] if tokens else ""
+    if resolved_version != PINNED_CLI_VERSION:
+        return (
+            False,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {
+                "error": f"resolved CLI version {resolved_version!r} does not match pinned version {PINNED_CLI_VERSION!r}",
+                "raw_version_output": raw_version,
+                "pinned_version": PINNED_CLI_VERSION,
+            },
+            None,
+        )
+
+    counter_id = compute_counter_id(cli_version=resolved_version, model=PINNED_MODEL)
+    if counter_id != DEFAULT_COUNTER_ID:
+        return (
+            False,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {
+                "error": "counter identity mismatch",
+                "observed_counter_id": counter_id,
+                "expected_counter_id": DEFAULT_COUNTER_ID,
+            },
+            None,
+        )
+
+    return True, None, None, resolved_version
 
 
 def map_antigravity_tokens(usage: dict[str, Any], counter_id: str) -> dict[str, Any]:
@@ -213,14 +370,33 @@ def evaluate_task_outcome(
 
     Quality Boundary:
     Antigravity status SUCCESS does NOT imply benchmark task PASS.
-    Task outcome is determined independently from:
-    - task completion
-    - required validation
-    - governance preservation
+    No missing task-completion, validation, or governance field may default
+    to a successful benchmark result.
+
+    Task outcome is determined strictly from explicit independently established evidence:
+    - task_completed
+    - validation_passed
+    - governance_valid
     """
-    task_completed = bool(antigravity_output.get("task_completed", task_payload.get("task_completed", True)))
-    validation_passed = bool(antigravity_output.get("validation_passed", task_payload.get("validation_passed", True)))
-    governance_valid = bool(antigravity_output.get("governance_valid", task_payload.get("governance_valid", True)))
+    raw_completed = (
+        antigravity_output.get("task_completed")
+        if "task_completed" in antigravity_output
+        else task_payload.get("task_completed")
+    )
+    raw_validation = (
+        antigravity_output.get("validation_passed")
+        if "validation_passed" in antigravity_output
+        else task_payload.get("validation_passed")
+    )
+    raw_gov = (
+        antigravity_output.get("governance_valid")
+        if "governance_valid" in antigravity_output
+        else task_payload.get("governance_valid")
+    )
+
+    task_completed = bool(raw_completed) if raw_completed is not None else False
+    validation_passed = bool(raw_validation) if raw_validation is not None else False
+    governance_valid = bool(raw_gov) if raw_gov is not None else False
 
     is_pass = task_completed and validation_passed and governance_valid
 
@@ -248,6 +424,7 @@ def parse_antigravity_output(
     raw_output: str | dict[str, Any],
     request: dict[str, Any],
     elapsed_ms: int | None = None,
+    validated_cli_version: str = PINNED_CLI_VERSION,
 ) -> dict[str, Any]:
     """Parse raw Antigravity outer envelope and construct Orchestra benchmark result."""
     task_payload = request.get("task_payload", {})
@@ -297,24 +474,47 @@ def parse_antigravity_output(
             elapsed_ms,
         )
 
-    host_model = envelope.get("model", PINNED_MODEL)
-    req_control = request.get("control_identity", {})
-    req_model = req_control.get("model", PINNED_MODEL)
-    if host_model != PINNED_MODEL or req_model != PINNED_MODEL or host_model != req_model:
+    # Check model mismatch if host returned model field
+    if "model" in envelope and envelope["model"] != PINNED_MODEL:
         return build_invalid_result(
             request,
             "MEASUREMENT_CAPTURE_FAILURE",
             {
-                "error": "model identity mismatch",
-                "host_model": host_model,
+                "error": "host returned model mismatch",
+                "host_model": envelope["model"],
+                "pinned_model": PINNED_MODEL,
+            },
+            elapsed_ms,
+        )
+
+    req_control = request.get("control_identity", {})
+    req_model = req_control.get("model", PINNED_MODEL)
+    if req_model != PINNED_MODEL:
+        return build_invalid_result(
+            request,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {
+                "error": "request model mismatch",
                 "request_model": req_model,
                 "pinned_model": PINNED_MODEL,
             },
             elapsed_ms,
         )
 
-    host_cli_version = envelope.get("cli_version", PINNED_CLI_VERSION)
-    counter_id = compute_counter_id(cli_version=host_cli_version, model=host_model)
+    # Check cli_version mismatch if host returned cli_version field
+    if "cli_version" in envelope and envelope["cli_version"] != PINNED_CLI_VERSION:
+        return build_invalid_result(
+            request,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {
+                "error": "host returned cli_version mismatch",
+                "host_cli_version": envelope["cli_version"],
+                "pinned_cli_version": PINNED_CLI_VERSION,
+            },
+            elapsed_ms,
+        )
+
+    counter_id = compute_counter_id(cli_version=validated_cli_version, model=PINNED_MODEL)
     if counter_id != DEFAULT_COUNTER_ID:
         return build_invalid_result(
             request,
@@ -369,7 +569,17 @@ def parse_antigravity_output(
     }
 
     comm_source = envelope.get("communication") or {}
-    user_visible_bytes = int(comm_source.get("user_visible_bytes", len(envelope.get("content", "").encode("utf-8")) if "content" in envelope else 0))
+    if "user_visible_bytes" in comm_source:
+        user_visible_bytes = int(comm_source["user_visible_bytes"])
+    elif "response" in envelope:
+        resp = envelope["response"]
+        user_visible_bytes = len(resp.encode("utf-8")) if isinstance(resp, str) else len(canonical_json(resp).encode("utf-8"))
+    elif "content" in envelope:
+        cont = envelope["content"]
+        user_visible_bytes = len(cont.encode("utf-8")) if isinstance(cont, str) else len(canonical_json(cont).encode("utf-8"))
+    else:
+        user_visible_bytes = 0
+
     communication = {
         "progress_messages": int(comm_source.get("progress_messages", 0)),
         "model_progress_calls": int(comm_source.get("model_progress_calls", 0)),
@@ -383,9 +593,25 @@ def parse_antigravity_output(
 
     raw_evidence = {
         "host": "Antigravity CLI",
-        "cli_version": host_cli_version,
-        "model": host_model,
+        "cli_version": validated_cli_version,
+        "cli_version_provenance": {
+            "source": "PREFLIGHT_COMMAND",
+            "value": validated_cli_version,
+        },
+        "model": PINNED_MODEL,
+        "model_provenance": {
+            "source": "PINNED_COMMAND_ARGUMENT",
+            "value": PINNED_MODEL,
+        },
+        "usage_provenance": {
+            "source": "HOST_REPORTED_JSON_USAGE",
+        },
         "counter_id": counter_id,
+        "counter_id_provenance": {
+            "identifier": counter_id,
+            "provenance": "ORCHESTRA_ASSIGNED_MEASUREMENT_SURFACE",
+            "vendor_assigned_claim": False,
+        },
         "outer_envelope": copy.deepcopy(envelope),
         "total_tokens": usage.get("total_tokens"),
         "useG1Credits": envelope.get("useG1Credits", False),
@@ -423,7 +649,9 @@ def parse_antigravity_output(
 
 def execute_request(
     request: dict[str, Any],
-    runner_fn: Callable[[list[str], str], tuple[int, str, str]] | None = None,
+    runner_fn: Callable[..., tuple[int, str, str]] | None = None,
+    settings_path: Path | None = None,
+    version_runner_fn: Callable[[list[str]], tuple[int, str, str]] | None = None,
 ) -> dict[str, Any]:
     """Execute a single comparative benchmark request with Antigravity binding."""
     if not isinstance(request, dict):
@@ -462,26 +690,44 @@ def execute_request(
     if mock_output is not None:
         return parse_antigravity_output(mock_output, request, elapsed_ms=10)
 
-    # Live Antigravity CLI execution path (disabled during non-live testing)
+    # Fail-closed host preflight before real model invocation
+    preflight_valid, pf_reason, pf_detail, validated_version = run_host_preflight(
+        request,
+        settings_path=settings_path,
+        version_runner_fn=version_runner_fn,
+    )
+    if not preflight_valid:
+        return build_invalid_result(
+            request,
+            pf_reason or "MEASUREMENT_CAPTURE_FAILURE",
+            pf_detail or {"error": "preflight failed"},
+        )
+
+    cli_version = validated_version or PINNED_CLI_VERSION
+    prompt = task_payload.get("prompt", "")
+
+    # Validated Antigravity print-mode command interface
     cmd = [
         "agy",
         "--model",
         PINNED_MODEL,
+        "-p",
+        prompt,
         "--output-format",
         "json",
-        "--no-use-g1-credits",
     ]
 
-    prompt = task_payload.get("prompt", "")
     started = time.monotonic()
 
     if runner_fn is not None:
-        returncode, stdout, stderr = runner_fn(cmd, prompt)
+        try:
+            returncode, stdout, stderr = runner_fn(cmd, prompt)
+        except TypeError:
+            returncode, stdout, stderr = runner_fn(cmd)
     else:
         try:
             completed = subprocess.run(
                 cmd,
-                input=prompt,
                 capture_output=True,
                 text=True,
                 check=False,
@@ -506,7 +752,7 @@ def execute_request(
             elapsed,
         )
 
-    return parse_antigravity_output(stdout, request, elapsed)
+    return parse_antigravity_output(stdout, request, elapsed, validated_cli_version=cli_version)
 
 
 def main(argv: list[str] | None = None) -> int:

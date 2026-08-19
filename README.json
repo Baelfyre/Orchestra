@@ -187,7 +187,7 @@
     },
     "comparative_measurement_b3_1": {
       "status": "IMPLEMENTED_NON_CALIBRATED",
-      "purpose": "Bounded Antigravity measurement executor binding for the Orchestra comparative benchmark harness, supporting structured token usage mapping and deterministic counter identity provenance.",
+      "purpose": "Bounded Antigravity measurement executor binding for the Orchestra comparative benchmark harness with hardened print-mode invocation, fail-closed preflight, explicit provenance semantics, and strict outcome evaluation.",
       "program_id": "orchestra.shared-comparative-benchmark.v1",
       "executor": "scripts/antigravity_benchmark_executor.py",
       "machine_sources": ["machine/benchmarking/antigravity-executor-binding.v1.json"],
@@ -201,7 +201,7 @@
       "a5_execution_promotion": "NOT_AUTHORIZED",
       "a6_authorized": false,
       "b4_state": "BLOCKED",
-      "authority_note": "B3.1 provides the bounded Antigravity measurement executor binding only. Calibration is not executed in this unit, Murmurs benefit is not established, fresh_billable_tokens and cost remain unavailable, A5 remains shadow-only, and B4 remains blocked."
+      "authority_note": "B3.1/B3.1.1 provides the bounded Antigravity measurement executor binding only. Calibration is not executed in this unit, Murmurs benefit is not established, fresh_billable_tokens and cost remain unavailable, A5 remains shadow-only, and B4 remains blocked."
     }
   },
   "machine_scan_order": [
@@ -384,6 +384,7 @@
     "adaptive_tuner_a5": "docs/architecture/ADAPTIVE_TUNER_A5.md",
     "comparative_measurement_b0": "docs/benchmarking/COMPARATIVE_MEASUREMENT_B0.md",
     "comparative_measurement_b1": "docs/benchmarking/COMPARATIVE_MEASUREMENT_B1.md",
+    "comparative_measurement_b3": "docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md",
     "roadmap": "docs/project/ROADMAP.md",
     "changelog": "CHANGELOG.md",
     "release_docs": "docs/releases/",
