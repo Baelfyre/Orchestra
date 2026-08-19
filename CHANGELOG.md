@@ -1,5 +1,16 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B3.1.4 Antigravity Sparse Settings Semantic Preflight - Candidate
+
+- Refactors Antigravity host preflight in `scripts/antigravity_benchmark_executor.py` to interpret `useG1Credits` according to documented Antigravity sparse-settings semantics where system default is `false`.
+- Introduces `resolve_use_g1_credits` deterministic helper mapping absent keys to effective `false` with `SYSTEM_DEFAULT_SPARSE_PERSISTENCE` provenance and explicit `false` to `EXPLICIT_SETTING` provenance.
+- Enforces fail-closed validation (`INVALID_RUN` / `MEASUREMENT_CAPTURE_FAILURE`) when `useG1Credits` is explicitly `true` or set to non-boolean/malformed values (`null`, `0`, `1`, `"false"`, `"true"`, `{}`, `[]`) without silent coercion.
+- Preserves the core benchmark invariant that `effective_use_g1_credits` must be `false`, keeping personal credit fallback strictly disabled during comparative measurement.
+- Preserves raw and effective provenance in `credit_fallback_policy` machine evidence across execution results.
+- Preserves all prior preflights: exact CLI version matching (1.1.15), model pinning (`gemini-3.7-flash-high`), stream-json and json counter identities, communication treatment bindings (`DEFAULT`, `CAVEMAN`, `MURMURS`), and independent task outcome evaluation.
+- Adds comprehensive deterministic runtime test coverage in `tests/runtime/test_comparative_benchmark_antigravity_executor.py` with zero live model turns.
+- Updates machine discovery in `README.json`, machine binding record `machine/benchmarking/antigravity-executor-binding.v1.json`, and documentation in `docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md`.
+
 ## Post-v1.6.0 Comparative Benchmark B3.1.3 Exact Host Version Pin Externalization - Candidate
 
 - Externalizes the exact expected Antigravity host CLI version via `--expected-cli-version` CLI argument in `scripts/antigravity_benchmark_executor.py`, removing operational hard-coding while preserving exact fail-closed version matching.

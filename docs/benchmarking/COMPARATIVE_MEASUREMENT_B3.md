@@ -5,11 +5,11 @@
 ```text
 Program: Orchestra Shared Comparative Benchmark
 Phase: B3 Murmurs Isolated Comparative Experiment
-Current bounded unit: B3.1.3 Exact Host Version Pin Externalization
-State: B3_1_3_EXACT_HOST_VERSION_PIN_IMPLEMENTED_SOURCE_ONLY
-Canonical entry: 48007cbbbbfa6ce84747ed8b413b1d4af8ac895f
-Canonical entry tree: 62818f2a94c961725578e2297001f8692ad83444
-Authoritative benchmark machine state: B0/B1/B3.1.3 executor binding
+Current bounded unit: B3.1.4 Sparse Settings Semantic Preflight
+State: B3_1_4_SPARSE_SETTINGS_PREFLIGHT_IMPLEMENTED_SOURCE_ONLY
+Canonical entry: b0f14ade2ce9bb2b5b25ae7c653cb94345af5dcb
+Canonical entry tree: 4dbcb6b4ff07a410fb3e1b57e9526fb9f0c851d0
+Authoritative benchmark machine state: B0/B1/B3.1.4 executor binding
 Validated local Antigravity host: Antigravity CLI 1.1.15
 Measurement maturity after unit implementation: MEASUREMENT_NOT_STARTED
 Murmurs benefit: NOT ESTABLISHED
@@ -20,7 +20,7 @@ Diagnostic execution: DIAGNOSTIC_READINESS_ONLY (NOT EXECUTED)
 Calibration execution: NOT EXECUTED
 ```
 
-B3.1.3 externalizes the exact expected Antigravity host CLI version (`--expected-cli-version`), replacing the operational hard-coding of 1.1.14 while qualifying 1.1.15 via zero-turn structured preflight probes. It maintains exact fail-closed host/version identity for every comparative measurement batch and preserves the B3.1.2 communication treatments (`DEFAULT`, `CAVEMAN`, and `MURMURS`).
+B3.1.4 refactors Antigravity host preflight so `useG1Credits` is interpreted according to documented Antigravity sparse-settings semantics where system default is `false`. It resolves omitted sparse settings and explicit `false` settings to effective `false` while failing closed against explicit `true` or malformed values, keeping personal credit fallback strictly disabled during benchmark measurement. It preserves exact version qualification (1.1.15), externalized version matching, stream-json event transport, and all B3.1.2 communication treatments (`DEFAULT`, `CAVEMAN`, and `MURMURS`).
 
 It does not execute Antigravity model turns, does not execute the 3-run diagnostic, does not execute the 30-run calibration, does not measure live token savings or benefit, does not vendor Caveman, and does not alter production runtime routing.
 
@@ -31,10 +31,10 @@ ARM OPERATIONALIZATION IMPLEMENTATION != MEASURED CALIBRATION
 PLAN-ONLY VALIDATION != MEASURED CALIBRATION
 SYNTHETIC FIXTURE != MURMURS BENEFIT EVIDENCE
 CAVEMAN PUBLISHED RESULTS != ORCHESTRA RESULTS
-MEASUREMENT_NOT_STARTED remains current after B3.1.3
+MEASUREMENT_NOT_STARTED remains current after B3.1.4
 ```
 
-The authoritative benchmark machine state incorporates the B3.1.3 executor binding record (`machine/benchmarking/antigravity-executor-binding.v1.json`) alongside the B0 contract and B1 harness. Measurement maturity remains `MEASUREMENT_NOT_STARTED` until genuine calibrated evidence is collected.
+The authoritative benchmark machine state incorporates the B3.1.4 executor binding record (`machine/benchmarking/antigravity-executor-binding.v1.json`) alongside the B0 contract and B1 harness. Measurement maturity remains `MEASUREMENT_NOT_STARTED` until genuine calibrated evidence is collected.
 
 ## B3.1.2 / B3.1.3 Communication Treatments
 
@@ -85,6 +85,22 @@ Paired comparability invariants:
 - Native usage counters (`input_tokens`, `output_tokens`, `cache_read_tokens`, `thinking_tokens`) map deterministically into Orchestra token schema regardless of transport format.
 - `total_tokens` remains in `raw_evidence` only.
 - Cost remains `UNAVAILABLE`.
+
+## Sparse Settings Semantics & Credit Policy Resolution
+
+Antigravity CLI settings persistence follows sparse persistence semantics:
+1. `useG1Credits` has system default `false`.
+2. Values equal to system defaults may be omitted from `settings.json`.
+3. An omitted `useG1Credits` key and `"useG1Credits": false` both represent the exact same effective host policy: `effective_use_g1_credits = false` (credit fallback disabled).
+4. The benchmark invariant is strictly: `effective_use_g1_credits` must be `false`.
+
+Preflight state resolution table:
+- **Key absent (`settings = {}`)**: resolves to `effective_use_g1_credits = false`, passes preflight with `effective_source: SYSTEM_DEFAULT_SPARSE_PERSISTENCE`.
+- **Key explicitly false (`settings = {"useG1Credits": false}`)**: resolves to `effective_use_g1_credits = false`, passes preflight with `effective_source: EXPLICIT_SETTING`.
+- **Key explicitly true (`settings = {"useG1Credits": true}`)**: fails closed as `INVALID_RUN` (`MEASUREMENT_CAPTURE_FAILURE`) because personal credit fallback is enabled.
+- **Key present with non-boolean value (`null`, `0`, `1`, `"false"`, `"true"`, `{}`, `[]`)**: fails closed as `INVALID_RUN` (`MEASUREMENT_CAPTURE_FAILURE`) without silent coercion.
+
+Raw and effective provenance is recorded in `raw_evidence.credit_fallback_policy` to distinguish the physical file representation from the resolved host policy.
 
 ## Quality Boundary: Host Status != Task Outcome
 
