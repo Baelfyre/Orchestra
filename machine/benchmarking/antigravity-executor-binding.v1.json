@@ -1,9 +1,9 @@
 {
   "schema_version": "orchestra.antigravity-executor-binding.v1",
   "program_id": "orchestra.shared-comparative-benchmark.v1",
-  "phase": "BENCHMARK_B3_1_3_EXACT_HOST_VERSION_PIN_EXTERNALIZATION",
+  "phase": "BENCHMARK_B3_1_4_SPARSE_SETTINGS_SEMANTIC_PREFLIGHT",
   "status": "IMPLEMENTED_NON_CALIBRATED",
-  "canonical_entry_baseline": "48007cbbbbfa6ce84747ed8b413b1d4af8ac895f",
+  "canonical_entry_baseline": "b0f14ade2ce9bb2b5b25ae7c653cb94345af5dcb",
   "binding": {
     "host": "Antigravity CLI",
     "cli_version": "1.1.15",
@@ -15,6 +15,9 @@
     "output_formats": ["json", "stream-json"],
     "non_interactive": true,
     "personal_credit_fallback": "disabled",
+    "use_g1_credits_effective": false,
+    "sparse_settings_persistence": true,
+    "use_g1_credits_system_default": false,
     "use_g1_credits": false,
     "executor_script": "scripts/antigravity_benchmark_executor.py",
     "qualification_method": "ZERO_TURN_STRUCTURED_PREFLIGHT_PROBES",
@@ -83,6 +86,9 @@
     "fail_closed_on_caveman_policy_mismatch": true,
     "fail_closed_on_missing_expected_cli_version": true,
     "fail_closed_on_cli_version_mismatch": true,
+    "fail_closed_on_use_g1_credits_true": true,
+    "fail_closed_on_malformed_use_g1_credits": true,
+    "sparse_settings_default_fallback_disabled": true,
     "raw_outer_envelope_preserved": true,
     "no_metric_inference": true
   },
@@ -96,8 +102,9 @@
     ]
   },
   "governance_boundaries": {
-    "b3_1_3_exact_host_version_pin": "IMPLEMENTED_SOURCE_ONLY",
+    "b3_1_4_sparse_settings_preflight": "IMPLEMENTED_SOURCE_ONLY",
     "current_validated_agy_version": "1.1.15",
+    "credit_fallback_effective": false,
     "b3_measurement_maturity": "MEASUREMENT_NOT_STARTED",
     "b3_diagnostic_execution": "NOT_STARTED",
     "b3_calibration_execution": "NOT_STARTED",
