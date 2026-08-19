@@ -1,5 +1,17 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B3 Calibration Execution Closeout & Evidence Freeze - Candidate
+
+- Executes and validates full 30-run B3 calibration across 10 paired blocks (5 Padayon-grounded tasks x 2 repetitions x 3 communication arms) under Antigravity CLI 1.1.15 and `gemini-3.7-flash-high` stream-json transport.
+- Achieves 100.0% semantic pass rate (30/30) derived strictly through `EXACT_JSON_CONFORMANCE_V1` deterministic response validation with zero invalid runs and zero safety violations (0 required specialist omissions, 0 authority expansions, 0 capability expansions, 0 governance violations).
+- Measures empirical per-arm token consumption:
+  - `DEFAULT`: mean 29,049.1 total tokens / 27,751.3 input / 1,297.8 output / 1,120.0 reasoning
+  - `CAVEMAN`: mean 29,864.6 total tokens (+2.81% vs DEFAULT) / 28,597.9 input (+3.05% vs DEFAULT) / 1,266.7 output (-2.40% vs DEFAULT) / 1,092.4 reasoning (-2.46% vs DEFAULT)
+  - `MURMURS`: mean 28,844.5 total tokens (-0.70% vs DEFAULT) / 27,752.8 input (+0.01% vs DEFAULT) / 1,091.7 output (-15.88% vs DEFAULT) / 913.9 reasoning (-18.40% vs DEFAULT)
+- Bounds resource consumption well within frozen ceilings: cumulative total tokens 877,582 <= 1,200,000 ceiling, peak per-call tokens 31,268 <= 45,000 ceiling, and zero invalid runs.
+- Cryptographically anchors and freezes calibration evidence in `machine/benchmarking/antigravity-executor-binding.v1.json`, `docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md`, and `README.json`.
+- Enforces measurement boundaries: Murmurs benefit remains unestablished from calibration sample alone (inconclusive), token savings are evidence-derived only, confirmatory benchmark is required before establishing production claims, A5 execution promotion remains unauthorized, A6 remains unauthorized, and B4 remains blocked.
+
 ## Post-v1.6.0 Comparative Benchmark B3.2.1 Padayon-Grounded Calibration Task-Set & Deterministic Outcome Validation - Candidate
 
 - Recalibrates B3 calibration task-set to be grounded in Padayon's approved work sequence (R5 capability manifest, R6/O1/O2 compatibility, O3/O4 freshness, Issue #115 assurance drift, O5/O6 routing) across 5 synthetic, self-contained task definitions.
