@@ -196,4 +196,3 @@ This unit authorizes no:
 - Release publication or deployment.
 
 B4 remains BLOCKED until valid measured B2 and B3 evidence exists.
-

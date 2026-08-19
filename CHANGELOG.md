@@ -8,7 +8,7 @@
 - Binds `MURMURS` to canonical `orchestra_runtime.presentation` contracts (`PresentationMode.MURMURS`, `murmurs-policy.v1.json`, `murmurs-vocabulary.v1.json`), reducing routine lifecycle events via `decide_presentation` while keeping the underlying task prompt invariant.
 - Adds stream-json NDJSON event parsing with token counter mapping, event sequence retention, and counter identity invariance.
 - Expands runtime unit test suite in `tests/runtime/test_comparative_benchmark_antigravity_executor.py` with 20 new tests covering all required B3.1.2 invariants with zero live model turns.
-- Updates machine binding record `machine/benchmarking/antigravity-executor-binding.v1.json` and documentation `docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md`.
+- Updates machine discovery parity in `README.json`, machine binding record `machine/benchmarking/antigravity-executor-binding.v1.json`, and documentation `docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md`.
 
 ## Post-v1.6.0 Comparative Benchmark B3.1.1 Antigravity Live Invocation Hardening - Candidate
 

@@ -187,21 +187,31 @@
     },
     "comparative_measurement_b3_1": {
       "status": "IMPLEMENTED_NON_CALIBRATED",
-      "purpose": "Bounded Antigravity measurement executor binding for the Orchestra comparative benchmark harness with hardened print-mode invocation, fail-closed preflight, explicit provenance semantics, and strict outcome evaluation.",
+      "purpose": "Bounded Antigravity measurement executor binding and B3.1.2 communication-arm operationalization for the Orchestra comparative benchmark harness with explicit DEFAULT, CAVEMAN, and MURMURS treatments, pinned Caveman external baseline, canonical Murmurs presentation binding, stream-json transport support, hardened print-mode invocation, fail-closed preflight, explicit provenance semantics, and strict outcome evaluation.",
       "program_id": "orchestra.shared-comparative-benchmark.v1",
       "executor": "scripts/antigravity_benchmark_executor.py",
+      "communication_arms": ["DEFAULT", "CAVEMAN", "MURMURS"],
+      "supported_transports": ["json-usage", "stream-json-usage"],
+      "pinned_caveman_baseline": {
+        "repository": "JuliusBrussee/caveman",
+        "revision": "ae405e872270acc57484693612ae038b16c8f6cd",
+        "skill_path": "skills/caveman/SKILL.md",
+        "blob_identity": "bd22d86b32e4a99e09ff7482a35509faac7a6f65"
+      },
       "machine_sources": ["machine/benchmarking/antigravity-executor-binding.v1.json"],
       "human_sources": ["docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md"],
-      "counter_identity": "antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high",
+      "canonical_json_counter_id": "antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high",
+      "canonical_stream_json_counter_id": "antigravity-cli-1.1.14:stream-json-usage:gemini-3.7-flash-high",
       "counter_identity_provenance": "ORCHESTRA_ASSIGNED_MEASUREMENT_SURFACE",
       "measurement_maturity": "MEASUREMENT_NOT_STARTED",
+      "diagnostic_executed": false,
       "calibration_executed": false,
       "murmurs_benefit": "NOT_ESTABLISHED",
       "a5_benefit": "NOT_ESTABLISHED",
       "a5_execution_promotion": "NOT_AUTHORIZED",
       "a6_authorized": false,
       "b4_state": "BLOCKED",
-      "authority_note": "B3.1/B3.1.1 provides the bounded Antigravity measurement executor binding only. Calibration is not executed in this unit, Murmurs benefit is not established, fresh_billable_tokens and cost remain unavailable, A5 remains shadow-only, and B4 remains blocked."
+      "authority_note": "B3.1/B3.1.2 provides the bounded Antigravity measurement executor binding and communication-arm operationalization only. Diagnostic and calibration are not executed in this unit, Murmurs benefit is not established, fresh_billable_tokens and cost remain unavailable, A5 remains shadow-only, and B4 remains blocked."
     }
   },
   "machine_scan_order": [
