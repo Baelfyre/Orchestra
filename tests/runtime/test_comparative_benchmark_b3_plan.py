@@ -30,7 +30,7 @@ def test_b3_plan_only_fixture_is_schema_valid_and_isolates_communication_mode() 
 
     assert manifest["experiment_kind"] == "MURMURS_ISOLATED"
     assert manifest["stage"] == "CALIBRATION"
-    assert manifest["common_control_identity"]["orchestra_revision"] == "6ec1a549370eaf73249eb3ddcffe5e464c5eb4ae"
+    assert manifest["common_control_identity"]["orchestra_revision"] == "d95f677dbf23ab79c4698c26645ea30cea9b3019"
     assert manifest["common_control_identity"]["provider"] == "NO_PROVIDER_PLAN_ONLY"
     assert manifest["common_control_identity"]["model"] == "NO_MODEL_PLAN_ONLY"
     assert len(manifest["tasks"]) >= 5
