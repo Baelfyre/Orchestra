@@ -215,15 +215,18 @@
       "authority_note": "B3 records completed and validated 30-run empirical calibration and baseline evidence freeze under the Padayon-grounded task-set. Murmurs benefit remains not established from calibration sample evidence alone, token savings are evidence-derived only, fresh_billable_tokens and cost remain unavailable, personal credit fallback remains disabled, A5 remains shadow-only, and B4 remains blocked."
     },
     "registry_adaptive_consumption_o1_o6": {
-      "status": "IMPLEMENTED_CANDIDATE_PENDING_EXACT_HEAD_VALIDATION",
+      "status": "CANONICAL_IMPLEMENTED_VALIDATED_AND_REGISTRY_RECONCILED",
       "purpose": "Negotiated Registry capability consumption, explicit trusted Registry v0.2.0 compatibility, multi-jurisdiction query selection, query-scoped freshness, release-delta impact analysis, and governed domain-to-specialist resolution.",
       "runtime_surface": "orchestra_runtime/registry_adaptive.py",
       "cli_surface": "scripts/compliance_registry_adaptive.py",
       "validation_surfaces": ["tests/runtime/test_registry_adaptive.py", "tests/runtime/test_registry_adaptive_edges.py", "tests/runtime/test_registry_joint_contract.py"],
       "human_sources": ["docs/architecture/REGISTRY_ADAPTIVE_CONSUMPTION_O1_O6.md"],
-      "registry_r5_r6_candidate": "Baelfyre/Orchestra-Compliance-Registry PR #24",
-      "legacy_v0_2_compatibility": "EXPLICIT_LOCAL_PROFILE_NO_INVENTED_REGISTRY_R5_METADATA",
-      "authority_note": "Registry capability, freshness, delta, and routing evidence cannot expand Orchestra authority, merge or publish Registry state, bypass Conductor routing, or replace Governor/Steward/Arbiter evidence controls."
+      "canonical_orchestra_implementation": {"sha": "955a4b4918e28638a50e9564d1e3ea0127ae5f73", "tree": "4cba8642eb63b38b283db67010e01f204c92780b"},
+      "registry_r1_r6_canonical": {"repository": "Baelfyre/Orchestra-Compliance-Registry", "sha": "20eb859db153f17e24c052a13765e982d51cedbf", "tree": "763be9062a0c23031c794403dc4592f5db4389b0", "implementation_merge_sha": "be297335b55aa6a3a88a473c7e7da28614e95cd2", "trusted_release": "registry-v0.2.0", "trusted_release_includes_r1_r6": false},
+      "r5_capability_blob_sha": "978c1a6eecffe802df79e6d110a16b780ec6bd3f",
+      "joint_reconciliation": "PASS",
+      "legacy_v0_2_compatibility": "EXPLICIT_LOCAL_PROFILE_NO_INVENTED_REGISTRY_CAPABILITY_METADATA",
+      "authority_note": "Registry capability, freshness, delta, and routing evidence cannot expand Orchestra authority, publish Registry state, bypass Conductor routing, or replace Governor/Steward/Arbiter evidence controls."
     }
   },
   "machine_scan_order": [
@@ -438,7 +441,7 @@
     "adaptive_governed_orchestration": "A5_CLOSED_AT_SHADOW_MATURITY_EXECUTION_PROMOTION_DEFERRED_BENEFIT_NOT_ESTABLISHED_ISSUE_340",
     "comparative_measurement_b0": "CONTRACT_FROZEN_NO_BENCHMARK_EXECUTION",
     "comparative_measurement_b1": "IMPLEMENTED_NON_PRODUCTION_NO_PROVIDER_ADAPTERS",
-    "registry_adaptive_consumption_o1_o6": "IMPLEMENTED_CANDIDATE_PENDING_EXACT_HEAD_VALIDATION",
+    "registry_adaptive_consumption_o1_o6": "CANONICAL_IMPLEMENTED_VALIDATED_AND_REGISTRY_RECONCILED",
     "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316"
   },
   "ai_review_guidance": {
