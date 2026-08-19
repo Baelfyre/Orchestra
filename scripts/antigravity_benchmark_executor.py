@@ -1,17 +1,19 @@
 #!/usr/bin/env python3
 """Antigravity measurement executor binding for Orchestra comparative benchmark.
 
-Provides the B3.1.2 executor adapter for Antigravity CLI host-native execution,
+Provides the B3.1.3 executor adapter for Antigravity CLI host-native execution,
 deterministic communication-arm binding (DEFAULT, CAVEMAN, MURMURS), fail-closed
-preflight validation, structured usage parsing, stream-json event parsing, and
-Orchestra-compatible benchmark result construction.
+preflight validation, externalized exact CLI version expectation, structured
+usage parsing, stream-json event parsing, and Orchestra-compatible benchmark
+result construction.
 
 Measurement Surface Provenance:
 - Counter ID format: "antigravity-cli-{cli_version}:{transport}:{model}"
-- Canonical default (json): "antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high"
-- Canonical stream (stream-json): "antigravity-cli-1.1.14:stream-json-usage:gemini-3.7-flash-high"
+- Canonical default (json): "antigravity-cli-1.1.15:json-usage:gemini-3.7-flash-high"
+- Canonical stream (stream-json): "antigravity-cli-1.1.15:stream-json-usage:gemini-3.7-flash-high"
 - Provenance semantics:
-  - CLI version: source = PREFLIGHT_COMMAND (exact validated `agy --version`)
+  - Expected CLI version: source = EXECUTOR_ARGUMENT (--expected-cli-version)
+  - Observed CLI version: source = PREFLIGHT_COMMAND (exact validated `agy --version`)
   - Model: source = PINNED_COMMAND_ARGUMENT (gemini-3.7-flash-high)
   - Usage counters: source = HOST_REPORTED_JSON_USAGE or HOST_REPORTED_STREAM_JSON_USAGE
   - Counter ID: provenance = ORCHESTRA_ASSIGNED_MEASUREMENT_SURFACE
@@ -37,6 +39,7 @@ import copy
 import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -51,13 +54,28 @@ EXECUTOR_RESULT_VERSION = "orchestra.comparative-benchmark-executor-result.v1"
 EXECUTOR_REQUEST_VERSION = "orchestra.comparative-benchmark-executor-request.v1"
 PROGRAM_ID = "orchestra.shared-comparative-benchmark.v1"
 
-PINNED_CLI_VERSION = "1.1.14"
+QUALIFIED_CLI_VERSION = "1.1.15"
+PINNED_CLI_VERSION = QUALIFIED_CLI_VERSION
 PINNED_MODEL = "gemini-3.7-flash-high"
 PINNED_TRANSPORT_JSON = "json-usage"
 PINNED_TRANSPORT_STREAM = "stream-json-usage"
 PINNED_TRANSPORT = PINNED_TRANSPORT_JSON
-DEFAULT_COUNTER_ID = f"antigravity-cli-{PINNED_CLI_VERSION}:{PINNED_TRANSPORT_JSON}:{PINNED_MODEL}"
-STREAM_JSON_COUNTER_ID = f"antigravity-cli-{PINNED_CLI_VERSION}:{PINNED_TRANSPORT_STREAM}:{PINNED_MODEL}"
+DEFAULT_COUNTER_ID = f"antigravity-cli-{QUALIFIED_CLI_VERSION}:{PINNED_TRANSPORT_JSON}:{PINNED_MODEL}"
+STREAM_JSON_COUNTER_ID = f"antigravity-cli-{QUALIFIED_CLI_VERSION}:{PINNED_TRANSPORT_STREAM}:{PINNED_MODEL}"
+
+VERSION_PATTERN = re.compile(r"^\d+\.\d+\.\d+(?:[-.][0-9A-Za-z]+)*$")
+
+
+def validate_version_format(version: Any) -> bool:
+    """Validate that version string is an exact semantic version without ranges, operators, or wildcards."""
+    if not isinstance(version, str):
+        return False
+    v = version.strip()
+    if not v:
+        return False
+    if any(op in v for op in (">", "<", "=", "~", "^", "*", "latest", "LATEST")):
+        return False
+    return bool(VERSION_PATTERN.match(v))
 
 PINNED_CAVEMAN_REPO = "JuliusBrussee/caveman"
 PINNED_CAVEMAN_REVISION = "ae405e872270acc57484693612ae038b16c8f6cd"
@@ -440,6 +458,7 @@ def bind_communication_treatment(
 
 def run_host_preflight(
     request: dict[str, Any],
+    expected_cli_version: str | None = None,
     settings_path: Path | None = None,
     version_runner_fn: Callable[[list[str]], tuple[int, str, str]] | None = None,
     transport: str = PINNED_TRANSPORT,
@@ -447,15 +466,27 @@ def run_host_preflight(
     """Execute fail-closed host preflight before real model invocation.
 
     Invariants verified:
-    1. Resolved Antigravity CLI version is exactly 1.1.14.
-    2. settings.json exists and parses successfully.
-    3. useG1Credits is explicitly False.
-    4. Benchmark model in request control_identity remains exactly gemini-3.7-flash-high.
-    5. Expected counter identity matches the specified transport.
+    1. Expected CLI version is explicitly provided, non-empty, and valid format.
+    2. Resolved Antigravity CLI version from `agy --version` exactly equals expected_cli_version.
+    3. settings.json exists and parses successfully.
+    4. useG1Credits is explicitly False.
+    5. Benchmark model in request control_identity remains exactly gemini-3.7-flash-high.
+    6. Expected counter identity matches the specified transport and version.
 
     Returns:
         (is_valid, invalid_reason, detail, validated_cli_version)
     """
+    if expected_cli_version is None or not validate_version_format(expected_cli_version):
+        return (
+            False,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {
+                "error": f"invalid or missing expected_cli_version: {expected_cli_version!r}",
+                "expected_cli_version": expected_cli_version,
+            },
+            None,
+        )
+
     req_control = request.get("control_identity", {})
     req_model = req_control.get("model", PINNED_MODEL)
     if req_model != PINNED_MODEL:
@@ -557,19 +588,20 @@ def run_host_preflight(
     raw_version = stdout.strip()
     tokens = raw_version.split()
     resolved_version = tokens[-1] if tokens else ""
-    if resolved_version != PINNED_CLI_VERSION:
+    if resolved_version != expected_cli_version:
         return (
             False,
             "MEASUREMENT_CAPTURE_FAILURE",
             {
-                "error": f"resolved CLI version {resolved_version!r} does not match pinned version {PINNED_CLI_VERSION!r}",
+                "error": f"resolved CLI version {resolved_version!r} does not match expected version {expected_cli_version!r}",
                 "raw_version_output": raw_version,
-                "pinned_version": PINNED_CLI_VERSION,
+                "expected_version": expected_cli_version,
+                "observed_version": resolved_version,
             },
             None,
         )
 
-    expected_counter = compute_counter_id(cli_version=PINNED_CLI_VERSION, model=PINNED_MODEL, transport=transport)
+    expected_counter = compute_counter_id(cli_version=expected_cli_version, model=PINNED_MODEL, transport=transport)
     counter_id = compute_counter_id(cli_version=resolved_version, model=PINNED_MODEL, transport=transport)
     if counter_id != expected_counter:
         return (
@@ -644,16 +676,19 @@ def build_invalid_result(
     reason: str,
     detail: dict[str, Any],
     elapsed_ms: int | None = None,
+    expected_cli_version: str | None = None,
 ) -> dict[str, Any]:
     """Build fail-closed INVALID_RUN executor result matching schema."""
     req_id = request.get("request_id", "unknown-request")
-    unavailable_evidence = {
+    unavailable_evidence: dict[str, Any] = {
         "request_id": req_id,
         "invalid_reason": reason,
         "detail": detail,
         "validation_executed": False,
         "governance_evaluated": False,
     }
+    if expected_cli_version is not None:
+        unavailable_evidence["expected_cli_version"] = expected_cli_version
     unavailable_digest = digest_json(unavailable_evidence)
     return {
         "schema_version": EXECUTOR_RESULT_VERSION,
@@ -776,7 +811,8 @@ def parse_stream_json_output(
     raw_output: str | list[Any],
     request: dict[str, Any],
     elapsed_ms: int | None = None,
-    validated_cli_version: str = PINNED_CLI_VERSION,
+    expected_cli_version: str | None = None,
+    validated_cli_version: str | None = None,
     binding: dict[str, Any] | None = None,
     presentation_root: Path | str | None = None,
 ) -> dict[str, Any]:
@@ -793,6 +829,7 @@ def parse_stream_json_output(
                     "MEASUREMENT_CAPTURE_FAILURE",
                     {"error": "stream event is not an object", "event": item},
                     elapsed_ms,
+                    expected_cli_version=expected_cli_version,
                 )
             events.append(item)
     elif isinstance(raw_output, str):
@@ -806,6 +843,7 @@ def parse_stream_json_output(
                     "MEASUREMENT_CAPTURE_FAILURE",
                     {"error": f"stream JSON decode error on line {idx + 1}: {exc}", "line": line},
                     elapsed_ms,
+                    expected_cli_version=expected_cli_version,
                 )
             if not isinstance(ev, dict):
                 return build_invalid_result(
@@ -813,6 +851,7 @@ def parse_stream_json_output(
                     "MEASUREMENT_CAPTURE_FAILURE",
                     {"error": f"stream line {idx + 1} is not a JSON object", "line": line},
                     elapsed_ms,
+                    expected_cli_version=expected_cli_version,
                 )
             events.append(ev)
     else:
@@ -821,6 +860,7 @@ def parse_stream_json_output(
             "MEASUREMENT_CAPTURE_FAILURE",
             {"error": f"unsupported stream output type: {type(raw_output).__name__}"},
             elapsed_ms,
+            expected_cli_version=expected_cli_version,
         )
 
     if not events:
@@ -829,6 +869,7 @@ def parse_stream_json_output(
             "MEASUREMENT_CAPTURE_FAILURE",
             {"error": "empty event stream"},
             elapsed_ms,
+            expected_cli_version=expected_cli_version,
         )
 
     # Locate terminal result
@@ -851,6 +892,7 @@ def parse_stream_json_output(
             "MEASUREMENT_CAPTURE_FAILURE",
             {"error": f"terminal stream status is not SUCCESS: {status}", "terminal_envelope": terminal_envelope},
             elapsed_ms,
+            expected_cli_version=expected_cli_version,
         )
 
     usage = terminal_envelope.get("usage")
@@ -860,23 +902,50 @@ def parse_stream_json_output(
             "MEASUREMENT_CAPTURE_FAILURE",
             {"error": "usage object missing from terminal event", "terminal_envelope": terminal_envelope},
             elapsed_ms,
+            expected_cli_version=expected_cli_version,
+        )
+
+    target_expected_version = expected_cli_version or QUALIFIED_CLI_VERSION
+    effective_cli_version = (
+        validated_cli_version
+        or terminal_envelope.get("cli_version")
+        or target_expected_version
+    )
+
+    if "cli_version" in terminal_envelope and terminal_envelope["cli_version"] != target_expected_version:
+        return build_invalid_result(
+            request,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {
+                "error": "terminal stream cli_version mismatch",
+                "host_cli_version": terminal_envelope["cli_version"],
+                "expected_cli_version": target_expected_version,
+            },
+            elapsed_ms,
+            expected_cli_version=target_expected_version,
         )
 
     counter_id = compute_counter_id(
-        cli_version=validated_cli_version,
+        cli_version=effective_cli_version,
         model=PINNED_MODEL,
         transport=PINNED_TRANSPORT_STREAM,
     )
-    if counter_id != STREAM_JSON_COUNTER_ID:
+    expected_counter = compute_counter_id(
+        cli_version=target_expected_version,
+        model=PINNED_MODEL,
+        transport=PINNED_TRANSPORT_STREAM,
+    )
+    if counter_id != expected_counter:
         return build_invalid_result(
             request,
             "MEASUREMENT_CAPTURE_FAILURE",
             {
                 "error": "stream-json counter identity changed inside paired batch",
                 "observed_counter_id": counter_id,
-                "expected_counter_id": STREAM_JSON_COUNTER_ID,
+                "expected_counter_id": expected_counter,
             },
             elapsed_ms,
+            expected_cli_version=target_expected_version,
         )
 
     try:
@@ -887,6 +956,7 @@ def parse_stream_json_output(
             "MEASUREMENT_CAPTURE_FAILURE",
             {"error": f"stream usage mapping failed: {exc}", "usage": usage},
             elapsed_ms,
+            expected_cli_version=target_expected_version,
         )
 
     outcome, quality = evaluate_task_outcome(terminal_envelope, task_payload)
@@ -990,10 +1060,16 @@ def parse_stream_json_output(
     effective_binding = binding or {}
     raw_evidence = {
         "host": "Antigravity CLI",
-        "cli_version": validated_cli_version,
+        "expected_cli_version": target_expected_version,
+        "expected_cli_version_provenance": {
+            "source": "EXECUTOR_ARGUMENT" if expected_cli_version else "DEFAULT_QUALIFIED_HOST",
+            "value": target_expected_version,
+        },
+        "observed_cli_version": effective_cli_version,
+        "cli_version": effective_cli_version,
         "cli_version_provenance": {
-            "source": "PREFLIGHT_COMMAND",
-            "value": validated_cli_version,
+            "source": "PREFLIGHT_COMMAND" if validated_cli_version else "HOST_REPORTED_STREAM_JSON_USAGE",
+            "value": effective_cli_version,
         },
         "model": PINNED_MODEL,
         "model_provenance": {
@@ -1059,9 +1135,10 @@ def parse_antigravity_output(
     raw_output: str | dict[str, Any] | list[dict[str, Any]],
     request: dict[str, Any],
     elapsed_ms: int | None = None,
-    validated_cli_version: str = PINNED_CLI_VERSION,
+    expected_cli_version: str | None = None,
+    validated_cli_version: str | None = None,
     binding: dict[str, Any] | None = None,
-    transport: str = PINNED_TRANSPORT,
+    transport: str = PINNED_TRANSPORT_JSON,
     presentation_root: Path | str | None = None,
 ) -> dict[str, Any]:
     """Parse raw Antigravity output (JSON or stream-json) and construct Orchestra benchmark result."""
@@ -1076,6 +1153,7 @@ def parse_antigravity_output(
                 b_reason or "MEASUREMENT_CAPTURE_FAILURE",
                 b_detail or {"error": "communication treatment binding failed"},
                 elapsed_ms,
+                expected_cli_version=expected_cli_version,
             )
         binding = resolved_binding
 
@@ -1085,6 +1163,7 @@ def parse_antigravity_output(
             raw_output,
             request,
             elapsed_ms=elapsed_ms,
+            expected_cli_version=expected_cli_version,
             validated_cli_version=validated_cli_version,
             binding=binding,
             presentation_root=presentation_root,
@@ -1098,6 +1177,7 @@ def parse_antigravity_output(
                 raw_output,
                 request,
                 elapsed_ms=elapsed_ms,
+                expected_cli_version=expected_cli_version,
                 validated_cli_version=validated_cli_version,
                 binding=binding,
                 presentation_root=presentation_root,
@@ -1114,6 +1194,7 @@ def parse_antigravity_output(
                 "MEASUREMENT_CAPTURE_FAILURE",
                 {"error": f"outer JSON decode failure: {exc}", "raw_stdout": raw_output},
                 elapsed_ms,
+                expected_cli_version=expected_cli_version,
             )
     elif isinstance(raw_output, dict):
         envelope = raw_output
@@ -1123,6 +1204,7 @@ def parse_antigravity_output(
             "MEASUREMENT_CAPTURE_FAILURE",
             {"error": f"unsupported output type: {type(raw_output).__name__}"},
             elapsed_ms,
+            expected_cli_version=expected_cli_version,
         )
 
     if not isinstance(envelope, dict):
@@ -1131,6 +1213,7 @@ def parse_antigravity_output(
             "MEASUREMENT_CAPTURE_FAILURE",
             {"error": "outer JSON is not an object", "raw_output": envelope},
             elapsed_ms,
+            expected_cli_version=expected_cli_version,
         )
 
     status = envelope.get("status")
@@ -1140,6 +1223,7 @@ def parse_antigravity_output(
             "MEASUREMENT_CAPTURE_FAILURE",
             {"error": "missing or non-string status in outer envelope", "outer_envelope": envelope},
             elapsed_ms,
+            expected_cli_version=expected_cli_version,
         )
 
     if status.upper() != "SUCCESS":
@@ -1148,6 +1232,7 @@ def parse_antigravity_output(
             "MEASUREMENT_CAPTURE_FAILURE",
             {"error": f"host execution status is not usable: {status}", "outer_envelope": envelope},
             elapsed_ms,
+            expected_cli_version=expected_cli_version,
         )
 
     if "model" in envelope and envelope["model"] != PINNED_MODEL:
@@ -1160,6 +1245,7 @@ def parse_antigravity_output(
                 "pinned_model": PINNED_MODEL,
             },
             elapsed_ms,
+            expected_cli_version=expected_cli_version,
         )
 
     req_control = request.get("control_identity", {})
@@ -1174,22 +1260,32 @@ def parse_antigravity_output(
                 "pinned_model": PINNED_MODEL,
             },
             elapsed_ms,
+            expected_cli_version=expected_cli_version,
         )
 
-    if "cli_version" in envelope and envelope["cli_version"] != PINNED_CLI_VERSION:
+    target_expected_version = expected_cli_version or QUALIFIED_CLI_VERSION
+    host_cli_version = envelope.get("cli_version")
+    effective_cli_version = (
+        validated_cli_version
+        or host_cli_version
+        or target_expected_version
+    )
+
+    if host_cli_version is not None and host_cli_version != target_expected_version:
         return build_invalid_result(
             request,
             "MEASUREMENT_CAPTURE_FAILURE",
             {
                 "error": "host returned cli_version mismatch",
-                "host_cli_version": envelope["cli_version"],
-                "pinned_cli_version": PINNED_CLI_VERSION,
+                "host_cli_version": host_cli_version,
+                "expected_cli_version": target_expected_version,
             },
             elapsed_ms,
+            expected_cli_version=target_expected_version,
         )
 
-    expected_counter = compute_counter_id(cli_version=PINNED_CLI_VERSION, model=PINNED_MODEL, transport=transport)
-    counter_id = compute_counter_id(cli_version=validated_cli_version, model=PINNED_MODEL, transport=transport)
+    expected_counter = compute_counter_id(cli_version=target_expected_version, model=PINNED_MODEL, transport=transport)
+    counter_id = compute_counter_id(cli_version=effective_cli_version, model=PINNED_MODEL, transport=transport)
     if counter_id != expected_counter:
         return build_invalid_result(
             request,
@@ -1200,6 +1296,7 @@ def parse_antigravity_output(
                 "expected_counter_id": expected_counter,
             },
             elapsed_ms,
+            expected_cli_version=target_expected_version,
         )
 
     usage = envelope.get("usage")
@@ -1209,6 +1306,7 @@ def parse_antigravity_output(
             "MEASUREMENT_CAPTURE_FAILURE",
             {"error": "native usage object is missing from outer envelope", "outer_envelope": envelope},
             elapsed_ms,
+            expected_cli_version=target_expected_version,
         )
 
     try:
@@ -1219,6 +1317,7 @@ def parse_antigravity_output(
             "MEASUREMENT_CAPTURE_FAILURE",
             {"error": f"usage mapping failed: {exc}", "usage": usage},
             elapsed_ms,
+            expected_cli_version=target_expected_version,
         )
 
     outcome, quality = evaluate_task_outcome(envelope, task_payload)
@@ -1269,10 +1368,16 @@ def parse_antigravity_output(
     effective_binding = binding or {}
     raw_evidence = {
         "host": "Antigravity CLI",
-        "cli_version": validated_cli_version,
+        "expected_cli_version": target_expected_version,
+        "expected_cli_version_provenance": {
+            "source": "EXECUTOR_ARGUMENT" if expected_cli_version else "DEFAULT_QUALIFIED_HOST",
+            "value": target_expected_version,
+        },
+        "observed_cli_version": effective_cli_version,
+        "cli_version": effective_cli_version,
         "cli_version_provenance": {
-            "source": "PREFLIGHT_COMMAND",
-            "value": validated_cli_version,
+            "source": "PREFLIGHT_COMMAND" if validated_cli_version else "HOST_REPORTED_JSON_USAGE",
+            "value": effective_cli_version,
         },
         "model": PINNED_MODEL,
         "model_provenance": {
@@ -1335,6 +1440,7 @@ def parse_antigravity_output(
 
 def execute_request(
     request: dict[str, Any],
+    expected_cli_version: str | None = None,
     runner_fn: Callable[..., tuple[int, str, str]] | None = None,
     settings_path: Path | None = None,
     version_runner_fn: Callable[[list[str]], tuple[int, str, str]] | None = None,
@@ -1373,6 +1479,25 @@ def execute_request(
             },
         )
 
+    expected_ver = (
+        expected_cli_version
+        or task_payload.get("expected_cli_version")
+        or req_control.get("expected_cli_version")
+        or request.get("expected_cli_version")
+        or os.environ.get("ORCHESTRA_EXPECTED_CLI_VERSION")
+        or os.environ.get("ANTIGRAVITY_EXPECTED_CLI_VERSION")
+    )
+    if expected_ver is not None and not validate_version_format(expected_ver):
+        return build_invalid_result(
+            request,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {
+                "error": f"invalid expected_cli_version format: {expected_ver!r}",
+                "expected_cli_version": expected_ver,
+            },
+            expected_cli_version=expected_ver,
+        )
+
     # Deterministically bind and preflight communication treatment
     is_valid, inv_reason, inv_detail, binding = bind_communication_treatment(
         request,
@@ -1386,6 +1511,7 @@ def execute_request(
             request,
             inv_reason or "MEASUREMENT_CAPTURE_FAILURE",
             inv_detail or {"error": "communication arm binding failed"},
+            expected_cli_version=expected_ver,
         )
 
     # Determine transport format and counter type
@@ -1407,14 +1533,25 @@ def execute_request(
             mock_output,
             request,
             elapsed_ms=10,
+            expected_cli_version=expected_ver,
             binding=binding,
             transport=transport_counter,
             presentation_root=presentation_root,
         )
 
+    # Live execution requires an explicitly supplied expected CLI version
+    if not expected_ver:
+        return build_invalid_result(
+            request,
+            "MEASUREMENT_CAPTURE_FAILURE",
+            {"error": "expected_cli_version is required for live execution but was not supplied"},
+            expected_cli_version=None,
+        )
+
     # Fail-closed host preflight before real model invocation
     preflight_valid, pf_reason, pf_detail, validated_version = run_host_preflight(
         request,
+        expected_cli_version=expected_ver,
         settings_path=settings_path,
         version_runner_fn=version_runner_fn,
         transport=transport_counter,
@@ -1424,9 +1561,10 @@ def execute_request(
             request,
             pf_reason or "MEASUREMENT_CAPTURE_FAILURE",
             pf_detail or {"error": "preflight failed"},
+            expected_cli_version=expected_ver,
         )
 
-    cli_version = validated_version or PINNED_CLI_VERSION
+    cli_version = validated_version or expected_ver
     effective_prompt = binding["effective_prompt"]
 
     # Validated Antigravity print-mode command interface
@@ -1464,6 +1602,7 @@ def execute_request(
                 "HARNESS_FAILURE",
                 {"error": f"failed to launch Antigravity CLI: {exc}"},
                 elapsed,
+                expected_cli_version=expected_ver,
             )
 
     elapsed = int((time.monotonic() - started) * 1000)
@@ -1473,12 +1612,14 @@ def execute_request(
             "MEASUREMENT_CAPTURE_FAILURE",
             {"returncode": returncode, "stdout": stdout, "stderr": stderr},
             elapsed,
+            expected_cli_version=expected_ver,
         )
 
     return parse_antigravity_output(
         stdout,
         request,
         elapsed,
+        expected_cli_version=expected_ver,
         validated_cli_version=cli_version,
         binding=binding,
         transport=transport_counter,
@@ -1489,6 +1630,7 @@ def execute_request(
 def main(argv: list[str] | None = None) -> int:
     """CLI entrypoint reading one JSON request on stdin and writing JSON result on stdout."""
     parser = argparse.ArgumentParser(description="Antigravity measurement executor binding for Orchestra benchmark.")
+    parser.add_argument("--expected-cli-version", type=str, default=None, help="Exact expected Antigravity CLI version (e.g. 1.1.15)")
     parser.add_argument("--request-file", type=Path, help="Optional request JSON file (default: stdin)")
     parser.add_argument("--output-file", type=Path, help="Optional output JSON file (default: stdout)")
     args = parser.parse_args(argv)
@@ -1500,14 +1642,19 @@ def main(argv: list[str] | None = None) -> int:
             raw_req = sys.stdin.read()
         request = json.loads(raw_req)
     except Exception as exc:
-        err_res = build_invalid_result({}, "HARNESS_FAILURE", {"error": f"cannot read/parse request JSON: {exc}"})
+        err_res = build_invalid_result(
+            {},
+            "HARNESS_FAILURE",
+            {"error": f"cannot read/parse request JSON: {exc}"},
+            expected_cli_version=args.expected_cli_version,
+        )
         if args.output_file:
             args.output_file.write_text(json.dumps(err_res, indent=2) + "\n", encoding="utf-8")
         else:
             print(json.dumps(err_res, indent=2))
         return 0
 
-    result = execute_request(request)
+    result = execute_request(request, expected_cli_version=args.expected_cli_version)
     out_str = json.dumps(result, indent=2) + "\n"
 
     if args.output_file:

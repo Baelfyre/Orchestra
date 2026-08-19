@@ -161,7 +161,7 @@ def _mock_host_envelope(
     cache_read_tokens: int = 300,
     total_tokens: int = 2320,
     model: str = "gemini-3.7-flash-high",
-    cli_version: str = "1.1.14",
+    cli_version: str = "1.1.15",
     task_completed: bool = True,
     validation_passed: bool = True,
     governance_valid: bool = True,
@@ -204,7 +204,7 @@ def test_01_valid_antigravity_usage_maps_to_host_reported_tokens() -> None:
     _validate_result_schema(res)
 
     assert res["tokens"]["source"] == "HOST_REPORTED"
-    assert res["tokens"]["counter_id"] == "antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high"
+    assert res["tokens"]["counter_id"] == "antigravity-cli-1.1.15:json-usage:gemini-3.7-flash-high"
     assert res["tokens"]["input_tokens"] == 1000
     assert res["tokens"]["output_tokens"] == 250
 
@@ -353,8 +353,8 @@ def test_11_host_success_without_independent_evidence_cannot_produce_pass() -> N
 
 def test_12_counter_identity_is_deterministic() -> None:
     cid1 = executor.compute_counter_id()
-    cid2 = executor.compute_counter_id("1.1.14", "gemini-3.7-flash-high", "json-usage")
-    assert cid1 == "antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high"
+    cid2 = executor.compute_counter_id("1.1.15", "gemini-3.7-flash-high", "json-usage")
+    assert cid1 == "antigravity-cli-1.1.15:json-usage:gemini-3.7-flash-high"
     assert cid1 == cid2 == executor.DEFAULT_COUNTER_ID
 
 
@@ -367,7 +367,7 @@ def test_13_changed_cli_or_model_identity_changes_counter_identity() -> None:
 
     cid_model_change = executor.compute_counter_id(model="gemini-2.5-pro")
     assert cid_model_change != base_cid
-    assert cid_model_change == "antigravity-cli-1.1.14:json-usage:gemini-2.5-pro"
+    assert cid_model_change == "antigravity-cli-1.1.15:json-usage:gemini-2.5-pro"
 
     envelope_drift = _mock_host_envelope(cli_version="1.2.0")
     res = executor.execute_request(_base_request(raw_host_output=envelope_drift))
@@ -425,7 +425,7 @@ def test_17_live_argv_construction_and_no_stdin_prompt(tmp_path: Path) -> None:
     captured_calls: list[dict[str, Any]] = []
 
     def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
-        return (0, "1.1.14\n", "")
+        return (0, "1.1.15\n", "")
 
     def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
         captured_calls.append({"cmd": cmd, "prompt": prompt})
@@ -440,6 +440,7 @@ def test_17_live_argv_construction_and_no_stdin_prompt(tmp_path: Path) -> None:
     req = _base_request(prompt=test_prompt)
     res = executor.execute_request(
         req,
+        expected_cli_version="1.1.15",
         runner_fn=mock_model_runner,
         settings_path=settings_file,
         version_runner_fn=mock_version_runner,
@@ -466,13 +467,13 @@ def test_17_live_argv_construction_and_no_stdin_prompt(tmp_path: Path) -> None:
     assert res["outcome"]["status"] == "PASS"
 
 
-def test_18_preflight_accepts_exact_cli_version_1_1_14(tmp_path: Path) -> None:
+def test_18_preflight_accepts_exact_cli_version_1_1_15(tmp_path: Path) -> None:
     settings_file = _create_mock_settings(tmp_path, use_g1_credits=False)
     model_called = False
 
     def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
         assert cmd == ["agy", "--version"]
-        return (0, "antigravity-cli 1.1.14\n", "")
+        return (0, "antigravity-cli 1.1.15\n", "")
 
     def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
         nonlocal model_called
@@ -482,6 +483,7 @@ def test_18_preflight_accepts_exact_cli_version_1_1_14(tmp_path: Path) -> None:
     req = _base_request(prompt="Sample prompt")
     res = executor.execute_request(
         req,
+        expected_cli_version="1.1.15",
         runner_fn=mock_model_runner,
         settings_path=settings_file,
         version_runner_fn=mock_version_runner,
@@ -490,7 +492,7 @@ def test_18_preflight_accepts_exact_cli_version_1_1_14(tmp_path: Path) -> None:
 
     assert model_called is True
     assert res["outcome"]["status"] == "PASS"
-    assert res["raw_evidence"]["cli_version"] == "1.1.14"
+    assert res["raw_evidence"]["cli_version"] == "1.1.15"
 
 
 def test_19_preflight_fails_closed_on_different_cli_version(tmp_path: Path) -> None:
@@ -508,6 +510,7 @@ def test_19_preflight_fails_closed_on_different_cli_version(tmp_path: Path) -> N
     req = _base_request(prompt="Sample prompt")
     res = executor.execute_request(
         req,
+        expected_cli_version="1.1.15",
         runner_fn=mock_model_runner,
         settings_path=settings_file,
         version_runner_fn=mock_version_runner,
@@ -525,7 +528,7 @@ def test_20_preflight_accepts_explicit_use_g1_credits_false(tmp_path: Path) -> N
     model_called = False
 
     def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
-        return (0, "1.1.14\n", "")
+        return (0, "1.1.15\n", "")
 
     def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
         nonlocal model_called
@@ -535,6 +538,7 @@ def test_20_preflight_accepts_explicit_use_g1_credits_false(tmp_path: Path) -> N
     req = _base_request(prompt="Sample prompt")
     res = executor.execute_request(
         req,
+        expected_cli_version="1.1.15",
         runner_fn=mock_model_runner,
         settings_path=settings_file,
         version_runner_fn=mock_version_runner,
@@ -550,7 +554,7 @@ def test_21_preflight_fails_closed_on_use_g1_credits_true(tmp_path: Path) -> Non
     model_called = False
 
     def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
-        return (0, "1.1.14\n", "")
+        return (0, "1.1.15\n", "")
 
     def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
         nonlocal model_called
@@ -560,6 +564,7 @@ def test_21_preflight_fails_closed_on_use_g1_credits_true(tmp_path: Path) -> Non
     req = _base_request(prompt="Sample prompt")
     res = executor.execute_request(
         req,
+        expected_cli_version="1.1.15",
         runner_fn=mock_model_runner,
         settings_path=settings_file,
         version_runner_fn=mock_version_runner,
@@ -574,12 +579,13 @@ def test_21_preflight_fails_closed_on_use_g1_credits_true(tmp_path: Path) -> Non
 
 def test_22_preflight_fails_closed_on_malformed_or_missing_settings(tmp_path: Path) -> None:
     def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
-        return (0, "1.1.14\n", "")
+        return (0, "1.1.15\n", "")
 
     missing_settings = tmp_path / "non_existent_settings.json"
     req1 = _base_request(prompt="Sample prompt")
     res1 = executor.execute_request(
         req1,
+        expected_cli_version="1.1.15",
         settings_path=missing_settings,
         version_runner_fn=mock_version_runner,
     )
@@ -592,6 +598,7 @@ def test_22_preflight_fails_closed_on_malformed_or_missing_settings(tmp_path: Pa
     req2 = _base_request(prompt="Sample prompt")
     res2 = executor.execute_request(
         req2,
+        expected_cli_version="1.1.15",
         settings_path=malformed_settings,
         version_runner_fn=mock_version_runner,
     )
@@ -603,6 +610,7 @@ def test_22_preflight_fails_closed_on_malformed_or_missing_settings(tmp_path: Pa
     req3 = _base_request(prompt="Sample prompt")
     res3 = executor.execute_request(
         req3,
+        expected_cli_version="1.1.15",
         settings_path=missing_key_settings,
         version_runner_fn=mock_version_runner,
     )
@@ -621,14 +629,17 @@ def test_23_provenance_semantics_explicitly_preserved() -> None:
     _validate_result_schema(res)
 
     raw_ev = res["raw_evidence"]
-    assert raw_ev["cli_version_provenance"]["source"] == "PREFLIGHT_COMMAND"
-    assert raw_ev["cli_version_provenance"]["value"] == "1.1.14"
+    assert raw_ev["expected_cli_version"] == "1.1.15"
+    assert raw_ev["expected_cli_version_provenance"]["source"] == "DEFAULT_QUALIFIED_HOST"
+    assert raw_ev["observed_cli_version"] == "1.1.15"
+    assert raw_ev["cli_version_provenance"]["source"] == "HOST_REPORTED_JSON_USAGE"
+    assert raw_ev["cli_version_provenance"]["value"] == "1.1.15"
     assert raw_ev["model_provenance"]["source"] == "PINNED_COMMAND_ARGUMENT"
     assert raw_ev["model_provenance"]["value"] == "gemini-3.7-flash-high"
     assert raw_ev["usage_provenance"]["source"] == "HOST_REPORTED_JSON_USAGE"
     assert raw_ev["counter_id_provenance"]["provenance"] == "ORCHESTRA_ASSIGNED_MEASUREMENT_SURFACE"
     assert raw_ev["counter_id_provenance"]["vendor_assigned_claim"] is False
-    assert raw_ev["counter_id_provenance"]["identifier"] == "antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high"
+    assert raw_ev["counter_id_provenance"]["identifier"] == "antigravity-cli-1.1.15:json-usage:gemini-3.7-flash-high"
 
 
 def test_24_response_bytes_captured_from_response_field() -> None:
@@ -718,7 +729,7 @@ def test_25_runner_integration_with_antigravity_executor(tmp_path: Path) -> None
         schema = _load_schema("comparative-benchmark-run.schema.json")
         jsonschema.Draft202012Validator(schema).validate(run_record)
         assert run_record["tokens"]["source"] == "HOST_REPORTED"
-        assert run_record["tokens"]["counter_id"] == "antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high"
+        assert run_record["tokens"]["counter_id"] == "antigravity-cli-1.1.15:json-usage:gemini-3.7-flash-high"
         assert run_record["tokens"]["fresh_billable_tokens"] is None
         assert run_record["outcome"]["status"] == "PASS"
 
@@ -1039,7 +1050,7 @@ def test_41_stream_json_transport_supported_across_arms() -> None:
         _validate_result_schema(res)
 
         assert res["tokens"]["source"] == "HOST_REPORTED"
-        assert res["tokens"]["counter_id"] == "antigravity-cli-1.1.14:stream-json-usage:gemini-3.7-flash-high"
+        assert res["tokens"]["counter_id"] == "antigravity-cli-1.1.15:stream-json-usage:gemini-3.7-flash-high"
         assert res["raw_evidence"]["transport"] == "stream-json-usage"
         assert res["outcome"]["status"] == "PASS"
 
@@ -1087,7 +1098,7 @@ def test_43_stream_json_terminal_native_usage_counters_map_correctly() -> None:
 
     tok = res["tokens"]
     assert tok["source"] == "HOST_REPORTED"
-    assert tok["counter_id"] == "antigravity-cli-1.1.14:stream-json-usage:gemini-3.7-flash-high"
+    assert tok["counter_id"] == "antigravity-cli-1.1.15:stream-json-usage:gemini-3.7-flash-high"
     assert tok["input_tokens"] == 1400
     assert tok["output_tokens"] == 350
     assert tok["reasoning_tokens"] == 110
@@ -1101,8 +1112,8 @@ def test_44_json_and_stream_json_counter_identities_cannot_be_mixed(tmp_path: Pa
     cid_json = executor.compute_counter_id(transport="json-usage")
     cid_stream = executor.compute_counter_id(transport="stream-json-usage")
     assert cid_json != cid_stream
-    assert cid_json == "antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high"
-    assert cid_stream == "antigravity-cli-1.1.14:stream-json-usage:gemini-3.7-flash-high"
+    assert cid_json == "antigravity-cli-1.1.15:json-usage:gemini-3.7-flash-high"
+    assert cid_stream == "antigravity-cli-1.1.15:stream-json-usage:gemini-3.7-flash-high"
 
     # Runner cross-run invariant check fails if counter_id differs across runs
     manifest_path = tmp_path / "mixed_manifest.json"
@@ -1213,3 +1224,297 @@ def test_45_final_task_outcome_still_requires_independent_evidence() -> None:
         _validate_result_schema(res2)
         assert res2["outcome"]["status"] == "FAIL"
         assert res2["outcome"]["governance_valid"] is False
+
+
+# B3.1.3 Exact Host Version Pin Externalization Tests (14 Invariants)
+
+
+def test_46_preflight_passes_on_exact_expected_version_1_1_15(tmp_path: Path) -> None:
+    # Invariant 1: expected 1.1.15 + observed 1.1.15 passes preflight
+    settings_file = _create_mock_settings(tmp_path, use_g1_credits=False)
+    req = _base_request()
+    valid, reason, detail, ver = executor.run_host_preflight(
+        req,
+        expected_cli_version="1.1.15",
+        settings_path=settings_file,
+        version_runner_fn=lambda cmd: (0, "antigravity-cli 1.1.15\n", ""),
+    )
+    assert valid is True
+    assert reason is None
+    assert detail is None
+    assert ver == "1.1.15"
+
+
+def test_47_preflight_fails_closed_before_model_call_on_newer_version_1_1_16(tmp_path: Path) -> None:
+    # Invariant 2: expected 1.1.15 + observed 1.1.16 fails before model invocation
+    settings_file = _create_mock_settings(tmp_path, use_g1_credits=False)
+    req = _base_request()
+    valid, reason, detail, ver = executor.run_host_preflight(
+        req,
+        expected_cli_version="1.1.15",
+        settings_path=settings_file,
+        version_runner_fn=lambda cmd: (0, "antigravity-cli 1.1.16\n", ""),
+    )
+    assert valid is False
+    assert reason == "MEASUREMENT_CAPTURE_FAILURE"
+    assert "1.1.16" in str(detail)
+    assert ver is None
+
+
+def test_48_preflight_fails_closed_before_model_call_on_older_version_1_1_14(tmp_path: Path) -> None:
+    # Invariant 3: expected 1.1.15 + observed 1.1.14 fails before model invocation
+    settings_file = _create_mock_settings(tmp_path, use_g1_credits=False)
+    req = _base_request()
+    valid, reason, detail, ver = executor.run_host_preflight(
+        req,
+        expected_cli_version="1.1.15",
+        settings_path=settings_file,
+        version_runner_fn=lambda cmd: (0, "antigravity-cli 1.1.14\n", ""),
+    )
+    assert valid is False
+    assert reason == "MEASUREMENT_CAPTURE_FAILURE"
+    assert "1.1.14" in str(detail)
+    assert ver is None
+
+
+def test_49_live_execution_fails_closed_when_expected_version_missing() -> None:
+    # Invariant 4: missing expected version at CLI live execution fails closed
+    req = _base_request()
+    res = executor.execute_request(req)
+    _validate_result_schema(res)
+    assert res["outcome"]["status"] == "INVALID_RUN"
+    assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+    assert "expected_cli_version" in str(res["raw_evidence"]["detail"])
+
+
+def test_50_empty_or_whitespace_expected_version_rejected(tmp_path: Path) -> None:
+    # Invariant 5: empty / whitespace expected version is rejected
+    settings_file = _create_mock_settings(tmp_path, use_g1_credits=False)
+    assert executor.validate_version_format("") is False
+    assert executor.validate_version_format("   ") is False
+    assert executor.validate_version_format(None) is False
+
+    req = _base_request()
+    res = executor.execute_request(
+        req,
+        expected_cli_version="   ",
+        settings_path=settings_file,
+        version_runner_fn=lambda cmd: (0, "1.1.15\n", ""),
+    )
+    _validate_result_schema(res)
+    assert res["outcome"]["status"] == "INVALID_RUN"
+    assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+
+def test_51_malformed_expected_version_range_and_operators_rejected(tmp_path: Path) -> None:
+    # Invariant 6: malformed expected version (ranges, >=1.1.15, latest) is rejected
+    invalid_versions = [
+        ">=1.1.15",
+        "^1.1.15",
+        "~1.1.15",
+        "1.1.x",
+        "1.1.*",
+        "latest",
+        "LATEST",
+        "=1.1.15",
+        "1.1.15 - 1.1.16",
+    ]
+    settings_file = _create_mock_settings(tmp_path, use_g1_credits=False)
+    for bad_ver in invalid_versions:
+        assert executor.validate_version_format(bad_ver) is False
+        req = _base_request()
+        res = executor.execute_request(
+            req,
+            expected_cli_version=bad_ver,
+            settings_path=settings_file,
+            version_runner_fn=lambda cmd: (0, f"{bad_ver}\n", ""),
+        )
+        _validate_result_schema(res)
+        assert res["outcome"]["status"] == "INVALID_RUN"
+        assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+
+def test_52_json_counter_identity_derives_from_exact_validated_version() -> None:
+    # Invariant 7: json counter identity derives from exact expected/validated version
+    cid_15 = executor.compute_counter_id(cli_version="1.1.15", transport="json-usage")
+    assert cid_15 == "antigravity-cli-1.1.15:json-usage:gemini-3.7-flash-high"
+
+    cid_14 = executor.compute_counter_id(cli_version="1.1.14", transport="json-usage")
+    assert cid_14 == "antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high"
+    assert cid_15 != cid_14
+
+
+def test_53_stream_json_counter_identity_derives_from_exact_validated_version() -> None:
+    # Invariant 8: stream-json counter identity derives from exact expected/validated version
+    cid_stream_15 = executor.compute_counter_id(cli_version="1.1.15", transport="stream-json-usage")
+    assert cid_stream_15 == "antigravity-cli-1.1.15:stream-json-usage:gemini-3.7-flash-high"
+
+    cid_stream_14 = executor.compute_counter_id(cli_version="1.1.14", transport="stream-json-usage")
+    assert cid_stream_14 == "antigravity-cli-1.1.14:stream-json-usage:gemini-3.7-flash-high"
+    assert cid_stream_15 != cid_stream_14
+
+
+def test_54_raw_evidence_records_dual_provenance_for_expected_and_observed_version(tmp_path: Path) -> None:
+    # Invariant 9: dual provenance (expected_cli_version + observed_cli_version) preserved
+    settings_file = _create_mock_settings(tmp_path, use_g1_credits=False)
+
+    def mock_version_runner(cmd: list[str]) -> tuple[int, str, str]:
+        return (0, "antigravity-cli 1.1.15\n", "")
+
+    def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
+        return (0, json.dumps(_mock_host_envelope(cli_version="1.1.15")), "")
+
+    req = _base_request()
+    res = executor.execute_request(
+        req,
+        expected_cli_version="1.1.15",
+        runner_fn=mock_model_runner,
+        settings_path=settings_file,
+        version_runner_fn=mock_version_runner,
+    )
+    _validate_result_schema(res)
+
+    raw_ev = res["raw_evidence"]
+    assert raw_ev["expected_cli_version"] == "1.1.15"
+    assert raw_ev["expected_cli_version_provenance"]["source"] == "EXECUTOR_ARGUMENT"
+    assert raw_ev["expected_cli_version_provenance"]["value"] == "1.1.15"
+    assert raw_ev["observed_cli_version"] == "1.1.15"
+    assert raw_ev["cli_version_provenance"]["source"] == "PREFLIGHT_COMMAND"
+    assert raw_ev["cli_version_provenance"]["value"] == "1.1.15"
+
+
+def test_55_counter_identity_drift_inside_paired_arms_fails_closed(tmp_path: Path) -> None:
+    # Invariant 10: counter identity cannot silently drift inside paired arms
+    manifest_path = tmp_path / "drift_manifest.json"
+    manifest = {
+        "schema_version": "orchestra.comparative-benchmark-manifest.v1",
+        "program_id": "orchestra.shared-comparative-benchmark.v1",
+        "experiment_id": "fixture-b3-drift",
+        "experiment_kind": "MURMURS_ISOLATED",
+        "stage": "CALIBRATION",
+        "randomization_seed": 12345,
+        "repetitions_per_arm": 1,
+        "executor_timeout_seconds": 30,
+        "common_control_identity": {
+            "orchestra_revision": "06ede6bde3aa7682194950ba9130ba52e4fb0ea5",
+            "repository_revision": "test-repo-rev",
+            "starting_state_digest": DIGEST,
+            "task_prompt_digest": DIGEST,
+            "system_instruction_digest": DIGEST,
+            "provider": "antigravity",
+            "model": "gemini-3.7-flash-high",
+            "model_revision": None,
+            "reasoning_setting": "default",
+            "temperature": 0.0,
+            "tool_access_digest": DIGEST,
+            "specialist_set_digest": DIGEST,
+            "required_specialist_set_digest": DIGEST,
+            "authority_digest": DIGEST,
+            "governance_digest": DIGEST,
+            "validation_contract_digest": DIGEST,
+            "environment_digest": DIGEST,
+            "retry_policy_digest": DIGEST,
+            "resource_budget_digest": DIGEST,
+        },
+        "arms": [
+            {"arm_id": "default", "topology_candidate_id": "fixed-top", "topology_class": "FIXED_DETERMINISTIC", "topology_digest": DIGEST, "communication_mode": "DEFAULT"},
+            {"arm_id": "caveman", "topology_candidate_id": "fixed-top", "topology_class": "FIXED_DETERMINISTIC", "topology_digest": DIGEST, "communication_mode": "CAVEMAN"},
+        ],
+        "tasks": [
+            {
+                "task_id": "task-01",
+                "task_class": "SINGLE_DOMAIN",
+                "starting_state_digest": DIGEST,
+                "task_prompt_digest": DIGEST,
+                "task_payload": {
+                    "raw_host_output": _mock_host_envelope(input_tokens=1000, output_tokens=200),
+                },
+            }
+        ],
+        "a5_evaluation": None,
+        "murmurs_evaluation": {"same_counter_identity_for_token_delta": True},
+        "interaction_evaluation": None,
+        "preregistration_digest": None,
+        "benefit_thresholds": None,
+    }
+
+    run_v15 = {
+        "task_id": "task-01",
+        "repetition_index": 1,
+        "outcome": {"status": "PASS"},
+        "tokens": {"source": "HOST_REPORTED", "counter_id": "antigravity-cli-1.1.15:json-usage:gemini-3.7-flash-high"},
+        "a5_shadow_observation": None,
+    }
+    run_v14 = {
+        "task_id": "task-01",
+        "repetition_index": 1,
+        "outcome": {"status": "PASS"},
+        "tokens": {"source": "HOST_REPORTED", "counter_id": "antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high"},
+        "a5_shadow_observation": None,
+    }
+    with pytest.raises(Exception, match="MURMURS_ISOLATED requires identical counter_id"):
+        runner.enforce_cross_run_invariants(manifest, [run_v15, run_v14])
+
+
+def test_56_historical_1_1_14_fixture_supported_when_expected_version_explicitly_set() -> None:
+    # Invariant 11: historical 1.1.14 fixture behavior supported by passing expected_cli_version="1.1.14" explicitly
+    envelope_14 = _mock_host_envelope(cli_version="1.1.14", input_tokens=1100, output_tokens=220)
+    req = _base_request(raw_host_output=envelope_14)
+    res = executor.execute_request(req, expected_cli_version="1.1.14")
+    _validate_result_schema(res)
+
+    assert res["outcome"]["status"] == "PASS"
+    assert res["tokens"]["counter_id"] == "antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high"
+    assert res["raw_evidence"]["expected_cli_version"] == "1.1.14"
+    assert res["raw_evidence"]["observed_cli_version"] == "1.1.14"
+
+
+def test_57_zero_live_antigravity_model_turns_in_test_suite() -> None:
+    # Invariant 12: zero live AGY model turns in tests
+    call_log: list[str] = []
+
+    def mock_model_runner(cmd: list[str], prompt: str) -> tuple[int, str, str]:
+        call_log.append("called")
+        return (0, json.dumps(_mock_host_envelope()), "")
+
+    # Mock output bypasses live subprocess entirely
+    req = _base_request(raw_host_output=_mock_host_envelope())
+    res = executor.execute_request(req, runner_fn=mock_model_runner)
+    assert len(call_log) == 0
+    assert res["outcome"]["status"] == "PASS"
+
+
+def test_58_all_b3_1_2_communication_treatments_remain_green_with_1_1_15() -> None:
+    # Invariant 13: all B3.1.2 treatment tests remain green
+    for mode in ("DEFAULT", "CAVEMAN", "MURMURS"):
+        req = _base_request(
+            communication_mode=mode,
+            caveman_policy_content=VALID_CAVEMAN_SKILL_MD if mode == "CAVEMAN" else None,
+            raw_host_output=_mock_host_envelope(cli_version="1.1.15"),
+        )
+        res = executor.execute_request(req, expected_cli_version="1.1.15")
+        _validate_result_schema(res)
+        assert res["outcome"]["status"] == "PASS"
+        assert res["raw_evidence"]["communication_mode"] == mode
+        assert res["tokens"]["counter_id"] == "antigravity-cli-1.1.15:json-usage:gemini-3.7-flash-high"
+
+
+def test_59_host_success_alone_cannot_become_benchmark_task_pass() -> None:
+    # Invariant 14: host SUCCESS alone cannot become benchmark task PASS
+    bare_success = {
+        "status": "SUCCESS",
+        "cli_version": "1.1.15",
+        "model": "gemini-3.7-flash-high",
+        "usage": {
+            "input_tokens": 1000,
+            "output_tokens": 200,
+        },
+    }
+    req = _base_request(raw_host_output=bare_success)
+    res = executor.execute_request(req, expected_cli_version="1.1.15")
+    _validate_result_schema(res)
+    assert res["outcome"]["status"] == "FAIL"
+    assert res["outcome"]["task_completed"] is False
+    assert res["outcome"]["validation_passed"] is False
+    assert res["outcome"]["governance_valid"] is False
+    assert res["tokens"]["source"] == "HOST_REPORTED"

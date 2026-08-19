@@ -5,11 +5,12 @@
 ```text
 Program: Orchestra Shared Comparative Benchmark
 Phase: B3 Murmurs Isolated Comparative Experiment
-Current bounded unit: B3.1.2 Communication Arm Operationalization
-State: B3_1_2_COMMUNICATION_ARM_OPERATIONALIZATION_IMPLEMENTED
-Canonical entry: dfeb94ee8dccd1e812b7e2c2a5ae8ae1c40b5874
-Canonical entry tree: ba672942a93dcf945a51dac104d990b672ee897b
-Authoritative benchmark machine state: B0/B1/B3.1.2 executor binding
+Current bounded unit: B3.1.3 Exact Host Version Pin Externalization
+State: B3_1_3_EXACT_HOST_VERSION_PIN_IMPLEMENTED_SOURCE_ONLY
+Canonical entry: 48007cbbbbfa6ce84747ed8b413b1d4af8ac895f
+Canonical entry tree: 62818f2a94c961725578e2297001f8692ad83444
+Authoritative benchmark machine state: B0/B1/B3.1.3 executor binding
+Validated local Antigravity host: Antigravity CLI 1.1.15
 Measurement maturity after unit implementation: MEASUREMENT_NOT_STARTED
 Murmurs benefit: NOT ESTABLISHED
 A5 execution-effective selection: NOT AUTHORIZED
@@ -19,7 +20,7 @@ Diagnostic execution: DIAGNOSTIC_READINESS_ONLY (NOT EXECUTED)
 Calibration execution: NOT EXECUTED
 ```
 
-B3.1.2 implements the communication arm operationalization needed for the Orchestra comparative benchmark harness, making `DEFAULT`, `CAVEMAN`, and `MURMURS` genuinely distinct and machine-verifiable before diagnostic or calibration execution.
+B3.1.3 externalizes the exact expected Antigravity host CLI version (`--expected-cli-version`), replacing the operational hard-coding of 1.1.14 while qualifying 1.1.15 via zero-turn structured preflight probes. It maintains exact fail-closed host/version identity for every comparative measurement batch and preserves the B3.1.2 communication treatments (`DEFAULT`, `CAVEMAN`, and `MURMURS`).
 
 It does not execute Antigravity model turns, does not execute the 3-run diagnostic, does not execute the 30-run calibration, does not measure live token savings or benefit, does not vendor Caveman, and does not alter production runtime routing.
 
@@ -30,12 +31,12 @@ ARM OPERATIONALIZATION IMPLEMENTATION != MEASURED CALIBRATION
 PLAN-ONLY VALIDATION != MEASURED CALIBRATION
 SYNTHETIC FIXTURE != MURMURS BENEFIT EVIDENCE
 CAVEMAN PUBLISHED RESULTS != ORCHESTRA RESULTS
-MEASUREMENT_NOT_STARTED remains current after B3.1.2
+MEASUREMENT_NOT_STARTED remains current after B3.1.3
 ```
 
-The authoritative benchmark machine state incorporates the B3.1.2 executor binding record (`machine/benchmarking/antigravity-executor-binding.v1.json`) alongside the B0 contract and B1 harness. Measurement maturity remains `MEASUREMENT_NOT_STARTED` until genuine calibrated evidence is collected.
+The authoritative benchmark machine state incorporates the B3.1.3 executor binding record (`machine/benchmarking/antigravity-executor-binding.v1.json`) alongside the B0 contract and B1 harness. Measurement maturity remains `MEASUREMENT_NOT_STARTED` until genuine calibrated evidence is collected.
 
-## B3.1.2 Communication Treatments
+## B3.1.2 / B3.1.3 Communication Treatments
 
 The three communication arms are deterministically bound by the executor:
 
@@ -74,8 +75,8 @@ Under B3 comparative measurement:
 The executor supports host-native structured JSON and NDJSON event streaming (`stream-json`):
 
 ```text
-Canonical json counter:        antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high
-Canonical stream-json counter: antigravity-cli-1.1.14:stream-json-usage:gemini-3.7-flash-high
+Canonical json counter:        antigravity-cli-1.1.15:json-usage:gemini-3.7-flash-high
+Canonical stream-json counter: antigravity-cli-1.1.15:stream-json-usage:gemini-3.7-flash-high
 ```
 
 Paired comparability invariants:
