@@ -1,5 +1,17 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B3.1.5 Antigravity Stream-JSON Result Envelope Normalization - Candidate
+
+- Normalizes stream-json terminal result envelopes in `scripts/antigravity_benchmark_executor.py` via `normalize_stream_terminal_event` to correctly recognize wrapped Antigravity CLI 1.1.15 terminal events (`{"event": "result", "result": {"status": "SUCCESS", "usage": {...}, ...}}`).
+- Resolves measurement fields (`status`, `usage`, `response`, `conversation_id`, `duration_seconds`, `num_turns`, `cli_version`, `model`, `latency`, `coordination`) from the nested canonical result payload.
+- Enforces fail-closed validation (`INVALID_RUN` / `MEASUREMENT_CAPTURE_FAILURE`) against missing terminal events, non-object result payloads, missing/non-SUCCESS status, missing/malformed usage objects, and conflicting critical fields (`status`, `usage`, `cli_version`, `model`) between outer wrapper and nested payload.
+- Recognizes `event` field discriminators (e.g., `event = "step_update"`, `event = "init"`, `event = "tool_start"`) in progress event processing, while strictly excluding the terminal result from intermediate progress counts.
+- Preserves full original wrapper in `raw_evidence.terminal_event_envelope` (and `raw_evidence.outer_envelope`) and normalized payload in `raw_evidence.terminal_result_payload`.
+- Maintains full backwards compatibility with flat legacy terminal fixtures (`{"type": "result", "status": "SUCCESS", ...}`).
+- Records B3.2 Diagnostic Attempt 2 compatibility disposition (`INVALID_RUN` / `AGY_STREAM_RESULT_ENVELOPE_SCHEMA_MISMATCH` / `RESOURCE_CEILING_EXCEEDED`) as diagnostic compatibility evidence without committing external run directories or interpreting counters as comparative performance evidence.
+- Adds comprehensive deterministic regression tests in `tests/runtime/test_comparative_benchmark_antigravity_executor.py` with zero live model turns.
+- Updates machine discovery in `README.json`, machine binding record `machine/benchmarking/antigravity-executor-binding.v1.json`, and documentation in `docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md`.
+
 ## Post-v1.6.0 Comparative Benchmark B3.1.4 Antigravity Sparse Settings Semantic Preflight - Candidate
 
 - Refactors Antigravity host preflight in `scripts/antigravity_benchmark_executor.py` to interpret `useG1Credits` according to documented Antigravity sparse-settings semantics where system default is `false`.

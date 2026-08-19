@@ -2024,3 +2024,521 @@ def test_76_stream_json_sparse_settings_provenance(tmp_path: Path) -> None:
     assert pol["effective_source"] == "SYSTEM_DEFAULT_SPARSE_PERSISTENCE"
     assert pol["key_present"] is False
     assert pol["effective_value"] is False
+
+
+def _mock_agy_1_1_15_wrapped_result(
+    status: str = "SUCCESS",
+    input_tokens: int = 142896,
+    output_tokens: int = 4692,
+    thinking_tokens: int = 2804,
+    cache_read_tokens: int = 786302,
+    total_tokens: int = 147588,
+    response: str = "diagnostic response",
+    conversation_id: str = "synthetic-test-id",
+    duration_seconds: float = 86.5398064,
+    num_turns: int = 1,
+    cli_version: str | None = None,
+    model: str | None = None,
+    task_completed: bool = True,
+    validation_passed: bool = True,
+    governance_valid: bool = True,
+) -> dict[str, Any]:
+    res: dict[str, Any] = {
+        "conversation_id": conversation_id,
+        "duration_seconds": duration_seconds,
+        "num_turns": num_turns,
+        "response": response,
+        "status": status,
+        "usage": {
+            "cache_read_tokens": cache_read_tokens,
+            "input_tokens": input_tokens,
+            "output_tokens": output_tokens,
+            "thinking_tokens": thinking_tokens,
+            "total_tokens": total_tokens,
+        },
+        "task_completed": task_completed,
+        "validation_passed": validation_passed,
+        "governance_valid": governance_valid,
+    }
+    if cli_version is not None:
+        res["cli_version"] = cli_version
+    if model is not None:
+        res["model"] = model
+    return {
+        "event": "result",
+        "result": res,
+    }
+
+
+def test_77_normalize_stream_terminal_event_helper_unit_tests() -> None:
+    # Helper unit tests for normalize_stream_terminal_event
+    wrapped = _mock_agy_1_1_15_wrapped_result()
+    ok, err, norm = executor.normalize_stream_terminal_event(wrapped)
+    assert ok is True
+    assert err is None
+    assert norm is not None
+    assert norm["status"] == "SUCCESS"
+    assert norm["usage"]["input_tokens"] == 142896
+    assert norm["conversation_id"] == "synthetic-test-id"
+
+    # Flat legacy event
+    flat = {"type": "result", "status": "SUCCESS", "usage": {"input_tokens": 100, "output_tokens": 50}}
+    ok, err, norm = executor.normalize_stream_terminal_event(flat)
+    assert ok is True
+    assert err is None
+    assert norm["usage"]["input_tokens"] == 100
+
+    # Non-dict event
+    ok, err, norm = executor.normalize_stream_terminal_event("not-a-dict")  # type: ignore
+    assert ok is False
+    assert "not a JSON object" in (err or "")
+
+    # Wrapped event with non-dict result payload
+    ok, err, norm = executor.normalize_stream_terminal_event({"event": "result", "result": "invalid"})
+    assert ok is False
+    assert "nested result payload is not a JSON object" in (err or "")
+
+    # Wrapped event with missing result key
+    ok, err, norm = executor.normalize_stream_terminal_event({"event": "result"})
+    assert ok is False
+    assert "missing result payload" in (err or "")
+
+    # Conflicting outer status
+    conflict_status = {
+        "event": "result",
+        "status": "FAIL",
+        "result": {"status": "SUCCESS", "usage": {"input_tokens": 100, "output_tokens": 50}},
+    }
+    ok, err, norm = executor.normalize_stream_terminal_event(conflict_status)
+    assert ok is False
+    assert "conflicting outer wrapper and nested result critical field: status" in (err or "")
+
+    # Conflicting outer usage
+    conflict_usage = {
+        "event": "result",
+        "usage": {"input_tokens": 999, "output_tokens": 1},
+        "result": {"status": "SUCCESS", "usage": {"input_tokens": 100, "output_tokens": 50}},
+    }
+    ok, err, norm = executor.normalize_stream_terminal_event(conflict_usage)
+    assert ok is False
+    assert "conflicting outer wrapper and nested result critical field: usage" in (err or "")
+
+
+def test_78_wrapped_agy_1_1_15_terminal_event_detected_and_accepted() -> None:
+    # Requirement: wrapped event=result matching AGY 1.1.15 is detected and parsed correctly
+    wrapped = _mock_agy_1_1_15_wrapped_result()
+    events = [
+        {"event": "step_update", "content": "Processing task step..."},
+        wrapped,
+    ]
+    raw_stream = "\n".join(json.dumps(ev) for ev in events)
+
+    req = _base_request(prompt="AGY 1.1.15 stream test", transport="stream-json")
+    res = executor.parse_antigravity_output(
+        raw_stream,
+        req,
+        elapsed_ms=86540,
+        expected_cli_version="1.1.15",
+        transport="stream-json-usage",
+    )
+    _validate_result_schema(res)
+
+    # 1. wrapped event=result is detected as terminal
+    assert res["outcome"]["status"] == "PASS"
+
+    # 2. nested result.status=SUCCESS is accepted
+    assert res["outcome"]["task_completed"] is True
+    assert res["outcome"]["validation_passed"] is True
+    assert res["outcome"]["governance_valid"] is True
+
+    # 3. nested usage maps to HOST_REPORTED tokens
+    tok = res["tokens"]
+    assert tok["source"] == "HOST_REPORTED"
+    assert tok["input_tokens"] == 142896
+    assert tok["output_tokens"] == 4692
+    assert tok["reasoning_tokens"] == 2804
+    assert tok["cached_input_tokens"] == 786302
+    assert tok["fresh_billable_tokens"] is None
+
+    # 4. counter identity is the qualified stream counter
+    assert tok["counter_id"] == "antigravity-cli-1.1.15:stream-json-usage:gemini-3.7-flash-high"
+
+    # 5. cache_read_tokens maps without being invented into total_tokens
+    assert res["raw_evidence"]["total_tokens"] == 147588
+
+    # 6. response contributes to user-visible output accounting
+    resp_bytes = len("diagnostic response".encode("utf-8"))
+    assert res["communication"]["user_visible_bytes"] >= resp_bytes
+
+    # 7. original wrapper is retained
+    assert "terminal_event_envelope" in res["raw_evidence"]
+    assert res["raw_evidence"]["terminal_event_envelope"]["event"] == "result"
+    assert "result" in res["raw_evidence"]["terminal_event_envelope"]
+
+    # 8. normalized result payload is retained
+    assert "terminal_result_payload" in res["raw_evidence"]
+    assert res["raw_evidence"]["terminal_result_payload"]["status"] == "SUCCESS"
+    assert res["raw_evidence"]["terminal_result_payload"]["conversation_id"] == "synthetic-test-id"
+
+
+def test_79_wrapped_stream_malformed_result_fails_closed() -> None:
+    # Requirement: malformed result value fails closed
+    req = _base_request(transport="stream-json")
+
+    # String result
+    res_str = executor.parse_stream_json_output(
+        [{"event": "result", "result": "malformed_string"}],
+        req,
+        expected_cli_version="1.1.15",
+    )
+    _validate_result_schema(res_str)
+    assert res_str["outcome"]["status"] == "INVALID_RUN"
+    assert res_str["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+    # Null result
+    res_null = executor.parse_stream_json_output(
+        [{"event": "result", "result": None}],
+        req,
+        expected_cli_version="1.1.15",
+    )
+    _validate_result_schema(res_null)
+    assert res_null["outcome"]["status"] == "INVALID_RUN"
+    assert res_null["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+    # Integer result
+    res_int = executor.parse_stream_json_output(
+        [{"event": "result", "result": 12345}],
+        req,
+        expected_cli_version="1.1.15",
+    )
+    _validate_result_schema(res_int)
+    assert res_int["outcome"]["status"] == "INVALID_RUN"
+    assert res_int["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+    # Missing result key with event=result
+    res_missing = executor.parse_stream_json_output(
+        [{"event": "result"}],
+        req,
+        expected_cli_version="1.1.15",
+    )
+    _validate_result_schema(res_missing)
+    assert res_missing["outcome"]["status"] == "INVALID_RUN"
+    assert res_missing["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+
+def test_80_wrapped_stream_missing_or_non_success_status_fails_closed() -> None:
+    # Requirement: missing nested status or non-SUCCESS nested status fails closed
+    req = _base_request(transport="stream-json")
+
+    # Missing status
+    res_missing_status = executor.parse_stream_json_output(
+        [{
+            "event": "result",
+            "result": {
+                "usage": {"input_tokens": 100, "output_tokens": 50},
+                "response": "ok",
+            },
+        }],
+        req,
+        expected_cli_version="1.1.15",
+    )
+    _validate_result_schema(res_missing_status)
+    assert res_missing_status["outcome"]["status"] == "INVALID_RUN"
+    assert res_missing_status["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+    # Non-SUCCESS status
+    res_fail_status = executor.parse_stream_json_output(
+        [{
+            "event": "result",
+            "result": {
+                "status": "ERROR",
+                "usage": {"input_tokens": 100, "output_tokens": 50},
+                "response": "failed",
+            },
+        }],
+        req,
+        expected_cli_version="1.1.15",
+    )
+    _validate_result_schema(res_fail_status)
+    assert res_fail_status["outcome"]["status"] == "INVALID_RUN"
+    assert res_fail_status["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+
+def test_81_wrapped_stream_missing_or_malformed_usage_fails_closed() -> None:
+    # Requirement: missing usage or malformed usage fails closed
+    req = _base_request(transport="stream-json")
+
+    # Missing usage
+    res_no_usage = executor.parse_stream_json_output(
+        [{
+            "event": "result",
+            "result": {
+                "status": "SUCCESS",
+                "response": "ok",
+            },
+        }],
+        req,
+        expected_cli_version="1.1.15",
+    )
+    _validate_result_schema(res_no_usage)
+    assert res_no_usage["outcome"]["status"] == "INVALID_RUN"
+    assert res_no_usage["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+    # Non-dict usage
+    res_str_usage = executor.parse_stream_json_output(
+        [{
+            "event": "result",
+            "result": {
+                "status": "SUCCESS",
+                "usage": "invalid_usage_string",
+            },
+        }],
+        req,
+        expected_cli_version="1.1.15",
+    )
+    _validate_result_schema(res_str_usage)
+    assert res_str_usage["outcome"]["status"] == "INVALID_RUN"
+    assert res_str_usage["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+    # Missing input_tokens
+    res_missing_input = executor.parse_stream_json_output(
+        [{
+            "event": "result",
+            "result": {
+                "status": "SUCCESS",
+                "usage": {"output_tokens": 50},
+            },
+        }],
+        req,
+        expected_cli_version="1.1.15",
+    )
+    _validate_result_schema(res_missing_input)
+    assert res_missing_input["outcome"]["status"] == "INVALID_RUN"
+    assert res_missing_input["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+    # Negative tokens
+    res_neg_input = executor.parse_stream_json_output(
+        [{
+            "event": "result",
+            "result": {
+                "status": "SUCCESS",
+                "usage": {"input_tokens": -1, "output_tokens": 50},
+            },
+        }],
+        req,
+        expected_cli_version="1.1.15",
+    )
+    _validate_result_schema(res_neg_input)
+    assert res_neg_input["outcome"]["status"] == "INVALID_RUN"
+    assert res_neg_input["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+
+def test_82_conflicting_outer_wrapper_and_nested_critical_values_fail_closed() -> None:
+    # Requirement: conflicting outer and nested critical values fail closed
+    req = _base_request(transport="stream-json")
+
+    # Conflicting status
+    res_status_conflict = executor.parse_stream_json_output(
+        [{
+            "event": "result",
+            "status": "FAIL",
+            "result": {
+                "status": "SUCCESS",
+                "usage": {"input_tokens": 100, "output_tokens": 50},
+            },
+        }],
+        req,
+        expected_cli_version="1.1.15",
+    )
+    _validate_result_schema(res_status_conflict)
+    assert res_status_conflict["outcome"]["status"] == "INVALID_RUN"
+    assert res_status_conflict["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+    # Conflicting usage
+    res_usage_conflict = executor.parse_stream_json_output(
+        [{
+            "event": "result",
+            "usage": {"input_tokens": 999, "output_tokens": 999},
+            "result": {
+                "status": "SUCCESS",
+                "usage": {"input_tokens": 100, "output_tokens": 50},
+            },
+        }],
+        req,
+        expected_cli_version="1.1.15",
+    )
+    _validate_result_schema(res_usage_conflict)
+    assert res_usage_conflict["outcome"]["status"] == "INVALID_RUN"
+    assert res_usage_conflict["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+    # Conflicting cli_version
+    res_ver_conflict = executor.parse_stream_json_output(
+        [{
+            "event": "result",
+            "cli_version": "1.1.14",
+            "result": {
+                "status": "SUCCESS",
+                "cli_version": "1.1.15",
+                "usage": {"input_tokens": 100, "output_tokens": 50},
+            },
+        }],
+        req,
+        expected_cli_version="1.1.15",
+    )
+    _validate_result_schema(res_ver_conflict)
+    assert res_ver_conflict["outcome"]["status"] == "INVALID_RUN"
+    assert res_ver_conflict["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+    # Conflicting model
+    res_model_conflict = executor.parse_stream_json_output(
+        [{
+            "event": "result",
+            "model": "gemini-2.5-pro",
+            "result": {
+                "status": "SUCCESS",
+                "model": "gemini-3.7-flash-high",
+                "usage": {"input_tokens": 100, "output_tokens": 50},
+            },
+        }],
+        req,
+        expected_cli_version="1.1.15",
+    )
+    _validate_result_schema(res_model_conflict)
+    assert res_model_conflict["outcome"]["status"] == "INVALID_RUN"
+    assert res_model_conflict["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+
+def test_83_matching_outer_and_nested_critical_fields_accepted() -> None:
+    # Requirement: non-conflicting outer metadata is accepted and merged without error
+    req = _base_request(transport="stream-json")
+    event = {
+        "event": "result",
+        "status": "SUCCESS",
+        "cli_version": "1.1.15",
+        "model": "gemini-3.7-flash-high",
+        "result": {
+            "status": "SUCCESS",
+            "cli_version": "1.1.15",
+            "model": "gemini-3.7-flash-high",
+            "usage": {"input_tokens": 500, "output_tokens": 100},
+            "task_completed": True,
+            "validation_passed": True,
+            "governance_valid": True,
+            "response": "All matched",
+        },
+    }
+    res = executor.parse_stream_json_output([event], req, expected_cli_version="1.1.15")
+    _validate_result_schema(res)
+    assert res["outcome"]["status"] == "PASS"
+    assert res["tokens"]["input_tokens"] == 500
+
+
+def test_84_multiple_conflicting_terminal_results_in_stream_fails_closed() -> None:
+    # Requirement: multiple conflicting terminal results fail closed
+    req = _base_request(transport="stream-json")
+    ev1 = _mock_agy_1_1_15_wrapped_result(status="SUCCESS", input_tokens=1000)
+    ev2 = _mock_agy_1_1_15_wrapped_result(status="SUCCESS", input_tokens=2000)  # different usage!
+
+    res = executor.parse_stream_json_output([ev1, ev2], req, expected_cli_version="1.1.15")
+    _validate_result_schema(res)
+    assert res["outcome"]["status"] == "INVALID_RUN"
+    assert res["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+
+
+def test_85_flat_legacy_terminal_fixture_remains_supported() -> None:
+    # Requirement: flat legacy terminal fixtures continue to be accepted
+    flat_event = {
+        "type": "result",
+        "status": "SUCCESS",
+        "cli_version": "1.1.15",
+        "model": "gemini-3.7-flash-high",
+        "usage": {
+            "input_tokens": 1500,
+            "output_tokens": 400,
+            "thinking_tokens": 120,
+            "cache_read_tokens": 300,
+            "total_tokens": 2320,
+        },
+        "task_completed": True,
+        "validation_passed": True,
+        "governance_valid": True,
+        "response": "Legacy flat response",
+    }
+    req = _base_request(transport="stream-json")
+    res = executor.parse_stream_json_output([flat_event], req, expected_cli_version="1.1.15")
+    _validate_result_schema(res)
+    assert res["outcome"]["status"] == "PASS"
+    assert res["tokens"]["input_tokens"] == 1500
+    assert res["raw_evidence"]["terminal_event_envelope"] == flat_event
+    assert res["raw_evidence"]["terminal_result_payload"]["status"] == "SUCCESS"
+
+
+def test_86_intermediate_progress_events_with_event_field_recognized() -> None:
+    # Requirement: event=step_update recognized and terminal result excluded from intermediate count
+    events = [
+        {"event": "step_update", "content": "Thinking step 1"},
+        {"event": "step_update", "content": "Thinking step 2"},
+        {"event": "tool_start", "event_kind": "TOOL_STARTED", "content": "Running tool"},
+        {"event": "tool_complete", "event_kind": "TOOL_COMPLETED", "content": "Finished tool"},
+        _mock_agy_1_1_15_wrapped_result(),
+    ]
+    raw_stream = "\n".join(json.dumps(ev) for ev in events)
+
+    req = _base_request(transport="stream-json", communication_mode="DEFAULT")
+    res = executor.parse_stream_json_output(raw_stream, req, expected_cli_version="1.1.15")
+    _validate_result_schema(res)
+
+    comm = res["communication"]
+    # 4 intermediate events, terminal result is excluded from progress_messages count
+    assert comm["progress_messages"] == 4
+    assert comm["model_progress_calls"] == 4
+    # User visible bytes include content of intermediate events + terminal response
+    assert comm["user_visible_bytes"] > len("diagnostic response".encode("utf-8"))
+
+
+def test_87_wrapped_stream_across_all_communication_treatments() -> None:
+    # Requirement: DEFAULT, CAVEMAN, MURMURS arms all work with wrapped AGY 1.1.15 stream-json output
+    wrapped = _mock_agy_1_1_15_wrapped_result()
+    events = [
+        {"event": "step_update", "event_kind": "TOOL_STARTED", "content": "Running test"},
+        {"event": "step_update", "event_kind": "TOOL_COMPLETED", "content": "Completed test"},
+        wrapped,
+    ]
+    stream_payload = "\n".join(json.dumps(ev) for ev in events)
+
+    for mode in ("DEFAULT", "CAVEMAN", "MURMURS"):
+        req = _base_request(
+            communication_mode=mode,
+            transport="stream-json",
+            caveman_policy_content=VALID_CAVEMAN_SKILL_MD if mode == "CAVEMAN" else None,
+            raw_host_output=stream_payload,
+        )
+        res = executor.execute_request(req)
+        _validate_result_schema(res)
+
+        assert res["tokens"]["source"] == "HOST_REPORTED"
+        assert res["tokens"]["counter_id"] == "antigravity-cli-1.1.15:stream-json-usage:gemini-3.7-flash-high"
+        assert res["tokens"]["input_tokens"] == 142896
+        assert res["tokens"]["cached_input_tokens"] == 786302
+        assert res["raw_evidence"]["transport"] == "stream-json-usage"
+        assert res["outcome"]["status"] == "PASS"
+
+
+def test_88_zero_live_model_calls_across_all_stream_tests() -> None:
+    # Requirement: zero tests execute a real Antigravity model turn
+    call_records: list[list[str]] = []
+
+    def tracking_runner(cmd: list[str], prompt: str = "") -> tuple[int, str, str]:
+        call_records.append(cmd)
+        return (0, json.dumps(_mock_agy_1_1_15_wrapped_result()), "")
+
+    req = _base_request(
+        raw_host_output=json.dumps(_mock_agy_1_1_15_wrapped_result()),
+        transport="stream-json",
+    )
+    res = executor.execute_request(req, runner_fn=tracking_runner)
+    _validate_result_schema(res)
+
+    # When mock output is provided, runner is never called
+    assert len(call_records) == 0
+    assert res["outcome"]["status"] == "PASS"
