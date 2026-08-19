@@ -87,16 +87,62 @@ Provenance rules:
 - Paired B3 token deltas are valid only while this counter identity remains identical across `DEFAULT`, `CAVEMAN`, and `MURMURS` arms.
 - If the CLI version, model identity, usage-field semantics, provider/host, or structured-output mechanism changes, the counter identity must change and the affected paired batch must not be combined as one comparable counter population.
 
-## Execution Controls
+## Execution Controls and B3.1.1 Live Invocation Hardening
 
 The B3 Antigravity executor pins:
 
 ```text
 model: gemini-3.7-flash-high
 output_format: json
-personal_credit_fallback: disabled (useG1Credits: false)
-mode: non-interactive
+personal_credit_fallback: disabled (useG1Credits: false in ~/.gemini/antigravity-cli/settings.json)
+mode: non-interactive (print-mode interface)
 ```
+
+### Production Live-Execution Command Format (B3.1.1)
+
+The live invocation path uses the validated Antigravity print-mode command interface:
+
+```json
+[
+  "agy",
+  "--model",
+  "gemini-3.7-flash-high",
+  "-p",
+  "<PROMPT>",
+  "--output-format",
+  "json"
+]
+```
+
+Invocation invariants:
+- Prompt is delivered strictly through `-p` / `--print` argument.
+- Benchmark prompt is not supplied through subprocess stdin.
+- `shell=False` is mandatory; stdout and stderr are captured.
+- Unvalidated `--no-use-g1-credits` command argument is removed (credit policy is enforced in `settings.json`).
+- Non-zero subprocess exit codes fail closed as `MEASUREMENT_CAPTURE_FAILURE` or `HARNESS_FAILURE`.
+
+### Fail-Closed Host Preflight (B3.1.1)
+
+Before any real model invocation, the executor verifies:
+1. Resolved Antigravity CLI version (`agy --version`) is exactly `1.1.14`.
+2. `settings.json` exists and parses successfully.
+3. `useG1Credits` is explicitly `false`.
+4. Benchmark model in request control identity remains exactly `gemini-3.7-flash-high`.
+5. Expected measurement-surface counter identity remains `antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high`.
+
+If any preflight condition fails, the executor returns `INVALID_RUN` with `MEASUREMENT_CAPTURE_FAILURE` without executing a model call.
+
+### Explicit Provenance Semantics (B3.1.1)
+
+The observed Antigravity outer JSON envelope does not necessarily contain host-returned model or version fields. Provenance is preserved explicitly in raw evidence:
+- CLI version: `source = PREFLIGHT_COMMAND` (exact validated `agy --version`)
+- Model: `source = PINNED_COMMAND_ARGUMENT` (`gemini-3.7-flash-high`)
+- Usage counters: `source = HOST_REPORTED_JSON_USAGE`
+- Counter ID: `provenance = ORCHESTRA_ASSIGNED_MEASUREMENT_SURFACE` (not provider-issued)
+
+### Communication Response Bytes (B3.1.1)
+
+User-visible response bytes are measured from the `response` field of the Antigravity structured envelope (or `content` field when present), ensuring accurate communication accounting.
 
 Fail-closed invariants:
 The executor fails closed as `INVALID_RUN` with `MEASUREMENT_CAPTURE_FAILURE` (or `CORRUPTED_STARTING_STATE` / `HARNESS_FAILURE`) when:
@@ -107,18 +153,19 @@ The executor fails closed as `INVALID_RUN` with `MEASUREMENT_CAPTURE_FAILURE` (o
 5. `output_tokens` is missing or invalid;
 6. Model identity changes or mismatches the pinned model;
 7. Counter identity changes inside a paired batch;
-8. Canonical starting-state identity is corrupted.
+8. Canonical starting-state identity is corrupted;
+9. Preflight checks fail (version, settings, credit policy).
 
 ## Quality Boundary: Host Status != Task Outcome
 
 Antigravity status `SUCCESS` does NOT imply benchmark task `PASS`.
 
-The benchmark task outcome is determined independently from:
+The benchmark task outcome is determined independently from explicit independently established evidence:
 - Task completion (`task_completed`);
 - Required validation (`validation_passed`);
 - Governance preservation (`governance_valid`).
 
-When host execution succeeds but benchmark validation fails, the run is recorded as a valid execution with outcome `FAIL` (not `PASS`, and not `INVALID_RUN`).
+Missing task-completion, validation, or governance fields default to `false` and cannot manufacture a benchmark `PASS`. When host execution succeeds but benchmark validation fails, the run is recorded as a valid execution with outcome `FAIL` (not `PASS`, and not `INVALID_RUN`).
 
 ## Causal variable
 
