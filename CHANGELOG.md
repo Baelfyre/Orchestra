@@ -1,5 +1,15 @@
 # Changelog
 
+## Post-v1.6.0 Registry Adaptive Consumption O1-O6 Realignment - Candidate
+
+- Implements deterministic Registry capability negotiation with explicit required/optional contracts, fail-closed incompatible required capabilities, and a bounded legacy compatibility profile for the immutable trusted Registry v0.2.0 surface without inventing unpublished R5 metadata.
+- Adds multi-jurisdiction/provider/domain Registry selection while preserving exact source-to-obligation provenance and binding the adaptive path back into the existing `ComplianceQueryReceipt` and downstream compliance set-equality protocol.
+- Adds query-scoped freshness so unrelated stale sources do not poison unrelated queries while stale, overdue, or untracked required sources fail the affected query closed.
+- Adds deterministic R6 release-delta verification and scoped impact analysis with tamper, authority-expansion, unsupported-capability, and human-review dispositions preserved as evidence rather than execution authority.
+- Adds governed Registry-domain to existing-specialist resolution with Conductor retained as the exclusive router; unknown domains escalate to human routing and cannot create or select unbounded agents.
+- Adds an exact Registry R5 candidate fixture plus focused O1-O6, edge, and joint-contract regression coverage, and documents the adaptive architecture in `docs/architecture/REGISTRY_ADAPTIVE_CONSUMPTION_O1_O6.md`.
+- Preserves the frozen B3 benchmark evidence, Registry PR #23/#24 unmerged state, trusted Registry release boundary, A5 non-promotion, A6 unauthorized state, B4 block, and all deployment/release/policy/destructive-operation gates.
+
 ## Post-v1.6.0 Comparative Benchmark B3 Calibration Execution Closeout & Evidence Freeze - Candidate
 
 - Executes and validates full 30-run B3 calibration across 10 paired blocks (5 Padayon-grounded tasks x 2 repetitions x 3 communication arms) under Antigravity CLI 1.1.15 and `gemini-3.7-flash-high` stream-json transport.
@@ -66,7 +76,7 @@
 - Preserves raw and effective provenance in `credit_fallback_policy` machine evidence across execution results.
 - Preserves all prior preflights: exact CLI version matching (1.1.15), model pinning (`gemini-3.7-flash-high`), stream-json and json counter identities, communication treatment bindings (`DEFAULT`, `CAVEMAN`, `MURMURS`), and independent task outcome evaluation.
 - Adds comprehensive deterministic runtime test coverage in `tests/runtime/test_comparative_benchmark_antigravity_executor.py` with zero live model turns.
-- Updates machine discovery in `README.json`, machine binding record `machine/benchmarking/antigravity-executor-binding.v1.json`, and documentation in `docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md`.
+- Updates machine discovery in `README.json`, machine binding record `machine/benchmarking/antigravity-executor-binding.v1.json`, and documentation `docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md`.
 
 ## Post-v1.6.0 Comparative Benchmark B3.1.3 Exact Host Version Pin Externalization - Candidate
 
@@ -291,7 +301,7 @@
 ## v1.5.0 Machine-Verifiable Control Plane and Murmurs - Published 2026-08-16
 
 - Published `Orchestra v1.5.0: Machine-Verifiable Control Plane and Murmurs` as immutable, non-draft, non-prerelease GitHub Release id `371314544` from lightweight tag `v1.5.0`, which resolves directly to exact signed canonical release commit `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`.
-- Completed the machine-verifiable control-plane re-foundation through `LEGACY_RETIRED`, preserving the versioned machine specialist registry, routing contract, governance policy, exact evidence/receipt stack, deterministic Arbiter Kernel, continuity/context state, persistent remediation circuit, pre-execution policy gate, and host conformance boundaries.
+- Completed the machine-verifiable control-plane re-foundation through `LEGACY_RETIRED`, preserving the versioned machine specialist registry, routing contract, governance policy, exact evidence/receipt stack, deterministic Arbiter Kernel, continuity/context state, persistent remediation circuit breakers, pre-execution policy gate, and host conformance boundaries.
 - Published the fail-closed merge-readiness stabilization requiring current `mergeable=true` and `mergeable_state=clean` for ordinary governed progression, with prior accepted pre-merge state carried into post-merge verification.
 - Published the additive Murmurs communication budget with `NORMAL` as the default and deterministic `SILENT`, local `MURMUR`, and required `EXPLAIN` dispositions; no billing-token savings percentage is claimed without comparable host-reported counters.
 - Final release evidence recorded 1,058 passing runtime tests, 98.47% statement coverage, 95.36% branch coverage, passing critical-module floors, governance, CodeQL and native-platform validation, plus complete Mutmut and Cosmic Ray campaigns.

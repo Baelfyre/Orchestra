@@ -213,6 +213,17 @@
       "a6_authorized": false,
       "b4_state": "BLOCKED",
       "authority_note": "B3 records completed and validated 30-run empirical calibration and baseline evidence freeze under the Padayon-grounded task-set. Murmurs benefit remains not established from calibration sample evidence alone, token savings are evidence-derived only, fresh_billable_tokens and cost remain unavailable, personal credit fallback remains disabled, A5 remains shadow-only, and B4 remains blocked."
+    },
+    "registry_adaptive_consumption_o1_o6": {
+      "status": "IMPLEMENTED_CANDIDATE_PENDING_EXACT_HEAD_VALIDATION",
+      "purpose": "Negotiated Registry capability consumption, explicit trusted Registry v0.2.0 compatibility, multi-jurisdiction query selection, query-scoped freshness, release-delta impact analysis, and governed domain-to-specialist resolution.",
+      "runtime_surface": "orchestra_runtime/registry_adaptive.py",
+      "cli_surface": "scripts/compliance_registry_adaptive.py",
+      "validation_surfaces": ["tests/runtime/test_registry_adaptive.py", "tests/runtime/test_registry_adaptive_edges.py", "tests/runtime/test_registry_joint_contract.py"],
+      "human_sources": ["docs/architecture/REGISTRY_ADAPTIVE_CONSUMPTION_O1_O6.md"],
+      "registry_r5_r6_candidate": "Baelfyre/Orchestra-Compliance-Registry PR #24",
+      "legacy_v0_2_compatibility": "EXPLICIT_LOCAL_PROFILE_NO_INVENTED_REGISTRY_R5_METADATA",
+      "authority_note": "Registry capability, freshness, delta, and routing evidence cannot expand Orchestra authority, merge or publish Registry state, bypass Conductor routing, or replace Governor/Steward/Arbiter evidence controls."
     }
   },
   "machine_scan_order": [
@@ -397,6 +408,7 @@
     "comparative_measurement_b0": "docs/benchmarking/COMPARATIVE_MEASUREMENT_B0.md",
     "comparative_measurement_b1": "docs/benchmarking/COMPARATIVE_MEASUREMENT_B1.md",
     "comparative_measurement_b3": "docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md",
+    "registry_adaptive_consumption_o1_o6": "docs/architecture/REGISTRY_ADAPTIVE_CONSUMPTION_O1_O6.md",
     "roadmap": "docs/project/ROADMAP.md",
     "changelog": "CHANGELOG.md",
     "release_docs": "docs/releases/",
@@ -426,6 +438,7 @@
     "adaptive_governed_orchestration": "A5_CLOSED_AT_SHADOW_MATURITY_EXECUTION_PROMOTION_DEFERRED_BENEFIT_NOT_ESTABLISHED_ISSUE_340",
     "comparative_measurement_b0": "CONTRACT_FROZEN_NO_BENCHMARK_EXECUTION",
     "comparative_measurement_b1": "IMPLEMENTED_NON_PRODUCTION_NO_PROVIDER_ADAPTERS",
+    "registry_adaptive_consumption_o1_o6": "IMPLEMENTED_CANDIDATE_PENDING_EXACT_HEAD_VALIDATION",
     "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316"
   },
   "ai_review_guidance": {
@@ -474,6 +487,10 @@
     "treat_b1_harness_as_non_production_evidence_infrastructure": true,
     "do_not_treat_synthetic_b1_fixture_measurements_as_benefit_evidence": true,
     "require_explicit_resource_ceiling_before_paid_live_benchmark_execution": true,
+    "treat_registry_capability_delta_freshness_and_routing_evidence_as_non_authorizing": true,
+    "require_explicit_v0_2_legacy_profile_instead_of_inventing_missing_registry_capability_metadata": true,
+    "require_query_scoped_registry_freshness_to_bind_to_the_exact_consumed_source_set": true,
+    "require_unknown_registry_domains_to_escalate_instead_of_creating_or_selecting_unbounded_agents": true,
     "treat_v1_5_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "treat_v1_6_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "when_evaluating_a_published_tag_or_release_prefer_live_verified_git_and_release_identity_over_prepublication_snapshot_fields": true
