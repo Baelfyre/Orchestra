@@ -427,6 +427,12 @@ def enforce_cross_run_invariants(manifest: dict[str, Any], runs: list[dict[str, 
             require(prior == fingerprint, "A5 shadow observation changed across arms in the same paired block")
 
     if kind == "MURMURS_ISOLATED":
+        counter_ids = {
+            run["tokens"]["counter_id"]
+            for run in runs
+            if run["outcome"]["status"] != "INVALID_RUN" and run["tokens"]["source"] == "HOST_REPORTED"
+        }
+        require(len(counter_ids) <= 1, "MURMURS_ISOLATED requires identical counter_id across all arms")
         for run in runs:
             require(run["a5_shadow_observation"] is None, "MURMURS_ISOLATED run unexpectedly contains A5 observation")
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B3.1.2 Communication Arm Operationalization - Candidate
+
+- Operationalizes `DEFAULT`, `CAVEMAN`, and `MURMURS` communication treatments in `scripts/antigravity_benchmark_executor.py` into distinct, machine-verifiable benchmark treatments.
+- Binds `DEFAULT` as the uncompressed baseline with `PresentationMode.NORMAL` and identity verification.
+- Binds `CAVEMAN` against the pinned external repository `JuliusBrussee/caveman` at revision `ae405e872270acc57484693612ae038b16c8f6cd` and `skills/caveman/SKILL.md` (Git blob SHA-1 `bd22d86b32e4a99e09ff7482a35509faac7a6f65`), failing closed on revision/blob mismatch and prohibiting context compression proxies without vendoring or adopting runtime dependencies.
+- Binds `MURMURS` to canonical `orchestra_runtime.presentation` contracts (`PresentationMode.MURMURS`, `murmurs-policy.v1.json`, `murmurs-vocabulary.v1.json`), reducing routine lifecycle events via `decide_presentation` while keeping the underlying task prompt invariant.
+- Adds stream-json NDJSON event parsing with token counter mapping, event sequence retention, and counter identity invariance.
+- Expands runtime unit test suite in `tests/runtime/test_comparative_benchmark_antigravity_executor.py` with 20 new tests covering all required B3.1.2 invariants with zero live model turns.
+- Updates machine binding record `machine/benchmarking/antigravity-executor-binding.v1.json` and documentation `docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md`.
+
 ## Post-v1.6.0 Comparative Benchmark B3.1.1 Antigravity Live Invocation Hardening - Candidate
 
 - Hardens the live Antigravity CLI invocation path in `scripts/antigravity_benchmark_executor.py` to use validated print-mode syntax: `["agy", "--model", "gemini-3.7-flash-high", "-p", prompt, "--output-format", "json"]`.

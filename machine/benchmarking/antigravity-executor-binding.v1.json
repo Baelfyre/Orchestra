@@ -1,22 +1,52 @@
 {
   "schema_version": "orchestra.antigravity-executor-binding.v1",
   "program_id": "orchestra.shared-comparative-benchmark.v1",
-  "phase": "BENCHMARK_B3_1_ANTIGRAVITY_EXECUTOR_BINDING",
+  "phase": "BENCHMARK_B3_1_2_COMMUNICATION_ARM_OPERATIONALIZATION",
   "status": "IMPLEMENTED_NON_CALIBRATED",
-  "canonical_entry_baseline": "06ede6bde3aa7682194950ba9130ba52e4fb0ea5",
+  "canonical_entry_baseline": "dfeb94ee8dccd1e812b7e2c2a5ae8ae1c40b5874",
   "binding": {
     "host": "Antigravity CLI",
     "cli_version": "1.1.14",
     "model": "gemini-3.7-flash-high",
-    "transport": "JSON",
-    "output_format": "json",
+    "supported_transports": ["json-usage", "stream-json-usage"],
+    "default_transport": "json-usage",
+    "output_formats": ["json", "stream-json"],
     "non_interactive": true,
     "personal_credit_fallback": "disabled",
     "use_g1_credits": false,
     "executor_script": "scripts/antigravity_benchmark_executor.py"
   },
+  "communication_arms": {
+    "default": {
+      "mode": "DEFAULT",
+      "presentation_mode": "NORMAL",
+      "treatment": "NO_COMPRESSION_BASELINE",
+      "prompt_substance_altered": false
+    },
+    "caveman": {
+      "mode": "CAVEMAN",
+      "presentation_mode": "NORMAL",
+      "external_repository": "JuliusBrussee/caveman",
+      "pinned_revision": "ae405e872270acc57484693612ae038b16c8f6cd",
+      "skill_path": "skills/caveman/SKILL.md",
+      "pinned_blob_identity": "bd22d86b32e4a99e09ff7482a35509faac7a6f65",
+      "fail_closed_on_revision_mismatch": true,
+      "fail_closed_on_blob_mismatch": true,
+      "vendoring_allowed": false,
+      "runtime_dependency": false
+    },
+    "murmurs": {
+      "mode": "MURMURS",
+      "presentation_mode": "MURMURS",
+      "presentation_engine": "orchestra_runtime.presentation",
+      "policy_contract": "machine/presentation/murmurs-policy.v1.json",
+      "vocabulary_contract": "machine/presentation/murmurs-vocabulary.v1.json",
+      "prompt_substance_altered": false
+    }
+  },
   "counter_identity": {
-    "identifier": "antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high",
+    "canonical_json_counter_id": "antigravity-cli-1.1.14:json-usage:gemini-3.7-flash-high",
+    "canonical_stream_json_counter_id": "antigravity-cli-1.1.14:stream-json-usage:gemini-3.7-flash-high",
     "provenance": "ORCHESTRA_ASSIGNED_MEASUREMENT_SURFACE",
     "vendor_assigned_claim": false,
     "paired_comparability_rule": "IDENTICAL_COUNTER_IDENTITY_REQUIRED_ACROSS_ALL_ARMS"
@@ -40,6 +70,7 @@
     "fail_closed_on_model_mismatch": true,
     "fail_closed_on_counter_identity_drift": true,
     "fail_closed_on_corrupted_starting_state": true,
+    "fail_closed_on_caveman_policy_mismatch": true,
     "raw_outer_envelope_preserved": true,
     "no_metric_inference": true
   },
@@ -53,14 +84,16 @@
     ]
   },
   "governance_boundaries": {
-    "b3_1_antigravity_executor_binding": "IMPLEMENTED",
+    "b3_1_2_communication_arm_operationalization": "IMPLEMENTED",
     "b3_measurement_maturity": "MEASUREMENT_NOT_STARTED",
     "murmurs_benefit": "NOT_ESTABLISHED",
     "a5_benefit": "NOT_ESTABLISHED",
     "a5_execution_promotion": "NOT_AUTHORIZED",
     "a6_authorized": false,
     "b4_state": "BLOCKED",
+    "diagnostic_executed": false,
     "calibration_executed": false,
     "live_provider_calls_in_unit": false
   }
 }
+
