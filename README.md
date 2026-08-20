@@ -44,6 +44,12 @@ It is **not an AI model**. Models generate and review work. Orchestra determines
 | **Portable host integration** | Supports governed adapter surfaces, PRAP compatibility, host maturity contracts, and bounded MCP transport. | [Hosts & Integrations](docs/README.md#hosts-adapters-and-integrations) |
 | **Machine-readable knowledge** | Exposes structured contracts, schemas, provenance, release evidence, and an AI-first repository index. | [`README.json`](README.json) |
 
+## Token-efficient Registry consumption
+
+**O7 is approved and planned, not yet implemented.** It will let Orchestra consume projected/indexed Registry results through the smallest sufficient context while preserving the existing O1-O6 capability, freshness, receipt, Governor/Steward/Arbiter, and fail-closed semantics. Direct local indexed access is preferred; direct JSON remains the deterministic fallback and MCP remains an optional transport for external hosts.
+
+See [O7 — Optimized Registry Consumption](docs/architecture/REGISTRY_QUERY_OPTIMIZATION_O7.md) for the complete architecture and phase plan.
+
 ## How Orchestra works
 
 ```text
