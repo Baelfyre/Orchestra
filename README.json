@@ -17,8 +17,8 @@
     "current_public_release_commit": "ba35764a14111518c7da729b5a4c69c6af485a9b",
     "current_public_release_state_scope": "LIVE_VERIFIED_PUBLICATION",
     "main_contains_post_release_work": true,
-    "next_release_plan": "UNSELECTED_POST_V1_6_0",
-    "next_release_plan_status": "NO_NEXT_RELEASE_SELECTED_OR_AUTHORIZED"
+    "next_release_plan": "V1_7_AFTER_CODEX_BASELINE_CLOSEOUT",
+    "next_release_plan_status": "APPROVED_SEQUENCE_NOT_YET_PUBLISHED"
   },
   "purpose": {
     "summary": "Portable orchestration runtime for structured AI-assisted software development.",
@@ -215,11 +215,13 @@
       "authority_note": "B3 records completed and validated 30-run empirical calibration and baseline evidence freeze under the Padayon-grounded task-set. Murmurs benefit remains not established from calibration sample evidence alone, token savings are evidence-derived only, fresh_billable_tokens and cost remain unavailable, personal credit fallback remains disabled, A5 remains shadow-only, and B4 remains blocked."
     },
     "comparative_measurement_codex_baseline_readiness": {
-      "status": "READINESS_ONLY_NO_LIVE_CALLS",
+      "status": "CANONICAL_READY_NO_LIVE_CALLS",
       "purpose": "Host-specific Codex CLI measurement adapter readiness for the controlled cross-host baseline without changing the frozen benchmark subject, task set, common runner, deterministic response validator, communication treatments, or accepted Antigravity evidence.",
       "executor": "scripts/codex_benchmark_executor.py",
       "machine_sources": ["machine/benchmarking/codex-executor-binding.v1.json"],
       "human_sources": ["docs/benchmarking/CODEX_BASELINE_READINESS.md"],
+      "canonical_readiness_commit": "83f0ff7d74c14b19f78d58143aadcc0a0613f13f",
+      "canonical_readiness_tree": "6e6a4f48439f6126452de1f9c65949fec4d3d7e1",
       "frozen_benchmark_subject": {
         "sha": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
         "tree": "ceab55bd512ea6fde4e8e76877cbb7006d18500e"
@@ -231,13 +233,13 @@
       "taskset_digest": "fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8",
       "validator": "EXACT_JSON_CONFORMANCE_V1",
       "live_execution_authorized": false,
-      "exact_cli_version": "TO_BE_FROZEN_BY_HUMAN_GATE",
-      "exact_model": "TO_BE_FROZEN_BY_HUMAN_GATE",
-      "exact_reasoning_effort": "TO_BE_FROZEN_BY_HUMAN_GATE",
+      "exact_cli_version": "TO_BE_FROZEN_BY_LIVE_EXECUTION_GATE",
+      "exact_model": "TO_BE_FROZEN_BY_LIVE_EXECUTION_GATE",
+      "exact_reasoning_effort": "TO_BE_FROZEN_BY_LIVE_EXECUTION_GATE",
       "a5_execution_promotion": "NOT_AUTHORIZED",
       "a6_authorized": false,
       "b4_state": "BLOCKED",
-      "authority_note": "Readiness infrastructure and host-counter transport are measurement evidence plumbing only. The frozen control_identity.orchestra_revision remains d95f; Codex adapter provenance is separate and cannot become benchmark-subject authority."
+      "authority_note": "Readiness is canonical and performs zero live Codex/provider calls. Live baseline execution still requires exact host/model/reasoning/counter/workspace/resource and stop-condition freeze."
     },
     "registry_adaptive_consumption_o1_o6": {
       "status": "CANONICAL_IMPLEMENTED_VALIDATED_AND_REGISTRY_RECONCILED",
@@ -247,11 +249,36 @@
       "validation_surfaces": ["tests/runtime/test_registry_adaptive.py", "tests/runtime/test_registry_adaptive_edges.py", "tests/runtime/test_registry_joint_contract.py"],
       "human_sources": ["docs/architecture/REGISTRY_ADAPTIVE_CONSUMPTION_O1_O6.md"],
       "canonical_orchestra_implementation": {"sha": "955a4b4918e28638a50e9564d1e3ea0127ae5f73", "tree": "4cba8642eb63b38b283db67010e01f204c92780b"},
-      "registry_r1_r6_canonical": {"repository": "Baelfyre/Orchestra-Compliance-Registry", "sha": "20eb859db153f17e24c052a13765e982d51cedbf", "tree": "763be9062a0c23031c794403dc4592f5db4389b0", "implementation_merge_sha": "be297335b55aa6a3a88a473c7e7da28614e95cd2", "trusted_release": "registry-v0.2.0", "trusted_release_includes_r1_r6": false},
+      "registry_r1_r6_canonical": {"repository": "Baelfyre/Orchestra-Compliance-Registry", "sha": "20eb859db153f17e24c052a13765e982d51cedbf", "tree": "763be9062a0c23031c794403dc4592f5db4389b0", "implementation_merge_sha": "be297335b55aa6a3a88a473c7e7da28614e95cd2", "trusted_release": "registry-v0.3.0", "trusted_release_includes_r1_r6": true},
       "r5_capability_blob_sha": "978c1a6eecffe802df79e6d110a16b780ec6bd3f",
       "joint_reconciliation": "PASS",
       "legacy_v0_2_compatibility": "EXPLICIT_LOCAL_PROFILE_NO_INVENTED_REGISTRY_CAPABILITY_METADATA",
       "authority_note": "Registry capability, freshness, delta, and routing evidence cannot expand Orchestra authority, publish Registry state, bypass Conductor routing, or replace Governor/Steward/Arbiter evidence controls."
+    },
+    "registry_query_optimization_o7": {
+      "status": "APPROVED_PLANNED_NOT_IMPLEMENTED",
+      "purpose": "Consume the Registry R7 typed/indexed/projection query gateway using the smallest sufficient context while preserving O1-O6 semantics, exact Registry identities, existing compliance receipts, and fail-closed behavior.",
+      "human_sources": ["docs/architecture/REGISTRY_QUERY_OPTIMIZATION_O7.md"],
+      "implementation_order": "AFTER_CODEX_BASELINE_CLOSEOUT_AND_ORCHESTRA_V1_7_0_AND_AFTER_STABLE_REGISTRY_R7_CONTRACT",
+      "required_compatibility_floor": {"cap.query.v1": "1.0.0"},
+      "planned_optional_capabilities": ["cap.query.projection.v1", "cap.query.relationships.v1", "cap.query.indexed-read.v1", "cap.query.budget.v1", "cap.transport.mcp.v1"],
+      "preferred_transport_order": ["DIRECT_LOCAL_INDEXED_GATEWAY", "DIRECT_LOCAL_JSON_QUERY", "OPTIONAL_MCP_TRANSPORT"],
+      "projection_levels": ["MINIMAL", "SUMMARY", "EVIDENCE", "FULL"],
+      "phase_plan": [
+        "O7.0_CONSUMER_CONTRACT_FREEZE",
+        "O7.1_OPTIONAL_CAPABILITY_NEGOTIATION",
+        "O7.2_TRANSPORT_ABSTRACTION",
+        "O7.3_PROJECTION_AWARE_CONSUMPTION",
+        "O7.4_EXISTING_RECEIPT_NORMALIZATION",
+        "O7.5_DETERMINISTIC_FAILOVER",
+        "O7.6_CONTEXT_BUDGET_INTEGRATION",
+        "O7.7_JOINT_R7_O7_CONFORMANCE"
+      ],
+      "fallbacks": {"indexed_unavailable": "DIRECT_LOCAL_JSON_QUERY", "mcp_unavailable": "DIRECT_LOCAL_QUERY", "optional_capability_missing": "CURRENT_O3_PATH", "index_identity_mismatch": "REJECT_REBUILD_OR_FALLBACK", "semantic_mismatch": "FAIL_CLOSED"},
+      "frozen_invariants": ["O1_CAPABILITY_NEGOTIATION", "O2_COMPATIBILITY_FAIL_CLOSED", "O3_QUERY_SEMANTICS", "O4_QUERY_SCOPED_FRESHNESS", "O5_RELEASE_DELTA", "O6_DOMAIN_ROUTING", "CONDUCTOR_EXCLUSIVE_ROUTING", "GOVERNOR_APPLICABILITY", "STEWARD_TRACEABILITY", "ARBITER_SET_EQUALITY"],
+      "planned_release_target": "v1.8.0_AFTER_REGISTRY_R7_TRUSTED_RELEASE_AND_JOINT_CONFORMANCE",
+      "token_efficiency_claim": "NOT_CLAIMED_UNTIL_MEASURED",
+      "authority_note": "O7 is a planned read-path optimization only. MCP remains transport, the Registry index remains derived, query/projection choice cannot change compliance meaning, and no O7 path may expand authority or bypass existing evidence gates."
     }
   },
   "machine_scan_order": [
@@ -350,7 +377,7 @@
     "required_analysis_ruleset_drift_issue": 331,
     "required_analysis_ruleset_drift_state": "OPEN_COMPATIBILITY_WORKFLOW_ACTIVE"
   },
-  "architecture": {"current_overview": "docs/architecture/README.md", "detailed_authority_capability_design": "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md", "routing_reference": "ROUTING_MAP.md", "governance_reference": "docs/governance/README.md", "compliance_registry_reference": "docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md", "compliance_protocol_runtime": "orchestra_runtime/compliance_protocol.py", "mcp_transport_reference": "docs/developer/MCP_STDIO_TRANSPORT.md", "adaptive_context_reference": "docs/architecture/ADAPTIVE_CONTEXT_A2.md", "adaptive_shadow_learning_reference": "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3.md", "adaptive_shadow_implementation_reference": "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3_IMPLEMENTATION.md", "adaptive_selection_a4_reference": "docs/architecture/ADAPTIVE_SELECTION_A4.md", "adaptive_selection_a4_execution_attachment_reference": "docs/architecture/ADAPTIVE_SELECTION_A4_EXECUTION_ATTACHMENT.md", "adaptive_tuner_a5_reference": "docs/architecture/ADAPTIVE_TUNER_A5.md", "historical_status_policy": "Phase documents may retain phase-era status wording. Current exact state comes from live machine contracts, release evidence, and Git identity."},
+  "architecture": {"current_overview": "docs/architecture/README.md", "detailed_authority_capability_design": "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md", "routing_reference": "ROUTING_MAP.md", "governance_reference": "docs/governance/README.md", "compliance_registry_reference": "docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md", "compliance_protocol_runtime": "orchestra_runtime/compliance_protocol.py", "mcp_transport_reference": "docs/developer/MCP_STDIO_TRANSPORT.md", "adaptive_context_reference": "docs/architecture/ADAPTIVE_CONTEXT_A2.md", "adaptive_shadow_learning_reference": "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3.md", "adaptive_shadow_implementation_reference": "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3_IMPLEMENTATION.md", "adaptive_selection_a4_reference": "docs/architecture/ADAPTIVE_SELECTION_A4.md", "adaptive_selection_a4_execution_attachment_reference": "docs/architecture/ADAPTIVE_SELECTION_A4_EXECUTION_ATTACHMENT.md", "adaptive_tuner_a5_reference": "docs/architecture/ADAPTIVE_TUNER_A5.md", "registry_query_optimization_o7_reference": "docs/architecture/REGISTRY_QUERY_OPTIMIZATION_O7.md", "historical_status_policy": "Phase documents may retain phase-era status wording. Current exact state comes from live machine contracts, release evidence, and Git identity."},
   "hosts_integrations": {
     "host_update_contract": "machine/hosts/update-contract.v1.json",
     "adapter_sdk_reference": "docs/setup/ADAPTER_SDK_PRAP.md",
@@ -405,10 +432,10 @@
     "release_evidence": "GITHUB_RELEASE_ID_371748233",
     "publication_closeout": "GITHUB_RELEASE_ID_371748233_PLUS_CANONICAL_COMMIT_VERIFICATION",
     "post_release_main_contains_significant_changes": true,
-    "provisional_next_release": "UNSELECTED",
-    "provisional_next_release_status": "NO_NEXT_RELEASE_SELECTED_OR_AUTHORIZED",
+    "provisional_next_release": "v1.7.0",
+    "provisional_next_release_status": "APPROVED_AFTER_CODEX_BASELINE_CLOSEOUT",
     "publication_authorized": false,
-    "publication_target": "NONE",
+    "publication_target": "NONE_UNTIL_CODEX_BASELINE_CLOSEOUT",
     "publication_identity_rule": "Any future public release becomes authoritative only when the exact tag, immutable GitHub Release, and approved signed canonical commit identity are created and independently verified.",
     "v1_5_0_must_remain_immutable": true,
     "murmurs_measurement_issue": 316,
@@ -439,6 +466,7 @@
     "comparative_measurement_b3": "docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md",
     "codex_baseline_readiness": "docs/benchmarking/CODEX_BASELINE_READINESS.md",
     "registry_adaptive_consumption_o1_o6": "docs/architecture/REGISTRY_ADAPTIVE_CONSUMPTION_O1_O6.md",
+    "registry_query_optimization_o7": "docs/architecture/REGISTRY_QUERY_OPTIMIZATION_O7.md",
     "roadmap": "docs/project/ROADMAP.md",
     "changelog": "CHANGELOG.md",
     "release_docs": "docs/releases/",
@@ -468,8 +496,9 @@
     "adaptive_governed_orchestration": "A5_CLOSED_AT_SHADOW_MATURITY_EXECUTION_PROMOTION_DEFERRED_BENEFIT_NOT_ESTABLISHED_ISSUE_340",
     "comparative_measurement_b0": "CONTRACT_FROZEN_NO_BENCHMARK_EXECUTION",
     "comparative_measurement_b1": "IMPLEMENTED_NON_PRODUCTION_NO_PROVIDER_ADAPTERS",
-    "codex_baseline_readiness": "READINESS_ONLY_NO_LIVE_CALLS",
+    "codex_baseline_readiness": "CANONICAL_READY_NO_LIVE_CALLS",
     "registry_adaptive_consumption_o1_o6": "CANONICAL_IMPLEMENTED_VALIDATED_AND_REGISTRY_RECONCILED",
+    "registry_query_optimization_o7": "APPROVED_PLANNED_NOT_IMPLEMENTED",
     "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316"
   },
   "ai_review_guidance": {
@@ -526,6 +555,11 @@
     "require_explicit_v0_2_legacy_profile_instead_of_inventing_missing_registry_capability_metadata": true,
     "require_query_scoped_registry_freshness_to_bind_to_the_exact_consumed_source_set": true,
     "require_unknown_registry_domains_to_escalate_instead_of_creating_or_selecting_unbounded_agents": true,
+    "treat_registry_query_o7_as_planned_not_implemented_until_canonical_runtime_evidence_exists": true,
+    "prefer_direct_local_indexed_registry_gateway_over_mcp_for_orchestra_internal_consumption_when_o7_is_implemented": true,
+    "treat_registry_mcp_as_optional_transport_not_registry_or_orchestra_authority": true,
+    "preserve_o1_o6_compliance_semantics_across_o7_projection_and_transport_paths": true,
+    "do_not_claim_o7_token_savings_until_cross_path_efficiency_measurement_exists": true,
     "treat_v1_5_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "treat_v1_6_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "when_evaluating_a_published_tag_or_release_prefer_live_verified_git_and_release_identity_over_prepublication_snapshot_fields": true
