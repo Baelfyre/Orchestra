@@ -1,0 +1,215 @@
+{
+  "schema_version": "orchestra.codex-c1-cross-provider-reconciliation.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "status": "C1_COMPLETE_RECONCILED_CALIBRATION_ONLY",
+  "recorded_date": "2026-08-22",
+  "benchmark_identity": {
+    "adapter_sha": "0af078f6ad34d5cf406823bbd0e8258496923b60",
+    "adapter_tree": "90255564c13fcbb132a7e4cf8b98eb106d039e39",
+    "benchmark_subject_sha": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
+    "benchmark_subject_tree": "ceab55bd512ea6fde4e8e76877cbb7006d18500e",
+    "common_measurement_core_sha": "e182e478988c77125127811375aa1b69278cca63",
+    "common_measurement_core_tree": "9e1d9c0dcf5e615c4b16dfd95bb72f63eaacc33e",
+    "taskset_digest": "fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8",
+    "validator": "EXACT_JSON_CONFORMANCE_V1",
+    "tasks": 5,
+    "repetitions_per_arm": 2,
+    "arms": ["DEFAULT", "CAVEMAN", "MURMURS"]
+  },
+  "providers": {
+    "antigravity": {
+      "cli_version": "1.1.15",
+      "model": "gemini-3.7-flash-high",
+      "transport": "stream-json-usage",
+      "counter_id": "antigravity-cli-1.1.15:stream-json-usage:gemini-3.7-flash-high",
+      "accepted_runs": 30,
+      "invalid_runs": 0,
+      "accepted_cumulative_total_tokens": 877582,
+      "arm_summary": {
+        "DEFAULT": {
+          "runs": 10,
+          "pass_rate": 1.0,
+          "mean_total_tokens": 29049.1,
+          "mean_input_tokens": 27751.3,
+          "mean_output_tokens": 1297.8,
+          "mean_reasoning_tokens": 1120.0
+        },
+        "CAVEMAN": {
+          "runs": 10,
+          "pass_rate": 1.0,
+          "mean_total_tokens": 29864.6,
+          "mean_input_tokens": 28597.9,
+          "mean_output_tokens": 1266.7,
+          "mean_reasoning_tokens": 1092.4,
+          "relative_to_default": {
+            "total_tokens_pct": 2.81,
+            "input_tokens_pct": 3.05,
+            "output_tokens_pct": -2.40,
+            "reasoning_tokens_pct": -2.46
+          }
+        },
+        "MURMURS": {
+          "runs": 10,
+          "pass_rate": 1.0,
+          "mean_total_tokens": 28844.5,
+          "mean_input_tokens": 27752.8,
+          "mean_output_tokens": 1091.7,
+          "mean_reasoning_tokens": 913.9,
+          "relative_to_default": {
+            "total_tokens_pct": -0.70,
+            "input_tokens_pct": 0.01,
+            "output_tokens_pct": -15.88,
+            "reasoning_tokens_pct": -18.40
+          }
+        }
+      },
+      "raw_per_run_files_in_repository": false,
+      "evidence_boundary": "Canonical repository records aggregate calibration results and cryptographic evidence digests; raw 30-run Antigravity calibration files remain external."
+    },
+    "codex": {
+      "cli_version": "0.148.0",
+      "model": "gpt-5.6-sol",
+      "reasoning_effort": "medium",
+      "transport": "jsonl-usage",
+      "counter_id": "codex-cli-0.148.0:jsonl-usage:gpt-5.6-sol:medium",
+      "formal_accepted_runs": 30,
+      "accepted_task_passes": 30,
+      "accepted_validation_passes": 30,
+      "accepted_governance_valid_runs": 30,
+      "accepted_safety_violation_flags": 0,
+      "live_attempts": 31,
+      "invalid_attempts": 1,
+      "accepted_cumulative_total_tokens": 332578,
+      "failed_attempt_token_usage": null,
+      "failed_attempt_token_usage_note": "No accepted provider-token measurement was established for the failed provider-outage attempt; no value is inferred.",
+      "arm_summary": {
+        "DEFAULT": {
+          "runs": 10,
+          "pass_rate": 1.0,
+          "mean_total_tokens": 10437.7,
+          "mean_input_tokens": 10308.3,
+          "mean_output_tokens": 129.4,
+          "mean_reasoning_tokens": 8.1
+        },
+        "CAVEMAN": {
+          "runs": 10,
+          "pass_rate": 1.0,
+          "mean_total_tokens": 12377.8,
+          "relative_to_default": {
+            "total_tokens_pct": 18.59,
+            "input_tokens_pct": 18.80,
+            "output_tokens_pct": 1.55,
+            "reasoning_tokens_pct": 22.22
+          },
+          "paired_total_token_delta": {
+            "mean": 1940.1,
+            "bootstrap_95_ci": [1501.9, 2747.9],
+            "blocks_lower_than_default": 0,
+            "blocks_equal_to_default": 0,
+            "blocks_higher_than_default": 10
+          }
+        },
+        "MURMURS": {
+          "runs": 10,
+          "pass_rate": 1.0,
+          "mean_total_tokens": 10442.3,
+          "mean_input_tokens": 10308.3,
+          "relative_to_default": {
+            "total_tokens_pct": 0.04,
+            "input_tokens_pct": 0.00,
+            "output_tokens_pct": 3.55,
+            "reasoning_tokens_pct": 17.28
+          },
+          "paired_total_token_delta": {
+            "mean": 4.6,
+            "bootstrap_95_ci": [-40.5, 47.5],
+            "blocks_lower_than_default": 1,
+            "blocks_equal_to_default": 5,
+            "blocks_higher_than_default": 4
+          },
+          "task_class_mean_total_token_delta_vs_default": {
+            "DEBUGGING": 7.0,
+            "DEPENDENCY_HEAVY": 90.5,
+            "HIGH_COORDINATION": 0.0,
+            "SINGLE_DOMAIN": -74.5,
+            "VALIDATION_HEAVY": 0.0
+          }
+        }
+      },
+      "provider_outage": {
+        "slot": 26,
+        "request_id": "1d3cdc802809e37c8f4661c9",
+        "attempt": 1,
+        "status": "INVALID_RUN",
+        "invalid_reason": "PROVIDER_OUTAGE",
+        "structured_error": {
+          "type": "error",
+          "message": "Reconnecting... 2/5 (request timed out)"
+        },
+        "adjudication": "PRESERVED_AND_ONE_HUMAN_AUTHORIZED_REPLACEMENT",
+        "replacement_attempt": 2,
+        "replacement_status": "PASS",
+        "replacement_accepted_total_tokens": 15894,
+        "recovery_final_status": "COMPLETE"
+      },
+      "final_checkpoint": {
+        "formal_completed_runs": 30,
+        "formal_planned_runs": 30,
+        "last_status": "PASS",
+        "cumulative_total_tokens": 332578,
+        "recovery_session": true
+      }
+    }
+  },
+  "cross_provider_observations": {
+    "accepted_host_reported_total_tokens": {
+      "antigravity": 877582,
+      "codex": 332578,
+      "difference": -545004,
+      "codex_relative_to_antigravity_pct": -62.10,
+      "interpretation": "DESCRIPTIVE_ONLY_NOT_A_DIRECT_CROSS_PROVIDER_EFFICIENCY_CLAIM"
+    },
+    "caveman_total_token_direction_replication": "YES_HIGHER_THAN_DEFAULT_ON_BOTH_PROVIDERS",
+    "murmurs_total_token_direction_replication": "NO_ANTIGRAVITY_LOWER_CODEX_EFFECTIVELY_NEUTRAL",
+    "murmurs_input_token_behavior_replication": "YES_EFFECTIVELY_UNCHANGED_ON_BOTH_PROVIDERS",
+    "murmurs_output_token_direction_replication": "NO_ANTIGRAVITY_LOWER_CODEX_SLIGHTLY_HIGHER",
+    "provider_absolute_token_counts_directly_interchangeable": false
+  },
+  "conclusions": {
+    "c1_validity": "VALID_COMPLETE",
+    "evidence_maturity": "CALIBRATION_ONLY",
+    "murmurs_benefit": "NOT_ESTABLISHED",
+    "caveman_observation": "TOTAL_AND_INPUT_TOKEN_OVERHEAD_DIRECTION_REPLICATES_ACROSS_TESTED_PROVIDER_MODEL_STACKS",
+    "murmurs_observation": "CODEX_TOTAL_TOKEN_EFFECT_IS_EFFECTIVELY_NEUTRAL_AND_DOES_NOT_REPLICATE_ANTIGRAVITY_TOTAL_OUTPUT_TOKEN_REDUCTION",
+    "causal_explanation_for_non_replication": "NOT_ESTABLISHED",
+    "production_promotion_authority": "NONE"
+  },
+  "follow_up_research_question": "Why does MURMURS reduce output and total token usage on the Antigravity/Gemini calibration while producing an effectively neutral total-token effect on Codex/GPT under the same frozen task set and communication-arm design?",
+  "next_planned_experiment": {
+    "id": "C2_MACHINE_READABLE_JSON_PROMPT_REPRESENTATION",
+    "state": "PLANNED_SEPARATE_GOVERNED_EXTENSION_NOT_STARTED_BY_THIS_RECORD",
+    "purpose": "Test whether deterministic machine-readable task representation changes efficiency, consistency, or communication-treatment behavior relative to the frozen natural-language C1 baseline."
+  },
+  "evidence_provenance": {
+    "local_reconciliation_bundle": {
+      "name": "orchestra_c1_reconciliation_bundle.zip",
+      "sha256": "b2d6fe46410f437be662645176b46c5ce71d2d2438568676aad154211f6ffe91"
+    },
+    "canonical_sources": [
+      "docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md",
+      "machine/benchmarking/comparative-measurement-contract.v1.json",
+      "machine/benchmarking/b3-calibration-task-set.v1.json",
+      "machine/benchmarking/codex-executor-binding.v1.json",
+      "machine/benchmarking/codex-prebaseline-remediation.v1.json"
+    ]
+  },
+  "research_boundary": {
+    "calibration_claims_allowed": false,
+    "automatic_promotion": false,
+    "a5_execution_effective_promotion_authorized": false,
+    "a6_authorized": false,
+    "b4_execution_authorized": false,
+    "release_publication_authorized": false,
+    "deployment_authorized": false
+  }
+}
