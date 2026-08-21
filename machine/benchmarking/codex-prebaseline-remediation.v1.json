@@ -77,20 +77,6 @@
       "STRUCTURED_HOST_ERROR_REMAINS_PROVIDER_OUTAGE"
     ]
   },
-  "agy_evidence_reconciliation": {
-    "underlying_run_records": 30,
-    "run_digest_mismatches": 0,
-    "valid_runs": 30,
-    "pass_runs": 30,
-    "invalid_runs": 0,
-    "cumulative_total_tokens": 877582,
-    "manifest_canonical_digest_match": true,
-    "experiment_canonical_digest_match": true,
-    "run_index_canonical_digest_match": true,
-    "calibration_summary_canonical_digest_match": false,
-    "calibration_summary_disposition": "DERIVED_ARTIFACT_DRIFT_NONBLOCKING_FOR_CODEX_INPUT_PROVENANCE",
-    "agy_rerun_required": false
-  },
   "resource_freeze": {
     "per_call_total_token_ceiling": 45000,
     "cumulative_total_token_ceiling": 1200000,
@@ -104,7 +90,8 @@
   },
   "authority": {
     "formal_codex_baseline_execution_authorized_by_this_record": false,
-    "merge_authorized": false,
+    "canonicalization_requires_exact_head_validation": true,
+    "signed_materialization_required": true,
     "release_publication_authorized": false,
     "a5_execution_promotion": "NOT_AUTHORIZED",
     "a6": "NOT_AUTHORIZED",

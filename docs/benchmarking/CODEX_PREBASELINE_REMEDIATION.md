@@ -103,22 +103,6 @@ This keeps provider attribution evidence-based and fail-closed.
 
 Existing deterministic Codex executor tests remain authoritative for JSONL validation, exact task validation, no-tool enforcement, host identity drift, counter identity, and result-schema compatibility.
 
-## Antigravity evidence reconciliation
-
-The accepted B3 Antigravity evidence was checked before Codex execution:
-
-```text
-RUN_INDEX_RECORDED = 30
-RUN_FILES_CHECKED = 30
-RUN_DIGEST_MISMATCHES = 0
-VALID_RUNS = 30
-PASS_RUNS = 30
-INVALID_RUNS = 0
-CUMULATIVE_TOTAL_TOKENS = 877582
-```
-
-The canonical JSON digests for the manifest, experiment, and run index match the frozen B3 records. The local `calibration_summary.json` canonical digest differs from its recorded frozen digest, but the underlying 30 indexed run records independently reproduce the canonical aggregate metrics. This is recorded as derived-summary artifact drift and does not alter the frozen task-set or accepted run evidence used for Codex comparison. No Antigravity rerun is required by this remediation unit.
-
 ## Resource and execution boundary
 
 The prospective Codex baseline budget remains:
@@ -135,4 +119,4 @@ The formal run must stop on any invalid run, host/model/reasoning identity drift
 
 ## Governance boundary
 
-This remediation authorizes no merge, release publication, A5 execution promotion, A6 initiation, B4 execution, or formal Codex 30-run baseline by itself. Validation and human review remain required before canonicalization.
+This remediation authorizes no release publication, A5 execution promotion, A6 initiation, B4 execution, or formal Codex 30-run baseline by itself. Canonicalization remains subject to exact-head validation and the repository's signed-materialization governance.
