@@ -215,11 +215,11 @@
       "authority_note": "B3 records completed and validated 30-run empirical calibration and baseline evidence freeze under the Padayon-grounded task-set. Murmurs benefit remains not established from calibration sample evidence alone, token savings are evidence-derived only, fresh_billable_tokens and cost remain unavailable, personal credit fallback remains disabled, A5 remains shadow-only, and B4 remains blocked."
     },
     "comparative_measurement_codex_baseline_readiness": {
-      "status": "CANONICAL_READY_NO_LIVE_CALLS",
-      "purpose": "Host-specific Codex CLI measurement adapter readiness for the controlled cross-host baseline without changing the frozen benchmark subject, task set, common runner, deterministic response validator, communication treatments, or accepted Antigravity evidence.",
+      "status": "LIVE_DIAGNOSTIC_QUALIFIED_PREBASELINE_REMEDIATION_PENDING_VALIDATION",
+      "purpose": "Host-specific Codex CLI measurement adapter readiness and bounded prebaseline hardening for the controlled cross-host baseline without changing the frozen benchmark subject, task set, common runner, deterministic response validator, communication treatments, or accepted Antigravity run evidence.",
       "executor": "scripts/codex_benchmark_executor.py",
-      "machine_sources": ["machine/benchmarking/codex-executor-binding.v1.json"],
-      "human_sources": ["docs/benchmarking/CODEX_BASELINE_READINESS.md"],
+      "machine_sources": ["machine/benchmarking/codex-executor-binding.v1.json", "machine/benchmarking/codex-prebaseline-remediation.v1.json"],
+      "human_sources": ["docs/benchmarking/CODEX_BASELINE_READINESS.md", "docs/benchmarking/CODEX_PREBASELINE_REMEDIATION.md"],
       "canonical_readiness_commit": "83f0ff7d74c14b19f78d58143aadcc0a0613f13f",
       "canonical_readiness_tree": "6e6a4f48439f6126452de1f9c65949fec4d3d7e1",
       "frozen_benchmark_subject": {
@@ -233,13 +233,13 @@
       "taskset_digest": "fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8",
       "validator": "EXACT_JSON_CONFORMANCE_V1",
       "live_execution_authorized": false,
-      "exact_cli_version": "TO_BE_FROZEN_BY_LIVE_EXECUTION_GATE",
-      "exact_model": "TO_BE_FROZEN_BY_LIVE_EXECUTION_GATE",
-      "exact_reasoning_effort": "TO_BE_FROZEN_BY_LIVE_EXECUTION_GATE",
+      "exact_cli_version": "0.148.0",
+      "exact_model": "gpt-5.6-sol",
+      "exact_reasoning_effort": "medium",
       "a5_execution_promotion": "NOT_AUTHORIZED",
       "a6_authorized": false,
       "b4_state": "BLOCKED",
-      "authority_note": "Readiness is canonical and performs zero live Codex/provider calls. Live baseline execution still requires exact host/model/reasoning/counter/workspace/resource and stop-condition freeze."
+      "authority_note": "Live diagnostic transport qualification succeeded on Attempt 2 after an isolated Git-worktree precondition repair. The formal Codex baseline remains 0/30 and unauthorized until this prebaseline remediation is validated and canonicalized under a separate merge gate."
     },
     "registry_adaptive_consumption_o1_o6": {
       "status": "CANONICAL_IMPLEMENTED_VALIDATED_AND_REGISTRY_RECONCILED",
@@ -343,6 +343,7 @@
     "comparative_benchmark_executor_result_schema": "machine/schemas/comparative-benchmark-executor-result.schema.json",
     "comparative_benchmark_antigravity_executor_binding": "machine/benchmarking/antigravity-executor-binding.v1.json",
     "comparative_benchmark_codex_executor_binding": "machine/benchmarking/codex-executor-binding.v1.json",
+    "comparative_benchmark_codex_prebaseline_remediation": "machine/benchmarking/codex-prebaseline-remediation.v1.json",
     "comparative_benchmark_calibration_task_set": "machine/benchmarking/b3-calibration-task-set.v1.json",
     "release_evidence_directory": "machine/release-evidence",
     "schemas_directory": "machine/schemas",
@@ -465,6 +466,7 @@
     "comparative_measurement_b1": "docs/benchmarking/COMPARATIVE_MEASUREMENT_B1.md",
     "comparative_measurement_b3": "docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md",
     "codex_baseline_readiness": "docs/benchmarking/CODEX_BASELINE_READINESS.md",
+    "codex_prebaseline_remediation": "docs/benchmarking/CODEX_PREBASELINE_REMEDIATION.md",
     "registry_adaptive_consumption_o1_o6": "docs/architecture/REGISTRY_ADAPTIVE_CONSUMPTION_O1_O6.md",
     "registry_query_optimization_o7": "docs/architecture/REGISTRY_QUERY_OPTIMIZATION_O7.md",
     "roadmap": "docs/project/ROADMAP.md",
@@ -496,7 +498,7 @@
     "adaptive_governed_orchestration": "A5_CLOSED_AT_SHADOW_MATURITY_EXECUTION_PROMOTION_DEFERRED_BENEFIT_NOT_ESTABLISHED_ISSUE_340",
     "comparative_measurement_b0": "CONTRACT_FROZEN_NO_BENCHMARK_EXECUTION",
     "comparative_measurement_b1": "IMPLEMENTED_NON_PRODUCTION_NO_PROVIDER_ADAPTERS",
-    "codex_baseline_readiness": "CANONICAL_READY_NO_LIVE_CALLS",
+    "codex_baseline_readiness": "LIVE_DIAGNOSTIC_QUALIFIED_PREBASELINE_REMEDIATION_PENDING_VALIDATION",
     "registry_adaptive_consumption_o1_o6": "CANONICAL_IMPLEMENTED_VALIDATED_AND_REGISTRY_RECONCILED",
     "registry_query_optimization_o7": "APPROVED_PLANNED_NOT_IMPLEMENTED",
     "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316"
@@ -551,6 +553,8 @@
     "treat_e182_as_common_measurement_core_baseline_not_benchmark_subject": true,
     "record_codex_host_adapter_revision_separately_from_control_identity_orchestra_revision": true,
     "do_not_execute_codex_baseline_until_exact_host_surface_and_resource_stop_conditions_are_frozen": true,
+    "require_git_worktree_for_live_codex_benchmark_workspace": true,
+    "do_not_classify_unstructured_codex_nonzero_exit_as_provider_outage": true,
     "treat_registry_capability_delta_freshness_and_routing_evidence_as_non_authorizing": true,
     "require_explicit_v0_2_legacy_profile_instead_of_inventing_missing_registry_capability_metadata": true,
     "require_query_scoped_registry_freshness_to_bind_to_the_exact_consumed_source_set": true,
