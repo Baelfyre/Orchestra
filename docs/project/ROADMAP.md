@@ -168,6 +168,9 @@ The existing bypass list remains operationally available. Orchestra governance m
 - [ ] Improve adapters as tool capabilities change.
 - [ ] Expand fictional, project-agnostic examples.
 - [x] Publish `v1.2.0` after R7R, GA-0 through GA-7, refreshed release evidence, independent final verification, and the separate R8 publication gate completed.
+- [x] Publish `v1.3.0` after the SK1-SK10 Specialist Intelligence campaign, release preparation, revision-bound readiness, README alignment, and separate publication authority completed.
+- [x] Publish `v1.4.0` after Compliance Registry cross-integration, trusted immutable Registry publication, real network-provenance validation, final exact-head readiness, and separate Orchestra publication authority completed.
+- [x] Publish `v1.5.0` after the machine-verifiable control-plane re-foundation, merge-readiness stabilization, Murmurs, fresh exact-head release evidence, signed canonicalization, and separate publication transition completed.
 
 ## Next New Campaign After Existing Pending Work
 
