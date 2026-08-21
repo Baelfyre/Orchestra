@@ -2,7 +2,7 @@
   "schema_version": "orchestra.codex-executor-binding.v1",
   "program_id": "orchestra.shared-comparative-benchmark.v1",
   "status": "READINESS_ONLY_NO_LIVE_CALLS",
-  "recorded_at": "2026-08-20",
+  "recorded_at": "2026-08-21",
   "purpose": "Define a host-specific Codex CLI executor binding for the controlled cross-host baseline without changing the frozen benchmark subject, task set, communication treatments, shared runner, deterministic response validator, or accepted Antigravity evidence.",
   "live_execution": {
     "authorized": false,
@@ -41,7 +41,11 @@
     "aggregate_digest": "fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8",
     "task_count": 5,
     "repetitions_per_arm": 2,
-    "communication_arms": ["DEFAULT", "CAVEMAN", "MURMURS"],
+    "communication_arms": [
+      "DEFAULT",
+      "CAVEMAN",
+      "MURMURS"
+    ],
     "planned_runs": 30,
     "validator_type": "EXACT_JSON_CONFORMANCE_V1",
     "mutation_allowed": false
@@ -80,7 +84,14 @@
       "web_search": "disabled",
       "shell_tool": false,
       "output_schema_enforcement": false,
+      "live_workspace_git_worktree_required": true,
+      "git_worktree_preflight": "git -C {workspace} rev-parse --is-inside-work-tree",
       "reason": "Synthetic calibration tasks require no host tools, network, repository mutation, or host-enforced answer schema. Outcome validation remains Orchestra response-derived and identical across hosts."
+    },
+    "nonzero_exit_classification": {
+      "structured_turn_failed_or_error_jsonl": "PROVIDER_OUTAGE",
+      "nonzero_without_structured_provider_failure": "MEASUREMENT_CAPTURE_FAILURE",
+      "rule": "A non-zero Codex process exit is not provider-outage evidence by itself. PROVIDER_OUTAGE requires a structured Codex turn.failed or error event; local or otherwise unqualified non-zero exits fail closed without attributing provider failure."
     }
   },
   "fail_closed_conditions": [
@@ -89,9 +100,11 @@
     "REASONING_EFFORT_MISMATCH",
     "FROZEN_BENCHMARK_SUBJECT_DRIFT",
     "MISSING_OR_INVALID_WORKSPACE",
+    "LIVE_WORKSPACE_NOT_GIT_WORKTREE",
     "MALFORMED_JSONL",
     "MISSING_THREAD_STARTED",
     "TURN_FAILED_OR_ERROR_EVENT",
+    "UNSTRUCTURED_NONZERO_CODEX_EXIT",
     "MISSING_OR_DUPLICATE_TURN_COMPLETED",
     "MISSING_OR_MALFORMED_HOST_USAGE",
     "MISSING_FINAL_AGENT_MESSAGE",
