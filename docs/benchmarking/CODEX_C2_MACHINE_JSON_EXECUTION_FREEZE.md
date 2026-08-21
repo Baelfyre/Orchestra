@@ -99,8 +99,14 @@ C2 remains calibration/research evidence. It does not authorize a claim that mac
 
 C2 results must be analyzed against C1 using within-provider paired representation effects. Any causal explanation for an observed difference requires additional evidence.
 
-## Machine record
+## Full machine execution freeze
 
-The complete machine-readable freeze, including all 30 execution entries and all machine-prompt digests, is `machine/benchmarking/codex-c2-machine-json-execution-freeze.v1.json`.
+The complete machine-readable execution freeze remains an external benchmark artifact until C2 produces results. It contains all 30 exact execution entries, all machine-prompt digests, resource ceilings, stop rules, and execution authority.
 
-Freeze envelope SHA-256: `0285f97f0f509ddd41bebfe7254aec82d9292f6ae0097cf05776923c8f5bcc7b`.
+Full freeze envelope SHA-256: `0285f97f0f509ddd41bebfe7254aec82d9292f6ae0097cf05776923c8f5bcc7b`.
+
+Validated local launcher SHA-256: `b20010df254a329696441565c2827df5d4c880b198f192da3d2c51662573c142`.
+
+Execution bundle SHA-256: `d2d4fcbc67cea1b8f7b898105e39cf0cc6cd47823dfd104d6b6162eba66a874d`.
+
+The final C2 result publication will add the normal human-readable analysis plus canonical machine-readable result/index record after the evidence is reconciled.
