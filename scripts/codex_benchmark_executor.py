@@ -37,6 +37,7 @@ TRANSPORT_ID = "jsonl-usage"
 VERSION_PATTERN = re.compile(r"\d+\.\d+\.\d+(?:[-.][0-9A-Za-z]+)*")
 ALLOWED_REASONING_EFFORTS = {"minimal", "low", "medium", "high", "xhigh"}
 DISALLOWED_ITEM_TYPES = {"command_execution", "file_change", "mcp_tool_call", "web_search"}
+PROVIDER_FAILURE_EVENT_TYPES = {"turn.failed", "error"}
 
 BENCHMARK_SUBJECT_SHA = "d95f677dbf23ab79c4698c26645ea30cea9b3019"
 BENCHMARK_SUBJECT_TREE = "ceab55bd512ea6fde4e8e76877cbb7006d18500e"
@@ -124,6 +125,48 @@ def parse_cli_version(raw: str) -> str:
     return unique[0]
 
 
+def validate_git_worktree(
+    workspace_dir: Path,
+    *,
+    git_runner: Callable[..., subprocess.CompletedProcess[str]] = subprocess.run,
+) -> tuple[bool, str]:
+    """Verify the live Codex workspace is inside a Git worktree before invocation."""
+    command = ["git", "-C", str(workspace_dir.resolve()), "rev-parse", "--is-inside-work-tree"]
+    try:
+        cp = git_runner(
+            command,
+            capture_output=True,
+            text=True,
+            check=False,
+            shell=False,
+        )
+    except OSError as exc:
+        return False, f"cannot verify workspace Git worktree: {exc}"
+
+    if cp.returncode != 0:
+        detail = (cp.stderr or cp.stdout or "").strip()
+        suffix = f": {detail}" if detail else ""
+        return False, f"workspace_dir must resolve inside a Git worktree{suffix}"
+    if (cp.stdout or "").strip().lower() != "true":
+        return False, "workspace_dir is not inside a Git worktree"
+    return True, ""
+
+
+def _has_structured_provider_failure(raw_output: str) -> bool:
+    """Return true only when Codex JSONL contains explicit provider/host failure evidence."""
+    for raw_line in (raw_output or "").splitlines():
+        line = raw_line.strip()
+        if not line:
+            continue
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(event, dict) and event.get("type") in PROVIDER_FAILURE_EVENT_TYPES:
+            return True
+    return False
+
+
 def build_codex_command(*, prompt: str, workspace_dir: Path, model: str, reasoning_effort: str) -> list[str]:
     """Build one bounded Codex non-interactive benchmark invocation."""
     return [
@@ -172,7 +215,7 @@ def parse_codex_jsonl(raw_output: str) -> dict[str, Any]:
         raise ValueError("Codex JSONL stream is empty")
     if not any(event.get("type") == "thread.started" for event in events):
         raise ValueError("Codex JSONL is missing thread.started")
-    if any(event.get("type") in {"turn.failed", "error"} for event in events):
+    if any(event.get("type") in PROVIDER_FAILURE_EVENT_TYPES for event in events):
         raise RuntimeError("Codex reported turn.failed or error")
 
     completed = [event for event in events if event.get("type") == "turn.completed"]
@@ -245,6 +288,7 @@ def execute_request(
     workspace_dir: Path | str | None,
     run_command: Callable[..., subprocess.CompletedProcess[str]] = subprocess.run,
     version_runner: Callable[..., subprocess.CompletedProcess[str]] = subprocess.run,
+    git_runner: Callable[..., subprocess.CompletedProcess[str]] = subprocess.run,
     raw_jsonl: str | None = None,
     observed_cli_version: str | None = None,
     caveman_policy_content: str | bytes | None = None,
@@ -289,6 +333,16 @@ def execute_request(
             "CORRUPTED_STARTING_STATE",
             {**evidence, "error": "workspace_dir must resolve to an existing directory"},
         )
+
+    if raw_jsonl is None:
+        git_ok, git_error = validate_git_worktree(workspace, git_runner=git_runner)
+        if not git_ok:
+            return _invalid_result(
+                request,
+                "CORRUPTED_STARTING_STATE",
+                {**evidence, "error": git_error, "workspace": str(workspace.resolve())},
+            )
+        evidence["workspace_git_worktree"] = True
 
     identity_error = _validate_request_identity(
         request,
@@ -382,16 +436,22 @@ def execute_request(
                 {**evidence, "error": f"Codex execution failed to start: {exc}"},
             )
         if cp.returncode != 0:
-            return _invalid_result(
-                request,
-                "PROVIDER_OUTAGE",
+            evidence.update(
                 {
-                    **evidence,
-                    "error": "codex exec returned non-zero",
                     "returncode": cp.returncode,
                     "stderr": cp.stderr,
-                },
+                    "raw_jsonl": cp.stdout,
+                }
             )
+            if not _has_structured_provider_failure(cp.stdout):
+                return _invalid_result(
+                    request,
+                    "MEASUREMENT_CAPTURE_FAILURE",
+                    {
+                        **evidence,
+                        "error": "codex exec returned non-zero without structured provider failure evidence",
+                    },
+                )
         raw_jsonl = cp.stdout
         evidence["stderr"] = cp.stderr
     wall_clock_ms = max(0, int((time.perf_counter() - started) * 1000))
