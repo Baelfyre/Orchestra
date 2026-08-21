@@ -50,6 +50,31 @@ It is **not an AI model**. Models generate and review work. Orchestra determines
 
 See [O7 — Optimized Registry Consumption](docs/architecture/REGISTRY_QUERY_OPTIMIZATION_O7.md) for the complete architecture and phase plan.
 
+## Research results and empirical benchmarks
+
+Orchestra includes controlled comparative experiments so architectural or communication-efficiency ideas can be evaluated with measured evidence instead of assumed benefit.
+
+### C1 cross-provider natural-language baseline
+
+The completed C1 calibration ran the same frozen five-task benchmark across `DEFAULT`, `CAVEMAN`, and `MURMURS` communication arms using both the accepted Antigravity/Gemini calibration and a separately controlled Codex/GPT baseline.
+
+| Calibration result | Antigravity | Codex |
+| --- | ---: | ---: |
+| Accepted runs | 30 / 30 | 30 / 30 |
+| Task / validation / governance pass | 100% | 100% |
+| CAVEMAN total tokens vs DEFAULT | **+2.81%** | **+18.59%** |
+| MURMURS total tokens vs DEFAULT | **-0.70%** | **+0.04%** |
+
+**Current research interpretation:** CAVEMAN's token-overhead direction replicated across the two tested provider/model stacks. The small MURMURS token-saving direction observed under Antigravity did **not** replicate under Codex, where MURMURS was effectively token-neutral. MURMURS input-token behavior remained effectively unchanged from `DEFAULT` on both stacks.
+
+This is intentionally a calibration result, not a production-benefit claim. Absolute host-reported token totals are not treated as directly interchangeable across providers/models, and the current evidence does not establish why the MURMURS effect differs between the two host/model surfaces.
+
+- **Full human-readable analysis:** [Codex C1 Cross-Provider Reconciliation](docs/benchmarking/CODEX_C1_CROSS_PROVIDER_RECONCILIATION.md)
+- **Machine-readable result:** [`machine/benchmarking/codex-c1-cross-provider-reconciliation.v1.json`](machine/benchmarking/codex-c1-cross-provider-reconciliation.v1.json)
+- **Original Antigravity calibration:** [Comparative Measurement B3](docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md)
+
+The next research extension is C2, which will test deterministic machine-readable JSON task representation separately from this frozen natural-language baseline. C2 must not rewrite or retroactively tune C1 evidence.
+
 ## How Orchestra works
 
 ```text
