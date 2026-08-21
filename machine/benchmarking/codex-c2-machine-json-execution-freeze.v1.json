@@ -1,0 +1,154 @@
+{
+  "schema_version": "orchestra.codex-c2-machine-json-execution-freeze.v1",
+  "status": "FROZEN_AND_AUTHORIZED_FOR_LOCAL_EXECUTION_AFTER_PREFLIGHT",
+  "recorded_date": "2026-08-22",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "experiment_id": "b3-codex-machine-json-prompt-extension-v1",
+  "authority": {
+    "c2_design_approved": true,
+    "c2_resource_budget_approved": true,
+    "c2_live_execution_authorized_after_preflight": true,
+    "automatic_retry_authorized": false,
+    "manual_recovery_requires_separate_adjudication": true,
+    "c1_mutation_authorized": false,
+    "c3_execution_authorized": false,
+    "a5_execution_promotion": "NOT_AUTHORIZED",
+    "a6": "NOT_AUTHORIZED",
+    "b4": "BLOCKED",
+    "release_publication_authorized": false,
+    "deployment_authorized": false
+  },
+  "canonical_repository_state_at_freeze": {
+    "repository": "Baelfyre/Orchestra",
+    "branch": "main",
+    "sha": "dc119739ef871d77ee91ade4e0d2d9032c804970",
+    "tree": "6e734f3bf64e23a58bb4066d75a6f59ab93392aa",
+    "parent": "0af078f6ad34d5cf406823bbd0e8258496923b60",
+    "signature": "VERIFIED_VALID"
+  },
+  "executable_adapter_revision": {
+    "sha": "0af078f6ad34d5cf406823bbd0e8258496923b60",
+    "tree": "90255564c13fcbb132a7e4cf8b98eb106d039e39",
+    "reason": "Same frozen adapter revision used by C1; current canonical main changed documentation only and retains byte-identical benchmark source blobs.",
+    "canonical_blob_equivalence_at_current_main": {
+      "task_set": "b0f4fd6c2ad14d5a38db61851303e58d80577ccf",
+      "plan_fixture": "2448efecf3fc8742bbc516141ac79d2bd2d19a87",
+      "planner": "6de55d48fd2e37f8106ff64eecb522cde30b7a58",
+      "codex_executor": "0b5267234d881027224cbb26b400e19e8fe3bf74"
+    }
+  },
+  "benchmark_identity": {
+    "benchmark_subject_sha": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
+    "benchmark_subject_tree": "ceab55bd512ea6fde4e8e76877cbb7006d18500e",
+    "taskset_digest": "fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8",
+    "validator": "EXACT_JSON_CONFORMANCE_V1",
+    "task_count": 5,
+    "communication_modes": ["DEFAULT", "CAVEMAN", "MURMURS"],
+    "repetitions_per_arm": 2,
+    "formal_planned_runs": 30
+  },
+  "codex_host_freeze": {
+    "authentication_surface": "ChatGPT",
+    "cli_version": "0.148.0",
+    "provider": "openai-codex",
+    "transport": "jsonl-usage",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "medium",
+    "counter_id": "codex-cli-0.148.0:jsonl-usage:gpt-5.6-sol:medium"
+  },
+  "prompt_representation": {
+    "representation": "MACHINE_JSON",
+    "schema_version": "orchestra.prompt-representation.machine-json.v1",
+    "canonicalization": "sort_keys=true,separators=(comma,colon),ensure_ascii=true",
+    "source_natural_prompt_embedded": false,
+    "semantic_source": ["task_payload.starting_state", "task_payload.validation_contract", "deterministic operation map"],
+    "operation_map": {
+      "b3-cal-padayon-r5-capability-manifest": "NEGOTIATE_CAPABILITY_COMPATIBILITY_AND_SCHEMA",
+      "b3-cal-padayon-o1-o2-compatibility": "ANALYZE_DEPENDENCY_COMPATIBILITY_AND_SCOPED_REVALIDATION",
+      "b3-cal-padayon-o3-o4-freshness": "EVALUATE_FRESHNESS_AND_SCOPED_REVALIDATION",
+      "b3-cal-padayon-assurance-drift": "DIAGNOSE_CANONICAL_IDENTITY_AND_COMPLIANCE_CONSUMPTION_DRIFT",
+      "b3-cal-padayon-o5-o6-routing": "RESOLVE_SPECIALIST_ROUTING_AND_ORDERED_VALIDATION"
+    },
+    "task_prompt_digests": {
+      "b3-cal-padayon-r5-capability-manifest": "0fabc3125a676aec98e04c6136bc8df3083b4ac69b06b3f7444b021178ad26c8",
+      "b3-cal-padayon-o1-o2-compatibility": "341d0c71be9d74ba7f31fe875767dd605dc8873774a34f65f6fe951a1dc30fb1",
+      "b3-cal-padayon-o3-o4-freshness": "7afce5ad5659bed9e64dc9a653e155cefb5ee87f6e87c66f896bd12fdf54abbc",
+      "b3-cal-padayon-assurance-drift": "93920cc6153f1a577b1cfcb94427dec42e06182ec03b4bacf400fdaa790f4882",
+      "b3-cal-padayon-o5-o6-routing": "b2bf3f03d5b100a134a9fc1280ccb334c42233718d6574e30487c630cf6fcb2b"
+    }
+  },
+  "execution_envelope": {
+    "autonomy": "CONTROLLED_READ_ONLY",
+    "sandbox": "read-only",
+    "approval_policy": "never",
+    "network_required_by_tasks": false,
+    "repository_mutation_allowed": false,
+    "workspace": "ISOLATED_EMPTY_GIT_WORKTREE_NO_AGENTS_MD",
+    "disallowed_tool_events_remain_invalid": true
+  },
+  "resource_freeze": {
+    "per_call_total_token_ceiling": 45000,
+    "cumulative_total_token_ceiling": 1200000,
+    "formal_planned_runs": 30,
+    "formal_completed_runs": 0,
+    "automatic_retry": false,
+    "stop_on_invalid_run": true,
+    "stop_on_identity_drift": true,
+    "stop_on_tool_event": true,
+    "stop_on_token_ceiling_breach": true,
+    "rationale": "Reuse C1 ceilings unchanged to avoid introducing a resource-envelope difference into the representation experiment."
+  },
+  "schedule": {
+    "policy": "PAIR_TASK_REPETITION_COMMUNICATION_MODE_AND_EXECUTION_SLOT_TO_C1",
+    "paired_to": "C1_FROZEN_NATURAL_LANGUAGE_BASELINE",
+    "new_randomization_performed": false,
+    "temporal_order_limitation": "C1 was executed before C2; provider/session temporal effects are not fully randomized across representation.",
+    "entries": [
+      [1,"91acbb576029939d6acf5d3e","b3-cal-padayon-r5-capability-manifest",1,"DEFAULT","default-communication"],
+      [2,"6c5ce8488c30d550353403fd","b3-cal-padayon-r5-capability-manifest",1,"CAVEMAN","caveman-communication"],
+      [3,"362e862516084531d2177d85","b3-cal-padayon-r5-capability-manifest",1,"MURMURS","murmurs-communication"],
+      [4,"8bba565f2609bc21e49b8aa8","b3-cal-padayon-r5-capability-manifest",2,"CAVEMAN","caveman-communication"],
+      [5,"220bacc8f18de18b4ca19832","b3-cal-padayon-r5-capability-manifest",2,"DEFAULT","default-communication"],
+      [6,"62a71e98216d858f0569da79","b3-cal-padayon-r5-capability-manifest",2,"MURMURS","murmurs-communication"],
+      [7,"61176b03827f242006e91cbf","b3-cal-padayon-o1-o2-compatibility",1,"DEFAULT","default-communication"],
+      [8,"e54aa29ea0aae81ddfeb9a86","b3-cal-padayon-o1-o2-compatibility",1,"CAVEMAN","caveman-communication"],
+      [9,"840b39b6d3cfdc4d6b3ae1bd","b3-cal-padayon-o1-o2-compatibility",1,"MURMURS","murmurs-communication"],
+      [10,"59e60200b30fcf4a5d8b6e5e","b3-cal-padayon-o1-o2-compatibility",2,"MURMURS","murmurs-communication"],
+      [11,"dd9ac432a7b333eb4b422620","b3-cal-padayon-o1-o2-compatibility",2,"DEFAULT","default-communication"],
+      [12,"cc68111b9a78a7a17250a0cf","b3-cal-padayon-o1-o2-compatibility",2,"CAVEMAN","caveman-communication"],
+      [13,"c5a170daba2efa70b446163e","b3-cal-padayon-o3-o4-freshness",1,"MURMURS","murmurs-communication"],
+      [14,"2d2a68d048119a61af46a314","b3-cal-padayon-o3-o4-freshness",1,"CAVEMAN","caveman-communication"],
+      [15,"ffd425fd7451f5dc9bdda465","b3-cal-padayon-o3-o4-freshness",1,"DEFAULT","default-communication"],
+      [16,"a04141e8c928eb8a696acecf","b3-cal-padayon-o3-o4-freshness",2,"MURMURS","murmurs-communication"],
+      [17,"0f1c172c28338aab08f02413","b3-cal-padayon-o3-o4-freshness",2,"CAVEMAN","caveman-communication"],
+      [18,"2b6ebf8d2f1d39b9225dcfd6","b3-cal-padayon-o3-o4-freshness",2,"DEFAULT","default-communication"],
+      [19,"2cdc26f26636bbe6e3062478","b3-cal-padayon-assurance-drift",1,"MURMURS","murmurs-communication"],
+      [20,"4d0cd4bf50a1ea64414d79bb","b3-cal-padayon-assurance-drift",1,"DEFAULT","default-communication"],
+      [21,"1af9bb0573fae3136d261319","b3-cal-padayon-assurance-drift",1,"CAVEMAN","caveman-communication"],
+      [22,"29411e56ddc0cd23d9fb928e","b3-cal-padayon-assurance-drift",2,"DEFAULT","default-communication"],
+      [23,"9fd8a4f6a42c27ff7b363912","b3-cal-padayon-assurance-drift",2,"MURMURS","murmurs-communication"],
+      [24,"86d731864c13b01481b97e51","b3-cal-padayon-assurance-drift",2,"CAVEMAN","caveman-communication"],
+      [25,"133baef94c10b447b5563447","b3-cal-padayon-o5-o6-routing",1,"MURMURS","murmurs-communication"],
+      [26,"9adb91f261234f46870b7cbb","b3-cal-padayon-o5-o6-routing",1,"CAVEMAN","caveman-communication"],
+      [27,"a8393be8056d232961920f85","b3-cal-padayon-o5-o6-routing",1,"DEFAULT","default-communication"],
+      [28,"e103c112f2d89b7bf6383a01","b3-cal-padayon-o5-o6-routing",2,"DEFAULT","default-communication"],
+      [29,"68e1aec799087235a000aa88","b3-cal-padayon-o5-o6-routing",2,"MURMURS","murmurs-communication"],
+      [30,"3bb065d8441fc13c6ff46fc5","b3-cal-padayon-o5-o6-routing",2,"CAVEMAN","caveman-communication"]
+    ],
+    "entry_tuple_schema": ["execution_order_index","request_id","task_id","repetition_index","communication_mode","arm_id"]
+  },
+  "evidence_rules": {
+    "preserve_every_invalid_attempt": true,
+    "accepted_run_count_excludes_invalid_attempts": true,
+    "do_not_overwrite_c1_evidence": true,
+    "c2_evidence_directory_must_be_separate": true,
+    "provider_native_counter_boundary_preserved": true
+  },
+  "interpretation_limits": {
+    "calibration_only": true,
+    "no_production_promotion": true,
+    "no_causal_claim_from_single_provider_representation_test": true,
+    "machine_json_benefit_not_assumed": true
+  },
+  "full_local_execution_freeze_envelope_sha256": "0285f97f0f509ddd41bebfe7254aec82d9292f6ae0097cf05776923c8f5bcc7b"
+}
