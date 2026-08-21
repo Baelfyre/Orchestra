@@ -1,0 +1,100 @@
+{
+  "schema_version": "orchestra.codex-prebaseline-remediation.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "status": "IMPLEMENTED_ON_BRANCH_VALIDATION_PENDING",
+  "recorded_date": "2026-08-21",
+  "benchmark_subject": {
+    "repository": "Baelfyre/Orchestra",
+    "sha": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
+    "tree": "ceab55bd512ea6fde4e8e76877cbb7006d18500e"
+  },
+  "measurement_core": {
+    "sha": "e182e478988c77125127811375aa1b69278cca63",
+    "tree": "9e1d9c0dcf5e615c4b16dfd95bb72f63eaacc33e",
+    "taskset_digest": "fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8",
+    "validator": "EXACT_JSON_CONFORMANCE_V1"
+  },
+  "codex_host_freeze": {
+    "cli_version": "0.148.0",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "medium",
+    "authentication_surface": "ChatGPT",
+    "counter_id": "codex-cli-0.148.0:jsonl-usage:gpt-5.6-sol:medium"
+  },
+  "diagnostics": [
+    {
+      "attempt": 1,
+      "status": "INVALID_RUN",
+      "adapter_reported_invalid_reason": "PROVIDER_OUTAGE",
+      "observed_process_returncode": 1,
+      "observed_stderr": "Not inside a trusted directory and --skip-git-repo-check was not specified.",
+      "actual_disposition": "LOCAL_GIT_WORKSPACE_PRECONDITION_FAILURE",
+      "provider_outage_established": false,
+      "accepted_measurement": false,
+      "host_token_evidence": "UNAVAILABLE",
+      "model_completion_established": false
+    },
+    {
+      "attempt": 2,
+      "status": "PASS",
+      "invalid_reason": null,
+      "workspace_precondition": "ISOLATED_EMPTY_GIT_WORKTREE_NO_AGENTS_MD",
+      "accepted_diagnostic_measurement": true,
+      "tokens": {
+        "source": "HOST_REPORTED",
+        "input_tokens": 10028,
+        "cached_input_tokens": 0,
+        "output_tokens": 95,
+        "reasoning_tokens": 0,
+        "total_tokens": 10123
+      },
+      "counter_id": "codex-cli-0.148.0:jsonl-usage:gpt-5.6-sol:medium",
+      "semantic_validation": "PASS",
+      "governance_valid": true,
+      "tool_leakage": false
+    }
+  ],
+  "discovered_defect": {
+    "id": "CODEX_ADAPTER_DEFECT_001",
+    "summary": "Real Codex execution required a Git-backed trusted workspace, while the readiness adapter only checked that workspace_dir existed; every non-zero codex exec exit was also classified as PROVIDER_OUTAGE.",
+    "risk": "Formal comparative evidence could misclassify local workspace or invocation failures as provider incidents.",
+    "remediation": [
+      "Require live Codex workspaces to pass git rev-parse --is-inside-work-tree before invoking codex exec.",
+      "Classify known trusted-directory and Git-workspace rejections as CORRUPTED_STARTING_STATE.",
+      "Classify known invocation/configuration rejections as MEASUREMENT_CAPTURE_FAILURE.",
+      "Reserve PROVIDER_OUTAGE for structured Codex turn.failed/error evidence.",
+      "Default otherwise-unstructured non-zero process exits to INFRASTRUCTURE_OUTAGE rather than provider attribution.",
+      "Preserve synthetic raw-JSONL readiness tests without requiring a local Git repository because they do not launch Codex."
+    ]
+  },
+  "regression_coverage": {
+    "file": "tests/runtime/test_codex_benchmark_workspace_preflight_regression.py",
+    "required_cases": [
+      "LIVE_NON_GIT_WORKSPACE_FAILS_BEFORE_CODEX_PROCESS",
+      "TRUSTED_DIRECTORY_REJECTION_IS_CORRUPTED_STARTING_STATE",
+      "UNSTRUCTURED_NONZERO_EXIT_IS_INFRASTRUCTURE_OUTAGE",
+      "CONFIGURATION_REJECTION_IS_MEASUREMENT_CAPTURE_FAILURE",
+      "STRUCTURED_HOST_ERROR_REMAINS_PROVIDER_OUTAGE"
+    ]
+  },
+  "resource_freeze": {
+    "per_call_total_token_ceiling": 45000,
+    "cumulative_total_token_ceiling": 1200000,
+    "formal_planned_runs": 30,
+    "formal_completed_runs": 0,
+    "automatic_retry": false,
+    "stop_on_invalid_run": true,
+    "stop_on_identity_drift": true,
+    "stop_on_tool_event": true,
+    "stop_on_token_ceiling_breach": true
+  },
+  "authority": {
+    "formal_codex_baseline_execution_authorized_by_this_record": false,
+    "canonicalization_requires_exact_head_validation": true,
+    "signed_materialization_required": true,
+    "release_publication_authorized": false,
+    "a5_execution_promotion": "NOT_AUTHORIZED",
+    "a6": "NOT_AUTHORIZED",
+    "b4": "BLOCKED"
+  }
+}

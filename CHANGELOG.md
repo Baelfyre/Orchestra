@@ -1,5 +1,13 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark Codex Prebaseline Workspace and Exit Classification Remediation - Candidate
+
+- Requires a live Codex benchmark workspace to pass `git -C <workspace> rev-parse --is-inside-work-tree` before `codex exec`; a non-Git live workspace fails closed as `CORRUPTED_STARTING_STATE` before the Codex process is invoked, while synthetic `raw_jsonl` tests remain exempt because they launch no live process.
+- Reclassifies non-zero Codex process exits from observed evidence instead of treating every failure as a provider outage: structured `turn.failed` / `error` evidence maps to `PROVIDER_OUTAGE`, known trusted-directory or Git-workspace rejection maps to `CORRUPTED_STARTING_STATE`, recognized invocation/configuration rejection maps to `MEASUREMENT_CAPTURE_FAILURE`, and otherwise-unstructured non-zero exits map to `INFRASTRUCTURE_OUTAGE`.
+- Adds focused deterministic regression coverage proving live non-Git rejection occurs before process invocation, the Diagnostic Attempt 1 trusted-directory failure is classified as local starting-state corruption, structured provider errors retain `PROVIDER_OUTAGE`, and configuration or unstructured process failures remain separately classified.
+- Records the bounded 2026-08-21 Codex prebaseline remediation and diagnostic evidence while preserving the frozen benchmark subject `d95f677dbf23ab79c4698c26645ea30cea9b3019`, task-set digest `fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8`, accepted Antigravity evidence, and the prospective 45,000 per-call / 1,200,000 cumulative token ceilings without tuning them from Diagnostic Attempt 2.
+- Keeps the formal Codex comparative baseline at 0/30 and authorizes no formal baseline execution, A5 execution promotion, A6, B4, release publication, deployment, or destructive operation.
+
 ## Post-v1.6.0 Comparative Benchmark Codex Baseline Readiness - Candidate
 
 - Adds a zero-live-call Codex CLI executor binding in `scripts/codex_benchmark_executor.py` for the controlled cross-host baseline while preserving the exact frozen `d95f677dbf23ab79c4698c26645ea30cea9b3019` benchmark-subject identity and the `e182e478988c77125127811375aa1b69278cca63` common measurement-core baseline as separate provenance fields.

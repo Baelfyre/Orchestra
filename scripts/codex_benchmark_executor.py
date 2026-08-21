@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Codex measurement executor binding for Orchestra comparative benchmarks.
 
-Readiness-only until a separate human gate freezes exact Codex CLI version,
-model, reasoning effort, counter identity, authentication surface, workspace,
-and resource/stop ceilings. Frozen B3 tasks and accepted Antigravity evidence
-are not changed by this adapter.
+Live execution remains governed by a separate human freeze of exact Codex CLI
+version, model, reasoning effort, counter identity, authentication surface,
+workspace, and resource/stop ceilings. Frozen B3 tasks and accepted Antigravity
+evidence are not changed by this adapter.
 """
 
 from __future__ import annotations
@@ -53,7 +53,9 @@ def _empty_safety() -> dict[str, bool]:
     return {field: False for field in SAFETY_FIELDS}
 
 
-def _invalid_result(request: dict[str, Any], invalid_reason: str, evidence: dict[str, Any]) -> dict[str, Any]:
+def _invalid_result(
+    request: dict[str, Any], invalid_reason: str, evidence: dict[str, Any]
+) -> dict[str, Any]:
     outcome = {
         "status": "INVALID_RUN",
         "invalid_reason": invalid_reason,
@@ -110,7 +112,9 @@ def _invalid_result(request: dict[str, Any], invalid_reason: str, evidence: dict
         },
         "safety": safety,
         "validation_digest": digest_json({"outcome": outcome}),
-        "governance_digest": digest_json({"governance_valid": False, "safety": safety}),
+        "governance_digest": digest_json(
+            {"governance_valid": False, "safety": safety}
+        ),
         "raw_evidence": evidence,
         "a5_shadow_observation": None,
     }
@@ -124,7 +128,9 @@ def parse_cli_version(raw: str) -> str:
     return unique[0]
 
 
-def build_codex_command(*, prompt: str, workspace_dir: Path, model: str, reasoning_effort: str) -> list[str]:
+def build_codex_command(
+    *, prompt: str, workspace_dir: Path, model: str, reasoning_effort: str
+) -> list[str]:
     """Build one bounded Codex non-interactive benchmark invocation."""
     return [
         "codex",
@@ -163,9 +169,13 @@ def parse_codex_jsonl(raw_output: str) -> dict[str, Any]:
         try:
             event = json.loads(line)
         except json.JSONDecodeError as exc:
-            raise ValueError(f"malformed Codex JSONL at line {line_number}: {exc}") from exc
+            raise ValueError(
+                f"malformed Codex JSONL at line {line_number}: {exc}"
+            ) from exc
         if not isinstance(event, dict):
-            raise ValueError(f"Codex JSONL event at line {line_number} is not an object")
+            raise ValueError(
+                f"Codex JSONL event at line {line_number} is not an object"
+            )
         events.append(event)
 
     if not events:
@@ -177,11 +187,18 @@ def parse_codex_jsonl(raw_output: str) -> dict[str, Any]:
 
     completed = [event for event in events if event.get("type") == "turn.completed"]
     if len(completed) != 1:
-        raise ValueError(f"Codex JSONL requires exactly one turn.completed event; observed {len(completed)}")
+        raise ValueError(
+            f"Codex JSONL requires exactly one turn.completed event; observed {len(completed)}"
+        )
     usage = completed[0].get("usage")
     if not isinstance(usage, dict):
         raise ValueError("Codex turn.completed is missing usage")
-    usage_fields = ("input_tokens", "cached_input_tokens", "output_tokens", "reasoning_output_tokens")
+    usage_fields = (
+        "input_tokens",
+        "cached_input_tokens",
+        "output_tokens",
+        "reasoning_output_tokens",
+    )
     for field in usage_fields:
         value = usage.get(field)
         if not isinstance(value, int) or isinstance(value, bool) or value < 0:
@@ -204,7 +221,9 @@ def parse_codex_jsonl(raw_output: str) -> dict[str, Any]:
                 agent_messages.append(text)
 
     if unexpected_tools:
-        raise PermissionError(f"Codex emitted disallowed tool events: {sorted(set(unexpected_tools))}")
+        raise PermissionError(
+            f"Codex emitted disallowed tool events: {sorted(set(unexpected_tools))}"
+        )
     if not agent_messages:
         raise ValueError("Codex JSONL is missing a completed agent message")
     return {
@@ -236,6 +255,100 @@ def _validate_request_identity(
     return None
 
 
+def _structured_provider_failure(raw_output: str) -> bool:
+    """Return True only when Codex emitted structured provider-failure evidence."""
+    for raw_line in (raw_output or "").splitlines():
+        line = raw_line.strip()
+        if not line:
+            continue
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        if isinstance(event, dict) and event.get("type") in {"turn.failed", "error"}:
+            return True
+    return False
+
+
+def classify_nonzero_codex_exit(stdout: str, stderr: str) -> str:
+    """Classify a non-zero Codex process exit without over-claiming provider failure.
+
+    Provider outage is reserved for structured host evidence (turn.failed/error).
+    Known local workspace/configuration rejections are classified separately;
+    unstructured non-zero process exits default to infrastructure outage.
+    """
+    if _structured_provider_failure(stdout):
+        return "PROVIDER_OUTAGE"
+
+    combined = f"{stdout}\n{stderr}".lower()
+    workspace_markers = (
+        "not inside a trusted directory",
+        "not a git repository",
+        "not inside a git repository",
+        "outside a trusted directory",
+    )
+    if any(marker in combined for marker in workspace_markers):
+        return "CORRUPTED_STARTING_STATE"
+
+    configuration_markers = (
+        "unexpected argument",
+        "unrecognized option",
+        "unknown option",
+        "invalid value",
+        "failed to parse config",
+        "failed to parse configuration",
+        "configuration error",
+    )
+    if any(marker in combined for marker in configuration_markers):
+        return "MEASUREMENT_CAPTURE_FAILURE"
+
+    return "INFRASTRUCTURE_OUTAGE"
+
+
+def validate_live_git_workspace(
+    workspace: Path,
+    *,
+    git_runner: Callable[..., subprocess.CompletedProcess[str]] = subprocess.run,
+) -> tuple[bool, str | None, dict[str, Any]]:
+    """Fail closed unless the live Codex workspace resolves inside a Git worktree."""
+    command = [
+        "git",
+        "-C",
+        str(workspace.resolve()),
+        "rev-parse",
+        "--is-inside-work-tree",
+    ]
+    try:
+        cp = git_runner(
+            command,
+            capture_output=True,
+            text=True,
+            check=False,
+            shell=False,
+        )
+    except OSError as exc:
+        return (
+            False,
+            "INFRASTRUCTURE_OUTAGE",
+            {
+                "command": command,
+                "error": f"cannot execute Git workspace preflight: {exc}",
+            },
+        )
+
+    is_inside = cp.returncode == 0 and (cp.stdout or "").strip().lower() == "true"
+    evidence = {
+        "command": command,
+        "returncode": cp.returncode,
+        "stdout": cp.stdout,
+        "stderr": cp.stderr,
+        "is_inside_work_tree": is_inside,
+    }
+    if not is_inside:
+        return False, "CORRUPTED_STARTING_STATE", evidence
+    return True, None, evidence
+
+
 def execute_request(
     request: dict[str, Any],
     *,
@@ -245,6 +358,7 @@ def execute_request(
     workspace_dir: Path | str | None,
     run_command: Callable[..., subprocess.CompletedProcess[str]] = subprocess.run,
     version_runner: Callable[..., subprocess.CompletedProcess[str]] = subprocess.run,
+    git_runner: Callable[..., subprocess.CompletedProcess[str]] = subprocess.run,
     raw_jsonl: str | None = None,
     observed_cli_version: str | None = None,
     caveman_policy_content: str | bytes | None = None,
@@ -254,7 +368,10 @@ def execute_request(
 ) -> dict[str, Any]:
     """Execute or deterministically parse one bounded Codex benchmark request."""
     evidence: dict[str, Any] = {
-        "benchmark_subject": {"sha": BENCHMARK_SUBJECT_SHA, "tree": BENCHMARK_SUBJECT_TREE},
+        "benchmark_subject": {
+            "sha": BENCHMARK_SUBJECT_SHA,
+            "tree": BENCHMARK_SUBJECT_TREE,
+        },
         "common_measurement_core_baseline": {
             "sha": COMMON_MEASUREMENT_CORE_SHA,
             "tree": COMMON_MEASUREMENT_CORE_TREE,
@@ -270,7 +387,10 @@ def execute_request(
         return _invalid_result(
             request,
             "MEASUREMENT_CAPTURE_FAILURE",
-            {**evidence, "error": "exact Codex CLI version, model, and reasoning effort must be frozen before execution"},
+            {
+                **evidence,
+                "error": "exact Codex CLI version, model, and reasoning effort must be frozen before execution",
+            },
         )
     assert expected_cli_version is not None
     assert expected_model is not None
@@ -296,14 +416,20 @@ def execute_request(
         expected_reasoning_effort=expected_reasoning_effort,
     )
     if identity_error:
-        return _invalid_result(request, "CORRUPTED_STARTING_STATE", {**evidence, "error": identity_error})
+        return _invalid_result(
+            request,
+            "CORRUPTED_STARTING_STATE",
+            {**evidence, "error": identity_error},
+        )
 
-    treatment_ok, treatment_reason, treatment_detail, binding = bind_communication_treatment(
-        request,
-        caveman_policy_content=caveman_policy_content,
-        caveman_policy_path=caveman_policy_path,
-        caveman_repo_path=caveman_repo_path,
-        presentation_root=presentation_root,
+    treatment_ok, treatment_reason, treatment_detail, binding = (
+        bind_communication_treatment(
+            request,
+            caveman_policy_content=caveman_policy_content,
+            caveman_policy_path=caveman_policy_path,
+            caveman_repo_path=caveman_repo_path,
+            presentation_root=presentation_root,
+        )
     )
     if not treatment_ok or not isinstance(binding, dict):
         return _invalid_result(
@@ -333,12 +459,22 @@ def execute_request(
             return _invalid_result(
                 request,
                 "INFRASTRUCTURE_OUTAGE",
-                {**evidence, "error": "codex --version failed", "stderr": version_cp.stderr},
+                {
+                    **evidence,
+                    "error": "codex --version failed",
+                    "stderr": version_cp.stderr,
+                },
             )
         try:
-            observed_cli_version = parse_cli_version(version_cp.stdout or version_cp.stderr)
+            observed_cli_version = parse_cli_version(
+                version_cp.stdout or version_cp.stderr
+            )
         except ValueError as exc:
-            return _invalid_result(request, "MEASUREMENT_CAPTURE_FAILURE", {**evidence, "error": str(exc)})
+            return _invalid_result(
+                request,
+                "MEASUREMENT_CAPTURE_FAILURE",
+                {**evidence, "error": str(exc)},
+            )
 
     evidence.update(
         {
@@ -355,6 +491,24 @@ def execute_request(
             "CORRUPTED_STARTING_STATE",
             {**evidence, "error": "Codex CLI version mismatch"},
         )
+
+    # Real Codex execution requires a trusted Git-backed workspace. Synthetic
+    # raw_jsonl tests intentionally bypass this host precondition because no
+    # live process is launched in that path.
+    if raw_jsonl is None:
+        git_ok, git_reason, git_evidence = validate_live_git_workspace(
+            workspace, git_runner=git_runner
+        )
+        evidence["workspace_git_preflight"] = git_evidence
+        if not git_ok:
+            return _invalid_result(
+                request,
+                git_reason or "CORRUPTED_STARTING_STATE",
+                {
+                    **evidence,
+                    "error": "workspace_dir must resolve inside a Git worktree before live Codex execution",
+                },
+            )
 
     command = build_codex_command(
         prompt=prompt,
@@ -382,14 +536,17 @@ def execute_request(
                 {**evidence, "error": f"Codex execution failed to start: {exc}"},
             )
         if cp.returncode != 0:
+            reason = classify_nonzero_codex_exit(cp.stdout or "", cp.stderr or "")
             return _invalid_result(
                 request,
-                "PROVIDER_OUTAGE",
+                reason,
                 {
                     **evidence,
                     "error": "codex exec returned non-zero",
                     "returncode": cp.returncode,
+                    "stdout": cp.stdout,
                     "stderr": cp.stderr,
+                    "nonzero_exit_classification": reason,
                 },
             )
         raw_jsonl = cp.stdout
@@ -421,11 +578,12 @@ def execute_request(
     if not isinstance(task_payload, dict):
         task_payload = {}
     outcome, quality, safety = evaluate_task_outcome(
-        {"response": parsed["response"]},
-        task_payload,
+        {"response": parsed["response"]}, task_payload
     )
     usage = parsed["usage"]
-    counter_id = compute_counter_id(observed_cli_version, expected_model, expected_reasoning_effort)
+    counter_id = compute_counter_id(
+        observed_cli_version, expected_model, expected_reasoning_effort
+    )
     evidence.update(
         {
             "jsonl_events": parsed["events"],
@@ -439,7 +597,11 @@ def execute_request(
     if isinstance(validation_contract, dict):
         validator_type = validation_contract.get("validator_type")
     validation_digest = digest_json(
-        {"validator": validator_type, "outcome": outcome, "taskset_digest": TASKSET_DIGEST}
+        {
+            "validator": validator_type,
+            "outcome": outcome,
+            "taskset_digest": TASKSET_DIGEST,
+        }
     )
     governance_digest = digest_json(
         {"governance_valid": outcome["governance_valid"], "safety": safety}
@@ -494,7 +656,7 @@ def execute_request(
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Codex measurement executor readiness binding for Orchestra benchmark."
+        description="Codex measurement executor binding for Orchestra benchmark."
     )
     parser.add_argument("--expected-cli-version", required=True)
     parser.add_argument("--expected-model", required=True)
@@ -518,10 +680,16 @@ def main(argv: list[str] | None = None) -> int:
             else json.load(sys.stdin)
         )
     except (OSError, json.JSONDecodeError) as exc:
-        print(json.dumps({"error": f"cannot load benchmark request: {exc}"}), file=sys.stderr)
+        print(
+            json.dumps({"error": f"cannot load benchmark request: {exc}"}),
+            file=sys.stderr,
+        )
         return 2
     if not isinstance(request, dict):
-        print(json.dumps({"error": "benchmark request must be a JSON object"}), file=sys.stderr)
+        print(
+            json.dumps({"error": "benchmark request must be a JSON object"}),
+            file=sys.stderr,
+        )
         return 2
 
     result = execute_request(
