@@ -1,0 +1,88 @@
+{
+  "schema_version": "orchestra.codex-baseline-hardening.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "recorded_date": "2026-08-21",
+  "status": "PREBASELINE_HARDENING_IMPLEMENTED_PENDING_VALIDATION",
+  "authority": {
+    "live_30_run_baseline_authorized": false,
+    "accepted_codex_baseline_runs": 0,
+    "automatic_retry_allowed": false,
+    "merge_authorized": false,
+    "release_publication_authorized": false
+  },
+  "frozen_subject": {
+    "sha": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
+    "tree": "ceab55bd512ea6fde4e8e76877cbb7006d18500e",
+    "taskset_digest": "fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8",
+    "validator": "EXACT_JSON_CONFORMANCE_V1"
+  },
+  "host_freeze": {
+    "cli": "codex-cli",
+    "cli_version": "0.148.0",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "medium",
+    "authentication_surface": "ChatGPT",
+    "counter_identity": "codex-cli-0.148.0:jsonl-usage:gpt-5.6-sol:medium"
+  },
+  "diagnostics": [
+    {
+      "attempt": 1,
+      "accepted_measurement": false,
+      "outcome": "INVALID_RUN",
+      "adapter_invalid_reason": "PROVIDER_OUTAGE",
+      "actual_observed_cause": "CODEX_GIT_REPOSITORY_PRECONDITION_FAILURE",
+      "stderr": "Not inside a trusted directory and --skip-git-repo-check was not specified.",
+      "returncode": 1,
+      "provider_outage_established": false,
+      "token_source": "UNAVAILABLE"
+    },
+    {
+      "attempt": 2,
+      "accepted_measurement": false,
+      "diagnostic_transport_qualified": true,
+      "outcome": "PASS",
+      "invalid_reason": null,
+      "governance_valid": true,
+      "validation_passed": true,
+      "token_source": "HOST_REPORTED",
+      "counter_identity": "codex-cli-0.148.0:jsonl-usage:gpt-5.6-sol:medium",
+      "input_tokens": 10028,
+      "cached_input_tokens": 0,
+      "output_tokens": 95,
+      "reasoning_tokens": 0,
+      "total_tokens": 10123,
+      "per_call_ceiling": 45000,
+      "ceiling_passed": true
+    }
+  ],
+  "discovered_defect": {
+    "id": "CODEX_ADAPTER_DEFECT_001",
+    "description": "A non-zero codex exec process exit was classified as PROVIDER_OUTAGE even when the failure was a local Git workspace precondition.",
+    "risk": "Formal baseline evidence could misclassify local CLI or starting-state failures as provider incidents.",
+    "required_behavior": [
+      "FAIL_BEFORE_CODEX_INVOCATION_IF_WORKSPACE_IS_NOT_A_GIT_WORKTREE",
+      "CLASSIFY_NONZERO_PROCESS_EXIT_WITHOUT_STRUCTURED_PROVIDER_EVENT_AS_MEASUREMENT_CAPTURE_FAILURE",
+      "PRESERVE_PROVIDER_OUTAGE_FOR_STRUCTURED_TURN_FAILED_OR_ERROR_EVENTS"
+    ]
+  },
+  "implementation": {
+    "canonical_measurement_core": "scripts/codex_benchmark_executor.py",
+    "hardened_live_entrypoint": "scripts/codex_benchmark_executor_hardened.py",
+    "regression_tests": "tests/runtime/test_codex_benchmark_executor_hardening.py",
+    "design": "WRAPPER_PRESERVES_CANONICAL_CORE_AND_ADDS_LIVE_PREFLIGHT_CLASSIFICATION_BOUNDARY"
+  },
+  "resource_freeze_candidate": {
+    "per_call_token_ceiling": 45000,
+    "cumulative_token_ceiling": 1200000,
+    "planned_runs": 30,
+    "invalid_run_stop": "IMMEDIATE",
+    "consecutive_invalid_limit": 1,
+    "automatic_retry": false
+  },
+  "next_gate": "VALIDATE_HARDENED_ENTRYPOINT_AND_TESTS_THEN_FREEZE_CODEX_SPECIFIC_30_RUN_MANIFEST",
+  "notes": [
+    "Diagnostic calls are qualification evidence only and are not counted in the formal 30-run baseline.",
+    "Accepted Antigravity B3 measurements remain unchanged.",
+    "No live Codex calls are performed by this hardening implementation."
+  ]
+}
