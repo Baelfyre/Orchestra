@@ -171,3 +171,7 @@ The existing bypass list remains operationally available. Orchestra governance m
 - [x] Publish `v1.3.0` after the SK1-SK10 Specialist Intelligence campaign, release preparation, revision-bound readiness, README alignment, and separate publication authority completed.
 - [x] Publish `v1.4.0` after Compliance Registry cross-integration, trusted immutable Registry publication, real network-provenance validation, final exact-head readiness, and separate Orchestra publication authority completed.
 - [x] Publish `v1.5.0` after the machine-verifiable control-plane re-foundation, merge-readiness stabilization, Murmurs, fresh exact-head release evidence, signed canonicalization, and separate publication transition completed.
+
+## Next New Campaign After Existing Pending Work
+
+- [ ] Begin the governed UI design fidelity and design-system campaign only after every earlier pending item above has been completed, canonically closed, or explicitly reclassified by the maintainer. Re-verify live repository and active-work state before activation. Implementation sequence and reference-repository audit are defined in `docs/project/UI_DESIGN_FIDELITY_SYSTEM_PLAN.md`.
