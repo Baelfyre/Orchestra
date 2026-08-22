@@ -320,9 +320,11 @@
       ],
       "validated_launcher_sha256": "014f38025e3b8491b7cf84e46cb19b1ca8484f0ea3a57abfbb65be6ca1c567d3",
       "launcher_preflight_sha256": "c04cf9610605acb1836c9806bfef60c45786c150769805c88bffd0effedb82f6",
+      "live_authorization_record": "machine/benchmarking/codex-c2-portability-r1-live-execution-authorization.v1.json",
+      "live_authorization_status": "PREPARED_NOT_AUTHORIZED",
       "live_execution_authorized": false,
-      "next_gate": "SOURCE_VALIDATE_RECONCILIATION_THEN_SEPARATELY_AUTHORIZE_FIRST_LOCAL_C2R1_SLOT",
-      "authority_note": "C2R1 preserves the frozen benchmark design but replaces unavailable pre-execution prompt/package bytes with explicitly versioned portability artifacts. It grants no C1 mutation, C3, A5 promotion, A6, B4, release, deployment, or policy authority."
+      "next_gate": "REVIEW_AND_CANONICALIZE_PREPARED_LIVE_AUTHORIZATION_THEN_SEPARATELY_ACTIVATE_SLOT_1",
+      "authority_note": "C2R1 preserves the frozen benchmark design but replaces unavailable pre-execution prompt/package bytes with explicitly versioned portability artifacts. The prepared live-authorization record is non-effective until separately reviewed, committed, validated, canonicalized, zero-call preflighted, and explicitly activated for slot 1. It grants no C1 mutation, C3, A5 promotion, A6, B4, release, deployment, or policy authority."
     }
   },
   "machine_scan_order": [
@@ -407,7 +409,8 @@
     "prap_certification_evidence_schema": "machine/schemas/prap-certification-evidence.schema.json",
     "developer_portal_catalog_schema": "machine/schemas/developer-portal-catalog.schema.json",
     "readme_machine_index_schema": "machine/schemas/readme-machine-index.schema.json",
-    "comparative_benchmark_codex_c2_portability_r1": "machine/benchmarking/codex-c2-portability-r1-preexecution.v1.json"
+    "comparative_benchmark_codex_c2_portability_r1": "machine/benchmarking/codex-c2-portability-r1-preexecution.v1.json",
+    "comparative_benchmark_codex_c2_portability_r1_live_authorization": "machine/benchmarking/codex-c2-portability-r1-live-execution-authorization.v1.json"
   },
   "specialists": {"count": 14, "registry_source": "machine/specialists/registry.v1.json", "human_index": "SKILL_INDEX.md", "routing_reference": "ROUTING_MAP.md", "knowledge_root": "skills/", "source_of_truth_note": "Specialist prose and reasoning guidance remain in skills/*/SKILL.md; machine routing-critical metadata is compiled and parity-validated."},
   "governance": {
