@@ -1,0 +1,180 @@
+{
+    "schema_version":  "orchestra.codex-c2-portability-r1-live-execution-authorization.v1",
+    "status":  "PREPARED_NOT_AUTHORIZED",
+    "recorded_date":  "2026-08-22",
+    "program_id":  "orchestra.shared-comparative-benchmark.v1",
+    "experiment_id":  "b3-codex-machine-json-prompt-extension-v1",
+    "portability_revision":  "orchestra.codex-c2-portability-r1.v1",
+    "preparation_authorization":  {
+                                      "human_statement":  "Approved, prepare C2R1 live-execution authorization",
+                                      "preparation_authorized":  true,
+                                      "live_execution_authorized":  false,
+                                      "commit_authorized":  false,
+                                      "publication_authorized":  false,
+                                      "canonicalization_authorized":  false,
+                                      "effect":  "PREPARE_REVIEW_CANDIDATE_ONLY"
+                                  },
+    "activation":  {
+                       "authorization_scope":  "SLOT_1_ONLY",
+                       "current_state":  "INACTIVE",
+                       "canonicalization_required_before_activation":  true,
+                       "final_zero_call_preflight_required_after_canonicalization":  true,
+                       "separate_explicit_human_live_execution_authorization_required":  true,
+                       "live_execution_authorized":  false,
+                       "slots_2_through_30_authorized":  false,
+                       "activation_rule":  "NO_MODEL_CALL_UNTIL_THIS_RECORD_IS_CANONICAL_AND_A_LATER_EXPLICIT_HUMAN_AUTHORIZATION_ACTIVATES_SLOT_1"
+                   },
+    "canonical_authority":  {
+                                "orchestra":  {
+                                                  "repository":  "Baelfyre/Orchestra",
+                                                  "branch":  "main",
+                                                  "sha":  "e92bb1ec76c17c7bd7b0d9e1b60c374c4d49e48d",
+                                                  "tree":  "a74fba1084768e52181720997556d029eecc9999",
+                                                  "parent":  "d001cec0719a73d5e104e0a7c6d5ede7bb1ad351",
+                                                  "github_signature":  "VERIFIED_VALID",
+                                                  "source_pr":  472,
+                                                  "signed_materialization_pr":  473,
+                                                  "canonical_pr":  474,
+                                                  "signed_materialized_head":  "bc668f4ed6558d6bf5e9e072345194a554eeed05",
+                                                  "exact_tree_equivalence":  true,
+                                                  "final_exact_head_validation":  {
+                                                                                      "governance_check_run":  32555991518,
+                                                                                      "validate_run":  32555991517,
+                                                                                      "required_analysis_compatibility_run":  32555991526,
+                                                                                      "cross_platform_validation_run":  32555991524,
+                                                                                      "cosmic_ray_confidence_run":  32555991529,
+                                                                                      "all_success":  true
+                                                                                  }
+                                              },
+                                "padayon":  {
+                                                "repository":  "Baelfyre/Padayon",
+                                                "branch":  "main",
+                                                "sha":  "64b34a6e6af4249bad4e87f8204426d7295def6f",
+                                                "tree":  "7d3e6e6a9d3a4034537a84879e7397fa740893c1",
+                                                "parent":  "4062e9147eb576ad08e077aae4d826b0c034ef99",
+                                                "github_signature":  "VERIFIED_VALID",
+                                                "canonical_pr":  156
+                                            },
+                                "drift_rule":  "ANY_CANONICAL_SHA_OR_TREE_DRIFT_BEFORE_SLOT_1_INVALIDATES_ACTIVATION_AND_REQUIRES_READJUDICATION"
+                            },
+    "preserved_scientific_design":  {
+                                        "benchmark_subject_sha":  "d95f677dbf23ab79c4698c26645ea30cea9b3019",
+                                        "benchmark_subject_tree":  "ceab55bd512ea6fde4e8e76877cbb7006d18500e",
+                                        "executable_adapter_sha":  "0af078f6ad34d5cf406823bbd0e8258496923b60",
+                                        "executable_adapter_tree":  "90255564c13fcbb132a7e4cf8b98eb106d039e39",
+                                        "taskset_digest":  "fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8",
+                                        "validator":  "EXACT_JSON_CONFORMANCE_V1",
+                                        "representation":  "MACHINE_JSON",
+                                        "representation_schema":  "orchestra.prompt-representation.machine-json.v1",
+                                        "planned_accepted_runs":  30,
+                                        "exact_original_slot_assignment_preserved":  true,
+                                        "new_randomization_performed":  false
+                                    },
+    "slot_1":  {
+                   "execution_order_index":  1,
+                   "request_id":  "91acbb576029939d6acf5d3e",
+                   "task_id":  "b3-cal-padayon-r5-capability-manifest",
+                   "repetition_index":  1,
+                   "communication_mode":  "DEFAULT",
+                   "portable_r1_task_prompt_sha256":  "6ff223d1a9be6dead014f09d29b53e0fdde8962e882510c1da9763b46369a35f",
+                   "response_validator":  "EXACT_JSON_CONFORMANCE_V1",
+                   "expected_response_format":  "EXACTLY_ONE_VALID_JSON_OBJECT_NO_MARKDOWN_NO_SURROUNDING_COMMENTARY",
+                   "authority_expansion_allowed":  false,
+                   "one_attempt_only":  true,
+                   "automatic_retry":  false
+               },
+    "codex_host_binding":  {
+                               "cli_version":  "0.148.0",
+                               "provider":  "openai-codex",
+                               "model":  "gpt-5.6-sol",
+                               "reasoning_effort":  "medium",
+                               "transport":  "jsonl-usage",
+                               "counter_id":  "codex-cli-0.148.0:jsonl-usage:gpt-5.6-sol:medium",
+                               "binding_strategy":  "NODE_EXACT_NPM_ENTRYPOINT",
+                               "node_exe_path":  "C:\\Program Files\\nodejs\\node.exe",
+                               "node_exe_sha256":  "e921fe5307e29bf6fd00000dd594356affd3a7b044e52720c7f10decbdc305b9",
+                               "codex_js_path":  "C:\\Users\\ACER\\.codex-cli-0.148.0\\node_modules\\@openai\\codex\\bin\\codex.js",
+                               "codex_js_sha256":  "134063e133f0b4244fa3b251acf973d4fe4b4aeeacbdc135211bf480f59f1477",
+                               "codex_package_json_path":  "C:\\Users\\ACER\\.codex-cli-0.148.0\\node_modules\\@openai\\codex\\package.json",
+                               "codex_package_json_sha256":  "071f84ec4e6ff199b3dce2c2560a77c2248443b0d8b17e64f6e3f08427d32fc2",
+                               "python_shell_false_bare_codex_prohibited":  true
+                           },
+    "workspace_boundary":  {
+                               "path":  "D:\\Dev\\Repositories\\+Orchestra-C2-Workspace",
+                               "git_backed":  true,
+                               "empty_except_git_metadata":  true,
+                               "agents_md_absent":  true,
+                               "repository_mutation_prohibited":  true,
+                               "task_required_network_access":  false,
+                               "sandbox":  "read-only",
+                               "approval_policy":  "never",
+                               "agents_enabled":  false,
+                               "web_search":  "disabled",
+                               "shell_tool":  false
+                           },
+    "external_treatment_binding":  {
+                                       "caveman_repository":  "JuliusBrussee/caveman",
+                                       "local_repository_path":  "D:\\Dev\\Repositories\\+Orchestra-C2-Caveman",
+                                       "revision":  "ae405e872270acc57484693612ae038b16c8f6cd",
+                                       "skill_path":  "skills/caveman/SKILL.md",
+                                       "skill_blob":  "bd22d86b32e4a99e09ff7482a35509faac7a6f65",
+                                       "note":  "Bound for the frozen experiment; slot 1 itself uses DEFAULT."
+                                   },
+    "portability_artifacts":  {
+                                  "prompt_set_sha256":  "9cb5e34fc4a66911ca702acd52eee12187946a471c81fbba471412c79b805165",
+                                  "execution_plan_sha256":  "e780e8c7c4793cd2eff465e0629cb0887c31faad14265232d6524e55560a94f2",
+                                  "portability_revision_sha256":  "d8a30e401c71d3625a51b7d265548dff2f31866195d50065b3fcfa2d7ae21b11",
+                                  "hash_manifest_sha256":  "dee5a1281c55d32918987279ec32e2d1e6ca34f2f9e2d2733ea7948473091283",
+                                  "launcher_sha256":  "014f38025e3b8491b7cf84e46cb19b1ca8484f0ea3a57abfbb65be6ca1c567d3",
+                                  "launcher_preflight_sha256":  "c04cf9610605acb1836c9806bfef60c45786c150769805c88bffd0effedb82f6",
+                                  "prior_launcher_preflight_status":  "PASS_ZERO_LIVE_CALLS",
+                                  "final_zero_call_preflight":  "REQUIRED_AFTER_THIS_RECORD_IS_CANONICAL"
+                              },
+    "resource_freeze":  {
+                            "per_call_total_token_ceiling":  45000,
+                            "cumulative_accepted_token_ceiling":  1200000,
+                            "automatic_retry":  false,
+                            "accepted_runs_before_slot_1":  0,
+                            "live_c2_calls_before_slot_1":  0
+                        },
+    "fail_closed_stop_conditions":  [
+                                        "ORCHESTRA_CANONICAL_SHA_OR_TREE_DRIFT",
+                                        "PADAYON_CANONICAL_SHA_OR_TREE_DRIFT",
+                                        "AUTHORIZATION_RECORD_NOT_CANONICAL",
+                                        "SEPARATE_HUMAN_SLOT_1_AUTHORIZATION_ABSENT",
+                                        "FINAL_ZERO_CALL_PREFLIGHT_NOT_PASS",
+                                        "CLI_VERSION_OR_EXECUTABLE_HASH_DRIFT",
+                                        "PROVIDER_MODEL_REASONING_OR_COUNTER_DRIFT",
+                                        "WORKSPACE_NOT_EMPTY_CLEAN_GIT_BACKED_OR_AGENTS_MD_PRESENT",
+                                        "DISALLOWED_TOOL_EVENT",
+                                        "REPOSITORY_MUTATION_EVENT",
+                                        "INVALID_RUN_OR_VALIDATOR_FAILURE",
+                                        "PER_CALL_TOKEN_CEILING_BREACH",
+                                        "CUMULATIVE_ACCEPTED_TOKEN_CEILING_BREACH",
+                                        "STRUCTURED_PROVIDER_ERROR",
+                                        "MEASUREMENT_CAPTURE_FAILURE",
+                                        "ANY_UNADJUDICATED_IDENTITY_OR_AUTHORITY_DRIFT"
+                                    ],
+    "post_slot_1_boundary":  {
+                                 "slots_2_through_30":  "NOT_AUTHORIZED_BY_THIS_RECORD",
+                                 "automatic_continuation":  false,
+                                 "required_next_decision":  "REVIEW_SLOT_1_EVIDENCE_THEN_SEPARATELY_AUTHORIZE_OR_REJECT_CONTINUATION"
+                             },
+    "preserved_non_authority":  {
+                                    "c1_mutation_authorized":  false,
+                                    "c3_execution_authorized":  false,
+                                    "a5_execution_promotion":  "NOT_AUTHORIZED",
+                                    "a6":  "NOT_AUTHORIZED",
+                                    "b4":  "BLOCKED",
+                                    "release_publication_authorized":  false,
+                                    "deployment_authorized":  false,
+                                    "policy_activation_authorized":  false
+                                },
+    "live_state":  {
+                       "live_execution_authorized":  false,
+                       "live_model_calls":  0,
+                       "accepted_c2r1_runs":  0,
+                       "c2r1_results_exist":  false
+                   },
+    "next_gate":  "HUMAN_REVIEW_PREPARED_RECORD_THEN_SEPARATE_COMMIT_AUTHORIZATION"
+}
