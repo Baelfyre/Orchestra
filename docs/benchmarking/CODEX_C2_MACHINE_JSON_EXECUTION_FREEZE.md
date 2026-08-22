@@ -2,7 +2,9 @@
 
 ## Status
 
-`FROZEN_AND_AUTHORIZED_FOR_LOCAL_EXECUTION_AFTER_PREFLIGHT`
+`HISTORICAL_SUPERSEDED_PRE_EXECUTION_BY_C2_PORTABILITY_R1`
+
+> **Portability supersession:** No C2 live model call was made under the original external execution package. The package is unavailable on the current host, and deterministic recovery reproduced 0/5 original prompt digests. The original hashes below remain historical provenance only. Current pre-execution authority is recorded in `docs/benchmarking/CODEX_C2_PORTABILITY_R1_PREEXECUTION.md` and `machine/benchmarking/codex-c2-portability-r1-preexecution.v1.json`; live execution remains locked pending a separate authorization record.
 
 C2 is the second Codex phase in Orchestra's shared comparative benchmark. It changes only the task-prompt representation from the completed C1 natural-language form to deterministic canonical JSON.
 
@@ -99,9 +101,9 @@ C2 remains calibration/research evidence. It does not authorize a claim that mac
 
 C2 results must be analyzed against C1 using within-provider paired representation effects. Any causal explanation for an observed difference requires additional evidence.
 
-## Full machine execution freeze
+## Historical original execution freeze
 
-The complete machine-readable execution freeze remains an external benchmark artifact until C2 produces results. It contains all 30 exact execution entries, all machine-prompt digests, resource ceilings, stop rules, and execution authority.
+The original machine-readable execution freeze was an external benchmark artifact. Because that package is unavailable and its prompt identity could not be recovered exactly, the hashes below are preserved as historical provenance only and do not authorize C2R1 execution. Current pre-execution authority is the C2R1 reconciliation record linked above.
 
 Full freeze envelope SHA-256: `0285f97f0f509ddd41bebfe7254aec82d9292f6ae0097cf05776923c8f5bcc7b`.
 
