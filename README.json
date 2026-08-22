@@ -192,12 +192,7 @@
       "executor": "scripts/antigravity_benchmark_executor.py",
       "communication_arms": ["DEFAULT", "CAVEMAN", "MURMURS"],
       "supported_transports": ["json-usage", "stream-json-usage"],
-      "pinned_caveman_baseline": {
-        "repository": "JuliusBrussee/caveman",
-        "revision": "ae405e872270acc57484693612ae038b16c8f6cd",
-        "skill_path": "skills/caveman/SKILL.md",
-        "blob_identity": "bd22d86b32e4a99e09ff7482a35509faac7a6f65"
-      },
+      "pinned_caveman_baseline": {"repository": "JuliusBrussee/caveman", "revision": "ae405e872270acc57484693612ae038b16c8f6cd", "skill_path": "skills/caveman/SKILL.md", "blob_identity": "bd22d86b32e4a99e09ff7482a35509faac7a6f65"},
       "machine_sources": ["machine/benchmarking/antigravity-executor-binding.v1.json", "machine/benchmarking/b3-calibration-task-set.v1.json"],
       "human_sources": ["docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md", "docs/benchmarking/B3_CALIBRATION_TASK_SET.md"],
       "canonical_json_counter_id": "antigravity-cli-1.1.15:json-usage:gemini-3.7-flash-high",
@@ -222,14 +217,8 @@
       "human_sources": ["docs/benchmarking/CODEX_BASELINE_READINESS.md", "docs/benchmarking/CODEX_PREBASELINE_REMEDIATION.md"],
       "canonical_readiness_commit": "83f0ff7d74c14b19f78d58143aadcc0a0613f13f",
       "canonical_readiness_tree": "6e6a4f48439f6126452de1f9c65949fec4d3d7e1",
-      "frozen_benchmark_subject": {
-        "sha": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
-        "tree": "ceab55bd512ea6fde4e8e76877cbb7006d18500e"
-      },
-      "common_measurement_core_baseline": {
-        "sha": "e182e478988c77125127811375aa1b69278cca63",
-        "tree": "9e1d9c0dcf5e615c4b16dfd95bb72f63eaacc33e"
-      },
+      "frozen_benchmark_subject": {"sha": "d95f677dbf23ab79c4698c26645ea30cea9b3019", "tree": "ceab55bd512ea6fde4e8e76877cbb7006d18500e"},
+      "common_measurement_core_baseline": {"sha": "e182e478988c77125127811375aa1b69278cca63", "tree": "9e1d9c0dcf5e615c4b16dfd95bb72f63eaacc33e"},
       "taskset_digest": "fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8",
       "validator": "EXACT_JSON_CONFORMANCE_V1",
       "live_execution_authorized": false,
@@ -257,7 +246,7 @@
       "murmurs_input_token_behavior_replication": "YES_EFFECTIVELY_UNCHANGED_VS_DEFAULT_ON_BOTH_PROVIDERS",
       "murmurs_benefit": "NOT_ESTABLISHED",
       "causal_explanation": "NOT_ESTABLISHED",
-      "next_experiment": "C2_MACHINE_READABLE_JSON_PROMPT_REPRESENTATION",
+      "next_experiment": "C2R1_MACHINE_JSON_RECONCILIATION_COMPLETE",
       "a5_execution_promotion": "NOT_AUTHORIZED",
       "a6_authorized": false,
       "b4_state": "BLOCKED",
@@ -286,16 +275,7 @@
       "planned_optional_capabilities": ["cap.query.projection.v1", "cap.query.relationships.v1", "cap.query.indexed-read.v1", "cap.query.budget.v1", "cap.transport.mcp.v1"],
       "preferred_transport_order": ["DIRECT_LOCAL_INDEXED_GATEWAY", "DIRECT_LOCAL_JSON_QUERY", "OPTIONAL_MCP_TRANSPORT"],
       "projection_levels": ["MINIMAL", "SUMMARY", "EVIDENCE", "FULL"],
-      "phase_plan": [
-        "O7.0_CONSUMER_CONTRACT_FREEZE",
-        "O7.1_OPTIONAL_CAPABILITY_NEGOTIATION",
-        "O7.2_TRANSPORT_ABSTRACTION",
-        "O7.3_PROJECTION_AWARE_CONSUMPTION",
-        "O7.4_EXISTING_RECEIPT_NORMALIZATION",
-        "O7.5_DETERMINISTIC_FAILOVER",
-        "O7.6_CONTEXT_BUDGET_INTEGRATION",
-        "O7.7_JOINT_R7_O7_CONFORMANCE"
-      ],
+      "phase_plan": ["O7.0_CONSUMER_CONTRACT_FREEZE", "O7.1_OPTIONAL_CAPABILITY_NEGOTIATION", "O7.2_TRANSPORT_ABSTRACTION", "O7.3_PROJECTION_AWARE_CONSUMPTION", "O7.4_EXISTING_RECEIPT_NORMALIZATION", "O7.5_DETERMINISTIC_FAILOVER", "O7.6_CONTEXT_BUDGET_INTEGRATION", "O7.7_JOINT_R7_O7_CONFORMANCE"],
       "fallbacks": {"indexed_unavailable": "DIRECT_LOCAL_JSON_QUERY", "mcp_unavailable": "DIRECT_LOCAL_QUERY", "optional_capability_missing": "CURRENT_O3_PATH", "index_identity_mismatch": "REJECT_REBUILD_OR_FALLBACK", "semantic_mismatch": "FAIL_CLOSED"},
       "frozen_invariants": ["O1_CAPABILITY_NEGOTIATION", "O2_COMPATIBILITY_FAIL_CLOSED", "O3_QUERY_SEMANTICS", "O4_QUERY_SCOPED_FRESHNESS", "O5_RELEASE_DELTA", "O6_DOMAIN_ROUTING", "CONDUCTOR_EXCLUSIVE_ROUTING", "GOVERNOR_APPLICABILITY", "STEWARD_TRACEABILITY", "ARBITER_SET_EQUALITY"],
       "planned_release_target": "v1.8.0_AFTER_REGISTRY_R7_TRUSTED_RELEASE_AND_JOINT_CONFORMANCE",
@@ -303,28 +283,23 @@
       "authority_note": "O7 is a planned read-path optimization only. MCP remains transport, the Registry index remains derived, query/projection choice cannot change compliance meaning, and no O7 path may expand authority or bypass existing evidence gates."
     },
     "comparative_measurement_codex_c2_portability_r1": {
-      "status": "PORTABILITY_R1_RECONCILED_PREEXECUTION_LIVE_EXECUTION_LOCKED",
-      "purpose": "Current pre-execution authority for the Codex C2 machine-JSON representation experiment after loss of the original external execution package.",
+      "status": "C2R1_EXECUTION_COMPLETE_RECONCILIATION_CANDIDATE",
+      "purpose": "Completed Codex C2R1 machine-JSON calibration reconciliation, preserving the primary 29 accepted + 1 invalid provider-outage record and the separately labeled supplemental recovery sensitivity observation.",
       "program_id": "orchestra.shared-comparative-benchmark.v1",
       "experiment_id": "b3-codex-machine-json-prompt-extension-v1",
       "portability_revision": "orchestra.codex-c2-portability-r1.v1",
-      "live_c2_calls": 0,
+      "live_c2_calls": 30,
       "original_prompt_digest_match_count": 0,
       "original_prompt_identity_recovered_exactly": false,
-      "machine_sources": [
-        "machine/benchmarking/codex-c2-portability-r1-preexecution.v1.json"
-      ],
-      "human_sources": [
-        "docs/benchmarking/CODEX_C2_PORTABILITY_R1_PREEXECUTION.md",
-        "docs/benchmarking/CODEX_C2_MACHINE_JSON_EXECUTION_FREEZE.md"
-      ],
+      "machine_sources": ["machine/benchmarking/codex-c2-portability-r1-preexecution.v1.json", "machine/benchmarking/codex-c2-portability-r1-live-execution-authorization.v1.json", "machine/benchmarking/codex-c2r1-machine-json-reconciliation.v1.json"],
+      "human_sources": ["docs/benchmarking/CODEX_C2_PORTABILITY_R1_PREEXECUTION.md", "docs/benchmarking/CODEX_C2_MACHINE_JSON_EXECUTION_FREEZE.md", "docs/benchmarking/CODEX_C2R1_MACHINE_JSON_RECONCILIATION.md"],
       "validated_launcher_sha256": "014f38025e3b8491b7cf84e46cb19b1ca8484f0ea3a57abfbb65be6ca1c567d3",
       "launcher_preflight_sha256": "c04cf9610605acb1836c9806bfef60c45786c150769805c88bffd0effedb82f6",
       "live_authorization_record": "machine/benchmarking/codex-c2-portability-r1-live-execution-authorization.v1.json",
-      "live_authorization_status": "PREPARED_NOT_AUTHORIZED",
+      "live_authorization_status": "CONSUMED_FOR_COMPLETED_PRIMARY_EXECUTION",
       "live_execution_authorized": false,
-      "next_gate": "REVIEW_AND_CANONICALIZE_PREPARED_LIVE_AUTHORIZATION_THEN_SEPARATELY_ACTIVATE_SLOT_1",
-      "authority_note": "C2R1 preserves the frozen benchmark design but replaces unavailable pre-execution prompt/package bytes with explicitly versioned portability artifacts. The prepared live-authorization record is non-effective until separately reviewed, committed, validated, canonicalized, zero-call preflighted, and explicitly activated for slot 1. It grants no C1 mutation, C3, A5 promotion, A6, B4, release, deployment, or policy authority."
+      "next_gate": "C2R1_RECONCILIATION_VALIDATION_AND_CANONICALIZATION",
+      "authority_note": "C2R1 completed its governed primary execution with 29 accepted runs and one preserved provider-outage invalid observation. A separately authorized supplemental recovery passed but does not replace the primary invalid run. The result remains calibration evidence only and grants no C3, A5 promotion, A6, B4, release, deployment, or policy authority."
     }
   },
   "machine_scan_order": [
@@ -391,6 +366,7 @@
     "comparative_benchmark_codex_executor_binding": "machine/benchmarking/codex-executor-binding.v1.json",
     "comparative_benchmark_codex_prebaseline_remediation": "machine/benchmarking/codex-prebaseline-remediation.v1.json",
     "comparative_benchmark_codex_c1_reconciliation": "machine/benchmarking/codex-c1-cross-provider-reconciliation.v1.json",
+    "comparative_benchmark_codex_c2r1_reconciliation": "machine/benchmarking/codex-c2r1-machine-json-reconciliation.v1.json",
     "comparative_benchmark_calibration_task_set": "machine/benchmarking/b3-calibration-task-set.v1.json",
     "release_evidence_directory": "machine/release-evidence",
     "schemas_directory": "machine/schemas",
@@ -517,6 +493,7 @@
     "codex_baseline_readiness": "docs/benchmarking/CODEX_BASELINE_READINESS.md",
     "codex_prebaseline_remediation": "docs/benchmarking/CODEX_PREBASELINE_REMEDIATION.md",
     "codex_c1_cross_provider_reconciliation": "docs/benchmarking/CODEX_C1_CROSS_PROVIDER_RECONCILIATION.md",
+    "codex_c2r1_machine_json_reconciliation": "docs/benchmarking/CODEX_C2R1_MACHINE_JSON_RECONCILIATION.md",
     "registry_adaptive_consumption_o1_o6": "docs/architecture/REGISTRY_ADAPTIVE_CONSUMPTION_O1_O6.md",
     "registry_query_optimization_o7": "docs/architecture/REGISTRY_QUERY_OPTIMIZATION_O7.md",
     "roadmap": "docs/project/ROADMAP.md",
@@ -554,7 +531,7 @@
     "registry_adaptive_consumption_o1_o6": "CANONICAL_IMPLEMENTED_VALIDATED_AND_REGISTRY_RECONCILED",
     "registry_query_optimization_o7": "APPROVED_PLANNED_NOT_IMPLEMENTED",
     "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316",
-    "codex_c2_portability_r1": "RECONCILED_PREEXECUTION_LIVE_EXECUTION_LOCKED"
+    "codex_c2_portability_r1": "C2R1_EXECUTION_COMPLETE_RECONCILIATION_CANDIDATE"
   },
   "ai_review_guidance": {
     "preferred_entrypoint": "README.json",
@@ -579,10 +556,12 @@
     "preserve_c1_provider_outage_and_recovery_as_part_of_the_evidence_trail": true,
     "do_not_infer_causal_explanation_for_murmurs_non_replication_from_c1": true,
     "keep_c2_machine_json_prompt_results_separate_from_frozen_c1_natural_language_evidence": true,
+    "preserve_c2r1_primary_29_accepted_plus_1_provider_outage_invalid_record": true,
+    "treat_c2r1_supplemental_recovery_as_sensitivity_evidence_not_primary_replacement": true,
     "treat_adaptive_a1_memory_as_non_authorizing_local_data_not_runtime_policy": true,
     "treat_adaptive_a2_context_as_advisory_only_after_existing_runtime_gates": true,
     "preserve_explicit_adaptive_precedence_over_same_scope_inferred_lifecycle": true,
-    "treat_a3_shadow_state_as_non_authorizing_and_separate_from_a1_profile_and_a2_context": true,
+    "treat_a3_shadow_state_as_non-authorizing_and_separate_from_a1_profile_and_a2_context": true,
     "do_not_infer_specialist_strategy_success_from_generic_phase_or_task_success": true,
     "do_not_treat_a3_confidence_as_promotion_or_execution_authority": true,
     "do_not_treat_a3_shadow_comparison_as_execution_selection": true,
@@ -591,13 +570,13 @@
     "do_not_allow_a4_ranking_to_restore_or_create_eligibility": true,
     "do_not_repurpose_a3_strategy_evidence_as_model_or_worker_performance_evidence": true,
     "treat_a4_shadow_decisions_as_non_execution_effective_and_not_promoted": true,
-    "treat_a4_1_shadow_ranker_as_non_authorizing_and_separate_from_execution_control": true,
+    "treat_a4_1_shadow_ranker_as_non-authorizing_and_separate_from_execution_control": true,
     "treat_a4_execution_attachment_as_post_execution_observation_only": true,
     "do_not_use_a4_execution_attachment_to_influence_operation_inputs_or_attribute_runtime_outcomes": true,
     "do_not_allow_a5_topology_to_omit_required_specialists_or_change_domain_ownership": true,
     "preserve_conductor_dispatch_arbiter_transition_and_overseer_validation_ownership_in_a5": true,
     "do_not_treat_a3_workflow_tendency_as_topology_performance_without_exact_topology_binding": true,
-    "treat_a5_1_shadow_topology_ranker_as_non_authorizing_and_separate_from_dispatch_execution": true,
+    "treat_a5_1_shadow_topology_ranker_as_non-authorizing_and_separate_from_dispatch_execution": true,
     "do_not_allow_a5_1_ranking_to_create_restore_or_execute_topology_candidates": true,
     "do_not_treat_a3_workflow_tendency_as_direct_topology_performance_evidence": true,
     "do_not_treat_a5_closeout_as_measurable_benefit_or_execution_promotion": true,
@@ -613,7 +592,7 @@
     "do_not_execute_codex_baseline_until_exact_host_surface_and_resource_stop_conditions_are_frozen": true,
     "require_git_worktree_for_live_codex_benchmark_workspace": true,
     "do_not_classify_unstructured_codex_nonzero_exit_as_provider_outage": true,
-    "treat_registry_capability_delta_freshness_and_routing_evidence_as_non_authorizing": true,
+    "treat_registry_capability_delta_freshness_and_routing_evidence_as_non-authorizing": true,
     "require_explicit_v0_2_legacy_profile_instead_of_inventing_missing_registry_capability_metadata": true,
     "require_query_scoped_registry_freshness_to_bind_to_the_exact_consumed_source_set": true,
     "require_unknown_registry_domains_to_escalate_instead_of_creating_or_selecting_unbounded_agents": true,
