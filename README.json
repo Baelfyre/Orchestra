@@ -301,6 +301,28 @@
       "planned_release_target": "v1.8.0_AFTER_REGISTRY_R7_TRUSTED_RELEASE_AND_JOINT_CONFORMANCE",
       "token_efficiency_claim": "NOT_CLAIMED_UNTIL_MEASURED",
       "authority_note": "O7 is a planned read-path optimization only. MCP remains transport, the Registry index remains derived, query/projection choice cannot change compliance meaning, and no O7 path may expand authority or bypass existing evidence gates."
+    },
+    "comparative_measurement_codex_c2_portability_r1": {
+      "status": "PORTABILITY_R1_RECONCILED_PREEXECUTION_LIVE_EXECUTION_LOCKED",
+      "purpose": "Current pre-execution authority for the Codex C2 machine-JSON representation experiment after loss of the original external execution package.",
+      "program_id": "orchestra.shared-comparative-benchmark.v1",
+      "experiment_id": "b3-codex-machine-json-prompt-extension-v1",
+      "portability_revision": "orchestra.codex-c2-portability-r1.v1",
+      "live_c2_calls": 0,
+      "original_prompt_digest_match_count": 0,
+      "original_prompt_identity_recovered_exactly": false,
+      "machine_sources": [
+        "machine/benchmarking/codex-c2-portability-r1-preexecution.v1.json"
+      ],
+      "human_sources": [
+        "docs/benchmarking/CODEX_C2_PORTABILITY_R1_PREEXECUTION.md",
+        "docs/benchmarking/CODEX_C2_MACHINE_JSON_EXECUTION_FREEZE.md"
+      ],
+      "validated_launcher_sha256": "014f38025e3b8491b7cf84e46cb19b1ca8484f0ea3a57abfbb65be6ca1c567d3",
+      "launcher_preflight_sha256": "c04cf9610605acb1836c9806bfef60c45786c150769805c88bffd0effedb82f6",
+      "live_execution_authorized": false,
+      "next_gate": "SOURCE_VALIDATE_RECONCILIATION_THEN_SEPARATELY_AUTHORIZE_FIRST_LOCAL_C2R1_SLOT",
+      "authority_note": "C2R1 preserves the frozen benchmark design but replaces unavailable pre-execution prompt/package bytes with explicitly versioned portability artifacts. It grants no C1 mutation, C3, A5 promotion, A6, B4, release, deployment, or policy authority."
     }
   },
   "machine_scan_order": [
@@ -384,7 +406,8 @@
     "communication_measurement_schema": "machine/schemas/communication-measurement.schema.json",
     "prap_certification_evidence_schema": "machine/schemas/prap-certification-evidence.schema.json",
     "developer_portal_catalog_schema": "machine/schemas/developer-portal-catalog.schema.json",
-    "readme_machine_index_schema": "machine/schemas/readme-machine-index.schema.json"
+    "readme_machine_index_schema": "machine/schemas/readme-machine-index.schema.json",
+    "comparative_benchmark_codex_c2_portability_r1": "machine/benchmarking/codex-c2-portability-r1-preexecution.v1.json"
   },
   "specialists": {"count": 14, "registry_source": "machine/specialists/registry.v1.json", "human_index": "SKILL_INDEX.md", "routing_reference": "ROUTING_MAP.md", "knowledge_root": "skills/", "source_of_truth_note": "Specialist prose and reasoning guidance remain in skills/*/SKILL.md; machine routing-critical metadata is compiled and parity-validated."},
   "governance": {
@@ -503,7 +526,8 @@
     "third_party_provenance_machine": "machine/provenance/third-party.v1.json",
     "merge_readiness": "docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md",
     "murmurs": "docs/project/MURMURS_COMMUNICATION_BUDGET.md",
-    "release_candidate_v1_6_0": "docs/releases/v1.6.0-integration-developer-experience-release-candidate.md"
+    "release_candidate_v1_6_0": "docs/releases/v1.6.0-integration-developer-experience-release-candidate.md",
+    "codex_c2_portability_r1_preexecution": "docs/benchmarking/CODEX_C2_PORTABILITY_R1_PREEXECUTION.md"
   },
   "representation_policy": {"markdown": "Human-readable explanation, rationale, examples, and nuanced specialist guidance", "json": "Canonical structured machine state, identity, routing, governance, receipts, manifests, provenance, presentation contracts, evidence, and indexes", "json_schema": "Validation contract for machine-readable records", "jsonl": "Append-only event/history records where incremental retrieval is preferable", "toon": "Derived validated non-authoritative model-context projection only when bounded compilation provides measured context benefit", "parity_rule": "When the same deterministic fact appears in more than one representation, CI must validate parity or derive the projection from one authoritative source."},
   "maturity": {
@@ -526,7 +550,8 @@
     "codex_c1_cross_provider_reconciliation": "C1_COMPLETE_RECONCILED_CALIBRATION_ONLY",
     "registry_adaptive_consumption_o1_o6": "CANONICAL_IMPLEMENTED_VALIDATED_AND_REGISTRY_RECONCILED",
     "registry_query_optimization_o7": "APPROVED_PLANNED_NOT_IMPLEMENTED",
-    "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316"
+    "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316",
+    "codex_c2_portability_r1": "RECONCILED_PREEXECUTION_LIVE_EXECUTION_LOCKED"
   },
   "ai_review_guidance": {
     "preferred_entrypoint": "README.json",
@@ -596,6 +621,8 @@
     "do_not_claim_o7_token_savings_until_cross_path_efficiency_measurement_exists": true,
     "treat_v1_5_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "treat_v1_6_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
-    "when_evaluating_a_published_tag_or_release_prefer_live_verified_git_and_release_identity_over_prepublication_snapshot_fields": true
+    "when_evaluating_a_published_tag_or_release_prefer_live_verified_git_and_release_identity_over_prepublication_snapshot_fields": true,
+    "treat_original_c2_external_artifact_hashes_as_historical_not_current_execution_authority": true,
+    "require_c2_portability_r1_live_authorization_record_before_first_model_call": true
   }
 }
