@@ -1,5 +1,11 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B2.4 Replacement Pilot Reconciliation - Candidate
+
+- Records the separately authorized replacement B2.4 session as 8/8 accepted runs, 24/24 model calls, 251,862 accepted tokens, and complete retained evidence.
+- Reconciles all request/result/run bijections, run-index and experiment digests, advisory bytes, context-transfer ledgers, counter provenance, and safety flags.
+- Retains the prior zero-call invalid attempt without pooling it and advances B2.5 to held-out task-set freeze and zero-call preflight.
+
 ## Post-v1.6.0 Comparative Benchmark B2.4 Stopped Attempt Reconciliation - Candidate
 
 - Records the fail-closed first-slot stop, retained raw-evidence archive digest, zero accepted runs, and independently reconciled zero live model calls.

@@ -4,22 +4,22 @@
 
 ```text
 Phase: B2.4 instrumentation pilot
-State: STOPPED_REPREPARED_NOT_AUTHORIZED
+State: COMPLETE_VALID_REPLACEMENT_RECONCILIATION
 Tasks: 2
 Repetitions per task: 2
 Topology arms: 2
 Planned runs: 8
 Codex calls per run: 3
 Maximum underlying model calls: 24
-Attempted slots: 1
-Accepted runs: 0
-Reconciled live model calls consumed: 0
+Attempted slots: 8
+Accepted runs: 8
+Reconciled live model calls consumed: 24
 Live execution authorized: false
 ```
 
-B2.4 remains an instrumentation pilot only. The first authorized attempt stopped on an executor command-contract defect before any model invocation. The defect is corrected forward-only, but retry is not authorized. See [B2_INSTRUMENTATION_PILOT_RECONCILIATION.md](B2_INSTRUMENTATION_PILOT_RECONCILIATION.md).
+B2.4 remains an instrumentation pilot only. The first attempt stopped on an executor command-contract defect before any model invocation; a separately authorized replacement session then completed all eight runs with valid instrumentation. See [B2_INSTRUMENTATION_PILOT_RECONCILIATION.md](B2_INSTRUMENTATION_PILOT_RECONCILIATION.md).
 
-The stopped attempt establishes no topology benefit and is not A5 promotion evidence. The corrected driver must not run until a separate later human retry authorization binds the corrected freeze digest.
+The pilot establishes no topology benefit and is not A5 promotion evidence. Its descriptive counter and context-transfer observations are eligible only for the separately frozen B2.5 design.
 
 ## Frozen task selection
 
@@ -62,6 +62,4 @@ Cross-run reconciliation supports `STABLE_EXACT`, `CACHE_STATE_VARIANT`, `INPUT_
 
 ## Next gate
 
-The exact authorization must use schema `orchestra.b2-instrumentation-pilot-live-authorization.v1`, set `live_execution_authorized=true`, and bind the canonical preparation SHA and tree plus the exact freeze, manifest, and plan digests, eight planned runs, and maximum 24 underlying model calls.
-
-Until that authorization is issued, B2.4 remains `PREPARED_NOT_AUTHORIZED`; B2.5, A5 execution promotion, A6-A8, B4, release, deployment, and policy activation remain unauthorized or blocked.
+The next unit is the B2.5 held-out task-set freeze and zero-call preflight. B2.5 must bind a new held-out task set, deterministic plan, exact host and workspace identities, and its own finite resource ceiling before any further model call.
