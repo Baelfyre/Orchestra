@@ -112,29 +112,32 @@ counter: codex-cli-0.148.0:jsonl-usage:gpt-5.6-sol:medium
 binding: NODE_EXACT_NPM_ENTRYPOINT
 ```
 
-Frozen executable identities:
+Exact machine-local executable locations and hashes are intentionally kept in the machine freeze rather than duplicated in human prose:
 
 ```text
-Node:
-C:\Program Files\nodejs\node.exe
-sha256 e921fe5307e29bf6fd00000dd594356affd3a7b044e52720c7f10decbdc305b9
+machine/benchmarking/b2-real-calibration-freeze.v1.json#/host_binding
+```
 
-Codex JS:
-C:\Users\ACER\.codex-cli-0.148.0\node_modules\@openai\codex\bin\codex.js
-sha256 134063e133f0b4244fa3b251acf973d4fe4b4aeeacbdc135211bf480f59f1477
+Frozen SHA-256 identities:
+
+```text
+Node executable:
+e921fe5307e29bf6fd00000dd594356affd3a7b044e52720c7f10decbdc305b9
+
+Codex JS entrypoint:
+134063e133f0b4244fa3b251acf973d4fe4b4aeeacbdc135211bf480f59f1477
 
 Codex package.json:
-C:\Users\ACER\.codex-cli-0.148.0\node_modules\@openai\codex\package.json
-sha256 071f84ec4e6ff199b3dce2c2560a77c2248443b0d8b17e64f6e3f08427d32fc2
+071f84ec4e6ff199b3dce2c2560a77c2248443b0d8b17e64f6e3f08427d32fc2
 ```
 
-The frozen workspace is the already isolated empty Git workspace used by C2R1:
+The exact isolated workspace location is likewise machine-local and is frozen only in:
 
 ```text
-D:\Dev\Repositories\+Orchestra-C2-Workspace
+machine/benchmarking/b2-real-calibration-freeze.v1.json#/workspace_boundary
 ```
 
-It must remain Git-backed, empty outside Git metadata, free of `AGENTS.md`, read-only for model execution, and unable to mutate the Orchestra repository.
+The workspace must remain Git-backed, empty outside Git metadata, free of `AGENTS.md`, read-only for model execution, and unable to mutate the Orchestra repository.
 
 ## Resource freeze
 
