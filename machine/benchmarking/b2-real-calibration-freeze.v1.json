@@ -23,6 +23,14 @@
     "arm_count": 2,
     "benefit_claim_prohibited": true
   },
+  "manifest": {
+    "source": "machine/benchmarking/b2-real-calibration-manifest.v1.json",
+    "schema_version": "orchestra.comparative-benchmark-manifest.v1",
+    "digest": "b4d9c279da5681d5c3c3f76dbb04592d575121bc66772861926dacdeeedea8d7",
+    "planned_entries": 20,
+    "executor": "scripts/a5_topology_benchmark_executor.py",
+    "runner": "scripts/comparative_benchmark_runner.py"
+  },
   "benchmark_subject": {
     "repository": "Baelfyre/Orchestra",
     "sha": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
