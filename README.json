@@ -638,7 +638,7 @@
     "keep_c2_machine_json_prompt_results_separate_from_frozen_c1_natural_language_evidence": true,
     "preserve_c2r1_primary_29_accepted_plus_1_provider_outage_invalid_record": true,
     "treat_c2r1_supplemental_recovery_as_sensitivity_evidence_not_primary_replacement": true,
-    "treat_adaptive_a1_memory_as_non-authorizing_local_data_not_runtime_policy": true,
+    "treat_adaptive_a1_memory_as_non_authorizing_local_data_not_runtime_policy": true,
     "treat_adaptive_a2_context_as_advisory_only_after_existing_runtime_gates": true,
     "preserve_explicit_adaptive_precedence_over_same_scope_inferred_lifecycle": true,
     "treat_a3_shadow_state_as_non-authorizing_and_separate_from_a1_profile_and_a2_context": true,
