@@ -45,6 +45,11 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def sha256_source_file(path: Path) -> str:
+    """Hash canonical Git text bytes independent of checkout line endings."""
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
+
 def static_preflight() -> dict[str, Any]:
     freeze = load_json(FREEZE_PATH)
     require(freeze.get("schema_version") == "orchestra.b2-instrumentation-pilot-freeze.v1", "unexpected freeze schema")
@@ -96,7 +101,7 @@ def static_preflight() -> dict[str, Any]:
     require(len(blocks) == 4 and all(len(arms) == 2 for arms in blocks.values()), "paired 2x2x2 plan drift")
 
     for relative, expected in freeze["implementation"]["sha256"].items():
-        require(sha256_file(ROOT / relative) == expected, f"implementation identity drift: {relative}")
+        require(sha256_source_file(ROOT / relative) == expected, f"implementation identity drift: {relative}")
     return {
         "status": "PASS_STATIC_ZERO_LIVE_CALLS", "codex_exec_invoked": False, "live_model_calls": 0,
         "freeze_digest": digest_json(freeze), "manifest_digest": digest_json(manifest), "plan_digest": digest_json(plan),

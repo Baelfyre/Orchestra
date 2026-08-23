@@ -102,9 +102,9 @@
     "preflight": "scripts/b2_instrumentation_pilot_preflight.py",
     "driver": "scripts/b2_instrumentation_pilot_driver.py",
     "sha256": {
-      "scripts/a5_topology_benchmark_executor.py": "0908d27603f1b165cbf077f11c4a6bdd64d66bdcd2c2981b64d1e88c2af5e17c",
-      "scripts/b2_confirmatory_evidence.py": "3a3c560db14462532036249a7be59ff7d6356677e18f5615da37fdc8c9778e2e",
-      "scripts/b2_instrumentation_pilot_preflight.py": "dbc268b16242c1924972907727f68c3f1e6bdbe1e64834f125eccae15b010409",
+      "scripts/a5_topology_benchmark_executor.py": "dc3eff98b9477e0776d55a6e3312e5e66205e2ee31c13874652dcb0c557e3f9a",
+      "scripts/b2_confirmatory_evidence.py": "7828fec435094bbd415ad8ba635ea0f43df9dd4798425aec6ca535b603edbb01",
+      "scripts/b2_instrumentation_pilot_preflight.py": "b2a7fda6d3d0d42da83a723648b9673ae538de71ca1beaea16969f1866fffde5",
       "scripts/b2_instrumentation_pilot_driver.py": "e321592b8b8de516ce034c2c09b0a39ec939fb03107c74bdf3d3ce4fd45b3b90"
     }
   },
