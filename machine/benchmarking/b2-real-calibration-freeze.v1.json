@@ -29,51 +29,53 @@
     "tree": "ceab55bd512ea6fde4e8e76877cbb7006d18500e"
   },
   "task_set": {
-    "source": "machine/benchmarking/b3-calibration-task-set.v1.json",
-    "aggregate_digest": "fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8",
+    "source": "machine/benchmarking/b2-topology-calibration-task-set.v1.json",
+    "aggregate_digest": "f7af904895107a7f00abb6ab125d7a33a7bcb5c729b0665acfe9049bf2050ee8",
     "validator": "EXACT_JSON_CONFORMANCE_V1",
     "task_count": 5,
-    "reuse_rule": "SAME_FROZEN_TASK_PROMPTS_STARTING_STATES_AND_VALIDATION_CONTRACTS_WITH_B2_EXECUTION_ALLOWED_ONLY_AT_LIVE_AUTHORIZED_STAGE",
+    "topology_sensitive": true,
+    "execution_payloads_enabled": true,
+    "live_execution_authorized": false,
     "tasks": [
       {
-        "task_id": "b3-cal-padayon-r5-capability-manifest",
-        "task_class": "SINGLE_DOMAIN",
-        "starting_state_digest": "4f574c6b4150d6a00f25534fcff9089f7245fb1969557db441f09481a0e07160",
-        "task_prompt_digest": "aef3872f6ee106ece139545d0afba67f41e5244b9201f66cf2763614ed3f6772",
-        "task_payload_digest": "04c4de55d313f056f190f15514340e5c445c83d7901af04a5ff46872ffe1d7eb",
-        "validation_contract_digest": "1f2f21f168285e5db15e8db84060787661ff09dcc8802f92832f0d2d874670bf"
+        "task_id": "b2-cal-api-boundary",
+        "task_class": "ARCHITECTURE_HEAVY",
+        "starting_state_digest": "428d25779539cf825278a5c27f07e1ff4e0882947cb05b41723e870c2f990ba0",
+        "task_prompt_digest": "1e73ca402f4b5c7047db5641b420a0b9035a0b00b3509aaa5b2b91e5aa42ea2f",
+        "task_payload_digest": "f49f257fa1b12d7f3645b808aaf25da7faaaa00fd0b7b5ab33eda142b87abd0a",
+        "validation_contract_digest": "cfa4bf69498e620ca9ed0999a3d7128daa370892486a00606a7d530036808393"
       },
       {
-        "task_id": "b3-cal-padayon-o1-o2-compatibility",
+        "task_id": "b2-cal-schema-migration",
         "task_class": "DEPENDENCY_HEAVY",
-        "starting_state_digest": "3af707cddc212e07249fb6eccdb5f3ae7ad6fedf0ff4158c267e4fbbe4844d9f",
-        "task_prompt_digest": "ae437de88760c0613127f7369562ccbe28efad3ac35d38ad7dc0566d3db18f7a",
-        "task_payload_digest": "43013eedfe19f4127ae61a79ef4f1f9e4dcdf1162367d14e5230d9b8b2e5f847",
-        "validation_contract_digest": "93055d657d151d8e7e6969cdaa26ec8ba9be4dc2c59f426cd9dd63616cf4f0e1"
+        "starting_state_digest": "7ca705643c8c2679429cb2e15f8c48697a37df449945ba0df4341cbc439c375b",
+        "task_prompt_digest": "194ae2325f231f020aff5304a337ba36b608b8fd1ec5152df2db5e881b149d84",
+        "task_payload_digest": "e92cb52eb7d8e0762204acda8cadab2c84771ec5052a3df474c6fd9fd7f13a7b",
+        "validation_contract_digest": "1edb58473da8159d0e44ab82bbcb6842c392a5bb6cf1117e6887479bc2fe18fc"
       },
       {
-        "task_id": "b3-cal-padayon-o3-o4-freshness",
+        "task_id": "b2-cal-cache-freshness",
         "task_class": "VALIDATION_HEAVY",
-        "starting_state_digest": "41856aef66a8cb9b11995751ccfd67e84ae16bcb9431a6e1f1d01fd7749406bb",
-        "task_prompt_digest": "6cc9ff7e6bcaa4d8ee74026d549813f3efd2f1c77f184aae829674e3e5877fd8",
-        "task_payload_digest": "8895ad53b389c301819520af34f815c7ade24978681382af447bcd7b53db45e2",
-        "validation_contract_digest": "fc2ea317496b073c7bec304960a7c130b58d8a7114379b0c7c0d17ff4982b32d"
+        "starting_state_digest": "2cee16af8991d23d33be669a013eb3dc2999f9263027515b48b4b10aed90072b",
+        "task_prompt_digest": "d8bb49e72f868f59c1bb74b27ad7712aee4270aa6183def7f4b26102dc97763c",
+        "task_payload_digest": "a11158cb446c0238f8da3712a8a665bdf6c742d505a1a48854ea0d6df676676b",
+        "validation_contract_digest": "901bfb42bebd52e266fdca05fccf53a6696a911f73be350f6875411ec46a5457"
       },
       {
-        "task_id": "b3-cal-padayon-assurance-drift",
+        "task_id": "b2-cal-retry-amplification",
         "task_class": "DEBUGGING",
-        "starting_state_digest": "8e7fcc7681eed61dca0a5d9dd68aa554146eb2eb4376609408e8df2dd77438c0",
-        "task_prompt_digest": "4ed1e8ae833c0c6db22ee2711a4b6897af748bac459e54e005f8b3204fa617cc",
-        "task_payload_digest": "384890c16d7f073a13230202ad5b437336e7f9e69e363a55ffbf99df0d65d6cb",
-        "validation_contract_digest": "51e1c685014b10f4ac340760ec924383938ad45014018454df0189b886431a96"
+        "starting_state_digest": "28f25ec23e6bca4d84c7e798b002fe6c0b30822163823e02c4a71e8daff5bc11",
+        "task_prompt_digest": "c7f170f57eb461ec2298ae76b9d5b47440b37eb29e26c88a26245521f7ffae65",
+        "task_payload_digest": "744d01211c850544771d5e65efa02c6fbd94db20aff38571182ae6f38de50aca",
+        "validation_contract_digest": "bfec4990ae6de9eb85912640942bb4e3a0be6053579c5dfafe326ae294be557c"
       },
       {
-        "task_id": "b3-cal-padayon-o5-o6-routing",
+        "task_id": "b2-cal-cross-layer-release",
         "task_class": "HIGH_COORDINATION",
-        "starting_state_digest": "00336a2691d1997db5f66a0a28e1ebd9c723880153718905fe095ef10c672463",
-        "task_prompt_digest": "9c05bf1506ba0fba8fe8a7fa9bee2461415182e8e7490dddf7304679143b89db",
-        "task_payload_digest": "864d80a80c69e6a41b029955752e706d6e05f7a8a91871144c3d1e03c4d93de7",
-        "validation_contract_digest": "a67ffceaa82962b21c0c72199c13316b0557d290002c8181209498c34089d654"
+        "starting_state_digest": "1d40e285ca50e0889f20f694cf81aa965e0823fdce4b48a5b87964d01588d91c",
+        "task_prompt_digest": "7039e383ae6053d21f1b98a0f33a83bed243b762b52100cccf7dbe01ba97eb3d",
+        "task_payload_digest": "e825d46738a5a4e01d761cb65c128e2895b6a93266915e8efd51c3ff3098e053",
+        "validation_contract_digest": "af5fa66e04ff429fe31c1fa53fb8ca9b43b26318dc6315e78a15617bb01e6fce"
       }
     ]
   },
@@ -90,7 +92,6 @@
     },
     "deterministic_baseline_candidate_id": "b2.seq.clockwork-overseer.v1",
     "required_specialists": ["clockwork", "overseer"],
-    "required_specialist_set_digest": "9075492b1f72c6bd6ca7f14e9c223c26e93348098508d6aa9c12fc30625133de",
     "topology_effective": false,
     "shadow_influenced_execution": false,
     "parallel_execution_authorized": false,
