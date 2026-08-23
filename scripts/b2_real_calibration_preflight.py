@@ -22,6 +22,7 @@ if str(ROOT) not in sys.path:
 
 from scripts.a5_topology_benchmark_executor import digest_json, load_envelope  # noqa: E402
 from scripts.codex_benchmark_executor import parse_cli_version, validate_live_git_workspace  # noqa: E402
+from scripts.comparative_benchmark_runner import build_plan, validate_manifest  # noqa: E402
 
 FREEZE_PATH = ROOT / "machine" / "benchmarking" / "b2-real-calibration-freeze.v1.json"
 
@@ -97,10 +98,49 @@ def static_preflight() -> dict[str, Any]:
             require(source.get(field) == frozen[field], f"task identity drift: {frozen['task_id']}:{field}")
         require(source.get("task_payload", {}).get("execution_allowed") is True, f"task is not executable after authorization: {frozen['task_id']}")
 
+    manifest_path = ROOT / freeze["manifest"]["source"]
+    manifest = load_json(manifest_path)
+    try:
+        validate_manifest(manifest)
+    except Exception as exc:
+        raise PreflightError(f"B2 manifest validation failed: {exc}") from exc
+    require(digest_json(manifest) == freeze["manifest"]["digest"], "B2 manifest digest drift")
+    require(manifest["experiment_id"] == freeze["experiment"]["experiment_id"], "manifest experiment identity drift")
+    require(manifest["randomization_seed"] == freeze["experiment"]["randomization_seed"], "manifest randomization seed drift")
+    require(manifest["repetitions_per_arm"] == freeze["experiment"]["repetitions_per_arm"], "manifest repetition drift")
+    require(manifest["a5_evaluation"]["eligibility_envelope_digest"] == envelope_digest, "manifest eligibility digest drift")
+    require(manifest["a5_evaluation"]["eligible_topology_candidate_ids"] == list(envelope.candidate_ids), "manifest candidate order drift")
+    require(all(arm["communication_mode"] == "DEFAULT" for arm in manifest["arms"]), "manifest communication drift")
+    require([arm["topology_candidate_id"] for arm in manifest["arms"]] == list(envelope.candidate_ids), "manifest arm candidate order drift")
+    require(manifest["common_control_identity"]["resource_budget_digest"] == freeze["resource_budget_digest"], "manifest resource identity drift")
+    require(manifest["common_control_identity"]["provider"] == freeze["host_binding"]["provider"], "manifest provider drift")
+    require(manifest["common_control_identity"]["model"] == freeze["host_binding"]["model"], "manifest model drift")
+    require(manifest["common_control_identity"]["reasoning_setting"] == freeze["host_binding"]["reasoning_effort"], "manifest reasoning drift")
+    manifest_tasks = {task["task_id"]: task for task in manifest["tasks"]}
+    require(set(manifest_tasks) == set(source_tasks), "manifest/task-set membership drift")
+    for task_id, source in source_tasks.items():
+        manifest_task = manifest_tasks[task_id]
+        require(manifest_task["task_class"] == source["task_class"], f"manifest task class drift: {task_id}")
+        require(manifest_task["starting_state_digest"] == source["starting_state_digest"], f"manifest starting state drift: {task_id}")
+        require(manifest_task["task_prompt_digest"] == source["task_prompt_digest"], f"manifest prompt drift: {task_id}")
+        require(digest_json(manifest_task["task_payload"]) == source["task_payload_digest"], f"manifest payload drift: {task_id}")
+
+    plan = build_plan(manifest)
+    entries = plan["entries"]
+    require(len(entries) == freeze["manifest"]["planned_entries"] == freeze["experiment"]["planned_runs"], "B2 plan size drift")
+    blocks: dict[tuple[str, int], list[str]] = {}
+    for entry in entries:
+        blocks.setdefault((entry["task_id"], entry["repetition_index"]), []).append(entry["arm"]["arm_id"])
+    expected_arm_ids = {arm["arm_id"] for arm in manifest["arms"]}
+    require(len(blocks) == freeze["experiment"]["paired_blocks"], "paired block count drift")
+    require(all(set(arms) == expected_arm_ids and len(arms) == 2 for arms in blocks.values()), "every paired block must contain both B2 arms exactly once")
+
     return {
         "status": "PASS_STATIC_ZERO_LIVE_CALLS",
         "live_model_calls": 0,
         "freeze_digest": digest_json(freeze),
+        "manifest_digest": digest_json(manifest),
+        "plan_digest": digest_json(plan),
         "eligibility_envelope_digest": envelope_digest,
         "task_set_digest": freeze["task_set"]["aggregate_digest"],
         "planned_runs": freeze["experiment"]["planned_runs"],
