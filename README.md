@@ -73,7 +73,25 @@ This is intentionally a calibration result, not a production-benefit claim. Abso
 - **Machine-readable result:** [`machine/benchmarking/codex-c1-cross-provider-reconciliation.v1.json`](machine/benchmarking/codex-c1-cross-provider-reconciliation.v1.json)
 - **Original Antigravity calibration:** [Comparative Measurement B3](docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md)
 
-The next research extension is C2, which will test deterministic machine-readable JSON task representation separately from this frozen natural-language baseline. C2 must not rewrite or retroactively tune C1 evidence.
+### C2R1 machine-JSON representation calibration
+
+C2R1 reused the frozen Codex task semantics, validator, provider/model surface, and communication-arm design while changing the task representation to canonical machine JSON. The primary execution completed with `29/30` accepted runs and one preserved `INVALID_RUN / PROVIDER_OUTAGE` on DEFAULT slot 5. That invalid primary observation was not retried or silently replaced.
+
+A separately authorized supplemental recovery replicate reproduced the missing DEFAULT workload at `15,026` tokens. It is reported only as sensitivity evidence and does **not** rewrite the primary C2R1 dataset.
+
+| C2R1 analysis | DEFAULT | CAVEMAN | MURMURS |
+| --- | ---: | ---: | ---: |
+| Primary complete-case mean, 9 matched blocks | 10,959.56 | 12,567.56 | 10,859.67 |
+| Primary complete-case vs DEFAULT | baseline | **+14.67%** | **-0.91%** |
+| Supplemental balanced sensitivity mean, 10 blocks | 11,366.2 | 12,508.9 | 11,276.3 |
+| Supplemental sensitivity vs DEFAULT | baseline | **+10.05%** | **-0.79%** |
+
+**Current C2R1 interpretation:** CAVEMAN's aggregate token-overhead direction persists, but its magnitude is workload-dependent. MURMURS remains near-neutral in aggregate and varies materially by task. The machine-JSON representation does **not** establish a global token-saving benefit relative to the canonical C1 Codex aggregate.
+
+- **Full human-readable analysis:** [Codex C2R1 Machine-JSON Reconciliation](docs/benchmarking/CODEX_C2R1_MACHINE_JSON_RECONCILIATION.md)
+- **Machine-readable result:** [`machine/benchmarking/codex-c2r1-machine-json-reconciliation.v1.json`](machine/benchmarking/codex-c2r1-machine-json-reconciliation.v1.json)
+
+C1 and C2R1 remain calibration evidence only. They grant no production promotion, A5 execution promotion, A6, B4, release publication, deployment, or automatic policy change.
 
 ## How Orchestra works
 
