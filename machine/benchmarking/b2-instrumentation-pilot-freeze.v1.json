@@ -1,0 +1,145 @@
+{
+  "schema_version": "orchestra.b2-instrumentation-pilot-freeze.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "phase": "B2_4_INSTRUMENTATION_PILOT_PREPARATION",
+  "status": "PREPARED_NOT_AUTHORIZED",
+  "recorded_date": "2026-08-23",
+  "source_baseline": {
+    "repository": "Baelfyre/Orchestra",
+    "branch": "main",
+    "sha": "f165153358474f68a128b9e9c636ff05052b1be7",
+    "tree": "505fb6c6b0dc08d90ae0a99a156ec5159eb4298e",
+    "signature": "GITHUB_VERIFIED_VALID"
+  },
+  "task_selection": {
+    "source_task_set": "machine/benchmarking/b2-topology-calibration-task-set.v1.json",
+    "source_task_set_digest": "f7af904895107a7f00abb6ab125d7a33a7bcb5c729b0665acfe9049bf2050ee8",
+    "mandatory_task_id": "b2-cal-cache-freshness",
+    "second_task_id": "b2-cal-cross-layer-release",
+    "selected_task_ids": ["b2-cal-cache-freshness", "b2-cal-cross-layer-release"],
+    "selection_rule": "EXCLUDE_MANDATORY_THEN_HIGH_COORDINATION_THEN_LEXICOGRAPHIC_TASK_ID_FAIL_IF_NONE",
+    "selection_basis": "FROZEN_TASK_CLASS_ONLY",
+    "prior_outcome_data_used": false,
+    "benefit_result_used": false,
+    "locked_before_new_pilot_outcomes": true
+  },
+  "experiment": {
+    "experiment_id": "b2-instrumentation-pilot-v1",
+    "purpose": "INSTRUMENTATION_PILOT_ONLY",
+    "task_count": 2,
+    "repetitions_per_task": 2,
+    "arm_count": 2,
+    "paired_blocks": 4,
+    "planned_runs": 8,
+    "calls_per_run": 3,
+    "maximum_underlying_model_calls": 24,
+    "communication_mode": "DEFAULT",
+    "automatic_retry": false,
+    "attempts_per_slot": 1,
+    "benefit_claim_allowed": false,
+    "a5_promotion_evidence_allowed": false
+  },
+  "manifest": {
+    "source": "machine/benchmarking/b2-instrumentation-pilot-manifest.v1.json",
+    "digest": "d7ca2eed1a087c5509ed529b151e5f06342cdc5ad796282419e87392aba3b04a"
+  },
+  "plan": {
+    "source": "machine/benchmarking/b2-instrumentation-pilot-plan.v1.json",
+    "digest": "716d6f4a5c8c21647dbb8725307741e2e8bb1069a3d4891fff38672c572297d9",
+    "ordering_policy": "SEEDED_PAIRED_BLOCK_ARM_SHUFFLE",
+    "randomization_seed": 20260822
+  },
+  "topology": {
+    "eligibility_envelope": "machine/benchmarking/b2-real-calibration-eligibility-envelope.v1.json",
+    "eligibility_envelope_digest": "26af9b40870a13a138f52b23e45189a052875a81c8d4004366f2b93e9361bb55",
+    "candidate_ids": ["b2.seq.clockwork-overseer.v1", "b2.seq.overseer-clockwork.v1"],
+    "arms": ["Clockwork -> Overseer", "Overseer -> Clockwork"],
+    "parallel_execution_authorized": false
+  },
+  "host_binding": {
+    "provider": "openai-codex",
+    "cli_version": "0.148.0",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "medium",
+    "transport": "jsonl-usage",
+    "counter_id": "codex-cli-0.148.0:jsonl-usage:gpt-5.6-sol:medium",
+    "binding_strategy": "NODE_EXACT_NPM_ENTRYPOINT",
+    "node_exe_path": "C:\\Program Files\\nodejs\\node.exe",
+    "node_exe_sha256": "e921fe5307e29bf6fd00000dd594356affd3a7b044e52720c7f10decbdc305b9",
+    "codex_js_path": "C:\\Users\\ACER\\.codex-cli-0.148.0\\node_modules\\@openai\\codex\\bin\\codex.js",
+    "codex_js_sha256": "134063e133f0b4244fa3b251acf973d4fe4b4aeeacbdc135211bf480f59f1477",
+    "codex_package_json_path": "C:\\Users\\ACER\\.codex-cli-0.148.0\\node_modules\\@openai\\codex\\package.json",
+    "codex_package_json_sha256": "071f84ec4e6ff199b3dce2c2560a77c2248443b0d8b17e64f6e3f08427d32fc2"
+  },
+  "workspace_boundary": {
+    "path": "D:\\Dev\\Repositories\\+Orchestra-C2-Workspace",
+    "git_backed": true,
+    "empty_except_git_metadata": true,
+    "agents_md_absent": true,
+    "repository_mutation_prohibited": true,
+    "sandbox": "read-only",
+    "approval_policy": "never",
+    "agents_enabled": false,
+    "web_search": "disabled",
+    "shell_tool": false
+  },
+  "resource_freeze": {
+    "per_run_total_token_ceiling": 75000,
+    "cumulative_accepted_token_ceiling": 1200000,
+    "maximum_benchmark_runs": 8,
+    "maximum_underlying_model_calls": 24,
+    "model_calls_per_run": 3,
+    "call_timeout_seconds": 600,
+    "automatic_retry": false,
+    "stop_on_first_invalid_run": true,
+    "stop_on_first_validator_failure": true,
+    "specialist_advisory_retention_ceiling_bytes": 16384
+  },
+  "resource_budget_digest": "7421c9ca1baeee338756d93da3114a085c505f9249c42b0a5f3209eb80fdd71a",
+  "implementation": {
+    "executor": "scripts/a5_topology_benchmark_executor.py",
+    "evidence_helper": "scripts/b2_confirmatory_evidence.py",
+    "preflight": "scripts/b2_instrumentation_pilot_preflight.py",
+    "driver": "scripts/b2_instrumentation_pilot_driver.py",
+    "sha256": {
+      "scripts/a5_topology_benchmark_executor.py": "0908d27603f1b165cbf077f11c4a6bdd64d66bdcd2c2981b64d1e88c2af5e17c",
+      "scripts/b2_confirmatory_evidence.py": "3a3c560db14462532036249a7be59ff7d6356677e18f5615da37fdc8c9778e2e",
+      "scripts/b2_instrumentation_pilot_preflight.py": "dbc268b16242c1924972907727f68c3f1e6bdbe1e64834f125eccae15b010409",
+      "scripts/b2_instrumentation_pilot_driver.py": "e321592b8b8de516ce034c2c09b0a39ec939fb03107c74bdf3d3ce4fd45b3b90"
+    }
+  },
+  "evidence_contract": {
+    "retain_exact_specialist_advisory_text": true,
+    "retain_utf8_byte_count_and_raw_sha256": true,
+    "retain_ordered_advisory_references": true,
+    "independently_recompute_context_transfer_bytes": true,
+    "retain_exact_turn_completed_usage_objects": true,
+    "retain_usage_digests_and_counter_identities": true,
+    "counter_classifications": ["STABLE_EXACT", "CACHE_STATE_VARIANT", "INPUT_COUNTER_VARIANT", "UNSTABLE_ATTRIBUTION"],
+    "reject_cached_input_greater_than_input": true,
+    "advisory_overflow_disposition": "INVALID_RUN_NO_TRUNCATION"
+  },
+  "stop_conditions": [
+    "FIRST_INVALID_RUN", "FIRST_VALIDATOR_FAILURE", "HOST_IDENTITY_DRIFT",
+    "EXECUTABLE_IDENTITY_DRIFT", "WORKSPACE_BOUNDARY_VIOLATION", "REPOSITORY_MUTATION",
+    "RESOURCE_CEILING_VIOLATION", "EVIDENCE_RECOMPUTATION_MISMATCH",
+    "ADVISORY_RETENTION_OVERFLOW", "COUNTER_PROVENANCE_FAILURE"
+  ],
+  "activation": {
+    "live_execution_authorized": false,
+    "separate_exact_human_authorization_required": true,
+    "driver_executed_during_preparation": false,
+    "automatic_continuation": false
+  },
+  "authority": {
+    "b2_5_authorized": false,
+    "a5_execution_effective_promotion": false,
+    "a6_a8_authorized": false,
+    "b4_authorized": false,
+    "release_publication_authorized": false,
+    "deployment_authorized": false,
+    "policy_activation_authorized": false,
+    "installed_integration_refresh_authorized": false
+  },
+  "next_gate": "SEPARATE_EXACT_HUMAN_B2_4_LIVE_EXECUTION_AUTHORIZATION"
+}
