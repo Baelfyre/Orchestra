@@ -2,7 +2,7 @@
   "schema_version": "orchestra.b2-instrumentation-pilot-freeze.v1",
   "program_id": "orchestra.shared-comparative-benchmark.v1",
   "phase": "B2_4_INSTRUMENTATION_PILOT_PREPARATION",
-  "status": "PREPARED_NOT_AUTHORIZED",
+  "status": "REPREPARED_NOT_AUTHORIZED_AFTER_INVALID_DRIVER_ATTEMPT",
   "recorded_date": "2026-08-23",
   "source_baseline": {
     "repository": "Baelfyre/Orchestra",
@@ -105,7 +105,7 @@
       "scripts/a5_topology_benchmark_executor.py": "dc3eff98b9477e0776d55a6e3312e5e66205e2ee31c13874652dcb0c557e3f9a",
       "scripts/b2_confirmatory_evidence.py": "7828fec435094bbd415ad8ba635ea0f43df9dd4798425aec6ca535b603edbb01",
       "scripts/b2_instrumentation_pilot_preflight.py": "51a0f9e3f67742cc2ca96aec90502476519576a572896015761bfce5cc5e8a70",
-      "scripts/b2_instrumentation_pilot_driver.py": "8355e04889adf9171c89fb92f42c5844403e5a4475dd889b459507149a1bdb9d"
+      "scripts/b2_instrumentation_pilot_driver.py": "0c08ed5920687e3d32aa7c614e521887ac305ab348b09a6538b3ff4dfb196424"
     }
   },
   "evidence_contract": {
@@ -125,6 +125,16 @@
     "RESOURCE_CEILING_VIOLATION", "EVIDENCE_RECOMPUTATION_MISMATCH",
     "ADVISORY_RETENTION_OVERFLOW", "COUNTER_PROVENANCE_FAILURE"
   ],
+  "prior_live_attempt": {
+    "preparation_sha": "30772ff6aa581dfa43337ed029d233e5a43aa64c",
+    "preparation_tree": "f1ff75ceeed63053bb91f31b7c9aa8d0281a9615",
+    "freeze_digest": "70df095f14428a8ac3a4fc0117e96d727690f4c76e80d9c7efdc8791f9a912d9",
+    "attempted_slots": 1,
+    "accepted_runs": 0,
+    "actual_live_model_calls": 0,
+    "status": "STOPPED_INVALID_EXECUTOR_COMMAND_CONTRACT",
+    "automatic_retry_performed": false
+  },
   "activation": {
     "live_execution_authorized": false,
     "separate_exact_human_authorization_required": true,
@@ -141,5 +151,5 @@
     "policy_activation_authorized": false,
     "installed_integration_refresh_authorized": false
   },
-  "next_gate": "SEPARATE_EXACT_HUMAN_B2_4_LIVE_EXECUTION_AUTHORIZATION"
+  "next_gate": "SEPARATE_LATER_HUMAN_B2_4_RETRY_AUTHORIZATION"
 }

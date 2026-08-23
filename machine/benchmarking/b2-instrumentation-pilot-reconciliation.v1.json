@@ -1,0 +1,112 @@
+{
+  "schema_version": "orchestra.b2-instrumentation-pilot-reconciliation.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "phase": "B2_4_INSTRUMENTATION_PILOT_EVIDENCE_RECONCILIATION",
+  "recorded_date": "2026-08-23",
+  "status": "B2_4_STOPPED_INVALID_DRIVER_COMMAND_CONTRACT",
+  "evidence_maturity": "INVALID_INSTRUMENTATION_ATTEMPT",
+  "benefit_claim": "NOT_ALLOWED",
+  "canonical_entry": {
+    "repository": "Baelfyre/Orchestra",
+    "branch": "main",
+    "sha": "30772ff6aa581dfa43337ed029d233e5a43aa64c",
+    "tree": "f1ff75ceeed63053bb91f31b7c9aa8d0281a9615",
+    "signature": "GITHUB_VERIFIED_VALID"
+  },
+  "frozen_identity": {
+    "experiment_id": "b2-instrumentation-pilot-v1",
+    "freeze_digest": "70df095f14428a8ac3a4fc0117e96d727690f4c76e80d9c7efdc8791f9a912d9",
+    "manifest_digest": "d7ca2eed1a087c5509ed529b151e5f06342cdc5ad796282419e87392aba3b04a",
+    "plan_digest": "716d6f4a5c8c21647dbb8725307741e2e8bb1069a3d4891fff38672c572297d9",
+    "provider": "openai-codex",
+    "cli_version": "0.148.0",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "medium"
+  },
+  "authorization": {
+    "master_authorization_id": "ORCHESTRA_B_PHASE_FULL_AUTONOMOUS_20260823",
+    "master_authorization_sha256": "73104a7b23f8e505399acef791119033d3941eceeb9ab0d6b026f495e274d9bf",
+    "child_authorization_valid": true,
+    "automatic_retry": false,
+    "retry_or_replacement_performed": false
+  },
+  "execution": {
+    "planned_runs": 8,
+    "attempted_slots": 1,
+    "accepted_runs": 0,
+    "invalid_attempts": 1,
+    "driver_reported_live_model_calls_consumed": 3,
+    "independently_reconciled_live_model_calls_consumed": 0,
+    "maximum_underlying_model_calls": 24,
+    "codex_exec_invoked": false,
+    "stop_before_next_slot": true,
+    "stop_reason_reported": "EVIDENCE_OR_VALIDATOR_FAILURE:A5 experiment requires a5_shadow_observation",
+    "root_failure": "EXECUTOR_ARGUMENT_PARSER_REJECTED_OBSOLETE_DRIVER_FLAGS_BEFORE_MODEL_INVOCATION"
+  },
+  "evidence_archive": {
+    "filename": "ORCHESTRA_B2_4_INSTRUMENTATION_PILOT_20260823T193531Z.zip",
+    "sha256": "f03db6a617ff469fc1ef5f549800e386fc4deed308c2a00e7f3c0c7f2d009aa2",
+    "repository_committed": false,
+    "external_operator_retained": true,
+    "file_count": 8,
+    "uncompressed_bytes": 17895,
+    "structure": {
+      "session_level_records": 5,
+      "requests": 1,
+      "executor_results": 1,
+      "partial_evidence_records": 1,
+      "run_records": 0
+    },
+    "key_digests": {
+      "executor_result_sha256": "dabe81912fdaa6597d487b75d0b9a8674d2fe94e1672384f94ce5e3504cd8764",
+      "partial_evidence_sha256": "b3f8baa9ef7afce866969b93658a10a601860bdd9802f8f0b39cc7b3384160fe",
+      "session_summary_sha256": "f76c9c5a01a70a0edd1c84c6b9f9b8b975c5f5d0e9a73da9d46b6eb3fbbca12f"
+    }
+  },
+  "integrity_audit": {
+    "repository_unchanged": true,
+    "request_matches_first_frozen_slot": true,
+    "executor_result_retained": true,
+    "partial_stderr_retained": true,
+    "accepted_run_record_absent": true,
+    "run_index_empty": true,
+    "automatic_retry_absent": true,
+    "actual_call_reconciliation_basis": "ARGPARSE_EXITED_ON_REQUIRED_ARGUMENT_CHECK_BEFORE_REQUEST_PARSE_OR_RUN_CODEX_CALL"
+  },
+  "defect": {
+    "id": "B2-4-DRIVER-001",
+    "location": "scripts/b2_instrumentation_pilot_driver.py:exact_executor_command",
+    "expected_flags": ["--codex-command-prefix-json", "--workspace-dir"],
+    "observed_flags": ["--codex-prefix-json", "--workspace"],
+    "effect": "EXECUTOR_EXITED_2_BEFORE_ANY_MODEL_CALL",
+    "masked_stop_reason": true
+  },
+  "forward_remediation": {
+    "driver_command_contract_corrected": true,
+    "exact_command_regression_test_added": true,
+    "corrected_driver_sha256": "0c08ed5920687e3d32aa7c614e521887ac305ab348b09a6538b3ff4dfb196424",
+    "corrected_freeze_digest": "398560ce170191743360438dd5100578ea1e1a0c421b549663d826e3d7c4fa4c",
+    "live_retry_authorized": false,
+    "new_model_calls_during_remediation": 0
+  },
+  "reconciliation_conclusion": {
+    "pilot_valid": false,
+    "instrumentation_validated": false,
+    "b2_5_eligible": false,
+    "a5_execution_promotion": "NOT_AUTHORIZED",
+    "b4": "BLOCKED",
+    "next_gate": "SEPARATE_LATER_HUMAN_B2_4_RETRY_AUTHORIZATION_BOUND_TO_CORRECTED_FREEZE"
+  },
+  "authority": {
+    "b2_4_retry_authorized": false,
+    "b2_5_authorized": false,
+    "a5_execution_effective_promotion": false,
+    "a6_a8_authorized": false,
+    "b4_authorized": false,
+    "release_publication_authorized": false,
+    "deployment_authorized": false,
+    "policy_activation_authorized": false,
+    "installed_integration_refresh_authorized": false,
+    "destructive_cleanup_authorized": false
+  }
+}
