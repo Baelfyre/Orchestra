@@ -1,0 +1,96 @@
+{
+  "schema_version": "orchestra.adaptive-topology-eligibility-envelope.v1",
+  "envelope_id": "orchestra.b2.real-calibration.eligibility.v1",
+  "session_id": "benchmark.b2.a5-isolated.calibration.v1",
+  "created_at": "2026-08-23T01:10:00Z",
+  "user_key": "benchmark-controlled",
+  "project_key": "Baelfyre/Orchestra",
+  "task_session_key": "b2.real-calibration.v1",
+  "coordination_contract_ref": "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md#orchestra-coordination-runtime-v1",
+  "coordination_contract_revision": 1,
+  "deterministic_topology_candidate_id": "b2.seq.clockwork-overseer.v1",
+  "explicit_current_constraint_ref": "machine/benchmarking/b2-real-calibration-freeze.v1.json#experimental_constraints",
+  "required_specialists": [
+    "clockwork",
+    "overseer"
+  ],
+  "invariants_applied": {
+    "coordination_validated": true,
+    "required_specialists_complete": true,
+    "ownership_complete": true,
+    "authority_external_to_tuner": true,
+    "governance_complete": true,
+    "contradictions_resolved": true,
+    "stale_contracts_resolved": true,
+    "provider_privacy": true,
+    "lifecycle": true,
+    "resource_ceilings": true,
+    "context_disclosure_ceiling": true
+  },
+  "invariant_evidence_refs": [
+    "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md#design-principles",
+    "machine/adaptive/a5-tuner-topology-contract.v1.json#eligibility_policy",
+    "machine/benchmarking/b2-a5-topology-executor-binding.v1.json#fail_closed_conditions"
+  ],
+  "candidates": [
+    {
+      "candidate_id": "b2.seq.clockwork-overseer.v1",
+      "coordination_contract_revision": 1,
+      "required_specialists": [
+        "clockwork",
+        "overseer"
+      ],
+      "stages": [
+        {
+          "stage_id": "b2.cw-ov.stage.1",
+          "mode": "SEQUENTIAL",
+          "specialists": ["clockwork"],
+          "join_required": true
+        },
+        {
+          "stage_id": "b2.cw-ov.stage.2",
+          "mode": "SEQUENTIAL",
+          "specialists": ["overseer"],
+          "join_required": true
+        }
+      ],
+      "reentry_order": ["overseer"],
+      "prior_output_disclosure_refs": ["benchmark:b2:clockwork-advisory-to-overseer"],
+      "eligibility_status": "ELIGIBLE",
+      "eligibility_evidence_refs": [
+        "machine/adaptive/a5-tuner-topology-contract.v1.json#eligibility_policy",
+        "machine/benchmarking/b2-a5-topology-executor-binding.v1.json#topology_binding"
+      ]
+    },
+    {
+      "candidate_id": "b2.seq.overseer-clockwork.v1",
+      "coordination_contract_revision": 1,
+      "required_specialists": [
+        "clockwork",
+        "overseer"
+      ],
+      "stages": [
+        {
+          "stage_id": "b2.ov-cw.stage.1",
+          "mode": "SEQUENTIAL",
+          "specialists": ["overseer"],
+          "join_required": true
+        },
+        {
+          "stage_id": "b2.ov-cw.stage.2",
+          "mode": "SEQUENTIAL",
+          "specialists": ["clockwork"],
+          "join_required": true
+        }
+      ],
+      "reentry_order": ["clockwork"],
+      "prior_output_disclosure_refs": ["benchmark:b2:overseer-advisory-to-clockwork"],
+      "eligibility_status": "ELIGIBLE",
+      "eligibility_evidence_refs": [
+        "machine/adaptive/a5-tuner-topology-contract.v1.json#eligibility_policy",
+        "machine/benchmarking/b2-a5-topology-executor-binding.v1.json#topology_binding"
+      ]
+    }
+  ],
+  "disposition": "ELIGIBLE_TOPOLOGY_SET_READY"
+}
