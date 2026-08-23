@@ -1,0 +1,201 @@
+{
+  "schema_version": "orchestra.b2-real-calibration-freeze.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "phase": "B2_2_REAL_CALIBRATION_FREEZE_AND_ZERO_CALL_PREFLIGHT",
+  "status": "PREPARED_ZERO_LIVE_CALLS_REQUIRES_CANONICALIZATION_AND_HOST_PREFLIGHT",
+  "recorded_date": "2026-08-22",
+  "source_baseline": {
+    "repository": "Baelfyre/Orchestra",
+    "branch": "main",
+    "sha": "3ecbe83d2c4e8ea237c529963ea0184a898ca06c",
+    "tree": "cc58620351ec14de609687547612a2a8e054af5b",
+    "signature": "VERIFIED_VALID"
+  },
+  "experiment": {
+    "experiment_id": "b2-a5-isolated-real-calibration-v1",
+    "experiment_kind": "A5_ISOLATED",
+    "stage": "CALIBRATION",
+    "randomization_seed": 20260822,
+    "repetitions_per_arm": 2,
+    "communication_mode": "DEFAULT",
+    "planned_runs": 20,
+    "paired_blocks": 10,
+    "arm_count": 2,
+    "benefit_claim_prohibited": true
+  },
+  "manifest": {
+    "source": "machine/benchmarking/b2-real-calibration-manifest.v1.json",
+    "schema_version": "orchestra.comparative-benchmark-manifest.v1",
+    "digest": "b4d9c279da5681d5c3c3f76dbb04592d575121bc66772861926dacdeeedea8d7",
+    "planned_entries": 20,
+    "executor": "scripts/a5_topology_benchmark_executor.py",
+    "runner": "scripts/comparative_benchmark_runner.py"
+  },
+  "benchmark_subject": {
+    "repository": "Baelfyre/Orchestra",
+    "sha": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
+    "tree": "ceab55bd512ea6fde4e8e76877cbb7006d18500e"
+  },
+  "task_set": {
+    "source": "machine/benchmarking/b2-topology-calibration-task-set.v1.json",
+    "aggregate_digest": "f7af904895107a7f00abb6ab125d7a33a7bcb5c729b0665acfe9049bf2050ee8",
+    "validator": "EXACT_JSON_CONFORMANCE_V1",
+    "task_count": 5,
+    "topology_sensitive": true,
+    "execution_payloads_enabled": true,
+    "live_execution_authorized": false,
+    "tasks": [
+      {
+        "task_id": "b2-cal-api-boundary",
+        "task_class": "ARCHITECTURE_HEAVY",
+        "starting_state_digest": "428d25779539cf825278a5c27f07e1ff4e0882947cb05b41723e870c2f990ba0",
+        "task_prompt_digest": "1e73ca402f4b5c7047db5641b420a0b9035a0b00b3509aaa5b2b91e5aa42ea2f",
+        "task_payload_digest": "f49f257fa1b12d7f3645b808aaf25da7faaaa00fd0b7b5ab33eda142b87abd0a",
+        "validation_contract_digest": "cfa4bf69498e620ca9ed0999a3d7128daa370892486a00606a7d530036808393"
+      },
+      {
+        "task_id": "b2-cal-schema-migration",
+        "task_class": "DEPENDENCY_HEAVY",
+        "starting_state_digest": "7ca705643c8c2679429cb2e15f8c48697a37df449945ba0df4341cbc439c375b",
+        "task_prompt_digest": "194ae2325f231f020aff5304a337ba36b608b8fd1ec5152df2db5e881b149d84",
+        "task_payload_digest": "e92cb52eb7d8e0762204acda8cadab2c84771ec5052a3df474c6fd9fd7f13a7b",
+        "validation_contract_digest": "1edb58473da8159d0e44ab82bbcb6842c392a5bb6cf1117e6887479bc2fe18fc"
+      },
+      {
+        "task_id": "b2-cal-cache-freshness",
+        "task_class": "VALIDATION_HEAVY",
+        "starting_state_digest": "2cee16af8991d23d33be669a013eb3dc2999f9263027515b48b4b10aed90072b",
+        "task_prompt_digest": "d8bb49e72f868f59c1bb74b27ad7712aee4270aa6183def7f4b26102dc97763c",
+        "task_payload_digest": "a11158cb446c0238f8da3712a8a665bdf6c742d505a1a48854ea0d6df676676b",
+        "validation_contract_digest": "901bfb42bebd52e266fdca05fccf53a6696a911f73be350f6875411ec46a5457"
+      },
+      {
+        "task_id": "b2-cal-retry-amplification",
+        "task_class": "DEBUGGING",
+        "starting_state_digest": "28f25ec23e6bca4d84c7e798b002fe6c0b30822163823e02c4a71e8daff5bc11",
+        "task_prompt_digest": "c7f170f57eb461ec2298ae76b9d5b47440b37eb29e26c88a26245521f7ffae65",
+        "task_payload_digest": "744d01211c850544771d5e65efa02c6fbd94db20aff38571182ae6f38de50aca",
+        "validation_contract_digest": "bfec4990ae6de9eb85912640942bb4e3a0be6053579c5dfafe326ae294be557c"
+      },
+      {
+        "task_id": "b2-cal-cross-layer-release",
+        "task_class": "HIGH_COORDINATION",
+        "starting_state_digest": "1d40e285ca50e0889f20f694cf81aa965e0823fdce4b48a5b87964d01588d91c",
+        "task_prompt_digest": "7039e383ae6053d21f1b98a0f33a83bed243b762b52100cccf7dbe01ba97eb3d",
+        "task_payload_digest": "e825d46738a5a4e01d761cb65c128e2895b6a93266915e8efd51c3ff3098e053",
+        "validation_contract_digest": "af5fa66e04ff429fe31c1fa53fb8ca9b43b26318dc6315e78a15617bb01e6fce"
+      }
+    ]
+  },
+  "topology": {
+    "eligibility_envelope": "machine/benchmarking/b2-real-calibration-eligibility-envelope.v1.json",
+    "eligibility_envelope_digest": "26af9b40870a13a138f52b23e45189a052875a81c8d4004366f2b93e9361bb55",
+    "candidate_ids": [
+      "b2.seq.clockwork-overseer.v1",
+      "b2.seq.overseer-clockwork.v1"
+    ],
+    "candidate_digests": {
+      "b2.seq.clockwork-overseer.v1": "c28e14b11c586cd21397892239ce881f46e230993353013918212dbef7291183",
+      "b2.seq.overseer-clockwork.v1": "067a8867aaa3a7bc82b4915da40ec60222413e261460863b1e8de90b836773f3"
+    },
+    "deterministic_baseline_candidate_id": "b2.seq.clockwork-overseer.v1",
+    "required_specialists": ["clockwork", "overseer"],
+    "topology_effective": false,
+    "shadow_influenced_execution": false,
+    "parallel_execution_authorized": false,
+    "candidate_selected_by": "SHARED_BENCHMARK_HARNESS_ARM_SCHEDULE"
+  },
+  "host_binding": {
+    "provider": "openai-codex",
+    "cli_version": "0.148.0",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "medium",
+    "transport": "jsonl-usage",
+    "counter_id": "codex-cli-0.148.0:jsonl-usage:gpt-5.6-sol:medium",
+    "binding_strategy": "NODE_EXACT_NPM_ENTRYPOINT",
+    "node_exe_path": "C:\\Program Files\\nodejs\\node.exe",
+    "node_exe_sha256": "e921fe5307e29bf6fd00000dd594356affd3a7b044e52720c7f10decbdc305b9",
+    "codex_js_path": "C:\\Users\\ACER\\.codex-cli-0.148.0\\node_modules\\@openai\\codex\\bin\\codex.js",
+    "codex_js_sha256": "134063e133f0b4244fa3b251acf973d4fe4b4aeeacbdc135211bf480f59f1477",
+    "codex_package_json_path": "C:\\Users\\ACER\\.codex-cli-0.148.0\\node_modules\\@openai\\codex\\package.json",
+    "codex_package_json_sha256": "071f84ec4e6ff199b3dce2c2560a77c2248443b0d8b17e64f6e3f08427d32fc2"
+  },
+  "workspace_boundary": {
+    "path": "D:\\Dev\\Repositories\\+Orchestra-C2-Workspace",
+    "git_backed": true,
+    "empty_except_git_metadata": true,
+    "agents_md_absent": true,
+    "repository_mutation_prohibited": true,
+    "sandbox": "read-only",
+    "approval_policy": "never",
+    "agents_enabled": false,
+    "web_search": "disabled",
+    "shell_tool": false
+  },
+  "resource_freeze": {
+    "per_run_total_token_ceiling": 75000,
+    "cumulative_accepted_token_ceiling": 1200000,
+    "maximum_benchmark_runs": 20,
+    "maximum_underlying_model_calls": 60,
+    "model_calls_per_run": 3,
+    "call_timeout_seconds": 600,
+    "automatic_retry": false,
+    "stop_on_first_invalid_run": true
+  },
+  "resource_budget_digest": "32ea2bda042dd05467fbbd02f95b2504a32c5a2c4c0080c5b7b53ec225f50c78",
+  "experimental_constraints": {
+    "a5_shadow_ranker_may_select_execution_arm": false,
+    "a5_execution_effective": false,
+    "production_runtime_attachment": false,
+    "task_network_access": false,
+    "repository_mutation": false,
+    "automatic_retry": false,
+    "attempts_per_slot": 1,
+    "stop_on_invalid_run": true,
+    "stop_on_identity_drift": true,
+    "stop_on_disallowed_tool_event": true,
+    "stop_on_resource_ceiling_breach": true
+  },
+  "zero_call_preflight": {
+    "script": "scripts/b2_real_calibration_preflight.py",
+    "static_repository_preflight_required": true,
+    "exact_host_preflight_required_after_canonicalization": true,
+    "model_calls_permitted": 0,
+    "expected_success_status": "PASS_ZERO_LIVE_CALLS",
+    "host_preflight_may_invoke": "CODEX_VERSION_ONLY",
+    "host_preflight_may_not_invoke": "CODEX_EXEC"
+  },
+  "activation": {
+    "live_execution_authorized": false,
+    "canonicalization_required": true,
+    "separate_explicit_human_live_execution_authorization_required": true,
+    "automatic_continuation": false
+  },
+  "fail_closed_stop_conditions": [
+    "FREEZE_RECORD_DRIFT",
+    "ELIGIBILITY_ENVELOPE_DRIFT",
+    "TASK_SET_OR_TASK_IDENTITY_DRIFT",
+    "CLI_VERSION_OR_EXECUTABLE_HASH_DRIFT",
+    "PROVIDER_MODEL_REASONING_OR_COUNTER_DRIFT",
+    "WORKSPACE_NOT_EMPTY_CLEAN_GIT_BACKED_OR_AGENTS_MD_PRESENT",
+    "DISALLOWED_TOOL_EVENT",
+    "REPOSITORY_MUTATION_EVENT",
+    "INVALID_RUN_OR_VALIDATOR_FAILURE",
+    "PER_RUN_TOKEN_CEILING_BREACH",
+    "CUMULATIVE_ACCEPTED_TOKEN_CEILING_BREACH",
+    "MAXIMUM_MODEL_CALL_COUNT_BREACH",
+    "ANY_UNADJUDICATED_IDENTITY_OR_AUTHORITY_DRIFT"
+  ],
+  "authority": {
+    "live_execution_authorized": false,
+    "a5_execution_effective_promotion": false,
+    "a6_authorized": false,
+    "a7_authorized": false,
+    "a8_authorized": false,
+    "b4_authorized": false,
+    "release_publication_authorized": false,
+    "deployment_authorized": false,
+    "policy_activation_authorized": false
+  },
+  "next_gate": "CANONICALIZE_B2_2_THEN_RUN_EXACT_HOST_ZERO_CALL_PREFLIGHT_THEN_SEPARATE_HUMAN_LIVE_EXECUTION_AUTHORIZATION"
+}

@@ -1,5 +1,13 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B2.2 Real Calibration Freeze and Zero-Call Preflight - Candidate
+
+- Freezes the exact B2 isolated A5 topology-calibration envelope, topology-sensitive task set, executable manifest, paired 20-run schedule, pinned Codex 0.148.0 / `gpt-5.6-sol` / medium host identity, workspace identity, and bounded resource ceilings before any live benchmark execution.
+- Adds `scripts/b2_real_calibration_preflight.py` as a deterministic zero-model-call preflight that validates frozen digests, run-plan invariants, executable identities, workspace state, and optional pinned-host version identity without invoking `codex exec`.
+- Adds focused regression coverage in `tests/runtime/test_comparative_benchmark_b2_real_freeze.py` for freeze integrity, topology isolation, exact task/manifest identity, fail-closed drift handling, resource ceilings, retry prohibition, and the zero-live-call authorization boundary.
+- Records B2.1 as canonical non-production topology execution infrastructure while keeping A5 shadow-only and non-effective; `execution_allowed=true` in frozen task payloads remains adapter compatibility and does not grant live-execution authority.
+- Authorizes no B2 live model calls, A5 execution promotion, production runtime attachment, parallel production capability, A6-A8, B4, release publication, deployment, policy activation, installed-integration refresh, destructive cleanup, branch deletion, force push, or history rewrite.
+
 ## Post-v1.6.0 Comparative Benchmark B2.1 A5 Topology Execution Enablement - Candidate
 
 - Adds a benchmark-only A5 topology executor in `scripts/a5_topology_benchmark_executor.py` so isolated B2 measurement can enact real sequential topology differences instead of merely carrying topology IDs as provenance.
