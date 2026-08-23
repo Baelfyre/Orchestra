@@ -166,7 +166,7 @@ def test_b2_binding_rejects_parallel_stage_even_when_structurally_eligible():
         deterministic_topology_candidate_id=forward.candidate_id,
     )
     request = make_request(envelope, "parallel")
-    with pytest.raises(Exception, match="does not authorize PARALLEL"):
+    with pytest.raises(Exception, match="B2.1"):
         validate_candidate_for_b2(request, envelope, digest_json(envelope.to_dict()))
 
 
