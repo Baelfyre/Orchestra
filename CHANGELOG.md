@@ -1,5 +1,13 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B2.4 Instrumentation Pilot Preparation - Candidate
+
+- Freezes the human-authorized two-task selection, exact paired eight-run plan, pinned Codex host/workspace identities, maximum 24-call ceiling, retry prohibition, and fail-closed stop conditions.
+- Adds zero-live-call static and exact-host preflight that may invoke only Codex `--version` and reports `codex_exec_invoked=false` and `live_model_calls=0`.
+- Prepares a separately authorized one-attempt-per-slot driver that preserves B2.3.1 evidence, complete session artifacts, exact repository boundaries, and counter-stability reconciliation.
+- Adds deterministic fixture coverage for plan construction, authorization rejection, stop-on-first failure, repository mutation, evidence recomputation, resource ceilings, and zero model calls.
+- Authorizes no B2.4 live execution, B2.5 confirmatory execution, A5 promotion, A6-A8, B4, release, deployment, policy activation, integration refresh, or destructive operation.
+
 ## Post-v1.6.0 Comparative Benchmark B2.3.1 Confirmatory Evidence Instrumentation - Candidate
 
 - Implements bounded synthetic specialist advisory retention with exact UTF-8 bytes and raw-byte SHA-256 evidence so context-transfer measurements are independently recomputable.
