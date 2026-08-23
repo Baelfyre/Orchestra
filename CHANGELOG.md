@@ -1,5 +1,13 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B2.1 A5 Topology Execution Enablement - Candidate
+
+- Adds a benchmark-only A5 topology executor in `scripts/a5_topology_benchmark_executor.py` so isolated B2 measurement can enact real sequential topology differences instead of merely carrying topology IDs as provenance.
+- Restricts this calibration surface to already-eligible sequential candidates that preserve the exact required-specialist set while varying only `Clockwork -> Overseer` versus `Overseer -> Clockwork`, followed by one identical fixed finalization step; parallel execution remains rejected.
+- Fails closed on candidate/envelope digest drift, non-`DEFAULT` communication, required-specialist drift, invalid Git workspace, CLI/model/reasoning identity drift, disallowed Codex tool events, and per-run token-ceiling breach.
+- Adds deterministic zero-live-call regression coverage plus human/machine execution-enablement records and README machine-index parity; A5 shadow ranking remains non-authorizing and the shared benchmark harness independently schedules every arm.
+- Authorizes no B2 live model calls, A5 execution promotion, Conductor or `RuntimeExecutor` production attachment, A6-A8, B4, release publication, deployment, policy activation, installed-integration refresh, destructive cleanup, branch deletion, force push, or history rewrite.
+
 ## Post-v1.6.0 Comparative Benchmark Codex Prebaseline Workspace and Exit Classification Remediation - Candidate
 
 - Requires a live Codex benchmark workspace to pass `git -C <workspace> rev-parse --is-inside-work-tree` before `codex exec`; a non-Git live workspace fails closed as `CORRUPTED_STARTING_STATE` before the Codex process is invoked, while synthetic `raw_jsonl` tests remain exempt because they launch no live process.
