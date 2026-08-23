@@ -3,19 +3,23 @@
 ## Status
 
 ```text
-Phase: B2.4 instrumentation pilot preparation
-State: PREPARED_NOT_AUTHORIZED
+Phase: B2.4 instrumentation pilot
+State: STOPPED_REPREPARED_NOT_AUTHORIZED
 Tasks: 2
 Repetitions per task: 2
 Topology arms: 2
 Planned runs: 8
 Codex calls per run: 3
 Maximum underlying model calls: 24
-Live model calls consumed during preparation: 0
+Attempted slots: 1
+Accepted runs: 0
+Reconciled live model calls consumed: 0
 Live execution authorized: false
 ```
 
-B2.4 prepares an instrumentation pilot only. It establishes no topology benefit and is not A5 promotion evidence. The prepared driver must not run until a separate exact human live-execution authorization is issued.
+B2.4 remains an instrumentation pilot only. The first authorized attempt stopped on an executor command-contract defect before any model invocation. The defect is corrected forward-only, but retry is not authorized. See [B2_INSTRUMENTATION_PILOT_RECONCILIATION.md](B2_INSTRUMENTATION_PILOT_RECONCILIATION.md).
+
+The stopped attempt establishes no topology benefit and is not A5 promotion evidence. The corrected driver must not run until a separate later human retry authorization binds the corrected freeze digest.
 
 ## Frozen task selection
 

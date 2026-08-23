@@ -10,6 +10,7 @@ from scripts.a5_topology_benchmark_executor import digest_json, execute_request,
 from scripts.b2_instrumentation_pilot_driver import (
     FREEZE_PATH,
     PilotDriverError,
+    exact_executor_command,
     run_session,
     validate_authorization,
     validate_output_boundary,
@@ -111,6 +112,15 @@ def test_host_preflight_invokes_version_only_and_zero_model_calls():
     assert commands and all(command[-1] == "--version" and "exec" not in command for command in commands)
     assert result["codex_exec_invoked"] is False
     assert result["live_model_calls"] == 0
+
+
+def test_driver_command_matches_executor_parser_contract():
+    freeze, _, _ = frozen_records()
+    command = exact_executor_command(freeze)
+    assert "--codex-command-prefix-json" in command
+    assert "--workspace-dir" in command
+    assert "--codex-prefix-json" not in command
+    assert "--workspace" not in command
 
 
 def test_driver_requires_separate_exact_authorization_before_invocation(tmp_path: Path):
