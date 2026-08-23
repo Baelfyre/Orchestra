@@ -24,7 +24,6 @@ from scripts.a5_topology_benchmark_executor import digest_json, load_envelope  #
 from scripts.codex_benchmark_executor import parse_cli_version, validate_live_git_workspace  # noqa: E402
 
 FREEZE_PATH = ROOT / "machine" / "benchmarking" / "b2-real-calibration-freeze.v1.json"
-TASKSET_PATH = ROOT / "machine" / "benchmarking" / "b3-calibration-task-set.v1.json"
 
 
 class PreflightError(RuntimeError):
@@ -78,10 +77,17 @@ def static_preflight() -> dict[str, Any]:
         require(digest_json(candidate.to_dict()) == freeze["topology"]["candidate_digests"][candidate.candidate_id], f"candidate digest drift: {candidate.candidate_id}")
         require(all(stage.mode == "SEQUENTIAL" for stage in candidate.stages), "parallel candidate is not permitted")
 
-    taskset = load_json(TASKSET_PATH)
-    require(taskset.get("status") == "PADAYON_GROUNDED_V1_FROZEN", "task set is not frozen")
-    require(taskset.get("design_rules", {}).get("validator_type") == "EXACT_JSON_CONFORMANCE_V1", "validator drift")
-    require(freeze["task_set"]["aggregate_digest"] == "fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8", "task-set digest drift")
+    taskset_path = ROOT / freeze["task_set"]["source"]
+    taskset = load_json(taskset_path)
+    require(taskset.get("schema_version") == "orchestra.b2-topology-calibration-task-set.v1", "unexpected B2 task-set schema")
+    require(taskset.get("status") == "B2_TOPOLOGY_SENSITIVE_V1_FROZEN_EXECUTABLE_NOT_LIVE_AUTHORIZED", "B2 task set is not frozen")
+    rules = taskset.get("design_rules", {})
+    require(rules.get("validator_type") == "EXACT_JSON_CONFORMANCE_V1", "validator drift")
+    require(rules.get("topology_sensitive") is True, "B2 task set must be topology-sensitive")
+    require(rules.get("execution_allowed_in_payload") is True, "B2 task payloads must be executable after authorization")
+    require(rules.get("live_execution_authorized") is False, "B2 task set cannot authorize live execution")
+    require(digest_json(taskset["tasks"]) == taskset["aggregate_digest"], "B2 task-set aggregate digest drift")
+    require(taskset["aggregate_digest"] == freeze["task_set"]["aggregate_digest"], "freeze/task-set aggregate digest mismatch")
     source_tasks = {task["task_id"]: task for task in taskset["tasks"]}
     require(len(source_tasks) == freeze["task_set"]["task_count"] == 5, "task count drift")
     for frozen in freeze["task_set"]["tasks"]:
@@ -89,6 +95,7 @@ def static_preflight() -> dict[str, Any]:
         require(source is not None, f"missing frozen task: {frozen['task_id']}")
         for field in ("task_class", "starting_state_digest", "task_prompt_digest", "task_payload_digest", "validation_contract_digest"):
             require(source.get(field) == frozen[field], f"task identity drift: {frozen['task_id']}:{field}")
+        require(source.get("task_payload", {}).get("execution_allowed") is True, f"task is not executable after authorization: {frozen['task_id']}")
 
     return {
         "status": "PASS_STATIC_ZERO_LIVE_CALLS",
@@ -100,6 +107,7 @@ def static_preflight() -> dict[str, Any]:
         "maximum_underlying_model_calls": freeze["resource_freeze"]["maximum_underlying_model_calls"],
         "candidate_ids": list(envelope.candidate_ids),
         "canonical_envelope": raw_envelope == envelope.to_dict(),
+        "topology_sensitive_task_set": True,
     }
 
 
