@@ -7,11 +7,13 @@ from jsonschema import Draft202012Validator, FormatChecker
 
 from scripts.a5_topology_benchmark_executor import digest_json, load_envelope
 from scripts.b2_real_calibration_preflight import ROOT, static_preflight
+from scripts.comparative_benchmark_runner import build_plan, validate_manifest
 
 
 FREEZE = ROOT / "machine" / "benchmarking" / "b2-real-calibration-freeze.v1.json"
 ENVELOPE = ROOT / "machine" / "benchmarking" / "b2-real-calibration-eligibility-envelope.v1.json"
-SCHEMA = ROOT / "machine" / "schemas" / "adaptive-topology-eligibility-envelope.schema.json"
+ELIGIBILITY_SCHEMA = ROOT / "machine" / "schemas" / "adaptive-topology-eligibility-envelope.schema.json"
+MANIFEST_SCHEMA = ROOT / "machine" / "schemas" / "comparative-benchmark-manifest.schema.json"
 
 
 def load(path: Path):
@@ -26,11 +28,12 @@ def test_b2_2_static_preflight_passes_with_zero_live_calls():
     assert result["maximum_underlying_model_calls"] == 60
     assert result["canonical_envelope"] is True
     assert result["topology_sensitive_task_set"] is True
+    assert result["manifest_digest"] == "b4d9c279da5681d5c3c3f76dbb04592d575121bc66772861926dacdeeedea8d7"
 
 
 def test_b2_2_eligibility_envelope_is_schema_valid_and_canonical():
     raw = load(ENVELOPE)
-    schema = load(SCHEMA)
+    schema = load(ELIGIBILITY_SCHEMA)
     Draft202012Validator.check_schema(schema)
     Draft202012Validator(schema, format_checker=FormatChecker()).validate(raw)
     normalized, envelope, envelope_digest = load_envelope(ENVELOPE)
@@ -107,6 +110,28 @@ def test_b2_2_uses_five_topology_sensitive_executable_but_unauthorized_tasks():
             "validation_contract_digest",
         ):
             assert frozen[field] == actual[field]
+
+
+def test_b2_2_manifest_is_schema_valid_and_builds_exact_paired_plan():
+    freeze = load(FREEZE)
+    manifest = load(ROOT / freeze["manifest"]["source"])
+    schema = load(MANIFEST_SCHEMA)
+    Draft202012Validator.check_schema(schema)
+    Draft202012Validator(schema, format_checker=FormatChecker()).validate(manifest)
+    validate_manifest(manifest)
+    assert digest_json(manifest) == freeze["manifest"]["digest"]
+    assert manifest["experiment_kind"] == "A5_ISOLATED"
+    assert manifest["stage"] == "CALIBRATION"
+    assert {arm["communication_mode"] for arm in manifest["arms"]} == {"DEFAULT"}
+    assert [arm["topology_candidate_id"] for arm in manifest["arms"]] == freeze["topology"]["candidate_ids"]
+    plan = build_plan(manifest)
+    assert len(plan["entries"]) == 20
+    blocks = {}
+    for entry in plan["entries"]:
+        blocks.setdefault((entry["task_id"], entry["repetition_index"]), []).append(entry["arm"]["arm_id"])
+    assert len(blocks) == 10
+    expected = {arm["arm_id"] for arm in manifest["arms"]}
+    assert all(set(arms) == expected and len(arms) == 2 for arms in blocks.values())
 
 
 def test_b2_2_host_preflight_is_version_only_and_not_live_execution_authority():
