@@ -25,6 +25,7 @@ def test_b2_2_static_preflight_passes_with_zero_live_calls():
     assert result["planned_runs"] == 20
     assert result["maximum_underlying_model_calls"] == 60
     assert result["canonical_envelope"] is True
+    assert result["topology_sensitive_task_set"] is True
 
 
 def test_b2_2_eligibility_envelope_is_schema_valid_and_canonical():
@@ -76,15 +77,28 @@ def test_b2_2_resource_and_authority_boundaries_are_frozen():
     assert freeze["authority"]["b4_authorized"] is False
 
 
-def test_b2_2_reuses_frozen_five_task_identity_without_semantic_redefinition():
+def test_b2_2_uses_five_topology_sensitive_executable_but_unauthorized_tasks():
     freeze = load(FREEZE)
     taskset = load(ROOT / freeze["task_set"]["source"])
-    assert freeze["task_set"]["aggregate_digest"] == "fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8"
+    assert freeze["task_set"]["aggregate_digest"] == "f7af904895107a7f00abb6ab125d7a33a7bcb5c729b0665acfe9049bf2050ee8"
+    assert digest_json(taskset["tasks"]) == taskset["aggregate_digest"]
     assert freeze["task_set"]["validator"] == "EXACT_JSON_CONFORMANCE_V1"
+    assert freeze["task_set"]["topology_sensitive"] is True
+    assert taskset["design_rules"]["topology_sensitive"] is True
+    assert taskset["design_rules"]["live_execution_authorized"] is False
     assert len(freeze["task_set"]["tasks"]) == len(taskset["tasks"]) == 5
     source = {task["task_id"]: task for task in taskset["tasks"]}
+    assert {task["task_class"] for task in taskset["tasks"]} == {
+        "ARCHITECTURE_HEAVY",
+        "DEPENDENCY_HEAVY",
+        "VALIDATION_HEAVY",
+        "DEBUGGING",
+        "HIGH_COORDINATION",
+    }
     for frozen in freeze["task_set"]["tasks"]:
         actual = source[frozen["task_id"]]
+        assert actual["task_payload"]["execution_allowed"] is True
+        assert actual["task_payload"]["validation_contract"]["validator_type"] == "EXACT_JSON_CONFORMANCE_V1"
         for field in (
             "task_class",
             "starting_state_digest",
