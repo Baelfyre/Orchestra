@@ -110,21 +110,31 @@ def static_preflight() -> dict[str, Any]:
     }
 
 
-def host_preflight(static: dict[str, Any], run: Callable[..., subprocess.CompletedProcess[str]] = subprocess.run) -> dict[str, Any]:
-    freeze = load_json(FREEZE_PATH)
+def verify_exact_boundaries(freeze: dict[str, Any]) -> dict[str, Any]:
     host = freeze["host_binding"]
     for path_key, digest_key in (("node_exe_path", "node_exe_sha256"), ("codex_js_path", "codex_js_sha256"), ("codex_package_json_path", "codex_package_json_sha256")):
         path = Path(host[path_key])
         require(path.is_file() and sha256_file(path) == host[digest_key], f"host file identity drift: {path_key}")
-    command = [host["node_exe_path"], host["codex_js_path"], "--version"]
-    version = run(command, capture_output=True, text=True, check=False, shell=False)
-    require(command[-1] == "--version" and "exec" not in command, "preflight command boundary crossed")
-    require(version.returncode == 0 and parse_cli_version(f"{version.stdout}\n{version.stderr}") == host["cli_version"], "Codex CLI version drift")
     workspace = Path(freeze["workspace_boundary"]["path"])
     ok, reason, evidence = validate_live_git_workspace(workspace)
     require(ok, reason or "workspace Git preflight failed")
     require(not (workspace / "AGENTS.md").exists(), "AGENTS.md is prohibited in pilot workspace")
     require(not [entry.name for entry in workspace.iterdir() if entry.name != ".git"], "pilot workspace is not empty")
+    return evidence
+
+
+def host_preflight(
+    static: dict[str, Any],
+    run: Callable[..., subprocess.CompletedProcess[str]] = subprocess.run,
+    verify_boundaries: Callable[[dict[str, Any]], dict[str, Any]] = verify_exact_boundaries,
+) -> dict[str, Any]:
+    freeze = load_json(FREEZE_PATH)
+    host = freeze["host_binding"]
+    evidence = verify_boundaries(freeze)
+    command = [host["node_exe_path"], host["codex_js_path"], "--version"]
+    version = run(command, capture_output=True, text=True, check=False, shell=False)
+    require(command[-1] == "--version" and "exec" not in command, "preflight command boundary crossed")
+    require(version.returncode == 0 and parse_cli_version(f"{version.stdout}\n{version.stderr}") == host["cli_version"], "Codex CLI version drift")
     return {**static, "status": "PASS_ZERO_LIVE_CALLS", "host_verified": True, "workspace_preflight": evidence, "codex_exec_invoked": False, "live_model_calls": 0}
 
 

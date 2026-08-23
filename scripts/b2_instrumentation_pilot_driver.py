@@ -126,10 +126,15 @@ def exact_executor_command(freeze: dict[str, Any]) -> list[str]:
     ]
 
 
+def exact_host_preflight() -> dict[str, Any]:
+    return host_preflight(static_preflight())
+
+
 def run_session(
     authorization: dict[str, Any], output_dir: Path, *,
     invoke: Callable[[list[str], dict[str, Any], int], tuple[dict[str, Any], dict[str, Any] | None]] = invoke_executor,
     snapshot: Callable[[], dict[str, Any]] = repository_snapshot,
+    preflight: Callable[[], dict[str, Any]] = exact_host_preflight,
 ) -> dict[str, Any]:
     freeze = load_json(FREEZE_PATH)
     manifest = load_json(ROOT / freeze["manifest"]["source"])
@@ -137,7 +142,7 @@ def run_session(
     validate_manifest(manifest)
     require(build_plan(manifest) == plan, "frozen plan does not match manifest")
     validate_authorization(authorization, freeze, manifest, plan)
-    host_preflight(static_preflight())
+    preflight()
     workspace = Path(freeze["workspace_boundary"]["path"])
     validate_output_boundary(output_dir, workspace)
     baseline = snapshot()

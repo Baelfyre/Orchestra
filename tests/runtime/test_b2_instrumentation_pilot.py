@@ -107,7 +107,7 @@ def test_host_preflight_invokes_version_only_and_zero_model_calls():
         commands.append(command)
         return subprocess.CompletedProcess(args=command, returncode=0, stdout="codex-cli 0.148.0\n", stderr="")
 
-    result = host_preflight(static_preflight(), fake_run)
+    result = host_preflight(static_preflight(), fake_run, lambda freeze: {"fixture": "ZERO_CALL"})
     assert commands and all(command[-1] == "--version" and "exec" not in command for command in commands)
     assert result["codex_exec_invoked"] is False
     assert result["live_model_calls"] == 0
@@ -134,7 +134,7 @@ def test_driver_requires_separate_exact_authorization_before_invocation(tmp_path
 def test_fixture_driver_completes_all_slots_preserving_artifacts(tmp_path: Path):
     freeze, manifest, plan = frozen_records()
     output = tmp_path / "complete"
-    summary = run_session(authorization(freeze, manifest, plan), output, invoke=fixture_invoke(tmp_path), snapshot=snapshot)
+    summary = run_session(authorization(freeze, manifest, plan), output, invoke=fixture_invoke(tmp_path), snapshot=snapshot, preflight=lambda: {})
     assert summary["status"] == "COMPLETE"
     assert summary["completed_runs"] == 8
     assert summary["live_model_calls_consumed"] == 24
@@ -150,7 +150,7 @@ def test_fixture_driver_completes_all_slots_preserving_artifacts(tmp_path: Path)
 @pytest.mark.parametrize(("status", "expected"), [("INVALID_RUN", "INVALID_RUN"), ("FAIL", "FAIL")])
 def test_driver_stops_after_first_invalid_or_validator_failure(tmp_path: Path, status: str, expected: str):
     freeze, manifest, plan = frozen_records()
-    summary = run_session(authorization(freeze, manifest, plan), tmp_path / status, invoke=fixture_invoke(tmp_path, status=status), snapshot=snapshot)
+    summary = run_session(authorization(freeze, manifest, plan), tmp_path / status, invoke=fixture_invoke(tmp_path, status=status), snapshot=snapshot, preflight=lambda: {})
     assert summary["status"] == "STOPPED"
     assert summary["stop_reason"] == expected
     assert summary["completed_runs"] == 1
@@ -159,7 +159,7 @@ def test_driver_stops_after_first_invalid_or_validator_failure(tmp_path: Path, s
 
 def test_driver_rejects_evidence_recomputation_mismatch(tmp_path: Path):
     freeze, manifest, plan = frozen_records()
-    summary = run_session(authorization(freeze, manifest, plan), tmp_path / "tampered", invoke=fixture_invoke(tmp_path, tamper=True), snapshot=snapshot)
+    summary = run_session(authorization(freeze, manifest, plan), tmp_path / "tampered", invoke=fixture_invoke(tmp_path, tamper=True), snapshot=snapshot, preflight=lambda: {})
     assert summary["status"] == "STOPPED"
     assert summary["stop_reason"].startswith("EVIDENCE_OR_VALIDATOR_FAILURE:")
     assert summary["completed_runs"] == 0
@@ -169,7 +169,7 @@ def test_driver_rejects_repository_mutation_and_workspace_output(tmp_path: Path)
     freeze, manifest, plan = frozen_records()
     states = iter([snapshot(), snapshot(), {**snapshot(), "status": " M changed"}])
     output = tmp_path / "mutated"
-    summary = run_session(authorization(freeze, manifest, plan), output, invoke=fixture_invoke(tmp_path), snapshot=lambda: next(states))
+    summary = run_session(authorization(freeze, manifest, plan), output, invoke=fixture_invoke(tmp_path), snapshot=lambda: next(states), preflight=lambda: {})
     assert summary["status"] == "STOPPED"
     assert summary["stop_reason"] == "REPOSITORY_MUTATED_DURING_RUN"
     assert (output / "session-summary.json").is_file()
