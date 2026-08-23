@@ -15,7 +15,7 @@ A6/A7/A8: NOT AUTHORIZED
 B4: BLOCKED
 ```
 
-B2.2 freezes the executable calibration identity after canonical B2.1 established that the benchmark can enact real sequential topology differences. This unit still performs **zero model calls**. It binds the exact topology envelope, task identities, Codex host identity, workspace, resource ceilings, run count, retry policy, and stop conditions that a later explicitly authorized live B2 calibration must use.
+B2.2 freezes the executable calibration identity after canonical B2.1 established that the benchmark can enact real sequential topology differences. This unit still performs **zero model calls**. It binds the exact topology envelope, topology-sensitive task identities, Codex host identity, workspace, resource ceilings, run count, retry policy, and stop conditions that a later explicitly authorized live B2 calibration must use.
 
 ```text
 FREEZE != LIVE AUTHORIZATION
@@ -53,27 +53,36 @@ SHA-256 canonical envelope digest:
 26af9b40870a13a138f52b23e45189a052875a81c8d4004366f2b93e9361bb55
 ```
 
-## Workload freeze
+## Topology-sensitive workload freeze
 
-B2 reuses the exact Padayon-grounded five-task task set already frozen for B3/C1/C2R1:
+B2 does **not** reuse the B3 communication-calibration workload as live topology evidence. During freeze review, that would have introduced two validity problems: B3's source tasks are plan-only, and its single-domain coverage is not sufficient to establish that Clockwork/Overseer ordering is a meaningful treatment.
+
+B2 therefore uses a separate self-contained task set that requires both architecture and validation reasoning while preserving the same deterministic exact-JSON validation style:
 
 ```text
-machine/benchmarking/b3-calibration-task-set.v1.json
+machine/benchmarking/b2-topology-calibration-task-set.v1.json
 aggregate task-set digest:
-fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8
+f7af904895107a7f00abb6ab125d7a33a7bcb5c729b0665acfe9049bf2050ee8
 validator:
 EXACT_JSON_CONFORMANCE_V1
 ```
 
-The five tasks remain:
+The five frozen tasks are:
 
-1. `b3-cal-padayon-r5-capability-manifest` — `SINGLE_DOMAIN`
-2. `b3-cal-padayon-o1-o2-compatibility` — `DEPENDENCY_HEAVY`
-3. `b3-cal-padayon-o3-o4-freshness` — `VALIDATION_HEAVY`
-4. `b3-cal-padayon-assurance-drift` — `DEBUGGING`
-5. `b3-cal-padayon-o5-o6-routing` — `HIGH_COORDINATION`
+1. `b2-cal-api-boundary` — `ARCHITECTURE_HEAVY`
+   - architecture-owned dependency direction plus validation-gate sufficiency.
+2. `b2-cal-schema-migration` — `DEPENDENCY_HEAVY`
+   - expand/contract sequencing plus migration validation and rollback evidence.
+3. `b2-cal-cache-freshness` — `VALIDATION_HEAVY`
+   - query-scoped cache architecture plus fail-closed freshness validation.
+4. `b2-cal-retry-amplification` — `DEBUGGING`
+   - architectural retry-budget defect diagnosis plus regression validation.
+5. `b2-cal-cross-layer-release` — `HIGH_COORDINATION`
+   - interface freeze, acceptance freeze, bounded implementation sequencing, exact-head validation, and preserved human release gate.
 
-Their starting-state, prompt, payload, and validation-contract digests are frozen in `machine/benchmarking/b2-real-calibration-freeze.v1.json`. B2 does not rewrite the task semantics. This preserves comparability with the completed communication experiments while introducing only the coordination-order treatment.
+Every task is synthetic, self-contained, network-free, non-mutating, and contains `execution_allowed=true` only so the already validated B2.1 adapter can execute it **after** separate live authorization. The task-set record itself keeps `live_execution_authorized=false`; therefore executable payload structure is not permission to perform a model call.
+
+Starting-state, prompt, task-payload, validation-contract, and expected-response digests are frozen in the task-set record, with the first four also repeated in the B2.2 freeze for exact identity checking.
 
 ## Calibration schedule
 
@@ -158,7 +167,7 @@ The repository preflight is:
 python scripts/b2_real_calibration_preflight.py
 ```
 
-This validates the static freeze, canonical envelope, candidate digests, five task identities, schedule/resource arithmetic, and no-live-authority boundary.
+This validates the static freeze, canonical envelope, candidate digests, topology-sensitive task-set aggregate and task identities, schedule/resource arithmetic, executable-payload structure, and no-live-authority boundary.
 
 After B2.2 becomes canonical, the exact local host preflight is:
 
@@ -190,7 +199,7 @@ Invalid evidence is preserved and is not silently retried or converted into task
 
 B2.2 is complete when:
 
-1. the freeze record and eligibility envelope are canonical and validated;
+1. the freeze record, topology-sensitive task set, and eligibility envelope are canonical and validated;
 2. repository static preflight passes with zero model calls;
 3. all normal exact-head repository gates pass;
 4. after canonicalization, the exact local host preflight reports `PASS_ZERO_LIVE_CALLS`;
