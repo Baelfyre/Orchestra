@@ -1,0 +1,192 @@
+{
+  "schema_version": "orchestra.b2-real-calibration-freeze.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "phase": "B2_2_REAL_CALIBRATION_FREEZE_AND_ZERO_CALL_PREFLIGHT",
+  "status": "PREPARED_ZERO_LIVE_CALLS_REQUIRES_CANONICALIZATION_AND_HOST_PREFLIGHT",
+  "recorded_date": "2026-08-22",
+  "source_baseline": {
+    "repository": "Baelfyre/Orchestra",
+    "branch": "main",
+    "sha": "3ecbe83d2c4e8ea237c529963ea0184a898ca06c",
+    "tree": "cc58620351ec14de609687547612a2a8e054af5b",
+    "signature": "VERIFIED_VALID"
+  },
+  "experiment": {
+    "experiment_id": "b2-a5-isolated-real-calibration-v1",
+    "experiment_kind": "A5_ISOLATED",
+    "stage": "CALIBRATION",
+    "randomization_seed": 20260822,
+    "repetitions_per_arm": 2,
+    "communication_mode": "DEFAULT",
+    "planned_runs": 20,
+    "paired_blocks": 10,
+    "arm_count": 2,
+    "benefit_claim_prohibited": true
+  },
+  "benchmark_subject": {
+    "repository": "Baelfyre/Orchestra",
+    "sha": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
+    "tree": "ceab55bd512ea6fde4e8e76877cbb7006d18500e"
+  },
+  "task_set": {
+    "source": "machine/benchmarking/b3-calibration-task-set.v1.json",
+    "aggregate_digest": "fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8",
+    "validator": "EXACT_JSON_CONFORMANCE_V1",
+    "task_count": 5,
+    "reuse_rule": "SAME_FROZEN_TASK_PROMPTS_STARTING_STATES_AND_VALIDATION_CONTRACTS_WITH_B2_EXECUTION_ALLOWED_ONLY_AT_LIVE_AUTHORIZED_STAGE",
+    "tasks": [
+      {
+        "task_id": "b3-cal-padayon-r5-capability-manifest",
+        "task_class": "SINGLE_DOMAIN",
+        "starting_state_digest": "4f574c6b4150d6a00f25534fcff9089f7245fb1969557db441f09481a0e07160",
+        "task_prompt_digest": "aef3872f6ee106ece139545d0afba67f41e5244b9201f66cf2763614ed3f6772",
+        "task_payload_digest": "04c4de55d313f056f190f15514340e5c445c83d7901af04a5ff46872ffe1d7eb",
+        "validation_contract_digest": "1f2f21f168285e5db15e8db84060787661ff09dcc8802f92832f0d2d874670bf"
+      },
+      {
+        "task_id": "b3-cal-padayon-o1-o2-compatibility",
+        "task_class": "DEPENDENCY_HEAVY",
+        "starting_state_digest": "3af707cddc212e07249fb6eccdb5f3ae7ad6fedf0ff4158c267e4fbbe4844d9f",
+        "task_prompt_digest": "ae437de88760c0613127f7369562ccbe28efad3ac35d38ad7dc0566d3db18f7a",
+        "task_payload_digest": "43013eedfe19f4127ae61a79ef4f1f9e4dcdf1162367d14e5230d9b8b2e5f847",
+        "validation_contract_digest": "93055d657d151d8e7e6969cdaa26ec8ba9be4dc2c59f426cd9dd63616cf4f0e1"
+      },
+      {
+        "task_id": "b3-cal-padayon-o3-o4-freshness",
+        "task_class": "VALIDATION_HEAVY",
+        "starting_state_digest": "41856aef66a8cb9b11995751ccfd67e84ae16bcb9431a6e1f1d01fd7749406bb",
+        "task_prompt_digest": "6cc9ff7e6bcaa4d8ee74026d549813f3efd2f1c77f184aae829674e3e5877fd8",
+        "task_payload_digest": "8895ad53b389c301819520af34f815c7ade24978681382af447bcd7b53db45e2",
+        "validation_contract_digest": "fc2ea317496b073c7bec304960a7c130b58d8a7114379b0c7c0d17ff4982b32d"
+      },
+      {
+        "task_id": "b3-cal-padayon-assurance-drift",
+        "task_class": "DEBUGGING",
+        "starting_state_digest": "8e7fcc7681eed61dca0a5d9dd68aa554146eb2eb4376609408e8df2dd77438c0",
+        "task_prompt_digest": "4ed1e8ae833c0c6db22ee2711a4b6897af748bac459e54e005f8b3204fa617cc",
+        "task_payload_digest": "384890c16d7f073a13230202ad5b437336e7f9e69e363a55ffbf99df0d65d6cb",
+        "validation_contract_digest": "51e1c685014b10f4ac340760ec924383938ad45014018454df0189b886431a96"
+      },
+      {
+        "task_id": "b3-cal-padayon-o5-o6-routing",
+        "task_class": "HIGH_COORDINATION",
+        "starting_state_digest": "00336a2691d1997db5f66a0a28e1ebd9c723880153718905fe095ef10c672463",
+        "task_prompt_digest": "9c05bf1506ba0fba8fe8a7fa9bee2461415182e8e7490dddf7304679143b89db",
+        "task_payload_digest": "864d80a80c69e6a41b029955752e706d6e05f7a8a91871144c3d1e03c4d93de7",
+        "validation_contract_digest": "a67ffceaa82962b21c0c72199c13316b0557d290002c8181209498c34089d654"
+      }
+    ]
+  },
+  "topology": {
+    "eligibility_envelope": "machine/benchmarking/b2-real-calibration-eligibility-envelope.v1.json",
+    "eligibility_envelope_digest": "26af9b40870a13a138f52b23e45189a052875a81c8d4004366f2b93e9361bb55",
+    "candidate_ids": [
+      "b2.seq.clockwork-overseer.v1",
+      "b2.seq.overseer-clockwork.v1"
+    ],
+    "candidate_digests": {
+      "b2.seq.clockwork-overseer.v1": "c28e14b11c586cd21397892239ce881f46e230993353013918212dbef7291183",
+      "b2.seq.overseer-clockwork.v1": "067a8867aaa3a7bc82b4915da40ec60222413e261460863b1e8de90b836773f3"
+    },
+    "deterministic_baseline_candidate_id": "b2.seq.clockwork-overseer.v1",
+    "required_specialists": ["clockwork", "overseer"],
+    "required_specialist_set_digest": "9075492b1f72c6bd6ca7f14e9c223c26e93348098508d6aa9c12fc30625133de",
+    "topology_effective": false,
+    "shadow_influenced_execution": false,
+    "parallel_execution_authorized": false,
+    "candidate_selected_by": "SHARED_BENCHMARK_HARNESS_ARM_SCHEDULE"
+  },
+  "host_binding": {
+    "provider": "openai-codex",
+    "cli_version": "0.148.0",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "medium",
+    "transport": "jsonl-usage",
+    "counter_id": "codex-cli-0.148.0:jsonl-usage:gpt-5.6-sol:medium",
+    "binding_strategy": "NODE_EXACT_NPM_ENTRYPOINT",
+    "node_exe_path": "C:\\Program Files\\nodejs\\node.exe",
+    "node_exe_sha256": "e921fe5307e29bf6fd00000dd594356affd3a7b044e52720c7f10decbdc305b9",
+    "codex_js_path": "C:\\Users\\ACER\\.codex-cli-0.148.0\\node_modules\\@openai\\codex\\bin\\codex.js",
+    "codex_js_sha256": "134063e133f0b4244fa3b251acf973d4fe4b4aeeacbdc135211bf480f59f1477",
+    "codex_package_json_path": "C:\\Users\\ACER\\.codex-cli-0.148.0\\node_modules\\@openai\\codex\\package.json",
+    "codex_package_json_sha256": "071f84ec4e6ff199b3dce2c2560a77c2248443b0d8b17e64f6e3f08427d32fc2"
+  },
+  "workspace_boundary": {
+    "path": "D:\\Dev\\Repositories\\+Orchestra-C2-Workspace",
+    "git_backed": true,
+    "empty_except_git_metadata": true,
+    "agents_md_absent": true,
+    "repository_mutation_prohibited": true,
+    "sandbox": "read-only",
+    "approval_policy": "never",
+    "agents_enabled": false,
+    "web_search": "disabled",
+    "shell_tool": false
+  },
+  "resource_freeze": {
+    "per_run_total_token_ceiling": 75000,
+    "cumulative_accepted_token_ceiling": 1200000,
+    "maximum_benchmark_runs": 20,
+    "maximum_underlying_model_calls": 60,
+    "model_calls_per_run": 3,
+    "call_timeout_seconds": 600,
+    "automatic_retry": false,
+    "stop_on_first_invalid_run": true
+  },
+  "resource_budget_digest": "32ea2bda042dd05467fbbd02f95b2504a32c5a2c4c0080c5b7b53ec225f50c78",
+  "experimental_constraints": {
+    "a5_shadow_ranker_may_select_execution_arm": false,
+    "a5_execution_effective": false,
+    "production_runtime_attachment": false,
+    "task_network_access": false,
+    "repository_mutation": false,
+    "automatic_retry": false,
+    "attempts_per_slot": 1,
+    "stop_on_invalid_run": true,
+    "stop_on_identity_drift": true,
+    "stop_on_disallowed_tool_event": true,
+    "stop_on_resource_ceiling_breach": true
+  },
+  "zero_call_preflight": {
+    "script": "scripts/b2_real_calibration_preflight.py",
+    "static_repository_preflight_required": true,
+    "exact_host_preflight_required_after_canonicalization": true,
+    "model_calls_permitted": 0,
+    "expected_success_status": "PASS_ZERO_LIVE_CALLS",
+    "host_preflight_may_invoke": "CODEX_VERSION_ONLY",
+    "host_preflight_may_not_invoke": "CODEX_EXEC"
+  },
+  "activation": {
+    "live_execution_authorized": false,
+    "canonicalization_required": true,
+    "separate_explicit_human_live_execution_authorization_required": true,
+    "automatic_continuation": false
+  },
+  "fail_closed_stop_conditions": [
+    "FREEZE_RECORD_DRIFT",
+    "ELIGIBILITY_ENVELOPE_DRIFT",
+    "TASK_SET_OR_TASK_IDENTITY_DRIFT",
+    "CLI_VERSION_OR_EXECUTABLE_HASH_DRIFT",
+    "PROVIDER_MODEL_REASONING_OR_COUNTER_DRIFT",
+    "WORKSPACE_NOT_EMPTY_CLEAN_GIT_BACKED_OR_AGENTS_MD_PRESENT",
+    "DISALLOWED_TOOL_EVENT",
+    "REPOSITORY_MUTATION_EVENT",
+    "INVALID_RUN_OR_VALIDATOR_FAILURE",
+    "PER_RUN_TOKEN_CEILING_BREACH",
+    "CUMULATIVE_ACCEPTED_TOKEN_CEILING_BREACH",
+    "MAXIMUM_MODEL_CALL_COUNT_BREACH",
+    "ANY_UNADJUDICATED_IDENTITY_OR_AUTHORITY_DRIFT"
+  ],
+  "authority": {
+    "live_execution_authorized": false,
+    "a5_execution_effective_promotion": false,
+    "a6_authorized": false,
+    "a7_authorized": false,
+    "a8_authorized": false,
+    "b4_authorized": false,
+    "release_publication_authorized": false,
+    "deployment_authorized": false,
+    "policy_activation_authorized": false
+  },
+  "next_gate": "CANONICALIZE_B2_2_THEN_RUN_EXACT_HOST_ZERO_CALL_PREFLIGHT_THEN_SEPARATE_HUMAN_LIVE_EXECUTION_AUTHORIZATION"
+}
