@@ -1,5 +1,11 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B2.4 Stopped Attempt Reconciliation - Candidate
+
+- Records the fail-closed first-slot stop, retained raw-evidence archive digest, zero accepted runs, and independently reconciled zero live model calls.
+- Corrects the B2.4 driver to use the topology executor's exact `--codex-command-prefix-json` and `--workspace-dir` parser contract and adds a zero-call regression check.
+- Preserves the invalid attempt without retry or replacement, re-freezes the corrected driver as not authorized, and keeps B2.5, A5 promotion, and B4 blocked.
+
 ## Post-v1.6.0 Comparative Benchmark B2.4 Instrumentation Pilot Preparation - Candidate
 
 - Freezes the human-authorized two-task selection, exact paired eight-run plan, pinned Codex host/workspace identities, maximum 24-call ceiling, retry prohibition, and fail-closed stop conditions.

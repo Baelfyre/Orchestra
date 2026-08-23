@@ -119,8 +119,8 @@ def exact_executor_command(freeze: dict[str, Any]) -> list[str]:
         "--eligibility-envelope", str(ROOT / freeze["topology"]["eligibility_envelope"]),
         "--expected-cli-version", host["cli_version"], "--model", host["model"],
         "--reasoning-effort", host["reasoning_effort"],
-        "--codex-prefix-json", json.dumps([host["node_exe_path"], host["codex_js_path"]]),
-        "--workspace", freeze["workspace_boundary"]["path"],
+        "--codex-command-prefix-json", json.dumps([host["node_exe_path"], host["codex_js_path"]]),
+        "--workspace-dir", freeze["workspace_boundary"]["path"],
         "--call-timeout-seconds", str(freeze["resource_freeze"]["call_timeout_seconds"]),
         "--per-run-total-token-ceiling", str(freeze["resource_freeze"]["per_run_total_token_ceiling"]),
     ]
