@@ -638,7 +638,7 @@
     "keep_c2_machine_json_prompt_results_separate_from_frozen_c1_natural_language_evidence": true,
     "preserve_c2r1_primary_29_accepted_plus_1_provider_outage_invalid_record": true,
     "treat_c2r1_supplemental_recovery_as_sensitivity_evidence_not_primary_replacement": true,
-    "treat_adaptive_a1_memory_as_non_authorizing_local_data_not_runtime_policy": true,
+    "treat_adaptive_a1_memory_as_non-authorizing_local_data_not_runtime_policy": true,
     "treat_adaptive_a2_context_as_advisory_only_after_existing_runtime_gates": true,
     "preserve_explicit_adaptive_precedence_over_same_scope_inferred_lifecycle": true,
     "treat_a3_shadow_state_as_non-authorizing_and_separate_from_a1_profile_and_a2_context": true,
@@ -694,7 +694,7 @@
     "preserve_o1_o6_compliance_semantics_across_o7_projection_and_transport_paths": true,
     "do_not_claim_o7_token_savings_until_cross_path_efficiency_measurement_exists": true,
     "treat_v1_5_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
-    "treat_v1_6_0_as_published_verified_only_when_tag_release_identity_match": true,
+    "treat_v1_6_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
     "when_evaluating_a_published_tag_or_release_prefer_live_verified_git_and_release_identity_over_prepublication_snapshot_fields": true,
     "treat_original_c2_external_artifact_hashes_as_historical_not_current_execution_authority": true,
     "require_c2_portability_r1_live_authorization_record_before_first_model_call": true
