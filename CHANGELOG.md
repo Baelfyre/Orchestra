@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B2.3.1 Confirmatory Evidence Instrumentation - Candidate
+
+- Implements bounded synthetic specialist advisory retention with exact UTF-8 bytes and raw-byte SHA-256 evidence so context-transfer measurements are independently recomputable.
+- Preserves exact Codex `turn.completed.usage` objects and deterministic per-call counter identity/stability keys without changing the shared Codex adapter.
+- Adds pure cross-run stability classification (`STABLE_EXACT`, `CACHE_STATE_VARIANT`, `INPUT_COUNTER_VARIANT`, `UNSTABLE_ATTRIBUTION`) and rejects impossible cached-input counters.
+- Adds fail-closed 16,384-byte advisory retention ceiling and deterministic zero-live-call fixture coverage.
+- Adds machine/human B2.3.1 instrumentation contracts while keeping B2 calibration historical evidence unchanged.
+- Authorizes no B2.4 pilot, B2.5 confirmatory execution, A5 promotion, A6-A8, B4, release/deployment, policy activation, integration refresh, or destructive operation.
+
 ## Post-v1.6.0 Comparative Benchmark B2.2 Real Calibration Freeze and Zero-Call Preflight - Candidate
 
 - Freezes the exact B2 isolated A5 topology-calibration envelope, topology-sensitive task set, executable manifest, paired 20-run schedule, pinned Codex 0.148.0 / `gpt-5.6-sol` / medium host identity, workspace identity, and bounded resource ceilings before any live benchmark execution.
