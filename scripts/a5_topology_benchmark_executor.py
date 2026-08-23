@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Non-production sequential-topology executor for Orchestra B2 A5 calibration.
+"""Non-production sequential-topology executor for Orchestra B2 A5 measurement.
 
 This adapter exists only for the shared comparative benchmark. It enacts a
 frozen, already-eligible A5 topology candidate by changing the order in which
@@ -30,6 +30,15 @@ from orchestra_runtime.adaptive.topology import (  # noqa: E402
     TopologyStage,
     build_topology_evidence_packet,
     rank_shadow_topologies,
+)
+from scripts.b2_confirmatory_evidence import (  # noqa: E402
+    B2EvidenceError,
+    MAX_RETAINED_ADVISORY_UTF8_BYTES,
+    build_advisory_reference,
+    build_counter_identity,
+    build_response_evidence,
+    build_usage_evidence,
+    recompute_context_transfer_ledger,
 )
 from scripts.codex_benchmark_executor import (  # noqa: E402
     ALLOWED_REASONING_EFFORTS,
@@ -63,7 +72,8 @@ SPECIALIST_PROJECTIONS = {
     ),
 }
 SPECIALIST_PROJECTION_VERSION = "orchestra.b2-specialist-projection.v1"
-EXECUTOR_BINDING_VERSION = "orchestra.b2-a5-topology-executor.v1"
+EXECUTOR_BINDING_VERSION = "orchestra.b2-a5-topology-executor.v1.1"
+EVIDENCE_INSTRUMENTATION_VERSION = "orchestra.b2-confirmatory-evidence-instrumentation.v1"
 ALLOWED_SPECIALISTS = frozenset(SPECIALIST_PROJECTIONS)
 SAFETY_FIELDS = (
     "required_specialist_omission",
@@ -310,11 +320,16 @@ def run_codex_call(
         parsed = parse_codex_jsonl(completed.stdout)
     except (ValueError, RuntimeError, PermissionError) as exc:
         raise TopologyExecutorError(f"Codex JSONL rejected: {exc}") from exc
+    completed_events = [event for event in parsed["events"] if event.get("type") == "turn.completed"]
+    if len(completed_events) != 1 or not isinstance(completed_events[0].get("usage"), dict):
+        raise TopologyExecutorError("Codex parsed stream did not preserve one exact turn.completed usage object")
+    exact_usage = copy.deepcopy(completed_events[0]["usage"])
     usage = parsed["usage"]
     total_tokens = usage["input_tokens"] + usage["output_tokens"]
     return {
         "response": parsed["response"],
         "usage": usage,
+        "turn_completed_usage": exact_usage,
         "total_tokens": total_tokens,
         "elapsed_ms": elapsed_ms,
         "agent_message_count": parsed["agent_message_count"],
@@ -353,6 +368,43 @@ def invalid_result(request: Mapping[str, Any], reason: str, evidence: Mapping[st
     }
 
 
+def _workspace_identity(workspace: Path) -> tuple[str, dict[str, Any]]:
+    payload = {
+        "resolved_path": str(workspace.resolve()),
+        "git_is_inside_work_tree": True,
+    }
+    return digest_json(payload), payload
+
+
+def _call_usage_evidence(
+    call: Mapping[str, Any],
+    *,
+    counter_id: str,
+    prompt_digest: str,
+    role: str,
+    specialist: str | None,
+    expected_cli_version: str,
+    model: str,
+    reasoning_effort: str,
+    workspace_identity: str,
+) -> dict[str, Any]:
+    identity = build_counter_identity(
+        counter_id=counter_id,
+        prompt_digest=prompt_digest,
+        role=role,
+        specialist=specialist,
+        cli_version=expected_cli_version,
+        model=model,
+        reasoning_effort=reasoning_effort,
+        transport=TRANSPORT_ID,
+        workspace_identity=workspace_identity,
+    )
+    raw_usage = call.get("turn_completed_usage", call.get("usage"))
+    if not isinstance(raw_usage, Mapping):
+        raise B2EvidenceError("call did not preserve turn.completed usage evidence")
+    return build_usage_evidence(raw_usage=raw_usage, counter_identity=identity)
+
+
 def execute_request(
     request: dict[str, Any],
     *,
@@ -372,11 +424,13 @@ def execute_request(
     started = time.monotonic()
     base_evidence: dict[str, Any] = {
         "executor_binding_version": EXECUTOR_BINDING_VERSION,
+        "evidence_instrumentation_version": EVIDENCE_INSTRUMENTATION_VERSION,
         "specialist_projection_version": SPECIALIST_PROJECTION_VERSION,
         "specialist_projection_digests": {name: digest_json(text) for name, text in SPECIALIST_PROJECTIONS.items()},
         "eligibility_digest": eligibility_digest,
         "live_execution_authorized_by_adapter": False,
         "retry_performed": False,
+        "retained_advisory_utf8_byte_ceiling": MAX_RETAINED_ADVISORY_UTF8_BYTES,
     }
     try:
         candidate = validate_candidate_for_b2(request, envelope, eligibility_digest)
@@ -389,6 +443,11 @@ def execute_request(
         base_evidence["workspace_preflight"] = workspace_evidence
         if not workspace_ok:
             return invalid_result(request, workspace_reason or "CORRUPTED_STARTING_STATE", {**base_evidence, "error": "Git workspace preflight failed"})
+        workspace_identity, workspace_identity_payload = _workspace_identity(workspace)
+        base_evidence["workspace_identity"] = {
+            **workspace_identity_payload,
+            "identity_digest": workspace_identity,
+        }
 
         version_cp = version_runner(list(command_prefix) + ["--version"], capture_output=True, text=True, check=False, shell=False)
         if version_cp.returncode != 0:
@@ -417,24 +476,149 @@ def execute_request(
         if task_payload.get("execution_allowed") is not True:
             raise TopologyExecutorError("task payload is not live-execution enabled")
 
+        counter_id = f"codex-cli-{expected_cli_version}:{TRANSPORT_ID}:{model}:{reasoning_effort}"
         calls: list[dict[str, Any]] = []
         advisory_outputs: list[tuple[str, str]] = []
+        advisory_records: list[dict[str, Any]] = []
         call_evidence: list[dict[str, Any]] = []
         for index, stage in enumerate(candidate.stages, start=1):
             specialist = stage.specialists[0]
+            prior_refs = [
+                build_advisory_reference(
+                    source_call_index=int(record["source_call_index"]),
+                    specialist=str(record["specialist"]),
+                    response_evidence=record["response_evidence"],
+                )
+                for record in advisory_records
+            ]
             prompt = render_specialist_prompt(specialist=specialist, task_prompt=task_prompt, prior_outputs=advisory_outputs)
+            prompt_digest = digest_json(prompt)
             call = call_runner(prompt=prompt, prefix=command_prefix, workspace=workspace, model=model, reasoning_effort=reasoning_effort, timeout_seconds=call_timeout_seconds)
             calls.append(call)
-            advisory_outputs.append((specialist, str(call["response"])))
+            response_text = str(call["response"])
+            try:
+                response_evidence = build_response_evidence(response_text)
+            except B2EvidenceError as exc:
+                raw = response_text.encode("utf-8")
+                return invalid_result(
+                    request,
+                    "MEASUREMENT_CAPTURE_FAILURE",
+                    {
+                        **base_evidence,
+                        "error": str(exc),
+                        "candidate_id": candidate.candidate_id,
+                        "observed_call_count": len(calls),
+                        "rejected_advisory": {
+                            "specialist": specialist,
+                            "response_utf8_bytes": len(raw),
+                            "response_utf8_sha256": sha256(raw).hexdigest(),
+                        },
+                    },
+                )
+            try:
+                usage_evidence = _call_usage_evidence(
+                    call,
+                    counter_id=counter_id,
+                    prompt_digest=prompt_digest,
+                    role="SPECIALIST",
+                    specialist=specialist,
+                    expected_cli_version=expected_cli_version,
+                    model=model,
+                    reasoning_effort=reasoning_effort,
+                    workspace_identity=workspace_identity,
+                )
+            except B2EvidenceError as exc:
+                return invalid_result(
+                    request,
+                    "MEASUREMENT_CAPTURE_FAILURE",
+                    {
+                        **base_evidence,
+                        "error": str(exc),
+                        "candidate_id": candidate.candidate_id,
+                        "observed_call_count": len(calls),
+                        "rejected_turn_completed_usage": copy.deepcopy(call.get("turn_completed_usage", call.get("usage"))),
+                    },
+                )
+            evidence = {
+                "role": "SPECIALIST",
+                "stage_index": index,
+                "stage_id": stage.stage_id,
+                "specialist": specialist,
+                "prompt_digest": prompt_digest,
+                **response_evidence,
+                "prior_advisory_inputs": prior_refs,
+                "usage": copy.deepcopy(call["usage"]),
+                **usage_evidence,
+                "total_tokens": int(call["total_tokens"]),
+                "elapsed_ms": int(call["elapsed_ms"]),
+            }
+            call_evidence.append(evidence)
+            advisory_outputs.append((specialist, response_text))
+            advisory_records.append(
+                {
+                    "source_call_index": index,
+                    "specialist": specialist,
+                    "response_evidence": response_evidence,
+                }
+            )
             total_so_far = sum(int(item["total_tokens"]) for item in calls)
-            call_evidence.append({"role": "SPECIALIST", "stage_index": index, "stage_id": stage.stage_id, "specialist": specialist, "prompt_digest": digest_json(prompt), "response_digest": digest_json(str(call["response"])), "usage": copy.deepcopy(call["usage"]), "total_tokens": int(call["total_tokens"]), "elapsed_ms": int(call["elapsed_ms"])})
             if total_so_far > per_run_total_token_ceiling:
                 return invalid_result(request, "MEASUREMENT_CAPTURE_FAILURE", {**base_evidence, "error": "per-run total-token ceiling exceeded before finalization", "candidate_id": candidate.candidate_id, "calls": call_evidence, "observed_total_tokens": total_so_far, "per_run_total_token_ceiling": per_run_total_token_ceiling})
 
         finalizer_prompt = render_finalizer_prompt(task_prompt=task_prompt, advisories=advisory_outputs)
+        finalizer_prompt_digest = digest_json(finalizer_prompt)
         final_call = call_runner(prompt=finalizer_prompt, prefix=command_prefix, workspace=workspace, model=model, reasoning_effort=reasoning_effort, timeout_seconds=call_timeout_seconds)
         calls.append(final_call)
-        call_evidence.append({"role": "FIXED_FINALIZER", "stage_index": None, "stage_id": "fixed.finalizer", "specialist": None, "prompt_digest": digest_json(finalizer_prompt), "response_digest": digest_json(str(final_call["response"])), "usage": copy.deepcopy(final_call["usage"]), "total_tokens": int(final_call["total_tokens"]), "elapsed_ms": int(final_call["elapsed_ms"])})
+        finalizer_refs = sorted(
+            [
+                build_advisory_reference(
+                    source_call_index=int(record["source_call_index"]),
+                    specialist=str(record["specialist"]),
+                    response_evidence=record["response_evidence"],
+                )
+                for record in advisory_records
+            ],
+            key=lambda item: str(item["specialist"]),
+        )
+        try:
+            final_usage_evidence = _call_usage_evidence(
+                final_call,
+                counter_id=counter_id,
+                prompt_digest=finalizer_prompt_digest,
+                role="FIXED_FINALIZER",
+                specialist=None,
+                expected_cli_version=expected_cli_version,
+                model=model,
+                reasoning_effort=reasoning_effort,
+                workspace_identity=workspace_identity,
+            )
+        except B2EvidenceError as exc:
+            return invalid_result(
+                request,
+                "MEASUREMENT_CAPTURE_FAILURE",
+                {
+                    **base_evidence,
+                    "error": str(exc),
+                    "candidate_id": candidate.candidate_id,
+                    "observed_call_count": len(calls),
+                    "calls": call_evidence,
+                    "rejected_turn_completed_usage": copy.deepcopy(final_call.get("turn_completed_usage", final_call.get("usage"))),
+                },
+            )
+        finalizer_evidence = {
+            "role": "FIXED_FINALIZER",
+            "stage_index": None,
+            "stage_id": "fixed.finalizer",
+            "specialist": None,
+            "prompt_digest": finalizer_prompt_digest,
+            "response_digest": digest_json(str(final_call["response"])),
+            "advisory_inputs": finalizer_refs,
+            "usage": copy.deepcopy(final_call["usage"]),
+            **final_usage_evidence,
+            "total_tokens": int(final_call["total_tokens"]),
+            "elapsed_ms": int(final_call["elapsed_ms"]),
+        }
+        call_evidence.append(finalizer_evidence)
         totals = aggregate_calls(calls)
         if totals["total_tokens"] > per_run_total_token_ceiling:
             return invalid_result(request, "MEASUREMENT_CAPTURE_FAILURE", {**base_evidence, "error": "per-run total-token ceiling exceeded", "candidate_id": candidate.candidate_id, "calls": call_evidence, "observed_total_tokens": totals["total_tokens"], "per_run_total_token_ceiling": per_run_total_token_ceiling})
@@ -442,19 +626,31 @@ def execute_request(
         valid, observed, validation_error = validate_exact_json_response(str(final_call["response"]), task_payload)
         outcome = {"status": "PASS" if valid else "FAIL", "invalid_reason": None, "task_completed": True, "validation_passed": valid, "governance_valid": True}
         safety = _empty_safety()
-        context_transfer_bytes = sum(len(text.encode("utf-8")) for _, text in advisory_outputs[:-1]) + sum(len(text.encode("utf-8")) for _, text in advisory_outputs)
+        specialist_evidence = [item for item in call_evidence if item["role"] == "SPECIALIST"]
+        context_ledger = recompute_context_transfer_ledger(
+            specialist_calls=specialist_evidence,
+            finalizer_call=finalizer_evidence,
+        )
+        context_transfer_bytes = context_ledger["recomputed_context_transfer_bytes"]
+        context_ledger = recompute_context_transfer_ledger(
+            specialist_calls=specialist_evidence,
+            finalizer_call=finalizer_evidence,
+            reported_context_transfer_bytes=context_transfer_bytes,
+        )
         raw_evidence = {
             **base_evidence,
             "candidate_id": candidate.candidate_id,
             "candidate_digest": digest_json(candidate.to_dict()),
             "candidate_stage_order": [{"stage_id": stage.stage_id, "mode": stage.mode, "specialists": list(stage.specialists)} for stage in candidate.stages],
             "calls": call_evidence,
+            "context_transfer_recomputation": context_ledger,
             "final_response": str(final_call["response"]),
             "observed_json": observed,
             "validation_error": validation_error,
             "per_run_total_token_ceiling": per_run_total_token_ceiling,
             "observed_total_tokens": totals["total_tokens"],
-            "counter_id": f"codex-cli-{expected_cli_version}:{TRANSPORT_ID}:{model}:{reasoning_effort}",
+            "counter_id": counter_id,
+            "counter_stability_evaluation_scope": "CROSS_RUN_RECONCILIATION_REQUIRED",
         }
         wall_ms = int((time.monotonic() - started) * 1000)
         return {
@@ -473,7 +669,7 @@ def execute_request(
             "raw_evidence": raw_evidence,
             "a5_shadow_observation": shadow,
         }
-    except (TopologyExecutorError, OSError, subprocess.SubprocessError, ValueError, KeyError, TypeError) as exc:
+    except (TopologyExecutorError, B2EvidenceError, OSError, subprocess.SubprocessError, ValueError, KeyError, TypeError) as exc:
         return invalid_result(request, "MEASUREMENT_CAPTURE_FAILURE", {**base_evidence, "error": str(exc)})
 
 
