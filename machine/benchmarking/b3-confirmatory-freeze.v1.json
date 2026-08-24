@@ -1,0 +1,79 @@
+{
+  "activation": {
+    "live_execution_authorized": false
+  },
+  "communication_binding": {
+    "caveman_blob": "bd22d86b32e4a99e09ff7482a35509faac7a6f65",
+    "caveman_repo_path": "D:\\Dev\\Orchestra-Benchmark-Evidence\\b3-pilot-host\\caveman",
+    "caveman_revision": "ae405e872270acc57484693612ae038b16c8f6cd"
+  },
+  "evidence_boundary": {
+    "benefit_claim_allowed_before_reconciliation": false,
+    "counter_pooling_with_calibration": false,
+    "primary_dataset": "CONFIRMATORY_SESSION_ONLY"
+  },
+  "host_binding": {
+    "cli_version": "1.1.19",
+    "counter_id": "antigravity-cli-1.1.19:stream-json-usage:gemini-3.7-flash-high",
+    "executable_path": "D:\\Dev\\Orchestra-Benchmark-Evidence\\b3-pilot-host\\agy-1.1.19\\agy.exe",
+    "executable_sha256": "09b8290ff6da848dc7ad7018475887762fca4a994335ad599b6dfa90a27298ee",
+    "model": "gemini-3.7-flash-high",
+    "model_display_name": "Gemini 3.7 Flash (High)",
+    "provider": "antigravity",
+    "reasoning_setting": "high",
+    "settings_path": "D:\\Dev\\Orchestra-Benchmark-Evidence\\b3-pilot-host\\settings.json",
+    "settings_sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "transport": "stream-json-usage"
+  },
+  "implementation": {
+    "driver": "scripts/b3_confirmatory_driver.py",
+    "executor_adapter": "scripts/b3_antigravity_executor.py",
+    "preflight": "scripts/b3_confirmatory_preflight.py",
+    "sha256": {
+      "scripts/antigravity_benchmark_executor.py": "fe1715a88aad11ea2dd93899c6adc0b266042d5ed495304e7cd879923819762f",
+      "scripts/b3_antigravity_executor.py": "d48d1d41ae003385e906df8e298e9cd1fb69c20a78e6a7e9023672c9ca26711e",
+      "scripts/b3_confirmatory_driver.py": "ab2001b245932822136e35dfa17adc86e377b6b368854e89079f254f4ab996e7",
+      "scripts/b3_confirmatory_preflight.py": "72d8452bb3fca4141077baac6aca83ea2719296073607a2d7e30dfbd4764fc2e",
+      "scripts/benchmarking/calibration_task_validator.py": "045e60aee52e7f64bd9325553acc42db9308050a598349122816e266feeb7e01",
+      "scripts/comparative_benchmark_runner.py": "5d73956ce61769258838b6d00233c1ba751799bff4aba85e1a7a6d604019a670"
+    }
+  },
+  "manifest": {
+    "digest": "6b0c591072666473ffd48503f14c3ede8a6895d700df82d23f0e6e6357693abc",
+    "source": "machine/benchmarking/b3-confirmatory-manifest.v1.json"
+  },
+  "phase": "B3_CONFIRMATORY_PREPARATION",
+  "plan": {
+    "digest": "d87d7d13d653e9a6ed599310f2094abe841cae7717ce8c3c439a2c6c2c864c69",
+    "source": "machine/benchmarking/b3-confirmatory-plan.v1.json"
+  },
+  "preregistration": {
+    "digest": "3e6cf35815395ef0fb34341464983827d16729a1d9982c301e48f848bce17bcb",
+    "source": "machine/benchmarking/b3-confirmatory-preregistration.v1.json"
+  },
+  "repository_binding": {
+    "git_executable": "C:\\Program Files\\Git\\bin\\git.exe"
+  },
+  "resource_freeze": {
+    "attempts_per_slot": 1,
+    "automatic_retry": false,
+    "cumulative_token_ceiling": 20250000,
+    "maximum_model_calls": 450,
+    "maximum_runs": 450,
+    "per_run_total_token_ceiling": 45000,
+    "stop_on_first_invalid_run": true,
+    "stop_on_first_validator_failure": true
+  },
+  "schema_version": "orchestra.b3-confirmatory-freeze.v1",
+  "task_set": {
+    "digest": "c29b6988df9b53deb02b938849c6115b7bc7f18b0a3c7093183ee0d9eae4b7ee",
+    "source": "machine/benchmarking/b3-confirmatory-task-set.v1.json"
+  },
+  "workspace_boundary": {
+    "allowed_entries": [
+      ".git"
+    ],
+    "path": "D:\\Dev\\Orchestra-Benchmark-Evidence\\b3-pilot-host\\workspace",
+    "repository_mutation_allowed": false
+  }
+}

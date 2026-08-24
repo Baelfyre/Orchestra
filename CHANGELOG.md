@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B3 Pilot Reconciliation and Confirmatory Preparation - Candidate
+
+- Reconciles the valid 180/180 B3 pilot with 180 model calls, 3,533,572 accepted tokens, complete digest verification, and no invalid, safety, or repository-boundary event.
+- Records pilot-only Murmurs signals and preserves the prohibition on a pilot benefit claim.
+- Derives 48 paired blocks from pilot output-token variance, applies the B0 50-task floor, and freezes a 450-run confirmatory design across three repetitions and three communication arms.
+- Preregisters the primary endpoint, practical/statistical thresholds, quality and regression guards, zero-call preflight, one-attempt driver, and exact 450-call ceiling.
+
 ## Post-v1.6.0 Comparative Benchmark B3 Pilot Preparation - Candidate
 
 - Freezes 20 held-out synthetic tasks across ten B0 strata, three repetitions, three communication arms, and an exact 180-run randomized plan.
