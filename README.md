@@ -91,7 +91,41 @@ A separately authorized supplemental recovery replicate reproduced the missing D
 - **Full human-readable analysis:** [Codex C2R1 Machine-JSON Reconciliation](docs/benchmarking/CODEX_C2R1_MACHINE_JSON_RECONCILIATION.md)
 - **Machine-readable result:** [`machine/benchmarking/codex-c2r1-machine-json-reconciliation.v1.json`](machine/benchmarking/codex-c2r1-machine-json-reconciliation.v1.json)
 
-C1 and C2R1 remain calibration evidence only. They grant no production promotion, A5 execution promotion, A6, B4, release publication, deployment, or automatic policy change.
+### B-phase confirmatory closeout
+
+The later B program preregistered and executed larger confirmatory experiments instead of promoting the calibration signals. The result was negative for both tested benefit hypotheses.
+
+| Confirmatory result | Outcome |
+| --- | --- |
+| B2 topology experiment | `CONFIRMATORY_BENEFIT_NOT_ESTABLISHED` |
+| B2.5 replacement | 40 / 40 accepted, 120 model calls |
+| B3 Murmurs confirmatory | 450 / 450 accepted, 450 model calls |
+| B3 median output-token reduction | **-1.03%** |
+| B3 bootstrap 95% CI | **[-4.68%, 2.07%]** |
+| B3 exact sign-test | **p = 0.8699229710286416** |
+| B3 conclusion | `CONFIRMATORY_BENEFIT_NOT_ESTABLISHED` |
+| B4 interaction experiment | `NOT_ELIGIBLE_NO_EXECUTION` |
+| B5 | Complete, no promotion |
+| Total B-phase model calls | **911**, including preserved stopped/invalid evidence |
+
+**Final Murmurs disposition:** Murmurs remains a preserved experimental/research communication format. The confirmatory evidence did not establish a repeatable output-token efficiency benefit, so Murmurs is **not promoted to default execution, not required by specialists, and not attached to production/runtime authority**. A5 topology execution likewise receives no execution-effective promotion from B2.
+
+This is treated as a useful negative result, not as an experiment to rerun until positive. Any future reconsideration requires a materially different, outcome-blind hypothesis and a separately governed experiment while preserving the existing negative evidence.
+
+- **Terminal decision:** [B-Phase Terminal Closeout Decision](docs/benchmarking/B_PHASE_CLOSEOUT_DECISION.md)
+- **B3 reconciliation:** [B3 Confirmatory Reconciliation](docs/benchmarking/B3_CONFIRMATORY_RECONCILIATION.md)
+- **Final B synthesis:** [B-Phase Final Evidence Synthesis](docs/benchmarking/B_PHASE_FINAL_EVIDENCE_SYNTHESIS.md)
+- **Machine evidence:** [`machine/benchmarking/b3-confirmatory-reconciliation.v1.json`](machine/benchmarking/b3-confirmatory-reconciliation.v1.json), [`machine/benchmarking/b4-controlled-interaction-disposition.v1.json`](machine/benchmarking/b4-controlled-interaction-disposition.v1.json), [`machine/benchmarking/b5-final-evidence-synthesis.v1.json`](machine/benchmarking/b5-final-evidence-synthesis.v1.json)
+
+Earlier C1 and C2R1 records remain calibration evidence and are interpreted in light of the completed B confirmatory program. None of these measurements grants production promotion, A5 execution promotion, release publication, deployment, or automatic policy change.
+
+## Current development workstream
+
+With the comparative B program closed, the selected next Orchestra workstream is **governed UI/UX specialist enhancement and visual-fidelity engineering**.
+
+`UIX-0` is the active bounded unit. It audits specialist ownership, design-source preservation, project component/token reuse, rendered-validation evidence, accessibility invariants, external-tool overlap, and the inputs needed for a library-neutral UI Design Contract. UIX-0 is planning and contract audit only; it does not authorize dependency installation, Figma mutation, target-project UI changes, release, deployment, or production mutation.
+
+See [Governed UI Design Fidelity System Plan](docs/project/UI_DESIGN_FIDELITY_SYSTEM_PLAN.md).
 
 ## How Orchestra works
 
