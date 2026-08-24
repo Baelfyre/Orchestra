@@ -1,5 +1,11 @@
 # Changelog
 
+## Post-v1.6.0 UIX-2 Design-Source Preservation - Candidate
+
+- Adds the library-neutral UIX-2 design-source preservation workflow, schemas, deterministic fixtures, runtime validation, and pre-implementation handoff contract.
+- Adds `README.json` machine-discovery parity for UIX-2, records UIX-1 as canonical at entry `main` commit `c331634dc63fbebb86ca07274c06262d5b52a50d`, and reconciles the current UIX plan to the active PR #538 source head `8222342a746e7e20418572e562ba53cc1092a6c7`.
+- Keeps historical UIX phase wording, external design tools, dependency adoption, Figma mutation, release, deployment, and policy activation outside this bounded candidate.
+
 ## Post-v1.6.0 UIX-1 UI Design Contract - Candidate
 
 - Adds the library-neutral `orchestra.ui-design-contract.v1` Draft 2020-12 schema for source evidence, design-system tokens, project component mappings, layouts, themes, assets, accessibility requirements, fidelity dispositions, revision-bound validation state, and explicit authority non-equivalence.
