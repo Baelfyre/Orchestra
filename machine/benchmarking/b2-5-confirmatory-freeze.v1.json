@@ -1,0 +1,163 @@
+{
+  "schema_version": "orchestra.b2-5-confirmatory-freeze.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "phase": "B2_5_CONFIRMATORY_PREPARATION",
+  "status": "FROZEN_NOT_LIVE_EXECUTED",
+  "recorded_date": "2026-08-23",
+  "source_baseline": {
+    "repository": "Baelfyre/Orchestra",
+    "branch": "main",
+    "sha": "68be3fff54f44dff30e3eaa198c126f3c7dc7188",
+    "tree": "c312db258b62da2484c335d25f292596d3d06d8a",
+    "signature": "GITHUB_VERIFIED_VALID"
+  },
+  "task_selection": {
+    "source_task_set": "machine/benchmarking/b2-5-held-out-task-set.v1.json",
+    "source_task_set_digest": "5763028d73ea6bac3933cf5b75a16dcf1ff820b114ca093c7730254ebb400eb6",
+    "selection_rule_id": "B2_5_ONE_HELD_OUT_TASK_PER_B0_STRATUM_V1",
+    "task_ids": [
+      "b2-confirm-single-domain-state-transition",
+      "b2-confirm-multi-domain-order-entitlement",
+      "b2-confirm-architecture-plugin-boundary",
+      "b2-confirm-debugging-event-duplication",
+      "b2-confirm-security-capability-scope",
+      "b2-confirm-validation-partial-write",
+      "b2-confirm-doc-implementation-contract",
+      "b2-confirm-dependency-version-skew",
+      "b2-confirm-parallel-artifact-join",
+      "b2-confirm-high-coordination-contract-rollout"
+    ],
+    "task_classes": ["SINGLE_DOMAIN", "MULTI_DOMAIN", "ARCHITECTURE_HEAVY", "DEBUGGING", "SECURITY_SENSITIVE", "VALIDATION_HEAVY", "DOCUMENTATION_PLUS_IMPLEMENTATION", "DEPENDENCY_HEAVY", "PARALLEL_FRIENDLY", "HIGH_COORDINATION"],
+    "reuse_b2_calibration_tasks": false,
+    "reuse_b2_4_pilot_tasks": false,
+    "outcome_data_used_for_selection": false,
+    "locked_before_first_b2_5_outcome": true
+  },
+  "experiment": {
+    "experiment_id": "b2-confirmatory-measurement-v1",
+    "purpose": "CONFIRMATORY_COORDINATION_MEASUREMENT",
+    "task_count": 10,
+    "repetitions_per_task": 2,
+    "arm_count": 2,
+    "matched_blocks": 20,
+    "planned_runs": 40,
+    "calls_per_run": 3,
+    "maximum_underlying_model_calls": 120,
+    "communication_mode": "DEFAULT",
+    "automatic_retry": false,
+    "attempts_per_slot": 1,
+    "benefit_claim_allowed": false,
+    "a5_promotion_evidence_allowed": false
+  },
+  "manifest": {
+    "source": "machine/benchmarking/b2-5-confirmatory-manifest.v1.json",
+    "digest": "8207f16cb2a9fa93b414c0651c16f183cab27c3c859604bbd62197e1198e9041"
+  },
+  "plan": {
+    "source": "machine/benchmarking/b2-5-confirmatory-plan.v1.json",
+    "digest": "5e8eacb7ef042b8a9e9c90c9d6406075533df8afcdbf62b1f9a01d57ffa8c2d9",
+    "ordering_policy": "SEEDED_PAIRED_BLOCK_ARM_SHUFFLE",
+    "randomization_seed": 20260822
+  },
+  "preregistration": {
+    "source": "machine/benchmarking/b2-5-confirmatory-preregistration.v1.json",
+    "digest": "a77b563acf95189a96647641426244903cf950b760946c5d38a06b37c0292e1f"
+  },
+  "topology": {
+    "eligibility_envelope": "machine/benchmarking/b2-real-calibration-eligibility-envelope.v1.json",
+    "eligibility_envelope_digest": "26af9b40870a13a138f52b23e45189a052875a81c8d4004366f2b93e9361bb55",
+    "candidate_ids": ["b2.seq.clockwork-overseer.v1", "b2.seq.overseer-clockwork.v1"],
+    "arms": ["Clockwork -> Overseer", "Overseer -> Clockwork"],
+    "parallel_execution_authorized": false
+  },
+  "host_binding": {
+    "provider": "openai-codex",
+    "cli_version": "0.148.0",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "medium",
+    "transport": "jsonl-usage",
+    "counter_id": "codex-cli-0.148.0:jsonl-usage:gpt-5.6-sol:medium",
+    "binding_strategy": "NODE_EXACT_NPM_ENTRYPOINT",
+    "node_exe_path": "C:\\Program Files\\nodejs\\node.exe",
+    "node_exe_sha256": "e921fe5307e29bf6fd00000dd594356affd3a7b044e52720c7f10decbdc305b9",
+    "codex_js_path": "C:\\Users\\ACER\\.codex-cli-0.148.0\\node_modules\\@openai\\codex\\bin\\codex.js",
+    "codex_js_sha256": "134063e133f0b4244fa3b251acf973d4fe4b4aeeacbdc135211bf480f59f1477",
+    "codex_package_json_path": "C:\\Users\\ACER\\.codex-cli-0.148.0\\node_modules\\@openai\\codex\\package.json",
+    "codex_package_json_sha256": "071f84ec4e6ff199b3dce2c2560a77c2248443b0d8b17e64f6e3f08427d32fc2"
+  },
+  "workspace_boundary": {
+    "path": "D:\\Dev\\Repositories\\+Orchestra-C2-Workspace",
+    "git_backed": true,
+    "empty_except_git_metadata": true,
+    "agents_md_absent": true,
+    "repository_mutation_prohibited": true,
+    "sandbox": "read-only",
+    "approval_policy": "never",
+    "agents_enabled": false,
+    "web_search": "disabled",
+    "shell_tool": false
+  },
+  "resource_freeze": {
+    "per_run_total_token_ceiling": 75000,
+    "cumulative_accepted_token_ceiling": 3000000,
+    "maximum_benchmark_runs": 40,
+    "maximum_underlying_model_calls": 120,
+    "model_calls_per_run": 3,
+    "call_timeout_seconds": 600,
+    "automatic_retry": false,
+    "stop_on_first_invalid_run": true,
+    "stop_on_first_validator_failure": true,
+    "specialist_advisory_retention_ceiling_bytes": 16384
+  },
+  "resource_budget_digest": "6eaeb6ea85bfdc09d9c336b2284859cb8a583da0494def6b1f7454a6d732ca20",
+  "implementation": {
+    "executor": "scripts/a5_topology_benchmark_executor.py",
+    "evidence_helper": "scripts/b2_confirmatory_evidence.py",
+    "preflight": "scripts/b2_5_confirmatory_preflight.py",
+    "driver": "scripts/b2_5_confirmatory_driver.py",
+    "sha256": {
+      "scripts/a5_topology_benchmark_executor.py": "dc3eff98b9477e0776d55a6e3312e5e66205e2ee31c13874652dcb0c557e3f9a",
+      "scripts/b2_confirmatory_evidence.py": "7828fec435094bbd415ad8ba635ea0f43df9dd4798425aec6ca535b603edbb01",
+      "scripts/b2_5_confirmatory_preflight.py": "0b98a6f3280f964ff337b1d1b8e16b81f4a2038da1a08880d473fc272bab06cf",
+      "scripts/b2_5_confirmatory_driver.py": "1bfa0314fb3226e47b1d495d46f5ebf0ba0cbacac29fe43cc63556b16731f9dd"
+    }
+  },
+  "evidence_contract": {
+    "retain_exact_specialist_advisory_text": true,
+    "retain_utf8_byte_count_and_raw_sha256": true,
+    "retain_ordered_advisory_references": true,
+    "independently_recompute_context_transfer_bytes": true,
+    "retain_exact_turn_completed_usage_objects": true,
+    "retain_usage_digests_and_counter_identities": true,
+    "counter_classifications": ["STABLE_EXACT", "CACHE_STATE_VARIANT", "INPUT_COUNTER_VARIANT", "UNSTABLE_ATTRIBUTION"],
+    "reject_cached_input_greater_than_input": true,
+    "advisory_overflow_disposition": "INVALID_RUN_NO_TRUNCATION"
+  },
+  "analysis_freeze": {
+    "primary_endpoint": "INDEPENDENTLY_RECOMPUTED_CONTEXT_TRANSFER_BYTES",
+    "minimum_directional_wins": 15,
+    "matched_blocks": 20,
+    "two_sided_exact_sign_test": "P_LT_0_05",
+    "minimum_median_relative_context_reduction": 0.1,
+    "quality_role": "NON_DEGRADATION_GUARDRAIL",
+    "token_efficiency_rule": "CLAIM_ELIGIBLE_ONLY_IF_TOKEN_ATTRIBUTION_GATE_PASS"
+  },
+  "stop_conditions": ["FIRST_INVALID_RUN", "FIRST_VALIDATOR_FAILURE", "HOST_IDENTITY_DRIFT", "EXECUTABLE_IDENTITY_DRIFT", "WORKSPACE_BOUNDARY_VIOLATION", "REPOSITORY_MUTATION", "RESOURCE_CEILING_VIOLATION", "EVIDENCE_RECOMPUTATION_MISMATCH", "ADVISORY_RETENTION_OVERFLOW", "COUNTER_PROVENANCE_FAILURE"],
+  "activation": {
+    "live_execution_authorized": false,
+    "authorization_source": "HUMAN_MASTER_B_PHASE_CONTINUATION_AFTER_CANONICAL_FREEZE",
+    "driver_executed_during_preparation": false
+  },
+  "authority": {
+    "b2_5_confirmatory_execution_authorized_after_canonicalization": true,
+    "a5_execution_effective_promotion": false,
+    "production_runtime_attachment": false,
+    "b4_authorized": false,
+    "release_publication_authorized": false,
+    "deployment_authorized": false,
+    "policy_activation_authorized": false,
+    "force_push_authorized": false,
+    "history_rewrite_authorized": false
+  },
+  "next_gate": "EXACT_HEAD_VALIDATION_THEN_SIGNED_CANONICALIZATION_THEN_B2_5_LIVE_EXECUTION"
+}
