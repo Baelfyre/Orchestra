@@ -1,10 +1,10 @@
 # Governed UI Design Fidelity System Plan
 
-Status: `UIX_5_ACTIVE_SPECIALIST_INTEGRATION`
+Status: `UIX_6_ACTIVE_OPTIONAL_ADAPTER_BOUNDARIES`
 
 Recorded: 2026-08-24
 
-Activation baseline: `3a7f18bd49c7aa16cfc4568fd42f9b06c37cb847`
+Activation baseline: `7d9c020a5fbd70b7270d86e24f8922928bc5613b`
 
 Historical design source: closed-unmerged PR #471 (`docs: plan governed UI design fidelity system`)
 
@@ -32,7 +32,7 @@ That sequencing gate is now resolved:
 
 Unchecked entries in `docs/project/ROADMAP.md` under Deferred and Future Work are backlog candidates, not automatic prerequisites. They do not block UIX unless an item becomes an explicit dependency or the maintainer changes priority.
 
-UIX-0 is complete, UIX-1 is canonical at `c331634dc63fbebb86ca07274c06262d5b52a50d`, UIX-2 is canonical at `8e4f3bb5e878131e8c038ea195311c92ca08cfde`, UIX-3 is canonical at `d27fbd6b89b297646c7e30ffb8bac193bbdc0cf4`, UIX-4 is canonical at `3a7f18bd49c7aa16cfc4568fd42f9b06c37cb847`, and UIX-5 is the active bounded unit on the current source branch. This current-state reconciliation supersedes the earlier UIX-0-only sequencing statement; historical UIX-0 and UIX-1 phase documents retain their phase-era status wording. The plan does not itself authorize dependency installation, Figma mutation, external authentication, release, deployment, marketplace publication, policy activation, or another protected action.
+UIX-0 is complete, UIX-1 is canonical at `c331634dc63fbebb86ca07274c06262d5b52a50d`, UIX-2 is canonical at `8e4f3bb5e878131e8c038ea195311c92ca08cfde`, UIX-3 is canonical at `d27fbd6b89b297646c7e30ffb8bac193bbdc0cf4`, UIX-4 is canonical at `3a7f18bd49c7aa16cfc4568fd42f9b06c37cb847`, UIX-5 is canonical at `7d9c020a5fbd70b7270d86e24f8922928bc5613b`, and UIX-6 is the active bounded unit on the current source branch. This current-state reconciliation supersedes the earlier UIX-0-only sequencing statement; historical UIX-0 and UIX-1 phase documents retain their phase-era status wording. The plan does not itself authorize dependency installation, Figma mutation, external authentication, release, deployment, marketplace publication, policy activation, or another protected action.
 
 ## Existing ownership
 
@@ -282,4 +282,4 @@ The UIX campaign does not:
 
 ## Current bounded next action
 
-Complete UIX-5 through fresh exact-head validation and signed canonicalization of the specialist integration flow. Stop before UIX-6 until UIX-5 has an independent canonical readback.
+Complete UIX-6 through fresh exact-head validation and signed canonicalization of the optional adapter boundary contract, with explicit `NO_ADOPTION`. Stop before UIX-7 until UIX-6 has an independent canonical readback.
