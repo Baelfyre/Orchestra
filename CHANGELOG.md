@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B2.5 Confirmatory Preparation - Candidate
+
+- Freezes ten new held-out synthetic tasks, one per B0 stratum, with exact task decisions, validation gates, and no authority expansion.
+- Adds the deterministic 40-run paired plan across `Clockwork -> Overseer` and `Overseer -> Clockwork`, with a 120-call ceiling, no retries, and fail-closed stop conditions.
+- Adds zero-live-call static and exact-host preflight plus a one-attempt-per-slot driver retaining the complete B2.3.1 evidence and session artifact contract.
+- Keeps live execution, benefit claims, A5 promotion, production attachment, B4, release, deployment, policy activation, integration refresh, and destructive operations separately controlled.
+
 ## Post-v1.6.0 Comparative Benchmark B2.4 Replacement Pilot Reconciliation - Candidate
 
 - Records the separately authorized replacement B2.4 session as 8/8 accepted runs, 24/24 model calls, 251,862 accepted tokens, and complete retained evidence.

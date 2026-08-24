@@ -1,0 +1,447 @@
+{
+  "schema_version": "orchestra.comparative-benchmark-manifest.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "experiment_id": "b2-confirmatory-measurement-v1",
+  "experiment_kind": "A5_ISOLATED",
+  "stage": "CONFIRMATORY",
+  "randomization_seed": 20260822,
+  "repetitions_per_arm": 2,
+  "executor_timeout_seconds": 600,
+  "common_control_identity": {
+    "orchestra_revision": "68be3fff54f44dff30e3eaa198c126f3c7dc7188",
+    "repository_revision": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
+    "system_instruction_digest": "0d73f104eb0624032eeaec5473961345758478336bdad83aa4837021a3b7c451",
+    "provider": "openai-codex",
+    "model": "gpt-5.6-sol",
+    "model_revision": null,
+    "reasoning_setting": "medium",
+    "temperature": null,
+    "tool_access_digest": "ed731bd5dfa081afb7a732c2aabdafd869dd5ab98f206d204c48d6dcd402bf7a",
+    "specialist_set_digest": "9075492b1f72c6bd6ca7f14e9c223c26e93348098508d6aa9c12fc30625133de",
+    "required_specialist_set_digest": "9075492b1f72c6bd6ca7f14e9c223c26e93348098508d6aa9c12fc30625133de",
+    "authority_digest": "6cad6668dd989b436188bafbc4ffca4fdf91dd80aef7cf6d99c21b1701d0b866",
+    "governance_digest": "7558d5f60c3f93067af0b3d0af1f4f69a0208daac2f3cce19831bdfb96700463",
+    "validation_contract_digest": "039bac4e2e44f1fcacda6bf3d7fb596496bf37cc722c505c71a3c5bd0086b3c9",
+    "environment_digest": "82b5eb93963b609b71f7754f4fb2dc89959734369c31df81b3dec2283539efae",
+    "retry_policy_digest": "6df621c17d68b4c7d77ad8ac51efe183e3021200c58c1898b0656ce8e0fc89c2",
+    "resource_budget_digest": "6eaeb6ea85bfdc09d9c336b2284859cb8a583da0494def6b1f7454a6d732ca20"
+  },
+  "arms": [
+    {
+      "arm_id": "b2-arm-clockwork-overseer",
+      "topology_candidate_id": "b2.seq.clockwork-overseer.v1",
+      "topology_class": "SEQUENTIAL",
+      "topology_digest": "c28e14b11c586cd21397892239ce881f46e230993353013918212dbef7291183",
+      "communication_mode": "DEFAULT"
+    },
+    {
+      "arm_id": "b2-arm-overseer-clockwork",
+      "topology_candidate_id": "b2.seq.overseer-clockwork.v1",
+      "topology_class": "SEQUENTIAL",
+      "topology_digest": "067a8867aaa3a7bc82b4915da40ec60222413e261460863b1e8de90b836773f3",
+      "communication_mode": "DEFAULT"
+    }
+  ],
+  "tasks": [
+    {
+      "task_id": "b2-confirm-single-domain-state-transition",
+      "task_class": "SINGLE_DOMAIN",
+      "starting_state_digest": "7d7250ddb08b2507d38b5c6daa61c497c9084a7bf968acaaa75e4ac4f1c8dd97",
+      "task_prompt_digest": "e084d19f58ca10ebe0c1f1d1e8689b32becc41e51dfc22f0ade663f175d593f1",
+      "task_payload": {
+        "prompt": "You are evaluating a synthetic account-state transition change.\n\nScenario: A synthetic account-state service must add a SUSPENDED state while preserving existing ACTIVE and CLOSED transitions.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b2-confirm-single-domain-state-transition\",\"decision\":\"EXPLICIT_STATE_MACHINE_EXTENSION\",\"validation_gates\":[\"allowed_transition_matrix\",\"legacy_transition_regression\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "execution_allowed": true,
+        "validation_contract": {
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1",
+          "expected_response": {
+            "task_id": "b2-confirm-single-domain-state-transition",
+            "decision": "EXPLICIT_STATE_MACHINE_EXTENSION",
+            "validation_gates": [
+              "allowed_transition_matrix",
+              "legacy_transition_regression"
+            ],
+            "authority_expansion": false
+          },
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ]
+        }
+      },
+      "task_payload_digest": "3874dbd8fdd01b13123ce301ee1cd96bd92fe290e57fa57e3e5e5f102b312049",
+      "expected_response_digest": "bb2404126053ad5c1bc57c34fadd5e4fe854d10ed33fdb40f6c0f1daa8c1da4e",
+      "task_set_ordinal": 1,
+      "task_class_source": "B2_5_ONE_HELD_OUT_TASK_PER_B0_STRATUM_V1"
+    },
+    {
+      "task_id": "b2-confirm-multi-domain-order-entitlement",
+      "task_class": "MULTI_DOMAIN",
+      "starting_state_digest": "f5312d7e9c6a36d62d340feb98a891403a53e54849c84f38a1cbe9b15fbb9177",
+      "task_prompt_digest": "25fe02910e41cd3c4dd34e4e699c05ebf3d556d35095fcdab3b67836eba0d95a",
+      "task_payload": {
+        "prompt": "You are evaluating a synthetic multi-domain workflow change.\n\nScenario: A synthetic order workflow must coordinate order completion with entitlement activation without coupling domain internals.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b2-confirm-multi-domain-order-entitlement\",\"decision\":\"DOMAIN_EVENT_HANDOFF\",\"validation_gates\":[\"order_completion_contract\",\"entitlement_activation_contract\",\"idempotent_event_delivery\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "execution_allowed": true,
+        "validation_contract": {
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1",
+          "expected_response": {
+            "task_id": "b2-confirm-multi-domain-order-entitlement",
+            "decision": "DOMAIN_EVENT_HANDOFF",
+            "validation_gates": [
+              "order_completion_contract",
+              "entitlement_activation_contract",
+              "idempotent_event_delivery"
+            ],
+            "authority_expansion": false
+          },
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ]
+        }
+      },
+      "task_payload_digest": "9c3732921bd9a88ecfde4ccdebfd96c26343867b457ef6762c13a9530f0666a6",
+      "expected_response_digest": "58ef35926dc53463d05fc1adfa700a9746725734d1a9b80b79849efb4754edd9",
+      "task_set_ordinal": 2,
+      "task_class_source": "B2_5_ONE_HELD_OUT_TASK_PER_B0_STRATUM_V1"
+    },
+    {
+      "task_id": "b2-confirm-architecture-plugin-boundary",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "starting_state_digest": "dff443fcae0ae3013cac60c3f1261adb8e64b4159ec544d2171fb7519b10d5c9",
+      "task_prompt_digest": "bd97b28df6edb8d851953854f16ea5dd1b39f3b381294e880735562ab4edaaf5",
+      "task_payload": {
+        "prompt": "You are evaluating a synthetic plugin architecture change.\n\nScenario: A synthetic plugin system needs third-party extensions without permitting plugins to depend directly on application internals.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b2-confirm-architecture-plugin-boundary\",\"decision\":\"VERSIONED_PLUGIN_PORT\",\"validation_gates\":[\"dependency_boundary_test\",\"plugin_contract_compatibility\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "execution_allowed": true,
+        "validation_contract": {
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1",
+          "expected_response": {
+            "task_id": "b2-confirm-architecture-plugin-boundary",
+            "decision": "VERSIONED_PLUGIN_PORT",
+            "validation_gates": [
+              "dependency_boundary_test",
+              "plugin_contract_compatibility"
+            ],
+            "authority_expansion": false
+          },
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ]
+        }
+      },
+      "task_payload_digest": "fb12208cece62572972f3bd075c0a8c764cf2a18921746e460f40b64ddf5a2e7",
+      "expected_response_digest": "5a9b8ca851fb75b33d4a552dd309c68f9f73e6929e4e02bb76ad883f97d5fe86",
+      "task_set_ordinal": 3,
+      "task_class_source": "B2_5_ONE_HELD_OUT_TASK_PER_B0_STRATUM_V1"
+    },
+    {
+      "task_id": "b2-confirm-debugging-event-duplication",
+      "task_class": "DEBUGGING",
+      "starting_state_digest": "aa9bba3830331a93f28ed0957146c7cdb41ea5fd5679ba56b9d422a06f731903",
+      "task_prompt_digest": "0c13bfdc3ce6ddccb2e6f3eaee0d9c17f1a76269b9ca1fb4fdcd365e17471c70",
+      "task_payload": {
+        "prompt": "You are diagnosing a synthetic event-processing defect.\n\nScenario: A synthetic event consumer processes some messages twice because acknowledgement occurs after a non-idempotent side effect.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b2-confirm-debugging-event-duplication\",\"decision\":\"IDEMPOTENT_CONSUMER_WITH_ATOMIC_ACK\",\"validation_gates\":[\"duplicate_delivery_test\",\"side_effect_exactly_once_test\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "execution_allowed": true,
+        "validation_contract": {
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1",
+          "expected_response": {
+            "task_id": "b2-confirm-debugging-event-duplication",
+            "decision": "IDEMPOTENT_CONSUMER_WITH_ATOMIC_ACK",
+            "validation_gates": [
+              "duplicate_delivery_test",
+              "side_effect_exactly_once_test"
+            ],
+            "authority_expansion": false
+          },
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ]
+        }
+      },
+      "task_payload_digest": "ebe8d9f7496cb4c8446dc1426981f29528ff2cacdb5f717f055484a8ad17b823",
+      "expected_response_digest": "a51868db1e12fbc9959948ad8842b37e77133ad4b0c344b7d29a891f74188c21",
+      "task_set_ordinal": 4,
+      "task_class_source": "B2_5_ONE_HELD_OUT_TASK_PER_B0_STRATUM_V1"
+    },
+    {
+      "task_id": "b2-confirm-security-capability-scope",
+      "task_class": "SECURITY_SENSITIVE",
+      "starting_state_digest": "355caf3cdfa71767fe6f6be2ff01eef7a4a6e5c5f860eefa28c0a9b79b52515f",
+      "task_prompt_digest": "d9ac00056667f943f6ac43741d29cf50b9b693bbbdf77409d9d5a42d6d679c5c",
+      "task_payload": {
+        "prompt": "You are evaluating a synthetic capability-scope change.\n\nScenario: A synthetic worker currently receives a broad service credential although it needs only read access to one resource class.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b2-confirm-security-capability-scope\",\"decision\":\"LEAST_PRIVILEGE_SCOPED_CAPABILITY\",\"validation_gates\":[\"allowed_resource_access\",\"denied_out_of_scope_access\",\"credential_scope_regression\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "execution_allowed": true,
+        "validation_contract": {
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1",
+          "expected_response": {
+            "task_id": "b2-confirm-security-capability-scope",
+            "decision": "LEAST_PRIVILEGE_SCOPED_CAPABILITY",
+            "validation_gates": [
+              "allowed_resource_access",
+              "denied_out_of_scope_access",
+              "credential_scope_regression"
+            ],
+            "authority_expansion": false
+          },
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ]
+        }
+      },
+      "task_payload_digest": "e810668fdf6a67b34a2aa4939fa1db36b96b55488543baf1d46ea5ad6d8864bc",
+      "expected_response_digest": "a1f941e46e59089574940d5aade2188575555a5dc18b53e8bd45699c52c501c0",
+      "task_set_ordinal": 5,
+      "task_class_source": "B2_5_ONE_HELD_OUT_TASK_PER_B0_STRATUM_V1"
+    },
+    {
+      "task_id": "b2-confirm-validation-partial-write",
+      "task_class": "VALIDATION_HEAVY",
+      "starting_state_digest": "6638330a8f2914176b26ee1a43064e3bdbfaa77f4f0ceeca1f0d54344217a275",
+      "task_prompt_digest": "1b905503cbb513a5afae2fd2dc3aa85fb0f68cfddee27df8617f734b538d278e",
+      "task_payload": {
+        "prompt": "You are evaluating a synthetic batch-validation change.\n\nScenario: A synthetic batch update may partially commit records when one item fails validation.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b2-confirm-validation-partial-write\",\"decision\":\"VALIDATE_THEN_ATOMIC_COMMIT\",\"validation_gates\":[\"all_items_prevalidated\",\"partial_commit_prohibited\",\"rollback_integrity\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "execution_allowed": true,
+        "validation_contract": {
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1",
+          "expected_response": {
+            "task_id": "b2-confirm-validation-partial-write",
+            "decision": "VALIDATE_THEN_ATOMIC_COMMIT",
+            "validation_gates": [
+              "all_items_prevalidated",
+              "partial_commit_prohibited",
+              "rollback_integrity"
+            ],
+            "authority_expansion": false
+          },
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ]
+        }
+      },
+      "task_payload_digest": "c598d7ed40068bdc3b185c3b1fb8049da71c74ec2d0cbdecbc84584c06e9e6db",
+      "expected_response_digest": "49514f2b09d44cd3a9f1b482d918aa49ab166b3c80f28b7d5c7ae8ecdf5cdabd",
+      "task_set_ordinal": 6,
+      "task_class_source": "B2_5_ONE_HELD_OUT_TASK_PER_B0_STRATUM_V1"
+    },
+    {
+      "task_id": "b2-confirm-doc-implementation-contract",
+      "task_class": "DOCUMENTATION_PLUS_IMPLEMENTATION",
+      "starting_state_digest": "da7cb2067baf29458d91cb0c9e9e626ccec209adac29006e6546e3cb6216e99d",
+      "task_prompt_digest": "a8b7abb0903feb4cc36013b99bd8b3b271d30023327fd4a1f6d0a41bbcbef8cf",
+      "task_payload": {
+        "prompt": "You are evaluating a synthetic API documentation and implementation change.\n\nScenario: A synthetic API change adds a pagination cursor and requires implementation and public contract documentation to remain synchronized.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b2-confirm-doc-implementation-contract\",\"decision\":\"CONTRACT_FIRST_CURSOR_PAGINATION\",\"validation_gates\":[\"implementation_contract_match\",\"documentation_example_validation\",\"backward_compatibility\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "execution_allowed": true,
+        "validation_contract": {
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1",
+          "expected_response": {
+            "task_id": "b2-confirm-doc-implementation-contract",
+            "decision": "CONTRACT_FIRST_CURSOR_PAGINATION",
+            "validation_gates": [
+              "implementation_contract_match",
+              "documentation_example_validation",
+              "backward_compatibility"
+            ],
+            "authority_expansion": false
+          },
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ]
+        }
+      },
+      "task_payload_digest": "43386e676e9a21b33e8f4cb57a8b249e99a9caf3f7e94811bd3e4b7f86bfc064",
+      "expected_response_digest": "ccab2856795745b4a9ffe413e8ec0ec34b1bd1d6bfe547bdde4fdbb24f9ba495",
+      "task_set_ordinal": 7,
+      "task_class_source": "B2_5_ONE_HELD_OUT_TASK_PER_B0_STRATUM_V1"
+    },
+    {
+      "task_id": "b2-confirm-dependency-version-skew",
+      "task_class": "DEPENDENCY_HEAVY",
+      "starting_state_digest": "9b5e380f41ac21e8af014a61e90801e76733c083efb51872ec56be2ad15bc087",
+      "task_prompt_digest": "5d08bb0a1438e61870bb4b88e992de7101664f3b45662c0341d1eeec21e0cac9",
+      "task_payload": {
+        "prompt": "You are evaluating a synthetic dependency-version change.\n\nScenario: Two synthetic components require incompatible major versions of the same external client library.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b2-confirm-dependency-version-skew\",\"decision\":\"APPLICATION_OWNED_ABSTRACTION_WITH_ISOLATED_ADAPTERS\",\"validation_gates\":[\"adapter_contract_parity\",\"dependency_isolation\",\"version_skew_regression\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "execution_allowed": true,
+        "validation_contract": {
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1",
+          "expected_response": {
+            "task_id": "b2-confirm-dependency-version-skew",
+            "decision": "APPLICATION_OWNED_ABSTRACTION_WITH_ISOLATED_ADAPTERS",
+            "validation_gates": [
+              "adapter_contract_parity",
+              "dependency_isolation",
+              "version_skew_regression"
+            ],
+            "authority_expansion": false
+          },
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ]
+        }
+      },
+      "task_payload_digest": "b2eda55280efc806d71b67993d91b32dc39a9183c6a6813d3c649d59de4c1cf6",
+      "expected_response_digest": "5a1b4f2e304a326eeb9f7ea636386675b858e2d4641c5be746c2aac5bcb72998",
+      "task_set_ordinal": 8,
+      "task_class_source": "B2_5_ONE_HELD_OUT_TASK_PER_B0_STRATUM_V1"
+    },
+    {
+      "task_id": "b2-confirm-parallel-artifact-join",
+      "task_class": "PARALLEL_FRIENDLY",
+      "starting_state_digest": "b5c0318a2f0c217f9dbbd32261069f198aaeba4856696e6cfbc5c002b774d726",
+      "task_prompt_digest": "d9bbd5c491c3b7494d62e6cefa028af6d991af630042c0c85ad5cbbd3a38274a",
+      "task_payload": {
+        "prompt": "You are evaluating a synthetic parallel-analysis change.\n\nScenario: Two independent synthetic analysis steps can execute concurrently but their outputs must pass a deterministic join validation before use.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b2-confirm-parallel-artifact-join\",\"decision\":\"BOUNDED_PARALLEL_BRANCHES_WITH_VALIDATED_JOIN\",\"validation_gates\":[\"branch_independence\",\"join_completeness\",\"deterministic_merge\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "execution_allowed": true,
+        "validation_contract": {
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1",
+          "expected_response": {
+            "task_id": "b2-confirm-parallel-artifact-join",
+            "decision": "BOUNDED_PARALLEL_BRANCHES_WITH_VALIDATED_JOIN",
+            "validation_gates": [
+              "branch_independence",
+              "join_completeness",
+              "deterministic_merge"
+            ],
+            "authority_expansion": false
+          },
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ]
+        }
+      },
+      "task_payload_digest": "6bb77b97d059aa397dd2bdead4149fbcfc8326f6b7759c3b7fcf84a4f8c189da",
+      "expected_response_digest": "6ea5865eff8fcba1a11324a5b39d95b8854a1da424848853b2c931a270cccc94",
+      "task_set_ordinal": 9,
+      "task_class_source": "B2_5_ONE_HELD_OUT_TASK_PER_B0_STRATUM_V1"
+    },
+    {
+      "task_id": "b2-confirm-high-coordination-contract-rollout",
+      "task_class": "HIGH_COORDINATION",
+      "starting_state_digest": "582a8000e0b39c3739a75fa6a8b39ec9d254dbb10d94c36e2ceb0c48a198af05",
+      "task_prompt_digest": "f9cda42dbf303df33c36da24777f7304339d12ad897a56ad84d75aba14ff48e9",
+      "task_payload": {
+        "prompt": "You are evaluating a synthetic cross-layer contract rollout.\n\nScenario: A synthetic cross-layer contract change affects producer, consumer, migration sequencing, and release validation while deployment remains a human gate.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b2-confirm-high-coordination-contract-rollout\",\"decision\":\"FREEZE_CONTRACT_THEN_STAGE_ROLLOUT\",\"validation_gates\":[\"producer_contract\",\"consumer_contract\",\"migration_compatibility\",\"exact_head_release_validation\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "execution_allowed": true,
+        "validation_contract": {
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1",
+          "expected_response": {
+            "task_id": "b2-confirm-high-coordination-contract-rollout",
+            "decision": "FREEZE_CONTRACT_THEN_STAGE_ROLLOUT",
+            "validation_gates": [
+              "producer_contract",
+              "consumer_contract",
+              "migration_compatibility",
+              "exact_head_release_validation"
+            ],
+            "authority_expansion": false
+          },
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ]
+        }
+      },
+      "task_payload_digest": "30054802c83b23946cc0545407a564867d2bce623ba83e4a9c3e7ccafb2e9f3e",
+      "expected_response_digest": "b55f3714958e89c4ca77f0d08dcdbab53bf933f77b1e819e419c85309e70206c",
+      "task_set_ordinal": 10,
+      "task_class_source": "B2_5_ONE_HELD_OUT_TASK_PER_B0_STRATUM_V1"
+    }
+  ],
+  "task_set_source": "machine/benchmarking/b2-5-held-out-task-set.v1.json",
+  "task_set_digest": "5763028d73ea6bac3933cf5b75a16dcf1ff820b114ca093c7730254ebb400eb6",
+  "a5_evaluation": {
+    "eligibility_envelope_digest": "26af9b40870a13a138f52b23e45189a052875a81c8d4004366f2b93e9361bb55",
+    "eligible_topology_candidate_ids": [
+      "b2.seq.clockwork-overseer.v1",
+      "b2.seq.overseer-clockwork.v1"
+    ]
+  },
+  "murmurs_evaluation": null,
+  "interaction_evaluation": null,
+  "preregistration_digest": "a77b563acf95189a96647641426244903cf950b760946c5d38a06b37c0292e1f",
+  "benefit_thresholds": {
+    "minimum_positive_directional_blocks": 15,
+    "total_matched_blocks": 20,
+    "two_sided_exact_sign_test_alpha": 0.05,
+    "minimum_median_paired_relative_context_reduction": 0.1,
+    "all_accepted_runs_validator_pass_required": true,
+    "zero_safety_or_governance_violations_required": true,
+    "all_context_values_must_recompute": true
+  },
+  "resource_freeze": {
+    "per_run_total_token_ceiling": 75000,
+    "cumulative_accepted_token_ceiling": 3000000,
+    "maximum_benchmark_runs": 40,
+    "maximum_underlying_model_calls": 120,
+    "model_calls_per_run": 3,
+    "call_timeout_seconds": 600,
+    "automatic_retry": false,
+    "stop_on_first_invalid_run": true,
+    "specialist_advisory_retention_ceiling_bytes": 16384
+  }
+}
