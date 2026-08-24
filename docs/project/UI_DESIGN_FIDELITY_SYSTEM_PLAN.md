@@ -1,10 +1,10 @@
 # Governed UI Design Fidelity System Plan
 
-Status: `UIX_0_ACTIVE_CONTRACT_AUDIT_ONLY`
+Status: `UIX_2_ACTIVE_SOURCE_PRESERVATION`
 
 Recorded: 2026-08-24
 
-Activation baseline: `8cfb48d501ade0ce31722495c913078f269031f2`
+Activation baseline: `c331634dc63fbebb86ca07274c06262d5b52a50d`
 
 Historical design source: closed-unmerged PR #471 (`docs: plan governed UI design fidelity system`)
 
@@ -32,7 +32,7 @@ That sequencing gate is now resolved:
 
 Unchecked entries in `docs/project/ROADMAP.md` under Deferred and Future Work are backlog candidates, not automatic prerequisites. They do not block UIX unless an item becomes an explicit dependency or the maintainer changes priority.
 
-Only UIX-0 is active by this record. This plan does not by itself authorize UIX-1 through UIX-9 implementation, dependency installation, Figma mutation, external authentication, release, deployment, marketplace publication, policy activation, or another protected action.
+UIX-0 is complete, UIX-1 is canonical at `c331634dc63fbebb86ca07274c06262d5b52a50d`, and UIX-2 is the active bounded unit through PR #538 at source head `8222342a746e7e20418572e562ba53cc1092a6c7`. This current-state reconciliation supersedes the earlier UIX-0-only sequencing statement; historical UIX-0 and UIX-1 phase documents retain their phase-era status wording. The plan does not itself authorize dependency installation, Figma mutation, external authentication, release, deployment, marketplace publication, policy activation, or another protected action.
 
 ## Existing ownership
 
@@ -282,4 +282,4 @@ The UIX campaign does not:
 
 ## Current bounded next action
 
-Execute UIX-0 only. Produce an evidence-backed overlap/ownership/tool audit and a contract-ready UIX-1 input set. Stop before UIX-1 implementation unless the resulting transition is separately authorized under current Orchestra governance.
+Complete UIX-2 through fresh exact-head validation and signed canonicalization of the design-source preservation contract. Stop before UIX-3 until UIX-2 has an independent canonical readback.

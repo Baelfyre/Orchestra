@@ -32,7 +32,7 @@
     "cross_specialist_coordination": {"status": "IMPLEMENTED", "human_sources": ["docs/governance/TUNER_PROTOCOL.md", "ROUTING_MAP.md"]},
     "validation_and_evidence": {"status": "IMPLEMENTED", "machine_sources": ["machine/schemas/", "machine/release-evidence/"], "human_sources": ["docs/setup/VALIDATION.md", "docs/validation/"]},
     "governed_ui_design_contract_uix1": {
-      "status": "IMPLEMENTED_PENDING_CANONICAL_VALIDATION",
+      "status": "IMPLEMENTED_CANONICAL",
       "purpose": "Library-neutral evidence-bound UI Design Contract for source identity, design-system tokens, component reuse mappings, layouts, themes, assets, accessibility requirements, fidelity dispositions, and revision-bound validation state.",
       "machine_sources": ["machine/schemas/ui-design-contract.schema.json"],
       "human_sources": ["docs/project/UIX_0_ACTIVATION_OVERLAP_AUDIT.md", "docs/project/UIX_1_UI_DESIGN_CONTRACT.md"],
@@ -41,6 +41,17 @@
       "code_connect_required": false,
       "runtime_integration": false,
       "authority_note": "The UI Design Contract is evidence, not implementation authority. Figma, Code Connect, Storybook, Playwright, component libraries, and token tools remain optional capabilities; contract or validation evidence cannot grant or expand authority."
+    },
+    "governed_ui_design_source_preservation_uix2": {
+      "status": "IMPLEMENTED_PENDING_CANONICAL_VALIDATION",
+      "purpose": "Library-neutral design-source intake and preservation workflow for source identity, evidence inventory, project-native component and token mapping, asset provenance, unresolved evidence, and pre-implementation handoff.",
+      "machine_sources": ["machine/schemas/design-source-preservation-report.schema.json", "machine/schemas/design-source-preservation-workflow.schema.json", "machine/ui/design-source-preservation-workflow.v1.json"],
+      "human_sources": ["docs/project/UIX_2_DESIGN_SOURCE_PRESERVATION.md"],
+      "validation_surface": "tests/runtime/test_ui_design_source_preservation.py",
+      "figma_required": false,
+      "code_connect_required": false,
+      "runtime_integration": false,
+      "authority_note": "UIX-2 preserves evidence and reports unresolved design inputs; it does not grant implementation authority, authorize dependency adoption, make external tools authoritative, or authorize Figma mutation."
     },
     "host_update_planning": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "machine_sources": ["machine/hosts/update-contract.v1.json"], "human_sources": ["docs/setup/HOST_UPDATES.md"]},
     "adapter_sdk_and_prap_certification": {
