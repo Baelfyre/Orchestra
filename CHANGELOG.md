@@ -1,10 +1,16 @@
 # Changelog
 
-## Post-v1.6.0 UIX-2 Design-Source Preservation - Candidate
+## Post-v1.6.0 UIX-3 Theme, Layout, and Effect Profile Registry - Candidate
+
+- Adds the library-neutral UIX-3 profile registry, separating foundations, layouts, complete themes or systems, and optional effects.
+- Adds deterministic composition rules for required foundation/layout selections, mutually exclusive full systems, single optional effects, accessibility invariants, and project-native precedence.
+- Keeps profile metadata non-authorizing: no arbitrary CSS values, frontend dependency, external tool, Figma mutation, runtime integration, release, deployment, or policy activation is introduced.
+
+## Post-v1.6.0 UIX-2 Design-Source Preservation - Canonical
 
 - Adds the library-neutral UIX-2 design-source preservation workflow, schemas, deterministic fixtures, runtime validation, and pre-implementation handoff contract.
-- Adds `README.json` machine-discovery parity for UIX-2, records UIX-1 as canonical at entry `main` commit `c331634dc63fbebb86ca07274c06262d5b52a50d`, and reconciles the current UIX plan to the active PR #538 source head `8222342a746e7e20418572e562ba53cc1092a6c7`.
-- Keeps historical UIX phase wording, external design tools, dependency adoption, Figma mutation, release, deployment, and policy activation outside this bounded candidate.
+- Adds `README.json` machine-discovery parity for UIX-2 and records its canonical main readback at `8e4f3bb5e878131e8c038ea195311c92ca08cfde`.
+- Keeps historical UIX phase wording, external design tools, dependency adoption, Figma mutation, release, deployment, and policy activation outside this bounded phase.
 
 ## Post-v1.6.0 UIX-1 UI Design Contract - Candidate
 

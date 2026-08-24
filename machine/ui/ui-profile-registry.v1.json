@@ -1,0 +1,216 @@
+{
+  "$schema": "../schemas/ui-profile-registry.schema.json",
+  "schema_version": "orchestra.ui-profile-registry.v1",
+  "registry_id": "uix3-theme-layout-effect-profiles",
+  "role": "UIX_3_PROFILE_REGISTRY",
+  "taxonomy": {
+    "foundation": ["minimalist"],
+    "layout": ["bento_grid"],
+    "full_theme_or_system": ["dark_cyberpunk", "neo_brutalism", "material_3", "retro_web_90s"],
+    "optional_effect": ["glassmorphism", "neumorphism", "claymorphism", "aurora"]
+  },
+  "profiles": [
+    {
+      "profile_id": "minimalist",
+      "category": "foundation",
+      "display_name": "Minimalist",
+      "purpose": "Reduce visual noise and prioritize semantic structure without prescribing implementation values.",
+      "composition_role": "REQUIRED_FOUNDATION",
+      "accessibility_behavior": {
+        "contrast": "INHERIT_GLOBAL_INVARIANT",
+        "reduced_motion": "INHERIT_GLOBAL_INVARIANT",
+        "forced_colors": "INHERIT_GLOBAL_INVARIANT"
+      },
+      "value_authority": "METADATA_ONLY_NO_ARBITRARY_CSS_AUTHORITY"
+    },
+    {
+      "profile_id": "bento_grid",
+      "category": "layout",
+      "display_name": "Bento Grid",
+      "purpose": "Arrange responsive content regions with explicit containment and order; this profile is a layout, not a theme.",
+      "composition_role": "REQUIRED_LAYOUT",
+      "accessibility_behavior": {
+        "contrast": "INHERIT_GLOBAL_INVARIANT",
+        "reduced_motion": "INHERIT_GLOBAL_INVARIANT",
+        "forced_colors": "INHERIT_GLOBAL_INVARIANT"
+      },
+      "value_authority": "METADATA_ONLY_NO_ARBITRARY_CSS_AUTHORITY"
+    },
+    {
+      "profile_id": "dark_cyberpunk",
+      "category": "full_theme_or_system",
+      "display_name": "Dark Cyberpunk",
+      "purpose": "A complete dark visual system with expressive technology-oriented emphasis.",
+      "composition_role": "OPTIONAL_FULL_THEME_OR_SYSTEM",
+      "accessibility_behavior": {
+        "contrast": "INHERIT_GLOBAL_INVARIANT",
+        "reduced_motion": "INHERIT_GLOBAL_INVARIANT",
+        "forced_colors": "INHERIT_GLOBAL_INVARIANT"
+      },
+      "value_authority": "METADATA_ONLY_NO_ARBITRARY_CSS_AUTHORITY"
+    },
+    {
+      "profile_id": "neo_brutalism",
+      "category": "full_theme_or_system",
+      "display_name": "Neo Brutalism",
+      "purpose": "A complete high-contrast visual system with direct hierarchy and deliberate visual weight.",
+      "composition_role": "OPTIONAL_FULL_THEME_OR_SYSTEM",
+      "accessibility_behavior": {
+        "contrast": "INHERIT_GLOBAL_INVARIANT",
+        "reduced_motion": "INHERIT_GLOBAL_INVARIANT",
+        "forced_colors": "INHERIT_GLOBAL_INVARIANT"
+      },
+      "value_authority": "METADATA_ONLY_NO_ARBITRARY_CSS_AUTHORITY"
+    },
+    {
+      "profile_id": "material_3",
+      "category": "full_theme_or_system",
+      "display_name": "Material 3",
+      "purpose": "A complete system profile whose components, state model, and tokens remain a coherent unit.",
+      "composition_role": "OPTIONAL_FULL_THEME_OR_SYSTEM",
+      "accessibility_behavior": {
+        "contrast": "INHERIT_GLOBAL_INVARIANT",
+        "reduced_motion": "INHERIT_GLOBAL_INVARIANT",
+        "forced_colors": "INHERIT_GLOBAL_INVARIANT"
+      },
+      "value_authority": "METADATA_ONLY_NO_ARBITRARY_CSS_AUTHORITY"
+    },
+    {
+      "profile_id": "retro_web_90s",
+      "category": "full_theme_or_system",
+      "display_name": "Retro Web 90s",
+      "purpose": "A complete nostalgic web visual system with explicit preservation of modern interaction requirements.",
+      "composition_role": "OPTIONAL_FULL_THEME_OR_SYSTEM",
+      "accessibility_behavior": {
+        "contrast": "INHERIT_GLOBAL_INVARIANT",
+        "reduced_motion": "INHERIT_GLOBAL_INVARIANT",
+        "forced_colors": "INHERIT_GLOBAL_INVARIANT"
+      },
+      "value_authority": "METADATA_ONLY_NO_ARBITRARY_CSS_AUTHORITY"
+    },
+    {
+      "profile_id": "glassmorphism",
+      "category": "optional_effect",
+      "display_name": "Glassmorphism",
+      "purpose": "An optional translucent surface treatment that may be used only where interaction-critical contrast and focus remain intact.",
+      "composition_role": "OPTIONAL_EFFECT",
+      "accessibility_behavior": {
+        "contrast": "RESTRICT_INTERACTION_CRITICAL_SURFACES",
+        "reduced_motion": "INHERIT_GLOBAL_INVARIANT",
+        "forced_colors": "INHERIT_GLOBAL_INVARIANT"
+      },
+      "value_authority": "METADATA_ONLY_NO_ARBITRARY_CSS_AUTHORITY"
+    },
+    {
+      "profile_id": "neumorphism",
+      "category": "optional_effect",
+      "display_name": "Neumorphism",
+      "purpose": "An optional soft-surface treatment that must not obscure boundaries, focus, or interaction-critical contrast.",
+      "composition_role": "OPTIONAL_EFFECT",
+      "accessibility_behavior": {
+        "contrast": "RESTRICT_INTERACTION_CRITICAL_SURFACES",
+        "reduced_motion": "INHERIT_GLOBAL_INVARIANT",
+        "forced_colors": "INHERIT_GLOBAL_INVARIANT"
+      },
+      "value_authority": "METADATA_ONLY_NO_ARBITRARY_CSS_AUTHORITY"
+    },
+    {
+      "profile_id": "claymorphism",
+      "category": "optional_effect",
+      "display_name": "Claymorphism",
+      "purpose": "An optional dimensional surface treatment that must preserve semantic boundaries and usable focus states.",
+      "composition_role": "OPTIONAL_EFFECT",
+      "accessibility_behavior": {
+        "contrast": "RESTRICT_INTERACTION_CRITICAL_SURFACES",
+        "reduced_motion": "INHERIT_GLOBAL_INVARIANT",
+        "forced_colors": "INHERIT_GLOBAL_INVARIANT"
+      },
+      "value_authority": "METADATA_ONLY_NO_ARBITRARY_CSS_AUTHORITY"
+    },
+    {
+      "profile_id": "aurora",
+      "category": "optional_effect",
+      "display_name": "Aurora",
+      "purpose": "An optional atmospheric light effect that must yield to interaction-critical contrast, focus, and reduced-motion requirements.",
+      "composition_role": "OPTIONAL_EFFECT",
+      "accessibility_behavior": {
+        "contrast": "RESTRICT_INTERACTION_CRITICAL_SURFACES",
+        "reduced_motion": "INHERIT_GLOBAL_INVARIANT",
+        "forced_colors": "INHERIT_GLOBAL_INVARIANT"
+      },
+      "value_authority": "METADATA_ONLY_NO_ARBITRARY_CSS_AUTHORITY"
+    }
+  ],
+  "composition_rules": {
+    "required_categories": ["foundation", "layout"],
+    "optional_categories": ["full_theme_or_system", "optional_effect"],
+    "maximum_selections_by_category": {
+      "foundation": 1,
+      "layout": 1,
+      "full_theme_or_system": 1,
+      "optional_effect": 1
+    },
+    "full_system_mix_policy": "MUTUALLY_EXCLUSIVE",
+    "incompatibility_rules": [
+      {
+        "rule_id": "full-system-mutual-exclusion",
+        "kind": "CATEGORY_MUTUALLY_EXCLUSIVE",
+        "profile_ids": ["dark_cyberpunk", "neo_brutalism", "material_3", "retro_web_90s"],
+        "disposition": "REJECT_COMPOSITION",
+        "reason": "Complete systems must remain coherent rather than being mixed as unrelated peer themes."
+      },
+      {
+        "rule_id": "optional-effect-single-selection",
+        "kind": "CATEGORY_MAXIMUM",
+        "profile_ids": ["glassmorphism", "neumorphism", "claymorphism", "aurora"],
+        "disposition": "REJECT_COMPOSITION",
+        "reason": "UIX-3 permits at most one optional effect so surface treatments cannot stack without explicit later evidence."
+      }
+    ],
+    "layout_classification": "BENTO_GRID_IS_LAYOUT_NOT_THEME",
+    "effect_safety": "OPTIONAL_EFFECTS_MUST_NOT_WEAKEN_INTERACTION_CRITICAL_CONTRAST_OR_FOCUS",
+    "profile_name_authority": "PROFILE_IDENTIFIERS_DO_NOT_AUTHORIZE_ARBITRARY_CSS_VALUES",
+    "project_precedence": "EXISTING_PROJECT_DESIGN_SYSTEM_OVERRIDES_PROFILE_DEFAULTS",
+    "unknown_profile_disposition": "REJECT_COMPOSITION"
+  },
+  "accessibility_invariants": [
+    {
+      "invariant_id": "SEMANTIC_STRUCTURE_AND_NAMES",
+      "requirement": "Semantic structure and accessible names remain required for every profile composition.",
+      "applies_to": "ALL_PROFILE_COMPOSITIONS"
+    },
+    {
+      "invariant_id": "KEYBOARD_AND_FOCUS",
+      "requirement": "Keyboard operation and visible usable focus remain required for every profile composition.",
+      "applies_to": "ALL_PROFILE_COMPOSITIONS"
+    },
+    {
+      "invariant_id": "INTERACTION_CRITICAL_CONTRAST",
+      "requirement": "Interaction-critical controls cannot lose required contrast or focus visibility because of a profile or effect.",
+      "applies_to": "ALL_PROFILE_COMPOSITIONS"
+    },
+    {
+      "invariant_id": "TARGET_SIZE_AND_ERROR_STATES",
+      "requirement": "Target-size and error-state requirements remain active regardless of visual profile.",
+      "applies_to": "ALL_PROFILE_COMPOSITIONS"
+    },
+    {
+      "invariant_id": "REDUCED_MOTION",
+      "requirement": "Reduced-motion preferences remain invariant and must be honored by any implementation or effect.",
+      "applies_to": "ALL_PROFILE_COMPOSITIONS"
+    },
+    {
+      "invariant_id": "FORCED_COLORS",
+      "requirement": "Forced-colors behavior remains usable and cannot be disabled by a selected profile.",
+      "applies_to": "ALL_PROFILE_COMPOSITIONS"
+    }
+  ],
+  "authority": {
+    "registry_grants_implementation_authority": false,
+    "profile_grants_css_authority": false,
+    "external_tools_grant_authority": false,
+    "validation_grants_authority": false,
+    "dependency_adoption_authorized": false,
+    "figma_mutation_authorized": false
+  }
+}

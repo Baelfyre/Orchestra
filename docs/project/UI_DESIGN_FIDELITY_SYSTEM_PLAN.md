@@ -1,10 +1,10 @@
 # Governed UI Design Fidelity System Plan
 
-Status: `UIX_2_ACTIVE_SOURCE_PRESERVATION`
+Status: `UIX_3_ACTIVE_PROFILE_REGISTRY`
 
 Recorded: 2026-08-24
 
-Activation baseline: `c331634dc63fbebb86ca07274c06262d5b52a50d`
+Activation baseline: `8e4f3bb5e878131e8c038ea195311c92ca08cfde`
 
 Historical design source: closed-unmerged PR #471 (`docs: plan governed UI design fidelity system`)
 
@@ -32,7 +32,7 @@ That sequencing gate is now resolved:
 
 Unchecked entries in `docs/project/ROADMAP.md` under Deferred and Future Work are backlog candidates, not automatic prerequisites. They do not block UIX unless an item becomes an explicit dependency or the maintainer changes priority.
 
-UIX-0 is complete, UIX-1 is canonical at `c331634dc63fbebb86ca07274c06262d5b52a50d`, and UIX-2 is the active bounded unit through PR #538 at source head `8222342a746e7e20418572e562ba53cc1092a6c7`. This current-state reconciliation supersedes the earlier UIX-0-only sequencing statement; historical UIX-0 and UIX-1 phase documents retain their phase-era status wording. The plan does not itself authorize dependency installation, Figma mutation, external authentication, release, deployment, marketplace publication, policy activation, or another protected action.
+UIX-0 is complete, UIX-1 is canonical at `c331634dc63fbebb86ca07274c06262d5b52a50d`, UIX-2 is canonical at `8e4f3bb5e878131e8c038ea195311c92ca08cfde`, and UIX-3 is the active bounded unit on the current source branch. This current-state reconciliation supersedes the earlier UIX-0-only sequencing statement; historical UIX-0 and UIX-1 phase documents retain their phase-era status wording. The plan does not itself authorize dependency installation, Figma mutation, external authentication, release, deployment, marketplace publication, policy activation, or another protected action.
 
 ## Existing ownership
 
@@ -282,4 +282,4 @@ The UIX campaign does not:
 
 ## Current bounded next action
 
-Complete UIX-2 through fresh exact-head validation and signed canonicalization of the design-source preservation contract. Stop before UIX-3 until UIX-2 has an independent canonical readback.
+Complete UIX-3 through fresh exact-head validation and signed canonicalization of the theme, layout, and effect profile registry. Stop before UIX-4 until UIX-3 has an independent canonical readback.
