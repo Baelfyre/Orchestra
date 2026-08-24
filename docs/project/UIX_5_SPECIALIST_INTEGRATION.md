@@ -1,6 +1,6 @@
 # UIX-5 Specialist Integration Flow
 
-Status: `UIX_5_SPECIALIST_INTEGRATION_IMPLEMENTED_PENDING_CANONICAL_VALIDATION`
+Status: `UIX_5_SPECIALIST_INTEGRATION_IMPLEMENTED_CANONICAL`
 
 Recorded: 2026-08-24
 
@@ -51,4 +51,4 @@ Caveman remains presentation-only. Butler is not a registered or active owner. U
 
 This is a contract-only integration surface. It does not add runtime integration, frontend dependencies, external-tool authority, Figma mutation, asset or dependency adoption authority, release authority, or policy activation. Missing or contradictory upstream evidence remains unresolved and must stop or reroute through the existing Conductor, Overseer, Governor, or Arbiter boundaries.
 
-UIX-5 exits only after the exact flow, ownership boundaries, negative fixtures, and repository validation are proven, followed by fresh protected-main checks, signed materialization, canonical promotion, and independent readback.
+UIX-5 exited after the exact flow, ownership boundaries, negative fixtures, repository validation, fresh protected-main checks, signed materialization, canonical promotion, and independent readback at `7d9c020`.

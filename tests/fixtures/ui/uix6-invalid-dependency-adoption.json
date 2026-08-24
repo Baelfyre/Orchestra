@@ -1,0 +1,19 @@
+{
+  "$schema": "../schemas/optional-adapter-boundaries.schema.json",
+  "schema_version": "orchestra.ui-optional-adapter-boundaries.v1",
+  "role": "UIX_6_OPTIONAL_ADAPTER_BOUNDARIES",
+  "entry_baseline": "7d9c020a5fbd70b7270d86e24f8922928bc5613b",
+  "host_maturity": {"source": "machine/hosts/update-contract.v1.json", "supported_hosts": ["codex", "antigravity"], "scaffold_only_hosts": ["claude-code", "cursor", "windsurf", "vscode", "jetbrains", "zed", "neovim"]},
+  "capabilities": [
+    {"id": "FIGMA_STRUCTURED_CONTEXT", "status": "UNAVAILABLE_OPTIONAL", "evidence_refs": ["docs/project/UIX_1_UI_DESIGN_CONTRACT.md"], "reader_boundary": "OPTIONAL_READ_ONLY_EXTERNAL_EVIDENCE", "authority_class": "EVIDENCE_ONLY", "adoption_disposition": "NO_ADOPTION", "missing_capability_behavior": "EXPLICIT_EVIDENCE_LIMITATION"},
+    {"id": "FIGMA_CODE_CONNECT_TEMPLATE_EVIDENCE", "status": "UNAVAILABLE_OPTIONAL", "evidence_refs": ["docs/project/UIX_1_UI_DESIGN_CONTRACT.md"], "reader_boundary": "OPTIONAL_READ_ONLY_EXTERNAL_EVIDENCE", "authority_class": "EVIDENCE_ONLY", "adoption_disposition": "NO_ADOPTION", "missing_capability_behavior": "EXPLICIT_EVIDENCE_LIMITATION"},
+    {"id": "STORYBOOK_COMPONENT_STATE_EVIDENCE", "status": "UNAVAILABLE_OPTIONAL", "evidence_refs": ["docs/project/UIX_2_DESIGN_SOURCE_PRESERVATION.md"], "reader_boundary": "OPTIONAL_READ_ONLY_EXTERNAL_EVIDENCE", "authority_class": "EVIDENCE_ONLY", "adoption_disposition": "NO_ADOPTION", "missing_capability_behavior": "EXPLICIT_EVIDENCE_LIMITATION"},
+    {"id": "PLAYWRIGHT_RENDERED_BROWSER_EVIDENCE", "status": "UNAVAILABLE_OPTIONAL", "evidence_refs": ["docs/setup/VALIDATION.md"], "reader_boundary": "OPTIONAL_READ_ONLY_EXTERNAL_EVIDENCE", "authority_class": "EVIDENCE_ONLY", "adoption_disposition": "NO_ADOPTION", "missing_capability_behavior": "EXPLICIT_EVIDENCE_LIMITATION"},
+    {"id": "AXE_ACCESSIBILITY_EVIDENCE", "status": "UNAVAILABLE_OPTIONAL", "evidence_refs": ["docs/setup/VALIDATION.md"], "reader_boundary": "OPTIONAL_READ_ONLY_EXTERNAL_EVIDENCE", "authority_class": "EVIDENCE_ONLY", "adoption_disposition": "NO_ADOPTION", "missing_capability_behavior": "EXPLICIT_EVIDENCE_LIMITATION"},
+    {"id": "PROJECT_NATIVE_DESIGN_TOKEN_EVIDENCE", "status": "AVAILABLE_CONTRACT_ONLY", "evidence_refs": ["machine/schemas/ui-design-contract.schema.json"], "reader_boundary": "PROJECT_NATIVE_EVIDENCE_ONLY", "authority_class": "EVIDENCE_ONLY", "adoption_disposition": "NO_ADOPTION", "missing_capability_behavior": "EXPLICIT_EVIDENCE_LIMITATION"}
+  ],
+  "audit": {"repository_evidence_only": true, "project_target": "ORCHESTRA_REPOSITORY_ONLY_NO_EXTERNAL_TARGET", "external_calls_performed": false, "dependency_changes": true, "installed_integration_refresh": false, "figma_mutations": false},
+  "adapter_policy": {"project_native_first": true, "external_service_authority": false, "dependency_adoption_authorized": false, "installed_integration_refresh_authorized": false, "homegrown_figma_client_allowed": false, "missing_capability_behavior": "EXPLICIT_EVIDENCE_LIMITATION", "runtime_integration": false},
+  "terminal_disposition": {"status": "NO_ADOPTION", "reason": "Invalid fixture: dependency adoption was recorded in the audit.", "new_dependencies": ["example-ui-adapter"], "new_runtime_adapters": [], "next_gate": "SEPARATE_DEPENDENCY_AND_HOST_AUTHORIZATION"},
+  "authority": {"adapter_contract_grants_authority": false, "capability_detection_grants_authority": false, "external_tool_grants_authority": false, "dependency_adoption_authorized": false, "installed_refresh_authorized": false, "figma_mutation_authorized": false, "release_authorized": false}
+}
