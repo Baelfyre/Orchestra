@@ -1,0 +1,128 @@
+{
+  "$schema": "../schemas/component-asset-preservation.schema.json",
+  "schema_version": "orchestra.component-asset-preservation.v1",
+  "contract_id": "uix4-component-asset-preservation",
+  "role": "CLOAK_COMPONENT_ASSET_PRESERVATION",
+  "consumes": {
+    "ui_design_contract_schema": "machine/schemas/ui-design-contract.schema.json",
+    "source_preservation_report_schema": "machine/schemas/design-source-preservation-report.schema.json",
+    "profile_registry_schema": "machine/schemas/ui-profile-registry.schema.json"
+  },
+  "precedence": [
+    "EXACT_SUPPLIED_PROJECT_ASSET_OR_COMPONENT",
+    "VERIFIED_EXISTING_PROJECT_NATIVE_EQUIVALENT",
+    "APPROVED_SEMANTIC_MAPPING",
+    "EXPLICITLY_APPROVED_ADAPTATION",
+    "REVIEWED_NEW_IMPLEMENTATION",
+    "UNRESOLVED_NO_FABRICATED_REPLACEMENT"
+  ],
+  "component_contract": {
+    "required_variant_coverage": true,
+    "required_interaction_state_coverage": true,
+    "semantic_token_preservation": true,
+    "mapping_kinds": [
+      "EXACT",
+      "VERIFIED_PROJECT_NATIVE",
+      "APPROVED_SEMANTIC_MAPPING",
+      "APPROVED_ADAPTATION",
+      "REVIEWED_NEW",
+      "UNRESOLVED"
+    ],
+    "incomplete_coverage_disposition": "BLOCKED_INCOMPLETE_COVERAGE",
+    "unresolved_mapping_disposition": "UNRESOLVED_NO_FABRICATION"
+  },
+  "asset_contract": {
+    "asset_types": ["FONT", "ICON", "IMAGE", "ILLUSTRATION", "LOGO"],
+    "provenance_requirement": "SOURCE_IDENTITY_AND_PROVENANCE_STATUS_REQUIRED",
+    "substitution_policies": [
+      "EXACT_REQUIRED",
+      "PROJECT_MATCH_ALLOWED",
+      "APPROVAL_REQUIRED",
+      "NO_SUBSTITUTION"
+    ],
+    "known_asset_without_evidence": "REJECT",
+    "known_asset_approximation": "REJECT_WITHOUT_EXPLICIT_APPROVAL_AND_PROVENANCE"
+  },
+  "components": [
+    {
+      "component_id": "checkout_button",
+      "source_ref": "uix2:evidence:component:checkout_button",
+      "mapping_kind": "VERIFIED_PROJECT_NATIVE",
+      "target": "project:components/Button",
+      "variants": ["default", "icon_only"],
+      "states": ["default", "hover", "focus_visible", "disabled", "error"],
+      "semantic_tokens": ["color.action.primary", "space.control.inline", "radius.control"],
+      "coverage_status": "COMPLETE",
+      "implementation_disposition": "READY_FOR_IMPLEMENTATION"
+    }
+  ],
+  "assets": [
+    {
+      "asset_id": "brand_font",
+      "asset_type": "FONT",
+      "semantic_role": "primary interface typography",
+      "source_identity": "project:fonts/inter",
+      "provenance_status": "CONFIRMED",
+      "license_or_source_status": "CONFIRMED",
+      "substitution_policy": "PROJECT_MATCH_ALLOWED",
+      "evidence_ref": "uix2:evidence:asset:brand_font",
+      "match_basis": "verified project-native font role"
+    },
+    {
+      "asset_id": "checkout_icon",
+      "asset_type": "ICON",
+      "semantic_role": "checkout confirmation action",
+      "source_identity": "project:icons/check",
+      "provenance_status": "CONFIRMED",
+      "license_or_source_status": "NOT_APPLICABLE",
+      "substitution_policy": "PROJECT_MATCH_ALLOWED",
+      "evidence_ref": "uix2:evidence:asset:checkout_icon",
+      "match_basis": "verified project-native icon component"
+    },
+    {
+      "asset_id": "checkout_hero",
+      "asset_type": "IMAGE",
+      "semantic_role": "checkout product context",
+      "source_identity": "project:images/checkout-hero",
+      "provenance_status": "CONFIRMED",
+      "license_or_source_status": "CONFIRMED",
+      "substitution_policy": "EXACT_REQUIRED",
+      "evidence_ref": "uix2:evidence:asset:checkout_hero"
+    },
+    {
+      "asset_id": "empty_state_illustration",
+      "asset_type": "ILLUSTRATION",
+      "semantic_role": "empty checkout state",
+      "source_identity": "project:illustrations/empty-checkout",
+      "provenance_status": "CONFIRMED",
+      "license_or_source_status": "CONFIRMED",
+      "substitution_policy": "EXACT_REQUIRED",
+      "evidence_ref": "uix2:evidence:asset:empty_state_illustration"
+    },
+    {
+      "asset_id": "brand_logo",
+      "asset_type": "LOGO",
+      "semantic_role": "brand identity",
+      "source_identity": "project:logos/primary",
+      "provenance_status": "CONFIRMED",
+      "license_or_source_status": "CONFIRMED",
+      "substitution_policy": "NO_SUBSTITUTION",
+      "evidence_ref": "uix2:evidence:asset:brand_logo"
+    }
+  ],
+  "deviation_rules": {
+    "intentional_adaptation_requires_reason_and_approval": true,
+    "substitution_requires_approval_when_not_exact": true,
+    "invented_svg_or_logo_allowed": false,
+    "novel_font_adoption_allowed": false,
+    "silent_known_asset_substitution_allowed": false,
+    "unresolved_is_implementation_ready": false
+  },
+  "authority": {
+    "contract_grants_implementation_authority": false,
+    "external_tools_grant_authority": false,
+    "validation_grants_authority": false,
+    "dependency_adoption_authorized": false,
+    "figma_mutation_authorized": false
+  }
+}

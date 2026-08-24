@@ -1,6 +1,12 @@
 # Changelog
 
-## Post-v1.6.0 UIX-3 Theme, Layout, and Effect Profile Registry - Candidate
+## Post-v1.6.0 UIX-4 Component and Asset Preservation - Candidate
+
+- Adds the library-neutral UIX-4 component and asset preservation contract with exact reuse precedence, variant/state coverage, semantic token preservation, provenance, substitution, and intentional-deviation rules.
+- Adds deterministic valid/invalid fixtures and runtime validation for incomplete coverage, unapproved substitutions, known-asset provenance, and non-authorizing authority boundaries.
+- Keeps implementation, dependency, external-tool, Figma, release, deployment, and policy activation outside this bounded candidate.
+
+## Post-v1.6.0 UIX-3 Theme, Layout, and Effect Profile Registry - Canonical
 
 - Adds the library-neutral UIX-3 profile registry, separating foundations, layouts, complete themes or systems, and optional effects.
 - Adds deterministic composition rules for required foundation/layout selections, mutually exclusive full systems, single optional effects, accessibility invariants, and project-native precedence.
