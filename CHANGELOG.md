@@ -1,5 +1,11 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B2.5 UTF-8 Recovery - Candidate
+
+- Makes Codex JSONL subprocess decoding explicitly UTF-8 with strict decode errors, removing the Windows locale codec from the evidence boundary.
+- Adds zero-live-call Unicode and malformed-byte regression coverage while preserving exact usage objects and advisory hashes.
+- Retains the stopped 13-run, 42-call session as historical invalidated evidence and refreshes only shared-executor implementation identities, including B2.4 compatibility, for one fresh B2.5 replacement session.
+
 ## Post-v1.6.0 Comparative Benchmark B2.5 Driver Import Remediation - Candidate
 
 - Adds the missing standard-library `argparse` import required by the prepared B2.5 driver entrypoint.

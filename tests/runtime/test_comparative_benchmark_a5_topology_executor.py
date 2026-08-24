@@ -408,19 +408,22 @@ def test_executor_rejects_invalid_cached_counter_before_next_call(tmp_path: Path
     assert result["raw_evidence"]["rejected_turn_completed_usage"]["cached_input_tokens"] == 11
 
 
-def test_run_codex_call_preserves_exact_turn_completed_usage_with_zero_live_call(tmp_path: Path):
+@pytest.mark.parametrize("response", ["advisory", "advisory-雪"])
+def test_run_codex_call_preserves_exact_turn_completed_usage_with_zero_live_call(tmp_path: Path, response: str):
     usage = {"input_tokens": 21, "cached_input_tokens": 3, "output_tokens": 4, "reasoning_output_tokens": 2, "provider_extension": 9}
     raw = "\n".join(
         [
             json.dumps({"type": "thread.started", "thread_id": "t"}),
-            json.dumps({"type": "item.completed", "item": {"type": "agent_message", "text": "advisory"}}),
+            json.dumps({"type": "item.completed", "item": {"type": "agent_message", "text": response}}, ensure_ascii=False),
             json.dumps({"type": "turn.completed", "usage": usage}),
         ]
     )
     observed_commands: list[list[str]] = []
+    observed_kwargs: list[dict] = []
 
     def fake_process(command, **kwargs):
         observed_commands.append(command)
+        observed_kwargs.append(kwargs)
         return subprocess.CompletedProcess(command, 0, stdout=raw, stderr="")
 
     call = run_codex_call(
@@ -433,9 +436,27 @@ def test_run_codex_call_preserves_exact_turn_completed_usage_with_zero_live_call
         run_command=fake_process,
     )
     assert len(observed_commands) == 1
+    assert observed_kwargs == [{"capture_output": True, "text": True, "encoding": "utf-8", "errors": "strict", "check": False, "shell": False, "timeout": 30}]
     assert call["turn_completed_usage"] == usage
     assert call["usage"] == {key: usage[key] for key in ("input_tokens", "cached_input_tokens", "output_tokens", "reasoning_output_tokens")}
-    assert call["response"] == "advisory"
+    assert call["response"] == response
+    assert build_response_evidence(call["response"])["response_utf8_sha256"] == sha256(response.encode("utf-8")).hexdigest()
+
+
+def test_run_codex_call_fails_closed_on_invalid_utf8_without_live_call(tmp_path: Path):
+    def fake_process(_command, **kwargs):
+        assert kwargs["encoding"] == "utf-8"
+        assert kwargs["errors"] == "strict"
+        raise UnicodeDecodeError("utf-8", b"\x80", 0, 1, "invalid start byte")
+
+    def fake_call(**kwargs):
+        return run_codex_call(**kwargs, run_command=fake_process)
+
+    envelope = make_envelope()
+    result = execute_with_fixtures(make_request(envelope, "clockwork-then-overseer"), envelope, tmp_path, fake_call)
+    assert result["outcome"]["status"] == "INVALID_RUN"
+    assert result["outcome"]["invalid_reason"] == "MEASUREMENT_CAPTURE_FAILURE"
+    assert "invalid start byte" in result["raw_evidence"]["error"]
 
 
 def test_fixture_integration_uses_only_injected_fake_runners(tmp_path: Path):
