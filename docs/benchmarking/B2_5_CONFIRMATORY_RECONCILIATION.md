@@ -1,7 +1,7 @@
 # B2.5 Confirmatory Reconciliation and B2 Terminal Conclusion
 
-Recorded: 2026-08-24  
-Program: `orchestra.shared-comparative-benchmark.v1`  
+Recorded: 2026-08-24
+Program: `orchestra.shared-comparative-benchmark.v1`
 Status: `B2_TERMINAL_EVIDENCE_RECONCILED`
 
 ## Conclusion
