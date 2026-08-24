@@ -1,5 +1,11 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B2.5 Reconciliation - Candidate
+
+- Records the valid fresh 40-run B2.5 replacement session with 120 model calls, complete recomputable evidence, and no invalid, quality, safety, governance, or repository-mutation failure.
+- Applies the frozen confirmatory analysis: 14/20 directional wins, two-sided exact sign-test `p=0.11531829833984375`, 25.53% median paired context reduction, and a failed token-attribution gate.
+- Concludes `CONFIRMATORY_BENEFIT_NOT_ESTABLISHED`, keeps A5 promotion and production attachment unauthorized, and advances to remaining B3 isolated measurement work.
+
 ## Post-v1.6.0 Comparative Benchmark B2.5 UTF-8 Recovery - Candidate
 
 - Makes Codex JSONL subprocess decoding explicitly UTF-8 with strict decode errors, removing the Windows locale codec from the evidence boundary.
