@@ -1,5 +1,11 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B-Phase Terminal Synthesis - Candidate
+
+- Reconciles the valid 450/450 B3 confirmatory session with 450 model calls, 8,885,182 accepted tokens, complete run and raw-evidence digest verification, and no invalid, safety, or repository-boundary event.
+- Concludes `CONFIRMATORY_BENEFIT_NOT_ESTABLISHED` for Murmurs after all three primary benefit gates failed while quality, safety, and regression guards passed.
+- Records B4 as not eligible with zero calls, completes B5 with separate negative B2 and B3 conclusions, and performs no A5 promotion, Murmurs authority expansion, runtime attachment, release, deployment, or policy activation.
+
 ## Post-v1.6.0 Comparative Benchmark B3 Pilot Reconciliation and Confirmatory Preparation - Candidate
 
 - Reconciles the valid 180/180 B3 pilot with 180 model calls, 3,533,572 accepted tokens, complete digest verification, and no invalid, safety, or repository-boundary event.
