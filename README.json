@@ -65,7 +65,7 @@
       "authority_note": "UIX-3 profile metadata constrains composition evidence only; profile names do not authorize arbitrary CSS, implementation, dependency adoption, external tools, validation bypass, or Figma mutation."
     },
     "governed_ui_component_asset_preservation_uix4": {
-      "status": "IMPLEMENTED_PENDING_CANONICAL_VALIDATION",
+      "status": "IMPLEMENTED_CANONICAL",
       "purpose": "Evidence-bound UIX-4 component mapping, variant and interaction-state coverage, semantic token preservation, asset provenance, substitution, and intentional-deviation contract.",
       "machine_sources": ["machine/schemas/component-asset-preservation.schema.json", "machine/ui/component-asset-preservation-contract.v1.json"],
       "human_sources": ["docs/project/UIX_4_COMPONENT_ASSET_PRESERVATION.md"],
@@ -74,6 +74,17 @@
       "code_connect_required": false,
       "runtime_integration": false,
       "authority_note": "UIX-4 preserves component and asset evidence; it does not grant implementation authority, authorize silent substitutions, add dependencies, make external tools authoritative, or authorize Figma mutation."
+    },
+    "governed_ui_specialist_integration_uix5": {
+      "status": "IMPLEMENTED_PENDING_CANONICAL_VALIDATION",
+      "purpose": "Library-neutral UIX-5 flow for consuming governed UI evidence through the existing Conductor, Cloak, Clockwork, Governor, Ponytail, Overseer, and Arbiter workflow with explicit non-overlapping ownership.",
+      "machine_sources": ["machine/schemas/specialist-integration-flow.schema.json", "machine/ui/specialist-integration-flow.v1.json"],
+      "human_sources": ["docs/project/UIX_5_SPECIALIST_INTEGRATION.md"],
+      "validation_surface": "tests/runtime/test_specialist_integration_flow.py",
+      "figma_required": false,
+      "code_connect_required": false,
+      "runtime_integration": false,
+      "authority_note": "UIX-5 sequences existing specialists and binds evidence to handoffs; it does not create a specialist, expand authority, make UI or rendered evidence approval, activate adoption, or authorize Figma mutation."
     },
     "host_update_planning": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "machine_sources": ["machine/hosts/update-contract.v1.json"], "human_sources": ["docs/setup/HOST_UPDATES.md"]},
     "adapter_sdk_and_prap_certification": {
@@ -610,6 +621,8 @@
     "ui_profile_registry": "machine/ui/ui-profile-registry.v1.json",
     "component_asset_preservation_schema": "machine/schemas/component-asset-preservation.schema.json",
     "component_asset_preservation_contract": "machine/ui/component-asset-preservation-contract.v1.json",
+    "specialist_integration_flow_schema": "machine/schemas/specialist-integration-flow.schema.json",
+    "specialist_integration_flow": "machine/ui/specialist-integration-flow.v1.json",
     "comparative_benchmark_codex_c2_portability_r1": "machine/benchmarking/codex-c2-portability-r1-preexecution.v1.json",
     "comparative_benchmark_codex_c2_portability_r1_live_authorization": "machine/benchmarking/codex-c2-portability-r1-live-execution-authorization.v1.json"
   },
