@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B3 Pilot Preparation - Candidate
+
+- Freezes 20 held-out synthetic tasks across ten B0 strata, three repetitions, three communication arms, and an exact 180-run randomized plan.
+- Binds a newly validated Antigravity CLI 1.1.19 / Gemini 3.7 Flash High counter stratum without pooling it with the historical 1.1.15 calibration counters.
+- Adds zero-model-call static and host preflight plus a one-attempt-per-slot fail-closed driver with an exact 180-call ceiling and no retries.
+- Keeps pilot benefit claims and self-authorization disabled pending a child live authorization bound to the signed canonical preparation.
+
 ## Post-v1.6.0 Comparative Benchmark B2.5 Reconciliation - Candidate
 
 - Records the valid fresh 40-run B2.5 replacement session with 120 model calls, complete recomputable evidence, and no invalid, quality, safety, governance, or repository-mutation failure.

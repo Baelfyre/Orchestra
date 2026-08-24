@@ -1,0 +1,2531 @@
+{
+  "entries": [
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 1,
+      "repetition_index": 1,
+      "request_id": "5061aabb4657d70522f99441",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-pilot-a-single-domain-state-transition"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 2,
+      "repetition_index": 1,
+      "request_id": "bab513d3bea9807313710952",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-pilot-a-single-domain-state-transition"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 3,
+      "repetition_index": 1,
+      "request_id": "5b06fd35539be377acdc1a8b",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-pilot-a-single-domain-state-transition"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 4,
+      "repetition_index": 2,
+      "request_id": "3fbb650c9d6046704ea12fa8",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-pilot-a-single-domain-state-transition"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 5,
+      "repetition_index": 2,
+      "request_id": "8021c988a05b9d98a1d1a4d0",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-pilot-a-single-domain-state-transition"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 6,
+      "repetition_index": 2,
+      "request_id": "7e47eaf3a5b08d087e44b880",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-pilot-a-single-domain-state-transition"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 7,
+      "repetition_index": 3,
+      "request_id": "37cae71be30071bb8436c2d9",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-pilot-a-single-domain-state-transition"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 8,
+      "repetition_index": 3,
+      "request_id": "9387cf53854cb69643248cab",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-pilot-a-single-domain-state-transition"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 9,
+      "repetition_index": 3,
+      "request_id": "713e6986ac39e23929619eef",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-pilot-a-single-domain-state-transition"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 10,
+      "repetition_index": 1,
+      "request_id": "ad4eda74a6592e01c276bb45",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-pilot-b-single-domain-state-transition"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 11,
+      "repetition_index": 1,
+      "request_id": "e64cfb6706d4e03bcf5b8718",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-pilot-b-single-domain-state-transition"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 12,
+      "repetition_index": 1,
+      "request_id": "b039ea26f8c8d8bc32615486",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-pilot-b-single-domain-state-transition"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 13,
+      "repetition_index": 2,
+      "request_id": "fd0c100a08f1310f663428a2",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-pilot-b-single-domain-state-transition"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 14,
+      "repetition_index": 2,
+      "request_id": "54e703f1124b448880c38900",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-pilot-b-single-domain-state-transition"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 15,
+      "repetition_index": 2,
+      "request_id": "b551bbb65f061d4266b7998b",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-pilot-b-single-domain-state-transition"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 16,
+      "repetition_index": 3,
+      "request_id": "5e5728d72f02ce91245c3aba",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-pilot-b-single-domain-state-transition"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 17,
+      "repetition_index": 3,
+      "request_id": "4fae13586ffd005e8e07a13b",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-pilot-b-single-domain-state-transition"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 18,
+      "repetition_index": 3,
+      "request_id": "e4e2c4ed6e4f7a617769cec4",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-pilot-b-single-domain-state-transition"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 19,
+      "repetition_index": 1,
+      "request_id": "a49d54f99f294c811dc2a51e",
+      "task_class": "MULTI_DOMAIN",
+      "task_id": "b3-pilot-a-multi-domain-order-entitlement"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 20,
+      "repetition_index": 1,
+      "request_id": "0c2668ea5d802346bd2b229c",
+      "task_class": "MULTI_DOMAIN",
+      "task_id": "b3-pilot-a-multi-domain-order-entitlement"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 21,
+      "repetition_index": 1,
+      "request_id": "1ec9afbbc8fa18c02b20ec11",
+      "task_class": "MULTI_DOMAIN",
+      "task_id": "b3-pilot-a-multi-domain-order-entitlement"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 22,
+      "repetition_index": 2,
+      "request_id": "aaff451ac4f1bf6c6ae3b75e",
+      "task_class": "MULTI_DOMAIN",
+      "task_id": "b3-pilot-a-multi-domain-order-entitlement"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 23,
+      "repetition_index": 2,
+      "request_id": "c1b00cdb7cf599a213131b7e",
+      "task_class": "MULTI_DOMAIN",
+      "task_id": "b3-pilot-a-multi-domain-order-entitlement"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 24,
+      "repetition_index": 2,
+      "request_id": "a0cae0aba172f961ba58f62f",
+      "task_class": "MULTI_DOMAIN",
+      "task_id": "b3-pilot-a-multi-domain-order-entitlement"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 25,
+      "repetition_index": 3,
+      "request_id": "9de8db25c1cefa27c6189c3e",
+      "task_class": "MULTI_DOMAIN",
+      "task_id": "b3-pilot-a-multi-domain-order-entitlement"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 26,
+      "repetition_index": 3,
+      "request_id": "6760ae1da98237edff566af3",
+      "task_class": "MULTI_DOMAIN",
+      "task_id": "b3-pilot-a-multi-domain-order-entitlement"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 27,
+      "repetition_index": 3,
+      "request_id": "b4406451434fa127811f552c",
+      "task_class": "MULTI_DOMAIN",
+      "task_id": "b3-pilot-a-multi-domain-order-entitlement"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 28,
+      "repetition_index": 1,
+      "request_id": "103600651fe4517a889fd587",
+      "task_class": "MULTI_DOMAIN",
+      "task_id": "b3-pilot-b-multi-domain-order-entitlement"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 29,
+      "repetition_index": 1,
+      "request_id": "b2bf6f54a90d337da57311ad",
+      "task_class": "MULTI_DOMAIN",
+      "task_id": "b3-pilot-b-multi-domain-order-entitlement"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 30,
+      "repetition_index": 1,
+      "request_id": "3955b029f31e25c21b914d45",
+      "task_class": "MULTI_DOMAIN",
+      "task_id": "b3-pilot-b-multi-domain-order-entitlement"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 31,
+      "repetition_index": 2,
+      "request_id": "7be9c9c101a494db9ad395ef",
+      "task_class": "MULTI_DOMAIN",
+      "task_id": "b3-pilot-b-multi-domain-order-entitlement"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 32,
+      "repetition_index": 2,
+      "request_id": "ad21c0aba8789904b45d2edb",
+      "task_class": "MULTI_DOMAIN",
+      "task_id": "b3-pilot-b-multi-domain-order-entitlement"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 33,
+      "repetition_index": 2,
+      "request_id": "4fa95408fc301d74cb0621c6",
+      "task_class": "MULTI_DOMAIN",
+      "task_id": "b3-pilot-b-multi-domain-order-entitlement"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 34,
+      "repetition_index": 3,
+      "request_id": "9ede0a46bfac89f5fab5311a",
+      "task_class": "MULTI_DOMAIN",
+      "task_id": "b3-pilot-b-multi-domain-order-entitlement"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 35,
+      "repetition_index": 3,
+      "request_id": "a528d3d3cf918c1edbfc13f1",
+      "task_class": "MULTI_DOMAIN",
+      "task_id": "b3-pilot-b-multi-domain-order-entitlement"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 36,
+      "repetition_index": 3,
+      "request_id": "5aaf9396e97ec87b58be6bea",
+      "task_class": "MULTI_DOMAIN",
+      "task_id": "b3-pilot-b-multi-domain-order-entitlement"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 37,
+      "repetition_index": 1,
+      "request_id": "2ed2dcb844261b764652b379",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "task_id": "b3-pilot-a-architecture-plugin-boundary"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 38,
+      "repetition_index": 1,
+      "request_id": "b79f5ed42cbe24b1cc188786",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "task_id": "b3-pilot-a-architecture-plugin-boundary"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 39,
+      "repetition_index": 1,
+      "request_id": "559bc136b0ee619bcf882fa8",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "task_id": "b3-pilot-a-architecture-plugin-boundary"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 40,
+      "repetition_index": 2,
+      "request_id": "64613b9aa7cc18f78efd721d",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "task_id": "b3-pilot-a-architecture-plugin-boundary"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 41,
+      "repetition_index": 2,
+      "request_id": "fc99edc63d7ffc0b9de7f1f4",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "task_id": "b3-pilot-a-architecture-plugin-boundary"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 42,
+      "repetition_index": 2,
+      "request_id": "16a62249e4307d5076e34bde",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "task_id": "b3-pilot-a-architecture-plugin-boundary"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 43,
+      "repetition_index": 3,
+      "request_id": "97f403f63e363634ce235e15",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "task_id": "b3-pilot-a-architecture-plugin-boundary"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 44,
+      "repetition_index": 3,
+      "request_id": "71d15a9663f9c51a7429d793",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "task_id": "b3-pilot-a-architecture-plugin-boundary"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 45,
+      "repetition_index": 3,
+      "request_id": "d0e7b8d5bd5776f23e24bf32",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "task_id": "b3-pilot-a-architecture-plugin-boundary"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 46,
+      "repetition_index": 1,
+      "request_id": "873205c807356c9542756b77",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "task_id": "b3-pilot-b-architecture-plugin-boundary"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 47,
+      "repetition_index": 1,
+      "request_id": "9fae43e060851d3e099a68ce",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "task_id": "b3-pilot-b-architecture-plugin-boundary"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 48,
+      "repetition_index": 1,
+      "request_id": "0e9f445afc5dd77cad25f2c9",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "task_id": "b3-pilot-b-architecture-plugin-boundary"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 49,
+      "repetition_index": 2,
+      "request_id": "258a3a34f894c2eaf94003c2",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "task_id": "b3-pilot-b-architecture-plugin-boundary"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 50,
+      "repetition_index": 2,
+      "request_id": "f0f3fa1c615a5f2c03bdce12",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "task_id": "b3-pilot-b-architecture-plugin-boundary"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 51,
+      "repetition_index": 2,
+      "request_id": "ca67abac3f35a86d213d7540",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "task_id": "b3-pilot-b-architecture-plugin-boundary"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 52,
+      "repetition_index": 3,
+      "request_id": "ef460a25170db05e101515dc",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "task_id": "b3-pilot-b-architecture-plugin-boundary"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 53,
+      "repetition_index": 3,
+      "request_id": "b0544dc73acd4d4541bd6e8a",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "task_id": "b3-pilot-b-architecture-plugin-boundary"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 54,
+      "repetition_index": 3,
+      "request_id": "25d63a9a5f3ff19bc096b31a",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "task_id": "b3-pilot-b-architecture-plugin-boundary"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 55,
+      "repetition_index": 1,
+      "request_id": "ff1665ccc19a87456648d304",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-pilot-a-debugging-event-duplication"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 56,
+      "repetition_index": 1,
+      "request_id": "7043b298ba5c30b3191e3d7c",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-pilot-a-debugging-event-duplication"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 57,
+      "repetition_index": 1,
+      "request_id": "7b5d67932ff7fdcaeabf4d31",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-pilot-a-debugging-event-duplication"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 58,
+      "repetition_index": 2,
+      "request_id": "2de3650f8811566a80a19fa3",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-pilot-a-debugging-event-duplication"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 59,
+      "repetition_index": 2,
+      "request_id": "9413d6d66293f9102ee9fe16",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-pilot-a-debugging-event-duplication"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 60,
+      "repetition_index": 2,
+      "request_id": "173609fea0d7fe143bb99b8d",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-pilot-a-debugging-event-duplication"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 61,
+      "repetition_index": 3,
+      "request_id": "627b0f1eb7c56553e075e1c4",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-pilot-a-debugging-event-duplication"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 62,
+      "repetition_index": 3,
+      "request_id": "ac0841cdeb46b4cd8f80abdc",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-pilot-a-debugging-event-duplication"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 63,
+      "repetition_index": 3,
+      "request_id": "510653fb1b6b72b92ebf7461",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-pilot-a-debugging-event-duplication"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 64,
+      "repetition_index": 1,
+      "request_id": "365fe074a17fc9b58e58c3f9",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-pilot-b-debugging-event-duplication"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 65,
+      "repetition_index": 1,
+      "request_id": "c0902ebbc073acb3d602afcb",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-pilot-b-debugging-event-duplication"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 66,
+      "repetition_index": 1,
+      "request_id": "179b5e9f80bca71cf6cffa02",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-pilot-b-debugging-event-duplication"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 67,
+      "repetition_index": 2,
+      "request_id": "b1d12e79f8e6c3724a92edfc",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-pilot-b-debugging-event-duplication"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 68,
+      "repetition_index": 2,
+      "request_id": "bac9a7c1ce7a79b1718d83de",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-pilot-b-debugging-event-duplication"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 69,
+      "repetition_index": 2,
+      "request_id": "bf856eefe6a33168e80bc422",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-pilot-b-debugging-event-duplication"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 70,
+      "repetition_index": 3,
+      "request_id": "e6d68ca7dc01ebf7051f60e4",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-pilot-b-debugging-event-duplication"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 71,
+      "repetition_index": 3,
+      "request_id": "483621e1c8eaa7bba77d1914",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-pilot-b-debugging-event-duplication"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 72,
+      "repetition_index": 3,
+      "request_id": "e47f4e38263950c43e668c83",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-pilot-b-debugging-event-duplication"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 73,
+      "repetition_index": 1,
+      "request_id": "47aaf286b3c732f3d9be924a",
+      "task_class": "SECURITY_SENSITIVE",
+      "task_id": "b3-pilot-a-security-capability-scope"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 74,
+      "repetition_index": 1,
+      "request_id": "6742a9e0f7741470643e305c",
+      "task_class": "SECURITY_SENSITIVE",
+      "task_id": "b3-pilot-a-security-capability-scope"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 75,
+      "repetition_index": 1,
+      "request_id": "382f78c4f9759239dc61803f",
+      "task_class": "SECURITY_SENSITIVE",
+      "task_id": "b3-pilot-a-security-capability-scope"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 76,
+      "repetition_index": 2,
+      "request_id": "0a2e44d9127276fbe3ca7a6e",
+      "task_class": "SECURITY_SENSITIVE",
+      "task_id": "b3-pilot-a-security-capability-scope"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 77,
+      "repetition_index": 2,
+      "request_id": "19c9cea50f13abf9f33f0c3a",
+      "task_class": "SECURITY_SENSITIVE",
+      "task_id": "b3-pilot-a-security-capability-scope"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 78,
+      "repetition_index": 2,
+      "request_id": "2b174a349a48685e51c1b36a",
+      "task_class": "SECURITY_SENSITIVE",
+      "task_id": "b3-pilot-a-security-capability-scope"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 79,
+      "repetition_index": 3,
+      "request_id": "94f9c47301866a11ccfaed5c",
+      "task_class": "SECURITY_SENSITIVE",
+      "task_id": "b3-pilot-a-security-capability-scope"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 80,
+      "repetition_index": 3,
+      "request_id": "711870726157900f67676159",
+      "task_class": "SECURITY_SENSITIVE",
+      "task_id": "b3-pilot-a-security-capability-scope"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 81,
+      "repetition_index": 3,
+      "request_id": "b3df86d7f5b9ffaecabe0d91",
+      "task_class": "SECURITY_SENSITIVE",
+      "task_id": "b3-pilot-a-security-capability-scope"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 82,
+      "repetition_index": 1,
+      "request_id": "76d38d9668a86e6faf1b37d3",
+      "task_class": "SECURITY_SENSITIVE",
+      "task_id": "b3-pilot-b-security-capability-scope"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 83,
+      "repetition_index": 1,
+      "request_id": "8c7971abaaef9932721217f2",
+      "task_class": "SECURITY_SENSITIVE",
+      "task_id": "b3-pilot-b-security-capability-scope"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 84,
+      "repetition_index": 1,
+      "request_id": "06a82296559a6cd943f966b3",
+      "task_class": "SECURITY_SENSITIVE",
+      "task_id": "b3-pilot-b-security-capability-scope"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 85,
+      "repetition_index": 2,
+      "request_id": "25302059290a155d3d622978",
+      "task_class": "SECURITY_SENSITIVE",
+      "task_id": "b3-pilot-b-security-capability-scope"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 86,
+      "repetition_index": 2,
+      "request_id": "78e8434c3815d5269b1beb6d",
+      "task_class": "SECURITY_SENSITIVE",
+      "task_id": "b3-pilot-b-security-capability-scope"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 87,
+      "repetition_index": 2,
+      "request_id": "bfde93ce5960a7c65db55c23",
+      "task_class": "SECURITY_SENSITIVE",
+      "task_id": "b3-pilot-b-security-capability-scope"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 88,
+      "repetition_index": 3,
+      "request_id": "0f0421e65e5568d48b91788b",
+      "task_class": "SECURITY_SENSITIVE",
+      "task_id": "b3-pilot-b-security-capability-scope"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 89,
+      "repetition_index": 3,
+      "request_id": "756d89bdf9ec75acd3f994a5",
+      "task_class": "SECURITY_SENSITIVE",
+      "task_id": "b3-pilot-b-security-capability-scope"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 90,
+      "repetition_index": 3,
+      "request_id": "f9790804a6ba8e0454466855",
+      "task_class": "SECURITY_SENSITIVE",
+      "task_id": "b3-pilot-b-security-capability-scope"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 91,
+      "repetition_index": 1,
+      "request_id": "55518f85cab52398c488d4d9",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-pilot-a-validation-partial-write"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 92,
+      "repetition_index": 1,
+      "request_id": "cab587673bd8fbbf0e53bded",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-pilot-a-validation-partial-write"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 93,
+      "repetition_index": 1,
+      "request_id": "f635db233a11943414c32f18",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-pilot-a-validation-partial-write"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 94,
+      "repetition_index": 2,
+      "request_id": "cd2956c1486600a6a9bab8cd",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-pilot-a-validation-partial-write"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 95,
+      "repetition_index": 2,
+      "request_id": "3e5aa397194ee586fd6d3df2",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-pilot-a-validation-partial-write"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 96,
+      "repetition_index": 2,
+      "request_id": "2fa35caa2df0b91850581a16",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-pilot-a-validation-partial-write"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 97,
+      "repetition_index": 3,
+      "request_id": "2679bc2af8fe8e0f28e219bd",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-pilot-a-validation-partial-write"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 98,
+      "repetition_index": 3,
+      "request_id": "a365f5b4235ab0d138ba4751",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-pilot-a-validation-partial-write"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 99,
+      "repetition_index": 3,
+      "request_id": "2efbc91920757a4006c3a442",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-pilot-a-validation-partial-write"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 100,
+      "repetition_index": 1,
+      "request_id": "4080f81e1080be71322bde6c",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-pilot-b-validation-partial-write"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 101,
+      "repetition_index": 1,
+      "request_id": "d750e941505806aa3700af23",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-pilot-b-validation-partial-write"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 102,
+      "repetition_index": 1,
+      "request_id": "f025c11215a03284cb605a5d",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-pilot-b-validation-partial-write"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 103,
+      "repetition_index": 2,
+      "request_id": "693ab7e0729620a9c03721c7",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-pilot-b-validation-partial-write"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 104,
+      "repetition_index": 2,
+      "request_id": "2dec5e39eaff5879c3859e9e",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-pilot-b-validation-partial-write"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 105,
+      "repetition_index": 2,
+      "request_id": "7d665a08a3c864940631ecd4",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-pilot-b-validation-partial-write"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 106,
+      "repetition_index": 3,
+      "request_id": "31521d33333d1c7921508a63",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-pilot-b-validation-partial-write"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 107,
+      "repetition_index": 3,
+      "request_id": "1d66aa9065f710bacd25130c",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-pilot-b-validation-partial-write"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 108,
+      "repetition_index": 3,
+      "request_id": "4d551e0a5dbe41853f9551a3",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-pilot-b-validation-partial-write"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 109,
+      "repetition_index": 1,
+      "request_id": "5f2df723ba89d6186d63afda",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "task_id": "b3-pilot-a-doc-implementation-contract"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 110,
+      "repetition_index": 1,
+      "request_id": "b5187e3176a43944c95083fc",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "task_id": "b3-pilot-a-doc-implementation-contract"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 111,
+      "repetition_index": 1,
+      "request_id": "70205296c3ba0dace6b0c099",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "task_id": "b3-pilot-a-doc-implementation-contract"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 112,
+      "repetition_index": 2,
+      "request_id": "f5292cec7e429500f900039d",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "task_id": "b3-pilot-a-doc-implementation-contract"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 113,
+      "repetition_index": 2,
+      "request_id": "d0bbfef67babca728cb2e79d",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "task_id": "b3-pilot-a-doc-implementation-contract"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 114,
+      "repetition_index": 2,
+      "request_id": "24c8b48584c401144f00484a",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "task_id": "b3-pilot-a-doc-implementation-contract"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 115,
+      "repetition_index": 3,
+      "request_id": "c4fad1b24f7097708441a4bb",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "task_id": "b3-pilot-a-doc-implementation-contract"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 116,
+      "repetition_index": 3,
+      "request_id": "81dfe5bc0915a3f773aad2f9",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "task_id": "b3-pilot-a-doc-implementation-contract"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 117,
+      "repetition_index": 3,
+      "request_id": "1fccbbd856d9322cdb1b0735",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "task_id": "b3-pilot-a-doc-implementation-contract"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 118,
+      "repetition_index": 1,
+      "request_id": "fbe18fe2d06944e2384f9ce0",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "task_id": "b3-pilot-b-doc-implementation-contract"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 119,
+      "repetition_index": 1,
+      "request_id": "7629495507666eeb33173dbe",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "task_id": "b3-pilot-b-doc-implementation-contract"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 120,
+      "repetition_index": 1,
+      "request_id": "887ce1c9bed5538d1c6b9dae",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "task_id": "b3-pilot-b-doc-implementation-contract"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 121,
+      "repetition_index": 2,
+      "request_id": "51bf9fde64027801566bd89d",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "task_id": "b3-pilot-b-doc-implementation-contract"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 122,
+      "repetition_index": 2,
+      "request_id": "abbc0128571a48b5211dc530",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "task_id": "b3-pilot-b-doc-implementation-contract"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 123,
+      "repetition_index": 2,
+      "request_id": "5246049644451ed207f061d5",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "task_id": "b3-pilot-b-doc-implementation-contract"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 124,
+      "repetition_index": 3,
+      "request_id": "a1e62e6c3d4372558974878c",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "task_id": "b3-pilot-b-doc-implementation-contract"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 125,
+      "repetition_index": 3,
+      "request_id": "90b80f57f0ce6fd311d7303c",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "task_id": "b3-pilot-b-doc-implementation-contract"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 126,
+      "repetition_index": 3,
+      "request_id": "d647690274a23bdc11634e77",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "task_id": "b3-pilot-b-doc-implementation-contract"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 127,
+      "repetition_index": 1,
+      "request_id": "8f6c49f3e16fc30ea25aeffa",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-pilot-a-dependency-version-skew"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 128,
+      "repetition_index": 1,
+      "request_id": "0c031ebb004b319716279fd4",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-pilot-a-dependency-version-skew"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 129,
+      "repetition_index": 1,
+      "request_id": "8930f2cfa685deef0a4e48c9",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-pilot-a-dependency-version-skew"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 130,
+      "repetition_index": 2,
+      "request_id": "0dbfd29a23cf6097b7be944a",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-pilot-a-dependency-version-skew"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 131,
+      "repetition_index": 2,
+      "request_id": "b48fed419cd8d2e23cc9feef",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-pilot-a-dependency-version-skew"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 132,
+      "repetition_index": 2,
+      "request_id": "8d313d33a96b81d372e6147e",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-pilot-a-dependency-version-skew"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 133,
+      "repetition_index": 3,
+      "request_id": "b7ee30af7caf96f6d52df9f9",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-pilot-a-dependency-version-skew"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 134,
+      "repetition_index": 3,
+      "request_id": "a82e8ce6978521cb308c151e",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-pilot-a-dependency-version-skew"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 135,
+      "repetition_index": 3,
+      "request_id": "78889491fca037f5eed83ea8",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-pilot-a-dependency-version-skew"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 136,
+      "repetition_index": 1,
+      "request_id": "45f5d0440b4ef63d0a1504b3",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-pilot-b-dependency-version-skew"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 137,
+      "repetition_index": 1,
+      "request_id": "8d176a8bfe8af9d99ead9aa4",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-pilot-b-dependency-version-skew"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 138,
+      "repetition_index": 1,
+      "request_id": "0d52bc1b936f86af3f86b33f",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-pilot-b-dependency-version-skew"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 139,
+      "repetition_index": 2,
+      "request_id": "83f3155089d74e11ca8e8ce3",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-pilot-b-dependency-version-skew"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 140,
+      "repetition_index": 2,
+      "request_id": "804a5687317ba603c19ad2e9",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-pilot-b-dependency-version-skew"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 141,
+      "repetition_index": 2,
+      "request_id": "9b3abe60c853546900371610",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-pilot-b-dependency-version-skew"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 142,
+      "repetition_index": 3,
+      "request_id": "f899dbdc361fea94e3a920bb",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-pilot-b-dependency-version-skew"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 143,
+      "repetition_index": 3,
+      "request_id": "5cf968eebc6b0d6c73ee0e67",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-pilot-b-dependency-version-skew"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 144,
+      "repetition_index": 3,
+      "request_id": "fa5dd37d9e4affd4fb47398a",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-pilot-b-dependency-version-skew"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 145,
+      "repetition_index": 1,
+      "request_id": "dcbaf595825de0772c48f60e",
+      "task_class": "PARALLEL_FRIENDLY",
+      "task_id": "b3-pilot-a-parallel-artifact-join"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 146,
+      "repetition_index": 1,
+      "request_id": "6230e45ccdfab1351f0c488f",
+      "task_class": "PARALLEL_FRIENDLY",
+      "task_id": "b3-pilot-a-parallel-artifact-join"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 147,
+      "repetition_index": 1,
+      "request_id": "557beb25ea94fcb931751c15",
+      "task_class": "PARALLEL_FRIENDLY",
+      "task_id": "b3-pilot-a-parallel-artifact-join"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 148,
+      "repetition_index": 2,
+      "request_id": "6ffb4d6770de256e19e6524f",
+      "task_class": "PARALLEL_FRIENDLY",
+      "task_id": "b3-pilot-a-parallel-artifact-join"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 149,
+      "repetition_index": 2,
+      "request_id": "faa3859bec6f1e79567cfab4",
+      "task_class": "PARALLEL_FRIENDLY",
+      "task_id": "b3-pilot-a-parallel-artifact-join"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 150,
+      "repetition_index": 2,
+      "request_id": "f90c509291f42161e4b65d90",
+      "task_class": "PARALLEL_FRIENDLY",
+      "task_id": "b3-pilot-a-parallel-artifact-join"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 151,
+      "repetition_index": 3,
+      "request_id": "6cff3a454e42409eac81dfbd",
+      "task_class": "PARALLEL_FRIENDLY",
+      "task_id": "b3-pilot-a-parallel-artifact-join"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 152,
+      "repetition_index": 3,
+      "request_id": "32c59f266b76b166f3318ed7",
+      "task_class": "PARALLEL_FRIENDLY",
+      "task_id": "b3-pilot-a-parallel-artifact-join"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 153,
+      "repetition_index": 3,
+      "request_id": "0703a171cc460462636bcef0",
+      "task_class": "PARALLEL_FRIENDLY",
+      "task_id": "b3-pilot-a-parallel-artifact-join"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 154,
+      "repetition_index": 1,
+      "request_id": "6853d7b44207e70bbf513ff7",
+      "task_class": "PARALLEL_FRIENDLY",
+      "task_id": "b3-pilot-b-parallel-artifact-join"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 155,
+      "repetition_index": 1,
+      "request_id": "47d8852dcf11df229bc25d05",
+      "task_class": "PARALLEL_FRIENDLY",
+      "task_id": "b3-pilot-b-parallel-artifact-join"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 156,
+      "repetition_index": 1,
+      "request_id": "068593dd71940b7237fff289",
+      "task_class": "PARALLEL_FRIENDLY",
+      "task_id": "b3-pilot-b-parallel-artifact-join"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 157,
+      "repetition_index": 2,
+      "request_id": "d7a65d4b1ed8cb40a199d79f",
+      "task_class": "PARALLEL_FRIENDLY",
+      "task_id": "b3-pilot-b-parallel-artifact-join"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 158,
+      "repetition_index": 2,
+      "request_id": "32453036eb79a6c3d58131bc",
+      "task_class": "PARALLEL_FRIENDLY",
+      "task_id": "b3-pilot-b-parallel-artifact-join"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 159,
+      "repetition_index": 2,
+      "request_id": "897b9e9a9f471f6f383ff8e7",
+      "task_class": "PARALLEL_FRIENDLY",
+      "task_id": "b3-pilot-b-parallel-artifact-join"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 160,
+      "repetition_index": 3,
+      "request_id": "eaeb2483f58c729518cb60b8",
+      "task_class": "PARALLEL_FRIENDLY",
+      "task_id": "b3-pilot-b-parallel-artifact-join"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 161,
+      "repetition_index": 3,
+      "request_id": "991aa41092deb680b391980a",
+      "task_class": "PARALLEL_FRIENDLY",
+      "task_id": "b3-pilot-b-parallel-artifact-join"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 162,
+      "repetition_index": 3,
+      "request_id": "66e4dee4f24ac80be1add819",
+      "task_class": "PARALLEL_FRIENDLY",
+      "task_id": "b3-pilot-b-parallel-artifact-join"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 163,
+      "repetition_index": 1,
+      "request_id": "56746f4633f1e7bc575c2e8e",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-pilot-a-high-coordination-contract-rollout"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 164,
+      "repetition_index": 1,
+      "request_id": "189edd88e502fc3399ca8331",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-pilot-a-high-coordination-contract-rollout"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 165,
+      "repetition_index": 1,
+      "request_id": "5f7ec40dedcad835f9b78c2b",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-pilot-a-high-coordination-contract-rollout"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 166,
+      "repetition_index": 2,
+      "request_id": "30f92ae8b30a9673e40df820",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-pilot-a-high-coordination-contract-rollout"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 167,
+      "repetition_index": 2,
+      "request_id": "7f5c63b274d31ce7216e555b",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-pilot-a-high-coordination-contract-rollout"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 168,
+      "repetition_index": 2,
+      "request_id": "0bd2c5a2ac51d68fb1c2c4ba",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-pilot-a-high-coordination-contract-rollout"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 169,
+      "repetition_index": 3,
+      "request_id": "4d8a6e2c84752424b9d5b7d7",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-pilot-a-high-coordination-contract-rollout"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 170,
+      "repetition_index": 3,
+      "request_id": "d0cb93dc63ff90ab3f0f9c91",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-pilot-a-high-coordination-contract-rollout"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 171,
+      "repetition_index": 3,
+      "request_id": "cc6c9e06108f54f9a866dca8",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-pilot-a-high-coordination-contract-rollout"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 172,
+      "repetition_index": 1,
+      "request_id": "3076cbad5248a59336c8e1bb",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-pilot-b-high-coordination-contract-rollout"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 173,
+      "repetition_index": 1,
+      "request_id": "33427274df8ac8709a6ea06a",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-pilot-b-high-coordination-contract-rollout"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 174,
+      "repetition_index": 1,
+      "request_id": "d978522d4fd48c4a399550a7",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-pilot-b-high-coordination-contract-rollout"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 175,
+      "repetition_index": 2,
+      "request_id": "6e1390e8b3497bf14cf237f4",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-pilot-b-high-coordination-contract-rollout"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 176,
+      "repetition_index": 2,
+      "request_id": "9ef760012493227f38d34d7a",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-pilot-b-high-coordination-contract-rollout"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 177,
+      "repetition_index": 2,
+      "request_id": "01f7260606a681520801bbe1",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-pilot-b-high-coordination-contract-rollout"
+    },
+    {
+      "arm": {
+        "arm_id": "murmurs-communication",
+        "communication_mode": "MURMURS",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 178,
+      "repetition_index": 3,
+      "request_id": "a6566c48b4a2f287242670a2",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-pilot-b-high-coordination-contract-rollout"
+    },
+    {
+      "arm": {
+        "arm_id": "default-communication",
+        "communication_mode": "DEFAULT",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 179,
+      "repetition_index": 3,
+      "request_id": "e493df63d0a97d7c0c2e19fd",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-pilot-b-high-coordination-contract-rollout"
+    },
+    {
+      "arm": {
+        "arm_id": "caveman-communication",
+        "communication_mode": "CAVEMAN",
+        "topology_candidate_id": "synthetic-fixed-topology",
+        "topology_class": "FIXED_DETERMINISTIC",
+        "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+      },
+      "execution_order_index": 180,
+      "repetition_index": 3,
+      "request_id": "0605b8cb20ce37bd2f20492f",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-pilot-b-high-coordination-contract-rollout"
+    }
+  ],
+  "experiment_id": "b3-murmurs-isolated-pilot-v1",
+  "experiment_kind": "MURMURS_ISOLATED",
+  "manifest_digest": "383feee68ca1463709ae19c485a10271be4ae6618dde3d0cc689ff842483df29",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "randomization_seed_digest": "aa5d936739bd80cad41e20297dadb74805e67d34bee3b6d990084a94e5a33e56",
+  "schema_version": "orchestra.comparative-benchmark-plan.v1",
+  "stage": "PILOT"
+}

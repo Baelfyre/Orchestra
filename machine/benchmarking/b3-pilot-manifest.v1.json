@@ -1,0 +1,991 @@
+{
+  "a5_evaluation": null,
+  "arms": [
+    {
+      "arm_id": "default-communication",
+      "communication_mode": "DEFAULT",
+      "topology_candidate_id": "synthetic-fixed-topology",
+      "topology_class": "FIXED_DETERMINISTIC",
+      "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+    },
+    {
+      "arm_id": "caveman-communication",
+      "communication_mode": "CAVEMAN",
+      "topology_candidate_id": "synthetic-fixed-topology",
+      "topology_class": "FIXED_DETERMINISTIC",
+      "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+    },
+    {
+      "arm_id": "murmurs-communication",
+      "communication_mode": "MURMURS",
+      "topology_candidate_id": "synthetic-fixed-topology",
+      "topology_class": "FIXED_DETERMINISTIC",
+      "topology_digest": "9c57cd21646c6387ca6b5c4957963c343259def3609891243747b22b1eb4f462"
+    }
+  ],
+  "common_control_identity": {
+    "authority_digest": "4dc300ef43a24bbecc03452daa1a2fafccc2c39d936ca6251a5742c25def937b",
+    "environment_digest": "a4a3b2febdcc215442e4d071d5d6941a097f712879041577322f7dcaebeca7b4",
+    "governance_digest": "967982db3883c178568f6b0c3cac136e757011a16d504edfebe39e1893235dd1",
+    "model": "gemini-3.7-flash-high",
+    "model_revision": null,
+    "orchestra_revision": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
+    "provider": "antigravity",
+    "reasoning_setting": "high",
+    "repository_revision": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
+    "required_specialist_set_digest": "6e3ac679762e9e5e8eae401ba65d14766c0dfd6de2824aa01bc1f489c1e3755d",
+    "resource_budget_digest": "bd964a52bf91e067a47a251f32e392f945a51f72dc06cf94f53811d05ac32cf9",
+    "retry_policy_digest": "d33fcca31e3de609817402483b11dfa2ed75c0e188c36a95205a6cae6be569cf",
+    "specialist_set_digest": "6e3ac679762e9e5e8eae401ba65d14766c0dfd6de2824aa01bc1f489c1e3755d",
+    "system_instruction_digest": "031d41497a6a61004e949c3b9869639f57d7d4fa287d847100da8ca24d8ec9de",
+    "temperature": 0.0,
+    "tool_access_digest": "78440ab9e5058f2e2e55330a820c144477c7d65f2f4933dcf2a02989f8936f0c",
+    "validation_contract_digest": "ba4ab4b3ef2938b6cdd4e65c6b0bbe7c79b3ec0926463d94a48626ad4ede9dbd"
+  },
+  "executor_timeout_seconds": 600,
+  "experiment_id": "b3-murmurs-isolated-pilot-v1",
+  "experiment_kind": "MURMURS_ISOLATED",
+  "interaction_evaluation": null,
+  "murmurs_evaluation": {
+    "same_counter_identity_for_token_delta": true
+  },
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "randomization_seed": 2408202603,
+  "repetitions_per_arm": 3,
+  "schema_version": "orchestra.comparative-benchmark-manifest.v1",
+  "stage": "PILOT",
+  "tasks": [
+    {
+      "starting_state_digest": "7ac47a4cf9a816b8c489bc604997c23a71e7ac92c4080d1eacff6f3cb42543fb",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-pilot-a-single-domain-state-transition",
+      "task_payload": {
+        "execution_allowed": true,
+        "expected_cli_version": "1.1.19",
+        "prompt": "Evaluate this synthetic governed engineering scenario.\n\nScenario: A synthetic account-state service must add a SUSPENDED state while preserving existing ACTIVE and CLOSED transitions. This is the primary bounded scenario; make no authority expansion.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b3-pilot-a-single-domain-state-transition\",\"decision\":\"EXPLICIT_STATE_MACHINE_EXTENSION\",\"validation_gates\":[\"allowed_transition_matrix\",\"legacy_transition_regression\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "starting_state": {
+          "authority_expansion": false,
+          "required_decision": "EXPLICIT_STATE_MACHINE_EXTENSION",
+          "required_validation_gates": [
+            "allowed_transition_matrix",
+            "legacy_transition_regression"
+          ],
+          "scenario": "A synthetic account-state service must add a SUSPENDED state while preserving existing ACTIVE and CLOSED transitions. This is the primary bounded scenario; make no authority expansion.",
+          "scenario_variant": "a"
+        },
+        "synthetic": true,
+        "transport": "stream-json",
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "decision": "EXPLICIT_STATE_MACHINE_EXTENSION",
+            "task_id": "b3-pilot-a-single-domain-state-transition",
+            "validation_gates": [
+              "allowed_transition_matrix",
+              "legacy_transition_regression"
+            ]
+          },
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ],
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "541bf6d55b82020ed5208880f125c8346333540427202c444789784ae387ab16"
+    },
+    {
+      "starting_state_digest": "41c65f492550d154c2e3f9383c38786a58deb7191083d2eba69ee3606905f17a",
+      "task_class": "SINGLE_DOMAIN",
+      "task_id": "b3-pilot-b-single-domain-state-transition",
+      "task_payload": {
+        "execution_allowed": true,
+        "expected_cli_version": "1.1.19",
+        "prompt": "Evaluate this synthetic governed engineering scenario.\n\nScenario: A synthetic account-state service must add a SUSPENDED state while preserving existing ACTIVE and CLOSED transitions. This is the alternate bounded scenario; make no authority expansion.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b3-pilot-b-single-domain-state-transition\",\"decision\":\"EXPLICIT_STATE_MACHINE_EXTENSION\",\"validation_gates\":[\"allowed_transition_matrix\",\"legacy_transition_regression\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "starting_state": {
+          "authority_expansion": false,
+          "required_decision": "EXPLICIT_STATE_MACHINE_EXTENSION",
+          "required_validation_gates": [
+            "allowed_transition_matrix",
+            "legacy_transition_regression"
+          ],
+          "scenario": "A synthetic account-state service must add a SUSPENDED state while preserving existing ACTIVE and CLOSED transitions. This is the alternate bounded scenario; make no authority expansion.",
+          "scenario_variant": "b"
+        },
+        "synthetic": true,
+        "transport": "stream-json",
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "decision": "EXPLICIT_STATE_MACHINE_EXTENSION",
+            "task_id": "b3-pilot-b-single-domain-state-transition",
+            "validation_gates": [
+              "allowed_transition_matrix",
+              "legacy_transition_regression"
+            ]
+          },
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ],
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "837b612d0c36feccd7ddecec7d6d9c1efd22fc764daf9d306949529d02c0255b"
+    },
+    {
+      "starting_state_digest": "db77d7f083424fab2a0a2f9e70a0db1fea18078f0a2f454492d0c8f4f7bd0e37",
+      "task_class": "MULTI_DOMAIN",
+      "task_id": "b3-pilot-a-multi-domain-order-entitlement",
+      "task_payload": {
+        "execution_allowed": true,
+        "expected_cli_version": "1.1.19",
+        "prompt": "Evaluate this synthetic governed engineering scenario.\n\nScenario: A synthetic order workflow must coordinate order completion with entitlement activation without coupling domain internals. This is the primary bounded scenario; make no authority expansion.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b3-pilot-a-multi-domain-order-entitlement\",\"decision\":\"DOMAIN_EVENT_HANDOFF\",\"validation_gates\":[\"order_completion_contract\",\"entitlement_activation_contract\",\"idempotent_event_delivery\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "starting_state": {
+          "authority_expansion": false,
+          "required_decision": "DOMAIN_EVENT_HANDOFF",
+          "required_validation_gates": [
+            "order_completion_contract",
+            "entitlement_activation_contract",
+            "idempotent_event_delivery"
+          ],
+          "scenario": "A synthetic order workflow must coordinate order completion with entitlement activation without coupling domain internals. This is the primary bounded scenario; make no authority expansion.",
+          "scenario_variant": "a"
+        },
+        "synthetic": true,
+        "transport": "stream-json",
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "decision": "DOMAIN_EVENT_HANDOFF",
+            "task_id": "b3-pilot-a-multi-domain-order-entitlement",
+            "validation_gates": [
+              "order_completion_contract",
+              "entitlement_activation_contract",
+              "idempotent_event_delivery"
+            ]
+          },
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ],
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "feb1228540bcb70288cfa3d8e58983f558ffb9d5d32bc88bf0b9858118df5382"
+    },
+    {
+      "starting_state_digest": "7d38b1b6e726a2c3f2dea89c443105d3b8718f59869d1132901c47a029e8c44d",
+      "task_class": "MULTI_DOMAIN",
+      "task_id": "b3-pilot-b-multi-domain-order-entitlement",
+      "task_payload": {
+        "execution_allowed": true,
+        "expected_cli_version": "1.1.19",
+        "prompt": "Evaluate this synthetic governed engineering scenario.\n\nScenario: A synthetic order workflow must coordinate order completion with entitlement activation without coupling domain internals. This is the alternate bounded scenario; make no authority expansion.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b3-pilot-b-multi-domain-order-entitlement\",\"decision\":\"DOMAIN_EVENT_HANDOFF\",\"validation_gates\":[\"order_completion_contract\",\"entitlement_activation_contract\",\"idempotent_event_delivery\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "starting_state": {
+          "authority_expansion": false,
+          "required_decision": "DOMAIN_EVENT_HANDOFF",
+          "required_validation_gates": [
+            "order_completion_contract",
+            "entitlement_activation_contract",
+            "idempotent_event_delivery"
+          ],
+          "scenario": "A synthetic order workflow must coordinate order completion with entitlement activation without coupling domain internals. This is the alternate bounded scenario; make no authority expansion.",
+          "scenario_variant": "b"
+        },
+        "synthetic": true,
+        "transport": "stream-json",
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "decision": "DOMAIN_EVENT_HANDOFF",
+            "task_id": "b3-pilot-b-multi-domain-order-entitlement",
+            "validation_gates": [
+              "order_completion_contract",
+              "entitlement_activation_contract",
+              "idempotent_event_delivery"
+            ]
+          },
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ],
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "d4d81bd52540f63a62af81cd69546f418acae63c4429993f814634f35605bc96"
+    },
+    {
+      "starting_state_digest": "189c9bb90757428a4ef32a94b4bfd9655dbedb0444284852b52b02822a67437c",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "task_id": "b3-pilot-a-architecture-plugin-boundary",
+      "task_payload": {
+        "execution_allowed": true,
+        "expected_cli_version": "1.1.19",
+        "prompt": "Evaluate this synthetic governed engineering scenario.\n\nScenario: A synthetic plugin system needs third-party extensions without permitting plugins to depend directly on application internals. This is the primary bounded scenario; make no authority expansion.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b3-pilot-a-architecture-plugin-boundary\",\"decision\":\"VERSIONED_PLUGIN_PORT\",\"validation_gates\":[\"dependency_boundary_test\",\"plugin_contract_compatibility\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "starting_state": {
+          "authority_expansion": false,
+          "required_decision": "VERSIONED_PLUGIN_PORT",
+          "required_validation_gates": [
+            "dependency_boundary_test",
+            "plugin_contract_compatibility"
+          ],
+          "scenario": "A synthetic plugin system needs third-party extensions without permitting plugins to depend directly on application internals. This is the primary bounded scenario; make no authority expansion.",
+          "scenario_variant": "a"
+        },
+        "synthetic": true,
+        "transport": "stream-json",
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "decision": "VERSIONED_PLUGIN_PORT",
+            "task_id": "b3-pilot-a-architecture-plugin-boundary",
+            "validation_gates": [
+              "dependency_boundary_test",
+              "plugin_contract_compatibility"
+            ]
+          },
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ],
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "4482d3483f3b8208386b48a9fc06b6c3f7d80702ded90b3ba7489f95a47ea209"
+    },
+    {
+      "starting_state_digest": "1277c2592ea843f0e22cc3eb09afcb11ea068d10decaba0b624cf641ff9b1aa9",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "task_id": "b3-pilot-b-architecture-plugin-boundary",
+      "task_payload": {
+        "execution_allowed": true,
+        "expected_cli_version": "1.1.19",
+        "prompt": "Evaluate this synthetic governed engineering scenario.\n\nScenario: A synthetic plugin system needs third-party extensions without permitting plugins to depend directly on application internals. This is the alternate bounded scenario; make no authority expansion.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b3-pilot-b-architecture-plugin-boundary\",\"decision\":\"VERSIONED_PLUGIN_PORT\",\"validation_gates\":[\"dependency_boundary_test\",\"plugin_contract_compatibility\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "starting_state": {
+          "authority_expansion": false,
+          "required_decision": "VERSIONED_PLUGIN_PORT",
+          "required_validation_gates": [
+            "dependency_boundary_test",
+            "plugin_contract_compatibility"
+          ],
+          "scenario": "A synthetic plugin system needs third-party extensions without permitting plugins to depend directly on application internals. This is the alternate bounded scenario; make no authority expansion.",
+          "scenario_variant": "b"
+        },
+        "synthetic": true,
+        "transport": "stream-json",
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "decision": "VERSIONED_PLUGIN_PORT",
+            "task_id": "b3-pilot-b-architecture-plugin-boundary",
+            "validation_gates": [
+              "dependency_boundary_test",
+              "plugin_contract_compatibility"
+            ]
+          },
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ],
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "8f109f903a713439c264c18d2eb5995b539c35ebfa43995371155505e1997e67"
+    },
+    {
+      "starting_state_digest": "d0251be45d637fbc624ce02b9b0df7b47320995427837bf10db18bec549307d0",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-pilot-a-debugging-event-duplication",
+      "task_payload": {
+        "execution_allowed": true,
+        "expected_cli_version": "1.1.19",
+        "prompt": "Evaluate this synthetic governed engineering scenario.\n\nScenario: A synthetic event consumer processes some messages twice because acknowledgement occurs after a non-idempotent side effect. This is the primary bounded scenario; make no authority expansion.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b3-pilot-a-debugging-event-duplication\",\"decision\":\"IDEMPOTENT_CONSUMER_WITH_ATOMIC_ACK\",\"validation_gates\":[\"duplicate_delivery_test\",\"side_effect_exactly_once_test\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "starting_state": {
+          "authority_expansion": false,
+          "required_decision": "IDEMPOTENT_CONSUMER_WITH_ATOMIC_ACK",
+          "required_validation_gates": [
+            "duplicate_delivery_test",
+            "side_effect_exactly_once_test"
+          ],
+          "scenario": "A synthetic event consumer processes some messages twice because acknowledgement occurs after a non-idempotent side effect. This is the primary bounded scenario; make no authority expansion.",
+          "scenario_variant": "a"
+        },
+        "synthetic": true,
+        "transport": "stream-json",
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "decision": "IDEMPOTENT_CONSUMER_WITH_ATOMIC_ACK",
+            "task_id": "b3-pilot-a-debugging-event-duplication",
+            "validation_gates": [
+              "duplicate_delivery_test",
+              "side_effect_exactly_once_test"
+            ]
+          },
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ],
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "e52b17e882a2118f491c2133efbfcc30b90b206ab7356a29c1e3823d347a8359"
+    },
+    {
+      "starting_state_digest": "fc4a0f73eb860c7d2e62c3dd615e1a4d76cea1ef57c82ce42959f84ab96799e1",
+      "task_class": "DEBUGGING",
+      "task_id": "b3-pilot-b-debugging-event-duplication",
+      "task_payload": {
+        "execution_allowed": true,
+        "expected_cli_version": "1.1.19",
+        "prompt": "Evaluate this synthetic governed engineering scenario.\n\nScenario: A synthetic event consumer processes some messages twice because acknowledgement occurs after a non-idempotent side effect. This is the alternate bounded scenario; make no authority expansion.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b3-pilot-b-debugging-event-duplication\",\"decision\":\"IDEMPOTENT_CONSUMER_WITH_ATOMIC_ACK\",\"validation_gates\":[\"duplicate_delivery_test\",\"side_effect_exactly_once_test\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "starting_state": {
+          "authority_expansion": false,
+          "required_decision": "IDEMPOTENT_CONSUMER_WITH_ATOMIC_ACK",
+          "required_validation_gates": [
+            "duplicate_delivery_test",
+            "side_effect_exactly_once_test"
+          ],
+          "scenario": "A synthetic event consumer processes some messages twice because acknowledgement occurs after a non-idempotent side effect. This is the alternate bounded scenario; make no authority expansion.",
+          "scenario_variant": "b"
+        },
+        "synthetic": true,
+        "transport": "stream-json",
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "decision": "IDEMPOTENT_CONSUMER_WITH_ATOMIC_ACK",
+            "task_id": "b3-pilot-b-debugging-event-duplication",
+            "validation_gates": [
+              "duplicate_delivery_test",
+              "side_effect_exactly_once_test"
+            ]
+          },
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ],
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "db76ca821b8f81d5f6cdd2afb54a9d4829b83b57d862e42d78b5d0478a586bd8"
+    },
+    {
+      "starting_state_digest": "65aa11f1ce0005c2688b2bcb4cfeca449d6079462f7ec55aaa2e1389920ac22b",
+      "task_class": "SECURITY_SENSITIVE",
+      "task_id": "b3-pilot-a-security-capability-scope",
+      "task_payload": {
+        "execution_allowed": true,
+        "expected_cli_version": "1.1.19",
+        "prompt": "Evaluate this synthetic governed engineering scenario.\n\nScenario: A synthetic worker currently receives a broad service credential although it needs only read access to one resource class. This is the primary bounded scenario; make no authority expansion.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b3-pilot-a-security-capability-scope\",\"decision\":\"LEAST_PRIVILEGE_SCOPED_CAPABILITY\",\"validation_gates\":[\"allowed_resource_access\",\"denied_out_of_scope_access\",\"credential_scope_regression\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "starting_state": {
+          "authority_expansion": false,
+          "required_decision": "LEAST_PRIVILEGE_SCOPED_CAPABILITY",
+          "required_validation_gates": [
+            "allowed_resource_access",
+            "denied_out_of_scope_access",
+            "credential_scope_regression"
+          ],
+          "scenario": "A synthetic worker currently receives a broad service credential although it needs only read access to one resource class. This is the primary bounded scenario; make no authority expansion.",
+          "scenario_variant": "a"
+        },
+        "synthetic": true,
+        "transport": "stream-json",
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "decision": "LEAST_PRIVILEGE_SCOPED_CAPABILITY",
+            "task_id": "b3-pilot-a-security-capability-scope",
+            "validation_gates": [
+              "allowed_resource_access",
+              "denied_out_of_scope_access",
+              "credential_scope_regression"
+            ]
+          },
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ],
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "70c03ede482434f1e420b3e500f618f3309bc7244db2217f5f3f74f010bdcd95"
+    },
+    {
+      "starting_state_digest": "b3d7f74c61b490fe546631e6cef153dafb9da4df88bdf626dab48abd96a71773",
+      "task_class": "SECURITY_SENSITIVE",
+      "task_id": "b3-pilot-b-security-capability-scope",
+      "task_payload": {
+        "execution_allowed": true,
+        "expected_cli_version": "1.1.19",
+        "prompt": "Evaluate this synthetic governed engineering scenario.\n\nScenario: A synthetic worker currently receives a broad service credential although it needs only read access to one resource class. This is the alternate bounded scenario; make no authority expansion.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b3-pilot-b-security-capability-scope\",\"decision\":\"LEAST_PRIVILEGE_SCOPED_CAPABILITY\",\"validation_gates\":[\"allowed_resource_access\",\"denied_out_of_scope_access\",\"credential_scope_regression\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "starting_state": {
+          "authority_expansion": false,
+          "required_decision": "LEAST_PRIVILEGE_SCOPED_CAPABILITY",
+          "required_validation_gates": [
+            "allowed_resource_access",
+            "denied_out_of_scope_access",
+            "credential_scope_regression"
+          ],
+          "scenario": "A synthetic worker currently receives a broad service credential although it needs only read access to one resource class. This is the alternate bounded scenario; make no authority expansion.",
+          "scenario_variant": "b"
+        },
+        "synthetic": true,
+        "transport": "stream-json",
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "decision": "LEAST_PRIVILEGE_SCOPED_CAPABILITY",
+            "task_id": "b3-pilot-b-security-capability-scope",
+            "validation_gates": [
+              "allowed_resource_access",
+              "denied_out_of_scope_access",
+              "credential_scope_regression"
+            ]
+          },
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ],
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "19b5725e99708ad658a92a9581b8050bf4ed2fd1f9bcdd6d65f6ad3306358997"
+    },
+    {
+      "starting_state_digest": "5c2d0671bc65f558000ac11ee8c5fba5ad824f30ad88d37518f14ff359024345",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-pilot-a-validation-partial-write",
+      "task_payload": {
+        "execution_allowed": true,
+        "expected_cli_version": "1.1.19",
+        "prompt": "Evaluate this synthetic governed engineering scenario.\n\nScenario: A synthetic batch update may partially commit records when one item fails validation. This is the primary bounded scenario; make no authority expansion.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b3-pilot-a-validation-partial-write\",\"decision\":\"VALIDATE_THEN_ATOMIC_COMMIT\",\"validation_gates\":[\"all_items_prevalidated\",\"partial_commit_prohibited\",\"rollback_integrity\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "starting_state": {
+          "authority_expansion": false,
+          "required_decision": "VALIDATE_THEN_ATOMIC_COMMIT",
+          "required_validation_gates": [
+            "all_items_prevalidated",
+            "partial_commit_prohibited",
+            "rollback_integrity"
+          ],
+          "scenario": "A synthetic batch update may partially commit records when one item fails validation. This is the primary bounded scenario; make no authority expansion.",
+          "scenario_variant": "a"
+        },
+        "synthetic": true,
+        "transport": "stream-json",
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "decision": "VALIDATE_THEN_ATOMIC_COMMIT",
+            "task_id": "b3-pilot-a-validation-partial-write",
+            "validation_gates": [
+              "all_items_prevalidated",
+              "partial_commit_prohibited",
+              "rollback_integrity"
+            ]
+          },
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ],
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "c84be8c63f3722987fe72f1e58426012a3f6b4a138998ce516852bbbc55a0e99"
+    },
+    {
+      "starting_state_digest": "ed7ce8acbb90835e4be4052b9a3c35bd8b58aeaac4b55d2a5f9bd2da208fefe6",
+      "task_class": "VALIDATION_HEAVY",
+      "task_id": "b3-pilot-b-validation-partial-write",
+      "task_payload": {
+        "execution_allowed": true,
+        "expected_cli_version": "1.1.19",
+        "prompt": "Evaluate this synthetic governed engineering scenario.\n\nScenario: A synthetic batch update may partially commit records when one item fails validation. This is the alternate bounded scenario; make no authority expansion.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b3-pilot-b-validation-partial-write\",\"decision\":\"VALIDATE_THEN_ATOMIC_COMMIT\",\"validation_gates\":[\"all_items_prevalidated\",\"partial_commit_prohibited\",\"rollback_integrity\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "starting_state": {
+          "authority_expansion": false,
+          "required_decision": "VALIDATE_THEN_ATOMIC_COMMIT",
+          "required_validation_gates": [
+            "all_items_prevalidated",
+            "partial_commit_prohibited",
+            "rollback_integrity"
+          ],
+          "scenario": "A synthetic batch update may partially commit records when one item fails validation. This is the alternate bounded scenario; make no authority expansion.",
+          "scenario_variant": "b"
+        },
+        "synthetic": true,
+        "transport": "stream-json",
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "decision": "VALIDATE_THEN_ATOMIC_COMMIT",
+            "task_id": "b3-pilot-b-validation-partial-write",
+            "validation_gates": [
+              "all_items_prevalidated",
+              "partial_commit_prohibited",
+              "rollback_integrity"
+            ]
+          },
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ],
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "497608ad0379bc79da3da4152f17d57fbb4fcdc6233983c5bd1a912135756ab6"
+    },
+    {
+      "starting_state_digest": "7cf285ae7b55985f1e143007888165082b16802ba445e2ce9e603e116be12f82",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "task_id": "b3-pilot-a-doc-implementation-contract",
+      "task_payload": {
+        "execution_allowed": true,
+        "expected_cli_version": "1.1.19",
+        "prompt": "Evaluate this synthetic governed engineering scenario.\n\nScenario: A synthetic API change adds a pagination cursor and requires implementation and public contract documentation to remain synchronized. This is the primary bounded scenario; make no authority expansion.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b3-pilot-a-doc-implementation-contract\",\"decision\":\"CONTRACT_FIRST_CURSOR_PAGINATION\",\"validation_gates\":[\"implementation_contract_match\",\"documentation_example_validation\",\"backward_compatibility\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "starting_state": {
+          "authority_expansion": false,
+          "required_decision": "CONTRACT_FIRST_CURSOR_PAGINATION",
+          "required_validation_gates": [
+            "implementation_contract_match",
+            "documentation_example_validation",
+            "backward_compatibility"
+          ],
+          "scenario": "A synthetic API change adds a pagination cursor and requires implementation and public contract documentation to remain synchronized. This is the primary bounded scenario; make no authority expansion.",
+          "scenario_variant": "a"
+        },
+        "synthetic": true,
+        "transport": "stream-json",
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "decision": "CONTRACT_FIRST_CURSOR_PAGINATION",
+            "task_id": "b3-pilot-a-doc-implementation-contract",
+            "validation_gates": [
+              "implementation_contract_match",
+              "documentation_example_validation",
+              "backward_compatibility"
+            ]
+          },
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ],
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "5b6c8cf3c8c8e555a2746d95082973813b563035d3dd78fa210ddcd280c72a5b"
+    },
+    {
+      "starting_state_digest": "ac7e020abfc103dde876be76601a3b243e3721aac303c30e0782395186806111",
+      "task_class": "DOCUMENTATION_AND_IMPLEMENTATION",
+      "task_id": "b3-pilot-b-doc-implementation-contract",
+      "task_payload": {
+        "execution_allowed": true,
+        "expected_cli_version": "1.1.19",
+        "prompt": "Evaluate this synthetic governed engineering scenario.\n\nScenario: A synthetic API change adds a pagination cursor and requires implementation and public contract documentation to remain synchronized. This is the alternate bounded scenario; make no authority expansion.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b3-pilot-b-doc-implementation-contract\",\"decision\":\"CONTRACT_FIRST_CURSOR_PAGINATION\",\"validation_gates\":[\"implementation_contract_match\",\"documentation_example_validation\",\"backward_compatibility\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "starting_state": {
+          "authority_expansion": false,
+          "required_decision": "CONTRACT_FIRST_CURSOR_PAGINATION",
+          "required_validation_gates": [
+            "implementation_contract_match",
+            "documentation_example_validation",
+            "backward_compatibility"
+          ],
+          "scenario": "A synthetic API change adds a pagination cursor and requires implementation and public contract documentation to remain synchronized. This is the alternate bounded scenario; make no authority expansion.",
+          "scenario_variant": "b"
+        },
+        "synthetic": true,
+        "transport": "stream-json",
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "decision": "CONTRACT_FIRST_CURSOR_PAGINATION",
+            "task_id": "b3-pilot-b-doc-implementation-contract",
+            "validation_gates": [
+              "implementation_contract_match",
+              "documentation_example_validation",
+              "backward_compatibility"
+            ]
+          },
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ],
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "c639ecafc739e6c3d35285660e57ac239cd82a84363a1a58346f9328627fefc4"
+    },
+    {
+      "starting_state_digest": "ab96032a09e0d8136f2e313ccf773770cf92eb65b5a7bde9eef99644d687e0d2",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-pilot-a-dependency-version-skew",
+      "task_payload": {
+        "execution_allowed": true,
+        "expected_cli_version": "1.1.19",
+        "prompt": "Evaluate this synthetic governed engineering scenario.\n\nScenario: Two synthetic components require incompatible major versions of the same external client library. This is the primary bounded scenario; make no authority expansion.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b3-pilot-a-dependency-version-skew\",\"decision\":\"APPLICATION_OWNED_ABSTRACTION_WITH_ISOLATED_ADAPTERS\",\"validation_gates\":[\"adapter_contract_parity\",\"dependency_isolation\",\"version_skew_regression\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "starting_state": {
+          "authority_expansion": false,
+          "required_decision": "APPLICATION_OWNED_ABSTRACTION_WITH_ISOLATED_ADAPTERS",
+          "required_validation_gates": [
+            "adapter_contract_parity",
+            "dependency_isolation",
+            "version_skew_regression"
+          ],
+          "scenario": "Two synthetic components require incompatible major versions of the same external client library. This is the primary bounded scenario; make no authority expansion.",
+          "scenario_variant": "a"
+        },
+        "synthetic": true,
+        "transport": "stream-json",
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "decision": "APPLICATION_OWNED_ABSTRACTION_WITH_ISOLATED_ADAPTERS",
+            "task_id": "b3-pilot-a-dependency-version-skew",
+            "validation_gates": [
+              "adapter_contract_parity",
+              "dependency_isolation",
+              "version_skew_regression"
+            ]
+          },
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ],
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "191efa61a70231b946c9d2be0122e5906cb1da891f2499e1e7023e0546ab492e"
+    },
+    {
+      "starting_state_digest": "751e218ffdadd3b856b66da2db8902339ba59afb0ab64323441e48c81f542f62",
+      "task_class": "DEPENDENCY_HEAVY",
+      "task_id": "b3-pilot-b-dependency-version-skew",
+      "task_payload": {
+        "execution_allowed": true,
+        "expected_cli_version": "1.1.19",
+        "prompt": "Evaluate this synthetic governed engineering scenario.\n\nScenario: Two synthetic components require incompatible major versions of the same external client library. This is the alternate bounded scenario; make no authority expansion.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b3-pilot-b-dependency-version-skew\",\"decision\":\"APPLICATION_OWNED_ABSTRACTION_WITH_ISOLATED_ADAPTERS\",\"validation_gates\":[\"adapter_contract_parity\",\"dependency_isolation\",\"version_skew_regression\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "starting_state": {
+          "authority_expansion": false,
+          "required_decision": "APPLICATION_OWNED_ABSTRACTION_WITH_ISOLATED_ADAPTERS",
+          "required_validation_gates": [
+            "adapter_contract_parity",
+            "dependency_isolation",
+            "version_skew_regression"
+          ],
+          "scenario": "Two synthetic components require incompatible major versions of the same external client library. This is the alternate bounded scenario; make no authority expansion.",
+          "scenario_variant": "b"
+        },
+        "synthetic": true,
+        "transport": "stream-json",
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "decision": "APPLICATION_OWNED_ABSTRACTION_WITH_ISOLATED_ADAPTERS",
+            "task_id": "b3-pilot-b-dependency-version-skew",
+            "validation_gates": [
+              "adapter_contract_parity",
+              "dependency_isolation",
+              "version_skew_regression"
+            ]
+          },
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ],
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "532404af2f9a53a84e9679228a9ac923098ebea80cad878f3405fb515e718881"
+    },
+    {
+      "starting_state_digest": "f8b5f347297f037cbdc313a68b07d9abd81dc4e41152023774be22b5cbfa108c",
+      "task_class": "PARALLEL_FRIENDLY",
+      "task_id": "b3-pilot-a-parallel-artifact-join",
+      "task_payload": {
+        "execution_allowed": true,
+        "expected_cli_version": "1.1.19",
+        "prompt": "Evaluate this synthetic governed engineering scenario.\n\nScenario: Two independent synthetic analysis steps can execute concurrently but their outputs must pass a deterministic join validation before use. This is the primary bounded scenario; make no authority expansion.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b3-pilot-a-parallel-artifact-join\",\"decision\":\"BOUNDED_PARALLEL_BRANCHES_WITH_VALIDATED_JOIN\",\"validation_gates\":[\"branch_independence\",\"join_completeness\",\"deterministic_merge\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "starting_state": {
+          "authority_expansion": false,
+          "required_decision": "BOUNDED_PARALLEL_BRANCHES_WITH_VALIDATED_JOIN",
+          "required_validation_gates": [
+            "branch_independence",
+            "join_completeness",
+            "deterministic_merge"
+          ],
+          "scenario": "Two independent synthetic analysis steps can execute concurrently but their outputs must pass a deterministic join validation before use. This is the primary bounded scenario; make no authority expansion.",
+          "scenario_variant": "a"
+        },
+        "synthetic": true,
+        "transport": "stream-json",
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "decision": "BOUNDED_PARALLEL_BRANCHES_WITH_VALIDATED_JOIN",
+            "task_id": "b3-pilot-a-parallel-artifact-join",
+            "validation_gates": [
+              "branch_independence",
+              "join_completeness",
+              "deterministic_merge"
+            ]
+          },
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ],
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "c5c39392190cc09486daad68e7a84e5a391676cd7b3a08941d90eb9fcb1a028e"
+    },
+    {
+      "starting_state_digest": "53f24acfa5a2f8a2d3da9f815cb0c5e405f36dbb4d99f6af8ac20eaa16d3771c",
+      "task_class": "PARALLEL_FRIENDLY",
+      "task_id": "b3-pilot-b-parallel-artifact-join",
+      "task_payload": {
+        "execution_allowed": true,
+        "expected_cli_version": "1.1.19",
+        "prompt": "Evaluate this synthetic governed engineering scenario.\n\nScenario: Two independent synthetic analysis steps can execute concurrently but their outputs must pass a deterministic join validation before use. This is the alternate bounded scenario; make no authority expansion.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b3-pilot-b-parallel-artifact-join\",\"decision\":\"BOUNDED_PARALLEL_BRANCHES_WITH_VALIDATED_JOIN\",\"validation_gates\":[\"branch_independence\",\"join_completeness\",\"deterministic_merge\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "starting_state": {
+          "authority_expansion": false,
+          "required_decision": "BOUNDED_PARALLEL_BRANCHES_WITH_VALIDATED_JOIN",
+          "required_validation_gates": [
+            "branch_independence",
+            "join_completeness",
+            "deterministic_merge"
+          ],
+          "scenario": "Two independent synthetic analysis steps can execute concurrently but their outputs must pass a deterministic join validation before use. This is the alternate bounded scenario; make no authority expansion.",
+          "scenario_variant": "b"
+        },
+        "synthetic": true,
+        "transport": "stream-json",
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "decision": "BOUNDED_PARALLEL_BRANCHES_WITH_VALIDATED_JOIN",
+            "task_id": "b3-pilot-b-parallel-artifact-join",
+            "validation_gates": [
+              "branch_independence",
+              "join_completeness",
+              "deterministic_merge"
+            ]
+          },
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ],
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "fdeea18ac2ab06c701cf3a3c75925d0d1b1f1def6e269d90fec5c4ad8783cbc3"
+    },
+    {
+      "starting_state_digest": "5d9f266cf6a74de060b3a4eb972e6fa966827b9bdaaed3810206631a08453774",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-pilot-a-high-coordination-contract-rollout",
+      "task_payload": {
+        "execution_allowed": true,
+        "expected_cli_version": "1.1.19",
+        "prompt": "Evaluate this synthetic governed engineering scenario.\n\nScenario: A synthetic cross-layer contract change affects producer, consumer, migration sequencing, and release validation while deployment remains a human gate. This is the primary bounded scenario; make no authority expansion.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b3-pilot-a-high-coordination-contract-rollout\",\"decision\":\"FREEZE_CONTRACT_THEN_STAGE_ROLLOUT\",\"validation_gates\":[\"producer_contract\",\"consumer_contract\",\"migration_compatibility\",\"exact_head_release_validation\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "starting_state": {
+          "authority_expansion": false,
+          "required_decision": "FREEZE_CONTRACT_THEN_STAGE_ROLLOUT",
+          "required_validation_gates": [
+            "producer_contract",
+            "consumer_contract",
+            "migration_compatibility",
+            "exact_head_release_validation"
+          ],
+          "scenario": "A synthetic cross-layer contract change affects producer, consumer, migration sequencing, and release validation while deployment remains a human gate. This is the primary bounded scenario; make no authority expansion.",
+          "scenario_variant": "a"
+        },
+        "synthetic": true,
+        "transport": "stream-json",
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "decision": "FREEZE_CONTRACT_THEN_STAGE_ROLLOUT",
+            "task_id": "b3-pilot-a-high-coordination-contract-rollout",
+            "validation_gates": [
+              "producer_contract",
+              "consumer_contract",
+              "migration_compatibility",
+              "exact_head_release_validation"
+            ]
+          },
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ],
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "0263cfd00dffeaac180e3e8f80ac0a666350c6c3eebf236bc2d80b5044cd01ad"
+    },
+    {
+      "starting_state_digest": "7e5550079c6ad53aa3b36223e3f0cc3d664d6e03f4a76c01e708c1f085d98356",
+      "task_class": "HIGH_COORDINATION",
+      "task_id": "b3-pilot-b-high-coordination-contract-rollout",
+      "task_payload": {
+        "execution_allowed": true,
+        "expected_cli_version": "1.1.19",
+        "prompt": "Evaluate this synthetic governed engineering scenario.\n\nScenario: A synthetic cross-layer contract change affects producer, consumer, migration sequencing, and release validation while deployment remains a human gate. This is the alternate bounded scenario; make no authority expansion.\n\nReturn EXACTLY one JSON object with this shape and values:\n{\"task_id\":\"b3-pilot-b-high-coordination-contract-rollout\",\"decision\":\"FREEZE_CONTRACT_THEN_STAGE_ROLLOUT\",\"validation_gates\":[\"producer_contract\",\"consumer_contract\",\"migration_compatibility\",\"exact_head_release_validation\"],\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "starting_state": {
+          "authority_expansion": false,
+          "required_decision": "FREEZE_CONTRACT_THEN_STAGE_ROLLOUT",
+          "required_validation_gates": [
+            "producer_contract",
+            "consumer_contract",
+            "migration_compatibility",
+            "exact_head_release_validation"
+          ],
+          "scenario": "A synthetic cross-layer contract change affects producer, consumer, migration sequencing, and release validation while deployment remains a human gate. This is the alternate bounded scenario; make no authority expansion.",
+          "scenario_variant": "b"
+        },
+        "synthetic": true,
+        "transport": "stream-json",
+        "validation_contract": {
+          "expected_response": {
+            "authority_expansion": false,
+            "decision": "FREEZE_CONTRACT_THEN_STAGE_ROLLOUT",
+            "task_id": "b3-pilot-b-high-coordination-contract-rollout",
+            "validation_gates": [
+              "producer_contract",
+              "consumer_contract",
+              "migration_compatibility",
+              "exact_head_release_validation"
+            ]
+          },
+          "prohibited_dispositions": [
+            "AUTHORITY_EXPANSION",
+            "GOVERNANCE_BYPASS"
+          ],
+          "required_keys": [
+            "task_id",
+            "decision",
+            "validation_gates",
+            "authority_expansion"
+          ],
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1"
+        }
+      },
+      "task_prompt_digest": "01cb2ceb8a865865a0bfb912c93946d7097a6b3069fb7c71bab17658618e22df"
+    }
+  ]
+}
