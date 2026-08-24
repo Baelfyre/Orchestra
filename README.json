@@ -291,6 +291,8 @@
       "preregistration_digest": "a77b563acf95189a96647641426244903cf950b760946c5d38a06b37c0292e1f",
       "manifest_digest": "8207f16cb2a9fa93b414c0651c16f183cab27c3c859604bbd62197e1198e9041",
       "plan_digest": "5e8eacb7ef042b8a9e9c90c9d6406075533df8afcdbf62b1f9a01d57ffa8c2d9",
+      "freeze_digest": "e13a3b4d8f62822db3ae9edce8256c2ca94d344577b125d04a779032253e95af",
+      "driver_sha256": "77c4821ff638e90ceadbc80964b520d25b0c23abb874d5e494fca91a77c19f5e",
       "planned_runs": 40,
       "codex_calls_per_run": 3,
       "maximum_underlying_model_calls": 120,

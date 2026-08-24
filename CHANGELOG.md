@@ -1,5 +1,10 @@
 # Changelog
 
+## Post-v1.6.0 Comparative Benchmark B2.5 Driver Import Remediation - Candidate
+
+- Adds the missing standard-library `argparse` import required by the prepared B2.5 driver entrypoint.
+- The first authorized continuation stopped before executor invocation; no B2.5 live model call or accepted run was consumed.
+
 ## Post-v1.6.0 Comparative Benchmark B2.5 Confirmatory Preparation - Candidate
 
 - Freezes ten new held-out synthetic tasks, one per B0 stratum, with exact task decisions, validation gates, and no authority expansion.
