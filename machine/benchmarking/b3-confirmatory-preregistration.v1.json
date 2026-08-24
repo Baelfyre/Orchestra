@@ -1,0 +1,37 @@
+{
+  "benefit_rule": "ALL_PRIMARY_STATISTICAL_PRACTICAL_QUALITY_AND_REGRESSION_GATES_MUST_PASS",
+  "exclusions": "OBJECTIVE_INVALID_RUNS_ONLY_STOP_ON_FIRST_INVALID_NO_RETRY",
+  "practical_threshold": 0.1,
+  "primary_endpoint": "MEDIAN_PAIRED_OUTPUT_TOKEN_RELATIVE_REDUCTION_MURMURS_VS_DEFAULT",
+  "quality_guard": {
+    "all_runs_must_pass": true,
+    "all_safety_flags_must_be_false": true,
+    "murmurs_success_rate_may_not_be_lower_than_default": true
+  },
+  "regression_guards": {
+    "median_input_token_relative_reduction_minimum": -0.05,
+    "median_latency_relative_reduction_minimum": -0.1,
+    "median_total_token_relative_reduction_minimum": -0.05
+  },
+  "sample_size": {
+    "b0_clamped_task_count": 50,
+    "maximum_model_calls": 450,
+    "normal_approximation_required_blocks": 48,
+    "pilot_paired_relative_stdev": 0.24671837802012273,
+    "planned_runs": 450,
+    "power": 0.8,
+    "practical_effect": 0.1,
+    "primary_endpoint": "PAIRED_OUTPUT_TOKEN_RELATIVE_REDUCTION",
+    "repetitions_per_task": 3,
+    "two_sided_alpha": 0.05
+  },
+  "schema_version": "orchestra.b3-confirmatory-preregistration.v1",
+  "statistical_rules": {
+    "confidence_level": 0.95,
+    "lower_bound_must_exceed": 0.0,
+    "paired_bootstrap_samples": 20000,
+    "paired_bootstrap_seed": 24082027,
+    "two_sided_exact_sign_test_alpha": 0.05
+  },
+  "status": "FROZEN_BEFORE_CONFIRMATORY_OUTCOMES"
+}
