@@ -1,10 +1,16 @@
 # Changelog
 
-## Post-v1.6.0 UIX-4 Component and Asset Preservation - Candidate
+## Post-v1.6.0 UIX-5 Specialist Integration - Candidate
+
+- Adds the library-neutral UIX-5 specialist integration flow for governed UI evidence consumption through the existing Conductor, Cloak, Clockwork, Governor, Ponytail, Overseer, and Arbiter workflow.
+- Adds explicit handoff, ownership, conditional adoption review, evidence, and non-authority contracts with deterministic negative fixtures.
+- Keeps Caveman presentation-only, Butler inactive, external tools optional, and runtime, dependency, Figma, release, deployment, and policy changes outside this bounded candidate.
+
+## Post-v1.6.0 UIX-4 Component and Asset Preservation - Canonical
 
 - Adds the library-neutral UIX-4 component and asset preservation contract with exact reuse precedence, variant/state coverage, semantic token preservation, provenance, substitution, and intentional-deviation rules.
 - Adds deterministic valid/invalid fixtures and runtime validation for incomplete coverage, unapproved substitutions, known-asset provenance, and non-authorizing authority boundaries.
-- Keeps implementation, dependency, external-tool, Figma, release, deployment, and policy activation outside this bounded candidate.
+- Canonicalized through signed materialization and independent readback at `3a7f18b` with no implementation, dependency, external-tool, Figma, release, deployment, or policy activation.
 
 ## Post-v1.6.0 UIX-3 Theme, Layout, and Effect Profile Registry - Canonical
 

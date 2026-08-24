@@ -1,6 +1,6 @@
 # UIX-4 Component and Asset Preservation Contracts
 
-Status: `UIX_4_COMPONENT_ASSET_PRESERVATION_IMPLEMENTED_PENDING_CANONICAL_VALIDATION`
+Status: `UIX_4_COMPONENT_ASSET_PRESERVATION_IMPLEMENTED_CANONICAL`
 
 Recorded: 2026-08-24
 
@@ -43,4 +43,4 @@ This contract is evidence. It does not grant implementation, CSS, validation, de
 
 Cloak owns preservation semantics and static fidelity requirements. Clockwork owns later component boundaries. Ponytail owns only authorized project-native implementation. Overseer owns rendered and accessibility evidence. Conductor and Arbiter retain routing and transition ownership.
 
-UIX-4 exits only after exact-tree validation, fresh protected-main checks, signed materialization, canonical promotion, and independent tree/signature readback.
+UIX-4 exited after exact-tree validation, fresh protected-main checks, signed materialization, canonical promotion, and independent tree/signature readback at `3a7f18b`.
