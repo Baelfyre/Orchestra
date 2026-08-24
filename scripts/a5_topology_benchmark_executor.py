@@ -312,7 +312,16 @@ def run_codex_call(
 ) -> dict[str, Any]:
     command = codex_command(prefix, prompt=prompt, workspace=workspace, model=model, reasoning_effort=reasoning_effort)
     started = time.monotonic()
-    completed = run_command(command, capture_output=True, text=True, check=False, shell=False, timeout=timeout_seconds)
+    completed = run_command(
+        command,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="strict",
+        check=False,
+        shell=False,
+        timeout=timeout_seconds,
+    )
     elapsed_ms = int((time.monotonic() - started) * 1000)
     if completed.returncode != 0:
         raise TopologyExecutorError(f"Codex call failed with exit {completed.returncode}: {completed.stderr.strip()}")

@@ -41,10 +41,16 @@ Machine records:
 
 `scripts/b2_5_confirmatory_driver.py` requires an exact live authorization bound to the freeze, task-set, manifest, plan, and preparation Git identities. It uses the corrected executor flags `--codex-command-prefix-json` and `--workspace-dir`, preserves the complete B2.3.1 evidence contract and session artifacts, and stops before the next slot after any invalid run, validator failure, identity drift, repository mutation, evidence mismatch, counter-provenance failure, or resource overflow. The driver is not run during preparation.
 
+## UTF-8 recovery boundary
+
+The first empirical B2.5 session stopped fail-closed at slot 14 after 13 accepted runs and 42 actual model calls. Windows decoded Codex JSONL with the locale-dependent `cp1252` codec and rejected a byte before evidence parsing. That stopped session remains historical invalidated-session evidence and is excluded from primary confirmatory inference.
+
+The corrected executor requests `encoding="utf-8"` and `errors="strict"` for Codex subprocess output. Invalid UTF-8 remains a measurement-capture failure; replacement characters and ignored decode errors are prohibited. The task set, prompts, expected responses, validators, manifest, plan, randomization seed, topology arms, resource limits, and preregistered analysis are unchanged. Because the executor identity changed, the freeze binds its new source SHA-256 before one full fresh replacement session may begin from slot 1.
+
 ## Authority state
 
 The preparation freeze records `live_execution_authorized=false`, `benefit_claim_allowed=false`, and `a5_promotion_evidence_allowed=false`. B2.5 live execution is a separately gated action after exact-head validation, signed materialization, canonicalization, and independent canonical verification. A5 effective promotion, production attachment, B4, release, deployment, policy activation, integration refresh, destructive cleanup, force push, and history rewrite remain unauthorized.
 
 ## Next gate
 
-Complete exact-head validation and signed canonicalization of this preparation package. Only then may the separately authorized B2.5 execution session be created and run once against the frozen 40-slot plan.
+Complete exact-head validation and signed canonicalization of the UTF-8 recovery package. Only then may the authorized child B2.5 replacement session be created and run once from slot 1 against the unchanged frozen 40-slot plan.

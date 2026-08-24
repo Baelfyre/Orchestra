@@ -282,8 +282,8 @@
       "next_gate": "B2_5_HELD_OUT_TASK_SET_FREEZE_AND_ZERO_CALL_PREFLIGHT"
     },
     "comparative_measurement_b2_5": {
-      "status": "B2_5_CONFIRMATORY_PREPARATION_FROZEN_NOT_LIVE_EXECUTED",
-      "purpose": "Freeze a new held-out confirmatory task set, deterministic paired execution plan, exact host/workspace boundary, zero-call preflight, and fail-closed live driver.",
+      "status": "B2_5_UTF8_RECOVERY_FROZEN_NOT_LIVE_AUTHORIZED",
+      "purpose": "Preserve the held-out confirmatory design while binding Codex JSONL decoding explicitly to strict UTF-8 after the historical Windows locale-decoding stop.",
       "program_id": "orchestra.shared-comparative-benchmark.v1",
       "experiment_id": "b2-confirmatory-measurement-v1",
       "tasks": ["b2-confirm-single-domain-state-transition", "b2-confirm-multi-domain-order-entitlement", "b2-confirm-architecture-plugin-boundary", "b2-confirm-debugging-event-duplication", "b2-confirm-security-capability-scope", "b2-confirm-validation-partial-write", "b2-confirm-doc-implementation-contract", "b2-confirm-dependency-version-skew", "b2-confirm-parallel-artifact-join", "b2-confirm-high-coordination-contract-rollout"],
@@ -291,7 +291,8 @@
       "preregistration_digest": "a77b563acf95189a96647641426244903cf950b760946c5d38a06b37c0292e1f",
       "manifest_digest": "8207f16cb2a9fa93b414c0651c16f183cab27c3c859604bbd62197e1198e9041",
       "plan_digest": "5e8eacb7ef042b8a9e9c90c9d6406075533df8afcdbf62b1f9a01d57ffa8c2d9",
-      "freeze_digest": "e13a3b4d8f62822db3ae9edce8256c2ca94d344577b125d04a779032253e95af",
+      "freeze_digest": "66fc567ab448f87f824ba113c7646b1d7a7b59f1e1b7daf98cece8b5e86f3c11",
+      "executor_sha256": "d33104cc684c28e175038ca7eba18adcde78a9d063bb73a2d31bca77d72912ce",
       "driver_sha256": "77c4821ff638e90ceadbc80964b520d25b0c23abb874d5e494fca91a77c19f5e",
       "planned_runs": 40,
       "codex_calls_per_run": 3,
@@ -302,10 +303,15 @@
       "machine_sources": ["machine/benchmarking/b2-5-held-out-task-set.v1.json", "machine/benchmarking/b2-5-confirmatory-preregistration.v1.json", "machine/benchmarking/b2-5-confirmatory-manifest.v1.json", "machine/benchmarking/b2-5-confirmatory-plan.v1.json", "machine/benchmarking/b2-5-confirmatory-freeze.v1.json"],
       "human_sources": ["docs/benchmarking/B2_CONFIRMATORY_MEASUREMENT_DESIGN.md", "docs/benchmarking/B2_CONFIRMATORY_EVIDENCE_INSTRUMENTATION.md", "docs/benchmarking/B2_5_CONFIRMATORY_PREPARATION.md"],
       "live_execution_authorized": false,
-      "live_model_calls_consumed": 0,
+      "live_model_calls_consumed": 42,
+      "historical_stopped_session_accepted_runs": 13,
+      "historical_stopped_session_attempted_slots": 14,
+      "historical_stopped_session_primary_inference_eligible": false,
+      "replacement_session_authorized_after_canonicalization": true,
+      "maximum_additional_underlying_model_calls": 120,
       "benefit_claim_allowed": false,
       "a5_execution_promotion": "NOT_AUTHORIZED",
-      "next_gate": "B2_5_EXACT_HEAD_VALIDATION_SIGNED_CANONICALIZATION_THEN_SEPARATELY_AUTHORIZED_EXECUTION"
+      "next_gate": "B2_5_UTF8_RECOVERY_EXACT_HEAD_VALIDATION_SIGNED_CANONICALIZATION_THEN_ONE_REPLACEMENT_SESSION"
     },
     "comparative_measurement_b3_1": {
       "status": "CALIBRATION_COMPLETED_AND_VALIDATED",
