@@ -31,6 +31,17 @@
     "governed_runtime": {"status": "IMPLEMENTED", "machine_sources": ["machine/governance/policy.v1.json"], "human_sources": ["docs/architecture/README.md", "docs/governance/GOVERNANCE_LAYER.md", "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md"]},
     "cross_specialist_coordination": {"status": "IMPLEMENTED", "human_sources": ["docs/governance/TUNER_PROTOCOL.md", "ROUTING_MAP.md"]},
     "validation_and_evidence": {"status": "IMPLEMENTED", "machine_sources": ["machine/schemas/", "machine/release-evidence/"], "human_sources": ["docs/setup/VALIDATION.md", "docs/validation/"]},
+    "governed_ui_design_contract_uix1": {
+      "status": "IMPLEMENTED_PENDING_CANONICAL_VALIDATION",
+      "purpose": "Library-neutral evidence-bound UI Design Contract for source identity, design-system tokens, component reuse mappings, layouts, themes, assets, accessibility requirements, fidelity dispositions, and revision-bound validation state.",
+      "machine_sources": ["machine/schemas/ui-design-contract.schema.json"],
+      "human_sources": ["docs/project/UIX_0_ACTIVATION_OVERLAP_AUDIT.md", "docs/project/UIX_1_UI_DESIGN_CONTRACT.md"],
+      "validation_surface": "tests/runtime/test_ui_design_contract.py",
+      "figma_required": false,
+      "code_connect_required": false,
+      "runtime_integration": false,
+      "authority_note": "The UI Design Contract is evidence, not implementation authority. Figma, Code Connect, Storybook, Playwright, component libraries, and token tools remain optional capabilities; contract or validation evidence cannot grant or expand authority."
+    },
     "host_update_planning": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "machine_sources": ["machine/hosts/update-contract.v1.json"], "human_sources": ["docs/setup/HOST_UPDATES.md"]},
     "adapter_sdk_and_prap_certification": {
       "status": "INCLUDED_IN_V1_6_CANDIDATE",
@@ -743,7 +754,7 @@
     "keep_c2_machine_json_prompt_results_separate_from_frozen_c1_natural_language_evidence": true,
     "preserve_c2r1_primary_29_accepted_plus_1_provider_outage_invalid_record": true,
     "treat_c2r1_supplemental_recovery_as_sensitivity_evidence_not_primary_replacement": true,
-    "treat_adaptive_a1_memory_as_non_authorizing_local_data_not_runtime_policy": true,
+    "treat_adaptive_a1_memory_as_non-authorizing_local_data_not_runtime_policy": true,
     "treat_adaptive_a2_context_as_advisory_only_after_existing_runtime_gates": true,
     "preserve_explicit_adaptive_precedence_over_same_scope_inferred_lifecycle": true,
     "treat_a3_shadow_state_as_non-authorizing_and_separate_from_a1_profile_and_a2_context": true,

@@ -1,5 +1,11 @@
 # Changelog
 
+## Post-v1.6.0 UIX-1 UI Design Contract - Candidate
+
+- Adds the library-neutral `orchestra.ui-design-contract.v1` Draft 2020-12 schema for source evidence, design-system tokens, project component mappings, layouts, themes, assets, accessibility requirements, fidelity dispositions, revision-bound validation state, and explicit authority non-equivalence.
+- Adds one valid reference contract, deterministic invalid fixtures, and runtime validation proving explicit-approval requirements, intentional-adaptation controls, project-native operation without Figma/Code Connect, mapping target requirements, and fail-closed authority flags.
+- Adds UIX-1 human contract documentation while keeping Figma, Code Connect, Storybook, Playwright, component libraries, token tools, dependency adoption, Figma mutation, specialist/runtime integration, release, deployment, and policy activation outside this bounded unit.
+
 ## Post-v1.6.0 Comparative Benchmark B-Phase Terminal Synthesis - Candidate
 
 - Reconciles the valid 450/450 B3 confirmatory session with 450 model calls, 8,885,182 accepted tokens, complete run and raw-evidence digest verification, and no invalid, safety, or repository-boundary event.
@@ -483,7 +489,7 @@
 ## Post-v1.2.0 Specialist Knowledge Layer - SK10 Hardening and Evaluation - Pending
 
 - Added evidence-driven hardening guides for Weaver model/source traceability, Conductor routing evaluation, The Tuner contradiction/invalidation coordination, and Arbiter continuity/handoff evaluation.
-- Added a selective JSON adversarial scenario catalog with deterministic regression coverage for routing, ownership, contradiction, re-entry, stale diagrams, handoff identity, and protected-action boundaries.
+- Added a selective JSON adversarial scenario catalog with deterministic regression coverage for routing, ownership, contradiction, re-entry, stale diagrams, handoff identity, continuity, and protected-action boundaries.
 - Preserved existing orchestration and governance contracts; no routing, authority, runtime, manifest, policy, release, or deployment redesign was introduced.
 - No release/tag publication, deployment/production mutation, installed-integration refresh, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is performed by SK10.
 
