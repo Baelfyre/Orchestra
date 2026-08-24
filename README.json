@@ -43,7 +43,7 @@
       "authority_note": "The UI Design Contract is evidence, not implementation authority. Figma, Code Connect, Storybook, Playwright, component libraries, and token tools remain optional capabilities; contract or validation evidence cannot grant or expand authority."
     },
     "governed_ui_design_source_preservation_uix2": {
-      "status": "IMPLEMENTED_PENDING_CANONICAL_VALIDATION",
+      "status": "IMPLEMENTED_CANONICAL",
       "purpose": "Library-neutral design-source intake and preservation workflow for source identity, evidence inventory, project-native component and token mapping, asset provenance, unresolved evidence, and pre-implementation handoff.",
       "machine_sources": ["machine/schemas/design-source-preservation-report.schema.json", "machine/schemas/design-source-preservation-workflow.schema.json", "machine/ui/design-source-preservation-workflow.v1.json"],
       "human_sources": ["docs/project/UIX_2_DESIGN_SOURCE_PRESERVATION.md"],
@@ -52,6 +52,17 @@
       "code_connect_required": false,
       "runtime_integration": false,
       "authority_note": "UIX-2 preserves evidence and reports unresolved design inputs; it does not grant implementation authority, authorize dependency adoption, make external tools authoritative, or authorize Figma mutation."
+    },
+    "governed_ui_design_profile_registry_uix3": {
+      "status": "IMPLEMENTED_PENDING_CANONICAL_VALIDATION",
+      "purpose": "Library-neutral UIX-3 registry separating foundations, layouts, complete themes or systems, and optional effects with deterministic composition and accessibility invariants.",
+      "machine_sources": ["machine/schemas/ui-profile-registry.schema.json", "machine/ui/ui-profile-registry.v1.json"],
+      "human_sources": ["docs/project/UIX_3_THEME_LAYOUT_EFFECT_PROFILE_REGISTRY.md"],
+      "validation_surface": "tests/runtime/test_ui_profile_registry.py",
+      "figma_required": false,
+      "code_connect_required": false,
+      "runtime_integration": false,
+      "authority_note": "UIX-3 profile metadata constrains composition evidence only; profile names do not authorize arbitrary CSS, implementation, dependency adoption, external tools, validation bypass, or Figma mutation."
     },
     "host_update_planning": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "machine_sources": ["machine/hosts/update-contract.v1.json"], "human_sources": ["docs/setup/HOST_UPDATES.md"]},
     "adapter_sdk_and_prap_certification": {
@@ -584,6 +595,8 @@
     "prap_certification_evidence_schema": "machine/schemas/prap-certification-evidence.schema.json",
     "developer_portal_catalog_schema": "machine/schemas/developer-portal-catalog.schema.json",
     "readme_machine_index_schema": "machine/schemas/readme-machine-index.schema.json",
+    "ui_profile_registry_schema": "machine/schemas/ui-profile-registry.schema.json",
+    "ui_profile_registry": "machine/ui/ui-profile-registry.v1.json",
     "comparative_benchmark_codex_c2_portability_r1": "machine/benchmarking/codex-c2-portability-r1-preexecution.v1.json",
     "comparative_benchmark_codex_c2_portability_r1_live_authorization": "machine/benchmarking/codex-c2-portability-r1-live-execution-authorization.v1.json"
   },
