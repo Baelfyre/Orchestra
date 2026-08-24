@@ -1,0 +1,75 @@
+{
+  "activation": {
+    "live_execution_authorized": false
+  },
+  "communication_binding": {
+    "caveman_blob": "bd22d86b32e4a99e09ff7482a35509faac7a6f65",
+    "caveman_repo_path": "D:\\Dev\\Orchestra-Benchmark-Evidence\\b3-pilot-host\\caveman",
+    "caveman_revision": "ae405e872270acc57484693612ae038b16c8f6cd"
+  },
+  "evidence_boundary": {
+    "confirmatory_design_must_be_frozen_after_pilot": true,
+    "counter_pooling_with_calibration": false,
+    "pilot_benefit_claim_allowed": false
+  },
+  "host_binding": {
+    "cli_version": "1.1.19",
+    "counter_id": "antigravity-cli-1.1.19:stream-json-usage:gemini-3.7-flash-high",
+    "executable_path": "D:\\Dev\\Orchestra-Benchmark-Evidence\\b3-pilot-host\\agy-1.1.19\\agy.exe",
+    "executable_sha256": "09b8290ff6da848dc7ad7018475887762fca4a994335ad599b6dfa90a27298ee",
+    "model": "gemini-3.7-flash-high",
+    "model_display_name": "Gemini 3.7 Flash (High)",
+    "provider": "antigravity",
+    "reasoning_setting": "high",
+    "settings_path": "D:\\Dev\\Orchestra-Benchmark-Evidence\\b3-pilot-host\\settings.json",
+    "settings_sha256": "ca3d163bab055381827226140568f3bef7eaac187cebd76878e0b63e9e442356",
+    "transport": "stream-json-usage"
+  },
+  "implementation": {
+    "driver": "scripts/b3_pilot_driver.py",
+    "executor_adapter": "scripts/b3_antigravity_executor.py",
+    "preflight": "scripts/b3_pilot_preflight.py",
+    "sha256": {
+      "scripts/antigravity_benchmark_executor.py": "fe1715a88aad11ea2dd93899c6adc0b266042d5ed495304e7cd879923819762f",
+      "scripts/b3_antigravity_executor.py": "d48d1d41ae003385e906df8e298e9cd1fb69c20a78e6a7e9023672c9ca26711e",
+      "scripts/b3_pilot_driver.py": "e594480a6b095f17466ea228f8f41fb3a52d0d2cb3f0e6ece03589023fb3f4ba",
+      "scripts/b3_pilot_preflight.py": "6bb3120a1c6ed57b677cecfd9c801ab5cdeab86596dd2204cf0323720cfb4c51",
+      "scripts/benchmarking/calibration_task_validator.py": "045e60aee52e7f64bd9325553acc42db9308050a598349122816e266feeb7e01",
+      "scripts/comparative_benchmark_runner.py": "5d73956ce61769258838b6d00233c1ba751799bff4aba85e1a7a6d604019a670"
+    }
+  },
+  "manifest": {
+    "digest": "383feee68ca1463709ae19c485a10271be4ae6618dde3d0cc689ff842483df29",
+    "source": "machine/benchmarking/b3-pilot-manifest.v1.json"
+  },
+  "phase": "B3_PILOT_PREPARATION",
+  "plan": {
+    "digest": "3d248a61eddb3d4c2b732c98fa82f78fb49b8f012df79d6ae2038a4b3f492d06",
+    "source": "machine/benchmarking/b3-pilot-plan.v1.json"
+  },
+  "repository_binding": {
+    "git_executable": "C:\\Program Files\\Git\\bin\\git.exe"
+  },
+  "resource_freeze": {
+    "attempts_per_slot": 1,
+    "automatic_retry": false,
+    "cumulative_token_ceiling": 8100000,
+    "maximum_model_calls": 180,
+    "maximum_runs": 180,
+    "per_run_total_token_ceiling": 45000,
+    "stop_on_first_invalid_run": true,
+    "stop_on_first_validator_failure": true
+  },
+  "schema_version": "orchestra.b3-pilot-freeze.v1",
+  "task_set": {
+    "digest": "4bfc7b6bdcd0d6d3d6ac2face7b247194a609475f6406a2bf790ed5f5307f3e4",
+    "source": "machine/benchmarking/b3-pilot-task-set.v1.json"
+  },
+  "workspace_boundary": {
+    "allowed_entries": [
+      ".git"
+    ],
+    "path": "D:\\Dev\\Orchestra-Benchmark-Evidence\\b3-pilot-host\\workspace",
+    "repository_mutation_allowed": false
+  }
+}
