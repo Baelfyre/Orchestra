@@ -1,10 +1,16 @@
 # Changelog
 
-## Post-v1.6.0 UIX-5 Specialist Integration - Candidate
+## Post-v1.6.0 UIX-6 Optional UI Adapter Boundaries - Candidate
+
+- Adds the library-neutral UIX-6 host and optional UI evidence capability audit for Figma, Code Connect, Storybook, Playwright, axe, and project-native design-token surfaces.
+- Records explicit evidence limitations and preserves Codex/Antigravity supported maturity versus scaffold-only host classifications.
+- Records `NO_ADOPTION`: no dependency, runtime adapter, installed-integration refresh, external call, Figma mutation, release, deployment, or policy activation.
+
+## Post-v1.6.0 UIX-5 Specialist Integration - Canonical
 
 - Adds the library-neutral UIX-5 specialist integration flow for governed UI evidence consumption through the existing Conductor, Cloak, Clockwork, Governor, Ponytail, Overseer, and Arbiter workflow.
 - Adds explicit handoff, ownership, conditional adoption review, evidence, and non-authority contracts with deterministic negative fixtures.
-- Keeps Caveman presentation-only, Butler inactive, external tools optional, and runtime, dependency, Figma, release, deployment, and policy changes outside this bounded candidate.
+- Canonicalized through signed materialization and independent readback at `7d9c020` with Caveman presentation-only, Butler inactive, external tools optional, and no runtime, dependency, Figma, release, deployment, or policy change.
 
 ## Post-v1.6.0 UIX-4 Component and Asset Preservation - Canonical
 
