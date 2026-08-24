@@ -1,0 +1,211 @@
+{
+  "schema_version": "orchestra.b2-5-confirmatory-reconciliation.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "phase": "B2_5_CONFIRMATORY_EVIDENCE_RECONCILIATION_AND_B2_TERMINAL_CONCLUSION",
+  "recorded_date": "2026-08-24",
+  "status": "B2_TERMINAL_EVIDENCE_RECONCILED",
+  "canonical_entry": {
+    "repository": "Baelfyre/Orchestra",
+    "branch": "main",
+    "sha": "d4ee953a6835e75cff2b188e4645e8c0d52543bc",
+    "tree": "bcae8b1167da8b1cb2adfccf21f27d4b2916658a",
+    "parent": "685cfcd1ebecf897b1f56d6106408e2937a6f096",
+    "signature": "GITHUB_VERIFIED_VALID"
+  },
+  "frozen_identity": {
+    "experiment_id": "b2-confirmatory-measurement-v1",
+    "freeze_digest": "66fc567ab448f87f824ba113c7646b1d7a7b59f1e1b7daf98cece8b5e86f3c11",
+    "manifest_digest": "8207f16cb2a9fa93b414c0651c16f183cab27c3c859604bbd62197e1198e9041",
+    "plan_digest": "5e8eacb7ef042b8a9e9c90c9d6406075533df8afcdbf62b1f9a01d57ffa8c2d9",
+    "task_set_digest": "5763028d73ea6bac3933cf5b75a16dcf1ff820b114ca093c7730254ebb400eb6",
+    "preregistration_digest": "a77b563acf95189a96647641426244903cf950b760946c5d38a06b37c0292e1f",
+    "executor_sha256": "d33104cc684c28e175038ca7eba18adcde78a9d063bb73a2d31bca77d72912ce",
+    "preparation_sha": "d4ee953a6835e75cff2b188e4645e8c0d52543bc",
+    "preparation_tree": "bcae8b1167da8b1cb2adfccf21f27d4b2916658a",
+    "provider": "openai-codex",
+    "cli_version": "0.148.0",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "medium",
+    "transport": "jsonl-usage",
+    "workspace": "D:\\Dev\\Repositories\\+Orchestra-C2-Workspace",
+    "counter_id": "codex-cli-0.148.0:jsonl-usage:gpt-5.6-sol:medium"
+  },
+  "historical_sessions": {
+    "pre_utf8_stopped_session": {
+      "status": "STOPPED_FAIL_CLOSED",
+      "accepted_runs": 13,
+      "attempted_slot": 14,
+      "actual_model_calls": 42,
+      "primary_inference_eligible": false,
+      "pooled_with_replacement": false,
+      "evidence_location": "D:\\Dev\\Orchestra-Benchmark-Evidence\\b2-5-remediated-20260824T004600Z\\session"
+    },
+    "git_path_preflight_failure": {
+      "status": "INFRASTRUCTURE_ONLY_PRE_SESSION_FAILURE",
+      "session_directory_created": false,
+      "attempted_slots": 0,
+      "accepted_runs": 0,
+      "actual_model_calls": 0,
+      "counts_as_confirmatory_attempt": false,
+      "evidence_sha256": "272f279b2945bf371a955a7e821babf5b4ff33a8e5dd00adf4a745ccc700d5a3"
+    }
+  },
+  "git_path_recovery": {
+    "selected_git_executable": "C:\\Program Files\\Git\\bin\\git.exe",
+    "selected_git_version": "git version 2.55.0.windows.4",
+    "selected_git_sha256": "c470d205517c7a53ceca321df16a6e4549fcd52b576ab4d09536d36f26fda5a9",
+    "child_only_path_binding": true,
+    "persistent_environment_mutation": false,
+    "binding_evidence_sha256": "d1f14054b5c94dda7057131cefef4c4b3fd8c0cdf6d7562f4af90da9195959fc",
+    "zero_call_preflight_sha256": "87a4b227fa26f82fc3e71e5399b456cea47507593fc298b18a67b9675aae6a11",
+    "preflight_status": "PASS_ZERO_LIVE_CALLS",
+    "preflight_model_calls": 0
+  },
+  "authorization": {
+    "master_authorization_id": "ORCHESTRA_B_PHASE_FULL_AUTONOMOUS_20260823",
+    "authorization_type": "SEPARATE_LATER_HUMAN_B2_5_GIT_PATH_RECOVERY_AUTHORIZATION",
+    "authorized_by": "HUMAN_REPOSITORY_OWNER",
+    "child_authorization_digest": "2c0dc8067c620b776281c99468d821000429ecf86eddb234c9fb4b7c45c499f3",
+    "replacement_session_count": 1,
+    "automatic_retry": false,
+    "authorization_consumed": true
+  },
+  "execution": {
+    "planned_runs": 40,
+    "attempted_slots": 40,
+    "accepted_runs": 40,
+    "invalid_attempts": 0,
+    "failed_runs": 0,
+    "live_model_calls_consumed": 120,
+    "maximum_underlying_model_calls": 120,
+    "accepted_total_tokens": 1256262,
+    "session_status": "COMPLETE",
+    "stop_reason": null,
+    "historical_model_calls": 42,
+    "total_b2_5_model_calls_across_historical_and_primary_sessions": 162
+  },
+  "evidence_archive": {
+    "filename": "ORCHESTRA_B2_5_GIT_PATH_REPLACEMENT_20260824T014600Z.zip",
+    "sha256": "3022ff797c007f1edccb1217f67fe0f2f87816b33f2ead08428aee52ce2741ed",
+    "repository_committed": false,
+    "external_operator_retained": true,
+    "file_count": 125,
+    "uncompressed_bytes": 921250,
+    "structure": {
+      "session_level_records": 5,
+      "requests": 40,
+      "executor_results": 40,
+      "run_records": 40
+    },
+    "derived_record_digests": {
+      "authorization_json_digest": "2c0dc8067c620b776281c99468d821000429ecf86eddb234c9fb4b7c45c499f3",
+      "plan_json_digest": "5e8eacb7ef042b8a9e9c90c9d6406075533df8afcdbf62b1f9a01d57ffa8c2d9",
+      "run_index_json_digest": "fc6439c1760792e5fbfdd76f129e022860bdbb48b2317c75122edaeed64eea91",
+      "experiment_json_digest": "279b978744463a1e1796a5ff5f276b6be80c31c3b0f350de0e7a66267023c206",
+      "session_summary_json_digest": "705841e919b8d037ade3f26375a9fb95eaf5ae7aaaf7a7b3800696d43a8effe8"
+    }
+  },
+  "integrity_audit": {
+    "repository_unchanged_during_session": true,
+    "plan_request_executor_run_bijection": "PASS_40_OF_40",
+    "run_index_digest_recomputation": "PASS_40_OF_40",
+    "experiment_run_digest_order_match": "PASS_40_OF_40",
+    "final_response_exact_json_validation": "PASS_40_OF_40",
+    "safety_flags_all_false": true,
+    "calls_per_run": 3,
+    "topology_stage_order_matches_arm": "PASS_40_OF_40",
+    "raw_specialist_advisory_text_preserved": true,
+    "context_transfer_recomputation": "PASS_40_OF_40",
+    "cached_input_greater_than_input_rejected": true,
+    "advisory_retention_ceiling_enforced": true,
+    "counter_provenance_retained": true
+  },
+  "primary_analysis": {
+    "endpoint": "INDEPENDENTLY_RECOMPUTED_CONTEXT_TRANSFER_BYTES",
+    "paired_delta": "Overseer->Clockwork bytes - Clockwork->Overseer bytes",
+    "matched_blocks": 20,
+    "positive_directional_blocks": 14,
+    "negative_directional_blocks": 6,
+    "ties": 0,
+    "minimum_positive_directional_blocks": 15,
+    "directional_threshold_pass": false,
+    "two_sided_exact_sign_test_p": 0.11531829833984375,
+    "sign_test_alpha": 0.05,
+    "sign_test_pass": false,
+    "median_paired_relative_context_reduction": 0.25528705267564566,
+    "minimum_median_paired_relative_context_reduction": 0.1,
+    "median_reduction_threshold_pass": true,
+    "all_context_values_recomputed": true,
+    "quality_non_degradation_guardrail": "PASS",
+    "zero_safety_or_governance_violations": true,
+    "all_preregistered_benefit_criteria_pass": false,
+    "disposition": "B2_CONFIRMATORY_BENEFIT_NOT_ESTABLISHED"
+  },
+  "paired_blocks": [
+    {"task_id":"b2-confirm-architecture-plugin-boundary","repetition_index":1,"clockwork_overseer_bytes":1443,"overseer_clockwork_bytes":1171,"delta_bytes":-272,"relative_reduction":-0.2322801024765158},
+    {"task_id":"b2-confirm-architecture-plugin-boundary","repetition_index":2,"clockwork_overseer_bytes":1024,"overseer_clockwork_bytes":1638,"delta_bytes":614,"relative_reduction":0.37484737484737485},
+    {"task_id":"b2-confirm-debugging-event-duplication","repetition_index":1,"clockwork_overseer_bytes":1826,"overseer_clockwork_bytes":1854,"delta_bytes":28,"relative_reduction":0.015102481121898598},
+    {"task_id":"b2-confirm-debugging-event-duplication","repetition_index":2,"clockwork_overseer_bytes":1598,"overseer_clockwork_bytes":2148,"delta_bytes":550,"relative_reduction":0.25605214152700184},
+    {"task_id":"b2-confirm-dependency-version-skew","repetition_index":1,"clockwork_overseer_bytes":2511,"overseer_clockwork_bytes":2124,"delta_bytes":-387,"relative_reduction":-0.18220338983050846},
+    {"task_id":"b2-confirm-dependency-version-skew","repetition_index":2,"clockwork_overseer_bytes":1154,"overseer_clockwork_bytes":1548,"delta_bytes":394,"relative_reduction":0.25452196382428943},
+    {"task_id":"b2-confirm-doc-implementation-contract","repetition_index":1,"clockwork_overseer_bytes":1617,"overseer_clockwork_bytes":1308,"delta_bytes":-309,"relative_reduction":-0.23623853211009174},
+    {"task_id":"b2-confirm-doc-implementation-contract","repetition_index":2,"clockwork_overseer_bytes":1265,"overseer_clockwork_bytes":2440,"delta_bytes":1175,"relative_reduction":0.48155737704918034},
+    {"task_id":"b2-confirm-high-coordination-contract-rollout","repetition_index":1,"clockwork_overseer_bytes":1093,"overseer_clockwork_bytes":1775,"delta_bytes":682,"relative_reduction":0.38422535211267606},
+    {"task_id":"b2-confirm-high-coordination-contract-rollout","repetition_index":2,"clockwork_overseer_bytes":939,"overseer_clockwork_bytes":2473,"delta_bytes":1534,"relative_reduction":0.6202992317023858},
+    {"task_id":"b2-confirm-multi-domain-order-entitlement","repetition_index":1,"clockwork_overseer_bytes":1217,"overseer_clockwork_bytes":2608,"delta_bytes":1391,"relative_reduction":0.5333588957055214},
+    {"task_id":"b2-confirm-multi-domain-order-entitlement","repetition_index":2,"clockwork_overseer_bytes":1157,"overseer_clockwork_bytes":1820,"delta_bytes":663,"relative_reduction":0.36428571428571427},
+    {"task_id":"b2-confirm-parallel-artifact-join","repetition_index":1,"clockwork_overseer_bytes":1028,"overseer_clockwork_bytes":1319,"delta_bytes":291,"relative_reduction":0.22062168309325247},
+    {"task_id":"b2-confirm-parallel-artifact-join","repetition_index":2,"clockwork_overseer_bytes":1008,"overseer_clockwork_bytes":2195,"delta_bytes":1187,"relative_reduction":0.5407744874715262},
+    {"task_id":"b2-confirm-security-capability-scope","repetition_index":1,"clockwork_overseer_bytes":1858,"overseer_clockwork_bytes":1767,"delta_bytes":-91,"relative_reduction":-0.05149971703452179},
+    {"task_id":"b2-confirm-security-capability-scope","repetition_index":2,"clockwork_overseer_bytes":902,"overseer_clockwork_bytes":2025,"delta_bytes":1123,"relative_reduction":0.5545679012345679},
+    {"task_id":"b2-confirm-single-domain-state-transition","repetition_index":1,"clockwork_overseer_bytes":1132,"overseer_clockwork_bytes":1004,"delta_bytes":-128,"relative_reduction":-0.12749003984063745},
+    {"task_id":"b2-confirm-single-domain-state-transition","repetition_index":2,"clockwork_overseer_bytes":1244,"overseer_clockwork_bytes":1227,"delta_bytes":-17,"relative_reduction":-0.013854930725346373},
+    {"task_id":"b2-confirm-validation-partial-write","repetition_index":1,"clockwork_overseer_bytes":1095,"overseer_clockwork_bytes":1279,"delta_bytes":184,"relative_reduction":0.14386239249413604},
+    {"task_id":"b2-confirm-validation-partial-write","repetition_index":2,"clockwork_overseer_bytes":930,"overseer_clockwork_bytes":1531,"delta_bytes":601,"relative_reduction":0.3925538863487916}
+  ],
+  "token_attribution": {
+    "required_repeated_first_stage_groups": 20,
+    "stable_exact_groups": 6,
+    "cache_state_variant_groups": 13,
+    "input_counter_variant_groups": 1,
+    "unstable_attribution_groups": 0,
+    "gate": "FAIL",
+    "token_efficiency_disposition": "TOKEN_EFFICIENCY_DESCRIPTIVE_ONLY"
+  },
+  "secondary_descriptive_results": {
+    "b2-arm-clockwork-overseer": {
+      "runs": 20,
+      "passes": 20,
+      "context_transfer_bytes_total": 26041,
+      "context_transfer_bytes_mean": 1302.05,
+      "observed_tokens_total": 629185,
+      "input_tokens_total": 622522,
+      "cached_input_tokens_total": 257792,
+      "output_tokens_total": 6663,
+      "median_wall_clock_ms": 33520.5,
+      "median_model_execution_ms": 33093.0
+    },
+    "b2-arm-overseer-clockwork": {
+      "runs": 20,
+      "passes": 20,
+      "context_transfer_bytes_total": 35254,
+      "context_transfer_bytes_mean": 1762.7,
+      "observed_tokens_total": 627077,
+      "input_tokens_total": 619650,
+      "cached_input_tokens_total": 216832,
+      "output_tokens_total": 7427,
+      "median_wall_clock_ms": 36909.0,
+      "median_model_execution_ms": 36472.5
+    }
+  },
+  "b2_terminal_conclusion": {
+    "measurement_valid": true,
+    "topology_benefit": "CONFIRMATORY_BENEFIT_NOT_ESTABLISHED",
+    "quality_regression_detected": false,
+    "token_efficiency": "DESCRIPTIVE_ONLY",
+    "a5_execution_effective_promotion": "NOT_AUTHORIZED_AND_NOT_PERFORMED",
+    "production_runtime_attachment": "NOT_AUTHORIZED_AND_NOT_PERFORMED",
+    "b4_isolated_b2_benefit_prerequisite": "NOT_SATISFIED",
+    "next_gate": "B3_REMAINING_ISOLATED_MEASUREMENT_WORK"
+  }
+}
