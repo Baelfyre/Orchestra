@@ -44,7 +44,7 @@ jobs:
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git rm scripts/_apply_v1_7_post_release_parity.py .github/workflows/apply-v1-7-post-release-parity.yml
+          git rm -f scripts/_apply_v1_7_post_release_parity.py .github/workflows/apply-v1-7-post-release-parity.yml
           git add README.md README.json PROJECT_CONTEXT.md PROJECT_STATE.md SESSION_HANDOFF.md CHANGELOG.md requirements-dev.txt docs/README.md docs/MATURITY.md docs/CONTRIBUTING.md docs/setup/INSTALLATION.md docs/setup/COMPATIBILITY.md docs/setup/HOST_UPDATES.md docs/setup/ADAPTER_SDK_PRAP.md docs/setup/VALIDATION.md docs/developer/README.md docs/developer/MCP_STDIO_TRANSPORT.md docs/validation/V1_7_0_PUBLICATION_CLOSEOUT.md
           git commit -m "docs: reconcile v1.7 post-release parity"
           git push origin HEAD:docs/v1-7-post-release-parity-20260826
