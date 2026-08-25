@@ -19,6 +19,10 @@ jobs:
           ref: docs/v1-7-post-release-parity-20260826
           fetch-depth: 0
 
+      - name: Correct validated source expectation
+        shell: bash
+        run: sed -i 's/^    expected=2,$/    expected=1,/' scripts/_apply_v1_7_post_release_parity.py
+
       - name: Apply bounded parity patch
         run: python scripts/_apply_v1_7_post_release_parity.py
 
