@@ -11,14 +11,14 @@
     "full_name": "Baelfyre/Orchestra",
     "url": "https://github.com/Baelfyre/Orchestra",
     "license": "MIT",
-    "package_version": "1.6.0",
+    "package_version": "1.7.0",
     "package_version_source": "plugin.json#/version",
     "current_public_release": "v1.6.0",
     "current_public_release_commit": "ba35764a14111518c7da729b5a4c69c6af485a9b",
     "current_public_release_state_scope": "LIVE_VERIFIED_PUBLICATION",
     "main_contains_post_release_work": true,
-    "next_release_plan": "V1_7_AFTER_CODEX_BASELINE_CLOSEOUT",
-    "next_release_plan_status": "APPROVED_SEQUENCE_NOT_YET_PUBLISHED"
+    "next_release_plan": "V1_7_RELEASE_CANDIDATE",
+    "next_release_plan_status": "AUTHORIZED_PENDING_EXACT_HEAD_VALIDATION_AND_PUBLICATION"
   },
   "purpose": {
     "summary": "Portable orchestration runtime for structured AI-assisted software development.",
@@ -87,7 +87,7 @@
       "authority_note": "UIX-5 sequences existing specialists and binds evidence to handoffs; it does not create a specialist, expand authority, make UI or rendered evidence approval, activate adoption, or authorize Figma mutation."
     },
     "governed_ui_optional_adapter_boundaries_uix6": {
-      "status": "IMPLEMENTED_NO_ADOPTION_PENDING_CANONICAL_VALIDATION",
+      "status": "IMPLEMENTED_CANONICAL_NO_ADOPTION",
       "purpose": "Library-neutral UIX-6 audit and boundary contract for optional Figma, Code Connect, Storybook, Playwright, axe, and project-native design-token evidence capabilities.",
       "machine_sources": ["machine/schemas/optional-adapter-boundaries.schema.json", "machine/ui/optional-adapter-boundaries.v1.json"],
       "human_sources": ["docs/project/UIX_6_OPTIONAL_ADAPTER_BOUNDARIES.md"],
@@ -99,7 +99,7 @@
       "authority_note": "UIX-6 records optional capability boundaries and explicit evidence limitations; it does not adopt dependencies, refresh installed integrations, create a Figma client, make external tools authoritative, or authorize Figma mutation."
     },
     "governed_ui_portable_specialist_parity_uix8": {
-      "status": "IMPLEMENTED_PENDING_CANONICAL_VALIDATION",
+      "status": "IMPLEMENTED_CANONICAL",
       "purpose": "UIX-8 source specialist guidance and supported Codex projection parity with explicit Antigravity no-copy and scaffold-only exclusions.",
       "machine_sources": ["machine/schemas/portable-specialist-parity.schema.json", "machine/ui/portable-specialist-parity.v1.json"],
       "human_sources": ["docs/project/UIX_8_PORTABLE_SPECIALIST_PARITY.md"],
@@ -123,9 +123,9 @@
       "benefit_claim": "NONE",
       "authority_note": "UIX-9A proves repository protocol determinism only; it does not claim model behavior improvement or authorize live calls, external mutation, runtime, release, deployment, policy, or destructive action."
     },
-    "host_update_planning": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "machine_sources": ["machine/hosts/update-contract.v1.json"], "human_sources": ["docs/setup/HOST_UPDATES.md"]},
+    "host_update_planning": {"status": "PUBLISHED_V1_6_STABLE", "machine_sources": ["machine/hosts/update-contract.v1.json"], "human_sources": ["docs/setup/HOST_UPDATES.md"]},
     "adapter_sdk_and_prap_certification": {
-      "status": "INCLUDED_IN_V1_6_CANDIDATE",
+      "status": "PUBLISHED_V1_6_STABLE",
       "purpose": "Stable SDK import surface and read-only PRAP v1 compatibility certification for host and adapter integration authors.",
       "stable_import_surface": "orchestra_runtime.protocol.sdk",
       "quickstart_commands": ["python scripts/certify_adapter.py --adapter codex --json", "python scripts/certify_adapter.py --all --json"],
@@ -133,9 +133,9 @@
       "human_sources": ["docs/setup/ADAPTER_SDK_PRAP.md"],
       "authority_note": "Certification proves compatibility only. It does not grant runtime authority, host maturity, deployment permission, policy activation, or installed refresh authority."
     },
-    "developer_portal": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "machine_sources": ["machine/developer-portal/catalog.v1.json"], "human_sources": ["docs/developer/README.md"]},
+    "developer_portal": {"status": "PUBLISHED_V1_6_STABLE", "machine_sources": ["machine/developer-portal/catalog.v1.json"], "human_sources": ["docs/developer/README.md"]},
     "mcp_stdio_transport": {
-      "status": "INCLUDED_IN_V1_6_CANDIDATE",
+      "status": "PUBLISHED_V1_6_STABLE",
       "purpose": "Expose a bounded Orchestra tool surface to MCP-compatible clients while preserving existing PRAP, governance, runtime, and authority boundaries.",
       "protocol_revision": "2026-07-28",
       "transport": "stdio",
@@ -144,8 +144,8 @@
       "human_sources": ["docs/developer/MCP_STDIO_TRANSPORT.md"],
       "authority_note": "MCP is transport, not authority."
     },
-    "murmurs_presentation": {"status": "IMPLEMENTED_OPT_IN", "machine_sources": ["machine/presentation/murmurs-policy.v1.json", "machine/presentation/murmurs-vocabulary.v1.json"], "human_sources": ["docs/project/MURMURS_COMMUNICATION_BUDGET.md"], "token_savings_claim": "NOT_CLAIMED_WITHOUT_TRUSTWORTHY_COMPARABLE_LIVE_HOST_COUNTERS"},
-    "hybrid_context_representation": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "human_sources": ["docs/HYBRID_CONTEXT_FORMATS.md"], "json_authority": "CANONICAL_FOR_STRUCTURED_MACHINE_STATE", "toon_authority": "DERIVED_VALIDATED_NON_AUTHORITATIVE"},
+    "murmurs_presentation": {"status": "IMPLEMENTED_OPT_IN_RESEARCH_NOT_PROMOTED", "machine_sources": ["machine/presentation/murmurs-policy.v1.json", "machine/presentation/murmurs-vocabulary.v1.json"], "human_sources": ["docs/project/MURMURS_COMMUNICATION_BUDGET.md"], "token_savings_claim": "CONFIRMATORY_BENEFIT_NOT_ESTABLISHED"},
+    "hybrid_context_representation": {"status": "PUBLISHED_V1_6_STABLE", "human_sources": ["docs/HYBRID_CONTEXT_FORMATS.md"], "json_authority": "CANONICAL_FOR_STRUCTURED_MACHINE_STATE", "toon_authority": "DERIVED_VALIDATED_NON_AUTHORITATIVE"},
     "local_adaptive_memory_a1": {
       "status": "CANONICAL_FOUNDATION_NO_DIRECT_RUNTIME_EFFECT",
       "purpose": "Machine-local scoped adaptive observation evidence and derived preference profiles without routing, policy, authority, governance, provider, lifecycle, or training authority.",
@@ -477,8 +477,8 @@
       "production_runtime_attachment": "NOT_AUTHORIZED_AND_NOT_PERFORMED"
     },
     "comparative_measurement_codex_baseline_readiness": {
-      "status": "LIVE_DIAGNOSTIC_QUALIFIED_PREBASELINE_REMEDIATION_PENDING_VALIDATION",
-      "purpose": "Host-specific Codex CLI measurement adapter readiness and bounded prebaseline hardening for the controlled cross-host baseline without changing the frozen benchmark subject, task set, common runner, deterministic response validator, communication treatments, or accepted Antigravity run evidence.",
+      "status": "HISTORICAL_PREBASELINE_STATE_SUPERSEDED_BY_C1_C2R1",
+      "purpose": "Historical host-specific Codex CLI measurement-adapter readiness state retained for provenance; later C1 and C2R1 reconciliations are the current completed Codex measurement records.",
       "executor": "scripts/codex_benchmark_executor.py",
       "machine_sources": ["machine/benchmarking/codex-executor-binding.v1.json", "machine/benchmarking/codex-prebaseline-remediation.v1.json"],
       "human_sources": ["docs/benchmarking/CODEX_BASELINE_READINESS.md", "docs/benchmarking/CODEX_PREBASELINE_REMEDIATION.md"],
@@ -494,8 +494,8 @@
       "exact_reasoning_effort": "medium",
       "a5_execution_promotion": "NOT_AUTHORIZED",
       "a6_authorized": false,
-      "b4_state": "BLOCKED",
-      "authority_note": "Live diagnostic transport qualification succeeded on Attempt 2 after an isolated Git-worktree precondition repair. The formal Codex baseline remains 0/30 and unauthorized until this prebaseline remediation is validated and canonicalized under a separate merge gate."
+      "b4_state": "NOT_ELIGIBLE_NO_EXECUTION",
+      "authority_note": "This object preserves prebaseline readiness provenance only. Current Codex measurement state is represented by the completed C1 and C2R1 reconciliations; no runtime promotion or live execution authority follows from those measurements."
     },
     "comparative_measurement_codex_c1_reconciliation": {
       "status": "C1_COMPLETE_RECONCILED_CALIBRATION_ONLY",
@@ -516,7 +516,7 @@
       "next_experiment": "C2R1_MACHINE_JSON_RECONCILIATION_COMPLETE",
       "a5_execution_promotion": "NOT_AUTHORIZED",
       "a6_authorized": false,
-      "b4_state": "BLOCKED",
+      "b4_state": "NOT_ELIGIBLE_NO_EXECUTION",
       "authority_note": "C1 is calibration evidence only. Absolute provider-native token totals are descriptive and not a direct cross-provider efficiency ranking. C1 grants no runtime promotion, release, deployment, A5, A6, or B4 authority."
     },
     "registry_adaptive_consumption_o1_o6": {
@@ -537,7 +537,7 @@
       "status": "APPROVED_PLANNED_NOT_IMPLEMENTED",
       "purpose": "Consume the Registry R7 typed/indexed/projection query gateway using the smallest sufficient context while preserving O1-O6 semantics, exact Registry identities, existing compliance receipts, and fail-closed behavior.",
       "human_sources": ["docs/architecture/REGISTRY_QUERY_OPTIMIZATION_O7.md"],
-      "implementation_order": "AFTER_CODEX_BASELINE_CLOSEOUT_AND_ORCHESTRA_V1_7_0_AND_AFTER_STABLE_REGISTRY_R7_CONTRACT",
+      "implementation_order": "AFTER_ORCHESTRA_V1_7_0_AND_AFTER_STABLE_REGISTRY_R7_CONTRACT",
       "required_compatibility_floor": {"cap.query.v1": "1.0.0"},
       "planned_optional_capabilities": ["cap.query.projection.v1", "cap.query.relationships.v1", "cap.query.indexed-read.v1", "cap.query.budget.v1", "cap.transport.mcp.v1"],
       "preferred_transport_order": ["DIRECT_LOCAL_INDEXED_GATEWAY", "DIRECT_LOCAL_JSON_QUERY", "OPTIONAL_MCP_TRANSPORT"],
@@ -565,8 +565,8 @@
       "live_authorization_record": "machine/benchmarking/codex-c2-portability-r1-live-execution-authorization.v1.json",
       "live_authorization_status": "CONSUMED_FOR_COMPLETED_PRIMARY_EXECUTION",
       "live_execution_authorized": false,
-      "next_gate": "B2_BENCHMARK_COMPLETION_SEQUENCE",
-      "authority_note": "C2R1 completed its governed primary execution with 29 accepted runs and one preserved provider-outage invalid observation. A separately authorized supplemental recovery passed but does not replace the primary invalid run. The result remains calibration evidence only and grants no C3, A5 promotion, A6, B4, release, deployment, or policy authority."
+      "next_gate": "B_PHASE_COMPLETE_NO_FURTHER_BENCHMARK_PROMOTION",
+      "authority_note": "C2R1 completed its governed primary execution with 29 accepted runs and one preserved provider-outage invalid observation. A separately authorized supplemental recovery passed but does not replace the primary invalid run. The result remains calibration evidence only and grants no C3, A5 promotion, A6, B4, deployment, or policy authority."
     }
   },
   "machine_scan_order": [
@@ -701,7 +701,7 @@
     "transition_dispositions": ["AUTO_CONTINUE", "AUTO_REMEDIATE_AND_REVALIDATE", "WAIT_FOR_EVIDENCE", "WAIT_FOR_CAPACITY", "ESCALATE_HUMAN", "STOP"],
     "protected_actions_require_separate_authority": true,
     "required_analysis_ruleset_drift_issue": 331,
-    "required_analysis_ruleset_drift_state": "OPEN_COMPATIBILITY_WORKFLOW_ACTIVE"
+    "required_analysis_ruleset_drift_state": "CLOSED_RULESET_NORMALIZED"
   },
   "architecture": {"current_overview": "docs/architecture/README.md", "detailed_authority_capability_design": "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md", "routing_reference": "ROUTING_MAP.md", "governance_reference": "docs/governance/README.md", "compliance_registry_reference": "docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md", "compliance_protocol_runtime": "orchestra_runtime/compliance_protocol.py", "mcp_transport_reference": "docs/developer/MCP_STDIO_TRANSPORT.md", "adaptive_context_reference": "docs/architecture/ADAPTIVE_CONTEXT_A2.md", "adaptive_shadow_learning_reference": "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3.md", "adaptive_shadow_implementation_reference": "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3_IMPLEMENTATION.md", "adaptive_selection_a4_reference": "docs/architecture/ADAPTIVE_SELECTION_A4.md", "adaptive_selection_a4_execution_attachment_reference": "docs/architecture/ADAPTIVE_SELECTION_A4_EXECUTION_ATTACHMENT.md", "adaptive_tuner_a5_reference": "docs/architecture/ADAPTIVE_TUNER_A5.md", "portable_adaptive_memory_reference": "docs/architecture/PORTABLE_ADAPTIVE_MEMORY.md", "registry_query_optimization_o7_reference": "docs/architecture/REGISTRY_QUERY_OPTIMIZATION_O7.md", "historical_status_policy": "Phase documents may retain phase-era status wording. Current exact state comes from live machine contracts, release evidence, and Git identity."},
   "hosts_integrations": {
@@ -759,13 +759,14 @@
     "publication_closeout": "GITHUB_RELEASE_ID_371748233_PLUS_CANONICAL_COMMIT_VERIFICATION",
     "post_release_main_contains_significant_changes": true,
     "provisional_next_release": "v1.7.0",
-    "provisional_next_release_status": "APPROVED_AFTER_CODEX_BASELINE_CLOSEOUT",
-    "publication_authorized": false,
-    "publication_target": "NONE_UNTIL_CODEX_BASELINE_CLOSEOUT",
+    "provisional_next_release_status": "AUTHORIZED_RELEASE_CANDIDATE_VALIDATION_IN_PROGRESS",
+    "release_tracking_issue": 563,
+    "publication_authorized": true,
+    "publication_target": "v1.7.0_AFTER_EXACT_HEAD_VALIDATION",
     "publication_identity_rule": "Any future public release becomes authoritative only when the exact tag, immutable GitHub Release, and approved signed canonical commit identity are created and independently verified.",
     "v1_5_0_must_remain_immutable": true,
     "murmurs_measurement_issue": 316,
-    "murmurs_measurement_issue_state": "OPEN",
+    "murmurs_measurement_issue_state": "CLOSED_TERMINAL_BENEFIT_NOT_ESTABLISHED",
     "adaptive_governed_orchestration_issue": 340,
     "adaptive_governed_orchestration_state": "A5_CLOSED_AT_SHADOW_MATURITY_EXECUTION_PROMOTION_DEFERRED_BENEFIT_NOT_ESTABLISHED"
   },
@@ -815,32 +816,34 @@
     "merge_readiness": "docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md",
     "murmurs": "docs/project/MURMURS_COMMUNICATION_BUDGET.md",
     "release_candidate_v1_6_0": "docs/releases/v1.6.0-integration-developer-experience-release-candidate.md",
+    "release_candidate_v1_7_0": "docs/releases/v1.7.0-adaptive-intelligence-portable-memory-design-fidelity-release-candidate.md",
     "codex_c2_portability_r1_preexecution": "docs/benchmarking/CODEX_C2_PORTABILITY_R1_PREEXECUTION.md"
   },
   "representation_policy": {"markdown": "Human-readable explanation, rationale, examples, and nuanced specialist guidance", "json": "Canonical structured machine state, identity, routing, governance, receipts, manifests, provenance, presentation contracts, evidence, and indexes", "json_schema": "Validation contract for machine-readable records", "jsonl": "Append-only event/history records where incremental retrieval is preferable", "toon": "Derived validated non-authoritative model-context projection only when bounded compilation provides measured context benefit", "parity_rule": "When the same deterministic fact appears in more than one representation, CI must validate parity or derive the projection from one authoritative source."},
   "maturity": {
     "current_public_release": "PUBLISHED_VERIFIED_V1_6_0",
     "v1_6_publication": "PUBLISHED_VERIFIED",
-    "mcp_stdio_transport": "INCLUDED_IN_V1_6_CANDIDATE",
-    "host_update_commands": "INCLUDED_IN_V1_6_CANDIDATE",
-    "adapter_sdk_prap_certification": "INCLUDED_IN_V1_6_CANDIDATE",
-    "developer_portal": "INCLUDED_IN_V1_6_CANDIDATE",
-    "truesheet_specialist_enrichment": "INCLUDED_IN_V1_6_CANDIDATE",
-    "hybrid_context_compilation": "INCLUDED_IN_V1_6_CANDIDATE",
-    "documentation_architecture_v2": "INCLUDED_IN_V1_6_CANDIDATE",
-    "documentation_and_provenance_closeout": "INCLUDED_IN_V1_6_CANDIDATE",
+    "v1_7_release_candidate": "AUTHORIZED_PENDING_EXACT_HEAD_VALIDATION_AND_PUBLICATION",
+    "mcp_stdio_transport": "PUBLISHED_VERIFIED_V1_6_0",
+    "host_update_commands": "PUBLISHED_VERIFIED_V1_6_0",
+    "adapter_sdk_prap_certification": "PUBLISHED_VERIFIED_V1_6_0",
+    "developer_portal": "PUBLISHED_VERIFIED_V1_6_0",
+    "truesheet_specialist_enrichment": "PUBLISHED_VERIFIED_V1_6_0",
+    "hybrid_context_compilation": "PUBLISHED_VERIFIED_V1_6_0",
+    "documentation_architecture_v2": "PUBLISHED_VERIFIED_V1_6_0",
+    "documentation_and_provenance_closeout": "PUBLISHED_VERIFIED_V1_6_0",
     "adaptive_local_memory_a1": "CANONICAL_FOUNDATION_NO_DIRECT_RUNTIME_EFFECT",
     "adaptive_specialist_context_a2": "CANONICAL_ADVISORY_OPT_IN",
     "portable_adaptive_memory": "IMPLEMENTED_OPTIONAL_STORAGE_AGNOSTIC_NON_AUTHORIZING",
     "adaptive_governed_orchestration": "A5_CLOSED_AT_SHADOW_MATURITY_EXECUTION_PROMOTION_DEFERRED_BENEFIT_NOT_ESTABLISHED_ISSUE_340",
     "comparative_measurement_b0": "CONTRACT_FROZEN_NO_BENCHMARK_EXECUTION",
     "comparative_measurement_b1": "IMPLEMENTED_NON_PRODUCTION_NO_PROVIDER_ADAPTERS",
-    "comparative_measurement_b2": "B2_4_COMPLETE_VALID_REPLACEMENT_RECONCILIATION",
-    "codex_baseline_readiness": "LIVE_DIAGNOSTIC_QUALIFIED_PREBASELINE_REMEDIATION_PENDING_VALIDATION",
+    "comparative_measurement_b2": "B2_TERMINAL_EVIDENCE_RECONCILED_BENEFIT_NOT_ESTABLISHED",
+    "codex_baseline_readiness": "SUPERSEDED_BY_C1_C2R1_COMPLETED_RECONCILIATIONS",
     "codex_c1_cross_provider_reconciliation": "C1_COMPLETE_RECONCILED_CALIBRATION_ONLY",
     "registry_adaptive_consumption_o1_o6": "CANONICAL_IMPLEMENTED_VALIDATED_AND_REGISTRY_RECONCILED",
     "registry_query_optimization_o7": "APPROVED_PLANNED_NOT_IMPLEMENTED",
-    "murmurs_live_host_token_measurement": "DEFERRED_UNTIL_ELIGIBLE_COUNTERS_ISSUE_316",
+    "murmurs_live_host_token_measurement": "B3_TERMINAL_EVIDENCE_RECONCILED_BENEFIT_NOT_ESTABLISHED",
     "codex_c2_portability_r1": "C2R1_EXECUTION_COMPLETE_RECONCILED_CANONICAL"
   },
   "ai_review_guidance": {
@@ -903,7 +906,7 @@
     "do_not_treat_b2_topology_identity_as_execution_without_the_benchmark_topology_adapter": true,
     "preserve_b2_a5_shadow_ranking_as_non-authorizing_and_separate_from_arm_scheduling": true,
     "treat_b2_1_topology_executor_as_canonical_non_production_measurement_adapter": true,
-    "require_b2_topology_sensitive_taskset_and_exact_manifest_before_live_execution": true,
+    "require_b2_topology_sensitive_taskset_and_exact_manifest_before live execution": true,
     "do_not_equate_execution_allowed_task_payload_with_live_execution_authority": true,
     "require_b2_2_exact_host_zero_call_preflight_and_separate_human_authorization_before_model_calls": true,
     "treat_b2_real_calibration_as_calibration_only_not_confirmatory_benefit": true,
