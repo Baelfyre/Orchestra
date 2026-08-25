@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.6.0 UIX-7 Deterministic UI Design-Fidelity Validation Fixtures - Candidate
+
+- UIX-7 adds deterministic UI design-fidelity validation fixtures.
+- Coverage includes component reuse, token preservation, arbitrary-value drift, state completeness, profile conflicts, asset provenance, responsive containment, accessibility invariants, reference identity, and unauthorized visual-baseline replacement.
+- UIX-7 remains validation-only.
+- No runtime authority, dependency, adapter, external call, Figma mutation, release, deployment, policy activation, or destructive action is introduced.
+
 ## Post-v1.6.0 UIX-6 Optional UI Adapter Boundaries - Candidate
 
 - Adds the library-neutral UIX-6 host and optional UI evidence capability audit for Figma, Code Connect, Storybook, Playwright, axe, and project-native design-token surfaces.
