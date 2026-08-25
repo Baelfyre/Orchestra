@@ -1,0 +1,145 @@
+{
+  "$schema": "../schemas/uix-proof-plan.schema.json",
+  "schema_version": "orchestra.uix-proof-plan.v1",
+  "role": "UIX_9A_CONTROLLED_PROOF_CAMPAIGN",
+  "status": "PREPARED_WAITING_LIVE_CALL_AUTHORIZATION",
+  "entry_baseline": "093babeea188c502cded8756f97648291bc0fea0",
+  "proof_question": {
+    "baseline_arm": "BASELINE_NO_ORCHESTRA_UIX_GUIDANCE",
+    "governed_arm": "GOVERNED_CANONICAL_UIX_1_8_GUIDANCE",
+    "same_frozen_task_requirements": true,
+    "same_repo_contained_project_fixture": true,
+    "same_non_ui_authority_security_constraints": true,
+    "only_treatment_difference": "UIX_GUIDANCE_PRESENT_OR_ABSENT",
+    "no_model_self_rating": true,
+    "no_primary_subjective_visual_score": true,
+    "repository_only_fixture_protocol": true
+  },
+  "controlled_variables": [
+    "SAME_TASK_SEMANTICS",
+    "SAME_STARTING_PROJECT_STATE",
+    "SAME_PERMITTED_DEPENDENCIES",
+    "SAME_PROVIDER_MODEL_IF_LIVE_AUTHORIZED",
+    "SAME_RESOURCE_CEILING",
+    "SAME_VALIDATOR",
+    "SAME_ACCEPTANCE_REQUIREMENTS",
+    "SAME_RETRY_POLICY"
+  ],
+  "arms": [
+    {
+      "arm_id": "BASELINE_NO_ORCHESTRA_UIX_GUIDANCE",
+      "guidance_treatment": "NO_ORCHESTRA_UIX_GUIDANCE",
+      "guidance_revision": null,
+      "external_calls_allowed": false,
+      "external_repo_mutation_allowed": false
+    },
+    {
+      "arm_id": "GOVERNED_CANONICAL_UIX_1_8_GUIDANCE",
+      "guidance_treatment": "CANONICAL_UIX_1_8_GUIDANCE",
+      "guidance_revision": "093babeea188c502cded8756f97648291bc0fea0",
+      "external_calls_allowed": false,
+      "external_repo_mutation_allowed": false
+    }
+  ],
+  "metrics": [
+    "COMPONENT_REUSE",
+    "DUPLICATE_COMPONENT_COUNT",
+    "TOKEN_VIOLATIONS",
+    "ARBITRARY_STYLE_DRIFT",
+    "STATE_COVERAGE",
+    "ASSET_PROVENANCE",
+    "ASSET_SUBSTITUTION",
+    "RESPONSIVE_CONTAINMENT",
+    "ACCESSIBILITY_INVARIANTS",
+    "UNRESOLVED_MAPPINGS",
+    "REVISION_MISMATCH",
+    "VISUAL_BASELINE_REPLACEMENT",
+    "DETERMINISTIC_ACCEPTANCE"
+  ],
+  "secondary_metrics": [
+    "IMPLEMENTATION_DIFF_SIZE",
+    "NEW_COMPONENT_COUNT",
+    "NEW_ARBITRARY_TOKEN_VALUE_COUNT",
+    "VALIDATION_REMEDIATION_COUNT",
+    "TRUSTWORTHY_TIME_OR_TOKEN_USAGE_ONLY"
+  ],
+  "measurement_rules": [
+    "PREREGISTER_METRIC_DIRECTION",
+    "UNAVAILABLE_METRICS_REMAIN_UNAVAILABLE",
+    "INVALID_OBSERVATIONS_NOT_SILENTLY_EXCLUDED",
+    "PROVIDER_OUTAGES_EXPLICITLY_CLASSIFIED",
+    "VALID_UNFAVORABLE_RESULTS_NOT_RETRIED",
+    "REPLACEMENT_INVALID_OUTAGE_OBSERVATION_RECORDED_SEPARATELY",
+    "NO_SINGLE_METRIC_GRANTS_PROMOTION"
+  ],
+  "fixtures": {
+    "project_requirements": "tests/fixtures/ui/uix9-proof-project/requirements.json",
+    "positive": "tests/fixtures/ui/uix9-proof-positive.json",
+    "negative": "tests/fixtures/ui/uix9-proof-negative.json",
+    "same_requirements_digest": true,
+    "arms_differ_only_by_uixtreatment": true,
+    "deterministic": true
+  },
+  "harness": {
+    "script": "scripts/uix9_proof_harness.py",
+    "test": "tests/runtime/test_uix9_proof_protocol.py",
+    "mode": "REPOSITORY_ONLY_ZERO_CALL_DRY_RUN",
+    "network_calls": 0,
+    "external_repo_writes": 0
+  },
+  "evidence_boundary": {
+    "root": "tests/fixtures/ui/uix9-proof-project",
+    "write_isolated": true,
+    "canonical_benchmark_evidence_touched": false
+  },
+  "resource_ceilings": {
+    "max_live_model_calls": 0,
+    "max_provider_calls": 0,
+    "max_external_repo_mutations": 0,
+    "max_fixture_cases": 2,
+    "max_runtime_seconds": 10,
+    "max_output_bytes": 16384
+  },
+  "stop_conditions": [
+    "LIVE_CALL_REQUIRED",
+    "UNAUTHORIZED_EXTERNAL_MUTATION",
+    "FIXTURE_OR_VALIDATOR_NONDETERMINISM",
+    "OUTCOME_ENDPOINT_CHANGED",
+    "RESOURCE_CEILING_EXCEEDED"
+  ],
+  "live_call_authorization_request": {
+    "provider": "NOT_AUTHORIZED",
+    "model": "NOT_AUTHORIZED",
+    "host_cli_version": "NOT_AUTHORIZED",
+    "task_count": 1,
+    "arm_count": 2,
+    "repetitions": null,
+    "maximum_live_calls": 0,
+    "token_resource_ceiling": "NOT_AUTHORIZED",
+    "timeout": null,
+    "retry_policy": "FROZEN_BEFORE_AUTHORIZATION",
+    "invalid_run_policy": "EXPLICIT_CLASSIFICATION_REQUIRED",
+    "primary_endpoints": ["OBJECTIVE_UI_FIDELITY_METRICS"],
+    "secondary_endpoints": ["IMPLEMENTATION_DIFF_SIZE", "NEW_COMPONENT_COUNT", "VALIDATION_REMEDIATION_COUNT", "TRUSTWORTHY_TIME_OR_TOKEN_USAGE_ONLY"],
+    "stop_conditions": ["LIVE_CALL_REQUIRED", "UNAUTHORIZED_EXTERNAL_MUTATION", "FIXTURE_OR_VALIDATOR_NONDETERMINISM", "OUTCOME_ENDPOINT_CHANGED", "RESOURCE_CEILING_EXCEEDED"],
+    "exact_frozen_task_validator_identity": "tests/fixtures/ui/uix9-proof-project/requirements.json + tests/runtime/test_uix9_proof_protocol.py"
+  },
+  "authority": {
+    "live_model_calls_authorized": false,
+    "provider_calls_authorized": false,
+    "external_repo_mutation_authorized": false,
+    "model_self_rating_authorized": false,
+    "subjective_visual_score_authorized": false,
+    "endpoint_change_authorized": false,
+    "release_authorized": false,
+    "deployment_authorized": false,
+    "policy_activation_authorized": false,
+    "destructive_action_authorized": false
+  },
+  "terminal_policy": {
+    "terminal": "UIX_9_PROOF_PREPARED_WAITING_LIVE_CALL_AUTHORIZATION",
+    "live_calls_required_for_behavior_claim": true,
+    "zero_call_dry_run_may_claim_model_improvement": false,
+    "benefit_claim": "NONE"
+  }
+}

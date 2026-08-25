@@ -110,6 +110,19 @@
       "runtime_integration": false,
       "authority_note": "UIX-8 parity is semantic portability evidence only; it does not grant host maturity, runtime, installation, execution, adoption, release, deployment, policy, or Figma authority."
     },
+    "controlled_ui_proof_campaign_uix9a": {
+      "status": "PREPARED_WAITING_LIVE_CALL_AUTHORIZATION",
+      "purpose": "UIX-9A repository-only proof protocol with frozen baseline and governed arms, deterministic positive and negative fixtures, and objective design-fidelity observations.",
+      "machine_sources": ["machine/schemas/uix-proof-plan.schema.json", "machine/schemas/uix-proof-observation.schema.json", "machine/schemas/uix-proof-result.schema.json", "machine/ui/uix9-proof-plan.v1.json"],
+      "human_sources": ["docs/project/UIX_9_CONTROLLED_PROOF_CAMPAIGN.md"],
+      "validation_surface": "tests/runtime/test_uix9_proof_protocol.py",
+      "harness": "scripts/uix9_proof_harness.py",
+      "terminal": "UIX_9_PROOF_PREPARED_WAITING_LIVE_CALL_AUTHORIZATION",
+      "live_model_calls": 0,
+      "provider_calls": 0,
+      "benefit_claim": "NONE",
+      "authority_note": "UIX-9A proves repository protocol determinism only; it does not claim model behavior improvement or authorize live calls, external mutation, runtime, release, deployment, policy, or destructive action."
+    },
     "host_update_planning": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "machine_sources": ["machine/hosts/update-contract.v1.json"], "human_sources": ["docs/setup/HOST_UPDATES.md"]},
     "adapter_sdk_and_prap_certification": {
       "status": "INCLUDED_IN_V1_6_CANDIDATE",
@@ -651,6 +664,10 @@
     "optional_adapter_boundaries": "machine/ui/optional-adapter-boundaries.v1.json",
     "portable_specialist_parity_schema": "machine/schemas/portable-specialist-parity.schema.json",
     "portable_specialist_parity": "machine/ui/portable-specialist-parity.v1.json",
+    "uix_proof_plan_schema": "machine/schemas/uix-proof-plan.schema.json",
+    "uix_proof_observation_schema": "machine/schemas/uix-proof-observation.schema.json",
+    "uix_proof_result_schema": "machine/schemas/uix-proof-result.schema.json",
+    "uix9_proof_plan": "machine/ui/uix9-proof-plan.v1.json",
     "comparative_benchmark_codex_c2_portability_r1": "machine/benchmarking/codex-c2-portability-r1-preexecution.v1.json",
     "comparative_benchmark_codex_c2_portability_r1_live_authorization": "machine/benchmarking/codex-c2-portability-r1-live-execution-authorization.v1.json"
   },

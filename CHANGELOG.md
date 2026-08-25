@@ -1,5 +1,11 @@
 # Changelog
 
+## Post-v1.6.0 UIX-9A Controlled Proof Preparation - Candidate
+
+- Prepares a repository-only UIX-9A proof protocol with frozen baseline and governed arms and objective design-fidelity metrics covering reuse, tokens, styles, states, assets, responsive containment, accessibility, mappings, revision identity, visual-baseline replacement, and deterministic acceptance.
+- Adds positive and negative validator fixtures plus a zero-call dry-run harness that records `UIX_9_PROOF_PREPARED_WAITING_LIVE_CALL_AUTHORIZATION`.
+- No model or provider call, model self-rating, subjective visual score, endpoint change, runtime authority, dependency, external mutation, release, deployment, policy activation, or destructive action is introduced; no behavior-improvement claim is made.
+
 ## Post-v1.6.0 UIX-8 Portable Specialist and Adapter Parity - Candidate
 
 - Operationalizes the canonical UIX-1 through UIX-7 contracts in the Conductor, Cloak, Clockwork, Governor, Ponytail, Overseer, and Arbiter guidance surfaces.
