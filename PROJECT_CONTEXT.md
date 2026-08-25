@@ -10,8 +10,7 @@ A governance-first specialist orchestration framework that routes complex AI-ass
 Open-source developer tooling and AI orchestration framework
 
 ## Current Stage
-v1.7.0 - Adaptive Intelligence, Portable Memory & Design Fidelity (`RELEASE_CANDIDATE_VALIDATION_IN_PROGRESS`). Repository package/version surfaces are normalized to `1.7.0`, while the latest published GitHub Release remains immutable `v1.6.0` at signed release commit `ba35764a14111518c7da729b5a4c69c6af485a9b` until the v1.7 publication gate completes. The approved v1.7 candidate consolidates the verified post-v1.6 adaptive-intelligence stack, storage-agnostic portable adaptive-memory contract, Registry O1-O6 adaptive consumption, governed UI design-fidelity work through UIX-9A proof preparation, documentation/release-surface cleanup, and the terminal benchmark/research closeout where A5 topology and Murmurs benefit were not established.
-
+v1.7.0 - Adaptive Intelligence, Portable Memory & Design Fidelity (`PUBLISHED_VERIFIED`). The immutable GitHub Release and lightweight `v1.7.0` tag resolve to canonical signed commit `e5305ef3e160209a0345bd2c7843c923940e62c5` with tree `7b7a0f6d5dd5376a62125ed1c6b037284e519c69`. Post-publication verification run `32898750932` independently confirmed tag target, release body, immutable/latest state, canonical SHA/tree/parent/signature, and preservation of the prior v1.6.0 tag. Later commits on `main` are post-release maintenance and do not move the v1.7.0 release identity.
 ## Primary Users
 Developers and maintainers who install Orchestra as a plugin, skill set, or runtime package inside supported or scaffold-only coding hosts.
 
@@ -40,7 +39,7 @@ Orchestra is a public multi-agent development repository with write-capable auto
 - Murmurs is optional presentation research and cannot change machine state, governance, validation truth, blockers, handoffs, or terminal outcomes.
 - The confirmatory program did not establish repeatable Murmurs efficiency benefit or A5 topology benefit; neither is promoted to default execution authority.
 - UI design evidence and optional Figma, Code Connect, Storybook, Playwright, axe, or project-native token tooling are evidence/capability surfaces, not implementation authority.
-- UIX-9A is deterministic repository proof preparation only. No live UIX-9 provider/model execution or model-behavior benefit claim is included in the v1.7 release candidate.
+- UIX-9A is deterministic repository proof preparation only. No live UIX-9 provider/model execution or model-behavior benefit claim is included in the published v1.7.0 release.
 - Registry capability, freshness, delta, and routing evidence cannot expand Orchestra authority or bypass Conductor, Governor, Steward, or Arbiter controls.
 - No automatic installed-integration refresh, host maturity promotion, deployment, production mutation, or policy activation is implied by a release.
 
@@ -49,13 +48,13 @@ Orchestra is a public multi-agent development repository with write-capable auto
 - `pytest tests/runtime` must pass with enforced statement, branch, and critical-module coverage floors.
 - `python scripts/governance_check.py --strict` must pass.
 - The documentation-impact contract must pass and require the correct human/machine surfaces for the actual changed scope.
-- All 11 release/version surfaces and `machine/hosts/update-contract.v1.json#/package_version` must match `1.7.0` before the candidate can be release-ready.
+- All 11 release/version surfaces and `machine/hosts/update-contract.v1.json#/package_version` remain normalized to `1.7.0` for the published release line; any future release candidate must establish its own exact version parity.
 - Required Analysis Compatibility must execute real exact-head CodeQL successfully before its compatibility status surface is accepted.
 - Native Windows, Ubuntu, and macOS validation must pass on the exact release candidate.
 - Release-candidate mutation-confidence and Cosmic Ray evidence must be fresh where repository policy triggers them.
 - The exact validated source candidate must proceed through the signed-materialization lane required by current repository policy before final canonical promotion.
 - Ordinary governed merge readiness requires current `mergeable=true`, `mergeable_state=clean`, zero unresolved review threads, signed exact-head identity, and expected-head Squash protection.
-- Publication requires an exact `v1.7.0` tag/GitHub Release identity check against the approved signed canonical candidate plus post-publication verification.
+- The published `v1.7.0` tag/GitHub Release identity is verified. Any future publication requires a fresh exact tag/release/canonical identity check and fresh post-publication verification.
 
 ## Known Constraints
 - Codex and Antigravity remain the supported Host Update identities. Claude Code, Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain scaffold-only unless separately graduated.
@@ -65,7 +64,7 @@ Orchestra is a public multi-agent development repository with write-capable auto
 - Portable adaptive memory is optional, storage-agnostic, privacy-minimized, and non-authorizing; automatic promotion is disabled.
 - UIX-0 through UIX-9A repository work is canonical/prepared, but live UIX-9 model/provider proof remains separately unauthorized unless a future explicit authorization grants it.
 - Registry O1-O6 adaptive consumption is canonical. O7 remains planned and is not part of v1.7.0 runtime implementation.
-- The latest published release remains `v1.6.0` until the v1.7 publication gate completes. Existing historical tags/releases must not move.
+- The latest published release is immutable `v1.7.0`. Existing historical tags/releases must not move, and post-release `main` maintenance must not be described as a new published release.
 - Repository simulation and CI evidence do not automatically prove installed-host behavior, provider behavior, or token billing behavior.
 
 ## Known Non-Goals
@@ -79,8 +78,7 @@ Orchestra is a public multi-agent development repository with write-capable auto
 - A merged release candidate is not itself a public release until tag/GitHub Release identity is created and verified.
 
 ## Maintainer Approval Rules
-The maintainer has authorized the v1.7.0 release publication path once all release-candidate corrections, exact-head validation gates, signed canonical identity checks, and post-publication verification requirements succeed. This release authorization does not authorize live UIX-9 model/provider calls, deployment, production mutation, policy activation, installed-integration refresh, unrelated destructive cleanup, force push, or history rewrite.
-
+The maintainer's v1.7.0 publication authorization has been consumed and the release is complete. Any future release/publication, live UIX-9 model/provider call, deployment, production mutation, policy activation, installed-integration refresh, destructive cleanup, force push, or history rewrite requires fresh applicable authority.
 ## User or Maintainer Preferences
 Repository changes follow bounded governed execution, exact-head validation, fail-closed evidence handling, forward-only history preservation, and conservative claims where comparative benefit was not established.
 

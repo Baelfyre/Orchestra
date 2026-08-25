@@ -79,11 +79,11 @@ See [Portable Adaptive Memory](docs/architecture/PORTABLE_ADAPTIVE_MEMORY.md).
 
 ## Current release state
 
-The latest published release remains **[v1.6.0: Integration & Developer Experience](https://github.com/Baelfyre/Orchestra/releases/tag/v1.6.0)** until the approved v1.7.0 candidate completes exact-head release validation and publication.
+The latest published release is **[v1.7.0: Adaptive Intelligence, Portable Memory & Design Fidelity](https://github.com/Baelfyre/Orchestra/releases/tag/v1.7.0)**. The immutable release resolves to canonical commit `e5305ef3e160209a0345bd2c7843c923940e62c5` with tree `7b7a0f6d5dd5376a62125ed1c6b037284e519c69` and a GitHub verified/valid signature.
 
-The **v1.7.0 release candidate** consolidates the substantial post-v1.6 work across adaptive intelligence, storage-agnostic portable memory, Compliance Registry consumption, and governed UI design fidelity. Release closeout is tracked in **[Release v1.7.0: Adaptive Intelligence, Portable Memory & Design Fidelity](https://github.com/Baelfyre/Orchestra/issues/563)**.
+v1.7.0 consolidates adaptive intelligence through bounded shadow maturity, storage-agnostic portable adaptive memory, Registry O1-O6 adaptive consumption, governed UI design fidelity through UIX-9A proof preparation, and the post-v1.6 documentation/research closeout. The `v1.7.0` tag remains fixed even when `main` receives later post-release maintenance.
 
-The UI design-fidelity work has progressed through the UIX-9A repository proof-preparation boundary. UIX-9A prepares deterministic proof infrastructure only and does not itself authorize live model/provider calls or claim a model-behavior benefit.
+UIX-9A remains deterministic proof infrastructure only. No live UIX-9 model/provider proof was executed as part of v1.7.0, and no model-behavior benefit claim is established by the repository-only protocol.
 
 ## Research and validation archive
 
@@ -121,7 +121,7 @@ Launch the stdio server with an existing adapter identity:
 python scripts/mcp_server.py --adapter codex
 ```
 
-The v1.6 transport targets MCP protocol revision `2026-07-28` and exposes only `server/discover`, `tools/list`, and `tools/call`.
+The bounded MCP transport, introduced in v1.6.0 and retained in v1.7.0, targets protocol revision `2026-07-28` and exposes only `server/discover`, `tools/list`, and `tools/call`.
 
 **MCP is transport, not authority.** Client metadata, tool arguments, discovery, or compatibility cannot grant Orchestra runtime authority.
 

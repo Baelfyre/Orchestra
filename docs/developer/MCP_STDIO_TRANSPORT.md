@@ -1,6 +1,6 @@
 # MCP stdio governed tool transport
 
-Status: post-v1.5 candidate under Orchestra issue #349.
+Status: shipped in v1.6.0 and retained in v1.7.0. Orchestra issue #349 is completed.
 
 ## Scope
 

@@ -4,11 +4,9 @@ Orchestra can be installed in several ways depending on your AI host or IDE.
 
 ## Release Status
 
-The current public GitHub Release is `v1.5.0: Machine-Verifiable Control Plane and Murmurs`, published from lightweight tag `v1.5.0` at exact signed release commit `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`. Repository manifests and the published release are normalized to version `1.5.0`. The GitHub Release is non-draft, non-prerelease, immutable, and independently verified as latest.
+The current public GitHub Release is `v1.7.0: Adaptive Intelligence, Portable Memory & Design Fidelity`, published from lightweight tag `v1.7.0` at exact GitHub-verified signed release commit `e5305ef3e160209a0345bd2c7843c923940e62c5`. The release is non-draft, non-prerelease, immutable, and independently verified as latest.
 
-Like `v1.4.0`, `v1.5.0` is a lightweight tag ref whose object type is `commit` and whose SHA is the exact GitHub-verified signed release commit above; there is no separate tag object to represent as signed or unsigned. Historical annotated-tag evidence for v1.2.0 and v1.3.0 remains unchanged.
-
-The latest GitHub Release remains the publication source of truth. Installing directly from `main` may include post-release documentation or later unreleased work, so use tag `v1.5.0` when exact released content is required.
+The `v1.7.0` tag is a lightweight `commit` ref resolving directly to the release commit; there is no separate tag object. Package/version surfaces are normalized to `1.7.0`. Installing directly from later `main` commits may include post-release maintenance, so use tag `v1.7.0` when exact released content is required.
 
 | Host | Install Surface | Current Status |
 |---|---|---|
