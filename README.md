@@ -42,18 +42,16 @@ It is **not an AI model**. Models generate and review work. Orchestra determines
 | **Cross-domain coordination** | Sequences specialist work, detects contradictions, and re-enters the correct owner when assumptions become stale. | [Coordination](docs/README.md#specialists-routing-and-coordination) |
 | **Validation & evidence** | Uses deterministic checks, exact-head evidence, cross-platform validation, and fail-closed transition rules. | [Validation & Evidence](docs/README.md#validation-evidence-and-continuity) |
 | **Portable host integration** | Supports governed adapter surfaces, PRAP compatibility, host maturity contracts, and bounded MCP transport. | [Hosts & Integrations](docs/README.md#hosts-adapters-and-integrations) |
-| **Adaptive memory portability** | Keeps local self-learning storage-agnostic and lets users choose a portable memory backend without granting learned state execution authority. | [Portable Adaptive Memory](docs/architecture/PORTABLE_ADAPTIVE_MEMORY.md) |
+| **Adaptive memory** | Keeps learned observations local by default and exposes an optional storage-agnostic contract for user-selected portable memory backends. | [Portable Adaptive Memory](docs/architecture/PORTABLE_ADAPTIVE_MEMORY.md) |
 | **Machine-readable knowledge** | Exposes structured contracts, schemas, provenance, release evidence, and an AI-first repository index. | [`README.json`](README.json) |
 
-## Adaptive memory and user-selected storage
+## Portable adaptive memory
 
-Orchestra's A1/A2/A3 adaptive-learning layers remain **machine-local by default**. Portable memory is optional and storage-agnostic: users or projects may select local JSON/JSONL, a user-selected Git-backed JSON store, an HTTP/API-backed memory service, or a custom adapter implementing the public backend contract.
+Orchestra's adaptive learning remains machine-local by default. Users may optionally connect a portable memory backend through the generic portable-memory contract without changing Orchestra's learning core.
 
-Orchestra does **not** require or embed the identity of a particular external memory repository, product, or service. Backend identity and configuration can remain entirely in the user's local or project environment.
+Supported backend classes are intentionally generic: local JSON, Git-backed JSON, HTTP/API storage, or a custom adapter. Orchestra does not require, discover, name, or embed any specific external repository or private storage system. Backend configuration and credentials remain outside portable learned-pattern payloads.
 
-Before a learned pattern can leave local adaptive memory, the portable candidate contract requires an explicit privacy review and excludes raw conversations, sensitive data, credentials, local user identifiers, and task-session identifiers. Portable candidates remain non-authorizing and cannot automatically promote themselves, alter routing, relax governance, or grant execution or policy authority.
-
-See [Portable Adaptive Memory](docs/architecture/PORTABLE_ADAPTIVE_MEMORY.md) and [`machine/adaptive/memory-backends.v1.json`](machine/adaptive/memory-backends.v1.json).
+Portable memory remains advisory and non-authorizing: it cannot grant execution or policy authority, override explicit instructions, relax governance, or automatically promote a learned candidate. See [Portable Adaptive Memory](docs/architecture/PORTABLE_ADAPTIVE_MEMORY.md).
 
 ## Token-efficient Registry consumption
 
@@ -91,7 +89,7 @@ C2R1 reused the frozen Codex task semantics, validator, provider/model surface, 
 A separately authorized supplemental recovery replicate reproduced the missing DEFAULT workload at `15,026` tokens. It is reported only as sensitivity evidence and does **not** rewrite the primary C2R1 dataset.
 
 | C2R1 analysis | DEFAULT | CAVEMAN | MURMURS |
-| --- | ---: | ---: |
+| --- | ---: | ---: | ---: |
 | Primary complete-case mean, 9 matched blocks | 10,959.56 | 12,567.56 | 10,859.67 |
 | Primary complete-case vs DEFAULT | baseline | **+14.67%** | **-0.91%** |
 | Supplemental balanced sensitivity mean, 10 blocks | 11,366.2 | 12,508.9 | 11,276.3 |
