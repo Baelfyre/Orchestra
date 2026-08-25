@@ -23,11 +23,15 @@ Older phase documents may retain the status language of the phase in which they 
 - [Adaptive Memory A0/A1](architecture/ADAPTIVE_MEMORY_A0_A1.md): research boundary and machine-local adaptive-memory foundation.
 - [Adaptive Specialist Context A2](architecture/ADAPTIVE_CONTEXT_A2.md): opt-in read-only specialist context after deterministic runtime gates.
 - [Adaptive Behavioral Pattern Learning A3](architecture/ADAPTIVE_SHADOW_LEARNING_A3.md): A3.0 shadow-learning contract and non-authorizing signal/candidate/comparison model.
+- [Portable Adaptive Memory](architecture/PORTABLE_ADAPTIVE_MEMORY.md): optional storage-agnostic export contract for user-selected memory backends.
 - `../machine/adaptive/a1-memory-contract.v1.json`: A1 machine contract.
 - `../machine/adaptive/a2-context-contract.v1.json`: A2 machine contract.
 - `../machine/adaptive/a3-shadow-learning-contract.v1.json`: A3.0 machine contract.
+- `../machine/adaptive/memory-backends.v1.json`: generic portable-memory backend classes and privacy boundaries.
 
 A1 and A2 are canonical. The pre-A3 precedence/materialization hardening is canonical at `8402a5acbafe923c73904dcdb90f7faca90ced9c`. A3 shadow state is defined as separate from the A1 materialized profile and A2 specialist context; contract definition does not activate an A3 learner or grant execution authority.
+
+Portable memory is optional. Orchestra does not require or identify a specific external repository, service, database, or user-selected backend. Backend identity, configuration, and credentials remain outside Orchestra's public source and portable learned-pattern payloads.
 
 ## Specialists, routing, and coordination
 
@@ -59,7 +63,7 @@ Structured machine governance, runtime state, receipts, and evidence use JSON. M
 - `../PROJECT_STATE.md`: human project-state chronology.
 - `../SESSION_HANDOFF.md`: repository-local human continuity record.
 
-Padayon owns cross-repository continuity and active Relay handoffs outside this repository. Orchestra repository memory does not supersede live Git state or validated source evidence.
+Cross-repository continuity may be supplied by a user-selected external continuity or memory backend. That backend is outside Orchestra's public source and does not supersede live Git state, validated source evidence, or Orchestra authority boundaries.
 
 ## Hosts, adapters, and integrations
 
