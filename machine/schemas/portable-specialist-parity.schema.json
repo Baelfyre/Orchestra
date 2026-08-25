@@ -1,0 +1,277 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/portable-specialist-parity.schema.json",
+  "title": "Orchestra UIX-8 Portable Specialist and Adapter Parity",
+  "description": "Closed evidence contract for source specialist guidance and only canonically supported portable host projections.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "role",
+    "entry_baseline",
+    "source_authority",
+    "host_projections",
+    "surfaces",
+    "validation",
+    "authority"
+  ],
+  "properties": {
+    "$schema": {"const": "../schemas/portable-specialist-parity.schema.json"},
+    "schema_version": {"const": "orchestra.ui-portable-specialist-parity.v1"},
+    "role": {"const": "UIX_8_PORTABLE_SPECIALIST_PARITY"},
+    "entry_baseline": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "source_authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["integration_flow", "contract_inputs", "owners", "authority_note"],
+      "properties": {
+        "integration_flow": {"const": "machine/ui/specialist-integration-flow.v1.json"},
+        "contract_inputs": {
+          "const": [
+            "docs/project/UIX_1_UI_DESIGN_CONTRACT.md",
+            "docs/project/UIX_2_DESIGN_SOURCE_PRESERVATION.md",
+            "docs/project/UIX_3_THEME_LAYOUT_EFFECT_PROFILE_REGISTRY.md",
+            "docs/project/UIX_4_COMPONENT_ASSET_PRESERVATION.md",
+            "docs/project/UIX_5_SPECIALIST_INTEGRATION.md",
+            "docs/project/UIX_6_OPTIONAL_ADAPTER_BOUNDARIES.md",
+            "docs/project/UIX_7_DETERMINISTIC_VALIDATION_FIXTURES.md",
+            "machine/ui/specialist-integration-flow.v1.json",
+            "machine/ui/optional-adapter-boundaries.v1.json"
+          ]
+        },
+        "owners": {
+          "const": ["conductor", "cloak", "clockwork", "the-governor", "ponytail", "overseer", "arbiter"]
+        },
+        "authority_note": {"type": "string", "minLength": 1}
+      }
+    },
+    "host_projections": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "prefixItems": [
+        {
+          "allOf": [
+            {"$ref": "#/$defs/host_projection"},
+            {"properties": {
+              "host_id": {"const": "codex"},
+              "maturity": {"const": "SUPPORTED"},
+              "disposition": {"const": "NORMALIZED_PORTABLE_COPY"},
+              "source_root": {"const": "skills"},
+              "projection_root": {"const": "adapters/codex/skills"},
+              "validator": {"const": "adapters/codex/validate_codex_export.py"},
+              "copy_required": {"const": true}
+            }}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/host_projection"},
+            {"properties": {
+              "host_id": {"const": "antigravity"},
+              "maturity": {"const": "SUPPORTED"},
+              "disposition": {"const": "NO_COPY_REQUIRED"},
+              "source_root": {"const": "skills"},
+              "projection_root": {"const": null},
+              "validator": {"const": null},
+              "copy_required": {"const": false}
+            }}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/host_projection"},
+            {"properties": {
+              "host_id": {"const": "claude-code"},
+              "maturity": {"const": "SCAFFOLD_ONLY"},
+              "disposition": {"const": "SCAFFOLD_ONLY_EXCLUDED"},
+              "source_root": {"const": null},
+              "projection_root": {"const": null},
+              "validator": {"const": null},
+              "copy_required": {"const": false}
+            }}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/host_projection"},
+            {"properties": {
+              "host_id": {"const": "cursor"},
+              "maturity": {"const": "SCAFFOLD_ONLY"},
+              "disposition": {"const": "SCAFFOLD_ONLY_EXCLUDED"},
+              "source_root": {"const": null},
+              "projection_root": {"const": null},
+              "validator": {"const": null},
+              "copy_required": {"const": false}
+            }}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/host_projection"},
+            {"properties": {
+              "host_id": {"const": "windsurf"},
+              "maturity": {"const": "SCAFFOLD_ONLY"},
+              "disposition": {"const": "SCAFFOLD_ONLY_EXCLUDED"},
+              "source_root": {"const": null},
+              "projection_root": {"const": null},
+              "validator": {"const": null},
+              "copy_required": {"const": false}
+            }}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/host_projection"},
+            {"properties": {
+              "host_id": {"const": "vscode"},
+              "maturity": {"const": "SCAFFOLD_ONLY"},
+              "disposition": {"const": "SCAFFOLD_ONLY_EXCLUDED"},
+              "source_root": {"const": null},
+              "projection_root": {"const": null},
+              "validator": {"const": null},
+              "copy_required": {"const": false}
+            }}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/host_projection"},
+            {"properties": {
+              "host_id": {"const": "jetbrains"},
+              "maturity": {"const": "SCAFFOLD_ONLY"},
+              "disposition": {"const": "SCAFFOLD_ONLY_EXCLUDED"},
+              "source_root": {"const": null},
+              "projection_root": {"const": null},
+              "validator": {"const": null},
+              "copy_required": {"const": false}
+            }}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/host_projection"},
+            {"properties": {
+              "host_id": {"const": "zed"},
+              "maturity": {"const": "SCAFFOLD_ONLY"},
+              "disposition": {"const": "SCAFFOLD_ONLY_EXCLUDED"},
+              "source_root": {"const": null},
+              "projection_root": {"const": null},
+              "validator": {"const": null},
+              "copy_required": {"const": false}
+            }}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/host_projection"},
+            {"properties": {
+              "host_id": {"const": "neovim"},
+              "maturity": {"const": "SCAFFOLD_ONLY"},
+              "disposition": {"const": "SCAFFOLD_ONLY_EXCLUDED"},
+              "source_root": {"const": null},
+              "projection_root": {"const": null},
+              "validator": {"const": null},
+              "copy_required": {"const": false}
+            }}
+          ]
+        }
+      ],
+      "items": false
+    },
+    "surfaces": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {"$ref": "#/$defs/surface"}
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "deterministic_test",
+        "codex_validator",
+        "host_maturity_contract",
+        "positive_cases",
+        "negative_cases",
+        "no_fabricated_antigravity_projection",
+        "no_scaffold_promotion",
+        "no_host_maturity_promotion",
+        "zero_external_calls",
+        "no_runtime_integration"
+      ],
+      "properties": {
+        "deterministic_test": {"const": "tests/runtime/test_portable_specialist_parity.py"},
+        "codex_validator": {"const": "adapters/codex/validate_codex_export.py"},
+        "host_maturity_contract": {"const": "machine/hosts/update-contract.v1.json"},
+        "positive_cases": {"const": ["SUPPORTED_CODEX_NORMALIZED_PARITY"]},
+        "negative_cases": {"const": ["STALE_SOURCE_COPY", "AUTHORITY_EXPANSION", "SCAFFOLD_HOST_PROMOTION", "FABRICATED_ANTIGRAVITY_COPY"]},
+        "no_fabricated_antigravity_projection": {"const": true},
+        "no_scaffold_promotion": {"const": true},
+        "no_host_maturity_promotion": {"const": true},
+        "zero_external_calls": {"const": true},
+        "no_runtime_integration": {"const": true}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parity_grants_host_maturity",
+        "parity_grants_runtime_authority",
+        "parity_grants_installation_authority",
+        "parity_grants_execution_authority",
+        "dependency_adoption_authorized",
+        "external_calls_authorized",
+        "figma_mutation_authorized",
+        "release_authorized",
+        "policy_activation_authorized",
+        "destructive_action_authorized"
+      ],
+      "properties": {
+        "parity_grants_host_maturity": {"const": false},
+        "parity_grants_runtime_authority": {"const": false},
+        "parity_grants_installation_authority": {"const": false},
+        "parity_grants_execution_authority": {"const": false},
+        "dependency_adoption_authorized": {"const": false},
+        "external_calls_authorized": {"const": false},
+        "figma_mutation_authorized": {"const": false},
+        "release_authorized": {"const": false},
+        "policy_activation_authorized": {"const": false},
+        "destructive_action_authorized": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "host_projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host_id", "maturity_source", "maturity", "disposition", "source_root", "projection_root", "validator", "copy_required", "rationale"],
+      "properties": {
+        "host_id": {"enum": ["codex", "antigravity", "claude-code", "cursor", "windsurf", "vscode", "jetbrains", "zed", "neovim"]},
+        "maturity_source": {"const": "machine/hosts/update-contract.v1.json"},
+        "maturity": {"enum": ["SUPPORTED", "SCAFFOLD_ONLY"]},
+        "disposition": {"enum": ["SOURCE_CANONICAL", "EXACT_PORTABLE_COPY", "NORMALIZED_PORTABLE_COPY", "HOST_NATIVE_REFERENCE", "NO_COPY_REQUIRED", "SCAFFOLD_ONLY_EXCLUDED"]},
+        "source_root": {"type": ["string", "null"]},
+        "projection_root": {"type": ["string", "null"]},
+        "validator": {"type": ["string", "null"]},
+        "copy_required": {"type": "boolean"},
+        "rationale": {"type": "string", "minLength": 1}
+      }
+    },
+    "surface": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner", "source_path", "projection_path", "disposition", "parity_mode", "required_markers"],
+      "properties": {
+        "owner": {"enum": ["conductor", "cloak", "clockwork", "the-governor", "ponytail", "overseer", "arbiter"]},
+        "source_path": {"type": "string", "pattern": "^skills/(conductor|cloak|clockwork|the-governor|ponytail|overseer|arbiter)/SKILL\\.md$"},
+        "projection_path": {"type": "string", "pattern": "^adapters/codex/skills/(conductor|cloak|clockwork|the-governor|ponytail|overseer|arbiter)/SKILL\\.md$"},
+        "disposition": {"const": "NORMALIZED_PORTABLE_COPY"},
+        "parity_mode": {"const": "NORMALIZED_BODY"},
+        "required_markers": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      }
+    }
+  }
+}

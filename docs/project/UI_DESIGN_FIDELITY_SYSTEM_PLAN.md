@@ -1,10 +1,10 @@
 # Governed UI Design Fidelity System Plan
 
-Status: `UIX_6_ACTIVE_OPTIONAL_ADAPTER_BOUNDARIES`
+Status: `UIX_8_ACTIVE_PORTABLE_SPECIALIST_PARITY`
 
 Recorded: 2026-08-24
 
-Activation baseline: `7d9c020a5fbd70b7270d86e24f8922928bc5613b`
+Activation baseline: `593c7b4444d422f8fb4d78eaf25f2532ffd096ac`
 
 Historical design source: closed-unmerged PR #471 (`docs: plan governed UI design fidelity system`)
 
@@ -32,7 +32,7 @@ That sequencing gate is now resolved:
 
 Unchecked entries in `docs/project/ROADMAP.md` under Deferred and Future Work are backlog candidates, not automatic prerequisites. They do not block UIX unless an item becomes an explicit dependency or the maintainer changes priority.
 
-UIX-0 is complete, UIX-1 is canonical at `c331634dc63fbebb86ca07274c06262d5b52a50d`, UIX-2 is canonical at `8e4f3bb5e878131e8c038ea195311c92ca08cfde`, UIX-3 is canonical at `d27fbd6b89b297646c7e30ffb8bac193bbdc0cf4`, UIX-4 is canonical at `3a7f18bd49c7aa16cfc4568fd42f9b06c37cb847`, UIX-5 is canonical at `7d9c020a5fbd70b7270d86e24f8922928bc5613b`, and UIX-6 is the active bounded unit on the current source branch. This current-state reconciliation supersedes the earlier UIX-0-only sequencing statement; historical UIX-0 and UIX-1 phase documents retain their phase-era status wording. The plan does not itself authorize dependency installation, Figma mutation, external authentication, release, deployment, marketplace publication, policy activation, or another protected action.
+UIX-0 is complete, UIX-1 is canonical at `c331634dc63fbebb86ca07274c06262d5b52a50d`, UIX-2 is canonical at `8e4f3bb5e878131e8c038ea195311c92ca08cfde`, UIX-3 is canonical at `d27fbd6b89b297646c7e30ffb8bac193bbdc0cf4`, UIX-4 is canonical at `3a7f18bd49c7aa16cfc4568fd42f9b06c37cb847`, UIX-5 is canonical at `7d9c020a5fbd70b7270d86e24f8922928bc5613b`, UIX-6 is canonical with `NO_ADOPTION`, and UIX-7 is canonical at `593c7b4444d422f8fb4d78eaf25f2532ffd096ac`. UIX-8 is the active bounded unit on the current source branch. This current-state reconciliation supersedes the earlier UIX-0-only sequencing statement; historical UIX phase documents retain their phase-era status wording. The plan does not itself authorize dependency installation, Figma mutation, external authentication, release, deployment, marketplace publication, policy activation, or another protected action.
 
 ## Existing ownership
 
@@ -210,7 +210,7 @@ Cover component reuse, token preservation, arbitrary-value drift, state complete
 
 ### UIX-8: Portable specialist and adapter parity
 
-Update source specialist guidance and only canonically supported portable adapter copies, plus routing, indexes, checklists, and documentation required by actual changed scope.
+Operationalize the canonical UIX-1 through UIX-7 contracts in the seven UIX-5 owner specialist surfaces. Validate normalized Codex parity through the existing exporter, record Antigravity as `NO_COPY_REQUIRED`, exclude scaffold-only hosts, and update only the routing, index, checklist, and documentation surfaces required by the changed scope.
 
 ### UIX-9: Controlled proof campaign
 

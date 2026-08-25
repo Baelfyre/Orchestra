@@ -38,6 +38,10 @@ Do not use it for:
 
 If architecture work depends on an unresolved decision owned by another specialist, return `SPECIALIST_REROUTE_REQUIRED` for that decision instead of absorbing the other specialist's scope.
 
+## UIX Design-Fidelity Contract Boundary
+
+For UIX work, translate frozen UI evidence into component, state, and responsive architecture while preserving existing project boundaries and design-system ownership. Clockwork defines the engineering boundary, but does not become visual-fidelity authority or implementation authority.
+
 ## Supported Work
 
 - architecture and layering review

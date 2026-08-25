@@ -158,6 +158,10 @@ Arbiter must return `HOLD`, `WAIT_FOR_EVIDENCE`, or a higher-priority dispositio
 
 Arbiter must not return `READY` or `AUTO_CONTINUE` until the current contract reference, required specialist revisions, and validation evidence are mutually current. Arbiter validates continuity and freshness but does not decide domain contract correctness.
 
+## UIX Transition Boundary
+
+Require fresh, revision-bound UI evidence before transition. Reject stale, mismatched, or incomplete evidence, and retain transition-disposition ownership even when UIX validation is green.
+
 ## Authority
 
 Arbiter may:

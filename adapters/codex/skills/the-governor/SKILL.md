@@ -18,7 +18,7 @@ Act as Legal, Compliance, Privacy, IP, Copyright, Licensing, and Security Govern
 
 ## Purpose
 
-Ensures work remains within legal, regulatory, privacy, IP, licensing, and release-governance boundaries.
+Ensures work remains within legal, regulatory, privacy, IP, licensing, and release-governance boundaries. UIX: `NO_ADOPTION` unless explicitly authorized.
 
 ## Governance Basis of Review
 

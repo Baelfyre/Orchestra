@@ -66,6 +66,10 @@ Overseer stays focused on validation and readiness. It does not absorb implement
 
 If the request is outside this specialist's scope, do not execute it. Return `SPECIALIST_REROUTE_REQUIRED` and recommend the correct specialist or Conductor.
 
+## UIX Evidence Boundary
+
+Bind rendered UIX evidence to the exact implementation revision and design-reference identity. Validate interaction, responsive behavior, and accessibility, and reject silent visual-baseline replacement as remediation. Functional or static evidence alone must not be reported as rendered proof.
+
 ## Progressive Disclosure Rule
 
 Use `SKILL.md` first. Do not load every supporting document by default or consume context with unused material.

@@ -35,6 +35,10 @@ Do not use it for:
 
 If implementation depends on an unresolved specialist decision, return `SPECIALIST_REROUTE_REQUIRED` and do not execute the work. Do not guess.
 
+## UIX Implementation Boundary
+
+Implement UIX work only after upstream contracts are sufficiently frozen. Prefer mapped project-native components, semantic tokens, and approved assets. Do not duplicate an adequate mapped component, use arbitrary styling, or substitute an unapproved asset to approximate missing evidence.
+
 ## Supported Work
 
 - code navigation and file inspection

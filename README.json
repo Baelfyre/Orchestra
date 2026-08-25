@@ -98,6 +98,18 @@
       "adoption_disposition": "NO_ADOPTION",
       "authority_note": "UIX-6 records optional capability boundaries and explicit evidence limitations; it does not adopt dependencies, refresh installed integrations, create a Figma client, make external tools authoritative, or authorize Figma mutation."
     },
+    "governed_ui_portable_specialist_parity_uix8": {
+      "status": "IMPLEMENTED_PENDING_CANONICAL_VALIDATION",
+      "purpose": "UIX-8 source specialist guidance and supported Codex projection parity with explicit Antigravity no-copy and scaffold-only exclusions.",
+      "machine_sources": ["machine/schemas/portable-specialist-parity.schema.json", "machine/ui/portable-specialist-parity.v1.json"],
+      "human_sources": ["docs/project/UIX_8_PORTABLE_SPECIALIST_PARITY.md"],
+      "validation_surface": "tests/runtime/test_portable_specialist_parity.py",
+      "supported_projection": "CODEX_NORMALIZED_PORTABLE_COPY",
+      "antigravity_disposition": "NO_COPY_REQUIRED",
+      "scaffold_host_disposition": "SCAFFOLD_ONLY_EXCLUDED",
+      "runtime_integration": false,
+      "authority_note": "UIX-8 parity is semantic portability evidence only; it does not grant host maturity, runtime, installation, execution, adoption, release, deployment, policy, or Figma authority."
+    },
     "host_update_planning": {"status": "INCLUDED_IN_V1_6_CANDIDATE", "machine_sources": ["machine/hosts/update-contract.v1.json"], "human_sources": ["docs/setup/HOST_UPDATES.md"]},
     "adapter_sdk_and_prap_certification": {
       "status": "INCLUDED_IN_V1_6_CANDIDATE",
@@ -637,6 +649,8 @@
     "specialist_integration_flow": "machine/ui/specialist-integration-flow.v1.json",
     "optional_adapter_boundaries_schema": "machine/schemas/optional-adapter-boundaries.schema.json",
     "optional_adapter_boundaries": "machine/ui/optional-adapter-boundaries.v1.json",
+    "portable_specialist_parity_schema": "machine/schemas/portable-specialist-parity.schema.json",
+    "portable_specialist_parity": "machine/ui/portable-specialist-parity.v1.json",
     "comparative_benchmark_codex_c2_portability_r1": "machine/benchmarking/codex-c2-portability-r1-preexecution.v1.json",
     "comparative_benchmark_codex_c2_portability_r1_live_authorization": "machine/benchmarking/codex-c2-portability-r1-live-execution-authorization.v1.json"
   },
