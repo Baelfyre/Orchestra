@@ -48,7 +48,7 @@ The Developer Portal cannot activate policy, deploy or mutate production, refres
 
 ## MCP transport boundary
 
-MCP is an established bounded transport, introduced in v1.6.0 and retained in v1.7.0. It maps protocol revision `2026-07-28` to Orchestra's existing trusted Adapter SDK/PRAP/runtime boundary, projects only currently permitted runtime-bound commands, and delegates accepted calls to a fresh trusted runtime composition.
+MCP remains the final integration phase in the Developer Portal sequencing model. The bounded stdio transport itself is now an established integration surface, introduced in v1.6.0 and retained in v1.7.0. It maps protocol revision `2026-07-28` to Orchestra's existing trusted Adapter SDK/PRAP/runtime boundary, projects only currently permitted runtime-bound commands, and delegates accepted calls to a fresh trusted runtime composition.
 
 MCP remains transport, not authority. The current unit does not add Streamable HTTP, resources, prompts, Tasks/extensions, deployment, policy activation, installed-integration refresh, host-maturity promotion, or token-savings claims. See `docs/developer/MCP_STDIO_TRANSPORT.md`.
 
