@@ -1,0 +1,49 @@
+{
+  "schema_version": "orchestra.memory-backends.v1",
+  "purpose": "Define storage-agnostic portable-memory integration without requiring or naming any user-selected backend.",
+  "selection_policy": {
+    "user_or_project_may_select_backend": true,
+    "orchestra_learning_core_is_backend_agnostic": true,
+    "backend_selection_grants_authority": false,
+    "automatic_promotion": false,
+    "runtime_execution_control": false,
+    "raw_local_observations_exported_by_default": false,
+    "privacy_review_required_before_portable_promotion": true
+  },
+  "contract": {
+    "portable_candidate_schema": "machine/schemas/portable-memory-candidate.schema.json",
+    "backend_protocol": "orchestra_runtime/adaptive/portable_memory.py#PortableMemoryBackend",
+    "required_backend_operations": ["validate_candidate", "stage_candidate"],
+    "canonical_write_is_backend_governed": true
+  },
+  "supported_adapter_kinds": [
+    {
+      "adapter_kind": "LOCAL_JSON",
+      "record_formats": ["JSON", "JSONL"],
+      "typical_use": "single-machine or explicitly synchronized file storage"
+    },
+    {
+      "adapter_kind": "GIT_JSON",
+      "record_formats": ["JSON", "JSONL"],
+      "typical_use": "versioned portable memory using a user-selected Git repository"
+    },
+    {
+      "adapter_kind": "HTTP_API",
+      "record_formats": ["JSON"],
+      "typical_use": "remote memory service or organization-managed knowledge store"
+    },
+    {
+      "adapter_kind": "CUSTOM",
+      "record_formats": ["JSON", "JSONL"],
+      "typical_use": "user-supplied adapter implementing the portable-memory backend contract"
+    }
+  ],
+  "non_goals": [
+    "REQUIRE_A_SPECIFIC_MEMORY_PRODUCT_OR_REPOSITORY",
+    "DISCLOSE_USER_SELECTED_BACKEND_IDENTITY_IN_ORCHESTRA_SOURCE",
+    "ALLOW_MEMORY_TO_GRANT_EXECUTION_OR_POLICY_AUTHORITY",
+    "AUTO_EXPORT_RAW_CONVERSATIONS_OR_MACHINE_LOCAL_IDENTIFIERS",
+    "AUTO_PROMOTE_A3_SHADOW_CANDIDATES",
+    "MAKE_NEWEST_TIMESTAMP_OVERRIDE_SCOPE_OR_GOVERNANCE"
+  ]
+}
