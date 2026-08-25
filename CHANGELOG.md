@@ -4,9 +4,13 @@ This root changelog is release-oriented. Detailed pre-v1.7 development chronolog
 
 ## v1.7.0 - Adaptive Intelligence, Portable Memory & Design Fidelity
 
-Release tracking: [#563 - Release v1.7.0: Adaptive Intelligence, Portable Memory & Design Fidelity](https://github.com/Baelfyre/Orchestra/issues/563)
+Release tracking: [#563 - Release v1.7.0: Adaptive Intelligence, Portable Memory & Design Fidelity](https://github.com/Baelfyre/Orchestra/issues/563) (`CLOSED_COMPLETED`)
 
-Full release description: [v1.7.0 release candidate notes](docs/releases/v1.7.0-adaptive-intelligence-portable-memory-design-fidelity-release-candidate.md)
+Published release: [Orchestra v1.7.0](https://github.com/Baelfyre/Orchestra/releases/tag/v1.7.0)
+
+Release-source description: [v1.7.0 release candidate notes](docs/releases/v1.7.0-adaptive-intelligence-portable-memory-design-fidelity-release-candidate.md)
+
+Published August 25, 2026 (UTC).
 
 ### Added
 
@@ -20,6 +24,8 @@ Full release description: [v1.7.0 release candidate notes](docs/releases/v1.7.0-
 - Simplified the public README so stable capabilities and current release state are primary, while detailed comparative benchmark results are linked as research/validation evidence rather than embedded as large landing-page tables.
 - Portable adaptive-memory payloads exclude raw conversation, credentials, sensitive data, and local identity; backend configuration remains external to portable learned-pattern records.
 - The root changelog is now release-oriented. The former detailed chronology is retained unchanged under `docs/history/CHANGELOG_PRE_V1_7.md` instead of being deleted.
+- Post-release documentation parity aligns README, machine index, setup/compatibility, project continuity, MCP/PRAP, maturity, contribution, and validation guidance with the published v1.7.0 state.
+- Added `requirements-dev.txt` so core local runtime-test dependencies are discoverable without reverse-engineering CI YAML.
 
 ### Research closeout
 
@@ -29,7 +35,7 @@ Full release description: [v1.7.0 release candidate notes](docs/releases/v1.7.0-
 
 ### Release boundary
 
-The v1.7.0 candidate is approved for publication only after the complete exact-head release matrix and signed canonical identity checks pass. Publication does not itself authorize deployment, production mutation, policy activation, installed-integration refresh, destructive cleanup, branch deletion, force push, or history rewrite.
+Orchestra v1.7.0 is published and independently verified at immutable tag/release target `e5305ef3e160209a0345bd2c7843c923940e62c5`. Post-release maintenance does not move that tag or create a new release. Deployment, production mutation, policy activation, installed-integration refresh, destructive cleanup, branch deletion, force push, and history rewrite remain separately controlled.
 
 ---
 

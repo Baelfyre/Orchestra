@@ -1,10 +1,8 @@
 # Compatibility
 
-The current public GitHub Release is Orchestra `v1.5.0: Machine-Verifiable Control Plane and Murmurs`, published from lightweight tag `v1.5.0` at exact signed release commit `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`. The release is non-draft, non-prerelease, immutable, and independently verified as latest. Publication did not graduate scaffold-only hosts or perform marketplace publication.
+The current public GitHub Release is Orchestra `v1.7.0: Adaptive Intelligence, Portable Memory & Design Fidelity`, published from lightweight tag `v1.7.0` at exact GitHub-verified signed release commit `e5305ef3e160209a0345bd2c7843c923940e62c5`. The release is non-draft, non-prerelease, immutable, and independently verified as latest.
 
-The `v1.5.0` tag is a lightweight `commit` ref resolving directly to the GitHub-verified signed release commit above; there is no separate tag object. Historical v1.2.0/v1.3.0 annotated-tag evidence and the v1.4.0 lightweight-tag evidence remain unchanged.
-
-v1.5.0 preserves the existing public package, command, specialist, and host surfaces while making the machine contracts and deterministic kernel the canonical control-plane boundary at `LEGACY_RETIRED`. Murmurs is additive and opt-in with `NORMAL` as the default presentation mode. MCP is not part of v1.5.0 and remains a post-publication transport/integration candidate, not a source of authority.
+The `v1.7.0` tag resolves directly to the exact release commit. v1.7.0 retains the bounded MCP stdio transport and PRAP/Adapter SDK introduced in v1.6.0, while adding adaptive intelligence, storage-agnostic portable memory, Registry O1-O6 adaptive consumption, and governed UI design-fidelity contracts. Publication did not graduate scaffold-only hosts or publish those scaffold surfaces to marketplaces.
 
 Scaffold-only hosts are not full support claims. Promotion requirements and graduation order live in `docs/project/SCAFFOLD_ADAPTER_GRADUATION_CRITERIA.md`.
 

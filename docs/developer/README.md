@@ -1,6 +1,6 @@
 # Orchestra Developer Portal
 
-The Developer Portal is Orchestra's repository-native discovery surface for developers extending or integrating with the stabilized post-v1.5 contracts. It is documentation and indexing only. It is not a hosted service, marketplace, package registry, deployment plane, policy authority, or runtime permission source.
+The Developer Portal is Orchestra's repository-native discovery surface for developers extending or integrating with the current v1.7 contracts. It is documentation and indexing only. It is not a hosted service, marketplace, package registry, deployment plane, policy authority, or runtime permission source.
 
 ## Start here
 
@@ -14,7 +14,7 @@ The Developer Portal is Orchestra's repository-native discovery surface for deve
 | Review governance | `machine/governance/policy.v1.json`, `docs/governance/GOVERNANCE_LAYER.md` |
 | Validate changes | `docs/setup/VALIDATION.md` |
 
-The machine-readable index for the established portal entry points is `machine/developer-portal/catalog.v1.json`. Its schema is `machine/schemas/developer-portal-catalog.schema.json`. The bounded MCP transport is a later integration phase and does not make the portal catalog authoritative for MCP execution.
+The machine-readable index for the established portal entry points is `machine/developer-portal/catalog.v1.json`. Its schema is `machine/schemas/developer-portal-catalog.schema.json`. The bounded MCP transport is an established integration surface and does not make the portal catalog authoritative for MCP execution.
 
 ## Adapter journey
 
@@ -48,12 +48,10 @@ The Developer Portal cannot activate policy, deploy or mutate production, refres
 
 ## MCP transport boundary
 
-MCP remains the final integration phase. The current post-v1.5 candidate implements only its first bounded stdio tool-transport unit and does not authorize expansion into the deferred MCP surfaces.
+MCP remains the final integration phase in the Developer Portal sequencing model. The bounded stdio transport itself is now an established integration surface, introduced in v1.6.0 and retained in v1.7.0. It maps protocol revision `2026-07-28` to Orchestra's existing trusted Adapter SDK/PRAP/runtime boundary, projects only currently permitted runtime-bound commands, and delegates accepted calls to a fresh trusted runtime composition.
 
-The post-v1.5 MCP candidate is a stdio-only transport that maps protocol revision `2026-07-28` to Orchestra's existing trusted Adapter SDK/PRAP/runtime boundary. It projects current runtime-bound commands as tools and delegates accepted calls to a fresh existing trusted runtime composition. It does not define a new permission model or bypass binding, authority, runtime-capability, governance, lifecycle, or audit controls.
-
-The first bounded unit does not add Streamable HTTP, resources, prompts, Tasks/extensions, deployment, policy activation, installed-integration refresh, host-maturity promotion, or token-savings claims. See `docs/developer/MCP_STDIO_TRANSPORT.md`.
+MCP remains transport, not authority. The current unit does not add Streamable HTTP, resources, prompts, Tasks/extensions, deployment, policy activation, installed-integration refresh, host-maturity promotion, or token-savings claims. See `docs/developer/MCP_STDIO_TRANSPORT.md`.
 
 ## Public release boundary
 
-The current public release remains `v1.5.0` at `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`. This post-release candidate does not move or republish that release.
+The current public release is immutable `v1.7.0` at `e5305ef3e160209a0345bd2c7843c923940e62c5`. Later `main` commits are post-release maintenance until a separately governed future release is authorized, validated, published, and independently verified.

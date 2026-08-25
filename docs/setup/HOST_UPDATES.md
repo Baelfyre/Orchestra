@@ -35,7 +35,7 @@ Unknown hosts fail closed.
 The planner performs no network request. Without `--latest-version`, status is `NOT_CHECKED`. A caller that has separately obtained a trusted current release version may pass it explicitly:
 
 ```text
-python scripts/host_update.py --host codex --latest-version 1.5.0 --json
+python scripts/host_update.py --host codex --latest-version 1.7.0 --json
 ```
 
 The result is deterministic and uses only the canonical local contract plus the supplied version observation.

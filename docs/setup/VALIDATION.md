@@ -21,6 +21,15 @@ These validation enforcement levels are separate from the governance-facing `Gov
 The framework provides a unified Python behavior runner, [tests/behavior/run_tests.py](../../tests/behavior/run_tests.py), which executes the structural, consistency, and regression checks used by the `validate` workflow job.
 
 ### How to Run Tests Locally
+
+Install the core local behavior/runtime test dependencies first:
+
+```powershell
+python -m pip install -r requirements-dev.txt
+```
+
+`requirements-dev.txt` mirrors the core test dependencies declared by the primary validate workflow. Specialized mutation campaigns install their additional pinned tools in their dedicated workflows.
+
 Run the primary behavior suite locally:
 ```powershell
 python .\tests\behavior\run_tests.py
@@ -28,7 +37,7 @@ python .\tests\behavior\run_tests.py
 
 Run the runtime coverage gate used by CI:
 ```powershell
-python -m pytest tests/runtime --cov=orchestra_runtime --cov-report=term-missing --cov-fail-under=90
+python -m pytest tests/runtime --cov=orchestra_runtime --cov-branch --cov-report=term-missing --cov-report=json:artifacts/runtime/coverage.json --junitxml=artifacts/runtime/runtime-junit.xml --cov-fail-under=0
 ```
 
 If you specifically need the Windows compatibility wrapper, it remains available:
@@ -46,8 +55,12 @@ The Python behavior runner executes the following checks sequentially:
 6. **Codex Skill Export Alignment (`validate_codex_export.py`)**: Verifies that generated/exported Codex skill definitions match the source rules.
 7. **Governance Evaluation (`evaluate_governance.py`)**: Validates source-level governance behavior expectations.
 8. **Runtime Guardrail and Dagger Simulations**: Runs the runtime guardrail scan, Dagger guardrail tests, and isolated regression checks for guardrails, project-context validation, and lock acquisition behavior.
-9. **Runtime Coverage Gate (`pytest-cov`)**: The CI workflow separately runs `tests/runtime` with `--cov=orchestra_runtime --cov-report=term-missing --cov-fail-under=90`.
+9. **Runtime Coverage Evidence (`pytest-cov`)**: CI collects statement and branch coverage from `tests/runtime`; `--cov-fail-under=0` keeps pytest itself from duplicating policy. `orchestra_runtime.test_evidence` enforces minimum overall statement/branch coverage of 97%/95%, while `scripts/validation/build_coverage_inventory.py` enforces critical-module floors of 98%/95%.
 10. **Cross-Layer Synchronicity Contract**: Runs `scripts/validate_cross_layer_synchronicity_contract.py` and `tests/behavior/test_cross_layer_synchronicity_contract.py` to enforce the canonical workflow stages, deterministic statuses, single-owner findings, executable evidence, and fail-closed re-entry behavior.
+
+### Git context requirement for strict evidence checks
+
+`python scripts/governance_check.py --strict` intentionally uses repository Git identity and refs when validating startup memory, evidence freshness, and branch/path ambiguity. Run strict governance from a real clone with the required refs available. Tarball extractions, reconstructed `.git` directories, single-branch/shallow clones, or synthetic audit sandboxes can fail closed because the checker cannot prove a historical `docs/...` token is a Git branch rather than a missing repository path. That is insufficient Git evidence, not permission to weaken the check.
 
 Run the focused cross-layer checks directly:
 
