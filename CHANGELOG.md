@@ -2,9 +2,11 @@
 
 This root changelog is release-oriented. Detailed pre-v1.7 development chronology remains preserved byte-for-byte in [the historical changelog archive](docs/history/CHANGELOG_PRE_V1_7.md), Git history, merged pull requests, decision records, and validation evidence.
 
-## v1.7.0 - Release Preparation
+## v1.7.0 - Adaptive Intelligence, Portable Memory & Design Fidelity
 
-Release tracking: [#563 - Release v1.7.0: Adaptive Orchestration & Design Fidelity](https://github.com/Baelfyre/Orchestra/issues/563)
+Release tracking: [#563 - Release v1.7.0: Adaptive Intelligence, Portable Memory & Design Fidelity](https://github.com/Baelfyre/Orchestra/issues/563)
+
+Full release description: [v1.7.0 release candidate notes](docs/releases/v1.7.0-adaptive-intelligence-portable-memory-design-fidelity-release-candidate.md)
 
 ### Added
 
@@ -27,7 +29,7 @@ Release tracking: [#563 - Release v1.7.0: Adaptive Orchestration & Design Fideli
 
 ### Release boundary
 
-This preparation does not itself publish v1.7.0. Tag creation, GitHub Release publication, deployment, production mutation, policy activation, installed-integration refresh, destructive cleanup, branch deletion, force push, and history rewrite remain separately controlled.
+The v1.7.0 candidate is approved for publication only after the complete exact-head release matrix and signed canonical identity checks pass. Publication does not itself authorize deployment, production mutation, policy activation, installed-integration refresh, destructive cleanup, branch deletion, force push, or history rewrite.
 
 ---
 
