@@ -1,59 +1,37 @@
 #!/usr/bin/env python3
-"""Build a non-authorizing Padayon promotion envelope from one A3 candidate.
+"""Padayon reference adapter for Orchestra portable adaptive memory.
 
-This tool never writes Padayon and never marks a local candidate promoted. It
-only emits a privacy-minimized envelope that Padayon can validate separately.
+Orchestra's learning core is storage-agnostic. This adapter selects Padayon as
+one optional GIT_JSON backend, emits a portable candidate, and never writes to
+Padayon or marks the local A3 candidate promoted.
 """
 from __future__ import annotations
 
 import argparse
 import json
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
 import jsonschema
 
-ROOT = Path(__file__).resolve().parents[1]
-SOURCE_SCHEMA = ROOT / "machine" / "schemas" / "adaptive-shadow-candidate.schema.json"
-BRIDGE_SCHEMA = ROOT / "machine" / "schemas" / "padayon-memory-promotion-candidate.schema.json"
+from orchestra_runtime.adaptive.portable_memory import (
+    CATEGORIES,
+    MemoryBackendDescriptor,
+    build_portable_memory_candidate,
+)
 
-TYPE_MAP = {
-    "USER_PREFERENCE_TENDENCY": "USER_PREFERENCE",
-    "WORKFLOW_TENDENCY": "WORKFLOW_PATTERN",
-    "SPECIALIST_STRATEGY_TENDENCY": "SPECIALIST_STRATEGY",
-}
-CATEGORIES = (
-    "ARCHITECTURE",
-    "CODE_REVIEW",
-    "CONTEXT_RETRIEVAL",
-    "DESIGN_UI_UX",
-    "DOCUMENTATION",
-    "REMEDIATION",
-    "RESEARCH",
-    "TESTING",
-    "TOOLING",
-    "VALIDATION",
-    "WORKFLOW",
+ROOT = Path(__file__).resolve().parents[1]
+PADAYON_ADAPTER_SCHEMA = ROOT / "machine" / "schemas" / "padayon-memory-promotion-candidate.schema.json"
+PADAYON_BACKEND = MemoryBackendDescriptor(
+    backend_id="padayon",
+    adapter_kind="GIT_JSON",
+    record_format="JSON",
+    config_ref="machine/adaptive/memory-backends.v1.json#padayon",
 )
 
 
 def load_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
-
-
-def _validator(path: Path) -> jsonschema.Draft202012Validator:
-    schema = load_json(path)
-    jsonschema.Draft202012Validator.check_schema(schema)
-    return jsonschema.Draft202012Validator(schema)
-
-
-def _unique(values: list[str]) -> list[str]:
-    return list(dict.fromkeys(item for item in values if item))
-
-
-def _utc_now() -> str:
-    return datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
 
 
 def build_promotion_envelope(
@@ -68,84 +46,21 @@ def build_promotion_envelope(
     created_at: str | None = None,
     privacy_reviewed: bool = False,
 ) -> dict[str, Any]:
-    _validator(SOURCE_SCHEMA).validate(candidate)
-
-    if candidate["status"] != "CANDIDATE":
-        raise ValueError("only active A3 CANDIDATE records may enter the Padayon promotion bridge")
-    if not privacy_reviewed:
-        raise ValueError("portable promotion requires an explicit privacy review")
-    if category not in CATEGORIES:
-        raise ValueError(f"unsupported category: {category}")
-
-    source_scope = candidate["scope"]
-    mapped_projects = list(projects or [])
-    mapped_specialists = list(specialists or [])
-    if source_scope.get("project_key"):
-        mapped_projects.append(source_scope["project_key"])
-    if source_scope.get("specialist_slug"):
-        mapped_specialists.append(source_scope["specialist_slug"])
-
-    refs = list(candidate["supporting_signal_refs"])
-    digests = list(candidate["supporting_signal_digests"])
-    if len(refs) != len(digests):
-        raise ValueError("supporting signal refs and digests must have one-to-one parity")
-
-    envelope = {
-        "schema_version": "orchestra.padayon-memory-promotion-candidate.v1",
-        "source": {
-            "system": "ORCHESTRA_ADAPTIVE_A3",
-            "candidate_id": candidate["candidate_id"],
-            "source_schema_version": candidate["schema_version"],
-            "learner_rule_version": candidate["learner_rule_version"],
-            "status": candidate["status"],
-            "shadow_only": candidate["shadow_only"],
-            "promotion_state": candidate["promotion_state"],
-        },
-        "pattern": {
-            "key": candidate["subject_key"],
-            "type": TYPE_MAP[candidate["candidate_type"]],
-            "category": category,
-            "value": candidate["candidate_value"],
-            "scope": {
-                "repositories": _unique(list(repositories or [])),
-                "projects": _unique(mapped_projects),
-                "use_cases": _unique(list(use_cases or [])),
-                "specialists": _unique(mapped_specialists),
-            },
-            "tags": _unique(list(tags or [])),
-        },
-        "evidence": {
-            "refs": refs,
-            "digests": digests,
-            "distinct_support_count": candidate["distinct_support_count"],
-            "confidence": candidate["confidence"],
-            "confidence_method": candidate["confidence_method"],
-            "first_seen": candidate["first_seen"],
-            "last_seen": candidate["last_seen"],
-        },
-        "privacy": {
-            "contains_raw_conversation": False,
-            "contains_sensitive_data": False,
-            "contains_credentials": False,
-            "user_key_transferred": False,
-            "task_session_key_transferred": False,
-            "review_state": "EXPLICITLY_REVIEWED_FOR_PORTABLE_PROMOTION",
-        },
-        "authority": {
-            "execution_authority": False,
-            "policy_authority": False,
-            "may_override_explicit_instruction": False,
-            "may_relax_governance": False,
-            "automatic_promotion": False,
-        },
-        "intake": {
-            "destination_repository": "Baelfyre/Padayon",
-            "state": "PENDING_GOVERNED_VALIDATION",
-            "canonical_write_authorized": False,
-            "created_at": created_at or _utc_now(),
-        },
-    }
-    _validator(BRIDGE_SCHEMA).validate(envelope)
+    envelope = build_portable_memory_candidate(
+        candidate,
+        backend=PADAYON_BACKEND,
+        category=category,
+        repositories=repositories,
+        projects=projects,
+        use_cases=use_cases,
+        specialists=specialists,
+        tags=tags,
+        created_at=created_at,
+        privacy_reviewed=privacy_reviewed,
+    )
+    schema = load_json(PADAYON_ADAPTER_SCHEMA)
+    jsonschema.Draft202012Validator.check_schema(schema)
+    jsonschema.Draft202012Validator(schema).validate(envelope)
     return envelope
 
 
@@ -173,9 +88,8 @@ def main() -> int:
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
 
-    candidate = load_json(args.candidate)
     envelope = build_promotion_envelope(
-        candidate,
+        load_json(args.candidate),
         category=args.category,
         repositories=args.repository,
         projects=args.project,
