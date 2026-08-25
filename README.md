@@ -40,92 +40,11 @@ It is **not an AI model**. Models generate and review work. Orchestra determines
 | **Specialist orchestration** | Routes work to focused architecture, implementation, security, UI/UX, database, QA, documentation, governance, and coordination roles. | [Skills & Routing](docs/README.md#specialists-routing-and-coordination) |
 | **Governed execution** | Keeps authority, capabilities, governance, human gates, and repository policy separate and explicit. | [Governance & Authority](docs/README.md#governance-and-authority) |
 | **Cross-domain coordination** | Sequences specialist work, detects contradictions, and re-enters the correct owner when assumptions become stale. | [Coordination](docs/README.md#specialists-routing-and-coordination) |
-| **Validation & evidence** | Uses deterministic checks, exact-head evidence, cross-platform validation, and fail-closed transition rules. | [Validation & Evidence](docs/README.md#validation-evidence-and-continuity) |
+| **Adaptive context and shadow learning** | Maintains bounded local evidence, advisory specialist context, and non-authorizing adaptive evaluation without allowing learned state to silently create authority. | [Adaptive Architecture](docs/README.md#adaptive-intelligence) |
+| **UI design fidelity** | Preserves design-source evidence, project-native components, tokens, assets, accessibility requirements, specialist ownership, and deterministic validation. | [UI Design Fidelity Plan](docs/project/UI_DESIGN_FIDELITY_SYSTEM_PLAN.md) |
+| **Validation and evidence** | Uses deterministic checks, exact-head evidence, cross-platform validation, and fail-closed transition rules. | [Validation & Evidence](docs/README.md#validation-evidence-and-continuity) |
 | **Portable host integration** | Supports governed adapter surfaces, PRAP compatibility, host maturity contracts, and bounded MCP transport. | [Hosts & Integrations](docs/README.md#hosts-adapters-and-integrations) |
 | **Machine-readable knowledge** | Exposes structured contracts, schemas, provenance, release evidence, and an AI-first repository index. | [`README.json`](README.json) |
-
-## Token-efficient Registry consumption
-
-**O7 is approved and planned, not yet implemented.** It will let Orchestra consume projected/indexed Registry results through the smallest sufficient context while preserving the existing O1-O6 capability, freshness, receipt, Governor/Steward/Arbiter, and fail-closed semantics. Direct local indexed access is preferred; direct JSON remains the deterministic fallback and MCP remains an optional transport for external hosts.
-
-See [O7 — Optimized Registry Consumption](docs/architecture/REGISTRY_QUERY_OPTIMIZATION_O7.md) for the complete architecture and phase plan.
-
-## Research results and empirical benchmarks
-
-Orchestra includes controlled comparative experiments so architectural or communication-efficiency ideas can be evaluated with measured evidence instead of assumed benefit.
-
-### C1 cross-provider natural-language baseline
-
-The completed C1 calibration ran the same frozen five-task benchmark across `DEFAULT`, `CAVEMAN`, and `MURMURS` communication arms using both the accepted Antigravity/Gemini calibration and a separately controlled Codex/GPT baseline.
-
-| Calibration result | Antigravity | Codex |
-| --- | ---: | ---: |
-| Accepted runs | 30 / 30 | 30 / 30 |
-| Task / validation / governance pass | 100% | 100% |
-| CAVEMAN total tokens vs DEFAULT | **+2.81%** | **+18.59%** |
-| MURMURS total tokens vs DEFAULT | **-0.70%** | **+0.04%** |
-
-**Current research interpretation:** CAVEMAN's token-overhead direction replicated across the two tested provider/model stacks. The small MURMURS token-saving direction observed under Antigravity did **not** replicate under Codex, where MURMURS was effectively token-neutral. MURMURS input-token behavior remained effectively unchanged from `DEFAULT` on both stacks.
-
-This is intentionally a calibration result, not a production-benefit claim. Absolute host-reported token totals are not treated as directly interchangeable across providers/models, and the current evidence does not establish why the MURMURS effect differs between the two host/model surfaces.
-
-- **Full human-readable analysis:** [Codex C1 Cross-Provider Reconciliation](docs/benchmarking/CODEX_C1_CROSS_PROVIDER_RECONCILIATION.md)
-- **Machine-readable result:** [`machine/benchmarking/codex-c1-cross-provider-reconciliation.v1.json`](machine/benchmarking/codex-c1-cross-provider-reconciliation.v1.json)
-- **Original Antigravity calibration:** [Comparative Measurement B3](docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md)
-
-### C2R1 machine-JSON representation calibration
-
-C2R1 reused the frozen Codex task semantics, validator, provider/model surface, and communication-arm design while changing the task representation to canonical machine JSON. The primary execution completed with `29/30` accepted runs and one preserved `INVALID_RUN / PROVIDER_OUTAGE` on DEFAULT slot 5. That invalid primary observation was not retried or silently replaced.
-
-A separately authorized supplemental recovery replicate reproduced the missing DEFAULT workload at `15,026` tokens. It is reported only as sensitivity evidence and does **not** rewrite the primary C2R1 dataset.
-
-| C2R1 analysis | DEFAULT | CAVEMAN | MURMURS |
-| --- | ---: | ---: | ---: |
-| Primary complete-case mean, 9 matched blocks | 10,959.56 | 12,567.56 | 10,859.67 |
-| Primary complete-case vs DEFAULT | baseline | **+14.67%** | **-0.91%** |
-| Supplemental balanced sensitivity mean, 10 blocks | 11,366.2 | 12,508.9 | 11,276.3 |
-| Supplemental sensitivity vs DEFAULT | baseline | **+10.05%** | **-0.79%** |
-
-**Current C2R1 interpretation:** CAVEMAN's aggregate token-overhead direction persists, but its magnitude is workload-dependent. MURMURS remains near-neutral in aggregate and varies materially by task. The machine-JSON representation does **not** establish a global token-saving benefit relative to the canonical C1 Codex aggregate.
-
-- **Full human-readable analysis:** [Codex C2R1 Machine-JSON Reconciliation](docs/benchmarking/CODEX_C2R1_MACHINE_JSON_RECONCILIATION.md)
-- **Machine-readable result:** [`machine/benchmarking/codex-c2r1-machine-json-reconciliation.v1.json`](machine/benchmarking/codex-c2r1-machine-json-reconciliation.v1.json)
-
-### B-phase confirmatory closeout
-
-The later B program preregistered and executed larger confirmatory experiments instead of promoting the calibration signals. The result was negative for both tested benefit hypotheses.
-
-| Confirmatory result | Outcome |
-| --- | --- |
-| B2 topology experiment | `CONFIRMATORY_BENEFIT_NOT_ESTABLISHED` |
-| B2.5 replacement | 40 / 40 accepted, 120 model calls |
-| B3 Murmurs confirmatory | 450 / 450 accepted, 450 model calls |
-| B3 median output-token reduction | **-1.03%** |
-| B3 bootstrap 95% CI | **[-4.68%, 2.07%]** |
-| B3 exact sign-test | **p = 0.8699229710286416** |
-| B3 conclusion | `CONFIRMATORY_BENEFIT_NOT_ESTABLISHED` |
-| B4 interaction experiment | `NOT_ELIGIBLE_NO_EXECUTION` |
-| B5 | Complete, no promotion |
-| Total B-phase model calls | **911**, including preserved stopped/invalid evidence |
-
-**Final Murmurs disposition:** Murmurs remains a preserved experimental/research communication format. The confirmatory evidence did not establish a repeatable output-token efficiency benefit, so Murmurs is **not promoted to default execution, not required by specialists, and not attached to production/runtime authority**. A5 topology execution likewise receives no execution-effective promotion from B2.
-
-This is treated as a useful negative result, not as an experiment to rerun until positive. Any future reconsideration requires a materially different, outcome-blind hypothesis and a separately governed experiment while preserving the existing negative evidence.
-
-- **Terminal decision:** [B-Phase Terminal Closeout Decision](docs/benchmarking/B_PHASE_CLOSEOUT_DECISION.md)
-- **B3 reconciliation:** [B3 Confirmatory Reconciliation](docs/benchmarking/B3_CONFIRMATORY_RECONCILIATION.md)
-- **Final B synthesis:** [B-Phase Final Evidence Synthesis](docs/benchmarking/B_PHASE_FINAL_EVIDENCE_SYNTHESIS.md)
-- **Machine evidence:** [`machine/benchmarking/b3-confirmatory-reconciliation.v1.json`](machine/benchmarking/b3-confirmatory-reconciliation.v1.json), [`machine/benchmarking/b4-controlled-interaction-disposition.v1.json`](machine/benchmarking/b4-controlled-interaction-disposition.v1.json), [`machine/benchmarking/b5-final-evidence-synthesis.v1.json`](machine/benchmarking/b5-final-evidence-synthesis.v1.json)
-
-Earlier C1 and C2R1 records remain calibration evidence and are interpreted in light of the completed B confirmatory program. None of these measurements grants production promotion, A5 execution promotion, release publication, deployment, or automatic policy change.
-
-## Current development workstream
-
-With the comparative B program closed, the selected next Orchestra workstream is **governed UI/UX specialist enhancement and visual-fidelity engineering**.
-
-`UIX-0` is the active bounded unit. It audits specialist ownership, design-source preservation, project component/token reuse, rendered-validation evidence, accessibility invariants, external-tool overlap, and the inputs needed for a library-neutral UI Design Contract. UIX-0 is planning and contract audit only; it does not authorize dependency installation, Figma mutation, target-project UI changes, release, deployment, or production mutation.
-
-See [Governed UI Design Fidelity System Plan](docs/project/UI_DESIGN_FIDELITY_SYSTEM_PLAN.md).
 
 ## How Orchestra works
 
@@ -147,6 +66,28 @@ Next bounded action or human gate
 
 The deterministic control plane defines what is allowed. Specialists decide how to perform their owned work inside those boundaries. Validation proves outcomes; it does not grant permission.
 
+## Current release state
+
+The latest public release is **[v1.6.0: Integration & Developer Experience](https://github.com/Baelfyre/Orchestra/releases/tag/v1.6.0)**.
+
+`main` contains substantial post-v1.6 work across adaptive orchestration, Registry consumption, and governed UI design fidelity. The next consolidation release is tracked in **[Release v1.7.0: Adaptive Orchestration & Design Fidelity](https://github.com/Baelfyre/Orchestra/issues/563)**.
+
+The UI design-fidelity work has progressed through the UIX-9A repository proof-preparation boundary. UIX-9A prepares deterministic proof infrastructure only and does not itself authorize live model/provider calls or claim a model-behavior benefit.
+
+## Research and validation archive
+
+Detailed comparative benchmark reports are retained as research and validation evidence rather than expanded in this landing page.
+
+The completed confirmatory program did **not** establish a repeatable efficiency benefit for Murmurs, so Murmurs is not promoted to the default execution path and is not required by specialists. Historical experiments remain preserved so the negative result is not lost or repeatedly re-tested until positive.
+
+- [B-Phase Terminal Closeout Decision](docs/benchmarking/B_PHASE_CLOSEOUT_DECISION.md)
+- [B-Phase Final Evidence Synthesis](docs/benchmarking/B_PHASE_FINAL_EVIDENCE_SYNTHESIS.md)
+- [Codex C1 Cross-Provider Reconciliation](docs/benchmarking/CODEX_C1_CROSS_PROVIDER_RECONCILIATION.md)
+- [Codex C2R1 Machine-JSON Reconciliation](docs/benchmarking/CODEX_C2R1_MACHINE_JSON_RECONCILIATION.md)
+- [Benchmarking documentation archive](docs/benchmarking/)
+
+These reports are evidence, not runtime authority or release permission.
+
 ## Install Orchestra
 
 **Codex:** add this repository as a Marketplace source, install Orchestra, then invoke `@Orchestra`.
@@ -161,7 +102,7 @@ agy plugin install https://github.com/Baelfyre/Orchestra
 
 ## Use Orchestra through MCP
 
-**Purpose:** expose a bounded Orchestra tool surface to an MCP-compatible client while preserving the same PRAP adapter, runtime, governance, and authority boundaries.
+Orchestra can expose a bounded tool surface to an MCP-compatible client while preserving the same PRAP adapter, runtime, governance, and authority boundaries.
 
 Launch the stdio server with an existing adapter identity:
 
@@ -173,13 +114,11 @@ The v1.6 transport targets MCP protocol revision `2026-07-28` and exposes only `
 
 **MCP is transport, not authority.** Client metadata, tool arguments, discovery, or compatibility cannot grant Orchestra runtime authority.
 
-See [MCP stdio governed tool transport](docs/developer/MCP_STDIO_TRANSPORT.md) for framing, protocol-version handling, safety boundaries, and non-goals.
+See [MCP stdio governed tool transport](docs/developer/MCP_STDIO_TRANSPORT.md) for protocol handling, safety boundaries, and non-goals.
 
 ## Build or certify an adapter with the SDK / PRAP
 
-**Purpose:** give integration authors a stable import surface and read-only compatibility certification for Orchestra's existing PRAP v1 adapter contract.
-
-Use the stable SDK import surface:
+Integration authors can use Orchestra's stable SDK import surface and read-only PRAP v1 compatibility certification.
 
 ```text
 orchestra_runtime.protocol.sdk
@@ -201,26 +140,20 @@ Certification validates compatibility. It does not install integrations, promote
 
 See [Adapter SDK and PRAP v1 Compatibility Certification](docs/setup/ADAPTER_SDK_PRAP.md) for the full contract and authority boundary.
 
-## Acknowledgements & provenance
+## Documentation and provenance
 
-Orchestra has been built and refined with help from open-source tools, implementation references, protocol specifications, and research repositories.
-
-A reference does **not** automatically mean Orchestra copied its source, vendors it, depends on it at runtime, or inherits authority from it. Orchestra records the relationship, reviewed revision where recoverable, license status, learned or incorporated patterns, affected surfaces, evidence, and explicit incorporation boundaries.
-
-The provenance reconstruction includes current dependencies and references plus historically documented projects such as Strix, OpenHero, Spec-Kitty, Bryl Minimal Design, Ponytail, Caveman, TrueSheet, the MCP specification, and earlier governance/integration research. Deferred research such as Sakana AI Fugu is classified separately from already incorporated references.
-
-- **Human-readable ledger:** [Third-Party Provenance and Acknowledgements](docs/THIRD_PARTY_PROVENANCE.md)
-- **Canonical machine record:** [`machine/provenance/third-party.v1.json`](machine/provenance/third-party.v1.json)
-
-## Explore the framework
-
-Start with the [Documentation Map](docs/README.md) for architecture, specialists, governance, validation, hosts, MCP, knowledge, provenance, releases, and historical design records.
+Start with the [Documentation Map](docs/README.md) for architecture, specialists, governance, adaptive intelligence, UI design fidelity, validation, hosts, MCP, knowledge, provenance, releases, and historical design records.
 
 Developers extending Orchestra should use the [Developer Portal](docs/developer/README.md), which indexes the Adapter SDK, PRAP certification, host, specialist, governance, and validation contracts.
 
+Orchestra records third-party relationships without treating a reference as automatic source adoption, runtime dependency, affiliation, or authority transfer.
+
+- [Third-Party Provenance and Acknowledgements](docs/THIRD_PARTY_PROVENANCE.md)
+- [`machine/provenance/third-party.v1.json`](machine/provenance/third-party.v1.json)
+
 ## Machine-readable reference
 
-AI systems should start with [`README.json`](README.json), then follow its ordered references into `machine/` contracts and JSON Schemas. For third-party attribution and upstream influence, use [`machine/provenance/third-party.v1.json`](machine/provenance/third-party.v1.json) as the canonical semantic provenance record.
+AI systems should start with [`README.json`](README.json), then follow its ordered references into `machine/` contracts and JSON Schemas.
 
 Orchestra uses a hybrid representation policy:
 
