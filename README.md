@@ -41,6 +41,7 @@ It is **not an AI model**. Models generate and review work. Orchestra determines
 | **Governed execution** | Keeps authority, capabilities, governance, human gates, and repository policy separate and explicit. | [Governance & Authority](docs/README.md#governance-and-authority) |
 | **Cross-domain coordination** | Sequences specialist work, detects contradictions, and re-enters the correct owner when assumptions become stale. | [Coordination](docs/README.md#specialists-routing-and-coordination) |
 | **Adaptive context and shadow learning** | Maintains bounded local evidence, advisory specialist context, and non-authorizing adaptive evaluation without allowing learned state to silently create authority. | [Adaptive Architecture](docs/README.md#adaptive-intelligence) |
+| **Portable adaptive memory** | Keeps adaptive state local by default while allowing explicitly reviewed learned candidates to use a storage-agnostic user-selected backend. | [Portable Adaptive Memory](docs/architecture/PORTABLE_ADAPTIVE_MEMORY.md) |
 | **UI design fidelity** | Preserves design-source evidence, project-native components, tokens, assets, accessibility requirements, specialist ownership, and deterministic validation. | [UI Design Fidelity Plan](docs/project/UI_DESIGN_FIDELITY_SYSTEM_PLAN.md) |
 | **Validation and evidence** | Uses deterministic checks, exact-head evidence, cross-platform validation, and fail-closed transition rules. | [Validation & Evidence](docs/README.md#validation-evidence-and-continuity) |
 | **Portable host integration** | Supports governed adapter surfaces, PRAP compatibility, host maturity contracts, and bounded MCP transport. | [Hosts & Integrations](docs/README.md#hosts-adapters-and-integrations) |
@@ -65,6 +66,16 @@ Next bounded action or human gate
 ```
 
 The deterministic control plane defines what is allowed. Specialists decide how to perform their owned work inside those boundaries. Validation proves outcomes; it does not grant permission.
+
+## Portable adaptive memory
+
+Orchestra adaptive learning remains machine-local by default. An optional portable-memory contract can stage explicitly reviewed learned candidates for a user-selected backend without coupling the runtime to a specific repository or storage service.
+
+Supported backend classes are generic: local JSON, Git-backed JSON, HTTP/API storage, or a custom adapter. Backend configuration and credentials remain outside portable learned-pattern payloads.
+
+Portable memory remains advisory and non-authorizing. It cannot grant execution or policy authority, override explicit instructions, relax governance, transfer local identity, or automatically promote learned state.
+
+See [Portable Adaptive Memory](docs/architecture/PORTABLE_ADAPTIVE_MEMORY.md).
 
 ## Current release state
 
