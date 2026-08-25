@@ -13,7 +13,7 @@
     <a href="CHANGELOG.md">Changelog</a>
   </p>
   <p>
-    <img src="https://img.shields.io/badge/package_version-v1.6.0-blue" alt="Repository package version v1.6.0" />
+    <img src="https://img.shields.io/badge/package_version-v1.7.0-blue" alt="Repository package version v1.7.0" />
     <a href="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml">
       <img src="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml/badge.svg" alt="Repository validation status" />
     </a>
@@ -79,9 +79,9 @@ See [Portable Adaptive Memory](docs/architecture/PORTABLE_ADAPTIVE_MEMORY.md).
 
 ## Current release state
 
-The latest public release is **[v1.6.0: Integration & Developer Experience](https://github.com/Baelfyre/Orchestra/releases/tag/v1.6.0)**.
+The latest published release remains **[v1.6.0: Integration & Developer Experience](https://github.com/Baelfyre/Orchestra/releases/tag/v1.6.0)** until the approved v1.7.0 candidate completes exact-head release validation and publication.
 
-`main` contains substantial post-v1.6 work across adaptive orchestration, Registry consumption, and governed UI design fidelity. The next consolidation release is tracked in **[Release v1.7.0: Adaptive Orchestration & Design Fidelity](https://github.com/Baelfyre/Orchestra/issues/563)**.
+The **v1.7.0 release candidate** consolidates the substantial post-v1.6 work across adaptive intelligence, storage-agnostic portable memory, Compliance Registry consumption, and governed UI design fidelity. Release closeout is tracked in **[Release v1.7.0: Adaptive Intelligence, Portable Memory & Design Fidelity](https://github.com/Baelfyre/Orchestra/issues/563)**.
 
 The UI design-fidelity work has progressed through the UIX-9A repository proof-preparation boundary. UIX-9A prepares deterministic proof infrastructure only and does not itself authorize live model/provider calls or claim a model-behavior benefit.
 
