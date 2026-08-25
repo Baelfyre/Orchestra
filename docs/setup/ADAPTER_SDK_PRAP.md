@@ -44,7 +44,7 @@ Adapter metadata, packaging metadata, validation success, and compatibility evid
 
 ## MCP transport mapping
 
-The post-v1.5 MCP candidate adds a bounded stdio transport for MCP protocol revision `2026-07-28`. It does not create a parallel adapter protocol. The MCP server selects an existing Orchestra adapter through `AdapterFactory`, projects only commands that are both exposed by that adapter and present in the current trusted runtime policy, and routes every accepted tool call through a fresh existing `RuntimeExecutor` composition.
+The bounded MCP stdio transport introduced in v1.6.0 and retained in v1.7.0 targets protocol revision `2026-07-28`. It does not create a parallel adapter protocol. The MCP server selects an existing Orchestra adapter through `AdapterFactory`, projects only commands that are both exposed by that adapter and present in the current trusted runtime policy, and routes every accepted tool call through a fresh existing `RuntimeExecutor` composition.
 
 MCP therefore remains transport rather than authority. MCP client metadata, MCP capabilities, tool names, tool arguments, discovery responses, PRAP certification, and Host Update maturity cannot grant runtime authority or runtime capability. Client-supplied tool arguments cannot inject Orchestra governance-validation metadata.
 

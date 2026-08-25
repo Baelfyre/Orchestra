@@ -1,29 +1,34 @@
 # Orchestra Project Maturity
 
-This document classifies the current maturity level of Orchestra's features and infrastructure. It helps contributors and users understand the stability of different components and what is planned for the future.
+This document classifies the current maturity of Orchestra's public v1.7.0 surfaces. It distinguishes implemented deterministic controls from bounded/advisory capabilities and from planned work so compatibility or test success is not mistaken for authority or production maturity.
 
-## Stable
+## Stable / Enforced
 
-* **Skill Structure**: The standard `SKILL.md` format, folder layout, and required metadata are well-defined and validated.
-* **Manifest Validation**: The `plugin.json` manifest acts as the single source of truth and is strictly validated against skill contents.
-* **Stale-Reference Checks**: Automatic scanning for deprecated naming, legacy roles, and disallowed references.
-* **Guardrail Scanning**: Runtime checks for secrets, PII, destructive operations, copyleft licenses, and unsafe expressions.
-* **Workspace Locking**: Collision protection and state locking mechanisms via `.amalgam/lock.json`.
-* **Python Behavior Validation**: `tests/behavior/run_tests.py` is the primary cross-platform behavior validation runner used by CI.
-* **Runtime Coverage Enforcement**: `tests/runtime` is enforced in CI with `pytest-cov` and `--cov-fail-under=90`.
-* **Cross-Platform CI Matrix Validation**: Windows, Linux, and macOS matrix coverage validates the Python behavior runner and native runtime coverage gate.
+- **Specialist and manifest structure**: `SKILL.md`, manifest, routing, and machine specialist contracts are deterministic and validated.
+- **Governance and authority separation**: routing, capabilities, validation, compatibility, mergeability, and learned state remain separate from execution authority.
+- **Behavior validation**: `tests/behavior/run_tests.py` remains a primary cross-platform deterministic validation runner.
+- **Runtime test evidence**: CI records statement and branch coverage. Overall evidence floors are 97% statement / 95% branch; critical-module inventory floors are 98% statement / 95% branch.
+- **Cross-platform validation**: native Windows, Ubuntu, and macOS jobs are required on protected `main`.
+- **Protected-main release discipline**: exact-head checks, signed commits, linear history, Squash-only merge, review-thread resolution, and the live required-status matrix are enforced by repository rules.
+- **Adapter SDK / PRAP v1 certification**: stable read-only compatibility surface through `orchestra_runtime.protocol.sdk` and `scripts/certify_adapter.py`.
+- **MCP stdio transport**: bounded `2026-07-28` stdio transport exposing `server/discover`, `tools/list`, and `tools/call` while preserving existing runtime authority boundaries.
 
-## Beta
+## Implemented but Bounded / Non-Promoted
 
-* **Governance Instruction Conformance Checks**: Static evaluation of `SKILL.md` instructions against behavioral expectation fixtures (e.g., verifying `BLOCKED`, `HOLD` states are documented).
-* **Project Context Governance Validator**: Validates `PROJECT_CONTEXT.md` presence and required sections against advisory, recommended, and strict-governed governance levels. Advisory and recommended paths remain non-blocking by default; strict-governed remains blocking when declared or explicitly requested.
-* **Codex Export Validation**: Alignment checks for exports specifically intended for the Codex adapter framework.
+- **Adaptive intelligence A1-A5**: local memory, bounded specialist context, shadow learning, shadow selection, and topology evaluation are implemented within explicit non-authorizing boundaries. A5 execution-effective topology promotion is not performed because qualifying benefit was not established.
+- **Portable adaptive memory**: optional storage-agnostic transport supports local JSON, Git-backed JSON, HTTP/API, and custom backends for explicitly reviewed learned candidates. Automatic external-memory promotion remains disabled.
+- **UI design fidelity UIX-0 through UIX-9A**: repository contracts, evidence preservation, specialist integration, optional adapter boundaries, portability, and controlled-proof preparation are implemented. Live UIX-9 provider/model proof is not part of v1.7.0.
+- **Registry O1-O6 adaptive consumption**: deterministic capability/freshness/query/receipt handling is implemented; Registry evidence remains evidence, not authority.
+- **Murmurs**: retained as optional historical presentation research. Repeatable efficiency benefit was not established and Murmurs is not a default execution requirement.
+- **Scaffold-only hosts**: Claude Code runtime continuity, Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain scaffold-only where declared. Package-version parity does not promote host maturity.
 
-## Experimental
+## Experimental / Compatibility
 
-* **PowerShell Validation Wrapper**: The legacy `run-tests.ps1` wrapper remains available for Windows-oriented compatibility flows, but it is no longer the primary CI entry point.
+- **Legacy PowerShell wrappers**: retained for Windows-oriented compatibility where documented, but Python validation is the primary CI path.
+- **External audit sandboxes**: useful for independent review, but strict evidence/freshness checks require trustworthy Git identity and refs; incomplete Git reconstructions may intentionally fail closed.
 
 ## Planned
 
-* **Deeper Runtime Behavioral Simulation**: Expand static governance checks into true end-to-end routing simulation to prove real runtime governance decisions.
-* **Host-Integrated Enforcement**: Transition from instruction-level and standalone script enforcement to direct host integration blocking capabilities (where feasible).
+- **Registry O7 query optimization**: planned, not part of v1.7.0 runtime implementation.
+- **Live UIX-9 controlled proof**: separately gated and not authorized by the v1.7.0 release.
+- **Host graduation**: scaffold-only hosts require separate evidence and explicit promotion; no automatic graduation is implied.

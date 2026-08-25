@@ -1,32 +1,41 @@
 # Project State
 
 - **Project Name:** Orchestra
-- **Active Repo:** `D:\Dev\Repositories\+conductor`
+- **Active Repo:** `Baelfyre/Orchestra`
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Stable Continuation Branch:** `main`
-- **Current Public Release:** `v1.5.0`
-- **Release Status:** `v1.5.0 PUBLISHED_VERIFIED`
-- **Target Release:** `v1.5.0`
-- **Release-Candidate Metadata:** `1.5.0`
+- **Current Public Release:** `v1.7.0`
+- **Release Status:** `v1.7.0 PUBLISHED_VERIFIED`
+- **Target Release:** `NONE_DECLARED`
+- **Release-Candidate Metadata:** `1.7.0` (`PUBLISHED`)
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.3.0 Release State:** `PUBLISHED_VERIFIED`
-- **v1.3.0 Release Commit:** `3c6155c111981632649a3c3207fac8ac1edcea74`
-- **v1.3.0 Release Tree:** `5ae72f6ab9ddf5284afdc3d8675f67fc23c24281`
-- **v1.3.0 Annotated Tag Object:** `c66afec49990036d9deb2f07e3363cd664e2dcb1` (`UNSIGNED`, exact target verified)
-- **v1.3.0 GitHub Release:** `PUBLISHED_VERIFIED`, immutable, non-draft, non-prerelease
 - **v1.4.0 Release State:** `PUBLISHED_VERIFIED`
-- **v1.4.0 Release Commit:** `93dd51c0fbe1b10affc58e6fadd5fb0bc2927a50`
-- **v1.4.0 Release Tree:** `1ef60b00e3ac6deba5da57c47d2a0850872d41a9`
-- **v1.4.0 Tag Ref:** lightweight `commit` ref, exact target verified
-- **v1.4.0 GitHub Release:** id `370658917`, immutable, non-draft, non-prerelease, historical after v1.5.0 publication
 - **v1.5.0 Release State:** `PUBLISHED_VERIFIED`
-- **v1.5.0 Release Theme:** Machine-Verifiable Control Plane and Murmurs
-- **v1.5.0 Release Commit:** `b0a56cc7af8ad78234754bcb29ed07f6ab54d920`
-- **v1.5.0 Tag Ref:** lightweight `commit` ref, exact target verified
-- **v1.5.0 GitHub Release:** id `371314544`, immutable, non-draft, non-prerelease, independently verified latest
-- **MCP State:** `POST_V1_5_PRIORITY_REVIEW_REQUIRED`
+- **v1.6.0 Release State:** `PUBLISHED_VERIFIED`
+- **v1.6.0 Release Commit:** `ba35764a14111518c7da729b5a4c69c6af485a9b`
+- **v1.6.0 GitHub Release:** id `371748233`, immutable and historical after v1.7.0 publication
+- **v1.7.0 Release State:** `PUBLISHED_VERIFIED`
+- **v1.7.0 Release Commit:** `e5305ef3e160209a0345bd2c7843c923940e62c5`
+- **v1.7.0 Release Tree:** `7b7a0f6d5dd5376a62125ed1c6b037284e519c69`
+- **v1.7.0 Sole Parent:** `664079b5fb9e149ea0689ff08bc2d9c039780290`
+- **v1.7.0 Tag Ref:** lightweight `commit` ref targeting the exact release commit
+- **v1.7.0 GitHub Release:** id `376713145`, immutable, non-draft, non-prerelease, independently verified latest
+- **v1.7.0 Post-Publication Verification:** run `32898750932` PASS
+- **Control Plane State:** `V1_7_0_CURRENT`
+- **MCP State:** `PUBLISHED_V1_6_STABLE_RETAINED_V1_7`
 - **Policy Activation State:** `NOT_PERFORMED`
+
+## v1.7.0 Adaptive Intelligence, Portable Memory & Design Fidelity Publication
+
+Orchestra `v1.7.0` is `PUBLISHED_VERIFIED`. Immutable GitHub Release id `376713145` and lightweight tag `v1.7.0` resolve to exact signed canonical release commit `e5305ef3e160209a0345bd2c7843c923940e62c5` with tree `7b7a0f6d5dd5376a62125ed1c6b037284e519c69` and sole parent `664079b5fb9e149ea0689ff08bc2d9c039780290`. Canonical Governance, validate/runtime, Required Analysis Compatibility/CodeQL, native Windows/Ubuntu/macOS validation, Cosmic Ray confidence, signed materialization, expected-head Squash, and zero unresolved review-thread gates passed before publication. Read-only post-publication verification run `32898750932` independently confirmed the exact tag, release body, latest/immutable release state, and prior-tag preservation.
+
+The release includes governed adaptive intelligence through bounded shadow maturity, optional storage-agnostic portable adaptive memory, Registry O1-O6 adaptive consumption, and governed UI design fidelity through UIX-9A repository proof preparation. A5 topology benefit and repeatable Murmurs efficiency benefit were not established, so neither was promoted to default execution authority.
+
+No live UIX-9 model/provider proof, deployment, production mutation, policy activation, installed-integration refresh, destructive cleanup, force push, or history rewrite was performed. Later `main` changes are post-release maintenance and do not move the immutable v1.7.0 identity.
+
+See `docs/validation/V1_7_0_PUBLICATION_CLOSEOUT.md`.
 
 ## v1.5.0 Machine-Verifiable Control Plane and Murmurs Publication
 
