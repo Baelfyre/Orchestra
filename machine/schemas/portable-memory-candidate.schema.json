@@ -61,13 +61,12 @@
     "privacy": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["contains_raw_conversation", "contains_sensitive_data", "contains_credentials", "user_key_transferred", "task_session_key_transferred", "review_state"],
+      "required": ["contains_raw_conversation", "contains_sensitive_data", "contains_credentials", "local_identity_transferred", "review_state"],
       "properties": {
         "contains_raw_conversation": {"const": false},
         "contains_sensitive_data": {"const": false},
         "contains_credentials": {"const": false},
-        "user_key_transferred": {"const": false},
-        "task_session_key_transferred": {"const": false},
+        "local_identity_transferred": {"const": false},
         "review_state": {"const": "EXPLICITLY_REVIEWED_FOR_PORTABLE_PROMOTION"}
       }
     },
