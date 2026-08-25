@@ -35,6 +35,10 @@ Do not use it for:
 - **Long documentation writing** (Route to Scribe)
 - **Architecture diagrams or wireframes** (Route to Weaver)
 
+## UIX Design-Fidelity Contract Boundary
+
+For UIX work, consume design-source identity and evidence before implementation. Prefer project-native component, token, and asset mappings, and keep `MISSING` and `UNRESOLVED` evidence explicit rather than inventing fidelity. Apply profile-composition and accessibility invariants during review. After implementation, perform the static-fidelity review again; it is not rendered proof and must not be presented as one.
+
 ## Mode Selection
 
 Select exactly one mode before generating any output:
