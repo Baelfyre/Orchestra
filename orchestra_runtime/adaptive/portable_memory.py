@@ -164,8 +164,7 @@ def build_portable_memory_candidate(
             "contains_raw_conversation": False,
             "contains_sensitive_data": False,
             "contains_credentials": False,
-            "user_key_transferred": False,
-            "task_session_key_transferred": False,
+            "local_identity_transferred": False,
             "review_state": "EXPLICITLY_REVIEWED_FOR_PORTABLE_PROMOTION",
         },
         "authority": {
