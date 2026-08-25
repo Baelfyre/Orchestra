@@ -1,12 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "orchestra.padayon-memory-promotion-candidate.v1",
-  "title": "Orchestra to Padayon Memory Promotion Candidate",
+  "$id": "orchestra.padayon-memory-backend-profile.v1",
+  "title": "Padayon Backend Profile for Orchestra Portable Memory",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "source", "pattern", "evidence", "privacy", "authority", "intake"],
+  "required": ["schema_version", "source", "pattern", "evidence", "privacy", "authority", "destination"],
   "properties": {
-    "schema_version": {"const": "orchestra.padayon-memory-promotion-candidate.v1"},
+    "schema_version": {"const": "orchestra.portable-memory-candidate.v1"},
     "source": {
       "type": "object",
       "additionalProperties": false,
@@ -83,19 +83,20 @@
         "automatic_promotion": {"const": false}
       }
     },
-    "intake": {
+    "destination": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["destination_repository", "state", "canonical_write_authorized", "created_at"],
+      "required": ["backend_id", "adapter_kind", "record_format", "state", "canonical_write_authorized", "created_at", "config_ref"],
       "properties": {
-        "destination_repository": {"const": "Baelfyre/Padayon"},
-        "state": {"const": "PENDING_GOVERNED_VALIDATION"},
+        "backend_id": {"const": "padayon"},
+        "adapter_kind": {"const": "GIT_JSON"},
+        "record_format": {"const": "JSON"},
+        "state": {"const": "PENDING_BACKEND_VALIDATION"},
         "canonical_write_authorized": {"const": false},
-        "created_at": {"type": "string", "format": "date-time"}
+        "created_at": {"type": "string", "format": "date-time"},
+        "config_ref": {"const": "machine/adaptive/memory-backends.v1.json#padayon"}
       }
     }
   },
-  "$defs": {
-    "slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]{0,127}$"}
-  }
+  "$defs": {"slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]{0,127}$"}}
 }
