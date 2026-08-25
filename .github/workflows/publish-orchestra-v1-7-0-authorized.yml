@@ -1,0 +1,167 @@
+name: Publish Orchestra v1.7.0 Authorized
+
+on:
+  push:
+    branches:
+      - ops/publish-orchestra-v1-7-0-20260826
+    paths:
+      - .github/workflows/publish-orchestra-v1-7-0-authorized.yml
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish exact immutable v1.7.0 release
+        shell: bash
+        env:
+          EXPECTED_MAIN_SHA: e5305ef3e160209a0345bd2c7843c923940e62c5
+          EXPECTED_MAIN_TREE: 7b7a0f6d5dd5376a62125ed1c6b037284e519c69
+          EXPECTED_PARENT_SHA: 664079b5fb9e149ea0689ff08bc2d9c039780290
+          EXPECTED_PREVIOUS_TAG_SHA: ba35764a14111518c7da729b5a4c69c6af485a9b
+          TAG: v1.7.0
+          PREVIOUS_TAG: v1.6.0
+          RELEASE_NAME: "Orchestra v1.7.0: Adaptive Intelligence, Portable Memory & Design Fidelity"
+          RELEASE_NOTES_PATH: docs/releases/v1.7.0-adaptive-intelligence-portable-memory-design-fidelity-release-candidate.md
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          API="https://api.github.com/repos/${GITHUB_REPOSITORY}"
+          auth=(-H "Authorization: Bearer ${GH_TOKEN}" -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28")
+
+          curl -fsS "${auth[@]}" "${API}/commits/main" > /tmp/current-main.json
+          current_main="$(jq -r '.sha' /tmp/current-main.json)"
+          current_tree="$(jq -r '.commit.tree.sha' /tmp/current-main.json)"
+          current_parent="$(jq -r '.parents[0].sha' /tmp/current-main.json)"
+          current_verified="$(jq -r '.commit.verification.verified' /tmp/current-main.json)"
+          current_reason="$(jq -r '.commit.verification.reason' /tmp/current-main.json)"
+
+          echo "CURRENT_MAIN=${current_main}"
+          echo "CURRENT_TREE=${current_tree}"
+          echo "CURRENT_PARENT=${current_parent}"
+          echo "CURRENT_VERIFIED=${current_verified}"
+          echo "CURRENT_VERIFICATION_REASON=${current_reason}"
+
+          test "${current_main}" = "${EXPECTED_MAIN_SHA}"
+          test "${current_tree}" = "${EXPECTED_MAIN_TREE}"
+          test "${current_parent}" = "${EXPECTED_PARENT_SHA}"
+          test "${current_verified}" = "true"
+          test "${current_reason}" = "valid"
+
+          previous_ref="$(curl -fsS "${auth[@]}" "${API}/git/ref/tags/${PREVIOUS_TAG}")"
+          previous_type="$(jq -r '.object.type' <<<"${previous_ref}")"
+          previous_sha="$(jq -r '.object.sha' <<<"${previous_ref}")"
+          if [ "${previous_type}" = "tag" ]; then
+            previous_sha="$(curl -fsS "${auth[@]}" "${API}/git/tags/${previous_sha}" | jq -r '.object.sha')"
+          fi
+          test "${previous_sha}" = "${EXPECTED_PREVIOUS_TAG_SHA}"
+
+          release_code="$(curl -sS -o /tmp/existing-release.json -w '%{http_code}' "${auth[@]}" "${API}/releases/tags/${TAG}")"
+          test "${release_code}" = "404"
+
+          tag_code="$(curl -sS -o /tmp/existing-tag.json -w '%{http_code}' "${auth[@]}" "${API}/git/ref/tags/${TAG}")"
+          test "${tag_code}" = "404"
+
+          raw_notes="https://raw.githubusercontent.com/${GITHUB_REPOSITORY}/${EXPECTED_MAIN_SHA}/${RELEASE_NOTES_PATH}"
+          curl -fsSL "${raw_notes}" > /tmp/canonical-release-notes.md
+          test -s /tmp/canonical-release-notes.md
+          grep -Fq '# Orchestra v1.7.0: Adaptive Intelligence, Portable Memory & Design Fidelity' /tmp/canonical-release-notes.md
+
+          cat > /tmp/release-header.md <<'EOF'
+          # Orchestra v1.7.0: Adaptive Intelligence, Portable Memory & Design Fidelity
+
+          ## Published release identity
+
+          - Canonical commit: `e5305ef3e160209a0345bd2c7843c923940e62c5`
+          - Canonical tree: `7b7a0f6d5dd5376a62125ed1c6b037284e519c69`
+          - Sole parent: `664079b5fb9e149ea0689ff08bc2d9c039780290`
+          - GitHub signature: verified / valid
+          - Signed materialized candidate: `da4a78e04e4989b83b14dec18280ac662b3c44c4`
+          - Signed-materialization run: `32897500629`
+          - Signed-materialization artifact digest: `sha256:315014b4adadafe11f8e2b54eca574186d87e7a15024a7b84e5d45e9d55c1699`
+
+          ### Canonical exact-head validation
+
+          - Governance Check `32897630179`: PASS
+          - validate/runtime `32897630178`: PASS
+          - Required Analysis Compatibility / CodeQL `32897630143`: PASS
+          - Cross-platform Validation `32897630175`: PASS
+          - Cosmic Ray confidence `32897630172`: PASS
+          - Unresolved review threads: 0
+          - Expected-head Squash: PASS
+
+          EOF
+          sed -i 's/^          //' /tmp/release-header.md
+          tail -n +2 /tmp/canonical-release-notes.md > /tmp/release-body-tail.md
+          cat /tmp/release-header.md /tmp/release-body-tail.md > /tmp/release-notes.md
+
+          jq -n \
+            --arg tag "${TAG}" \
+            --arg target "${EXPECTED_MAIN_SHA}" \
+            --arg name "${RELEASE_NAME}" \
+            --rawfile body /tmp/release-notes.md \
+            '{tag_name:$tag,target_commitish:$target,name:$name,body:$body,draft:false,prerelease:false,make_latest:"true"}' \
+            > /tmp/release-payload.json
+
+          curl -fsS -X POST "${auth[@]}" \
+            -H 'Content-Type: application/json' \
+            --data-binary @/tmp/release-payload.json \
+            "${API}/releases" > /tmp/published-release.json
+
+          release_id="$(jq -r '.id' /tmp/published-release.json)"
+          published_tag="$(jq -r '.tag_name' /tmp/published-release.json)"
+          published_target="$(jq -r '.target_commitish' /tmp/published-release.json)"
+          published_name="$(jq -r '.name' /tmp/published-release.json)"
+          published_draft="$(jq -r '.draft' /tmp/published-release.json)"
+          published_prerelease="$(jq -r '.prerelease' /tmp/published-release.json)"
+          jq -r '.body' /tmp/published-release.json > /tmp/published-body.md
+
+          test -n "${release_id}"
+          test "${published_tag}" = "${TAG}"
+          test "${published_target}" = "${EXPECTED_MAIN_SHA}"
+          test "${published_name}" = "${RELEASE_NAME}"
+          test "${published_draft}" = "false"
+          test "${published_prerelease}" = "false"
+          cmp -s /tmp/release-notes.md /tmp/published-body.md
+
+          immutable="false"
+          for _ in $(seq 1 24); do
+            curl -fsS "${auth[@]}" "${API}/releases/tags/${TAG}" > /tmp/verified-release.json
+            immutable="$(jq -r '.immutable // false' /tmp/verified-release.json)"
+            if [ "${immutable}" = "true" ]; then
+              break
+            fi
+            sleep 5
+          done
+          test "${immutable}" = "true"
+          test "$(jq -r '.tag_name' /tmp/verified-release.json)" = "${TAG}"
+          test "$(jq -r '.target_commitish' /tmp/verified-release.json)" = "${EXPECTED_MAIN_SHA}"
+          test "$(jq -r '.name' /tmp/verified-release.json)" = "${RELEASE_NAME}"
+          test "$(jq -r '.draft' /tmp/verified-release.json)" = "false"
+          test "$(jq -r '.prerelease' /tmp/verified-release.json)" = "false"
+          jq -r '.body' /tmp/verified-release.json > /tmp/verified-body.md
+          cmp -s /tmp/release-notes.md /tmp/verified-body.md
+
+          curl -fsS "${auth[@]}" "${API}/git/ref/tags/${TAG}" > /tmp/tag-ref.json
+          tag_type="$(jq -r '.object.type' /tmp/tag-ref.json)"
+          tag_sha="$(jq -r '.object.sha' /tmp/tag-ref.json)"
+          if [ "${tag_type}" = "tag" ]; then
+            tag_sha="$(curl -fsS "${auth[@]}" "${API}/git/tags/${tag_sha}" | jq -r '.object.sha')"
+          fi
+          test "${tag_sha}" = "${EXPECTED_MAIN_SHA}"
+
+          curl -fsS "${auth[@]}" "${API}/releases/latest" > /tmp/latest-release.json
+          test "$(jq -r '.tag_name' /tmp/latest-release.json)" = "${TAG}"
+          test "$(jq -r '.target_commitish' /tmp/latest-release.json)" = "${EXPECTED_MAIN_SHA}"
+          test "$(jq -r '.immutable // false' /tmp/latest-release.json)" = "true"
+
+          echo "RELEASE_ID=${release_id}"
+          echo "TAG=${TAG}"
+          echo "TARGET_SHA=${tag_sha}"
+          echo "IMMUTABLE=${immutable}"
+          echo "PREVIOUS_TAG_PRESERVED=${previous_sha}"
+          echo "RELEASE_BODY_EXACT=PASS"
+          echo "PUBLISH_VERIFICATION=PASS"
