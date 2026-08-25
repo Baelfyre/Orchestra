@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/tests/fixtures/ui/uix7-deterministic-validation-fixtures.schema.json",
+  "title": "Orchestra UIX-7 Deterministic UI Validation Fixtures",
+  "description": "Machine-readable deterministic pass/fail-closed fixture suite for governed UI fidelity validation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "role", "entry_baseline", "source_contracts", "categories", "cases", "authority"],
+  "properties": {
+    "$schema": {"const": "./uix7-deterministic-validation-fixtures.schema.json"},
+    "schema_version": {"const": "orchestra.ui-deterministic-validation-fixtures.v1"},
+    "role": {"const": "UIX_7_DETERMINISTIC_VALIDATION_FIXTURES"},
+    "entry_baseline": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "source_contracts": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "categories": {"const": ["COMPONENT_REUSE", "TOKEN_PRESERVATION", "ARBITRARY_VALUE_DRIFT", "STATE_COMPLETENESS", "PROFILE_CONFLICT", "ASSET_PROVENANCE", "RESPONSIVE_CONTAINMENT", "ACCESSIBILITY_INVARIANTS", "REFERENCE_IDENTITY", "VISUAL_BASELINE_REPLACEMENT"]},
+    "cases": {"type": "array", "minItems": 20, "maxItems": 20, "items": {"$ref": "#/$defs/case"}},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fixture_result_grants_authority", "baseline_change_grants_authority", "external_evidence_grants_authority", "runtime_integration", "dependency_adoption_authorized", "figma_mutation_authorized", "release_authorized"],
+      "properties": {
+        "fixture_result_grants_authority": {"const": false},
+        "baseline_change_grants_authority": {"const": false},
+        "external_evidence_grants_authority": {"const": false},
+        "runtime_integration": {"const": false},
+        "dependency_adoption_authorized": {"const": false},
+        "figma_mutation_authorized": {"const": false},
+        "release_authorized": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case_id", "category", "expectation", "failure_code", "evidence_refs", "input"],
+      "properties": {
+        "case_id": {"type": "string", "pattern": "^uix7-[a-z0-9-]+$"},
+        "category": {"enum": ["COMPONENT_REUSE", "TOKEN_PRESERVATION", "ARBITRARY_VALUE_DRIFT", "STATE_COMPLETENESS", "PROFILE_CONFLICT", "ASSET_PROVENANCE", "RESPONSIVE_CONTAINMENT", "ACCESSIBILITY_INVARIANTS", "REFERENCE_IDENTITY", "VISUAL_BASELINE_REPLACEMENT"]},
+        "expectation": {"enum": ["PASS", "FAIL_CLOSED"]},
+        "failure_code": {"type": ["string", "null"]},
+        "evidence_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "input": {"type": "object"}
+      },
+      "allOf": [
+        {"if": {"properties": {"expectation": {"const": "PASS"}}}, "then": {"properties": {"failure_code": {"type": "null"}}}},
+        {"if": {"properties": {"expectation": {"const": "FAIL_CLOSED"}}}, "then": {"properties": {"failure_code": {"type": "string", "minLength": 1}}}},
+        {"if": {"properties": {"category": {"const": "COMPONENT_REUSE"}}}, "then": {"properties": {"input": {"type": "object", "additionalProperties": false, "required": ["existing_component", "requested_component", "implementation_component", "duplicate_created"], "properties": {"existing_component": {"type": "string", "minLength": 1}, "requested_component": {"type": "string", "minLength": 1}, "implementation_component": {"type": "string", "minLength": 1}, "duplicate_created": {"type": "boolean"}}}}}},
+        {"if": {"properties": {"category": {"const": "TOKEN_PRESERVATION"}}}, "then": {"properties": {"input": {"type": "object", "additionalProperties": false, "required": ["source_token_ref", "implementation_token_ref"], "properties": {"source_token_ref": {"type": "string", "minLength": 1}, "implementation_token_ref": {"type": "string", "minLength": 1}}}}}},
+        {"if": {"properties": {"category": {"const": "ARBITRARY_VALUE_DRIFT"}}}, "then": {"properties": {"input": {"type": "object", "additionalProperties": false, "required": ["project_token_available", "arbitrary_value_used", "arbitrary_value"], "properties": {"project_token_available": {"type": "boolean"}, "arbitrary_value_used": {"type": "boolean"}, "arbitrary_value": {"type": ["string", "null"]}}}}}},
+        {"if": {"properties": {"category": {"const": "STATE_COMPLETENESS"}}}, "then": {"properties": {"input": {"type": "object", "additionalProperties": false, "required": ["required_states", "implemented_states"], "properties": {"required_states": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}, "implemented_states": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}}}}}},
+        {"if": {"properties": {"category": {"const": "PROFILE_CONFLICT"}}}, "then": {"properties": {"input": {"type": "object", "additionalProperties": false, "required": ["selection"], "properties": {"selection": {"type": "object", "additionalProperties": false, "required": ["foundation", "layout", "full_theme_or_system", "optional_effect"], "properties": {"foundation": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}, "layout": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}, "full_theme_or_system": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}, "optional_effect": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}}}}}}}},
+        {"if": {"properties": {"category": {"const": "ASSET_PROVENANCE"}}}, "then": {"properties": {"input": {"type": "object", "additionalProperties": false, "required": ["source_identity", "implementation_source_identity", "substitution_approved", "approval_ref"], "properties": {"source_identity": {"type": "string", "minLength": 1}, "implementation_source_identity": {"type": "string", "minLength": 1}, "substitution_approved": {"type": "boolean"}, "approval_ref": {"type": ["string", "null"]}}}}}},
+        {"if": {"properties": {"category": {"const": "RESPONSIVE_CONTAINMENT"}}}, "then": {"properties": {"input": {"type": "object", "additionalProperties": false, "required": ["viewport_width", "content_width", "overflow_x"], "properties": {"viewport_width": {"type": "integer", "minimum": 1}, "content_width": {"type": "integer", "minimum": 0}, "overflow_x": {"type": "boolean"}}}}}},
+        {"if": {"properties": {"category": {"const": "ACCESSIBILITY_INVARIANTS"}}}, "then": {"properties": {"input": {"type": "object", "additionalProperties": false, "required": ["reduced_motion_respected", "forced_colors_respected", "interaction_critical_contrast_passed"], "properties": {"reduced_motion_respected": {"type": "boolean"}, "forced_colors_respected": {"type": "boolean"}, "interaction_critical_contrast_passed": {"type": "boolean"}}}}}},
+        {"if": {"properties": {"category": {"const": "REFERENCE_IDENTITY"}}}, "then": {"properties": {"input": {"type": "object", "additionalProperties": false, "required": ["expected_reference_identity", "observed_reference_identity", "expected_revision", "observed_revision"], "properties": {"expected_reference_identity": {"type": "string", "minLength": 1}, "observed_reference_identity": {"type": "string", "minLength": 1}, "expected_revision": {"type": "string", "minLength": 1}, "observed_revision": {"type": "string", "minLength": 1}}}}}},
+        {"if": {"properties": {"category": {"const": "VISUAL_BASELINE_REPLACEMENT"}}}, "then": {"properties": {"input": {"type": "object", "additionalProperties": false, "required": ["prior_comparison_result", "baseline_replaced", "approval_ref", "replacement_reason"], "properties": {"prior_comparison_result": {"enum": ["PASS", "FAIL"]}, "baseline_replaced": {"type": "boolean"}, "approval_ref": {"type": ["string", "null"]}, "replacement_reason": {"type": ["string", "null"]}}}}}}
+      ]
+    }
+  }
+}
