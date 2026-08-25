@@ -1,0 +1,11 @@
+{
+  "project_id": "uix9-proof-project",
+  "requirements_revision": "frozen-2026-08-24",
+  "requirements": [
+    "Reuse mapped project-native components where adequate.",
+    "Preserve semantic design tokens and explicit states.",
+    "Record missing or unresolved evidence without substitution.",
+    "Contain responsive layout and preserve accessibility invariants.",
+    "Bind evidence to implementation and reference identity."
+  ]
+}
