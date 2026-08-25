@@ -1,0 +1,52 @@
+{
+  "schema_version": "orchestra.memory-backends.v1",
+  "purpose": "Declare portable-memory backend options without making any backend authoritative or mandatory.",
+  "selection_policy": {
+    "user_or_project_may_select_backend": true,
+    "orchestra_learning_core_is_backend_agnostic": true,
+    "backend_selection_grants_authority": false,
+    "automatic_promotion": false,
+    "runtime_execution_control": false,
+    "raw_local_observations_exported_by_default": false,
+    "privacy_review_required_before_portable_promotion": true
+  },
+  "contract": {
+    "portable_candidate_schema": "machine/schemas/portable-memory-candidate.schema.json",
+    "backend_protocol": "orchestra_runtime/adaptive/portable_memory.py#PortableMemoryBackend",
+    "required_backend_operations": [
+      "validate_candidate",
+      "stage_candidate"
+    ],
+    "canonical_write_is_backend_governed": true
+  },
+  "backends": [
+    {
+      "backend_id": "local_json",
+      "adapter_kind": "LOCAL_JSON",
+      "status": "EXISTING_LOCAL_MEMORY_REFERENCE",
+      "portable_cross_machine": false,
+      "description": "Machine-local JSON/JSONL adaptive state. No shared portable promotion is implied."
+    },
+    {
+      "backend_id": "padayon",
+      "adapter_kind": "GIT_JSON",
+      "status": "REFERENCE_ADAPTER_UNDER_VALIDATION",
+      "portable_cross_machine": true,
+      "description": "Governed Git-backed JSON reservoir with scoped indexes, validation, supersession, and PR promotion. Padayon is optional and is not required by Orchestra."
+    },
+    {
+      "backend_id": "custom",
+      "adapter_kind": "CUSTOM",
+      "status": "CONTRACT_AVAILABLE_IMPLEMENTATION_USER_SUPPLIED",
+      "portable_cross_machine": "BACKEND_DEFINED",
+      "description": "User-supplied storage adapter implementing Orchestra's portable-memory backend contract."
+    }
+  ],
+  "non_goals": [
+    "MAKE_PADAYON_A_REQUIRED_ORCHESTRA_DEPENDENCY",
+    "ALLOW_MEMORY_TO_GRANT_EXECUTION_OR_POLICY_AUTHORITY",
+    "AUTO_EXPORT_RAW_CONVERSATIONS_OR_MACHINE_LOCAL_IDENTIFIERS",
+    "AUTO_PROMOTE_A3_SHADOW_CANDIDATES",
+    "MAKE_NEWEST_TIMESTAMP_OVERRIDE_SCOPE_OR_GOVERNANCE"
+  ]
+}
