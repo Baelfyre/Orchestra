@@ -5,7 +5,12 @@ from copy import deepcopy
 import jsonschema
 import pytest
 
-from scripts.adaptive_padayon_bridge import BRIDGE_SCHEMA, build_promotion_envelope, load_json
+from orchestra_runtime.adaptive.portable_memory import (
+    MemoryBackendDescriptor,
+    PORTABLE_SCHEMA,
+    build_portable_memory_candidate,
+)
+from scripts.adaptive_padayon_bridge import PADAYON_ADAPTER_SCHEMA, build_promotion_envelope, load_json
 
 
 def _candidate() -> dict:
@@ -35,7 +40,28 @@ def _candidate() -> dict:
     }
 
 
-def test_bridge_emits_privacy_minimized_non_authorizing_envelope() -> None:
+def test_generic_bridge_accepts_user_selected_custom_backend() -> None:
+    backend = MemoryBackendDescriptor(
+        backend_id="my_private_memory",
+        adapter_kind="CUSTOM",
+        record_format="JSON",
+        config_ref="user://memory/my_private_memory",
+    )
+    envelope = build_portable_memory_candidate(
+        _candidate(),
+        backend=backend,
+        category="WORKFLOW",
+        repositories=["Example/Repo"],
+        privacy_reviewed=True,
+        created_at="2026-08-26T00:00:00Z",
+    )
+    jsonschema.Draft202012Validator(load_json(PORTABLE_SCHEMA)).validate(envelope)
+    assert envelope["destination"]["backend_id"] == "my_private_memory"
+    assert envelope["destination"]["adapter_kind"] == "CUSTOM"
+    assert envelope["destination"]["canonical_write_authorized"] is False
+
+
+def test_padayon_is_reference_adapter_not_core_dependency() -> None:
     envelope = build_promotion_envelope(
         _candidate(),
         category="DESIGN_UI_UX",
@@ -44,13 +70,15 @@ def test_bridge_emits_privacy_minimized_non_authorizing_envelope() -> None:
         privacy_reviewed=True,
         created_at="2026-08-26T00:00:00Z",
     )
-    jsonschema.Draft202012Validator(load_json(BRIDGE_SCHEMA)).validate(envelope)
+    jsonschema.Draft202012Validator(load_json(PADAYON_ADAPTER_SCHEMA)).validate(envelope)
     assert envelope["pattern"]["scope"]["projects"] == ["orderly"]
     assert envelope["pattern"]["scope"]["specialists"] == ["cloak"]
+    assert envelope["destination"]["backend_id"] == "padayon"
+    assert envelope["destination"]["adapter_kind"] == "GIT_JSON"
     assert "user_key" not in str(envelope)
     assert "task_session_key" not in str(envelope)
     assert envelope["authority"]["automatic_promotion"] is False
-    assert envelope["intake"]["canonical_write_authorized"] is False
+    assert envelope["destination"]["canonical_write_authorized"] is False
 
 
 def test_bridge_requires_explicit_privacy_review() -> None:
