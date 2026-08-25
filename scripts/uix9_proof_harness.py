@@ -30,6 +30,11 @@ def _validate(path: Path, schema_path: Path) -> dict:
     return value
 
 
+def _canonical_digest(path: Path) -> str:
+    text = path.read_text(encoding="utf-8")
+    return hashlib.sha256(text.replace("\r\n", "\n").replace("\r", "\n").encode("utf-8")).hexdigest()
+
+
 def _require_zero_calls(value: dict) -> None:
     for field in ("model_calls", "provider_calls", "external_repo_mutations", "model_self_ratings", "subjective_visual_scores", "endpoint_changes"):
         assert value[field] == 0, f"non-zero dry-run side effect: {field}"
@@ -63,7 +68,7 @@ def _validate_bundle(path: Path, expected_kind: str, requirements_digest: str) -
 def dry_run() -> dict:
     plan = _validate(PLAN_PATH, PLAN_SCHEMA_PATH)
     requirements_path = ROOT / plan["fixtures"]["project_requirements"]
-    requirements_digest = hashlib.sha256(requirements_path.read_bytes()).hexdigest()
+    requirements_digest = _canonical_digest(requirements_path)
 
     positive = _validate_bundle(ROOT / plan["fixtures"]["positive"], "POSITIVE_VALIDATOR", requirements_digest)
     negative = _validate_bundle(ROOT / plan["fixtures"]["negative"], "NEGATIVE_VALIDATOR", requirements_digest)
