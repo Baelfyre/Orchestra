@@ -40,7 +40,7 @@ With a `DelegatedExecutionEnvelope`:
 5. Merge needs Full, explicit authority, and merge-readiness. Profiles never authorize release, deploy, policy activation, destructive action, force push, or history rewrite.
 
 ## Phase 2 Re-entry Routing
-Conductor remains router. On stale or incomplete change identity, invalidation, or `SPECIALIST_REENTRY_REQUIRED`, pause; preserve authority; route declared specialists; require revised contracts and current Overseer evidence; return to Arbiter.
+Conductor remains UIX-5 router. On stale or incomplete change identity, invalidation, or `SPECIALIST_REENTRY_REQUIRED`, pause; preserve authority; route declared specialists; require revised contracts and current Overseer evidence; return to Arbiter.
 
 ## Synchronicity routing
 

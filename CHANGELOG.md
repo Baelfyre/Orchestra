@@ -1,5 +1,11 @@
 # Changelog
 
+## Post-v1.6.0 UIX-8 Portable Specialist and Adapter Parity - Candidate
+
+- Operationalizes the canonical UIX-1 through UIX-7 contracts in the Conductor, Cloak, Clockwork, Governor, Ponytail, Overseer, and Arbiter guidance surfaces.
+- Records normalized Codex parity, explicit Antigravity `NO_COPY_REQUIRED`, and scaffold-only host exclusion without upgrading host maturity or fabricating specialist copies.
+- UIX-8 remains evidence and portability validation only: no runtime authority, dependency adoption, external call, installed-integration refresh, Figma mutation, release, deployment, policy activation, or destructive action is introduced.
+
 ## Post-v1.6.0 UIX-7 Deterministic UI Design-Fidelity Validation Fixtures - Candidate
 
 - UIX-7 adds deterministic UI design-fidelity validation fixtures.
