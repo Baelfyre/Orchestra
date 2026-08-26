@@ -112,17 +112,18 @@ def test_default_execute_path_refuses_before_codex(monkeypatch: pytest.MonkeyPat
     assert "UIX_9C_EXECUTION_REFUSED_EXPLICIT_LIVE_GATE_REQUIRED" in captured.out
 
 
-def test_explicit_live_gate_still_requires_approved_authorization(monkeypatch: pytest.MonkeyPatch) -> None:
-    called = False
+def test_approved_authorization_still_requires_explicit_live_gate() -> None:
+    authorization = _load(ROOT / "machine/ui/uix9b-live-call-authorization-request.v2.json")
+    assert authorization["authorization_status"] == "APPROVED"
+    assert authorization["current_request_max_new_live_calls"] == 6
+    assert authorization["live_model_calls_authorized"] is True
+    assert authorization["provider_calls_authorized"] is True
+    assert authorization["uix9c_execution_authorized"] is True
 
-    def never_run(*_args: object) -> dict:
-        nonlocal called
-        called = True
-        raise AssertionError("Codex must not run")
+    with pytest.raises(v2_runner.ExecutionRefused, match="EXPLICIT_LIVE_CALL_GATE_REQUIRED"):
+        v2_runner._authorize_live(authorization, live_call_gate=False)
 
-    with pytest.raises(v2_runner.ExecutionRefused, match="HUMAN_LIVE_AUTHORIZATION_REQUIRED"):
-        v2_runner.execute_campaign(live_call_gate=True, session_runner=never_run)
-    assert called is False
+    v2_runner._authorize_live(authorization, live_call_gate=True)
 
 
 def test_arm_prompts_preserve_treatment_boundary() -> None:
