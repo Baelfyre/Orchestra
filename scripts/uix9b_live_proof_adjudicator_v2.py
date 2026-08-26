@@ -37,8 +37,11 @@ def validate_observation(observation: dict[str, Any]) -> None:
     validate(observation, OBSERVATION_SCHEMA)
     if observation["run_classification"] not in {"ZERO_CALL_CANARY_PASS", "VALID_UNFAVORABLE_OUTPUT"}:
         raise ValueError("observation is not a countable deterministic output")
-    if observation["model_call_count"] != 0 or observation["provider_call_count"] != 0:
-        raise ValueError("zero-call adjudicator received a call-bearing observation")
+    expected_calls = 0 if observation["run_classification"] == "ZERO_CALL_CANARY_PASS" else 1
+    if observation["model_call_count"] != expected_calls or observation["provider_call_count"] != expected_calls:
+        raise ValueError("observation call count does not match classification")
+    if observation["external_side_effects"]["model_calls"] != expected_calls or observation["external_side_effects"]["provider_calls"] != expected_calls:
+        raise ValueError("observation side-effect count does not match classification")
 
 
 def pair_adjudication(baseline: dict[str, Any], governed: dict[str, Any]) -> dict[str, Any]:

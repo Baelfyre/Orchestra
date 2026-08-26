@@ -90,7 +90,39 @@ The only result classifications are `BENEFIT_ESTABLISHED`, `NO_BENEFIT_ESTABLISH
 
 ## Authority and boundary
 
-The V2 runner is `scripts/uix9b_live_proof_runner_v2.py`. It verifies every frozen identity and refuses the execution command in preparation mode. The machine authorization request is `machine/ui/uix9b-live-call-authorization-request.v2.json`; the human-readable request is `docs/validation/UIX_9B_V2_LIVE_CALL_AUTHORIZATION_REQUEST.md`.
+The V2 runner is `scripts/uix9b_live_proof_runner_v2.py`. It verifies every frozen identity and refuses the execution command unless both `--execution-mode live` and `--live-call-gate` are supplied and the machine authorization request is approved. The machine authorization request is `machine/ui/uix9b-live-call-authorization-request.v2.json`; the human-readable request is `docs/validation/UIX_9B_V2_LIVE_CALL_AUTHORIZATION_REQUEST.md`.
+
+The frozen experiment base identity and current canonical preparation identity are
+independent. `machine/ui/uix9b-live-proof-v2-identity.json` retains the immutable
+base SHA `bf6f14316fa8814eeac91440c4a7d70be0d04b9e`. The separate
+`machine/ui/uix9b-live-preparation-identity.v2.json` records the reviewed
+canonical preparation SHA `7e08a1d4aa09cbdf7632f5a86461fb3cd3e50fe9`.
+Before any future execution, the runner requires the frozen base and reviewed
+preparation to be ancestors of current `origin/main`, then verifies the
+required preparation paths and the canonical fixture, task, validator,
+evaluator, and UIX-1 through UIX-8 guidance digests directly from that ref.
+Canonical drift fails closed; the frozen base SHA is never replaced.
+
+The dormant execution adapter uses one fresh fixture copy and one ephemeral
+`codex` session per planned run in the exact order `A1,B1,B2,A2,A3,B3`. The
+supported CLI ordering is `codex --ask-for-approval never exec ...`; the
+adapter does not use `--ignore-rules` or an equivalent repository-rule bypass.
+Arm A receives no Orchestra UIX guidance. Arm B receives only the frozen
+UIX-1 through UIX-8 treatment; UIX-9 result logic is rejected from treatment
+material. Workspace writes are confined to the isolated evidence surface,
+provider/model substitution is rejected, and the frozen retry, outage,
+resource, and six-session ceilings are enforced. Supplemental screenshot,
+DOM, accessibility, and console hooks are retained outside the evaluator's
+thirteen primary metrics; screenshots never affect primary scoring.
+
+No execution is a valid scientific session after process success alone. The
+required pipeline is raw result capture, candidate-tree verification,
+independent zero-call validation, deterministic evaluator execution,
+metric-result schema validation, observation construction and schema
+validation, atomic observation/evaluator persistence, pair adjudication and
+schema validation, required-artifact verification, and only then
+`valid_session=true`. Staged evidence is never promoted to the final evidence
+surface when any step fails.
 
 Current authority is explicitly false:
 

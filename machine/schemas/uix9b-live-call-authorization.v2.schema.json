@@ -26,7 +26,7 @@
     "repetitions_per_arm": {"const": 3},
     "execution_order": {"const": ["A1", "B1", "B2", "A2", "A3", "B3"]},
     "maximum_live_calls": {"const": 6},
-    "current_request_max_new_live_calls": {"const": 0},
+    "current_request_max_new_live_calls": {"type": "integer", "minimum": 0, "maximum": 6},
     "token_or_compute_ceiling": {"const": "MAX_TOTAL_TOKENS_120000_MAX_PER_RUN_20000"},
     "per_run_timeout_seconds": {"const": 900},
     "retry_policy": {"type": "string", "minLength": 1},
@@ -40,9 +40,30 @@
     "stop_conditions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
     "historical_counters": {"$ref": "#/$defs/counters"},
     "new_campaign_authorization_counters": {"$ref": "#/$defs/counters"},
-    "live_model_calls_authorized": {"const": false},
-    "provider_calls_authorized": {"const": false},
-    "uix9c_execution_authorized": {"const": false}
+    "live_model_calls_authorized": {"type": "boolean"},
+    "provider_calls_authorized": {"type": "boolean"},
+    "uix9c_execution_authorized": {"type": "boolean"}
   },
-  "$defs": {"counters": {"type": "object", "additionalProperties": false, "required": ["experimental_model_calls", "experimental_provider_calls", "nonexperimental_availability_probes", "total_provider_interactions", "invalid_infrastructure_retries"], "properties": {"experimental_model_calls": {"type": "integer", "minimum": 0}, "experimental_provider_calls": {"type": "integer", "minimum": 0}, "nonexperimental_availability_probes": {"type": "integer", "minimum": 0}, "total_provider_interactions": {"type": "integer", "minimum": 0}, "invalid_infrastructure_retries": {"type": "integer", "minimum": 0}}}}
+  "$defs": {"counters": {"type": "object", "additionalProperties": false, "required": ["experimental_model_calls", "experimental_provider_calls", "nonexperimental_availability_probes", "total_provider_interactions", "invalid_infrastructure_retries"], "properties": {"experimental_model_calls": {"type": "integer", "minimum": 0}, "experimental_provider_calls": {"type": "integer", "minimum": 0}, "nonexperimental_availability_probes": {"type": "integer", "minimum": 0}, "total_provider_interactions": {"type": "integer", "minimum": 0}, "invalid_infrastructure_retries": {"type": "integer", "minimum": 0}}}},
+  "allOf": [
+    {
+      "if": {"properties": {"authorization_status": {"const": "APPROVED"}}},
+      "then": {
+        "properties": {
+          "current_request_max_new_live_calls": {"const": 6},
+          "live_model_calls_authorized": {"const": true},
+          "provider_calls_authorized": {"const": true},
+          "uix9c_execution_authorized": {"const": true}
+        }
+      },
+      "else": {
+        "properties": {
+          "current_request_max_new_live_calls": {"const": 0},
+          "live_model_calls_authorized": {"const": false},
+          "provider_calls_authorized": {"const": false},
+          "uix9c_execution_authorized": {"const": false}
+        }
+      }
+    }
+  ]
 }

@@ -4,6 +4,10 @@ This root changelog is release-oriented. Detailed pre-v1.7 development chronolog
 
 ## Post-v1.7 governed proof preparation
 
+- Connected the frozen deterministic evaluator, observation validation, evidence persistence, and adjudication into the future live-proof execution path with fail-closed valid-session semantics and staged evidence finalization.
+- Removed the repository-rules bypass from the Codex adapter and froze the supported `codex --ask-for-approval never exec` ordering with zero-call regression coverage.
+- No live model or provider call, experimental run, external repository mutation, release, deployment, or policy activation is introduced.
+
 - Added the UIX-9B V2 deterministic live-proof evaluator, frozen calibration cases, isolated UI fixture, machine contracts, zero-call adjudication path, and human authorization envelope.
 - Corrected the UIX-9A and UIX-9B preparation runners to bind the frozen canonical SHA to `origin/main`, allowing a validated preparation candidate to run ahead on its isolated branch without changing frozen proof identities.
 
