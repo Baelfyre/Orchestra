@@ -152,8 +152,12 @@
   },
   "allOf": [
     {
-      "if": {"properties": {"admission": {"properties": {"disposition": {"const": "REJECT"}}}}},
-      "then": {"properties": {"promotion": {"properties": {"status": {"const": "NOT_APPLICABLE"}}}}}
+      "if": {
+        "properties": {"admission": {"properties": {"disposition": {"const": "REJECT"}}, "required": ["disposition"]}},
+        "required": ["admission"]
+      },
+      "then": {"properties": {"promotion": {"properties": {"status": {"const": "NOT_APPLICABLE"}}}}},
+      "else": {"properties": {"promotion": {"properties": {"status": {"enum": ["PENDING", "DECIDED"]}}}}}
     }
   ],
   "$defs": {
