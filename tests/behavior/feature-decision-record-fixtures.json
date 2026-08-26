@@ -1,0 +1,156 @@
+{
+  "schema_version": "orchestra.feature-admission-fixtures.v1",
+  "base_record": {
+    "$schema": "../schemas/feature-decision-record.v1.schema.json",
+    "schema_version": "orchestra.feature-decision-record.v1",
+    "record_type": "FEATURE_DECISION_RECORD",
+    "record_id": "FDR-EXAMPLE-001",
+    "feature_id": "EXAMPLE-BOUNDED-CAPABILITY",
+    "title": "Example bounded capability",
+    "proposal": {
+      "problem_statement": "A repeatable Orchestra-owned workflow problem requires an explicit bounded capability decision.",
+      "affected_parties": ["Orchestra maintainers", "governed project users"],
+      "problem_evidence": ["evidence/problem-observation-001"],
+      "orchestra_ownership_rationale": "The problem concerns Orchestra orchestration behavior rather than a provider or project-local implementation detail.",
+      "existing_mechanisms": [
+        {"mechanism": "existing configuration", "disposition": "PARTIALLY_SOLVES", "evidence_refs": ["evidence/config-comparison-001"]},
+        {"mechanism": "provider behavior", "disposition": "DOES_NOT_SOLVE", "evidence_refs": ["evidence/provider-boundary-001"]}
+      ],
+      "expected_observable_improvement": "The governed workflow should reduce repeated corrective intervention without increasing authority or governance violations.",
+      "falsification_criterion": "Reject the value claim if controlled evidence shows no repeatable improvement or any authority, governance, privacy, or scope regression.",
+      "costs": {
+        "complexity": {"level": "LOW", "rationale": "One bounded contract and validation surface."},
+        "maintenance": {"level": "LOW", "rationale": "No additional runtime service."},
+        "security": {"level": "NONE", "rationale": "No new privileged execution path."},
+        "privacy": {"level": "NONE", "rationale": "No new personal-data collection."},
+        "policy": {"level": "LOW", "rationale": "Existing authority policy remains controlling."},
+        "cognitive": {"level": "LOW", "rationale": "One explicit decision record replaces implicit assumptions."}
+      },
+      "reversibility": {
+        "optional_possible": true,
+        "disable_supported": true,
+        "removal_supported": true,
+        "rollback_removal_plan": "Remove the bounded capability through an ordinary forward-only governed candidate and preserve the decision evidence."
+      },
+      "non_adoption_effect": "The existing deterministic behavior continues without the proposed improvement."
+    },
+    "scope": {
+      "owner": "Conductor",
+      "proposed_change": "Add one bounded capability without changing existing authority, routing ownership, or protected-action semantics.",
+      "affected_surfaces": ["governance contract", "validation"],
+      "authority_reference": "EXPLICIT_SEPARATE_IMPLEMENTATION_GRANT_REQUIRED"
+    },
+    "source_identity": {
+      "repository": "Baelfyre/Orchestra",
+      "base_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "policy_refs": [
+        "docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md",
+        "docs/governance/FEATURE_ADMISSION_POLICY.md"
+      ]
+    },
+    "authority": {
+      "record_grants_authority": false,
+      "admission_grants_implementation_authority": false,
+      "admission_grants_merge_authority": false,
+      "promotion_grants_merge_authority": false,
+      "promotion_grants_release_authority": false,
+      "promotion_grants_deployment_authority": false,
+      "promotion_grants_policy_activation": false,
+      "promotion_grants_destructive_authority": false
+    },
+    "admission": {
+      "disposition": "ADMIT",
+      "rationale": "The problem is evidenced and bounded enough to justify implementation or evaluation under separate authority.",
+      "decision_owner": "maintainer"
+    },
+    "promotion": {
+      "status": "PENDING",
+      "disposition": null,
+      "rationale": "Promotion awaits proportional evidence.",
+      "evidence_refs": [],
+      "decision_owner": null
+    }
+  },
+  "valid_record_cases": [
+    {"id": "admitted-pending-promotion"},
+    {
+      "id": "admitted-later-rejected-no-value",
+      "overrides": {
+        "promotion": {
+          "status": "DECIDED",
+          "disposition": "REJECT_NO_MEASURABLE_VALUE",
+          "rationale": "Controlled evidence did not establish the expected repeatable improvement.",
+          "evidence_refs": ["evidence/controlled-evaluation-001"],
+          "decision_owner": "maintainer"
+        }
+      }
+    },
+    {
+      "id": "experiment-only-pending",
+      "overrides": {
+        "admission": {
+          "disposition": "EXPERIMENT_ONLY",
+          "rationale": "The hypothesis is worth bounded testing but permanent adoption is not established.",
+          "decision_owner": "maintainer"
+        }
+      }
+    },
+    {
+      "id": "rejected-not-applicable-promotion",
+      "overrides": {
+        "admission": {
+          "disposition": "REJECT",
+          "rationale": "The proposal duplicates an existing mechanism and should not proceed.",
+          "decision_owner": "maintainer"
+        },
+        "promotion": {
+          "status": "NOT_APPLICABLE",
+          "disposition": null,
+          "rationale": "Promotion is not applicable because admission was rejected.",
+          "evidence_refs": [],
+          "decision_owner": null
+        }
+      }
+    }
+  ],
+  "invalid_record_cases": [
+    {"id": "record-claims-authority", "set": {"authority.record_grants_authority": true}},
+    {"id": "admission-claims-merge-authority", "set": {"authority.admission_grants_merge_authority": true}},
+    {"id": "bad-base-sha", "set": {"source_identity.base_sha": "not-a-sha"}},
+    {"id": "unknown-admission", "set": {"admission.disposition": "IMPLEMENT"}},
+    {"id": "missing-ownership-rationale", "delete": ["proposal.orchestra_ownership_rationale"]},
+    {
+      "id": "decided-promotion-without-evidence",
+      "overrides": {
+        "promotion": {
+          "status": "DECIDED",
+          "disposition": "ADOPT",
+          "rationale": "A permanent promotion decision was recorded without evidence references.",
+          "evidence_refs": [],
+          "decision_owner": "maintainer"
+        }
+      }
+    },
+    {
+      "id": "rejected-but-promotion-pending",
+      "overrides": {
+        "admission": {
+          "disposition": "REJECT",
+          "rationale": "The proposal should not proceed under the current evidence.",
+          "decision_owner": "maintainer"
+        }
+      }
+    }
+  ],
+  "inline_rationale_cases": [
+    {"id": "truth-correction", "change_class": "TRIVIAL_TRUTH_CORRECTION", "rationale": "Correct a stale factual value.", "accepted_requirement_refs": [], "flags": [], "expected": "INLINE_RATIONALE_ALLOWED"},
+    {"id": "parity-refresh", "change_class": "PARITY_REFRESH", "rationale": "Synchronize a derived projection with its accepted source.", "accepted_requirement_refs": [], "flags": [], "expected": "INLINE_RATIONALE_ALLOWED"},
+    {"id": "test-restoration", "change_class": "TEST_RESTORING_ACCEPTED_BEHAVIOR", "rationale": "Restore the already accepted behavior after a regression.", "accepted_requirement_refs": ["requirement/accepted-001"], "flags": [], "expected": "INLINE_RATIONALE_ALLOWED"},
+    {"id": "bounded-bug-fix", "change_class": "BOUNDED_BUG_FIX_ACCEPTED_REQUIREMENT", "rationale": "Correct the implementation to satisfy the existing accepted requirement.", "accepted_requirement_refs": ["requirement/accepted-002"], "flags": [], "expected": "INLINE_RATIONALE_ALLOWED"},
+    {"id": "bug-fix-without-requirement", "change_class": "BOUNDED_BUG_FIX_ACCEPTED_REQUIREMENT", "rationale": "A bug fix without a cited accepted requirement.", "accepted_requirement_refs": [], "flags": [], "expected": "FULL_RECORD_REQUIRED"},
+    {"id": "new-capability", "change_class": "TRIVIAL_TRUTH_CORRECTION", "rationale": "Labelled trivial but actually adds a capability.", "accepted_requirement_refs": [], "flags": ["NEW_CAPABILITY"], "expected": "FULL_RECORD_REQUIRED"},
+    {"id": "policy-change", "change_class": "PARITY_REFRESH", "rationale": "Labelled parity but changes policy semantics.", "accepted_requirement_refs": [], "flags": ["GOVERNANCE_OR_POLICY_CHANGE"], "expected": "FULL_RECORD_REQUIRED"},
+    {"id": "authority-change", "change_class": "TEST_RESTORING_ACCEPTED_BEHAVIOR", "rationale": "Would alter authority behavior.", "accepted_requirement_refs": ["requirement/accepted-003"], "flags": ["AUTHORITY_CHANGE_OR_EXPANSION"], "expected": "FULL_RECORD_REQUIRED"},
+    {"id": "unknown-class", "change_class": "NICE_TO_HAVE", "rationale": "Not an eligible fast-path class.", "accepted_requirement_refs": [], "flags": [], "expected": "FULL_RECORD_REQUIRED"}
+  ]
+}
