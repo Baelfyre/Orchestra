@@ -10,6 +10,7 @@ This root changelog is release-oriented. Detailed pre-v1.7 development chronolog
 - Added the Orchestra Prime Directive v1 and Feature Admission v1 contract, separating implementation correctness from permanent capability promotion, preserving human ownership/adoption judgment, and machine-validating non-authorizing `FeatureDecisionRecord` completeness plus the bounded inline-rationale fast path.
 - Added Candidate Maturity and Feature Freeze v1, separating the development-candidate lifecycle from runtime execution state, freezing exact candidate/base identities and acceptance/scope boundaries, and requiring any post-freeze remediation to create a new candidate identity without inferring merge or protected-action authority.
 - Integrated Candidate Maturity with the existing Governed Autonomy Modes contract so autonomy removes redundant pauses only after prerequisite decisions/evidence exist, preserves human-owned feature acceptance, requires an exact candidate/PR grant plus the existing merge evaluator for Full-Autonomous merge, and keeps retirement separate from branch deletion.
+- Added risk-proportional Qualification Gates, controlled evaluation, and independent read-only audit contracts, including preregistered experiment integrity, negative-evidence preservation, exact candidate binding, and a `QUALIFIED -> human-owned acceptance` ordering that avoids both heavyweight universal gating and test-success-as-adoption.
 
 ## v1.7.0 - Adaptive Intelligence, Portable Memory & Design Fidelity
 
