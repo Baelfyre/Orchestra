@@ -50,17 +50,20 @@ def test_missing_admission_authority_or_freeze_fails_closed():
     assert_case("implement-freeze-incomplete", "WAIT_FOR_EVIDENCE")
 
 
-def test_full_autonomous_cannot_decide_feature_acceptance():
+def test_qualification_must_complete_before_human_owned_acceptance():
+    assert_case("qualification-stale-before-acceptance", "WAIT_FOR_EVIDENCE")
+    assert_case("qualification-pending-before-acceptance", "WAIT_FOR_EVIDENCE")
+    assert_case("qualification-blocked-stops-acceptance", "STOP")
     assert_case("full-cannot-self-accept", "ESCALATE_HUMAN")
     assert_case("machine-owned-acceptance-escalates", "ESCALATE_HUMAN")
-    assert_case("acceptance-record-auto", "AUTO_CONTINUE")
+    assert_case("acceptance-record-auto-after-qualified", "AUTO_CONTINUE")
 
 
-def test_merge_ready_pause_differs_by_profile_without_changing_evidence_requirement():
+def test_merge_ready_pause_differs_by_profile_without_reusing_qualification():
     assert_case("human-merge-ready-needs-phase-gate", "ESCALATE_HUMAN")
     assert_case("human-merge-ready-with-phase-gate", "AUTO_CONTINUE")
     assert_case("semi-merge-ready-auto", "AUTO_CONTINUE")
-    assert_case("qualification-stale-waits", "WAIT_FOR_EVIDENCE")
+    assert_case("merge-readiness-stale-waits", "WAIT_FOR_EVIDENCE")
 
 
 def test_only_full_autonomous_may_initiate_merge_and_only_with_exact_grant():
