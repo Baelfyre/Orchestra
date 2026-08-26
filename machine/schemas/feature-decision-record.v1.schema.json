@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/feature-decision-record.v1.schema.json",
+  "title": "Orchestra Feature Decision Record v1",
+  "description": "Machine-validatable completeness contract for feature admission and promotion decisions. The record never grants execution or protected-action authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "record_type",
+    "record_id",
+    "feature_id",
+    "title",
+    "proposal",
+    "scope",
+    "source_identity",
+    "authority",
+    "admission",
+    "promotion"
+  ],
+  "properties": {
+    "$schema": {"const": "../schemas/feature-decision-record.v1.schema.json"},
+    "schema_version": {"const": "orchestra.feature-decision-record.v1"},
+    "record_type": {"const": "FEATURE_DECISION_RECORD"},
+    "record_id": {"$ref": "#/$defs/identifier"},
+    "feature_id": {"$ref": "#/$defs/identifier"},
+    "title": {"type": "string", "minLength": 3},
+    "proposal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "problem_statement",
+        "affected_parties",
+        "problem_evidence",
+        "orchestra_ownership_rationale",
+        "existing_mechanisms",
+        "expected_observable_improvement",
+        "falsification_criterion",
+        "costs",
+        "reversibility",
+        "non_adoption_effect"
+      ],
+      "properties": {
+        "problem_statement": {"type": "string", "minLength": 10},
+        "affected_parties": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 2}},
+        "problem_evidence": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 3}},
+        "orchestra_ownership_rationale": {"type": "string", "minLength": 10},
+        "existing_mechanisms": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["mechanism", "disposition", "evidence_refs"],
+            "properties": {
+              "mechanism": {"type": "string", "minLength": 2},
+              "disposition": {"enum": ["FULLY_SOLVES", "PARTIALLY_SOLVES", "DOES_NOT_SOLVE", "UNKNOWN"]},
+              "evidence_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 3}}
+            }
+          }
+        },
+        "expected_observable_improvement": {"type": "string", "minLength": 10},
+        "falsification_criterion": {"type": "string", "minLength": 10},
+        "costs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["complexity", "maintenance", "security", "privacy", "policy", "cognitive"],
+          "properties": {
+            "complexity": {"$ref": "#/$defs/cost"},
+            "maintenance": {"$ref": "#/$defs/cost"},
+            "security": {"$ref": "#/$defs/cost"},
+            "privacy": {"$ref": "#/$defs/cost"},
+            "policy": {"$ref": "#/$defs/cost"},
+            "cognitive": {"$ref": "#/$defs/cost"}
+          }
+        },
+        "reversibility": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["optional_possible", "disable_supported", "removal_supported", "rollback_removal_plan"],
+          "properties": {
+            "optional_possible": {"type": "boolean"},
+            "disable_supported": {"type": "boolean"},
+            "removal_supported": {"type": "boolean"},
+            "rollback_removal_plan": {"type": "string", "minLength": 10}
+          }
+        },
+        "non_adoption_effect": {"type": "string", "minLength": 5}
+      }
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owner", "proposed_change", "affected_surfaces", "authority_reference"],
+      "properties": {
+        "owner": {"type": "string", "minLength": 2},
+        "proposed_change": {"type": "string", "minLength": 10},
+        "affected_surfaces": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 2}},
+        "authority_reference": {"type": "string", "minLength": 3}
+      }
+    },
+    "source_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "base_sha", "policy_refs"],
+      "properties": {
+        "repository": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+        "base_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "policy_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 3}}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "record_grants_authority",
+        "admission_grants_implementation_authority",
+        "admission_grants_merge_authority",
+        "promotion_grants_merge_authority",
+        "promotion_grants_release_authority",
+        "promotion_grants_deployment_authority",
+        "promotion_grants_policy_activation",
+        "promotion_grants_destructive_authority"
+      ],
+      "properties": {
+        "record_grants_authority": {"const": false},
+        "admission_grants_implementation_authority": {"const": false},
+        "admission_grants_merge_authority": {"const": false},
+        "promotion_grants_merge_authority": {"const": false},
+        "promotion_grants_release_authority": {"const": false},
+        "promotion_grants_deployment_authority": {"const": false},
+        "promotion_grants_policy_activation": {"const": false},
+        "promotion_grants_destructive_authority": {"const": false}
+      }
+    },
+    "admission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["disposition", "rationale", "decision_owner"],
+      "properties": {
+        "disposition": {"enum": ["ADMIT", "EXPERIMENT_ONLY", "DEFER", "REJECT"]},
+        "rationale": {"type": "string", "minLength": 10},
+        "decision_owner": {"type": "string", "minLength": 2}
+      }
+    },
+    "promotion": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "disposition", "rationale", "evidence_refs", "decision_owner"],
+          "properties": {
+            "status": {"const": "PENDING"},
+            "disposition": {"type": "null"},
+            "rationale": {"type": "string", "minLength": 3},
+            "evidence_refs": {"const": []},
+            "decision_owner": {"type": "null"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "disposition", "rationale", "evidence_refs", "decision_owner"],
+          "properties": {
+            "status": {"const": "NOT_APPLICABLE"},
+            "disposition": {"type": "null"},
+            "rationale": {"type": "string", "minLength": 10},
+            "evidence_refs": {"const": []},
+            "decision_owner": {"type": "null"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "disposition", "rationale", "evidence_refs", "decision_owner"],
+          "properties": {
+            "status": {"const": "DECIDED"},
+            "disposition": {"enum": ["ADOPT", "ADOPT_SIMPLIFIED", "ADOPT_OPTIONAL", "REPLACE_WITH_CONFIGURATION", "EXPERIMENT_ONLY", "DEFER", "REJECT_NO_MEASURABLE_VALUE", "REJECT_COMPLEXITY_EXCEEDS_BENEFIT"]},
+            "rationale": {"type": "string", "minLength": 10},
+            "evidence_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 3}},
+            "decision_owner": {"type": "string", "minLength": 2}
+          }
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"admission": {"properties": {"disposition": {"const": "REJECT"}}}}},
+      "then": {"properties": {"promotion": {"properties": {"status": {"const": "NOT_APPLICABLE"}}}}}
+    }
+  ],
+  "$defs": {
+    "identifier": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$"},
+    "cost": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level", "rationale"],
+      "properties": {
+        "level": {"enum": ["NONE", "LOW", "MEDIUM", "HIGH"]},
+        "rationale": {"type": "string", "minLength": 3}
+      }
+    }
+  }
+}
