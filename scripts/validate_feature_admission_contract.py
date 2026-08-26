@@ -185,9 +185,9 @@ def validate(root):
         if term not in admission:
             errors.append(f"Feature Admission policy missing boundary: {term}")
 
-    for path in ("docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md", "docs/governance/FEATURE_ADMISSION_POLICY.md"):
-        if path not in governance_index:
-            errors.append(f"governance documentation index missing {path}")
+    for filename in ("ORCHESTRA_PRIME_DIRECTIVE.md", "FEATURE_ADMISSION_POLICY.md"):
+        if filename not in governance_index:
+            errors.append(f"governance documentation index missing {filename}")
 
     capability = readme_index.get("capabilities", {}).get("prime_directive_feature_admission_v1")
     if not isinstance(capability, dict):
