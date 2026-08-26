@@ -2,6 +2,17 @@
 
 Orchestra governance controls whether otherwise authorized work may proceed. It does not create runtime authority, capabilities, specialist ownership, or evidence by itself.
 
+## Constitutional and admission layer
+
+The stable constitutional boundary for Orchestra is defined by:
+
+- [Orchestra Prime Directive](ORCHESTRA_PRIME_DIRECTIVE.md)
+- [Feature Admission Policy](FEATURE_ADMISSION_POLICY.md)
+
+The Prime Directive defines the authority, evidence, specialist-ownership, autonomy, adaptive-intelligence, recovery, and self-amendment invariants that subordinate policies must preserve. Feature Admission adds the separate product/value decision required before new permanent complexity is promoted.
+
+The `FeatureDecisionRecord` machine schema validates record completeness and non-authority boundaries. It does not decide whether Orchestra should own a capability and does not create implementation, merge, release, deployment, policy-activation, or destructive-action authority.
+
 ## Current authority split
 
 For exact deterministic governance facts, use the machine contract:
@@ -10,6 +21,8 @@ For exact deterministic governance facts, use the machine contract:
 
 For human explanation, operating modes, risk scaling, governance roles, and usage guidance, use:
 
+- [Orchestra Prime Directive](ORCHESTRA_PRIME_DIRECTIVE.md)
+- [Feature Admission Policy](FEATURE_ADMISSION_POLICY.md)
 - [Governance Layer](GOVERNANCE_LAYER.md)
 - [Autonomous Merge Readiness Protocol](AUTONOMOUS_MERGE_READINESS_PROTOCOL.md)
 - [Compliance Registry Integration](COMPLIANCE_REGISTRY_INTEGRATION.md)
