@@ -1,8 +1,8 @@
 # Feature Admission Policy
 
-**Contract:** `ORCHESTRA_FEATURE_ADMISSION_V1`  
-**Primary record:** `FeatureDecisionRecord`  
-**Machine schema:** `machine/schemas/feature-decision-record.v1.schema.json`  
+**Contract:** `ORCHESTRA_FEATURE_ADMISSION_V1`
+**Primary record:** `FeatureDecisionRecord`
+**Machine schema:** `machine/schemas/feature-decision-record.v1.schema.json`
 **Authority class:** record completeness is `MACHINE_VALIDATED`; ownership and adoption judgments remain `HUMAN_POLICY`
 
 ## Purpose
