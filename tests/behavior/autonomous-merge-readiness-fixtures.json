@@ -83,6 +83,7 @@
   },
   "pre_merge_cases": [
     {"id": "fully-green", "expected_disposition": "READY_FOR_MERGE"},
+    {"id": "reordered-required-contexts", "ruleset_overrides": {"required_status_contexts": ["native-macos-latest", "governance-check", "Compatibility CodeQL (python)", "native-ubuntu-latest", "validate", "native-windows-latest", "runtime-tests"]}, "expected_disposition": "READY_FOR_MERGE"},
     {"id": "no-check-data", "overrides": {"checks": null}, "expected_disposition": "WAIT_FOR_EVIDENCE"},
     {"id": "missing-runtime", "remove_check": "validate/runtime-tests", "expected_disposition": "WAIT_FOR_EVIDENCE"},
     {"id": "missing-codeql-compatibility", "remove_check": "Required Analysis Compatibility/Compatibility CodeQL (python)", "expected_disposition": "WAIT_FOR_EVIDENCE"},

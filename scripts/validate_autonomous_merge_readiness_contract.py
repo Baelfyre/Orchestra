@@ -71,7 +71,19 @@ def ruleset_matches(snapshot):
     ruleset = snapshot.get("ruleset")
     if not isinstance(ruleset, dict):
         return False
-    return all(ruleset.get(key) == value for key, value in EXPECTED_RULESET.items())
+
+    for key, value in EXPECTED_RULESET.items():
+        if key == "required_status_contexts":
+            continue
+        if ruleset.get(key) != value:
+            return False
+
+    contexts = ruleset.get("required_status_contexts")
+    if not isinstance(contexts, list):
+        return False
+    if len(contexts) != len(set(contexts)):
+        return False
+    return set(contexts) == set(REQUIRED_STATUS_CONTEXTS)
 
 
 def evaluate_mergeability(snapshot):

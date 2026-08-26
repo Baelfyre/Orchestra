@@ -44,6 +44,12 @@ def test_fully_green_exact_head_is_ready():
     assert validator.evaluate_pre_merge(snapshot) == case["expected_disposition"]
 
 
+def test_required_status_context_order_is_not_policy_drift():
+    case, snapshot = pre_case("reordered-required-contexts")
+    assert validator.evaluate_pre_merge(snapshot) == "READY_FOR_MERGE"
+    assert case["expected_disposition"] == "READY_FOR_MERGE"
+
+
 def test_missing_and_pending_evidence_waits():
     for case_id in (
         "no-check-data",
