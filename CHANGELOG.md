@@ -9,6 +9,7 @@ This root changelog is release-oriented. Detailed pre-v1.7 development chronolog
 - Reconciled the autonomous merge-readiness contract with the maintainer-approved required-check profile: one `native-ubuntu-latest` context and `Compatibility CodeQL (python)` as the required analysis context; duplicate Ubuntu contexts and retired `Analyze (actions)` / `Analyze (python)` required contexts are now modeled as policy drift.
 - Added the Orchestra Prime Directive v1 and Feature Admission v1 contract, separating implementation correctness from permanent capability promotion, preserving human ownership/adoption judgment, and machine-validating non-authorizing `FeatureDecisionRecord` completeness plus the bounded inline-rationale fast path.
 - Added Candidate Maturity and Feature Freeze v1, separating the development-candidate lifecycle from runtime execution state, freezing exact candidate/base identities and acceptance/scope boundaries, and requiring any post-freeze remediation to create a new candidate identity without inferring merge or protected-action authority.
+- Integrated Candidate Maturity with the existing Governed Autonomy Modes contract so autonomy removes redundant pauses only after prerequisite decisions/evidence exist, preserves human-owned feature acceptance, requires an exact candidate/PR grant plus the existing merge evaluator for Full-Autonomous merge, and keeps retirement separate from branch deletion.
 
 ## v1.7.0 - Adaptive Intelligence, Portable Memory & Design Fidelity
 
