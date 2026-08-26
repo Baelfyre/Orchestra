@@ -49,7 +49,9 @@ def verify_frozen_identities() -> dict[str, Any]:
     evaluator.verify_identity(IDENTITY_PATH, evaluator.DEFAULT_FIXTURE_ROOT)
     calibration = load_json(CALIBRATION_MANIFEST)
     validate(calibration, ROOT / "machine" / "schemas" / "uix9b-live-calibration-manifest.v2.schema.json")
-    if plan["canonical_sha"] != git_value("rev-parse", "HEAD") or plan["canonical_sha"] != git_value("rev-parse", "origin/main"):
+    # The frozen SHA identifies the verified canonical base.  The preparation
+    # candidate is expected to be ahead of that base after its commit exists.
+    if plan["canonical_sha"] != git_value("rev-parse", "origin/main"):
         raise RuntimeError("CANONICAL_SHA_MISMATCH")
     if plan["fixture_digest"] != identity["fixture_digest"] or plan["task_digest"] != identity["task_digest"] or plan["validator_digest"] != identity["validator_digest"] or plan["uix_guidance_digest"] != identity["uix_guidance_digest"]:
         raise RuntimeError("PLAN_IDENTITY_MISMATCH")

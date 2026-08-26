@@ -7,6 +7,7 @@ from pathlib import Path
 import jsonschema
 import pytest
 
+from scripts import uix9b_live_proof_runner_v2 as v2_runner
 from scripts.uix9_live_proof_runner import (
     OBSERVATION_SCHEMA_PATH,
     PLAN_PATH,
@@ -81,6 +82,22 @@ def test_uix9b_result_classification_is_closed() -> None:
         "MIXED_OR_INCONCLUSIVE",
         "PROTOCOL_INVALID",
     ]
+
+
+def test_v2_identity_gate_binds_to_canonical_base_not_candidate_head(monkeypatch: pytest.MonkeyPatch) -> None:
+    plan = _load(ROOT / "machine/ui/uix9b-live-proof-plan.v2.json")
+    calls: list[tuple[str, ...]] = []
+
+    def fake_git_value(*arguments: str) -> str:
+        calls.append(arguments)
+        assert arguments == ("rev-parse", "origin/main")
+        return plan["canonical_sha"]
+
+    monkeypatch.setattr(v2_runner, "git_value", fake_git_value)
+    report = v2_runner.verify_frozen_identities()
+
+    assert report["canonical_sha"] == plan["canonical_sha"]
+    assert calls == [("rev-parse", "origin/main")]
 
 
 def validate_json_value(value: dict, schema_path: Path) -> None:

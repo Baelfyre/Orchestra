@@ -2,6 +2,11 @@
 
 This root changelog is release-oriented. Detailed pre-v1.7 development chronology remains preserved byte-for-byte in [the historical changelog archive](docs/history/CHANGELOG_PRE_V1_7.md), Git history, merged pull requests, decision records, and validation evidence.
 
+## Post-v1.7 governed proof preparation
+
+- Added the UIX-9B V2 deterministic live-proof evaluator, frozen calibration cases, isolated UI fixture, machine contracts, zero-call adjudication path, and human authorization envelope.
+- Corrected the UIX-9A and UIX-9B preparation runners to bind the frozen canonical SHA to `origin/main`, allowing a validated preparation candidate to run ahead on its isolated branch without changing frozen proof identities.
+
 ## v1.7.0 - Adaptive Intelligence, Portable Memory & Design Fidelity
 
 Release tracking: [#563 - Release v1.7.0: Adaptive Intelligence, Portable Memory & Design Fidelity](https://github.com/Baelfyre/Orchestra/issues/563) (`CLOSED_COMPLETED`)

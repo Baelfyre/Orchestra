@@ -36,12 +36,18 @@ EVALUATOR_DIGEST=d585010eb83ec23b1df2c3512868e9ff5285e7dced1393dcafb0233b835f7ae
 | V2 identity gate | `python scripts/uix9b_live_proof_runner_v2.py verify-frozen-identities` | PASS |
 | Machine contract validation | `python scripts/validate_machine_contracts.py` plus direct Draft 2020-12 validation of V2 artifacts | PASS |
 | Behavior suite | `ORCHESTRA_APPROVED_BASE_SHA=bf6f14316fa8814eeac91440c4a7d70be0d04b9e python tests/behavior/run_tests.py` | PASS |
-| Runtime suite | `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest tests/runtime -q` | PASS; 1684 passed, 10 subtests passed |
+| Runtime suite | `PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 python -m pytest tests/runtime -q` | PASS; 1685 passed, 10 subtests passed |
 | Python compile | `PYTHONPYCACHEPREFIX=<temporary-prefix> python -m compileall -q -f orchestra_runtime scripts internal/context tests/runtime/test_uix9_live_metric_evaluator_v2.py` | PASS |
 | Governance and structure | `validate_structure.py`, `validate_manifest.py`, `governance_check.py --strict`, `check_stale_references.py`, runtime guardrail | PASS |
 | Cross-platform-compatible checks | Codex export, router positive/negative, prompt thresholds, plugin JSON, `git diff --check` | PASS; prompt threshold output is advisory only |
 
 The first direct compile attempt used the source tree's default bytecode cache and encountered a host permission error. It was rerun with a temporary bytecode prefix and passed. An earlier BOM-aware in-memory compile also passed all repository Python sources. No repository source or generated runtime copy was changed to address the host cache issue.
+
+## Post-commit exact-candidate remediation
+
+The first signed preparation commit exposed a bounded runner defect: the V2 identity gate compared the frozen canonical base SHA to the candidate `HEAD`, which fails by definition once the preparation commit exists. The correction binds `canonical_sha` to the current `origin/main` base and permits the isolated candidate to be ahead. Regression coverage was added in `tests/runtime/test_uix9_live_proof_protocol.py`.
+
+The preserved UIX-9A runner, schemas, fixtures, observations, and `VALIDATOR_DIGEST` remain byte-for-byte unchanged. Its historical full-preparation command is base-bound by that frozen validator identity; the V1 runtime regression tests and zero-call canaries pass on the V2 candidate without altering the historical validator.
 
 ## Calibration answers
 
