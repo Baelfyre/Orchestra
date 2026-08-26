@@ -43,10 +43,6 @@ def evaluate_candidate_transition(snapshot, autonomy_validator):
     if profile not in autonomy_validator.PROFILES:
         return "STOP"
 
-    # Reuse the existing autonomy evaluator for authority, profile, parent/child,
-    # continuity, repository-policy, bypass, and evidence guards. A read-only
-    # validation action is permitted by every valid Governance Profile and does
-    # not create a second autonomy engine here.
     guard_snapshot = copy.deepcopy(snapshot)
     guard_snapshot["action"] = "validate"
     guard = autonomy_validator.evaluate(guard_snapshot)
@@ -57,7 +53,6 @@ def evaluate_candidate_transition(snapshot, autonomy_validator):
     state = str(snapshot.get("candidate_state", ""))
     if (previous_state, state) not in ALLOWED_TRANSITIONS:
         return "STOP"
-
     if snapshot.get("candidate_identity_current") is not True:
         return "WAIT_FOR_EVIDENCE"
 
@@ -74,6 +69,15 @@ def evaluate_candidate_transition(snapshot, autonomy_validator):
         return "AUTO_CONTINUE"
 
     if previous_state == "FROZEN_CANDIDATE":
+        if snapshot.get("qualification_evidence_current") is not True:
+            return "WAIT_FOR_EVIDENCE"
+        qualification = str(snapshot.get("qualification_disposition", ""))
+        if qualification == "QUALIFICATION_PENDING":
+            return "WAIT_FOR_EVIDENCE"
+        if qualification == "BLOCKED":
+            return "STOP"
+        if qualification != "QUALIFIED":
+            return "STOP"
         if snapshot.get("acceptance_decision_current") is not True:
             return "ESCALATE_HUMAN"
         if snapshot.get("acceptance_decision_human_owned") is not True:
@@ -81,26 +85,19 @@ def evaluate_candidate_transition(snapshot, autonomy_validator):
         return "AUTO_CONTINUE"
 
     if previous_state == "ACCEPTED":
-        if snapshot.get("qualification_evidence_current") is not True:
+        if snapshot.get("merge_readiness_evidence_current") is not True:
             return "WAIT_FOR_EVIDENCE"
         if profile == "HUMAN_GOVERNED" and snapshot.get("major_phase_progression_authorized") is not True:
             return "ESCALATE_HUMAN"
         return "AUTO_CONTINUE"
 
     if previous_state == "MERGE_READY":
-        # A human or external merge may be recorded after it is independently
-        # observed. This records fact; it does not authorize the merge.
         if snapshot.get("merge_applied_observed") is True:
             return "AUTO_CONTINUE"
         if profile != "FULL_AUTONOMOUS":
             return "ESCALATE_HUMAN"
         if snapshot.get("exact_candidate_pr_merge_grant") is not True:
             return "ESCALATE_HUMAN"
-
-        # Full Autonomous still uses the existing merge evaluator. Therefore
-        # Squash, exact-head evidence, repository/project policy, host support,
-        # bypass, write verification, and explicit action grant remain owned by
-        # the established Governed Autonomy Modes contract.
         merge_snapshot = copy.deepcopy(snapshot)
         merge_snapshot["action"] = "merge"
         return autonomy_validator.evaluate(merge_snapshot)
@@ -118,7 +115,6 @@ def evaluate_candidate_transition(snapshot, autonomy_validator):
         if snapshot.get("retirement_grants_branch_deletion") is not False:
             return "STOP"
         return "AUTO_CONTINUE"
-
     return "STOP"
 
 
@@ -126,17 +122,14 @@ def validate_fixture(data, autonomy_validator):
     errors = []
     if data.get("schema_version") != SCHEMA_VERSION:
         errors.append(f"schema_version must equal {SCHEMA_VERSION}")
-
     base = data.get("base_transition_snapshot")
     if not isinstance(base, dict):
         errors.append("base_transition_snapshot must be an object")
         return errors
-
     cases = data.get("cases")
     if not isinstance(cases, list) or not cases:
         errors.append("cases must be a non-empty list")
         return errors
-
     seen = set()
     for case in cases:
         case_id = str(case.get("id", ""))
@@ -161,11 +154,12 @@ def validate(root):
     maturity_path = root / "docs/governance/CANDIDATE_MATURITY_FEATURE_FREEZE.md"
     autonomy_path = root / "docs/governance/GOVERNED_AUTONOMY_MODES.md"
     protocol_path = root / "docs/governance/GOVERNED_AUTONOMOUS_EXECUTION_PROTOCOL.md"
+    qualification_path = root / "docs/governance/QUALIFICATION_GATES_EVALUATION_AUDIT.md"
 
     errors = []
-    for path in (fixture_path, integration_path, maturity_path, autonomy_path, protocol_path):
+    for path in (fixture_path, integration_path, maturity_path, autonomy_path, protocol_path, qualification_path):
         if not path.is_file():
-            errors.append(f"missing required Campaign 3 surface: {path.relative_to(root)}")
+            errors.append(f"missing required lifecycle surface: {path.relative_to(root)}")
     if errors:
         return errors
 
@@ -173,16 +167,16 @@ def validate(root):
         data = json.loads(fixture_path.read_text(encoding="utf-8"))
         autonomy_validator = load_autonomy_validator(root)
     except Exception as exc:
-        return [f"Campaign 3 parse/import failure: {exc}"]
+        return [f"candidate lifecycle parse/import failure: {exc}"]
 
-    base_errors = autonomy_validator.validate(root)
-    errors.extend(f"base autonomy contract: {error}" for error in base_errors)
+    errors.extend(f"base autonomy contract: {error}" for error in autonomy_validator.validate(root))
     errors.extend(validate_fixture(data, autonomy_validator))
 
     integration = integration_path.read_text(encoding="utf-8")
     maturity = maturity_path.read_text(encoding="utf-8")
     autonomy = autonomy_path.read_text(encoding="utf-8")
     protocol = protocol_path.read_text(encoding="utf-8")
+    qualification = qualification_path.read_text(encoding="utf-8")
 
     for term in (
         "AUTONOMY_CHANGES_PAUSES_NOT_PREREQUISITES",
@@ -194,24 +188,15 @@ def validate(root):
     ):
         if term not in integration:
             errors.append(f"candidate lifecycle integration missing invariant: {term}")
-
-    for term in (
-        "PROPOSED",
-        "FROZEN_CANDIDATE",
-        "ACCEPTED",
-        "MERGE_READY",
-        "MERGE_APPLIED_UNVERIFIED",
-        "MERGED_VERIFIED",
-        "RETIRED",
-    ):
+    for term in ("PROPOSED", "FROZEN_CANDIDATE", "ACCEPTED", "MERGE_READY", "MERGE_APPLIED_UNVERIFIED", "MERGED_VERIFIED", "RETIRED"):
         if term not in maturity:
             errors.append(f"candidate maturity contract missing state: {term}")
-
     if "Governed Autonomy Candidate Lifecycle Integration" not in autonomy:
-        errors.append("Governed Autonomy Modes missing Campaign 3 integration reference")
+        errors.append("Governed Autonomy Modes missing lifecycle integration reference")
     if "Candidate-maturity integration" not in protocol:
-        errors.append("Governed Autonomous Execution Protocol missing Campaign 3 integration section")
-
+        errors.append("Governed Autonomous Execution Protocol missing lifecycle integration section")
+    if "QUALIFIED != ACCEPTED" not in qualification:
+        errors.append("qualification policy missing acceptance separation")
     return errors
 
 
