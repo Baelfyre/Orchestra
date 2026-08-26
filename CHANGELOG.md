@@ -6,6 +6,7 @@ This root changelog is release-oriented. Detailed pre-v1.7 development chronolog
 
 - Added the UIX-9B V2 deterministic live-proof evaluator, frozen calibration cases, isolated UI fixture, machine contracts, zero-call adjudication path, and human authorization envelope.
 - Corrected the UIX-9A and UIX-9B preparation runners to bind the frozen canonical SHA to `origin/main`, allowing a validated preparation candidate to run ahead on its isolated branch without changing frozen proof identities.
+- Reconciled the autonomous merge-readiness contract with the maintainer-approved required-check profile: one `native-ubuntu-latest` context and `Compatibility CodeQL (python)` as the required analysis context; duplicate Ubuntu contexts and retired `Analyze (actions)` / `Analyze (python)` required contexts are now modeled as policy drift.
 
 ## v1.7.0 - Adaptive Intelligence, Portable Memory & Design Fidelity
 
