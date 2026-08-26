@@ -1,8 +1,8 @@
 # UIX-9B V2 Live Call Authorization Request
 
-Status: `PENDING_HUMAN_AUTHORIZATION`
+Status: `APPROVED`
 
-This is a request record only. It does not authorize UIX-9C execution.
+The maintainer explicitly authorized proceeding with the remaining UIX testing in the active governance thread on 2026-08-27. This authorization applies only to the frozen UIX-9C V2 campaign below. It does not authorize merge, release, deployment, policy activation, destructive cleanup, external repository mutation, or any scope expansion.
 
 ## Frozen execution identity
 
@@ -24,7 +24,9 @@ REPETITIONS_PER_ARM=3
 EXECUTION_ORDER=A1_B1__B2_A2__A3_B3
 ```
 
-## Proposed ceilings and accounting
+The provider does not expose a more specific immutable model revision through the validated Codex host surface. The frozen model identity remains `gpt-5.6-luna`; provider/model substitution is prohibited. The legacy model-revision field is retained unchanged so the approved envelope does not rewrite the preregistered experiment identity.
+
+## Approved ceilings and accounting
 
 ```text
 MAX_MODEL_CALLS_PER_RUN=1
@@ -32,6 +34,7 @@ MAX_TOTAL_MODEL_CALLS=6
 MAX_EXPERIMENTAL_PROVIDER_CALLS=6
 MAX_NONEXPERIMENTAL_AVAILABILITY_PROBES=1
 MAX_TOTAL_PROVIDER_INTERACTIONS=7
+MAX_NEW_LIVE_CALLS=6
 TOKEN_OR_COMPUTE_CEILING=MAX_TOTAL_TOKENS_120000_MAX_PER_RUN_20000
 PER_RUN_TIMEOUT_SECONDS=900
 TOTAL_CAMPAIGN_TIMEOUT_SECONDS=7200
@@ -39,7 +42,7 @@ MAX_RETRIES_FOR_INVALID_INFRASTRUCTURE_RUN=1
 MAX_EXTERNAL_REPO_MUTATIONS=0
 ```
 
-Historical counters are `6` experimental model calls, `6` experimental provider calls, `1` nonexperimental availability probe, `7` total provider interactions, and `0` invalid-infrastructure retries. New-campaign authorization counters are all zero.
+Historical counters remain `6` experimental model calls, `6` experimental provider calls, `1` nonexperimental availability probe, `7` total provider interactions, and `0` invalid-infrastructure retries. New-campaign authorization counters start at zero and may advance only through the frozen V2 runner.
 
 ## Endpoints and policies
 
@@ -62,13 +65,13 @@ Stop on any frozen identity mismatch, hard-guardrail regression, protocol breach
 ## Current authority record
 
 ```text
-LIVE_MODEL_CALLS_AUTHORIZED=false
-PROVIDER_CALLS_AUTHORIZED=false
-UIX_9C_EXECUTION_AUTHORIZED=false
-MAX_NEW_LIVE_CALLS=0
+LIVE_MODEL_CALLS_AUTHORIZED=true
+PROVIDER_CALLS_AUTHORIZED=true
+UIX_9C_EXECUTION_AUTHORIZED=true
+MAX_NEW_LIVE_CALLS=6
 BENEFIT_CLAIM=NONE
 HARM_CLAIM=NONE
 DIRECTIONAL_MODEL_BEHAVIOR_CLAIM=NONE
 ```
 
-Human approval would have to explicitly change this request record and independently authorize the next execution phase. This preparation turn does not do so.
+This authorization enables only the frozen six-session V2 execution path and still requires the runner's explicit `--execution-mode live --live-call-gate` invocation. Authorization does not itself constitute execution evidence or a scientific result.
