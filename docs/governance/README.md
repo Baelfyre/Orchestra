@@ -27,9 +27,14 @@ For human explanation, operating modes, risk scaling, governance roles, and usag
 - [Orchestra Prime Directive](ORCHESTRA_PRIME_DIRECTIVE.md)
 - [Feature Admission Policy](FEATURE_ADMISSION_POLICY.md)
 - [Candidate Maturity and Feature Freeze](CANDIDATE_MATURITY_FEATURE_FREEZE.md)
+- [Governed Autonomy Modes](GOVERNED_AUTONOMY_MODES.md)
+- [Governed Autonomous Execution Protocol](GOVERNED_AUTONOMOUS_EXECUTION_PROTOCOL.md)
+- [Governed Autonomy Candidate Lifecycle Integration](GOVERNED_AUTONOMY_CANDIDATE_LIFECYCLE_INTEGRATION.md)
 - [Governance Layer](GOVERNANCE_LAYER.md)
 - [Autonomous Merge Readiness Protocol](AUTONOMOUS_MERGE_READINESS_PROTOCOL.md)
 - [Compliance Registry Integration](COMPLIANCE_REGISTRY_INTEGRATION.md)
+
+The autonomy candidate-lifecycle integration is intentionally thin: it reuses the existing autonomy evaluator to decide whether an already-valid candidate transition needs another human pause. It does not create feature-adoption authority, merge authority, persistence authority, or branch-deletion authority.
 
 Older wording in human governance documents may describe Markdown as the primary governance artifact format. That describes the human instruction layer, not the current authority of structured machine state. Current representation policy is:
 
