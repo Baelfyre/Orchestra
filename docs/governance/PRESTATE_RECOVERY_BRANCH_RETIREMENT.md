@@ -10,6 +10,7 @@
 Campaign 5 defines a recoverable merge boundary and a conservative branch-retirement policy without creating a cleanup bot or a rollback mechanism that rewrites canonical history.
 
 ```text
+RECOVERY_STRATEGY = FORWARD_ONLY
 PRESTATE_EVIDENCE != RECOVERY_AUTHORITY
 RECOVERY_PLAN != RECOVERY_EXECUTION_AUTHORITY
 RETIREMENT_ELIGIBLE != BRANCH_DELETION_AUTHORITY
