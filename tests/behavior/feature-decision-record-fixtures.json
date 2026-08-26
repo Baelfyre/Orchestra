@@ -43,6 +43,7 @@
     "source_identity": {
       "repository": "Baelfyre/Orchestra",
       "base_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "base_tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
       "policy_refs": [
         "docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md",
         "docs/governance/FEATURE_ADMISSION_POLICY.md"
@@ -117,8 +118,11 @@
     {"id": "record-claims-authority", "set": {"authority.record_grants_authority": true}},
     {"id": "admission-claims-merge-authority", "set": {"authority.admission_grants_merge_authority": true}},
     {"id": "bad-base-sha", "set": {"source_identity.base_sha": "not-a-sha"}},
+    {"id": "bad-base-tree", "set": {"source_identity.base_tree": "not-a-tree"}},
     {"id": "unknown-admission", "set": {"admission.disposition": "IMPLEMENT"}},
     {"id": "missing-ownership-rationale", "delete": ["proposal.orchestra_ownership_rationale"]},
+    {"id": "missing-prime-directive-policy-ref", "set": {"source_identity.policy_refs": ["docs/governance/FEATURE_ADMISSION_POLICY.md", "docs/governance/GOVERNANCE_LAYER.md"]}},
+    {"id": "missing-feature-admission-policy-ref", "set": {"source_identity.policy_refs": ["docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md", "docs/governance/GOVERNANCE_LAYER.md"]}},
     {
       "id": "decided-promotion-without-evidence",
       "overrides": {
