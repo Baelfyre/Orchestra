@@ -1,0 +1,38 @@
+{
+  "100": {
+    "append": {
+      "p50_ms": 5.704,
+      "p95_ms": 8.518
+    },
+    "context_compilation": {
+      "p50_ms": 13.787,
+      "p95_ms": 15.93
+    },
+    "profile_compilation": {
+      "p50_ms": 14.667,
+      "p95_ms": 15.205
+    },
+    "store_load": {
+      "p50_ms": 7.278,
+      "p95_ms": 7.554
+    }
+  },
+  "1000": {
+    "append": {
+      "p50_ms": 38.36,
+      "p95_ms": 150.283
+    },
+    "context_compilation": {
+      "p50_ms": 177.089,
+      "p95_ms": 222.847
+    },
+    "profile_compilation": {
+      "p50_ms": 215.176,
+      "p95_ms": 249.0
+    },
+    "store_load": {
+      "p50_ms": 141.574,
+      "p95_ms": 199.197
+    }
+  }
+}

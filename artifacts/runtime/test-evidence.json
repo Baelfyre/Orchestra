@@ -1,0 +1,44 @@
+{
+  "coverage": {
+    "branch_gate_enabled": true,
+    "branch_percent": 95.04,
+    "branches": 3526,
+    "covered_branches": 3351,
+    "covered_statements": 10094,
+    "minimum_branch_coverage": 95.0,
+    "minimum_statement_coverage": 97.0,
+    "missing_branches": 175,
+    "missing_statements": 175,
+    "statement_percent": 98.3,
+    "statements": 10269
+  },
+  "generated_at": "2026-08-26T12:20:57Z",
+  "reports": {
+    "coverage_json": "coverage.json",
+    "coverage_json_sha256": "5e1dcfb6c41c2d79df88f2ff233195084cc95abd02920d5bb4c681306a5f1f69",
+    "junit_xml": "runtime-junit.xml",
+    "junit_xml_sha256": "dd40d886d69425b663a4dc68c9c8174e7caec9826b4f340768c51b8ecac688a5"
+  },
+  "repository": "unknown/unknown",
+  "result": "PASS",
+  "runtime": {
+    "python_version": "3.12.10",
+    "test_outcome": "success"
+  },
+  "schema_version": "orchestra.test-evidence.v1",
+  "source_head_sha": "7e08a1d4aa09cbdf7632f5a86461fb3cd3e50fe9",
+  "tested_sha": "7e08a1d4aa09cbdf7632f5a86461fb3cd3e50fe9",
+  "tests": {
+    "errors": 0,
+    "failures": 0,
+    "passed": 1735,
+    "skipped": 0,
+    "total": 1735
+  },
+  "workflow": {
+    "event_name": "local",
+    "ref_name": "local",
+    "run_attempt": "1",
+    "run_id": "local"
+  }
+}

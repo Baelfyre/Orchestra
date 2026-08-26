@@ -1,0 +1,143 @@
+{
+  "artifact": "ORCHESTRA_ADAPTIVE_SELF_LEARNING_EFFICACY_BASELINE",
+  "generated_at": "2026-08-26T12:34:39Z",
+  "repository": "Baelfyre/Orchestra",
+  "baseline": {
+    "canonical_ref": "origin/main",
+    "canonical_head_sha": "7e08a1d4aa09cbdf7632f5a86461fb3cd3e50fe9",
+    "canonical_tree_sha": "76402a7557b5dd4a27f723c810429111437d89ab",
+    "test_branch": "test/adaptive-self-learning-efficacy-20260826",
+    "test_head_sha": "5014110aff5be1a9ea9742cf8411c762e54c56c2",
+    "test_tree_sha": "9310d4f37471958adff639b6660b511fe51f45cb",
+    "test_commit_signature": "G",
+    "production_files_changed": []
+  },
+  "implementation": {
+    "mode": "TEST_ONLY",
+    "test_files": [
+      "tests/runtime/test_adaptive_efficacy_baseline.py",
+      "tests/runtime/test_adaptive_autonomy_baseline.py"
+    ],
+    "runtime_files_changed": [],
+    "configuration_files_changed": [],
+    "dependencies_changed": false
+  },
+  "contractual_scenarios": {
+    "total": 36,
+    "passed": 36,
+    "failed": 0,
+    "pass_rate": 1.0,
+    "groups": {
+      "A_persistence_recovery": {"total": 6, "passed": 6},
+      "B_scope_precedence": {"total": 6, "passed": 6},
+      "C_shadow_learning": {"total": 6, "passed": 6},
+      "D_governance_authority": {"total": 5, "passed": 5},
+      "E_privacy_isolation": {"total": 5, "passed": 5},
+      "F_runtime_integration": {"total": 5, "passed": 5},
+      "G_portable_memory_determinism": {"total": 3, "passed": 3}
+    }
+  },
+  "autonomy_probes": {
+    "total": 4,
+    "classifications": {
+      "H01": "NOT_AUTO_OBSERVED",
+      "H02": "NOT_AUTO_OBSERVED",
+      "H03": "NOT_AUTO_OBSERVED",
+      "H04": "NOT_AUTO_OBSERVED"
+    },
+    "result": "AUTO_OBSERVATION_NOT_INTEGRATED",
+    "ordinary_runtime_interactions_recorded_without_explicit_adaptive_api": false,
+    "automatic_observer_bridge_found": false
+  },
+  "repeats": {
+    "repeat_count": 10,
+    "scenario_executions": 400,
+    "passed_executions": 400,
+    "failed_executions": 0,
+    "flake_count": 0,
+    "repeat_junit_files": 10,
+    "repeat_junit_case_count_each": 40,
+    "deterministic_repeatability": 1.0
+  },
+  "efficacy_metrics": {
+    "persistence_recovery_rate": 1.0,
+    "tamper_detection_rate": 1.0,
+    "duplicate_overcount_rate": 0.0,
+    "cross_user_leakage_count": 0,
+    "cross_project_leakage_count": 0,
+    "cross_specialist_leakage_count": 0,
+    "cross_session_leakage_count": 0,
+    "raw_conversation_retention_count": 0,
+    "shadow_influenced_execution_count": 0,
+    "automatic_promotion_count": 0,
+    "authority_or_delegation_influence_count": 0
+  },
+  "regression_validation": {
+    "adaptive_regression_command": "python -m pytest tests/runtime/test_adaptive_*.py tests/runtime/test_portable_memory_backend.py tests/runtime/test_registry_adaptive.py tests/runtime/test_registry_adaptive_edges.py tests/runtime/test_canonical_promotion_authority.py -q",
+    "adaptive_regression_passed": 257,
+    "adaptive_regression_failed": 0,
+    "local_behavior_gate": "PASS",
+    "local_behavior_gate_baseline_sha": "7e08a1d4aa09cbdf7632f5a86461fb3cd3e50fe9"
+  },
+  "runtime_gate": {
+    "pytest_command": "python -m pytest tests/runtime --cov=orchestra_runtime --cov-branch --cov-report=term-missing --cov-report=json:artifacts/runtime/coverage.json --junitxml=artifacts/runtime/runtime-junit.xml --cov-fail-under=0",
+    "pytest_collected": 1725,
+    "pytest_passed": 1725,
+    "pytest_failed": 0,
+    "pytest_errors": 0,
+    "statement_percent": 98.3,
+    "branch_percent": 95.04,
+    "test_evidence_result": "PASS",
+    "critical_inventory_ready": true,
+    "critical_inventory_failures": [],
+    "junit_root_tests_attribute": 1735,
+    "junit_testcase_elements": 1725,
+    "evidence_count_discrepancy": true
+  },
+  "performance": {
+    "thresholds_applied": false,
+    "N=100": {
+      "append_ms_p50": 5.704,
+      "append_ms_p95": 8.518,
+      "store_load_ms_p50": 7.278,
+      "store_load_ms_p95": 7.554,
+      "profile_compilation_ms_p50": 14.667,
+      "profile_compilation_ms_p95": 15.205,
+      "context_compilation_ms_p50": 13.787,
+      "context_compilation_ms_p95": 15.93
+    },
+    "N=1000": {
+      "append_ms_p50": 38.36,
+      "append_ms_p95": 150.283,
+      "store_load_ms_p50": 141.574,
+      "store_load_ms_p95": 199.197,
+      "profile_compilation_ms_p50": 215.176,
+      "profile_compilation_ms_p95": 249.0,
+      "context_compilation_ms_p50": 177.089,
+      "context_compilation_ms_p95": 222.847
+    }
+  },
+  "remote_validation": {
+    "push_performed": true,
+    "workflow": "validate.yml",
+    "dispatch_performed": true,
+    "run_id": 32968748794,
+    "run_url": "https://github.com/Baelfyre/Orchestra/actions/runs/32968748794",
+    "tested_head_sha": "5014110aff5be1a9ea9742cf8411c762e54c56c2",
+    "conclusion": "failure",
+    "jobs": {
+      "runtime-tests": "success",
+      "validate": "failure"
+    },
+    "validate_failure": "tests/behavior/run_tests.py requires ORCHESTRA_APPROVED_BASE_SHA for workflow-dispatch validation; validate.yml provides no dispatch input for it",
+    "runtime_job_passed_exact_head": true
+  },
+  "warnings": [
+    "One parallel repeat emitted a non-failing Windows pytest temporary-directory cleanup warning (WinError 145); all 400 scenario executions passed and no flake was counted.",
+    "The runtime JUnit root tests attribute and test_evidence total are 1735, while pytest collected/passed 1725 and the XML contains 1725 testcase elements. The discrepancy is preserved as evidence and was not normalized.",
+    "Remote validate.yml overall conclusion is failure because the dispatch-only approved-baseline environment is missing; the independent remote runtime-tests job passed."
+  ],
+  "verdict": "EFFICACY_BASELINE_PASS",
+  "autonomy_verdict": "AUTO_OBSERVATION_NOT_INTEGRATED",
+  "next_action": "Separately authorize any automatic observer integration, then rerun this unchanged baseline to measure the transition from NOT_AUTO_OBSERVED. No production fix was made by this assessment."
+}
