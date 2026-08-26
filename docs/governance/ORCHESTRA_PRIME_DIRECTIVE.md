@@ -1,8 +1,8 @@
 # Orchestra Prime Directive
 
-**Contract:** `ORCHESTRA_PRIME_DIRECTIVE_V1`  
-**Role:** Constitutional governance policy for Orchestra  
-**Authority class:** `HUMAN_POLICY`  
+**Contract:** `ORCHESTRA_PRIME_DIRECTIVE_V1`
+**Role:** Constitutional governance policy for Orchestra
+**Authority class:** `HUMAN_POLICY`
 **Runtime authority:** None created by this document
 
 ## Purpose
