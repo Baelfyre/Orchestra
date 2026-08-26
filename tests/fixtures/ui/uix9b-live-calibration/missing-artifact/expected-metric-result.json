@@ -1,0 +1,6 @@
+{
+  "status": "FAIL_CLOSED",
+  "candidate_tree_digest": "280f1361eda45c2b632c37dd049ec47dec81ab1e8e9e81c61a7aa0d9fb96b978",
+  "metric_result_digest": "276d8ee95e8df426ed6533651023816b0d9dd0768dce31b20cd0583ae07e8cf0",
+  "failure_codes": ["MISSING_VALIDATOR_RESULT"]
+}

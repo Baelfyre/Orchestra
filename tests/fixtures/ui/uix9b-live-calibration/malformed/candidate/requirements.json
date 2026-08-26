@@ -1,0 +1,36 @@
+{
+  "$schema": "./validation-contract.json",
+  "project_id": "uix9b-live-project",
+  "requirements_revision": invalid-json,
+  "task_id": "uix9b-work-queue-screen",
+  "reference_identity": "uix9b-operations-workspace-reference-v1",
+  "source_provider": "PROJECT_NATIVE",
+  "permitted_dependencies": {
+    "runtime": [],
+    "development": [],
+    "allowed_platform": ["node-builtins"]
+  },
+  "required_components": [
+    "AppShell", "Sidebar", "PageHeader", "Button", "StatusBadge",
+    "StatCard", "DataTable", "Alert", "EmptyState", "Drawer", "Card",
+    "FormField"
+  ],
+  "required_states": ["DEFAULT", "LOADING", "EMPTY", "ERROR", "POPULATED"],
+  "required_viewports": ["mobile", "tablet", "desktop"],
+  "required_themes": ["light", "dark"],
+  "hard_guardrails": [
+    "ACCESSIBILITY_INVARIANTS",
+    "RESPONSIVE_CONTAINMENT",
+    "REFERENCE_IDENTITY",
+    "VISUAL_BASELINE_PRESERVATION",
+    "ASSET_PROVENANCE",
+    "DEPENDENCY_BOUNDARY",
+    "EXTERNAL_MUTATION_BOUNDARY"
+  ],
+  "authority": {
+    "implementation_authorized_for_fixture": true,
+    "live_model_calls_authorized": false,
+    "provider_calls_authorized": false,
+    "external_repo_mutations_authorized": false
+  }
+}

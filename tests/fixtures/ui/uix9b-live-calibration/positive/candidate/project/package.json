@@ -1,0 +1,12 @@
+{
+  "name": "uix9b-live-project",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {"node": ">=22"},
+  "scripts": {
+    "typecheck": "node scripts/typecheck.mjs",
+    "test": "node --test tests/project-contract.test.mjs",
+    "build": "node scripts/build.mjs"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/uix9b-live-proof-result.v2.schema.json",
+  "title": "Orchestra UIX-9B V2 Live Proof Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "role", "result_classification", "observations_count", "valid_executions_counted", "failure_codes", "model_behavior_claim", "benefit_claim", "harm_claim"],
+  "properties": {
+    "$schema": {"const": "../../../machine/schemas/uix9b-live-proof-result.v2.schema.json"},
+    "schema_version": {"const": "orchestra.uix9b.live-proof-result.v2"},
+    "role": {"const": "UIX_9B_LIVE_PROOF_RESULT"},
+    "result_classification": {"enum": ["BENEFIT_ESTABLISHED", "NO_BENEFIT_ESTABLISHED", "MIXED_OR_INCONCLUSIVE", "PROTOCOL_INVALID"]},
+    "observations_count": {"type": "integer", "minimum": 0},
+    "valid_executions_counted": {"type": "integer", "minimum": 0, "maximum": 6},
+    "failure_codes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "model_behavior_claim": {"const": "NONE"},
+    "benefit_claim": {"const": "NONE"},
+    "harm_claim": {"const": "NONE"}
+  }
+}

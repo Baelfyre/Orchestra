@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/uix9b-live-metric-result.v2.schema.json",
+  "title": "Orchestra UIX-9B V2 Frozen Metric Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "role", "evaluator_version", "evaluator_digest", "fixture_digest", "task_digest", "validator_digest", "uix_guidance_digest", "candidate_tree_digest", "metric_result_digest", "status", "failure_codes", "metrics", "deterministic"],
+  "properties": {
+    "$schema": {"const": "../../../machine/schemas/uix9b-live-metric-result.v2.schema.json"},
+    "schema_version": {"const": "orchestra.uix9b-live-metric-result.v2"},
+    "role": {"const": "UIX_9B_LIVE_METRIC_RESULT"},
+    "evaluator_version": {"type": "string", "minLength": 1},
+    "evaluator_digest": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "fixture_digest": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "task_digest": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "validator_digest": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "uix_guidance_digest": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "candidate_tree_digest": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "metric_result_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "status": {"enum": ["PASS", "FAIL_CLOSED"]},
+    "failure_codes": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "metrics": {"anyOf": [{"$ref": "#/$defs/primaryMetrics"}, {"type": "null"}]},
+    "deterministic": {"const": true}
+  },
+  "$defs": {
+    "primaryMetrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["COMPONENT_REUSE", "DUPLICATE_COMPONENT_COUNT", "TOKEN_VIOLATIONS", "ARBITRARY_STYLE_DRIFT", "STATE_COVERAGE", "ASSET_PROVENANCE", "ASSET_SUBSTITUTION", "RESPONSIVE_CONTAINMENT", "ACCESSIBILITY_INVARIANTS", "UNRESOLVED_MAPPINGS", "REVISION_MISMATCH", "VISUAL_BASELINE_REPLACEMENT", "DETERMINISTIC_ACCEPTANCE"],
+      "properties": {
+        "COMPONENT_REUSE": {"type": "boolean"},
+        "DUPLICATE_COMPONENT_COUNT": {"type": "integer", "minimum": 0},
+        "TOKEN_VIOLATIONS": {"type": "integer", "minimum": 0},
+        "ARBITRARY_STYLE_DRIFT": {"type": "integer", "minimum": 0},
+        "STATE_COVERAGE": {"type": "number", "minimum": 0, "maximum": 1},
+        "ASSET_PROVENANCE": {"type": "boolean"},
+        "ASSET_SUBSTITUTION": {"type": "boolean"},
+        "RESPONSIVE_CONTAINMENT": {"type": "boolean"},
+        "ACCESSIBILITY_INVARIANTS": {"type": "boolean"},
+        "UNRESOLVED_MAPPINGS": {"type": "integer", "minimum": 0},
+        "REVISION_MISMATCH": {"type": "boolean"},
+        "VISUAL_BASELINE_REPLACEMENT": {"type": "boolean"},
+        "DETERMINISTIC_ACCEPTANCE": {"type": "boolean"}
+      }
+    }
+  }
+}

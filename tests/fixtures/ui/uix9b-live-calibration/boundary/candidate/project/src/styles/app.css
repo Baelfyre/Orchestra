@@ -1,0 +1,25 @@
+* { box-sizing: border-box; }
+body { background: var(--color-surface-canvas); color: var(--color-content-primary); font-family: var(--font-family-sans); font-size: var(--font-size-md); line-height: var(--line-body); margin: 0; }
+button, input { font: inherit; }
+:focus-visible { outline: var(--color-focus-ring); }
+.app-shell { display: grid; }
+.sidebar { background: var(--color-surface-panel); border-color: var(--color-border-subtle); padding: var(--space-4); }
+.brand { color: var(--color-content-primary); display: inline-flex; font-weight: var(--font-weight-bold); gap: var(--space-2); }
+.sidebar-nav { display: flex; gap: var(--space-2); margin-top: var(--space-4); overflow-x: auto; }
+.nav-link { border-radius: var(--radius-sm); color: var(--color-content-secondary); padding: var(--space-2) var(--space-3); }
+.app-main { min-width: 0; padding: var(--space-5); }
+.screen { margin: 0 auto; max-width: 100%; }
+.page-header { display: flex; gap: var(--space-4); justify-content: space-between; margin-bottom: var(--space-6); }
+.page-header h1 { font-size: var(--font-size-xl); margin: 0; }
+.card { background: var(--color-surface-panel); border-color: var(--color-border-subtle); border-radius: var(--radius-lg); padding: var(--space-5); }
+.button { border-color: var(--color-border-subtle); border-radius: var(--radius-sm); font-weight: var(--font-weight-medium); padding: var(--space-2) var(--space-4); }
+.button-primary { background: var(--color-action-primary); color: var(--color-content-inverse); }
+.alert { border-color: var(--color-border-subtle); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); }
+.data-table { border-collapse: collapse; min-width: 100%; }
+.data-table th, .data-table td { border-color: var(--color-border-subtle); padding: var(--space-3); }
+.drawer { border-color: var(--color-border-subtle); border-radius: var(--radius-lg); color: var(--color-content-primary); max-width: 100%; }
+
+@media (min-width: 768px) { .app-main { padding: var(--space-8); } }
+@media (min-width: 1024px) { .app-shell { display: grid; } }
+@media (prefers-reduced-motion: reduce) { * { transition-duration: var(--duration-fast); } }
+@media (forced-colors: active) { .button, .card, .alert, .drawer { border-color: ButtonText; } }
