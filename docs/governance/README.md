@@ -8,10 +8,13 @@ The stable constitutional boundary for Orchestra is defined by:
 
 - [Orchestra Prime Directive](ORCHESTRA_PRIME_DIRECTIVE.md)
 - [Feature Admission Policy](FEATURE_ADMISSION_POLICY.md)
+- [Candidate Maturity and Feature Freeze](CANDIDATE_MATURITY_FEATURE_FREEZE.md)
 
 The Prime Directive defines the authority, evidence, specialist-ownership, autonomy, adaptive-intelligence, recovery, and self-amendment invariants that subordinate policies must preserve. Feature Admission adds the separate product/value decision required before new permanent complexity is promoted.
 
 The `FeatureDecisionRecord` machine schema validates record completeness and non-authority boundaries. It does not decide whether Orchestra should own a capability and does not create implementation, merge, release, deployment, policy-activation, or destructive-action authority.
+
+The `CandidateMaturityRecord` schema adds development-candidate maturity and exact Feature Freeze identity without replacing the runtime lifecycle controller. Frozen state, acceptance, and merge readiness remain evidence states rather than authority grants.
 
 ## Current authority split
 
@@ -23,6 +26,7 @@ For human explanation, operating modes, risk scaling, governance roles, and usag
 
 - [Orchestra Prime Directive](ORCHESTRA_PRIME_DIRECTIVE.md)
 - [Feature Admission Policy](FEATURE_ADMISSION_POLICY.md)
+- [Candidate Maturity and Feature Freeze](CANDIDATE_MATURITY_FEATURE_FREEZE.md)
 - [Governance Layer](GOVERNANCE_LAYER.md)
 - [Autonomous Merge Readiness Protocol](AUTONOMOUS_MERGE_READINESS_PROTOCOL.md)
 - [Compliance Registry Integration](COMPLIANCE_REGISTRY_INTEGRATION.md)
