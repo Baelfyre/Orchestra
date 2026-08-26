@@ -103,3 +103,4 @@ See [Orchestra v1.0.0](https://github.com/Baelfyre/Orchestra/releases/tag/v1.0.0
 ## Earlier repository history
 
 Pre-v1.0 implementation detail and all detailed candidate chronology remain available in the [historical detailed changelog](docs/history/CHANGELOG_PRE_V1_7.md), Git history, `DECISION_LOG.md`, `PROJECT_STATE.md`, validation records, and merged pull requests.
+
