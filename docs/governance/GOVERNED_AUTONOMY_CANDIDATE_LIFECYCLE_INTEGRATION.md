@@ -1,12 +1,12 @@
 # Governed Autonomy Candidate Lifecycle Integration
 
 **Contract:** `ORCHESTRA_GOVERNED_AUTONOMY_CANDIDATE_LIFECYCLE_V1`
-**Consumes:** Governed Autonomy Modes, Governed Autonomous Execution Protocol, Candidate Maturity and Feature Freeze
+**Consumes:** Governed Autonomy Modes, Governed Autonomous Execution Protocol, Candidate Maturity and Feature Freeze, Qualification Gates/Evaluation/Independent Audit
 **Authority class:** deterministic pause/transition evaluation only; this contract creates no execution, merge, release, deployment, policy, destructive-action, or branch-deletion authority
 
 ## Purpose
 
-Campaign 3 integrates the development-candidate maturity contract with Orchestra's existing Governed Autonomy Modes without creating a second autonomy engine or a second lifecycle controller.
+Campaign 3 integrates development-candidate maturity with Orchestra's existing Governed Autonomy Modes. Campaign 4 supplies the qualification evidence that must be satisfied before the human-owned promotion/acceptance decision.
 
 The integration answers one narrow question:
 
@@ -20,7 +20,7 @@ MERGE_READY != MERGE_AUTHORITY
 RETIRED != BRANCH_DELETION_AUTHORITY
 ```
 
-The existing governed-autonomy evaluator remains the action ceiling. The Candidate Maturity contract remains the state/evidence contract. This integration is only the deterministic bridge between them.
+The existing governed-autonomy evaluator remains the action ceiling. Candidate Maturity remains the state/evidence contract. Qualification Gates define proportional evidence obligations. This integration is only the deterministic bridge between them.
 
 ## Separation of responsibilities
 
@@ -30,6 +30,9 @@ Feature Admission / human ownership judgment
 
 Candidate Maturity / Feature Freeze
         -> what exact development state and frozen identity exist
+
+Qualification Gates / Evaluation / Audit
+        -> what evidence this frozen candidate must satisfy
 
 Governed Autonomy Modes
         -> whether an otherwise-valid action needs another human pause
@@ -41,8 +44,6 @@ Candidate Lifecycle Integration
 None of these layers may infer authority from another.
 
 ## Forward candidate path
-
-The only normal forward pairs consumed from Campaign 2 are:
 
 ```text
 PROPOSED -> IMPLEMENTING
@@ -68,25 +69,34 @@ Missing admission evidence returns `WAIT_FOR_EVIDENCE`. Missing implementation a
 
 All profiles may record the freeze without another approval only when the exact candidate identity is current and the Feature Freeze is complete.
 
-Freeze completion does not prove acceptance or merge readiness.
+Freeze completion does not prove qualification, acceptance, or merge readiness.
 
 ### FROZEN_CANDIDATE -> ACCEPTED
 
-No Governance Profile may decide product ownership or feature adoption by itself.
+Qualification occurs **before** product/adoption acceptance.
 
-The transition may be recorded automatically only after a current, human-owned acceptance/promotion decision already exists. Otherwise the result is `ESCALATE_HUMAN`.
+The transition may be recorded only when:
+
+1. exact-current qualification evidence exists;
+2. its derived disposition is `QUALIFIED`; and
+3. a current human-owned acceptance/promotion decision exists.
+
+`QUALIFICATION_PENDING` returns `WAIT_FOR_EVIDENCE`. `BLOCKED` returns `STOP`. No Governance Profile may convert either state into acceptance.
 
 ```text
 FULL_AUTONOMOUS + GREEN_TESTS != ACCEPTANCE_DECISION
+QUALIFIED != ACCEPTED
 ```
+
+Full Autonomous may automate evidence collection and recording, but cannot self-adopt a capability.
 
 ### ACCEPTED -> MERGE_READY
 
-Current qualification evidence is required in every profile.
+This transition consumes **merge-readiness evidence**, not qualification evidence that was already completed before acceptance.
 
 - `HUMAN_GOVERNED`: requires an explicit major-phase progression authorization before the transition is recorded.
-- `SEMI_AUTONOMOUS`: may record `MERGE_READY` automatically when exact-current qualification evidence is complete.
-- `FULL_AUTONOMOUS`: may record `MERGE_READY` automatically when exact-current qualification evidence is complete.
+- `SEMI_AUTONOMOUS`: may record `MERGE_READY` when exact-current merge-readiness evidence is complete.
+- `FULL_AUTONOMOUS`: may record `MERGE_READY` when exact-current merge-readiness evidence is complete.
 
 This is readiness evidence only. It does not authorize merge.
 
@@ -100,7 +110,7 @@ If the merge has not yet occurred:
 - `SEMI_AUTONOMOUS`: `ESCALATE_HUMAN`.
 - `FULL_AUTONOMOUS`: may proceed only when an `EXACT_CANDIDATE_PR_MERGE_GRANT` is current and the existing governed-autonomy `merge` evaluator independently returns `AUTO_CONTINUE` for the same exact candidate state.
 
-The integration does not duplicate Squash, required-check, ruleset, evidence, host, bypass, or write-readback checks. Those remain owned by the existing autonomy and merge-readiness contracts.
+The integration does not duplicate Squash, required-check, ruleset, evidence, host, bypass, or write-readback checks.
 
 ### MERGE_APPLIED_UNVERIFIED -> MERGED_VERIFIED
 
@@ -138,20 +148,11 @@ AUTO_CONTINUE(commit_or_push)
 
 ## Protected actions
 
-Candidate maturity never absorbs the separately controlled boundaries for:
-
-- release/publication;
-- deployment/production mutation;
-- policy activation;
-- installed-integration refresh;
-- destructive operations;
-- branch deletion;
-- force push/history rewrite;
-- authority expansion.
+Candidate maturity never absorbs the separately controlled boundaries for release/publication, deployment/production mutation, policy activation, installed-integration refresh, destructive operations, branch deletion, force push/history rewrite, or authority expansion.
 
 ## Fail-closed rule
 
-Unknown profile, malformed candidate transition, invalid authority, bypass use, stale continuity, stale repository policy, stale candidate identity, missing required evidence, or unsupported transition never becomes automatic permission.
+Unknown profile, malformed candidate transition, invalid authority, bypass use, stale continuity, stale repository policy, stale candidate identity, missing required qualification/readiness evidence, or unsupported transition never becomes automatic permission.
 
 ## Contract result
 
