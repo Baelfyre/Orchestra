@@ -1,0 +1,33 @@
+{
+  "$schema": "../schemas/uix-live-proof-result.schema.json",
+  "schema_version": "orchestra.uix-live-proof-result.v1",
+  "role": "UIX_9B_LIVE_PROOF_RESULT",
+  "plan_digest": "36e1cd1a25f187b0aafe28c2458a64e39f3ec21bcdc4098b7ba704c9225da6a7",
+  "canonical_sha": "bf6f14316fa8814eeac91440c4a7d70be0d04b9e",
+  "fixture_digest": "280f1361eda45c2b632c37dd049ec47dec81ab1e8e9e81c61a7aa0d9fb96b978",
+  "task_digest": "3708f0d7d172a424ed426a6275d5012df6a11b0718ed37cba95ba0724c0c506d",
+  "validator_digest": "285494688ef105c813ef5f449f1e13b75529c8cddbf8a42ea76d283a9d5eecf3",
+  "guidance_digest": "f989ac579875fbcd349f812fa6e241ba5c8505f9f940abcb5e0e30006f1606ab",
+  "observations": ["A1", "B1", "B2", "A2", "A3", "B3"],
+  "paired_repetitions": [
+    {"pair_id": "PAIR_1", "baseline_run_id": "A1", "governed_run_id": "B1", "valid": false},
+    {"pair_id": "PAIR_2", "baseline_run_id": "A2", "governed_run_id": "B2", "valid": false},
+    {"pair_id": "PAIR_3", "baseline_run_id": "A3", "governed_run_id": "B3", "valid": false}
+  ],
+  "result_classification": "PROTOCOL_INVALID",
+  "claim_boundary": {
+    "behavior_improvement_claimed": false,
+    "model_self_rating_used": false,
+    "primary_subjective_visual_score_used": false,
+    "rationale": "Six isolated sessions completed and passed project checks, but the frozen package lacked a deterministic live-output metric evaluator. No paired result can be counted or used to infer model behavior without inventing adjudication logic after observation."
+  },
+  "authority": {
+    "live_model_calls_authorized": true,
+    "provider_calls_authorized": true,
+    "external_repo_mutations_authorized": false,
+    "release_authorized": false,
+    "deployment_authorized": false,
+    "policy_activation_authorized": false,
+    "destructive_action_authorized": false
+  }
+}

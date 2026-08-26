@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/uix9b-validator-result.v2.schema.json",
+  "title": "Orchestra UIX-9B Independent Validator Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "role", "candidate_tree_digest", "fixture_digest", "validator_digest", "dependency_manifest_digest", "asset_manifest_digest", "component_map_digest", "design_token_digest", "checks", "model_calls", "provider_calls", "network_access", "external_repo_mutations"],
+  "properties": {
+    "$schema": {"const": "../../../machine/schemas/uix9b-validator-result.v2.schema.json"},
+    "schema_version": {"const": "orchestra.uix9b-validator-result.v2"},
+    "role": {"const": "UIX_9B_INDEPENDENT_VALIDATOR_RESULT"},
+    "candidate_tree_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "fixture_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "validator_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "dependency_manifest_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "asset_manifest_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "component_map_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "design_token_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fresh_setup", "typecheck", "unit_component_tests", "production_build", "fixture_reset", "dependency_manifest_equality", "asset_manifest_equality", "component_map_equality", "design_token_equality", "validator_digest_equality", "asset_reference_integrity", "responsive_validation", "accessibility_validation", "validator_determinism"],
+      "properties": {
+        "fresh_setup": {"$ref": "#/$defs/check"},
+        "typecheck": {"$ref": "#/$defs/check"},
+        "unit_component_tests": {"$ref": "#/$defs/check"},
+        "production_build": {"$ref": "#/$defs/check"},
+        "fixture_reset": {"$ref": "#/$defs/check"},
+        "dependency_manifest_equality": {"$ref": "#/$defs/check"},
+        "asset_manifest_equality": {"$ref": "#/$defs/check"},
+        "component_map_equality": {"$ref": "#/$defs/check"},
+        "design_token_equality": {"$ref": "#/$defs/check"},
+        "validator_digest_equality": {"$ref": "#/$defs/check"},
+        "asset_reference_integrity": {"$ref": "#/$defs/check"},
+        "responsive_validation": {"$ref": "#/$defs/check"},
+        "accessibility_validation": {"$ref": "#/$defs/check"},
+        "validator_determinism": {"$ref": "#/$defs/check"}
+      }
+    },
+    "model_calls": {"const": 0},
+    "provider_calls": {"const": 0},
+    "network_access": {"const": 0},
+    "external_repo_mutations": {"const": 0}
+  },
+  "$defs": {"check": {"type": "object", "additionalProperties": false, "required": ["status", "deterministic", "details"], "properties": {"status": {"enum": ["PASS", "FAIL"]}, "deterministic": {"const": true}, "details": {"type": "string", "minLength": 1}}}}
+}

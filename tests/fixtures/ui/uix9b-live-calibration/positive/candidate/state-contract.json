@@ -1,0 +1,20 @@
+{
+  "schema_version": "uix9b.state-contract.v1",
+  "screen_id": "work-queue",
+  "reference_identity": "uix9b-operations-workspace-reference-v1",
+  "states": [
+    {"id": "DEFAULT", "entry": "initial render before data request", "required": true},
+    {"id": "LOADING", "entry": "data request pending", "required": true},
+    {"id": "EMPTY", "entry": "successful request with zero work items", "required": true},
+    {"id": "ERROR", "entry": "request failure", "required": true},
+    {"id": "POPULATED", "entry": "successful request with one or more work items", "required": true}
+  ],
+  "transition_rules": [
+    "DEFAULT_TO_LOADING",
+    "LOADING_TO_EMPTY",
+    "LOADING_TO_ERROR",
+    "LOADING_TO_POPULATED",
+    "ERROR_RETRY_TO_LOADING"
+  ],
+  "state_visibility": "visible_text_or_semantic_structure_required"
+}

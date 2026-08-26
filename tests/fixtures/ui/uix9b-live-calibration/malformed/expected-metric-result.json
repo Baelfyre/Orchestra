@@ -1,0 +1,6 @@
+{
+  "status": "FAIL_CLOSED",
+  "candidate_tree_digest": "c10e57ab3658a286e17840785dafa3df04e46e44f5a2ebcfca3b63cc48cb085d",
+  "metric_result_digest": "74c6e1a901aa32ca3e2b79026b4502b73315d7322f7c347d83dce2d0d5c07314",
+  "failure_codes": ["MALFORMED_JSON_ARTIFACT"]
+}

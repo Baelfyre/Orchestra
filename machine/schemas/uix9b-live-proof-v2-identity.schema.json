@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/uix9b-live-proof-v2-identity.schema.json",
+  "title": "Orchestra UIX-9B V2 Frozen Identity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "role", "canonical_sha", "evaluator_version", "evaluator_source", "evaluator_digest", "fixture_digest", "task_digest", "validator_digest", "uix_guidance_revision", "uix_guidance_digest", "model_calls_authorized", "provider_calls_authorized", "external_repo_mutations_authorized"],
+  "properties": {
+    "$schema": {"const": "../../../machine/schemas/uix9b-live-proof-v2-identity.schema.json"},
+    "schema_version": {"const": "uix9b.live-proof-v2-identity.v1"},
+    "role": {"const": "UIX_9B_V2_FROZEN_IDENTITY"},
+    "canonical_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "evaluator_version": {"const": "uix9b-live-metric-evaluator-v2.0.0"},
+    "evaluator_source": {"const": "scripts/uix9_live_metric_evaluator_v2.py"},
+    "evaluator_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "fixture_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "task_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "validator_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "uix_guidance_revision": {"type": "string", "minLength": 1},
+    "uix_guidance_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "model_calls_authorized": {"const": false},
+    "provider_calls_authorized": {"const": false},
+    "external_repo_mutations_authorized": {"const": false}
+  }
+}

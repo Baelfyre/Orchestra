@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/uix-live-proof-result.schema.json",
+  "title": "Orchestra UIX-9B Live Proof Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "role", "plan_digest", "canonical_sha", "fixture_digest", "task_digest", "validator_digest", "guidance_digest", "observations", "paired_repetitions", "result_classification", "claim_boundary", "authority"],
+  "properties": {
+    "$schema": {"const": "../schemas/uix-live-proof-result.schema.json"},
+    "schema_version": {"const": "orchestra.uix-live-proof-result.v1"},
+    "role": {"const": "UIX_9B_LIVE_PROOF_RESULT"},
+    "plan_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "canonical_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "fixture_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "task_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "validator_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "guidance_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "observations": {"type": "array", "minItems": 6, "maxItems": 6, "uniqueItems": true, "items": {"type": "string", "pattern": "^(A|B)[1-3]$"}},
+    "paired_repetitions": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "object", "additionalProperties": false, "required": ["pair_id", "baseline_run_id", "governed_run_id", "valid"], "properties": {"pair_id": {"enum": ["PAIR_1", "PAIR_2", "PAIR_3"]}, "baseline_run_id": {"pattern": "^A[1-3]$"}, "governed_run_id": {"pattern": "^B[1-3]$"}, "valid": {"type": "boolean"}}}},
+    "result_classification": {"enum": ["BENEFIT_ESTABLISHED", "NO_BENEFIT_ESTABLISHED", "MIXED_OR_INCONCLUSIVE", "PROTOCOL_INVALID"]},
+    "claim_boundary": {"type": "object", "additionalProperties": false, "required": ["behavior_improvement_claimed", "model_self_rating_used", "primary_subjective_visual_score_used", "rationale"], "properties": {"behavior_improvement_claimed": {"type": "boolean"}, "model_self_rating_used": {"const": false}, "primary_subjective_visual_score_used": {"const": false}, "rationale": {"type": "string", "minLength": 1}}},
+    "authority": {"type": "object", "additionalProperties": false, "required": ["live_model_calls_authorized", "provider_calls_authorized", "external_repo_mutations_authorized", "release_authorized", "deployment_authorized", "policy_activation_authorized", "destructive_action_authorized"], "properties": {"live_model_calls_authorized": {"const": true}, "provider_calls_authorized": {"const": true}, "external_repo_mutations_authorized": {"const": false}, "release_authorized": {"const": false}, "deployment_authorized": {"const": false}, "policy_activation_authorized": {"const": false}, "destructive_action_authorized": {"const": false}}}
+  }
+}
