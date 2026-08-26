@@ -1,0 +1,208 @@
+{
+  "schema_version": "orchestra-recovery-retirement-fixtures-v1",
+  "base_record": {
+    "$schema": "../schemas/repository-recovery-retirement-plan.v1.schema.json",
+    "schema_version": "orchestra.repository-recovery-retirement-plan.v1",
+    "record_type": "REPOSITORY_RECOVERY_RETIREMENT_PLAN",
+    "record_id": "recovery-retirement-example-001",
+    "candidate_id": "candidate-example-001",
+    "prestate": {
+      "repository": "Baelfyre/Orchestra",
+      "canonical_branch": "main",
+      "pre_merge_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "pre_merge_tree": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "evidence_ref": "evidence:prestate-001",
+      "risk_level": "LOW",
+      "temporary_ref_policy": "EVIDENCE_ONLY",
+      "temporary_ref_name": null,
+      "retention_days": 0,
+      "ref_reuse_prohibited": true,
+      "force_update_prohibited": true
+    },
+    "recovery": {
+      "strategy": "FORWARD_ONLY",
+      "reset_main_backward_allowed": false,
+      "force_push_allowed": false,
+      "requires_new_candidate": true,
+      "requires_validation": true,
+      "requires_pull_request": true,
+      "requires_separate_merge_authority": true,
+      "requires_canonical_readback": true,
+      "stale_evidence_reuse_allowed": false
+    },
+    "branches": [
+      {
+        "ref": "main",
+        "tip_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "classification": "ACTIVE",
+        "recommended_action": "KEEP",
+        "age_days": 0,
+        "retention_days": 0,
+        "evidence_current": true,
+        "open_pr": false,
+        "active_role": true,
+        "unique_work": false,
+        "canonical_equivalence_proven": true,
+        "sealed_evidence": true,
+        "historical_reason": null,
+        "notes": "Canonical branch is always active."
+      }
+    ],
+    "dry_run": {
+      "enabled": true,
+      "ref_creation_performed": false,
+      "recovery_execution_performed": false,
+      "branch_deletion_performed": false,
+      "force_push_performed": false,
+      "history_rewrite_performed": false
+    },
+    "authority": {
+      "record_grants_ref_creation_authority": false,
+      "record_grants_recovery_authority": false,
+      "record_grants_branch_deletion_authority": false,
+      "retention_expiry_grants_deletion_authority": false,
+      "eligibility_grants_deletion_authority": false
+    }
+  },
+  "cases": [
+    {"id": "low-risk-sha-tree-evidence-only", "valid": true, "overrides": {}},
+    {
+      "id": "high-risk-requires-temporary-ref",
+      "valid": false,
+      "overrides": {"prestate": {"risk_level": "HIGH"}}
+    },
+    {
+      "id": "high-risk-with-temporary-ref",
+      "valid": true,
+      "overrides": {
+        "prestate": {
+          "risk_level": "HIGH",
+          "temporary_ref_policy": "TEMPORARY_REF_REQUIRED",
+          "temporary_ref_name": "prestate/main/candidate-example-001-20260827-aaaaaaa",
+          "retention_days": 30
+        }
+      }
+    },
+    {
+      "id": "temporary-ref-retention-too-short",
+      "valid": false,
+      "overrides": {
+        "prestate": {
+          "risk_level": "HIGH",
+          "temporary_ref_policy": "TEMPORARY_REF_REQUIRED",
+          "temporary_ref_name": "prestate/main/candidate-example-001-20260827-aaaaaaa",
+          "retention_days": 7
+        }
+      }
+    },
+    {
+      "id": "canonical-main-must-be-active",
+      "valid": false,
+      "overrides": {
+        "branches": [{"ref": "main", "tip_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "classification": "UNKNOWN", "recommended_action": "QUARANTINE", "age_days": 0, "retention_days": 30, "evidence_current": true, "open_pr": false, "active_role": false, "unique_work": false, "canonical_equivalence_proven": false, "sealed_evidence": false, "historical_reason": null, "notes": "Invalid canonical classification."}]
+      }
+    },
+    {
+      "id": "open-pr-is-always-kept",
+      "valid": true,
+      "overrides": {
+        "branches": [
+          {"ref": "main", "tip_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "classification": "ACTIVE", "recommended_action": "KEEP", "age_days": 0, "retention_days": 0, "evidence_current": true, "open_pr": false, "active_role": true, "unique_work": false, "canonical_equivalence_proven": true, "sealed_evidence": true, "historical_reason": null, "notes": "Canonical branch."},
+          {"ref": "feat/open", "tip_sha": "cccccccccccccccccccccccccccccccccccccccc", "classification": "OPEN_PR", "recommended_action": "KEEP", "age_days": 90, "retention_days": 0, "evidence_current": true, "open_pr": true, "active_role": false, "unique_work": false, "canonical_equivalence_proven": true, "sealed_evidence": true, "historical_reason": null, "notes": "Open PR head is preserved."}
+        ]
+      }
+    },
+    {
+      "id": "open-pr-cannot-be-retirement-eligible",
+      "valid": false,
+      "overrides": {
+        "branches": [
+          {"ref": "main", "tip_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "classification": "ACTIVE", "recommended_action": "KEEP", "age_days": 0, "retention_days": 0, "evidence_current": true, "open_pr": false, "active_role": true, "unique_work": false, "canonical_equivalence_proven": true, "sealed_evidence": true, "historical_reason": null, "notes": "Canonical branch."},
+          {"ref": "feat/open", "tip_sha": "cccccccccccccccccccccccccccccccccccccccc", "classification": "CANONICAL_EQUIVALENT", "recommended_action": "ELIGIBLE_FOR_SEPARATE_AUTHORIZATION", "age_days": 90, "retention_days": 7, "evidence_current": true, "open_pr": true, "active_role": false, "unique_work": false, "canonical_equivalence_proven": true, "sealed_evidence": true, "historical_reason": null, "notes": "Invalid open PR classification."}
+        ]
+      }
+    },
+    {
+      "id": "canonical-equivalent-after-cooling-is-eligible-only",
+      "valid": true,
+      "overrides": {
+        "branches": [
+          {"ref": "main", "tip_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "classification": "ACTIVE", "recommended_action": "KEEP", "age_days": 0, "retention_days": 0, "evidence_current": true, "open_pr": false, "active_role": true, "unique_work": false, "canonical_equivalence_proven": true, "sealed_evidence": true, "historical_reason": null, "notes": "Canonical branch."},
+          {"ref": "materialize/example", "tip_sha": "dddddddddddddddddddddddddddddddddddddddd", "classification": "CANONICAL_EQUIVALENT", "recommended_action": "ELIGIBLE_FOR_SEPARATE_AUTHORIZATION", "age_days": 8, "retention_days": 7, "evidence_current": true, "open_pr": false, "active_role": false, "unique_work": false, "canonical_equivalence_proven": true, "sealed_evidence": true, "historical_reason": null, "notes": "Tree/content equivalence is sealed."}
+        ]
+      }
+    },
+    {
+      "id": "canonical-equivalent-before-cooling-quarantines",
+      "valid": true,
+      "overrides": {
+        "branches": [
+          {"ref": "main", "tip_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "classification": "ACTIVE", "recommended_action": "KEEP", "age_days": 0, "retention_days": 0, "evidence_current": true, "open_pr": false, "active_role": true, "unique_work": false, "canonical_equivalence_proven": true, "sealed_evidence": true, "historical_reason": null, "notes": "Canonical branch."},
+          {"ref": "materialize/new", "tip_sha": "dddddddddddddddddddddddddddddddddddddddd", "classification": "CANONICAL_EQUIVALENT", "recommended_action": "QUARANTINE", "age_days": 3, "retention_days": 7, "evidence_current": true, "open_pr": false, "active_role": false, "unique_work": false, "canonical_equivalence_proven": true, "sealed_evidence": true, "historical_reason": null, "notes": "Cooling period not met."}
+        ]
+      }
+    },
+    {
+      "id": "superseded-default-quarantine",
+      "valid": true,
+      "overrides": {
+        "branches": [
+          {"ref": "main", "tip_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "classification": "ACTIVE", "recommended_action": "KEEP", "age_days": 0, "retention_days": 0, "evidence_current": true, "open_pr": false, "active_role": true, "unique_work": false, "canonical_equivalence_proven": true, "sealed_evidence": true, "historical_reason": null, "notes": "Canonical branch."},
+          {"ref": "feat/superseded", "tip_sha": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee", "classification": "SUPERSEDED", "recommended_action": "QUARANTINE", "age_days": 10, "retention_days": 14, "evidence_current": true, "open_pr": false, "active_role": false, "unique_work": false, "canonical_equivalence_proven": false, "sealed_evidence": true, "historical_reason": null, "notes": "Superseded but still cooling."}
+        ]
+      }
+    },
+    {
+      "id": "recovery-ref-after-retention-is-eligible-only",
+      "valid": true,
+      "overrides": {
+        "branches": [
+          {"ref": "main", "tip_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "classification": "ACTIVE", "recommended_action": "KEEP", "age_days": 0, "retention_days": 0, "evidence_current": true, "open_pr": false, "active_role": true, "unique_work": false, "canonical_equivalence_proven": true, "sealed_evidence": true, "historical_reason": null, "notes": "Canonical branch."},
+          {"ref": "prestate/main/example-20260801-abcdef0", "tip_sha": "ffffffffffffffffffffffffffffffffffffffff", "classification": "RECOVERY_EXPIRED", "recommended_action": "ELIGIBLE_FOR_SEPARATE_AUTHORIZATION", "age_days": 31, "retention_days": 30, "evidence_current": true, "open_pr": false, "active_role": false, "unique_work": false, "canonical_equivalence_proven": false, "sealed_evidence": true, "historical_reason": null, "notes": "Retention expired with sealed canonical evidence."}
+        ]
+      }
+    },
+    {
+      "id": "historical-evidence-needs-positive-reason",
+      "valid": false,
+      "overrides": {
+        "branches": [
+          {"ref": "main", "tip_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "classification": "ACTIVE", "recommended_action": "KEEP", "age_days": 0, "retention_days": 0, "evidence_current": true, "open_pr": false, "active_role": true, "unique_work": false, "canonical_equivalence_proven": true, "sealed_evidence": true, "historical_reason": null, "notes": "Canonical branch."},
+          {"ref": "archive/evidence", "tip_sha": "1111111111111111111111111111111111111111", "classification": "HISTORICAL_EVIDENCE", "recommended_action": "KEEP", "age_days": 100, "retention_days": 0, "evidence_current": true, "open_pr": false, "active_role": false, "unique_work": false, "canonical_equivalence_proven": false, "sealed_evidence": true, "historical_reason": null, "notes": "Missing preservation reason."}
+        ]
+      }
+    },
+    {
+      "id": "unmerged-unique-is-never-auto-eligible",
+      "valid": true,
+      "overrides": {
+        "branches": [
+          {"ref": "main", "tip_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "classification": "ACTIVE", "recommended_action": "KEEP", "age_days": 0, "retention_days": 0, "evidence_current": true, "open_pr": false, "active_role": true, "unique_work": false, "canonical_equivalence_proven": true, "sealed_evidence": true, "historical_reason": null, "notes": "Canonical branch."},
+          {"ref": "feat/unique", "tip_sha": "2222222222222222222222222222222222222222", "classification": "UNMERGED_UNIQUE", "recommended_action": "KEEP", "age_days": 400, "retention_days": 0, "evidence_current": true, "open_pr": false, "active_role": false, "unique_work": true, "canonical_equivalence_proven": false, "sealed_evidence": false, "historical_reason": null, "notes": "Unique work remains."}
+        ]
+      }
+    },
+    {
+      "id": "stale-evidence-must-be-unknown",
+      "valid": false,
+      "overrides": {
+        "branches": [
+          {"ref": "main", "tip_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "classification": "ACTIVE", "recommended_action": "KEEP", "age_days": 0, "retention_days": 0, "evidence_current": false, "open_pr": false, "active_role": true, "unique_work": false, "canonical_equivalence_proven": true, "sealed_evidence": false, "historical_reason": null, "notes": "Stale evidence cannot remain ACTIVE."}
+        ]
+      }
+    },
+    {
+      "id": "unknown-remains-quarantined-after-time",
+      "valid": true,
+      "overrides": {
+        "branches": [
+          {"ref": "main", "tip_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "classification": "ACTIVE", "recommended_action": "KEEP", "age_days": 0, "retention_days": 0, "evidence_current": true, "open_pr": false, "active_role": true, "unique_work": false, "canonical_equivalence_proven": true, "sealed_evidence": true, "historical_reason": null, "notes": "Canonical branch."},
+          {"ref": "old/unknown", "tip_sha": "3333333333333333333333333333333333333333", "classification": "UNKNOWN", "recommended_action": "QUARANTINE", "age_days": 365, "retention_days": 30, "evidence_current": true, "open_pr": false, "active_role": false, "unique_work": false, "canonical_equivalence_proven": false, "sealed_evidence": false, "historical_reason": null, "notes": "Age alone cannot prove safe deletion."}
+        ]
+      }
+    },
+    {"id": "dry-run-cannot-perform-deletion", "valid": false, "overrides": {"dry_run": {"branch_deletion_performed": true}}},
+    {"id": "eligibility-cannot-grant-deletion-authority", "valid": false, "overrides": {"authority": {"eligibility_grants_deletion_authority": true}}},
+    {"id": "recovery-cannot-reset-main-backward", "valid": false, "overrides": {"recovery": {"reset_main_backward_allowed": true}}}
+  ]
+}
