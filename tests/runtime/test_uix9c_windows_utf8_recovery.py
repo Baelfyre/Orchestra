@@ -1,52 +1,39 @@
 from __future__ import annotations
 
-import json
 from pathlib import Path
 from types import SimpleNamespace
 
-from scripts import uix9b_live_proof_runner_v2 as runner
+from scripts import uix9c_windows_utf8_launcher as launcher
 
 
-def _successful_jsonl_bytes() -> bytes:
-    events = [
-        {"type": "thread.started"},
-        {"type": "item.completed", "item": {"type": "agent_message", "text": "UTF-8 right quote: \u201d"}},
-        {"type": "turn.completed", "usage": {"input_tokens": 1, "output_tokens": 1, "total_tokens": 2}},
-    ]
-    return ("\n".join(json.dumps(event, ensure_ascii=False) for event in events) + "\n").encode("utf-8")
+def test_launcher_forces_python_utf8_mode() -> None:
+    command = launcher.build_command([
+        "execute",
+        "--execution-mode",
+        "live",
+        "--live-call-gate",
+    ])
+
+    assert command[0] == launcher.sys.executable
+    assert command[1:3] == ["-X", "utf8"]
+    assert Path(command[3]).resolve() == launcher.RUNNER.resolve()
+    assert command[4:] == ["execute", "--execution-mode", "live", "--live-call-gate"]
 
 
-def test_live_codex_capture_is_binary_then_utf8_decoded(monkeypatch, tmp_path: Path) -> None:
+def test_launcher_preserves_child_exit_code_and_does_not_use_shell(monkeypatch) -> None:
     seen: dict[str, object] = {}
 
-    monkeypatch.setattr(runner, "verify_codex_cli_version", lambda: runner.EXPECTED_CODEX_CLI_VERSION)
-    monkeypatch.setattr(runner, "build_codex_command", lambda **_kwargs: ["codex", "exec"])
-
-    def fake_run(*_args, **kwargs):
+    def fake_run(command, **kwargs):
+        seen["command"] = command
         seen.update(kwargs)
-        return SimpleNamespace(returncode=0, stdout=_successful_jsonl_bytes(), stderr=b"")
+        return SimpleNamespace(returncode=17)
 
-    monkeypatch.setattr(runner.subprocess, "run", fake_run)
+    monkeypatch.setattr(launcher.subprocess, "run", fake_run)
 
-    result = runner.run_codex_session(tmp_path, "task")
+    result = launcher.main(["verify-frozen-identities"])
 
-    assert seen["capture_output"] is True
-    assert seen["text"] is False
-    assert result["classification"] == "OUTPUT_CAPTURED_PENDING_VALIDATOR"
-    assert result["parsed"]["response"] == "UTF-8 right quote: \u201d"
-
-
-def test_invalid_utf8_capture_is_host_crash_not_scientific_output(monkeypatch, tmp_path: Path) -> None:
-    monkeypatch.setattr(runner, "verify_codex_cli_version", lambda: runner.EXPECTED_CODEX_CLI_VERSION)
-    monkeypatch.setattr(runner, "build_codex_command", lambda **_kwargs: ["codex", "exec"])
-
-    def fake_run(*_args, **_kwargs):
-        return SimpleNamespace(returncode=0, stdout=b"\x9d", stderr=b"")
-
-    monkeypatch.setattr(runner.subprocess, "run", fake_run)
-
-    result = runner.run_codex_session(tmp_path, "task")
-
-    assert result["classification"] == "HOST_CRASH"
-    assert result["error"].startswith("CODEX_STDOUT_UTF8_DECODE_FAILURE:")
-    assert len(result["stdout_sha256"]) == 64
+    assert result == 17
+    assert seen["command"][1:3] == ["-X", "utf8"]
+    assert seen["cwd"] == launcher.ROOT
+    assert seen["shell"] is False
+    assert seen["check"] is False
