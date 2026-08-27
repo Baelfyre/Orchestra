@@ -1,7 +1,7 @@
 {
   "schema_version": "orchestra.uix9c-v3-stdin-transport-authorization.v1",
-  "authorization_status": "PENDING_HUMAN_SCIENTIFIC_AUTHORIZATION",
-  "authority_class": "HUMAN_SCIENTIFIC_AUTHORIZATION_REQUIRED",
+  "authorization_status": "APPROVED",
+  "authority_class": "HUMAN_SCIENTIFIC_AUTHORIZATION",
   "scientific_inputs": {
     "task_fixture_prompt_guidance_evaluator_validator_unchanged": true,
     "execution_order": ["A1", "B1", "B2", "A2", "A3", "B3"],
@@ -49,7 +49,7 @@
     "prior_invalid_evidence_is_scientific_result": false
   },
   "authority_boundary": {
-    "live_execution_authorized": false,
+    "live_execution_authorized": true,
     "merge_authorized": false,
     "release_authorized": false,
     "deployment_authorized": false,
