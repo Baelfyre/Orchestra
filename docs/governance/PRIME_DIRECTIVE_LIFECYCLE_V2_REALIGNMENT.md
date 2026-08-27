@@ -25,7 +25,7 @@ The reconstruction must not introduce a second governance kernel, autonomy engin
 
 | Campaign | Source PR | Source head | Disposition | Current treatment |
 | --- | ---: | --- | --- | --- |
-| Campaign 0 - policy-source reconciliation | #573 | `838179da05bb638ffde165f628813a3b850901fa` | `KEEP_WITH_REALIGNMENT` | Preserve repository-side unique required-check parity and fail-closed drift detection. Discard the historical claim that the live ruleset currently contains a duplicate `native-ubuntu-latest`; the maintainer's current verified live configuration contains one. No live ruleset mutation is part of this candidate. |
+| Campaign 0 - policy-source reconciliation | #573 | `838179da05bb638ffde165f628813a3b850901fa` | `KEEP_WITH_REALIGNMENT` | Preserve repository-side unique required-check parity and fail-closed drift detection. Current live `Protect main` ruleset evidence still contains a duplicate `native-ubuntu-latest` required-status entry, so the live repository configuration is classified as external policy drift. No live ruleset mutation is part of this candidate. |
 | Campaign 1 - Prime Directive + Feature Admission | #574 | `4f922ff8e94572ccfe778cb5a3bbaab66d747664` | `KEEP_WITH_REALIGNMENT` | Promote the constitutional Prime Directive and feature-admission/value boundary onto current `main`; retain existing governance as subordinate implementation. |
 | Campaign 2 - Candidate Maturity + Feature Freeze | #576 | `59ac8db4f0d9e0b131ed14e6ff7f44811b05b5d5` | `KEEP_WITH_REALIGNMENT` | Keep development-candidate maturity separate from runtime execution lifecycle; exact identity and evidence staleness remain explicit. |
 | Campaign 3 - Governed Autonomy lifecycle integration | #578 | `258a46553ad8529e41ed89552a731cf70e74cdd2` | `KEEP_WITH_REALIGNMENT` | Reuse the existing autonomy evaluator and authority envelope. `AUTONOMY_CHANGES_PAUSES_NOT_PREREQUISITES`. Full Autonomous cannot self-adopt permanent capability. |
@@ -108,19 +108,22 @@ NO_AUTOMATIC_PROMOTION
 - Retirement eligibility does not grant branch-deletion authority.
 - A state-changing action is incomplete until canonical state is independently read back.
 
-## Current live ruleset correction
+## Current live ruleset state
 
-The maintainer has directly verified the current `Protect main` required-check UI. The current required-check inventory is treated as one entry each for:
+A read-only GitHub ruleset read for the active `Protect main` ruleset reports the following required-status contexts:
 
 - `governance-check`
 - `validate`
-- `runtime-tests`
 - `native-windows-latest`
 - `native-ubuntu-latest`
+- `native-ubuntu-latest`
 - `native-macos-latest`
+- `runtime-tests`
 - `Compatibility CodeQL (python)`
 
-Older repository or continuity evidence describing a duplicate `native-ubuntu-latest` entry is historical and must not be promoted into current-state claims. This source candidate does not mutate the GitHub ruleset.
+The repository contract's intended canonical profile requires each required status context exactly once. Therefore the duplicate `native-ubuntu-latest` entry is current external policy drift, not stale historical evidence. Under the fail-closed merge-readiness contract, ordinary governed merge readiness remains blocked until that live ruleset drift is separately reconciled.
+
+This source candidate does not mutate the GitHub ruleset. Ruleset mutation or policy activation requires separate applicable authority.
 
 ## Protected boundaries
 
@@ -139,4 +142,4 @@ This realignment grants no authority for:
 
 ## Completion condition
 
-The source realignment is ready for a merge decision only after current-main reconstruction, focused contract validation, the repository-owned exact-head CI matrix, zero unresolved review blockers, and a separately current merge authorization. Green CI does not create that authorization.
+The source realignment is ready for a merge decision only after current-main reconstruction, focused contract validation, the repository-owned exact-head CI matrix, zero unresolved review blockers, live ruleset parity with the repository contract, and a separately current merge authorization. Green CI does not create that authorization.
