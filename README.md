@@ -33,6 +33,31 @@ It is **not an AI model**. Models generate and review work. Orchestra determines
 
 > **Core rule:** routing, tool access, compatibility, validation success, and mergeability are not authority.
 
+## Mission and vision
+
+**Mission:** make AI-assisted software engineering more reliable through explicit specialist ownership, bounded authority, deterministic safeguards, validation, evidence, and auditable state transitions.
+
+**Vision:** enable the highest useful level of AI-assisted autonomy consistent with explicit human authority, deterministic safeguards, auditable evidence, and recoverable engineering state.
+
+## Prime Directive
+
+> Orchestra shall permit an AI-assisted action or lifecycle transition only within explicit, reduction-only authority and current applicable evidence. It shall never infer permission from capability, routing, confidence, learned state, validation success, mergeability, or prior success. A permanent capability shall be promoted only when proportional evidence shows that it solves an Orchestra-owned problem whose benefit justifies its complexity and risk without weakening these boundaries.
+
+The practical trust boundary is intentionally strict:
+
+```text
+CAN_EDIT != MAY_EDIT
+CAN_PUSH != MAY_PUSH
+TESTS_PASS != MERGE_AUTHORITY
+VALIDATION_SUCCESS != AUTHORITY
+MCP_EXPOSURE != AUTHORITY
+SELECTED_SPECIALIST != UNLIMITED_AUTHORITY
+MERGEABLE != MERGE_READY
+MERGE_READY != MERGE_AUTHORITY
+```
+
+See the full [Orchestra Prime Directive](docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md) and [Governance Overview](docs/governance/README.md).
+
 ## Core capabilities
 
 | Capability | What it does | Go deeper |
@@ -67,6 +92,32 @@ Next bounded action or human gate
 
 The deterministic control plane defines what is allowed. Specialists decide how to perform their owned work inside those boundaries. Validation proves outcomes; it does not grant permission.
 
+## Development Lifecycle V2
+
+Development-candidate maturity is kept separate from Orchestra's runtime execution lifecycle. The high-level promotion path is:
+
+```text
+Feature Admission
+    ↓
+Baseline + Implementation
+    ↓
+Candidate Declaration / Feature Freeze
+    ↓
+Qualification Gate Set
+    ↓
+Promotion Adjudication
+    ↓
+Merge Preparation
+    ↓
+Merge + Independent Verification
+    ↓
+Closeout + Retirement
+```
+
+This preserves an important distinction: **implemented != validated != evidence-supported != worth adopting != merge-ready != released or activated**. Greater autonomy may remove unnecessary pauses after a gate is satisfied; it does not remove the gate or create protected-action authority.
+
+See [Feature Admission](docs/governance/FEATURE_ADMISSION_POLICY.md), [Candidate Maturity and Feature Freeze](docs/governance/CANDIDATE_MATURITY_FEATURE_FREEZE.md), and [Qualification Gates, Evaluation, and Independent Audit](docs/governance/QUALIFICATION_GATES_EVALUATION_AUDIT.md).
+
 ## Portable adaptive memory
 
 Orchestra adaptive learning remains machine-local by default. An optional portable-memory contract can stage explicitly reviewed learned candidates for a user-selected backend without coupling the runtime to a specific repository or storage service.
@@ -83,7 +134,7 @@ The latest published release is **[v1.7.0: Adaptive Intelligence, Portable Memor
 
 v1.7.0 consolidates adaptive intelligence through bounded shadow maturity, storage-agnostic portable adaptive memory, Registry O1-O6 adaptive consumption, governed UI design fidelity through UIX-9A proof preparation, and the post-v1.6 documentation/research closeout. The `v1.7.0` tag remains fixed even when `main` receives later post-release maintenance.
 
-UIX-9A remains deterministic proof infrastructure only. No live UIX-9 model/provider proof was executed as part of v1.7.0, and no model-behavior benefit claim is established by the repository-only protocol.
+The v1.7.0 release itself did not include a live UIX-9 model/provider proof. Post-release UIX-9C V3 later completed as a controlled six-observation study. Its terminal result is **`NO_BENEFIT_ESTABLISHED`**: all three corrected pairs were valid and all 39 primary governed-versus-baseline metric comparisons were unchanged, establishing neither a repeatable governed advantage nor harm under the frozen experiment.
 
 ## Research and validation archive
 
@@ -91,6 +142,9 @@ Detailed comparative benchmark reports are retained as research and validation e
 
 The completed confirmatory program did **not** establish a repeatable efficiency benefit for Murmurs, so Murmurs is not promoted to the default execution path and is not required by specialists. Historical experiments remain preserved so the negative result is not lost or repeatedly re-tested until positive.
 
+The completed UIX-9C V3 controlled study likewise did **not** establish a repeatable governed UIX advantage on its frozen fixture. The null result is retained as valid negative evidence and does not establish harm.
+
+- [UIX-9C V3 post-study result](docs/validation/uix9b-live-evidence-v2/v3-poststudy-result.v2.json)
 - [B-Phase Terminal Closeout Decision](docs/benchmarking/B_PHASE_CLOSEOUT_DECISION.md)
 - [B-Phase Final Evidence Synthesis](docs/benchmarking/B_PHASE_FINAL_EVIDENCE_SYNTHESIS.md)
 - [Codex C1 Cross-Provider Reconciliation](docs/benchmarking/CODEX_C1_CROSS_PROVIDER_RECONCILIATION.md)
