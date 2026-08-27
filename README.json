@@ -126,11 +126,12 @@
     "controlled_ui_proof_campaign_uix9b_v2": {
       "status": "PREPARATION_FROZEN_WAITING_UIX_9C_AUTHORIZATION",
       "purpose": "UIX-9B V2 deterministic evaluator and calibration layer for a future controlled UIX-9C live campaign, with treatment-blind thirteen-metric scoring, isolated fixture identity, and fail-closed evidence adjudication.",
-      "machine_sources": ["machine/ui/uix9b-live-proof-plan.v2.json", "machine/ui/uix9b-live-metric-evaluator.v2.json", "machine/ui/uix9b-live-proof-v2-identity.json", "machine/ui/uix9b-live-call-authorization-request.v2.json", "machine/schemas/uix9b-live-metric-evaluator.v2.schema.json", "machine/schemas/uix9b-live-metric-result.v2.schema.json", "machine/schemas/uix9b-live-proof-observation.v2.schema.json", "machine/schemas/uix9b-live-proof-result.v2.schema.json"],
+      "machine_sources": ["machine/ui/uix9b-live-proof-plan.v2.json", "machine/ui/uix9b-live-metric-evaluator.v2.json", "machine/ui/uix9b-live-proof-v2-identity.json", "machine/ui/uix9b-live-call-authorization-request.v2.json", "machine/ui/uix9b-live-preparation-identity.v2.json", "machine/schemas/uix9b-live-metric-evaluator.v2.schema.json", "machine/schemas/uix9b-live-metric-result.v2.schema.json", "machine/schemas/uix9b-live-proof-observation.v2.schema.json", "machine/schemas/uix9b-live-proof-result.v2.schema.json", "machine/schemas/uix9b-live-call-authorization.v2.schema.json", "machine/schemas/uix9b-live-preparation-identity.v2.schema.json"],
       "human_sources": ["docs/project/UIX_9B_LIVE_PROOF_EXECUTION_PROTOCOL_V2.md", "docs/validation/UIX_9B_V2_REPREPARATION_VALIDATION.md", "docs/validation/UIX_9B_V2_LIVE_CALL_AUTHORIZATION_REQUEST.md"],
       "validation_surface": "tests/runtime/test_uix9_live_metric_evaluator_v2.py",
       "evaluator": "scripts/uix9_live_metric_evaluator_v2.py",
       "runner": "scripts/uix9b_live_proof_runner_v2.py",
+      "adjudicator": "scripts/uix9b_live_proof_adjudicator_v2.py",
       "terminal": "UIX_9B_V2_CANONICAL_FULL_VALIDATION_PASS_CANONICAL_POST_MERGE_VERIFIED",
       "live_model_calls": 0,
       "provider_calls": 0,
