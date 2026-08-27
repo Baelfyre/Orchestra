@@ -35,7 +35,7 @@
       "status": "IMPLEMENTED_CONTRACT_NO_RUNTIME_INTEGRATION",
       "purpose": "Constitutional Prime Directive and machine-validatable Feature Admission and promotion record for evidence-backed capability decisions without creating execution authority.",
       "machine_sources": ["machine/schemas/feature-decision-record.v1.schema.json"],
-      "human_sources": ["docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md", "docs/governance/FEATURE_ADMISSION_POLICY.md"],
+      "human_sources": ["docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md", "docs/governance/FEATURE_ADMISSION_POLICY.md", "docs/governance/PRIME_DIRECTIVE_LIFECYCLE_V2_REALIGNMENT.md", "docs/validation/PR592_CANONICAL_CLOSEOUT.md"],
       "validation_surface": "tests/runtime/test_feature_admission_contract.py",
       "validator": "scripts/validate_feature_admission_contract.py",
       "runtime_integration": false,
@@ -997,7 +997,7 @@
     "preserve_o1_o6_compliance_semantics_across_o7_projection_and_transport_paths": true,
     "do_not_claim_o7_token_savings_until_cross_path_efficiency_measurement_exists": true,
     "treat_v1_5_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
-    "treat_v1_6_0_as_published_verified_only_when_tag_release_and_commit_identity_match": true,
+    "treat_v1_6_0_as_published_verified only_when_tag_release_and_commit_identity_match": true,
     "when_evaluating_a_published_tag_or_release_prefer_live_verified_git_and_release_identity_over_prepublication_snapshot_fields": true,
     "treat_original_c2_external_artifact_hashes_as_historical_not_current_execution_authority": true,
     "require_c2_portability_r1_live_authorization_record_before_first_model_call": true
