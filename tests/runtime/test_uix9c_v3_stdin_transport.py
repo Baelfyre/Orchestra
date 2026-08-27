@@ -66,25 +66,27 @@ def test_session_runner_sends_exact_prompt_over_utf8_stdin(monkeypatch: pytest.M
     assert captured["check"] is False
 
 
-def test_pending_authorization_refuses_live_execution() -> None:
+def test_materialized_authorization_is_exact_and_requires_explicit_live_gate() -> None:
     authorization = v3._load_authorization()
-    assert authorization["authorization_status"] == "PENDING_HUMAN_SCIENTIFIC_AUTHORIZATION"
-    assert authorization["authority_boundary"]["live_execution_authorized"] is False
-    with pytest.raises(v3.V3ExecutionRefused, match="V3_LIVE_EXECUTION_NOT_HUMAN_AUTHORIZED"):
-        v3._authorize_live_v3(authorization, live_call_gate=True)
+    assert authorization["authorization_status"] == "APPROVED"
+    assert authorization["authority_class"] == "HUMAN_SCIENTIFIC_AUTHORIZATION"
+    assert authorization["authority_boundary"]["live_execution_authorized"] is True
+    with pytest.raises(v3.V3ExecutionRefused, match="V3_EXPLICIT_LIVE_GATE_REQUIRED"):
+        v3._authorize_live_v3(authorization, live_call_gate=False)
+    v3._authorize_live_v3(authorization, live_call_gate=True)
 
 
-def test_pending_authorization_prevents_campaign_invocation(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_approved_authorization_does_not_invoke_campaign_without_explicit_gate(monkeypatch: pytest.MonkeyPatch) -> None:
     called = False
 
     def should_not_execute(**_kwargs):
         nonlocal called
         called = True
-        raise AssertionError("live campaign must remain dormant while V3 authorization is pending")
+        raise AssertionError("campaign must not execute without the explicit V3 live gate")
 
     monkeypatch.setattr(v3.v2, "execute_campaign", should_not_execute)
-    with pytest.raises(v3.V3ExecutionRefused, match="V3_LIVE_EXECUTION_NOT_HUMAN_AUTHORIZED"):
-        v3.execute_v3(live_call_gate=True)
+    with pytest.raises(v3.V3ExecutionRefused, match="V3_EXPLICIT_LIVE_GATE_REQUIRED"):
+        v3.execute_v3(live_call_gate=False)
     assert called is False
 
 
@@ -120,8 +122,6 @@ def test_approved_v3_envelope_supersedes_only_v2_call_ceiling_gate_and_restores_
         assert v3.v2.MAX_PROVIDER_CALLS == 7
         assert v3.v2.MAX_TOTAL_PROVIDER_INTERACTIONS == 7
         assert v3.v2.MAX_RETRIES_FOR_INVALID_RUN == 1
-        # This is the exact check that would otherwise reject because the
-        # frozen V2 authorization record declares six calls.
         v3.v2._authorize_live({}, live_call_gate=True)
         assert callable(kwargs["session_runner"])
         return {"status": "MOCK_EXECUTION_BOUND_TO_V3_ENVELOPE"}
