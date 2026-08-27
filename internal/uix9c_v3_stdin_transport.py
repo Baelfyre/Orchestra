@@ -14,7 +14,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import Any, Iterator, Sequence
+from typing import Any, Callable, Iterator, Sequence
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -39,6 +39,7 @@ EVIDENCE_ROOT = (
 
 EXPECTED_A_PROMPT_DIGEST = "9116cd67a55cfcc4c44f671c8ac69d2a22c55f2efc70c4f2c8fec45039caebb8"
 EXPECTED_B_PROMPT_DIGEST = "0d25f263abe967184ac61c500bdd75d3af310256b376619eb586ad8bbe9c6bac"
+INVALID_REPLACEMENT_CLASSIFICATIONS = frozenset({"HOST_CRASH", "PROVIDER_OUTAGE"})
 
 
 class V3ExecutionRefused(RuntimeError):
@@ -265,6 +266,8 @@ def verify_transport() -> dict[str, Any]:
 def _authorize_live_v3(authorization: dict[str, Any], *, live_call_gate: bool) -> None:
     if authorization.get("authorization_status") != "APPROVED":
         raise V3ExecutionRefused("V3_LIVE_EXECUTION_NOT_HUMAN_AUTHORIZED")
+    if authorization.get("authority_class") != "HUMAN_SCIENTIFIC_AUTHORIZATION":
+        raise V3ExecutionRefused("V3_HUMAN_SCIENTIFIC_AUTHORITY_CLASS_REQUIRED")
     if authorization["authority_boundary"].get("live_execution_authorized") is not True:
         raise V3ExecutionRefused("V3_LIVE_EXECUTION_AUTHORITY_FLAG_FALSE")
     if not live_call_gate:
@@ -310,6 +313,33 @@ def _v3_execution_envelope(authorization: dict[str, Any]) -> Iterator[None]:
         v2._authorize_live = original["authorize_live"]
 
 
+def _single_replacement_session_runner() -> Callable[[Path, str], dict[str, Any]]:
+    """Return a session runner allowing at most one replacement campaign-wide.
+
+    The frozen V2 executor owns the actual retry transition. After the first
+    invalid infrastructure/provider attempt has triggered that transition, the
+    replacement invocation disables further automatic retries for the rest of
+    the process-bound V3 campaign. A later invalid attempt is preserved with
+    its real classification and stops rather than receiving another retry.
+    """
+    replacement_pending = False
+
+    def runner(workspace: Path, prompt: str) -> dict[str, Any]:
+        nonlocal replacement_pending
+        if replacement_pending:
+            v2.MAX_RETRIES_FOR_INVALID_RUN = 0
+            replacement_pending = False
+        result = run_codex_session_stdin(workspace, prompt)
+        if (
+            result.get("classification") in INVALID_REPLACEMENT_CLASSIFICATIONS
+            and v2.MAX_RETRIES_FOR_INVALID_RUN > 0
+        ):
+            replacement_pending = True
+        return result
+
+    return runner
+
+
 def execute_v3(*, live_call_gate: bool) -> dict[str, Any]:
     authorization = _load_authorization()
     _authorize_live_v3(authorization, live_call_gate=live_call_gate)
@@ -317,7 +347,7 @@ def execute_v3(*, live_call_gate: bool) -> dict[str, Any]:
         return v2.execute_campaign(
             evidence_root=EVIDENCE_ROOT,
             live_call_gate=True,
-            session_runner=run_codex_session_stdin,
+            session_runner=_single_replacement_session_runner(),
         )
 
 
