@@ -2,6 +2,15 @@
 
 This root changelog is release-oriented. Detailed pre-v1.7 development chronology remains preserved byte-for-byte in [the historical changelog archive](docs/history/CHANGELOG_PRE_V1_7.md), Git history, merged pull requests, decision records, and validation evidence.
 
+## Post-v1.7 constitutional and controlled-study closeout
+
+- Completed UIX-9C V3 with six valid observations and three corrected valid pairs. All 39 primary governed-versus-baseline comparisons were unchanged, producing terminal `NO_BENEFIT_ESTABLISHED` with no benefit, harm, or directional model-behavior claim.
+- Added Orchestra Prime Directive v1 and Feature Admission v1, separating implementation correctness from permanent capability promotion and retaining negative/inconclusive evidence as valid decision evidence.
+- Added Development Lifecycle V2 candidate maturity and Feature Freeze, thin governed-autonomy lifecycle integration, risk-proportional qualification/evaluation/audit, and forward-only recovery/branch-retirement contracts without introducing a second governance, autonomy, runtime-lifecycle, Arbiter, or merge engine.
+- Reconciled the historical Campaign 0-5 stack onto current post-UIX `main`, preserving current UIX/runtime work and treating the maintainer-verified single `native-ubuntu-latest` required-check configuration as current truth rather than replaying stale duplicate-Ubuntu evidence.
+- Realigned the public README, project context, governance index, and documentation map around Mission, Vision, the Prime Directive, Development Lifecycle V2, and the completed UIX null result while retaining v1.7.0 as the immutable latest published release.
+- No new live model/provider call, release, deployment, policy activation, installed-integration refresh, branch deletion, destructive cleanup, force push, or history rewrite is introduced by this realignment.
+
 ## Post-v1.7 governed proof preparation
 
 - Connected the frozen deterministic evaluator, observation validation, evidence persistence, and adjudication into the future live-proof execution path with fail-closed valid-session semantics and staged evidence finalization.
