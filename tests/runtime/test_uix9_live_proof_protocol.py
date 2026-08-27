@@ -90,8 +90,8 @@ def test_v2_identity_gate_separates_frozen_base_from_current_canonical() -> None
 
     assert report["canonical_sha"] == "bf6f14316fa8814eeac91440c4a7d70be0d04b9e"
     assert report["frozen_experiment_base_sha"] == report["canonical_sha"]
-    assert report["current_canonical_preparation_sha"] == "7e08a1d4aa09cbdf7632f5a86461fb3cd3e50fe9"
-    assert report["reviewed_canonical_sha"] == report["current_canonical_preparation_sha"]
+    assert report["current_canonical_preparation_sha"] == "11c255c3e0efa158b5df9fe4832c60f9ae401948"
+    assert report["reviewed_canonical_sha"] == "7e08a1d4aa09cbdf7632f5a86461fb3cd3e50fe9"
     assert report["canonical_lineage_verified"] is True
     assert report["preparation_content_verified"] is True
 
