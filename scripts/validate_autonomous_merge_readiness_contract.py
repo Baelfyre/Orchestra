@@ -4,7 +4,7 @@ import re
 import sys
 from pathlib import Path
 
-SCHEMA_VERSION = "orchestra-autonomous-merge-readiness-v3"
+SCHEMA_VERSION = "orchestra-autonomous-merge-readiness-v4"
 
 REQUIRED_CHECKS = (
     ("Governance Check", "governance-check"),
@@ -13,8 +13,17 @@ REQUIRED_CHECKS = (
     ("Cross-platform Validation", "native-windows-latest"),
     ("Cross-platform Validation", "native-ubuntu-latest"),
     ("Cross-platform Validation", "native-macos-latest"),
-    ("CodeQL", "Analyze (actions)"),
-    ("CodeQL", "Analyze (python)"),
+    ("Required Analysis Compatibility", "Compatibility CodeQL (python)"),
+)
+
+REQUIRED_STATUS_CONTEXTS = (
+    "governance-check",
+    "validate",
+    "runtime-tests",
+    "native-windows-latest",
+    "native-ubuntu-latest",
+    "native-macos-latest",
+    "Compatibility CodeQL (python)",
 )
 
 EXPECTED_RULESET = {
@@ -32,6 +41,7 @@ EXPECTED_RULESET = {
     "require_branches_up_to_date": True,
     "block_force_pushes": True,
     "restrict_deletions": True,
+    "required_status_contexts": list(REQUIRED_STATUS_CONTEXTS),
 }
 
 CHECK_STATUSES = {"queued", "in_progress", "completed"}
@@ -61,7 +71,19 @@ def ruleset_matches(snapshot):
     ruleset = snapshot.get("ruleset")
     if not isinstance(ruleset, dict):
         return False
-    return all(ruleset.get(key) == value for key, value in EXPECTED_RULESET.items())
+
+    for key, value in EXPECTED_RULESET.items():
+        if key == "required_status_contexts":
+            continue
+        if ruleset.get(key) != value:
+            return False
+
+    contexts = ruleset.get("required_status_contexts")
+    if not isinstance(contexts, list):
+        return False
+    if len(contexts) != len(set(contexts)):
+        return False
+    return set(contexts) == set(REQUIRED_STATUS_CONTEXTS)
 
 
 def evaluate_mergeability(snapshot):
@@ -321,6 +343,8 @@ def validate(root):
         "BYPASS_CAPABILITY != GOVERNANCE_AUTHORIZATION",
         "NO_CHECK_DATA = WAIT_FOR_EVIDENCE",
         "MERGEABLE_STATE_BLOCKED = BLOCK",
+        "DUPLICATE_REQUIRED_STATUS_CONTEXT = BLOCK",
+        "Compatibility CodeQL (python)",
         "mergeable_state == clean",
         "Squash",
         "expected_head_sha",

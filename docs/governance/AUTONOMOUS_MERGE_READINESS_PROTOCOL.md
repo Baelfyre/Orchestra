@@ -54,9 +54,23 @@ Require branches to be up to date before merging: ON
 Block force pushes: ON
 ```
 
+The exact required status contexts are:
+
+```text
+governance-check
+validate
+runtime-tests
+native-windows-latest
+native-ubuntu-latest
+native-macos-latest
+Compatibility CodeQL (python)
+```
+
+Each required status context must appear exactly once. Duplicate required contexts or reintroduction of retired required contexts are policy drift and block ordinary autonomous merge readiness until reconciled.
+
 The bypass list is intentionally retained as repository-operational capability. It is non-authorizing for governed autonomous progression unless a separate explicit bypass authority is granted. Ordinary autonomous merge execution records `bypass_used=false`.
 
-A live ruleset that is stricter than this profile may constrain progression further. A live ruleset that materially weakens this profile is policy drift and blocks autonomous merge until reviewed.
+A live ruleset that is stricter than this profile may constrain progression further. A live ruleset that materially weakens or contradicts this profile is policy drift and blocks autonomous merge until reviewed.
 
 ## Required Evidence Snapshot
 
@@ -65,7 +79,7 @@ A pre-merge snapshot must bind all evidence to one exact current PR head SHA and
 - canonical base health;
 - current PR head SHA;
 - whether that head was re-read immediately before merge;
-- the live `Protect main` profile;
+- the live `Protect main` profile, including the exact required status-context inventory;
 - selected merge method;
 - whether bypass was used;
 - changelog freshness when significant paths changed;
@@ -87,10 +101,11 @@ The canonical exact required-check inventory is:
 | Cross-platform Validation | `native-windows-latest` |
 | Cross-platform Validation | `native-ubuntu-latest` |
 | Cross-platform Validation | `native-macos-latest` |
-| CodeQL | `Analyze (actions)` |
-| CodeQL | `Analyze (python)` |
+| Required Analysis Compatibility | `Compatibility CodeQL (python)` |
 
-Repository rules may become stricter and require additional checks. Additional required checks must also pass; this table is a minimum exact profile for the current Orchestra ruleset, not a bypass list.
+Supporting jobs may still execute inside a workflow, but they are not merge-required evidence unless their contexts are present in the exact current `Protect main` required-status profile. In particular, `Analyze (actions)` and `Analyze (python)` are not part of the current required merge profile.
+
+Repository rules may become stricter and require additional checks. Additional required checks must also pass; this table is the maintainer-approved exact profile for the current Orchestra ruleset and must be reconciled whenever the live ruleset changes.
 
 ## Fail-Closed Interpretation
 
@@ -109,6 +124,8 @@ UNRESOLVED_BLOCKER = BLOCK
 UNRESOLVED_REVIEW_THREAD = BLOCK
 REQUIRED_CHANGELOG_MISSING = BLOCK
 RULESET_PROFILE_DRIFT = BLOCK
+DUPLICATE_REQUIRED_STATUS_CONTEXT = BLOCK
+RETIRED_REQUIRED_STATUS_CONTEXT = BLOCK
 MERGE_METHOD_NOT_SQUASH = BLOCK
 MERGEABLE_UNKNOWN = WAIT_FOR_EVIDENCE
 MERGEABLE_STATE_UNKNOWN = WAIT_FOR_EVIDENCE
@@ -133,19 +150,20 @@ Before merge:
 
 1. Read the PR and capture the current head SHA.
 2. Read the live ruleset and verify the effective policy remains compatible with the canonical profile.
-3. Require `Squash` as the selected merge method.
-4. Require ordinary governed execution to use no bypass.
-5. Fetch fresh required workflow/job state for that exact head.
-6. Require every required job to exist.
-7. Require every required job status to be `completed`.
-8. Require every required job conclusion to be `success`.
-9. Require every job's evidence head SHA to equal the current PR head SHA.
-10. Require zero unresolved review threads.
-11. Re-read the current PR REST state immediately before merge, including both `mergeable` and raw `mergeable_state`.
-12. If the head changed, discard prior evidence and return `STALE_EVIDENCE`.
-13. If `mergeable` is not yet known or `mergeable_state` is missing/`unknown`, return `WAIT_FOR_EVIDENCE`.
-14. Require `mergeable == true` and `mergeable_state == clean`; otherwise return `BLOCK`.
-15. Use `expected_head_sha` or the platform's equivalent compare-and-swap guard when issuing the merge.
+3. Require the exact required status contexts to match the current approved inventory, with every context appearing once and no retired required context present.
+4. Require `Squash` as the selected merge method.
+5. Require ordinary governed execution to use no bypass.
+6. Fetch fresh required workflow/job state for that exact head.
+7. Require every required job to exist.
+8. Require every required job status to be `completed`.
+9. Require every required job conclusion to be `success`.
+10. Require every job's evidence head SHA to equal the current PR head SHA.
+11. Require zero unresolved review threads.
+12. Re-read the current PR REST state immediately before merge, including both `mergeable` and raw `mergeable_state`.
+13. If the head changed, discard prior evidence and return `STALE_EVIDENCE`.
+14. If `mergeable` is not yet known or `mergeable_state` is missing/`unknown`, return `WAIT_FOR_EVIDENCE`.
+15. Require `mergeable == true` and `mergeable_state == clean`; otherwise return `BLOCK`.
+16. Use `expected_head_sha` or the platform's equivalent compare-and-swap guard when issuing the merge.
 
 Any remediation commit invalidates all earlier check evidence. The complete required matrix must be collected again for the new head.
 
@@ -270,4 +288,4 @@ The executable contract is:
 - `tests/behavior/autonomous-merge-readiness-fixtures.json`
 - `tests/runtime/test_autonomous_merge_readiness_contract.py`
 
-The fixtures intentionally cover missing check data, pending jobs, failed governance/runtime/cross-platform/CodeQL checks, stale heads, red baseline progression, changelog omission, boolean mergeability misuse, missing and unknown mergeable state, blocked/behind/dirty/unstable mergeable states, ruleset drift, unauthorized bypass use, non-Squash merge selection, unresolved review threads, pre-merge gate preservation, tree mismatch, parent drift, unsigned canonical commits, and unverified post-merge state.
+The v4 fixtures intentionally cover missing check data, pending jobs, failed governance/runtime/cross-platform/required-analysis checks, stale heads, red baseline progression, changelog omission, boolean mergeability misuse, missing and unknown mergeable state, blocked/behind/dirty/unstable mergeable states, ruleset drift, duplicate required status contexts, retired required contexts, unauthorized bypass use, non-Squash merge selection, unresolved review threads, pre-merge gate preservation, tree mismatch, parent drift, unsigned canonical commits, and unverified post-merge state.

@@ -47,21 +47,40 @@ Specialist prose and progressive-disclosure knowledge remain under `../skills/*/
 
 Start with the current [Governance Overview](governance/README.md).
 
+Constitutional and Development Lifecycle V2 surfaces:
+
+- [Orchestra Prime Directive](governance/ORCHESTRA_PRIME_DIRECTIVE.md): stable constitutional authority/evidence boundary.
+- [Feature Admission Policy](governance/FEATURE_ADMISSION_POLICY.md): separates proposal admission and permanent promotion from implementation authority.
+- [Candidate Maturity and Feature Freeze](governance/CANDIDATE_MATURITY_FEATURE_FREEZE.md): exact development-candidate identity and maturity record.
+- [Governed Autonomy Candidate Lifecycle Integration](governance/GOVERNED_AUTONOMY_CANDIDATE_LIFECYCLE_INTEGRATION.md): thin reuse of the existing autonomy evaluator for candidate transitions.
+- [Qualification Gates, Evaluation, and Independent Audit](governance/QUALIFICATION_GATES_EVALUATION_AUDIT.md): risk-proportional qualification and controlled-evaluation integrity.
+- [Pre-state, Forward Recovery, and Branch Retirement](governance/PRESTATE_RECOVERY_BRANCH_RETIREMENT.md): forward-only recovery and non-authorizing retirement classification.
+- [Prime Directive / Lifecycle V2 Realignment](governance/PRIME_DIRECTIVE_LIFECYCLE_V2_REALIGNMENT.md): current-main reconciliation and Campaign 0-5 provenance.
+
+Existing governance/runtime surfaces remain subordinate and active:
+
 - `../machine/governance/policy.v1.json`: machine governance policy and exact structured authority.
 - [Governance Layer](governance/GOVERNANCE_LAYER.md): detailed human operating model, roles, modes, and risk scaling.
+- [Governed Autonomy Modes](governance/GOVERNED_AUTONOMY_MODES.md): who may advance already-satisfied governance transitions.
+- [Governed Autonomous Execution Protocol](governance/GOVERNED_AUTONOMOUS_EXECUTION_PROTOCOL.md): bounded autonomous development execution.
 - [Autonomous Merge Readiness Protocol](governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md): exact-head merge-readiness rules.
 - [Compliance Registry Integration](governance/COMPLIANCE_REGISTRY_INTEGRATION.md): registry boundary and evidence flow.
 - [Authority and Capability Runtime Architecture](project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md): trusted runtime authority and capability design record.
+
+Development Lifecycle V2 does not replace the runtime lifecycle controller, governance kernel, Arbiter, authority envelope, autonomy evaluator, or merge-readiness engine. Admission, implementation, validation, qualification, promotion, merge readiness, merge authority, and release/activation remain distinct.
 
 Structured machine governance, runtime state, receipts, and evidence use JSON. Markdown remains the explanation, rationale, and instruction layer.
 
 ## Validation, evidence, and continuity
 
 - [Validation Guide](setup/VALIDATION.md): local and CI validation entry points.
-- `../machine/schemas/`: machine record schemas.
+- `../machine/schemas/`: machine record schemas, including Feature Admission, Candidate Maturity, Qualification Gate, and Repository Recovery/Retirement contracts.
 - `../machine/release-evidence/`: structured release and confidence evidence.
+- [UIX-9C V3 post-study result](validation/uix9b-live-evidence-v2/v3-poststudy-result.v2.json): completed controlled UI study with terminal `NO_BENEFIT_ESTABLISHED`, zero primary improvements, and zero primary regressions.
 - `../PROJECT_STATE.md`: human project-state chronology.
 - `../SESSION_HANDOFF.md`: repository-local human continuity record.
+
+Negative and inconclusive experimental results remain evidence. A no-benefit result must not be selectively discarded, retried until positive, or converted into a harm claim.
 
 Cross-repository continuity may be supplied by a user-selected external continuity or memory backend. That backend is outside Orchestra's public source and does not supersede live Git state, validated source evidence, or Orchestra authority boundaries.
 

@@ -1,0 +1,226 @@
+{
+  "schema_version": "orchestra-qualification-gate-fixtures-v1",
+  "base_record": {
+    "$schema": "../schemas/qualification-gate-plan.v1.schema.json",
+    "schema_version": "orchestra.qualification-gate-plan.v1",
+    "record_type": "QUALIFICATION_GATE_PLAN",
+    "record_id": "qualification-example-001",
+    "candidate_id": "candidate-example-001",
+    "candidate_identity": {
+      "repository": "Baelfyre/Orchestra",
+      "head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "tree_sha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "base_sha": "cccccccccccccccccccccccccccccccccccccccc",
+      "base_tree": "dddddddddddddddddddddddddddddddddddddddd"
+    },
+    "classification": {
+      "change_class": "BOUNDED_FIX",
+      "risk_level": "MODERATE",
+      "rationale": "Bounded runtime correction.",
+      "factors": {
+        "runtime_behavior": true,
+        "public_contract": false,
+        "dependency_or_integration": false,
+        "governance_or_security": false,
+        "trust_boundary": false,
+        "adaptive_promotion": false,
+        "release_or_recovery_automation": false,
+        "destructive_automation": false,
+        "trivial_truth_correction": false
+      }
+    },
+    "gates": {
+      "engineering_validation": {"applicability": "REQUIRED", "rationale": "All candidates require engineering validation.", "status": "PASS", "evidence_refs": ["run:validate"]},
+      "regression_compatibility": {"applicability": "REQUIRED", "rationale": "Runtime behavior changed.", "status": "PASS", "evidence_refs": ["run:cross-platform"]},
+      "security_governance": {"applicability": "NOT_APPLICABLE", "rationale": "No security, governance, dependency, or trust boundary change.", "status": "NOT_APPLICABLE", "evidence_refs": []},
+      "controlled_evaluation": {"applicability": "NOT_APPLICABLE", "rationale": "Deterministic validation is sufficient.", "status": "NOT_APPLICABLE", "evidence_refs": []},
+      "independent_audit": {"applicability": "NOT_APPLICABLE", "rationale": "Conditional bounded-fix audit was not triggered.", "status": "NOT_APPLICABLE", "evidence_refs": []}
+    },
+    "evaluation": {
+      "disposition": "DETERMINISTIC_VALIDATION_SUFFICIENT",
+      "rationale": "Behavior is deterministically testable.",
+      "evaluation_plan_ref": null,
+      "experiment_protocol": null
+    },
+    "independent_audit": {
+      "requirement": "CONDITIONAL",
+      "condition_triggered": false,
+      "rationale": "Bounded fix does not touch a mandatory audit trigger.",
+      "first_pass_read_only": true,
+      "status": "NOT_APPLICABLE",
+      "evidence_refs": []
+    },
+    "qualification": {"disposition": "QUALIFIED", "rationale": "All required gates passed."},
+    "authority": {
+      "record_grants_authority": false,
+      "qualification_grants_merge_authority": false,
+      "evaluation_grants_live_call_authority": false,
+      "audit_grants_merge_authority": false,
+      "qualified_grants_release_authority": false
+    }
+  },
+  "cases": [
+    {"id": "bounded-fix-qualified", "valid": true, "expected_qualification": "QUALIFIED", "overrides": {}},
+    {
+      "id": "pending-required-gate",
+      "valid": true,
+      "expected_qualification": "QUALIFICATION_PENDING",
+      "overrides": {
+        "gates": {"engineering_validation": {"status": "PENDING", "evidence_refs": []}},
+        "qualification": {"disposition": "QUALIFICATION_PENDING", "rationale": "Engineering evidence remains pending."}
+      }
+    },
+    {
+      "id": "runtime-change-cannot-skip-regression",
+      "valid": false,
+      "overrides": {"gates": {"regression_compatibility": {"applicability": "NOT_APPLICABLE", "rationale": "Incorrectly omitted.", "status": "NOT_APPLICABLE", "evidence_refs": []}}}
+    },
+    {
+      "id": "governance-change-cannot-skip-security-gate",
+      "valid": false,
+      "overrides": {
+        "classification": {"change_class": "GOVERNANCE_OR_SECURITY_CHANGE", "risk_level": "HIGH", "factors": {"runtime_behavior": false, "governance_or_security": true}},
+        "independent_audit": {"requirement": "REQUIRED", "condition_triggered": true, "status": "PASS", "evidence_refs": ["audit:1"]},
+        "gates": {
+          "regression_compatibility": {"applicability": "NOT_APPLICABLE", "rationale": "No runtime compatibility surface.", "status": "NOT_APPLICABLE", "evidence_refs": []},
+          "independent_audit": {"applicability": "REQUIRED", "rationale": "Governance change requires audit.", "status": "PASS", "evidence_refs": ["audit:1"]}
+        }
+      }
+    },
+    {
+      "id": "trust-boundary-requires-independent-audit",
+      "valid": false,
+      "overrides": {
+        "classification": {"change_class": "TRUST_BOUNDARY_CHANGE", "risk_level": "HIGH", "factors": {"runtime_behavior": false, "trust_boundary": true}},
+        "independent_audit": {"requirement": "NOT_REQUIRED", "condition_triggered": false},
+        "gates": {
+          "security_governance": {"applicability": "REQUIRED", "rationale": "Trust boundary change.", "status": "PASS", "evidence_refs": ["security:1"]},
+          "regression_compatibility": {"applicability": "REQUIRED", "rationale": "Trust boundary change.", "status": "PASS", "evidence_refs": ["regression:1"]}
+        }
+      }
+    },
+    {
+      "id": "adaptive-promotion-cannot-use-deterministic-only",
+      "valid": false,
+      "overrides": {
+        "classification": {"change_class": "ADAPTIVE_PROMOTION", "risk_level": "HIGH", "factors": {"runtime_behavior": false, "adaptive_promotion": true}},
+        "independent_audit": {"requirement": "REQUIRED", "condition_triggered": true, "status": "PASS", "evidence_refs": ["audit:adaptive"]},
+        "gates": {
+          "regression_compatibility": {"applicability": "REQUIRED", "rationale": "Adaptive promotion can alter selection behavior.", "status": "PASS", "evidence_refs": ["regression:adaptive"]},
+          "security_governance": {"applicability": "REQUIRED", "rationale": "Adaptive promotion requires governance review.", "status": "PASS", "evidence_refs": ["governance:adaptive"]},
+          "independent_audit": {"applicability": "REQUIRED", "rationale": "Adaptive promotion requires audit.", "status": "PASS", "evidence_refs": ["audit:adaptive"]}
+        }
+      }
+    },
+    {
+      "id": "adaptive-experiment-qualified",
+      "valid": true,
+      "expected_qualification": "QUALIFIED",
+      "overrides": {
+        "classification": {"change_class": "ADAPTIVE_PROMOTION", "risk_level": "HIGH", "factors": {"runtime_behavior": false, "adaptive_promotion": true}},
+        "gates": {
+          "regression_compatibility": {"applicability": "REQUIRED", "rationale": "Adaptive promotion can alter selection behavior.", "status": "PASS", "evidence_refs": ["regression:adaptive"]},
+          "security_governance": {"applicability": "REQUIRED", "rationale": "Adaptive promotion requires governance review.", "status": "PASS", "evidence_refs": ["governance:adaptive"]},
+          "controlled_evaluation": {"applicability": "REQUIRED", "rationale": "Adaptive promotion requires controlled efficacy evaluation.", "status": "PASS", "evidence_refs": ["experiment:adaptive-v1"]},
+          "independent_audit": {"applicability": "REQUIRED", "rationale": "Adaptive promotion requires independent audit.", "status": "PASS", "evidence_refs": ["audit:adaptive"]}
+        },
+        "evaluation": {
+          "disposition": "EXPERIMENT_REQUIRED",
+          "rationale": "Real-world efficacy must be established.",
+          "evaluation_plan_ref": "experiment:adaptive-v1",
+          "experiment_protocol": {
+            "research_question": "Does adaptive treatment improve repeated preference adherence?",
+            "hypothesis": "Treatment reduces repeated correction without governance regression.",
+            "provider_model_revision": "frozen-provider-model-revision",
+            "task_fixture_ref": "fixture:adaptive-efficacy-v2",
+            "validator_ref": "validator:adaptive-efficacy-v2",
+            "metrics": ["preference_adherence", "governance_violations"],
+            "endpoint_ref": "endpoint:frozen",
+            "order_policy_ref": "order:balanced",
+            "retry_policy_ref": "retry:preregistered",
+            "resource_ceiling_ref": "ceiling:authorized",
+            "stop_conditions_ref": "stop:preregistered",
+            "state_isolation_ref": "isolation:run",
+            "all_attempts_retained": true,
+            "outcome_based_retry_prohibited": true,
+            "selective_exclusion_prohibited": true,
+            "post_start_metric_change_prohibited": true,
+            "negative_inconclusive_preserved": true
+          }
+        },
+        "independent_audit": {"requirement": "REQUIRED", "condition_triggered": true, "status": "PASS", "evidence_refs": ["audit:adaptive"]},
+        "qualification": {"disposition": "QUALIFIED", "rationale": "All mandatory gates passed."}
+      }
+    },
+    {
+      "id": "experiment-requires-preregistered-protocol",
+      "valid": false,
+      "overrides": {
+        "classification": {"change_class": "ADAPTIVE_PROMOTION", "risk_level": "HIGH", "factors": {"runtime_behavior": false, "adaptive_promotion": true}},
+        "evaluation": {"disposition": "EXPERIMENT_REQUIRED", "rationale": "Experiment required.", "evaluation_plan_ref": "experiment:missing", "experiment_protocol": null}
+      }
+    },
+    {
+      "id": "failed-required-gate-must-block",
+      "valid": false,
+      "overrides": {"gates": {"regression_compatibility": {"status": "FAIL"}}}
+    },
+    {
+      "id": "failed-required-gate-records-blocked",
+      "valid": true,
+      "expected_qualification": "BLOCKED",
+      "overrides": {
+        "gates": {"regression_compatibility": {"status": "FAIL"}},
+        "qualification": {"disposition": "BLOCKED", "rationale": "Required regression gate failed."}
+      }
+    },
+    {
+      "id": "trivial-correction-cannot-hide-runtime-change",
+      "valid": false,
+      "overrides": {"classification": {"change_class": "TRIVIAL_CORRECTION", "risk_level": "LOW", "factors": {"trivial_truth_correction": true}}}
+    },
+    {
+      "id": "audit-first-pass-must-be-read-only",
+      "valid": false,
+      "overrides": {"independent_audit": {"first_pass_read_only": false}}
+    },
+    {
+      "id": "experiment-must-preserve-negative-evidence",
+      "valid": false,
+      "overrides": {
+        "classification": {"change_class": "ADAPTIVE_PROMOTION", "risk_level": "HIGH", "factors": {"runtime_behavior": false, "adaptive_promotion": true}},
+        "gates": {
+          "regression_compatibility": {"applicability": "REQUIRED", "rationale": "Adaptive promotion.", "status": "PASS", "evidence_refs": ["regression:adaptive"]},
+          "security_governance": {"applicability": "REQUIRED", "rationale": "Adaptive promotion.", "status": "PASS", "evidence_refs": ["governance:adaptive"]},
+          "controlled_evaluation": {"applicability": "REQUIRED", "rationale": "Experiment required.", "status": "PASS", "evidence_refs": ["experiment:adaptive"]},
+          "independent_audit": {"applicability": "REQUIRED", "rationale": "Adaptive promotion.", "status": "PASS", "evidence_refs": ["audit:adaptive"]}
+        },
+        "evaluation": {
+          "disposition": "EXPERIMENT_REQUIRED",
+          "rationale": "Experiment required.",
+          "evaluation_plan_ref": "experiment:adaptive",
+          "experiment_protocol": {
+            "research_question": "Does the treatment improve outcomes?",
+            "hypothesis": "Treatment improves the preregistered metric.",
+            "provider_model_revision": "frozen-provider-model-revision",
+            "task_fixture_ref": "fixture:adaptive",
+            "validator_ref": "validator:adaptive",
+            "metrics": ["benefit"],
+            "endpoint_ref": "endpoint:frozen",
+            "order_policy_ref": "order:balanced",
+            "retry_policy_ref": "retry:preregistered",
+            "resource_ceiling_ref": "ceiling:authorized",
+            "stop_conditions_ref": "stop:preregistered",
+            "state_isolation_ref": "isolation:run",
+            "all_attempts_retained": true,
+            "outcome_based_retry_prohibited": true,
+            "selective_exclusion_prohibited": true,
+            "post_start_metric_change_prohibited": true,
+            "negative_inconclusive_preserved": false
+          }
+        },
+        "independent_audit": {"requirement": "REQUIRED", "condition_triggered": true, "status": "PASS", "evidence_refs": ["audit:adaptive"]}
+      }
+    }
+  ]
+}

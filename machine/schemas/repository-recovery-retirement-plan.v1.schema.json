@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/repository-recovery-retirement-plan.v1.schema.json",
+  "title": "Orchestra Repository Recovery and Retirement Plan v1",
+  "description": "Dry-run-only pre-state, forward-recovery, and branch-retirement evidence contract. It never grants or performs ref mutation, recovery execution, branch deletion, force push, or history rewrite.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "record_type", "record_id", "candidate_id", "prestate", "recovery", "branches", "dry_run", "authority"],
+  "properties": {
+    "$schema": {"const": "../schemas/repository-recovery-retirement-plan.v1.schema.json"},
+    "schema_version": {"const": "orchestra.repository-recovery-retirement-plan.v1"},
+    "record_type": {"const": "REPOSITORY_RECOVERY_RETIREMENT_PLAN"},
+    "record_id": {"$ref": "#/$defs/identifier"},
+    "candidate_id": {"$ref": "#/$defs/identifier"},
+    "prestate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "canonical_branch", "pre_merge_sha", "pre_merge_tree", "evidence_ref", "risk_level", "temporary_ref_policy", "temporary_ref_name", "retention_days", "ref_reuse_prohibited", "force_update_prohibited"],
+      "properties": {
+        "repository": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+        "canonical_branch": {"type": "string", "minLength": 1},
+        "pre_merge_sha": {"$ref": "#/$defs/git_sha"},
+        "pre_merge_tree": {"$ref": "#/$defs/git_sha"},
+        "evidence_ref": {"type": "string", "minLength": 3},
+        "risk_level": {"enum": ["LOW", "MODERATE", "HIGH", "CRITICAL"]},
+        "temporary_ref_policy": {"enum": ["EVIDENCE_ONLY", "TEMPORARY_REF_OPTIONAL", "TEMPORARY_REF_REQUIRED"]},
+        "temporary_ref_name": {"oneOf": [{"type": "null"}, {"type": "string", "pattern": "^prestate/main/[A-Za-z0-9._-]+-[0-9]{8}-[0-9a-f]{7,12}$"}]},
+        "retention_days": {"type": "integer", "minimum": 0, "maximum": 3650},
+        "ref_reuse_prohibited": {"const": true},
+        "force_update_prohibited": {"const": true}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"temporary_ref_policy": {"const": "TEMPORARY_REF_REQUIRED"}}, "required": ["temporary_ref_policy"]},
+          "then": {"properties": {"temporary_ref_name": {"type": "string", "pattern": "^prestate/main/[A-Za-z0-9._-]+-[0-9]{8}-[0-9a-f]{7,12}$"}, "retention_days": {"minimum": 30}}}
+        },
+        {
+          "if": {"properties": {"temporary_ref_policy": {"const": "EVIDENCE_ONLY"}}, "required": ["temporary_ref_policy"]},
+          "then": {"properties": {"temporary_ref_name": {"type": "null"}, "retention_days": {"const": 0}}}
+        }
+      ]
+    },
+    "recovery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["strategy", "reset_main_backward_allowed", "force_push_allowed", "requires_new_candidate", "requires_validation", "requires_pull_request", "requires_separate_merge_authority", "requires_canonical_readback", "stale_evidence_reuse_allowed"],
+      "properties": {
+        "strategy": {"const": "FORWARD_ONLY"},
+        "reset_main_backward_allowed": {"const": false},
+        "force_push_allowed": {"const": false},
+        "requires_new_candidate": {"const": true},
+        "requires_validation": {"const": true},
+        "requires_pull_request": {"const": true},
+        "requires_separate_merge_authority": {"const": true},
+        "requires_canonical_readback": {"const": true},
+        "stale_evidence_reuse_allowed": {"const": false}
+      }
+    },
+    "branches": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/branch_record"},
+      "uniqueItems": true
+    },
+    "dry_run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "ref_creation_performed", "recovery_execution_performed", "branch_deletion_performed", "force_push_performed", "history_rewrite_performed"],
+      "properties": {
+        "enabled": {"const": true},
+        "ref_creation_performed": {"const": false},
+        "recovery_execution_performed": {"const": false},
+        "branch_deletion_performed": {"const": false},
+        "force_push_performed": {"const": false},
+        "history_rewrite_performed": {"const": false}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_grants_ref_creation_authority", "record_grants_recovery_authority", "record_grants_branch_deletion_authority", "retention_expiry_grants_deletion_authority", "eligibility_grants_deletion_authority"],
+      "properties": {
+        "record_grants_ref_creation_authority": {"const": false},
+        "record_grants_recovery_authority": {"const": false},
+        "record_grants_branch_deletion_authority": {"const": false},
+        "retention_expiry_grants_deletion_authority": {"const": false},
+        "eligibility_grants_deletion_authority": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "identifier": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$"},
+    "git_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "branch_record": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "tip_sha", "classification", "recommended_action", "age_days", "retention_days", "evidence_current", "open_pr", "active_role", "unique_work", "canonical_equivalence_proven", "sealed_evidence", "historical_reason", "notes"],
+      "properties": {
+        "ref": {"type": "string", "minLength": 1},
+        "tip_sha": {"$ref": "#/$defs/git_sha"},
+        "classification": {"enum": ["ACTIVE", "OPEN_PR", "CANONICAL_EQUIVALENT", "SUPERSEDED", "RECOVERY_EXPIRED", "HISTORICAL_EVIDENCE", "UNMERGED_UNIQUE", "UNKNOWN"]},
+        "recommended_action": {"enum": ["KEEP", "QUARANTINE", "ELIGIBLE_FOR_SEPARATE_AUTHORIZATION"]},
+        "age_days": {"type": "integer", "minimum": 0},
+        "retention_days": {"type": "integer", "minimum": 0, "maximum": 3650},
+        "evidence_current": {"type": "boolean"},
+        "open_pr": {"type": "boolean"},
+        "active_role": {"type": "boolean"},
+        "unique_work": {"type": "boolean"},
+        "canonical_equivalence_proven": {"type": "boolean"},
+        "sealed_evidence": {"type": "boolean"},
+        "historical_reason": {"oneOf": [{"type": "null"}, {"type": "string", "minLength": 3}]},
+        "notes": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}
