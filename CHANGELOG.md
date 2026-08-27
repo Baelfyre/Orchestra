@@ -2,6 +2,10 @@
 
 This root changelog is release-oriented. Detailed pre-v1.7 development chronology remains preserved byte-for-byte in [the historical changelog archive](docs/history/CHANGELOG_PRE_V1_7.md), Git history, merged pull requests, decision records, and validation evidence.
 
+## Post-v1.7 candidate maturation
+
+- Added candidate-maturation T1/T2 validation records and zero-call failure-injection coverage for the frozen UIX-9B V2 evidence pipeline. Added a proposal-only resource ceiling record that separates six valid observations from one bounded invalid-infrastructure replacement without authorizing UIX-9C.
+
 ## Post-v1.7 governed proof preparation
 
 - Connected the frozen deterministic evaluator, observation validation, evidence persistence, and adjudication into the future live-proof execution path with fail-closed valid-session semantics and staged evidence finalization.

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from copy import deepcopy
 import json
+import os
 from pathlib import Path
 import sys
 
@@ -325,6 +326,44 @@ def test_malformed_session_evidence_is_invalid_session(tmp_path: Path, monkeypat
         _campaign(tmp_path, monkeypatch, session_runner=lambda _workspace, _prompt: [])
 
 
+def test_process_failure_is_invalid_and_retries_only_under_frozen_policy(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = 0
+
+    def process_failure(_workspace: Path, _prompt: str) -> dict:
+        nonlocal calls
+        calls += 1
+        raise OSError("synthetic process failure")
+
+    with pytest.raises(v2_runner.ProtocolBreach, match="SESSION_NOT_VALID:HOST_CRASH"):
+        _campaign(tmp_path, monkeypatch, session_runner=process_failure)
+
+    state = _load(tmp_path / "campaign-state.json")
+    assert calls == 2
+    assert state["counters"] == {"model_calls": 2, "provider_calls": 2, "provider_interactions": 2, "invalid_retries": 1}
+    assert state["runs"]["A1"]["valid_session"] is False
+
+
+def test_malformed_raw_output_is_invalid_session(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    with pytest.raises(v2_runner.ProtocolBreach, match="SESSION_NOT_VALID:PROTOCOL_BREACH"):
+        _campaign(tmp_path, monkeypatch, session_runner=lambda _workspace, _prompt: {"stdout": "not-a-session"})
+
+
+def test_invalid_candidate_tree_is_invalid_session(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def remove_project(workspace: Path, _prompt: str) -> dict:
+        import shutil
+        shutil.rmtree(workspace / "project")
+        return {"classification": "OUTPUT_CAPTURED_PENDING_VALIDATOR", "parsed": {}}
+
+    with pytest.raises(v2_runner.ProtocolBreach, match="EVIDENCE_PIPELINE_FAILURE"):
+        _campaign(tmp_path, monkeypatch, session_runner=remove_project, validator_runner=v2_runner.run_independent_validator)
+    assert _load(tmp_path / "campaign-state.json")["runs"]["A1"]["valid_session"] is False
+
+
+def test_incomplete_validator_evidence_is_invalid_session(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    with pytest.raises(v2_runner.ProtocolBreach, match="EVIDENCE_PIPELINE_FAILURE"):
+        _campaign(tmp_path, monkeypatch, validator_runner=lambda *_args: {})
+
+
 def test_complete_valid_chain_sets_valid_session_only_after_adjudication(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     _campaign(tmp_path, monkeypatch)
     state = _load(tmp_path / "campaign-state.json")
@@ -340,6 +379,96 @@ def test_partial_evidence_is_never_counted(tmp_path: Path, monkeypatch: pytest.M
     state = _load(tmp_path / "campaign-state.json")
     assert all(not run["valid_session"] for run in state["runs"].values())
     assert not list((tmp_path / "pairs").glob("PAIR_*")) or not list((tmp_path / "pairs").glob("PAIR_*/pair-adjudication.json"))
+
+
+def test_incomplete_evidence_surface_is_invalid_session(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    def persist_only_observation(root: Path, run_id: str, observation: dict, _metric_result: dict) -> None:
+        v2_runner._atomic_json(root / "observations" / f"{run_id}.json", observation)
+
+    monkeypatch.setattr(v2_runner, "persist_evaluated_artifacts", persist_only_observation)
+    with pytest.raises(v2_runner.ProtocolBreach, match="MISSING_FINAL_ARTIFACT"):
+        _campaign(tmp_path, monkeypatch)
+    state = _load(tmp_path / "campaign-state.json")
+    assert state["runs"]["A1"]["valid_session"] is False
+    assert not (tmp_path / "pairs" / "PAIR_1").exists()
+
+
+def test_simulated_crash_before_pair_finalization_is_invalid_and_not_promoted(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    original_replace = os.replace
+
+    def crash_before_finalization(source: str | bytes | os.PathLike, destination: str | bytes | os.PathLike) -> None:
+        if Path(source).name == "PAIR_1":
+            raise OSError("synthetic crash before finalization")
+        original_replace(source, destination)
+
+    monkeypatch.setattr(v2_runner.os, "replace", crash_before_finalization)
+    with pytest.raises(v2_runner.ProtocolBreach, match="ADJUDICATION_PIPELINE_FAILURE"):
+        _campaign(tmp_path, monkeypatch)
+    state = _load(tmp_path / "campaign-state.json")
+    assert all(not run["valid_session"] for run in state["runs"].values())
+    assert not (tmp_path / "pairs" / "PAIR_1").exists()
+
+
+def test_restart_with_partial_state_is_rejected_without_session_call(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    v2_runner._atomic_json(tmp_path / "campaign-state.json", {
+        "schema_version": v2_runner.EVIDENCE_STATE_VERSION,
+        "runs": {"A1": {"status": "STARTED", "valid_session": False}},
+        "counters": {"model_calls": 1, "provider_calls": 1, "provider_interactions": 1, "invalid_retries": 0},
+    })
+    called = False
+
+    def never_run(_workspace: Path, _prompt: str) -> dict:
+        nonlocal called
+        called = True
+        raise AssertionError("partial recovery must not invoke a session")
+
+    with pytest.raises(v2_runner.ExecutionRefused, match="RECOVERY_REQUIRES_AUDIT_NO_DOUBLE_COUNT"):
+        _campaign(tmp_path, monkeypatch, session_runner=never_run)
+    assert called is False
+    assert _load(tmp_path / "campaign-state.json")["runs"]["A1"]["valid_session"] is False
+
+
+def test_counter_overflow_attempt_is_rejected_without_advancing_counters(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    v2_runner._atomic_json(tmp_path / "campaign-state.json", {
+        "schema_version": v2_runner.EVIDENCE_STATE_VERSION,
+        "runs": {},
+        "counters": {"model_calls": v2_runner.MAX_TOTAL_MODEL_CALLS, "provider_calls": v2_runner.MAX_PROVIDER_CALLS, "provider_interactions": v2_runner.MAX_TOTAL_PROVIDER_INTERACTIONS, "invalid_retries": 0},
+    })
+    with pytest.raises(v2_runner.ExecutionRefused, match="IMMUTABLE_PROVIDER_CEILING_REACHED"):
+        _campaign(tmp_path, monkeypatch, session_runner=lambda *_args: (_ for _ in ()).throw(AssertionError("ceiling must stop before session")))
+    state = _load(tmp_path / "campaign-state.json")
+    assert state["counters"] == {"model_calls": 6, "provider_calls": 6, "provider_interactions": 7, "invalid_retries": 0}
+    assert state["runs"]["A1"]["valid_session"] is False
+
+
+def test_wrong_frozen_identity_is_rejected_before_session(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(v2_runner, "verify_frozen_identities", lambda: (_ for _ in ()).throw(RuntimeError("FROZEN_BASE_IDENTITY_MISMATCH")))
+    monkeypatch.setattr(v2_runner, "_authorize_live", lambda *_args, **_kwargs: None)
+    called = False
+
+    def never_run(_workspace: Path, _prompt: str) -> dict:
+        nonlocal called
+        called = True
+        raise AssertionError("identity failure must precede session")
+
+    with pytest.raises(RuntimeError, match="FROZEN_BASE_IDENTITY_MISMATCH"):
+        v2_runner.execute_campaign(evidence_root=tmp_path, live_call_gate=True, session_runner=never_run)
+    assert called is False
+
+
+def test_wrong_preparation_identity_is_rejected_before_session(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(v2_runner, "verify_frozen_identities", lambda: (_ for _ in ()).throw(RuntimeError("CANONICAL_PREPARATION_LINEAGE_DRIFT")))
+    monkeypatch.setattr(v2_runner, "_authorize_live", lambda *_args, **_kwargs: None)
+    called = False
+
+    def never_run(_workspace: Path, _prompt: str) -> dict:
+        nonlocal called
+        called = True
+        raise AssertionError("preparation identity failure must precede session")
+
+    with pytest.raises(RuntimeError, match="CANONICAL_PREPARATION_LINEAGE_DRIFT"):
+        v2_runner.execute_campaign(evidence_root=tmp_path, live_call_gate=True, session_runner=never_run)
+    assert called is False
 
 
 def test_restart_cannot_double_count_run(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
