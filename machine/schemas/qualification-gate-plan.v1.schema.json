@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/qualification-gate-plan.v1.schema.json",
+  "title": "Orchestra Qualification Gate Plan v1",
+  "description": "Risk-proportional qualification, evaluation, and independent-audit plan bound to one frozen candidate. This record classifies evidence obligations and does not grant execution, merge, release, deployment, policy, destructive, or live-call authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "record_type", "record_id", "candidate_id", "candidate_identity", "classification", "gates", "evaluation", "independent_audit", "qualification", "authority"],
+  "properties": {
+    "$schema": {"const": "../schemas/qualification-gate-plan.v1.schema.json"},
+    "schema_version": {"const": "orchestra.qualification-gate-plan.v1"},
+    "record_type": {"const": "QUALIFICATION_GATE_PLAN"},
+    "record_id": {"$ref": "#/$defs/identifier"},
+    "candidate_id": {"$ref": "#/$defs/identifier"},
+    "candidate_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "head_sha", "tree_sha", "base_sha", "base_tree"],
+      "properties": {
+        "repository": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+        "head_sha": {"$ref": "#/$defs/git_sha"},
+        "tree_sha": {"$ref": "#/$defs/git_sha"},
+        "base_sha": {"$ref": "#/$defs/git_sha"},
+        "base_tree": {"$ref": "#/$defs/git_sha"}
+      }
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["change_class", "risk_level", "factors", "rationale"],
+      "properties": {
+        "change_class": {"enum": ["TRIVIAL_CORRECTION", "BOUNDED_FIX", "CAPABILITY_CHANGE", "GOVERNANCE_OR_SECURITY_CHANGE", "TRUST_BOUNDARY_CHANGE", "ADAPTIVE_PROMOTION", "RELEASE_RECOVERY_AUTOMATION"]},
+        "risk_level": {"enum": ["LOW", "MODERATE", "HIGH", "CRITICAL"]},
+        "rationale": {"type": "string", "minLength": 3},
+        "factors": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["runtime_behavior", "public_contract", "dependency_or_integration", "governance_or_security", "trust_boundary", "adaptive_promotion", "release_or_recovery_automation", "destructive_automation", "trivial_truth_correction"],
+          "properties": {
+            "runtime_behavior": {"type": "boolean"},
+            "public_contract": {"type": "boolean"},
+            "dependency_or_integration": {"type": "boolean"},
+            "governance_or_security": {"type": "boolean"},
+            "trust_boundary": {"type": "boolean"},
+            "adaptive_promotion": {"type": "boolean"},
+            "release_or_recovery_automation": {"type": "boolean"},
+            "destructive_automation": {"type": "boolean"},
+            "trivial_truth_correction": {"type": "boolean"}
+          }
+        }
+      }
+    },
+    "gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["engineering_validation", "regression_compatibility", "security_governance", "controlled_evaluation", "independent_audit"],
+      "properties": {
+        "engineering_validation": {"$ref": "#/$defs/gate"},
+        "regression_compatibility": {"$ref": "#/$defs/gate"},
+        "security_governance": {"$ref": "#/$defs/gate"},
+        "controlled_evaluation": {"$ref": "#/$defs/gate"},
+        "independent_audit": {"$ref": "#/$defs/gate"}
+      }
+    },
+    "evaluation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["disposition", "rationale", "evaluation_plan_ref", "experiment_protocol"],
+      "properties": {
+        "disposition": {"enum": ["DETERMINISTIC_VALIDATION_SUFFICIENT", "ADVERSARIAL_VALIDATION_REQUIRED", "SIMULATION_REQUIRED", "EXPERIMENT_REQUIRED", "NOT_APPLICABLE"]},
+        "rationale": {"type": "string", "minLength": 3},
+        "evaluation_plan_ref": {"oneOf": [{"type": "null"}, {"type": "string", "minLength": 3}]},
+        "experiment_protocol": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/experiment_protocol"}]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"disposition": {"enum": ["ADVERSARIAL_VALIDATION_REQUIRED", "SIMULATION_REQUIRED", "EXPERIMENT_REQUIRED"]}}, "required": ["disposition"]},
+          "then": {"properties": {"evaluation_plan_ref": {"type": "string", "minLength": 3}}}
+        },
+        {
+          "if": {"properties": {"disposition": {"const": "EXPERIMENT_REQUIRED"}}, "required": ["disposition"]},
+          "then": {"properties": {"experiment_protocol": {"$ref": "#/$defs/experiment_protocol"}}},
+          "else": {"properties": {"experiment_protocol": {"type": "null"}}}
+        }
+      ]
+    },
+    "independent_audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requirement", "condition_triggered", "rationale", "first_pass_read_only", "status", "evidence_refs"],
+      "properties": {
+        "requirement": {"enum": ["REQUIRED", "CONDITIONAL", "NOT_REQUIRED"]},
+        "condition_triggered": {"type": "boolean"},
+        "rationale": {"type": "string", "minLength": 3},
+        "first_pass_read_only": {"const": true},
+        "status": {"enum": ["PENDING", "PASS", "FAIL", "NOT_APPLICABLE"]},
+        "evidence_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 3}}
+      }
+    },
+    "qualification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["disposition", "rationale"],
+      "properties": {
+        "disposition": {"enum": ["QUALIFICATION_PENDING", "QUALIFIED", "BLOCKED"]},
+        "rationale": {"type": "string", "minLength": 3}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_grants_authority", "qualification_grants_merge_authority", "evaluation_grants_live_call_authority", "audit_grants_merge_authority", "qualified_grants_release_authority"],
+      "properties": {
+        "record_grants_authority": {"const": false},
+        "qualification_grants_merge_authority": {"const": false},
+        "evaluation_grants_live_call_authority": {"const": false},
+        "audit_grants_merge_authority": {"const": false},
+        "qualified_grants_release_authority": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "identifier": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$"},
+    "git_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["applicability", "rationale", "status", "evidence_refs"],
+      "properties": {
+        "applicability": {"enum": ["REQUIRED", "NOT_APPLICABLE"]},
+        "rationale": {"type": "string", "minLength": 3},
+        "status": {"enum": ["PENDING", "PASS", "FAIL", "NOT_APPLICABLE"]},
+        "evidence_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 3}}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"applicability": {"const": "NOT_APPLICABLE"}}, "required": ["applicability"]},
+          "then": {"properties": {"status": {"const": "NOT_APPLICABLE"}, "evidence_refs": {"maxItems": 0}}}
+        },
+        {
+          "if": {"properties": {"applicability": {"const": "REQUIRED"}}, "required": ["applicability"]},
+          "then": {"properties": {"status": {"enum": ["PENDING", "PASS", "FAIL"]}}}
+        }
+      ]
+    },
+    "experiment_protocol": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["research_question", "hypothesis", "provider_model_revision", "task_fixture_ref", "validator_ref", "metrics", "endpoint_ref", "order_policy_ref", "retry_policy_ref", "resource_ceiling_ref", "stop_conditions_ref", "state_isolation_ref", "all_attempts_retained", "outcome_based_retry_prohibited", "selective_exclusion_prohibited", "post_start_metric_change_prohibited", "negative_inconclusive_preserved"],
+      "properties": {
+        "research_question": {"type": "string", "minLength": 3},
+        "hypothesis": {"type": "string", "minLength": 3},
+        "provider_model_revision": {"type": "string", "minLength": 3},
+        "task_fixture_ref": {"type": "string", "minLength": 3},
+        "validator_ref": {"type": "string", "minLength": 3},
+        "metrics": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "endpoint_ref": {"type": "string", "minLength": 3},
+        "order_policy_ref": {"type": "string", "minLength": 3},
+        "retry_policy_ref": {"type": "string", "minLength": 3},
+        "resource_ceiling_ref": {"type": "string", "minLength": 3},
+        "stop_conditions_ref": {"type": "string", "minLength": 3},
+        "state_isolation_ref": {"type": "string", "minLength": 3},
+        "all_attempts_retained": {"const": true},
+        "outcome_based_retry_prohibited": {"const": true},
+        "selective_exclusion_prohibited": {"const": true},
+        "post_start_metric_change_prohibited": {"const": true},
+        "negative_inconclusive_preserved": {"const": true}
+      }
+    }
+  }
+}
