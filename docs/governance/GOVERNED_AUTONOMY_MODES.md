@@ -78,6 +78,29 @@ effective transitions =
 
 If any required input is unavailable or stale, Orchestra returns `WAIT_FOR_EVIDENCE` or `ESCALATE_HUMAN`; it does not infer permission.
 
+## Candidate maturity integration
+
+The [Governed Autonomy Candidate Lifecycle Integration](GOVERNED_AUTONOMY_CANDIDATE_LIFECYCLE_INTEGRATION.md) applies these existing profile ceilings to the Candidate Maturity and Feature Freeze states without creating another autonomy engine.
+
+```text
+AUTONOMY_CHANGES_PAUSES_NOT_PREREQUISITES
+CANDIDATE_TRANSITION != PERSISTENCE_AUTHORITY
+FULL_AUTONOMOUS != FEATURE_ADOPTION_AUTHORITY
+```
+
+The integration may remove an unnecessary second human checkpoint only after the transition's prerequisite decision, authority, identity, and evidence already exist.
+
+In particular:
+
+- all profiles may mechanically start already-authorized implementation and record a complete exact Feature Freeze;
+- no profile may create its own feature-acceptance/adoption decision;
+- Semi-Autonomous and Full Autonomous may record `MERGE_READY` when qualification evidence is current, while Human-Governed retains its major-phase progression gate;
+- only Full Autonomous may initiate a merge automatically, and only when an exact candidate/PR merge grant is current and the existing merge evaluator independently permits it;
+- post-merge canonical verification may be recorded automatically after independent readback;
+- `RETIRED` closes the candidate record and never grants branch-deletion authority.
+
+Any Git write used to persist a maturity record remains separately subject to this document's ordinary action matrix.
+
 ## Selection record
 
 Before autonomous state mutation, record:
