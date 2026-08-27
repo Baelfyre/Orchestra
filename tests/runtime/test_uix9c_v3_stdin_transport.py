@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import copy
 import json
 from pathlib import Path
 from types import SimpleNamespace
@@ -85,6 +86,71 @@ def test_pending_authorization_prevents_campaign_invocation(monkeypatch: pytest.
     with pytest.raises(v3.V3ExecutionRefused, match="V3_LIVE_EXECUTION_NOT_HUMAN_AUTHORIZED"):
         v3.execute_v3(live_call_gate=True)
     assert called is False
+
+
+def _approved_authorization() -> dict:
+    authorization = copy.deepcopy(v3._load_authorization())
+    authorization["authorization_status"] = "APPROVED"
+    authorization["authority_class"] = "HUMAN_SCIENTIFIC_AUTHORIZATION"
+    authorization["authority_boundary"]["live_execution_authorized"] = True
+    return authorization
+
+
+def test_approved_v3_envelope_supersedes_only_v2_call_ceiling_gate_and_restores_globals(monkeypatch: pytest.MonkeyPatch) -> None:
+    authorization = _approved_authorization()
+    originals = {
+        "max_model": v3.v2.MAX_TOTAL_MODEL_CALLS,
+        "max_provider": v3.v2.MAX_PROVIDER_CALLS,
+        "max_interactions": v3.v2.MAX_TOTAL_PROVIDER_INTERACTIONS,
+        "max_retries": v3.v2.MAX_RETRIES_FOR_INVALID_RUN,
+        "authorize_live": v3.v2._authorize_live,
+    }
+    observed: dict = {}
+
+    def fake_execute_campaign(**kwargs):
+        observed.update(kwargs)
+        assert v3.v2.MAX_TOTAL_MODEL_CALLS == 7
+        assert v3.v2.MAX_PROVIDER_CALLS == 7
+        assert v3.v2.MAX_TOTAL_PROVIDER_INTERACTIONS == 7
+        assert v3.v2.MAX_RETRIES_FOR_INVALID_RUN == 1
+        # This is the exact check that would otherwise reject because the
+        # frozen V2 authorization record declares six calls.
+        v3.v2._authorize_live({}, live_call_gate=True)
+        return {"status": "MOCK_EXECUTION_BOUND_TO_V3_ENVELOPE"}
+
+    monkeypatch.setattr(v3, "_load_authorization", lambda: authorization)
+    monkeypatch.setattr(v3.v2, "execute_campaign", fake_execute_campaign)
+
+    result = v3.execute_v3(live_call_gate=True)
+
+    assert result == {"status": "MOCK_EXECUTION_BOUND_TO_V3_ENVELOPE"}
+    assert observed["evidence_root"] == v3.EVIDENCE_ROOT
+    assert observed["live_call_gate"] is True
+    assert observed["session_runner"] is v3.run_codex_session_stdin
+    assert v3.v2.MAX_TOTAL_MODEL_CALLS == originals["max_model"]
+    assert v3.v2.MAX_PROVIDER_CALLS == originals["max_provider"]
+    assert v3.v2.MAX_TOTAL_PROVIDER_INTERACTIONS == originals["max_interactions"]
+    assert v3.v2.MAX_RETRIES_FOR_INVALID_RUN == originals["max_retries"]
+    assert v3.v2._authorize_live is originals["authorize_live"]
+
+
+def test_v3_envelope_restores_v2_globals_after_failure(monkeypatch: pytest.MonkeyPatch) -> None:
+    authorization = _approved_authorization()
+    original_authorize = v3.v2._authorize_live
+    original_model_ceiling = v3.v2.MAX_TOTAL_MODEL_CALLS
+
+    def fail_campaign(**_kwargs):
+        assert v3.v2.MAX_TOTAL_MODEL_CALLS == 7
+        raise RuntimeError("synthetic failure")
+
+    monkeypatch.setattr(v3, "_load_authorization", lambda: authorization)
+    monkeypatch.setattr(v3.v2, "execute_campaign", fail_campaign)
+
+    with pytest.raises(RuntimeError, match="synthetic failure"):
+        v3.execute_v3(live_call_gate=True)
+
+    assert v3.v2.MAX_TOTAL_MODEL_CALLS == original_model_ceiling
+    assert v3.v2._authorize_live is original_authorize
 
 
 def test_v3_evidence_root_is_fresh_and_separate() -> None:
