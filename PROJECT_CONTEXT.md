@@ -69,7 +69,7 @@ The Orchestra Prime Directive is the stable constitutional boundary for developm
 ## Known Constraints
 - Codex and Antigravity remain the supported Host Update identities. Claude Code, Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain scaffold-only unless separately graduated.
 - Issue #331 is closed and the required-analysis ruleset/status surface is normalized; compatibility evidence remains part of validation but no stale open-issue state should be inferred.
-- The maintainer has directly verified the current `Protect main` required-check configuration with one `native-ubuntu-latest` entry. Historical evidence describing a duplicate Ubuntu entry is stale for current-state claims.
+- The current live `Protect main` ruleset API reports two identical `native-ubuntu-latest` required-status entries. The repository contract requires each required context exactly once, so this is external policy drift and blocks ordinary governed merge readiness until separately reconciled. This source candidate does not mutate the live ruleset.
 - Murmurs measurement issue #316 is closed with terminal benefit-not-established disposition. New benefit claims require new trustworthy comparable evidence rather than replaying the closed result as positive evidence.
 - Adaptive orchestration A1-A5 is canonical through shadow maturity. A5 execution-effective topology promotion remains deferred/not promoted because qualifying benefit was not established.
 - Portable adaptive memory is optional, storage-agnostic, privacy-minimized, and non-authorizing; automatic promotion is disabled.
