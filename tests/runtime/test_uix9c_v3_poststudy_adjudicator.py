@@ -73,3 +73,23 @@ def test_pair_set_mismatch_fails_closed() -> None:
     classification, failures = post.classify_pair_adjudications([_pair("PAIR_1"), _pair("PAIR_2")])
     assert classification == "PROTOCOL_INVALID"
     assert failures == ["PAIR_SET_MISMATCH"]
+
+
+def test_materialized_v3_terminal_result_validates_against_frozen_schema() -> None:
+    path = (
+        post.frozen.ROOT
+        / "docs"
+        / "validation"
+        / "uix9b-live-evidence-v2"
+        / "v3-poststudy-result.v2.json"
+    )
+    result = post.load_json(path)
+    post.frozen.validate(result, post.frozen.RESULT_SCHEMA)
+
+    assert result["result_classification"] == "NO_BENEFIT_ESTABLISHED"
+    assert result["observations_count"] == 6
+    assert result["valid_executions_counted"] == 6
+    assert result["failure_codes"] == []
+    assert result["benefit_claim"] == "NONE"
+    assert result["harm_claim"] == "NONE"
+    assert result["model_behavior_claim"] == "NONE"
