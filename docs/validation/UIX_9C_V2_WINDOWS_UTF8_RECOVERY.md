@@ -41,7 +41,7 @@ The failed attempt must remain preserved and auditable. It must not be deleted, 
 The frozen V2 runner remains unchanged. Windows execution is routed through:
 
 ```text
-python scripts/uix9c_windows_utf8_launcher.py execute --execution-mode live --live-call-gate
+python internal/uix9c_windows_utf8_launcher.py execute --execution-mode live --live-call-gate
 ```
 
 The launcher re-executes the frozen runner using:
