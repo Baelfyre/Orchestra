@@ -96,6 +96,13 @@ def _approved_authorization() -> dict:
     return authorization
 
 
+def test_approved_status_without_human_scientific_authority_class_is_refused() -> None:
+    authorization = _approved_authorization()
+    authorization["authority_class"] = "HUMAN_SCIENTIFIC_AUTHORIZATION_REQUIRED"
+    with pytest.raises(v3.V3ExecutionRefused, match="V3_HUMAN_SCIENTIFIC_AUTHORITY_CLASS_REQUIRED"):
+        v3._authorize_live_v3(authorization, live_call_gate=True)
+
+
 def test_approved_v3_envelope_supersedes_only_v2_call_ceiling_gate_and_restores_globals(monkeypatch: pytest.MonkeyPatch) -> None:
     authorization = _approved_authorization()
     originals = {
@@ -116,6 +123,7 @@ def test_approved_v3_envelope_supersedes_only_v2_call_ceiling_gate_and_restores_
         # This is the exact check that would otherwise reject because the
         # frozen V2 authorization record declares six calls.
         v3.v2._authorize_live({}, live_call_gate=True)
+        assert callable(kwargs["session_runner"])
         return {"status": "MOCK_EXECUTION_BOUND_TO_V3_ENVELOPE"}
 
     monkeypatch.setattr(v3, "_load_authorization", lambda: authorization)
@@ -126,7 +134,6 @@ def test_approved_v3_envelope_supersedes_only_v2_call_ceiling_gate_and_restores_
     assert result == {"status": "MOCK_EXECUTION_BOUND_TO_V3_ENVELOPE"}
     assert observed["evidence_root"] == v3.EVIDENCE_ROOT
     assert observed["live_call_gate"] is True
-    assert observed["session_runner"] is v3.run_codex_session_stdin
     assert v3.v2.MAX_TOTAL_MODEL_CALLS == originals["max_model"]
     assert v3.v2.MAX_PROVIDER_CALLS == originals["max_provider"]
     assert v3.v2.MAX_TOTAL_PROVIDER_INTERACTIONS == originals["max_interactions"]
@@ -151,6 +158,35 @@ def test_v3_envelope_restores_v2_globals_after_failure(monkeypatch: pytest.Monke
 
     assert v3.v2.MAX_TOTAL_MODEL_CALLS == original_model_ceiling
     assert v3.v2._authorize_live is original_authorize
+
+
+def test_single_invalid_replacement_is_campaign_global(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    sequence = iter(
+        [
+            {"classification": "HOST_CRASH"},
+            {"classification": "OUTPUT_CAPTURED_PENDING_VALIDATOR"},
+            {"classification": "PROVIDER_OUTAGE"},
+        ]
+    )
+    original_retry_ceiling = v3.v2.MAX_RETRIES_FOR_INVALID_RUN
+    v3.v2.MAX_RETRIES_FOR_INVALID_RUN = 1
+    try:
+        monkeypatch.setattr(v3, "run_codex_session_stdin", lambda _workspace, _prompt: next(sequence))
+        runner = v3._single_replacement_session_runner()
+
+        first = runner(tmp_path, "prompt")
+        assert first["classification"] == "HOST_CRASH"
+        assert v3.v2.MAX_RETRIES_FOR_INVALID_RUN == 1
+
+        replacement = runner(tmp_path, "prompt")
+        assert replacement["classification"] == "OUTPUT_CAPTURED_PENDING_VALIDATOR"
+        assert v3.v2.MAX_RETRIES_FOR_INVALID_RUN == 0
+
+        later_invalid = runner(tmp_path, "prompt")
+        assert later_invalid["classification"] == "PROVIDER_OUTAGE"
+        assert v3.v2.MAX_RETRIES_FOR_INVALID_RUN == 0
+    finally:
+        v3.v2.MAX_RETRIES_FOR_INVALID_RUN = original_retry_ceiling
 
 
 def test_v3_evidence_root_is_fresh_and_separate() -> None:
