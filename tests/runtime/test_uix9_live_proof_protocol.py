@@ -87,11 +87,13 @@ def test_uix9b_result_classification_is_closed() -> None:
 
 def test_v2_identity_gate_separates_frozen_base_from_current_canonical() -> None:
     report = v2_runner.verify_frozen_identities()
+    live_origin_main = v2_runner.git_value("rev-parse", "origin/main")
 
     assert report["canonical_sha"] == "bf6f14316fa8814eeac91440c4a7d70be0d04b9e"
     assert report["frozen_experiment_base_sha"] == report["canonical_sha"]
-    assert report["current_canonical_preparation_sha"] == "7e08a1d4aa09cbdf7632f5a86461fb3cd3e50fe9"
-    assert report["reviewed_canonical_sha"] == report["current_canonical_preparation_sha"]
+    assert report["current_canonical_preparation_sha"] == live_origin_main
+    assert report["reviewed_canonical_sha"] == "7e08a1d4aa09cbdf7632f5a86461fb3cd3e50fe9"
+    assert v2_runner.git_check("merge-base", "--is-ancestor", report["reviewed_canonical_sha"], live_origin_main)
     assert report["canonical_lineage_verified"] is True
     assert report["preparation_content_verified"] is True
 

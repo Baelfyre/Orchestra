@@ -1,5 +1,5 @@
 {
-  "schema_version": "orchestra-autonomous-merge-readiness-v3",
+  "schema_version": "orchestra-autonomous-merge-readiness-v4",
   "required_checks": [
     {"workflow": "Governance Check", "job": "governance-check"},
     {"workflow": "validate", "job": "validate"},
@@ -7,8 +7,7 @@
     {"workflow": "Cross-platform Validation", "job": "native-windows-latest"},
     {"workflow": "Cross-platform Validation", "job": "native-ubuntu-latest"},
     {"workflow": "Cross-platform Validation", "job": "native-macos-latest"},
-    {"workflow": "CodeQL", "job": "Analyze (actions)"},
-    {"workflow": "CodeQL", "job": "Analyze (python)"}
+    {"workflow": "Required Analysis Compatibility", "job": "Compatibility CodeQL (python)"}
   ],
   "expected_ruleset": {
     "required_approvals": 0,
@@ -24,7 +23,16 @@
     "require_status_checks": true,
     "require_branches_up_to_date": true,
     "block_force_pushes": true,
-    "restrict_deletions": true
+    "restrict_deletions": true,
+    "required_status_contexts": [
+      "governance-check",
+      "validate",
+      "runtime-tests",
+      "native-windows-latest",
+      "native-ubuntu-latest",
+      "native-macos-latest",
+      "Compatibility CodeQL (python)"
+    ]
   },
   "base_snapshot": {
     "base_health": "GREEN",
@@ -52,7 +60,16 @@
       "require_status_checks": true,
       "require_branches_up_to_date": true,
       "block_force_pushes": true,
-      "restrict_deletions": true
+      "restrict_deletions": true,
+      "required_status_contexts": [
+        "governance-check",
+        "validate",
+        "runtime-tests",
+        "native-windows-latest",
+        "native-ubuntu-latest",
+        "native-macos-latest",
+        "Compatibility CodeQL (python)"
+      ]
     },
     "checks": [
       {"workflow": "Governance Check", "job": "governance-check", "head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "status": "completed", "conclusion": "success"},
@@ -61,20 +78,20 @@
       {"workflow": "Cross-platform Validation", "job": "native-windows-latest", "head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "status": "completed", "conclusion": "success"},
       {"workflow": "Cross-platform Validation", "job": "native-ubuntu-latest", "head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "status": "completed", "conclusion": "success"},
       {"workflow": "Cross-platform Validation", "job": "native-macos-latest", "head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "status": "completed", "conclusion": "success"},
-      {"workflow": "CodeQL", "job": "Analyze (actions)", "head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "status": "completed", "conclusion": "success"},
-      {"workflow": "CodeQL", "job": "Analyze (python)", "head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "status": "completed", "conclusion": "success"}
+      {"workflow": "Required Analysis Compatibility", "job": "Compatibility CodeQL (python)", "head_sha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "status": "completed", "conclusion": "success"}
     ]
   },
   "pre_merge_cases": [
     {"id": "fully-green", "expected_disposition": "READY_FOR_MERGE"},
+    {"id": "reordered-required-contexts", "ruleset_overrides": {"required_status_contexts": ["native-macos-latest", "governance-check", "Compatibility CodeQL (python)", "native-ubuntu-latest", "validate", "native-windows-latest", "runtime-tests"]}, "expected_disposition": "READY_FOR_MERGE"},
     {"id": "no-check-data", "overrides": {"checks": null}, "expected_disposition": "WAIT_FOR_EVIDENCE"},
     {"id": "missing-runtime", "remove_check": "validate/runtime-tests", "expected_disposition": "WAIT_FOR_EVIDENCE"},
-    {"id": "missing-codeql-actions", "remove_check": "CodeQL/Analyze (actions)", "expected_disposition": "WAIT_FOR_EVIDENCE"},
+    {"id": "missing-codeql-compatibility", "remove_check": "Required Analysis Compatibility/Compatibility CodeQL (python)", "expected_disposition": "WAIT_FOR_EVIDENCE"},
     {"id": "queued-windows", "check_overrides": {"Cross-platform Validation/native-windows-latest": {"status": "queued", "conclusion": null}}, "expected_disposition": "WAIT_FOR_EVIDENCE"},
     {"id": "in-progress-macos", "check_overrides": {"Cross-platform Validation/native-macos-latest": {"status": "in_progress", "conclusion": null}}, "expected_disposition": "WAIT_FOR_EVIDENCE"},
     {"id": "governance-failed", "check_overrides": {"Governance Check/governance-check": {"conclusion": "failure"}}, "expected_disposition": "BLOCK"},
     {"id": "runtime-failed", "check_overrides": {"validate/runtime-tests": {"conclusion": "failure"}}, "expected_disposition": "BLOCK"},
-    {"id": "codeql-python-failed", "check_overrides": {"CodeQL/Analyze (python)": {"conclusion": "failure"}}, "expected_disposition": "BLOCK"},
+    {"id": "compatibility-codeql-failed", "check_overrides": {"Required Analysis Compatibility/Compatibility CodeQL (python)": {"conclusion": "failure"}}, "expected_disposition": "BLOCK"},
     {"id": "cross-platform-failed", "check_overrides": {"Cross-platform Validation/native-ubuntu-latest": {"conclusion": "failure"}}, "expected_disposition": "BLOCK"},
     {"id": "required-skipped", "check_overrides": {"validate/validate": {"conclusion": "skipped"}}, "expected_disposition": "BLOCK"},
     {"id": "required-cancelled", "check_overrides": {"validate/runtime-tests": {"conclusion": "cancelled"}}, "expected_disposition": "BLOCK"},
@@ -96,6 +113,8 @@
     {"id": "unresolved-thread", "overrides": {"unresolved_review_threads": 1}, "expected_disposition": "BLOCK"},
     {"id": "approval-requirement-drift", "ruleset_overrides": {"required_approvals": 1}, "expected_disposition": "BLOCK"},
     {"id": "merge-method-drift", "ruleset_overrides": {"allowed_merge_methods": ["rebase"]}, "expected_disposition": "BLOCK"},
+    {"id": "duplicate-ubuntu-required-context", "ruleset_overrides": {"required_status_contexts": ["governance-check", "validate", "runtime-tests", "native-windows-latest", "native-ubuntu-latest", "native-ubuntu-latest", "native-macos-latest", "Compatibility CodeQL (python)"]}, "expected_disposition": "BLOCK"},
+    {"id": "retired-codeql-required-contexts", "ruleset_overrides": {"required_status_contexts": ["governance-check", "validate", "runtime-tests", "native-windows-latest", "native-ubuntu-latest", "native-macos-latest", "Analyze (actions)", "Analyze (python)"]}, "expected_disposition": "BLOCK"},
     {"id": "selected-rebase", "overrides": {"selected_merge_method": "rebase"}, "expected_disposition": "BLOCK"},
     {"id": "signature-rule-disabled", "ruleset_overrides": {"require_signed_commits": false}, "expected_disposition": "BLOCK"},
     {"id": "bypass-used", "overrides": {"bypass_used": true}, "expected_disposition": "BLOCK"}

@@ -44,11 +44,17 @@ def test_fully_green_exact_head_is_ready():
     assert validator.evaluate_pre_merge(snapshot) == case["expected_disposition"]
 
 
+def test_required_status_context_order_is_not_policy_drift():
+    case, snapshot = pre_case("reordered-required-contexts")
+    assert validator.evaluate_pre_merge(snapshot) == "READY_FOR_MERGE"
+    assert case["expected_disposition"] == "READY_FOR_MERGE"
+
+
 def test_missing_and_pending_evidence_waits():
     for case_id in (
         "no-check-data",
         "missing-runtime",
-        "missing-codeql-actions",
+        "missing-codeql-compatibility",
         "queued-windows",
         "in-progress-macos",
         "head-not-reconfirmed",
@@ -66,7 +72,7 @@ def test_any_required_check_failure_blocks():
     for case_id in (
         "governance-failed",
         "runtime-failed",
-        "codeql-python-failed",
+        "compatibility-codeql-failed",
         "cross-platform-failed",
         "required-skipped",
         "required-cancelled",
@@ -127,11 +133,22 @@ def test_ruleset_and_merge_method_drift_block():
     for case_id in (
         "approval-requirement-drift",
         "merge-method-drift",
+        "duplicate-ubuntu-required-context",
+        "retired-codeql-required-contexts",
         "selected-rebase",
         "signature-rule-disabled",
     ):
         _, snapshot = pre_case(case_id)
         assert validator.evaluate_pre_merge(snapshot) == "BLOCK"
+
+
+def test_required_status_context_profile_is_exact_and_unique():
+    contexts = fixture_data()["expected_ruleset"]["required_status_contexts"]
+    assert len(contexts) == len(set(contexts))
+    assert contexts.count("native-ubuntu-latest") == 1
+    assert "Compatibility CodeQL (python)" in contexts
+    assert "Analyze (actions)" not in contexts
+    assert "Analyze (python)" not in contexts
 
 
 def test_bypass_capability_is_not_governance_authority():
