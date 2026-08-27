@@ -1,6 +1,6 @@
 # UIX-9C V2 Windows UTF-8 Recovery
 
-Status: `RECOVERY_PREPARED_WAITING_REVISED_HUMAN_LIVE_CEILING`
+Status: `RECOVERY_AUTHORIZED_WAITING_FRESH_LOCAL_EXECUTION`
 
 ## Observed invalid infrastructure attempt
 
@@ -36,9 +36,23 @@ DIRECTIONAL_MODEL_BEHAVIOR_CLAIM=NONE
 
 The failed attempt must remain preserved and auditable. It must not be deleted, rewritten into a valid observation, or counted as an A-arm result.
 
+## Human scientific authorization
+
+On 2026-08-27, the maintainer explicitly approved:
+
+> 7 total experimental interactions, consisting of the 1 already-preserved invalid-infrastructure attempt plus at most 6 fresh calls producing at most 6 valid observations.
+
+The machine-readable authorization is frozen at:
+
+```text
+docs/validation/uix9b-live-evidence-v2/recovery-authorization.v1.json
+```
+
+This approval authorizes only the bounded restart described below. It does not grant merge, release, deployment, policy activation, external repository mutation, branch deletion, destructive cleanup, force push, or history rewrite authority.
+
 ## Host remediation
 
-The frozen V2 runner remains unchanged. Windows execution is routed through:
+The frozen V2 scientific runner remains unchanged. Windows execution is routed through:
 
 ```text
 python internal/uix9c_windows_utf8_launcher.py execute --execution-mode live --live-call-gate
@@ -50,7 +64,7 @@ The launcher re-executes the frozen runner using:
 python -X utf8
 ```
 
-This changes only Python host text decoding. It does not change:
+This changes only Python host text decoding and recovery gating. It does not change:
 
 - provider or model identity;
 - reasoning effort;
@@ -62,36 +76,47 @@ This changes only Python host text decoding. It does not change:
 
 ## Restart discipline
 
-The invalid A1 attempt is preserved separately before a new clean evidence campaign begins. The restarted campaign still requires exactly six valid observations in the frozen order:
+The invalid A1 attempt remains in the parent evidence surface. A new clean campaign must write only to:
+
+```text
+docs/validation/uix9b-live-evidence-v2/restart-20260827
+```
+
+The launcher owns this evidence-root selection for live recovery execution and rejects a caller-supplied override.
+
+The restarted campaign retains the frozen order:
 
 ```text
 A1,B1,B2,A2,A3,B3
 ```
 
-The failed infrastructure interaction is never replaced by a seventh valid observation.
+The failed infrastructure interaction is never rewritten into an A-arm observation and never replaced by a seventh valid observation.
 
-## Revised ceiling requiring explicit human authorization
+## Approved revised ceiling
 
-Because one experimental provider/model interaction was consumed without yielding a valid observation, completing six valid observations requires an overall ceiling of seven experimental interactions for this scientific effort:
+The approved scientific-effort accounting is:
 
 ```text
 PRIOR_INVALID_INFRASTRUCTURE_INTERACTIONS=1
 FRESH_CAMPAIGN_MAX_NEW_MODEL_CALLS=6
 FRESH_CAMPAIGN_MAX_NEW_PROVIDER_CALLS=6
+FRESH_CAMPAIGN_MAX_NEW_PROVIDER_INTERACTIONS=6
 MAX_VALID_OBSERVATIONS=6
 OVERALL_EXPERIMENTAL_INTERACTION_CEILING=7
-MAX_INVALID_INFRASTRUCTURE_REPLACEMENTS=1
+SEVENTH_VALID_OBSERVATION_AUTHORIZED=false
+ADDITIONAL_CEILING_EXPANSION_AUTHORIZED=false
 ```
 
 The fresh campaign remains capped at six new calls. The seventh total interaction exists only because the preserved failed infrastructure attempt already consumed one interaction.
 
-This ceiling expansion is not inferred from Full Autonomous mode. Live restart remains blocked until explicit human scientific authorization is recorded.
+If another infrastructure failure occurs, any frozen runner retry may consume part of the remaining six-call fresh budget, but it may not extend the overall ceiling above seven. If six valid observations can no longer be completed within the approved ceiling, the campaign must stop or remain invalid rather than infer additional authority.
 
 ## Protected boundaries
 
 ```text
-RECOVERY_PREPARATION != LIVE_CALL_AUTHORITY
+RECOVERY_AUTHORIZATION = LIVE_RESTART_AUTHORITY_ONLY
 INVALID_INFRASTRUCTURE != SCIENTIFIC_RESULT
 SEVEN_TOTAL_INTERACTIONS != SEVEN_VALID_OBSERVATIONS
-VALIDATION_PASS != LIVE_CALL_AUTHORITY
+VALIDATION_PASS != MERGE_AUTHORITY
+VALIDATION_PASS != RELEASE_AUTHORITY
 ```
