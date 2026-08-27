@@ -8,12 +8,13 @@ scientific authorization record is APPROVED.
 from __future__ import annotations
 
 import argparse
+from contextlib import contextmanager
 import json
 import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any, Iterator, Sequence
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -270,23 +271,54 @@ def _authorize_live_v3(authorization: dict[str, Any], *, live_call_gate: bool) -
         raise V3ExecutionRefused("V3_EXPLICIT_LIVE_GATE_REQUIRED")
 
 
-def execute_v3(*, live_call_gate: bool) -> dict[str, Any]:
-    authorization = _load_authorization()
-    _authorize_live_v3(authorization, live_call_gate=live_call_gate)
-    ceiling = authorization["fresh_campaign_proposed_ceiling"]
+@contextmanager
+def _v3_execution_envelope(authorization: dict[str, Any]) -> Iterator[None]:
+    """Temporarily bind the frozen V2 executor to the approved V3 envelope.
 
-    # Apply only the separately authorized V3 resource envelope to the frozen
-    # V2 campaign executor. Scientific inputs and result logic remain unchanged.
+    V3 performs the human authority check before entering this context. This
+    context changes no repository file and restores every V2 process-global
+    value even when execution fails. It replaces only the superseded V2
+    six-call authorization check; V2 scientific identity verification,
+    accounting, execution order, evaluator, validator, adjudicator, and result
+    logic remain active.
+    """
+    ceiling = authorization["fresh_campaign_proposed_ceiling"]
+    original = {
+        "max_model": v2.MAX_TOTAL_MODEL_CALLS,
+        "max_provider": v2.MAX_PROVIDER_CALLS,
+        "max_interactions": v2.MAX_TOTAL_PROVIDER_INTERACTIONS,
+        "max_retries": v2.MAX_RETRIES_FOR_INVALID_RUN,
+        "authorize_live": v2._authorize_live,
+    }
+
+    def v3_authorize_bridge(_v2_auth: dict[str, Any], *, live_call_gate: bool) -> None:
+        if not live_call_gate:
+            raise v2.ExecutionRefused("V3_EXPLICIT_LIVE_CALL_GATE_REQUIRED")
+
     v2.MAX_TOTAL_MODEL_CALLS = ceiling["max_new_model_calls"]
     v2.MAX_PROVIDER_CALLS = ceiling["max_new_provider_calls"]
     v2.MAX_TOTAL_PROVIDER_INTERACTIONS = ceiling["max_new_provider_interactions"]
     v2.MAX_RETRIES_FOR_INVALID_RUN = ceiling["max_invalid_infrastructure_replacements"]
+    v2._authorize_live = v3_authorize_bridge
+    try:
+        yield
+    finally:
+        v2.MAX_TOTAL_MODEL_CALLS = original["max_model"]
+        v2.MAX_PROVIDER_CALLS = original["max_provider"]
+        v2.MAX_TOTAL_PROVIDER_INTERACTIONS = original["max_interactions"]
+        v2.MAX_RETRIES_FOR_INVALID_RUN = original["max_retries"]
+        v2._authorize_live = original["authorize_live"]
 
-    return v2.execute_campaign(
-        evidence_root=EVIDENCE_ROOT,
-        live_call_gate=True,
-        session_runner=run_codex_session_stdin,
-    )
+
+def execute_v3(*, live_call_gate: bool) -> dict[str, Any]:
+    authorization = _load_authorization()
+    _authorize_live_v3(authorization, live_call_gate=live_call_gate)
+    with _v3_execution_envelope(authorization):
+        return v2.execute_campaign(
+            evidence_root=EVIDENCE_ROOT,
+            live_call_gate=True,
+            session_runner=run_codex_session_stdin,
+        )
 
 
 def main(arguments: Sequence[str] | None = None) -> int:
