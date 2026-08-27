@@ -3,7 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from types import SimpleNamespace
 
-from scripts import uix9c_windows_utf8_launcher as launcher
+from internal import uix9c_windows_utf8_launcher as launcher
 
 
 def test_launcher_forces_python_utf8_mode() -> None:
