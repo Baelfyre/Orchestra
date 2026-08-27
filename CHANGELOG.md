@@ -7,7 +7,7 @@ This root changelog is release-oriented. Detailed pre-v1.7 development chronolog
 - Completed UIX-9C V3 with six valid observations and three corrected valid pairs. All 39 primary governed-versus-baseline comparisons were unchanged, producing terminal `NO_BENEFIT_ESTABLISHED` with no benefit, harm, or directional model-behavior claim.
 - Added Orchestra Prime Directive v1 and Feature Admission v1, separating implementation correctness from permanent capability promotion and retaining negative/inconclusive evidence as valid decision evidence.
 - Added Development Lifecycle V2 candidate maturity and Feature Freeze, thin governed-autonomy lifecycle integration, risk-proportional qualification/evaluation/audit, and forward-only recovery/branch-retirement contracts without introducing a second governance, autonomy, runtime-lifecycle, Arbiter, or merge engine.
-- Reconciled the historical Campaign 0-5 stack onto current post-UIX `main`, preserving current UIX/runtime work and treating the maintainer-verified single `native-ubuntu-latest` required-check configuration as current truth rather than replaying stale duplicate-Ubuntu evidence.
+- Reconciled the historical Campaign 0-5 stack onto current post-UIX `main`, preserving current UIX/runtime work and the repository contract's unique required-check profile. The current live ruleset duplicate `native-ubuntu-latest` entry is external policy drift and is not mutated by this source candidate.
 - Realigned the public README, project context, governance index, and documentation map around Mission, Vision, the Prime Directive, Development Lifecycle V2, and the completed UIX null result while retaining v1.7.0 as the immutable latest published release.
 - No new live model/provider call, release, deployment, policy activation, installed-integration refresh, branch deletion, destructive cleanup, force push, or history rewrite is introduced by this realignment.
 
@@ -97,11 +97,11 @@ See the [historical detailed changelog](docs/history/CHANGELOG_PRE_V1_7.md) and 
 
 ## v1.1.1 - Post-Release Hardening
 
-See the [historical detailed changelog](docs/history/CHANGELOG_PRE_V1_7.md).
+See [the historical detailed changelog](docs/history/CHANGELOG_PRE_V1_7.md).
 
 ## v1.1.0 - Specialist Governance & Boundary Standard
 
-See the [historical detailed changelog](docs/history/CHANGELOG_PRE_V1_7.md).
+See [the historical detailed changelog](docs/history/CHANGELOG_PRE_V1_7.md).
 
 ## v1.0.0 - Portable Runtime
 
