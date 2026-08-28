@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/specialist-execution-receipt.v1.schema.json",
+  "title": "Orchestra Specialist Execution Receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "receipt_version",
+    "receipt_id",
+    "request_id",
+    "request_digest",
+    "run_id",
+    "adapter_name",
+    "command_name",
+    "specialist",
+    "engine_id",
+    "engine_version",
+    "host_execution_id",
+    "status",
+    "reason_code",
+    "output",
+    "evidence_refs",
+    "side_effect_class",
+    "artifact_refs",
+    "changed_paths"
+  ],
+  "properties": {
+    "receipt_version": {
+      "const": "orchestra.specialist-execution-receipt.v1"
+    },
+    "receipt_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "request_id": {
+      "type": "string",
+      "pattern": "^specialist-request\\.[0-9a-f]{24}$"
+    },
+    "request_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "adapter_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "command_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "specialist": {
+      "type": "string",
+      "minLength": 1
+    },
+    "engine_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "engine_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "host_execution_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": ["COMPLETED", "FAILED", "CANCELLED", "TIMED_OUT"]
+    },
+    "reason_code": {
+      "type": "string",
+      "minLength": 1
+    },
+    "output": {
+      "type": "string"
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "side_effect_class": {
+      "enum": ["NONE", "READ_ONLY", "FILE_MUTATION", "EXTERNAL_MUTATION", "UNKNOWN"]
+    },
+    "host_identity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sandbox_identity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "approval_policy_identity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "artifact_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "changed_paths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "completed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
