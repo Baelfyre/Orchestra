@@ -1,0 +1,418 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.orchestra.dev/machine/registry-o7-consumer-contract/1.0.0",
+  "title": "Orchestra O7.0 Registry Consumer Contract",
+  "description": "Frozen Orchestra consumer contract for optional Registry R7 read optimizations without runtime implementation or authority expansion.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "contract_id",
+    "status",
+    "source_contract",
+    "compatibility",
+    "transport",
+    "projections",
+    "receipt_normalization",
+    "integrity",
+    "context_budget",
+    "phase_gates",
+    "authority"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "./registry-o7-consumer-contract.schema.json"
+    },
+    "schema_version": {
+      "const": "orchestra.registry-o7-consumer-contract.v1"
+    },
+    "contract_id": {
+      "const": "o7.0-registry-consumer-contract"
+    },
+    "status": {
+      "const": "CONTRACT_FROZEN_RUNTIME_NOT_IMPLEMENTED"
+    },
+    "source_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "canonical_branch",
+        "reviewed_commit_sha",
+        "reviewed_tree_sha",
+        "r7_document",
+        "r7_document_blob_sha",
+        "r7_status",
+        "planned_registry_release"
+      ],
+      "properties": {
+        "repository": {
+          "const": "Baelfyre/Orchestra-Compliance-Registry"
+        },
+        "canonical_branch": {
+          "const": "main"
+        },
+        "reviewed_commit_sha": {
+          "const": "c1910806ed3ea9147af96b1c49a9f72aef75e0f6"
+        },
+        "reviewed_tree_sha": {
+          "const": "0c37d7bf47fc20b49b26fea156c8e180db57b4a3"
+        },
+        "r7_document": {
+          "const": "docs/TOKEN_EFFICIENT_QUERY_ARCHITECTURE_R7.md"
+        },
+        "r7_document_blob_sha": {
+          "const": "9f24a10f455a77509ec5246e6981ca2672624ca1"
+        },
+        "r7_status": {
+          "const": "APPROVED_PLANNED_NOT_IMPLEMENTED"
+        },
+        "planned_registry_release": {
+          "const": "registry-v0.4.0"
+        }
+      }
+    },
+    "compatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_capability_floor",
+        "optional_capabilities",
+        "optional_absence_disposition",
+        "required_incompatibility_disposition",
+        "existing_o1_o6_semantics_preserved"
+      ],
+      "properties": {
+        "required_capability_floor": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "capability_id",
+            "minimum_contract_version"
+          ],
+          "properties": {
+            "capability_id": {
+              "const": "cap.query.v1"
+            },
+            "minimum_contract_version": {
+              "const": "1.0.0"
+            }
+          }
+        },
+        "optional_capabilities": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "capability_id",
+              "minimum_contract_version"
+            ],
+            "properties": {
+              "capability_id": {
+                "enum": [
+                  "cap.query.projection.v1",
+                  "cap.query.relationships.v1",
+                  "cap.query.indexed-read.v1",
+                  "cap.query.budget.v1",
+                  "cap.transport.mcp.v1"
+                ]
+              },
+              "minimum_contract_version": {
+                "const": "1.0.0"
+              }
+            }
+          }
+        },
+        "optional_absence_disposition": {
+          "const": "USE_CURRENT_O1_O6_PATH"
+        },
+        "required_incompatibility_disposition": {
+          "const": "FAIL_CLOSED"
+        },
+        "existing_o1_o6_semantics_preserved": {
+          "const": true
+        }
+      }
+    },
+    "transport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "preference_order",
+        "internal_default",
+        "index_unavailable_fallback",
+        "mcp_unavailable_fallback",
+        "mcp_required_for_internal_orchestra",
+        "transport_selection_may_expand_authority"
+      ],
+      "properties": {
+        "preference_order": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "DIRECT_LOCAL_INDEXED_GATEWAY"
+            },
+            {
+              "const": "DIRECT_LOCAL_JSON_QUERY"
+            },
+            {
+              "const": "OPTIONAL_MCP_TRANSPORT"
+            }
+          ],
+          "items": false,
+          "minItems": 3,
+          "maxItems": 3
+        },
+        "internal_default": {
+          "const": "DIRECT_LOCAL_INDEXED_GATEWAY_WHEN_VERIFIED"
+        },
+        "index_unavailable_fallback": {
+          "const": "DIRECT_LOCAL_JSON_QUERY"
+        },
+        "mcp_unavailable_fallback": {
+          "const": "DIRECT_LOCAL_QUERY"
+        },
+        "mcp_required_for_internal_orchestra": {
+          "const": false
+        },
+        "transport_selection_may_expand_authority": {
+          "const": false
+        }
+      }
+    },
+    "projections": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowed",
+        "workflow_defaults",
+        "projection_changes_payload_not_semantics",
+        "projection_may_change_source_or_obligation_identity"
+      ],
+      "properties": {
+        "allowed": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "MINIMAL"
+            },
+            {
+              "const": "SUMMARY"
+            },
+            {
+              "const": "EVIDENCE"
+            },
+            {
+              "const": "FULL"
+            }
+          ],
+          "items": false,
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "workflow_defaults": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "conductor_discovery",
+            "governor_applicability_review",
+            "steward_requirements_traceability",
+            "explicit_audit_escalation"
+          ],
+          "properties": {
+            "conductor_discovery": {
+              "const": [
+                "MINIMAL"
+              ]
+            },
+            "governor_applicability_review": {
+              "const": [
+                "SUMMARY",
+                "EVIDENCE"
+              ]
+            },
+            "steward_requirements_traceability": {
+              "const": [
+                "EVIDENCE"
+              ]
+            },
+            "explicit_audit_escalation": {
+              "const": [
+                "FULL"
+              ]
+            }
+          }
+        },
+        "projection_changes_payload_not_semantics": {
+          "const": true
+        },
+        "projection_may_change_source_or_obligation_identity": {
+          "const": false
+        }
+      }
+    },
+    "receipt_normalization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_model",
+        "preserve",
+        "downstream_set_equality_required",
+        "authority_expansion"
+      ],
+      "properties": {
+        "target_model": {
+          "const": "ComplianceQueryReceipt"
+        },
+        "preserve": {
+          "type": "array",
+          "minItems": 11,
+          "maxItems": 11,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "registry_repository",
+              "registry_version",
+              "release_sequence",
+              "release_tag",
+              "release_manifest_digest",
+              "query_digest",
+              "source_ids",
+              "obligation_ids",
+              "freshness_evidence",
+              "capability_negotiation",
+              "domain_routing_evidence"
+            ]
+          }
+        },
+        "downstream_set_equality_required": {
+          "const": true
+        },
+        "authority_expansion": {
+          "const": false
+        }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "index_identity_or_digest_mismatch",
+        "semantic_query_mismatch",
+        "required_capability_incompatibility",
+        "optional_capability_absence",
+        "model_authored_integrity_repair_allowed"
+      ],
+      "properties": {
+        "index_identity_or_digest_mismatch": {
+          "const": "REJECT_INDEX_REBUILD_OR_FALLBACK"
+        },
+        "semantic_query_mismatch": {
+          "const": "FAIL_CLOSED"
+        },
+        "required_capability_incompatibility": {
+          "const": "FAIL_CLOSED"
+        },
+        "optional_capability_absence": {
+          "const": "USE_CURRENT_O1_O6_PATH"
+        },
+        "model_authored_integrity_repair_allowed": {
+          "const": false
+        }
+      }
+    },
+    "context_budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority_source",
+        "projection_selection_creates_budget_authority",
+        "maximum_context_bytes_is_bounded_input",
+        "toon_selection_requires_measured_savings",
+        "token_or_workflow_savings_claim_requires_measurement"
+      ],
+      "properties": {
+        "authority_source": {
+          "const": "EXISTING_ORCHESTRA_COMMUNICATION_CONTEXT_BUDGET"
+        },
+        "projection_selection_creates_budget_authority": {
+          "const": false
+        },
+        "maximum_context_bytes_is_bounded_input": {
+          "const": true
+        },
+        "toon_selection_requires_measured_savings": {
+          "const": true
+        },
+        "token_or_workflow_savings_claim_requires_measurement": {
+          "const": true
+        }
+      }
+    },
+    "phase_gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "o7_0_contract_freeze_complete",
+        "o7_1_plus_runtime_implementation_authorized",
+        "o7_1_plus_entry_condition",
+        "joint_conformance_required_before_o7_completion",
+        "trusted_immutable_registry_release_required_before_release_integration"
+      ],
+      "properties": {
+        "o7_0_contract_freeze_complete": {
+          "const": true
+        },
+        "o7_1_plus_runtime_implementation_authorized": {
+          "const": false
+        },
+        "o7_1_plus_entry_condition": {
+          "const": "IMPLEMENTED_STABLE_REGISTRY_R7_SURFACE_REQUIRED"
+        },
+        "joint_conformance_required_before_o7_completion": {
+          "const": true
+        },
+        "trusted_immutable_registry_release_required_before_release_integration": {
+          "const": true
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_grants_runtime_implementation_authority",
+        "registry_capability_grants_orchestra_authority",
+        "transport_grants_authority",
+        "projection_grants_authority",
+        "validation_grants_merge_authority",
+        "contract_grants_release_or_deployment_authority"
+      ],
+      "properties": {
+        "contract_grants_runtime_implementation_authority": {
+          "const": false
+        },
+        "registry_capability_grants_orchestra_authority": {
+          "const": false
+        },
+        "transport_grants_authority": {
+          "const": false
+        },
+        "projection_grants_authority": {
+          "const": false
+        },
+        "validation_grants_merge_authority": {
+          "const": false
+        },
+        "contract_grants_release_or_deployment_authority": {
+          "const": false
+        }
+      }
+    }
+  }
+}
