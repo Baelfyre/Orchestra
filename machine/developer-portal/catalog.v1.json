@@ -9,14 +9,14 @@
     "grants_mutation_authority": false,
     "promotes_host_maturity": false,
     "publishes_marketplace_listings": false,
-    "implements_mcp": false,
+    "implements_mcp": true,
     "activates_policy": false,
     "deploys_or_mutates_production": false,
     "refreshes_installed_integrations": false
   },
   "public_release_boundary": {
-    "release": "v1.5.0",
-    "target_commit": "b0a56cc7af8ad78234754bcb29ed07f6ab54d920",
+    "release": "v1.7.0",
+    "target_commit": "e5305ef3e160209a0345bd2c7843c923940e62c5",
     "moved_by_portal": false
   },
   "surfaces": [
@@ -144,6 +144,6 @@
   ],
   "future_phase_boundaries": {
     "third_party_specialist_marketplace": "NOT_IMPLEMENTED",
-    "mcp_server": "NOT_IMPLEMENTED_FINAL_PHASE"
+    "mcp_server": "PUBLISHED_V1_6_STABLE_RETAINED_V1_7"
   }
 }
