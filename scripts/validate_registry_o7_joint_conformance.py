@@ -147,7 +147,7 @@ def run_conformance(registry_root: Path, release_assets: Path) -> dict[str, Any]
             "manifest_sha256": verified.release_manifest_sha256,
         }
         request = registry_o7.O7QueryRequest(
-            workflow_stage="STEWARD_TRACEABILITY",
+            workflow_stage="steward_requirements_traceability",
             domains=("privacy",),
             projection="EVIDENCE",
             limit=100,
