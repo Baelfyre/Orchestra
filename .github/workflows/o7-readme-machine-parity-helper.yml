@@ -1,0 +1,89 @@
+name: O7 README Machine Parity Helper
+
+on:
+  push:
+    branches:
+      - feat/o7-r7-direct-consumption-20260828
+
+permissions:
+  contents: write
+
+jobs:
+  patch-readme:
+    if: github.event.head_commit.message == 'chore(o7): temporary readme parity helper'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/o7-r7-direct-consumption-20260828
+          fetch-depth: 0
+      - name: Apply asserted O7 machine parity patch
+        shell: python
+        run: |
+          from pathlib import Path
+
+          path = Path("README.json")
+          text = path.read_text(encoding="utf-8")
+
+          old_capability = '''    "registry_query_optimization_o7": {
+              "status": "APPROVED_PLANNED_NOT_IMPLEMENTED",
+              "purpose": "Consume the Registry R7 typed/indexed/projection query gateway using the smallest sufficient context while preserving O1-O6 semantics, exact Registry identities, existing compliance receipts, and fail-closed behavior.",
+              "human_sources": ["docs/architecture/REGISTRY_QUERY_OPTIMIZATION_O7.md"],
+              "implementation_order": "AFTER_ORCHESTRA_V1_7_0_AND_AFTER_STABLE_REGISTRY_R7_CONTRACT",
+              "required_compatibility_floor": {"cap.query.v1": "1.0.0"},
+              "planned_optional_capabilities": ["cap.query.projection.v1", "cap.query.relationships.v1", "cap.query.indexed-read.v1", "cap.query.budget.v1", "cap.transport.mcp.v1"],
+              "preferred_transport_order": ["DIRECT_LOCAL_INDEXED_GATEWAY", "DIRECT_LOCAL_JSON_QUERY", "OPTIONAL_MCP_TRANSPORT"],
+              "projection_levels": ["MINIMAL", "SUMMARY", "EVIDENCE", "FULL"],
+              "phase_plan": ["O7.0_CONSUMER_CONTRACT_FREEZE", "O7.1_OPTIONAL_CAPABILITY_NEGOTIATION", "O7.2_TRANSPORT_ABSTRACTION", "O7.3_PROJECTION_AWARE_CONSUMPTION", "O7.4_EXISTING_RECEIPT_NORMALIZATION", "O7.5_DETERMINISTIC_FAILOVER", "O7.6_CONTEXT_BUDGET_INTEGRATION", "O7.7_JOINT_R7_O7_CONFORMANCE"],
+              "fallbacks": {"indexed_unavailable": "DIRECT_LOCAL_JSON_QUERY", "mcp_unavailable": "DIRECT_LOCAL_QUERY", "optional_capability_missing": "CURRENT_O3_PATH", "index_identity_mismatch": "REJECT_REBUILD_OR_FALLBACK", "semantic_mismatch": "FAIL_CLOSED"},
+              "frozen_invariants": ["O1_CAPABILITY_NEGOTIATION", "O2_COMPATIBILITY_FAIL_CLOSED", "O3_QUERY_SEMANTICS", "O4_QUERY_SCOPED_FRESHNESS", "O5_RELEASE_DELTA", "O6_DOMAIN_ROUTING", "CONDUCTOR_EXCLUSIVE_ROUTING", "GOVERNOR_APPLICABILITY", "STEWARD_TRACEABILITY", "ARBITER_SET_EQUALITY"],
+              "planned_release_target": "v1.8.0_AFTER_REGISTRY_R7_TRUSTED_RELEASE_AND_JOINT_CONFORMANCE",
+              "token_efficiency_claim": "NOT_CLAIMED_UNTIL_MEASURED",
+              "authority_note": "O7 is a planned read-path optimization only. MCP remains transport, the Registry index remains derived, query/projection choice cannot change compliance meaning, and no O7 path may expand authority or bypass existing evidence gates."
+            }'''
+          new_capability = '''    "registry_query_optimization_o7": {
+              "status": "O7_1_O7_6_IMPLEMENTED_PENDING_CANONICALIZATION",
+              "purpose": "Consume the canonical Registry R7.1-R7.6 stable direct query surface through a Registry-owned gateway boundary while preserving O1-O6 semantics, exact Registry identities, existing compliance receipts, deterministic fallback, and fail-closed behavior.",
+              "runtime_surface": "orchestra_runtime/registry_o7.py",
+              "machine_sources": ["docs/architecture/contracts/registry-o7-runtime-state.v1.json"],
+              "human_sources": ["docs/architecture/REGISTRY_QUERY_OPTIMIZATION_O7.md"],
+              "validation_surfaces": ["tests/runtime/test_registry_o7.py", "tests/runtime/test_registry_o7_runtime_state.py"],
+              "registry_r7_1_r7_6_canonical": {"repository": "Baelfyre/Orchestra-Compliance-Registry", "sha": "155c21ab54f704d876ae4a0c2d995f5591f13930", "tree": "ea99fce806a455c4c1e2c912277c44d3595f54d8", "surface_status": "IMPLEMENTED_STABLE_DIRECT_SURFACE_R7_1_R7_6"},
+              "required_compatibility_floor": {"cap.query.v1": "1.0.0"},
+              "optional_capabilities": ["cap.query.projection.v1", "cap.query.relationships.v1", "cap.query.indexed-read.v1", "cap.query.budget.v1", "cap.transport.mcp.v1"],
+              "implemented_direct_capabilities": ["cap.query.projection.v1", "cap.query.relationships.v1", "cap.query.indexed-read.v1", "cap.query.budget.v1"],
+              "mcp_capability_status": "NOT_IMPLEMENTED",
+              "preferred_transport_order": ["DIRECT_LOCAL_INDEXED_GATEWAY", "DIRECT_LOCAL_JSON_QUERY", "OPTIONAL_MCP_TRANSPORT"],
+              "projection_levels": ["MINIMAL", "SUMMARY", "EVIDENCE", "FULL"],
+              "phase_status": {"O7.0": "MERGED_VERIFIED", "O7.1": "IMPLEMENTED", "O7.2": "IMPLEMENTED", "O7.3": "IMPLEMENTED", "O7.4": "IMPLEMENTED", "O7.5": "IMPLEMENTED", "O7.6": "IMPLEMENTED", "O7.7": "BLOCKED_PENDING_R7_7_AND_TRUSTED_RELEASE_INTEGRATION"},
+              "fallbacks": {"indexed_unavailable": "DIRECT_LOCAL_JSON_QUERY", "mcp_unavailable": "DIRECT_LOCAL_QUERY", "optional_capability_missing": "CURRENT_O1_O6_PATH", "index_identity_mismatch": "REJECT_INDEX_THEN_DIRECT_JSON_OR_LEGACY_FALLBACK", "semantic_mismatch": "FAIL_CLOSED"},
+              "frozen_invariants": ["O1_CAPABILITY_NEGOTIATION", "O2_COMPATIBILITY_FAIL_CLOSED", "O3_QUERY_SEMANTICS", "O4_QUERY_SCOPED_FRESHNESS", "O5_RELEASE_DELTA", "O6_DOMAIN_ROUTING", "CONDUCTOR_EXCLUSIVE_ROUTING", "GOVERNOR_APPLICABILITY", "STEWARD_TRACEABILITY", "ARBITER_SET_EQUALITY"],
+              "planned_release_target": "v1.8.0_AFTER_REGISTRY_R7_TRUSTED_RELEASE_AND_JOINT_CONFORMANCE",
+              "token_efficiency_claim": "NOT_CLAIMED_UNTIL_MEASURED",
+              "authority_note": "O7.1-O7.6 consumption is non-authorizing. Registry capability presence, transport choice, projection choice, runtime validation, or mergeability cannot grant release, deployment, policy, trusted-publication, or other protected-action authority."
+            }'''
+          old_maturity = '    "registry_query_optimization_o7": "APPROVED_PLANNED_NOT_IMPLEMENTED",'
+          new_maturity = '    "registry_query_optimization_o7": "O7_1_O7_6_IMPLEMENTED_PENDING_CANONICALIZATION_O7_7_BLOCKED",'
+          old_guidance = '    "treat_registry_query_o7_as_planned_not_implemented_until_canonical_runtime_evidence_exists": true,'
+          new_guidance = '    "treat_registry_o7_1_o7_6_as_implemented_only_when_runtime_state_and_canonical_registry_dependency_are_verified": true,'
+
+          replacements = [
+              (old_capability, new_capability, "capability"),
+              (old_maturity, new_maturity, "maturity"),
+              (old_guidance, new_guidance, "guidance"),
+          ]
+          for old, new, label in replacements:
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f"README parity assertion failed for {label}: expected 1 match, found {count}")
+              text = text.replace(old, new, 1)
+
+          path.write_text(text, encoding="utf-8")
+      - name: Commit machine parity only
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.json
+          git diff --cached --check
+          git commit -m "docs(o7): add machine discovery parity"
+          git push origin HEAD:feat/o7-r7-direct-consumption-20260828
