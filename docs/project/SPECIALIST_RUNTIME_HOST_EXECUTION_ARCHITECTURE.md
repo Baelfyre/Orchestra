@@ -1,6 +1,6 @@
 # Specialist Runtime-Host Execution Architecture
 
-Status: `DESIGN_ADMITTED_NO_RUNTIME_INTEGRATION`
+Status: `E1_E3_DETERMINISTIC_FOUNDATION_IMPLEMENTED_HOST_BRIDGE_PENDING`
 
 Canonical design baseline:
 
@@ -12,29 +12,23 @@ PUBLIC_RELEASE = v1.7.0
 
 Admission record: `machine/features/specialist-runtime-host-execution.v1.json`
 
-This document defines a proposed execution boundary only. It does not implement a specialist engine, invoke a model/provider, refresh an installed integration, change MCP behavior, promote a host, or grant runtime, merge, release, deployment, policy, destructive, or other protected-action authority.
+Implementation plan: `docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_IMPLEMENTATION_PLAN.md`
 
-## 1. Problem
+The E1-E3 deterministic foundation is implemented as an optional runtime attachment. It does not implement a live Codex or other host bridge, invoke a model/provider, refresh an installed integration, promote the feature, move the public release, or grant merge, release, deployment, policy, destructive, or other protected-action authority.
 
-Orchestra's current MCP path is verified through transport and routing E2E. A `tools/call` reaches the trusted runtime, resolves the exact command and specialist, evaluates authority and capability, applies governance, advances lifecycle state, and returns an `ExecutionResult`.
+## 1. Problem and current boundary
 
-The default MCP runtime factory does not configure a substantive specialist execution engine. `RuntimeExecutor` therefore falls back to `_default_operation`, which returns route-oriented output such as:
+Orchestra's default MCP path is verified through transport and routing E2E. A `tools/call` reaches the trusted runtime, resolves the exact command and specialist, evaluates authority and capability, applies governance, advances lifecycle state, and returns an `ExecutionResult`.
+
+The default MCP runtime factory still does not configure a host-native specialist execution engine. It therefore retains route-oriented output such as:
 
 ```text
 codex adapter routed 'review-docs' to 'scribe' with governance status NOT_REQUIRED
 ```
 
-That result proves runtime dispatch and specialist selection. It does not prove that Scribe read the requested documents, applied Scribe instructions, used host tools, or produced a substantive specialist result.
+That proves runtime dispatch and specialist selection. It does not prove that Scribe read documents, applied Scribe guidance, used Codex host tools, or produced substantive specialist reasoning.
 
-The current operation hook also receives only:
-
-```text
-(adapter_name, RouteDecision, ValidationResult)
-```
-
-It does not receive the original task input, assembled context, command, selected skill identity digest, or exact authority/capability decision references. A real host execution engine should not recover those inputs from global state, process state, transport metadata, or hidden host context.
-
-The required architectural change is therefore not "call a model after routing." It is to define a typed, auditable, non-authorizing boundary from an already-approved runtime route into an optional host execution engine.
+E1-E3 now provide the missing typed execution boundary and deterministic proof path without changing that default.
 
 ## 2. Core invariants
 
@@ -49,7 +43,7 @@ VALID_RECEIPT != MERGE_AUTHORITY
 SUBSTANTIVE_OUTPUT != RELEASE_AUTHORITY
 ```
 
-The effective execution boundary is an intersection, never a union:
+Effective host execution remains an intersection, never a union:
 
 ```text
 EFFECTIVE_EXECUTION
@@ -60,16 +54,16 @@ EFFECTIVE_EXECUTION
   INTERSECT SPECIALIST_EXECUTION_SCOPE
 ```
 
-If a host cannot represent or enforce the required restrictions, the bridge must fail closed or reduce to a safer supported mode such as read-only execution. A permissive host configuration cannot widen Orchestra authority.
+If a host cannot represent or enforce the required restrictions, the bridge must fail closed or reduce to a safer separately authorized mode. A permissive host configuration cannot widen Orchestra authority.
 
-## 3. Design decision
+## 3. Implemented design
 
-Introduce an optional typed `ISpecialistExecutionEngine` boundary after existing authority, capability, and governance gates and before the runtime maps an operation outcome into lifecycle state.
+E1-E3 implement an optional typed `ISpecialistExecutionEngine` boundary layered over the existing trusted runtime.
 
-The default runtime remains route-only unless an execution engine is explicitly supplied through trusted runtime construction.
+The default remains route-only:
 
 ```text
-CURRENT DEFAULT
+DEFAULT PATH
 Trusted RuntimeComposition
 -> adapter context
 -> command
@@ -81,8 +75,12 @@ Trusted RuntimeComposition
 -> route-only RuntimeOperationResult
 -> lifecycle
 -> ExecutionResult
+```
 
-PROPOSED OPTIONAL PATH
+The explicit optional path is now:
+
+```text
+OPTIONAL E1-E3 PATH
 Trusted RuntimeComposition
 -> adapter context
 -> command
@@ -91,41 +89,33 @@ Trusted RuntimeComposition
 -> authority
 -> capability
 -> governance
+-> lifecycle activation
 -> SpecialistExecutionRequest
--> configured ISpecialistExecutionEngine
--> host bridge or deterministic engine
+-> explicitly configured ISpecialistExecutionEngine
 -> SpecialistExecutionReceipt
--> receipt validation
+-> strict receipt validation
 -> RuntimeOperationResult
--> lifecycle
+-> lifecycle terminal mapping
 -> ExecutionResult
 ```
 
-No engine is inferred from adapter name, MCP client metadata, environment discovery, provider availability, or installed host state.
+No engine is inferred from adapter name, MCP client metadata, prompt content, provider availability, environment discovery, or installed host state.
 
-## 4. Why MCP Sampling is not the execution architecture
+The implementation is additive:
 
-MCP protocol revision `2026-07-28` retains Sampling during a deprecation window but explicitly deprecates it for new integrations. Orchestra should not build a new permanent specialist execution architecture on a deprecated server-to-client model invocation feature.
+- existing `RuntimeExecutor` remains unchanged;
+- `SpecialistRuntimeExecutor` subclasses it for explicit opt-in execution;
+- existing `build_mcp_runtime_factory(...)` remains route-only;
+- existing `build_mcp_stdio_transport(...)` remains route-only;
+- optional execution is constructed through `orchestra_runtime/mcp_specialist_execution.py`.
 
-MCP remains a transport that exposes Orchestra commands. Specialist execution is a runtime concern behind a host-neutral interface.
+## 4. Typed execution contracts
 
-This also prevents the MCP transport from becoming responsible for provider credentials, model selection, model billing, host conversation state, or sandbox semantics.
+### `SpecialistExecutionRequest`
 
-## 5. Why direct provider APIs are not the default Orchestra core path
+A request is created only after the existing pre-operation gates succeed.
 
-Calling a model provider directly from `orchestra_runtime` would introduce a second agent harness with provider credentials, model-specific behavior, billing semantics, tool orchestration, network policy, and context management. That duplicates responsibilities already owned by supported coding hosts.
-
-The core architecture therefore does not require OpenAI, Google, Anthropic, or another provider SDK.
-
-A future provider-specific execution engine could be evaluated as an optional integration, but it is not the default design and would require its own Feature Admission, dependency, security, privacy, and authority review if materially different from this host-bridge architecture.
-
-## 6. Proposed typed contracts
-
-### 6.1 `SpecialistExecutionRequest`
-
-A request is created only after all current pre-operation gates succeed.
-
-Minimum fields:
+It binds:
 
 ```text
 request_version
@@ -151,19 +141,23 @@ execution_mode
 
 Rules:
 
-1. `run_id`, `command_name`, and `specialist` must exactly match the trusted route and runtime composition.
-2. `authority_decision_ref` and `capability_decision_ref` must refer to the decisions that allowed this exact run and binding.
-3. `skill_source_path` must resolve through the canonical `SkillRegistry`, not an arbitrary host-provided prompt path.
-4. `skill_source_digest` binds the request to the exact specialist guidance loaded for the run.
-5. `task_input` is the original task necessary for execution. It is not authority and must not be copied into runtime audit events by default.
-6. `execution_constraints` are derived only from trusted runtime policy and explicit reduction-only request constraints. Host metadata cannot add authority.
-7. `execution_mode` is explicit. Absence never silently enables substantive execution.
+1. Run, command, adapter, and specialist identities come from trusted runtime state.
+2. Skill source path resolves through the canonical `SkillRegistry`.
+3. Skill source SHA-256 binds the exact specialist guidance source.
+4. Authority and capability references bind the request to the decisions that allowed the exact runtime binding.
+5. Task input is necessary execution input, not authority.
+6. Execution constraints come from trusted runtime policy and remain reduction-only.
+7. Execution mode is explicit; absence never silently enables host-native execution.
 
-### 6.2 `SpecialistExecutionReceipt`
+Machine contract:
 
-A receipt represents what the configured execution engine claims occurred. It is evidence and must be validated before the runtime accepts it as an operation result.
+`machine/schemas/specialist-execution-request.v1.schema.json`
 
-Minimum fields:
+### `SpecialistExecutionReceipt`
+
+A receipt represents what an explicitly configured engine claims occurred. It is evidence and is validated before its output is accepted as an operation result.
+
+It binds at least:
 
 ```text
 receipt_version
@@ -184,246 +178,278 @@ evidence_refs
 side_effect_class
 ```
 
-Recommended optional fields:
-
-```text
-host_identity
-sandbox_identity
-approval_policy_identity
-artifact_refs
-changed_paths
-started_at
-completed_at
-```
+Optional host-evidence fields include host identity, sandbox identity, approval-policy identity, artifact references, changed paths, and timestamps.
 
 Rules:
 
-1. Request identity must match exactly.
-2. Run, command, adapter, and specialist identity must match exactly.
-3. Unknown or malformed terminal status fails closed.
+1. Request ID and digest must match exactly.
+2. Run, command, adapter, specialist, engine ID, and engine version must match exactly.
+3. Unknown or malformed receipt state fails closed.
 4. Receipt evidence cannot create authority or retroactively authorize side effects.
-5. `changed_paths` or artifact summaries may be evidence, but they do not replace Git or repository validation.
-6. Raw secrets, credentials, full prompt text, and unnecessary host transcripts must not be persisted in the receipt.
+5. Deterministic test-engine receipts cannot report side effects.
+6. Raw credentials, secrets, and unnecessary full host transcripts are not ordinary receipt evidence.
 
-### 6.3 `ISpecialistExecutionEngine`
+Machine contract:
 
-Conceptual interface:
+`machine/schemas/specialist-execution-receipt.v1.schema.json`
+
+### `ISpecialistExecutionEngine`
+
+The interface is intentionally narrower than an agent SDK:
 
 ```python
 class ISpecialistExecutionEngine(ABC):
-    @abstractmethod
+    @property
+    def engine_id(self) -> str: ...
+
+    @property
+    def engine_version(self) -> str: ...
+
     def execute(
         self,
         request: SpecialistExecutionRequest,
-    ) -> SpecialistExecutionReceipt:
-        ...
+    ) -> SpecialistExecutionReceipt: ...
 ```
 
-The interface is intentionally narrower than a general agent SDK. It does not own routing, authority, capability evaluation, governance, lifecycle, delegation, coordination, or merge decisions.
+It does not own routing, authority, capability evaluation, governance, coordination, lifecycle policy, delegation, merge decisions, release decisions, or host installation.
 
-## 7. Runtime ownership
+## 5. Runtime ownership and gate ordering
 
-### `RuntimeExecutor`
+`SpecialistRuntimeExecutor` deliberately delegates the gate sequence to the existing `RuntimeExecutor`.
 
-Owns:
+The configured engine is unreachable before:
 
-- deciding whether the current route reached the execution boundary;
-- constructing the typed request from already-known runtime state;
-- invoking only the explicitly configured engine;
-- validating receipt identity;
-- translating a valid receipt into `RuntimeOperationResult`;
-- preserving existing lifecycle and audit behavior.
+1. coordination validation;
+2. lifecycle initialization;
+3. context assembly and command parsing;
+4. deterministic routing;
+5. exact runtime binding;
+6. authority ALLOW;
+7. capability ALLOW;
+8. governance ALLOW/NOT_REQUIRED;
+9. lifecycle activation.
 
-Does not own:
+Only then does the optional operation boundary create and execute a `SpecialistExecutionRequest`.
 
-- model/provider selection by inference;
-- host authentication;
-- host installation or refresh;
-- host sandbox configuration;
-- arbitrary provider tool registration;
-- merge, release, deployment, or policy activation.
+Adversarial tests prove engine invocation is absent on authority, capability, governance, and coordination denial.
 
-### `SkillRegistry`
+## 6. Execution modes
 
-Remains the source of canonical specialist identity and source path. The execution request should bind to the exact canonical skill source that produced the route.
+### Route-only default
 
-Adapter-exported skill copies may be used by a host bridge only as verified host-compatible projections. They do not replace the canonical source identity.
-
-### MCP transport
-
-MCP continues to:
-
-- validate protocol revision and request shape;
-- project bounded Orchestra commands;
-- prevent client-supplied governance metadata injection;
-- call the configured runtime factory;
-- serialize `ExecutionResult`.
-
-MCP does not decide whether a substantive execution engine exists. A runtime factory may explicitly supply one later.
-
-## 8. Execution modes
-
-The architecture defines three semantic modes for planning and validation. They are not implemented by this design phase.
-
-### `ROUTE_ONLY`
-
-Current behavior. No model or host execution occurs. Successful output proves trusted routing and gate passage only.
+The existing runtime and MCP builders remain route-only. Successful output proves routing and gate passage only.
 
 ### `DETERMINISTIC_TEST_ENGINE`
 
-A no-network, no-provider deterministic engine used to validate request construction, receipt validation, lifecycle integration, failure behavior, and MCP result plumbing.
+Implemented for E1-E3 validation. It is no-network and no-provider. It proves request construction, exact receipt validation, lifecycle mapping, fail-closed behavior, and MCP result plumbing.
 
-It must not be represented as model or specialist intelligence. Its purpose is architectural proof.
+It is architectural evidence, not model intelligence.
 
 ### `HOST_NATIVE`
 
-An optional engine delegates the typed request to a supported host bridge and returns a receipt bound to the original request.
+Defined but not yet implemented by a host bridge. It requires an explicitly configured bridge plus separately validated host capability, sandbox, approval, and scope evidence.
 
-`HOST_NATIVE` requires separately validated host capability and explicit applicable authority. It is never selected because a host executable happens to be installed.
+An installed Codex executable or an MCP connection does not activate this mode.
 
-## 9. Host bridge requirements
+## 7. MCP integration
 
-A host bridge must provide all of the following before it can be considered for installed-host E2E:
-
-1. Exact request identity preservation.
-2. Exact specialist identity preservation.
-3. A deterministic method for loading the intended specialist guidance.
-4. Bounded task/context transfer.
-5. A declared sandbox and approval-policy relationship.
-6. No authority derivation from host capability or model output.
-7. Fail-closed handling when required restrictions cannot be represented.
-8. Structured terminal receipt identity.
-9. Evidence sufficient to distinguish route success from substantive execution.
-10. No secret material in ordinary runtime audit output.
-
-## 10. Codex bridge direction
-
-OpenAI documents the Codex App Server as the first-class integration method for embedding the Codex harness. That makes it a better future candidate for a Codex host bridge than recursive CLI invocation or deprecated MCP Sampling.
-
-This architecture does not yet select or implement a Codex App Server bridge. A bounded spike must first prove:
-
-- the bridge can create an isolated execution with explicit task and specialist instructions;
-- the bridge can preserve the caller's intended sandbox/approval restrictions;
-- the bridge can return stable execution identity and terminal output;
-- the integration does not recursively call the same Orchestra MCP tool;
-- the integration does not require Orchestra core to own OpenAI credentials or provider billing state;
-- failure and cancellation can be represented without inventing lifecycle success.
-
-Until that proof exists:
+The protocol remains MCP `2026-07-28` with the existing stdio method surface:
 
 ```text
-CODEX_HOST_BRIDGE = DESIGN_CANDIDATE_ONLY
+server/discover
+tools/list
+tools/call
+```
+
+E3 adds explicit optional builders:
+
+```text
+build_mcp_specialist_runtime_factory(...)
+build_mcp_stdio_transport_with_specialist_execution(...)
+```
+
+Engine selection is constructor-owned trusted configuration. MCP prompt content and client `_meta` are non-authorizing and cannot select or activate an engine.
+
+The deterministic engine has been exercised through `tools/call`, proving:
+
+```text
+MCP_DETERMINISTIC_ENGINE_E2E = VERIFIED
+```
+
+This is not host-native specialist proof.
+
+## 8. Why MCP Sampling is not the host execution architecture
+
+MCP `2026-07-28` deprecates Sampling for new integrations. Orchestra therefore does not build its new permanent execution path on Sampling.
+
+MCP remains transport. Specialist execution remains behind a host-neutral runtime interface.
+
+## 9. Why direct provider APIs are not the default core path
+
+Putting direct model-provider calls into Orchestra core would create another agent harness with provider credentials, billing semantics, model-specific behavior, tool orchestration, network policy, and context management.
+
+E1-E3 add no OpenAI, Google, Anthropic, or other provider SDK to the core runtime.
+
+A materially different provider-specific engine would require its own governance, dependency, security, privacy, and authority review.
+
+## 10. Codex bridge direction for E4
+
+The preferred feasibility direction is a Codex host-native integration surface such as Codex App Server rather than deprecated MCP Sampling or default recursive `codex exec` invocation.
+
+Before any live call, E4 must freeze:
+
+```text
+HOST_IDENTITY
+HOST_VERSION
+BRIDGE_VERSION
+MODEL_IDENTITY_IF_HOST_EXPOSES_IT
+SANDBOX_MODE
+APPROVAL_POLICY
+WORKSPACE_IDENTITY
+ORCHESTRA_BASE_SHA
+ORCHESTRA_ENGINE_HEAD_SHA
+SPECIALIST
+COMMAND
+TASK_FIXTURE
+EXPECTED_NON_MUTATING_OUTCOME
+```
+
+Mandatory blockers:
+
+```text
+NO_RECURSIVE_ORCHESTRA_MCP_LOOP
+NO_HIDDEN_UNBOUNDED_NETWORK_REQUIREMENT
+NO_PROVIDER_SECRET_IN_RUNTIME_AUDIT
+NO_HOST_POLICY_WIDENING
+NO_UNSCOPED_WORKSPACE_ACCESS
+CANCELLATION_REPRESENTABLE
+FAILURE_REPRESENTABLE
+TIMEOUT_REPRESENTABLE
+```
+
+Until E4-E5 prove otherwise:
+
+```text
+CODEX_HOST_BRIDGE = NOT_IMPLEMENTED
 CODEX_SPECIALIST_EXECUTION_E2E = NOT_VERIFIED
 ```
 
-## 11. Security model
+## 11. E5 first live proof
 
-### 11.1 Prompt and specialist instructions
-
-Task text and specialist Markdown can influence model behavior, but they cannot create authority. The runtime must complete authority and capability evaluation before creating an execution request.
-
-### 11.2 Host sandbox
-
-The host sandbox is an independent lower-level constraint. Orchestra may require a stricter mode than the host default. If the bridge cannot enforce the Orchestra requirement, execution must be denied or reduced.
-
-### 11.3 Tool and network access
-
-A host bridge must not infer that a specialist needs unrestricted shell, filesystem, or network access. Required access must be represented through the applicable existing Orchestra authority/capability scope and host policy.
-
-### 11.4 Audit minimization
-
-Audit should record identities, decisions, status, reason codes, and evidence references. It should not log raw prompts, credentials, entire host conversations, or full file contents unless a separately defined evidence contract explicitly requires and protects them.
-
-### 11.5 Recursive execution
-
-A host bridge must detect or prohibit recursive invocation of the same Orchestra execution surface when recursion would create an unbounded agent loop.
-
-## 12. Failure semantics
-
-The following conditions must fail closed before lifecycle completion is recorded:
+The first installed-host proof is deliberately read-only:
 
 ```text
-ENGINE_NOT_CONFIGURED when HOST_NATIVE was explicitly required
+HOST = CODEX
+COMMAND = review-docs
+SPECIALIST = scribe
+MODE = READ_ONLY
+MUTATION_ALLOWED = FALSE
+```
+
+A successful proof must establish exact command acceptance, Scribe selection, authority/capability/governance passage, exact request creation, Codex bridge execution, exact matching receipt, task-specific substantive output, unchanged worktree, no recursion, and minimized audit evidence.
+
+Only then may the evidence state:
+
+```text
+SUBSTANTIVE_SPECIALIST_EXECUTION_E2E = VERIFIED_FOR_CODEX_READ_ONLY_SCRIBE_FIXTURE
+```
+
+## 12. E6 mutation boundary
+
+Read-only host proof is not mutation authority.
+
+Any mutation-capable assessment must separately verify exact allowed/prohibited paths, process and network constraints, approval intersection, Git state evidence, post-execution validation, cancellation/partial-write recovery, destructive exclusions, and delegation behavior.
+
+Destructive or high-impact mutation must not be performed merely to prove the bridge can mutate.
+
+## 13. Security and privacy model
+
+### Prompt and specialist instructions
+
+Task text and specialist guidance may influence model behavior but cannot create authority.
+
+### Host sandbox
+
+The host sandbox is an independent lower-level constraint. If a bridge cannot enforce the stricter effective boundary, execution fails closed or is reduced to a safer authorized mode.
+
+### Tool and network access
+
+No specialist or host identity implies unrestricted shell, filesystem, process, or network access.
+
+### Audit minimization
+
+Audit records identities, decisions, status, reason codes, and evidence references. Raw prompts, credentials, entire host conversations, and full file contents are not persisted by default.
+
+### Recursive execution
+
+A host bridge must detect or prohibit recursive invocation that could create an unbounded Orchestra/Codex loop.
+
+## 14. Failure semantics
+
+Fail-closed conditions include:
+
+```text
+ENGINE_NOT_CONFIGURED
 REQUEST_IDENTITY_MISMATCH
 REQUEST_DIGEST_MISMATCH
 SPECIALIST_IDENTITY_MISMATCH
 COMMAND_IDENTITY_MISMATCH
 RUN_IDENTITY_MISMATCH
-HOST_CONSTRAINT_UNENFORCEABLE
-ENGINE_PROTOCOL_UNSUPPORTED
+ENGINE_IDENTITY_MISMATCH
+ENGINE_VERSION_MISMATCH
 MALFORMED_EXECUTION_RECEIPT
+DETERMINISTIC_ENGINE_SIDE_EFFECT_REJECTED
+SPECIALIST_ENGINE_EXCEPTION
+HOST_CONSTRAINT_UNENFORCEABLE
 HOST_EXECUTION_FAILED
 HOST_EXECUTION_CANCELLED
 HOST_EXECUTION_TIMED_OUT
 RECURSIVE_EXECUTION_BLOCKED
 ```
 
-An engine exception must never be converted into successful route output.
+An engine exception never degrades into a successful route acknowledgement.
 
-Route-only compatibility remains a separate explicit mode, not a fallback after a requested host-native execution fails.
+Route-only remains an explicit compatibility path, not a fallback after requested host-native execution fails.
 
-## 13. Evidence classification
+## 15. Evidence classification
 
-The architecture preserves separate evidence levels:
+Evidence levels remain separate:
 
 ```text
 MCP_TRANSPORT_E2E
 MCP_ROUTING_E2E
 SPECIALIST_SELECTION
 DETERMINISTIC_ENGINE_E2E
+MCP_DETERMINISTIC_ENGINE_E2E
 HOST_BRIDGE_E2E
 SUBSTANTIVE_SPECIALIST_EXECUTION_E2E
 PROTECTED_ACTION_VALIDATION
 ```
 
-A later installed-host test may claim `SUBSTANTIVE_SPECIALIST_EXECUTION_E2E = VERIFIED` only when the receipt and observable result prove that the selected specialist guidance was executed against the supplied task through the configured host bridge.
-
-That claim still does not prove correctness of every specialist output or grant protected-action authority.
-
-## 14. Compatibility strategy
-
-- Existing `RuntimeExecutor(..., operation=None)` behavior remains route-only.
-- Existing MCP discovery and tool projection remain unchanged unless a later phase explicitly changes them.
-- No new MCP method is required for the first implementation.
-- Existing adapters remain valid.
-- Host execution engines are optional trusted constructor dependencies.
-- No automatic migration from route-only to host-native behavior is allowed.
-- No installed integration is refreshed automatically.
-
-## 15. Rejected alternatives
-
-### Build on MCP Sampling
-
-Rejected as the permanent design because Sampling is deprecated for new integrations in MCP `2026-07-28`.
-
-### Put provider API calls directly in `mcp_transport.py`
-
-Rejected because transport would become provider, credential, billing, model, and agent-loop infrastructure.
-
-### Recursively invoke `codex exec` by default
-
-Rejected as the default architecture because nested CLI execution makes conversation identity, sandbox inheritance, approval semantics, cancellation, and recursion behavior harder to prove.
-
-### Return specialist Markdown and assume the outer model executed it
-
-Rejected as E2E proof. The outer agent may choose to follow text, but a text handoff alone does not produce a runtime-bound execution receipt.
-
-### Treat host approval as Orchestra authority
-
-Rejected. Host permission is an independent constraint and cannot expand the trusted Orchestra scope.
-
-## 16. Phase boundary
-
-This design phase authorizes only architecture and admission evidence.
+Current bounded state:
 
 ```text
-RUNTIME_CODE_CHANGED = FALSE
-MCP_BEHAVIOR_CHANGED = FALSE
-LIVE_MODEL_CALLS = 0
-PROVIDER_CALLS = 0
-INSTALLED_INTEGRATION_REFRESH = FALSE
-POLICY_ACTIVATION = FALSE
-RELEASE_PUBLICATION = FALSE
+MCP_TRANSPORT_E2E = VERIFIED
+MCP_ROUTING_E2E = VERIFIED
+SPECIALIST_SELECTION = VERIFIED
+DETERMINISTIC_ENGINE_E2E = VERIFIED
+MCP_DETERMINISTIC_ENGINE_E2E = VERIFIED
+HOST_BRIDGE_E2E = NOT_VERIFIED
+SUBSTANTIVE_SPECIALIST_EXECUTION_E2E = NOT_CLAIMED
 ```
 
-Implementation, installed-host execution, live model/provider calls, integration refresh, merge, and release remain separately gated.
+## 16. Compatibility and authority boundary
+
+- Existing `RuntimeExecutor(..., operation=None)` stays route-only.
+- Existing MCP discovery and tool projection stay unchanged.
+- Existing adapters remain valid.
+- Host execution engines are optional trusted constructor dependencies.
+- No automatic migration from route-only to host-native behavior exists.
+- No installed integration is refreshed automatically.
+- No direct provider SDK or MCP Sampling dependency is introduced.
+
+E1-E3 performed zero live model/provider calls.
+
+E4-E6 are separately authorized for bounded execution through Codex CLI, subject to the frozen blockers and exclusions above.
+
+Release publication, production deployment, policy activation, ruleset mutation, automatic installed-integration refresh, destructive cleanup, branch deletion, force push, and history rewrite remain separately controlled.
