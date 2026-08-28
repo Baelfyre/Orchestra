@@ -94,16 +94,25 @@
   },
   "scope": {
     "owner": "Clockwork with Arbiter and Governor review",
-    "proposed_change": "Define the architecture and phased implementation contract for an optional post-governance specialist execution engine and host bridge while preserving route-only default behavior.",
+    "proposed_change": "Implement the authorized E1-E3 deterministic execution foundation: typed request and receipt contracts, an optional post-gate execution engine attachment, strict receipt validation, and an explicit MCP execution builder while preserving route-only defaults and deferring live host execution to E4-E6.",
     "affected_surfaces": [
-      "orchestra_runtime/services.py",
       "orchestra_runtime/interfaces.py",
-      "orchestra_runtime/models.py",
-      "orchestra_runtime/mcp_transport.py",
+      "orchestra_runtime/specialist_execution.py",
+      "orchestra_runtime/mcp_specialist_execution.py",
+      "machine/schemas/specialist-execution-request.v1.schema.json",
+      "machine/schemas/specialist-execution-receipt.v1.schema.json",
+      "tests/runtime/test_specialist_execution_contract.py",
+      "tests/runtime/test_specialist_execution_edges.py",
+      "tests/runtime/test_mcp_specialist_execution.py",
+      "tests/runtime/test_mcp_specialist_execution_edges.py",
       "docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_ARCHITECTURE.md",
-      "docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_IMPLEMENTATION_PLAN.md"
+      "docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_IMPLEMENTATION_PLAN.md",
+      "docs/project/OOP_RUNTIME_ARCHITECTURE.md",
+      "docs/developer/MCP_STDIO_TRANSPORT.md",
+      "README.json",
+      "CHANGELOG.md"
     ],
-    "authority_reference": "maintainer-chat-authorization-2026-08-29-next-task-design"
+    "authority_reference": "maintainer-chat-blanket-authorization-2026-08-29-e1-e3"
   },
   "source_identity": {
     "repository": "Baelfyre/Orchestra",
@@ -127,7 +136,7 @@
   },
   "admission": {
     "disposition": "ADMIT",
-    "rationale": "The route-only boundary is now directly evidenced and the capability is worth bounded architecture and deterministic contract work. Admission is limited to design and later separately authorized implementation stages; no live host/model execution is authorized by this record.",
+    "rationale": "The route-only boundary is directly evidenced and the maintainer separately granted blanket authorization for the bounded E1-E3 deterministic foundation. Admission and that implementation authorization do not authorize live E4-E6 host/model execution or any protected release, deployment, policy, destructive, or integration-refresh action.",
     "decision_owner": "Baelfyre maintainer"
   },
   "promotion": {
