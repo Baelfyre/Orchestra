@@ -1,0 +1,131 @@
+{
+  "$schema": "./registry-o7-consumer-contract.schema.json",
+  "schema_version": "orchestra.registry-o7-consumer-contract.v1",
+  "contract_id": "o7.0-registry-consumer-contract",
+  "status": "CONTRACT_FROZEN_RUNTIME_NOT_IMPLEMENTED",
+  "source_contract": {
+    "repository": "Baelfyre/Orchestra-Compliance-Registry",
+    "canonical_branch": "main",
+    "reviewed_commit_sha": "c1910806ed3ea9147af96b1c49a9f72aef75e0f6",
+    "reviewed_tree_sha": "0c37d7bf47fc20b49b26fea156c8e180db57b4a3",
+    "r7_document": "docs/TOKEN_EFFICIENT_QUERY_ARCHITECTURE_R7.md",
+    "r7_document_blob_sha": "9f24a10f455a77509ec5246e6981ca2672624ca1",
+    "r7_status": "APPROVED_PLANNED_NOT_IMPLEMENTED",
+    "planned_registry_release": "registry-v0.4.0"
+  },
+  "compatibility": {
+    "required_capability_floor": {
+      "capability_id": "cap.query.v1",
+      "minimum_contract_version": "1.0.0"
+    },
+    "optional_capabilities": [
+      {
+        "capability_id": "cap.query.projection.v1",
+        "minimum_contract_version": "1.0.0"
+      },
+      {
+        "capability_id": "cap.query.relationships.v1",
+        "minimum_contract_version": "1.0.0"
+      },
+      {
+        "capability_id": "cap.query.indexed-read.v1",
+        "minimum_contract_version": "1.0.0"
+      },
+      {
+        "capability_id": "cap.query.budget.v1",
+        "minimum_contract_version": "1.0.0"
+      },
+      {
+        "capability_id": "cap.transport.mcp.v1",
+        "minimum_contract_version": "1.0.0"
+      }
+    ],
+    "optional_absence_disposition": "USE_CURRENT_O1_O6_PATH",
+    "required_incompatibility_disposition": "FAIL_CLOSED",
+    "existing_o1_o6_semantics_preserved": true
+  },
+  "transport": {
+    "preference_order": [
+      "DIRECT_LOCAL_INDEXED_GATEWAY",
+      "DIRECT_LOCAL_JSON_QUERY",
+      "OPTIONAL_MCP_TRANSPORT"
+    ],
+    "internal_default": "DIRECT_LOCAL_INDEXED_GATEWAY_WHEN_VERIFIED",
+    "index_unavailable_fallback": "DIRECT_LOCAL_JSON_QUERY",
+    "mcp_unavailable_fallback": "DIRECT_LOCAL_QUERY",
+    "mcp_required_for_internal_orchestra": false,
+    "transport_selection_may_expand_authority": false
+  },
+  "projections": {
+    "allowed": [
+      "MINIMAL",
+      "SUMMARY",
+      "EVIDENCE",
+      "FULL"
+    ],
+    "workflow_defaults": {
+      "conductor_discovery": [
+        "MINIMAL"
+      ],
+      "governor_applicability_review": [
+        "SUMMARY",
+        "EVIDENCE"
+      ],
+      "steward_requirements_traceability": [
+        "EVIDENCE"
+      ],
+      "explicit_audit_escalation": [
+        "FULL"
+      ]
+    },
+    "projection_changes_payload_not_semantics": true,
+    "projection_may_change_source_or_obligation_identity": false
+  },
+  "receipt_normalization": {
+    "target_model": "ComplianceQueryReceipt",
+    "preserve": [
+      "registry_repository",
+      "registry_version",
+      "release_sequence",
+      "release_tag",
+      "release_manifest_digest",
+      "query_digest",
+      "source_ids",
+      "obligation_ids",
+      "freshness_evidence",
+      "capability_negotiation",
+      "domain_routing_evidence"
+    ],
+    "downstream_set_equality_required": true,
+    "authority_expansion": false
+  },
+  "integrity": {
+    "index_identity_or_digest_mismatch": "REJECT_INDEX_REBUILD_OR_FALLBACK",
+    "semantic_query_mismatch": "FAIL_CLOSED",
+    "required_capability_incompatibility": "FAIL_CLOSED",
+    "optional_capability_absence": "USE_CURRENT_O1_O6_PATH",
+    "model_authored_integrity_repair_allowed": false
+  },
+  "context_budget": {
+    "authority_source": "EXISTING_ORCHESTRA_COMMUNICATION_CONTEXT_BUDGET",
+    "projection_selection_creates_budget_authority": false,
+    "maximum_context_bytes_is_bounded_input": true,
+    "toon_selection_requires_measured_savings": true,
+    "token_or_workflow_savings_claim_requires_measurement": true
+  },
+  "phase_gates": {
+    "o7_0_contract_freeze_complete": true,
+    "o7_1_plus_runtime_implementation_authorized": false,
+    "o7_1_plus_entry_condition": "IMPLEMENTED_STABLE_REGISTRY_R7_SURFACE_REQUIRED",
+    "joint_conformance_required_before_o7_completion": true,
+    "trusted_immutable_registry_release_required_before_release_integration": true
+  },
+  "authority": {
+    "contract_grants_runtime_implementation_authority": false,
+    "registry_capability_grants_orchestra_authority": false,
+    "transport_grants_authority": false,
+    "projection_grants_authority": false,
+    "validation_grants_merge_authority": false,
+    "contract_grants_release_or_deployment_authority": false
+  }
+}

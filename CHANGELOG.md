@@ -2,6 +2,14 @@
 
 This root changelog is release-oriented. Detailed pre-v1.7 development chronology remains preserved byte-for-byte in [the historical changelog archive](docs/history/CHANGELOG_PRE_V1_7.md), Git history, merged pull requests, decision records, and validation evidence.
 
+## Post-v1.7 O7.0 Registry consumer contract freeze
+
+- Froze Orchestra O7.0 consumer expectations against the signed Registry R7 architecture at commit `c1910806ed3ea9147af96b1c49a9f72aef75e0f6`, tree `0c37d7bf47fc20b49b26fea156c8e180db57b4a3`, and R7 document blob `9f24a10f455a77509ec5246e6981ca2672624ca1` while retaining Registry R7 status `APPROVED_PLANNED_NOT_IMPLEMENTED`.
+- Preserved required `cap.query.v1` at consumer floor `1.0.0` and froze the five future R7 optional capability IDs at Orchestra minimum `1.0.0` acceptance floors without claiming that Registry currently publishes or implements those capabilities.
+- Froze indexed/local/MCP transport precedence, `MINIMAL`/`SUMMARY`/`EVIDENCE`/`FULL` projection semantics, existing `ComplianceQueryReceipt` normalization identities, fail-closed integrity dispositions, and existing Orchestra context-budget ownership.
+- Added a machine-readable O7.0 contract, Draft 2020-12 schema, and deterministic runtime contract tests that reject authority expansion, capability-set drift, transport-precedence drift, and premature O7.1+ activation.
+- O7.1+ runtime implementation remains blocked by `IMPLEMENTED_STABLE_REGISTRY_R7_SURFACE_REQUIRED`; no Orchestra runtime behavior, Registry source, release/tag, deployment, policy, installed integration, ruleset, or protected action is changed by O7.0.
+
 ## Post-v1.7 Prime Directive / Development Lifecycle V2 canonical closeout
 
 - PR #592 squash merged the reviewed Prime Directive and Development Lifecycle V2 realignment tree to signed canonical `main` commit `a04dafe75fc52ecc1fedcc17a73b14b8a31f548a`, tree `854ebfb01b05226304f36d2c35420658c5c8e91f`; the reviewed tree equals the canonical tree.
