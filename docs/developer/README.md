@@ -8,7 +8,7 @@ The Developer Portal is Orchestra's repository-native discovery surface for deve
 | --- | --- |
 | Understand or build an adapter | `docs/setup/ADAPTER_SDK_PRAP.md`, `machine/protocol/prap-certification-contract.v1.json`, `machine/specialists/registry.v1.json` |
 | Produce PRAP compatibility evidence | `scripts/certify_adapter.py`, `machine/protocol/prap-certification-contract.v1.json`, `machine/schemas/prap-certification-evidence.schema.json` |
-| Integrate through MCP stdio | `docs/developer/MCP_STDIO_TRANSPORT.md`, `orchestra_runtime/mcp_transport.py`, `scripts/mcp_server.py` |
+| Integrate through MCP stdio | `docs/developer/MCP_STDIO_TRANSPORT.md`, `docs/validation/CODEX_MCP_2026_HOST_REVALIDATION_2026_08_28.md`, `orchestra_runtime/mcp_transport.py`, `scripts/mcp_server.py` |
 | Check host maturity | `machine/hosts/update-contract.v1.json`, `docs/setup/HOST_UPDATES.md` |
 | Understand specialist / Downstream Role boundaries | `machine/specialists/registry.v1.json`, `docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md` |
 | Review governance | `machine/governance/policy.v1.json`, `docs/governance/GOVERNANCE_LAYER.md` |
@@ -28,11 +28,15 @@ The machine-readable index for the established portal entry points is `machine/d
 ## MCP integration journey
 
 1. Read `docs/developer/MCP_STDIO_TRANSPORT.md` and the existing Adapter SDK/PRAP authority boundary.
-2. Start the bounded server with `python scripts/mcp_server.py --adapter <existing-adapter-id>`.
-3. Treat the selected adapter as the existing PRAP/runtime identity. MCP does not register a new adapter or promote host maturity.
-4. Use only the implemented `server/discover`, `tools/list`, and `tools/call` surface for protocol revision `2026-07-28`.
-5. Treat MCP request metadata and tool arguments as untrusted for Orchestra authority or governance expansion.
-6. Keep Streamable HTTP, resources, prompts, Tasks/extensions, deployment, policy activation, and installed-integration refresh outside this bounded transport.
+2. For Codex, enable `mcp_2026_07_28` **and** register the Orchestra stdio server with `CODEX_MCP_PROTOCOL_VERSION=2026-07-28`. Both host opt-ins are required.
+3. Fully restart Codex after changing either setting, then require `/mcp` to show Orchestra connected before treating discovery as verified.
+4. For an installed-host invocation smoke test, use a bounded read-only session whose approval policy can permit an approval-required MCP call; the verified Codex sequence is documented in `docs/validation/CODEX_MCP_2026_HOST_REVALIDATION_2026_08_28.md`.
+5. Start the bounded server with `python scripts/mcp_server.py --adapter <existing-adapter-id>` when launching it directly.
+6. Treat the selected adapter as the existing PRAP/runtime identity. MCP does not register a new adapter or promote host maturity.
+7. Use only the implemented `server/discover`, `tools/list`, and `tools/call` surface for protocol revision `2026-07-28`.
+8. Treat MCP request metadata and tool arguments as untrusted for Orchestra authority or governance expansion.
+9. Distinguish successful MCP routing from substantive specialist execution. The default MCP runtime currently returns orchestration decisions/route output and does not invoke a host-native specialist execution engine.
+10. Keep Streamable HTTP, resources, prompts, Tasks/extensions, deployment, policy activation, and installed-integration refresh outside this bounded transport.
 
 ## Specialist extension journey
 
@@ -50,7 +54,9 @@ The Developer Portal cannot activate policy, deploy or mutate production, refres
 
 MCP was the final integration phase in the Developer Portal sequencing model and is now an established bounded integration surface, introduced in v1.6.0 and retained in v1.7.0. It maps protocol revision `2026-07-28` to Orchestra's existing trusted Adapter SDK/PRAP/runtime boundary, projects only currently permitted runtime-bound commands, and delegates accepted calls to a fresh trusted runtime composition.
 
-MCP remains transport, not authority. The current unit does not add Streamable HTTP, resources, prompts, Tasks/extensions, deployment, policy activation, installed-integration refresh, host-maturity promotion, or token-savings claims. See `docs/developer/MCP_STDIO_TRANSPORT.md`.
+Installed Codex routing E2E was revalidated on 2026-08-28: modern discovery, 20-tool projection, and an actual `tools/call` through `mcp__orchestra__review_docs` succeeded with `isError: false` and left the worktree clean. The returned route acknowledgement is expected under the current default runtime and is not evidence of substantive Scribe execution.
+
+MCP remains transport, not authority. The current unit does not add Streamable HTTP, resources, prompts, Tasks/extensions, deployment, policy activation, installed-integration refresh, host-maturity promotion, default host-native specialist execution, or token-savings claims. See `docs/developer/MCP_STDIO_TRANSPORT.md`.
 
 ## Public release boundary
 
