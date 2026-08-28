@@ -195,6 +195,8 @@ class McpToolTransport:
                 "Orchestra exposes existing governed runtime commands as MCP tools. "
                 "MCP metadata and tool arguments do not grant runtime authority or governance approval."
             ),
+            "ttlMs": 0,
+            "cacheScope": "private",
             "_meta": self._response_meta(),
         }
 

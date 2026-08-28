@@ -49,7 +49,7 @@ For persistent Codex use, the feature can be enabled in the user's Codex configu
 
 MCP `2026-07-28` uses a stateless request model. Orchestra does not implement the retired `initialize` / `initialized` handshake or MCP protocol sessions in this transport. Requests must declare `io.modelcontextprotocol/protocolVersion` in `_meta`; unsupported versions fail with the MCP unsupported-protocol-version error.
 
-`server/discover` advertises only the protocol revision and tools capability implemented by this bounded server. `tools/list` returns a deterministic projection of commands that are both exposed by the selected existing adapter and present in the current trusted runtime policy. Tool definitions accept one field only, `prompt`, with `additionalProperties: false`.
+`server/discover` advertises only the protocol revision and tools capability implemented by this bounded server. Its discovery result includes `ttlMs: 0` and `cacheScope: "private"`, satisfying the MCP 2026 discovery result contract while preventing reusable discovery caching or stale capability assumptions. These cache hints are transport metadata only and do not grant runtime authority. `tools/list` returns a deterministic projection of commands that are both exposed by the selected existing adapter and present in the current trusted runtime policy. Tool definitions accept one field only, `prompt`, with `additionalProperties: false`.
 
 ## Authority boundary
 
@@ -78,6 +78,7 @@ Unknown tools and malformed tool arguments are protocol-level errors. Existing O
 The focused runtime tests cover:
 
 - current protocol discovery;
+- Codex-compatible discovery cache-hint shape;
 - deterministic tool ordering and runtime-policy projection;
 - exact-command routing independent of prompt triggers;
 - a fresh trusted runtime per tool call;
