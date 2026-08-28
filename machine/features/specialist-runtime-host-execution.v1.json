@@ -1,0 +1,140 @@
+{
+  "$schema": "../schemas/feature-decision-record.v1.schema.json",
+  "schema_version": "orchestra.feature-decision-record.v1",
+  "record_type": "FEATURE_DECISION_RECORD",
+  "record_id": "feature.specialist-runtime-host-execution.20260829",
+  "feature_id": "specialist-runtime-host-execution",
+  "title": "Executable specialist runtime-host integration",
+  "proposal": {
+    "problem_statement": "The current MCP path verifies transport, trusted routing, authority, capability, governance, and specialist selection, but the default runtime operation returns only a route acknowledgement and cannot produce a substantive specialist execution result.",
+    "affected_parties": [
+      "Orchestra maintainers",
+      "developers using Orchestra through supported hosts",
+      "MCP clients invoking Orchestra specialist commands"
+    ],
+    "problem_evidence": [
+      "orchestra_runtime/mcp_transport.py builds RuntimeExecutor without a specialist execution engine",
+      "orchestra_runtime/services.py defaults the runtime operation to route-oriented output after successful gates",
+      "docs/validation/CODEX_MCP_2026_HOST_REVALIDATION_2026_08_28.md records MCP routing E2E as verified while substantive specialist execution is not claimed",
+      "docs/project/OOP_RUNTIME_ARCHITECTURE.md records SPECIALIST_NATIVE_EXECUTION as not implemented in the default MCP runtime"
+    ],
+    "orchestra_ownership_rationale": "Orchestra owns the transition from trusted specialist selection to governed runtime execution semantics. A host may provide the model and sandbox, but Orchestra must define the execution request, evidence binding, fail-closed receipt validation, and the rule that host capability cannot widen Orchestra authority.",
+    "existing_mechanisms": [
+      {
+        "mechanism": "Current RuntimeExecutor operation hook",
+        "disposition": "PARTIALLY_SOLVES",
+        "evidence_refs": [
+          "orchestra_runtime/services.py#RuntimeExecutor"
+        ]
+      },
+      {
+        "mechanism": "Current MCP stdio tools/call transport",
+        "disposition": "PARTIALLY_SOLVES",
+        "evidence_refs": [
+          "orchestra_runtime/mcp_transport.py#McpToolTransport.call_tool"
+        ]
+      },
+      {
+        "mechanism": "Codex-compatible exported specialist skills",
+        "disposition": "PARTIALLY_SOLVES",
+        "evidence_refs": [
+          "adapters/codex/README.md"
+        ]
+      },
+      {
+        "mechanism": "MCP Sampling",
+        "disposition": "DOES_NOT_SOLVE",
+        "evidence_refs": [
+          "https://blog.modelcontextprotocol.io/posts/2026-07-28/"
+        ]
+      },
+      {
+        "mechanism": "Codex App Server host integration",
+        "disposition": "UNKNOWN",
+        "evidence_refs": [
+          "https://openai.com/index/unlocking-the-codex-harness/"
+        ]
+      }
+    ],
+    "expected_observable_improvement": "An explicitly configured execution engine can receive a post-gate typed specialist execution request and return a verifiable receipt so a successful installed-host call can be classified as substantive specialist execution rather than routing E2E only.",
+    "falsification_criterion": "Do not promote the capability if a host bridge cannot preserve exact run, route, specialist, authority, capability, governance, task, and execution-policy identity without hidden authority expansion, provider coupling in Orchestra core, or unverifiable host-side side effects.",
+    "costs": {
+      "complexity": {
+        "level": "MEDIUM",
+        "rationale": "Adds a typed execution boundary and host bridge abstraction after existing runtime gates."
+      },
+      "maintenance": {
+        "level": "MEDIUM",
+        "rationale": "Host execution bridges can drift independently of the stable runtime contract."
+      },
+      "security": {
+        "level": "HIGH",
+        "rationale": "Substantive host execution can create file, process, network, or external side effects if constraints are not intersected and enforced correctly."
+      },
+      "privacy": {
+        "level": "MEDIUM",
+        "rationale": "Task input and project context may contain sensitive downstream project information and must not be copied into audit evidence by default."
+      },
+      "policy": {
+        "level": "HIGH",
+        "rationale": "The feature crosses the current route-only execution boundary and therefore requires explicit authority and trust-boundary review."
+      },
+      "cognitive": {
+        "level": "MEDIUM",
+        "rationale": "Maintainers must distinguish routing, execution request creation, host execution, receipt validation, and protected-action authority."
+      }
+    },
+    "reversibility": {
+      "optional_possible": true,
+      "disable_supported": true,
+      "removal_supported": true,
+      "rollback_removal_plan": "Keep route-only behavior as the default compatibility path. Remove or disable optional execution-engine wiring and host bridges without changing routing, authority, capability, governance, lifecycle, or MCP discovery semantics."
+    },
+    "non_adoption_effect": "Orchestra MCP remains a verified governed routing surface but cannot claim substantive specialist execution E2E."
+  },
+  "scope": {
+    "owner": "Clockwork with Arbiter and Governor review",
+    "proposed_change": "Define the architecture and phased implementation contract for an optional post-governance specialist execution engine and host bridge while preserving route-only default behavior.",
+    "affected_surfaces": [
+      "orchestra_runtime/services.py",
+      "orchestra_runtime/interfaces.py",
+      "orchestra_runtime/models.py",
+      "orchestra_runtime/mcp_transport.py",
+      "docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_ARCHITECTURE.md",
+      "docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_IMPLEMENTATION_PLAN.md"
+    ],
+    "authority_reference": "maintainer-chat-authorization-2026-08-29-next-task-design"
+  },
+  "source_identity": {
+    "repository": "Baelfyre/Orchestra",
+    "base_sha": "31d4bb31c6f839d6bee6a788f8cf77d4d5367af3",
+    "base_tree": "af4bb0df8afb85c84675c040551b1ed06b734767",
+    "policy_refs": [
+      "docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md",
+      "docs/governance/FEATURE_ADMISSION_POLICY.md",
+      "docs/governance/CANDIDATE_MATURITY_FEATURE_FREEZE.md"
+    ]
+  },
+  "authority": {
+    "record_grants_authority": false,
+    "admission_grants_implementation_authority": false,
+    "admission_grants_merge_authority": false,
+    "promotion_grants_merge_authority": false,
+    "promotion_grants_release_authority": false,
+    "promotion_grants_deployment_authority": false,
+    "promotion_grants_policy_activation": false,
+    "promotion_grants_destructive_authority": false
+  },
+  "admission": {
+    "disposition": "ADMIT",
+    "rationale": "The route-only boundary is now directly evidenced and the capability is worth bounded architecture and deterministic contract work. Admission is limited to design and later separately authorized implementation stages; no live host/model execution is authorized by this record.",
+    "decision_owner": "Baelfyre maintainer"
+  },
+  "promotion": {
+    "status": "PENDING",
+    "disposition": null,
+    "rationale": "Promotion requires implementation evidence, adversarial validation, and at least one bounded installed-host substantive execution proof.",
+    "evidence_refs": [],
+    "decision_owner": null
+  }
+}
