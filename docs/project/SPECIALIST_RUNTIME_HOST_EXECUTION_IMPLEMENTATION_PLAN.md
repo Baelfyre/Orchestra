@@ -1,6 +1,6 @@
 # Specialist Runtime-Host Execution Implementation Plan
 
-Status: `PLANNED_NOT_IMPLEMENTED`
+Status: `E1_E3_IMPLEMENTED_DETERMINISTIC_FOUNDATION_E4_E6_PENDING_HOST_EXECUTION`
 
 Architecture: `docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_ARCHITECTURE.md`
 
@@ -11,135 +11,125 @@ Canonical design baseline:
 ```text
 BASE_SHA  = 31d4bb31c6f839d6bee6a788f8cf77d4d5367af3
 BASE_TREE = af4bb0df8afb85c84675c040551b1ed06b734767
+PUBLIC_RELEASE = v1.7.0
 ```
 
-This plan decomposes future implementation into separately reviewable stages. It does not authorize implementation, live host execution, provider/model calls, integration refresh, protected actions, merge, release, or deployment.
+The maintainer separately granted blanket authorization on 2026-08-29 for bounded E1-E3 implementation and ordinary validation/remediation. E4-E6 received separate blanket authorization for execution through Codex CLI, but those live-host stages are not executed by the E1-E3 repository phase.
 
 ## 1. Objective
 
-Move Orchestra from:
-
-```text
-MCP transport -> trusted routing -> route acknowledgement
-```
-
-to an optional path capable of:
+Move Orchestra from the default route-only path:
 
 ```text
 MCP transport
 -> trusted routing
 -> authority/capability/governance gates
--> typed specialist execution request
--> explicitly configured execution engine
--> validated execution receipt
+-> route acknowledgement
+```
+
+to an optional, explicit execution path:
+
+```text
+MCP transport
+-> trusted routing
+-> authority/capability/governance gates
+-> typed SpecialistExecutionRequest
+-> explicitly configured ISpecialistExecutionEngine
+-> SpecialistExecutionReceipt
+-> strict receipt validation
 -> existing lifecycle/audit/result path
 ```
 
-while keeping route-only behavior as the default and preserving all existing authority boundaries.
+while preserving route-only behavior as the default and keeping host capability independent from Orchestra authority.
 
-## 2. Frozen non-goals
+## 2. Frozen invariants
 
-The first implementation must not:
+```text
+SPECIALIST_SELECTION != SPECIALIST_EXECUTION
+SPECIALIST_EXECUTION != AUTHORITY
+HOST_CAPABILITY != ORCHESTRA_AUTHORITY
+HOST_APPROVAL != ORCHESTRA_AUTHORITY
+MCP_TRANSPORT != EXECUTION_ENGINE
+VALID_RECEIPT != MERGE_AUTHORITY
+SUBSTANTIVE_OUTPUT != RELEASE_AUTHORITY
+```
 
-- add direct provider SDKs to Orchestra core;
+The E1-E3 implementation must not:
+
+- add a direct model/provider SDK to Orchestra core;
 - build on deprecated MCP Sampling;
-- automatically invoke Codex, Antigravity, or another host merely because it is installed;
-- refresh an installed host integration;
-- change public release identity;
-- introduce Streamable HTTP;
-- change the routing map or specialist ownership;
-- weaken current authority, capability, governance, lifecycle, delegation, coordination, or audit checks;
-- infer sandbox permission from adapter metadata;
-- perform live model/provider calls during deterministic foundation stages;
-- claim specialist execution E2E from deterministic fixture output.
+- automatically invoke Codex, Antigravity, or another installed host;
+- let MCP prompt text or client metadata select an execution engine;
+- refresh an installed integration;
+- change the public release identity;
+- change specialist routing ownership;
+- weaken authority, capability, governance, coordination, lifecycle, delegation, or audit gates;
+- infer host sandbox permission from adapter metadata;
+- perform a live model/provider call;
+- claim substantive host-native specialist execution from deterministic fixture output.
 
 ## 3. Stage E0 - Architecture and admission
 
-Status for this phase: `IN_SCOPE_NOW`
+Status: `COMPLETE_VALIDATED_DESIGN_CANDIDATE`
 
-Deliverables:
+Delivered:
 
 - `machine/features/specialist-runtime-host-execution.v1.json`
 - `docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_ARCHITECTURE.md`
 - this implementation plan
+- `README.json` feature discoverability entry
 
-Acceptance:
-
-```text
-FEATURE_ADMISSION = ADMIT_FOR_BOUNDED_DESIGN
-PROMOTION = PENDING
-RUNTIME_CODE_CHANGE = NONE
-LIVE_MODEL_CALLS = 0
-HOST_MUTATION = NONE
-```
-
-Exit condition: exact-head repository validation and maintainer merge authorization for the design artifacts.
+The original E0 source head `11a7eaa52d9ce71c3b06dd2e071f4b9273c49c1a` passed Governance, validate, Required Analysis Compatibility, Cross-platform Validation, and Cosmic Ray confidence before E1-E3 implementation began.
 
 ## 4. Stage E1 - Typed execution contract foundation
 
-Requires fresh implementation authority.
+Status: `IMPLEMENTED`
 
-Proposed files:
+Implemented surfaces:
 
 ```text
-orchestra_runtime/models.py
 orchestra_runtime/interfaces.py
-orchestra_runtime/services.py
+orchestra_runtime/specialist_execution.py
 machine/schemas/specialist-execution-request.v1.schema.json
 machine/schemas/specialist-execution-receipt.v1.schema.json
-tests/runtime/test_specialist_execution_contract.py
 ```
 
-Work:
+Implemented contract:
 
-1. Add immutable `SpecialistExecutionRequest`.
-2. Add immutable `SpecialistExecutionReceipt`.
-3. Add `ISpecialistExecutionEngine`.
-4. Add request/receipt schema parity where machine interchange is needed.
-5. Extend runtime audit event vocabulary only if necessary for request/receipt identity evidence.
-6. Preserve existing `RuntimeOperationResult` as the lifecycle-facing operation result.
-7. Do not yet wire a live host or provider.
+- `ISpecialistExecutionEngine`
+- immutable `SpecialistExecutionRequest`
+- immutable `SpecialistExecutionReceipt`
+- deterministic request digest and request identifier
+- exact run, route, command, specialist, adapter, and specialist-source identity binding
+- exact authority/capability decision references
+- governance status/rule binding
+- trusted execution constraints
+- explicit execution mode
+- receipt-side engine identity, outcome, evidence, and side-effect classification
 
-Important design correction:
-
-The execution engine must receive a typed request that contains the original task input and exact identity references. It must not use the current three-argument route-only callback as the long-term substantive execution contract.
-
-Compatibility requirement:
+Compatibility rule remains:
 
 ```text
 ENGINE_ABSENT -> CURRENT_ROUTE_ONLY_BEHAVIOR
 ```
 
-No constructor omission may silently enable execution.
+No constructor omission can silently enable execution.
 
-## 5. Stage E2 - Runtime integration with deterministic test engine
+## 5. Stage E2 - Deterministic execution engine integration
 
-Requires fresh implementation authority after E1 is reviewed.
+Status: `IMPLEMENTED_AND_RUNTIME_VALIDATED`
 
-Proposed files:
+Implementation:
 
-```text
-orchestra_runtime/services.py
-tests/runtime/test_specialist_execution_engine.py
-tests/runtime/test_specialist_execution_adversarial.py
-```
+- `SpecialistRuntimeExecutor` subclasses the existing `RuntimeExecutor` rather than replacing it.
+- The base `RuntimeExecutor` is unchanged.
+- An executor-local bound task input is carried into the existing post-activation operation boundary.
+- A configured engine is invoked only after the existing coordination, exact-binding, authority, capability, governance, and lifecycle activation gates.
+- Engine exceptions, malformed receipts, and request/receipt identity mismatches fail closed into existing lifecycle failure outcomes.
+- `FAILED`, `CANCELLED`, and `TIMED_OUT` receipts map to the existing terminal lifecycle states.
+- `DETERMINISTIC_TEST_ENGINE` rejects reported side effects.
 
-Work:
-
-1. Create the execution request only after:
-   - exact runtime binding;
-   - authority ALLOW;
-   - capability ALLOW;
-   - governance ALLOW;
-   - lifecycle activation eligibility.
-2. Inject a deterministic test engine from tests.
-3. Validate receipt identity before accepting its output.
-4. Map valid receipts to existing `RuntimeOperationResult` and lifecycle transitions.
-5. Map invalid receipts and engine failures to deterministic failures.
-6. Prove no engine call occurs on authority, capability, governance, coordination, or binding denial.
-7. Prove prompts or host metadata cannot switch execution mode or engine identity.
-
-Required tests include:
+Adversarial evidence includes:
 
 ```text
 NO_ENGINE_CALL_BEFORE_AUTHORITY
@@ -156,37 +146,65 @@ RECEIPT_SPECIALIST_MISMATCH_FAILS_CLOSED
 RECEIPT_COMMAND_MISMATCH_FAILS_CLOSED
 RECEIPT_DIGEST_MISMATCH_FAILS_CLOSED
 ENGINE_EXCEPTION_IS_NOT_SUCCESS
+DETERMINISTIC_ENGINE_SIDE_EFFECT_REJECTED
 ROUTE_ONLY_DEFAULT_PRESERVED
 ```
 
-Evidence claim at E2 maximum:
+Pre-parity runtime evidence from source head `da1a1c0e19914f8b0fa7048c73a93e319a197292`:
+
+```text
+TESTS_TOTAL = 1926
+TESTS_PASS = 1926
+TESTS_FAILURES = 0
+TESTS_ERRORS = 0
+STATEMENT_COVERAGE = 98.22%
+BRANCH_COVERAGE = 95.09%
+RUNTIME_EVIDENCE_RESULT = PASS
+VALIDATE_RUN = 33203755377
+```
+
+The pull-request workflow tested merge ref `46b40fdc998a4f6142921f7688125704ea2eb1ff` and explicitly bound `source_head_sha` to `da1a1c0e19914f8b0fa7048c73a93e319a197292`.
+
+Maximum E2 claim:
 
 ```text
 DETERMINISTIC_ENGINE_E2E = VERIFIED
 SUBSTANTIVE_SPECIALIST_EXECUTION_E2E = NOT_CLAIMED
 ```
 
-## 6. Stage E3 - MCP wiring to the optional engine
+## 6. Stage E3 - MCP optional execution wiring
 
-Requires fresh implementation authority.
+Status: `IMPLEMENTED_AND_DETERMINISTIC_E2E_VALIDATED`
 
-Proposed files:
+Implemented surface:
 
 ```text
-orchestra_runtime/mcp_transport.py
-tests/runtime/test_mcp_transport.py
-tests/runtime/test_mcp_specialist_execution.py
-docs/developer/MCP_STDIO_TRANSPORT.md
+orchestra_runtime/mcp_specialist_execution.py
 ```
 
-Work:
+The new explicit builders are:
 
-1. Allow trusted MCP runtime construction to receive an explicit engine or engine factory.
-2. Keep existing `build_mcp_stdio_transport(...)` route-only unless explicitly configured.
-3. Keep MCP client metadata non-authorizing.
-4. Keep tool input schema bounded to task input unless a separately admitted requirement adds structured reduction-only constraints.
-5. Prove the deterministic engine can flow through `tools/call` and return the engine output.
-6. Preserve protocol revision `2026-07-28` and the current three-method stdio surface unless a separate protocol need is demonstrated.
+```text
+build_mcp_specialist_runtime_factory(...)
+build_mcp_stdio_transport_with_specialist_execution(...)
+```
+
+The existing builders remain unchanged and route-only:
+
+```text
+build_mcp_runtime_factory(...)
+build_mcp_stdio_transport(...)
+```
+
+Properties:
+
+1. Engine selection is trusted constructor configuration, not MCP client input.
+2. MCP prompt text cannot activate or select an engine.
+3. MCP `_meta` cannot activate or select an engine.
+4. Protocol revision remains `2026-07-28`.
+5. The MCP surface remains `server/discover`, `tools/list`, and `tools/call`.
+6. A deterministic engine can return substantive fixture output through `tools/call` after existing runtime gates.
+7. A host-native bridge is still absent.
 
 Maximum E3 claim:
 
@@ -196,21 +214,19 @@ HOST_BRIDGE_E2E = NOT_VERIFIED
 SUBSTANTIVE_SPECIALIST_EXECUTION_E2E = NOT_CLAIMED
 ```
 
-## 7. Stage E4 - Host bridge feasibility spike
+## 7. Stage E4 - Codex host-bridge feasibility spike
 
-Requires separate authority because this stage can involve an installed host and live model/provider execution.
+Status: `AUTHORIZED_FOR_CODEX_CLI_EXECUTION_NOT_YET_EXECUTED_IN_THIS_PHASE`
 
-First candidate: Codex host-native bridge.
+Preferred direction:
 
-Preferred investigation direction:
-
-- evaluate Codex App Server as the host integration surface;
+- evaluate Codex App Server as the first host integration surface;
 - do not build the permanent path on deprecated MCP Sampling;
-- do not default to recursive `codex exec` subprocess invocation;
-- preserve host sandbox/approval semantics explicitly;
+- do not default to recursive `codex exec` invocation;
+- preserve Codex sandbox and approval semantics explicitly;
 - keep provider credentials outside Orchestra core.
 
-Before any live call, freeze:
+Before the first live call, freeze:
 
 ```text
 HOST_IDENTITY
@@ -228,9 +244,7 @@ TASK_FIXTURE
 EXPECTED_NON_MUTATING_OUTCOME
 ```
 
-Initial live proof should be read-only, preferably Scribe `review-docs`, because it can demonstrate substantive specialist reasoning without requiring repository mutation.
-
-Required blocker checks:
+Mandatory blocker checks:
 
 ```text
 NO_RECURSIVE_ORCHESTRA_MCP_LOOP
@@ -245,11 +259,11 @@ TIMEOUT_REPRESENTABLE
 
 If these cannot be established, E4 terminates without promotion.
 
-## 8. Stage E5 - Installed-host read-only specialist E2E
+## 8. Stage E5 - Installed-host read-only Scribe E2E
 
-Requires explicit live-host execution authority.
+Status: `AUTHORIZED_FOR_CODEX_CLI_EXECUTION_NOT_YET_VERIFIED`
 
-Suggested bounded proof:
+Frozen first proof:
 
 ```text
 HOST = CODEX
@@ -263,60 +277,51 @@ Success requires evidence that:
 
 1. MCP accepted the exact command.
 2. Runtime selected Scribe.
-3. Authority/capability/governance all passed.
+3. Authority, capability, and governance passed.
 4. Runtime created an exact specialist execution request.
-5. The host bridge executed the Scribe guidance against the task.
+5. The Codex host bridge executed Scribe guidance against the task.
 6. The bridge returned an exact matching receipt.
-7. The substantive output contains task-specific analysis not present in the route acknowledgement.
+7. The output contains task-specific analysis beyond route acknowledgement.
 8. The worktree remained unchanged.
 9. No recursive MCP loop occurred.
-10. Audit/result evidence contains identities but not raw secrets or unnecessary prompt content.
+10. Audit/result evidence contains identities without unnecessary secrets or raw prompt persistence.
 
-Only then may the evidence say:
+Only then may the evidence state:
 
 ```text
 SUBSTANTIVE_SPECIALIST_EXECUTION_E2E = VERIFIED_FOR_CODEX_READ_ONLY_SCRIBE_FIXTURE
 ```
 
-That claim remains host-, version-, model-, configuration-, specialist-, task-, and scope-specific until broader evidence exists.
+The claim remains bound to the exact Codex host/version/model/configuration/specialist/task/scope evidence.
 
 ## 9. Stage E6 - Mutation-capable host execution assessment
 
-Not authorized by the design phase.
+Status: `AUTHORIZED_FOR_BOUNDED_CODEX_CLI_ASSESSMENT_NOT_YET_VERIFIED`
 
-Mutation support is not a natural consequence of read-only E2E.
+Read-only success is not mutation authority.
 
-Before considering it, define and test:
+Before any mutation-capable proof, define and validate:
 
-- exact path scope propagation;
+- exact allowed path propagation;
 - prohibited path enforcement;
 - shell/process capability restrictions;
 - network restriction behavior;
-- approval intersection;
-- Git dirty-state evidence;
+- host approval intersection;
+- Git clean/dirty-state evidence;
 - post-execution validation;
 - cancellation and partial-mutation recovery;
-- destructive operation exclusions;
+- destructive-operation exclusions;
 - delegation behavior.
 
-Read-only success must not be used as mutation authority.
+Do not perform destructive or high-impact mutation merely to prove capability.
 
 ## 10. Stage E7 - Promotion decision
 
-Promotion remains `PENDING` until proportional evidence exists.
+Status: `PENDING`
 
-Evaluate the original Feature Decision Record against:
+Promotion is not implied by E1-E6 implementation effort.
 
-- problem solved or not solved;
-- host-neutral contract stability;
-- maintenance burden of host bridges;
-- security and privacy findings;
-- provider/host coupling;
-- installed-host reliability;
-- actual value over route-only plus ordinary host skills;
-- reversibility.
-
-Possible outcomes include:
+Possible dispositions remain:
 
 ```text
 ADOPT
@@ -329,56 +334,25 @@ REJECT_NO_MEASURABLE_VALUE
 REJECT_COMPLEXITY_EXCEEDS_BENEFIT
 ```
 
-Implementation effort does not predetermine promotion.
+Evaluate the original Feature Decision Record against real host evidence, security/privacy findings, host/provider coupling, reliability, maintenance burden, reversibility, and actual value over route-only plus ordinary host skills.
 
-## 11. Proposed contract ownership
+## 11. Ownership
 
 | Concern | Owner | Boundary |
 | --- | --- | --- |
-| Execution request/receipt shape | Clockwork | Defines typed engineering contract only. |
-| Routing and specialist identity | Conductor | Selects route; no authority or execution grant. |
+| Execution request/receipt shape | Clockwork | Typed engineering contract only. |
+| Routing and specialist identity | Conductor | Selects route; no authority grant. |
 | Authority semantics | Arbiter | Existing authority remains reduction-only and pre-execution. |
 | Governance applicability | Governor | Existing governance remains pre-execution. |
 | Runtime capability | Clockwork | Existing capability decision remains required. |
-| Cross-specialist coordination | Tuner / existing coordination runtime | Execution engine cannot bypass coordination blockers. |
-| Host bridge | Host adapter owner | Implements host-specific mechanics behind the stable engine interface. |
-| Validation/evidence | Overseer / repository validators | Proves contract behavior and exact-host results. |
-| Merge/release decision | Maintainer | Remains separately gated. |
+| Cross-specialist coordination | Tuner / coordination runtime | Engine cannot bypass coordination blockers. |
+| Host bridge | Host adapter owner | Host-specific mechanics behind the stable engine interface. |
+| Validation/evidence | Overseer / validators | Proves contract behavior and exact-host results. |
+| Merge/release decision | Maintainer | Separately controlled. |
 
-## 12. Documentation impact by stage
+## 12. Stop conditions
 
-### E0
-
-New design/admission docs only.
-
-### E1-E2
-
-Likely updates:
-
-```text
-docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_ARCHITECTURE.md
-docs/project/OOP_RUNTIME_ARCHITECTURE.md
-README.json if capability status becomes implemented
-CHANGELOG.md after canonical implementation state changes
-```
-
-### E3-E5
-
-Likely updates:
-
-```text
-docs/developer/MCP_STDIO_TRANSPORT.md
-docs/developer/README.md
-docs/validation/<host-proof>.md
-README.md only if the landing-page trust model materially changes
-README.json for exact current capability/evidence state
-```
-
-No documentation should claim broader host execution maturity than the evidence supports.
-
-## 13. Stop conditions
-
-Stop and escalate rather than broadening scope when any of the following occurs:
+Stop rather than broadening scope if any phase requires:
 
 ```text
 REQUIRES_AUTHORITY_MODEL_WEAKENING
@@ -392,19 +366,23 @@ REQUIRES_UNBOUNDED_RECURSION
 REQUIRES_ROUTE_ONLY_FALLBACK_AFTER_REQUESTED_HOST_FAILURE
 ```
 
-## 14. Current terminal state
-
-At completion of the design phase:
+## 13. Current bounded state
 
 ```text
-SPECIALIST_RUNTIME_HOST_EXECUTION_DESIGN = COMPLETE
-FEATURE_ADMISSION = ADMIT
-PROMOTION = PENDING
-CANDIDATE_MATURITY = NOT_STARTED
-RUNTIME_INTEGRATION = FALSE
-MCP_BEHAVIOR_CHANGE = FALSE
-LIVE_MODEL_CALLS = 0
-PROVIDER_CALLS = 0
+E0_DESIGN = COMPLETE
+E1_TYPED_CONTRACTS = IMPLEMENTED
+E2_DETERMINISTIC_ENGINE = IMPLEMENTED
+E3_MCP_OPTIONAL_ENGINE_WIRING = IMPLEMENTED
+ROUTE_ONLY_DEFAULT = PRESERVED
+DETERMINISTIC_ENGINE_E2E = VERIFIED
+MCP_DETERMINISTIC_ENGINE_E2E = VERIFIED
 HOST_BRIDGE = NOT_IMPLEMENTED
-SUBSTANTIVE_SPECIALIST_EXECUTION_E2E = NOT_VERIFIED
+HOST_BRIDGE_E2E = NOT_VERIFIED
+SUBSTANTIVE_SPECIALIST_EXECUTION_E2E = NOT_CLAIMED
+LIVE_MODEL_CALLS_E1_E3 = 0
+PROVIDER_CALLS_E1_E3 = 0
+PROMOTION = PENDING
+E4_E6 = SEPARATELY_AUTHORIZED_FOR_CODEX_CLI_EXECUTION
 ```
+
+Release publication, production deployment, policy activation, ruleset mutation, automatic installed-integration refresh, destructive cleanup, branch deletion, force push, and history rewrite remain outside this authorization.
