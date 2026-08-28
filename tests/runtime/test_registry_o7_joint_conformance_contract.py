@@ -36,7 +36,7 @@ class RegistryO7JointConformanceContractTests(unittest.TestCase):
     def test_three_transport_gate_is_fail_closed_and_non_authorizing(self) -> None:
         conformance = self.state["joint_conformance"]
         self.assertEqual(
-            ["DIRECT_LOCAL_INDEXED_GATEWAY", "DIRECT_LOCAL_JSON_QUERY", "OPTIONAL_MCP_TRANSPORT"],
+            ["DIRECT_LOCAL_JSON_QUERY", "DIRECT_LOCAL_INDEXED_GATEWAY", "OPTIONAL_MCP_TRANSPORT"],
             conformance["required_transports"],
         )
         self.assertTrue(conformance["same_release_identity_required"])
@@ -80,6 +80,7 @@ class RegistryO7JointConformanceContractTests(unittest.TestCase):
         self.assertIn("DIRECT_INDEXED", validator)
         self.assertIn("OPTIONAL_MCP", validator)
         self.assertIn("canonical_registry_json_remains_authority", validator)
+        self.assertIn('workflow_stage="steward_requirements_traceability"', validator)
 
     def test_completed_state_cannot_precede_trusted_release(self) -> None:
         complete = self.state["release_boundary"]["joint_r7_o7_conformance_complete"]
