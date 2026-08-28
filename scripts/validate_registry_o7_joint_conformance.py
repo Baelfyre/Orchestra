@@ -15,6 +15,10 @@ import tempfile
 from pathlib import Path
 from typing import Any, Mapping
 
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 from orchestra_runtime import registry_adaptive, registry_o7
 
 ORCHESTRA_BASE_COMMIT = "6428a02b9b4a89a467c3fe7443e9478dbef79989"
