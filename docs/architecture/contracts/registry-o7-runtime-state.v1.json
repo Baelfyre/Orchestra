@@ -33,7 +33,7 @@
     "publication_state": "PUBLISHED_IMMUTABLE_VERIFIED"
   },
   "implementation": {
-    "status": "O7_1_O7_7_IMPLEMENTED_WITH_JOINT_CONFORMANCE_GATE",
+    "status": "O7_1_O7_7_IMPLEMENTED_JOINT_CONFORMANCE_PASS_PENDING_CANONICALIZATION",
     "phases": {
       "O7.1": "CANONICAL_MERGED_VERIFIED",
       "O7.2": "CANONICAL_MERGED_VERIFIED",
@@ -41,7 +41,7 @@
       "O7.4": "CANONICAL_MERGED_VERIFIED",
       "O7.5": "CANONICAL_MERGED_VERIFIED",
       "O7.6": "CANONICAL_MERGED_VERIFIED",
-      "O7.7": "JOINT_CONFORMANCE_REQUIRED_PASS_BEFORE_CANONICALIZATION"
+      "O7.7": "JOINT_CONFORMANCE_PASS_PENDING_SIGNED_MATERIALIZATION_AND_CANONICALIZATION"
     },
     "runtime_module": "orchestra_runtime/registry_o7.py",
     "joint_conformance_validator": "scripts/validate_registry_o7_joint_conformance.py",
@@ -95,7 +95,10 @@
     "freshness_parity_required": true,
     "normalized_compliance_query_receipt_required": true,
     "authority_expansion_allowed": false,
-    "canonicalization_requires_gate_pass": true
+    "canonicalization_requires_gate_pass": true,
+    "latest_evidence_status": "PASS",
+    "latest_evidence_workflow_run_id": 33153052348,
+    "latest_evidence_source_head": "226918a47bbfc7616ab0d92d3423c721b6c0cf2c"
   },
   "benchmark_boundary": {
     "r7_9_complete": true,
@@ -110,7 +113,7 @@
     "r7_7_mcp_implemented": true,
     "r7_8_trusted_release_integration_implemented": true,
     "r7_9_benchmark_complete": true,
-    "joint_r7_o7_conformance_complete": false,
+    "joint_r7_o7_conformance_complete": true,
     "orchestra_release_integration_authorized_by_this_state": false
   },
   "authority_expansion": false
