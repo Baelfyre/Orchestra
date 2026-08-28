@@ -2,6 +2,14 @@
 
 This root changelog is release-oriented. Detailed pre-v1.7 development chronology remains preserved byte-for-byte in [the historical changelog archive](docs/history/CHANGELOG_PRE_V1_7.md), Git history, merged pull requests, decision records, and validation evidence.
 
+## Post-v1.7 Codex MCP installed-host routing revalidation and documentation parity
+
+- Revalidated the installed Codex MCP `2026-07-28` path with Orchestra connected and 20 projected tools, then successfully dispatched `mcp__orchestra__review_docs` with `isError: false` in a bounded read-only session.
+- Confirmed that Codex requires both host opt-ins: the `mcp_2026_07_28` feature and the per-server `CODEX_MCP_PROTOCOL_VERSION=2026-07-28` environment marker. Actual approval-required `tools/call` verification also requires a session policy that can request approval rather than `never`.
+- Classified the successful tool result as routing E2E evidence only. The default MCP runtime does not configure a host-native specialist execution engine, so route acknowledgement proves specialist selection but does not prove substantive Scribe execution.
+- Canonicalized the Codex setup, troubleshooting, routing-boundary, and installed-host evidence documentation, then realigned the OOP runtime architecture document with the current Adapter SDK / PRAP and MCP route-only runtime boundary.
+- `v1.7.0` remains the immutable current public release. This post-release maintenance does not publish or move a release/tag and does not expand runtime authority, deploy, activate policy, refresh installed integrations, mutate rulesets, perform destructive cleanup, delete branches, force push, or rewrite history.
+
 ## Post-v1.7 canonical O7 and Developer Portal state reconciliation
 
 - Reconciled the Developer Portal machine projection, schema, documentation, and regression expectations to the already-published `v1.7.0` release at commit `e5305ef3e160209a0345bd2c7843c923940e62c5`, including `authority.implements_mcp = true` and the retained bounded MCP stdio state `PUBLISHED_V1_6_STABLE_RETAINED_V1_7`.
