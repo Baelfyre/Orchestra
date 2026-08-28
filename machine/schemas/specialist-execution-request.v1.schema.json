@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/specialist-execution-request.v1.schema.json",
+  "title": "Orchestra Specialist Execution Request v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "request_version",
+    "request_id",
+    "request_digest",
+    "run_id",
+    "parent_run_id",
+    "correlation_id",
+    "adapter_name",
+    "command_name",
+    "specialist",
+    "project_root",
+    "skill_source_path",
+    "skill_source_digest",
+    "task_input",
+    "authority_decision_ref",
+    "capability_decision_ref",
+    "governance_status",
+    "evaluated_governance_rules",
+    "execution_constraints",
+    "execution_mode"
+  ],
+  "properties": {
+    "request_version": {
+      "const": "orchestra.specialist-execution-request.v1"
+    },
+    "request_id": {
+      "type": "string",
+      "pattern": "^specialist-request\\.[0-9a-f]{24}$"
+    },
+    "request_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parent_run_id": {
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "correlation_id": {
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "adapter_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "command_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "specialist": {
+      "type": "string",
+      "minLength": 1
+    },
+    "project_root": {
+      "type": "string",
+      "minLength": 1
+    },
+    "skill_source_path": {
+      "type": "string",
+      "minLength": 1
+    },
+    "skill_source_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "task_input": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authority_decision_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "capability_decision_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "governance_status": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evaluated_governance_rules": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "execution_constraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source", "key", "kind", "values"],
+        "properties": {
+          "source": {
+            "enum": ["AUTHORITY", "CAPABILITY"]
+          },
+          "key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "enum": ["EXACT", "ALLOWED_SET"]
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          }
+        }
+      }
+    },
+    "execution_mode": {
+      "enum": ["DETERMINISTIC_TEST_ENGINE", "HOST_NATIVE"]
+    }
+  }
+}

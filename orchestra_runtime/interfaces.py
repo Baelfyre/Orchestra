@@ -15,6 +15,7 @@ if TYPE_CHECKING:
         CoordinationSignal,
         CoordinationValidationResult,
     )
+    from .specialist_execution import SpecialistExecutionReceipt, SpecialistExecutionRequest
 
 
 class IIDEAdapter(ABC):
@@ -179,6 +180,7 @@ class ILifecycleController(ABC):
     def terminal_result(self, snapshot: LifecycleSnapshot) -> StructuredTerminalResult | None:
         raise NotImplementedError
 
+
 class ICoordinationController(ABC):
     @abstractmethod
     def validate(self, session: CollaborationSession) -> CoordinationValidationResult:
@@ -190,4 +192,22 @@ class ICoordinationController(ABC):
         session: CollaborationSession,
         signal: CoordinationSignal,
     ) -> CollaborationSession:
+        raise NotImplementedError
+
+
+class ISpecialistExecutionEngine(ABC):
+    """Host-neutral execution engine boundary used only after trusted runtime gates."""
+
+    @property
+    @abstractmethod
+    def engine_id(self) -> str:
+        raise NotImplementedError
+
+    @property
+    @abstractmethod
+    def engine_version(self) -> str:
+        raise NotImplementedError
+
+    @abstractmethod
+    def execute(self, request: SpecialistExecutionRequest) -> SpecialistExecutionReceipt:
         raise NotImplementedError
