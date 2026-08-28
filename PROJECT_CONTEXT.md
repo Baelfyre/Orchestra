@@ -10,7 +10,7 @@ A governance-first specialist orchestration framework that routes complex AI-ass
 Open-source developer tooling and AI orchestration framework
 
 ## Current Stage
-v1.7.0 - Adaptive Intelligence, Portable Memory & Design Fidelity (`PUBLISHED_VERIFIED`). The immutable GitHub Release and lightweight `v1.7.0` tag resolve to canonical signed commit `e5305ef3e160209a0345bd2c7843c923940e62c5` with tree `7b7a0f6d5dd5376a62125ed1c6b037284e519c69`. Post-publication verification run `32898750932` independently confirmed tag target, release body, immutable/latest state, canonical SHA/tree/parent/signature, and preservation of the prior v1.6.0 tag. Later commits on `main` are post-release maintenance and do not move the v1.7.0 release identity. Post-release UIX-9C V3 completed as a controlled six-observation study with terminal classification `NO_BENEFIT_ESTABLISHED`; the result establishes neither a repeatable governed advantage nor harm under the frozen experiment.
+v1.7.0 - Adaptive Intelligence, Portable Memory & Design Fidelity (`PUBLISHED_VERIFIED`). The immutable GitHub Release and lightweight `v1.7.0` tag resolve to canonical signed commit `e5305ef3e160209a0345bd2c7843c923940e62c5` with tree `7b7a0f6d5dd5376a62125ed1c6b037284e519c69`. Post-publication verification run `32898750932` independently confirmed tag target, release body, immutable/latest state, canonical SHA/tree/parent/signature, and preservation of the prior v1.6.0 tag. Later commits on `main` are post-release maintenance and do not move the v1.7.0 release identity. Post-release UIX-9C V3 completed as a controlled six-observation study with terminal classification `NO_BENEFIT_ESTABLISHED`; the result establishes neither a repeatable governed advantage nor harm under the frozen experiment. Prime Directive and Development Lifecycle V2 realignment is now canonical post-release maintenance through PR #592 at signed `main` commit `a04dafe75fc52ecc1fedcc17a73b14b8a31f548a`, tree `854ebfb01b05226304f36d2c35420658c5c8e91f`; this does not move or republish v1.7.0.
 
 ## Primary Users
 Developers and maintainers who install Orchestra as a plugin, skill set, or runtime package inside supported or scaffold-only coding hosts.
@@ -69,7 +69,7 @@ The Orchestra Prime Directive is the stable constitutional boundary for developm
 ## Known Constraints
 - Codex and Antigravity remain the supported Host Update identities. Claude Code, Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain scaffold-only unless separately graduated.
 - Issue #331 is closed and the required-analysis ruleset/status surface is normalized; compatibility evidence remains part of validation but no stale open-issue state should be inferred.
-- The current live `Protect main` ruleset API reports two identical `native-ubuntu-latest` required-status entries. The repository contract requires each required context exactly once, so this is external policy drift and blocks ordinary governed merge readiness until separately reconciled. This source candidate does not mutate the live ruleset.
+- Active `Protect main` ruleset `17927422` was separately reconciled under explicit ruleset-mutation authority before PR #592 merged. The live required-status profile now contains each required context exactly once, including one `native-ubuntu-latest`, while strict status checks, Squash-only merging, linear history, required signatures, pull-request requirements, and bypass actors remain preserved. Future merge gates must re-read this external state rather than treating this snapshot as permanent authority.
 - Murmurs measurement issue #316 is closed with terminal benefit-not-established disposition. New benefit claims require new trustworthy comparable evidence rather than replaying the closed result as positive evidence.
 - Adaptive orchestration A1-A5 is canonical through shadow maturity. A5 execution-effective topology promotion remains deferred/not promoted because qualifying benefit was not established.
 - Portable adaptive memory is optional, storage-agnostic, privacy-minimized, and non-authorizing; automatic promotion is disabled.
@@ -96,4 +96,4 @@ The maintainer's v1.7.0 publication authorization and UIX-9C V3 experimental aut
 Repository changes follow bounded governed execution, exact-head validation, fail-closed evidence handling, forward-only history preservation, conservative claims where comparative benefit was not established, and explicit separation between capability and authority.
 
 ## Last Reviewed
-2026-08-27
+2026-08-28
