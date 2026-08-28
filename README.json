@@ -29,6 +29,21 @@
   "capabilities": {
     "specialist_orchestration": {"status": "IMPLEMENTED", "machine_sources": ["machine/specialists/registry.v1.json", "machine/routing/routes.v1.json"], "human_sources": ["SKILL_INDEX.md", "ROUTING_MAP.md"]},
     "governed_runtime": {"status": "IMPLEMENTED", "machine_sources": ["machine/governance/policy.v1.json"], "human_sources": ["docs/architecture/README.md", "docs/governance/GOVERNANCE_LAYER.md", "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md"]},
+    "specialist_runtime_host_execution_design": {
+      "status": "DESIGN_ADMITTED_NO_RUNTIME_INTEGRATION",
+      "purpose": "Define an optional post-gate specialist execution request/receipt and host-bridge architecture while preserving route-only default behavior.",
+      "machine_sources": ["machine/features/specialist-runtime-host-execution.v1.json"],
+      "human_sources": ["docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_ARCHITECTURE.md", "docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_IMPLEMENTATION_PLAN.md"],
+      "admission": "ADMIT",
+      "promotion": "PENDING",
+      "runtime_integration": false,
+      "mcp_behavior_changed": false,
+      "live_model_calls": 0,
+      "provider_calls": 0,
+      "host_bridge": "NOT_IMPLEMENTED",
+      "substantive_specialist_execution_e2e": "NOT_VERIFIED",
+      "authority_note": "Design and admission evidence only. It does not grant implementation, host/model execution, installed-integration refresh, merge, release, deployment, policy activation, destructive, or other protected-action authority."
+    },
     "cross_specialist_coordination": {"status": "IMPLEMENTED", "human_sources": ["docs/governance/TUNER_PROTOCOL.md", "ROUTING_MAP.md"]},
     "validation_and_evidence": {"status": "IMPLEMENTED", "machine_sources": ["machine/schemas/", "machine/release-evidence/"], "human_sources": ["docs/setup/VALIDATION.md", "docs/validation/"]},
     "prime_directive_feature_admission_v1": {
