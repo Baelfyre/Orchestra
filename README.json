@@ -182,13 +182,13 @@
     "developer_portal": {"status": "PUBLISHED_V1_6_STABLE", "machine_sources": ["machine/developer-portal/catalog.v1.json"], "human_sources": ["docs/developer/README.md"]},
     "mcp_stdio_transport": {
       "status": "PUBLISHED_V1_6_STABLE",
-      "purpose": "Expose a bounded Orchestra tool surface to MCP-compatible clients while preserving existing PRAP, governance, runtime, and authority boundaries.",
+      "purpose": "Expose a bounded Orchestra tool surface to MCP-compatible clients, including Codex MCP 2026 discovery with non-cacheable private cache hints, while preserving existing PRAP, governance, runtime, and authority boundaries.",
       "protocol_revision": "2026-07-28",
       "transport": "stdio",
       "quickstart_command": "python scripts/mcp_server.py --adapter codex",
       "surface": ["server/discover", "tools/list", "tools/call"],
       "human_sources": ["docs/developer/MCP_STDIO_TRANSPORT.md"],
-      "authority_note": "MCP is transport, not authority."
+      "authority_note": "MCP is transport, not authority. Discovery uses ttlMs=0 and cacheScope=private so capability discovery is not reusable cached authority."
     },
     "murmurs_presentation": {"status": "IMPLEMENTED_OPT_IN_RESEARCH_NOT_PROMOTED", "machine_sources": ["machine/presentation/murmurs-policy.v1.json", "machine/presentation/murmurs-vocabulary.v1.json"], "human_sources": ["docs/project/MURMURS_COMMUNICATION_BUDGET.md"], "token_savings_claim": "CONFIRMATORY_BENEFIT_NOT_ESTABLISHED"},
     "hybrid_context_representation": {"status": "PUBLISHED_V1_6_STABLE", "human_sources": ["docs/HYBRID_CONTEXT_FORMATS.md"], "json_authority": "CANONICAL_FOR_STRUCTURED_MACHINE_STATE", "toon_authority": "DERIVED_VALIDATED_NON_AUTHORITATIVE"},
