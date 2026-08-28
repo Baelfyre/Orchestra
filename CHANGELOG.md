@@ -2,6 +2,14 @@
 
 This root changelog is release-oriented. Detailed pre-v1.7 development chronology remains preserved byte-for-byte in [the historical changelog archive](docs/history/CHANGELOG_PRE_V1_7.md), Git history, merged pull requests, decision records, and validation evidence.
 
+## Post-v1.7 deterministic specialist execution E1-E3 foundation
+
+- Added a host-neutral `ISpecialistExecutionEngine` boundary plus immutable typed specialist execution request and receipt contracts that bind run, route, specialist source digest, task input, authority/capability decision references, governance state, trusted execution constraints, engine identity, outcome, evidence, and side-effect classification.
+- Added an opt-in `SpecialistRuntimeExecutor` layered over the existing `RuntimeExecutor` so engine invocation occurs only after the established coordination, exact-binding, authority, capability, governance, and lifecycle-activation gates. The existing runtime executor remains route-only by default.
+- Added strict request/receipt JSON Schemas and deterministic adversarial tests proving that authority, capability, governance, or coordination denial prevents engine invocation; mismatched or malformed receipts and engine exceptions fail closed instead of degrading to route-only success.
+- Added an explicit MCP specialist-execution builder that reuses the existing MCP `2026-07-28` `server/discover`, `tools/list`, and `tools/call` surface while leaving the existing MCP builders unchanged and route-only. MCP prompt content and client metadata cannot select or activate an execution engine.
+- E1-E3 use deterministic no-network test engines only. No Codex host bridge, MCP Sampling, direct provider SDK, live model/provider call, installed-integration refresh, release, deployment, policy activation, destructive cleanup, branch deletion, force push, or history rewrite is introduced or authorized by this foundation. E4-E6 live-host evidence remains separately bounded.
+
 ## Post-v1.7 Codex MCP installed-host routing revalidation and documentation parity
 
 - Revalidated the installed Codex MCP `2026-07-28` path with Orchestra connected and 20 projected tools, then successfully dispatched `mcp__orchestra__review_docs` with `isError: false` in a bounded read-only session.
