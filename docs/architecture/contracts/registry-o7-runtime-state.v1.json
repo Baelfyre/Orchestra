@@ -3,33 +3,50 @@
   "authority": "DESCRIPTIVE_NON_AUTHORIZING",
   "orchestra_baseline": {
     "repository": "Baelfyre/Orchestra",
-    "base_commit_sha": "92b7871aef8444d84f6859586b9cb801393fd386",
-    "base_tree_sha": "037ab47a6003e78b8df868848978be219a896d6e",
-    "o7_0": "MERGED_VERIFIED"
+    "base_commit_sha": "6428a02b9b4a89a467c3fe7443e9478dbef79989",
+    "base_tree_sha": "dce106063f23dde35c60e15b384530c6188393aa",
+    "o7_0": "MERGED_VERIFIED",
+    "o7_1_o7_6": "CANONICAL_MERGED_VERIFIED"
   },
   "registry_dependency": {
     "repository": "Baelfyre/Orchestra-Compliance-Registry",
-    "canonical_commit_sha": "155c21ab54f704d876ae4a0c2d995f5591f13930",
-    "canonical_tree_sha": "ea99fce806a455c4c1e2c912277c44d3595f54d8",
+    "canonical_commit_sha": "4926a3b5f48122dd45f3c8e83a12b8d071dd5387",
+    "canonical_tree_sha": "01be27bde90f6faa59ab74d60ba13af480c11b1d",
     "signature": "VERIFIED",
     "canonical_validation": "PASS",
-    "surface_status": "IMPLEMENTED_STABLE_DIRECT_SURFACE_R7_1_R7_6",
-    "entry_condition": "IMPLEMENTED_STABLE_REGISTRY_R7_SURFACE_REQUIRED",
+    "surface_status": "R7_1_R7_9_IMPLEMENTED_WITH_TRUSTED_DIRECT_JSON_IDENTITY_REMEDIATION",
+    "entry_condition": "TRUSTED_REGISTRY_V0_4_0_AND_POST_RELEASE_R7_RUNTIME_REQUIRED",
     "entry_condition_satisfied": true
   },
+  "trusted_release": {
+    "release_tag": "registry-v0.4.0",
+    "registry_version": "0.4.0",
+    "release_sequence": 4,
+    "source_commit_sha": "488c979b37dd84d8645fd8e6c288d297375c4e5b",
+    "source_tree_sha": "0d3bbf34ec7ab7e4833fba225aba96b829de1cec",
+    "release_manifest_sha256": "040d6576cf10e9f7e3a9a051792869541c1d33b7af3c665fad8eecb939c7baaa",
+    "bundle_sha256": "e0457a75837d169d7bb8a7da14d8f4141d35a691952ff8f8978ef793e3cf92d3",
+    "release_id": 378292109,
+    "draft": false,
+    "prerelease": false,
+    "immutable": true,
+    "publication_state": "PUBLISHED_IMMUTABLE_VERIFIED"
+  },
   "implementation": {
-    "status": "O7_1_O7_6_IMPLEMENTED_PENDING_CANONICALIZATION",
+    "status": "O7_1_O7_7_IMPLEMENTED_JOINT_CONFORMANCE_PASS_PENDING_CANONICALIZATION",
     "phases": {
-      "O7.1": "IMPLEMENTED",
-      "O7.2": "IMPLEMENTED",
-      "O7.3": "IMPLEMENTED",
-      "O7.4": "IMPLEMENTED",
-      "O7.5": "IMPLEMENTED",
-      "O7.6": "IMPLEMENTED",
-      "O7.7": "BLOCKED_PENDING_R7_7_AND_TRUSTED_RELEASE_INTEGRATION"
+      "O7.1": "CANONICAL_MERGED_VERIFIED",
+      "O7.2": "CANONICAL_MERGED_VERIFIED",
+      "O7.3": "CANONICAL_MERGED_VERIFIED",
+      "O7.4": "CANONICAL_MERGED_VERIFIED",
+      "O7.5": "CANONICAL_MERGED_VERIFIED",
+      "O7.6": "CANONICAL_MERGED_VERIFIED",
+      "O7.7": "JOINT_CONFORMANCE_PASS_PENDING_SIGNED_MATERIALIZATION_AND_CANONICALIZATION"
     },
     "runtime_module": "orchestra_runtime/registry_o7.py",
-    "test_module": "tests/runtime/test_registry_o7.py"
+    "joint_conformance_validator": "scripts/validate_registry_o7_joint_conformance.py",
+    "runtime_test_module": "tests/runtime/test_registry_o7.py",
+    "joint_contract_test_module": "tests/runtime/test_registry_o7_joint_conformance_contract.py"
   },
   "transport": {
     "preference": [
@@ -40,7 +57,10 @@
     "registry_gateway_semantics_are_reimplemented_in_orchestra": false,
     "registry_gateway_is_injected_consumer_boundary": true,
     "legacy_o1_o6_fallback_preserved": true,
-    "mcp_currently_available": false
+    "trusted_direct_json_available": true,
+    "trusted_indexed_available": true,
+    "mcp_currently_available": true,
+    "mcp_read_only": true
   },
   "compatibility": {
     "required_capability": "cap.query.v1>=1.0.0",
@@ -58,12 +78,42 @@
     "index_mismatch_disposition": "REJECT_INDEX_THEN_DIRECT_JSON_OR_LEGACY_FALLBACK",
     "semantic_query_mismatch_disposition": "FAIL_CLOSED",
     "result_digest_mismatch_disposition": "FAIL_CLOSED",
+    "trusted_direct_json_identity_required": true,
+    "trusted_release_manifest_digest_required": true,
     "model_authored_integrity_repair_allowed": false
   },
+  "joint_conformance": {
+    "workflow": ".github/workflows/registry-o7-joint-conformance.yml",
+    "required_transports": [
+      "DIRECT_LOCAL_JSON_QUERY",
+      "DIRECT_LOCAL_INDEXED_GATEWAY",
+      "OPTIONAL_MCP_TRANSPORT"
+    ],
+    "same_release_identity_required": true,
+    "semantic_parity_required": true,
+    "exact_source_and_obligation_identity_required": true,
+    "freshness_parity_required": true,
+    "normalized_compliance_query_receipt_required": true,
+    "authority_expansion_allowed": false,
+    "canonicalization_requires_gate_pass": true,
+    "latest_evidence_status": "PASS",
+    "latest_evidence_workflow_run_id": 33153052348,
+    "latest_evidence_source_head": "226918a47bbfc7616ab0d92d3423c721b6c0cf2c"
+  },
+  "benchmark_boundary": {
+    "r7_9_complete": true,
+    "projected_byte_benefit_established": false,
+    "token_efficiency_established": false,
+    "token_efficiency_claim_allowed": false,
+    "reason": "HOST_REPORTED_INPUT_TOKENS_UNAVAILABLE_AND_MEASURED_PROJECTED_BYTE_BENEFIT_NOT_ESTABLISHED"
+  },
   "release_boundary": {
-    "trusted_registry_v0_4_0_published": false,
-    "r7_7_mcp_implemented": false,
-    "joint_r7_o7_conformance_complete": false,
+    "trusted_registry_v0_4_0_published": true,
+    "trusted_registry_v0_4_0_immutable_verified": true,
+    "r7_7_mcp_implemented": true,
+    "r7_8_trusted_release_integration_implemented": true,
+    "r7_9_benchmark_complete": true,
+    "joint_r7_o7_conformance_complete": true,
     "orchestra_release_integration_authorized_by_this_state": false
   },
   "authority_expansion": false
