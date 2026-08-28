@@ -2,6 +2,14 @@
 
 This root changelog is release-oriented. Detailed pre-v1.7 development chronology remains preserved byte-for-byte in [the historical changelog archive](docs/history/CHANGELOG_PRE_V1_7.md), Git history, merged pull requests, decision records, and validation evidence.
 
+## Post-v1.7 O7.7 trusted Registry joint conformance
+
+- Added an executable cross-repository O7.7 conformance gate against immutable `registry-v0.4.0`, exact release source `488c979b37dd84d8645fd8e6c288d297375c4e5b`, release-manifest SHA-256 `040d6576cf10e9f7e3a9a051792869541c1d33b7af3c665fad8eecb939c7baaa`, and bundle SHA-256 `e0457a75837d169d7bb8a7da14d8f4141d35a691952ff8f8978ef793e3cf92d3`.
+- Bound joint conformance to the validated post-release Registry runtime at commit `4926a3b5f48122dd45f3c8e83a12b8d071dd5387`, tree `01be27bde90f6faa59ab74d60ba13af480c11b1d`, including trusted direct-JSON identity verification without changing the immutable v0.4.0 release.
+- Verified the same privacy `EVIDENCE` query through trusted direct JSON, verified indexed gateway, and read-only MCP transport with semantic parity across records, source IDs, obligation IDs, query digest, freshness evidence, and normalized `ComplianceQueryReceipt` identity.
+- Preserved Registry canonical JSON as authority, retained O1-O6 fallback and fail-closed semantic/integrity behavior, and prohibited authority expansion and model-authored integrity repair.
+- The R7.9 benchmark did not establish token-efficiency benefit, so no token-efficiency claim is introduced. O7.7 conformance evidence does not itself authorize an Orchestra release, deployment, policy activation, installed-integration refresh, or any other protected action.
+
 ## Post-v1.7 O7.1-O7.6 Registry R7 direct consumption runtime
 
 - Integrated Orchestra O7.1 through O7.6 against the canonical Registry R7.1-R7.6 stable direct surface at commit `155c21ab54f704d876ae4a0c2d995f5591f13930`, tree `ea99fce806a455c4c1e2c912277c44d3595f54d8`, without reimplementing Registry-owned query semantics in Orchestra.
