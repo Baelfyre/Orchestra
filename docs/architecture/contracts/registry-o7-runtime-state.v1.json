@@ -33,7 +33,7 @@
     "publication_state": "PUBLISHED_IMMUTABLE_VERIFIED"
   },
   "implementation": {
-    "status": "O7_1_O7_7_IMPLEMENTED_JOINT_CONFORMANCE_PASS_PENDING_CANONICALIZATION",
+    "status": "CANONICAL_MERGED_VERIFIED",
     "phases": {
       "O7.1": "CANONICAL_MERGED_VERIFIED",
       "O7.2": "CANONICAL_MERGED_VERIFIED",
@@ -41,7 +41,7 @@
       "O7.4": "CANONICAL_MERGED_VERIFIED",
       "O7.5": "CANONICAL_MERGED_VERIFIED",
       "O7.6": "CANONICAL_MERGED_VERIFIED",
-      "O7.7": "JOINT_CONFORMANCE_PASS_PENDING_SIGNED_MATERIALIZATION_AND_CANONICALIZATION"
+      "O7.7": "CANONICAL_MERGED_VERIFIED"
     },
     "runtime_module": "orchestra_runtime/registry_o7.py",
     "joint_conformance_validator": "scripts/validate_registry_o7_joint_conformance.py",

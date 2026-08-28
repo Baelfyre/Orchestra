@@ -2,6 +2,12 @@
 
 This root changelog is release-oriented. Detailed pre-v1.7 development chronology remains preserved byte-for-byte in [the historical changelog archive](docs/history/CHANGELOG_PRE_V1_7.md), Git history, merged pull requests, decision records, and validation evidence.
 
+## Post-v1.7 canonical O7 and Developer Portal state reconciliation
+
+- Reconciled the Developer Portal machine projection, schema, documentation, and regression expectations to the already-published `v1.7.0` release at commit `e5305ef3e160209a0345bd2c7843c923940e62c5`, including `authority.implements_mcp = true` and the retained bounded MCP stdio state `PUBLISHED_V1_6_STABLE_RETAINED_V1_7`.
+- Reconciled O7.7 and the coupled O7 runtime-state projections from stale pending-canonicalization wording to the existing completed `CANONICAL_MERGED_VERIFIED` state while preserving the trusted Registry v0.4.0 identities and fail-closed/non-authorizing boundaries.
+- Updated only the directly coupled regression tests and `README.json` machine projections needed to enforce that state. No runtime behavior, Registry cache, installed integration, policy, release, deployment, ruleset, authority, or protected-operation boundary is changed by this reconciliation.
+
 ## Post-v1.7 Codex MCP 2026 discovery compatibility
 
 - Corrected the MCP `2026-07-28` `server/discover` result shape by adding `ttlMs: 0` and `cacheScope: "private"`, matching the modern Codex discovery contract while preventing reusable discovery caching or stale capability assumptions.

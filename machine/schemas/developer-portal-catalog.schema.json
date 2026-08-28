@@ -60,7 +60,7 @@
           "const": false
         },
         "implements_mcp": {
-          "const": false
+          "const": true
         },
         "activates_policy": {
           "const": false
@@ -83,10 +83,10 @@
       ],
       "properties": {
         "release": {
-          "const": "v1.5.0"
+          "const": "v1.7.0"
         },
         "target_commit": {
-          "const": "b0a56cc7af8ad78234754bcb29ed07f6ab54d920"
+          "const": "e5305ef3e160209a0345bd2c7843c923940e62c5"
         },
         "moved_by_portal": {
           "const": false
@@ -175,7 +175,7 @@
           "const": "NOT_IMPLEMENTED"
         },
         "mcp_server": {
-          "const": "NOT_IMPLEMENTED_FINAL_PHASE"
+          "const": "PUBLISHED_V1_6_STABLE_RETAINED_V1_7"
         }
       }
     }
