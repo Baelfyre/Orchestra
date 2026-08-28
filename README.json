@@ -580,14 +580,15 @@
       "authority_note": "Registry capability, freshness, delta, and routing evidence cannot expand Orchestra authority, publish Registry state, bypass Conductor routing, or replace Governor/Steward/Arbiter evidence controls."
     },
     "registry_query_optimization_o7": {
-      "status": "O7_1_O7_6_IMPLEMENTED_PENDING_CANONICALIZATION",
+      "status": "O7_1_O7_7_IMPLEMENTED_JOINT_CONFORMANCE_PASS_PENDING_CANONICALIZATION",
       "purpose": "Consume the Registry R7 typed/indexed/projection query gateway using the smallest sufficient context while preserving O1-O6 semantics, exact Registry identities, existing compliance receipts, and fail-closed behavior.",
       "runtime_surface": "orchestra_runtime/registry_o7.py",
       "machine_sources": ["docs/architecture/contracts/registry-o7-runtime-state.v1.json"],
       "human_sources": ["docs/architecture/REGISTRY_QUERY_OPTIMIZATION_O7.md"],
-      "validation_surfaces": ["tests/runtime/test_registry_o7.py", "tests/runtime/test_registry_o7_runtime_state.py"],
+      "validation_surfaces": ["tests/runtime/test_registry_o7.py", "tests/runtime/test_registry_o7_runtime_state.py", "tests/runtime/test_registry_o7_joint_conformance_contract.py"],
       "registry_r7_1_r7_6_canonical": {"repository": "Baelfyre/Orchestra-Compliance-Registry", "sha": "155c21ab54f704d876ae4a0c2d995f5591f13930", "tree": "ea99fce806a455c4c1e2c912277c44d3595f54d8", "surface_status": "IMPLEMENTED_STABLE_DIRECT_SURFACE_R7_1_R7_6"},
-      "implementation_order": "O7_1_O7_6_IMPLEMENTED_AFTER_STABLE_REGISTRY_R7_SURFACE",
+      "registry_r7_trusted_release": {"repository": "Baelfyre/Orchestra-Compliance-Registry", "release_tag": "registry-v0.4.0", "release_source_sha": "488c979b37dd84d8645fd8e6c288d297375c4e5b", "release_manifest_sha256": "040d6576cf10e9f7e3a9a051792869541c1d33b7af3c665fad8eecb939c7baaa", "bundle_sha256": "e0457a75837d169d7bb8a7da14d8f4141d35a691952ff8f8978ef793e3cf92d3", "post_release_runtime_sha": "4926a3b5f48122dd45f3c8e83a12b8d071dd5387", "post_release_runtime_tree": "01be27bde90f6faa59ab74d60ba13af480c11b1d", "publication_state": "PUBLISHED_IMMUTABLE_VERIFIED"},
+      "implementation_order": "O7_1_O7_6_CANONICAL_THEN_O7_7_VERIFIED_AGAINST_TRUSTED_REGISTRY_V0_4_0",
       "required_compatibility_floor": {"cap.query.v1": "1.0.0"},
       "planned_optional_capabilities": ["cap.query.projection.v1", "cap.query.relationships.v1", "cap.query.indexed-read.v1", "cap.query.budget.v1", "cap.transport.mcp.v1"],
       "preferred_transport_order": ["DIRECT_LOCAL_INDEXED_GATEWAY", "DIRECT_LOCAL_JSON_QUERY", "OPTIONAL_MCP_TRANSPORT"],
@@ -597,7 +598,7 @@
       "frozen_invariants": ["O1_CAPABILITY_NEGOTIATION", "O2_COMPATIBILITY_FAIL_CLOSED", "O3_QUERY_SEMANTICS", "O4_QUERY_SCOPED_FRESHNESS", "O5_RELEASE_DELTA", "O6_DOMAIN_ROUTING", "CONDUCTOR_EXCLUSIVE_ROUTING", "GOVERNOR_APPLICABILITY", "STEWARD_TRACEABILITY", "ARBITER_SET_EQUALITY"],
       "planned_release_target": "v1.8.0_AFTER_REGISTRY_R7_TRUSTED_RELEASE_AND_JOINT_CONFORMANCE",
       "token_efficiency_claim": "NOT_CLAIMED_UNTIL_MEASURED",
-      "authority_note": "O7 is a planned read-path optimization only. MCP remains transport, the Registry index remains derived, query/projection choice cannot change compliance meaning, and no O7 path may expand authority or bypass existing evidence gates."
+      "authority_note": "O7.1-O7.6 are canonical read-path optimizations and O7.7 joint conformance has passed against immutable Registry v0.4.0. MCP remains transport, the Registry index remains derived, query/projection choice cannot change compliance meaning, and O7 evidence grants no merge, release, deployment, policy, or other protected-action authority."
     },
     "comparative_measurement_codex_c2_portability_r1": {
       "status": "C2R1_EXECUTION_COMPLETE_RECONCILED_CANONICAL",
@@ -912,7 +913,7 @@
     "codex_baseline_readiness": "SUPERSEDED_BY_C1_C2R1_COMPLETED_RECONCILIATIONS",
     "codex_c1_cross_provider_reconciliation": "C1_COMPLETE_RECONCILED_CALIBRATION_ONLY",
     "registry_adaptive_consumption_o1_o6": "CANONICAL_IMPLEMENTED_VALIDATED_AND_REGISTRY_RECONCILED",
-    "registry_query_optimization_o7": "O7_1_O7_6_IMPLEMENTED_PENDING_CANONICALIZATION_O7_7_BLOCKED",
+    "registry_query_optimization_o7": "O7_1_O7_7_IMPLEMENTED_JOINT_CONFORMANCE_PASS_PENDING_CANONICALIZATION",
     "murmurs_live_host_token_measurement": "B3_TERMINAL_EVIDENCE_RECONCILED_BENEFIT_NOT_ESTABLISHED",
     "codex_c2_portability_r1": "C2R1_EXECUTION_COMPLETE_RECONCILED_CANONICAL"
   },
