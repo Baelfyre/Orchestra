@@ -58,20 +58,21 @@ def test_journeys_reference_declared_surfaces_only():
         assert set(journey["surface_ids"]) <= surface_ids
 
 
-def test_portal_cannot_expand_authority_or_future_phase_scope():
+def test_portal_preserves_authority_boundaries_and_current_mcp_release_projection():
     catalog = load(CATALOG_PATH)
     authority = catalog["authority"]
     assert authority["documentation_and_discovery_only"] is True
+    assert authority["implements_mcp"] is True
     for key, value in authority.items():
-        if key != "documentation_and_discovery_only":
+        if key not in {"documentation_and_discovery_only", "implements_mcp"}:
             assert value is False, key
     assert catalog["future_phase_boundaries"] == {
         "third_party_specialist_marketplace": "NOT_IMPLEMENTED",
-        "mcp_server": "NOT_IMPLEMENTED_FINAL_PHASE",
+        "mcp_server": "PUBLISHED_V1_6_STABLE_RETAINED_V1_7",
     }
     assert catalog["public_release_boundary"] == {
-        "release": "v1.5.0",
-        "target_commit": "b0a56cc7af8ad78234754bcb29ed07f6ab54d920",
+        "release": "v1.7.0",
+        "target_commit": "e5305ef3e160209a0345bd2c7843c923940e62c5",
         "moved_by_portal": False,
     }
 
@@ -93,5 +94,6 @@ def test_human_portal_and_readme_surface_the_machine_index_and_boundaries():
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     assert "machine/developer-portal/catalog.v1.json" in portal
     assert "Third-Party Specialist Marketplace" in portal
-    assert "MCP remains the final integration phase" in portal
+    assert "MCP was the final integration phase" in portal
+    assert "introduced in v1.6.0 and retained in v1.7.0" in portal
     assert "docs/developer/README.md" in readme
