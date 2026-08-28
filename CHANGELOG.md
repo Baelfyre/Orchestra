@@ -2,6 +2,14 @@
 
 This root changelog is release-oriented. Detailed pre-v1.7 development chronology remains preserved byte-for-byte in [the historical changelog archive](docs/history/CHANGELOG_PRE_V1_7.md), Git history, merged pull requests, decision records, and validation evidence.
 
+## Post-v1.7 O7.1-O7.6 Registry R7 direct consumption runtime
+
+- Integrated Orchestra O7.1 through O7.6 against the canonical Registry R7.1-R7.6 stable direct surface at commit `155c21ab54f704d876ae4a0c2d995f5591f13930`, tree `ea99fce806a455c4c1e2c912277c44d3595f54d8`, without reimplementing Registry-owned query semantics in Orchestra.
+- Added optional R7 capability negotiation, deterministic indexed/direct-JSON/O1-O6 fallback selection, `MINIMAL`/`SUMMARY`/`EVIDENCE`/`FULL` projection-aware consumption, and normalization into the existing `ComplianceQueryReceipt` evidence model.
+- Added fail-closed semantic and result-digest integrity checks, deterministic index rejection/fallback behavior, context-budget capability gating, exact source/obligation identity preservation, and machine-readable runtime state bound to the verified Registry dependency.
+- Preserved the existing O1-O6 compatibility path when optional R7 capabilities are absent; required `cap.query.v1` incompatibility remains fail closed and transport/projection choices do not expand authority.
+- R7.7 MCP, Registry `v0.4.0` trusted immutable publication, trusted-release integration, measured R7.9 efficiency benchmarking, O7.7 joint conformance, release, deployment, and policy authority remain outside this runtime increment and are not claimed by it.
+
 ## Post-v1.7 O7.0 Registry consumer contract freeze
 
 - Froze Orchestra O7.0 consumer expectations against the signed Registry R7 architecture at commit `c1910806ed3ea9147af96b1c49a9f72aef75e0f6`, tree `0c37d7bf47fc20b49b26fea156c8e180db57b4a3`, and R7 document blob `9f24a10f455a77509ec5246e6981ca2672624ca1` while retaining Registry R7 status `APPROVED_PLANNED_NOT_IMPLEMENTED`.
