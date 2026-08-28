@@ -58,6 +58,12 @@ def test_source_contract_is_bound_to_reviewed_signed_r7_architecture():
     assert source["r7_status"] == "APPROVED_PLANNED_NOT_IMPLEMENTED"
 
 
+def test_schema_rejects_claim_that_r7_is_implemented():
+    mutated = copy.deepcopy(contract_data())
+    mutated["source_contract"]["r7_status"] = "IMPLEMENTED"
+    assert schema_errors(mutated)
+
+
 def test_required_floor_and_optional_capability_set_are_exact():
     compatibility = contract_data()["compatibility"]
     assert compatibility["required_capability_floor"] == {
