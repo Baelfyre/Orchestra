@@ -20,6 +20,31 @@ python scripts/mcp_server.py --adapter codex
 
 `--adapter` selects an existing Orchestra PRAP adapter identity. MCP does not add a new PRAP adapter identity or promote host maturity.
 
+## Codex host compatibility
+
+Current Codex MCP `2026-07-28` stdio support is opt-in at both the Codex client and the individual stdio-server configuration. A Codex host must satisfy both conditions:
+
+1. enable the Codex feature `mcp_2026_07_28` for the Codex session; and
+2. launch the Orchestra stdio server with `CODEX_MCP_PROTOCOL_VERSION=2026-07-28` in the server environment.
+
+A bounded registration example is:
+
+```text
+codex mcp add orchestra --env CODEX_MCP_PROTOCOL_VERSION=2026-07-28 -- python "<ORCHESTRA_ROOT>\scripts\mcp_server.py" --adapter codex
+```
+
+For an explicit one-session verification, launch Codex with:
+
+```text
+codex --enable mcp_2026_07_28
+```
+
+Then inspect `/mcp` and require Orchestra to start successfully before treating the host integration as verified. `codex mcp get orchestra --json` can be used to confirm that the stdio launcher configuration includes the protocol marker.
+
+If the Codex feature is disabled or the stdio protocol marker is absent, Codex can select its legacy MCP initialization lifecycle. Orchestra intentionally does not implement that retired lifecycle, so a mismatched client can receive a fail-closed error such as `Request _meta is required`. The remedy is to align the Codex host with MCP `2026-07-28`; do not weaken Orchestra's `_meta` validation or add a legacy authority path.
+
+For persistent Codex use, the feature can be enabled in the user's Codex configuration under `[features]` as `mcp_2026_07_28 = true`. This is a host compatibility setting only. It does not authorize Orchestra tool execution, governance approval, deployment, installed-integration refresh, or any protected action.
+
 ## Current protocol model
 
 MCP `2026-07-28` uses a stateless request model. Orchestra does not implement the retired `initialize` / `initialized` handshake or MCP protocol sessions in this transport. Requests must declare `io.modelcontextprotocol/protocolVersion` in `_meta`; unsupported versions fail with the MCP unsupported-protocol-version error.
