@@ -1,0 +1,69 @@
+name: Temporary O7.7 README machine parity
+
+on:
+  push:
+    branches:
+      - feat/o7-7-joint-conformance-20260828
+    paths:
+      - ".github/workflows/_o7-7-readme-parity-tmp.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/o7-7-joint-conformance-20260828
+      - name: Update exact O7.7 README machine parity
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("README.json")
+          text = path.read_text(encoding="utf-8")
+          replacements = [
+              (
+                  '"status": "O7_1_O7_6_IMPLEMENTED_PENDING_CANONICALIZATION"',
+                  '"status": "O7_1_O7_7_IMPLEMENTED_JOINT_CONFORMANCE_PASS_PENDING_CANONICALIZATION"',
+              ),
+              (
+                  '"validation_surfaces": ["tests/runtime/test_registry_o7.py", "tests/runtime/test_registry_o7_runtime_state.py"]',
+                  '"validation_surfaces": ["tests/runtime/test_registry_o7.py", "tests/runtime/test_registry_o7_runtime_state.py", "tests/runtime/test_registry_o7_joint_conformance_contract.py"]',
+              ),
+              (
+                  '"registry_r7_1_r7_6_canonical": {"repository": "Baelfyre/Orchestra-Compliance-Registry", "sha": "155c21ab54f704d876ae4a0c2d995f5591f13930", "tree": "ea99fce806a455c4c1e2c912277c44d3595f54d8", "surface_status": "IMPLEMENTED_STABLE_DIRECT_SURFACE_R7_1_R7_6"},',
+                  '"registry_r7_1_r7_6_canonical": {"repository": "Baelfyre/Orchestra-Compliance-Registry", "sha": "155c21ab54f704d876ae4a0c2d995f5591f13930", "tree": "ea99fce806a455c4c1e2c912277c44d3595f54d8", "surface_status": "IMPLEMENTED_STABLE_DIRECT_SURFACE_R7_1_R7_6"},\n      "registry_r7_trusted_release": {"repository": "Baelfyre/Orchestra-Compliance-Registry", "release_tag": "registry-v0.4.0", "release_source_sha": "488c979b37dd84d8645fd8e6c288d297375c4e5b", "release_manifest_sha256": "040d6576cf10e9f7e3a9a051792869541c1d33b7af3c665fad8eecb939c7baaa", "bundle_sha256": "e0457a75837d169d7bb8a7da14d8f4141d35a691952ff8f8978ef793e3cf92d3", "post_release_runtime_sha": "4926a3b5f48122dd45f3c8e83a12b8d071dd5387", "post_release_runtime_tree": "01be27bde90f6faa59ab74d60ba13af480c11b1d", "publication_state": "PUBLISHED_IMMUTABLE_VERIFIED"},',
+              ),
+              (
+                  '"implementation_order": "O7_1_O7_6_IMPLEMENTED_AFTER_STABLE_REGISTRY_R7_SURFACE"',
+                  '"implementation_order": "O7_1_O7_6_CANONICAL_THEN_O7_7_VERIFIED_AGAINST_TRUSTED_REGISTRY_V0_4_0"',
+              ),
+              (
+                  '"authority_note": "O7 is a planned read-path optimization only. MCP remains transport, the Registry index remains derived, query/projection choice cannot change compliance meaning, and no O7 path may expand authority or bypass existing evidence gates."',
+                  '"authority_note": "O7.1-O7.6 are canonical read-path optimizations and O7.7 joint conformance has passed against immutable Registry v0.4.0. MCP remains transport, the Registry index remains derived, query/projection choice cannot change compliance meaning, and O7 evidence grants no merge, release, deployment, policy, or other protected-action authority."',
+              ),
+              (
+                  '"registry_query_optimization_o7": "O7_1_O7_6_IMPLEMENTED_PENDING_CANONICALIZATION_O7_7_BLOCKED"',
+                  '"registry_query_optimization_o7": "O7_1_O7_7_IMPLEMENTED_JOINT_CONFORMANCE_PASS_PENDING_CANONICALIZATION"',
+              ),
+          ]
+          for old, new in replacements:
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f"expected exactly one README parity token, found {count}: {old[:80]}")
+              text = text.replace(old, new)
+          json.loads(text)
+          path.write_text(text, encoding="utf-8")
+          PY
+          git diff --check
+          python -m json.tool README.json >/dev/null
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.json
+          git commit -m "docs(o7): align README machine parity with conformance"
+          git push origin HEAD:feat/o7-7-joint-conformance-20260828
