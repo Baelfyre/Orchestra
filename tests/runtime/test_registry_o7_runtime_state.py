@@ -27,9 +27,9 @@ def test_o7_runtime_state_is_bound_to_verified_registry_r7_trusted_surface() -> 
 
 def test_o7_runtime_state_records_verified_joint_conformance_without_authority_expansion() -> None:
     state = json.loads(STATE.read_text(encoding="utf-8"))
+    assert state["implementation"]["status"] == "CANONICAL_MERGED_VERIFIED"
     phases = state["implementation"]["phases"]
-    assert all(phases[f"O7.{index}"] == "CANONICAL_MERGED_VERIFIED" for index in range(1, 7))
-    assert phases["O7.7"] == "JOINT_CONFORMANCE_PASS_PENDING_SIGNED_MATERIALIZATION_AND_CANONICALIZATION"
+    assert all(phases[f"O7.{index}"] == "CANONICAL_MERGED_VERIFIED" for index in range(1, 8))
     assert state["transport"]["registry_gateway_semantics_are_reimplemented_in_orchestra"] is False
     assert state["transport"]["mcp_currently_available"] is True
     assert state["transport"]["mcp_read_only"] is True
