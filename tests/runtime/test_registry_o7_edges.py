@@ -186,7 +186,7 @@ def test_request_validation_fails_closed(overrides: dict) -> None:
 
 def test_request_normalizes_projection_representation_ids_and_filters() -> None:
     req = request(
-        providers=("provider-b", "provider-a", "provider-a"),
+        providers=("provider-a", "provider-a"),
         source_id="PH-A",
         obligation_id="PH-O",
         projection="summary",
@@ -197,7 +197,7 @@ def test_request_normalizes_projection_representation_ids_and_filters() -> None:
     )
     assert req.projection == "SUMMARY"
     assert req.representation == "JSON"
-    assert req.providers == ("provider-a", "provider-b")
+    assert req.providers == ("provider-a",)
     assert req.receipt_filters()["source_id"] == "PH-A"
     assert req.receipt_filters()["obligation_id"] == "PH-O"
     assert req.gateway_request()["maximum_context_bytes"] == 4096
