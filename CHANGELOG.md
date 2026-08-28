@@ -2,12 +2,20 @@
 
 This root changelog is release-oriented. Detailed pre-v1.7 development chronology remains preserved byte-for-byte in [the historical changelog archive](docs/history/CHANGELOG_PRE_V1_7.md), Git history, merged pull requests, decision records, and validation evidence.
 
+## Post-v1.7 Prime Directive / Development Lifecycle V2 canonical closeout
+
+- PR #592 squash merged the reviewed Prime Directive and Development Lifecycle V2 realignment tree to signed canonical `main` commit `a04dafe75fc52ecc1fedcc17a73b14b8a31f548a`, tree `854ebfb01b05226304f36d2c35420658c5c8e91f`; the reviewed tree equals the canonical tree.
+- Before merge, active `Protect main` ruleset `17927422` was separately corrected under explicit ruleset-mutation authority by removing only the unintended duplicate `native-ubuntu-latest` required-status entry. Strict required-status enforcement, Squash-only merging, linear history, required signatures, pull-request requirements, and the existing bypass actors remained preserved.
+- Post-merge exact-canonical validation passed: Required Analysis Compatibility `33121949316`, Governance Check `33121949333`, `validate` `33121949278`, Cross-platform Validation `33121949330`, and GitHub CodeQL push analysis `33121948441`.
+- `v1.7.0` remains the immutable current public release. PR #592 is post-release canonical maintenance and did not publish or move a release/tag.
+- UIX-9C V3 remains terminal negative evidence with `NO_BENEFIT_ESTABLISHED`; this closeout does not authorize another experiment or live model/provider call.
+
 ## Post-v1.7 constitutional and controlled-study closeout
 
 - Completed UIX-9C V3 with six valid observations and three corrected valid pairs. All 39 primary governed-versus-baseline comparisons were unchanged, producing terminal `NO_BENEFIT_ESTABLISHED` with no benefit, harm, or directional model-behavior claim.
 - Added Orchestra Prime Directive v1 and Feature Admission v1, separating implementation correctness from permanent capability promotion and retaining negative/inconclusive evidence as valid decision evidence.
 - Added Development Lifecycle V2 candidate maturity and Feature Freeze, thin governed-autonomy lifecycle integration, risk-proportional qualification/evaluation/audit, and forward-only recovery/branch-retirement contracts without introducing a second governance, autonomy, runtime-lifecycle, Arbiter, or merge engine.
-- Reconciled the historical Campaign 0-5 stack onto current post-UIX `main`, preserving current UIX/runtime work and the repository contract's unique required-check profile. The current live ruleset duplicate `native-ubuntu-latest` entry is external policy drift and is not mutated by this source candidate.
+- Reconciled the historical Campaign 0-5 stack onto current post-UIX `main`, preserving current UIX/runtime work and the repository contract's unique required-check profile. During candidate construction, the live ruleset still contained a duplicate `native-ubuntu-latest` entry; that external policy drift was separately corrected before PR #592 merged and was not mutated by the source candidate itself.
 - Realigned the public README, project context, governance index, and documentation map around Mission, Vision, the Prime Directive, Development Lifecycle V2, and the completed UIX null result while retaining v1.7.0 as the immutable latest published release.
 - No new live model/provider call, release, deployment, policy activation, installed-integration refresh, branch deletion, destructive cleanup, force push, or history rewrite is introduced by this realignment.
 

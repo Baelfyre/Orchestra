@@ -1,12 +1,28 @@
 # Prime Directive and Development Lifecycle V2 Realignment
 
-Status: `IMPLEMENTATION_RECONCILIATION_ACTIVE`
+Status: `MERGED_VERIFIED`
 
 Recorded: 2026-08-27
 
-## Current canonical boundary
+Canonical closeout: 2026-08-28
 
-This realignment starts from Orchestra canonical `main` at:
+## Canonical closeout
+
+The realigned source was reviewed and promoted through PR #592 using the repository's signed-materialization path and Squash-only canonical merge discipline.
+
+- canonical merge commit: `a04dafe75fc52ecc1fedcc17a73b14b8a31f548a`
+- canonical tree: `854ebfb01b05226304f36d2c35420658c5c8e91f`
+- sole parent: `11c255c3e0efa158b5df9fe4832c60f9ae401948`
+- canonical signature: `VERIFIED_VALID`
+- reviewed tree equals canonical tree: `true`
+- post-merge validation: `PASS`
+- public release remains: `v1.7.0`
+
+The active `Protect main` ruleset `17927422` was separately corrected under explicit ruleset-mutation authority before the canonical merge. The unintended duplicate `native-ubuntu-latest` required-status entry was removed while the rest of the ruleset profile remained preserved. Ruleset correction and validation evidence did not create merge authority; PR #592 merged only after separate explicit merge authorization.
+
+## Historical starting boundary
+
+This realignment started from Orchestra canonical `main` at:
 
 - commit: `11c255c3e0efa158b5df9fe4832c60f9ae401948`
 - tree: `0a4d80e2a1c46e62a2599bef4626f81c21f8dc4f`
@@ -25,7 +41,7 @@ The reconstruction must not introduce a second governance kernel, autonomy engin
 
 | Campaign | Source PR | Source head | Disposition | Current treatment |
 | --- | ---: | --- | --- | --- |
-| Campaign 0 - policy-source reconciliation | #573 | `838179da05bb638ffde165f628813a3b850901fa` | `KEEP_WITH_REALIGNMENT` | Preserve repository-side unique required-check parity and fail-closed drift detection. Current live `Protect main` ruleset evidence still contains a duplicate `native-ubuntu-latest` required-status entry, so the live repository configuration is classified as external policy drift. No live ruleset mutation is part of this candidate. |
+| Campaign 0 - policy-source reconciliation | #573 | `838179da05bb638ffde165f628813a3b850901fa` | `KEEP_WITH_REALIGNMENT` | Preserve repository-side unique required-check parity and fail-closed drift detection. At candidate construction, the live `Protect main` ruleset contained a duplicate `native-ubuntu-latest` entry. That external policy drift was separately reconciled under explicit ruleset authority before PR #592 merged; the source candidate itself did not mutate the live ruleset. |
 | Campaign 1 - Prime Directive + Feature Admission | #574 | `4f922ff8e94572ccfe778cb5a3bbaab66d747664` | `KEEP_WITH_REALIGNMENT` | Promote the constitutional Prime Directive and feature-admission/value boundary onto current `main`; retain existing governance as subordinate implementation. |
 | Campaign 2 - Candidate Maturity + Feature Freeze | #576 | `59ac8db4f0d9e0b131ed14e6ff7f44811b05b5d5` | `KEEP_WITH_REALIGNMENT` | Keep development-candidate maturity separate from runtime execution lifecycle; exact identity and evidence staleness remain explicit. |
 | Campaign 3 - Governed Autonomy lifecycle integration | #578 | `258a46553ad8529e41ed89552a731cf70e74cdd2` | `KEEP_WITH_REALIGNMENT` | Reuse the existing autonomy evaluator and authority envelope. `AUTONOMY_CHANGES_PAUSES_NOT_PREREQUISITES`. Full Autonomous cannot self-adopt permanent capability. |
@@ -110,26 +126,25 @@ NO_AUTOMATIC_PROMOTION
 
 ## Current live ruleset state
 
-A read-only GitHub ruleset read for the active `Protect main` ruleset reports the following required-status contexts:
+A post-correction read-only GitHub ruleset read for active `Protect main` ruleset `17927422` reports the required-status profile with each context exactly once:
 
 - `governance-check`
 - `validate`
 - `native-windows-latest`
 - `native-ubuntu-latest`
-- `native-ubuntu-latest`
 - `native-macos-latest`
 - `runtime-tests`
 - `Compatibility CodeQL (python)`
 
-The repository contract's intended canonical profile requires each required status context exactly once. Therefore the duplicate `native-ubuntu-latest` entry is current external policy drift, not stale historical evidence. Under the fail-closed merge-readiness contract, ordinary governed merge readiness remains blocked until that live ruleset drift is separately reconciled.
+The same live read preserves strict required-status enforcement, Squash-only merging, required linear history, required signatures, pull-request requirements, deletion/non-fast-forward protection, default-branch targeting, and the pre-existing bypass actors. `RULESET_PROFILE_DRIFT = FALSE` at the PR #592 closeout checkpoint.
 
-This source candidate does not mutate the GitHub ruleset. Ruleset mutation or policy activation requires separate applicable authority.
+This is external repository configuration and must be re-read for future merge decisions. Its current validity does not create future merge, release, policy, or bypass authority.
 
 ## Protected boundaries
 
 This realignment grants no authority for:
 
-- canonical merge;
+- future canonical merge;
 - release/tag publication;
 - deployment or production mutation;
 - policy activation;
@@ -140,6 +155,8 @@ This realignment grants no authority for:
 - live model/provider experiments;
 - autonomous amendment of the Prime Directive.
 
-## Completion condition
+## Completion disposition
 
-The source realignment is ready for a merge decision only after current-main reconstruction, focused contract validation, the repository-owned exact-head CI matrix, zero unresolved review blockers, live ruleset parity with the repository contract, and a separately current merge authorization. Green CI does not create that authorization.
+PR #592 satisfied the realignment completion condition and is `MERGED_VERIFIED`. The reviewed source tree was canonically materialized without content drift, the ruleset profile was separately reconciled before merge, the exact candidate passed the required pre-merge matrix, and the canonical post-merge workflow matrix passed on `a04dafe75fc52ecc1fedcc17a73b14b8a31f548a`.
+
+This closeout is historical evidence for that transition only. Any future candidate must establish its own current baseline, exact-head validation, live ruleset parity, zero unresolved review blockers, and separately applicable merge authority.
