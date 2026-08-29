@@ -2,7 +2,7 @@
   "schema_version": "1.0",
   "project": "Orchestra",
   "featured": true,
-  "summary": "Portable governance and orchestration runtime for structured AI-assisted software development.",
+  "summary": "Coordinates AI-assisted development as a governed system of specialist routing, validation, evidence, and human approval rather than an unbounded agent loop.",
   "status": "Latest release: v1.7.0",
   "next": "Next release: not announced",
   "url": "https://github.com/Baelfyre/Orchestra"
