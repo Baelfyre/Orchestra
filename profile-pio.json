@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0",
+  "project": "Orchestra",
+  "featured": true,
+  "summary": "Portable governance and orchestration runtime for structured AI-assisted software development.",
+  "status": "v1.7.0 published; post-release work on main",
+  "next": "Post-v1.7 maintenance and bounded runtime evolution",
+  "url": "https://github.com/Baelfyre/Orchestra"
+}
