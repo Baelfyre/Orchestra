@@ -3,7 +3,7 @@
   "project": "Orchestra",
   "featured": true,
   "summary": "Portable governance and orchestration runtime for structured AI-assisted software development.",
-  "status": "v1.7.0 published; post-release work on main",
-  "next": "Post-v1.7 maintenance and bounded runtime evolution",
+  "status": "Latest release: v1.7.0",
+  "next": "Next release: not announced",
   "url": "https://github.com/Baelfyre/Orchestra"
 }
