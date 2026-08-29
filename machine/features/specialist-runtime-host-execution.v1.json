@@ -7,143 +7,57 @@
   "title": "Executable specialist runtime-host integration",
   "proposal": {
     "problem_statement": "The current MCP path verifies transport, trusted routing, authority, capability, governance, and specialist selection, but the default runtime operation returns only a route acknowledgement and cannot produce a substantive specialist execution result.",
-    "affected_parties": [
-      "Orchestra maintainers",
-      "developers using Orchestra through supported hosts",
-      "MCP clients invoking Orchestra specialist commands"
-    ],
-    "problem_evidence": [
-      "orchestra_runtime/mcp_transport.py builds RuntimeExecutor without a specialist execution engine",
-      "orchestra_runtime/services.py defaults the runtime operation to route-oriented output after successful gates",
-      "docs/validation/CODEX_MCP_2026_HOST_REVALIDATION_2026_08_28.md records MCP routing E2E as verified while substantive specialist execution is not claimed",
-      "docs/project/OOP_RUNTIME_ARCHITECTURE.md records SPECIALIST_NATIVE_EXECUTION as not implemented in the default MCP runtime"
-    ],
+    "affected_parties": ["Orchestra maintainers", "developers using Orchestra through supported hosts", "MCP clients invoking Orchestra specialist commands"],
+    "problem_evidence": ["orchestra_runtime/mcp_transport.py builds RuntimeExecutor without a specialist execution engine", "orchestra_runtime/services.py defaults the runtime operation to route-oriented output after successful gates", "docs/validation/CODEX_MCP_2026_HOST_REVALIDATION_2026_08_28.md records MCP routing E2E as verified while substantive specialist execution is not claimed", "docs/project/OOP_RUNTIME_ARCHITECTURE.md records SPECIALIST_NATIVE_EXECUTION as not implemented in the default MCP runtime"],
     "orchestra_ownership_rationale": "Orchestra owns the transition from trusted specialist selection to governed runtime execution semantics. A host may provide the model and sandbox, but Orchestra must define the execution request, evidence binding, fail-closed receipt validation, and the rule that host capability cannot widen Orchestra authority.",
     "existing_mechanisms": [
-      {
-        "mechanism": "Current RuntimeExecutor operation hook",
-        "disposition": "PARTIALLY_SOLVES",
-        "evidence_refs": [
-          "orchestra_runtime/services.py#RuntimeExecutor"
-        ]
-      },
-      {
-        "mechanism": "Current MCP stdio tools/call transport",
-        "disposition": "PARTIALLY_SOLVES",
-        "evidence_refs": [
-          "orchestra_runtime/mcp_transport.py#McpToolTransport.call_tool"
-        ]
-      },
-      {
-        "mechanism": "Codex-compatible exported specialist skills",
-        "disposition": "PARTIALLY_SOLVES",
-        "evidence_refs": [
-          "adapters/codex/README.md"
-        ]
-      },
-      {
-        "mechanism": "MCP Sampling",
-        "disposition": "DOES_NOT_SOLVE",
-        "evidence_refs": [
-          "https://blog.modelcontextprotocol.io/posts/2026-07-28/"
-        ]
-      },
-      {
-        "mechanism": "Codex App Server host integration",
-        "disposition": "UNKNOWN",
-        "evidence_refs": [
-          "https://openai.com/index/unlocking-the-codex-harness/"
-        ]
-      }
+      {"mechanism":"Current RuntimeExecutor operation hook","disposition":"PARTIALLY_SOLVES","evidence_refs":["orchestra_runtime/services.py#RuntimeExecutor"]},
+      {"mechanism":"Current MCP stdio tools/call transport","disposition":"PARTIALLY_SOLVES","evidence_refs":["orchestra_runtime/mcp_transport.py#McpToolTransport.call_tool"]},
+      {"mechanism":"Codex-compatible exported specialist skills","disposition":"PARTIALLY_SOLVES","evidence_refs":["adapters/codex/README.md"]},
+      {"mechanism":"MCP Sampling","disposition":"DOES_NOT_SOLVE","evidence_refs":["https://blog.modelcontextprotocol.io/posts/2026-07-28/"]},
+      {"mechanism":"Codex App Server host integration","disposition":"UNKNOWN","evidence_refs":["https://openai.com/index/unlocking-the-codex-harness/"]}
     ],
     "expected_observable_improvement": "An explicitly configured execution engine can receive a post-gate typed specialist execution request and return a verifiable receipt so a successful installed-host call can be classified as substantive specialist execution rather than routing E2E only.",
     "falsification_criterion": "Do not promote the capability if a host bridge cannot preserve exact run, route, specialist, authority, capability, governance, task, and execution-policy identity without hidden authority expansion, provider coupling in Orchestra core, or unverifiable host-side side effects.",
     "costs": {
-      "complexity": {
-        "level": "MEDIUM",
-        "rationale": "Adds a typed execution boundary and host bridge abstraction after existing runtime gates."
-      },
-      "maintenance": {
-        "level": "MEDIUM",
-        "rationale": "Host execution bridges can drift independently of the stable runtime contract."
-      },
-      "security": {
-        "level": "HIGH",
-        "rationale": "Substantive host execution can create file, process, network, or external side effects if constraints are not intersected and enforced correctly."
-      },
-      "privacy": {
-        "level": "MEDIUM",
-        "rationale": "Task input and project context may contain sensitive downstream project information and must not be copied into audit evidence by default."
-      },
-      "policy": {
-        "level": "HIGH",
-        "rationale": "The feature crosses the current route-only execution boundary and therefore requires explicit authority and trust-boundary review."
-      },
-      "cognitive": {
-        "level": "MEDIUM",
-        "rationale": "Maintainers must distinguish routing, execution request creation, host execution, receipt validation, and protected-action authority."
-      }
+      "complexity":{"level":"MEDIUM","rationale":"Adds a typed execution boundary and host bridge abstraction after existing runtime gates."},
+      "maintenance":{"level":"MEDIUM","rationale":"Host execution bridges can drift independently of the stable runtime contract."},
+      "security":{"level":"HIGH","rationale":"Substantive host execution can create file, process, network, or external side effects if constraints are not intersected and enforced correctly."},
+      "privacy":{"level":"MEDIUM","rationale":"Task input and project context may contain sensitive downstream project information and must not be copied into audit evidence by default."},
+      "policy":{"level":"HIGH","rationale":"The feature crosses the current route-only execution boundary and therefore requires explicit authority and trust-boundary review."},
+      "cognitive":{"level":"MEDIUM","rationale":"Maintainers must distinguish routing, execution request creation, host execution, receipt validation, and protected-action authority."}
     },
-    "reversibility": {
-      "optional_possible": true,
-      "disable_supported": true,
-      "removal_supported": true,
-      "rollback_removal_plan": "Keep route-only behavior as the default compatibility path. Remove or disable optional execution-engine wiring and host bridges without changing routing, authority, capability, governance, lifecycle, or MCP discovery semantics."
-    },
-    "non_adoption_effect": "Orchestra MCP remains a verified governed routing surface but cannot claim substantive specialist execution E2E."
+    "reversibility":{"optional_possible":true,"disable_supported":true,"removal_supported":true,"rollback_removal_plan":"Keep route-only behavior as the default compatibility path. Remove or disable optional execution-engine wiring and host bridges without changing routing, authority, capability, governance, lifecycle, or MCP discovery semantics."},
+    "non_adoption_effect":"Orchestra MCP remains a verified governed routing surface but cannot claim substantive specialist execution E2E."
   },
   "scope": {
-    "owner": "Clockwork with Arbiter and Governor review",
-    "proposed_change": "Implement the authorized E1-E3 deterministic execution foundation: typed request and receipt contracts, an optional post-gate execution engine attachment, strict receipt validation, and an explicit MCP execution builder while preserving route-only defaults and deferring live host execution to E4-E6.",
-    "affected_surfaces": [
-      "orchestra_runtime/interfaces.py",
-      "orchestra_runtime/specialist_execution.py",
-      "orchestra_runtime/mcp_specialist_execution.py",
-      "machine/schemas/specialist-execution-request.v1.schema.json",
-      "machine/schemas/specialist-execution-receipt.v1.schema.json",
-      "tests/runtime/test_specialist_execution_contract.py",
-      "tests/runtime/test_specialist_execution_edges.py",
-      "tests/runtime/test_mcp_specialist_execution.py",
-      "tests/runtime/test_mcp_specialist_execution_edges.py",
-      "docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_ARCHITECTURE.md",
-      "docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_IMPLEMENTATION_PLAN.md",
-      "docs/project/OOP_RUNTIME_ARCHITECTURE.md",
-      "docs/developer/MCP_STDIO_TRANSPORT.md",
-      "README.json",
-      "CHANGELOG.md"
-    ],
-    "authority_reference": "maintainer-chat-blanket-authorization-2026-08-29-e1-e3"
+    "owner":"Clockwork with Arbiter and Governor review",
+    "proposed_change":"Implement the authorized E1-E3 deterministic execution foundation: typed request and receipt contracts, an optional post-gate execution engine attachment, strict receipt validation, and an explicit MCP execution builder while preserving route-only defaults and deferring live host execution to E4-E6.",
+    "affected_surfaces":["orchestra_runtime/interfaces.py","orchestra_runtime/specialist_execution.py","orchestra_runtime/mcp_specialist_execution.py","machine/schemas/specialist-execution-request.v1.schema.json","machine/schemas/specialist-execution-receipt.v1.schema.json","tests/runtime/test_specialist_execution_contract.py","tests/runtime/test_specialist_execution_edges.py","tests/runtime/test_mcp_specialist_execution.py","tests/runtime/test_mcp_specialist_execution_edges.py","docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_ARCHITECTURE.md","docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_IMPLEMENTATION_PLAN.md","docs/project/OOP_RUNTIME_ARCHITECTURE.md","docs/developer/MCP_STDIO_TRANSPORT.md","README.json","CHANGELOG.md"],
+    "authority_reference":"maintainer-chat-blanket-authorization-2026-08-29-e1-e3"
   },
   "source_identity": {
-    "repository": "Baelfyre/Orchestra",
-    "base_sha": "31d4bb31c6f839d6bee6a788f8cf77d4d5367af3",
-    "base_tree": "af4bb0df8afb85c84675c040551b1ed06b734767",
-    "policy_refs": [
-      "docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md",
-      "docs/governance/FEATURE_ADMISSION_POLICY.md",
-      "docs/governance/CANDIDATE_MATURITY_FEATURE_FREEZE.md"
-    ]
+    "repository":"Baelfyre/Orchestra",
+    "base_sha":"31d4bb31c6f839d6bee6a788f8cf77d4d5367af3",
+    "base_tree":"af4bb0df8afb85c84675c040551b1ed06b734767",
+    "policy_refs":["docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md","docs/governance/FEATURE_ADMISSION_POLICY.md","docs/governance/CANDIDATE_MATURITY_FEATURE_FREEZE.md"]
   },
   "authority": {
-    "record_grants_authority": false,
-    "admission_grants_implementation_authority": false,
-    "admission_grants_merge_authority": false,
-    "promotion_grants_merge_authority": false,
-    "promotion_grants_release_authority": false,
-    "promotion_grants_deployment_authority": false,
-    "promotion_grants_policy_activation": false,
-    "promotion_grants_destructive_authority": false
+    "record_grants_authority":false,
+    "admission_grants_implementation_authority":false,
+    "admission_grants_merge_authority":false,
+    "promotion_grants_merge_authority":false,
+    "promotion_grants_release_authority":false,
+    "promotion_grants_deployment_authority":false,
+    "promotion_grants_policy_activation":false,
+    "promotion_grants_destructive_authority":false
   },
-  "admission": {
-    "disposition": "ADMIT",
-    "rationale": "The route-only boundary is directly evidenced and the maintainer separately granted blanket authorization for the bounded E1-E3 deterministic foundation. Admission and that implementation authorization do not authorize live E4-E6 host/model execution or any protected release, deployment, policy, destructive, or integration-refresh action.",
-    "decision_owner": "Baelfyre maintainer"
-  },
+  "admission":{"disposition":"ADMIT","rationale":"The route-only boundary is directly evidenced and the maintainer separately granted blanket authorization for the bounded E1-E3 deterministic foundation. Admission and that implementation authorization do not authorize live E4-E6 host/model execution or any protected release, deployment, policy, destructive, or integration-refresh action.","decision_owner":"Baelfyre maintainer"},
   "promotion": {
-    "status": "PENDING",
-    "disposition": null,
-    "rationale": "Promotion requires implementation evidence, adversarial validation, and at least one bounded installed-host substantive execution proof.",
-    "evidence_refs": [],
-    "decision_owner": null
+    "status":"DECIDED",
+    "disposition":"ADOPT_OPTIONAL",
+    "rationale":"E7 adopts specialist runtime-host execution as an optional bounded capability after deterministic, adversarial, installed-host, repeatability, canonical-alignment, and post-merge validation. Eight substantive live Codex trials passed across the E5 read-only Scribe and E6 isolated single-file Ponytail fixtures with zero observed boundary violations, identity mismatches, or out-of-scope mutations. The decision preserves route-only behavior as the default, keeps default runtime mutation disabled, and does not claim all hosts, all models, generic mutation behavior, or MCP mutation E2E.",
+    "evidence_refs":["docs/validation/SPECIALIST_RUNTIME_HOST_EXECUTION_PRE_E7_EFFECTIVENESS_2026_08_29.md","docs/validation/SPECIALIST_RUNTIME_HOST_EXECUTION_E7_PROMOTION_DECISION_2026_08_30.md","https://github.com/Baelfyre/Orchestra/pull/638","canonical:fbcacf3c7c48c4471fde220954a8515d2c3decf0"],
+    "decision_owner":"Baelfyre maintainer"
   }
 }
