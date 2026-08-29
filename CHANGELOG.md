@@ -2,6 +2,13 @@
 
 This root changelog is release-oriented. Detailed pre-v1.7 development chronology remains preserved byte-for-byte in [the historical changelog archive](docs/history/CHANGELOG_PRE_V1_7.md), Git history, merged pull requests, decision records, and validation evidence.
 
+## Post-v1.7 Codex user-selected model configuration candidate
+
+- Added a pre-E7 trusted configuration boundary that requires an explicit non-empty Codex model identifier instead of treating the Sol model used by E5/E6 verification as a permanent runtime default.
+- Added focused runtime tests proving the selected model and optional reasoning effort are carried into the existing bounded read-only and mutation-assessment configurations without widening approval, sandbox, network, write-scope, specialist, or command controls.
+- Preserved the historical E5/E6 `gpt-5.6-sol` proof identity unchanged for reproducibility. Historical tested-model identity is evidence only and does not define Orchestra's runtime default.
+- This candidate does not decide E7 promotion, enable default runtime mutation, claim MCP mutation E2E, merge canonically, publish a release, deploy, activate policy, refresh integrations, or authorize destructive operations.
+
 ## Post-v1.7 Codex host bridge E5 candidate
 
 - Added an internal, experimental Codex App Server bridge candidate behind the existing `ISpecialistExecutionEngine` boundary for the bounded E5 `review-docs` to Scribe proof. The default runtime and default MCP builders remain route-only.
@@ -37,7 +44,6 @@ This root changelog is release-oriented. Detailed pre-v1.7 development chronolog
 - Added a focused Codex discovery compatibility regression test and synchronized the detailed MCP transport documentation plus `README.json` machine parity.
 - Codex hosts still require the `mcp_2026_07_28` feature and `CODEX_MCP_PROTOCOL_VERSION=2026-07-28` stdio-server marker; this repository change does not itself establish a successful installed-host connection.
 - The fix preserves required MCP `_meta` validation and the modern stateless lifecycle. It does not add the retired `initialize` lifecycle, expand tool or runtime authority, publish a release, deploy, activate policy, refresh installed integrations, or authorize protected operations.
-
 ## Post-v1.7 O7.7 trusted Registry joint conformance
 
 - Added an executable cross-repository O7.7 conformance gate against immutable `registry-v0.4.0`, exact release source `488c979b37dd84d8645fd8e6c288d297375c4e5b`, release-manifest SHA-256 `040d6576cf10e9f7e3a9a051792869541c1d33b7af3c665fad8eecb939c7baaa`, and bundle SHA-256 `e0457a75837d169d7bb8a7da14d8f4141d35a691952ff8f8978ef793e3cf92d3`.
