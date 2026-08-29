@@ -2,6 +2,13 @@
 
 This root changelog is release-oriented. Detailed pre-v1.7 development chronology remains preserved byte-for-byte in [the historical changelog archive](docs/history/CHANGELOG_PRE_V1_7.md), Git history, merged pull requests, decision records, and validation evidence.
 
+## Post-v1.7 Codex user-selected model configuration candidate
+
+- Added a pre-E7 trusted configuration boundary that requires an explicit non-empty Codex model identifier instead of treating the Sol model used by E5/E6 verification as a permanent runtime default.
+- Added focused runtime tests proving the selected model and optional reasoning effort are carried into the existing bounded read-only and mutation-assessment configurations without widening approval, sandbox, network, write-scope, specialist, or command controls.
+- Preserved the historical E5/E6 `gpt-5.6-sol` proof identity unchanged for reproducibility. Historical tested-model identity is evidence only and does not define Orchestra's runtime default.
+- This candidate does not decide E7 promotion, enable default runtime mutation, claim MCP mutation E2E, merge canonically, publish a release, deploy, activate policy, refresh integrations, or authorize destructive operations.
+
 ## Post-v1.7 Codex host bridge E5 candidate
 
 - Added an internal, experimental Codex App Server bridge candidate behind the existing `ISpecialistExecutionEngine` boundary for the bounded E5 `review-docs` to Scribe proof. The default runtime and default MCP builders remain route-only.
