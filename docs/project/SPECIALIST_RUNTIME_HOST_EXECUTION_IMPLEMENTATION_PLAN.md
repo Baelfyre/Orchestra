@@ -1,6 +1,6 @@
 # Specialist Runtime-Host Execution Implementation Plan
 
-Status: `E1_E6_BOUNDED_CODEX_EFFECTIVENESS_VERIFIED_E7_PENDING`
+Status: `E1_E7_COMPLETE_ADOPT_OPTIONAL`
 
 Architecture: `docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_ARCHITECTURE.md`
 
@@ -317,24 +317,29 @@ Do not perform destructive or high-impact mutation merely to prove capability.
 
 ## 10. Stage E7 - Promotion decision
 
-Status: `PENDING`
+Status: `DECIDED_ADOPT_OPTIONAL`
 
-Promotion is not implied by E1-E6 implementation effort.
+Promotion is not implied by E1-E6 implementation effort. E7 is separately decided from the canonical pre-E7 effectiveness evidence.
 
-Possible dispositions remain:
+Disposition:
 
 ```text
-ADOPT
-ADOPT_SIMPLIFIED
 ADOPT_OPTIONAL
-REPLACE_WITH_CONFIGURATION
-EXPERIMENT_ONLY
-DEFER
-REJECT_NO_MEASURABLE_VALUE
-REJECT_COMPLEXITY_EXCEEDS_BENEFIT
 ```
 
-Evaluate the original Feature Decision Record against real host evidence, security/privacy findings, host/provider coupling, reliability, maintenance burden, reversibility, and actual value over route-only plus ordinary host skills.
+Decision basis:
+
+- E5 read-only Scribe: 3/3 repeatability plus 1/1 canonical-alignment confirmation;
+- E6 isolated single-file Ponytail mutation: 3/3 repeatability plus 1/1 canonical-alignment confirmation;
+- 8/8 substantive live trials passed;
+- zero observed boundary violations, identity mismatches, and out-of-scope mutations;
+- post-merge Governance, validate/runtime, Required Analysis Compatibility, CodeQL, and Windows/macOS/Ubuntu validation passed;
+- route-only remains the default and default runtime mutation remains disabled;
+- generic MCP mutation E2E remains unclaimed.
+
+Decision record: `docs/validation/SPECIALIST_RUNTIME_HOST_EXECUTION_E7_PROMOTION_DECISION_2026_08_30.md`.
+
+The disposition is intentionally narrower than default adoption because the evidence remains bound to the current Codex configuration and bounded E5/E6 fixtures.
 
 ## 11. Ownership
 
@@ -382,9 +387,15 @@ SUBSTANTIVE_SPECIALIST_EXECUTION_E2E = VERIFIED_FOR_CURRENT_CODEX_CONFIGURATION_
 CODEX_MUTATION_BRIDGE_E2E = VERIFIED_FOR_EXACT_BOUNDED_E6_FIXTURE
 LIVE_MODEL_CALLS_E1_E3 = 0
 PROVIDER_CALLS_E1_E3 = 0
-PRE_E7_EFFECTIVENESS_REVALIDATION = PASS
-PROMOTION = PENDING
+PRE_E7_EFFECTIVENESS_REVALIDATION = PASS_CANONICALLY_REALIGNED
+E7_PROMOTION = ADOPT_OPTIONAL
+SPECIALIST_RUNTIME_HOST_EXECUTION = SUPPORTED_OPTIONAL
+PROMOTION = DECIDED_ADOPT_OPTIONAL
 E4_E6 = SEPARATELY_AUTHORIZED_FOR_CODEX_CLI_EXECUTION
 ```
+
+E7 completes the currently defined Specialist Runtime-Host Execution track. No post-E7 productization, multi-host, model-discovery, isolation-expansion, generic mutation, or MCP mutation campaign is implied or authorized by this decision.
+
+Any newly identified implementation gap beyond this track must be presented to the maintainer first with its purpose, risk of deferral, and required-versus-optional classification.
 
 Release publication, production deployment, policy activation, ruleset mutation, automatic installed-integration refresh, destructive cleanup, branch deletion, force push, and history rewrite remain outside this authorization.
