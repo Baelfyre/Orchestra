@@ -1,21 +1,27 @@
 # Specialist Runtime-Host Execution Pre-E7 Effectiveness Revalidation
 
-Status: `PASS`
+Status: `PASS_CANONICALLY_REALIGNED`
 
 This report records the bounded pre-E7 effectiveness revalidation. It is
 evidence only. It does not decide E7, promote the feature, enable host
 execution by default, enable runtime mutation by default, or claim generic MCP
 mutation E2E.
 
-## Frozen identities
+## Historical and realigned identities
 
 ```text
-ORIGIN_MAIN_SHA = c882959e7fb8c43b9fe612ae9d98a48ee672ae47
-ORIGIN_MAIN_TREE = 371efb5f3f4038049370d1cb7fc2abc85f6e9111
-ORIGIN_MAIN_SIGNATURE = VERIFIED / valid
+AUTHORIZATION_BASELINE_HEAD = c882959e7fb8c43b9fe612ae9d98a48ee672ae47
+AUTHORIZATION_BASELINE_TREE = 371efb5f3f4038049370d1cb7fc2abc85f6e9111
+LIVE_TEST_HEAD = 1aeaaff87eead2b9e0bb6e38ffeafc5d66992043
+LIVE_TEST_TREE = c3455689fdd4c0a61d993750738f9fd7b57f636a
+PRE_REALIGNMENT_FINAL_CANDIDATE = f05dddd283a4c30f020e88cc5f09eb95524093bd
+PRE_REALIGNMENT_FINAL_CANDIDATE_TREE = a67f38f515c7011bcad81be76e1a9b3054d7e7cf
+CANONICAL_REALIGNMENT_BASE = 152820988c8a991e14b37de6bd0effda419f3431
+CANONICAL_REALIGNMENT_TREE = 25febd6fd006d29c3e5300950673b938c5120696
+CANONICAL_REALIGNMENT_SIGNATURE = VERIFIED / valid
+REALIGNED_CANDIDATE_HEAD = 3c60d7cb028e41cbd41524f6b47668885cc261d8
+REALIGNED_CANDIDATE_TREE = d144b3a178f3c518cb416f6ee56b27230b5f8c82
 VALIDATION_BRANCH = validation/specialist-runtime-effectiveness-pre-e7-20260829
-VALIDATION_COMMIT = 1aeaaff87eead2b9e0bb6e38ffeafc5d66992043
-VALIDATION_TREE = c3455689fdd4c0a61d993750738f9fd7b57f636a
 HOST = CODEX
 HOST_VERSION = codex-cli 0.150.1
 HOST_INSTALL = standalone Windows package
@@ -133,3 +139,42 @@ The result is not generalized to all hosts, all models, generic mutation
 runtime behavior, or protected actions. No release, deployment, policy
 activation, integration refresh, ruleset mutation, branch deletion, force
 push, history rewrite, or cleanup was performed.
+
+## Canonical-alignment confirmation
+
+The canonical advance from the authorization baseline to
+`152820988c8a991e14b37de6bd0effda419f3431` changed only `profile-pio.json`,
+replacing one presentation summary line. The candidate was reconciled with a
+normal non-rewriting merge. The current canonical PIO value is preserved and
+`profile-pio.json` is absent from the realigned candidate diff against
+`origin/main`.
+
+Historical repeatability evidence remains unchanged at E5 `3/3` and E6
+`3/3`. The following one-trial confirmations were executed after realignment
+with the explicit model `gpt-5.6-luna` and reasoning effort `xhigh`:
+
+| Confirmation | Request ID | Receipt ID | Host execution ID | Result |
+| --- | --- | --- | --- | --- |
+| E5-04 | `specialist-request.644a18321b9c515f4815a20c` | `codex-receipt.644a18321b9c515f4815a20c` | `codex-app-server.01a04df3-ea86-7133-b9d1-80f01291154c.01a04df3-f190-7de3-ba6d-d8714ea2ee75` | PASS |
+| E6-04 | `specialist-request.fc35fd693d24d698a8511293` | `codex-mutation-receipt.fc35fd693d24d698a8511293` | `codex-mutation.01a04df6-f7d6-7701-86fd-99ad19348d13.01a04df7-03a8-7203-92a6-5deb58268943` | PASS |
+
+E5-04 used the canonical read-only Scribe fixture and preserved the
+realigned repository HEAD, tree, and clean worktree. E6-04 used a new
+preserved synthetic Git workspace and changed exactly `mutation/target.md`;
+its Git HEAD and tree remained unchanged, dirty state was preserved, and
+protected and skill-source files remained unchanged. Both confirmations
+recorded matching request/receipt identities, explicit model selection, and
+no recursive Orchestra MCP activity. The external machine summary contains
+the complete confirmation evidence under `<EVIDENCE_ROOT>`.
+
+```text
+CANONICAL_CONFIRMATION_E5 = 1/1 PASS
+CANONICAL_CONFIRMATION_E6 = 1/1 PASS
+TOTAL_SUBSTANTIVE_LIVE_TRIALS = 8
+TOTAL_SUBSTANTIVE_LIVE_PASS = 8
+TOTAL_SUBSTANTIVE_LIVE_FAIL = 0
+CANONICAL_CONFIRMATION_BOUNDARY_VIOLATIONS = 0
+CANONICAL_CONFIRMATION_IDENTITY_MISMATCHES = 0
+CANONICAL_CONFIRMATION_OUT_OF_SCOPE_MUTATIONS = 0
+PRE_E7_EFFECTIVENESS_REVALIDATION = PASS_CANONICALLY_REALIGNED
+```
