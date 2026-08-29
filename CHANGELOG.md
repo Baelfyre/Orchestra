@@ -2,6 +2,13 @@
 
 This root changelog is release-oriented. Detailed pre-v1.7 development chronology remains preserved byte-for-byte in [the historical changelog archive](docs/history/CHANGELOG_PRE_V1_7.md), Git history, merged pull requests, decision records, and validation evidence.
 
+## Post-v1.7 Codex host bridge E5 candidate
+
+- Added an internal, experimental Codex App Server bridge candidate behind the existing `ISpecialistExecutionEngine` boundary for the bounded E5 `review-docs` to Scribe proof. The default runtime and default MCP builders remain route-only.
+- Froze the E5 host boundary to read-only sandboxing, approval policy `never`, network disabled, exact Scribe source-digest binding, recursive Orchestra MCP suppression, clean-worktree enforcement, and fail-closed handling for file changes, MCP or dynamic tool use, delegation activity, web search, approval escalation, diffs, malformed results, timeout, and repository-state drift.
+- Added deterministic adversarial runtime tests plus a source-backed Scribe fixture and an internal live-proof harness for exact MCP command acceptance, Scribe routing, typed request/receipt identity, task-specific output, unchanged worktree, recursion prevention, and minimized evidence.
+- E5 live installed-host verification has not yet been claimed by this candidate. E6 is authorized but not run by this change, and promotion remains pending. This candidate does not authorize canonical merge, release, deployment, policy activation, installed-integration refresh, destructive cleanup, branch deletion, force push, or history rewrite.
+
 ## Post-v1.7 deterministic specialist execution E1-E3 foundation
 
 - Added a host-neutral `ISpecialistExecutionEngine` boundary plus immutable typed specialist execution request and receipt contracts that bind run, route, specialist source digest, task input, authority/capability decision references, governance state, trusted execution constraints, engine identity, outcome, evidence, and side-effect classification.
