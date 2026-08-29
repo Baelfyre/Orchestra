@@ -1,6 +1,6 @@
 # Specialist Runtime-Host Execution Architecture
 
-Status: `E1_E3_DETERMINISTIC_FOUNDATION_IMPLEMENTED_HOST_BRIDGE_PENDING`
+Status: `E1_E6_BOUNDED_CODEX_VALIDATED_E7_PENDING`
 
 Canonical design baseline:
 
@@ -327,11 +327,11 @@ FAILURE_REPRESENTABLE
 TIMEOUT_REPRESENTABLE
 ```
 
-Until E4-E5 prove otherwise:
+The bounded pre-E7 validation result is:
 
 ```text
-CODEX_HOST_BRIDGE = NOT_IMPLEMENTED
-CODEX_SPECIALIST_EXECUTION_E2E = NOT_VERIFIED
+CODEX_HOST_BRIDGE = VERIFIED_FOR_CODEX_APP_SERVER
+CODEX_SPECIALIST_EXECUTION_E2E = VERIFIED_FOR_CURRENT_CODEX_CONFIGURATION_AND_BOUNDED_FIXTURES
 ```
 
 ## 11. E5 first live proof
@@ -434,8 +434,9 @@ MCP_ROUTING_E2E = VERIFIED
 SPECIALIST_SELECTION = VERIFIED
 DETERMINISTIC_ENGINE_E2E = VERIFIED
 MCP_DETERMINISTIC_ENGINE_E2E = VERIFIED
-HOST_BRIDGE_E2E = NOT_VERIFIED
-SUBSTANTIVE_SPECIALIST_EXECUTION_E2E = NOT_CLAIMED
+HOST_BRIDGE_E2E = VERIFIED_FOR_CODEX_READ_ONLY_SCRIBE_AND_BOUNDED_MUTATION_ASSESSMENT
+SUBSTANTIVE_SPECIALIST_EXECUTION_E2E = VERIFIED_FOR_CURRENT_CODEX_CONFIGURATION_AND_BOUNDED_E5_FIXTURE
+CODEX_MUTATION_BRIDGE_E2E = VERIFIED_FOR_EXACT_BOUNDED_E6_FIXTURE
 ```
 
 ## 16. Compatibility and authority boundary
@@ -448,7 +449,11 @@ SUBSTANTIVE_SPECIALIST_EXECUTION_E2E = NOT_CLAIMED
 - No installed integration is refreshed automatically.
 - No direct provider SDK or MCP Sampling dependency is introduced.
 
-E1-E3 performed zero live model/provider calls.
+E1-E3 performed zero live model/provider calls. The pre-E7 revalidation performed
+three bounded E5 and three bounded E6 host trials using Codex CLI 0.150.1,
+model `gpt-5.6-luna`, and explicit validation-input model selection. Exact
+trial evidence is recorded in
+`docs/validation/SPECIALIST_RUNTIME_HOST_EXECUTION_PRE_E7_EFFECTIVENESS_2026_08_29.md`.
 
 E4-E6 are separately authorized for bounded execution through Codex CLI, subject to the frozen blockers and exclusions above.
 

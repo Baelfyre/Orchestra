@@ -6,7 +6,7 @@
 
 ## Purpose
 
-The E5 and E6 live proofs were intentionally executed with `gpt-5.6-sol` as a frozen evidence identity. That tested model must not become Orchestra's permanent runtime model.
+Historical E5 and E6 live proofs were intentionally executed with `gpt-5.6-sol` as a frozen evidence identity. That tested model must not become Orchestra's permanent runtime model. The pre-E7 effectiveness entrypoints now require an explicit `--model` input and do not infer that historical model.
 
 The supported model-selection rule for any later promoted Codex host-execution surface is:
 
@@ -33,12 +33,13 @@ The configuration builders intentionally have no GPT model default. A future UI 
 
 ## Historical evidence boundary
 
-The existing E5/E6 proof implementations retain their `gpt-5.6-sol` pin because those files describe and reproduce the exact historical verification environment.
+Historical evidence retains its `gpt-5.6-sol` identity because it describes and reproduces the exact prior verification environment. New effectiveness validation records the explicit model supplied to each entrypoint.
 
 ```text
 E5_TESTED_MODEL = gpt-5.6-sol
 E6_TESTED_MODEL = gpt-5.6-sol
 HISTORICAL_TEST_MODEL != ORCHESTRA_RUNTIME_DEFAULT
+PRE_E7_MODEL_SELECTION_SOURCE = EXPLICIT_VALIDATION_INPUT
 ```
 
 Changing the historical proof identity would weaken reproducibility and would incorrectly rewrite already-collected evidence.

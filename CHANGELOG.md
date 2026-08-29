@@ -2,6 +2,12 @@
 
 This root changelog is release-oriented. Detailed pre-v1.7 development chronology remains preserved byte-for-byte in [the historical changelog archive](docs/history/CHANGELOG_PRE_V1_7.md), Git history, merged pull requests, decision records, and validation evidence.
 
+## Post-v1.7 Specialist Runtime-Host Pre-E7 Effectiveness Revalidation
+
+- Corrected the E5 replay harness to validate current Git HEAD/tree and clean-worktree identity without coupling replay to a historical branch name, and required explicit model selection for new E5/E6 validation entrypoints.
+- Revalidated the bounded Codex App Server bridge with three independent read-only E5 Scribe trials and three independent isolated E6 Ponytail mutation trials on the current validation candidate. All six trials passed with zero identity, authority, capability, governance, network, process, delegation, or out-of-scope mutation violations.
+- Recorded the exact bounded evidence and preserved route-only defaults, disabled default runtime mutation, unclaimed MCP mutation E2E, `E7 = PENDING`, and `PROMOTION = PENDING`.
+
 ## Post-v1.7 Codex user-selected model configuration candidate
 
 - Added a pre-E7 trusted configuration boundary that requires an explicit non-empty Codex model identifier instead of treating the Sol model used by E5/E6 verification as a permanent runtime default.
