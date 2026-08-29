@@ -1,7 +1,7 @@
 # Specialist Runtime Host Model Selection
 
-**Status:** PRE-E7 REVIEW CANDIDATE  
-**Scope:** Codex host model selection only  
+**Status:** PRE-E7 REVIEW CANDIDATE
+**Scope:** Codex host model selection only
 **Authority:** No E7 promotion, merge, release, deployment, policy activation, or default-runtime mutation authority is created by this document.
 
 ## Purpose
