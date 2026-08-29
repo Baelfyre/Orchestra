@@ -140,10 +140,15 @@
     "decision_owner": "Baelfyre maintainer"
   },
   "promotion": {
-    "status": "PENDING",
-    "disposition": null,
-    "rationale": "Promotion requires implementation evidence, adversarial validation, and at least one bounded installed-host substantive execution proof.",
-    "evidence_refs": [],
-    "decision_owner": null
+    "status": "DECIDED",
+    "disposition": "ADOPT_OPTIONAL",
+    "rationale": "E7 adopts specialist runtime-host execution as an optional bounded capability after deterministic, adversarial, installed-host, repeatability, canonical-alignment, and post-merge validation. Eight substantive live Codex trials passed across the E5 read-only Scribe and E6 isolated single-file Ponytail fixtures with zero observed boundary violations, identity mismatches, or out-of-scope mutations. The decision preserves route-only behavior as the default, keeps default runtime mutation disabled, and does not claim all hosts, all models, generic mutation behavior, or MCP mutation E2E.",
+    "evidence_refs": [
+      "docs/validation/SPECIALIST_RUNTIME_HOST_EXECUTION_PRE_E7_EFFECTIVENESS_2026_08_29.md",
+      "docs/validation/SPECIALIST_RUNTIME_HOST_EXECUTION_E7_PROMOTION_DECISION_2026_08_30.md",
+      "https://github.com/Baelfyre/Orchestra/pull/638",
+      "canonical:fbcacf3c7c48c4471fde220954a8515d2c3decf0"
+    ],
+    "decision_owner": "Baelfyre maintainer"
   }
 }
