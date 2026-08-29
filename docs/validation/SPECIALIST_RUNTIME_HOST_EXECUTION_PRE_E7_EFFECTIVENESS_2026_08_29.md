@@ -51,8 +51,10 @@ NATIVE_STRUCTURE_MANIFEST_STALE_REFERENCE_CODEX_EXPORT_GUARDRAIL_ROUTER_PLUGIN =
 PROMPT_LOAD = PASS_WITH_ADVISORY_SOFT_LIMIT_EXCEEDANCES
 ```
 
-No remote CI workflow was triggered. CI workflow run IDs are therefore
-`NOT_RUN_NO_PUSH_OR_PULL_REQUEST`.
+Remote qualification was run for this candidate through PR #638. The exact
+workflow and job run IDs are retained in the external machine summary and in
+the PR check history; this report does not treat CI success as E7 promotion
+or release authority.
 
 ## Live E5 trials
 
