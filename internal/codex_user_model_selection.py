@@ -7,6 +7,7 @@ from internal.codex_app_server_mutation_assessment import CodexMutationAssessmen
 
 
 MODEL_SELECTION_SOURCE = "USER_CONFIG"
+VALIDATION_MODEL_SELECTION_SOURCE = "EXPLICIT_VALIDATION_INPUT"
 
 
 @dataclass(frozen=True, slots=True)

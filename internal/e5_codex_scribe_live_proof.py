@@ -5,6 +5,7 @@ import argparse
 from hashlib import sha256
 import json
 from pathlib import Path
+import re
 import subprocess
 import sys
 from typing import Any
@@ -14,8 +15,13 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from internal.codex_app_server_bridge import (  # noqa: E402
-    CodexAppServerConfig,
     CodexAppServerExecutionEngine,
+)
+from internal.codex_user_model_selection import (  # noqa: E402
+    MODEL_SELECTION_SOURCE,
+    VALIDATION_MODEL_SELECTION_SOURCE,
+    CodexUserModelSelection,
+    build_read_only_config,
 )
 from orchestra_runtime.mcp_specialist_execution import (  # noqa: E402
     build_mcp_stdio_transport_with_specialist_execution,
@@ -32,9 +38,13 @@ from orchestra_runtime.specialist_execution import (  # noqa: E402
 )
 
 
-EXPECTED_BRANCH = "feat/specialist-runtime-host-execution-e5-e6-20260829"
 FIXTURE_PATH = Path("tests/fixtures/specialist_execution/e5_scribe_read_only.md")
-TASK_MARKERS = ("E5-SCRIBE-20260829", "ALDER-47", "REVISION_DECLARED", "REVISION_FOOTER")
+TASK_MARKERS = (
+    "E5-SCRIBE-20260829",
+    "ALDER-47",
+    "REVISION_DECLARED=3",
+    "REVISION_FOOTER=4",
+)
 EVIDENCE_SCHEMA = "orchestra.e5.codex-read-only-scribe-proof.v1"
 
 
@@ -73,6 +83,28 @@ def _snapshot() -> dict[str, Any]:
         "clean": not bool(status.strip()),
         "status_sha256": sha256(status.encode("utf-8")).hexdigest(),
     }
+
+
+def _validate_before_snapshot(snapshot: dict[str, Any]) -> None:
+    if not snapshot.get("head"):
+        raise E5ProofError("E5 could not capture the repository HEAD")
+    if not snapshot.get("tree"):
+        raise E5ProofError("E5 could not capture the repository tree")
+    if not snapshot.get("clean"):
+        raise E5ProofError("E5 requires a clean worktree")
+
+
+def _validate_after_snapshot(
+    before: dict[str, Any], after: dict[str, Any]
+) -> None:
+    if not after.get("clean"):
+        raise E5ProofError("E5 read-only proof left the worktree dirty")
+    if after.get("head") != before.get("head"):
+        raise E5ProofError("repository HEAD changed during E5 read-only proof")
+    if after.get("tree") != before.get("tree"):
+        raise E5ProofError("repository tree changed during E5 read-only proof")
+    if after != before:
+        raise E5ProofError("repository state changed during E5 read-only proof")
 
 
 def _stable_digest(value: Any) -> str:
@@ -121,23 +153,20 @@ def _validate_output(text: str) -> dict[str, Any]:
         raise E5ProofError("specialist output must be a JSON object")
     if parsed.get("non_mutating") is not True:
         raise E5ProofError("specialist output did not preserve the non-mutating assertion")
-    haystack = json.dumps(parsed, sort_keys=True)
+    haystack = re.sub(r"\s*=\s*", "=", json.dumps(parsed, sort_keys=True))
     for marker in TASK_MARKERS:
         if marker not in haystack:
             raise E5ProofError(f"task-specific marker was missing from specialist output: {marker}")
-    if "3" not in haystack or "4" not in haystack:
-        raise E5ProofError("revision values 3 and 4 were not both present in specialist output")
     return parsed
 
 
 def run(model: str, reasoning_effort: str | None, evidence_root: Path) -> dict[str, Any]:
+    selection = CodexUserModelSelection(
+        model=model,
+        reasoning_effort=reasoning_effort,
+    )
     before = _snapshot()
-    if before["branch"] != EXPECTED_BRANCH:
-        raise E5ProofError(
-            f"wrong branch: expected={EXPECTED_BRANCH} actual={before['branch'] or '<detached>'}"
-        )
-    if not before["clean"]:
-        raise E5ProofError("E5 requires a clean worktree")
+    _validate_before_snapshot(before)
 
     fixture = ROOT / FIXTURE_PATH
     if not fixture.is_file():
@@ -149,9 +178,8 @@ def run(model: str, reasoning_effort: str | None, evidence_root: Path) -> dict[s
     def engine_factory() -> CodexAppServerExecutionEngine:
         engine = CodexAppServerExecutionEngine(
             ROOT,
-            config=CodexAppServerConfig(
-                model=model,
-                reasoning_effort=reasoning_effort,
+            config=build_read_only_config(
+                selection,
                 turn_timeout_seconds=240,
             ),
         )
@@ -207,8 +235,7 @@ def run(model: str, reasoning_effort: str | None, evidence_root: Path) -> dict[s
         raise E5ProofError("Codex host command did not freeze approval policy")
 
     after = _snapshot()
-    if after != before:
-        raise E5ProofError("repository state changed during E5 read-only proof")
+    _validate_after_snapshot(before, after)
 
     evidence = {
         "schema_version": EVIDENCE_SCHEMA,
@@ -219,10 +246,24 @@ def run(model: str, reasoning_effort: str | None, evidence_root: Path) -> dict[s
             "specialist": "scribe",
             "mode": "READ_ONLY",
             "mutation_allowed": False,
-            "model": model,
-            "reasoning_effort": reasoning_effort,
+            "model": selection.model,
+            "reasoning_effort": selection.reasoning_effort,
+            "model_selection_source": VALIDATION_MODEL_SELECTION_SOURCE,
+            "model_configuration_source": MODEL_SELECTION_SOURCE,
         },
-        "repository": before,
+        "repository": {
+            **before,
+            "after": after,
+        },
+        "repository_checks": {
+            "HEAD_CAPTURED": bool(before["head"]),
+            "TREE_CAPTURED": bool(before["tree"]),
+            "WORKTREE_CLEAN_BEFORE": before["clean"],
+            "WORKTREE_CLEAN_AFTER": after["clean"],
+            "HEAD_UNCHANGED_AFTER": after["head"] == before["head"],
+            "TREE_UNCHANGED_AFTER": after["tree"] == before["tree"],
+            "WORKTREE_UNCHANGED_AFTER": after == before,
+        },
         "fixture": {
             "path": FIXTURE_PATH.as_posix(),
             "sha256": fixture_digest,
@@ -288,6 +329,10 @@ def run(model: str, reasoning_effort: str | None, evidence_root: Path) -> dict[s
 
     evidence_root.mkdir(parents=True, exist_ok=True)
     evidence_path = evidence_root / "e5-codex-read-only-scribe-proof.v1.json"
+    if evidence_path.exists():
+        raise E5ProofError(
+            f"evidence path already exists; refusing overwrite: {evidence_path}"
+        )
     evidence_path.write_text(
         json.dumps(evidence, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
@@ -297,7 +342,7 @@ def run(model: str, reasoning_effort: str | None, evidence_root: Path) -> dict[s
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Run Orchestra E5 read-only Codex/Scribe proof")
-    parser.add_argument("--model", default="gpt-5.6-sol")
+    parser.add_argument("--model", required=True)
     parser.add_argument("--reasoning-effort", default=None)
     parser.add_argument(
         "--evidence-root",

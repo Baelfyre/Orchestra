@@ -16,7 +16,12 @@ if str(ROOT) not in sys.path:
 
 from internal.codex_app_server_mutation_assessment import (  # noqa: E402
     CodexAppServerMutationAssessmentEngine,
-    CodexMutationAssessmentConfig,
+)
+from internal.codex_user_model_selection import (  # noqa: E402
+    MODEL_SELECTION_SOURCE,
+    VALIDATION_MODEL_SELECTION_SOURCE,
+    CodexUserModelSelection,
+    build_mutation_assessment_config,
 )
 from orchestra_runtime.specialist_execution import (  # noqa: E402
     SpecialistExecutionConstraint,
@@ -176,15 +181,19 @@ def run(
     sandbox: Path,
     evidence_root: Path,
 ) -> dict[str, Any]:
+    selection = CodexUserModelSelection(
+        model=model,
+        reasoning_effort=reasoning_effort,
+    )
     baseline = _prepare_sandbox(sandbox)
     request = _request(sandbox)
     engine = CodexAppServerMutationAssessmentEngine(
         sandbox,
-        config=CodexMutationAssessmentConfig(
-            model=model,
-            reasoning_effort=reasoning_effort,
+        config=build_mutation_assessment_config(
+            selection,
             allowed_relative_paths=(TARGET.as_posix(),),
             writable_root=TARGET.parent.as_posix(),
+            turn_timeout_seconds=240,
         ),
     )
     receipt = engine.execute(request)
@@ -256,8 +265,10 @@ def run(
         "status": "PASS",
         "scope": {
             "host": "CODEX",
-            "model": model,
-            "reasoning_effort": reasoning_effort,
+            "model": selection.model,
+            "reasoning_effort": selection.reasoning_effort,
+            "model_selection_source": VALIDATION_MODEL_SELECTION_SOURCE,
+            "model_configuration_source": MODEL_SELECTION_SOURCE,
             "specialist": "ponytail",
             "command": "ponytail",
             "mode": "MUTATION_ASSESSMENT",
@@ -362,7 +373,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         description="Run Orchestra E6 isolated Codex/Ponytail mutation assessment"
     )
-    parser.add_argument("--model", default="gpt-5.6-sol")
+    parser.add_argument("--model", required=True)
     parser.add_argument("--reasoning-effort", default=None)
     parser.add_argument(
         "--sandbox-root",
