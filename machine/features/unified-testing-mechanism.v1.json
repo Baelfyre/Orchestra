@@ -67,10 +67,16 @@
     "decision_owner": "Human maintainer"
   },
   "promotion": {
-    "status": "PENDING",
-    "disposition": null,
-    "rationale": "Promotion requires bounded implementation evidence and controlled baseline-versus-UTM efficacy measurement.",
-    "evidence_refs": [],
-    "decision_owner": null
+    "status": "DECIDED",
+    "disposition": "ADOPT_OPTIONAL",
+    "rationale": "The bounded 15-case controlled calibration improved readiness-decision accuracy from 8/15 for the distributed-evidence proxy to 15/15 for UTM and unsafe-case detection from 4/11 to 11/11, with zero UTM false positives or false negatives in the frozen fixture corpus. Optional promotion is warranted because the core coordination benefit is established within that bounded study, while human operator time, live-host token cost, live-host latency, cross-host generalization, and exact historical-baseline equivalence remain unmeasured or intentionally unclaimed.",
+    "evidence_refs": [
+      "docs/validation/UNIFIED_TESTING_MECHANISM_EFFICACY_2026_08_30.md",
+      "docs/validation/UNIFIED_TESTING_MECHANISM_EFFICACY_INDEPENDENT_AUDIT_2026_08_30.md",
+      "docs/validation/UNIFIED_TESTING_MECHANISM_PROMOTION_DECISION_2026_08_30.md",
+      "https://github.com/Baelfyre/Orchestra/pull/648",
+      "canonical:c5601f68ba3c84272c17a16bd94e0ddeb67f83b2"
+    ],
+    "decision_owner": "Baelfyre maintainer"
   }
 }
