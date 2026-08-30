@@ -58,6 +58,22 @@
       "mcp_mutation_e2e": "NOT_CLAIMED",
       "authority_note": "E7 adopts the validated Codex host-execution path as supported optional behavior only. Route-only behavior remains default, runtime mutation is not enabled by default, model selection is not execution authority, and host capability or receipt success cannot grant implementation, merge, release, deployment, policy activation, destructive, installed-integration-refresh, or other protected-action authority."
     },
+    "vscode_multi_harness_provider_qualification_p2_2b": {
+      "status": "IMPLEMENTATION_CANDIDATE_DETERMINISTIC_QUALIFICATION_PENDING_CANONICALIZATION",
+      "purpose": "Record and classify user-controlled VS Code multi-harness provider/model observations without granting provider execution, automatic routing, or release authority.",
+      "machine_sources": ["machine/schemas/vscode-provider-observation.v1.schema.json", "machine/schemas/provider-qualification-receipt.v1.schema.json"],
+      "human_sources": ["docs/project/PRIORITY_2_VSCODE_MULTI_HARNESS_QUALIFICATION.md", "adapters/vscode/README.md", "adapters/vscode/install-guide.md"],
+      "runtime_surface": "orchestra_runtime/provider_qualification.py",
+      "validator": "scripts/qualify_vscode_provider.py",
+      "validation_surface": "tests/runtime/test_provider_qualification.py",
+      "host_id": "vscode",
+      "harnesses": ["local", "copilot", "claude", "codex"],
+      "live_provider_evidence": "USER_CONTROLLED_SEPARATE_NOT_CLAIMED_BY_DETERMINISTIC_CI",
+      "automatic_routing_authorized": false,
+      "provider_execution_authority": false,
+      "release_authorized": false,
+      "authority_note": "P2.2B records and classifies evidence only. A configured model, successful VS Code response, provider-native harness observation, deterministic CI pass, or qualification receipt cannot grant provider execution, automatic routing/fallback, merge, release, deployment, policy activation, credential mutation, installed-integration refresh, or other protected-action authority."
+    },
     "cross_specialist_coordination": {"status": "IMPLEMENTED", "human_sources": ["docs/governance/TUNER_PROTOCOL.md", "ROUTING_MAP.md"]},
     "validation_and_evidence": {"status": "IMPLEMENTED", "machine_sources": ["machine/schemas/", "machine/release-evidence/"], "human_sources": ["docs/setup/VALIDATION.md", "docs/validation/"]},
     "unified_testing_mechanism_t0_t9": {
