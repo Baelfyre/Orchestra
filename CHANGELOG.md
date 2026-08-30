@@ -1,5 +1,11 @@
 # Changelog
 
+## Post-v1.7 Unified Testing Mechanism Efficacy Calibration
+
+- Added a deterministic offline 15-case baseline-versus-UTM efficacy calibration, machine-readable result, qualification record, focused regression tests, and independent read-only audit for the canonical experimental UTM candidate.
+- The bounded calibration improved readiness-decision accuracy from 8/15 for the distributed-evidence proxy to 15/15 for UTM and unsafe-case detection from 4/11 to 11/11, with zero UTM false positives or false negatives in the frozen fixture corpus; all preregistered thresholds passed.
+- The evidence recommendation is `ADOPT_OPTIONAL`, not mandatory/default adoption. Human operator time, live-host token cost, and live-host latency remain unmeasured; zero model/provider calls were performed, runtime integration remains disabled, and efficacy evidence grants no protected-action authority.
+
 ## Post-v1.7 Unified Testing Mechanism Experimental Candidate
 
 - Added an `EXPERIMENT_ONLY` T0-T9 applicability and revision-bound evidence aggregation candidate that reuses existing specialist and CI validation surfaces rather than creating a second QA engine.

@@ -1,0 +1,86 @@
+{
+  "accuracy_gain_over_baseline": 0.4667,
+  "all_preregistered_thresholds_passed": true,
+  "baseline_metrics": {
+    "decision_accuracy": {"count": 8, "rate": 0.5333, "total": 15},
+    "false_negatives": {"count": 7, "rate": 0.6364, "total": 11},
+    "false_positives": {"count": 0, "rate": 0.0, "total": 4},
+    "missing_evidence_detection": {"count": 0, "rate": 0.0, "total": 2},
+    "risk_detection": {"count": 4, "rate": 0.3636, "total": 11},
+    "structural_violation_detection": {"count": 2, "rate": 0.2857, "total": 7}
+  },
+  "case_count": 15,
+  "case_results": [
+    {"baseline_complete": true, "baseline_correct": true, "baseline_disposition": "READINESS_EVIDENCE_COMPLETE", "case_id": "C01_DOCS_CLEAN", "category": "CLEAN", "expected_complete": true, "utm_authority_clear": true, "utm_complete": true, "utm_correct": true, "utm_disposition": "READINESS_EVIDENCE_COMPLETE"},
+    {"baseline_complete": true, "baseline_correct": true, "baseline_disposition": "READINESS_EVIDENCE_COMPLETE", "case_id": "C02_RUNTIME_CLEAN", "category": "CLEAN", "expected_complete": true, "utm_authority_clear": true, "utm_complete": true, "utm_correct": true, "utm_disposition": "READINESS_EVIDENCE_COMPLETE"},
+    {"baseline_complete": true, "baseline_correct": true, "baseline_disposition": "READINESS_EVIDENCE_COMPLETE", "case_id": "C03_SECURITY_CLEAN", "category": "CLEAN", "expected_complete": true, "utm_authority_clear": true, "utm_complete": true, "utm_correct": true, "utm_disposition": "READINESS_EVIDENCE_COMPLETE"},
+    {"baseline_complete": true, "baseline_correct": true, "baseline_disposition": "READINESS_EVIDENCE_COMPLETE", "case_id": "C04_UI_CLEAN", "category": "CLEAN", "expected_complete": true, "utm_authority_clear": true, "utm_complete": true, "utm_correct": true, "utm_disposition": "READINESS_EVIDENCE_COMPLETE"},
+    {"baseline_complete": true, "baseline_correct": false, "baseline_disposition": "READINESS_EVIDENCE_COMPLETE", "case_id": "C05_MISSING_SECURITY", "category": "EVIDENCE_COMPLETENESS", "expected_complete": false, "utm_authority_clear": true, "utm_complete": false, "utm_correct": true, "utm_disposition": "WAIT_FOR_EVIDENCE"},
+    {"baseline_complete": true, "baseline_correct": false, "baseline_disposition": "READINESS_EVIDENCE_COMPLETE", "case_id": "C06_MISSING_REGRESSION", "category": "EVIDENCE_COMPLETENESS", "expected_complete": false, "utm_authority_clear": true, "utm_complete": false, "utm_correct": true, "utm_disposition": "WAIT_FOR_EVIDENCE"},
+    {"baseline_complete": false, "baseline_correct": true, "baseline_disposition": "BLOCKED", "case_id": "C07_FUNCTIONAL_FAIL", "category": "RISK_SIGNAL", "expected_complete": false, "utm_authority_clear": true, "utm_complete": false, "utm_correct": true, "utm_disposition": "BLOCKED"},
+    {"baseline_complete": false, "baseline_correct": true, "baseline_disposition": "WAIT_FOR_EVIDENCE", "case_id": "C08_SECURITY_PENDING", "category": "RISK_SIGNAL", "expected_complete": false, "utm_authority_clear": true, "utm_complete": false, "utm_correct": true, "utm_disposition": "WAIT_FOR_EVIDENCE"},
+    {"baseline_complete": false, "baseline_correct": true, "baseline_disposition": "INVALID_EVIDENCE", "case_id": "C09_STALE_REGRESSION", "category": "STRUCTURAL_INTEGRITY", "expected_complete": false, "utm_authority_clear": true, "utm_complete": false, "utm_correct": true, "utm_disposition": "INVALID_PACKET"},
+    {"baseline_complete": true, "baseline_correct": false, "baseline_disposition": "READINESS_EVIDENCE_COMPLETE", "case_id": "C10_DUPLICATE_EVIDENCE", "category": "STRUCTURAL_INTEGRITY", "expected_complete": false, "utm_authority_clear": true, "utm_complete": false, "utm_correct": true, "utm_disposition": "INVALID_PACKET"},
+    {"baseline_complete": true, "baseline_correct": false, "baseline_disposition": "READINESS_EVIDENCE_COMPLETE", "case_id": "C11_EVIDENCE_FOR_NA", "category": "STRUCTURAL_INTEGRITY", "expected_complete": false, "utm_authority_clear": true, "utm_complete": false, "utm_correct": true, "utm_disposition": "INVALID_PACKET"},
+    {"baseline_complete": true, "baseline_correct": false, "baseline_disposition": "READINESS_EVIDENCE_COMPLETE", "case_id": "C12_T0_NA", "category": "STRUCTURAL_INTEGRITY", "expected_complete": false, "utm_authority_clear": true, "utm_complete": false, "utm_correct": true, "utm_disposition": "INVALID_PACKET"},
+    {"baseline_complete": true, "baseline_correct": false, "baseline_disposition": "READINESS_EVIDENCE_COMPLETE", "case_id": "C13_STAGE_DECLARATION_MISSING", "category": "STRUCTURAL_INTEGRITY", "expected_complete": false, "utm_authority_clear": true, "utm_complete": false, "utm_correct": true, "utm_disposition": "INVALID_PACKET"},
+    {"baseline_complete": true, "baseline_correct": false, "baseline_disposition": "READINESS_EVIDENCE_COMPLETE", "case_id": "C14_OWNER_DRIFT", "category": "STRUCTURAL_INTEGRITY", "expected_complete": false, "utm_authority_clear": true, "utm_complete": false, "utm_correct": true, "utm_disposition": "INVALID_PACKET"},
+    {"baseline_complete": false, "baseline_correct": true, "baseline_disposition": "INVALID_EVIDENCE", "case_id": "C15_TERMINAL_NO_REF", "category": "STRUCTURAL_INTEGRITY", "expected_complete": false, "utm_authority_clear": true, "utm_complete": false, "utm_correct": true, "utm_disposition": "INVALID_PACKET"}
+  ],
+  "complexity_snapshot": {
+    "assessment": "MEDIUM_BUT_BOUNDED",
+    "canonical_candidate_additions": 815,
+    "canonical_candidate_files_changed": 7,
+    "default_mode": "NON_RELEASE",
+    "new_ci_platform": false,
+    "new_runtime_dependencies": 0,
+    "runtime_integration": false,
+    "second_test_engine": false
+  },
+  "evidence_recommendation": "ADOPT_OPTIONAL",
+  "frozen_subject": {
+    "baseline_parent_sha": "8d7df8aa397f7ed6ad628dd7c06a9ab5ca8b097d",
+    "baseline_parent_tree": "433e04a08958aafc78d3bfd7b28c797109e3d592",
+    "implementation_pr": 644,
+    "repository": "Baelfyre/Orchestra",
+    "revision_sha": "d5d1c9af408cc229838b68da2bb21ad1d19e76ee",
+    "tree_sha": "36d7376a1ab087f0a7814141667b48c934179645"
+  },
+  "measurement_boundaries": {
+    "cross_host_consistency": "NOT_APPLICABLE_NO_HOST_EXECUTION",
+    "interpretation": "The calibration may establish core evidence-completeness and fail-closed detection value. It cannot establish default-use efficiency or live-host cost benefit.",
+    "live_host_latency": "UNMEASURED",
+    "live_host_token_cost": "UNMEASURED",
+    "live_model_calls": 0,
+    "operator_effort_time": "UNMEASURED",
+    "provider_calls": 0
+  },
+  "program_id": "orchestra.unified-testing-mechanism-efficacy.v1",
+  "recommendation_boundary": "ADOPT_OPTIONAL is evidence advice only. It does not itself mutate the Feature Decision Record or grant merge, release, deployment, policy, destructive, or other protected-action authority.",
+  "schema_version": "orchestra.unified-testing-efficacy-result.v1",
+  "stage": "CALIBRATION",
+  "study_id": "utm-efficacy-2026-08-30",
+  "threshold_results": {
+    "authority_boundaries_preserved": true,
+    "no_new_runtime_dependencies": true,
+    "not_second_test_engine": true,
+    "runtime_integration_remains_disabled": true,
+    "utm_accuracy_gain_over_baseline_min": true,
+    "utm_decision_accuracy_min": true,
+    "utm_false_negative_rate_max": true,
+    "utm_false_positive_rate_max": true,
+    "utm_missing_evidence_detection_min": true,
+    "utm_risk_detection_min": true,
+    "utm_structural_violation_detection_min": true,
+    "zero_live_model_calls": true,
+    "zero_provider_calls": true
+  },
+  "utm_metrics": {
+    "decision_accuracy": {"count": 15, "rate": 1.0, "total": 15},
+    "false_negatives": {"count": 0, "rate": 0.0, "total": 11},
+    "false_positives": {"count": 0, "rate": 0.0, "total": 4},
+    "missing_evidence_detection": {"count": 2, "rate": 1.0, "total": 2},
+    "risk_detection": {"count": 11, "rate": 1.0, "total": 11},
+    "structural_violation_detection": {"count": 7, "rate": 1.0, "total": 7}
+  }
+}

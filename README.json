@@ -61,17 +61,21 @@
     "cross_specialist_coordination": {"status": "IMPLEMENTED", "human_sources": ["docs/governance/TUNER_PROTOCOL.md", "ROUTING_MAP.md"]},
     "validation_and_evidence": {"status": "IMPLEMENTED", "machine_sources": ["machine/schemas/", "machine/release-evidence/"], "human_sources": ["docs/setup/VALIDATION.md", "docs/validation/"]},
     "unified_testing_mechanism_t0_t9": {
-      "status": "EXPERIMENTAL_EFFICACY_PENDING",
+      "status": "EXPERIMENTAL_EFFICACY_PASS_PROMOTION_PENDING",
       "purpose": "Provide a revision-bound T0-T9 applicability and evidence-aggregation contract that reuses existing specialist and CI validation without creating a second test framework or protected-action authority.",
-      "machine_sources": ["machine/features/unified-testing-mechanism.v1.json", "machine/schemas/unified-testing-packet.v1.schema.json"],
-      "human_sources": ["docs/project/UNIFIED_TESTING_MECHANISM.md"],
+      "machine_sources": ["machine/features/unified-testing-mechanism.v1.json", "machine/schemas/unified-testing-packet.v1.schema.json", "machine/benchmarking/utm-efficacy-study.v1.json", "machine/benchmarking/utm-efficacy-result.v1.json", "machine/benchmarking/utm-efficacy-qualification-plan.v1.json"],
+      "human_sources": ["docs/project/UNIFIED_TESTING_MECHANISM.md", "docs/validation/UNIFIED_TESTING_MECHANISM_EFFICACY_2026_08_30.md", "docs/validation/UNIFIED_TESTING_MECHANISM_EFFICACY_INDEPENDENT_AUDIT_2026_08_30.md"],
       "runtime_surface": "orchestra_runtime/unified_testing.py",
       "validation_surface": "tests/runtime/test_unified_testing.py",
+      "efficacy_validation_surface": "tests/runtime/test_unified_testing_efficacy.py",
+      "efficacy_evaluator": "scripts/evaluate_unified_testing_efficacy.py",
       "admission": "EXPERIMENT_ONLY",
       "promotion": "PENDING",
+      "efficacy_result": "CONTROLLED_EVALUATION_PASS",
+      "efficacy_recommendation": "ADOPT_OPTIONAL",
       "default_release_intent": "NON_RELEASE",
       "runtime_integration": false,
-      "authority_note": "UTM readiness aggregation is evidence only. READINESS_EVIDENCE_COMPLETE does not grant merge, release, deployment, policy activation, destructive, integration-refresh, or other protected-action authority; permanent adoption remains pending controlled efficacy evidence."
+      "authority_note": "UTM readiness aggregation and efficacy evidence are non-authorizing. READINESS_EVIDENCE_COMPLETE, QUALIFIED, or EFFICACY_PASS do not grant merge, release, deployment, policy activation, destructive, integration-refresh, or other protected-action authority; permanent promotion remains a separate governed transition."
     },
     "prime_directive_feature_admission_v1": {
       "status": "IMPLEMENTED_CONTRACT_NO_RUNTIME_INTEGRATION",

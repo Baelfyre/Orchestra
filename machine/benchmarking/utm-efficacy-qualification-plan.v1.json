@@ -1,0 +1,105 @@
+{
+  "$schema": "../schemas/qualification-gate-plan.v1.schema.json",
+  "authority": {
+    "audit_grants_merge_authority": false,
+    "evaluation_grants_live_call_authority": false,
+    "qualification_grants_merge_authority": false,
+    "qualified_grants_release_authority": false,
+    "record_grants_authority": false
+  },
+  "candidate_id": "feature.unified-testing-mechanism.v1",
+  "candidate_identity": {
+    "base_sha": "8d7df8aa397f7ed6ad628dd7c06a9ab5ca8b097d",
+    "base_tree": "433e04a08958aafc78d3bfd7b28c797109e3d592",
+    "head_sha": "d5d1c9af408cc229838b68da2bb21ad1d19e76ee",
+    "repository": "Baelfyre/Orchestra",
+    "tree_sha": "36d7376a1ab087f0a7814141667b48c934179645"
+  },
+  "classification": {
+    "change_class": "CAPABILITY_CHANGE",
+    "factors": {
+      "adaptive_promotion": false,
+      "dependency_or_integration": false,
+      "destructive_automation": false,
+      "governance_or_security": true,
+      "public_contract": true,
+      "release_or_recovery_automation": false,
+      "runtime_behavior": true,
+      "trivial_truth_correction": false,
+      "trust_boundary": false
+    },
+    "rationale": "UTM adds a non-authorizing runtime evidence-aggregation capability and public machine contract, so engineering, regression, governance, controlled-evaluation, and independent-audit evidence are required.",
+    "risk_level": "MODERATE"
+  },
+  "evaluation": {
+    "disposition": "SIMULATION_REQUIRED",
+    "evaluation_plan_ref": "machine/benchmarking/utm-efficacy-study.v1.json",
+    "experiment_protocol": null,
+    "rationale": "The claimed incremental benefit can be tested deterministically with representative bounded evidence packets without live provider/model execution."
+  },
+  "gates": {
+    "controlled_evaluation": {
+      "applicability": "REQUIRED",
+      "evidence_refs": [
+        "machine/benchmarking/utm-efficacy-study.v1.json",
+        "machine/benchmarking/utm-efficacy-result.v1.json",
+        "docs/validation/UNIFIED_TESTING_MECHANISM_EFFICACY_2026_08_30.md"
+      ],
+      "rationale": "Permanent promotion requires a baseline-versus-UTM efficacy pilot rather than correctness tests alone.",
+      "status": "PASS"
+    },
+    "engineering_validation": {
+      "applicability": "REQUIRED",
+      "evidence_refs": [
+        "PR #644 signed exact-head validate/runtime PASS",
+        "canonical d5d1c9af408cc229838b68da2bb21ad1d19e76ee post-merge validate/runtime PASS"
+      ],
+      "rationale": "Canonical UTM implementation and focused fail-closed runtime tests require exact-head engineering evidence.",
+      "status": "PASS"
+    },
+    "independent_audit": {
+      "applicability": "REQUIRED",
+      "evidence_refs": [
+        "docs/validation/UNIFIED_TESTING_MECHANISM_EFFICACY_INDEPENDENT_AUDIT_2026_08_30.md"
+      ],
+      "rationale": "A separate read-only audit is warranted because the feature coordinates governance-adjacent readiness evidence across specialists.",
+      "status": "PASS"
+    },
+    "regression_compatibility": {
+      "applicability": "REQUIRED",
+      "evidence_refs": [
+        "PR #644 Windows/Ubuntu/macOS Cross-platform Validation PASS",
+        "PR #644 Required Analysis Compatibility PASS",
+        "canonical post-merge cross-platform and Required Analysis PASS"
+      ],
+      "rationale": "UTM introduces runtime and public machine-contract surfaces that must preserve portability and compatibility.",
+      "status": "PASS"
+    },
+    "security_governance": {
+      "applicability": "REQUIRED",
+      "evidence_refs": [
+        "PR #644 Governance Check PASS",
+        "machine/benchmarking/utm-efficacy-result.v1.json authority_boundaries_preserved=true"
+      ],
+      "rationale": "UTM changes readiness evidence semantics and must prove that readiness does not create protected-action authority.",
+      "status": "PASS"
+    }
+  },
+  "independent_audit": {
+    "condition_triggered": true,
+    "evidence_refs": [
+      "docs/validation/UNIFIED_TESTING_MECHANISM_EFFICACY_INDEPENDENT_AUDIT_2026_08_30.md"
+    ],
+    "first_pass_read_only": true,
+    "rationale": "The cross-specialist readiness contract is governance-adjacent and merits a read-only second-pass audit before a promotion recommendation.",
+    "requirement": "CONDITIONAL",
+    "status": "PASS"
+  },
+  "qualification": {
+    "disposition": "QUALIFIED",
+    "rationale": "Canonical engineering/regression/governance evidence, deterministic controlled efficacy evidence, and the read-only audit all pass for the frozen UTM candidate."
+  },
+  "record_id": "qualification.unified-testing-mechanism-efficacy.v1",
+  "record_type": "QUALIFICATION_GATE_PLAN",
+  "schema_version": "orchestra.qualification-gate-plan.v1"
+}
