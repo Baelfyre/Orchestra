@@ -186,7 +186,8 @@ def test_completed_read_only_receipt_binds_host_specialist_and_invocation_policy
     assert "--no-session-persistence" in command
     assert "--dangerously-skip-permissions" not in command
     assert "--fallback-model" not in command
-    assert _flag_value(command, "--append-system-prompt-file").endswith("skills/scribe/SKILL.md")
+    skill_file = Path(_flag_value(command, "--append-system-prompt-file"))
+    assert skill_file.parts[-3:] == ("skills", "scribe", "SKILL.md")
     assert request.request_id in _flag_value(command, "--append-system-prompt")
 
 
