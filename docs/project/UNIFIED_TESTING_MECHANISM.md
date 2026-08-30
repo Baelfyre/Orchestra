@@ -1,8 +1,8 @@
 # Unified Testing Mechanism — T0–T9 Experimental Contract
 
-**Status:** EXPERIMENT_ONLY / implementation candidate  
-**Promotion:** PENDING  
-**Default mode:** NON_RELEASE  
+**Status:** EXPERIMENT_ONLY / implementation candidate
+**Promotion:** PENDING
+**Default mode:** NON_RELEASE
 **Authority:** evidence only; this mechanism grants no merge, release, deployment, policy-activation, destructive, or other protected-action authority.
 
 ## Purpose
