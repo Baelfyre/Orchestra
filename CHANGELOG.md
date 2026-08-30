@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.7 Priority 2 Claude Code provider-native engine candidate
+
+- Completed a fresh second-provider audit and selected Claude Code for the bounded P2.2A candidate because its current CLI exposes invocation-scoped model selection, structured output, tool restriction, permission mode, safe-mode/customization suppression, browser disablement, MCP denial, and session-persistence controls without requiring Orchestra to mutate persistent user permissions.
+- Added a bounded read-only Claude Code specialist execution bridge that requires an explicit model, Claude Code CLI `>= 2.1.205`, exact Scribe source-digest binding, clean and unchanged repository state, `plan` permission mode, the fixed `Read`/`Glob`/`Grep` tool set, denied MCP tools, safe mode, disabled browser/session persistence, schema-conforming output, and `non_mutating=true`.
+- Added the `anthropic-claude-code` provider profile wrapper while deliberately not claiming OS-level read-only sandbox control or streaming host-activity observation; deterministic adversarial tests cover policy widening, identity mismatch, version floor, timeout, malformed output, host failure, and repository-state drift.
+- P2.2A is deterministic qualification only and does not claim live Claude provider E2E, automatic provider routing or fallback, direct provider APIs/SDKs, credential or global Claude settings mutation, Registry mutation, release, deployment, policy/ruleset activation, integration refresh, destructive cleanup, branch deletion, force push, or history rewrite.
+
 ## Post-v1.7 Priority 2 provider execution profile candidate
 
 - Added a deterministic, non-authorizing provider execution profile and trusted provider/model/capability requirement gate for explicit host-native specialist execution, while preserving existing route-only and provider-free deterministic runtime paths.
