@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/provider-qualification-receipt.v1.schema.json",
+  "title": "Orchestra Provider Qualification Receipt v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version","classification","host_id","harness_id","provider_source_id","provider_id","model_id","repository_sha","fixture_id","fixture_sha256","observation_digest","live_model_path_observed","provider_native_harness_path_observed","automatic_routing_authorized","provider_execution_authority","release_authorized","evidence_refs","limitations"],
+  "properties": {
+    "schema_version": {"const": "orchestra.provider-qualification-receipt.v1"},
+    "classification": {"enum": ["STATIC_CONFIGURATION_ONLY","LIVE_HOST_ROUTED_MODEL_OBSERVED","LIVE_PROVIDER_NATIVE_HARNESS_OBSERVED","LIVE_MODEL_PATH_FAILED"]},
+    "host_id": {"const": "vscode"},
+    "harness_id": {"enum": ["local","copilot","claude","codex"]},
+    "provider_source_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]*$"},
+    "provider_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]*$"},
+    "model_id": {"type": "string", "minLength": 1},
+    "repository_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "fixture_id": {"type": "string", "minLength": 1},
+    "fixture_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "observation_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "live_model_path_observed": {"type": "boolean"},
+    "provider_native_harness_path_observed": {"type": "boolean"},
+    "automatic_routing_authorized": {"const": false},
+    "provider_execution_authority": {"const": false},
+    "release_authorized": {"const": false},
+    "evidence_refs": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true},
+    "limitations": {"type": "array", "items": {"type": "string", "minLength": 1}, "uniqueItems": true}
+  }
+}
