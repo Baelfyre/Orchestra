@@ -142,3 +142,54 @@ def test_provider_mcp_factory_rejects_non_provider_engine() -> None:
         assert "IProviderExecutionEngine" in str(exc)
     else:
         raise AssertionError("provider MCP factory must fail closed on a non-provider engine")
+
+
+def test_provider_mcp_factory_rejects_empty_backing_adapter() -> None:
+    try:
+        build_mcp_provider_runtime_factory(
+            ROOT,
+            execution_engine_factory=McpProviderEngine,
+            backing_adapter="   ",
+        )
+    except ValueError as exc:
+        assert "backing_adapter" in str(exc)
+    else:
+        raise AssertionError("provider MCP factory must reject an empty backing adapter")
+
+
+def test_provider_mcp_factory_rejects_non_callable_engine_factory() -> None:
+    try:
+        build_mcp_provider_runtime_factory(
+            ROOT,
+            execution_engine_factory=object(),  # type: ignore[arg-type]
+        )
+    except TypeError as exc:
+        assert "execution_engine_factory" in str(exc)
+    else:
+        raise AssertionError("provider MCP factory must reject a non-callable engine factory")
+
+
+def test_provider_mcp_factory_rejects_invalid_requirement_type() -> None:
+    try:
+        build_mcp_provider_runtime_factory(
+            ROOT,
+            execution_engine_factory=McpProviderEngine,
+            provider_requirement=object(),  # type: ignore[arg-type]
+        )
+    except TypeError as exc:
+        assert "provider_requirement" in str(exc)
+    else:
+        raise AssertionError("provider MCP factory must reject an invalid provider requirement")
+
+
+def test_provider_mcp_stdio_rejects_empty_plugin_version(tmp_path: Path) -> None:
+    (tmp_path / "plugin.json").write_text('{"version": ""}', encoding="utf-8")
+    try:
+        build_mcp_stdio_transport_with_provider_execution(
+            tmp_path,
+            execution_engine_factory=McpProviderEngine,
+        )
+    except ValueError as exc:
+        assert "non-empty version" in str(exc)
+    else:
+        raise AssertionError("provider MCP stdio transport must require a plugin version")
