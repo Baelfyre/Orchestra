@@ -1,9 +1,9 @@
 # Unified Testing Mechanism — Controlled Efficacy Calibration
 
-**Date:** 2026-08-30  
-**Frozen UTM candidate:** `d5d1c9af408cc229838b68da2bb21ad1d19e76ee`  
-**Tree:** `36d7376a1ab087f0a7814141667b48c934179645`  
-**Status:** CONTROLLED_EVALUATION_PASS / PROMOTION_RECOMMENDATION_ONLY  
+**Date:** 2026-08-30
+**Frozen UTM candidate:** `d5d1c9af408cc229838b68da2bb21ad1d19e76ee`
+**Tree:** `36d7376a1ab087f0a7814141667b48c934179645`
+**Status:** CONTROLLED_EVALUATION_PASS / PROMOTION_RECOMMENDATION_ONLY
 **Live model/provider calls:** 0
 
 ## Question
