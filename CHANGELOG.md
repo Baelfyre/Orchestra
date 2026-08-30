@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.7 Priority 2 provider execution profile candidate
+
+- Added a deterministic, non-authorizing provider execution profile and trusted provider/model/capability requirement gate for explicit host-native specialist execution, while preserving existing route-only and provider-free deterministic runtime paths.
+- Added separate provider-aware MCP constructors and Codex App Server wrappers that map the existing explicit user-selected model configuration into `openai-codex` provider profiles without widening approval, sandbox, network, specialist, command, or mutation scope.
+- Added Draft 2020-12 provider profile/requirement schemas and focused regressions for deterministic identity, fail-closed mismatch and drift handling, authority-before-provider ordering, minimized provider evidence, and prompt/MCP metadata non-override.
+- P2.1 does not add automatic provider routing or fallback, direct provider SDKs/APIs, credential handling, a static model catalog, Registry mutation, release, deployment, policy activation, integration refresh, destructive operations, branch deletion, force push, or history rewrite.
+
 ## Post-v1.7 Unified Testing Mechanism Efficacy Calibration
 
 - Added a deterministic offline 15-case baseline-versus-UTM efficacy calibration, machine-readable result, qualification record, focused regression tests, and independent read-only audit for the canonical experimental UTM candidate.
