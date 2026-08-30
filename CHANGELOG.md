@@ -1,5 +1,11 @@
 # Changelog
 
+## Post-v1.7 Unified Testing Mechanism Experimental Candidate
+
+- Added an `EXPERIMENT_ONLY` T0-T9 applicability and revision-bound evidence aggregation candidate that reuses existing specialist and CI validation surfaces rather than creating a second QA engine.
+- Added deterministic fail-closed handling for missing, pending, failed, stale-revision, non-applicable, and malformed stage evidence while preserving `READINESS_EVIDENCE_COMPLETE != RELEASE_AUTHORITY` and all existing protected-action gates.
+- Permanent promotion remains `PENDING` until the approved controlled baseline-versus-UTM efficacy campaign establishes measurable value relative to complexity and operating cost.
+
 This root changelog is release-oriented. Detailed pre-v1.7 development chronology remains preserved byte-for-byte in [the historical changelog archive](docs/history/CHANGELOG_PRE_V1_7.md), Git history, merged pull requests, decision records, and validation evidence.
 
 ## Post-v1.7 Specialist Runtime-Host Pre-E7 Effectiveness Revalidation
