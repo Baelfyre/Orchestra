@@ -1,9 +1,9 @@
 # Unified Testing Mechanism — Independent Read-Only Efficacy Audit
 
-**Date:** 2026-08-30  
-**Audit mode:** READ_ONLY  
-**Frozen candidate:** `d5d1c9af408cc229838b68da2bb21ad1d19e76ee`  
-**Audit disposition:** PASS_WITH_RECORDED_LIMITATIONS  
+**Date:** 2026-08-30
+**Audit mode:** READ_ONLY
+**Frozen candidate:** `d5d1c9af408cc229838b68da2bb21ad1d19e76ee`
+**Audit disposition:** PASS_WITH_RECORDED_LIMITATIONS
 **Remediation performed during audit:** none
 
 ## Audit scope
