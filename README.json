@@ -61,21 +61,21 @@
     "cross_specialist_coordination": {"status": "IMPLEMENTED", "human_sources": ["docs/governance/TUNER_PROTOCOL.md", "ROUTING_MAP.md"]},
     "validation_and_evidence": {"status": "IMPLEMENTED", "machine_sources": ["machine/schemas/", "machine/release-evidence/"], "human_sources": ["docs/setup/VALIDATION.md", "docs/validation/"]},
     "unified_testing_mechanism_t0_t9": {
-      "status": "EXPERIMENTAL_EFFICACY_PASS_PROMOTION_PENDING",
+      "status": "SUPPORTED_OPTIONAL_ADOPT_OPTIONAL",
       "purpose": "Provide a revision-bound T0-T9 applicability and evidence-aggregation contract that reuses existing specialist and CI validation without creating a second test framework or protected-action authority.",
       "machine_sources": ["machine/features/unified-testing-mechanism.v1.json", "machine/schemas/unified-testing-packet.v1.schema.json", "machine/benchmarking/utm-efficacy-study.v1.json", "machine/benchmarking/utm-efficacy-result.v1.json", "machine/benchmarking/utm-efficacy-qualification-plan.v1.json"],
-      "human_sources": ["docs/project/UNIFIED_TESTING_MECHANISM.md", "docs/validation/UNIFIED_TESTING_MECHANISM_EFFICACY_2026_08_30.md", "docs/validation/UNIFIED_TESTING_MECHANISM_EFFICACY_INDEPENDENT_AUDIT_2026_08_30.md"],
+      "human_sources": ["docs/project/UNIFIED_TESTING_MECHANISM.md", "docs/validation/UNIFIED_TESTING_MECHANISM_EFFICACY_2026_08_30.md", "docs/validation/UNIFIED_TESTING_MECHANISM_EFFICACY_INDEPENDENT_AUDIT_2026_08_30.md", "docs/validation/UNIFIED_TESTING_MECHANISM_PROMOTION_DECISION_2026_08_30.md"],
       "runtime_surface": "orchestra_runtime/unified_testing.py",
       "validation_surface": "tests/runtime/test_unified_testing.py",
       "efficacy_validation_surface": "tests/runtime/test_unified_testing_efficacy.py",
       "efficacy_evaluator": "scripts/evaluate_unified_testing_efficacy.py",
       "admission": "EXPERIMENT_ONLY",
-      "promotion": "PENDING",
+      "promotion": "ADOPT_OPTIONAL",
       "efficacy_result": "CONTROLLED_EVALUATION_PASS",
       "efficacy_recommendation": "ADOPT_OPTIONAL",
       "default_release_intent": "NON_RELEASE",
       "runtime_integration": false,
-      "authority_note": "UTM readiness aggregation and efficacy evidence are non-authorizing. READINESS_EVIDENCE_COMPLETE, QUALIFIED, or EFFICACY_PASS do not grant merge, release, deployment, policy activation, destructive, integration-refresh, or other protected-action authority; permanent promotion remains a separate governed transition."
+      "authority_note": "UTM is a supported optional, non-mandatory applicability and evidence-aggregation layer. READINESS_EVIDENCE_COMPLETE, QUALIFIED, EFFICACY_PASS, or ADOPT_OPTIONAL do not grant merge, release, deployment, policy activation, destructive, integration-refresh, or other protected-action authority; runtime integration remains disabled."
     },
     "prime_directive_feature_admission_v1": {
       "status": "IMPLEMENTED_CONTRACT_NO_RUNTIME_INTEGRATION",
@@ -961,7 +961,8 @@
     "registry_query_optimization_o7": "CANONICAL_MERGED_VERIFIED",
     "murmurs_live_host_token_measurement": "B3_TERMINAL_EVIDENCE_RECONCILED_BENEFIT_NOT_ESTABLISHED",
     "codex_c2_portability_r1": "C2R1_EXECUTION_COMPLETE_RECONCILED_CANONICAL",
-    "specialist_runtime_host_execution": "SUPPORTED_OPTIONAL_E7_ADOPT_OPTIONAL"
+    "specialist_runtime_host_execution": "SUPPORTED_OPTIONAL_E7_ADOPT_OPTIONAL",
+    "unified_testing_mechanism": "SUPPORTED_OPTIONAL_ADOPT_OPTIONAL"
   },
   "ai_review_guidance": {
     "preferred_entrypoint": "README.json",

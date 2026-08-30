@@ -1,8 +1,9 @@
-# Unified Testing Mechanism — T0–T9 Experimental Contract
+# Unified Testing Mechanism - T0-T9 Supported Optional Contract
 
-**Status:** EXPERIMENT_ONLY / implementation candidate
-**Promotion:** PENDING
-**Default mode:** NON_RELEASE
+**Status:** SUPPORTED_OPTIONAL / ADOPT_OPTIONAL
+**Promotion:** DECIDED / ADOPT_OPTIONAL
+**Default mode:** NON_MANDATORY / NON_RELEASE
+**Runtime integration:** DISABLED
 **Authority:** evidence only; this mechanism grants no merge, release, deployment, policy-activation, destructive, or other protected-action authority.
 
 ## Purpose
@@ -25,7 +26,7 @@ READINESS_EVIDENCE_COMPLETE != RELEASE_AUTHORIZED
 
 | Stage | Existing Orchestra capability | Primary ownership | Gap UTM addresses |
 | --- | --- | --- | --- |
-| T0 Applicability & Evidence Plan | Conductor routes multi-domain work; Overseer defines QA scope and evidence | Conductor + Overseer | No common T0–T9 applicability record |
+| T0 Applicability & Evidence Plan | Conductor routes multi-domain work; Overseer defines QA scope and evidence | Conductor + Overseer | No common T0-T9 applicability record |
 | T1 Smoke / Sanity | Overseer smoke scope; behavior/runtime CI | Overseer | Evidence is not aggregated under one subject revision |
 | T2 Functional | Overseer acceptance/pass-fail criteria; runtime tests | Overseer | No shared stage-level applicability/result contract |
 | T3 Integration / Contract | Overseer cross-layer/contract evidence; behavior tests | Overseer | No common aggregation semantics |
@@ -38,7 +39,7 @@ READINESS_EVIDENCE_COMPLETE != RELEASE_AUTHORIZED
 
 ### Audit conclusion
 
-Existing mechanisms **partially solve** every domain-specific stage. The confirmed missing capability is a common applicability/evidence envelope and deterministic aggregate verdict. Therefore UTM is deliberately implemented as a thin coordination layer rather than a second QA engine.
+Existing mechanisms **partially solve** every domain-specific stage. The confirmed missing capability is a common applicability/evidence envelope and deterministic aggregate verdict. UTM is therefore a thin coordination layer rather than a second QA engine.
 
 ## Canonical stages
 
@@ -55,7 +56,7 @@ T8 Regression / Compatibility / Portability
 T9 Readiness Aggregation / Independent Verification
 ```
 
-T0 and T9 are always required. T1–T8 are selectively applicable according to the risk surface. Every `NOT_APPLICABLE` stage requires an explicit rationale and may not masquerade as completed evidence.
+T0 and T9 are always required. T1-T8 are selectively applicable according to the risk surface. Every `NOT_APPLICABLE` stage requires an explicit rationale and may not masquerade as completed evidence.
 
 ## Machine contract
 
@@ -81,7 +82,7 @@ WAIT_FOR_EVIDENCE
 READINESS_EVIDENCE_COMPLETE
 ```
 
-`READINESS_EVIDENCE_COMPLETE` means only that every required T0–T9 stage has terminal PASS evidence for the packet revision. It does not authorize a transition.
+`READINESS_EVIDENCE_COMPLETE` means only that every required T0-T9 stage has terminal PASS evidence for the packet revision. It does not authorize a transition.
 
 ## Release intent and human sign-off
 
@@ -113,25 +114,40 @@ Even `RELEASE_CANDIDATE + APPROVED + READINESS_EVIDENCE_COMPLETE` does not grant
 - Pending required evidence -> `WAIT_FOR_EVIDENCE`.
 - Any required FAIL -> `BLOCKED`.
 - Evidence revision mismatch -> reject packet as stale.
-- Duplicate/missing T0–T9 stage declaration -> reject packet.
+- Duplicate/missing T0-T9 stage declaration -> reject packet.
 - T0 or T9 marked not applicable -> reject packet.
 - Evidence supplied for a stage declared not applicable -> reject packet.
 - Invalid/noncanonical specialist ownership mapping -> reject packet.
 
-## Efficacy requirement before promotion
+## Efficacy and promotion decision
 
-Permanent adoption is not assumed. The approved pilot must compare the existing baseline workflow with UTM on representative bounded cases and measure at least:
+The controlled 15-case baseline-versus-UTM efficacy campaign and independent read-only audit are canonical evidence for the promotion decision.
 
-- evidence completeness;
-- failure/risk detection;
-- false positives and false negatives;
-- operator effort/time;
-- token or other measurable operational cost when available;
-- cross-host consistency where host execution is actually authorized;
-- complexity and maintenance burden.
+Measured results include:
 
-Promotion remains `PENDING` until this evidence supports one of the Feature Admission promotion dispositions. A no-benefit or excessive-complexity result is valid and must be retained.
+- readiness-decision accuracy: 8/15 for the distributed-evidence proxy versus 15/15 for UTM;
+- unsafe-case detection: 4/11 for the distributed-evidence proxy versus 11/11 for UTM;
+- UTM false positives: 0/4;
+- UTM false negatives: 0/11;
+- structural-integrity detection: 2/7 for the distributed-evidence proxy versus 7/7 for UTM;
+- missing-required-evidence detection: 0/2 for the distributed-evidence proxy versus 2/2 for UTM;
+- all preregistered efficacy thresholds passed;
+- zero model/provider calls were performed.
+
+The resulting Feature Admission disposition is `ADOPT_OPTIONAL`. The mechanism is supported but non-mandatory and remains non-authorizing. Runtime integration is not enabled by the promotion decision.
+
+The decision intentionally does not claim measured human operator-time savings, live-host token or cost reduction, live-host latency improvement, cross-host generalization, or exact equivalence between the controlled baseline proxy and every historical Orchestra workflow.
+
+Decision evidence:
+
+- `docs/validation/UNIFIED_TESTING_MECHANISM_EFFICACY_2026_08_30.md`
+- `docs/validation/UNIFIED_TESTING_MECHANISM_EFFICACY_INDEPENDENT_AUDIT_2026_08_30.md`
+- `docs/validation/UNIFIED_TESTING_MECHANISM_PROMOTION_DECISION_2026_08_30.md`
+- `machine/benchmarking/utm-efficacy-result.v1.json`
+- canonical efficacy commit `c5601f68ba3c84272c17a16bd94e0ddeb67f83b2`
 
 ## Rollback / simplification
 
-During the pilot UTM remains experimental and non-default. If efficacy is weak, the candidate may be simplified, deferred, or removed without changing existing specialist or CI mechanisms. Existing validation contracts remain authoritative for their own domains throughout the experiment.
+UTM remains optional and separately reversible. If future evidence shows that its coordination value no longer justifies its maintenance cost or complexity, it may be simplified, deferred, or removed through a new governed Feature Admission decision without changing the authority of existing specialist or CI mechanisms.
+
+Existing validation contracts remain authoritative for their own domains. Optional UTM adoption does not make UTM a second QA engine or a protected-action authority.
