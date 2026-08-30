@@ -32,8 +32,8 @@
     "specialist_runtime_host_execution_design": {
       "status": "E1_E7_COMPLETE_ADOPT_OPTIONAL",
       "purpose": "Provide a supported optional post-gate typed specialist execution path with verified bounded Codex host execution while preserving route-only defaults, explicit user model configuration, and independent Orchestra authority boundaries.",
-      "machine_sources": ["machine/features/specialist-runtime-host-execution.v1.json", "machine/schemas/specialist-execution-request.v1.schema.json", "machine/schemas/specialist-execution-receipt.v1.schema.json"],
-      "human_sources": ["docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_ARCHITECTURE.md", "docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_IMPLEMENTATION_PLAN.md", "docs/validation/SPECIALIST_RUNTIME_HOST_EXECUTION_PRE_E7_EFFECTIVENESS_2026_08_29.md", "docs/validation/SPECIALIST_RUNTIME_HOST_EXECUTION_E7_PROMOTION_DECISION_2026_08_30.md", "docs/developer/MCP_STDIO_TRANSPORT.md"],
+      "machine_sources": ["machine/features/specialist-runtime-host-execution.v1.json", "machine/schemas/specialist-execution-request.v1.schema.json", "machine/schemas/specialist-execution-receipt.v1.schema.json", "machine/schemas/provider-execution-profile.v1.schema.json", "machine/schemas/provider-execution-requirement.v1.schema.json"],
+      "human_sources": ["docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_ARCHITECTURE.md", "docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_IMPLEMENTATION_PLAN.md", "docs/project/PRIORITY_2_PROVIDER_EXECUTION_PROFILE.md", "docs/validation/SPECIALIST_RUNTIME_HOST_EXECUTION_PRE_E7_EFFECTIVENESS_2026_08_29.md", "docs/validation/SPECIALIST_RUNTIME_HOST_EXECUTION_E7_PROMOTION_DECISION_2026_08_30.md", "docs/developer/MCP_STDIO_TRANSPORT.md"],
       "admission": "ADMIT",
       "promotion": "ADOPT_OPTIONAL",
       "runtime_integration": true,
