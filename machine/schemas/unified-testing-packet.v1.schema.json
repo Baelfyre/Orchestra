@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/unified-testing-packet.v1.schema.json",
+  "title": "Orchestra Unified Testing Packet v1",
+  "description": "Non-authorizing T0-T9 applicability and evidence packet. Validation completeness never grants merge, release, deployment, policy-activation, or destructive authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "packet_id", "subject", "release_intent", "stages", "evidence", "human_signoff"],
+  "properties": {
+    "schema_version": {"const": "orchestra.unified-testing-packet.v1"},
+    "packet_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$"},
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "revision_sha"],
+      "properties": {
+        "repository": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+        "revision_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+      }
+    },
+    "release_intent": {"enum": ["NON_RELEASE", "RELEASE_CANDIDATE"]},
+    "stages": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": {"$ref": "#/$defs/stage_plan"}
+    },
+    "evidence": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/stage_evidence"}
+    },
+    "human_signoff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "decision_owner", "evidence_refs"],
+      "properties": {
+        "status": {"enum": ["NOT_REQUESTED", "PENDING", "APPROVED", "REJECTED"]},
+        "decision_owner": {"type": ["string", "null"]},
+        "evidence_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      }
+    }
+  },
+  "$defs": {
+    "stage_id": {"enum": ["T0", "T1", "T2", "T3", "T4", "T5", "T6", "T7", "T8", "T9"]},
+    "stage_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stage_id", "name", "applicability", "owners", "rationale", "evidence_requirements"],
+      "properties": {
+        "stage_id": {"$ref": "#/$defs/stage_id"},
+        "name": {"type": "string", "minLength": 3},
+        "applicability": {"enum": ["REQUIRED", "NOT_APPLICABLE"]},
+        "owners": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 2}},
+        "rationale": {"type": "string", "minLength": 3},
+        "evidence_requirements": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 2}}
+      }
+    },
+    "stage_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stage_id", "revision_sha", "result", "evidence_refs", "limitations"],
+      "properties": {
+        "stage_id": {"$ref": "#/$defs/stage_id"},
+        "revision_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "result": {"enum": ["PASS", "FAIL", "PENDING"]},
+        "evidence_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "limitations": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      }
+    }
+  }
+}
