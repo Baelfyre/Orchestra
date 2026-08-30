@@ -1,0 +1,16 @@
+{
+  "challenge": {
+    "expected_sum": 58,
+    "marker": "ORCH-VSCODE-Q1-7F3A",
+    "sequence": [
+      17,
+      4,
+      29,
+      8
+    ],
+    "specialist": "scribe"
+  },
+  "fixture_id": "vscode-provider-qualification-fixture-v1",
+  "instruction": "Read this fixture without editing repository files. Return the marker, sequence, expected_sum, and specialist exactly as stored.",
+  "schema_version": "orchestra.vscode-provider-qualification-fixture.v1"
+}
