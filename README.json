@@ -60,6 +60,19 @@
     },
     "cross_specialist_coordination": {"status": "IMPLEMENTED", "human_sources": ["docs/governance/TUNER_PROTOCOL.md", "ROUTING_MAP.md"]},
     "validation_and_evidence": {"status": "IMPLEMENTED", "machine_sources": ["machine/schemas/", "machine/release-evidence/"], "human_sources": ["docs/setup/VALIDATION.md", "docs/validation/"]},
+    "unified_testing_mechanism_t0_t9": {
+      "status": "EXPERIMENTAL_EFFICACY_PENDING",
+      "purpose": "Provide a revision-bound T0-T9 applicability and evidence-aggregation contract that reuses existing specialist and CI validation without creating a second test framework or protected-action authority.",
+      "machine_sources": ["machine/features/unified-testing-mechanism.v1.json", "machine/schemas/unified-testing-packet.v1.schema.json"],
+      "human_sources": ["docs/project/UNIFIED_TESTING_MECHANISM.md"],
+      "runtime_surface": "orchestra_runtime/unified_testing.py",
+      "validation_surface": "tests/runtime/test_unified_testing.py",
+      "admission": "EXPERIMENT_ONLY",
+      "promotion": "PENDING",
+      "default_release_intent": "NON_RELEASE",
+      "runtime_integration": false,
+      "authority_note": "UTM readiness aggregation is evidence only. READINESS_EVIDENCE_COMPLETE does not grant merge, release, deployment, policy activation, destructive, integration-refresh, or other protected-action authority; permanent adoption remains pending controlled efficacy evidence."
+    },
     "prime_directive_feature_admission_v1": {
       "status": "IMPLEMENTED_CONTRACT_NO_RUNTIME_INTEGRATION",
       "purpose": "Constitutional Prime Directive and machine-validatable Feature Admission and promotion record for evidence-backed capability decisions without creating execution authority.",

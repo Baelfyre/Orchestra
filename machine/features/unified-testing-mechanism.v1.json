@@ -1,0 +1,76 @@
+{
+  "$schema": "../schemas/feature-decision-record.v1.schema.json",
+  "schema_version": "orchestra.feature-decision-record.v1",
+  "record_type": "FEATURE_DECISION_RECORD",
+  "record_id": "feature.unified-testing-mechanism.v1",
+  "feature_id": "unified-testing-mechanism",
+  "title": "Unified Testing Mechanism T0-T9",
+  "proposal": {
+    "problem_statement": "Orchestra has strong specialist and CI validation mechanisms, but lacks one revision-bound contract that declares which testing stages apply, requires explicit reasons for omitted stages, and aggregates heterogeneous evidence without conflating validation with release authority.",
+    "affected_parties": ["Orchestra maintainers", "Orchestra specialists", "Projects governed by Orchestra"],
+    "problem_evidence": [
+      "skills/overseer/SKILL.md owns QA strategy, validation gates, smoke/regression scope, and readiness evidence but explicitly does not own orchestration.",
+      ".github/workflows/validate.yml produces machine-readable runtime test evidence but only for the runtime-test surface.",
+      ".github/workflows/cross-platform-validation.yml validates portability across Windows, macOS, and Ubuntu without an overarching applicability contract.",
+      "docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md aggregates exact merge evidence but is intentionally merge-specific rather than a general testing lifecycle."
+    ],
+    "orchestra_ownership_rationale": "Cross-specialist routing, evidence continuity, and governed readiness are Orchestra responsibilities. A thin applicability and aggregation contract belongs in Orchestra because no individual specialist or host should decide the complete cross-domain testing lifecycle.",
+    "existing_mechanisms": [
+      {"mechanism": "Overseer QA and readiness contracts", "disposition": "PARTIALLY_SOLVES", "evidence_refs": ["skills/overseer/SKILL.md"]},
+      {"mechanism": "Dagger, Cipher, and Cloak specialist evidence", "disposition": "PARTIALLY_SOLVES", "evidence_refs": ["skills/dagger/SKILL.md", "skills/cipher/SKILL.md", "skills/cloak/SKILL.md"]},
+      {"mechanism": "validate and cross-platform CI workflows", "disposition": "PARTIALLY_SOLVES", "evidence_refs": [".github/workflows/validate.yml", ".github/workflows/cross-platform-validation.yml", ".github/workflows/required-analysis-compat.yml"]},
+      {"mechanism": "Autonomous Merge Readiness Protocol", "disposition": "PARTIALLY_SOLVES", "evidence_refs": ["docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md"]}
+    ],
+    "expected_observable_improvement": "A representative pilot should show more complete and less ambiguous revision-bound test evidence with fewer omitted-risk stages, without materially increasing false positives, operator effort, token cost, or permanent governance complexity.",
+    "falsification_criterion": "Do not promote the mechanism if the controlled pilot fails to improve evidence completeness or failure detection, produces unacceptable false positives or negatives, materially increases operational effort, or duplicates existing QA contracts without measurable benefit.",
+    "costs": {
+      "complexity": {"level": "MEDIUM", "rationale": "Adds a lifecycle vocabulary, plan contract, and aggregation semantics."},
+      "maintenance": {"level": "MEDIUM", "rationale": "Stage mappings and evidence adapters must remain aligned with existing specialists and CI."},
+      "security": {"level": "LOW", "rationale": "The mechanism consumes evidence and grants no execution or security authority."},
+      "privacy": {"level": "LOW", "rationale": "Evidence references should avoid raw private data and preserve existing specialist privacy boundaries."},
+      "policy": {"level": "MEDIUM", "rationale": "Readiness semantics must remain separate from merge, release, deployment, and policy authority."},
+      "cognitive": {"level": "MEDIUM", "rationale": "T0-T9 introduces terminology that must reduce rather than add QA ambiguity."}
+    },
+    "reversibility": {
+      "optional_possible": true,
+      "disable_supported": true,
+      "removal_supported": true,
+      "rollback_removal_plan": "Keep the mechanism non-default during the pilot. If efficacy is not established, remove the UTM contract/runtime aggregator and continue using existing specialist and CI evidence independently."
+    },
+    "non_adoption_effect": "Testing remains distributed across existing specialist and CI mechanisms, with applicability and aggregate evidence completeness requiring manual coordination."
+  },
+  "scope": {
+    "owner": "Conductor + Overseer",
+    "proposed_change": "Introduce an experimental non-authorizing T0-T9 applicability and evidence-aggregation contract that reuses existing specialist and CI validation mechanisms and is evaluated through a bounded efficacy pilot before promotion.",
+    "affected_surfaces": ["machine testing contracts", "runtime evidence aggregation", "QA documentation", "focused runtime tests"],
+    "authority_reference": "User-approved Orchestra Priority 1 Unified Testing Mechanism implementation; protected release/deployment/policy/destructive actions remain separately gated."
+  },
+  "source_identity": {
+    "repository": "Baelfyre/Orchestra",
+    "base_sha": "8d7df8aa397f7ed6ad628dd7c06a9ab5ca8b097d",
+    "base_tree": "433e04a08958aafc78d3bfd7b28c797109e3d592",
+    "policy_refs": ["docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md", "docs/governance/FEATURE_ADMISSION_POLICY.md"]
+  },
+  "authority": {
+    "record_grants_authority": false,
+    "admission_grants_implementation_authority": false,
+    "admission_grants_merge_authority": false,
+    "promotion_grants_merge_authority": false,
+    "promotion_grants_release_authority": false,
+    "promotion_grants_deployment_authority": false,
+    "promotion_grants_policy_activation": false,
+    "promotion_grants_destructive_authority": false
+  },
+  "admission": {
+    "disposition": "EXPERIMENT_ONLY",
+    "rationale": "The cross-stage coordination gap is real and Orchestra-owned, but permanent value must be established by the already-approved controlled efficacy pilot before promotion.",
+    "decision_owner": "Human maintainer"
+  },
+  "promotion": {
+    "status": "PENDING",
+    "disposition": null,
+    "rationale": "Promotion requires bounded implementation evidence and controlled baseline-versus-UTM efficacy measurement.",
+    "evidence_refs": [],
+    "decision_owner": null
+  }
+}
