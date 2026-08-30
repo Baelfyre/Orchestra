@@ -40,6 +40,7 @@ Portable memory is optional. Orchestra does not require or identify a specific e
 - `../machine/specialists/registry.v1.json`: compiled machine specialist registry.
 - `../machine/routing/routes.v1.json`: canonical machine routing contract.
 - [Tuner Protocol](governance/TUNER_PROTOCOL.md): cross-specialist coordination contract.
+- [Cloak UI Reference Corpus Upgrade Plan](project/CLOAK_UI_REFERENCE_CORPUS_PLAN.md): canonical CUIR corpus, provenance, licensing, icon-reuse, evaluation, and phase-sequencing plan.
 
 Specialist prose and progressive-disclosure knowledge remain under `../skills/*/`.
 
