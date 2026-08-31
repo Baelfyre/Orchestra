@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.7 Priority 2 VS Code multi-harness provider qualification candidate
+
+- Added a bounded, non-authorizing VS Code provider-observation and qualification layer that keeps host, harness, provider source, provider, model, and authority identities separate across Local, Copilot, Claude, and Codex session paths.
+- Added a frozen read-only qualification fixture, exact fixture SHA-256 binding, machine schemas, CLI validation, and adversarial runtime tests so static configuration, host-routed model evidence, provider-native harness evidence, and failed live paths cannot be conflated.
+- Added a user-controlled VS Code operator protocol that requires visible harness/model/provider-source evidence and clean repository state before and after the fixture; current VS Code worktree isolation is not treated as sandbox or network-restriction proof.
+- P2.2B does not control VS Code, create an AHP client, install or refresh integrations, mutate credentials/settings, call provider APIs directly, claim live provider evidence from deterministic tests, qualify the P2.2A standalone Claude CLI from a VS Code session, enable routing/fallback, mutate Registry state, release, deploy, activate policy, delete branches, force push, or rewrite history.
+
 ## Post-v1.7 Priority 2 Claude Code provider-native engine candidate
 
 - Completed a fresh second-provider audit and selected Claude Code for the bounded P2.2A candidate because its current CLI exposes invocation-scoped model selection, structured output, tool restriction, permission mode, safe-mode/customization suppression, browser disablement, MCP denial, and session-persistence controls without requiring Orchestra to mutate persistent user permissions.
