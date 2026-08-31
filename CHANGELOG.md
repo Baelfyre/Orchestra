@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.7 Cloak CUIR-0 corpus governance candidate
+
+- Added the bounded `CUIR-0` governance and intake contract for `CLOAK_UI_REFERENCE_CORPUS_V1`, freezing per-repository eligibility, provenance, exact source-revision pinning, reuse classifications, specialist ownership, and data-minimization rules before any broad corpus inventory or pattern extraction.
+- Added machine-validatable policy and source-record schemas that fail closed: missing or ambiguous licenses permit concept-level `REFERENCE_ONLY` treatment only and cannot authorize direct source or asset reuse; account-wide license inference and automatic ingestion are prohibited.
+- Added adversarial tests that reject malformed source revisions, missing non-copying provenance, invalid reuse classifications, missing `Nazia-99` attribution, authority widening, and external-execution widening.
+- CUIR-0 performs no `Nazia-99` repository inventory, hard-codes no repository count, copies no external source/assets, installs no external dependencies, executes no external project code, grants no Cloak implementation authority, and does not authorize provider routing/fallback, merge, release, deployment, policy activation, integration refresh, destructive cleanup, branch deletion, force push, or history rewrite.
+
 ## Post-v1.7 Priority 2 VS Code multi-harness provider qualification candidate
 
 - Added a bounded, non-authorizing VS Code provider-observation and qualification layer that keeps host, harness, provider source, provider, model, and authority identities separate across Local, Copilot, Claude, and Codex session paths.
