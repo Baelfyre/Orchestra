@@ -1,0 +1,131 @@
+{
+  "schema_version": "orchestra.cloak-ui-reference-corpus-policy.v1",
+  "plan_id": "CLOAK_UI_REFERENCE_CORPUS_V1",
+  "phase": "CUIR-0",
+  "status": "ACTIVE_GOVERNANCE_CONTRACT",
+  "source_of_truth": {
+    "planning_document": "docs/project/CLOAK_UI_REFERENCE_CORPUS_PLAN.md",
+    "implementation_contract": "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR0_CONTRACT.md",
+    "padayon_role": "MIRROR_CONTINUITY_ONLY"
+  },
+  "corpus": {
+    "ui_reference": {
+      "initial_account": "Nazia-99",
+      "repository_count": "DISCOVER_AT_CUIR_1",
+      "default_treatment": "PATTERN_REFERENCE_FIRST"
+    },
+    "icon_reference": {
+      "repositories": [
+        "simple-icons/simple-icons",
+        "tabler/tabler-icons",
+        "lucide-icons/lucide"
+      ],
+      "separate_subcorpus": true
+    }
+  },
+  "eligibility": {
+    "public_visibility_required": true,
+    "ui_or_icon_relevance_required": true,
+    "repository_identity_required": true,
+    "exact_revision_required_before_deep_analysis": true,
+    "license_classified_per_repository": true,
+    "automatic_ingestion": false,
+    "account_wide_license_inference": false
+  },
+  "reuse": {
+    "classifications": [
+      "REFERENCE_ONLY",
+      "REUSE_WITH_NOTICE",
+      "REUSE_WITH_RIGHTS_REVIEW",
+      "PROHIBITED"
+    ],
+    "license_fail_closed": {
+      "missing_or_ambiguous_license_pattern_treatment": "REFERENCE_ONLY",
+      "missing_or_ambiguous_license_direct_reuse": "PROHIBITED",
+      "unresolved_rights_direct_reuse": "PROHIBITED"
+    },
+    "direct_reuse_requires_verified_permission": true
+  },
+  "external_execution": {
+    "allowed": false,
+    "run_build_scripts": false,
+    "install_project_dependencies": false,
+    "execute_application_code": false,
+    "execute_unknown_scripts": false
+  },
+  "data_minimization": {
+    "retain_only_relevant_evidence": true,
+    "mirror_entire_repository": false,
+    "retain_unneeded_assets": false,
+    "pattern_records_must_be_concept_level_by_default": true
+  },
+  "provenance": {
+    "source_record_schema": "machine/schemas/cloak-ui-reference-source-record.v1.schema.json",
+    "required_fields": [
+      "repository",
+      "owner",
+      "source_revision",
+      "source_paths_or_artifact_ids",
+      "source_category",
+      "license_identifier",
+      "license_evidence",
+      "reuse_classification",
+      "attribution_or_notice_requirements",
+      "pattern_or_asset_summary",
+      "what_was_learned_or_reused",
+      "what_was_not_copied",
+      "review_owner"
+    ],
+    "specific_repository_attribution_required": true,
+    "source_revision_refresh_required_on_change": true
+  },
+  "roles": {
+    "Artificer": [
+      "source intake",
+      "pinned repository identity",
+      "static inspection boundary",
+      "license and provenance evidence collection",
+      "external pattern records"
+    ],
+    "Cloak": [
+      "UI and UX interpretation",
+      "pattern taxonomy",
+      "pattern selection",
+      "icon design suitability",
+      "accessibility and user-facing consequences",
+      "provenance-aware design recommendations"
+    ],
+    "Governor": [
+      "licensing and governance review for ambiguous or material reuse obligations"
+    ],
+    "Clockwork": [
+      "architecture and component-boundary review when a pattern affects shared frontend ownership"
+    ],
+    "Ponytail": [
+      "separately authorized Orchestra-native or project-native implementation"
+    ],
+    "Overseer": [
+      "evaluation evidence",
+      "regression evidence",
+      "readiness verification"
+    ],
+    "Arbiter": [
+      "evidence-based transition disposition between governed CUIR phases"
+    ]
+  },
+  "handoff": {
+    "artificer_cannot_self_approve_implementation": true,
+    "cloak_has_code_implementation_authority": false,
+    "cuir1_requires_cuir0_pass": true
+  },
+  "authority": {
+    "external_code_execution_authorized": false,
+    "automatic_ingestion_authorized": false,
+    "code_implementation_authorized": false,
+    "merge_authorized": false,
+    "release_authorized": false,
+    "deployment_authorized": false,
+    "policy_activation_authorized": false,
+    "automatic_provider_routing_authorized": false
+  }
+}

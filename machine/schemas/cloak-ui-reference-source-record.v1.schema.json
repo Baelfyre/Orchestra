@@ -1,0 +1,109 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "orchestra://schemas/cloak-ui-reference-source-record.v1",
+  "title": "Orchestra Cloak UI Reference Source Record v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_id",
+    "repository",
+    "owner",
+    "source_revision",
+    "source_paths_or_artifact_ids",
+    "source_category",
+    "license_identifier",
+    "license_evidence",
+    "reuse_classification",
+    "attribution_or_notice_requirements",
+    "pattern_or_asset_summary",
+    "what_was_learned_or_reused",
+    "what_was_not_copied",
+    "review_owner"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.cloak-ui-reference-source-record.v1"},
+    "record_id": {"type": "string", "minLength": 1, "maxLength": 160, "pattern": "^[a-z0-9][a-z0-9._-]*$"},
+    "repository": {"type": "string", "minLength": 3, "maxLength": 200, "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+    "owner": {"type": "string", "minLength": 1, "maxLength": 100},
+    "source_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "source_paths_or_artifact_ids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1, "maxLength": 500}
+    },
+    "source_category": {
+      "enum": ["UI_REFERENCE", "BRAND_ICONS", "GENERAL_UI_ICONS"]
+    },
+    "license_identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "description": "Use an SPDX identifier when verified or an explicit sentinel such as NONE_DETECTED or AMBIGUOUS when reuse rights are not established."
+    },
+    "license_evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "reference", "source_revision"],
+        "properties": {
+          "type": {"enum": ["LICENSE_FILE", "REPOSITORY_METADATA", "UPSTREAM_NOTICE", "ARTIFACT_LICENSE_MAP", "ABSENCE_CHECK"]},
+          "reference": {"type": "string", "minLength": 1, "maxLength": 1000},
+          "source_revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "notes": {"type": "string", "maxLength": 2000}
+        }
+      }
+    },
+    "reuse_classification": {
+      "enum": ["REFERENCE_ONLY", "REUSE_WITH_NOTICE", "REUSE_WITH_RIGHTS_REVIEW", "PROHIBITED"]
+    },
+    "attribution_or_notice_requirements": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1, "maxLength": 1000}
+    },
+    "pattern_or_asset_summary": {"type": "string", "minLength": 1, "maxLength": 4000},
+    "what_was_learned_or_reused": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1, "maxLength": 2000}
+    },
+    "what_was_not_copied": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1, "maxLength": 2000}
+    },
+    "review_owner": {
+      "enum": ["Artificer", "Cloak", "Governor", "Clockwork", "Ponytail", "Overseer", "Arbiter"]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"license_identifier": {"enum": ["NONE_DETECTED", "AMBIGUOUS"]}},
+        "required": ["license_identifier"]
+      },
+      "then": {
+        "properties": {"reuse_classification": {"enum": ["REFERENCE_ONLY", "PROHIBITED"]}}
+      }
+    },
+    {
+      "if": {
+        "properties": {"source_category": {"const": "UI_REFERENCE"}, "owner": {"const": "Nazia-99"}},
+        "required": ["source_category", "owner"]
+      },
+      "then": {
+        "properties": {
+          "attribution_or_notice_requirements": {
+            "contains": {"type": "string", "pattern": "Nazia-99"}
+          }
+        }
+      }
+    }
+  ]
+}
