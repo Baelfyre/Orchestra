@@ -103,11 +103,11 @@
       "external_code_execution": false,
       "automatic_ingestion": false,
       "source_copying_from_reference_only_records": false,
-      "cuir2_started": false,
+      "cuir2_started": true,
       "authority_note": "CUIR-1 is canonical inventory and provenance classification only. The phase_boundary inside the dated inventory record preserves preparation-time source state; current lifecycle state is the verified canonical Git state and this machine index. CUIR-1 does not authorize source or asset copying from reference-only records, external project execution, automatic ingestion, CUIR-2 pattern extraction, provider routing or fallback, release, deployment, policy activation, or other protected-action authority."
     },
     "cloak_ui_reference_corpus_cuir2": {
-      "status": "CUIR_2_STATIC_ANALYSIS_CANDIDATE_PENDING_CANONICALIZATION",
+      "status": "CUIR_2_CANONICAL_MERGED_VERIFIED",
       "purpose": "Static concept-level UI, interaction, information-hierarchy, accessibility, and icon-suitability analysis over the 23 canonical CUIR-1 retained source records.",
       "machine_sources": [
         "machine/provenance/cloak-ui-reference-cuir2.v1.json",
