@@ -1,0 +1,17 @@
+{
+  "schema_version": "orchestra.cloak-ui-reference-source-record.v1",
+  "record_id": "nazia-99.animated-action-menu",
+  "repository": "Nazia-99/Animated-Action-Menu",
+  "owner": "Nazia-99",
+  "source_revision": "da4bb29cf7398ab4e80208306356a9aac07086bb",
+  "source_paths_or_artifact_ids": ["repository-root@da4bb29cf7398ab4e80208306356a9aac07086bb"],
+  "source_category": "UI_REFERENCE",
+  "license_identifier": "AMBIGUOUS",
+  "license_evidence": [{"type":"REPOSITORY_METADATA","reference":"https://api.github.com/repos/Nazia-99/Animated-Action-Menu","source_revision":"da4bb29cf7398ab4e80208306356a9aac07086bb","notes":"GitHub repository metadata reported license=null during CUIR-1 inspection while the default branch resolved to this pinned revision. This is not an exhaustive filesystem absence check; direct reuse is not authorized."}],
+  "reuse_classification": "REFERENCE_ONLY",
+  "attribution_or_notice_requirements": ["Reference attribution must identify Nazia-99 and Nazia-99/Animated-Action-Menu.","No direct source-code or asset reuse is authorized by this record."],
+  "pattern_or_asset_summary": "Retained as a concept-level CUIR-1 reference candidate for later static analysis of compact action-menu structure. CUIR-1 does not extract or implement the external pattern.",
+  "what_was_learned_or_reused": ["Retained repository identity, public visibility, exact revision, and conservative rights classification for later static analysis.","Functional reference category recorded at concept level: compact action-menu structure."],
+  "what_was_not_copied": ["No source code, assets, generated output, or external dependencies were copied, installed, or executed during CUIR-1.","No implementation detail was promoted into Orchestra from this external repository during CUIR-1."],
+  "review_owner": "Artificer"
+}

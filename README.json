@@ -75,17 +75,36 @@
       "authority_note": "P2.2B records and classifies evidence only. A configured model, successful VS Code response, provider-native harness observation, deterministic CI pass, or qualification receipt cannot grant provider execution, automatic routing/fallback, merge, release, deployment, policy activation, credential mutation, installed-integration refresh, or other protected-action authority."
     },
     "cloak_ui_reference_corpus_cuir0": {
-      "status": "CUIR_0_IMPLEMENTED_CANDIDATE_PENDING_CANONICALIZATION",
+      "status": "CUIR_0_CANONICAL_MERGED_VERIFIED",
       "purpose": "Freeze provenance-aware external UI and icon corpus eligibility, per-repository licensing and reuse, non-execution, data-minimization, source-record, and specialist-handoff rules before inventory or pattern extraction.",
       "machine_sources": ["machine/governance/cloak-ui-reference-corpus-policy.v1.json", "machine/schemas/cloak-ui-reference-corpus-policy.v1.schema.json", "machine/schemas/cloak-ui-reference-source-record.v1.schema.json"],
       "human_sources": ["docs/project/CLOAK_UI_REFERENCE_CORPUS_PLAN.md", "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR0_CONTRACT.md"],
       "validation_surface": "tests/runtime/test_cloak_ui_reference_corpus_governance.py",
       "runtime_integration": false,
-      "current_inventory": "NOT_STARTED_CUIR_1",
+      "current_inventory": "CUIR_1_IMPLEMENTATION_CANDIDATE_PENDING_CANONICALIZATION",
       "external_code_execution": false,
       "automatic_ingestion": false,
       "code_implementation_authority": false,
-      "authority_note": "CUIR-0 freezes source-intake and reuse boundaries only. It does not inventory or ingest repositories, authorize copying, execute external code, grant Cloak implementation authority, or grant merge, release, deployment, policy, provider-routing, or other protected-action authority."
+      "authority_note": "CUIR-0 is canonical source-intake and reuse governance. It does not authorize copying, external code execution, Cloak implementation authority, merge, release, deployment, policy, provider routing, or other protected-action authority."
+    },
+    "cloak_ui_reference_corpus_cuir1": {
+      "status": "CUIR_1_IMPLEMENTATION_CANDIDATE_PENDING_CANONICALIZATION",
+      "purpose": "Record the dated current UI reference corpus inventory and per-retained-repository license and provenance classifications without source ingestion or pattern extraction.",
+      "machine_sources": ["machine/provenance/cloak-ui-reference-cuir1.v1.json", "machine/schemas/cloak-ui-reference-source-record.v1.schema.json"],
+      "human_sources": ["docs/project/CLOAK_UI_REFERENCE_CORPUS_PLAN.md", "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR1_INVENTORY.md"],
+      "validation_surface": "tests/runtime/test_cloak_ui_reference_corpus_cuir1.py",
+      "discovery_snapshot_date": "2026-08-31",
+      "public_repository_count": 144,
+      "retained_nazia_ui_reference_count": 20,
+      "discovered_not_retained_count": 124,
+      "icon_source_count": 3,
+      "total_source_record_count": 23,
+      "runtime_integration": false,
+      "external_code_execution": false,
+      "automatic_ingestion": false,
+      "source_copying_from_reference_only_records": false,
+      "cuir2_started": false,
+      "authority_note": "CUIR-1 is inventory and provenance classification only. It does not authorize source or asset copying from reference-only records, external project execution, automatic ingestion, CUIR-2 pattern extraction, provider routing or fallback, merge, release, deployment, policy activation, or other protected-action authority."
     },
     "cross_specialist_coordination": {"status": "IMPLEMENTED", "human_sources": ["docs/governance/TUNER_PROTOCOL.md", "ROUTING_MAP.md"]},
     "validation_and_evidence": {"status": "IMPLEMENTED", "machine_sources": ["machine/schemas/", "machine/release-evidence/"], "human_sources": ["docs/setup/VALIDATION.md", "docs/validation/"]},
@@ -991,7 +1010,9 @@
     "murmurs_live_host_token_measurement": "B3_TERMINAL_EVIDENCE_RECONCILED_BENEFIT_NOT_ESTABLISHED",
     "codex_c2_portability_r1": "C2R1_EXECUTION_COMPLETE_RECONCILED_CANONICAL",
     "specialist_runtime_host_execution": "SUPPORTED_OPTIONAL_E7_ADOPT_OPTIONAL",
-    "unified_testing_mechanism": "SUPPORTED_OPTIONAL_ADOPT_OPTIONAL"
+    "unified_testing_mechanism": "SUPPORTED_OPTIONAL_ADOPT_OPTIONAL",
+    "cloak_ui_reference_corpus_cuir0": "CUIR_0_CANONICAL_MERGED_VERIFIED",
+    "cloak_ui_reference_corpus_cuir1": "CUIR_1_IMPLEMENTATION_CANDIDATE_PENDING_CANONICALIZATION"
   },
   "ai_review_guidance": {
     "preferred_entrypoint": "README.json",
@@ -1085,6 +1106,9 @@
     "treat_original_c2_external_artifact_hashes_as_historical_not_current_execution_authority": true,
     "require_c2_portability_r1_live_authorization_record_before_first_model_call": true,
     "treat_e7_specialist_runtime_host_execution_as_optional_not_default": true,
-    "do_not_infer_generic_mcp_mutation_e2e_from_bounded_e6_evidence": true
+    "do_not_infer_generic_mcp_mutation_e2e_from_bounded_e6_evidence": true,
+    "treat_cuir1_as_inventory_and_provenance_only_until_canonicalized": true,
+    "do_not_treat_cuir1_reference_only_sources_as_copy_or_execution_authority": true,
+    "do_not_start_cuir2_from_cuir1_candidate_state": true
   }
 }
