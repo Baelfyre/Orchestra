@@ -589,7 +589,7 @@
       "confirmatory_completed_runs": 450,
       "confirmatory_live_model_calls": 450,
       "confirmatory_accepted_total_tokens": 8885182,
-      "confirmatory_median_output_token_relative_reduction": -0.01025067578772803,
+      "confirmatory_median_output_token_relative_reduction": -0.010250675612710838,
       "confirmatory_bootstrap_95_ci": [-0.04682317578772803, 0.020726934275213594],
       "confirmatory_exact_sign_test_p": 0.8699229710286416,
       "diagnostic_executed": true,
