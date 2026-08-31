@@ -106,6 +106,28 @@
       "cuir2_started": false,
       "authority_note": "CUIR-1 is canonical inventory and provenance classification only. The phase_boundary inside the dated inventory record preserves preparation-time source state; current lifecycle state is the verified canonical Git state and this machine index. CUIR-1 does not authorize source or asset copying from reference-only records, external project execution, automatic ingestion, CUIR-2 pattern extraction, provider routing or fallback, release, deployment, policy activation, or other protected-action authority."
     },
+    "cloak_ui_reference_corpus_cuir2": {
+      "status": "CUIR_2_STATIC_ANALYSIS_CANDIDATE_PENDING_CANONICALIZATION",
+      "purpose": "Static concept-level UI, interaction, information-hierarchy, accessibility, and icon-suitability analysis over the 23 canonical CUIR-1 retained source records.",
+      "machine_sources": [
+        "machine/provenance/cloak-ui-reference-cuir2.v1.json",
+        "machine/provenance/cloak-ui-reference-cuir2/analysis-batch-1.v1.json",
+        "machine/provenance/cloak-ui-reference-cuir2/analysis-batch-2.v1.json",
+        "machine/provenance/cloak-ui-reference-cuir2/analysis-batch-3.v1.json",
+        "machine/schemas/cloak-ui-reference-analysis-record.v1.schema.json"
+      ],
+      "human_sources": [
+        "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR2_STATIC_ANALYSIS.md"
+      ],
+      "validation_surface": "tests/runtime/test_cloak_ui_reference_corpus_cuir2.py",
+      "runtime_integration": false,
+      "external_code_execution": false,
+      "automatic_ingestion": false,
+      "source_copying": false,
+      "asset_copying": false,
+      "cuir3_started": false,
+      "authority_note": "CUIR-2 is analysis evidence only. It does not authorize source or asset copying, external code or dependency execution, CUIR-3 normalization, runtime integration, provider routing or fallback, release, deployment, production mutation, or policy activation."
+    },
     "cross_specialist_coordination": {"status": "IMPLEMENTED", "human_sources": ["docs/governance/TUNER_PROTOCOL.md", "ROUTING_MAP.md"]},
     "validation_and_evidence": {"status": "IMPLEMENTED", "machine_sources": ["machine/schemas/", "machine/release-evidence/"], "human_sources": ["docs/setup/VALIDATION.md", "docs/validation/"]},
     "unified_testing_mechanism_t0_t9": {
