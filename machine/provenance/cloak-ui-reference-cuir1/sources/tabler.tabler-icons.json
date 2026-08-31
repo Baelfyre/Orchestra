@@ -1,0 +1,17 @@
+{
+  "schema_version": "orchestra.cloak-ui-reference-source-record.v1",
+  "record_id": "tabler.tabler-icons",
+  "repository": "tabler/tabler-icons",
+  "owner": "tabler",
+  "source_revision": "5a0fe38e97784d94279ce4eb1bf85f9a91bf027e",
+  "source_paths_or_artifact_ids": ["LICENSE","repository-root@5a0fe38e97784d94279ce4eb1bf85f9a91bf027e"],
+  "source_category": "GENERAL_UI_ICONS",
+  "license_identifier": "MIT",
+  "license_evidence": [{"type":"LICENSE_FILE","reference":"https://github.com/tabler/tabler-icons/blob/5a0fe38e97784d94279ce4eb1bf85f9a91bf027e/LICENSE","source_revision":"5a0fe38e97784d94279ce4eb1bf85f9a91bf027e","notes":"Pinned LICENSE is MIT and requires preservation of the copyright and permission notice in copies or substantial portions."}],
+  "reuse_classification": "REUSE_WITH_NOTICE",
+  "attribution_or_notice_requirements": ["Preserve the applicable Tabler Icons MIT copyright and permission notice with reused material."],
+  "pattern_or_asset_summary": "General UI icon corpus pinned for later icon suitability review. No icon asset is reused during CUIR-1.",
+  "what_was_learned_or_reused": ["Retained exact repository identity, revision, MIT license classification, and notice obligation."],
+  "what_was_not_copied": ["No icon artwork, SVG path data, source code, package content, or generated output was copied during CUIR-1."],
+  "review_owner": "Artificer"
+}
