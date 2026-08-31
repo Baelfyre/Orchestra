@@ -1,5 +1,11 @@
 # Changelog
 
+## Post-v1.7 Cloak CUIR-2 static pattern analysis candidate
+
+- Added bounded static concept-level analysis across all 23 canonical CUIR-1 retained source records: 20 Nazia-99 UI references plus the three pinned Simple Icons, Tabler Icons, and Lucide icon sources.
+- Recorded three bounded machine analysis batches covering concept-level UI, information-hierarchy, interaction-state, accessibility, and icon-suitability findings, with inherited provenance and reuse classifications preserved.
+- Added the strict analysis schema and deterministic CUIR-2 runtime validation for source binding, batch coverage, schema conformance, and closed authority boundaries.
+- CUIR-2 performs no source or asset copying, external project build, dependency installation, external execution, automatic ingestion, runtime integration, provider routing or fallback, release, deployment, production mutation, or policy activation. CUIR-3 remains not started.
 ## Post-v1.7 Cloak CUIR-1 corpus inventory and provenance candidate
 
 - Added the dated CUIR-1 live-source inventory for the `Nazia-99` account, recording 144 unique public repository identities from the 2026-08-31 discovery snapshot, explicit per-repository screening dispositions, 20 retained distinct UI references, and 124 discovered sources not promoted into the retained corpus.
