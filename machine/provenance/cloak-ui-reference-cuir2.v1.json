@@ -1,0 +1,65 @@
+{
+  "schema_version": "orchestra.cloak-ui-reference-cuir2.v1",
+  "phase": "CUIR-2",
+  "status": "CUIR_2_STATIC_ANALYSIS_CANDIDATE_PENDING_CANONICALIZATION",
+  "analysis_date": "2026-08-31",
+  "orchestra_baseline_sha": "8211dd39cbdd6210495a2a82c756b6feb9fb9cee",
+  "source_of_truth": {
+    "plan": "docs/project/CLOAK_UI_REFERENCE_CORPUS_PLAN.md",
+    "governance_contract": "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR0_CONTRACT.md",
+    "input_inventory": "machine/provenance/cloak-ui-reference-cuir1.v1.json",
+    "analysis_record_schema": "machine/schemas/cloak-ui-reference-analysis-record.v1.schema.json",
+    "human_record": "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR2_STATIC_ANALYSIS.md"
+  },
+  "input_boundary": {
+    "required_cuir1_lifecycle": "CUIR_1_CANONICAL_MERGED_VERIFIED",
+    "expected_source_record_count": 23,
+    "retained_nazia_ui_reference_count": 20,
+    "icon_source_count": 3,
+    "revision_refresh_performed": false,
+    "input_rule": "CUIR-2 analyzes only the 23 exact-revision source records retained by canonical CUIR-1."
+  },
+  "external_execution_controls": {
+    "analysis_mode": "STATIC_ONLY",
+    "run_build_scripts": false,
+    "install_project_dependencies": false,
+    "execute_application_code": false,
+    "execute_unknown_scripts": false,
+    "mirror_entire_repository": false,
+    "automatic_ingestion": false,
+    "download_or_copy_reference_only_assets": false,
+    "source_code_copied": false,
+    "assets_copied": false,
+    "material_reused": false,
+    "direct_reuse_authorized_by_cuir2": false,
+    "separate_reuse_gate_required_before_direct_reuse": true
+  },
+  "cross_source_findings": {
+    "status": "CANDIDATE_FINDINGS_NOT_CUIR3_NORMALIZED",
+    "findings": [
+      "The retained UI references provide reusable state and hierarchy concepts even when their visual style is not reusable.",
+      "Navigation, forms, progress, selection, dense information, and action hierarchy recur as independent interaction concerns.",
+      "Native semantic controls are uneven across the reference set; CUIR-3 should preserve useful state models while rejecting generic-click-target accessibility regressions.",
+      "Motion can reinforce state but must not carry the only active, progress, or completion signal.",
+      "Brand icons and general UI icons must remain separate because brand rights review differs from general icon-library notice obligations."
+    ]
+  },
+  "phase_boundary": {
+    "cuir2_started": true,
+    "cuir2_static_analysis_complete_in_candidate": true,
+    "cuir3_started": false,
+    "runtime_integration": false,
+    "code_implementation_authorized_by_cuir2": false,
+    "automatic_provider_routing": false,
+    "automatic_provider_fallback": false,
+    "release_authorized_by_cuir2": false,
+    "deployment_authorized_by_cuir2": false,
+    "policy_activation_authorized_by_cuir2": false
+  },
+  "analysis_record_files": [
+    "machine/provenance/cloak-ui-reference-cuir2/analysis-batch-1.v1.json",
+    "machine/provenance/cloak-ui-reference-cuir2/analysis-batch-2.v1.json",
+    "machine/provenance/cloak-ui-reference-cuir2/analysis-batch-3.v1.json"
+  ],
+  "analysis_record_count": 23
+}
