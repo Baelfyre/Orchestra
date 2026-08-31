@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.7 Cloak CUIR-1 corpus inventory and provenance candidate
+
+- Added the dated CUIR-1 live-source inventory for the `Nazia-99` account, recording 144 unique public repository identities from the 2026-08-31 discovery snapshot, explicit per-repository screening dispositions, 20 retained distinct UI references, and 124 discovered sources not promoted into the retained corpus.
+- Added 23 exact-revision provenance records: 20 retained `Nazia-99` UI references conservatively classified `AMBIGUOUS` and `REFERENCE_ONLY`, plus pinned Simple Icons, Tabler Icons, and Lucide icon-source records with their applicable CC0-1.0 rights-review, MIT notice, ISC notice, and Feather-derived MIT subset distinctions preserved.
+- Added deterministic CUIR-1 runtime validation for snapshot identity, disposition counts, source-record schema conformance, attribution/non-copying boundaries, exact icon pins, and closed external-execution/provider-routing boundaries.
+- CUIR-1 performs no external build, dependency installation, external application/script execution, repository mirroring, automatic ingestion, source/asset copying from the reference-only Nazia records, provider routing/fallback activation, or CUIR-2 pattern extraction.
+
 ## Post-v1.7 Cloak CUIR-0 corpus governance candidate
 
 - Added the bounded `CUIR-0` governance and intake contract for `CLOAK_UI_REFERENCE_CORPUS_V1`, freezing per-repository eligibility, provenance, exact source-revision pinning, reuse classifications, specialist ownership, and data-minimization rules before any broad corpus inventory or pattern extraction.
