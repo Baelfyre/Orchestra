@@ -74,6 +74,19 @@
       "release_authorized": false,
       "authority_note": "P2.2B records and classifies evidence only. A configured model, successful VS Code response, provider-native harness observation, deterministic CI pass, or qualification receipt cannot grant provider execution, automatic routing/fallback, merge, release, deployment, policy activation, credential mutation, installed-integration refresh, or other protected-action authority."
     },
+    "cloak_ui_reference_corpus_cuir0": {
+      "status": "CUIR_0_IMPLEMENTED_CANDIDATE_PENDING_CANONICALIZATION",
+      "purpose": "Freeze provenance-aware external UI and icon corpus eligibility, per-repository licensing and reuse, non-execution, data-minimization, source-record, and specialist-handoff rules before inventory or pattern extraction.",
+      "machine_sources": ["machine/governance/cloak-ui-reference-corpus-policy.v1.json", "machine/schemas/cloak-ui-reference-corpus-policy.v1.schema.json", "machine/schemas/cloak-ui-reference-source-record.v1.schema.json"],
+      "human_sources": ["docs/project/CLOAK_UI_REFERENCE_CORPUS_PLAN.md", "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR0_CONTRACT.md"],
+      "validation_surface": "tests/runtime/test_cloak_ui_reference_corpus_governance.py",
+      "runtime_integration": false,
+      "current_inventory": "NOT_STARTED_CUIR_1",
+      "external_code_execution": false,
+      "automatic_ingestion": false,
+      "code_implementation_authority": false,
+      "authority_note": "CUIR-0 freezes source-intake and reuse boundaries only. It does not inventory or ingest repositories, authorize copying, execute external code, grant Cloak implementation authority, or grant merge, release, deployment, policy, provider-routing, or other protected-action authority."
+    },
     "cross_specialist_coordination": {"status": "IMPLEMENTED", "human_sources": ["docs/governance/TUNER_PROTOCOL.md", "ROUTING_MAP.md"]},
     "validation_and_evidence": {"status": "IMPLEMENTED", "machine_sources": ["machine/schemas/", "machine/release-evidence/"], "human_sources": ["docs/setup/VALIDATION.md", "docs/validation/"]},
     "unified_testing_mechanism_t0_t9": {
