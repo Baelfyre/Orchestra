@@ -1,0 +1,137 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "orchestra.runtime-architecture-boundaries.v1.schema",
+  "title": "Orchestra Runtime Architecture Boundaries",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "policy_role",
+    "runtime_root",
+    "migration",
+    "canonical_package_roots",
+    "layer_rules",
+    "placement",
+    "repository_zones",
+    "enforcement",
+    "authority"
+  ],
+  "properties": {
+    "$schema": {"type": "string", "minLength": 1},
+    "schema_version": {"const": "orchestra.runtime-architecture-boundaries.v1"},
+    "policy_role": {"const": "machine_runtime_architecture_policy"},
+    "runtime_root": {"const": "orchestra_runtime"},
+    "migration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "strategy",
+        "new_flat_runtime_modules_prohibited",
+        "legacy_flat_modules",
+        "legacy_package_roots",
+        "compatibility_facades"
+      ],
+      "properties": {
+        "strategy": {"const": "STRANGLER_COMPATIBILITY_FACADES"},
+        "new_flat_runtime_modules_prohibited": {"const": true},
+        "legacy_flat_modules": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Za-z0-9_]+\\.py$"}
+        },
+        "legacy_package_roots": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"}
+        },
+        "compatibility_facades": {
+          "type": "object",
+          "additionalProperties": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "canonical_package_roots": {
+      "type": "array",
+      "minItems": 6,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"}
+    },
+    "layer_rules": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["forbidden_import_prefixes"],
+        "properties": {
+          "forbidden_import_prefixes": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "forbidden_io_import_prefixes": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "forbid_builtin_open": {"type": "boolean"}
+        }
+      }
+    },
+    "placement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dto_prefix", "dpo_prefix", "repository_allowed_prefixes", "runtime_resources_prefix"],
+      "properties": {
+        "dto_prefix": {"type": "string", "minLength": 1},
+        "dpo_prefix": {"type": "string", "minLength": 1},
+        "repository_allowed_prefixes": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "runtime_resources_prefix": {"type": "string", "minLength": 1}
+      }
+    },
+    "repository_zones": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"type": "string", "minLength": 1}
+    },
+    "enforcement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["validator", "tests", "ci_workflows", "fail_closed_on_unknown_runtime_package_root", "fail_closed_on_unplaced_runtime_file"],
+      "properties": {
+        "validator": {"type": "string", "minLength": 1},
+        "tests": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "ci_workflows": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "fail_closed_on_unknown_runtime_package_root": {"const": true},
+        "fail_closed_on_unplaced_runtime_file": {"const": true}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["architecture_owner", "implementation_owner", "validation_does_not_grant_authority", "release_authorized"],
+      "properties": {
+        "architecture_owner": {"type": "string", "minLength": 1},
+        "implementation_owner": {"type": "string", "minLength": 1},
+        "validation_does_not_grant_authority": {"const": true},
+        "release_authorized": {"const": false}
+      }
+    }
+  }
+}
