@@ -307,7 +307,7 @@
   ],
   "coverage": {
     "expected_cuir2_analysis_count": 23,
-    "normalized_pattern_count": 15,
+    "normalized_pattern_count": 16,
     "all_cuir2_records_accounted_for": true,
     "promoted_analysis_ids": [
       "nazia-99.expandable-glassmorphism-sidebar-menu-ui.cuir2",

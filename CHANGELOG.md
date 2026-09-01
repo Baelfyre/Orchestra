@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.7 Cloak CUIR-3 Orchestra-native normalization candidate
+
+- Normalized the canonical 23-record CUIR-2 static-analysis corpus into 16 evidence-bound Orchestra-native UI/reference patterns covering navigation, forms and input, selection and disclosure, status and progress, action hierarchy, data and summaries, content grouping, collections, accessibility, motion, and icon semantics.
+- Added a strict normalized-pattern schema, machine knowledge catalog, human normalization record, and deterministic CUIR-3 runtime validation with complete CUIR-2 provenance accounting and no unknown or silently dropped analysis records.
+- Preserved `REFERENCE_ONLY`, `REUSE_WITH_NOTICE`, and `REUSE_WITH_RIGHTS_REVIEW` classifications; kept general UI icon notice obligations separate from brand-icon rights review; rejected observed accessibility regressions instead of normalizing them.
+- CUIR-3 performs no new external source inspection or revision refresh, source or asset copying, external execution, dependency installation, automatic ingestion, runtime integration, automatic pattern retrieval, provider routing or fallback, release, deployment, production mutation, or policy activation. CUIR-4 remains not started.
+
 ## Post-v1.7 Cloak CUIR-2 static pattern analysis candidate
 
 - Added bounded static concept-level analysis across all 23 canonical CUIR-1 retained source records: 20 Nazia-99 UI references plus the three pinned Simple Icons, Tabler Icons, and Lucide icon sources.

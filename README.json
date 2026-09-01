@@ -125,8 +125,25 @@
       "automatic_ingestion": false,
       "source_copying": false,
       "asset_copying": false,
-      "cuir3_started": false,
+      "cuir3_started": true,
       "authority_note": "CUIR-2 is analysis evidence only. It does not authorize source or asset copying, external code or dependency execution, CUIR-3 normalization, runtime integration, provider routing or fallback, release, deployment, production mutation, or policy activation."
+    },
+    "cloak_ui_reference_corpus_cuir3": {
+      "status": "CUIR_3_NORMALIZATION_CANDIDATE_PENDING_CANONICALIZATION",
+      "purpose": "Normalize canonical CUIR-2 static findings into a compact Orchestra-native, provenance-aware Cloak pattern vocabulary without runtime integration or automatic retrieval.",
+      "machine_sources": ["machine/knowledge/cloak-ui-reference-cuir3.v1.json", "machine/schemas/cloak-ui-normalized-pattern.v1.schema.json"],
+      "human_sources": ["docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR3_NORMALIZATION.md"],
+      "validation_surface": "tests/runtime/test_cloak_ui_reference_corpus_cuir3.py",
+      "source_analysis_record_count": 23,
+      "normalized_pattern_count": 16,
+      "runtime_integration": false,
+      "automatic_retrieval": false,
+      "external_code_execution": false,
+      "automatic_ingestion": false,
+      "source_copying": false,
+      "asset_copying": false,
+      "cuir4_started": false,
+      "authority_note": "CUIR-3 is normalized reference knowledge only. It does not authorize runtime or automatic retrieval integration, source or asset copying, external execution, implementation, provider routing or fallback, release, deployment, production mutation, or policy activation."
     },
     "cross_specialist_coordination": {"status": "IMPLEMENTED", "human_sources": ["docs/governance/TUNER_PROTOCOL.md", "ROUTING_MAP.md"]},
     "validation_and_evidence": {"status": "IMPLEMENTED", "machine_sources": ["machine/schemas/", "machine/release-evidence/"], "human_sources": ["docs/setup/VALIDATION.md", "docs/validation/"]},
@@ -1034,7 +1051,9 @@
     "specialist_runtime_host_execution": "SUPPORTED_OPTIONAL_E7_ADOPT_OPTIONAL",
     "unified_testing_mechanism": "SUPPORTED_OPTIONAL_ADOPT_OPTIONAL",
     "cloak_ui_reference_corpus_cuir0": "CUIR_0_CANONICAL_MERGED_VERIFIED",
-    "cloak_ui_reference_corpus_cuir1": "CUIR_1_CANONICAL_MERGED_VERIFIED"
+    "cloak_ui_reference_corpus_cuir1": "CUIR_1_CANONICAL_MERGED_VERIFIED",
+    "cloak_ui_reference_corpus_cuir2": "CUIR_2_CANONICAL_MERGED_VERIFIED",
+    "cloak_ui_reference_corpus_cuir3": "CUIR_3_NORMALIZATION_CANDIDATE_PENDING_CANONICALIZATION"
   },
   "ai_review_guidance": {
     "preferred_entrypoint": "README.json",
@@ -1131,6 +1150,10 @@
     "do_not_infer_generic_mcp_mutation_e2e_from_bounded_e6_evidence": true,
     "treat_cuir1_as_canonical_inventory_and_provenance_only": true,
     "do_not_treat_cuir1_reference_only_sources_as_copy_or_execution_authority": true,
-    "do_not_infer_cuir2_authority_from_cuir1_canonicalization": true
+    "do_not_infer_cuir2_authority_from_cuir1_canonicalization": true,
+    "treat_cuir2_as_canonical_static_analysis_only": true,
+    "do_not_treat_cuir2_reference_findings_as_copy_or_execution_authority": true,
+    "treat_cuir3_as_normalized_reference_knowledge_only_until_canonicalized": true,
+    "do_not_infer_cuir4_authority_from_cuir3_candidate_state": true
   }
 }

@@ -61,7 +61,7 @@ Visual treatments such as glassmorphism or neumorphism are not normalized as req
 
 ## Normalized taxonomy
 
-The candidate taxonomy contains 12 category families and 15 normalized patterns.
+The candidate taxonomy contains 12 category families and 16 normalized patterns.
 
 | Category | Normalized patterns |
 | --- | --- |
