@@ -33,6 +33,14 @@ jobs:
       - name: Create Artifacts Directory
         run: mkdir -p artifacts
 
+      - name: Validate Runtime Architecture Boundaries
+        run: |
+          python scripts/validation/validate_architecture_boundaries.py > artifacts/architecture_boundaries_report.txt
+          cat artifacts/architecture_boundaries_report.txt
+
+      - name: Test Runtime Architecture Boundary Validator
+        run: python tests/behavior/test_architecture_boundaries.py
+
       - name: Test Documentation Contracts
         run: |
           python tests/behavior/test_readme_impact.py
@@ -105,7 +113,7 @@ jobs:
         run: |
           echo "# Governance Validation Report" >> $GITHUB_STEP_SUMMARY
           echo "## Stage 1 Strict Deterministic Gates: ON" >> $GITHUB_STEP_SUMMARY
-          echo "Documentation Impact Gate and Stage 1 strict deterministic governance validation completed. Review artifacts and logs for any fail-closed documentation or governance findings." >> $GITHUB_STEP_SUMMARY
+          echo "Documentation Impact Gate, runtime architecture boundary enforcement, and Stage 1 strict deterministic governance validation completed. Review artifacts and logs for any fail-closed findings." >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Governance Artifacts
         if: always()
