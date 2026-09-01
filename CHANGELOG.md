@@ -1,5 +1,13 @@
 # Changelog
 
+## Post-v1.7 Cloak CUIR-4 pattern intelligence integration candidate
+
+- Integrates the canonical 16-pattern CUIR-3 catalog into Cloak through progressive disclosure instead of default full-corpus prompt injection.
+- Adds a deterministic problem-class/category retrieval contract and reproducible helper capped at five normalized patterns per task.
+- Preserves project-native requirements first, exact provenance, accessibility constraints, and `REFERENCE_ONLY` / `REUSE_WITH_NOTICE` / `REUSE_WITH_RIGHTS_REVIEW` distinctions.
+- Adds source/Codex Cloak guide parity and deterministic runtime validation for category reachability, bounded retrieval, representative task relevance, icon-rights separation, and closed CUIR-5 authority.
+- Performs no new external repository inspection, external dependency installation, source/asset copying, provider routing, release, deployment, production mutation, or policy activation.
+
 ## Post-v1.7 Cloak CUIR-3 Orchestra-native normalization candidate
 
 - Normalized the canonical 23-record CUIR-2 static-analysis corpus into 16 evidence-bound Orchestra-native UI/reference patterns covering navigation, forms and input, selection and disclosure, status and progress, action hierarchy, data and summaries, content grouping, collections, accessibility, motion, and icon semantics.
