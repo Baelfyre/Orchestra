@@ -1,0 +1,149 @@
+{
+  "$schema": "../schemas/runtime-architecture-boundaries.v1.schema.json",
+  "schema_version": "orchestra.runtime-architecture-boundaries.v1",
+  "policy_role": "machine_runtime_architecture_policy",
+  "runtime_root": "orchestra_runtime",
+  "migration": {
+    "strategy": "STRANGLER_COMPATIBILITY_FACADES",
+    "new_flat_runtime_modules_prohibited": true,
+    "legacy_flat_modules": [
+      "__init__.py",
+      "adapters.py",
+      "authority.py",
+      "capabilities.py",
+      "communication_budget.py",
+      "compliance_protocol.py",
+      "context_state.py",
+      "coordination.py",
+      "correlation.py",
+      "delegation.py",
+      "errors.py",
+      "evidence.py",
+      "factories.py",
+      "governance_kernel.py",
+      "host_protocol.py",
+      "host_updates.py",
+      "interfaces.py",
+      "lifecycle.py",
+      "machine_contracts.py",
+      "mcp_specialist_execution.py",
+      "mcp_transport.py",
+      "models.py",
+      "preexecution.py",
+      "presentation.py",
+      "provider_execution.py",
+      "provider_mcp_execution.py",
+      "provider_qualification.py",
+      "registry_adaptive.py",
+      "registry_o7.py",
+      "remediation_circuit.py",
+      "repositories.py",
+      "retrospective.py",
+      "serialization.py",
+      "services.py",
+      "shadow_conformance.py",
+      "specialist_execution.py",
+      "status.py",
+      "test_evidence.py",
+      "unified_testing.py",
+      "workflow_contracts.py",
+      "worktree.py"
+    ],
+    "legacy_package_roots": ["adaptive"],
+    "compatibility_facades": {
+      "orchestra_runtime.errors": "orchestra_runtime.shared.errors"
+    }
+  },
+  "canonical_package_roots": [
+    "domain",
+    "application",
+    "infrastructure",
+    "entrypoints",
+    "bootstrap",
+    "shared",
+    "resources"
+  ],
+  "layer_rules": {
+    "domain": {
+      "forbidden_import_prefixes": [
+        "orchestra_runtime.application",
+        "orchestra_runtime.infrastructure",
+        "orchestra_runtime.entrypoints",
+        "internal"
+      ],
+      "forbidden_io_import_prefixes": [
+        "subprocess",
+        "socket",
+        "sqlite3",
+        "http.client",
+        "urllib.request",
+        "requests",
+        "aiohttp",
+        "httpx"
+      ],
+      "forbid_builtin_open": true
+    },
+    "application": {
+      "forbidden_import_prefixes": [
+        "orchestra_runtime.infrastructure",
+        "orchestra_runtime.entrypoints",
+        "internal"
+      ]
+    },
+    "infrastructure": {
+      "forbidden_import_prefixes": [
+        "orchestra_runtime.entrypoints",
+        "internal"
+      ]
+    },
+    "entrypoints": {
+      "forbidden_import_prefixes": ["internal"]
+    },
+    "shared": {
+      "forbidden_import_prefixes": [
+        "orchestra_runtime.domain",
+        "orchestra_runtime.application",
+        "orchestra_runtime.infrastructure",
+        "orchestra_runtime.entrypoints",
+        "internal"
+      ]
+    },
+    "bootstrap": {
+      "forbidden_import_prefixes": ["internal"]
+    }
+  },
+  "placement": {
+    "dto_prefix": "application/dto/",
+    "dpo_prefix": "infrastructure/persistence/dpo/",
+    "repository_allowed_prefixes": [
+      "application/ports/repositories/",
+      "infrastructure/persistence/repositories/"
+    ],
+    "runtime_resources_prefix": "resources/"
+  },
+  "repository_zones": {
+    "machine": "canonical_machine_contracts_and_evidence",
+    "skills": "specialist_instruction_sources",
+    "commands": "command_surfaces",
+    "adapters": "host_distribution_projections",
+    "docs": "human_documentation",
+    "assets": "static_visual_assets",
+    "internal": "experiments_proofs_and_research_not_runtime_dependencies"
+  },
+  "enforcement": {
+    "validator": "scripts/validation/validate_architecture_boundaries.py",
+    "tests": [
+      "tests/runtime/test_runtime_architecture_boundaries.py",
+      "tests/runtime/test_runtime_architecture_policy.py"
+    ],
+    "ci_workflows": ["Governance Check", "validate"],
+    "fail_closed_on_unknown_runtime_package_root": true,
+    "fail_closed_on_unplaced_runtime_file": true
+  },
+  "authority": {
+    "architecture_owner": "clockwork",
+    "implementation_owner": "ponytail",
+    "validation_does_not_grant_authority": true,
+    "release_authorized": false
+  }
+}
