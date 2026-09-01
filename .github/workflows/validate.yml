@@ -30,6 +30,12 @@ jobs:
       - name: Install test dependencies
         run: python -m pip install --upgrade pip pytest pytest-cov
 
+      - name: Validate runtime architecture boundaries
+        run: python scripts/validation/validate_architecture_boundaries.py
+
+      - name: Test architecture boundary validator
+        run: python tests/behavior/test_architecture_boundaries.py
+
       - name: Run behavior validation suite
         run: python tests/behavior/run_tests.py
 
