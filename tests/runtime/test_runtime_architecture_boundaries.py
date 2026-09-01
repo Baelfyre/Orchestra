@@ -55,16 +55,16 @@ FORBIDDEN_IMPORT_PREFIXES = {
     "domain": (
         "orchestra_runtime.application",
         "orchestra_runtime.infrastructure",
-        "orchestra_runtime.interfaces",
+        "orchestra_runtime.entrypoints",
         "internal",
     ),
     "application": (
         "orchestra_runtime.infrastructure",
-        "orchestra_runtime.interfaces",
+        "orchestra_runtime.entrypoints",
         "internal",
     ),
-    "infrastructure": ("orchestra_runtime.interfaces", "internal"),
-    "interfaces": ("internal",),
+    "infrastructure": ("orchestra_runtime.entrypoints", "internal"),
+    "entrypoints": ("internal",),
 }
 
 
