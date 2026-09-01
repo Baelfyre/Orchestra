@@ -1,0 +1,64 @@
+name: v1.8.0 RC context parity builder
+
+on:
+  push:
+    branches:
+      - release/v1.8.0-candidate-20260901
+
+permissions:
+  contents: write
+
+jobs:
+  apply-context-parity:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout candidate branch
+        uses: actions/checkout@v7
+        with:
+          ref: release/v1.8.0-candidate-20260901
+          fetch-depth: 0
+
+      - name: Replace bounded Current Stage block
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("PROJECT_CONTEXT.md")
+          text = path.read_text(encoding="utf-8")
+          start_marker = "## Current Stage\n"
+          end_marker = "\n\n## Primary Users"
+          if text.count(start_marker) != 1 or text.count(end_marker) != 1:
+              raise SystemExit("PROJECT_CONTEXT.md Current Stage markers are not unique")
+          start = text.index(start_marker) + len(start_marker)
+          end = text.index(end_marker, start)
+          current = text[start:end]
+          if not current.startswith("v1.7.0 -"):
+              raise SystemExit(f"Unexpected Current Stage prefix: {current[:80]!r}")
+          replacement = (
+              "v1.8.0 - Governed Execution, Registry Optimization & Reference Intelligence "
+              "(`RELEASE_CANDIDATE_NOT_PUBLISHED`). The candidate is prepared from signed canonical "
+              "CUIR-6 baseline `2f11f17742e68560d2a435bcab3f247b52d351ab`, tree "
+              "`0f114c13d8f5f54ee5ecf1e9deb156ae6fe6e24b`, and remains subject to exact-head qualification, "
+              "zero unresolved review threads, signed materialization, signed-head validation, canonical "
+              "tree/signature/parent verification, and explicit final-review approval. The latest published "
+              "release remains immutable `v1.7.0` at signed commit "
+              "`e5305ef3e160209a0345bd2c7843c923940e62c5`; no `v1.8.0` tag or GitHub Release has been created, "
+              "and publication is not authorized by the candidate."
+          )
+          path.write_text(text[:start] + replacement + text[end:], encoding="utf-8")
+          Path(".github/workflows/v18-rc-context-builder.yml").unlink()
+          PY
+
+          git diff --check
+
+      - name: Commit bounded context parity update
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add PROJECT_CONTEXT.md .github/workflows/v18-rc-context-builder.yml
+          git diff --cached --check
+          git commit -m "docs(release): align v1.8.0 project context"
+          git push origin HEAD:release/v1.8.0-candidate-20260901
