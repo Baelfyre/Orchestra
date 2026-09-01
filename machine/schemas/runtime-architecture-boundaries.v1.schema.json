@@ -29,7 +29,7 @@
         "strategy",
         "new_flat_runtime_modules_prohibited",
         "legacy_flat_modules",
-        "legacy_package_roots",
+        "legacy_package_files",
         "compatibility_facades"
       ],
       "properties": {
@@ -40,10 +40,13 @@
           "uniqueItems": true,
           "items": {"type": "string", "pattern": "^[A-Za-z0-9_]+\\.py$"}
         },
-        "legacy_package_roots": {
-          "type": "array",
-          "uniqueItems": true,
-          "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"}
+        "legacy_package_files": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "pattern": "^(?:[A-Za-z0-9_]+/)*[A-Za-z0-9_]+\\.py$"}
+          }
         },
         "compatibility_facades": {
           "type": "object",
@@ -63,8 +66,13 @@
       "additionalProperties": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["forbidden_import_prefixes"],
+        "required": ["allowed_runtime_import_prefixes", "forbidden_import_prefixes", "allow_legacy_runtime_imports"],
         "properties": {
+          "allowed_runtime_import_prefixes": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
           "forbidden_import_prefixes": {
             "type": "array",
             "uniqueItems": true,
@@ -75,15 +83,40 @@
             "uniqueItems": true,
             "items": {"type": "string", "minLength": 1}
           },
-          "forbid_builtin_open": {"type": "boolean"}
+          "forbid_builtin_open": {"type": "boolean"},
+          "allow_legacy_runtime_imports": {"type": "boolean"}
         }
       }
     },
     "placement": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["dto_prefix", "dpo_prefix", "repository_allowed_prefixes", "runtime_resources_prefix"],
+      "required": [
+        "layer_subzones",
+        "allowed_direct_files",
+        "dto_prefix",
+        "dpo_prefix",
+        "repository_allowed_prefixes",
+        "methods_pattern",
+        "runtime_resources_prefix"
+      ],
       "properties": {
+        "layer_subzones": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"}
+          }
+        },
+        "allowed_direct_files": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "pattern": "^[A-Za-z0-9_]+\\.py$"}
+          }
+        },
         "dto_prefix": {"type": "string", "minLength": 1},
         "dpo_prefix": {"type": "string", "minLength": 1},
         "repository_allowed_prefixes": {
@@ -92,6 +125,7 @@
           "uniqueItems": true,
           "items": {"type": "string", "minLength": 1}
         },
+        "methods_pattern": {"const": "domain/<bounded-context>/methods/"},
         "runtime_resources_prefix": {"type": "string", "minLength": 1}
       }
     },
@@ -103,7 +137,15 @@
     "enforcement": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["validator", "tests", "ci_workflows", "fail_closed_on_unknown_runtime_package_root", "fail_closed_on_unplaced_runtime_file"],
+      "required": [
+        "validator",
+        "tests",
+        "ci_workflows",
+        "fail_closed_on_unknown_runtime_package_root",
+        "fail_closed_on_unplaced_runtime_file",
+        "freeze_legacy_package_file_inventories",
+        "forbid_migrated_layers_from_importing_flat_legacy_runtime"
+      ],
       "properties": {
         "validator": {"type": "string", "minLength": 1},
         "tests": {
@@ -119,7 +161,9 @@
           "items": {"type": "string", "minLength": 1}
         },
         "fail_closed_on_unknown_runtime_package_root": {"const": true},
-        "fail_closed_on_unplaced_runtime_file": {"const": true}
+        "fail_closed_on_unplaced_runtime_file": {"const": true},
+        "freeze_legacy_package_file_inventories": {"const": true},
+        "forbid_migrated_layers_from_importing_flat_legacy_runtime": {"const": true}
       }
     },
     "authority": {
