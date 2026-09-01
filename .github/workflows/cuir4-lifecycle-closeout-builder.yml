@@ -1,0 +1,79 @@
+name: CUIR-4 lifecycle closeout builder
+
+on:
+  push:
+    branches:
+      - chore/cloak-cuir4-lifecycle-closeout-20260901
+
+permissions:
+  contents: write
+
+jobs:
+  closeout:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Reconcile CUIR-4 lifecycle projection
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+
+          readme = Path('README.json')
+          text = readme.read_text(encoding='utf-8')
+          old_status = 'CUIR_4_PATTERN_INTELLIGENCE_CANDIDATE_PENDING_CANONICALIZATION'
+          new_status = 'CUIR_4_CANONICAL_MERGED_VERIFIED'
+          count = text.count(old_status)
+          if count != 2:
+              raise SystemExit(f'expected exactly 2 README status occurrences, found {count}')
+          text = text.replace(old_status, new_status)
+          old_note = 'CUIR-4 adds advisory progressive pattern retrieval only. It does not transfer implementation, architecture, security, merge, release, deployment, provider-routing, production-mutation, or policy authority and does not start CUIR-5.'
+          new_note = 'CUIR-4 is canonical advisory progressive pattern retrieval only. Canonicalization does not transfer implementation, architecture, security, merge, release, deployment, provider-routing, production-mutation, or policy authority and does not start CUIR-5.'
+          if old_note not in text:
+              raise SystemExit('expected CUIR-4 authority note not found')
+          text = text.replace(old_note, new_note, 1)
+          old_guidance = '"treat_cuir4_as_bounded_progressive_pattern_intelligence_until_canonicalized": true,\n    "do_not_infer_cuir5_authority_from_cuir4_candidate_state": true'
+          new_guidance = '"treat_cuir4_as_canonical_bounded_progressive_pattern_intelligence": true,\n    "do_not_infer_cuir5_authority_from_cuir4_canonicalization": true'
+          if old_guidance not in text:
+              raise SystemExit('expected CUIR-4 AI guidance block not found')
+          text = text.replace(old_guidance, new_guidance, 1)
+          json.loads(text)
+          readme.write_text(text, encoding='utf-8')
+
+          test = Path('tests/runtime/test_cloak_ui_reference_corpus_cuir4.py')
+          t = test.read_text(encoding='utf-8')
+          needle = 'assert cuir4["status"] == "CUIR_4_PATTERN_INTELLIGENCE_CANDIDATE_PENDING_CANONICALIZATION"'
+          repl = 'assert cuir4["status"] == "CUIR_4_CANONICAL_MERGED_VERIFIED"'
+          if t.count(needle) != 1:
+              raise SystemExit('expected one CUIR-4 README status assertion')
+          test.write_text(t.replace(needle, repl, 1), encoding='utf-8')
+
+          changelog = Path('CHANGELOG.md')
+          c = changelog.read_text(encoding='utf-8')
+          entry = '''## Post-v1.7 Cloak CUIR-4 canonical lifecycle closeout\n\n- Reconciles machine discovery with the verified canonical CUIR-4 integration at `67dc4a70159346cea903761373412829f7677fcf`.\n- Marks CUIR-4 as `CUIR_4_CANONICAL_MERGED_VERIFIED` while preserving bounded progressive retrieval, project-native precedence, provenance/reuse classifications, and the frozen UIX-9 core guidance.\n- Keeps `cuir5_started=false`; CUIR-4 canonicalization does not itself authorize CUIR-5 evaluation or any provider, release, deployment, production, policy, destructive, force-push, or history-rewrite action.\n\n'''
+          marker = '# Changelog\n\n'
+          if marker not in c:
+              raise SystemExit('changelog header not found')
+          if '## Post-v1.7 Cloak CUIR-4 canonical lifecycle closeout' not in c:
+              c = c.replace(marker, marker + entry, 1)
+          changelog.write_text(c, encoding='utf-8')
+          PY
+          python -m json.tool README.json >/dev/null
+          python -m pytest tests/runtime/test_cloak_ui_reference_corpus_cuir4.py -q
+          git diff --check
+      - name: Commit bounded closeout
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add README.json CHANGELOG.md tests/runtime/test_cloak_ui_reference_corpus_cuir4.py
+          git diff --cached --exit-code && { echo 'No closeout changes produced'; exit 1; } || true
+          git commit -m 'chore(cuir4): close canonical lifecycle state'
+          git push origin HEAD:chore/cloak-cuir4-lifecycle-closeout-20260901
