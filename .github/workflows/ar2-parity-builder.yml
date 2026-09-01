@@ -1,0 +1,94 @@
+name: AR2 Parity Builder
+
+on:
+  push:
+    branches:
+      - refactor/runtime-architecture-ar2-foundation
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Apply bounded AR-2 parity updates
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          readme_path = Path('README.json')
+          data = json.loads(readme_path.read_text(encoding='utf-8'))
+          capabilities = data.setdefault('capabilities', {})
+          capabilities['runtime_architecture_refoundation'] = {
+              'status': 'AR_2_FOUNDATION_CANDIDATE',
+              'purpose': 'Incrementally refactor the Orchestra Python runtime into bounded clean/hexagonal architecture layers while preserving public behavior and legacy import compatibility.',
+              'human_sources': [
+                  'docs/project/ORCHESTRA_RUNTIME_ARCHITECTURE_REFOUNDATION.md',
+                  'docs/architecture/README.md'
+              ],
+              'validation_surface': 'tests/runtime/test_runtime_architecture_boundaries.py',
+              'canonical_layers': ['domain', 'application', 'infrastructure', 'bootstrap', 'shared', 'resources'],
+              'application_subzones': ['use_cases', 'services', 'dto', 'ports'],
+              'persistence_subzones': ['repositories', 'dpo', 'mappers', 'stores', 'serialization'],
+              'migration_strategy': 'STRANGLER_COMPATIBILITY_FACADES',
+              'first_migrated_surface': 'orchestra_runtime.shared.errors',
+              'compatibility_facade': 'orchestra_runtime.errors',
+              'new_flat_runtime_modules_prohibited': True,
+              'production_runtime_internal_imports_prohibited': True,
+              'runtime_behavior_change': False,
+              'public_import_retirement': False,
+              'ar3_started': False,
+              'release_authorized': False,
+              'authority_note': 'AR-2 establishes architectural destinations and migrates the shared runtime error boundary behind a compatibility facade. Architecture placement or validation success does not grant implementation beyond the approved refactor scope, release, deployment, policy activation, provider routing/fallback, destructive, installed-integration-refresh, force-push, or history-rewrite authority.'
+          }
+          readme_path.write_text(json.dumps(data, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          test_path = Path('tests/runtime/test_runtime_architecture_boundaries.py')
+          test_text = test_path.read_text(encoding='utf-8')
+          marker = 'def test_ar2_foundation_packages_and_error_facade_are_compatible():'
+          if marker not in test_text:
+              test_text += '''\n\ndef test_ar2_foundation_packages_and_error_facade_are_compatible():\n    required = [\n        "domain",\n        "application",\n        "application/use_cases",\n        "application/services",\n        "application/dto",\n        "application/ports",\n        "infrastructure",\n        "infrastructure/persistence",\n        "infrastructure/persistence/repositories",\n        "infrastructure/persistence/dpo",\n        "infrastructure/persistence/mappers",\n        "infrastructure/persistence/stores",\n        "infrastructure/persistence/serialization",\n        "bootstrap",\n        "resources",\n        "shared",\n    ]\n    missing = [path for path in required if not (RUNTIME / path / "__init__.py").is_file()]\n    assert not missing, f"Missing AR-2 package boundaries: {missing}"\n\n    from orchestra_runtime import errors as legacy_errors\n    from orchestra_runtime.shared import errors as shared_errors\n\n    names = [\n        "RuntimeContractError",\n        "InvalidAuthorityConfigurationError",\n        "AuthorityDeniedError",\n        "InvalidCapabilityConfigurationError",\n        "CapabilityCollisionError",\n        "CapabilityDeniedError",\n        "DelegationRejectedError",\n        "DelegationDepthViolationError",\n        "InvalidLifecycleTransitionError",\n        "InvalidLifecycleSignalError",\n        "ConflictingTerminalSignalError",\n        "RuntimeInitializationError",\n        "RuntimeBindingError",\n        "RuntimeAuditError",\n        "InvalidCoordinationContractError",\n        "InvalidCoordinationTransitionError",\n        "InvalidCoordinationSignalError",\n        "CoordinationReadinessError",\n        "ConflictingCoordinationSignalError",\n    ]\n    mismatched = [name for name in names if getattr(legacy_errors, name) is not getattr(shared_errors, name)]\n    assert not mismatched, f"Legacy error facade changed class identity: {mismatched}"\n'''
+              test_path.write_text(test_text, encoding='utf-8')
+
+          changelog_path = Path('CHANGELOG.md')
+          changelog = changelog_path.read_text(encoding='utf-8')
+          heading = '## Post-v1.7 runtime architecture refoundation AR-2 foundation candidate'
+          if heading not in changelog:
+              block = '''# Changelog\n\n## Post-v1.7 runtime architecture refoundation AR-2 foundation candidate\n\n- Creates the canonical `domain`, `application`, `infrastructure`, `bootstrap`, `shared`, and runtime-resource package boundaries plus application use-case/service/DTO/port and persistence repository/DPO/mapper/store/serialization destinations.\n- Moves runtime contract error implementations to `orchestra_runtime.shared.errors` while retaining `orchestra_runtime.errors` as an identity-preserving compatibility facade for existing imports.\n- Extends architecture validation so the package skeleton and compatibility facade are executable invariants; new flat runtime Python modules remain prohibited and production runtime imports from repository `internal/` remain prohibited.\n- Records AR-2 in the machine repository index and architecture documentation. No runtime behavior, provider/MCP behavior, persistence semantics, public import retirement, release, deployment, policy activation, branch deletion, force push, or history rewrite is introduced.\n\n'''
+              if not changelog.startswith('# Changelog\n'):
+                  raise SystemExit('Unexpected CHANGELOG header')
+              changelog_path.write_text(block + changelog[len('# Changelog\n\n'):], encoding='utf-8')
+
+          arch_path = Path('docs/architecture/README.md')
+          arch = arch_path.read_text(encoding='utf-8')
+          arch_heading = '## Runtime Architecture Refoundation'
+          if arch_heading not in arch:
+              arch += '''\n\n## Runtime Architecture Refoundation\n\nThe pre-v1.8 runtime refoundation is defined in `docs/project/ORCHESTRA_RUNTIME_ARCHITECTURE_REFOUNDATION.md`. AR-2 establishes physical clean/hexagonal layer destinations and begins strangler migration with the shared runtime error contract. Existing public imports remain compatibility-preserved while new flat `orchestra_runtime/*.py` modules are rejected by deterministic architecture tests. Machine discovery is maintained in `README.json`.\n'''
+              arch_path.write_text(arch, encoding='utf-8')
+          PY
+
+          python -m json.tool README.json > /dev/null
+          python -m pytest tests/runtime/test_runtime_architecture_boundaries.py -q
+          git diff --check
+      - name: Commit durable parity updates
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo 'No durable changes required.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add README.json CHANGELOG.md docs/architecture/README.md tests/runtime/test_runtime_architecture_boundaries.py
+          git commit -m 'refactor(ar2): align architecture machine and validation parity'
+          git push origin HEAD:refactor/runtime-architecture-ar2-foundation
