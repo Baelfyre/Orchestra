@@ -1,0 +1,90 @@
+name: v1.8.0 RC parity builder
+
+on:
+  push:
+    branches:
+      - release/v1.8.0-candidate-20260901
+
+permissions:
+  contents: write
+
+jobs:
+  apply-release-parity:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout candidate branch
+        uses: actions/checkout@v7
+        with:
+          ref: release/v1.8.0-candidate-20260901
+          fetch-depth: 0
+
+      - name: Apply exact release-state parity
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path: str, old: str, new: str) -> None:
+              p = Path(path)
+              text = p.read_text(encoding="utf-8")
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f"{path}: expected exactly one match, found {count}: {old!r}")
+              p.write_text(text.replace(old, new, 1), encoding="utf-8")
+
+          replace_once(
+              "README.json",
+              '    "package_version": "1.7.0",',
+              '    "package_version": "1.8.0",',
+          )
+          replace_once(
+              "README.json",
+              '    "next_release_plan": "POST_V1_7_MAINTENANCE",\n    "next_release_plan_status": "V1_7_0_PUBLISHED_VERIFIED_COMPLETE"',
+              '    "next_release_plan": "V1_8_RELEASE_CANDIDATE",\n    "next_release_plan_status": "PREPARED_PENDING_EXACT_HEAD_QUALIFICATION_AND_FINAL_REVIEW"',
+          )
+          replace_once(
+              "README.json",
+              '    "provisional_next_release": "UNSET",\n    "provisional_next_release_status": "NO_NEXT_RELEASE_DECLARED",',
+              '    "provisional_next_release": "v1.8.0",\n    "provisional_next_release_status": "RELEASE_CANDIDATE_PREPARED_PENDING_QUALIFICATION_AND_FINAL_REVIEW",',
+          )
+          replace_once(
+              "README.json",
+              '    "release_candidate_v1_7_0": "docs/releases/v1.7.0-adaptive-intelligence-portable-memory-design-fidelity-release-candidate.md",',
+              '    "release_candidate_v1_7_0": "docs/releases/v1.7.0-adaptive-intelligence-portable-memory-design-fidelity-release-candidate.md",\n    "release_candidate_v1_8_0": "docs/releases/v1.8.0-governed-execution-registry-reference-intelligence-release-candidate.md",',
+          )
+          replace_once(
+              "README.json",
+              '    "v1_7_release_candidate": "PUBLISHED_VERIFIED_COMPLETE",',
+              '    "v1_7_release_candidate": "PUBLISHED_VERIFIED_COMPLETE",\n    "v1_8_release_candidate": "PREPARED_PENDING_EXACT_HEAD_QUALIFICATION_AND_FINAL_REVIEW",',
+          )
+
+          replace_once(
+              "README.md",
+              'https://img.shields.io/badge/package_version-v1.7.0-blue" alt="Repository package version v1.7.0"',
+              'https://img.shields.io/badge/package_version-v1.8.0-blue" alt="Repository package version v1.8.0 release candidate"',
+          )
+          replace_once(
+              "README.md",
+              '## Current release state\n\n',
+              '## Current release state\n\nThe repository package surfaces are prepared as the **v1.8.0 release candidate: Governed Execution, Registry Optimization & Reference Intelligence**. The candidate remains unpublished and is pending exact-head qualification, signed materialization, canonical identity verification, and explicit final-review approval. No `v1.8.0` tag or GitHub Release has been created. See the [v1.8.0 release candidate notes](docs/releases/v1.8.0-governed-execution-registry-reference-intelligence-release-candidate.md).\n\n',
+          )
+
+          release_entry = '''## v1.8.0 - Governed Execution, Registry Optimization & Reference Intelligence (Release Candidate)\n\n- Prepares the repository package and declared packaging surfaces for `1.8.0` while retaining `v1.7.0` as the latest published release until a separately approved publication step.\n- Consolidates the canonical post-v1.7 line covering the Prime Directive and Development Lifecycle V2, supported optional specialist host execution, provider qualification boundaries, Registry O7 query optimization and joint conformance, MCP 2026 compatibility, optional UTM adoption, and CUIR-0 through CUIR-6 reference intelligence.\n- Preserves terminal negative or bounded evidence without overclaiming: A5 topology and Murmurs benefit remain not established, UIX-9C V3 remains `NO_BENEFIT_ESTABLISHED`, and CUIR-5 does not establish end-to-end model quality, rendered UI correctness, human usability preference, or production effectiveness.\n- Publication remains blocked pending exact-head release qualification, zero unresolved review threads, signed materialization, signed-head validation, canonical tree/signature/parent verification, and explicit final-review approval. This preparation does not create or move the `v1.8.0` tag, publish a GitHub Release, deploy, mutate production, activate policy, refresh installed integrations, route or fallback providers, delete branches, force push, or rewrite history.\n\n'''
+          replace_once("CHANGELOG.md", "# Changelog\n\n", "# Changelog\n\n" + release_entry)
+
+          Path(".github/workflows/v18-rc-parity-builder.yml").unlink()
+          PY
+
+          python -m json.tool README.json > /dev/null
+          git diff --check
+
+      - name: Commit bounded parity update
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.json README.md CHANGELOG.md .github/workflows/v18-rc-parity-builder.yml
+          git diff --cached --check
+          git commit -m "docs(release): align v1.8.0 candidate state"
+          git push origin HEAD:release/v1.8.0-candidate-20260901
