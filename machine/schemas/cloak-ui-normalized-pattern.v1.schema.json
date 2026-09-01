@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/machine/schemas/cloak-ui-normalized-pattern.v1.schema.json",
+  "title": "Cloak Orchestra-Native Normalized UI Pattern",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "pattern_id",
+    "category",
+    "title",
+    "intent",
+    "problem_or_context",
+    "recommended_behavior",
+    "interaction_states",
+    "accessibility_constraints",
+    "source_analysis_ids",
+    "source_record_paths",
+    "reuse_classifications",
+    "evidence_count",
+    "orchestra_native_normalization",
+    "implementation_authority"
+  ],
+  "properties": {
+    "pattern_id": {"type": "string", "pattern": "^cuir3\\.[a-z0-9_]+$"},
+    "category": {
+      "enum": [
+        "navigation_and_destination_state",
+        "forms_and_input",
+        "selection_and_disclosure",
+        "feedback_status_and_progress",
+        "action_hierarchy",
+        "data_and_summary",
+        "cards_and_content_grouping",
+        "collection_and_sequence",
+        "accessibility_and_semantics",
+        "motion_and_state_emphasis",
+        "general_ui_icons",
+        "brand_icon_rights"
+      ]
+    },
+    "title": {"type": "string", "minLength": 1},
+    "intent": {"type": "string", "minLength": 1},
+    "problem_or_context": {"type": "string", "minLength": 1},
+    "recommended_behavior": {"type": "string", "minLength": 1},
+    "interaction_states": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[a-z0-9_]+$"}
+    },
+    "accessibility_constraints": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "source_analysis_ids": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[a-z0-9.-]+\\.cuir2$"}
+    },
+    "source_record_paths": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^machine/provenance/cloak-ui-reference-cuir1/sources/.+\\.json$"}
+    },
+    "reuse_classifications": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"enum": ["REFERENCE_ONLY", "REUSE_WITH_NOTICE", "REUSE_WITH_RIGHTS_REVIEW", "PROHIBITED"]}
+    },
+    "evidence_count": {"type": "integer", "minimum": 1},
+    "orchestra_native_normalization": {"const": true},
+    "implementation_authority": {"const": false}
+  }
+}
