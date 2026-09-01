@@ -160,8 +160,20 @@
       "automatic_ingestion": false,
       "source_copying": false,
       "asset_copying": false,
-      "cuir5_started": false,
-      "authority_note": "CUIR-4 is canonical advisory progressive pattern retrieval only. Canonicalization does not transfer implementation, architecture, security, merge, release, deployment, provider-routing, production-mutation, or policy authority and does not start CUIR-5."
+      "cuir5_started": true,
+      "authority_note": "CUIR-4 is canonical advisory progressive pattern retrieval only. CUIR-5 has been started by a separately authorized controlled evaluation candidate; CUIR-4 canonicalization itself did not transfer implementation, architecture, security, merge, release, deployment, provider-routing, production-mutation, or policy authority."
+    },
+    "cloak_ui_reference_corpus_cuir5": {
+      "status": "CUIR_5_CONTROLLED_EVALUATION_CANDIDATE",
+      "purpose": "Measure the incremental contribution of bounded CUIR-4 progressive retrieval against a no-CUIR-retrieval baseline using deterministic representative fixtures without claiming end-to-end model, rendered UI, human-usability, or production effectiveness.",
+      "machine_sources": ["machine/evaluation/cloak-ui-reference-cuir5-benchmark.v1.json"],
+      "human_sources": ["docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR5_EVALUATION.md"],
+      "evaluator": "scripts/evaluate_cloak_cuir5.py",
+      "validation_surface": "tests/runtime/test_cloak_ui_reference_corpus_cuir5.py",
+      "runtime_integration": false,
+      "provider_calls": 0,
+      "recommendation_ceiling": "ADOPT_OPTIONAL_FOR_CUIR6_CONSIDERATION",
+      "authority_note": "CUIR-5 is controlled evaluation evidence only. It cannot grant implementation, architecture, security, merge, release, deployment, provider routing or fallback, production mutation, policy, destructive, or installed-integration-refresh authority."
     },
     "cross_specialist_coordination": {"status": "IMPLEMENTED", "human_sources": ["docs/governance/TUNER_PROTOCOL.md", "ROUTING_MAP.md"]},
     "validation_and_evidence": {"status": "IMPLEMENTED", "machine_sources": ["machine/schemas/", "machine/release-evidence/"], "human_sources": ["docs/setup/VALIDATION.md", "docs/validation/"]},
@@ -856,6 +868,7 @@
     "comparative_benchmark_codex_c1_reconciliation": "machine/benchmarking/codex-c1-cross-provider-reconciliation.v1.json",
     "comparative_benchmark_codex_c2r1_reconciliation": "machine/benchmarking/codex-c2r1-machine-json-reconciliation.v1.json",
     "comparative_benchmark_calibration_task_set": "machine/benchmarking/b3-calibration-task-set.v1.json",
+    "cloak_ui_reference_cuir5_benchmark": "machine/evaluation/cloak-ui-reference-cuir5-benchmark.v1.json",
     "release_evidence_directory": "machine/release-evidence",
     "schemas_directory": "machine/schemas",
     "source_state_receipt_schema": "machine/schemas/source-state-receipt.schema.json",
@@ -1038,7 +1051,8 @@
     "release_candidate_v1_6_0": "docs/releases/v1.6.0-integration-developer-experience-release-candidate.md",
     "release_candidate_v1_7_0": "docs/releases/v1.7.0-adaptive-intelligence-portable-memory-design-fidelity-release-candidate.md",
     "publication_closeout_v1_7_0": "docs/validation/V1_7_0_PUBLICATION_CLOSEOUT.md",
-    "codex_c2_portability_r1_preexecution": "docs/benchmarking/CODEX_C2_PORTABILITY_R1_PREEXECUTION.md"
+    "codex_c2_portability_r1_preexecution": "docs/benchmarking/CODEX_C2_PORTABILITY_R1_PREEXECUTION.md",
+    "cloak_ui_reference_cuir5_evaluation": "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR5_EVALUATION.md"
   },
   "representation_policy": {"markdown": "Human-readable explanation, rationale, examples, and nuanced specialist guidance", "json": "Canonical structured machine state, identity, routing, governance, receipts, manifests, provenance, presentation contracts, evidence, and indexes", "json_schema": "Validation contract for machine-readable records", "jsonl": "Append-only event/history records where incremental retrieval is preferable", "toon": "Derived validated non-authoritative model-context projection only when bounded compilation provides measured context benefit", "parity_rule": "When the same deterministic fact appears in more than one representation, CI must validate parity or derive the projection from one authoritative source."},
   "maturity": {
@@ -1072,7 +1086,8 @@
     "cloak_ui_reference_corpus_cuir1": "CUIR_1_CANONICAL_MERGED_VERIFIED",
     "cloak_ui_reference_corpus_cuir2": "CUIR_2_CANONICAL_MERGED_VERIFIED",
     "cloak_ui_reference_corpus_cuir3": "CUIR_3_CANONICAL_MERGED_VERIFIED",
-    "cloak_ui_reference_corpus_cuir4": "CUIR_4_CANONICAL_MERGED_VERIFIED"
+    "cloak_ui_reference_corpus_cuir4": "CUIR_4_CANONICAL_MERGED_VERIFIED",
+    "cloak_ui_reference_corpus_cuir5": "CUIR_5_CONTROLLED_EVALUATION_CANDIDATE"
   },
   "ai_review_guidance": {
     "preferred_entrypoint": "README.json",
@@ -1175,6 +1190,7 @@
     "treat_cuir3_as_canonical_normalized_reference_knowledge_only": true,
     "do_not_infer_cuir4_authority_from_cuir3_canonicalization": true,
     "treat_cuir4_as_canonical_bounded_progressive_pattern_intelligence": true,
-    "do_not_infer_cuir5_authority_from_cuir4_canonicalization": true
+    "do_not_infer_cuir5_authority_from_cuir4_canonicalization": true,
+    "treat_cuir5_controlled_evaluation_as_bounded_non_authorizing_evidence_only": true
   }
 }

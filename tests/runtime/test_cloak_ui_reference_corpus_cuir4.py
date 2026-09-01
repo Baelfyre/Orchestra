@@ -82,12 +82,16 @@ def test_adjacent_progressive_disclosure_guide_preserves_frozen_core_skill():
     assert index["retrieval_policy"]["default_catalog_injection"] is False
 
 
-def test_readme_machine_projection_tracks_candidate_without_granting_cuir5():
+def test_readme_machine_projection_tracks_separately_started_cuir5_without_authority_widening():
     readme = _json(ROOT / "README.json")
     cuir3 = readme["capabilities"]["cloak_ui_reference_corpus_cuir3"]
     cuir4 = readme["capabilities"]["cloak_ui_reference_corpus_cuir4"]
+    cuir5 = readme["capabilities"]["cloak_ui_reference_corpus_cuir5"]
     assert cuir3["cuir4_started"] is True
     assert cuir4["status"] == "CUIR_4_CANONICAL_MERGED_VERIFIED"
     assert cuir4["progressive_retrieval"] is True
-    assert cuir4["cuir5_started"] is False
+    assert cuir4["cuir5_started"] is True
     assert cuir4["implementation_authority"] is False
+    assert cuir5["status"] == "CUIR_5_CONTROLLED_EVALUATION_CANDIDATE"
+    assert cuir5["runtime_integration"] is False
+    assert "cannot grant implementation" in cuir5["authority_note"]
