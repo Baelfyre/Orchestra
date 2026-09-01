@@ -1,0 +1,120 @@
+name: AR2 Domain Context Parity Builder
+
+on:
+  push:
+    branches:
+      - refactor/runtime-architecture-ar2-domain-context-20260902
+
+permissions:
+  contents: write
+
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+
+jobs:
+  build:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install focused validation dependencies
+        run: python -m pip install -e '.[dev]'
+      - name: Update AR-2 domain/context parity records
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          readme = Path('README.json')
+          text = readme.read_text(encoding='utf-8')
+          text = text.replace(
+              '"status": "AR_2_FOUNDATION_CANONICAL_MERGED_VERIFIED",',
+              '"status": "AR_2_DOMAIN_CONTEXT_EXTRACTION_CANDIDATE",',
+              1,
+          )
+          anchor = '      "shared_canonicalization_validation_surface": "tests/runtime/test_shared_canonicalization.py",\n'
+          addition = (
+              '      "domain_context_surface": "orchestra_runtime/domain/context/state.py",\n'
+              '      "domain_context_compatibility_surface": "orchestra_runtime/context_state.py",\n'
+              '      "domain_context_validation_surface": "tests/runtime/test_domain_context_state.py",\n'
+          )
+          if addition not in text:
+              if anchor not in text:
+                  raise SystemExit('README architecture anchor not found')
+              text = text.replace(anchor, anchor + addition, 1)
+          old_note = '      "authority_note": "AR-2 establishes architectural destinations and migrates the shared runtime error boundary behind a compatibility facade. Architecture placement or validation success does not grant implementation beyond the approved refactor scope, release, deployment, policy activation, provider routing/fallback, destructive, installed-integration-refresh, force-push, or history-rewrite authority."\n'
+          new_note = '      "authority_note": "AR-2 incrementally extracts pure runtime semantics inward. The current candidate moves context state and continuity-event domain ownership into domain/context while legacy compilation, JSONL persistence, and Markdown presentation remain intentionally unmigrated for their owning later phases. Architecture placement or validation success does not grant implementation beyond the approved refactor scope, release, deployment, policy activation, provider routing/fallback, destructive, installed-integration-refresh, force-push, or history-rewrite authority."\n'
+          if old_note in text:
+              text = text.replace(old_note, new_note, 1)
+          elif new_note not in text:
+              raise SystemExit('README authority note drifted unexpectedly')
+          json.loads(text)
+          readme.write_text(text, encoding='utf-8')
+
+          plan = Path('docs/project/ORCHESTRA_RUNTIME_ARCHITECTURE_REFOUNDATION.md')
+          plan_text = plan.read_text(encoding='utf-8')
+          old = '''## Current AR-2 Migration Increment
+
+The AR-2 package foundation and machine placement policy are canonical. The next inward extraction places deterministic Git/SHA normalization, timestamp normalization, canonical JSON serialization, and receipt digest primitives in `orchestra_runtime/shared/canonicalization.py`. `orchestra_runtime/evidence.py` continues to expose the same public names by importing those shared primitives, so existing callers remain compatible while future migrated domain code can depend inward on `shared/` instead of the flat legacy runtime.
+
+This increment does not move context entities, persistence, use cases, provider/MCP behavior, or public entrypoints. `domain/context` migration begins only after the shared primitive surface independently qualifies and canonicalizes.
+'''
+          new = '''## Current AR-2 Migration Increment
+
+The AR-2 package foundation, machine placement policy, shared error boundary, and shared deterministic canonicalization surface are canonical. The current bounded extraction moves `CurrentProjectState`, `ContinuityEvent`, and their pure validation/digest semantics into `orchestra_runtime/domain/context/state.py`.
+
+`orchestra_runtime/context_state.py` remains the compatibility surface for existing imports and intentionally retains context compilation, JSONL persistence, and Markdown presentation. Those responsibilities are not pulled forward into AR-2: application use-case extraction belongs to AR-3, persistence belongs to AR-4, and external presentation is moved only with its owning entrypoint work. The new domain module depends only on standard-library pure types and `orchestra_runtime.shared.canonicalization`; it performs no filesystem, provider, MCP, host, network, or repository-`internal/` I/O.
+'''
+          if old not in plan_text:
+              raise SystemExit('AR-2 current-increment block drifted unexpectedly')
+          plan.write_text(plan_text.replace(old, new, 1), encoding='utf-8')
+
+          changelog = Path('CHANGELOG.md')
+          ch = changelog.read_text(encoding='utf-8')
+          heading = '## Post-v1.7 runtime architecture AR-2 domain/context extraction candidate\n'
+          if heading not in ch:
+              section = '''## Post-v1.7 runtime architecture AR-2 domain/context extraction candidate
+
+- Moves `CurrentProjectState`, `ContinuityEvent`, their schema identity, canonical validation, and deterministic digest semantics into `orchestra_runtime/domain/context/state.py`.
+- Keeps `orchestra_runtime.context_state` import-compatible by re-exporting the exact same domain class objects while intentionally retaining context compilation, JSONL persistence, and Markdown presentation for later owning phases.
+- Adds direct domain-surface behavior/identity tests and relies on the canonical architecture validator to enforce no filesystem I/O, no repository-`internal/` dependency, and no imports from flat legacy runtime in the migrated domain package.
+- Does not start AR-3, move persistence/application/presentation behavior, change provider/MCP behavior, retire public imports, publish a release, deploy, activate policy, or expand protected-action authority.
+
+'''
+              ch = ch.replace('# Changelog\n\n', '# Changelog\n\n' + section, 1)
+              changelog.write_text(ch, encoding='utf-8')
+
+          boundary_test = Path('tests/runtime/test_runtime_architecture_boundaries.py')
+          bt = boundary_test.read_text(encoding='utf-8')
+          marker = '        "domain",\n'
+          replacement = '        "domain",\n        "domain/context",\n'
+          if replacement not in bt:
+              if marker not in bt:
+                  raise SystemExit('boundary package marker not found')
+              bt = bt.replace(marker, replacement, 1)
+          identity = '''\n\ndef test_ar2_domain_context_exports_are_identity_preserved():\n    from orchestra_runtime import context_state as legacy_context\n    from orchestra_runtime.domain.context import state as domain_context\n\n    assert legacy_context.CurrentProjectState is domain_context.CurrentProjectState\n    assert legacy_context.ContinuityEvent is domain_context.ContinuityEvent\n    assert legacy_context.CONTEXT_STATE_SCHEMA_VERSION == domain_context.CONTEXT_STATE_SCHEMA_VERSION\n'''
+          if 'test_ar2_domain_context_exports_are_identity_preserved' not in bt:
+              bt += identity
+          boundary_test.write_text(bt, encoding='utf-8')
+          PY
+
+      - name: Focused validation
+        shell: bash
+        run: |
+          python scripts/validation/validate_architecture_boundaries.py
+          pytest -q tests/runtime/test_domain_context_state.py tests/runtime/test_context_state.py tests/runtime/test_runtime_architecture_boundaries.py tests/runtime/test_runtime_architecture_policy.py tests/runtime/test_shared_canonicalization.py
+          git diff --check
+      - name: Commit durable parity updates
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add README.json CHANGELOG.md docs/project/ORCHESTRA_RUNTIME_ARCHITECTURE_REFOUNDATION.md tests/runtime/test_runtime_architecture_boundaries.py
+          git commit -m 'docs(ar2): record domain context extraction candidate'
+          git push origin HEAD:refactor/runtime-architecture-ar2-domain-context-20260902
