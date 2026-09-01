@@ -94,3 +94,8 @@ See [Hybrid Context Formats](../HYBRID_CONTEXT_FORMATS.md).
 ## Source-of-truth rule
 
 For exact deterministic facts, prefer the relevant machine contract or exact Git/release evidence. Human documents explain the system and may preserve historical phase wording. If a maintained human document conflicts with a current machine contract, treat that as documentation drift and reconcile it rather than inferring a new machine state from prose.
+
+
+## Runtime Architecture Refoundation
+
+The pre-v1.8 runtime refoundation is defined in `docs/project/ORCHESTRA_RUNTIME_ARCHITECTURE_REFOUNDATION.md`. AR-2 establishes physical clean/hexagonal layer destinations and begins strangler migration with the shared runtime error contract. Existing public imports remain compatibility-preserved while new flat `orchestra_runtime/*.py` modules are rejected by deterministic architecture tests. Machine discovery is maintained in `README.json`.

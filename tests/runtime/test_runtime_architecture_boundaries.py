@@ -130,3 +130,53 @@ def test_dto_and_dpo_filename_placement_after_migration_begins():
         if "dpo" in lowered and not relative.startswith("infrastructure/persistence/dpo/"):
             failures.append(f"DPO-intent file is outside infrastructure/persistence/dpo: {relative}")
     assert not failures, "DTO/DPO placement violations:\n" + "\n".join(failures)
+
+
+def test_ar2_foundation_packages_and_error_facade_are_compatible():
+    required = [
+        "domain",
+        "application",
+        "application/use_cases",
+        "application/services",
+        "application/dto",
+        "application/ports",
+        "infrastructure",
+        "infrastructure/persistence",
+        "infrastructure/persistence/repositories",
+        "infrastructure/persistence/dpo",
+        "infrastructure/persistence/mappers",
+        "infrastructure/persistence/stores",
+        "infrastructure/persistence/serialization",
+        "bootstrap",
+        "resources",
+        "shared",
+    ]
+    missing = [path for path in required if not (RUNTIME / path / "__init__.py").is_file()]
+    assert not missing, f"Missing AR-2 package boundaries: {missing}"
+
+    from orchestra_runtime import errors as legacy_errors
+    from orchestra_runtime.shared import errors as shared_errors
+
+    names = [
+        "RuntimeContractError",
+        "InvalidAuthorityConfigurationError",
+        "AuthorityDeniedError",
+        "InvalidCapabilityConfigurationError",
+        "CapabilityCollisionError",
+        "CapabilityDeniedError",
+        "DelegationRejectedError",
+        "DelegationDepthViolationError",
+        "InvalidLifecycleTransitionError",
+        "InvalidLifecycleSignalError",
+        "ConflictingTerminalSignalError",
+        "RuntimeInitializationError",
+        "RuntimeBindingError",
+        "RuntimeAuditError",
+        "InvalidCoordinationContractError",
+        "InvalidCoordinationTransitionError",
+        "InvalidCoordinationSignalError",
+        "CoordinationReadinessError",
+        "ConflictingCoordinationSignalError",
+    ]
+    mismatched = [name for name in names if getattr(legacy_errors, name) is not getattr(shared_errors, name)]
+    assert not mismatched, f"Legacy error facade changed class identity: {mismatched}"
