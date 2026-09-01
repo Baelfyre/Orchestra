@@ -19,6 +19,8 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
+      - name: Install focused validation dependency
+        run: python -m pip install pytest
       - name: Reconcile CUIR-4 lifecycle projection
         shell: bash
         run: |
