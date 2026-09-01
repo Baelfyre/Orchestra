@@ -1,0 +1,83 @@
+name: CUIR-3 lifecycle closeout branch remediation
+
+on:
+  push:
+    branches:
+      - chore/cloak-cuir3-lifecycle-closeout-20260901
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    if: github.repository == 'Baelfyre/Orchestra' && github.ref == 'refs/heads/chore/cloak-cuir3-lifecycle-closeout-20260901'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: chore/cloak-cuir3-lifecycle-closeout-20260901
+          fetch-depth: 0
+
+      - name: Reconcile bounded CUIR-3 lifecycle projection
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('README.json')
+          text = path.read_text(encoding='utf-8')
+
+          old_status = 'CUIR_3_NORMALIZATION_CANDIDATE_PENDING_CANONICALIZATION'
+          new_status = 'CUIR_3_CANONICAL_MERGED_VERIFIED'
+          if text.count(old_status) != 2:
+              raise SystemExit(f'Expected exactly 2 CUIR-3 candidate status occurrences, found {text.count(old_status)}')
+          text = text.replace(old_status, new_status)
+
+          old_guidance = '"treat_cuir3_as_normalized_reference_knowledge_only_until_canonicalized": true'
+          new_guidance = '"treat_cuir3_as_canonical_normalized_reference_knowledge_only": true'
+          if text.count(old_guidance) != 1:
+              raise SystemExit('Expected exactly one pre-canonical CUIR-3 guidance key')
+          text = text.replace(old_guidance, new_guidance, 1)
+
+          old_cuir4 = '"do_not_infer_cuir4_authority_from_cuir3_candidate_state": true'
+          new_cuir4 = '"do_not_infer_cuir4_authority_from_cuir3_canonicalization": true'
+          if text.count(old_cuir4) != 1:
+              raise SystemExit('Expected exactly one CUIR-4 candidate-state authority guard')
+          text = text.replace(old_cuir4, new_cuir4, 1)
+
+          parsed = json.loads(text)
+          cuir3 = parsed['capabilities']['cloak_ui_reference_corpus_cuir3']
+          maturity = parsed['maturity']['cloak_ui_reference_corpus_cuir3']
+          guidance = parsed['ai_review_guidance']
+
+          assert cuir3['status'] == new_status
+          assert maturity == new_status
+          assert cuir3['cuir4_started'] is False
+          assert cuir3['runtime_integration'] is False
+          assert cuir3['automatic_retrieval'] is False
+          assert cuir3['external_code_execution'] is False
+          assert cuir3['automatic_ingestion'] is False
+          assert cuir3['source_copying'] is False
+          assert cuir3['asset_copying'] is False
+          assert guidance['treat_cuir3_as_canonical_normalized_reference_knowledge_only'] is True
+          assert guidance['do_not_infer_cuir4_authority_from_cuir3_canonicalization'] is True
+
+          path.write_text(text, encoding='utf-8')
+          PY
+
+          git diff --check
+          git diff -- README.json
+
+      - name: Commit bounded lifecycle reconciliation
+        shell: bash
+        run: |
+          if git diff --quiet -- README.json; then
+            echo "CUIR3_LIFECYCLE_CLOSEOUT=NO_CHANGES"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.json
+          git commit -m "chore(cuir3): close canonical lifecycle state"
+          git push origin HEAD:chore/cloak-cuir3-lifecycle-closeout-20260901
