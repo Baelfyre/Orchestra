@@ -27,13 +27,10 @@ jobs:
 
           root = Path('.')
 
-          # Correct the internally detected 16-vs-15 bookkeeping mismatch.
           catalog_path = root / 'machine/knowledge/cloak-ui-reference-cuir3.v1.json'
           catalog_text = catalog_path.read_text(encoding='utf-8')
-          old = '"normalized_pattern_count": 15'
-          new = '"normalized_pattern_count": 16'
-          if old in catalog_text:
-              catalog_text = catalog_text.replace(old, new, 1)
+          if '"normalized_pattern_count": 15' in catalog_text:
+              catalog_text = catalog_text.replace('"normalized_pattern_count": 15', '"normalized_pattern_count": 16', 1)
               catalog_path.write_text(catalog_text, encoding='utf-8')
 
           test_path = root / 'tests/runtime/test_cloak_ui_reference_corpus_cuir3.py'
@@ -45,14 +42,9 @@ jobs:
           human_path = root / 'docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR3_NORMALIZATION.md'
           human_text = human_path.read_text(encoding='utf-8')
           if '12 category families and 15 normalized patterns.' in human_text:
-              human_text = human_text.replace(
-                  '12 category families and 15 normalized patterns.',
-                  '12 category families and 16 normalized patterns.',
-                  1,
-              )
+              human_text = human_text.replace('12 category families and 15 normalized patterns.', '12 category families and 16 normalized patterns.', 1)
               human_path.write_text(human_text, encoding='utf-8')
 
-          # Restore machine-discovery parity without reformatting the existing README index.
           readme_path = root / 'README.json'
           readme = readme_path.read_text(encoding='utf-8')
           if '"cloak_ui_reference_corpus_cuir3"' not in readme:
@@ -63,23 +55,23 @@ jobs:
                   raise SystemExit('CUIR-2 projection did not contain expected cuir3_started=false guard')
               cuir2_segment = cuir2_segment.replace('"cuir3_started": false', '"cuir3_started": true', 1)
               cuir3_block = '''    "cloak_ui_reference_corpus_cuir3": {
-              "status": "CUIR_3_NORMALIZATION_CANDIDATE_PENDING_CANONICALIZATION",
-              "purpose": "Normalize canonical CUIR-2 static findings into a compact Orchestra-native, provenance-aware Cloak pattern vocabulary without runtime integration or automatic retrieval.",
-              "machine_sources": ["machine/knowledge/cloak-ui-reference-cuir3.v1.json", "machine/schemas/cloak-ui-normalized-pattern.v1.schema.json"],
-              "human_sources": ["docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR3_NORMALIZATION.md"],
-              "validation_surface": "tests/runtime/test_cloak_ui_reference_corpus_cuir3.py",
-              "source_analysis_record_count": 23,
-              "normalized_pattern_count": 16,
-              "runtime_integration": false,
-              "automatic_retrieval": false,
-              "external_code_execution": false,
-              "automatic_ingestion": false,
-              "source_copying": false,
-              "asset_copying": false,
-              "cuir4_started": false,
-              "authority_note": "CUIR-3 is normalized reference knowledge only. It does not authorize runtime or automatic retrieval integration, source or asset copying, external execution, implementation, provider routing or fallback, release, deployment, production mutation, or policy activation."
-            },
-'''
+                "status": "CUIR_3_NORMALIZATION_CANDIDATE_PENDING_CANONICALIZATION",
+                "purpose": "Normalize canonical CUIR-2 static findings into a compact Orchestra-native, provenance-aware Cloak pattern vocabulary without runtime integration or automatic retrieval.",
+                "machine_sources": ["machine/knowledge/cloak-ui-reference-cuir3.v1.json", "machine/schemas/cloak-ui-normalized-pattern.v1.schema.json"],
+                "human_sources": ["docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR3_NORMALIZATION.md"],
+                "validation_surface": "tests/runtime/test_cloak_ui_reference_corpus_cuir3.py",
+                "source_analysis_record_count": 23,
+                "normalized_pattern_count": 16,
+                "runtime_integration": false,
+                "automatic_retrieval": false,
+                "external_code_execution": false,
+                "automatic_ingestion": false,
+                "source_copying": false,
+                "asset_copying": false,
+                "cuir4_started": false,
+                "authority_note": "CUIR-3 is normalized reference knowledge only. It does not authorize runtime or automatic retrieval integration, source or asset copying, external execution, implementation, provider routing or fallback, release, deployment, production mutation, or policy activation."
+              },
+          '''
               readme = readme[:start] + cuir2_segment + cuir3_block + readme[end:]
 
               maturity_old = '    "cloak_ui_reference_corpus_cuir1": "CUIR_1_CANONICAL_MERGED_VERIFIED"\n  },'
@@ -96,7 +88,6 @@ jobs:
               json.loads(readme)
               readme_path.write_text(readme, encoding='utf-8')
 
-          # Add the required significant-change lifecycle record exactly once.
           changelog_path = root / 'CHANGELOG.md'
           changelog = changelog_path.read_text(encoding='utf-8')
           heading = '## Post-v1.7 Cloak CUIR-3 Orchestra-native normalization candidate'
@@ -106,16 +97,15 @@ jobs:
                   raise SystemExit('CHANGELOG anchor not found')
               entry = '''## Post-v1.7 Cloak CUIR-3 Orchestra-native normalization candidate
 
-- Normalized the canonical 23-record CUIR-2 static-analysis corpus into 16 evidence-bound Orchestra-native UI/reference patterns covering navigation, forms and input, selection and disclosure, status and progress, action hierarchy, data and summaries, content grouping, collections, accessibility, motion, and icon semantics.
-- Added a strict normalized-pattern schema, machine knowledge catalog, human normalization record, and deterministic CUIR-3 runtime validation with complete CUIR-2 provenance accounting and no unknown or silently dropped analysis records.
-- Preserved `REFERENCE_ONLY`, `REUSE_WITH_NOTICE`, and `REUSE_WITH_RIGHTS_REVIEW` classifications; kept general UI icon notice obligations separate from brand-icon rights review; rejected observed accessibility regressions instead of normalizing them.
-- CUIR-3 performs no new external source inspection or revision refresh, source or asset copying, external execution, dependency installation, automatic ingestion, runtime integration, automatic pattern retrieval, provider routing or fallback, release, deployment, production mutation, or policy activation. CUIR-4 remains not started.
+          - Normalized the canonical 23-record CUIR-2 static-analysis corpus into 16 evidence-bound Orchestra-native UI/reference patterns covering navigation, forms and input, selection and disclosure, status and progress, action hierarchy, data and summaries, content grouping, collections, accessibility, motion, and icon semantics.
+          - Added a strict normalized-pattern schema, machine knowledge catalog, human normalization record, and deterministic CUIR-3 runtime validation with complete CUIR-2 provenance accounting and no unknown or silently dropped analysis records.
+          - Preserved `REFERENCE_ONLY`, `REUSE_WITH_NOTICE`, and `REUSE_WITH_RIGHTS_REVIEW` classifications; kept general UI icon notice obligations separate from brand-icon rights review; rejected observed accessibility regressions instead of normalizing them.
+          - CUIR-3 performs no new external source inspection or revision refresh, source or asset copying, external execution, dependency installation, automatic ingestion, runtime integration, automatic pattern retrieval, provider routing or fallback, release, deployment, production mutation, or policy activation. CUIR-4 remains not started.
 
-'''
+          '''
               changelog = anchor + entry + changelog[len(anchor):]
               changelog_path.write_text(changelog, encoding='utf-8')
 
-          # Deterministic local guard before committing.
           parsed_catalog = json.loads(catalog_path.read_text(encoding='utf-8'))
           assert len(parsed_catalog['patterns']) == 16
           assert parsed_catalog['coverage']['normalized_pattern_count'] == 16
