@@ -1,0 +1,134 @@
+{
+  "schema_version": "orchestra.runtime-architecture-boundaries.v1",
+  "runtime_root": "orchestra_runtime",
+  "canonical_roots": [
+    "domain",
+    "application",
+    "infrastructure",
+    "entrypoints",
+    "bootstrap",
+    "shared",
+    "resources"
+  ],
+  "legacy_package_roots": [
+    "adaptive",
+    "protocol"
+  ],
+  "legacy_top_level_modules": [
+    "__init__.py",
+    "adapters.py",
+    "authority.py",
+    "capabilities.py",
+    "communication_budget.py",
+    "compliance_protocol.py",
+    "context_state.py",
+    "coordination.py",
+    "correlation.py",
+    "delegation.py",
+    "errors.py",
+    "evidence.py",
+    "factories.py",
+    "governance_kernel.py",
+    "host_protocol.py",
+    "host_updates.py",
+    "interfaces.py",
+    "lifecycle.py",
+    "machine_contracts.py",
+    "mcp_specialist_execution.py",
+    "mcp_transport.py",
+    "models.py",
+    "preexecution.py",
+    "presentation.py",
+    "provider_execution.py",
+    "provider_mcp_execution.py",
+    "provider_qualification.py",
+    "registry_adaptive.py",
+    "registry_o7.py",
+    "remediation_circuit.py",
+    "repositories.py",
+    "retrospective.py",
+    "serialization.py",
+    "services.py",
+    "shadow_conformance.py",
+    "specialist_execution.py",
+    "status.py",
+    "test_evidence.py",
+    "unified_testing.py",
+    "workflow_contracts.py",
+    "worktree.py"
+  ],
+  "layers": {
+    "domain": {
+      "forbidden_import_prefixes": [
+        "orchestra_runtime.application",
+        "orchestra_runtime.infrastructure",
+        "orchestra_runtime.entrypoints",
+        "orchestra_runtime.bootstrap",
+        "internal"
+      ],
+      "forbidden_stdlib_prefixes": [
+        "subprocess",
+        "socket",
+        "sqlite3",
+        "urllib.request",
+        "http.client"
+      ]
+    },
+    "application": {
+      "forbidden_import_prefixes": [
+        "orchestra_runtime.infrastructure",
+        "orchestra_runtime.entrypoints",
+        "orchestra_runtime.bootstrap",
+        "internal"
+      ]
+    },
+    "infrastructure": {
+      "forbidden_import_prefixes": [
+        "orchestra_runtime.entrypoints",
+        "internal"
+      ]
+    },
+    "entrypoints": {
+      "forbidden_import_prefixes": [
+        "internal"
+      ]
+    },
+    "bootstrap": {
+      "forbidden_import_prefixes": [
+        "internal"
+      ]
+    },
+    "shared": {
+      "forbidden_import_prefixes": [
+        "orchestra_runtime.domain",
+        "orchestra_runtime.application",
+        "orchestra_runtime.infrastructure",
+        "orchestra_runtime.entrypoints",
+        "orchestra_runtime.bootstrap",
+        "internal"
+      ]
+    }
+  },
+  "placement": {
+    "dto_root": "orchestra_runtime/application/dto",
+    "dpo_root": "orchestra_runtime/infrastructure/persistence/dpo",
+    "repository_port_root": "orchestra_runtime/application/ports/repositories",
+    "repository_implementation_root": "orchestra_runtime/infrastructure/persistence/repositories",
+    "runtime_resources_root": "orchestra_runtime/resources"
+  },
+  "compatibility_facades": {
+    "orchestra_runtime/correlation.py": "orchestra_runtime.domain.context.correlation",
+    "orchestra_runtime/errors.py": "orchestra_runtime.shared.errors",
+    "orchestra_runtime/interfaces.py": "orchestra_runtime.application.ports",
+    "orchestra_runtime/repositories.py": "orchestra_runtime.infrastructure.persistence.repositories"
+  },
+  "rules": {
+    "new_top_level_runtime_modules": "forbidden_unless_policy_updated",
+    "production_runtime_imports_internal": "forbidden",
+    "compatibility_facades_may_define_behavior": false,
+    "domain_may_perform_external_io": false,
+    "dpo_may_cross_infrastructure_boundary": false,
+    "dto_may_contain_business_rules": false,
+    "runtime_resources_must_be_under_resources_root": true
+  }
+}
