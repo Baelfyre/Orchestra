@@ -49,7 +49,7 @@
       "workflow_contracts.py",
       "worktree.py"
     ],
-    "legacy_package_roots": ["adaptive"],
+    "legacy_package_roots": ["adaptive", "protocol"],
     "compatibility_facades": {
       "orchestra_runtime.errors": "orchestra_runtime.shared.errors"
     }
