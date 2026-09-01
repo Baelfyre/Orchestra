@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.7 runtime architecture AR-2 machine placement enforcement candidate
+
+- Promotes runtime placement rules into the versioned `machine/governance/runtime-architecture-boundaries.v1.json` contract with a strict Draft 2020-12 schema and reusable standalone validator.
+- Enforces new-flat-module, unknown-package-root, dependency-direction, DTO/DPO, repository-zone, compatibility-facade, repository-`internal/`, and direct domain-I/O boundaries while grandfathering only explicitly recorded migration debt.
+- Wires the same validator into Governance Check and the main validate workflow, keeps pytest architecture regression coverage, and adds an agent-facing placement rule so future files must identify their bounded owner before implementation.
+- Standardizes the external runtime layer name as `entrypoints/` to avoid collision with legacy `orchestra_runtime/interfaces.py`, which remains migration debt until its application-port extraction. No runtime behavior, public-import retirement, release, deployment, policy activation, provider routing/fallback, destructive action, branch deletion, force push, or history rewrite is introduced.
+
 ## Post-v1.7 runtime architecture refoundation AR-2 foundation candidate
 
 - Creates the canonical `domain`, `application`, `infrastructure`, `bootstrap`, `shared`, and runtime-resource package boundaries plus application use-case/service/DTO/port and persistence repository/DPO/mapper/store/serialization destinations.

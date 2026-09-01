@@ -9,7 +9,7 @@ This document defines the pre-v1.8 runtime architecture refoundation for Orchest
 ## Objectives
 
 1. Organize runtime code by bounded context and architectural responsibility.
-2. Separate domain policy, application use cases, services, ports, infrastructure, persistence objects, interfaces, composition, and resources.
+2. Separate domain policy, application use cases, services, ports, infrastructure, persistence objects, entrypoints, composition, and resources.
 3. Prevent new flat runtime modules from accumulating during migration.
 4. Preserve public behavior and import compatibility while modules move.
 5. Keep `machine/`, `skills/`, `commands/`, `adapters/`, `assets/`, `docs/`, and `internal/` as distinct repository zones.
@@ -47,7 +47,7 @@ orchestra_runtime/
 │   ├── git/
 │   ├── machine/
 │   └── evidence/
-├── interfaces/
+├── entrypoints/
 │   ├── cli/
 │   ├── mcp/
 │   ├── api/
@@ -63,7 +63,7 @@ orchestra_runtime/
 Permitted direction is inward:
 
 ```text
-interfaces -> application -> domain
+entrypoints -> application -> domain
                     ^
                     |
 infrastructure -> ports/domain
@@ -71,10 +71,10 @@ infrastructure -> ports/domain
 
 Rules:
 
-- `domain` must not import application, infrastructure, interfaces, repository `internal/`, host SDKs, MCP transports, filesystem implementations, or provider implementations.
+- `domain` must not import application, infrastructure, entrypoints, repository `internal/`, host SDKs, MCP transports, filesystem implementations, or provider implementations.
 - `application` may depend on domain and application ports, but not concrete infrastructure.
 - `infrastructure` implements ports and may depend inward on application/domain contracts.
-- `interfaces` translate external interaction into application requests/use cases.
+- `entrypoints` translate external interaction into application requests/use cases.
 - production runtime must not import repository `internal/`.
 - runtime composition belongs under `bootstrap/` rather than hidden concrete construction inside domain/application modules.
 
