@@ -30,7 +30,7 @@
     "specialist_orchestration": {"status": "IMPLEMENTED", "machine_sources": ["machine/specialists/registry.v1.json", "machine/routing/routes.v1.json"], "human_sources": ["SKILL_INDEX.md", "ROUTING_MAP.md"]},
     "governed_runtime": {"status": "IMPLEMENTED", "machine_sources": ["machine/governance/policy.v1.json"], "human_sources": ["docs/architecture/README.md", "docs/governance/GOVERNANCE_LAYER.md", "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md"]},
     "runtime_architecture_refoundation": {
-      "status": "AR_2_CANONICAL_MERGED_VERIFIED",
+      "status": "AR_2_FOUNDATION_CANONICAL_MERGED_VERIFIED",
       "purpose": "Incrementally refactor the Orchestra Python runtime into bounded clean/hexagonal architecture layers while preserving public behavior and legacy import compatibility.",
       "human_sources": ["docs/project/ORCHESTRA_RUNTIME_ARCHITECTURE_REFOUNDATION.md", "docs/architecture/README.md"],
       "validation_surface": "tests/runtime/test_runtime_architecture_boundaries.py",
