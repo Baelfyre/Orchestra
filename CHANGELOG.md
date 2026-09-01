@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.8.0 - Governed Execution, Registry Optimization & Reference Intelligence (Release Candidate)
+
+- Prepares the repository package and declared packaging surfaces for `1.8.0` while retaining `v1.7.0` as the latest published release until a separately approved publication step.
+- Consolidates the canonical post-v1.7 line covering the Prime Directive and Development Lifecycle V2, supported optional specialist host execution, provider qualification boundaries, Registry O7 query optimization and joint conformance, MCP 2026 compatibility, optional UTM adoption, and CUIR-0 through CUIR-6 reference intelligence.
+- Preserves terminal negative or bounded evidence without overclaiming: A5 topology and Murmurs benefit remain not established, UIX-9C V3 remains `NO_BENEFIT_ESTABLISHED`, and CUIR-5 does not establish end-to-end model quality, rendered UI correctness, human usability preference, or production effectiveness.
+- Publication remains blocked pending exact-head release qualification, zero unresolved review threads, signed materialization, signed-head validation, canonical tree/signature/parent verification, and explicit final-review approval. This preparation does not create or move the `v1.8.0` tag, publish a GitHub Release, deploy, mutate production, activate policy, refresh installed integrations, route or fallback providers, delete branches, force push, or rewrite history.
+
 ## Post-v1.7 Cloak CUIR-5 controlled evaluation candidate
 
 - Adds a deterministic representative benchmark and evaluator comparing a no-CUIR-retrieval baseline with bounded CUIR-4 progressive retrieval.
