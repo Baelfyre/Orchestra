@@ -73,6 +73,9 @@ jobs:
           python scripts/validate_project_context.py > artifacts/project_context_report.txt
           cat artifacts/project_context_report.txt
 
+      - name: Validate Runtime Architecture Boundaries
+        run: python scripts/validation/validate_architecture_boundaries.py
+
       - name: Run Stage 1 Strict Governance Check
         run: |
           set +e
