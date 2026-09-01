@@ -1,0 +1,453 @@
+name: CUIR-4 bounded branch builder
+
+on:
+  push:
+    branches:
+      - feat/cloak-cuir4-pattern-intelligence
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: github.repository == 'Baelfyre/Orchestra' && github.ref == 'refs/heads/feat/cloak-cuir4-pattern-intelligence'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: feat/cloak-cuir4-pattern-intelligence
+          fetch-depth: 0
+
+      - name: Build bounded CUIR-4 candidate
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import textwrap
+          from pathlib import Path
+
+          ROOT = Path('.')
+
+          retrieval = {
+              "schema_version": "orchestra.cloak-ui-pattern-intelligence-cuir4.v1",
+              "phase": "CUIR-4",
+              "status": "CUIR_4_PATTERN_INTELLIGENCE_CANDIDATE_PENDING_CANONICALIZATION",
+              "authority_class": "CLOAK_ADVISORY_PATTERN_RETRIEVAL_ONLY",
+              "canonical_cuir3_input": {
+                  "implementation_commit": "5d3ff818c875c94355b906d65165dcaa2eeb1ef3",
+                  "implementation_tree": "338f7448f9ee92483baf35a4accb8c019bfcefa2",
+                  "lifecycle_closeout_commit": "36f8d262f64efd91f0961f780f1cd54272eeadb3",
+                  "lifecycle_closeout_tree": "9fbd9932377ac1727b9b22a29b5e9594cd674113",
+                  "catalog": "machine/knowledge/cloak-ui-reference-cuir3.v1.json",
+                  "normalized_pattern_count": 16
+              },
+              "retrieval_policy": {
+                  "mode": "PROGRESSIVE_DISCLOSURE",
+                  "default_catalog_injection": False,
+                  "automatic_host_injection": False,
+                  "maximum_problem_classes": 3,
+                  "maximum_patterns_per_task": 5,
+                  "rank_by": ["matched_category_priority", "evidence_count_desc", "pattern_id_asc"],
+                  "preserve_project_native_requirements_first": True,
+                  "preserve_provenance": True,
+                  "preserve_reuse_classification": True,
+                  "implementation_authority": False
+              },
+              "problem_classes": [
+                  {
+                      "problem_class": "navigation_and_destination",
+                      "trigger_terms": ["navigation", "navbar", "sidebar", "menu", "destination", "breadcrumb", "tab", "tabs", "bottom navigation"],
+                      "categories": ["navigation_and_destination_state", "selection_and_disclosure", "accessibility_and_semantics"]
+                  },
+                  {
+                      "problem_class": "forms_and_input",
+                      "trigger_terms": ["form", "input", "login", "signup", "register", "password", "validation", "field", "radio", "checkbox", "multi-step", "multistep"],
+                      "categories": ["forms_and_input", "selection_and_disclosure", "feedback_status_and_progress", "accessibility_and_semantics"]
+                  },
+                  {
+                      "problem_class": "feedback_status_and_progress",
+                      "trigger_terms": ["progress", "upload", "loading", "status", "success", "error", "empty state", "completion", "complete", "pause", "resume", "notification"],
+                      "categories": ["feedback_status_and_progress", "motion_and_state_emphasis", "accessibility_and_semantics"]
+                  },
+                  {
+                      "problem_class": "action_hierarchy",
+                      "trigger_terms": ["delete", "destructive", "danger", "primary action", "secondary action", "cta", "call to action", "overflow", "action menu"],
+                      "categories": ["action_hierarchy", "accessibility_and_semantics"]
+                  },
+                  {
+                      "problem_class": "data_and_summary",
+                      "trigger_terms": ["dashboard", "summary", "metrics", "invoice", "weather", "analytics", "data", "status card", "financial"],
+                      "categories": ["data_and_summary", "feedback_status_and_progress", "accessibility_and_semantics"]
+                  },
+                  {
+                      "problem_class": "cards_and_content_grouping",
+                      "trigger_terms": ["card", "pricing", "product", "profile", "offer", "content grouping", "commerce"],
+                      "categories": ["cards_and_content_grouping", "action_hierarchy", "accessibility_and_semantics"]
+                  },
+                  {
+                      "problem_class": "collections_and_sequence",
+                      "trigger_terms": ["list", "todo", "task list", "collection", "forecast", "timeline", "stack", "sequence"],
+                      "categories": ["collection_and_sequence", "feedback_status_and_progress", "accessibility_and_semantics"]
+                  },
+                  {
+                      "problem_class": "icons_and_brand",
+                      "trigger_terms": ["icon", "icons", "logo", "brand icon", "brand logo", "symbol", "lucide", "tabler", "simple icons"],
+                      "categories": ["general_ui_icons", "brand_icon_rights", "accessibility_and_semantics"]
+                  }
+              ],
+              "fallback": {
+                  "problem_class": "general_interface_review",
+                  "categories": ["accessibility_and_semantics"],
+                  "reason": "Unknown or mixed UI tasks should receive only the semantic accessibility baseline rather than broad corpus injection."
+              },
+              "handoff": {
+                  "frontend_implementation_owner": "Ponytail",
+                  "architecture_or_shared_component_owner": "Clockwork",
+                  "readiness_owner": "Overseer",
+                  "security_owner": "Cipher"
+              },
+              "protected_boundaries": {
+                  "source_copying": False,
+                  "asset_copying": False,
+                  "external_code_execution": False,
+                  "external_dependency_installation": False,
+                  "provider_routing": False,
+                  "release_authority": False,
+                  "deployment_authority": False,
+                  "policy_activation_authority": False,
+                  "cuir5_started": False
+              }
+          }
+          Path('machine/knowledge/cloak-ui-pattern-intelligence-cuir4.v1.json').write_text(json.dumps(retrieval, indent=2) + '\n', encoding='utf-8')
+
+          schema = {
+              "$schema": "https://json-schema.org/draft/2020-12/schema",
+              "$id": "orchestra.cloak-ui-pattern-intelligence-cuir4.v1.schema.json",
+              "title": "Cloak CUIR-4 Pattern Intelligence",
+              "type": "object",
+              "additionalProperties": False,
+              "required": ["schema_version", "phase", "status", "authority_class", "canonical_cuir3_input", "retrieval_policy", "problem_classes", "fallback", "handoff", "protected_boundaries"],
+              "properties": {
+                  "schema_version": {"const": "orchestra.cloak-ui-pattern-intelligence-cuir4.v1"},
+                  "phase": {"const": "CUIR-4"},
+                  "status": {"type": "string"},
+                  "authority_class": {"const": "CLOAK_ADVISORY_PATTERN_RETRIEVAL_ONLY"},
+                  "canonical_cuir3_input": {"type": "object"},
+                  "retrieval_policy": {"type": "object"},
+                  "problem_classes": {
+                      "type": "array",
+                      "minItems": 1,
+                      "items": {
+                          "type": "object",
+                          "additionalProperties": False,
+                          "required": ["problem_class", "trigger_terms", "categories"],
+                          "properties": {
+                              "problem_class": {"type": "string", "minLength": 1},
+                              "trigger_terms": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+                              "categories": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+                          }
+                      }
+                  },
+                  "fallback": {"type": "object"},
+                  "handoff": {"type": "object"},
+                  "protected_boundaries": {"type": "object"}
+              }
+          }
+          Path('machine/schemas/cloak-ui-pattern-intelligence-cuir4.v1.schema.json').write_text(json.dumps(schema, indent=2) + '\n', encoding='utf-8')
+
+          guide = textwrap.dedent('''\
+          # Cloak CUIR-4 Pattern Intelligence Guide
+
+          Use this guide only when the active task needs design-pattern selection or comparison. Do not load the full CUIR corpus by default.
+
+          ## Retrieval flow
+
+          1. Preserve project-native requirements, components, tokens, and assets as the primary design authority.
+          2. Classify the UI problem into at most three problem classes using `machine/knowledge/cloak-ui-pattern-intelligence-cuir4.v1.json`.
+          3. Retrieve only the matching normalized CUIR-3 categories from `machine/knowledge/cloak-ui-reference-cuir3.v1.json`.
+          4. Keep the selected pattern set at five patterns or fewer. Prefer matched category priority, then stronger evidence count, then stable pattern ID order.
+          5. Preserve each selected pattern's provenance and reuse classification. `REFERENCE_ONLY` means concept guidance only; do not copy source expression or assets.
+          6. For unknown or mixed tasks, use only the semantic accessibility baseline instead of loading broad corpus context.
+          7. Treat the result as advisory design intelligence. It grants no code implementation, architecture, security, merge, release, deployment, or policy authority.
+
+          ## Rights and accessibility
+
+          - Project-native design requirements override external inspiration unless the project requirement itself is invalid or unsafe.
+          - General UI icons may use the catalog's notice-bearing treatment only when the applicable license obligations are preserved.
+          - Brand icons remain subject to separate brand/trademark rights review even when copyright reuse is permissive.
+          - Never promote generic click targets, placeholder-only labels, motion-only status, or unlabeled icon controls from reference implementations.
+
+          ## Handoff
+
+          - Frontend implementation: Ponytail.
+          - Shared component or architecture decisions: Clockwork.
+          - Security-sensitive controls: Cipher.
+          - Readiness and evaluation gates: Overseer.
+
+          The deterministic helper `scripts/retrieve_cloak_patterns.py` mirrors this retrieval policy for validation and reproducible inspection. It does not make implementation decisions.
+          ''')
+          Path('skills/cloak/CUIR_PATTERN_INTELLIGENCE_GUIDE.md').write_text(guide, encoding='utf-8')
+          Path('adapters/codex/skills/cloak/CUIR_PATTERN_INTELLIGENCE_GUIDE.md').write_text(guide, encoding='utf-8')
+
+          script = textwrap.dedent('''\
+          from __future__ import annotations
+
+          import argparse
+          import json
+          from pathlib import Path
+          from typing import Any
+
+          ROOT = Path(__file__).resolve().parents[1]
+          INDEX_PATH = ROOT / "machine/knowledge/cloak-ui-pattern-intelligence-cuir4.v1.json"
+          CATALOG_PATH = ROOT / "machine/knowledge/cloak-ui-reference-cuir3.v1.json"
+
+          def _load(path: Path) -> dict[str, Any]:
+              return json.loads(path.read_text(encoding="utf-8"))
+
+          def classify_task(task: str, index: dict[str, Any] | None = None) -> list[str]:
+              index = index or _load(INDEX_PATH)
+              text = task.casefold()
+              scored: list[tuple[int, str]] = []
+              for item in index["problem_classes"]:
+                  score = sum(1 for term in item["trigger_terms"] if term.casefold() in text)
+                  if score:
+                      scored.append((score, item["problem_class"]))
+              scored.sort(key=lambda item: (-item[0], item[1]))
+              limit = index["retrieval_policy"]["maximum_problem_classes"]
+              return [name for _, name in scored[:limit]] or [index["fallback"]["problem_class"]]
+
+          def retrieve_patterns(task: str) -> dict[str, Any]:
+              index = _load(INDEX_PATH)
+              catalog = _load(CATALOG_PATH)
+              classes = classify_task(task, index)
+              class_map = {item["problem_class"]: item for item in index["problem_classes"]}
+              category_priority: list[str] = []
+              if classes == [index["fallback"]["problem_class"]]:
+                  category_priority.extend(index["fallback"]["categories"])
+              else:
+                  for name in classes:
+                      for category in class_map[name]["categories"]:
+                          if category not in category_priority:
+                              category_priority.append(category)
+              rank = {category: position for position, category in enumerate(category_priority)}
+              candidates = [p for p in catalog["patterns"] if p["category"] in rank]
+              candidates.sort(key=lambda p: (rank[p["category"]], -int(p["evidence_count"]), p["pattern_id"]))
+              maximum = int(index["retrieval_policy"]["maximum_patterns_per_task"])
+              selected = candidates[:maximum]
+              return {
+                  "task": task,
+                  "problem_classes": classes,
+                  "categories": category_priority,
+                  "patterns": selected,
+                  "implementation_authority": False,
+                  "handoff": index["handoff"]
+              }
+
+          def main() -> int:
+              parser = argparse.ArgumentParser(description="Retrieve the smallest relevant CUIR-4 Cloak pattern set.")
+              parser.add_argument("task")
+              args = parser.parse_args()
+              print(json.dumps(retrieve_patterns(args.task), indent=2))
+              return 0
+
+          if __name__ == "__main__":
+              raise SystemExit(main())
+          ''')
+          Path('scripts/retrieve_cloak_patterns.py').write_text(script, encoding='utf-8')
+
+          doc = textwrap.dedent('''\
+          # Cloak UI Reference Corpus — CUIR-4 Pattern Intelligence Integration
+
+          Status: `IMPLEMENTATION_CANDIDATE_PENDING_CANONICALIZATION`
+
+          CUIR-4 integrates the canonical CUIR-3 normalized pattern catalog into Cloak through progressive disclosure. The full corpus is not injected into every task.
+
+          ## Integration model
+
+          Cloak first preserves project-native requirements, then classifies the current UI problem into a bounded problem class, retrieves only matching normalized categories, caps the selected set at five patterns, and preserves provenance and reuse classification in the resulting guidance.
+
+          The integration has three surfaces:
+
+          - `machine/knowledge/cloak-ui-pattern-intelligence-cuir4.v1.json` — deterministic problem-class and category retrieval contract;
+          - `skills/cloak/CUIR_PATTERN_INTELLIGENCE_GUIDE.md` — specialist progressive-disclosure instructions;
+          - `scripts/retrieve_cloak_patterns.py` — reproducible helper used by tests and maintainers to inspect the same retrieval policy.
+
+          ## Authority boundary
+
+          Pattern retrieval is advisory. It does not transfer frontend implementation authority from Ponytail, architecture ownership from Clockwork, security ownership from Cipher, or readiness ownership from Overseer. It creates no merge, release, deployment, provider-routing, or policy authority.
+
+          ## Source and rights boundary
+
+          CUIR-4 consumes only the already-canonical CUIR-3 normalized catalog. It performs no new external repository inspection, dependency installation, source copying, asset copying, or external code execution. Existing `REFERENCE_ONLY`, `REUSE_WITH_NOTICE`, and `REUSE_WITH_RIGHTS_REVIEW` distinctions remain unchanged.
+
+          ## CUIR-5 boundary
+
+          CUIR-5 remains not started in this candidate. CUIR-5 will evaluate whether this bounded retrieval mechanism improves measurable task coverage and provenance behavior relative to the no-retrieval baseline.
+          ''')
+          Path('docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR4_INTEGRATION.md').write_text(doc, encoding='utf-8')
+
+          test = textwrap.dedent('''\
+          from __future__ import annotations
+
+          import importlib.util
+          import json
+          from pathlib import Path
+
+          ROOT = Path(__file__).resolve().parents[2]
+          INDEX = ROOT / "machine/knowledge/cloak-ui-pattern-intelligence-cuir4.v1.json"
+          CATALOG = ROOT / "machine/knowledge/cloak-ui-reference-cuir3.v1.json"
+          GUIDE = ROOT / "skills/cloak/CUIR_PATTERN_INTELLIGENCE_GUIDE.md"
+          CODEX_GUIDE = ROOT / "adapters/codex/skills/cloak/CUIR_PATTERN_INTELLIGENCE_GUIDE.md"
+
+          def _json(path: Path):
+              return json.loads(path.read_text(encoding="utf-8"))
+
+          def _module():
+              path = ROOT / "scripts/retrieve_cloak_patterns.py"
+              spec = importlib.util.spec_from_file_location("cuir4_retrieval", path)
+              assert spec and spec.loader
+              module = importlib.util.module_from_spec(spec)
+              spec.loader.exec_module(module)
+              return module
+
+          def test_cuir4_binds_exact_canonical_cuir3_and_keeps_cuir5_closed():
+              index = _json(INDEX)
+              assert index["canonical_cuir3_input"]["lifecycle_closeout_commit"] == "36f8d262f64efd91f0961f780f1cd54272eeadb3"
+              assert index["canonical_cuir3_input"]["normalized_pattern_count"] == 16
+              assert index["protected_boundaries"]["cuir5_started"] is False
+              assert index["retrieval_policy"]["default_catalog_injection"] is False
+              assert index["retrieval_policy"]["automatic_host_injection"] is False
+
+          def test_all_normalized_categories_and_patterns_are_reachable_without_full_injection():
+              index = _json(INDEX)
+              catalog = _json(CATALOG)
+              categories = {c["category_id"] for c in catalog["categories"]}
+              referenced = {category for item in index["problem_classes"] for category in item["categories"]}
+              referenced.update(index["fallback"]["categories"])
+              assert categories <= referenced
+              reachable = {p["pattern_id"] for p in catalog["patterns"] if p["category"] in referenced}
+              assert reachable == {p["pattern_id"] for p in catalog["patterns"]}
+              assert index["retrieval_policy"]["maximum_patterns_per_task"] < len(catalog["patterns"])
+
+          def test_representative_retrieval_is_bounded_and_semantically_relevant():
+              module = _module()
+              cases = {
+                  "Design a multi-step signup form with password validation": "cuir3.semantic_field_and_control_state",
+                  "Show upload progress, pause, resume, and completion": "cuir3.operation_progress_lifecycle",
+                  "Separate delete account from normal settings actions": "cuir3.action_priority_and_destructive_separation",
+                  "Create a collapsed sidebar with a clear selected destination": "cuir3.destination_state_navigation",
+                  "Choose general UI icons and a brand logo": "cuir3.general_ui_icon_system",
+              }
+              for task, expected in cases.items():
+                  result = module.retrieve_patterns(task)
+                  ids = {p["pattern_id"] for p in result["patterns"]}
+                  assert expected in ids
+                  assert len(result["patterns"]) <= 5
+                  assert result["implementation_authority"] is False
+
+          def test_brand_and_general_icon_rights_remain_separate():
+              module = _module()
+              result = module.retrieve_patterns("Use UI icons and a brand logo")
+              patterns = {p["pattern_id"]: p for p in result["patterns"]}
+              assert "cuir3.general_ui_icon_system" in patterns
+              assert "cuir3.brand_icon_traceability_and_rights" in patterns
+              assert "REUSE_WITH_NOTICE" in patterns["cuir3.general_ui_icon_system"]["reuse_classifications"]
+              assert "REUSE_WITH_RIGHTS_REVIEW" in patterns["cuir3.brand_icon_traceability_and_rights"]["reuse_classifications"]
+
+          def test_skill_progressive_disclosure_and_adapter_parity():
+              source_skill = (ROOT / "skills/cloak/SKILL.md").read_text(encoding="utf-8")
+              codex_skill = (ROOT / "adapters/codex/skills/cloak/SKILL.md").read_text(encoding="utf-8")
+              marker = "Load `CUIR_PATTERN_INTELLIGENCE_GUIDE.md` only when"
+              assert marker in source_skill
+              assert marker in codex_skill
+              assert GUIDE.read_text(encoding="utf-8") == CODEX_GUIDE.read_text(encoding="utf-8")
+              assert "Ponytail" in GUIDE.read_text(encoding="utf-8")
+              assert "do not copy source expression or assets" in GUIDE.read_text(encoding="utf-8")
+
+          def test_readme_machine_projection_tracks_candidate_without_granting_cuir5():
+              readme = _json(ROOT / "README.json")
+              cuir3 = readme["capabilities"]["cloak_ui_reference_corpus_cuir3"]
+              cuir4 = readme["capabilities"]["cloak_ui_reference_corpus_cuir4"]
+              assert cuir3["cuir4_started"] is True
+              assert cuir4["status"] == "CUIR_4_PATTERN_INTELLIGENCE_CANDIDATE_PENDING_CANONICALIZATION"
+              assert cuir4["progressive_retrieval"] is True
+              assert cuir4["cuir5_started"] is False
+              assert cuir4["implementation_authority"] is False
+          ''')
+          Path('tests/runtime/test_cloak_ui_reference_corpus_cuir4.py').write_text(test, encoding='utf-8')
+
+          marker = '- Load `FRONTEND_ROUTING_COMPONENT_BOUNDARIES_GUIDE.md` only for user-visible route behavior, deep links, route focus, browser history, responsive navigation, or component-boundary review.\n'
+          addition = marker + '- Load `CUIR_PATTERN_INTELLIGENCE_GUIDE.md` only when the task requires UI pattern selection, pattern comparison, or provenance-aware design intelligence. Use the smallest relevant CUIR pattern set; do not load the full corpus by default.\n'
+          for skill_path in [Path('skills/cloak/SKILL.md'), Path('adapters/codex/skills/cloak/SKILL.md')]:
+              text = skill_path.read_text(encoding='utf-8')
+              if 'CUIR_PATTERN_INTELLIGENCE_GUIDE.md' not in text:
+                  if marker not in text:
+                      raise SystemExit(f'Progressive disclosure marker not found in {skill_path}')
+                  text = text.replace(marker, addition, 1)
+                  skill_path.write_text(text, encoding='utf-8')
+
+          readme_path = Path('README.json')
+          readme = readme_path.read_text(encoding='utf-8')
+          old_flag = '      "cuir4_started": false,\n      "authority_note": "CUIR-3 is normalized reference knowledge only.'
+          new_flag = '      "cuir4_started": true,\n      "authority_note": "CUIR-3 is normalized reference knowledge only.'
+          if old_flag not in readme:
+              raise SystemExit('CUIR-3 cuir4_started marker not found')
+          readme = readme.replace(old_flag, new_flag, 1)
+
+          capability_anchor = '      "authority_note": "CUIR-3 is normalized reference knowledge only. It does not authorize runtime or automatic retrieval integration, source or asset copying, external execution, implementation, provider routing or fallback, release, deployment, production mutation, or policy activation."\n    },\n    "cross_specialist_coordination"'
+          capability_block = '''      "authority_note": "CUIR-3 is normalized reference knowledge only. It does not authorize runtime or automatic retrieval integration, source or asset copying, external execution, implementation, provider routing or fallback, release, deployment, production mutation, or policy activation."\n    },\n    "cloak_ui_reference_corpus_cuir4": {\n      "status": "CUIR_4_PATTERN_INTELLIGENCE_CANDIDATE_PENDING_CANONICALIZATION",\n      "purpose": "Integrate canonical CUIR-3 normalized UI knowledge into Cloak through bounded progressive disclosure and deterministic provenance-aware retrieval.",\n      "machine_sources": ["machine/knowledge/cloak-ui-pattern-intelligence-cuir4.v1.json", "machine/schemas/cloak-ui-pattern-intelligence-cuir4.v1.schema.json"],\n      "human_sources": ["docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR4_INTEGRATION.md", "skills/cloak/CUIR_PATTERN_INTELLIGENCE_GUIDE.md"],\n      "retrieval_surface": "scripts/retrieve_cloak_patterns.py",\n      "validation_surface": "tests/runtime/test_cloak_ui_reference_corpus_cuir4.py",\n      "progressive_retrieval": true,\n      "default_catalog_injection": false,\n      "automatic_host_injection": false,\n      "implementation_authority": false,\n      "external_code_execution": false,\n      "automatic_ingestion": false,\n      "source_copying": false,\n      "asset_copying": false,\n      "cuir5_started": false,\n      "authority_note": "CUIR-4 adds advisory progressive pattern retrieval only. It does not transfer implementation, architecture, security, merge, release, deployment, provider-routing, production-mutation, or policy authority and does not start CUIR-5."\n    },\n    "cross_specialist_coordination"'''
+          if capability_anchor not in readme:
+              raise SystemExit('CUIR-4 capability insertion anchor not found')
+          readme = readme.replace(capability_anchor, capability_block, 1)
+
+          maturity_anchor = '    "cloak_ui_reference_corpus_cuir3": "CUIR_3_CANONICAL_MERGED_VERIFIED"\n  },'
+          maturity_block = '    "cloak_ui_reference_corpus_cuir3": "CUIR_3_CANONICAL_MERGED_VERIFIED",\n    "cloak_ui_reference_corpus_cuir4": "CUIR_4_PATTERN_INTELLIGENCE_CANDIDATE_PENDING_CANONICALIZATION"\n  },'
+          if maturity_anchor not in readme:
+              raise SystemExit('CUIR-4 maturity insertion anchor not found')
+          readme = readme.replace(maturity_anchor, maturity_block, 1)
+
+          guidance_anchor = '    "do_not_infer_cuir4_authority_from_cuir3_canonicalization": true\n  }\n}'
+          guidance_block = '    "do_not_infer_cuir4_authority_from_cuir3_canonicalization": true,\n    "treat_cuir4_as_bounded_progressive_pattern_intelligence_until_canonicalized": true,\n    "do_not_infer_cuir5_authority_from_cuir4_candidate_state": true\n  }\n}'
+          if guidance_anchor not in readme:
+              raise SystemExit('CUIR-4 guidance insertion anchor not found')
+          readme = readme.replace(guidance_anchor, guidance_block, 1)
+          json.loads(readme)
+          readme_path.write_text(readme, encoding='utf-8')
+
+          changelog = Path('CHANGELOG.md')
+          current = changelog.read_text(encoding='utf-8')
+          entry = textwrap.dedent('''\
+          ## Post-v1.7 Cloak CUIR-4 pattern intelligence integration candidate
+
+          - Integrates the canonical 16-pattern CUIR-3 catalog into Cloak through progressive disclosure instead of default full-corpus prompt injection.
+          - Adds a deterministic problem-class/category retrieval contract and reproducible helper capped at five normalized patterns per task.
+          - Preserves project-native requirements first, exact provenance, accessibility constraints, and `REFERENCE_ONLY` / `REUSE_WITH_NOTICE` / `REUSE_WITH_RIGHTS_REVIEW` distinctions.
+          - Adds source/Codex Cloak guide parity and deterministic runtime validation for category reachability, bounded retrieval, representative task relevance, icon-rights separation, and closed CUIR-5 authority.
+          - Performs no new external repository inspection, external dependency installation, source/asset copying, provider routing, release, deployment, production mutation, or policy activation.
+
+          ''')
+          if entry.strip() not in current:
+              if not current.startswith('# Changelog\n'):
+                  raise SystemExit('Unexpected CHANGELOG header')
+              current = '# Changelog\n\n' + entry + current[len('# Changelog\n\n'):]
+              changelog.write_text(current, encoding='utf-8')
+
+          helper = Path('.github/workflows/cuir4-branch-build.yml')
+          helper.unlink()
+
+          json.loads(Path('machine/knowledge/cloak-ui-pattern-intelligence-cuir4.v1.json').read_text(encoding='utf-8'))
+          json.loads(Path('machine/schemas/cloak-ui-pattern-intelligence-cuir4.v1.schema.json').read_text(encoding='utf-8'))
+          json.loads(Path('README.json').read_text(encoding='utf-8'))
+          PY
+
+          git diff --check
+          python -m pytest tests/runtime/test_cloak_ui_reference_corpus_cuir4.py -q
+
+      - name: Commit bounded CUIR-4 candidate
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md README.json docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR4_INTEGRATION.md machine/knowledge/cloak-ui-pattern-intelligence-cuir4.v1.json machine/schemas/cloak-ui-pattern-intelligence-cuir4.v1.schema.json scripts/retrieve_cloak_patterns.py skills/cloak/SKILL.md skills/cloak/CUIR_PATTERN_INTELLIGENCE_GUIDE.md adapters/codex/skills/cloak/SKILL.md adapters/codex/skills/cloak/CUIR_PATTERN_INTELLIGENCE_GUIDE.md tests/runtime/test_cloak_ui_reference_corpus_cuir4.py .github/workflows/cuir4-branch-build.yml
+          git commit -m "feat(cuir4): integrate Cloak pattern intelligence"
+          git push origin HEAD:feat/cloak-cuir4-pattern-intelligence
