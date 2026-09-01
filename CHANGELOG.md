@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.7 runtime architecture AR-2 domain context extraction candidate
+
+- Establishes `orchestra_runtime.domain.context` as the inward-only owner of `CurrentProjectState`, `ContinuityEvent`, and deterministic `compile_context` semantics.
+- Preserves legacy `orchestra_runtime.context_state` imports by re-exposing the same canonical domain symbols while deliberately retaining JSONL filesystem persistence and Markdown projection on the legacy surface for later infrastructure/presentation extraction.
+- Adds direct compatibility and domain-context regression coverage plus detailed extraction documentation and `README.json` machine-discovery parity.
+- Does not move communication-budget presentation dependencies, clock/entropy-backed correlation generation, provider/MCP behavior, public entrypoints, release/deployment authority, or start AR-3.
+
 ## Post-v1.7 Padayon post-restructure realignment searchability
 
 - Adds a repository-local, searchable governance notice for the Padayon M0-M6 post-restructure source-reality reconciliation procedure and links it from the governance documentation index.
