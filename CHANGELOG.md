@@ -1,5 +1,11 @@
 # Changelog
 
+## Post-v1.7 Cloak CUIR-4 canonical lifecycle closeout
+
+- Reconciles machine discovery with the verified canonical CUIR-4 integration at `67dc4a70159346cea903761373412829f7677fcf`.
+- Marks CUIR-4 as `CUIR_4_CANONICAL_MERGED_VERIFIED` while preserving bounded progressive retrieval, project-native precedence, provenance/reuse classifications, and the frozen UIX-9 core guidance.
+- Keeps `cuir5_started=false`; CUIR-4 canonicalization does not itself authorize CUIR-5 evaluation or any provider, release, deployment, production, policy, destructive, force-push, or history-rewrite action.
+
 ## Post-v1.7 Cloak CUIR-4 pattern intelligence integration candidate
 
 - Integrates the canonical 16-pattern CUIR-3 catalog into Cloak through progressive disclosure instead of default full-corpus prompt injection.
