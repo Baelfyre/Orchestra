@@ -27,46 +27,32 @@
     "core_trust_boundary": "Permission and execution authority are explicit bounded inputs. Routing, host capability, governance disposition, validation evidence, compatibility certification, presentation mode, and GitHub state cannot independently grant or expand authority."
   },
   "capabilities": {
-    "specialist_orchestration": {
-      "status": "IMPLEMENTED",
-      "machine_sources": [
-        "machine/specialists/registry.v1.json",
-        "machine/routing/routes.v1.json"
-      ],
-      "human_sources": [
-        "SKILL_INDEX.md",
-        "ROUTING_MAP.md"
-      ]
-    },
-    "governed_runtime": {
-      "status": "IMPLEMENTED",
-      "machine_sources": [
-        "machine/governance/policy.v1.json"
-      ],
-      "human_sources": [
-        "docs/architecture/README.md",
-        "docs/governance/GOVERNANCE_LAYER.md",
-        "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md"
-      ]
+    "specialist_orchestration": {"status": "IMPLEMENTED", "machine_sources": ["machine/specialists/registry.v1.json", "machine/routing/routes.v1.json"], "human_sources": ["SKILL_INDEX.md", "ROUTING_MAP.md"]},
+    "governed_runtime": {"status": "IMPLEMENTED", "machine_sources": ["machine/governance/policy.v1.json"], "human_sources": ["docs/architecture/README.md", "docs/governance/GOVERNANCE_LAYER.md", "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md"]},
+    "runtime_architecture_refoundation": {
+      "status": "AR_2_FOUNDATION_CANDIDATE",
+      "purpose": "Incrementally refactor the Orchestra Python runtime into bounded clean/hexagonal architecture layers while preserving public behavior and legacy import compatibility.",
+      "human_sources": ["docs/project/ORCHESTRA_RUNTIME_ARCHITECTURE_REFOUNDATION.md", "docs/architecture/README.md"],
+      "validation_surface": "tests/runtime/test_runtime_architecture_boundaries.py",
+      "canonical_layers": ["domain", "application", "infrastructure", "bootstrap", "shared", "resources"],
+      "application_subzones": ["use_cases", "services", "dto", "ports"],
+      "persistence_subzones": ["repositories", "dpo", "mappers", "stores", "serialization"],
+      "migration_strategy": "STRANGLER_COMPATIBILITY_FACADES",
+      "first_migrated_surface": "orchestra_runtime.shared.errors",
+      "compatibility_facade": "orchestra_runtime.errors",
+      "new_flat_runtime_modules_prohibited": true,
+      "production_runtime_internal_imports_prohibited": true,
+      "runtime_behavior_change": false,
+      "public_import_retirement": false,
+      "ar3_started": false,
+      "release_authorized": false,
+      "authority_note": "AR-2 establishes architectural destinations and migrates the shared runtime error boundary behind a compatibility facade. Architecture placement or validation success does not grant implementation beyond the approved refactor scope, release, deployment, policy activation, provider routing/fallback, destructive, installed-integration-refresh, force-push, or history-rewrite authority."
     },
     "specialist_runtime_host_execution_design": {
       "status": "E1_E7_COMPLETE_ADOPT_OPTIONAL",
       "purpose": "Provide a supported optional post-gate typed specialist execution path with verified bounded Codex host execution while preserving route-only defaults, explicit user model configuration, and independent Orchestra authority boundaries.",
-      "machine_sources": [
-        "machine/features/specialist-runtime-host-execution.v1.json",
-        "machine/schemas/specialist-execution-request.v1.schema.json",
-        "machine/schemas/specialist-execution-receipt.v1.schema.json",
-        "machine/schemas/provider-execution-profile.v1.schema.json",
-        "machine/schemas/provider-execution-requirement.v1.schema.json"
-      ],
-      "human_sources": [
-        "docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_ARCHITECTURE.md",
-        "docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_IMPLEMENTATION_PLAN.md",
-        "docs/project/PRIORITY_2_PROVIDER_EXECUTION_PROFILE.md",
-        "docs/validation/SPECIALIST_RUNTIME_HOST_EXECUTION_PRE_E7_EFFECTIVENESS_2026_08_29.md",
-        "docs/validation/SPECIALIST_RUNTIME_HOST_EXECUTION_E7_PROMOTION_DECISION_2026_08_30.md",
-        "docs/developer/MCP_STDIO_TRANSPORT.md"
-      ],
+      "machine_sources": ["machine/features/specialist-runtime-host-execution.v1.json", "machine/schemas/specialist-execution-request.v1.schema.json", "machine/schemas/specialist-execution-receipt.v1.schema.json", "machine/schemas/provider-execution-profile.v1.schema.json", "machine/schemas/provider-execution-requirement.v1.schema.json"],
+      "human_sources": ["docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_ARCHITECTURE.md", "docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_IMPLEMENTATION_PLAN.md", "docs/project/PRIORITY_2_PROVIDER_EXECUTION_PROFILE.md", "docs/validation/SPECIALIST_RUNTIME_HOST_EXECUTION_PRE_E7_EFFECTIVENESS_2026_08_29.md", "docs/validation/SPECIALIST_RUNTIME_HOST_EXECUTION_E7_PROMOTION_DECISION_2026_08_30.md", "docs/developer/MCP_STDIO_TRANSPORT.md"],
       "admission": "ADMIT",
       "promotion": "ADOPT_OPTIONAL",
       "runtime_integration": true,
@@ -94,25 +80,13 @@
     "vscode_multi_harness_provider_qualification_p2_2b": {
       "status": "IMPLEMENTATION_CANDIDATE_DETERMINISTIC_QUALIFICATION_PENDING_CANONICALIZATION",
       "purpose": "Record and classify user-controlled VS Code multi-harness provider/model observations without granting provider execution, automatic routing, or release authority.",
-      "machine_sources": [
-        "machine/schemas/vscode-provider-observation.v1.schema.json",
-        "machine/schemas/provider-qualification-receipt.v1.schema.json"
-      ],
-      "human_sources": [
-        "docs/project/PRIORITY_2_VSCODE_MULTI_HARNESS_QUALIFICATION.md",
-        "adapters/vscode/README.md",
-        "adapters/vscode/install-guide.md"
-      ],
+      "machine_sources": ["machine/schemas/vscode-provider-observation.v1.schema.json", "machine/schemas/provider-qualification-receipt.v1.schema.json"],
+      "human_sources": ["docs/project/PRIORITY_2_VSCODE_MULTI_HARNESS_QUALIFICATION.md", "adapters/vscode/README.md", "adapters/vscode/install-guide.md"],
       "runtime_surface": "orchestra_runtime/provider_qualification.py",
       "validator": "scripts/qualify_vscode_provider.py",
       "validation_surface": "tests/runtime/test_provider_qualification.py",
       "host_id": "vscode",
-      "harnesses": [
-        "local",
-        "copilot",
-        "claude",
-        "codex"
-      ],
+      "harnesses": ["local", "copilot", "claude", "codex"],
       "live_provider_evidence": "USER_CONTROLLED_SEPARATE_NOT_CLAIMED_BY_DETERMINISTIC_CI",
       "automatic_routing_authorized": false,
       "provider_execution_authority": false,
@@ -122,15 +96,8 @@
     "cloak_ui_reference_corpus_cuir0": {
       "status": "CUIR_0_CANONICAL_MERGED_VERIFIED",
       "purpose": "Freeze provenance-aware external UI and icon corpus eligibility, per-repository licensing and reuse, non-execution, data-minimization, source-record, and specialist-handoff rules before inventory or pattern extraction.",
-      "machine_sources": [
-        "machine/governance/cloak-ui-reference-corpus-policy.v1.json",
-        "machine/schemas/cloak-ui-reference-corpus-policy.v1.schema.json",
-        "machine/schemas/cloak-ui-reference-source-record.v1.schema.json"
-      ],
-      "human_sources": [
-        "docs/project/CLOAK_UI_REFERENCE_CORPUS_PLAN.md",
-        "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR0_CONTRACT.md"
-      ],
+      "machine_sources": ["machine/governance/cloak-ui-reference-corpus-policy.v1.json", "machine/schemas/cloak-ui-reference-corpus-policy.v1.schema.json", "machine/schemas/cloak-ui-reference-source-record.v1.schema.json"],
+      "human_sources": ["docs/project/CLOAK_UI_REFERENCE_CORPUS_PLAN.md", "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR0_CONTRACT.md"],
       "validation_surface": "tests/runtime/test_cloak_ui_reference_corpus_governance.py",
       "runtime_integration": false,
       "current_inventory": "CUIR_1_CANONICAL_MERGED_VERIFIED",
@@ -142,14 +109,8 @@
     "cloak_ui_reference_corpus_cuir1": {
       "status": "CUIR_1_CANONICAL_MERGED_VERIFIED",
       "purpose": "Record the dated current UI reference corpus inventory and per-retained-repository license and provenance classifications without source ingestion or pattern extraction.",
-      "machine_sources": [
-        "machine/provenance/cloak-ui-reference-cuir1.v1.json",
-        "machine/schemas/cloak-ui-reference-source-record.v1.schema.json"
-      ],
-      "human_sources": [
-        "docs/project/CLOAK_UI_REFERENCE_CORPUS_PLAN.md",
-        "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR1_INVENTORY.md"
-      ],
+      "machine_sources": ["machine/provenance/cloak-ui-reference-cuir1.v1.json", "machine/schemas/cloak-ui-reference-source-record.v1.schema.json"],
+      "human_sources": ["docs/project/CLOAK_UI_REFERENCE_CORPUS_PLAN.md", "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR1_INVENTORY.md"],
       "validation_surface": "tests/runtime/test_cloak_ui_reference_corpus_cuir1.py",
       "discovery_snapshot_date": "2026-08-31",
       "public_repository_count": 144,
@@ -189,13 +150,8 @@
     "cloak_ui_reference_corpus_cuir3": {
       "status": "CUIR_3_CANONICAL_MERGED_VERIFIED",
       "purpose": "Normalize canonical CUIR-2 static findings into a compact Orchestra-native, provenance-aware Cloak pattern vocabulary without runtime integration or automatic retrieval.",
-      "machine_sources": [
-        "machine/knowledge/cloak-ui-reference-cuir3.v1.json",
-        "machine/schemas/cloak-ui-normalized-pattern.v1.schema.json"
-      ],
-      "human_sources": [
-        "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR3_NORMALIZATION.md"
-      ],
+      "machine_sources": ["machine/knowledge/cloak-ui-reference-cuir3.v1.json", "machine/schemas/cloak-ui-normalized-pattern.v1.schema.json"],
+      "human_sources": ["docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR3_NORMALIZATION.md"],
       "validation_surface": "tests/runtime/test_cloak_ui_reference_corpus_cuir3.py",
       "source_analysis_record_count": 23,
       "normalized_pattern_count": 16,
@@ -211,14 +167,8 @@
     "cloak_ui_reference_corpus_cuir4": {
       "status": "CUIR_4_CANONICAL_MERGED_VERIFIED",
       "purpose": "Integrate canonical CUIR-3 normalized UI knowledge into Cloak through bounded progressive disclosure and deterministic provenance-aware retrieval.",
-      "machine_sources": [
-        "machine/knowledge/cloak-ui-pattern-intelligence-cuir4.v1.json",
-        "machine/schemas/cloak-ui-pattern-intelligence-cuir4.v1.schema.json"
-      ],
-      "human_sources": [
-        "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR4_INTEGRATION.md",
-        "skills/cloak/CUIR_PATTERN_INTELLIGENCE_GUIDE.md"
-      ],
+      "machine_sources": ["machine/knowledge/cloak-ui-pattern-intelligence-cuir4.v1.json", "machine/schemas/cloak-ui-pattern-intelligence-cuir4.v1.schema.json"],
+      "human_sources": ["docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR4_INTEGRATION.md", "skills/cloak/CUIR_PATTERN_INTELLIGENCE_GUIDE.md"],
       "retrieval_surface": "scripts/retrieve_cloak_patterns.py",
       "validation_surface": "tests/runtime/test_cloak_ui_reference_corpus_cuir4.py",
       "progressive_retrieval": true,
@@ -235,12 +185,8 @@
     "cloak_ui_reference_corpus_cuir5": {
       "status": "CUIR_5_CONTROLLED_EVALUATION_CANDIDATE",
       "purpose": "Measure the incremental contribution of bounded CUIR-4 progressive retrieval against a no-CUIR-retrieval baseline using deterministic representative fixtures without claiming end-to-end model, rendered UI, human-usability, or production effectiveness.",
-      "machine_sources": [
-        "machine/evaluation/cloak-ui-reference-cuir5-benchmark.v1.json"
-      ],
-      "human_sources": [
-        "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR5_EVALUATION.md"
-      ],
+      "machine_sources": ["machine/evaluation/cloak-ui-reference-cuir5-benchmark.v1.json"],
+      "human_sources": ["docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR5_EVALUATION.md"],
       "evaluator": "scripts/evaluate_cloak_cuir5.py",
       "validation_surface": "tests/runtime/test_cloak_ui_reference_corpus_cuir5.py",
       "runtime_integration": false,
@@ -248,40 +194,13 @@
       "recommendation_ceiling": "ADOPT_OPTIONAL_FOR_CUIR6_CONSIDERATION",
       "authority_note": "CUIR-5 is controlled evaluation evidence only. It cannot grant implementation, architecture, security, merge, release, deployment, provider routing or fallback, production mutation, policy, destructive, or installed-integration-refresh authority."
     },
-    "cross_specialist_coordination": {
-      "status": "IMPLEMENTED",
-      "human_sources": [
-        "docs/governance/TUNER_PROTOCOL.md",
-        "ROUTING_MAP.md"
-      ]
-    },
-    "validation_and_evidence": {
-      "status": "IMPLEMENTED",
-      "machine_sources": [
-        "machine/schemas/",
-        "machine/release-evidence/"
-      ],
-      "human_sources": [
-        "docs/setup/VALIDATION.md",
-        "docs/validation/"
-      ]
-    },
+    "cross_specialist_coordination": {"status": "IMPLEMENTED", "human_sources": ["docs/governance/TUNER_PROTOCOL.md", "ROUTING_MAP.md"]},
+    "validation_and_evidence": {"status": "IMPLEMENTED", "machine_sources": ["machine/schemas/", "machine/release-evidence/"], "human_sources": ["docs/setup/VALIDATION.md", "docs/validation/"]},
     "unified_testing_mechanism_t0_t9": {
       "status": "SUPPORTED_OPTIONAL_ADOPT_OPTIONAL",
       "purpose": "Provide a revision-bound T0-T9 applicability and evidence-aggregation contract that reuses existing specialist and CI validation without creating a second test framework or protected-action authority.",
-      "machine_sources": [
-        "machine/features/unified-testing-mechanism.v1.json",
-        "machine/schemas/unified-testing-packet.v1.schema.json",
-        "machine/benchmarking/utm-efficacy-study.v1.json",
-        "machine/benchmarking/utm-efficacy-result.v1.json",
-        "machine/benchmarking/utm-efficacy-qualification-plan.v1.json"
-      ],
-      "human_sources": [
-        "docs/project/UNIFIED_TESTING_MECHANISM.md",
-        "docs/validation/UNIFIED_TESTING_MECHANISM_EFFICACY_2026_08_30.md",
-        "docs/validation/UNIFIED_TESTING_MECHANISM_EFFICACY_INDEPENDENT_AUDIT_2026_08_30.md",
-        "docs/validation/UNIFIED_TESTING_MECHANISM_PROMOTION_DECISION_2026_08_30.md"
-      ],
+      "machine_sources": ["machine/features/unified-testing-mechanism.v1.json", "machine/schemas/unified-testing-packet.v1.schema.json", "machine/benchmarking/utm-efficacy-study.v1.json", "machine/benchmarking/utm-efficacy-result.v1.json", "machine/benchmarking/utm-efficacy-qualification-plan.v1.json"],
+      "human_sources": ["docs/project/UNIFIED_TESTING_MECHANISM.md", "docs/validation/UNIFIED_TESTING_MECHANISM_EFFICACY_2026_08_30.md", "docs/validation/UNIFIED_TESTING_MECHANISM_EFFICACY_INDEPENDENT_AUDIT_2026_08_30.md", "docs/validation/UNIFIED_TESTING_MECHANISM_PROMOTION_DECISION_2026_08_30.md"],
       "runtime_surface": "orchestra_runtime/unified_testing.py",
       "validation_surface": "tests/runtime/test_unified_testing.py",
       "efficacy_validation_surface": "tests/runtime/test_unified_testing_efficacy.py",
@@ -297,13 +216,8 @@
     "prime_directive_feature_admission_v1": {
       "status": "IMPLEMENTED_CONTRACT_NO_RUNTIME_INTEGRATION",
       "purpose": "Constitutional Prime Directive and machine-validatable Feature Admission and promotion record for evidence-backed capability decisions without creating execution authority.",
-      "machine_sources": [
-        "machine/schemas/feature-decision-record.v1.schema.json"
-      ],
-      "human_sources": [
-        "docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md",
-        "docs/governance/FEATURE_ADMISSION_POLICY.md"
-      ],
+      "machine_sources": ["machine/schemas/feature-decision-record.v1.schema.json"],
+      "human_sources": ["docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md", "docs/governance/FEATURE_ADMISSION_POLICY.md"],
       "validation_surface": "tests/runtime/test_feature_admission_contract.py",
       "validator": "scripts/validate_feature_admission_contract.py",
       "runtime_integration": false,
@@ -312,13 +226,8 @@
     "governed_ui_design_contract_uix1": {
       "status": "IMPLEMENTED_CANONICAL",
       "purpose": "Library-neutral evidence-bound UI Design Contract for source identity, design-system tokens, component reuse mappings, layouts, themes, assets, accessibility requirements, fidelity dispositions, and revision-bound validation state.",
-      "machine_sources": [
-        "machine/schemas/ui-design-contract.schema.json"
-      ],
-      "human_sources": [
-        "docs/project/UIX_0_ACTIVATION_OVERLAP_AUDIT.md",
-        "docs/project/UIX_1_UI_DESIGN_CONTRACT.md"
-      ],
+      "machine_sources": ["machine/schemas/ui-design-contract.schema.json"],
+      "human_sources": ["docs/project/UIX_0_ACTIVATION_OVERLAP_AUDIT.md", "docs/project/UIX_1_UI_DESIGN_CONTRACT.md"],
       "validation_surface": "tests/runtime/test_ui_design_contract.py",
       "figma_required": false,
       "code_connect_required": false,
@@ -328,14 +237,8 @@
     "governed_ui_design_source_preservation_uix2": {
       "status": "IMPLEMENTED_CANONICAL",
       "purpose": "Library-neutral design-source intake and preservation workflow for source identity, evidence inventory, project-native component and token mapping, asset provenance, unresolved evidence, and pre-implementation handoff.",
-      "machine_sources": [
-        "machine/schemas/design-source-preservation-report.schema.json",
-        "machine/schemas/design-source-preservation-workflow.schema.json",
-        "machine/ui/design-source-preservation-workflow.v1.json"
-      ],
-      "human_sources": [
-        "docs/project/UIX_2_DESIGN_SOURCE_PRESERVATION.md"
-      ],
+      "machine_sources": ["machine/schemas/design-source-preservation-report.schema.json", "machine/schemas/design-source-preservation-workflow.schema.json", "machine/ui/design-source-preservation-workflow.v1.json"],
+      "human_sources": ["docs/project/UIX_2_DESIGN_SOURCE_PRESERVATION.md"],
       "validation_surface": "tests/runtime/test_ui_design_source_preservation.py",
       "figma_required": false,
       "code_connect_required": false,
@@ -345,13 +248,8 @@
     "governed_ui_design_profile_registry_uix3": {
       "status": "IMPLEMENTED_CANONICAL",
       "purpose": "Library-neutral UIX-3 registry separating foundations, layouts, complete themes or systems, and optional effects with deterministic composition and accessibility invariants.",
-      "machine_sources": [
-        "machine/schemas/ui-profile-registry.schema.json",
-        "machine/ui/ui-profile-registry.v1.json"
-      ],
-      "human_sources": [
-        "docs/project/UIX_3_THEME_LAYOUT_EFFECT_PROFILE_REGISTRY.md"
-      ],
+      "machine_sources": ["machine/schemas/ui-profile-registry.schema.json", "machine/ui/ui-profile-registry.v1.json"],
+      "human_sources": ["docs/project/UIX_3_THEME_LAYOUT_EFFECT_PROFILE_REGISTRY.md"],
       "validation_surface": "tests/runtime/test_ui_profile_registry.py",
       "figma_required": false,
       "code_connect_required": false,
@@ -361,13 +259,8 @@
     "governed_ui_component_asset_preservation_uix4": {
       "status": "IMPLEMENTED_CANONICAL",
       "purpose": "Evidence-bound UIX-4 component mapping, variant and interaction-state coverage, semantic token preservation, asset provenance, substitution, and intentional-deviation contract.",
-      "machine_sources": [
-        "machine/schemas/component-asset-preservation.schema.json",
-        "machine/ui/component-asset-preservation-contract.v1.json"
-      ],
-      "human_sources": [
-        "docs/project/UIX_4_COMPONENT_ASSET_PRESERVATION.md"
-      ],
+      "machine_sources": ["machine/schemas/component-asset-preservation.schema.json", "machine/ui/component-asset-preservation-contract.v1.json"],
+      "human_sources": ["docs/project/UIX_4_COMPONENT_ASSET_PRESERVATION.md"],
       "validation_surface": "tests/runtime/test_component_asset_preservation.py",
       "figma_required": false,
       "code_connect_required": false,
@@ -377,13 +270,8 @@
     "governed_ui_specialist_integration_uix5": {
       "status": "IMPLEMENTED_CANONICAL",
       "purpose": "Library-neutral UIX-5 flow for consuming governed UI evidence through the existing Conductor, Cloak, Clockwork, Governor, Ponytail, Overseer, and Arbiter workflow with explicit non-overlapping ownership.",
-      "machine_sources": [
-        "machine/schemas/specialist-integration-flow.schema.json",
-        "machine/ui/specialist-integration-flow.v1.json"
-      ],
-      "human_sources": [
-        "docs/project/UIX_5_SPECIALIST_INTEGRATION.md"
-      ],
+      "machine_sources": ["machine/schemas/specialist-integration-flow.schema.json", "machine/ui/specialist-integration-flow.v1.json"],
+      "human_sources": ["docs/project/UIX_5_SPECIALIST_INTEGRATION.md"],
       "validation_surface": "tests/runtime/test_specialist_integration_flow.py",
       "figma_required": false,
       "code_connect_required": false,
@@ -393,13 +281,8 @@
     "governed_ui_optional_adapter_boundaries_uix6": {
       "status": "IMPLEMENTED_CANONICAL_NO_ADOPTION",
       "purpose": "Library-neutral UIX-6 audit and boundary contract for optional Figma, Code Connect, Storybook, Playwright, axe, and project-native design-token evidence capabilities.",
-      "machine_sources": [
-        "machine/schemas/optional-adapter-boundaries.schema.json",
-        "machine/ui/optional-adapter-boundaries.v1.json"
-      ],
-      "human_sources": [
-        "docs/project/UIX_6_OPTIONAL_ADAPTER_BOUNDARIES.md"
-      ],
+      "machine_sources": ["machine/schemas/optional-adapter-boundaries.schema.json", "machine/ui/optional-adapter-boundaries.v1.json"],
+      "human_sources": ["docs/project/UIX_6_OPTIONAL_ADAPTER_BOUNDARIES.md"],
       "validation_surface": "tests/runtime/test_optional_adapter_boundaries.py",
       "figma_required": false,
       "code_connect_required": false,
@@ -410,13 +293,8 @@
     "governed_ui_portable_specialist_parity_uix8": {
       "status": "IMPLEMENTED_CANONICAL",
       "purpose": "UIX-8 source specialist guidance and supported Codex projection parity with explicit Antigravity no-copy and scaffold-only exclusions.",
-      "machine_sources": [
-        "machine/schemas/portable-specialist-parity.schema.json",
-        "machine/ui/portable-specialist-parity.v1.json"
-      ],
-      "human_sources": [
-        "docs/project/UIX_8_PORTABLE_SPECIALIST_PARITY.md"
-      ],
+      "machine_sources": ["machine/schemas/portable-specialist-parity.schema.json", "machine/ui/portable-specialist-parity.v1.json"],
+      "human_sources": ["docs/project/UIX_8_PORTABLE_SPECIALIST_PARITY.md"],
       "validation_surface": "tests/runtime/test_portable_specialist_parity.py",
       "figma_required": false,
       "code_connect_required": false,
@@ -426,15 +304,8 @@
     "controlled_ui_proof_campaign_uix9a": {
       "status": "HISTORICAL_PREPARATION",
       "purpose": "Historical UIX-9A repository-only proof preparation with frozen baseline and governed arms, deterministic positive and negative fixtures, and objective design-fidelity observations.",
-      "machine_sources": [
-        "machine/schemas/uix-proof-plan.schema.json",
-        "machine/schemas/uix-proof-observation.schema.json",
-        "machine/schemas/uix-proof-result.schema.json",
-        "machine/ui/uix9-proof-plan.v1.json"
-      ],
-      "human_sources": [
-        "docs/project/UIX_9_CONTROLLED_PROOF_CAMPAIGN.md"
-      ],
+      "machine_sources": ["machine/schemas/uix-proof-plan.schema.json", "machine/schemas/uix-proof-observation.schema.json", "machine/schemas/uix-proof-result.schema.json", "machine/ui/uix9-proof-plan.v1.json"],
+      "human_sources": ["docs/project/UIX_9_CONTROLLED_PROOF_CAMPAIGN.md"],
       "validation_surface": "tests/runtime/test_uix9_proof_protocol.py",
       "harness": "scripts/uix9_proof_harness.py",
       "terminal": "UIX_9_PROOF_PREPARED_WAITING_LIVE_CALL_AUTHORIZATION",
@@ -446,24 +317,8 @@
     "controlled_ui_proof_campaign_uix9b_v2": {
       "status": "HISTORICAL_PREPARATION",
       "purpose": "Historical UIX-9B V2 deterministic evaluator and calibration preparation preceding the controlled UIX-9C live campaign, with treatment-blind thirteen-metric scoring, isolated fixture identity, and fail-closed evidence adjudication.",
-      "machine_sources": [
-        "machine/ui/uix9b-live-proof-plan.v2.json",
-        "machine/ui/uix9b-live-metric-evaluator.v2.json",
-        "machine/ui/uix9b-live-proof-v2-identity.json",
-        "machine/ui/uix9b-live-call-authorization-request.v2.json",
-        "machine/ui/uix9b-live-preparation-identity.v2.json",
-        "machine/schemas/uix9b-live-metric-evaluator.v2.schema.json",
-        "machine/schemas/uix9b-live-metric-result.v2.schema.json",
-        "machine/schemas/uix9b-live-proof-observation.v2.schema.json",
-        "machine/schemas/uix9b-live-proof-result.v2.schema.json",
-        "machine/schemas/uix9b-live-call-authorization.v2.schema.json",
-        "machine/schemas/uix9b-live-preparation-identity.v2.schema.json"
-      ],
-      "human_sources": [
-        "docs/project/UIX_9B_LIVE_PROOF_EXECUTION_PROTOCOL_V2.md",
-        "docs/validation/UIX_9B_V2_REPREPARATION_VALIDATION.md",
-        "docs/validation/UIX_9B_V2_LIVE_CALL_AUTHORIZATION_REQUEST.md"
-      ],
+      "machine_sources": ["machine/ui/uix9b-live-proof-plan.v2.json", "machine/ui/uix9b-live-metric-evaluator.v2.json", "machine/ui/uix9b-live-proof-v2-identity.json", "machine/ui/uix9b-live-call-authorization-request.v2.json", "machine/ui/uix9b-live-preparation-identity.v2.json", "machine/schemas/uix9b-live-metric-evaluator.v2.schema.json", "machine/schemas/uix9b-live-metric-result.v2.schema.json", "machine/schemas/uix9b-live-proof-observation.v2.schema.json", "machine/schemas/uix9b-live-proof-result.v2.schema.json", "machine/schemas/uix9b-live-call-authorization.v2.schema.json", "machine/schemas/uix9b-live-preparation-identity.v2.schema.json"],
+      "human_sources": ["docs/project/UIX_9B_LIVE_PROOF_EXECUTION_PROTOCOL_V2.md", "docs/validation/UIX_9B_V2_REPREPARATION_VALIDATION.md", "docs/validation/UIX_9B_V2_LIVE_CALL_AUTHORIZATION_REQUEST.md"],
       "validation_surface": "tests/runtime/test_uix9_live_metric_evaluator_v2.py",
       "evaluator": "scripts/uix9_live_metric_evaluator_v2.py",
       "runner": "scripts/uix9b_live_proof_runner_v2.py",
@@ -478,12 +333,8 @@
     "controlled_ui_proof_campaign_uix9c_v3": {
       "status": "UIX_9C_V3_COMPLETE",
       "purpose": "Current UIX-9C V3 controlled-study post-study result preserved as evidence-bound negative evidence without a benefit, harm, or directional model-behavior claim.",
-      "machine_sources": [
-        "docs/validation/uix9b-live-evidence-v2/v3-poststudy-result.v2.json"
-      ],
-      "human_sources": [
-        "docs/validation/UIX_9C_V3_POSTSTUDY_ADJUDICATION_REMEDIATION.md"
-      ],
+      "machine_sources": ["docs/validation/uix9b-live-evidence-v2/v3-poststudy-result.v2.json"],
+      "human_sources": ["docs/validation/UIX_9C_V3_POSTSTUDY_ADJUDICATION_REMEDIATION.md"],
       "validation_surface": "tests/runtime/test_uix9c_v3_poststudy_adjudicator.py",
       "adjudicator": "scripts/uix9c_v3_poststudy_adjudicator.py",
       "result_classification": "NO_BENEFIT_ESTABLISHED",
@@ -499,89 +350,34 @@
       "runtime_integration": false,
       "authority_note": "UIX-9C V3 is preserved terminal evidence only. It does not authorize another experiment, live model/provider calls, runtime behavior change, promotion, merge, release, deployment, policy activation, or destructive action."
     },
-    "host_update_planning": {
-      "status": "PUBLISHED_V1_6_STABLE",
-      "machine_sources": [
-        "machine/hosts/update-contract.v1.json"
-      ],
-      "human_sources": [
-        "docs/setup/HOST_UPDATES.md"
-      ]
-    },
+    "host_update_planning": {"status": "PUBLISHED_V1_6_STABLE", "machine_sources": ["machine/hosts/update-contract.v1.json"], "human_sources": ["docs/setup/HOST_UPDATES.md"]},
     "adapter_sdk_and_prap_certification": {
       "status": "PUBLISHED_V1_6_STABLE",
       "purpose": "Stable SDK import surface and read-only PRAP v1 compatibility certification for host and adapter integration authors.",
       "stable_import_surface": "orchestra_runtime.protocol.sdk",
-      "quickstart_commands": [
-        "python scripts/certify_adapter.py --adapter codex --json",
-        "python scripts/certify_adapter.py --all --json"
-      ],
-      "machine_sources": [
-        "machine/protocol/prap-certification-contract.v1.json",
-        "machine/schemas/prap-certification-evidence.schema.json"
-      ],
-      "human_sources": [
-        "docs/setup/ADAPTER_SDK_PRAP.md"
-      ],
+      "quickstart_commands": ["python scripts/certify_adapter.py --adapter codex --json", "python scripts/certify_adapter.py --all --json"],
+      "machine_sources": ["machine/protocol/prap-certification-contract.v1.json", "machine/schemas/prap-certification-evidence.schema.json"],
+      "human_sources": ["docs/setup/ADAPTER_SDK_PRAP.md"],
       "authority_note": "Certification proves compatibility only. It does not grant runtime authority, host maturity, deployment permission, policy activation, or installed refresh authority."
     },
-    "developer_portal": {
-      "status": "PUBLISHED_V1_6_STABLE",
-      "machine_sources": [
-        "machine/developer-portal/catalog.v1.json"
-      ],
-      "human_sources": [
-        "docs/developer/README.md"
-      ]
-    },
+    "developer_portal": {"status": "PUBLISHED_V1_6_STABLE", "machine_sources": ["machine/developer-portal/catalog.v1.json"], "human_sources": ["docs/developer/README.md"]},
     "mcp_stdio_transport": {
       "status": "PUBLISHED_V1_6_STABLE",
       "purpose": "Expose a bounded Orchestra tool surface to MCP-compatible clients, including Codex MCP 2026 discovery with non-cacheable private cache hints, while preserving existing PRAP, governance, runtime, and authority boundaries.",
       "protocol_revision": "2026-07-28",
       "transport": "stdio",
       "quickstart_command": "python scripts/mcp_server.py --adapter codex",
-      "surface": [
-        "server/discover",
-        "tools/list",
-        "tools/call"
-      ],
-      "human_sources": [
-        "docs/developer/MCP_STDIO_TRANSPORT.md"
-      ],
+      "surface": ["server/discover", "tools/list", "tools/call"],
+      "human_sources": ["docs/developer/MCP_STDIO_TRANSPORT.md"],
       "authority_note": "MCP is transport, not authority. Discovery uses ttlMs=0 and cacheScope=private so capability discovery is not reusable cached authority."
     },
-    "murmurs_presentation": {
-      "status": "IMPLEMENTED_OPT_IN_RESEARCH_NOT_PROMOTED",
-      "machine_sources": [
-        "machine/presentation/murmurs-policy.v1.json",
-        "machine/presentation/murmurs-vocabulary.v1.json"
-      ],
-      "human_sources": [
-        "docs/project/MURMURS_COMMUNICATION_BUDGET.md"
-      ],
-      "token_savings_claim": "CONFIRMATORY_BENEFIT_NOT_ESTABLISHED"
-    },
-    "hybrid_context_representation": {
-      "status": "PUBLISHED_V1_6_STABLE",
-      "human_sources": [
-        "docs/HYBRID_CONTEXT_FORMATS.md"
-      ],
-      "json_authority": "CANONICAL_FOR_STRUCTURED_MACHINE_STATE",
-      "toon_authority": "DERIVED_VALIDATED_NON_AUTHORITATIVE"
-    },
+    "murmurs_presentation": {"status": "IMPLEMENTED_OPT_IN_RESEARCH_NOT_PROMOTED", "machine_sources": ["machine/presentation/murmurs-policy.v1.json", "machine/presentation/murmurs-vocabulary.v1.json"], "human_sources": ["docs/project/MURMURS_COMMUNICATION_BUDGET.md"], "token_savings_claim": "CONFIRMATORY_BENEFIT_NOT_ESTABLISHED"},
+    "hybrid_context_representation": {"status": "PUBLISHED_V1_6_STABLE", "human_sources": ["docs/HYBRID_CONTEXT_FORMATS.md"], "json_authority": "CANONICAL_FOR_STRUCTURED_MACHINE_STATE", "toon_authority": "DERIVED_VALIDATED_NON_AUTHORITATIVE"},
     "local_adaptive_memory_a1": {
       "status": "CANONICAL_FOUNDATION_NO_DIRECT_RUNTIME_EFFECT",
       "purpose": "Machine-local scoped adaptive observation evidence and derived preference profiles without routing, policy, authority, governance, provider, lifecycle, or training authority.",
-      "machine_sources": [
-        "machine/adaptive/a1-memory-contract.v1.json",
-        "machine/schemas/adaptive-observation.schema.json",
-        "machine/schemas/adaptive-profile.schema.json",
-        "machine/schemas/adaptive-export.schema.json",
-        "machine/schemas/adaptive-store-meta.schema.json"
-      ],
-      "human_sources": [
-        "docs/architecture/ADAPTIVE_MEMORY_A0_A1.md"
-      ],
+      "machine_sources": ["machine/adaptive/a1-memory-contract.v1.json", "machine/schemas/adaptive-observation.schema.json", "machine/schemas/adaptive-profile.schema.json", "machine/schemas/adaptive-export.schema.json", "machine/schemas/adaptive-store-meta.schema.json"],
+      "human_sources": ["docs/architecture/ADAPTIVE_MEMORY_A0_A1.md"],
       "storage_authority": "MACHINE_LOCAL_JSON_JSONL_ONLY",
       "canonical_commit": "d3b98ecd127f8da562df8cf21385beca33b520f9",
       "canonical_tree": "61e17acfa7b370814ea2f22da1550d0ebe0440c7",
@@ -592,13 +388,8 @@
     "specialist_adaptive_context_a2": {
       "status": "CANONICAL_ADVISORY_OPT_IN",
       "purpose": "Opt-in read-only specialist context compiled from exact-scope A1 local state after existing route binding, authority, capability, and governance gates.",
-      "machine_sources": [
-        "machine/adaptive/a2-context-contract.v1.json",
-        "machine/schemas/adaptive-context.schema.json"
-      ],
-      "human_sources": [
-        "docs/architecture/ADAPTIVE_CONTEXT_A2.md"
-      ],
+      "machine_sources": ["machine/adaptive/a2-context-contract.v1.json", "machine/schemas/adaptive-context.schema.json"],
+      "human_sources": ["docs/architecture/ADAPTIVE_CONTEXT_A2.md"],
       "canonical_commit": "0bae83812bdab17ac4cf346d1b35b84c8e361a79",
       "canonical_tree": "8a67a13a994c5cc6ed59d24c7908ffdc1ba03063",
       "runtime_attachment": "POST_GOVERNANCE_PRE_OPERATION",
@@ -610,16 +401,8 @@
     "behavioral_pattern_learning_a3": {
       "status": "SHADOW_IMPLEMENTED_NO_EXECUTION_CONTROL",
       "purpose": "Machine-local shadow signal extraction, evidence-bounded candidate learning, and comparison against deterministic choices without inserting shadow state into the A1 materialized profile, A2 specialist context, routing, or execution.",
-      "machine_sources": [
-        "machine/adaptive/a3-shadow-learning-contract.v1.json",
-        "machine/schemas/adaptive-shadow-signal.schema.json",
-        "machine/schemas/adaptive-shadow-candidate.schema.json",
-        "machine/schemas/adaptive-shadow-comparison.schema.json"
-      ],
-      "human_sources": [
-        "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3.md",
-        "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3_IMPLEMENTATION.md"
-      ],
+      "machine_sources": ["machine/adaptive/a3-shadow-learning-contract.v1.json", "machine/schemas/adaptive-shadow-signal.schema.json", "machine/schemas/adaptive-shadow-candidate.schema.json", "machine/schemas/adaptive-shadow-comparison.schema.json"],
+      "human_sources": ["docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3.md", "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3_IMPLEMENTATION.md"],
       "runtime_surface": "orchestra_runtime/adaptive/shadow.py",
       "validation_surface": "tests/runtime/test_adaptive_shadow.py",
       "canonical_a3_0_contract_commit": "07989ef6473657ab37530462ce7d2a9ef1c5f8e2",
@@ -637,23 +420,13 @@
     "portable_adaptive_memory": {
       "status": "IMPLEMENTED_OPTIONAL_STORAGE_AGNOSTIC_NON_AUTHORIZING",
       "purpose": "Privacy-minimized export of eligible A3 shadow candidates through a generic user-selected portable-memory backend contract without attaching storage to routing or execution.",
-      "machine_sources": [
-        "machine/adaptive/memory-backends.v1.json",
-        "machine/schemas/portable-memory-candidate.schema.json"
-      ],
-      "human_sources": [
-        "docs/architecture/PORTABLE_ADAPTIVE_MEMORY.md"
-      ],
+      "machine_sources": ["machine/adaptive/memory-backends.v1.json", "machine/schemas/portable-memory-candidate.schema.json"],
+      "human_sources": ["docs/architecture/PORTABLE_ADAPTIVE_MEMORY.md"],
       "runtime_surface": "orchestra_runtime/adaptive/portable_memory.py",
       "validation_surface": "tests/runtime/test_portable_memory_backend.py",
       "default_storage": "MACHINE_LOCAL",
       "portable_backend_required": false,
-      "supported_adapter_kinds": [
-        "LOCAL_JSON",
-        "GIT_JSON",
-        "HTTP_API",
-        "CUSTOM"
-      ],
+      "supported_adapter_kinds": ["LOCAL_JSON", "GIT_JSON", "HTTP_API", "CUSTOM"],
       "private_backend_identity_embedded": false,
       "automatic_promotion": false,
       "runtime_execution_control": false,
@@ -662,18 +435,8 @@
     "bounded_adaptive_selection_a4": {
       "status": "CANONICAL_SHADOW_RANKER_WITH_POST_EXECUTION_ATTACHMENT_NO_EXECUTION_CONTROL",
       "purpose": "Canonical bounded A4 shadow selector, evidence qualification, and opt-in post-execution observation attachment with deterministic fallback and no execution authority.",
-      "machine_sources": [
-        "machine/adaptive/a4-bounded-selection-contract.v1.json",
-        "machine/adaptive/a4-shadow-ranker-implementation.v1.json",
-        "machine/adaptive/a4-execution-attachment-implementation.v1.json",
-        "machine/schemas/adaptive-selection-eligibility-envelope.schema.json",
-        "machine/schemas/adaptive-selection-evidence.schema.json",
-        "machine/schemas/adaptive-selection-decision.schema.json"
-      ],
-      "human_sources": [
-        "docs/architecture/ADAPTIVE_SELECTION_A4.md",
-        "docs/architecture/ADAPTIVE_SELECTION_A4_EXECUTION_ATTACHMENT.md"
-      ],
+      "machine_sources": ["machine/adaptive/a4-bounded-selection-contract.v1.json", "machine/adaptive/a4-shadow-ranker-implementation.v1.json", "machine/adaptive/a4-execution-attachment-implementation.v1.json", "machine/schemas/adaptive-selection-eligibility-envelope.schema.json", "machine/schemas/adaptive-selection-evidence.schema.json", "machine/schemas/adaptive-selection-decision.schema.json"],
+      "human_sources": ["docs/architecture/ADAPTIVE_SELECTION_A4.md", "docs/architecture/ADAPTIVE_SELECTION_A4_EXECUTION_ATTACHMENT.md"],
       "runtime_surface": "orchestra_runtime/adaptive/selection.py",
       "validation_surface": "tests/runtime/test_adaptive_selection.py",
       "execution_attachment_runtime_surface": "orchestra_runtime/adaptive/selection_runtime.py",
@@ -700,25 +463,13 @@
     "adaptive_tuner_topology_a5": {
       "status": "A5_CLOSED_AT_SHADOW_MATURITY_EXECUTION_PROMOTION_DEFERRED_BENEFIT_NOT_ESTABLISHED",
       "purpose": "Canonical bounded A5 shadow topology scorer and exact evidence-qualification layer under the frozen deterministic coordination contracts, closed without execution promotion because qualifying comparative benefit was not established.",
-      "machine_sources": [
-        "machine/adaptive/a5-tuner-topology-contract.v1.json",
-        "machine/adaptive/a5-shadow-topology-ranker-implementation.v1.json",
-        "machine/schemas/adaptive-topology-eligibility-envelope.schema.json",
-        "machine/schemas/adaptive-topology-evidence.schema.json",
-        "machine/schemas/adaptive-topology-decision.schema.json"
-      ],
-      "human_sources": [
-        "docs/architecture/ADAPTIVE_TUNER_A5.md",
-        "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md"
-      ],
+      "machine_sources": ["machine/adaptive/a5-tuner-topology-contract.v1.json", "machine/adaptive/a5-shadow-topology-ranker-implementation.v1.json", "machine/schemas/adaptive-topology-eligibility-envelope.schema.json", "machine/schemas/adaptive-topology-evidence.schema.json", "machine/schemas/adaptive-topology-decision.schema.json"],
+      "human_sources": ["docs/architecture/ADAPTIVE_TUNER_A5.md", "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md"],
       "canonical_entry_head": "fb0ace102d3ab0e662937bb4d824a40b103c1976",
       "canonical_entry_tree": "c3f8b2efa4e1e75b64d5fc1ae10c92402a5b47f8",
       "existing_coordination_runtime_surface": "orchestra_runtime/coordination.py",
       "runtime_surface": "orchestra_runtime/adaptive/topology.py",
-      "validation_surfaces": [
-        "tests/runtime/test_adaptive_topology.py",
-        "tests/runtime/test_adaptive_topology_edges.py"
-      ],
+      "validation_surfaces": ["tests/runtime/test_adaptive_topology.py", "tests/runtime/test_adaptive_topology_edges.py"],
       "source_baseline_head": "8a365eea7dd52022c427b83d7f3b484aba7152ff",
       "source_baseline_tree": "5a8a2b66a44eb233643a37aa9365222d50a732df",
       "canonical_a5_1_head": "8acb03802834e9e56b078496a3e5e0f1aa498ebf",
@@ -747,14 +498,8 @@
       "status": "CONTRACT_FROZEN_NO_BENCHMARK_EXECUTION",
       "purpose": "Shared provenance-bound comparative measurement contract for isolated A5 topology testing, isolated Murmurs communication testing, and a later controlled interaction experiment without granting runtime promotion authority.",
       "program_id": "orchestra.shared-comparative-benchmark.v1",
-      "machine_sources": [
-        "machine/benchmarking/comparative-measurement-contract.v1.json",
-        "machine/schemas/comparative-benchmark-run.schema.json",
-        "machine/schemas/comparative-benchmark-experiment.schema.json"
-      ],
-      "human_sources": [
-        "docs/benchmarking/COMPARATIVE_MEASUREMENT_B0.md"
-      ],
+      "machine_sources": ["machine/benchmarking/comparative-measurement-contract.v1.json", "machine/schemas/comparative-benchmark-run.schema.json", "machine/schemas/comparative-benchmark-experiment.schema.json"],
+      "human_sources": ["docs/benchmarking/COMPARATIVE_MEASUREMENT_B0.md"],
       "benchmark_execution_active": false,
       "a5_execution_effective_promotion": false,
       "a6_authorized": false,
@@ -765,17 +510,8 @@
       "purpose": "Shared non-production harness for provenance-bound paired comparative benchmark execution and evidence collection across isolated A5, isolated Murmurs, and later controlled interaction experiments.",
       "program_id": "orchestra.shared-comparative-benchmark.v1",
       "runner": "scripts/comparative_benchmark_runner.py",
-      "machine_sources": [
-        "machine/benchmarking/shared-benchmark-harness-implementation.v1.json",
-        "machine/schemas/comparative-benchmark-manifest.schema.json",
-        "machine/schemas/comparative-benchmark-executor-request.schema.json",
-        "machine/schemas/comparative-benchmark-executor-result.schema.json",
-        "machine/schemas/comparative-benchmark-run.schema.json",
-        "machine/schemas/comparative-benchmark-experiment.schema.json"
-      ],
-      "human_sources": [
-        "docs/benchmarking/COMPARATIVE_MEASUREMENT_B1.md"
-      ],
+      "machine_sources": ["machine/benchmarking/shared-benchmark-harness-implementation.v1.json", "machine/schemas/comparative-benchmark-manifest.schema.json", "machine/schemas/comparative-benchmark-executor-request.schema.json", "machine/schemas/comparative-benchmark-executor-result.schema.json", "machine/schemas/comparative-benchmark-run.schema.json", "machine/schemas/comparative-benchmark-experiment.schema.json"],
+      "human_sources": ["docs/benchmarking/COMPARATIVE_MEASUREMENT_B1.md"],
       "provider_adapter_bundled": false,
       "production_runtime_attachment": false,
       "paid_provider_calls_authorized": false,
@@ -788,13 +524,8 @@
       "purpose": "Canonical benchmark-only sequential A5 topology execution adapter for scientifically valid isolated B2 measurement, without attaching A5 to production dispatch or RuntimeExecutor execution.",
       "program_id": "orchestra.shared-comparative-benchmark.v1",
       "executor": "scripts/a5_topology_benchmark_executor.py",
-      "machine_sources": [
-        "machine/benchmarking/b2-a5-topology-executor-binding.v1.json"
-      ],
-      "human_sources": [
-        "docs/benchmarking/COMPARATIVE_MEASUREMENT_B2.md",
-        "docs/benchmarking/B2_A5_TOPOLOGY_EXECUTION_ENABLEMENT.md"
-      ],
+      "machine_sources": ["machine/benchmarking/b2-a5-topology-executor-binding.v1.json"],
+      "human_sources": ["docs/benchmarking/COMPARATIVE_MEASUREMENT_B2.md", "docs/benchmarking/B2_A5_TOPOLOGY_EXECUTION_ENABLEMENT.md"],
       "canonical_commit": "3ecbe83d2c4e8ea237c529963ea0184a898ca06c",
       "canonical_tree": "cc58620351ec14de609687547612a2a8e054af5b",
       "communication_mode": "DEFAULT",
@@ -812,19 +543,8 @@
       "program_id": "orchestra.shared-comparative-benchmark.v1",
       "experiment_id": "b2-a5-isolated-real-calibration-v1",
       "preflight": "scripts/b2_real_calibration_preflight.py",
-      "machine_sources": [
-        "machine/benchmarking/b2-real-calibration-freeze.v1.json",
-        "machine/benchmarking/b2-real-calibration-eligibility-envelope.v1.json",
-        "machine/benchmarking/b2-topology-calibration-task-set.v1.json",
-        "machine/benchmarking/b2-real-calibration-manifest.v1.json",
-        "machine/benchmarking/b2-real-calibration-reconciliation.v1.json"
-      ],
-      "human_sources": [
-        "docs/benchmarking/COMPARATIVE_MEASUREMENT_B2.md",
-        "docs/benchmarking/B2_A5_TOPOLOGY_EXECUTION_ENABLEMENT.md",
-        "docs/benchmarking/B2_REAL_CALIBRATION_FREEZE.md",
-        "docs/benchmarking/B2_REAL_CALIBRATION_RECONCILIATION.md"
-      ],
+      "machine_sources": ["machine/benchmarking/b2-real-calibration-freeze.v1.json", "machine/benchmarking/b2-real-calibration-eligibility-envelope.v1.json", "machine/benchmarking/b2-topology-calibration-task-set.v1.json", "machine/benchmarking/b2-real-calibration-manifest.v1.json", "machine/benchmarking/b2-real-calibration-reconciliation.v1.json"],
+      "human_sources": ["docs/benchmarking/COMPARATIVE_MEASUREMENT_B2.md", "docs/benchmarking/B2_A5_TOPOLOGY_EXECUTION_ENABLEMENT.md", "docs/benchmarking/B2_REAL_CALIBRATION_FREEZE.md", "docs/benchmarking/B2_REAL_CALIBRATION_RECONCILIATION.md"],
       "task_set_digest": "f7af904895107a7f00abb6ab125d7a33a7bcb5c729b0665acfe9049bf2050ee8",
       "manifest_digest": "b4d9c279da5681d5c3c3f76dbb04592d575121bc66772861926dacdeeedea8d7",
       "eligibility_envelope_digest": "26af9b40870a13a138f52b23e45189a052875a81c8d4004366f2b93e9361bb55",
@@ -855,13 +575,8 @@
       "program_id": "orchestra.shared-comparative-benchmark.v1",
       "executor": "scripts/a5_topology_benchmark_executor.py",
       "evidence_helpers": "scripts/b2_confirmatory_evidence.py",
-      "machine_sources": [
-        "machine/benchmarking/b2-confirmatory-evidence-instrumentation.v1.json"
-      ],
-      "human_sources": [
-        "docs/benchmarking/B2_CONFIRMATORY_MEASUREMENT_DESIGN.md",
-        "docs/benchmarking/B2_CONFIRMATORY_EVIDENCE_INSTRUMENTATION.md"
-      ],
+      "machine_sources": ["machine/benchmarking/b2-confirmatory-evidence-instrumentation.v1.json"],
+      "human_sources": ["docs/benchmarking/B2_CONFIRMATORY_MEASUREMENT_DESIGN.md", "docs/benchmarking/B2_CONFIRMATORY_EVIDENCE_INSTRUMENTATION.md"],
       "live_execution_authorized": false,
       "b2_4_pilot_authorized": false,
       "b2_5_confirmatory_execution_authorized": false,
@@ -875,15 +590,9 @@
       "status": "B2_4_COMPLETE_VALID_REPLACEMENT_RECONCILIATION",
       "purpose": "Execute and reconcile the separately authorized replacement B2.4 instrumentation pilot with complete evidence retention.",
       "program_id": "orchestra.shared-comparative-benchmark.v1",
-      "tasks": [
-        "b2-cal-cache-freshness",
-        "b2-cal-cross-layer-release"
-      ],
+      "tasks": ["b2-cal-cache-freshness", "b2-cal-cross-layer-release"],
       "repetitions_per_task": 2,
-      "topology_arms": [
-        "Clockwork -> Overseer",
-        "Overseer -> Clockwork"
-      ],
+      "topology_arms": ["Clockwork -> Overseer", "Overseer -> Clockwork"],
       "planned_runs": 8,
       "codex_calls_per_run": 3,
       "maximum_underlying_model_calls": 24,
@@ -892,16 +601,8 @@
       "prepared_driver": "scripts/b2_instrumentation_pilot_driver.py",
       "attempted_slots": 8,
       "accepted_runs": 8,
-      "machine_sources": [
-        "machine/benchmarking/b2-instrumentation-pilot-freeze.v1.json",
-        "machine/benchmarking/b2-instrumentation-pilot-manifest.v1.json",
-        "machine/benchmarking/b2-instrumentation-pilot-plan.v1.json",
-        "machine/benchmarking/b2-instrumentation-pilot-reconciliation.v1.json"
-      ],
-      "human_sources": [
-        "docs/benchmarking/B2_INSTRUMENTATION_PILOT_FREEZE.md",
-        "docs/benchmarking/B2_INSTRUMENTATION_PILOT_RECONCILIATION.md"
-      ],
+      "machine_sources": ["machine/benchmarking/b2-instrumentation-pilot-freeze.v1.json", "machine/benchmarking/b2-instrumentation-pilot-manifest.v1.json", "machine/benchmarking/b2-instrumentation-pilot-plan.v1.json", "machine/benchmarking/b2-instrumentation-pilot-reconciliation.v1.json"],
+      "human_sources": ["docs/benchmarking/B2_INSTRUMENTATION_PILOT_FREEZE.md", "docs/benchmarking/B2_INSTRUMENTATION_PILOT_RECONCILIATION.md"],
       "live_model_calls_consumed": 24,
       "prior_stopped_attempt_actual_model_calls": 0,
       "prior_stopped_attempt_accepted_runs": 0,
@@ -919,18 +620,7 @@
       "purpose": "Record the valid 40-run held-out confirmatory replacement and the preregistered B2 terminal conclusion.",
       "program_id": "orchestra.shared-comparative-benchmark.v1",
       "experiment_id": "b2-confirmatory-measurement-v1",
-      "tasks": [
-        "b2-confirm-single-domain-state-transition",
-        "b2-confirm-multi-domain-order-entitlement",
-        "b2-confirm-architecture-plugin-boundary",
-        "b2-confirm-debugging-event-duplication",
-        "b2-confirm-security-capability-scope",
-        "b2-confirm-validation-partial-write",
-        "b2-confirm-doc-implementation-contract",
-        "b2-confirm-dependency-version-skew",
-        "b2-confirm-parallel-artifact-join",
-        "b2-confirm-high-coordination-contract-rollout"
-      ],
+      "tasks": ["b2-confirm-single-domain-state-transition", "b2-confirm-multi-domain-order-entitlement", "b2-confirm-architecture-plugin-boundary", "b2-confirm-debugging-event-duplication", "b2-confirm-security-capability-scope", "b2-confirm-validation-partial-write", "b2-confirm-doc-implementation-contract", "b2-confirm-dependency-version-skew", "b2-confirm-parallel-artifact-join", "b2-confirm-high-coordination-contract-rollout"],
       "task_set_digest": "5763028d73ea6bac3933cf5b75a16dcf1ff820b114ca093c7730254ebb400eb6",
       "preregistration_digest": "a77b563acf95189a96647641426244903cf950b760946c5d38a06b37c0292e1f",
       "manifest_digest": "8207f16cb2a9fa93b414c0651c16f183cab27c3c859604bbd62197e1198e9041",
@@ -944,20 +634,8 @@
       "automatic_retry": false,
       "preflight": "scripts/b2_5_confirmatory_preflight.py",
       "prepared_driver": "scripts/b2_5_confirmatory_driver.py",
-      "machine_sources": [
-        "machine/benchmarking/b2-5-held-out-task-set.v1.json",
-        "machine/benchmarking/b2-5-confirmatory-preregistration.v1.json",
-        "machine/benchmarking/b2-5-confirmatory-manifest.v1.json",
-        "machine/benchmarking/b2-5-confirmatory-plan.v1.json",
-        "machine/benchmarking/b2-5-confirmatory-freeze.v1.json",
-        "machine/benchmarking/b2-5-confirmatory-reconciliation.v1.json"
-      ],
-      "human_sources": [
-        "docs/benchmarking/B2_CONFIRMATORY_MEASUREMENT_DESIGN.md",
-        "docs/benchmarking/B2_CONFIRMATORY_EVIDENCE_INSTRUMENTATION.md",
-        "docs/benchmarking/B2_5_CONFIRMATORY_PREPARATION.md",
-        "docs/benchmarking/B2_5_CONFIRMATORY_RECONCILIATION.md"
-      ],
+      "machine_sources": ["machine/benchmarking/b2-5-held-out-task-set.v1.json", "machine/benchmarking/b2-5-confirmatory-preregistration.v1.json", "machine/benchmarking/b2-5-confirmatory-manifest.v1.json", "machine/benchmarking/b2-5-confirmatory-plan.v1.json", "machine/benchmarking/b2-5-confirmatory-freeze.v1.json", "machine/benchmarking/b2-5-confirmatory-reconciliation.v1.json"],
+      "human_sources": ["docs/benchmarking/B2_CONFIRMATORY_MEASUREMENT_DESIGN.md", "docs/benchmarking/B2_CONFIRMATORY_EVIDENCE_INSTRUMENTATION.md", "docs/benchmarking/B2_5_CONFIRMATORY_PREPARATION.md", "docs/benchmarking/B2_5_CONFIRMATORY_RECONCILIATION.md"],
       "live_execution_authorized": false,
       "live_model_calls_consumed": 162,
       "historical_stopped_session_accepted_runs": 13,
@@ -980,44 +658,11 @@
       "purpose": "Record the completed B3 calibration, pilot, and 450-run held-out confirmatory evidence with separate trustworthy host-counter attribution and the preregistered terminal Murmurs conclusion.",
       "program_id": "orchestra.shared-comparative-benchmark.v1",
       "executor": "scripts/antigravity_benchmark_executor.py",
-      "communication_arms": [
-        "DEFAULT",
-        "CAVEMAN",
-        "MURMURS"
-      ],
-      "supported_transports": [
-        "json-usage",
-        "stream-json-usage"
-      ],
-      "pinned_caveman_baseline": {
-        "repository": "JuliusBrussee/caveman",
-        "revision": "ae405e872270acc57484693612ae038b16c8f6cd",
-        "skill_path": "skills/caveman/SKILL.md",
-        "blob_identity": "bd22d86b32e4a99e09ff7482a35509faac7a6f65"
-      },
-      "machine_sources": [
-        "machine/benchmarking/antigravity-executor-binding.v1.json",
-        "machine/benchmarking/b3-calibration-task-set.v1.json",
-        "machine/benchmarking/b3-pilot-task-set.v1.json",
-        "machine/benchmarking/b3-pilot-freeze.v1.json",
-        "machine/benchmarking/b3-pilot-manifest.v1.json",
-        "machine/benchmarking/b3-pilot-plan.v1.json",
-        "machine/benchmarking/b3-pilot-reconciliation.v1.json",
-        "machine/benchmarking/b3-confirmatory-task-set.v1.json",
-        "machine/benchmarking/b3-confirmatory-preregistration.v1.json",
-        "machine/benchmarking/b3-confirmatory-freeze.v1.json",
-        "machine/benchmarking/b3-confirmatory-manifest.v1.json",
-        "machine/benchmarking/b3-confirmatory-plan.v1.json",
-        "machine/benchmarking/b3-confirmatory-reconciliation.v1.json"
-      ],
-      "human_sources": [
-        "docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md",
-        "docs/benchmarking/B3_CALIBRATION_TASK_SET.md",
-        "docs/benchmarking/B3_INSTRUMENTATION_PILOT_FREEZE.md",
-        "docs/benchmarking/B3_PILOT_RECONCILIATION.md",
-        "docs/benchmarking/B3_CONFIRMATORY_FREEZE.md",
-        "docs/benchmarking/B3_CONFIRMATORY_RECONCILIATION.md"
-      ],
+      "communication_arms": ["DEFAULT", "CAVEMAN", "MURMURS"],
+      "supported_transports": ["json-usage", "stream-json-usage"],
+      "pinned_caveman_baseline": {"repository": "JuliusBrussee/caveman", "revision": "ae405e872270acc57484693612ae038b16c8f6cd", "skill_path": "skills/caveman/SKILL.md", "blob_identity": "bd22d86b32e4a99e09ff7482a35509faac7a6f65"},
+      "machine_sources": ["machine/benchmarking/antigravity-executor-binding.v1.json", "machine/benchmarking/b3-calibration-task-set.v1.json", "machine/benchmarking/b3-pilot-task-set.v1.json", "machine/benchmarking/b3-pilot-freeze.v1.json", "machine/benchmarking/b3-pilot-manifest.v1.json", "machine/benchmarking/b3-pilot-plan.v1.json", "machine/benchmarking/b3-pilot-reconciliation.v1.json", "machine/benchmarking/b3-confirmatory-task-set.v1.json", "machine/benchmarking/b3-confirmatory-preregistration.v1.json", "machine/benchmarking/b3-confirmatory-freeze.v1.json", "machine/benchmarking/b3-confirmatory-manifest.v1.json", "machine/benchmarking/b3-confirmatory-plan.v1.json", "machine/benchmarking/b3-confirmatory-reconciliation.v1.json"],
+      "human_sources": ["docs/benchmarking/COMPARATIVE_MEASUREMENT_B3.md", "docs/benchmarking/B3_CALIBRATION_TASK_SET.md", "docs/benchmarking/B3_INSTRUMENTATION_PILOT_FREEZE.md", "docs/benchmarking/B3_PILOT_RECONCILIATION.md", "docs/benchmarking/B3_CONFIRMATORY_FREEZE.md", "docs/benchmarking/B3_CONFIRMATORY_RECONCILIATION.md"],
       "canonical_json_counter_id": "antigravity-cli-1.1.15:json-usage:gemini-3.7-flash-high",
       "canonical_stream_json_counter_id": "antigravity-cli-1.1.15:stream-json-usage:gemini-3.7-flash-high",
       "counter_identity_provenance": "ORCHESTRA_ASSIGNED_MEASUREMENT_SURFACE",
@@ -1033,10 +678,7 @@
       "confirmatory_live_model_calls": 450,
       "confirmatory_accepted_total_tokens": 8885182,
       "confirmatory_median_output_token_relative_reduction": -0.010250675612710838,
-      "confirmatory_bootstrap_95_ci": [
-        -0.04682317578772803,
-        0.020726934275213594
-      ],
+      "confirmatory_bootstrap_95_ci": [-0.04682317578772803, 0.020726934275213594],
       "confirmatory_exact_sign_test_p": 0.8699229710286416,
       "diagnostic_executed": true,
       "calibration_executed": true,
@@ -1050,13 +692,8 @@
     },
     "comparative_measurement_b5": {
       "status": "B_PHASE_COMPLETE_NO_BENEFIT_ESTABLISHED_NO_PROMOTION",
-      "machine_sources": [
-        "machine/benchmarking/b4-controlled-interaction-disposition.v1.json",
-        "machine/benchmarking/b5-final-evidence-synthesis.v1.json"
-      ],
-      "human_sources": [
-        "docs/benchmarking/B_PHASE_FINAL_EVIDENCE_SYNTHESIS.md"
-      ],
+      "machine_sources": ["machine/benchmarking/b4-controlled-interaction-disposition.v1.json", "machine/benchmarking/b5-final-evidence-synthesis.v1.json"],
+      "human_sources": ["docs/benchmarking/B_PHASE_FINAL_EVIDENCE_SYNTHESIS.md"],
       "a5_topology_benefit": "CONFIRMATORY_BENEFIT_NOT_ESTABLISHED",
       "murmurs_benefit": "CONFIRMATORY_BENEFIT_NOT_ESTABLISHED",
       "a5_murmurs_interaction": "NOT_RUN_NOT_ELIGIBLE",
@@ -1070,24 +707,12 @@
       "status": "HISTORICAL_PREBASELINE_STATE_SUPERSEDED_BY_C1_C2R1",
       "purpose": "Historical host-specific Codex CLI measurement-adapter readiness state retained for provenance; later C1 and C2R1 reconciliations are the current completed Codex measurement records.",
       "executor": "scripts/codex_benchmark_executor.py",
-      "machine_sources": [
-        "machine/benchmarking/codex-executor-binding.v1.json",
-        "machine/benchmarking/codex-prebaseline-remediation.v1.json"
-      ],
-      "human_sources": [
-        "docs/benchmarking/CODEX_BASELINE_READINESS.md",
-        "docs/benchmarking/CODEX_PREBASELINE_REMEDIATION.md"
-      ],
+      "machine_sources": ["machine/benchmarking/codex-executor-binding.v1.json", "machine/benchmarking/codex-prebaseline-remediation.v1.json"],
+      "human_sources": ["docs/benchmarking/CODEX_BASELINE_READINESS.md", "docs/benchmarking/CODEX_PREBASELINE_REMEDIATION.md"],
       "canonical_readiness_commit": "83f0ff7d74c14b19f78d58143aadcc0a0613f13f",
       "canonical_readiness_tree": "6e6a4f48439f6126452de1f9c65949fec4d3d7e1",
-      "frozen_benchmark_subject": {
-        "sha": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
-        "tree": "ceab55bd512ea6fde4e8e76877cbb7006d18500e"
-      },
-      "common_measurement_core_baseline": {
-        "sha": "e182e478988c77125127811375aa1b69278cca63",
-        "tree": "9e1d9c0dcf5e615c4b16dfd95bb72f63eaacc33e"
-      },
+      "frozen_benchmark_subject": {"sha": "d95f677dbf23ab79c4698c26645ea30cea9b3019", "tree": "ceab55bd512ea6fde4e8e76877cbb7006d18500e"},
+      "common_measurement_core_baseline": {"sha": "e182e478988c77125127811375aa1b69278cca63", "tree": "9e1d9c0dcf5e615c4b16dfd95bb72f63eaacc33e"},
       "taskset_digest": "fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8",
       "validator": "EXACT_JSON_CONFORMANCE_V1",
       "live_execution_authorized": false,
@@ -1103,12 +728,8 @@
       "status": "C1_COMPLETE_RECONCILED_CALIBRATION_ONLY",
       "purpose": "Completed Codex C1 natural-language 30-run calibration reconciled against the frozen Antigravity B3 calibration while preserving provider-native counter boundaries and the single adjudicated Codex provider-outage attempt.",
       "program_id": "orchestra.shared-comparative-benchmark.v1",
-      "machine_sources": [
-        "machine/benchmarking/codex-c1-cross-provider-reconciliation.v1.json"
-      ],
-      "human_sources": [
-        "docs/benchmarking/CODEX_C1_CROSS_PROVIDER_RECONCILIATION.md"
-      ],
+      "machine_sources": ["machine/benchmarking/codex-c1-cross-provider-reconciliation.v1.json"],
+      "human_sources": ["docs/benchmarking/CODEX_C1_CROSS_PROVIDER_RECONCILIATION.md"],
       "codex_accepted_runs": 30,
       "codex_accepted_cumulative_total_tokens": 332578,
       "codex_invalid_attempts_preserved": 1,
@@ -1130,26 +751,10 @@
       "purpose": "Negotiated Registry capability consumption, explicit trusted Registry v0.2.0 compatibility, multi-jurisdiction query selection, query-scoped freshness, release-delta impact analysis, and governed domain-to-specialist resolution.",
       "runtime_surface": "orchestra_runtime/registry_adaptive.py",
       "cli_surface": "scripts/compliance_registry_adaptive.py",
-      "validation_surfaces": [
-        "tests/runtime/test_registry_adaptive.py",
-        "tests/runtime/test_registry_adaptive_edges.py",
-        "tests/runtime/test_registry_joint_contract.py"
-      ],
-      "human_sources": [
-        "docs/architecture/REGISTRY_ADAPTIVE_CONSUMPTION_O1_O6.md"
-      ],
-      "canonical_orchestra_implementation": {
-        "sha": "955a4b4918e28638a50e9564d1e3ea0127ae5f73",
-        "tree": "4cba8642eb63b38b283db67010e01f204c92780b"
-      },
-      "registry_r1_r6_canonical": {
-        "repository": "Baelfyre/Orchestra-Compliance-Registry",
-        "sha": "20eb859db153f17e24c052a13765e982d51cedbf",
-        "tree": "763be9062a0c23031c794403dc4592f5db4389b0",
-        "implementation_merge_sha": "be297335b55aa6a3a88a473c7e7da28614e95cd2",
-        "trusted_release": "registry-v0.3.0",
-        "trusted_release_includes_r1_r6": true
-      },
+      "validation_surfaces": ["tests/runtime/test_registry_adaptive.py", "tests/runtime/test_registry_adaptive_edges.py", "tests/runtime/test_registry_joint_contract.py"],
+      "human_sources": ["docs/architecture/REGISTRY_ADAPTIVE_CONSUMPTION_O1_O6.md"],
+      "canonical_orchestra_implementation": {"sha": "955a4b4918e28638a50e9564d1e3ea0127ae5f73", "tree": "4cba8642eb63b38b283db67010e01f204c92780b"},
+      "registry_r1_r6_canonical": {"repository": "Baelfyre/Orchestra-Compliance-Registry", "sha": "20eb859db153f17e24c052a13765e982d51cedbf", "tree": "763be9062a0c23031c794403dc4592f5db4389b0", "implementation_merge_sha": "be297335b55aa6a3a88a473c7e7da28614e95cd2", "trusted_release": "registry-v0.3.0", "trusted_release_includes_r1_r6": true},
       "r5_capability_blob_sha": "978c1a6eecffe802df79e6d110a16b780ec6bd3f",
       "joint_reconciliation": "PASS",
       "legacy_v0_2_compatibility": "EXPLICIT_LOCAL_PROFILE_NO_INVENTED_REGISTRY_CAPABILITY_METADATA",
@@ -1159,84 +764,19 @@
       "status": "CANONICAL_MERGED_VERIFIED",
       "purpose": "Consume the Registry R7 typed/indexed/projection query gateway using the smallest sufficient context while preserving O1-O6 semantics, exact Registry identities, existing compliance receipts, and fail-closed behavior.",
       "runtime_surface": "orchestra_runtime/registry_o7.py",
-      "machine_sources": [
-        "docs/architecture/contracts/registry-o7-runtime-state.v1.json"
-      ],
-      "human_sources": [
-        "docs/architecture/REGISTRY_QUERY_OPTIMIZATION_O7.md"
-      ],
-      "validation_surfaces": [
-        "tests/runtime/test_registry_o7.py",
-        "tests/runtime/test_registry_o7_runtime_state.py",
-        "tests/runtime/test_registry_o7_joint_conformance_contract.py"
-      ],
-      "registry_r7_1_r7_6_canonical": {
-        "repository": "Baelfyre/Orchestra-Compliance-Registry",
-        "sha": "155c21ab54f704d876ae4a0c2d995f5591f13930",
-        "tree": "ea99fce806a455c4c1e2c912277c44d3595f54d8",
-        "surface_status": "IMPLEMENTED_STABLE_DIRECT_SURFACE_R7_1_R7_6"
-      },
-      "registry_r7_trusted_release": {
-        "repository": "Baelfyre/Orchestra-Compliance-Registry",
-        "release_tag": "registry-v0.4.0",
-        "release_source_sha": "488c979b37dd84d8645fd8e6c288d297375c4e5b",
-        "release_manifest_sha256": "040d6576cf10e9f7e3a9a051792869541c1d33b7af3c665fad8eecb939c7baaa",
-        "bundle_sha256": "e0457a75837d169d7bb8a7da14d8f4141d35a691952ff8f8978ef793e3cf92d3",
-        "post_release_runtime_sha": "4926a3b5f48122dd45f3c8e83a12b8d071dd5387",
-        "post_release_runtime_tree": "01be27bde90f6faa59ab74d60ba13af480c11b1d",
-        "publication_state": "PUBLISHED_IMMUTABLE_VERIFIED"
-      },
+      "machine_sources": ["docs/architecture/contracts/registry-o7-runtime-state.v1.json"],
+      "human_sources": ["docs/architecture/REGISTRY_QUERY_OPTIMIZATION_O7.md"],
+      "validation_surfaces": ["tests/runtime/test_registry_o7.py", "tests/runtime/test_registry_o7_runtime_state.py", "tests/runtime/test_registry_o7_joint_conformance_contract.py"],
+      "registry_r7_1_r7_6_canonical": {"repository": "Baelfyre/Orchestra-Compliance-Registry", "sha": "155c21ab54f704d876ae4a0c2d995f5591f13930", "tree": "ea99fce806a455c4c1e2c912277c44d3595f54d8", "surface_status": "IMPLEMENTED_STABLE_DIRECT_SURFACE_R7_1_R7_6"},
+      "registry_r7_trusted_release": {"repository": "Baelfyre/Orchestra-Compliance-Registry", "release_tag": "registry-v0.4.0", "release_source_sha": "488c979b37dd84d8645fd8e6c288d297375c4e5b", "release_manifest_sha256": "040d6576cf10e9f7e3a9a051792869541c1d33b7af3c665fad8eecb939c7baaa", "bundle_sha256": "e0457a75837d169d7bb8a7da14d8f4141d35a691952ff8f8978ef793e3cf92d3", "post_release_runtime_sha": "4926a3b5f48122dd45f3c8e83a12b8d071dd5387", "post_release_runtime_tree": "01be27bde90f6faa59ab74d60ba13af480c11b1d", "publication_state": "PUBLISHED_IMMUTABLE_VERIFIED"},
       "implementation_order": "O7_1_O7_6_CANONICAL_THEN_O7_7_VERIFIED_AGAINST_TRUSTED_REGISTRY_V0_4_0",
-      "required_compatibility_floor": {
-        "cap.query.v1": "1.0.0"
-      },
-      "planned_optional_capabilities": [
-        "cap.query.projection.v1",
-        "cap.query.relationships.v1",
-        "cap.query.indexed-read.v1",
-        "cap.query.budget.v1",
-        "cap.transport.mcp.v1"
-      ],
-      "preferred_transport_order": [
-        "DIRECT_LOCAL_INDEXED_GATEWAY",
-        "DIRECT_LOCAL_JSON_QUERY",
-        "OPTIONAL_MCP_TRANSPORT"
-      ],
-      "projection_levels": [
-        "MINIMAL",
-        "SUMMARY",
-        "EVIDENCE",
-        "FULL"
-      ],
-      "phase_plan": [
-        "O7.0_CONSUMER_CONTRACT_FREEZE",
-        "O7.1_OPTIONAL_CAPABILITY_NEGOTIATION",
-        "O7.2_TRANSPORT_ABSTRACTION",
-        "O7.3_PROJECTION_AWARE_CONSUMPTION",
-        "O7.4_EXISTING_RECEIPT_NORMALIZATION",
-        "O7.5_DETERMINISTIC_FAILOVER",
-        "O7.6_CONTEXT_BUDGET_INTEGRATION",
-        "O7.7_JOINT_R7_O7_CONFORMANCE"
-      ],
-      "fallbacks": {
-        "indexed_unavailable": "DIRECT_LOCAL_JSON_QUERY",
-        "mcp_unavailable": "DIRECT_LOCAL_QUERY",
-        "optional_capability_missing": "CURRENT_O3_PATH",
-        "index_identity_mismatch": "REJECT_REBUILD_OR_FALLBACK",
-        "semantic_mismatch": "FAIL_CLOSED"
-      },
-      "frozen_invariants": [
-        "O1_CAPABILITY_NEGOTIATION",
-        "O2_COMPATIBILITY_FAIL_CLOSED",
-        "O3_QUERY_SEMANTICS",
-        "O4_QUERY_SCOPED_FRESHNESS",
-        "O5_RELEASE_DELTA",
-        "O6_DOMAIN_ROUTING",
-        "CONDUCTOR_EXCLUSIVE_ROUTING",
-        "GOVERNOR_APPLICABILITY",
-        "STEWARD_TRACEABILITY",
-        "ARBITER_SET_EQUALITY"
-      ],
+      "required_compatibility_floor": {"cap.query.v1": "1.0.0"},
+      "planned_optional_capabilities": ["cap.query.projection.v1", "cap.query.relationships.v1", "cap.query.indexed-read.v1", "cap.query.budget.v1", "cap.transport.mcp.v1"],
+      "preferred_transport_order": ["DIRECT_LOCAL_INDEXED_GATEWAY", "DIRECT_LOCAL_JSON_QUERY", "OPTIONAL_MCP_TRANSPORT"],
+      "projection_levels": ["MINIMAL", "SUMMARY", "EVIDENCE", "FULL"],
+      "phase_plan": ["O7.0_CONSUMER_CONTRACT_FREEZE", "O7.1_OPTIONAL_CAPABILITY_NEGOTIATION", "O7.2_TRANSPORT_ABSTRACTION", "O7.3_PROJECTION_AWARE_CONSUMPTION", "O7.4_EXISTING_RECEIPT_NORMALIZATION", "O7.5_DETERMINISTIC_FAILOVER", "O7.6_CONTEXT_BUDGET_INTEGRATION", "O7.7_JOINT_R7_O7_CONFORMANCE"],
+      "fallbacks": {"indexed_unavailable": "DIRECT_LOCAL_JSON_QUERY", "mcp_unavailable": "DIRECT_LOCAL_QUERY", "optional_capability_missing": "CURRENT_O3_PATH", "index_identity_mismatch": "REJECT_REBUILD_OR_FALLBACK", "semantic_mismatch": "FAIL_CLOSED"},
+      "frozen_invariants": ["O1_CAPABILITY_NEGOTIATION", "O2_COMPATIBILITY_FAIL_CLOSED", "O3_QUERY_SEMANTICS", "O4_QUERY_SCOPED_FRESHNESS", "O5_RELEASE_DELTA", "O6_DOMAIN_ROUTING", "CONDUCTOR_EXCLUSIVE_ROUTING", "GOVERNOR_APPLICABILITY", "STEWARD_TRACEABILITY", "ARBITER_SET_EQUALITY"],
       "planned_release_target": "v1.8.0_AFTER_REGISTRY_R7_TRUSTED_RELEASE_AND_JOINT_CONFORMANCE",
       "token_efficiency_claim": "NOT_CLAIMED_UNTIL_MEASURED",
       "authority_note": "O7.1-O7.6 are canonical read-path optimizations and O7.7 joint conformance has passed against immutable Registry v0.4.0. MCP remains transport, the Registry index remains derived, query/projection choice cannot change compliance meaning, and O7 evidence grants no merge, release, deployment, policy, or other protected-action authority."
@@ -1250,16 +790,8 @@
       "live_c2_calls": 30,
       "original_prompt_digest_match_count": 0,
       "original_prompt_identity_recovered_exactly": false,
-      "machine_sources": [
-        "machine/benchmarking/codex-c2-portability-r1-preexecution.v1.json",
-        "machine/benchmarking/codex-c2-portability-r1-live-execution-authorization.v1.json",
-        "machine/benchmarking/codex-c2r1-machine-json-reconciliation.v1.json"
-      ],
-      "human_sources": [
-        "docs/benchmarking/CODEX_C2_PORTABILITY_R1_PREEXECUTION.md",
-        "docs/benchmarking/CODEX_C2_MACHINE_JSON_EXECUTION_FREEZE.md",
-        "docs/benchmarking/CODEX_C2R1_MACHINE_JSON_RECONCILIATION.md"
-      ],
+      "machine_sources": ["machine/benchmarking/codex-c2-portability-r1-preexecution.v1.json", "machine/benchmarking/codex-c2-portability-r1-live-execution-authorization.v1.json", "machine/benchmarking/codex-c2r1-machine-json-reconciliation.v1.json"],
+      "human_sources": ["docs/benchmarking/CODEX_C2_PORTABILITY_R1_PREEXECUTION.md", "docs/benchmarking/CODEX_C2_MACHINE_JSON_EXECUTION_FREEZE.md", "docs/benchmarking/CODEX_C2R1_MACHINE_JSON_RECONCILIATION.md"],
       "validated_launcher_sha256": "014f38025e3b8491b7cf84e46cb19b1ca8484f0ea3a57abfbb65be6ca1c567d3",
       "launcher_preflight_sha256": "c04cf9610605acb1836c9806bfef60c45786c150769805c88bffd0effedb82f6",
       "live_authorization_record": "machine/benchmarking/codex-c2-portability-r1-live-execution-authorization.v1.json",
@@ -1267,129 +799,25 @@
       "live_execution_authorized": false,
       "next_gate": "B_PHASE_COMPLETE_NO_FURTHER_BENCHMARK_PROMOTION",
       "authority_note": "C2R1 completed its governed primary execution with 29 accepted runs and one preserved provider-outage invalid observation. A separately authorized supplemental recovery passed but does not replace the primary invalid run. The result remains calibration evidence only and grants no C3, A5 promotion, A6, B4, deployment, or policy authority."
-    },
-    "runtime_architecture_refoundation": {
-      "status": "AR_2_FOUNDATION_CANDIDATE",
-      "purpose": "Incrementally refactor the Orchestra Python runtime into bounded clean/hexagonal architecture layers while preserving public behavior and legacy import compatibility.",
-      "human_sources": [
-        "docs/project/ORCHESTRA_RUNTIME_ARCHITECTURE_REFOUNDATION.md",
-        "docs/architecture/README.md"
-      ],
-      "validation_surface": "tests/runtime/test_runtime_architecture_boundaries.py",
-      "canonical_layers": [
-        "domain",
-        "application",
-        "infrastructure",
-        "bootstrap",
-        "shared",
-        "resources"
-      ],
-      "application_subzones": [
-        "use_cases",
-        "services",
-        "dto",
-        "ports"
-      ],
-      "persistence_subzones": [
-        "repositories",
-        "dpo",
-        "mappers",
-        "stores",
-        "serialization"
-      ],
-      "migration_strategy": "STRANGLER_COMPATIBILITY_FACADES",
-      "first_migrated_surface": "orchestra_runtime.shared.errors",
-      "compatibility_facade": "orchestra_runtime.errors",
-      "new_flat_runtime_modules_prohibited": true,
-      "production_runtime_internal_imports_prohibited": true,
-      "runtime_behavior_change": false,
-      "public_import_retirement": false,
-      "ar3_started": false,
-      "release_authorized": false,
-      "authority_note": "AR-2 establishes architectural destinations and migrates the shared runtime error boundary behind a compatibility facade. Architecture placement or validation success does not grant implementation beyond the approved refactor scope, release, deployment, policy activation, provider routing/fallback, destructive, installed-integration-refresh, force-push, or history-rewrite authority."
     }
   },
   "machine_scan_order": [
-    {
-      "order": 1,
-      "path": "README.json",
-      "purpose": "AI-facing repository orientation and machine-surface discovery graph"
-    },
-    {
-      "order": 2,
-      "path": "plugin.json",
-      "purpose": "Package identity, version, command manifest, and installable specialist manifest"
-    },
-    {
-      "order": 3,
-      "path": "machine/specialists/registry.v1.json",
-      "purpose": "Compiled specialist identities and routing-relevant metadata"
-    },
-    {
-      "order": 4,
-      "path": "machine/routing/routes.v1.json",
-      "purpose": "Deterministic command routing, direct routes, ordered sequences, aliases, and fallback"
-    },
-    {
-      "order": 5,
-      "path": "machine/governance/policy.v1.json",
-      "purpose": "Governance vocabulary, precedence, ownership, validation rules, and remediation defaults"
-    },
-    {
-      "order": 6,
-      "path": "machine/hosts/update-contract.v1.json",
-      "purpose": "Host maturity and governed host-update planning contract"
-    },
-    {
-      "order": 7,
-      "path": "machine/protocol/prap-certification-contract.v1.json",
-      "purpose": "Adapter SDK / PRAP compatibility certification contract"
-    },
-    {
-      "order": 8,
-      "path": "machine/developer-portal/catalog.v1.json",
-      "purpose": "Machine Developer Portal discovery catalog"
-    },
-    {
-      "order": 9,
-      "path": "machine/knowledge/",
-      "purpose": "Machine-readable specialist knowledge references and provenance-bound catalogs"
-    },
-    {
-      "order": 10,
-      "path": "machine/presentation/murmurs-policy.v1.json",
-      "purpose": "Deterministic Murmurs presentation dispositions and required-explanation safety boundaries"
-    },
-    {
-      "order": 11,
-      "path": "machine/provenance/third-party.v1.json",
-      "purpose": "Canonical semantic record of third-party dependencies, references, protocol sources, historical research, planned research, reviewed revisions, license state, learned patterns, affected surfaces, evidence, and incorporation boundaries"
-    },
-    {
-      "order": 12,
-      "path": "machine/release-evidence/",
-      "purpose": "Structured release and confidence evidence"
-    },
-    {
-      "order": 13,
-      "path": "machine/schemas/",
-      "purpose": "JSON Schema contracts for machine-readable records"
-    },
-    {
-      "order": 14,
-      "path": "docs/README.md",
-      "purpose": "Human documentation map and current entry-point classification"
-    },
-    {
-      "order": 15,
-      "path": "PROJECT_STATE.md",
-      "purpose": "Human project continuity and implementation chronology"
-    },
-    {
-      "order": 16,
-      "path": "README.md",
-      "purpose": "Concise human landing page"
-    }
+    {"order": 1, "path": "README.json", "purpose": "AI-facing repository orientation and machine-surface discovery graph"},
+    {"order": 2, "path": "plugin.json", "purpose": "Package identity, version, command manifest, and installable specialist manifest"},
+    {"order": 3, "path": "machine/specialists/registry.v1.json", "purpose": "Compiled specialist identities and routing-relevant metadata"},
+    {"order": 4, "path": "machine/routing/routes.v1.json", "purpose": "Deterministic command routing, direct routes, ordered sequences, aliases, and fallback"},
+    {"order": 5, "path": "machine/governance/policy.v1.json", "purpose": "Governance vocabulary, precedence, ownership, validation rules, and remediation defaults"},
+    {"order": 6, "path": "machine/hosts/update-contract.v1.json", "purpose": "Host maturity and governed host-update planning contract"},
+    {"order": 7, "path": "machine/protocol/prap-certification-contract.v1.json", "purpose": "Adapter SDK / PRAP compatibility certification contract"},
+    {"order": 8, "path": "machine/developer-portal/catalog.v1.json", "purpose": "Machine Developer Portal discovery catalog"},
+    {"order": 9, "path": "machine/knowledge/", "purpose": "Machine-readable specialist knowledge references and provenance-bound catalogs"},
+    {"order": 10, "path": "machine/presentation/murmurs-policy.v1.json", "purpose": "Deterministic Murmurs presentation dispositions and required-explanation safety boundaries"},
+    {"order": 11, "path": "machine/provenance/third-party.v1.json", "purpose": "Canonical semantic record of third-party dependencies, references, protocol sources, historical research, planned research, reviewed revisions, license state, learned patterns, affected surfaces, evidence, and incorporation boundaries"},
+    {"order": 12, "path": "machine/release-evidence/", "purpose": "Structured release and confidence evidence"},
+    {"order": 13, "path": "machine/schemas/", "purpose": "JSON Schema contracts for machine-readable records"},
+    {"order": 14, "path": "docs/README.md", "purpose": "Human documentation map and current entry-point classification"},
+    {"order": 15, "path": "PROJECT_STATE.md", "purpose": "Human project continuity and implementation chronology"},
+    {"order": 16, "path": "README.md", "purpose": "Concise human landing page"}
   ],
   "machine_contracts": {
     "specialist_registry": "machine/specialists/registry.v1.json",
@@ -1506,14 +934,7 @@
     "comparative_benchmark_codex_c2_portability_r1": "machine/benchmarking/codex-c2-portability-r1-preexecution.v1.json",
     "comparative_benchmark_codex_c2_portability_r1_live_authorization": "machine/benchmarking/codex-c2-portability-r1-live-execution-authorization.v1.json"
   },
-  "specialists": {
-    "count": 14,
-    "registry_source": "machine/specialists/registry.v1.json",
-    "human_index": "SKILL_INDEX.md",
-    "routing_reference": "ROUTING_MAP.md",
-    "knowledge_root": "skills/",
-    "source_of_truth_note": "Specialist prose and reasoning guidance remain in skills/*/SKILL.md; machine routing-critical metadata is compiled and parity-validated."
-  },
+  "specialists": {"count": 14, "registry_source": "machine/specialists/registry.v1.json", "human_index": "SKILL_INDEX.md", "routing_reference": "ROUTING_MAP.md", "knowledge_root": "skills/", "source_of_truth_note": "Specialist prose and reasoning guidance remain in skills/*/SKILL.md; machine routing-critical metadata is compiled and parity-validated."},
   "governance": {
     "human_overview": "docs/governance/README.md",
     "current_architecture_overview": "docs/architecture/README.md",
@@ -1524,70 +945,26 @@
     "control_plane_stage": "LEGACY_RETIRED",
     "control_plane_stage_source": "machine/migration/control-plane.v1.json#/current_stage",
     "merge_readiness_protocol": "docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md",
-    "ordinary_merge_requirements": {
-      "mergeable": true,
-      "mergeable_state": "clean",
-      "expected_head_protection": true,
-      "governed_bypass_allowed": false
-    },
+    "ordinary_merge_requirements": {"mergeable": true, "mergeable_state": "clean", "expected_head_protection": true, "governed_bypass_allowed": false},
     "effective_authority_model": "selected_profile INTERSECTION explicit_grant INTERSECTION repository_policy INTERSECTION host_capability INTERSECTION current_phase INTERSECTION current_evidence",
-    "transition_dispositions": [
-      "AUTO_CONTINUE",
-      "AUTO_REMEDIATE_AND_REVALIDATE",
-      "WAIT_FOR_EVIDENCE",
-      "WAIT_FOR_CAPACITY",
-      "ESCALATE_HUMAN",
-      "STOP"
-    ],
+    "transition_dispositions": ["AUTO_CONTINUE", "AUTO_REMEDIATE_AND_REVALIDATE", "WAIT_FOR_EVIDENCE", "WAIT_FOR_CAPACITY", "ESCALATE_HUMAN", "STOP"],
     "protected_actions_require_separate_authority": true,
     "required_analysis_ruleset_drift_issue": 331,
     "required_analysis_ruleset_drift_state": "CLOSED_RULESET_NORMALIZED"
   },
-  "architecture": {
-    "current_overview": "docs/architecture/README.md",
-    "detailed_authority_capability_design": "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md",
-    "routing_reference": "ROUTING_MAP.md",
-    "governance_reference": "docs/governance/README.md",
-    "compliance_registry_reference": "docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md",
-    "compliance_protocol_runtime": "orchestra_runtime/compliance_protocol.py",
-    "mcp_transport_reference": "docs/developer/MCP_STDIO_TRANSPORT.md",
-    "adaptive_context_reference": "docs/architecture/ADAPTIVE_CONTEXT_A2.md",
-    "adaptive_shadow_learning_reference": "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3.md",
-    "adaptive_shadow_implementation_reference": "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3_IMPLEMENTATION.md",
-    "adaptive_selection_a4_reference": "docs/architecture/ADAPTIVE_SELECTION_A4.md",
-    "adaptive_selection_a4_execution_attachment_reference": "docs/architecture/ADAPTIVE_SELECTION_A4_EXECUTION_ATTACHMENT.md",
-    "adaptive_tuner_a5_reference": "docs/architecture/ADAPTIVE_TUNER_A5.md",
-    "portable_adaptive_memory_reference": "docs/architecture/PORTABLE_ADAPTIVE_MEMORY.md",
-    "registry_query_optimization_o7_reference": "docs/architecture/REGISTRY_QUERY_OPTIMIZATION_O7.md",
-    "historical_status_policy": "Phase documents may retain phase-era status wording. Current exact state comes from live machine contracts, release evidence, and Git identity."
-  },
+  "architecture": {"current_overview": "docs/architecture/README.md", "detailed_authority_capability_design": "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md", "routing_reference": "ROUTING_MAP.md", "governance_reference": "docs/governance/README.md", "compliance_registry_reference": "docs/governance/COMPLIANCE_REGISTRY_INTEGRATION.md", "compliance_protocol_runtime": "orchestra_runtime/compliance_protocol.py", "mcp_transport_reference": "docs/developer/MCP_STDIO_TRANSPORT.md", "adaptive_context_reference": "docs/architecture/ADAPTIVE_CONTEXT_A2.md", "adaptive_shadow_learning_reference": "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3.md", "adaptive_shadow_implementation_reference": "docs/architecture/ADAPTIVE_SHADOW_LEARNING_A3_IMPLEMENTATION.md", "adaptive_selection_a4_reference": "docs/architecture/ADAPTIVE_SELECTION_A4.md", "adaptive_selection_a4_execution_attachment_reference": "docs/architecture/ADAPTIVE_SELECTION_A4_EXECUTION_ATTACHMENT.md", "adaptive_tuner_a5_reference": "docs/architecture/ADAPTIVE_TUNER_A5.md", "portable_adaptive_memory_reference": "docs/architecture/PORTABLE_ADAPTIVE_MEMORY.md", "registry_query_optimization_o7_reference": "docs/architecture/REGISTRY_QUERY_OPTIMIZATION_O7.md", "historical_status_policy": "Phase documents may retain phase-era status wording. Current exact state comes from live machine contracts, release evidence, and Git identity."},
   "hosts_integrations": {
     "host_update_contract": "machine/hosts/update-contract.v1.json",
     "adapter_sdk_reference": "docs/setup/ADAPTER_SDK_PRAP.md",
     "adapter_sdk_stable_import_surface": "orchestra_runtime.protocol.sdk",
-    "adapter_certification_commands": [
-      "python scripts/certify_adapter.py --adapter codex --json",
-      "python scripts/certify_adapter.py --all --json"
-    ],
+    "adapter_certification_commands": ["python scripts/certify_adapter.py --adapter codex --json", "python scripts/certify_adapter.py --all --json"],
     "prap_certification_contract": "machine/protocol/prap-certification-contract.v1.json",
     "developer_portal": "docs/developer/README.md",
     "developer_portal_catalog": "machine/developer-portal/catalog.v1.json",
     "mcp_transport": "docs/developer/MCP_STDIO_TRANSPORT.md",
     "mcp_stdio_quickstart": "python scripts/mcp_server.py --adapter codex",
-    "supported_hosts": [
-      "codex",
-      "antigravity"
-    ],
-    "scaffold_only_hosts": [
-      "claude-code",
-      "cursor",
-      "windsurf",
-      "vscode",
-      "vscodium",
-      "jetbrains",
-      "zed",
-      "neovim"
-    ],
+    "supported_hosts": ["codex", "antigravity"],
+    "scaffold_only_hosts": ["claude-code", "cursor", "windsurf", "vscode", "vscodium", "jetbrains", "zed", "neovim"],
     "certification_is_authority": false,
     "host_maturity_is_authority": false,
     "installed_refresh_automatic": false
@@ -1599,15 +976,7 @@
     "third_party_human_role": "CURATED_HUMAN_PROJECTION",
     "machine_knowledge_directory": "machine/knowledge",
     "truesheet_reference": "machine/knowledge/truesheet-specialist-reference.v1.json",
-    "classification_model": [
-      "TEST_TOOL_DEPENDENCY",
-      "REFERENCE_ONLY",
-      "PROTOCOL_STANDARD_REFERENCE",
-      "HISTORICAL_RESEARCH_REFERENCE",
-      "EVALUATED_OR_PLANNED_REFERENCE",
-      "INTEGRATED_RUNTIME_DEPENDENCY",
-      "VENDORED_OR_COPIED_CODE"
-    ],
+    "classification_model": ["TEST_TOOL_DEPENDENCY", "REFERENCE_ONLY", "PROTOCOL_STANDARD_REFERENCE", "HISTORICAL_RESEARCH_REFERENCE", "EVALUATED_OR_PLANNED_REFERENCE", "INTEGRATED_RUNTIME_DEPENDENCY", "VENDORED_OR_COPIED_CODE"],
     "semantic_context_contract": "Each provenance item records why Orchestra consulted it, reviewed revision state, license state, learned or incorporated patterns, affected Orchestra surfaces, evidence, and explicit source/runtime incorporation boundaries.",
     "historical_uncertainty_rule": "Unknown historical facts remain explicitly unknown instead of being guessed.",
     "external_reference_authority": "KNOWLEDGE_REFERENCE_ONLY_NOT_RUNTIME_OR_GOVERNANCE_AUTHORITY",
@@ -1630,15 +999,7 @@
     "future_release_candidate_policy": "Any future release candidate requires fresh exact-head runtime, branch, critical-module, mutation, Cosmic Ray, cross-platform, CodeQL/required-analysis, governance, documentation-parity, and release-identity evidence.",
     "evidence_policy": "Runtime confidence claims must be derived from persisted machine-readable CI evidence bound to the tested checkout SHA and source-head SHA."
   },
-  "continuity": {
-    "repository_human_state": "PROJECT_STATE.md",
-    "repository_human_handoff": "SESSION_HANDOFF.md",
-    "decision_log": "DECISION_LOG.md",
-    "cross_repository_continuity_owner": "USER_SELECTED_EXTERNAL_BACKEND",
-    "active_machine_handoff_external": "OPTIONAL_EXTERNAL_CONTINUITY_BACKEND",
-    "external_backend_identity_embedded": false,
-    "continuity_rule": "Repository memory and external handoffs cannot promote source state without verified Git/source evidence."
-  },
+  "continuity": {"repository_human_state": "PROJECT_STATE.md", "repository_human_handoff": "SESSION_HANDOFF.md", "decision_log": "DECISION_LOG.md", "cross_repository_continuity_owner": "USER_SELECTED_EXTERNAL_BACKEND", "active_machine_handoff_external": "OPTIONAL_EXTERNAL_CONTINUITY_BACKEND", "external_backend_identity_embedded": false, "continuity_rule": "Repository memory and external handoffs cannot promote source state without verified Git/source evidence."},
   "release_state": {
     "current_public_release": "v1.7.0",
     "release_commit": "e5305ef3e160209a0345bd2c7843c923940e62c5",
@@ -1712,14 +1073,7 @@
     "codex_c2_portability_r1_preexecution": "docs/benchmarking/CODEX_C2_PORTABILITY_R1_PREEXECUTION.md",
     "cloak_ui_reference_cuir5_evaluation": "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR5_EVALUATION.md"
   },
-  "representation_policy": {
-    "markdown": "Human-readable explanation, rationale, examples, and nuanced specialist guidance",
-    "json": "Canonical structured machine state, identity, routing, governance, receipts, manifests, provenance, presentation contracts, evidence, and indexes",
-    "json_schema": "Validation contract for machine-readable records",
-    "jsonl": "Append-only event/history records where incremental retrieval is preferable",
-    "toon": "Derived validated non-authoritative model-context projection only when bounded compilation provides measured context benefit",
-    "parity_rule": "When the same deterministic fact appears in more than one representation, CI must validate parity or derive the projection from one authoritative source."
-  },
+  "representation_policy": {"markdown": "Human-readable explanation, rationale, examples, and nuanced specialist guidance", "json": "Canonical structured machine state, identity, routing, governance, receipts, manifests, provenance, presentation contracts, evidence, and indexes", "json_schema": "Validation contract for machine-readable records", "jsonl": "Append-only event/history records where incremental retrieval is preferable", "toon": "Derived validated non-authoritative model-context projection only when bounded compilation provides measured context benefit", "parity_rule": "When the same deterministic fact appears in more than one representation, CI must validate parity or derive the projection from one authoritative source."},
   "maturity": {
     "current_public_release": "PUBLISHED_VERIFIED_V1_7_0",
     "v1_6_publication": "PUBLISHED_VERIFIED",
