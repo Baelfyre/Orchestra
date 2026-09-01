@@ -1,0 +1,73 @@
+name: AR2 Shared Canonicalization Builder
+
+on:
+  push:
+    branches:
+      - refactor/runtime-architecture-ar2-shared-canonicalization
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install focused dependencies
+        run: python -m pip install pytest 'jsonschema[format]>=4.21,<5'
+      - name: Apply machine and documentation parity
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          index_path = Path('README.json')
+          index = json.loads(index_path.read_text(encoding='utf-8'))
+          capability = index['capabilities']['runtime_architecture_refoundation']
+          capability['shared_canonicalization_surface'] = 'orchestra_runtime/shared/canonicalization.py'
+          capability['shared_canonicalization_compatibility_surface'] = 'orchestra_runtime/evidence.py'
+          capability['shared_canonicalization_validation_surface'] = 'tests/runtime/test_shared_canonicalization.py'
+          index_path.write_text(json.dumps(index, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          doc_path = Path('docs/project/ORCHESTRA_RUNTIME_ARCHITECTURE_REFOUNDATION.md')
+          doc = doc_path.read_text(encoding='utf-8')
+          status_anchor = '`AR-0/AR-1 — VALIDATION-FIRST / MIGRATION-AWARE`'
+          if status_anchor not in doc:
+              raise SystemExit('runtime architecture status anchor missing')
+          doc = doc.replace(status_anchor, '`AR-2 — INCREMENTAL MIGRATION / VALIDATION-ENFORCED`', 1)
+          objective_anchor = '## Objectives\n'
+          if doc.count(objective_anchor) != 1:
+              raise SystemExit('runtime architecture objectives anchor mismatch')
+          section = '''## Current AR-2 Migration Increment\n\nThe AR-2 package foundation and machine placement policy are canonical. The next inward extraction places deterministic Git/SHA normalization, timestamp normalization, canonical JSON serialization, and receipt digest primitives in `orchestra_runtime/shared/canonicalization.py`. `orchestra_runtime/evidence.py` continues to expose the same public names by importing those shared primitives, so existing callers remain compatible while future migrated domain code can depend inward on `shared/` instead of the flat legacy runtime.\n\nThis increment does not move context entities, persistence, use cases, provider/MCP behavior, or public entrypoints. `domain/context` migration begins only after the shared primitive surface independently qualifies and canonicalizes.\n\n'''
+          doc = doc.replace(objective_anchor, section + objective_anchor, 1)
+          doc_path.write_text(doc, encoding='utf-8')
+
+          changelog_path = Path('CHANGELOG.md')
+          changelog = changelog_path.read_text(encoding='utf-8')
+          header = '# Changelog\n\n'
+          if not changelog.startswith(header):
+              raise SystemExit('CHANGELOG.md header mismatch')
+          entry = '''## Post-v1.7 runtime architecture AR-2 shared canonicalization extraction candidate\n\n- Moves deterministic Git/SHA normalization, timezone normalization, canonical JSON bytes, and receipt digest ownership into the inward-only `orchestra_runtime.shared.canonicalization` surface.\n- Keeps `orchestra_runtime.evidence` API-compatible by importing and re-exposing the same primitive function objects while retaining evidence-specific receipt construction in the legacy module.\n- Adds equivalence and edge-case coverage for legacy exports, canonical bytes/digests, timestamps, and existing receipt constructors, and records the shared primitive surface in the machine repository index.\n- Does not move context entities, persistence, application use cases, provider/MCP behavior, public entrypoints, or release/deployment authority; `domain/context` remains a later bounded AR-2 increment.\n\n'''
+          changelog_path.write_text(header + entry + changelog[len(header):], encoding='utf-8')
+          PY
+      - name: Run focused architecture validation
+        run: |
+          python scripts/validation/validate_architecture_boundaries.py
+          python tests/behavior/test_readme_machine_index.py
+          python -m pytest tests/runtime/test_shared_canonicalization.py tests/runtime/test_refoundation_guard_edges.py tests/runtime/test_runtime_architecture_policy.py -q
+          git diff --check
+      - name: Commit durable parity changes
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add README.json CHANGELOG.md docs/project/ORCHESTRA_RUNTIME_ARCHITECTURE_REFOUNDATION.md
+          git commit -m 'docs(architecture): align shared canonicalization parity'
+          git push origin HEAD:refactor/runtime-architecture-ar2-shared-canonicalization
