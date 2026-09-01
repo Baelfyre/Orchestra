@@ -1,5 +1,10 @@
 # Changelog
 
+## Post-v1.7 Padayon post-restructure realignment searchability
+
+- Adds a repository-local, searchable governance notice for the Padayon M0-M6 post-restructure source-reality reconciliation procedure and links it from the governance documentation index.
+- Preserves live Orchestra source precedence, current Padayon routing, explicit drift classifications, and the verified AR-2 checkpoint as evidence only; this documentation change grants no new implementation, release, deployment, policy, provider-routing, destructive, or history-rewrite authority.
+
 ## Post-v1.7 runtime architecture AR-2 shared canonicalization extraction candidate
 
 - Moves deterministic Git/SHA normalization, timezone normalization, canonical JSON bytes, and receipt digest ownership into the inward-only `orchestra_runtime.shared.canonicalization` surface.
