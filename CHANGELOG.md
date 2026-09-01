@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.7 runtime architecture refoundation AR-0/AR-1 candidate
+
+- Adds the validation-first Orchestra runtime architecture refoundation plan, defining bounded contexts and explicit domain, application, infrastructure, interface, composition, persistence, DTO/DPO, resource, and repository-zone ownership.
+- Adds migration-aware architecture validation that freezes the current flat `orchestra_runtime` module inventory as legacy debt and rejects newly introduced flat runtime Python modules while later bounded packages are migrated incrementally.
+- Adds dependency-direction checks for migrated `domain`, `application`, `infrastructure`, and `interfaces` packages, prohibits production runtime imports from repository `internal/`, and validates DTO/DPO placement intent.
+- AR-0/AR-1 changes no runtime behavior or public imports. Runtime package creation and source movement begin only in separately qualified AR-2 work, with required `README.json` machine-index parity preserved in the same migration change.
+
 ## Post-v1.7 Cloak CUIR-5 controlled evaluation candidate
 
 - Adds a deterministic representative benchmark and evaluator comparing a no-CUIR-retrieval baseline with bounded CUIR-4 progressive retrieval.
