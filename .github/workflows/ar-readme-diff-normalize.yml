@@ -1,0 +1,111 @@
+name: AR README parity normalization
+
+on:
+  push:
+    branches:
+      - refactor/ar-runtime-boundaries-20260901
+
+permissions:
+  contents: write
+
+jobs:
+  normalize-readme-diff:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source branch
+        uses: actions/checkout@v7
+        with:
+          ref: refactor/ar-runtime-boundaries-20260901
+          fetch-depth: 0
+
+      - name: Rebuild README parity from exact main formatting
+        shell: python
+        run: |
+          import json
+          import subprocess
+          from pathlib import Path
+
+          base = subprocess.check_output(
+              ["git", "show", "origin/main:README.json"],
+              text=True,
+              encoding="utf-8",
+          )
+
+          def insert_after(text: str, marker: str, payload: str) -> str:
+              count = text.count(marker)
+              if count != 1:
+                  raise SystemExit(f"expected exactly one marker {marker!r}, found {count}")
+              return text.replace(marker, marker + payload, 1)
+
+          capability = '''    "runtime_architecture_refoundation_ar1": {
+              "status": "AR_1_IMPLEMENTATION_CANDIDATE",
+              "purpose": "Establish compatibility-preserving bounded runtime source architecture and fail-closed placement/dependency validation before the next release freeze.",
+              "machine_sources": ["machine/architecture/runtime-boundaries.v1.json"],
+              "human_sources": ["docs/architecture/RUNTIME_ARCHITECTURE_BOUNDARIES.md", "docs/architecture/README.md"],
+              "validator": "scripts/validation/validate_architecture_boundaries.py",
+              "validation_surface": "tests/behavior/test_architecture_boundaries.py",
+              "canonical_runtime_roots": ["domain", "application", "infrastructure", "entrypoints", "bootstrap", "shared", "resources"],
+              "migration_strategy": "STRANGLER_COMPATIBILITY_FACADES",
+              "new_flat_runtime_modules_allowed": false,
+              "production_runtime_imports_internal_allowed": false,
+              "release_authorized": false,
+              "authority_note": "AR-1 governs source placement and dependency direction only. It does not grant release, deployment, provider-routing, production-mutation, ruleset/policy bypass, destructive, branch-deletion, force-push, or history-rewrite authority."
+            },
+'''
+          base = insert_after(base, '  "capabilities": {\n', capability)
+          base = insert_after(
+              base,
+              '  "machine_contracts": {\n',
+              '    "runtime_architecture_boundaries": "machine/architecture/runtime-boundaries.v1.json",\n',
+          )
+          architecture = '''    "runtime_source_boundaries": {
+              "contract": "machine/architecture/runtime-boundaries.v1.json",
+              "human_contract": "docs/architecture/RUNTIME_ARCHITECTURE_BOUNDARIES.md",
+              "validator": "scripts/validation/validate_architecture_boundaries.py",
+              "ci_enforcement": ["validate", "Governance Check"],
+              "compatibility_preserving": true
+            },
+'''
+          base = insert_after(base, '  "architecture": {\n', architecture)
+          base = insert_after(
+              base,
+              '  "documentation": {\n',
+              '    "runtime_architecture_boundaries": "docs/architecture/RUNTIME_ARCHITECTURE_BOUNDARIES.md",\n',
+          )
+          base = insert_after(
+              base,
+              '  "maturity": {\n',
+              '    "runtime_architecture_refoundation": "AR_1_IMPLEMENTATION_CANDIDATE",\n',
+          )
+          base = insert_after(
+              base,
+              '  "ai_review_guidance": {\n',
+              '    "treat_runtime_architecture_boundary_contract_as_source_placement_authority": true,\n',
+          )
+
+          parsed = json.loads(base)
+          assert parsed["repository"]["package_version"] == "1.7.0"
+          assert parsed["repository"]["current_public_release"] == "v1.7.0"
+          assert parsed["machine_contracts"]["runtime_architecture_boundaries"] == "machine/architecture/runtime-boundaries.v1.json"
+          Path("README.json").write_text(base, encoding="utf-8")
+
+      - name: Validate normalized machine index
+        run: |
+          python -m json.tool README.json > /dev/null
+          python tests/behavior/test_readme_machine_index.py
+
+      - name: Commit normalized README parity
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.json
+          git diff --cached --check
+          if git diff --cached --quiet; then
+            echo "AR_README_NORMALIZATION=NO_CHANGES"
+            exit 0
+          fi
+          git commit -m "docs(ar): minimize machine index parity diff"
+          git push origin HEAD:refactor/ar-runtime-boundaries-20260901
