@@ -2,9 +2,15 @@
 
 ## Status
 
-`AR-0/AR-1 — VALIDATION-FIRST / MIGRATION-AWARE`
+`AR-2 — INCREMENTAL MIGRATION / VALIDATION-ENFORCED`
 
 This document defines the pre-v1.8 runtime architecture refoundation for Orchestra. The migration is incremental and compatibility-preserving: existing validated runtime behavior remains intact while new code is mechanically prevented from expanding the current flat runtime structure.
+
+## Current AR-2 Migration Increment
+
+The AR-2 package foundation and machine placement policy are canonical. The next inward extraction places deterministic Git/SHA normalization, timestamp normalization, canonical JSON serialization, and receipt digest primitives in `orchestra_runtime/shared/canonicalization.py`. `orchestra_runtime/evidence.py` continues to expose the same public names by importing those shared primitives, so existing callers remain compatible while future migrated domain code can depend inward on `shared/` instead of the flat legacy runtime.
+
+This increment does not move context entities, persistence, use cases, provider/MCP behavior, or public entrypoints. `domain/context` migration begins only after the shared primitive surface independently qualifies and canonicalizes.
 
 ## Objectives
 

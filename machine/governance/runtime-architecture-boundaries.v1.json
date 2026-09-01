@@ -205,7 +205,7 @@
       "infrastructure": ["__init__.py"],
       "entrypoints": ["__init__.py"],
       "resources": ["__init__.py"],
-      "shared": ["__init__.py", "errors.py"],
+      "shared": ["__init__.py", "canonicalization.py", "errors.py"],
       "bootstrap": ["__init__.py"]
     },
     "dto_prefix": "application/dto/",
