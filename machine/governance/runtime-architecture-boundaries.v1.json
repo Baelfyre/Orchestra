@@ -1,0 +1,136 @@
+{
+  "schema_version": "1.0",
+  "contract": "orchestra-runtime-architecture-boundaries",
+  "status": "ENFORCED_FOR_NEW_STRUCTURE_MIGRATION_AWARE",
+  "purpose": "Prevent new runtime files and dependencies from escaping their intended architectural boundaries while the legacy flat runtime is migrated incrementally.",
+  "canonical_layers": [
+    "domain",
+    "application",
+    "infrastructure",
+    "interfaces",
+    "bootstrap",
+    "shared",
+    "resources"
+  ],
+  "dependency_rules": {
+    "domain": {
+      "may_import": ["orchestra_runtime.domain", "orchestra_runtime.shared"],
+      "must_not_import": [
+        "orchestra_runtime.application",
+        "orchestra_runtime.infrastructure",
+        "orchestra_runtime.interfaces",
+        "internal"
+      ]
+    },
+    "application": {
+      "may_import": [
+        "orchestra_runtime.domain",
+        "orchestra_runtime.application",
+        "orchestra_runtime.shared"
+      ],
+      "must_not_import": [
+        "orchestra_runtime.infrastructure",
+        "orchestra_runtime.interfaces",
+        "internal"
+      ]
+    },
+    "infrastructure": {
+      "may_import": [
+        "orchestra_runtime.domain",
+        "orchestra_runtime.application",
+        "orchestra_runtime.infrastructure",
+        "orchestra_runtime.shared"
+      ],
+      "must_not_import": ["orchestra_runtime.interfaces", "internal"]
+    },
+    "interfaces": {
+      "may_import": [
+        "orchestra_runtime.application",
+        "orchestra_runtime.domain",
+        "orchestra_runtime.interfaces",
+        "orchestra_runtime.shared"
+      ],
+      "must_not_import": ["internal"]
+    }
+  },
+  "placement_rules": {
+    "dto": "orchestra_runtime/application/dto",
+    "dpo": "orchestra_runtime/infrastructure/persistence/dpo",
+    "repository_ports": "orchestra_runtime/application/ports/repositories",
+    "repository_implementations": "orchestra_runtime/infrastructure/persistence/repositories",
+    "provider_ports": "orchestra_runtime/application/ports/providers",
+    "provider_implementations": "orchestra_runtime/infrastructure/providers",
+    "host_integrations": "orchestra_runtime/infrastructure/hosts",
+    "mcp_transport": "orchestra_runtime/infrastructure/mcp",
+    "runtime_resources": "orchestra_runtime/resources",
+    "composition_root": "orchestra_runtime/bootstrap",
+    "domain_methods": "orchestra_runtime/domain/<bounded_context>/methods"
+  },
+  "repository_zone_rules": {
+    "machine": "Canonical machine-readable contracts, governance, schemas, provenance and evidence. Not an application-service layer.",
+    "assets": "Static visual and branding assets only.",
+    "docs": "Human-readable documentation and plans.",
+    "skills": "Specialist instruction sources; must not become hidden runtime business logic.",
+    "commands": "Command surfaces; must delegate into runtime/application boundaries.",
+    "adapters": "Host/distribution projections; executable Python host integrations belong under runtime infrastructure.",
+    "internal": "Experiments, proofs and research only. Production orchestra_runtime code must not import internal."
+  },
+  "migration": {
+    "new_flat_python_modules_allowed": false,
+    "legacy_flat_modules_are_temporary": true,
+    "legacy_flat_python_modules": [
+      "__init__.py",
+      "adapters.py",
+      "authority.py",
+      "capabilities.py",
+      "communication_budget.py",
+      "compliance_protocol.py",
+      "context_state.py",
+      "coordination.py",
+      "correlation.py",
+      "delegation.py",
+      "errors.py",
+      "evidence.py",
+      "factories.py",
+      "governance_kernel.py",
+      "host_protocol.py",
+      "host_updates.py",
+      "interfaces.py",
+      "lifecycle.py",
+      "machine_contracts.py",
+      "mcp_specialist_execution.py",
+      "mcp_transport.py",
+      "models.py",
+      "preexecution.py",
+      "presentation.py",
+      "provider_execution.py",
+      "provider_mcp_execution.py",
+      "provider_qualification.py",
+      "registry_adaptive.py",
+      "registry_o7.py",
+      "remediation_circuit.py",
+      "repositories.py",
+      "retrospective.py",
+      "serialization.py",
+      "services.py",
+      "shadow_conformance.py",
+      "specialist_execution.py",
+      "status.py",
+      "test_evidence.py",
+      "unified_testing.py",
+      "workflow_contracts.py",
+      "worktree.py"
+    ],
+    "existing_subpackages_allowed_during_migration": ["adaptive", "protocol"]
+  },
+  "validation": {
+    "architecture_test": "tests/runtime/test_runtime_architecture_boundaries.py",
+    "fail_conditions": [
+      "new flat orchestra_runtime Python module outside the legacy allowlist",
+      "domain imports outward",
+      "application imports concrete infrastructure",
+      "production runtime imports internal",
+      "DTO or DPO classes are introduced outside their canonical placement when the filename declares dto/dpo intent"
+    ]
+  }
+}
