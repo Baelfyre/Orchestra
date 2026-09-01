@@ -18,7 +18,7 @@ jobs:
           fetch-depth: 0
       - name: Install focused validation dependencies
         run: python -m pip install pytest 'jsonschema[format]>=4.21,<5'
-      - name: Apply durable policy parity updates
+      - name: Apply durable non-workflow parity updates
         shell: bash
         run: |
           python - <<'PY'
@@ -32,7 +32,6 @@ jobs:
                   raise SystemExit(f'{path}: expected one replacement target, found {count}: {old!r}')
               p.write_text(text.replace(old, new, 1), encoding='utf-8')
 
-          # Machine discovery parity.
           replace_once(
               'README.json',
               '      "validation_surface": "tests/runtime/test_runtime_architecture_boundaries.py",\n',
@@ -48,7 +47,6 @@ jobs:
               '      "canonical_layers": ["domain", "application", "infrastructure", "entrypoints", "bootstrap", "shared", "resources"],'
           )
 
-          # Current architecture terminology: entrypoints avoids collision with legacy interfaces.py.
           doc = Path('docs/project/ORCHESTRA_RUNTIME_ARCHITECTURE_REFOUNDATION.md')
           text = doc.read_text(encoding='utf-8')
           replacements = {
@@ -63,19 +61,14 @@ jobs:
               text = text.replace(old, new)
           doc.write_text(text, encoding='utf-8')
 
-          # Existing regression guard follows the machine-policy terminology.
           test = Path('tests/runtime/test_runtime_architecture_boundaries.py')
           text = test.read_text(encoding='utf-8')
           text = text.replace('orchestra_runtime.interfaces', 'orchestra_runtime.entrypoints')
           text = text.replace('    "interfaces": ("internal",),', '    "entrypoints": ("internal",),')
           test.write_text(text, encoding='utf-8')
 
-          # Agent-facing placement rule.
           agents = Path('AGENTS.md')
           text = agents.read_text(encoding='utf-8')
-          anchor = '11. **Governed Autonomy Profile Rule**:'
-          if anchor not in text:
-              raise SystemExit('AGENTS.md rule 11 anchor missing')
           marker = '\n\n\n## Repo Source vs Runtime Rule'
           if marker not in text:
               raise SystemExit('AGENTS.md insertion marker missing')
@@ -88,25 +81,6 @@ jobs:
           text = text.replace(marker, rule + marker, 1)
           agents.write_text(text, encoding='utf-8')
 
-          # Governance workflow enforcement.
-          gov = Path('.github/workflows/governance-check.yml')
-          text = gov.read_text(encoding='utf-8')
-          anchor = '''      - name: Run Project Context Validation\n        run: |\n          python scripts/validate_project_context.py > artifacts/project_context_report.txt\n          cat artifacts/project_context_report.txt\n\n'''
-          if text.count(anchor) != 1:
-              raise SystemExit('governance architecture insertion anchor mismatch')
-          step = anchor + '''      - name: Validate Runtime Architecture Boundaries\n        run: python scripts/validation/validate_architecture_boundaries.py\n\n'''
-          gov.write_text(text.replace(anchor, step, 1), encoding='utf-8')
-
-          # Main validation workflow enforcement.
-          val = Path('.github/workflows/validate.yml')
-          text = val.read_text(encoding='utf-8')
-          anchor = '''      - name: Prepare runtime evidence directory\n        run: mkdir -p artifacts/runtime\n'''
-          if text.count(anchor) != 1:
-              raise SystemExit('validate architecture insertion anchor mismatch')
-          step = '''      - name: Validate runtime architecture boundaries\n        run: python scripts/validation/validate_architecture_boundaries.py\n\n''' + anchor
-          val.write_text(text.replace(anchor, step, 1), encoding='utf-8')
-
-          # Release-oriented change record.
           changelog = Path('CHANGELOG.md')
           text = changelog.read_text(encoding='utf-8')
           anchor = '# Changelog\n\n'
@@ -122,11 +96,11 @@ jobs:
           python scripts/validation/validate_architecture_boundaries.py
           python -m pytest tests/runtime/test_runtime_architecture_boundaries.py tests/runtime/test_runtime_architecture_policy.py -q
           git diff --check
-      - name: Commit durable AR-2 policy enforcement candidate
+      - name: Commit durable non-workflow parity candidate
         shell: bash
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add README.json AGENTS.md CHANGELOG.md docs/project/ORCHESTRA_RUNTIME_ARCHITECTURE_REFOUNDATION.md tests/runtime/test_runtime_architecture_boundaries.py .github/workflows/governance-check.yml .github/workflows/validate.yml
-          git commit -m 'feat(architecture): enforce runtime placement policy'
+          git add README.json AGENTS.md CHANGELOG.md docs/project/ORCHESTRA_RUNTIME_ARCHITECTURE_REFOUNDATION.md tests/runtime/test_runtime_architecture_boundaries.py
+          git commit -m 'feat(architecture): enforce runtime placement policy parity'
           git push origin HEAD:feat/runtime-architecture-ar2-policy-enforcement
