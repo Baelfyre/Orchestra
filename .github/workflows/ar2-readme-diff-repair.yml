@@ -1,0 +1,45 @@
+name: AR2 README Diff Repair
+
+on:
+  push:
+    branches:
+      - refactor/runtime-architecture-ar2-foundation
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Restore canonical formatting and insert AR-2 capability
+        shell: bash
+        run: |
+          git show 16ceb3dcbb02bfdb6f355e8f43d9519a245d62a5:README.json > README.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('README.json')
+          text = path.read_text(encoding='utf-8')
+          anchor = '    "governed_runtime": {"status": "IMPLEMENTED", "machine_sources": ["machine/governance/policy.v1.json"], "human_sources": ["docs/architecture/README.md", "docs/governance/GOVERNANCE_LAYER.md", "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md"]},\n'
+          if anchor not in text:
+              raise SystemExit('README capability anchor not found')
+          block = '''    "runtime_architecture_refoundation": {\n      "status": "AR_2_FOUNDATION_CANDIDATE",\n      "purpose": "Incrementally refactor the Orchestra Python runtime into bounded clean/hexagonal architecture layers while preserving public behavior and legacy import compatibility.",\n      "human_sources": ["docs/project/ORCHESTRA_RUNTIME_ARCHITECTURE_REFOUNDATION.md", "docs/architecture/README.md"],\n      "validation_surface": "tests/runtime/test_runtime_architecture_boundaries.py",\n      "canonical_layers": ["domain", "application", "infrastructure", "bootstrap", "shared", "resources"],\n      "application_subzones": ["use_cases", "services", "dto", "ports"],\n      "persistence_subzones": ["repositories", "dpo", "mappers", "stores", "serialization"],\n      "migration_strategy": "STRANGLER_COMPATIBILITY_FACADES",\n      "first_migrated_surface": "orchestra_runtime.shared.errors",\n      "compatibility_facade": "orchestra_runtime.errors",\n      "new_flat_runtime_modules_prohibited": true,\n      "production_runtime_internal_imports_prohibited": true,\n      "runtime_behavior_change": false,\n      "public_import_retirement": false,\n      "ar3_started": false,\n      "release_authorized": false,\n      "authority_note": "AR-2 establishes architectural destinations and migrates the shared runtime error boundary behind a compatibility facade. Architecture placement or validation success does not grant implementation beyond the approved refactor scope, release, deployment, policy activation, provider routing/fallback, destructive, installed-integration-refresh, force-push, or history-rewrite authority."\n    },\n'''
+          text = text.replace(anchor, anchor + block, 1)
+          path.write_text(text, encoding='utf-8')
+          json.loads(text)
+          PY
+          git diff --check
+      - name: Commit repaired README projection
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add README.json
+          git commit -m 'refactor(ar2): preserve README machine-index formatting'
+          git push origin HEAD:refactor/runtime-architecture-ar2-foundation
