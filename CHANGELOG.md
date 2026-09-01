@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.7 runtime architecture AR-2 shared canonicalization extraction candidate
+
+- Moves deterministic Git/SHA normalization, timezone normalization, canonical JSON bytes, and receipt digest ownership into the inward-only `orchestra_runtime.shared.canonicalization` surface.
+- Keeps `orchestra_runtime.evidence` API-compatible by importing and re-exposing the same primitive function objects while retaining evidence-specific receipt construction in the legacy module.
+- Adds equivalence and edge-case coverage for legacy exports, canonical bytes/digests, timestamps, and existing receipt constructors, and records the shared primitive surface in the machine repository index.
+- Does not move context entities, persistence, application use cases, provider/MCP behavior, public entrypoints, or release/deployment authority; `domain/context` remains a later bounded AR-2 increment.
+
 ## Post-v1.7 runtime architecture AR-2 machine placement enforcement candidate
 
 - Promotes runtime placement rules into the versioned `machine/governance/runtime-architecture-boundaries.v1.json` contract with a strict Draft 2020-12 schema and reusable standalone validator.
