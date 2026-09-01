@@ -19,6 +19,8 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
+      - name: Install focused test dependency
+        run: python -m pip install pytest
       - name: Apply bounded AR-2 parity updates
         shell: bash
         run: |
