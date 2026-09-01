@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.7 runtime architecture refoundation AR-2 foundation candidate
+
+- Creates the canonical `domain`, `application`, `infrastructure`, `bootstrap`, `shared`, and runtime-resource package boundaries plus application use-case/service/DTO/port and persistence repository/DPO/mapper/store/serialization destinations.
+- Moves runtime contract error implementations to `orchestra_runtime.shared.errors` while retaining `orchestra_runtime.errors` as an identity-preserving compatibility facade for existing imports.
+- Extends architecture validation so the package skeleton and compatibility facade are executable invariants; new flat runtime Python modules remain prohibited and production runtime imports from repository `internal/` remain prohibited.
+- Records AR-2 in the machine repository index and architecture documentation. No runtime behavior, provider/MCP behavior, persistence semantics, public import retirement, release, deployment, policy activation, branch deletion, force push, or history rewrite is introduced.
+
 ## Post-v1.7 runtime architecture refoundation AR-0/AR-1 candidate
 
 - Adds the validation-first Orchestra runtime architecture refoundation plan, defining bounded contexts and explicit domain, application, infrastructure, interface, composition, persistence, DTO/DPO, resource, and repository-zone ownership.

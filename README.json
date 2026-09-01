@@ -29,6 +29,25 @@
   "capabilities": {
     "specialist_orchestration": {"status": "IMPLEMENTED", "machine_sources": ["machine/specialists/registry.v1.json", "machine/routing/routes.v1.json"], "human_sources": ["SKILL_INDEX.md", "ROUTING_MAP.md"]},
     "governed_runtime": {"status": "IMPLEMENTED", "machine_sources": ["machine/governance/policy.v1.json"], "human_sources": ["docs/architecture/README.md", "docs/governance/GOVERNANCE_LAYER.md", "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md"]},
+    "runtime_architecture_refoundation": {
+      "status": "AR_2_FOUNDATION_CANDIDATE",
+      "purpose": "Incrementally refactor the Orchestra Python runtime into bounded clean/hexagonal architecture layers while preserving public behavior and legacy import compatibility.",
+      "human_sources": ["docs/project/ORCHESTRA_RUNTIME_ARCHITECTURE_REFOUNDATION.md", "docs/architecture/README.md"],
+      "validation_surface": "tests/runtime/test_runtime_architecture_boundaries.py",
+      "canonical_layers": ["domain", "application", "infrastructure", "bootstrap", "shared", "resources"],
+      "application_subzones": ["use_cases", "services", "dto", "ports"],
+      "persistence_subzones": ["repositories", "dpo", "mappers", "stores", "serialization"],
+      "migration_strategy": "STRANGLER_COMPATIBILITY_FACADES",
+      "first_migrated_surface": "orchestra_runtime.shared.errors",
+      "compatibility_facade": "orchestra_runtime.errors",
+      "new_flat_runtime_modules_prohibited": true,
+      "production_runtime_internal_imports_prohibited": true,
+      "runtime_behavior_change": false,
+      "public_import_retirement": false,
+      "ar3_started": false,
+      "release_authorized": false,
+      "authority_note": "AR-2 establishes architectural destinations and migrates the shared runtime error boundary behind a compatibility facade. Architecture placement or validation success does not grant implementation beyond the approved refactor scope, release, deployment, policy activation, provider routing/fallback, destructive, installed-integration-refresh, force-push, or history-rewrite authority."
+    },
     "specialist_runtime_host_execution_design": {
       "status": "E1_E7_COMPLETE_ADOPT_OPTIONAL",
       "purpose": "Provide a supported optional post-gate typed specialist execution path with verified bounded Codex host execution while preserving route-only defaults, explicit user model configuration, and independent Orchestra authority boundaries.",
