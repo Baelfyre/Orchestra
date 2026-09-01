@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.7 Architecture Refoundation AR-1 candidate
+
+- Establishes bounded `domain`, `application`, `infrastructure`, `entrypoints`, `bootstrap`, `shared`, and `resources` runtime ownership with a compatibility-preserving strangler migration instead of a wholesale folder shuffle.
+- Migrates correlation policy, shared runtime errors, application ports, and concrete source repositories into their canonical layers while retaining behavior-free historical import facades.
+- Adds the machine-readable runtime-boundary policy, deterministic architecture validator, behavior tests, and required `validate` / `Governance Check` enforcement so new flat modules, reversed dependency direction, misplaced DTO/DPO/repository objects, runtime `internal/` imports, and misplaced runtime resources fail closed.
+- AR-1 changes source organization and validation only; it does not bump the public version or grant release, deployment, provider-routing, production-mutation, ruleset/policy bypass, destructive, branch-deletion, force-push, or history-rewrite authority.
+
 ## Post-v1.7 Cloak CUIR-5 controlled evaluation candidate
 
 - Adds a deterministic representative benchmark and evaluator comparing a no-CUIR-retrieval baseline with bounded CUIR-4 progressive retrieval.
