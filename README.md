@@ -13,7 +13,7 @@
     <a href="CHANGELOG.md">Changelog</a>
   </p>
   <p>
-    <img src="https://img.shields.io/badge/package_version-v1.7.0-blue" alt="Repository package version v1.7.0" />
+    <img src="https://img.shields.io/badge/package_version-v1.8.0-blue" alt="Repository package version v1.8.0 release candidate" />
     <a href="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml">
       <img src="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml/badge.svg" alt="Repository validation status" />
     </a>
@@ -129,6 +129,8 @@ Portable memory remains advisory and non-authorizing. It cannot grant execution 
 See [Portable Adaptive Memory](docs/architecture/PORTABLE_ADAPTIVE_MEMORY.md).
 
 ## Current release state
+
+The repository package surfaces are prepared as the **v1.8.0 release candidate: Governed Execution, Registry Optimization & Reference Intelligence**. The candidate remains unpublished and is pending exact-head qualification, signed materialization, canonical identity verification, and explicit final-review approval. No `v1.8.0` tag or GitHub Release has been created. See the [v1.8.0 release candidate notes](docs/releases/v1.8.0-governed-execution-registry-reference-intelligence-release-candidate.md).
 
 The latest published release is **[v1.7.0: Adaptive Intelligence, Portable Memory & Design Fidelity](https://github.com/Baelfyre/Orchestra/releases/tag/v1.7.0)**. The immutable release resolves to canonical commit `e5305ef3e160209a0345bd2c7843c923940e62c5` with tree `7b7a0f6d5dd5376a62125ed1c6b037284e519c69` and a GitHub verified/valid signature.
 

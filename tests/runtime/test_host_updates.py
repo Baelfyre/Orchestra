@@ -19,7 +19,7 @@ from orchestra_runtime.host_updates import (
 )
 
 ROOT = Path(__file__).resolve().parents[2]
-CURRENT_VERSION = "1.7.0"
+CURRENT_VERSION = "1.8.0"
 
 
 def _canonical_contract() -> dict[str, object]:
@@ -107,13 +107,13 @@ def test_unknown_host_fails_closed_for_record_and_plan() -> None:
 
 
 def test_update_status_is_deterministic_without_network_or_mutation() -> None:
-    available = build_host_update_plan("codex", latest_version="v1.8.0", root=ROOT)
+    available = build_host_update_plan("codex", latest_version="v1.9.0", root=ROOT)
     current = build_host_update_plan("codex", latest_version=CURRENT_VERSION, root=ROOT)
-    ahead = build_host_update_plan("codex", latest_version="1.6.0", root=ROOT)
+    ahead = build_host_update_plan("codex", latest_version="1.7.0", root=ROOT)
     unchecked = build_host_update_plan("codex", root=ROOT)
 
     assert available.update_status == "UPDATE_AVAILABLE"
-    assert available.latest_version == "1.8.0"
+    assert available.latest_version == "1.9.0"
     assert current.update_status == "UP_TO_DATE"
     assert ahead.update_status == "LOCAL_AHEAD"
     assert unchecked.update_status == "NOT_CHECKED"
@@ -163,7 +163,7 @@ def test_contract_top_level_identity_and_version_fail_closed(tmp_path: Path) -> 
             load_host_update_contract(tmp_path)
 
     contract = _canonical_contract()
-    _write_contract_repo(tmp_path, contract, plugin_version="1.7.1")
+    _write_contract_repo(tmp_path, contract, plugin_version="1.8.1")
     with pytest.raises(HostUpdateError, match="HOST_UPDATE_PACKAGE_VERSION_MISMATCH"):
         load_host_update_contract(tmp_path)
 
