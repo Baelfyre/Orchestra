@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.7 Cloak CUIR-5 controlled evaluation candidate
+
+- Adds a deterministic representative benchmark and evaluator comparing a no-CUIR-retrieval baseline with bounded CUIR-4 progressive retrieval.
+- Measures retrieval recall, provenance completeness, bounded context, authority-boundary preservation, and source-copying violation signals only; it does not claim end-to-end LLM output quality, rendered correctness, human usability preference, or production effectiveness.
+- Adds regression coverage for the controlled evaluation and records the active CUIR-5 machine-discovery surfaces in `README.json`.
+- A passing result may recommend only `ADOPT_OPTIONAL` for CUIR-6 consideration and grants no implementation, architecture, security, merge, release, deployment, provider-routing/fallback, production-mutation, policy, destructive, or installed-integration-refresh authority.
+
 ## Post-v1.7 Cloak CUIR-4 canonical lifecycle closeout
 
 - Reconciles machine discovery with the verified canonical CUIR-4 integration at `67dc4a70159346cea903761373412829f7677fcf`.
