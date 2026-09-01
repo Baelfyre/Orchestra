@@ -1,0 +1,67 @@
+{
+  "schema_version": "orchestra.cloak-ui-reference-cuir5-benchmark.v1",
+  "phase": "CUIR-5",
+  "status": "CONTROLLED_EVALUATION_CANDIDATE",
+  "evaluation_scope": "DETERMINISTIC_RETRIEVAL_LAYER_ONLY",
+  "baseline": {
+    "name": "NO_CUIR_PATTERN_RETRIEVAL",
+    "description": "The frozen Cloak core remains available, but no CUIR normalized pattern records are retrieved for the task. This baseline is used only to measure the incremental contribution of the CUIR retrieval layer, not end-to-end model quality."
+  },
+  "candidate": {
+    "name": "CUIR4_BOUNDED_PROGRESSIVE_RETRIEVAL",
+    "retriever": "scripts/retrieve_cloak_patterns.py",
+    "maximum_problem_classes": 3,
+    "maximum_patterns_per_task": 5
+  },
+  "claims_not_supported_by_this_evaluation": [
+    "end-to-end LLM output quality",
+    "rendered visual correctness",
+    "human preference or usability outcomes",
+    "production effectiveness"
+  ],
+  "cases": [
+    {
+      "id": "CUIR5-01",
+      "task": "Design a multi-step signup form with password validation and clear field errors",
+      "expected_patterns": ["cuir3.auth_and_multistep_form_flow", "cuir3.semantic_field_and_control_state"],
+      "criteria": ["requirement_coverage", "accessibility_coverage", "design_consistency"]
+    },
+    {
+      "id": "CUIR5-02",
+      "task": "Show file upload progress with pause, resume, failure, and completion states",
+      "expected_patterns": ["cuir3.operation_progress_lifecycle", "cuir3.outcome_feedback_and_empty_state"],
+      "criteria": ["requirement_coverage", "responsive_coverage", "accessibility_coverage"]
+    },
+    {
+      "id": "CUIR5-03",
+      "task": "Separate delete account from routine settings actions and require a clear destructive path",
+      "expected_patterns": ["cuir3.action_priority_and_destructive_separation"],
+      "criteria": ["requirement_coverage", "design_consistency"]
+    },
+    {
+      "id": "CUIR5-04",
+      "task": "Create a collapsed sidebar with a clear selected destination and keyboard-usable controls",
+      "expected_patterns": ["cuir3.destination_state_navigation"],
+      "criteria": ["requirement_coverage", "accessibility_coverage", "responsive_coverage"]
+    },
+    {
+      "id": "CUIR5-05",
+      "task": "Choose general interface icons and a brand logo while preserving the correct reuse and rights treatment",
+      "expected_patterns": ["cuir3.general_ui_icon_system", "cuir3.brand_icon_traceability_and_rights"],
+      "criteria": ["provenance_correctness", "license_reuse_correctness"]
+    },
+    {
+      "id": "CUIR5-06",
+      "task": "Design an accordion settings panel with one section expanded and explicit selected state",
+      "expected_patterns": ["cuir3.selection_and_disclosure_state"],
+      "criteria": ["requirement_coverage", "accessibility_coverage"]
+    }
+  ],
+  "pass_thresholds": {
+    "expected_pattern_recall": 0.8,
+    "provenance_completeness": 1.0,
+    "bounded_context_compliance": 1.0,
+    "authority_boundary_compliance": 1.0,
+    "source_copying_violation_count": 0
+  }
+}
