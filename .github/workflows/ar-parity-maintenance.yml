@@ -1,0 +1,92 @@
+name: AR parity maintenance
+
+on:
+  push:
+    branches:
+      - refactor/ar-runtime-boundaries-20260901
+
+permissions:
+  contents: write
+
+jobs:
+  patch-parity:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source branch
+        uses: actions/checkout@v7
+        with:
+          ref: refactor/ar-runtime-boundaries-20260901
+          fetch-depth: 0
+
+      - name: Patch README machine index and changelog
+        shell: python
+        run: |
+          import json
+          from pathlib import Path
+
+          readme_path = Path("README.json")
+          index = json.loads(readme_path.read_text(encoding="utf-8"))
+
+          capability_key = "runtime_architecture_refoundation_ar1"
+          index.setdefault("capabilities", {})[capability_key] = {
+              "status": "AR_1_IMPLEMENTATION_CANDIDATE",
+              "purpose": "Establish compatibility-preserving bounded runtime source architecture and fail-closed placement/dependency validation before the next release freeze.",
+              "machine_sources": ["machine/architecture/runtime-boundaries.v1.json"],
+              "human_sources": ["docs/architecture/RUNTIME_ARCHITECTURE_BOUNDARIES.md", "docs/architecture/README.md"],
+              "validator": "scripts/validation/validate_architecture_boundaries.py",
+              "validation_surface": "tests/behavior/test_architecture_boundaries.py",
+              "canonical_runtime_roots": ["domain", "application", "infrastructure", "entrypoints", "bootstrap", "shared", "resources"],
+              "migration_strategy": "STRANGLER_COMPATIBILITY_FACADES",
+              "new_flat_runtime_modules_allowed": False,
+              "production_runtime_imports_internal_allowed": False,
+              "release_authorized": False,
+              "authority_note": "AR-1 governs source placement and dependency direction only. It does not grant release, deployment, provider-routing, production-mutation, ruleset/policy bypass, destructive, branch-deletion, force-push, or history-rewrite authority."
+          }
+
+          index.setdefault("machine_contracts", {})["runtime_architecture_boundaries"] = "machine/architecture/runtime-boundaries.v1.json"
+          index.setdefault("architecture", {})["runtime_source_boundaries"] = {
+              "contract": "machine/architecture/runtime-boundaries.v1.json",
+              "human_contract": "docs/architecture/RUNTIME_ARCHITECTURE_BOUNDARIES.md",
+              "validator": "scripts/validation/validate_architecture_boundaries.py",
+              "ci_enforcement": ["validate", "Governance Check"],
+              "compatibility_preserving": True
+          }
+          index.setdefault("documentation", {})["runtime_architecture_boundaries"] = "docs/architecture/RUNTIME_ARCHITECTURE_BOUNDARIES.md"
+          index.setdefault("maturity", {})["runtime_architecture_refoundation"] = "AR_1_IMPLEMENTATION_CANDIDATE"
+          index.setdefault("ai_review_guidance", {})["treat_runtime_architecture_boundary_contract_as_source_placement_authority"] = True
+
+          scan_path = "machine/architecture/runtime-boundaries.v1.json"
+          scan = index.setdefault("machine_scan_order", [])
+          if not any(entry.get("path") == scan_path for entry in scan):
+              scan.append({
+                  "order": len(scan) + 1,
+                  "path": scan_path,
+                  "purpose": "Canonical runtime source placement, layering, persistence-object, resource, and dependency-direction contract"
+              })
+
+          readme_path.write_text(json.dumps(index, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+          changelog_path = Path("CHANGELOG.md")
+          changelog = changelog_path.read_text(encoding="utf-8")
+          heading = "## Post-v1.7 Architecture Refoundation AR-1 candidate"
+          if heading not in changelog:
+              if not changelog.startswith("# Changelog\n"):
+                  raise SystemExit("unexpected CHANGELOG.md heading")
+              entry = """# Changelog\n\n## Post-v1.7 Architecture Refoundation AR-1 candidate\n\n- Establishes bounded `domain`, `application`, `infrastructure`, `entrypoints`, `bootstrap`, `shared`, and `resources` runtime ownership with a compatibility-preserving strangler migration instead of a wholesale folder shuffle.\n- Migrates correlation policy, shared runtime errors, application ports, and concrete source repositories into their canonical layers while retaining behavior-free historical import facades.\n- Adds the machine-readable runtime-boundary policy, deterministic architecture validator, behavior tests, and required `validate` / `Governance Check` enforcement so new flat modules, reversed dependency direction, misplaced DTO/DPO/repository objects, runtime `internal/` imports, and misplaced runtime resources fail closed.\n- AR-1 changes source organization and validation only; it does not bump the public version or grant release, deployment, provider-routing, production-mutation, ruleset/policy bypass, destructive, branch-deletion, force-push, or history-rewrite authority.\n"""
+              changelog = entry + changelog[len("# Changelog\n"):]
+              changelog_path.write_text(changelog, encoding="utf-8")
+
+      - name: Commit bounded parity changes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.json CHANGELOG.md
+          if git diff --cached --quiet; then
+            echo "AR_PARITY_MAINTENANCE=NO_CHANGES"
+            exit 0
+          fi
+          git commit -m "docs(ar): add machine index and changelog parity"
+          git push origin HEAD:refactor/ar-runtime-boundaries-20260901
