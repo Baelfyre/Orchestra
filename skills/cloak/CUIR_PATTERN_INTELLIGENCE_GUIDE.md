@@ -2,6 +2,8 @@
 
 Use this guide only when the active task needs design-pattern selection or comparison. Do not load the full CUIR corpus by default.
 
+This guide is an adjacent progressive-disclosure surface and intentionally does not alter the frozen core `SKILL.md` used by the historical UIX-9 proof protocol. Load it explicitly through the CUIR-4 machine-discovery/retrieval path.
+
 ## Retrieval flow
 
 1. Preserve project-native requirements, components, tokens, and assets as the primary design authority.

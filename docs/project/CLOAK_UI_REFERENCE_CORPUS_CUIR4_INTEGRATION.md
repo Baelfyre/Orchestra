@@ -8,6 +8,8 @@ CUIR-4 integrates the canonical CUIR-3 normalized pattern catalog into Cloak thr
 
 Cloak first preserves project-native requirements, then classifies the current UI problem into a bounded problem class, retrieves only matching normalized categories, caps the selected set at five patterns, and preserves provenance and reuse classification in the resulting guidance.
 
+The integration is deliberately adjacent to the frozen UIX-9 treatment surface. `skills/cloak/SKILL.md` remains byte-identical to the canonical UIX-9 guidance freeze so historical proof identities remain reproducible. CUIR-4 is exposed through machine discovery, the bounded helper, and an explicitly loaded Cloak guide rather than silently changing that frozen treatment.
+
 The integration has three surfaces:
 
 - `machine/knowledge/cloak-ui-pattern-intelligence-cuir4.v1.json` — deterministic problem-class and category retrieval contract;

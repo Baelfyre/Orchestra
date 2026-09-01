@@ -65,15 +65,18 @@ def test_brand_and_general_icon_rights_remain_separate():
     assert "REUSE_WITH_NOTICE" in patterns["cuir3.general_ui_icon_system"]["reuse_classifications"]
     assert "REUSE_WITH_RIGHTS_REVIEW" in patterns["cuir3.brand_icon_traceability_and_rights"]["reuse_classifications"]
 
-def test_skill_progressive_disclosure_and_adapter_parity():
-    source_skill = (ROOT / "skills/cloak/SKILL.md").read_text(encoding="utf-8")
-    codex_skill = (ROOT / "adapters/codex/skills/cloak/SKILL.md").read_text(encoding="utf-8")
-    marker = "Load `CUIR_PATTERN_INTELLIGENCE_GUIDE.md` only when"
-    assert marker in source_skill
-    assert marker in codex_skill
+def test_adjacent_progressive_disclosure_guide_preserves_frozen_core_skill():
     assert GUIDE.read_text(encoding="utf-8") == CODEX_GUIDE.read_text(encoding="utf-8")
-    assert "Ponytail" in GUIDE.read_text(encoding="utf-8")
-    assert "do not copy source expression or assets" in GUIDE.read_text(encoding="utf-8")
+    guide = GUIDE.read_text(encoding="utf-8")
+    assert "Ponytail" in guide
+    assert "do not copy source expression or assets" in guide
+    index = _json(INDEX)
+    assert index["retrieval_policy"]["mode"] == "PROGRESSIVE_DISCLOSURE"
+    assert index["retrieval_policy"]["default_catalog_injection"] is False
+    manifest = _json(ROOT / "machine/ui/uix9-live-guidance-manifest.v1.json")
+    cloak = next(item for item in manifest["materials"] if item["path"] == "skills/cloak/SKILL.md")
+    import hashlib
+    assert hashlib.sha256((ROOT / "skills/cloak/SKILL.md").read_bytes()).hexdigest() == cloak["canonical_blob_digest"]
 
 def test_readme_machine_projection_tracks_candidate_without_granting_cuir5():
     readme = _json(ROOT / "README.json")

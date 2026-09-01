@@ -61,7 +61,6 @@ Use `SKILL.md` first. Do not load every supporting document by default or consum
 - Load `FORM_FOCUS_VALIDATION_GUIDE.md` only for form labels, validation timing, errors, focus recovery, duplicate submission, multi-step flows, or destructive confirmations.
 - Load `DESIGN_TOKENS_COMPONENT_STATES_GUIDE.md` only for design-system tokens, variants, theme parity, component state matrices, or reusable state semantics.
 - Load `FRONTEND_ROUTING_COMPONENT_BOUNDARIES_GUIDE.md` only for user-visible route behavior, deep links, route focus, browser history, responsive navigation, or component-boundary review.
-- Load `CUIR_PATTERN_INTELLIGENCE_GUIDE.md` only when the task requires UI pattern selection, pattern comparison, or provenance-aware design intelligence. Use the smallest relevant CUIR pattern set; do not load the full corpus by default.
 - Load `templates/<template-name>.md` only when the user explicitly requests a specific aesthetic (e.g., `bryl-minimal`). Do not load templates by default.
 
 ## Artifact Evidence Review
