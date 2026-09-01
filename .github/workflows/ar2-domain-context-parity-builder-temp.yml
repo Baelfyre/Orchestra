@@ -1,3 +1,4 @@
+# Second push intentionally triggers this self-removing bounded parity builder.
 name: AR2 Domain Context Parity Builder Temp
 
 on:
