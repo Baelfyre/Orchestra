@@ -41,6 +41,7 @@ For human explanation, operating modes, risk scaling, governance roles, and usag
 - [Governance Layer](GOVERNANCE_LAYER.md)
 - [Autonomous Merge Readiness Protocol](AUTONOMOUS_MERGE_READINESS_PROTOCOL.md)
 - [Compliance Registry Integration](COMPLIANCE_REGISTRY_INTEGRATION.md)
+- [Padayon Post-Restructure Repository Realignment Notice](PADAYON_POST_RESTRUCTURE_REALIGNMENT_NOTICE.md): searchable repository-local continuity guidance for M0-M6 post-restructure source-reality reconciliation and live-source precedence.
 
 The autonomy candidate-lifecycle integration is intentionally thin: it reuses the existing autonomy evaluator to decide whether an already-valid candidate transition needs another human pause. It does not create feature-adoption authority, merge authority, persistence authority, or branch-deletion authority.
 
