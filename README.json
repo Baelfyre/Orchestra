@@ -142,8 +142,26 @@
       "automatic_ingestion": false,
       "source_copying": false,
       "asset_copying": false,
-      "cuir4_started": false,
+      "cuir4_started": true,
       "authority_note": "CUIR-3 is normalized reference knowledge only. It does not authorize runtime or automatic retrieval integration, source or asset copying, external execution, implementation, provider routing or fallback, release, deployment, production mutation, or policy activation."
+    },
+    "cloak_ui_reference_corpus_cuir4": {
+      "status": "CUIR_4_PATTERN_INTELLIGENCE_CANDIDATE_PENDING_CANONICALIZATION",
+      "purpose": "Integrate canonical CUIR-3 normalized UI knowledge into Cloak through bounded progressive disclosure and deterministic provenance-aware retrieval.",
+      "machine_sources": ["machine/knowledge/cloak-ui-pattern-intelligence-cuir4.v1.json", "machine/schemas/cloak-ui-pattern-intelligence-cuir4.v1.schema.json"],
+      "human_sources": ["docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR4_INTEGRATION.md", "skills/cloak/CUIR_PATTERN_INTELLIGENCE_GUIDE.md"],
+      "retrieval_surface": "scripts/retrieve_cloak_patterns.py",
+      "validation_surface": "tests/runtime/test_cloak_ui_reference_corpus_cuir4.py",
+      "progressive_retrieval": true,
+      "default_catalog_injection": false,
+      "automatic_host_injection": false,
+      "implementation_authority": false,
+      "external_code_execution": false,
+      "automatic_ingestion": false,
+      "source_copying": false,
+      "asset_copying": false,
+      "cuir5_started": false,
+      "authority_note": "CUIR-4 adds advisory progressive pattern retrieval only. It does not transfer implementation, architecture, security, merge, release, deployment, provider-routing, production-mutation, or policy authority and does not start CUIR-5."
     },
     "cross_specialist_coordination": {"status": "IMPLEMENTED", "human_sources": ["docs/governance/TUNER_PROTOCOL.md", "ROUTING_MAP.md"]},
     "validation_and_evidence": {"status": "IMPLEMENTED", "machine_sources": ["machine/schemas/", "machine/release-evidence/"], "human_sources": ["docs/setup/VALIDATION.md", "docs/validation/"]},
@@ -1053,7 +1071,8 @@
     "cloak_ui_reference_corpus_cuir0": "CUIR_0_CANONICAL_MERGED_VERIFIED",
     "cloak_ui_reference_corpus_cuir1": "CUIR_1_CANONICAL_MERGED_VERIFIED",
     "cloak_ui_reference_corpus_cuir2": "CUIR_2_CANONICAL_MERGED_VERIFIED",
-    "cloak_ui_reference_corpus_cuir3": "CUIR_3_CANONICAL_MERGED_VERIFIED"
+    "cloak_ui_reference_corpus_cuir3": "CUIR_3_CANONICAL_MERGED_VERIFIED",
+    "cloak_ui_reference_corpus_cuir4": "CUIR_4_PATTERN_INTELLIGENCE_CANDIDATE_PENDING_CANONICALIZATION"
   },
   "ai_review_guidance": {
     "preferred_entrypoint": "README.json",
@@ -1154,6 +1173,8 @@
     "treat_cuir2_as_canonical_static_analysis_only": true,
     "do_not_treat_cuir2_reference_findings_as_copy_or_execution_authority": true,
     "treat_cuir3_as_canonical_normalized_reference_knowledge_only": true,
-    "do_not_infer_cuir4_authority_from_cuir3_canonicalization": true
+    "do_not_infer_cuir4_authority_from_cuir3_canonicalization": true,
+    "treat_cuir4_as_bounded_progressive_pattern_intelligence_until_canonicalized": true,
+    "do_not_infer_cuir5_authority_from_cuir4_candidate_state": true
   }
 }

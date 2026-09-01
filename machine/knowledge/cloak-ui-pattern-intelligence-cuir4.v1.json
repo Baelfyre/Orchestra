@@ -1,0 +1,211 @@
+{
+  "schema_version": "orchestra.cloak-ui-pattern-intelligence-cuir4.v1",
+  "phase": "CUIR-4",
+  "status": "CUIR_4_PATTERN_INTELLIGENCE_CANDIDATE_PENDING_CANONICALIZATION",
+  "authority_class": "CLOAK_ADVISORY_PATTERN_RETRIEVAL_ONLY",
+  "canonical_cuir3_input": {
+    "implementation_commit": "5d3ff818c875c94355b906d65165dcaa2eeb1ef3",
+    "implementation_tree": "338f7448f9ee92483baf35a4accb8c019bfcefa2",
+    "lifecycle_closeout_commit": "36f8d262f64efd91f0961f780f1cd54272eeadb3",
+    "lifecycle_closeout_tree": "9fbd9932377ac1727b9b22a29b5e9594cd674113",
+    "catalog": "machine/knowledge/cloak-ui-reference-cuir3.v1.json",
+    "normalized_pattern_count": 16
+  },
+  "retrieval_policy": {
+    "mode": "PROGRESSIVE_DISCLOSURE",
+    "default_catalog_injection": false,
+    "automatic_host_injection": false,
+    "maximum_problem_classes": 3,
+    "maximum_patterns_per_task": 5,
+    "rank_by": [
+      "matched_category_priority",
+      "evidence_count_desc",
+      "pattern_id_asc"
+    ],
+    "preserve_project_native_requirements_first": true,
+    "preserve_provenance": true,
+    "preserve_reuse_classification": true,
+    "implementation_authority": false
+  },
+  "problem_classes": [
+    {
+      "problem_class": "navigation_and_destination",
+      "trigger_terms": [
+        "navigation",
+        "navbar",
+        "sidebar",
+        "menu",
+        "destination",
+        "breadcrumb",
+        "tab",
+        "tabs",
+        "bottom navigation"
+      ],
+      "categories": [
+        "navigation_and_destination_state",
+        "selection_and_disclosure",
+        "accessibility_and_semantics"
+      ]
+    },
+    {
+      "problem_class": "forms_and_input",
+      "trigger_terms": [
+        "form",
+        "input",
+        "login",
+        "signup",
+        "register",
+        "password",
+        "validation",
+        "field",
+        "radio",
+        "checkbox",
+        "multi-step",
+        "multistep"
+      ],
+      "categories": [
+        "forms_and_input",
+        "selection_and_disclosure",
+        "feedback_status_and_progress",
+        "accessibility_and_semantics"
+      ]
+    },
+    {
+      "problem_class": "feedback_status_and_progress",
+      "trigger_terms": [
+        "progress",
+        "upload",
+        "loading",
+        "status",
+        "success",
+        "error",
+        "empty state",
+        "completion",
+        "complete",
+        "pause",
+        "resume",
+        "notification"
+      ],
+      "categories": [
+        "feedback_status_and_progress",
+        "motion_and_state_emphasis",
+        "accessibility_and_semantics"
+      ]
+    },
+    {
+      "problem_class": "action_hierarchy",
+      "trigger_terms": [
+        "delete",
+        "destructive",
+        "danger",
+        "primary action",
+        "secondary action",
+        "cta",
+        "call to action",
+        "overflow",
+        "action menu"
+      ],
+      "categories": [
+        "action_hierarchy",
+        "accessibility_and_semantics"
+      ]
+    },
+    {
+      "problem_class": "data_and_summary",
+      "trigger_terms": [
+        "dashboard",
+        "summary",
+        "metrics",
+        "invoice",
+        "weather",
+        "analytics",
+        "data",
+        "status card",
+        "financial"
+      ],
+      "categories": [
+        "data_and_summary",
+        "feedback_status_and_progress",
+        "accessibility_and_semantics"
+      ]
+    },
+    {
+      "problem_class": "cards_and_content_grouping",
+      "trigger_terms": [
+        "card",
+        "pricing",
+        "product",
+        "profile",
+        "offer",
+        "content grouping",
+        "commerce"
+      ],
+      "categories": [
+        "cards_and_content_grouping",
+        "action_hierarchy",
+        "accessibility_and_semantics"
+      ]
+    },
+    {
+      "problem_class": "collections_and_sequence",
+      "trigger_terms": [
+        "list",
+        "todo",
+        "task list",
+        "collection",
+        "forecast",
+        "timeline",
+        "stack",
+        "sequence"
+      ],
+      "categories": [
+        "collection_and_sequence",
+        "feedback_status_and_progress",
+        "accessibility_and_semantics"
+      ]
+    },
+    {
+      "problem_class": "icons_and_brand",
+      "trigger_terms": [
+        "icon",
+        "icons",
+        "logo",
+        "brand icon",
+        "brand logo",
+        "symbol",
+        "lucide",
+        "tabler",
+        "simple icons"
+      ],
+      "categories": [
+        "general_ui_icons",
+        "brand_icon_rights",
+        "accessibility_and_semantics"
+      ]
+    }
+  ],
+  "fallback": {
+    "problem_class": "general_interface_review",
+    "categories": [
+      "accessibility_and_semantics"
+    ],
+    "reason": "Unknown or mixed UI tasks should receive only the semantic accessibility baseline rather than broad corpus injection."
+  },
+  "handoff": {
+    "frontend_implementation_owner": "Ponytail",
+    "architecture_or_shared_component_owner": "Clockwork",
+    "readiness_owner": "Overseer",
+    "security_owner": "Cipher"
+  },
+  "protected_boundaries": {
+    "source_copying": false,
+    "asset_copying": false,
+    "external_code_execution": false,
+    "external_dependency_installation": false,
+    "provider_routing": false,
+    "release_authority": false,
+    "deployment_authority": false,
+    "policy_activation_authority": false,
+    "cuir5_started": false
+  }
+}
