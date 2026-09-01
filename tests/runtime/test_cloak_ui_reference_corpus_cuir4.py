@@ -87,7 +87,7 @@ def test_readme_machine_projection_tracks_candidate_without_granting_cuir5():
     cuir3 = readme["capabilities"]["cloak_ui_reference_corpus_cuir3"]
     cuir4 = readme["capabilities"]["cloak_ui_reference_corpus_cuir4"]
     assert cuir3["cuir4_started"] is True
-    assert cuir4["status"] == "CUIR_4_PATTERN_INTELLIGENCE_CANDIDATE_PENDING_CANONICALIZATION"
+    assert cuir4["status"] == "CUIR_4_CANONICAL_MERGED_VERIFIED"
     assert cuir4["progressive_retrieval"] is True
     assert cuir4["cuir5_started"] is False
     assert cuir4["implementation_authority"] is False
