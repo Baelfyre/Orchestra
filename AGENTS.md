@@ -18,3 +18,17 @@ When operating within this repository or when this plugin is active, adhere to t
 ## Repo Source vs Runtime Rule
 
 Apply persistent project updates only to Git-tracked repo source paths. Do not treat `.agents/`, generated runtime copies, installed adapter copies, cache folders, or local execution mirrors as the source of truth. Before editing, verify the target file path is inside the tracked repo source and not inside `.agents/`. If a task touches skill files, update `skills/<skill>/...` in the repository source, not `.agents/skills/<skill>/...`. Runtime copies may be inspected for comparison, but persistent fixes must be applied to the Git-tracked source.
+
+## Runtime Architecture Placement Rule
+
+For new or materially refactored Python runtime code, treat `docs/architecture/RUNTIME_ARCHITECTURE_BOUNDARIES.md` and `machine/architecture/runtime-boundaries.v1.json` as the source of truth for placement and dependency direction.
+
+- New runtime implementation belongs under `orchestra_runtime/domain/`, `application/`, `infrastructure/`, `entrypoints/`, `bootstrap/`, `shared/`, or `resources/` according to ownership. Do not add a new flat `orchestra_runtime/*.py` implementation module.
+- `domain` must not depend on application orchestration, concrete infrastructure, entrypoints, bootstrap wiring, or repository-level `internal/` code.
+- `application` owns use cases, services, DTOs, and ports; it must not depend on concrete infrastructure.
+- persistence implementations, stores, mappers, serialization, and DPOs belong under `infrastructure/persistence/`; DPOs must not leak into domain/application contracts.
+- repository contracts belong under `application/ports/repositories/`; concrete repositories belong under `infrastructure/persistence/repositories/`.
+- runtime package resources belong under `orchestra_runtime/resources/`; canonical machine contracts remain under repository-level `machine/` and must not be duplicated as runtime resources.
+- repository-level `internal/` is for experiments/proofs/tooling and must never be imported by production `orchestra_runtime/` code.
+- a migrated historical flat module marked `ARCHITECTURE_COMPATIBILITY_FACADE` is re-export-only. Do not add new behavior to it.
+- before completing runtime structure work, run `python scripts/validation/validate_architecture_boundaries.py` and `python tests/behavior/test_architecture_boundaries.py`. Architecture validation failures are blocking evidence, not advisory warnings.
