@@ -1,0 +1,47 @@
+name: AR2 Lifecycle Closeout
+
+on:
+  push:
+    branches:
+      - chore/runtime-architecture-ar2-closeout
+
+permissions:
+  contents: write
+
+jobs:
+  closeout:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Reconcile AR-2 machine lifecycle projection
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('README.json')
+          text = path.read_text(encoding='utf-8')
+          old = '"status": "AR_2_FOUNDATION_CANDIDATE"'
+          new = '"status": "AR_2_CANONICAL_MERGED_VERIFIED"'
+          if text.count(old) != 1:
+              raise SystemExit(f'expected exactly one AR-2 candidate status, found {text.count(old)}')
+          text = text.replace(old, new, 1)
+          data = json.loads(text)
+          capability = data['capabilities']['runtime_architecture_refoundation']
+          assert capability['status'] == 'AR_2_CANONICAL_MERGED_VERIFIED'
+          assert capability['ar3_started'] is False
+          assert capability['release_authorized'] is False
+          path.write_text(text, encoding='utf-8')
+          PY
+          git diff --check
+          test "$(git diff --name-only)" = "README.json"
+      - name: Commit lifecycle closeout
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add README.json
+          git commit -m 'chore(ar2): close canonical lifecycle projection'
+          git push origin HEAD:chore/runtime-architecture-ar2-closeout
