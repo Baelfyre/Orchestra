@@ -58,6 +58,9 @@ jobs:
           python -m pip install --upgrade pip pytest pytest-cov hypothesis==6.163.0
           "jsonschema[format]>=4.21,<5"
 
+      - name: Validate runtime architecture boundaries
+        run: python scripts/validation/validate_architecture_boundaries.py
+
       - name: Prepare runtime evidence directory
         run: mkdir -p artifacts/runtime
 
