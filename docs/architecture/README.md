@@ -20,6 +20,16 @@ Validation and machine-readable evidence
 Arbiter transition / human gate / next bounded action
 ```
 
+## Runtime source architecture
+
+Runtime source placement and dependency direction are now governed by a dedicated compatibility-preserving architecture contract:
+
+- [Runtime Architecture Boundaries](RUNTIME_ARCHITECTURE_BOUNDARIES.md)
+- `../../machine/architecture/runtime-boundaries.v1.json`
+- `../../scripts/validation/validate_architecture_boundaries.py`
+
+New runtime implementation belongs in the bounded `domain`, `application`, `infrastructure`, `entrypoints`, `bootstrap`, `shared`, or `resources` roots. Existing flat runtime modules are grandfathered only for incremental migration; migrated historical paths become behavior-free compatibility facades.
+
 ## Architectural boundaries
 
 ### Routing is not authority
