@@ -1147,7 +1147,7 @@
     "do_not_equate_reference_only_research_or_protocol_use_with_runtime_dependency_or_copied_source": true,
     "preserve_unknown_historical_revision_or_license_facts_as_unknown": true,
     "treat_mutation_scores_as_scope_specific_evidence": true,
-    "treat_generated_or_derived_views_as_non-authoritative_when_their_source_contract_is_available": true,
+    "treat_generated_or_derived_views_as_non_authoritative_when_their_source_contract_is_available": true,
     "treat_mergeable_boolean_without_clean_mergeable_state_as_insufficient": true,
     "treat_mcp_prap_adapters_and_host_maturity_as_transport_or_compatibility_not_authority": true,
     "treat_murmurs_as_presentation_only": true,
