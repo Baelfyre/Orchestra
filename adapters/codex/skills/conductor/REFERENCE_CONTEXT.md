@@ -173,7 +173,7 @@ Generated from canonical Orchestra sources. Indented snapshots are code-only con
     | `overseer` | QA strategy, validation evidence, release readiness | test strategy, validation plan, CI readiness, regression evidence, release validation | architecture design or destructive testing | Validation owner | test and validation evidence | Caveman,Full QA Review,Delegated Unit Evidence |
     | `dagger` | Guarded destructive-path and resilience simulation | chaos simulation, guarded negative-path validation, resilience stress path | routine QA, security policy, implementation | Guarded execution specialist | `scripts/dagger_guardrail.py` | Caveman |
     | `weaver` | Diagrams and visual models | UML, ERD, Mermaid, PlantUML, workflow visualization | code implementation or policy review | Technical artifact owner | diagram target domain only | Mermaid,PlantUML |
-    | `scribe` | Documentation production and editing | README rewrite, changelog prose, docs cleanup, source-backed narrative | business alignment decisions or architecture ownership | Execution owner for docs | source material only | Mode 1,Mode 2,Mode 3 |
+    | `scribe` | Documentation, domain narrative, and traceability | README/changelog/docs; `SPEC_TO_SYSTEM`; `SYSTEM_TO_DOCS`; `RECONCILE`; domain and research narrative; requirements traceability; as-built and drift review | technical architecture, persistence, formal models, security, QA, UI/UX, governance, or implementation decisions | Documentation and traceability owner | source/project evidence plus needed specialist facts | Mode 1,Mode 2,Mode 3 |
     | `ponytail` | Implementation after design is ready | scoped code edit, bug fix with known owner, minimal safe implementation | architecture, security, DB, governance, or ambiguous ownership | Execution owner | active file slice plus routed specialist guidance | IMPLEMENTATION_PLAN,CODE_REVIEW,QUICK_FIX |
 
     ## Avoid-When Notes
@@ -188,7 +188,7 @@ Generated from canonical Orchestra sources. Indented snapshots are code-only con
     - **chronicler**: avoid for UI or general QA
     - **overseer**: avoid for architecture ownership or destructive testing
     - **weaver**: avoid for code implementation or policy review
-    - **scribe**: avoid for architecture, database, or governance decisions
+    - **scribe**: avoid technical, governance, implementation, or release-approval decisions; Scribe documents verified outputs from those owners
     - **clockwork**: avoid for layout tweaks or documentation writing
     - **ponytail**: avoid for architecture, UI/UX decisions, security policy, database semantics, or governance
 
@@ -368,7 +368,7 @@ Generated from canonical Orchestra sources. Indented snapshots are code-only con
     | `clockwork` | None | Architecture, layering, service boundaries, refactor structure | None | None | Architecture evidence inputs only | None |
     | `chronicler` | None | Database and persistence semantics, schema, migrations, ORM behavior | None | None | Persistence evidence inputs only | None |
     | `cloak` | None | UI/UX, accessibility, responsive layout, interaction design | None | None | UX evidence inputs only | None |
-    | `scribe` | None | Documentation quality only when asked | Documentation production and editing | None | Documentation evidence inputs only | None |
+    | `scribe` | None | Documentation quality, domain-narrative consistency, and evidence-traceability review only | Documentation production, system reconstruction, research/capstone documentation, and documentation/system reconciliation | None | Documentation/traceability evidence inputs only; no QA conclusion ownership | None |
     | `ponytail` | None | None | Implementation only after design and governance are ready | None | Local implementation validation only | None |
     | `dagger` | None | Controlled destructive-path and resilience review | Guarded destructive simulation only | None | Guardrail evidence only | None |
     | `weaver` | None | Diagram and visual-model notation | Diagram production | None | Diagram evidence inputs only | None |
@@ -379,7 +379,8 @@ Generated from canonical Orchestra sources. Indented snapshots are code-only con
     - Governor owns legal, regulatory, licensing, privacy-obligation, and IP governance.
     - Cipher owns technical security and privacy-control analysis.
     - Steward owns business alignment, scope, requirements, acceptance criteria, and required SDLC artifact sufficiency.
-    - Scribe produces and edits documentation but does not decide business alignment.
+    - Scribe produces and edits documentation but does not decide business alignment. Scribe also owns documented representation, domain narrative, evidence traceability, research/capstone documentation, and documentation/system reconciliation, but does not decide technical architecture, persistence semantics, formal models, security policy, QA conclusions, UI/UX behavior, implementation, or release authority.
+    - Scribe drift labels such as `DOC_DRIFT`, `IMPLEMENTATION_DRIFT`, `MISSING_EVIDENCE`, and `UNRESOLVED` are evidence classifications only and cannot grant implementation, approval, validation, or release authority.
     - Arbiter owns continuity, source-of-truth, branch, handoff, and merge-readiness decisions.
     - Overseer owns QA strategy, test execution planning, and validation evidence.
     - Clockwork owns architecture and layering.

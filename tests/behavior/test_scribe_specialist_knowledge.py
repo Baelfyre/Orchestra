@@ -15,6 +15,10 @@ REQUIRED_SUPPORT = [
     "CHANGELOG_ADR_GUIDE.md",
     "API_VERSIONED_DOCUMENTATION_GUIDE.md",
     "LINK_CLAIM_VALIDATION_GUIDE.md",
+    "DOMAIN_NARRATIVE_MODELING_GUIDE.md",
+    "REQUIREMENTS_TRACEABILITY_GUIDE.md",
+    "RESEARCH_CAPSTONE_DOCUMENTATION_GUIDE.md",
+    "DOCUMENTATION_SYSTEM_RECONCILIATION_GUIDE.md",
     "examples/final-submission-readiness-example.md",
     "examples/project-documentation-audit-example.md",
     "examples/readme-audit-example.md",
@@ -51,7 +55,27 @@ def main() -> None:
     ]:
         if filename not in skill:
             raise AssertionError(f"Scribe progressive disclosure misses {filename}")
-    require(skill, "source revision and last-verified date", "generated heading anchors")
+    require(
+        skill,
+        "Documentation, Domain Narrative, and Knowledge Traceability Specialist",
+        "SPEC_TO_SYSTEM",
+        "SYSTEM_TO_DOCS",
+        "RECONCILE",
+        "source revision and last-verified date",
+        "generated heading anchors",
+    )
+
+    domain = read(SOURCE / "DOMAIN_NARRATIVE_MODELING_GUIDE.md")
+    require(domain, "Noun extraction is discovery only", "Clockwork", "Chronicler", "Weaver", "UNRESOLVED")
+
+    traceability = read(SOURCE / "REQUIREMENTS_TRACEABILITY_GUIDE.md")
+    require(traceability, "Forward trace", "Reverse trace", "MISSING_EVIDENCE", "NOT_APPLICABLE")
+
+    research = read(SOURCE / "RESEARCH_CAPSTONE_DOCUMENTATION_GUIDE.md")
+    require(research, "Plan first", "Prototype first", "Existing system", "### Continuous", "Chapter 1-5")
+
+    reconciliation = read(SOURCE / "DOCUMENTATION_SYSTEM_RECONCILIATION_GUIDE.md")
+    require(reconciliation, "DOC_DRIFT", "IMPLEMENTATION_DRIFT", "observed behavior", "inferred purpose", "historical intent")
 
     markdown = read(SOURCE / "MARKDOWN_TECHNICAL_SYNTAX_GUIDE.md")
     require(markdown, "CommonMark", "GitHub-Flavored Markdown", "Heading fragments", "language identifier", "alternative text")

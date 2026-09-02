@@ -32,6 +32,8 @@ Do not load it for obvious single-owner work.
 | UI/UX, accessibility, responsive layout, interaction design | `cloak` | Frontend design owner is clear |
 | QA strategy, validation evidence, release-readiness checks | `overseer` | Validation owner is clear |
 | Documentation production and editing | `scribe` | Documentation execution owner is clear |
+| Domain narrative, glossary, requirements, research/capstone, as-built documentation | `scribe` | Documentation and knowledge structuring; technical and governance decisions remain with their owning specialists |
+| `SPEC_TO_SYSTEM`, `SYSTEM_TO_DOCS`, or `RECONCILE` | `scribe` -> only required specialists -> implementation/validation owners as applicable | Scribe leads the mode-specific narrative, reconstruction, or drift review without inventing intent or specialist-owned decisions |
 | Diagram and model generation | `weaver` | Visual artifact owner is clear |
 | Minimal implementation after design is ready | `ponytail` | Execution owner is clear and upstream design/governance are ready |
 | Controlled destructive-path simulation | `dagger` | Explicit authorization and guardrail validation are present |
@@ -43,6 +45,15 @@ Do not load it for obvious single-owner work.
 
 The two compliance commands are explicit public commands. They must not rely on the unknown-command ambiguity fallback. `/compliance-registry` uses Conductor only as the command entry boundary and delegates data lifecycle work to the deterministic Registry script. `/compliance-review` follows the governed ordered sequence below; no role may treat Registry evidence as release, deployment, execution, or legal authority.
 
+## Scribe SSU Routing Rules
+
+- Existing-system, implemented-system, or current-capstone requests -> `scribe` in `SYSTEM_TO_DOCS` with only required evidence-verification specialists.
+- Requirements, problem-to-specification, or approved-requirements requests -> `scribe` in `SPEC_TO_SYSTEM`, then the appropriate technical and implementation owners.
+- Domain-model requests -> `scribe` for concept discovery; `weaver`, `clockwork`, or `chronicler` owns formal modeling as applicable.
+- Documentation/code alignment -> `scribe` in `RECONCILE`; unresolved correction decisions return to the owning specialist or governance authority.
+
+Do not route every documentation request through every specialist. Progressive disclosure and smallest-sufficient-specialist routing remain required.
+
 ## Ordered Multi-Skill Sequences
 
 - `the-governor -> cipher -> ponytail` for governance-sensitive security implementation
@@ -50,6 +61,9 @@ The two compliance commands are explicit public commands. They must not rely on 
 - `chronicler -> overseer` for persistence semantics followed by migration or DB validation
 - `the-steward -> scribe` for required SDLC documentation shaped by business-alignment governance
 - `the-governor -> scribe` for compliance documentation shaped by governance
+- `scribe -> relevant technical specialists -> ponytail -> overseer -> scribe` for `SPEC_TO_SYSTEM` when implementation is actually authorized and the final artifact must become as-built documentation
+- `scribe -> verification specialists as needed -> scribe` for `SYSTEM_TO_DOCS`; technical specialists verify their facts, Scribe owns the documented reconstruction
+- `scribe -> conductor -> affected specialist or governance authority -> overseer as needed -> scribe` for `RECONCILE` when drift cannot be resolved by documentation correction alone
 - `conductor -> the-governor -> the-steward -> arbiter` for Registry-backed governed compliance review
 - `arbiter -> overseer` when validation evidence must be executed or refreshed before continuation
 - `cloak -> clockwork -> ponytail` when frontend design changes API shape, data flow, or service boundaries
@@ -94,6 +108,7 @@ No single role may treat successful source inspection, implementation, or automa
 - Assign one owner per output and sequence dependencies instead of parallel policy conflicts.
 - Use `dagger` only for guarded destructive-path work, never as default QA, security, DB, or UI reviewer.
 - For ERDs, use `chronicler` for semantics and `weaver` for notation.
+- Scribe reconciliation may identify `DOC_DRIFT`, `IMPLEMENTATION_DRIFT`, `MISSING_EVIDENCE`, or `UNRESOLVED`, but those states do not grant code, policy, approval, validation, or release authority.
 
 ## Legacy Routing Aliases
 

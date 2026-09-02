@@ -214,12 +214,12 @@
       ]
     },
     {
-      "primary_use": "Documentation prose, READMEs, setup guides, release notes, SDLC, technical summaries",
+      "primary_use": "Documentation prose, domain narrative, requirements traceability, research/capstone documentation, system reconstruction, reconciliation, READMEs, setup guides, release notes, SDLC, technical summaries",
       "slug": "scribe",
-      "description": "Documentation and Knowledge Transfer Specialist. See SKILL_INDEX.md.",
-      "avoid_when": "Architecture decisions, database design, normalization analysis, UI design, diagram generation, or code implementation",
+      "description": "Documentation, Domain Narrative, and Knowledge Traceability Specialist. See SKILL_INDEX.md.",
+      "avoid_when": "Architecture decisions, database design, normalization analysis, UI design, formal diagram generation, QA conclusions, security policy, governance decisions, or code implementation",
       "skill_path": "skills/scribe/SKILL.md",
-      "role": "Documentation and Knowledge Transfer Specialist",
+      "role": "Documentation, Domain Narrative, and Knowledge Traceability Specialist",
       "name": "scribe",
       "activation_level": "Specialist",
       "depends_on": "None",
