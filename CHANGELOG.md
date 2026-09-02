@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.7 runtime architecture AR-2 governance authority extraction candidate
+
+- Establishes `orchestra_runtime.domain.governance.authority` as the inward-only owner of immutable authority entities and deterministic constraint/intersection semantics.
+- Preserves legacy `orchestra_runtime.authority` symbol identity while retaining repository-policy filesystem loading, application-port inheritance, and runtime audit-event projection on the transitional legacy surface for later AR-3/AR-4 placement.
+- Adds direct compatibility/import-boundary regression coverage, detailed extraction documentation, and `README.json` machine-discovery parity.
+- Does not alter authority scope/evaluation behavior, provider/MCP execution, public import retirement, release/deployment/policy authority, or start AR-3.
+
 ## Post-v1.7 runtime architecture AR-2 domain context extraction candidate
 
 - Establishes `orchestra_runtime.domain.context` as the inward-only owner of `CurrentProjectState`, `ContinuityEvent`, and deterministic `compile_context` semantics.
