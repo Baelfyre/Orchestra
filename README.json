@@ -1183,7 +1183,7 @@
     "require_explicit_resource_ceiling_before_paid_live_benchmark_execution": true,
     "do_not_treat_b2_topology_identity_as_execution_without_the_benchmark_topology_adapter": true,
     "preserve_b2_a5_shadow_ranking_as_non-authorizing_and_separate_from_arm_scheduling": true,
-    "treat_b2_1_topology_executor_as_canonical_non-production_measurement_adapter": true,
+    "treat_b2_1_topology_executor_as_canonical_non_production_measurement_adapter": true,
     "require_b2_topology_sensitive_taskset_and_exact_manifest_before_live_execution": true,
     "do_not_equate_execution_allowed_task_payload_with_live_execution_authority": true,
     "require_b2_2_exact_host_zero_call_preflight_and_separate_human_authorization_before_model_calls": true,
