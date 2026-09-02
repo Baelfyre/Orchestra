@@ -32,6 +32,9 @@ Do not load it for obvious single-owner work.
 | UI/UX, accessibility, responsive layout, interaction design | `cloak` | Frontend design owner is clear |
 | QA strategy, validation evidence, release-readiness checks | `overseer` | Validation owner is clear |
 | Documentation production and editing | `scribe` | Documentation execution owner is clear |
+| Domain narrative, glossary, requirements prose, traceability, research/capstone documentation | `scribe` | Scribe is structuring documented knowledge and not deciding architecture, persistence, formal models, security, UI, implementation, or QA truth |
+| Existing-system as-built documentation | `scribe` + only required verification specialists | `SYSTEM_TO_DOCS`; technical facts are verified by their owning specialists where repository evidence alone is insufficient |
+| Documentation/system drift reconciliation | `scribe` + affected owner(s) | `RECONCILE`; Scribe classifies drift and the owning specialist resolves disputed technical truth |
 | Diagram and model generation | `weaver` | Visual artifact owner is clear |
 | Minimal implementation after design is ready | `ponytail` | Execution owner is clear and upstream design/governance are ready |
 | Controlled destructive-path simulation | `dagger` | Explicit authorization and guardrail validation are present |
@@ -43,6 +46,20 @@ Do not load it for obvious single-owner work.
 
 The two compliance commands are explicit public commands. They must not rely on the unknown-command ambiguity fallback. `/compliance-registry` uses Conductor only as the command entry boundary and delegates data lifecycle work to the deterministic Registry script. `/compliance-review` follows the governed ordered sequence below; no role may treat Registry evidence as release, deployment, execution, or legal authority.
 
+## Scribe Lifecycle Documentation Routing
+
+Use these patterns only when the documentation task needs lifecycle-aware sequencing. Ordinary documentation editing still routes directly to Scribe.
+
+- **Create requirements before build**: Scribe structures problem context, domain narrative, requirements prose, and traceability (`SPEC_TO_SYSTEM`), then Conductor routes technical decisions to the minimum required specialist set.
+- **Turn a problem statement into a system specification**: Scribe leads knowledge structuring; The Steward participates when business scope, requirement approval, or acceptance-governance decisions are required.
+- **Create a domain model**: Scribe may produce domain narrative and candidate concept discovery. Formal UML/model decisions route to Weaver; architecture decisions to Clockwork; persistence/entity-storage decisions to Chronicler.
+- **Document an existing system**: Scribe uses `SYSTEM_TO_DOCS` and repository evidence, calling only the specialists required to verify disputed architecture, persistence, security, UI, modeling, or validation facts.
+- **Update research/capstone documentation from current implementation**: Scribe reconstructs only evidence-supported implementation and validation state, then maps it into the institution's actual required structure. Empirical results are never inferred from implementation alone.
+- **Check whether documentation matches code/system state**: Scribe uses `RECONCILE`, classifies `DOC_DRIFT`, `IMPLEMENTATION_DRIFT`, missing evidence, unsupported claims, or other gaps, then routes the disputed truth to the owning specialist before correction.
+- **Use approved requirements to guide implementation**: Scribe maintains requirement and evidence traceability; Conductor routes actual technical decisions and implementation to their owners.
+
+Documentation routing does not make Scribe the authority for architecture, persistence, formal models, security, UI, QA, governance, or implementation.
+
 ## Ordered Multi-Skill Sequences
 
 - `the-governor -> cipher -> ponytail` for governance-sensitive security implementation
@@ -50,6 +67,9 @@ The two compliance commands are explicit public commands. They must not rely on 
 - `chronicler -> overseer` for persistence semantics followed by migration or DB validation
 - `the-steward -> scribe` for required SDLC documentation shaped by business-alignment governance
 - `the-governor -> scribe` for compliance documentation shaped by governance
+- `scribe -> conductor -> relevant technical owners -> implementation owner -> overseer -> scribe` for `SPEC_TO_SYSTEM` work where structured requirements guide implementation and Scribe updates the as-built/evidence record afterward
+- `conductor -> relevant verification owners -> scribe` for `SYSTEM_TO_DOCS` when existing implementation needs disputed technical facts verified before reconstruction
+- `scribe -> affected owner(s) -> scribe` for `RECONCILE` when documentation and system evidence conflict
 - `conductor -> the-governor -> the-steward -> arbiter` for Registry-backed governed compliance review
 - `arbiter -> overseer` when validation evidence must be executed or refreshed before continuation
 - `cloak -> clockwork -> ponytail` when frontend design changes API shape, data flow, or service boundaries
