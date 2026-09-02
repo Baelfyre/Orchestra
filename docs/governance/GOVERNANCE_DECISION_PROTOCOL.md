@@ -63,7 +63,7 @@ Clarifications:
 - Governor owns legal, regulatory, licensing, privacy-obligation, and IP governance.
 - Cipher owns technical security and privacy-control analysis.
 - Steward owns business alignment, scope, requirements, acceptance criteria, and required SDLC artifact sufficiency.
-- Scribe owns documented representation, domain narrative, evidence traceability, research/capstone documentation, and documentation/system reconciliation, but does not decide business alignment, technical architecture, persistence semantics, formal models, security policy, QA conclusions, UI/UX behavior, implementation, or release authority.
+- Scribe produces and edits documentation but does not decide business alignment. Scribe also owns documented representation, domain narrative, evidence traceability, research/capstone documentation, and documentation/system reconciliation, but does not decide technical architecture, persistence semantics, formal models, security policy, QA conclusions, UI/UX behavior, implementation, or release authority.
 - Scribe drift labels such as `DOC_DRIFT`, `IMPLEMENTATION_DRIFT`, `MISSING_EVIDENCE`, and `UNRESOLVED` are evidence classifications only and cannot grant implementation, approval, validation, or release authority.
 - Arbiter owns continuity, source-of-truth, branch, handoff, and merge-readiness decisions.
 - Overseer owns QA strategy, test execution planning, and validation evidence.

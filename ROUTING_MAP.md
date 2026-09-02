@@ -32,10 +32,8 @@ Do not load it for obvious single-owner work.
 | UI/UX, accessibility, responsive layout, interaction design | `cloak` | Frontend design owner is clear |
 | QA strategy, validation evidence, release-readiness checks | `overseer` | Validation owner is clear |
 | Documentation production and editing | `scribe` | Documentation execution owner is clear |
-| Problem/domain narrative, glossary, stakeholder/process narrative, requirements prose, research/capstone documentation | `scribe` | The request is documentation/knowledge structuring and does not require Scribe to make specialist-owned technical or governance decisions |
-| `SPEC_TO_SYSTEM` documentation-led system specification | `scribe` -> relevant technical specialists -> implementation owner | Approved/problem-domain documentation is being used to guide later design/implementation; specialist authority remains unchanged |
-| `SYSTEM_TO_DOCS` existing-system reconstruction | `scribe` with only required verification specialists | Current source/config/tests/runtime/UI evidence exists and Scribe is reconstructing as-built/domain/research documentation rather than inventing intent |
-| `RECONCILE` documentation/system/evidence alignment | `scribe` -> `conductor` only when re-entry is required | Scribe compares intent/specification/implementation/validation/documentation; contradictions route to the owning specialist or governance authority |
+| Domain narrative, glossary, requirements, research/capstone, as-built documentation | `scribe` | Documentation and knowledge structuring; technical and governance decisions remain with their owning specialists |
+| `SPEC_TO_SYSTEM`, `SYSTEM_TO_DOCS`, or `RECONCILE` | `scribe` -> only required specialists -> implementation/validation owners as applicable | Scribe leads the mode-specific narrative, reconstruction, or drift review without inventing intent or specialist-owned decisions |
 | Diagram and model generation | `weaver` | Visual artifact owner is clear |
 | Minimal implementation after design is ready | `ponytail` | Execution owner is clear and upstream design/governance are ready |
 | Controlled destructive-path simulation | `dagger` | Explicit authorization and guardrail validation are present |
@@ -49,14 +47,10 @@ The two compliance commands are explicit public commands. They must not rely on 
 
 ## Scribe SSU Routing Rules
 
-- **"Document this existing system"** -> `scribe` in `SYSTEM_TO_DOCS`; add Clockwork, Chronicler, Cipher, Cloak, Weaver, Overseer, or governance specialists only where technical truth is unresolved and relevant.
-- **"Create requirements before we build"** -> `scribe` in `SPEC_TO_SYSTEM`; route business approval/acceptance governance to The Steward and route technical design to the relevant specialist before implementation.
-- **"Turn this problem statement into a system specification"** -> `scribe` for domain narrative and documented requirements; do not let Scribe invent architecture, schema, security, UI, or test decisions.
-- **"Create a domain model"** -> `scribe` for narrative/concept discovery only; `weaver`, `clockwork`, or `chronicler` owns formal technical modeling as applicable.
-- **"Update our capstone based on current implementation"** -> `scribe` in `SYSTEM_TO_DOCS` using repository/project evidence and only the verification specialists required by unresolved claims.
-- **"Check whether our documentation still matches the code"** -> `scribe` in `RECONCILE`; route actual correction decisions to the owning specialist or governance authority.
-- **"Document what has already been implemented"** -> `scribe` in `SYSTEM_TO_DOCS`.
-- **"Use the approved requirements to guide implementation"** -> `scribe` in `SPEC_TO_SYSTEM`, then the appropriate technical specialist(s), then the implementation owner.
+- Existing-system, implemented-system, or current-capstone requests -> `scribe` in `SYSTEM_TO_DOCS` with only required evidence-verification specialists.
+- Requirements, problem-to-specification, or approved-requirements requests -> `scribe` in `SPEC_TO_SYSTEM`, then the appropriate technical and implementation owners.
+- Domain-model requests -> `scribe` for concept discovery; `weaver`, `clockwork`, or `chronicler` owns formal modeling as applicable.
+- Documentation/code alignment -> `scribe` in `RECONCILE`; unresolved correction decisions return to the owning specialist or governance authority.
 
 Do not route every documentation request through every specialist. Progressive disclosure and smallest-sufficient-specialist routing remain required.
 

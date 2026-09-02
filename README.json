@@ -30,7 +30,7 @@
     "specialist_orchestration": {"status": "IMPLEMENTED", "machine_sources": ["machine/specialists/registry.v1.json", "machine/routing/routes.v1.json"], "human_sources": ["SKILL_INDEX.md", "ROUTING_MAP.md"]},
     "governed_runtime": {"status": "IMPLEMENTED", "machine_sources": ["machine/governance/policy.v1.json"], "human_sources": ["docs/architecture/README.md", "docs/governance/GOVERNANCE_LAYER.md", "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md"]},
     "runtime_architecture_refoundation": {
-      "status": "AR_2_DOMAIN_EXTRACTIONS_ACTIVE",
+      "status": "AR_2_COMPLETE_CANONICAL_VERIFIED",
       "purpose": "Incrementally refactor the Orchestra Python runtime into bounded clean/hexagonal architecture layers while preserving public behavior and legacy import compatibility.",
       "human_sources": ["docs/project/ORCHESTRA_RUNTIME_ARCHITECTURE_REFOUNDATION.md", "docs/project/ORCHESTRA_AR2_DOMAIN_CONTEXT_EXTRACTION.md", "docs/project/ORCHESTRA_AR2_DOMAIN_GOVERNANCE_AUTHORITY_EXTRACTION.md", "docs/project/ORCHESTRA_AR2_DOMAIN_CAPABILITIES_CORE_EXTRACTION.md", "docs/project/ORCHESTRA_AR2_DOMAIN_CAPABILITY_MANIFEST_EXTRACTION.md", "docs/project/ORCHESTRA_AR2_DOMAIN_EXECUTION_CORRELATION_EXTRACTION.md", "docs/project/ORCHESTRA_AR2_DOMAIN_EXECUTION_IDENTITY_EXTRACTION.md", "docs/project/ORCHESTRA_AR2_DOMAIN_EXECUTION_LIFECYCLE_CORE_EXTRACTION.md", "docs/project/ORCHESTRA_AR2_DOMAIN_EXTRACTION_CLOSEOUT.md", "docs/architecture/README.md"],
       "validation_surface": "tests/runtime/test_runtime_architecture_boundaries.py",
@@ -88,6 +88,19 @@
       "ar3_started": false,
       "release_authorized": false,
       "authority_note": "AR-2 establishes architectural destinations and moves only qualified inward domain ownership while preserving compatibility facades. Architecture placement or validation success does not grant implementation beyond the approved refactor scope, release, deployment, policy activation, provider routing/fallback, destructive, installed-integration-refresh, force-push, or history-rewrite authority."
+    },
+    "scribe_specialist_upgrade_ssu": {
+      "status": "IMPLEMENTATION_CANDIDATE",
+      "purpose": "Upgrade Scribe into an adaptive Documentation, Domain Narrative, and Knowledge Traceability Specialist without transferring architecture, persistence, diagram, QA, security, UI, governance, or implementation authority.",
+      "human_sources": ["docs/project/SCRIBE_SPECIALIST_UPGRADE_SSU.md", "skills/scribe/SKILL.md", "skills/scribe/DOMAIN_NARRATIVE_MODELING_GUIDE.md", "skills/scribe/REQUIREMENTS_TRACEABILITY_GUIDE.md", "skills/scribe/RESEARCH_CAPSTONE_DOCUMENTATION_GUIDE.md", "skills/scribe/DOCUMENTATION_SYSTEM_RECONCILIATION_GUIDE.md", "skills/scribe/OUTPUT_TEMPLATES.md", "ROUTING_MAP.md", "SKILL_INDEX.md", "commands/scribe.md", "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
+      "machine_sources": ["plugin.json", "machine/specialists/registry.v1.json", "machine/routing/routes.v1.json", "tests/behavior/router-contract-fixtures.json"],
+      "working_modes": ["SPEC_TO_SYSTEM", "SYSTEM_TO_DOCS", "RECONCILE"],
+      "capability_scope": ["domain narrative", "requirements traceability", "research/capstone documentation", "as-built reconstruction", "documentation/system reconciliation", "claim/evidence discipline"],
+      "specialist_boundary_rule": "Scribe documents verified outputs from owning specialists; it does not decide architecture, persistence, formal diagrams, QA conclusions, security controls, UI behavior, governance, or source-code implementation.",
+      "provenance_rule": "External standards, institutional materials, repositories, templates, code, data, and figures remain references unless reuse rights are explicit; rights uncertainty escalates to The Governor.",
+      "runtime_integration": false,
+      "ar3_started": false,
+      "release_authorized": false
     },
     "specialist_runtime_host_execution_design": {
       "status": "E1_E7_COMPLETE_ADOPT_OPTIONAL",
@@ -1141,7 +1154,13 @@
     "runtime_architecture_ar2_domain_capabilities_core": "docs/project/ORCHESTRA_AR2_DOMAIN_CAPABILITIES_CORE_EXTRACTION.md",
     "runtime_architecture_ar2_domain_execution_correlation": "docs/project/ORCHESTRA_AR2_DOMAIN_EXECUTION_CORRELATION_EXTRACTION.md",
     "runtime_architecture_ar2_domain_execution_identity": "docs/project/ORCHESTRA_AR2_DOMAIN_EXECUTION_IDENTITY_EXTRACTION.md",
-    "runtime_architecture_ar2_domain_execution_lifecycle_core": "docs/project/ORCHESTRA_AR2_DOMAIN_EXECUTION_LIFECYCLE_CORE_EXTRACTION.md"
+    "runtime_architecture_ar2_domain_execution_lifecycle_core": "docs/project/ORCHESTRA_AR2_DOMAIN_EXECUTION_LIFECYCLE_CORE_EXTRACTION.md",
+    "scribe_specialist_upgrade_ssu": "docs/project/SCRIBE_SPECIALIST_UPGRADE_SSU.md",
+    "scribe_domain_narrative_guide": "skills/scribe/DOMAIN_NARRATIVE_MODELING_GUIDE.md",
+    "scribe_requirements_traceability_guide": "skills/scribe/REQUIREMENTS_TRACEABILITY_GUIDE.md",
+    "scribe_research_capstone_guide": "skills/scribe/RESEARCH_CAPSTONE_DOCUMENTATION_GUIDE.md",
+    "scribe_documentation_reconciliation_guide": "skills/scribe/DOCUMENTATION_SYSTEM_RECONCILIATION_GUIDE.md",
+    "scribe_output_templates": "skills/scribe/OUTPUT_TEMPLATES.md"
   },
   "representation_policy": {"markdown": "Human-readable explanation, rationale, examples, and nuanced specialist guidance", "json": "Canonical structured machine state, identity, routing, governance, receipts, manifests, provenance, presentation contracts, evidence, and indexes", "json_schema": "Validation contract for machine-readable records", "jsonl": "Append-only event/history records where incremental retrieval is preferable", "toon": "Derived validated non-authoritative model-context projection only when bounded compilation provides measured context benefit", "parity_rule": "When the same deterministic fact appears in more than one representation, CI must validate parity or derive the projection from one authoritative source."},
   "maturity": {

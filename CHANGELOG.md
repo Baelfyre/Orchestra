@@ -1,5 +1,13 @@
 # Changelog
 
+## Post-v1.7 Scribe specialist upgrade candidate
+
+- Expands Scribe into a Documentation, Domain Narrative, and Knowledge Traceability Specialist with `SPEC_TO_SYSTEM`, `SYSTEM_TO_DOCS`, and `RECONCILE` modes, domain narrative, bidirectional traceability, adaptive research/capstone guidance, and as-built/reconciliation templates.
+- Preserves specialist authority boundaries, surfaces unsupported claims and missing evidence, and keeps external standards, institutional materials, code, data, figures, and templates subject to provenance and rights review through Conductor and The Governor.
+- Updates Scribe source/Codex parity, registry/routing metadata, progressive-disclosure guides, deterministic route fixtures, and documentation indexes.
+- Records exact-current prompt-load baselines for the affected routing and governance packages without changing their revision or maximum percentage thresholds.
+- Keeps AR-3 unstarted, makes no provider or policy change, grants no release or deployment authority, and does not publish v1.8.
+
 ## Post-v1.7 runtime architecture AR-2 residual domain extraction closeout candidate
 
 - Moves qualified pure-domain semantics for capability manifests, governance decision/result contracts, pre-execution intent and policy, and workflow sanity receipts into bounded inward domain packages.

@@ -44,6 +44,8 @@ Portable memory is optional. Orchestra does not require or identify a specific e
 
 Specialist prose and progressive-disclosure knowledge remain under `../skills/*/`.
 
+- [Scribe Specialist Upgrade SSU](project/SCRIBE_SPECIALIST_UPGRADE_SSU.md): adaptive domain narrative, traceability, research/capstone documentation, and documentation/system reconciliation guidance.
+
 ## Governance and authority
 
 Start with the current [Governance Overview](governance/README.md).
