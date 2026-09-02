@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.7 runtime architecture AR-2 residual domain extraction closeout candidate
+
+- Moves qualified pure-domain semantics for capability manifests, governance decision/result contracts, pre-execution intent and policy, and workflow sanity receipts into bounded inward domain packages.
+- Preserves exact legacy compatibility surfaces and public object identity while leaving machine-policy evaluation, application/use-case coordination, host gates, routing/builders, DTOs, persistence, audit projection, provider, and MCP responsibilities for their later AR-3/AR-4 phases.
+- Adds targeted domain, compatibility, fail-closed, and import-boundary tests plus the residual AR-2 closeout documentation and machine-index parity.
+- Keeps AR-3 unstarted, makes no provider/MCP behavior change, retires no public imports, and grants no release, deployment, or policy authority.
+
 ## Post-v1.7 runtime architecture AR-2 execution lifecycle core extraction candidate
 
 - Establishes `orchestra_runtime.domain.execution.lifecycle` as the inward-only owner of immutable lifecycle state, signal, snapshot, terminal-result, deterministic fingerprint, initialization, and transition semantics.
