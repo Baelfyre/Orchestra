@@ -15,6 +15,9 @@ def test_legacy_preexecution_policy_symbols_are_domain_symbols() -> None:
     assert legacy_preexecution.PreExecutionReason is domain_preexecution.PreExecutionReason
     assert legacy_preexecution.ExecutionIntent is domain_preexecution.ExecutionIntent
     assert legacy_preexecution.PreExecutionPolicy is domain_preexecution.PreExecutionPolicy
+    assert legacy_preexecution._text is domain_preexecution._text
+    assert legacy_preexecution._action is domain_preexecution._action
+    assert legacy_preexecution._path is domain_preexecution._path
 
 
 def test_domain_preexecution_policy_preserves_path_and_authority_semantics() -> None:
@@ -53,6 +56,49 @@ def test_domain_preexecution_policy_preserves_path_and_authority_semantics() -> 
             allowed_actions=("FILE_READ",),
             allowed_paths=("src/secrets",),
             prohibited_paths=("src",),
+        )
+
+
+def test_domain_preexecution_policy_fail_closed_edges() -> None:
+    with pytest.raises(ValueError, match="non-empty"):
+        domain_preexecution._text("", "field")
+    with pytest.raises(ValueError, match="unsupported execution action"):
+        domain_preexecution._action("MAGIC")
+    for bad in ("\\absolute", "./relative", "src/./x", "src/../secret"):
+        with pytest.raises(ValueError):
+            domain_preexecution._path(bad, "path")
+    with pytest.raises(ValueError, match="unsupported execution intent schema"):
+        domain_preexecution.ExecutionIntent(
+            intent_id="intent",
+            action="SHELL_EXECUTE",
+            schema_version="bad",
+        )
+    with pytest.raises(ValueError, match="requires at least one requested path"):
+        domain_preexecution.ExecutionIntent(intent_id="intent", action="FILE_READ")
+    with pytest.raises(ValueError, match="duplicates"):
+        domain_preexecution.ExecutionIntent(
+            intent_id="intent",
+            action="SHELL_EXECUTE",
+            evidence_refs=("evidence:1", "evidence:1"),
+        )
+    with pytest.raises(ValueError, match="unsupported pre-execution policy schema"):
+        domain_preexecution.PreExecutionPolicy(
+            policy_id="policy",
+            allowed_actions=("SHELL_EXECUTE",),
+            schema_version="bad",
+        )
+    with pytest.raises(ValueError, match="non-empty and unique"):
+        domain_preexecution.PreExecutionPolicy(policy_id="policy", allowed_actions=())
+    with pytest.raises(ValueError, match="non-empty and unique"):
+        domain_preexecution.PreExecutionPolicy(
+            policy_id="policy",
+            allowed_actions=("SHELL_EXECUTE", "SHELL_EXECUTE"),
+        )
+    with pytest.raises(TypeError, match="must be bool"):
+        domain_preexecution.PreExecutionPolicy(
+            policy_id="policy",
+            allowed_actions=("SHELL_EXECUTE",),
+            remote_write_authorized=1,  # type: ignore[arg-type]
         )
 
 
