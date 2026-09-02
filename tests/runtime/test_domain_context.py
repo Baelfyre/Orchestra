@@ -70,6 +70,11 @@ def test_domain_context_refuses_inferred_l3_history():
         domain_context.compile_context(_state(), "L3")
 
 
+def test_legacy_context_store_rejects_empty_project_identity(tmp_path):
+    with pytest.raises(ValueError, match="project_id must be non-empty"):
+        context_state.JsonlContinuityStore(tmp_path / "events.jsonl", "   ")
+
+
 def test_legacy_store_and_markdown_surfaces_remain_available_outside_domain_package(tmp_path):
     state = _state()
     store = context_state.JsonlContinuityStore(tmp_path / "events.jsonl", state.project_id)
