@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.7 runtime architecture AR-2 execution identity extraction candidate
+
+- Establishes `orchestra_runtime.domain.execution.identity` as the inward-only owner of immutable `RunIdentity` normalization and serialization semantics.
+- Preserves exact legacy `orchestra_runtime.models.RunIdentity` and top-level `orchestra_runtime.RunIdentity` object identity while routing correlation validation through the canonical execution-domain correlation contract.
+- Adds direct compatibility, invariant, import-boundary regression coverage, detailed extraction documentation, and `README.json` machine-discovery parity.
+- Does not move lifecycle controllers/state, audit events, execution results, capability manifests, delegation/services behavior, start AR-3/AR-4, retire public imports, or change release/deployment/policy authority.
+
 ## Post-v1.7 runtime architecture AR-2 execution correlation extraction candidate
 
 - Establishes `orchestra_runtime.domain.execution.correlation` as the inward-only owner of deterministic RFC 9562 UUIDv7 validation while keeping clock and entropy backed correlation generation outside the domain.
