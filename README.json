@@ -157,7 +157,7 @@
       "human_sources": [
         "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR2_STATIC_ANALYSIS.md"
       ],
-      "validation_surface": "tests/runtime/test_cloak-ui-reference-corpus-cuir2.py",
+      "validation_surface": "tests/runtime/test_cloak_ui_reference_corpus_cuir2.py",
       "runtime_integration": false,
       "external_code_execution": false,
       "automatic_ingestion": false,
@@ -1170,7 +1170,7 @@
     "do_not_allow_a4_ranking_to_restore_or_create_eligibility": true,
     "do_not_repurpose_a3_strategy_evidence_as_model_or_worker_performance_evidence": true,
     "treat_a4_shadow_decisions_as_non_execution_effective_and_not_promoted": true,
-    "treat_a4_1_shadow_ranker_as_non-authorizing_and_separate_from_execution_control": true,
+    "treat_a4_1_shadow_topology_ranker_as_non-authorizing_and_separate_from_dispatch_execution": true,
     "treat_a4_execution_attachment_as_post_execution_observation_only": true,
     "do_not_use_a4_execution_attachment_to_influence_operation_inputs_or_attribute_runtime_outcomes": true,
     "do_not_allow_a5_topology_to_omit_required_specialists_or_change_domain_ownership": true,
