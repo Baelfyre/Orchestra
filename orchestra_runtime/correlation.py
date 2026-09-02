@@ -5,6 +5,8 @@ import time
 import uuid
 from typing import Callable
 
+from .domain.execution.correlation import is_valid_correlation_id, validate_correlation_id
+
 
 def generate_correlation_id() -> str:
     """Generate a valid RFC 9562 UUIDv7 correlation identifier string."""
@@ -47,48 +49,3 @@ def _generate_correlation_id(
 
     uuid_int = (now_ms << 80) | (ver_rand_a << 64) | (var_rand_b_high << 48) | rand_b_low
     return str(uuid.UUID(int=uuid_int))
-
-
-def validate_correlation_id(value: str) -> str:
-    """Validate that value is a valid RFC 9562 UUIDv7 string and return canonical lowercase string.
-
-    Rejects:
-    - Non-string input
-    - Empty or whitespace-padded string
-    - Malformed format (must be 36-character hyphenated UUID)
-    - Non-version-7 UUIDs
-    - Non-RFC-4122/9562-variant UUIDs
-    """
-    if not isinstance(value, str):
-        raise TypeError("correlation_id must be a string")
-    if not value or value != value.strip():
-        raise ValueError("correlation_id must be a non-empty, unpadded string")
-
-    try:
-        parsed = uuid.UUID(value)
-    except Exception as exc:
-        raise ValueError(f"malformed correlation_id: {value}") from exc
-
-    version_digit = (parsed.int >> 76) & 0xF
-    if version_digit != 7:
-        raise ValueError(f"correlation_id version must be 7, got {version_digit}")
-
-    if parsed.variant != uuid.RFC_4122:
-        raise ValueError("correlation_id variant must be RFC 4122 / RFC 9562 compatible")
-
-    canonical_str = str(parsed)
-    if value.lower() != canonical_str:
-        raise ValueError("correlation_id must use canonical hyphenated UUID format")
-
-    return canonical_str
-
-
-def is_valid_correlation_id(value: object) -> bool:
-    """Return True if value is a valid RFC 9562 UUIDv7 string, False otherwise."""
-    if not isinstance(value, str):
-        return False
-    try:
-        validate_correlation_id(value)
-        return True
-    except (ValueError, TypeError):
-        return False
