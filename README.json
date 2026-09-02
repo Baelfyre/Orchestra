@@ -32,7 +32,7 @@
     "runtime_architecture_refoundation": {
       "status": "AR_2_DOMAIN_EXTRACTIONS_ACTIVE",
       "purpose": "Incrementally refactor the Orchestra Python runtime into bounded clean/hexagonal architecture layers while preserving public behavior and legacy import compatibility.",
-      "human_sources": ["docs/project/ORCHESTRA_RUNTIME_ARCHITECTURE_REFOUNDATION.md", "docs/project/ORCHESTRA_AR2_DOMAIN_CONTEXT_EXTRACTION.md", "docs/project/ORCHESTRA_AR2_DOMAIN_GOVERNANCE_AUTHORITY_EXTRACTION.md", "docs/architecture/README.md"],
+      "human_sources": ["docs/project/ORCHESTRA_RUNTIME_ARCHITECTURE_REFOUNDATION.md", "docs/project/ORCHESTRA_AR2_DOMAIN_CONTEXT_EXTRACTION.md", "docs/project/ORCHESTRA_AR2_DOMAIN_GOVERNANCE_AUTHORITY_EXTRACTION.md", "docs/project/ORCHESTRA_AR2_DOMAIN_CAPABILITIES_CORE_EXTRACTION.md", "docs/architecture/README.md"],
       "validation_surface": "tests/runtime/test_runtime_architecture_boundaries.py",
       "machine_policy": "machine/governance/runtime-architecture-boundaries.v1.json",
       "machine_policy_schema": "machine/schemas/runtime-architecture-boundaries.v1.schema.json",
@@ -48,6 +48,10 @@
       "governance_authority_domain_surface": "orchestra_runtime/domain/governance/authority.py",
       "governance_authority_legacy_compatibility_surface": "orchestra_runtime/authority.py",
       "governance_authority_validation_surface": "tests/runtime/test_domain_governance_authority.py",
+      "capabilities_domain_surface": "orchestra_runtime/domain/capabilities",
+      "capabilities_domain_core_surface": "orchestra_runtime/domain/capabilities/core.py",
+      "capabilities_legacy_compatibility_surface": "orchestra_runtime/capabilities.py",
+      "capabilities_domain_validation_surface": "tests/runtime/test_domain_capabilities_core.py",
       "ci_enforcement": ["Governance Check", "validate"],
       "canonical_layers": ["domain", "application", "infrastructure", "entrypoints", "bootstrap", "shared", "resources"],
       "application_subzones": ["use_cases", "services", "dto", "ports"],
@@ -1087,7 +1091,8 @@
     "publication_closeout_v1_7_0": "docs/validation/V1_7_0_PUBLICATION_CLOSEOUT.md",
     "codex_c2_portability_r1_preexecution": "docs/benchmarking/CODEX_C2_PORTABILITY_R1_PREEXECUTION.md",
     "cloak_ui_reference_cuir5_evaluation": "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR5_EVALUATION.md",
-    "runtime_architecture_ar2_domain_governance_authority": "docs/project/ORCHESTRA_AR2_DOMAIN_GOVERNANCE_AUTHORITY_EXTRACTION.md"
+    "runtime_architecture_ar2_domain_governance_authority": "docs/project/ORCHESTRA_AR2_DOMAIN_GOVERNANCE_AUTHORITY_EXTRACTION.md",
+    "runtime_architecture_ar2_domain_capabilities_core": "docs/project/ORCHESTRA_AR2_DOMAIN_CAPABILITIES_CORE_EXTRACTION.md"
   },
   "representation_policy": {"markdown": "Human-readable explanation, rationale, examples, and nuanced specialist guidance", "json": "Canonical structured machine state, identity, routing, governance, receipts, manifests, provenance, presentation contracts, evidence, and indexes", "json_schema": "Validation contract for machine-readable records", "jsonl": "Append-only event/history records where incremental retrieval is preferable", "toon": "Derived validated non-authoritative model-context projection only when bounded compilation provides measured context benefit", "parity_rule": "When the same deterministic fact appears in more than one representation, CI must validate parity or derive the projection from one authoritative source."},
   "maturity": {
@@ -1183,7 +1188,7 @@
     "require_explicit_resource_ceiling_before_paid_live_benchmark_execution": true,
     "do_not_treat_b2_topology_identity_as_execution_without_the_benchmark_topology_adapter": true,
     "preserve_b2_a5_shadow_ranking_as_non-authorizing_and_separate_from_arm_scheduling": true,
-    "treat_b2_1_topology_executor_as_canonical_non_production_measurement_adapter": true,
+    "treat_b2_1_topology_executor_as_canonical_non-production_measurement_adapter": true,
     "require_b2_topology_sensitive_taskset_and_exact_manifest_before_live_execution": true,
     "do_not_equate_execution_allowed_task_payload_with_live_execution_authority": true,
     "require_b2_2_exact_host_zero_call_preflight_and_separate_human_authorization_before_model_calls": true,
