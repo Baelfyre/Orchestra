@@ -1,6 +1,6 @@
 ---
 name: scribe
-description: Documentation and Knowledge Transfer Specialist. See SKILL_INDEX.md.
+description: Documentation, Domain Narrative, and Knowledge Traceability Specialist. See SKILL_INDEX.md.
 ---
 # Scribe
 
