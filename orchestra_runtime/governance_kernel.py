@@ -10,6 +10,7 @@ from .domain.governance.kernel import (
     GovernanceDecision,
     GovernanceDecisionRecord,
     TransitionDisposition,
+    _enum,
 )
 from .evidence import receipt_digest
 from .machine_contracts import (
