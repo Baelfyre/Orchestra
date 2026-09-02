@@ -90,7 +90,7 @@
       "authority_note": "AR-2 establishes architectural destinations and moves only qualified inward domain ownership while preserving compatibility facades. Architecture placement or validation success does not grant implementation beyond the approved refactor scope, release, deployment, policy activation, provider routing/fallback, destructive, installed-integration-refresh, force-push, or history-rewrite authority."
     },
     "scribe_specialist_upgrade_ssu": {
-      "status": "IMPLEMENTATION_CANDIDATE",
+      "status": "SSU_COMPLETE_CANONICAL_VERIFIED",
       "purpose": "Upgrade Scribe into an adaptive Documentation, Domain Narrative, and Knowledge Traceability Specialist without transferring architecture, persistence, diagram, QA, security, UI, governance, or implementation authority.",
       "human_sources": ["docs/project/SCRIBE_SPECIALIST_UPGRADE_SSU.md", "skills/scribe/SKILL.md", "skills/scribe/DOMAIN_NARRATIVE_MODELING_GUIDE.md", "skills/scribe/REQUIREMENTS_TRACEABILITY_GUIDE.md", "skills/scribe/RESEARCH_CAPSTONE_DOCUMENTATION_GUIDE.md", "skills/scribe/DOCUMENTATION_SYSTEM_RECONCILIATION_GUIDE.md", "skills/scribe/OUTPUT_TEMPLATES.md", "ROUTING_MAP.md", "SKILL_INDEX.md", "commands/scribe.md", "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"],
       "machine_sources": ["plugin.json", "machine/specialists/registry.v1.json", "machine/routing/routes.v1.json", "tests/behavior/router-contract-fixtures.json"],
@@ -100,7 +100,11 @@
       "provenance_rule": "External standards, institutional materials, repositories, templates, code, data, and figures remain references unless reuse rights are explicit; rights uncertainty escalates to The Governor.",
       "runtime_integration": false,
       "ar3_started": false,
-      "release_authorized": false
+      "release_authorized": false,
+      "canonical_commit": "a8ac2b3706cb779c9528c758d2aa0c3c677b5a20",
+      "canonical_tree": "85460b606932757c03b5a482302bdcecb2e237f7",
+      "canonical_parent": "422f01dbe0df9707e27519be5ff059feb463735b",
+      "canonical_signature": "VERIFIED_VALID"
     },
     "specialist_runtime_host_execution_design": {
       "status": "E1_E7_COMPLETE_ADOPT_OPTIONAL",
@@ -1186,6 +1190,7 @@
     "codex_c1_cross_provider_reconciliation": "C1_COMPLETE_RECONCILED_CALIBRATION_ONLY",
     "registry_adaptive_consumption_o1_o6": "CANONICAL_IMPLEMENTED_VALIDATED_AND_REGISTRY_RECONCILED",
     "registry_query_optimization_o7": "CANONICAL_MERGED_VERIFIED",
+     "scribe_specialist_upgrade_ssu": "SSU_COMPLETE_CANONICAL_VERIFIED",
     "murmurs_live_host_token_measurement": "B3_TERMINAL_EVIDENCE_RECONCILED_BENEFIT_NOT_ESTABLISHED",
     "codex_c2_portability_r1": "C2R1_EXECUTION_COMPLETE_RECONCILED_CANONICAL",
     "specialist_runtime_host_execution": "SUPPORTED_OPTIONAL_E7_ADOPT_OPTIONAL",
