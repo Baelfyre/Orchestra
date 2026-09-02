@@ -1,10 +1,10 @@
 ---
 name: scribe
-description: Documentation and Knowledge Transfer Specialist. See SKILL_INDEX.md.
+description: Documentation, Domain Narrative, and Knowledge Traceability Specialist. See SKILL_INDEX.md.
 slug: scribe
-role: Documentation and Knowledge Transfer Specialist
-primary_use: Documentation prose, READMEs, setup guides, release notes, SDLC, technical summaries
-avoid_when: Architecture decisions, database design, normalization analysis, UI design, diagram generation, or code implementation
+role: Documentation, Domain Narrative, and Knowledge Traceability Specialist
+primary_use: Documentation prose, READMEs, setup guides, release notes, SDLC, domain narrative, requirements traceability, research/capstone documentation, as-built reconstruction, documentation-system reconciliation
+avoid_when: Architecture decisions, database design, normalization analysis, UI design, formal diagram/model decisions, security policy, QA conclusions, or code implementation
 activation_level: Specialist
 depends_on: None
 output_formats: [Mode 1, Mode 2, Mode 3]
