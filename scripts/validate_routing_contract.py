@@ -36,6 +36,17 @@ REQUIRED_FIXTURE_IDS = {
     "governance-decision-enforcement",
     "multi-domain-tuner-coordination",
     "late-boundary-crossing-tuner",
+    "scribe-system-to-docs",
+    "scribe-spec-to-system",
+    "scribe-problem-to-specification",
+    "scribe-domain-model-discovery",
+    "scribe-capstone-existing-system",
+    "scribe-reconcile-docs-code",
+    "scribe-implemented-system-docs",
+    "scribe-approved-requirements-guidance",
+    "scribe-database-table-reroute",
+    "scribe-unsupported-validation-promotion",
+    "scribe-copyrighted-template-reroute",
 }
 
 VALID_MODES = {"Ideation", "Prototype", "Implementation", "Governed", "Audit", "Release", "Destructive"}
@@ -48,6 +59,20 @@ KNOWN_CONTEXTS = {
     "docs/governance/GOVERNANCE_LAYER.md",
     "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md",
     "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md",
+}
+
+SSU_FIXTURE_EXPECTATIONS = {
+    "scribe-system-to-docs": ("SYSTEM_TO_DOCS", "documentation-system-to-docs", "SCRIBE_RECONSTRUCTION"),
+    "scribe-spec-to-system": ("SPEC_TO_SYSTEM", "documentation-spec-to-system", "SCRIBE_LEADS_SPECIFICATION"),
+    "scribe-problem-to-specification": ("SPEC_TO_SYSTEM", "documentation-spec-to-system", "SCRIBE_LEADS_SPECIFICATION"),
+    "scribe-domain-model-discovery": ("SPEC_TO_SYSTEM", "documentation-domain-narrative", "SCRIBE_CONCEPT_DISCOVERY_THEN_SPECIALIST_REROUTE"),
+    "scribe-capstone-existing-system": ("SYSTEM_TO_DOCS", "documentation-system-to-docs", "SCRIBE_RECONSTRUCTION"),
+    "scribe-reconcile-docs-code": ("RECONCILE", "documentation-reconcile", "RECONCILIATION_WITH_EXPLICIT_DRIFT"),
+    "scribe-implemented-system-docs": ("SYSTEM_TO_DOCS", "documentation-system-to-docs", "SCRIBE_RECONSTRUCTION"),
+    "scribe-approved-requirements-guidance": ("SPEC_TO_SYSTEM", "documentation-spec-to-system", "SCRIBE_LEADS_THEN_IMPLEMENTATION"),
+    "scribe-database-table-reroute": ("Audit", "documentation-domain-narrative", "SPECIALIST_REROUTE_REQUIRED"),
+    "scribe-unsupported-validation-promotion": ("Audit", "documentation-reconcile", "MISSING_EVIDENCE"),
+    "scribe-copyrighted-template-reroute": ("Governed", "documentation", "SPECIALIST_REROUTE_REQUIRED"),
 }
 
 
@@ -262,6 +287,46 @@ def validate_expected_routing_rules(fixtures, errors):
         fail(errors, "arbiter-vs-overseer-overlap: Arbiter HOLD/BLOCKED gate must remain blocking")
 
 
+def validate_ssu_fixtures(fixtures, errors):
+    by_id = {fixture["id"]: fixture for fixture in fixtures if "id" in fixture}
+
+    for fixture_id, (mode, route_id, outcome) in SSU_FIXTURE_EXPECTATIONS.items():
+        fixture = by_id.get(fixture_id)
+        if not fixture:
+            continue
+        if fixture.get("primary_skill") != "scribe":
+            fail(errors, f"{fixture_id}: Scribe must remain the primary documentation owner")
+        if fixture.get("scribe_mode") != mode:
+            fail(errors, f"{fixture_id}: expected scribe_mode {mode!r}")
+        if fixture.get("expected_route_id") != route_id:
+            fail(errors, f"{fixture_id}: expected_route_id must be {route_id!r}")
+        if fixture.get("expected_outcome") != outcome:
+            fail(errors, f"{fixture_id}: expected_outcome must be {outcome!r}")
+
+    reroute = by_id.get("scribe-database-table-reroute")
+    if reroute:
+        if reroute.get("reroute_skill") != "chronicler":
+            fail(errors, "scribe-database-table-reroute: database-table authority must reroute to chronicler")
+        if reroute.get("expected_outcome") != "SPECIALIST_REROUTE_REQUIRED":
+            fail(errors, "scribe-database-table-reroute: unsupported database ownership must be rejected")
+
+    unsupported = by_id.get("scribe-unsupported-validation-promotion")
+    if unsupported:
+        if unsupported.get("required_evidence_state") != "MISSING_EVIDENCE":
+            fail(errors, "scribe-unsupported-validation-promotion: untested behavior must remain MISSING_EVIDENCE")
+        if "validated" not in unsupported.get("request", "").lower():
+            fail(errors, "scribe-unsupported-validation-promotion: fixture must cover an unsupported validation promotion")
+
+    rights = by_id.get("scribe-copyrighted-template-reroute")
+    if rights:
+        if rights.get("reroute_skill") != "the-governor":
+            fail(errors, "scribe-copyrighted-template-reroute: rights uncertainty must escalate to the-governor")
+        if rights.get("governance_status") != "REQUIRED":
+            fail(errors, "scribe-copyrighted-template-reroute: rights review must remain governance-required")
+        if "copyright" not in rights.get("request", "").lower():
+            fail(errors, "scribe-copyrighted-template-reroute: fixture must cover copyright/provenance handling")
+
+
 def main(argv=None):
     args = parse_args(argv)
     repo_root = args.repo_root.resolve()
@@ -290,6 +355,7 @@ def main(argv=None):
     else:
         validate_fixture_schema(fixtures, registered, errors)
         validate_expected_routing_rules(fixtures, errors)
+        validate_ssu_fixtures(fixtures, errors)
 
     if errors:
         for error in errors:

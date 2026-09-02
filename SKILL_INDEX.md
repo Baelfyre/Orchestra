@@ -43,7 +43,7 @@ Lightweight routing index. Load a specialist `SKILL.md` only when it will execut
 | `overseer` | QA strategy, validation evidence, release readiness | test strategy, validation plan, CI readiness, regression evidence, release validation | architecture design or destructive testing | Validation owner | test and validation evidence | Caveman,Full QA Review,Delegated Unit Evidence |
 | `dagger` | Guarded destructive-path and resilience simulation | chaos simulation, guarded negative-path validation, resilience stress path | routine QA, security policy, implementation | Guarded execution specialist | `scripts/dagger_guardrail.py` | Caveman |
 | `weaver` | Diagrams and visual models | UML, ERD, Mermaid, PlantUML, workflow visualization | code implementation or policy review | Technical artifact owner | diagram target domain only | Mermaid,PlantUML |
-| `scribe` | Documentation production and editing | README rewrite, changelog prose, docs cleanup, source-backed narrative | business alignment decisions or architecture ownership | Execution owner for docs | source material only | Mode 1,Mode 2,Mode 3 |
+| `scribe` | Documentation, domain narrative, and traceability | README/changelog/docs; `SPEC_TO_SYSTEM`; `SYSTEM_TO_DOCS`; `RECONCILE`; domain and research narrative; requirements traceability; as-built and drift review | technical architecture, persistence, formal models, security, QA, UI/UX, governance, or implementation decisions | Documentation and traceability owner | source/project evidence plus needed specialist facts | Mode 1,Mode 2,Mode 3 |
 | `ponytail` | Implementation after design is ready | scoped code edit, bug fix with known owner, minimal safe implementation | architecture, security, DB, governance, or ambiguous ownership | Execution owner | active file slice plus routed specialist guidance | IMPLEMENTATION_PLAN,CODE_REVIEW,QUICK_FIX |
 
 ## Avoid-When Notes
@@ -58,7 +58,7 @@ Lightweight routing index. Load a specialist `SKILL.md` only when it will execut
 - **chronicler**: avoid for UI or general QA
 - **overseer**: avoid for architecture ownership or destructive testing
 - **weaver**: avoid for code implementation or policy review
-- **scribe**: avoid for architecture, database, or governance decisions
+- **scribe**: avoid technical, governance, implementation, or release-approval decisions; Scribe documents verified outputs from those owners
 - **clockwork**: avoid for layout tweaks or documentation writing
 - **ponytail**: avoid for architecture, UI/UX decisions, security policy, database semantics, or governance
 
