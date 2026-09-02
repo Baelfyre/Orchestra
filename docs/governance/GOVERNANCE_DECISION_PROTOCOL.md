@@ -52,7 +52,7 @@ Specialists may add role-specific fields in their own output formats.
 | `clockwork` | None | Architecture, layering, service boundaries, refactor structure | None | None | Architecture evidence inputs only | None |
 | `chronicler` | None | Database and persistence semantics, schema, migrations, ORM behavior | None | None | Persistence evidence inputs only | None |
 | `cloak` | None | UI/UX, accessibility, responsive layout, interaction design | None | None | UX evidence inputs only | None |
-| `scribe` | None | Documentation quality only when asked | Documentation production and editing | None | Documentation evidence inputs only | None |
+| `scribe` | None | Documentation quality, domain-narrative consistency, and evidence-traceability review only | Documentation production, system reconstruction, research/capstone documentation, and documentation/system reconciliation | None | Documentation/traceability evidence inputs only; no QA conclusion ownership | None |
 | `ponytail` | None | None | Implementation only after design and governance are ready | None | Local implementation validation only | None |
 | `dagger` | None | Controlled destructive-path and resilience review | Guarded destructive simulation only | None | Guardrail evidence only | None |
 | `weaver` | None | Diagram and visual-model notation | Diagram production | None | Diagram evidence inputs only | None |
@@ -63,7 +63,8 @@ Clarifications:
 - Governor owns legal, regulatory, licensing, privacy-obligation, and IP governance.
 - Cipher owns technical security and privacy-control analysis.
 - Steward owns business alignment, scope, requirements, acceptance criteria, and required SDLC artifact sufficiency.
-- Scribe produces and edits documentation but does not decide business alignment.
+- Scribe owns documented representation, domain narrative, evidence traceability, research/capstone documentation, and documentation/system reconciliation, but does not decide business alignment, technical architecture, persistence semantics, formal models, security policy, QA conclusions, UI/UX behavior, implementation, or release authority.
+- Scribe drift labels such as `DOC_DRIFT`, `IMPLEMENTATION_DRIFT`, `MISSING_EVIDENCE`, and `UNRESOLVED` are evidence classifications only and cannot grant implementation, approval, validation, or release authority.
 - Arbiter owns continuity, source-of-truth, branch, handoff, and merge-readiness decisions.
 - Overseer owns QA strategy, test execution planning, and validation evidence.
 - Clockwork owns architecture and layering.
