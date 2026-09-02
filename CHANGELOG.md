@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.7 runtime architecture AR-2 capability core extraction candidate
+
+- Establishes `orchestra_runtime.domain.capabilities` as the inward-only owner of capability value objects, deterministic decision/enforcement semantics, and restrictive grant intersection.
+- Preserves legacy `orchestra_runtime.capabilities` symbol identity while deliberately retaining run-bound manifests, `RunIdentity` construction, application-port inheritance, filesystem policy loading, and runtime audit-event projection on the transitional legacy surface.
+- Adds direct compatibility, fail-closed evaluation/intersection, import-boundary regression coverage, detailed extraction documentation, and `README.json` machine-discovery parity.
+- Does not move correlation generation/validation, start AR-3/AR-4, alter provider/MCP behavior, retire public imports, or change release/deployment/policy authority.
+
 ## Post-v1.7 runtime architecture AR-2 governance authority extraction candidate
 
 - Establishes `orchestra_runtime.domain.governance.authority` as the inward-only owner of immutable authority entities and deterministic constraint/intersection semantics.
