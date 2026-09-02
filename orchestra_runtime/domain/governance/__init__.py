@@ -19,9 +19,18 @@ from .kernel import (
     GovernanceDecisionRecord,
     TransitionDisposition,
 )
+from .preexecution import (
+    PREEXECUTION_SCHEMA_VERSION,
+    ExecutionAction,
+    ExecutionIntent,
+    PreExecutionConstraint,
+    PreExecutionPolicy,
+    PreExecutionReason,
+)
 
 __all__ = [
     "GOVERNANCE_KERNEL_SCHEMA_VERSION",
+    "PREEXECUTION_SCHEMA_VERSION",
     "ArbiterKernelResult",
     "ArbiterReasonCode",
     "AuthorityDecision",
@@ -30,8 +39,13 @@ __all__ = [
     "AuthorityScope",
     "Constraint",
     "ConstraintKind",
+    "ExecutionAction",
+    "ExecutionIntent",
     "GovernanceDecision",
     "GovernanceDecisionRecord",
+    "PreExecutionConstraint",
+    "PreExecutionPolicy",
+    "PreExecutionReason",
     "ProvenanceSource",
     "TargetSelector",
     "TargetSelectorType",
