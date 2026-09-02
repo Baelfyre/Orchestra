@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.7 runtime architecture AR-2 execution lifecycle core extraction candidate
+
+- Establishes `orchestra_runtime.domain.execution.lifecycle` as the inward-only owner of immutable lifecycle state, signal, snapshot, terminal-result, deterministic fingerprint, initialization, and transition semantics.
+- Preserves exact legacy `orchestra_runtime.lifecycle` and top-level lifecycle symbol identity while retaining `LifecycleController(ILifecycleController)` plus runtime audit-event projection on the transitional legacy surface for later AR-3/AR-4 placement.
+- Adds direct compatibility, transition/replay, fail-closed, controller-delegation, import-boundary regression coverage, detailed extraction documentation, and `README.json` machine-discovery parity.
+- Does not alter provider/MCP behavior, runtime policy, audit-event semantics, public import compatibility, release/deployment/policy authority, or start AR-3.
+
 ## Post-v1.7 Cloak CUIR lifecycle projection reconciliation candidate
 
 - Reconciles the current `README.json` machine projection with the verified canonical CUIR-5 controlled evaluation and CUIR-6 `ADOPT_OPTIONAL` closeout.
