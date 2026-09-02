@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dataclasses import dataclass
 from pathlib import Path
 
 from .authority import AuthorityProvenance, Constraint, ProvenanceSource, _load_trusted_json
