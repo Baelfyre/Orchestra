@@ -1,6 +1,6 @@
 # Scribe Specialist Upgrade (SSU)
 
-Status: `IMPLEMENTATION_CANDIDATE`
+Status: `SSU_COMPLETE_CANONICAL_VERIFIED`
 
 Source baseline:
 
@@ -10,6 +10,13 @@ Source baseline:
 - AR-3: not started
 - Public release: v1.7.0
 - v1.8 publication: not authorized
+
+Canonical verification:
+
+- Implementation PR #731 was squash-merged to `main` at `a8ac2b3706cb779c9528c758d2aa0c3c677b5a20`.
+- The canonical tree is `85460b606932757c03b5a482302bdcecb2e237f7`, with parent `422f01dbe0df9707e27519be5ff059feb463735b`.
+- GitHub reports the canonical commit signature as verified and valid.
+- Post-merge Governance Check, validate/runtime, Required Analysis Compatibility, CodeQL, and Ubuntu/Windows/macOS checks passed on the exact canonical SHA.
 
 ## Mission
 
