@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.7 Cloak CUIR lifecycle projection reconciliation candidate
+
+- Reconciles the current `README.json` machine projection with the verified canonical CUIR-5 controlled evaluation and CUIR-6 `ADOPT_OPTIONAL` closeout.
+- Records the verified CUIR-5 commit/tree `0736517fc59f3979ec76d642bc2d8ed5c7b858b1` / `b0e5d89db6f3c9642465704ecc1ace8c3b905291` and CUIR-6 commit/tree `2f11f17742e68560d2a435bcab3f247b52d351ab` / `0f114c13d8f5f54ee5ecf1e9deb156ae6fe6e24b` while preserving phase-era candidate artifacts as historical evidence.
+- Adds regression coverage ensuring the optional closeout does not become runtime expansion, mandatory full-corpus injection, automatic host injection, or new authority.
+- Does not change Cloak runtime behavior, retrieval limits, provenance or licensing rules, AR state, release/deployment/provider/policy authority, or delete branches.
+
 ## Post-v1.7 runtime architecture AR-2 execution identity extraction candidate
 
 - Establishes `orchestra_runtime.domain.execution.identity` as the inward-only owner of immutable `RunIdentity` normalization and serialization semantics.

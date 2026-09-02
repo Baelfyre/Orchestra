@@ -206,10 +206,10 @@
       "source_copying": false,
       "asset_copying": false,
       "cuir5_started": true,
-      "authority_note": "CUIR-4 is canonical advisory progressive pattern retrieval only. CUIR-5 has been started by a separately authorized controlled evaluation candidate; CUIR-4 canonicalization itself did not transfer implementation, architecture, security, merge, release, deployment, provider-routing, production-mutation, or policy authority."
+      "authority_note": "CUIR-4 is canonical advisory progressive pattern retrieval only. CUIR-5 controlled evaluation and CUIR-6 optional-adoption closeout are now canonical; neither transferred implementation, architecture, security, merge, release, deployment, provider-routing, production-mutation, or policy authority."
     },
     "cloak_ui_reference_corpus_cuir5": {
-      "status": "CUIR_5_CONTROLLED_EVALUATION_CANDIDATE",
+      "status": "CUIR_5_CANONICAL_CONTROLLED_EVALUATION_VERIFIED",
       "purpose": "Measure the incremental contribution of bounded CUIR-4 progressive retrieval against a no-CUIR-retrieval baseline using deterministic representative fixtures without claiming end-to-end model, rendered UI, human-usability, or production effectiveness.",
       "machine_sources": ["machine/evaluation/cloak-ui-reference-cuir5-benchmark.v1.json"],
       "human_sources": ["docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR5_EVALUATION.md"],
@@ -217,8 +217,30 @@
       "validation_surface": "tests/runtime/test_cloak_ui_reference_corpus_cuir5.py",
       "runtime_integration": false,
       "provider_calls": 0,
+      "evaluation_result": "CONTROLLED_EVALUATION_PASS",
+      "recommendation": "ADOPT_OPTIONAL",
       "recommendation_ceiling": "ADOPT_OPTIONAL_FOR_CUIR6_CONSIDERATION",
-      "authority_note": "CUIR-5 is controlled evaluation evidence only. It cannot grant implementation, architecture, security, merge, release, deployment, provider routing or fallback, production mutation, policy, destructive, or installed-integration-refresh authority."
+      "canonical_commit": "0736517fc59f3979ec76d642bc2d8ed5c7b858b1",
+      "canonical_tree": "b0e5d89db6f3c9642465704ecc1ace8c3b905291",
+      "cuir6_closed": true,
+      "authority_note": "CUIR-5 is canonical controlled evaluation evidence only. It cannot grant implementation, architecture, security, merge, release, deployment, provider routing or fallback, production mutation, policy, destructive, or installed-integration-refresh authority."
+    },
+    "cloak_ui_reference_corpus_cuir6": {
+      "status": "CUIR_6_CANONICAL_ADOPT_OPTIONAL_CLOSEOUT_VERIFIED",
+      "purpose": "Close the CUIR phase family by adopting the existing bounded CUIR-4 progressive retrieval capability as supported optional Cloak behavior after canonical CUIR-5 controlled-evaluation evidence.",
+      "human_sources": ["docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR6_ADOPTION.md", "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR5_CUIR6_LIFECYCLE_RECONCILIATION.md"],
+      "canonical_input_commit": "0736517fc59f3979ec76d642bc2d8ed5c7b858b1",
+      "canonical_input_tree": "b0e5d89db6f3c9642465704ecc1ace8c3b905291",
+      "canonical_commit": "2f11f17742e68560d2a435bcab3f247b52d351ab",
+      "canonical_tree": "0f114c13d8f5f54ee5ecf1e9deb156ae6fe6e24b",
+      "adoption": "ADOPT_OPTIONAL",
+      "family_closed": true,
+      "runtime_expansion": false,
+      "mandatory_full_corpus_injection": false,
+      "automatic_host_injection": false,
+      "implementation_authority": false,
+      "release_authorized": false,
+      "authority_note": "CUIR-6 canonically closes the CUIR family with optional bounded retrieval only. Closeout does not grant implementation, architecture, security, merge, release, deployment, provider routing or fallback, production mutation, policy, destructive, installed-integration-refresh, branch-deletion, force-push, or history-rewrite authority."
     },
     "cross_specialist_coordination": {"status": "IMPLEMENTED", "human_sources": ["docs/governance/TUNER_PROTOCOL.md", "ROUTING_MAP.md"]},
     "validation_and_evidence": {"status": "IMPLEMENTED", "machine_sources": ["machine/schemas/", "machine/release-evidence/"], "human_sources": ["docs/setup/VALIDATION.md", "docs/validation/"]},
@@ -1098,6 +1120,8 @@
     "publication_closeout_v1_7_0": "docs/validation/V1_7_0_PUBLICATION_CLOSEOUT.md",
     "codex_c2_portability_r1_preexecution": "docs/benchmarking/CODEX_C2_PORTABILITY_R1_PREEXECUTION.md",
     "cloak_ui_reference_cuir5_evaluation": "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR5_EVALUATION.md",
+    "cloak_ui_reference_cuir6_adoption": "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR6_ADOPTION.md",
+    "cloak_ui_reference_cuir5_cuir6_lifecycle_reconciliation": "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR5_CUIR6_LIFECYCLE_RECONCILIATION.md",
     "runtime_architecture_ar2_domain_governance_authority": "docs/project/ORCHESTRA_AR2_DOMAIN_GOVERNANCE_AUTHORITY_EXTRACTION.md",
     "runtime_architecture_ar2_domain_capabilities_core": "docs/project/ORCHESTRA_AR2_DOMAIN_CAPABILITIES_CORE_EXTRACTION.md",
     "runtime_architecture_ar2_domain_execution_correlation": "docs/project/ORCHESTRA_AR2_DOMAIN_EXECUTION_CORRELATION_EXTRACTION.md",
@@ -1136,7 +1160,8 @@
     "cloak_ui_reference_corpus_cuir2": "CUIR_2_CANONICAL_MERGED_VERIFIED",
     "cloak_ui_reference_corpus_cuir3": "CUIR_3_CANONICAL_MERGED_VERIFIED",
     "cloak_ui_reference_corpus_cuir4": "CUIR_4_CANONICAL_MERGED_VERIFIED",
-    "cloak_ui_reference_corpus_cuir5": "CUIR_5_CONTROLLED_EVALUATION_CANDIDATE"
+    "cloak_ui_reference_corpus_cuir5": "CUIR_5_CANONICAL_CONTROLLED_EVALUATION_VERIFIED",
+    "cloak_ui_reference_corpus_cuir6": "CUIR_6_CANONICAL_ADOPT_OPTIONAL_CLOSEOUT_VERIFIED"
   },
   "ai_review_guidance": {
     "preferred_entrypoint": "README.json",
@@ -1240,6 +1265,8 @@
     "do_not_infer_cuir4_authority_from_cuir3_canonicalization": true,
     "treat_cuir4_as_canonical_bounded_progressive_pattern_intelligence": true,
     "do_not_infer_cuir5_authority_from_cuir4_canonicalization": true,
-    "treat_cuir5_controlled_evaluation_as_bounded_non_authorizing_evidence_only": true
+    "treat_cuir5_controlled_evaluation_as_bounded_non_authorizing_evidence_only": true,
+    "treat_cuir6_as_canonical_optional_closeout_not_runtime_expansion": true,
+    "do_not_infer_mandatory_cuir_injection_or_new_authority_from_cuir6_adoption": true
   }
 }

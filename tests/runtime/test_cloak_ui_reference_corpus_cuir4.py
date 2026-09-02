@@ -82,16 +82,27 @@ def test_adjacent_progressive_disclosure_guide_preserves_frozen_core_skill():
     assert index["retrieval_policy"]["default_catalog_injection"] is False
 
 
-def test_readme_machine_projection_tracks_separately_started_cuir5_without_authority_widening():
+def test_readme_machine_projection_tracks_cuir5_cuir6_canonical_closeout_without_authority_widening():
     readme = _json(ROOT / "README.json")
     cuir3 = readme["capabilities"]["cloak_ui_reference_corpus_cuir3"]
     cuir4 = readme["capabilities"]["cloak_ui_reference_corpus_cuir4"]
     cuir5 = readme["capabilities"]["cloak_ui_reference_corpus_cuir5"]
+    cuir6 = readme["capabilities"]["cloak_ui_reference_corpus_cuir6"]
     assert cuir3["cuir4_started"] is True
     assert cuir4["status"] == "CUIR_4_CANONICAL_MERGED_VERIFIED"
     assert cuir4["progressive_retrieval"] is True
     assert cuir4["cuir5_started"] is True
     assert cuir4["implementation_authority"] is False
-    assert cuir5["status"] == "CUIR_5_CONTROLLED_EVALUATION_CANDIDATE"
+    assert cuir5["status"] == "CUIR_5_CANONICAL_CONTROLLED_EVALUATION_VERIFIED"
+    assert cuir5["evaluation_result"] == "CONTROLLED_EVALUATION_PASS"
+    assert cuir5["recommendation"] == "ADOPT_OPTIONAL"
     assert cuir5["runtime_integration"] is False
-    assert "cannot grant implementation" in cuir5["authority_note"]
+    assert cuir5["cuir6_closed"] is True
+    assert cuir6["status"] == "CUIR_6_CANONICAL_ADOPT_OPTIONAL_CLOSEOUT_VERIFIED"
+    assert cuir6["adoption"] == "ADOPT_OPTIONAL"
+    assert cuir6["family_closed"] is True
+    assert cuir6["runtime_expansion"] is False
+    assert cuir6["mandatory_full_corpus_injection"] is False
+    assert cuir6["automatic_host_injection"] is False
+    assert cuir6["implementation_authority"] is False
+    assert cuir6["release_authorized"] is False
