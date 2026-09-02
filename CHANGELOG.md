@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.7 runtime architecture AR-2 execution correlation extraction candidate
+
+- Establishes `orchestra_runtime.domain.execution.correlation` as the inward-only owner of deterministic RFC 9562 UUIDv7 validation while keeping clock and entropy backed correlation generation outside the domain.
+- Preserves legacy `orchestra_runtime.correlation` validation symbol identity and deliberately retains `generate_correlation_id`, `_generate_correlation_id`, `time.time_ns`, `secrets.token_bytes`, and UUIDv7 construction on the transitional legacy surface.
+- Adds direct compatibility and import-boundary coverage, detailed extraction documentation, and `README.json` machine-discovery parity for the execution-correlation surface.
+- Does not move `RunIdentity`, lifecycle state/controllers, audit events, or execution results; start AR-3/AR-4; alter provider/MCP behavior; retire public imports; or change release/deployment/policy authority.
+
 ## Post-v1.7 runtime architecture AR-2 capability core extraction candidate
 
 - Establishes `orchestra_runtime.domain.capabilities` as the inward-only owner of capability value objects, deterministic decision/enforcement semantics, and restrictive grant intersection.

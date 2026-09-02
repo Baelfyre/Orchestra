@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import ast
 import secrets
 import time
 import uuid
@@ -7,6 +8,7 @@ from pathlib import Path
 
 import pytest
 
+import orchestra_runtime.correlation as legacy_correlation
 from orchestra_runtime import (
     AntigravityAdapter,
     ClaudeCodeAdapter,
@@ -32,6 +34,7 @@ from orchestra_runtime import (
 )
 from orchestra_runtime.capabilities import CapabilityResolver
 from orchestra_runtime.correlation import _generate_correlation_id
+from orchestra_runtime.domain.execution import correlation as domain_correlation
 from orchestra_runtime.repositories import ManifestRepository, SkillSourceRepository
 
 
@@ -185,6 +188,43 @@ def test_is_valid_correlation_id_helper() -> None:
     assert is_valid_correlation_id(str(uuid.uuid4())) is False
     assert is_valid_correlation_id(None) is False
     assert is_valid_correlation_id(123) is False
+
+
+def test_domain_correlation_exports_are_legacy_identity_compatible() -> None:
+    assert legacy_correlation.validate_correlation_id is domain_correlation.validate_correlation_id
+    assert legacy_correlation.is_valid_correlation_id is domain_correlation.is_valid_correlation_id
+    assert validate_correlation_id is domain_correlation.validate_correlation_id
+    assert is_valid_correlation_id is domain_correlation.is_valid_correlation_id
+
+
+def test_domain_correlation_validation_is_pure_and_generation_free() -> None:
+    source_path = Path(domain_correlation.__file__)
+    tree = ast.parse(source_path.read_text(encoding="utf-8"))
+    imports: set[str] = set()
+    function_names: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Import):
+            imports.update(alias.name for alias in node.names)
+        elif isinstance(node, ast.ImportFrom) and node.module:
+            imports.add(node.module)
+        elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            function_names.add(node.name)
+
+    forbidden = {
+        "secrets",
+        "time",
+        "pathlib",
+        "os",
+        "subprocess",
+        "socket",
+        "orchestra_runtime.correlation",
+        "orchestra_runtime.models",
+        "orchestra_runtime.interfaces",
+    }
+    assert not imports.intersection(forbidden)
+    assert "generate_correlation_id" not in function_names
+    assert "_generate_correlation_id" not in function_names
+    assert not any(isinstance(node, ast.Name) and node.id == "open" for node in ast.walk(tree))
 
 
 def test_run_identity_correlation_integration_no_auto_generation() -> None:
@@ -347,7 +387,9 @@ def test_adapter_correlation_preservation() -> None:
 
     class DummyRepo:
         repo_root = "."
-        def load_manifest(self) -> None: return None
+
+        def load_manifest(self) -> None:
+            return None
 
     codex = CodexAdapter(DummyRepo())  # type: ignore[arg-type]
     antigravity = AntigravityAdapter(DummyRepo())  # type: ignore[arg-type]
