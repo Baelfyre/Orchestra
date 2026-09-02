@@ -10,7 +10,10 @@ from .domain.governance.preexecution import (
     PreExecutionConstraint,
     PreExecutionPolicy,
     PreExecutionReason,
+    _action,
     _is_within,
+    _path,
+    _text,
 )
 from .evidence import receipt_digest
 from .governance_kernel import ArbiterKernelInput, ArbiterKernelResult, evaluate_arbiter
