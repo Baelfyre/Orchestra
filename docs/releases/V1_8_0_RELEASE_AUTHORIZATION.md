@@ -1,0 +1,33 @@
+# Orchestra v1.8.0 Release Authorization Record
+
+- **Authorization Date**: 2026-09-04
+- **Authorized Campaign**: `V1_8_0_GOVERNED_PUBLIC_RELEASE`
+- **Authorized Target**: `v1.8.0`
+- **Release Title**: `Orchestra v1.8.0: Governance Hardening, Runtime Refoundation & Traceability`
+- **Sealed Source Program**: `OR-GOV COMPLETE_CANONICAL_VERIFIED`
+- **Starting Canonical Baseline**:
+  - `HEAD`: `b601c2d853ad0dcdc68b8dc652578f19ef663c79`
+  - `TREE`: `ccd21e536db92c70a459ebc19cbe3a5bfbd26ec7`
+  - `PARENT`: `a6d1c8e0f457035fea5fabb75b6e713fb4350124`
+  - `SIGNATURE`: `VERIFIED_VALID`
+- **Padayon Baseline**:
+  - `HEAD`: `a6fd10a1c226a3e9309fdbb0a3a969801f9a7d4a`
+  - `TREE`: `90a98e9edf1ed947dca4e3d2b839c60ec35a97cd`
+  - `SIGNATURE`: `VERIFIED_VALID`
+- **Human Publication Authority**: `GRANTED`
+  - `V1.8.0 PREPARATION = AUTHORIZED`
+  - `V1.8.0 TAG CREATION = AUTHORIZED`
+  - `V1.8.0 GITHUB RELEASE PUBLICATION = AUTHORIZED`
+  - `V1.8.0 LATEST RELEASE PROMOTION = AUTHORIZED`
+  - `V1.8.0 POST-PUBLICATION VERIFICATION = AUTHORIZED`
+  - `V1.8.0 PADAYON RECONCILIATION = AUTHORIZED`
+- **Explicit Scope Boundaries**:
+  - `AR-3 = NOT AUTHORIZED / NOT STARTED`
+  - `AR-4 = NOT AUTHORIZED / NOT STARTED`
+  - `New OR-GOV phases = NOT AUTHORIZED`
+  - `Runtime redesign = NOT AUTHORIZED`
+  - `Provider promotion = NOT AUTHORIZED`
+  - `Policy activation = NOT AUTHORIZED`
+  - `Production mutation / deployment = NOT AUTHORIZED`
+  - `Destructive testing = NOT AUTHORIZED`
+  - `Force push / history rewrite = NOT AUTHORIZED`
