@@ -1121,6 +1121,50 @@
       "ar3_started": false,
       "release_authorized": false,
       "authority_note": "OR-GOV-7 derives and evaluates validation evidence only. It does not invent requirements, capacity targets, environments, or results; implement tests; execute migrations or destructive checks; route specialists; issue Arbiter transitions; change upstream contracts; expand Dagger; start OR-GOV-8 or AR-3; or authorize merge, release, deployment, policy, provider, or v1.8 publication."
+    },
+    "specialist_governance_refinement_or_gov_8a": {
+      "status": "OR_GOV_8A_CIPHER_TENANT_SECURITY_GOVERNANCE_IMPLEMENTED",
+      "purpose": "Formalize Cipher's deterministic tenant-security reasoning and authorization boundaries without building a second authentication framework.",
+      "machine_sources": [
+        "machine/schemas/project-architecture-governance-profile.v1.schema.json",
+        "machine/schemas/architecture-validation-contract.v1.schema.json",
+        "tests/behavior/test_cipher_tenant_security.py"
+      ],
+      "human_sources": [
+        "skills/cipher/SKILL.md",
+        "skills/cipher/TENANT_SECURITY_GOVERNANCE_GUIDE.md",
+        "skills/cipher/OUTPUT_FORMATS.md",
+        "docs/README.md"
+      ],
+      "validation_surfaces": [
+        "tests/behavior/test_cipher_tenant_security.py",
+        "tests/behavior/run_tests.py",
+        "scripts/check_readme_impact.py"
+      ],
+      "tenancy_model_source": "ProjectArchitectureGovernanceProfile",
+      "trusted_context_server_verified": true,
+      "default_deny_across_tenant_boundaries": true,
+      "single_tenant_proportionality_preserved": true,
+      "undecided_tenancy_routes_conductor": true,
+      "validation_handoff_to_overseer": true,
+      "cipher_defines_security_not_architecture_or_persistence": true,
+      "migration_risk_unknown_production_gap": "PRESERVED_SCHEMA_GAP_NO_TRI_STATE_AMENDMENT",
+      "or_gov_1_implemented": true,
+      "or_gov_2_implemented": true,
+      "or_gov_3_implemented": true,
+      "or_gov_4_implemented": true,
+      "or_gov_5_implemented": true,
+      "or_gov_6_implemented": true,
+      "or_gov_7_implemented": true,
+      "or_gov_8a_implemented": true,
+      "or_gov_8b_started": false,
+      "or_gov_8c_started": false,
+      "or_gov_8d_started": false,
+      "or_gov_9_started": false,
+      "or_gov_10_started": false,
+      "ar3_started": false,
+      "release_authorized": false,
+      "authority_note": "OR-GOV-8A formalizes Cipher tenant-security governance and authorization reasoning only. It does not implement OR-GOV-8B/8C/8D/9/10, start AR-3, expand Dagger, or authorize release, deployment, policy, provider, or v1.8 publication."
     }
   },
   "machine_scan_order": [
