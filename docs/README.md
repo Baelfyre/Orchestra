@@ -48,6 +48,7 @@ Specialist prose and progressive-disclosure knowledge remain under `../skills/*/
 - [Cipher Tenant-Security Governance Guide](../skills/cipher/TENANT_SECURITY_GOVERNANCE_GUIDE.md): evidence-bound tenant trust, authorization chains, default-deny boundaries, background execution, and specialist handoffs.
 - [Conductor Architecture Governance Intake Guide](../skills/conductor/ARCHITECTURE_GOVERNANCE_INTAKE_GUIDE.md): evidence-bound architecture classification, adaptive capacity routing, and minimum specialist route composition.
 - [Arbiter Continuity and Evidence Freshness Evaluation Guide](../skills/arbiter/CONTINUITY_EVALUATION_GUIDE.md): evidence freshness taxonomy, six-tier transition precedence, exact commit and tree lineage binding, and non-authorizing constraints.
+- [Ponytail Upstream-Contract Enforcement Guide](../skills/ponytail/UPSTREAM_CONTRACT_ENFORCEMENT_GUIDE.md): deterministic upstream-contract consumption, minimal safe diff discipline, zero-invented-facts boundaries, and specialist handoffs.
 - [Overseer Architecture Validation Contract Guide](../skills/overseer/ARCHITECTURE_VALIDATION_CONTRACT_GUIDE.md): contract-derived validation obligations, exact-bound proof states, and evidence limitations.
 - [Scribe Specialist Upgrade SSU](project/SCRIBE_SPECIALIST_UPGRADE_SSU.md): adaptive domain narrative, traceability, research/capstone documentation, and documentation/system reconciliation guidance.
 
