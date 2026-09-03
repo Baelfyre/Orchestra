@@ -1,0 +1,131 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/architecture-complexity-decision.v1.schema.json",
+  "title": "Orchestra Architecture Complexity Decision v1",
+  "description": "Requires concrete evidence and simpler-alternative analysis before adding material architecture or infrastructure complexity. Invariant: FUTURE_SCALABILITY_ALONE_IS_NOT_SUFFICIENT_JUSTIFICATION.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_name",
+    "owner",
+    "revision",
+    "requested_change",
+    "current_architecture",
+    "requirement_driver",
+    "complexity_added",
+    "justification_categories",
+    "scale_posture_after",
+    "simpler_alternatives",
+    "decision"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orchestra.architecture-complexity-decision.v1"
+    },
+    "contract_name": {
+      "const": "ArchitectureComplexityDecision"
+    },
+    "owner": {
+      "const": "clockwork"
+    },
+    "revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "requested_change": {
+      "type": "string",
+      "minLength": 1
+    },
+    "current_architecture": {
+      "type": "string",
+      "minLength": 1
+    },
+    "requirement_driver": {
+      "type": "string",
+      "minLength": 1
+    },
+    "capacity_envelope_ref": {
+      "type": "string"
+    },
+    "complexity_added": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "database",
+          "cache",
+          "queue",
+          "event_bus",
+          "service",
+          "worker",
+          "replica",
+          "container",
+          "orchestrator",
+          "search_cluster",
+          "multi_region",
+          "cloud_provider",
+          "other"
+        ]
+      }
+    },
+    "justification_categories": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "CURRENT_FUNCTIONAL_REQUIREMENT",
+          "MEASURED_PERFORMANCE_BOTTLENECK",
+          "SECURITY_REQUIREMENT",
+          "RELIABILITY_REQUIREMENT",
+          "ISOLATION_REQUIREMENT",
+          "COMPLIANCE_REQUIREMENT",
+          "CAPACITY_THRESHOLD",
+          "OPERATIONAL_REQUIREMENT",
+          "APPROVED_ARCHITECTURE_DECISION"
+        ]
+      }
+    },
+    "scale_posture_before": {
+      "enum": [
+        "SCALE_READY",
+        "SCALE_PROVISIONED"
+      ]
+    },
+    "scale_posture_after": {
+      "enum": [
+        "SCALE_READY",
+        "SCALE_PROVISIONED"
+      ]
+    },
+    "simpler_alternatives": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "decision": {
+      "enum": [
+        "ACCEPT",
+        "ACCEPT_WITH_CONSTRAINTS",
+        "DEFER",
+        "REJECT"
+      ]
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

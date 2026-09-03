@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/architecture-governance-intake.v1.schema.json",
+  "title": "Orchestra Architecture Governance Intake v1",
+  "description": "Classification and routing metadata for architecture governance intake. Routing metadata does not create or expand authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_name",
+    "owner",
+    "change_materiality",
+    "capacity_relevance",
+    "capacity_context_disposition",
+    "complexity_delta",
+    "tenancy_impact",
+    "persistence_impact",
+    "product_decision",
+    "security_impact",
+    "validation_impact"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orchestra.architecture-governance-intake.v1"
+    },
+    "contract_name": {
+      "const": "ArchitectureGovernanceIntake"
+    },
+    "owner": {
+      "const": "conductor"
+    },
+    "change_materiality": {
+      "enum": [
+        "TRIVIAL",
+        "STANDARD",
+        "ARCHITECTURAL",
+        "PRODUCTION_CRITICAL"
+      ]
+    },
+    "capacity_relevance": {
+      "enum": [
+        "NONE",
+        "KNOWN",
+        "UNKNOWN",
+        "CHANGED"
+      ]
+    },
+    "capacity_context_disposition": {
+      "enum": [
+        "NOT_REQUIRED",
+        "SUFFICIENT",
+        "PARTIAL",
+        "PROMPT_REQUIRED",
+        "MEASUREMENT_REQUIRED",
+        "BLOCKING_FOR_CLAIM"
+      ]
+    },
+    "complexity_delta": {
+      "enum": [
+        "NONE",
+        "LOW",
+        "MATERIAL"
+      ]
+    },
+    "tenancy_impact": {
+      "enum": [
+        "NONE",
+        "POSSIBLE",
+        "CONFIRMED"
+      ]
+    },
+    "persistence_impact": {
+      "enum": [
+        "NONE",
+        "DEVELOPMENT_ONLY",
+        "PRODUCTION_COMPATIBILITY",
+        "HIGH_RISK"
+      ]
+    },
+    "product_decision": {
+      "enum": [
+        "NONE",
+        "REQUESTED_SOLUTION",
+        "STRATEGIC_CHANGE"
+      ]
+    },
+    "security_impact": {
+      "enum": [
+        "NONE",
+        "POSSIBLE",
+        "MATERIAL"
+      ]
+    },
+    "validation_impact": {
+      "enum": [
+        "NORMAL",
+        "CONTRACT_DERIVED",
+        "EMPIRICAL_REQUIRED"
+      ]
+    },
+    "authority_notice": {
+      "type": "string"
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

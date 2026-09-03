@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/capacity-envelope.v1.schema.json",
+  "title": "Orchestra Capacity Envelope v1",
+  "description": "Represents known, assumed, unknown, measured, and not-applicable workload, capacity, and cost constraints without requiring fabricated precision.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_name",
+    "owner",
+    "revision"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orchestra.capacity-envelope.v1"
+    },
+    "contract_name": {
+      "const": "CapacityEnvelope"
+    },
+    "owner": {
+      "const": "the-steward"
+    },
+    "revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "product_stage": {
+      "type": "string",
+      "enum": [
+        "IDEATION_OR_PROTOTYPE",
+        "STANDARD_DEVELOPMENT",
+        "ARCHITECTURAL_OR_PRODUCTION_CRITICAL",
+        "UNKNOWN",
+        "NOT_APPLICABLE"
+      ]
+    },
+    "target_horizon": {
+      "type": "string"
+    },
+    "workload_metrics": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/capacity_value"
+      },
+      "properties": {
+        "users": {
+          "$ref": "#/$defs/capacity_value"
+        },
+        "tenants": {
+          "$ref": "#/$defs/capacity_value"
+        },
+        "concurrent_users": {
+          "$ref": "#/$defs/capacity_value"
+        },
+        "transactions_per_day": {
+          "$ref": "#/$defs/capacity_value"
+        },
+        "messages_per_day": {
+          "$ref": "#/$defs/capacity_value"
+        },
+        "documents_per_day": {
+          "$ref": "#/$defs/capacity_value"
+        },
+        "requests_per_second": {
+          "$ref": "#/$defs/capacity_value"
+        },
+        "peak_requests_per_second": {
+          "$ref": "#/$defs/capacity_value"
+        },
+        "storage_growth": {
+          "$ref": "#/$defs/capacity_value"
+        },
+        "background_workload": {
+          "$ref": "#/$defs/capacity_value"
+        },
+        "latency_expectation": {
+          "$ref": "#/$defs/capacity_value"
+        },
+        "availability_expectation": {
+          "$ref": "#/$defs/capacity_value"
+        },
+        "cost_constraint": {
+          "$ref": "#/$defs/capacity_value"
+        }
+      }
+    },
+    "known_values": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "assumed_values": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unknown_values": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "not_applicable_values": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "capacity_value": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "value_status"
+      ],
+      "properties": {
+        "value_status": {
+          "enum": [
+            "EXACT",
+            "RANGE",
+            "OBSERVED",
+            "ESTIMATED",
+            "UNKNOWN",
+            "TO_BE_MEASURED",
+            "NOT_APPLICABLE"
+          ]
+        },
+        "exact_value": {
+          "type": [
+            "number",
+            "string",
+            "null"
+          ]
+        },
+        "range_value": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "min",
+            "max"
+          ],
+          "properties": {
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            }
+          }
+        },
+        "unit": {
+          "type": "string"
+        },
+        "confidence": {
+          "enum": [
+            "HIGH",
+            "MEDIUM",
+            "LOW",
+            "UNKNOWN"
+          ]
+        },
+        "basis": {
+          "enum": [
+            "OBSERVED_METRIC",
+            "CONTRACTUAL_TARGET",
+            "USER_PROVIDED_ESTIMATE",
+            "HISTORICAL_DATA",
+            "BENCHMARK",
+            "ASSUMPTION",
+            "UNKNOWN"
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
