@@ -16,6 +16,7 @@ REQUIRED_SUPPORT = [
     "TRANSACTION_ISOLATION_LOCKING_GUIDE.md",
     "QUERY_PLAN_TENANT_ISOLATION_GUIDE.md",
     "ZERO_DOWNTIME_MIGRATION_GUIDE.md",
+    "MIGRATION_RISK_CONTRACT_GUIDE.md",
     "examples/constraints-review-example.md",
     "examples/database-documentation-example.md",
     "examples/erd-database-review-example.md",
@@ -52,6 +53,7 @@ def main() -> None:
         "TRANSACTION_ISOLATION_LOCKING_GUIDE.md",
         "QUERY_PLAN_TENANT_ISOLATION_GUIDE.md",
         "ZERO_DOWNTIME_MIGRATION_GUIDE.md",
+        "MIGRATION_RISK_CONTRACT_GUIDE.md",
     ]:
         if filename not in skill:
             raise AssertionError(f"Chronicler progressive disclosure does not reference {filename}")
@@ -101,6 +103,22 @@ def main() -> None:
         "Rollback Boundaries",
         "`PLANNED_UNEXECUTED`",
         "Never infer production authority",
+    )
+
+    contract = read(SOURCE / "MIGRATION_RISK_CONTRACT_GUIDE.md")
+    require(
+        contract,
+        "MigrationRiskContract",
+        "MIGRATION SAFETY MUST BE EVIDENCE-BOUND",
+        "MIGRATION_RISK_SCHEMA_GAP: UNKNOWN_PRODUCTION_STATE_NOT_REPRESENTABLE",
+        "ENGINE_SPECIFIC_CLAIM_BLOCKED",
+        "EXPAND_CONTRACT",
+        "BATCHED_BACKFILL",
+        "DUAL_READ_WRITE",
+        "ONLINE_DDL",
+        "rollback_boundary",
+        "human_gate_required",
+        "does not execute destructive SQL",
     )
 
     example = read(SOURCE / "examples" / "zero-downtime-schema-change-example.md")
