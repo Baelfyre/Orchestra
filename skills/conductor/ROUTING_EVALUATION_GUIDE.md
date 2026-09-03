@@ -20,3 +20,19 @@ Cover disguised multi-domain work, direct specialist bypass, Dagger without auth
 - A correct route does not authorize the routed action.
 
 Record expected and observed route, mismatch class, minimum contract correction, and regression identity. Prefer correcting an incomplete scenario or compact routing rule over expanding the orchestration model.
+
+## OR-GOV-5 Architecture Governance Intake
+
+For architecture, capacity, tenancy, persistence, product-intent, security,
+or validation-sensitive requests, load
+[ARCHITECTURE_GOVERNANCE_INTAKE_GUIDE.md](ARCHITECTURE_GOVERNANCE_INTAKE_GUIDE.md)
+and embed the canonical `ArchitectureGovernanceIntake` in the existing
+`Routing Plan` output. Classify the actual change, preserve unknown evidence,
+and compose the minimum specialist route. Do not run a universal capacity
+questionnaire or treat routing metadata as authority.
+
+The OR-GOV-5 evaluation set covers product intent before architecture,
+decision-specific capacity prompting, direct-route preservation, tenancy and
+persistence boundaries, empirical validation claims, blocked Dagger requests,
+and unresolved production presence. OR-GOV-6 dependency invalidation and
+minimal re-entry remain out of scope.

@@ -801,5 +801,740 @@
     "expected_route_id": "documentation",
     "expected_outcome": "SPECIALIST_REROUTE_REQUIRED",
     "reroute_skill": "the-governor"
+  },
+  {
+    "id": "or-gov5-vague-scale",
+    "request": "Build it so it can scale.",
+    "expected_intent": "architecture_governance_intake",
+    "expected_mode": "Governed",
+    "primary_skill": "conductor",
+    "supporting_skills": [
+      "the-steward",
+      "clockwork"
+    ],
+    "governance_status": "CONDITIONAL",
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [],
+    "expected_gate": "NONE",
+    "rationale": "Vague scale language requires only the capacity and architecture decisions that affect the current design.",
+    "architecture_governance_intake": {
+      "change_materiality": "ARCHITECTURAL",
+      "capacity_relevance": "UNKNOWN",
+      "capacity_context_disposition": "PROMPT_REQUIRED",
+        "complexity_delta": "NONE",
+      "tenancy_impact": "NONE",
+      "persistence_impact": "NONE",
+      "product_decision": "NONE",
+      "security_impact": "NONE",
+      "validation_impact": "NORMAL"
+    },
+    "expected_route": [
+      "the-steward",
+      "clockwork"
+    ],
+    "expected_notes": []
+  },
+  {
+    "id": "or-gov5-premature-redis",
+    "request": "Add Redis because we might need it later.",
+    "expected_intent": "architecture_governance_intake",
+    "expected_mode": "Governed",
+    "primary_skill": "conductor",
+    "supporting_skills": [
+      "the-steward",
+      "clockwork"
+    ],
+    "governance_status": "REQUIRED",
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [],
+    "expected_gate": "NONE",
+    "rationale": "A requested technology is not an accepted product or architecture decision, and future capacity is unspecified.",
+    "architecture_governance_intake": {
+      "change_materiality": "ARCHITECTURAL",
+      "capacity_relevance": "UNKNOWN",
+      "capacity_context_disposition": "PROMPT_REQUIRED",
+      "complexity_delta": "MATERIAL",
+      "tenancy_impact": "NONE",
+      "persistence_impact": "NONE",
+      "product_decision": "REQUESTED_SOLUTION",
+      "security_impact": "NONE",
+      "validation_impact": "NORMAL"
+    },
+    "expected_route": [
+      "the-steward",
+      "clockwork"
+    ],
+    "expected_notes": []
+  },
+  {
+    "id": "or-gov5-exact-capacity",
+    "request": "We have 20 tenants now, 200 expected in 12 months, 300 messages per tenant per day, and peak concurrency under 100.",
+    "expected_intent": "capacity_context",
+    "expected_mode": "Governed",
+    "primary_skill": "the-steward",
+    "supporting_skills": [],
+    "governance_status": "CONDITIONAL",
+    "required_context": [
+      "SKILL_INDEX.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [],
+    "expected_gate": "NONE",
+    "rationale": "Authoritative workload values are already present, so Conductor does not re-prompt for the same context.",
+    "architecture_governance_intake": {
+      "change_materiality": "STANDARD",
+      "capacity_relevance": "KNOWN",
+      "capacity_context_disposition": "SUFFICIENT",
+      "complexity_delta": "NONE",
+      "tenancy_impact": "NONE",
+      "persistence_impact": "NONE",
+      "product_decision": "NONE",
+      "security_impact": "NONE",
+      "validation_impact": "NORMAL"
+    },
+    "expected_route": [
+      "the-steward"
+    ],
+    "expected_notes": []
+  },
+  {
+    "id": "or-gov5-partial-capacity",
+    "request": "Plan for 100 to 300 tenants in year one; peak traffic is unknown.",
+    "expected_intent": "capacity_context",
+    "expected_mode": "Governed",
+    "primary_skill": "the-steward",
+    "supporting_skills": [],
+    "governance_status": "CONDITIONAL",
+    "required_context": [
+      "SKILL_INDEX.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [],
+    "expected_gate": "NONE",
+    "rationale": "The tenant range is preserved while the missing peak metric remains partial context.",
+    "architecture_governance_intake": {
+      "change_materiality": "STANDARD",
+      "capacity_relevance": "UNKNOWN",
+      "capacity_context_disposition": "PARTIAL",
+      "complexity_delta": "NONE",
+      "tenancy_impact": "NONE",
+      "persistence_impact": "NONE",
+      "product_decision": "NONE",
+      "security_impact": "NONE",
+      "validation_impact": "NORMAL"
+    },
+    "expected_route": [
+      "the-steward"
+    ],
+    "expected_notes": []
+  },
+  {
+    "id": "or-gov5-prototype-unknown-workload",
+    "request": "We do not know the workload yet. This is a prototype.",
+    "expected_intent": "capacity_context",
+    "expected_mode": "Governed",
+    "primary_skill": "the-steward",
+    "supporting_skills": [],
+    "governance_status": "CONDITIONAL",
+    "required_context": [
+      "SKILL_INDEX.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [],
+    "expected_gate": "NONE",
+    "rationale": "Prototype work can remain reversible while the workload is measured rather than guessed.",
+    "architecture_governance_intake": {
+      "change_materiality": "STANDARD",
+      "capacity_relevance": "UNKNOWN",
+      "capacity_context_disposition": "MEASUREMENT_REQUIRED",
+      "complexity_delta": "NONE",
+      "tenancy_impact": "NONE",
+      "persistence_impact": "NONE",
+      "product_decision": "NONE",
+      "security_impact": "NONE",
+      "validation_impact": "NORMAL"
+    },
+    "expected_route": [
+      "the-steward"
+    ],
+    "expected_notes": []
+  },
+  {
+    "id": "or-gov5-possible-future-organizations",
+    "request": "We are building for one client now but may support other organizations later.",
+    "expected_intent": "business_alignment_review",
+    "expected_mode": "Governed",
+    "primary_skill": "the-steward",
+    "supporting_skills": [],
+    "governance_status": "REQUIRED",
+    "required_context": [
+      "SKILL_INDEX.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [],
+    "expected_gate": "NONE",
+    "rationale": "Possible future organizational expansion is a product decision before it is an architecture mandate.",
+    "architecture_governance_intake": {
+      "change_materiality": "STANDARD",
+      "capacity_relevance": "NONE",
+      "capacity_context_disposition": "NOT_REQUIRED",
+      "complexity_delta": "NONE",
+      "tenancy_impact": "POSSIBLE",
+      "persistence_impact": "NONE",
+      "product_decision": "STRATEGIC_CHANGE",
+      "security_impact": "NONE",
+      "validation_impact": "NORMAL"
+    },
+    "expected_route": [
+      "the-steward"
+    ],
+    "expected_notes": []
+  },
+  {
+    "id": "or-gov5-single-tenant",
+    "request": "This system is contractually single-tenant for its lifetime.",
+    "expected_intent": "architecture_governance_intake",
+    "expected_mode": "Governed",
+    "primary_skill": "the-steward",
+    "supporting_skills": [],
+    "governance_status": "CONDITIONAL",
+    "required_context": [
+      "SKILL_INDEX.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [],
+    "expected_gate": "NONE",
+    "rationale": "A binding single-tenant constraint removes a multi-tenant architecture dependency.",
+    "architecture_governance_intake": {
+      "change_materiality": "STANDARD",
+      "capacity_relevance": "NONE",
+      "capacity_context_disposition": "NOT_REQUIRED",
+      "complexity_delta": "NONE",
+      "tenancy_impact": "NONE",
+      "persistence_impact": "NONE",
+      "product_decision": "NONE",
+      "security_impact": "NONE",
+      "validation_impact": "NORMAL"
+    },
+    "expected_route": [
+      "the-steward"
+    ],
+    "expected_notes": []
+  },
+  {
+    "id": "or-gov5-live-tenant-migration",
+    "request": "Add tenant_id to several million live rows while writes continue.",
+    "expected_intent": "migration_governance_intake",
+    "expected_mode": "Governed",
+    "primary_skill": "conductor",
+    "supporting_skills": [
+      "chronicler",
+      "cipher"
+    ],
+    "governance_status": "REQUIRED",
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md",
+      "docs/governance/GOVERNANCE_LAYER.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail"
+    ],
+    "expected_gate": "NONE",
+    "rationale": "Live tenant data and persistence compatibility require Chronicler, with Cipher involved for tenant-isolation implications.",
+    "architecture_governance_intake": {
+      "change_materiality": "PRODUCTION_CRITICAL",
+      "capacity_relevance": "UNKNOWN",
+      "capacity_context_disposition": "MEASUREMENT_REQUIRED",
+      "complexity_delta": "NONE",
+      "tenancy_impact": "CONFIRMED",
+      "persistence_impact": "HIGH_RISK",
+      "product_decision": "NONE",
+      "security_impact": "POSSIBLE",
+      "validation_impact": "CONTRACT_DERIVED"
+    },
+    "expected_route": [
+      "chronicler",
+      "cipher"
+    ],
+    "expected_notes": [
+      "PRODUCTION_PRESENCE_RELEVANT"
+    ]
+  },
+  {
+    "id": "or-gov5-development-nullable-column",
+    "request": "Add an optional nullable column to an empty local development database.",
+    "expected_intent": "persistence_change",
+    "expected_mode": "Implementation",
+    "primary_skill": "chronicler",
+    "supporting_skills": [],
+    "governance_status": "CONDITIONAL",
+    "required_context": [
+      "SKILL_INDEX.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail"
+    ],
+    "expected_gate": "NONE",
+    "rationale": "An empty local development change is persistence work without production compatibility ceremony.",
+    "architecture_governance_intake": {
+      "change_materiality": "STANDARD",
+      "capacity_relevance": "NONE",
+      "capacity_context_disposition": "NOT_REQUIRED",
+      "complexity_delta": "NONE",
+      "tenancy_impact": "NONE",
+      "persistence_impact": "DEVELOPMENT_ONLY",
+      "product_decision": "NONE",
+      "security_impact": "NONE",
+      "validation_impact": "NORMAL"
+    },
+    "expected_route": [
+      "chronicler"
+    ],
+    "expected_notes": []
+  },
+  {
+    "id": "or-gov5-requested-feature",
+    "request": "Customer wants feature X.",
+    "expected_intent": "business_alignment_review",
+    "expected_mode": "Governed",
+    "primary_skill": "the-steward",
+    "supporting_skills": [],
+    "governance_status": "REQUIRED",
+    "required_context": [
+      "SKILL_INDEX.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [],
+    "expected_gate": "NONE",
+    "rationale": "The requested feature is not an implementation approval until the underlying problem and intent are aligned.",
+    "architecture_governance_intake": {
+      "change_materiality": "STANDARD",
+      "capacity_relevance": "NONE",
+      "capacity_context_disposition": "NOT_REQUIRED",
+      "complexity_delta": "NONE",
+      "tenancy_impact": "NONE",
+      "persistence_impact": "NONE",
+      "product_decision": "REQUESTED_SOLUTION",
+      "security_impact": "NONE",
+      "validation_impact": "NORMAL"
+    },
+    "expected_route": [
+      "the-steward"
+    ],
+    "expected_notes": []
+  },
+  {
+    "id": "or-gov5-trivial-ui-copy",
+    "request": "Change 'Save' to 'Update'.",
+    "expected_intent": "ui_copy_change",
+    "expected_mode": "Implementation",
+    "primary_skill": "cloak",
+    "supporting_skills": [],
+    "governance_status": "NOT_REQUIRED",
+    "required_context": [
+      "SKILL_INDEX.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "conductor",
+      "the-steward",
+      "clockwork",
+      "chronicler",
+      "cipher",
+      "overseer"
+    ],
+    "expected_gate": "NONE",
+    "rationale": "A small isolated UI copy change preserves direct routing and does not need architecture governance.",
+    "architecture_governance_intake": {
+      "change_materiality": "TRIVIAL",
+      "capacity_relevance": "NONE",
+      "capacity_context_disposition": "NOT_REQUIRED",
+      "complexity_delta": "NONE",
+      "tenancy_impact": "NONE",
+      "persistence_impact": "NONE",
+      "product_decision": "NONE",
+      "security_impact": "NONE",
+      "validation_impact": "NORMAL"
+    },
+    "expected_route": [
+      "cloak"
+    ],
+    "expected_notes": []
+  },
+  {
+    "id": "or-gov5-capacity-changed",
+    "request": "Previous capacity was 50 tenants and the current accepted capacity is 5000.",
+    "expected_intent": "architecture_governance_intake",
+    "expected_mode": "Governed",
+    "primary_skill": "conductor",
+    "supporting_skills": [
+      "the-steward",
+      "clockwork"
+    ],
+    "governance_status": "REQUIRED",
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [],
+    "expected_gate": "NONE",
+    "rationale": "A changed capacity assumption routes the affected decisions without implementing dependency invalidation.",
+    "architecture_governance_intake": {
+      "change_materiality": "ARCHITECTURAL",
+      "capacity_relevance": "CHANGED",
+      "capacity_context_disposition": "PARTIAL",
+      "complexity_delta": "NONE",
+      "tenancy_impact": "NONE",
+      "persistence_impact": "NONE",
+      "product_decision": "NONE",
+      "security_impact": "NONE",
+      "validation_impact": "CONTRACT_DERIVED"
+    },
+    "expected_route": [
+      "the-steward",
+      "clockwork"
+    ],
+    "expected_notes": [
+      "OR_GOV_6_INVALIDATION_DEFERRED"
+    ]
+  },
+  {
+    "id": "or-gov5-unsupported-capacity-claim",
+    "request": "This architecture supports 300 RPS.",
+    "expected_intent": "capacity_validation_claim",
+    "expected_mode": "Governed",
+    "primary_skill": "conductor",
+    "supporting_skills": [
+      "overseer"
+    ],
+    "governance_status": "REQUIRED",
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [],
+    "expected_gate": "NONE",
+    "rationale": "A quantified capacity claim without benchmark evidence needs empirical validation and remains unproven.",
+    "architecture_governance_intake": {
+      "change_materiality": "ARCHITECTURAL",
+      "capacity_relevance": "UNKNOWN",
+      "capacity_context_disposition": "BLOCKING_FOR_CLAIM",
+      "complexity_delta": "NONE",
+      "tenancy_impact": "NONE",
+      "persistence_impact": "NONE",
+      "product_decision": "NONE",
+      "security_impact": "NONE",
+      "validation_impact": "EMPIRICAL_REQUIRED"
+    },
+    "expected_route": [
+      "overseer"
+    ],
+    "expected_notes": [
+      "NOT_PROVEN"
+    ],
+    "expected_outcome": "NOT_PROVEN"
+  },
+  {
+    "id": "or-gov5-existing-architecture-sufficient",
+    "request": "Current requirements and capacity are satisfied by the existing architecture.",
+    "expected_intent": "architecture_review",
+    "expected_mode": "Audit",
+    "primary_skill": "clockwork",
+    "supporting_skills": [],
+    "governance_status": "NOT_REQUIRED",
+    "required_context": [
+      "SKILL_INDEX.md"
+    ],
+    "forbidden_context": [
+      "ROUTING_MAP.md",
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "conductor",
+      "the-steward",
+      "chronicler",
+      "cipher",
+      "overseer"
+    ],
+    "expected_gate": "NONE",
+    "rationale": "No material architecture change is proposed, so no additional complexity route is needed.",
+    "architecture_governance_intake": {
+      "change_materiality": "STANDARD",
+      "capacity_relevance": "KNOWN",
+      "capacity_context_disposition": "SUFFICIENT",
+      "complexity_delta": "NONE",
+      "tenancy_impact": "NONE",
+      "persistence_impact": "NONE",
+      "product_decision": "NONE",
+      "security_impact": "NONE",
+      "validation_impact": "NORMAL"
+    },
+    "expected_route": [
+      "clockwork"
+    ],
+    "expected_notes": []
+  },
+  {
+    "id": "or-gov5-unauthorized-dagger",
+    "request": "Run destructive failure simulation now; authorization has not yet been granted.",
+    "expected_intent": "destructive_failure_simulation",
+    "expected_mode": "Destructive",
+    "primary_skill": "conductor",
+    "supporting_skills": [
+      "dagger"
+    ],
+    "governance_status": "BLOCKED_PENDING_AUTHORIZATION",
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [],
+    "forbidden_skills": [],
+    "expected_gate": "BLOCKED_PENDING_AUTHORIZATION",
+    "rationale": "Dagger remains blocked until its separate destructive-test authority is granted.",
+    "architecture_governance_intake": {
+      "change_materiality": "PRODUCTION_CRITICAL",
+      "capacity_relevance": "NONE",
+      "capacity_context_disposition": "NOT_REQUIRED",
+      "complexity_delta": "NONE",
+      "tenancy_impact": "NONE",
+      "persistence_impact": "NONE",
+      "product_decision": "NONE",
+      "security_impact": "NONE",
+      "validation_impact": "NORMAL"
+    },
+    "expected_route": [
+      "dagger"
+    ],
+    "expected_notes": [
+      "DAGGER_AUTHORITY_NOT_GRANTED"
+    ],
+    "expected_outcome": "BLOCKED_PENDING_AUTHORIZATION"
+  },
+  {
+    "id": "or-gov5-unknown-production-presence",
+    "request": "We need a schema change but production presence is unknown.",
+    "expected_intent": "migration_governance_intake",
+    "expected_mode": "Governed",
+    "primary_skill": "conductor",
+    "supporting_skills": [
+      "chronicler"
+    ],
+    "governance_status": "REQUIRED",
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md",
+      "docs/governance/GOVERNANCE_LAYER.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail"
+    ],
+    "expected_gate": "NONE",
+    "rationale": "Unknown production presence must remain unresolved and route to Chronicler without coercion to false.",
+    "architecture_governance_intake": {
+      "change_materiality": "PRODUCTION_CRITICAL",
+      "capacity_relevance": "NONE",
+      "capacity_context_disposition": "NOT_REQUIRED",
+      "complexity_delta": "NONE",
+      "tenancy_impact": "NONE",
+      "persistence_impact": "PRODUCTION_COMPATIBILITY",
+      "product_decision": "NONE",
+      "security_impact": "NONE",
+      "validation_impact": "CONTRACT_DERIVED"
+    },
+    "expected_route": [
+      "chronicler"
+    ],
+    "expected_notes": [
+      "PRODUCTION_PRESENCE_UNRESOLVED",
+      "CHRONICLER_PRECONTRACT_SCHEMA_GAP_APPLIES"
+    ],
+    "expected_outcome": "MIGRATION_RISK_SCHEMA_GAP"
+  },
+  {
+    "id": "or-gov5-compound-redis-future-growth",
+    "request": "Client wants Redis because the app should handle future growth.",
+    "expected_intent": "architecture_governance_intake",
+    "expected_mode": "Governed",
+    "primary_skill": "conductor",
+    "supporting_skills": [
+      "the-steward",
+      "clockwork"
+    ],
+    "governance_status": "REQUIRED",
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [],
+    "expected_gate": "NONE",
+    "rationale": "Requested infrastructure and future growth require intent alignment before architecture composition.",
+    "architecture_governance_intake": {
+      "change_materiality": "ARCHITECTURAL",
+      "capacity_relevance": "UNKNOWN",
+      "capacity_context_disposition": "PROMPT_REQUIRED",
+      "complexity_delta": "MATERIAL",
+      "tenancy_impact": "NONE",
+      "persistence_impact": "NONE",
+      "product_decision": "REQUESTED_SOLUTION",
+      "security_impact": "NONE",
+      "validation_impact": "NORMAL"
+    },
+    "expected_route": [
+      "the-steward",
+      "clockwork"
+    ],
+    "expected_notes": []
+  },
+  {
+    "id": "or-gov5-compound-live-tenant-model",
+    "request": "Move live tenant records to a new tenant-aware model while old and new app versions coexist.",
+    "expected_intent": "migration_governance_intake",
+    "expected_mode": "Governed",
+    "primary_skill": "conductor",
+    "supporting_skills": [
+      "clockwork",
+      "chronicler",
+      "cipher"
+    ],
+    "governance_status": "REQUIRED",
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md",
+      "docs/governance/GOVERNANCE_LAYER.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [
+      "ponytail"
+    ],
+    "expected_gate": "NONE",
+    "rationale": "A live tenant model transition composes architecture, persistence, and isolation review without allowing Conductor to decide their content.",
+    "architecture_governance_intake": {
+      "change_materiality": "PRODUCTION_CRITICAL",
+      "capacity_relevance": "UNKNOWN",
+      "capacity_context_disposition": "MEASUREMENT_REQUIRED",
+      "complexity_delta": "MATERIAL",
+      "tenancy_impact": "CONFIRMED",
+      "persistence_impact": "HIGH_RISK",
+      "product_decision": "NONE",
+      "security_impact": "MATERIAL",
+      "validation_impact": "CONTRACT_DERIVED"
+    },
+    "expected_route": [
+      "clockwork",
+      "chronicler",
+      "cipher"
+    ],
+    "expected_notes": []
+  },
+  {
+    "id": "or-gov5-compound-prove-500-rps",
+    "request": "Prove our current deployment can sustain 500 RPS.",
+    "expected_intent": "capacity_validation_claim",
+    "expected_mode": "Governed",
+    "primary_skill": "conductor",
+    "supporting_skills": [
+      "overseer"
+    ],
+    "governance_status": "REQUIRED",
+    "required_context": [
+      "SKILL_INDEX.md",
+      "ROUTING_MAP.md",
+      "docs/routing/EXECUTION_MODES_POLICY.md"
+    ],
+    "forbidden_context": [
+      "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+    ],
+    "forbidden_skills": [],
+    "expected_gate": "NONE",
+    "rationale": "A proof request belongs to Overseer and cannot be satisfied by routing metadata alone.",
+    "architecture_governance_intake": {
+      "change_materiality": "STANDARD",
+      "capacity_relevance": "UNKNOWN",
+      "capacity_context_disposition": "BLOCKING_FOR_CLAIM",
+      "complexity_delta": "NONE",
+      "tenancy_impact": "NONE",
+      "persistence_impact": "NONE",
+      "product_decision": "NONE",
+      "security_impact": "NONE",
+      "validation_impact": "EMPIRICAL_REQUIRED"
+    },
+    "expected_route": [
+      "overseer"
+    ],
+    "expected_notes": [
+      "NOT_PROVEN"
+    ],
+    "expected_outcome": "NOT_PROVEN"
   }
 ]
