@@ -10,22 +10,22 @@
   "baseline_sha": "48af26607ae1f589971c2f79460329dd859438a0",
   "program_phases": {
     "or_gov_1": {
-      "phase_name": "Capacity & Product Intent Contracts",
-      "specialist": "the-steward",
+      "phase_name": "Shared Machine Contracts and Schemas",
+      "specialist": "shared / cross-specialist",
       "status": "COMPLETE_CANONICAL_VERIFIED",
-      "contract": "CapacityEnvelope, ProductIntentContract"
+      "contract": "Canonical machine schemas and governance profiles"
     },
     "or_gov_2": {
-      "phase_name": "Architecture Complexity Decisions & Boundaries",
+      "phase_name": "Product Intent and Capacity Envelope Governance",
+      "specialist": "the-steward",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
+      "contract": "ProductIntentContract, CapacityEnvelope"
+    },
+    "or_gov_3": {
+      "phase_name": "Architecture Complexity Decisions and Scale Posture",
       "specialist": "clockwork",
       "status": "COMPLETE_CANONICAL_VERIFIED",
       "contract": "ArchitectureComplexityDecision"
-    },
-    "or_gov_3": {
-      "phase_name": "SSU Traceability & Documentation Foundation",
-      "specialist": "scribe",
-      "status": "COMPLETE_CANONICAL_VERIFIED",
-      "contract": "SSU Foundation"
     },
     "or_gov_4": {
       "phase_name": "Migration Risk Contract Governance",
@@ -88,6 +88,14 @@
       "disposition": "OR_GOV_SYSTEM_INTEGRATED_AND_VERIFIED"
     }
   },
+  "separate_initiatives": {
+    "scribe_ssu": {
+      "initiative_name": "Scribe Specialist Upgrade (SSU)",
+      "specialist": "scribe",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
+      "relationship": "Separate completed initiative, not OR-GOV-3"
+    }
+  },
   "e2e_scenarios_verified": [
     "SCENARIO_A_SIMPLE_TRIVIAL_CHANGE_MINIMAL_ROUTING",
     "SCENARIO_B_PREMATURE_SCALING_REQUEST_STEWARD_CLOCKWORK_EVALUATION",
@@ -103,10 +111,10 @@
   "contract_inventory_verified": {
     "CapacityEnvelope": "machine/schemas/capacity-envelope.v1.schema.json",
     "ProductIntentContract": "machine/schemas/product-intent-contract.v1.schema.json",
-    "ArchitectureComplexityDecision": "skills/clockwork/ARCHITECTURE_COMPLEXITY_AND_SCALE_POSTURE_GUIDE.md",
+    "ArchitectureComplexityDecision": "machine/schemas/architecture-complexity-decision.v1.schema.json",
     "MigrationRiskContract": "machine/schemas/migration-risk-contract.v1.schema.json",
-    "ArchitectureGovernanceIntake": "skills/conductor/ARCHITECTURE_GOVERNANCE_INTAKE_GUIDE.md",
-    "ArchitectureValidationContract": "skills/overseer/ARCHITECTURE_VALIDATION_CONTRACT_GUIDE.md",
+    "ArchitectureGovernanceIntake": "machine/schemas/architecture-governance-intake.v1.schema.json",
+    "ArchitectureValidationContract": "machine/schemas/architecture-validation-contract.v1.schema.json",
     "ProjectArchitectureGovernanceProfile": "machine/schemas/project-architecture-governance-profile.v1.schema.json"
   },
   "non_authorizing_constraints": {
