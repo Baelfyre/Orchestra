@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.7 OR-GOV-5 Conductor architecture governance intake candidate
+
+- Extends Conductor with the canonical `ArchitectureGovernanceIntake` classification surface for change materiality, capacity relevance and disposition, complexity, tenancy, persistence, product intent, security, and validation impact.
+- Adds adaptive capacity routing that asks only for decision-changing context, preserves exact values and ranges, and keeps unknown or changed assumptions explicit without a universal questionnaire or fabricated performance claims.
+- Formalizes minimum specialist route composition, including product intent before architecture, capacity measurement before architecture, architecture or persistence or security review before implementation, and Overseer evidence before readiness claims.
+- Preserves specialist authority: Conductor classifies, routes, and sequences; Steward owns business intent and capacity; Clockwork owns architecture; Chronicler owns persistence; Cipher owns security; Overseer owns validation evidence; Ponytail implements; Dagger remains blocked without authorization.
+- Preserves the OR-GOV-4 `MigrationRiskContract` unknown-production schema gap without a tri-state amendment, and does not implement OR-GOV-6 invalidation or minimal re-entry, AR-3, release, deployment, provider, or policy changes.
+- Updates routing metadata, human and Codex guidance parity, README discovery, and deterministic intake fixtures and tests. Public release remains v1.7.0 and v1.8 publication is not authorized.
+
 ## Post-v1.7 OR-GOV-4 Chronicler migration risk contract candidate
 
 - Formalizes Chronicler's existing migration, locking, dialect, transaction, backfill, and zero-downtime knowledge as deterministic `MigrationRiskContract` guidance.
