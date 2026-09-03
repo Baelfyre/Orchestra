@@ -7,6 +7,7 @@ PACKS = {
     "the-steward": [
         "REQUIREMENTS_TRACEABILITY_ACCEPTANCE_GUIDE.md",
         "SCOPE_CHANGE_CONTROL_SDLC_GUIDE.md",
+        "PRODUCT_INTENT_AND_CAPACITY_ENVELOPE_GUIDE.md",
         "examples/governed-change-review-example.md",
     ],
     "the-governor": [
@@ -47,6 +48,7 @@ def main() -> None:
         steward_skill,
         "REQUIREMENTS_TRACEABILITY_ACCEPTANCE_GUIDE.md",
         "SCOPE_CHANGE_CONTROL_SDLC_GUIDE.md",
+        "PRODUCT_INTENT_AND_CAPACITY_ENVELOPE_GUIDE.md",
         "examples/governed-change-review-example.md",
     )
 
@@ -55,6 +57,15 @@ def main() -> None:
 
     change_control = read(ROOT / "skills" / "the-steward" / "SCOPE_CHANGE_CONTROL_SDLC_GUIDE.md")
     require(change_control, "IN_SCOPE_CORRECTION", "SCOPE_CHANGE", "POLICY_CHANGE", "A tracker entry is evidence of state, not authority")
+
+    capacity_guide = read(ROOT / "skills" / "the-steward" / "PRODUCT_INTENT_AND_CAPACITY_ENVELOPE_GUIDE.md")
+    require(
+        capacity_guide,
+        "Problem vs. Requested Solution Decoupling",
+        "UNKNOWN IS VALID",
+        "To size this without overengineering it",
+        "Downstream Handoff to Clockwork",
+    )
 
     governor_skill = read(ROOT / "skills" / "the-governor" / "SKILL.md")
     require(

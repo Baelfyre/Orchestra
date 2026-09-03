@@ -177,7 +177,7 @@ foreach ($item in $filesToScan) {
 
     # G. Stale Routing Reference Guard
     # Ignore allowed legacy alias files/tests
-    $isAllowedAlias = $item.Relative -replace '\\','/' -match 'aliases\.json|commands/|tests/|plugin\.json|\.codex-plugin/plugin\.json|scripts/refresh-installed-integrations\.ps1|README\.md|ROUTING_MAP\.md|docs/project/|DECISION_LOG\.md|SESSION_HANDOFF\.md|skills/conductor/SKILL\.md|examples/plugin-manifest\.example\.json'
+    $isAllowedAlias = $item.Relative -replace '\\','/' -match 'aliases\.json|commands/|tests/|plugin\.json|\.codex-plugin/plugin\.json|scripts/refresh-installed-integrations\.ps1|README\.md|ROUTING_MAP\.md|docs/project/|DECISION_LOG\.md|SESSION_HANDOFF\.md|skills/conductor/SKILL\.md|examples/plugin-manifest\.example\.json|machine/routing/routes\.v1\.json'
     if (-not $isAllowedAlias) {
         $legacyNames = @(
             'amalgam-conductor', 'cloak-meister', 'scribe-meister', 'clockwork-meister',

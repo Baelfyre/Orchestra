@@ -3,8 +3,6 @@
 ## Governance Review
 
 ### Compact
-Use this default compact format for general governance reviews.
-
 ```text
 REVIEWER: the-steward
 PROJECT_CONTEXT: [project type] | [risk level]
@@ -15,13 +13,11 @@ REQUIRED_ACTIONS: [actions needed or "none"]
 ```
 
 ### Expanded
-Use this expanded format when significant findings or risks exist.
-
 ```text
 REVIEWER: the-steward
 PROJECT_CONTEXT: [project type] | [risk level]
 DECISION: [APPROVED | ADVISORY_ONLY | REVISION_REQUIRED | BLOCKED | NOT_APPLICABLE]
-SUMMARY: [one-line assessment]
+SUMMARY: [assessment]
 ALIGNMENT: [status]
 SCOPE: [within scope | scope drift risk | out of scope]
 REQUIREMENTS: [covered | partial | missing]
@@ -35,18 +31,51 @@ TIMESTAMP: [ISO 8601]
 ```
 
 ## Delegated Governance Review
-
-Use this format when evaluating or emitting a decision for a delegated phase unit.
-
 ```text
 REVIEWER: the-steward
 ENVELOPE_ID: [envelope_id]
 PHASE_ID: [phase_id]
 UNIT_ID: [unit_id]
-DECISION: [APPROVED | ADVISORY_ONLY | REVISION_REQUIRED | BLOCKED | NOT_APPLICABLE]
+DECISION: [decision]
 HUMAN_REVIEW_REQUIRED: [false | true]
 REASON_CODE: [code]
 CONSTRAINTS: [list or "none"]
 REQUIRED_ACTIONS: [actions or "none"]
 EVIDENCE_REFERENCES: [list or "none"]
+```
+
+## Product Intent Contract
+```text
+CONTRACT: ProductIntentContract
+OWNER: the-steward
+REVISION: [revision]
+PROBLEM: [verified problem friction]
+EVIDENCE: [tickets/quotes/telemetry]
+USERS: [personas/roles]
+WORKAROUND: [current handling]
+REQUESTED: [proposed solution]
+ALIGNMENT: [strategic alignment]
+ALTERNATIVES_REQUIRED: [true | false]
+OVERLAP: [overlap or "none"]
+OBSOLESCENCE: [assessment]
+MAINTENANCE: [assessment]
+DECISION: [decision enum]
+RATIONALE: [justification]
+CRITERIA: [acceptance criteria]
+REFS: [evidence references]
+```
+
+## Capacity Envelope
+```text
+CONTRACT: CapacityEnvelope
+OWNER: the-steward
+REVISION: [revision]
+STAGE: [stage enum]
+HORIZON: [target horizon]
+METRICS: [metric: status, value, basis, confidence]
+KNOWN: [known metrics]
+ASSUMED: [assumed metrics]
+UNKNOWN: [unknown metrics]
+DISPOSITION: [disposition enum]
+REFS: [evidence references]
 ```

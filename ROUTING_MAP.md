@@ -23,7 +23,7 @@ Do not load it for obvious single-owner work.
 
 | Task Type | Target Skill | Condition |
 | --- | --- | --- |
-| Business alignment, scope, requirements, acceptance criteria, SDLC sufficiency | `the-steward` | Governance alignment owner is clear |
+| Business alignment, scope, requirements, product intent, capacity envelope, acceptance criteria, SDLC sufficiency | `the-steward` | Governance alignment owner is clear |
 | Legal, regulatory, privacy-obligation, IP, licensing governance | `the-governor` | Governance compliance owner is clear |
 | Continuity, handoff, merge readiness, branch drift, source-of-truth conflict | `arbiter` | Continuation state is uncertain |
 | Architecture, layering, service boundaries, refactor structure | `clockwork` | Technical architecture owner is clear |

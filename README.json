@@ -895,12 +895,33 @@
       "validation_surface": "tests/runtime/test_or_gov_contracts.py",
       "or_gov_1_implemented": true,
       "adaptive_routing_implemented": false,
-      "steward_refinement_implemented": false,
+      "steward_refinement_implemented": true,
       "clockwork_refinement_implemented": false,
       "migration_governance_implemented": false,
       "ar3_started": false,
       "release_authorized": false,
       "authority_note": "OR-GOV-1 establishes contract and schema foundations only. It does not implement adaptive specialist behavior, grant architecture authority, start AR-3, or authorize release."
+    },
+    "specialist_governance_refinement_or_gov_2": {
+      "status": "OR_GOV_2_STEWARD_INTENT_AND_CAPACITY_IMPLEMENTED",
+      "purpose": "Upgrade The Steward with product intent governance, capacity envelope reasoning, adaptive elicitation, and project-stage awareness.",
+      "machine_sources": [
+        "skills/the-steward/SKILL.md",
+        "skills/the-steward/OUTPUT_FORMATS.md",
+        "skills/the-steward/PRODUCT_INTENT_AND_CAPACITY_ENVELOPE_GUIDE.md",
+        "machine/schemas/product-intent-contract.v1.schema.json",
+        "machine/schemas/capacity-envelope.v1.schema.json"
+      ],
+      "validation_surface": "tests/behavior/test_steward_product_intent_and_capacity.py",
+      "or_gov_1_implemented": true,
+      "or_gov_2_implemented": true,
+      "adaptive_routing_implemented": true,
+      "steward_refinement_implemented": true,
+      "clockwork_refinement_implemented": false,
+      "migration_governance_implemented": false,
+      "ar3_started": false,
+      "release_authorized": false,
+      "authority_note": "OR-GOV-2 upgrades The Steward requirements and business alignment governance only. It does not implement Clockwork complexity engine (OR-GOV-3), start AR-3, or authorize release."
     }
   },
   "machine_scan_order": [
