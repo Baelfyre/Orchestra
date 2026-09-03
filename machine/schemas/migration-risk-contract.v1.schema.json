@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/migration-risk-contract.v1.schema.json",
+  "title": "Orchestra Migration Risk Contract v1",
+  "description": "Exposes database migration risk, locking, backfill, compatibility, index strategy, rollback boundaries, and live-traffic operational constraints across engines.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_name",
+    "owner",
+    "revision",
+    "database_engine",
+    "schema_revision",
+    "production_data",
+    "locking_implications",
+    "compatibility_required",
+    "backfill_required",
+    "migration_pattern",
+    "risk",
+    "human_gate_required"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orchestra.migration-risk-contract.v1"
+    },
+    "contract_name": {
+      "const": "MigrationRiskContract"
+    },
+    "owner": {
+      "const": "chronicler"
+    },
+    "revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "database_engine": {
+      "type": "string",
+      "minLength": 1
+    },
+    "database_version": {
+      "type": "string"
+    },
+    "schema_revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "migration_tool": {
+      "type": "string"
+    },
+    "production_data": {
+      "type": "boolean"
+    },
+    "affected_records": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "read_traffic": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "write_traffic": {
+      "type": [
+        "number",
+        "string"
+      ]
+    },
+    "locking_implications": {
+      "type": "string",
+      "minLength": 1
+    },
+    "compatibility_required": {
+      "type": "boolean"
+    },
+    "backfill_required": {
+      "type": "boolean"
+    },
+    "index_operation": {
+      "type": "string"
+    },
+    "migration_pattern": {
+      "enum": [
+        "DIRECT",
+        "EXPAND_CONTRACT",
+        "BATCHED_BACKFILL",
+        "DUAL_READ_WRITE",
+        "ONLINE_DDL",
+        "ENGINE_SPECIFIC",
+        "OTHER"
+      ]
+    },
+    "deployment_sequence": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rollback_boundary": {
+      "type": "string"
+    },
+    "failure_recovery": {
+      "type": "string"
+    },
+    "observability": {
+      "type": "string"
+    },
+    "completion_criteria": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "risk": {
+      "enum": [
+        "LOW",
+        "MEDIUM",
+        "HIGH",
+        "CRITICAL",
+        "UNKNOWN"
+      ]
+    },
+    "human_gate_required": {
+      "type": "boolean"
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

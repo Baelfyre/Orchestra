@@ -879,6 +879,28 @@
       "live_execution_authorized": false,
       "next_gate": "B_PHASE_COMPLETE_NO_FURTHER_BENCHMARK_PROMOTION",
       "authority_note": "C2R1 completed its governed primary execution with 29 accepted runs and one preserved provider-outage invalid observation. A separately authorized supplemental recovery passed but does not replace the primary invalid run. The result remains calibration evidence only and grants no C3, A5 promotion, A6, B4, deployment, or policy authority."
+    },
+    "specialist_governance_refinement_or_gov_1": {
+      "status": "OR_GOV_1_SHARED_MACHINE_CONTRACT_FOUNDATION",
+      "purpose": "Establish seven shared machine-readable governance contract schemas for capacity envelope, product intent, architecture complexity, migration risk, governance intake, validation, and project profiles.",
+      "machine_sources": [
+        "machine/schemas/capacity-envelope.v1.schema.json",
+        "machine/schemas/product-intent-contract.v1.schema.json",
+        "machine/schemas/architecture-complexity-decision.v1.schema.json",
+        "machine/schemas/migration-risk-contract.v1.schema.json",
+        "machine/schemas/architecture-governance-intake.v1.schema.json",
+        "machine/schemas/architecture-validation-contract.v1.schema.json",
+        "machine/schemas/project-architecture-governance-profile.v1.schema.json"
+      ],
+      "validation_surface": "tests/runtime/test_or_gov_contracts.py",
+      "or_gov_1_implemented": true,
+      "adaptive_routing_implemented": false,
+      "steward_refinement_implemented": false,
+      "clockwork_refinement_implemented": false,
+      "migration_governance_implemented": false,
+      "ar3_started": false,
+      "release_authorized": false,
+      "authority_note": "OR-GOV-1 establishes contract and schema foundations only. It does not implement adaptive specialist behavior, grant architecture authority, start AR-3, or authorize release."
     }
   },
   "machine_scan_order": [
@@ -1012,7 +1034,14 @@
     "uix9b_live_metric_evaluator_v2": "machine/ui/uix9b-live-metric-evaluator.v2.json",
     "uix9b_live_call_authorization_v2": "machine/ui/uix9b-live-call-authorization-request.v2.json",
     "comparative_benchmark_codex_c2_portability_r1": "machine/benchmarking/codex-c2-portability-r1-preexecution.v1.json",
-    "comparative_benchmark_codex_c2_portability_r1_live_authorization": "machine/benchmarking/codex-c2-portability-r1-live-execution-authorization.v1.json"
+    "comparative_benchmark_codex_c2_portability_r1_live_authorization": "machine/benchmarking/codex-c2-portability-r1-live-execution-authorization.v1.json",
+    "capacity_envelope_schema": "machine/schemas/capacity-envelope.v1.schema.json",
+    "product_intent_contract_schema": "machine/schemas/product-intent-contract.v1.schema.json",
+    "architecture_complexity_decision_schema": "machine/schemas/architecture-complexity-decision.v1.schema.json",
+    "migration_risk_contract_schema": "machine/schemas/migration-risk-contract.v1.schema.json",
+    "architecture_governance_intake_schema": "machine/schemas/architecture-governance-intake.v1.schema.json",
+    "architecture_validation_contract_schema": "machine/schemas/architecture-validation-contract.v1.schema.json",
+    "project_architecture_governance_profile_schema": "machine/schemas/project-architecture-governance-profile.v1.schema.json"
   },
   "specialists": {"count": 14, "registry_source": "machine/specialists/registry.v1.json", "human_index": "SKILL_INDEX.md", "routing_reference": "ROUTING_MAP.md", "knowledge_root": "skills/", "source_of_truth_note": "Specialist prose and reasoning guidance remain in skills/*/SKILL.md; machine routing-critical metadata is compiled and parity-validated."},
   "governance": {
