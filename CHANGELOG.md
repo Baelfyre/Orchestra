@@ -1,5 +1,15 @@
 # Changelog
 
+## Post-v1.7 OR-GOV-3 Clockwork architecture complexity and scale posture candidate
+
+- Upgrades Clockwork (`skills/clockwork/SKILL.md`, `OUTPUT_FORMATS.md`, and dedicated `ARCHITECTURE_COMPLEXITY_AND_SCALE_POSTURE_GUIDE.md`) with architecture complexity decisions, scale-ready versus scale-provisioned posture formalization, simpler-alternative justification, and the future-scalability invariant.
+- Enforces the primary invariant `FUTURE_SCALABILITY_ALONE_IS_NOT_SUFFICIENT_JUSTIFICATION`, preventing vague future-scale claims from causing premature infrastructure expansion while rejecting unsupported complexity, not growth itself.
+- Formalizes `SCALE_READY` (preserving proportionate evolution paths without pre-provisioning unnecessary scale infrastructure) and `SCALE_PROVISIONED` (actively provisioning physical infrastructure based on verified capacity, performance, or isolation requirements), defaulting to `SCALE_READY` when both satisfy current accepted requirements.
+- Implements mandatory simpler-alternative analysis for material complexity additions, canonical justification categorization, and decision states (`ACCEPT`, `ACCEPT_WITH_CONSTRAINTS`, `DEFER`, `REJECT`).
+- Consumes upstream `ProductIntentContract` and `CapacityEnvelope` from The Steward, preserving `UNKNOWN IS VALID`, ranges without averaging, partial capacity tolerance, and cost constraints as binding architecture inputs.
+- Adds Codex mirror parity (`adapters/codex/skills/clockwork/`), behavioral regression tests (`tests/behavior/test_clockwork_architecture_complexity.py`), route/registry metadata updates, and machine discovery in `README.json`.
+- Does not implement Chronicler migration risk (OR-GOV-4), does not start AR-3, and does not authorize v1.8 publication.
+
 ## Post-v1.7 OR-GOV-2 The Steward product intent and capacity envelope candidate
 
 - Upgrades The Steward (`skills/the-steward/SKILL.md`, `OUTPUT_FORMATS.md`, and dedicated `PRODUCT_INTENT_AND_CAPACITY_ENVELOPE_GUIDE.md`) with product intent governance, capacity envelope review, adaptive elicitation, and project-stage awareness.

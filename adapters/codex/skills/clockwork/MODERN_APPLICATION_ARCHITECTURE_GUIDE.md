@@ -10,6 +10,13 @@ Choose the simplest architecture that satisfies the accepted requirements and ob
 
 Do not recommend microservices, queues, caches, workflow engines, distributed locks, service meshes, or separate runtimes only because they are common patterns. Every added boundary creates operational and failure complexity.
 
+## Architecture Complexity and Scale Posture Governance
+
+For evaluating proposed additions of material architecture or infrastructure complexity, simpler alternatives, and scale posture (SCALE_READY vs SCALE_PROVISIONED), load [ARCHITECTURE_COMPLEXITY_AND_SCALE_POSTURE_GUIDE.md](ARCHITECTURE_COMPLEXITY_AND_SCALE_POSTURE_GUIDE.md).
+
+Primary Invariant:
+`FUTURE_SCALABILITY_ALONE_IS_NOT_SUFFICIENT_JUSTIFICATION`
+
 Use repository evidence to answer:
 
 1. What owns the behavior?

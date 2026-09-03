@@ -26,7 +26,7 @@ Do not load it for obvious single-owner work.
 | Business alignment, scope, requirements, product intent, capacity envelope, acceptance criteria, SDLC sufficiency | `the-steward` | Governance alignment owner is clear |
 | Legal, regulatory, privacy-obligation, IP, licensing governance | `the-governor` | Governance compliance owner is clear |
 | Continuity, handoff, merge readiness, branch drift, source-of-truth conflict | `arbiter` | Continuation state is uncertain |
-| Architecture, layering, service boundaries, refactor structure | `clockwork` | Technical architecture owner is clear |
+| Architecture, layering, service boundaries, complexity decisions, scale posture, refactor structure | `clockwork` | Technical architecture owner is clear |
 | Technical security, authorization, secrets, privacy-control design | `cipher` | Technical security owner is clear |
 | Database, schema, migration, ORM, persistence semantics | `chronicler` | Persistence owner is clear |
 | UI/UX, accessibility, responsive layout, interaction design | `cloak` | Frontend design owner is clear |
