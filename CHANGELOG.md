@@ -1,5 +1,13 @@
 # Changelog
 
+## Post-v1.7 OR-GOV-8D Scribe post-SSU governance documentation integration candidate
+
+- Formalizes Scribe's deterministic post-SSU governance documentation discipline as `skills/scribe/GOVERNANCE_DOCUMENTATION_INTEGRATION_GUIDE.md`.
+- Integrates SSU operating modes (`SPEC_TO_SYSTEM`, `SYSTEM_TO_DOCS`, `RECONCILE`) with governance workflows, enforcing bidirectional traceability between problem statements, specialist contracts, implementation, and verified validation evidence.
+- Establishes evidence-bound claim verification: zero invented facts, non-coercion of unknown states (preserving Chronicler unknown-production gap), and prohibition of silent promotions (`PROPOSED` to `APPROVED`, `PLANNED` to `IMPLEMENTED`, `IMPLEMENTED` to `VALIDATED`, etc.).
+- Adds `GOVERNANCE_DOCUMENTATION_RECONCILIATION` output format to `skills/scribe/OUTPUT_FORMATS.md`, byte-identical Codex parity mirror, and 22 deterministic behavioral tests registered in `tests/behavior/run_tests.py`.
+- Concludes Continuous Governed Run A (`OR-GOV-8A -> OR-GOV-8B -> OR-GOV-8C -> OR-GOV-8D`). Preserves the v1.8 publication hold. OR-GOV-9, OR-GOV-10, AR-3, release, deployment, provider, and policy changes remain out of scope.
+
 ## Post-v1.7 OR-GOV-8C Ponytail upstream-contract enforcement candidate
 
 - Formalizes Ponytail's deterministic upstream-contract consumption and implementation discipline as `skills/ponytail/UPSTREAM_CONTRACT_ENFORCEMENT_GUIDE.md`.

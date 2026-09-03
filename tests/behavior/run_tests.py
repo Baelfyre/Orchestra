@@ -140,6 +140,7 @@ def main():
         ,{"Name": "test_cipher_tenant_security.py", "Path": "tests/behavior/test_cipher_tenant_security.py"}
         ,{"Name": "test_arbiter_evidence_freshness.py", "Path": "tests/behavior/test_arbiter_evidence_freshness.py"}
         ,{"Name": "test_ponytail_upstream_contract_enforcement.py", "Path": "tests/behavior/test_ponytail_upstream_contract_enforcement.py"}
+        ,{"Name": "test_scribe_governance_documentation_integration.py", "Path": "tests/behavior/test_scribe_governance_documentation_integration.py"}
     ]
 
     failed = False
