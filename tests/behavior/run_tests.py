@@ -133,6 +133,7 @@ def main():
         ,{"Name": "validate_artificer_pattern_catalog.py", "Path": "scripts/validate_artificer_pattern_catalog.py"}
         ,{"Name": "test_artificer_pattern_catalog.py", "Path": "tests/behavior/test_artificer_pattern_catalog.py"}
         ,{"Name": "test_steward_product_intent_and_capacity.py", "Path": "tests/behavior/test_steward_product_intent_and_capacity.py"}
+        ,{"Name": "test_clockwork_architecture_complexity.py", "Path": "tests/behavior/test_clockwork_architecture_complexity.py"}
     ]
 
     failed = False

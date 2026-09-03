@@ -1,6 +1,6 @@
 # Clockwork Output Formats
 
-Generate output using exactly one format below. Default to `Compact` unless `Full` is requested.
+Generate output using exactly one format below. Default to `Compact` unless `Full` or `ArchitectureComplexityDecision` is requested.
 
 ## Compact
 
@@ -93,4 +93,27 @@ Clockwork does not own the QA strategy. Route test scope, gate selection, and re
 
 ## 9. Stop/go decision
 [Safe for downstream implementation / Audit only / Needs user approval before broad changes / Blocked]
+```
+
+## ArchitectureComplexityDecision
+
+Use when evaluating proposed architectural or infrastructure complexity (new databases, caches, queues, microservices, workers, replicas, multi-region, or orchestrators) against upstream `ProductIntentContract` and `CapacityEnvelope` inputs.
+
+```text
+CONTRACT: ArchitectureComplexityDecision
+SCHEMA: orchestra.architecture-complexity-decision.v1
+OWNER: clockwork
+REVISION: [revision]
+REQUESTED_CHANGE: [exact architectural change proposed]
+CURRENT_ARCHITECTURE: [baseline architecture]
+REQUIREMENT_DRIVER: [concrete accepted requirement]
+CAPACITY_ENVELOPE_REF: [revision or URI, if applicable]
+COMPLEXITY_ADDED: [database, cache, queue, event_bus, service, worker, replica, container, orchestrator, search_cluster, multi_region, cloud_provider, other]
+JUSTIFICATION_CATEGORIES: [CURRENT_FUNCTIONAL_REQUIREMENT | MEASURED_PERFORMANCE_BOTTLENECK | SECURITY_REQUIREMENT | RELIABILITY_REQUIREMENT | ISOLATION_REQUIREMENT | COMPLIANCE_REQUIREMENT | CAPACITY_THRESHOLD | OPERATIONAL_REQUIREMENT | APPROVED_ARCHITECTURE_DECISION]
+SCALE_POSTURE_BEFORE: [SCALE_READY | SCALE_PROVISIONED]
+SCALE_POSTURE_AFTER: [SCALE_READY | SCALE_PROVISIONED]
+SIMPLER_ALTERNATIVES: [list of simpler alternatives considered]
+DECISION: [ACCEPT | ACCEPT_WITH_CONSTRAINTS | DEFER | REJECT]
+CONSTRAINTS: [list of constraints or "none"]
+EVIDENCE_REFS: [benchmarks, tickets, requirements, or contracts]
 ```

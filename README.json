@@ -922,6 +922,29 @@
       "ar3_started": false,
       "release_authorized": false,
       "authority_note": "OR-GOV-2 upgrades The Steward requirements and business alignment governance only. It does not implement Clockwork complexity engine (OR-GOV-3), start AR-3, or authorize release."
+    },
+    "specialist_governance_refinement_or_gov_3": {
+      "status": "OR_GOV_3_CLOCKWORK_COMPLEXITY_AND_SCALE_IMPLEMENTED",
+      "purpose": "Upgrade Clockwork with architecture complexity decisions, scale-ready versus scale-provisioned posture formalization, simpler-alternative justification, and the future-scalability invariant.",
+      "machine_sources": [
+        "skills/clockwork/SKILL.md",
+        "skills/clockwork/OUTPUT_FORMATS.md",
+        "skills/clockwork/ARCHITECTURE_COMPLEXITY_AND_SCALE_POSTURE_GUIDE.md",
+        "machine/schemas/architecture-complexity-decision.v1.schema.json",
+        "machine/schemas/capacity-envelope.v1.schema.json",
+        "machine/schemas/product-intent-contract.v1.schema.json"
+      ],
+      "validation_surface": "tests/behavior/test_clockwork_architecture_complexity.py",
+      "or_gov_1_implemented": true,
+      "or_gov_2_implemented": true,
+      "or_gov_3_implemented": true,
+      "adaptive_routing_implemented": true,
+      "steward_refinement_implemented": true,
+      "clockwork_refinement_implemented": true,
+      "migration_governance_implemented": false,
+      "ar3_started": false,
+      "release_authorized": false,
+      "authority_note": "OR-GOV-3 upgrades Clockwork architecture complexity and scale posture governance only. It does not implement Chronicler migration risk (OR-GOV-4), start AR-3, or authorize release."
     }
   },
   "machine_scan_order": [
