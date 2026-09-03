@@ -325,6 +325,185 @@ def test_fail_closed_for_missing_applicability_and_undeclared_criteria() -> None
         raise AssertionError("undeclared criterion did not fail closed")
 
 
+def test_fail_closed_for_malformed_contract_and_evidence_inputs() -> None:
+    def expect_error(action: Any, fragment: str) -> None:
+        try:
+            action()
+        except ValueError as exc:
+            assert fragment in str(exc)
+        else:
+            raise AssertionError(f"expected ValueError containing {fragment!r}")
+
+    expect_error(
+        lambda: evaluate_architecture_validation(
+            contract_refs="not-an-array",
+            exact_revision=REVISION,
+            environment_identity=ENVIRONMENT,
+            obligations=_obligations(),
+            evidence=[],
+        ),
+        "array of strings",
+    )
+    expect_error(
+        lambda: evaluate_architecture_validation(
+            contract_refs=(),
+            exact_revision=REVISION,
+            environment_identity=ENVIRONMENT,
+            obligations=_obligations(),
+            evidence=[],
+        ),
+        "must not be empty",
+    )
+    expect_error(
+        lambda: evaluate_architecture_validation(
+            contract_refs=("ref", "ref"),
+            exact_revision=REVISION,
+            environment_identity=ENVIRONMENT,
+            obligations=_obligations(),
+            evidence=[],
+        ),
+        "duplicate values",
+    )
+    expect_error(
+        lambda: evaluate_architecture_validation(
+            contract_refs=REFS,
+            exact_revision="",
+            environment_identity=ENVIRONMENT,
+            obligations=_obligations(),
+            evidence=[],
+        ),
+        "exact_revision",
+    )
+    expect_error(
+        lambda: evaluate_architecture_validation(
+            contract_refs=REFS,
+            exact_revision=REVISION,
+            environment_identity=ENVIRONMENT,
+            obligations=[],
+            evidence=[],
+        ),
+        "obligations must be an object",
+    )
+
+    unknown = _obligations()
+    unknown["unknown_dimension"] = {"applicability": "NOT_REQUIRED"}
+    expect_error(
+        lambda: evaluate_architecture_validation(
+            contract_refs=REFS,
+            exact_revision=REVISION,
+            environment_identity=ENVIRONMENT,
+            obligations=unknown,
+            evidence=[],
+        ),
+        "unknown dimensions",
+    )
+
+    missing_record = _obligations()
+    del missing_record["functional_validation"]
+    expect_error(
+        lambda: evaluate_architecture_validation(
+            contract_refs=REFS,
+            exact_revision=REVISION,
+            environment_identity=ENVIRONMENT,
+            obligations=missing_record,
+            evidence=[],
+        ),
+        "applicability",
+    )
+
+    non_mapping = _obligations()
+    non_mapping["functional_validation"] = []
+    expect_error(
+        lambda: evaluate_architecture_validation(
+            contract_refs=REFS,
+            exact_revision=REVISION,
+            environment_identity=ENVIRONMENT,
+            obligations=non_mapping,
+            evidence=[],
+        ),
+        "must be an object",
+    )
+
+    invalid_applicability = _obligations()
+    invalid_applicability["functional_validation"] = {"applicability": "MAYBE"}
+    expect_error(
+        lambda: evaluate_architecture_validation(
+            contract_refs=REFS,
+            exact_revision=REVISION,
+            environment_identity=ENVIRONMENT,
+            obligations=invalid_applicability,
+            evidence=[],
+        ),
+        "REQUIRED or NOT_REQUIRED",
+    )
+
+    irrelevant_criteria = _obligations()
+    irrelevant_criteria["functional_validation"] = {
+        "applicability": "NOT_REQUIRED",
+        "criteria": ["not-allowed"],
+    }
+    expect_error(
+        lambda: evaluate_architecture_validation(
+            contract_refs=REFS,
+            exact_revision=REVISION,
+            environment_identity=ENVIRONMENT,
+            obligations=irrelevant_criteria,
+            evidence=[],
+        ),
+        "must not declare criteria",
+    )
+
+    expect_error(
+        lambda: _evaluate({}, evidence="not-an-array"),
+        "evidence must be an array",
+    )
+    expect_error(
+        lambda: _evaluate({}, evidence=["not-an-object"]),
+        "each evidence record",
+    )
+    expect_error(
+        lambda: _evaluate(
+            {"functional_validation": ("criterion",)},
+            [_evidence("unknown-dimension", "unknown_dimension", ("criterion",))],
+        ),
+        "unknown dimension",
+    )
+    expect_error(
+        lambda: _evaluate(
+            {"functional_validation": ("criterion",)},
+            [_evidence("bad-proof", "functional_validation", ("criterion",), "MAYBE")],
+        ),
+        "proof_state",
+    )
+    expect_error(
+        lambda: _evaluate(
+            {},
+            [_evidence("irrelevant", "functional_validation", ("criterion",))],
+        ),
+        "NOT_REQUIRED",
+    )
+    expect_error(
+        lambda: _evaluate(
+            {"functional_validation": ("criterion",)},
+            [_evidence(
+                "bad-freshness",
+                "functional_validation",
+                ("criterion",),
+                evidence_status="MAYBE",
+            )],
+        ),
+        "evidence_status",
+    )
+    duplicate = _evidence("duplicate", "functional_validation", ("criterion",))
+    expect_error(
+        lambda: _evaluate(
+            {"functional_validation": ("criterion",)},
+            [duplicate, duplicate],
+        ),
+        "duplicate evidence_ref",
+    )
+
+
 def test_evaluator_has_no_execution_or_authority_dependencies() -> None:
     source = ast.parse((ROOT / "orchestra_runtime" / "domain" / "evaluation" / "architecture_validation.py").read_text(encoding="utf-8"))
     imports: set[str] = set()
@@ -365,6 +544,7 @@ def _run() -> None:
         test_t24_unsupported_claim_requires_an_accepted_obligation_and_evidence,
         test_schema_output_and_exact_identity_are_preserved,
         test_fail_closed_for_missing_applicability_and_undeclared_criteria,
+        test_fail_closed_for_malformed_contract_and_evidence_inputs,
         test_evaluator_has_no_execution_or_authority_dependencies,
     ]
     for test in tests:
