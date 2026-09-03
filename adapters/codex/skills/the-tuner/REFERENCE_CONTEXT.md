@@ -1456,6 +1456,42 @@ Generated from canonical Orchestra sources. Indented snapshots are code-only con
 
     Phase 4 adds no persistence, SQLite, migration, RPC, Codex App Server, network or host-process orchestration, prompt-text semantic activation, automatic Tuner routing, Dagger authority, external-action authority, release, or deployment behavior.
 
+    ## 27. OR-GOV-6 governance contract dependency integration
+
+    OR-GOV-6 integrates the canonical governance contracts with the existing
+    `CollaborationGraph`, `CollaborationDependency`, `InvalidationEvent`, and
+    `Re-entry Recommendation` surfaces. It does not create a parallel graph,
+    invalidation engine, or re-entry state machine.
+
+    The Tuner may coordinate references to `ArchitectureGovernanceIntake`,
+    `ProductIntentContract`, `CapacityEnvelope`,
+    `ArchitectureComplexityDecision`, `MigrationRiskContract`, and
+    `ProjectArchitectureGovernanceProfile`. Each edge must declare the source,
+    target, target kind, and consumed clauses. Joint participation is not a
+    dependency. Unknown owners, malformed edges, and undeclared relationships fail
+    closed.
+
+    Semantic invalidation compares the clauses actually consumed by the target.
+    An identity-only revision or hash change requires reference reconciliation but
+    does not cause domain re-entry when consumed clauses are equivalent. Semantic
+    changes traverse declared invalidation edges only. Invalidation cycles are
+    finite revalidation sets; sequence cycles remain decomposition or contradiction
+    findings. Converging paths are deduplicated.
+
+    The owner that issued an upstream revision is not re-entered merely for
+    publishing that revision. An implementation delta may explicitly invalidate its
+    own specialist contract, in which case that owner is included together with
+    declared downstream dependents. Stale evidence, artifacts, documentation, and
+    diagrams are marked through declared targets and are not treated as failed
+    evidence.
+
+    The Tuner returns a recommendation to Conductor and never dispatches a
+    specialist. Conductor remains the exclusive router, Arbiter remains the
+    transition authority, and Overseer remains the validation and evidence owner.
+    `ArchitectureValidationContract` behavior remains deferred to OR-GOV-7. The
+    OR-GOV-4 `MigrationRiskContract` unknown-production schema gap remains
+    unchanged, and unknown production presence is never coerced to `false`.
+
 <a id="cross-module-logic-audit-protocol"></a>
 ## Source: docs/validation/CROSS_MODULE_LOGIC_AUDIT_PROTOCOL.md
 

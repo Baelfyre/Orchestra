@@ -1,5 +1,13 @@
 # Changelog
 
+## Post-v1.7 OR-GOV-6 Tuner governance contract dependency candidate
+
+- Integrates `ArchitectureGovernanceIntake`, `ProductIntentContract`, `CapacityEnvelope`, `ArchitectureComplexityDecision`, `MigrationRiskContract`, and project governance profile references with the existing Tuner collaboration and invalidation model.
+- Distinguishes semantic clause changes from identity-only reference refresh, traverses declared dependency edges only, handles invalidation cycles finitely, and deduplicates converging minimal re-entry paths.
+- Preserves trigger-owner semantics, stale evidence and artifact handling, documentation and diagram invalidation, Conductor-only routing, Arbiter transition authority, Overseer validation ownership, and specialist domain authority.
+- Adds deterministic OR-GOV-6 fixtures and behavior coverage, including missing-owner and malformed-edge fail-closed cases, the OR-GOV-4 unknown-production schema gap, and invalidation-cycle regression coverage.
+- Does not amend any OR-GOV schema, implement OR-GOV-7 or OR-GOV-8, start AR-3, execute migrations or SQL, expand Dagger, change providers or policy, deploy, release, or authorize v1.8 publication.
+
 ## Post-v1.7 OR-GOV-5 Conductor architecture governance intake candidate
 
 - Extends Conductor with the canonical `ArchitectureGovernanceIntake` classification surface for change materiality, capacity relevance and disposition, complexity, tenancy, persistence, product intent, security, and validation impact.

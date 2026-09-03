@@ -274,7 +274,7 @@
       "release_authorized": false,
       "authority_note": "CUIR-6 canonically closes the CUIR family with optional bounded retrieval only. Closeout does not grant implementation, architecture, security, merge, release, deployment, provider routing or fallback, production mutation, policy, destructive, installed-integration-refresh, branch-deletion, force-push, or history-rewrite authority."
     },
-    "cross_specialist_coordination": {"status": "IMPLEMENTED", "human_sources": ["docs/governance/TUNER_PROTOCOL.md", "ROUTING_MAP.md"]},
+    "cross_specialist_coordination": {"status": "IMPLEMENTED", "human_sources": ["docs/governance/TUNER_PROTOCOL.md", "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md", "skills/the-tuner/GOVERNANCE_CONTRACT_DEPENDENCY_GUIDE.md", "ROUTING_MAP.md"]},
     "validation_and_evidence": {"status": "IMPLEMENTED", "machine_sources": ["machine/schemas/", "machine/release-evidence/"], "human_sources": ["docs/setup/VALIDATION.md", "docs/validation/"]},
     "unified_testing_mechanism_t0_t9": {
       "status": "SUPPORTED_OPTIONAL_ADOPT_OPTIONAL",
@@ -1024,6 +1024,57 @@
       "ar3_started": false,
       "release_authorized": false,
       "authority_note": "OR-GOV-5 classifies and sequences work only. It does not make product, architecture, persistence, security, QA, implementation, migration, release, deployment, policy, Dagger, or other protected-action decisions; the OR-GOV-4 unknown-production schema gap remains preserved."
+    },
+    "specialist_governance_refinement_or_gov_6": {
+      "status": "OR_GOV_6_TUNER_GOVERNANCE_CONTRACT_INVALIDATION_IMPLEMENTED",
+      "purpose": "Integrate canonical governance-contract dependencies with the existing Tuner collaboration graph, semantic invalidation, evidence/artifact freshness, and minimal specialist re-entry recommendations.",
+      "machine_sources": [
+        "machine/schemas/architecture-governance-intake.v1.schema.json",
+        "machine/schemas/product-intent-contract.v1.schema.json",
+        "machine/schemas/capacity-envelope.v1.schema.json",
+        "machine/schemas/architecture-complexity-decision.v1.schema.json",
+        "machine/schemas/migration-risk-contract.v1.schema.json",
+        "machine/schemas/project-architecture-governance-profile.v1.schema.json",
+        "scripts/validate_tuner_evidence_continuity.py",
+        "tests/behavior/tuner-governance-contract-fixtures.json"
+      ],
+      "human_sources": [
+        "skills/the-tuner/SKILL.md",
+        "skills/the-tuner/COORDINATION_EVALUATION_GUIDE.md",
+        "skills/the-tuner/GOVERNANCE_CONTRACT_DEPENDENCY_GUIDE.md",
+        "skills/the-tuner/OUTPUT_FORMATS.md",
+        "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md",
+        "ROUTING_MAP.md",
+        "SKILL_INDEX.md"
+      ],
+      "validation_surfaces": [
+        "tests/behavior/test_tuner_governance_contract_invalidation.py",
+        "tests/behavior/test_tuner_evidence_continuity.py",
+        "tests/runtime/test_coordination_adversarial.py",
+        "scripts/validate_tuner_collaboration_contract.py",
+        "scripts/validate_tuner_evidence_continuity.py"
+      ],
+      "existing_graph_reused": true,
+      "parallel_graph_created": false,
+      "declared_edge_only": true,
+      "identity_only_refresh_without_domain_reentry": true,
+      "invalidation_cycles_finite": true,
+      "tuner_routes_directly": false,
+      "conductor_remains_router": true,
+      "arbiter_remains_transition_authority": true,
+      "overseer_remains_validation_owner": true,
+      "migration_risk_unknown_production_gap": "PRESERVED_SCHEMA_GAP_NO_TRI_STATE_AMENDMENT",
+      "or_gov_1_implemented": true,
+      "or_gov_2_implemented": true,
+      "or_gov_3_implemented": true,
+      "or_gov_4_implemented": true,
+      "or_gov_5_implemented": true,
+      "or_gov_6_implemented": true,
+      "or_gov_7_started": false,
+      "or_gov_8_started": false,
+      "ar3_started": false,
+      "release_authorized": false,
+      "authority_note": "OR-GOV-6 coordinates declared governance-contract dependencies and returns minimal re-entry recommendations to Conductor. It does not dispatch specialists, resolve domain decisions, generate OR-GOV-7 validation contracts, refine OR-GOV-8 specialists, amend the MigrationRiskContract schema, start AR-3, or authorize release, deployment, policy, provider, Dagger, or migration execution."
     }
   },
   "machine_scan_order": [
