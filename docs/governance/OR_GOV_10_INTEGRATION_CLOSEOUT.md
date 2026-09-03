@@ -31,15 +31,37 @@ All canonical architecture and governance contracts across the program were veri
 | :--- | :--- | :--- | :--- |
 | `CapacityEnvelope` | `machine/schemas/capacity-envelope.v1.schema.json` | The Steward | Volume, throughput, burst ratios; preserves `UNKNOWN` and `NOT_APPLICABLE` without fabricated metrics. |
 | `ProductIntentContract` | `machine/schemas/product-intent-contract.v1.schema.json` | The Steward | Product goals, problem statements, requirements traceability; gates architectural expansion. |
-| `ArchitectureComplexityDecision` | `skills/clockwork/ARCHITECTURE_COMPLEXITY_AND_SCALE_POSTURE_GUIDE.md` | Clockwork | Layering, package boundaries, ADR maintenance; distinguishes `SCALE_READY` from `SCALE_PROVISIONED`. |
+| `ArchitectureComplexityDecision` | `machine/schemas/architecture-complexity-decision.v1.schema.json` | Clockwork | Layering, package boundaries, ADR maintenance; distinguishes `SCALE_READY` from `SCALE_PROVISIONED`. |
 | `MigrationRiskContract` | `machine/schemas/migration-risk-contract.v1.schema.json` | Chronicler | DDL risk scoring, rollback plans, engine locking; preserves unknown-production pre-contract gap without coercion. |
-| `ArchitectureGovernanceIntake` | `skills/conductor/ARCHITECTURE_GOVERNANCE_INTAKE_GUIDE.md` | Conductor | Scope classification (`TRIVIAL`, `ISOLATED_REFACTOR`, `MULTI_SUBSYSTEM`), fail-closed routing without ceremony explosion. |
-| `ArchitectureValidationContract` | `skills/overseer/ARCHITECTURE_VALIDATION_CONTRACT_GUIDE.md` | Overseer | Empirical verification of architecture claims; formal proof states (`PROVEN`, `NOT_PROVEN`, `FAILED`). |
+| `ArchitectureGovernanceIntake` | `machine/schemas/architecture-governance-intake.v1.schema.json` | Conductor | Scope classification (`TRIVIAL`, `STANDARD`, `ARCHITECTURAL`, `PRODUCTION_CRITICAL`), fail-closed routing without ceremony explosion. |
+| `ArchitectureValidationContract` | `machine/schemas/architecture-validation-contract.v1.schema.json` | Overseer | Empirical verification of architecture claims; formal proof states (`PROVEN`, `NOT_PROVEN`, `NOT_REQUIRED`, `FAILED`). |
 | `ProjectArchitectureGovernanceProfile` | `machine/schemas/project-architecture-governance-profile.v1.schema.json` | Shared / Governance | Tenancy model (`MULTI_TENANT`, `SINGLE_TENANT`), scale posture, runtime boundary references. |
 
 ---
 
-## 2. Specialist Ownership Chain Verification
+## 2. Canonical Phase Ledger
+
+The OR-GOV program consists of ten sequentially executed and verified phases:
+
+- **OR-GOV-1**: Shared Machine Contracts and Schemas
+- **OR-GOV-2**: The Steward — Product Intent and Capacity Envelope Governance (`ProductIntentContract`, `CapacityEnvelope`)
+- **OR-GOV-3**: Clockwork — Architecture Complexity Decisions and Scale Posture (`ArchitectureComplexityDecision`)
+- **OR-GOV-4**: Chronicler — Migration Risk Contract Governance (`MigrationRiskContract`)
+- **OR-GOV-5**: Conductor — Architecture Governance Intake Routing (`ArchitectureGovernanceIntake`)
+- **OR-GOV-6**: The Tuner — Governance Contract Invalidation & Minimal Re-entry (`CrossSpecialistCoordination`)
+- **OR-GOV-7**: Overseer — Contract-Derived Architecture Validation (`ArchitectureValidationContract`)
+- **OR-GOV-8A**: Cipher — Tenant-Security Governance Refinement (`ProjectArchitectureGovernanceProfile.tenancy_model`)
+- **OR-GOV-8B**: Arbiter — Contract and Evidence Freshness Governance (`ContinuityEvidenceFreshness`)
+- **OR-GOV-8C**: Ponytail — Upstream-Contract Enforcement Governance (`UpstreamContractEnforcement`)
+- **OR-GOV-8D**: Scribe — Post-SSU Governance Documentation Integration (`GovernanceDocumentationIntegration`)
+- **OR-GOV-9**: Conditional Specialist Governance Sufficiency Audit (The Governor, Weaver, Cloak, Dagger regression)
+- **OR-GOV-10**: Final Integration, Parity, Full Regression, and Program Closeout
+
+*Note*: The Scribe Specialist Upgrade (SSU) is a separate completed initiative and is distinct from OR-GOV-3.
+
+---
+
+## 3. Specialist Ownership Chain Verification
 
 Every specialist maintains strict domain ownership; no specialist silently absorbs or bypasses another:
 
@@ -60,7 +82,7 @@ Every specialist maintains strict domain ownership; no specialist silently absor
 
 ---
 
-## 3. End-to-End Governance Scenarios (Scenarios A – J)
+## 4. End-to-End Governance Scenarios (Scenarios A – J)
 
 | Scenario | Objective | Enforced Governance Flow | Verification Result |
 | :--- | :--- | :--- | :--- |
@@ -70,14 +92,14 @@ Every specialist maintains strict domain ownership; no specialist silently absor
 | **D: Empirical Performance Claim** | Verify throughput assertions | Assertion ("Supports 300 RPS") assigned to Overseer; remains `NOT_PROVEN` until verified by an executed benchmark receipt. | `PASS` |
 | **E: Multi-Tenant Persistence Change** | Full cross-specialist flow | Routes through Steward (intent) -> Clockwork (architecture) -> Chronicler (DDL) -> Cipher (tenant isolation) -> Ponytail (code) -> Overseer (validation). | `PASS` |
 | **F: Capacity Material Change** | Contract invalidation & re-entry | Material change in capacity triggers Tuner declared-edge invalidation; only affected specialists re-enter; Arbiter rejects stale evidence. | `PASS` |
-| **G: Stale Validation Evidence** | Lineage and commit binding | Commit boundary changes invalidate prior evidence; Arbiter transitions to `WAIT_FOR_EVIDENCE` or `AUTO_REMEDIATE_AND_REVALIDATE`. | `PASS` |
+| **G: Stale Validation Evidence** | Lineage and commit boundary binding | Commit boundary changes invalidate prior evidence; Arbiter transitions to `WAIT_FOR_EVIDENCE` or `AUTO_REMEDIATE_AND_REVALIDATE`. | `PASS` |
 | **H: Migration Production State Unknown** | Handle schema limitations | Unknown production state preserved without false boolean coercion; pre-contract schema gap documented explicitly. | `PASS` |
-| **I: Documentation Reconciliation** | Maintain proof truth in docs | Scribe records exact proof states (`PROVEN`, `NOT_PROVEN`, `FAILED`, `MISSING_EVIDENCE`, `STALE_INVALIDATED`); prohibits silent status promotion. | `PASS` |
+| **I: Documentation Reconciliation** | Maintain proof truth in docs | Scribe records exact proof states (`PROVEN`, `NOT_PROVEN`, `NOT_REQUIRED`, `FAILED`); anomaly states (`MISSING_EVIDENCE`, `STALE_INVALIDATED`); prohibits silent status promotion. | `PASS` |
 | **J: Dagger Request Without Authority** | Block destructive testing | Destructive chaos/load testing blocked without explicit authorized envelope; simulation-first behavior verified. | `PASS` |
 
 ---
 
-## 4. Adapter Parity and Prompt Load Budget
+## 5. Adapter Parity and Prompt Load Budget
 
 - **Codex Adapter Parity**: Validated via `python adapters/codex/validate_codex_export.py` with zero discrepancies. All mirrored guides, contracts, and output formats maintain exact source parity.
 - **Prompt Load Budget**: Validated via `python scripts/validate_prompt_load_budget.py --repo-root .`. All specialist prompt loads remain strictly within character and token budgets.
@@ -85,7 +107,7 @@ Every specialist maintains strict domain ownership; no specialist silently absor
 
 ---
 
-## 5. Non-Authorizing Constraints & Program Termination
+## 6. Non-Authorizing Constraints & Program Termination
 
 1. **Program Conclusion**: With OR-GOV-10 complete, the OR-GOV program concludes. All requirements across OR-GOV-1 through OR-GOV-10 are fully satisfied and verified.
 2. **Release Hold**: Public release remains held at `v1.7.0`. Publication of `v1.8` is **NOT AUTHORIZED**.
