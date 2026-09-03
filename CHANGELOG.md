@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-closeout OR-GOV record erratum candidate
+
+- Corrects post-closeout OR-GOV record inaccuracies without reopening the completed governance program or creating OR-GOV-11.
+- Restores canonical historical phase ledger in `docs/governance/or_gov_10_integration_closeout_disposition.v1.json` (OR-GOV-1 = Shared Machine Contracts and Schemas, OR-GOV-2 = The Steward, OR-GOV-3 = Clockwork; Scribe SSU recorded as separate initiative).
+- Corrects `ArchitectureGovernanceIntake.change_materiality` terminology in `docs/governance/OR_GOV_10_INTEGRATION_CLOSEOUT.md` to canonical enum (`TRIVIAL`, `STANDARD`, `ARCHITECTURAL`, `PRODUCTION_CRITICAL`), removing uncanonical `ISOLATED_REFACTOR` and `MULTI_SUBSYSTEM`.
+- Restores complete canonical `ArchitectureValidationContract` proof-state set (`PROVEN`, `NOT_PROVEN`, `NOT_REQUIRED`, `FAILED`) in closeout documentation.
+- Extends `tests/behavior/test_or_gov_10_e2e_integration_closeout.py` (22/22 PASS) covering all seven canonical machine contracts, enum regressions, document accuracy, phase ledger mapping, and status preservation.
+- Preserves OR-GOV completion state (`OR_GOV_PROGRAM_COMPLETE`), runtime behavior, frozen guidance, release hold (`v1.7.0`), and AR-3 boundary (`NOT_STARTED`).
+
 ## Post-v1.7 OR-GOV-10 final integration, parity, full regression, and program closeout candidate
 
 - Concludes the Orchestra Architecture & Governance Hardening Program (OR-GOV-1 through OR-GOV-10).
