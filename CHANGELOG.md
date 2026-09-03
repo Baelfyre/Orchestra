@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.7 OR-GOV-8B Arbiter contract and evidence freshness candidate
+
+- Formalizes Arbiter's deterministic contract and evidence freshness rules, binding transition admissibility to the exact commit SHA, tree hash, and parent lineage triple without expanding execution authority.
+- Establishes the four deterministic evidence freshness states: `FRESH_BOUND_VALID`, `STALE_INVALIDATED`, `MISSING_EVIDENCE`, and `CONTRADICTORY_EVIDENCE`.
+- Enforces the strict six-tier transition precedence hierarchy (`STOP` -> `ESCALATE_HUMAN` -> `WAIT_FOR_CAPACITY` -> `WAIT_FOR_EVIDENCE` -> `AUTO_REMEDIATE_AND_REVALIDATE` -> `AUTO_CONTINUE`).
+- Defines strict cached evidence invalidation rules: caching is strictly prohibited across git commit boundaries, branch switches, rebases, clean/dirty transitions, or environment changes.
+- Preserves the Tuner coordination handoff for contract staleness and minimal re-entry, Overseer validation proof-state boundaries (`PROVEN`, `NOT_PROVEN`, `NOT_REQUIRED`, `FAILED`), and UIX-9 frozen `SKILL.md` integrity.
+- Updates `CONTINUITY_EVALUATION_GUIDE.md` with byte-identical Codex parity mirror, registers deterministic behavioral coverage in `tests/behavior/run_tests.py`, and preserves the v1.8 publication hold. OR-GOV-8C, 8D, 9, 10, AR-3, release, deployment, provider, and policy changes remain out of scope.
+
 ## Post-v1.7 OR-GOV-8A Cipher tenant-security governance refinement candidate
 
 - Formalizes Cipher's deterministic tenant-security reasoning as `TENANT_SECURITY_GOVERNANCE_GUIDE.md`, consuming `ProjectArchitectureGovernanceProfile.tenancy_model` and `tenant_isolation_policy_refs` to derive tenant-security requirements proportional to the accepted project posture.
