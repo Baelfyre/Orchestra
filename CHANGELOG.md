@@ -1,5 +1,17 @@
 # Changelog
 
+## v1.8.0 — Governance Hardening, Runtime Refoundation & Traceability
+
+- **Governance Hardening**: Reinforces the Orchestra Prime Directive and Governed Execution Lifecycle V2, enforcing strict separation of authority, capability, routing, and validation readiness.
+- **Architecture Governance System (OR-GOV-1 through OR-GOV-10)**: Formalizes seven machine-readable contracts (`CapacityEnvelope`, `ProductIntentContract`, `ArchitectureComplexityDecision`, `MigrationRiskContract`, `ArchitectureGovernanceIntake`, `ArchitectureValidationContract`, `ProjectArchitectureGovernanceProfile`) with adaptive capacity reasoning, scale-ready vs. scale-provisioned distinction, engine-aware migration risk, proportional routing, declared-edge semantic invalidation, and revision-bound validation proof states.
+- **Specialist Governance Upgrades**: Formalizes operational boundaries and evidence-bound governance for The Steward, Clockwork, Chronicler, Conductor, The Tuner, Overseer, Cipher (tenant-security governance), Arbiter (evidence freshness), Ponytail (upstream-contract enforcement), Scribe, and audits Governor, Weaver, Cloak, and Dagger.
+- **Scribe Specialist Upgrade (SSU)**: Expands Scribe into domain narrative modeling, requirements traceability, and documentation drift reconciliation with `SPEC_TO_SYSTEM`, `SYSTEM_TO_DOCS`, and `RECONCILE` operating modes.
+- **Runtime Architecture Refoundation (AR-0, AR-1, AR-2)**: Refounds `orchestra_runtime` into clean hexagonal architecture layers (`domain/`, `application/`, `infrastructure/`, `bootstrap/`, `shared/`), extracting pure domain models while preserving legacy compatibility facades and enforcing machine-checked architecture boundaries. (AR-3 and AR-4 remain future work).
+- **Specialist & Provider Execution Boundaries**: Formalizes specialist execution requests and receipts, revalidates Codex MCP integration, and enforces provider boundaries without authority expansion.
+- **Registry O7 Query Optimization**: Delivers governed registry query optimization with full backward-compatibility fallback to O1-O6 query patterns.
+- **Cloak Reference Intelligence (CUIR)**: Introduces optional normalized UI pattern reference intelligence (`ADOPT_OPTIONAL`) with project-native precedence.
+- **Deterministic Release Assurance**: 11/11 package version surfaces unified at `1.8.0`, with extensive cross-platform, CodeQL, governance check, architecture boundary, prompt-budget, and behavioral test coverage.
+
 ## Post-closeout OR-GOV record erratum candidate
 
 - Corrects post-closeout OR-GOV record inaccuracies without reopening the completed governance program or creating OR-GOV-11.
