@@ -41,7 +41,7 @@ Do not load it for obvious single-owner work.
 | Compliance Registry cache lifecycle and query operations | `conductor` -> deterministic `scripts/compliance_registry.py` | Explicit `/compliance-registry` command; Registry data remains evidence, not authority |
 | Registry-backed governed compliance review | `conductor` | Explicit `/compliance-review` command; Governor applicability, Steward traceability, and Arbiter freshness/set-equality review are required |
 | Broad, unclear, or overlapping requests | `conductor` | Ownership overlaps, dependencies exist, or route split is unclear |
-| Cross-specialist contract coordination | `the-tuner` | Conductor has classified material multi-domain dependencies, missing ownership, contradiction, stale contract, or late boundary crossing |
+| Cross-specialist contract coordination | `the-tuner` | Conductor has classified material multi-domain dependencies, governance-contract invalidation, missing ownership, contradiction, stale contract, or late boundary crossing |
 | Frontend/backend synchronicity | `conductor` -> `the-tuner` | Frozen packet and authority exist |
 
 ## OR-GOV-5 Architecture Governance Intake
@@ -63,8 +63,24 @@ smallest sufficient route.
 - Validation or quantified sufficiency claim -> `overseer`; missing evidence remains `NOT_PROVEN` or the applicable missing-evidence state.
 - Unknown production presence -> `chronicler` with `PRODUCTION_PRESENCE_UNRESOLVED`; never emit `production_data=false` from that uncertainty.
 
-Keywords are contextual triggers, not decisions. OR-GOV-5 does not implement
-OR-GOV-6 dependency invalidation, propagation, or minimal re-entry.
+Keywords are contextual triggers, not decisions. OR-GOV-5 intake remains the
+classifier. When a current Tuner session has declared governance-contract
+dependencies, the Tuner compares consumed clauses, distinguishes identity-only
+refresh from semantic invalidation, and returns the smallest re-entry
+recommendation to Conductor. The Tuner never dispatches specialists.
+
+## OR-GOV-6 Governance Contract Invalidation
+
+- `ArchitectureGovernanceIntake` changes may make the collaboration composition stale and return routing to Conductor.
+- `ProductIntentContract` and `CapacityEnvelope` affect only declared downstream architecture decisions and consumed dimensions.
+- `ArchitectureComplexityDecision` affects Chronicler only when migration planning declares that dependency.
+- `MigrationRiskContract` affects Overseer only when validation evidence consumes the changed migration clauses.
+- Identity-only revision or hash changes refresh references without automatic domain re-entry.
+- Cyclic invalidation edges are finite revalidation sets; sequence-cycle findings remain separate.
+- The upstream trigger owner is not re-entered unless its own contract was explicitly invalidated by an implementation delta.
+
+OR-GOV-6 does not implement OR-GOV-7 validation semantics or OR-GOV-8
+specialist refinements.
 
 The two compliance commands are explicit public commands. They must not rely on the unknown-command ambiguity fallback. `/compliance-registry` uses Conductor only as the command entry boundary and delegates data lifecycle work to the deterministic Registry script. `/compliance-review` follows the governed ordered sequence below; no role may treat Registry evidence as release, deployment, execution, or legal authority.
 
