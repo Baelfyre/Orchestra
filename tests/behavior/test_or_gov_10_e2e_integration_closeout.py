@@ -2,7 +2,7 @@
 """Deterministic end-to-end integration and closeout tests for OR-GOV-10.
 
 Proves that OR-GOV-1 through OR-GOV-9 operate as one coherent governance system:
-1. Contract Inventory and ownership validation.
+1. Contract Inventory and ownership validation across all seven canonical machine contracts.
 2. Specialist ownership chain and non-absorption boundaries.
 3. Scenarios A through J:
    - Scenario A: Simple trivial change (minimum route, no ceremony explosion).
@@ -16,6 +16,7 @@ Proves that OR-GOV-1 through OR-GOV-9 operate as one coherent governance system:
    - Scenario I: Documentation reconciliation (Scribe proof/value preservation, no silent promotion).
    - Scenario J: Dagger request (blocked without explicit authority, simulation-first).
 4. Adapter parity, prompt budget, frozen guidance, and architecture boundaries.
+5. Post-closeout record accuracy regressions (canonical enums, document accuracy, historical phase ledger, status preservation).
 """
 
 import hashlib
@@ -33,12 +34,15 @@ class TestOrGov10E2EIntegrationCloseout(unittest.TestCase):
     """E2E integration test suite for the complete OR-GOV program closeout."""
 
     def test_01_contract_inventory_and_ownership(self):
-        """Verify all canonical schemas, ownership, and required fields."""
+        """Verify all seven canonical machine schemas, ownership, and required fields."""
         schemas_dir = REPO_ROOT / "machine" / "schemas"
         contracts = {
             "capacity-envelope.v1.schema.json": ("CapacityEnvelope", "the-steward"),
             "product-intent-contract.v1.schema.json": ("ProductIntentContract", "the-steward"),
+            "architecture-complexity-decision.v1.schema.json": ("ArchitectureComplexityDecision", "clockwork"),
             "migration-risk-contract.v1.schema.json": ("MigrationRiskContract", "chronicler"),
+            "architecture-governance-intake.v1.schema.json": ("ArchitectureGovernanceIntake", "conductor"),
+            "architecture-validation-contract.v1.schema.json": ("ArchitectureValidationContract", "overseer"),
             "project-architecture-governance-profile.v1.schema.json": ("ProjectArchitectureGovernanceProfile", None),
         }
         for filename, (expected_name, expected_owner) in contracts.items():
@@ -46,8 +50,12 @@ class TestOrGov10E2EIntegrationCloseout(unittest.TestCase):
             self.assertTrue(schema_path.exists(), f"Missing schema: {filename}")
             schema = json.loads(schema_path.read_text(encoding="utf-8"))
             self.assertEqual(schema["properties"]["contract_name"]["const"], expected_name)
+            self.assertIn("schema_version", schema["properties"])
+            self.assertTrue(len(schema.get("required", [])) > 0, f"Schema {filename} missing required fields")
             if expected_owner:
                 self.assertEqual(schema["properties"]["owner"]["const"], expected_owner)
+            else:
+                self.assertNotIn("owner", schema.get("properties", {}), f"Schema {filename} should not define owner")
 
     def test_02_specialist_ownership_chain(self):
         """Verify strict ownership chain: no specialist silently absorbs another's authority."""
@@ -82,7 +90,6 @@ class TestOrGov10E2EIntegrationCloseout(unittest.TestCase):
         """Scenario A: Simple trivial change routes minimally without governance explosion."""
         routes = json.loads((REPO_ROOT / "machine" / "routing" / "routes.v1.json").read_text(encoding="utf-8"))
         self.assertIn("direct_routes", routes)
-        # Trivial work stays focused on implementation without mandatory heavy ceremony
         intake_guide = (REPO_ROOT / "skills" / "conductor" / "ARCHITECTURE_GOVERNANCE_INTAKE_GUIDE.md").read_text(encoding="utf-8")
         self.assertIn("TRIVIAL", intake_guide)
 
@@ -91,7 +98,6 @@ class TestOrGov10E2EIntegrationCloseout(unittest.TestCase):
         complexity_guide = (REPO_ROOT / "skills" / "clockwork" / "ARCHITECTURE_COMPLEXITY_AND_SCALE_POSTURE_GUIDE.md").read_text(encoding="utf-8")
         self.assertIn("SCALE_READY", complexity_guide)
         self.assertIn("SCALE_PROVISIONED", complexity_guide)
-        # Scalability alone does not justify adding unneeded infrastructure
         self.assertIn("ProductIntentContract", complexity_guide)
 
     def test_05_scenario_c_unknown_capacity(self):
@@ -113,7 +119,6 @@ class TestOrGov10E2EIntegrationCloseout(unittest.TestCase):
         tenant_guide = (REPO_ROOT / "skills" / "cipher" / "TENANT_SECURITY_GOVERNANCE_GUIDE.md").read_text(encoding="utf-8")
         self.assertIn("MULTI_TENANT", tenant_guide)
         self.assertIn("tenant isolation", tenant_guide.lower())
-        # Chronicler owns persistence enforcement
         chronicler_skill = (REPO_ROOT / "skills" / "chronicler" / "SKILL.md").read_text(encoding="utf-8")
         self.assertIn("migration", chronicler_skill)
 
@@ -133,7 +138,6 @@ class TestOrGov10E2EIntegrationCloseout(unittest.TestCase):
         """Scenario H: Unknown production presence preserves schema gap without false coercion."""
         migration_schema = json.loads((REPO_ROOT / "machine" / "schemas" / "migration-risk-contract.v1.schema.json").read_text(encoding="utf-8"))
         self.assertEqual(migration_schema["properties"]["production_data"]["type"], "boolean")
-        # Ensure documentation explicitly notes the pre-contract gap
         chronicler_guide = (REPO_ROOT / "skills" / "chronicler" / "MIGRATION_RISK_CONTRACT_GUIDE.md").read_text(encoding="utf-8")
         self.assertIn("pre-contract", chronicler_guide)
 
@@ -202,6 +206,83 @@ class TestOrGov10E2EIntegrationCloseout(unittest.TestCase):
         res = subprocess.run([sys.executable, str(REPO_ROOT / "scripts" / "validation" / "validate_architecture_boundaries.py")], cwd=str(REPO_ROOT), capture_output=True, text=True)
         self.assertEqual(res.returncode, 0)
         self.assertIn("RUNTIME_ARCHITECTURE_BOUNDARIES=PASS", res.stdout)
+
+    def test_18_architecture_governance_intake_enum_regression(self):
+        """Verify ArchitectureGovernanceIntake.change_materiality canonical enum exactly."""
+        schema_path = REPO_ROOT / "machine" / "schemas" / "architecture-governance-intake.v1.schema.json"
+        schema = json.loads(schema_path.read_text(encoding="utf-8"))
+        change_mat = schema["properties"]["change_materiality"]["enum"]
+        self.assertEqual(change_mat, ["TRIVIAL", "STANDARD", "ARCHITECTURAL", "PRODUCTION_CRITICAL"])
+        self.assertNotIn("ISOLATED_REFACTOR", change_mat)
+        self.assertNotIn("MULTI_SUBSYSTEM", change_mat)
+
+    def test_19_architecture_validation_contract_proof_states_enum_regression(self):
+        """Verify ArchitectureValidationContract proof-state enum completeness."""
+        schema_path = REPO_ROOT / "machine" / "schemas" / "architecture-validation-contract.v1.schema.json"
+        schema = json.loads(schema_path.read_text(encoding="utf-8"))
+        proof_states = schema["$defs"]["validation_result"]["enum"]
+        self.assertEqual(proof_states, ["PROVEN", "NOT_PROVEN", "NOT_REQUIRED", "FAILED"])
+        self.assertNotIn("MISSING_EVIDENCE", proof_states)
+        self.assertNotIn("STALE_INVALIDATED", proof_states)
+
+    def test_20_closeout_document_accuracy(self):
+        """Verify docs/governance/OR_GOV_10_INTEGRATION_CLOSEOUT.md has accurate terms and enums."""
+        doc_path = REPO_ROOT / "docs" / "governance" / "OR_GOV_10_INTEGRATION_CLOSEOUT.md"
+        self.assertTrue(doc_path.exists())
+        doc = doc_path.read_text(encoding="utf-8")
+
+        for term in ["TRIVIAL", "STANDARD", "ARCHITECTURAL", "PRODUCTION_CRITICAL"]:
+            self.assertIn(term, doc, f"Missing canonical term {term} in closeout document")
+
+        self.assertNotIn("ISOLATED_REFACTOR", doc)
+        self.assertNotIn("MULTI_SUBSYSTEM", doc)
+
+        for term in ["PROVEN", "NOT_PROVEN", "NOT_REQUIRED", "FAILED"]:
+            self.assertIn(term, doc, f"Missing validation proof state {term} in closeout document")
+
+    def test_21_historical_phase_ledger_regression(self):
+        """Verify canonical historical phase mapping in closeout disposition."""
+        disp_path = REPO_ROOT / "docs" / "governance" / "or_gov_10_integration_closeout_disposition.v1.json"
+        self.assertTrue(disp_path.exists())
+        disp = json.loads(disp_path.read_text(encoding="utf-8"))
+        phases = disp["program_phases"]
+
+        # Verify OR-GOV-1 is shared machine contracts, not Steward product intent
+        self.assertNotEqual(phases["or_gov_1"]["specialist"], "the-steward")
+        self.assertIn("machine contracts", phases["or_gov_1"]["phase_name"].lower())
+
+        # Verify OR-GOV-2 is Steward
+        self.assertEqual(phases["or_gov_2"]["specialist"], "the-steward")
+        self.assertIn("product intent", phases["or_gov_2"]["phase_name"].lower())
+
+        # Verify OR-GOV-3 is Clockwork complexity/scale, NOT Scribe SSU
+        self.assertEqual(phases["or_gov_3"]["specialist"], "clockwork")
+        self.assertIn("complexity", phases["or_gov_3"]["phase_name"].lower())
+        self.assertNotIn("ssu", phases["or_gov_3"]["phase_name"].lower())
+        self.assertNotEqual(phases["or_gov_3"]["specialist"], "scribe")
+
+        # Verify Scribe SSU is recorded as separate initiative
+        self.assertIn("separate_initiatives", disp)
+        self.assertEqual(disp["separate_initiatives"]["scribe_ssu"]["status"], "COMPLETE_CANONICAL_VERIFIED")
+        self.assertIn("separate", disp["separate_initiatives"]["scribe_ssu"]["relationship"].lower())
+
+    def test_22_status_preservation(self):
+        """Verify that closeout erratum preserves completion status without reopening phases."""
+        disp_path = REPO_ROOT / "docs" / "governance" / "or_gov_10_integration_closeout_disposition.v1.json"
+        disp = json.loads(disp_path.read_text(encoding="utf-8"))
+
+        self.assertEqual(disp["status"], "OR_GOV_PROGRAM_COMPLETE")
+        phases = disp["program_phases"]
+        for phase_key in ["or_gov_1", "or_gov_2", "or_gov_3", "or_gov_4", "or_gov_5", "or_gov_6", "or_gov_7", "or_gov_8a", "or_gov_8b", "or_gov_8c", "or_gov_8d", "or_gov_9", "or_gov_10"]:
+            self.assertEqual(phases[phase_key]["status"], "COMPLETE_CANONICAL_VERIFIED", f"Phase {phase_key} status drifted")
+
+        constraints = disp["non_authorizing_constraints"]
+        self.assertTrue(constraints["public_release_held"])
+        self.assertEqual(constraints["current_public_release"], "v1.7.0")
+        self.assertFalse(constraints["v1_8_publication_authorized"])
+        self.assertFalse(constraints["ar_3_authorized"])
+        self.assertFalse(constraints["ar_4_authorized"])
+        self.assertTrue(constraints["execution_stops_after_or_gov_10"])
 
 
 if __name__ == "__main__":
