@@ -1,7 +1,7 @@
 {
   "schema_version": "orchestra.host-update-contract.v1",
   "contract_id": "orchestra-host-update",
-  "package_version": "1.7.0",
+  "package_version": "1.8.0",
   "default_behavior": "READ_ONLY_PLAN",
   "unknown_host_policy": "FAIL_CLOSED",
   "authority": {
@@ -12,7 +12,9 @@
   "hosts": [
     {
       "host_id": "codex",
-      "aliases": ["codex"],
+      "aliases": [
+        "codex"
+      ],
       "maturity": "SUPPORTED",
       "adapter_path": "adapters/codex",
       "update_mechanism": "GIT_FAST_FORWARD_THEN_MANUAL_HOST_REFRESH",
@@ -39,7 +41,10 @@
     },
     {
       "host_id": "antigravity",
-      "aliases": ["antigravity", "agy"],
+      "aliases": [
+        "antigravity",
+        "agy"
+      ],
       "maturity": "SUPPORTED",
       "adapter_path": "adapters/antigravity",
       "update_mechanism": "GIT_FAST_FORWARD_THEN_MANUAL_HOST_REFRESH",
@@ -65,7 +70,10 @@
     },
     {
       "host_id": "claude-code",
-      "aliases": ["claude-code", "claude"],
+      "aliases": [
+        "claude-code",
+        "claude"
+      ],
       "maturity": "SCAFFOLD_ONLY",
       "adapter_path": "adapters/claude-code",
       "update_mechanism": "INSTRUCTION_ONLY",
@@ -76,86 +84,140 @@
         "Use this scaffold only to inspect repository update guidance for active runtime continuity.",
         "Do not represent this scaffold as marketplace installation or live installed-host mutation capability."
       ],
-      "validation_commands": ["python scripts/validate_claude_plugin.py"],
-      "recovery_hints": ["Stop if scaffold validation fails; no installed-host rollback is implied by this instruction-only surface."]
+      "validation_commands": [
+        "python scripts/validate_claude_plugin.py"
+      ],
+      "recovery_hints": [
+        "Stop if scaffold validation fails; no installed-host rollback is implied by this instruction-only surface."
+      ]
     },
     {
       "host_id": "cursor",
-      "aliases": ["cursor"],
+      "aliases": [
+        "cursor"
+      ],
       "maturity": "SCAFFOLD_ONLY",
       "adapter_path": "adapters/cursor",
       "update_mechanism": "INSTRUCTION_ONLY",
       "execution_support": "INSTRUCTION_ONLY",
       "automatic_installed_integration_refresh": false,
       "plan_command": "python scripts/host_update.py --host cursor --json",
-      "update_instructions": ["Inspect the Cursor packaging scaffold and repository release state; no live installed-host mutation is implemented."],
-      "validation_commands": ["python scripts/validate_ide_packaging.py"],
-      "recovery_hints": ["Stop on scaffold validation failure; no installed-host rollback is implied."]
+      "update_instructions": [
+        "Inspect the Cursor packaging scaffold and repository release state; no live installed-host mutation is implemented."
+      ],
+      "validation_commands": [
+        "python scripts/validate_ide_packaging.py"
+      ],
+      "recovery_hints": [
+        "Stop on scaffold validation failure; no installed-host rollback is implied."
+      ]
     },
     {
       "host_id": "windsurf",
-      "aliases": ["windsurf"],
+      "aliases": [
+        "windsurf"
+      ],
       "maturity": "SCAFFOLD_ONLY",
       "adapter_path": "adapters/windsurf",
       "update_mechanism": "INSTRUCTION_ONLY",
       "execution_support": "INSTRUCTION_ONLY",
       "automatic_installed_integration_refresh": false,
       "plan_command": "python scripts/host_update.py --host windsurf --json",
-      "update_instructions": ["Inspect the Windsurf packaging scaffold and repository release state; no live installed-host mutation is implemented."],
-      "validation_commands": ["python scripts/validate_ide_packaging.py"],
-      "recovery_hints": ["Stop on scaffold validation failure; no installed-host rollback is implied."]
+      "update_instructions": [
+        "Inspect the Windsurf packaging scaffold and repository release state; no live installed-host mutation is implemented."
+      ],
+      "validation_commands": [
+        "python scripts/validate_ide_packaging.py"
+      ],
+      "recovery_hints": [
+        "Stop on scaffold validation failure; no installed-host rollback is implied."
+      ]
     },
     {
       "host_id": "vscode",
-      "aliases": ["vscode", "vscodium"],
+      "aliases": [
+        "vscode",
+        "vscodium"
+      ],
       "maturity": "SCAFFOLD_ONLY",
       "adapter_path": "adapters/vscode",
       "update_mechanism": "INSTRUCTION_ONLY",
       "execution_support": "INSTRUCTION_ONLY",
       "automatic_installed_integration_refresh": false,
       "plan_command": "python scripts/host_update.py --host vscode --json",
-      "update_instructions": ["Inspect the VS Code/VSCodium packaging scaffold and repository release state; no live installed-host mutation is implemented."],
-      "validation_commands": ["python scripts/validate_ide_packaging.py"],
-      "recovery_hints": ["Stop on scaffold validation failure; no installed-host rollback is implied."]
+      "update_instructions": [
+        "Inspect the VS Code/VSCodium packaging scaffold and repository release state; no live installed-host mutation is implemented."
+      ],
+      "validation_commands": [
+        "python scripts/validate_ide_packaging.py"
+      ],
+      "recovery_hints": [
+        "Stop on scaffold validation failure; no installed-host rollback is implied."
+      ]
     },
     {
       "host_id": "jetbrains",
-      "aliases": ["jetbrains"],
+      "aliases": [
+        "jetbrains"
+      ],
       "maturity": "SCAFFOLD_ONLY",
       "adapter_path": "adapters/jetbrains",
       "update_mechanism": "INSTRUCTION_ONLY",
       "execution_support": "INSTRUCTION_ONLY",
       "automatic_installed_integration_refresh": false,
       "plan_command": "python scripts/host_update.py --host jetbrains --json",
-      "update_instructions": ["Inspect the JetBrains packaging scaffold and repository release state; no live installed-host mutation is implemented."],
-      "validation_commands": ["python scripts/validate_ide_packaging.py"],
-      "recovery_hints": ["Stop on scaffold validation failure; no installed-host rollback is implied."]
+      "update_instructions": [
+        "Inspect the JetBrains packaging scaffold and repository release state; no live installed-host mutation is implemented."
+      ],
+      "validation_commands": [
+        "python scripts/validate_ide_packaging.py"
+      ],
+      "recovery_hints": [
+        "Stop on scaffold validation failure; no installed-host rollback is implied."
+      ]
     },
     {
       "host_id": "zed",
-      "aliases": ["zed"],
+      "aliases": [
+        "zed"
+      ],
       "maturity": "SCAFFOLD_ONLY",
       "adapter_path": "adapters/zed",
       "update_mechanism": "INSTRUCTION_ONLY",
       "execution_support": "INSTRUCTION_ONLY",
       "automatic_installed_integration_refresh": false,
       "plan_command": "python scripts/host_update.py --host zed --json",
-      "update_instructions": ["Inspect the Zed packaging scaffold and repository release state; no live installed-host mutation is implemented."],
-      "validation_commands": ["python scripts/validate_ide_packaging.py"],
-      "recovery_hints": ["Stop on scaffold validation failure; no installed-host rollback is implied."]
+      "update_instructions": [
+        "Inspect the Zed packaging scaffold and repository release state; no live installed-host mutation is implemented."
+      ],
+      "validation_commands": [
+        "python scripts/validate_ide_packaging.py"
+      ],
+      "recovery_hints": [
+        "Stop on scaffold validation failure; no installed-host rollback is implied."
+      ]
     },
     {
       "host_id": "neovim",
-      "aliases": ["neovim", "nvim"],
+      "aliases": [
+        "neovim",
+        "nvim"
+      ],
       "maturity": "SCAFFOLD_ONLY",
       "adapter_path": "adapters/neovim",
       "update_mechanism": "INSTRUCTION_ONLY",
       "execution_support": "INSTRUCTION_ONLY",
       "automatic_installed_integration_refresh": false,
       "plan_command": "python scripts/host_update.py --host neovim --json",
-      "update_instructions": ["Inspect the Neovim packaging scaffold and repository release state; no live installed-host mutation is implemented."],
-      "validation_commands": ["python scripts/validate_ide_packaging.py"],
-      "recovery_hints": ["Stop on scaffold validation failure; no installed-host rollback is implied."]
+      "update_instructions": [
+        "Inspect the Neovim packaging scaffold and repository release state; no live installed-host mutation is implemented."
+      ],
+      "validation_commands": [
+        "python scripts/validate_ide_packaging.py"
+      ],
+      "recovery_hints": [
+        "Stop on scaffold validation failure; no installed-host rollback is implied."
+      ]
     }
   ]
 }
