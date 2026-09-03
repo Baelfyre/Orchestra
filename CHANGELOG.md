@@ -1,5 +1,16 @@
 # Changelog
 
+## Post-v1.7 OR-GOV-1 shared machine contracts and schemas candidate
+
+- Establishes seven shared machine-readable governance contract schemas (`CapacityEnvelope`, `ProductIntentContract`, `ArchitectureComplexityDecision`, `MigrationRiskContract`, `ArchitectureGovernanceIntake`, `ArchitectureValidationContract`, and `ProjectArchitectureGovernanceProfile`) under `machine/schemas/`.
+- Supports adaptive capacity value states including `EXACT`, `RANGE`, `OBSERVED`, `ESTIMATED`, `UNKNOWN`, `TO_BE_MEASURED`, and `NOT_APPLICABLE`, treating unmeasured metrics as valid rather than automatic validation failures.
+- Decouples product problem statements and evidence from requested solutions in `ProductIntentContract`.
+- Enforces architecture complexity justification, simpler-alternative review, scale postures (`SCALE_READY`, `SCALE_PROVISIONED`), and the invariant `FUTURE_SCALABILITY_ALONE_IS_NOT_SUFFICIENT_JUSTIFICATION`.
+- Provides an engine-agnostic database migration risk contract supporting locking, compatibility, backfill, patterns (`DIRECT`, `EXPAND_CONTRACT`, `BATCHED_BACKFILL`, `DUAL_READ_WRITE`, `ONLINE_DDL`, `ENGINE_SPECIFIC`, `OTHER`), and unmeasured production telemetry.
+- Establishes Conductor intake classifier surfaces and Overseer distinct validation states (`PROVEN`, `NOT_PROVEN`, `NOT_REQUIRED`, `FAILED`).
+- Adds focused schema and invariant tests in `tests/runtime/test_or_gov_contracts.py` (40 passed tests) and records machine discovery in `README.json`.
+- Does not implement later specialist behavior (OR-GOV-2 through OR-GOV-10), does not start AR-3, alters no runtime architecture, and does not authorize v1.8 publication.
+
 ## Post-v1.7 Scribe specialist upgrade candidate
 
 - Expands Scribe into a Documentation, Domain Narrative, and Knowledge Traceability Specialist with `SPEC_TO_SYSTEM`, `SYSTEM_TO_DOCS`, and `RECONCILE` modes, domain narrative, bidirectional traceability, adaptive research/capstone guidance, and as-built/reconciliation templates.
