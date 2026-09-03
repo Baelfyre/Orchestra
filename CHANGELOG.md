@@ -1,5 +1,15 @@
 # Changelog
 
+## Post-v1.7 OR-GOV-10 final integration, parity, full regression, and program closeout candidate
+
+- Concludes the Orchestra Architecture & Governance Hardening Program (OR-GOV-1 through OR-GOV-10).
+- Verifies the canonical Contract Inventory: `CapacityEnvelope`, `ProductIntentContract`, `ArchitectureComplexityDecision`, `MigrationRiskContract`, `ArchitectureGovernanceIntake`, `ArchitectureValidationContract`, and `ProjectArchitectureGovernanceProfile`.
+- Validates the complete specialist ownership chain (The Steward, Conductor, Clockwork, Chronicler, Cipher, The Tuner, Overseer, Arbiter, Ponytail, Scribe, The Governor, Weaver, Cloak, Dagger) ensuring zero silent authority absorption.
+- Implements and passes 10 end-to-end integration scenarios (Scenarios A through J) covering trivial routing, premature scaling, unknown capacity, empirical performance claims, multi-tenant persistence, declared-edge invalidation, stale evidence enforcement, unknown migration production state, documentation reconciliation, and blocked unauthorized Dagger execution.
+- Verifies Codex adapter export parity, prompt load budgets, routing consistency, Tuner collaboration consistency, UIX-9 frozen guidance integrity, and runtime architecture boundaries.
+- Adds `docs/governance/or_gov_10_integration_closeout_disposition.v1.json`, `docs/governance/OR_GOV_10_INTEGRATION_CLOSEOUT.md`, and deterministic E2E integration test suite `tests/behavior/test_or_gov_10_e2e_integration_closeout.py` (17/17 PASS) registered in `tests/behavior/run_tests.py`.
+- Terminates Continuous Governed Run B. Preserves the v1.8 publication hold; public release remains `v1.7.0`. AR-3, AR-4, release, deployment, provider, and policy changes remain out of scope and unauthorized.
+
 ## Post-v1.7 OR-GOV-9 conditional specialist governance sufficiency audit candidate
 
 - Performs conditional specialist governance sufficiency audit across The Governor, Weaver, Cloak, and Dagger.
