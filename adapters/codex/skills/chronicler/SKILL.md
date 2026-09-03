@@ -31,7 +31,7 @@ You are the definitive source of truth for database normalization. You must own:
 
 ## Activation Conditions
 
-Use Chronicler for data modeling, SQL/NoSQL schemas, JSON documents, table/collection definitions, normalization (1NF-BCNF), keys, constraints, index strategy, seed data structures, migration safety, stored procedures, audit log persistence design, ORM/JPA alignments, data dictionaries, data lifecycle rules, SQL query reasoning, database report logic, validation queries, joins, subqueries, views, and aggregation review.
+Use Chronicler for data modeling, SQL/NoSQL schemas, JSON documents, table/collection definitions, normalization (1NF-BCNF), keys, constraints, index strategy, seed data structures, migration safety, `MigrationRiskContract` planning, stored procedures, audit log persistence design, ORM/JPA alignments, data dictionaries, data lifecycle rules, SQL query reasoning, database report logic, validation queries, joins, subqueries, views, and aggregation review.
 
 ### Record Accuracy Gate
 **Trigger:** Any task involving factual, curated, academic, legal, source-linked, or public-facing records.
@@ -77,6 +77,7 @@ Use `SKILL.md` first. Do not load every supporting document by default or consum
 - Load [TRANSACTION_ISOLATION_LOCKING_GUIDE.md](TRANSACTION_ISOLATION_LOCKING_GUIDE.md) for isolation, MVCC, concurrency anomalies, locks, deadlocks, retries, or long-running transaction review.
 - Load [QUERY_PLAN_TENANT_ISOLATION_GUIDE.md](QUERY_PLAN_TENANT_ISOLATION_GUIDE.md) for plan analysis, index evidence, row-estimate errors, tenant predicates, or database-enforced tenant isolation.
 - Load [ZERO_DOWNTIME_MIGRATION_GUIDE.md](ZERO_DOWNTIME_MIGRATION_GUIDE.md) for compatibility-window, backfill, expand-contract, online DDL, or phased schema-change planning.
+- Load [MIGRATION_RISK_CONTRACT_GUIDE.md](MIGRATION_RISK_CONTRACT_GUIDE.md) when producing or consuming a `MigrationRiskContract`, classifying production-state uncertainty, selecting a migration pattern, or assigning a proportional human gate.
 
 ## Operating principles
 

@@ -368,7 +368,7 @@ def test_architecture_complexity_unsupported_justification_rejected() -> None:
 
 
 def test_migration_risk_contract_engine_agnostic_and_unknown_handling() -> None:
-    """Proves: MigrationRiskContract works for any database engine and accepts unknown facts."""
+    """Proves: the v1 contract accepts unknown telemetry while production presence is confirmed."""
     contract = {
         "schema_version": "orchestra.migration-risk-contract.v1",
         "contract_name": "MigrationRiskContract",
@@ -393,6 +393,27 @@ def test_migration_risk_contract_engine_agnostic_and_unknown_handling() -> None:
         "human_gate_required": True,
     }
     assert validate_contract_schema("MigrationRiskContract", contract) == []
+
+
+def test_migration_risk_contract_rejects_unknown_production_presence() -> None:
+    """The strict v1 Boolean cannot represent unknown production presence."""
+    contract = {
+        "schema_version": "orchestra.migration-risk-contract.v1",
+        "contract_name": "MigrationRiskContract",
+        "owner": "chronicler",
+        "revision": "rev-mig-unknown-production",
+        "database_engine": "UNKNOWN",
+        "schema_revision": "UNKNOWN",
+        "production_data": "UNKNOWN",
+        "locking_implications": "Unknown until the production-data context is confirmed.",
+        "compatibility_required": False,
+        "backfill_required": False,
+        "migration_pattern": "OTHER",
+        "risk": "UNKNOWN",
+        "human_gate_required": True,
+    }
+    errors = validate_contract_schema("MigrationRiskContract", contract)
+    assert errors, "Unknown production presence must not be coerced into a valid v1 Boolean"
 
 
 @pytest.mark.parametrize(

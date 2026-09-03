@@ -44,6 +44,7 @@ Portable memory is optional. Orchestra does not require or identify a specific e
 
 Specialist prose and progressive-disclosure knowledge remain under `../skills/*/`.
 
+- [Chronicler Migration Risk Contract Guide](../skills/chronicler/MIGRATION_RISK_CONTRACT_GUIDE.md): evidence-bound production compatibility, migration patterns, rollback, and human-gate guidance.
 - [Scribe Specialist Upgrade SSU](project/SCRIBE_SPECIALIST_UPGRADE_SSU.md): adaptive domain narrative, traceability, research/capstone documentation, and documentation/system reconciliation guidance.
 
 ## Governance and authority
