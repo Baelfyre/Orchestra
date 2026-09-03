@@ -42,6 +42,12 @@
 - State the exact evidence and revision supporting each result.
 - Mark stale or mismatched reports.
 
+For contract-derived architecture validation, load
+[ARCHITECTURE_VALIDATION_CONTRACT_GUIDE.md](ARCHITECTURE_VALIDATION_CONTRACT_GUIDE.md).
+It defines the existing `ArchitectureValidationContract` evidence boundary,
+including `PROVEN`, `NOT_PROVEN`, `NOT_REQUIRED`, and `FAILED`; it does not add
+a second QA framework.
+
 ## Ask for Missing Evidence
 
 Ask only when the missing requirement, environment, result, defect evidence, or gate definition materially changes the decision. Otherwise, document the gap and proceed with limited confidence.

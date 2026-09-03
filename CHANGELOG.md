@@ -1,5 +1,13 @@
 # Changelog
 
+## Post-v1.7 OR-GOV-7 Overseer architecture validation candidate
+
+- Formalizes Overseer's existing contract-derived validation behavior around `ArchitectureValidationContract`, preserving the canonical seven validation dimensions and `PROVEN`, `NOT_PROVEN`, `NOT_REQUIRED`, and `FAILED` proof states.
+- Binds current proof to the complete accepted contract references, exact subject revision, actual environment identity, and observed criterion-level evidence. Missing, skipped, stale, mismatched, flaky, or crashed evidence remains `NOT_PROVEN`; only observed criterion failure is `FAILED`.
+- Preserves accepted capacity ranges and unknown or estimated values without inventing targets, adds proportionate migration, tenant-isolation, failure, compatibility, and scale-posture guidance, and keeps `SCALE_READY` distinct from quantified capacity proof.
+- Reuses the existing evidence and Tuner freshness boundaries. Overseer does not implement tests, run migrations or destructive simulations, route specialists, issue Arbiter transitions, change upstream contracts, or grant merge, release, deployment, or policy authority.
+- Adds progressive-disclosure validation guidance, output-format parity, deterministic OR-GOV-7 proof-state coverage, and runtime architecture placement validation. The OR-GOV-4 unknown-production schema gap remains preserved; OR-GOV-8, AR-3, release, deployment, provider, and policy changes remain out of scope.
+
 ## Post-v1.7 OR-GOV-6 Tuner governance contract dependency candidate
 
 - Integrates `ArchitectureGovernanceIntake`, `ProductIntentContract`, `CapacityEnvelope`, `ArchitectureComplexityDecision`, `MigrationRiskContract`, and project governance profile references with the existing Tuner collaboration and invalidation model.
