@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.7 OR-GOV-8C Ponytail upstream-contract enforcement candidate
+
+- Formalizes Ponytail's deterministic upstream-contract consumption and implementation discipline as `skills/ponytail/UPSTREAM_CONTRACT_ENFORCEMENT_GUIDE.md`.
+- Enforces strict compliance with accepted upstream specialist contracts (Steward, Governor, Clockwork, Chronicler, Cipher, Cloak, Overseer, Arbiter, The Tuner).
+- Establishes core operational tenets: Minimal Safe Solution (Caveman filter), zero invented facts, reversibility and modularity, native-first and dependency discipline, and Git-tracked source of truth.
+- Implements fail-closed protocol for contract gaps: missing, ambiguous, stale, or scope-creeping contracts halt implementation without guessing.
+- Adds `UPSTREAM_CONTRACT_COMPLIANCE` output format, byte-identical Codex parity mirror, and 22 deterministic behavioral tests registered in `tests/behavior/run_tests.py`.
+- Preserves UIX-9 frozen `SKILL.md` integrity and the v1.8 publication hold. OR-GOV-8D, OR-GOV-9, OR-GOV-10, AR-3, release, deployment, provider, and policy changes remain out of scope.
+
 ## Post-v1.7 OR-GOV-8B Arbiter contract and evidence freshness candidate
 
 - Formalizes Arbiter's deterministic contract and evidence freshness rules, binding transition admissibility to the exact commit SHA, tree hash, and parent lineage triple without expanding execution authority.

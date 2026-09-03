@@ -28,3 +28,13 @@ FILES TO EDIT:
 PROPOSED CHANGES:
 REQUIRED VALIDATION:
 ```
+
+## UPSTREAM_CONTRACT_COMPLIANCE
+Use for verifying upstream specialist contract alignment before code implementation.
+
+```text
+UPSTREAM_CONTRACTS_VERIFIED:
+BOUNDED_SCOPE:
+MINIMAL_DIFF_STRATEGY:
+SPECIALIST_HANDOFFS:
+```

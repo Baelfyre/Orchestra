@@ -1201,13 +1201,59 @@
       "or_gov_7_implemented": true,
       "or_gov_8a_implemented": true,
       "or_gov_8b_implemented": true,
-      "or_gov_8c_started": false,
+      "or_gov_8c_started": true,
       "or_gov_8d_started": false,
       "or_gov_9_started": false,
       "or_gov_10_started": false,
       "ar3_started": false,
       "release_authorized": false,
       "authority_note": "OR-GOV-8B formalizes Arbiter contract and evidence freshness rules and transition precedence only. It does not implement OR-GOV-8C/8D/9/10, start AR-3, expand Dagger, or authorize release, deployment, policy, provider, or v1.8 publication."
+    },
+    "specialist_governance_refinement_or_gov_8c": {
+      "status": "OR_GOV_8C_PONYTAIL_UPSTREAM_CONTRACT_ENFORCEMENT_IMPLEMENTED",
+      "purpose": "Formalize Ponytail's deterministic upstream-contract consumption, minimal safe diff discipline, and zero-invented-facts implementation boundaries without expanding authority.",
+      "machine_sources": [
+        "machine/ui/specialist-integration-flow.v1.json",
+        "machine/ui/uix9-live-guidance-manifest.v1.json",
+        "machine/governance/runtime-architecture-boundaries.v1.json",
+        "tests/behavior/test_ponytail_upstream_contract_enforcement.py"
+      ],
+      "human_sources": [
+        "skills/ponytail/SKILL.md",
+        "skills/ponytail/UPSTREAM_CONTRACT_ENFORCEMENT_GUIDE.md",
+        "skills/ponytail/UPSTREAM_REFERENCE.md",
+        "skills/ponytail/IMPLEMENTATION_FOUNDATIONS_GUIDE.md",
+        "skills/ponytail/OUTPUT_FORMATS.md",
+        "docs/README.md"
+      ],
+      "validation_surfaces": [
+        "tests/behavior/test_ponytail_upstream_contract_enforcement.py",
+        "tests/behavior/run_tests.py",
+        "scripts/check_readme_impact.py"
+      ],
+      "upstream_contract_enforcement_defined": true,
+      "minimal_safe_solution_caveman_filter": true,
+      "zero_invented_facts_enforced": true,
+      "reversibility_and_modularity_enforced": true,
+      "native_first_dependency_discipline_enforced": true,
+      "overseer_validation_handoff_preserved": true,
+      "uix9_frozen_skill_md_preserved": true,
+      "or_gov_1_implemented": true,
+      "or_gov_2_implemented": true,
+      "or_gov_3_implemented": true,
+      "or_gov_4_implemented": true,
+      "or_gov_5_implemented": true,
+      "or_gov_6_implemented": true,
+      "or_gov_7_implemented": true,
+      "or_gov_8a_implemented": true,
+      "or_gov_8b_implemented": true,
+      "or_gov_8c_implemented": true,
+      "or_gov_8d_started": false,
+      "or_gov_9_started": false,
+      "or_gov_10_started": false,
+      "ar3_started": false,
+      "release_authorized": false,
+      "authority_note": "OR-GOV-8C formalizes Ponytail upstream-contract consumption and implementation discipline only. It does not implement OR-GOV-8D/9/10, start AR-3, expand Dagger, or authorize release, deployment, policy, provider, or v1.8 publication."
     }
   },
   "machine_scan_order": [
