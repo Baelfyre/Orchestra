@@ -1,0 +1,92 @@
+{
+  "schema_version": "orchestra.governance-disposition.v1",
+  "phase": "OR-GOV-9",
+  "title": "Conditional Specialist Governance Sufficiency Audit Disposition",
+  "recorded_at": "2026-09-04T03:40:00+08:00",
+  "baseline": {
+    "canonical_sha": "3620934d1d974ff3d649cd1d0a1daf8a7af30afd",
+    "canonical_tree": "09520292a88f1247703503aa190cef23dd853f78",
+    "canonical_parent": "a36f41468bb5c0ab89ac0c6c4c83ee4bddf3be7d",
+    "canonical_signature": "VERIFIED_VALID"
+  },
+  "specialists_audited": {
+    "the_governor": {
+      "role": "Legal, Compliance, Privacy, and IP Governance Authority",
+      "sources_reviewed": [
+        "skills/the-governor/SKILL.md",
+        "skills/the-governor/AUTHORITATIVE_SOURCE_VERIFICATION_GUIDE.md",
+        "skills/the-governor/LICENSE_PRIVACY_IP_COMPLIANCE_GUIDE.md",
+        "skills/the-governor/HUMAN_ESCALATION_BOUNDARIES_GUIDE.md",
+        "skills/the-governor/OUTPUT_FORMATS.md"
+      ],
+      "findings": "Governor already enforces strict no-assumption rules for jurisdiction, legal obligations, and compliance frameworks. Distinguishes technical security (Cipher) from legal/regulatory governance. Material uncertainty maps to human_review_required. Does not assume legal authority from architecture profiles.",
+      "disposition": "NO_REFINEMENT_REQUIRED",
+      "frozen_guidance_intact": true,
+      "frozen_skill_modified": false
+    },
+    "weaver": {
+      "role": "Visual Modeling and Diagram Generation Specialist",
+      "sources_reviewed": [
+        "skills/weaver/SKILL.md",
+        "skills/weaver/MODEL_TRACEABILITY_INVALIDATION_GUIDE.md",
+        "skills/weaver/DIAGRAM_STANDARDS.md",
+        "skills/weaver/OUTPUT_FORMATS.md"
+      ],
+      "findings": "Weaver enforces source-to-model traceability, marks conflicting facts CONTRADICTED, preserves UNKNOWN without invented connectors, and invalidates diagrams on semantic source fact changes while preserving validity across cosmetic layout changes. Diagram validation remains explicitly non-authorizing.",
+      "disposition": "NO_REFINEMENT_REQUIRED",
+      "frozen_guidance_intact": true,
+      "frozen_skill_modified": false
+    },
+    "cloak": {
+      "role": "UI/UX, Accessibility, Responsive Layout, and Frontend Design Specialist",
+      "sources_reviewed": [
+        "skills/cloak/SKILL.md",
+        "skills/cloak/FRONTEND_ROUTING_COMPONENT_BOUNDARIES_GUIDE.md",
+        "skills/cloak/DESIGN_TOKENS_COMPONENT_STATES_GUIDE.md",
+        "skills/cloak/OUTPUT_FORMATS.md"
+      ],
+      "findings": "Cloak explicitly enforces that hidden UI navigation is not backend authorization. Permission states describe user-visible limitations without leaking policy details. Backend enforcement remains mandatory under Cipher. UI visibility != authorization invariant is strictly preserved.",
+      "disposition": "NO_REFINEMENT_REQUIRED",
+      "frozen_guidance_intact": true,
+      "frozen_skill_modified": false
+    },
+    "dagger": {
+      "role": "Chaos and Resilience Specialist (Regression Only)",
+      "sources_reviewed": [
+        "skills/dagger/SKILL.md",
+        "skills/dagger/SAFETY_GATES.md",
+        "scripts/test_dagger_guardrail.py",
+        "scripts/dagger_guardrail.py"
+      ],
+      "findings": "Dagger remains gated and simulation-first with live destructive execution strictly blocked. No new governance capability added. Guardrails, rollbacks, and handoffs to Overseer, Cipher, and Ponytail are fully functional.",
+      "disposition": "REGRESSION_PASS_NO_REFINEMENT_REQUIRED",
+      "authority_expanded": false,
+      "destructive_execution": false,
+      "regression_result": "PASS"
+    }
+  },
+  "audit_disposition": "OR_GOV_9_SUFFICIENT_NO_REFINEMENT",
+  "or_gov_10_eligible": true,
+  "invariants_confirmed": {
+    "no_assumed_jurisdiction": true,
+    "no_assumed_legal_obligation": true,
+    "no_assumed_compliance_framework": true,
+    "no_automatic_legal_sufficiency_claim": true,
+    "technical_security_distinct_from_legal_governance": true,
+    "source_facts_to_diagram_without_invented_facts": true,
+    "ui_visibility_distinct_from_authorization": true,
+    "dagger_no_authority_expansion": true,
+    "dagger_live_execution_blocked": true,
+    "frozen_skills_preserved": true
+  },
+  "tests_executed": [
+    "tests/behavior/test_or_gov_9_specialist_governance_sufficiency.py",
+    "tests/runtime/test_or_gov_contracts.py",
+    "scripts/test_dagger_guardrail.py",
+    "scripts/governance_check.py --strict"
+  ],
+  "known_limitations": [
+    "MigrationRiskContract v1 UNKNOWN production presence remains a pre-contract schema gap.",
+    "AR-3, AR-4, and v1.8 publication remain unauthorized."
+  ]
+}

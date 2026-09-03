@@ -66,6 +66,7 @@ Constitutional and Development Lifecycle V2 surfaces:
 - [Qualification Gates, Evaluation, and Independent Audit](governance/QUALIFICATION_GATES_EVALUATION_AUDIT.md): risk-proportional qualification and controlled-evaluation integrity.
 - [Pre-state, Forward Recovery, and Branch Retirement](governance/PRESTATE_RECOVERY_BRANCH_RETIREMENT.md): forward-only recovery and non-authorizing retirement classification.
 - [Prime Directive / Lifecycle V2 Realignment](governance/PRIME_DIRECTIVE_LIFECYCLE_V2_REALIGNMENT.md): current-main reconciliation and Campaign 0-5 provenance.
+- [OR-GOV-9 Specialist Sufficiency Audit](governance/OR_GOV_9_SPECIALIST_SUFFICIENCY_AUDIT.md): conditional specialist governance sufficiency audit across The Governor, Weaver, Cloak, and Dagger.
 
 Existing governance/runtime surfaces remain subordinate and active:
 
