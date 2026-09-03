@@ -99,6 +99,7 @@ def validate(repo_root):
     required_paths = [
         repo_root / "skills/the-tuner/SKILL.md",
         repo_root / "skills/the-tuner/OUTPUT_FORMATS.md",
+        repo_root / "skills/the-tuner/GOVERNANCE_CONTRACT_DEPENDENCY_GUIDE.md",
         repo_root / "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md",
         repo_root / "tests/behavior/tuner-collaboration-fixtures.json",
     ]
@@ -124,7 +125,7 @@ def validate(repo_root):
         if phrase not in skill:
             errors.append(f"skills/the-tuner/SKILL.md: missing `{phrase}`")
 
-    protocol = required_paths[2].read_text(encoding="utf-8")
+    protocol = required_paths[3].read_text(encoding="utf-8")
     for token in REQUIRED_PROTOCOL_TOKENS:
         if token not in protocol:
             errors.append(f"coordination protocol: missing `{token}`")
@@ -136,6 +137,17 @@ def validate(repo_root):
     ):
         if phrase not in protocol:
             errors.append(f"coordination protocol: missing boundary phrase `{phrase}`")
+
+    governance_guide = required_paths[2].read_text(encoding="utf-8")
+    for phrase in (
+        "exact consumed clauses",
+        "identity-only reference refresh",
+        "finite cycle",
+        "recommended_next_route: conductor",
+        "must never be coerced to `false`",
+    ):
+        if phrase not in governance_guide:
+            errors.append(f"governance dependency guide: missing `{phrase}`")
 
     outputs = required_paths[1].read_text(encoding="utf-8")
     for heading in (
@@ -166,7 +178,7 @@ def validate(repo_root):
         if token not in content:
             errors.append(f"{label}: missing `{token}`")
 
-    fixtures = load_json(required_paths[3])
+    fixtures = load_json(required_paths[4])
     if not isinstance(fixtures, list):
         return errors + ["tuner fixtures must be a top-level list"]
     seen = set()

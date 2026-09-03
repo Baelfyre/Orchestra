@@ -586,7 +586,12 @@ def _has_blocking_cycle(
 ) -> bool:
     graph = {item.specialist_slug: set() for item in participants}
     for dependency in dependencies:
-        if dependency.blocking and dependency.dependency_kind is not DependencyKind.REVIEWS:
+        # Invalidation edges describe revalidation reachability, not execution
+        # order. They may point backward or form a finite cycle.
+        if dependency.blocking and dependency.dependency_kind not in {
+            DependencyKind.REVIEWS,
+            DependencyKind.INVALIDATES,
+        }:
             graph[dependency.source_specialist].add(dependency.target_specialist)
 
     visiting: set[str] = set()

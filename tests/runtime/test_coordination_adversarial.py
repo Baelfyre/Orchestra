@@ -177,6 +177,26 @@ def test_review_edges_may_cycle_but_blocking_dependency_edges_may_not():
     assert exc.value.reason_code == "COORDINATION_DEPENDENCY_CYCLE"
 
 
+def test_invalidation_edges_may_form_a_finite_reentry_cycle():
+    graph = build_graph()
+    invalidation_cycle = graph.dependencies + (
+        CollaborationDependency(
+            "dep.clockwork.overseer-invalidation",
+            "clockwork",
+            "overseer",
+            DependencyKind.INVALIDATES,
+        ),
+        CollaborationDependency(
+            "dep.overseer.clockwork-invalidation",
+            "overseer",
+            "clockwork",
+            DependencyKind.INVALIDATES,
+        ),
+    )
+    cycled = replace(graph, dependencies=invalidation_cycle)
+    assert cycled.fingerprint
+
+
 def test_public_manifest_does_not_expose_direct_tuner_command():
     repo_root = Path(__file__).resolve().parents[2]
     manifest = json.loads((repo_root / "plugin.json").read_text(encoding="utf-8"))
