@@ -1248,12 +1248,57 @@
       "or_gov_8a_implemented": true,
       "or_gov_8b_implemented": true,
       "or_gov_8c_implemented": true,
-      "or_gov_8d_started": false,
+      "or_gov_8d_started": true,
       "or_gov_9_started": false,
       "or_gov_10_started": false,
       "ar3_started": false,
       "release_authorized": false,
       "authority_note": "OR-GOV-8C formalizes Ponytail upstream-contract consumption and implementation discipline only. It does not implement OR-GOV-8D/9/10, start AR-3, expand Dagger, or authorize release, deployment, policy, provider, or v1.8 publication."
+    },
+    "specialist_governance_refinement_or_gov_8d": {
+      "status": "OR_GOV_8D_SCRIBE_GOVERNANCE_DOCUMENTATION_INTEGRATION_IMPLEMENTED",
+      "purpose": "Formalize Scribe's deterministic post-SSU governance documentation discipline, bidirectional traceability, and evidence-bound claim verification without expanding authority.",
+      "machine_sources": [
+        "docs/project/SCRIBE_SPECIALIST_UPGRADE_SSU.md",
+        "tests/behavior/test_scribe_governance_documentation_integration.py"
+      ],
+      "human_sources": [
+        "skills/scribe/SKILL.md",
+        "skills/scribe/GOVERNANCE_DOCUMENTATION_INTEGRATION_GUIDE.md",
+        "skills/scribe/DOMAIN_NARRATIVE_MODELING_GUIDE.md",
+        "skills/scribe/REQUIREMENTS_TRACEABILITY_GUIDE.md",
+        "skills/scribe/RESEARCH_CAPSTONE_DOCUMENTATION_GUIDE.md",
+        "skills/scribe/DOCUMENTATION_SYSTEM_RECONCILIATION_GUIDE.md",
+        "skills/scribe/OUTPUT_FORMATS.md",
+        "docs/README.md"
+      ],
+      "validation_surfaces": [
+        "tests/behavior/test_scribe_governance_documentation_integration.py",
+        "tests/behavior/run_tests.py",
+        "scripts/check_readme_impact.py"
+      ],
+      "governance_documentation_integration_defined": true,
+      "bidirectional_traceability_enforced": true,
+      "zero_invented_facts_enforced": true,
+      "prohibited_silent_promotions_enforced": true,
+      "non_coercion_unknown_states_enforced": true,
+      "ssu_modes_integrated": true,
+      "or_gov_1_implemented": true,
+      "or_gov_2_implemented": true,
+      "or_gov_3_implemented": true,
+      "or_gov_4_implemented": true,
+      "or_gov_5_implemented": true,
+      "or_gov_6_implemented": true,
+      "or_gov_7_implemented": true,
+      "or_gov_8a_implemented": true,
+      "or_gov_8b_implemented": true,
+      "or_gov_8c_implemented": true,
+      "or_gov_8d_implemented": true,
+      "or_gov_9_started": false,
+      "or_gov_10_started": false,
+      "ar3_started": false,
+      "release_authorized": false,
+      "authority_note": "OR-GOV-8D formalizes Scribe post-SSU governance documentation integration only. It concludes Continuous Governed Run A. It does not implement OR-GOV-9/10, start AR-3, expand Dagger, or authorize release, deployment, policy, provider, or v1.8 publication."
     }
   },
   "machine_scan_order": [

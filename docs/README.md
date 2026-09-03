@@ -51,6 +51,7 @@ Specialist prose and progressive-disclosure knowledge remain under `../skills/*/
 - [Ponytail Upstream-Contract Enforcement Guide](../skills/ponytail/UPSTREAM_CONTRACT_ENFORCEMENT_GUIDE.md): deterministic upstream-contract consumption, minimal safe diff discipline, zero-invented-facts boundaries, and specialist handoffs.
 - [Overseer Architecture Validation Contract Guide](../skills/overseer/ARCHITECTURE_VALIDATION_CONTRACT_GUIDE.md): contract-derived validation obligations, exact-bound proof states, and evidence limitations.
 - [Scribe Specialist Upgrade SSU](project/SCRIBE_SPECIALIST_UPGRADE_SSU.md): adaptive domain narrative, traceability, research/capstone documentation, and documentation/system reconciliation guidance.
+- [Scribe Post-SSU Governance Documentation Integration Guide](../skills/scribe/GOVERNANCE_DOCUMENTATION_INTEGRATION_GUIDE.md): deterministic post-SSU governance documentation discipline, specialist contract matrices, bidirectional traceability, and evidence-bound claim verification.
 
 ## Governance and authority
 

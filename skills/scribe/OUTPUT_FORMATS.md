@@ -93,3 +93,30 @@ Use for quick audits.
 ## Next Action
 -
 ```
+
+## GOVERNANCE_DOCUMENTATION_RECONCILIATION
+
+Use for auditing and reconciling documentation against governance reality, specialist contracts, and exact-head commit/tree lineage.
+
+```markdown
+# Governance Documentation Reconciliation Report
+
+## Target Surface
+- Document Path:
+- Lineage Binding (Commit / Tree):
+- Specialist Contracts Reviewed:
+
+## Evidence Evaluation
+- Verified Source Evidence:
+- Missing Evidence / Gaps:
+- Prohibited Silent Promotions Detected: None / [List]
+
+## Drift & Contradiction Analysis
+- Documentation Drift: None / [Details]
+- Implementation Drift: None / [Details]
+- Contract Contradictions: None / [Details]
+
+## Disposition & Handoff
+- Reconciliation Status: RECONCILED / DRIFT_DETECTED / MISSING_EVIDENCE
+- Specialist Handoffs Required:
+```
