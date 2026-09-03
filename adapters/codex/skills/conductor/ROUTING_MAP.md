@@ -44,6 +44,28 @@ Do not load it for obvious single-owner work.
 | Cross-specialist contract coordination | `the-tuner` | Conductor has classified material multi-domain dependencies, missing ownership, contradiction, stale contract, or late boundary crossing |
 | Frontend/backend synchronicity | `conductor` -> `the-tuner` | Frozen packet and authority exist |
 
+## OR-GOV-5 Architecture Governance Intake
+
+Use the canonical `ArchitectureGovernanceIntake` inside the existing Routing
+Plan when a request may affect architecture, capacity, tenancy, persistence,
+product intent, security, or validation. Load
+[the architecture governance intake guide](https://github.com/Baelfyre/Orchestra/blob/main/skills/conductor/ARCHITECTURE_GOVERNANCE_INTAKE_GUIDE.md) only for that
+material intake. Classify context, preserve unknown values, and compose the
+smallest sufficient route.
+
+- `architecture-governance-intake` -> `conductor` for the canonical classifier and route composition.
+- `adaptive-capacity-routing` -> `conductor` when a decision-specific capacity dependency must be detected and routed.
+- `route-composition` -> `conductor` when dependent specialist order must be selected.
+- Product or strategic intent unresolved -> `the-steward`, then `clockwork` only when architecture is actually needed.
+- Capacity measurement required -> `the-steward`, then `overseer`, then `clockwork` only when architecture follows.
+- Confirmed persistence semantics -> `chronicler`, then `ponytail` after the persistence guidance is accepted.
+- Security-sensitive implementation -> `cipher`, then `ponytail` after security requirements are ready.
+- Validation or quantified sufficiency claim -> `overseer`; missing evidence remains `NOT_PROVEN` or the applicable missing-evidence state.
+- Unknown production presence -> `chronicler` with `PRODUCTION_PRESENCE_UNRESOLVED`; never emit `production_data=false` from that uncertainty.
+
+Keywords are contextual triggers, not decisions. OR-GOV-5 does not implement
+OR-GOV-6 dependency invalidation, propagation, or minimal re-entry.
+
 The two compliance commands are explicit public commands. They must not rely on the unknown-command ambiguity fallback. `/compliance-registry` uses Conductor only as the command entry boundary and delegates data lifecycle work to the deterministic Registry script. `/compliance-review` follows the governed ordered sequence below; no role may treat Registry evidence as release, deployment, execution, or legal authority.
 
 ## Scribe SSU Routing Rules
@@ -58,7 +80,11 @@ Do not route every documentation request through every specialist. Progressive d
 ## Ordered Multi-Skill Sequences
 
 - `the-governor -> cipher -> ponytail` for governance-sensitive security implementation
+- `the-steward -> clockwork` for unresolved product intent or decision-changing capacity before architecture
+- `the-steward -> overseer -> clockwork` when capacity must be measured before architecture
 - `clockwork -> ponytail` for architecture-first implementation
+- `chronicler -> ponytail` for persistence guidance followed by bounded implementation
+- `cipher -> ponytail` for security requirements followed by bounded implementation
 - `chronicler -> overseer` for persistence semantics followed by migration or DB validation
 - `chronicler -> ponytail -> overseer` for an accepted MigrationRiskContract that requires bounded implementation and validation
 - `the-steward -> scribe` for required SDLC documentation shaped by business-alignment governance

@@ -983,6 +983,47 @@
       "ar3_started": false,
       "release_authorized": false,
       "authority_note": "OR-GOV-4 formalizes Chronicler planning and handoff only. It does not execute migrations or production SQL, decide architecture or security policy, claim release readiness, implement OR-GOV-5, start AR-3, or authorize v1.8 publication."
+    },
+    "specialist_governance_refinement_or_gov_5": {
+      "status": "OR_GOV_5_CONDUCTOR_ARCHITECTURE_INTAKE_IMPLEMENTED",
+      "purpose": "Formalize Conductor architecture-governance intake, adaptive capacity-context routing, and minimum sufficient specialist route composition without transferring domain authority.",
+      "machine_sources": [
+        "machine/schemas/architecture-governance-intake.v1.schema.json",
+        "machine/schemas/capacity-envelope.v1.schema.json",
+        "machine/schemas/product-intent.v1.schema.json",
+        "machine/schemas/architecture-complexity-decision.v1.schema.json",
+        "machine/routing/routes.v1.json"
+      ],
+      "human_sources": [
+        "skills/conductor/SKILL.md",
+        "skills/conductor/ROUTING_EVALUATION_GUIDE.md",
+        "skills/conductor/ARCHITECTURE_GOVERNANCE_INTAKE_GUIDE.md",
+        "skills/conductor/OUTPUT_FORMATS.md",
+        "ROUTING_MAP.md",
+        "SKILL_INDEX.md",
+        "docs/README.md"
+      ],
+      "validation_surfaces": [
+        "tests/behavior/test_conductor_architecture_governance_intake.py",
+        "tests/behavior/router-contract-fixtures.json",
+        "scripts/validate_routing_contract.py",
+        "tests/runtime/test_or_gov_contracts.py",
+        "tests/runtime/test_uix9_live_proof_protocol.py"
+      ],
+      "frozen_conductor_skill": true,
+      "uix9_baseline_rewritten": false,
+      "capacity_questionnaire": "DECISION_DEPENDENCY_ONLY",
+      "minimum_route_composition": "CONDITIONAL_SPECIALIST_STACK",
+      "migration_risk_unknown_production_gap": "PRESERVED_SCHEMA_GAP_NO_TRI_STATE_AMENDMENT",
+      "or_gov_1_implemented": true,
+      "or_gov_2_implemented": true,
+      "or_gov_3_implemented": true,
+      "or_gov_4_implemented": true,
+      "or_gov_5_implemented": true,
+      "or_gov_6_started": false,
+      "ar3_started": false,
+      "release_authorized": false,
+      "authority_note": "OR-GOV-5 classifies and sequences work only. It does not make product, architecture, persistence, security, QA, implementation, migration, release, deployment, policy, Dagger, or other protected-action decisions; the OR-GOV-4 unknown-production schema gap remains preserved."
     }
   },
   "machine_scan_order": [
@@ -1275,7 +1316,9 @@
     "scribe_requirements_traceability_guide": "skills/scribe/REQUIREMENTS_TRACEABILITY_GUIDE.md",
     "scribe_research_capstone_guide": "skills/scribe/RESEARCH_CAPSTONE_DOCUMENTATION_GUIDE.md",
     "scribe_documentation_reconciliation_guide": "skills/scribe/DOCUMENTATION_SYSTEM_RECONCILIATION_GUIDE.md",
-    "scribe_output_templates": "skills/scribe/OUTPUT_TEMPLATES.md"
+    "scribe_output_templates": "skills/scribe/OUTPUT_TEMPLATES.md",
+    "conductor_routing_evaluation_guide": "skills/conductor/ROUTING_EVALUATION_GUIDE.md",
+    "conductor_architecture_governance_intake_guide": "skills/conductor/ARCHITECTURE_GOVERNANCE_INTAKE_GUIDE.md"
   },
   "representation_policy": {"markdown": "Human-readable explanation, rationale, examples, and nuanced specialist guidance", "json": "Canonical structured machine state, identity, routing, governance, receipts, manifests, provenance, presentation contracts, evidence, and indexes", "json_schema": "Validation contract for machine-readable records", "jsonl": "Append-only event/history records where incremental retrieval is preferable", "toon": "Derived validated non-authoritative model-context projection only when bounded compilation provides measured context benefit", "parity_rule": "When the same deterministic fact appears in more than one representation, CI must validate parity or derive the projection from one authoritative source."},
   "maturity": {

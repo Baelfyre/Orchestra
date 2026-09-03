@@ -47,6 +47,25 @@ REQUIRED_FIXTURE_IDS = {
     "scribe-database-table-reroute",
     "scribe-unsupported-validation-promotion",
     "scribe-copyrighted-template-reroute",
+    "or-gov5-vague-scale",
+    "or-gov5-premature-redis",
+    "or-gov5-exact-capacity",
+    "or-gov5-partial-capacity",
+    "or-gov5-prototype-unknown-workload",
+    "or-gov5-possible-future-organizations",
+    "or-gov5-single-tenant",
+    "or-gov5-live-tenant-migration",
+    "or-gov5-development-nullable-column",
+    "or-gov5-requested-feature",
+    "or-gov5-trivial-ui-copy",
+    "or-gov5-capacity-changed",
+    "or-gov5-unsupported-capacity-claim",
+    "or-gov5-existing-architecture-sufficient",
+    "or-gov5-unauthorized-dagger",
+    "or-gov5-unknown-production-presence",
+    "or-gov5-compound-redis-future-growth",
+    "or-gov5-compound-live-tenant-model",
+    "or-gov5-compound-prove-500-rps",
 }
 
 VALID_MODES = {"Ideation", "Prototype", "Implementation", "Governed", "Audit", "Release", "Destructive"}
@@ -73,6 +92,97 @@ SSU_FIXTURE_EXPECTATIONS = {
     "scribe-database-table-reroute": ("Audit", "documentation-domain-narrative", "SPECIALIST_REROUTE_REQUIRED"),
     "scribe-unsupported-validation-promotion": ("Audit", "documentation-reconcile", "MISSING_EVIDENCE"),
     "scribe-copyrighted-template-reroute": ("Governed", "documentation", "SPECIALIST_REROUTE_REQUIRED"),
+}
+
+OR_GOV5_FIXTURE_EXPECTATIONS = {
+    "or-gov5-vague-scale": {
+        "intake": {"change_materiality": "ARCHITECTURAL", "capacity_relevance": "UNKNOWN", "capacity_context_disposition": "PROMPT_REQUIRED", "complexity_delta": "NONE", "tenancy_impact": "NONE", "persistence_impact": "NONE", "product_decision": "NONE", "security_impact": "NONE", "validation_impact": "NORMAL"},
+        "route": ["the-steward", "clockwork"],
+    },
+    "or-gov5-premature-redis": {
+        "intake": {"change_materiality": "ARCHITECTURAL", "capacity_relevance": "UNKNOWN", "capacity_context_disposition": "PROMPT_REQUIRED", "complexity_delta": "MATERIAL", "tenancy_impact": "NONE", "persistence_impact": "NONE", "product_decision": "REQUESTED_SOLUTION", "security_impact": "NONE", "validation_impact": "NORMAL"},
+        "route": ["the-steward", "clockwork"],
+    },
+    "or-gov5-exact-capacity": {
+        "intake": {"change_materiality": "STANDARD", "capacity_relevance": "KNOWN", "capacity_context_disposition": "SUFFICIENT", "complexity_delta": "NONE", "tenancy_impact": "NONE", "persistence_impact": "NONE", "product_decision": "NONE", "security_impact": "NONE", "validation_impact": "NORMAL"},
+        "route": ["the-steward"],
+    },
+    "or-gov5-partial-capacity": {
+        "intake": {"change_materiality": "STANDARD", "capacity_relevance": "UNKNOWN", "capacity_context_disposition": "PARTIAL", "complexity_delta": "NONE", "tenancy_impact": "NONE", "persistence_impact": "NONE", "product_decision": "NONE", "security_impact": "NONE", "validation_impact": "NORMAL"},
+        "route": ["the-steward"],
+    },
+    "or-gov5-prototype-unknown-workload": {
+        "intake": {"change_materiality": "STANDARD", "capacity_relevance": "UNKNOWN", "capacity_context_disposition": "MEASUREMENT_REQUIRED", "complexity_delta": "NONE", "tenancy_impact": "NONE", "persistence_impact": "NONE", "product_decision": "NONE", "security_impact": "NONE", "validation_impact": "NORMAL"},
+        "route": ["the-steward"],
+    },
+    "or-gov5-possible-future-organizations": {
+        "intake": {"change_materiality": "STANDARD", "capacity_relevance": "NONE", "capacity_context_disposition": "NOT_REQUIRED", "complexity_delta": "NONE", "tenancy_impact": "POSSIBLE", "persistence_impact": "NONE", "product_decision": "STRATEGIC_CHANGE", "security_impact": "NONE", "validation_impact": "NORMAL"},
+        "route": ["the-steward"],
+    },
+    "or-gov5-single-tenant": {
+        "intake": {"change_materiality": "STANDARD", "capacity_relevance": "NONE", "capacity_context_disposition": "NOT_REQUIRED", "complexity_delta": "NONE", "tenancy_impact": "NONE", "persistence_impact": "NONE", "product_decision": "NONE", "security_impact": "NONE", "validation_impact": "NORMAL"},
+        "route": ["the-steward"],
+    },
+    "or-gov5-live-tenant-migration": {
+        "intake": {"change_materiality": "PRODUCTION_CRITICAL", "capacity_relevance": "UNKNOWN", "capacity_context_disposition": "MEASUREMENT_REQUIRED", "complexity_delta": "NONE", "tenancy_impact": "CONFIRMED", "persistence_impact": "HIGH_RISK", "product_decision": "NONE", "security_impact": "POSSIBLE", "validation_impact": "CONTRACT_DERIVED"},
+        "route": ["chronicler", "cipher"],
+    },
+    "or-gov5-development-nullable-column": {
+        "intake": {"change_materiality": "STANDARD", "capacity_relevance": "NONE", "capacity_context_disposition": "NOT_REQUIRED", "complexity_delta": "NONE", "tenancy_impact": "NONE", "persistence_impact": "DEVELOPMENT_ONLY", "product_decision": "NONE", "security_impact": "NONE", "validation_impact": "NORMAL"},
+        "route": ["chronicler"],
+    },
+    "or-gov5-requested-feature": {
+        "intake": {"change_materiality": "STANDARD", "capacity_relevance": "NONE", "capacity_context_disposition": "NOT_REQUIRED", "complexity_delta": "NONE", "tenancy_impact": "NONE", "persistence_impact": "NONE", "product_decision": "REQUESTED_SOLUTION", "security_impact": "NONE", "validation_impact": "NORMAL"},
+        "route": ["the-steward"],
+    },
+    "or-gov5-trivial-ui-copy": {
+        "intake": {"change_materiality": "TRIVIAL", "capacity_relevance": "NONE", "capacity_context_disposition": "NOT_REQUIRED", "complexity_delta": "NONE", "tenancy_impact": "NONE", "persistence_impact": "NONE", "product_decision": "NONE", "security_impact": "NONE", "validation_impact": "NORMAL"},
+        "route": ["cloak"],
+    },
+    "or-gov5-capacity-changed": {
+        "intake": {"change_materiality": "ARCHITECTURAL", "capacity_relevance": "CHANGED", "capacity_context_disposition": "PARTIAL", "complexity_delta": "NONE", "tenancy_impact": "NONE", "persistence_impact": "NONE", "product_decision": "NONE", "security_impact": "NONE", "validation_impact": "CONTRACT_DERIVED"},
+        "route": ["the-steward", "clockwork"],
+    },
+    "or-gov5-unsupported-capacity-claim": {
+        "intake": {"change_materiality": "ARCHITECTURAL", "capacity_relevance": "UNKNOWN", "capacity_context_disposition": "BLOCKING_FOR_CLAIM", "complexity_delta": "NONE", "tenancy_impact": "NONE", "persistence_impact": "NONE", "product_decision": "NONE", "security_impact": "NONE", "validation_impact": "EMPIRICAL_REQUIRED"},
+        "route": ["overseer"],
+    },
+    "or-gov5-existing-architecture-sufficient": {
+        "intake": {"change_materiality": "STANDARD", "capacity_relevance": "KNOWN", "capacity_context_disposition": "SUFFICIENT", "complexity_delta": "NONE", "tenancy_impact": "NONE", "persistence_impact": "NONE", "product_decision": "NONE", "security_impact": "NONE", "validation_impact": "NORMAL"},
+        "route": ["clockwork"],
+    },
+    "or-gov5-unauthorized-dagger": {
+        "intake": {"change_materiality": "PRODUCTION_CRITICAL", "capacity_relevance": "NONE", "capacity_context_disposition": "NOT_REQUIRED", "complexity_delta": "NONE", "tenancy_impact": "NONE", "persistence_impact": "NONE", "product_decision": "NONE", "security_impact": "NONE", "validation_impact": "NORMAL"},
+        "route": ["dagger"],
+    },
+    "or-gov5-unknown-production-presence": {
+        "intake": {"change_materiality": "PRODUCTION_CRITICAL", "capacity_relevance": "NONE", "capacity_context_disposition": "NOT_REQUIRED", "complexity_delta": "NONE", "tenancy_impact": "NONE", "persistence_impact": "PRODUCTION_COMPATIBILITY", "product_decision": "NONE", "security_impact": "NONE", "validation_impact": "CONTRACT_DERIVED"},
+        "route": ["chronicler"],
+    },
+    "or-gov5-compound-redis-future-growth": {
+        "intake": {"change_materiality": "ARCHITECTURAL", "capacity_relevance": "UNKNOWN", "capacity_context_disposition": "PROMPT_REQUIRED", "complexity_delta": "MATERIAL", "tenancy_impact": "NONE", "persistence_impact": "NONE", "product_decision": "REQUESTED_SOLUTION", "security_impact": "NONE", "validation_impact": "NORMAL"},
+        "route": ["the-steward", "clockwork"],
+    },
+    "or-gov5-compound-live-tenant-model": {
+        "intake": {"change_materiality": "PRODUCTION_CRITICAL", "capacity_relevance": "UNKNOWN", "capacity_context_disposition": "MEASUREMENT_REQUIRED", "complexity_delta": "MATERIAL", "tenancy_impact": "CONFIRMED", "persistence_impact": "HIGH_RISK", "product_decision": "NONE", "security_impact": "MATERIAL", "validation_impact": "CONTRACT_DERIVED"},
+        "route": ["clockwork", "chronicler", "cipher"],
+    },
+    "or-gov5-compound-prove-500-rps": {
+        "intake": {"change_materiality": "STANDARD", "capacity_relevance": "UNKNOWN", "capacity_context_disposition": "BLOCKING_FOR_CLAIM", "complexity_delta": "NONE", "tenancy_impact": "NONE", "persistence_impact": "NONE", "product_decision": "NONE", "security_impact": "NONE", "validation_impact": "EMPIRICAL_REQUIRED"},
+        "route": ["overseer"],
+    },
+}
+
+INTAKE_ENUMS = {
+    "change_materiality": {"TRIVIAL", "STANDARD", "ARCHITECTURAL", "PRODUCTION_CRITICAL"},
+    "capacity_relevance": {"NONE", "KNOWN", "UNKNOWN", "CHANGED"},
+    "capacity_context_disposition": {"NOT_REQUIRED", "SUFFICIENT", "PARTIAL", "PROMPT_REQUIRED", "MEASUREMENT_REQUIRED", "BLOCKING_FOR_CLAIM"},
+    "complexity_delta": {"NONE", "LOW", "MATERIAL"},
+    "tenancy_impact": {"NONE", "POSSIBLE", "CONFIRMED"},
+    "persistence_impact": {"NONE", "DEVELOPMENT_ONLY", "PRODUCTION_COMPATIBILITY", "HIGH_RISK"},
+    "product_decision": {"NONE", "REQUESTED_SOLUTION", "STRATEGIC_CHANGE"},
+    "security_impact": {"NONE", "POSSIBLE", "MATERIAL"},
+    "validation_impact": {"NORMAL", "CONTRACT_DERIVED", "EMPIRICAL_REQUIRED"},
 }
 
 
@@ -327,6 +437,69 @@ def validate_ssu_fixtures(fixtures, errors):
             fail(errors, "scribe-copyrighted-template-reroute: fixture must cover copyright/provenance handling")
 
 
+def validate_or_gov5_fixtures(fixtures, errors):
+    by_id = {fixture["id"]: fixture for fixture in fixtures if "id" in fixture}
+
+    for fixture_id, expected in OR_GOV5_FIXTURE_EXPECTATIONS.items():
+        fixture = by_id.get(fixture_id)
+        if not fixture:
+            continue
+
+        intake = fixture.get("architecture_governance_intake")
+        if not isinstance(intake, dict):
+            fail(errors, f"{fixture_id}: missing architecture_governance_intake object")
+            continue
+
+        for field, allowed in INTAKE_ENUMS.items():
+            value = intake.get(field)
+            if value not in allowed:
+                fail(errors, f"{fixture_id}: invalid intake {field} {value!r}")
+            if value != expected["intake"][field]:
+                fail(errors, f"{fixture_id}: intake {field} must be {expected['intake'][field]!r}")
+
+        route = fixture.get("expected_route")
+        if not isinstance(route, list):
+            fail(errors, f"{fixture_id}: expected_route must be a list")
+        else:
+            if route != expected["route"]:
+                fail(errors, f"{fixture_id}: expected_route must be {expected['route']!r}")
+            if len(route) != len(set(route)):
+                fail(errors, f"{fixture_id}: expected_route contains duplicates")
+            for skill in route:
+                if skill not in REQUIRED_SKILLS:
+                    fail(errors, f"{fixture_id}: expected_route names unknown skill {skill!r}")
+
+        if fixture.get("primary_skill") == "ponytail" and fixture_id in {
+            "or-gov5-vague-scale",
+            "or-gov5-premature-redis",
+            "or-gov5-unsupported-capacity-claim",
+            "or-gov5-unknown-production-presence",
+        }:
+            fail(errors, f"{fixture_id}: unresolved intake must not route directly to ponytail")
+
+    unknown_production = by_id.get("or-gov5-unknown-production-presence")
+    if unknown_production:
+        request = unknown_production.get("request", "").lower()
+        if "do not know" not in request and "unknown" not in request:
+            fail(errors, "or-gov5-unknown-production-presence: request must preserve unresolved production presence")
+        if "chronicler" not in unknown_production.get("supporting_skills", []):
+            fail(errors, "or-gov5-unknown-production-presence: Chronicler must be included")
+        if "PRODUCTION_PRESENCE_UNRESOLVED" not in unknown_production.get("expected_notes", []):
+            fail(errors, "or-gov5-unknown-production-presence: unresolved-production note is required")
+
+    dagger = by_id.get("or-gov5-unauthorized-dagger")
+    if dagger:
+        if dagger.get("governance_status") != "BLOCKED_PENDING_AUTHORIZATION":
+            fail(errors, "or-gov5-unauthorized-dagger: Dagger must remain blocked pending authorization")
+        if dagger.get("expected_gate") != "BLOCKED_PENDING_AUTHORIZATION":
+            fail(errors, "or-gov5-unauthorized-dagger: expected gate must remain blocked pending authorization")
+
+    for fixture_id in ("or-gov5-unsupported-capacity-claim", "or-gov5-compound-prove-500-rps"):
+        fixture = by_id.get(fixture_id)
+        if fixture and fixture.get("expected_outcome") != "NOT_PROVEN":
+            fail(errors, f"{fixture_id}: unsupported quantified claim must remain NOT_PROVEN")
+
+
 def main(argv=None):
     args = parse_args(argv)
     repo_root = args.repo_root.resolve()
@@ -356,6 +529,7 @@ def main(argv=None):
         validate_fixture_schema(fixtures, registered, errors)
         validate_expected_routing_rules(fixtures, errors)
         validate_ssu_fixtures(fixtures, errors)
+        validate_or_gov5_fixtures(fixtures, errors)
 
     if errors:
         for error in errors:
