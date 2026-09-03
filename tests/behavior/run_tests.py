@@ -138,6 +138,7 @@ def main():
         ,{"Name": "test_conductor_architecture_governance_intake.py", "Path": "tests/behavior/test_conductor_architecture_governance_intake.py"}
         ,{"Name": "test_overseer_architecture_validation_contract.py", "Path": "tests/behavior/test_overseer_architecture_validation_contract.py"}
         ,{"Name": "test_cipher_tenant_security.py", "Path": "tests/behavior/test_cipher_tenant_security.py"}
+        ,{"Name": "test_arbiter_evidence_freshness.py", "Path": "tests/behavior/test_arbiter_evidence_freshness.py"}
     ]
 
     failed = False
