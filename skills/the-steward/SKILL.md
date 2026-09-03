@@ -95,4 +95,3 @@ The Steward owns business/workload assumptions; **The Steward does NOT choose in
 ## Token Efficiency
 
 Use compact output by default. Expand only when findings exist. Review only governance areas relevant to current context. Do not perform HIGH-risk depth for LOW-risk work. Skip `NOT_APPLICABLE` sections.
-

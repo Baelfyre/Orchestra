@@ -79,4 +79,3 @@ UNKNOWN: [unknown metrics]
 DISPOSITION: [disposition enum]
 REFS: [evidence references]
 ```
-
