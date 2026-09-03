@@ -1294,11 +1294,56 @@
       "or_gov_8b_implemented": true,
       "or_gov_8c_implemented": true,
       "or_gov_8d_implemented": true,
-      "or_gov_9_started": false,
+      "or_gov_9_started": true,
       "or_gov_10_started": false,
       "ar3_started": false,
       "release_authorized": false,
       "authority_note": "OR-GOV-8D formalizes Scribe post-SSU governance documentation integration only. It concludes Continuous Governed Run A. It does not implement OR-GOV-9/10, start AR-3, expand Dagger, or authorize release, deployment, policy, provider, or v1.8 publication."
+    },
+    "specialist_governance_refinement_or_gov_9": {
+      "status": "OR_GOV_9_CONDITIONAL_SPECIALIST_GOVERNANCE_AUDIT_COMPLETE",
+      "purpose": "Audit whether OR-GOV-1 through OR-GOV-8 created any material unresolved governance integration gap in The Governor, Weaver, Cloak, and perform Dagger regression only.",
+      "machine_sources": [
+        "docs/governance/or_gov_9_specialist_sufficiency_disposition.v1.json",
+        "tests/behavior/test_or_gov_9_specialist_governance_sufficiency.py"
+      ],
+      "human_sources": [
+        "docs/governance/OR_GOV_9_SPECIALIST_SUFFICIENCY_AUDIT.md",
+        "skills/the-governor/SKILL.md",
+        "skills/weaver/SKILL.md",
+        "skills/cloak/SKILL.md",
+        "skills/dagger/SKILL.md"
+      ],
+      "validation_surfaces": [
+        "tests/behavior/test_or_gov_9_specialist_governance_sufficiency.py",
+        "scripts/test_dagger_guardrail.py",
+        "tests/behavior/run_tests.py"
+      ],
+      "governor_disposition": "NO_REFINEMENT_REQUIRED",
+      "weaver_disposition": "NO_REFINEMENT_REQUIRED",
+      "cloak_disposition": "NO_REFINEMENT_REQUIRED",
+      "dagger_disposition": "REGRESSION_PASS_NO_REFINEMENT_REQUIRED",
+      "governor_frozen_skill_modified": false,
+      "cloak_frozen_skill_modified": false,
+      "dagger_authority_expanded": false,
+      "destructive_execution": false,
+      "final_or_gov_9_disposition": "OR_GOV_9_SUFFICIENT_NO_REFINEMENT",
+      "or_gov_1_implemented": true,
+      "or_gov_2_implemented": true,
+      "or_gov_3_implemented": true,
+      "or_gov_4_implemented": true,
+      "or_gov_5_implemented": true,
+      "or_gov_6_implemented": true,
+      "or_gov_7_implemented": true,
+      "or_gov_8a_implemented": true,
+      "or_gov_8b_implemented": true,
+      "or_gov_8c_implemented": true,
+      "or_gov_8d_implemented": true,
+      "or_gov_9_implemented": true,
+      "or_gov_10_started": false,
+      "ar3_started": false,
+      "release_authorized": false,
+      "authority_note": "OR-GOV-9 evaluates specialist sufficiency and records governed disposition. It does not implement OR-GOV-10, start AR-3, expand Dagger, or authorize release, deployment, policy, provider, or v1.8 publication."
     }
   },
   "machine_scan_order": [

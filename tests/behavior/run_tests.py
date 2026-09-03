@@ -141,6 +141,7 @@ def main():
         ,{"Name": "test_arbiter_evidence_freshness.py", "Path": "tests/behavior/test_arbiter_evidence_freshness.py"}
         ,{"Name": "test_ponytail_upstream_contract_enforcement.py", "Path": "tests/behavior/test_ponytail_upstream_contract_enforcement.py"}
         ,{"Name": "test_scribe_governance_documentation_integration.py", "Path": "tests/behavior/test_scribe_governance_documentation_integration.py"}
+        ,{"Name": "test_or_gov_9_specialist_governance_sufficiency.py", "Path": "tests/behavior/test_or_gov_9_specialist_governance_sufficiency.py"}
     ]
 
     failed = False
