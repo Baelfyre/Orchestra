@@ -74,6 +74,7 @@ Use `SKILL.md` first. Load only the support file needed for the current objectiv
 - `SECURITY_TOOLING_INTERPRETATION_GUIDE.md` -> SAST/DAST/SCA/SBOM/CodeQL/dependency finding interpretation.
 - `FRAMEWORK_SECURITY_PATTERNS_GUIDE.md` -> framework-aware review cues without inventing framework requirements.
 - `patterns/security-control-catalog.json` -> deterministic control-family lookup only.
+- `TENANT_SECURITY_GOVERNANCE_GUIDE.md` -> tenant-security governance, tenancy model consumption, cross-tenant authorization reasoning, and specialist boundary enforcement.
 
 The JSON catalog is metadata, not authority, not a vulnerability scanner, and not proof that a control exists.
 

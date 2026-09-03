@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.7 OR-GOV-8A Cipher tenant-security governance refinement candidate
+
+- Formalizes Cipher's deterministic tenant-security reasoning as `TENANT_SECURITY_GOVERNANCE_GUIDE.md`, consuming `ProjectArchitectureGovernanceProfile.tenancy_model` and `tenant_isolation_policy_refs` to derive tenant-security requirements proportional to the accepted project posture.
+- Establishes the full authorization chain (authenticated subject, trusted tenant context, tenant membership, requested action, target resource, resource tenant ownership, property sensitivity, authorization decision) without reducing tenant authorization to role-only checks.
+- Enforces default deny across tenant boundaries, trusted tenant context verification (client selects, server verifies), and explicit privileged cross-tenant workflow requirements. Distinguishes tenant-owned, shared/global, system-owned, public, and cross-tenant administrative resources.
+- Covers background/async execution tenant context, cache/session isolation requirements, persistence boundary handoff to Chronicler, UI visibility versus security enforcement, and cross-tenant information leakage review.
+- Preserves single-tenant proportionality (no forced multi-tenant machinery when `SINGLE_TENANT`), undecided tenancy routing to Conductor, existing evidence classification, and Overseer validation handoff for `ArchitectureValidationContract.tenant_isolation_validation`.
+- Adds progressive-disclosure hook, Codex adapter parity, and deterministic OR-GOV-8A behavior coverage. The OR-GOV-4 unknown-production schema gap remains preserved; OR-GOV-8B through 8D, OR-GOV-9, AR-3, release, deployment, provider, and policy changes remain out of scope.
+
 ## Post-v1.7 OR-GOV-7 Overseer architecture validation candidate
 
 - Formalizes Overseer's existing contract-derived validation behavior around `ArchitectureValidationContract`, preserving the canonical seven validation dimensions and `PROVEN`, `NOT_PROVEN`, `NOT_REQUIRED`, and `FAILED` proof states.
