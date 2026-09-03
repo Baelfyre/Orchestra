@@ -29,6 +29,7 @@ Do not load it for obvious single-owner work.
 | Architecture, layering, service boundaries, complexity decisions, scale posture, refactor structure | `clockwork` | Technical architecture owner is clear |
 | Technical security, authorization, secrets, privacy-control design | `cipher` | Technical security owner is clear |
 | Database, schema, migration, ORM, persistence semantics | `chronicler` | Persistence owner is clear |
+| Migration risk contract, production compatibility, locking, backfill, index and constraint migration semantics | `chronicler` | Migration planning or migration-risk assessment is requested; execution remains with `ponytail` |
 | UI/UX, accessibility, responsive layout, interaction design | `cloak` | Frontend design owner is clear |
 | QA strategy, validation evidence, release-readiness checks | `overseer` | Validation owner is clear |
 | Documentation production and editing | `scribe` | Documentation execution owner is clear |
@@ -59,6 +60,7 @@ Do not route every documentation request through every specialist. Progressive d
 - `the-governor -> cipher -> ponytail` for governance-sensitive security implementation
 - `clockwork -> ponytail` for architecture-first implementation
 - `chronicler -> overseer` for persistence semantics followed by migration or DB validation
+- `chronicler -> ponytail -> overseer` for an accepted MigrationRiskContract that requires bounded implementation and validation
 - `the-steward -> scribe` for required SDLC documentation shaped by business-alignment governance
 - `the-governor -> scribe` for compliance documentation shaped by governance
 - `scribe -> relevant technical specialists -> ponytail -> overseer -> scribe` for `SPEC_TO_SYSTEM` when implementation is actually authorized and the final artifact must become as-built documentation

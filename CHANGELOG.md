@@ -1,5 +1,13 @@
 # Changelog
 
+## Post-v1.7 OR-GOV-4 Chronicler migration risk contract candidate
+
+- Formalizes Chronicler's existing migration, locking, dialect, transaction, backfill, and zero-downtime knowledge as deterministic `MigrationRiskContract` guidance.
+- Distinguishes development-only changes from production compatibility, preserves unknown production facts, and covers expand-contract, batched backfill, conditional dual read/write, engine-specific online DDL, index and constraint operations, rollback boundaries, failure recovery, observability, completion criteria, risk, and proportional human gates.
+- Preserves the canonical v1 schema without converting unknown production presence to `false`; the explicit `MIGRATION_RISK_SCHEMA_GAP: UNKNOWN_PRODUCTION_STATE_NOT_REPRESENTABLE` disposition remains visible until a separately governed schema amendment exists.
+- Routes accepted implementation to Ponytail and validation to Overseer while preserving Steward, Clockwork, Cipher, Conductor, and Chronicler ownership boundaries. Adds source/Codex parity and deterministic OR-GOV-4 behavior coverage.
+- Does not execute migrations or production SQL, implement OR-GOV-5, start AR-3, change provider or policy behavior, deploy, release, or authorize v1.8 publication.
+
 ## Post-v1.7 OR-GOV-3 Clockwork architecture complexity and scale posture candidate
 
 - Upgrades Clockwork (`skills/clockwork/SKILL.md`, `OUTPUT_FORMATS.md`, and dedicated `ARCHITECTURE_COMPLEXITY_AND_SCALE_POSTURE_GUIDE.md`) with architecture complexity decisions, scale-ready versus scale-provisioned posture formalization, simpler-alternative justification, and the future-scalability invariant.

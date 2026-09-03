@@ -945,6 +945,44 @@
       "ar3_started": false,
       "release_authorized": false,
       "authority_note": "OR-GOV-3 upgrades Clockwork architecture complexity and scale posture governance only. It does not implement Chronicler migration risk (OR-GOV-4), start AR-3, or authorize release."
+    },
+    "specialist_governance_refinement_or_gov_4": {
+      "status": "OR_GOV_4_CHRONICLER_MIGRATION_RISK_IMPLEMENTED",
+      "purpose": "Formalize Chronicler's evidence-bound MigrationRiskContract behavior for production compatibility, migration patterns, rollback, recovery, observability, completion, risk, and proportionate human gates.",
+      "machine_sources": [
+        "machine/schemas/migration-risk-contract.v1.schema.json",
+        "machine/schemas/capacity-envelope.v1.schema.json",
+        "machine/routing/routes.v1.json"
+      ],
+      "human_sources": [
+        "skills/chronicler/SKILL.md",
+        "skills/chronicler/OUTPUT_FORMATS.md",
+        "skills/chronicler/MIGRATION_RISK_CONTRACT_GUIDE.md",
+        "skills/chronicler/ZERO_DOWNTIME_MIGRATION_GUIDE.md",
+        "skills/chronicler/DATABASE_DIALECT_ORM_GUIDE.md",
+        "skills/chronicler/TRANSACTION_ISOLATION_LOCKING_GUIDE.md",
+        "skills/chronicler/QUERY_PLAN_TENANT_ISOLATION_GUIDE.md",
+        "ROUTING_MAP.md",
+        "SKILL_INDEX.md",
+        "docs/README.md"
+      ],
+      "validation_surfaces": [
+        "tests/behavior/test_chronicler_migration_risk.py",
+        "tests/behavior/test_chronicler_specialist_knowledge.py",
+        "tests/runtime/test_or_gov_contracts.py"
+      ],
+      "schema_sufficiency": "V1_UNCHANGED_UNKNOWN_PRODUCTION_PRESENCE_REQUIRES_EXPLICIT_SCHEMA_GAP_DISPOSITION",
+      "unknown_production_state": "MIGRATION_RISK_SCHEMA_GAP",
+      "engine_specific_claim_without_version": "ENGINE_SPECIFIC_CLAIM_BLOCKED",
+      "migration_execution": false,
+      "or_gov_1_implemented": true,
+      "or_gov_2_implemented": true,
+      "or_gov_3_implemented": true,
+      "or_gov_4_implemented": true,
+      "or_gov_5_started": false,
+      "ar3_started": false,
+      "release_authorized": false,
+      "authority_note": "OR-GOV-4 formalizes Chronicler planning and handoff only. It does not execute migrations or production SQL, decide architecture or security policy, claim release readiness, implement OR-GOV-5, start AR-3, or authorize v1.8 publication."
     }
   },
   "machine_scan_order": [
