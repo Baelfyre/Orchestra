@@ -1340,10 +1340,48 @@
       "or_gov_8c_implemented": true,
       "or_gov_8d_implemented": true,
       "or_gov_9_implemented": true,
-      "or_gov_10_started": false,
+      "or_gov_10_started": true,
       "ar3_started": false,
       "release_authorized": false,
       "authority_note": "OR-GOV-9 evaluates specialist sufficiency and records governed disposition. It does not implement OR-GOV-10, start AR-3, expand Dagger, or authorize release, deployment, policy, provider, or v1.8 publication."
+    },
+    "final_integration_and_closeout_or_gov_10": {
+      "status": "OR_GOV_PROGRAM_COMPLETE",
+      "purpose": "Final integration, parity, full regression, and program closeout for the OR-GOV architecture and governance hardening program.",
+      "machine_sources": [
+        "docs/governance/or_gov_10_integration_closeout_disposition.v1.json",
+        "tests/behavior/test_or_gov_10_e2e_integration_closeout.py"
+      ],
+      "human_sources": [
+        "docs/governance/OR_GOV_10_INTEGRATION_CLOSEOUT.md"
+      ],
+      "validation_surfaces": [
+        "tests/behavior/test_or_gov_10_e2e_integration_closeout.py",
+        "tests/behavior/run_tests.py",
+        "adapters/codex/validate_codex_export.py",
+        "scripts/validate_prompt_load_budget.py",
+        "scripts/validate_routing_contract.py",
+        "scripts/validation/validate_architecture_boundaries.py"
+      ],
+      "or_gov_1_implemented": true,
+      "or_gov_2_implemented": true,
+      "or_gov_3_implemented": true,
+      "or_gov_4_implemented": true,
+      "or_gov_5_implemented": true,
+      "or_gov_6_implemented": true,
+      "or_gov_7_implemented": true,
+      "or_gov_8a_implemented": true,
+      "or_gov_8b_implemented": true,
+      "or_gov_8c_implemented": true,
+      "or_gov_8d_implemented": true,
+      "or_gov_9_implemented": true,
+      "or_gov_10_implemented": true,
+      "or_gov_program_complete": true,
+      "release_hold_v1_7_0": true,
+      "v1_8_publication_held": true,
+      "ar3_started": false,
+      "release_authorized": false,
+      "authority_note": "OR-GOV-10 concludes the OR-GOV hardening program. Continuous Governed Run B terminates here. It does not start AR-3, expand Dagger, or authorize release, deployment, policy, provider, or v1.8 publication."
     }
   },
   "machine_scan_order": [
