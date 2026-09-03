@@ -67,6 +67,7 @@ Constitutional and Development Lifecycle V2 surfaces:
 - [Pre-state, Forward Recovery, and Branch Retirement](governance/PRESTATE_RECOVERY_BRANCH_RETIREMENT.md): forward-only recovery and non-authorizing retirement classification.
 - [Prime Directive / Lifecycle V2 Realignment](governance/PRIME_DIRECTIVE_LIFECYCLE_V2_REALIGNMENT.md): current-main reconciliation and Campaign 0-5 provenance.
 - [OR-GOV-9 Specialist Sufficiency Audit](governance/OR_GOV_9_SPECIALIST_SUFFICIENCY_AUDIT.md): conditional specialist governance sufficiency audit across The Governor, Weaver, Cloak, and Dagger.
+- [OR-GOV-10 Integration Closeout](governance/OR_GOV_10_INTEGRATION_CLOSEOUT.md): final integration, parity, full regression, and program closeout across the complete OR-GOV architecture and governance program.
 
 Existing governance/runtime surfaces remain subordinate and active:
 
