@@ -109,3 +109,31 @@ Use this format when producing or verifying focused validation evidence for a de
 ```
 
 Evidence packets contain paths, statuses, commands, and cryptographic identities. They must not embed secrets or private file contents.
+
+### Architecture Validation Contract
+
+Use this existing evidence/QA surface when accepted upstream contracts create
+architecture validation obligations. Keep the machine payload conformant to
+the repository schema at machine/schemas/architecture-validation-contract.v1.schema.json.
+
+```markdown
+contract_refs:
+exact_revision:
+environment_identity:
+
+functional_validation: PROVEN | NOT_PROVEN | NOT_REQUIRED | FAILED
+capacity_validation: PROVEN | NOT_PROVEN | NOT_REQUIRED | FAILED
+performance_validation: PROVEN | NOT_PROVEN | NOT_REQUIRED | FAILED
+tenant_isolation_validation: PROVEN | NOT_PROVEN | NOT_REQUIRED | FAILED
+migration_validation: PROVEN | NOT_PROVEN | NOT_REQUIRED | FAILED
+failure_behavior_validation: PROVEN | NOT_PROVEN | NOT_REQUIRED | FAILED
+compatibility_validation: PROVEN | NOT_PROVEN | NOT_REQUIRED | FAILED
+
+limitations:
+evidence_refs:
+```
+
+`PROVEN` requires current evidence for every accepted criterion at the exact
+revision and environment. Missing, skipped, stale, flaky, crashed, or
+mismatched evidence is `NOT_PROVEN`, not `FAILED`. `NOT_REQUIRED` is allowed
+only when accepted contracts establish that the dimension is inapplicable.

@@ -1075,6 +1075,52 @@
       "ar3_started": false,
       "release_authorized": false,
       "authority_note": "OR-GOV-6 coordinates declared governance-contract dependencies and returns minimal re-entry recommendations to Conductor. It does not dispatch specialists, resolve domain decisions, generate OR-GOV-7 validation contracts, refine OR-GOV-8 specialists, amend the MigrationRiskContract schema, start AR-3, or authorize release, deployment, policy, provider, Dagger, or migration execution."
+    },
+    "specialist_governance_refinement_or_gov_7": {
+      "status": "OR_GOV_7_OVERSEER_CONTRACT_DERIVED_VALIDATION_IMPLEMENTED",
+      "purpose": "Formalize Overseer's contract-derived ArchitectureValidationContract obligations and evidence-bound PROVEN, NOT_PROVEN, NOT_REQUIRED, and FAILED proof states without creating a second QA framework.",
+      "machine_sources": [
+        "machine/schemas/architecture-validation-contract.v1.schema.json",
+        "orchestra_runtime/domain/evaluation/architecture_validation.py",
+        "tests/behavior/test_overseer_architecture_validation_contract.py"
+      ],
+      "human_sources": [
+        "skills/overseer/SKILL.md",
+        "skills/overseer/QA_REVIEW_GUIDE.md",
+        "skills/overseer/ARCHITECTURE_VALIDATION_CONTRACT_GUIDE.md",
+        "skills/overseer/OUTPUT_FORMATS.md",
+        "docs/README.md"
+      ],
+      "validation_surfaces": [
+        "tests/behavior/test_overseer_architecture_validation_contract.py",
+        "tests/runtime/test_or_gov_contracts.py",
+        "tests/runtime/test_evidence_kernel.py",
+        "tests/runtime/test_test_evidence.py",
+        "tests/behavior/test_tuner_governance_contract_invalidation.py",
+        "scripts/validation/validate_architecture_boundaries.py"
+      ],
+      "schema_sufficiency": "ARCHITECTURE_VALIDATION_SCHEMA_SUFFICIENT",
+      "exact_revision_binding": true,
+      "environment_identity_binding": true,
+      "claim_scope_limited_to_observed_evidence": true,
+      "not_proven_distinct_from_failed": true,
+      "stale_evidence_preserved_not_failed": true,
+      "test_implementation_owner": "ponytail",
+      "overseer_routes_specialists": false,
+      "arbiter_remains_transition_authority": true,
+      "dagger_authority_expanded": false,
+      "migration_risk_unknown_production_gap": "PRESERVED_SCHEMA_GAP_NO_TRI_STATE_AMENDMENT",
+      "or_gov_1_implemented": true,
+      "or_gov_2_implemented": true,
+      "or_gov_3_implemented": true,
+      "or_gov_4_implemented": true,
+      "or_gov_5_implemented": true,
+      "or_gov_6_implemented": true,
+      "or_gov_7_implemented": true,
+      "or_gov_8_started": false,
+      "ar3_started": false,
+      "release_authorized": false,
+      "authority_note": "OR-GOV-7 derives and evaluates validation evidence only. It does not invent requirements, capacity targets, environments, or results; implement tests; execute migrations or destructive checks; route specialists; issue Arbiter transitions; change upstream contracts; expand Dagger; start OR-GOV-8 or AR-3; or authorize merge, release, deployment, policy, provider, or v1.8 publication."
     }
   },
   "machine_scan_order": [

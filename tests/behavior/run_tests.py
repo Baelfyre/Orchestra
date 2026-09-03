@@ -136,6 +136,7 @@ def main():
         ,{"Name": "test_steward_product_intent_and_capacity.py", "Path": "tests/behavior/test_steward_product_intent_and_capacity.py"}
         ,{"Name": "test_clockwork_architecture_complexity.py", "Path": "tests/behavior/test_clockwork_architecture_complexity.py"}
         ,{"Name": "test_conductor_architecture_governance_intake.py", "Path": "tests/behavior/test_conductor_architecture_governance_intake.py"}
+        ,{"Name": "test_overseer_architecture_validation_contract.py", "Path": "tests/behavior/test_overseer_architecture_validation_contract.py"}
     ]
 
     failed = False
