@@ -142,6 +142,7 @@ SSU guides:
 - Load [REQUIREMENTS_TRACEABILITY_GUIDE.md](REQUIREMENTS_TRACEABILITY_GUIDE.md) when maintaining forward/reverse traceability between problem, objective, requirement, implementation, tests/evaluation, evidence, and documented claims.
 - Load [RESEARCH_CAPSTONE_DOCUMENTATION_GUIDE.md](RESEARCH_CAPSTONE_DOCUMENTATION_GUIDE.md) for research/capstone documentation, prototype-first research, existing-system research reconstruction, literature/source provenance, research evidence maps, or implementation-to-claim discipline.
 - Load [DOCUMENTATION_SYSTEM_RECONCILIATION_GUIDE.md](DOCUMENTATION_SYSTEM_RECONCILIATION_GUIDE.md) for `SPEC_TO_SYSTEM`, `SYSTEM_TO_DOCS`, `RECONCILE`, as-built reconstruction, documentation drift, implementation drift, historical-intent comparison, or claim/evidence reconciliation.
+- Load [GOVERNANCE_DOCUMENTATION_INTEGRATION_GUIDE.md](GOVERNANCE_DOCUMENTATION_INTEGRATION_GUIDE.md) for post-SSU governance documentation discipline, specialist contract matrices, exact-head commit/tree lineage bindings, prohibited silent promotions, or reconciling documentation with governance reality.
 
 ## Supported Work
 
