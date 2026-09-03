@@ -32,28 +32,15 @@ If project context is incomplete:
 
 ## Project Context Profile
 
-Minimum context:
-```text
-Project Name:
-Project Type:
-Project Purpose:
-Target Users:
-Internal or Public:
-Open Source or Private:
-Release Stage:
-Risk Level:
-Required Documentation:
-```
-
-For project context, use the [prompt](REFERENCE_CONTEXT.md#project-context-decision-prompt), [policy](REFERENCE_CONTEXT.md#project-context-enforcement-policy), and [template](REFERENCE_CONTEXT.md#project-context-template).
+Minimum context: Name, Type, Purpose, Target Users, Internal/Public, OSS/Private, Release Stage, Risk Level, Required Documentation. Use [prompt](REFERENCE_CONTEXT.md#project-context-decision-prompt), [policy](REFERENCE_CONTEXT.md#project-context-enforcement-policy), and [template](REFERENCE_CONTEXT.md#project-context-template).
 
 ## Risk Classification
 
 | Risk Level | Criteria | Review Depth |
 | --- | --- | --- |
-| `LOW` | School assignment, personal prototype, no public release, no user data, no commercial use | Lightweight |
-| `MEDIUM` | Internal tool, team project, third-party dependencies, limited exposure | Standard |
-| `HIGH` | Public release, user accounts, PII, payments, AI outputs, legal/health/finance domain, commercial use | Expanded |
+| `LOW` | Prototype, internal-only, no user data | Lightweight |
+| `MEDIUM` | Internal tool, team dependencies, limited exposure | Standard |
+| `HIGH` | Public release, user accounts, PII, payments, commercial use | Expanded |
 
 ## Review Checklist
 
@@ -65,23 +52,40 @@ Apply relevant checks: 1. Goal support 2. Requirements met 3. Scope preserved 4.
 
 ## Steward-Specific Decision Nuance
 
-- `APPROVED` means alignment, scope, and SDLC sufficiency are acceptable.
-- Steward `APPROVED` proceeds to Governor only when Governor review applies; otherwise returns to Conductor.
-- `BLOCKED` means business alignment, scope, or required SDLC evidence is not acceptable.
+- `APPROVED`: alignment, scope, and SDLC sufficiency acceptable. Proceeds to Governor if applicable, else Conductor.
+- `BLOCKED`: business alignment, scope, or required SDLC evidence unacceptable.
 
 ## Delegated Phase Behavior
 
-In a delegated phase governed by a `DelegatedExecutionEnvelope`:
-- Steward approves alignment, scope, requirements, and acceptance criteria at phase entry, binding decision to `envelope_id`.
-- Steward avoids re-reviewing unchanged approved internal units.
-- Steward re-enters only when: intent/objective changes, scope expands beyond allowed paths/behaviors, acceptance criteria change, SDLC evidence is materially incomplete, or invalidation condition fires.
-- Deterministic in-scope corrections do not trigger a new decision. Unresolved scope expansion or missing intent produces `ESCALATE_HUMAN`.
+In a delegated phase under a `DelegatedExecutionEnvelope`:
+- Steward approves alignment, scope, requirements, and acceptance criteria at entry, binding to `envelope_id`.
+- Avoids re-reviewing unchanged approved units; re-enters only when intent, scope, criteria change, or invalidation fires.
+- In-scope corrections require no new decision; unresolved expansion or missing intent produces `ESCALATE_HUMAN`.
+
+## Product Intent Governance
+
+The Steward decouples underlying problem from requested solution. A request (e.g. "Customer asked for feature X") is stakeholder desire, not approved implementation.
+- **Assessment**: problem_statement, problem_evidence, affected_users, current_workaround, requested_solution, strategic_alignment, existing_capability_overlap, alternative_analysis_required, obsolescence_risk, maintenance_burden, decision, decision_rationale, acceptance_criteria.
+- **Dispositions**: `ACCEPT_REQUESTED_SOLUTION`, `ACCEPT_WITH_CONSTRAINTS`, `REQUIRE_ALTERNATIVES`, `DEFER`, `REJECT`, `INSUFFICIENT_CONTEXT`, `NOT_APPLICABLE`.
+- **Proportional Challenge**: Trivial -> `NOT_APPLICABLE` (no ceremony); Standard -> scope/acceptance review; Architectural/Material -> challenge requested mechanism against simpler alternatives; Strategic -> require explicit product intent before architecture.
+
+## Workload and Capacity Envelope Governance
+
+The Steward owns business/workload assumptions; **The Steward does NOT choose infrastructure.**
+- **Value States**: `EXACT`, `RANGE`, `OBSERVED`, `ESTIMATED`, `UNKNOWN`, `TO_BE_MEASURED`, `NOT_APPLICABLE`. Invariant: `UNKNOWN IS VALID`. Never fabricate numeric precision.
+- **Adaptive Elicitation**: No universal questionnaires. Ask only decision-critical metrics with baseline prompt: *"To size this without overengineering it, give the best numbers you know. Ranges are fine and 'unknown' is valid."* Focus on domain metrics (SaaS/multi-tenant, messaging, research/documents, ordering).
+- **Project Stage**: Ideation/Prototype -> unknown permitted, allow simplest reversible solution, record `MEASUREMENT_REQUIRED_BEFORE_SCALE_PROVISIONING`; Standard -> `PROMPT_REQUIRED` for unresolved metrics; Architectural/Production -> `INSUFFICIENT_CAPACITY_CONTEXT` if missing evidence.
+- **Confidence & Basis**: Confidence (`HIGH`, `MEDIUM`, `LOW`, `UNKNOWN`); Basis (`OBSERVED_METRIC`, `CONTRACTUAL_TARGET`, `USER_PROVIDED_ESTIMATE`, `HISTORICAL_DATA`, `BENCHMARK`, `ASSUMPTION`, `UNKNOWN`). Never promote estimates to observed metrics.
+- **Evidence Reconciliation**: Reuse authoritative context without re-prompting. Never average conflicting numbers; request human reconciliation.
+- **Clockwork Handoff**: Emit `ProductIntentContract` + `CapacityEnvelope` with context disposition (`CAPACITY_CONTEXT_SUFFICIENT`, `CAPACITY_CONTEXT_PARTIAL`, `CAPACITY_CONTEXT_UNKNOWN`, `PROMPT_REQUIRED`, `MEASUREMENT_REQUIRED`). Negative boundary: Steward never selects Redis, Kafka, microservices, Kubernetes, or replicas.
+- **Detailed Protocol**: See `PRODUCT_INTENT_AND_CAPACITY_ENVELOPE_GUIDE.md`.
 
 ## Canonical References
 
 - Shared decision model, gate contract, and ownership matrix: see the governance protocol above.
-- On-demand methods: `REQUIREMENTS_TRACEABILITY_ACCEPTANCE_GUIDE.md`, `SCOPE_CHANGE_CONTROL_SDLC_GUIDE.md`, and `examples/governed-change-review-example.md`
+- On-demand methods: `PRODUCT_INTENT_AND_CAPACITY_ENVELOPE_GUIDE.md`, `REQUIREMENTS_TRACEABILITY_ACCEPTANCE_GUIDE.md`, `SCOPE_CHANGE_CONTROL_SDLC_GUIDE.md`, and `examples/governed-change-review-example.md`
 
 ## Token Efficiency
 
 Use compact output by default. Expand only when findings exist. Review only governance areas relevant to current context. Do not perform HIGH-risk depth for LOW-risk work. Skip `NOT_APPLICABLE` sections.
+

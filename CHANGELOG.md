@@ -1,5 +1,15 @@
 # Changelog
 
+## Post-v1.7 OR-GOV-2 The Steward product intent and capacity envelope candidate
+
+- Upgrades The Steward (`skills/the-steward/SKILL.md`, `OUTPUT_FORMATS.md`, and dedicated `PRODUCT_INTENT_AND_CAPACITY_ENVELOPE_GUIDE.md`) with product intent governance, capacity envelope review, adaptive elicitation, and project-stage awareness.
+- Decouples underlying problem statements from requested implementation mechanisms, establishing proportional challenge tiers across trivial, standard, architectural/material, and strategic scopes.
+- Implements capacity envelope reasoning where unmeasured metrics are treated as valid (`UNKNOWN IS VALID`), preserving exact values and ranges without fabricated numeric precision.
+- Enforces adaptive capacity elicitation using domain-sensitive prompting, avoiding universal questionnaires and redundant re-prompting for known evidence.
+- Preserves specialist authority boundaries: The Steward governs business and workload assumptions, emitting upstream contracts to Clockwork, while strictly avoiding infrastructure selection or architecture implementation.
+- Adds Codex mirror parity (`adapters/codex/skills/the-steward/`), behavioral regression tests (`tests/behavior/test_steward_product_intent_and_capacity.py`), and machine discovery in `README.json`.
+- Does not implement Clockwork complexity engine (OR-GOV-3), does not start AR-3, and does not authorize v1.8 publication.
+
 ## Post-v1.7 OR-GOV-1 shared machine contracts and schemas candidate
 
 - Establishes seven shared machine-readable governance contract schemas (`CapacityEnvelope`, `ProductIntentContract`, `ArchitectureComplexityDecision`, `MigrationRiskContract`, `ArchitectureGovernanceIntake`, `ArchitectureValidationContract`, and `ProjectArchitectureGovernanceProfile`) under `machine/schemas/`.

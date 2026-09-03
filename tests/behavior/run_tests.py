@@ -132,6 +132,7 @@ def main():
         {"Name": "test_artificer_audit_report_renderer.py", "Path": "tests/behavior/test_artificer_audit_report_renderer.py"}
         ,{"Name": "validate_artificer_pattern_catalog.py", "Path": "scripts/validate_artificer_pattern_catalog.py"}
         ,{"Name": "test_artificer_pattern_catalog.py", "Path": "tests/behavior/test_artificer_pattern_catalog.py"}
+        ,{"Name": "test_steward_product_intent_and_capacity.py", "Path": "tests/behavior/test_steward_product_intent_and_capacity.py"}
     ]
     
     failed = False
