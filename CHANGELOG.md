@@ -1,5 +1,15 @@
 # Changelog
 
+## Post-v1.7 OR-GOV-9 conditional specialist governance sufficiency audit candidate
+
+- Performs conditional specialist governance sufficiency audit across The Governor, Weaver, Cloak, and Dagger.
+- Confirms Governor enforces no-assumption rules for jurisdiction, legal obligations, and compliance frameworks without assuming legal authority from architecture profiles. UIX-9 frozen SKILL.md remains unmodified.
+- Confirms Weaver enforces source-to-model traceability, marks conflicting facts CONTRADICTED, preserves UNKNOWN without invented connectors, and invalidates diagrams on semantic source changes.
+- Confirms Cloak enforces UI VISIBILITY != AUTHORIZATION, permission-aware UX without policy leakage, and clear specialist handoffs. UIX-9 frozen SKILL.md remains unmodified.
+- Confirms Dagger remains strictly gated and simulation-first with live destructive execution blocked across all paths (6/6 guardrail simulation tests pass).
+- Records governed disposition `OR_GOV_9_SUFFICIENT_NO_REFINEMENT` and qualifies repository for OR-GOV-10 integration closeout.
+- Adds `docs/governance/or_gov_9_specialist_sufficiency_disposition.v1.json`, `docs/governance/OR_GOV_9_SPECIALIST_SUFFICIENCY_AUDIT.md`, and 22 deterministic behavioral tests registered in `tests/behavior/run_tests.py`.
+
 ## Post-v1.7 OR-GOV-8D Scribe post-SSU governance documentation integration candidate
 
 - Formalizes Scribe's deterministic post-SSU governance documentation discipline as `skills/scribe/GOVERNANCE_DOCUMENTATION_INTEGRATION_GUIDE.md`.
