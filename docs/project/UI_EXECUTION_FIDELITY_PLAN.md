@@ -1,4 +1,4 @@
-# Orchestra UI Execution Fidelity Plan
+﻿# Orchestra UI Execution Fidelity Plan
 
 Status: APPROVED_DIRECTION_PENDING_CANONICAL_REVIEW
 
@@ -22,16 +22,33 @@ Related completed foundations:
 
 ## Purpose
 
-Establish a governed frontend execution-fidelity pipeline so that strong UI/UX design intent survives translation from Cloak and CUIR through architecture, implementation, and rendered validation.
+Establish a governed frontend execution-fidelity pipeline so that strong UI/UX design intent survives translation from reference intelligence, Cloak design discovery, and Clockwork engineering translation through Ponytail implementation and Overseer rendered validation.
 
-The program addresses a specific implementation risk: Ponytail is optimized for minimal safe implementation, but complex UI/UX may require more code or structure to preserve accepted design intent. Minimal implementation complexity must not become permission to reduce accepted design complexity.
+The program addresses a fundamental execution risk: Ponytail is optimized for minimal safe implementation, but high-fidelity UI/UX requires richer visual structure, balanced hierarchy, responsive transformation, and complete interaction states. Minimal implementation complexity must never become permission to reduce accepted design complexity.
 
-Core rule:
+This is not a Ponytail-only program. UIEF unifies:
+`	ext
+REFERENCE INTELLIGENCE
++
+CLOAK UI/UX DESIGN INTELLIGENCE
++
+CLOCKWORK ENGINEERING TRANSLATION
++
+CONDUCTOR PROFILE ROUTING
++
+PONYTAIL FIDELITY-PRESERVING IMPLEMENTATION
++
+CLOAK / OVERSEER / ARBITER VALIDATION
+`
 
-```text
+Core product rule:
+
+`	ext
 MINIMIZE IMPLEMENTATION COMPLEXITY
 WITHOUT MINIMIZING REQUIRED DESIGN COMPLEXITY.
-```
+`
+
+Ponytail must not simplify away accepted UI/UX composition, hierarchy, responsiveness, states, interaction behavior, layering, or visual relationships merely because a simpler implementation requires less code.
 
 ## Authority and source-of-truth
 
@@ -51,13 +68,114 @@ Padayon may mirror:
 
 Padayon must not independently redefine UIEF technical contracts or implementation authority.
 
+## The Four Connected Layers
+
+UIEF connects four governed architectural layers:
+
+### Layer A. Reference Intelligence
+
+Sources of design and interaction patterns may include:
+1. completed CUIR normalized pattern corpus;
+2. open-source UI repositories and references under established provenance and licensing rules;
+3. publicly available provider UI guidance and documentation;
+4. observable provider-generated UI outputs;
+5. Claude / Anthropic public guidance and observed UI outputs where lawfully and reproducibly accessible;
+6. project-native successful UI precedent and existing design systems.
+
+The sole purpose of reference intelligence is to identify reusable DESIGN CONCEPTS AND PATTERNS.
+
+Governing invariant:
+`	ext
+PUBLIC GUIDANCE OR OBSERVED OUTPUT
+!=
+PROPRIETARY PROVIDER ALGORITHM
+`
+
+### Layer B. Cloak Design Intelligence
+
+Cloak is upgraded from a checklist/rule-bound UI reviewer into a provenance-aware design intelligence specialist capable of incorporating normalized UI/UX pattern knowledge covering:
+- macro composition and structural layout;
+- visual hierarchy and focal-point balance;
+- information architecture and navigation patterns;
+- deliberate asymmetry versus balanced grid composition;
+- spacing, padding, and density systems;
+- typography scale, weight, and hierarchy;
+- responsive transformations, breakpoints, and container queries;
+- state presentation (default, hover, focus-visible, active, disabled, loading, empty, error);
+- interaction completeness and micro-feedback;
+- layering, elevation, z-index hierarchy, and overlays;
+- dashboard, analytics, and data-dense information presentation;
+- accessibility-related visible behavior (contrast, touch targets, focus rings, reduced motion);
+- component relationships and parent-child visual containment;
+- project-native design tokens and component-library reuse.
+
+Cloak retrieves only bounded, relevant pattern knowledge via progressive disclosure for the task at hand rather than injecting whole corpora into prompt contexts. Validated pattern intelligence is incorporated into appropriate Cloak reference and skill surfaces without diluting core safety invariants.
+
+### Layer C. Engineering Translation and Implementation
+
+Preserves the governed engineering chain:
+`	ext
+Cloak design handoff -> Clockwork engineering translation -> Conductor profile selection -> Ponytail implementation
+`
+
+Clockwork translates visual complexity into component architecture, state ownership, and integration boundaries without redesigning the visible experience. Conductor selects the implementation profile (MINIMAL_SAFE or UI_CONTRACT_FIDELITY). Ponytail implements the exact contract without acquiring UI design authority or self-downgrading the profile.
+
+### Layer D. Fidelity Validation
+
+Preserves the layered validation model:
+`	ext
+Cloak static fidelity review -> Overseer rendered/interaction/responsive evidence -> Arbiter transition disposition
+`
+
+Static source review confirms token mapping, region coverage, state declarations, and pattern intent. Rendered browser evidence proves layout containment, responsive reordering, focus behavior, and visual coherence.
+
+## CUIR Relationship — Do Not Reopen
+
+CUIR is not reopened by UIEF:
+`	ext
+CUIR-0 through CUIR-6 = COMPLETE_CANONICAL_VERIFIED
+Adoption disposition = ADOPT_OPTIONAL
+Role = UPSTREAM_REFERENCE_INTELLIGENCE
+`
+
+UIEF consumes:
+- CUIR normalized pattern vocabulary;
+- CUIR provenance records and licenses;
+- CUIR pattern references;
+- existing retrieval and progressive-disclosure mechanisms.
+
+New provider-observed pattern research must use the SAME strict provenance discipline established under CUIR rather than creating an ungoverned parallel corpus. Artificer remains responsible for external source and provenance intake. The Governor remains conditional for licensing, intellectual property, and rights questions.
+
+## Claude and Provider Reference Boundary
+
+The objective of studying Claude or other provider UI outputs and public documentation is explicitly bounded:
+
+Prohibited intentions:
+- NOT reverse engineering Claude or any other commercial model;
+- NOT claiming knowledge of Anthropic or provider proprietary internal algorithms;
+- NOT copying proprietary UI assets, styling libraries, or copyrighted source code;
+- NOT claiming that Claude is objectively superior without empirical evaluation evidence;
+- NOT hardcoding provider-specific style quirks or imitation hacks into Orchestra skills.
+
+Permissible analytical objective:
+Study reproducible, observable characteristics of strong UI outputs and published provider design guidance, normalize the underlying design principles into Orchestra-native concepts, and empirically test whether they improve Orchestra-assisted UI generation.
+
+Permissible analytical dimensions:
+- composition strategy and visual hierarchy;
+- spacing rhythm, padding, and information density;
+- responsive behavior across viewport boundaries;
+- state completeness across interactive elements;
+- project-native component and token reuse;
+- visual coherence and tone consistency;
+- avoidance of generic SaaS layout drift.
+
 ## Existing ownership preserved
 
 ### Conductor
 Owns routing, sequencing, context selection, and implementation-profile selection from accepted upstream evidence.
 
 ### Cloak
-Owns UI/UX requirements, design intent, visual hierarchy, responsive intent, interaction design, accessibility requirements, CUIR pattern selection, and static fidelity review.
+Owns UI/UX requirements, design intent, visual hierarchy, responsive intent, interaction design, accessibility requirements, reference pattern selection, and static fidelity review.
 
 ### Clockwork
 Owns component/state architecture, responsive engineering structure, dependency direction, integration boundaries, and translation of accepted visible-layer intent into maintainable engineering boundaries.
@@ -91,12 +209,12 @@ Remains optional. UIEF may evaluate composition/wireframe representation support
 
 ## Target pipeline
 
-```text
+`	ext
 User intent
   -> Conductor
-  -> Cloak design discovery and design intent
-  -> CUIR bounded pattern retrieval when applicable
-  -> optional composition representation
+  -> Cloak design discovery and reference intelligence retrieval
+  -> Bounded CUIR and provider-observed pattern retrieval when applicable
+  -> optional Weaver composition representation
   -> Clockwork engineering translation when required
   -> conditional Governor/Cipher/Chronicler review
   -> Conductor implementation-profile selection
@@ -104,7 +222,7 @@ User intent
   -> Cloak static fidelity review
   -> Overseer rendered/interaction/responsive/accessibility evidence
   -> Arbiter transition disposition
-```
+`
 
 ## Implementation profiles
 
@@ -113,10 +231,9 @@ User intent
 Use for ordinary implementation where no accepted high-fidelity UI contract requires preservation beyond normal project-native correctness.
 
 Principle:
-
-```text
+`	ext
 SMALLEST CORRECT IMPLEMENTATION
-```
+`
 
 ### UI_CONTRACT_FIDELITY
 
@@ -124,9 +241,9 @@ Use when accepted upstream evidence requires preservation of complex visible-lay
 
 Representative triggers:
 - frozen UI Design Contract;
-- Cloak fidelity handoff;
-- selected CUIR pattern references;
-- explicit reference/Figma fidelity;
+- Cloak UIFidelityHandoff;
+- selected CUIR and normalized reference pattern references;
+- explicit reference/Figma fidelity requirements;
 - greenfield or aesthetic-heavy UI;
 - non-trivial macro composition;
 - deliberate visual hierarchy;
@@ -134,11 +251,10 @@ Representative triggers:
 - required state/motion/layering behavior.
 
 Principle:
-
-```text
+`	ext
 SMALLEST CORRECT IMPLEMENTATION
 THAT FULLY PRESERVES THE ACCEPTED DESIGN CONTRACT.
-```
+`
 
 Ponytail cannot self-downgrade UI_CONTRACT_FIDELITY to MINIMAL_SAFE.
 
@@ -155,8 +271,9 @@ Required work:
 3. Reconcile active Butler/Caveman UI routing residue with canonical UIX ownership.
 4. Inventory historical UIX frozen surfaces and tests that protect them.
 5. Inventory every Ponytail frontend, upstream-contract, routing, prompt, and validation surface affected by UIEF.
-6. Produce a change-safety map showing amendable, additive, historical-frozen, and out-of-scope files.
-7. Make no fidelity behavior change in the same atomic unit unless separately authorized.
+6. Inventory Cloak reference-intelligence surfaces and provider-reference intake boundaries.
+7. Produce a change-safety map showing amendable, additive, historical-frozen, and out-of-scope files.
+8. Make no fidelity behavior change in the same atomic unit unless separately authorized.
 
 Exit:
 UIEF_0_BASELINE_RECONCILED
@@ -164,10 +281,10 @@ UIEF_0_BASELINE_RECONCILED
 ### UIEF-1 - UI implementation profile contract
 
 Goal:
-Define the machine-readable switch between ordinary minimal implementation and fidelity-preserving implementation.
+Define the machine-readable switch between ordinary minimal implementation and fidelity-preserving implementation, allowing traceable reference intelligence and design contract references.
 
 Candidate contract:
-```text
+`	ext
 UIImplementationProfile
 - profile
 - design_contract_ref
@@ -179,13 +296,13 @@ UIImplementationProfile
 - allowed_deviations
 - selection_reason
 - selected_by
-```
+`
 
 Required rules:
 - supported profiles are MINIMAL_SAFE and UI_CONTRACT_FIDELITY;
 - Conductor selects the profile from accepted upstream evidence;
 - Ponytail cannot change or downgrade the profile;
-- UI_CONTRACT_FIDELITY requires traceable design inputs;
+- UI_CONTRACT_FIDELITY requires traceable design inputs and reference-intelligence references;
 - missing required design evidence fails closed;
 - the contract grants no new authority.
 
@@ -195,7 +312,7 @@ UIEF_1_IMPLEMENTATION_PROFILE_CONTRACT_READY
 ### UIEF-2 - Conductor fidelity routing and context gate
 
 Goal:
-Make high-fidelity UI routing deterministic and prevent visually sensitive work from bypassing required design context.
+Make high-fidelity UI routing deterministic and route fidelity-sensitive tasks with the required design and reference-intelligence context.
 
 Required work:
 1. Add design-fidelity routing triggers.
@@ -213,9 +330,9 @@ Goal:
 Add progressive-disclosure implementation guidance without casually rewriting the historical frozen Ponytail core skill.
 
 Candidate guide:
-```text
+`	ext
 skills/ponytail/FRONTEND_FIDELITY_EXECUTION_GUIDE.md
-```
+`
 
 Required execution order:
 1. Verify frozen design identity.
@@ -240,18 +357,18 @@ UIEF_3_PONYTAIL_FIDELITY_EXECUTION_READY
 ### UIEF-4 - Cloak implementation-bound fidelity handoff
 
 Goal:
-Convert design intelligence into an implementation-consumable but non-authorizing visible-layer contract.
+Convert design intelligence into an implementation-consumable visible-layer contract that binds CUIR pattern refs, normalized provider-observed pattern refs, and project-native requirements.
 
 Candidate additive artifact:
-```text
+`	ext
 UIFidelityHandoff
-```
+`
 
 Candidate fields:
 - design_intent;
 - information_hierarchy;
 - macro_composition;
-- selected_pattern_refs;
+- selected_pattern_refs (CUIR and normalized provider-observed references);
 - pattern_application_reason;
 - required_regions;
 - component_roles;
@@ -266,7 +383,7 @@ Candidate fields:
 - avoid;
 - unresolved.
 
-CUIR patterns remain guidance evidence. UIEF binds selected patterns to the accepted design handoff without transferring design authority to Ponytail.
+CUIR and provider-observed patterns remain guidance evidence. UIEF binds selected patterns to the accepted design handoff without transferring design authority to Ponytail.
 
 Exit:
 UIEF_4_CLOAK_IMPLEMENTATION_BINDING_READY
@@ -287,9 +404,9 @@ Required work:
 - integration boundaries.
 
 Rule:
-```text
+`	ext
 DESIGN COMPLEXITY != ARCHITECTURAL COMPLEXITY
-```
+`
 
 Clockwork should minimize unnecessary engineering complexity while preserving accepted visible-layer complexity.
 
@@ -302,7 +419,7 @@ Goal:
 Integrate routing and handoffs without overlapping specialist authority.
 
 Canonical chain:
-```text
+`	ext
 Conductor
 -> Cloak
 -> Clockwork when required
@@ -312,11 +429,9 @@ Conductor
 -> Cloak
 -> Overseer
 -> Arbiter
-```
+`
 
-The Tuner detects semantic invalidation and recommends the smallest re-entry path.
-
-Weaver support may be evaluated for composition representation only. No automatic authority expansion is allowed.
+The Tuner detects semantic invalidation and recommends the smallest re-entry path. Weaver support may be evaluated for composition representation only. No automatic authority expansion is allowed.
 
 Exit:
 UIEF_6_SPECIALIST_INTEGRATION_READY
@@ -324,19 +439,19 @@ UIEF_6_SPECIALIST_INTEGRATION_READY
 ### UIEF-7 - Fidelity validation system
 
 Goal:
-Define layered validation that can distinguish source correctness from rendered design fidelity.
+Define layered validation that proves selected reference/design intent and structural complexity survived implementation into rendered output.
 
-Cloak static review should cover:
+Cloak static review covers:
 - required regions;
 - component mappings;
 - semantic tokens;
-- pattern intent;
+- pattern intent (CUIR and provider-observed);
 - state coverage;
 - unapproved substitution;
 - source-level responsive intent;
 - declared fidelity deviations.
 
-Overseer rendered evidence should cover:
+Overseer rendered evidence covers:
 - layout containment;
 - responsive behavior;
 - hierarchy preservation;
@@ -347,7 +462,7 @@ Overseer rendered evidence should cover:
 - reduced motion;
 - theme/state consistency.
 
-Reuse existing fidelity dispositions where applicable:
+Fidelity dispositions:
 - PRESERVED;
 - INTENTIONALLY_ADAPTED;
 - UNRESOLVED;
@@ -359,7 +474,7 @@ UIEF_7_FIDELITY_VALIDATION_READY
 ### UIEF-8 - Adversarial regression suite
 
 Goal:
-Prove that minimalism cannot override accepted UI fidelity.
+Prove deterministically that minimalism cannot override accepted UI fidelity.
 
 Minimum adversarial scenarios:
 1. required seven-region composition versus easier four-region simplification;
@@ -382,11 +497,11 @@ UIEF_8_ADVERSARIAL_REGRESSION_PASS
 ### UIEF-9 - Controlled comparative evaluation
 
 Goal:
-Determine whether UIEF improves Codex-generated frontend quality without weakening project-native reuse, accessibility, correctness, or governance.
+Determine whether the complete reference-intelligence + execution-fidelity pipeline improves frontend quality without weakening project-native reuse, accessibility, correctness, or governance.
 
 Arms:
-- baseline: current Codex/Ponytail path;
-- candidate: Cloak/CUIR + UI fidelity handoff + Clockwork translation + Ponytail UI_CONTRACT_FIDELITY.
+- baseline: current Codex / Orchestra path;
+- candidate: Cloak + CUIR/reference intelligence + normalized provider-observed patterns + Clockwork translation + UI_CONTRACT_FIDELITY + rendered validation.
 
 Representative task classes:
 - dashboard;
@@ -403,7 +518,7 @@ Evaluation dimensions:
 - information hierarchy;
 - composition quality;
 - visual coherence;
-- typography/spacing;
+- typography and spacing rhythm;
 - project-native reuse;
 - responsive behavior;
 - accessibility;
@@ -427,7 +542,7 @@ UIEF_9_CONTROLLED_EVALUATION_COMPLETE
 ### UIEF-10 - Portable integration and closeout
 
 Goal:
-Integrate only validated UIEF behavior into portable specialist surfaces and close the program without rewriting historical evidence.
+Integrate only evidence-supported UIEF behavior into portable specialist and reference surfaces, closing the program without rewriting historical evidence.
 
 Required work:
 - canonical/Codex parity;
@@ -448,7 +563,7 @@ UIEF_COMPLETE_CANONICAL_VERIFIED
 
 ## Phase dependency
 
-```text
+`	ext
 UIEF-0
 -> UIEF-1
 -> UIEF-2
@@ -460,7 +575,7 @@ UIEF-0
 -> UIEF-8
 -> UIEF-9
 -> UIEF-10
-```
+`
 
 The sequence is intentionally serial at program start because each phase defines or consumes contracts needed by the next phase.
 
@@ -493,16 +608,6 @@ UIEF does not:
 - claim access to proprietary provider internals;
 - authorize implementation merely because this plan exists.
 
-## External research boundary
-
-Publicly available provider guidance and open-source UI references may be studied through existing provenance and governance rules. Any Anthropic/Claude comparison must distinguish observable/public behavior from proprietary internal behavior.
-
-```text
-PUBLIC GUIDANCE OR OBSERVED OUTPUT
-!=
-PROPRIETARY INTERNAL ALGORITHM
-```
-
 ## Padayon continuity projection
 
 Recommended Padayon mirror fields:
@@ -520,6 +625,6 @@ The Padayon projection is continuity-only and must be reconciled against live Or
 
 ## Current bounded next action
 
-After this plan is reviewed and canonically established, begin UIEF-0 as a separate bounded audit/reconciliation unit.
+After this plan is reviewed and canonically established, complete UIEF-0 as a separate bounded audit/reconciliation unit.
 
 Do not begin UIEF-1 implementation until UIEF-0 is complete, validated, canonically read back, and the next phase is separately authorized.
