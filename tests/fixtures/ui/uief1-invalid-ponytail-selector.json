@@ -1,0 +1,23 @@
+{
+  "$schema": "../../machine/schemas/ui-implementation-profile.v1.schema.json",
+  "schema_version": "orchestra.ui-implementation-profile.v1",
+  "contract_id": "uief1-invalid-ponytail-selector",
+  "profile": "MINIMAL_SAFE",
+  "selected_by": "ponytail",
+  "selection_reason": "Ponytail attempting to select profile independently.",
+  "pattern_refs": [],
+  "composition_refs": [],
+  "required_fidelity": {
+    "preserve_macro_composition": false,
+    "preserve_visual_hierarchy": false,
+    "preserve_interaction_states": false,
+    "preserve_responsive_transformation": false
+  },
+  "allowed_deviations": [],
+  "authority": {
+    "grants_specialist_authority": false,
+    "grants_implementation_authority": false,
+    "ponytail_can_self_select": false,
+    "ponytail_can_downgrade": false
+  }
+}
