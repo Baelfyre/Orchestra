@@ -124,3 +124,25 @@ def test_load_contract_rejects_wrong_schema(tmp_path):
     (path / "registry.v1.json").write_text('{"schema_version":"wrong","specialists":[]}', encoding="utf-8")
     with pytest.raises(ValueError, match="unsupported specialist registry"):
         contracts.load_specialist_registry(tmp_path)
+
+    fidelity_path = tmp_path / "machine" / "routing"
+    fidelity_path.mkdir(parents=True)
+    (fidelity_path / "ui-fidelity-routing.v1.json").write_text('{"schema_version":"wrong"}', encoding="utf-8")
+    with pytest.raises(ValueError, match="unsupported UI fidelity routing"):
+        contracts.load_ui_fidelity_routing_contract(tmp_path)
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [
+        ("selected_by", "ponytail", "UI_FIDELITY_ROUTING_SELECTOR_INVALID"),
+        ("profiles", ["MINIMAL_SAFE"], "UI_FIDELITY_ROUTING_PROFILE_SET_INVALID"),
+        ("triggers", [{"id": ""}], "UI_FIDELITY_ROUTING_TRIGGER_SET_INVALID"),
+        ("authority", {"grants_implementation_authority": True}, "UI_FIDELITY_ROUTING_AUTHORITY_EXPANSION"),
+    ],
+)
+def test_machine_contract_errors_reject_ui_fidelity_contract_drift(monkeypatch, field, value, message):
+    fidelity = deepcopy(contracts.load_ui_fidelity_routing_contract(ROOT))
+    fidelity[field] = value
+    monkeypatch.setattr(contracts, "load_ui_fidelity_routing_contract", lambda root=None: fidelity)
+    assert message in contracts.machine_contract_errors(ROOT)

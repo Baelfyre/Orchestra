@@ -1,0 +1,184 @@
+{
+  "$schema": "../schemas/ui-fidelity-routing.v1.schema.json",
+  "schema_version": "orchestra.ui-fidelity-routing.v1",
+  "contract_id": "uief2-conductor-fidelity-routing",
+  "source_reference": "docs/project/UI_EXECUTION_FIDELITY_PLAN.md#uief-2-conductor-fidelity-routing-and-context-gate",
+  "selected_by": "conductor",
+  "profiles": [
+    "MINIMAL_SAFE",
+    "UI_CONTRACT_FIDELITY"
+  ],
+  "metadata_keys": {
+    "profile": "ui_implementation_profile",
+    "fidelity_evidence": "ui_fidelity_evidence",
+    "fidelity_context": "ui_fidelity_context",
+    "trigger_ids": "ui_fidelity_trigger_ids",
+    "fast_mode_prohibited": "fast_mode_prohibited",
+    "risk_mode": "risk_mode",
+    "generic_execution_mode": "execution_mode"
+  },
+  "fast_mode": {
+    "value": "FAST",
+    "prohibited_when": "DESIGN_FIDELITY_TRIGGER",
+    "allowed_when": "NO_MATERIAL_FIDELITY_TRIGGER"
+  },
+  "triggers": [
+    {
+      "id": "accepted_frozen_ui_design_contract",
+      "prompt_terms": [
+        "accepted ui design contract",
+        "frozen ui design contract",
+        "ui design contract"
+      ],
+      "evidence_keys": [
+        "design_contract_ref",
+        "ui_design_contract_ref"
+      ]
+    },
+    {
+      "id": "cloak_fidelity_handoff",
+      "prompt_terms": [
+        "cloak fidelity handoff",
+        "cloak handoff",
+        "ui fidelity handoff"
+      ],
+      "evidence_keys": [
+        "cloak_handoff_ref",
+        "cloak_fidelity_handoff_ref"
+      ]
+    },
+    {
+      "id": "reference_or_figma_fidelity",
+      "prompt_terms": [
+        "figma fidelity",
+        "accepted figma design",
+        "reference fidelity",
+        "match the reference",
+        "preserve the reference"
+      ],
+      "evidence_keys": [
+        "reference_ref",
+        "figma_ref"
+      ]
+    },
+    {
+      "id": "normalized_ui_reference_patterns",
+      "prompt_terms": [
+        "cuiR pattern",
+        "cuir pattern",
+        "normalized reference pattern",
+        "reference pattern"
+      ],
+      "evidence_keys": [
+        "pattern_refs"
+      ]
+    },
+    {
+      "id": "non_trivial_macro_composition",
+      "prompt_terms": [
+        "macro composition",
+        "non-trivial composition",
+        "multi-region composition"
+      ],
+      "evidence_keys": [
+        "composition_refs"
+      ]
+    },
+    {
+      "id": "visual_hierarchy_or_density",
+      "prompt_terms": [
+        "visual hierarchy",
+        "visual density",
+        "optical balance"
+      ],
+      "evidence_keys": [
+        "visual_hierarchy",
+        "optical_balance"
+      ]
+    },
+    {
+      "id": "responsive_transformation",
+      "prompt_terms": [
+        "responsive reordering",
+        "responsive transformation",
+        "responsive collapse"
+      ],
+      "evidence_keys": [
+        "responsive_reordering",
+        "responsive_transformation"
+      ]
+    },
+    {
+      "id": "interaction_state_or_layering",
+      "prompt_terms": [
+        "interaction states",
+        "motion and layering",
+        "interaction behavior and layering"
+      ],
+      "evidence_keys": [
+        "interaction_states",
+        "motion",
+        "layering"
+      ]
+    },
+    {
+      "id": "greenfield_or_aesthetic_heavy_ui",
+      "prompt_terms": [
+        "greenfield ui",
+        "aesthetic-heavy ui",
+        "aesthetic heavy ui"
+      ],
+      "evidence_keys": [
+        "greenfield_ui",
+        "aesthetic_heavy_ui"
+      ]
+    }
+  ],
+  "documented_non_triggers": [
+    "copy-only correction with no visual-contract impact",
+    "simple label or typo with no fidelity evidence",
+    "isolated mechanical UI fix that does not alter accepted composition, hierarchy, state, responsive, motion, or reference binding"
+  ],
+  "fidelity_profile_required_fields": [
+    "selection_reason",
+    "selected_by",
+    "design_contract_ref",
+    "cloak_handoff_ref",
+    "pattern_refs",
+    "composition_refs",
+    "clockwork_boundary_ref",
+    "required_fidelity",
+    "allowed_deviations"
+  ],
+  "fidelity_required_true_fields": [
+    "preserve_macro_composition",
+    "preserve_visual_hierarchy",
+    "preserve_interaction_states",
+    "preserve_responsive_transformation"
+  ],
+  "context_forward_fields": [
+    "profile",
+    "design_contract_ref",
+    "cloak_handoff_ref",
+    "pattern_refs",
+    "composition_refs",
+    "clockwork_boundary_ref",
+    "required_fidelity",
+    "allowed_deviations",
+    "selection_reason",
+    "selected_by",
+    "authority"
+  ],
+  "authority_false_fields": [
+    "grants_specialist_authority",
+    "grants_implementation_authority",
+    "ponytail_can_self_select",
+    "ponytail_can_downgrade"
+  ],
+  "authority": {
+    "grants_specialist_authority": false,
+    "grants_implementation_authority": false,
+    "ponytail_can_self_select": false,
+    "ponytail_can_downgrade": false
+  }
+}

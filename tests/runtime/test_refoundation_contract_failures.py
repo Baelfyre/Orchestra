@@ -117,6 +117,10 @@ def _machine_repo(tmp_path: Path):
         },
     }
     _write_json(tmp_path / "machine/routing/routes.v1.json", routing)
+    _write_json(
+        tmp_path / "machine/routing/ui-fidelity-routing.v1.json",
+        json.loads((Path(__file__).resolve().parents[2] / "machine/routing/ui-fidelity-routing.v1.json").read_text(encoding="utf-8")),
+    )
     _write_json(tmp_path / "machine/governance/policy.v1.json", policy)
     assert mc.machine_contract_errors(tmp_path) == ()
     return routing, policy

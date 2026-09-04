@@ -555,6 +555,26 @@
       "runtime_integration": false,
       "authority_note": "UIX-5 sequences existing specialists and binds evidence to handoffs; it does not create a specialist, expand authority, make UI or rendered evidence approval, activate adoption, or authorize Figma mutation."
     },
+    "uief2_conductor_fidelity_routing": {
+      "status": "IMPLEMENTED_CANONICAL",
+      "purpose": "Deterministic Conductor selection of MINIMAL_SAFE or UI_CONTRACT_FIDELITY from accepted design-fidelity evidence, with FAST prohibition and bounded downstream context.",
+      "machine_sources": [
+        "machine/routing/ui-fidelity-routing.v1.json",
+        "machine/schemas/ui-fidelity-routing.v1.schema.json",
+        "orchestra_runtime/domain/orchestration/ui_fidelity.py",
+        "orchestra_runtime/machine_contracts.py",
+        "orchestra_runtime/services.py"
+      ],
+      "human_sources": [
+        "docs/project/UI_EXECUTION_FIDELITY_PLAN.md"
+      ],
+      "validation_surface": "tests/runtime/test_uief2_conductor_fidelity_routing.py",
+      "runtime_integration": true,
+      "fast_mode_prohibited_on_material_trigger": true,
+      "generic_execution_mode_preserved": true,
+      "authority_expansion": false,
+      "authority_note": "UIEF-2 routes and bounds fidelity context only. It does not transfer UI design authority to Ponytail, allow profile self-selection or downgrade, expand authority, authorize external tools, release, deployment, policy activation, or other protected actions."
+    },
     "governed_ui_optional_adapter_boundaries_uix6": {
       "status": "IMPLEMENTED_CANONICAL_NO_ADOPTION",
       "purpose": "Library-neutral UIX-6 audit and boundary contract for optional Figma, Code Connect, Storybook, Playwright, axe, and project-native design-token evidence capabilities.",
@@ -2022,6 +2042,8 @@
   "machine_contracts": {
     "specialist_registry": "machine/specialists/registry.v1.json",
     "routing_contract": "machine/routing/routes.v1.json",
+    "ui_fidelity_routing_contract": "machine/routing/ui-fidelity-routing.v1.json",
+    "ui_fidelity_routing_schema": "machine/schemas/ui-fidelity-routing.v1.schema.json",
     "governance_policy": "machine/governance/policy.v1.json",
     "feature_decision_record_schema": "machine/schemas/feature-decision-record.v1.schema.json",
     "control_plane_migration": "machine/migration/control-plane.v1.json",
@@ -2362,7 +2384,8 @@
     "scribe_documentation_reconciliation_guide": "skills/scribe/DOCUMENTATION_SYSTEM_RECONCILIATION_GUIDE.md",
     "scribe_output_templates": "skills/scribe/OUTPUT_TEMPLATES.md",
     "conductor_routing_evaluation_guide": "skills/conductor/ROUTING_EVALUATION_GUIDE.md",
-    "conductor_architecture_governance_intake_guide": "skills/conductor/ARCHITECTURE_GOVERNANCE_INTAKE_GUIDE.md"
+    "conductor_architecture_governance_intake_guide": "skills/conductor/ARCHITECTURE_GOVERNANCE_INTAKE_GUIDE.md",
+    "ui_execution_fidelity_plan": "docs/project/UI_EXECUTION_FIDELITY_PLAN.md"
   },
   "representation_policy": {
     "markdown": "Human-readable explanation, rationale, examples, and nuanced specialist guidance",

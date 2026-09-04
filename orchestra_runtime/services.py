@@ -45,6 +45,7 @@ from .delegation import (
     delegation_accepted_event,
     delegation_rejected_event,
 )
+from .domain.orchestration.ui_fidelity import classify_ui_fidelity
 from .errors import (
     ConflictingCoordinationSignalError,
     CoordinationReadinessError,
@@ -88,6 +89,7 @@ from .machine_contracts import (
     command_route_map,
     command_route_record,
     governance_required_specialists,
+    load_ui_fidelity_routing_contract,
     runtime_validation_rule_records,
 )
 from .models import (
@@ -339,6 +341,8 @@ class RouterService(IRouterService):
         _assert_runtime_machine_contracts()
         self._skill_registry = skill_registry
         self._command_routes = command_routes or command_route_map()
+        registry_root = getattr(getattr(skill_registry, "_skill_repository", None), "repo_root", None)
+        self._ui_fidelity_contract = load_ui_fidelity_routing_contract(registry_root)
         self._fallback_specialist = str(command_route_record("__orchestra_ambiguity_fallback__")["specialist"])
         self._governance_required_specialists = governance_required_specialists()
 
@@ -349,21 +353,29 @@ class RouterService(IRouterService):
             raise ValueError(f"Unable to resolve skill for command '{command.name}'")
 
         governance_required = skill.slug in self._governance_required_specialists
+        ui_fidelity = classify_ui_fidelity(command.raw_input, context.metadata, self._ui_fidelity_contract)
+        context_profile = context.metadata.get(self._ui_fidelity_contract["metadata_keys"]["profile"])
+        if isinstance(context_profile, str) and context_profile != ui_fidelity.selected_profile:
+            raise ValueError("UI fidelity context and routed profile disagree")
         reason = (
             f"{context.adapter_name} command '{command.name}' maps to skill '{skill.slug}' via runtime router"
+            f" with UI profile '{ui_fidelity.selected_profile}'"
         )
+        route_metadata = {"skill_path": str(skill.skill_path)}
+        route_metadata.update(ui_fidelity.to_metadata(self._ui_fidelity_contract))
         return RouteDecision(
             command_name=command.name,
             skill_slug=skill.slug,
             governance_required=governance_required,
             reason=reason,
-            metadata={"skill_path": str(skill.skill_path)},
+            metadata=route_metadata,
         )
 
 
 class ContextAssembler:
     def __init__(self, manifest_repository: ManifestRepository):
         self._manifest_repository = manifest_repository
+        self._ui_fidelity_contract = load_ui_fidelity_routing_contract(manifest_repository.repo_root)
 
     def assemble(self, adapter: IIDEAdapter, prompt: str, metadata: dict | None = None) -> ContextPackage:
         context = adapter.provide_context(prompt, metadata)
@@ -371,6 +383,10 @@ class ContextAssembler:
         merged_metadata.setdefault("governance_validated", False)
         merged_metadata.setdefault("destructive_validated", False)
         merged_metadata.setdefault("dry_run", False)
+        ui_fidelity = classify_ui_fidelity(prompt, merged_metadata, self._ui_fidelity_contract)
+        merged_metadata.update(ui_fidelity.to_metadata(self._ui_fidelity_contract))
+        if ui_fidelity.fidelity_context is None:
+            merged_metadata.pop(self._ui_fidelity_contract["metadata_keys"]["fidelity_context"], None)
         return ContextPackage(
             adapter_name=context.adapter_name,
             prompt=context.prompt,
