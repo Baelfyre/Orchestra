@@ -338,3 +338,144 @@ def test_codex_parity_mirrors_exist_and_byte_identical() -> None:
     out_codex_bytes = OUTPUT_FORMATS_CODEX.read_bytes().replace(b"\r\n", b"\n")
     assert out_source_bytes == out_codex_bytes, "OUTPUT_FORMATS.md must be byte-identical between skills/ and adapters/"
     assert "FRONTEND_FIDELITY_EXECUTION" in OUTPUT_FORMATS_SOURCE.read_text(encoding="utf-8")
+
+
+def test_deviation_and_execution_serialization() -> None:
+    rec = UIDeviationRecord(
+        requirement_or_reference="req",
+        deviation="dev",
+        reason="reason",
+        impact="impact",
+        evidence="evidence",
+        requires_upstream_reentry=True,
+    )
+    rec_dict = rec.to_dict()
+    assert rec_dict["requirement_or_reference"] == "req"
+    assert rec_dict["requires_upstream_reentry"] is True
+
+    execution = PonytailFidelityExecution(
+        profile=UI_CONTRACT_FIDELITY,
+        preserved_compositions=("c1",),
+        preserved_hierarchies=("h1",),
+        preserved_states=("s1",),
+        preserved_responsive=("r1",),
+        project_native_reuse=("p1",),
+        deviations=(rec,),
+        motion_implemented=False,
+        requires_upstream_reentry=True,
+        static_review_ready=True,
+    )
+    exec_dict = execution.to_dict()
+    assert exec_dict["profile"] == UI_CONTRACT_FIDELITY
+    assert len(exec_dict["deviations"]) == 1
+    assert exec_dict["deviations"][0]["deviation"] == "dev"
+
+
+def test_metadata_and_profile_edge_cases() -> None:
+    with pytest.raises(ValueError, match="Context must provide mapping metadata"):
+        enforce_ponytail_fidelity_execution("non-mapping-metadata", {})
+
+    with pytest.raises(ValueError, match="Generic execution_mode cannot be contaminated"):
+        enforce_ponytail_fidelity_execution({"ui_implementation_profile": "HOST_NATIVE"}, {})
+
+    with pytest.raises(ValueError, match="Invalid UI implementation profile"):
+        enforce_ponytail_fidelity_execution({"ui_implementation_profile": "INVALID_PROFILE"}, {})
+
+    with pytest.raises(ValueError, match="Ponytail cannot select or self-assign UI implementation profile"):
+        enforce_ponytail_fidelity_execution(
+            {"ui_implementation_profile": {"profile": UI_CONTRACT_FIDELITY, "selected_by": "ponytail"}},
+            {},
+        )
+
+    # Missing profile defaults to MINIMAL_SAFE
+    default_res = enforce_ponytail_fidelity_execution({}, {})
+    assert default_res.profile == MINIMAL_SAFE
+
+    # Profile mapping without ui_fidelity_context
+    with pytest.raises(ValueError, match="missing required fidelity evidence"):
+        enforce_ponytail_fidelity_execution({"ui_implementation_profile": {"profile": UI_CONTRACT_FIDELITY}}, {})
+
+
+def test_required_fidelity_evidence_and_deviation_parsing() -> None:
+    base_ctx = {
+        "design_contract_ref": "ref",
+        "cloak_handoff_ref": "ref",
+        "clockwork_boundary_ref": "ref",
+        "pattern_refs": [{"pattern_id": "p1"}],
+        "composition_refs": [{"composition_id": "c1"}],
+        "required_fidelity": {"preserve_macro_composition": True},
+    }
+
+    # Non-string or empty design_contract_ref
+    for bad_field in ("design_contract_ref", "cloak_handoff_ref", "clockwork_boundary_ref"):
+        ctx_copy = dict(base_ctx)
+        ctx_copy[bad_field] = "   "
+        with pytest.raises(ValueError, match=f"missing required fidelity evidence: {bad_field}"):
+            enforce_ponytail_fidelity_execution(
+                {"ui_implementation_profile": UI_CONTRACT_FIDELITY, "ui_fidelity_context": ctx_copy},
+                {},
+            )
+
+    # Non-mapping required_fidelity
+    ctx_copy = dict(base_ctx)
+    ctx_copy["required_fidelity"] = "not-a-mapping"
+    with pytest.raises(ValueError, match="missing required fidelity evidence: required_fidelity"):
+        enforce_ponytail_fidelity_execution(
+            {"ui_implementation_profile": UI_CONTRACT_FIDELITY, "ui_fidelity_context": ctx_copy},
+            {},
+        )
+
+    # Complexity reduction for diff
+    with pytest.raises(ValueError, match="cannot be replaced with a simpler composition"):
+        enforce_ponytail_fidelity_execution(
+            {"ui_implementation_profile": UI_CONTRACT_FIDELITY, "ui_fidelity_context": base_ctx},
+            {"complexity_reduction_for_diff": True},
+        )
+
+    # Valid dictionary deviation parsing
+    result = enforce_ponytail_fidelity_execution(
+        {"ui_implementation_profile": UI_CONTRACT_FIDELITY, "ui_fidelity_context": base_ctx},
+        {
+            "preserved_compositions": ["c1"],
+            "deviations": [
+                {
+                    "requirement_or_reference": "c1",
+                    "deviation": "minor tweak",
+                    "reason": "responsive fit",
+                    "impact": "none",
+                    "evidence": "layout test",
+                    "requires_upstream_reentry": False,
+                }
+            ],
+        },
+    )
+    assert len(result.deviations) == 1
+    assert result.deviations[0].deviation == "minor tweak"
+
+    # Invalid deviation object type
+    with pytest.raises(ValueError, match="Deviations must be UIDeviationRecord or Mapping"):
+        enforce_ponytail_fidelity_execution(
+            {"ui_implementation_profile": UI_CONTRACT_FIDELITY, "ui_fidelity_context": base_ctx},
+            {"preserved_compositions": ["c1"], "deviations": [12345]},
+        )
+
+    # String upstream profile without ui_fidelity_context mapping
+    with pytest.raises(ValueError, match="missing required fidelity evidence"):
+        enforce_ponytail_fidelity_execution(
+            {"ui_implementation_profile": UI_CONTRACT_FIDELITY, "ui_fidelity_context": "not-a-mapping"},
+            {},
+        )
+
+    # Non-mapping items in composition_refs are ignored
+    mixed_ctx = dict(base_ctx)
+    mixed_ctx["composition_refs"] = ["not-a-mapping", {"composition_id": "c1"}]
+    mixed_res = enforce_ponytail_fidelity_execution(
+        {"ui_implementation_profile": UI_CONTRACT_FIDELITY, "ui_fidelity_context": mixed_ctx},
+        {"preserved_compositions": ["c1"]},
+    )
+    assert mixed_res.profile == UI_CONTRACT_FIDELITY
+
+    # Direct check of _evidence_present with invalid keys type
+    from orchestra_runtime.domain.orchestration.ui_fidelity import _evidence_present
+    with pytest.raises(ValueError, match="UI fidelity trigger evidence_keys must be a list"):
+        _evidence_present({}, None, "not-a-list")
