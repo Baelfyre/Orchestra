@@ -177,4 +177,229 @@ def classify_ui_fidelity(
     return UIFidelityRouting(MINIMAL_SAFE, (), False, None)
 
 
-__all__ = ["MINIMAL_SAFE", "UI_CONTRACT_FIDELITY", "UIFidelityRouting", "classify_ui_fidelity"]
+@dataclass(frozen=True)
+class UIDeviationRecord:
+    requirement_or_reference: str
+    deviation: str
+    reason: str
+    impact: str
+    evidence: str
+    requires_upstream_reentry: bool
+
+    def validate(self) -> None:
+        for field in ("requirement_or_reference", "deviation", "reason", "impact", "evidence"):
+            val = getattr(self, field)
+            if not isinstance(val, str) or not val.strip():
+                raise ValueError(f"UIDeviationRecord requires non-empty {field}")
+        if not isinstance(self.requires_upstream_reentry, bool):
+            raise ValueError("UIDeviationRecord requires boolean requires_upstream_reentry")
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "requirement_or_reference": self.requirement_or_reference,
+            "deviation": self.deviation,
+            "reason": self.reason,
+            "impact": self.impact,
+            "evidence": self.evidence,
+            "requires_upstream_reentry": self.requires_upstream_reentry,
+        }
+
+
+@dataclass(frozen=True)
+class PonytailFidelityExecution:
+    profile: str
+    preserved_compositions: tuple[str, ...]
+    preserved_hierarchies: tuple[str, ...]
+    preserved_states: tuple[str, ...]
+    preserved_responsive: tuple[str, ...]
+    project_native_reuse: tuple[str, ...]
+    deviations: tuple[UIDeviationRecord, ...]
+    motion_implemented: bool
+    requires_upstream_reentry: bool
+    static_review_ready: bool
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "profile": self.profile,
+            "preserved_compositions": list(self.preserved_compositions),
+            "preserved_hierarchies": list(self.preserved_hierarchies),
+            "preserved_states": list(self.preserved_states),
+            "preserved_responsive": list(self.preserved_responsive),
+            "project_native_reuse": list(self.project_native_reuse),
+            "deviations": [d.to_dict() for d in self.deviations],
+            "motion_implemented": self.motion_implemented,
+            "requires_upstream_reentry": self.requires_upstream_reentry,
+            "static_review_ready": self.static_review_ready,
+        }
+
+
+def enforce_ponytail_fidelity_execution(
+    context: Mapping[str, Any] | Any,
+    execution_payload: Mapping[str, Any] | None = None,
+) -> PonytailFidelityExecution:
+    meta = getattr(context, "metadata", context)
+    if not isinstance(meta, Mapping):
+        raise ValueError("Context must provide mapping metadata")
+
+    payload = dict(execution_payload or {})
+
+    # Check generic execution_mode contamination
+    for source in (meta, payload):
+        exec_mode = source.get("execution_mode")
+        if isinstance(exec_mode, str) and exec_mode in (MINIMAL_SAFE, UI_CONTRACT_FIDELITY):
+            raise ValueError("Generic execution_mode cannot be contaminated with UI fidelity profile values")
+
+    raw_profile = meta.get("ui_implementation_profile")
+    if isinstance(raw_profile, str) and raw_profile in ("HOST_NATIVE", "DETERMINISTIC_TEST_ENGINE"):
+        raise ValueError("Generic execution_mode cannot be contaminated with UI fidelity profile values")
+    if isinstance(payload.get("profile"), str) and payload["profile"] in ("HOST_NATIVE", "DETERMINISTIC_TEST_ENGINE"):
+        raise ValueError("Generic execution_mode cannot be contaminated with UI fidelity profile values")
+
+    # Check UIEF-4 initiation boundary
+    if (
+        payload.get("creates_uifidelity_handoff")
+        or payload.get("ui_fidelity_handoff") is not None
+        or payload.get("starts_uief4") is True
+    ):
+        raise ValueError("Ponytail cannot create UIFidelityHandoff or initiate UIEF-4")
+
+    # Determine upstream profile
+    if isinstance(raw_profile, Mapping):
+        upstream_profile = raw_profile.get("profile", MINIMAL_SAFE)
+        profile_dict = dict(raw_profile)
+    elif isinstance(raw_profile, str):
+        upstream_profile = raw_profile
+        profile_dict = meta.get("ui_fidelity_context") if isinstance(meta.get("ui_fidelity_context"), Mapping) else None
+    else:
+        upstream_profile = MINIMAL_SAFE
+        profile_dict = None
+
+    if upstream_profile not in (MINIMAL_SAFE, UI_CONTRACT_FIDELITY):
+        raise ValueError(f"Invalid UI implementation profile: {upstream_profile}")
+
+    # Check Ponytail self-selection / downgrade
+    if payload.get("selected_by") == "ponytail" or (isinstance(raw_profile, Mapping) and raw_profile.get("selected_by") == "ponytail"):
+        raise ValueError("Ponytail cannot select or self-assign UI implementation profile")
+
+    if upstream_profile == UI_CONTRACT_FIDELITY and payload.get("profile") == MINIMAL_SAFE:
+        raise ValueError("Ponytail cannot downgrade UI_CONTRACT_FIDELITY to MINIMAL_SAFE")
+
+    if upstream_profile == MINIMAL_SAFE and payload.get("profile") == UI_CONTRACT_FIDELITY:
+        raise ValueError("Ponytail cannot self-select UI_CONTRACT_FIDELITY")
+
+    # MINIMAL_SAFE path
+    if upstream_profile == MINIMAL_SAFE:
+        native_reuse = tuple(str(x) for x in payload.get("project_native_reuse", ()))
+        return PonytailFidelityExecution(
+            profile=MINIMAL_SAFE,
+            preserved_compositions=(),
+            preserved_hierarchies=(),
+            preserved_states=(),
+            preserved_responsive=(),
+            project_native_reuse=native_reuse,
+            deviations=(),
+            motion_implemented=False,
+            requires_upstream_reentry=False,
+            static_review_ready=True,
+        )
+
+    # UI_CONTRACT_FIDELITY path
+    fidelity_ctx = profile_dict or meta.get("ui_fidelity_context")
+    if not isinstance(fidelity_ctx, Mapping):
+        raise ValueError("UI_CONTRACT_FIDELITY missing required fidelity evidence")
+
+    # Validate required fidelity evidence
+    for field in ("design_contract_ref", "cloak_handoff_ref", "clockwork_boundary_ref"):
+        val = fidelity_ctx.get(field)
+        if not isinstance(val, str) or not val.strip():
+            raise ValueError(f"UI_CONTRACT_FIDELITY missing required fidelity evidence: {field}")
+
+    for field in ("pattern_refs", "composition_refs"):
+        val = fidelity_ctx.get(field)
+        if not isinstance(val, list) or not val:
+            raise ValueError(f"UI_CONTRACT_FIDELITY missing required fidelity evidence: {field}")
+
+    req_fidelity = fidelity_ctx.get("required_fidelity")
+    if not isinstance(req_fidelity, Mapping):
+        raise ValueError("UI_CONTRACT_FIDELITY missing required fidelity evidence: required_fidelity")
+
+    # Check for invented design requirements / unresolved facts
+    if payload.get("invented_design_requirements") or payload.get("unresolved_design_facts"):
+        raise ValueError("Ponytail cannot invent unresolved design requirements; upstream re-entry required")
+
+    # Check complexity reduction prohibition
+    if (
+        payload.get("simplified_composition_for_code_size") is True
+        or payload.get("complexity_reduction_for_diff") is True
+    ):
+        raise ValueError("Complex required composition cannot be replaced with a simpler composition solely for code-size reduction")
+
+    # Parse deviations first so they can account for unpreserved compositions
+    raw_deviations = payload.get("deviations", ())
+    validated_deviations: list[UIDeviationRecord] = []
+    reentry_required = False
+    for item in raw_deviations:
+        if isinstance(item, UIDeviationRecord):
+            rec = item
+        elif isinstance(item, Mapping):
+            rec = UIDeviationRecord(
+                requirement_or_reference=str(item.get("requirement_or_reference", "")),
+                deviation=str(item.get("deviation", "")),
+                reason=str(item.get("reason", "")),
+                impact=str(item.get("impact", "")),
+                evidence=str(item.get("evidence", "")),
+                requires_upstream_reentry=bool(item.get("requires_upstream_reentry", False)),
+            )
+        else:
+            raise ValueError("Deviations must be UIDeviationRecord or Mapping")
+        rec.validate()
+        validated_deviations.append(rec)
+        if rec.requires_upstream_reentry:
+            reentry_required = True
+
+    # Check required composition preservation
+    preserved_comps = set(str(c) for c in payload.get("preserved_compositions", ()))
+    for comp_ref in fidelity_ctx.get("composition_refs", []):
+        if isinstance(comp_ref, Mapping):
+            comp_id = str(comp_ref.get("composition_id", "")).strip()
+            if comp_id and comp_id not in preserved_comps:
+                # Must be covered by an explicit deviation
+                matching = [d for d in validated_deviations if comp_id in d.requirement_or_reference]
+                if not matching:
+                    raise ValueError(
+                        f"Required composition '{comp_id}' must be preserved or recorded as an authorized deviation"
+                    )
+
+    # Check motion
+    motion_implemented = bool(payload.get("motion_implemented", False))
+    if motion_implemented and not payload.get("motion_required", False):
+        raise ValueError("Motion implemented without explicit design contract requirement")
+
+    native_reuse = tuple(str(x) for x in payload.get("project_native_reuse", ()))
+    preserved_hierarchies = tuple(str(x) for x in payload.get("preserved_hierarchies", ()))
+    preserved_states = tuple(str(x) for x in payload.get("preserved_states", ()))
+    preserved_responsive = tuple(str(x) for x in payload.get("preserved_responsive", ()))
+
+    return PonytailFidelityExecution(
+        profile=UI_CONTRACT_FIDELITY,
+        preserved_compositions=tuple(sorted(preserved_comps)),
+        preserved_hierarchies=preserved_hierarchies,
+        preserved_states=preserved_states,
+        preserved_responsive=preserved_responsive,
+        project_native_reuse=native_reuse,
+        deviations=tuple(validated_deviations),
+        motion_implemented=motion_implemented,
+        requires_upstream_reentry=reentry_required,
+        static_review_ready=not reentry_required,
+    )
+
+
+__all__ = [
+    "MINIMAL_SAFE",
+    "UI_CONTRACT_FIDELITY",
+    "UIFidelityRouting",
+    "UIDeviationRecord",
+    "PonytailFidelityExecution",
+    "classify_ui_fidelity",
+    "enforce_ponytail_fidelity_execution",
+]
