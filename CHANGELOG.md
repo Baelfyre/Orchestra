@@ -1,5 +1,12 @@
 # Changelog
 
+## Post-v1.8.0 UIEF-2 Conductor fidelity routing and context gate
+
+- Adds a versioned machine contract for deterministic design-fidelity triggers and `FAST_MODE_PROHIBITED` semantics.
+- Routes material UI fidelity work through `UI_CONTRACT_FIDELITY` while preserving `MINIMAL_SAFE` eligibility for genuinely trivial UI changes.
+- Forwards only the selected profile's required design/reference context and preserves generic runtime `execution_mode` semantics.
+- Adds fail-closed runtime behavior tests for trigger determinism, bounded context, missing evidence, and Ponytail self-selection or downgrade attempts.
+
 ## Post-v1.8.0 UIEF-1 UI implementation profile contract candidate
 
 - Introduces library-neutral UI implementation profile contract schema `machine/schemas/ui-implementation-profile.v1.schema.json` under JSON Schema Draft 2020-12.
