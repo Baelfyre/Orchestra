@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.8.0 UIEF-1 UI implementation profile contract candidate
+
+- Introduces library-neutral UI implementation profile contract schema `machine/schemas/ui-implementation-profile.v1.schema.json` under JSON Schema Draft 2020-12.
+- Defines `MINIMAL_SAFE` vs `UI_CONTRACT_FIDELITY` execution profiles under the core rule: minimize implementation complexity without minimizing accepted design complexity.
+- Establishes canonical reference machine contract in `machine/ui/ui-implementation-profile.v1.json`.
+- Enforces Conductor exclusive selection authority (`selected_by: ["conductor"]`); Ponytail cannot self-select or downgrade implementation profiles.
+- Provides deterministic positive and negative test fixtures in `tests/fixtures/ui/uief1-*.json` and runtime validation tests in `tests/runtime/test_ui_implementation_profile_contract.py`.
+- Updates `README.json` machine discovery index with `ui_implementation_profile_schema` and `ui_implementation_profile_reference`.
+
 ## v1.8.0 — Governance Hardening, Runtime Refoundation & Traceability
 
 - **Governance Hardening**: Reinforces the Orchestra Prime Directive and Governed Execution Lifecycle V2, enforcing strict separation of authority, capability, routing, and validation readiness.
