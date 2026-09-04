@@ -2139,7 +2139,9 @@
     "migration_risk_contract_schema": "machine/schemas/migration-risk-contract.v1.schema.json",
     "architecture_governance_intake_schema": "machine/schemas/architecture-governance-intake.v1.schema.json",
     "architecture_validation_contract_schema": "machine/schemas/architecture-validation-contract.v1.schema.json",
-    "project_architecture_governance_profile_schema": "machine/schemas/project-architecture-governance-profile.v1.schema.json"
+    "project_architecture_governance_profile_schema": "machine/schemas/project-architecture-governance-profile.v1.schema.json",
+    "ui_implementation_profile_schema": "machine/schemas/ui-implementation-profile.v1.schema.json",
+    "ui_implementation_profile_reference": "machine/ui/ui-implementation-profile.v1.json"
   },
   "specialists": {
     "count": 14,

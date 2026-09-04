@@ -1,0 +1,77 @@
+{
+  "$schema": "../schemas/ui-implementation-profile.v1.schema.json",
+  "schema_version": "orchestra.ui-implementation-profile.v1",
+  "contract_id": "uief1-ui-implementation-profile-reference",
+  "profile": "UI_CONTRACT_FIDELITY",
+  "selected_by": "conductor",
+  "selection_reason": "Execution envelope requires verified UI contract fidelity with preserved macro composition, visual hierarchy, and multi-source UI reference intelligence.",
+  "design_contract_ref": "machine/schemas/ui-design-contract.schema.json",
+  "cloak_handoff_ref": "docs/architecture/UIEF_V1_CLOAK_HANDOFF_SPECIFICATION.md",
+  "pattern_refs": [
+    {
+      "pattern_id": "cuir-workspace-split-pane",
+      "source_kind": "CUIR_NORMALIZED",
+      "reference_ref": "docs/specs/cuir/CUIR_NORMALIZED_PATTERNS.md#workspace-split-pane",
+      "advisory_only": false
+    },
+    {
+      "pattern_id": "native-command-palette",
+      "source_kind": "PROJECT_NATIVE",
+      "reference_ref": "components/palette/CommandPalette.tsx",
+      "advisory_only": false
+    },
+    {
+      "pattern_id": "public-anthropic-artifact-canvas-flow",
+      "source_kind": "PUBLIC_PROVIDER_GUIDANCE",
+      "reference_ref": "docs/specs/ui/PUBLIC_PROVIDER_UI_REFERENCE_INTELLIGENCE.md#anthropic-artifact-canvas",
+      "advisory_only": true
+    },
+    {
+      "pattern_id": "observed-sidecar-drawer-layout",
+      "source_kind": "OBSERVED_PROVIDER_OUTPUT",
+      "reference_ref": "docs/specs/ui/OBSERVED_PROVIDER_PATTERNS.md#sidecar-drawer-layout",
+      "advisory_only": true
+    }
+  ],
+  "composition_refs": [
+    {
+      "composition_id": "desktop-macro-grid",
+      "structural_role": "MACRO_LAYOUT",
+      "reference_ref": "docs/specs/ui/COMPOSITIONS.md#desktop-macro-grid"
+    },
+    {
+      "composition_id": "action-bar-visual-hierarchy",
+      "structural_role": "VISUAL_HIERARCHY",
+      "reference_ref": "docs/specs/ui/COMPOSITIONS.md#action-bar-visual-hierarchy"
+    },
+    {
+      "composition_id": "split-pane-responsive-collapse",
+      "structural_role": "RESPONSIVE_TRANSFORMATION",
+      "reference_ref": "docs/specs/ui/COMPOSITIONS.md#split-pane-responsive-collapse"
+    }
+  ],
+  "clockwork_boundary_ref": "docs/architecture/UIEF_CLOCKWORK_ENGINEERING_BOUNDARY.md",
+  "execution_mode": "DETERMINISTIC_TEST_ENGINE",
+  "required_fidelity": {
+    "preserve_macro_composition": true,
+    "preserve_visual_hierarchy": true,
+    "preserve_interaction_states": true,
+    "preserve_responsive_transformation": true,
+    "min_accessibility_level": "WCAG_AA",
+    "optical_balance_required": true
+  },
+  "allowed_deviations": [
+    {
+      "item_ref": "pattern:observed-sidecar-drawer-layout",
+      "deviation_type": "PERFORMANCE_SIMPLIFICATION",
+      "reason": "Avoid non-hardware-accelerated backdrop blur filter on low-power client devices.",
+      "approved_by": "conductor"
+    }
+  ],
+  "authority": {
+    "grants_specialist_authority": false,
+    "grants_implementation_authority": false,
+    "ponytail_can_self_select": false,
+    "ponytail_can_downgrade": false
+  }
+}
