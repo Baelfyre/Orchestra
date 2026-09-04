@@ -1,5 +1,13 @@
 # Changelog
 
+## Post-v1.8.0 UIEF-3 Ponytail frontend fidelity execution layer
+
+- Establishes Ponytail frontend fidelity execution progressive-disclosure guide at `skills/ponytail/FRONTEND_FIDELITY_EXECUTION_GUIDE.md` and byte-identical Codex mirror at `adapters/codex/skills/ponytail/FRONTEND_FIDELITY_EXECUTION_GUIDE.md`.
+- Formalizes the 12-step execution order under `UI_CONTRACT_FIDELITY`, preserving accepted macro composition, visual hierarchy, interaction states, responsive transformations, density, and layering without casually rewriting frozen historical `SKILL.md`.
+- Adds `FRONTEND_FIDELITY_EXECUTION` output format and enforces traceable deviation recording contract with `UIDeviationRecord`.
+- Enforces strict complexity-reduction prohibition preventing replacement of required complex composition solely for code-size reduction.
+- Enforces runtime contract validation in `orchestra_runtime/domain/orchestration/ui_fidelity.py` with comprehensive test coverage in `tests/runtime/test_uief3_ponytail_fidelity_execution.py`.
+
 ## Post-v1.8.0 UIEF-2 Conductor fidelity routing and context gate
 
 - Adds a versioned machine contract for deterministic design-fidelity triggers and `FAST_MODE_PROHIBITED` semantics.
