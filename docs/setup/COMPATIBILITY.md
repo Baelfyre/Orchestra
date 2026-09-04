@@ -1,8 +1,8 @@
 # Compatibility
 
-The current public GitHub Release is Orchestra `v1.7.0: Adaptive Intelligence, Portable Memory & Design Fidelity`, published from lightweight tag `v1.7.0` at exact GitHub-verified signed release commit `e5305ef3e160209a0345bd2c7843c923940e62c5`. The release is non-draft, non-prerelease, immutable, and independently verified as latest.
+The current public GitHub Release is Orchestra `v1.8.0: Governance Hardening, Runtime Refoundation & Traceability`, published from lightweight tag `v1.8.0` at exact GitHub-verified signed release commit `dad1f153f1be6522a8a7964258a2122a8d057596`. The release is non-draft, non-prerelease, immutable, and independently verified as latest.
 
-The `v1.7.0` tag resolves directly to the exact release commit. v1.7.0 retains the bounded MCP stdio transport and PRAP/Adapter SDK introduced in v1.6.0, while adding adaptive intelligence, storage-agnostic portable memory, Registry O1-O6 adaptive consumption, and governed UI design-fidelity contracts. Publication did not graduate scaffold-only hosts or publish those scaffold surfaces to marketplaces.
+The `v1.8.0` tag resolves directly to the exact release commit. v1.8.0 incorporates the complete architecture governance program OR-GOV-1 through OR-GOV-10, Scribe Specialist Upgrade (SSU), runtime architecture refoundation milestones AR-0 through AR-2, Registry O7 query optimization, and Cloak CUIR reference intelligence. Publication did not graduate scaffold-only hosts or publish those scaffold surfaces to marketplaces.
 
 Scaffold-only hosts are not full support claims. Promotion requirements and graduation order live in `docs/project/SCAFFOLD_ADAPTER_GRADUATION_CRITERIA.md`.
 

@@ -1,6 +1,6 @@
 # Orchestra Developer Portal
 
-The Developer Portal is Orchestra's repository-native discovery surface for developers extending or integrating with the current v1.7 contracts. It is documentation and indexing only. It is not a hosted service, marketplace, package registry, deployment plane, policy authority, or runtime permission source.
+The Developer Portal is Orchestra's repository-native discovery surface for developers extending or integrating with the current v1.8 contracts. It is documentation and indexing only. It is not a hosted service, marketplace, package registry, deployment plane, policy authority, or runtime permission source.
 
 ## Start here
 

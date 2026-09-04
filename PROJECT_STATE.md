@@ -5,10 +5,10 @@
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Stable Continuation Branch:** `main`
-- **Current Public Release:** `v1.7.0`
-- **Release Status:** `v1.7.0 PUBLISHED_VERIFIED`
+- **Current Public Release:** `v1.8.0`
+- **Release Status:** `v1.8.0 PUBLISHED_VERIFIED`
 - **Target Release:** `NONE_DECLARED`
-- **Release-Candidate Metadata:** `1.7.0` (`PUBLISHED`)
+- **Release-Candidate Metadata:** `1.8.0` (`PUBLISHED`)
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.3.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.4.0 Release State:** `PUBLISHED_VERIFIED`
@@ -23,9 +23,26 @@
 - **v1.7.0 Tag Ref:** lightweight `commit` ref targeting the exact release commit
 - **v1.7.0 GitHub Release:** id `376713145`, immutable, non-draft, non-prerelease, independently verified latest
 - **v1.7.0 Post-Publication Verification:** run `32898750932` PASS
+- **v1.8.0 Release State:** `PUBLISHED_VERIFIED`
+- **v1.8.0 Release Commit:** `dad1f153f1be6522a8a7964258a2122a8d057596`
+- **v1.8.0 Release Tree:** `4effcd97e15f843c8c0d9d45217870ee9d6480ff`
+- **v1.8.0 Sole Parent:** `b601c2d853ad0dcdc68b8dc652578f19ef663c79`
+- **v1.8.0 Tag Ref:** lightweight `commit` ref targeting the exact release commit
+- **v1.8.0 GitHub Release:** id `RE_kwDOS_4UtM4WyusI`, immutable, non-draft, non-prerelease, independently verified latest
+- **v1.8.0 Post-Publication Verification:** PASS
 - **Control Plane State:** `V1_7_0_CURRENT`
 - **MCP State:** `PUBLISHED_V1_6_STABLE_RETAINED_V1_7`
 - **Policy Activation State:** `NOT_PERFORMED`
+
+## v1.8.0 Governance Hardening, Runtime Refoundation & Traceability Publication
+
+Orchestra `v1.8.0` is `PUBLISHED_VERIFIED`. Immutable GitHub Release id `RE_kwDOS_4UtM4WyusI` and lightweight tag `v1.8.0` resolve to exact signed canonical release commit `dad1f153f1be6522a8a7964258a2122a8d057596` with tree `4effcd97e15f843c8c0d9d45217870ee9d6480ff` and sole parent `b601c2d853ad0dcdc68b8dc652578f19ef663c79`. Canonical Governance, validate/runtime, Required Analysis Compatibility/CodeQL, native Windows/Ubuntu/macOS validation, bounded-pilot confidence, signed materialization, expected-head Squash, and zero unresolved review-thread gates passed before publication. Read-only post-publication verification independently confirmed the exact tag, release body, latest/immutable release state, and prior-tag preservation.
+
+The release incorporates Prime Directive / Lifecycle V2, completed runtime refoundation milestones AR-0 through AR-2, Scribe Specialist Upgrade (SSU), the complete architecture governance program OR-GOV-1 through OR-GOV-10, Registry O7, Cloak CUIR reference intelligence, and expanded deterministic validation.
+
+No AR-3/AR-4 implementation, deployment, production mutation, policy activation, installed-integration refresh, destructive cleanup, force push, or history rewrite was performed. Later `main` changes are post-release maintenance and do not move the immutable v1.8.0 identity.
+
+See `docs/validation/V1_8_0_PUBLICATION_CLOSEOUT.md`.
 
 ## v1.7.0 Adaptive Intelligence, Portable Memory & Design Fidelity Publication
 

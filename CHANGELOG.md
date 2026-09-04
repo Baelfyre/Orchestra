@@ -11,6 +11,7 @@
 - **Registry O7 Query Optimization**: Delivers governed registry query optimization with full backward-compatibility fallback to O1-O6 query patterns.
 - **Cloak Reference Intelligence (CUIR)**: Introduces optional normalized UI pattern reference intelligence (`ADOPT_OPTIONAL`) with project-native precedence.
 - **Deterministic Release Assurance**: 11/11 package version surfaces unified at `1.8.0`, with extensive cross-platform, CodeQL, governance check, architecture boundary, prompt-budget, and behavioral test coverage.
+- **Developer Portal & Release Surface Synchronization**: Reconciles developer portal catalog and test fixtures (`tests/runtime/test_developer_portal.py`) with the published v1.8.0 release identity and exact canonical release commit `dad1f153f1be6522a8a7964258a2122a8d057596`.
 
 ## Post-closeout OR-GOV record erratum candidate
 
