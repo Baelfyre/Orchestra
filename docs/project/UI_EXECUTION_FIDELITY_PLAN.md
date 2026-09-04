@@ -1,4 +1,4 @@
-﻿# Orchestra UI Execution Fidelity Plan
+# Orchestra UI Execution Fidelity Plan
 
 Status: APPROVED_DIRECTION_PENDING_CANONICAL_REVIEW
 
@@ -379,6 +379,30 @@ Ponytail must not replace a required complex composition with a simpler composit
 
 Exit:
 UIEF_3_PONYTAIL_FIDELITY_EXECUTION_READY
+
+The canonical UIEF-3 implementation is the progressive-disclosure guide at
+`skills/ponytail/FRONTEND_FIDELITY_EXECUTION_GUIDE.md` with byte-identical
+Codex mirror at
+`adapters/codex/skills/ponytail/FRONTEND_FIDELITY_EXECUTION_GUIDE.md` and the
+`FRONTEND_FIDELITY_EXECUTION` output format in `skills/ponytail/OUTPUT_FORMATS.md`.
+Ponytail strictly executes the 12-step execution order under
+`UI_CONTRACT_FIDELITY`, preserving accepted macro composition, visual hierarchy,
+interaction states, responsive transformations, density, and layering without
+rewriting the historical frozen Ponytail core skill.
+
+Ponytail consumes but cannot self-select or downgrade `UIImplementationProfile`.
+Generic `execution_mode` remains strictly distinct from UI fidelity profile values.
+Project-native components, tokens, and assets are preferred when they satisfy
+the accepted design contract. Every necessary divergence is captured in a
+structured `UIDeviationRecord` with all required fields. The explicit
+complexity-reduction prohibition forbids replacing a required complex
+composition solely for code-size reduction. Ponytail returns a static-review-ready
+delta to the downstream Cloak boundary and cannot create `UIFidelityHandoff` or
+initiate UIEF-4.
+
+The runtime enforcement contracts and semantic test coverage live in
+`orchestra_runtime/domain/orchestration/ui_fidelity.py` and
+`tests/runtime/test_uief3_ponytail_fidelity_execution.py`.
 
 ### UIEF-4 - Cloak implementation-bound fidelity handoff
 
