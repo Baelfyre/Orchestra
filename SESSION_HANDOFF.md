@@ -3,8 +3,8 @@
 - **Canonical Repo:** `Baelfyre/Orchestra`
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
-- **Current Public Release:** `v1.7.0`
-- **Release-Candidate Metadata:** `v1.7.0` (`PUBLISHED`)
+- **Current Public Release:** `v1.8.0`
+- **Release-Candidate Metadata:** `v1.8.0` (`PUBLISHED`)
 - **Target Release:** `NONE_DECLARED`
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.3.0 Release State:** `PUBLISHED_VERIFIED`
@@ -19,9 +19,21 @@
 - **v1.7.0 Tag Ref:** lightweight `commit` ref targeting the exact release commit
 - **v1.7.0 GitHub Release:** id `376713145`, immutable, non-draft, non-prerelease, independently verified latest
 - **v1.7.0 Post-Publication Verification:** run `32898750932` PASS
+- **v1.8.0 Release State:** `PUBLISHED_VERIFIED`
+- **v1.8.0 Release Commit:** `dad1f153f1be6522a8a7964258a2122a8d057596`
+- **v1.8.0 Release Tree:** `4effcd97e15f843c8c0d9d45217870ee9d6480ff`
+- **v1.8.0 Tag Ref:** lightweight `commit` ref targeting the exact release commit
+- **v1.8.0 GitHub Release:** id `RE_kwDOS_4UtM4WyusI`, immutable, non-draft, non-prerelease, independently verified latest
+- **v1.8.0 Post-Publication Verification:** PASS
 - **Control Plane State:** `V1_7_0_CURRENT`
 - **MCP State:** `PUBLISHED_V1_6_STABLE_RETAINED_V1_7`
 - **Policy Activation:** `NOT_PERFORMED`
+
+## v1.8.0 Governance Hardening, Runtime Refoundation & Traceability Publication Continuity
+
+Orchestra `v1.8.0` is `PUBLISHED_VERIFIED`. Release id `RE_kwDOS_4UtM4WyusI` and lightweight tag `v1.8.0` resolve to exact signed canonical commit `dad1f153f1be6522a8a7964258a2122a8d057596` with tree `4effcd97e15f843c8c0d9d45217870ee9d6480ff`. The complete exact-head release matrix and signed-materialization path passed before publication. Post-publication verification independently confirmed the exact immutable/latest release identity and preserved the prior `v1.7.0` and `v1.6.0` tags.
+
+Evidence: `docs/validation/V1_8_0_PUBLICATION_CLOSEOUT.md`.
 
 ## v1.7.0 Adaptive Intelligence, Portable Memory & Design Fidelity Publication Continuity
 

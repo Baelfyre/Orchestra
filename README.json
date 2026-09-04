@@ -13,12 +13,12 @@
     "license": "MIT",
     "package_version": "1.8.0",
     "package_version_source": "plugin.json#/version",
-    "current_public_release": "v1.7.0",
-    "current_public_release_commit": "e5305ef3e160209a0345bd2c7843c923940e62c5",
+    "current_public_release": "v1.8.0",
+    "current_public_release_commit": "dad1f153f1be6522a8a7964258a2122a8d057596",
     "current_public_release_state_scope": "LIVE_VERIFIED_PUBLICATION",
     "main_contains_post_release_work": true,
-    "next_release_plan": "v1.8.0",
-    "next_release_plan_status": "V1_8_0_RELEASE_CANDIDATE_PREPARATION"
+    "next_release_plan": "NONE_DECLARED",
+    "next_release_plan_status": "V1_8_0_PUBLISHED_VERIFIED_COMPLETE"
   },
   "purpose": {
     "summary": "Portable orchestration runtime for structured AI-assisted software development.",

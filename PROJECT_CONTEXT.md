@@ -10,7 +10,7 @@ A governance-first specialist orchestration framework that routes complex AI-ass
 Open-source developer tooling and AI orchestration framework
 
 ## Current Stage
-v1.8.0 - Governance Hardening, Runtime Refoundation & Traceability (`RELEASE_CANDIDATE_PREPARATION`). Prior public release is v1.7.0 (canonical signed commit `e5305ef3e160209a0345bd2c7843c923940e62c5` with tree `7b7a0f6d5dd5376a62125ed1c6b037284e519c69`), which remains the active public release until v1.8.0 release publication is finalized and verified. Package and host integration surfaces are unified at version 1.8.0. Incorporates Prime Directive / Lifecycle V2, completed runtime refoundation milestones AR-0 through AR-2, Scribe Specialist Upgrade (SSU), the complete architecture governance program OR-GOV-1 through OR-GOV-10, Registry O7, Cloak CUIR reference intelligence, and expanded deterministic validation.
+v1.8.0 - Governance Hardening, Runtime Refoundation & Traceability (`PUBLISHED_VERIFIED`). The immutable GitHub Release (id `RE_kwDOS_4UtM4WyusI`) and lightweight `v1.8.0` tag resolve to canonical signed commit `dad1f153f1be6522a8a7964258a2122a8d057596` with tree `4effcd97e15f843c8c0d9d45217870ee9d6480ff` and sole parent `b601c2d853ad0dcdc68b8dc652578f19ef663c79`. Post-publication verification independently confirmed tag target, release body, immutable/latest state, canonical SHA/tree/parent/signature, and preservation of prior tags (v1.7.0, v1.6.0). Later commits on `main` are post-release maintenance and do not move the v1.8.0 release identity.
 
 ## Primary Users
 Developers and maintainers who install Orchestra as a plugin, skill set, or runtime package inside supported or scaffold-only coding hosts.

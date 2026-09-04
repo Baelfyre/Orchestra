@@ -71,8 +71,8 @@ def test_portal_preserves_authority_boundaries_and_current_mcp_release_projectio
         "mcp_server": "PUBLISHED_V1_6_STABLE_RETAINED_V1_7",
     }
     assert catalog["public_release_boundary"] == {
-        "release": "v1.7.0",
-        "target_commit": "e5305ef3e160209a0345bd2c7843c923940e62c5",
+        "release": "v1.8.0",
+        "target_commit": "dad1f153f1be6522a8a7964258a2122a8d057596",
         "moved_by_portal": False,
     }
 
