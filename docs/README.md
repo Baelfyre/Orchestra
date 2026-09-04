@@ -41,6 +41,7 @@ Portable memory is optional. Orchestra does not require or identify a specific e
 - `../machine/routing/routes.v1.json`: canonical machine routing contract.
 - [Tuner Protocol](governance/TUNER_PROTOCOL.md): cross-specialist coordination contract, including declared governance dependencies and minimal re-entry.
 - [Cloak UI Reference Corpus Upgrade Plan](project/CLOAK_UI_REFERENCE_CORPUS_PLAN.md): canonical CUIR corpus, provenance, licensing, icon-reuse, evaluation, and phase-sequencing plan.
+- [UI Execution Fidelity Plan](project/UI_EXECUTION_FIDELITY_PLAN.md): approved post-CUIR plan for fidelity-aware routing, Ponytail execution profiles, Cloak/Clockwork handoffs, rendered validation, and controlled comparative evaluation.
 
 Specialist prose and progressive-disclosure knowledge remain under `../skills/*/`.
 
