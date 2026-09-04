@@ -324,6 +324,32 @@ Required work:
 Exit:
 UIEF_2_ROUTING_AND_CONTEXT_GATE_READY
 
+The canonical UIEF-2 implementation is the versioned machine contract at
+`machine/routing/ui-fidelity-routing.v1.json` with its schema at
+`machine/schemas/ui-fidelity-routing.v1.schema.json`. Conductor classifies
+accepted design-fidelity evidence in deterministic contract order and selects
+`UI_CONTRACT_FIDELITY` for material triggers such as an accepted design
+contract, explicit reference fidelity, normalized pattern references,
+non-trivial composition, visual hierarchy or density, responsive
+transformation, or interaction-state and motion requirements. A material
+trigger makes `FAST` invalid; genuinely trivial UI work without a trigger
+remains eligible for `MINIMAL_SAFE` and `FAST`.
+
+Only the selected profile and traceable, allowlisted fidelity references are
+forwarded downstream. `UI_CONTRACT_FIDELITY` requires the design contract,
+Cloak, pattern, composition, and Clockwork boundary references together with
+the required fidelity disposition fields. `MINIMAL_SAFE` removes stale
+fidelity-only context. Generic `execution_mode` remains reserved for
+`HOST_NATIVE` and `DETERMINISTIC_TEST_ENGINE` semantics. Conductor owns
+selection, and Ponytail cannot self-select, downgrade, or add fidelity-only
+context. Missing profile evidence, conflicting explicit minimal selection,
+invalid authority flags, and missing required references fail closed.
+
+The runtime contract and focused semantic coverage live in
+`orchestra_runtime/domain/orchestration/ui_fidelity.py`,
+`orchestra_runtime/services.py`, and
+`tests/runtime/test_uief2_conductor_fidelity_routing.py`.
+
 ### UIEF-3 - Ponytail frontend fidelity execution layer
 
 Goal:

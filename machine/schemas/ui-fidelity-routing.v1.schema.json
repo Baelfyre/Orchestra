@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/ui-fidelity-routing.v1.schema.json",
+  "title": "Orchestra UI Fidelity Routing Contract v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "contract_id",
+    "source_reference",
+    "selected_by",
+    "profiles",
+    "metadata_keys",
+    "fast_mode",
+    "triggers",
+    "documented_non_triggers",
+    "fidelity_profile_required_fields",
+    "fidelity_required_true_fields",
+    "context_forward_fields",
+    "authority_false_fields",
+    "authority"
+  ],
+  "properties": {
+    "$schema": {"type": "string"},
+    "schema_version": {"const": "orchestra.ui-fidelity-routing.v1"},
+    "contract_id": {"type": "string", "minLength": 1},
+    "source_reference": {"type": "string", "minLength": 1},
+    "selected_by": {"const": "conductor"},
+    "profiles": {
+      "type": "array",
+      "const": ["MINIMAL_SAFE", "UI_CONTRACT_FIDELITY"]
+    },
+    "metadata_keys": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["profile", "fidelity_evidence", "fidelity_context", "trigger_ids", "fast_mode_prohibited", "risk_mode", "generic_execution_mode"],
+      "properties": {
+        "profile": {"const": "ui_implementation_profile"},
+        "fidelity_evidence": {"const": "ui_fidelity_evidence"},
+        "fidelity_context": {"const": "ui_fidelity_context"},
+        "trigger_ids": {"const": "ui_fidelity_trigger_ids"},
+        "fast_mode_prohibited": {"const": "fast_mode_prohibited"},
+        "risk_mode": {"const": "risk_mode"},
+        "generic_execution_mode": {"const": "execution_mode"}
+      }
+    },
+    "fast_mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["value", "prohibited_when", "allowed_when"],
+      "properties": {
+        "value": {"const": "FAST"},
+        "prohibited_when": {"const": "DESIGN_FIDELITY_TRIGGER"},
+        "allowed_when": {"const": "NO_MATERIAL_FIDELITY_TRIGGER"}
+      }
+    },
+    "triggers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "prompt_terms", "evidence_keys"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "prompt_terms": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+          "evidence_keys": {"type": "array", "items": {"type": "string", "minLength": 1}}
+        }
+      }
+    },
+    "documented_non_triggers": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "fidelity_profile_required_fields": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "fidelity_required_true_fields": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "context_forward_fields": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "authority_false_fields": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["grants_specialist_authority", "grants_implementation_authority", "ponytail_can_self_select", "ponytail_can_downgrade"],
+      "properties": {
+        "grants_specialist_authority": {"const": false},
+        "grants_implementation_authority": {"const": false},
+        "ponytail_can_self_select": {"const": false},
+        "ponytail_can_downgrade": {"const": false}
+      }
+    }
+  }
+}

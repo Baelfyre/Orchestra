@@ -9,10 +9,12 @@ from .repositories import ManifestRepository, SkillSourceRepository
 SPECIALIST_REGISTRY_SCHEMA_VERSION = "orchestra.specialist-registry.v1"
 ROUTING_CONTRACT_SCHEMA_VERSION = "orchestra.routing-contract.v1"
 GOVERNANCE_POLICY_SCHEMA_VERSION = "orchestra.governance-policy.v1"
+UI_FIDELITY_ROUTING_CONTRACT_SCHEMA_VERSION = "orchestra.ui-fidelity-routing.v1"
 
 _MACHINE_ROOT = Path("machine")
 _SPECIALIST_REGISTRY = _MACHINE_ROOT / "specialists" / "registry.v1.json"
 _ROUTING_CONTRACT = _MACHINE_ROOT / "routing" / "routes.v1.json"
+_UI_FIDELITY_ROUTING_CONTRACT = _MACHINE_ROOT / "routing" / "ui-fidelity-routing.v1.json"
 _GOVERNANCE_POLICY = _MACHINE_ROOT / "governance" / "policy.v1.json"
 
 FRONTMATTER_FIELDS = (
@@ -122,6 +124,13 @@ def load_routing_contract(root: Path | str | None = None) -> dict[str, Any]:
     contract = _load_json(repo_root / _ROUTING_CONTRACT)
     if contract.get("schema_version") != ROUTING_CONTRACT_SCHEMA_VERSION:
         raise ValueError("unsupported routing contract schema_version")
+    return contract
+
+
+def load_ui_fidelity_routing_contract(root: Path | str | None = None) -> dict[str, Any]:
+    contract = _load_json(_root(root) / _UI_FIDELITY_ROUTING_CONTRACT)
+    if contract.get("schema_version") != UI_FIDELITY_ROUTING_CONTRACT_SCHEMA_VERSION:
+        raise ValueError("unsupported UI fidelity routing contract schema_version")
     return contract
 
 
@@ -298,6 +307,21 @@ def machine_contract_errors(root: Path | str | None = None) -> tuple[str, ...]:
             errors.append("AMBIGUITY_FALLBACK_UNKNOWN")
     except (ValueError, OSError) as exc:
         errors.append(f"ROUTING_CONTRACT_INVALID:{exc}")
+
+    try:
+        fidelity = load_ui_fidelity_routing_contract(repo_root)
+        if fidelity.get("selected_by") != "conductor":
+            errors.append("UI_FIDELITY_ROUTING_SELECTOR_INVALID")
+        if fidelity.get("profiles") != ["MINIMAL_SAFE", "UI_CONTRACT_FIDELITY"]:
+            errors.append("UI_FIDELITY_ROUTING_PROFILE_SET_INVALID")
+        trigger_ids = [str(item.get("id", "")).strip() for item in fidelity.get("triggers", [])]
+        if not trigger_ids or any(not item for item in trigger_ids) or len(trigger_ids) != len(set(trigger_ids)):
+            errors.append("UI_FIDELITY_ROUTING_TRIGGER_SET_INVALID")
+        authority = fidelity.get("authority")
+        if not isinstance(authority, dict) or any(value is not False for value in authority.values()):
+            errors.append("UI_FIDELITY_ROUTING_AUTHORITY_EXPANSION")
+    except (ValueError, OSError) as exc:
+        errors.append(f"UI_FIDELITY_ROUTING_CONTRACT_INVALID:{exc}")
 
     try:
         policy = load_governance_policy(repo_root)
