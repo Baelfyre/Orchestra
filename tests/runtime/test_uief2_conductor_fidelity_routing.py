@@ -8,7 +8,11 @@ import jsonschema
 import pytest
 
 from orchestra_runtime.adapters import CodexAdapter
-from orchestra_runtime.domain.orchestration.ui_fidelity import MINIMAL_SAFE, UI_CONTRACT_FIDELITY
+from orchestra_runtime.domain.orchestration.ui_fidelity import (
+    MINIMAL_SAFE,
+    UI_CONTRACT_FIDELITY,
+    classify_ui_fidelity,
+)
 from orchestra_runtime.machine_contracts import load_ui_fidelity_routing_contract
 from orchestra_runtime.models import Command, ContextPackage
 from orchestra_runtime.repositories import ManifestRepository, SkillSourceRepository
@@ -28,6 +32,10 @@ def _context(prompt: str, metadata: dict | None = None) -> ContextPackage:
 def _router() -> RouterService:
     registry = SkillRegistry(ManifestRepository(ROOT), SkillSourceRepository(ROOT))
     return RouterService(registry)
+
+
+def _classify(prompt: str, metadata: dict | None = None, contract: dict | None = None):
+    return classify_ui_fidelity(prompt, metadata, contract or load_ui_fidelity_routing_contract(ROOT))
 
 
 def test_uief2_machine_contract_is_schema_valid_and_loaded() -> None:
@@ -117,3 +125,81 @@ def test_profile_selection_and_downgrade_authority_fail_closed() -> None:
 def test_missing_required_fidelity_evidence_fails_closed() -> None:
     with pytest.raises(ValueError, match="requires conductor-selected profile evidence"):
         _context("Implement the accepted Figma design.")
+
+
+def test_mapping_evidence_is_considered_without_broadening_forwarded_context() -> None:
+    context = _context(
+        "Implement the accepted UI design contract.",
+        {
+            "ui_implementation_profile": copy.deepcopy(PROFILE),
+            "ui_fidelity_evidence": {"visual_hierarchy": True, "unrelated_corpus": ["drop"]},
+        },
+    )
+    assert context.metadata["ui_implementation_profile"] == UI_CONTRACT_FIDELITY
+    assert "unrelated_corpus" not in context.metadata["ui_fidelity_context"]
+
+
+@pytest.mark.parametrize(
+    ("mutate", "message"),
+    [
+        (lambda profile: profile.clear(), "missing required evidence"),
+        (lambda profile: profile.update(selection_reason=""), "requires a selection reason"),
+        (lambda profile: profile.update(design_contract_ref=""), "requires design_contract_ref"),
+        (lambda profile: profile.update(pattern_refs=[]), "requires non-empty pattern_refs"),
+        (lambda profile: profile.update(required_fidelity=None), "requires required_fidelity evidence"),
+        (
+            lambda profile: profile["required_fidelity"].update(preserve_visual_hierarchy=False),
+            "preserve_visual_hierarchy=true",
+        ),
+        (lambda profile: profile.update(authority=None), "requires authority boundaries"),
+        (
+            lambda profile: profile["authority"].update(ponytail_can_downgrade=True),
+            "authority boundary ponytail_can_downgrade must be false",
+        ),
+    ],
+)
+def test_invalid_fidelity_profile_evidence_fails_closed(mutate, message: str) -> None:
+    profile = copy.deepcopy(PROFILE)
+    mutate(profile)
+    with pytest.raises(ValueError, match=message):
+        _classify("Implement the accepted UI design contract.", {"ui_implementation_profile": profile})
+
+
+def test_malformed_profile_payload_and_profile_name_fail_closed() -> None:
+    with pytest.raises(ValueError, match="object or a canonical profile name"):
+        _classify("Fix a button label.", {"ui_implementation_profile": 7})
+    with pytest.raises(ValueError, match="must be MINIMAL_SAFE"):
+        _classify("Fix a button label.", {"ui_implementation_profile": {"profile": "UNSAFE"}})
+
+
+def test_malformed_trigger_contract_fails_closed() -> None:
+    contract = copy.deepcopy(load_ui_fidelity_routing_contract(ROOT))
+    contract["triggers"][0]["prompt_terms"] = "not-a-list"
+    with pytest.raises(ValueError, match="prompt_terms must be a list"):
+        _classify("anything", contract=contract)
+
+
+def test_minimal_profile_boundaries_are_checked_without_selecting_fidelity() -> None:
+    assert _classify("Fix a button label.", {"ui_implementation_profile": {"profile": None}}).selected_profile == MINIMAL_SAFE
+
+    contract = copy.deepcopy(load_ui_fidelity_routing_contract(ROOT))
+    contract["profiles"].append("UNSAFE")
+    with pytest.raises(ValueError, match="conflicting UI profile"):
+        _classify("Fix a button label.", {"ui_implementation_profile": {"profile": "UNSAFE"}}, contract=contract)
+
+    with pytest.raises(ValueError, match="only be selected by conductor"):
+        _classify("Fix a button label.", {"ui_implementation_profile": {"selected_by": "ponytail"}})
+
+    safe_authority = {
+        key: False
+        for key in load_ui_fidelity_routing_contract(ROOT)["authority_false_fields"]
+    }
+    assert _classify(
+        "Fix a button label.",
+        {"ui_implementation_profile": {"authority": safe_authority}},
+    ).selected_profile == MINIMAL_SAFE
+
+    unsafe_authority = dict(safe_authority)
+    unsafe_authority["ponytail_can_self_select"] = True
+    with pytest.raises(ValueError, match="authority boundary ponytail_can_self_select must be false"):
+        _classify("Fix a button label.", {"ui_implementation_profile": {"authority": unsafe_authority}})
