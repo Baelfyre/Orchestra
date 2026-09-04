@@ -135,9 +135,9 @@ See [Portable Adaptive Memory](docs/architecture/PORTABLE_ADAPTIVE_MEMORY.md).
 
 ## Current release state
 
-The latest published release is **[v1.7.0: Adaptive Intelligence, Portable Memory & Design Fidelity](https://github.com/Baelfyre/Orchestra/releases/tag/v1.7.0)**. The immutable release resolves to canonical commit `e5305ef3e160209a0345bd2c7843c923940e62c5` with tree `7b7a0f6d5dd5376a62125ed1c6b037284e519c69` and a GitHub verified/valid signature.
+The latest published release is **[v1.8.0: Governance Hardening, Runtime Refoundation & Traceability](https://github.com/Baelfyre/Orchestra/releases/tag/v1.8.0)**. The immutable release resolves to canonical commit `dad1f153f1be6522a8a7964258a2122a8d057596` with tree `4effcd97e15f843c8c0d9d45217870ee9d6480ff` and a GitHub verified/valid signature.
 
-v1.7.0 consolidates adaptive intelligence through bounded shadow maturity, storage-agnostic portable adaptive memory, Registry O1-O6 adaptive consumption, governed UI design fidelity through UIX-9A proof preparation, and the post-v1.6 documentation/research closeout. The `v1.7.0` tag remains fixed even when `main` receives later post-release maintenance.
+v1.8.0 consolidates governance hardening, seven architecture governance contracts (OR-GOV-1 through OR-GOV-10), Scribe's documentation and traceability upgrade (SSU), the validated AR-0/AR-1/AR-2 runtime architecture foundation, Registry O7 query optimization, and Cloak CUIR reference intelligence. The `v1.8.0` tag remains fixed even when `main` receives later post-release maintenance.
 
 The v1.7.0 release itself did not include a live UIX-9 model/provider proof. Post-release UIX-9C V3 later completed as a controlled six-observation study. Its terminal result is **`NO_BENEFIT_ESTABLISHED`**: all three corrected pairs were valid and all 39 primary governed-versus-baseline metric comparisons were unchanged, establishing neither a repeatable governed advantage nor harm under the frozen experiment.
 
