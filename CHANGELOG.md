@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.8.0 UIEF reference/provenance responsive erratum current-main successor
+
+- Reconstructs qualified PR #799 evidence on current canonical main `63bbe70f29fa5e2d72ffb34a3f071a7d3fc725e4` without discarding later AWF/OEE closeout work.
+- Replaces nonexistent UIEF reference-profile and Cloak-handoff paths with traceable canonical CUIR-3 and UIEF plan/guide sources instead of creating placeholder artifacts.
+- Removes unsupported project-native and provider-specific provenance claims from the Orchestra reference fixture; consuming-project evidence remains explicit when unavailable.
+- Reconciles the UIEF-4 responsive macro summary with the existing tablet/mobile drawer transformations under Cloak visible-design authority.
+- Freezes the historical contradictory handoff for OEE-7 replay so repairing the live UIEF contract does not rewrite historical efficiency evidence.
+- Adds deterministic reference-path, CUIR-pattern-identity, responsive-consistency, and historical-replay regressions while preserving frozen Cloak core identity and existing authority boundaries.
+
 ## Post-v1.8.0 OEE canonical closeout reconciliation
 
 - Reconciles OEE-0 through OEE-8 to their already-merged canonical state.
