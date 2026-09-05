@@ -1,0 +1,588 @@
+{
+  "schema_version": "orchestra.awf-semantic-robustness.v1",
+  "purpose": "AWF-N5 semantic contrast corpus for paraphrase, scoped negation, instruction reversal, mixed intent, clause-local hypothetical behavior, and protected conditional actions.",
+  "cases": [
+    {
+      "id": "S01_REFRAIN_DEPLOY",
+      "prompt": "Please refrain from deploying. Review the README for clarity.",
+      "expect": {
+        "primary_owner": "scribe",
+        "protected_action_required": false,
+        "transition_required": false,
+        "mutation_required": false,
+        "human_gate_required": false
+      },
+      "avoid": {
+        "specialists": [
+          "arbiter",
+          "ponytail",
+          "the-tuner"
+        ],
+        "authority_domains": [
+          "TRANSITION"
+        ]
+      }
+    },
+    {
+      "id": "S02_HOLD_OFF_MERGE",
+      "prompt": "Hold off on the merge and review the changelog.",
+      "expect": {
+        "primary_owner": "scribe",
+        "protected_action_required": false,
+        "transition_required": false,
+        "human_gate_required": false
+      },
+      "avoid": {
+        "specialists": [
+          "arbiter",
+          "the-tuner"
+        ],
+        "authority_domains": [
+          "TRANSITION"
+        ]
+      }
+    },
+    {
+      "id": "S03_AVOID_DB_MUTATION",
+      "prompt": "Avoid modifying the database. Review the migration documentation only.",
+      "expect": {
+        "primary_owner": "scribe",
+        "mutation_required": false,
+        "implementation_required": false,
+        "human_gate_required": false
+      },
+      "avoid": {
+        "specialists": [
+          "chronicler",
+          "ponytail",
+          "the-tuner"
+        ],
+        "authority_domains": [
+          "PERSISTENCE",
+          "IMPLEMENTATION"
+        ]
+      }
+    },
+    {
+      "id": "S04_NO_NEED_TESTS",
+      "prompt": "There is no need to run tests. Review the test suite documentation.",
+      "expect": {
+        "primary_owner": "scribe",
+        "validation_required": false,
+        "mutation_required": false,
+        "human_gate_required": false
+      },
+      "avoid": {
+        "specialists": [
+          "overseer",
+          "the-tuner"
+        ],
+        "authority_domains": [
+          "VALIDATION"
+        ]
+      }
+    },
+    {
+      "id": "S05_LEAVE_DB_UNCHANGED",
+      "prompt": "Leave the database unchanged and review the documentation.",
+      "expect": {
+        "primary_owner": "scribe",
+        "mutation_required": false,
+        "implementation_required": false,
+        "human_gate_required": false
+      },
+      "avoid": {
+        "specialists": [
+          "chronicler",
+          "ponytail",
+          "the-tuner"
+        ],
+        "authority_domains": [
+          "PERSISTENCE"
+        ]
+      }
+    },
+    {
+      "id": "S06_NEGATE_REVIEW_THEN_DEPLOY",
+      "prompt": "Do not review the docs; deploy to staging.",
+      "expect": {
+        "primary_owner": "scribe",
+        "protected_action_required": true,
+        "transition_required": true,
+        "human_gate_required": true
+      },
+      "avoid": {
+        "patterns": [
+          "MULTI_AGENT"
+        ]
+      }
+    },
+    {
+      "id": "S07_NEGATE_MODIFY_BUT_TEST",
+      "prompt": "Don't modify code, but run tests.",
+      "expect": {
+        "primary_owner": "overseer",
+        "mutation_required": false,
+        "implementation_required": false,
+        "validation_required": true,
+        "human_gate_required": false
+      },
+      "avoid": {
+        "specialists": [
+          "ponytail",
+          "the-tuner"
+        ],
+        "authority_domains": [
+          "IMPLEMENTATION"
+        ]
+      }
+    },
+    {
+      "id": "S08_NEGATE_DEPLOY_BUT_DOC_EDIT",
+      "prompt": "Don't deploy, but update the docs.",
+      "expect": {
+        "primary_owner": "scribe",
+        "protected_action_required": false,
+        "transition_required": false,
+        "mutation_required": true,
+        "human_gate_required": false
+      },
+      "avoid": {
+        "specialists": [
+          "arbiter",
+          "the-tuner"
+        ],
+        "authority_domains": [
+          "TRANSITION"
+        ]
+      }
+    },
+    {
+      "id": "S09_NO_ISSUE_DEPLOY",
+      "prompt": "No issue here; deploy to staging.",
+      "expect": {
+        "primary_owner": "arbiter",
+        "protected_action_required": true,
+        "transition_required": true,
+        "human_gate_required": true
+      },
+      "avoid": {
+        "specialists": [
+          "dagger",
+          "ponytail"
+        ]
+      }
+    },
+    {
+      "id": "S10_NO_NEED_DEPLOY",
+      "prompt": "No need to deploy; review the docs.",
+      "expect": {
+        "primary_owner": "scribe",
+        "protected_action_required": false,
+        "transition_required": false,
+        "mutation_required": false,
+        "human_gate_required": false
+      },
+      "avoid": {
+        "specialists": [
+          "arbiter",
+          "the-tuner"
+        ],
+        "authority_domains": [
+          "TRANSITION"
+        ]
+      }
+    },
+    {
+      "id": "S11_REVERSAL_DEPLOY_TO_DOCS",
+      "prompt": "Deploy to production. Actually, don't deploy; just review the docs.",
+      "expect": {
+        "primary_owner": "scribe",
+        "protected_action_required": false,
+        "transition_required": false,
+        "mutation_required": false,
+        "human_gate_required": false
+      },
+      "avoid": {
+        "specialists": [
+          "arbiter",
+          "ponytail",
+          "dagger"
+        ],
+        "authority_domains": [
+          "TRANSITION"
+        ]
+      }
+    },
+    {
+      "id": "S12_REVERSAL_TEST_TO_DOCS",
+      "prompt": "Run tests. Correction: don't run tests; review the docs.",
+      "expect": {
+        "primary_owner": "scribe",
+        "validation_required": false,
+        "mutation_required": false,
+        "human_gate_required": false
+      },
+      "avoid": {
+        "specialists": [
+          "overseer",
+          "the-tuner"
+        ],
+        "authority_domains": [
+          "VALIDATION"
+        ]
+      }
+    },
+    {
+      "id": "S13_REVERSAL_TO_ACTIVE_TEST",
+      "prompt": "Don't run tests. Correction: run the test suite.",
+      "expect": {
+        "primary_owner": "overseer",
+        "validation_required": true,
+        "mutation_required": false,
+        "human_gate_required": false
+      },
+      "avoid": {
+        "specialists": [
+          "ponytail",
+          "the-tuner"
+        ]
+      }
+    },
+    {
+      "id": "S14_REVERSAL_TO_ACTIVE_DEPLOY",
+      "prompt": "Review the docs. Actually, deploy to production now.",
+      "expect": {
+        "primary_owner": "scribe",
+        "protected_action_required": true,
+        "transition_required": true,
+        "human_gate_required": true
+      },
+      "avoid": {
+        "patterns": [
+          "MULTI_AGENT"
+        ]
+      }
+    },
+    {
+      "id": "S15_HYPOTHETICAL_THEN_ACTIVE_DEPLOY",
+      "prompt": "What if we deploy to production? Actually, deploy to staging now.",
+      "expect": {
+        "primary_owner": "arbiter",
+        "protected_action_required": true,
+        "transition_required": true,
+        "human_gate_required": true
+      },
+      "avoid": {
+        "specialists": [
+          "dagger",
+          "ponytail"
+        ]
+      }
+    },
+    {
+      "id": "S16_HYPOTHETICAL_THEN_NEGATED",
+      "prompt": "If we were to deploy, what should we check? Do not deploy.",
+      "expect": {
+        "primary_owner": "conductor",
+        "protected_action_required": false,
+        "transition_required": false,
+        "mutation_required": false,
+        "human_gate_required": false
+      },
+      "avoid": {
+        "specialists": [
+          "arbiter",
+          "dagger",
+          "ponytail"
+        ],
+        "authority_domains": [
+          "TRANSITION"
+        ]
+      }
+    },
+    {
+      "id": "S17_QUOTED_THEN_ACTIVE_DEPLOY",
+      "prompt": "The docs say \"deploy now\". Deploy to staging now.",
+      "expect": {
+        "primary_owner": "scribe",
+        "protected_action_required": true,
+        "transition_required": true,
+        "human_gate_required": true
+      },
+      "avoid": {
+        "patterns": [
+          "MULTI_AGENT"
+        ]
+      }
+    },
+    {
+      "id": "S18_QUOTED_DOC_EDIT_ONLY",
+      "prompt": "Add the sentence \"deploy now\" to the README.",
+      "expect": {
+        "primary_owner": "scribe",
+        "protected_action_required": false,
+        "transition_required": false,
+        "mutation_required": true,
+        "human_gate_required": false
+      },
+      "avoid": {
+        "specialists": [
+          "arbiter",
+          "the-tuner"
+        ],
+        "authority_domains": [
+          "TRANSITION"
+        ]
+      }
+    },
+    {
+      "id": "S19_MIXED_DOCS_AND_TESTS",
+      "prompt": "Update the docs and run tests.",
+      "expect": {
+        "primary_owner": "scribe",
+        "mutation_required": true,
+        "validation_required": true,
+        "protected_action_required": false,
+        "human_gate_required": false
+      },
+      "include": {
+        "specialists": [
+          "scribe",
+          "overseer"
+        ]
+      },
+      "avoid": {
+        "specialists": [
+          "arbiter",
+          "ponytail",
+          "the-tuner"
+        ]
+      }
+    },
+    {
+      "id": "S20_MIXED_DOCS_AND_DEPLOY",
+      "prompt": "Review the README, then deploy to staging.",
+      "expect": {
+        "primary_owner": "scribe",
+        "protected_action_required": true,
+        "transition_required": true,
+        "human_gate_required": true
+      },
+      "include": {
+        "specialists": [
+          "scribe",
+          "arbiter"
+        ]
+      },
+      "avoid": {
+        "specialists": [
+          "the-tuner",
+          "ponytail"
+        ]
+      }
+    },
+    {
+      "id": "S21_MIXED_DOCS_UI_IMPLEMENT",
+      "prompt": "Update the documentation and implement the responsive UI component.",
+      "expect": {
+        "primary_owner": "scribe",
+        "implementation_required": true,
+        "mutation_required": true,
+        "human_gate_required": false
+      },
+      "include": {
+        "specialists": [
+          "the-tuner",
+          "scribe",
+          "cloak",
+          "ponytail"
+        ]
+      },
+      "avoid": {
+        "specialists": [
+          "arbiter"
+        ]
+      }
+    },
+    {
+      "id": "S22_MIXED_SUMMARY_SECURITY_AUDIT",
+      "prompt": "Summarize the security incident, then audit authentication controls.",
+      "expect": {
+        "primary_owner": "scribe",
+        "mutation_required": false,
+        "implementation_required": false,
+        "human_gate_required": false
+      },
+      "include": {
+        "specialists": [
+          "the-tuner",
+          "scribe",
+          "cipher"
+        ]
+      },
+      "avoid": {
+        "specialists": [
+          "ponytail",
+          "arbiter"
+        ]
+      }
+    },
+    {
+      "id": "S23_CONDITIONAL_DEPLOY",
+      "prompt": "If approval arrives, deploy to production.",
+      "expect": {
+        "primary_owner": "arbiter",
+        "protected_action_required": true,
+        "transition_required": true,
+        "human_gate_required": true
+      },
+      "avoid": {
+        "specialists": [
+          "ponytail",
+          "dagger"
+        ]
+      }
+    },
+    {
+      "id": "S24_CONDITIONAL_PUBLISH",
+      "prompt": "When approved, publish the release.",
+      "expect": {
+        "primary_owner": "arbiter",
+        "protected_action_required": true,
+        "transition_required": true,
+        "human_gate_required": true
+      },
+      "avoid": {
+        "specialists": [
+          "ponytail",
+          "dagger"
+        ]
+      }
+    },
+    {
+      "id": "S25_PLAN_DEPLOY_NO_EXECUTE",
+      "prompt": "Prepare a deployment plan, but do not deploy.",
+      "expect": {
+        "primary_owner": "conductor",
+        "protected_action_required": false,
+        "transition_required": false,
+        "mutation_required": false,
+        "human_gate_required": false
+      },
+      "avoid": {
+        "specialists": [
+          "arbiter",
+          "ponytail",
+          "dagger"
+        ],
+        "authority_domains": [
+          "TRANSITION"
+        ]
+      }
+    },
+    {
+      "id": "S26_REVIEW_CODE_NO_MODIFY",
+      "prompt": "Review the code, but do not modify it.",
+      "expect": {
+        "primary_owner": "conductor",
+        "mutation_required": false,
+        "implementation_required": false,
+        "human_gate_required": false
+      },
+      "avoid": {
+        "specialists": [
+          "ponytail",
+          "the-tuner"
+        ],
+        "authority_domains": [
+          "IMPLEMENTATION"
+        ]
+      }
+    },
+    {
+      "id": "S27_DOC_TERM_THEN_SECURITY_IMPLEMENT",
+      "prompt": "Update the docs that mention authorization, then implement authentication.",
+      "expect": {
+        "primary_owner": "scribe",
+        "implementation_required": true,
+        "mutation_required": true,
+        "human_gate_required": false
+      },
+      "include": {
+        "specialists": [
+          "the-tuner",
+          "scribe",
+          "cipher",
+          "ponytail"
+        ]
+      },
+      "avoid": {
+        "specialists": [
+          "arbiter"
+        ]
+      }
+    },
+    {
+      "id": "S28_CHANGELOG_AND_REFACTOR",
+      "prompt": "Update the changelog and refactor code.",
+      "expect": {
+        "primary_owner": "scribe",
+        "implementation_required": true,
+        "mutation_required": true,
+        "human_gate_required": false
+      },
+      "include": {
+        "specialists": [
+          "scribe",
+          "ponytail"
+        ]
+      },
+      "avoid": {
+        "specialists": [
+          "the-tuner",
+          "arbiter"
+        ]
+      }
+    },
+    {
+      "id": "S29_NEGATE_UI_MUTATION_REVIEW_ACCESSIBILITY",
+      "prompt": "Don't modify the UI; only review accessibility.",
+      "expect": {
+        "primary_owner": "cloak",
+        "mutation_required": false,
+        "implementation_required": false,
+        "human_gate_required": false
+      },
+      "avoid": {
+        "specialists": [
+          "ponytail",
+          "the-tuner"
+        ],
+        "authority_domains": [
+          "IMPLEMENTATION"
+        ]
+      }
+    },
+    {
+      "id": "S30_NEGATE_SECURITY_REVIEW_LAYOUT",
+      "prompt": "Do not assess security; review the layout.",
+      "expect": {
+        "primary_owner": "cloak",
+        "mutation_required": false,
+        "implementation_required": false,
+        "human_gate_required": false
+      },
+      "avoid": {
+        "specialists": [
+          "cipher",
+          "the-tuner",
+          "ponytail"
+        ],
+        "authority_domains": [
+          "SECURITY"
+        ]
+      }
+    }
+  ]
+}
