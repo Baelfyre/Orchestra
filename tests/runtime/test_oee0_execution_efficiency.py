@@ -16,7 +16,10 @@ from orchestra_runtime.domain.orchestration.execution_efficiency import (
     validate_decisive_stop_signal,
     validate_execution_budget,
 )
-from orchestra_runtime.machine_contracts import load_execution_budget_contract
+from orchestra_runtime.execution_efficiency_contracts import (
+    execution_budget_errors,
+    load_execution_budget_contract,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -190,4 +193,29 @@ def test_ci_wait_rejects_non_boolean_state() -> None:
             ci_state_changed="no",
             active_model_reasoning=False,
         )
+
+def test_execution_budget_adapter_fails_closed_on_missing_contract(tmp_path) -> None:
+    assert execution_budget_errors(tmp_path)[0].startswith(
+        "EXECUTION_BUDGET_CONTRACT_INVALID:execution budget contract missing:"
+    )
+
+
+def test_execution_budget_adapter_fails_closed_on_invalid_json(tmp_path) -> None:
+    path = tmp_path / "machine" / "governance" / "execution-budget.v1.json"
+    path.parent.mkdir(parents=True)
+    path.write_text("{", encoding="utf-8")
+    assert execution_budget_errors(tmp_path)[0].startswith(
+        "EXECUTION_BUDGET_CONTRACT_INVALID:execution budget contract is invalid JSON:"
+    )
+
+
+def test_execution_budget_adapter_rejects_weakened_contract(tmp_path) -> None:
+    path = tmp_path / "machine" / "governance" / "execution-budget.v1.json"
+    path.parent.mkdir(parents=True)
+    data = deepcopy(_budget())
+    data["defaults"]["max_parallel_specialists"] = 2
+    import json
+
+    path.write_text(json.dumps(data), encoding="utf-8")
+    assert "max_parallel_specialists" in execution_budget_errors(tmp_path)[0]
 
