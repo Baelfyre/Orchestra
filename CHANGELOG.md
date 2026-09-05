@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.8.0 OEE canonical closeout reconciliation
+
+- Reconciles OEE-0 through OEE-8 to their already-merged canonical state.
+- OEE-0 is canonical at `1927d3f0672198ddc67cc32624d38c2b14c434e8` from PR #794.
+- OEE-1 through OEE-8 are canonical at `75100c3ad0fd9a11c69f2b9b7c5172edd8841cd2` from PR #798 after exact-head qualification and signed materialization.
+- Preserves the OEE-7 controlled replay result and the canonical `max_parallel_specialists = 1` execution budget.
+- Keeps UIEF paused: OEE completion does not repair the UIEF-4 responsive contradiction, revalidate provenance, or requalify PR #791.
+- No runtime behavior, specialist authority, release/deploy state, policy, or UIEF execution state changes in this reconciliation.
+
 ## Post-v1.8.0 AWF-N6 advanced adaptation admission
 
 - Canonicalizes AWF-N5 semantic robustness from PR #802 at `0b5582e7175cb1ca432b371aad21634f35fa34aa`.
