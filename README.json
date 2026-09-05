@@ -594,6 +594,27 @@
       "authority_expansion": false,
       "authority_note": "UIEF-3 implements accepted frontend fidelity contracts only. It does not transfer design authority to Ponytail, allow profile self-selection or downgrade, authorize UIEF-4 UIFidelityHandoff creation, release, deployment, or policy activation."
     },
+    "uief4_cloak_fidelity_handoff": {
+      "status": "IMPLEMENTED_CANONICAL",
+      "purpose": "Cloak implementation-bound fidelity handoff contract binding design intent, macro composition, information hierarchy, CUIR normalized pattern references, provider-observed references, required regions, responsive transformations, component roles, visual/typography/spacing relationships, and explicit preserve/adapt/avoid/unresolved rules into an implementation-consumable contract.",
+      "machine_sources": [
+        "machine/schemas/ui-fidelity-handoff.v1.schema.json",
+        "machine/ui/ui-fidelity-handoff.v1.json",
+        "orchestra_runtime/domain/orchestration/ui_fidelity.py",
+        "skills/cloak/OUTPUT_FORMATS.md",
+        "adapters/codex/skills/cloak/OUTPUT_FORMATS.md"
+      ],
+      "human_sources": [
+        "skills/cloak/UI_FIDELITY_HANDOFF_GUIDE.md",
+        "adapters/codex/skills/cloak/UI_FIDELITY_HANDOFF_GUIDE.md",
+        "docs/project/UI_EXECUTION_FIDELITY_PLAN.md"
+      ],
+      "validation_surface": "tests/runtime/test_uief4_cloak_fidelity_handoff.py",
+      "runtime_integration": true,
+      "frozen_core_preserved": true,
+      "authority_expansion": false,
+      "authority_note": "UIEF-4 binds accepted visible design intent and fidelity requirements into an implementation-consumable handoff. It does not transfer design authority to Ponytail, authorize implementation, architecture translation, release, deployment, or policy activation."
+    },
     "governed_ui_optional_adapter_boundaries_uix6": {
       "status": "IMPLEMENTED_CANONICAL_NO_ADOPTION",
       "purpose": "Library-neutral UIX-6 audit and boundary contract for optional Figma, Code Connect, Storybook, Playwright, axe, and project-native design-token evidence capabilities.",
@@ -2405,6 +2426,7 @@
     "conductor_routing_evaluation_guide": "skills/conductor/ROUTING_EVALUATION_GUIDE.md",
     "conductor_architecture_governance_intake_guide": "skills/conductor/ARCHITECTURE_GOVERNANCE_INTAKE_GUIDE.md",
     "ponytail_frontend_fidelity_execution_guide": "skills/ponytail/FRONTEND_FIDELITY_EXECUTION_GUIDE.md",
+    "cloak_ui_fidelity_handoff_guide": "skills/cloak/UI_FIDELITY_HANDOFF_GUIDE.md",
     "ui_execution_fidelity_plan": "docs/project/UI_EXECUTION_FIDELITY_PLAN.md"
   },
   "representation_policy": {

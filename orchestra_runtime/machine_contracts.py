@@ -10,11 +10,13 @@ SPECIALIST_REGISTRY_SCHEMA_VERSION = "orchestra.specialist-registry.v1"
 ROUTING_CONTRACT_SCHEMA_VERSION = "orchestra.routing-contract.v1"
 GOVERNANCE_POLICY_SCHEMA_VERSION = "orchestra.governance-policy.v1"
 UI_FIDELITY_ROUTING_CONTRACT_SCHEMA_VERSION = "orchestra.ui-fidelity-routing.v1"
+UI_FIDELITY_HANDOFF_SCHEMA_VERSION = "orchestra.ui-fidelity-handoff.v1"
 
 _MACHINE_ROOT = Path("machine")
 _SPECIALIST_REGISTRY = _MACHINE_ROOT / "specialists" / "registry.v1.json"
 _ROUTING_CONTRACT = _MACHINE_ROOT / "routing" / "routes.v1.json"
 _UI_FIDELITY_ROUTING_CONTRACT = _MACHINE_ROOT / "routing" / "ui-fidelity-routing.v1.json"
+_UI_FIDELITY_HANDOFF_CONTRACT = _MACHINE_ROOT / "ui" / "ui-fidelity-handoff.v1.json"
 _GOVERNANCE_POLICY = _MACHINE_ROOT / "governance" / "policy.v1.json"
 
 FRONTMATTER_FIELDS = (
@@ -131,6 +133,13 @@ def load_ui_fidelity_routing_contract(root: Path | str | None = None) -> dict[st
     contract = _load_json(_root(root) / _UI_FIDELITY_ROUTING_CONTRACT)
     if contract.get("schema_version") != UI_FIDELITY_ROUTING_CONTRACT_SCHEMA_VERSION:
         raise ValueError("unsupported UI fidelity routing contract schema_version")
+    return contract
+
+
+def load_ui_fidelity_handoff_contract(root: Path | str | None = None) -> dict[str, Any]:
+    contract = _load_json(_root(root) / _UI_FIDELITY_HANDOFF_CONTRACT)
+    if contract.get("schema_version") != UI_FIDELITY_HANDOFF_SCHEMA_VERSION:
+        raise ValueError("unsupported UI fidelity handoff contract schema_version")
     return contract
 
 
@@ -322,6 +331,41 @@ def machine_contract_errors(root: Path | str | None = None) -> tuple[str, ...]:
             errors.append("UI_FIDELITY_ROUTING_AUTHORITY_EXPANSION")
     except (ValueError, OSError) as exc:
         errors.append(f"UI_FIDELITY_ROUTING_CONTRACT_INVALID:{exc}")
+
+    try:
+        handoff = load_ui_fidelity_handoff_contract(repo_root)
+        if handoff.get("owned_by") != "cloak":
+            errors.append("UI_FIDELITY_HANDOFF_OWNER_INVALID")
+        authority = handoff.get("authority")
+        if not isinstance(authority, dict) or any(value is not False for value in authority.values()):
+            errors.append("UI_FIDELITY_HANDOFF_AUTHORITY_EXPANSION")
+        for req_field in (
+            "design_contract_ref",
+            "ui_implementation_profile_ref",
+            "source_revision_or_contract_identity",
+            "provenance_refs",
+            "design_intent",
+            "information_hierarchy",
+            "macro_composition",
+            "selected_pattern_refs",
+            "pattern_application_reason",
+            "required_regions",
+            "component_roles",
+            "visual_relationships",
+            "typography_roles",
+            "spacing_relationships",
+            "responsive_transformations",
+            "interaction_states",
+            "asset_requirements",
+            "preserve",
+            "adapt",
+            "avoid",
+            "unresolved",
+        ):
+            if req_field not in handoff:
+                errors.append(f"UI_FIDELITY_HANDOFF_MISSING_FIELD:{req_field}")
+    except (ValueError, OSError) as exc:
+        errors.append(f"UI_FIDELITY_HANDOFF_CONTRACT_INVALID:{exc}")
 
     try:
         policy = load_governance_policy(repo_root)

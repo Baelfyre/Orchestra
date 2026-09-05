@@ -1,0 +1,386 @@
+{
+  "": {
+    "provenanceRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "source_kind",
+        "reference_ref",
+        "provenance_id"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_kind": {
+          "enum": [
+            "CUIR_NORMALIZED",
+            "PROJECT_NATIVE",
+            "PUBLIC_PROVIDER_GUIDANCE",
+            "OBSERVED_PROVIDER_OUTPUT"
+          ]
+        },
+        "reference_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provenance_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "advisory_only": {
+          "type": "boolean"
+        }
+      }
+    },
+    "patternRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pattern_id",
+        "source_kind",
+        "reference_ref",
+        "provenance_id"
+      ],
+      "properties": {
+        "pattern_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_kind": {
+          "enum": [
+            "CUIR_NORMALIZED",
+            "PROJECT_NATIVE",
+            "PUBLIC_PROVIDER_GUIDANCE",
+            "OBSERVED_PROVIDER_OUTPUT"
+          ]
+        },
+        "reference_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provenance_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "advisory_only": {
+          "type": "boolean"
+        }
+      }
+    },
+    "hierarchyItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "level",
+        "description"
+      ],
+      "properties": {
+        "level": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target_components": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "compositionItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "composition_id",
+        "structural_role",
+        "description"
+      ],
+      "properties": {
+        "composition_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "structural_role": {
+          "enum": [
+            "MACRO_LAYOUT",
+            "VISUAL_HIERARCHY",
+            "RESPONSIVE_TRANSFORMATION",
+            "CONTAINER_FLOW",
+            "FOCUSED_REGION"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reference_ref": {
+          "type": "string"
+        }
+      }
+    },
+    "regionItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "region_id",
+        "role",
+        "placement"
+      ],
+      "properties": {
+        "region_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "placement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "collapsible": {
+          "type": "boolean"
+        }
+      }
+    },
+    "responsiveItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "breakpoint",
+        "transformation"
+      ],
+      "properties": {
+        "breakpoint": {
+          "type": "string",
+          "minLength": 1
+        },
+        "transformation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "affected_regions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "assetItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asset_id",
+        "kind",
+        "usage"
+      ],
+      "properties": {
+        "asset_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "DESIGN_TOKEN",
+            "ICON",
+            "ILLUSTRATION",
+            "TYPOGRAPHY_SPEC",
+            "NATIVE_COMPONENT"
+          ]
+        },
+        "usage": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reference_ref": {
+          "type": "string"
+        }
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "implementation_authorized",
+        "architecture_translation_authorized",
+        "release_authorized"
+      ],
+      "properties": {
+        "implementation_authorized": {
+          "const": false
+        },
+        "architecture_translation_authorized": {
+          "const": false
+        },
+        "release_authorized": {
+          "const": false
+        }
+      }
+    }
+  },
+  "title": "Orchestra UI Fidelity Handoff Contract v1",
+  "description": "Cloak implementation-bound visible-layer fidelity handoff contract binding design intent, macro-composition, information hierarchy, pattern intelligence, and execution constraints for Ponytail consumption without transferring design authority or implementation ownership.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_id",
+    "owned_by",
+    "design_contract_ref",
+    "ui_implementation_profile_ref",
+    "source_revision_or_contract_identity",
+    "provenance_refs",
+    "design_intent",
+    "information_hierarchy",
+    "macro_composition",
+    "selected_pattern_refs",
+    "pattern_application_reason",
+    "required_regions",
+    "component_roles",
+    "visual_relationships",
+    "typography_roles",
+    "spacing_relationships",
+    "responsive_transformations",
+    "interaction_states",
+    "asset_requirements",
+    "preserve",
+    "adapt",
+    "avoid",
+    "unresolved",
+    "authority"
+  ],
+  "properties": {
+    "": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orchestra.ui-fidelity-handoff.v1"
+    },
+    "contract_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "owned_by": {
+      "const": "cloak"
+    },
+    "design_contract_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "ui_implementation_profile_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_revision_or_contract_identity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "provenance_refs": {
+      "type": "array",
+      "items": {
+        "": "#//provenanceRef"
+      }
+    },
+    "design_intent": {
+      "type": "string",
+      "minLength": 1
+    },
+    "information_hierarchy": {
+      "type": "array",
+      "items": {
+        "": "#//hierarchyItem"
+      }
+    },
+    "macro_composition": {
+      "type": "array",
+      "items": {
+        "": "#//compositionItem"
+      }
+    },
+    "selected_pattern_refs": {
+      "type": "array",
+      "items": {
+        "": "#//patternRef"
+      }
+    },
+    "pattern_application_reason": {
+      "type": "string",
+      "minLength": 1
+    },
+    "required_regions": {
+      "type": "array",
+      "items": {
+        "": "#//regionItem"
+      }
+    },
+    "component_roles": {
+      "type": "object"
+    },
+    "visual_relationships": {
+      "type": "object"
+    },
+    "typography_roles": {
+      "type": "object"
+    },
+    "spacing_relationships": {
+      "type": "object"
+    },
+    "responsive_transformations": {
+      "type": "array",
+      "items": {
+        "": "#//responsiveItem"
+      }
+    },
+    "interaction_states": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "asset_requirements": {
+      "type": "array",
+      "items": {
+        "": "#//assetItem"
+      }
+    },
+    "preserve": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "adapt": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "avoid": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unresolved": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "authority": {
+      "": "#//authority"
+    }
+  }
+}

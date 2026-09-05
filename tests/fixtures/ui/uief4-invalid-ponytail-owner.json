@@ -1,0 +1,253 @@
+{
+  "": "../schemas/ui-fidelity-handoff.v1.schema.json",
+  "schema_version": "orchestra.ui-fidelity-handoff.v1",
+  "contract_id": "uief4-ui-fidelity-handoff-reference",
+  "owned_by": "ponytail",
+  "design_contract_ref": "machine/schemas/ui-design-contract.schema.json",
+  "ui_implementation_profile_ref": "machine/ui/ui-implementation-profile.v1.json",
+  "source_revision_or_contract_identity": "uief1-ui-implementation-profile-reference",
+  "provenance_refs": [
+    {
+      "source_id": "cuir-workspace-split-pane-prov",
+      "source_kind": "CUIR_NORMALIZED",
+      "reference_ref": "docs/specs/cuir/CUIR_NORMALIZED_PATTERNS.md#workspace-split-pane",
+      "provenance_id": "CUIR-3-WORKSPACE-SPLIT-PANE-001",
+      "advisory_only": false
+    },
+    {
+      "source_id": "native-command-palette-prov",
+      "source_kind": "PROJECT_NATIVE",
+      "reference_ref": "components/palette/CommandPalette.tsx",
+      "provenance_id": "PROJECT-NATIVE-PALETTE-001",
+      "advisory_only": false
+    },
+    {
+      "source_id": "public-anthropic-artifact-canvas-prov",
+      "source_kind": "PUBLIC_PROVIDER_GUIDANCE",
+      "reference_ref": "docs/specs/ui/PUBLIC_PROVIDER_UI_REFERENCE_INTELLIGENCE.md#anthropic-artifact-canvas",
+      "provenance_id": "PUBLIC-PROVIDER-ANTHROPIC-CANVAS-001",
+      "advisory_only": true
+    },
+    {
+      "source_id": "observed-sidecar-drawer-layout-prov",
+      "source_kind": "OBSERVED_PROVIDER_OUTPUT",
+      "reference_ref": "docs/specs/ui/OBSERVED_PROVIDER_PATTERNS.md#sidecar-drawer-layout",
+      "provenance_id": "OBSERVED-PROVIDER-SIDECAR-DRAWER-001",
+      "advisory_only": true
+    }
+  ],
+  "design_intent": "Deliver a high-density, multi-pane developer workspace interface maintaining macro composition and visual hierarchy without code-size-induced composition simplification.",
+  "information_hierarchy": [
+    {
+      "level": 1,
+      "title": "Workspace Header and Navigation",
+      "description": "Topmost operational bar exposing repository context, status indicator, and global command trigger.",
+      "target_components": [
+        "WorkspaceHeader",
+        "StatusIndicator",
+        "GlobalCommandTrigger"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "Dual-Pane Operational Canvas",
+      "description": "Primary content region divided into collateral navigator (left) and active document viewer (right).",
+      "target_components": [
+        "SplitPaneContainer",
+        "CollateralNavigator",
+        "DocumentViewer"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "Docked Secondary Inspector",
+      "description": "Bottom contextual inspector displaying diagnostics, metadata, and execution telemetry.",
+      "target_components": [
+        "ContextualInspector",
+        "TelemetryPanel"
+      ]
+    }
+  ],
+  "macro_composition": [
+    {
+      "composition_id": "desktop-macro-grid",
+      "structural_role": "MACRO_LAYOUT",
+      "description": "3-region vertical grid with fixed header (48px), flex primary workspace (1fr), and docked bottom tray (auto/collapsible).",
+      "reference_ref": "docs/specs/ui/COMPOSITIONS.md#desktop-macro-grid"
+    },
+    {
+      "composition_id": "action-bar-visual-hierarchy",
+      "structural_role": "VISUAL_HIERARCHY",
+      "description": "Prominent left-aligned breadcrumb title with right-aligned action group maintaining high-contrast primary CTA.",
+      "reference_ref": "docs/specs/ui/COMPOSITIONS.md#action-bar-visual-hierarchy"
+    },
+    {
+      "composition_id": "split-pane-responsive-collapse",
+      "structural_role": "RESPONSIVE_TRANSFORMATION",
+      "description": "Horizontal split-pane on viewports >= 1024px; vertical accordion-stack collapse on viewports < 1024px.",
+      "reference_ref": "docs/specs/ui/COMPOSITIONS.md#split-pane-responsive-collapse"
+    }
+  ],
+  "selected_pattern_refs": [
+    {
+      "pattern_id": "cuir-workspace-split-pane",
+      "source_kind": "CUIR_NORMALIZED",
+      "reference_ref": "docs/specs/cuir/CUIR_NORMALIZED_PATTERNS.md#workspace-split-pane",
+      "provenance_id": "CUIR-3-WORKSPACE-SPLIT-PANE-001",
+      "advisory_only": false
+    },
+    {
+      "pattern_id": "native-command-palette",
+      "source_kind": "PROJECT_NATIVE",
+      "reference_ref": "components/palette/CommandPalette.tsx",
+      "provenance_id": "PROJECT-NATIVE-PALETTE-001",
+      "advisory_only": false
+    },
+    {
+      "pattern_id": "public-anthropic-artifact-canvas-flow",
+      "source_kind": "PUBLIC_PROVIDER_GUIDANCE",
+      "reference_ref": "docs/specs/ui/PUBLIC_PROVIDER_UI_REFERENCE_INTELLIGENCE.md#anthropic-artifact-canvas",
+      "provenance_id": "PUBLIC-PROVIDER-ANTHROPIC-CANVAS-001",
+      "advisory_only": true
+    },
+    {
+      "pattern_id": "observed-sidecar-drawer-layout",
+      "source_kind": "OBSERVED_PROVIDER_OUTPUT",
+      "reference_ref": "docs/specs/ui/OBSERVED_PROVIDER_PATTERNS.md#sidecar-drawer-layout",
+      "provenance_id": "OBSERVED-PROVIDER-SIDECAR-DRAWER-001",
+      "advisory_only": true
+    }
+  ],
+  "pattern_application_reason": "Normalized CUIR split-pane provides deterministic layout stability; native command palette preserves existing user muscle memory; provider references serve as advisory-only pattern evidence.",
+  "required_regions": [
+    {
+      "region_id": "region-header",
+      "role": "BANNER",
+      "placement": "TOP_FIXED",
+      "collapsible": false
+    },
+    {
+      "region_id": "region-nav-sidebar",
+      "role": "NAVIGATION",
+      "placement": "LEFT_FLEXIBLE",
+      "collapsible": true
+    },
+    {
+      "region_id": "region-main-content",
+      "role": "MAIN",
+      "placement": "CENTER_EXPANDING",
+      "collapsible": false
+    },
+    {
+      "region_id": "region-bottom-dock",
+      "role": "COMPLEMENTARY",
+      "placement": "BOTTOM_DOCKED",
+      "collapsible": true
+    }
+  ],
+  "component_roles": {
+    "primary_container": "LayoutShell",
+    "navigator": "CollateralTree",
+    "viewer": "ActiveDocumentViewer",
+    "status_indicator": "SystemStateBadge",
+    "action_palette": "CommandPalette"
+  },
+  "visual_relationships": {
+    "grid_gap": "12px",
+    "sidebar_width_range": "240px-360px",
+    "content_min_width": "480px",
+    "elevation_hierarchy": {
+      "base_surface": "0px",
+      "docked_surface": "2px",
+      "floating_palette": "8px"
+    }
+  },
+  "typography_roles": {
+    "page_title": "font-size: 1.125rem; font-weight: 600; line-height: 1.5rem;",
+    "section_header": "font-size: 0.875rem; font-weight: 600; text-transform: uppercase;",
+    "body_text": "font-size: 0.875rem; font-weight: 400; line-height: 1.25rem;",
+    "code_snippet": "font-family: monospace; font-size: 0.8125rem;"
+  },
+  "spacing_relationships": {
+    "layout_padding": "16px",
+    "component_padding": "8px 12px",
+    "compact_padding": "4px 8px",
+    "element_gap": "8px"
+  },
+  "responsive_transformations": [
+    {
+      "breakpoint": "desktop (>= 1024px)",
+      "transformation": "Multi-column split view with visible sidebar and expanded document canvas.",
+      "affected_regions": [
+        "region-nav-sidebar",
+        "region-main-content"
+      ]
+    },
+    {
+      "breakpoint": "tablet (768px - 1023px)",
+      "transformation": "Sidebar collapsed to drawer toggle; main content occupies full viewport width.",
+      "affected_regions": [
+        "region-nav-sidebar",
+        "region-main-content"
+      ]
+    },
+    {
+      "breakpoint": "mobile (< 768px)",
+      "transformation": "Single-column vertical stack with drawer overlay navigation.",
+      "affected_regions": [
+        "region-header",
+        "region-nav-sidebar",
+        "region-main-content",
+        "region-bottom-dock"
+      ]
+    }
+  ],
+  "interaction_states": [
+    "DEFAULT",
+    "HOVER",
+    "FOCUS_VISIBLE",
+    "ACTIVE",
+    "DISABLED",
+    "LOADING",
+    "EMPTY",
+    "ERROR"
+  ],
+  "asset_requirements": [
+    {
+      "asset_id": "icon-command-palette",
+      "kind": "ICON",
+      "usage": "Trigger button icon for command palette in header bar.",
+      "reference_ref": "assets/icons/command.svg"
+    },
+    {
+      "asset_id": "token-color-surface-base",
+      "kind": "DESIGN_TOKEN",
+      "usage": "Background color variable for primary shell.",
+      "reference_ref": "tokens/color.json#surface-base"
+    }
+  ],
+  "preserve": [
+    "Preserve desktop-macro-grid layout structure across all desktop viewports.",
+    "Preserve action-bar-visual-hierarchy with unambiguous primary action salience.",
+    "Preserve split-pane-responsive-collapse behavior without dropping sidecar accessibility.",
+    "Preserve keyboard navigability (Tab, Shift+Tab, Escape, Enter) across all interactive elements."
+  ],
+  "adapt": [
+    "Adapt column widths fluidly between minimum and maximum constraints.",
+    "Adapt bottom dock height according to inspector content volume."
+  ],
+  "avoid": [
+    "Do not replace required multi-region composition with flat single-pane layout to reduce code size.",
+    "Do not remove split-pane divider to avoid implementing drag/collapse interactions.",
+    "Do not invent unrequested modal dialogs or floating overlays.",
+    "Do not downgrade UI_CONTRACT_FIDELITY profile."
+  ],
+  "unresolved": [
+    "Exact custom accent color token pending design system token finalization (fallback: project native brand blue)."
+  ],
+  "authority": {
+    "implementation_authorized": false,
+    "architecture_translation_authorized": false,
+    "release_authorized": false
+  }
+}
