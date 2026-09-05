@@ -639,6 +639,278 @@ def validate_ui_fidelity_handoff(data: Mapping[str, Any]) -> UIFidelityHandoff:
     return handoff
 
 
+UI_ENGINEERING_TRANSLATION_SCHEMA = "orchestra.ui-engineering-translation.v1"
+
+
+@dataclass(frozen=True)
+class UIEngineeringTranslation:
+    schema_version: str
+    contract_id: str
+    owned_by: str
+    source_handoff_ref: str
+    source_revision_or_contract_identity: str
+    component_boundaries: tuple[dict[str, Any], ...]
+    state_ownership: tuple[dict[str, Any], ...]
+    responsive_engineering: tuple[dict[str, Any], ...]
+    composition_ownership: tuple[dict[str, Any], ...]
+    layer_relationships: tuple[dict[str, Any], ...]
+    data_flow_boundaries: tuple[dict[str, Any], ...]
+    reusable_component_strategy: tuple[dict[str, Any], ...]
+    integration_boundaries: tuple[dict[str, Any], ...]
+    dependency_boundaries: tuple[dict[str, Any], ...]
+    preserve: tuple[str, ...]
+    unresolved_engineering_questions: tuple[str, ...]
+    authority: dict[str, Any]
+
+    def validate(self, source_handoff: UIFidelityHandoff | None = None) -> None:
+        if self.schema_version != UI_ENGINEERING_TRANSLATION_SCHEMA:
+            raise ValueError(
+                f"unsupported UIEngineeringTranslation schema_version: {self.schema_version}"
+            )
+        if self.owned_by != "clockwork":
+            raise ValueError("UIEngineeringTranslation must be owned by clockwork")
+
+        for field_name in (
+            "contract_id",
+            "source_handoff_ref",
+            "source_revision_or_contract_identity",
+        ):
+            value = getattr(self, field_name)
+            if not isinstance(value, str) or not value.strip():
+                raise ValueError(
+                    f"UIEngineeringTranslation requires non-empty string {field_name}"
+                )
+
+        required_collections = (
+            "component_boundaries",
+            "state_ownership",
+            "responsive_engineering",
+            "composition_ownership",
+            "data_flow_boundaries",
+            "reusable_component_strategy",
+            "integration_boundaries",
+            "dependency_boundaries",
+            "preserve",
+        )
+        for field_name in required_collections:
+            value = getattr(self, field_name)
+            if not isinstance(value, (tuple, list)) or not value:
+                raise ValueError(
+                    f"UIEngineeringTranslation requires non-empty collection {field_name}"
+                )
+
+        if not isinstance(self.layer_relationships, (tuple, list)):
+            raise ValueError("UIEngineeringTranslation requires layer_relationships list")
+        if not isinstance(self.unresolved_engineering_questions, (tuple, list)):
+            raise ValueError(
+                "UIEngineeringTranslation requires unresolved_engineering_questions list"
+            )
+
+        collection_ids = (
+            ("component_boundaries", "component_id"),
+            ("state_ownership", "state_id"),
+            ("responsive_engineering", "transformation_id"),
+            ("composition_ownership", "composition_id"),
+            ("data_flow_boundaries", "flow_id"),
+            ("integration_boundaries", "boundary_id"),
+        )
+        for field_name, id_field in collection_ids:
+            seen: set[str] = set()
+            for item in getattr(self, field_name):
+                if not isinstance(item, Mapping):
+                    raise ValueError(
+                        f"UIEngineeringTranslation {field_name} items must be mappings"
+                    )
+                item_id = str(item.get(id_field, "")).strip()
+                if not item_id:
+                    raise ValueError(
+                        f"UIEngineeringTranslation {field_name} items require {id_field}"
+                    )
+                if item_id in seen:
+                    raise ValueError(
+                        f"UIEngineeringTranslation {field_name} contains duplicate {id_field}: {item_id}"
+                    )
+                seen.add(item_id)
+
+        for field_name in (
+            "reusable_component_strategy",
+            "dependency_boundaries",
+            "layer_relationships",
+        ):
+            for item in getattr(self, field_name):
+                if not isinstance(item, Mapping):
+                    raise ValueError(
+                        f"UIEngineeringTranslation {field_name} items must be mappings"
+                    )
+
+        if not isinstance(self.authority, Mapping):
+            raise ValueError("UIEngineeringTranslation requires mapping authority")
+        for field_name in (
+            "visible_layer_redesign_authorized",
+            "implementation_authorized",
+            "dependency_adoption_authorized",
+            "release_authorized",
+        ):
+            if self.authority.get(field_name) is not False:
+                raise ValueError(
+                    f"UIEngineeringTranslation authority boundary {field_name} must be false"
+                )
+
+        if source_handoff is not None:
+            source_handoff.validate()
+            if self.source_handoff_ref != source_handoff.contract_id:
+                raise ValueError(
+                    "UIEngineeringTranslation source_handoff_ref must match accepted UIFidelityHandoff"
+                )
+            owned_compositions = {
+                str(item.get("composition_id", "")).strip()
+                for item in self.composition_ownership
+                if isinstance(item, Mapping)
+            }
+            required_compositions = {
+                str(item.get("composition_id", "")).strip()
+                for item in source_handoff.macro_composition
+                if isinstance(item, Mapping)
+            }
+            missing = sorted(
+                item for item in required_compositions if item and item not in owned_compositions
+            )
+            if missing:
+                raise ValueError(
+                    "UIEngineeringTranslation must preserve accepted composition ownership: "
+                    + ", ".join(missing)
+                )
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "schema_version": self.schema_version,
+            "contract_id": self.contract_id,
+            "owned_by": self.owned_by,
+            "source_handoff_ref": self.source_handoff_ref,
+            "source_revision_or_contract_identity": self.source_revision_or_contract_identity,
+            "component_boundaries": list(self.component_boundaries),
+            "state_ownership": list(self.state_ownership),
+            "responsive_engineering": list(self.responsive_engineering),
+            "composition_ownership": list(self.composition_ownership),
+            "layer_relationships": list(self.layer_relationships),
+            "data_flow_boundaries": list(self.data_flow_boundaries),
+            "reusable_component_strategy": list(self.reusable_component_strategy),
+            "integration_boundaries": list(self.integration_boundaries),
+            "dependency_boundaries": list(self.dependency_boundaries),
+            "preserve": list(self.preserve),
+            "unresolved_engineering_questions": list(
+                self.unresolved_engineering_questions
+            ),
+            "authority": dict(self.authority),
+        }
+
+
+def validate_ui_engineering_translation(
+    data: Mapping[str, Any],
+    source_handoff: UIFidelityHandoff | None = None,
+) -> UIEngineeringTranslation:
+    if not isinstance(data, Mapping):
+        raise ValueError("UIEngineeringTranslation data must be a mapping")
+
+    execution_mode = data.get("execution_mode")
+    if isinstance(execution_mode, str) and execution_mode in (
+        MINIMAL_SAFE,
+        UI_CONTRACT_FIDELITY,
+    ):
+        raise ValueError(
+            "Generic execution_mode cannot be contaminated with UI fidelity profile values"
+        )
+
+    prohibited = (
+        "redesigned_visible_intent",
+        "visible_layer_redesign",
+        "simplified_visible_complexity_for_architecture",
+        "starts_uief6",
+        "cross_specialist_chain",
+    )
+    if any(data.get(field) not in (None, False) for field in prohibited):
+        raise ValueError(
+            "Clockwork cannot redesign accepted visible intent, simplify visible complexity for architecture, or initiate UIEF-6"
+        )
+
+    for seq_field in (
+        "component_boundaries",
+        "state_ownership",
+        "responsive_engineering",
+        "composition_ownership",
+        "layer_relationships",
+        "data_flow_boundaries",
+        "reusable_component_strategy",
+        "integration_boundaries",
+        "dependency_boundaries",
+        "preserve",
+        "unresolved_engineering_questions",
+    ):
+        if seq_field in data and not isinstance(data[seq_field], (list, tuple)):
+            raise ValueError(
+                f"UIEngineeringTranslation requires list or tuple for {seq_field}"
+            )
+
+    authority = data.get("authority", {})
+    if not isinstance(authority, Mapping):
+        raise ValueError("UIEngineeringTranslation requires mapping authority")
+
+    translation = UIEngineeringTranslation(
+        schema_version=str(
+            data.get("schema_version", UI_ENGINEERING_TRANSLATION_SCHEMA)
+        ),
+        contract_id=str(data.get("contract_id", "")),
+        owned_by=str(data.get("owned_by", "")).strip(),
+        source_handoff_ref=str(data.get("source_handoff_ref", "")),
+        source_revision_or_contract_identity=str(
+            data.get("source_revision_or_contract_identity", "")
+        ),
+        component_boundaries=tuple(
+            dict(x) if isinstance(x, Mapping) else x
+            for x in data.get("component_boundaries", ())
+        ),
+        state_ownership=tuple(
+            dict(x) if isinstance(x, Mapping) else x
+            for x in data.get("state_ownership", ())
+        ),
+        responsive_engineering=tuple(
+            dict(x) if isinstance(x, Mapping) else x
+            for x in data.get("responsive_engineering", ())
+        ),
+        composition_ownership=tuple(
+            dict(x) if isinstance(x, Mapping) else x
+            for x in data.get("composition_ownership", ())
+        ),
+        layer_relationships=tuple(
+            dict(x) if isinstance(x, Mapping) else x
+            for x in data.get("layer_relationships", ())
+        ),
+        data_flow_boundaries=tuple(
+            dict(x) if isinstance(x, Mapping) else x
+            for x in data.get("data_flow_boundaries", ())
+        ),
+        reusable_component_strategy=tuple(
+            dict(x) if isinstance(x, Mapping) else x
+            for x in data.get("reusable_component_strategy", ())
+        ),
+        integration_boundaries=tuple(
+            dict(x) if isinstance(x, Mapping) else x
+            for x in data.get("integration_boundaries", ())
+        ),
+        dependency_boundaries=tuple(
+            dict(x) if isinstance(x, Mapping) else x
+            for x in data.get("dependency_boundaries", ())
+        ),
+        preserve=tuple(str(x) for x in data.get("preserve", ())),
+        unresolved_engineering_questions=tuple(
+            str(x) for x in data.get("unresolved_engineering_questions", ())
+        ),
+        authority=dict(authority),
+    )
+    translation.validate(source_handoff=source_handoff)
+    return translation
+
+
 __all__ = [
     "MINIMAL_SAFE",
     "UI_CONTRACT_FIDELITY",
@@ -646,9 +918,12 @@ __all__ = [
     "UIDeviationRecord",
     "PonytailFidelityExecution",
     "UIFidelityHandoff",
+    "UIEngineeringTranslation",
     "VALID_SOURCE_KINDS",
     "UI_FIDELITY_HANDOFF_SCHEMA",
+    "UI_ENGINEERING_TRANSLATION_SCHEMA",
     "classify_ui_fidelity",
     "enforce_ponytail_fidelity_execution",
     "validate_ui_fidelity_handoff",
+    "validate_ui_engineering_translation",
 ]
