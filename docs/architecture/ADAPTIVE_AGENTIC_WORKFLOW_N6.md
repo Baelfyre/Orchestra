@@ -1,6 +1,6 @@
 # Adaptive Agentic Workflow N6 - Advanced Adaptation Admission
 
-Status: IMPLEMENTATION CANDIDATE - CURRENT DISPOSITION NO PROMOTION
+Status: COMPLETE_CANONICAL_VERIFIED - NO PROMOTION
 
 Canonical prerequisites:
 
@@ -146,3 +146,37 @@ N6 does not:
 - resume UIEF.
 
 Any future promotion requires new qualifying evidence and a separately governed transition.
+
+
+## Canonical qualification
+
+N6 source PR #803 qualified on exact head:
+
+```text
+550a94fc14081d51da02fb451e0a25517e7ac7f7
+```
+
+Applicable protected workflows:
+
+- Governance Check: PASS
+- Required Analysis Compatibility: PASS
+- validate: PASS
+- Cross-platform Validation: PASS
+- cosmic-ray-confidence: PASS
+
+Runtime qualification:
+
+```text
+2,572 tests
+0 failures
+branch coverage: 95.56%
+statement coverage: 98.27%
+```
+
+PR #803 was squash merged to canonical main at:
+
+```text
+7cac0beb337dc43b5b1cbbdae7cf561b477adcdf
+```
+
+N6 therefore closes with `COMPLETE_NO_PROMOTION_EVIDENCE_INSUFFICIENT`. Deterministic AWF remains the execution-effective path.

@@ -2049,7 +2049,7 @@
       "authority_note": "The candidate constrains orchestration decisions without changing domain ownership or protected-action authority. UIEF remains paused because the UIEF-4 responsive contradiction is still unresolved."
     },
     "adaptive_agentic_workflow_advanced_adaptation_n6": {
-      "status": "IMPLEMENTATION_CANDIDATE_NO_PROMOTION",
+      "status": "COMPLETE_CANONICAL_VERIFIED_NO_PROMOTION",
       "purpose": "Recompute evidence-gated admission for A5 execution-effective topology selection, learned routing recommendations, and OEE concurrency widening without attaching any candidate to execution.",
       "machine_sources": [
         "machine/adaptive/advanced-adaptation-admission.v1.json",
@@ -2062,7 +2062,17 @@
       "current_disposition": "COMPLETE_NO_PROMOTION_EVIDENCE_INSUFFICIENT",
       "promotion_effective": false,
       "oee_max_parallel_specialists_preserved": 1,
-      "authority_note": "N6 classifies evidence only. Even a future eligible candidate remains non-effective until a separate governed transition. N6 cannot attach to Conductor dispatch or RuntimeExecutor, expand specialist authority, widen OEE concurrency, release, deploy, activate policy, or resume UIEF."
+      "authority_note": "N6 classifies evidence only. Even a future eligible candidate remains non-effective until a separate governed transition. N6 cannot attach to Conductor dispatch or RuntimeExecutor, expand specialist authority, widen OEE concurrency, release, deploy, activate policy, or resume UIEF.",
+      "canonical_source_pr": 803,
+      "qualified_source_head": "550a94fc14081d51da02fb451e0a25517e7ac7f7",
+      "canonical_merge_commit": "7cac0beb337dc43b5b1cbbdae7cf561b477adcdf",
+      "applicable_workflows": [
+        "Governance Check",
+        "Required Analysis Compatibility",
+        "validate",
+        "Cross-platform Validation",
+        "cosmic-ray-confidence"
+      ]
     }
   },
   "machine_scan_order": [
@@ -2559,7 +2569,7 @@
     "adaptive_agentic_workflow_awf": "AWF_N1_N5_COMPLETE_CANONICAL_VERIFIED",
     "adaptive_agentic_workflow_intake_n1_n3": "IMPLEMENTATION_CANDIDATE",
     "adaptive_agentic_workflow_semantic_robustness_n5": "IMPLEMENTATION_CANDIDATE",
-    "adaptive_agentic_workflow_advanced_adaptation_n6": "IMPLEMENTATION_CANDIDATE_NO_PROMOTION"
+    "adaptive_agentic_workflow_advanced_adaptation_n6": "COMPLETE_CANONICAL_VERIFIED_NO_PROMOTION"
   },
   "ai_review_guidance": {
     "preferred_entrypoint": "README.json",

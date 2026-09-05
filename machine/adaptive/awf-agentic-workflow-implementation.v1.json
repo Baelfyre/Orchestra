@@ -141,7 +141,7 @@
   },
   "next_program": {
     "id": "AWF_N1_N6_CONTINUOUS_ADAPTIVE_INTAKE_AND_CALIBRATION",
-    "status": "N1_N5_COMPLETE_CANONICAL_N6_IMPLEMENTATION_CANDIDATE",
+    "status": "N1_N6_COMPLETE_CANONICAL_VERIFIED_NO_PROMOTION",
     "authority_expansion": false,
     "phases": [
       {
@@ -166,7 +166,7 @@
       },
       {
         "id": "AWF-N6",
-        "status": "IMPLEMENTATION_CANDIDATE_NO_PROMOTION"
+        "status": "COMPLETE_CANONICAL_VERIFIED_NO_PROMOTION"
       }
     ],
     "canonical_n5": {
@@ -178,11 +178,9 @@
       "total_controlled_cases": 68
     },
     "current_scope": [
-      "advanced adaptation evidence admission",
-      "A5 confirmatory benefit readback",
-      "learned routing promotion boundary",
-      "OEE concurrency promotion boundary",
-      "non-effective future promotion-candidate semantics"
+      "AWF N1-N6 canonical closeout",
+      "deterministic AWF remains active",
+      "future advanced adaptation requires new qualifying evidence and separate governed transition"
     ],
     "prohibited": [
       "A5 execution attachment",
@@ -238,7 +236,7 @@
     "mutation_confidence_applicable": false
   },
   "advanced_adaptation_n6": {
-    "status": "IMPLEMENTATION_CANDIDATE_NO_PROMOTION",
+    "status": "COMPLETE_CANONICAL_VERIFIED_NO_PROMOTION",
     "admission_record": "machine/adaptive/advanced-adaptation-admission.v1.json",
     "schema": "machine/schemas/advanced-adaptation-admission.v1.schema.json",
     "evaluator": "orchestra_runtime/domain/adaptive/advanced_adaptation.py",
@@ -247,6 +245,23 @@
     "learned_routing_recommendations": "BLOCKED_NO_EXACT_PREDICTIVE_BENEFIT_EVIDENCE",
     "oee_concurrency_widening": "BLOCKED_NO_PARALLEL_BENEFIT_OR_POLICY_AUTHORIZATION",
     "promotion_effective": false,
-    "separate_governed_transition_required_for_any_future_candidate": true
+    "separate_governed_transition_required_for_any_future_candidate": true,
+    "source_pr": 803,
+    "qualified_source_head": "550a94fc14081d51da02fb451e0a25517e7ac7f7",
+    "canonical_merge_commit": "7cac0beb337dc43b5b1cbbdae7cf561b477adcdf",
+    "applicable_workflows": [
+      "Governance Check",
+      "Required Analysis Compatibility",
+      "validate",
+      "Cross-platform Validation",
+      "cosmic-ray-confidence"
+    ],
+    "runtime_tests": {
+      "total": 2572,
+      "failures": 0,
+      "branch_percent": 95.56,
+      "statement_percent": 98.27
+    },
+    "final_disposition": "COMPLETE_NO_PROMOTION_EVIDENCE_INSUFFICIENT"
   }
 }
