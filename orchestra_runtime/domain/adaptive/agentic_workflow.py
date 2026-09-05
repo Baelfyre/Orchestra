@@ -67,11 +67,15 @@ def select_agentic_workflow(
 
     required: list[str] = []
     domain_owner_count = len(set(owners))
-    tuner_needed = domain_owner_count > 1 and (task.dependency_depth > 0 or task.implementation_required)
+    tuner_needed = bool(task.reentry_specialists) or (domain_owner_count > 1 and (task.dependency_depth > 0 or task.implementation_required))
     if tuner_needed:
         _append_unique(required, "the-tuner")
     for owner in owners:
         _append_unique(required, owner)
+    for specialist in task.reentry_specialists:
+        if specialist not in authorities:
+            raise ValueError(f"re-entry specialist is not in canonical authority view: {specialist}")
+        _append_unique(required, specialist)
     if task.implementation_required:
         _append_unique(required, "ponytail")
     if task.validation_required:
@@ -94,7 +98,7 @@ def select_agentic_workflow(
         patterns.append("REFLECTION_CRITIC")
 
     multi_agent_value = len(required) > 1 and (
-        task.independent_subtasks >= 2 or domain_owner_count >= 2
+        task.independent_subtasks >= 2 or domain_owner_count >= 2 or bool(task.reentry_specialists)
     )
     if multi_agent_value:
         patterns.append("MULTI_AGENT")
