@@ -3,6 +3,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from orchestra_runtime.domain.orchestration.ui_fidelity import validate_ui_fidelity_handoff
+from orchestra_runtime.machine_contracts import load_ui_fidelity_handoff_contract
+
 
 ROOT = Path(__file__).resolve().parents[2]
 PROFILE_PATH = ROOT / "machine" / "ui" / "ui-implementation-profile.v1.json"
@@ -143,3 +146,11 @@ def test_historical_oee_replay_fixture_preserves_original_contradiction() -> Non
     )
     assert "accordion" in responsive_macro["description"].casefold()
     assert "drawer" in tablet["transformation"].casefold()
+
+
+def test_generated_ponytail_context_uses_real_clockwork_boundary_reference() -> None:
+    handoff = validate_ui_fidelity_handoff(load_ui_fidelity_handoff_contract(ROOT))
+    context = handoff.to_ponytail_context()["ui_fidelity_context"]
+    reference = context["clockwork_boundary_ref"]
+    assert _repo_path(reference).is_file()
+    assert reference == "docs/project/UI_EXECUTION_FIDELITY_PLAN.md"
