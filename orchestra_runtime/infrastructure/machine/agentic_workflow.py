@@ -40,8 +40,11 @@ def _load_json(path: Path) -> dict[str, Any]:
 
 def _git_blob_sha(path: Path) -> str:
     data = path.read_bytes()
-    header = f"blob {len(data)}\0".encode("utf-8")
-    return hashlib.sha1(header + data).hexdigest()
+    # Reconstruct canonical tracked text bytes instead of binding authority
+    # identity to platform-specific Windows CRLF checkout materialization.
+    canonical = data.replace(b"\\r\\n", b"\\n")
+    header = f"blob {len(canonical)}\\0".encode("utf-8")
+    return hashlib.sha1(header + canonical).hexdigest()
 
 
 def load_agentic_workflow_authority_view(root: Path | str | None = None) -> dict[str, Any]:
