@@ -25,6 +25,7 @@
     "objective_verifier_available",
     "critic_owner",
     "critic_domain",
+    "reentry_specialists",
     "current_source_identity",
     "human_gate_requirements"
   ],
@@ -157,6 +158,16 @@
         "type": "string",
         "minLength": 1,
         "maxLength": 256
+      }
+    },
+    "reentry_specialists": {
+      "type": "array",
+      "maxItems": 14,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128
       }
     }
   }
