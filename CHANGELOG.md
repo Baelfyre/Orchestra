@@ -1,5 +1,17 @@
 # Changelog
 
+## Post-v1.8.0 OEE-1 through OEE-8 execution-efficiency enforcement candidate
+
+- Operationalizes the canonical OEE-0 `ExecutionBudget` without rewriting `RuntimeExecutor` or creating a new specialist.
+- Adds owner-first specialist invocation controls: one active specialist by default, one retry after the initial attempt, explicit cross-domain/adversarial/reroute reasons for secondary specialists, and non-blocking optional reviews.
+- Enforces `EARLIEST_DECISIVE_EVIDENCE_WINS` so sufficient blocking evidence terminates downstream specialist execution, broad search, implementation analysis, and expensive validation.
+- Adds exact-source evidence reuse records and stale-identity rejection while preserving the canonical narrow-to-broad search order.
+- Adds risk-based validation sequencing with repository qualification and protected gates prohibited until the candidate is stable.
+- Adds explicit CI wait requests that reject continuous watch loops and active model reasoning when CI state is unchanged.
+- Adds phase-local context packs with exact-source required/conditional references and opt-in historical context.
+- Adds a deterministic OEE-7 replay of the real UIEF-5 responsive contradiction. The replay reaches the same `BLOCKED_PRE_IMPLEMENTATION_REVIEW` disposition with one unique specialist role instead of four, zero repository-wide searches after the blocker, zero full validation after the blocker, and zero CI watch events.
+- Adds OEE-8 pre-canonical integration disposition. OEE completion does not automatically resume UIEF; the UIEF-4 responsive contradiction and provenance references require separate repair/revalidation.
+
 ## Post-v1.8.0 OEE-0 execution cost baseline and guardrail contract candidate
 
 - Introduces `ORCHESTRA_EXECUTION_EFFICIENCY_V1` OEE-0 guardrails under the invariant `MINIMIZE_EXECUTION_COST_WITHOUT_MINIMIZING_REQUIRED_EVIDENCE_OR_IMPLEMENTATION_QUALITY`.
