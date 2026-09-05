@@ -1,6 +1,6 @@
 # Adaptive Agentic Workflow Architecture (AWF)
 
-Status: IMPLEMENTATION CANDIDATE, EXECUTION-EFFECTIVE WITHIN GRANTED AUTHORITY
+Status: AWF-I0 THROUGH AWF-I10 COMPLETE_CANONICAL_VERIFIED
 
 Architecture baseline: Padayon PR #382, squash merge `b4b59d04ea37c4f23bb6a54e7d217bd3037eb6ab`
 Orchestra source baseline: `75100c3ad0fd9a11c69f2b9b7c5172edd8841cd2`
@@ -216,7 +216,14 @@ Validation:
 - `tests/runtime/test_agentic_workflow_scenarios.py`
 - `tests/fixtures/agentic-workflow/awf-scenarios.v1.json`
 
+## Post-canonical adaptive intake
+
+The canonical AWF selector can consume an explicit TaskProfile. The next bounded increment, AWF-N1 through AWF-N3, adds deterministic ordinary-prompt TaskProfile derivation, machine-readable selection traces, and controlled operational scenarios without changing specialist authority or OEE concurrency.
+
+See [Adaptive Agentic Workflow Intake N1-N3](ADAPTIVE_AGENTIC_WORKFLOW_INTAKE_N1.md).
+
 ## Non-goals
+
 
 This implementation does not:
 

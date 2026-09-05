@@ -45,7 +45,10 @@ from .delegation import (
     delegation_accepted_event,
     delegation_rejected_event,
 )
-from .application.use_cases.agentic_workflow import plan_agentic_workflow
+from .application.use_cases.agentic_workflow import (
+    plan_agentic_workflow,
+    plan_agentic_workflow_from_intake,
+)
 from .domain.orchestration.ui_fidelity import classify_ui_fidelity
 from .infrastructure.machine.agentic_workflow import load_agentic_workflow_contracts
 from .infrastructure.machine.execution_efficiency import load_execution_budget_contract
@@ -349,6 +352,8 @@ class RouterService(IRouterService):
         self._ui_fidelity_contract = load_ui_fidelity_routing_contract(registry_root)
         self._fallback_specialist = str(command_route_record("__orchestra_ambiguity_fallback__")["specialist"])
         self._governance_required_specialists = governance_required_specialists()
+        self._agentic_workflow_contracts: dict[str, object] | None = None
+        self._agentic_execution_budget: dict[str, object] | None = None
 
     def route(self, command: Command, context: ContextPackage) -> RouteDecision:
         skill_slug = self._command_routes.get(command.name, self._fallback_specialist)
@@ -369,27 +374,56 @@ class RouterService(IRouterService):
         route_metadata.update(ui_fidelity.to_metadata(self._ui_fidelity_contract))
 
         raw_task_profile = context.metadata.get("agentic_task_profile")
-        if raw_task_profile is not None:
-            if skill.slug != "conductor":
-                raise ValueError("agentic task profile requires Conductor routing")
-            if not isinstance(raw_task_profile, dict):
-                raise ValueError("agentic_task_profile must be a mapping")
-            contracts = load_agentic_workflow_contracts(self._registry_root)
-            execution_budget = load_execution_budget_contract(self._registry_root)
+        if raw_task_profile is not None and skill.slug != "conductor":
+            raise ValueError("agentic task profile requires Conductor routing")
+
+        auto_agentic = context.metadata.get("agentic_workflow_auto", True)
+        if type(auto_agentic) is not bool:
+            raise ValueError("agentic_workflow_auto must be an exact boolean")
+
+        if skill.slug == "conductor" and (raw_task_profile is not None or auto_agentic):
+            if self._agentic_workflow_contracts is None:
+                self._agentic_workflow_contracts = load_agentic_workflow_contracts(self._registry_root)
+            if self._agentic_execution_budget is None:
+                self._agentic_execution_budget = load_execution_budget_contract(self._registry_root)
+
+            contracts = self._agentic_workflow_contracts
+            execution_budget = self._agentic_execution_budget
             registry = {
                 "specialists": [
                     {"slug": registered.slug}
                     for registered in self._skill_registry.load_skills()
                 ]
             }
-            agentic_plan = plan_agentic_workflow(
-                task_profile=raw_task_profile,
-                specialist_authority_view=contracts["authority_view"],
-                specialist_registry=registry,
-                execution_budget=execution_budget,
-            )
+            if raw_task_profile is not None:
+                if not isinstance(raw_task_profile, dict):
+                    raise ValueError("agentic_task_profile must be a mapping")
+                agentic_plan = plan_agentic_workflow(
+                    task_profile=raw_task_profile,
+                    specialist_authority_view=contracts["authority_view"],
+                    specialist_registry=registry,
+                    execution_budget=execution_budget,
+                )
+            else:
+                source_identity = str(
+                    context.metadata.get("current_source_identity")
+                    or f"{context.project_root}@{context.manifest_version}"
+                ).strip()
+                agentic_plan = plan_agentic_workflow_from_intake(
+                    prompt=command.raw_input,
+                    metadata=context.metadata,
+                    current_source_identity=source_identity,
+                    derivation_policy=contracts["derivation_policy"],
+                    specialist_authority_view=contracts["authority_view"],
+                    specialist_registry=registry,
+                    execution_budget=execution_budget,
+                )
+
+            route_metadata["agentic_task_profile"] = agentic_plan["task_profile"]
+            route_metadata["agentic_task_profile_source"] = agentic_plan["task_profile_source"]
             route_metadata["agentic_workflow_profile"] = agentic_plan["workflow_profile"]
             route_metadata["agentic_critic_contract"] = agentic_plan["critic_contract"]
+            route_metadata["agentic_selection_trace"] = agentic_plan["selection_trace"]
             route_metadata["agentic_workflow_telemetry"] = agentic_plan["telemetry"]
             route_metadata["agentic_authority_rule"] = agentic_plan["authority_rule"]
 

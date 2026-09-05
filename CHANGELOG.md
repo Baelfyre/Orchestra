@@ -1,5 +1,15 @@
 # Changelog
 
+## Post-v1.8.0 AWF-N1 through AWF-N3 adaptive intake candidate
+
+- Reconciles AWF-I0 through AWF-I10 as complete canonical at merge commit `7f1e1962817b1b363fbcb1629902d69d50f1daa6`, sourced from fully qualified PR #800.
+- Adds a machine-configured deterministic Conductor intake policy that derives TaskProfile fields from ordinary prompt and host context signals without granting authority.
+- Adds automatic Conductor TaskProfile derivation when no explicit structured profile is supplied; explicit valid structured profiles remain supported.
+- Adds machine-readable selection traces containing matched signals, derived reason codes, selected/rejected patterns, selected specialists, and underlying human-gate reasons without exposing private model reasoning.
+- Keeps unknown domains fail-closed at Conductor, keeps protected-action authorization explicit, and preserves OEE `max_parallel_specialists = 1`.
+- Expands controlled calibration to 18 positive RouterService scenarios and adds a 20-case adversarial negative-routing corpus covering negation, quoted/example content, hypothetical actions, representation-only work, and protected-action false-positive suppression.
+- Does not widen specialist authority, change OEE concurrency, promote A5, resume UIEF, release, deploy, or activate policy.
+
 ## Post-v1.8.0 Adaptive Agentic Workflow AWF-I0 through AWF-I10 candidate
 
 - Adds execution-effective, authority-aware adaptive workflow topology selection under the invariant `WORKFLOW_TOPOLOGY_CHANGE != AUTHORITY_EXPANSION`.

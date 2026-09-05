@@ -9,16 +9,20 @@ from ...domain.adaptive import (
     PATTERN_ORDER,
     REQUIRED_COMPOSITION_INVARIANT_IDS,
     parse_authority_view,
+    validate_derivation_policy,
 )
 
 AUTHORITY_VIEW_PATH = Path("machine/specialists/authority-view.v1.json")
 PATTERNS_PATH = Path("machine/workflows/patterns.v1.json")
 INVARIANTS_PATH = Path("machine/workflows/composition-invariants.v1.json")
+DERIVATION_POLICY_PATH = Path("machine/workflows/task-profile-derivation.v1.json")
 SCHEMA_PATHS = (
     Path("machine/schemas/task-profile.v1.schema.json"),
     Path("machine/schemas/critic-contract.v1.schema.json"),
     Path("machine/schemas/specialist-authority-view.v1.schema.json"),
     Path("machine/schemas/agentic-workflow-profile.v1.schema.json"),
+    Path("machine/schemas/task-profile-derivation.v1.schema.json"),
+    Path("machine/schemas/agentic-selection-trace.v1.schema.json"),
 )
 
 
@@ -98,6 +102,14 @@ def load_agentic_composition_invariants(root: Path | str | None = None) -> dict[
     return value
 
 
+
+def load_task_profile_derivation_policy(root: Path | str | None = None) -> dict[str, Any]:
+    repo_root = repository_root() if root is None else Path(root)
+    value = _load_json(repo_root / DERIVATION_POLICY_PATH)
+    validate_derivation_policy(value)
+    return value
+
+
 def load_agentic_workflow_contracts(root: Path | str | None = None) -> dict[str, Any]:
     repo_root = repository_root() if root is None else Path(root)
     for schema_path in SCHEMA_PATHS:
@@ -106,6 +118,7 @@ def load_agentic_workflow_contracts(root: Path | str | None = None) -> dict[str,
         "authority_view": load_agentic_workflow_authority_view(repo_root),
         "patterns": load_agentic_pattern_contract(repo_root),
         "composition_invariants": load_agentic_composition_invariants(repo_root),
+        "derivation_policy": load_task_profile_derivation_policy(repo_root),
     }
 
 
@@ -119,6 +132,7 @@ def agentic_workflow_errors(root: Path | str | None = None) -> tuple[str, ...]:
 
 __all__ = [
     "AUTHORITY_VIEW_PATH",
+    "DERIVATION_POLICY_PATH",
     "INVARIANTS_PATH",
     "PATTERNS_PATH",
     "SCHEMA_PATHS",
@@ -127,4 +141,5 @@ __all__ = [
     "load_agentic_pattern_contract",
     "load_agentic_workflow_authority_view",
     "load_agentic_workflow_contracts",
+    "load_task_profile_derivation_policy",
 ]
