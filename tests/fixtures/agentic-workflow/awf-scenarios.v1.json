@@ -214,9 +214,9 @@
       "expected": {
         "required_specialists": [
           "the-tuner",
-          "ponytail",
           "cipher",
-          "clockwork"
+          "clockwork",
+          "ponytail"
         ],
         "selected_patterns": [
           "ROUTING",
