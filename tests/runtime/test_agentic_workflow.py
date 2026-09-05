@@ -205,7 +205,7 @@ def test_invalidation_reentry_activates_tuner_without_new_human_gate():
         )
     )
     profile = result["workflow_profile"]
-    assert profile["required_specialists"] == ["the-tuner", "ponytail", "cipher", "clockwork"]
+    assert profile["required_specialists"] == ["the-tuner", "cipher", "clockwork", "ponytail"]
     assert "MULTI_AGENT" in profile["selected_patterns"]
     assert profile["human_gate_required"] is False
     assert result["telemetry"]["reentry_specialist_count"] == 2
