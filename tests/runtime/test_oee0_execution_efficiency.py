@@ -329,3 +329,27 @@ def test_escalation_rejects_unknown_stage() -> None:
             current_stage_insufficient=True,
         )
 
+def test_execution_budget_rejects_boolean_numeric_limits_and_extra_fields() -> None:
+    for field in ("max_parallel_specialists", "specialist_retry_limit"):
+        data = deepcopy(_budget())
+        data["defaults"][field] = True
+        with pytest.raises(ValueError, match="integer 1"):
+            validate_execution_budget(data)
+
+    data = deepcopy(_budget())
+    data["defaults"]["extra"] = True
+    with pytest.raises(ValueError, match="defaults field set changed"):
+        validate_execution_budget(data)
+
+    data = deepcopy(_budget())
+    data["authority"]["extra"] = False
+    with pytest.raises(ValueError, match="authority field set changed"):
+        validate_execution_budget(data)
+
+
+def test_execution_budget_rejects_non_string_measurement_field() -> None:
+    data = deepcopy(_budget())
+    data["measurement_fields"][0] = 1
+    with pytest.raises(ValueError, match="measurement_fields items must be strings"):
+        validate_execution_budget(data)
+
