@@ -379,9 +379,6 @@ def evaluate_specialist_invocation(
             role,
             False,
         )
-    if role == "PRIMARY" and requested != request.owner_specialist.casefold():
-        return SpecialistInvocationDecision(False, "OWNER_FIRST_REQUIRED", requested, role, False)
-
     secondary_reason = (
         request.cross_domain_required
         or request.adversarial_review_required
@@ -443,7 +440,7 @@ class EvidenceReuseRecord:
             raise ValueError("content_digest must be a SHA-256 hex digest")
         if self.produced_tier not in EVIDENCE_TIERS:
             raise ValueError("produced_tier must be an OEE evidence tier")
-        consumers = tuple(item.casefold() for item in self.allowed_consumers)
+        consumers = tuple(str(item).strip().casefold() for item in self.allowed_consumers)
         if (
             not consumers
             or any(not item.strip() for item in consumers)
@@ -465,7 +462,7 @@ def require_evidence_reuse(
     consumer_id = _clean_text(consumer, "consumer").casefold()
     if identity != record.source_identity:
         raise ValueError("cached evidence source identity is stale")
-    if consumer_id not in {item.casefold() for item in record.allowed_consumers}:
+    if consumer_id not in {str(item).strip().casefold() for item in record.allowed_consumers}:
         raise ValueError("cached evidence consumer is not authorized")
 
 
