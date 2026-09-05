@@ -40,6 +40,7 @@ def _task(**overrides):
         "objective_verifier_available": True,
         "critic_owner": None,
         "critic_domain": None,
+        "reentry_specialists": [],
         "current_source_identity": "main@example",
         "human_gate_requirements": [],
     }
@@ -191,6 +192,23 @@ def test_explicit_distinct_critic_adds_bounded_reflection_contract():
     assert critic["evidence_owner"] == "overseer"
     assert critic["can_transition"] is False
     assert critic["max_iterations"] == 1
+
+
+def test_invalidation_reentry_activates_tuner_without_new_human_gate():
+    result = _plan(
+        _task(
+            task_id="reentry",
+            authority_domains=["IMPLEMENTATION"],
+            mutation_required=True,
+            implementation_required=True,
+            reentry_specialists=["cipher", "clockwork"],
+        )
+    )
+    profile = result["workflow_profile"]
+    assert profile["required_specialists"] == ["the-tuner", "ponytail", "cipher", "clockwork"]
+    assert "MULTI_AGENT" in profile["selected_patterns"]
+    assert profile["human_gate_required"] is False
+    assert result["telemetry"]["reentry_specialist_count"] == 2
 
 
 def test_generated_task_and_workflow_records_validate_against_draft_2020_12_schemas():
