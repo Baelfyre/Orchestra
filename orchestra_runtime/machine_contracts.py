@@ -11,12 +11,14 @@ ROUTING_CONTRACT_SCHEMA_VERSION = "orchestra.routing-contract.v1"
 GOVERNANCE_POLICY_SCHEMA_VERSION = "orchestra.governance-policy.v1"
 UI_FIDELITY_ROUTING_CONTRACT_SCHEMA_VERSION = "orchestra.ui-fidelity-routing.v1"
 UI_FIDELITY_HANDOFF_SCHEMA_VERSION = "orchestra.ui-fidelity-handoff.v1"
+EXECUTION_BUDGET_SCHEMA_VERSION = "orchestra.execution-budget.v1"
 
 _MACHINE_ROOT = Path("machine")
 _SPECIALIST_REGISTRY = _MACHINE_ROOT / "specialists" / "registry.v1.json"
 _ROUTING_CONTRACT = _MACHINE_ROOT / "routing" / "routes.v1.json"
 _UI_FIDELITY_ROUTING_CONTRACT = _MACHINE_ROOT / "routing" / "ui-fidelity-routing.v1.json"
 _UI_FIDELITY_HANDOFF_CONTRACT = _MACHINE_ROOT / "ui" / "ui-fidelity-handoff.v1.json"
+_EXECUTION_BUDGET_CONTRACT = _MACHINE_ROOT / "governance" / "execution-budget.v1.json"
 _GOVERNANCE_POLICY = _MACHINE_ROOT / "governance" / "policy.v1.json"
 
 FRONTMATTER_FIELDS = (
@@ -140,6 +142,13 @@ def load_ui_fidelity_handoff_contract(root: Path | str | None = None) -> dict[st
     contract = _load_json(_root(root) / _UI_FIDELITY_HANDOFF_CONTRACT)
     if contract.get("schema_version") != UI_FIDELITY_HANDOFF_SCHEMA_VERSION:
         raise ValueError("unsupported UI fidelity handoff contract schema_version")
+    return contract
+
+
+def load_execution_budget_contract(root: Path | str | None = None) -> dict[str, Any]:
+    contract = _load_json(_root(root) / _EXECUTION_BUDGET_CONTRACT)
+    if contract.get("schema_version") != EXECUTION_BUDGET_SCHEMA_VERSION:
+        raise ValueError("unsupported execution budget schema_version")
     return contract
 
 
@@ -366,6 +375,57 @@ def machine_contract_errors(root: Path | str | None = None) -> tuple[str, ...]:
                 errors.append(f"UI_FIDELITY_HANDOFF_MISSING_FIELD:{req_field}")
     except (ValueError, OSError) as exc:
         errors.append(f"UI_FIDELITY_HANDOFF_CONTRACT_INVALID:{exc}")
+
+    try:
+        budget = load_execution_budget_contract(repo_root)
+        if budget.get("contract_name") != "ExecutionBudget":
+            errors.append("EXECUTION_BUDGET_CONTRACT_NAME_INVALID")
+        if budget.get("owner") != "conductor":
+            errors.append("EXECUTION_BUDGET_OWNER_INVALID")
+        defaults = budget.get("defaults")
+        if not isinstance(defaults, dict):
+            errors.append("EXECUTION_BUDGET_DEFAULTS_INVALID")
+        else:
+            if defaults.get("max_parallel_specialists") != 1:
+                errors.append("EXECUTION_BUDGET_PARALLEL_SPECIALIST_DEFAULT_INVALID")
+            if defaults.get("specialist_retry_limit") != 1:
+                errors.append("EXECUTION_BUDGET_RETRY_LIMIT_INVALID")
+            for field in (
+                "owner_first_routing",
+                "broad_search_requires_narrow_search_exhaustion",
+                "evidence_cache_requires_exact_source_identity",
+                "full_validation_requires_stable_candidate",
+                "ci_wait_must_not_consume_reasoning_budget",
+                "autonomous_campaigns_load_one_phase_at_a_time",
+                "optional_review_cannot_block_without_explicit_authority",
+            ):
+                if defaults.get(field) is not True:
+                    errors.append(f"EXECUTION_BUDGET_DEFAULT_NOT_FAIL_CLOSED:{field}")
+        if [item.get("tier") for item in budget.get("evidence_tiers", [])] != [
+            "E0", "E1", "E2", "E3", "E4", "E5"
+        ]:
+            errors.append("EXECUTION_BUDGET_EVIDENCE_TIERS_INVALID")
+        if budget.get("search_escalation") != [
+            "EXACT_PATH",
+            "EXACT_SYMBOL",
+            "BOUNDED_DIRECTORY",
+            "REPOSITORY_WIDE",
+            "EXTERNAL",
+        ]:
+            errors.append("EXECUTION_BUDGET_SEARCH_ESCALATION_INVALID")
+        if budget.get("validation_escalation") != [
+            "SYNTAX_SCHEMA",
+            "DIRECT_TESTS",
+            "SUBSYSTEM",
+            "REPOSITORY_QUALIFICATION",
+            "PROTECTED_GATES",
+        ]:
+            errors.append("EXECUTION_BUDGET_VALIDATION_ESCALATION_INVALID")
+        authority = budget.get("authority")
+        if not isinstance(authority, dict) or any(value is not False for value in authority.values()):
+            errors.append("EXECUTION_BUDGET_AUTHORITY_EXPANSION")
+    except (ValueError, OSError) as exc:
+        errors.append(f"EXECUTION_BUDGET_CONTRACT_INVALID:{exc}")
 
     try:
         policy = load_governance_policy(repo_root)
