@@ -23,6 +23,7 @@ Use Conductor for ambiguous, cross-domain, or governed work; otherwise route dir
 2. Route from the [skill index](../../SKILL_INDEX.md); load the [routing map](../../ROUTING_MAP.md) only for ambiguity or dependencies.
 3. Load governance on triggers; pause on unresolved gates.
 4. Build the minimum [packet](../../docs/routing/MINIMAL_PROMPT_FORMAT.md).
+5. For multi-step, cross-specialist, autonomous, or validation-heavy work, apply [execution efficiency guidance](EXECUTION_EFFICIENCY_GUIDE.md): owner first, one active specialist by default, stop on decisive evidence, reuse exact-source evidence, and escalate search/validation progressively.
 
 ## Governance Profile Selection Gate
 
@@ -36,15 +37,17 @@ Resolve `HUMAN_GOVERNED` (default), `SEMI_AUTONOMOUS`, or `FULL_AUTONOMOUS` at r
 - If either returns `NOT_APPLICABLE`, Conductor proceeds under the selected mode.
 - In manual mode, pause on Arbiter `HOLD` or `BLOCKED`.
 - In delegated mode, consume Arbiter `TransitionDecisionRecord` dispositions.
+- When sufficient authoritative evidence establishes a stop, do not invoke downstream specialists or validation that cannot change the decision.
 - Keep Dagger blocked pending authorization. Audit edits require approval.
 
 ## Delegated Phase Autonomous Loop
 With a `DelegatedExecutionEnvelope`:
-1. Verify envelope/unit; route minimum packet.
-2. Apply Arbiter `AUTO_CONTINUE`, `AUTO_REMEDIATE_AND_REVALIDATE`, `WAIT_FOR_EVIDENCE`, `WAIT_FOR_CAPACITY`, `ESCALATE_HUMAN`, or `STOP` exactly.
-3. Never invent scope/authority; unsupported dispositions pause.
-4. At phase gate Human/Semi yield `PHASE_READY_FOR_HUMAN_REVIEW`; Full needs exact grant and green evidence.
-5. Merge needs Full, explicit authority, and merge-readiness. Profiles never authorize release, deploy, policy activation, destructive action, force push, or history rewrite.
+1. Verify envelope/unit; route minimum packet and load only the active phase context.
+2. Invoke the current decision owner first; supporting specialists require a recorded cross-domain or adversarial reason.
+3. Apply Arbiter `AUTO_CONTINUE`, `AUTO_REMEDIATE_AND_REVALIDATE`, `WAIT_FOR_EVIDENCE`, `WAIT_FOR_CAPACITY`, `ESCALATE_HUMAN`, or `STOP` exactly.
+4. Never invent scope/authority; unsupported dispositions pause.
+5. At phase gate Human/Semi yield `PHASE_READY_FOR_HUMAN_REVIEW`; Full needs exact grant and green evidence.
+6. Merge needs Full, explicit authority, and merge-readiness. Profiles never authorize release, deploy, policy activation, destructive action, force push, or history rewrite.
 
 ## Phase 2 Re-entry Routing
 Conductor remains UIX-5 router. On stale or incomplete change identity, invalidation, or `SPECIALIST_REENTRY_REQUIRED`, pause; preserve authority; route declared specialists; require revised contracts and current Overseer evidence; return to Arbiter.
