@@ -1,5 +1,15 @@
 # Changelog
 
+## Post-v1.8.0 AWF-N5 semantic robustness candidate
+
+- Starts AWF-N5 from canonical PR #801 and Padayon continuity #383.
+- Adds a 30-case semantic contrast corpus covering paraphrased negation, scoped contrast clauses, multi-sentence correction, clause-local hypothetical behavior, mixed documentation/execution requests, and conditional protected actions.
+- Diagnostic evaluation identified prompt-wide suppression defects around mixed representation/execution requests and clause-scope leakage.
+- Replaces prompt-wide semantic suppression with clause-local routing context and last-directive precedence for repeated action signals.
+- Preserves the canonical 18 positive plus 20 negative routing cases as contrast regressions.
+- Keeps specialist authority, protected-action requirements, and OEE max parallel specialists unchanged.
+- Does not promote A5, learned routing, parallel execution, release/deploy authority, or UIEF resumption.
+
 ## Post-v1.8.0 AWF-N1 through AWF-N3 adaptive intake candidate
 
 - Reconciles AWF-I0 through AWF-I10 as complete canonical at merge commit `7f1e1962817b1b363fbcb1629902d69d50f1daa6`, sourced from fully qualified PR #800.

@@ -207,3 +207,49 @@ REPRESENTATION_CONTEXT != REFERENCED_DOMAIN_AUTHORITY
 ```
 
 A false-negative protected-action detection remains a blocking safety defect. A false-positive protected-action or specialist activation is a routing-calibration defect.
+
+
+## AWF-N5 semantic robustness
+
+Status: IMPLEMENTATION CANDIDATE
+
+N1 through N4 are canonical at Orchestra merge commit `e0b2c0b9a8d4cc6618267ce0340048793613abc5`. N5 extends deterministic intake calibration from exact-token positive/negative cases into sentence-structure and instruction-order robustness.
+
+### Semantic contrast corpus
+
+The N5 corpus contains 30 RouterService-level cases covering:
+
+- paraphrased negation such as `refrain from`, `hold off on`, `avoid`, and `no need to`;
+- scoped contrast around `but` and semicolon boundaries;
+- later correction of earlier deploy/test instructions;
+- hypothetical clauses followed by later active commands;
+- quoted text followed by active execution;
+- mixed documentation plus validation, implementation, security, and deployment work;
+- conditional protected actions;
+- same-token different-intent contrast pairs.
+
+The corpus aggregates all mismatches before failing so one evaluation run exposes the full semantic calibration map.
+
+### N5 diagnostic finding
+
+The first diagnostic run found four concrete classes:
+
+1. negation scope leaking across contrast clauses;
+2. hypothetical state leaking into later active sentences;
+3. representation-only suppression applying to the whole prompt instead of only the representation clause;
+4. repeated action directives lacking reliable later-instruction precedence.
+
+The runtime now evaluates semantic suppression per clause and uses later directive state for repeated operation signals.
+
+### N5 invariants
+
+```text
+NEGATION_SCOPE_IS_LOCAL
+HYPOTHETICAL_SCOPE_IS_LOCAL
+REPRESENTATION_SCOPE_IS_LOCAL
+MIXED_REPRESENTATION_AND_EXECUTION_MUST_PRESERVE_EXECUTION_INTENT
+LATER_SAME_SIGNAL_DIRECTIVE_SUPERSEDES_EARLIER_SAME_SIGNAL_DIRECTIVE
+CONDITIONAL_PROTECTED_ACTION_REMAINS_PROTECTED
+```
+
+N5 does not expand specialist authority or OEE concurrency. Evidence-gated A5, learned ranking, and concurrency changes remain deferred to N6.

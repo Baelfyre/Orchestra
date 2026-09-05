@@ -101,19 +101,70 @@ def _phrase_present(text: str, phrase: str) -> bool:
     return re.search(rf"(?<!\w){escaped}(?!\w)", text.casefold()) is not None
 
 
+def _semantic_clause_ranges(text: str) -> tuple[tuple[int, int], ...]:
+    separators = re.compile(
+        r"[.!?;]+|,\s*(?:but|then|however|instead)\s+|\s+(?:but|however)\s+",
+        re.IGNORECASE,
+    )
+    ranges: list[tuple[int, int]] = []
+    cursor = 0
+    for match in separators.finditer(text):
+        if cursor < match.start():
+            ranges.append((cursor, match.start()))
+        cursor = match.end()
+    if cursor < len(text):
+        ranges.append((cursor, len(text)))
+    return tuple((start, end) for start, end in ranges if text[start:end].strip())
+
+
+def _clause_for_position(text: str, position: int) -> tuple[int, int]:
+    for start, end in _semantic_clause_ranges(text):
+        if start <= position < end:
+            return start, end
+    return 0, len(text)
+
+
 def _is_negated(
     text: str,
     position: int,
     negation_phrases: tuple[str, ...],
 ) -> bool:
-    boundary = max(
-        text.rfind(".", 0, position),
-        text.rfind("!", 0, position),
-        text.rfind("?", 0, position),
-        text.rfind(";", 0, position),
-        text.rfind(":", 0, position),
+    start, _ = _clause_for_position(text, position)
+    prefix = text[start:position].casefold()
+
+    # A coordinated independent action resets negation scope. Keep transition
+    # verbs out of this reset set so "do not deploy and merge" remains jointly
+    # negated while "hold off on merge and review the changelog" does not
+    # suppress the later review object.
+    reset_verbs = (
+        "review",
+        "audit",
+        "assess",
+        "analyze",
+        "update",
+        "write",
+        "summarize",
+        "explain",
+        "describe",
+        "document",
+        "rename",
+        "fix",
+        "remove",
+        "change",
+        "add",
+        "implement",
+        "build",
+        "run",
+        "refactor",
+        "modify",
+        "edit",
     )
-    prefix = text[boundary + 1 : position].casefold()
+    conjunctions = tuple(re.finditer(r"\band\b", prefix))
+    if conjunctions:
+        suffix = prefix[conjunctions[-1].end():]
+        if any(re.search(rf"(?<!\w){re.escape(verb)}(?!\w)", suffix) for verb in reset_verbs):
+            prefix = suffix
+
     for phrase in negation_phrases:
         normalized = " ".join(str(phrase).casefold().split())
         escaped = re.escape(normalized).replace(r"\ ", r"\s+")
@@ -127,49 +178,109 @@ def _is_hypothetical(
     position: int,
     hypothetical_prefixes: tuple[str, ...],
 ) -> bool:
-    normalized = text.casefold().lstrip()
+    start, _ = _clause_for_position(text, position)
+    normalized = text[start:position].casefold().lstrip()
     for prefix in hypothetical_prefixes:
         candidate = " ".join(str(prefix).casefold().split())
-        if normalized.startswith(candidate) and position >= normalized.find(candidate) + len(candidate):
+        if normalized.startswith(candidate):
             return True
     return False
 
 
-def _representation_context(
+def _active_execution_signal_in_clause(
+    text: str,
+    start: int,
+    end: int,
+    operation_signals: Mapping[str, Any],
+    quoted: tuple[tuple[int, int], ...],
+    negations: tuple[str, ...],
+    hypotheticals: tuple[str, ...],
+) -> bool:
+    execution_operations = (
+        "implementation",
+        "validation",
+        "transition",
+        "destructive",
+        "protected_action",
+    )
+    for operation in execution_operations:
+        for raw_signal in operation_signals[operation]:
+            signal = str(raw_signal).strip()
+            for position in _signal_positions(text, signal):
+                if not (start <= position < end):
+                    continue
+                if _position_in_ranges(position, quoted):
+                    continue
+                if _is_negated(text, position, negations):
+                    continue
+                if _is_hypothetical(text, position, hypotheticals):
+                    continue
+                return True
+    return False
+
+
+def _representation_ranges(
     text: str,
     suppression_rules: Mapping[str, Any],
+    operation_signals: Mapping[str, Any],
     quoted: tuple[tuple[int, int], ...],
-) -> tuple[bool, int | None]:
-    lower = text.casefold()
+) -> tuple[tuple[tuple[int, int], ...], tuple[int, ...]]:
     artifacts = tuple(str(item).casefold() for item in suppression_rules["representation_artifacts"])
     verbs = tuple(str(item).casefold() for item in suppression_rules["representation_verbs"])
     edit_verbs = tuple(str(item).casefold() for item in suppression_rules["representation_edit_verbs"])
     scope_phrases = tuple(str(item).casefold() for item in suppression_rules["representation_scope_phrases"])
     negations = tuple(str(item).casefold() for item in suppression_rules["negation_phrases"])
+    hypotheticals = tuple(str(item).casefold() for item in suppression_rules["hypothetical_prefixes"])
 
-    artifact_present = any(_phrase_present(lower, item) for item in artifacts)
-    verb_present = any(_phrase_present(lower, item) for item in verbs)
-    scope_present = any(_phrase_present(lower, item) for item in scope_phrases)
-    representation_only = (
-        (artifact_present and verb_present)
-        or scope_present
-        or lower.startswith("document ")
-        or lower.startswith("summarize ")
-    )
-
-    edit_position: int | None = None
-    if representation_only:
-        candidates: list[int] = []
-        for verb in edit_verbs:
+    representation: list[tuple[int, int]] = []
+    edit_positions: list[int] = []
+    for start, end in _semantic_clause_ranges(text):
+        clause = text[start:end]
+        lower = clause.casefold()
+        artifact_present = any(_phrase_present(lower, item) for item in artifacts)
+        active_representation_verb = False
+        for verb in verbs:
             for position in _signal_positions(text, verb):
+                if not (start <= position < end):
+                    continue
                 if _position_in_ranges(position, quoted):
                     continue
                 if _is_negated(text, position, negations):
                     continue
-                candidates.append(position)
-        if candidates:
-            edit_position = min(candidates)
-    return representation_only, edit_position
+                active_representation_verb = True
+                break
+            if active_representation_verb:
+                break
+        scope_present = any(_phrase_present(lower, item) for item in scope_phrases)
+        representation_candidate = (
+            (artifact_present and active_representation_verb)
+            or scope_present
+            or lower.lstrip().startswith("document ")
+            or lower.lstrip().startswith("summarize ")
+        )
+        if not representation_candidate:
+            continue
+        if not scope_present and _active_execution_signal_in_clause(
+            text,
+            start,
+            end,
+            operation_signals,
+            quoted,
+            negations,
+            hypotheticals,
+        ):
+            continue
+        representation.append((start, end))
+        for verb in edit_verbs:
+            for position in _signal_positions(text, verb):
+                if not (start <= position < end):
+                    continue
+                if _position_in_ranges(position, quoted):
+                    continue
+                if _is_negated(text, position, negations):
+                    continue
+                edit_positions.append(position)
+    return tuple(representation), tuple(sorted(set(edit_positions)))
 
 
 def _first_active_signal_position(
@@ -181,16 +292,17 @@ def _first_active_signal_position(
     hypothetical_prefixes: tuple[str, ...],
     suppress_hypothetical: bool,
 ) -> int | None:
+    directives: list[tuple[int, bool]] = []
     for position in _signal_positions(text, signal):
         if _position_in_ranges(position, quoted):
             continue
-        if _is_negated(text, position, negation_phrases):
-            continue
         if suppress_hypothetical and _is_hypothetical(text, position, hypothetical_prefixes):
             continue
-        return position
-    return None
-
+        directives.append((position, _is_negated(text, position, negation_phrases)))
+    if not directives:
+        return None
+    position, negated = directives[-1]
+    return None if negated else position
 
 def _exact_bool_or_default(value: object, default: bool, field_name: str) -> bool:
     if value is None:
@@ -295,9 +407,10 @@ def _matched_signals(
     quoted = _quoted_ranges(prompt)
     negations = tuple(str(item).casefold() for item in suppression_rules["negation_phrases"])
     hypotheticals = tuple(str(item).casefold() for item in suppression_rules["hypothetical_prefixes"])
-    representation_only, representation_edit_position = _representation_context(
+    representation_ranges, representation_edit_positions = _representation_ranges(
         prompt,
         suppression_rules,
+        operation_signals,
         quoted,
     )
 
@@ -305,66 +418,66 @@ def _matched_signals(
         domain = str(rule["domain"]).strip().upper()
         for raw_signal in rule["signals"]:
             signal = str(raw_signal).strip()
-            active_position = None
+            directives: list[tuple[int, bool]] = []
             for position in _signal_positions(prompt, signal):
                 if _position_in_ranges(position, quoted):
                     suppressed += 1
                     continue
-                if _is_negated(prompt, position, negations):
+                if _position_in_ranges(position, representation_ranges) and domain != "DOCUMENTATION":
                     suppressed += 1
                     continue
-                if representation_only and domain != "DOCUMENTATION":
-                    suppressed += 1
-                    continue
-                active_position = position
-                break
-            if active_position is not None:
-                matches.append(IntakeSignal("DOMAIN", domain, signal, active_position))
+                directives.append((position, _is_negated(prompt, position, negations)))
+            if not directives:
+                continue
+            active_position, negated = directives[-1]
+            if negated:
+                suppressed += 1
+                continue
+            matches.append(IntakeSignal("DOMAIN", domain, signal, active_position))
 
     for operation in _OPERATION_KEYS:
         for raw_signal in operation_signals[operation]:
             signal = str(raw_signal).strip()
-            active_position = None
+            directives: list[tuple[int, bool]] = []
             for position in _signal_positions(prompt, signal):
                 if _position_in_ranges(position, quoted):
-                    suppressed += 1
-                    continue
-                if _is_negated(prompt, position, negations):
                     suppressed += 1
                     continue
                 if _is_hypothetical(prompt, position, hypotheticals):
                     suppressed += 1
                     continue
-                if representation_only and operation != "audit":
+                if _position_in_ranges(position, representation_ranges) and operation != "audit":
                     suppressed += 1
                     continue
-                active_position = position
-                break
-            if active_position is not None:
-                matches.append(
-                    IntakeSignal("OPERATION", operation.upper(), signal, active_position)
-                )
-
-    if representation_only and not any(
-        item.kind == "DOMAIN" and item.value == "DOCUMENTATION"
-        for item in matches
-    ):
-        matches.append(IntakeSignal("DOMAIN", "DOCUMENTATION", "representation_context", 0))
-
-    if representation_only and representation_edit_position is not None:
-        matches.append(
-            IntakeSignal(
-                "OPERATION",
-                "MUTATION",
-                "representation_edit",
-                representation_edit_position,
+                directives.append((position, _is_negated(prompt, position, negations)))
+            if not directives:
+                continue
+            active_position, negated = directives[-1]
+            if negated:
+                suppressed += 1
+                continue
+            matches.append(
+                IntakeSignal("OPERATION", operation.upper(), signal, active_position)
             )
+
+    for start, _ in representation_ranges:
+        if not any(
+            item.kind == "DOMAIN"
+            and item.value == "DOCUMENTATION"
+            and start <= item.position
+            for item in matches
+        ):
+            matches.append(IntakeSignal("DOMAIN", "DOCUMENTATION", "representation_context", start))
+
+    for position in representation_edit_positions:
+        matches.append(
+            IntakeSignal("OPERATION", "MUTATION", "representation_edit", position)
         )
 
     return (
         tuple(sorted(matches, key=lambda item: (item.position, item.kind, item.value, item.signal))),
         suppressed,
-        representation_only,
+        bool(representation_ranges),
     )
 
 def _operation_active(matches: tuple[IntakeSignal, ...], operation: str) -> bool:
@@ -451,7 +564,7 @@ def derive_task_profile(
         hypothetical_prefixes=tuple(str(item).casefold() for item in suppression_rules["hypothetical_prefixes"]),
         suppress_hypothetical=True,
     )
-    if representation_only:
+    if representation_only and production_position is not None and _position_in_ranges(production_position, _representation_ranges(text, suppression_rules, operation_signals, quoted_ranges)[0]):
         production_position = None
     production_transition = transition_required and production_position is not None
     destructive_requested = _operation_active(matches, "destructive") or production_transition

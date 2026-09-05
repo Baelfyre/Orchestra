@@ -142,7 +142,8 @@
       "update docs",
       "update documentation",
       "update file",
-      "update files"
+      "update files",
+      "update the docs"
     ],
     "implementation": [
       "implement",
@@ -160,9 +161,10 @@
       "validation",
       "verify",
       "run tests",
-      "test suite",
       "quality assurance",
-      "qa"
+      "qa",
+      "run the test suite",
+      "execute tests"
     ],
     "transition": [
       "merge",
@@ -217,8 +219,18 @@
       "never",
       "must not",
       "should not",
-      "without",
-      "no"
+      "refrain from",
+      "hold off on",
+      "avoid",
+      "no need to",
+      "there is no need to",
+      "without changing",
+      "without modifying",
+      "without deploying",
+      "without merging",
+      "without running",
+      "without assessing",
+      "without executing"
     ],
     "hypothetical_prefixes": [
       "what would happen if",
@@ -276,7 +288,10 @@
       "without changing anything",
       "that mentions",
       "screenshot caption",
-      "release notes"
+      "release notes",
+      "explain why",
+      "describe why",
+      "document why"
     ]
   }
 }
