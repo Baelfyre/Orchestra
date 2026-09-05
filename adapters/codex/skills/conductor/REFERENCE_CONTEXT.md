@@ -424,20 +424,3 @@ Generated from canonical Orchestra sources. Indented snapshots are code-only con
     ### Fail-Closed Rule
 
     Unknown, malformed, missing, or unsupported transition dispositions must fail closed and produce `ESCALATE_HUMAN`. Never default to automatic continuation.
-
-
-## Adaptive Agentic Workflow AWF
-
-Use the canonical AWF execution contract when the prompt, plan, goal, current state, or invalidation requires an adaptive specialist topology.
-
-- Derive the minimum TaskProfile from user intent, project state, and already-granted authority.
-- Run deterministic and OEE checks first.
-- Select the minimum sufficient Routing, Planning, Tool/ReAct, Reflection/Critic, and Multi-Agent composition.
-- Conductor alone dispatches. The Tuner coordinates dependencies, contradiction, invalidation, and re-entry.
-- Multi-Agent does not grant parallelism; OEE controls concurrency.
-- Stop on decision-sufficient evidence.
-- Replan automatically on material state or dependency change.
-- `WORKFLOW_TOPOLOGY_CHANGE != AUTHORITY_EXPANSION`.
-- Do not request human approval solely for topology changes inside existing authority. Escalate only when the underlying action independently crosses a protected boundary or expands scope/authority.
-
-Canonical machine and runtime details live in `docs/architecture/ADAPTIVE_AGENTIC_WORKFLOW_AWF.md`.
