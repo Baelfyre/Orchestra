@@ -16,28 +16,7 @@ Use Conductor for ambiguous, cross-domain, or governed work; otherwise route dir
 2. Route from the [skill index](REFERENCE_CONTEXT.md#skill-index); load the [routing map](ROUTING_MAP.md) only for ambiguity or dependencies.
 3. Load governance on triggers; pause on unresolved gates.
 4. Build the minimum [packet](REFERENCE_CONTEXT.md#minimal-prompt-format).
-
-## Adaptive Agentic Workflow Selection
-
-For each ambiguous, cross-domain, governed, or evolving task, derive the minimum TaskProfile from the user's prompt, plan, goals, explicit instructions, current project state, and already-granted authority.
-
-1. Run deterministic source, predecessor, authority, and OEE checks before adding model reasoning.
-2. Resolve the minimum authoritative owner and only the authority domains actually needed.
-3. Select the minimum sufficient combination of Routing, Planning, Tool/ReAct, Reflection/Critic, and Multi-Agent behavior.
-4. Keep specialist authority unchanged. Tool/ReAct mutation is limited to the selected specialist's existing mutation authority.
-5. Use The Tuner for material cross-domain dependencies, contradictions, invalidation, or specialist re-entry. The Tuner recommends; Conductor dispatches.
-6. Use objective validation before a subjective critic when an objective verifier can resolve the decision.
-7. Treat Multi-Agent as a topology concept, not a concurrency grant. OEE controls active parallelism.
-8. Stop on decision-sufficient evidence and suppress downstream work that cannot change the disposition.
-9. Re-evaluate topology automatically when material state, dependencies, or invalidation change.
-
-```text
-WORKFLOW_TOPOLOGY_CHANGE != AUTHORITY_EXPANSION
-```
-
-Do not request human approval merely to route, replan, add or remove specialists, activate a critic, re-enter an invalidated specialist, or change the agentic pattern composition while every underlying action remains inside existing granted authority.
-
-Escalate only when the underlying action independently requires new authority or crosses an existing protected boundary.
+5. For adaptive topology or specialist re-entry, load [AWF](REFERENCE_CONTEXT.md#adaptive-agentic-workflow-awf); topology changes inside current authority need no human gate.
 
 ## Governance Profile Selection Gate
 
@@ -62,7 +41,7 @@ With a `DelegatedExecutionEnvelope`:
 5. Merge needs Full, explicit authority, and merge-readiness. Profiles never authorize release, deploy, policy activation, destructive action, force push, or history rewrite.
 
 ## Phase 2 Re-entry Routing
-Conductor remains UIX-5 router. On stale or incomplete change identity, invalidation, or `SPECIALIST_REENTRY_REQUIRED`, stop affected downstream work, preserve authority, activate The Tuner when coordination is material, and automatically route the minimum declared specialist re-entry set within existing authority. Require revised contracts and current Overseer evidence when applicable, then return to Arbiter when transition governance applies. Specialist re-entry alone does not require human approval.
+Conductor remains UIX-5 router. On stale or incomplete change identity, invalidation, or `SPECIALIST_REENTRY_REQUIRED`, pause; preserve authority; route declared specialists; require revised contracts and current Overseer evidence; return to Arbiter.
 
 ## Synchronicity routing
 
