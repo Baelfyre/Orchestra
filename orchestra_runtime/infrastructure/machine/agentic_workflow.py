@@ -42,8 +42,8 @@ def _git_blob_sha(path: Path) -> str:
     data = path.read_bytes()
     # Reconstruct canonical tracked text bytes instead of binding authority
     # identity to platform-specific Windows CRLF checkout materialization.
-    canonical = data.replace(b"\\r\\n", b"\\n")
-    header = f"blob {len(canonical)}\\0".encode("utf-8")
+    canonical = data.replace(b"\r\n", b"\n")
+    header = f"blob {len(canonical)}\0".encode("utf-8")
     return hashlib.sha1(header + canonical).hexdigest()
 
 
