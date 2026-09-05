@@ -201,7 +201,8 @@ class ValidationRequest:
         required = VALIDATION_ESCALATION[:target_index]
         if completed != required:
             raise ValueError(
-                "validation stage requires exact ordered prerequisites: " + ", ".join(required)
+                "validation stage cannot skip prerequisites; exact ordered prerequisites: "
+                + ", ".join(required)
             )
         if self.target_stage in {"REPOSITORY_QUALIFICATION", "PROTECTED_GATES"} and not self.candidate_stable:
             raise ValueError("expensive validation requires a stable candidate")
