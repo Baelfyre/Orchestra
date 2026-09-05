@@ -95,7 +95,7 @@ def _workflow_profile(**overrides):
         (None, "field", 4, TypeError),
         ("", "field", 4, ValueError),
         ("12345", "field", 4, ValueError),
-        ("bad\\x00x", "field", 8, ValueError),
+        ("bad" + chr(0) + "x", "field", 8, ValueError),
     ],
 )
 def test_task_text_rejects_invalid_values(value, field, maximum, exc):
