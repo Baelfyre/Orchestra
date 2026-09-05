@@ -100,7 +100,9 @@
     "scripts/validate_machine_contracts.py",
     "tests/runtime/test_agentic_workflow_edges.py",
     "tests/runtime/test_agentic_workflow_intake.py",
-    "tests/runtime/test_agentic_workflow_intake_edges.py"
+    "tests/runtime/test_agentic_workflow_intake_edges.py",
+    "tests/fixtures/agentic-workflow/awf-intake-calibration.v1.json",
+    "tests/runtime/test_agentic_workflow_intake_calibration.py"
   ],
   "historical_replay": {
     "case": "UIEF5_20260905_USAGE_EXHAUSTION",
@@ -145,7 +147,8 @@
     "current_scope": [
       "automatic TaskProfile derivation",
       "selection trace explainability",
-      "three controlled operational scenarios"
+      "18-case controlled operational calibration corpus",
+      "terminal-role over-routing suppression"
     ],
     "prohibited": [
       "OEE concurrency widening",
