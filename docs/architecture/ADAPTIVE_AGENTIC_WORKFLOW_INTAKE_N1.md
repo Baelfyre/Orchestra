@@ -23,7 +23,7 @@ WORKFLOW_TOPOLOGY_CHANGE != AUTHORITY_EXPANSION
 When Conductor receives an ordinary request and no explicit `agentic_task_profile` is supplied, RouterService derives a TaskProfile from:
 
 - the user request text;
-- existing execution-mode and risk constraints;
+- existing canonical `risk_mode` constraints and namespaced `agentic_execution_mode` / `agentic_risk_level` constraints;
 - explicit host-provided authority-domain hints;
 - explicit protected-action authorization state;
 - current source identity;
@@ -36,7 +36,7 @@ The policy is deliberately calibratable. It stores domain and operation signals 
 ### Safety rules
 
 - Prompt keywords may identify potential work domains, but never grant authority.
-- Explicit host execution mode and risk hints may escalate the derived result but cannot downgrade it.
+- Host `execution_mode` values used by execution engines, such as `HOST_NATIVE`, are not interpreted as AWF risk modes. Canonical `risk_mode` and namespaced AWF mode/risk hints may escalate the derived result but cannot downgrade it.
 - Protected-action authorization is never inferred from text.
 - Unknown domains fail to `ROUTING` with Conductor as owner instead of guessing.
 - Explicit valid structured TaskProfiles remain supported.
@@ -109,6 +109,7 @@ Expected:
 - transition ownership resolves to Arbiter
 - destructive/critical classification
 - protected action required
+- `deploy` plus production context is classified as destructive without making the generic word `production` a universal destructive trigger
 - authorization remains false unless explicitly supplied by trusted context
 - human gate required
 
