@@ -6,12 +6,12 @@
   "selected_by": "conductor",
   "selection_reason": "High-fidelity UI contract requiring strict structural fidelity and interaction state preservation.",
   "design_contract_ref": "machine/schemas/ui-design-contract.schema.json",
-  "cloak_handoff_ref": "docs/specs/ui/CLOAK_HANDOFF.md",
+  "cloak_handoff_ref": "skills/cloak/UI_FIDELITY_HANDOFF_GUIDE.md",
   "pattern_refs": [
     {
-      "pattern_id": "cuir-workspace-split-pane",
+      "pattern_id": "cuir3.destination_state_navigation",
       "source_kind": "CUIR_NORMALIZED",
-      "reference_ref": "docs/specs/cuir/CUIR_NORMALIZED_PATTERNS.md#workspace-split-pane",
+      "reference_ref": "machine/knowledge/cloak-ui-reference-cuir3.v1.json",
       "advisory_only": false
     }
   ],
@@ -19,10 +19,10 @@
     {
       "composition_id": "desktop-macro-grid",
       "structural_role": "MACRO_LAYOUT",
-      "reference_ref": "docs/specs/ui/COMPOSITIONS.md#desktop-macro-grid"
+      "reference_ref": "docs/project/UI_EXECUTION_FIDELITY_PLAN.md"
     }
   ],
-  "clockwork_boundary_ref": "docs/architecture/CLOCKWORK_BOUNDARY.md",
+  "clockwork_boundary_ref": "docs/project/UI_EXECUTION_FIDELITY_PLAN.md",
   "execution_mode": "DETERMINISTIC_TEST_ENGINE",
   "required_fidelity": {
     "preserve_macro_composition": true,

@@ -1,5 +1,13 @@
 # Changelog
 
+## Post-v1.8.0 UIEF reference/provenance responsive erratum candidate
+
+- Replaces nonexistent UIEF reference-profile and Cloak-handoff paths with traceable canonical CUIR-3 and UIEF plan/guide sources instead of creating placeholder artifacts.
+- Removes unsupported project-native, Anthropic, observed-provider, composition, icon, and token provenance claims from the Orchestra reference fixture; consuming-project evidence remains explicit when unavailable.
+- Reconciles the UIEF-4 responsive macro summary with the existing tablet/mobile drawer transformations under Cloak visible-design authority.
+- Freezes the historical contradictory handoff for OEE-7 replay so repairing the live UIEF contract does not rewrite historical efficiency evidence.
+- Adds deterministic reference-path, CUIR-pattern-identity, responsive-consistency, and historical-replay regressions while preserving frozen Cloak core identity and all existing authority boundaries.
+
 ## Post-v1.8.0 OEE-1 through OEE-8 execution-efficiency enforcement candidate
 
 - Operationalizes the canonical OEE-0 `ExecutionBudget` without rewriting `RuntimeExecutor` or creating a new specialist.
