@@ -1,0 +1,232 @@
+{
+  "schema_version": "orchestra.awf-regression-scenarios.v1",
+  "cases": [
+    {
+      "id": "uief5-responsive-blocker",
+      "evidence_kind": "HISTORICAL_REPLAY",
+      "task": {
+        "schema_version": "orchestra.task-profile.v1",
+        "task_id": "UIEF5_20260905_USAGE_EXHAUSTION",
+        "goal": "Determine whether the upstream responsive handoff is decision-sufficient for UIEF-5.",
+        "execution_mode": "AUDIT",
+        "risk_level": "MEDIUM",
+        "authority_domains": [
+          "UI_UX"
+        ],
+        "primary_owner": "cloak",
+        "dependency_depth": 0,
+        "independent_subtasks": 0,
+        "parallelizable": false,
+        "mutation_required": false,
+        "implementation_required": false,
+        "validation_required": false,
+        "transition_required": false,
+        "external_state_required": true,
+        "protected_action_required": false,
+        "protected_action_authorized": false,
+        "objective_verifier_available": true,
+        "critic_owner": null,
+        "critic_domain": null,
+        "reentry_specialists": [],
+        "current_source_identity": "75100c3ad0fd9a11c69f2b9b7c5172edd8841cd2",
+        "human_gate_requirements": []
+      },
+      "expected": {
+        "required_specialists": [
+          "cloak"
+        ],
+        "selected_patterns": [
+          "ROUTING",
+          "TOOL_REACT"
+        ],
+        "concurrency_mode": "SINGLE_OWNER",
+        "human_gate_required": false
+      }
+    },
+    {
+      "id": "bounded-implementation-validation",
+      "evidence_kind": "SYNTHETIC_DESIGN_REGRESSION",
+      "task": {
+        "schema_version": "orchestra.task-profile.v1",
+        "task_id": "bounded-implementation",
+        "goal": "Implement a bounded approved change and validate it.",
+        "execution_mode": "STANDARD",
+        "risk_level": "LOW",
+        "authority_domains": [
+          "IMPLEMENTATION"
+        ],
+        "primary_owner": "ponytail",
+        "dependency_depth": 0,
+        "independent_subtasks": 0,
+        "parallelizable": false,
+        "mutation_required": true,
+        "implementation_required": true,
+        "validation_required": true,
+        "transition_required": false,
+        "external_state_required": true,
+        "protected_action_required": false,
+        "protected_action_authorized": false,
+        "objective_verifier_available": true,
+        "critic_owner": null,
+        "critic_domain": null,
+        "reentry_specialists": [],
+        "current_source_identity": "fixture",
+        "human_gate_requirements": []
+      },
+      "expected": {
+        "required_specialists": [
+          "ponytail",
+          "overseer"
+        ],
+        "selected_patterns": [
+          "ROUTING",
+          "PLANNING",
+          "TOOL_REACT"
+        ],
+        "concurrency_mode": "SEQUENTIAL_MULTI_AGENT",
+        "human_gate_required": false
+      }
+    },
+    {
+      "id": "multi-domain-ui-architecture",
+      "evidence_kind": "SYNTHETIC_DESIGN_REGRESSION",
+      "task": {
+        "schema_version": "orchestra.task-profile.v1",
+        "task_id": "multi-domain",
+        "goal": "Translate an accepted UI design into architecture and implementation.",
+        "execution_mode": "GOVERNED",
+        "risk_level": "MEDIUM",
+        "authority_domains": [
+          "UI_UX",
+          "ARCHITECTURE"
+        ],
+        "primary_owner": "cloak",
+        "dependency_depth": 2,
+        "independent_subtasks": 2,
+        "parallelizable": true,
+        "mutation_required": true,
+        "implementation_required": true,
+        "validation_required": true,
+        "transition_required": false,
+        "external_state_required": true,
+        "protected_action_required": false,
+        "protected_action_authorized": false,
+        "objective_verifier_available": true,
+        "critic_owner": null,
+        "critic_domain": null,
+        "reentry_specialists": [],
+        "current_source_identity": "fixture",
+        "human_gate_requirements": []
+      },
+      "expected": {
+        "required_specialists": [
+          "the-tuner",
+          "cloak",
+          "clockwork",
+          "ponytail",
+          "overseer"
+        ],
+        "selected_patterns": [
+          "ROUTING",
+          "PLANNING",
+          "TOOL_REACT",
+          "MULTI_AGENT"
+        ],
+        "concurrency_mode": "SEQUENTIAL_MULTI_AGENT",
+        "human_gate_required": false
+      }
+    },
+    {
+      "id": "protected-action-not-authorized",
+      "evidence_kind": "SYNTHETIC_DESIGN_REGRESSION",
+      "task": {
+        "schema_version": "orchestra.task-profile.v1",
+        "task_id": "protected-action",
+        "goal": "Prepare implementation whose underlying protected action lacks authority.",
+        "execution_mode": "GOVERNED",
+        "risk_level": "HIGH",
+        "authority_domains": [
+          "IMPLEMENTATION"
+        ],
+        "primary_owner": "ponytail",
+        "dependency_depth": 0,
+        "independent_subtasks": 0,
+        "parallelizable": false,
+        "mutation_required": true,
+        "implementation_required": true,
+        "validation_required": false,
+        "transition_required": false,
+        "external_state_required": true,
+        "protected_action_required": true,
+        "protected_action_authorized": false,
+        "objective_verifier_available": true,
+        "critic_owner": null,
+        "critic_domain": null,
+        "reentry_specialists": [],
+        "current_source_identity": "fixture",
+        "human_gate_requirements": []
+      },
+      "expected": {
+        "required_specialists": [
+          "ponytail"
+        ],
+        "selected_patterns": [
+          "ROUTING",
+          "TOOL_REACT"
+        ],
+        "concurrency_mode": "SINGLE_OWNER",
+        "human_gate_required": true
+      }
+    },
+    {
+      "id": "contract-invalidation-reentry",
+      "evidence_kind": "SYNTHETIC_DESIGN_REGRESSION",
+      "task": {
+        "schema_version": "orchestra.task-profile.v1",
+        "task_id": "reentry",
+        "goal": "Re-enter invalidated security and architecture owners during implementation.",
+        "execution_mode": "GOVERNED",
+        "risk_level": "MEDIUM",
+        "authority_domains": [
+          "IMPLEMENTATION"
+        ],
+        "primary_owner": "ponytail",
+        "dependency_depth": 0,
+        "independent_subtasks": 0,
+        "parallelizable": false,
+        "mutation_required": true,
+        "implementation_required": true,
+        "validation_required": false,
+        "transition_required": false,
+        "external_state_required": true,
+        "protected_action_required": false,
+        "protected_action_authorized": false,
+        "objective_verifier_available": true,
+        "critic_owner": null,
+        "critic_domain": null,
+        "reentry_specialists": [
+          "cipher",
+          "clockwork"
+        ],
+        "current_source_identity": "fixture",
+        "human_gate_requirements": []
+      },
+      "expected": {
+        "required_specialists": [
+          "the-tuner",
+          "ponytail",
+          "cipher",
+          "clockwork"
+        ],
+        "selected_patterns": [
+          "ROUTING",
+          "PLANNING",
+          "TOOL_REACT",
+          "MULTI_AGENT"
+        ],
+        "concurrency_mode": "SEQUENTIAL_MULTI_AGENT",
+        "human_gate_required": false
+      }
+    }
+  ]
+}
