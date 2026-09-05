@@ -1,5 +1,16 @@
 # Changelog
 
+## Post-v1.8.0 UIEF-5 Clockwork UI engineering translation candidate
+
+- Introduces the versioned `orchestra.ui-engineering-translation.v1` contract and schema for translating accepted Cloak fidelity handoffs into component, state, responsive, composition, layer, data-flow, reuse, integration, and dependency boundaries.
+- Enforces `DESIGN_COMPLEXITY != ARCHITECTURAL_COMPLEXITY`: Clockwork may simplify engineering structure only when accepted visible-layer fidelity is unchanged.
+- Adds `skills/clockwork/UI_ENGINEERING_TRANSLATION_GUIDE.md`, a byte-identical Codex mirror, and the `UI_ENGINEERING_TRANSLATION` Clockwork output format without modifying the core Clockwork skill.
+- Materializes the existing UIEF-4 Clockwork boundary reference at `docs/architecture/UIEF_CLOCKWORK_ENGINEERING_BOUNDARY.md`.
+- Adds `UIEngineeringTranslation` runtime validation that binds the exact accepted `UIFidelityHandoff`, preserves every accepted macro-composition identity, and rejects visible-layer redesign, architecture-driven fidelity simplification, generic execution-mode contamination, or premature UIEF-6 initiation.
+- Preserves strict authority boundaries: Clockwork cannot authorize visible-layer redesign, Ponytail implementation, dependency adoption, release, deployment, or UIEF-6 integration.
+- Adds machine-contract validation, deterministic fixtures, source/Codex parity checks, and UIEF-5 boundary regressions in `tests/runtime/test_uief5_clockwork_engineering_translation.py`.
+- Records UIEF-5 in `README.json` as `IMPLEMENTATION_CANDIDATE`; no canonical completion or downstream phase authority is claimed.
+
 ## Post-v1.8.0 UIEF-4 Cloak implementation-bound fidelity handoff
 
 - Introduces library-neutral UI fidelity handoff machine contract schema `machine/schemas/ui-fidelity-handoff.v1.schema.json` under JSON Schema Draft 2020-12.
