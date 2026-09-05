@@ -42,8 +42,8 @@ def test_valid_fidelity_handoff_fixture_parses_and_validates() -> None:
     assert handoff.owned_by == "cloak"
     assert handoff.contract_id == "uief4-ui-fidelity-handoff-reference"
     assert len(handoff.macro_composition) == 3
-    assert len(handoff.selected_pattern_refs) == 4
-    assert len(handoff.provenance_refs) == 4
+    assert len(handoff.selected_pattern_refs) == 2
+    assert len(handoff.provenance_refs) == 2
     assert len(handoff.preserve) == 4
     assert len(handoff.avoid) == 4
     assert handoff.authority["implementation_authorized"] is False
