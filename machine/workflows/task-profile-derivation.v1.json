@@ -1,0 +1,203 @@
+{
+  "schema_version": "orchestra.task-profile-derivation.v1",
+  "owner": "conductor",
+  "default_execution_mode": "FAST",
+  "default_risk_level": "LOW",
+  "governed_domains": [
+    "LEGAL_COMPLIANCE",
+    "SECURITY",
+    "PERSISTENCE",
+    "ADVERSARIAL"
+  ],
+  "domain_rules": [
+    {
+      "domain": "LEGAL_COMPLIANCE",
+      "signals": [
+        "legal",
+        "licensing",
+        "license",
+        "copyright",
+        "regulatory",
+        "regulation",
+        "compliance"
+      ]
+    },
+    {
+      "domain": "SECURITY",
+      "signals": [
+        "security",
+        "secure",
+        "authentication",
+        "authorization",
+        "auth",
+        "rbac",
+        "permission",
+        "privacy",
+        "secret",
+        "credential"
+      ]
+    },
+    {
+      "domain": "PERSISTENCE",
+      "signals": [
+        "database",
+        "db",
+        "schema",
+        "migration",
+        "sql",
+        "persistence",
+        "index",
+        "constraint"
+      ]
+    },
+    {
+      "domain": "UI_UX",
+      "signals": [
+        "ui",
+        "ux",
+        "frontend",
+        "screen",
+        "layout",
+        "responsive",
+        "accessibility",
+        "visual",
+        "design",
+        "component"
+      ]
+    },
+    {
+      "domain": "ARCHITECTURE",
+      "signals": [
+        "architecture",
+        "architectural",
+        "service boundary",
+        "dependency direction",
+        "concurrency",
+        "state ownership",
+        "layering"
+      ]
+    },
+    {
+      "domain": "BUSINESS_SCOPE",
+      "signals": [
+        "requirements",
+        "acceptance criteria",
+        "scope",
+        "product intent",
+        "business rule"
+      ]
+    },
+    {
+      "domain": "DIAGRAM",
+      "signals": [
+        "diagram",
+        "uml",
+        "plantuml",
+        "sequence diagram",
+        "class diagram",
+        "object diagram"
+      ]
+    },
+    {
+      "domain": "DOCUMENTATION",
+      "signals": [
+        "documentation",
+        "docs",
+        "readme",
+        "changelog",
+        "write-up"
+      ]
+    },
+    {
+      "domain": "ADVERSARIAL",
+      "signals": [
+        "chaos test",
+        "chaos testing",
+        "fuzz",
+        "fuzzing",
+        "adversarial",
+        "resilience test",
+        "negative live execution"
+      ]
+    }
+  ],
+  "operation_signals": {
+    "mutation": [
+      "edit",
+      "update",
+      "modify",
+      "change",
+      "fix",
+      "implement",
+      "build",
+      "add",
+      "remove",
+      "delete",
+      "merge",
+      "deploy",
+      "release",
+      "publish",
+      "refactor"
+    ],
+    "implementation": [
+      "implement",
+      "code change",
+      "modify code",
+      "edit source",
+      "change source",
+      "fix bug",
+      "build feature",
+      "add feature",
+      "refactor code"
+    ],
+    "validation": [
+      "validate",
+      "validation",
+      "verify",
+      "run tests",
+      "test suite",
+      "quality assurance",
+      "qa"
+    ],
+    "transition": [
+      "merge",
+      "release",
+      "publish",
+      "deploy"
+    ],
+    "audit": [
+      "audit",
+      "review",
+      "assess",
+      "analyze"
+    ],
+    "destructive": [
+      "force push",
+      "rewrite history",
+      "drop table",
+      "truncate",
+      "chaos test",
+      "negative live execution",
+      "production"
+    ],
+    "protected_action": [
+      "merge",
+      "release",
+      "publish",
+      "deploy",
+      "production",
+      "force push",
+      "rewrite history",
+      "delete branch",
+      "drop table",
+      "truncate",
+      "chaos test",
+      "negative live execution"
+    ],
+    "parallel": [
+      "in parallel",
+      "parallelize",
+      "parallel execution"
+    ]
+  }
+}
