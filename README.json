@@ -2003,7 +2003,7 @@
         "machine/governance/execution-budget.v1.json",
         "machine/schemas/execution-budget.v1.schema.json",
         "orchestra_runtime/domain/orchestration/execution_efficiency.py",
-        "orchestra_runtime/execution_efficiency_contracts.py",
+        "orchestra_runtime/infrastructure/machine/execution_efficiency.py",
         "scripts/validate_machine_contracts.py"
       ],
       "human_sources": [
