@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Orchestra UI Engineering Translation Contract v1",
+  "description": "Clockwork engineering translation of an accepted Cloak fidelity handoff into maintainable component, state, responsive, composition, data-flow, integration, and dependency boundaries without visible-layer redesign.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_id",
+    "owned_by",
+    "source_handoff_ref",
+    "source_revision_or_contract_identity",
+    "component_boundaries",
+    "state_ownership",
+    "responsive_engineering",
+    "composition_ownership",
+    "layer_relationships",
+    "data_flow_boundaries",
+    "reusable_component_strategy",
+    "integration_boundaries",
+    "dependency_boundaries",
+    "preserve",
+    "unresolved_engineering_questions",
+    "authority"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orchestra.ui-engineering-translation.v1"
+    },
+    "contract_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "owned_by": {
+      "const": "clockwork"
+    },
+    "source_handoff_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_revision_or_contract_identity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "component_boundaries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object"
+      }
+    },
+    "state_ownership": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object"
+      }
+    },
+    "responsive_engineering": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object"
+      }
+    },
+    "composition_ownership": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object"
+      }
+    },
+    "layer_relationships": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "data_flow_boundaries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object"
+      }
+    },
+    "reusable_component_strategy": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object"
+      }
+    },
+    "integration_boundaries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object"
+      }
+    },
+    "dependency_boundaries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object"
+      }
+    },
+    "preserve": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "unresolved_engineering_questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "visible_layer_redesign_authorized",
+        "implementation_authorized",
+        "dependency_adoption_authorized",
+        "release_authorized"
+      ],
+      "properties": {
+        "visible_layer_redesign_authorized": {
+          "const": false
+        },
+        "implementation_authorized": {
+          "const": false
+        },
+        "dependency_adoption_authorized": {
+          "const": false
+        },
+        "release_authorized": {
+          "const": false
+        }
+      }
+    }
+  }
+}
