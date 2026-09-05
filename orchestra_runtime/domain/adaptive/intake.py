@@ -240,7 +240,8 @@ def derive_task_profile(
     validation_required = _operation_active(matches, "validation")
     transition_required = _operation_active(matches, "transition")
     audit_requested = _operation_active(matches, "audit")
-    destructive_requested = _operation_active(matches, "destructive")
+    production_transition = transition_required and _signal_position(text, "production") is not None
+    destructive_requested = _operation_active(matches, "destructive") or production_transition
     protected_action_required = _operation_active(matches, "protected_action")
     parallelizable = _operation_active(matches, "parallel")
 
@@ -268,7 +269,12 @@ def derive_task_profile(
         mode = "STANDARD"
     else:
         mode = str(policy["default_execution_mode"]).strip().upper()
-    mode = _stronger(mode, metadata.get("execution_mode"), MODE_ORDER, "execution_mode")
+    explicit_mode = metadata.get("agentic_execution_mode")
+    if explicit_mode is None:
+        risk_mode = metadata.get("risk_mode")
+        if isinstance(risk_mode, str) and risk_mode.strip().upper() in MODE_ORDER:
+            explicit_mode = risk_mode
+    mode = _stronger(mode, explicit_mode, MODE_ORDER, "agentic_execution_mode")
 
     if destructive_requested:
         risk = "CRITICAL"
@@ -278,7 +284,7 @@ def derive_task_profile(
         risk = "MEDIUM"
     else:
         risk = str(policy["default_risk_level"]).strip().upper()
-    risk = _stronger(risk, metadata.get("risk_level"), RISK_ORDER, "risk_level")
+    risk = _stronger(risk, metadata.get("agentic_risk_level"), RISK_ORDER, "agentic_risk_level")
 
     explicit_owner = metadata.get("agentic_primary_owner")
     if explicit_owner is None:
@@ -394,10 +400,12 @@ def derive_task_profile(
         reasons.append("UNKNOWN_DOMAIN_FAILS_TO_CONDUCTOR_ROUTING")
     if explicit_domains:
         reasons.append("EXPLICIT_AUTHORITY_DOMAINS_PRESERVED")
-    if metadata.get("execution_mode") is not None:
+    if explicit_mode is not None:
         reasons.append("EXPLICIT_EXECUTION_MODE_MAY_ESCALATE_ONLY")
-    if metadata.get("risk_level") is not None:
+    if metadata.get("agentic_risk_level") is not None:
         reasons.append("EXPLICIT_RISK_LEVEL_MAY_ESCALATE_ONLY")
+    if production_transition:
+        reasons.append("PRODUCTION_TRANSITION_CLASSIFIED_DESTRUCTIVE")
 
     return TaskProfileDerivation(
         task_profile=profile,
