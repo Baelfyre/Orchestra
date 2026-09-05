@@ -615,6 +615,32 @@
       "authority_expansion": false,
       "authority_note": "UIEF-4 binds accepted visible design intent and fidelity requirements into an implementation-consumable handoff. It does not transfer design authority to Ponytail, authorize implementation, architecture translation, release, deployment, or policy activation."
     },
+    "uief5_clockwork_engineering_translation": {
+      "status": "IMPLEMENTATION_CANDIDATE",
+      "purpose": "Clockwork translation of accepted UI fidelity handoffs into maintainable component, state, responsive, composition, layer, data-flow, reuse, integration, and dependency boundaries without visible-layer redesign.",
+      "machine_sources": [
+        "machine/schemas/ui-engineering-translation.v1.schema.json",
+        "machine/ui/ui-engineering-translation.v1.json",
+        "orchestra_runtime/domain/orchestration/ui_fidelity.py",
+        "orchestra_runtime/machine_contracts.py",
+        "skills/clockwork/OUTPUT_FORMATS.md",
+        "adapters/codex/skills/clockwork/OUTPUT_FORMATS.md"
+      ],
+      "human_sources": [
+        "skills/clockwork/UI_ENGINEERING_TRANSLATION_GUIDE.md",
+        "adapters/codex/skills/clockwork/UI_ENGINEERING_TRANSLATION_GUIDE.md",
+        "docs/architecture/UIEF_CLOCKWORK_ENGINEERING_BOUNDARY.md",
+        "docs/project/UI_EXECUTION_FIDELITY_PLAN.md"
+      ],
+      "validation_surface": "tests/runtime/test_uief5_clockwork_engineering_translation.py",
+      "runtime_integration": true,
+      "source_handoff": "orchestra.ui-fidelity-handoff.v1",
+      "visible_layer_redesign_authorized": false,
+      "implementation_authorized": false,
+      "dependency_adoption_authorized": false,
+      "release_authorized": false,
+      "authority_note": "UIEF-5 translates accepted visible-layer complexity into engineering boundaries only. Clockwork may simplify engineering structure when fidelity is unchanged, but cannot redesign Cloak-owned visible intent, authorize implementation or dependency adoption, initiate UIEF-6, release, deployment, or policy activation."
+    },
     "governed_ui_optional_adapter_boundaries_uix6": {
       "status": "IMPLEMENTED_CANONICAL_NO_ADOPTION",
       "purpose": "Library-neutral UIX-6 audit and boundary contract for optional Figma, Code Connect, Storybook, Playwright, axe, and project-native design-token evidence capabilities.",
@@ -2427,6 +2453,8 @@
     "conductor_architecture_governance_intake_guide": "skills/conductor/ARCHITECTURE_GOVERNANCE_INTAKE_GUIDE.md",
     "ponytail_frontend_fidelity_execution_guide": "skills/ponytail/FRONTEND_FIDELITY_EXECUTION_GUIDE.md",
     "cloak_ui_fidelity_handoff_guide": "skills/cloak/UI_FIDELITY_HANDOFF_GUIDE.md",
+    "clockwork_ui_engineering_translation_guide": "skills/clockwork/UI_ENGINEERING_TRANSLATION_GUIDE.md",
+    "uief_clockwork_engineering_boundary": "docs/architecture/UIEF_CLOCKWORK_ENGINEERING_BOUNDARY.md",
     "ui_execution_fidelity_plan": "docs/project/UI_EXECUTION_FIDELITY_PLAN.md"
   },
   "representation_policy": {
