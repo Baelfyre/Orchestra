@@ -5,10 +5,8 @@ from typing import Mapping, Sequence
 
 from .execution_efficiency import (
     DecisiveStopSignal,
-    EVIDENCE_TIERS,
     SEARCH_ESCALATION,
     VALIDATION_ESCALATION,
-    require_evidence_tier,
     require_search_escalation,
     require_validation_escalation,
 )
@@ -94,7 +92,7 @@ def build_owner_first_plan(
     plan = SpecialistInvocationPlan(
         owner_specialist=_text(owner_specialist, "owner_specialist"),
         supporting_specialists=tuple(supporting_specialists),
-        retry_counts=tuple((str(key), value) for key, value in (retry_counts or {}).items()),
+        retry_counts=tuple(sorted((str(key), value) for key, value in (retry_counts or {}).items())),
         expansion_reason=expansion_reason,
         expansion_evidence_refs=tuple(expansion_evidence_refs),
     )
@@ -197,11 +195,14 @@ class ValidationRequest:
         completed = tuple(self.completed_stages)
         if any(item not in VALIDATION_ESCALATION for item in completed):
             raise ValueError("completed_stages contains unknown validation stage")
+        if len(set(completed)) != len(completed):
+            raise ValueError("completed_stages values must be unique")
         target_index = VALIDATION_ESCALATION.index(self.target_stage)
         required = VALIDATION_ESCALATION[:target_index]
-        missing = [item for item in required if item not in completed]
-        if missing:
-            raise ValueError("validation stage cannot skip prerequisites: " + ", ".join(missing))
+        if completed != required:
+            raise ValueError(
+                "validation stage requires exact ordered prerequisites: " + ", ".join(required)
+            )
         if self.target_stage in {"REPOSITORY_QUALIFICATION", "PROTECTED_GATES"} and not self.candidate_stable:
             raise ValueError("expensive validation requires a stable candidate")
         if target_index > 0:
@@ -262,16 +263,21 @@ class PhaseContextPack:
 
     def validate(self) -> None:
         _text(self.phase_id, "phase_id")
-        _text(self.owner_specialist, "owner_specialist")
+        owner = _text(self.owner_specialist, "owner_specialist")
         _text(self.source_revision, "source_revision")
         if not self.evidence:
             raise ValueError("phase context pack requires evidence")
         refs: list[str] = []
+        owner_evidence = False
         for item in self.evidence:
             item.validate()
             if item.ref in refs:
                 raise ValueError("phase context evidence refs must be unique")
             refs.append(item.ref)
+            if owner in item.required_for or "all" in item.required_for:
+                owner_evidence = True
+        if not owner_evidence:
+            raise ValueError("phase context pack must include evidence for its owner")
         excluded = _unique_text(self.excluded_refs, "excluded_ref")
         if set(refs) & set(excluded):
             raise ValueError("phase context evidence cannot also be excluded")
