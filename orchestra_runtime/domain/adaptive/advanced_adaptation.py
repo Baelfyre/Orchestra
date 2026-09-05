@@ -126,12 +126,14 @@ def evaluate_advanced_adaptation_admission(
     if b5_promotion.get("a5_execution_effective_promotion") != "AUTHORIZED_CANDIDATE":
         a5_blockers.append("EXISTING_PROMOTION_DECISION_IS_NOT_AUTHORIZED_CANDIDATE")
 
-    a5_authority = _mapping(a5.get("authority"), "a5_record.authority")
-    if a5_authority.get("execution_effective_promotion") not in {
-        "DEFERRED_NOT_PROMOTED",
-        "NOT_PROMOTED",
-    }:
-        a5_blockers.append("A5_SHADOW_AUTHORITY_STATE_UNEXPECTED")
+    a5_exit = _mapping(a5.get("a5_exit_evaluation"), "a5_record.a5_exit_evaluation")
+    a5_boundary = _mapping(a5.get("decision_boundary"), "a5_record.decision_boundary")
+    if a5_exit.get("execution_effective_promotion") != "DEFERRED_NOT_PROMOTED":
+        a5_blockers.append("A5_SHADOW_PROMOTION_STATE_UNEXPECTED")
+    if a5_boundary.get("topology_effective") is not False:
+        a5_blockers.append("A5_SHADOW_TOPOLOGY_EFFECTIVE_STATE_UNEXPECTED")
+    if a5_boundary.get("runtime_executor_attachment") is not False:
+        a5_blockers.append("A5_RUNTIME_EXECUTOR_ATTACHMENT_UNEXPECTED")
 
     a5_decision = PromotionCandidateDecision(
         candidate_id=CANDIDATE_A5,
