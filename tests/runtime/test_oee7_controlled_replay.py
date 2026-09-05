@@ -46,7 +46,7 @@ def test_oee7_stops_before_unrelated_provenance_search() -> None:
 
 def test_oee7_fails_closed_when_the_expected_blocker_disappears(tmp_path: Path) -> None:
     handoff = json.loads(
-        (ROOT / "machine/ui/ui-fidelity-handoff.v1.json").read_text(encoding="utf-8")
+        (ROOT / "tests/fixtures/oee/uief5-responsive-contradiction-20260905.json").read_text(encoding="utf-8")
     )
     baseline = json.loads(
         (ROOT / "docs/governance/oee_0_execution_cost_baseline.v1.json").read_text(
@@ -60,7 +60,7 @@ def test_oee7_fails_closed_when_the_expected_blocker_disappears(tmp_path: Path) 
                 "Horizontal split-pane on viewports >= 1024px; drawer navigation below 1024px."
             )
 
-    handoff_path = tmp_path / "machine/ui/ui-fidelity-handoff.v1.json"
+    handoff_path = tmp_path / "tests/fixtures/oee/uief5-responsive-contradiction-20260905.json"
     handoff_path.parent.mkdir(parents=True)
     handoff_path.write_text(json.dumps(handoff), encoding="utf-8")
 
