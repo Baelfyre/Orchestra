@@ -599,4 +599,3 @@ def test_oee6_list_fields_reject_empty_values() -> None:
             required_refs=(_ref("one"),),
             allowed_actions=("",),
         ).validate()
-
