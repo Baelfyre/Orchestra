@@ -90,7 +90,10 @@
     "orchestra_runtime/domain/adaptive/topology_validator.py",
     "orchestra_runtime/domain/adaptive/agentic_workflow.py",
     "orchestra_runtime/application/use_cases/agentic_workflow.py",
-    "orchestra_runtime/infrastructure/machine/agentic_workflow.py"
+    "orchestra_runtime/infrastructure/machine/agentic_workflow.py",
+    "orchestra_runtime/services.py",
+    "skills/conductor/SKILL.md",
+    "adapters/codex/skills/conductor/REFERENCE_CONTEXT.md"
   ],
   "validation_surfaces": [
     "tests/runtime/test_agentic_workflow.py",
@@ -110,5 +113,11 @@
     "local_runtime_tests": "NOT_RUN_CONNECTOR_ONLY_ENVIRONMENT",
     "github_ci": "PENDING_SOURCE_PR",
     "structural_readback": "PENDING_FINAL_RECONCILIATION"
+  },
+  "efficiency": {
+    "conductor_prompt_load_strategy": "COMPACT_POINTER_WITH_PROGRESSIVE_DISCLOSURE",
+    "conductor_skill_estimated_tokens": 1168,
+    "hard_prompt_load_ceiling_estimated_tokens": 1182,
+    "prompt_load_budget_weakened": false
   }
 }
