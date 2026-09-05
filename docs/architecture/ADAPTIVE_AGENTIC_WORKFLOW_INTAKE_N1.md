@@ -120,3 +120,37 @@ N1-N3 are deterministic and evidence-generating.
 N4 may adjust signal rules only after controlled or real workflow evidence demonstrates over-routing, under-routing, unnecessary specialist activation, false protected-action escalation, or missed authority domains.
 
 N5 may consider A5 ranking signals, learned recommendations, or concurrency changes only after separate empirical benefit evidence. No such promotion is part of N1-N3.
+
+
+## Higher calibration corpus
+
+The N3/N4 calibration corpus now contains 18 RouterService-level scenarios covering:
+
+- single-owner UI review;
+- security audit;
+- persistence implementation and validation;
+- architecture refactor;
+- documentation mutation;
+- diagram creation;
+- business-scope review;
+- legal/compliance review;
+- ambiguous fallback;
+- parallel UI/security analysis;
+- protected merge;
+- production deployment;
+- force-push/history rewrite;
+- gated Dagger chaos work;
+- single-domain UI implementation;
+- persistence/security cross-domain implementation;
+- false-positive protection for the generic word `production`;
+- cross-domain security/UI review.
+
+The calibration invariant is:
+
+```text
+TERMINAL_EXECUTION_ROLE != DISTINCT_DOMAIN_DECISION_AUTHORITY
+```
+
+Ponytail, Overseer, and Arbiter can be required in a topology without causing The Tuner or Multi-Agent activation by themselves. The Tuner and Multi-Agent semantics are justified by multiple distinct domain-decision owners, explicit re-entry, or independent subtask evidence.
+
+This prevents a simple single-domain implementation from being over-routed merely because implementation and validation stages exist.
