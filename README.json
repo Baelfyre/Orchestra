@@ -2047,6 +2047,22 @@
       "uief_resume_authorized": false,
       "authority_expansion": false,
       "authority_note": "The candidate constrains orchestration decisions without changing domain ownership or protected-action authority. UIEF remains paused because the UIEF-4 responsive contradiction is still unresolved."
+    },
+    "adaptive_agentic_workflow_advanced_adaptation_n6": {
+      "status": "IMPLEMENTATION_CANDIDATE_NO_PROMOTION",
+      "purpose": "Recompute evidence-gated admission for A5 execution-effective topology selection, learned routing recommendations, and OEE concurrency widening without attaching any candidate to execution.",
+      "machine_sources": [
+        "machine/adaptive/advanced-adaptation-admission.v1.json",
+        "machine/schemas/advanced-adaptation-admission.v1.schema.json",
+        "machine/benchmarking/b2-5-confirmatory-reconciliation.v1.json",
+        "machine/benchmarking/b5-final-evidence-synthesis.v1.json"
+      ],
+      "runtime_surface": "orchestra_runtime/domain/adaptive/advanced_adaptation.py",
+      "validation_surface": "tests/runtime/test_advanced_adaptation_admission.py",
+      "current_disposition": "COMPLETE_NO_PROMOTION_EVIDENCE_INSUFFICIENT",
+      "promotion_effective": false,
+      "oee_max_parallel_specialists_preserved": 1,
+      "authority_note": "N6 classifies evidence only. Even a future eligible candidate remains non-effective until a separate governed transition. N6 cannot attach to Conductor dispatch or RuntimeExecutor, expand specialist authority, widen OEE concurrency, release, deploy, activate policy, or resume UIEF."
     }
   },
   "machine_scan_order": [
@@ -2268,7 +2284,9 @@
     "agentic_workflow_implementation": "machine/adaptive/awf-agentic-workflow-implementation.v1.json",
     "task_profile_derivation_schema": "machine/schemas/task-profile-derivation.v1.schema.json",
     "task_profile_derivation_policy": "machine/workflows/task-profile-derivation.v1.json",
-    "agentic_selection_trace_schema": "machine/schemas/agentic-selection-trace.v1.schema.json"
+    "agentic_selection_trace_schema": "machine/schemas/agentic-selection-trace.v1.schema.json",
+    "advanced_adaptation_admission_schema": "machine/schemas/advanced-adaptation-admission.v1.schema.json",
+    "advanced_adaptation_admission": "machine/adaptive/advanced-adaptation-admission.v1.json"
   },
   "specialists": {
     "count": 14,
@@ -2538,9 +2556,10 @@
     "cloak_ui_reference_corpus_cuir4": "CUIR_4_CANONICAL_MERGED_VERIFIED",
     "cloak_ui_reference_corpus_cuir5": "CUIR_5_CANONICAL_CONTROLLED_EVALUATION_VERIFIED",
     "cloak_ui_reference_corpus_cuir6": "CUIR_6_CANONICAL_ADOPT_OPTIONAL_CLOSEOUT_VERIFIED",
-    "adaptive_agentic_workflow_awf": "AWF_N1_N4_COMPLETE_CANONICAL_VERIFIED",
+    "adaptive_agentic_workflow_awf": "AWF_N1_N5_COMPLETE_CANONICAL_VERIFIED",
     "adaptive_agentic_workflow_intake_n1_n3": "IMPLEMENTATION_CANDIDATE",
-    "adaptive_agentic_workflow_semantic_robustness_n5": "IMPLEMENTATION_CANDIDATE"
+    "adaptive_agentic_workflow_semantic_robustness_n5": "IMPLEMENTATION_CANDIDATE",
+    "adaptive_agentic_workflow_advanced_adaptation_n6": "IMPLEMENTATION_CANDIDATE_NO_PROMOTION"
   },
   "ai_review_guidance": {
     "preferred_entrypoint": "README.json",
@@ -2657,6 +2676,10 @@
     "treat_awf_semantic_suppression_as_clause_local": true,
     "do_not_apply_representation_only_suppression_to_independent_execution_clauses": true,
     "later_same_signal_directive_supersedes_earlier_same_signal_directive": true,
-    "conditional_protected_actions_remain_protected_until_condition_and_authority_are_verified": true
+    "conditional_protected_actions_remain_protected_until_condition_and_authority_are_verified": true,
+    "treat_n6_as_admission_not_execution_control": true,
+    "do_not_promote_a5_when_confirmatory_benefit_is_not_established": true,
+    "do_not_promote_learned_routing_without_exact_taskprofile_topology_bound_benefit": true,
+    "do_not_widen_oee_concurrency_without_confirmatory_parallel_benefit_and_separate_policy_authorization": true
   }
 }
