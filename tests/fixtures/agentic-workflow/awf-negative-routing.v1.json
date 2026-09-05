@@ -1,0 +1,441 @@
+{
+  "schema_version": "orchestra.awf-negative-routing.v1",
+  "purpose": "Adversarial negative-routing corpus that asserts forbidden specialist, pattern, mutation, validation, transition, and protected-action activations.",
+  "cases": [
+    {
+      "id": "N01_NEGATED_DEPLOY_MERGE_DOC_REVIEW",
+      "prompt": "Do not deploy or merge anything. Just review the README for clarity.",
+      "expect": {
+        "protected_action_required": false,
+        "mutation_required": false,
+        "human_gate_required": false,
+        "primary_owner": "scribe"
+      },
+      "avoid": {
+        "authority_domains": [
+          "TRANSITION"
+        ],
+        "specialists": [
+          "arbiter",
+          "ponytail",
+          "the-tuner"
+        ],
+        "patterns": [
+          "MULTI_AGENT"
+        ]
+      }
+    },
+    {
+      "id": "N02_DOCUMENT_PROHIBITED_FORCE_PUSH",
+      "prompt": "Update documentation to explain why force push and rewrite history are prohibited.",
+      "expect": {
+        "protected_action_required": false,
+        "human_gate_required": false,
+        "primary_owner": "scribe"
+      },
+      "avoid": {
+        "specialists": [
+          "arbiter",
+          "dagger",
+          "the-tuner"
+        ],
+        "patterns": [
+          "MULTI_AGENT"
+        ]
+      }
+    },
+    {
+      "id": "N03_HYPOTHETICAL_PRODUCTION_DEPLOY",
+      "prompt": "What would happen if we deploy this change to production?",
+      "expect": {
+        "protected_action_required": false,
+        "mutation_required": false,
+        "human_gate_required": false,
+        "primary_owner": "conductor"
+      },
+      "avoid": {
+        "authority_domains": [
+          "TRANSITION"
+        ],
+        "specialists": [
+          "arbiter",
+          "ponytail",
+          "dagger"
+        ]
+      }
+    },
+    {
+      "id": "N04_REMOVE_DEPLOY_WORD_FROM_README",
+      "prompt": "Remove the word deploy from the README only.",
+      "expect": {
+        "protected_action_required": false,
+        "human_gate_required": false,
+        "primary_owner": "scribe"
+      },
+      "avoid": {
+        "authority_domains": [
+          "TRANSITION"
+        ],
+        "specialists": [
+          "arbiter",
+          "the-tuner"
+        ],
+        "patterns": [
+          "MULTI_AGENT"
+        ]
+      }
+    },
+    {
+      "id": "N05_DOC_AUTHORIZATION_TERM_ONLY",
+      "prompt": "Update documentation only: rename the term authorization to access control.",
+      "expect": {
+        "protected_action_required": false,
+        "human_gate_required": false,
+        "primary_owner": "scribe"
+      },
+      "avoid": {
+        "authority_domains": [
+          "SECURITY"
+        ],
+        "specialists": [
+          "cipher",
+          "the-tuner"
+        ],
+        "patterns": [
+          "MULTI_AGENT"
+        ]
+      }
+    },
+    {
+      "id": "N06_SECURITY_MARKETING_COPY",
+      "prompt": "Review the README sentence 'secure and private by design' for wording only.",
+      "expect": {
+        "mutation_required": false,
+        "human_gate_required": false,
+        "primary_owner": "scribe"
+      },
+      "avoid": {
+        "authority_domains": [
+          "SECURITY",
+          "UI_UX"
+        ],
+        "specialists": [
+          "cipher",
+          "cloak",
+          "the-tuner"
+        ],
+        "patterns": [
+          "MULTI_AGENT"
+        ]
+      }
+    },
+    {
+      "id": "N07_DATABASE_TERM_IN_DOCUMENTATION_ONLY",
+      "prompt": "Update docs only to describe the database migration history without changing the database.",
+      "expect": {
+        "protected_action_required": false,
+        "human_gate_required": false,
+        "primary_owner": "scribe"
+      },
+      "avoid": {
+        "authority_domains": [
+          "PERSISTENCE"
+        ],
+        "specialists": [
+          "chronicler",
+          "the-tuner",
+          "ponytail"
+        ],
+        "patterns": [
+          "MULTI_AGENT"
+        ]
+      }
+    },
+    {
+      "id": "N08_UI_TERM_IN_ARCHITECTURE_DOC",
+      "prompt": "Document the existing frontend architecture. Do not redesign the UI or change code.",
+      "expect": {
+        "protected_action_required": false,
+        "mutation_required": true,
+        "human_gate_required": false,
+        "primary_owner": "scribe"
+      },
+      "avoid": {
+        "authority_domains": [
+          "UI_UX",
+          "IMPLEMENTATION"
+        ],
+        "specialists": [
+          "cloak",
+          "ponytail",
+          "the-tuner"
+        ],
+        "patterns": [
+          "MULTI_AGENT"
+        ]
+      }
+    },
+    {
+      "id": "N09_EXAMPLE_CHAOS_TEST_TEXT",
+      "prompt": "Add an example sentence to the docs: 'Run a chaos test in staging.' Do not execute it.",
+      "expect": {
+        "protected_action_required": false,
+        "human_gate_required": false,
+        "primary_owner": "scribe"
+      },
+      "avoid": {
+        "authority_domains": [
+          "ADVERSARIAL"
+        ],
+        "specialists": [
+          "dagger",
+          "the-tuner"
+        ],
+        "patterns": [
+          "MULTI_AGENT"
+        ]
+      }
+    },
+    {
+      "id": "N10_QUOTED_DROP_TABLE",
+      "prompt": "Explain in the README why 'drop table' is dangerous.",
+      "expect": {
+        "protected_action_required": false,
+        "human_gate_required": false,
+        "primary_owner": "scribe"
+      },
+      "avoid": {
+        "authority_domains": [
+          "PERSISTENCE"
+        ],
+        "specialists": [
+          "chronicler",
+          "dagger",
+          "arbiter"
+        ],
+        "patterns": [
+          "MULTI_AGENT"
+        ]
+      }
+    },
+    {
+      "id": "N11_RELEASE_NOTES_NOT_RELEASE",
+      "prompt": "Write release notes for the upcoming version. Do not publish or release anything.",
+      "expect": {
+        "protected_action_required": false,
+        "human_gate_required": false,
+        "primary_owner": "scribe"
+      },
+      "avoid": {
+        "authority_domains": [
+          "TRANSITION"
+        ],
+        "specialists": [
+          "arbiter",
+          "the-tuner"
+        ],
+        "patterns": [
+          "MULTI_AGENT"
+        ]
+      }
+    },
+    {
+      "id": "N12_REVIEW_DEPLOYMENT_DOCS_ONLY",
+      "prompt": "Review deployment documentation only. No deployment or production changes.",
+      "expect": {
+        "protected_action_required": false,
+        "mutation_required": false,
+        "human_gate_required": false,
+        "primary_owner": "scribe"
+      },
+      "avoid": {
+        "authority_domains": [
+          "TRANSITION"
+        ],
+        "specialists": [
+          "arbiter",
+          "ponytail",
+          "the-tuner"
+        ],
+        "patterns": [
+          "MULTI_AGENT"
+        ]
+      }
+    },
+    {
+      "id": "N13_SECURITY_INCIDENT_SUMMARY_ONLY",
+      "prompt": "Summarize the security incident report without assessing controls or changing anything.",
+      "expect": {
+        "mutation_required": false,
+        "human_gate_required": false,
+        "primary_owner": "scribe"
+      },
+      "avoid": {
+        "authority_domains": [
+          "SECURITY"
+        ],
+        "specialists": [
+          "cipher",
+          "the-tuner"
+        ],
+        "patterns": [
+          "MULTI_AGENT"
+        ]
+      }
+    },
+    {
+      "id": "N14_CODE_WORD_FIX_IN_DOCS",
+      "prompt": "Fix the typo 'authentication' in the documentation only.",
+      "expect": {
+        "protected_action_required": false,
+        "human_gate_required": false,
+        "primary_owner": "scribe"
+      },
+      "avoid": {
+        "authority_domains": [
+          "SECURITY",
+          "IMPLEMENTATION"
+        ],
+        "specialists": [
+          "cipher",
+          "ponytail",
+          "the-tuner"
+        ],
+        "patterns": [
+          "MULTI_AGENT"
+        ]
+      }
+    },
+    {
+      "id": "N15_ARCHITECTURE_WORD_IN_CHANGELOG",
+      "prompt": "Update the changelog entry that mentions architecture. Do not refactor anything.",
+      "expect": {
+        "protected_action_required": false,
+        "human_gate_required": false,
+        "primary_owner": "scribe"
+      },
+      "avoid": {
+        "authority_domains": [
+          "ARCHITECTURE",
+          "IMPLEMENTATION"
+        ],
+        "specialists": [
+          "clockwork",
+          "ponytail",
+          "the-tuner"
+        ],
+        "patterns": [
+          "MULTI_AGENT"
+        ]
+      }
+    },
+    {
+      "id": "N16_PRODUCTION_ROADMAP_FALSE_POSITIVE",
+      "prompt": "Review the production roadmap documentation.",
+      "expect": {
+        "protected_action_required": false,
+        "human_gate_required": false,
+        "primary_owner": "scribe"
+      },
+      "avoid": {
+        "authority_domains": [
+          "TRANSITION"
+        ],
+        "specialists": [
+          "arbiter",
+          "ponytail",
+          "dagger"
+        ]
+      }
+    },
+    {
+      "id": "N17_DO_NOT_RUN_TESTS",
+      "prompt": "Do not run tests. Review the test suite documentation for clarity.",
+      "expect": {
+        "validation_required": false,
+        "mutation_required": false,
+        "human_gate_required": false,
+        "primary_owner": "scribe"
+      },
+      "avoid": {
+        "authority_domains": [
+          "VALIDATION"
+        ],
+        "specialists": [
+          "overseer",
+          "ponytail",
+          "the-tuner"
+        ]
+      }
+    },
+    {
+      "id": "N18_PERMISSION_TEXT_LABEL",
+      "prompt": "Change the documentation label from permission to access level. Documentation only.",
+      "expect": {
+        "protected_action_required": false,
+        "human_gate_required": false,
+        "primary_owner": "scribe"
+      },
+      "avoid": {
+        "authority_domains": [
+          "SECURITY"
+        ],
+        "specialists": [
+          "cipher",
+          "the-tuner"
+        ],
+        "patterns": [
+          "MULTI_AGENT"
+        ]
+      }
+    },
+    {
+      "id": "N19_DATABASE_SCREENSHOT_CAPTION",
+      "prompt": "Update the screenshot caption that says database schema. Do not change the database or UI.",
+      "expect": {
+        "protected_action_required": false,
+        "human_gate_required": false,
+        "primary_owner": "conductor"
+      },
+      "avoid": {
+        "authority_domains": [
+          "PERSISTENCE",
+          "UI_UX",
+          "IMPLEMENTATION"
+        ],
+        "specialists": [
+          "chronicler",
+          "cloak",
+          "ponytail",
+          "the-tuner"
+        ],
+        "patterns": [
+          "MULTI_AGENT"
+        ]
+      }
+    },
+    {
+      "id": "N20_PLAN_DEPLOYMENT_NOT_EXECUTE",
+      "prompt": "Create a plan for a future deployment, but do not deploy, merge, release, or publish anything.",
+      "expect": {
+        "protected_action_required": false,
+        "mutation_required": false,
+        "human_gate_required": false,
+        "primary_owner": "conductor"
+      },
+      "avoid": {
+        "authority_domains": [
+          "TRANSITION"
+        ],
+        "specialists": [
+          "arbiter",
+          "ponytail",
+          "dagger"
+        ],
+        "patterns": [
+          "MULTI_AGENT"
+        ]
+      }
+    }
+  ]
+}
