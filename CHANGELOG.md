@@ -7,7 +7,7 @@
 - Adds automatic Conductor TaskProfile derivation when no explicit structured profile is supplied; explicit valid structured profiles remain supported.
 - Adds machine-readable selection traces containing matched signals, derived reason codes, selected/rejected patterns, selected specialists, and underlying human-gate reasons without exposing private model reasoning.
 - Keeps unknown domains fail-closed at Conductor, keeps protected-action authorization explicit, and preserves OEE `max_parallel_specialists = 1`.
-- Adds three controlled runtime scenarios for single-owner UI review, multi-domain implementation, and protected production deployment.
+- Expands controlled calibration to 18 positive RouterService scenarios and adds a 20-case adversarial negative-routing corpus covering negation, quoted/example content, hypothetical actions, representation-only work, and protected-action false-positive suppression.
 - Does not widen specialist authority, change OEE concurrency, promote A5, resume UIEF, release, deploy, or activate policy.
 
 ## Post-v1.8.0 Adaptive Agentic Workflow AWF-I0 through AWF-I10 candidate
