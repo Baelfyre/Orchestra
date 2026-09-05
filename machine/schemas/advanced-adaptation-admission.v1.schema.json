@@ -1,0 +1,116 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/machine/schemas/advanced-adaptation-admission.v1.schema.json",
+  "title": "Orchestra Advanced Adaptation Admission",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "overall_disposition",
+    "promotion_effective",
+    "requires_separate_governed_transition",
+    "candidates",
+    "invariants"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "orchestra.advanced-adaptation-admission.v1"
+    },
+    "overall_disposition": {
+      "enum": [
+        "COMPLETE_NO_PROMOTION_EVIDENCE_INSUFFICIENT",
+        "COMPLETE_PROMOTION_CANDIDATE_REQUIRES_SEPARATE_GOVERNED_TRANSITION"
+      ]
+    },
+    "promotion_effective": {
+      "const": false
+    },
+    "requires_separate_governed_transition": {
+      "type": "boolean"
+    },
+    "candidates": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "candidate_id",
+          "eligible",
+          "disposition",
+          "blockers",
+          "evidence_refs"
+        ],
+        "properties": {
+          "candidate_id": {
+            "enum": [
+              "A5_EXECUTION_EFFECTIVE_TOPOLOGY_SELECTION",
+              "LEARNED_ROUTING_RECOMMENDATIONS",
+              "OEE_CONCURRENCY_WIDENING"
+            ]
+          },
+          "eligible": {
+            "type": "boolean"
+          },
+          "disposition": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "blockers": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            }
+          },
+          "evidence_refs": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            }
+          }
+        }
+      }
+    },
+    "invariants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "runtime_executor_attachment",
+        "conductor_dispatch_mutation",
+        "specialist_authority_expansion",
+        "learned_routing_controls_execution",
+        "a5_ranking_controls_execution",
+        "oee_concurrency_widened"
+      ],
+      "properties": {
+        "runtime_executor_attachment": {
+          "const": false
+        },
+        "conductor_dispatch_mutation": {
+          "const": false
+        },
+        "specialist_authority_expansion": {
+          "const": false
+        },
+        "learned_routing_controls_execution": {
+          "const": false
+        },
+        "a5_ranking_controls_execution": {
+          "const": false
+        },
+        "oee_concurrency_widened": {
+          "const": false
+        }
+      }
+    }
+  }
+}
