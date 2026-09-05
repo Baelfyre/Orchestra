@@ -1,0 +1,97 @@
+{
+  "schema_version": "orchestra.execution-efficiency-closeout.v1",
+  "record_id": "oee8-integration-closeout-20260905",
+  "program_id": "ORCHESTRA_EXECUTION_EFFICIENCY_V1",
+  "status": "OEE_PROGRAM_COMPLETE_CANDIDATE",
+  "canonical_baseline": "1927d3f0672198ddc67cc32624d38c2b14c434e8",
+  "phases": [
+    {
+      "phase": "OEE-0",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
+      "evidence": [
+        "machine/governance/execution-budget.v1.json",
+        "docs/governance/oee_0_execution_cost_baseline.v1.json"
+      ]
+    },
+    {
+      "phase": "OEE-1",
+      "status": "IMPLEMENTED_CANDIDATE",
+      "evidence": [
+        "orchestra_runtime/domain/orchestration/execution_efficiency_runtime.py#SpecialistInvocationPlan",
+        "skills/conductor/EXECUTION_EFFICIENCY_GUIDE.md#oee-1-owner-first-specialist-budget"
+      ]
+    },
+    {
+      "phase": "OEE-2",
+      "status": "IMPLEMENTED_CANDIDATE",
+      "evidence": [
+        "orchestra_runtime/domain/orchestration/execution_efficiency_runtime.py#evaluate_decisive_progression",
+        "skills/conductor/EXECUTION_EFFICIENCY_GUIDE.md#oee-2-earliest-decisive-evidence"
+      ]
+    },
+    {
+      "phase": "OEE-3",
+      "status": "IMPLEMENTED_CANDIDATE",
+      "evidence": [
+        "orchestra_runtime/domain/orchestration/execution_efficiency_runtime.py#EvidenceCacheEntry",
+        "orchestra_runtime/domain/orchestration/execution_efficiency_runtime.py#next_search_stage"
+      ]
+    },
+    {
+      "phase": "OEE-4",
+      "status": "IMPLEMENTED_CANDIDATE",
+      "evidence": [
+        "orchestra_runtime/domain/orchestration/execution_efficiency_runtime.py#ValidationRequest"
+      ]
+    },
+    {
+      "phase": "OEE-5",
+      "status": "IMPLEMENTED_CANDIDATE",
+      "evidence": [
+        "orchestra_runtime/domain/orchestration/execution_efficiency_runtime.py#plan_ci_activity"
+      ]
+    },
+    {
+      "phase": "OEE-6",
+      "status": "IMPLEMENTED_CANDIDATE",
+      "evidence": [
+        "orchestra_runtime/domain/orchestration/execution_efficiency_runtime.py#PhaseContextPack",
+        "orchestra_runtime/domain/orchestration/execution_efficiency_runtime.py#require_active_phase"
+      ]
+    },
+    {
+      "phase": "OEE-7",
+      "status": "EVIDENCE_PASS_CANDIDATE",
+      "evidence": [
+        "docs/governance/oee_7_uief5_controlled_replay.v1.json",
+        "tests/runtime/test_oee1_oee8_execution_controls.py#test_oee7_replay_reaches_same_blocker_with_less_specialist_fanout_and_no_ci_watch"
+      ]
+    },
+    {
+      "phase": "OEE-8",
+      "status": "INTEGRATION_GATE_CANDIDATE",
+      "evidence": [
+        "orchestra_runtime/domain/orchestration/execution_efficiency_runtime.py#evaluate_program_resume_gate",
+        "tests/runtime/test_oee1_oee8_execution_controls.py#test_oee8_resume_gate_requires_exact_ordered_oee0_through_oee7_evidence"
+      ]
+    }
+  ],
+  "resume_disposition": {
+    "oee_program_ready_for_canonical_qualification": true,
+    "uief_lane_may_reopen_after_oee_canonicalization": true,
+    "uief_5_implementation_unblocked": false,
+    "remaining_uief_5_blockers": [
+      "UIEF5_UPSTREAM_RESPONSIVE_CONTRADICTION",
+      "UIEF5_UNRESOLVED_PROVENANCE_REFERENCES"
+    ],
+    "note": "OEE completion permits UIEF to become the next development lane again. It does not resolve or bypass UIEF-5's own upstream design/provenance blockers."
+  },
+  "authority": {
+    "release_authorized": false,
+    "deployment_authorized": false,
+    "policy_activation_authorized": false,
+    "destructive_action_authorized": false,
+    "new_specialist_created": false,
+    "existing_specialist_authority_expanded": false
+  }
+}
