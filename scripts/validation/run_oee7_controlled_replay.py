@@ -3,14 +3,17 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import sys
 from typing import Any
+
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from orchestra_runtime.domain.orchestration.execution_efficiency import (
     DecisiveStopSignal,
     evaluate_decisive_stop,
 )
-
-ROOT = Path(__file__).resolve().parents[2]
 
 
 def _load_json(path: Path) -> dict[str, Any]:
