@@ -45,7 +45,10 @@ from .delegation import (
     delegation_accepted_event,
     delegation_rejected_event,
 )
+from .application.use_cases.agentic_workflow import plan_agentic_workflow
 from .domain.orchestration.ui_fidelity import classify_ui_fidelity
+from .infrastructure.machine.agentic_workflow import load_agentic_workflow_contracts
+from .infrastructure.machine.execution_efficiency import load_execution_budget_contract
 from .errors import (
     ConflictingCoordinationSignalError,
     CoordinationReadinessError,
@@ -342,6 +345,7 @@ class RouterService(IRouterService):
         self._skill_registry = skill_registry
         self._command_routes = command_routes or command_route_map()
         registry_root = getattr(getattr(skill_registry, "_skill_repository", None), "repo_root", None)
+        self._registry_root = registry_root
         self._ui_fidelity_contract = load_ui_fidelity_routing_contract(registry_root)
         self._fallback_specialist = str(command_route_record("__orchestra_ambiguity_fallback__")["specialist"])
         self._governance_required_specialists = governance_required_specialists()
@@ -363,6 +367,32 @@ class RouterService(IRouterService):
         )
         route_metadata = {"skill_path": str(skill.skill_path)}
         route_metadata.update(ui_fidelity.to_metadata(self._ui_fidelity_contract))
+
+        raw_task_profile = context.metadata.get("agentic_task_profile")
+        if raw_task_profile is not None:
+            if skill.slug != "conductor":
+                raise ValueError("agentic task profile requires Conductor routing")
+            if not isinstance(raw_task_profile, dict):
+                raise ValueError("agentic_task_profile must be a mapping")
+            contracts = load_agentic_workflow_contracts(self._registry_root)
+            execution_budget = load_execution_budget_contract(self._registry_root)
+            registry = {
+                "specialists": [
+                    {"slug": registered.slug}
+                    for registered in self._skill_registry.load_skills()
+                ]
+            }
+            agentic_plan = plan_agentic_workflow(
+                task_profile=raw_task_profile,
+                specialist_authority_view=contracts["authority_view"],
+                specialist_registry=registry,
+                execution_budget=execution_budget,
+            )
+            route_metadata["agentic_workflow_profile"] = agentic_plan["workflow_profile"]
+            route_metadata["agentic_critic_contract"] = agentic_plan["critic_contract"]
+            route_metadata["agentic_workflow_telemetry"] = agentic_plan["telemetry"]
+            route_metadata["agentic_authority_rule"] = agentic_plan["authority_rule"]
+
         return RouteDecision(
             command_name=command.name,
             skill_slug=skill.slug,

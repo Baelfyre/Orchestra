@@ -1,5 +1,18 @@
 # Changelog
 
+## Post-v1.8.0 Adaptive Agentic Workflow AWF-I0 through AWF-I10 candidate
+
+- Adds execution-effective, authority-aware adaptive workflow topology selection under the invariant `WORKFLOW_TOPOLOGY_CHANGE != AUTHORITY_EXPANSION`.
+- Adds versioned TaskProfile, CriticContract, SpecialistAuthorityView, and AgenticWorkflowProfile machine contracts plus 26 hard composition invariants and five composable agentic primitives.
+- Keeps Conductor as exclusive dispatcher, The Tuner as coordination-only, Ponytail as general implementation owner, Overseer as primary validation owner, and Arbiter as transition owner.
+- Makes topology adaptation autonomous inside authority already granted by the user/project while preserving independent escalation for protected actions, scope/authority expansion, and other existing gates.
+- Binds the derived 14-specialist authority view to exact specialist SKILL.md Git blob identities and fails closed on source drift.
+- Reuses the canonical OEE ExecutionBudget, including owner-first routing, current max parallel specialist default of one, exact-source evidence reuse, earliest decisive evidence stopping, and stable-candidate validation escalation.
+- Adds bounded Planning, Tool/ReAct, Reflection/Critic, sequential Multi-Agent semantics, specialist invalidation/re-entry, and topology telemetry without widening specialist authority.
+- Preserves the historical Adaptive A5 shadow topology ranker as non-execution-effective evidence/ranking infrastructure; AWF is not an A5 benefit claim or learned-ranking promotion.
+- Adds the UIEF-5 historical owner-first replay plus synthetic design regressions for bounded implementation, multi-domain work, protected-action gating, and specialist re-entry.
+- Does not resume UIEF, mutate PR #799/#791, change OEE concurrency, release, deploy, or activate policy.
+
 ## Post-v1.8.0 OEE-1 through OEE-8 execution-efficiency enforcement candidate
 
 - Operationalizes the canonical OEE-0 `ExecutionBudget` without rewriting `RuntimeExecutor` or creating a new specialist.

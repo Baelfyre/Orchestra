@@ -31,7 +31,10 @@
       "status": "IMPLEMENTED",
       "machine_sources": [
         "machine/specialists/registry.v1.json",
-        "machine/routing/routes.v1.json"
+        "machine/routing/routes.v1.json",
+        "machine/specialists/authority-view.v1.json",
+        "machine/workflows/patterns.v1.json",
+        "machine/workflows/composition-invariants.v1.json"
       ],
       "human_sources": [
         "SKILL_INDEX.md",
@@ -2254,7 +2257,15 @@
     "ui_implementation_profile_schema": "machine/schemas/ui-implementation-profile.v1.schema.json",
     "ui_implementation_profile_reference": "machine/ui/ui-implementation-profile.v1.json",
     "execution_budget_contract": "machine/governance/execution-budget.v1.json",
-    "execution_budget_schema": "machine/schemas/execution-budget.v1.schema.json"
+    "execution_budget_schema": "machine/schemas/execution-budget.v1.schema.json",
+    "task_profile_schema": "machine/schemas/task-profile.v1.schema.json",
+    "critic_contract_schema": "machine/schemas/critic-contract.v1.schema.json",
+    "specialist_authority_view_schema": "machine/schemas/specialist-authority-view.v1.schema.json",
+    "specialist_authority_view": "machine/specialists/authority-view.v1.json",
+    "agentic_workflow_profile_schema": "machine/schemas/agentic-workflow-profile.v1.schema.json",
+    "agentic_patterns": "machine/workflows/patterns.v1.json",
+    "agentic_composition_invariants": "machine/workflows/composition-invariants.v1.json",
+    "agentic_workflow_implementation": "machine/adaptive/awf-agentic-workflow-implementation.v1.json"
   },
   "specialists": {
     "count": 14,
@@ -2309,7 +2320,8 @@
     "adaptive_tuner_a5_reference": "docs/architecture/ADAPTIVE_TUNER_A5.md",
     "portable_adaptive_memory_reference": "docs/architecture/PORTABLE_ADAPTIVE_MEMORY.md",
     "registry_query_optimization_o7_reference": "docs/architecture/REGISTRY_QUERY_OPTIMIZATION_O7.md",
-    "historical_status_policy": "Phase documents may retain phase-era status wording. Current exact state comes from live machine contracts, release evidence, and Git identity."
+    "historical_status_policy": "Phase documents may retain phase-era status wording. Current exact state comes from live machine contracts, release evidence, and Git identity.",
+    "adaptive_agentic_workflow_awf": "docs/architecture/ADAPTIVE_AGENTIC_WORKFLOW_AWF.md"
   },
   "hosts_integrations": {
     "host_update_contract": "machine/hosts/update-contract.v1.json",
@@ -2522,7 +2534,8 @@
     "cloak_ui_reference_corpus_cuir3": "CUIR_3_CANONICAL_MERGED_VERIFIED",
     "cloak_ui_reference_corpus_cuir4": "CUIR_4_CANONICAL_MERGED_VERIFIED",
     "cloak_ui_reference_corpus_cuir5": "CUIR_5_CANONICAL_CONTROLLED_EVALUATION_VERIFIED",
-    "cloak_ui_reference_corpus_cuir6": "CUIR_6_CANONICAL_ADOPT_OPTIONAL_CLOSEOUT_VERIFIED"
+    "cloak_ui_reference_corpus_cuir6": "CUIR_6_CANONICAL_ADOPT_OPTIONAL_CLOSEOUT_VERIFIED",
+    "adaptive_agentic_workflow_awf": "IMPLEMENTED_EXECUTION_EFFECTIVE_AUTHORITY_PRESERVING"
   },
   "ai_review_guidance": {
     "preferred_entrypoint": "README.json",
@@ -2628,6 +2641,10 @@
     "do_not_infer_cuir5_authority_from_cuir4_canonicalization": true,
     "treat_cuir5_controlled_evaluation_as_bounded_non_authorizing_evidence_only": true,
     "treat_cuir6_as_canonical_optional_closeout_not_runtime_expansion": true,
-    "do_not_infer_mandatory_cuir_injection_or_new_authority_from_cuir6_adoption": true
+    "do_not_infer_mandatory_cuir_injection_or_new_authority_from_cuir6_adoption": true,
+    "treat_awf_topology_change_as_non_authority_expanding_when_within_granted_authority": true,
+    "treat_awf_as_deterministic_authority_aware_execution_topology_not_a5_shadow_ranker_promotion": true,
+    "do_not_use_a5_shadow_ranking_as_awf_execution_selection_without_separate_evidence_contract": true,
+    "preserve_oee_max_parallel_specialists_default_during_awf_selection": true
   }
 }

@@ -1,0 +1,138 @@
+{
+  "schema_version": "orchestra.agentic-composition-invariants.v1",
+  "owner": "conductor",
+  "authority_expansion": false,
+  "topology_change_requires_human_approval": false,
+  "invariants": [
+    {
+      "id": "AWF-I01",
+      "rule": "WORKFLOW_CAPABILITY_NEVER_EXPANDS_SPECIALIST_AUTHORITY",
+      "hard": true
+    },
+    {
+      "id": "AWF-I02",
+      "rule": "OBSERVE_DECIDE_MUTATE_ARE_SEPARATE_PERMISSIONS",
+      "hard": true
+    },
+    {
+      "id": "AWF-I03",
+      "rule": "ROUTING_AND_DISPATCH_ARE_CONDUCTOR_EXCLUSIVE",
+      "hard": true
+    },
+    {
+      "id": "AWF-I04",
+      "rule": "TUNER_COORDINATION_READY_NEVER_EQUALS_IMPLEMENTATION_OR_TRANSITION_AUTHORITY",
+      "hard": true
+    },
+    {
+      "id": "AWF-I05",
+      "rule": "OVERSEER_PASS_NEVER_EQUALS_ARBITER_TRANSITION_APPROVAL",
+      "hard": true
+    },
+    {
+      "id": "AWF-I06",
+      "rule": "PLANNING_INHERITS_PLANNING_OWNER_AND_DOMAIN_SCOPE",
+      "hard": true
+    },
+    {
+      "id": "AWF-I07",
+      "rule": "REACT_ACT_STEP_INHERITS_MUTATION_AUTHORITY_AND_EXTERNAL_ACTION_GATES",
+      "hard": true
+    },
+    {
+      "id": "AWF-I08",
+      "rule": "CRITIC_NODE_MUST_DECLARE_EVALUATION_DOMAIN_EVIDENCE_OWNER_AND_BLOCKING_AUTHORITY",
+      "hard": true
+    },
+    {
+      "id": "AWF-I09",
+      "rule": "OBJECTIVE_EXTERNAL_VERIFIER_PRECEDES_SUBJECTIVE_REFLECTION_WHEN_AVAILABLE",
+      "hard": true
+    },
+    {
+      "id": "AWF-I10",
+      "rule": "MULTI_AGENT_REQUIRES_DISTINCT_SUBTASKS_AUTHORITIES_OR_EVIDENCE_WITH_DECISION_VALUE",
+      "hard": true
+    },
+    {
+      "id": "AWF-I11",
+      "rule": "DEFAULT_MAX_PARALLEL_SPECIALISTS_REMAINS_ONE_UNLESS_OEE_POLICY_CHANGES",
+      "hard": true
+    },
+    {
+      "id": "AWF-I12",
+      "rule": "SPECIALIZATION_DOES_NOT_IMPLY_PARALLELIZATION",
+      "hard": true
+    },
+    {
+      "id": "AWF-I13",
+      "rule": "EARLIEST_DECISIVE_EVIDENCE_WINS_AND_STOPS_DOWNSTREAM_WORK",
+      "hard": true
+    },
+    {
+      "id": "AWF-I14",
+      "rule": "EXACT_SOURCE_EVIDENCE_REUSE_PRECEDES_REPEAT_RETRIEVAL",
+      "hard": true
+    },
+    {
+      "id": "AWF-I15",
+      "rule": "FULL_VALIDATION_REQUIRES_STABLE_CANDIDATE",
+      "hard": true
+    },
+    {
+      "id": "AWF-I16",
+      "rule": "UNCHANGED_CI_WAIT_MUST_NOT_CONSUME_ACTIVE_REASONING",
+      "hard": true
+    },
+    {
+      "id": "AWF-I17",
+      "rule": "APPLICABLE_GOVERNANCE_BLOCK_REVISION_OR_HUMAN_REVIEW_CONSTRAINS_DOWNSTREAM_PATTERNS",
+      "hard": true
+    },
+    {
+      "id": "AWF-I18",
+      "rule": "DAGGER_SELECTION_NEVER_CREATES_DESTRUCTIVE_OR_EXTERNAL_EXECUTION_AUTHORITY",
+      "hard": true
+    },
+    {
+      "id": "AWF-I19",
+      "rule": "REPRESENTATION_SPECIALISTS_CANNOT_RESOLVE_MISSING_DOMAIN_TRUTH",
+      "hard": true
+    },
+    {
+      "id": "AWF-I20",
+      "rule": "IMPLEMENTATION_REQUIRES_REQUIRED_UPSTREAM_CONTRACTS_READY_OR_FROZEN",
+      "hard": true
+    },
+    {
+      "id": "AWF-I21",
+      "rule": "NO_SPECIALIST_SELF_PROMOTES_FROM_REVIEW_TO_IMPLEMENTATION_OR_EVIDENCE_TO_TRANSITION",
+      "hard": true
+    },
+    {
+      "id": "AWF-I22",
+      "rule": "UNKNOWN_OR_MALFORMED_TOPOLOGY_STATE_FAILS_CLOSED",
+      "hard": true
+    },
+    {
+      "id": "AWF-I23",
+      "rule": "PHASE_LOCAL_CONTEXT_UNLESS_HISTORY_HAS_EXPLICIT_DECISION_VALUE",
+      "hard": true
+    },
+    {
+      "id": "AWF-I24",
+      "rule": "TOPOLOGY_ESCALATION_RETURNS_TO_CONDUCTOR_AND_REVALIDATES_AUTHORITY_AND_OEE",
+      "hard": true
+    },
+    {
+      "id": "AWF-I25",
+      "rule": "WORKFLOW_TOPOLOGY_CHANGE_DOES_NOT_REQUIRE_HUMAN_APPROVAL_WITHIN_EXISTING_GRANTED_AUTHORITY",
+      "hard": true
+    },
+    {
+      "id": "AWF-I26",
+      "rule": "HUMAN_ESCALATION_IS_TRIGGERED_BY_PROTECTED_ACTION_OR_AUTHORITY_SCOPE_EXPANSION_NOT_BY_PATTERN_COMPOSITION",
+      "hard": true
+    }
+  ]
+}

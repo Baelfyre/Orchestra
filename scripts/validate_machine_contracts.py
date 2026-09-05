@@ -8,12 +8,13 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from orchestra_runtime.infrastructure.machine.agentic_workflow import agentic_workflow_errors
 from orchestra_runtime.infrastructure.machine.execution_efficiency import execution_budget_errors
 from orchestra_runtime.machine_contracts import machine_contract_errors
 
 
 def main() -> int:
-    errors = machine_contract_errors(ROOT) + execution_budget_errors(ROOT)
+    errors = machine_contract_errors(ROOT) + execution_budget_errors(ROOT) + agentic_workflow_errors(ROOT)
     if errors:
         for error in errors:
             print(f"ERROR: {error}", file=sys.stderr)

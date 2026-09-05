@@ -1,0 +1,121 @@
+{
+  "schema_version": "orchestra.awf-agentic-workflow-implementation.v1",
+  "program": "AWF_ADAPTIVE_AGENTIC_WORKFLOW",
+  "status": "IMPLEMENTATION_CANDIDATE_VALIDATION_PENDING",
+  "architecture_baseline": {
+    "padayon_pr": 382,
+    "padayon_merge_sha": "b4b59d04ea37c4f23bb6a54e7d217bd3037eb6ab",
+    "orchestra_source_baseline": "75100c3ad0fd9a11c69f2b9b7c5172edd8841cd2"
+  },
+  "phases": [
+    {
+      "id": "AWF-I0",
+      "status": "IMPLEMENTED_CANDIDATE",
+      "goal": "machine schemas and source-binding rules"
+    },
+    {
+      "id": "AWF-I1",
+      "status": "IMPLEMENTED_CANDIDATE",
+      "goal": "source-bound specialist authority view"
+    },
+    {
+      "id": "AWF-I2",
+      "status": "IMPLEMENTED_CANDIDATE",
+      "goal": "topology authority validator"
+    },
+    {
+      "id": "AWF-I3",
+      "status": "IMPLEMENTED_CANDIDATE",
+      "goal": "TaskProfile and deterministic owner resolution"
+    },
+    {
+      "id": "AWF-I4",
+      "status": "IMPLEMENTED_CANDIDATE",
+      "goal": "Planning and bounded Tool/ReAct selection"
+    },
+    {
+      "id": "AWF-I5",
+      "status": "IMPLEMENTED_CANDIDATE",
+      "goal": "bounded critic contract activation"
+    },
+    {
+      "id": "AWF-I6",
+      "status": "IMPLEMENTED_CANDIDATE",
+      "goal": "conditional multi-agent graph semantics under OEE"
+    },
+    {
+      "id": "AWF-I7",
+      "status": "IMPLEMENTED_CANDIDATE",
+      "goal": "specialist re-entry and transition topology integration"
+    },
+    {
+      "id": "AWF-I8",
+      "status": "IMPLEMENTED_CANDIDATE",
+      "goal": "deterministic topology telemetry"
+    },
+    {
+      "id": "AWF-I9",
+      "status": "IMPLEMENTED_CANDIDATE",
+      "goal": "UIEF-5 and synthetic regression corpus"
+    },
+    {
+      "id": "AWF-I10",
+      "status": "QUALIFICATION_PENDING",
+      "goal": "source PR validation and canonical integration"
+    }
+  ],
+  "authority": {
+    "topology_change_requires_human_approval": false,
+    "execution_within_granted_authority": true,
+    "authority_expansion": false,
+    "specialist_authority_mutation": false,
+    "protected_actions_require_independent_authority": true,
+    "uief_resume": false,
+    "release_deployment_policy_activation": false
+  },
+  "oee": {
+    "execution_budget": "machine/governance/execution-budget.v1.json",
+    "max_parallel_specialists_default_preserved": 1,
+    "owner_first": true,
+    "earliest_decisive_evidence_wins": true
+  },
+  "legacy_a5_relationship": {
+    "historical_status": "A5_CLOSED_AT_SHADOW_MATURITY_EXECUTION_PROMOTION_DEFERRED_BENEFIT_NOT_ESTABLISHED",
+    "a5_shadow_ranker_controls_awf_execution": false,
+    "awf_is_a5_execution_promotion": false,
+    "comparative_a5_benefit_claimed": false
+  },
+  "runtime_surfaces": [
+    "orchestra_runtime/domain/adaptive/task_profile.py",
+    "orchestra_runtime/domain/adaptive/topology_validator.py",
+    "orchestra_runtime/domain/adaptive/agentic_workflow.py",
+    "orchestra_runtime/application/use_cases/agentic_workflow.py",
+    "orchestra_runtime/infrastructure/machine/agentic_workflow.py",
+    "orchestra_runtime/services.py"
+  ],
+  "validation_surfaces": [
+    "tests/runtime/test_agentic_workflow.py",
+    "tests/runtime/test_agentic_workflow_oee_replay.py",
+    "tests/runtime/test_agentic_workflow_scenarios.py",
+    "scripts/validate_machine_contracts.py"
+  ],
+  "historical_replay": {
+    "case": "UIEF5_20260905_USAGE_EXHAUSTION",
+    "owner": "cloak",
+    "expected_required_specialists": [
+      "cloak"
+    ],
+    "evidence_claim_scope": "HISTORICAL_REPLAY_ONLY"
+  },
+  "qualification": {
+    "local_runtime_tests": "NOT_RUN_CONNECTOR_ONLY_ENVIRONMENT",
+    "github_ci": "PENDING_SOURCE_PR",
+    "structural_readback": "PENDING_FINAL_RECONCILIATION"
+  },
+  "efficiency": {
+    "conductor_prompt_load_strategy": "UNCHANGED_CANONICAL_SKILL_RUNTIME_CONTROL_PLANE_ACTIVATION",
+    "conductor_skill_modified": false,
+    "codex_portable_reference_modified": false,
+    "prompt_load_budget_weakened": false
+  }
+}
