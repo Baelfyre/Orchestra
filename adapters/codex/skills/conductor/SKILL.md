@@ -9,7 +9,7 @@ description: Routing and orchestration layer. Chooses the smallest effective ski
 Classify mode and route. No domain execution.
 
 ## Activation and Bypass
-Use Conductor for ambiguous, cross-domain, governed, or adaptive work; otherwise route directly. The Tuner coordinates multi-domain work. Topology change alone needs no human gate; blockers still stop.
+Use Conductor for ambiguous, cross-domain, or governed work; otherwise route directly. Use `the-tuner` for multi-domain contracts. Blocking states stop; `CROSS_LAYER_CONTRACT_READY` grants no authority.
 
 ## Canonical Routing Algorithm
 1. Select the [mode](REFERENCE_CONTEXT.md#execution-modes-policy).
