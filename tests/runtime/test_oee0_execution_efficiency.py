@@ -152,3 +152,42 @@ def test_unchanged_ci_wait_cannot_consume_active_model_reasoning() -> None:
         ci_state_changed=True,
         active_model_reasoning=True,
     )
+
+def test_decisive_stop_rejects_non_boolean_state() -> None:
+    with pytest.raises(ValueError, match="must be a boolean"):
+        validate_decisive_stop_signal(
+            {
+                "owner": "cloak",
+                "evidence_sufficient": "true",
+                "stop_required": True,
+                "downstream_execution_allowed": False,
+                "reason": "synthetic",
+                "evidence_refs": ["evidence"],
+            }
+        )
+
+
+def test_escalation_rejects_backward_and_malformed_transitions() -> None:
+    with pytest.raises(ValueError, match="cannot move backward"):
+        require_search_escalation(
+            "REPOSITORY_WIDE",
+            "EXACT_SYMBOL",
+            current_stage_insufficient=True,
+        )
+
+    with pytest.raises(ValueError, match="must be a boolean"):
+        require_validation_escalation(
+            "DIRECT_TESTS",
+            "SUBSYSTEM",
+            current_stage_insufficient=1,
+        )
+
+
+def test_ci_wait_rejects_non_boolean_state() -> None:
+    with pytest.raises(ValueError, match="must be booleans"):
+        enforce_ci_wait_boundary(
+            activity="CI_WAIT",
+            ci_state_changed="no",
+            active_model_reasoning=False,
+        )
+
