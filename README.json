@@ -2134,7 +2134,7 @@
       "status": "SOURCE_CANDIDATE_HARDENED_PENDING_QUALIFICATION",
       "purpose": "Clockwork translation of the accepted corrected UI fidelity handoff into maintainable component, state, responsive, composition, layer, data-flow, reuse, integration, and dependency boundaries with deterministic source-content identity and no invented consuming-project provenance.",
       "source_handoff": "uief4-ui-fidelity-handoff-reference",
-      "source_handoff_content_identity": "sha256:fc5e8df99cb47ebaf366d53cc0ebb9897fe61669750a550add53ca3c74113659",
+      "source_handoff_content_identity": "sha256:6b589112da6ae4413c796cde6ed69093de6d10941a821824d205fe18d96caebc",
       "historical_reference_pr": 791,
       "historical_reference_disposition": "REFERENCE_ONLY_DO_NOT_MERGE_AS_IS",
       "machine_sources": [
@@ -2161,7 +2161,8 @@
       "dependency_adoption_authorized": false,
       "release_authorized": false,
       "uief6_initiation_authorized": false,
-      "authority_note": "UIEF-5 translates accepted visible-layer complexity into engineering boundaries only. Clockwork may simplify engineering structure only when accepted fidelity is unchanged; it cannot redesign Cloak-owned visible intent, authorize implementation or dependency adoption, initiate UIEF-6, release, deploy, activate policy, or expand specialist authority."
+      "authority_note": "UIEF-5 translates accepted visible-layer complexity into engineering boundaries only. Clockwork may simplify engineering structure only when accepted fidelity is unchanged; it cannot redesign Cloak-owned visible intent, authorize implementation or dependency adoption, initiate UIEF-6, release, deploy, activate policy, or expand specialist authority.",
+      "source_identity_semantics": "SHA-256 over canonical JSON serialization of UIFidelityHandoff.to_dict(), excluding machine-only schema decoration."
     }
   },
   "machine_scan_order": [
