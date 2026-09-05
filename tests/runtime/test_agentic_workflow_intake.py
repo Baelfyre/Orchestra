@@ -156,7 +156,7 @@ def test_host_constraints_can_escalate_but_not_downgrade_mode_or_risk():
     contracts = load_agentic_workflow_contracts(ROOT)
     base = derive_task_profile(
         prompt="Implement secure authentication.",
-        metadata={"execution_mode": "FAST", "risk_level": "LOW"},
+        metadata={"agentic_execution_mode": "FAST", "agentic_risk_level": "LOW"},
         current_source_identity="main@test",
         policy=contracts["derivation_policy"],
     )
@@ -165,7 +165,7 @@ def test_host_constraints_can_escalate_but_not_downgrade_mode_or_risk():
 
     escalated = derive_task_profile(
         prompt="Review this responsive screen.",
-        metadata={"execution_mode": "GOVERNED", "risk_level": "HIGH"},
+        metadata={"agentic_execution_mode": "GOVERNED", "agentic_risk_level": "HIGH"},
         current_source_identity="main@test",
         policy=contracts["derivation_policy"],
     )
