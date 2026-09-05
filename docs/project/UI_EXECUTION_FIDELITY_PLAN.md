@@ -438,6 +438,31 @@ CUIR and provider-observed patterns remain guidance evidence. UIEF binds selecte
 Exit:
 UIEF_4_CLOAK_IMPLEMENTATION_BINDING_READY
 
+The canonical UIEF-4 implementation is the versioned machine contract at
+`machine/ui/ui-fidelity-handoff.v1.json` with its schema at
+`machine/schemas/ui-fidelity-handoff.v1.schema.json`. Cloak binds accepted design
+intelligence, macro composition, information hierarchy, CUIR normalized pattern
+references, provider-observed pattern references, required regions, responsive
+transformations, component roles, visual/typography/spacing relationships, and
+explicit preserve/adapt/avoid/unresolved rules into an implementation-consumable
+handoff without modifying the historical frozen Cloak core skill (`skills/cloak/SKILL.md`).
+
+The progressive-disclosure implementation guidance lives in
+`skills/cloak/UI_FIDELITY_HANDOFF_GUIDE.md` with byte-identical Codex mirror at
+`adapters/codex/skills/cloak/UI_FIDELITY_HANDOFF_GUIDE.md` and the
+`UI_FIDELITY_HANDOFF` output format in `skills/cloak/OUTPUT_FORMATS.md`.
+Cloak remains the exclusive owner of visible design intent and fidelity handoff;
+Ponytail consumes the handoff via `to_ponytail_context()` but cannot create or own
+handoff contracts. Authority invariants strictly ensure the handoff conveys no
+implementation, architecture translation, or release authority. Generic `execution_mode`
+contamination and premature UIEF-5 Clockwork translation initiation are strictly
+prohibited and fail closed.
+
+The runtime enforcement contracts, schema validation, and semantic test coverage
+live in `orchestra_runtime/domain/orchestration/ui_fidelity.py`,
+`orchestra_runtime/machine_contracts.py`, and
+`tests/runtime/test_uief4_cloak_fidelity_handoff.py`.
+
 ### UIEF-5 - Clockwork UI engineering translation
 
 Goal:

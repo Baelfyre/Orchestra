@@ -134,3 +134,32 @@ Reason:
 ```
 
 Write `None confirmed` for empty issue sections. State whether the interface is ready, needs revision, or needs major restructuring.
+---
+
+## UI_FIDELITY_HANDOFF
+
+Use when performing UIEF visible-layer fidelity handoffs to Ponytail for execution.
+
+\\	ext
+HANDOFF ID:
+DESIGN INTENT:
+UI IMPLEMENTATION PROFILE:
+DESIGN CONTRACT REF:
+INFORMATION HIERARCHY:
+MACRO COMPOSITION:
+REQUIRED REGIONS:
+SELECTED PATTERNS:
+PROVENANCE IDENTIFIERS:
+COMPONENT ROLES:
+VISUAL RELATIONSHIPS:
+TYPOGRAPHY ROLES:
+SPACING RELATIONSHIPS:
+RESPONSIVE TRANSFORMATIONS:
+INTERACTION STATES:
+ASSET REQUIREMENTS:
+PRESERVE:
+ADAPT:
+AVOID:
+UNRESOLVED:
+HANDOFF TO: Ponytail (Implementation)
+\

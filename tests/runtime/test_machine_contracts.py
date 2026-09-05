@@ -131,6 +131,12 @@ def test_load_contract_rejects_wrong_schema(tmp_path):
     with pytest.raises(ValueError, match="unsupported UI fidelity routing"):
         contracts.load_ui_fidelity_routing_contract(tmp_path)
 
+    handoff_path = tmp_path / "machine" / "ui"
+    handoff_path.mkdir(parents=True)
+    (handoff_path / "ui-fidelity-handoff.v1.json").write_text('{"schema_version":"wrong"}', encoding="utf-8")
+    with pytest.raises(ValueError, match="unsupported UI fidelity handoff"):
+        contracts.load_ui_fidelity_handoff_contract(tmp_path)
+
 
 @pytest.mark.parametrize(
     ("field", "value", "message"),
@@ -146,3 +152,31 @@ def test_machine_contract_errors_reject_ui_fidelity_contract_drift(monkeypatch, 
     fidelity[field] = value
     monkeypatch.setattr(contracts, "load_ui_fidelity_routing_contract", lambda root=None: fidelity)
     assert message in contracts.machine_contract_errors(ROOT)
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [
+        ("owned_by", "ponytail", "UI_FIDELITY_HANDOFF_OWNER_INVALID"),
+        ("authority", {"implementation_authorized": True}, "UI_FIDELITY_HANDOFF_AUTHORITY_EXPANSION"),
+    ],
+)
+def test_machine_contract_errors_reject_ui_fidelity_handoff_contract_drift(monkeypatch, field, value, message):
+    handoff = deepcopy(contracts.load_ui_fidelity_handoff_contract(ROOT))
+    handoff[field] = value
+    monkeypatch.setattr(contracts, "load_ui_fidelity_handoff_contract", lambda root=None: handoff)
+    assert message in contracts.machine_contract_errors(ROOT)
+
+
+def test_machine_contract_errors_reject_ui_fidelity_handoff_missing_required_field(monkeypatch):
+    handoff = deepcopy(contracts.load_ui_fidelity_handoff_contract(ROOT))
+    del handoff["preserve"]
+    monkeypatch.setattr(contracts, "load_ui_fidelity_handoff_contract", lambda root=None: handoff)
+    assert "UI_FIDELITY_HANDOFF_MISSING_FIELD:preserve" in contracts.machine_contract_errors(ROOT)
+
+
+def test_machine_contract_errors_reject_ui_fidelity_handoff_contract_exception(monkeypatch):
+    def _failing_loader(root=None):
+        raise ValueError("corrupted handoff")
+    monkeypatch.setattr(contracts, "load_ui_fidelity_handoff_contract", _failing_loader)
+    assert "UI_FIDELITY_HANDOFF_CONTRACT_INVALID:corrupted handoff" in contracts.machine_contract_errors(ROOT)
