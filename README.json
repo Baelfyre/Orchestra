@@ -31,7 +31,10 @@
       "status": "IMPLEMENTED",
       "machine_sources": [
         "machine/specialists/registry.v1.json",
-        "machine/routing/routes.v1.json"
+        "machine/routing/routes.v1.json",
+        "machine/specialists/authority-view.v1.json",
+        "machine/workflows/patterns.v1.json",
+        "machine/workflows/composition-invariants.v1.json"
       ],
       "human_sources": [
         "SKILL_INDEX.md",
@@ -2261,7 +2264,8 @@
     "specialist_authority_view": "machine/specialists/authority-view.v1.json",
     "agentic_workflow_profile_schema": "machine/schemas/agentic-workflow-profile.v1.schema.json",
     "agentic_patterns": "machine/workflows/patterns.v1.json",
-    "agentic_composition_invariants": "machine/workflows/composition-invariants.v1.json"
+    "agentic_composition_invariants": "machine/workflows/composition-invariants.v1.json",
+    "agentic_workflow_implementation": "machine/adaptive/awf-agentic-workflow-implementation.v1.json"
   },
   "specialists": {
     "count": 14,
