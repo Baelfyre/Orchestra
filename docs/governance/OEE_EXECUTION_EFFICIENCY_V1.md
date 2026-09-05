@@ -110,4 +110,3 @@ The post-OEE-0 continuation operationalizes the existing budget rather than crea
 The OEE-7 replay intentionally stops at the UIEF-4 responsive contradiction during E1 input integrity. It does not continue to provenance search, downstream specialists, implementation analysis, full validation, or CI watch work after that decisive blocker.
 
 OEE-8 does not automatically resume UIEF. The current source candidate records UIEF as still blocked pending Cloak-owned responsive-contract repair, provenance revalidation, and UIEF-5 source requalification.
-
