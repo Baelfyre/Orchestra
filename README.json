@@ -2265,7 +2265,10 @@
     "agentic_workflow_profile_schema": "machine/schemas/agentic-workflow-profile.v1.schema.json",
     "agentic_patterns": "machine/workflows/patterns.v1.json",
     "agentic_composition_invariants": "machine/workflows/composition-invariants.v1.json",
-    "agentic_workflow_implementation": "machine/adaptive/awf-agentic-workflow-implementation.v1.json"
+    "agentic_workflow_implementation": "machine/adaptive/awf-agentic-workflow-implementation.v1.json",
+    "task_profile_derivation_schema": "machine/schemas/task-profile-derivation.v1.schema.json",
+    "task_profile_derivation_policy": "machine/workflows/task-profile-derivation.v1.json",
+    "agentic_selection_trace_schema": "machine/schemas/agentic-selection-trace.v1.schema.json"
   },
   "specialists": {
     "count": 14,
@@ -2535,7 +2538,8 @@
     "cloak_ui_reference_corpus_cuir4": "CUIR_4_CANONICAL_MERGED_VERIFIED",
     "cloak_ui_reference_corpus_cuir5": "CUIR_5_CANONICAL_CONTROLLED_EVALUATION_VERIFIED",
     "cloak_ui_reference_corpus_cuir6": "CUIR_6_CANONICAL_ADOPT_OPTIONAL_CLOSEOUT_VERIFIED",
-    "adaptive_agentic_workflow_awf": "IMPLEMENTED_EXECUTION_EFFECTIVE_AUTHORITY_PRESERVING"
+    "adaptive_agentic_workflow_awf": "AWF_I0_I10_COMPLETE_CANONICAL_VERIFIED",
+    "adaptive_agentic_workflow_intake_n1_n3": "IMPLEMENTATION_CANDIDATE"
   },
   "ai_review_guidance": {
     "preferred_entrypoint": "README.json",
@@ -2645,6 +2649,9 @@
     "treat_awf_topology_change_as_non_authority_expanding_when_within_granted_authority": true,
     "treat_awf_as_deterministic_authority_aware_execution_topology_not_a5_shadow_ranker_promotion": true,
     "do_not_use_a5_shadow_ranking_as_awf_execution_selection_without_separate_evidence_contract": true,
-    "preserve_oee_max_parallel_specialists_default_during_awf_selection": true
+    "preserve_oee_max_parallel_specialists_default_during_awf_selection": true,
+    "treat_awf_intake_derivation_as_deterministic_calibratable_routing_evidence": true,
+    "do_not_infer_protected_action_authority_from_awf_prompt_signals": true,
+    "unknown_awf_intake_domain_fails_to_conductor_instead_of_guessing_owner": true
   }
 }
