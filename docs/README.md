@@ -24,6 +24,7 @@ Older phase documents may retain the status language of the phase in which they 
 - [Adaptive Specialist Context A2](architecture/ADAPTIVE_CONTEXT_A2.md): opt-in read-only specialist context after deterministic runtime gates.
 - [Adaptive Behavioral Pattern Learning A3](architecture/ADAPTIVE_SHADOW_LEARNING_A3.md): A3.0 shadow-learning contract and non-authorizing signal/candidate/comparison model.
 - [Portable Adaptive Memory](architecture/PORTABLE_ADAPTIVE_MEMORY.md): optional storage-agnostic export contract for user-selected memory backends.
+- [Adaptive Agentic Workflow AWF](architecture/ADAPTIVE_AGENTIC_WORKFLOW_AWF.md): execution-effective authority-aware topology selection inside existing user/project authority, with topology changes separated from authority expansion.
 - `../machine/adaptive/a1-memory-contract.v1.json`: A1 machine contract.
 - `../machine/adaptive/a2-context-contract.v1.json`: A2 machine contract.
 - `../machine/adaptive/a3-shadow-learning-contract.v1.json`: A3.0 machine contract.
