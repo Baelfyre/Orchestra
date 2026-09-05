@@ -103,7 +103,7 @@ def _string_list(value: object, field_name: str, *, maximum: int) -> tuple[str, 
     return items
 
 
-def _validated_policy(policy: Mapping[str, Any]) -> tuple[list[Mapping[str, Any]], Mapping[str, Any], frozenset[str]]:
+def validate_derivation_policy(policy: Mapping[str, Any]) -> tuple[list[Mapping[str, Any]], Mapping[str, Any], frozenset[str]]:
     if not isinstance(policy, Mapping):
         raise TypeError("TaskProfile derivation policy must be a mapping")
     if policy.get("schema_version") != DERIVATION_POLICY_SCHEMA_VERSION:
@@ -220,7 +220,7 @@ def derive_task_profile(
     if not source_identity:
         raise ValueError("current_source_identity must be non-empty")
 
-    domain_rules, operation_signals, governed_domains = _validated_policy(policy)
+    domain_rules, operation_signals, governed_domains = validate_derivation_policy(policy)
     matches = _matched_signals(text, domain_rules, operation_signals)
     domains = _domain_order(matches)
 
@@ -413,4 +413,5 @@ __all__ = [
     "RISK_ORDER",
     "TaskProfileDerivation",
     "derive_task_profile",
+    "validate_derivation_policy",
 ]
