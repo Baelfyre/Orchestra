@@ -2,7 +2,7 @@
 
 Status: IMPLEMENTATION CANDIDATE, EXECUTION-EFFECTIVE WITHIN GRANTED AUTHORITY
 
-Architecture baseline: Padayon PR #382, squash merge `b4b59d04ea37c4f23bb6a54e7d217bd3037eb6ab`  
+Architecture baseline: Padayon PR #382, squash merge `b4b59d04ea37c4f23bb6a54e7d217bd3037eb6ab`
 Orchestra source baseline: `75100c3ad0fd9a11c69f2b9b7c5172edd8841cd2`
 
 ## Purpose
