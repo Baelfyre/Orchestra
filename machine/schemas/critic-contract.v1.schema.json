@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/critic-contract.v1.schema.json",
+  "title": "Orchestra Agentic Critic Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_id",
+    "critic_owner",
+    "evaluation_domain",
+    "evidence_owner",
+    "can_block",
+    "can_request_revision",
+    "can_transition",
+    "max_iterations"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "orchestra.critic-contract.v1"
+    },
+    "contract_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "critic_owner": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "evaluation_domain": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "evidence_owner": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "can_block": {
+      "type": "boolean"
+    },
+    "can_request_revision": {
+      "type": "boolean"
+    },
+    "can_transition": {
+      "type": "boolean"
+    },
+    "max_iterations": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 3
+    }
+  }
+}
