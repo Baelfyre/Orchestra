@@ -11,7 +11,8 @@
     "default_risk_level",
     "governed_domains",
     "domain_rules",
-    "operation_signals"
+    "operation_signals",
+    "suppression_rules"
   ],
   "properties": {
     "schema_version": {
@@ -171,6 +172,86 @@
           }
         },
         "parallel": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        }
+      }
+    },
+    "suppression_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "negation_phrases",
+        "hypothetical_prefixes",
+        "representation_artifacts",
+        "representation_verbs",
+        "representation_edit_verbs",
+        "representation_scope_phrases"
+      ],
+      "properties": {
+        "negation_phrases": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        },
+        "hypothetical_prefixes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        },
+        "representation_artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        },
+        "representation_verbs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        },
+        "representation_edit_verbs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          }
+        },
+        "representation_scope_phrases": {
           "type": "array",
           "minItems": 1,
           "maxItems": 64,
