@@ -32,6 +32,7 @@ def test_awf_replay_preserves_oee7_decisive_owner_and_minimum_specialist_set():
         "objective_verifier_available": True,
         "critic_owner": None,
         "critic_domain": None,
+        "reentry_specialists": [],
         "current_source_identity": "75100c3ad0fd9a11c69f2b9b7c5172edd8841cd2",
         "human_gate_requirements": [],
     }
