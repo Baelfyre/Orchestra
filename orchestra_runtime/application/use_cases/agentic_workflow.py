@@ -31,10 +31,20 @@ def plan_agentic_workflow(
         raise ValueError("authority view and canonical specialist registry must have identical specialist sets")
 
     profile, critic = select_agentic_workflow(task, authorities, budget)
+    parallel_peak = max((len(group) for group in profile.parallel_groups), default=1)
     return {
         "task_profile": task.to_dict(),
         "workflow_profile": profile.to_dict(),
         "critic_contract": None if critic is None else critic.to_dict(),
+        "telemetry": {
+            "specialist_count": len(profile.required_specialists),
+            "pattern_count": len(profile.selected_patterns),
+            "parallel_specialist_peak": parallel_peak,
+            "max_parallel_specialists": profile.max_parallel_specialists,
+            "human_gate_required": profile.human_gate_required,
+            "topology_effective": profile.topology_effective,
+            "reentry_specialist_count": len(task.reentry_specialists),
+        },
         "authority_rule": "WORKFLOW_TOPOLOGY_CHANGE != AUTHORITY_EXPANSION",
     }
 
