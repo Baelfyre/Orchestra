@@ -1,5 +1,4 @@
 {
-  "$schema": "../schemas/agentic-workflow-profile.v1.schema.json",
   "schema_version": "orchestra.agentic-patterns.v1",
   "owner": "conductor",
   "core_rule": "SELECT_MINIMUM_SUFFICIENT_AGENTIC_TOPOLOGY",
