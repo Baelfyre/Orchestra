@@ -127,6 +127,14 @@ class DecisiveStopSignal:
 def validate_execution_budget(data: Mapping[str, Any]) -> ExecutionBudget:
     if not isinstance(data, Mapping):
         raise ValueError("ExecutionBudget data must be a mapping")
+    for field in ("defaults", "decisive_stop", "authority"):
+        if not isinstance(data.get(field), Mapping):
+            raise ValueError(f"ExecutionBudget {field} must be a mapping")
+    for field in ("evidence_tiers", "search_escalation", "validation_escalation", "measurement_fields"):
+        if not isinstance(data.get(field), (list, tuple)):
+            raise ValueError(f"ExecutionBudget {field} must be a list or tuple")
+    if any(not isinstance(item, Mapping) for item in data.get("evidence_tiers", ())):
+        raise ValueError("ExecutionBudget evidence_tiers items must be mappings")
     budget = ExecutionBudget(
         schema_version=str(data.get("schema_version", "")),
         contract_name=str(data.get("contract_name", "")),
@@ -147,11 +155,16 @@ def validate_execution_budget(data: Mapping[str, Any]) -> ExecutionBudget:
 def validate_decisive_stop_signal(data: Mapping[str, Any]) -> DecisiveStopSignal:
     if not isinstance(data, Mapping):
         raise ValueError("DecisiveStopSignal data must be a mapping")
+    for field in ("evidence_sufficient", "stop_required", "downstream_execution_allowed"):
+        if type(data.get(field)) is not bool:
+            raise ValueError(f"DecisiveStopSignal {field} must be a boolean")
+    if not isinstance(data.get("evidence_refs"), (list, tuple)):
+        raise ValueError("DecisiveStopSignal evidence_refs must be a list or tuple")
     signal = DecisiveStopSignal(
         owner=str(data.get("owner", "")),
-        evidence_sufficient=data.get("evidence_sufficient") is True,
-        stop_required=data.get("stop_required") is True,
-        downstream_execution_allowed=data.get("downstream_execution_allowed") is True,
+        evidence_sufficient=data["evidence_sufficient"],
+        stop_required=data["stop_required"],
+        downstream_execution_allowed=data["downstream_execution_allowed"],
         reason=str(data.get("reason", "")),
         evidence_refs=tuple(str(item) for item in data.get("evidence_refs", ())),
     )
@@ -181,11 +194,15 @@ def require_ordered_escalation(
     *,
     current_stage_insufficient: bool,
 ) -> None:
+    if type(current_stage_insufficient) is not bool:
+        raise ValueError("current_stage_insufficient must be a boolean")
     stages = tuple(stages)
     if current_stage not in stages or target_stage not in stages:
         raise ValueError("unknown escalation stage")
     current_index = stages.index(current_stage)
     target_index = stages.index(target_stage)
+    if target_index < current_index:
+        raise ValueError("escalation cannot move backward")
     if target_index > current_index + 1:
         raise ValueError("escalation cannot skip stages")
     if target_index > current_index and not current_stage_insufficient:
@@ -220,6 +237,8 @@ def enforce_ci_wait_boundary(
     ci_state_changed: bool,
     active_model_reasoning: bool,
 ) -> None:
+    if type(ci_state_changed) is not bool or type(active_model_reasoning) is not bool:
+        raise ValueError("CI wait state flags must be booleans")
     if (
         activity == "CI_WAIT"
         and not ci_state_changed
