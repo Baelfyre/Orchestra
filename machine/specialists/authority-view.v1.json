@@ -1,5 +1,4 @@
 {
-  "$schema": "../schemas/specialist-authority-view.v1.schema.json",
   "schema_version": "orchestra.specialist-authority-view.v1",
   "source_of_truth": "skills_and_governance_contracts",
   "generation_policy": "source_bound_compiled_view",
@@ -117,7 +116,7 @@
       "slug": "conductor",
       "authority_class": "ROUTING_SEQUENCE_CONTROL_PLANE",
       "source_path": "skills/conductor/SKILL.md",
-      "source_blob_sha": "9d878200670eb74423c2815ab786dbe6661f5979",
+      "source_blob_sha": "6d190812e5514357c60ca54355b0e2ec1ca4839b",
       "observe_classes": [
         "REQUEST_INTENT",
         "AUTHORITY_ENVELOPE",
