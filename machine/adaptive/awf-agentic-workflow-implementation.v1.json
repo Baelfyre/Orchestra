@@ -98,7 +98,9 @@
     "tests/runtime/test_agentic_workflow_oee_replay.py",
     "tests/runtime/test_agentic_workflow_scenarios.py",
     "scripts/validate_machine_contracts.py",
-    "tests/runtime/test_agentic_workflow_edges.py"
+    "tests/runtime/test_agentic_workflow_edges.py",
+    "tests/runtime/test_agentic_workflow_intake.py",
+    "tests/runtime/test_agentic_workflow_intake_edges.py"
   ],
   "historical_replay": {
     "case": "UIEF5_20260905_USAGE_EXHAUSTION",
