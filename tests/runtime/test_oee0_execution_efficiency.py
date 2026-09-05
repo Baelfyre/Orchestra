@@ -16,7 +16,7 @@ from orchestra_runtime.domain.orchestration.execution_efficiency import (
     validate_decisive_stop_signal,
     validate_execution_budget,
 )
-from orchestra_runtime.execution_efficiency_contracts import (
+from orchestra_runtime.infrastructure.machine.execution_efficiency import (
     execution_budget_errors,
     load_execution_budget_contract,
 )
