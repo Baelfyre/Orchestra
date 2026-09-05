@@ -41,13 +41,13 @@
       "domain": "PERSISTENCE",
       "signals": [
         "database",
-        "db",
-        "schema",
+        "database schema",
+        "db schema",
         "migration",
         "sql",
         "persistence",
-        "index",
-        "constraint"
+        "database index",
+        "database constraint"
       ]
     },
     {
@@ -60,9 +60,10 @@
         "layout",
         "responsive",
         "accessibility",
-        "visual",
-        "design",
-        "component"
+        "visual design",
+        "ui design",
+        "ui component",
+        "frontend component"
       ]
     },
     {
@@ -124,9 +125,7 @@
   "operation_signals": {
     "mutation": [
       "edit",
-      "update",
       "modify",
-      "change",
       "fix",
       "implement",
       "build",
@@ -137,7 +136,13 @@
       "deploy",
       "release",
       "publish",
-      "refactor"
+      "refactor",
+      "make changes",
+      "update code",
+      "update docs",
+      "update documentation",
+      "update file",
+      "update files"
     ],
     "implementation": [
       "implement",
@@ -178,21 +183,26 @@
       "truncate",
       "chaos test",
       "negative live execution",
-      "production"
+      "deploy to production",
+      "production data",
+      "production mutation",
+      "production database"
     ],
     "protected_action": [
       "merge",
       "release",
       "publish",
       "deploy",
-      "production",
       "force push",
       "rewrite history",
       "delete branch",
       "drop table",
       "truncate",
       "chaos test",
-      "negative live execution"
+      "negative live execution",
+      "production data",
+      "production mutation",
+      "production database"
     ],
     "parallel": [
       "in parallel",
