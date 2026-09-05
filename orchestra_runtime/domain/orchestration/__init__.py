@@ -1,5 +1,20 @@
 """Pure orchestration-domain contracts."""
 
+from .execution_efficiency import (
+    DecisiveStopSignal,
+    EVIDENCE_TIERS,
+    EXECUTION_BUDGET_INVARIANT,
+    EXECUTION_BUDGET_SCHEMA,
+    ExecutionBudget,
+    SEARCH_ESCALATION,
+    VALIDATION_ESCALATION,
+    enforce_ci_wait_boundary,
+    require_evidence_tier,
+    require_search_escalation,
+    require_validation_escalation,
+    validate_decisive_stop_signal,
+    validate_execution_budget,
+)
 from .ui_fidelity import (
     MINIMAL_SAFE,
     UI_CONTRACT_FIDELITY,
@@ -16,6 +31,19 @@ from .ui_fidelity import (
 from .workflow import WORKFLOW_SANITY_SCHEMA_VERSION, WorkflowSanityReceipt
 
 __all__ = [
+    "DecisiveStopSignal",
+    "EVIDENCE_TIERS",
+    "EXECUTION_BUDGET_INVARIANT",
+    "EXECUTION_BUDGET_SCHEMA",
+    "ExecutionBudget",
+    "SEARCH_ESCALATION",
+    "VALIDATION_ESCALATION",
+    "enforce_ci_wait_boundary",
+    "require_evidence_tier",
+    "require_search_escalation",
+    "require_validation_escalation",
+    "validate_decisive_stop_signal",
+    "validate_execution_budget",
     "MINIMAL_SAFE",
     "UI_CONTRACT_FIDELITY",
     "UI_FIDELITY_HANDOFF_SCHEMA",

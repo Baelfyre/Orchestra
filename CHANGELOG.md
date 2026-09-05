@@ -1,5 +1,17 @@
 # Changelog
 
+## Post-v1.8.0 OEE-0 execution cost baseline and guardrail contract candidate
+
+- Introduces `ORCHESTRA_EXECUTION_EFFICIENCY_V1` OEE-0 guardrails under the invariant `MINIMIZE_EXECUTION_COST_WITHOUT_MINIMIZING_REQUIRED_EVIDENCE_OR_IMPLEMENTATION_QUALITY`.
+- Adds versioned `ExecutionBudget` schema and machine contract with fail-closed defaults: one parallel specialist, one retry after the initial attempt, owner-first routing, narrow-to-broad search escalation, source-bound evidence reuse, stable-candidate qualification, one-phase-at-a-time campaign loading, and non-blocking optional review unless explicitly authorized.
+- Adds E0-E5 progressive evidence tiers and prevents entry into a higher tier before required prior tiers complete.
+- Adds explicit search and validation escalation orders so repository-wide/external search and protected/full validation cannot be reached by skipping cheaper prerequisite stages.
+- Adds `DecisiveStopSignal` validation enforcing `EARLIEST_DECISIVE_EVIDENCE_WINS`: sufficient stop evidence forbids downstream execution.
+- Adds a CI-wait boundary prohibiting active model reasoning when the sole activity is waiting on unchanged CI state.
+- Records the UIEF-5 usage-exhaustion incident as a non-authorizing baseline with unknown usage quantities preserved as unknown rather than fabricated zeroes.
+- Preserves specialist authority: Conductor owns routing/sequencing; Arbiter, Overseer, The Tuner, Scribe, and The Governor retain existing responsibilities. No new specialist is created and UIEF remains paused.
+- Adds focused runtime and machine-contract regressions for fail-closed efficiency defaults. OEE-1 dispatch integration is not included.
+
 ## Post-v1.8.0 UIEF-4 Cloak implementation-bound fidelity handoff
 
 - Introduces library-neutral UI fidelity handoff machine contract schema `machine/schemas/ui-fidelity-handoff.v1.schema.json` under JSON Schema Draft 2020-12.

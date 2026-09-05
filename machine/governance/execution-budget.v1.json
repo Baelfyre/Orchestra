@@ -1,0 +1,93 @@
+{
+  "$schema": "../schemas/execution-budget.v1.schema.json",
+  "schema_version": "orchestra.execution-budget.v1",
+  "contract_name": "ExecutionBudget",
+  "owner": "conductor",
+  "core_invariant": "MINIMIZE_EXECUTION_COST_WITHOUT_MINIMIZING_REQUIRED_EVIDENCE_OR_IMPLEMENTATION_QUALITY",
+  "defaults": {
+    "max_parallel_specialists": 1,
+    "specialist_retry_limit": 1,
+    "owner_first_routing": true,
+    "broad_search_requires_narrow_search_exhaustion": true,
+    "evidence_cache_requires_exact_source_identity": true,
+    "full_validation_requires_stable_candidate": true,
+    "ci_wait_must_not_consume_reasoning_budget": true,
+    "autonomous_campaigns_load_one_phase_at_a_time": true,
+    "optional_review_cannot_block_without_explicit_authority": true
+  },
+  "evidence_tiers": [
+    {
+      "tier": "E0",
+      "name": "ORIENTATION"
+    },
+    {
+      "tier": "E1",
+      "name": "INPUT_INTEGRITY"
+    },
+    {
+      "tier": "E2",
+      "name": "TARGETED_ANALYSIS"
+    },
+    {
+      "tier": "E3",
+      "name": "IMPLEMENTATION"
+    },
+    {
+      "tier": "E4",
+      "name": "QUALIFICATION"
+    },
+    {
+      "tier": "E5",
+      "name": "PROMOTION"
+    }
+  ],
+  "search_escalation": [
+    "EXACT_PATH",
+    "EXACT_SYMBOL",
+    "BOUNDED_DIRECTORY",
+    "REPOSITORY_WIDE",
+    "EXTERNAL"
+  ],
+  "validation_escalation": [
+    "SYNTAX_SCHEMA",
+    "DIRECT_TESTS",
+    "SUBSYSTEM",
+    "REPOSITORY_QUALIFICATION",
+    "PROTECTED_GATES"
+  ],
+  "decisive_stop": {
+    "rule": "EARLIEST_DECISIVE_EVIDENCE_WINS",
+    "required_fields": [
+      "owner",
+      "evidence_sufficient",
+      "stop_required",
+      "downstream_execution_allowed",
+      "reason",
+      "evidence_refs"
+    ]
+  },
+  "measurement_fields": [
+    "specialist_invocation_count",
+    "specialist_retry_count",
+    "parallel_specialist_peak",
+    "repository_wide_search_count",
+    "duplicate_evidence_read_count",
+    "validation_run_count_by_tier",
+    "full_repository_validation_count",
+    "ci_poll_or_watch_count",
+    "model_active_wait_events",
+    "files_read_or_context_pack_size_when_measurable",
+    "host_reported_usage_units_when_available",
+    "phase_outcome",
+    "blocker_detection_point",
+    "canonical_phase_advance"
+  ],
+  "authority": {
+    "creates_or_expands_authority": false,
+    "weakens_existing_governance": false,
+    "weakens_security": false,
+    "weakens_validation": false,
+    "weakens_human_gates": false,
+    "new_specialist_required": false
+  }
+}
