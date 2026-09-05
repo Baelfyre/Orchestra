@@ -9,14 +9,13 @@ description: Routing and orchestration layer. Chooses the smallest effective ski
 Classify mode and route. No domain execution.
 
 ## Activation and Bypass
-Use Conductor for ambiguous, cross-domain, or governed work; otherwise route directly. Use `the-tuner` for multi-domain contracts. Blocking states stop; `CROSS_LAYER_CONTRACT_READY` grants no authority.
+Use Conductor for ambiguous, cross-domain, governed, or adaptive work; otherwise route directly. The Tuner coordinates multi-domain work. Topology change alone needs no human gate; blockers still stop.
 
 ## Canonical Routing Algorithm
 1. Select the [mode](REFERENCE_CONTEXT.md#execution-modes-policy).
 2. Route from the [skill index](REFERENCE_CONTEXT.md#skill-index); load the [routing map](ROUTING_MAP.md) only for ambiguity or dependencies.
 3. Load governance on triggers; pause on unresolved gates.
 4. Build the minimum [packet](REFERENCE_CONTEXT.md#minimal-prompt-format).
-5. For adaptive topology or specialist re-entry, load [AWF](REFERENCE_CONTEXT.md#adaptive-agentic-workflow-awf); topology changes inside current authority need no human gate.
 
 ## Governance Profile Selection Gate
 
