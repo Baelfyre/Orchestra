@@ -117,3 +117,63 @@ DECISION: [ACCEPT | ACCEPT_WITH_CONSTRAINTS | DEFER | REJECT]
 CONSTRAINTS: [list of constraints or "none"]
 EVIDENCE_REFS: [benchmarks, tickets, requirements, or contracts]
 ```
+
+## UI_ENGINEERING_TRANSLATION
+
+Use for UIEF-5 when Clockwork translates an accepted Cloak `UIFidelityHandoff` into implementation-consumable engineering boundaries.
+
+```text
+CONTRACT: UIEngineeringTranslation
+SCHEMA: orchestra.ui-engineering-translation.v1
+OWNER: clockwork
+SOURCE_HANDOFF_REF: [accepted UIFidelityHandoff contract id]
+SOURCE_REVISION_OR_CONTRACT_IDENTITY: [exact source revision or contract identity]
+
+COMPONENT_BOUNDARIES:
+- [component id | responsibility | containment/reuse boundary]
+
+STATE_OWNERSHIP:
+- [state id | owner | scope | lifecycle]
+
+RESPONSIVE_ENGINEERING:
+- [accepted transformation id | engineering owner | preservation strategy]
+
+COMPOSITION_OWNERSHIP:
+- [accepted composition id | container owner | layout strategy]
+
+LAYER_RELATIONSHIPS:
+- [overlay/layer id | owner | stacking/lifecycle relationship]
+
+DATA_FLOW_BOUNDARIES:
+- [flow id | producer | consumer | contract]
+
+REUSABLE_COMPONENT_STRATEGY:
+- [project-native component | REUSE/PREFER_REUSE/DO_NOT_FORCE | reason]
+
+INTEGRATION_BOUNDARIES:
+- [boundary id | input/output | rule]
+
+DEPENDENCY_BOUNDARIES:
+- [from | to | allowed/prohibited rule]
+
+PRESERVE:
+- [accepted visible-layer requirement that architecture must preserve]
+
+UNRESOLVED_ENGINEERING_QUESTIONS:
+- [question or "none"]
+
+AUTHORITY:
+- visible_layer_redesign_authorized: false
+- implementation_authorized: false
+- dependency_adoption_authorized: false
+- release_authorized: false
+
+STOP: UIEF_5_ENGINEERING_TRANSLATION_READY
+```
+
+Rules:
+- `DESIGN_COMPLEXITY != ARCHITECTURAL_COMPLEXITY`.
+- Clockwork may simplify engineering structure only when accepted visible fidelity is unchanged.
+- Do not redesign Cloak-owned visible intent.
+- Do not initiate UIEF-6 from this output.
+- Ponytail owns implementation after the engineering boundary is accepted.

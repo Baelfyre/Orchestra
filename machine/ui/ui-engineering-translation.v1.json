@@ -1,0 +1,166 @@
+{
+  "$schema": "../schemas/ui-engineering-translation.v1.schema.json",
+  "schema_version": "orchestra.ui-engineering-translation.v1",
+  "contract_id": "uief5-ui-engineering-translation-reference",
+  "owned_by": "clockwork",
+  "source_handoff_ref": "uief4-ui-fidelity-handoff-reference",
+  "source_revision_or_contract_identity": "379b5fb0f4c6c11cfabc06f98f8479314d854abb",
+  "component_boundaries": [
+    {
+      "component_id": "WorkspaceShell",
+      "responsibility": "Own the accepted three-region vertical workspace shell and composition slots.",
+      "contains": [
+        "WorkspaceHeader",
+        "PrimaryWorkspace",
+        "ContextualInspector"
+      ],
+      "project_native_reuse": true
+    },
+    {
+      "component_id": "PrimaryWorkspace",
+      "responsibility": "Own the accepted desktop split-pane relationship without changing sidebar/content visual hierarchy.",
+      "contains": [
+        "CollateralNavigator",
+        "ActiveDocumentViewer"
+      ],
+      "project_native_reuse": true
+    },
+    {
+      "component_id": "CommandPaletteBoundary",
+      "responsibility": "Reuse the project-native command palette integration boundary without redesigning the palette.",
+      "contains": [
+        "CommandPalette"
+      ],
+      "project_native_reuse": true
+    }
+  ],
+  "state_ownership": [
+    {
+      "state_id": "navigation-collapsed",
+      "owner": "PrimaryWorkspace",
+      "scope": "VIEW_LOCAL",
+      "lifecycle": "MOUNT_TO_UNMOUNT"
+    },
+    {
+      "state_id": "bottom-inspector-expanded",
+      "owner": "ContextualInspector",
+      "scope": "VIEW_LOCAL",
+      "lifecycle": "MOUNT_TO_UNMOUNT"
+    },
+    {
+      "state_id": "command-palette-open",
+      "owner": "CommandPaletteBoundary",
+      "scope": "SHELL_LOCAL",
+      "lifecycle": "SHELL_MOUNT_TO_UNMOUNT"
+    }
+  ],
+  "responsive_engineering": [
+    {
+      "transformation_id": "split-pane-responsive-collapse",
+      "owner": "PrimaryWorkspace",
+      "strategy": "Preserve desktop horizontal split; use accepted drawer/collapse behavior below the handoff breakpoints rather than generic stacking."
+    },
+    {
+      "transformation_id": "mobile-single-column-shell",
+      "owner": "WorkspaceShell",
+      "strategy": "Preserve handoff region order and overlay navigation behavior on mobile."
+    }
+  ],
+  "composition_ownership": [
+    {
+      "composition_id": "desktop-macro-grid",
+      "owner": "WorkspaceShell",
+      "strategy": "CSS grid shell with fixed header, flexible primary region, and docked inspector slot."
+    },
+    {
+      "composition_id": "action-bar-visual-hierarchy",
+      "owner": "WorkspaceHeader",
+      "strategy": "Header sub-layout owns breadcrumb/action grouping while visual emphasis remains Cloak-owned."
+    },
+    {
+      "composition_id": "split-pane-responsive-collapse",
+      "owner": "PrimaryWorkspace",
+      "strategy": "Responsive container owns split/collapse mechanics without changing accepted visual intent."
+    }
+  ],
+  "layer_relationships": [
+    {
+      "layer_id": "command-palette-overlay",
+      "owner": "CommandPaletteBoundary",
+      "relationship": "Own overlay portal and stacking context above shell surfaces; preserve focus and escape lifecycle."
+    },
+    {
+      "layer_id": "responsive-navigation-drawer",
+      "owner": "PrimaryWorkspace",
+      "relationship": "Own drawer mount/unmount and pointer interception only at accepted responsive states."
+    }
+  ],
+  "data_flow_boundaries": [
+    {
+      "flow_id": "workspace-context",
+      "producer": "ApplicationShell",
+      "consumer": "WorkspaceShell",
+      "contract": "Repository/workspace context enters through explicit props/context boundary; no visual decisions are derived from transport details."
+    },
+    {
+      "flow_id": "active-document",
+      "producer": "WorkspaceState",
+      "consumer": "ActiveDocumentViewer",
+      "contract": "Active document identity/content remains state input; viewer presentation remains bounded by the accepted handoff."
+    }
+  ],
+  "reusable_component_strategy": [
+    {
+      "component_ref": "components/palette/CommandPalette.tsx",
+      "decision": "REUSE",
+      "reason": "Project-native component already satisfies the accepted command-palette role."
+    },
+    {
+      "component_ref": "existing shell/layout primitives",
+      "decision": "PREFER_REUSE",
+      "reason": "Reuse when they preserve required region and responsive behavior; do not force reuse if fidelity would be lost."
+    }
+  ],
+  "integration_boundaries": [
+    {
+      "boundary_id": "cloak-to-clockwork",
+      "input": "UIFidelityHandoff",
+      "rule": "Clockwork consumes accepted visible intent without mutating it."
+    },
+    {
+      "boundary_id": "clockwork-to-ponytail",
+      "output": "UIEngineeringTranslation",
+      "rule": "Provides engineering boundaries only; implementation remains Ponytail-owned."
+    }
+  ],
+  "dependency_boundaries": [
+    {
+      "from": "UI composition components",
+      "to": "project-native UI primitives",
+      "rule": "May depend inward on stable project-native primitives that preserve fidelity."
+    },
+    {
+      "from": "UI composition components",
+      "to": "new third-party UI dependency",
+      "rule": "PROHIBITED_WITHOUT_SEPARATE_ADOPTION_AUTHORITY"
+    },
+    {
+      "from": "domain/application layers",
+      "to": "visible-layer components",
+      "rule": "PROHIBITED"
+    }
+  ],
+  "preserve": [
+    "Preserve every accepted UIEF-4 macro-composition identity in composition_ownership.",
+    "Preserve accepted responsive transformations without replacing them with generic stacking.",
+    "Preserve Cloak ownership of visible intent, hierarchy, spacing, typography, interactions, and accessibility requirements.",
+    "Preserve project-native component/token/asset precedence when fidelity is satisfied."
+  ],
+  "unresolved_engineering_questions": [],
+  "authority": {
+    "visible_layer_redesign_authorized": false,
+    "implementation_authorized": false,
+    "dependency_adoption_authorized": false,
+    "release_authorized": false
+  }
+}
