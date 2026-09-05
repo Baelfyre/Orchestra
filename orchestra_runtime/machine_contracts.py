@@ -421,8 +421,35 @@ def machine_contract_errors(root: Path | str | None = None) -> tuple[str, ...]:
             "PROTECTED_GATES",
         ]:
             errors.append("EXECUTION_BUDGET_VALIDATION_ESCALATION_INVALID")
+        if budget.get("core_invariant") != (
+            "MINIMIZE_EXECUTION_COST_WITHOUT_MINIMIZING_REQUIRED_EVIDENCE_OR_IMPLEMENTATION_QUALITY"
+        ):
+            errors.append("EXECUTION_BUDGET_INVARIANT_INVALID")
+        decisive_stop = budget.get("decisive_stop")
+        if not isinstance(decisive_stop, dict) or decisive_stop.get("rule") != "EARLIEST_DECISIVE_EVIDENCE_WINS":
+            errors.append("EXECUTION_BUDGET_DECISIVE_STOP_INVALID")
+        measurement_fields = budget.get("measurement_fields")
+        if (
+            not isinstance(measurement_fields, list)
+            or not measurement_fields
+            or any(not isinstance(item, str) or not item.strip() for item in measurement_fields)
+            or len(measurement_fields) != len(set(measurement_fields))
+        ):
+            errors.append("EXECUTION_BUDGET_MEASUREMENT_FIELDS_INVALID")
         authority = budget.get("authority")
-        if not isinstance(authority, dict) or any(value is not False for value in authority.values()):
+        required_authority_fields = {
+            "creates_or_expands_authority",
+            "weakens_existing_governance",
+            "weakens_security",
+            "weakens_validation",
+            "weakens_human_gates",
+            "new_specialist_required",
+        }
+        if (
+            not isinstance(authority, dict)
+            or set(authority) != required_authority_fields
+            or any(value is not False for value in authority.values())
+        ):
             errors.append("EXECUTION_BUDGET_AUTHORITY_EXPANSION")
     except (ValueError, OSError) as exc:
         errors.append(f"EXECUTION_BUDGET_CONTRACT_INVALID:{exc}")
