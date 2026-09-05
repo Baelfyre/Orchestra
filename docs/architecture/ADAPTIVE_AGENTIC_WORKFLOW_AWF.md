@@ -71,7 +71,7 @@ Each entry records:
 - mutation classes;
 - exclusive control-plane flags.
 
-The loader recalculates each referenced specialist skill's Git blob identity and fails closed if the view is stale.
+The loader reconstructs each referenced specialist skill's canonical LF Git blob identity and fails closed if the view is stale. This keeps the binding stable across Linux, macOS, and Windows worktrees where checkout line endings may differ.
 
 Exclusive authority remains:
 
