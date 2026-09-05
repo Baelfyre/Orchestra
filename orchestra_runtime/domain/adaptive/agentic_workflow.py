@@ -67,24 +67,32 @@ def select_agentic_workflow(
 
     required: list[str] = []
     domain_owner_count = len(set(owners))
-    tuner_needed = bool(task.reentry_specialists) or (domain_owner_count > 1 and (task.dependency_depth > 0 or task.implementation_required))
-    if tuner_needed:
+    tuner_needed = bool(task.reentry_specialists) or (
+        domain_owner_count > 1 and (task.dependency_depth > 0 or task.implementation_required)
+    )
+    if tuner_needed or "the-tuner" in owners:
         _append_unique(required, "the-tuner")
+
+    terminal_owners = {"ponytail", "overseer", "arbiter", "the-tuner"}
     for owner in owners:
-        _append_unique(required, owner)
+        if owner not in terminal_owners:
+            _append_unique(required, owner)
+
     for specialist in task.reentry_specialists:
         if specialist not in authorities:
             raise ValueError(f"re-entry specialist is not in canonical authority view: {specialist}")
-        _append_unique(required, specialist)
-    if task.implementation_required:
+        if specialist not in terminal_owners:
+            _append_unique(required, specialist)
+
+    if task.implementation_required or "ponytail" in owners or "ponytail" in task.reentry_specialists:
         _append_unique(required, "ponytail")
-    if task.validation_required:
+    if task.validation_required or "overseer" in owners or "overseer" in task.reentry_specialists:
         _append_unique(required, "overseer")
     if task.critic_owner is not None:
         if task.critic_owner not in authorities:
             raise ValueError("critic owner is not in canonical authority view")
         _append_unique(required, task.critic_owner)
-    if task.transition_required:
+    if task.transition_required or "arbiter" in owners or "arbiter" in task.reentry_specialists:
         _append_unique(required, "arbiter")
     if not required:
         _append_unique(required, primary_owner)
