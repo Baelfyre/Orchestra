@@ -91,9 +91,7 @@
     "orchestra_runtime/domain/adaptive/agentic_workflow.py",
     "orchestra_runtime/application/use_cases/agentic_workflow.py",
     "orchestra_runtime/infrastructure/machine/agentic_workflow.py",
-    "orchestra_runtime/services.py",
-    "skills/conductor/SKILL.md",
-    "adapters/codex/skills/conductor/REFERENCE_CONTEXT.md"
+    "orchestra_runtime/services.py"
   ],
   "validation_surfaces": [
     "tests/runtime/test_agentic_workflow.py",
@@ -115,10 +113,9 @@
     "structural_readback": "PENDING_FINAL_RECONCILIATION"
   },
   "efficiency": {
-    "conductor_prompt_load_strategy": "COMPACT_ACTIVATION_RULE_WITH_PROGRESSIVE_DISCLOSURE",
-    "conductor_skill_estimated_tokens": 1122,
-    "hard_prompt_load_ceiling_estimated_tokens": 1182,
-    "prompt_load_budget_weakened": false,
-    "revision_prompt_load_ceiling_estimated_tokens": 1128
+    "conductor_prompt_load_strategy": "UNCHANGED_CANONICAL_SKILL_RUNTIME_CONTROL_PLANE_ACTIVATION",
+    "conductor_skill_modified": false,
+    "codex_portable_reference_modified": false,
+    "prompt_load_budget_weakened": false
   }
 }
