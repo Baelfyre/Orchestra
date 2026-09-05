@@ -1,5 +1,16 @@
 # Changelog
 
+## Post-v1.8.0 UIEF-4 Cloak implementation-bound fidelity handoff
+
+- Introduces library-neutral UI fidelity handoff machine contract schema `machine/schemas/ui-fidelity-handoff.v1.schema.json` under JSON Schema Draft 2020-12.
+- Establishes canonical reference machine contract in `machine/ui/ui-fidelity-handoff.v1.json` binding design intent, macro composition, information hierarchy, CUIR normalized pattern references, provider-observed references, required regions, responsive transformations, component roles, visual/typography/spacing relationships, and explicit preserve/adapt/avoid/unresolved rules.
+- Adds progressive-disclosure handoff guide at `skills/cloak/UI_FIDELITY_HANDOFF_GUIDE.md` and byte-identical Codex mirror at `adapters/codex/skills/cloak/UI_FIDELITY_HANDOFF_GUIDE.md` without modifying the historical frozen Cloak core skill (`skills/cloak/SKILL.md`).
+- Adds `UI_FIDELITY_HANDOFF` output format to `skills/cloak/OUTPUT_FORMATS.md` and `adapters/codex/skills/cloak/OUTPUT_FORMATS.md`.
+- Formalizes `UIFidelityHandoff` domain model and `validate_ui_fidelity_handoff` parser/validator in `orchestra_runtime/domain/orchestration/ui_fidelity.py` and machine contract validation in `orchestra_runtime/machine_contracts.py`.
+- Enforces strict authority invariants: Cloak cannot grant implementation, architecture translation, or release authority; Ponytail consumes the handoff via `to_ponytail_context()` but cannot create or own handoff contracts.
+- Enforces strict prohibitions against generic `execution_mode` contamination and premature UIEF-5 Clockwork engineering translation.
+- Provides deterministic test fixtures in `tests/fixtures/ui/uief4-*.json` and comprehensive runtime validation in `tests/runtime/test_uief4_cloak_fidelity_handoff.py`.
+
 ## Post-v1.8.0 UIEF-3 Ponytail frontend fidelity execution layer
 
 - Establishes Ponytail frontend fidelity execution progressive-disclosure guide at `skills/ponytail/FRONTEND_FIDELITY_EXECUTION_GUIDE.md` and byte-identical Codex mirror at `adapters/codex/skills/ponytail/FRONTEND_FIDELITY_EXECUTION_GUIDE.md`.

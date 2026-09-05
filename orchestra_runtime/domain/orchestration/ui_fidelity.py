@@ -394,12 +394,261 @@ def enforce_ponytail_fidelity_execution(
     )
 
 
+VALID_SOURCE_KINDS = frozenset(
+    (
+        "CUIR_NORMALIZED",
+        "PROJECT_NATIVE",
+        "PUBLIC_PROVIDER_GUIDANCE",
+        "OBSERVED_PROVIDER_OUTPUT",
+    )
+)
+
+UI_FIDELITY_HANDOFF_SCHEMA = "orchestra.ui-fidelity-handoff.v1"
+
+
+@dataclass(frozen=True)
+class UIFidelityHandoff:
+    schema_version: str
+    contract_id: str
+    owned_by: str
+    design_contract_ref: str
+    ui_implementation_profile_ref: str
+    source_revision_or_contract_identity: str
+    provenance_refs: tuple[dict[str, Any], ...]
+    design_intent: str
+    information_hierarchy: tuple[dict[str, Any] | str, ...]
+    macro_composition: tuple[dict[str, Any], ...]
+    selected_pattern_refs: tuple[dict[str, Any], ...]
+    pattern_application_reason: str
+    required_regions: tuple[dict[str, Any] | str, ...]
+    component_roles: dict[str, Any]
+    visual_relationships: dict[str, Any]
+    typography_roles: dict[str, Any]
+    spacing_relationships: dict[str, Any]
+    responsive_transformations: tuple[dict[str, Any] | str, ...]
+    interaction_states: tuple[str, ...]
+    asset_requirements: tuple[dict[str, Any] | str, ...]
+    preserve: tuple[str, ...]
+    adapt: tuple[str, ...]
+    avoid: tuple[str, ...]
+    unresolved: tuple[str, ...]
+    authority: dict[str, Any]
+
+    def validate(self) -> None:
+        if self.schema_version != UI_FIDELITY_HANDOFF_SCHEMA:
+            raise ValueError(f"unsupported UIFidelityHandoff schema_version: {self.schema_version}")
+        if self.owned_by != "cloak":
+            raise ValueError("UIFidelityHandoff must be owned by cloak")
+
+        # Authority invariant: handoff does NOT authorize implementation or architecture translation
+        if not isinstance(self.authority, Mapping):
+            raise ValueError("UIFidelityHandoff requires mapping authority")
+        if (
+            self.authority.get("implementation_authorized") is not False
+            or self.authority.get("architecture_translation_authorized") is not False
+            or self.authority.get("release_authorized") is not False
+        ):
+            raise ValueError("UIFidelityHandoff cannot authorize implementation, architecture translation, or release")
+
+        # UIEF-5 Clockwork boundary invariant
+        if hasattr(self, "clockwork_translation") or hasattr(self, "engineering_translation_authorized"):
+            raise ValueError("UIFidelityHandoff cannot embed or initiate UIEF-5 engineering translation")
+
+        # Non-empty string validations
+        for field_name in (
+            "contract_id",
+            "design_contract_ref",
+            "ui_implementation_profile_ref",
+            "source_revision_or_contract_identity",
+            "design_intent",
+            "pattern_application_reason",
+        ):
+            val = getattr(self, field_name)
+            if not isinstance(val, str) or not val.strip():
+                raise ValueError(f"UIFidelityHandoff requires non-empty string {field_name}")
+
+        # Required collections validations
+        for field_name in (
+            "provenance_refs",
+            "information_hierarchy",
+            "macro_composition",
+            "selected_pattern_refs",
+            "required_regions",
+            "preserve",
+            "avoid",
+        ):
+            val = getattr(self, field_name)
+            if not isinstance(val, (tuple, list)) or not val:
+                raise ValueError(f"UIFidelityHandoff requires non-empty collection {field_name}")
+
+        # Check selected_pattern_refs provenance
+        for pat in self.selected_pattern_refs:
+            if not isinstance(pat, Mapping):
+                raise ValueError("selected_pattern_refs items must be mappings")
+            pat_id = str(pat.get("pattern_id", "")).strip()
+            source_kind = str(pat.get("source_kind", "")).strip()
+            prov_id = str(pat.get("provenance_id", "")).strip()
+            if not pat_id:
+                raise ValueError("selected_pattern_refs items require pattern_id")
+            if source_kind not in VALID_SOURCE_KINDS:
+                raise ValueError(f"unrecognized source_kind in pattern_ref: {source_kind}")
+            if not prov_id:
+                raise ValueError("selected_pattern_refs items require provenance_id")
+
+        # Check macro_composition structural roles
+        for comp in self.macro_composition:
+            if not isinstance(comp, Mapping):
+                raise ValueError("macro_composition items must be mappings")
+            if not str(comp.get("composition_id", "")).strip():
+                raise ValueError("macro_composition items require composition_id")
+
+        # Check unresolved must be a tuple/list (can be empty, but must be present)
+        if not isinstance(self.unresolved, (tuple, list)):
+            raise ValueError("UIFidelityHandoff requires unresolved list")
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "schema_version": self.schema_version,
+            "contract_id": self.contract_id,
+            "owned_by": self.owned_by,
+            "design_contract_ref": self.design_contract_ref,
+            "ui_implementation_profile_ref": self.ui_implementation_profile_ref,
+            "source_revision_or_contract_identity": self.source_revision_or_contract_identity,
+            "provenance_refs": list(self.provenance_refs),
+            "design_intent": self.design_intent,
+            "information_hierarchy": list(self.information_hierarchy),
+            "macro_composition": list(self.macro_composition),
+            "selected_pattern_refs": list(self.selected_pattern_refs),
+            "pattern_application_reason": self.pattern_application_reason,
+            "required_regions": list(self.required_regions),
+            "component_roles": dict(self.component_roles),
+            "visual_relationships": dict(self.visual_relationships),
+            "typography_roles": dict(self.typography_roles),
+            "spacing_relationships": dict(self.spacing_relationships),
+            "responsive_transformations": list(self.responsive_transformations),
+            "interaction_states": list(self.interaction_states),
+            "asset_requirements": list(self.asset_requirements),
+            "preserve": list(self.preserve),
+            "adapt": list(self.adapt),
+            "avoid": list(self.avoid),
+            "unresolved": list(self.unresolved),
+            "authority": dict(self.authority),
+        }
+
+    def to_ponytail_context(self) -> dict[str, Any]:
+        """Convert handoff into context format required by Ponytail UIEF-3 execution."""
+        return {
+            "ui_implementation_profile": UI_CONTRACT_FIDELITY,
+            "ui_fidelity_context": {
+                "design_contract_ref": self.design_contract_ref,
+                "cloak_handoff_ref": self.contract_id,
+                "clockwork_boundary_ref": "docs/architecture/UIEF_CLOCKWORK_ENGINEERING_BOUNDARY.md",
+                "pattern_refs": list(self.selected_pattern_refs),
+                "composition_refs": list(self.macro_composition),
+                "required_fidelity": {
+                    "preserve_macro_composition": True,
+                    "preserve_visual_hierarchy": True,
+                    "preserve_interaction_states": True,
+                    "preserve_responsive_transformation": True,
+                    "min_accessibility_level": "WCAG_AA",
+                },
+                "required_regions": list(self.required_regions),
+                "preserve": list(self.preserve),
+                "adapt": list(self.adapt),
+                "avoid": list(self.avoid),
+                "unresolved": list(self.unresolved),
+            },
+        }
+
+
+def validate_ui_fidelity_handoff(data: Mapping[str, Any]) -> UIFidelityHandoff:
+    if not isinstance(data, Mapping):
+        raise ValueError("UIFidelityHandoff data must be a mapping")
+
+    # Contamination check
+    exec_mode = data.get("execution_mode")
+    if isinstance(exec_mode, str) and exec_mode in (MINIMAL_SAFE, UI_CONTRACT_FIDELITY):
+        raise ValueError("Generic execution_mode cannot be contaminated with UI fidelity profile values")
+
+    # Prohibited initiation / boundary checks
+    if "clockwork_translation" in data or data.get("engineering_translation_authorized") is True:
+        raise ValueError("UIFidelityHandoff cannot embed or initiate UIEF-5 engineering translation")
+
+    owned_by = str(data.get("owned_by", "")).strip()
+    if owned_by != "cloak":
+        raise ValueError("UIFidelityHandoff must be owned by cloak")
+
+    authority = data.get("authority", {})
+    if not isinstance(authority, Mapping):
+        raise ValueError("UIFidelityHandoff requires mapping authority")
+
+    for seq_field in (
+        "provenance_refs",
+        "information_hierarchy",
+        "macro_composition",
+        "selected_pattern_refs",
+        "required_regions",
+        "responsive_transformations",
+        "interaction_states",
+        "asset_requirements",
+        "preserve",
+        "adapt",
+        "avoid",
+        "unresolved",
+    ):
+        if seq_field in data and not isinstance(data[seq_field], (list, tuple)):
+            raise ValueError(f"UIFidelityHandoff requires list or tuple for {seq_field}")
+
+    for map_field in (
+        "component_roles",
+        "visual_relationships",
+        "typography_roles",
+        "spacing_relationships",
+    ):
+        if map_field in data and not isinstance(data[map_field], Mapping):
+            raise ValueError(f"UIFidelityHandoff requires mapping for {map_field}")
+
+    handoff = UIFidelityHandoff(
+        schema_version=str(data.get("schema_version", UI_FIDELITY_HANDOFF_SCHEMA)),
+        contract_id=str(data.get("contract_id", "")),
+        owned_by=owned_by,
+        design_contract_ref=str(data.get("design_contract_ref", "")),
+        ui_implementation_profile_ref=str(data.get("ui_implementation_profile_ref", "")),
+        source_revision_or_contract_identity=str(data.get("source_revision_or_contract_identity", "")),
+        provenance_refs=tuple(dict(x) if isinstance(x, Mapping) else x for x in data.get("provenance_refs", ())),
+        design_intent=str(data.get("design_intent", "")),
+        information_hierarchy=tuple(data.get("information_hierarchy", ())),
+        macro_composition=tuple(dict(x) if isinstance(x, Mapping) else x for x in data.get("macro_composition", ())),
+        selected_pattern_refs=tuple(dict(x) if isinstance(x, Mapping) else x for x in data.get("selected_pattern_refs", ())),
+        pattern_application_reason=str(data.get("pattern_application_reason", "")),
+        required_regions=tuple(data.get("required_regions", ())),
+        component_roles=dict(data.get("component_roles", {})),
+        visual_relationships=dict(data.get("visual_relationships", {})),
+        typography_roles=dict(data.get("typography_roles", {})),
+        spacing_relationships=dict(data.get("spacing_relationships", {})),
+        responsive_transformations=tuple(data.get("responsive_transformations", ())),
+        interaction_states=tuple(str(x) for x in data.get("interaction_states", ())),
+        asset_requirements=tuple(data.get("asset_requirements", ())),
+        preserve=tuple(str(x) for x in data.get("preserve", ())),
+        adapt=tuple(str(x) for x in data.get("adapt", ())),
+        avoid=tuple(str(x) for x in data.get("avoid", ())),
+        unresolved=tuple(str(x) for x in data.get("unresolved", ())),
+        authority=dict(authority),
+    )
+    handoff.validate()
+    return handoff
+
+
 __all__ = [
     "MINIMAL_SAFE",
     "UI_CONTRACT_FIDELITY",
     "UIFidelityRouting",
     "UIDeviationRecord",
     "PonytailFidelityExecution",
+    "UIFidelityHandoff",
+    "VALID_SOURCE_KINDS",
+    "UI_FIDELITY_HANDOFF_SCHEMA",
     "classify_ui_fidelity",
     "enforce_ponytail_fidelity_execution",
+    "validate_ui_fidelity_handoff",
 ]
