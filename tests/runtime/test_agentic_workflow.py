@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+
+import pytest
 from pathlib import Path
 
 from jsonschema import Draft202012Validator
@@ -13,6 +15,9 @@ from orchestra_runtime.infrastructure.machine.execution_efficiency import (
     load_execution_budget_contract,
 )
 from orchestra_runtime.machine_contracts import load_specialist_registry
+from orchestra_runtime.models import Command, ContextPackage
+from orchestra_runtime.repositories import ManifestRepository, SkillSourceRepository
+from orchestra_runtime.services import RouterService, SkillRegistry
 
 ROOT = Path(__file__).resolve().parents[2]
 SCHEMAS = ROOT / "machine" / "schemas"
@@ -220,3 +225,45 @@ def test_generated_task_and_workflow_records_validate_against_draft_2020_12_sche
     Draft202012Validator(task_schema).validate(result["task_profile"])
     Draft202012Validator(workflow_schema).validate(result["workflow_profile"])
     Draft202012Validator(authority_schema).validate(load_agentic_workflow_contracts(ROOT)["authority_view"])
+
+
+def _router():
+    registry = SkillRegistry(ManifestRepository(ROOT), SkillSourceRepository(ROOT))
+    return RouterService(registry)
+
+
+def _routing_context(task):
+    return ContextPackage(
+        adapter_name="test",
+        prompt=task["goal"],
+        project_root=ROOT,
+        available_commands=("conductor", "cloak"),
+        manifest_version="test",
+        metadata={"agentic_task_profile": task},
+    )
+
+
+def test_router_service_attaches_execution_effective_awf_plan_for_conductor():
+    task = _task(
+        task_id="router-awf",
+        authority_domains=["UI_UX", "ARCHITECTURE"],
+        primary_owner="cloak",
+        dependency_depth=2,
+        independent_subtasks=2,
+        parallelizable=True,
+        mutation_required=True,
+        implementation_required=True,
+        validation_required=True,
+    )
+    decision = _router().route(Command("conductor", task["goal"], "test"), _routing_context(task))
+    profile = decision.metadata["agentic_workflow_profile"]
+    assert profile["selected_by"] == "conductor"
+    assert profile["topology_effective"] is True
+    assert profile["topology_change_requires_human_approval"] is False
+    assert decision.metadata["agentic_authority_rule"] == "WORKFLOW_TOPOLOGY_CHANGE != AUTHORITY_EXPANSION"
+
+
+def test_router_service_rejects_agentic_profile_on_non_conductor_route():
+    task = _task(task_id="wrong-owner")
+    with pytest.raises(ValueError, match="requires Conductor routing"):
+        _router().route(Command("cloak", task["goal"], "test"), _routing_context(task))
