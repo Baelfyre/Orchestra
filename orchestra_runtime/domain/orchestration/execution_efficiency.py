@@ -8,6 +8,7 @@ EXECUTION_BUDGET_INVARIANT = (
     "MINIMIZE_EXECUTION_COST_WITHOUT_MINIMIZING_REQUIRED_EVIDENCE_OR_IMPLEMENTATION_QUALITY"
 )
 EVIDENCE_TIERS = ("E0", "E1", "E2", "E3", "E4", "E5")
+EVIDENCE_TIER_NAMES = ("ORIENTATION", "INPUT_INTEGRITY", "TARGETED_ANALYSIS", "IMPLEMENTATION", "QUALIFICATION", "PROMOTION")
 SEARCH_ESCALATION = (
     "EXACT_PATH",
     "EXACT_SYMBOL",
@@ -74,8 +75,9 @@ class ExecutionBudget:
                 raise ValueError(f"ExecutionBudget default {field} must be true")
 
         tier_ids = tuple(str(item.get("tier", "")).strip() for item in self.evidence_tiers)
-        if tier_ids != EVIDENCE_TIERS:
-            raise ValueError("ExecutionBudget evidence tiers must be exact E0-E5 order")
+        tier_names = tuple(str(item.get("name", "")).strip() for item in self.evidence_tiers)
+        if tier_ids != EVIDENCE_TIERS or tier_names != EVIDENCE_TIER_NAMES:
+            raise ValueError("ExecutionBudget evidence tiers must be exact E0-E5 order and names")
         if self.search_escalation != SEARCH_ESCALATION:
             raise ValueError("ExecutionBudget search escalation order changed")
         if self.validation_escalation != VALIDATION_ESCALATION:
@@ -94,7 +96,11 @@ class ExecutionBudget:
         ]:
             raise ValueError("ExecutionBudget decisive stop required fields changed")
 
-        if not self.measurement_fields or len(set(self.measurement_fields)) != len(self.measurement_fields):
+        if (
+            not self.measurement_fields
+            or any(not field.strip() for field in self.measurement_fields)
+            or len(set(self.measurement_fields)) != len(self.measurement_fields)
+        ):
             raise ValueError("ExecutionBudget measurement_fields must be non-empty and unique")
 
         for field in AUTHORITY_FALSE_FIELDS:
@@ -253,6 +259,7 @@ __all__ = [
     "AUTHORITY_FALSE_FIELDS",
     "DecisiveStopSignal",
     "EVIDENCE_TIERS",
+    "EVIDENCE_TIER_NAMES",
     "EXECUTION_BUDGET_INVARIANT",
     "EXECUTION_BUDGET_SCHEMA",
     "ExecutionBudget",
