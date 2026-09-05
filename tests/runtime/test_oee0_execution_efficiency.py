@@ -219,3 +219,113 @@ def test_execution_budget_adapter_rejects_weakened_contract(tmp_path) -> None:
     path.write_text(json.dumps(data), encoding="utf-8")
     assert "max_parallel_specialists" in execution_budget_errors(tmp_path)[0]
 
+@pytest.mark.parametrize(
+    ("mutate", "message"),
+    [
+        (lambda d: d.update({"schema_version": "wrong"}), "schema_version"),
+        (lambda d: d.update({"contract_name": "Wrong"}), "contract_name"),
+        (lambda d: d.update({"owner": "the-governor"}), "owner must be conductor"),
+        (lambda d: d.update({"core_invariant": "weaker"}), "core invariant changed"),
+        (lambda d: d["evidence_tiers"][0].update({"name": "WRONG"}), "evidence tiers"),
+        (lambda d: d.update({"search_escalation": ["EXTERNAL"]}), "search escalation"),
+        (lambda d: d.update({"validation_escalation": ["PROTECTED_GATES"]}), "validation escalation"),
+        (lambda d: d["decisive_stop"].update({"rule": "KEEP_GOING"}), "decisive stop rule"),
+        (lambda d: d["decisive_stop"].update({"required_fields": []}), "decisive stop required fields"),
+        (lambda d: d.update({"measurement_fields": []}), "measurement_fields"),
+        (lambda d: d.update({"measurement_fields": ["duplicate", "duplicate"]}), "measurement_fields"),
+    ],
+)
+def test_execution_budget_rejects_contract_drift(mutate, message) -> None:
+    data = deepcopy(_budget())
+    mutate(data)
+    with pytest.raises(ValueError, match=message):
+        validate_execution_budget(data)
+
+
+@pytest.mark.parametrize("field", ["defaults", "decisive_stop", "authority"])
+def test_execution_budget_requires_mapping_sections(field: str) -> None:
+    data = deepcopy(_budget())
+    data[field] = []
+    with pytest.raises(ValueError, match=f"{field} must be a mapping"):
+        validate_execution_budget(data)
+
+
+@pytest.mark.parametrize(
+    "field",
+    ["evidence_tiers", "search_escalation", "validation_escalation", "measurement_fields"],
+)
+def test_execution_budget_requires_sequence_sections(field: str) -> None:
+    data = deepcopy(_budget())
+    data[field] = "not-a-sequence"
+    with pytest.raises(ValueError, match=f"{field} must be a list or tuple"):
+        validate_execution_budget(data)
+
+
+def test_execution_budget_rejects_non_mapping_tier_item() -> None:
+    data = deepcopy(_budget())
+    data["evidence_tiers"][0] = "E0"
+    with pytest.raises(ValueError, match="evidence_tiers items must be mappings"):
+        validate_execution_budget(data)
+
+
+def test_execution_budget_rejects_non_mapping_root() -> None:
+    with pytest.raises(ValueError, match="data must be a mapping"):
+        validate_execution_budget([])
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [
+        ("owner", "", "owner is required"),
+        ("reason", "", "reason is required"),
+        ("evidence_refs", [], "requires evidence_refs"),
+        ("evidence_refs", [""], "requires evidence_refs"),
+    ],
+)
+def test_decisive_stop_requires_complete_evidence(field, value, message) -> None:
+    data = {
+        "owner": "cloak",
+        "evidence_sufficient": True,
+        "stop_required": True,
+        "downstream_execution_allowed": False,
+        "reason": "blocked",
+        "evidence_refs": ["evidence"],
+    }
+    data[field] = value
+    with pytest.raises(ValueError, match=message):
+        validate_decisive_stop_signal(data)
+
+
+def test_decisive_stop_rejects_non_mapping_and_non_sequence_refs() -> None:
+    with pytest.raises(ValueError, match="data must be a mapping"):
+        validate_decisive_stop_signal([])
+
+    with pytest.raises(ValueError, match="evidence_refs must be a list or tuple"):
+        validate_decisive_stop_signal(
+            {
+                "owner": "cloak",
+                "evidence_sufficient": True,
+                "stop_required": True,
+                "downstream_execution_allowed": False,
+                "reason": "blocked",
+                "evidence_refs": "one-ref",
+            }
+        )
+
+
+def test_evidence_tier_rejects_unknown_inputs() -> None:
+    with pytest.raises(ValueError, match="unknown evidence tier"):
+        require_evidence_tier("E9", ())
+
+    with pytest.raises(ValueError, match="completed_tiers contains unknown"):
+        require_evidence_tier("E1", ("UNKNOWN",))
+
+
+def test_escalation_rejects_unknown_stage() -> None:
+    with pytest.raises(ValueError, match="unknown escalation stage"):
+        require_search_escalation(
+            "EXACT_PATH",
+            "UNKNOWN",
+            current_stage_insufficient=True,
+        )
+
