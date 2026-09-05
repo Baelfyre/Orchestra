@@ -1,5 +1,16 @@
 # Changelog
 
+## Post-v1.8.0 AWF-N6 advanced adaptation admission
+
+- Canonicalizes AWF-N5 semantic robustness from PR #802 at `0b5582e7175cb1ca432b371aad21634f35fa34aa`.
+- Adds a deterministic advanced-adaptation admission evaluator for A5 execution-effective topology selection, learned routing recommendations, and OEE concurrency widening.
+- Recomputes the current admission decision from canonical A5, B2.5 confirmatory, B5 synthesis, A3 shadow-learning, AWF, and OEE evidence.
+- Records `COMPLETE_NO_PROMOTION_EVIDENCE_INSUFFICIENT`: A5 confirmatory benefit was not established, learned routing has no exact TaskProfile/topology-bound predictive-benefit evidence, and concurrency has no confirmatory parallel-benefit evidence or policy authorization.
+- Proves with adversarial tests that even a future evidence-positive candidate remains non-execution-effective and requires a separate governed transition.
+- Keeps deterministic AWF execution, specialist authority, and OEE `max_parallel_specialists = 1` unchanged.
+- Performs no new benchmark model calls and does not rerun prior negative experiments to seek a favorable outcome.
+- Does not attach A5 or learned routing to Conductor/RuntimeExecutor, release, deploy, activate policy, or resume UIEF.
+
 ## Post-v1.8.0 AWF-N5 semantic robustness candidate
 
 - Starts AWF-N5 from canonical PR #801 and Padayon continuity #383.
