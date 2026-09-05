@@ -1,5 +1,10 @@
 """Pure authority-aware adaptive workflow domain contracts."""
 
+from .advanced_adaptation import (
+    AdvancedAdaptationAdmission,
+    PromotionCandidateDecision,
+    evaluate_advanced_adaptation_admission,
+)
 from .agentic_workflow import STOP_CONDITIONS, select_agentic_workflow
 from .intake import (
     DERIVATION_POLICY_SCHEMA_VERSION,
@@ -52,11 +57,14 @@ __all__ = [
     "STOP_CONDITIONS",
     "TASK_PROFILE_SCHEMA_VERSION",
     "WORKFLOW_PROFILE_SCHEMA_VERSION",
+    "AdvancedAdaptationAdmission",
     "AgenticWorkflowProfile",
     "IntakeSignal",
+    "PromotionCandidateDecision",
     "TaskProfileDerivation",
     "build_selection_trace",
     "derive_task_profile",
+    "evaluate_advanced_adaptation_admission",
     "validate_derivation_policy",
     "CriticContract",
     "SpecialistAuthority",
