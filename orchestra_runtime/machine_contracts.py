@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 from typing import Any
 
-from .domain.orchestration.execution_efficiency import validate_execution_budget
 from .repositories import ManifestRepository, SkillSourceRepository
 
 SPECIALIST_REGISTRY_SCHEMA_VERSION = "orchestra.specialist-registry.v1"
@@ -12,14 +11,12 @@ ROUTING_CONTRACT_SCHEMA_VERSION = "orchestra.routing-contract.v1"
 GOVERNANCE_POLICY_SCHEMA_VERSION = "orchestra.governance-policy.v1"
 UI_FIDELITY_ROUTING_CONTRACT_SCHEMA_VERSION = "orchestra.ui-fidelity-routing.v1"
 UI_FIDELITY_HANDOFF_SCHEMA_VERSION = "orchestra.ui-fidelity-handoff.v1"
-EXECUTION_BUDGET_SCHEMA_VERSION = "orchestra.execution-budget.v1"
 
 _MACHINE_ROOT = Path("machine")
 _SPECIALIST_REGISTRY = _MACHINE_ROOT / "specialists" / "registry.v1.json"
 _ROUTING_CONTRACT = _MACHINE_ROOT / "routing" / "routes.v1.json"
 _UI_FIDELITY_ROUTING_CONTRACT = _MACHINE_ROOT / "routing" / "ui-fidelity-routing.v1.json"
 _UI_FIDELITY_HANDOFF_CONTRACT = _MACHINE_ROOT / "ui" / "ui-fidelity-handoff.v1.json"
-_EXECUTION_BUDGET_CONTRACT = _MACHINE_ROOT / "governance" / "execution-budget.v1.json"
 _GOVERNANCE_POLICY = _MACHINE_ROOT / "governance" / "policy.v1.json"
 
 FRONTMATTER_FIELDS = (
@@ -143,13 +140,6 @@ def load_ui_fidelity_handoff_contract(root: Path | str | None = None) -> dict[st
     contract = _load_json(_root(root) / _UI_FIDELITY_HANDOFF_CONTRACT)
     if contract.get("schema_version") != UI_FIDELITY_HANDOFF_SCHEMA_VERSION:
         raise ValueError("unsupported UI fidelity handoff contract schema_version")
-    return contract
-
-
-def load_execution_budget_contract(root: Path | str | None = None) -> dict[str, Any]:
-    contract = _load_json(_root(root) / _EXECUTION_BUDGET_CONTRACT)
-    if contract.get("schema_version") != EXECUTION_BUDGET_SCHEMA_VERSION:
-        raise ValueError("unsupported execution budget schema_version")
     return contract
 
 
@@ -376,11 +366,6 @@ def machine_contract_errors(root: Path | str | None = None) -> tuple[str, ...]:
                 errors.append(f"UI_FIDELITY_HANDOFF_MISSING_FIELD:{req_field}")
     except (ValueError, OSError) as exc:
         errors.append(f"UI_FIDELITY_HANDOFF_CONTRACT_INVALID:{exc}")
-
-    try:
-        validate_execution_budget(load_execution_budget_contract(repo_root))
-    except (ValueError, OSError) as exc:
-        errors.append(f"EXECUTION_BUDGET_CONTRACT_INVALID:{exc}")
 
     try:
         policy = load_governance_policy(repo_root)
