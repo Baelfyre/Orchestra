@@ -389,16 +389,16 @@ def test_oee5_unchanged_ci_is_passive_and_watch_loops_are_rejected() -> None:
 
 
 @pytest.mark.parametrize(
-    "request",
+    "ci_request",
     [
         CIWaitRequest("", "checks:a", False),
         CIWaitRequest("checks:a", "", False),
         CIWaitRequest("checks:a", "checks:a", "no"),
     ],
 )
-def test_oee5_ci_wait_request_rejects_malformed_state(request) -> None:
+def test_oee5_ci_wait_request_rejects_malformed_state(ci_request) -> None:
     with pytest.raises(ValueError):
-        request.evaluate()
+        ci_request.evaluate()
 
 
 def _ref(name: str) -> ContextReference:
