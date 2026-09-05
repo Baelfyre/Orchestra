@@ -9,6 +9,7 @@
 - Proves with adversarial tests that even a future evidence-positive candidate remains non-execution-effective and requires a separate governed transition.
 - Keeps deterministic AWF execution, specialist authority, and OEE `max_parallel_specialists = 1` unchanged.
 - Performs no new benchmark model calls and does not rerun prior negative experiments to seek a favorable outcome.
+- PR #803 qualified on exact head `550a94fc14081d51da02fb451e0a25517e7ac7f7` and was squash merged to canonical `7cac0beb337dc43b5b1cbbdae7cf561b477adcdf`; N6 closes as `COMPLETE_NO_PROMOTION_EVIDENCE_INSUFFICIENT`.
 - Does not attach A5 or learned routing to Conductor/RuntimeExecutor, release, deploy, activate policy, or resume UIEF.
 
 ## Post-v1.8.0 AWF-N5 semantic robustness candidate
