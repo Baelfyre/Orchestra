@@ -240,3 +240,17 @@ def test_machine_contract_errors_reject_ui_engineering_translation_contract_exce
         in contracts.machine_contract_errors(ROOT)
     )
 
+def test_machine_contract_errors_reject_ui_fidelity_routing_contract_exception(monkeypatch):
+    def _failing_loader(root=None):
+        raise ValueError("corrupted fidelity routing")
+
+    monkeypatch.setattr(
+        contracts,
+        "load_ui_fidelity_routing_contract",
+        _failing_loader,
+    )
+    assert (
+        "UI_FIDELITY_ROUTING_CONTRACT_INVALID:corrupted fidelity routing"
+        in contracts.machine_contract_errors(ROOT)
+    )
+
