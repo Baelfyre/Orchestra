@@ -499,3 +499,104 @@ def test_oee6_context_reference_and_list_fields_fail_closed() -> None:
             required_refs=(_ref("one"),),
             historical_context_included=1,
         ).validate()
+
+def test_oee1_invocation_decision_rejects_malformed_outputs() -> None:
+    from orchestra_runtime.domain.orchestration.execution_efficiency import (
+        SpecialistInvocationDecision,
+    )
+
+    with pytest.raises(ValueError, match="flags must be booleans"):
+        SpecialistInvocationDecision(
+            allowed=1,
+            reason_code="X",
+            requested_specialist="cloak",
+            role="PRIMARY",
+            blocking_allowed=True,
+        )
+
+    with pytest.raises(ValueError, match="unknown specialist invocation decision role"):
+        SpecialistInvocationDecision(
+            allowed=True,
+            reason_code="X",
+            requested_specialist="cloak",
+            role="UNKNOWN",
+            blocking_allowed=True,
+        )
+
+
+@pytest.mark.parametrize(
+    "consumers",
+    [
+        (),
+        ("",),
+    ],
+)
+def test_oee3_reuse_record_requires_non_empty_consumers(consumers) -> None:
+    record = EvidenceReuseRecord(
+        "id",
+        "ref",
+        "identity",
+        sha256(b"x").hexdigest(),
+        "E1",
+        consumers,
+    )
+    with pytest.raises(ValueError, match="allowed_consumers"):
+        record.validate()
+
+
+@pytest.mark.parametrize(
+    ("ref", "identity", "purpose"),
+    [
+        ("", "sha:x", "purpose"),
+        ("ref", "", "purpose"),
+        ("ref", "sha:x", ""),
+    ],
+)
+def test_oee6_context_reference_requires_all_identity_fields(
+    ref, identity, purpose
+) -> None:
+    with pytest.raises(ValueError):
+        ContextReference(ref, identity, purpose).validate()
+
+
+@pytest.mark.parametrize(
+    ("phase_id", "owner", "objective"),
+    [
+        ("", "conductor", "objective"),
+        ("OEE-6", "", "objective"),
+        ("OEE-6", "conductor", ""),
+    ],
+)
+def test_oee6_phase_context_pack_requires_core_identity(
+    phase_id, owner, objective
+) -> None:
+    with pytest.raises(ValueError):
+        PhaseContextPack(
+            phase_id=phase_id,
+            owner_specialist=owner,
+            objective=objective,
+            required_refs=(_ref("one"),),
+        ).validate()
+
+
+def test_oee6_historical_context_is_allowed_only_with_explicit_reason() -> None:
+    PhaseContextPack(
+        phase_id="OEE-6",
+        owner_specialist="conductor",
+        objective="inspect one historical decision",
+        required_refs=(_ref("one"),),
+        historical_context_included=True,
+        historical_context_reason="the current decision explicitly depends on it",
+    ).validate()
+
+
+def test_oee6_list_fields_reject_empty_values() -> None:
+    with pytest.raises(ValueError, match="unique non-empty"):
+        PhaseContextPack(
+            phase_id="OEE-6",
+            owner_specialist="conductor",
+            objective="x",
+            required_refs=(_ref("one"),),
+            allowed_actions=("",),
+        ).validate()
+
