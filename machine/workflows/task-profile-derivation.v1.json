@@ -217,8 +217,18 @@
       "never",
       "must not",
       "should not",
-      "without",
-      "no"
+      "refrain from",
+      "hold off on",
+      "avoid",
+      "no need to",
+      "there is no need to",
+      "without changing",
+      "without modifying",
+      "without deploying",
+      "without merging",
+      "without running",
+      "without assessing",
+      "without executing"
     ],
     "hypothetical_prefixes": [
       "what would happen if",
