@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 from typing import Any
 
+from .domain.orchestration.execution_efficiency import validate_execution_budget
 from .repositories import ManifestRepository, SkillSourceRepository
 
 SPECIALIST_REGISTRY_SCHEMA_VERSION = "orchestra.specialist-registry.v1"
@@ -377,80 +378,7 @@ def machine_contract_errors(root: Path | str | None = None) -> tuple[str, ...]:
         errors.append(f"UI_FIDELITY_HANDOFF_CONTRACT_INVALID:{exc}")
 
     try:
-        budget = load_execution_budget_contract(repo_root)
-        if budget.get("contract_name") != "ExecutionBudget":
-            errors.append("EXECUTION_BUDGET_CONTRACT_NAME_INVALID")
-        if budget.get("owner") != "conductor":
-            errors.append("EXECUTION_BUDGET_OWNER_INVALID")
-        defaults = budget.get("defaults")
-        if not isinstance(defaults, dict):
-            errors.append("EXECUTION_BUDGET_DEFAULTS_INVALID")
-        else:
-            if defaults.get("max_parallel_specialists") != 1:
-                errors.append("EXECUTION_BUDGET_PARALLEL_SPECIALIST_DEFAULT_INVALID")
-            if defaults.get("specialist_retry_limit") != 1:
-                errors.append("EXECUTION_BUDGET_RETRY_LIMIT_INVALID")
-            for field in (
-                "owner_first_routing",
-                "broad_search_requires_narrow_search_exhaustion",
-                "evidence_cache_requires_exact_source_identity",
-                "full_validation_requires_stable_candidate",
-                "ci_wait_must_not_consume_reasoning_budget",
-                "autonomous_campaigns_load_one_phase_at_a_time",
-                "optional_review_cannot_block_without_explicit_authority",
-            ):
-                if defaults.get(field) is not True:
-                    errors.append(f"EXECUTION_BUDGET_DEFAULT_NOT_FAIL_CLOSED:{field}")
-        if [item.get("tier") for item in budget.get("evidence_tiers", [])] != [
-            "E0", "E1", "E2", "E3", "E4", "E5"
-        ]:
-            errors.append("EXECUTION_BUDGET_EVIDENCE_TIERS_INVALID")
-        if budget.get("search_escalation") != [
-            "EXACT_PATH",
-            "EXACT_SYMBOL",
-            "BOUNDED_DIRECTORY",
-            "REPOSITORY_WIDE",
-            "EXTERNAL",
-        ]:
-            errors.append("EXECUTION_BUDGET_SEARCH_ESCALATION_INVALID")
-        if budget.get("validation_escalation") != [
-            "SYNTAX_SCHEMA",
-            "DIRECT_TESTS",
-            "SUBSYSTEM",
-            "REPOSITORY_QUALIFICATION",
-            "PROTECTED_GATES",
-        ]:
-            errors.append("EXECUTION_BUDGET_VALIDATION_ESCALATION_INVALID")
-        if budget.get("core_invariant") != (
-            "MINIMIZE_EXECUTION_COST_WITHOUT_MINIMIZING_REQUIRED_EVIDENCE_OR_IMPLEMENTATION_QUALITY"
-        ):
-            errors.append("EXECUTION_BUDGET_INVARIANT_INVALID")
-        decisive_stop = budget.get("decisive_stop")
-        if not isinstance(decisive_stop, dict) or decisive_stop.get("rule") != "EARLIEST_DECISIVE_EVIDENCE_WINS":
-            errors.append("EXECUTION_BUDGET_DECISIVE_STOP_INVALID")
-        measurement_fields = budget.get("measurement_fields")
-        if (
-            not isinstance(measurement_fields, list)
-            or not measurement_fields
-            or any(not isinstance(item, str) or not item.strip() for item in measurement_fields)
-            or len(measurement_fields) != len(set(measurement_fields))
-        ):
-            errors.append("EXECUTION_BUDGET_MEASUREMENT_FIELDS_INVALID")
-        authority = budget.get("authority")
-        required_authority_fields = {
-            "creates_or_expands_authority",
-            "weakens_existing_governance",
-            "weakens_security",
-            "weakens_validation",
-            "weakens_human_gates",
-            "new_specialist_required",
-        }
-        if (
-            not isinstance(authority, dict)
-            or set(authority) != required_authority_fields
-            or any(value is not False for value in authority.values())
-        ):
-            errors.append("EXECUTION_BUDGET_AUTHORITY_EXPANSION")
+        validate_execution_budget(load_execution_budget_contract(repo_root))
     except (ValueError, OSError) as exc:
         errors.append(f"EXECUTION_BUDGET_CONTRACT_INVALID:{exc}")
 
