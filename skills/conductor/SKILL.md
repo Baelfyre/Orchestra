@@ -16,14 +16,13 @@ output_formats: [Routing Plan, Prompts]
 Classify mode and route. No domain execution.
 
 ## Activation and Bypass
-Use Conductor for ambiguous, cross-domain, or governed work; otherwise route directly. Use `the-tuner` for multi-domain contracts. Blocking states stop; `CROSS_LAYER_CONTRACT_READY` grants no authority.
+Use Conductor for ambiguous, cross-domain, governed, or adaptive work; otherwise route directly. The Tuner coordinates multi-domain work. Topology change alone needs no human gate; blockers still stop.
 
 ## Canonical Routing Algorithm
 1. Select the [mode](../../docs/routing/EXECUTION_MODES_POLICY.md).
 2. Route from the [skill index](../../SKILL_INDEX.md); load the [routing map](../../ROUTING_MAP.md) only for ambiguity or dependencies.
 3. Load governance on triggers; pause on unresolved gates.
 4. Build the minimum [packet](../../docs/routing/MINIMAL_PROMPT_FORMAT.md).
-5. For adaptive topology or specialist re-entry, load [AWF](../../docs/architecture/ADAPTIVE_AGENTIC_WORKFLOW_AWF.md); topology changes inside current authority need no human gate.
 
 ## Governance Profile Selection Gate
 
