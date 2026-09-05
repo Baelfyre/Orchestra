@@ -1,0 +1,170 @@
+{
+  "$schema": "../schemas/ui-engineering-translation.v1.schema.json",
+  "schema_version": "orchestra.ui-engineering-translation.v1",
+  "contract_id": "uief5-ui-engineering-translation-reference",
+  "owned_by": "clockwork",
+  "source_handoff_ref": "uief4-ui-fidelity-handoff-reference",
+  "source_revision_or_contract_identity": "sha256:fc5e8df99cb47ebaf366d53cc0ebb9897fe61669750a550add53ca3c74113659",
+  "component_boundaries": [
+    {
+      "component_id": "WorkspaceShell",
+      "responsibility": "Own the accepted three-region vertical workspace shell and composition slots without claiming a consuming-project native component identity.",
+      "contains": [
+        "WorkspaceHeader",
+        "PrimaryWorkspace",
+        "ContextualInspector"
+      ],
+      "reuse_semantics": "LOGICAL_BOUNDARY_ONLY; bind a project-native implementation only when consuming-project evidence exists."
+    },
+    {
+      "component_id": "PrimaryWorkspace",
+      "responsibility": "Own accepted split-pane and responsive navigation mechanics without changing Cloak-owned hierarchy.",
+      "contains": [
+        "CollateralNavigator",
+        "ActiveDocumentViewer"
+      ],
+      "reuse_semantics": "PREFER_VERIFIED_PROJECT_NATIVE_REUSE_WHEN_EVIDENCE_EXISTS"
+    },
+    {
+      "component_id": "ActionPaletteBoundary",
+      "responsibility": "Own the action-palette integration role without inventing a project-native path or component identity.",
+      "contains": [
+        "ActionPaletteRole"
+      ],
+      "reuse_semantics": "ROLE_BOUNDARY_ONLY_PENDING_CONSUMING_PROJECT_EVIDENCE"
+    }
+  ],
+  "state_ownership": [
+    {
+      "state_id": "navigation-collapsed",
+      "owner": "PrimaryWorkspace",
+      "scope": "VIEW_LOCAL",
+      "lifecycle": "MOUNT_TO_UNMOUNT"
+    },
+    {
+      "state_id": "bottom-inspector-expanded",
+      "owner": "ContextualInspector",
+      "scope": "VIEW_LOCAL",
+      "lifecycle": "MOUNT_TO_UNMOUNT"
+    },
+    {
+      "state_id": "action-palette-open",
+      "owner": "ActionPaletteBoundary",
+      "scope": "SHELL_LOCAL",
+      "lifecycle": "SHELL_MOUNT_TO_UNMOUNT"
+    }
+  ],
+  "responsive_engineering": [
+    {
+      "transformation_id": "split-pane-responsive-collapse",
+      "owner": "PrimaryWorkspace",
+      "strategy": "Preserve desktop horizontal split; below 1024px use the accepted drawer behavior and breakpoint-specific content flow rather than generic stacking."
+    },
+    {
+      "transformation_id": "mobile-single-column-shell",
+      "owner": "WorkspaceShell",
+      "strategy": "Preserve accepted mobile single-column content flow and drawer overlay behavior."
+    }
+  ],
+  "composition_ownership": [
+    {
+      "composition_id": "desktop-macro-grid",
+      "owner": "WorkspaceShell",
+      "strategy": "Grid shell with fixed header, flexible primary workspace, and docked bottom tray."
+    },
+    {
+      "composition_id": "action-bar-visual-hierarchy",
+      "owner": "WorkspaceHeader",
+      "strategy": "Header sub-layout owns breadcrumb/action grouping while emphasis remains Cloak-owned."
+    },
+    {
+      "composition_id": "split-pane-responsive-collapse",
+      "owner": "PrimaryWorkspace",
+      "strategy": "Responsive container owns split and drawer mechanics without changing accepted visible intent."
+    }
+  ],
+  "layer_relationships": [
+    {
+      "layer_id": "action-palette-overlay",
+      "owner": "ActionPaletteBoundary",
+      "relationship": "Own overlay portal and stacking context above shell surfaces while preserving focus and escape lifecycle."
+    },
+    {
+      "layer_id": "responsive-navigation-drawer",
+      "owner": "PrimaryWorkspace",
+      "relationship": "Own drawer mount/unmount, focus containment, and pointer interception only at accepted responsive states."
+    }
+  ],
+  "data_flow_boundaries": [
+    {
+      "flow_id": "workspace-context",
+      "producer": "ApplicationShell",
+      "consumer": "WorkspaceShell",
+      "contract": "Repository/workspace context enters through an explicit input boundary; transport details do not determine visible design."
+    },
+    {
+      "flow_id": "active-document",
+      "producer": "WorkspaceState",
+      "consumer": "ActiveDocumentViewer",
+      "contract": "Active document identity/content is state input; presentation remains bounded by the accepted handoff."
+    }
+  ],
+  "reusable_component_strategy": [
+    {
+      "evidence_identity": "uief4-ui-fidelity-handoff-reference#component_roles.action_palette",
+      "decision": "BIND_AT_CONSUMING_PROJECT",
+      "reason": "The handoff supplies a semantic action-palette role but explicitly does not supply a project-native component path."
+    },
+    {
+      "evidence_identity": "uief4-ui-fidelity-handoff-reference#unresolved.consuming-project-native-identities",
+      "decision": "PREFER_VERIFIED_REUSE",
+      "reason": "Use project-native shell/layout primitives only after consuming-project evidence binds their identity and proves fidelity compatibility."
+    }
+  ],
+  "integration_boundaries": [
+    {
+      "boundary_id": "cloak-to-clockwork",
+      "direction": "INPUT",
+      "contract": "UIFidelityHandoff",
+      "rule": "Clockwork consumes accepted visible intent and exact handoff content identity without mutating it."
+    },
+    {
+      "boundary_id": "clockwork-to-ponytail",
+      "direction": "OUTPUT",
+      "contract": "UIEngineeringTranslation",
+      "rule": "Provides engineering boundaries only; implementation remains Ponytail-owned and separately authorized."
+    }
+  ],
+  "dependency_boundaries": [
+    {
+      "from": "UI composition components",
+      "to": "verified project-native UI primitives",
+      "rule": "ALLOWED_ONLY_WHEN_CONSUMING_PROJECT_EVIDENCE_BINDS_IDENTITY_AND_FIDELITY_IS_PRESERVED"
+    },
+    {
+      "from": "UI composition components",
+      "to": "new third-party UI dependency",
+      "rule": "PROHIBITED_WITHOUT_SEPARATE_ADOPTION_AUTHORITY"
+    },
+    {
+      "from": "domain/application layers",
+      "to": "visible-layer components",
+      "rule": "PROHIBITED"
+    }
+  ],
+  "preserve": [
+    "Preserve every accepted UIEF-4 macro-composition identity in composition_ownership.",
+    "Preserve accepted responsive transformations without replacing them with generic stacking.",
+    "Preserve Cloak ownership of visible intent, hierarchy, spacing, typography, interactions, and accessibility requirements.",
+    "Preserve project-native component/token/asset precedence only when traceable consuming-project evidence exists."
+  ],
+  "unresolved_engineering_questions": [
+    "Consuming-project native component, icon, and design-token identities remain unresolved until accepted project evidence binds them."
+  ],
+  "authority": {
+    "visible_layer_redesign_authorized": false,
+    "implementation_authorized": false,
+    "dependency_adoption_authorized": false,
+    "release_authorized": false
+  }
+}
