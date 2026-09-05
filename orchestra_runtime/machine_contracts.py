@@ -11,12 +11,14 @@ ROUTING_CONTRACT_SCHEMA_VERSION = "orchestra.routing-contract.v1"
 GOVERNANCE_POLICY_SCHEMA_VERSION = "orchestra.governance-policy.v1"
 UI_FIDELITY_ROUTING_CONTRACT_SCHEMA_VERSION = "orchestra.ui-fidelity-routing.v1"
 UI_FIDELITY_HANDOFF_SCHEMA_VERSION = "orchestra.ui-fidelity-handoff.v1"
+UI_ENGINEERING_TRANSLATION_SCHEMA_VERSION = "orchestra.ui-engineering-translation.v1"
 
 _MACHINE_ROOT = Path("machine")
 _SPECIALIST_REGISTRY = _MACHINE_ROOT / "specialists" / "registry.v1.json"
 _ROUTING_CONTRACT = _MACHINE_ROOT / "routing" / "routes.v1.json"
 _UI_FIDELITY_ROUTING_CONTRACT = _MACHINE_ROOT / "routing" / "ui-fidelity-routing.v1.json"
 _UI_FIDELITY_HANDOFF_CONTRACT = _MACHINE_ROOT / "ui" / "ui-fidelity-handoff.v1.json"
+_UI_ENGINEERING_TRANSLATION_CONTRACT = _MACHINE_ROOT / "ui" / "ui-engineering-translation.v1.json"
 _GOVERNANCE_POLICY = _MACHINE_ROOT / "governance" / "policy.v1.json"
 
 FRONTMATTER_FIELDS = (
@@ -140,6 +142,13 @@ def load_ui_fidelity_handoff_contract(root: Path | str | None = None) -> dict[st
     contract = _load_json(_root(root) / _UI_FIDELITY_HANDOFF_CONTRACT)
     if contract.get("schema_version") != UI_FIDELITY_HANDOFF_SCHEMA_VERSION:
         raise ValueError("unsupported UI fidelity handoff contract schema_version")
+    return contract
+
+
+def load_ui_engineering_translation_contract(root: Path | str | None = None) -> dict[str, Any]:
+    contract = _load_json(_root(root) / _UI_ENGINEERING_TRANSLATION_CONTRACT)
+    if contract.get("schema_version") != UI_ENGINEERING_TRANSLATION_SCHEMA_VERSION:
+        raise ValueError("unsupported UI engineering translation contract schema_version")
     return contract
 
 
@@ -366,6 +375,33 @@ def machine_contract_errors(root: Path | str | None = None) -> tuple[str, ...]:
                 errors.append(f"UI_FIDELITY_HANDOFF_MISSING_FIELD:{req_field}")
     except (ValueError, OSError) as exc:
         errors.append(f"UI_FIDELITY_HANDOFF_CONTRACT_INVALID:{exc}")
+
+    try:
+        translation = load_ui_engineering_translation_contract(repo_root)
+        if translation.get("owned_by") != "clockwork":
+            errors.append("UI_ENGINEERING_TRANSLATION_OWNER_INVALID")
+        authority = translation.get("authority")
+        if not isinstance(authority, dict) or any(value is not False for value in authority.values()):
+            errors.append("UI_ENGINEERING_TRANSLATION_AUTHORITY_EXPANSION")
+        for req_field in (
+            "source_handoff_ref",
+            "source_revision_or_contract_identity",
+            "component_boundaries",
+            "state_ownership",
+            "responsive_engineering",
+            "composition_ownership",
+            "layer_relationships",
+            "data_flow_boundaries",
+            "reusable_component_strategy",
+            "integration_boundaries",
+            "dependency_boundaries",
+            "preserve",
+            "unresolved_engineering_questions",
+        ):
+            if req_field not in translation:
+                errors.append(f"UI_ENGINEERING_TRANSLATION_MISSING_FIELD:{req_field}")
+    except (ValueError, OSError) as exc:
+        errors.append(f"UI_ENGINEERING_TRANSLATION_CONTRACT_INVALID:{exc}")
 
     try:
         policy = load_governance_policy(repo_root)
