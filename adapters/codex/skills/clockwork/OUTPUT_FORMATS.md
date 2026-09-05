@@ -177,4 +177,3 @@ Rules:
 - Do not redesign Cloak-owned visible intent.
 - Do not initiate UIEF-6 from this output.
 - Ponytail owns implementation after the engineering boundary is accepted.
-
