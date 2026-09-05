@@ -75,7 +75,7 @@ def test_handoff_to_ponytail_context_executes_cleanly() -> None:
     inner_ctx = ponytail_ctx["ui_fidelity_context"]
     assert inner_ctx["design_contract_ref"] == handoff.design_contract_ref
     assert inner_ctx["cloak_handoff_ref"] == handoff.contract_id
-    assert inner_ctx["clockwork_boundary_ref"] == "docs/architecture/UIEF_CLOCKWORK_ENGINEERING_BOUNDARY.md"
+    assert inner_ctx["clockwork_boundary_ref"] == "docs/project/UI_EXECUTION_FIDELITY_PLAN.md"
 
     # Enforce through Ponytail execution gate
     execution = enforce_ponytail_fidelity_execution(
@@ -86,7 +86,7 @@ def test_handoff_to_ponytail_context_executes_cleanly() -> None:
                 "action-bar-visual-hierarchy",
                 "split-pane-responsive-collapse",
             ],
-            "project_native_reuse": ["components/palette/CommandPalette.tsx"],
+            "project_native_reuse": [],
             "deviations": [],
         },
     )
