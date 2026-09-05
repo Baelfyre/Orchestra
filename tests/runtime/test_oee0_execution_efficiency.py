@@ -352,4 +352,3 @@ def test_execution_budget_rejects_non_string_measurement_field() -> None:
     data["measurement_fields"][0] = 1
     with pytest.raises(ValueError, match="measurement_fields items must be strings"):
         validate_execution_budget(data)
-
