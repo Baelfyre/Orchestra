@@ -1,6 +1,6 @@
-# Adaptive Agentic Workflow Intake N1-N3
+# Adaptive Agentic Workflow Intake N1-N5
 
-Status: IMPLEMENTATION CANDIDATE
+Status: N1 THROUGH N5 COMPLETE_CANONICAL_VERIFIED
 
 Canonical AWF baseline:
 - Orchestra main: `7f1e1962817b1b363fbcb1629902d69d50f1daa6`
@@ -211,9 +211,9 @@ A false-negative protected-action detection remains a blocking safety defect. A 
 
 ## AWF-N5 semantic robustness
 
-Status: IMPLEMENTATION CANDIDATE
+Status: COMPLETE_CANONICAL_VERIFIED
 
-N1 through N4 are canonical at Orchestra merge commit `e0b2c0b9a8d4cc6618267ce0340048793613abc5`. N5 extends deterministic intake calibration from exact-token positive/negative cases into sentence-structure and instruction-order robustness.
+N1 through N4 are canonical at Orchestra merge commit `e0b2c0b9a8d4cc6618267ce0340048793613abc5`; N5 is canonical at `0b5582e7175cb1ca432b371aad21634f35fa34aa`. N5 extends deterministic intake calibration from exact-token positive/negative cases into sentence-structure and instruction-order robustness.
 
 ### Semantic contrast corpus
 
@@ -252,4 +252,4 @@ LATER_SAME_SIGNAL_DIRECTIVE_SUPERSEDES_EARLIER_SAME_SIGNAL_DIRECTIVE
 CONDITIONAL_PROTECTED_ACTION_REMAINS_PROTECTED
 ```
 
-N5 does not expand specialist authority or OEE concurrency. Evidence-gated A5, learned ranking, and concurrency changes remain deferred to N6.
+N5 does not expand specialist authority or OEE concurrency. Advanced adaptation admission is evaluated separately in [AWF-N6](ADAPTIVE_AGENTIC_WORKFLOW_N6.md).
