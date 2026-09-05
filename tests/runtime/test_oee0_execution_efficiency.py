@@ -1,0 +1,154 @@
+from __future__ import annotations
+
+from copy import deepcopy
+from pathlib import Path
+
+import pytest
+
+from orchestra_runtime.domain.orchestration.execution_efficiency import (
+    EVIDENCE_TIERS,
+    SEARCH_ESCALATION,
+    VALIDATION_ESCALATION,
+    enforce_ci_wait_boundary,
+    require_evidence_tier,
+    require_search_escalation,
+    require_validation_escalation,
+    validate_decisive_stop_signal,
+    validate_execution_budget,
+)
+from orchestra_runtime.machine_contracts import load_execution_budget_contract
+
+
+ROOT = Path(__file__).resolve().parents[2]
+
+
+def _budget() -> dict:
+    return load_execution_budget_contract(ROOT)
+
+
+def test_reference_execution_budget_is_fail_closed() -> None:
+    budget = validate_execution_budget(_budget())
+
+    assert budget.owner == "conductor"
+    assert budget.defaults["max_parallel_specialists"] == 1
+    assert budget.defaults["specialist_retry_limit"] == 1
+    assert budget.search_escalation == SEARCH_ESCALATION
+    assert budget.validation_escalation == VALIDATION_ESCALATION
+    assert tuple(item["tier"] for item in budget.evidence_tiers) == EVIDENCE_TIERS
+    assert all(value is False for value in budget.authority.values())
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("max_parallel_specialists", 2),
+        ("specialist_retry_limit", 2),
+        ("owner_first_routing", False),
+        ("full_validation_requires_stable_candidate", False),
+        ("ci_wait_must_not_consume_reasoning_budget", False),
+    ],
+)
+def test_execution_budget_rejects_weaker_defaults(field: str, value: object) -> None:
+    data = deepcopy(_budget())
+    data["defaults"][field] = value
+    with pytest.raises(ValueError):
+        validate_execution_budget(data)
+
+
+def test_execution_budget_rejects_authority_expansion() -> None:
+    data = deepcopy(_budget())
+    data["authority"]["weakens_human_gates"] = True
+    with pytest.raises(ValueError, match="weakens_human_gates"):
+        validate_execution_budget(data)
+
+
+def test_evidence_tiers_cannot_be_skipped() -> None:
+    require_evidence_tier("E0", ())
+    require_evidence_tier("E2", ("E0", "E1"))
+
+    with pytest.raises(ValueError, match="E1"):
+        require_evidence_tier("E2", ("E0",))
+
+
+def test_search_escalation_is_narrow_to_broad() -> None:
+    require_search_escalation(
+        "EXACT_PATH",
+        "EXACT_SYMBOL",
+        current_stage_insufficient=True,
+    )
+
+    with pytest.raises(ValueError, match="cannot skip"):
+        require_search_escalation(
+            "EXACT_PATH",
+            "REPOSITORY_WIDE",
+            current_stage_insufficient=True,
+        )
+
+    with pytest.raises(ValueError, match="before current stage is insufficient"):
+        require_search_escalation(
+            "EXACT_PATH",
+            "EXACT_SYMBOL",
+            current_stage_insufficient=False,
+        )
+
+
+def test_validation_escalation_defers_expensive_gates() -> None:
+    require_validation_escalation(
+        "DIRECT_TESTS",
+        "SUBSYSTEM",
+        current_stage_insufficient=True,
+    )
+
+    with pytest.raises(ValueError, match="cannot skip"):
+        require_validation_escalation(
+            "DIRECT_TESTS",
+            "PROTECTED_GATES",
+            current_stage_insufficient=True,
+        )
+
+
+def test_decisive_stop_blocks_downstream_execution() -> None:
+    signal = validate_decisive_stop_signal(
+        {
+            "owner": "cloak",
+            "evidence_sufficient": True,
+            "stop_required": True,
+            "downstream_execution_allowed": False,
+            "reason": "accepted responsive intent is contradictory",
+            "evidence_refs": ["machine/ui/ui-fidelity-handoff.v1.json"],
+        }
+    )
+    assert signal.downstream_execution_allowed is False
+
+    with pytest.raises(ValueError, match="downstream execution must be false"):
+        validate_decisive_stop_signal(
+            {
+                "owner": "cloak",
+                "evidence_sufficient": True,
+                "stop_required": True,
+                "downstream_execution_allowed": True,
+                "reason": "accepted responsive intent is contradictory",
+                "evidence_refs": ["machine/ui/ui-fidelity-handoff.v1.json"],
+            }
+        )
+
+
+def test_unchanged_ci_wait_cannot_consume_active_model_reasoning() -> None:
+    enforce_ci_wait_boundary(
+        activity="CI_WAIT",
+        ci_state_changed=False,
+        active_model_reasoning=False,
+    )
+
+    with pytest.raises(ValueError, match="unchanged CI"):
+        enforce_ci_wait_boundary(
+            activity="CI_WAIT",
+            ci_state_changed=False,
+            active_model_reasoning=True,
+        )
+
+    enforce_ci_wait_boundary(
+        activity="CI_WAIT",
+        ci_state_changed=True,
+        active_model_reasoning=True,
+    )
