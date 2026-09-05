@@ -32,6 +32,11 @@ REQUIRED_TRUE_DEFAULTS = (
     "autonomous_campaigns_load_one_phase_at_a_time",
     "optional_review_cannot_block_without_explicit_authority",
 )
+DEFAULT_FIELDS = (
+    "max_parallel_specialists",
+    "specialist_retry_limit",
+    *REQUIRED_TRUE_DEFAULTS,
+)
 AUTHORITY_FALSE_FIELDS = (
     "creates_or_expands_authority",
     "weakens_existing_governance",
@@ -66,10 +71,18 @@ class ExecutionBudget:
         if self.core_invariant != EXECUTION_BUDGET_INVARIANT:
             raise ValueError("ExecutionBudget core invariant changed")
 
-        if self.defaults.get("max_parallel_specialists") != 1:
-            raise ValueError("ExecutionBudget max_parallel_specialists must default to 1")
-        if self.defaults.get("specialist_retry_limit") != 1:
-            raise ValueError("ExecutionBudget specialist_retry_limit must default to 1")
+        if set(self.defaults) != set(DEFAULT_FIELDS):
+            raise ValueError("ExecutionBudget defaults field set changed")
+        if (
+            type(self.defaults.get("max_parallel_specialists")) is not int
+            or self.defaults.get("max_parallel_specialists") != 1
+        ):
+            raise ValueError("ExecutionBudget max_parallel_specialists must default to integer 1")
+        if (
+            type(self.defaults.get("specialist_retry_limit")) is not int
+            or self.defaults.get("specialist_retry_limit") != 1
+        ):
+            raise ValueError("ExecutionBudget specialist_retry_limit must default to integer 1")
         for field in REQUIRED_TRUE_DEFAULTS:
             if self.defaults.get(field) is not True:
                 raise ValueError(f"ExecutionBudget default {field} must be true")
@@ -103,6 +116,8 @@ class ExecutionBudget:
         ):
             raise ValueError("ExecutionBudget measurement_fields must be non-empty and unique")
 
+        if set(self.authority) != set(AUTHORITY_FALSE_FIELDS):
+            raise ValueError("ExecutionBudget authority field set changed")
         for field in AUTHORITY_FALSE_FIELDS:
             if self.authority.get(field) is not False:
                 raise ValueError(f"ExecutionBudget authority field {field} must be false")
@@ -139,6 +154,8 @@ def validate_execution_budget(data: Mapping[str, Any]) -> ExecutionBudget:
     for field in ("evidence_tiers", "search_escalation", "validation_escalation", "measurement_fields"):
         if not isinstance(data.get(field), (list, tuple)):
             raise ValueError(f"ExecutionBudget {field} must be a list or tuple")
+    if any(not isinstance(item, str) for item in data.get("measurement_fields", ())):
+        raise ValueError("ExecutionBudget measurement_fields items must be strings")
     if any(not isinstance(item, Mapping) for item in data.get("evidence_tiers", ())):
         raise ValueError("ExecutionBudget evidence_tiers items must be mappings")
     budget = ExecutionBudget(
@@ -257,6 +274,7 @@ def enforce_ci_wait_boundary(
 
 __all__ = [
     "AUTHORITY_FALSE_FIELDS",
+    "DEFAULT_FIELDS",
     "DecisiveStopSignal",
     "EVIDENCE_TIERS",
     "EVIDENCE_TIER_NAMES",
