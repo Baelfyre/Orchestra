@@ -18,6 +18,7 @@ from orchestra_runtime.domain.adaptive.topology_validator import (
     SpecialistAuthority,
 )
 from orchestra_runtime.infrastructure.machine import agentic_workflow as machine_awf
+from orchestra_runtime.domain.orchestration.execution_efficiency import validate_execution_budget
 from orchestra_runtime.infrastructure.machine.execution_efficiency import (
     load_execution_budget_contract,
 )
@@ -65,7 +66,7 @@ def _authorities():
 
 
 def _budget():
-    return load_execution_budget_contract(ROOT)
+    return validate_execution_budget(load_execution_budget_contract(ROOT))
 
 
 def _workflow_profile(**overrides):
