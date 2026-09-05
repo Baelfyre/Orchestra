@@ -209,5 +209,74 @@
       "parallelize",
       "parallel execution"
     ]
+  },
+  "suppression_rules": {
+    "negation_phrases": [
+      "do not",
+      "don't",
+      "never",
+      "must not",
+      "should not",
+      "without",
+      "no"
+    ],
+    "hypothetical_prefixes": [
+      "what would happen if",
+      "what if",
+      "hypothetically",
+      "suppose",
+      "imagine if",
+      "if we were to"
+    ],
+    "representation_artifacts": [
+      "documentation",
+      "docs",
+      "readme",
+      "changelog",
+      "release notes",
+      "incident report",
+      "report",
+      "screenshot caption",
+      "caption",
+      "sentence",
+      "label",
+      "term"
+    ],
+    "representation_verbs": [
+      "review",
+      "update",
+      "write",
+      "summarize",
+      "explain",
+      "describe",
+      "document",
+      "rename",
+      "fix",
+      "remove",
+      "change",
+      "add"
+    ],
+    "representation_edit_verbs": [
+      "update",
+      "write",
+      "document",
+      "rename",
+      "fix",
+      "remove",
+      "change",
+      "add"
+    ],
+    "representation_scope_phrases": [
+      "documentation only",
+      "docs only",
+      "readme only",
+      "for wording only",
+      "wording only",
+      "without assessing controls",
+      "without changing anything",
+      "that mentions",
+      "screenshot caption",
+      "release notes"
+    ]
   }
 }
