@@ -542,7 +542,7 @@ class UIFidelityHandoff:
             "ui_fidelity_context": {
                 "design_contract_ref": self.design_contract_ref,
                 "cloak_handoff_ref": self.contract_id,
-                "clockwork_boundary_ref": "docs/architecture/UIEF_CLOCKWORK_ENGINEERING_BOUNDARY.md",
+                "clockwork_boundary_ref": "docs/project/UI_EXECUTION_FIDELITY_PLAN.md",
                 "pattern_refs": list(self.selected_pattern_refs),
                 "composition_refs": list(self.macro_composition),
                 "required_fidelity": {
