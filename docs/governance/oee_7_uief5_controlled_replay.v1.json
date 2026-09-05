@@ -1,0 +1,49 @@
+{
+  "schema_version": "orchestra.execution-efficiency-replay.v1",
+  "record_id": "oee7-uief5-controlled-replay-20260905",
+  "source_case": "UIEF5_20260905_USAGE_EXHAUSTION",
+  "historical_observed": {
+    "canonical_phase_at_start": "UIEF-4",
+    "canonical_phase_at_end": "UIEF-4",
+    "canonical_phase_advance": 0,
+    "disposition": "BLOCKED_PRE_IMPLEMENTATION_REVIEW",
+    "unique_specialist_roles_observed": [
+      "clockwork",
+      "overseer",
+      "cloak",
+      "arbiter"
+    ],
+    "specialist_capacity_failures_or_retries_observed": true,
+    "broad_repository_investigation_observed": true,
+    "ci_watch_observed": true,
+    "first_decisive_blocker_owner": "cloak",
+    "first_decisive_blocker": "UIEF5_UPSTREAM_RESPONSIVE_CONTRADICTION",
+    "exact_historical_invocation_count": null,
+    "exact_historical_retry_count": null,
+    "exact_historical_repository_wide_search_count": null,
+    "exact_historical_token_or_usage_units": null
+  },
+  "oee_replay": {
+    "owner_first_specialist": "cloak",
+    "active_specialist_count_before_decisive_stop": 1,
+    "supporting_specialists_before_decisive_stop": [],
+    "decisive_stop": {
+      "evidence_sufficient": true,
+      "stop_required": true,
+      "downstream_execution_allowed": false
+    },
+    "downstream_implementation_after_blocker": false,
+    "active_ci_watch": false,
+    "disposition": "BLOCKED_PRE_IMPLEMENTATION_REVIEW"
+  },
+  "comparison": {
+    "same_or_safer_disposition": true,
+    "specialist_role_reduction_demonstrated": true,
+    "historical_unique_specialist_roles": 4,
+    "replay_active_specialists_before_stop": 1,
+    "ci_watch_removed": true,
+    "downstream_work_after_decisive_blocker_removed": true,
+    "unsupported_precision_claims_made": false
+  },
+  "result": "OEE_7_EFFICIENCY_EVIDENCE_PASS"
+}
