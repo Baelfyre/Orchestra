@@ -2062,7 +2062,8 @@
         "machine/ui/ui-fidelity-handoff.v1.json",
         "machine/knowledge/cloak-ui-reference-cuir3.v1.json",
         "scripts/validation/run_oee7_controlled_replay.py",
-        "tests/fixtures/oee/uief5-responsive-contradiction-20260905.json"
+        "tests/fixtures/oee/uief5-responsive-contradiction-20260905.json",
+        "orchestra_runtime/domain/orchestration/ui_fidelity.py"
       ],
       "human_sources": [
         "docs/project/UIEF_REFERENCE_PROVENANCE_RESPONSIVE_ERRATUM_20260905.md",
