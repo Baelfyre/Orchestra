@@ -1,5 +1,14 @@
 # Changelog
 
+## Post-v1.8.0 UIEF-5 hardened Clockwork engineering translation candidate
+
+- Reconstructs historical PR #791 forward from corrected canonical UIEF-4 instead of merging the stale candidate.
+- Binds `UIEngineeringTranslation.source_revision_or_contract_identity` to the canonical SHA-256 digest of the accepted `UIFidelityHandoff` content.
+- Requires substantive component, state, responsive, composition, layer, data-flow, reuse, integration, and dependency semantics rather than ID-only records.
+- Removes invented project-native component, icon, and token paths; consuming-project identities remain explicitly unresolved until traceable evidence exists.
+- Preserves OEE execution-efficiency exports, Cloak visible-design authority, Ponytail implementation ownership, and the prohibition on UIEF-5 initiating UIEF-6.
+- Adds deterministic negative regressions for stale identity, ownerless boundaries, incomplete semantics, authority expansion, generic execution-mode contamination, and unsupported UIEF-6 initiation.
+
 ## Post-v1.8.0 UIEF reference/provenance responsive erratum current-main successor
 
 - Reconstructs qualified PR #799 evidence on current canonical main `63bbe70f29fa5e2d72ffb34a3f071a7d3fc725e4` without discarding later AWF/OEE closeout work.

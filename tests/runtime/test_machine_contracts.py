@@ -137,6 +137,13 @@ def test_load_contract_rejects_wrong_schema(tmp_path):
     with pytest.raises(ValueError, match="unsupported UI fidelity handoff"):
         contracts.load_ui_fidelity_handoff_contract(tmp_path)
 
+    (handoff_path / "ui-engineering-translation.v1.json").write_text(
+        '{"schema_version":"wrong"}',
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="unsupported UI engineering translation"):
+        contracts.load_ui_engineering_translation_contract(tmp_path)
+
 
 @pytest.mark.parametrize(
     ("field", "value", "message"),
@@ -180,3 +187,56 @@ def test_machine_contract_errors_reject_ui_fidelity_handoff_contract_exception(m
         raise ValueError("corrupted handoff")
     monkeypatch.setattr(contracts, "load_ui_fidelity_handoff_contract", _failing_loader)
     assert "UI_FIDELITY_HANDOFF_CONTRACT_INVALID:corrupted handoff" in contracts.machine_contract_errors(ROOT)
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [
+        ("owned_by", "cloak", "UI_ENGINEERING_TRANSLATION_OWNER_INVALID"),
+        (
+            "authority",
+            {"visible_layer_redesign_authorized": True},
+            "UI_ENGINEERING_TRANSLATION_AUTHORITY_EXPANSION",
+        ),
+    ],
+)
+def test_machine_contract_errors_reject_ui_engineering_translation_drift(
+    monkeypatch, field, value, message
+):
+    translation = deepcopy(contracts.load_ui_engineering_translation_contract(ROOT))
+    translation[field] = value
+    monkeypatch.setattr(
+        contracts,
+        "load_ui_engineering_translation_contract",
+        lambda root=None: translation,
+    )
+    assert message in contracts.machine_contract_errors(ROOT)
+
+
+def test_machine_contract_errors_reject_ui_engineering_translation_missing_required_field(monkeypatch):
+    translation = deepcopy(contracts.load_ui_engineering_translation_contract(ROOT))
+    del translation["composition_ownership"]
+    monkeypatch.setattr(
+        contracts,
+        "load_ui_engineering_translation_contract",
+        lambda root=None: translation,
+    )
+    assert (
+        "UI_ENGINEERING_TRANSLATION_MISSING_FIELD:composition_ownership"
+        in contracts.machine_contract_errors(ROOT)
+    )
+
+
+def test_machine_contract_errors_reject_ui_engineering_translation_contract_exception(monkeypatch):
+    def _failing_loader(root=None):
+        raise ValueError("corrupted engineering translation")
+
+    monkeypatch.setattr(
+        contracts,
+        "load_ui_engineering_translation_contract",
+        _failing_loader,
+    )
+    assert (
+        "UI_ENGINEERING_TRANSLATION_CONTRACT_INVALID:corrupted engineering translation"
+        in contracts.machine_contract_errors(ROOT)
+    )

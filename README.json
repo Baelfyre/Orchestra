@@ -2090,7 +2090,7 @@
       ]
     },
     "uief_reference_provenance_responsive_erratum": {
-      "status": "CURRENT_MAIN_SUCCESSOR_PENDING_QUALIFICATION",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
       "purpose": "Repair UIEF-1/UIEF-4 canonical reference integrity and responsive consistency by binding only real repository evidence, preserving missing consuming-project evidence explicitly, and freezing the historical OEE-7 blocker input.",
       "baseline_main": "63bbe70f29fa5e2d72ffb34a3f071a7d3fc725e4",
       "baseline_tree": "2b95a4509acaf1d9044dd9278dc3e71b97b0b47e",
@@ -2123,8 +2123,46 @@
       "historical_oee_replay_preserved": true,
       "frozen_cloak_core_preserved": true,
       "authority_expansion": false,
-      "uief5_implementation_authorized": false,
-      "authority_note": "This current-main successor repairs evidence identity and Cloak-owned responsive intent only. It does not itself promote UIEF-5, release, deployment, policy activation, provider routing, or specialist authority. Separate Padayon sequencing authority governs subsequent work only after this erratum is canonical."
+      "uief5_implementation_authorized": true,
+      "authority_note": "The corrected UIEF-4 erratum is canonical and verified. The separate primary-human campaign authority permits UIEF-5 continuation, but the erratum itself still grants no implementation, release, deployment, policy, provider-routing, or specialist-authority expansion.",
+      "canonical_pr": 808,
+      "canonical_sha": "e791e86a971880344f2b77e42291adb51692b6b2",
+      "canonical_tree": "1f18dab8f526dfd9f63d4bea3407444ab8201c0b",
+      "reviewed_signed_head": "e09e3c260c526a73735851952c7aeb56be1bf594"
+    },
+    "uief5_clockwork_engineering_translation": {
+      "status": "SOURCE_CANDIDATE_HARDENED_PENDING_QUALIFICATION",
+      "purpose": "Clockwork translation of the accepted corrected UI fidelity handoff into maintainable component, state, responsive, composition, layer, data-flow, reuse, integration, and dependency boundaries with deterministic source-content identity and no invented consuming-project provenance.",
+      "source_handoff": "uief4-ui-fidelity-handoff-reference",
+      "source_handoff_content_identity": "sha256:6b589112da6ae4413c796cde6ed69093de6d10941a821824d205fe18d96caebc",
+      "historical_reference_pr": 791,
+      "historical_reference_disposition": "REFERENCE_ONLY_DO_NOT_MERGE_AS_IS",
+      "machine_sources": [
+        "machine/schemas/ui-engineering-translation.v1.schema.json",
+        "machine/ui/ui-engineering-translation.v1.json",
+        "orchestra_runtime/domain/orchestration/ui_fidelity.py",
+        "orchestra_runtime/machine_contracts.py"
+      ],
+      "human_sources": [
+        "skills/clockwork/UI_ENGINEERING_TRANSLATION_GUIDE.md",
+        "adapters/codex/skills/clockwork/UI_ENGINEERING_TRANSLATION_GUIDE.md",
+        "docs/architecture/UIEF_CLOCKWORK_ENGINEERING_BOUNDARY.md",
+        "docs/project/UI_EXECUTION_FIDELITY_PLAN.md"
+      ],
+      "validation_surfaces": [
+        "tests/runtime/test_uief5_clockwork_engineering_translation.py",
+        "tests/runtime/test_machine_contracts.py",
+        "tests/runtime/test_refoundation_contract_failures.py"
+      ],
+      "deterministic_source_identity": true,
+      "invented_project_native_provenance": false,
+      "visible_layer_redesign_authorized": false,
+      "implementation_authorized": false,
+      "dependency_adoption_authorized": false,
+      "release_authorized": false,
+      "uief6_initiation_authorized": false,
+      "authority_note": "UIEF-5 translates accepted visible-layer complexity into engineering boundaries only. Clockwork may simplify engineering structure only when accepted fidelity is unchanged; it cannot redesign Cloak-owned visible intent, authorize implementation or dependency adoption, initiate UIEF-6, release, deploy, activate policy, or expand specialist authority.",
+      "source_identity_semantics": "SHA-256 over canonical JSON serialization of UIFidelityHandoff.to_dict(), excluding machine-only schema decoration."
     }
   },
   "machine_scan_order": [
