@@ -483,11 +483,10 @@ def authorize_validation_stage(
         raise ValueError("completed_stages must be unique")
     target_index = VALIDATION_ESCALATION.index(target_stage)
     required = VALIDATION_ESCALATION[:target_index]
-    missing = [stage for stage in required if stage not in completed]
-    if missing:
+    if completed != required:
         raise ValueError(
-            "cannot enter validation stage before required prior stages pass: "
-            + ", ".join(missing)
+            "cannot enter validation stage without exact ordered prior stages: "
+            + ", ".join(required)
         )
     if (
         target_stage in {"REPOSITORY_QUALIFICATION", "PROTECTED_GATES"}
