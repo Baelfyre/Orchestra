@@ -253,4 +253,3 @@ def test_machine_contract_errors_reject_ui_fidelity_routing_contract_exception(m
         "UI_FIDELITY_ROUTING_CONTRACT_INVALID:corrupted fidelity routing"
         in contracts.machine_contract_errors(ROOT)
     )
-
