@@ -10,7 +10,8 @@
     <a href="docs/README.md#governance-and-authority">Governance</a> |
     <a href="docs/setup/VALIDATION.md">Validation</a> |
     <a href="docs/THIRD_PARTY_PROVENANCE.md">Acknowledgements</a> |
-    <a href="CHANGELOG.md">Changelog</a>
+    <a href="CHANGELOG.md">Changelog</a> |
+    <a href="#support">Support</a>
   </p>
   <p>
     <img src="https://img.shields.io/badge/package_version-v1.8.0-blue" alt="Repository package version v1.8.0" />
@@ -220,6 +221,14 @@ Orchestra records third-party relationships without treating a reference as auto
 
 - [Third-Party Provenance and Acknowledgements](docs/THIRD_PARTY_PROVENANCE.md)
 - [`machine/provenance/third-party.v1.json`](machine/provenance/third-party.v1.json)
+
+## Support
+
+If Orchestra is useful to you, you can support ongoing open-source development, testing, documentation, and maintenance.
+
+<a href="https://buymeacoffee.com/baelfyre">
+  <img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=000000" alt="Buy Me a Coffee" />
+</a>
 
 ## Machine-readable reference
 
