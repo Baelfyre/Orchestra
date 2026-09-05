@@ -2,18 +2,18 @@
   "schema_version": "1.0.0",
   "record_type": "ORCHESTRA_EXECUTION_EFFICIENCY_V1_INTEGRATION_DISPOSITION",
   "program_id": "ORCHESTRA_EXECUTION_EFFICIENCY_V1",
-  "state": "SOURCE_CANDIDATE_PRE_CANONICAL_VALIDATION",
+  "state": "COMPLETE_CANONICAL_VERIFIED",
   "recorded_at": "2026-09-05T15:45:00+08:00",
   "phases": {
     "OEE-0": "COMPLETE_CANONICAL_VERIFIED_AT_1927d3f0672198ddc67cc32624d38c2b14c434e8",
-    "OEE-1": "SOURCE_CANDIDATE_OWNER_FIRST_ROUTING_AND_SPECIALIST_BUDGET",
-    "OEE-2": "SOURCE_CANDIDATE_EARLIEST_DECISIVE_EVIDENCE_STOP",
-    "OEE-3": "SOURCE_CANDIDATE_EVIDENCE_REUSE_AND_SEARCH_ESCALATION",
-    "OEE-4": "SOURCE_CANDIDATE_RISK_BASED_VALIDATION",
-    "OEE-5": "SOURCE_CANDIDATE_CI_WAIT_BOUNDARY",
-    "OEE-6": "SOURCE_CANDIDATE_PHASE_LOCAL_CONTEXT_PACKS",
-    "OEE-7": "SOURCE_CANDIDATE_CONTROLLED_REPLAY",
-    "OEE-8": "SOURCE_CANDIDATE_INTEGRATION_GATE"
+    "OEE-1": "COMPLETE_CANONICAL_VERIFIED_AT_75100c3ad0fd9a11c69f2b9b7c5172edd8841cd2",
+    "OEE-2": "COMPLETE_CANONICAL_VERIFIED_AT_75100c3ad0fd9a11c69f2b9b7c5172edd8841cd2",
+    "OEE-3": "COMPLETE_CANONICAL_VERIFIED_AT_75100c3ad0fd9a11c69f2b9b7c5172edd8841cd2",
+    "OEE-4": "COMPLETE_CANONICAL_VERIFIED_AT_75100c3ad0fd9a11c69f2b9b7c5172edd8841cd2",
+    "OEE-5": "COMPLETE_CANONICAL_VERIFIED_AT_75100c3ad0fd9a11c69f2b9b7c5172edd8841cd2",
+    "OEE-6": "COMPLETE_CANONICAL_VERIFIED_AT_75100c3ad0fd9a11c69f2b9b7c5172edd8841cd2",
+    "OEE-7": "COMPLETE_CANONICAL_VERIFIED_AT_75100c3ad0fd9a11c69f2b9b7c5172edd8841cd2",
+    "OEE-8": "COMPLETE_CANONICAL_VERIFIED_AT_75100c3ad0fd9a11c69f2b9b7c5172edd8841cd2"
   },
   "replay_expectation": {
     "baseline_case": "UIEF5_20260905_USAGE_EXHAUSTION",
@@ -41,5 +41,31 @@
     "uief_resume_authorized": false,
     "new_specialist_authorized": false
   },
-  "canonical_claim_prohibited_until_post_merge_readback": true
+  "canonical_claim_prohibited_until_post_merge_readback": false,
+  "canonical_qualification": {
+    "oee0": {
+      "source_pr": 792,
+      "qualified_source_head": "8903874688dc5bf5311689411f951afef16a968a",
+      "signed_materialization_pr": 793,
+      "canonical_pr": 794,
+      "canonical_commit": "1927d3f0672198ddc67cc32624d38c2b14c434e8"
+    },
+    "oee1_oee8": {
+      "source_pr": 795,
+      "qualified_source_head": "3986a04598bf1146270e1d65445373643e34a93f",
+      "signed_materialization_pr": 797,
+      "signed_materialization_commit": "dbe3f777265c6843695babce7bbd229c44b753e2",
+      "canonical_pr": 798,
+      "canonical_commit": "75100c3ad0fd9a11c69f2b9b7c5172edd8841cd2",
+      "workflows": [
+        "Governance Check",
+        "Required Analysis Compatibility",
+        "validate",
+        "Cross-platform Validation",
+        "cosmic-ray-confidence",
+        "signed-materialization"
+      ],
+      "all_success": true
+    }
+  }
 }
