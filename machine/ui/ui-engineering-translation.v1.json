@@ -4,7 +4,7 @@
   "contract_id": "uief5-ui-engineering-translation-reference",
   "owned_by": "clockwork",
   "source_handoff_ref": "uief4-ui-fidelity-handoff-reference",
-  "source_revision_or_contract_identity": "sha256:fc5e8df99cb47ebaf366d53cc0ebb9897fe61669750a550add53ca3c74113659",
+  "source_revision_or_contract_identity": "sha256:6b589112da6ae4413c796cde6ed69093de6d10941a821824d205fe18d96caebc",
   "component_boundaries": [
     {
       "component_id": "WorkspaceShell",
