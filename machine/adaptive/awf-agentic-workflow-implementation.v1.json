@@ -102,7 +102,9 @@
     "tests/runtime/test_agentic_workflow_intake.py",
     "tests/runtime/test_agentic_workflow_intake_edges.py",
     "tests/fixtures/agentic-workflow/awf-intake-calibration.v1.json",
-    "tests/runtime/test_agentic_workflow_intake_calibration.py"
+    "tests/runtime/test_agentic_workflow_intake_calibration.py",
+    "tests/fixtures/agentic-workflow/awf-negative-routing.v1.json",
+    "tests/runtime/test_agentic_workflow_negative_routing.py"
   ],
   "historical_replay": {
     "case": "UIEF5_20260905_USAGE_EXHAUSTION",
@@ -147,8 +149,10 @@
     "current_scope": [
       "automatic TaskProfile derivation",
       "selection trace explainability",
-      "18-case controlled operational calibration corpus",
-      "terminal-role over-routing suppression"
+      "18-case positive controlled calibration corpus",
+      "20-case adversarial negative-routing corpus",
+      "terminal-role over-routing suppression",
+      "negation, quotation, hypothetical, and representation-only suppression"
     ],
     "prohibited": [
       "OEE concurrency widening",
@@ -156,6 +160,18 @@
       "specialist authority expansion",
       "release/deploy/policy activation",
       "UIEF resumption"
+    ]
+  },
+  "negative_routing": {
+    "status": "IMPLEMENTED_CANDIDATE",
+    "corpus_cases": 20,
+    "policy": "machine/workflows/task-profile-derivation.v1.json",
+    "invariants": [
+      "MENTION != INTENT",
+      "NEGATED_ACTION != AUTHORIZED_ACTION",
+      "QUOTED_DANGEROUS_TEXT != PROTECTED_ACTION",
+      "HYPOTHETICAL_ACTION != EXECUTION_REQUEST",
+      "REPRESENTATION_CONTEXT != REFERENCED_DOMAIN_AUTHORITY"
     ]
   }
 }
