@@ -531,3 +531,11 @@ def test_machine_error_projection_returns_structured_failure(monkeypatch):
     assert machine_awf.agentic_workflow_errors(ROOT) == (
         "AGENTIC_WORKFLOW_CONTRACT_INVALID:broken",
     )
+
+
+def test_git_blob_identity_is_stable_across_crlf_worktrees(tmp_path):
+    lf = tmp_path / "lf.md"
+    crlf = tmp_path / "crlf.md"
+    lf.write_bytes(b"alpha\nbeta\n")
+    crlf.write_bytes(b"alpha\r\nbeta\r\n")
+    assert machine_awf._git_blob_sha(crlf) == machine_awf._git_blob_sha(lf)
