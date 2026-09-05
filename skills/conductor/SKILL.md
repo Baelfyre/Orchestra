@@ -23,7 +23,7 @@ Use Conductor for ambiguous, cross-domain, or governed work; otherwise route dir
 2. Route from the [skill index](../../SKILL_INDEX.md); load the [routing map](../../ROUTING_MAP.md) only for ambiguity or dependencies.
 3. Load governance on triggers; pause on unresolved gates.
 4. Build the minimum [packet](../../docs/routing/MINIMAL_PROMPT_FORMAT.md).
-5. For governed or multi-specialist work, load [EXECUTION_EFFICIENCY_GUIDE.md](EXECUTION_EFFICIENCY_GUIDE.md) before adding supporting specialists or broad validation.
+5. OEE: [guide](EXECUTION_EFFICIENCY_GUIDE.md).
 
 ## Governance Profile Selection Gate
 
@@ -63,7 +63,7 @@ Use `ROUTING_EVALUATION_GUIDE.md`. Tuner coordinates; Overseer validates; Arbite
 - Keep ambiguous access or authority routing with Conductor.
 
 ## Scope Enforcement
-Conductor must classify `SPECIALIST_REROUTE_REQUIRED` and must not allow a specialist to execute outside its documented scope.
+Classify `SPECIALIST_REROUTE_REQUIRED`; never let specialists execute outside documented scope.
 
 ## Output Contract
 ```text
