@@ -99,7 +99,7 @@ When Conductor receives `context.metadata.agentic_task_profile`, RouterService l
 
 A non-Conductor route that attempts to supply `agentic_task_profile` is rejected. This prevents a direct specialist route from using AWF metadata to bypass Conductor's exclusive dispatch authority.
 
-The always-loaded Conductor skill contains only a compact AWF activation rule. Detailed selection rules use progressive disclosure through this document and portable reference context so adaptive behavior does not inflate the default prompt-load package.
+The canonical Conductor skill text remains unchanged. AWF activation is attached at the runtime control-plane boundary through TaskProfile metadata and machine contracts, avoiding prompt-load growth and frozen-guidance digest drift.
 
 ## Specialist re-entry
 
