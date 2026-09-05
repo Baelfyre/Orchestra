@@ -99,6 +99,7 @@ class TaskProfile:
     objective_verifier_available: bool
     critic_owner: str | None
     critic_domain: str | None
+    reentry_specialists: tuple[str, ...]
     current_source_identity: str
     human_gate_requirements: tuple[str, ...] = ()
     schema_version: str = TASK_PROFILE_SCHEMA_VERSION
@@ -148,6 +149,10 @@ class TaskProfile:
         object.__setattr__(self, "protected_action_authorized", protected_authorized)
         object.__setattr__(self, "critic_owner", critic_owner)
         object.__setattr__(self, "critic_domain", critic_domain)
+        reentry = tuple(_identifier(item, "reentry_specialist") for item in self.reentry_specialists)
+        if len(reentry) > 14 or len(reentry) != len(set(reentry)):
+            raise ValueError("reentry_specialists must be unique and bounded")
+        object.__setattr__(self, "reentry_specialists", reentry)
         object.__setattr__(
             self,
             "current_source_identity",
@@ -184,6 +189,7 @@ class TaskProfile:
             objective_verifier_available=data.get("objective_verifier_available"),
             critic_owner=data.get("critic_owner"),
             critic_domain=data.get("critic_domain"),
+            reentry_specialists=tuple(data.get("reentry_specialists", ())),
             current_source_identity=data.get("current_source_identity", ""),
             human_gate_requirements=tuple(data.get("human_gate_requirements", ())),
         )
@@ -210,6 +216,7 @@ class TaskProfile:
             "objective_verifier_available": self.objective_verifier_available,
             "critic_owner": self.critic_owner,
             "critic_domain": self.critic_domain,
+            "reentry_specialists": list(self.reentry_specialists),
             "current_source_identity": self.current_source_identity,
             "human_gate_requirements": list(self.human_gate_requirements),
         }
