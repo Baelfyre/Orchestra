@@ -1,0 +1,40 @@
+{
+  "$schema": "../schemas/agentic-workflow-profile.v1.schema.json",
+  "schema_version": "orchestra.agentic-patterns.v1",
+  "owner": "conductor",
+  "core_rule": "SELECT_MINIMUM_SUFFICIENT_AGENTIC_TOPOLOGY",
+  "patterns": [
+    {
+      "name": "ROUTING",
+      "default": "REQUIRED_CONTROL_PLANE",
+      "activation": "Always owned by Conductor when Orchestra chooses or changes specialist topology.",
+      "authority_rule": "Routing changes workflow topology only and never expands execution authority."
+    },
+    {
+      "name": "PLANNING",
+      "default": "CONDITIONAL",
+      "activation": "Use for real dependency decomposition, multi-step work, or material cross-domain sequencing.",
+      "authority_rule": "Planning inherits planning_owner and domain scope; no global planner authority is created."
+    },
+    {
+      "name": "TOOL_REACT",
+      "default": "CONDITIONAL",
+      "activation": "Use when external state, evidence retrieval, validation tools, or authorized mutation are required.",
+      "authority_rule": "ACT inherits the selected specialist's mutation permissions and external-action gates."
+    },
+    {
+      "name": "REFLECTION_CRITIC",
+      "default": "CONDITIONAL",
+      "activation": "Use only when a distinct evaluation function, evidence source, or authority adds decision value.",
+      "authority_rule": "Critic behavior does not self-authorize implementation, validation, or transition."
+    },
+    {
+      "name": "MULTI_AGENT",
+      "default": "OFF_BY_DEFAULT",
+      "activation": "Use when at least two genuinely distinct subproblems, authorities, or evidence domains justify coordination cost.",
+      "authority_rule": "Specialization does not imply parallelization; Conductor remains dispatcher and OEE controls active concurrency."
+    }
+  ],
+  "topology_change_requires_human_approval": false,
+  "protected_action_authority_inherited_from_user_or_policy": true
+}
