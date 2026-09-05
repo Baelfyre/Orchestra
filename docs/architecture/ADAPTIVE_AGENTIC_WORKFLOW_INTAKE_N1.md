@@ -154,3 +154,56 @@ TERMINAL_EXECUTION_ROLE != DISTINCT_DOMAIN_DECISION_AUTHORITY
 Ponytail, Overseer, and Arbiter can be required in a topology without causing The Tuner or Multi-Agent activation by themselves. The Tuner and Multi-Agent semantics are justified by multiple distinct domain-decision owners, explicit re-entry, or independent subtask evidence.
 
 This prevents a simple single-domain implementation from being over-routed merely because implementation and validation stages exist.
+
+
+## Negative routing calibration
+
+The positive calibration corpus verifies what Orchestra should select. A separate negative-routing corpus verifies what Orchestra must avoid selecting when dangerous or cross-domain terminology is only mentioned, negated, quoted, hypothetical, or scoped to representation work.
+
+The negative corpus contains 20 RouterService-level scenarios covering:
+
+- explicit negation of deploy and merge actions;
+- documentation explaining prohibited force-push and history-rewrite operations;
+- hypothetical production deployment questions;
+- removing the literal word `deploy` from README text;
+- documentation-only use of authorization/security terminology;
+- quoted security marketing language;
+- database terminology inside documentation-only work;
+- documentation of frontend architecture without UI redesign or code mutation;
+- quoted chaos-test examples that must not activate Dagger;
+- quoted `drop table` text that must not activate persistence/destructive execution;
+- release notes that must not become release execution;
+- deployment-documentation review without deployment;
+- security-incident summarization without a Cipher review;
+- authentication terminology in documentation-only typo fixes;
+- architecture terminology in changelog-only work;
+- generic `production` terminology without production mutation;
+- negated test execution;
+- permission terminology used only as a documentation label;
+- screenshot-caption references to database/UI terminology;
+- future deployment planning with execution actions explicitly negated.
+
+### Suppression model
+
+The deterministic intake policy now separates active execution intent from four classes of non-executable mention:
+
+1. **Negated spans** such as `do not deploy`, `without changing the database`, or `never force push`.
+2. **Quoted/example spans** where dangerous strings are content to discuss rather than commands to execute.
+3. **Hypothetical actions** such as `What would happen if we deploy this to production?`.
+4. **Representation-only contexts** such as README, documentation, changelog, summary, caption, sentence, label, or term editing.
+
+Representation-only work suppresses unrelated domain-execution signals and routes to Scribe when appropriate. Audit intent may still be preserved for read-only representation review, while documentation edits retain mutation semantics for the documentation artifact itself.
+
+The policy is machine-configured in `machine/workflows/task-profile-derivation.v1.json`. Suppression behavior is therefore calibratable without changing frozen specialist prompts.
+
+### Negative-routing invariants
+
+```text
+MENTION != INTENT
+NEGATED_ACTION != AUTHORIZED_ACTION
+QUOTED_DANGEROUS_TEXT != PROTECTED_ACTION
+HYPOTHETICAL_ACTION != EXECUTION_REQUEST
+REPRESENTATION_CONTEXT != REFERENCED_DOMAIN_AUTHORITY
+```
+
+A false-negative protected-action detection remains a blocking safety defect. A false-positive protected-action or specialist activation is a routing-calibration defect.
