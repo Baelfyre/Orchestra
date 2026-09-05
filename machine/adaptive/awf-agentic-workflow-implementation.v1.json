@@ -104,7 +104,9 @@
     "tests/fixtures/agentic-workflow/awf-intake-calibration.v1.json",
     "tests/runtime/test_agentic_workflow_intake_calibration.py",
     "tests/fixtures/agentic-workflow/awf-negative-routing.v1.json",
-    "tests/runtime/test_agentic_workflow_negative_routing.py"
+    "tests/runtime/test_agentic_workflow_negative_routing.py",
+    "tests/fixtures/agentic-workflow/awf-semantic-robustness.v1.json",
+    "tests/runtime/test_agentic_workflow_semantic_robustness.py"
   ],
   "historical_replay": {
     "case": "UIEF5_20260905_USAGE_EXHAUSTION",
@@ -202,6 +204,24 @@
       "QUOTED_DANGEROUS_TEXT != PROTECTED_ACTION",
       "HYPOTHETICAL_ACTION != EXECUTION_REQUEST",
       "REPRESENTATION_CONTEXT != REFERENCED_DOMAIN_AUTHORITY"
+    ]
+  },
+  "semantic_robustness_n5": {
+    "status": "IMPLEMENTATION_CANDIDATE",
+    "corpus_cases": 30,
+    "diagnostic_failure_classes": [
+      "NEGATION_SCOPE_LEAK",
+      "HYPOTHETICAL_SCOPE_LEAK",
+      "PROMPT_WIDE_REPRESENTATION_SUPPRESSION",
+      "REPEATED_ACTION_PRECEDENCE_GAP"
+    ],
+    "invariants": [
+      "NEGATION_SCOPE_IS_LOCAL",
+      "HYPOTHETICAL_SCOPE_IS_LOCAL",
+      "REPRESENTATION_SCOPE_IS_LOCAL",
+      "MIXED_REPRESENTATION_AND_EXECUTION_MUST_PRESERVE_EXECUTION_INTENT",
+      "LATER_SAME_SIGNAL_DIRECTIVE_SUPERSEDES_EARLIER_SAME_SIGNAL_DIRECTIVE",
+      "CONDITIONAL_PROTECTED_ACTION_REMAINS_PROTECTED"
     ]
   }
 }
