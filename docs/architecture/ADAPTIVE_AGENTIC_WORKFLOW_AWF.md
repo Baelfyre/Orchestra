@@ -91,6 +91,16 @@ The TaskProfile is the deterministic input contract for topology selection. It r
 
 Task complexity alone does not create a human gate.
 
+## Conductor runtime attachment
+
+The normal RouterService path remains unchanged when no AWF task profile is supplied.
+
+When Conductor receives `context.metadata.agentic_task_profile`, RouterService loads the source-bound authority view and canonical OEE budget, invokes the AWF planner, and attaches the resulting workflow profile, critic contract, telemetry, and authority rule to the Conductor RouteDecision metadata.
+
+A non-Conductor route that attempts to supply `agentic_task_profile` is rejected. This prevents a direct specialist route from using AWF metadata to bypass Conductor's exclusive dispatch authority.
+
+The always-loaded Conductor skill contains only a compact AWF activation pointer. Detailed selection rules use progressive disclosure through this document and portable reference context so adaptive behavior does not inflate the default prompt-load package.
+
 ## Specialist re-entry
 
 When a prior specialist contract is invalidated, `reentry_specialists` identifies the affected owners.
