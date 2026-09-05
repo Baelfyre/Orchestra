@@ -117,7 +117,7 @@
       "slug": "conductor",
       "authority_class": "ROUTING_SEQUENCE_CONTROL_PLANE",
       "source_path": "skills/conductor/SKILL.md",
-      "source_blob_sha": "6d190812e5514357c60ca54355b0e2ec1ca4839b",
+      "source_blob_sha": "8e34df8bd366c855324d18fcbebd4ae48dcaf34a",
       "observe_classes": [
         "REQUEST_INTENT",
         "AUTHORITY_ENVELOPE",
