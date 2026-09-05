@@ -66,14 +66,15 @@ def select_agentic_workflow(
         raise ValueError(f"primary owner is not in canonical authority view: {primary_owner}")
 
     required: list[str] = []
-    domain_owner_count = len(set(owners))
+    terminal_owners = {"ponytail", "overseer", "arbiter", "the-tuner"}
+    decision_owners = [owner for owner in owners if owner not in terminal_owners]
+    decision_owner_count = len(set(decision_owners))
     tuner_needed = bool(task.reentry_specialists) or (
-        domain_owner_count > 1 and (task.dependency_depth > 0 or task.implementation_required)
+        decision_owner_count > 1 and (task.dependency_depth > 0 or task.implementation_required)
     )
     if tuner_needed or "the-tuner" in owners:
         _append_unique(required, "the-tuner")
 
-    terminal_owners = {"ponytail", "overseer", "arbiter", "the-tuner"}
     for owner in owners:
         if owner not in terminal_owners:
             _append_unique(required, owner)
@@ -106,7 +107,7 @@ def select_agentic_workflow(
         patterns.append("REFLECTION_CRITIC")
 
     multi_agent_value = len(required) > 1 and (
-        task.independent_subtasks >= 2 or domain_owner_count >= 2 or bool(task.reentry_specialists)
+        task.independent_subtasks >= 2 or decision_owner_count >= 2 or bool(task.reentry_specialists)
     )
     if multi_agent_value:
         patterns.append("MULTI_AGENT")
