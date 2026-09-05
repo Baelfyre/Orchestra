@@ -2021,7 +2021,7 @@
       "canonical_pr": 794
     },
     "oee1_oee8_execution_efficiency_enforcement": {
-      "status": "SOURCE_CANDIDATE_PRE_CANONICAL_VALIDATION",
+      "status": "OEE_1_THROUGH_OEE_8_COMPLETE_CANONICAL_VERIFIED",
       "purpose": "Operationalize execution efficiency through owner-first specialist invocation, decisive-stop enforcement, exact-source evidence reuse, narrow-to-broad search escalation, stable-candidate validation escalation, non-reasoning CI waits, phase-local context packs, and a controlled replay of the UIEF-5 usage-exhaustion incident.",
       "machine_sources": [
         "machine/governance/execution-budget.v1.json",
@@ -2043,7 +2043,15 @@
       "new_specialist": false,
       "uief_resume_authorized": false,
       "authority_expansion": false,
-      "authority_note": "The candidate constrains orchestration decisions without changing domain ownership or protected-action authority. UIEF remains paused because the UIEF-4 responsive contradiction is still unresolved."
+      "authority_note": "OEE-1 through OEE-8 are canonical and constrain redundant orchestration work without changing protected-action authority. OEE completion does not itself authorize UIEF resumption; current UIEF recovery state is tracked separately.",
+      "canonical_sha": "75100c3ad0fd9a11c69f2b9b7c5172edd8841cd2",
+      "canonical_tree": "9e448af3c90587417c83b5019936138af7ba2faa",
+      "canonical_parent": "1927d3f0672198ddc67cc32624d38c2b14c434e8",
+      "canonical_pr": 798,
+      "source_qualification_pr": 795,
+      "signed_materialization_pr": 797,
+      "signed_materialization_commit": "dbe3f777265c6843695babce7bbd229c44b753e2",
+      "signed_materialization_signature": "VERIFIED_VALID"
     },
     "uief_reference_provenance_responsive_erratum": {
       "status": "IMPLEMENTATION_CANDIDATE_PENDING_QUALIFICATION",
