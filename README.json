@@ -1995,6 +1995,26 @@
       "ar3_started": false,
       "release_authorized": false,
       "authority_note": "OR-GOV-10 concludes the OR-GOV hardening program. Continuous Governed Run B terminates here. It does not start AR-3, expand Dagger, or authorize release, deployment, policy, provider, or v1.8 publication."
+    },
+    "oee0_execution_efficiency_guardrails": {
+      "status": "IMPLEMENTATION_CANDIDATE",
+      "purpose": "Fail-closed execution-efficiency contract that constrains redundant specialist fan-out, retries, evidence-tier skipping, broad-search escalation, premature expensive validation, and active model reasoning during unchanged CI waits without weakening governance or implementation quality.",
+      "machine_sources": [
+        "machine/governance/execution-budget.v1.json",
+        "machine/schemas/execution-budget.v1.schema.json",
+        "orchestra_runtime/domain/orchestration/execution_efficiency.py",
+        "orchestra_runtime/machine_contracts.py"
+      ],
+      "human_sources": [
+        "docs/governance/OEE_EXECUTION_EFFICIENCY_V1.md",
+        "docs/governance/oee_0_execution_cost_baseline.v1.json"
+      ],
+      "validation_surface": "tests/runtime/test_oee0_execution_efficiency.py",
+      "runtime_integration": true,
+      "dispatch_integration": false,
+      "ui_ef_resume_authorized": false,
+      "authority_expansion": false,
+      "authority_note": "OEE-0 installs guardrail contracts and validation primitives only. It does not rewrite Conductor dispatch, create a specialist, weaken existing governance/security/validation/human gates, resume UIEF, or authorize later OEE phases."
     }
   },
   "machine_scan_order": [
@@ -2203,7 +2223,9 @@
     "architecture_validation_contract_schema": "machine/schemas/architecture-validation-contract.v1.schema.json",
     "project_architecture_governance_profile_schema": "machine/schemas/project-architecture-governance-profile.v1.schema.json",
     "ui_implementation_profile_schema": "machine/schemas/ui-implementation-profile.v1.schema.json",
-    "ui_implementation_profile_reference": "machine/ui/ui-implementation-profile.v1.json"
+    "ui_implementation_profile_reference": "machine/ui/ui-implementation-profile.v1.json",
+    "execution_budget_contract": "machine/governance/execution-budget.v1.json",
+    "execution_budget_schema": "machine/schemas/execution-budget.v1.schema.json"
   },
   "specialists": {
     "count": 14,
