@@ -1,7 +1,7 @@
 {
   "schema_version": "orchestra.awf-agentic-workflow-implementation.v1",
   "program": "AWF_ADAPTIVE_AGENTIC_WORKFLOW",
-  "status": "IMPLEMENTATION_CANDIDATE_VALIDATION_PENDING",
+  "status": "COMPLETE_CANONICAL_VERIFIED",
   "architecture_baseline": {
     "padayon_pr": 382,
     "padayon_merge_sha": "b4b59d04ea37c4f23bb6a54e7d217bd3037eb6ab",
@@ -10,57 +10,57 @@
   "phases": [
     {
       "id": "AWF-I0",
-      "status": "IMPLEMENTED_CANDIDATE",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
       "goal": "machine schemas and source-binding rules"
     },
     {
       "id": "AWF-I1",
-      "status": "IMPLEMENTED_CANDIDATE",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
       "goal": "source-bound specialist authority view"
     },
     {
       "id": "AWF-I2",
-      "status": "IMPLEMENTED_CANDIDATE",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
       "goal": "topology authority validator"
     },
     {
       "id": "AWF-I3",
-      "status": "IMPLEMENTED_CANDIDATE",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
       "goal": "TaskProfile and deterministic owner resolution"
     },
     {
       "id": "AWF-I4",
-      "status": "IMPLEMENTED_CANDIDATE",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
       "goal": "Planning and bounded Tool/ReAct selection"
     },
     {
       "id": "AWF-I5",
-      "status": "IMPLEMENTED_CANDIDATE",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
       "goal": "bounded critic contract activation"
     },
     {
       "id": "AWF-I6",
-      "status": "IMPLEMENTED_CANDIDATE",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
       "goal": "conditional multi-agent graph semantics under OEE"
     },
     {
       "id": "AWF-I7",
-      "status": "IMPLEMENTED_CANDIDATE",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
       "goal": "specialist re-entry and transition topology integration"
     },
     {
       "id": "AWF-I8",
-      "status": "IMPLEMENTED_CANDIDATE",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
       "goal": "deterministic topology telemetry"
     },
     {
       "id": "AWF-I9",
-      "status": "IMPLEMENTED_CANDIDATE",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
       "goal": "UIEF-5 and synthetic regression corpus"
     },
     {
       "id": "AWF-I10",
-      "status": "QUALIFICATION_PENDING",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
       "goal": "source PR validation and canonical integration"
     }
   ],
@@ -97,7 +97,8 @@
     "tests/runtime/test_agentic_workflow.py",
     "tests/runtime/test_agentic_workflow_oee_replay.py",
     "tests/runtime/test_agentic_workflow_scenarios.py",
-    "scripts/validate_machine_contracts.py"
+    "scripts/validate_machine_contracts.py",
+    "tests/runtime/test_agentic_workflow_edges.py"
   ],
   "historical_replay": {
     "case": "UIEF5_20260905_USAGE_EXHAUSTION",
@@ -108,14 +109,48 @@
     "evidence_claim_scope": "HISTORICAL_REPLAY_ONLY"
   },
   "qualification": {
-    "local_runtime_tests": "NOT_RUN_CONNECTOR_ONLY_ENVIRONMENT",
-    "github_ci": "PENDING_SOURCE_PR",
-    "structural_readback": "PENDING_FINAL_RECONCILIATION"
+    "source_pr": 800,
+    "qualified_source_head": "7040618b4faf6998fd88d6bc984677fc42764da4",
+    "canonical_merge_commit": "7f1e1962817b1b363fbcb1629902d69d50f1daa6",
+    "github_ci": "ALL_SIX_REQUIRED_WORKFLOWS_SUCCESS_ON_QUALIFIED_SOURCE_HEAD",
+    "workflows": [
+      "Governance Check",
+      "Required Analysis Compatibility",
+      "validate",
+      "mutation-confidence",
+      "Cross-platform Validation",
+      "cosmic-ray-confidence"
+    ],
+    "structural_readback": "CANONICAL_MAIN_CONTAINS_MERGED_AWF_TREE"
   },
   "efficiency": {
     "conductor_prompt_load_strategy": "UNCHANGED_CANONICAL_SKILL_RUNTIME_CONTROL_PLANE_ACTIVATION",
     "conductor_skill_modified": false,
     "codex_portable_reference_modified": false,
     "prompt_load_budget_weakened": false
+  },
+  "next_program": {
+    "id": "AWF_N1_N5_CONTINUOUS_ADAPTIVE_INTAKE_AND_CALIBRATION",
+    "status": "IMPLEMENTATION_CANDIDATE",
+    "authority_expansion": false,
+    "phases": [
+      "AWF-N1",
+      "AWF-N2",
+      "AWF-N3",
+      "AWF-N4",
+      "AWF-N5"
+    ],
+    "current_scope": [
+      "automatic TaskProfile derivation",
+      "selection trace explainability",
+      "three controlled operational scenarios"
+    ],
+    "prohibited": [
+      "OEE concurrency widening",
+      "A5 execution promotion",
+      "specialist authority expansion",
+      "release/deploy/policy activation",
+      "UIEF resumption"
+    ]
   }
 }
