@@ -115,9 +115,10 @@
     "structural_readback": "PENDING_FINAL_RECONCILIATION"
   },
   "efficiency": {
-    "conductor_prompt_load_strategy": "COMPACT_POINTER_WITH_PROGRESSIVE_DISCLOSURE",
-    "conductor_skill_estimated_tokens": 1168,
+    "conductor_prompt_load_strategy": "COMPACT_ACTIVATION_RULE_WITH_PROGRESSIVE_DISCLOSURE",
+    "conductor_skill_estimated_tokens": 1122,
     "hard_prompt_load_ceiling_estimated_tokens": 1182,
-    "prompt_load_budget_weakened": false
+    "prompt_load_budget_weakened": false,
+    "revision_prompt_load_ceiling_estimated_tokens": 1128
   }
 }
