@@ -204,17 +204,29 @@ def _representation_ranges(
         clause = text[start:end]
         lower = clause.casefold()
         artifact_present = any(_phrase_present(lower, item) for item in artifacts)
-        verb_present = any(_phrase_present(lower, item) for item in verbs)
+        active_representation_verb = False
+        for verb in verbs:
+            for position in _signal_positions(text, verb):
+                if not (start <= position < end):
+                    continue
+                if _position_in_ranges(position, quoted):
+                    continue
+                if _is_negated(text, position, negations):
+                    continue
+                active_representation_verb = True
+                break
+            if active_representation_verb:
+                break
         scope_present = any(_phrase_present(lower, item) for item in scope_phrases)
         representation_candidate = (
-            (artifact_present and verb_present)
+            (artifact_present and active_representation_verb)
             or scope_present
             or lower.lstrip().startswith("document ")
             or lower.lstrip().startswith("summarize ")
         )
         if not representation_candidate:
             continue
-        if _active_execution_signal_in_clause(
+        if not scope_present and _active_execution_signal_in_clause(
             text,
             start,
             end,
