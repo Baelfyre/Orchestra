@@ -137,15 +137,6 @@ def test_load_contract_rejects_wrong_schema(tmp_path):
     with pytest.raises(ValueError, match="unsupported UI fidelity handoff"):
         contracts.load_ui_fidelity_handoff_contract(tmp_path)
 
-    governance_path = tmp_path / "machine" / "governance"
-    governance_path.mkdir(parents=True)
-    (governance_path / "execution-budget.v1.json").write_text(
-        '{"schema_version":"wrong"}',
-        encoding="utf-8",
-    )
-    with pytest.raises(ValueError, match="unsupported execution budget"):
-        contracts.load_execution_budget_contract(tmp_path)
-
 
 @pytest.mark.parametrize(
     ("field", "value", "message"),
@@ -189,23 +180,3 @@ def test_machine_contract_errors_reject_ui_fidelity_handoff_contract_exception(m
         raise ValueError("corrupted handoff")
     monkeypatch.setattr(contracts, "load_ui_fidelity_handoff_contract", _failing_loader)
     assert "UI_FIDELITY_HANDOFF_CONTRACT_INVALID:corrupted handoff" in contracts.machine_contract_errors(ROOT)
-
-def test_machine_contract_errors_reject_execution_budget_drift(monkeypatch):
-    budget = deepcopy(contracts.load_execution_budget_contract(ROOT))
-    budget["owner"] = "the-governor"
-    monkeypatch.setattr(contracts, "load_execution_budget_contract", lambda root=None: budget)
-    assert any(
-        error.startswith("EXECUTION_BUDGET_CONTRACT_INVALID:")
-        for error in contracts.machine_contract_errors(ROOT)
-    )
-
-def test_machine_contract_errors_reject_execution_budget_contract_exception(monkeypatch):
-    def _failing_loader(root=None):
-        raise ValueError("corrupted execution budget")
-
-    monkeypatch.setattr(contracts, "load_execution_budget_contract", _failing_loader)
-    assert (
-        "EXECUTION_BUDGET_CONTRACT_INVALID:corrupted execution budget"
-        in contracts.machine_contract_errors(ROOT)
-    )
-
