@@ -66,12 +66,130 @@ def _clean_prompt(prompt: object) -> str:
 
 
 def _signal_position(text: str, signal: str) -> int | None:
+    positions = _signal_positions(text, signal)
+    return None if not positions else positions[0]
+
+
+def _signal_positions(text: str, signal: str) -> tuple[int, ...]:
     signal_text = " ".join(str(signal).casefold().split())
     if not signal_text:
         raise ValueError("derivation signals must be non-empty")
     escaped = re.escape(signal_text).replace(r"\ ", r"\s+")
-    match = re.search(rf"(?<!\w){escaped}(?!\w)", text.casefold())
-    return None if match is None else match.start()
+    return tuple(
+        match.start()
+        for match in re.finditer(rf"(?<!\w){escaped}(?!\w)", text.casefold())
+    )
+
+
+def _quoted_ranges(text: str) -> tuple[tuple[int, int], ...]:
+    ranges: list[tuple[int, int]] = []
+    for pattern in (r"`[^`]*`", r'"[^"]*"', r"'[^']*'"):
+        for match in re.finditer(pattern, text):
+            ranges.append((match.start(), match.end()))
+    return tuple(sorted(ranges))
+
+
+def _position_in_ranges(position: int, ranges: tuple[tuple[int, int], ...]) -> bool:
+    return any(start <= position < end for start, end in ranges)
+
+
+def _phrase_present(text: str, phrase: str) -> bool:
+    normalized = " ".join(str(phrase).casefold().split())
+    if not normalized:
+        return False
+    escaped = re.escape(normalized).replace(r"\ ", r"\s+")
+    return re.search(rf"(?<!\w){escaped}(?!\w)", text.casefold()) is not None
+
+
+def _is_negated(
+    text: str,
+    position: int,
+    negation_phrases: tuple[str, ...],
+) -> bool:
+    boundary = max(
+        text.rfind(".", 0, position),
+        text.rfind("!", 0, position),
+        text.rfind("?", 0, position),
+        text.rfind(";", 0, position),
+        text.rfind(":", 0, position),
+    )
+    prefix = text[boundary + 1 : position].casefold()
+    for phrase in negation_phrases:
+        normalized = " ".join(str(phrase).casefold().split())
+        escaped = re.escape(normalized).replace(r"\ ", r"\s+")
+        if re.search(rf"(?<!\w){escaped}(?!\w)", prefix):
+            return True
+    return False
+
+
+def _is_hypothetical(
+    text: str,
+    position: int,
+    hypothetical_prefixes: tuple[str, ...],
+) -> bool:
+    normalized = text.casefold().lstrip()
+    for prefix in hypothetical_prefixes:
+        candidate = " ".join(str(prefix).casefold().split())
+        if normalized.startswith(candidate) and position >= normalized.find(candidate) + len(candidate):
+            return True
+    return False
+
+
+def _representation_context(
+    text: str,
+    suppression_rules: Mapping[str, Any],
+    quoted: tuple[tuple[int, int], ...],
+) -> tuple[bool, int | None]:
+    lower = text.casefold()
+    artifacts = tuple(str(item).casefold() for item in suppression_rules["representation_artifacts"])
+    verbs = tuple(str(item).casefold() for item in suppression_rules["representation_verbs"])
+    edit_verbs = tuple(str(item).casefold() for item in suppression_rules["representation_edit_verbs"])
+    scope_phrases = tuple(str(item).casefold() for item in suppression_rules["representation_scope_phrases"])
+    negations = tuple(str(item).casefold() for item in suppression_rules["negation_phrases"])
+
+    artifact_present = any(_phrase_present(lower, item) for item in artifacts)
+    verb_present = any(_phrase_present(lower, item) for item in verbs)
+    scope_present = any(_phrase_present(lower, item) for item in scope_phrases)
+    representation_only = (
+        (artifact_present and verb_present)
+        or scope_present
+        or lower.startswith("document ")
+        or lower.startswith("summarize ")
+    )
+
+    edit_position: int | None = None
+    if representation_only:
+        candidates: list[int] = []
+        for verb in edit_verbs:
+            for position in _signal_positions(text, verb):
+                if _position_in_ranges(position, quoted):
+                    continue
+                if _is_negated(text, position, negations):
+                    continue
+                candidates.append(position)
+        if candidates:
+            edit_position = min(candidates)
+    return representation_only, edit_position
+
+
+def _first_active_signal_position(
+    text: str,
+    signal: str,
+    *,
+    quoted: tuple[tuple[int, int], ...],
+    negation_phrases: tuple[str, ...],
+    hypothetical_prefixes: tuple[str, ...],
+    suppress_hypothetical: bool,
+) -> int | None:
+    for position in _signal_positions(text, signal):
+        if _position_in_ranges(position, quoted):
+            continue
+        if _is_negated(text, position, negation_phrases):
+            continue
+        if suppress_hypothetical and _is_hypothetical(text, position, hypothetical_prefixes):
+            continue
+        return position
+    return None
 
 
 def _exact_bool_or_default(value: object, default: bool, field_name: str) -> bool:
@@ -103,7 +221,7 @@ def _string_list(value: object, field_name: str, *, maximum: int) -> tuple[str, 
     return items
 
 
-def validate_derivation_policy(policy: Mapping[str, Any]) -> tuple[list[Mapping[str, Any]], Mapping[str, Any], frozenset[str]]:
+def validate_derivation_policy(policy: Mapping[str, Any]) -> tuple[list[Mapping[str, Any]], Mapping[str, Any], frozenset[str], Mapping[str, Any]]:
     if not isinstance(policy, Mapping):
         raise TypeError("TaskProfile derivation policy must be a mapping")
     if policy.get("schema_version") != DERIVATION_POLICY_SCHEMA_VERSION:
@@ -145,30 +263,109 @@ def validate_derivation_policy(policy: Mapping[str, Any]) -> tuple[list[Mapping[
     governed = frozenset(str(item).strip().upper() for item in policy.get("governed_domains", ()))
     if not governed or not governed.issubset(AUTHORITY_DOMAINS):
         raise ValueError("TaskProfile derivation governed_domains are invalid")
-    return rules, raw_operations, governed
+
+    raw_suppression = policy.get("suppression_rules")
+    required_suppression = {
+        "negation_phrases",
+        "hypothetical_prefixes",
+        "representation_artifacts",
+        "representation_verbs",
+        "representation_edit_verbs",
+        "representation_scope_phrases",
+    }
+    if not isinstance(raw_suppression, Mapping):
+        raise TypeError("TaskProfile derivation suppression_rules must be a mapping")
+    if set(raw_suppression) != required_suppression:
+        raise ValueError("TaskProfile derivation suppression rule set changed")
+    for key in sorted(required_suppression):
+        values = raw_suppression[key]
+        if not isinstance(values, list) or not values or any(not str(item).strip() for item in values):
+            raise ValueError(f"TaskProfile derivation suppression rules are invalid: {key}")
+    return rules, raw_operations, governed, raw_suppression
 
 
 def _matched_signals(
     prompt: str,
     domain_rules: list[Mapping[str, Any]],
     operation_signals: Mapping[str, Any],
-) -> tuple[IntakeSignal, ...]:
+    suppression_rules: Mapping[str, Any],
+) -> tuple[tuple[IntakeSignal, ...], int, bool]:
     matches: list[IntakeSignal] = []
+    suppressed = 0
+    quoted = _quoted_ranges(prompt)
+    negations = tuple(str(item).casefold() for item in suppression_rules["negation_phrases"])
+    hypotheticals = tuple(str(item).casefold() for item in suppression_rules["hypothetical_prefixes"])
+    representation_only, representation_edit_position = _representation_context(
+        prompt,
+        suppression_rules,
+        quoted,
+    )
+
     for rule in domain_rules:
         domain = str(rule["domain"]).strip().upper()
         for raw_signal in rule["signals"]:
             signal = str(raw_signal).strip()
-            position = _signal_position(prompt, signal)
-            if position is not None:
-                matches.append(IntakeSignal("DOMAIN", domain, signal, position))
+            active_position = None
+            for position in _signal_positions(prompt, signal):
+                if _position_in_ranges(position, quoted):
+                    suppressed += 1
+                    continue
+                if _is_negated(prompt, position, negations):
+                    suppressed += 1
+                    continue
+                if representation_only and domain != "DOCUMENTATION":
+                    suppressed += 1
+                    continue
+                active_position = position
+                break
+            if active_position is not None:
+                matches.append(IntakeSignal("DOMAIN", domain, signal, active_position))
+
     for operation in _OPERATION_KEYS:
         for raw_signal in operation_signals[operation]:
             signal = str(raw_signal).strip()
-            position = _signal_position(prompt, signal)
-            if position is not None:
-                matches.append(IntakeSignal("OPERATION", operation.upper(), signal, position))
-    return tuple(sorted(matches, key=lambda item: (item.position, item.kind, item.value, item.signal)))
+            active_position = None
+            for position in _signal_positions(prompt, signal):
+                if _position_in_ranges(position, quoted):
+                    suppressed += 1
+                    continue
+                if _is_negated(prompt, position, negations):
+                    suppressed += 1
+                    continue
+                if _is_hypothetical(prompt, position, hypotheticals):
+                    suppressed += 1
+                    continue
+                if representation_only and operation != "audit":
+                    suppressed += 1
+                    continue
+                active_position = position
+                break
+            if active_position is not None:
+                matches.append(
+                    IntakeSignal("OPERATION", operation.upper(), signal, active_position)
+                )
 
+    if representation_only and not any(
+        item.kind == "DOMAIN" and item.value == "DOCUMENTATION"
+        for item in matches
+    ):
+        matches.append(IntakeSignal("DOMAIN", "DOCUMENTATION", "representation_context", 0))
+
+    if representation_only and representation_edit_position is not None:
+        matches.append(
+            IntakeSignal(
+                "OPERATION",
+                "MUTATION",
+                "representation_edit",
+                representation_edit_position,
+            )
+        )
+
+    return (
+        tuple(sorted(matches, key=lambda item: (item.position, item.kind, item.value, item.signal))),
+        suppressed,
+        representation_only,
+    )
 
 def _operation_active(matches: tuple[IntakeSignal, ...], operation: str) -> bool:
     target = operation.upper()
@@ -220,8 +417,13 @@ def derive_task_profile(
     if not source_identity:
         raise ValueError("current_source_identity must be non-empty")
 
-    domain_rules, operation_signals, governed_domains = validate_derivation_policy(policy)
-    matches = _matched_signals(text, domain_rules, operation_signals)
+    domain_rules, operation_signals, governed_domains, suppression_rules = validate_derivation_policy(policy)
+    matches, suppressed_signal_count, representation_only = _matched_signals(
+        text,
+        domain_rules,
+        operation_signals,
+        suppression_rules,
+    )
     domains = _domain_order(matches)
 
     explicit_domains = tuple(item.upper() for item in _string_list(
@@ -240,7 +442,18 @@ def derive_task_profile(
     validation_required = _operation_active(matches, "validation")
     transition_required = _operation_active(matches, "transition")
     audit_requested = _operation_active(matches, "audit")
-    production_transition = transition_required and _signal_position(text, "production") is not None
+    quoted_ranges = _quoted_ranges(text)
+    production_position = _first_active_signal_position(
+        text,
+        "production",
+        quoted=quoted_ranges,
+        negation_phrases=tuple(str(item).casefold() for item in suppression_rules["negation_phrases"]),
+        hypothetical_prefixes=tuple(str(item).casefold() for item in suppression_rules["hypothetical_prefixes"]),
+        suppress_hypothetical=True,
+    )
+    if representation_only:
+        production_position = None
+    production_transition = transition_required and production_position is not None
     destructive_requested = _operation_active(matches, "destructive") or production_transition
     protected_action_required = _operation_active(matches, "protected_action")
     parallelizable = _operation_active(matches, "parallel")
@@ -406,6 +619,10 @@ def derive_task_profile(
         reasons.append("EXPLICIT_RISK_LEVEL_MAY_ESCALATE_ONLY")
     if production_transition:
         reasons.append("PRODUCTION_TRANSITION_CLASSIFIED_DESTRUCTIVE")
+    if suppressed_signal_count:
+        reasons.append(f"NEGATIVE_ROUTING_SIGNALS_SUPPRESSED:{suppressed_signal_count}")
+    if representation_only:
+        reasons.append("REPRESENTATION_ONLY_CONTEXT_SUPPRESSED_DOMAIN_EXECUTION")
 
     return TaskProfileDerivation(
         task_profile=profile,
