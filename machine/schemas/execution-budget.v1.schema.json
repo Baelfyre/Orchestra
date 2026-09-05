@@ -1,0 +1,262 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/execution-budget.v1.schema.json",
+  "title": "Orchestra Execution Budget v1",
+  "description": "Fail-closed execution-efficiency guardrails. These rules reduce redundant execution without weakening evidence, implementation quality, governance, security, validation, or human authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_name",
+    "owner",
+    "core_invariant",
+    "defaults",
+    "evidence_tiers",
+    "search_escalation",
+    "validation_escalation",
+    "decisive_stop",
+    "measurement_fields",
+    "authority"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orchestra.execution-budget.v1"
+    },
+    "contract_name": {
+      "const": "ExecutionBudget"
+    },
+    "owner": {
+      "const": "conductor"
+    },
+    "core_invariant": {
+      "const": "MINIMIZE_EXECUTION_COST_WITHOUT_MINIMIZING_REQUIRED_EVIDENCE_OR_IMPLEMENTATION_QUALITY"
+    },
+    "defaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max_parallel_specialists",
+        "specialist_retry_limit",
+        "owner_first_routing",
+        "broad_search_requires_narrow_search_exhaustion",
+        "evidence_cache_requires_exact_source_identity",
+        "full_validation_requires_stable_candidate",
+        "ci_wait_must_not_consume_reasoning_budget",
+        "autonomous_campaigns_load_one_phase_at_a_time",
+        "optional_review_cannot_block_without_explicit_authority"
+      ],
+      "properties": {
+        "max_parallel_specialists": {
+          "const": 1
+        },
+        "specialist_retry_limit": {
+          "const": 1
+        },
+        "owner_first_routing": {
+          "const": true
+        },
+        "broad_search_requires_narrow_search_exhaustion": {
+          "const": true
+        },
+        "evidence_cache_requires_exact_source_identity": {
+          "const": true
+        },
+        "full_validation_requires_stable_candidate": {
+          "const": true
+        },
+        "ci_wait_must_not_consume_reasoning_budget": {
+          "const": true
+        },
+        "autonomous_campaigns_load_one_phase_at_a_time": {
+          "const": true
+        },
+        "optional_review_cannot_block_without_explicit_authority": {
+          "const": true
+        }
+      }
+    },
+    "evidence_tiers": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "prefixItems": [
+        {
+          "type": "object",
+          "required": [
+            "tier",
+            "name"
+          ],
+          "properties": {
+            "tier": {
+              "const": "E0"
+            },
+            "name": {
+              "const": "ORIENTATION"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "tier",
+            "name"
+          ],
+          "properties": {
+            "tier": {
+              "const": "E1"
+            },
+            "name": {
+              "const": "INPUT_INTEGRITY"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "tier",
+            "name"
+          ],
+          "properties": {
+            "tier": {
+              "const": "E2"
+            },
+            "name": {
+              "const": "TARGETED_ANALYSIS"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "tier",
+            "name"
+          ],
+          "properties": {
+            "tier": {
+              "const": "E3"
+            },
+            "name": {
+              "const": "IMPLEMENTATION"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "tier",
+            "name"
+          ],
+          "properties": {
+            "tier": {
+              "const": "E4"
+            },
+            "name": {
+              "const": "QUALIFICATION"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "tier",
+            "name"
+          ],
+          "properties": {
+            "tier": {
+              "const": "E5"
+            },
+            "name": {
+              "const": "PROMOTION"
+            }
+          }
+        }
+      ],
+      "items": false
+    },
+    "search_escalation": {
+      "const": [
+        "EXACT_PATH",
+        "EXACT_SYMBOL",
+        "BOUNDED_DIRECTORY",
+        "REPOSITORY_WIDE",
+        "EXTERNAL"
+      ]
+    },
+    "validation_escalation": {
+      "const": [
+        "SYNTAX_SCHEMA",
+        "DIRECT_TESTS",
+        "SUBSYSTEM",
+        "REPOSITORY_QUALIFICATION",
+        "PROTECTED_GATES"
+      ]
+    },
+    "decisive_stop": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rule",
+        "required_fields"
+      ],
+      "properties": {
+        "rule": {
+          "const": "EARLIEST_DECISIVE_EVIDENCE_WINS"
+        },
+        "required_fields": {
+          "const": [
+            "owner",
+            "evidence_sufficient",
+            "stop_required",
+            "downstream_execution_allowed",
+            "reason",
+            "evidence_refs"
+          ]
+        }
+      }
+    },
+    "measurement_fields": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "creates_or_expands_authority",
+        "weakens_existing_governance",
+        "weakens_security",
+        "weakens_validation",
+        "weakens_human_gates",
+        "new_specialist_required"
+      ],
+      "properties": {
+        "creates_or_expands_authority": {
+          "const": false
+        },
+        "weakens_existing_governance": {
+          "const": false
+        },
+        "weakens_security": {
+          "const": false
+        },
+        "weakens_validation": {
+          "const": false
+        },
+        "weakens_human_gates": {
+          "const": false
+        },
+        "new_specialist_required": {
+          "const": false
+        }
+      }
+    }
+  }
+}
