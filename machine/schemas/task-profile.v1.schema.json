@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/task-profile.v1.schema.json",
+  "title": "Orchestra Agentic Task Profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "task_id",
+    "goal",
+    "execution_mode",
+    "risk_level",
+    "authority_domains",
+    "primary_owner",
+    "dependency_depth",
+    "independent_subtasks",
+    "parallelizable",
+    "mutation_required",
+    "implementation_required",
+    "validation_required",
+    "transition_required",
+    "external_state_required",
+    "protected_action_required",
+    "protected_action_authorized",
+    "objective_verifier_available",
+    "critic_owner",
+    "critic_domain",
+    "current_source_identity",
+    "human_gate_requirements"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "orchestra.task-profile.v1"
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "goal": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096
+    },
+    "execution_mode": {
+      "enum": [
+        "FAST",
+        "STANDARD",
+        "GOVERNED",
+        "AUDIT",
+        "DESTRUCTIVE"
+      ]
+    },
+    "risk_level": {
+      "enum": [
+        "LOW",
+        "MEDIUM",
+        "HIGH",
+        "CRITICAL"
+      ]
+    },
+    "authority_domains": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 14,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "BUSINESS_SCOPE",
+          "LEGAL_COMPLIANCE",
+          "TRANSITION",
+          "VALIDATION",
+          "ROUTING",
+          "COORDINATION",
+          "SECURITY",
+          "UI_UX",
+          "ADVERSARIAL",
+          "PERSISTENCE",
+          "DIAGRAM",
+          "DOCUMENTATION",
+          "ARCHITECTURE",
+          "IMPLEMENTATION"
+        ]
+      }
+    },
+    "primary_owner": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "dependency_depth": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 64
+    },
+    "independent_subtasks": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 64
+    },
+    "parallelizable": {
+      "type": "boolean"
+    },
+    "mutation_required": {
+      "type": "boolean"
+    },
+    "implementation_required": {
+      "type": "boolean"
+    },
+    "validation_required": {
+      "type": "boolean"
+    },
+    "transition_required": {
+      "type": "boolean"
+    },
+    "external_state_required": {
+      "type": "boolean"
+    },
+    "protected_action_required": {
+      "type": "boolean"
+    },
+    "protected_action_authorized": {
+      "type": "boolean"
+    },
+    "objective_verifier_available": {
+      "type": "boolean"
+    },
+    "critic_owner": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "critic_domain": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "current_source_identity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "human_gate_requirements": {
+      "type": "array",
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      }
+    }
+  }
+}
