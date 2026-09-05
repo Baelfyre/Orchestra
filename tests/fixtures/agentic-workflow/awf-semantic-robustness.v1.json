@@ -106,7 +106,7 @@
       "id": "S06_NEGATE_REVIEW_THEN_DEPLOY",
       "prompt": "Do not review the docs; deploy to staging.",
       "expect": {
-        "primary_owner": "scribe",
+        "primary_owner": "arbiter",
         "protected_action_required": true,
         "transition_required": true,
         "human_gate_required": true
@@ -114,6 +114,11 @@
       "avoid": {
         "patterns": [
           "MULTI_AGENT"
+        ],
+        "specialists": [
+          "scribe",
+          "the-tuner",
+          "ponytail"
         ]
       }
     },
