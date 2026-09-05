@@ -1,6 +1,18 @@
 """Pure authority-aware adaptive workflow domain contracts."""
 
 from .agentic_workflow import STOP_CONDITIONS, select_agentic_workflow
+from .intake import (
+    DERIVATION_POLICY_SCHEMA_VERSION,
+    IntakeSignal,
+    TaskProfileDerivation,
+    derive_task_profile,
+    validate_derivation_policy,
+)
+from .selection_trace import (
+    AUTHORITY_RULE,
+    SELECTION_TRACE_SCHEMA_VERSION,
+    build_selection_trace,
+)
 from .task_profile import (
     AUTHORITY_DOMAINS,
     AUTHORITY_DOMAIN_OWNERS,
@@ -24,6 +36,9 @@ from .topology_validator import (
 )
 
 __all__ = [
+    "AUTHORITY_RULE",
+    "DERIVATION_POLICY_SCHEMA_VERSION",
+    "SELECTION_TRACE_SCHEMA_VERSION",
     "AUTHORITY_DOMAINS",
     "AUTHORITY_DOMAIN_OWNERS",
     "AUTHORITY_VIEW_SCHEMA_VERSION",
@@ -38,6 +53,11 @@ __all__ = [
     "TASK_PROFILE_SCHEMA_VERSION",
     "WORKFLOW_PROFILE_SCHEMA_VERSION",
     "AgenticWorkflowProfile",
+    "IntakeSignal",
+    "TaskProfileDerivation",
+    "build_selection_trace",
+    "derive_task_profile",
+    "validate_derivation_policy",
     "CriticContract",
     "SpecialistAuthority",
     "TaskProfile",
