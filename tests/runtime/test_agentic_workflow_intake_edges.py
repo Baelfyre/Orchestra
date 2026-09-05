@@ -266,3 +266,59 @@ def test_selection_trace_rejects_unknown_source():
     )
     with pytest.raises(ValueError, match="source is invalid"):
         build_selection_trace(task=task, profile=profile, source="UNKNOWN")
+
+
+def test_negative_routing_suppression_primitives():
+    policy = _policy()
+
+    negated = derive_task_profile(
+        prompt="Do not deploy or merge anything. Review the README.",
+        metadata={},
+        current_source_identity="main@test",
+        policy=policy,
+    )
+    assert negated.task_profile.protected_action_required is False
+    assert negated.task_profile.transition_required is False
+    assert negated.task_profile.primary_owner == "scribe"
+    assert any(
+        reason.startswith("NEGATIVE_ROUTING_SIGNALS_SUPPRESSED:")
+        for reason in negated.derivation_reasons
+    )
+
+    hypothetical = derive_task_profile(
+        prompt="What would happen if we deploy this change to production?",
+        metadata={},
+        current_source_identity="main@test",
+        policy=policy,
+    )
+    assert hypothetical.task_profile.authority_domains == ("ROUTING",)
+    assert hypothetical.task_profile.protected_action_required is False
+    assert hypothetical.task_profile.mutation_required is False
+
+    quoted = derive_task_profile(
+        prompt="Explain in the README why 'drop table' is dangerous.",
+        metadata={},
+        current_source_identity="main@test",
+        policy=policy,
+    )
+    assert quoted.task_profile.authority_domains == ("DOCUMENTATION",)
+    assert quoted.task_profile.protected_action_required is False
+    assert "REPRESENTATION_ONLY_CONTEXT_SUPPRESSED_DOMAIN_EXECUTION" in quoted.derivation_reasons
+
+
+def test_derivation_policy_rejects_missing_or_malformed_suppression_rules():
+    policy = _policy()
+    missing = deepcopy(policy)
+    missing.pop("suppression_rules")
+    with pytest.raises(TypeError, match="suppression_rules"):
+        intake_module.validate_derivation_policy(missing)
+
+    changed = deepcopy(policy)
+    changed["suppression_rules"].pop("hypothetical_prefixes")
+    with pytest.raises(ValueError, match="suppression rule set"):
+        intake_module.validate_derivation_policy(changed)
+
+    empty = deepcopy(policy)
+    empty["suppression_rules"]["negation_phrases"] = []
+    with pytest.raises(ValueError, match="suppression rules are invalid"):
+        intake_module.validate_derivation_policy(empty)
