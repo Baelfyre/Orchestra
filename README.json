@@ -2538,8 +2538,9 @@
     "cloak_ui_reference_corpus_cuir4": "CUIR_4_CANONICAL_MERGED_VERIFIED",
     "cloak_ui_reference_corpus_cuir5": "CUIR_5_CANONICAL_CONTROLLED_EVALUATION_VERIFIED",
     "cloak_ui_reference_corpus_cuir6": "CUIR_6_CANONICAL_ADOPT_OPTIONAL_CLOSEOUT_VERIFIED",
-    "adaptive_agentic_workflow_awf": "AWF_I0_I10_COMPLETE_CANONICAL_VERIFIED",
-    "adaptive_agentic_workflow_intake_n1_n3": "IMPLEMENTATION_CANDIDATE"
+    "adaptive_agentic_workflow_awf": "AWF_N1_N4_COMPLETE_CANONICAL_VERIFIED",
+    "adaptive_agentic_workflow_intake_n1_n3": "IMPLEMENTATION_CANDIDATE",
+    "adaptive_agentic_workflow_semantic_robustness_n5": "IMPLEMENTATION_CANDIDATE"
   },
   "ai_review_guidance": {
     "preferred_entrypoint": "README.json",
@@ -2652,6 +2653,10 @@
     "preserve_oee_max_parallel_specialists_default_during_awf_selection": true,
     "treat_awf_intake_derivation_as_deterministic_calibratable_routing_evidence": true,
     "do_not_infer_protected_action_authority_from_awf_prompt_signals": true,
-    "unknown_awf_intake_domain_fails_to_conductor_instead_of_guessing_owner": true
+    "unknown_awf_intake_domain_fails_to_conductor_instead_of_guessing_owner": true,
+    "treat_awf_semantic_suppression_as_clause_local": true,
+    "do_not_apply_representation_only_suppression_to_independent_execution_clauses": true,
+    "later_same_signal_directive_supersedes_earlier_same_signal_directive": true,
+    "conditional_protected_actions_remain_protected_until_condition_and_authority_are_verified": true
   }
 }
