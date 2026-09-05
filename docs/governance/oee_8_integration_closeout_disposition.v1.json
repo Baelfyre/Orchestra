@@ -1,0 +1,45 @@
+{
+  "schema_version": "1.0.0",
+  "record_type": "ORCHESTRA_EXECUTION_EFFICIENCY_V1_INTEGRATION_DISPOSITION",
+  "program_id": "ORCHESTRA_EXECUTION_EFFICIENCY_V1",
+  "state": "SOURCE_CANDIDATE_PRE_CANONICAL_VALIDATION",
+  "recorded_at": "2026-09-05T15:45:00+08:00",
+  "phases": {
+    "OEE-0": "COMPLETE_CANONICAL_VERIFIED_AT_1927d3f0672198ddc67cc32624d38c2b14c434e8",
+    "OEE-1": "SOURCE_CANDIDATE_OWNER_FIRST_ROUTING_AND_SPECIALIST_BUDGET",
+    "OEE-2": "SOURCE_CANDIDATE_EARLIEST_DECISIVE_EVIDENCE_STOP",
+    "OEE-3": "SOURCE_CANDIDATE_EVIDENCE_REUSE_AND_SEARCH_ESCALATION",
+    "OEE-4": "SOURCE_CANDIDATE_RISK_BASED_VALIDATION",
+    "OEE-5": "SOURCE_CANDIDATE_CI_WAIT_BOUNDARY",
+    "OEE-6": "SOURCE_CANDIDATE_PHASE_LOCAL_CONTEXT_PACKS",
+    "OEE-7": "SOURCE_CANDIDATE_CONTROLLED_REPLAY",
+    "OEE-8": "SOURCE_CANDIDATE_INTEGRATION_GATE"
+  },
+  "replay_expectation": {
+    "baseline_case": "UIEF5_20260905_USAGE_EXHAUSTION",
+    "expected_same_or_safer_disposition": "BLOCKED_PRE_IMPLEMENTATION_REVIEW",
+    "expected_decisive_owner": "cloak",
+    "expected_specialist_role_reduction": "4_TO_1_UNIQUE_ROLES",
+    "expected_repository_wide_searches_after_blocker": 0,
+    "expected_full_validation_runs_after_blocker": 0,
+    "expected_ci_watch_events": 0
+  },
+  "uief_resume_disposition": {
+    "eligible_after_oee_canonical_closeout": false,
+    "reason": "UIEF-4 responsive input contradiction remains unresolved. OEE completion removes the orchestration-efficiency gap but does not repair the UIEF-4 design contract.",
+    "required_before_resume": [
+      "REMEDIATE_UIEF_4_RESPONSIVE_CONTRADICTION_UNDER_CLOAK_AUTHORITY",
+      "REVALIDATE_UIEF_4_PROVENANCE_REFERENCES",
+      "REQUALIFY_UIEF_5_SOURCE_CANDIDATE_PR_791_OR_SUCCESSOR"
+    ],
+    "automatic_uief_resume": false
+  },
+  "authority": {
+    "release_authorized": false,
+    "deployment_authorized": false,
+    "policy_activation_authorized": false,
+    "uief_resume_authorized": false,
+    "new_specialist_authorized": false
+  },
+  "canonical_claim_prohibited_until_post_merge_readback": true
+}

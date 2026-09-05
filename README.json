@@ -1997,7 +1997,7 @@
       "authority_note": "OR-GOV-10 concludes the OR-GOV hardening program. Continuous Governed Run B terminates here. It does not start AR-3, expand Dagger, or authorize release, deployment, policy, provider, or v1.8 publication."
     },
     "oee0_execution_efficiency_guardrails": {
-      "status": "IMPLEMENTATION_CANDIDATE",
+      "status": "IMPLEMENTED_CANONICAL",
       "purpose": "Fail-closed execution-efficiency contract that constrains redundant specialist fan-out, retries, evidence-tier skipping, broad-search escalation, premature expensive validation, and active model reasoning during unchanged CI waits without weakening governance or implementation quality.",
       "machine_sources": [
         "machine/governance/execution-budget.v1.json",
@@ -2015,7 +2015,35 @@
       "dispatch_integration": false,
       "ui_ef_resume_authorized": false,
       "authority_expansion": false,
-      "authority_note": "OEE-0 installs guardrail contracts and validation primitives only. It does not rewrite Conductor dispatch, create a specialist, weaken existing governance/security/validation/human gates, resume UIEF, or authorize later OEE phases."
+      "authority_note": "OEE-0 is canonical and installs guardrail contracts and validation primitives only. It does not itself authorize UIEF resumption, release, deployment, policy activation, or authority expansion.",
+      "canonical_sha": "1927d3f0672198ddc67cc32624d38c2b14c434e8",
+      "canonical_tree": "44ff40723c858346d46fc68f6cd0b1d33dcdec78",
+      "canonical_pr": 794
+    },
+    "oee1_oee8_execution_efficiency_enforcement": {
+      "status": "SOURCE_CANDIDATE_PRE_CANONICAL_VALIDATION",
+      "purpose": "Operationalize execution efficiency through owner-first specialist invocation, decisive-stop enforcement, exact-source evidence reuse, narrow-to-broad search escalation, stable-candidate validation escalation, non-reasoning CI waits, phase-local context packs, and a controlled replay of the UIEF-5 usage-exhaustion incident.",
+      "machine_sources": [
+        "machine/governance/execution-budget.v1.json",
+        "orchestra_runtime/domain/orchestration/execution_efficiency.py",
+        "scripts/validation/run_oee7_controlled_replay.py"
+      ],
+      "specialist_sources": [
+        "skills/conductor/EXECUTION_EFFICIENCY_GUIDE.md",
+        "skills/conductor/OUTPUT_FORMATS.md",
+        "adapters/codex/skills/conductor/EXECUTION_EFFICIENCY_GUIDE.md",
+        "adapters/codex/skills/conductor/OUTPUT_FORMATS.md"
+      ],
+      "validation_surfaces": [
+        "tests/runtime/test_oee1_oee6_execution_efficiency.py",
+        "tests/runtime/test_oee7_controlled_replay.py"
+      ],
+      "integration_disposition": "docs/governance/oee_8_integration_closeout_disposition.v1.json",
+      "runtime_executor_rewrite": false,
+      "new_specialist": false,
+      "uief_resume_authorized": false,
+      "authority_expansion": false,
+      "authority_note": "The candidate constrains orchestration decisions without changing domain ownership or protected-action authority. UIEF remains paused because the UIEF-4 responsive contradiction is still unresolved."
     }
   },
   "machine_scan_order": [

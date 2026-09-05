@@ -1,6 +1,6 @@
 # Orchestra Execution Efficiency V1
 
-Status: OEE-0 guardrail contract
+Status: OEE-0 canonical; OEE-1 through OEE-8 source candidate
 
 ## Invariant
 
@@ -93,3 +93,20 @@ When evidence is sufficient and stop is required, downstream execution must be f
 Conductor owns routing and sequencing. Arbiter retains transition/stop authority. Overseer retains validation evidence authority. The Tuner retains evidence freshness/invalidation coordination. Scribe records durable measurements. The Governor remains legal/compliance governance and is not converted into an execution owner.
 
 OEE does not create a new specialist or expand existing authority.
+
+## OEE-1 through OEE-8 continuation
+
+The post-OEE-0 continuation operationalizes the existing budget rather than creating another governance layer.
+
+- OEE-1: owner-first specialist invocation and retry/fan-out budget.
+- OEE-2: earliest decisive evidence stop enforcement.
+- OEE-3: exact-source evidence reuse and narrow-to-broad search escalation.
+- OEE-4: stable-candidate validation escalation.
+- OEE-5: passive CI wait boundary and continuous-watch prohibition.
+- OEE-6: phase-local minimum sufficient context packs.
+- OEE-7: controlled replay of the UIEF-5 usage-exhaustion incident.
+- OEE-8: integration disposition and explicit UIEF resume decision.
+
+The OEE-7 replay intentionally stops at the UIEF-4 responsive contradiction during E1 input integrity. It does not continue to provenance search, downstream specialists, implementation analysis, full validation, or CI watch work after that decisive blocker.
+
+OEE-8 does not automatically resume UIEF. The current source candidate records UIEF as still blocked pending Cloak-owned responsive-contract repair, provenance revalidation, and UIEF-5 source requalification.
