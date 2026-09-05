@@ -136,34 +136,64 @@
     "prompt_load_budget_weakened": false
   },
   "next_program": {
-    "id": "AWF_N1_N5_CONTINUOUS_ADAPTIVE_INTAKE_AND_CALIBRATION",
-    "status": "IMPLEMENTATION_CANDIDATE",
+    "id": "AWF_N1_N6_CONTINUOUS_ADAPTIVE_INTAKE_AND_CALIBRATION",
+    "status": "N1_N4_COMPLETE_CANONICAL_N5_IMPLEMENTATION_CANDIDATE",
     "authority_expansion": false,
     "phases": [
-      "AWF-N1",
-      "AWF-N2",
-      "AWF-N3",
-      "AWF-N4",
-      "AWF-N5"
+      {
+        "id": "AWF-N1",
+        "status": "COMPLETE_CANONICAL_VERIFIED"
+      },
+      {
+        "id": "AWF-N2",
+        "status": "COMPLETE_CANONICAL_VERIFIED"
+      },
+      {
+        "id": "AWF-N3",
+        "status": "COMPLETE_CANONICAL_VERIFIED"
+      },
+      {
+        "id": "AWF-N4",
+        "status": "COMPLETE_CANONICAL_VERIFIED"
+      },
+      {
+        "id": "AWF-N5",
+        "status": "IMPLEMENTATION_CANDIDATE"
+      },
+      {
+        "id": "AWF-N6",
+        "status": "DEFERRED"
+      }
     ],
+    "canonical_n1_n4": {
+      "source_pr": 801,
+      "qualified_source_head": "186f92cc9ae6acaa55c14418b5199c97b5ba8a0a",
+      "canonical_merge_commit": "e0b2c0b9a8d4cc6618267ce0340048793613abc5",
+      "padayon_continuity_merge": "e3ff59f099f3f50032db8b859edfb91fe7b1c285",
+      "positive_cases": 18,
+      "negative_cases": 20,
+      "required_workflows": "ALL_SIX_SUCCESS"
+    },
     "current_scope": [
-      "automatic TaskProfile derivation",
-      "selection trace explainability",
-      "18-case positive controlled calibration corpus",
-      "20-case adversarial negative-routing corpus",
-      "terminal-role over-routing suppression",
-      "negation, quotation, hypothetical, and representation-only suppression"
+      "semantic clause-local suppression",
+      "negation paraphrase generalization",
+      "mixed representation and execution intent",
+      "multi-sentence correction and reversal",
+      "clause-local hypothetical contrast",
+      "instruction-order robustness",
+      "conditional protected-action preservation"
     ],
     "prohibited": [
       "OEE concurrency widening",
       "A5 execution promotion",
+      "learned routing promotion",
       "specialist authority expansion",
       "release/deploy/policy activation",
       "UIEF resumption"
     ]
   },
   "negative_routing": {
-    "status": "IMPLEMENTED_CANDIDATE",
+    "status": "COMPLETE_CANONICAL_VERIFIED",
     "corpus_cases": 20,
     "policy": "machine/workflows/task-profile-derivation.v1.json",
     "invariants": [
