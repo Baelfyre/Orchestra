@@ -131,6 +131,40 @@ def _is_negated(
 ) -> bool:
     start, _ = _clause_for_position(text, position)
     prefix = text[start:position].casefold()
+
+    # A coordinated independent action resets negation scope. Keep transition
+    # verbs out of this reset set so "do not deploy and merge" remains jointly
+    # negated while "hold off on merge and review the changelog" does not
+    # suppress the later review object.
+    reset_verbs = (
+        "review",
+        "audit",
+        "assess",
+        "analyze",
+        "update",
+        "write",
+        "summarize",
+        "explain",
+        "describe",
+        "document",
+        "rename",
+        "fix",
+        "remove",
+        "change",
+        "add",
+        "implement",
+        "build",
+        "run",
+        "refactor",
+        "modify",
+        "edit",
+    )
+    conjunctions = tuple(re.finditer(r"\band\b", prefix))
+    if conjunctions:
+        suffix = prefix[conjunctions[-1].end():]
+        if any(re.search(rf"(?<!\w){re.escape(verb)}(?!\w)", suffix) for verb in reset_verbs):
+            prefix = suffix
+
     for phrase in negation_phrases:
         normalized = " ".join(str(phrase).casefold().split())
         escaped = re.escape(normalized).replace(r"\ ", r"\s+")
