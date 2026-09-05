@@ -42,8 +42,8 @@ def test_valid_fidelity_handoff_fixture_parses_and_validates() -> None:
     assert handoff.owned_by == "cloak"
     assert handoff.contract_id == "uief4-ui-fidelity-handoff-reference"
     assert len(handoff.macro_composition) == 3
-    assert len(handoff.selected_pattern_refs) == 4
-    assert len(handoff.provenance_refs) == 4
+    assert len(handoff.selected_pattern_refs) == 2
+    assert len(handoff.provenance_refs) == 2
     assert len(handoff.preserve) == 4
     assert len(handoff.avoid) == 4
     assert handoff.authority["implementation_authorized"] is False
@@ -75,7 +75,7 @@ def test_handoff_to_ponytail_context_executes_cleanly() -> None:
     inner_ctx = ponytail_ctx["ui_fidelity_context"]
     assert inner_ctx["design_contract_ref"] == handoff.design_contract_ref
     assert inner_ctx["cloak_handoff_ref"] == handoff.contract_id
-    assert inner_ctx["clockwork_boundary_ref"] == "docs/architecture/UIEF_CLOCKWORK_ENGINEERING_BOUNDARY.md"
+    assert inner_ctx["clockwork_boundary_ref"] == "docs/project/UI_EXECUTION_FIDELITY_PLAN.md"
 
     # Enforce through Ponytail execution gate
     execution = enforce_ponytail_fidelity_execution(
@@ -86,7 +86,7 @@ def test_handoff_to_ponytail_context_executes_cleanly() -> None:
                 "action-bar-visual-hierarchy",
                 "split-pane-responsive-collapse",
             ],
-            "project_native_reuse": ["components/palette/CommandPalette.tsx"],
+            "project_native_reuse": [],
             "deviations": [],
         },
     )

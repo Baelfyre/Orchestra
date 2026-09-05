@@ -2088,6 +2088,43 @@
         "Cross-platform Validation",
         "cosmic-ray-confidence"
       ]
+    },
+    "uief_reference_provenance_responsive_erratum": {
+      "status": "CURRENT_MAIN_SUCCESSOR_PENDING_QUALIFICATION",
+      "purpose": "Repair UIEF-1/UIEF-4 canonical reference integrity and responsive consistency by binding only real repository evidence, preserving missing consuming-project evidence explicitly, and freezing the historical OEE-7 blocker input.",
+      "baseline_main": "63bbe70f29fa5e2d72ffb34a3f071a7d3fc725e4",
+      "baseline_tree": "2b95a4509acaf1d9044dd9278dc3e71b97b0b47e",
+      "source_evidence_pr": 799,
+      "source_evidence_head": "c80d8ad5b7b3fb6d686a26f44d364b9db6b934bf",
+      "machine_sources": [
+        "machine/ui/ui-implementation-profile.v1.json",
+        "machine/ui/ui-fidelity-handoff.v1.json",
+        "machine/knowledge/cloak-ui-reference-cuir3.v1.json",
+        "scripts/validation/run_oee7_controlled_replay.py",
+        "tests/fixtures/oee/uief5-responsive-contradiction-20260905.json",
+        "orchestra_runtime/domain/orchestration/ui_fidelity.py"
+      ],
+      "human_sources": [
+        "docs/project/UIEF_REFERENCE_PROVENANCE_RESPONSIVE_ERRATUM_20260905.md",
+        "docs/project/UI_EXECUTION_FIDELITY_PLAN.md",
+        "skills/cloak/UI_FIDELITY_HANDOFF_GUIDE.md"
+      ],
+      "validation_surfaces": [
+        "tests/runtime/test_uief_reference_integrity.py",
+        "tests/runtime/test_oee7_controlled_replay.py",
+        "tests/runtime/test_uief4_cloak_fidelity_handoff.py"
+      ],
+      "current_reference_source_kinds": [
+        "CUIR_NORMALIZED"
+      ],
+      "project_native_evidence_in_reference_fixture": false,
+      "provider_specific_evidence_in_reference_fixture": false,
+      "responsive_disposition": "DRAWER_BELOW_1024_WITH_BREAKPOINT_SPECIFIC_CONTENT_FLOW",
+      "historical_oee_replay_preserved": true,
+      "frozen_cloak_core_preserved": true,
+      "authority_expansion": false,
+      "uief5_implementation_authorized": false,
+      "authority_note": "This current-main successor repairs evidence identity and Cloak-owned responsive intent only. It does not itself promote UIEF-5, release, deployment, policy activation, provider routing, or specialist authority. Separate Padayon sequencing authority governs subsequent work only after this erratum is canonical."
     }
   },
   "machine_scan_order": [

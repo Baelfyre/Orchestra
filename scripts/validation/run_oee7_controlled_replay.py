@@ -55,7 +55,7 @@ def _responsive_contradiction(handoff: dict[str, Any]) -> str | None:
 
 
 def run_replay(root: Path = ROOT) -> dict[str, Any]:
-    handoff_path = root / "machine" / "ui" / "ui-fidelity-handoff.v1.json"
+    handoff_path = root / "tests" / "fixtures" / "oee" / "uief5-responsive-contradiction-20260905.json"
     baseline_path = root / "docs" / "governance" / "oee_0_execution_cost_baseline.v1.json"
     handoff = _load_json(handoff_path)
     baseline = _load_json(baseline_path)
@@ -70,7 +70,7 @@ def run_replay(root: Path = ROOT) -> dict[str, Any]:
         stop_required=True,
         downstream_execution_allowed=False,
         reason=contradiction,
-        evidence_refs=("machine/ui/ui-fidelity-handoff.v1.json",),
+        evidence_refs=("tests/fixtures/oee/uief5-responsive-contradiction-20260905.json",),
     )
     disposition = evaluate_decisive_stop(signal)
     if disposition != "STOP":
@@ -91,7 +91,7 @@ def run_replay(root: Path = ROOT) -> dict[str, Any]:
         "record_id": "oee7-uief5-controlled-replay-20260905",
         "source_case": baseline.get("source_case"),
         "replay_input": {
-            "handoff_ref": "machine/ui/ui-fidelity-handoff.v1.json",
+            "handoff_ref": "tests/fixtures/oee/uief5-responsive-contradiction-20260905.json",
             "blocker_owner": "cloak",
             "blocker": "UIEF5_UPSTREAM_RESPONSIVE_CONTRADICTION",
         },
