@@ -395,7 +395,7 @@
       "expect": {
         "protected_action_required": false,
         "human_gate_required": false,
-        "primary_owner": "conductor"
+        "primary_owner": "scribe"
       },
       "avoid": {
         "authority_domains": [
