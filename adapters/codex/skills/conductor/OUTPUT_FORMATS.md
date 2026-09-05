@@ -76,3 +76,36 @@ Can current specialist proceed: No
 Evidence:
 Next action:
 ```
+
+## Execution Efficiency Decision
+
+For governed or multi-specialist work, keep this output compact and include only decision-changing information.
+
+```text
+Execution Efficiency:
+Owner:
+Active specialist count:
+Requested specialist:
+Invocation role:
+Invocation reason:
+Retry number:
+Current evidence tier:
+Decisive blocker:
+Search stage:
+Validation stage:
+Candidate stable:
+CI disposition:
+Context pack:
+Next action:
+```
+
+Rules:
+- owner first;
+- one active specialist by default;
+- one retry after the initial attempt;
+- stop on sufficient decisive evidence;
+- narrow search before broad search;
+- full qualification only on a stable candidate;
+- no continuous CI watch;
+- exact-source phase context only.
+
