@@ -1,6 +1,6 @@
 # Orchestra Execution Efficiency V1
 
-Status: OEE-0 canonical; OEE-1 through OEE-8 source candidate
+Status: OEE-0 through OEE-8 COMPLETE_CANONICAL_VERIFIED
 
 ## Invariant
 
@@ -109,4 +109,25 @@ The post-OEE-0 continuation operationalizes the existing budget rather than crea
 
 The OEE-7 replay intentionally stops at the UIEF-4 responsive contradiction during E1 input integrity. It does not continue to provenance search, downstream specialists, implementation analysis, full validation, or CI watch work after that decisive blocker.
 
-OEE-8 does not automatically resume UIEF. The current source candidate records UIEF as still blocked pending Cloak-owned responsive-contract repair, provenance revalidation, and UIEF-5 source requalification.
+OEE-8 does not automatically resume UIEF. The canonical disposition keeps UIEF blocked pending Cloak-owned responsive-contract repair, provenance revalidation, and UIEF-5 source requalification.
+
+## Canonical qualification
+
+OEE-0:
+- source PR #792
+- qualified source head `8903874688dc5bf5311689411f951afef16a968a`
+- signed materialization PR #793
+- canonical PR #794
+- canonical commit `1927d3f0672198ddc67cc32624d38c2b14c434e8`
+
+OEE-1 through OEE-8:
+- source PR #795
+- qualified source head `3986a04598bf1146270e1d65445373643e34a93f`
+- signed materialization PR #797
+- signed materialization commit `dbe3f777265c6843695babce7bbd229c44b753e2`
+- canonical PR #798
+- canonical commit `75100c3ad0fd9a11c69f2b9b7c5172edd8841cd2`
+
+The OEE-1 through OEE-8 source head passed Governance Check, Required Analysis Compatibility, validate, Cross-platform Validation, cosmic-ray-confidence, and signed-materialization. OEE is therefore complete canonical verified.
+
+The OEE-7 replay preserved the same safe blocker disposition while reducing redundant work. OEE completion removes the execution-efficiency gap but does not repair UIEF input contradictions or grant a UIEF resume transition.
