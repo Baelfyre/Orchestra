@@ -117,6 +117,7 @@ def validate_payload(contract: Any, schema: Any | None = None) -> list[str]:
         "contract_revision",
         "contract_role",
         "authority",
+        "broker_policy",
         "capability_definitions",
         "provider_model_profiles",
         "evidence_policy",
@@ -150,6 +151,22 @@ def validate_payload(contract: Any, schema: Any | None = None) -> list[str]:
             errors.append(f"SCHEMA_VALIDATION:validator_error:{exc}")
 
     _validate_authority(contract.get("authority"), "authority", errors)
+
+    broker_policy = contract.get("broker_policy")
+    if _require_object(broker_policy, "broker_policy", errors):
+        expected_broker_policy = {
+            "mode": "SHADOW_ADVISORY_NON_AUTHORIZING",
+            "output_dispositions": ["ELIGIBLE", "ELIGIBLE_WITH_LIMITS", "INELIGIBLE", "UNKNOWN", "POLICY_BLOCKED"],
+            "provider_selection_changed": False,
+            "automatic_provider_switching": False,
+            "automatic_provider_fallback": False,
+            "learned_routing_promotion": False,
+            "specialist_routing_changed": False,
+            "workflow_topology_changed": False,
+        }
+        for field, expected_value in expected_broker_policy.items():
+            if broker_policy.get(field) != expected_value:
+                errors.append(f"AUTHORITY_OR_BROKER_POLICY_DRIFT:broker_policy.{field}")
 
     definitions = contract.get("capability_definitions")
     seen_definitions: set[str] = set()

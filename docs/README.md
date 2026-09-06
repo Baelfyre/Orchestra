@@ -106,7 +106,7 @@ Cross-repository continuity may be supplied by a user-selected external continui
 - [Compatibility](setup/COMPATIBILITY.md): host compatibility and maturity.
 - [Host Updates](setup/HOST_UPDATES.md): governed read-only host update planning.
 - [UAI Host Capability Contract](setup/HOST_CAPABILITY_CONTRACT.md): versioned host capability evidence and transport compatibility without authority expansion.
-- [UAI Provider/Model Capability Contract](setup/PROVIDER_MODEL_CAPABILITY_CONTRACT.md): provider/model-neutral technical capability vocabulary and evidence boundaries without provider selection.
+- [UAI Provider/Model Capability Contract](setup/PROVIDER_MODEL_CAPABILITY_CONTRACT.md): provider/model-neutral technical capability vocabulary, evidence boundaries, and shadow-only eligibility advice without provider selection.
 - [UAI Portable Projection Compiler](setup/PORTABLE_PROJECTION_COMPILER.md): canonical-source-backed host projection parity without installed-integration refresh or authority expansion.
 - [UAI Transport and Fallback Integration](setup/TRANSPORT_FALLBACK_INTEGRATION.md): deterministic non-executing transport fallback planning without provider switching or routing authority.
 - [Adapter SDK and PRAP v1](setup/ADAPTER_SDK_PRAP.md): stable adapter SDK and deterministic compatibility certification.

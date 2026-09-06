@@ -11,6 +11,7 @@
     "contract_revision",
     "contract_role",
     "authority",
+    "broker_policy",
     "capability_definitions",
     "provider_model_profiles",
     "evidence_policy"
@@ -33,6 +34,21 @@
     },
     "authority": {
       "$ref": "#/$defs/nonAuthorizingAuthority"
+    },
+    "broker_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "output_dispositions", "provider_selection_changed", "automatic_provider_switching", "automatic_provider_fallback", "learned_routing_promotion", "specialist_routing_changed", "workflow_topology_changed"],
+      "properties": {
+        "mode": {"const": "SHADOW_ADVISORY_NON_AUTHORIZING"},
+        "output_dispositions": {"const": ["ELIGIBLE", "ELIGIBLE_WITH_LIMITS", "INELIGIBLE", "UNKNOWN", "POLICY_BLOCKED"]},
+        "provider_selection_changed": {"const": false},
+        "automatic_provider_switching": {"const": false},
+        "automatic_provider_fallback": {"const": false},
+        "learned_routing_promotion": {"const": false},
+        "specialist_routing_changed": {"const": false},
+        "workflow_topology_changed": {"const": false}
+      }
     },
     "capability_definitions": {
       "type": "array",

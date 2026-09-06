@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased UAI-7 provider capability broker shadow advisory
+
+- Adds a deterministic shadow-only provider/model capability broker that classifies host-exposed options using task requirements, current evidence, and policy restrictions.
+- Returns `ELIGIBLE`, `ELIGIBLE_WITH_LIMITS`, `INELIGIBLE`, `UNKNOWN`, or `POLICY_BLOCKED` without selecting or switching an active provider/model.
+- Keeps provider capability separate from Conductor routing, AWF topology, transport fallback, credentials, learned-routing promotion, release, and deployment.
+
 ## Unreleased UAI-6 transport and fallback integration
 
 - Adds a deterministic, non-executing transport fallback chain layered on the UAI integration strategy resolver.

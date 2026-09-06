@@ -24,6 +24,14 @@ from .integration_strategy import (
     resolve_integration_strategy,
     resolve_transport_fallback,
 )
+from .provider_capability import (
+    HostProviderModelOption,
+    ProviderCapabilityAdvisory,
+    ProviderCapabilityBrokerDecision,
+    ProviderCapabilityEvidence,
+    ProviderCapabilityRequirements,
+    broker_provider_capabilities,
+)
 from .selection_trace import (
     AUTHORITY_RULE,
     SELECTION_TRACE_SCHEMA_VERSION,
@@ -76,6 +84,11 @@ __all__ = [
     "IntegrationStrategy",
     "IntegrationStrategyDecision",
     "IntegrationStrategyRequirements",
+    "HostProviderModelOption",
+    "ProviderCapabilityAdvisory",
+    "ProviderCapabilityBrokerDecision",
+    "ProviderCapabilityEvidence",
+    "ProviderCapabilityRequirements",
     "TransportFallbackDecision",
     "PromotionCandidateDecision",
     "TaskProfileDerivation",
@@ -91,4 +104,5 @@ __all__ = [
     "select_agentic_workflow",
     "resolve_integration_strategy",
     "resolve_transport_fallback",
+    "broker_provider_capabilities",
 ]

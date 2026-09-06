@@ -16,6 +16,16 @@
     "learned_routing_promotion": false,
     "execution_authorized": false
   },
+  "broker_policy": {
+    "mode": "SHADOW_ADVISORY_NON_AUTHORIZING",
+    "output_dispositions": ["ELIGIBLE", "ELIGIBLE_WITH_LIMITS", "INELIGIBLE", "UNKNOWN", "POLICY_BLOCKED"],
+    "provider_selection_changed": false,
+    "automatic_provider_switching": false,
+    "automatic_provider_fallback": false,
+    "learned_routing_promotion": false,
+    "specialist_routing_changed": false,
+    "workflow_topology_changed": false
+  },
   "capability_definitions": [
     {"capability_id": "TOOL_CALLING", "category": "INTERACTION", "value_kind": "BOOLEAN"},
     {"capability_id": "STRUCTURED_OUTPUT", "category": "OUTPUT", "value_kind": "BOOLEAN"},

@@ -12,6 +12,8 @@ This contract does not authorize automatic provider switching, fallback, credent
 
 UAI-4 resolves transport separately with the pure `resolve_integration_strategy` domain function. It considers only current supported evidence, required transport capabilities, host/provider policy, authority preservation, context cost, installation complexity, portability, and evidence quality. If no option is eligible it selects `UNSUPPORTED_FAIL_CLOSED`. The result cannot change specialist routing, AWF topology, provider/model selection, credentials, or fallback behavior.
 
+UAI-7 adds the pure `broker_provider_capabilities` domain function. It intersects task requirements, host-exposed provider/model options, provider/model capability evidence, and policy flags, returning only shadow advisories: `ELIGIBLE`, `ELIGIBLE_WITH_LIMITS`, `INELIGIBLE`, `UNKNOWN`, or `POLICY_BLOCKED`. It never selects or switches an active provider/model, and it cannot promote learned routing.
+
 Validate it with:
 
 ```text
