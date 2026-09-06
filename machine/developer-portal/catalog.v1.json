@@ -133,6 +133,13 @@
       "authority_role": "EVIDENCE_BOUND_CROSS_HOST_COMPARISON_WITHOUT_AUTHORITY"
     },
     {
+      "id": "uai-maturity-closeout-guide",
+      "title": "UAI Maturity and Closeout guide",
+      "kind": "human_guide",
+      "path": "docs/setup/UAI_MATURITY_CLOSEOUT.md",
+      "authority_role": "MATURITY_BOUNDARY_GUIDANCE_WITHOUT_RELEASE_OR_AUTHORITY"
+    },
+    {
       "id": "uai-portable-projection-contract",
       "title": "UAI Portable Projection Contract",
       "kind": "machine_contract",

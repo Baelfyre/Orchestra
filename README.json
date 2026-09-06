@@ -2233,8 +2233,8 @@
       "next_action": "FINAL_EXACT_HEAD_RELEASE_QUALIFICATION"
     },
     "universal_adaptive_integration_uai": {
-      "status": "UAI_9_CROSS_HOST_CAPABILITY_CONFORMANCE_COMPLETE",
-      "purpose": "Versioned host and provider/model capability evidence, deterministic minimal transport selection and non-executing transport fallback planning, shadow-only provider/model eligibility advice, canonical-source-backed portable projection parity, fail-closed negative and unknown capability testing, and evidence-bound cross-host conformance that preserve Conductor specialist routing and AWF workflow topology without authority expansion.",
+      "status": "UAI_10_MATURITY_AND_CLOSEOUT_COMPLETE",
+      "purpose": "Versioned host and provider/model capability evidence, deterministic minimal transport selection and non-executing transport fallback planning, shadow-only provider/model eligibility advice, canonical-source-backed portable projection parity, fail-closed negative and unknown capability testing, evidence-bound cross-host conformance, and maturity closeout that preserve Conductor specialist routing and AWF workflow topology without authority expansion or release implications.",
       "human_sources": [
         "adapters/github-copilot/README.md",
         "adapters/github-copilot/probe-guide.md",
@@ -2243,7 +2243,8 @@
         "docs/setup/PORTABLE_PROJECTION_COMPILER.md",
         "docs/setup/TRANSPORT_FALLBACK_INTEGRATION.md",
         "docs/setup/UAI_NEGATIVE_UNKNOWN_TESTING.md",
-        "docs/setup/UAI_CROSS_HOST_CONFORMANCE.md"
+        "docs/setup/UAI_CROSS_HOST_CONFORMANCE.md",
+        "docs/setup/UAI_MATURITY_CLOSEOUT.md"
       ],
       "machine_sources": [
         "adapters/github-copilot/copilot-instructions.template.md",
@@ -2269,7 +2270,8 @@
         "scripts/compile_portable_projections.py",
         "tests/runtime/test_portable_projection_compiler.py",
         "tests/runtime/test_uai8_negative_unknown_capabilities.py",
-        "tests/runtime/test_uai9_cross_host_capability_conformance.py"
+        "tests/runtime/test_uai9_cross_host_capability_conformance.py",
+        "tests/runtime/test_uai10_maturity_closeout.py"
       ],
       "probed_hosts": [
         "github-copilot"
@@ -2394,11 +2396,13 @@
     "provider_capability_broker": "orchestra_runtime/domain/adaptive/provider_capability.py",
     "negative_unknown_capability_testing": "tests/runtime/test_uai8_negative_unknown_capabilities.py",
     "cross_host_capability_conformance": "tests/runtime/test_uai9_cross_host_capability_conformance.py",
+    "maturity_closeout": "tests/runtime/test_uai10_maturity_closeout.py",
     "integration_strategy_policy": "machine/hosts/integration-strategy-policy.v1.json",
     "integration_strategy_policy_schema": "machine/schemas/integration-strategy-policy.v1.schema.json",
     "transport_fallback_guide": "docs/setup/TRANSPORT_FALLBACK_INTEGRATION.md",
     "negative_unknown_capability_testing_guide": "docs/setup/UAI_NEGATIVE_UNKNOWN_TESTING.md",
     "cross_host_capability_conformance_guide": "docs/setup/UAI_CROSS_HOST_CONFORMANCE.md",
+    "maturity_closeout_guide": "docs/setup/UAI_MATURITY_CLOSEOUT.md",
     "portable_projection_contract": "machine/projections/portable-projection-contract.v1.json",
     "portable_projection_contract_schema": "machine/schemas/portable-projection-contract.v1.schema.json",
     "portable_projection_index_schema": "machine/schemas/portable-projection-index.v1.schema.json",
@@ -2406,6 +2410,7 @@
     "portable_projection_compiler": "scripts/compile_portable_projections.py",
     "negative_unknown_capability_testing": "tests/runtime/test_uai8_negative_unknown_capabilities.py",
     "cross_host_capability_conformance": "tests/runtime/test_uai9_cross_host_capability_conformance.py",
+    "maturity_closeout": "tests/runtime/test_uai10_maturity_closeout.py",
     "prap_certification_contract": "machine/protocol/prap-certification-contract.v1.json",
     "developer_portal_catalog": "machine/developer-portal/catalog.v1.json",
     "murmurs_presentation_policy": "machine/presentation/murmurs-policy.v1.json",
@@ -2725,6 +2730,7 @@
     "portable_projection_compiler": "docs/setup/PORTABLE_PROJECTION_COMPILER.md",
     "negative_unknown_capability_testing": "docs/setup/UAI_NEGATIVE_UNKNOWN_TESTING.md",
     "cross_host_capability_conformance": "docs/setup/UAI_CROSS_HOST_CONFORMANCE.md",
+    "maturity_closeout": "docs/setup/UAI_MATURITY_CLOSEOUT.md",
     "validation": "docs/setup/VALIDATION.md",
     "developer_portal": "docs/developer/README.md",
     "mcp_transport": "docs/developer/MCP_STDIO_TRANSPORT.md",
