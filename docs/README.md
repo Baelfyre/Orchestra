@@ -110,6 +110,7 @@ Cross-repository continuity may be supplied by a user-selected external continui
 - [UAI Portable Projection Compiler](setup/PORTABLE_PROJECTION_COMPILER.md): canonical-source-backed host projection parity without installed-integration refresh or authority expansion.
 - [UAI Transport and Fallback Integration](setup/TRANSPORT_FALLBACK_INTEGRATION.md): deterministic non-executing transport fallback planning without provider switching or routing authority.
 - [UAI Negative and Unknown Capability Testing](setup/UAI_NEGATIVE_UNKNOWN_TESTING.md): fail-closed host, provider/model, transport, fallback, and projection boundary scenarios.
+- [UAI Cross-Host Capability Conformance](setup/UAI_CROSS_HOST_CONFORMANCE.md): evidence-bound comparison of Antigravity, Codex, and GitHub Copilot without fabricated admissions.
 - [Adapter SDK and PRAP v1](setup/ADAPTER_SDK_PRAP.md): stable adapter SDK and deterministic compatibility certification.
 - [Developer Portal](developer/README.md): extension and integration discovery surface.
 - [MCP stdio Transport](developer/MCP_STDIO_TRANSPORT.md): first bounded MCP tools transport.
