@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.9.0 UI Execution Fidelity release candidate - prepared
+
+- Canonically records the UIEF-5 Clockwork engineering translation at the signed Orchestra main boundary and reconciles its exact source, tree, parent, and signature evidence.
+- Completes the existing UIEF-6 and UIEF-8 specialist/regression contracts while preserving Conductor routing, serial specialist execution, and the one-active-specialist ceiling.
+- Records UIEF-7 deterministic-validation limits and UIEF-9 `NO_BENEFIT_ESTABLISHED` without claiming rendered-application benefit, harm, or new provider evidence.
+- Aligns all 11 package/version surfaces and the host-update contract to `1.9.0` while retaining v1.8.0 as the current public release until final publication verification.
+- Reconciles current-facing README, machine-index, installation, compatibility, portal, maturity, state, and roadmap surfaces; adds the verified support link `https://buymeacoffee.com/baelfyre`.
+- Records Adaptive Host Integration as future work only. No host integration, automatic adaptation, provider mutation, policy activation, deployment, or installed-integration refresh is included.
+
 ## Post-v1.8.0 UIEF-5 hardened Clockwork engineering translation candidate
 
 - Reconstructs historical PR #791 forward from corrected canonical UIEF-4 instead of merging the stale candidate.

@@ -11,14 +11,28 @@
     "full_name": "Baelfyre/Orchestra",
     "url": "https://github.com/Baelfyre/Orchestra",
     "license": "MIT",
-    "package_version": "1.8.0",
+    "package_version": "1.9.0",
     "package_version_source": "plugin.json#/version",
     "current_public_release": "v1.8.0",
     "current_public_release_commit": "dad1f153f1be6522a8a7964258a2122a8d057596",
     "current_public_release_state_scope": "LIVE_VERIFIED_PUBLICATION",
     "main_contains_post_release_work": true,
-    "next_release_plan": "NONE_DECLARED",
-    "next_release_plan_status": "V1_8_0_PUBLISHED_VERIFIED_COMPLETE"
+    "next_release_plan": "v1.9.0",
+    "next_release_plan_status": "PREPARED_NOT_PUBLISHED",
+    "release_candidate": {
+      "version": "1.9.0",
+      "status": "PREPARED_NOT_PUBLISHED",
+      "theme": "UI_EXECUTION_FIDELITY",
+      "source_baseline": "75af3966722edfdde474e8fcf99a1b8002d1527f",
+      "uief_5": "COMPLETE_CANONICAL_VERIFIED",
+      "uief_6": "COMPLETE_CANONICAL_VERIFIED",
+      "uief_7": "COMPLETE_CANONICAL_VERIFIED_WITH_LIMITS",
+      "uief_8": "COMPLETE_CANONICAL_VERIFIED",
+      "uief_9": "COMPLETE_CANONICAL_VERIFIED_WITH_LIMITS_NO_BENEFIT_ESTABLISHED",
+      "uief_10": "DOCUMENTATION_RELEASE_CLOSEOUT_PENDING",
+      "adaptive_host_integration": "FUTURE_ONLY_NOT_IMPLEMENTED",
+      "support_link": "https://buymeacoffee.com/baelfyre"
+    }
   },
   "purpose": {
     "summary": "Portable orchestration runtime for structured AI-assisted software development.",
@@ -2016,9 +2030,9 @@
       "validation_surface": "tests/runtime/test_oee0_execution_efficiency.py",
       "runtime_integration": true,
       "dispatch_integration": false,
-      "ui_ef_resume_authorized": false,
+      "ui_ef_resume_authorized": true,
       "authority_expansion": false,
-      "authority_note": "OEE-0 is canonical and installs guardrail contracts and validation primitives only. It does not itself authorize UIEF resumption, release, deployment, policy activation, or authority expansion.",
+      "authority_note": "OEE-0 is canonical and installs guardrail contracts and validation primitives only. The separately recorded campaign authority permits UIEF resumption; OEE itself does not grant release, deployment, policy activation, or authority expansion.",
       "canonical_sha": "1927d3f0672198ddc67cc32624d38c2b14c434e8",
       "canonical_tree": "44ff40723c858346d46fc68f6cd0b1d33dcdec78",
       "canonical_pr": 794
@@ -2044,9 +2058,9 @@
       "integration_disposition": "docs/governance/oee_8_integration_closeout_disposition.v1.json",
       "runtime_executor_rewrite": false,
       "new_specialist": false,
-      "uief_resume_authorized": false,
+      "uief_resume_authorized": true,
       "authority_expansion": false,
-      "authority_note": "OEE-1 through OEE-8 are canonical and verified. OEE constrains redundant work without changing domain ownership or protected-action authority. UIEF remains paused because the UIEF-4 responsive contradiction and provenance revalidation requirements remain unresolved; OEE completion does not itself authorize UIEF resumption.",
+      "authority_note": "OEE-1 through OEE-8 are canonical and verified. OEE constrains redundant work without changing domain ownership or protected-action authority. The current campaign has separately resumed UIEF from verified UIEF-4 evidence; OEE completion does not itself grant release or other protected-action authority.",
       "canonical_source_pr": 795,
       "qualified_source_head": "3986a04598bf1146270e1d65445373643e34a93f",
       "signed_materialization_pr": 797,
@@ -2061,7 +2075,8 @@
         "cosmic-ray-confidence",
         "signed-materialization"
       ],
-      "uief_resume_eligible": false
+      "uief_resume_eligible": true,
+      "current_uief_boundary": "UIEF_5_COMPLETE_UIEF_10_DOCUMENTATION_RELEASE_CLOSEOUT_PENDING"
     },
     "adaptive_agentic_workflow_advanced_adaptation_n6": {
       "status": "COMPLETE_CANONICAL_VERIFIED_NO_PROMOTION",
@@ -2131,7 +2146,7 @@
       "reviewed_signed_head": "e09e3c260c526a73735851952c7aeb56be1bf594"
     },
     "uief5_clockwork_engineering_translation": {
-      "status": "SOURCE_CANDIDATE_HARDENED_PENDING_QUALIFICATION",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
       "purpose": "Clockwork translation of the accepted corrected UI fidelity handoff into maintainable component, state, responsive, composition, layer, data-flow, reuse, integration, and dependency boundaries with deterministic source-content identity and no invented consuming-project provenance.",
       "source_handoff": "uief4-ui-fidelity-handoff-reference",
       "source_handoff_content_identity": "sha256:6b589112da6ae4413c796cde6ed69093de6d10941a821824d205fe18d96caebc",
@@ -2157,12 +2172,65 @@
       "deterministic_source_identity": true,
       "invented_project_native_provenance": false,
       "visible_layer_redesign_authorized": false,
-      "implementation_authorized": false,
+      "implementation_authorized": true,
       "dependency_adoption_authorized": false,
       "release_authorized": false,
-      "uief6_initiation_authorized": false,
-      "authority_note": "UIEF-5 translates accepted visible-layer complexity into engineering boundaries only. Clockwork may simplify engineering structure only when accepted fidelity is unchanged; it cannot redesign Cloak-owned visible intent, authorize implementation or dependency adoption, initiate UIEF-6, release, deploy, activate policy, or expand specialist authority.",
+      "uief6_initiation_authorized": true,
+      "canonical_source_pr": 809,
+      "signed_materialization_pr": 810,
+      "canonical_pr": 811,
+      "canonical_sha": "75af3966722edfdde474e8fcf99a1b8002d1527f",
+      "canonical_tree": "1020572e530cba92483cd31d54c2e7d51f179ae7",
+      "reviewed_signed_head": "baac9d1f349e7fcbbfb4b909b410406c93171fcb",
+      "authority_note": "UIEF-5 translates accepted visible-layer complexity into engineering boundaries without redesigning Cloak-owned visible intent. The separately authorized campaign canonically completed UIEF-5 and permits downstream UIEF progression; release, deploy, activate-policy, and specialist-authority expansion remain independently governed.",
       "source_identity_semantics": "SHA-256 over canonical JSON serialization of UIFidelityHandoff.to_dict(), excluding machine-only schema decoration."
+    },
+    "uief6_cross_specialist_fidelity_chain": {
+      "status": "COMPLETE_CANONICAL_VERIFIED",
+      "purpose": "Preserve Conductor-owned routing and serial specialist ownership across Cloak, conditional Clockwork, governance specialists, Ponytail, Overseer, and Arbiter.",
+      "machine_sources": ["machine/ui/specialist-integration-flow.v1.json"],
+      "validation_surfaces": ["tests/runtime/test_specialist_integration_flow.py"],
+      "authority_expansion": false,
+      "max_active_specialists": 1,
+      "router": "Conductor"
+    },
+    "uief7_fidelity_validation_system": {
+      "status": "COMPLETE_CANONICAL_VERIFIED_WITH_LIMITS",
+      "purpose": "Provide deterministic fail-closed fidelity validation fixtures and dispositions.",
+      "machine_sources": ["tests/fixtures/ui/uix7-deterministic-validation-suite.json"],
+      "validation_surfaces": ["tests/runtime/test_deterministic_ui_validation_fixtures.py"],
+      "rendered_application_evidence": "NOT_CLAIMED",
+      "authority_expansion": false
+    },
+    "uief8_adversarial_regression_suite": {
+      "status": "COMPLETE_CANONICAL_VERIFIED",
+      "purpose": "Exercise authority, fidelity, responsive, reuse, and fail-closed UIEF regressions.",
+      "validation_surfaces": [
+        "tests/runtime/test_uief5_clockwork_engineering_translation.py",
+        "tests/runtime/test_deterministic_ui_validation_fixtures.py",
+        "tests/behavior/test_router_contracts.py"
+      ],
+      "provider_experiment": "NOT_RUN",
+      "authority_expansion": false
+    },
+    "uief9_controlled_comparative_evaluation": {
+      "status": "COMPLETE_CANONICAL_VERIFIED_WITH_LIMITS",
+      "disposition": "NO_BENEFIT_ESTABLISHED",
+      "human_sources": [
+        "docs/MATURITY.md",
+        "docs/validation/UIX_9C_V3_POSTSTUDY_ADJUDICATION_REMEDIATION.md"
+      ],
+      "new_provider_experiment": false,
+      "harm_claim": false
+    },
+    "uief10_portable_integration_and_closeout": {
+      "status": "DOCUMENTATION_RELEASE_CLOSEOUT_PENDING",
+      "machine_sources": [
+        "machine/ui/portable-specialist-parity.v1.json",
+        "machine/ui/specialist-integration-flow.v1.json"
+      ],
+      "adaptive_host_integration": "FUTURE_ONLY_NOT_IMPLEMENTED",
+      "next_action": "FINAL_EXACT_HEAD_RELEASE_QUALIFICATION"
     }
   },
   "machine_scan_order": [
@@ -2523,18 +2591,22 @@
     "continuity_rule": "Repository memory and external handoffs cannot promote source state without verified Git/source evidence."
   },
   "release_state": {
-    "current_public_release": "v1.7.0",
-    "release_commit": "e5305ef3e160209a0345bd2c7843c923940e62c5",
+    "current_public_release": "v1.8.0",
+    "release_commit": "dad1f153f1be6522a8a7964258a2122a8d057596",
     "state_scope": "LIVE_VERIFIED_PUBLICATION",
-    "release_evidence": "GITHUB_RELEASE_ID_376713145",
-    "publication_closeout": "GITHUB_RELEASE_ID_376713145_PLUS_POST_PUBLICATION_VERIFICATION_RUN_32898750932",
+    "release_evidence": "GITHUB_RELEASE_ID_RE_kwDOS_4UtM4WyusI",
+    "publication_closeout": "GITHUB_RELEASE_ID_RE_kwDOS_4UtM4WyusI_PLUS_POST_PUBLICATION_VERIFICATION",
     "post_release_main_contains_significant_changes": true,
-    "provisional_next_release": "UNSET",
-    "provisional_next_release_status": "NO_NEXT_RELEASE_DECLARED",
+    "provisional_next_release": "v1.9.0",
+    "provisional_next_release_status": "PREPARED_NOT_PUBLISHED",
     "release_tracking_issue": 563,
     "release_tracking_issue_state": "CLOSED_COMPLETED",
-    "publication_authorized": false,
-    "publication_target": "PUBLISHED_V1_7_0_EXACT_IDENTITY_VERIFIED",
+    "publication_authorized": true,
+    "publication_target": "V1_9_0_UI_EXECUTION_FIDELITY_EXACT_IDENTITY_PENDING",
+    "release_candidate": "docs/releases/v1.9.0-ui-execution-fidelity-release-candidate.md",
+    "release_candidate_status": "PREPARED_NOT_PUBLISHED",
+    "release_candidate_source_baseline": "75af3966722edfdde474e8fcf99a1b8002d1527f",
+    "release_candidate_support_link": "https://buymeacoffee.com/baelfyre",
     "publication_identity_rule": "Any future public release becomes authoritative only when the exact tag, immutable GitHub Release, and approved signed canonical commit identity are created and independently verified.",
     "v1_5_0_must_remain_immutable": true,
     "murmurs_measurement_issue": 316,
@@ -2592,6 +2664,8 @@
     "release_candidate_v1_6_0": "docs/releases/v1.6.0-integration-developer-experience-release-candidate.md",
     "release_candidate_v1_7_0": "docs/releases/v1.7.0-adaptive-intelligence-portable-memory-design-fidelity-release-candidate.md",
     "publication_closeout_v1_7_0": "docs/validation/V1_7_0_PUBLICATION_CLOSEOUT.md",
+    "release_candidate_v1_9_0": "docs/releases/v1.9.0-ui-execution-fidelity-release-candidate.md",
+    "release_readiness_v1_9_0": "docs/validation/V1_9_0_RELEASE_READINESS_EVIDENCE.md",
     "codex_c2_portability_r1_preexecution": "docs/benchmarking/CODEX_C2_PORTABILITY_R1_PREEXECUTION.md",
     "cloak_ui_reference_cuir5_evaluation": "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR5_EVALUATION.md",
     "cloak_ui_reference_cuir6_adoption": "docs/project/CLOAK_UI_REFERENCE_CORPUS_CUIR6_ADOPTION.md",
@@ -2622,9 +2696,11 @@
     "parity_rule": "When the same deterministic fact appears in more than one representation, CI must validate parity or derive the projection from one authoritative source."
   },
   "maturity": {
-    "current_public_release": "PUBLISHED_VERIFIED_V1_7_0",
+    "current_public_release": "PUBLISHED_VERIFIED_V1_8_0",
     "v1_6_publication": "PUBLISHED_VERIFIED",
     "v1_7_release_candidate": "PUBLISHED_VERIFIED_COMPLETE",
+    "v1_8_publication": "PUBLISHED_VERIFIED_COMPLETE",
+    "v1_9_release_candidate": "PREPARED_NOT_PUBLISHED_UIEF_5_THROUGH_UIEF_10",
     "mcp_stdio_transport": "PUBLISHED_VERIFIED_V1_6_0",
     "host_update_commands": "PUBLISHED_VERIFIED_V1_6_0",
     "adapter_sdk_prap_certification": "PUBLISHED_VERIFIED_V1_6_0",

@@ -1,5 +1,15 @@
 # Roadmap
 
+## v1.9.0 UI Execution Fidelity Candidate - Prepared
+
+The current candidate carries UIEF-5 through UIEF-10 forward from the canonical UIEF plan. UIEF-5 is merged and verified at Orchestra `75af3966722edfdde474e8fcf99a1b8002d1527f`; UIEF-6 and UIEF-8 reuse existing verified contracts; UIEF-7 and UIEF-9 are complete with explicit evidence limits. The public v1.8.0 release remains immutable until v1.9.0 passes final exact-head release qualification and independent publication verification.
+
+- [x] Canonicalize UIEF-5 Clockwork engineering translation with signed exact-head evidence.
+- [x] Verify UIEF-6 specialist integration and UIEF-8 adversarial regression contracts without widening specialist authority.
+- [x] Record UIEF-7 deterministic validation limits and the UIEF-9 `NO_BENEFIT_ESTABLISHED` disposition without rerunning provider experiments.
+- [ ] Complete final UIEF-10 documentation, exact-head release qualification, and independent v1.9.0 publication verification.
+- [ ] Adaptive Host Integration remains future work only. Do not implement host integration, automatic host adaptation, provider mutation, or policy activation in this release.
+
 ## Spec Kitty-Derived Orchestra Contracts
 
 Design Status: `DESIGN_COMPLETE`
