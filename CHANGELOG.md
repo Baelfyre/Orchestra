@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased UAI-5 portable projection compiler
+
+- Adds a canonical-source-backed projection contract and deterministic parity index for the tracked GitHub Copilot repository-instruction and custom-agent surfaces.
+- Fingerprints canonical governance, specialist, routing, host-capability, integration-strategy, Conductor, and Ponytail sources and fails closed on missing invariant markers, stale output, unsupported formats, repository escapes, or `.agents` runtime-copy targets.
+- Does not refresh installed integrations or change Conductor routing, AWF topology, provider/model selection, credentials, automatic fallback, learned routing, release, or deployment.
+
 ## Unreleased UAI-4 integration strategy resolver
 
 - Adds deterministic transport selection across Agent Skills, custom agents, MCP, plugins/extensions, CLI adapters, repository/workspace instructions, instruction-only fallback, and explicit fail-closed unsupported output.
