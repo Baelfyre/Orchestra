@@ -2231,6 +2231,22 @@
       ],
       "adaptive_host_integration": "FUTURE_ONLY_NOT_IMPLEMENTED",
       "next_action": "FINAL_EXACT_HEAD_RELEASE_QUALIFICATION"
+    },
+    "universal_adaptive_integration_uai": {
+      "status": "UAI_0_BASELINE_AND_PROBE_PREPARED",
+      "purpose": "Decoupled host adapter templates and empirical capability probe suite for GitHub Copilot and external hosts without authority expansion.",
+      "human_sources": [
+        "adapters/github-copilot/README.md",
+        "adapters/github-copilot/probe-guide.md"
+      ],
+      "machine_sources": [
+        "adapters/github-copilot/copilot-instructions.template.md",
+        "adapters/github-copilot/custom-agent.template.md"
+      ],
+      "probed_hosts": [
+        "github-copilot"
+      ],
+      "authority_expansion": false
     }
   },
   "machine_scan_order": [
@@ -2688,7 +2704,9 @@
     "conductor_architecture_governance_intake_guide": "skills/conductor/ARCHITECTURE_GOVERNANCE_INTAKE_GUIDE.md",
     "ponytail_frontend_fidelity_execution_guide": "skills/ponytail/FRONTEND_FIDELITY_EXECUTION_GUIDE.md",
     "cloak_ui_fidelity_handoff_guide": "skills/cloak/UI_FIDELITY_HANDOFF_GUIDE.md",
-    "ui_execution_fidelity_plan": "docs/project/UI_EXECUTION_FIDELITY_PLAN.md"
+    "ui_execution_fidelity_plan": "docs/project/UI_EXECUTION_FIDELITY_PLAN.md",
+    "github_copilot_adapter": "adapters/github-copilot/README.md",
+    "github_copilot_probe_guide": "adapters/github-copilot/probe-guide.md"
   },
   "representation_policy": {
     "markdown": "Human-readable explanation, rationale, examples, and nuanced specialist guidance",
