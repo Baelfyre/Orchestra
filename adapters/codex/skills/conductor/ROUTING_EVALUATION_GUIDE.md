@@ -2,6 +2,8 @@
 
 Use this guide to test the existing router without redesigning it.
 
+Current routing authority: Conductor classifies every request and selects every specialist, including clear single-owner work. A direct single-specialist fast route is a Conductor decision; it may reduce context loading and ceremony, but it never bypasses Conductor. `CLEAR_OWNERSHIP != CONDUCTOR_BYPASS` and `FAST_ROUTE != ROUTER_BYPASS`.
+
 ## Scenario Shape
 
 Each scenario states request, repository/mode/authority context, material domains, expected primary owner, ordered supporting owners, governance triggers, Tuner activation or bypass, prohibited routes, expected stop/pause behavior, and evidence needed to pass.
@@ -12,7 +14,7 @@ Cover disguised multi-domain work, direct specialist bypass, Dagger without auth
 
 ## Evaluation Rules
 
-- One owner per decision or output.
+- Conductor owns specialist selection; one specialist owns each decision or output.
 - Order dependencies before implementation.
 - Do not hydrate unrelated specialists.
 - Domain keywords alone do not force a route; material ownership does.

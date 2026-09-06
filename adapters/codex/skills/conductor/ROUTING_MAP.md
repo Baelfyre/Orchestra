@@ -1,27 +1,31 @@
 # Orchestra Routing Map
 
+Current routing authority: Conductor classifies every request and owns every specialist selection. This current policy supersedes conflicting legacy wording in frozen historical UIX guidance; frozen evidence remains byte-stable. `CLEAR_OWNERSHIP != CONDUCTOR_BYPASS`; `FAST_ROUTE != ROUTER_BYPASS`.
+Conductor classifies every request and owns every specialist selection.
 Load this file only when routing is ambiguous, cross-domain, or order-dependent.
-Do not load it for obvious single-owner work.
+After Conductor classification, do not load it for a clear single-owner fast route.
 
 ## Direct Route Rules
 
-- Obvious single-owner work routes directly to owner.
+- Clear ownership yields a Conductor-selected direct single-specialist fast route.
+- The fast route may omit this map, `the-tuner`, governance context, and multi-specialist ceremony when those are not triggered.
+- A fast route is not a Conductor bypass; specialists cannot independently dispatch another specialist.
 - Ambiguous ownership stays with `conductor`.
 - Governance context stays out of ordinary low-risk work unless trigger exists.
 - `REFERENCE_CONTEXT.md#governance-decision-protocol` does not load during initial route classification.
-- `ROUTING_MAP.md` does not load for obvious single-owner tasks.
-- Obvious single-owner work bypasses `the-tuner`; a later material boundary crossing returns to `conductor` for Tuner activation.
+- `ROUTING_MAP.md` does not load after Conductor classification for clear single-owner tasks.
+- Clear single-owner work may bypass `the-tuner`; a later material boundary crossing returns to `conductor` for Tuner activation.
 
 ## Delegated Phase Progression Routing
 
-- Direct single-specialist routing remains available for simple single-unit work outside delegated phases.
+- Direct single-specialist fast routing remains available after Conductor classification for simple single-unit work outside delegated phases.
 - Conductor is required when multiple approved units exist, transition dispositions must be consumed, or checkpoint/resume behavior is needed.
 - Conductor loads the full envelope once and passes unit-specific deltas to specialists.
 - Routing metadata does not create or expand authority.
 
 ## Canonical Routing Rules
 
-| Task Type | Target Skill | Condition |
+| Task Type | Target Skill selected by Conductor | Condition |
 | --- | --- | --- |
 | Business alignment, scope, requirements, product intent, capacity envelope, acceptance criteria, SDLC sufficiency | `the-steward` | Governance alignment owner is clear |
 | Legal, regulatory, privacy-obligation, IP, licensing governance | `the-governor` | Governance compliance owner is clear |

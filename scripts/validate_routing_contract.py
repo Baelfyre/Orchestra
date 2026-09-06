@@ -283,6 +283,9 @@ def validate_fixture_schema(fixtures, registered, errors):
         if overlap:
             fail(errors, f"{fixture_id}: context both required and forbidden: {sorted(overlap)}")
 
+        if fixture_id.startswith("direct-") and fixture.get("route_owner") != "conductor":
+            fail(errors, f"{fixture_id}: clear ownership must remain a Conductor routing decision")
+
     missing_required_ids = REQUIRED_FIXTURE_IDS - seen
     if missing_required_ids:
         fail(errors, f"Missing required routing fixtures: {sorted(missing_required_ids)}")
@@ -318,8 +321,6 @@ def validate_expected_routing_rules(fixtures, errors):
         fixture = by_id.get(fixture_id)
         if not fixture:
             continue
-        if fixture["primary_skill"] == "conductor":
-            fail(errors, f"{fixture_id}: obvious single-owner work must not stay with conductor")
         if "ROUTING_MAP.md" in fixture["required_context"]:
             fail(errors, f"{fixture_id}: ROUTING_MAP.md must be excluded for obvious single-owner work")
         if "docs/governance/GOVERNANCE_LAYER.md" in fixture["required_context"]:
@@ -361,6 +362,8 @@ def validate_expected_routing_rules(fixtures, errors):
 
     for fixture in fixtures:
         if fixture.get("id", "").startswith("direct-"):
+            if fixture.get("route_owner") != "conductor":
+                fail(errors, f"{fixture.get('id')}: direct fast route must remain Conductor-selected")
             if "the-tuner" in fixture.get("supporting_skills", []):
                 fail(errors, "{}: obvious single-owner work must bypass the-tuner".format(fixture.get("id")))
             if "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md" in fixture.get("required_context", []):

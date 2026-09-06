@@ -65,7 +65,7 @@ missing evidence, but it must not add unrecognized machine enum values.
 Classify the request in this order, then compose only the route that the
 classification requires:
 
-1. Identify whether a direct single-owner route still suffices.
+1. Identify whether a Conductor-selected direct single-specialist fast route still suffices.
 2. Classify materiality and the actual change, not a keyword in isolation.
 3. Separate a business problem or strategic shift from a requested solution.
 4. Determine which capacity fact, if any, changes the current decision.
@@ -82,8 +82,9 @@ not decisions, risk ratings, approval, or implementation instructions.
 ### `TRIVIAL`
 
 Use for an isolated typo, label change, local variable rename, or similarly
-non-architectural correction. Avoid a governance stack, capacity elicitation,
-or Tuner activation when one direct specialist owns the work.
+non-architectural correction. After Conductor selects one direct specialist,
+avoid a governance stack, capacity elicitation, or Tuner activation when no
+additional trigger exists. The fast route remains Conductor-owned.
 
 ### `STANDARD`
 
@@ -243,10 +244,11 @@ The route is a conditional composition, not a universal pipeline:
 | Validation evidence is required before a claim | `overseer` before any readiness or sufficiency claim |
 
 Add a specialist only when its owned decision or evidence is implicated. A
-simple UI copy change remains a direct Cloak or implementation route. A
-development-only nullable column may route to Chronicler without a production
-compatibility stack. A live tenant migration may route Chronicler and Cipher,
-with Clockwork only when an architectural boundary is also changing.
+simple UI copy change may use a Conductor-selected direct Cloak or
+implementation route. A development-only nullable column may use a
+Conductor-selected Chronicler route without a production compatibility stack.
+A live tenant migration may route Chronicler and Cipher, with Clockwork only
+when an architectural boundary is also changing.
 
 Use The Tuner only through the existing Conductor coordination boundary when
 multiple specialist contracts need coordination. OR-GOV-5 does not implement

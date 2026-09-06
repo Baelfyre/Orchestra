@@ -5,6 +5,7 @@
     "expected_intent": "business_alignment_review",
     "expected_mode": "Audit",
     "primary_skill": "the-steward",
+    "route_owner": "conductor",
     "supporting_skills": [],
     "governance_status": "REQUIRED",
     "required_context": [
@@ -29,6 +30,7 @@
     "expected_intent": "compliance_governance_review",
     "expected_mode": "Audit",
     "primary_skill": "the-governor",
+    "route_owner": "conductor",
     "supporting_skills": [],
     "governance_status": "REQUIRED",
     "required_context": [
@@ -53,6 +55,7 @@
     "expected_intent": "continuity_review",
     "expected_mode": "Audit",
     "primary_skill": "arbiter",
+    "route_owner": "conductor",
     "supporting_skills": [],
     "governance_status": "NOT_REQUIRED",
     "required_context": [
@@ -77,6 +80,7 @@
     "expected_intent": "architecture_review",
     "expected_mode": "Implementation",
     "primary_skill": "clockwork",
+    "route_owner": "conductor",
     "supporting_skills": [],
     "governance_status": "CONDITIONAL",
     "required_context": [
@@ -101,6 +105,7 @@
     "expected_intent": "technical_security_review",
     "expected_mode": "Governed",
     "primary_skill": "cipher",
+    "route_owner": "conductor",
     "supporting_skills": [],
     "governance_status": "REQUIRED",
     "required_context": [
@@ -125,6 +130,7 @@
     "expected_intent": "ui_accessibility_review",
     "expected_mode": "Implementation",
     "primary_skill": "cloak",
+    "route_owner": "conductor",
     "supporting_skills": [],
     "governance_status": "CONDITIONAL",
     "required_context": [
@@ -149,6 +155,7 @@
     "expected_intent": "database_semantics_review",
     "expected_mode": "Governed",
     "primary_skill": "chronicler",
+    "route_owner": "conductor",
     "supporting_skills": [],
     "governance_status": "CONDITIONAL",
     "required_context": [
@@ -173,6 +180,7 @@
     "expected_intent": "qa_validation_review",
     "expected_mode": "Audit",
     "primary_skill": "overseer",
+    "route_owner": "conductor",
     "supporting_skills": [],
     "governance_status": "CONDITIONAL",
     "required_context": [
@@ -197,6 +205,7 @@
     "expected_intent": "guarded_destructive_simulation",
     "expected_mode": "Destructive",
     "primary_skill": "dagger",
+    "route_owner": "conductor",
     "supporting_skills": [],
     "governance_status": "BLOCKED_PENDING_AUTHORIZATION",
     "required_context": [
@@ -221,6 +230,7 @@
     "expected_intent": "documentation_execution",
     "expected_mode": "Implementation",
     "primary_skill": "scribe",
+    "route_owner": "conductor",
     "supporting_skills": [],
     "governance_status": "NOT_REQUIRED",
     "required_context": [
@@ -245,6 +255,7 @@
     "expected_intent": "scoped_implementation",
     "expected_mode": "Implementation",
     "primary_skill": "ponytail",
+    "route_owner": "conductor",
     "supporting_skills": [],
     "governance_status": "NOT_REQUIRED",
     "required_context": [
@@ -273,6 +284,7 @@
     "expected_intent": "diagram_generation",
     "expected_mode": "Ideation",
     "primary_skill": "weaver",
+    "route_owner": "conductor",
     "supporting_skills": [],
     "governance_status": "NOT_REQUIRED",
     "required_context": [
