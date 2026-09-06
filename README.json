@@ -2233,20 +2233,30 @@
       "next_action": "FINAL_EXACT_HEAD_RELEASE_QUALIFICATION"
     },
     "universal_adaptive_integration_uai": {
-      "status": "UAI_0_BASELINE_AND_PROBE_PREPARED",
-      "purpose": "Decoupled host adapter templates and empirical capability probe suite distinguishing canonical command invocation from native custom-agent capabilities without authority expansion.",
+      "status": "UAI_2_CANONICAL_HOST_CAPABILITY_CONTRACT_VERIFIED_WITH_CONDUCTOR_LIMITS",
+      "purpose": "Versioned host capability evidence and host-neutral transport compatibility that preserve Conductor specialist routing and AWF workflow topology without authority expansion.",
       "human_sources": [
         "adapters/github-copilot/README.md",
-        "adapters/github-copilot/probe-guide.md"
+        "adapters/github-copilot/probe-guide.md",
+        "docs/setup/HOST_CAPABILITY_CONTRACT.md"
       ],
       "machine_sources": [
         "adapters/github-copilot/copilot-instructions.template.md",
-        "adapters/github-copilot/custom-agent.template.md"
+        "adapters/github-copilot/custom-agent.template.md",
+        "machine/hosts/capability-contract.v1.json",
+        "machine/schemas/host-capability-contract.v1.schema.json",
+        "scripts/validate_host_capability_contract.py",
+        "tests/runtime/test_host_capability_contract.py"
       ],
       "probed_hosts": [
         "github-copilot"
       ],
-      "authority_expansion": false
+      "copilot_conductor_status": "SUPPORTED_WITH_LIMITS",
+      "copilot_ponytail_status": "SUPPORTED_VERIFIED",
+      "unverified_dimensions": "AVAILABLE_NOT_YET_VERIFIED_OR_UNKNOWN",
+      "authority_expansion": false,
+      "automatic_provider_routing": false,
+      "automatic_provider_fallback": false
     }
   },
   "machine_scan_order": [
@@ -2282,51 +2292,56 @@
     },
     {
       "order": 7,
+      "path": "machine/hosts/capability-contract.v1.json",
+      "purpose": "UAI host capability evidence, freshness, dispositions, and transport compatibility without authority expansion"
+    },
+    {
+      "order": 8,
       "path": "machine/protocol/prap-certification-contract.v1.json",
       "purpose": "Adapter SDK / PRAP compatibility certification contract"
     },
     {
-      "order": 8,
+      "order": 9,
       "path": "machine/developer-portal/catalog.v1.json",
       "purpose": "Machine Developer Portal discovery catalog"
     },
     {
-      "order": 9,
+      "order": 10,
       "path": "machine/knowledge/",
       "purpose": "Machine-readable specialist knowledge references and provenance-bound catalogs"
     },
     {
-      "order": 10,
+      "order": 11,
       "path": "machine/presentation/murmurs-policy.v1.json",
       "purpose": "Deterministic Murmurs presentation dispositions and required-explanation safety boundaries"
     },
     {
-      "order": 11,
+      "order": 12,
       "path": "machine/provenance/third-party.v1.json",
       "purpose": "Canonical semantic record of third-party dependencies, references, protocol sources, historical research, planned research, reviewed revisions, license state, learned patterns, affected surfaces, evidence, and incorporation boundaries"
     },
     {
-      "order": 12,
+      "order": 13,
       "path": "machine/release-evidence/",
       "purpose": "Structured release and confidence evidence"
     },
     {
-      "order": 13,
+      "order": 14,
       "path": "machine/schemas/",
       "purpose": "JSON Schema contracts for machine-readable records"
     },
     {
-      "order": 14,
+      "order": 15,
       "path": "docs/README.md",
       "purpose": "Human documentation map and current entry-point classification"
     },
     {
-      "order": 15,
+      "order": 16,
       "path": "PROJECT_STATE.md",
       "purpose": "Human project continuity and implementation chronology"
     },
     {
-      "order": 16,
+      "order": 17,
       "path": "README.md",
       "purpose": "Concise human landing page"
     }
@@ -2340,6 +2355,8 @@
     "feature_decision_record_schema": "machine/schemas/feature-decision-record.v1.schema.json",
     "control_plane_migration": "machine/migration/control-plane.v1.json",
     "host_update_contract": "machine/hosts/update-contract.v1.json",
+    "host_capability_contract": "machine/hosts/capability-contract.v1.json",
+    "host_capability_contract_schema": "machine/schemas/host-capability-contract.v1.schema.json",
     "prap_certification_contract": "machine/protocol/prap-certification-contract.v1.json",
     "developer_portal_catalog": "machine/developer-portal/catalog.v1.json",
     "murmurs_presentation_policy": "machine/presentation/murmurs-policy.v1.json",
@@ -2416,6 +2433,8 @@
     "presentation_policy_schema": "machine/schemas/presentation-policy.schema.json",
     "murmurs_vocabulary_schema": "machine/schemas/murmurs-vocabulary.schema.json",
     "communication_measurement_schema": "machine/schemas/communication-measurement.schema.json",
+    "host_capability_contract_validator": "scripts/validate_host_capability_contract.py",
+    "host_capability_contract_tests": "tests/runtime/test_host_capability_contract.py",
     "prap_certification_evidence_schema": "machine/schemas/prap-certification-evidence.schema.json",
     "developer_portal_catalog_schema": "machine/schemas/developer-portal-catalog.schema.json",
     "readme_machine_index_schema": "machine/schemas/readme-machine-index.schema.json",
@@ -2530,6 +2549,9 @@
   },
   "hosts_integrations": {
     "host_update_contract": "machine/hosts/update-contract.v1.json",
+    "host_capability_contract": "machine/hosts/capability-contract.v1.json",
+    "host_capability_contract_schema": "machine/schemas/host-capability-contract.v1.schema.json",
+    "host_capability_contract_validator": "scripts/validate_host_capability_contract.py",
     "uai_routing_boundaries": "adapters/github-copilot/probe-guide.md",
     "adapter_sdk_reference": "docs/setup/ADAPTER_SDK_PRAP.md",
     "adapter_sdk_stable_import_surface": "orchestra_runtime.protocol.sdk",
@@ -2638,6 +2660,7 @@
     "architecture_overview": "docs/architecture/README.md",
     "installation": "docs/setup/INSTALLATION.md",
     "compatibility": "docs/setup/COMPATIBILITY.md",
+    "host_capability_contract": "docs/setup/HOST_CAPABILITY_CONTRACT.md",
     "validation": "docs/setup/VALIDATION.md",
     "developer_portal": "docs/developer/README.md",
     "mcp_transport": "docs/developer/MCP_STDIO_TRANSPORT.md",

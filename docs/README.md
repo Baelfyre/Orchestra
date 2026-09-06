@@ -105,12 +105,15 @@ Cross-repository continuity may be supplied by a user-selected external continui
 - [Installation](setup/INSTALLATION.md): supported installation paths.
 - [Compatibility](setup/COMPATIBILITY.md): host compatibility and maturity.
 - [Host Updates](setup/HOST_UPDATES.md): governed read-only host update planning.
+- [UAI Host Capability Contract](setup/HOST_CAPABILITY_CONTRACT.md): versioned host capability evidence and transport compatibility without authority expansion.
 - [Adapter SDK and PRAP v1](setup/ADAPTER_SDK_PRAP.md): stable adapter SDK and deterministic compatibility certification.
 - [Developer Portal](developer/README.md): extension and integration discovery surface.
 - [MCP stdio Transport](developer/MCP_STDIO_TRANSPORT.md): first bounded MCP tools transport.
 - [GitHub Copilot Adapter](../adapters/github-copilot/README.md): decoupled integration architecture for GitHub Copilot.
 - [GitHub Copilot Probe Guide](../adapters/github-copilot/probe-guide.md): live capability probe guide distinguishing canonical command invocation from native custom agents.
 - `../machine/hosts/update-contract.v1.json`: host update/maturity contract.
+- `../machine/hosts/capability-contract.v1.json`: UAI host capability and transport compatibility contract.
+- `../machine/schemas/host-capability-contract.v1.schema.json`: UAI host capability contract schema.
 - `../machine/protocol/prap-certification-contract.v1.json`: PRAP certification contract.
 - `../machine/developer-portal/catalog.v1.json`: machine Developer Portal catalog.
 
