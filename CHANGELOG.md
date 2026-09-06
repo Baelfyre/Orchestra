@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased UAI-4 integration strategy resolver
+
+- Adds deterministic transport selection across Agent Skills, custom agents, MCP, plugins/extensions, CLI adapters, repository/workspace instructions, instruction-only fallback, and explicit fail-closed unsupported output.
+- Selects the smallest eligible transport using required capabilities, evidence disposition, policy allowance, authority preservation, installation complexity, context cost, portability, and evidence quality.
+- Does not change Conductor routing, AWF topology, provider/model selection, credentials, automatic fallback, learned routing, release, or deployment.
+
 ## Unreleased UAI-3 provider/model capability contract
 
 - Adds a provider/model-neutral capability vocabulary for tool calling, structured output, context limits, multimodal input, host-exposed execution, sub-agents, concurrency exposure, MCP compatibility, model selection, reasoning/runtime modes, permission semantics, and provider-policy restrictions.

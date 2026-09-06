@@ -10,6 +10,8 @@ Provider/model profiles, when admitted later, require exact provider/model ident
 
 This contract does not authorize automatic provider switching, fallback, credential changes, learned-routing promotion, specialist routing, AWF topology changes, or execution. P2.1's [Provider Execution Profile](../project/PRIORITY_2_PROVIDER_EXECUTION_PROFILE.md) remains the narrower trusted execution requirement gate. A capability profile describes what may be observable; it never becomes a runtime grant.
 
+UAI-4 resolves transport separately with the pure `resolve_integration_strategy` domain function. It considers only current supported evidence, required transport capabilities, host/provider policy, authority preservation, context cost, installation complexity, portability, and evidence quality. If no option is eligible it selects `UNSUPPORTED_FAIL_CLOSED`. The result cannot change specialist routing, AWF topology, provider/model selection, credentials, or fallback behavior.
+
 Validate it with:
 
 ```text

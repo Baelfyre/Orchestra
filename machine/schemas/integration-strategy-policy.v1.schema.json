@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/integration-strategy-policy.v1.schema.json",
+  "title": "Orchestra UAI Integration Strategy Policy v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "contract_id", "contract_revision", "contract_role", "authority", "selection_policy", "strategies"],
+  "properties": {
+    "$schema": {"const": "./machine/schemas/integration-strategy-policy.v1.schema.json"},
+    "schema_version": {"const": "orchestra.integration-strategy-policy.v1"},
+    "contract_id": {"const": "orchestra-uai-integration-strategy-policy"},
+    "contract_revision": {"const": 1},
+    "contract_role": {"const": "canonical_uai_integration_strategy_selection_policy"},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["transport_selection_only", "specialist_routing_changed", "workflow_topology_changed", "provider_selection_changed", "automatic_fallback", "credentials_mutated"],
+      "properties": {
+        "transport_selection_only": {"const": true},
+        "specialist_routing_changed": {"const": false},
+        "workflow_topology_changed": {"const": false},
+        "provider_selection_changed": {"const": false},
+        "automatic_fallback": {"const": false},
+        "credentials_mutated": {"const": false}
+      }
+    },
+    "selection_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eligible_dispositions", "authority_preserved_required", "policy_allowed_required", "fail_closed_strategy", "ranking_order"],
+      "properties": {
+        "eligible_dispositions": {"const": ["SUPPORTED_VERIFIED", "SUPPORTED_WITH_LIMITS"]},
+        "authority_preserved_required": {"const": true},
+        "policy_allowed_required": {"const": true},
+        "fail_closed_strategy": {"const": "UNSUPPORTED_FAIL_CLOSED"},
+        "ranking_order": {"const": ["installation_complexity", "context_cost", "portability_desc", "evidence_quality_desc", "declared_order"]}
+      }
+    },
+    "strategies": {
+      "type": "array",
+      "minItems": 9,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["strategy_id", "declared_order", "description"],
+        "properties": {
+          "strategy_id": {"enum": ["AGENT_SKILLS", "CUSTOM_AGENT", "MCP_TRANSPORT", "PLUGIN_OR_EXTENSION", "CLI_ADAPTER", "REPOSITORY_INSTRUCTIONS", "WORKSPACE_INSTRUCTIONS", "INSTRUCTION_ONLY_FALLBACK", "UNSUPPORTED_FAIL_CLOSED"]},
+          "declared_order": {"type": "integer", "minimum": 0},
+          "description": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}

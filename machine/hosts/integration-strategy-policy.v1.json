@@ -1,0 +1,33 @@
+{
+  "$schema": "./machine/schemas/integration-strategy-policy.v1.schema.json",
+  "schema_version": "orchestra.integration-strategy-policy.v1",
+  "contract_id": "orchestra-uai-integration-strategy-policy",
+  "contract_revision": 1,
+  "contract_role": "canonical_uai_integration_strategy_selection_policy",
+  "authority": {
+    "transport_selection_only": true,
+    "specialist_routing_changed": false,
+    "workflow_topology_changed": false,
+    "provider_selection_changed": false,
+    "automatic_fallback": false,
+    "credentials_mutated": false
+  },
+  "selection_policy": {
+    "eligible_dispositions": ["SUPPORTED_VERIFIED", "SUPPORTED_WITH_LIMITS"],
+    "authority_preserved_required": true,
+    "policy_allowed_required": true,
+    "fail_closed_strategy": "UNSUPPORTED_FAIL_CLOSED",
+    "ranking_order": ["installation_complexity", "context_cost", "portability_desc", "evidence_quality_desc", "declared_order"]
+  },
+  "strategies": [
+    {"strategy_id": "AGENT_SKILLS", "declared_order": 0, "description": "Repository-scoped skills when indexed by the host."},
+    {"strategy_id": "CUSTOM_AGENT", "declared_order": 1, "description": "Host-native custom agent as an optional transport."},
+    {"strategy_id": "MCP_TRANSPORT", "declared_order": 2, "description": "Configured bounded MCP transport."},
+    {"strategy_id": "PLUGIN_OR_EXTENSION", "declared_order": 3, "description": "Installed and verified host plugin or extension."},
+    {"strategy_id": "CLI_ADAPTER", "declared_order": 4, "description": "Installed and verified host CLI adapter."},
+    {"strategy_id": "REPOSITORY_INSTRUCTIONS", "declared_order": 5, "description": "Repository-scoped instructions."},
+    {"strategy_id": "WORKSPACE_INSTRUCTIONS", "declared_order": 6, "description": "Workspace-scoped instructions."},
+    {"strategy_id": "INSTRUCTION_ONLY_FALLBACK", "declared_order": 7, "description": "Bounded instruction-only integration."},
+    {"strategy_id": "UNSUPPORTED_FAIL_CLOSED", "declared_order": 8, "description": "Stop when a required capability is absent or policy-blocked."}
+  ]
+}
