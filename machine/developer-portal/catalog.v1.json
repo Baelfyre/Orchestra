@@ -56,6 +56,27 @@
       "authority_role": "GUIDANCE_OVER_HOST_CONTRACT"
     },
     {
+      "id": "uai-host-capability-contract",
+      "title": "UAI Host Capability Contract",
+      "kind": "machine_contract",
+      "path": "machine/hosts/capability-contract.v1.json",
+      "authority_role": "HOST_CAPABILITY_EVIDENCE_WITHOUT_AUTHORITY"
+    },
+    {
+      "id": "uai-host-capability-schema",
+      "title": "UAI Host Capability Contract schema",
+      "kind": "machine_schema",
+      "path": "machine/schemas/host-capability-contract.v1.schema.json",
+      "authority_role": "EVIDENCE_SCHEMA"
+    },
+    {
+      "id": "uai-host-capability-guide",
+      "title": "UAI Host Capability Contract guide",
+      "kind": "human_guide",
+      "path": "docs/setup/HOST_CAPABILITY_CONTRACT.md",
+      "authority_role": "GUIDANCE_OVER_HOST_CAPABILITY_CONTRACT"
+    },
+    {
       "id": "specialist-registry",
       "title": "Specialist registry",
       "kind": "machine_contract",

@@ -1,0 +1,107 @@
+{
+  "$schema": "./machine/schemas/host-capability-contract.v1.schema.json",
+  "schema_version": "orchestra.host-capability-contract.v1",
+  "contract_id": "orchestra-host-capability",
+  "contract_revision": 1,
+  "contract_role": "canonical_uai_host_capability_contract",
+  "authority": {
+    "capability_grants_execution_authority": false,
+    "capability_grants_routing_authority": false,
+    "capability_grants_specialist_selection_authority": false,
+    "capability_grants_workflow_topology_authority": false,
+    "capability_grants_provider_selection_authority": false,
+    "automatic_provider_routing": false,
+    "automatic_provider_fallback": false,
+    "execution_authorized": false
+  },
+  "dispositions": [
+    "SUPPORTED_VERIFIED",
+    "SUPPORTED_WITH_LIMITS",
+    "AVAILABLE_NOT_YET_VERIFIED",
+    "UNKNOWN",
+    "BLOCKED_BY_POLICY",
+    "VERIFIED_UNSUPPORTED_LOCALLY",
+    "UNSUPPORTED"
+  ],
+  "capability_dimensions": {
+    "instruction_surface": ["REPOSITORY_INSTRUCTIONS", "WORKSPACE_INSTRUCTIONS", "PERSONAL_INSTRUCTIONS"],
+    "agent_skills": ["OPEN_AGENT_SKILLS_V1", "TOOL_INVOCATION", "DYNAMIC_INJECTION"],
+    "custom_agents": ["SUBAGENT_DISPATCH", "CUSTOM_ROLE_PROMPT", "INDEPENDENT_CONTEXT"],
+    "tool_transport": ["MCP_STDIO", "MCP_SSE", "NATIVE_IDE_TOOLS", "LANGUAGE_SERVER_TOOLS"],
+    "execution_environment": ["LOCAL_SHELL_EXECUTE", "SANDBOXED_EXECUTE", "READ_ONLY_WORKSPACE", "FILE_READ", "FILE_WRITE"],
+    "control_surface": ["HUMAN_APPROVAL_PROMPTS", "PERMISSION_GATE", "FAIL_CLOSED_DISPOSITION"],
+    "model_selection": ["EXPLICIT_MODEL_CHOICE", "HOST_MANAGED_MODEL", "REASONING_EFFORT_SELECTOR"],
+    "policy_enforcement": ["ORG_POLICY_RESTRICTION", "ENTERPRISE_DISABLE_MCP", "NETWORK_ISOLATION"]
+  },
+  "transport_strategies": [
+    {"strategy_id": "AGENT_SKILLS", "host_neutral": true, "purpose": "Expose repository-scoped skills when the host indexes them."},
+    {"strategy_id": "CUSTOM_AGENT", "host_neutral": true, "purpose": "Expose a host-native custom agent as an optional integration transport."},
+    {"strategy_id": "MCP_TRANSPORT", "host_neutral": true, "purpose": "Expose bounded tools through a configured MCP transport."},
+    {"strategy_id": "PLUGIN_OR_EXTENSION", "host_neutral": true, "purpose": "Expose a host plugin or extension surface when installed and verified."},
+    {"strategy_id": "CLI_ADAPTER", "host_neutral": true, "purpose": "Expose a host CLI adapter when installed and verified."},
+    {"strategy_id": "REPOSITORY_INSTRUCTIONS", "host_neutral": true, "purpose": "Expose repository-scoped instructions."},
+    {"strategy_id": "WORKSPACE_INSTRUCTIONS", "host_neutral": true, "purpose": "Expose workspace-scoped instructions."},
+    {"strategy_id": "INSTRUCTION_ONLY_FALLBACK", "host_neutral": true, "purpose": "Use a bounded instruction-only integration when richer transports are unavailable."},
+    {"strategy_id": "UNSUPPORTED_FAIL_CLOSED", "host_neutral": true, "purpose": "Stop when a required host capability is absent or policy-blocked."}
+  ],
+  "profiles": [
+    {
+      "host_id": "github-copilot",
+      "host_product": "GitHub Copilot",
+      "adapter_id": "github-copilot",
+      "evidence": {
+        "source_repository": "Baelfyre/Padayon",
+        "source_path": "implementation-phase-prompts/orchestra/reports/orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report.json",
+        "source_commit": "267a3c1b302e8fadc939815b761ff32be5ae1eed",
+        "source_type": "LIVE_MAINTAINER_OBSERVATION",
+        "observation_id": "orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#uai_1_copilot_probe.live_maintainer_evidence",
+        "observed_at": "2026-09-06T13:55:00+08:00",
+        "environment": "CURRENT_THREAD_MAINTAINER_LIVE_GITHUB_COPILOT_OBSERVATION",
+        "probe": "Padayon report Probe A Conductor and Probe B Ponytail live responses",
+        "subject_repository": "Baelfyre/Orchestra",
+        "subject_commit": "0daa34b33adffc023101f958a9dfa39f9dd4ef0d",
+        "freshness": {
+          "status": "CURRENT_AT_OBSERVATION",
+          "max_age_hours": 24,
+          "invalidation_triggers": ["HOST_BUILD_UPDATE", "HOST_EXTENSION_UPDATE", "HOST_POLICY_UPDATE", "ACCOUNT_OR_ORGANIZATION_POLICY_UPDATE", "ORCHESTRA_CONTRACT_REVISION"]
+        }
+      },
+      "authority": {
+        "capability_grants_execution_authority": false,
+        "capability_grants_routing_authority": false,
+        "capability_grants_specialist_selection_authority": false,
+        "capability_grants_workflow_topology_authority": false,
+        "capability_grants_provider_selection_authority": false,
+        "automatic_provider_routing": false,
+        "automatic_provider_fallback": false,
+        "execution_authorized": false
+      },
+      "capabilities": [
+        {"capability_id": "repository_instructions_observability", "category": "instruction_surface", "disposition": "AVAILABLE_NOT_YET_VERIFIED", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#probe_matrix.1"]},
+        {"capability_id": "orchestra_command_recognition_conductor", "category": "instruction_surface", "disposition": "SUPPORTED_WITH_LIMITS", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#uai_1_copilot_probe.live_maintainer_evidence.PROBE_A_CONDUCTOR"], "limitations": ["CLEAR_OWNERSHIP_WAS_INCORRECTLY_INTERPRETED_AS_CONDUCTOR_BYPASS", "FOCUSED_RETEST_REQUIRED_AFTER_UAI_1_PROJECTION_REMEDIATION"]},
+        {"capability_id": "orchestra_specialist_recognition_ponytail", "category": "instruction_surface", "disposition": "SUPPORTED_VERIFIED", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#uai_1_copilot_probe.live_maintainer_evidence.PROBE_B_PONYTAIL"]},
+        {"capability_id": "orchestra_command_separation", "category": "instruction_surface", "disposition": "AVAILABLE_NOT_YET_VERIFIED", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#probe_matrix.2C"]},
+        {"capability_id": "native_custom_agent_support", "category": "custom_agents", "disposition": "AVAILABLE_NOT_YET_VERIFIED", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#probe_matrix.3"]},
+        {"capability_id": "agent_skills_discovery", "category": "agent_skills", "disposition": "AVAILABLE_NOT_YET_VERIFIED", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#probe_matrix.2"]},
+        {"capability_id": "mcp_discovery_and_read_only_tool_visibility", "category": "tool_transport", "disposition": "AVAILABLE_NOT_YET_VERIFIED", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#probe_matrix.4"]},
+        {"capability_id": "plugin_or_custom_marketplace_surface", "category": "tool_transport", "disposition": "VERIFIED_UNSUPPORTED_LOCALLY", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#probe_matrix.5"], "notes": "No local extension installed in the default profile; this does not claim global Copilot marketplace absence."},
+        {"capability_id": "cli_surface", "category": "execution_environment", "disposition": "VERIFIED_UNSUPPORTED_LOCALLY", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#probe_matrix.6"]},
+        {"capability_id": "file_workspace_terminal_tool_permissions", "category": "execution_environment", "disposition": "AVAILABLE_NOT_YET_VERIFIED", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#probe_matrix.7"]},
+        {"capability_id": "approval_and_permission_controls", "category": "control_surface", "disposition": "AVAILABLE_NOT_YET_VERIFIED", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#probe_matrix.8"]},
+        {"capability_id": "model_selection_controls", "category": "model_selection", "disposition": "AVAILABLE_NOT_YET_VERIFIED", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#probe_matrix.9"]},
+        {"capability_id": "organization_or_account_policy_restrictions", "category": "policy_enforcement", "disposition": "AVAILABLE_NOT_YET_VERIFIED", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#probe_matrix.10"]}
+      ],
+      "transport_compatibility": [
+        {"strategy_id": "AGENT_SKILLS", "disposition": "AVAILABLE_NOT_YET_VERIFIED", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#probe_matrix.2"]},
+        {"strategy_id": "CUSTOM_AGENT", "disposition": "AVAILABLE_NOT_YET_VERIFIED", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#probe_matrix.3"]},
+        {"strategy_id": "MCP_TRANSPORT", "disposition": "AVAILABLE_NOT_YET_VERIFIED", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#probe_matrix.4"]},
+        {"strategy_id": "PLUGIN_OR_EXTENSION", "disposition": "VERIFIED_UNSUPPORTED_LOCALLY", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#probe_matrix.5"]},
+        {"strategy_id": "CLI_ADAPTER", "disposition": "VERIFIED_UNSUPPORTED_LOCALLY", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#probe_matrix.6"]},
+        {"strategy_id": "REPOSITORY_INSTRUCTIONS", "disposition": "AVAILABLE_NOT_YET_VERIFIED", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#probe_matrix.1"]},
+        {"strategy_id": "WORKSPACE_INSTRUCTIONS", "disposition": "AVAILABLE_NOT_YET_VERIFIED", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#probe_matrix.1"]},
+        {"strategy_id": "INSTRUCTION_ONLY_FALLBACK", "disposition": "AVAILABLE_NOT_YET_VERIFIED", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#probe_suite_architecture"]},
+        {"strategy_id": "UNSUPPORTED_FAIL_CLOSED", "disposition": "SUPPORTED_VERIFIED", "evidence_refs": ["orchestra-uai0-uai1-copilot-baseline-and-live-probe-20260906-v1-report#uai_0_taxonomy.degradation_and_fail_closed_rules"]}
+      ]
+    }
+  ]
+}

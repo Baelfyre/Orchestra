@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased UAI-2 host capability contract
+
+- Adds a versioned UAI host capability contract, schema, evidence freshness fields, host-neutral transport compatibility, fail-closed validation, and Copilot capability profile evidence.
+- Preserves Conductor as the sole internal specialist router and keeps host capability, transport selection, provider advisory, and AWF workflow topology separate.
+- Does not promote the Copilot Conductor capability beyond `SUPPORTED_WITH_LIMITS` before the required focused live retest, and does not add automatic provider routing, fallback, concurrency widening, AR-3, AR-4, release, or deployment behavior.
+
 ## v1.9.0 UI Execution Fidelity - published and verified
 
 - Canonically records the UIEF-5 Clockwork engineering translation at the signed Orchestra main boundary and reconciles its exact source, tree, parent, and signature evidence.

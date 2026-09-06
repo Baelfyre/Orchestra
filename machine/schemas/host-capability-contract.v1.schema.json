@@ -1,0 +1,227 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/host-capability-contract.v1.schema.json",
+  "title": "Orchestra Universal Adaptive Integration Host Capability Contract v1",
+  "description": "Host capability evidence and compatibility declarations. Capability never creates execution, routing, workflow, provider, or policy authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "contract_id",
+    "contract_revision",
+    "contract_role",
+    "authority",
+    "dispositions",
+    "capability_dimensions",
+    "transport_strategies",
+    "profiles"
+  ],
+  "properties": {
+    "$schema": {"const": "./machine/schemas/host-capability-contract.v1.schema.json"},
+    "schema_version": {"const": "orchestra.host-capability-contract.v1"},
+    "contract_id": {"const": "orchestra-host-capability"},
+    "contract_revision": {"const": 1},
+    "contract_role": {"const": "canonical_uai_host_capability_contract"},
+    "authority": {"$ref": "#/$defs/authority"},
+    "dispositions": {
+      "type": "array",
+      "minItems": 7,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/disposition"}
+    },
+    "capability_dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "instruction_surface",
+        "agent_skills",
+        "custom_agents",
+        "tool_transport",
+        "execution_environment",
+        "control_surface",
+        "model_selection",
+        "policy_enforcement"
+      ],
+      "properties": {
+        "instruction_surface": {"$ref": "#/$defs/string_set"},
+        "agent_skills": {"$ref": "#/$defs/string_set"},
+        "custom_agents": {"$ref": "#/$defs/string_set"},
+        "tool_transport": {"$ref": "#/$defs/string_set"},
+        "execution_environment": {"$ref": "#/$defs/string_set"},
+        "control_surface": {"$ref": "#/$defs/string_set"},
+        "model_selection": {"$ref": "#/$defs/string_set"},
+        "policy_enforcement": {"$ref": "#/$defs/string_set"}
+      }
+    },
+    "transport_strategies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/transport_strategy"}
+    },
+    "profiles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/profile"}
+    }
+  },
+  "$defs": {
+    "disposition": {
+      "enum": [
+        "SUPPORTED_VERIFIED",
+        "SUPPORTED_WITH_LIMITS",
+        "AVAILABLE_NOT_YET_VERIFIED",
+        "UNKNOWN",
+        "BLOCKED_BY_POLICY",
+        "VERIFIED_UNSUPPORTED_LOCALLY",
+        "UNSUPPORTED"
+      ]
+    },
+    "string_set": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capability_grants_execution_authority",
+        "capability_grants_routing_authority",
+        "capability_grants_specialist_selection_authority",
+        "capability_grants_workflow_topology_authority",
+        "capability_grants_provider_selection_authority",
+        "automatic_provider_routing",
+        "automatic_provider_fallback",
+        "execution_authorized"
+      ],
+      "properties": {
+        "capability_grants_execution_authority": {"const": false},
+        "capability_grants_routing_authority": {"const": false},
+        "capability_grants_specialist_selection_authority": {"const": false},
+        "capability_grants_workflow_topology_authority": {"const": false},
+        "capability_grants_provider_selection_authority": {"const": false},
+        "automatic_provider_routing": {"const": false},
+        "automatic_provider_fallback": {"const": false},
+        "execution_authorized": {"const": false}
+      }
+    },
+    "evidence_ref_set": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "freshness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "max_age_hours", "invalidation_triggers"],
+      "properties": {
+        "status": {"enum": ["CURRENT_AT_OBSERVATION", "STALE", "UNKNOWN"]},
+        "max_age_hours": {"type": "integer", "minimum": 1},
+        "invalidation_triggers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "HOST_BUILD_UPDATE",
+              "HOST_EXTENSION_UPDATE",
+              "HOST_POLICY_UPDATE",
+              "ACCOUNT_OR_ORGANIZATION_POLICY_UPDATE",
+              "ORCHESTRA_CONTRACT_REVISION"
+            ]
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_repository",
+        "source_path",
+        "source_commit",
+        "source_type",
+        "observation_id",
+        "observed_at",
+        "environment",
+        "probe",
+        "subject_repository",
+        "subject_commit",
+        "freshness"
+      ],
+      "properties": {
+        "source_repository": {"type": "string", "minLength": 1},
+        "source_path": {"type": "string", "minLength": 1},
+        "source_commit": {"$ref": "#/$defs/sha"},
+        "source_type": {"enum": ["LIVE_MAINTAINER_OBSERVATION", "REPOSITORY_CONTRACT", "HOST_SELF_REPORT"]},
+        "observation_id": {"type": "string", "minLength": 1},
+        "observed_at": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(Z|[+-][0-9]{2}:[0-9]{2})$"},
+        "environment": {"type": "string", "minLength": 1},
+        "probe": {"type": "string", "minLength": 1},
+        "subject_repository": {"type": "string", "minLength": 1},
+        "subject_commit": {"$ref": "#/$defs/sha"},
+        "freshness": {"$ref": "#/$defs/freshness"}
+      }
+    },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["capability_id", "category", "disposition", "evidence_refs"],
+      "properties": {
+        "capability_id": {"type": "string", "pattern": "^[a-z][a-z0-9_]+$"},
+        "category": {"enum": ["instruction_surface", "agent_skills", "custom_agents", "tool_transport", "execution_environment", "control_surface", "model_selection", "policy_enforcement"]},
+        "disposition": {"$ref": "#/$defs/disposition"},
+        "evidence_refs": {"$ref": "#/$defs/evidence_ref_set"},
+        "limitations": {"$ref": "#/$defs/string_set"},
+        "notes": {"type": "string", "minLength": 1}
+      }
+    },
+    "transport_strategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["strategy_id", "host_neutral", "purpose"],
+      "properties": {
+        "strategy_id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"},
+        "host_neutral": {"const": true},
+        "purpose": {"type": "string", "minLength": 1}
+      }
+    },
+    "transport_compatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["strategy_id", "disposition", "evidence_refs"],
+      "properties": {
+        "strategy_id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"},
+        "disposition": {"$ref": "#/$defs/disposition"},
+        "evidence_refs": {"$ref": "#/$defs/evidence_ref_set"},
+        "notes": {"type": "string", "minLength": 1}
+      }
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["host_id", "host_product", "adapter_id", "evidence", "authority", "capabilities", "transport_compatibility"],
+      "properties": {
+        "host_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]+$"},
+        "host_product": {"type": "string", "minLength": 1},
+        "adapter_id": {"type": "string", "minLength": 1},
+        "evidence": {"$ref": "#/$defs/evidence"},
+        "authority": {"$ref": "#/$defs/authority"},
+        "capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/capability"}
+        },
+        "transport_compatibility": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/transport_compatibility"}
+        }
+      }
+    }
+  }
+}
