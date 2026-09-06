@@ -4,6 +4,10 @@ This is the human navigation layer for the Orchestra framework.
 
 For exact machine-readable state, identity, routing, governance, maturity, provenance, or release evidence, start with [`../README.json`](../README.json) and follow its references into `../machine/`. Human documentation explains those contracts; it does not override them.
 
+## Stable human reference layer
+
+Start with the [Orchestra Reference](reference/README.md) for concise navigation through getting started, architecture, governance, integrations, specialists, and releases. This detailed map remains available for the full repository-local documentation index.
+
 ## Architecture
 
 Start with the current [Architecture Overview](architecture/README.md).
@@ -42,7 +46,7 @@ Portable memory is optional. Orchestra does not require or identify a specific e
 - [Routing Map](../ROUTING_MAP.md): human routing and sequencing reference.
 - `../machine/specialists/registry.v1.json`: compiled machine specialist registry.
 - `../machine/routing/routes.v1.json`: canonical machine routing contract.
-- [Tuner Protocol](governance/TUNER_PROTOCOL.md): cross-specialist coordination contract, including declared governance dependencies and minimal re-entry.
+- [Cross-Specialist Coordination Protocol](routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md): cross-specialist coordination contract, including declared governance dependencies and minimal re-entry.
 - [Cloak UI Reference Corpus Upgrade Plan](project/CLOAK_UI_REFERENCE_CORPUS_PLAN.md): canonical CUIR corpus, provenance, licensing, icon-reuse, evaluation, and phase-sequencing plan.
 - [UI Execution Fidelity Plan](project/UI_EXECUTION_FIDELITY_PLAN.md): approved post-CUIR plan for fidelity-aware routing, Ponytail execution profiles, Cloak/Clockwork handoffs, rendered validation, and controlled comparative evaluation.
 
@@ -157,9 +161,9 @@ Murmurs changes presentation only. It does not alter authority, governance, vali
 - `../machine/release-evidence/`: structured release evidence.
 - [Decision Log](../DECISION_LOG.md): architectural and governance decisions.
 
-The current public release is immutable `v1.9.0`, tagged at signed canonical commit `7129a690b041bddbf8b58f41db0c4a680317fda1` with GitHub Release `RE_kwDOS_4UtM4W2pDC`. Its exact-head qualification, canonical merge, tag, and release identity were independently verified.
+The current public release is immutable `v1.10.0`, tagged at canonical commit `756a358f96363f0c377b049adcd87b1991d5aef6` with tree `42c0c8929c4dcfa5b17ff2feb293710d2468ca51` and GitHub Release `383668751`. Its exact-head qualification, canonical merge, tag, and release identity were independently verified.
 
-The `v1.10.0` Universal Adaptive Integration and Conductor Routing release candidate is prepared but unpublished. Its package/version surfaces are aligned to `1.10.0`; final publication remains a separate human approval gate.
+The published [v1.10.0 human reference](reference/releases/v1.10.0.md) is separate from the preserved [candidate qualification record](releases/v1.10.0-universal-adaptive-integration-release-candidate.md) and [release-readiness evidence](validation/V1_10_0_RELEASE_READINESS_EVIDENCE.md). The candidate evidence remains revision-bound historical evidence.
 
 ## Developer extension path
 

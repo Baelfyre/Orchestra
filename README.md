@@ -5,14 +5,14 @@
 
   <p>
     <a href="docs/setup/INSTALLATION.md">Install</a> |
-    <a href="docs/README.md">Documentation</a> |
+    <a href="docs/reference/README.md">Documentation</a> |
     <a href="docs/developer/README.md">Developer Portal</a> |
     <a href="docs/governance/README.md">Governance</a> |
     <a href="CHANGELOG.md">Changelog</a>
   </p>
 
   <p>
-    <img src="https://img.shields.io/badge/release-v1.9.0-blue" alt="Latest release v1.9.0" />
+    <img src="https://img.shields.io/badge/release-v1.10.0-blue" alt="Latest release v1.10.0" />
     <a href="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml">
       <img src="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml/badge.svg" alt="Repository validation status" />
     </a>
@@ -86,7 +86,7 @@ Capability is not authority.
 | **Continuity** | Machine-readable state, receipts, contracts, and bounded adaptive memory to reduce repeated reconstruction. |
 | **Portable integration** | Adapter and MCP surfaces that allow Orchestra to work across supported AI coding hosts without transferring authority to the host. |
 
-For the full capability map, see the [Documentation Map](docs/README.md).
+For the full capability map, see the [Orchestra Reference](docs/reference/README.md).
 
 ## Quick start
 
@@ -106,7 +106,7 @@ agy plugin install https://github.com/Baelfyre/Orchestra
 
 ### Other hosts
 
-See the [Installation Guide](docs/setup/INSTALLATION.md) and [Compatibility Guide](docs/setup/COMPATIBILITY.md).
+See the [Getting Started reference](docs/reference/getting-started/README.md), [Installation Guide](docs/setup/INSTALLATION.md), and [Compatibility Guide](docs/setup/COMPATIBILITY.md).
 
 ## MCP
 
@@ -122,15 +122,16 @@ See [MCP stdio governed tool transport](docs/developer/MCP_STDIO_TRANSPORT.md).
 
 ## Current release
 
-The latest published release is **[v1.9.0: UI Execution Fidelity](https://github.com/Baelfyre/Orchestra/releases/tag/v1.9.0)**.
+The latest published release is **[v1.10.0: Universal Adaptive Integration](https://github.com/Baelfyre/Orchestra/releases/tag/v1.10.0)**.
 
-v1.9.0 completes the current UI execution fidelity program while preserving explicit evidence limits where the project did not establish stronger claims. Detailed release evidence, maturity records, and historical validation remain in the documentation instead of being duplicated here.
+v1.10.0 adds evidence-bounded Universal Adaptive Integration, deterministic transport and projection contracts, cross-host conformance, and verified GitHub Copilot `/conductor` support while preserving existing governance and authority boundaries.
 
-The v1.10.0 Universal Adaptive Integration and Conductor Routing release candidate is prepared on current main from the post-v1.9.0 additive change set. It preserves Conductor as the sole internal specialist router, keeps direct fast-route semantics distinct from router bypass, and does not admit a provider/model profile from the Copilot Auto-mode evidence. Public release remains v1.9.0 until exact-head qualification and separate publication approval complete.
+Conductor remains the sole internal specialist router. Clear specialist ownership can use a lightweight direct route, but it never bypasses Conductor. Copilot Auto mode did not expose its provider/model identity, so no provider/model profile is admitted.
 
 See:
 
 - [Changelog](CHANGELOG.md)
+- [Published v1.10.0 reference](docs/reference/releases/v1.10.0.md)
 - [Maturity](docs/MATURITY.md)
 - [Validation documentation](docs/setup/VALIDATION.md)
 
@@ -138,16 +139,18 @@ See:
 
 Use the README as the entry point, then go deeper only when needed:
 
-- [Documentation Map](docs/README.md)
-- [Installation](docs/setup/INSTALLATION.md)
-- [Governance](docs/governance/README.md)
+- [Orchestra Reference](docs/reference/README.md)
+- [Getting started](docs/reference/getting-started/README.md)
+- [Governance](docs/reference/governance/README.md)
 - [Developer Portal](docs/developer/README.md)
-- [Architecture](docs/architecture/)
-- [Routing and coordination](docs/routing/)
-- [Validation](docs/setup/VALIDATION.md)
+- [Architecture](docs/reference/architecture/README.md)
+- [Integrations](docs/reference/integrations/README.md)
+- [Specialists](docs/reference/specialists/README.md)
+- [Releases](docs/reference/releases/README.md)
+- [Detailed Documentation Map](docs/README.md)
 - [Third-party provenance](docs/THIRD_PARTY_PROVENANCE.md)
 
-For AI systems and exact structured project state, start with [`README.json`](README.json).
+For AI systems and exact structured project state, start with [`README.json`](README.json); for human navigation, start with the [Orchestra Reference](docs/reference/README.md).
 
 ## Support
 

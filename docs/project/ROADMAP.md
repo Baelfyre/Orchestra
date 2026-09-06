@@ -1,15 +1,15 @@
 # Roadmap
 
-## v1.10.0 Universal Adaptive Integration and Conductor Routing - Release Candidate
+## v1.10.0 Universal Adaptive Integration and Conductor Routing - Published
 
-The v1.10.0 candidate is an additive minor release prepared from the post-v1.9.0 change set. UAI-0 through UAI-10 are canonically verified, and maintainer evidence promotes GitHub Copilot `/conductor` to `SUPPORTED_VERIFIED` without admitting an Auto-mode provider/model identity.
+The v1.10.0 publication is an additive minor release from the post-v1.9.0 change set. UAI-0 through UAI-10 are canonically verified, and maintainer evidence promotes GitHub Copilot `/conductor` to `SUPPORTED_VERIFIED` without admitting an Auto-mode provider/model identity. The exact published commit is `756a358f96363f0c377b049adcd87b1991d5aef6`, tree `42c0c8929c4dcfa5b17ff2feb293710d2468ca51`, tag `v1.10.0`, and GitHub Release `383668751`.
 
 - [x] Preserve Conductor as the sole internal specialist router and distinguish clear-ownership fast routing from router bypass.
 - [x] Keep UAI transport selection separate from AWF specialist routing and provider/model eligibility.
 - [x] Preserve deterministic AWF, OEE, UIEF/UIX, specialist parity, architecture, machine-contract, packaging, security, and governance boundaries.
 - [x] Align all 11 package/version surfaces and the host-update contract to `1.10.0`.
-- [ ] Complete exact-head release qualification and reconcile the resulting candidate identity to Padayon.
-- [ ] Publish a tag or GitHub Release only after separate final human approval; publication is not part of this candidate.
+- [x] Complete exact-head release qualification and reconcile the resulting candidate identity to Padayon.
+- [x] Publish the exact qualified tag and GitHub Release and independently verify the publication identity.
 
 ## v1.9.0 UI Execution Fidelity - Published
 

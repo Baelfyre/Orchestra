@@ -1,14 +1,15 @@
 # Orchestra Project Maturity
 
-This document classifies Orchestra's published v1.9.0 surfaces and prepared v1.10.0 candidate. It distinguishes implemented deterministic controls from bounded/advisory capabilities and from planned work so compatibility or test success is not mistaken for authority or production maturity.
+This document classifies Orchestra's published v1.10.0 surfaces and preserved historical qualification evidence. It distinguishes implemented deterministic controls from bounded/advisory capabilities and from planned work so compatibility or test success is not mistaken for authority or production maturity.
 
-## Current v1.10.0 candidate
+## Current v1.10.0 publication
 
 - **Universal Adaptive Integration**: UAI-0 through UAI-10 are canonically verified within the candidate scope. Host/transport capability remains separate from provider/model eligibility and Conductor/AWF specialist routing.
 - **GitHub Copilot Conductor**: `SUPPORTED_VERIFIED` from the maintainer live retest. Copilot Auto mode did not expose the underlying provider/model, so that identity remains unresolved and unadmitted.
 - **Conductor routing**: Conductor remains the sole internal specialist router. Clear ownership may enable a direct single-specialist fast route; it is not a router bypass.
-- **Package and host metadata**: all 11 package/version surfaces and the host update contract are prepared at `1.10.0`; the current public release remains v1.9.0.
-- **Publication boundary**: the candidate is `PREPARED_NOT_PUBLISHED`; no tag, GitHub Release, deployment, policy activation, or installed-integration refresh is included.
+- **Package and host metadata**: all 11 package/version surfaces and the host update contract are published at `1.10.0`; host maturity and installed integrations are unchanged.
+- **Publication identity**: tag `v1.10.0` and GitHub Release `383668751` resolve to signed canonical commit `756a358f96363f0c377b049adcd87b1991d5aef6`, tree `42c0c8929c4dcfa5b17ff2feb293710d2468ca51`.
+- **Publication boundary**: the release is `PUBLISHED_VERIFIED`; no deployment, policy activation, or installed-integration refresh is included. Post-publication documentation normalization does not change machine authority.
 
 ## Current v1.9.0 publication
 

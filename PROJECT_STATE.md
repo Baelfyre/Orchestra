@@ -5,10 +5,10 @@
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Stable Continuation Branch:** `main`
-- **Current Public Release:** `v1.9.0`
-- **Release Status:** `v1.9.0 PUBLISHED_VERIFIED`
-- **Target Release:** `v1.10.0`
-- **Release-Candidate Metadata:** `1.10.0` (`PREPARED_NOT_PUBLISHED`)
+- **Current Public Release:** `v1.10.0`
+- **Release Status:** `v1.10.0 PUBLISHED_VERIFIED`
+- **Target Release:** `POST_PUBLICATION_DOCUMENTATION_NORMALIZATION`
+- **Release-Candidate Metadata:** `1.10.0` (`PUBLISHED_VERIFIED_COMPLETE`)
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.3.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.4.0 Release State:** `PUBLISHED_VERIFIED`
@@ -34,13 +34,15 @@
 - **MCP State:** `PUBLISHED_V1_6_STABLE_RETAINED_V1_7`
 - **Policy Activation State:** `NOT_PERFORMED`
 
-## v1.10.0 Universal Adaptive Integration and Conductor Routing Candidate
+## v1.10.0 Universal Adaptive Integration and Conductor Routing Publication
 
 The v1.10.0 candidate is an additive, backward-compatible minor release candidate based on the post-v1.9.0 UAI and Conductor routing work. UAI-0 through UAI-10 are canonically verified, the maintainer-run GitHub Copilot `/conductor` promotion retest is `SUPPORTED_VERIFIED`, and Auto-mode provider/model identity remains unresolved and unadmitted.
 
 All 11 package/version surfaces and the host-update contract are aligned to `1.10.0`. Conductor remains the sole internal specialist router; clear ownership may enable a direct single-specialist fast route, but it does not bypass Conductor. UAI transport selection remains separate from AWF specialist routing, and automatic provider routing/fallback, learned routing promotion, concurrency widening, AR-3, and AR-4 remain out of scope.
 
-The candidate is `PREPARED_NOT_PUBLISHED`. Its exact canonical SHA, tree, and signature are determined by the governed protected merge and are recorded in the Padayon release-qualification report. No `v1.10.0` tag or GitHub Release is created by this candidate work.
+The publication is `PUBLISHED_VERIFIED` from exact canonical Orchestra commit `756a358f96363f0c377b049adcd87b1991d5aef6`, tree `42c0c8929c4dcfa5b17ff2feb293710d2468ca51`, sole parent `7cfc2b58c3cf3fb9f16d2a1e128bb01b74835b57`, lightweight tag `v1.10.0`, and GitHub Release ID `383668751`. The tag and non-draft, non-prerelease release were independently read back. Post-publication documentation normalization is active and does not rewrite the published identity or candidate qualification evidence.
+
+The published release reference is `docs/reference/releases/v1.10.0.md`; the candidate and readiness documents remain historical qualification evidence. Auto-mode provider/model identity remains unresolved and unadmitted.
 
 ## v1.9.0 UI Execution Fidelity Publication
 
