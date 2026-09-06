@@ -5,7 +5,7 @@ When assisting in the Orchestra repository or working with Orchestra-integrated 
 ## 1. Governance and Routing Architecture
 
 1. **Governance Layer**: `The Steward` (business alignment, scope, SDLC) and `The Governor` (legal, compliance, privacy, IP, licensing) sit above the Conductor. The Conductor cannot override governance decisions.
-2. **Routing Layer**: `Conductor` is the exclusive router and workflow orchestrator. Do not invent custom subagent chains or bypass the Conductor for complex tasks. Canonical command `/conductor` invokes Conductor for task classification, routing, and specialist orchestration.
+2. **Routing Layer**: `Conductor` is the exclusive internal specialist router and workflow orchestrator. Do not invent custom subagent chains or bypass Conductor for complex tasks. For clear single-owner work, Conductor may select a direct single-specialist fast route. That route is still a Conductor routing decision: `CLEAR_OWNERSHIP != CONDUCTOR_BYPASS` and `FAST_ROUTE != ROUTER_BYPASS`. Canonical command `/conductor` invokes Conductor for task classification, routing, and specialist orchestration.
 3. **Specialist Ownership**: Domain specialists exclusively own their respective domains:
    - `clockwork`: Architecture, OOP, layering, refactoring.
    - `cloak`: UI/UX, accessibility, design patterns.
@@ -34,6 +34,10 @@ When assisting in the Orchestra repository or working with Orchestra-integrated 
 - `INSTALL_SUCCESS != SUPPORTED_INTEGRATION`
 - `TRANSPORT != WORKFLOW`
 - `MODEL_SELECTION != GOVERNANCE`
+- `CONDUCTOR_IS_SOLE_INTERNAL_SPECIALIST_ROUTER`
+- `CLEAR_OWNERSHIP MAY_ENABLE DIRECT_SINGLE_SPECIALIST_FAST_ROUTE`
+- `CLEAR_OWNERSHIP != CONDUCTOR_BYPASS`
+- `FAST_ROUTE != ROUTER_BYPASS`
 - `UAI_TRANSPORT_SELECTION != AWF_SPECIALIST_ROUTING`
 
 ## 3. Code Modification Rules

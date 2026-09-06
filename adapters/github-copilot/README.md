@@ -10,6 +10,8 @@ Under UAI, integration with GitHub Copilot is decoupled into:
 3. **Provider Advisory**: Consulting the Provider Capability Broker in shadow mode to evaluate model fitness without automatic provider mutation.
 4. **Specialist & Workflow Preservation**: Preserving Conductor as the sole internal specialist router and deterministic AWF as the workflow topology authority.
 
+Clear ownership can let Conductor choose a direct single-specialist fast route, but it never authorizes a host, native custom agent, or adapter to bypass Conductor. UAI transport selection remains separate from specialist and workflow routing.
+
 ## Status
 
 - Adapter ID: `github-copilot`

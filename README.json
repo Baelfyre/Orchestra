@@ -2530,6 +2530,7 @@
   },
   "hosts_integrations": {
     "host_update_contract": "machine/hosts/update-contract.v1.json",
+    "uai_routing_boundaries": "adapters/github-copilot/probe-guide.md",
     "adapter_sdk_reference": "docs/setup/ADAPTER_SDK_PRAP.md",
     "adapter_sdk_stable_import_surface": "orchestra_runtime.protocol.sdk",
     "adapter_certification_commands": [

@@ -11,6 +11,9 @@ DO_NOT_FABRICATE_SUPPORT_FROM_DOCUMENTATION
 LIVE_EVIDENCE_OVERRIDES_VENDOR_CLAIMS
 CONDUCTOR_IS_EXCLUSIVE_ROUTER
 ORCHESTRA_COMMAND_INVOCATION != NATIVE_COPILOT_CUSTOM_AGENT_CAPABILITY
+CLEAR_OWNERSHIP != CONDUCTOR_BYPASS
+FAST_ROUTE != ROUTER_BYPASS
+UAI_TRANSPORT_SELECTION != AWF_SPECIALIST_ROUTING
 ```
 
 Capabilities not yet proven on the live Copilot surface remain `AVAILABLE_NOT_YET_VERIFIED` or `UNKNOWN`.
@@ -82,6 +85,9 @@ State:
 - Conductor acts as router/orchestrator.
 - No direct implementation occurs merely from classification.
 - Routing remains bounded by Orchestra specialist ownership.
+- If the task has one clear owner, Conductor may select a direct single-specialist fast route, but the result must identify that route as Conductor-selected rather than a host or specialist bypass.
+- Native custom-agent or other transport capability must not be presented as specialist routing authority.
+- UAI transport selection must remain separate from AWF specialist/workflow routing.
 - Capability does not create authority.
 *(Do not hard-code an expected destination specialist if the current Orchestra routing contract legitimately chooses another valid specialist.)*
 
