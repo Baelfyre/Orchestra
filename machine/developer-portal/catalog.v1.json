@@ -126,6 +126,13 @@
       "authority_role": "FAIL_CLOSED_EVIDENCE_GUIDANCE_WITHOUT_AUTHORITY"
     },
     {
+      "id": "uai-cross-host-capability-conformance-guide",
+      "title": "UAI Cross-Host Capability Conformance guide",
+      "kind": "human_guide",
+      "path": "docs/setup/UAI_CROSS_HOST_CONFORMANCE.md",
+      "authority_role": "EVIDENCE_BOUND_CROSS_HOST_COMPARISON_WITHOUT_AUTHORITY"
+    },
+    {
       "id": "uai-portable-projection-contract",
       "title": "UAI Portable Projection Contract",
       "kind": "machine_contract",

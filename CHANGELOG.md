@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased UAI-9 cross-host capability conformance
+
+- Adds an evidence-bound comparison matrix for Antigravity, Codex, and GitHub Copilot across discovery, capabilities, transport, specialist ownership, authority, validation, permissions, fallback, provider/model boundaries, and projection parity.
+- Keeps only the observed Copilot profile admitted; Antigravity and Codex remain unknown/not admitted, with no fabricated evidence or provider/model selection behavior.
+
 ## Unreleased UAI-8 negative and unknown capability testing
 
 - Adds a focused 15-scenario matrix for known, missing, unknown, contradictory, stale, policy-blocked, partial, and authority-expanding host/provider/transport/projection inputs.
