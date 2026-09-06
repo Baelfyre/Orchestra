@@ -78,10 +78,10 @@
     },
     {
       "id": "uai-provider-model-capability-contract",
-      "title": "UAI Provider/Model Capability Contract",
+      "title": "UAI Provider/Model Capability Contract and Shadow Broker",
       "kind": "machine_contract",
       "path": "machine/providers/provider-model-capability-contract.v1.json",
-      "authority_role": "PROVIDER_MODEL_CAPABILITY_EVIDENCE_WITHOUT_AUTHORITY"
+      "authority_role": "PROVIDER_MODEL_CAPABILITY_EVIDENCE_AND_SHADOW_ADVISORY_WITHOUT_AUTHORITY"
     },
     {
       "id": "uai-provider-model-capability-schema",

@@ -105,3 +105,13 @@ def test_contract_policy_cannot_authorize_provider_switching_or_learning() -> No
     assert any(error.startswith("SCHEMA_VALIDATION:evidence_policy") for error in errors)
     assert "AUTHORITY_OR_EVIDENCE_POLICY_DRIFT:evidence_policy.provider_switching_authorized" in errors
     assert "AUTHORITY_OR_EVIDENCE_POLICY_DRIFT:evidence_policy.learned_routing_promotion_authorized" in errors
+
+
+def test_broker_policy_is_shadow_only() -> None:
+    contract, schema = _canonical()
+    broker_policy = contract["broker_policy"]
+    assert isinstance(broker_policy, dict)
+    broker_policy["automatic_provider_switching"] = True
+    errors = validate_payload(contract, schema)
+    assert any(error.startswith("SCHEMA_VALIDATION:broker_policy") for error in errors)
+    assert "AUTHORITY_OR_BROKER_POLICY_DRIFT:broker_policy.automatic_provider_switching" in errors

@@ -2233,8 +2233,8 @@
       "next_action": "FINAL_EXACT_HEAD_RELEASE_QUALIFICATION"
     },
     "universal_adaptive_integration_uai": {
-      "status": "UAI_6_TRANSPORT_AND_FALLBACK_INTEGRATION_COMPLETE",
-      "purpose": "Versioned host and provider/model capability evidence, deterministic minimal transport selection and non-executing transport fallback planning, and canonical-source-backed portable projection parity that preserve Conductor specialist routing and AWF workflow topology without authority expansion.",
+      "status": "UAI_7_PROVIDER_CAPABILITY_BROKER_SHADOW_ADVISORY_COMPLETE",
+      "purpose": "Versioned host and provider/model capability evidence, deterministic minimal transport selection and non-executing transport fallback planning, shadow-only provider/model eligibility advice, and canonical-source-backed portable projection parity that preserve Conductor specialist routing and AWF workflow topology without authority expansion.",
       "human_sources": [
         "adapters/github-copilot/README.md",
         "adapters/github-copilot/probe-guide.md",
@@ -2254,6 +2254,8 @@
         "machine/schemas/provider-model-capability-contract.v1.schema.json",
         "scripts/validate_provider_model_capability_contract.py",
         "tests/runtime/test_provider_model_capability_contract.py",
+        "orchestra_runtime/domain/adaptive/provider_capability.py",
+        "tests/runtime/test_provider_capability_broker.py",
         "machine/hosts/integration-strategy-policy.v1.json",
         "machine/schemas/integration-strategy-policy.v1.schema.json",
         "orchestra_runtime/domain/adaptive/integration_strategy.py",
@@ -2276,6 +2278,7 @@
       "automatic_provider_routing": false,
       "automatic_provider_fallback": false,
       "transport_fallback": "DETERMINISTIC_NON_EXECUTING_CHAIN",
+      "provider_capability_broker": "SHADOW_ADVISORY_NON_AUTHORIZING",
       "learned_routing_promotion": false
     }
   },
@@ -2384,6 +2387,7 @@
     "host_capability_contract_schema": "machine/schemas/host-capability-contract.v1.schema.json",
     "provider_model_capability_contract": "machine/providers/provider-model-capability-contract.v1.json",
     "provider_model_capability_contract_schema": "machine/schemas/provider-model-capability-contract.v1.schema.json",
+    "provider_capability_broker": "orchestra_runtime/domain/adaptive/provider_capability.py",
     "integration_strategy_policy": "machine/hosts/integration-strategy-policy.v1.json",
     "integration_strategy_policy_schema": "machine/schemas/integration-strategy-policy.v1.schema.json",
     "transport_fallback_guide": "docs/setup/TRANSPORT_FALLBACK_INTEGRATION.md",
@@ -2590,6 +2594,7 @@
     "provider_model_capability_contract": "machine/providers/provider-model-capability-contract.v1.json",
     "provider_model_capability_contract_schema": "machine/schemas/provider-model-capability-contract.v1.schema.json",
     "provider_model_capability_contract_validator": "scripts/validate_provider_model_capability_contract.py",
+    "provider_capability_broker": "orchestra_runtime/domain/adaptive/provider_capability.py",
     "integration_strategy_policy": "machine/hosts/integration-strategy-policy.v1.json",
     "integration_strategy_policy_schema": "machine/schemas/integration-strategy-policy.v1.schema.json",
     "transport_fallback_guide": "docs/setup/TRANSPORT_FALLBACK_INTEGRATION.md",
