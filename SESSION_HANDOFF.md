@@ -4,8 +4,8 @@
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Current Public Release:** `v1.9.0`
-- **Release-Candidate Metadata:** `1.9.0` (`PUBLISHED_VERIFIED_COMPLETE`)
-- **Target Release:** `NONE_DECLARED`
+- **Release-Candidate Metadata:** `1.10.0` (`PREPARED_NOT_PUBLISHED`)
+- **Target Release:** `v1.10.0`
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.3.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.4.0 Release State:** `PUBLISHED_VERIFIED`
@@ -28,6 +28,12 @@
 - **Control Plane State:** `V1_9_0_CURRENT`
 - **MCP State:** `PUBLISHED_V1_6_STABLE_RETAINED_V1_7`
 - **Policy Activation:** `NOT_PERFORMED`
+
+## v1.10.0 Universal Adaptive Integration and Conductor Routing Candidate
+
+The v1.10.0 candidate is prepared from the post-v1.9.0 additive UAI and Conductor routing work. UAI-0 through UAI-10 are canonically verified, and the maintainer-run GitHub Copilot `/conductor` promotion retest passed. Copilot ran in Auto mode; the underlying provider/model remains unresolved and no provider/model profile is admitted.
+
+All 11 package/version surfaces and the host-update contract are aligned to `1.10.0`. Conductor remains the sole internal specialist router, with clear ownership permitting only a direct single-specialist fast route. No automatic provider routing/fallback, learned routing promotion, concurrency widening, AR-3, AR-4, deployment, tag, or GitHub Release publication is included. The exact post-merge candidate identity is recorded in the Padayon qualification report.
 
 ## v1.9.0 UI Execution Fidelity Publication Continuity
 

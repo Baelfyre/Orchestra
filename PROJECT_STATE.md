@@ -7,8 +7,8 @@
 - **Stable Continuation Branch:** `main`
 - **Current Public Release:** `v1.9.0`
 - **Release Status:** `v1.9.0 PUBLISHED_VERIFIED`
-- **Target Release:** `NONE_DECLARED`
-- **Release-Candidate Metadata:** `1.9.0` (`PUBLISHED_VERIFIED_COMPLETE`)
+- **Target Release:** `v1.10.0`
+- **Release-Candidate Metadata:** `1.10.0` (`PREPARED_NOT_PUBLISHED`)
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.3.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.4.0 Release State:** `PUBLISHED_VERIFIED`
@@ -30,9 +30,17 @@
 - **v1.8.0 Tag Ref:** lightweight `commit` ref targeting the exact release commit
 - **v1.8.0 GitHub Release:** id `RE_kwDOS_4UtM4WyusI`, immutable, non-draft, non-prerelease, independently verified latest
 - **v1.8.0 Post-Publication Verification:** PASS
-- **Control Plane State:** `V1_9_0_CURRENT`
+- **Control Plane State:** `V1_10_0_CANDIDATE`
 - **MCP State:** `PUBLISHED_V1_6_STABLE_RETAINED_V1_7`
 - **Policy Activation State:** `NOT_PERFORMED`
+
+## v1.10.0 Universal Adaptive Integration and Conductor Routing Candidate
+
+The v1.10.0 candidate is an additive, backward-compatible minor release candidate based on the post-v1.9.0 UAI and Conductor routing work. UAI-0 through UAI-10 are canonically verified, the maintainer-run GitHub Copilot `/conductor` promotion retest is `SUPPORTED_VERIFIED`, and Auto-mode provider/model identity remains unresolved and unadmitted.
+
+All 11 package/version surfaces and the host-update contract are aligned to `1.10.0`. Conductor remains the sole internal specialist router; clear ownership may enable a direct single-specialist fast route, but it does not bypass Conductor. UAI transport selection remains separate from AWF specialist routing, and automatic provider routing/fallback, learned routing promotion, concurrency widening, AR-3, and AR-4 remain out of scope.
+
+The candidate is `PREPARED_NOT_PUBLISHED`. Its exact canonical SHA, tree, and signature are determined by the governed protected merge and are recorded in the Padayon release-qualification report. No `v1.10.0` tag or GitHub Release is created by this candidate work.
 
 ## v1.9.0 UI Execution Fidelity Publication
 

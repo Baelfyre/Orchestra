@@ -6,6 +6,8 @@ The `v1.9.0` tag resolves directly to the exact release commit and carries the v
 
 The v1.9.0 release updates package/version metadata and current UIEF documentation. It does not promote scaffold-only hosts, refresh installed integrations, or change host maturity.
 
+The v1.10.0 candidate adds evidence-bounded UAI host capability and Conductor routing documentation. It preserves existing host maturity, keeps provider/model capability non-authorizing, and remains unpublished pending final human approval.
+
 Scaffold-only hosts are not full support claims. Promotion requirements and graduation order live in `docs/project/SCAFFOLD_ADAPTER_GRADUATION_CRITERIA.md`.
 
 | Host | Runtime Adapter | Status | Notes |

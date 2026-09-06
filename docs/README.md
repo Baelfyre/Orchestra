@@ -159,6 +159,8 @@ Murmurs changes presentation only. It does not alter authority, governance, vali
 
 The current public release is immutable `v1.9.0`, tagged at signed canonical commit `7129a690b041bddbf8b58f41db0c4a680317fda1` with GitHub Release `RE_kwDOS_4UtM4W2pDC`. Its exact-head qualification, canonical merge, tag, and release identity were independently verified.
 
+The `v1.10.0` Universal Adaptive Integration and Conductor Routing release candidate is prepared but unpublished. Its package/version surfaces are aligned to `1.10.0`; final publication remains a separate human approval gate.
+
 ## Developer extension path
 
 If your goal is to build an adapter, certify PRAP compatibility, understand host maturity, or inspect extension contracts, go directly to the [Developer Portal](developer/README.md).

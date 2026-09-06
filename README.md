@@ -126,6 +126,8 @@ The latest published release is **[v1.9.0: UI Execution Fidelity](https://github
 
 v1.9.0 completes the current UI execution fidelity program while preserving explicit evidence limits where the project did not establish stronger claims. Detailed release evidence, maturity records, and historical validation remain in the documentation instead of being duplicated here.
 
+The v1.10.0 Universal Adaptive Integration and Conductor Routing release candidate is prepared on current main from the post-v1.9.0 additive change set. It preserves Conductor as the sole internal specialist router, keeps direct fast-route semantics distinct from router bypass, and does not admit a provider/model profile from the Copilot Auto-mode evidence. Public release remains v1.9.0 until exact-head qualification and separate publication approval complete.
+
 See:
 
 - [Changelog](CHANGELOG.md)

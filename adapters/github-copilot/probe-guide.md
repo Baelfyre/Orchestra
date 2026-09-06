@@ -187,7 +187,7 @@ What external MCP tools are currently configured and callable in this session?
 Read lines 1-10 of plugin.json and show the exact version string without modifying the file.
 ```
 **Expected verified evidence**:
-- Copilot reads `plugin.json` and outputs `"version": "1.9.0"`.
+- Copilot reads `plugin.json` and outputs `"version": "1.10.0"` for the prepared candidate package surface.
 
 ---
 

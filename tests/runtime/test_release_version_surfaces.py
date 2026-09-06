@@ -4,7 +4,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-EXPECTED_VERSION = "1.9.0"
+EXPECTED_VERSION = "1.10.0"
 
 JSON_VERSION_SURFACES = (
     "plugin.json",

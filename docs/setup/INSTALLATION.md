@@ -8,6 +8,8 @@ The current public GitHub Release is `v1.9.0: UI Execution Fidelity`, published 
 
 The `v1.9.0` tag is a lightweight `commit` ref resolving directly to the release commit; there is no separate tag object. All package/version surfaces are normalized to `1.9.0`. Use tag `v1.9.0` when exact currently published content is required.
 
+The v1.10.0 release candidate is prepared but unpublished. Candidate package surfaces are aligned to `1.10.0`; use the v1.9.0 tag for the exact currently published content until a separately approved tag and GitHub Release exist.
+
 | Host | Install Surface | Current Status |
 |---|---|---|
 | Codex | Marketplace or repo-local fallback | Supported |

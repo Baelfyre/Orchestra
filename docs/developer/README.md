@@ -61,3 +61,5 @@ MCP remains transport, not authority. The current unit does not add Streamable H
 ## Public release boundary
 
 The current public release is immutable `v1.9.0` at signed canonical commit `7129a690b041bddbf8b58f41db0c4a680317fda1`. GitHub Release `RE_kwDOS_4UtM4W2pDC` and lightweight tag `v1.9.0` independently resolve to that exact identity.
+
+The v1.10.0 candidate adds the verified UAI host-capability and Conductor routing reconciliation surfaces without changing specialist ownership or granting provider/model selection authority. It is prepared but unpublished; provider/model identity for the Copilot Auto-mode evidence remains unresolved.

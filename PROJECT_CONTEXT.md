@@ -10,7 +10,7 @@ A governance-first specialist orchestration framework that routes complex AI-ass
 Open-source developer tooling and AI orchestration framework
 
 ## Current Stage
-v1.9.0 UI Execution Fidelity release (`PUBLISHED_VERIFIED`) follows the published v1.8.0 baseline. The signed canonical release commit is `7129a690b041bddbf8b58f41db0c4a680317fda1` with tree `babf0a0c61d4a073144891b295b1989c256513eb` and sole parent `75af3966722edfdde474e8fcf99a1b8002d1527f`; UIEF-5 through UIEF-10 are reconciled, while UIEF-7 and UIEF-9 retain explicit evidence limits. Tag `v1.9.0` and GitHub Release `RE_kwDOS_4UtM4W2pDC` are independently verified. Adaptive Host Integration is future work only.
+v1.10.0 Universal Adaptive Integration and Conductor Routing candidate (`PREPARED_NOT_PUBLISHED`) follows the published v1.9.0 baseline. The current public release remains v1.9.0 at signed canonical commit `7129a690b041bddbf8b58f41db0c4a680317fda1` with tree `babf0a0c61d4a073144891b295b1989c256513eb`; the candidate source baseline is canonical Orchestra `7cfc2b58c3cf3fb9f16d2a1e128bb01b74835b57`. UAI-0 through UAI-10 and the Conductor routing reconciliation are complete in the candidate scope. GitHub Copilot `/conductor` is `SUPPORTED_VERIFIED` from maintainer evidence, while Auto-mode provider/model identity remains unresolved and unadmitted. No v1.10.0 tag or GitHub Release exists.
 
 ## Primary Users
 Developers and maintainers who install Orchestra as a plugin, skill set, or runtime package inside supported or scaffold-only coding hosts.
@@ -58,7 +58,7 @@ The Orchestra Prime Directive is the stable constitutional boundary for developm
 - `python scripts/governance_check.py --strict` must pass.
 - The documentation-impact contract must pass and require the correct human/machine surfaces for the actual changed scope.
 - Prime Directive, Feature Admission, Candidate Maturity/Feature Freeze, autonomy lifecycle integration, qualification/evaluation/audit, recovery/retirement, and merge-readiness contract validators must pass when those surfaces are present or changed.
-- All 11 release/version surfaces and `machine/hosts/update-contract.v1.json#/package_version` are normalized to the published `1.9.0` release.
+- All 11 release/version surfaces and `machine/hosts/update-contract.v1.json#/package_version` are normalized to the v1.10.0 candidate; the current public release remains v1.9.0.
 - Required Analysis Compatibility must execute real exact-head CodeQL successfully before its compatibility status surface is accepted.
 - Native Windows, Ubuntu, and macOS validation must pass on the exact candidate where required by repository policy.
 - Release-candidate mutation-confidence and Cosmic Ray evidence must be fresh where repository policy triggers them.
