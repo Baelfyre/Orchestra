@@ -1,0 +1,41 @@
+{
+  "$schema": "./machine/schemas/provider-model-capability-contract.v1.schema.json",
+  "schema_version": "orchestra.provider-model-capability-contract.v1",
+  "contract_id": "orchestra-provider-model-capability",
+  "contract_revision": 1,
+  "contract_role": "canonical_uai_provider_model_capability_contract",
+  "authority": {
+    "capability_grants_execution_authority": false,
+    "capability_grants_routing_authority": false,
+    "capability_grants_specialist_selection_authority": false,
+    "capability_grants_workflow_topology_authority": false,
+    "capability_grants_provider_selection_authority": false,
+    "capability_grants_model_selection_authority": false,
+    "automatic_provider_switching": false,
+    "automatic_provider_fallback": false,
+    "learned_routing_promotion": false,
+    "execution_authorized": false
+  },
+  "capability_definitions": [
+    {"capability_id": "TOOL_CALLING", "category": "INTERACTION", "value_kind": "BOOLEAN"},
+    {"capability_id": "STRUCTURED_OUTPUT", "category": "OUTPUT", "value_kind": "BOOLEAN"},
+    {"capability_id": "CONTEXT_LIMITS", "category": "CONTEXT", "value_kind": "INTEGER_OR_RANGE"},
+    {"capability_id": "VISION_MULTIMODAL_INPUT", "category": "INPUT", "value_kind": "BOOLEAN"},
+    {"capability_id": "CODE_TERMINAL_EXPOSURE", "category": "EXECUTION", "value_kind": "ENUM_SET"},
+    {"capability_id": "SUB_AGENT_SUPPORT", "category": "ORCHESTRATION", "value_kind": "BOOLEAN"},
+    {"capability_id": "CONCURRENCY_EXPOSURE", "category": "ORCHESTRATION", "value_kind": "ENUM_SET"},
+    {"capability_id": "MCP_TOOL_COMPATIBILITY", "category": "TRANSPORT", "value_kind": "ENUM_SET"},
+    {"capability_id": "MODEL_SELECTION_CONTROLS", "category": "SELECTION", "value_kind": "ENUM_SET"},
+    {"capability_id": "REASONING_RUNTIME_MODES", "category": "RUNTIME", "value_kind": "ENUM_SET"},
+    {"capability_id": "PERMISSION_SEMANTICS", "category": "PERMISSION", "value_kind": "DESCRIPTIVE"},
+    {"capability_id": "PROVIDER_POLICY_RESTRICTIONS", "category": "POLICY", "value_kind": "DESCRIPTIVE"}
+  ],
+  "provider_model_profiles": [],
+  "evidence_policy": {
+    "positive_disposition_requires_current_evidence": true,
+    "unknown_identity_disposition": "UNKNOWN",
+    "static_declaration_disposition": "AVAILABLE_NOT_YET_VERIFIED",
+    "provider_switching_authorized": false,
+    "learned_routing_promotion_authorized": false
+  }
+}

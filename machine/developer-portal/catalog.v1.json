@@ -77,6 +77,27 @@
       "authority_role": "GUIDANCE_OVER_HOST_CAPABILITY_CONTRACT"
     },
     {
+      "id": "uai-provider-model-capability-contract",
+      "title": "UAI Provider/Model Capability Contract",
+      "kind": "machine_contract",
+      "path": "machine/providers/provider-model-capability-contract.v1.json",
+      "authority_role": "PROVIDER_MODEL_CAPABILITY_EVIDENCE_WITHOUT_AUTHORITY"
+    },
+    {
+      "id": "uai-provider-model-capability-schema",
+      "title": "UAI Provider/Model Capability Contract schema",
+      "kind": "machine_schema",
+      "path": "machine/schemas/provider-model-capability-contract.v1.schema.json",
+      "authority_role": "EVIDENCE_SCHEMA"
+    },
+    {
+      "id": "uai-provider-model-capability-guide",
+      "title": "UAI Provider/Model Capability Contract guide",
+      "kind": "human_guide",
+      "path": "docs/setup/PROVIDER_MODEL_CAPABILITY_CONTRACT.md",
+      "authority_role": "GUIDANCE_OVER_PROVIDER_MODEL_CAPABILITY_CONTRACT"
+    },
+    {
       "id": "specialist-registry",
       "title": "Specialist registry",
       "kind": "machine_contract",

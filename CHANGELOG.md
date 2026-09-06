@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased UAI-3 provider/model capability contract
+
+- Adds a provider/model-neutral capability vocabulary for tool calling, structured output, context limits, multimodal input, host-exposed execution, sub-agents, concurrency exposure, MCP compatibility, model selection, reasoning/runtime modes, permission semantics, and provider-policy restrictions.
+- Requires provenance and current freshness for positive provider/model capability profiles; the canonical profile set remains empty because no fresh provider/model observation is admitted by current evidence.
+- Keeps provider/model capability descriptive and non-authorizing. No automatic provider switching, fallback, credential changes, learned-routing promotion, specialist-routing change, AWF topology change, release, or deployment is included.
+
 ## Unreleased UAI-2 host capability contract
 
 - Adds a versioned UAI host capability contract, schema, evidence freshness fields, host-neutral transport compatibility, fail-closed validation, and Copilot capability profile evidence.
