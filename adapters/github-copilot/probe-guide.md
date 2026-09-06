@@ -35,7 +35,7 @@ Capabilities not yet proven on the live Copilot surface remain `AVAILABLE_NOT_YE
 ## Copy-Paste Execution Procedures for Maintainer
 
 ### Probe 1: Repository Instructions Observability
-**Surface**: GitHub Copilot Chat (VS Code, Web, or Cloud Agent)  
+**Surface**: GitHub Copilot Chat (VS Code, Web, or Cloud Agent)
 **Copy-paste prompt**:
 ```text
 According to the repository instructions for this project, what is the exclusive router and workflow orchestrator, and which specialist owns UI design?
@@ -46,7 +46,7 @@ According to the repository instructions for this project, what is the exclusive
 - Copilot cites `.github/copilot-instructions.md`.
 
 ### Probe 2: Agent Skills Discovery
-**Surface**: GitHub Copilot Chat  
+**Surface**: GitHub Copilot Chat
 **Copy-paste prompt**:
 ```text
 List all Orchestra skills available in this workspace and display the primary purpose of the 'clockwork' and 'cipher' skills.
@@ -55,7 +55,7 @@ List all Orchestra skills available in this workspace and display the primary pu
 - Copilot recognizes `skills/*/SKILL.md` or reports which skill directories are indexed.
 
 ### Probe 3: Custom Agent Dispatch
-**Surface**: GitHub Copilot Chat (agent selection menu or `@` mention)  
+**Surface**: GitHub Copilot Chat (agent selection menu or `@` mention)
 **Action**:
 - Type `@` in Copilot Chat to check whether `@conductor` or any custom agent is listed.
 - If available, enter:
@@ -66,7 +66,7 @@ List all Orchestra skills available in this workspace and display the primary pu
 - Copilot resolves `@conductor` as the custom agent and routes the task to `overseer` or `clockwork`.
 
 ### Probe 4: MCP Tool Visibility
-**Surface**: GitHub Copilot Chat (with MCP enabled)  
+**Surface**: GitHub Copilot Chat (with MCP enabled)
 **Copy-paste prompt**:
 ```text
 What external MCP tools are currently configured and callable in this session?
@@ -80,7 +80,7 @@ What external MCP tools are currently configured and callable in this session?
 - `code --list-extensions` -> `github.copilot` not installed in default local profile.
 
 ### Probe 7 & 8: File Access and Approval Controls
-**Surface**: GitHub Copilot Chat  
+**Surface**: GitHub Copilot Chat
 **Copy-paste prompt**:
 ```text
 Read line 1-10 of plugin.json and show the exact version string without modifying the file.
@@ -89,12 +89,12 @@ Read line 1-10 of plugin.json and show the exact version string without modifyin
 - Copilot reads `plugin.json` and outputs `"version": "1.9.0"`.
 
 ### Probe 9: Model Selection Controls
-**Surface**: GitHub Copilot Chat UI  
+**Surface**: GitHub Copilot Chat UI
 **Action**:
 - Check the model dropdown in the Copilot Chat interface.
 - Record the exact list of available models (e.g., `Claude 3.5 Sonnet`, `GPT-4o`, `o1-preview`, `o1-mini`).
 
 ### Probe 10: Policy Restrictions
-**Surface**: GitHub Copilot Chat / GitHub.com settings  
+**Surface**: GitHub Copilot Chat / GitHub.com settings
 **Action**:
 - Check whether any features are marked disabled by organization or account policy (e.g., CLI disabled, telemetry policy, model restrictions).
