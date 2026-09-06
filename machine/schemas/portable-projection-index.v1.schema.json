@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/portable-projection-index.v1.schema.json",
+  "title": "Orchestra UAI Portable Projection Index v1",
+  "description": "Deterministic generated parity evidence for canonical-source-backed host projections.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "contract_id", "contract_revision", "generated_from", "authority", "projections", "parity_status"],
+  "properties": {
+    "$schema": {"const": "./machine/schemas/portable-projection-index.v1.schema.json"},
+    "schema_version": {"const": "orchestra.portable-projection-index.v1"},
+    "contract_id": {"const": "orchestra-uai-portable-projection"},
+    "contract_revision": {"const": 1},
+    "generated_from": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["contract_path", "contract_sha256"],
+      "properties": {
+        "contract_path": {"const": "machine/projections/portable-projection-contract.v1.json"},
+        "contract_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical_source_remains_authoritative", "generated_projection_is_derived_only", "projection_grants_execution_authority", "projection_grants_routing_authority", "projection_grants_specialist_selection_authority", "projection_grants_workflow_topology_authority", "projection_grants_provider_selection_authority", "projection_grants_governance_authority", "installed_integration_refresh", "automatic_provider_routing", "automatic_provider_fallback", "learned_routing_promotion"],
+      "properties": {
+        "canonical_source_remains_authoritative": {"const": true},
+        "generated_projection_is_derived_only": {"const": true},
+        "projection_grants_execution_authority": {"const": false},
+        "projection_grants_routing_authority": {"const": false},
+        "projection_grants_specialist_selection_authority": {"const": false},
+        "projection_grants_workflow_topology_authority": {"const": false},
+        "projection_grants_provider_selection_authority": {"const": false},
+        "projection_grants_governance_authority": {"const": false},
+        "installed_integration_refresh": {"const": false},
+        "automatic_provider_routing": {"const": false},
+        "automatic_provider_fallback": {"const": false},
+        "learned_routing_promotion": {"const": false}
+      }
+    },
+    "projections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["projection_id", "host_id", "strategy_id", "format", "output_path", "output_sha256", "source_digests", "matched_markers", "parity"],
+        "properties": {
+          "projection_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]+$"},
+          "host_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]+$"},
+          "strategy_id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"},
+          "format": {"type": "string", "minLength": 1},
+          "output_path": {"type": "string", "minLength": 1},
+          "output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "source_digests": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["source_id", "path", "sha256"],
+              "properties": {
+                "source_id": {"type": "string", "pattern": "^[a-z][a-z0-9_]+$"},
+                "path": {"type": "string", "minLength": 1},
+                "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+              }
+            }
+          },
+          "matched_markers": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "parity": {"const": "PASS"}
+        }
+      }
+    },
+    "parity_status": {"const": "PASS"}
+  }
+}

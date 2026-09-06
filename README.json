@@ -2233,13 +2233,14 @@
       "next_action": "FINAL_EXACT_HEAD_RELEASE_QUALIFICATION"
     },
     "universal_adaptive_integration_uai": {
-      "status": "UAI_4_INTEGRATION_STRATEGY_RESOLVER_COMPLETE_CANONICAL_VERIFIED",
-      "purpose": "Versioned host and provider/model capability evidence plus deterministic minimal transport selection that preserve Conductor specialist routing and AWF workflow topology without authority expansion.",
+      "status": "UAI_5_PORTABLE_PROJECTION_COMPILER_COMPLETE_CANONICAL_VERIFIED",
+      "purpose": "Versioned host and provider/model capability evidence, deterministic minimal transport selection, and canonical-source-backed portable projection parity that preserve Conductor specialist routing and AWF workflow topology without authority expansion.",
       "human_sources": [
         "adapters/github-copilot/README.md",
         "adapters/github-copilot/probe-guide.md",
         "docs/setup/HOST_CAPABILITY_CONTRACT.md",
-        "docs/setup/PROVIDER_MODEL_CAPABILITY_CONTRACT.md"
+        "docs/setup/PROVIDER_MODEL_CAPABILITY_CONTRACT.md",
+        "docs/setup/PORTABLE_PROJECTION_COMPILER.md"
       ],
       "machine_sources": [
         "adapters/github-copilot/copilot-instructions.template.md",
@@ -2255,7 +2256,13 @@
         "machine/hosts/integration-strategy-policy.v1.json",
         "machine/schemas/integration-strategy-policy.v1.schema.json",
         "orchestra_runtime/domain/adaptive/integration_strategy.py",
-        "tests/runtime/test_integration_strategy.py"
+        "tests/runtime/test_integration_strategy.py",
+        "machine/projections/portable-projection-contract.v1.json",
+        "machine/schemas/portable-projection-contract.v1.schema.json",
+        "machine/schemas/portable-projection-index.v1.schema.json",
+        "machine/projections/portable-projection-index.v1.json",
+        "scripts/compile_portable_projections.py",
+        "tests/runtime/test_portable_projection_compiler.py"
       ],
       "probed_hosts": [
         "github-copilot"
@@ -2377,6 +2384,11 @@
     "provider_model_capability_contract_schema": "machine/schemas/provider-model-capability-contract.v1.schema.json",
     "integration_strategy_policy": "machine/hosts/integration-strategy-policy.v1.json",
     "integration_strategy_policy_schema": "machine/schemas/integration-strategy-policy.v1.schema.json",
+    "portable_projection_contract": "machine/projections/portable-projection-contract.v1.json",
+    "portable_projection_contract_schema": "machine/schemas/portable-projection-contract.v1.schema.json",
+    "portable_projection_index_schema": "machine/schemas/portable-projection-index.v1.schema.json",
+    "portable_projection_index": "machine/projections/portable-projection-index.v1.json",
+    "portable_projection_compiler": "scripts/compile_portable_projections.py",
     "prap_certification_contract": "machine/protocol/prap-certification-contract.v1.json",
     "developer_portal_catalog": "machine/developer-portal/catalog.v1.json",
     "murmurs_presentation_policy": "machine/presentation/murmurs-policy.v1.json",
@@ -2577,6 +2589,10 @@
     "provider_model_capability_contract_validator": "scripts/validate_provider_model_capability_contract.py",
     "integration_strategy_policy": "machine/hosts/integration-strategy-policy.v1.json",
     "integration_strategy_policy_schema": "machine/schemas/integration-strategy-policy.v1.schema.json",
+    "portable_projection_contract": "machine/projections/portable-projection-contract.v1.json",
+    "portable_projection_contract_schema": "machine/schemas/portable-projection-contract.v1.schema.json",
+    "portable_projection_index": "machine/projections/portable-projection-index.v1.json",
+    "portable_projection_compiler": "scripts/compile_portable_projections.py",
     "uai_routing_boundaries": "adapters/github-copilot/probe-guide.md",
     "adapter_sdk_reference": "docs/setup/ADAPTER_SDK_PRAP.md",
     "adapter_sdk_stable_import_surface": "orchestra_runtime.protocol.sdk",
@@ -2687,6 +2703,7 @@
     "compatibility": "docs/setup/COMPATIBILITY.md",
     "host_capability_contract": "docs/setup/HOST_CAPABILITY_CONTRACT.md",
     "provider_model_capability_contract": "docs/setup/PROVIDER_MODEL_CAPABILITY_CONTRACT.md",
+    "portable_projection_compiler": "docs/setup/PORTABLE_PROJECTION_COMPILER.md",
     "validation": "docs/setup/VALIDATION.md",
     "developer_portal": "docs/developer/README.md",
     "mcp_transport": "docs/developer/MCP_STDIO_TRANSPORT.md",

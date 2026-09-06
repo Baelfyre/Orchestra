@@ -107,6 +107,7 @@ Cross-repository continuity may be supplied by a user-selected external continui
 - [Host Updates](setup/HOST_UPDATES.md): governed read-only host update planning.
 - [UAI Host Capability Contract](setup/HOST_CAPABILITY_CONTRACT.md): versioned host capability evidence and transport compatibility without authority expansion.
 - [UAI Provider/Model Capability Contract](setup/PROVIDER_MODEL_CAPABILITY_CONTRACT.md): provider/model-neutral technical capability vocabulary and evidence boundaries without provider selection.
+- [UAI Portable Projection Compiler](setup/PORTABLE_PROJECTION_COMPILER.md): canonical-source-backed host projection parity without installed-integration refresh or authority expansion.
 - [Adapter SDK and PRAP v1](setup/ADAPTER_SDK_PRAP.md): stable adapter SDK and deterministic compatibility certification.
 - [Developer Portal](developer/README.md): extension and integration discovery surface.
 - [MCP stdio Transport](developer/MCP_STDIO_TRANSPORT.md): first bounded MCP tools transport.
@@ -117,6 +118,10 @@ Cross-repository continuity may be supplied by a user-selected external continui
 - `../machine/schemas/host-capability-contract.v1.schema.json`: UAI host capability contract schema.
 - `../machine/providers/provider-model-capability-contract.v1.json`: UAI provider/model capability contract.
 - `../machine/schemas/provider-model-capability-contract.v1.schema.json`: UAI provider/model capability contract schema.
+- `../machine/projections/portable-projection-contract.v1.json`: canonical source and derived projection contract.
+- `../machine/projections/portable-projection-index.v1.json`: generated machine-checkable projection parity index.
+- `../machine/schemas/portable-projection-contract.v1.schema.json`: portable projection contract schema.
+- `../machine/schemas/portable-projection-index.v1.schema.json`: generated parity index schema.
 - `../machine/protocol/prap-certification-contract.v1.json`: PRAP certification contract.
 - `../machine/developer-portal/catalog.v1.json`: machine Developer Portal catalog.
 

@@ -112,6 +112,27 @@
       "authority_role": "EVIDENCE_SCHEMA"
     },
     {
+      "id": "uai-portable-projection-contract",
+      "title": "UAI Portable Projection Contract",
+      "kind": "machine_contract",
+      "path": "machine/projections/portable-projection-contract.v1.json",
+      "authority_role": "CANONICAL_SOURCE_AND_DERIVED_PROJECTION_BOUNDARY"
+    },
+    {
+      "id": "uai-portable-projection-index",
+      "title": "UAI Portable Projection Parity Index",
+      "kind": "machine_contract",
+      "path": "machine/projections/portable-projection-index.v1.json",
+      "authority_role": "GENERATED_PARITY_EVIDENCE_ONLY"
+    },
+    {
+      "id": "uai-portable-projection-guide",
+      "title": "UAI Portable Projection Compiler guide",
+      "kind": "human_guide",
+      "path": "docs/setup/PORTABLE_PROJECTION_COMPILER.md",
+      "authority_role": "GUIDANCE_OVER_DERIVED_PROJECTION_COMPILER"
+    },
+    {
       "id": "specialist-registry",
       "title": "Specialist registry",
       "kind": "machine_contract",
