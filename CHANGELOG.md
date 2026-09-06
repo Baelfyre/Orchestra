@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased UAI-6 transport and fallback integration
+
+- Adds a deterministic, non-executing transport fallback chain layered on the UAI integration strategy resolver.
+- Keeps fallback candidates evidence-supported, capability-compatible, policy-allowed, and authority-preserving; no fallback exists when the resolver cannot establish a supported transport.
+- Explicitly prohibits automatic provider fallback and preserves Conductor specialist routing, AWF workflow topology, model selection, credentials, release, and deployment boundaries.
+
 ## Unreleased UAI-5 portable projection compiler
 
 - Adds a canonical-source-backed projection contract and deterministic parity index for the tracked GitHub Copilot repository-instruction and custom-agent surfaces.

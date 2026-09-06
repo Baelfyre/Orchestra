@@ -53,7 +53,7 @@
         {
           "source_id": "integration_strategy_policy",
           "path": "machine/hosts/integration-strategy-policy.v1.json",
-          "sha256": "e4d202fbde15a7cb1144ed33321245fc15e561cf233aab911ea97f3deae854fa"
+          "sha256": "d64077135cbd3ee9ca49f71be7bb450fed6611a0eb7053156d399799101256d9"
         },
         {
           "source_id": "conductor_skill",
@@ -105,7 +105,7 @@
         {
           "source_id": "integration_strategy_policy",
           "path": "machine/hosts/integration-strategy-policy.v1.json",
-          "sha256": "e4d202fbde15a7cb1144ed33321245fc15e561cf233aab911ea97f3deae854fa"
+          "sha256": "d64077135cbd3ee9ca49f71be7bb450fed6611a0eb7053156d399799101256d9"
         },
         {
           "source_id": "conductor_skill",
@@ -157,7 +157,7 @@
         {
           "source_id": "integration_strategy_policy",
           "path": "machine/hosts/integration-strategy-policy.v1.json",
-          "sha256": "e4d202fbde15a7cb1144ed33321245fc15e561cf233aab911ea97f3deae854fa"
+          "sha256": "d64077135cbd3ee9ca49f71be7bb450fed6611a0eb7053156d399799101256d9"
         },
         {
           "source_id": "conductor_skill",

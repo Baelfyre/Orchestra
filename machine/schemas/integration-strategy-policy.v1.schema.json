@@ -4,7 +4,7 @@
   "title": "Orchestra UAI Integration Strategy Policy v1",
   "type": "object",
   "additionalProperties": false,
-  "required": ["$schema", "schema_version", "contract_id", "contract_revision", "contract_role", "authority", "selection_policy", "strategies"],
+  "required": ["$schema", "schema_version", "contract_id", "contract_revision", "contract_role", "authority", "fallback_policy", "selection_policy", "strategies"],
   "properties": {
     "$schema": {"const": "./machine/schemas/integration-strategy-policy.v1.schema.json"},
     "schema_version": {"const": "orchestra.integration-strategy-policy.v1"},
@@ -22,6 +22,18 @@
         "provider_selection_changed": {"const": false},
         "automatic_fallback": {"const": false},
         "credentials_mutated": {"const": false}
+      }
+    },
+    "fallback_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "fallback_plan_is_non_executing", "same_authority_model_required", "automatic_provider_fallback", "fail_closed_when_no_supported_transport"],
+      "properties": {
+        "mode": {"const": "DETERMINISTIC_TRANSPORT_CHAIN"},
+        "fallback_plan_is_non_executing": {"const": true},
+        "same_authority_model_required": {"const": true},
+        "automatic_provider_fallback": {"const": false},
+        "fail_closed_when_no_supported_transport": {"const": true}
       }
     },
     "selection_policy": {

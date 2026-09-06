@@ -10,6 +10,7 @@ from orchestra_runtime.domain.adaptive.integration_strategy import (
     IntegrationStrategyRequirements,
     TransportCapabilityEvidence,
     resolve_integration_strategy,
+    resolve_transport_fallback,
 )
 
 
@@ -90,3 +91,42 @@ def test_limits_are_explicit_and_duplicate_options_fail() -> None:
         assert "one record per strategy" in str(exc)
     else:
         raise AssertionError("duplicate strategy options must fail closed")
+
+
+def test_transport_fallback_is_deterministic_and_non_authorizing() -> None:
+    decision = resolve_transport_fallback(
+        IntegrationStrategyRequirements(("instructions",)),
+        (
+            option("REPOSITORY_INSTRUCTIONS", installation_complexity=0),
+            option("WORKSPACE_INSTRUCTIONS", installation_complexity=1),
+            option("MCP_TRANSPORT", installation_complexity=2),
+        ),
+    )
+    assert decision.primary_decision.selected_strategy is IntegrationStrategy.REPOSITORY_INSTRUCTIONS
+    assert decision.fallback_strategies == (
+        IntegrationStrategy.WORKSPACE_INSTRUCTIONS,
+        IntegrationStrategy.MCP_TRANSPORT,
+    )
+    assert decision.reason_codes == (
+        "DETERMINISTIC_TRANSPORT_FALLBACK_CHAIN",
+        "FALLBACK_NON_AUTOMATIC",
+        "PROVIDER_FALLBACK_PROHIBITED",
+    )
+    assert decision.transport_fallback_only is True
+    assert decision.automatic_provider_fallback is False
+    assert decision.primary_decision.specialist_routing_changed is False
+    assert decision.primary_decision.workflow_topology_changed is False
+    assert decision.primary_decision.provider_selection_changed is False
+
+
+def test_transport_fallback_fails_closed_without_supported_evidence() -> None:
+    decision = resolve_transport_fallback(
+        IntegrationStrategyRequirements(("tools",)),
+        (option("MCP_TRANSPORT", disposition="UNKNOWN"),),
+    )
+    assert decision.fail_closed is True
+    assert decision.fallback_strategies == ()
+    assert decision.reason_codes == (
+        "NO_EVIDENCE_SUPPORTED_TRANSPORT",
+        "TRANSPORT_FALLBACK_FAIL_CLOSED",
+    )

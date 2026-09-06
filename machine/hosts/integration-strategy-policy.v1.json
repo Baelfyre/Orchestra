@@ -12,6 +12,13 @@
     "automatic_fallback": false,
     "credentials_mutated": false
   },
+  "fallback_policy": {
+    "mode": "DETERMINISTIC_TRANSPORT_CHAIN",
+    "fallback_plan_is_non_executing": true,
+    "same_authority_model_required": true,
+    "automatic_provider_fallback": false,
+    "fail_closed_when_no_supported_transport": true
+  },
   "selection_policy": {
     "eligible_dispositions": ["SUPPORTED_VERIFIED", "SUPPORTED_WITH_LIMITS"],
     "authority_preserved_required": true,
