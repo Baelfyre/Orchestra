@@ -74,6 +74,8 @@ Repository and runtime validation produce evidence about structure, behavior, co
 
 Adapters, PRAP, host-update tooling, the Developer Portal, and MCP expose or describe Orchestra capabilities without creating a second authority model.
 
+For UAI integrations, host transport selection is separate from specialist and workflow routing. Clear ownership may enable a Conductor-selected direct single-specialist fast route, but `CLEAR_OWNERSHIP != CONDUCTOR_BYPASS` and `FAST_ROUTE != ROUTER_BYPASS`; host capability never grants routing or execution authority.
+
 - [Adapter SDK and PRAP v1](../setup/ADAPTER_SDK_PRAP.md)
 - [Host Updates](../setup/HOST_UPDATES.md)
 - [Developer Portal](../developer/README.md)
