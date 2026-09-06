@@ -1,5 +1,16 @@
 # Roadmap
 
+## v1.10.0 Universal Adaptive Integration and Conductor Routing - Release Candidate
+
+The v1.10.0 candidate is an additive minor release prepared from the post-v1.9.0 change set. UAI-0 through UAI-10 are canonically verified, and maintainer evidence promotes GitHub Copilot `/conductor` to `SUPPORTED_VERIFIED` without admitting an Auto-mode provider/model identity.
+
+- [x] Preserve Conductor as the sole internal specialist router and distinguish clear-ownership fast routing from router bypass.
+- [x] Keep UAI transport selection separate from AWF specialist routing and provider/model eligibility.
+- [x] Preserve deterministic AWF, OEE, UIEF/UIX, specialist parity, architecture, machine-contract, packaging, security, and governance boundaries.
+- [x] Align all 11 package/version surfaces and the host-update contract to `1.10.0`.
+- [ ] Complete exact-head release qualification and reconcile the resulting candidate identity to Padayon.
+- [ ] Publish a tag or GitHub Release only after separate final human approval; publication is not part of this candidate.
+
 ## v1.9.0 UI Execution Fidelity - Published
 
 The published v1.9.0 release carries UIEF-5 through UIEF-10 forward from the canonical UIEF plan. UIEF-5 is preserved at Orchestra `75af3966722edfdde474e8fcf99a1b8002d1527f`; the v1.9.0 release is signed canonical commit `7129a690b041bddbf8b58f41db0c4a680317fda1` with exact tag/release verification. UIEF-7 and UIEF-9 retain explicit evidence limits.
