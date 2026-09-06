@@ -1,13 +1,14 @@
 # Changelog
 
-## v1.10.0 Universal Adaptive Integration and Conductor Routing - release candidate - prepared
+## v1.10.0 Universal Adaptive Integration and Conductor Routing - published
 
 - Packages the additive post-v1.9.0 UAI-0 through UAI-10 completion, including the canonical host capability contract, strategy/transport boundaries, portable projections, deterministic fallback planning, shadow-only provider capability classification, negative capability tests, cross-host conformance, and maturity closeout.
 - Records maintainer-verified GitHub Copilot `/conductor` support as `SUPPORTED_VERIFIED` after the required promotion retest. Copilot ran in Auto mode; the underlying provider/model remains unresolved and no provider/model profile is admitted.
 - Preserves Conductor as the sole internal specialist router. Clear ownership may enable a direct single-specialist fast route, but `CLEAR_OWNERSHIP != CONDUCTOR_BYPASS`, `FAST_ROUTE != ROUTER_BYPASS`, and `UAI_TRANSPORT_SELECTION != AWF_SPECIALIST_ROUTING` remain enforced.
 - Keeps automatic provider routing/fallback, learned routing promotion, concurrency widening, AR-3, AR-4, deployment, credentials, policy activation, installed-integration refresh, and marketplace publication out of scope.
 - Aligns all 11 package/version surfaces and the host-update contract to `1.10.0`.
-- Candidate status is `PREPARED_NOT_PUBLISHED`; no tag or GitHub Release is created by this entry.
+- Published from exact signed commit `756a358f96363f0c377b049adcd87b1991d5aef6`, tree `42c0c8929c4dcfa5b17ff2feb293710d2468ca51`, lightweight tag `v1.10.0`, and GitHub Release `383668751`.
+- Post-publication documentation normalization adds the stable `docs/reference/` navigation layer without moving identity-bound or dependency-bound legacy documents.
 
 ## Unreleased Conductor routing reconciliation
 

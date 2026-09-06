@@ -1,6 +1,6 @@
 # Orchestra Developer Portal
 
-The Developer Portal is Orchestra's repository-native discovery surface for developers extending or integrating with the current v1.9.0 contracts. It is documentation and indexing only. It is not a hosted service, marketplace, package registry, deployment plane, policy authority, or runtime permission source.
+The Developer Portal is Orchestra's repository-native discovery surface for developers extending or integrating with the current v1.10.0 contracts. It is documentation and indexing only. It is not a hosted service, marketplace, package registry, deployment plane, policy authority, or runtime permission source.
 
 ## Start here
 
@@ -60,6 +60,6 @@ MCP remains transport, not authority. The current unit does not add Streamable H
 
 ## Public release boundary
 
-The current public release is immutable `v1.9.0` at signed canonical commit `7129a690b041bddbf8b58f41db0c4a680317fda1`. GitHub Release `RE_kwDOS_4UtM4W2pDC` and lightweight tag `v1.9.0` independently resolve to that exact identity.
+The current public release is immutable `v1.10.0` at signed canonical commit `756a358f96363f0c377b049adcd87b1991d5aef6` and tree `42c0c8929c4dcfa5b17ff2feb293710d2468ca51`. GitHub Release `383668751` and lightweight tag `v1.10.0` independently resolve to that exact identity.
 
-The v1.10.0 candidate adds the verified UAI host-capability and Conductor routing reconciliation surfaces without changing specialist ownership or granting provider/model selection authority. It is prepared but unpublished; provider/model identity for the Copilot Auto-mode evidence remains unresolved.
+The published v1.10.0 release adds the verified UAI host-capability and Conductor routing reconciliation surfaces without changing specialist ownership or granting provider/model selection authority. Provider/model identity for the Copilot Auto-mode evidence remains unresolved and unadmitted. The preserved candidate/readiness documents remain historical qualification evidence.

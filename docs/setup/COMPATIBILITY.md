@@ -1,12 +1,12 @@
 # Compatibility
 
-The current public GitHub Release is Orchestra `v1.9.0: UI Execution Fidelity`, published from lightweight tag `v1.9.0` at exact GitHub-verified signed release commit `7129a690b041bddbf8b58f41db0c4a680317fda1`. The release is non-draft, non-prerelease, immutable, and independently verified as latest.
+The current public GitHub Release is Orchestra `v1.10.0: Universal Adaptive Integration`, published from lightweight tag `v1.10.0` at exact GitHub-verified signed release commit `756a358f96363f0c377b049adcd87b1991d5aef6`. The release is non-draft, non-prerelease, immutable, and independently verified as latest.
 
-The `v1.9.0` tag resolves directly to the exact release commit and carries the v1.8.0 governance/runtime foundation plus the UIEF-5 through UIEF-10 closeout. Publication did not graduate scaffold-only hosts or publish those scaffold surfaces to marketplaces.
+The `v1.10.0` tag resolves directly to the exact release commit and carries the v1.9.0 UIEF closeout plus the verified UAI-0 through UAI-10 and Conductor routing work. Publication did not graduate scaffold-only hosts or publish those scaffold surfaces to marketplaces.
 
-The v1.9.0 release updates package/version metadata and current UIEF documentation. It does not promote scaffold-only hosts, refresh installed integrations, or change host maturity.
+The v1.10.0 release updates package/version metadata and current UAI documentation. It does not promote scaffold-only hosts, refresh installed integrations, or change host maturity.
 
-The v1.10.0 candidate adds evidence-bounded UAI host capability and Conductor routing documentation. It preserves existing host maturity, keeps provider/model capability non-authorizing, and remains unpublished pending final human approval.
+The v1.10.0 publication preserves existing host maturity, keeps provider/model capability non-authorizing, and does not infer the provider/model behind Copilot Auto mode.
 
 Scaffold-only hosts are not full support claims. Promotion requirements and graduation order live in `docs/project/SCAFFOLD_ADAPTER_GRADUATION_CRITERIA.md`.
 

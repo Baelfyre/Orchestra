@@ -3,7 +3,7 @@
 This document describes `orchestra_runtime/` as the reusable runtime core for Orchestra.
 
 Historical implementation baseline: `release/v1.0.0-portable-runtime`
-Current public release line: `v1.9.0`
+Current public release line: `v1.10.0`
 
 ## Why this exists
 

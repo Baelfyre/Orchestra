@@ -4,11 +4,11 @@ Orchestra can be installed in several ways depending on your AI host or IDE.
 
 ## Release Status
 
-The current public GitHub Release is `v1.9.0: UI Execution Fidelity`, published from lightweight tag `v1.9.0` at exact GitHub-verified signed release commit `7129a690b041bddbf8b58f41db0c4a680317fda1`. The release is non-draft, non-prerelease, immutable, and independently verified as latest.
+The current public GitHub Release is `v1.10.0: Universal Adaptive Integration`, published from lightweight tag `v1.10.0` at exact GitHub-verified signed release commit `756a358f96363f0c377b049adcd87b1991d5aef6`. The release is non-draft, non-prerelease, immutable, and independently verified as latest.
 
-The `v1.9.0` tag is a lightweight `commit` ref resolving directly to the release commit; there is no separate tag object. All package/version surfaces are normalized to `1.9.0`. Use tag `v1.9.0` when exact currently published content is required.
+The `v1.10.0` tag is a lightweight `commit` ref resolving directly to the release commit; there is no separate tag object. All package/version surfaces are normalized to `1.10.0`. Use tag `v1.10.0` when exact currently published content is required.
 
-The v1.10.0 release candidate is prepared but unpublished. Candidate package surfaces are aligned to `1.10.0`; use the v1.9.0 tag for the exact currently published content until a separately approved tag and GitHub Release exist.
+The v1.10.0 published reference and preserved candidate/readiness evidence are linked from `docs/reference/releases/v1.10.0.md`. Provider/model identity for Copilot Auto mode remains unresolved and unadmitted.
 
 | Host | Install Surface | Current Status |
 |---|---|---|
