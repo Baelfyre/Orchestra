@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased Conductor routing reconciliation
+
+- Makes Conductor the explicit router for every specialist selection while preserving a lightweight direct single-specialist fast route for clear ownership.
+- Separates fast-route overhead reduction from router bypass, keeps Tuner activation conditional, and adds native/Codex regression coverage for the boundary.
+- Does not execute or promote live GitHub Copilot evidence, change AWF topology, add provider routing/fallback, or publish a release.
+
 ## Unreleased UAI-10 maturity and closeout
 
 - Records UAI maturity boundaries after cross-host conformance: Copilot remains the only admitted observed host, provider/model profiles remain empty, transport fallback remains non-executing, and projections remain derived-only.

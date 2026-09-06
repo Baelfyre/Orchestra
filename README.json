@@ -1641,6 +1641,7 @@
         "tests/runtime/test_uix9_live_proof_protocol.py"
       ],
       "frozen_conductor_skill": true,
+      "conductor_routing_reconciliation": "CANONICAL_FAST_ROUTE_NO_BYPASS",
       "uix9_baseline_rewritten": false,
       "capacity_questionnaire": "DECISION_DEPENDENCY_ONLY",
       "minimum_route_composition": "CONDITIONAL_SPECIALIST_STACK",

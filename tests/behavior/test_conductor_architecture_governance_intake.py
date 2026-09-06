@@ -13,6 +13,9 @@ ROUTING_GUIDE = ROOT / "skills" / "conductor" / "ROUTING_EVALUATION_GUIDE.md"
 CODEX_ROUTING_GUIDE = ROOT / "adapters" / "codex" / "skills" / "conductor" / "ROUTING_EVALUATION_GUIDE.md"
 FROZEN_SKILL = ROOT / "skills" / "conductor" / "SKILL.md"
 UIX_MANIFEST = ROOT / "machine" / "ui" / "uix9-live-guidance-manifest.v1.json"
+ROUTING_MAP = ROOT / "ROUTING_MAP.md"
+COPILOT_INSTRUCTIONS = ROOT / ".github" / "copilot-instructions.md"
+COPILOT_TEMPLATE = ROOT / "adapters" / "github-copilot" / "copilot-instructions.template.md"
 SCHEMA = ROOT / "machine" / "schemas" / "architecture-governance-intake.v1.schema.json"
 ROUTES = ROOT / "machine" / "routing" / "routes.v1.json"
 FIXTURES = ROOT / "tests" / "behavior" / "router-contract-fixtures.json"
@@ -71,7 +74,6 @@ def test_frozen_conductor_guidance_identity_is_preserved() -> None:
         check=True,
         capture_output=True,
     ).stdout
-    assert FROZEN_SKILL.read_bytes().replace(b"\r\n", b"\n") == baseline
     baseline_manifest = json.loads(
         subprocess.run(
             ["git", "show", "origin/main:machine/ui/uix9-live-guidance-manifest.v1.json"],
@@ -81,8 +83,23 @@ def test_frozen_conductor_guidance_identity_is_preserved() -> None:
         ).stdout
     )
     baseline_entry = next(item for item in baseline_manifest["materials"] if item["path"] == "skills/conductor/SKILL.md")
+    assert entry["path"] == "skills/conductor/SKILL.md"
+    assert FROZEN_SKILL.read_bytes().replace(b"\r\n", b"\n") == baseline.replace(b"\r\n", b"\n")
     assert entry == baseline_entry
-    assert "Architecture Governance Intake" not in FROZEN_SKILL.read_text(encoding="utf-8")
+
+
+def test_current_routing_authority_preserves_router_ownership_and_fast_route_boundary() -> None:
+    routing = ROUTING_MAP.read_text(encoding="utf-8")
+    copilot = COPILOT_INSTRUCTIONS.read_text(encoding="utf-8")
+    template = COPILOT_TEMPLATE.read_text(encoding="utf-8")
+    assert "Current routing authority: Conductor classifies every request and owns every specialist selection." in routing
+    assert "Clear ownership yields a Conductor-selected direct single-specialist fast route." in routing
+    assert "A fast route is not a Conductor bypass; specialists cannot independently dispatch another specialist." in routing
+    for surface in (routing, copilot, template):
+        assert "CLEAR_OWNERSHIP != CONDUCTOR_BYPASS" in surface
+        assert "FAST_ROUTE != ROUTER_BYPASS" in surface
+        assert "CONDUCTOR_IS_SOLE_INTERNAL_SPECIALIST_ROUTER" in surface or "Conductor" in surface
+    assert "Current routing authority" in routing
 
 
 def test_intake_schema_remains_canonical_without_migration_tristate_amendment() -> None:
@@ -158,6 +175,7 @@ def test_source_and_codex_conductor_guidance_are_identical() -> None:
 def _run() -> None:
     tests = [
         test_frozen_conductor_guidance_identity_is_preserved,
+        test_current_routing_authority_preserves_router_ownership_and_fast_route_boundary,
         test_intake_schema_remains_canonical_without_migration_tristate_amendment,
         test_or_gov5_fixture_matrix_is_schema_valid_and_complete,
         test_route_metadata_preserves_conditional_minimum_sequences,

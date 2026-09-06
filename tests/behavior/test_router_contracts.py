@@ -103,17 +103,17 @@ def test_protocol_loaded_during_classification_fails():
         temp.cleanup()
 
 
-def test_obvious_single_owner_conductor_fails():
+def test_obvious_single_owner_fast_route_remains_conductor_selected():
     temp, repo_root = make_repo_copy()
     try:
         fixtures = json.loads((repo_root / "tests/behavior/router-contract-fixtures.json").read_text(encoding="utf-8"))
         for fixture in fixtures:
             if fixture["id"] == "direct-clockwork":
-                fixture["primary_skill"] = "conductor"
+                fixture["route_owner"] = "clockwork"
                 break
         (repo_root / "tests/behavior/router-contract-fixtures.json").write_text(json.dumps(fixtures, indent=2), encoding="utf-8")
         result = run_validator(repo_root)
-        assert_true("obvious single-owner conductor fail", result.returncode == 1 and "obvious single-owner work must not stay with conductor" in result.stdout)
+        assert_true("clear ownership conductor bypass fail", result.returncode == 1 and "clear ownership must remain a Conductor routing decision" in result.stdout)
     finally:
         temp.cleanup()
 
@@ -377,6 +377,7 @@ def test_tuner_routing_activation_and_bypass():
     router_fixtures = {item["id"]: item for item in json.loads(FIXTURES.read_text(encoding="utf-8"))}
     for fixture_id in ("direct-scribe", "direct-ponytail"):
         fixture = router_fixtures[fixture_id]
+        assert_true(f"{fixture_id} remains routed by conductor", fixture["route_owner"] == "conductor")
         assert_true(f"{fixture_id} bypasses the-tuner", "the-tuner" not in fixture["supporting_skills"])
         assert_true(f"{fixture_id} forbids the-tuner", "the-tuner" in fixture["forbidden_skills"])
 
@@ -394,7 +395,7 @@ def main():
     test_passes_real_repo()
     test_missing_required_fixture_fails()
     test_protocol_loaded_during_classification_fails()
-    test_obvious_single_owner_conductor_fails()
+    test_obvious_single_owner_fast_route_remains_conductor_selected()
     test_governed_implementation_protocol_context_fails()
     test_direct_dagger_authorization_contradiction_fails()
     test_reference_integrity_cases()
