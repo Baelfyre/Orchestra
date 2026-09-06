@@ -13,7 +13,7 @@
     <a href="CHANGELOG.md">Changelog</a>
   </p>
   <p>
-    <img src="https://img.shields.io/badge/package_version-v1.8.0-blue" alt="Repository package version v1.8.0" />
+    <img src="https://img.shields.io/badge/package_version-v1.9.0-blue" alt="Repository package version v1.9.0" />
     <a href="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml">
       <img src="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml/badge.svg" alt="Repository validation status" />
     </a>
@@ -139,6 +139,8 @@ The latest published release is **[v1.8.0: Governance Hardening, Runtime Refound
 
 v1.8.0 consolidates governance hardening, seven architecture governance contracts (OR-GOV-1 through OR-GOV-10), Scribe's documentation and traceability upgrade (SSU), the validated AR-0/AR-1/AR-2 runtime architecture foundation, Registry O7 query optimization, and Cloak CUIR reference intelligence. The `v1.8.0` tag remains fixed even when `main` receives later post-release maintenance.
 
+The v1.9.0 release candidate is prepared on current `main` with the UIEF-5 Clockwork translation canonically merged and the existing UIEF-6 through UIEF-10 contracts reconciled. UIEF-7 and UIEF-9 retain explicit evidence limits: deterministic validation is covered without new rendered-application evidence, and the historical UIX-9C result remains `NO_BENEFIT_ESTABLISHED`. The public release remains v1.8.0 until the v1.9.0 exact-head release and tag are independently verified.
+
 The v1.7.0 release itself did not include a live UIX-9 model/provider proof. Post-release UIX-9C V3 later completed as a controlled six-observation study. Its terminal result is **`NO_BENEFIT_ESTABLISHED`**: all three corrected pairs were valid and all 39 primary governed-versus-baseline metric comparisons were unchanged, establishing neither a repeatable governed advantage nor harm under the frozen experiment.
 
 ## Research and validation archive
@@ -157,6 +159,10 @@ The completed UIX-9C V3 controlled study likewise did **not** establish a repeat
 - [Benchmarking documentation archive](docs/benchmarking/)
 
 These reports are evidence, not runtime authority or release permission.
+
+## Support
+
+If Orchestra is useful to you, support its continued maintenance at [Buy Me a Coffee](https://buymeacoffee.com/baelfyre).
 
 ## Install Orchestra
 

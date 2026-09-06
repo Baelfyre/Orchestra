@@ -130,5 +130,5 @@ DOWNSTREAM_REVIEW_BOUNDARY:
 
 1. Implementation capability does NOT equal release or deployment authority.
 2. Passing unit, runtime, or behavioral tests does NOT equal governance approval.
-3. The v1.8 publication hold remains strictly preserved; public release remains `v1.8.0`.
-4. UIEF-4 (Cloak implementation-bound fidelity handoff), UIEF-5, AR-3, and direct production actions remain out of scope and unauthorized.
+3. The v1.9.0 release candidate remains pending final qualification and publication; the current public release remains `v1.8.0` until independently verified publication.
+4. Ponytail does not initiate UIEF-4 or later phases. AR-3 and direct production actions remain out of scope and unauthorized.

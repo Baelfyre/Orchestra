@@ -4,6 +4,8 @@ The current public GitHub Release is Orchestra `v1.8.0: Governance Hardening, Ru
 
 The `v1.8.0` tag resolves directly to the exact release commit. v1.8.0 incorporates the complete architecture governance program OR-GOV-1 through OR-GOV-10, Scribe Specialist Upgrade (SSU), runtime architecture refoundation milestones AR-0 through AR-2, Registry O7 query optimization, and Cloak CUIR reference intelligence. Publication did not graduate scaffold-only hosts or publish those scaffold surfaces to marketplaces.
 
+The v1.9.0 candidate updates package/version metadata and current UIEF documentation. It does not promote scaffold-only hosts, refresh installed integrations, or change the published v1.8.0 identity before the separately governed release gate.
+
 Scaffold-only hosts are not full support claims. Promotion requirements and graduation order live in `docs/project/SCAFFOLD_ADAPTER_GRADUATION_CRITERIA.md`.
 
 | Host | Runtime Adapter | Status | Notes |

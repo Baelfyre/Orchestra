@@ -3,7 +3,7 @@
   "project": "Orchestra",
   "featured": true,
   "summary": "Coordinates AI-assisted development as a governed system of specialist routing, validation, evidence, and human approval rather than an unbounded agent loop.",
-  "status": "Latest release: v1.8.0",
-  "next": "Next release: not announced",
+  "status": "Latest release: v1.8.0; v1.9.0 UIEF candidate prepared",
+  "next": "Next release: v1.9.0 after exact-head qualification and publication verification",
   "url": "https://github.com/Baelfyre/Orchestra"
 }

@@ -10,7 +10,7 @@ A governance-first specialist orchestration framework that routes complex AI-ass
 Open-source developer tooling and AI orchestration framework
 
 ## Current Stage
-v1.8.0 - Governance Hardening, Runtime Refoundation & Traceability (`PUBLISHED_VERIFIED`). The immutable GitHub Release (id `RE_kwDOS_4UtM4WyusI`) and lightweight `v1.8.0` tag resolve to canonical signed commit `dad1f153f1be6522a8a7964258a2122a8d057596` with tree `4effcd97e15f843c8c0d9d45217870ee9d6480ff` and sole parent `b601c2d853ad0dcdc68b8dc652578f19ef663c79`. Post-publication verification independently confirmed tag target, release body, immutable/latest state, canonical SHA/tree/parent/signature, and preservation of prior tags (v1.7.0, v1.6.0). Later commits on `main` are post-release maintenance and do not move the v1.8.0 release identity.
+v1.9.0 UI Execution Fidelity release candidate (`PREPARED_NOT_PUBLISHED`) follows the published v1.8.0 baseline. UIEF-5 is canonical at signed commit `75af3966722edfdde474e8fcf99a1b8002d1527f` with tree `1020572e530cba92483cd31d54c2e7d51f179ae7`; UIEF-6 and UIEF-8 use existing verified contracts, while UIEF-7 and UIEF-9 retain explicit evidence limits. The public v1.8.0 tag and release remain unchanged until v1.9.0 passes its exact-head release gate and is independently published. Adaptive Host Integration is future work only.
 
 ## Primary Users
 Developers and maintainers who install Orchestra as a plugin, skill set, or runtime package inside supported or scaffold-only coding hosts.
@@ -58,13 +58,13 @@ The Orchestra Prime Directive is the stable constitutional boundary for developm
 - `python scripts/governance_check.py --strict` must pass.
 - The documentation-impact contract must pass and require the correct human/machine surfaces for the actual changed scope.
 - Prime Directive, Feature Admission, Candidate Maturity/Feature Freeze, autonomy lifecycle integration, qualification/evaluation/audit, recovery/retirement, and merge-readiness contract validators must pass when those surfaces are present or changed.
-- All 11 release/version surfaces and `machine/hosts/update-contract.v1.json#/package_version` remain normalized to `1.7.0` for the published release line; any future release candidate must establish its own exact version parity.
+- All 11 release/version surfaces and `machine/hosts/update-contract.v1.json#/package_version` remain normalized to `1.9.0` for the current release candidate; the published v1.8.0 identity remains separately verified until v1.9.0 publication.
 - Required Analysis Compatibility must execute real exact-head CodeQL successfully before its compatibility status surface is accepted.
 - Native Windows, Ubuntu, and macOS validation must pass on the exact candidate where required by repository policy.
 - Release-candidate mutation-confidence and Cosmic Ray evidence must be fresh where repository policy triggers them.
 - The exact validated source candidate must proceed through the signed-materialization lane required by current repository policy before final canonical promotion when its source identity is unsigned.
 - Ordinary governed merge readiness requires current `mergeable=true`, `mergeable_state=clean`, zero unresolved review threads, signed exact-head identity, and expected-head Squash protection.
-- The published `v1.7.0` tag/GitHub Release identity is verified. Any future publication requires a fresh exact tag/release/canonical identity check and fresh post-publication verification.
+- The published `v1.8.0` tag/GitHub Release identity is verified at exact commit `dad1f153f1be6522a8a7964258a2122a8d057596`. The v1.9.0 candidate requires a fresh exact tag/release/canonical identity check and fresh post-publication verification.
 
 ## Known Constraints
 - Codex and Antigravity remain the supported Host Update identities. Claude Code, Cursor, Windsurf, VS Code/VSCodium, JetBrains, Zed, and Neovim remain scaffold-only unless separately graduated.
@@ -74,26 +74,26 @@ The Orchestra Prime Directive is the stable constitutional boundary for developm
 - Adaptive orchestration A1-A5 is canonical through shadow maturity. A5 execution-effective topology promotion remains deferred/not promoted because qualifying benefit was not established.
 - Portable adaptive memory is optional, storage-agnostic, privacy-minimized, and non-authorizing; automatic promotion is disabled.
 - UIX-0 through UIX-9A repository proof preparation is canonical and UIX-9C V3 is complete. The completed V3 evidence does not authorize new UIX experiments or additional provider/model calls.
-- Registry O1-O6 adaptive consumption is canonical. O7 remains planned and is not part of v1.7.0 runtime implementation.
-- The latest published release is immutable `v1.7.0`. Existing historical tags/releases must not move, and post-release `main` maintenance must not be described as a new published release.
+- Registry O1-O6 adaptive consumption and O7 query optimization are canonical and verified; no new Registry expansion is included in the v1.9.0 candidate.
+- The latest published release is immutable `v1.8.0`; the v1.9.0 candidate remains unpublished until its release identity is verified. Existing historical tags/releases must not move, and post-release `main` maintenance must not be described as a new published release.
 - Repository simulation and CI evidence do not automatically prove installed-host behavior, provider behavior, or token billing behavior.
 
 ## Known Non-Goals
-- v1.7 does not add Streamable HTTP, remote authorization, hosted deployment, or automatic production mutation.
-- v1.7 does not promote A5 topology selection into execution-effective routing.
-- v1.7 does not promote Murmurs to default presentation or claim repeatable token/efficiency savings.
-- v1.7 itself did not execute UIX-9 live proof; the separately governed UIX-9C V3 study occurred post-release and does not alter the immutable release identity.
+- The v1.9.0 candidate does not add Streamable HTTP, remote authorization, hosted deployment, or automatic production mutation.
+- The v1.9.0 candidate does not promote A5 topology selection into execution-effective routing.
+- The v1.9.0 candidate does not promote Murmurs to default presentation or claim repeatable token/efficiency savings.
+- UIEF-9 records the historical UIX-9C V3 negative disposition and does not authorize new live provider/model proof or alter the immutable v1.8.0 release identity.
 - Development Lifecycle V2 does not introduce a second governance kernel, autonomy engine, runtime lifecycle controller, Arbiter, merge engine, or general-purpose workflow platform.
-- v1.7 does not implement Registry O7 query optimization.
-- v1.7 does not publish scaffold-only hosts to marketplaces or graduate their runtime maturity.
-- v1.7 does not automatically promote learned patterns or require a specific external memory backend.
+- The v1.9.0 candidate does not add further Registry O7 implementation beyond its canonical verified state.
+- The v1.9.0 candidate does not publish scaffold-only hosts to marketplaces or graduate their runtime maturity.
+- The v1.9.0 candidate does not automatically promote learned patterns or require a specific external memory backend.
 - A merged release candidate is not itself a public release until tag/GitHub Release identity is created and verified.
 
 ## Maintainer Approval Rules
-The maintainer's v1.7.0 publication authorization and UIX-9C V3 experimental authorization have been consumed by their completed scopes. Any future release/publication, new live model/provider experiment, deployment, production mutation, policy activation, installed-integration refresh, destructive cleanup, branch deletion, force push, history rewrite, or Prime Directive amendment requires fresh applicable authority.
+The maintainer's v1.8.0 publication authorization and UIX-9C V3 experimental authorization have been consumed by their completed scopes. The separately authorized v1.9.0 campaign permits only its bounded release path. Any later release/publication, new live model/provider experiment, deployment, production mutation, policy activation, installed-integration refresh, destructive cleanup, branch deletion, force push, history rewrite, or Prime Directive amendment requires fresh applicable authority.
 
 ## User or Maintainer Preferences
 Repository changes follow bounded governed execution, exact-head validation, fail-closed evidence handling, forward-only history preservation, conservative claims where comparative benefit was not established, and explicit separation between capability and authority.
 
 ## Last Reviewed
-2026-08-28
+2026-09-06

@@ -1,6 +1,12 @@
 # Orchestra Project Maturity
 
-This document classifies the current maturity of Orchestra's public v1.7.0 surfaces and post-release canonical maintenance. It distinguishes implemented deterministic controls from bounded/advisory capabilities and from planned work so compatibility or test success is not mistaken for authority or production maturity.
+This document classifies the current maturity of Orchestra's published v1.8.0 surfaces and the prepared v1.9.0 UI Execution Fidelity candidate. It distinguishes implemented deterministic controls from bounded/advisory capabilities and from planned work so compatibility or test success is not mistaken for authority or production maturity.
+
+## Current v1.9.0 candidate
+
+- **UIEF-5 through UIEF-10**: UIEF-5 is canonically merged and verified. UIEF-6 and UIEF-8 are verified from existing specialist and regression contracts. UIEF-7 is verified with deterministic static validation and no new rendered-application evidence. UIEF-9 is verified with the historical `NO_BENEFIT_ESTABLISHED` disposition and no new provider experiment. UIEF-10 documentation and release closeout are prepared for final exact-head qualification.
+- **Package and host metadata**: all 11 package/version surfaces and the host update contract are prepared at `1.9.0`; host maturity and installed integrations are unchanged.
+- **Adaptive Host Integration**: future roadmap item only; no host integration, automatic adaptation, provider mutation, or policy activation is included.
 
 ## Stable / Enforced
 
