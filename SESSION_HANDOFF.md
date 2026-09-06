@@ -3,9 +3,9 @@
 - **Canonical Repo:** `Baelfyre/Orchestra`
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
-- **Current Public Release:** `v1.8.0`
-- **Release-Candidate Metadata:** `1.9.0` (`PREPARED_NOT_PUBLISHED`)
-- **Target Release:** `v1.9.0`
+- **Current Public Release:** `v1.9.0`
+- **Release-Candidate Metadata:** `1.9.0` (`PUBLISHED_VERIFIED_COMPLETE`)
+- **Target Release:** `NONE_DECLARED`
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.3.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.4.0 Release State:** `PUBLISHED_VERIFIED`
@@ -25,13 +25,15 @@
 - **v1.8.0 Tag Ref:** lightweight `commit` ref targeting the exact release commit
 - **v1.8.0 GitHub Release:** id `RE_kwDOS_4UtM4WyusI`, immutable, non-draft, non-prerelease, independently verified latest
 - **v1.8.0 Post-Publication Verification:** PASS
-- **Control Plane State:** `V1_9_0_CANDIDATE`
-- **MCP State:** `PUBLISHED_V1_6_STABLE_RETAINED_V1_8`
+- **Control Plane State:** `V1_9_0_CURRENT`
+- **MCP State:** `PUBLISHED_V1_6_STABLE_RETAINED_V1_7`
 - **Policy Activation:** `NOT_PERFORMED`
 
-## v1.9.0 UI Execution Fidelity Release Candidate Continuity
+## v1.9.0 UI Execution Fidelity Publication Continuity
 
-The current candidate follows canonical UIEF-5 merge `75af3966722edfdde474e8fcf99a1b8002d1527f` (tree `1020572e530cba92483cd31d54c2e7d51f179ae7`). UIEF-6 and UIEF-8 are verified from existing contracts; UIEF-7 and UIEF-9 retain explicit evidence limits, including the historical `NO_BENEFIT_ESTABLISHED` UIX-9C disposition. Package surfaces are prepared at `1.9.0`, while v1.8.0 remains the published release until final exact-head qualification and independent publication verification. Adaptive Host Integration remains future-only and unimplemented.
+The v1.9.0 release follows canonical UIEF-5 merge `75af3966722edfdde474e8fcf99a1b8002d1527f` and is published at signed canonical commit `7129a690b041bddbf8b58f41db0c4a680317fda1` (tree `babf0a0c61d4a073144891b295b1989c256513eb7`). UIEF-6 through UIEF-10 are reconciled with explicit UIEF-7 deterministic-only and UIEF-9 `NO_BENEFIT_ESTABLISHED` limits. Adaptive Host Integration remains future-only and unimplemented.
+
+Evidence: `docs/validation/V1_9_0_PUBLICATION_CLOSEOUT.md`.
 
 ## v1.8.0 Governance Hardening, Runtime Refoundation & Traceability Publication Continuity
 

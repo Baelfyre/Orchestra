@@ -1,15 +1,16 @@
 # Orchestra v1.9.0 Release Readiness Evidence
 
-Status: `PREPARED_NOT_PUBLISHED`
+Status: `PUBLISHED_VERIFIED_COMPLETE`
 
 ## Candidate identity
 
 - Target version: `1.9.0`
-- Current public release: `v1.8.0`
-- Candidate source baseline: `75af3966722edfdde474e8fcf99a1b8002d1527f`
-- Candidate tree: `1020572e530cba92483cd31d54c2e7d51f179ae7`
-- Candidate release tag: `NOT_CREATED`
-- Candidate GitHub Release: `NOT_PUBLISHED`
+- Current public release: `v1.9.0`
+- Canonical release commit: `7129a690b041bddbf8b58f41db0c4a680317fda1`
+- Canonical release tree: `babf0a0c61d4a073144891b295b1989c256513eb`
+- Sole parent: `75af3966722edfdde474e8fcf99a1b8002d1527f`
+- Release tag: `v1.9.0` lightweight commit ref
+- GitHub Release: `RE_kwDOS_4UtM4W2pDC`, immutable, non-draft, non-prerelease, latest
 
 ## Completed source evidence
 
@@ -20,10 +21,12 @@ Status: `PREPARED_NOT_PUBLISHED`
 - Focused UIEF-5 and contract validation: `65 passed`.
 - UIEF-7 deterministic validation: no rendered application evidence claimed.
 - UIEF-9 historical disposition: `NO_BENEFIT_ESTABLISHED`; no new provider/model experiment run.
+- Canonical release commit signature: GitHub verified / valid.
+- Independent tag and release readback: PASS; v1.8.0 and v1.7.0 prior tags preserved.
 
-## Candidate release gates
+## Release gates
 
-The final candidate must pass and be recorded against its exact reviewed head:
+The final candidate passed these gates against its exact reviewed head:
 
 - all 11 package/version surfaces and host-update contract parity;
 - README/README.json and current-facing documentation parity;
@@ -31,7 +34,7 @@ The final candidate must pass and be recorded against its exact reviewed head:
 - behavior and runtime validation, architecture-boundary validation, and prompt-load validation;
 - Required Analysis Compatibility / CodeQL and native Windows, Ubuntu, and macOS checks;
 - exact-head ordinary merge readiness, signed canonical commit, and independent post-merge readback;
-- independent tag and GitHub Release identity verification after publication.
+- independent tag and GitHub Release identity verification after publication: PASS.
 
 ## Protected boundaries
 

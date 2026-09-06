@@ -139,7 +139,7 @@ Murmurs changes presentation only. It does not alter authority, governance, vali
 - `../machine/release-evidence/`: structured release evidence.
 - [Decision Log](../DECISION_LOG.md): architectural and governance decisions.
 
-The current public release is immutable `v1.8.0`. The v1.9.0 UIEF release candidate is prepared on `main` and remains unpublished until its exact-head qualification, canonical merge, tag, and GitHub Release identity are independently verified.
+The current public release is immutable `v1.9.0`, tagged at signed canonical commit `7129a690b041bddbf8b58f41db0c4a680317fda1` with GitHub Release `RE_kwDOS_4UtM4W2pDC`. Its exact-head qualification, canonical merge, tag, and release identity were independently verified.
 
 ## Developer extension path
 

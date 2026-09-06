@@ -15,8 +15,8 @@
     "refreshes_installed_integrations": false
   },
   "public_release_boundary": {
-    "release": "v1.8.0",
-    "target_commit": "dad1f153f1be6522a8a7964258a2122a8d057596",
+    "release": "v1.9.0",
+    "target_commit": "7129a690b041bddbf8b58f41db0c4a680317fda1",
     "moved_by_portal": false
   },
   "surfaces": [
