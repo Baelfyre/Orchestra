@@ -2233,14 +2233,15 @@
       "next_action": "FINAL_EXACT_HEAD_RELEASE_QUALIFICATION"
     },
     "universal_adaptive_integration_uai": {
-      "status": "UAI_5_PORTABLE_PROJECTION_COMPILER_COMPLETE_CANONICAL_VERIFIED",
-      "purpose": "Versioned host and provider/model capability evidence, deterministic minimal transport selection, and canonical-source-backed portable projection parity that preserve Conductor specialist routing and AWF workflow topology without authority expansion.",
+      "status": "UAI_6_TRANSPORT_AND_FALLBACK_INTEGRATION_COMPLETE",
+      "purpose": "Versioned host and provider/model capability evidence, deterministic minimal transport selection and non-executing transport fallback planning, and canonical-source-backed portable projection parity that preserve Conductor specialist routing and AWF workflow topology without authority expansion.",
       "human_sources": [
         "adapters/github-copilot/README.md",
         "adapters/github-copilot/probe-guide.md",
         "docs/setup/HOST_CAPABILITY_CONTRACT.md",
         "docs/setup/PROVIDER_MODEL_CAPABILITY_CONTRACT.md",
-        "docs/setup/PORTABLE_PROJECTION_COMPILER.md"
+        "docs/setup/PORTABLE_PROJECTION_COMPILER.md",
+        "docs/setup/TRANSPORT_FALLBACK_INTEGRATION.md"
       ],
       "machine_sources": [
         "adapters/github-copilot/copilot-instructions.template.md",
@@ -2274,6 +2275,7 @@
       "authority_expansion": false,
       "automatic_provider_routing": false,
       "automatic_provider_fallback": false,
+      "transport_fallback": "DETERMINISTIC_NON_EXECUTING_CHAIN",
       "learned_routing_promotion": false
     }
   },
@@ -2384,6 +2386,7 @@
     "provider_model_capability_contract_schema": "machine/schemas/provider-model-capability-contract.v1.schema.json",
     "integration_strategy_policy": "machine/hosts/integration-strategy-policy.v1.json",
     "integration_strategy_policy_schema": "machine/schemas/integration-strategy-policy.v1.schema.json",
+    "transport_fallback_guide": "docs/setup/TRANSPORT_FALLBACK_INTEGRATION.md",
     "portable_projection_contract": "machine/projections/portable-projection-contract.v1.json",
     "portable_projection_contract_schema": "machine/schemas/portable-projection-contract.v1.schema.json",
     "portable_projection_index_schema": "machine/schemas/portable-projection-index.v1.schema.json",
@@ -2589,6 +2592,7 @@
     "provider_model_capability_contract_validator": "scripts/validate_provider_model_capability_contract.py",
     "integration_strategy_policy": "machine/hosts/integration-strategy-policy.v1.json",
     "integration_strategy_policy_schema": "machine/schemas/integration-strategy-policy.v1.schema.json",
+    "transport_fallback_guide": "docs/setup/TRANSPORT_FALLBACK_INTEGRATION.md",
     "portable_projection_contract": "machine/projections/portable-projection-contract.v1.json",
     "portable_projection_contract_schema": "machine/schemas/portable-projection-contract.v1.schema.json",
     "portable_projection_index": "machine/projections/portable-projection-index.v1.json",

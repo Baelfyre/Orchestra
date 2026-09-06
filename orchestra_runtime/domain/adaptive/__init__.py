@@ -19,8 +19,10 @@ from .integration_strategy import (
     IntegrationStrategy,
     IntegrationStrategyDecision,
     IntegrationStrategyRequirements,
+    TransportFallbackDecision,
     TransportCapabilityEvidence,
     resolve_integration_strategy,
+    resolve_transport_fallback,
 )
 from .selection_trace import (
     AUTHORITY_RULE,
@@ -74,6 +76,7 @@ __all__ = [
     "IntegrationStrategy",
     "IntegrationStrategyDecision",
     "IntegrationStrategyRequirements",
+    "TransportFallbackDecision",
     "PromotionCandidateDecision",
     "TaskProfileDerivation",
     "build_selection_trace",
@@ -87,4 +90,5 @@ __all__ = [
     "parse_authority_view",
     "select_agentic_workflow",
     "resolve_integration_strategy",
+    "resolve_transport_fallback",
 ]

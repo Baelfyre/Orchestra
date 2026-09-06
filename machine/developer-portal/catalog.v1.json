@@ -99,10 +99,10 @@
     },
     {
       "id": "uai-integration-strategy-policy",
-      "title": "UAI Integration Strategy Policy",
+      "title": "UAI Integration Strategy and Transport Fallback Policy",
       "kind": "machine_contract",
       "path": "machine/hosts/integration-strategy-policy.v1.json",
-      "authority_role": "TRANSPORT_SELECTION_WITHOUT_ROUTING_AUTHORITY"
+      "authority_role": "TRANSPORT_SELECTION_AND_NON_EXECUTING_FALLBACK_WITHOUT_ROUTING_AUTHORITY"
     },
     {
       "id": "uai-integration-strategy-policy-schema",
@@ -110,6 +110,13 @@
       "kind": "machine_schema",
       "path": "machine/schemas/integration-strategy-policy.v1.schema.json",
       "authority_role": "EVIDENCE_SCHEMA"
+    },
+    {
+      "id": "uai-transport-fallback-guide",
+      "title": "UAI Transport and Fallback Integration guide",
+      "kind": "human_guide",
+      "path": "docs/setup/TRANSPORT_FALLBACK_INTEGRATION.md",
+      "authority_role": "NON_EXECUTING_TRANSPORT_FALLBACK_GUIDANCE"
     },
     {
       "id": "uai-portable-projection-contract",
