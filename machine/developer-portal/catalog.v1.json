@@ -119,6 +119,13 @@
       "authority_role": "NON_EXECUTING_TRANSPORT_FALLBACK_GUIDANCE"
     },
     {
+      "id": "uai-negative-unknown-capability-testing-guide",
+      "title": "UAI Negative and Unknown Capability Testing guide",
+      "kind": "human_guide",
+      "path": "docs/setup/UAI_NEGATIVE_UNKNOWN_TESTING.md",
+      "authority_role": "FAIL_CLOSED_EVIDENCE_GUIDANCE_WITHOUT_AUTHORITY"
+    },
+    {
       "id": "uai-portable-projection-contract",
       "title": "UAI Portable Projection Contract",
       "kind": "machine_contract",

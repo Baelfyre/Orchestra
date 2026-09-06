@@ -2233,15 +2233,16 @@
       "next_action": "FINAL_EXACT_HEAD_RELEASE_QUALIFICATION"
     },
     "universal_adaptive_integration_uai": {
-      "status": "UAI_7_PROVIDER_CAPABILITY_BROKER_SHADOW_ADVISORY_COMPLETE",
-      "purpose": "Versioned host and provider/model capability evidence, deterministic minimal transport selection and non-executing transport fallback planning, shadow-only provider/model eligibility advice, and canonical-source-backed portable projection parity that preserve Conductor specialist routing and AWF workflow topology without authority expansion.",
+      "status": "UAI_8_NEGATIVE_UNKNOWN_CAPABILITY_TESTING_COMPLETE",
+      "purpose": "Versioned host and provider/model capability evidence, deterministic minimal transport selection and non-executing transport fallback planning, shadow-only provider/model eligibility advice, canonical-source-backed portable projection parity, and fail-closed negative and unknown capability testing that preserve Conductor specialist routing and AWF workflow topology without authority expansion.",
       "human_sources": [
         "adapters/github-copilot/README.md",
         "adapters/github-copilot/probe-guide.md",
         "docs/setup/HOST_CAPABILITY_CONTRACT.md",
         "docs/setup/PROVIDER_MODEL_CAPABILITY_CONTRACT.md",
         "docs/setup/PORTABLE_PROJECTION_COMPILER.md",
-        "docs/setup/TRANSPORT_FALLBACK_INTEGRATION.md"
+        "docs/setup/TRANSPORT_FALLBACK_INTEGRATION.md",
+        "docs/setup/UAI_NEGATIVE_UNKNOWN_TESTING.md"
       ],
       "machine_sources": [
         "adapters/github-copilot/copilot-instructions.template.md",
@@ -2265,7 +2266,8 @@
         "machine/schemas/portable-projection-index.v1.schema.json",
         "machine/projections/portable-projection-index.v1.json",
         "scripts/compile_portable_projections.py",
-        "tests/runtime/test_portable_projection_compiler.py"
+        "tests/runtime/test_portable_projection_compiler.py",
+        "tests/runtime/test_uai8_negative_unknown_capabilities.py"
       ],
       "probed_hosts": [
         "github-copilot"
@@ -2388,14 +2390,17 @@
     "provider_model_capability_contract": "machine/providers/provider-model-capability-contract.v1.json",
     "provider_model_capability_contract_schema": "machine/schemas/provider-model-capability-contract.v1.schema.json",
     "provider_capability_broker": "orchestra_runtime/domain/adaptive/provider_capability.py",
+    "negative_unknown_capability_testing": "tests/runtime/test_uai8_negative_unknown_capabilities.py",
     "integration_strategy_policy": "machine/hosts/integration-strategy-policy.v1.json",
     "integration_strategy_policy_schema": "machine/schemas/integration-strategy-policy.v1.schema.json",
     "transport_fallback_guide": "docs/setup/TRANSPORT_FALLBACK_INTEGRATION.md",
+    "negative_unknown_capability_testing_guide": "docs/setup/UAI_NEGATIVE_UNKNOWN_TESTING.md",
     "portable_projection_contract": "machine/projections/portable-projection-contract.v1.json",
     "portable_projection_contract_schema": "machine/schemas/portable-projection-contract.v1.schema.json",
     "portable_projection_index_schema": "machine/schemas/portable-projection-index.v1.schema.json",
     "portable_projection_index": "machine/projections/portable-projection-index.v1.json",
     "portable_projection_compiler": "scripts/compile_portable_projections.py",
+    "negative_unknown_capability_testing": "tests/runtime/test_uai8_negative_unknown_capabilities.py",
     "prap_certification_contract": "machine/protocol/prap-certification-contract.v1.json",
     "developer_portal_catalog": "machine/developer-portal/catalog.v1.json",
     "murmurs_presentation_policy": "machine/presentation/murmurs-policy.v1.json",
@@ -2713,6 +2718,7 @@
     "host_capability_contract": "docs/setup/HOST_CAPABILITY_CONTRACT.md",
     "provider_model_capability_contract": "docs/setup/PROVIDER_MODEL_CAPABILITY_CONTRACT.md",
     "portable_projection_compiler": "docs/setup/PORTABLE_PROJECTION_COMPILER.md",
+    "negative_unknown_capability_testing": "docs/setup/UAI_NEGATIVE_UNKNOWN_TESTING.md",
     "validation": "docs/setup/VALIDATION.md",
     "developer_portal": "docs/developer/README.md",
     "mcp_transport": "docs/developer/MCP_STDIO_TRANSPORT.md",
