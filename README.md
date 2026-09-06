@@ -135,11 +135,11 @@ See [Portable Adaptive Memory](docs/architecture/PORTABLE_ADAPTIVE_MEMORY.md).
 
 ## Current release state
 
-The latest published release is **[v1.8.0: Governance Hardening, Runtime Refoundation & Traceability](https://github.com/Baelfyre/Orchestra/releases/tag/v1.8.0)**. The immutable release resolves to canonical commit `dad1f153f1be6522a8a7964258a2122a8d057596` with tree `4effcd97e15f843c8c0d9d45217870ee9d6480ff` and a GitHub verified/valid signature.
+The latest published release is **[v1.9.0: UI Execution Fidelity](https://github.com/Baelfyre/Orchestra/releases/tag/v1.9.0)**. The immutable release resolves to canonical commit `7129a690b041bddbf8b58f41db0c4a680317fda1` with tree `babf0a0c61d4a073144891b295b1989c256513eb` and a GitHub verified/valid signature.
 
-v1.8.0 consolidates governance hardening, seven architecture governance contracts (OR-GOV-1 through OR-GOV-10), Scribe's documentation and traceability upgrade (SSU), the validated AR-0/AR-1/AR-2 runtime architecture foundation, Registry O7 query optimization, and Cloak CUIR reference intelligence. The `v1.8.0` tag remains fixed even when `main` receives later post-release maintenance.
+v1.8.0 consolidated governance hardening, seven architecture governance contracts (OR-GOV-1 through OR-GOV-10), Scribe's documentation and traceability upgrade (SSU), the validated AR-0/AR-1/AR-2 runtime architecture foundation, Registry O7 query optimization, and Cloak CUIR reference intelligence. Its tag remains fixed after v1.9.0 publication.
 
-The v1.9.0 release candidate is prepared on current `main` with the UIEF-5 Clockwork translation canonically merged and the existing UIEF-6 through UIEF-10 contracts reconciled. UIEF-7 and UIEF-9 retain explicit evidence limits: deterministic validation is covered without new rendered-application evidence, and the historical UIX-9C result remains `NO_BENEFIT_ESTABLISHED`. The public release remains v1.8.0 until the v1.9.0 exact-head release and tag are independently verified.
+v1.9.0 carries the canonically merged UIEF-5 Clockwork translation and reconciles the existing UIEF-6 through UIEF-10 contracts. UIEF-7 and UIEF-9 retain explicit evidence limits: deterministic validation is covered without new rendered-application evidence, and the historical UIX-9C result remains `NO_BENEFIT_ESTABLISHED`. The v1.9.0 tag and GitHub Release were independently verified at the exact signed commit above.
 
 The v1.7.0 release itself did not include a live UIX-9 model/provider proof. Post-release UIX-9C V3 later completed as a controlled six-observation study. Its terminal result is **`NO_BENEFIT_ESTABLISHED`**: all three corrected pairs were valid and all 39 primary governed-versus-baseline metric comparisons were unchanged, establishing neither a repeatable governed advantage nor harm under the frozen experiment.
 
