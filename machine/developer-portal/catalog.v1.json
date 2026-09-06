@@ -98,6 +98,20 @@
       "authority_role": "GUIDANCE_OVER_PROVIDER_MODEL_CAPABILITY_CONTRACT"
     },
     {
+      "id": "uai-integration-strategy-policy",
+      "title": "UAI Integration Strategy Policy",
+      "kind": "machine_contract",
+      "path": "machine/hosts/integration-strategy-policy.v1.json",
+      "authority_role": "TRANSPORT_SELECTION_WITHOUT_ROUTING_AUTHORITY"
+    },
+    {
+      "id": "uai-integration-strategy-policy-schema",
+      "title": "UAI Integration Strategy Policy schema",
+      "kind": "machine_schema",
+      "path": "machine/schemas/integration-strategy-policy.v1.schema.json",
+      "authority_role": "EVIDENCE_SCHEMA"
+    },
+    {
       "id": "specialist-registry",
       "title": "Specialist registry",
       "kind": "machine_contract",

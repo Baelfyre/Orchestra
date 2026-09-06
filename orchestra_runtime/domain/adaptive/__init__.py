@@ -13,6 +13,15 @@ from .intake import (
     derive_task_profile,
     validate_derivation_policy,
 )
+from .integration_strategy import (
+    ELIGIBLE_DISPOSITIONS,
+    INTEGRATION_STRATEGY_POLICY_VERSION,
+    IntegrationStrategy,
+    IntegrationStrategyDecision,
+    IntegrationStrategyRequirements,
+    TransportCapabilityEvidence,
+    resolve_integration_strategy,
+)
 from .selection_trace import (
     AUTHORITY_RULE,
     SELECTION_TRACE_SCHEMA_VERSION,
@@ -43,6 +52,8 @@ from .topology_validator import (
 __all__ = [
     "AUTHORITY_RULE",
     "DERIVATION_POLICY_SCHEMA_VERSION",
+    "ELIGIBLE_DISPOSITIONS",
+    "INTEGRATION_STRATEGY_POLICY_VERSION",
     "SELECTION_TRACE_SCHEMA_VERSION",
     "AUTHORITY_DOMAINS",
     "AUTHORITY_DOMAIN_OWNERS",
@@ -60,6 +71,9 @@ __all__ = [
     "AdvancedAdaptationAdmission",
     "AgenticWorkflowProfile",
     "IntakeSignal",
+    "IntegrationStrategy",
+    "IntegrationStrategyDecision",
+    "IntegrationStrategyRequirements",
     "PromotionCandidateDecision",
     "TaskProfileDerivation",
     "build_selection_trace",
@@ -69,6 +83,8 @@ __all__ = [
     "CriticContract",
     "SpecialistAuthority",
     "TaskProfile",
+    "TransportCapabilityEvidence",
     "parse_authority_view",
     "select_agentic_workflow",
+    "resolve_integration_strategy",
 ]

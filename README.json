@@ -2233,8 +2233,8 @@
       "next_action": "FINAL_EXACT_HEAD_RELEASE_QUALIFICATION"
     },
     "universal_adaptive_integration_uai": {
-      "status": "UAI_3_PROVIDER_MODEL_CAPABILITY_CONTRACT_COMPLETE_CANONICAL_VERIFIED",
-      "purpose": "Versioned host and provider/model capability evidence with host-neutral transport compatibility that preserve Conductor specialist routing and AWF workflow topology without authority expansion.",
+      "status": "UAI_4_INTEGRATION_STRATEGY_RESOLVER_COMPLETE_CANONICAL_VERIFIED",
+      "purpose": "Versioned host and provider/model capability evidence plus deterministic minimal transport selection that preserve Conductor specialist routing and AWF workflow topology without authority expansion.",
       "human_sources": [
         "adapters/github-copilot/README.md",
         "adapters/github-copilot/probe-guide.md",
@@ -2251,7 +2251,11 @@
         "machine/providers/provider-model-capability-contract.v1.json",
         "machine/schemas/provider-model-capability-contract.v1.schema.json",
         "scripts/validate_provider_model_capability_contract.py",
-        "tests/runtime/test_provider_model_capability_contract.py"
+        "tests/runtime/test_provider_model_capability_contract.py",
+        "machine/hosts/integration-strategy-policy.v1.json",
+        "machine/schemas/integration-strategy-policy.v1.schema.json",
+        "orchestra_runtime/domain/adaptive/integration_strategy.py",
+        "tests/runtime/test_integration_strategy.py"
       ],
       "probed_hosts": [
         "github-copilot"
@@ -2371,6 +2375,8 @@
     "host_capability_contract_schema": "machine/schemas/host-capability-contract.v1.schema.json",
     "provider_model_capability_contract": "machine/providers/provider-model-capability-contract.v1.json",
     "provider_model_capability_contract_schema": "machine/schemas/provider-model-capability-contract.v1.schema.json",
+    "integration_strategy_policy": "machine/hosts/integration-strategy-policy.v1.json",
+    "integration_strategy_policy_schema": "machine/schemas/integration-strategy-policy.v1.schema.json",
     "prap_certification_contract": "machine/protocol/prap-certification-contract.v1.json",
     "developer_portal_catalog": "machine/developer-portal/catalog.v1.json",
     "murmurs_presentation_policy": "machine/presentation/murmurs-policy.v1.json",
@@ -2569,6 +2575,8 @@
     "provider_model_capability_contract": "machine/providers/provider-model-capability-contract.v1.json",
     "provider_model_capability_contract_schema": "machine/schemas/provider-model-capability-contract.v1.schema.json",
     "provider_model_capability_contract_validator": "scripts/validate_provider_model_capability_contract.py",
+    "integration_strategy_policy": "machine/hosts/integration-strategy-policy.v1.json",
+    "integration_strategy_policy_schema": "machine/schemas/integration-strategy-policy.v1.schema.json",
     "uai_routing_boundaries": "adapters/github-copilot/probe-guide.md",
     "adapter_sdk_reference": "docs/setup/ADAPTER_SDK_PRAP.md",
     "adapter_sdk_stable_import_surface": "orchestra_runtime.protocol.sdk",
