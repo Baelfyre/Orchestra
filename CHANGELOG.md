@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased UAI-8 negative and unknown capability testing
+
+- Adds a focused 15-scenario matrix for known, missing, unknown, contradictory, stale, policy-blocked, partial, and authority-expanding host/provider/transport/projection inputs.
+- Verifies existing fail-closed contracts without adding provider selection, automatic switching or fallback, learned routing, specialist-routing authority, AWF topology changes, credentials, release, or deployment behavior.
+
 ## Unreleased UAI-7 provider capability broker shadow advisory
 
 - Adds a deterministic shadow-only provider/model capability broker that classifies host-exposed options using task requirements, current evidence, and policy restrictions.
