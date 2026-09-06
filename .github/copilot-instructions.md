@@ -5,7 +5,7 @@ When assisting in the Orchestra repository or working with Orchestra-integrated 
 ## 1. Governance and Routing Architecture
 
 1. **Governance Layer**: `The Steward` (business alignment, scope, SDLC) and `The Governor` (legal, compliance, privacy, IP, licensing) sit above the Conductor. The Conductor cannot override governance decisions.
-2. **Routing Layer**: `Conductor` is the exclusive router and workflow orchestrator. Do not invent custom subagent chains or bypass the Conductor for complex tasks.
+2. **Routing Layer**: `Conductor` is the exclusive router and workflow orchestrator. Do not invent custom subagent chains or bypass the Conductor for complex tasks. Canonical command `/conductor` invokes Conductor for task classification, routing, and specialist orchestration.
 3. **Specialist Ownership**: Domain specialists exclusively own their respective domains:
    - `clockwork`: Architecture, OOP, layering, refactoring.
    - `cloak`: UI/UX, accessibility, design patterns.
@@ -17,11 +17,14 @@ When assisting in the Orchestra repository or working with Orchestra-integrated 
    - `dagger`: Chaos, adversarial, and resilience testing (destructive execution strictly blocked).
    - `arbiter`: Workflow continuity, validation, and transition governance.
    - `the-tuner`: Cross-specialist coordination.
-4. **Implementation Layer**: `Ponytail` handles focused implementation, strictly keeping code minimal, reversible, and free of over-engineering.
+4. **Implementation Layer**: `Ponytail` handles focused implementation, strictly keeping code minimal, reversible, and free of over-engineering. Canonical command `/ponytail` invokes Ponytail for bounded code edits within established architecture.
 5. **Simplicity Filter**: `Caveman` ensures the smallest safe change set, avoiding broad refactors during bug fixes.
 
 ## 2. Core Invariants
 
+- `CONDUCTOR != PONYTAIL`
+- `ROUTING_AUTHORITY != IMPLEMENTATION_AUTHORITY`
+- `CUSTOM_AGENT_CAPABILITY != ORCHESTRA_ROUTING_AUTHORITY`
 - `HOST != PROVIDER`
 - `PROVIDER != SPECIALIST`
 - `HOST_IDENTITY != AUTHORITY`

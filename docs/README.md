@@ -109,7 +109,7 @@ Cross-repository continuity may be supplied by a user-selected external continui
 - [Developer Portal](developer/README.md): extension and integration discovery surface.
 - [MCP stdio Transport](developer/MCP_STDIO_TRANSPORT.md): first bounded MCP tools transport.
 - [GitHub Copilot Adapter](../adapters/github-copilot/README.md): decoupled integration architecture for GitHub Copilot.
-- [GitHub Copilot Probe Guide](../adapters/github-copilot/probe-guide.md): 10-dimension live capability probe guide.
+- [GitHub Copilot Probe Guide](../adapters/github-copilot/probe-guide.md): live capability probe guide distinguishing canonical command invocation from native custom agents.
 - `../machine/hosts/update-contract.v1.json`: host update/maturity contract.
 - `../machine/protocol/prap-certification-contract.v1.json`: PRAP certification contract.
 - `../machine/developer-portal/catalog.v1.json`: machine Developer Portal catalog.

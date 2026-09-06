@@ -2234,7 +2234,7 @@
     },
     "universal_adaptive_integration_uai": {
       "status": "UAI_0_BASELINE_AND_PROBE_PREPARED",
-      "purpose": "Decoupled host adapter templates and empirical capability probe suite for GitHub Copilot and external hosts without authority expansion.",
+      "purpose": "Decoupled host adapter templates and empirical capability probe suite distinguishing canonical command invocation from native custom-agent capabilities without authority expansion.",
       "human_sources": [
         "adapters/github-copilot/README.md",
         "adapters/github-copilot/probe-guide.md"
