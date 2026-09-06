@@ -1,0 +1,240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/provider-model-capability-contract.v1.schema.json",
+  "title": "Orchestra Provider Model Capability Contract v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "contract_id",
+    "contract_revision",
+    "contract_role",
+    "authority",
+    "capability_definitions",
+    "provider_model_profiles",
+    "evidence_policy"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "./machine/schemas/provider-model-capability-contract.v1.schema.json"
+    },
+    "schema_version": {
+      "const": "orchestra.provider-model-capability-contract.v1"
+    },
+    "contract_id": {
+      "const": "orchestra-provider-model-capability"
+    },
+    "contract_revision": {
+      "const": 1
+    },
+    "contract_role": {
+      "const": "canonical_uai_provider_model_capability_contract"
+    },
+    "authority": {
+      "$ref": "#/$defs/nonAuthorizingAuthority"
+    },
+    "capability_definitions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["capability_id", "category", "value_kind"],
+        "properties": {
+          "capability_id": {
+            "enum": [
+              "TOOL_CALLING",
+              "STRUCTURED_OUTPUT",
+              "CONTEXT_LIMITS",
+              "VISION_MULTIMODAL_INPUT",
+              "CODE_TERMINAL_EXPOSURE",
+              "SUB_AGENT_SUPPORT",
+              "CONCURRENCY_EXPOSURE",
+              "MCP_TOOL_COMPATIBILITY",
+              "MODEL_SELECTION_CONTROLS",
+              "REASONING_RUNTIME_MODES",
+              "PERMISSION_SEMANTICS",
+              "PROVIDER_POLICY_RESTRICTIONS"
+            ]
+          },
+          "category": {
+            "enum": [
+              "INTERACTION",
+              "OUTPUT",
+              "CONTEXT",
+              "INPUT",
+              "EXECUTION",
+              "ORCHESTRATION",
+              "TRANSPORT",
+              "SELECTION",
+              "RUNTIME",
+              "PERMISSION",
+              "POLICY"
+            ]
+          },
+          "value_kind": {
+            "enum": ["BOOLEAN", "INTEGER_OR_RANGE", "ENUM_SET", "DESCRIPTIVE"]
+          }
+        }
+      }
+    },
+    "provider_model_profiles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/providerModelProfile"
+      }
+    },
+    "evidence_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "positive_disposition_requires_current_evidence",
+        "unknown_identity_disposition",
+        "static_declaration_disposition",
+        "provider_switching_authorized",
+        "learned_routing_promotion_authorized"
+      ],
+      "properties": {
+        "positive_disposition_requires_current_evidence": {
+          "const": true
+        },
+        "unknown_identity_disposition": {
+          "const": "UNKNOWN"
+        },
+        "static_declaration_disposition": {
+          "const": "AVAILABLE_NOT_YET_VERIFIED"
+        },
+        "provider_switching_authorized": {
+          "const": false
+        },
+        "learned_routing_promotion_authorized": {
+          "const": false
+        }
+      }
+    }
+  },
+  "$defs": {
+    "nonAuthorizingAuthority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capability_grants_execution_authority",
+        "capability_grants_routing_authority",
+        "capability_grants_specialist_selection_authority",
+        "capability_grants_workflow_topology_authority",
+        "capability_grants_provider_selection_authority",
+        "capability_grants_model_selection_authority",
+        "automatic_provider_switching",
+        "automatic_provider_fallback",
+        "learned_routing_promotion",
+        "execution_authorized"
+      ],
+      "properties": {
+        "capability_grants_execution_authority": {"const": false},
+        "capability_grants_routing_authority": {"const": false},
+        "capability_grants_specialist_selection_authority": {"const": false},
+        "capability_grants_workflow_topology_authority": {"const": false},
+        "capability_grants_provider_selection_authority": {"const": false},
+        "capability_grants_model_selection_authority": {"const": false},
+        "automatic_provider_switching": {"const": false},
+        "automatic_provider_fallback": {"const": false},
+        "learned_routing_promotion": {"const": false},
+        "execution_authorized": {"const": false}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_repository",
+        "source_path",
+        "source_commit",
+        "source_type",
+        "observation_id",
+        "observed_at",
+        "freshness"
+      ],
+      "properties": {
+        "source_repository": {"type": "string", "minLength": 1},
+        "source_path": {"type": "string", "minLength": 1},
+        "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "source_type": {"type": "string", "minLength": 1},
+        "observation_id": {"type": "string", "minLength": 1},
+        "observed_at": {"type": "string", "minLength": 1},
+        "freshness": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "max_age_hours", "invalidation_triggers"],
+          "properties": {
+            "status": {"enum": ["CURRENT_AT_OBSERVATION", "STALE", "UNKNOWN"]},
+            "max_age_hours": {"type": "integer", "minimum": 1},
+            "invalidation_triggers": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {"type": "string", "minLength": 1}
+            }
+          }
+        }
+      }
+    },
+    "providerModelProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile_id",
+        "host_id",
+        "provider_source_id",
+        "provider_id",
+        "model_id",
+        "evidence",
+        "authority",
+        "capabilities"
+      ],
+      "properties": {
+        "profile_id": {
+          "type": "string",
+          "pattern": "^provider-model-capability\\.[0-9a-f]{24}$"
+        },
+        "host_id": {"type": "string", "minLength": 1},
+        "provider_source_id": {"type": "string", "minLength": 1},
+        "provider_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]*$"},
+        "model_id": {"type": "string", "minLength": 1, "pattern": "^[^\\r\\n\\u0000]+$"},
+        "evidence": {"$ref": "#/$defs/evidence"},
+        "authority": {"$ref": "#/$defs/nonAuthorizingAuthority"},
+        "capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["capability_id", "disposition", "evidence_refs"],
+            "properties": {
+              "capability_id": {"type": "string", "minLength": 1},
+              "disposition": {
+                "enum": [
+                  "SUPPORTED_VERIFIED",
+                  "SUPPORTED_WITH_LIMITS",
+                  "AVAILABLE_NOT_YET_VERIFIED",
+                  "UNKNOWN",
+                  "BLOCKED_BY_POLICY",
+                  "VERIFIED_UNSUPPORTED_LOCALLY",
+                  "UNSUPPORTED"
+                ]
+              },
+              "evidence_refs": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {"type": "string", "minLength": 1}
+              },
+              "observed_value": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}
