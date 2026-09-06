@@ -83,10 +83,10 @@
       ],
       "properties": {
         "release": {
-          "const": "v1.8.0"
+          "const": "v1.9.0"
         },
         "target_commit": {
-          "const": "dad1f153f1be6522a8a7964258a2122a8d057596"
+          "const": "7129a690b041bddbf8b58f41db0c4a680317fda1"
         },
         "moved_by_portal": {
           "const": false

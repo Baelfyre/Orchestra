@@ -5,10 +5,10 @@
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Stable Continuation Branch:** `main`
-- **Current Public Release:** `v1.8.0`
-- **Release Status:** `v1.8.0 PUBLISHED_VERIFIED; v1.9.0 PREPARED_NOT_PUBLISHED`
-- **Target Release:** `v1.9.0`
-- **Release-Candidate Metadata:** `1.9.0` (`PREPARED_NOT_PUBLISHED`)
+- **Current Public Release:** `v1.9.0`
+- **Release Status:** `v1.9.0 PUBLISHED_VERIFIED`
+- **Target Release:** `NONE_DECLARED`
+- **Release-Candidate Metadata:** `1.9.0` (`PUBLISHED_VERIFIED_COMPLETE`)
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.3.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.4.0 Release State:** `PUBLISHED_VERIFIED`
@@ -30,15 +30,18 @@
 - **v1.8.0 Tag Ref:** lightweight `commit` ref targeting the exact release commit
 - **v1.8.0 GitHub Release:** id `RE_kwDOS_4UtM4WyusI`, immutable, non-draft, non-prerelease, independently verified latest
 - **v1.8.0 Post-Publication Verification:** PASS
-- **Control Plane State:** `V1_9_0_CANDIDATE`
-- **MCP State:** `PUBLISHED_V1_6_STABLE_RETAINED_V1_8`
+- **Control Plane State:** `V1_9_0_CURRENT`
+- **MCP State:** `PUBLISHED_V1_6_STABLE_RETAINED_V1_7`
 - **Policy Activation State:** `NOT_PERFORMED`
 
-## v1.9.0 UI Execution Fidelity Release Candidate
+## v1.9.0 UI Execution Fidelity Publication
 
-The v1.9.0 candidate is prepared from canonical Orchestra `main` after UIEF-5 Clockwork translation was independently qualified and squash-merged at `75af3966722edfdde474e8fcf99a1b8002d1527f` with tree `1020572e530cba92483cd31d54c2e7d51f179ae7`. UIEF-6 and UIEF-8 are verified against their existing specialist and regression contracts. UIEF-7 and UIEF-9 are complete with explicit limits: deterministic validation is covered without new rendered-application evidence, and the historical UIX-9C result remains `NO_BENEFIT_ESTABLISHED`.
+The v1.9.0 release is published from canonical Orchestra `main` at signed commit `7129a690b041bddbf8b58f41db0c4a680317fda1`, tree `babf0a0c61d4a073144891b295b1989c256513eb`, and sole parent `75af3966722edfdde474e8fcf99a1b8002d1527f`. UIEF-5 through UIEF-10 are canonically reconciled. UIEF-7 retains its deterministic-only evidence limit, and UIEF-9 retains the historical `NO_BENEFIT_ESTABLISHED` disposition without a new provider/model experiment.
 
-Current package/version surfaces are prepared at `1.9.0`; the public v1.8.0 tag and release remain unchanged until the final exact-head release candidate is qualified and independently published. Adaptive Host Integration is recorded as future work only and is not implemented.
+The v1.9.0 package/version surfaces are published and verified. Adaptive Host Integration is recorded as future work only and is not implemented.
+
+See `docs/validation/V1_9_0_PUBLICATION_CLOSEOUT.md` for the exact tag,
+release, signature, qualification, and independent post-publication evidence.
 
 ## v1.8.0 Governance Hardening, Runtime Refoundation & Traceability Publication
 

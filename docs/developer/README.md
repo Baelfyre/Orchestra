@@ -1,6 +1,6 @@
 # Orchestra Developer Portal
 
-The Developer Portal is Orchestra's repository-native discovery surface for developers extending or integrating with the current v1.9.0 candidate contracts. It is documentation and indexing only. It is not a hosted service, marketplace, package registry, deployment plane, policy authority, or runtime permission source.
+The Developer Portal is Orchestra's repository-native discovery surface for developers extending or integrating with the current v1.9.0 contracts. It is documentation and indexing only. It is not a hosted service, marketplace, package registry, deployment plane, policy authority, or runtime permission source.
 
 ## Start here
 
@@ -60,4 +60,4 @@ MCP remains transport, not authority. The current unit does not add Streamable H
 
 ## Public release boundary
 
-The current public release remains immutable `v1.8.0` at `dad1f153f1be6522a8a7964258a2122a8d057596`. The v1.9.0 candidate is prepared on `main` and remains unpublished until a separately governed exact-head release is authorized, validated, published, and independently verified.
+The current public release is immutable `v1.9.0` at signed canonical commit `7129a690b041bddbf8b58f41db0c4a680317fda1`. GitHub Release `RE_kwDOS_4UtM4W2pDC` and lightweight tag `v1.9.0` independently resolve to that exact identity.
