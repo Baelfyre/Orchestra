@@ -8,8 +8,7 @@
     <a href="docs/README.md">Documentation</a> |
     <a href="docs/developer/README.md">Developer Portal</a> |
     <a href="docs/governance/README.md">Governance</a> |
-    <a href="CHANGELOG.md">Changelog</a> |
-    <a href="https://buymeacoffee.com/baelfyre">Support</a>
+    <a href="CHANGELOG.md">Changelog</a>
   </p>
 
   <p>
@@ -18,6 +17,9 @@
       <img src="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml/badge.svg" alt="Repository validation status" />
     </a>
     <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license" />
+    <a href="https://buymeacoffee.com/baelfyre">
+      <img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=flat-square&logo=buymeacoffee&logoColor=000000" alt="Buy Me a Coffee" />
+    </a>
   </p>
 </div>
 
@@ -149,7 +151,11 @@ For AI systems and exact structured project state, start with [`README.json`](RE
 
 If Orchestra is useful to you and you want to support its continued development:
 
-**[Buy me a coffee](https://buymeacoffee.com/baelfyre)**
+<div align="center">
+  <a href="https://buymeacoffee.com/baelfyre">
+    <img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=000000" alt="Buy Me a Coffee" />
+  </a>
+</div>
 
 ---
 
