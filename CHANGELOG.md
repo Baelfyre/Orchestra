@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased UAI-10 maturity and closeout
+
+- Records UAI maturity boundaries after cross-host conformance: Copilot remains the only admitted observed host, provider/model profiles remain empty, transport fallback remains non-executing, and projections remain derived-only.
+- Explicitly keeps the focused Copilot Conductor retest promotion-only and excludes provider routing/fallback, learned routing, concurrency widening, AR-3, AR-4, release, deployment, marketplace, credentials, and policy activation.
+
 ## Unreleased UAI-9 cross-host capability conformance
 
 - Adds an evidence-bound comparison matrix for Antigravity, Codex, and GitHub Copilot across discovery, capabilities, transport, specialist ownership, authority, validation, permissions, fallback, provider/model boundaries, and projection parity.
