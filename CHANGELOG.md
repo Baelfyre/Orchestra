@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased ADAPT-QA AQ-2 adaptive risk profiler
+
+- Adds a methodology-neutral, deterministic risk profiler that selects assurance classes and minimum specialist topology from material risk characteristics and invariants.
+- Preserves independent Overseer QA, nonwaivable protected human gates, authority boundaries, and fail-closed handling for unknown risk or quality values.
+- Keeps Dagger recommendations risk-triggered and advisory only, with no provider activation, production action, AQ3 routing receipt, or AQ4 assurance manifest.
+
 ## Unreleased ADAPT-QA AQ-1 normative doctrine
 
 - Adds the machine-readable AQ-1 assurance contract, strict schema, pure domain validation rules, seven doctrine fixtures, and discoverable architecture documentation.
