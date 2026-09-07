@@ -196,6 +196,12 @@ _SECURITY_WORDS = (
     "security",
     "secret",
     "credential",
+    "rbac",
+    "permission",
+    "access control",
+    "role assignment",
+    "token",
+    "session validation",
 )
 _IDENTIFIER_RE = re.compile(r"^[A-Z][A-Z0-9_:-]{0,127}$")
 

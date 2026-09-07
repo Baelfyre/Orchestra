@@ -15,6 +15,7 @@ from orchestra_runtime.domain.adaptive import (
     BASE_QUALITY_DIMENSIONS,
     DaggerDecision,
     INVARIANT_EXAMPLES,
+    INVARIANT_RULES,
     ORCHESTRA_OVERLAYS,
     QUALITY_DIMENSIONS,
     RISK_CHARACTERISTICS,
@@ -51,6 +52,19 @@ def _profile(**overrides: object):
     return profile_risk(**values)
 
 
+def _rule_map(
+    rules: dict[str, tuple[tuple[str, ...], tuple[str, ...], bool]],
+) -> dict[str, object]:
+    return {
+        name: {
+            "assurance_classes": list(assurance_classes),
+            "specialists": list(specialists),
+            "dagger_trigger": dagger_trigger,
+        }
+        for name, (assurance_classes, specialists, dagger_trigger) in rules.items()
+    }
+
+
 def test_contract_matches_domain_model() -> None:
     contract = _json(CONTRACT_PATH)
     schema = _json(SCHEMA_PATH)
@@ -63,7 +77,8 @@ def test_contract_matches_domain_model() -> None:
     assert contract["invariant_examples"] == list(INVARIANT_EXAMPLES)
     assert contract["specialist_order"] == list(SPECIALIST_ORDER)
     assert contract["assurance_order"] == list(ASSURANCE_ORDER)
-    assert set(contract["risk_rules"]) == set(RISK_RULES)
+    assert contract["risk_rules"] == _rule_map(RISK_RULES)
+    assert contract["invariant_rules"] == _rule_map(INVARIANT_RULES)
     assert contract["authority"]["profiler_expands_authority"] is False
 
 
@@ -158,6 +173,20 @@ def test_security_critical_empty_profile_fails_closed() -> None:
         _profile(quality_dimensions=("SECURITY",))
     with pytest.raises(ValueError, match="security-critical"):
         _profile(material_behavior="change authorization behavior")
+
+
+@pytest.mark.parametrize(
+    "description",
+    (
+        "change RBAC permission checks",
+        "change access control",
+        "change role assignment",
+        "change token/session validation",
+    ),
+)
+def test_security_critical_empty_descriptions_fail_closed(description: str) -> None:
+    with pytest.raises(ValueError, match="security-critical"):
+        _profile(material_behavior=description)
 
 
 @pytest.mark.parametrize(
@@ -313,6 +342,9 @@ def test_assurance_and_dagger_monotonicity() -> None:
                 continue
             assert set(smaller_profile.required_assurance_classes).issubset(
                 larger_profile.required_assurance_classes
+            )
+            assert set(smaller_profile.recommended_specialists).issubset(
+                larger_profile.recommended_specialists
             )
             if smaller_profile.dagger_required:
                 assert larger_profile.dagger_required
