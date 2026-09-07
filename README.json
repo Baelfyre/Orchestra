@@ -2600,7 +2600,8 @@
     "portable_adaptive_memory_reference": "docs/architecture/PORTABLE_ADAPTIVE_MEMORY.md",
     "registry_query_optimization_o7_reference": "docs/architecture/REGISTRY_QUERY_OPTIMIZATION_O7.md",
     "historical_status_policy": "Phase documents may retain phase-era status wording. Current exact state comes from live machine contracts, release evidence, and Git identity.",
-    "adaptive_agentic_workflow_awf": "docs/architecture/ADAPTIVE_AGENTIC_WORKFLOW_AWF.md"
+    "adaptive_agentic_workflow_awf": "docs/architecture/ADAPTIVE_AGENTIC_WORKFLOW_AWF.md",
+    "adaptive_assurance_aq1_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ1.md"
   },
   "hosts_integrations": {
     "host_update_contract": "machine/hosts/update-contract.v1.json",
@@ -2856,7 +2857,8 @@
     "adaptive_agentic_workflow_awf": "AWF_N1_N5_COMPLETE_CANONICAL_VERIFIED",
     "adaptive_agentic_workflow_intake_n1_n3": "IMPLEMENTATION_CANDIDATE",
     "adaptive_agentic_workflow_semantic_robustness_n5": "IMPLEMENTATION_CANDIDATE",
-    "adaptive_agentic_workflow_advanced_adaptation_n6": "COMPLETE_CANONICAL_VERIFIED_NO_PROMOTION"
+    "adaptive_agentic_workflow_advanced_adaptation_n6": "COMPLETE_CANONICAL_VERIFIED_NO_PROMOTION",
+    "adaptive_assurance_aq1": "IMPLEMENTATION_CANDIDATE_AQ2_AND_CUD10_NOT_AUTHORIZED"
   },
   "ai_review_guidance": {
     "preferred_entrypoint": "README.json",

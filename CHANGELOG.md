@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased ADAPT-QA AQ-1 normative doctrine
+
+- Adds the machine-readable AQ-1 assurance contract, strict schema, pure domain validation rules, seven doctrine fixtures, and discoverable architecture documentation.
+- Keeps source-truth labels, explicit completion-state evidence, reconciliation gates, Conductor routing, provider boundaries, AQ-2 through AQ-14, and CUD10 authorization unchanged.
+
 ## v1.10.0 Universal Adaptive Integration and Conductor Routing - published
 
 - Packages the additive post-v1.9.0 UAI-0 through UAI-10 completion, including the canonical host capability contract, strategy/transport boundaries, portable projections, deterministic fallback planning, shadow-only provider capability classification, negative capability tests, cross-host conformance, and maturity closeout.
