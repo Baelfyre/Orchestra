@@ -16,6 +16,7 @@
     "source_truth_labels",
     "completion_states",
     "completion_policy",
+    "evidence_policy",
     "validation_fixtures",
     "future_boundary",
     "human_documentation"
@@ -65,6 +66,7 @@
       ]}
     },
     "completion_policy": {"$ref": "#/$defs/completion_policy"},
+    "evidence_policy": {"$ref": "#/$defs/evidence_policy"},
     "validation_fixtures": {
       "type": "array",
       "minItems": 7,
@@ -145,6 +147,165 @@
         "product_complete_requires_explicit_evidence": {"const": true},
         "discovery_first_product_complete_requires_reconciliation": {"const": true},
         "inferred_requires_authority_for_decided": {"const": true}
+      }
+    },
+    "evidence_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "layers",
+        "scopes",
+        "provenance_qualifications",
+        "required_metadata",
+        "claim_scope_by_state",
+        "required_layers_by_state",
+        "scope_rule",
+        "false_green_invariants"
+      ],
+      "properties": {
+        "layers": {
+          "const": [
+            "STATIC",
+            "UNIT",
+            "DOMAIN",
+            "CONTRACT",
+            "INTEGRATION",
+            "HTTP",
+            "RUNTIME",
+            "PERSISTENCE",
+            "CONCURRENCY",
+            "SECURITY",
+            "PROVENANCE",
+            "MUTATION",
+            "ADVERSARIAL",
+            "DOCUMENTATION",
+            "COMPLETION_STATE"
+          ]
+        },
+        "scopes": {
+          "const": [
+            "SOURCE",
+            "COMPLETION",
+            "DOMAIN",
+            "APPLICATION",
+            "API",
+            "UI",
+            "UNIT",
+            "CONTRACT",
+            "INTEGRATION",
+            "RUNTIME",
+            "PERSISTENCE",
+            "CONCURRENCY",
+            "SECURITY",
+            "ADVERSARIAL",
+            "CANONICAL",
+            "PRODUCT",
+            "EMPIRICAL_EFFECTIVENESS"
+          ]
+        },
+        "provenance_qualifications": {
+          "const": ["AUTHORITATIVE", "SELF_ASSERTED", "UNQUALIFIED"]
+        },
+        "required_metadata": {
+          "const": [
+            "originating_source",
+            "authoritative_source_ref",
+            "producer",
+            "validator",
+            "source_ref",
+            "candidate_ref",
+            "work_item_ref",
+            "freshness_ref",
+            "version_ref",
+            "provenance_qualification",
+            "evidence_layer",
+            "evidence_scope",
+            "claim_scope"
+          ]
+        },
+        "claim_scope_by_state": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "IDEATED",
+            "PROTOTYPED",
+            "DOMAIN_IMPLEMENTED",
+            "APPLICATION_INTEGRATED",
+            "API_INTEGRATED",
+            "UI_INTEGRATED",
+            "UNIT_VERIFIED",
+            "CONTRACT_VERIFIED",
+            "INTEGRATION_VERIFIED",
+            "RUNTIME_VERIFIED",
+            "SECURITY_VERIFIED",
+            "ADVERSARIALLY_VERIFIED",
+            "CANONICAL_VERIFIED",
+            "PRODUCT_COMPLETE"
+          ],
+          "properties": {
+            "IDEATED": {"const": "COMPLETION"},
+            "PROTOTYPED": {"const": "COMPLETION"},
+            "DOMAIN_IMPLEMENTED": {"const": "DOMAIN"},
+            "APPLICATION_INTEGRATED": {"const": "APPLICATION"},
+            "API_INTEGRATED": {"const": "API"},
+            "UI_INTEGRATED": {"const": "UI"},
+            "UNIT_VERIFIED": {"const": "UNIT"},
+            "CONTRACT_VERIFIED": {"const": "CONTRACT"},
+            "INTEGRATION_VERIFIED": {"const": "INTEGRATION"},
+            "RUNTIME_VERIFIED": {"const": "RUNTIME"},
+            "SECURITY_VERIFIED": {"const": "SECURITY"},
+            "ADVERSARIALLY_VERIFIED": {"const": "ADVERSARIAL"},
+            "CANONICAL_VERIFIED": {"const": "CANONICAL"},
+            "PRODUCT_COMPLETE": {"const": "PRODUCT"}
+          }
+        },
+        "required_layers_by_state": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "IDEATED",
+            "PROTOTYPED",
+            "DOMAIN_IMPLEMENTED",
+            "APPLICATION_INTEGRATED",
+            "API_INTEGRATED",
+            "UI_INTEGRATED",
+            "UNIT_VERIFIED",
+            "CONTRACT_VERIFIED",
+            "INTEGRATION_VERIFIED",
+            "RUNTIME_VERIFIED",
+            "SECURITY_VERIFIED",
+            "ADVERSARIALLY_VERIFIED",
+            "CANONICAL_VERIFIED",
+            "PRODUCT_COMPLETE"
+          ],
+          "properties": {
+            "IDEATED": {"const": ["COMPLETION_STATE"]},
+            "PROTOTYPED": {"const": ["COMPLETION_STATE"]},
+            "DOMAIN_IMPLEMENTED": {"const": ["DOMAIN"]},
+            "APPLICATION_INTEGRATED": {"const": ["INTEGRATION"]},
+            "API_INTEGRATED": {"const": ["INTEGRATION"]},
+            "UI_INTEGRATED": {"const": ["INTEGRATION"]},
+            "UNIT_VERIFIED": {"const": ["UNIT"]},
+            "CONTRACT_VERIFIED": {"const": ["CONTRACT"]},
+            "INTEGRATION_VERIFIED": {"const": ["INTEGRATION"]},
+            "RUNTIME_VERIFIED": {"const": ["HTTP", "RUNTIME"]},
+            "SECURITY_VERIFIED": {"const": ["SECURITY"]},
+            "ADVERSARIALLY_VERIFIED": {"const": ["ADVERSARIAL", "MUTATION"]},
+            "CANONICAL_VERIFIED": {"const": ["PROVENANCE"]},
+            "PRODUCT_COMPLETE": {"const": ["COMPLETION_STATE"]}
+          }
+        },
+        "scope_rule": {"const": "EVIDENCE_SCOPE_MUST_COVER_CLAIM_SCOPE"},
+        "false_green_invariants": {
+          "const": [
+            "SCHEMA_VALID_NOT_SEMANTICALLY_CONFORMANT",
+            "GREEN_CI_NOT_ASSURANCE_CONTRACT_SATISFIED",
+            "RECORD_BOUND_NOT_SEMANTICALLY_VERIFIED",
+            "EVIDENCE_PRESENT_NOT_EVIDENCE_SUFFICIENT",
+            "LOWER_ASSURANCE_LAYER_NOT_HIGHER_ASSURANCE_LAYER",
+            "CANONICAL_VERIFIED_NOT_EMPIRICALLY_VERIFIED"
+          ]
+        }
       }
     },
     "fixture": {

@@ -3,6 +3,7 @@
 ## Unreleased ADAPT-QA AQ-1 normative doctrine
 
 - Adds the machine-readable AQ-1 assurance contract, strict schema, pure domain validation rules, seven doctrine fixtures, and discoverable architecture documentation.
+- AQ1-R1 adds explicit evidence provenance, layer/type, source/candidate/work-item binding, freshness/version, evidence scope, claim scope, and fail-closed semantic sufficiency checks with negative regression coverage.
 - Keeps source-truth labels, explicit completion-state evidence, reconciliation gates, Conductor routing, provider boundaries, AQ-2 through AQ-14, and CUD10 authorization unchanged.
 
 ## v1.10.0 Universal Adaptive Integration and Conductor Routing - published
