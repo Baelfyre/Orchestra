@@ -157,6 +157,7 @@
         "scopes",
         "provenance_qualifications",
         "required_metadata",
+        "required_verifier_context",
         "claim_scope_by_state",
         "required_layers_by_state",
         "scope_rule",
@@ -220,7 +221,18 @@
             "provenance_qualification",
             "evidence_layer",
             "evidence_scope",
-            "claim_scope"
+            "claim_scope",
+            "authority_ref"
+          ]
+        },
+        "required_verifier_context": {
+          "const": [
+            "source_ref",
+            "candidate_ref",
+            "work_item_ref",
+            "freshness_ref",
+            "version_ref",
+            "verified_authority_ref"
           ]
         },
         "claim_scope_by_state": {

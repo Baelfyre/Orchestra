@@ -109,6 +109,32 @@ REQUIRED_EVIDENCE_LAYERS = {
     "PRODUCT_COMPLETE": ("COMPLETION_STATE",),
 }
 
+REQUIRED_EVIDENCE_METADATA = (
+    "originating_source",
+    "authoritative_source_ref",
+    "producer",
+    "validator",
+    "source_ref",
+    "candidate_ref",
+    "work_item_ref",
+    "freshness_ref",
+    "version_ref",
+    "provenance_qualification",
+    "evidence_layer",
+    "evidence_scope",
+    "claim_scope",
+    "authority_ref",
+)
+
+REQUIRED_VERIFIER_CONTEXT = (
+    "source_ref",
+    "candidate_ref",
+    "work_item_ref",
+    "freshness_ref",
+    "version_ref",
+    "verified_authority_ref",
+)
+
 # A scope relation is explicit coverage, not an assumption that one layer proves another.
 _SCOPE_COVERAGE = {
     "SOURCE": {"SOURCE"},
@@ -285,6 +311,7 @@ def validate_completion_escalation(
     work_item_ref: str | None = None,
     freshness_ref: str | None = None,
     version_ref: str | None = None,
+    verified_authority_ref: str | None = None,
 ) -> CompletionAssessment:
     """Validate one explicit state claim without inferring higher states."""
 
@@ -300,29 +327,19 @@ def validate_completion_escalation(
         raise ValueError("UNVERIFIED evidence cannot qualify a completion claim")
     if any(record.claimed_state != target for record in records):
         raise ValueError("completion evidence must claim the target state")
+    if verified_authority_ref is None:
+        raise ValueError("verifier-owned authority reference is required")
+    verified_authority = _text(verified_authority_ref, "verified_authority_ref")
     required_scope = CLAIM_SCOPE_BY_STATE[target]
     required_layers = REQUIRED_EVIDENCE_LAYERS[target]
     for record in records:
         if record.provenance_qualification != "AUTHORITATIVE":
             raise ValueError("completion evidence requires authoritative provenance")
-        required_metadata = (
-            "originating_source",
-            "authoritative_source_ref",
-            "producer",
-            "validator",
-            "source_ref",
-            "candidate_ref",
-            "work_item_ref",
-            "freshness_ref",
-            "version_ref",
-            "provenance_qualification",
-            "evidence_layer",
-            "evidence_scope",
-            "claim_scope",
-        )
-        missing = [field for field in required_metadata if getattr(record, field) is None]
+        missing = [field for field in REQUIRED_EVIDENCE_METADATA if getattr(record, field) is None]
         if missing:
             raise ValueError("completion evidence metadata is incomplete: " + ", ".join(missing))
+        if record.authority_ref != verified_authority:
+            raise ValueError("evidence authority does not match verifier-owned authority")
         if record.authoritative_source_ref != record.source_ref:
             raise ValueError("authoritative source reference must match bound source")
         if record.claim_scope != required_scope:
@@ -332,11 +349,19 @@ def validate_completion_escalation(
         if required_scope not in _SCOPE_COVERAGE[record.evidence_scope]:
             raise ValueError("evidence scope is insufficient for claim scope")
 
+    present_layers = {record.evidence_layer for record in records}
+    missing_layers = tuple(layer for layer in required_layers if layer not in present_layers)
+    if missing_layers:
+        raise ValueError("evidence layers are incomplete: " + ", ".join(missing_layers))
+
     def _check_binding(field_name: str, expected: str | None) -> None:
+        if expected is None:
+            raise ValueError(f"verifier context requires {field_name}")
+        expected_value = _text(expected, field_name)
         values = tuple(getattr(record, field_name) for record in records)
         if any(value is None for value in values) or len(set(values)) != 1:
             raise ValueError(f"evidence {field_name} is not consistently bound")
-        if expected is not None and values[0] != _text(expected, field_name):
+        if values[0] != expected_value:
             raise ValueError(f"evidence {field_name} does not match requested subject")
 
     for field_name, expected in (
@@ -385,6 +410,7 @@ def validate_product_complete(
     work_item_ref: str | None = None,
     freshness_ref: str | None = None,
     version_ref: str | None = None,
+    verified_authority_ref: str | None = None,
 ) -> CompletionAssessment:
     """Apply the product-complete gates that AQ-1 makes explicit."""
 
@@ -402,6 +428,7 @@ def validate_product_complete(
         work_item_ref=work_item_ref,
         freshness_ref=freshness_ref,
         version_ref=version_ref,
+        verified_authority_ref=verified_authority_ref,
     )
     state_set = set(assessment.explicit_states)
     if selected_mode == "DISCOVERY_FIRST" and not reconciled:
@@ -421,7 +448,9 @@ __all__ = [
     "EVIDENCE_LAYERS",
     "EVIDENCE_SCOPES",
     "PROVENANCE_QUALIFICATIONS",
+    "REQUIRED_EVIDENCE_METADATA",
     "REQUIRED_EVIDENCE_LAYERS",
+    "REQUIRED_VERIFIER_CONTEXT",
     "SOURCE_TRUTH_LABELS",
     "select_mode_for_evidence",
     "transition_mode",
