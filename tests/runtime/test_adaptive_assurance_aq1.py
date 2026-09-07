@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from copy import deepcopy
 from dataclasses import replace
 from itertools import product
 from pathlib import Path
@@ -24,6 +25,7 @@ from orchestra_runtime.domain.adaptive import (
     select_mode_for_evidence,
     transition_mode,
     validate_completion_escalation,
+    validate_development_mode,
     validate_product_complete,
 )
 
@@ -103,6 +105,64 @@ def _complete(
     )
 
 
+_CANONICAL_FIXTURES = (
+    ("AQ1-F1", "SPEC_FIRST", ("REQUIREMENT", "INVARIANT", "IMPLEMENTATION", "TEST"), "ADVANCE_WITH_EVIDENCE"),
+    ("AQ1-F2", "DISCOVERY_FIRST", ("PROTOTYPE",), "ALLOW_PROTOTYPE_ONLY"),
+    ("AQ1-F3", "DISCOVERY_FIRST", ("RECONCILIATION",), "REQUIRE_RECONCILIATION"),
+    ("AQ1-F4", "AS_BUILT", ("OBSERVED_BEHAVIOR", "HISTORICAL_INTENT_AUTHORITY"), "AUTHORITY_REQUIRED"),
+    ("AQ1-F5", "RECONCILIATION", ("CONFLICT_RECORD", "RECONCILIATION_DECISION"), "RECONCILIATION_REQUIRED"),
+    ("AQ1-F6", "AS_BUILT", ("INFERRED_STATEMENT", "AUTHORITY_RECORD"), "AUTHORITY_REQUIRED"),
+    ("AQ1-F7", "MAINTENANCE", ("TARGET_STATE_EVIDENCE",), "FAIL_CLOSED_NO_EVIDENCE"),
+)
+
+
+def _exercise_fixture(fixture_id: str) -> str:
+    if fixture_id == "AQ1-F1":
+        assessment = _validate((), "PROTOTYPED", [_evidence("PROTOTYPED")])
+        return "ADVANCE_WITH_EVIDENCE" if assessment.target_state == "PROTOTYPED" else "FAIL"
+    if fixture_id == "AQ1-F2":
+        assessment = _validate((), "PROTOTYPED", [_evidence("PROTOTYPED")])
+        return "ALLOW_PROTOTYPE_ONLY" if not assessment.product_complete else "FAIL"
+    if fixture_id == "AQ1-F3":
+        with pytest.raises(ValueError, match="RECONCILIATION"):
+            _complete(
+                "DISCOVERY_FIRST",
+                ("PROTOTYPED",),
+                [_evidence("PRODUCT_COMPLETE")],
+            )
+        return "REQUIRE_RECONCILIATION"
+    if fixture_id == "AQ1-F4":
+        with pytest.raises(ValueError, match="authority"):
+            _validate(
+                ("DOMAIN_IMPLEMENTED",),
+                "CANONICAL_VERIFIED",
+                [_evidence("CANONICAL_VERIFIED", "INFERRED")],
+                claim_source_truth="INFERRED",
+            )
+        return "AUTHORITY_REQUIRED"
+    if fixture_id == "AQ1-F5":
+        return (
+            "RECONCILIATION_REQUIRED"
+            if select_mode_for_evidence("AS_BUILT", conflicting_sources=True) == "RECONCILIATION"
+            else "FAIL"
+        )
+    if fixture_id == "AQ1-F6":
+        with pytest.raises(ValueError, match="cannot become DECIDED"):
+            _validate(
+                ("IDEATED",),
+                "PROTOTYPED",
+                [_evidence("PROTOTYPED", "INFERRED")],
+                claim_source_truth="DECIDED",
+                authority_ref="authority-2",
+            )
+        return "AUTHORITY_REQUIRED"
+    if fixture_id == "AQ1-F7":
+        with pytest.raises(ValueError, match="requires evidence"):
+            validate_completion_escalation(("IDEATED",), "PROTOTYPED", [])
+        return "FAIL_CLOSED_NO_EVIDENCE"
+    raise AssertionError(f"unexpected fixture {fixture_id}")
+
+
 def test_aq1_contract_matches_schema_and_domain_constants() -> None:
     contract = _json(CONTRACT_PATH)
     schema = _json(SCHEMA_PATH)
@@ -124,6 +184,53 @@ def test_aq1_contract_matches_schema_and_domain_constants() -> None:
     }
     assert contract["authority"]["aq2_or_later_authorized"] is False
     assert contract["authority"]["cud10_authorized"] is False
+
+
+@pytest.mark.parametrize("fixture_id,mode,required_evidence,expected_disposition", _CANONICAL_FIXTURES)
+def test_all_canonical_fixtures_execute_recorded_disposition(
+    fixture_id: str,
+    mode: str,
+    required_evidence: tuple[str, ...],
+    expected_disposition: str,
+) -> None:
+    contract = _json(CONTRACT_PATH)
+    fixture = next(item for item in contract["validation_fixtures"] if item["id"] == fixture_id)
+    assert fixture["mode"] == mode
+    assert tuple(fixture["required_evidence"]) == required_evidence
+    assert fixture["expected_disposition"] == expected_disposition
+    assert validate_development_mode(fixture["mode"]) == mode
+    assert _exercise_fixture(fixture_id) == expected_disposition
+
+
+def test_schema_rejects_missing_repeated_and_unexpected_fixture_ids() -> None:
+    contract = _json(CONTRACT_PATH)
+    schema = _json(SCHEMA_PATH)
+
+    missing = deepcopy(contract)
+    missing["validation_fixtures"].pop()
+    repeated = deepcopy(contract)
+    repeated["validation_fixtures"][1]["id"] = "AQ1-F1"
+    unexpected = deepcopy(contract)
+    unexpected["validation_fixtures"][6]["id"] = "AQ1-F8"
+
+    for mutated in (missing, repeated, unexpected):
+        errors = list(Draft202012Validator(schema).iter_errors(mutated))
+        assert errors
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("mode", "MAINTENANCE"),
+        ("required_evidence", ["UNDECLARED_EVIDENCE"]),
+        ("expected_disposition", "FAIL_CLOSED_NO_EVIDENCE"),
+    ],
+)
+def test_schema_rejects_canonical_fixture_field_drift(field: str, value: object) -> None:
+    contract = deepcopy(_json(CONTRACT_PATH))
+    contract["validation_fixtures"][0][field] = value
+    schema = _json(SCHEMA_PATH)
+    assert list(Draft202012Validator(schema).iter_errors(contract))
 
 
 @pytest.mark.parametrize("current_mode,target_mode", list(product(DEVELOPMENT_MODES, repeat=2)))
@@ -351,7 +458,7 @@ def test_adversarial_verification_requires_all_layers(layer: str) -> None:
         )
 
 
-def test_multi_layer_requirements_accept_complete_evidence() -> None:
+def test_distinct_evidence_identities_satisfy_multi_layer_requirements() -> None:
     runtime = _validate(
         ("INTEGRATION_VERIFIED",),
         "RUNTIME_VERIFIED",
@@ -391,6 +498,30 @@ def test_multi_layer_requirements_accept_complete_evidence() -> None:
         ],
     )
     assert adversarial.target_state == "ADVERSARIALLY_VERIFIED"
+
+
+def test_duplicate_evidence_identity_cannot_cover_runtime_layers() -> None:
+    with pytest.raises(ValueError, match="evidence_id"):
+        _validate(
+            ("INTEGRATION_VERIFIED",),
+            "RUNTIME_VERIFIED",
+            [
+                _evidence("RUNTIME_VERIFIED", evidence_layer="HTTP", evidence_scope="RUNTIME"),
+                _evidence("RUNTIME_VERIFIED", evidence_layer="RUNTIME", evidence_scope="RUNTIME"),
+            ],
+        )
+
+
+def test_duplicate_evidence_identity_cannot_cover_adversarial_layers() -> None:
+    with pytest.raises(ValueError, match="evidence_id"):
+        _validate(
+            ("SECURITY_VERIFIED",),
+            "ADVERSARIALLY_VERIFIED",
+            [
+                _evidence("ADVERSARIALLY_VERIFIED", evidence_layer="ADVERSARIAL", evidence_scope="ADVERSARIAL"),
+                _evidence("ADVERSARIALLY_VERIFIED", evidence_layer="MUTATION", evidence_scope="ADVERSARIAL"),
+            ],
+        )
 
 
 def test_stale_evidence_fails_closed_when_freshness_is_required() -> None:

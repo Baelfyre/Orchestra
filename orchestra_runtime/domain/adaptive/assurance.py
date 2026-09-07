@@ -323,6 +323,9 @@ def validate_completion_escalation(
         raise TypeError("evidence must contain AssuranceEvidence values")
     if not records:
         raise ValueError("completion-state qualification requires evidence")
+    evidence_ids = tuple(record.evidence_id for record in records)
+    if len(evidence_ids) != len(set(evidence_ids)):
+        raise ValueError("evidence_id values must be unique within one completion assessment")
     if claim_truth == "UNVERIFIED" or any(record.source_truth == "UNVERIFIED" for record in records):
         raise ValueError("UNVERIFIED evidence cannot qualify a completion claim")
     if any(record.claimed_state != target for record in records):
