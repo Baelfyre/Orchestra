@@ -7,6 +7,7 @@ This section is a curated entry point into the existing architecture records.
 - [Runtime architecture boundaries](../../../machine/governance/runtime-architecture-boundaries.v1.json)
 - [Router-first architecture](../../routing/ROUTER_FIRST_ARCHITECTURE.md)
 - [Adaptive Agentic Workflow](../../architecture/ADAPTIVE_AGENTIC_WORKFLOW_AWF.md)
+- [ADAPT-QA AQ-1 normative doctrine](../../architecture/ADAPTIVE_ASSURANCE_AQ1.md)
 - [UAI host capability contract](../../setup/HOST_CAPABILITY_CONTRACT.md)
 - [UAI cross-host conformance](../../setup/UAI_CROSS_HOST_CONFORMANCE.md)
 - [UAI maturity and closeout](../../setup/UAI_MATURITY_CLOSEOUT.md)
