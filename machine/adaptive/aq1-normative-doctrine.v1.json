@@ -1,0 +1,126 @@
+{
+  "$schema": "../schemas/adaptive-assurance-doctrine.v1.schema.json",
+  "schema_version": "orchestra.adaptive-assurance-doctrine.v1",
+  "phase": "AQ1_NORMATIVE_ADAPT_QA_DOCTRINE",
+  "status": "CONTRACT_DEFINED",
+  "source": {
+    "plan": "Padayon/projects/orchestra/10-approved/plans/Orchestra_ADAPT_QA_Repository_Assurance_Enhancement_Plan_20260907.md#AQ-1",
+    "reference_basis": "Padayon canonical main 64fcefd42bd606fe95116520e97f28292afacafb",
+    "derived_doctrine": true
+  },
+  "authority": {
+    "owner": "conductor",
+    "implementation_owner": "ponytail",
+    "validation_owner": "overseer",
+    "transition_owner": "arbiter",
+    "authority_expansion": false,
+    "routing_authority_change": false,
+    "provider_integration": "NONE",
+    "aq2_or_later_authorized": false,
+    "cud10_authorized": false
+  },
+  "development_modes": [
+    "SPEC_FIRST",
+    "DISCOVERY_FIRST",
+    "AS_BUILT",
+    "RECONCILIATION",
+    "DEFECT_DRIVEN",
+    "MAINTENANCE"
+  ],
+  "mode_transition": {
+    "supported": true,
+    "all_declared_modes_supported": true,
+    "example_sequence": [
+      "DISCOVERY_FIRST",
+      "PROTOTYPE",
+      "SYSTEM_TO_DOCS",
+      "RECONCILIATION",
+      "HARDENING",
+      "CANONICAL"
+    ]
+  },
+  "source_truth_labels": ["OBSERVED", "INFERRED", "DECIDED", "UNVERIFIED"],
+  "completion_states": [
+    "IDEATED",
+    "PROTOTYPED",
+    "DOMAIN_IMPLEMENTED",
+    "APPLICATION_INTEGRATED",
+    "API_INTEGRATED",
+    "UI_INTEGRATED",
+    "UNIT_VERIFIED",
+    "CONTRACT_VERIFIED",
+    "INTEGRATION_VERIFIED",
+    "RUNTIME_VERIFIED",
+    "SECURITY_VERIFIED",
+    "ADVERSARIALLY_VERIFIED",
+    "CANONICAL_VERIFIED",
+    "PRODUCT_COMPLETE"
+  ],
+  "completion_policy": {
+    "lower_state_does_not_imply_higher_state": true,
+    "state_evidence_required": true,
+    "canonical_verified_proves_empirical_effectiveness": false,
+    "canonical_verified_scope": "SOURCE_AND_EVIDENCE_QUALIFICATION_ONLY",
+    "domain_only_implies_application_integration": false,
+    "product_complete_requires_explicit_evidence": true,
+    "discovery_first_product_complete_requires_reconciliation": true,
+    "inferred_requires_authority_for_decided": true
+  },
+  "validation_fixtures": [
+    {
+      "id": "AQ1-F1",
+      "mode": "SPEC_FIRST",
+      "scenario": "A feature follows requirement to invariant to implementation to test.",
+      "required_evidence": ["REQUIREMENT", "INVARIANT", "IMPLEMENTATION", "TEST"],
+      "expected_disposition": "ADVANCE_WITH_EVIDENCE"
+    },
+    {
+      "id": "AQ1-F2",
+      "mode": "DISCOVERY_FIRST",
+      "scenario": "A prototype is allowed before documentation exists.",
+      "required_evidence": ["PROTOTYPE"],
+      "expected_disposition": "ALLOW_PROTOTYPE_ONLY"
+    },
+    {
+      "id": "AQ1-F3",
+      "mode": "DISCOVERY_FIRST",
+      "scenario": "A discovery-first work item cannot become product complete before reconciliation.",
+      "required_evidence": ["RECONCILIATION"],
+      "expected_disposition": "REQUIRE_RECONCILIATION"
+    },
+    {
+      "id": "AQ1-F4",
+      "mode": "AS_BUILT",
+      "scenario": "Reconstruction records observed behavior without inventing historical intent.",
+      "required_evidence": ["OBSERVED_BEHAVIOR", "HISTORICAL_INTENT_AUTHORITY"],
+      "expected_disposition": "AUTHORITY_REQUIRED"
+    },
+    {
+      "id": "AQ1-F5",
+      "mode": "RECONCILIATION",
+      "scenario": "Conflicting documentation and code selects reconciliation.",
+      "required_evidence": ["CONFLICT_RECORD", "RECONCILIATION_DECISION"],
+      "expected_disposition": "RECONCILIATION_REQUIRED"
+    },
+    {
+      "id": "AQ1-F6",
+      "mode": "AS_BUILT",
+      "scenario": "An inferred statement cannot become decided without authority.",
+      "required_evidence": ["INFERRED_STATEMENT", "AUTHORITY_RECORD"],
+      "expected_disposition": "AUTHORITY_REQUIRED"
+    },
+    {
+      "id": "AQ1-F7",
+      "mode": "MAINTENANCE",
+      "scenario": "Completion-state escalation without evidence fails closed.",
+      "required_evidence": ["TARGET_STATE_EVIDENCE"],
+      "expected_disposition": "FAIL_CLOSED_NO_EVIDENCE"
+    }
+  ],
+  "future_boundary": {
+    "aq2": "NOT_IMPLEMENTED",
+    "aq3_to_a14": "NOT_IMPLEMENTED",
+    "cud10": "NOT_AUTHORIZED"
+  },
+  "human_documentation": "docs/architecture/ADAPTIVE_ASSURANCE_AQ1.md"
+}

@@ -5,6 +5,19 @@ from .advanced_adaptation import (
     PromotionCandidateDecision,
     evaluate_advanced_adaptation_admission,
 )
+from .assurance import (
+    AQ1_DOCTRINE_SCHEMA_VERSION,
+    COMPLETION_STATES,
+    DEVELOPMENT_MODES,
+    SOURCE_TRUTH_LABELS,
+    AssuranceEvidence,
+    CompletionAssessment,
+    select_mode_for_evidence,
+    transition_mode,
+    validate_completion_escalation,
+    validate_development_mode,
+    validate_product_complete,
+)
 from .agentic_workflow import STOP_CONDITIONS, select_agentic_workflow
 from .intake import (
     DERIVATION_POLICY_SCHEMA_VERSION,
@@ -61,10 +74,16 @@ from .topology_validator import (
 
 __all__ = [
     "AUTHORITY_RULE",
+    "AQ1_DOCTRINE_SCHEMA_VERSION",
+    "AssuranceEvidence",
+    "COMPLETION_STATES",
+    "CompletionAssessment",
     "DERIVATION_POLICY_SCHEMA_VERSION",
+    "DEVELOPMENT_MODES",
     "ELIGIBLE_DISPOSITIONS",
     "INTEGRATION_STRATEGY_POLICY_VERSION",
     "SELECTION_TRACE_SCHEMA_VERSION",
+    "SOURCE_TRUTH_LABELS",
     "AUTHORITY_DOMAINS",
     "AUTHORITY_DOMAIN_OWNERS",
     "AUTHORITY_VIEW_SCHEMA_VERSION",
@@ -102,6 +121,11 @@ __all__ = [
     "TransportCapabilityEvidence",
     "parse_authority_view",
     "select_agentic_workflow",
+    "select_mode_for_evidence",
+    "transition_mode",
+    "validate_completion_escalation",
+    "validate_development_mode",
+    "validate_product_complete",
     "resolve_integration_strategy",
     "resolve_transport_fallback",
     "broker_provider_capabilities",
