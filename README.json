@@ -2460,6 +2460,11 @@
     "adaptive_assurance_aq4_receipt_schema": "machine/schemas/evidence-receipt.v1.schema.json",
     "adaptive_assurance_aq4_runtime": "orchestra_runtime/domain/adaptive/assurance_manifest.py",
     "adaptive_assurance_aq4_validation": "tests/runtime/test_adaptive_assurance_aq4.py",
+    "adaptive_assurance_aq5_contract": "machine/adaptive/aq5-qa-compliance.v1.json",
+    "adaptive_assurance_aq5_schema": "machine/schemas/qa-compliance.v1.schema.json",
+    "adaptive_assurance_aq5_runtime": "orchestra_runtime/domain/adaptive/qa_compliance.py",
+    "adaptive_assurance_aq5_validator": "scripts/validation/validate_qa_compliance.py",
+    "adaptive_assurance_aq5_workflow": ".github/workflows/qa-compliance.yml",
     "comparative_measurement_contract": "machine/benchmarking/comparative-measurement-contract.v1.json",
     "comparative_benchmark_run_schema": "machine/schemas/comparative-benchmark-run.schema.json",
     "comparative_benchmark_experiment_schema": "machine/schemas/comparative-benchmark-experiment.schema.json",
@@ -2621,7 +2626,8 @@
     "adaptive_assurance_aq1_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ1.md",
     "adaptive_assurance_aq2_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ2.md",
     "adaptive_assurance_aq3_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ3.md",
-    "adaptive_assurance_aq4_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ4.md"
+    "adaptive_assurance_aq4_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ4.md",
+    "adaptive_assurance_aq5_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ5.md"
   },
   "hosts_integrations": {
     "host_update_contract": "machine/hosts/update-contract.v1.json",
