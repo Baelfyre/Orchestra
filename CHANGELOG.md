@@ -5,6 +5,12 @@
 - Requires an explicit approved evidence-baseline SHA for manual workflow_dispatch validation and binds that value to ORCHESTRA_APPROVED_BASE_SHA across the four legacy validation workflows.
 - Preserves verified GitHub event-derived baselines for pull_request base and push before-commit validation.
 
+## Unreleased ADAPT-QA AQ-4 assurance manifests and evidence receipts
+
+- Adds pure deterministic machine-readable per-candidate assurance manifests and evidence receipts bound to source, candidate, and tree identity.
+- Enforces AQ1/AQ2/AQ3 inheritance, explicit slot coverage, provenance, layer, freshness, contradiction, and duplicate normalization with fail-closed authority non-expansion.
+- Adds schema/runtime parity, AQ4-N1 through AQ4-N18 negatives, property tests, and AQ1-AQ4 compatibility coverage without AQ5 gate enforcement or promotion authority.
+
 ## Unreleased ADAPT-QA AQ-3 specialist assurance contracts
 
 - Adds deterministic Conductor routing receipts bound to qualified AQ-2 risk profiles, with explicit source identities, specialist topology, assurance sets, Dagger decisions, protected gates, authority boundaries, and risk fingerprints.
@@ -232,7 +238,7 @@
 - Provides deterministic positive and negative test fixtures in `tests/fixtures/ui/uief1-*.json` and runtime validation tests in `tests/runtime/test_ui_implementation_profile_contract.py`.
 - Updates `README.json` machine discovery index with `ui_implementation_profile_schema` and `ui_implementation_profile_reference`.
 
-## v1.8.0 — Governance Hardening, Runtime Refoundation & Traceability
+## v1.8.0 ? Governance Hardening, Runtime Refoundation & Traceability
 
 - **Governance Hardening**: Reinforces the Orchestra Prime Directive and Governed Execution Lifecycle V2, enforcing strict separation of authority, capability, routing, and validation readiness.
 - **Architecture Governance System (OR-GOV-1 through OR-GOV-10)**: Formalizes seven machine-readable contracts (`CapacityEnvelope`, `ProductIntentContract`, `ArchitectureComplexityDecision`, `MigrationRiskContract`, `ArchitectureGovernanceIntake`, `ArchitectureValidationContract`, `ProjectArchitectureGovernanceProfile`) with adaptive capacity reasoning, scale-ready vs. scale-provisioned distinction, engine-aware migration risk, proportional routing, declared-edge semantic invalidation, and revision-bound validation proof states.
