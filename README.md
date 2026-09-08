@@ -98,6 +98,33 @@ Add this repository as a Marketplace source, install Orchestra, then invoke:
 @Orchestra
 ```
 
+### Claude
+
+#### Claude app / desktop plugin marketplace
+
+1. Open **Customize > Plugins**.
+2. Under **Personal plugins**, select **+ > Add marketplace > Add from a repository**.
+3. Paste:
+
+```text
+https://github.com/Baelfyre/Orchestra
+```
+
+4. Install the **orchestra** plugin.
+
+If your Claude client exposes plugin management under **Settings > Extensions > Plugins**, choose **Add Marketplace** there and use the same repository URL.
+
+#### Claude Code
+
+From a Claude Code session:
+
+```text
+/plugin marketplace add Baelfyre/Orchestra
+/plugin install orchestra@orchestra
+```
+
+If Claude reports that plugin changes require a reload, run `/reload-plugins`.
+
 ### Antigravity
 
 ```sh
@@ -112,9 +139,36 @@ See the [Getting Started reference](docs/reference/getting-started/README.md), [
 
 Orchestra can expose a bounded tool surface to an MCP-compatible client while preserving the same runtime and governance boundaries.
 
+### Codex MCP
+
 ```sh
 python scripts/mcp_server.py --adapter codex
 ```
+
+### Claude Code MCP
+
+Orchestra already registers `claude-code` as a runtime adapter, so the same local stdio server can be launched with the Claude adapter:
+
+```sh
+python scripts/mcp_server.py --adapter claude-code
+```
+
+To register the local server with Claude Code, replace `<path-to-Orchestra>` with your local clone path:
+
+```sh
+claude mcp add --scope user --transport stdio orchestra -- python "<path-to-Orchestra>/scripts/mcp_server.py" --adapter claude-code
+claude mcp get orchestra
+```
+
+Restart Claude Code after registration, then run:
+
+```text
+/mcp
+```
+
+The Claude MCP path is **prepared at the adapter and stdio-transport level**. The repository does not yet record an installed-host Claude MCP end-to-end proof equivalent to the existing Codex validation, so do not classify Claude MCP host execution as verified until that test is completed.
+
+The Claude marketplace plugin also does not currently auto-register Orchestra MCP because the plugin root does not ship a `.mcp.json`; MCP registration is a separate explicit setup step.
 
 MCP is transport, not authority. Discovery or tool access does not grant permission to perform protected actions.
 
