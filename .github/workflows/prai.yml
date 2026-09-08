@@ -83,7 +83,7 @@ jobs:
 
       - name: Run PRAI runtime and behavior tests
         run: >-
-          python -B -m pytest tests/runtime/test_prai.py tests/behavior/test_prai.py -q
+          python -B -m pytest tests/runtime/test_prai.py tests/behavior/test_prai.py --import-mode=importlib -q
 
       - name: Run fail-closed CLI syntax check
         run: >-
