@@ -2699,7 +2699,8 @@
     "communication_measurement_schema": "machine/schemas/communication-measurement.schema.json",
     "murmurs_measurement_policy": "Repository simulation may prove deterministic structural reductions such as fewer model-progress calls, but billing/model token deltas are reportable only when comparable live host-reported counters share the same counter identity. Unavailable token evidence remains unavailable rather than estimated.",
     "future_release_candidate_policy": "Any future release candidate requires fresh exact-head runtime, branch, critical-module, mutation, Cosmic Ray, cross-platform, CodeQL/required-analysis, governance, documentation-parity, and release-identity evidence.",
-    "evidence_policy": "Runtime confidence claims must be derived from persisted machine-readable CI evidence bound to the tested checkout SHA and source-head SHA."
+    "evidence_policy": "Runtime confidence claims must be derived from persisted machine-readable CI evidence bound to the tested checkout SHA and source-head SHA.",
+    "workflow_dispatch_baseline": "Manual workflow_dispatch validation requires the explicit approved_base_sha input bound to ORCHESTRA_APPROVED_BASE_SHA; pull_request and push retain verified event-derived baselines."
   },
   "continuity": {
     "repository_human_state": "PROJECT_STATE.md",

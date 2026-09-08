@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased legacy workflow-dispatch baseline contract repair
+
+- Requires an explicit approved evidence-baseline SHA for manual workflow_dispatch validation and binds that value to ORCHESTRA_APPROVED_BASE_SHA across the four legacy validation workflows.
+- Preserves verified GitHub event-derived baselines for pull_request base and push before-commit validation.
+
 ## Unreleased ADAPT-QA AQ-3 specialist assurance contracts
 
 - Adds deterministic Conductor routing receipts bound to qualified AQ-2 risk profiles, with explicit source identities, specialist topology, assurance sets, Dagger decisions, protected gates, authority boundaries, and risk fingerprints.
