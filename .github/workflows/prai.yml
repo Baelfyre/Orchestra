@@ -12,6 +12,7 @@ on:
       - main
     paths:
       - .github/workflows/prai.yml
+      - .github/workflows/qa-compliance.yml
       - CHANGELOG.md
       - README.json
       - docs/architecture/ADAPTIVE_ASSURANCE_PRAI.md
@@ -57,7 +58,7 @@ jobs:
           contract=json.loads((root/'machine/adaptive/prai-post-run-assurance.v1.json').read_text(encoding='utf-8'));
           schema=json.loads((root/'machine/schemas/prai-post-run-assurance.v1.schema.json').read_text(encoding='utf-8'));
           validate_prai_contract(contract);
-          validate_schema_runtime_parity(contract);
+          validate_schema_runtime_parity(contract, schema);
           Draft202012Validator.check_schema(schema);
           print('PRAI_CONTRACT=PASS')"
 
@@ -124,6 +125,7 @@ jobs:
           mapfile -t actual < <(git diff --name-only "$BASE_SHA..HEAD" | sort)
           expected=(
             ".github/workflows/prai.yml"
+            ".github/workflows/qa-compliance.yml"
             "CHANGELOG.md"
             "README.json"
             "docs/architecture/ADAPTIVE_ASSURANCE_PRAI.md"

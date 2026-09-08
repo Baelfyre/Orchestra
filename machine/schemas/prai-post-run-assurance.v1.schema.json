@@ -37,8 +37,7 @@
     "policy_self_modification",
     "authority_expansion",
     "green_tests",
-    "security_classification",
-    "digest"
+    "security_classification"
   ],
   "properties": {
     "schema_version": {
@@ -211,7 +210,42 @@
       "type": "array",
       "items": {
         "type": "string",
-        "minLength": 1
+        "minLength": 1,
+        "enum": [
+          "ACCESSIBILITY",
+          "AGGREGATE_INVARIANTS",
+          "AUTHENTICATION",
+          "AUTHORIZATION",
+          "CAPACITY",
+          "COMPLIANCE",
+          "CONCURRENCY",
+          "DATA_OWNERSHIP",
+          "DESTRUCTIVE_LIFECYCLE",
+          "DURABILITY",
+          "EXTERNAL_INPUT",
+          "IP",
+          "LEGAL",
+          "MIGRATION",
+          "PARTIAL_FAILURE",
+          "PERSISTENCE",
+          "POLICY",
+          "PRIVACY",
+          "PRIVILEGE",
+          "PRODUCT",
+          "PRODUCTION_CRITICAL",
+          "RECOVERY",
+          "RESOURCE_ALLOCATION",
+          "RESOURCE_PRESSURE",
+          "RETRY_IDEMPOTENCY",
+          "SCOPE_EXPANSION",
+          "SENSITIVE_PROVENANCE",
+          "STATE_MACHINE",
+          "TENANT_ISOLATION",
+          "TRANSACTION",
+          "UI",
+          "UX",
+          "VISUAL"
+        ]
       },
       "uniqueItems": true
     },
@@ -308,8 +342,7 @@
         "limitations",
         "examined_changed_code",
         "security_classification",
-        "logical_identity",
-        "digest"
+        "logical_identity"
       ],
       "properties": {
         "schema_version": {

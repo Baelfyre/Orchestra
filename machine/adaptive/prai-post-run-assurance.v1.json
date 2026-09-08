@@ -118,6 +118,7 @@
     ]
   },
   "required_work_unit_fields": [
+    "schema_version",
     "work_item_ref",
     "repository",
     "source_ref",
@@ -137,7 +138,18 @@
     "limitations",
     "overseer_sufficiency",
     "arbiter_disposition",
-    "review_receipts"
+    "review_receipts",
+    "authority_boundary",
+    "risk_characteristics",
+    "invariants",
+    "logical_findings",
+    "security_findings",
+    "caller_contract_issues",
+    "policy_modified_paths",
+    "policy_self_modification",
+    "authority_expansion",
+    "green_tests",
+    "security_classification"
   ],
   "work_unit_fields": [
     "schema_version",
@@ -246,7 +258,12 @@
     "stale_audit_reuse_after_repair",
     "audit_does_not_examine_changed_code",
     "generic_green_ci_substitution",
-    "self_modifying_prai_policy"
+    "self_modifying_prai_policy",
+    "schema_runtime_divergence",
+    "unknown_risk_characteristic",
+    "partial_changed_path_coverage",
+    "uncovered_risk_coverage",
+    "uncovered_invariant_coverage"
   ],
   "required_property_invariants": [
     "audit_is_mandatory",
@@ -287,5 +304,40 @@
     "AQ12",
     "AQ13",
     "AQ14"
+  ],
+  "allowed_risk_characteristics": [
+    "ACCESSIBILITY",
+    "AGGREGATE_INVARIANTS",
+    "AUTHENTICATION",
+    "AUTHORIZATION",
+    "CAPACITY",
+    "COMPLIANCE",
+    "CONCURRENCY",
+    "DATA_OWNERSHIP",
+    "DESTRUCTIVE_LIFECYCLE",
+    "DURABILITY",
+    "EXTERNAL_INPUT",
+    "IP",
+    "LEGAL",
+    "MIGRATION",
+    "PARTIAL_FAILURE",
+    "PERSISTENCE",
+    "POLICY",
+    "PRIVACY",
+    "PRIVILEGE",
+    "PRODUCT",
+    "PRODUCTION_CRITICAL",
+    "RECOVERY",
+    "RESOURCE_ALLOCATION",
+    "RESOURCE_PRESSURE",
+    "RETRY_IDEMPOTENCY",
+    "SCOPE_EXPANSION",
+    "SENSITIVE_PROVENANCE",
+    "STATE_MACHINE",
+    "TENANT_ISOLATION",
+    "TRANSACTION",
+    "UI",
+    "UX",
+    "VISUAL"
   ]
 }

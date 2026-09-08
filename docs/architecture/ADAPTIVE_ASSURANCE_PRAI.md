@@ -26,6 +26,18 @@ Each receipt binds the same repository, source ref, candidate SHA, tree SHA,
 work item, freshness ref, schema version, evidence scope, and reviewed paths.
 Receipt and work-unit digests use the shared canonicalization helpers.
 
+## Canonical schema and claim coverage
+
+The machine schema and runtime parser use the same canonical field inventory. Every
+serialized work-unit and receipt field is required except its derived digest, and
+legacy aliases are rejected. The command-line validator reads and validates the
+configured `--schema` before constructing or evaluating a work unit.
+
+Risk characteristics are restricted to the allowlist published by the machine
+contract. A PASS receipt must exactly cover every changed path, declared risk
+characteristic, and declared invariant in the work unit. Partial, unrelated, or
+empty claim coverage is insufficient, and unknown risk characteristics fail closed.
+
 The baseline reviewers are Clockwork for logical/system integrity, Cipher for
 security and authority integrity, and Overseer for evidence sufficiency. Arbiter
 disposition is a transition input. Chronicler, Dagger, Steward, Governor, and

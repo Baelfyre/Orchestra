@@ -37,6 +37,8 @@ def receipt(
     security_classification: str | None = None,
     logical_identity: str | None = None,
     examined_changed_code: bool = True,
+    covered_risks: tuple[str, ...] | None = None,
+    covered_invariants: tuple[str, ...] | None = None,
 ) -> prai.PraiReviewReceipt:
     evidence_refs = evidence_refs or (f"evidence://{role.lower()}",)
     return prai.PraiReviewReceipt(
@@ -54,8 +56,8 @@ def receipt(
         audited_paths=audited_paths,
         evidence_layer="specialist-review",
         evidence_scope="post-run-assurance",
-        covered_risks=("candidate-binding",),
-        covered_invariants=("post-run-assurance",),
+        covered_risks=covered_risks or (),
+        covered_invariants=covered_invariants or (),
         freshness_ref=FRESHNESS,
         version_ref=VERSION,
         provenance=provenance,
@@ -90,6 +92,7 @@ def make_unit(
     logical_impact: str = "LOW",
     security_impact: str = "LOW",
     security_classification: str | None = None,
+    invariants: tuple[str, ...] = ("candidate-bound-evidence",),
 ) -> prai.PraiWorkUnit:
     roles = roles_for(risks)
     refs = tuple(f"evidence://{role.lower()}" for role in roles)
@@ -105,6 +108,8 @@ def make_unit(
                 if security_impact == "NONE" and role == "CIPHER"
                 else None
             ),
+            covered_risks=risks,
+            covered_invariants=invariants,
         )
         for role in selected_roles
     )
@@ -130,7 +135,7 @@ def make_unit(
         arbiter_disposition="AUTO_CONTINUE",
         review_receipts=receipts,
         risk_characteristics=risks,
-        invariants=("candidate-bound-evidence",),
+        invariants=invariants,
         green_tests=True,
         security_classification=security_classification,
     )
@@ -234,7 +239,7 @@ def test_contract_and_schema_match_runtime() -> None:
         )
     )
     assert prai.validate_prai_contract(contract)["schema_version"] == prai.PRAI_CONTRACT_SCHEMA_VERSION
-    assert prai.validate_schema_runtime_parity(contract)["schema_version"] == prai.PRAI_CONTRACT_SCHEMA_VERSION
+    assert prai.validate_schema_runtime_parity(contract, schema)["schema_version"] == prai.PRAI_CONTRACT_SCHEMA_VERSION
     from jsonschema import Draft202012Validator
 
     Draft202012Validator.check_schema(schema)
@@ -497,19 +502,31 @@ def test_policy_and_security_findings_block() -> None:
 def test_aliases_strict_fields_and_digests() -> None:
     base = make_unit()
     receipt_data = base.review_receipts[0].to_dict()
-    receipt_data["review_type"] = receipt_data.pop("role")
-    receipt_data["evidence"] = receipt_data.pop("evidence_refs")
     assert prai.PraiReviewReceipt.from_mapping(receipt_data).role == "CLOCKWORK"
+    receipt_data["review_type"] = receipt_data.pop("role")
     with pytest.raises(ValueError):
-        prai.PraiReviewReceipt.from_mapping({**receipt_data, "unexpected": True})
+        prai.PraiReviewReceipt.from_mapping(receipt_data)
+    with pytest.raises(ValueError):
+        prai.PraiReviewReceipt.from_mapping({**base.review_receipts[0].to_dict(), "unexpected": True})
     with pytest.raises(ValueError):
         prai.PraiReviewReceipt.from_mapping(
             {**base.review_receipts[0].to_dict(), "digest": "0" * 64}
         )
+
     work_data = base.to_dict(include_digest=False)
-    work_data["receipts"] = work_data.pop("review_receipts")
-    work_data["current_freshness"] = work_data.pop("freshness_ref")
     assert prai.PraiWorkUnit.from_mapping(work_data).work_item_ref == WORK_ITEM
+    alias_data = base.to_dict(include_digest=False)
+    alias_data["receipts"] = alias_data.pop("review_receipts")
+    with pytest.raises(ValueError):
+        prai.PraiWorkUnit.from_mapping(alias_data)
+    alias_data = base.to_dict(include_digest=False)
+    alias_data["current_freshness"] = alias_data.pop("freshness_ref")
+    with pytest.raises(ValueError):
+        prai.PraiWorkUnit.from_mapping(alias_data)
+    missing = base.to_dict(include_digest=False)
+    missing.pop("authority_boundary")
+    with pytest.raises(ValueError):
+        prai.PraiWorkUnit.from_mapping(missing)
     with pytest.raises(ValueError):
         prai.PraiWorkUnit.from_mapping({**base.to_dict(), "unexpected": True})
     with pytest.raises(TypeError):
@@ -517,6 +534,73 @@ def test_aliases_strict_fields_and_digests() -> None:
     with pytest.raises(ValueError):
         prai.PraiReviewReceipt.from_mapping(
             {**base.review_receipts[0].to_dict(), "role": "UNKNOWN"}
+        )
+
+
+def test_schema_and_runtime_reject_divergent_shapes() -> None:
+    root = Path(__file__).resolve().parents[2]
+    schema = json.loads(
+        (root / "machine" / "schemas" / "prai-post-run-assurance.v1.schema.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    from jsonschema import Draft202012Validator, ValidationError
+
+    validator = Draft202012Validator(schema)
+    canonical = make_unit().to_dict()
+    without_digest = dict(canonical)
+    without_digest.pop("digest")
+    validator.validate(without_digest)
+    assert prai.PraiWorkUnit.from_mapping(without_digest).digest
+    missing = dict(without_digest)
+    missing.pop("authority_boundary")
+    with pytest.raises(ValidationError):
+        validator.validate(missing)
+    with pytest.raises(ValueError):
+        prai.PraiWorkUnit.from_mapping(missing)
+    invalid_type = dict(without_digest)
+    invalid_type["green_tests"] = "true"
+    with pytest.raises(ValidationError):
+        validator.validate(invalid_type)
+    with pytest.raises((TypeError, ValueError)):
+        prai.PraiWorkUnit.from_mapping(invalid_type)
+
+
+def test_unknown_risk_characteristics_fail_closed() -> None:
+    root = Path(__file__).resolve().parents[2]
+    schema = json.loads(
+        (root / "machine" / "schemas" / "prai-post-run-assurance.v1.schema.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    from jsonschema import Draft202012Validator, ValidationError
+
+    data = make_unit().to_dict()
+    data["risk_characteristics"] = ["AUTHORIZATON"]
+    with pytest.raises(ValueError, match=prai.FAIL_UNKNOWN_RISK_CHARACTERISTIC):
+        prai.PraiWorkUnit.from_mapping(data)
+    with pytest.raises(ValidationError):
+        Draft202012Validator(schema).validate(data)
+    with pytest.raises(ValueError, match=prai.FAIL_UNKNOWN_RISK_CHARACTERISTIC):
+        prai.triggered_reviewers(("AUTHORIZATON",))
+
+
+def test_pass_receipts_must_cover_all_claimed_dimensions() -> None:
+    unit = make_unit(risks=("AUTHORIZATION",))
+    cases = (
+        {"audited_paths": (CODE_PATHS[0],)},
+        {"covered_risks": ()},
+        {"covered_invariants": ()},
+        {"covered_risks": ("CONCURRENCY",)},
+    )
+    for changes in cases:
+        changed_receipts = list(unit.review_receipts)
+        changed_receipts[0] = replace_receipt(
+            changed_receipts[0], **changes
+        )
+        blocked(
+            clone(unit, review_receipts=tuple(changed_receipts)),
+            prai.FAIL_ASSURANCE_COVERAGE,
         )
 
 

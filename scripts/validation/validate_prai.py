@@ -17,6 +17,7 @@ from orchestra_runtime.domain.adaptive.prai import (  # noqa: E402
     PraiWorkUnit,
     evaluate_post_run_assurance,
     validate_prai_contract,
+    validate_prai_schema,
     validate_schema_runtime_parity,
 )
 
@@ -53,9 +54,12 @@ def main() -> int:
     args = parser().parse_args()
     try:
         contract = read_json(args.contract)
+        schema = read_json(args.schema)
+        work_payload = read_json(args.work_unit)
         validate_prai_contract(contract)
-        validate_schema_runtime_parity(contract)
-        work = PraiWorkUnit.from_mapping(read_json(args.work_unit))
+        validate_prai_schema(schema, work_payload)
+        validate_schema_runtime_parity(contract, schema)
+        work = PraiWorkUnit.from_mapping(work_payload)
         decision = evaluate_post_run_assurance(
             work,
             current_repository=args.repository,

@@ -40,8 +40,8 @@ def unit() -> prai.PraiWorkUnit:
             audited_paths=PATHS,
             evidence_layer="cli-behavior",
             evidence_scope="bounded-command",
-            covered_risks=("candidate-binding",),
-            covered_invariants=("identity",),
+            covered_risks=(),
+            covered_invariants=(),
             freshness_ref=FRESHNESS,
             version_ref="orchestra-prai-plan-20260908-v1",
             provenance="AUTHORITATIVE",
@@ -133,6 +133,20 @@ def test_cli_blocks_stale_candidate() -> None:
         assert result.returncode == 1
         assert "PRAI_RESULT=BLOCKED" in result.stdout
         assert "FAIL_STALE_CANDIDATE" in result.stdout
+
+
+def test_cli_reads_configured_schema() -> None:
+    root = Path(__file__).resolve().parents[2]
+    with TemporaryDirectory() as directory:
+        directory_path = Path(directory)
+        work_path = directory_path / "work.json"
+        schema_path = directory_path / "schema.json"
+        work_path.write_text(json.dumps(unit().to_dict()), encoding="utf-8")
+        schema_path.write_text(json.dumps({"type": "not-a-schema-type"}), encoding="utf-8")
+        result = run_validator(root, work_path, "--schema", str(schema_path))
+        assert result.returncode == 2
+        assert "PRAI_RESULT=INVALID" in result.stderr
+        assert prai.FAIL_SCHEMA_RUNTIME_PARITY in result.stderr
 
 
 def test_cli_fails_closed_for_malformed_work_unit() -> None:

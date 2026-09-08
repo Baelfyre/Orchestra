@@ -100,6 +100,13 @@ TRIGGERED_SPECIALISTS = {
     "GOVERNOR": ("LEGAL", "PRIVACY", "COMPLIANCE", "IP", "POLICY"),
     "CLOAK": ("UI", "UX", "ACCESSIBILITY", "VISUAL"),
 }
+ALLOWED_RISK_CHARACTERISTICS = tuple(
+    sorted(
+        set(DEEP_RISK_CHARACTERISTICS).union(
+            *(set(values) for values in TRIGGERED_SPECIALISTS.values())
+        )
+    )
+)
 _DOC_SUFFIXES = (".md", ".rst", ".txt")
 _DEPTH_RANK = {"LIGHT": 0, "STANDARD": 1, "DEEP": 2}
 
@@ -137,6 +144,9 @@ FAIL_EVIDENCE_BINDING = "FAIL_EVIDENCE_BINDING"
 FAIL_SCOPE_EXCEEDED = "FAIL_SCOPE_EXCEEDED"
 FAIL_INVALID_FIELD = "FAIL_INVALID_FIELD"
 FAIL_INVALID_DIGEST = "FAIL_INVALID_DIGEST"
+FAIL_ASSURANCE_COVERAGE = "FAIL_ASSURANCE_COVERAGE"
+FAIL_SCHEMA_RUNTIME_PARITY = "FAIL_SCHEMA_RUNTIME_PARITY"
+FAIL_UNKNOWN_RISK_CHARACTERISTIC = "FAIL_UNKNOWN_RISK_CHARACTERISTIC"
 
 REQUIRED_NEGATIVE_FIXTURES = (
     "green_tests_contradictory_logical_invariant",
@@ -157,6 +167,11 @@ REQUIRED_NEGATIVE_FIXTURES = (
     "audit_does_not_examine_changed_code",
     "generic_green_ci_substitution",
     "self_modifying_prai_policy",
+    "schema_runtime_divergence",
+    "unknown_risk_characteristic",
+    "partial_changed_path_coverage",
+    "uncovered_risk_coverage",
+    "uncovered_invariant_coverage",
 )
 REQUIRED_PROPERTY_INVARIANTS = (
     "audit_is_mandatory",
@@ -258,26 +273,7 @@ DECISION_FIELDS = (
     "limitations",
     "decision_digest",
 )
-REQUIRED_WORK_UNIT_FIELDS = tuple(
-    field
-    for field in WORK_UNIT_FIELDS
-    if field
-    not in {
-        "schema_version",
-        "authority_boundary",
-        "risk_characteristics",
-        "invariants",
-        "logical_findings",
-        "security_findings",
-        "caller_contract_issues",
-        "policy_modified_paths",
-        "policy_self_modification",
-        "authority_expansion",
-        "green_tests",
-        "security_classification",
-        "digest",
-    }
-)
+REQUIRED_WORK_UNIT_FIELDS = tuple(field for field in WORK_UNIT_FIELDS if field != "digest")
 
 
 def _text(value: Any, field_name: str) -> str:
@@ -310,6 +306,16 @@ def _strings(
         raise ValueError(f"{field_name} must not be empty")
     if len(result) != len(set(result)):
         raise ValueError(f"{field_name} must not contain duplicates")
+    return result
+
+
+def _canonical_risks(values: Any) -> tuple[str, ...]:
+    result = tuple(value.upper() for value in _strings(values, "risk_characteristics"))
+    unknown = sorted(set(result) - set(ALLOWED_RISK_CHARACTERISTICS))
+    if unknown:
+        raise ValueError(
+            f"{FAIL_UNKNOWN_RISK_CHARACTERISTIC}: " + ", ".join(unknown)
+        )
     return result
 
 
@@ -442,24 +448,10 @@ class PraiReviewReceipt:
     @classmethod
     def from_mapping(cls, value: Mapping[str, Any]) -> "PraiReviewReceipt":
         data = dict(_mapping(value, "receipt"))
-        aliases = {
-            "review_type": "role",
-            "reviewer_role": "role",
-            "evidence": "evidence_refs",
-        }
-        for source, target in aliases.items():
-            if source in data:
-                if target in data:
-                    raise ValueError(f"receipt contains both {source} and {target}")
-                data[target] = data.pop(source)
         unknown = set(data) - set(RECEIPT_FIELDS)
         if unknown:
             raise ValueError("unknown receipt fields: " + ", ".join(sorted(unknown)))
-        required = set(RECEIPT_FIELDS) - {
-            "security_classification",
-            "logical_identity",
-            "digest",
-        }
+        required = set(RECEIPT_FIELDS) - {"digest"}
         missing = required - set(data)
         if missing:
             raise ValueError("missing receipt fields: " + ", ".join(sorted(missing)))
@@ -559,8 +551,11 @@ class PraiWorkUnit:
         object.__setattr__(self, "limitations", _strings(self.limitations, "limitations"))
         object.__setattr__(self, "arbiter_disposition", _choice(self.arbiter_disposition, ARBITER_DISPOSITIONS, "arbiter_disposition"))
         object.__setattr__(self, "authority_boundary", _text(self.authority_boundary, "authority_boundary"))
-        risks = tuple(value.upper() for value in _strings(self.risk_characteristics, "risk_characteristics"))
-        object.__setattr__(self, "risk_characteristics", risks)
+        object.__setattr__(
+            self,
+            "risk_characteristics",
+            _canonical_risks(self.risk_characteristics),
+        )
         object.__setattr__(self, "invariants", _strings(self.invariants, "invariants"))
         object.__setattr__(self, "logical_findings", _strings(self.logical_findings, "logical_findings"))
         object.__setattr__(self, "security_findings", _strings(self.security_findings, "security_findings"))
@@ -598,16 +593,6 @@ class PraiWorkUnit:
     @classmethod
     def from_mapping(cls, value: Mapping[str, Any]) -> "PraiWorkUnit":
         data = dict(_mapping(value, "work_unit"))
-        aliases = {
-            "receipts": "review_receipts",
-            "reviews": "review_receipts",
-            "current_freshness": "freshness_ref",
-        }
-        for source, target in aliases.items():
-            if source in data:
-                if target in data:
-                    raise ValueError(f"work unit contains both {source} and {target}")
-                data[target] = data.pop(source)
         unknown = set(data) - set(WORK_UNIT_FIELDS)
         if unknown:
             raise ValueError("unknown work-unit fields: " + ", ".join(sorted(unknown)))
@@ -772,7 +757,7 @@ def required_audit_depth(unit: PraiWorkUnit | Mapping[str, Any]) -> str:
 
 
 def triggered_reviewers(risk_characteristics: Iterable[str]) -> tuple[str, ...]:
-    risks = {str(value).strip().upper() for value in risk_characteristics}
+    risks = set(_canonical_risks(risk_characteristics))
     return tuple(
         role
         for role, triggers in TRIGGERED_SPECIALISTS.items()
@@ -819,6 +804,20 @@ def _compare_identity(
         return
     if observed != expected:
         _add(failures, code)
+
+
+def _receipt_covers_claim(
+    receipt: PraiReviewReceipt,
+    work: PraiWorkUnit,
+    changed_paths: set[str],
+) -> bool:
+    return (
+        set(receipt.audited_paths) == changed_paths
+        and {value.upper() for value in receipt.covered_risks}
+        == set(work.risk_characteristics)
+        and {value.casefold() for value in receipt.covered_invariants}
+        == {value.casefold() for value in work.invariants}
+    )
 
 
 def evaluate_post_run_assurance(
@@ -924,6 +923,8 @@ def evaluate_post_run_assurance(
             and not receipt.examined_changed_code
         ):
             _add(failures, FAIL_CHANGED_CODE_UNEXAMINED)
+        if receipt.result == "PASS" and not _receipt_covers_claim(receipt, work, changed):
+            _add(failures, FAIL_ASSURANCE_COVERAGE)
         if _DEPTH_RANK[receipt.audit_depth] < _DEPTH_RANK[work.audit_depth]:
             _add(failures, FAIL_REQUIRED_AUDIT_DEPTH)
         if (
@@ -954,6 +955,24 @@ def evaluate_post_run_assurance(
             and receipt.independent
             and receipt.reviewer.casefold() != work.implementer.casefold()
             and receipt.producer.casefold() != work.implementer.casefold()
+            and receipt.repository == work.repository
+            and receipt.source_ref == work.source_ref
+            and receipt.candidate_sha == work.candidate_sha
+            and receipt.tree_sha == work.tree_sha
+            and receipt.work_item_ref == work.work_item_ref
+            and receipt.freshness_ref == work.freshness_ref
+            and set(receipt.evidence_refs).issubset(set(work.evidence_refs))
+            and _receipt_covers_claim(receipt, work, changed)
+            and _DEPTH_RANK[receipt.audit_depth] >= _DEPTH_RANK[work.audit_depth]
+            and (
+                not any(not path.endswith(_DOC_SUFFIXES) for path in changed)
+                or receipt.examined_changed_code
+            )
+            and (
+                receipt.role != "CIPHER"
+                or work.security_impact != "NONE"
+                or receipt.security_classification == SECURITY_NO_MATERIAL_IMPACT
+            )
         )
     }
     for role in required_reviewers:
@@ -1027,6 +1046,7 @@ def validate_prai_contract(contract: Mapping[str, Any]) -> Mapping[str, Any]:
         "baseline_reviewers": list(BASELINE_REVIEWERS),
         "baseline_assurance": list(BASELINE_ASSURANCE),
         "deep_risk_characteristics": list(DEEP_RISK_CHARACTERISTICS),
+        "allowed_risk_characteristics": list(ALLOWED_RISK_CHARACTERISTICS),
         "triggered_specialists": {
             key: list(value) for key, value in TRIGGERED_SPECIALISTS.items()
         },
@@ -1052,13 +1072,80 @@ def validate_prai_contract(contract: Mapping[str, Any]) -> Mapping[str, Any]:
     return data
 
 
-def validate_schema_runtime_parity(contract: Mapping[str, Any]) -> Mapping[str, Any]:
+def validate_prai_schema(
+    schema: Mapping[str, Any],
+    work_unit: Mapping[str, Any],
+) -> Mapping[str, Any]:
+    schema_data = _mapping(schema, "schema")
+    payload = _mapping(work_unit, "work_unit")
+    try:
+        from jsonschema import Draft202012Validator
+    except ImportError as exc:
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: jsonschema is required") from exc
+    try:
+        Draft202012Validator.check_schema(schema_data)
+        errors = sorted(
+            Draft202012Validator(schema_data).iter_errors(payload),
+            key=lambda item: tuple(str(value) for value in item.absolute_path),
+        )
+    except Exception as exc:
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: {exc}") from exc
+    if errors:
+        error = errors[0]
+        location = ".".join(str(value) for value in error.absolute_path) or "<root>"
+        raise ValueError(
+            f"{FAIL_SCHEMA_RUNTIME_PARITY}: schema rejected work unit at "
+            f"{location}: {error.message}"
+        )
+    return payload
+
+
+def validate_schema_runtime_parity(
+    contract: Mapping[str, Any],
+    schema: Mapping[str, Any],
+) -> Mapping[str, Any]:
     data = validate_prai_contract(contract)
-    for field in REQUIRED_WORK_UNIT_FIELDS:
-        if field not in WORK_UNIT_FIELDS:
-            raise ValueError(f"required work-unit field is not declared: {field}")
-    if not set(RECEIPT_FIELDS).issubset(set(WORK_UNIT_FIELDS)) and "review_receipts" not in WORK_UNIT_FIELDS:
-        raise ValueError("receipt fields are not reachable from work-unit schema")
+    schema_data = _mapping(schema, "schema")
+    try:
+        from jsonschema import Draft202012Validator
+        Draft202012Validator.check_schema(schema_data)
+    except ImportError as exc:
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: jsonschema is required") from exc
+    except Exception as exc:
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: {exc}") from exc
+    properties = schema_data.get("properties")
+    if not isinstance(properties, Mapping):
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: work-unit properties are missing")
+    if set(properties) != set(WORK_UNIT_FIELDS):
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: work-unit properties drift")
+    if set(schema_data.get("required", ())) != set(REQUIRED_WORK_UNIT_FIELDS):
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: work-unit required fields drift")
+    if schema_data.get("additionalProperties") is not False:
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: work-unit openness drift")
+    risk_schema = properties.get("risk_characteristics")
+    if not isinstance(risk_schema, Mapping):
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: risk-characteristic schema is missing")
+    risk_items = risk_schema.get("items")
+    if not isinstance(risk_items, Mapping):
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: risk-characteristic items are missing")
+    if list(risk_items.get("enum", ())) != list(ALLOWED_RISK_CHARACTERISTICS):
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: risk-characteristic allowlist drift")
+
+    definitions = schema_data.get("$defs")
+    if not isinstance(definitions, Mapping):
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: receipt definitions are missing")
+    receipt_schema = definitions.get("receipt")
+    if not isinstance(receipt_schema, Mapping):
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: receipt schema is missing")
+    receipt_properties = receipt_schema.get("properties")
+    if not isinstance(receipt_properties, Mapping):
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: receipt properties are missing")
+    if set(receipt_properties) != set(RECEIPT_FIELDS):
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: receipt properties drift")
+    if set(receipt_schema.get("required", ())) != set(RECEIPT_FIELDS) - {"digest"}:
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: receipt required fields drift")
+    if receipt_schema.get("additionalProperties") is not False:
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: receipt openness drift")
     return data
 
 
@@ -1067,17 +1154,21 @@ evaluate_prai = evaluate_post_run_assurance
 evaluate = evaluate_post_run_assurance
 
 __all__ = [
+    "ALLOWED_RISK_CHARACTERISTICS",
     "ARBITER_DISPOSITIONS",
     "AUDIT_DEPTHS",
     "BASELINE_ASSURANCE",
     "BASELINE_REVIEWERS",
     "DEEP_RISK_CHARACTERISTICS",
     "DECISION_FIELDS",
+    "FAIL_ASSURANCE_COVERAGE",
     "FAIL_AUTHORITY_EXPANSION",
     "FAIL_CALLER_CONTRACT",
+    "FAIL_SCHEMA_RUNTIME_PARITY",
     "FAIL_CHANGED_CODE_UNEXAMINED",
     "FAIL_CONTRADICTORY_RECEIPT",
     "FAIL_CURRENT_IDENTITY_REQUIRED",
+    "FAIL_UNKNOWN_RISK_CHARACTERISTIC",
     "FAIL_DUPLICATE_RECEIPT",
     "FAIL_EVIDENCE_BINDING",
     "FAIL_GENERIC_CI_SUBSTITUTION",
@@ -1124,6 +1215,7 @@ __all__ = [
     "evaluate_post_run_assurance",
     "required_audit_depth",
     "triggered_reviewers",
+    "validate_prai_schema",
     "validate_prai_contract",
     "validate_prai_machine_contract",
     "validate_schema_runtime_parity",
