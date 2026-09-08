@@ -699,7 +699,15 @@ def test_invalid_receipt_metadata_and_decision_assertions():
     good = _decision(manifest, _receipts(manifest))
     assert QaComplianceDecision.from_mapping(good.to_dict()).to_dict() == good.to_dict()
     assert assert_qa_compliance(good) is good
-    assert assert_qa_compliance(manifest, _receipts(manifest)).result == "PASS"
+    assert assert_qa_compliance(
+        manifest,
+        _receipts(manifest),
+        current_repository="Baelfyre/Orchestra",
+        current_source_ref=SOURCE,
+        current_candidate_sha=CANDIDATE,
+        current_tree_sha=TREE,
+        evaluated_at=OBSERVED,
+    ).result == "PASS"
     with pytest.raises(QaComplianceContractError):
         assert_qa_compliance(invalid)
     with pytest.raises(QaComplianceContractError):
