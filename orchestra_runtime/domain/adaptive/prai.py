@@ -945,7 +945,17 @@ def evaluate_post_run_assurance(
         if len({receipt.result for receipt in group}) > 1:
             _add(failures, FAIL_CONTRADICTORY_RECEIPT)
 
-    by_role = {receipt.role: receipt for receipt in receipts if receipt.result == "PASS"}
+    by_role = {
+        receipt.role: receipt
+        for receipt in receipts
+        if (
+            receipt.result == "PASS"
+            and receipt.provenance == "AUTHORITATIVE"
+            and receipt.independent
+            and receipt.reviewer.casefold() != work.implementer.casefold()
+            and receipt.producer.casefold() != work.implementer.casefold()
+        )
+    }
     for role in required_reviewers:
         receipt = by_role.get(role)
         if receipt is None:
