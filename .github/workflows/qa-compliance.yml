@@ -1,0 +1,137 @@
+name: AQ5 QA Compliance
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+      - codex/orchestra-aq4-assurance-manifests-20260908
+    paths:
+      - .github/workflows/qa-compliance.yml
+      - docs/architecture/ADAPTIVE_ASSURANCE_AQ5.md
+      - machine/adaptive/aq5-qa-compliance.v1.json
+      - machine/schemas/qa-compliance.v1.schema.json
+      - orchestra_runtime/domain/adaptive/qa_compliance.py
+      - scripts/validation/validate_qa_compliance.py
+      - tests/runtime/test_adaptive_assurance_aq5.py
+      - tests/behavior/test_qa_compliance.py
+
+permissions:
+  contents: read
+
+jobs:
+  aq5-runtime:
+    name: AQ5 runtime contract
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install validation dependencies
+        run: |
+          python -m pip install --upgrade pip pytest pytest-cov hypothesis==6.163.0 "jsonschema[format]>=4.21,<5"
+
+      - name: Run AQ5 runtime suite
+        run: >-
+          python -B -m pytest tests/runtime/test_adaptive_assurance_aq5.py
+          --cov=orchestra_runtime.domain.adaptive.qa_compliance
+          --cov-branch
+          --cov-report=term-missing
+          --cov-fail-under=97
+          -q
+
+      - name: Enforce AQ5 branch coverage
+        run: python -B -m coverage report --fail-under=95
+
+  aq5-behavior:
+    name: AQ5 CLI behavior
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Run AQ5 behavior test
+        run: |
+          python -B -m pytest tests/behavior/test_qa_compliance.py -q
+          python -B tests/behavior/test_qa_compliance.py
+
+  aq5-contract:
+    name: AQ5 schema and contract parity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install schema dependency
+        run: python -m pip install --upgrade pip "jsonschema[format]>=4.21,<5"
+
+      - name: Validate AQ5 machine contracts
+        run: |
+          python -B - <<'PY'
+          import json
+          from pathlib import Path
+          import jsonschema
+          from orchestra_runtime.domain.adaptive.qa_compliance import validate_qa_compliance_contract
+
+          root = Path.cwd()
+          contract = json.loads((root / "machine/adaptive/aq5-qa-compliance.v1.json").read_text(encoding="utf-8"))
+          validate_qa_compliance_contract(contract)
+          schema = json.loads((root / "machine/schemas/qa-compliance.v1.schema.json").read_text(encoding="utf-8"))
+          jsonschema.Draft202012Validator.check_schema(schema)
+          print("AQ5_CONTRACT_PARITY=PASS")
+          PY
+
+  aq5-scope:
+    name: AQ5 exact scope
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Check AQ5 diff scope and whitespace
+        shell: bash
+        run: |
+          set -euo pipefail
+          base_ref="origin/codex/orchestra-aq4-assurance-manifests-20260908"
+          if ! git rev-parse --verify "$base_ref" >/dev/null 2>&1; then
+            base_ref="HEAD^"
+          fi
+          git diff --check "$base_ref...HEAD"
+          git diff --name-only "$base_ref...HEAD" | sort > actual-paths.txt
+          cat > expected-paths.txt <<'EOF'
+          .github/workflows/qa-compliance.yml
+          docs/architecture/ADAPTIVE_ASSURANCE_AQ5.md
+          machine/adaptive/aq5-qa-compliance.v1.json
+          machine/schemas/qa-compliance.v1.schema.json
+          orchestra_runtime/domain/adaptive/qa_compliance.py
+          scripts/validation/validate_qa_compliance.py
+          tests/behavior/test_qa_compliance.py
+          tests/runtime/test_adaptive_assurance_aq5.py
+          EOF
+          sed -i 's/^          //' expected-paths.txt
+          sort -o expected-paths.txt expected-paths.txt
+          diff -u expected-paths.txt actual-paths.txt
+          test "$(wc -l < actual-paths.txt)" -eq 8
