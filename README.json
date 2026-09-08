@@ -2451,6 +2451,10 @@
     "adaptive_assurance_aq2_schema": "machine/schemas/adaptive-risk-profiler.v1.schema.json",
     "adaptive_assurance_aq2_runtime": "orchestra_runtime/domain/adaptive/risk_profiler.py",
     "adaptive_assurance_aq2_validation": "tests/runtime/test_adaptive_assurance_aq2.py",
+    "adaptive_assurance_aq3_contract": "machine/adaptive/aq3-specialist-assurance-contract.v1.json",
+    "adaptive_assurance_aq3_schema": "machine/schemas/specialist-assurance-contract.v1.schema.json",
+    "adaptive_assurance_aq3_runtime": "orchestra_runtime/domain/adaptive/specialist_assurance.py",
+    "adaptive_assurance_aq3_validation": "tests/runtime/test_adaptive_assurance_aq3.py",
     "comparative_measurement_contract": "machine/benchmarking/comparative-measurement-contract.v1.json",
     "comparative_benchmark_run_schema": "machine/schemas/comparative-benchmark-run.schema.json",
     "comparative_benchmark_experiment_schema": "machine/schemas/comparative-benchmark-experiment.schema.json",
@@ -2610,7 +2614,8 @@
     "historical_status_policy": "Phase documents may retain phase-era status wording. Current exact state comes from live machine contracts, release evidence, and Git identity.",
     "adaptive_agentic_workflow_awf": "docs/architecture/ADAPTIVE_AGENTIC_WORKFLOW_AWF.md",
     "adaptive_assurance_aq1_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ1.md",
-    "adaptive_assurance_aq2_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ2.md"
+    "adaptive_assurance_aq2_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ2.md",
+    "adaptive_assurance_aq3_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ3.md"
   },
   "hosts_integrations": {
     "host_update_contract": "machine/hosts/update-contract.v1.json",
