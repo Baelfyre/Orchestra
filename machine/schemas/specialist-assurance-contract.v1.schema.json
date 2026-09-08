@@ -1,0 +1,189 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/schemas/specialist-assurance-contract.v1.schema.json",
+  "title": "Orchestra AQ-3 specialist assurance contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "owner",
+    "authority_model",
+    "receipt_fields",
+    "aq2_binding",
+    "canonical_specialist_order",
+    "canonical_assurance_order",
+    "bounded_coordination",
+    "dagger_policy",
+    "overseer_policy",
+    "arbiter_policy",
+    "source_truth_policy",
+    "specialist_boundary_rules",
+    "failure_codes",
+    "authority"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.specialist-assurance-contract.v1"},
+    "owner": {"const": "conductor"},
+    "authority_model": {"const": "EVIDENCE_ONLY_NON_AUTHORIZING"},
+    "receipt_fields": {"$ref": "#/$defs/stringList"},
+    "aq2_binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "profile_fingerprint_field",
+        "receipt_fingerprint_field",
+        "rule_source",
+        "selection_relation"
+      ],
+      "properties": {
+        "schema_version": {"const": "orchestra.adaptive-risk-profiler.v1"},
+        "profile_fingerprint_field": {"const": "normalized_risk_fingerprint"},
+        "receipt_fingerprint_field": {"const": "risk_fingerprint"},
+        "rule_source": {"const": "orchestra_runtime.domain.adaptive.risk_profiler"},
+        "selection_relation": {"const": "AQ3_MUST_NOT_WEAKEN_AQ2"}
+      }
+    },
+    "canonical_specialist_order": {"$ref": "#/$defs/stringList"},
+    "canonical_assurance_order": {"$ref": "#/$defs/stringList"},
+    "bounded_coordination": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "additions_are_explicit",
+        "additions_are_registry_bound",
+        "selection_grants_authority",
+        "authority_expansion"
+      ],
+      "properties": {
+        "additions_are_explicit": {"const": true},
+        "additions_are_registry_bound": {"const": true},
+        "selection_grants_authority": {"const": false},
+        "authority_expansion": {"const": false}
+      }
+    },
+    "dagger_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "trigger_source",
+        "risk_triggered",
+        "harmless_copy_only_must_not_trigger",
+        "execution_authorized",
+        "required_selection_may_not_be_omitted",
+        "overrouting_disposition"
+      ],
+      "properties": {
+        "trigger_source": {"const": "AQ2_RISK_AND_INVARIANT_RULES"},
+        "risk_triggered": {"const": true},
+        "harmless_copy_only_must_not_trigger": {"const": true},
+        "execution_authorized": {"const": false},
+        "required_selection_may_not_be_omitted": {"const": true},
+        "overrouting_disposition": {"type": "string", "minLength": 1}
+      }
+    },
+    "overseer_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewer",
+        "required_outputs",
+        "independent_evidence_required",
+        "implementer_self_certification_satisfies",
+        "separate_attribution_required"
+      ],
+      "properties": {
+        "reviewer": {"const": "overseer"},
+        "required_outputs": {"$ref": "#/$defs/stringList"},
+        "independent_evidence_required": {"const": true},
+        "implementer_self_certification_satisfies": {"const": false},
+        "separate_attribution_required": {"const": true}
+      }
+    },
+    "arbiter_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_set",
+        "actual_set",
+        "claimed_state",
+        "stale_evidence_blocks",
+        "wrong_source_blocks",
+        "weaker_evidence_blocks",
+        "duplicate_logical_identity_counts_once",
+        "green_ci_substitutes_for_security",
+        "green_ci_substitutes_for_concurrency",
+        "green_ci_substitutes_for_adversarial",
+        "aq1_completion_escalation_allowed"
+      ],
+      "properties": {
+        "required_set": {"const": "REQUIRED_ASSURANCE_SET"},
+        "actual_set": {"const": "ACTUAL_EVIDENCE_SET"},
+        "claimed_state": {"const": "CLAIMED_COMPLETION_STATE"},
+        "stale_evidence_blocks": {"const": true},
+        "wrong_source_blocks": {"const": true},
+        "weaker_evidence_blocks": {"const": true},
+        "duplicate_logical_identity_counts_once": {"const": false},
+        "green_ci_substitutes_for_security": {"const": false},
+        "green_ci_substitutes_for_concurrency": {"const": false},
+        "green_ci_substitutes_for_adversarial": {"const": false},
+        "aq1_completion_escalation_allowed": {"const": false}
+      }
+    },
+    "source_truth_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["labels", "scribe_may_infer_historical_intent", "decided_claim_requires_authority"],
+      "properties": {
+        "labels": {"$ref": "#/$defs/stringList"},
+        "scribe_may_infer_historical_intent": {"const": false},
+        "decided_claim_requires_authority": {"const": true}
+      }
+    },
+    "specialist_boundary_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cipher_tenant_admin_may_mutate_global_authority",
+        "chronicler_row_level_evidence_proves_tenant_wide_aggregate",
+        "chronicler_aggregate_claim_requires"
+      ],
+      "properties": {
+        "cipher_tenant_admin_may_mutate_global_authority": {"const": false},
+        "chronicler_row_level_evidence_proves_tenant_wide_aggregate": {"const": false},
+        "chronicler_aggregate_claim_requires": {"const": "REQUIRE_AGGREGATE_CONCURRENCY_ANALYSIS"}
+      }
+    },
+    "failure_codes": {"$ref": "#/$defs/stringList"},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "receipt_authorizes_dispatch",
+        "receipt_authorizes_execution",
+        "receipt_expands_authority",
+        "provider_activation",
+        "production_action",
+        "arbiter_transition_authority_created",
+        "dagger_execution_authority_created"
+      ],
+      "properties": {
+        "receipt_authorizes_dispatch": {"const": false},
+        "receipt_authorizes_execution": {"const": false},
+        "receipt_expands_authority": {"const": false},
+        "provider_activation": {"const": false},
+        "production_action": {"const": false},
+        "arbiter_transition_authority_created": {"const": false},
+        "dagger_execution_authority_created": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "stringList": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}
