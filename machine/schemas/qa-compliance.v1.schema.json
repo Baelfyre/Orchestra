@@ -1,0 +1,321 @@
+{
+  "$id": "https://orchestra.local/schemas/qa-compliance.v1.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "candidate_sha": {
+      "pattern": "^[0-9a-f]{40}$",
+      "type": "string"
+    },
+    "changed_paths": {
+      "items": {
+        "maxLength": 1024,
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "completion_state": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "enum": [
+            "IDEATED",
+            "PROTOTYPED",
+            "DOMAIN_IMPLEMENTED",
+            "APPLICATION_INTEGRATED",
+            "API_INTEGRATED",
+            "UI_INTEGRATED",
+            "UNIT_VERIFIED",
+            "CONTRACT_VERIFIED",
+            "INTEGRATION_VERIFIED",
+            "RUNTIME_VERIFIED",
+            "SECURITY_VERIFIED",
+            "ADVERSARIALLY_VERIFIED",
+            "CANONICAL_VERIFIED",
+            "PRODUCT_COMPLETE"
+          ]
+        }
+      ]
+    },
+    "compliant": {
+      "type": "boolean"
+    },
+    "covered_slot_ids": {
+      "items": {
+        "maxLength": 1024,
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "decision_digest": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "decision_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    },
+    "declared_paths": {
+      "items": {
+        "maxLength": 1024,
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "evidence_receipt_ids": {
+      "items": {
+        "maxLength": 1024,
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "failure_codes": {
+      "items": {
+        "maxLength": 1024,
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "gate_ids": {
+      "items": {
+        "maxLength": 1024,
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "generated_at": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "manifest_id": {
+      "maxLength": 128,
+      "minLength": 1,
+      "type": "string"
+    },
+    "missing_assurance": {
+      "items": {
+        "enum": [
+          "DOCUMENTATION_RECONCILIATION",
+          "ARCHITECTURE_BOUNDARY",
+          "FUNCTIONAL_ASSURANCE",
+          "PERFORMANCE_ASSURANCE",
+          "COMPATIBILITY_ASSURANCE",
+          "INTERACTION_ASSURANCE",
+          "RELIABILITY_ASSURANCE",
+          "SECURITY_ASSURANCE",
+          "MAINTAINABILITY_ASSURANCE",
+          "FLEXIBILITY_ASSURANCE",
+          "SAFETY_ASSURANCE",
+          "PROVENANCE_ASSURANCE",
+          "AUTHORITY_TRUST_ASSURANCE",
+          "PRIVACY_ASSURANCE",
+          "TENANT_ISOLATION_ASSURANCE",
+          "DATA_OWNERSHIP_ASSURANCE",
+          "CONCURRENCY_ASSURANCE",
+          "STATE_TRANSITION_ASSURANCE",
+          "RETRY_IDEMPOTENCY_ASSURANCE",
+          "RECOVERY_ROLLBACK_ASSURANCE",
+          "EXTERNAL_INPUT_ASSURANCE",
+          "EXTERNAL_PROVIDER_ASSURANCE",
+          "MIGRATION_ASSURANCE",
+          "DESTRUCTIVE_LIFECYCLE_ASSURANCE",
+          "HUMAN_AUTHORITY_ASSURANCE",
+          "OBSERVABILITY_ASSURANCE",
+          "AUTHENTICATION_ASSURANCE",
+          "AUTHORIZATION_ASSURANCE",
+          "PRIVILEGE_BOUNDARY_ASSURANCE",
+          "MULTI_ACTOR_ASSURANCE",
+          "AGGREGATE_INVARIANT_ASSURANCE",
+          "TRANSACTION_ASSURANCE",
+          "DELETION_ASSURANCE",
+          "PUBLICATION_ASSURANCE",
+          "INVARIANT_PRESERVATION_ASSURANCE",
+          "ADVERSARIAL_ASSURANCE",
+          "INDEPENDENT_QA"
+        ]
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "missing_slot_ids": {
+      "items": {
+        "maxLength": 1024,
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "repository": {
+      "maxLength": 512,
+      "minLength": 1,
+      "type": "string"
+    },
+    "required_assurance": {
+      "items": {
+        "enum": [
+          "DOCUMENTATION_RECONCILIATION",
+          "ARCHITECTURE_BOUNDARY",
+          "FUNCTIONAL_ASSURANCE",
+          "PERFORMANCE_ASSURANCE",
+          "COMPATIBILITY_ASSURANCE",
+          "INTERACTION_ASSURANCE",
+          "RELIABILITY_ASSURANCE",
+          "SECURITY_ASSURANCE",
+          "MAINTAINABILITY_ASSURANCE",
+          "FLEXIBILITY_ASSURANCE",
+          "SAFETY_ASSURANCE",
+          "PROVENANCE_ASSURANCE",
+          "AUTHORITY_TRUST_ASSURANCE",
+          "PRIVACY_ASSURANCE",
+          "TENANT_ISOLATION_ASSURANCE",
+          "DATA_OWNERSHIP_ASSURANCE",
+          "CONCURRENCY_ASSURANCE",
+          "STATE_TRANSITION_ASSURANCE",
+          "RETRY_IDEMPOTENCY_ASSURANCE",
+          "RECOVERY_ROLLBACK_ASSURANCE",
+          "EXTERNAL_INPUT_ASSURANCE",
+          "EXTERNAL_PROVIDER_ASSURANCE",
+          "MIGRATION_ASSURANCE",
+          "DESTRUCTIVE_LIFECYCLE_ASSURANCE",
+          "HUMAN_AUTHORITY_ASSURANCE",
+          "OBSERVABILITY_ASSURANCE",
+          "AUTHENTICATION_ASSURANCE",
+          "AUTHORIZATION_ASSURANCE",
+          "PRIVILEGE_BOUNDARY_ASSURANCE",
+          "MULTI_ACTOR_ASSURANCE",
+          "AGGREGATE_INVARIANT_ASSURANCE",
+          "TRANSACTION_ASSURANCE",
+          "DELETION_ASSURANCE",
+          "PUBLICATION_ASSURANCE",
+          "INVARIANT_PRESERVATION_ASSURANCE",
+          "ADVERSARIAL_ASSURANCE",
+          "INDEPENDENT_QA"
+        ]
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "result": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "BLOCKED"
+      ]
+    },
+    "satisfied_assurance": {
+      "items": {
+        "enum": [
+          "DOCUMENTATION_RECONCILIATION",
+          "ARCHITECTURE_BOUNDARY",
+          "FUNCTIONAL_ASSURANCE",
+          "PERFORMANCE_ASSURANCE",
+          "COMPATIBILITY_ASSURANCE",
+          "INTERACTION_ASSURANCE",
+          "RELIABILITY_ASSURANCE",
+          "SECURITY_ASSURANCE",
+          "MAINTAINABILITY_ASSURANCE",
+          "FLEXIBILITY_ASSURANCE",
+          "SAFETY_ASSURANCE",
+          "PROVENANCE_ASSURANCE",
+          "AUTHORITY_TRUST_ASSURANCE",
+          "PRIVACY_ASSURANCE",
+          "TENANT_ISOLATION_ASSURANCE",
+          "DATA_OWNERSHIP_ASSURANCE",
+          "CONCURRENCY_ASSURANCE",
+          "STATE_TRANSITION_ASSURANCE",
+          "RETRY_IDEMPOTENCY_ASSURANCE",
+          "RECOVERY_ROLLBACK_ASSURANCE",
+          "EXTERNAL_INPUT_ASSURANCE",
+          "EXTERNAL_PROVIDER_ASSURANCE",
+          "MIGRATION_ASSURANCE",
+          "DESTRUCTIVE_LIFECYCLE_ASSURANCE",
+          "HUMAN_AUTHORITY_ASSURANCE",
+          "OBSERVABILITY_ASSURANCE",
+          "AUTHENTICATION_ASSURANCE",
+          "AUTHORIZATION_ASSURANCE",
+          "PRIVILEGE_BOUNDARY_ASSURANCE",
+          "MULTI_ACTOR_ASSURANCE",
+          "AGGREGATE_INVARIANT_ASSURANCE",
+          "TRANSACTION_ASSURANCE",
+          "DELETION_ASSURANCE",
+          "PUBLICATION_ASSURANCE",
+          "INVARIANT_PRESERVATION_ASSURANCE",
+          "ADVERSARIAL_ASSURANCE",
+          "INDEPENDENT_QA"
+        ]
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "schema_version": {
+      "const": "orchestra.qa-compliance-decision.v1"
+    },
+    "semantic_risks": {
+      "items": {
+        "maxLength": 1024,
+        "minLength": 1,
+        "type": "string"
+      },
+      "type": "array",
+      "uniqueItems": true
+    },
+    "source_ref": {
+      "maxLength": 512,
+      "minLength": 1,
+      "type": "string"
+    },
+    "tree_sha": {
+      "pattern": "^[0-9a-f]{40}$",
+      "type": "string"
+    },
+    "work_item_ref": {
+      "maxLength": 512,
+      "minLength": 1,
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "decision_id",
+    "repository",
+    "source_ref",
+    "candidate_sha",
+    "tree_sha",
+    "work_item_ref",
+    "manifest_id",
+    "result",
+    "compliant",
+    "failure_codes",
+    "changed_paths",
+    "declared_paths",
+    "semantic_risks",
+    "required_assurance",
+    "satisfied_assurance",
+    "covered_slot_ids",
+    "missing_slot_ids",
+    "missing_assurance",
+    "evidence_receipt_ids",
+    "gate_ids",
+    "completion_state",
+    "generated_at",
+    "decision_digest"
+  ],
+  "title": "Orchestra AQ5 QA compliance decision",
+  "type": "object"
+}

@@ -5,6 +5,12 @@
 - Requires an explicit approved evidence-baseline SHA for manual workflow_dispatch validation and binds that value to ORCHESTRA_APPROVED_BASE_SHA across the four legacy validation workflows.
 - Preserves verified GitHub event-derived baselines for pull_request base and push before-commit validation.
 
+## Unreleased ADAPT-QA AQ-5 repository QA compliance
+
+- Adds an independent repository-level QA compliance control that evaluates AQ-4 manifests and source-bound receipts against risk, evidence, completion, gate, runtime, protected, stale-state, and policy-integrity requirements without granting authority.
+- Adds fail-closed AQ5-F1 through AQ5-F10 coverage plus positive material-change and harmless low-risk fixtures while preserving AQ4 and earlier assurance contracts.
+- Requires explicit live repository, source, candidate, and tree identity at the AQ5 evaluation boundary so stale manifests and matching stale receipts cannot self-validate.
+
 ## Unreleased ADAPT-QA AQ-4 assurance manifests and evidence receipts
 
 - Adds pure deterministic machine-readable per-candidate assurance manifests and evidence receipts bound to source, candidate, and tree identity.

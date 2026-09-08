@@ -1,0 +1,176 @@
+{
+  "authority": {
+    "decision_authorizes_execution": false,
+    "decision_authorizes_transition": false,
+    "decision_expands_authority": false,
+    "lifecycle_transition": false,
+    "production_action": false,
+    "provider_activation": false
+  },
+  "authority_model": "EVIDENCE_ONLY_NON_AUTHORIZING",
+  "completion_claim_scopes": {
+    "ADVERSARIALLY_VERIFIED": "ADVERSARIAL",
+    "API_INTEGRATED": "API",
+    "APPLICATION_INTEGRATED": "APPLICATION",
+    "CANONICAL_VERIFIED": "CANONICAL",
+    "CONTRACT_VERIFIED": "CONTRACT",
+    "DOMAIN_IMPLEMENTED": "DOMAIN",
+    "IDEATED": "COMPLETION",
+    "INTEGRATION_VERIFIED": "INTEGRATION",
+    "PRODUCT_COMPLETE": "PRODUCT",
+    "PROTOTYPED": "COMPLETION",
+    "RUNTIME_VERIFIED": "RUNTIME",
+    "SECURITY_VERIFIED": "SECURITY",
+    "UI_INTEGRATED": "UI",
+    "UNIT_VERIFIED": "UNIT"
+  },
+  "constraints": {
+    "aq6_plus_implementation": false,
+    "network_access": false,
+    "promotion_or_transition": false,
+    "provider_access": false,
+    "pure_domain": true,
+    "repository_mutation": false,
+    "test_execution": false
+  },
+  "decision_fields": [
+    "schema_version",
+    "decision_id",
+    "repository",
+    "source_ref",
+    "candidate_sha",
+    "tree_sha",
+    "work_item_ref",
+    "manifest_id",
+    "result",
+    "compliant",
+    "failure_codes",
+    "changed_paths",
+    "declared_paths",
+    "semantic_risks",
+    "required_assurance",
+    "satisfied_assurance",
+    "covered_slot_ids",
+    "missing_slot_ids",
+    "missing_assurance",
+    "evidence_receipt_ids",
+    "gate_ids",
+    "completion_state",
+    "generated_at",
+    "decision_digest"
+  ],
+  "decision_schema_version": "orchestra.qa-compliance-decision.v1",
+  "max_final_pr_paths": 9,
+  "owner": "overseer",
+  "phase": "AQ5_REPOSITORY_QA_COMPLIANCE",
+  "protected_policy_prefixes": [
+    ".github/workflows/governance-check.yml",
+    ".github/workflows/qa-compliance.yml",
+    "machine/governance/",
+    "machine/adaptive/aq5-qa-compliance.v1.json",
+    "machine/schemas/qa-compliance.v1.schema.json",
+    "scripts/validation/validate_governance",
+    "scripts/validation/validate_qa_compliance.py",
+    "orchestra_runtime/domain/adaptive/qa_compliance.py"
+  ],
+  "quality_assurance_map": {
+    "AUTHORITY_TRUST": "AUTHORITY_TRUST_ASSURANCE",
+    "COMPATIBILITY": "COMPATIBILITY_ASSURANCE",
+    "CONCURRENCY": "CONCURRENCY_ASSURANCE",
+    "DATA_OWNERSHIP": "DATA_OWNERSHIP_ASSURANCE",
+    "DESTRUCTIVE_LIFECYCLE": "DESTRUCTIVE_LIFECYCLE_ASSURANCE",
+    "EXTERNAL_DEPENDENCY": "EXTERNAL_PROVIDER_ASSURANCE",
+    "EXTERNAL_INPUT": "EXTERNAL_INPUT_ASSURANCE",
+    "FLEXIBILITY": "FLEXIBILITY_ASSURANCE",
+    "FUNCTIONAL_SUITABILITY": "FUNCTIONAL_ASSURANCE",
+    "HUMAN_AUTHORITY": "HUMAN_AUTHORITY_ASSURANCE",
+    "INTERACTION_CAPABILITY": "INTERACTION_ASSURANCE",
+    "MAINTAINABILITY": "MAINTAINABILITY_ASSURANCE",
+    "MIGRATION": "MIGRATION_ASSURANCE",
+    "OBSERVABILITY": "OBSERVABILITY_ASSURANCE",
+    "PERFORMANCE_EFFICIENCY": "PERFORMANCE_ASSURANCE",
+    "PRIVACY": "PRIVACY_ASSURANCE",
+    "PROVENANCE": "PROVENANCE_ASSURANCE",
+    "RECOVERY_ROLLBACK": "RECOVERY_ROLLBACK_ASSURANCE",
+    "RELIABILITY": "RELIABILITY_ASSURANCE",
+    "RETRY_IDEMPOTENCY": "RETRY_IDEMPOTENCY_ASSURANCE",
+    "SAFETY": "SAFETY_ASSURANCE",
+    "SECURITY": "SECURITY_ASSURANCE",
+    "STATE_TRANSITIONS": "STATE_TRANSITION_ASSURANCE",
+    "TENANT_WORKSPACE_ISOLATION": "TENANT_ISOLATION_ASSURANCE"
+  },
+  "required_completion_layers": {
+    "ADVERSARIALLY_VERIFIED": [
+      "ADVERSARIAL",
+      "MUTATION"
+    ],
+    "API_INTEGRATED": [
+      "INTEGRATION"
+    ],
+    "APPLICATION_INTEGRATED": [
+      "INTEGRATION"
+    ],
+    "CANONICAL_VERIFIED": [
+      "PROVENANCE"
+    ],
+    "CONTRACT_VERIFIED": [
+      "CONTRACT"
+    ],
+    "DOMAIN_IMPLEMENTED": [
+      "DOMAIN"
+    ],
+    "IDEATED": [
+      "COMPLETION_STATE"
+    ],
+    "INTEGRATION_VERIFIED": [
+      "INTEGRATION"
+    ],
+    "PRODUCT_COMPLETE": [
+      "COMPLETION_STATE"
+    ],
+    "PROTOTYPED": [
+      "COMPLETION_STATE"
+    ],
+    "RUNTIME_VERIFIED": [
+      "HTTP",
+      "RUNTIME"
+    ],
+    "SECURITY_VERIFIED": [
+      "SECURITY"
+    ],
+    "UI_INTEGRATED": [
+      "INTEGRATION"
+    ],
+    "UNIT_VERIFIED": [
+      "UNIT"
+    ]
+  },
+  "required_invariants": [
+    "AQ4_MANIFEST_AND_RECEIPTS_MUST_BE_SEMANTICALLY_VALID",
+    "CURRENT_SOURCE_CANDIDATE_TREE_MUST_MATCH_AQ4",
+    "CHANGED_PATHS_MUST_EQUAL_DECLARED_PATHS",
+    "SEMANTIC_RISK_MUST_BE_DECLARED_AND_ASSURED",
+    "SECURITY_NEEDS_SECURITY_EVIDENCE",
+    "CONCURRENCY_NEEDS_CONCURRENCY_EVIDENCE",
+    "RUNTIME_NEEDS_HTTP_AND_RUNTIME_EVIDENCE",
+    "PRODUCT_COMPLETE_NEEDS_CALLER_AND_INTEGRATION_EVIDENCE",
+    "PASS_WITH_NONZERO_EXIT_MUST_FAIL",
+    "UNEXECUTED_TEST_CLAIMS_MUST_FAIL",
+    "POLICY_SELF_MODIFICATION_MUST_FAIL",
+    "AQ5_DECISION_DOES_NOT_AUTHORIZE_TRANSITION"
+  ],
+  "required_negative_fixtures": [
+    "F1_SECURITY_NO_EVIDENCE",
+    "F2_CONCURRENCY_NO_EVIDENCE",
+    "F3_RUNTIME_ONLY_OPENAPI",
+    "F4_PRODUCT_COMPLETE_WITHOUT_CALLER",
+    "F5_PASS_NONZERO_EXIT",
+    "F6_OLD_CANDIDATE_SHA",
+    "F7_UNEXECUTED_TEST_CLAIM",
+    "F8_TEST_DOES_NOT_REACH_CHANGED_CODE",
+    "F9_CHANGED_PATH_OMITTED",
+    "F10_POLICY_SELF_MODIFICATION",
+    "F11_CURRENT_IDENTITY_REQUIRED"
+  ],
+  "schema_version": "orchestra.qa-compliance.v1"
+}
