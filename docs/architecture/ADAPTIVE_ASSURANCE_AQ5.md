@@ -53,10 +53,13 @@ The runtime suite keeps these fail-closed cases executable:
 ## Execution boundary
 
 The CLI in `scripts/validation/validate_qa_compliance.py` is the only I/O
-adapter. It reads JSON manifest and receipt inputs, invokes the pure evaluator,
-and optionally writes the descriptive decision JSON. The AQ-5 domain module
-does not access the network, providers, filesystem, test runner, Git state, or
-promotion machinery.
+adapter. It reads JSON manifest and receipt inputs, requires explicit current
+repository, source, candidate, and tree identities, invokes the pure evaluator,
+and optionally writes the descriptive decision JSON. The evaluator fails closed
+with `AQ5_CURRENT_IDENTITY_REQUIRED` if any current identity is omitted, so a
+stale manifest cannot self-validate against matching stale receipts. The AQ-5
+domain module does not access the network, providers, filesystem, test runner,
+Git state, or promotion machinery.
 
 The reusable workflow
 `.github/workflows/qa-compliance.yml` runs the focused AQ-5 runtime and

@@ -9,6 +9,7 @@
 
 - Adds an independent repository-level QA compliance control that evaluates AQ-4 manifests and source-bound receipts against risk, evidence, completion, gate, runtime, protected, stale-state, and policy-integrity requirements without granting authority.
 - Adds fail-closed AQ5-F1 through AQ5-F10 coverage plus positive material-change and harmless low-risk fixtures while preserving AQ4 and earlier assurance contracts.
+- Requires explicit live repository, source, candidate, and tree identity at the AQ5 evaluation boundary so stale manifests and matching stale receipts cannot self-validate.
 
 ## Unreleased ADAPT-QA AQ-4 assurance manifests and evidence receipts
 

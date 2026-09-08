@@ -106,6 +106,14 @@ def _run_cli_checks():
         "manifest.json",
         "--receipts",
         "receipts.json",
+        "--repository",
+        "Baelfyre/Orchestra",
+        "--source-ref",
+        SOURCE,
+        "--candidate-sha",
+        CANDIDATE,
+        "--tree-sha",
+        TREE,
         "--evaluated-at",
         OBSERVED,
     ]
@@ -131,6 +139,21 @@ def _run_cli_checks():
             )
         assert failed == 1
         assert "AQ5-F9_CHANGED_PATH_OMITTED" in failed_output.getvalue()
+
+        missing_identity_stderr = io.StringIO()
+        missing_identity = [
+            item
+            for index, item in enumerate(common)
+            if index not in (6, 7)
+        ]
+        try:
+            with contextlib.redirect_stderr(missing_identity_stderr):
+                validation.main(missing_identity)
+        except SystemExit as exc:
+            assert exc.code == 2
+        else:
+            raise AssertionError("CLI accepted missing --source-ref identity")
+        assert "--source-ref" in missing_identity_stderr.getvalue()
     finally:
         validation._load = original_load
 

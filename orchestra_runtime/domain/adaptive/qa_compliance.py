@@ -97,6 +97,7 @@ FAIL_POLICY_SELF_MODIFICATION = "AQ5-F10_POLICY_SELF_MODIFICATION"
 
 FAIL_AQ4_INVALID = "AQ5_AQ4_INPUT_INVALID"
 FAIL_AQ4_EVIDENCE_INSUFFICIENT = "AQ5_AQ4_EVIDENCE_INSUFFICIENT"
+FAIL_CURRENT_IDENTITY_REQUIRED = "AQ5_CURRENT_IDENTITY_REQUIRED"
 FAIL_SOURCE_BINDING = "AQ5_SOURCE_BINDING_MISMATCH"
 FAIL_TREE_BINDING = "AQ5_TREE_BINDING_MISMATCH"
 FAIL_SEMANTIC_RISK_UNDECLARED = "AQ5_SEMANTIC_RISK_UNDECLARED"
@@ -596,6 +597,15 @@ def evaluate_qa_compliance(
 
     manifest_obj = _coerce_manifest(manifest)
     failures: list[str] = []
+    current_identity = {
+        "current_repository": current_repository,
+        "current_source_ref": current_source_ref,
+        "current_candidate_sha": current_candidate_sha,
+        "current_tree_sha": current_tree_sha,
+    }
+    if any(value is None for value in current_identity.values()):
+        _append(failures, FAIL_CURRENT_IDENTITY_REQUIRED)
+
     repository = (
         manifest_obj.repository
         if current_repository is None

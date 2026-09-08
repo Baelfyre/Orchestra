@@ -41,6 +41,7 @@ from orchestra_runtime.domain.adaptive.qa_compliance import (
     FAIL_UNEXECUTED_TEST_CLAIM,
     FAIL_AQ4_INVALID,
     FAIL_COMPLETION_SCOPE,
+    FAIL_CURRENT_IDENTITY_REQUIRED,
     QaComplianceContractError,
     QaComplianceDecision,
     assert_qa_compliance,
@@ -183,10 +184,65 @@ def _receipts(manifest):
 
 
 def _decision(manifest, receipts, **kwargs):
+    kwargs.setdefault("current_repository", "Baelfyre/Orchestra")
+    kwargs.setdefault("current_source_ref", SOURCE)
+    kwargs.setdefault("current_candidate_sha", CANDIDATE)
+    kwargs.setdefault("current_tree_sha", TREE)
     kwargs.setdefault("changed_paths", ())
     kwargs.setdefault("declared_paths", ())
     kwargs.setdefault("evaluated_at", OBSERVED)
     return evaluate_qa_compliance(manifest, receipts, **kwargs)
+
+
+def test_missing_current_identity_fails_closed():
+    manifest = _manifest(_profile())
+    decision = evaluate_qa_compliance(
+        manifest,
+        _receipts(manifest),
+        evaluated_at=OBSERVED,
+    )
+    assert decision.result == "FAIL"
+    assert FAIL_CURRENT_IDENTITY_REQUIRED in decision.failure_codes
+
+
+@pytest.mark.parametrize(
+    "missing_field",
+    (
+        "current_repository",
+        "current_source_ref",
+        "current_candidate_sha",
+        "current_tree_sha",
+    ),
+)
+def test_each_current_identity_field_is_mandatory(missing_field):
+    manifest = _manifest(_profile())
+    current_identity = {
+        "current_repository": "Baelfyre/Orchestra",
+        "current_source_ref": SOURCE,
+        "current_candidate_sha": CANDIDATE,
+        "current_tree_sha": TREE,
+    }
+    current_identity[missing_field] = None
+    decision = evaluate_qa_compliance(
+        manifest,
+        _receipts(manifest),
+        evaluated_at=OBSERVED,
+        **current_identity,
+    )
+    assert decision.result == "FAIL"
+    assert FAIL_CURRENT_IDENTITY_REQUIRED in decision.failure_codes
+
+
+def test_stale_packet_cannot_self_validate_without_live_identity():
+    stale_manifest = _manifest(_profile())
+    stale_receipts = _receipts(stale_manifest)
+    decision = evaluate_qa_compliance(
+        stale_manifest,
+        stale_receipts,
+        evaluated_at=OBSERVED,
+    )
+    assert decision.result == "FAIL"
+    assert FAIL_CURRENT_IDENTITY_REQUIRED in decision.failure_codes
 
 
 def test_positive_decision_is_source_bound_and_non_authorizing():
@@ -588,7 +644,15 @@ def test_validate_alias_and_decision_integrity_boundaries():
     receipts = _receipts(manifest)
     from orchestra_runtime.domain.adaptive.qa_compliance import validate_qa_compliance
 
-    assert validate_qa_compliance(manifest, receipts, evaluated_at=OBSERVED).result == "PASS"
+    assert validate_qa_compliance(
+        manifest,
+        receipts,
+        current_repository="Baelfyre/Orchestra",
+        current_source_ref=SOURCE,
+        current_candidate_sha=CANDIDATE,
+        current_tree_sha=TREE,
+        evaluated_at=OBSERVED,
+    ).result == "PASS"
 
 
 def test_product_complete_positive_and_protected_unknown_gate():
