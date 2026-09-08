@@ -49,6 +49,7 @@ The runtime suite keeps these fail-closed cases executable:
 | F8 | executed test does not cover changed code |
 | F9 | changed path omitted from the declaration |
 | F10 | executor modifies a protected assurance policy |
+| F11 | current repository/source/candidate/tree identity is missing, including stale packet self-validation |
 
 ## Execution boundary
 
