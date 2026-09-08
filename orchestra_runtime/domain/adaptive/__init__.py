@@ -78,6 +78,9 @@ from .selection_trace import (
 )
 from .specialist_assurance import (
     AQ3_AUTHORITY_RULE,
+    AQ3_DAGGER_MATERIAL_BEHAVIOR_MARKERS,
+    AQ3_DAGGER_QUALITY_DIMENSIONS,
+    AQ3_DAGGER_RISK_CHARACTERISTICS,
     AQ3_SPECIALIST_ASSURANCE_SCHEMA_VERSION,
     ArbiterProgressionDecision,
     CANONICAL_SPECIALIST_ORDER,
@@ -187,6 +190,9 @@ __all__ = [
     "TaskProfileDerivation",
     "build_selection_trace",
     "AQ3_AUTHORITY_RULE",
+    "AQ3_DAGGER_MATERIAL_BEHAVIOR_MARKERS",
+    "AQ3_DAGGER_QUALITY_DIMENSIONS",
+    "AQ3_DAGGER_RISK_CHARACTERISTICS",
     "AQ3_SPECIALIST_ASSURANCE_SCHEMA_VERSION",
     "ArbiterProgressionDecision",
     "CANONICAL_SPECIALIST_ORDER",

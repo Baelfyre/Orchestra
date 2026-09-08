@@ -68,14 +68,24 @@
       "required": [
         "trigger_source",
         "risk_triggered",
+        "aq3_risk_characteristics",
+        "aq3_quality_dimensions",
+        "aq3_material_behavior_markers",
+        "aq2_triggers_preserved",
+        "adversarial_assurance_added_if_missing",
         "harmless_copy_only_must_not_trigger",
         "execution_authorized",
         "required_selection_may_not_be_omitted",
         "overrouting_disposition"
       ],
       "properties": {
-        "trigger_source": {"const": "AQ2_RISK_AND_INVARIANT_RULES"},
+        "trigger_source": {"const": "AQ2_RISK_AND_INVARIANT_RULES_PLUS_AQ3_CANONICAL_TRIGGERS"},
         "risk_triggered": {"const": true},
+        "aq3_risk_characteristics": {"$ref": "#/$defs/stringList"},
+        "aq3_quality_dimensions": {"$ref": "#/$defs/stringList"},
+        "aq3_material_behavior_markers": {"$ref": "#/$defs/stringList"},
+        "aq2_triggers_preserved": {"const": true},
+        "adversarial_assurance_added_if_missing": {"const": true},
         "harmless_copy_only_must_not_trigger": {"const": true},
         "execution_authorized": {"const": false},
         "required_selection_may_not_be_omitted": {"const": true},
@@ -90,14 +100,20 @@
         "required_outputs",
         "independent_evidence_required",
         "implementer_self_certification_satisfies",
-        "separate_attribution_required"
+        "separate_attribution_required",
+        "context_fields",
+        "review_binding_fields",
+        "recomputed_from_current_evidence"
       ],
       "properties": {
         "reviewer": {"const": "overseer"},
         "required_outputs": {"$ref": "#/$defs/stringList"},
         "independent_evidence_required": {"const": true},
         "implementer_self_certification_satisfies": {"const": false},
-        "separate_attribution_required": {"const": true}
+        "separate_attribution_required": {"const": true},
+        "context_fields": {"$ref": "#/$defs/stringList"},
+        "review_binding_fields": {"$ref": "#/$defs/stringList"},
+        "recomputed_from_current_evidence": {"const": true}
       }
     },
     "arbiter_policy": {
@@ -114,7 +130,12 @@
         "green_ci_substitutes_for_security",
         "green_ci_substitutes_for_concurrency",
         "green_ci_substitutes_for_adversarial",
-        "aq1_completion_escalation_allowed"
+        "aq1_completion_escalation_allowed",
+        "aq1_completion_validator",
+        "aq1_evidence_required",
+        "aq1_required_verifier_context",
+        "overseer_review_recomputed",
+        "overseer_review_exact_binding_required"
       ],
       "properties": {
         "required_set": {"const": "REQUIRED_ASSURANCE_SET"},
@@ -127,7 +148,12 @@
         "green_ci_substitutes_for_security": {"const": false},
         "green_ci_substitutes_for_concurrency": {"const": false},
         "green_ci_substitutes_for_adversarial": {"const": false},
-        "aq1_completion_escalation_allowed": {"const": false}
+        "aq1_completion_escalation_allowed": {"const": false},
+        "aq1_completion_validator": {"const": "orchestra_runtime.domain.adaptive.assurance.validate_completion_escalation"},
+        "aq1_evidence_required": {"const": true},
+        "aq1_required_verifier_context": {"$ref": "#/$defs/stringList"},
+        "overseer_review_recomputed": {"const": true},
+        "overseer_review_exact_binding_required": {"const": true}
       }
     },
     "source_truth_policy": {

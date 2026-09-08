@@ -9,13 +9,18 @@ import pytest
 
 from orchestra_runtime.domain.adaptive import (
     ASSURANCE_ORDER,
+    AQ3_DAGGER_MATERIAL_BEHAVIOR_MARKERS,
+    AQ3_DAGGER_QUALITY_DIMENSIONS,
+    AQ3_DAGGER_RISK_CHARACTERISTICS,
     AQ3_AUTHORITY_RULE,
     AQ3_SPECIALIST_ASSURANCE_SCHEMA_VERSION,
     CANONICAL_SPECIALIST_ORDER,
+    CLAIM_SCOPE_BY_STATE,
     FAILURE_CODES,
     FAIL_AQ1_COMPLETION_SCOPE,
     FAIL_AUTHORITY_SCOPE_VIOLATION,
     FAIL_DUPLICATE_EVIDENCE_IDENTITY,
+    FAIL_EVIDENCE_BINDING,
     FAIL_INDEPENDENT_ASSURANCE_REQUIRED,
     FAIL_OR_WARN_OVERRouting_ACCORDING_TO_CANONICAL_POLICY,
     FAIL_PROTECTED_GATE_UNSATISFIED,
@@ -25,6 +30,9 @@ from orchestra_runtime.domain.adaptive import (
     FAIL_STALE_EVIDENCE,
     FAIL_WEAKER_EVIDENCE,
     FAIL_WRONG_SOURCE_EVIDENCE,
+    AssuranceEvidence,
+    REQUIRED_EVIDENCE_LAYERS,
+    REQUIRED_VERIFIER_CONTEXT,
     REQUIRED_RECEIPT_FIELDS,
     REQUIRE_AGGREGATE_CONCURRENCY_ANALYSIS,
     SpecialistAssuranceContractError,
@@ -46,6 +54,18 @@ ROOT = Path(__file__).resolve().parents[2]
 CONTRACT_PATH = ROOT / "machine" / "adaptive" / "aq3-specialist-assurance-contract.v1.json"
 SCHEMA_PATH = ROOT / "machine" / "schemas" / "specialist-assurance-contract.v1.schema.json"
 SOURCE = "orchestra:aef8d55b4b941066a2c958629eac79729133bd31"
+AQ3_CONTEXT = {
+    "candidate_ref": "candidate:aq3",
+    "work_item_ref": "work-item:aq3",
+    "freshness_ref": "fresh:aq3",
+    "version_ref": "version:aq3",
+}
+AQ1_CONTEXT = {
+    "source_ref": SOURCE,
+    **AQ3_CONTEXT,
+    "verified_authority_ref": "authority:aq1",
+    "authority_ref": "authority:aq1",
+}
 
 
 def _profile(**overrides: object):
@@ -94,6 +114,10 @@ def _evidence(
     scope: str | None = None,
     source_truth: str = "OBSERVED",
     provenance_qualification: str = "AUTHORITATIVE",
+    candidate_ref: str = AQ3_CONTEXT["candidate_ref"],
+    work_item_ref: str = AQ3_CONTEXT["work_item_ref"],
+    freshness_ref: str = AQ3_CONTEXT["freshness_ref"],
+    version_ref: str = AQ3_CONTEXT["version_ref"],
 ) -> SpecialistAssuranceEvidence:
     return SpecialistAssuranceEvidence(
         evidence_id=evidence_id or f"evidence:{assurance_class.casefold()}",
@@ -101,6 +125,10 @@ def _evidence(
         producer=producer,
         validator=validator,
         source_identity=source_identity,
+        candidate_ref=candidate_ref,
+        work_item_ref=work_item_ref,
+        freshness_ref=freshness_ref,
+        version_ref=version_ref,
         scope=scope or _scope(assurance_class),
         kind=kind,
         status=status,
@@ -116,6 +144,56 @@ def _complete_evidence(receipt, *, producer: str = "ponytail") -> list[Specialis
         for index, assurance in enumerate(receipt.required_assurance)
         if assurance != "INDEPENDENT_QA"
     ] + [_evidence(receipt, "INDEPENDENT_QA", producer=producer, evidence_id="evidence:independent")]
+
+
+def _aq1_evidence(
+    state: str = "CONTRACT_VERIFIED",
+    *,
+    evidence_id: str = "aq1:contract",
+    source_truth: str = "OBSERVED",
+    authority_ref: str | None = "authority:aq1",
+    evidence_layer: str | None = None,
+    **overrides: object,
+) -> AssuranceEvidence:
+    fields: dict[str, object] = {
+        "evidence_id": evidence_id,
+        "claimed_state": state,
+        "source_truth": source_truth,
+        "authority_ref": authority_ref,
+        "originating_source": "aq1-verifier",
+        "authoritative_source_ref": AQ1_CONTEXT["source_ref"],
+        "producer": "aq1-producer",
+        "validator": "aq1-verifier",
+        "source_ref": AQ1_CONTEXT["source_ref"],
+        "candidate_ref": AQ1_CONTEXT["candidate_ref"],
+        "work_item_ref": AQ1_CONTEXT["work_item_ref"],
+        "freshness_ref": AQ1_CONTEXT["freshness_ref"],
+        "version_ref": AQ1_CONTEXT["version_ref"],
+        "provenance_qualification": "AUTHORITATIVE",
+        "evidence_layer": evidence_layer or REQUIRED_EVIDENCE_LAYERS[state][0],
+        "evidence_scope": CLAIM_SCOPE_BY_STATE[state],
+        "claim_scope": CLAIM_SCOPE_BY_STATE[state],
+    }
+    fields.update(overrides)
+    return AssuranceEvidence(**fields)
+
+
+def _assess(receipt, profile, evidence, **overrides):
+    return assess_overseer_review(
+        receipt,
+        profile,
+        evidence,
+        **{**AQ3_CONTEXT, **overrides},
+    )
+
+
+def _arbiter(receipt, profile, evidence, **overrides):
+    values = {
+        **AQ3_CONTEXT,
+        "aq1_verifier_context": AQ1_CONTEXT,
+    }
+    values.update(overrides)
+    return evaluate_arbiter_progression(receipt, profile, evidence, **values)
 
 
 def _json(path: Path) -> dict[str, object]:
@@ -142,6 +220,15 @@ def test_aq3_machine_contract_is_schema_valid_and_matches_domain_constants() -> 
         "dagger_execution_authority_created": False,
     }
     assert AQ3_AUTHORITY_RULE == "WORKFLOW_TOPOLOGY_CHANGE != AUTHORITY_EXPANSION"
+    assert contract["dagger_policy"]["aq3_risk_characteristics"] == list(AQ3_DAGGER_RISK_CHARACTERISTICS)
+    assert contract["dagger_policy"]["aq3_quality_dimensions"] == list(AQ3_DAGGER_QUALITY_DIMENSIONS)
+    assert contract["dagger_policy"]["aq3_material_behavior_markers"] == list(
+        AQ3_DAGGER_MATERIAL_BEHAVIOR_MARKERS
+    )
+    assert contract["dagger_policy"]["aq2_triggers_preserved"] is True
+    assert contract["dagger_policy"]["adversarial_assurance_added_if_missing"] is True
+    assert contract["overseer_policy"]["context_fields"] == list(AQ3_CONTEXT)
+    assert contract["arbiter_policy"]["aq1_required_verifier_context"] == list(REQUIRED_VERIFIER_CONTEXT)
 
 
 def test_receipt_round_trip_is_deterministic_and_source_bound() -> None:
@@ -229,6 +316,11 @@ def test_required_dagger_cannot_be_omitted_from_concurrent_privilege_mutation() 
 def test_dagger_is_rejected_for_harmless_copy_only_work() -> None:
     profile = _profile(changed_domains=("documentation",), changed_paths=("docs/copy.md",))
     receipt = _receipt(profile)
+    with pytest.raises(
+        SpecialistAssuranceContractError,
+        match=FAIL_OR_WARN_OVERRouting_ACCORDING_TO_CANONICAL_POLICY,
+    ):
+        replace(receipt, selected_specialists=receipt.selected_specialists + ("dagger",))
     over_routed = replace(
         receipt,
         selected_specialists=receipt.selected_specialists + ("dagger",),
@@ -239,6 +331,31 @@ def test_dagger_is_rejected_for_harmless_copy_only_work() -> None:
         match=FAIL_OR_WARN_OVERRouting_ACCORDING_TO_CANONICAL_POLICY,
     ):
         validate_routing_receipt(over_routed, profile)
+
+
+@pytest.mark.parametrize(
+    ("overrides", "trigger"),
+    (
+        ({"risk_characteristics": ("AUTHORIZATION",)}, "AUTHORIZATION"),
+        ({"risk_characteristics": ("MULTI_TENANT",)}, "MULTI_TENANT"),
+        ({"risk_characteristics": ("STATE_MACHINE",)}, "STATE_MACHINE"),
+        ({"risk_characteristics": ("EXTERNAL_INPUT",)}, "EXTERNAL_INPUT"),
+        ({"quality_dimensions": ("DESTRUCTIVE_LIFECYCLE",)}, "DESTRUCTIVE_LIFECYCLE"),
+        ({"material_behavior": "normalized partial-failure behavior"}, "PARTIAL_FAILURE"),
+    ),
+)
+def test_aq3_dagger_trigger_policy_extends_aq2(
+    overrides: dict[str, object],
+    trigger: str,
+) -> None:
+    profile = _profile(**overrides)
+    receipt = _receipt(profile)
+    assert trigger in receipt.dagger_decision.triggered_by
+    assert receipt.dagger_decision.required is True
+    assert receipt.dagger_decision.execution_authorized is False
+    assert "dagger" in receipt.selected_specialists
+    assert "ADVERSARIAL_ASSURANCE" in receipt.required_assurance
+    assert validate_routing_receipt(receipt, profile) == receipt
 
 
 def test_added_specialists_do_not_create_authority() -> None:
@@ -258,7 +375,7 @@ def test_ponytail_self_certification_fails_without_independent_overseer() -> Non
     receipt = _receipt(profile)
     evidence = _complete_evidence(receipt, producer="ponytail")
     evidence = [replace(record, validator="ponytail") for record in evidence]
-    review = assess_overseer_review(receipt, evidence, reviewer="ponytail")
+    review = _assess(receipt, profile, evidence, reviewer="ponytail")
     assert review.implementation_contract_satisfied is False
     assert review.invariant_preservation_sufficient is False
     assert FAIL_INDEPENDENT_ASSURANCE_REQUIRED in review.failure_codes
@@ -267,7 +384,7 @@ def test_ponytail_self_certification_fails_without_independent_overseer() -> Non
 def test_overseer_requires_separate_attribution_and_can_issue_both_decisions() -> None:
     profile = _profile(invariants=("FAILED_VALIDATION_MUST_NOT_BECOME_PASS",))
     receipt = _receipt(profile)
-    review = assess_overseer_review(receipt, _complete_evidence(receipt))
+    review = _assess(receipt, profile, _complete_evidence(receipt))
     assert review.implementation_contract_satisfied is True
     assert review.invariant_preservation_sufficient is True
     assert review.satisfied is True
@@ -279,8 +396,8 @@ def test_arbiter_blocks_green_ci_when_concurrency_evidence_is_missing() -> None:
     profile = _profile(risk_characteristics=("CONCURRENCY",))
     receipt = _receipt(profile)
     evidence = [_evidence(receipt, "INDEPENDENT_QA", kind="CI", scope="CI")]
-    review = assess_overseer_review(receipt, evidence)
-    decision = evaluate_arbiter_progression(receipt, evidence, overseer_review=review)
+    review = _assess(receipt, profile, evidence)
+    decision = _arbiter(receipt, profile, evidence, overseer_review=review)
     assert decision.disposition == "BLOCK"
     assert decision.can_advance is False
     assert FAIL_REQUIRED_ASSURANCE_MISSING in decision.failure_codes
@@ -290,18 +407,120 @@ def test_arbiter_compares_required_actual_and_claimed_sets() -> None:
     profile = _profile()
     receipt = _receipt(profile)
     evidence = _complete_evidence(receipt)
-    review = assess_overseer_review(receipt, evidence)
-    decision = evaluate_arbiter_progression(
+    review = _assess(receipt, profile, evidence)
+    decision = _arbiter(
         receipt,
+        profile,
         evidence,
         claimed_completion_state="CONTRACT_VERIFIED",
         overseer_review=review,
+        aq1_evidence=[_aq1_evidence()],
     )
     assert decision.disposition == "ADVANCE"
     assert decision.can_advance is True
     assert decision.required_assurance_set == receipt.required_assurance
     assert decision.actual_evidence_set == receipt.required_assurance
     assert decision.to_dict()["can_advance"] is True
+
+
+def test_evaluators_reject_aq2_weakened_receipts_even_with_a_valid_fingerprint() -> None:
+    profile = _profile(risk_characteristics=("AUTHORIZATION",))
+    receipt = _receipt(profile)
+    weakened = replace(
+        receipt,
+        selected_specialists=tuple(item for item in receipt.selected_specialists if item != "cipher"),
+        required_assurance=tuple(
+            item for item in receipt.required_assurance if item != "AUTHORIZATION_ASSURANCE"
+        ),
+    )
+    assert weakened.risk_fingerprint == profile.risk_fingerprint
+    evidence = _complete_evidence(weakened)
+    review = _assess(weakened, profile, evidence)
+    assert review.satisfied is False
+    assert FAIL_REQUIRED_ASSURANCE_MISSING in review.failure_codes
+    decision = _arbiter(weakened, profile, evidence, overseer_review=review)
+    assert decision.disposition == "BLOCK"
+    assert FAIL_REQUIRED_ASSURANCE_MISSING in decision.failure_codes
+
+
+def test_evaluators_require_the_qualified_aq2_profile() -> None:
+    profile = _profile()
+    receipt = _receipt(profile)
+    evidence = _complete_evidence(receipt)
+    with pytest.raises(TypeError, match="AdaptiveRiskProfile"):
+        assess_overseer_review(receipt, evidence)
+    with pytest.raises(TypeError, match="AdaptiveRiskProfile"):
+        evaluate_arbiter_progression(receipt, evidence)
+
+
+def test_arbiter_reuses_aq1_completion_validation_and_requires_context() -> None:
+    profile = _profile()
+    receipt = _receipt(profile)
+    evidence = _complete_evidence(receipt)
+    review = _assess(receipt, profile, evidence)
+    missing_aq1 = _arbiter(receipt, profile, evidence, overseer_review=review)
+    assert missing_aq1.disposition == "BLOCK"
+    assert FAIL_AQ1_COMPLETION_SCOPE in missing_aq1.failure_codes
+
+    valid = _arbiter(
+        receipt,
+        profile,
+        evidence,
+        overseer_review=review,
+        aq1_evidence=[_aq1_evidence()],
+    )
+    assert valid.can_advance is True
+
+    incomplete_context = dict(AQ1_CONTEXT)
+    incomplete_context.pop("verified_authority_ref")
+    missing_context = _arbiter(
+        receipt,
+        profile,
+        evidence,
+        overseer_review=review,
+        aq1_evidence=[_aq1_evidence()],
+        aq1_verifier_context=incomplete_context,
+    )
+    assert missing_context.disposition == "BLOCK"
+    assert FAIL_AQ1_COMPLETION_SCOPE in missing_context.failure_codes
+
+    decided_without_authority = dict(AQ1_CONTEXT)
+    decided_without_authority["authority_ref"] = None
+    decided = _arbiter(
+        receipt,
+        profile,
+        evidence,
+        overseer_review=review,
+        claimed_source_truth="DECIDED",
+        aq1_evidence=[_aq1_evidence(source_truth="DECIDED")],
+        aq1_verifier_context=decided_without_authority,
+    )
+    assert decided.disposition == "BLOCK"
+    assert FAIL_AQ1_COMPLETION_SCOPE in decided.failure_codes
+
+
+def test_arbiter_recomputes_and_binds_overseer_review() -> None:
+    profile = _profile()
+    receipt = _receipt(profile)
+    evidence = _complete_evidence(receipt)
+    review = _assess(receipt, profile, evidence)
+    aq1 = [_aq1_evidence()]
+    valid = _arbiter(receipt, profile, evidence, overseer_review=review, aq1_evidence=aq1)
+    assert valid.can_advance is True
+
+    forged = replace(review, receipt_fingerprint="", profile_risk_fingerprint="")
+    forged_decision = _arbiter(receipt, profile, evidence, overseer_review=forged, aq1_evidence=aq1)
+    assert forged_decision.disposition == "BLOCK"
+    assert FAIL_INDEPENDENT_ASSURANCE_REQUIRED in forged_decision.failure_codes
+
+    wrong_evidence = replace(review, evidence_ids=("forged:evidence",))
+    wrong_decision = _arbiter(receipt, profile, evidence, overseer_review=wrong_evidence, aq1_evidence=aq1)
+    assert wrong_decision.disposition == "BLOCK"
+    assert FAIL_INDEPENDENT_ASSURANCE_REQUIRED in wrong_decision.failure_codes
+
+    unbound = assess_overseer_review(receipt, profile, evidence)
+    assert unbound.satisfied is False
+    assert FAIL_EVIDENCE_BINDING in unbound.failure_codes
 
 
 def test_arbiter_rejects_stale_wrong_source_weaker_and_duplicate_evidence() -> None:
@@ -311,8 +530,8 @@ def test_arbiter_rejects_stale_wrong_source_weaker_and_duplicate_evidence() -> N
     wrong = _evidence(receipt, "INDEPENDENT_QA", evidence_id="wrong", source_identity="sha:wrong")
     weaker = _evidence(receipt, "INDEPENDENT_QA", evidence_id="weak", status="WEAKER")
     duplicate = _evidence(receipt, "INDEPENDENT_QA", evidence_id="same", logical_identity="same")
-    review = assess_overseer_review(receipt, [stale, wrong, weaker, duplicate])
-    decision = evaluate_arbiter_progression(receipt, [stale, wrong, weaker, duplicate], overseer_review=review)
+    review = _assess(receipt, profile, [stale, wrong, weaker, duplicate])
+    decision = _arbiter(receipt, profile, [stale, wrong, weaker, duplicate], overseer_review=review)
     assert decision.disposition == "BLOCK"
     assert FAIL_STALE_EVIDENCE in decision.failure_codes
     assert FAIL_WRONG_SOURCE_EVIDENCE in decision.failure_codes
@@ -327,9 +546,10 @@ def test_arbiter_blocks_protected_gate_and_aq1_completion_escalation() -> None:
     )
     receipt = _receipt(profile)
     evidence = _complete_evidence(receipt)
-    review = assess_overseer_review(receipt, evidence)
-    decision = evaluate_arbiter_progression(
+    review = _assess(receipt, profile, evidence)
+    decision = _arbiter(
         receipt,
+        profile,
         evidence,
         claimed_completion_state="PRODUCT_COMPLETE",
         protected_gates_satisfied=False,
@@ -343,9 +563,10 @@ def test_arbiter_rejects_inferred_claims_and_wrong_context() -> None:
     profile = _profile()
     receipt = _receipt(profile)
     evidence = _complete_evidence(receipt)
-    review = assess_overseer_review(receipt, evidence)
-    inferred = evaluate_arbiter_progression(
+    review = _assess(receipt, profile, evidence)
+    inferred = _arbiter(
         receipt,
+        profile,
         evidence,
         claimed_source_truth="INFERRED",
         candidate_ref="different-candidate",
@@ -354,9 +575,10 @@ def test_arbiter_rejects_inferred_claims_and_wrong_context() -> None:
     assert FAIL_AQ1_COMPLETION_SCOPE in inferred.failure_codes
     assert "FAIL_EVIDENCE_BINDING" in inferred.failure_codes
     contract_evidence = _complete_evidence(receipt)
-    contract_review = assess_overseer_review(receipt, contract_evidence)
-    runtime_claim = evaluate_arbiter_progression(
+    contract_review = _assess(receipt, profile, contract_evidence)
+    runtime_claim = _arbiter(
         receipt,
+        profile,
         contract_evidence,
         claimed_completion_state="RUNTIME_VERIFIED",
         overseer_review=contract_review,
@@ -518,10 +740,10 @@ def test_evidence_and_review_edges_fail_closed() -> None:
         SpecialistAssuranceEvidence.from_mapping([])
     evidence = _evidence(receipt, "INDEPENDENT_QA", evidence_id="mapped")
     assert SpecialistAssuranceEvidence.from_mapping(evidence.to_dict()) == evidence
-    with pytest.raises(TypeError, match="iterable"):
+    with pytest.raises(TypeError, match="AdaptiveRiskProfile"):
         assess_overseer_review(receipt, SOURCE)
     with pytest.raises(TypeError, match="contain SpecialistAssuranceEvidence"):
-        assess_overseer_review(receipt, [object()])
+        _assess(receipt, profile, [object()])
     with pytest.raises(TypeError, match="exact booleans"):
         from orchestra_runtime.domain.adaptive import OverseerAssuranceReview
 
@@ -530,6 +752,10 @@ def test_evidence_and_review_edges_fail_closed() -> None:
         from orchestra_runtime.domain.adaptive import OverseerAssuranceReview
 
         OverseerAssuranceReview("overseer", False, False, "evidence", ())
+    with pytest.raises(TypeError, match="iterable"):
+        from orchestra_runtime.domain.adaptive import OverseerAssuranceReview
+
+        OverseerAssuranceReview("overseer", False, False, 1, ())
     with pytest.raises(ValueError, match="exceeds 128"):
         from orchestra_runtime.domain.adaptive import OverseerAssuranceReview
 
@@ -557,7 +783,7 @@ def test_evidence_status_provenance_binding_and_special_scope_edges() -> None:
         _evidence(receipt, "INDEPENDENT_QA", evidence_id="inconsistent"),
         candidate_ref="other-candidate",
     )
-    review = assess_overseer_review(receipt, [wrong_status, inferred, unqualified, inconsistent])
+    review = _assess(receipt, profile, [wrong_status, inferred, unqualified, inconsistent])
     assert FAIL_WRONG_SOURCE_EVIDENCE in review.failure_codes
     assert FAIL_SOURCE_TRUTH_VIOLATION in review.failure_codes
     assert "FAIL_EVIDENCE_PROVENANCE" in review.failure_codes
@@ -576,7 +802,7 @@ def test_evidence_status_provenance_binding_and_special_scope_edges() -> None:
         kind="CI",
         scope="SECURITY",
     )
-    security_review = assess_overseer_review(security_receipt, [ci_security])
+    security_review = _assess(security_receipt, security_profile, [ci_security])
     assert FAIL_REQUIRED_ASSURANCE_MISSING in security_review.failure_codes
 
     concurrency_profile = _profile(risk_characteristics=("CONCURRENCY",))
@@ -587,7 +813,11 @@ def test_evidence_status_provenance_binding_and_special_scope_edges() -> None:
         evidence_id="weak-scope",
         scope="CONTRACT",
     )
-    assert FAIL_REQUIRED_ASSURANCE_MISSING in assess_overseer_review(concurrency_receipt, [weak_scope]).failure_codes
+    assert FAIL_REQUIRED_ASSURANCE_MISSING in _assess(
+        concurrency_receipt,
+        concurrency_profile,
+        [weak_scope],
+    ).failure_codes
 
 
 def test_arbiter_handles_invalid_claim_and_aggregate_row_evidence() -> None:
@@ -601,9 +831,10 @@ def test_arbiter_handles_invalid_claim_and_aggregate_row_evidence() -> None:
             scope="ROW_VERSION",
         ),
     ]
-    review = assess_overseer_review(receipt, evidence)
-    invalid = evaluate_arbiter_progression(
+    review = _assess(receipt, profile, evidence)
+    invalid = _arbiter(
         receipt,
+        profile,
         evidence,
         claimed_completion_state="NOT_A_STATE",
         overseer_review=review,
@@ -611,3 +842,124 @@ def test_arbiter_handles_invalid_claim_and_aggregate_row_evidence() -> None:
     assert invalid.disposition == "BLOCK"
     assert REQUIRE_AGGREGATE_CONCURRENCY_ANALYSIS in invalid.failure_codes
     assert FAIL_AQ1_COMPLETION_SCOPE in invalid.failure_codes
+
+
+def test_semantic_profile_receipt_and_context_edges_fail_closed() -> None:
+    profile = _profile()
+    receipt = _receipt(profile)
+    evidence = _complete_evidence(receipt)
+    review = _assess(receipt, profile, evidence)
+
+    assert validate_routing_receipt(receipt) == receipt
+    with pytest.raises(SpecialistAssuranceContractError, match=FAIL_WRONG_SOURCE_EVIDENCE):
+        validate_routing_receipt(replace(receipt, changed_domains=("OTHER",)), profile)
+
+    omitted_dagger = _receipt(_profile(risk_characteristics=("AUTHORIZATION",)))
+    object.__setattr__(
+        omitted_dagger,
+        "selected_specialists",
+        tuple(item for item in omitted_dagger.selected_specialists if item != "dagger"),
+    )
+    with pytest.raises(SpecialistAssuranceContractError, match=FAIL_REQUIRED_DAGGER_OMITTED):
+        validate_routing_receipt(omitted_dagger, _profile(risk_characteristics=("AUTHORIZATION",)))
+
+    for invalid_context in ([], {**AQ3_CONTEXT, "unsupported": "value"}, {**AQ3_CONTEXT, "candidate_ref": "other"}):
+        invalid_review = _assess(receipt, profile, evidence, expected_context=invalid_context)
+        assert invalid_review.satisfied is False
+        assert FAIL_EVIDENCE_BINDING in invalid_review.failure_codes
+
+    invalid_arbiter = _arbiter(
+        receipt,
+        profile,
+        evidence,
+        overseer_review=review,
+        expected_context=[],
+        aq1_evidence=[_aq1_evidence()],
+    )
+    assert invalid_arbiter.disposition == "BLOCK"
+    assert FAIL_EVIDENCE_BINDING in invalid_arbiter.failure_codes
+
+
+def test_qualified_profile_and_evaluator_types_fail_closed() -> None:
+    profile = _profile()
+    receipt = _receipt(profile)
+    corrupted = _profile()
+    object.__setattr__(corrupted, "changed_domains", 1)
+    with pytest.raises(SpecialistAssuranceContractError, match=FAIL_WRONG_SOURCE_EVIDENCE):
+        build_routing_receipt(corrupted, source_identities=(SOURCE,))
+    with pytest.raises(TypeError, match="SpecialistAssuranceReceipt"):
+        assess_overseer_review(object(), profile)
+    with pytest.raises(TypeError, match="SpecialistAssuranceReceipt"):
+        evaluate_arbiter_progression(object(), profile)
+    with pytest.raises(TypeError, match="SpecialistAssuranceReceipt"):
+        validate_routing_receipt(object(), profile)
+
+
+def test_aq1_context_and_evidence_shapes_fail_closed() -> None:
+    profile = _profile()
+    receipt = _receipt(profile)
+    evidence = _complete_evidence(receipt)
+    review = _assess(receipt, profile, evidence)
+
+    invalid_contexts = (
+        [],
+        {**AQ1_CONTEXT, "unsupported": "value"},
+        {**AQ1_CONTEXT, "authority_ref": "authority:one"},
+    )
+    for invalid_context in invalid_contexts:
+        kwargs = {"aq1_verifier_context": invalid_context}
+        if invalid_context == {**AQ1_CONTEXT, "authority_ref": "authority:one"}:
+            kwargs["authority_ref"] = "authority:two"
+        decision = _arbiter(receipt, profile, evidence, overseer_review=review, aq1_evidence=[_aq1_evidence()], **kwargs)
+        assert decision.disposition == "BLOCK"
+        assert FAIL_AQ1_COMPLETION_SCOPE in decision.failure_codes
+
+    mismatched = dict(AQ1_CONTEXT)
+    mismatched["candidate_ref"] = "candidate:other"
+    mismatch = _arbiter(
+        receipt,
+        profile,
+        evidence,
+        overseer_review=review,
+        aq1_evidence=[_aq1_evidence()],
+        aq1_verifier_context=mismatched,
+    )
+    assert mismatch.disposition == "BLOCK"
+    assert FAIL_EVIDENCE_BINDING in mismatch.failure_codes
+
+    for invalid_evidence in ("not-evidence", [object()]):
+        decision = _arbiter(
+            receipt,
+            profile,
+            evidence,
+            overseer_review=review,
+            aq1_evidence=invalid_evidence,
+        )
+        assert decision.disposition == "BLOCK"
+        assert FAIL_AQ1_COMPLETION_SCOPE in decision.failure_codes
+
+    missing_authority_context = dict(AQ1_CONTEXT)
+    missing_authority_context.pop("authority_ref")
+    supplied_authority = _arbiter(
+        receipt,
+        profile,
+        evidence,
+        overseer_review=review,
+        aq1_evidence=[_aq1_evidence()],
+        aq1_verifier_context=missing_authority_context,
+        authority_ref="authority:aq1",
+    )
+    assert supplied_authority.disposition == "ADVANCE"
+
+    no_aq1_context = _arbiter(
+        receipt,
+        profile,
+        evidence,
+        overseer_review=review,
+        aq1_evidence=[_aq1_evidence()],
+        aq1_verifier_context=None,
+    )
+    assert no_aq1_context.disposition == "BLOCK"
+
+    with pytest.raises(TypeError, match="iterable"):
+        _assess(receipt, profile, "not-evidence")
