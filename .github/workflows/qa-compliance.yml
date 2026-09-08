@@ -21,6 +21,7 @@ on:
       - scripts/validation/validate_qa_compliance.py
       - tests/behavior/test_qa_compliance.py
       - tests/runtime/test_adaptive_assurance_aq5.py
+permissions:
   contents: read
 
 jobs:
