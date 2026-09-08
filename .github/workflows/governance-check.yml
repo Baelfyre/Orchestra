@@ -8,10 +8,18 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      approved_base_sha:
+        description: Explicit approved evidence baseline commit SHA
+        required: true
+        type: string
 
 permissions:
   contents: read
   artifact-metadata: write
+
+env:
+  ORCHESTRA_APPROVED_BASE_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.approved_base_sha || '' }}
 
 jobs:
   governance-check:
