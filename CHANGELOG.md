@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased ADAPT-QA AQ-4 assurance manifests and evidence receipts
+
+- Adds pure deterministic machine-readable per-candidate assurance manifests and evidence receipts bound to source, candidate, and tree identity.
+- Enforces AQ1/AQ2/AQ3 inheritance, explicit slot coverage, provenance, layer, freshness, contradiction, and duplicate normalization with fail-closed authority non-expansion.
+- Adds schema/runtime parity, AQ4-N1 through AQ4-N18 negatives, property tests, and AQ1-AQ4 compatibility coverage without AQ5 gate enforcement or promotion authority.
+
 ## Unreleased ADAPT-QA AQ-3 specialist assurance contracts
 
 - Adds deterministic Conductor routing receipts bound to qualified AQ-2 risk profiles, with explicit source identities, specialist topology, assurance sets, Dagger decisions, protected gates, authority boundaries, and risk fingerprints.

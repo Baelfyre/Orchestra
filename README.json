@@ -2455,6 +2455,11 @@
     "adaptive_assurance_aq3_schema": "machine/schemas/specialist-assurance-contract.v1.schema.json",
     "adaptive_assurance_aq3_runtime": "orchestra_runtime/domain/adaptive/specialist_assurance.py",
     "adaptive_assurance_aq3_validation": "tests/runtime/test_adaptive_assurance_aq3.py",
+    "adaptive_assurance_aq4_contract": "machine/adaptive/aq4-assurance-manifests-receipts.v1.json",
+    "adaptive_assurance_aq4_manifest_schema": "machine/schemas/assurance-manifest.v1.schema.json",
+    "adaptive_assurance_aq4_receipt_schema": "machine/schemas/evidence-receipt.v1.schema.json",
+    "adaptive_assurance_aq4_runtime": "orchestra_runtime/domain/adaptive/assurance_manifest.py",
+    "adaptive_assurance_aq4_validation": "tests/runtime/test_adaptive_assurance_aq4.py",
     "comparative_measurement_contract": "machine/benchmarking/comparative-measurement-contract.v1.json",
     "comparative_benchmark_run_schema": "machine/schemas/comparative-benchmark-run.schema.json",
     "comparative_benchmark_experiment_schema": "machine/schemas/comparative-benchmark-experiment.schema.json",
@@ -2615,7 +2620,8 @@
     "adaptive_agentic_workflow_awf": "docs/architecture/ADAPTIVE_AGENTIC_WORKFLOW_AWF.md",
     "adaptive_assurance_aq1_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ1.md",
     "adaptive_assurance_aq2_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ2.md",
-    "adaptive_assurance_aq3_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ3.md"
+    "adaptive_assurance_aq3_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ3.md",
+    "adaptive_assurance_aq4_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ4.md"
   },
   "hosts_integrations": {
     "host_update_contract": "machine/hosts/update-contract.v1.json",
@@ -2873,7 +2879,8 @@
     "adaptive_agentic_workflow_semantic_robustness_n5": "IMPLEMENTATION_CANDIDATE",
     "adaptive_agentic_workflow_advanced_adaptation_n6": "COMPLETE_CANONICAL_VERIFIED_NO_PROMOTION",
     "adaptive_assurance_aq1": "AQ1_CANONICAL_VERIFIED_AQ2_AUTHORIZED_IMPLEMENTATION_ONLY",
-    "adaptive_assurance_aq2": "AQ2_AUTHORIZED_IMPLEMENTATION_ONLY"
+    "adaptive_assurance_aq2": "AQ2_AUTHORIZED_IMPLEMENTATION_ONLY",
+    "adaptive_assurance_aq4": "AQ4_AUTHORIZED_IMPLEMENTATION_ONLY"
   },
   "ai_review_guidance": {
     "preferred_entrypoint": "README.json",
