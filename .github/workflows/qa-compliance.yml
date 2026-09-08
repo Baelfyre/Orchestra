@@ -64,6 +64,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install behavior dependencies
+        run: python -m pip install pytest
+
       - name: Run AQ5 behavior test
         run: |
           python -B -m pytest tests/behavior/test_qa_compliance.py -q
