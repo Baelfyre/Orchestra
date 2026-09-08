@@ -231,7 +231,7 @@
 - Provides deterministic positive and negative test fixtures in `tests/fixtures/ui/uief1-*.json` and runtime validation tests in `tests/runtime/test_ui_implementation_profile_contract.py`.
 - Updates `README.json` machine discovery index with `ui_implementation_profile_schema` and `ui_implementation_profile_reference`.
 
-## v1.8.0 ? Governance Hardening, Runtime Refoundation & Traceability
+## v1.8.0 — Governance Hardening, Runtime Refoundation & Traceability
 
 - **Governance Hardening**: Reinforces the Orchestra Prime Directive and Governed Execution Lifecycle V2, enforcing strict separation of authority, capability, routing, and validation readiness.
 - **Architecture Governance System (OR-GOV-1 through OR-GOV-10)**: Formalizes seven machine-readable contracts (`CapacityEnvelope`, `ProductIntentContract`, `ArchitectureComplexityDecision`, `MigrationRiskContract`, `ArchitectureGovernanceIntake`, `ArchitectureValidationContract`, `ProjectArchitectureGovernanceProfile`) with adaptive capacity reasoning, scale-ready vs. scale-provisioned distinction, engine-aware migration risk, proportional routing, declared-edge semantic invalidation, and revision-bound validation proof states.
