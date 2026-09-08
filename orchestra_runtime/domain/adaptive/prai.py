@@ -319,8 +319,13 @@ def _canonical_risks(values: Any) -> tuple[str, ...]:
     return result
 
 
-def _roles(values: Any, field_name: str) -> tuple[str, ...]:
-    result = tuple(value.upper() for value in _strings(values, field_name, allow_empty=False))
+def _roles(
+    values: Any, field_name: str, *, allow_empty: bool = False
+) -> tuple[str, ...]:
+    result = tuple(
+        value.upper()
+        for value in _strings(values, field_name, allow_empty=allow_empty)
+    )
     if any(value not in REVIEW_ROLES for value in result):
         raise ValueError(f"{field_name} contains an unknown reviewer role")
     return result
@@ -675,7 +680,11 @@ class PraiDecision:
             raise TypeError("compliant and authority_expansion must be bool values")
         object.__setattr__(self, "failure_codes", _strings(self.failure_codes, "failure_codes"))
         object.__setattr__(self, "required_reviewers", _roles(self.required_reviewers, "required_reviewers"))
-        object.__setattr__(self, "satisfied_reviewers", _roles(self.satisfied_reviewers, "satisfied_reviewers"))
+        object.__setattr__(
+            self,
+            "satisfied_reviewers",
+            _roles(self.satisfied_reviewers, "satisfied_reviewers", allow_empty=True),
+        )
         object.__setattr__(self, "required_additional_assurance", _strings(self.required_additional_assurance, "required_additional_assurance", allow_empty=False))
         object.__setattr__(self, "satisfied_additional_assurance", _strings(self.satisfied_additional_assurance, "satisfied_additional_assurance"))
         object.__setattr__(self, "audit_depth", _choice(self.audit_depth, AUDIT_DEPTHS, "audit_depth"))
