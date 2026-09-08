@@ -6,6 +6,7 @@
 - Adds independent Overseer decisions for implementation-contract and invariant-preservation sufficiency plus Arbiter progression checks for missing, stale, weaker, duplicate, wrong-source, non-authoritative, and claim-scope-insufficient evidence.
 - Preserves AQ-2 risk rules and Dagger execution restrictions, keeps specialist selection non-authorizing, and adds fail-closed Scribe, Cipher, Chronicler, AQ-1 claim, and aggregate-concurrency boundaries without AQ-4 persistence or promotion.
 - Repairs AQ-3 evaluation binding by requiring qualified AQ-2 profile validation, canonical AQ3 Dagger trigger parity, AQ-1 completion-escalation reuse, and independently recomputed Overseer context evidence.
+- Finalizes AQ-3 integrity by binding AQ-1 verifier sources to receipt identities and enforcing declarative/runtime parity for Overseer, Arbiter, and the canonical specialist registry.
 
 ## Unreleased ADAPT-QA AQ-2 adaptive risk profiler
 

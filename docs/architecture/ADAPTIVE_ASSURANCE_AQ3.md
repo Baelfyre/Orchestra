@@ -63,8 +63,17 @@ For claimed completion states, Arbiter delegates qualification to the AQ1
 `validate_completion_escalation` contract with explicit AQ1
 `AssuranceEvidence` and the complete verifier context. Missing verifier-owned
 authority, required evidence metadata or layers, claim scope, or source and
-revision bindings fails closed. AQ3 does not create canonical or product
-completion authority.
+revision bindings fails closed. The AQ1 verifier `source_ref` must also be a
+member of the current AQ3 receipt's `source_identities`; a complete claim
+from an unrelated source remains blocked. AQ3 does not create canonical or
+product completion authority.
+
+The machine AQ3 contract is parity-bound to the runtime policy: required
+Overseer outputs, AQ3 context fields, exact review bindings, review
+recomputation, AQ1 validation requirements, and the canonical specialist order
+are asserted against their runtime constants and the current specialist
+registry. Schema validity alone does not authorize a semantically drifted
+policy.
 
 ## Specialist boundaries
 

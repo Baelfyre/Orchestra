@@ -40,6 +40,8 @@
     "ponytail",
     "conductor"
   ],
+  "canonical_specialist_registry": "machine/specialists/registry.v1.json",
+  "canonical_specialist_set_exact": true,
   "canonical_assurance_order": [
     "DOCUMENTATION_RECONCILIATION",
     "ARCHITECTURE_BOUNDARY",
@@ -151,6 +153,7 @@
     "aq1_completion_escalation_allowed": false,
     "aq1_completion_validator": "orchestra_runtime.domain.adaptive.assurance.validate_completion_escalation",
     "aq1_evidence_required": true,
+    "aq1_source_must_match_receipt": true,
     "aq1_required_verifier_context": [
       "source_ref",
       "candidate_ref",

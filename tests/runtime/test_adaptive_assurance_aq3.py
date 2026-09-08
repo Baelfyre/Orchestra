@@ -8,7 +8,12 @@ import jsonschema
 import pytest
 
 from orchestra_runtime.domain.adaptive import (
+    AQ1_COMPLETION_VALIDATOR,
+    AQ1_EVIDENCE_REQUIRED,
+    AQ1_REQUIRED_VERIFIER_CONTEXT,
+    AQ1_SOURCE_MUST_MATCH_RECEIPT,
     ASSURANCE_ORDER,
+    AQ3_CONTEXT_FIELDS,
     AQ3_DAGGER_MATERIAL_BEHAVIOR_MARKERS,
     AQ3_DAGGER_QUALITY_DIMENSIONS,
     AQ3_DAGGER_RISK_CHARACTERISTICS,
@@ -31,7 +36,11 @@ from orchestra_runtime.domain.adaptive import (
     FAIL_WEAKER_EVIDENCE,
     FAIL_WRONG_SOURCE_EVIDENCE,
     AssuranceEvidence,
+    OVERSEER_REVIEW_BINDING_FIELDS,
+    OVERSEER_REVIEW_EXACT_BINDING_REQUIRED,
+    OVERSEER_REVIEW_RECOMPUTED,
     REQUIRED_EVIDENCE_LAYERS,
+    REQUIRED_OVERSEER_OUTPUTS,
     REQUIRED_VERIFIER_CONTEXT,
     REQUIRED_RECEIPT_FIELDS,
     REQUIRE_AGGREGATE_CONCURRENCY_ANALYSIS,
@@ -53,6 +62,7 @@ from orchestra_runtime.domain.adaptive.risk_profiler import DaggerDecision
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT_PATH = ROOT / "machine" / "adaptive" / "aq3-specialist-assurance-contract.v1.json"
 SCHEMA_PATH = ROOT / "machine" / "schemas" / "specialist-assurance-contract.v1.schema.json"
+REGISTRY_PATH = ROOT / "machine" / "specialists" / "registry.v1.json"
 SOURCE = "orchestra:aef8d55b4b941066a2c958629eac79729133bd31"
 AQ3_CONTEXT = {
     "candidate_ref": "candidate:aq3",
@@ -200,6 +210,38 @@ def _json(path: Path) -> dict[str, object]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _assert_aq3_contract_runtime_parity(
+    contract: dict[str, object],
+    *,
+    registry_slugs: tuple[str, ...] | None = None,
+) -> None:
+    overseer_policy = contract["overseer_policy"]
+    arbiter_policy = contract["arbiter_policy"]
+    assert isinstance(overseer_policy, dict)
+    assert isinstance(arbiter_policy, dict)
+    assert overseer_policy["required_outputs"] == list(REQUIRED_OVERSEER_OUTPUTS)
+    assert overseer_policy["context_fields"] == list(AQ3_CONTEXT_FIELDS)
+    assert overseer_policy["review_binding_fields"] == list(OVERSEER_REVIEW_BINDING_FIELDS)
+    assert overseer_policy["recomputed_from_current_evidence"] is OVERSEER_REVIEW_RECOMPUTED
+    assert arbiter_policy["aq1_completion_validator"] == AQ1_COMPLETION_VALIDATOR
+    assert arbiter_policy["aq1_evidence_required"] is AQ1_EVIDENCE_REQUIRED
+    assert arbiter_policy["aq1_source_must_match_receipt"] is AQ1_SOURCE_MUST_MATCH_RECEIPT
+    assert arbiter_policy["aq1_required_verifier_context"] == list(AQ1_REQUIRED_VERIFIER_CONTEXT)
+    assert arbiter_policy["overseer_review_recomputed"] is OVERSEER_REVIEW_RECOMPUTED
+    assert (
+        arbiter_policy["overseer_review_exact_binding_required"]
+        is OVERSEER_REVIEW_EXACT_BINDING_REQUIRED
+    )
+    if registry_slugs is None:
+        registry = _json(REGISTRY_PATH)
+        specialists = registry["specialists"]
+        assert isinstance(specialists, list)
+        registry_slugs = tuple(str(item["slug"]) for item in specialists)
+    assert len(CANONICAL_SPECIALIST_ORDER) == len(registry_slugs)
+    assert set(CANONICAL_SPECIALIST_ORDER) == set(registry_slugs)
+    assert contract["canonical_specialist_order"] == list(CANONICAL_SPECIALIST_ORDER)
+
+
 def test_aq3_machine_contract_is_schema_valid_and_matches_domain_constants() -> None:
     contract = _json(CONTRACT_PATH)
     schema = _json(SCHEMA_PATH)
@@ -207,7 +249,9 @@ def test_aq3_machine_contract_is_schema_valid_and_matches_domain_constants() -> 
     assert list(jsonschema.Draft202012Validator(schema).iter_errors(contract)) == []
     assert contract["schema_version"] == AQ3_SPECIALIST_ASSURANCE_SCHEMA_VERSION
     assert contract["receipt_fields"] == list(REQUIRED_RECEIPT_FIELDS)
-    assert contract["canonical_specialist_order"] == list(CANONICAL_SPECIALIST_ORDER)
+    assert contract["canonical_specialist_registry"] == "machine/specialists/registry.v1.json"
+    assert contract["canonical_specialist_set_exact"] is True
+    _assert_aq3_contract_runtime_parity(contract)
     assert contract["canonical_assurance_order"] == list(ASSURANCE_ORDER)
     assert contract["failure_codes"] == list(FAILURE_CODES)
     assert contract["authority"] == {
@@ -229,6 +273,25 @@ def test_aq3_machine_contract_is_schema_valid_and_matches_domain_constants() -> 
     assert contract["dagger_policy"]["adversarial_assurance_added_if_missing"] is True
     assert contract["overseer_policy"]["context_fields"] == list(AQ3_CONTEXT)
     assert contract["arbiter_policy"]["aq1_required_verifier_context"] == list(REQUIRED_VERIFIER_CONTEXT)
+
+
+def test_aq3_parity_guards_reject_schema_valid_policy_and_registry_drift() -> None:
+    contract = _json(CONTRACT_PATH)
+    schema = _json(SCHEMA_PATH)
+    drifted_policy = json.loads(json.dumps(contract))
+    drifted_policy["overseer_policy"]["review_binding_fields"] = ["receipt_fingerprint"]
+    assert list(jsonschema.Draft202012Validator(schema).iter_errors(drifted_policy)) == []
+    with pytest.raises(AssertionError):
+        _assert_aq3_contract_runtime_parity(drifted_policy)
+
+    registry = _json(REGISTRY_PATH)
+    specialists = registry["specialists"]
+    assert isinstance(specialists, list)
+    registry_slugs = tuple(str(item["slug"]) for item in specialists)
+    with pytest.raises(AssertionError):
+        _assert_aq3_contract_runtime_parity(contract, registry_slugs=(*registry_slugs, "new-specialist"))
+    with pytest.raises(AssertionError):
+        _assert_aq3_contract_runtime_parity(contract, registry_slugs=registry_slugs[:-1])
 
 
 def test_receipt_round_trip_is_deterministic_and_source_bound() -> None:
@@ -497,6 +560,49 @@ def test_arbiter_reuses_aq1_completion_validation_and_requires_context() -> None
     )
     assert decided.disposition == "BLOCK"
     assert FAIL_AQ1_COMPLETION_SCOPE in decided.failure_codes
+
+
+def test_arbiter_binds_aq1_source_to_an_aq3_receipt_identity() -> None:
+    profile = _profile()
+    secondary_source = "orchestra:secondary-source"
+    receipt = _receipt(profile, source_identities=(SOURCE, secondary_source))
+    evidence = _complete_evidence(receipt)
+    review = _assess(receipt, profile, evidence)
+
+    unrelated_context = dict(AQ1_CONTEXT)
+    unrelated_context["source_ref"] = "orchestra:unrelated-source"
+    unrelated = _arbiter(
+        receipt,
+        profile,
+        evidence,
+        overseer_review=review,
+        aq1_evidence=[
+            _aq1_evidence(
+                source_ref=unrelated_context["source_ref"],
+                authoritative_source_ref=unrelated_context["source_ref"],
+            )
+        ],
+        aq1_verifier_context=unrelated_context,
+    )
+    assert unrelated.disposition == "BLOCK"
+    assert FAIL_WRONG_SOURCE_EVIDENCE in unrelated.failure_codes
+
+    matching_context = dict(AQ1_CONTEXT)
+    matching_context["source_ref"] = secondary_source
+    matching = _arbiter(
+        receipt,
+        profile,
+        evidence,
+        overseer_review=review,
+        aq1_evidence=[
+            _aq1_evidence(
+                source_ref=secondary_source,
+                authoritative_source_ref=secondary_source,
+            )
+        ],
+        aq1_verifier_context=matching_context,
+    )
+    assert matching.can_advance is True
 
 
 def test_arbiter_recomputes_and_binds_overseer_review() -> None:

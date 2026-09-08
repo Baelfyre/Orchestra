@@ -80,6 +80,29 @@ CANONICAL_SPECIALIST_ORDER = SPECIALIST_ORDER + (
     "conductor",
 )
 
+AQ3_CONTEXT_FIELDS = ("candidate_ref", "work_item_ref", "freshness_ref", "version_ref")
+REQUIRED_OVERSEER_OUTPUTS = (
+    "IMPLEMENTATION_CONTRACT_SATISFIED",
+    "INVARIANT_PRESERVATION_SUFFICIENT",
+)
+OVERSEER_REVIEW_BINDING_FIELDS = (
+    "receipt_fingerprint",
+    "profile_risk_fingerprint",
+    "evidence_ids",
+    "candidate_ref",
+    "work_item_ref",
+    "freshness_ref",
+    "version_ref",
+)
+OVERSEER_REVIEW_RECOMPUTED = True
+OVERSEER_REVIEW_EXACT_BINDING_REQUIRED = True
+AQ1_COMPLETION_VALIDATOR = (
+    f"{validate_completion_escalation.__module__}.{validate_completion_escalation.__name__}"
+)
+AQ1_EVIDENCE_REQUIRED = True
+AQ1_REQUIRED_VERIFIER_CONTEXT = tuple(REQUIRED_VERIFIER_CONTEXT)
+AQ1_SOURCE_MUST_MATCH_RECEIPT = True
+
 AQ3_DAGGER_RISK_CHARACTERISTICS = (
     "AUTHORIZATION",
     "MULTI_TENANT",
@@ -150,8 +173,8 @@ _SPECIAL_ASSURANCE_SCOPES = {
     "AGGREGATE_INVARIANT_ASSURANCE": {"AGGREGATE"},
     "ADVERSARIAL_ASSURANCE": {"ADVERSARIAL"},
 }
-_AQ3_CONTEXT_FIELDS = ("candidate_ref", "work_item_ref", "freshness_ref", "version_ref")
-_AQ1_CONTEXT_FIELDS = tuple(REQUIRED_VERIFIER_CONTEXT)
+_AQ3_CONTEXT_FIELDS = AQ3_CONTEXT_FIELDS
+_AQ1_CONTEXT_FIELDS = AQ1_REQUIRED_VERIFIER_CONTEXT
 _AQ1_CONTEXT_ALLOWED_FIELDS = set(_AQ1_CONTEXT_FIELDS) | {"authority_ref"}
 
 
@@ -962,6 +985,7 @@ evaluate_overseer_review = assess_overseer_review
 
 
 def _validate_aq1_completion_claim(
+    receipt: SpecialistAssuranceReceipt,
     claimed_completion_state: str,
     claimed_source_truth: str,
     aq1_evidence: Iterable[AssuranceEvidence] | None,
@@ -973,10 +997,15 @@ def _validate_aq1_completion_claim(
 ) -> None:
     records = _aq1_records(aq1_evidence)
     context = _expected_aq1_context(aq1_verifier_context, authority_ref=authority_ref)
-    if not records or context is None or expected_context is None:
+    if (AQ1_EVIDENCE_REQUIRED and not records) or context is None or expected_context is None:
         raise SpecialistAssuranceContractError(
             FAIL_AQ1_COMPLETION_SCOPE,
             "AQ1 evidence and verifier context are required",
+        )
+    if AQ1_SOURCE_MUST_MATCH_RECEIPT and context["source_ref"] not in receipt.source_identities:
+        raise SpecialistAssuranceContractError(
+            FAIL_WRONG_SOURCE_EVIDENCE,
+            "AQ1 verifier source is not bound to the AQ3 receipt",
         )
     if any(context[field_name] != expected_context[field_name] for field_name in _AQ3_CONTEXT_FIELDS):
         raise SpecialistAssuranceContractError(
@@ -1076,7 +1105,7 @@ def evaluate_arbiter_progression(
     actual = set(_actual_assurance(records, receipt, context))
 
     recomputed_review: OverseerAssuranceReview | None = None
-    if context is not None:
+    if OVERSEER_REVIEW_RECOMPUTED and context is not None:
         recomputed_review = assess_overseer_review(
             receipt,
             profile,
@@ -1084,11 +1113,15 @@ def evaluate_arbiter_progression(
             reviewer="overseer",
             expected_context=context,
         )
-    if (
+    review_missing_or_unsatisfied = (
         recomputed_review is None
         or not isinstance(overseer_review, OverseerAssuranceReview)
         or not recomputed_review.satisfied
-        or overseer_review != recomputed_review
+    )
+    review_not_exactly_bound = overseer_review != recomputed_review
+    if (
+        (OVERSEER_REVIEW_RECOMPUTED and review_missing_or_unsatisfied)
+        or (OVERSEER_REVIEW_EXACT_BINDING_REQUIRED and review_not_exactly_bound)
     ):
         _append_unique(failures, FAIL_INDEPENDENT_ASSURANCE_REQUIRED)
     else:
@@ -1111,6 +1144,7 @@ def evaluate_arbiter_progression(
         _append_unique(failures, FAIL_AQ1_COMPLETION_SCOPE)
     try:
         _validate_aq1_completion_claim(
+            receipt,
             state,
             truth,
             aq1_evidence,
@@ -1207,7 +1241,12 @@ def validate_concurrency_claim(
 
 
 __all__ = [
+    "AQ1_COMPLETION_VALIDATOR",
+    "AQ1_EVIDENCE_REQUIRED",
+    "AQ1_REQUIRED_VERIFIER_CONTEXT",
+    "AQ1_SOURCE_MUST_MATCH_RECEIPT",
     "AQ3_AUTHORITY_RULE",
+    "AQ3_CONTEXT_FIELDS",
     "AQ3_DAGGER_MATERIAL_BEHAVIOR_MARKERS",
     "AQ3_DAGGER_QUALITY_DIMENSIONS",
     "AQ3_DAGGER_RISK_CHARACTERISTICS",
@@ -1233,8 +1272,12 @@ __all__ = [
     "FAIL_STALE_EVIDENCE",
     "FAIL_WEAKER_EVIDENCE",
     "FAIL_WRONG_SOURCE_EVIDENCE",
+    "OVERSEER_REVIEW_BINDING_FIELDS",
+    "OVERSEER_REVIEW_EXACT_BINDING_REQUIRED",
+    "OVERSEER_REVIEW_RECOMPUTED",
     "PROVENANCE_QUALIFICATIONS",
     "REQUIRED_RECEIPT_FIELDS",
+    "REQUIRED_OVERSEER_OUTPUTS",
     "REQUIRE_AGGREGATE_CONCURRENCY_ANALYSIS",
     "SpecialistAssuranceContractError",
     "SpecialistAssuranceEvidence",

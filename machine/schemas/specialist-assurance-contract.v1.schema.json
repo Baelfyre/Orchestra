@@ -11,6 +11,8 @@
     "receipt_fields",
     "aq2_binding",
     "canonical_specialist_order",
+    "canonical_specialist_registry",
+    "canonical_specialist_set_exact",
     "canonical_assurance_order",
     "bounded_coordination",
     "dagger_policy",
@@ -45,6 +47,8 @@
       }
     },
     "canonical_specialist_order": {"$ref": "#/$defs/stringList"},
+    "canonical_specialist_registry": {"const": "machine/specialists/registry.v1.json"},
+    "canonical_specialist_set_exact": {"const": true},
     "canonical_assurance_order": {"$ref": "#/$defs/stringList"},
     "bounded_coordination": {
       "type": "object",
@@ -133,6 +137,7 @@
         "aq1_completion_escalation_allowed",
         "aq1_completion_validator",
         "aq1_evidence_required",
+        "aq1_source_must_match_receipt",
         "aq1_required_verifier_context",
         "overseer_review_recomputed",
         "overseer_review_exact_binding_required"
@@ -151,6 +156,7 @@
         "aq1_completion_escalation_allowed": {"const": false},
         "aq1_completion_validator": {"const": "orchestra_runtime.domain.adaptive.assurance.validate_completion_escalation"},
         "aq1_evidence_required": {"const": true},
+        "aq1_source_must_match_receipt": {"const": true},
         "aq1_required_verifier_context": {"$ref": "#/$defs/stringList"},
         "overseer_review_recomputed": {"const": true},
         "overseer_review_exact_binding_required": {"const": true}
