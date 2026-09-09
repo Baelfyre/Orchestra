@@ -2295,6 +2295,31 @@
       "transport_fallback": "DETERMINISTIC_NON_EXECUTING_CHAIN",
       "provider_capability_broker": "SHADOW_ADVISORY_NON_AUTHORIZING",
       "learned_routing_promotion": false
+    },
+    "covenant_governance_synthesis": {
+      "status": "IMPLEMENTATION_CANDIDATE_BLIND_AUDIT_REMEDIATION",
+      "purpose": "Add an evidence-only cross-governance synthesis layer that compares Steward system-intent judgment, Governor protected-obligation judgment, PRAI/specialist evidence, project goals, critical flows, and system invariants against the Prime Directive.",
+      "human_sources": [
+        "docs/governance/THE_COVENANT.md",
+        "docs/validation/COVENANT_CONFLICT_SCENARIO_MATRIX_20260910.md",
+        "skills/the-steward/SKILL.md",
+        "skills/the-governor/SKILL.md"
+      ],
+      "machine_sources": [
+        "machine/governance/covenant.v1.json",
+        "machine/schemas/covenant.v1.schema.json"
+      ],
+      "runtime_surface": "orchestra_runtime/domain/governance/covenant.py",
+      "validation_surface": "tests/runtime/test_covenant_governance_reconciliation.py",
+      "legacy_assurance_engine": "PRAI",
+      "prai_pass_sufficient_for_covenant_pass": false,
+      "aq7_blind_audit_regressions": [
+        "concurrent last-administrator aggregate invariant",
+        "privilege mutation before mandatory audit recording",
+        "non-durable substantive PRAI evidence artifacts"
+      ],
+      "aq8_authorized": false,
+      "authority_note": "The Covenant is evidence-only and non-authorizing. It cannot amend the Prime Directive, override Steward/Governor ownership, create execution or transition authority, or start AQ8."
     }
   },
   "machine_scan_order": [

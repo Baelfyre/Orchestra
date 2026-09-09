@@ -90,3 +90,8 @@ Routing, validation success, PRAP certification, host maturity, Developer Portal
 ## Fail-closed boundaries
 
 Protected actions, missing required evidence, stale exact-head validation, invalid runtime authority, unresolved ownership conflicts, or other hard governance failures stop or escalate according to the machine policy. Human guidance may explain a decision but cannot override a machine-enforced prohibition without a separately authorized policy change.
+
+## Covenant governance synthesis
+
+- [The Covenant](THE_COVENANT.md): evidence-only cross-governance synthesis that compares Steward system intent, Governor protected obligations, specialist/PRAI evidence, project goals, and system invariants before Arbiter transition judgment.
+- [Covenant conflict scenario matrix](../validation/COVENANT_CONFLICT_SCENARIO_MATRIX_20260910.md): deterministic dilemma and AQ7 regression scenarios used to test reconciliation and fail-closed behavior.
