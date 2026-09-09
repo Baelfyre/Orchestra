@@ -79,7 +79,3 @@ UNKNOWN: [unknown metrics]
 DISPOSITION: [disposition enum]
 REFS: [evidence references]
 ```
-
-## Covenant judgment format
-
-For the material system-intent judgment, use COVENANT_SYSTEM_INTENT_JUDGMENT_GUIDE.md.
