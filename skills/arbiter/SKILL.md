@@ -144,6 +144,18 @@ Arbiter rules:
 - Fails closed on absent, malformed, or unsupported dispositions (defaults to `ESCALATE_HUMAN` / pause, never `AUTO_CONTINUE`).
 
 
+## Protected Governance Escalation Gate
+
+When evidence shows that remediation would change, relax, except, reinterpret, or supersede the governance controlling the same blocked candidate, Arbiter must return `HOLD` with transition disposition `ESCALATE_HUMAN`.
+
+This gate has higher precedence than `AUTO_REMEDIATE_AND_REVALIDATE`.
+
+Arbiter must verify and freeze the exact repository, base, candidate SHA, tree SHA, changed paths, work item, failing evidence, and current policy identity. Arbiter must treat any candidate mutation after escalation as invalidating the packet.
+
+Arbiter does not decide whether the policy should change. It records transition safety, preserves the originating candidate as blocked, and requires a new execution context after a human decision.
+
+`FAIL_POLICY_SELF_MODIFICATION` is a mandatory trigger. It must never be translated to `AUTO_CONTINUE` or ordinary automatic remediation in the same run.
+
 ## Cross-Specialist Coordination Continuity Gate
 
 Tuner output is coordination evidence, not a transition decision. Arbiter retains exclusive continuation authority.
