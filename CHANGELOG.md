@@ -3,7 +3,7 @@
 ## Unreleased ADAPT-QA AQ-7 runtime and adapter parity
 
 - Adds a framework-neutral HTTP-shaped tenant-administration reference path with authentication, tenant authorization, domain invariants, application service, persistence ports, in-memory and SQLite adapters, stable error mapping, deterministic audit serialization, and adapter-equivalence tests.
-- Adds bounded AQ7 legacy-scope applicability classification: the complete AQ7 slice is outside the historical AQ5/PRAI exact inventories, while partial, mixed, and unknown changes remain fail-closed applicable.
+- Adds bounded AQ7 legacy-scope applicability classification: the complete AQ7 slice is outside the historical AQ5/AQ6/PRAI exact inventories, while partial, mixed, and unknown changes remain fail-closed applicable.
 - Preserves candidate-only controlled challenges, deep candidate-bound PRAI evidence, no provider or socket activation, and no deployment or production authority.
 
 ## Unreleased ADAPT-QA AQ-6 gate coverage truthfulness

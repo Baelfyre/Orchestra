@@ -14,6 +14,7 @@ def test_complete_aq7_slice_is_not_applicable_to_legacy_gates() -> None:
     paths = _complete_aq7_paths()
     assert classify_paths(paths, "prai") == NOT_APPLICABLE
     assert classify_paths(paths, "aq5") == NOT_APPLICABLE
+    assert classify_paths(paths, "aq7") == NOT_APPLICABLE
 
 
 def test_partial_aq7_slice_remains_applicable() -> None:
@@ -21,9 +22,11 @@ def test_partial_aq7_slice_remains_applicable() -> None:
     paths.remove("tests/runtime/test_aq7_http_adapter_parity.py")
     assert classify_paths(paths, "prai") == APPLICABLE
     assert classify_paths(paths, "aq5") == APPLICABLE
+    assert classify_paths(paths, "aq7") == APPLICABLE
 
 
 def test_unknown_mixed_with_aq7_slice_remains_applicable() -> None:
     paths = [*_complete_aq7_paths(), "unexpected.txt"]
     assert classify_paths(paths, "prai") == APPLICABLE
     assert classify_paths(paths, "aq5") == APPLICABLE
+    assert classify_paths(paths, "aq7") == APPLICABLE

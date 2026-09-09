@@ -62,6 +62,7 @@ AQ6_IMPLEMENTATION_PATHS = frozenset(
 
 AQ7_IMPLEMENTATION_PATHS = frozenset(
     {
+        ".github/workflows/aq6-gate-coverage.yml",
         "docs/architecture/ADAPTIVE_ASSURANCE_AQ7.md",
         "orchestra_runtime/application/dto/tenant_administration.py",
         "orchestra_runtime/application/ports/repositories/__init__.py",
@@ -122,6 +123,7 @@ GOVERNANCE_PREFIXES = (
 
 IMPLEMENTATION_PATHS_BY_GATE = {
     "aq5": AQ5_IMPLEMENTATION_PATHS,
+    "aq7": AQ7_IMPLEMENTATION_PATHS,
     "prai": PRAI_IMPLEMENTATION_PATHS,
 }
 
@@ -160,7 +162,7 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
 
     normalized = normalize_paths(paths)
     strict_implementation_paths = implementation_paths - WORKFLOW_INTEGRATION_PATHS
-    if set(normalized).intersection(strict_implementation_paths):
+    if gate != "aq7" and set(normalized).intersection(strict_implementation_paths):
         return APPLICABLE
 
     non_neutral = set(normalized) - COMMON_TRIGGER_PATHS
