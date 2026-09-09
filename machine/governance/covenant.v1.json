@@ -80,5 +80,16 @@
     "PRAI_PASS_VS_SYSTEM_CONTRADICTION",
     "MISSING_DURABLE_ASSURANCE",
     "SAFE_NARROW_RECONCILIATION"
+  ],
+  "basis_required_fields": [
+    "repository",
+    "candidate_sha",
+    "tree_sha",
+    "basis_revision",
+    "project_ref",
+    "prime_directive_ref",
+    "project_goal_refs",
+    "critical_flows",
+    "system_invariants"
   ]
 }
