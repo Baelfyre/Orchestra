@@ -47,6 +47,14 @@ Implementers cannot produce their own assurance.
 
 ## Canonical vocabulary and scope relation
 
+The Covenant consumes PRAI as bounded assurance evidence. PRAI PASS is never
+Covenant PASS: the Covenant additionally evaluates Prime Directive alignment,
+project intent, critical flows, project invariants, protected obligations,
+cross-specialist contradictions, claim-to-evidence scope, durability, and
+Steward/Governor reconciliation. Covenant synthesis remains evidence-only and
+non-authorizing, and it cannot weaken PRAI limitations or replace Arbiter's
+transition ownership.
+
 Risk labels are canonical uppercase values from the machine contract; serialized
 non-canonical casing and unknown labels fail closed. Receipt evidence_layer uses
 the AQ1 EVIDENCE_LAYERS vocabulary, while evidence_scope and claim_scope use the

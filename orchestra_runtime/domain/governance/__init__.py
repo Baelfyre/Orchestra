@@ -1,5 +1,8 @@
 """Governance-domain semantics for Orchestra runtime architecture."""
 
+# @codebase_provenance_JEO
+# @codebase_rights_JEO
+
 from .authority import (
     AuthorityDecision,
     AuthorityProvenance,
@@ -27,6 +30,23 @@ from .preexecution import (
     PreExecutionPolicy,
     PreExecutionReason,
 )
+from .covenant import (
+    ALIGNMENT_STATES,
+    ASSURANCE_RESULTS,
+    COVENANT_DISPOSITIONS,
+    COVENANT_SCHEMA_VERSION,
+    FLOW_ALIGNMENT_STATES,
+    GOVERNANCE_DECISIONS,
+    OBLIGATION_STATES,
+    SPECIALIST_RESULTS,
+    SPECIALIST_REVIEWERS,
+    CovenantBasis,
+    CovenantDecision,
+    GovernanceJudgment,
+    ReconciliationProposal,
+    SpecialistEvidence,
+    evaluate_covenant,
+)
 
 __all__ = [
     "GOVERNANCE_KERNEL_SCHEMA_VERSION",
@@ -50,4 +70,19 @@ __all__ = [
     "TargetSelector",
     "TargetSelectorType",
     "TransitionDisposition",
+    "ALIGNMENT_STATES",
+    "ASSURANCE_RESULTS",
+    "COVENANT_DISPOSITIONS",
+    "COVENANT_SCHEMA_VERSION",
+    "CovenantBasis",
+    "CovenantDecision",
+    "FLOW_ALIGNMENT_STATES",
+    "GOVERNANCE_DECISIONS",
+    "GovernanceJudgment",
+    "OBLIGATION_STATES",
+    "ReconciliationProposal",
+    "SPECIALIST_RESULTS",
+    "SPECIALIST_REVIEWERS",
+    "SpecialistEvidence",
+    "evaluate_covenant",
 ]
