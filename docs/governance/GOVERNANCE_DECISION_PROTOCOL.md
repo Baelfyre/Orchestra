@@ -109,6 +109,6 @@ Requires valid envelope, current evidence, no stop/escalation condition, and no 
 
 Unknown, malformed, missing, or unsupported transition dispositions must fail closed and produce `ESCALATE_HUMAN`. Never default to automatic continuation.
 
-## Covenant cross-judgment synthesis
+## Covenant
 
-For material work, Steward/Governor decisions and specialist/PRAI evidence require Covenant synthesis before an ordinary transition can be treated as governance-coherent. Covenant never overrides owning governance, never creates authority, and Arbiter remains transition owner. See THE_COVENANT.md.
+Material governance decisions use THE_COVENANT.md for cross-judgment synthesis. Covenant does not override owning governance or Arbiter transition ownership.
