@@ -7,6 +7,7 @@ Orchestra governance controls whether otherwise authorized work may proceed. It 
 The stable constitutional boundary for Orchestra is defined by:
 
 - [Orchestra Prime Directive](ORCHESTRA_PRIME_DIRECTIVE.md)
+- [The Covenant](THE_COVENANT.md)
 - [Feature Admission Policy](FEATURE_ADMISSION_POLICY.md)
 - [Candidate Maturity and Feature Freeze](CANDIDATE_MATURITY_FEATURE_FREEZE.md)
 - [Qualification Gates, Evaluation, and Independent Audit](QUALIFICATION_GATES_EVALUATION_AUDIT.md)
@@ -80,6 +81,12 @@ Effective permitted action
 Routing, validation success, PRAP certification, host maturity, Developer Portal discovery, MCP metadata, GitHub mergeability, or a successful prior execution cannot widen that permission set.
 
 ## Governance roles
+
+The Steward owns product intent, scope, critical-flow completeness, and
+project-level system coherence. The Governor owns protected obligations and
+governance integrity. The Covenant synthesizes their separate judgments and
+specialist evidence without voting or creating authority; Arbiter remains the
+transition owner.
 
 - **The Steward:** business alignment, requirements, scope, SDLC sufficiency, and change control.
 - **The Governor:** legal/compliance, privacy obligations, IP, licensing, and source applicability.

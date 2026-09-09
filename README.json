@@ -66,6 +66,26 @@
         "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md"
       ]
     },
+    "covenant_cross_governance_synthesis": {
+      "status": "IMPLEMENTATION_CANDIDATE",
+      "purpose": "Synthesizes independent Steward system-intent, Governor protected-obligation, specialist, and PRAI evidence without creating authority.",
+      "machine_sources": [
+        "machine/governance/covenant.v1.json",
+        "machine/schemas/covenant.v1.schema.json"
+      ],
+      "human_sources": [
+        "docs/governance/THE_COVENANT.md",
+        "docs/validation/COVENANT_CONFLICT_SCENARIO_MATRIX_20260910.md",
+        "skills/the-steward/COVENANT_SYSTEM_INTENT_JUDGMENT_GUIDE.md",
+        "skills/the-governor/COVENANT_PROTECTED_OBLIGATION_JUDGMENT_GUIDE.md"
+      ],
+      "runtime_surface": "orchestra_runtime/domain/governance/covenant.py",
+      "validation_surface": [
+        "tests/runtime/test_covenant_contract.py",
+        "tests/runtime/test_covenant_governance_reconciliation.py"
+      ],
+      "authority_note": "Covenant results are evidence-only and non-authorizing. Arbiter remains transition owner; PRAI PASS and specialist PASS do not establish Covenant PASS."
+    },
     "runtime_architecture_refoundation": {
       "status": "AR_2_COMPLETE_CANONICAL_VERIFIED",
       "purpose": "Incrementally refactor the Orchestra Python runtime into bounded clean/hexagonal architecture layers while preserving public behavior and legacy import compatibility.",
@@ -2856,6 +2876,10 @@
     "ui_execution_fidelity_plan": "docs/project/UI_EXECUTION_FIDELITY_PLAN.md",
     "github_copilot_adapter": "adapters/github-copilot/README.md",
     "github_copilot_probe_guide": "adapters/github-copilot/probe-guide.md",
+    "covenant": "docs/governance/THE_COVENANT.md",
+    "covenant_conflict_scenario_matrix": "docs/validation/COVENANT_CONFLICT_SCENARIO_MATRIX_20260910.md",
+    "covenant_machine_contract": "machine/governance/covenant.v1.json",
+    "covenant_machine_schema": "machine/schemas/covenant.v1.schema.json",
     "covenant_assurance_scope_policy": "docs/governance/COVENANT_ASSURANCE_SCOPE_POLICY.md"
   },
   "representation_policy": {
