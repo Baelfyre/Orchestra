@@ -130,6 +130,10 @@ In a delegated phase governed by a `DelegatedExecutionEnvelope`:
 - Overseer provides concise failure excerpts suitable for automatic remediation without generating bloated session logs.
 
 
+## Protected Governance Escalation Evidence Role
+
+For a frozen protected-governance escalation, verify exact candidate identity, failing evidence, proposed governance change, alternatives, and consequences. Distinguish implementation defect from demonstrated governance/topology conflict. Do not authorize an exception, amendment, same-run continuation, or controlling-governance mutation.
+
 ## Cross-Layer Contract Evidence
 
 When a CrossLayerContractPacket exists:
