@@ -41,11 +41,6 @@ REQUIRED_TEXT = {
         "A run that discovers a protected governance change cannot execute that change in the same run.",
         "PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md",
     ),
-    "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md": (
-        "## Protected Governance Escalation",
-        "FAIL_POLICY_SELF_MODIFICATION",
-        "APPROVE_POLICY_AMENDMENT",
-    ),
     "docs/governance/GOVERNANCE_REVIEW_FLOW.md": (
         "## Protected Governance Escalation Flow",
         "ORIGINATING RUN TERMINATES",
@@ -60,6 +55,14 @@ REQUIRED_TEXT = {
         "GOVERNANCE_ESCALATION_REQUIRED",
         "FAIL_POLICY_SELF_MODIFICATION",
         "new execution context",
+    ),
+}
+
+FORBIDDEN_DUPLICATED_TEXT = {
+    "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md": (
+        "## Protected Governance Escalation",
+        "FAIL_POLICY_SELF_MODIFICATION",
+        "APPROVE_POLICY_AMENDMENT",
     ),
 }
 
@@ -158,6 +161,19 @@ def main() -> int:
         body = path.read_text(encoding="utf-8")
         for needle in needles:
             require(needle in body, errors, f"{relative} missing protected-escalation invariant: {needle}")
+
+    for relative, needles in FORBIDDEN_DUPLICATED_TEXT.items():
+        path = ROOT / relative
+        require(path.is_file(), errors, f"missing governed surface: {relative}")
+        if not path.is_file():
+            continue
+        body = path.read_text(encoding="utf-8")
+        for needle in needles:
+            require(
+                needle not in body,
+                errors,
+                f"{relative} must not duplicate protected-escalation detail: {needle}",
+            )
 
     if errors:
         for error in errors:

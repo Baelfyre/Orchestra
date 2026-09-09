@@ -123,6 +123,22 @@ jobs:
           set -euo pipefail
           git diff --check "$BASE_SHA..HEAD"
           mapfile -t actual < <(git diff --name-only "$BASE_SHA..HEAD" | sort)
+          scope_applicability="$(
+            printf '%s\n' "${actual[@]}" |
+              python -B scripts/validation/classify_adaptive_assurance_scope.py --assurance prai
+          )"
+          case "$scope_applicability" in
+            NOT_APPLICABLE)
+              echo "PRAI_SCOPE=NOT_APPLICABLE"
+              exit 0
+              ;;
+            APPLICABLE)
+              ;;
+            *)
+              echo "PRAI_SCOPE_CLASSIFICATION_INVALID: $scope_applicability" >&2
+              exit 1
+              ;;
+          esac
           expected=(
             ".github/workflows/prai.yml"
             ".github/workflows/qa-compliance.yml"

@@ -46,6 +46,7 @@ REQUIRED_VALIDATION_SCRIPTS = [
     "scripts/validate_governed_autonomy_modes_contract.py",
     "scripts/validate_host_capability_contract.py",
     "scripts/validate_protected_governance_escalation.py",
+    "scripts/validation/classify_adaptive_assurance_scope.py",
 ]
 
 REPO_MEMORY_FILES = [
