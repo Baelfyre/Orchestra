@@ -16,47 +16,146 @@
     "dispositions",
     "alignment_states",
     "reconciliation_invariants",
-    "required_scenario_classes"
+    "required_scenario_classes",
+    "basis_required_fields"
   ],
   "properties": {
-    "$schema": {"type": "string"},
-    "schema_version": {"const": "orchestra.covenant.v1"},
-    "contract_name": {"const": "TheCovenant"},
-    "authority_model": {"const": "EVIDENCE_ONLY_NON_AUTHORIZING"},
-    "prime_directive_ref": {"type": "string", "minLength": 1},
-    "human_contract_ref": {"type": "string", "minLength": 1},
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orchestra.covenant.v1"
+    },
+    "contract_name": {
+      "const": "TheCovenant"
+    },
+    "authority_model": {
+      "const": "EVIDENCE_ONLY_NON_AUTHORIZING"
+    },
+    "prime_directive_ref": {
+      "type": "string",
+      "minLength": 1
+    },
+    "human_contract_ref": {
+      "type": "string",
+      "minLength": 1
+    },
     "legacy_assurance_engine": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["name", "contract_ref", "relationship", "prai_pass_sufficient_for_covenant_pass"],
+      "required": [
+        "name",
+        "contract_ref",
+        "relationship",
+        "prai_pass_sufficient_for_covenant_pass"
+      ],
       "properties": {
-        "name": {"const": "PRAI"},
-        "contract_ref": {"type": "string", "minLength": 1},
-        "relationship": {"const": "EVIDENCE_INPUT_NOT_FINAL_SYSTEM_JUDGMENT"},
-        "prai_pass_sufficient_for_covenant_pass": {"const": false}
+        "name": {
+          "const": "PRAI"
+        },
+        "contract_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "relationship": {
+          "const": "EVIDENCE_INPUT_NOT_FINAL_SYSTEM_JUDGMENT"
+        },
+        "prai_pass_sufficient_for_covenant_pass": {
+          "const": false
+        }
       }
     },
     "judgment_owners": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["STEWARD", "GOVERNOR"],
+      "required": [
+        "STEWARD",
+        "GOVERNOR"
+      ],
       "properties": {
-        "STEWARD": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-        "GOVERNOR": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+        "STEWARD": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "GOVERNOR": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
       }
     },
-    "constitutional_precedence": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "constitutional_precedence": {
+      "type": "array",
+      "minItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
     "dispositions": {
       "type": "array",
       "uniqueItems": true,
-      "const": ["PASS", "RECONCILED_WITH_CONSTRAINTS", "REVISION_REQUIRED", "WAIT_FOR_EVIDENCE", "ESCALATE_HUMAN", "BLOCKED"]
+      "const": [
+        "PASS",
+        "RECONCILED_WITH_CONSTRAINTS",
+        "REVISION_REQUIRED",
+        "WAIT_FOR_EVIDENCE",
+        "ESCALATE_HUMAN",
+        "BLOCKED"
+      ]
     },
     "alignment_states": {
       "type": "array",
       "uniqueItems": true,
-      "const": ["ALIGNED", "CONFLICT", "UNKNOWN", "NOT_APPLICABLE"]
+      "const": [
+        "ALIGNED",
+        "CONFLICT",
+        "UNKNOWN",
+        "NOT_APPLICABLE"
+      ]
     },
-    "reconciliation_invariants": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-    "required_scenario_classes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+    "reconciliation_invariants": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "required_scenario_classes": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "basis_required_fields": {
+      "type": "array",
+      "uniqueItems": true,
+      "const": [
+        "repository",
+        "candidate_sha",
+        "tree_sha",
+        "basis_revision",
+        "project_ref",
+        "prime_directive_ref",
+        "project_goal_refs",
+        "critical_flows",
+        "system_invariants"
+      ]
+    }
   }
 }
