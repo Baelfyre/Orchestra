@@ -126,3 +126,15 @@ python -B scripts/validation/validate_prai.py --work-unit <json> \
 PRAI_COMPLETE_CANONICAL_VERIFIED is required before AQ6 admission. AQ6 and
 AQ7 are the only authorized autonomous trial phases in the current campaign;
 AQ8 and later phases are out of scope.
+
+## Relationship to The Covenant
+
+PRAI remains the candidate-bound post-run assurance engine during the compatibility period. It produces technical and specialist evidence, but its PASS result is not a final system-coherence judgment.
+
+For material work covered by The Covenant:
+
+    PRAI_PASS != COVENANT_PASS
+
+The Covenant consumes PRAI receipts, findings, limitations, candidate identity, evidence scope, and disposition together with Steward and Governor judgments. A contradiction between PRAI PASS and stronger project/system evidence must remain visible and must produce Covenant revision, evidence wait, block, or human escalation as appropriate.
+
+The Covenant is additive and non-authorizing. This compatibility relationship does not weaken PRAI, broaden protected PRAI mutation authority, or rename protected PRAI paths.
