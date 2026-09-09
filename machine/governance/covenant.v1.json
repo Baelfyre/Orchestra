@@ -1,0 +1,84 @@
+{
+  "$schema": "../schemas/covenant.v1.schema.json",
+  "schema_version": "orchestra.covenant.v1",
+  "contract_name": "TheCovenant",
+  "authority_model": "EVIDENCE_ONLY_NON_AUTHORIZING",
+  "prime_directive_ref": "docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md",
+  "human_contract_ref": "docs/governance/THE_COVENANT.md",
+  "legacy_assurance_engine": {
+    "name": "PRAI",
+    "contract_ref": "machine/adaptive/prai-post-run-assurance.v1.json",
+    "relationship": "EVIDENCE_INPUT_NOT_FINAL_SYSTEM_JUDGMENT",
+    "prai_pass_sufficient_for_covenant_pass": false
+  },
+  "judgment_owners": {
+    "STEWARD": [
+      "PROJECT_PURPOSE",
+      "PROJECT_GOALS",
+      "PRODUCT_INTENT",
+      "SCOPE",
+      "REQUIREMENTS",
+      "ACCEPTANCE_CRITERIA",
+      "CRITICAL_SYSTEM_FLOWS",
+      "SYSTEM_INTENT_COHERENCE"
+    ],
+    "GOVERNOR": [
+      "LEGAL",
+      "REGULATORY",
+      "PRIVACY_OBLIGATION",
+      "LICENSING",
+      "IP",
+      "COMPLIANCE",
+      "POLICY_INTEGRITY",
+      "AUDITABILITY_OBLIGATION",
+      "HUMAN_REVIEW_BOUNDARY"
+    ]
+  },
+  "constitutional_precedence": [
+    "PRIME_DIRECTIVE",
+    "EXPLICIT_HUMAN_AUTHORITY",
+    "PROTECTED_OBLIGATIONS",
+    "VERIFIED_PROJECT_GOALS_AND_REQUIREMENTS",
+    "SPECIALIST_TECHNICAL_EVIDENCE",
+    "PRAI_AND_VALIDATION_EVIDENCE"
+  ],
+  "dispositions": [
+    "PASS",
+    "RECONCILED_WITH_CONSTRAINTS",
+    "REVISION_REQUIRED",
+    "WAIT_FOR_EVIDENCE",
+    "ESCALATE_HUMAN",
+    "BLOCKED"
+  ],
+  "alignment_states": [
+    "ALIGNED",
+    "CONFLICT",
+    "UNKNOWN",
+    "NOT_APPLICABLE"
+  ],
+  "reconciliation_invariants": [
+    "PRIME_DIRECTIVE_CANNOT_BE_TRADED_AWAY",
+    "COVENANT_CANNOT_CREATE_AUTHORITY",
+    "COVENANT_CANNOT_INVENT_PROJECT_GOALS",
+    "COVENANT_CANNOT_OVERRIDE_STEWARD_OR_GOVERNOR_BLOCK",
+    "PRAI_PASS_DOES_NOT_OVERRIDE_CROSS_JUDGMENT_CONTRADICTION",
+    "VERIFIED_RECONCILIATION_MUST_PRESERVE_PRIME_DIRECTIVE",
+    "VERIFIED_RECONCILIATION_MUST_PRESERVE_PROJECT_GOALS",
+    "VERIFIED_RECONCILIATION_REQUIRES_STEWARD_AND_GOVERNOR_ACCEPTANCE",
+    "UNKNOWN_MATERIAL_GOVERNING_STATE_FAILS_CLOSED"
+  ],
+  "required_scenario_classes": [
+    "PRIME_DIRECTIVE_VS_PROJECT_GOAL",
+    "STEWARD_APPROVE_GOVERNOR_BLOCK",
+    "GOVERNOR_APPROVE_STEWARD_REVISION",
+    "PRIVACY_VS_AUDITABILITY",
+    "SCOPE_VS_REQUIRED_REMEDIATION",
+    "CONVENIENCE_VS_AUTHORIZATION",
+    "DELIVERY_VS_EVIDENCE",
+    "CONCURRENT_AGGREGATE_INVARIANT",
+    "MUTATION_VS_AUDIT_ATOMICITY",
+    "PRAI_PASS_VS_SYSTEM_CONTRADICTION",
+    "MISSING_DURABLE_ASSURANCE",
+    "SAFE_NARROW_RECONCILIATION"
+  ]
+}
