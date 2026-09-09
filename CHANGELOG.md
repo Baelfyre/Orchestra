@@ -1,3 +1,11 @@
+## Unreleased governance synthesis - The Covenant
+
+- Adds The Covenant as an evidence-only cross-governance synthesis layer above specialist/PRAI evidence and below Arbiter transition judgment.
+- Strengthens The Steward with system-intent coherence judgment and The Governor with protected-obligation judgment without transferring technical specialist ownership.
+- Adds deterministic conflict reconciliation that preserves Prime Directive precedence, explicit authority, protected obligations, and verified project goals.
+- Adds scenario regressions for governance dilemmas, including the AQ7 last-administrator concurrency escape, privilege-mutation/audit partial failure, and assurance-artifact durability gap.
+- Keeps AQ8 unauthorized and preserves PRAI protected paths during the compatibility phase.
+
 # Changelog
 
 ## Unreleased ADAPT-QA AQ-7 runtime and adapter parity
