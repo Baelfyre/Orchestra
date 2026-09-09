@@ -276,6 +276,47 @@ def test_schema_runtime_parity_rejects_scope_and_identity_drift() -> None:
     with pytest.raises(ValueError, match=prai.FAIL_SCHEMA_RUNTIME_PARITY):
         prai.validate_schema_runtime_parity(contract, schema)
 
+def test_schema_runtime_parity_rejects_r4_context_drift() -> None:
+    root = Path(__file__).resolve().parents[2]
+    contract = json.loads(
+        (root / "machine" / "adaptive" / "prai-post-run-assurance.v1.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    schema_path = root / "machine" / "schemas" / "prai-post-run-assurance.v1.schema.json"
+
+    def rejects(mutate) -> None:
+        schema = json.loads(schema_path.read_text(encoding="utf-8"))
+        mutate(schema)
+        with pytest.raises(ValueError, match=prai.FAIL_SCHEMA_RUNTIME_PARITY):
+            prai.validate_schema_runtime_parity(contract, schema)
+
+    rejects(lambda schema: schema["properties"]["version_ref"].update(minLength=2))
+    rejects(
+        lambda schema: schema["$defs"]["receipt"]["properties"]["version_ref"].update(
+            minLength=2
+        )
+    )
+    rejects(lambda schema: schema["$defs"].pop("decision"))
+    rejects(lambda schema: schema["$defs"]["decision"].update(properties=None))
+    rejects(
+        lambda schema: schema["$defs"]["decision"]["properties"].update(
+            unexpected={"type": "string"}
+        )
+    )
+    rejects(
+        lambda schema: schema["$defs"]["decision"].update(
+            required=schema["$defs"]["decision"]["required"][:-1]
+        )
+    )
+    rejects(lambda schema: schema["$defs"]["decision"].update(additionalProperties=True))
+    rejects(
+        lambda schema: schema["$defs"]["decision"]["properties"]["version_ref"].update(
+            minLength=2
+        )
+    )
+
+
 
 @pytest.mark.parametrize(
     ("name", "unit", "codes"),
