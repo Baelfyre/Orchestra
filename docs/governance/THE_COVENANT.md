@@ -108,6 +108,10 @@ A PRAI PASS is necessary where the active contract requires it, but is not suffi
 
 Future terminology may deprecate the PRAI name after compatibility and migration evidence are complete. This document does not rename protected PRAI paths or weaken PRAI policy.
 
+## State binding
+
+Every material Covenant judgment must be bound to the repository, exact candidate SHA, exact tree SHA, a governing-basis revision, Project Context reference, Prime Directive reference, project-goal references, critical flows, and system invariants. A prior Covenant result does not remain valid after a material bound identity changes.
+
 ## Transition boundary
 
 The Covenant emits evidence-only dispositions. Arbiter remains the transition owner.
