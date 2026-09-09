@@ -1340,7 +1340,7 @@ def validate_schema_runtime_parity(
         raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: decision properties are missing")
     if set(decision_properties) != set(DECISION_FIELDS):
         raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: decision properties drift")
-    if set(decision_schema.get("required", ())) != set(DECISION_FIELDS) - {"decision_digest"}:
+    if set(decision_schema.get("required", ())) != set(DECISION_FIELDS):
         raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: decision required fields drift")
     if decision_schema.get("additionalProperties") is not False:
         raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: decision openness drift")
