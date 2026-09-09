@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Classify whether a change set requires AQ5 or PRAI exact-scope validation."""
+"""Classify whether a change set requires legacy AQ5 or PRAI exact-scope validation."""
 
 from __future__ import annotations
 
@@ -43,6 +43,22 @@ AQ5_IMPLEMENTATION_PATHS = frozenset(
         "tests/runtime/test_adaptive_assurance_aq5.py",
     }
 )
+
+AQ6_IMPLEMENTATION_PATHS = frozenset(
+    {
+        ".github/workflows/aq6-gate-coverage.yml",
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ6.md",
+        "machine/adaptive/aq6-gate-coverage.v1.json",
+        "machine/schemas/aq6-gate-coverage.v1.schema.json",
+        "orchestra_runtime/domain/adaptive/__init__.py",
+        "orchestra_runtime/domain/adaptive/gate_coverage.py",
+        "scripts/validation/classify_adaptive_assurance_scope.py",
+        "scripts/validation/validate_gate_coverage.py",
+        "tests/behavior/test_gate_coverage.py",
+        "tests/runtime/test_adaptive_assurance_aq6.py",
+    }
+)
+
 
 ADAPTIVE_ASSURANCE_REFERENCE_PATHS = frozenset(
     {
@@ -129,6 +145,11 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
 
     non_neutral = set(normalized) - COMMON_TRIGGER_PATHS
     if not non_neutral:
+        return NOT_APPLICABLE
+
+    # AQ6 has its own exact-scope gate. Partial or mixed changes remain
+    # APPLICABLE so the legacy gates continue to fail closed.
+    if non_neutral == AQ6_IMPLEMENTATION_PATHS:
         return NOT_APPLICABLE
 
     governance_paths = {path for path in non_neutral if is_governance_path(path)}

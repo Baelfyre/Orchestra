@@ -143,6 +143,7 @@ jobs:
           orchestra_runtime/domain/adaptive/__init__.py
           orchestra_runtime/domain/adaptive/gate_coverage.py
           README.json
+          scripts/validation/classify_adaptive_assurance_scope.py
           scripts/validation/validate_gate_coverage.py
           tests/behavior/test_gate_coverage.py
           tests/runtime/test_adaptive_assurance_aq6.py

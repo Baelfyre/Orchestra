@@ -30,6 +30,28 @@ validation = importlib.util.module_from_spec(spec)
 assert spec and spec.loader
 spec.loader.exec_module(validation)
 
+scope_spec = importlib.util.spec_from_file_location(
+    "classify_adaptive_assurance_scope",
+    ROOT / "scripts" / "validation" / "classify_adaptive_assurance_scope.py",
+)
+scope = importlib.util.module_from_spec(scope_spec)
+assert scope_spec and scope_spec.loader
+scope_spec.loader.exec_module(scope)
+
+
+AQ6_SCOPE_PATHS = (
+    ".github/workflows/aq6-gate-coverage.yml",
+    "docs/architecture/ADAPTIVE_ASSURANCE_AQ6.md",
+    "machine/adaptive/aq6-gate-coverage.v1.json",
+    "machine/schemas/aq6-gate-coverage.v1.schema.json",
+    "orchestra_runtime/domain/adaptive/__init__.py",
+    "orchestra_runtime/domain/adaptive/gate_coverage.py",
+    "scripts/validation/classify_adaptive_assurance_scope.py",
+    "scripts/validation/validate_gate_coverage.py",
+    "tests/behavior/test_gate_coverage.py",
+    "tests/runtime/test_adaptive_assurance_aq6.py",
+)
+
 
 CONTRACT = ROOT / "machine" / "adaptive" / "aq6-gate-coverage.v1.json"
 SOURCE = "orchestra:aq6"
@@ -134,8 +156,26 @@ def test_cli_passes_source_bound_evidence():
     assert "AQ6_RESULT=PASS" in output.getvalue()
 
 
+def test_complete_aq6_scope_is_not_applicable_to_legacy_gates():
+    complete = (*AQ6_SCOPE_PATHS, "CHANGELOG.md", "README.json")
+    assert scope.classify_paths(complete, "aq5") == "NOT_APPLICABLE"
+    assert scope.classify_paths(complete, "prai") == "NOT_APPLICABLE"
+
+    partial = tuple(
+        path for path in complete
+        if path != "scripts/validation/classify_adaptive_assurance_scope.py"
+    )
+    assert scope.classify_paths(partial, "aq5") == "APPLICABLE"
+    assert scope.classify_paths((*complete, "unexpected.py"), "prai") == "APPLICABLE"
+    assert scope.classify_paths(
+        (*complete, "orchestra_runtime/domain/adaptive/qa_compliance.py"),
+        "aq5",
+    ) == "APPLICABLE"
+
+
 def main() -> int:
     test_cli_passes_source_bound_evidence()
+    test_complete_aq6_scope_is_not_applicable_to_legacy_gates()
     return 0
 
 
