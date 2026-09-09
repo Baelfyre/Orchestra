@@ -22,6 +22,7 @@ GOVERNANCE_DECISIONS = (
     "NOT_APPLICABLE",
 )
 ALIGNMENT_STATES = ("ALIGNED", "CONFLICT", "UNKNOWN", "NOT_APPLICABLE")
+PRIME_DIRECTIVE_ALIGNMENT_STATES = ("ALIGNED", "CONFLICT", "UNKNOWN")
 FLOW_ALIGNMENT_STATES = ("ALIGNED", "CONTRADICTIONS", "UNKNOWN", "NOT_APPLICABLE")
 OBLIGATION_STATES = ("SATISFIED", "GAPS", "UNKNOWN", "NOT_APPLICABLE")
 COVENANT_DISPOSITIONS = (
@@ -210,7 +211,11 @@ class GovernanceJudgment:
         object.__setattr__(
             self,
             "prime_directive_alignment",
-            _choice(self.prime_directive_alignment, "prime_directive_alignment", ALIGNMENT_STATES),
+            _choice(
+                self.prime_directive_alignment,
+                "prime_directive_alignment",
+                PRIME_DIRECTIVE_ALIGNMENT_STATES,
+            ),
         )
         object.__setattr__(
             self,
@@ -475,7 +480,7 @@ def evaluate_covenant(
     steward: GovernanceJudgment | None = None,
     governor: GovernanceJudgment | None = None,
     *,
-    assurance_result: str = "PASS",
+    assurance_result: str = "MISSING",
     cross_judgment_conflicts: Iterable[str] = (),
     cross_specialist_contradictions: Iterable[str] = (),
     system_contradictions: Iterable[str] = (),
@@ -483,7 +488,7 @@ def evaluate_covenant(
     current_candidate_sha: str | None = None,
     current_tree_sha: str | None = None,
     claim_to_evidence_scope: bool | str = True,
-    assurance_evidence_durable: bool = True,
+    assurance_evidence_durable: bool = False,
     assurance_evidence_retrievable: bool | None = None,
     assurance_evidence_refs: Iterable[str] = (),
     specialist_evidence: Iterable[SpecialistEvidence] = (),
@@ -587,6 +592,17 @@ def evaluate_covenant(
         )
 
     # Constitutional conflict is not a negotiable reviewer disagreement.
+    if "NOT_APPLICABLE" in (
+        steward.prime_directive_alignment,
+        governor.prime_directive_alignment,
+    ):
+        return _make_decision(
+            basis,
+            "WAIT_FOR_EVIDENCE",
+            ("PRIME_DIRECTIVE_ALIGNMENT_NOT_APPLICABLE",),
+            evidence_groups=evidence_groups,
+        )
+
     if "CONFLICT" in (steward.prime_directive_alignment, governor.prime_directive_alignment):
         return _make_decision(
             basis,
@@ -631,6 +647,20 @@ def evaluate_covenant(
             basis,
             "WAIT_FOR_EVIDENCE",
             ("ASSURANCE_EVIDENCE_MISSING",),
+            evidence_groups=evidence_groups,
+        )
+    if basis.assurance_required and assurance == "PASS" and not assurance_refs:
+        return _make_decision(
+            basis,
+            "WAIT_FOR_EVIDENCE",
+            ("ASSURANCE_EVIDENCE_MISSING",),
+            evidence_groups=evidence_groups,
+        )
+    if basis.assurance_required and assurance == "PASS" and assurance_evidence_retrievable is not True:
+        return _make_decision(
+            basis,
+            "WAIT_FOR_EVIDENCE",
+            ("ASSURANCE_EVIDENCE_NOT_DURABLE",),
             evidence_groups=evidence_groups,
         )
     if not assurance_evidence_durable or assurance_evidence_retrievable is False:
@@ -829,6 +859,7 @@ __all__ = [
     "GOVERNANCE_DECISIONS",
     "GovernanceJudgment",
     "OBLIGATION_STATES",
+    "PRIME_DIRECTIVE_ALIGNMENT_STATES",
     "ReconciliationProposal",
     "SPECIALIST_RESULTS",
     "SPECIALIST_REVIEWERS",
