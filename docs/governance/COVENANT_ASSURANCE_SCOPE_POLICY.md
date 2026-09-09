@@ -1,9 +1,9 @@
 # Covenant Assurance Scope Policy
 
-**Contract:** `ORCHESTRA_COVENANT_ASSURANCE_SCOPE_POLICY_V1`  
-**Authority:** explicit human `APPROVE_POLICY_AMENDMENT` decision  
-**Authority record:** Padayon commit `74bf85651e0f7a935b039fb82adbfadd68917b20`  
-**Originating frozen candidate:** Orchestra PR #868 at `745609d541e97e61f28b1d3c6f9295ba0245d914`  
+**Contract:** `ORCHESTRA_COVENANT_ASSURANCE_SCOPE_POLICY_V1`
+**Authority:** explicit human `APPROVE_POLICY_AMENDMENT` decision
+**Authority record:** Padayon commit `74bf85651e0f7a935b039fb82adbfadd68917b20`
+**Originating frozen candidate:** Orchestra PR #868 at `745609d541e97e61f28b1d3c6f9295ba0245d914`
 **Policy-amendment run:** Run N+1
 
 ## Purpose
