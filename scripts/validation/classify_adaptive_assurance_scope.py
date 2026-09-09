@@ -1,6 +1,6 @@
+#!/usr/bin/env python3
 # @codebase_provenance_JEO
 # @codebase_rights_JEO
-#!/usr/bin/env python3
 """Classify whether a change set requires legacy AQ5 or PRAI exact-scope validation."""
 
 from __future__ import annotations
