@@ -87,6 +87,10 @@ class CovenantBasis:
         )
         if not self.project_goal_refs:
             raise ValueError("project_goal_refs must not be empty")
+        if not self.critical_flows:
+            raise ValueError("critical_flows must not be empty")
+        if not self.system_invariants:
+            raise ValueError("system_invariants must not be empty")
         if not isinstance(self.assurance_required, bool):
             raise TypeError("assurance_required must be bool")
 
@@ -194,7 +198,17 @@ def evaluate_covenant(
     conflicts = _strings(cross_judgment_conflicts, "cross_judgment_conflicts")
     contradictions = _strings(system_contradictions, "system_contradictions")
     constraints = tuple(dict.fromkeys((*steward.constraints, *governor.constraints)))
-    evidence = tuple(dict.fromkeys((*steward.evidence_refs, *governor.evidence_refs)))
+    evidence = tuple(
+        dict.fromkeys(
+            (
+                basis.project_ref,
+                basis.prime_directive_ref,
+                *basis.project_goal_refs,
+                *steward.evidence_refs,
+                *governor.evidence_refs,
+            )
+        )
+    )
 
     prime_states = {
         steward.prime_directive_alignment,
