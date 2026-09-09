@@ -13,6 +13,10 @@ from orchestra_runtime.domain.governance.covenant import (
 
 
 BASIS = CovenantBasis(
+    repository="Baelfyre/Orchestra",
+    candidate_sha="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    tree_sha="bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    basis_revision="orchestra-covenant-basis-v1",
     project_ref="PROJECT_CONTEXT.md",
     prime_directive_ref="docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md",
     project_goal_refs=("goal:reliable-governed-orchestration",),
@@ -200,11 +204,19 @@ def test_fully_coherent_candidate_passes_without_creating_authority():
     assert "PROJECT_CONTEXT.md" in result.evidence_refs
     assert "docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md" in result.evidence_refs
     assert "goal:reliable-governed-orchestration" in result.evidence_refs
+    assert result.basis.repository == "Baelfyre/Orchestra"
+    assert result.basis.candidate_sha == "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    assert result.basis.tree_sha == "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    assert result.basis.basis_revision == "orchestra-covenant-basis-v1"
 
 
 def test_material_covenant_basis_requires_flows_and_invariants():
     with pytest.raises(ValueError):
         CovenantBasis(
+            repository="Baelfyre/Orchestra",
+            candidate_sha="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            tree_sha="bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            basis_revision="orchestra-covenant-basis-v1",
             project_ref="PROJECT_CONTEXT.md",
             prime_directive_ref="docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md",
             project_goal_refs=("goal:a",),
@@ -213,6 +225,10 @@ def test_material_covenant_basis_requires_flows_and_invariants():
         )
     with pytest.raises(ValueError):
         CovenantBasis(
+            repository="Baelfyre/Orchestra",
+            candidate_sha="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            tree_sha="bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            basis_revision="orchestra-covenant-basis-v1",
             project_ref="PROJECT_CONTEXT.md",
             prime_directive_ref="docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md",
             project_goal_refs=("goal:a",),
