@@ -189,8 +189,27 @@ class CovenantDecision:
     human_review_required: bool
 
     def __post_init__(self) -> None:
-        if self.disposition not in COVENANT_DISPOSITIONS:
+        if not isinstance(self.basis, CovenantBasis):
+            raise TypeError("basis must be CovenantBasis")
+        disposition = _text(self.disposition, "disposition").upper()
+        if disposition not in COVENANT_DISPOSITIONS:
             raise ValueError("unsupported Covenant disposition")
+        object.__setattr__(self, "disposition", disposition)
+        object.__setattr__(
+            self, "reason_codes", _strings(self.reason_codes, "reason_codes")
+        )
+        object.__setattr__(
+            self, "constraints", _strings(self.constraints, "constraints")
+        )
+        object.__setattr__(
+            self, "evidence_refs", _strings(self.evidence_refs, "evidence_refs")
+        )
+        if not self.reason_codes:
+            raise ValueError("reason_codes must not be empty")
+        if not self.evidence_refs:
+            raise ValueError("evidence_refs must not be empty")
+        if not isinstance(self.human_review_required, bool):
+            raise TypeError("human_review_required must be bool")
 
 
 def evaluate_covenant(
@@ -205,6 +224,12 @@ def evaluate_covenant(
 ) -> CovenantDecision:
     """Synthesize governance judgments without overriding their ownership."""
 
+    if not isinstance(basis, CovenantBasis):
+        raise TypeError("basis must be CovenantBasis")
+    if not isinstance(steward, GovernanceJudgment) or not isinstance(
+        governor, GovernanceJudgment
+    ):
+        raise TypeError("Steward and Governor judgments are required")
     if steward.reviewer != "STEWARD" or governor.reviewer != "GOVERNOR":
         raise ValueError("Steward and Governor judgments are required")
 
