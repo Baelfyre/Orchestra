@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased Protected Governance Escalation
+
+- Adds a mandatory fail-closed governance escalation path when an autonomous or delegated run discovers that progressing would require changing, relaxing, excepting, reinterpreting, or superseding the governance blocking that same candidate.
+- Requires exact candidate/evidence freeze, Conductor-routed independent review, Arbiter `ESCALATE_HUMAN`, preserved reviewer dissent, and a structured human-review handoff.
+- Forbids same-run creation and consumption of protected governance exceptions or policy amendments across every autonomy profile, including `FULL_AUTONOMOUS`.
+- Maps PRAI `FAIL_POLICY_SELF_MODIFICATION` to `GOVERNANCE_ESCALATION_REQUIRED` at the orchestration layer while preserving PRAI's blocked result.
+- Allows AI specialists to recommend denial, more evidence, a bounded exception, or a policy amendment; only explicit human authority may approve the protected change, and execution must occur in a new bounded run.
+- Adds machine contracts, schema, consistency validation, specialist/adapter propagation, and governance-index parity for the new workflow.
+
 ## Unreleased Post-Run Assurance Invariant
 
 - Enforces canonical risk casing, AQ1-compatible evidence/claim scope coverage, derived logical identities, and changed-path-derived PRAI self-modification detection.
