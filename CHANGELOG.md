@@ -1,3 +1,10 @@
+## Unreleased governance policy amendment: Covenant assurance scope
+
+- Adds a human-authorized exact-scope classification for the future fresh Covenant implementation without changing historical AQ5, AQ6, AQ7, or PRAI implementation inventories.
+- Keeps anchored partial, mixed, unknown, and unrecognized Covenant changes fail-closed `APPLICABLE`.
+- Adds governance regression coverage proving the policy amendment itself remains governance-only under the preexisting classifier behavior.
+- Preserves frozen PR #868, keeps AQ8 unauthorized, and requires a fresh Covenant candidate after canonical policy amendment.
+
 # Changelog
 
 ## Unreleased ADAPT-QA AQ-7 runtime and adapter parity
