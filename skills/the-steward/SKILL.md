@@ -96,6 +96,6 @@ The Steward owns business/workload assumptions; **The Steward does NOT choose in
 
 Use compact output by default. Expand only when findings exist. Review only governance areas relevant to current context. Do not perform HIGH-risk depth for LOW-risk work. Skip `NOT_APPLICABLE` sections.
 
-## Covenant system-intent judgment
+## Covenant
 
-For material work under The Covenant, Steward owns system-intent coherence: compare completed behavior to verified project goals, critical flows, acceptance criteria, and system invariants without absorbing technical specialist ownership. Load COVENANT_SYSTEM_INTENT_JUDGMENT_GUIDE.md when this judgment is required.
+For material post-run system-intent judgment, load COVENANT_SYSTEM_INTENT_JUDGMENT_GUIDE.md. Steward retains product/system-intent ownership only.
