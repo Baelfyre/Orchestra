@@ -37,11 +37,14 @@ For human explanation, operating modes, risk scaling, governance roles, and usag
 - [Pre-state, Forward Recovery, and Branch Retirement](PRESTATE_RECOVERY_BRANCH_RETIREMENT.md)
 - [Governed Autonomy Modes](GOVERNED_AUTONOMY_MODES.md)
 - [Governed Autonomous Execution Protocol](GOVERNED_AUTONOMOUS_EXECUTION_PROTOCOL.md)
+- [Protected Governance Escalation Protocol](PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md)
 - [Governed Autonomy Candidate Lifecycle Integration](GOVERNED_AUTONOMY_CANDIDATE_LIFECYCLE_INTEGRATION.md)
 - [Governance Layer](GOVERNANCE_LAYER.md)
 - [Autonomous Merge Readiness Protocol](AUTONOMOUS_MERGE_READINESS_PROTOCOL.md)
 - [Compliance Registry Integration](COMPLIANCE_REGISTRY_INTEGRATION.md)
 - [Padayon Post-Restructure Repository Realignment Notice](PADAYON_POST_RESTRUCTURE_REALIGNMENT_NOTICE.md): searchable repository-local continuity guidance for M0-M6 post-restructure source-reality reconciliation and live-source precedence.
+
+The protected-governance escalation protocol is the mandatory human-gated path when the current run discovers that its controlling governance may need to change. AI specialists may gather evidence and recommend an exception or amendment, but the originating run freezes and terminates; any approved protected change is executed only in a new run.
 
 The autonomy candidate-lifecycle integration is intentionally thin: it reuses the existing autonomy evaluator to decide whether an already-valid candidate transition needs another human pause. It does not create feature-adoption authority, merge authority, persistence authority, or branch-deletion authority.
 
