@@ -108,7 +108,3 @@ Requires valid envelope, current evidence, no stop/escalation condition, and no 
 ### Fail-Closed Rule
 
 Unknown, malformed, missing, or unsupported transition dispositions must fail closed and produce `ESCALATE_HUMAN`. Never default to automatic continuation.
-
-## Covenant
-
-Material governance decisions use THE_COVENANT.md for cross-judgment synthesis. Covenant does not override owning governance or Arbiter transition ownership.
