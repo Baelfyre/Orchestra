@@ -11,11 +11,90 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from adapters.codex import validate_codex_export
+from validation.classify_adaptive_assurance_scope import (
+    APPLICABLE,
+    NOT_APPLICABLE,
+    classify_paths,
+)
 
 
 def assert_equal(name, actual, expected):
     if actual != expected:
         raise AssertionError(f"{name}: expected {expected!r}, got {actual!r}")
+
+
+PROTECTED_GOVERNANCE_AMENDMENT_PATHS = (
+    ".github/workflows/prai.yml",
+    ".github/workflows/qa-compliance.yml",
+    "CHANGELOG.md",
+    "README.json",
+    "docs/architecture/ADAPTIVE_ASSURANCE_PRAI.md",
+    "docs/governance/GOVERNANCE_REVIEW_FLOW.md",
+    "docs/governance/GOVERNED_AUTONOMOUS_EXECUTION_PROTOCOL.md",
+    "docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md",
+    "docs/governance/PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md",
+    "docs/governance/README.md",
+    "machine/governance/policy.v1.json",
+    "machine/governance/protected-governance-escalation.v1.json",
+    "machine/projections/portable-projection-index.v1.json",
+    "machine/schemas/governance-policy.schema.json",
+    "machine/schemas/protected-governance-escalation.v1.schema.json",
+    "scripts/governance_check.py",
+    "scripts/test_governance_check.py",
+    "scripts/validate_protected_governance_escalation.py",
+    "scripts/validation/classify_adaptive_assurance_scope.py",
+    "tests/behavior/test_protected_governance_escalation.py",
+)
+
+
+def test_adaptive_assurance_scope_classifier_is_registered():
+    script = "scripts/validation/classify_adaptive_assurance_scope.py"
+    assert_equal("required scope classifier", script in gc.REQUIRED_VALIDATION_SCRIPTS, True)
+    assert_equal("scope classifier is not strict", script in gc.STRICT_VALIDATOR_SCRIPTS, False)
+
+
+def test_protected_governance_amendment_is_not_applicable_to_assurance_gates():
+    for assurance in ("prai", "aq5"):
+        result = classify_paths(PROTECTED_GOVERNANCE_AMENDMENT_PATHS, assurance)
+        assert_equal(f"{assurance} governance amendment scope", result, NOT_APPLICABLE)
+
+
+def test_partial_owned_assurance_changes_remain_applicable():
+    assert_equal(
+        "partial PRAI change",
+        classify_paths(
+            ("README.json", "machine/adaptive/prai-post-run-assurance.v1.json"),
+            "prai",
+        ),
+        APPLICABLE,
+    )
+    assert_equal(
+        "partial AQ5 change",
+        classify_paths(
+            ("README.json", "machine/adaptive/aq5-qa-compliance.v1.json"),
+            "aq5",
+        ),
+        APPLICABLE,
+    )
+
+
+def test_assurance_documentation_without_governance_context_remains_applicable():
+    assert_equal(
+        "PRAI documentation change",
+        classify_paths(
+            ("CHANGELOG.md", "docs/architecture/ADAPTIVE_ASSURANCE_PRAI.md"),
+            "prai",
+        ),
+        APPLICABLE,
+    )
+
+
+def test_unanchored_assurance_workflow_change_remains_applicable():
+    assert_equal(
+        "unanchored PRAI workflow change",
+        classify_paths(("README.json", ".github/workflows/prai.yml"), "prai"),
+        APPLICABLE,
+    )
 
 
 def test_tracked_repo_files_only():
@@ -433,6 +512,11 @@ def main():
     test_artificer_audit_renderer_is_registered_read_only()
     test_artificer_pattern_catalog_validator_is_registered()
     test_issue_171_validators_are_registered()
+    test_adaptive_assurance_scope_classifier_is_registered()
+    test_protected_governance_amendment_is_not_applicable_to_assurance_gates()
+    test_partial_owned_assurance_changes_remain_applicable()
+    test_assurance_documentation_without_governance_context_remains_applicable()
+    test_unanchored_assurance_workflow_change_remains_applicable()
     test_codex_parity_normalizes_only_approved_reference_depths()
     test_repo_memory_path_check()
     test_active_branch_memory_path_exception()

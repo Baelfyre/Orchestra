@@ -187,3 +187,42 @@ and `docs/project/DELEGATED_GOVERNANCE_IMPLEMENTATION_PLAN.md` for the
 multi-phase implementation roadmap.
 
 Governed profile selection and effective-action evaluation are defined in `docs/governance/GOVERNED_AUTONOMY_MODES.md` and `docs/governance/GOVERNED_AUTONOMOUS_EXECUTION_PROTOCOL.md`. A profile never bypasses Steward/Governor blockers, Arbiter evidence gates, repository policy, or separate release authority.
+
+
+## Protected Governance Escalation Flow
+
+This flow is mandatory when remediation would change the governance controlling the same blocked candidate, including PRAI `FAIL_POLICY_SELF_MODIFICATION`.
+
+```text
+Candidate / autonomous run
+        ↓
+Protected governance conflict detected
+        ↓
+Arbiter: ESCALATE_HUMAN
+        ↓
+Freeze candidate head/tree/base/diff/evidence
+        ↓
+Conductor routes review only
+        ↓
+Arbiter + Overseer + Clockwork
+        + applicable Governor/Cipher/Steward/domain reviewers
+        ↓
+AI recommendation:
+DENY | REQUEST_MORE_EVIDENCE |
+RECOMMEND_BOUNDED_EXCEPTION | RECOMMEND_POLICY_AMENDMENT
+        ↓
+GovernanceEscalationPacket
+        ↓
+ORIGINATING RUN TERMINATES
+        ↓
+Human governance review
+        ↓
+DENY | REQUEST_MORE_EVIDENCE |
+APPROVE_BOUNDED_EXCEPTION | APPROVE_POLICY_AMENDMENT
+        ↓
+NEW EXECUTION CONTEXT REQUIRED
+```
+
+The same run may never create and consume its own protected governance exception or amendment. Candidate changes invalidate the escalation packet. Reviewer dissent is preserved rather than collapsed into artificial consensus.
+
+See `PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md`.

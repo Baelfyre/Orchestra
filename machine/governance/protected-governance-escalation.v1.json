@@ -1,0 +1,99 @@
+{
+  "$schema": "../schemas/protected-governance-escalation.v1.schema.json",
+  "schema_version": "orchestra.protected-governance-escalation.v1",
+  "contract_role": "machine_protected_governance_escalation_contract",
+  "authority_class": "HUMAN_POLICY",
+  "same_run_policy_change_forbidden": true,
+  "human_review_required": true,
+  "new_execution_context_required": true,
+  "candidate_freeze_required": true,
+  "prai_failure_triggers": [
+    "FAIL_POLICY_SELF_MODIFICATION"
+  ],
+  "additional_triggers": [
+    "PROTECTED_RULE_CHANGE_REQUIRED",
+    "GOVERNANCE_TOPOLOGY_CONFLICT",
+    "POLICY_CHOICE_REQUIRED",
+    "AUTHORITY_EXPANSION_REQUIRED",
+    "PROTECTED_GATE_RELAXATION_REQUIRED"
+  ],
+  "ai_recommendations": [
+    "DENY",
+    "REQUEST_MORE_EVIDENCE",
+    "RECOMMEND_BOUNDED_EXCEPTION",
+    "RECOMMEND_POLICY_AMENDMENT"
+  ],
+  "human_decisions": [
+    "DENY",
+    "REQUEST_MORE_EVIDENCE",
+    "APPROVE_BOUNDED_EXCEPTION",
+    "APPROVE_POLICY_AMENDMENT"
+  ],
+  "required_default_reviewers": [
+    "ARBITER",
+    "OVERSEER",
+    "CLOCKWORK"
+  ],
+  "conditional_reviewers": {
+    "GOVERNOR": [
+      "POLICY",
+      "LEGAL",
+      "PRIVACY",
+      "COMPLIANCE",
+      "IP",
+      "LICENSING"
+    ],
+    "CIPHER": [
+      "SECURITY",
+      "AUTHORIZATION",
+      "PRIVILEGE",
+      "SECRETS",
+      "PRIVACY_CONTROL"
+    ],
+    "STEWARD": [
+      "SCOPE",
+      "PRODUCT",
+      "ACCEPTANCE_CRITERIA",
+      "RESOURCE_ALLOCATION"
+    ],
+    "CHRONICLER": [
+      "PERSISTENCE",
+      "MIGRATION",
+      "TRANSACTION"
+    ],
+    "DAGGER": [
+      "ADVERSARIAL",
+      "RESILIENCE",
+      "DESTRUCTIVE_LIFECYCLE"
+    ],
+    "CLOAK": [
+      "UI",
+      "UX",
+      "ACCESSIBILITY"
+    ]
+  },
+  "transition_rule": "PROTECTED_GOVERNANCE_CONFLICT -> ESCALATE_HUMAN -> FREEZE -> REVIEW_PACKET -> TERMINATE_ORIGINATING_RUN",
+  "ordinary_auto_remediation_allowed": false,
+  "originating_run_may_resume_after_human_decision": false,
+  "exception_properties": {
+    "exact_candidate_binding_required": true,
+    "exact_rule_binding_required": true,
+    "exact_scope_binding_required": true,
+    "evidence_binding_required": true,
+    "expiration_required": true,
+    "non_transitive": true,
+    "same_run_creation_and_consumption_forbidden": true
+  },
+  "policy_amendment_properties": {
+    "separate_branch_required": true,
+    "fresh_policy_read_required": true,
+    "ordinary_repository_checks_required": true,
+    "independent_canonical_readback_required": true,
+    "original_candidate_re_evaluation_required": true,
+    "self_amended_assurance_mechanism_cannot_be_claimed_as_independent_certifier": true
+  },
+  "anti_loop": {
+    "same_candidate_rule_evidence_one_escalation": true,
+    "repeat_requires_materially_new_evidence_or_human_reconsideration": true
+  }
+}

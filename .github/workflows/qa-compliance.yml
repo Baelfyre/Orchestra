@@ -157,6 +157,19 @@ jobs:
           printf "AQ5_COMPARISON_BASE_SHA=%s\n" "$comparison_base_sha"
           git diff --check "$comparison_base_sha..HEAD"
           git diff --name-only "$comparison_base_sha..HEAD" | sort > actual-paths.txt
+          scope_applicability="$(python -B scripts/validation/classify_adaptive_assurance_scope.py --assurance aq5 < actual-paths.txt)"
+          case "$scope_applicability" in
+            NOT_APPLICABLE)
+              echo "AQ5_SCOPE=NOT_APPLICABLE"
+              exit 0
+              ;;
+            APPLICABLE)
+              ;;
+            *)
+              echo "AQ5_SCOPE_CLASSIFICATION_INVALID: $scope_applicability" >&2
+              exit 1
+              ;;
+          esac
           cat > aq5-expected-paths.txt <<'EOF'
           .github/workflows/qa-compliance.yml
           CHANGELOG.md
