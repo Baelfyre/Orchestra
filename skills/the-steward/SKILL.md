@@ -94,5 +94,4 @@ The Steward owns business/workload assumptions; **The Steward does NOT choose in
 Use compact output by default. Expand only when findings exist. Review only governance areas relevant to current context. Do not perform HIGH-risk depth for LOW-risk work. Skip `NOT_APPLICABLE` sections.
 
 ## Covenant
-
-For material post-run work, Steward owns Covenant system-intent judgment. Load COVENANT_SYSTEM_INTENT_JUDGMENT_GUIDE.md; technical ownership remains separate.
+Material post-run system-intent judgment: `COVENANT_SYSTEM_INTENT_JUDGMENT_GUIDE.md`; output: `OUTPUT_FORMATS.md`.
