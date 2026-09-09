@@ -49,6 +49,8 @@ The first restrictive result wins.
 - `ESCALATE_HUMAN`: the action is valid in principle but the selected profile, explicit grant, repository/project policy, adoption judgment, major-phase gate, or hard boundary requires a human decision.
 - `STOP`: malformed state, invalid authority, unauthorized bypass, invalid candidate transition, non-remediable governance violation, unrelated red baseline, or prohibited action.
 
+A protected governance conflict is not ordinary remediation. When the current run would need to modify or except the governance controlling that same run, the required disposition is `ESCALATE_HUMAN`, the originating candidate freezes, and the run terminates after producing the protected governance escalation packet.
+
 Unknown dispositions fail closed.
 
 ## Transition loop
@@ -105,6 +107,8 @@ If recording a candidate transition requires stage, commit, push, PR mutation, m
 
 Automatic remediation requires all of:
 
+- the repair does not change, relax, reinterpret, except, or supersede the governance that is currently blocking the same candidate;
+
 - the current authorized change caused the defect;
 - the correction stays within the allowed paths and behavior;
 - no authority, runtime, fixture, validator, manifest, dependency, CI, security, release, or deployment boundary expands;
@@ -112,6 +116,27 @@ Automatic remediation requires all of:
 - focused and consolidated validation are rerun against the new exact state.
 
 Every remediation commit invalidates CI and immutable-review evidence for the prior head. For a frozen development candidate, any source remediation also creates a new candidate identity under the Candidate Maturity and Feature Freeze contract.
+
+## Protected Governance Escalation
+
+All governance profiles, including `FULL_AUTONOMOUS`, must stop when a protected governance change is required.
+
+```text
+RUN_N discovers governance conflict
+→ freeze exact candidate/evidence
+→ Conductor routes independent governance review
+→ Arbiter returns ESCALATE_HUMAN
+→ GovernanceEscalationPacket
+→ terminate RUN_N
+→ human decision
+→ RUN_N+1 implements only the newly approved bounded governance action
+```
+
+AI specialists may analyze and recommend but may not execute the protected change in the originating run. A human-approved bounded exception or policy amendment must be represented by a `HumanGovernanceDecisionRecord` and fresh-read in a new execution context. The original candidate must be re-evaluated separately after canonical governance changes.
+
+PRAI remains fail-closed. `FAIL_POLICY_SELF_MODIFICATION` is evidence that this escalation path is required; it is not converted into a same-run PRAI pass or automatic repair.
+
+See `PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md`.
 
 ## Merge integration
 
