@@ -11,25 +11,16 @@ on:
     branches:
       - main
     paths:
-      - .github/workflows/aq6-gate-coverage.yml
       - .github/workflows/prai.yml
       - .github/workflows/qa-compliance.yml
       - CHANGELOG.md
       - README.json
-      - docs/architecture/ADAPTIVE_ASSURANCE_AQ6.md
       - docs/architecture/ADAPTIVE_ASSURANCE_PRAI.md
-      - machine/adaptive/aq6-gate-coverage.v1.json
       - machine/adaptive/prai-post-run-assurance.v1.json
-      - machine/schemas/aq6-gate-coverage.v1.schema.json
       - machine/schemas/prai-post-run-assurance.v1.schema.json
-      - orchestra_runtime/domain/adaptive/__init__.py
-      - orchestra_runtime/domain/adaptive/gate_coverage.py
       - orchestra_runtime/domain/adaptive/prai.py
-      - scripts/validation/validate_gate_coverage.py
       - scripts/validation/validate_prai.py
-      - tests/behavior/test_gate_coverage.py
       - tests/behavior/test_prai.py
-      - tests/runtime/test_adaptive_assurance_aq6.py
       - tests/runtime/test_prai.py
 
 permissions:
@@ -146,29 +137,11 @@ jobs:
             "tests/runtime/test_prai.py"
           )
           mapfile -t expected_sorted < <(printf '%s\n' "${expected[@]}" | sort)
-          if [ "${#actual[@]}" -eq "${#expected_sorted[@]}" ] && diff -u <(printf '%s\n' "${expected_sorted[@]}") <(printf '%s\n' "${actual[@]}"); then
-            echo "PRAI_SCOPE=PASS"
-            exit 0
+          if [ "${#actual[@]}" -ne "${#expected_sorted[@]}" ]; then
+            printf 'Actual paths:\n%s\n' "${actual[*]}" >&2
+            exit 1
           fi
-          aq6_expected=(
-            ".github/workflows/aq6-gate-coverage.yml"
-            ".github/workflows/prai.yml"
-            ".github/workflows/qa-compliance.yml"
-            "CHANGELOG.md"
-            "README.json"
-            "docs/architecture/ADAPTIVE_ASSURANCE_AQ6.md"
-            "machine/adaptive/aq6-gate-coverage.v1.json"
-            "machine/schemas/aq6-gate-coverage.v1.schema.json"
-            "orchestra_runtime/domain/adaptive/__init__.py"
-            "orchestra_runtime/domain/adaptive/gate_coverage.py"
-            "scripts/validation/validate_gate_coverage.py"
-            "tests/behavior/test_gate_coverage.py"
-            "tests/runtime/test_adaptive_assurance_aq6.py"
-          )
-          mapfile -t aq6_expected_sorted < <(printf '%s\n' "${aq6_expected[@]}" | sort)
-          if [ "${#actual[@]}" -eq "${#aq6_expected_sorted[@]}" ] && diff -u <(printf '%s\n' "${aq6_expected_sorted[@]}") <(printf '%s\n' "${actual[@]}"); then
-            echo "PRAI_SCOPE=AQ6_COMPATIBILITY_PASS"
-            exit 0
+          if ! diff -u <(printf '%s\n' "${expected_sorted[@]}") <(printf '%s\n' "${actual[@]}"); then
+            exit 1
           fi
-          printf 'Actual paths:\n%s\n' "${actual[*]}" >&2
-          exit 1
+          echo "PRAI_SCOPE=PASS"

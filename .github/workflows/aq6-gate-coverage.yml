@@ -12,8 +12,6 @@ on:
       - main
     paths:
       - .github/workflows/aq6-gate-coverage.yml
-      - .github/workflows/prai.yml
-      - .github/workflows/qa-compliance.yml
       - CHANGELOG.md
       - docs/architecture/ADAPTIVE_ASSURANCE_AQ6.md
       - machine/adaptive/aq6-gate-coverage.v1.json
@@ -138,8 +136,6 @@ jobs:
           git diff --name-only "$comparison_base_sha..HEAD" | sort > actual-paths.txt
           cat > expected-paths.txt <<'EOF'
           .github/workflows/aq6-gate-coverage.yml
-          .github/workflows/prai.yml
-          .github/workflows/qa-compliance.yml
           CHANGELOG.md
           docs/architecture/ADAPTIVE_ASSURANCE_AQ6.md
           machine/adaptive/aq6-gate-coverage.v1.json

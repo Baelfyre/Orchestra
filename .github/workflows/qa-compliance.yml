@@ -11,24 +11,15 @@ on:
     branches:
       - main
     paths:
-      - .github/workflows/aq6-gate-coverage.yml
       - .github/workflows/qa-compliance.yml
       - CHANGELOG.md
       - README.json
       - docs/architecture/ADAPTIVE_ASSURANCE_AQ5.md
-      - docs/architecture/ADAPTIVE_ASSURANCE_AQ6.md
-      - machine/adaptive/aq6-gate-coverage.v1.json
       - machine/adaptive/aq5-qa-compliance.v1.json
-      - machine/schemas/aq6-gate-coverage.v1.schema.json
       - machine/schemas/qa-compliance.v1.schema.json
-      - orchestra_runtime/domain/adaptive/__init__.py
-      - orchestra_runtime/domain/adaptive/gate_coverage.py
       - orchestra_runtime/domain/adaptive/qa_compliance.py
-      - scripts/validation/validate_gate_coverage.py
       - scripts/validation/validate_qa_compliance.py
-      - tests/behavior/test_gate_coverage.py
       - tests/behavior/test_qa_compliance.py
-      - tests/runtime/test_adaptive_assurance_aq6.py
       - tests/runtime/test_adaptive_assurance_aq5.py
 permissions:
   contents: read
@@ -191,25 +182,9 @@ jobs:
           tests/behavior/test_prai.py
           tests/runtime/test_prai.py
           EOF
-          cat > aq6-expected-paths.txt <<'EOF'
-          .github/workflows/aq6-gate-coverage.yml
-          .github/workflows/prai.yml
-          .github/workflows/qa-compliance.yml
-          CHANGELOG.md
-          README.json
-          docs/architecture/ADAPTIVE_ASSURANCE_AQ6.md
-          machine/adaptive/aq6-gate-coverage.v1.json
-          machine/schemas/aq6-gate-coverage.v1.schema.json
-          orchestra_runtime/domain/adaptive/__init__.py
-          orchestra_runtime/domain/adaptive/gate_coverage.py
-          scripts/validation/validate_gate_coverage.py
-          tests/behavior/test_gate_coverage.py
-          tests/runtime/test_adaptive_assurance_aq6.py
-          EOF
-          sed -i 's/^          //' aq5-expected-paths.txt prai-expected-paths.txt aq6-expected-paths.txt
+          sed -i 's/^          //' aq5-expected-paths.txt prai-expected-paths.txt
           sort -o aq5-expected-paths.txt aq5-expected-paths.txt
           sort -o prai-expected-paths.txt prai-expected-paths.txt
-          sort -o aq6-expected-paths.txt aq6-expected-paths.txt
           classify_scope() {
             local actual_file="$1"
             if diff -u aq5-expected-paths.txt "$actual_file" >/dev/null; then
@@ -218,10 +193,6 @@ jobs:
             fi
             if diff -u prai-expected-paths.txt "$actual_file" >/dev/null; then
               printf 'PRAI_COMPATIBILITY'
-              return 0
-            fi
-            if diff -u aq6-expected-paths.txt "$actual_file" >/dev/null; then
-              printf 'AQ6_COMPATIBILITY'
               return 0
             fi
             printf 'INVALID'
@@ -235,10 +206,6 @@ jobs:
             PRAI_COMPATIBILITY)
               test "$(wc -l < actual-paths.txt)" -eq 11
               echo "AQ5_SCOPE=PRAI_COMPATIBILITY_PASS"
-              ;;
-            AQ6_COMPATIBILITY)
-              test "$(wc -l < actual-paths.txt)" -eq 13
-              echo "AQ5_SCOPE=AQ6_COMPATIBILITY_PASS"
               ;;
             *)
               printf 'Actual paths:\n'
