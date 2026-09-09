@@ -246,6 +246,26 @@ def test_contract_and_schema_match_runtime() -> None:
     Draft202012Validator(schema).validate(make_unit().to_dict())
 
 
+
+def test_schema_runtime_parity_rejects_scope_and_identity_drift() -> None:
+    root = Path(__file__).resolve().parents[2]
+    contract = json.loads(
+        (root / "machine" / "adaptive" / "prai-post-run-assurance.v1.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    schema_path = root / "machine" / "schemas" / "prai-post-run-assurance.v1.schema.json"
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+    schema["$defs"]["receipt"]["properties"]["evidence_scope"]["enum"] = ["UNIT"]
+    with pytest.raises(ValueError, match=prai.FAIL_SCHEMA_RUNTIME_PARITY):
+        prai.validate_schema_runtime_parity(contract, schema)
+
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+    schema["$defs"]["receipt"]["properties"]["logical_identity"]["pattern"] = ".*"
+    with pytest.raises(ValueError, match=prai.FAIL_SCHEMA_RUNTIME_PARITY):
+        prai.validate_schema_runtime_parity(contract, schema)
+
+
 @pytest.mark.parametrize(
     ("name", "unit", "codes"),
     [
