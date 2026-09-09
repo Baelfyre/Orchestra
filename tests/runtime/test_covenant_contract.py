@@ -64,6 +64,10 @@ def _evaluate(
     governor: GovernanceJudgment | None = None,
     **kwargs: object,
 ):
+    kwargs.setdefault("assurance_result", "PASS")
+    kwargs.setdefault("assurance_evidence_refs", ("evidence:prai",))
+    kwargs.setdefault("assurance_evidence_durable", True)
+    kwargs.setdefault("assurance_evidence_retrievable", True)
     return evaluate_covenant(
         _basis(),
         steward if steward is not None else _judgment("STEWARD"),
@@ -346,6 +350,9 @@ def test_evaluator_closes_each_non_final_or_prohibited_state() -> None:
         _judgment("STEWARD"),
         _judgment("GOVERNOR", evidence_refs=("PROJECT_CONTEXT.md",)),
         assurance_result="PASS",
+        assurance_evidence_refs=("evidence:prai",),
+        assurance_evidence_durable=True,
+        assurance_evidence_retrievable=True,
     )
     blocked_obligation = evaluate_covenant(
         BASIS,
