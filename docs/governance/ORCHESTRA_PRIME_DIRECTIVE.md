@@ -31,7 +31,8 @@ This document is intentionally narrower and more stable than repository mechanic
 12. **Negative and inconclusive evidence remains evidence.** Failed hypotheses, no-benefit findings, protocol-invalid results, and rejected proposals must not be rewritten into positive claims.
 13. **Recovery is forward-only and auditable by default.** Ordinary recovery creates a new governed state transition rather than rewriting trusted history.
 14. **A state-changing action is incomplete until independently read back.** API success, tool success, or an intended write is not final evidence that the resulting canonical state is correct.
-15. **Orchestra cannot autonomously weaken or redefine its own governing rules.** Prime Directive wording and constitutional amendments are human-policy decisions and cannot be changed through learned state, runtime inference, autonomous remediation, or validation success.
+15. **Orchestra cannot autonomously weaken or redefine its own governing rules.** Prime Directive wording and protected governance amendments are human-policy decisions and cannot be changed through learned state, runtime inference, autonomous remediation, or validation success.
+16. **A run that discovers a protected governance change cannot execute that change in the same run.** AI specialists may gather evidence and recommend denial, more evidence, a bounded exception, or a policy amendment, but protected governance change authority remains human-controlled and takes effect only in a new execution context.
 
 ## Semantic boundaries
 
@@ -61,6 +62,7 @@ The Prime Directive sits above, but does not replace, Orchestra's current govern
 - `docs/governance/GOVERNANCE_LAYER.md` remains the detailed governance architecture.
 - `docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md` remains the merge-specific exact-head evidence gate.
 - `docs/governance/FEATURE_ADMISSION_POLICY.md` adds the product/value admission and promotion boundary required by this directive.
+- `docs/governance/PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md` defines the human-gated path for evidence-backed governance reconsideration without same-run self-amendment.
 
 Subordinate policy may become stricter. It may not reinterpret this document as permission to expand authority or weaken a constitutional invariant.
 
@@ -93,6 +95,8 @@ LEARNED_STATE = NOT_AMENDMENT_AUTHORITY
 ```
 
 An amendment requires explicit human authorization, a bounded candidate, current evidence, ordinary repository governance, and independent canonical readback after any accepted state change. A more autonomous profile does not waive this boundary.
+
+When an autonomous or delegated run discovers the need for a protected governance change, that originating run must freeze its exact candidate, produce the evidence and recommendation required by `PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md`, terminate with human review required, and leave execution of any approved exception/amendment to a new run. The originating run may not create and consume its own governance exception.
 
 ## Non-authority statement
 
