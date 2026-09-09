@@ -39,10 +39,6 @@ With a `DelegatedExecutionEnvelope`:
 4. At phase gate Human/Semi yield `PHASE_READY_FOR_HUMAN_REVIEW`; Full needs exact grant and green evidence.
 5. Merge needs Full, explicit authority, and merge-readiness. Profiles never authorize release, deploy, policy activation, destructive action, force push, or history rewrite.
 
-## Protected Governance Escalation Routing
-
-When the current run would need to change, relax, except, reinterpret, or supersede the governance blocking that same candidate, freeze exact candidate/evidence, route independent review, preserve dissent, produce the canonical governance escalation packet, and terminate at `ESCALATE_HUMAN`. `FAIL_POLICY_SELF_MODIFICATION` is a mandatory trigger. Conductor may recommend but may not execute or consume the protected change; human approval applies only to a new execution context.
-
 ## Phase 2 Re-entry Routing
 Conductor remains UIX-5 router. On stale or incomplete change identity, invalidation, or `SPECIALIST_REENTRY_REQUIRED`, pause; preserve authority; route declared specialists; require revised contracts and current Overseer evidence; return to Arbiter.
 

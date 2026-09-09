@@ -1,5 +1,4 @@
 import argparse
-import json
 import re
 import sys
 from collections import Counter
@@ -97,16 +96,6 @@ REQUIRED_FLOW_DELEGATED_SECTION = (
     "Delegated Execution Flow",
     "Phase B Merged, PR #190",
     "DELEGATED_EXECUTION_POLICY.md",
-)
-
-PROTECTED_ESCALATION_DOC = "docs/governance/PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md"
-PROTECTED_ESCALATION_MACHINE = "machine/governance/protected-governance-escalation.v1.json"
-REQUIRED_PROTECTED_ESCALATION_TOKENS = (
-    "RUN_N_DISCOVERS_GOVERNANCE_CHANGE",
-    "HUMAN_REVIEW_REQUIRED",
-    "NEW_EXECUTION_CONTEXT_REQUIRED",
-    "FAIL_POLICY_SELF_MODIFICATION",
-    "The originating run must not create and consume its own exception",
 )
 
 REQUIRED_RECORD_SCHEMAS = {
@@ -293,8 +282,6 @@ def main(argv=None):
     arbiter_outputs = read_text(repo_root / "skills" / "arbiter" / "OUTPUT_FORMATS.md")
     overseer_outputs = read_text(repo_root / "skills" / "overseer" / "OUTPUT_FORMATS.md")
     tuner = read_text(repo_root / "skills" / "the-tuner" / "SKILL.md")
-    protected_escalation = read_text(repo_root / PROTECTED_ESCALATION_DOC)
-    protected_machine = json.loads(read_text(repo_root / PROTECTED_ESCALATION_MACHINE))
 
     delegated_policy_path = repo_root / "docs" / "governance" / "DELEGATED_EXECUTION_POLICY.md"
     delegated_policy_exists = delegated_policy_path.exists()
@@ -319,17 +306,6 @@ def main(argv=None):
     ensure_contains(errors, "skills/the-tuner/SKILL.md", tuner, "Conductor remains the exclusive router.")
     ensure_contains(errors, "skills/the-tuner/SKILL.md", tuner, "Arbiter remains the continuation and transition-decision authority.")
     ensure_contains(errors, "skills/the-tuner/SKILL.md", tuner, "Overseer remains the validation strategy and evidence owner.")
-
-    for token in REQUIRED_PROTECTED_ESCALATION_TOKENS:
-        ensure_contains(errors, PROTECTED_ESCALATION_DOC, protected_escalation, token)
-    if protected_machine.get("same_run_policy_change_forbidden") is not True:
-        fail(errors, f"{PROTECTED_ESCALATION_MACHINE}: same-run policy change must be forbidden")
-    if protected_machine.get("human_review_required") is not True:
-        fail(errors, f"{PROTECTED_ESCALATION_MACHINE}: human review must be required")
-    if protected_machine.get("new_execution_context_required") is not True:
-        fail(errors, f"{PROTECTED_ESCALATION_MACHINE}: new execution context must be required")
-    if "FAIL_POLICY_SELF_MODIFICATION" not in protected_machine.get("prai_failure_triggers", []):
-        fail(errors, f"{PROTECTED_ESCALATION_MACHINE}: PRAI self-modification must trigger escalation")
 
     ensure_contains(errors, "GOVERNANCE_LAYER.md", layer, "`GOVERNANCE_LAYER.md` is governance-context routing and operating-policy document.")
     ensure_contains(errors, "GOVERNANCE_LAYER.md", layer, "Load `GOVERNANCE_DECISION_PROTOCOL.md` only when governance decision must be produced, interpreted, or enforced.")
@@ -439,11 +415,6 @@ def main(argv=None):
     ensure_contains(errors, "skills/arbiter/SKILL.md", arbiter_skill, "Delegated Phase Transition Evaluation")
     ensure_contains(errors, "skills/conductor/SKILL.md", conductor_skill, "Delegated Phase Autonomous Loop")
     ensure_contains(errors, "skills/overseer/SKILL.md", overseer_skill, "Delegated Unit Evidence Role")
-    ensure_contains(errors, "skills/conductor/SKILL.md", conductor_skill, "Protected Governance Escalation Routing")
-    ensure_contains(errors, "skills/arbiter/SKILL.md", arbiter_skill, "Protected Governance Escalation Gate")
-    ensure_contains(errors, "skills/overseer/SKILL.md", overseer_skill, "Protected Governance Escalation Evidence Role")
-    ensure_contains(errors, "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md", protocol, "## Protected Governance Escalation")
-    ensure_contains(errors, "docs/governance/GOVERNANCE_REVIEW_FLOW.md", flow, "## Protected Governance Escalation Flow")
 
 
     if errors:

@@ -1,8 +1,8 @@
 # Protected Governance Escalation Protocol
 
-**Contract:** `ORCHESTRA_PROTECTED_GOVERNANCE_ESCALATION_V1`  
-**Authority class:** `HUMAN_POLICY`  
-**Status:** Canonical governance amendment  
+**Contract:** `ORCHESTRA_PROTECTED_GOVERNANCE_ESCALATION_V1`
+**Authority class:** `HUMAN_POLICY`
+**Status:** Canonical governance amendment
 **Applies to:** autonomous, delegated, semi-autonomous, and human-governed runs that discover a need to change, relax, reinterpret, except, or supersede an active protected governance control
 
 ## Purpose

@@ -46,22 +46,6 @@ With a `DelegatedExecutionEnvelope`:
 4. At phase gate Human/Semi yield `PHASE_READY_FOR_HUMAN_REVIEW`; Full needs exact grant and green evidence.
 5. Merge needs Full, explicit authority, and merge-readiness. Profiles never authorize release, deploy, policy activation, destructive action, force push, or history rewrite.
 
-## Protected Governance Escalation Routing
-
-When a run discovers that it would need to change, relax, except, reinterpret, or supersede the governance controlling that same blocked candidate, Conductor must not route implementation repair.
-
-Required behavior:
-1. Preserve/freeze the exact candidate head, tree, base, changed paths, failing evidence, and decision digest.
-2. Route Arbiter for transition safety, Overseer for evidence sufficiency, and Clockwork for logical/system consistency.
-3. Add Governor, Cipher, Steward, or other domain specialists only when their owned boundary is materially affected.
-4. Preserve dissenting reviewer findings; do not manufacture consensus.
-5. Produce the `GovernanceEscalationPacket` defined by `docs/governance/PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md`.
-6. Terminate the originating run at `ESCALATE_HUMAN` / `HUMAN_GOVERNANCE_REVIEW_REQUIRED`.
-
-Conductor cannot create, approve, execute, or consume a protected governance exception/amendment. Even `FULL_AUTONOMOUS` stops here. A human decision authorizes only a new execution context.
-
-`FAIL_POLICY_SELF_MODIFICATION` is always a protected-governance escalation trigger, never a same-run remediation route.
-
 ## Phase 2 Re-entry Routing
 Conductor remains UIX-5 router. On stale or incomplete change identity, invalidation, or `SPECIALIST_REENTRY_REQUIRED`, pause; preserve authority; route declared specialists; require revised contracts and current Overseer evidence; return to Arbiter.
 

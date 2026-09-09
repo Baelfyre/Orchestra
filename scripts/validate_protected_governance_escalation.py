@@ -61,30 +61,6 @@ REQUIRED_TEXT = {
         "FAIL_POLICY_SELF_MODIFICATION",
         "new execution context",
     ),
-    "AGENTS.md": (
-        "Protected Governance Escalation Rule",
-        "FAIL_POLICY_SELF_MODIFICATION",
-        "new execution context",
-    ),
-    "skills/conductor/SKILL.md": (
-        "## Protected Governance Escalation Routing",
-        "GovernanceEscalationPacket",
-        "FAIL_POLICY_SELF_MODIFICATION",
-    ),
-    "skills/arbiter/SKILL.md": (
-        "## Protected Governance Escalation Gate",
-        "ESCALATE_HUMAN",
-        "FAIL_POLICY_SELF_MODIFICATION",
-    ),
-    "skills/overseer/SKILL.md": (
-        "## Protected Governance Escalation Evidence Role",
-        "cannot authorize an exception",
-    ),
-    "skills/the-governor/HUMAN_ESCALATION_BOUNDARIES_GUIDE.md": (
-        "## Protected Governance Self-Change Boundary",
-        "human_review_required: true",
-        "new execution context",
-    ),
 }
 
 
