@@ -1,3 +1,9 @@
+## Unreleased Covenant cross-governance synthesis
+
+- Adds the evidence-only, non-authorizing Covenant runtime contract, machine schema, exact candidate/tree binding, and no-vote reconciliation rules.
+- Strengthens Steward system-intent and Governor protected-obligation judgment guides while preserving specialist ownership and Arbiter transition ownership.
+- Adds executable COV-01 through COV-18 conflict scenarios and adversarial fail-closed permutations, including AQ7 concurrency and partial-audit regression anchors.
+
 ## Unreleased governance policy amendment: Covenant assurance scope
 
 - Adds a human-authorized exact-scope classification for the future fresh Covenant implementation without changing historical AQ5, AQ6, AQ7, or PRAI implementation inventories.
