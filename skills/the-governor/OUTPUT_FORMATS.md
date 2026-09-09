@@ -59,15 +59,6 @@ REQUIRED_ACTIONS: [actions or "none"]
 EVIDENCE_REFERENCES: [list or "none"]
 ```
 
-## Covenant Protected-Obligation Judgment
+## Covenant judgment format
 
-    REVIEWER: the-governor
-    PRIME_DIRECTIVE_ALIGNMENT: [ALIGNED | CONFLICT | UNKNOWN | NOT_APPLICABLE]
-    PROJECT_GOAL_ALIGNMENT: [ALIGNED | CONFLICT | UNKNOWN | NOT_APPLICABLE]
-    PROTECTED_OBLIGATIONS: [list or none]
-    OBLIGATION_SATISFACTION: [satisfied | gaps | unknown]
-    PROHIBITED_OUTCOMES: [list or none]
-    DECISION: [APPROVED | REVISION_REQUIRED | BLOCKED | NOT_APPLICABLE]
-    HUMAN_REVIEW_REQUIRED: [true | false]
-    CONSTRAINTS: [list or none]
-    EVIDENCE_REFERENCES: [list]
+For the material protected-obligation judgment, use COVENANT_PROTECTED_OBLIGATION_JUDGMENT_GUIDE.md.
