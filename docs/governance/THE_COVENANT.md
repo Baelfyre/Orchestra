@@ -1,9 +1,9 @@
 # The Covenant
 
-Contract: ORCHESTRA_COVENANT_V1  
-Role: Cross-governance synthesis and constitutional assurance  
-Authority class: EVIDENCE_ONLY_NON_AUTHORIZING  
-Prime Directive relationship: subordinate; cannot reinterpret or weaken it  
+Contract: ORCHESTRA_COVENANT_V1
+Role: Cross-governance synthesis and constitutional assurance
+Authority class: EVIDENCE_ONLY_NON_AUTHORIZING
+Prime Directive relationship: subordinate; cannot reinterpret or weaken it
 Legacy assurance relationship: consumes PRAI evidence; does not replace exact-state validation
 
 ## Purpose
