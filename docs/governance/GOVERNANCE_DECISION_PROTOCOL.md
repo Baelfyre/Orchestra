@@ -109,18 +109,6 @@ Requires valid envelope, current evidence, no stop/escalation condition, and no 
 
 Unknown, malformed, missing, or unsupported transition dispositions must fail closed and produce `ESCALATE_HUMAN`. Never default to automatic continuation.
 
-## Covenant Cross-Judgment Synthesis
+## Covenant cross-judgment synthesis
 
-For material behavioral work, governance decision ownership remains separate, but the resulting decisions must be synthesized before a transition claim is accepted.
-
-The Covenant does not create a new owner for Steward or Governor domains. It evaluates whether their judgments and specialist evidence are mutually coherent under the Prime Directive and verified project goals.
-
-Required rule:
-
-    STEWARD_APPROVAL + GOVERNOR_APPROVAL + PRAI_PASS
-    !=
-    SYSTEM_COHERENCE
-
-A Covenant result of REVISION_REQUIRED, WAIT_FOR_EVIDENCE, ESCALATE_HUMAN, or BLOCKED prevents an ordinary automatic transition. Arbiter remains the owner of transition disposition and consumes Covenant evidence rather than delegating transition authority to it.
-
-A conflict may be reconciled automatically only when an evidence-backed narrower resolution preserves the Prime Directive and project goals and is explicitly accepted by both Steward and Governor. Otherwise the conflict remains fail-closed.
+For material work, Steward/Governor decisions and specialist/PRAI evidence require Covenant synthesis before an ordinary transition can be treated as governance-coherent. Covenant never overrides owning governance, never creates authority, and Arbiter remains transition owner. See THE_COVENANT.md.
