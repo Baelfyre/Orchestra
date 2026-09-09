@@ -100,6 +100,8 @@ The evaluator blocks for all required negative classes:
 Receipt order is normalized before evaluation. Repairs change candidate identity
 and require fresh receipts.
 
+A `FAIL_POLICY_SELF_MODIFICATION` result remains `BLOCKED`. PRAI does not authorize an exception and does not amend itself. The orchestration layer must convert that protected stop into `GOVERNANCE_ESCALATION_REQUIRED`: freeze the originating candidate, route independent governance analysis, produce a human-review packet, and terminate the originating run. Any human-approved governance change is executed only in a new execution context under `PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md`.
+
 ## AQ4/AQ5 integration and transport
 
 The contract uses the AQ4 semantic assurance slots

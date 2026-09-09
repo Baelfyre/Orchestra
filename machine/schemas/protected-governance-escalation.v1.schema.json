@@ -1,0 +1,266 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Orchestra Protected Governance Escalation v1",
+  "oneOf": [
+    {
+      "title": "GovernanceEscalationPacket",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "record_type",
+        "escalation_id",
+        "originating_run_id",
+        "repository",
+        "base_sha",
+        "candidate_sha",
+        "tree_sha",
+        "work_item_ref",
+        "phase_id",
+        "trigger_code",
+        "protected_rule",
+        "affected_paths",
+        "failing_evidence_refs",
+        "proposed_governance_change",
+        "prime_directive_analysis",
+        "alternatives_considered",
+        "risk_if_unchanged",
+        "risk_if_changed",
+        "required_reviewers",
+        "reviewer_findings",
+        "dissenting_findings",
+        "ai_recommendation",
+        "human_review_required",
+        "candidate_frozen",
+        "same_run_mutation_forbidden",
+        "next_allowed_action",
+        "generated_at"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "orchestra.protected-governance-escalation.v1"
+        },
+        "record_type": {
+          "const": "GovernanceEscalationPacket"
+        },
+        "escalation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "originating_run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "repository": {
+          "type": "string",
+          "minLength": 1
+        },
+        "base_sha": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "candidate_sha": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "tree_sha": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "work_item_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "phase_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "trigger_code": {
+          "type": "string",
+          "minLength": 1
+        },
+        "protected_rule": {
+          "type": "string",
+          "minLength": 1
+        },
+        "affected_paths": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "failing_evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "decision_digest": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "proposed_governance_change": {
+          "type": "string",
+          "minLength": 1
+        },
+        "prime_directive_analysis": {
+          "type": "string",
+          "minLength": 1
+        },
+        "alternatives_considered": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1
+        },
+        "risk_if_unchanged": {
+          "type": "string",
+          "minLength": 1
+        },
+        "risk_if_changed": {
+          "type": "string",
+          "minLength": 1
+        },
+        "required_reviewers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "reviewer_findings": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "dissenting_findings": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "ai_recommendation": {
+          "enum": [
+            "DENY",
+            "REQUEST_MORE_EVIDENCE",
+            "RECOMMEND_BOUNDED_EXCEPTION",
+            "RECOMMEND_POLICY_AMENDMENT"
+          ]
+        },
+        "human_review_required": {
+          "const": true
+        },
+        "candidate_frozen": {
+          "const": true
+        },
+        "same_run_mutation_forbidden": {
+          "const": true
+        },
+        "next_allowed_action": {
+          "const": "HUMAN_GOVERNANCE_REVIEW"
+        },
+        "generated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    {
+      "title": "HumanGovernanceDecisionRecord",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "record_type",
+        "decision_id",
+        "escalation_id",
+        "decision",
+        "human_authority_source",
+        "decision_timestamp",
+        "constraints",
+        "approved_scope",
+        "requires_new_execution_context",
+        "originating_candidate_may_resume"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "orchestra.protected-governance-escalation.v1"
+        },
+        "record_type": {
+          "const": "HumanGovernanceDecisionRecord"
+        },
+        "decision_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "escalation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "decision": {
+          "enum": [
+            "DENY",
+            "REQUEST_MORE_EVIDENCE",
+            "APPROVE_BOUNDED_EXCEPTION",
+            "APPROVE_POLICY_AMENDMENT"
+          ]
+        },
+        "human_authority_source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "decision_timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "approved_scope": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "expiration": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "requires_new_execution_context": {
+          "const": true
+        },
+        "originating_candidate_may_resume": {
+          "const": false
+        },
+        "supersedes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    }
+  ]
+}

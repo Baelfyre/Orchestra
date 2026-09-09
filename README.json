@@ -2189,8 +2189,12 @@
     "uief6_cross_specialist_fidelity_chain": {
       "status": "COMPLETE_CANONICAL_VERIFIED",
       "purpose": "Preserve Conductor-owned routing and serial specialist ownership across Cloak, conditional Clockwork, governance specialists, Ponytail, Overseer, and Arbiter.",
-      "machine_sources": ["machine/ui/specialist-integration-flow.v1.json"],
-      "validation_surfaces": ["tests/runtime/test_specialist_integration_flow.py"],
+      "machine_sources": [
+        "machine/ui/specialist-integration-flow.v1.json"
+      ],
+      "validation_surfaces": [
+        "tests/runtime/test_specialist_integration_flow.py"
+      ],
       "authority_expansion": false,
       "max_active_specialists": 1,
       "router": "Conductor"
@@ -2198,8 +2202,12 @@
     "uief7_fidelity_validation_system": {
       "status": "COMPLETE_CANONICAL_VERIFIED_WITH_LIMITS",
       "purpose": "Provide deterministic fail-closed fidelity validation fixtures and dispositions.",
-      "machine_sources": ["tests/fixtures/ui/uix7-deterministic-validation-suite.json"],
-      "validation_surfaces": ["tests/runtime/test_deterministic_ui_validation_fixtures.py"],
+      "machine_sources": [
+        "tests/fixtures/ui/uix7-deterministic-validation-suite.json"
+      ],
+      "validation_surfaces": [
+        "tests/runtime/test_deterministic_ui_validation_fixtures.py"
+      ],
       "rendered_application_evidence": "NOT_CLAIMED",
       "authority_expansion": false
     },
@@ -2409,9 +2417,6 @@
     "portable_projection_index_schema": "machine/schemas/portable-projection-index.v1.schema.json",
     "portable_projection_index": "machine/projections/portable-projection-index.v1.json",
     "portable_projection_compiler": "scripts/compile_portable_projections.py",
-    "negative_unknown_capability_testing": "tests/runtime/test_uai8_negative_unknown_capabilities.py",
-    "cross_host_capability_conformance": "tests/runtime/test_uai9_cross_host_capability_conformance.py",
-    "maturity_closeout": "tests/runtime/test_uai10_maturity_closeout.py",
     "prap_certification_contract": "machine/protocol/prap-certification-contract.v1.json",
     "developer_portal_catalog": "machine/developer-portal/catalog.v1.json",
     "murmurs_presentation_policy": "machine/presentation/murmurs-policy.v1.json",
@@ -2566,7 +2571,10 @@
     "task_profile_derivation_policy": "machine/workflows/task-profile-derivation.v1.json",
     "agentic_selection_trace_schema": "machine/schemas/agentic-selection-trace.v1.schema.json",
     "advanced_adaptation_admission_schema": "machine/schemas/advanced-adaptation-admission.v1.schema.json",
-    "advanced_adaptation_admission": "machine/adaptive/advanced-adaptation-admission.v1.json"
+    "advanced_adaptation_admission": "machine/adaptive/advanced-adaptation-admission.v1.json",
+    "protected_governance_escalation_contract": "machine/governance/protected-governance-escalation.v1.json",
+    "protected_governance_escalation_schema": "machine/schemas/protected-governance-escalation.v1.schema.json",
+    "protected_governance_escalation_validator": "scripts/validate_protected_governance_escalation.py"
   },
   "specialists": {
     "count": 14,
@@ -2603,7 +2611,10 @@
     ],
     "protected_actions_require_separate_authority": true,
     "required_analysis_ruleset_drift_issue": 331,
-    "required_analysis_ruleset_drift_state": "CLOSED_RULESET_NORMALIZED"
+    "required_analysis_ruleset_drift_state": "CLOSED_RULESET_NORMALIZED",
+    "protected_governance_escalation_protocol": "docs/governance/PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md",
+    "protected_governance_escalation_contract": "machine/governance/protected-governance-escalation.v1.json",
+    "protected_governance_change_authority": "HUMAN_REVIEW_REQUIRED_AND_NEW_EXECUTION_CONTEXT"
   },
   "architecture": {
     "current_overview": "docs/architecture/README.md",
