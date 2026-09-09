@@ -157,7 +157,7 @@ jobs:
           printf "AQ5_COMPARISON_BASE_SHA=%s\n" "$comparison_base_sha"
           git diff --check "$comparison_base_sha..HEAD"
           git diff --name-only "$comparison_base_sha..HEAD" | sort > actual-paths.txt
-          cat > expected-paths.txt <<'EOF'
+          cat > aq5-expected-paths.txt <<'EOF'
           .github/workflows/qa-compliance.yml
           CHANGELOG.md
           README.json
@@ -169,7 +169,55 @@ jobs:
           tests/behavior/test_qa_compliance.py
           tests/runtime/test_adaptive_assurance_aq5.py
           EOF
-          sed -i 's/^          //' expected-paths.txt
-          sort -o expected-paths.txt expected-paths.txt
-          diff -u expected-paths.txt actual-paths.txt
-          test "$(wc -l < actual-paths.txt)" -eq 10
+          cat > prai-expected-paths.txt <<'EOF'
+          .github/workflows/prai.yml
+          .github/workflows/qa-compliance.yml
+          CHANGELOG.md
+          README.json
+          docs/architecture/ADAPTIVE_ASSURANCE_PRAI.md
+          machine/adaptive/prai-post-run-assurance.v1.json
+          machine/schemas/prai-post-run-assurance.v1.schema.json
+          orchestra_runtime/domain/adaptive/prai.py
+          scripts/validation/validate_prai.py
+          tests/behavior/test_prai.py
+          tests/runtime/test_prai.py
+          EOF
+          sed -i 's/^          //' aq5-expected-paths.txt prai-expected-paths.txt
+          sort -o aq5-expected-paths.txt aq5-expected-paths.txt
+          sort -o prai-expected-paths.txt prai-expected-paths.txt
+          classify_scope() {
+            local actual_file="$1"
+            if diff -u aq5-expected-paths.txt "$actual_file" >/dev/null; then
+              printf 'AQ5'
+              return 0
+            fi
+            if diff -u prai-expected-paths.txt "$actual_file" >/dev/null; then
+              printf 'PRAI_COMPATIBILITY'
+              return 0
+            fi
+            printf 'INVALID'
+          }
+          scope_classification="$(classify_scope actual-paths.txt)"
+          case "$scope_classification" in
+            AQ5)
+              test "$(wc -l < actual-paths.txt)" -eq 10
+              echo "AQ5_SCOPE=PASS"
+              ;;
+            PRAI_COMPATIBILITY)
+              test "$(wc -l < actual-paths.txt)" -eq 11
+              echo "AQ5_SCOPE=PRAI_COMPATIBILITY_PASS"
+              ;;
+            *)
+              printf 'Actual paths:\n'
+              cat actual-paths.txt
+              exit 1
+              ;;
+          esac
+          invalid_fixture="$(mktemp)"
+          trap 'rm -f "$invalid_fixture"' EXIT
+          {
+            grep -v '^README.json$' aq5-expected-paths.txt
+            printf '%s\n' unexpected.txt
+          } | sort > "$invalid_fixture"
+          test "$(classify_scope "$invalid_fixture")" = "INVALID"
+          echo "AQ5_SCOPE_NEGATIVE_FIXTURE=PASS"
