@@ -81,6 +81,33 @@ AQ7_IMPLEMENTATION_PATHS = frozenset(
 )
 
 
+COVENANT_IMPLEMENTATION_PATHS = frozenset(
+    {
+        "AGENTS.md",
+        "docs/architecture/ADAPTIVE_ASSURANCE_PRAI.md",
+        "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md",
+        "docs/governance/GOVERNANCE_LAYER.md",
+        "docs/governance/README.md",
+        "docs/governance/THE_COVENANT.md",
+        "docs/validation/COVENANT_CONFLICT_SCENARIO_MATRIX_20260910.md",
+        "machine/governance/covenant.v1.json",
+        "machine/schemas/covenant.v1.schema.json",
+        "orchestra_runtime/domain/governance/__init__.py",
+        "orchestra_runtime/domain/governance/covenant.py",
+        "scripts/validation/classify_adaptive_assurance_scope.py",
+        "skills/the-governor/COVENANT_PROTECTED_OBLIGATION_JUDGMENT_GUIDE.md",
+        "skills/the-governor/OUTPUT_FORMATS.md",
+        "skills/the-governor/SKILL.md",
+        "skills/the-steward/COVENANT_SYSTEM_INTENT_JUDGMENT_GUIDE.md",
+        "skills/the-steward/OUTPUT_FORMATS.md",
+        "skills/the-steward/SKILL.md",
+        "tests/runtime/test_covenant_assurance_scope.py",
+        "tests/runtime/test_covenant_contract.py",
+        "tests/runtime/test_covenant_governance_reconciliation.py",
+    }
+)
+
+
 ADAPTIVE_ASSURANCE_REFERENCE_PATHS = frozenset(
     {
         "docs/architecture/ADAPTIVE_ASSURANCE_AQ5.md",
@@ -167,6 +194,12 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
 
     non_neutral = set(normalized) - COMMON_TRIGGER_PATHS
     if not non_neutral:
+        return NOT_APPLICABLE
+
+    # The Covenant is a separate, human-authorized governance synthesis scope.
+    # Only the complete exact slice is exempt from historical AQ5/AQ6/PRAI
+    # inventories. Partial, mixed, or unknown Covenant changes remain fail-closed.
+    if non_neutral == COVENANT_IMPLEMENTATION_PATHS:
         return NOT_APPLICABLE
 
     # AQ6 and AQ7 have their own exact-scope gates. Partial or mixed changes
