@@ -137,6 +137,10 @@ Arbiter rules:
 - Fails closed on absent, malformed, or unsupported dispositions (defaults to `ESCALATE_HUMAN` / pause, never `AUTO_CONTINUE`).
 
 
+## Protected Governance Escalation Gate
+
+When remediation would change, relax, except, reinterpret, or supersede the governance controlling the same blocked candidate, return `HOLD` with `ESCALATE_HUMAN`. Freeze exact identity/evidence and treat any later candidate mutation as invalidating the packet. `FAIL_POLICY_SELF_MODIFICATION` must never become same-run `AUTO_REMEDIATE_AND_REVALIDATE` or `AUTO_CONTINUE`. Human approval requires a new execution context.
+
 ## Cross-Specialist Coordination Continuity Gate
 
 Tuner output is coordination evidence, not a transition decision. Arbiter retains exclusive continuation authority.
