@@ -2644,7 +2644,8 @@
     "adaptive_assurance_aq2_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ2.md",
     "adaptive_assurance_aq3_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ3.md",
     "adaptive_assurance_aq4_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ4.md",
-    "adaptive_assurance_aq5_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ5.md"
+    "adaptive_assurance_aq5_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ5.md",
+    "adaptive_assurance_aq7_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ7.md"
   },
   "hosts_integrations": {
     "host_update_contract": "machine/hosts/update-contract.v1.json",

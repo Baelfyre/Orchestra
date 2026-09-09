@@ -134,6 +134,19 @@ jobs:
           git cat-file -e "${comparison_base_sha}^{commit}"
           git diff --check "$comparison_base_sha..HEAD"
           git diff --name-only "$comparison_base_sha..HEAD" | sort > actual-paths.txt
+          scope_applicability="$(python -B scripts/validation/classify_adaptive_assurance_scope.py --assurance aq7 < actual-paths.txt)"
+          case "$scope_applicability" in
+            NOT_APPLICABLE)
+              echo "AQ6_SCOPE=NOT_APPLICABLE"
+              exit 0
+              ;;
+            APPLICABLE)
+              ;;
+            *)
+              echo "AQ6_SCOPE_CLASSIFICATION_INVALID: $scope_applicability" >&2
+              exit 1
+              ;;
+          esac
           cat > expected-paths.txt <<'EOF'
           .github/workflows/aq6-gate-coverage.yml
           CHANGELOG.md

@@ -60,6 +60,27 @@ AQ6_IMPLEMENTATION_PATHS = frozenset(
 )
 
 
+AQ7_IMPLEMENTATION_PATHS = frozenset(
+    {
+        ".github/workflows/aq6-gate-coverage.yml",
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ7.md",
+        "orchestra_runtime/application/dto/tenant_administration.py",
+        "orchestra_runtime/application/ports/repositories/__init__.py",
+        "orchestra_runtime/application/ports/repositories/tenant_members.py",
+        "orchestra_runtime/application/services/tenant_administration.py",
+        "orchestra_runtime/domain/governance/tenant_administration.py",
+        "orchestra_runtime/entrypoints/__init__.py",
+        "orchestra_runtime/entrypoints/api/__init__.py",
+        "orchestra_runtime/entrypoints/api/tenant_administration.py",
+        "orchestra_runtime/infrastructure/persistence/repositories/__init__.py",
+        "orchestra_runtime/infrastructure/persistence/repositories/tenant_members.py",
+        "scripts/validation/classify_adaptive_assurance_scope.py",
+        "tests/runtime/test_adaptive_assurance_scope.py",
+        "tests/runtime/test_aq7_http_adapter_parity.py",
+    }
+)
+
+
 ADAPTIVE_ASSURANCE_REFERENCE_PATHS = frozenset(
     {
         "docs/architecture/ADAPTIVE_ASSURANCE_AQ5.md",
@@ -102,6 +123,7 @@ GOVERNANCE_PREFIXES = (
 
 IMPLEMENTATION_PATHS_BY_GATE = {
     "aq5": AQ5_IMPLEMENTATION_PATHS,
+    "aq7": AQ7_IMPLEMENTATION_PATHS,
     "prai": PRAI_IMPLEMENTATION_PATHS,
 }
 
@@ -140,16 +162,16 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
 
     normalized = normalize_paths(paths)
     strict_implementation_paths = implementation_paths - WORKFLOW_INTEGRATION_PATHS
-    if set(normalized).intersection(strict_implementation_paths):
+    if gate != "aq7" and set(normalized).intersection(strict_implementation_paths):
         return APPLICABLE
 
     non_neutral = set(normalized) - COMMON_TRIGGER_PATHS
     if not non_neutral:
         return NOT_APPLICABLE
 
-    # AQ6 has its own exact-scope gate. Partial or mixed changes remain
-    # APPLICABLE so the legacy gates continue to fail closed.
-    if non_neutral == AQ6_IMPLEMENTATION_PATHS:
+    # AQ6 and AQ7 have their own exact-scope gates. Partial or mixed changes
+    # remain APPLICABLE so the legacy gates continue to fail closed.
+    if non_neutral in {AQ6_IMPLEMENTATION_PATHS, AQ7_IMPLEMENTATION_PATHS}:
         return NOT_APPLICABLE
 
     governance_paths = {path for path in non_neutral if is_governance_path(path)}
