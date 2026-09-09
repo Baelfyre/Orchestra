@@ -137,6 +137,14 @@ In a delegated phase governed by a `DelegatedExecutionEnvelope`:
 - Overseer provides concise failure excerpts suitable for automatic remediation without generating bloated session logs.
 
 
+## Protected Governance Escalation Evidence Role
+
+When a candidate is frozen for protected governance escalation, Overseer verifies the evidence packet needed for human review. Overseer must distinguish an implementation defect from a demonstrated governance/topology conflict and record what the evidence can and cannot establish.
+
+Required evidence includes the exact blocked candidate identity, failing validation/PRAI evidence, the proposed governance change, alternatives tried or considered, and validation consequences of changing versus preserving the rule.
+
+Overseer may recommend more evidence but cannot authorize an exception, policy amendment, same-run continuation, or mutation of the controlling governance. Passing tests do not convert a protected governance conflict into automatic remediation.
+
 ## Cross-Layer Contract Evidence
 
 When a CrossLayerContractPacket exists:
