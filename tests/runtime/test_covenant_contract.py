@@ -22,6 +22,7 @@ from orchestra_runtime.domain.governance.covenant import (
     CovenantDecision,
     GovernanceJudgment,
     ReconciliationProposal,
+    SpecialistEvidence,
     evaluate_covenant,
 )
 
@@ -56,6 +57,22 @@ def _judgment(reviewer: str, **changes: object) -> GovernanceJudgment:
     }
     values.update(changes)
     return GovernanceJudgment(**values)
+
+
+def _evaluate(
+    steward: GovernanceJudgment | None = None,
+    governor: GovernanceJudgment | None = None,
+    **kwargs: object,
+):
+    return evaluate_covenant(
+        _basis(),
+        steward if steward is not None else _judgment("STEWARD"),
+        governor if governor is not None else _judgment("GOVERNOR"),
+        **kwargs,
+    )
+
+
+BASIS = _basis()
 
 
 def test_machine_contract_matches_schema_and_authority_boundaries() -> None:
@@ -183,3 +200,201 @@ def test_reconciliation_requires_nonempty_evidence() -> None:
             True,
             (),
         )
+
+
+def test_domain_serializers_and_strict_text_validation() -> None:
+    with pytest.raises(TypeError):
+        _basis(repository=object())
+    with pytest.raises(ValueError):
+        _basis(repository="\x01")
+    with pytest.raises(TypeError):
+        _basis(project_goal_refs="goal")
+    with pytest.raises(TypeError):
+        _basis(project_goal_refs=None)
+    with pytest.raises(ValueError):
+        _basis(project_context_ref=None, project_ref=None)
+    with pytest.raises(TypeError):
+        _basis(assurance_required=1)
+
+    steward = _judgment("STEWARD")
+    specialist = SpecialistEvidence(
+        reviewer="CLOCKWORK",
+        result="PASS",
+        claim_scope="candidate-system",
+        evidence_refs=("evidence:clockwork",),
+        candidate_sha=SHA,
+        tree_sha=TREE,
+        limitations=("static-only",),
+    )
+    proposal = ReconciliationProposal(
+        "narrow design",
+        True,
+        True,
+        True,
+        True,
+        ("evidence:proposal",),
+    )
+    assert steward.to_dict()["reviewer"] == "STEWARD"
+    assert specialist.to_dict()["limitations"] == ["static-only"]
+    assert proposal.to_dict()["evidence_refs"] == ["evidence:proposal"]
+
+    with pytest.raises(TypeError):
+        GovernanceJudgment(reviewer="STEWARD", human_review_required=1)
+    with pytest.raises(TypeError):
+        CovenantDecision(
+            basis=object(),
+            disposition="PASS",
+            reason_codes=("reason",),
+            constraints=(),
+            evidence_refs=("evidence",),
+            human_review_required=False,
+        )
+    with pytest.raises(TypeError):
+        CovenantDecision(
+            basis=_basis(),
+            disposition="PASS",
+            reason_codes=("reason",),
+            constraints=(),
+            evidence_refs=("evidence",),
+            human_review_required=1,
+        )
+
+
+def test_evaluator_rejects_malformed_and_ambiguous_inputs() -> None:
+    with pytest.raises(TypeError):
+        evaluate_covenant(object(), _judgment("STEWARD"), _judgment("GOVERNOR"))
+
+    invalid_governance = evaluate_covenant(BASIS, object(), object())
+    invalid_state = evaluate_covenant(
+        BASIS,
+        _judgment("STEWARD"),
+        _judgment("GOVERNOR"),
+        current_candidate_sha="not-a-sha",
+        current_tree_sha=TREE,
+    )
+    swapped_reviewers = evaluate_covenant(
+        BASIS,
+        _judgment("GOVERNOR"),
+        _judgment("STEWARD"),
+    )
+    missing_governance_evidence = evaluate_covenant(
+        BASIS,
+        _judgment("STEWARD", evidence_refs=()),
+        _judgment("GOVERNOR"),
+    )
+    malformed_durable = evaluate_covenant(
+        BASIS,
+        _judgment("STEWARD"),
+        _judgment("GOVERNOR"),
+        assurance_evidence_durable=1,
+    )
+    malformed_retrievable = evaluate_covenant(
+        BASIS,
+        _judgment("STEWARD"),
+        _judgment("GOVERNOR"),
+        assurance_evidence_retrievable=1,
+    )
+    unknown_scope = evaluate_covenant(
+        BASIS,
+        _judgment("STEWARD"),
+        _judgment("GOVERNOR"),
+        claim_to_evidence_scope="UNSPECIFIED",
+    )
+    invalid_reconciliation = evaluate_covenant(
+        BASIS,
+        _judgment("STEWARD"),
+        _judgment("GOVERNOR"),
+        reconciliation=object(),
+    )
+    invalid_specialist = evaluate_covenant(
+        BASIS,
+        _judgment("STEWARD"),
+        _judgment("GOVERNOR"),
+        specialist_evidence=(object(),),
+    )
+    missing_specialist_refs = evaluate_covenant(
+        BASIS,
+        _judgment("STEWARD"),
+        _judgment("GOVERNOR"),
+        specialist_evidence=(
+            SpecialistEvidence(
+                reviewer="CLOCKWORK",
+                result="PASS",
+                claim_scope="candidate-system",
+                evidence_refs=(),
+                candidate_sha=SHA,
+                tree_sha=TREE,
+            ),
+        ),
+    )
+
+    assert invalid_governance.reason_codes == ("INVALID_GOVERNANCE_JUDGMENT",)
+    assert invalid_state.reason_codes == ("INVALID_STATE_IDENTITY",)
+    assert swapped_reviewers.reason_codes == ("WRONG_GOVERNANCE_REVIEWER",)
+    assert missing_governance_evidence.reason_codes == ("GOVERNANCE_EVIDENCE_MISSING",)
+    assert malformed_durable.reason_codes == ("MALFORMED_COVENANT_INPUT",)
+    assert malformed_retrievable.reason_codes == ("MALFORMED_COVENANT_INPUT",)
+    assert unknown_scope.reason_codes == ("MALFORMED_COVENANT_INPUT",)
+    assert invalid_reconciliation.reason_codes == ("INVALID_RECONCILIATION",)
+    assert invalid_specialist.reason_codes == ("INVALID_SPECIALIST_EVIDENCE",)
+    assert missing_specialist_refs.reason_codes == ("SPECIALIST_EVIDENCE_MISSING",)
+
+
+def test_evaluator_closes_each_non_final_or_prohibited_state() -> None:
+    duplicate_basis_evidence = evaluate_covenant(
+        BASIS,
+        _judgment("STEWARD"),
+        _judgment("GOVERNOR", evidence_refs=("PROJECT_CONTEXT.md",)),
+        assurance_result="PASS",
+    )
+    blocked_obligation = evaluate_covenant(
+        BASIS,
+        _judgment("STEWARD"),
+        _judgment("GOVERNOR", obligation_satisfaction="GAPS"),
+        assurance_result="PASS",
+    )
+    blocked_assurance = _evaluate(assurance_result="BLOCKED")
+    prohibited_present = _evaluate(prohibited_outcome_avoidance="PRESENT")
+    prohibited_unknown = _evaluate(prohibited_outcome_avoidance="UNKNOWN")
+    advisory_steward = _evaluate(steward=_judgment("STEWARD", decision="ADVISORY_ONLY"))
+    governor_not_applicable = _evaluate(
+        governor=_judgment("GOVERNOR", decision="NOT_APPLICABLE")
+    )
+    coverage_not_applicable = _evaluate(
+        steward=_judgment("STEWARD", critical_flow_alignment="NOT_APPLICABLE")
+    )
+    blocked_specialist = _evaluate(
+        specialist_evidence=(
+            SpecialistEvidence(
+                reviewer="CLOCKWORK",
+                result="BLOCKED",
+                claim_scope="candidate-system",
+                evidence_refs=("evidence:clockwork",),
+                candidate_sha=SHA,
+                tree_sha=TREE,
+            ),
+        )
+    )
+    unexpected_reconciliation = _evaluate(
+        reconciliation=ReconciliationProposal(
+            "unrequested reconciliation",
+            True,
+            True,
+            True,
+            True,
+            ("evidence:unexpected",),
+        )
+    )
+    explicit_claim_scope = _evaluate(claim_to_evidence_scope="PASS")
+
+    assert duplicate_basis_evidence.disposition == "PASS"
+    assert blocked_obligation.disposition == "BLOCKED"
+    assert blocked_assurance.disposition == "BLOCKED"
+    assert prohibited_present.disposition == "BLOCKED"
+    assert prohibited_unknown.disposition == "WAIT_FOR_EVIDENCE"
+    assert advisory_steward.disposition == "WAIT_FOR_EVIDENCE"
+    assert governor_not_applicable.disposition == "WAIT_FOR_EVIDENCE"
+    assert coverage_not_applicable.disposition == "WAIT_FOR_EVIDENCE"
+    assert blocked_specialist.disposition == "REVISION_REQUIRED"
+    assert unexpected_reconciliation.disposition == "REVISION_REQUIRED"
+    assert explicit_claim_scope.disposition == "PASS"
