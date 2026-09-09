@@ -58,7 +58,3 @@ CONSTRAINTS: [list or "none"]
 REQUIRED_ACTIONS: [actions or "none"]
 EVIDENCE_REFERENCES: [list or "none"]
 ```
-
-## Covenant judgment format
-
-For the material protected-obligation judgment, use COVENANT_PROTECTED_OBLIGATION_JUDGMENT_GUIDE.md.
