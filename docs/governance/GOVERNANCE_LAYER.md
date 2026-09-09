@@ -305,6 +305,6 @@ Existing trusted runtime contracts cover Phase D; PR #226 found no duplicate ext
 
 *See [GOVERNANCE_DECISION_PROTOCOL.md](GOVERNANCE_DECISION_PROTOCOL.md), [STEWARD.md](STEWARD.md), [GOVERNOR.md](GOVERNOR.md), [GOVERNANCE_REVIEW_FLOW.md](GOVERNANCE_REVIEW_FLOW.md), and [RELEASE_GATES.md](RELEASE_GATES.md) for details.*
 
-## The Covenant synthesis layer
+## The Covenant
 
-For material work, The Covenant synthesizes Steward system-intent judgment, Governor protected-obligation judgment, and current specialist/PRAI evidence against the Prime Directive and verified project goals before Arbiter transition judgment. It is evidence-only, non-authorizing, and fail-closed on unresolved contradiction. See THE_COVENANT.md.
+Material cross-governance synthesis follows THE_COVENANT.md before Arbiter transition. Covenant is evidence-only; Arbiter remains transition owner.
