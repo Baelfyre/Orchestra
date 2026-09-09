@@ -1,8 +1,8 @@
 # Covenant Conflict Scenario Matrix
 
-Status: implementation regression matrix  
-Date: 2026-09-10  
-Scope: Steward, Governor, Covenant, PRAI compatibility, and Arbiter handoff  
+Status: implementation regression matrix
+Date: 2026-09-10
+Scope: Steward, Governor, Covenant, PRAI compatibility, and Arbiter handoff
 Authority: evidence-only; does not authorize AQ8
 
 ## Purpose
