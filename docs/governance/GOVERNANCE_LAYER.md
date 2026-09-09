@@ -305,26 +305,6 @@ Existing trusted runtime contracts cover Phase D; PR #226 found no duplicate ext
 
 *See [GOVERNANCE_DECISION_PROTOCOL.md](GOVERNANCE_DECISION_PROTOCOL.md), [STEWARD.md](STEWARD.md), [GOVERNOR.md](GOVERNOR.md), [GOVERNANCE_REVIEW_FLOW.md](GOVERNANCE_REVIEW_FLOW.md), and [RELEASE_GATES.md](RELEASE_GATES.md) for details.*
 
-## The Covenant Synthesis Layer
+## The Covenant synthesis layer
 
-The Covenant is the evidence-only synthesis layer between governance/domain evidence and Arbiter transition judgment. It does not replace The Steward, The Governor, PRAI, technical specialists, Overseer, or Arbiter.
-
-Its purpose is to detect conflicts that are invisible when each specialist is judged in isolation.
-
-The required ordering is:
-
-    Prime Directive
-        -> verified project context and goals
-        -> Steward system-intent judgment
-        -> Governor protected-obligation judgment
-        -> specialist and PRAI evidence
-        -> Covenant cross-judgment synthesis
-        -> Arbiter transition decision
-
-For material work, The Covenant must identify contradictions among project goals, acceptance criteria, critical flows, system invariants, protected obligations, specialist findings, and assurance claims.
-
-Conflict is resolved only by the narrowest evidence-backed option that preserves the Prime Directive, applicable human authority, protected obligations, and verified project goals. If that cannot be demonstrated, the result is fail-closed. Consensus does not override a higher-order boundary.
-
-Canonical contract: THE_COVENANT.md
-Machine contract: machine/governance/covenant.v1.json
-Scenario matrix: docs/validation/COVENANT_CONFLICT_SCENARIO_MATRIX_20260910.md
+For material work, The Covenant synthesizes Steward system-intent judgment, Governor protected-obligation judgment, and current specialist/PRAI evidence against the Prime Directive and verified project goals before Arbiter transition judgment. It is evidence-only, non-authorizing, and fail-closed on unresolved contradiction. See THE_COVENANT.md.
