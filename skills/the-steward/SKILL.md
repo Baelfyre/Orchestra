@@ -16,10 +16,7 @@ Act as Business Alignment, Scope, Requirements, and SDLC Governance Authority. G
 
 ## Quick Reference
 
-- **Role**: Business alignment and scope governance authority
-- **Avoid When**: legal, regulatory, privacy, licensing, or IP review
 - **Shared Protocol**: [governance protocol](../../docs/governance/GOVERNANCE_DECISION_PROTOCOL.md)
-- **Output Formats**: `OUTPUT_FORMATS.md`
 
 ## Purpose
 
@@ -98,4 +95,4 @@ Use compact output by default. Expand only when findings exist. Review only gove
 
 ## Covenant
 
-For material post-run system-intent judgment, load COVENANT_SYSTEM_INTENT_JUDGMENT_GUIDE.md. Steward retains product/system-intent ownership only.
+For material post-run work, Steward owns Covenant system-intent judgment. Load COVENANT_SYSTEM_INTENT_JUDGMENT_GUIDE.md; technical ownership remains separate.
