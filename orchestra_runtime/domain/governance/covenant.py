@@ -11,6 +11,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Iterable
 
+from ...shared.canonicalization import normalize_git_sha
+
 
 GOVERNANCE_DECISIONS = (
     "APPROVED",
@@ -48,6 +50,10 @@ def _strings(values: Iterable[str], field: str) -> tuple[str, ...]:
 
 @dataclass(frozen=True, slots=True)
 class CovenantBasis:
+    repository: str
+    candidate_sha: str
+    tree_sha: str
+    basis_revision: str
     project_ref: str
     prime_directive_ref: str
     project_goal_refs: tuple[str, ...]
@@ -58,6 +64,16 @@ class CovenantBasis:
     assurance_required: bool = True
 
     def __post_init__(self) -> None:
+        object.__setattr__(self, "repository", _text(self.repository, "repository"))
+        object.__setattr__(
+            self, "candidate_sha", normalize_git_sha(self.candidate_sha, "candidate_sha")
+        )
+        object.__setattr__(
+            self, "tree_sha", normalize_git_sha(self.tree_sha, "tree_sha")
+        )
+        object.__setattr__(
+            self, "basis_revision", _text(self.basis_revision, "basis_revision")
+        )
         object.__setattr__(self, "project_ref", _text(self.project_ref, "project_ref"))
         object.__setattr__(
             self,
@@ -165,6 +181,7 @@ class ReconciliationProposal:
 
 @dataclass(frozen=True, slots=True)
 class CovenantDecision:
+    basis: CovenantBasis
     disposition: str
     reason_codes: tuple[str, ...]
     constraints: tuple[str, ...]
@@ -218,6 +235,7 @@ def evaluate_covenant(
 
     if "CONFLICT" in prime_states:
         return CovenantDecision(
+            basis,
             "BLOCKED",
             ("PRIME_DIRECTIVE_CONFLICT",),
             constraints,
@@ -227,6 +245,7 @@ def evaluate_covenant(
 
     if steward.human_review_required or governor.human_review_required:
         return CovenantDecision(
+            basis,
             "ESCALATE_HUMAN",
             ("GOVERNANCE_HUMAN_REVIEW_REQUIRED",),
             constraints,
@@ -236,6 +255,7 @@ def evaluate_covenant(
 
     if "UNKNOWN" in prime_states or "UNKNOWN" in goal_states:
         return CovenantDecision(
+            basis,
             "WAIT_FOR_EVIDENCE",
             ("GOVERNING_ALIGNMENT_UNKNOWN",),
             constraints,
@@ -272,6 +292,7 @@ def evaluate_covenant(
 
     if contradictions:
         return CovenantDecision(
+            basis,
             "REVISION_REQUIRED",
             ("SYSTEM_CONTRADICTION",),
             constraints,
@@ -306,6 +327,7 @@ def evaluate_covenant(
                 dict.fromkeys((*evidence, *reconciliation.evidence_refs))
             )
             return CovenantDecision(
+                basis,
                 "RECONCILED_WITH_CONSTRAINTS",
                 ("VERIFIED_NARROW_RECONCILIATION",),
                 constraints,
@@ -321,6 +343,7 @@ def evaluate_covenant(
         )
 
     return CovenantDecision(
+        basis,
         "PASS",
         ("COHERENT_GOVERNANCE_AND_SYSTEM_EVIDENCE",),
         constraints,
