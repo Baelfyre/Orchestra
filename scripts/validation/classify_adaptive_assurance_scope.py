@@ -1,3 +1,5 @@
+# @codebase_provenance_JEO
+# @codebase_rights_JEO
 #!/usr/bin/env python3
 """Classify whether a change set requires legacy AQ5 or PRAI exact-scope validation."""
 
@@ -80,6 +82,40 @@ AQ7_IMPLEMENTATION_PATHS = frozenset(
     }
 )
 
+
+COVENANT_IMPLEMENTATION_PATHS = frozenset(
+    {
+        "AGENTS.md",
+        "docs/architecture/ADAPTIVE_ASSURANCE_PRAI.md",
+        "docs/governance/README.md",
+        "docs/governance/THE_COVENANT.md",
+        "docs/validation/COVENANT_CONFLICT_SCENARIO_MATRIX_20260910.md",
+        "machine/governance/covenant.v1.json",
+        "machine/schemas/covenant.v1.schema.json",
+        "orchestra_runtime/domain/governance/__init__.py",
+        "orchestra_runtime/domain/governance/covenant.py",
+        "skills/the-governor/COVENANT_PROTECTED_OBLIGATION_JUDGMENT_GUIDE.md",
+        "skills/the-governor/SKILL.md",
+        "skills/the-steward/COVENANT_SYSTEM_INTENT_JUDGMENT_GUIDE.md",
+        "skills/the-steward/SKILL.md",
+        "tests/runtime/test_covenant_contract.py",
+        "tests/runtime/test_covenant_governance_reconciliation.py",
+    }
+)
+
+COVENANT_SCOPE_ANCHOR_PATHS = frozenset(
+    {
+        "docs/governance/THE_COVENANT.md",
+        "docs/validation/COVENANT_CONFLICT_SCENARIO_MATRIX_20260910.md",
+        "machine/governance/covenant.v1.json",
+        "machine/schemas/covenant.v1.schema.json",
+        "orchestra_runtime/domain/governance/covenant.py",
+        "skills/the-governor/COVENANT_PROTECTED_OBLIGATION_JUDGMENT_GUIDE.md",
+        "skills/the-steward/COVENANT_SYSTEM_INTENT_JUDGMENT_GUIDE.md",
+        "tests/runtime/test_covenant_contract.py",
+        "tests/runtime/test_covenant_governance_reconciliation.py",
+    }
+)
 
 ADAPTIVE_ASSURANCE_REFERENCE_PATHS = frozenset(
     {
@@ -168,6 +204,15 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
     non_neutral = set(normalized) - COMMON_TRIGGER_PATHS
     if not non_neutral:
         return NOT_APPLICABLE
+
+    # The Covenant is a separate, human-authorized governance-assurance scope.
+    # Only its complete declared slice is outside the historical AQ5/AQ6/PRAI
+    # exact inventories. Any anchored partial or mixed Covenant change remains
+    # APPLICABLE so those legacy gates fail closed rather than silently exempt it.
+    if non_neutral == COVENANT_IMPLEMENTATION_PATHS:
+        return NOT_APPLICABLE
+    if non_neutral.intersection(COVENANT_SCOPE_ANCHOR_PATHS):
+        return APPLICABLE
 
     # AQ6 and AQ7 have their own exact-scope gates. Partial or mixed changes
     # remain APPLICABLE so the legacy gates continue to fail closed.
