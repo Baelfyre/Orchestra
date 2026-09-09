@@ -38,3 +38,7 @@ Governor approval is not release, publication, policy activation, deployment, or
 Bind the disposition to the reviewed facts, source versions, effective dates, scope, and release state. Re-enter when any of these change or when the review expiry/checkpoint is reached. A prior legal or compliance review must not be treated as timeless approval.
 
 Record the human decision, decision maker, date, constraints, and source packet. Do not rewrite the earlier escalation; link a superseding record.
+
+
+## Protected Governance Self-Change Boundary
+When a run proposes changing, relaxing, excepting, or reinterpreting a protected governance rule that blocks that same run, set `human_review_required: true` regardless of automation profile. Freeze the originating candidate and terminate after the governance escalation packet. Any human-approved exception or amendment applies only in a new execution context; the same run may not create and consume its own exception.
