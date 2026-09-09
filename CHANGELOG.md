@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased Post-Run Assurance Invariant
+
+- Enforces canonical risk casing, AQ1-compatible evidence/claim scope coverage, derived logical identities, and changed-path-derived PRAI self-modification detection.
+- Binds verifier-supplied current version context across work units, receipts, decisions, schema, and CLI validation, rejecting stale or mismatched evidence.
+- Restricts receipt evidence_layer to the canonical AQ1 vocabulary and keeps runtime, schema, and machine-contract parity fail closed.
+- Implements the approved PRAI post-run work-unit contract with independent logical, security/authority, evidence-sufficiency, and transition-assurance records.
+- Adds adaptive LIGHT/STANDARD/DEEP audit depth, candidate/source/tree binding, repair invalidation, duplicate and contradiction detection, and the required fail-closed negative fixtures.
+- Adds the dedicated PRAI machine contract, schema, validator, runtime/behavior coverage, and qualification workflow.
+- Aligns the schema, strict runtime parser, and CLI on canonical required fields, explicit risk values, configured-schema validation, and complete path/risk/invariant claim coverage.
+- Preserves repository event-derived baselines for pull_request and push validation; manual workflow_dispatch validation requires an explicit approved_base_sha bound to ORCHESTRA_APPROVED_BASE_SHA.
+- PRAI evidence is non-authorizing. AQ6 admission remains gated on PRAI_COMPLETE_CANONICAL_VERIFIED, and AQ8+ remains out of scope.
+
 ## Unreleased legacy workflow-dispatch baseline contract repair
 
 - Requires an explicit approved evidence-baseline SHA for manual workflow_dispatch validation and binds that value to ORCHESTRA_APPROVED_BASE_SHA across the four legacy validation workflows.
