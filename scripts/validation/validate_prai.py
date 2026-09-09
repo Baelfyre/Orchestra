@@ -36,6 +36,7 @@ def parser() -> argparse.ArgumentParser:
     value.add_argument("--tree-sha", required=True)
     value.add_argument("--work-item-ref", required=True)
     value.add_argument("--freshness-ref", required=True)
+    value.add_argument("--version-ref", required=True)
     value.add_argument(
         "--contract",
         type=Path,
@@ -68,6 +69,7 @@ def main() -> int:
             current_tree_sha=args.tree_sha,
             current_work_item_ref=args.work_item_ref,
             current_freshness_ref=args.freshness_ref,
+            current_version_ref=args.version_ref,
         )
     except (OSError, TypeError, ValueError, json.JSONDecodeError) as exc:
         print("PRAI_RESULT=INVALID", file=sys.stderr)

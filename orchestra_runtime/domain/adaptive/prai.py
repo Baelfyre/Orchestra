@@ -107,6 +107,23 @@ ALLOWED_RISK_CHARACTERISTICS = tuple(
         )
     )
 )
+EVIDENCE_LAYERS = (
+    "STATIC",
+    "UNIT",
+    "DOMAIN",
+    "CONTRACT",
+    "INTEGRATION",
+    "HTTP",
+    "RUNTIME",
+    "PERSISTENCE",
+    "CONCURRENCY",
+    "SECURITY",
+    "PROVENANCE",
+    "MUTATION",
+    "ADVERSARIAL",
+    "DOCUMENTATION",
+    "COMPLETION_STATE",
+)
 EVIDENCE_SCOPES = (
     "SOURCE",
     "COMPLETION",
@@ -162,6 +179,7 @@ FAIL_STALE_CANDIDATE = "FAIL_STALE_CANDIDATE"
 FAIL_STALE_TREE = "FAIL_STALE_TREE"
 FAIL_STALE_WORK_ITEM = "FAIL_STALE_WORK_ITEM"
 FAIL_STALE_FRESHNESS = "FAIL_STALE_FRESHNESS"
+FAIL_STALE_VERSION = "FAIL_STALE_VERSION"
 FAIL_REQUIRED_LOGICAL_ASSURANCE = "FAIL_REQUIRED_LOGICAL_ASSURANCE"
 FAIL_REQUIRED_SECURITY_ASSURANCE = "FAIL_REQUIRED_SECURITY_ASSURANCE"
 FAIL_REQUIRED_OVERSEER_ASSURANCE = "FAIL_REQUIRED_OVERSEER_ASSURANCE"
@@ -193,6 +211,7 @@ FAIL_ASSURANCE_COVERAGE = "FAIL_ASSURANCE_COVERAGE"
 FAIL_SCHEMA_RUNTIME_PARITY = "FAIL_SCHEMA_RUNTIME_PARITY"
 FAIL_UNKNOWN_RISK_CHARACTERISTIC = "FAIL_UNKNOWN_RISK_CHARACTERISTIC"
 FAIL_EVIDENCE_SCOPE = "FAIL_EVIDENCE_SCOPE"
+FAIL_EVIDENCE_LAYER = "FAIL_EVIDENCE_LAYER"
 FAIL_LOGICAL_IDENTITY = "FAIL_LOGICAL_IDENTITY"
 
 REQUIRED_NEGATIVE_FIXTURES = (
@@ -222,6 +241,11 @@ REQUIRED_NEGATIVE_FIXTURES = (
     "noncanonical_risk_characteristic",
     "evidence_scope_claim_scope_mismatch",
     "spoofed_logical_identity",
+    "stale_version_context",
+    "mismatched_version_context",
+    "missing_version_context",
+    "unknown_evidence_layer",
+    "noncanonical_evidence_layer",
     "undeclared_prai_policy_self_modification",
 )
 REQUIRED_PROPERTY_INVARIANTS = (
@@ -274,6 +298,7 @@ WORK_UNIT_FIELDS = (
     "candidate_sha",
     "tree_sha",
     "freshness_ref",
+    "version_ref",
     "changed_paths",
     "implementer",
     "logical_impact",
@@ -309,6 +334,7 @@ DECISION_FIELDS = (
     "candidate_sha",
     "tree_sha",
     "work_item_ref",
+    "version_ref",
     "result",
     "compliant",
     "failure_codes",
@@ -341,6 +367,13 @@ def _choice(value: Any, choices: Iterable[str], field_name: str) -> str:
     if value not in choices:
         raise ValueError(f"{field_name} must be one of {tuple(choices)!r}")
     return value
+
+
+def _evidence_layer(value: Any) -> str:
+    try:
+        return _choice(value, EVIDENCE_LAYERS, "evidence_layer")
+    except (TypeError, ValueError) as exc:
+        raise ValueError(f"{FAIL_EVIDENCE_LAYER}: {exc}") from exc
 
 
 def _strings(
@@ -457,6 +490,11 @@ class PraiReviewReceipt:
             object.__setattr__(self, name, _text(getattr(self, name), name))
         object.__setattr__(
             self,
+            "evidence_layer",
+            _evidence_layer(self.evidence_layer),
+        )
+        object.__setattr__(
+            self,
             "evidence_scope",
             _choice(self.evidence_scope, EVIDENCE_SCOPES, "evidence_scope"),
         )
@@ -499,6 +537,7 @@ class PraiReviewReceipt:
                 "tree_sha": self.tree_sha,
                 "evidence_refs": _tuple_json(self.evidence_refs),
                 "evidence_layer": self.evidence_layer,
+                "version_ref": self.version_ref,
                 "evidence_scope": self.evidence_scope,
                 "claim_scope": self.claim_scope,
             }
@@ -581,6 +620,7 @@ class PraiWorkUnit:
     candidate_sha: str
     tree_sha: str
     freshness_ref: str
+    version_ref: str
     changed_paths: tuple[str, ...]
     implementer: str
     logical_impact: str
@@ -615,6 +655,7 @@ class PraiWorkUnit:
         object.__setattr__(self, "candidate_sha", normalize_git_sha(self.candidate_sha, "candidate_sha"))
         object.__setattr__(self, "tree_sha", normalize_git_sha(self.tree_sha, "tree_sha"))
         object.__setattr__(self, "freshness_ref", normalize_timestamp(self.freshness_ref, "freshness_ref"))
+        object.__setattr__(self, "version_ref", _text(self.version_ref, "version_ref"))
         object.__setattr__(self, "changed_paths", _paths(self.changed_paths, "changed_paths", allow_empty=False))
         object.__setattr__(self, "logical_impact", _choice(self.logical_impact, IMPACT_LEVELS, "logical_impact"))
         object.__setattr__(self, "security_impact", _choice(self.security_impact, IMPACT_LEVELS, "security_impact"))
@@ -690,6 +731,7 @@ class PraiWorkUnit:
             "candidate_sha": self.candidate_sha,
             "tree_sha": self.tree_sha,
             "freshness_ref": self.freshness_ref,
+            "version_ref": self.version_ref,
             "changed_paths": _tuple_json(self.changed_paths),
             "implementer": self.implementer,
             "logical_impact": self.logical_impact,
@@ -729,6 +771,7 @@ class PraiDecision:
     candidate_sha: str
     tree_sha: str
     work_item_ref: str
+    version_ref: str
     result: str
     compliant: bool
     failure_codes: tuple[str, ...]
@@ -746,7 +789,7 @@ class PraiDecision:
     decision_digest: str | None = None
 
     def __post_init__(self) -> None:
-        for name in ("decision_id", "repository", "source_ref", "work_item_ref", "authority_model"):
+        for name in ("decision_id", "repository", "source_ref", "work_item_ref", "version_ref", "authority_model"):
             object.__setattr__(self, name, _text(getattr(self, name), name))
         object.__setattr__(self, "candidate_sha", normalize_git_sha(self.candidate_sha, "candidate_sha"))
         object.__setattr__(self, "tree_sha", normalize_git_sha(self.tree_sha, "tree_sha"))
@@ -799,6 +842,7 @@ class PraiDecision:
             "candidate_sha": self.candidate_sha,
             "tree_sha": self.tree_sha,
             "work_item_ref": self.work_item_ref,
+            "version_ref": self.version_ref,
             "result": self.result,
             "compliant": self.compliant,
             "failure_codes": _tuple_json(self.failure_codes),
@@ -913,6 +957,7 @@ def evaluate_post_run_assurance(
     current_tree_sha: str | None = None,
     current_work_item_ref: str | None = None,
     current_freshness_ref: str | None = None,
+    current_version_ref: str | None = None,
     generated_at: str | None = None,
     decision_id: str = "prai-post-run-assurance",
 ) -> PraiDecision:
@@ -924,6 +969,7 @@ def evaluate_post_run_assurance(
     _compare_identity(failures, "tree_sha", work.tree_sha, current_tree_sha, FAIL_STALE_TREE, normalize=True)
     _compare_identity(failures, "work_item_ref", work.work_item_ref, current_work_item_ref, FAIL_STALE_WORK_ITEM)
     _compare_identity(failures, "freshness_ref", work.freshness_ref, current_freshness_ref, FAIL_STALE_FRESHNESS)
+    _compare_identity(failures, "version_ref", work.version_ref, current_version_ref, FAIL_STALE_VERSION)
 
     required_reviewers = _required_reviewers(work)
     required_assurance = _required_assurance(work)
@@ -978,6 +1024,7 @@ def evaluate_post_run_assurance(
         _compare_identity(failures, "tree_sha", receipt.tree_sha, current_tree_sha, FAIL_STALE_TREE, normalize=True)
         _compare_identity(failures, "work_item_ref", receipt.work_item_ref, current_work_item_ref, FAIL_STALE_WORK_ITEM)
         _compare_identity(failures, "freshness_ref", receipt.freshness_ref, current_freshness_ref, FAIL_STALE_FRESHNESS)
+        _compare_identity(failures, "version_ref", receipt.version_ref, current_version_ref, FAIL_STALE_VERSION)
         if (
             receipt.repository != work.repository
             or receipt.source_ref != work.source_ref
@@ -985,6 +1032,7 @@ def evaluate_post_run_assurance(
             or receipt.tree_sha != work.tree_sha
             or receipt.work_item_ref != work.work_item_ref
             or receipt.freshness_ref != work.freshness_ref
+            or receipt.version_ref != work.version_ref
         ):
             _add(failures, FAIL_EVIDENCE_BINDING)
         if receipt.result != "PASS":
@@ -1049,6 +1097,9 @@ def evaluate_post_run_assurance(
             and receipt.tree_sha == work.tree_sha
             and receipt.work_item_ref == work.work_item_ref
             and receipt.freshness_ref == work.freshness_ref
+            and receipt.version_ref == work.version_ref
+            and current_version_ref is not None
+            and receipt.version_ref == current_version_ref
             and set(receipt.evidence_refs).issubset(set(work.evidence_refs))
             and _receipt_covers_claim(receipt, work, changed)
             and _DEPTH_RANK[receipt.audit_depth] >= _DEPTH_RANK[work.audit_depth]
@@ -1104,6 +1155,7 @@ def evaluate_post_run_assurance(
         candidate_sha=work.candidate_sha,
         tree_sha=work.tree_sha,
         work_item_ref=work.work_item_ref,
+        version_ref=work.version_ref,
         result=result,
         compliant=result == "PASS",
         failure_codes=tuple(failures),
@@ -1135,11 +1187,19 @@ def validate_prai_contract(contract: Mapping[str, Any]) -> Mapping[str, Any]:
         "baseline_assurance": list(BASELINE_ASSURANCE),
         "deep_risk_characteristics": list(DEEP_RISK_CHARACTERISTICS),
         "allowed_risk_characteristics": list(ALLOWED_RISK_CHARACTERISTICS),
+        "evidence_layers": list(EVIDENCE_LAYERS),
         "evidence_scopes": list(EVIDENCE_SCOPES),
         "evidence_scope_coverage": {
             key: list(value) for key, value in EVIDENCE_SCOPE_COVERAGE.items()
         },
         "evidence_scope_rule": "EVIDENCE_SCOPE_MUST_COVER_CLAIM_SCOPE",
+        "version_context": {
+            "work_unit_field": "version_ref",
+            "receipt_field": "version_ref",
+            "decision_field": "version_ref",
+            "current_identity_parameter": "current_version_ref",
+            "failure_code": FAIL_STALE_VERSION,
+        },
         "protected_prai_paths": list(PRAI_PROTECTED_PATHS),
         "triggered_specialists": {
             key: list(value) for key, value in TRIGGERED_SPECIALISTS.items()
@@ -1216,6 +1276,13 @@ def validate_schema_runtime_parity(
         raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: work-unit required fields drift")
     if schema_data.get("additionalProperties") is not False:
         raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: work-unit openness drift")
+    version_schema = properties.get("version_ref")
+    if (
+        not isinstance(version_schema, Mapping)
+        or version_schema.get("type") != "string"
+        or version_schema.get("minLength") != 1
+    ):
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: work-unit version context drift")
     risk_schema = properties.get("risk_characteristics")
     if not isinstance(risk_schema, Mapping):
         raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: risk-characteristic schema is missing")
@@ -1240,19 +1307,50 @@ def validate_schema_runtime_parity(
         raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: receipt required fields drift")
     if receipt_schema.get("additionalProperties") is not False:
         raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: receipt openness drift")
-    for field in ("evidence_scope", "claim_scope"):
+    for field, vocabulary in (
+        ("evidence_layer", EVIDENCE_LAYERS),
+        ("evidence_scope", EVIDENCE_SCOPES),
+        ("claim_scope", EVIDENCE_SCOPES),
+    ):
         scope_schema = receipt_properties.get(field)
         if (
             not isinstance(scope_schema, Mapping)
-            or list(scope_schema.get("enum", ())) != list(EVIDENCE_SCOPES)
+            or list(scope_schema.get("enum", ())) != list(vocabulary)
         ):
             raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: {field} vocabulary drift")
+    receipt_version_schema = receipt_properties.get("version_ref")
+    if (
+        not isinstance(receipt_version_schema, Mapping)
+        or receipt_version_schema.get("type") != "string"
+        or receipt_version_schema.get("minLength") != 1
+    ):
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: receipt version context drift")
     logical_schema = receipt_properties.get("logical_identity")
     if (
         not isinstance(logical_schema, Mapping)
         or logical_schema.get("pattern") != "^[a-f0-9]{64}$"
     ):
         raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: logical identity drift")
+
+    decision_schema = definitions.get("decision")
+    if not isinstance(decision_schema, Mapping):
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: decision schema is missing")
+    decision_properties = decision_schema.get("properties")
+    if not isinstance(decision_properties, Mapping):
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: decision properties are missing")
+    if set(decision_properties) != set(DECISION_FIELDS):
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: decision properties drift")
+    if set(decision_schema.get("required", ())) != set(DECISION_FIELDS) - {"decision_digest"}:
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: decision required fields drift")
+    if decision_schema.get("additionalProperties") is not False:
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: decision openness drift")
+    decision_version_schema = decision_properties.get("version_ref")
+    if (
+        not isinstance(decision_version_schema, Mapping)
+        or decision_version_schema.get("type") != "string"
+        or decision_version_schema.get("minLength") != 1
+    ):
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: decision version context drift")
     return data
 
 
@@ -1263,6 +1361,7 @@ evaluate = evaluate_post_run_assurance
 __all__ = [
     "ALLOWED_RISK_CHARACTERISTICS",
     "ARBITER_DISPOSITIONS",
+    "EVIDENCE_LAYERS",
     "EVIDENCE_SCOPES",
     "EVIDENCE_SCOPE_COVERAGE",
     "AUDIT_DEPTHS",
@@ -1280,6 +1379,7 @@ __all__ = [
     "FAIL_UNKNOWN_RISK_CHARACTERISTIC",
     "FAIL_DUPLICATE_RECEIPT",
     "FAIL_EVIDENCE_BINDING",
+    "FAIL_EVIDENCE_LAYER",
     "FAIL_EVIDENCE_SCOPE",
     "FAIL_GENERIC_CI_SUBSTITUTION",
     "FAIL_IMPLEMENTER_SELF_CERTIFICATION",
@@ -1300,6 +1400,7 @@ __all__ = [
     "FAIL_SECURITY_FINDING",
     "FAIL_STALE_CANDIDATE",
     "FAIL_STALE_FRESHNESS",
+    "FAIL_STALE_VERSION",
     "FAIL_STALE_REPOSITORY",
     "FAIL_STALE_SOURCE",
     "FAIL_STALE_TREE",

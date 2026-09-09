@@ -19,11 +19,12 @@ orchestra_runtime/domain/adaptive/prai.py. The required fields are:
 - limitations
 - overseer_sufficiency
 - arbiter_disposition
-- repository, source, candidate, tree, work-item, and freshness identity
+- repository, source, candidate, tree, work-item, freshness, and version identity
 - independently produced review_receipts
 
 Each receipt binds the same repository, source ref, candidate SHA, tree SHA,
-work item, freshness ref, schema version, evidence scope, and reviewed paths.
+work item, freshness ref, version ref, schema version, evidence layer, evidence
+scope, and reviewed paths.
 Receipt and work-unit digests use the shared canonicalization helpers.
 
 ## Canonical schema and claim coverage
@@ -47,13 +48,14 @@ Implementers cannot produce their own assurance.
 ## Canonical vocabulary and scope relation
 
 Risk labels are canonical uppercase values from the machine contract; serialized
-non-canonical casing and unknown labels fail closed. Receipt evidence_scope and
-claim_scope use the AQ1 evidence-scope vocabulary. The runtime enforces
+non-canonical casing and unknown labels fail closed. Receipt evidence_layer uses
+the AQ1 EVIDENCE_LAYERS vocabulary, while evidence_scope and claim_scope use the
+AQ1 evidence-scope vocabulary. The runtime enforces
 EVIDENCE_SCOPE_MUST_COVER_CLAIM_SCOPE using the canonical coverage relation, in
 addition to exact changed-path, risk, and invariant coverage.
 
-logical_identity is derived from substantive receipt identity and any supplied
-value must match it exactly. Changes to protected PRAI policy, runtime, schema,
+logical_identity is derived from substantive receipt identity, including the
+version ref, and any supplied value must match it exactly. Changes to protected PRAI policy, runtime, schema,
 or workflow paths derive self-modification and block by default; policy
 qualification is not implicit.
 
@@ -91,7 +93,9 @@ The evaluator blocks for all required negative classes:
 15. stale audit reuse after repair;
 16. an audit that never examines changed code;
 17. generic green CI substituted for specialist assurance;
-18. PRAI policy self-modification used to certify the same work.
+18. PRAI policy self-modification used to certify the same work;
+19. stale, mismatched, or missing current version context;
+20. unknown or noncanonical evidence layers.
 
 Receipt order is normalized before evaluation. Repairs change candidate identity
 and require fresh receipts.
@@ -114,7 +118,7 @@ The command-line validator is:
 ~~~text
 python -B scripts/validation/validate_prai.py --work-unit <json> \
   --repository <owner/name> --source-ref <sha> --candidate-sha <sha> \
-  --tree-sha <sha> --work-item-ref <ref> --freshness-ref <timestamp>
+  --tree-sha <sha> --work-item-ref <ref> --freshness-ref <timestamp> --version-ref <ref>
 ~~~
 
 PRAI_COMPLETE_CANONICAL_VERIFIED is required before AQ6 admission. AQ6 and

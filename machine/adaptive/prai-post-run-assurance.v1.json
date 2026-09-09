@@ -125,6 +125,7 @@
     "candidate_sha",
     "tree_sha",
     "freshness_ref",
+    "version_ref",
     "changed_paths",
     "implementer",
     "logical_impact",
@@ -159,6 +160,7 @@
     "candidate_sha",
     "tree_sha",
     "freshness_ref",
+    "version_ref",
     "changed_paths",
     "implementer",
     "logical_impact",
@@ -225,6 +227,7 @@
     "candidate_sha",
     "tree_sha",
     "work_item_ref",
+    "version_ref",
     "result",
     "compliant",
     "failure_codes",
@@ -267,6 +270,11 @@
     "noncanonical_risk_characteristic",
     "evidence_scope_claim_scope_mismatch",
     "spoofed_logical_identity",
+    "stale_version_context",
+    "mismatched_version_context",
+    "missing_version_context",
+    "unknown_evidence_layer",
+    "noncanonical_evidence_layer",
     "undeclared_prai_policy_self_modification"
   ],
   "required_property_invariants": [
@@ -343,6 +351,23 @@
     "UI",
     "UX",
     "VISUAL"
+  ],
+  "evidence_layers": [
+    "STATIC",
+    "UNIT",
+    "DOMAIN",
+    "CONTRACT",
+    "INTEGRATION",
+    "HTTP",
+    "RUNTIME",
+    "PERSISTENCE",
+    "CONCURRENCY",
+    "SECURITY",
+    "PROVENANCE",
+    "MUTATION",
+    "ADVERSARIAL",
+    "DOCUMENTATION",
+    "COMPLETION_STATE"
   ],
   "evidence_scopes": [
     "SOURCE",
@@ -431,6 +456,13 @@
     ]
   },
   "evidence_scope_rule": "EVIDENCE_SCOPE_MUST_COVER_CLAIM_SCOPE",
+  "version_context": {
+    "work_unit_field": "version_ref",
+    "receipt_field": "version_ref",
+    "decision_field": "version_ref",
+    "current_identity_parameter": "current_version_ref",
+    "failure_code": "FAIL_STALE_VERSION"
+  },
   "protected_prai_paths": [
     ".github/workflows/prai.yml",
     "machine/adaptive/prai-post-run-assurance.v1.json",

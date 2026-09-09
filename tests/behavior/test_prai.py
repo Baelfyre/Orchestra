@@ -15,6 +15,7 @@ CANDIDATE_SHA = "a" * 40
 TREE_SHA = "b" * 40
 WORK_ITEM = "prai-cli-behavior"
 FRESHNESS = "2026-09-09T00:00:00Z"
+VERSION = "orchestra-prai-plan-20260908-v1"
 PATHS = (
     "tests/behavior/test_prai.py",
 )
@@ -37,12 +38,12 @@ def unit() -> prai.PraiWorkUnit:
             audit_depth="STANDARD",
             evidence_refs=(ref,),
             audited_paths=PATHS,
-            evidence_layer="cli-behavior",
+            evidence_layer="PROVENANCE",
             evidence_scope="UNIT",
             covered_risks=(),
             covered_invariants=(),
             freshness_ref=FRESHNESS,
-            version_ref="orchestra-prai-plan-20260908-v1",
+            version_ref=VERSION,
             provenance="AUTHORITATIVE",
             independent=True,
             producer="independent-review",
@@ -60,6 +61,7 @@ def unit() -> prai.PraiWorkUnit:
         candidate_sha=CANDIDATE_SHA,
         tree_sha=TREE_SHA,
         freshness_ref=FRESHNESS,
+        version_ref=VERSION,
         changed_paths=PATHS,
         implementer="ponytail",
         logical_impact="LOW",
@@ -99,6 +101,8 @@ def run_validator(
             WORK_ITEM,
             "--freshness-ref",
             FRESHNESS,
+            "--version-ref",
+            VERSION,
             *extra,
         ],
         cwd=root,
@@ -132,6 +136,17 @@ def test_cli_blocks_stale_candidate() -> None:
         assert result.returncode == 1
         assert "PRAI_RESULT=BLOCKED" in result.stdout
         assert "FAIL_STALE_CANDIDATE" in result.stdout
+
+
+def test_cli_blocks_stale_version() -> None:
+    root = Path(__file__).resolve().parents[2]
+    with TemporaryDirectory() as directory:
+        work_path = Path(directory) / "work.json"
+        work_path.write_text(json.dumps(unit().to_dict()), encoding="utf-8")
+        result = run_validator(root, work_path, "--version-ref", "orchestra-prai-plan-20260907-v1")
+        assert result.returncode == 1
+        assert "PRAI_RESULT=BLOCKED" in result.stdout
+        assert prai.FAIL_STALE_VERSION in result.stdout
 
 
 def test_cli_reads_configured_schema() -> None:

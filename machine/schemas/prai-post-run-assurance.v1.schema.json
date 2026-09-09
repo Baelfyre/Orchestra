@@ -13,6 +13,7 @@
     "candidate_sha",
     "tree_sha",
     "freshness_ref",
+    "version_ref",
     "changed_paths",
     "implementer",
     "logical_impact",
@@ -67,6 +68,10 @@
     "freshness_ref": {
       "type": "string",
       "format": "date-time"
+    },
+    "version_ref": {
+      "type": "string",
+      "minLength": 1
     },
     "changed_paths": {
       "type": "array",
@@ -428,7 +433,23 @@
         },
         "evidence_layer": {
           "type": "string",
-          "minLength": 1
+          "enum": [
+            "STATIC",
+            "UNIT",
+            "DOMAIN",
+            "CONTRACT",
+            "INTEGRATION",
+            "HTTP",
+            "RUNTIME",
+            "PERSISTENCE",
+            "CONCURRENCY",
+            "SECURITY",
+            "PROVENANCE",
+            "MUTATION",
+            "ADVERSARIAL",
+            "DOCUMENTATION",
+            "COMPLETION_STATE"
+          ]
         },
         "evidence_scope": {
           "type": "string",
@@ -559,6 +580,7 @@
         "candidate_sha",
         "tree_sha",
         "work_item_ref",
+        "version_ref",
         "result",
         "compliant",
         "failure_codes",
@@ -600,6 +622,10 @@
           "pattern": "^[0-9a-f]{40}$"
         },
         "work_item_ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version_ref": {
           "type": "string",
           "minLength": 1
         },

@@ -33,6 +33,8 @@ def receipt(
     evidence_refs: tuple[str, ...] | None = None,
     audited_paths: tuple[str, ...] = CODE_PATHS,
     audit_depth: str = "STANDARD",
+    evidence_layer: str = "PROVENANCE",
+    version_ref: str = VERSION,
     provenance: str = "AUTHORITATIVE",
     security_classification: str | None = None,
     logical_identity: str | None = None,
@@ -54,12 +56,12 @@ def receipt(
         audit_depth=audit_depth,
         evidence_refs=evidence_refs,
         audited_paths=audited_paths,
-        evidence_layer="specialist-review",
+        evidence_layer=evidence_layer,
         evidence_scope="UNIT",
         covered_risks=covered_risks or (),
         covered_invariants=covered_invariants or (),
         freshness_ref=FRESHNESS,
-        version_ref=VERSION,
+        version_ref=version_ref,
         provenance=provenance,
         independent=independent,
         producer=producer,
@@ -92,6 +94,7 @@ def make_unit(
     logical_impact: str = "LOW",
     security_impact: str = "LOW",
     security_classification: str | None = None,
+    version_ref: str = VERSION,
     invariants: tuple[str, ...] = ("candidate-bound-evidence",),
 ) -> prai.PraiWorkUnit:
     roles = roles_for(risks)
@@ -110,6 +113,7 @@ def make_unit(
             ),
             covered_risks=risks,
             covered_invariants=invariants,
+            version_ref=version_ref,
         )
         for role in selected_roles
     )
@@ -120,6 +124,7 @@ def make_unit(
         candidate_sha=CANDIDATE_SHA,
         tree_sha=TREE_SHA,
         freshness_ref=FRESHNESS,
+        version_ref=version_ref,
         changed_paths=changed_paths,
         implementer="ponytail",
         logical_impact=logical_impact,
@@ -164,6 +169,7 @@ def evaluate(unit: prai.PraiWorkUnit, **overrides: str | None) -> prai.PraiDecis
         "current_tree_sha": TREE_SHA,
         "current_work_item_ref": WORK_ITEM,
         "current_freshness_ref": FRESHNESS,
+        "current_version_ref": VERSION,
     }
     current.update(overrides)
     return prai.evaluate_post_run_assurance(unit, **current)
@@ -257,6 +263,11 @@ def test_schema_runtime_parity_rejects_scope_and_identity_drift() -> None:
     schema_path = root / "machine" / "schemas" / "prai-post-run-assurance.v1.schema.json"
     schema = json.loads(schema_path.read_text(encoding="utf-8"))
     schema["$defs"]["receipt"]["properties"]["evidence_scope"]["enum"] = ["UNIT"]
+    with pytest.raises(ValueError, match=prai.FAIL_SCHEMA_RUNTIME_PARITY):
+        prai.validate_schema_runtime_parity(contract, schema)
+
+    schema = json.loads(schema_path.read_text(encoding="utf-8"))
+    schema["$defs"]["receipt"]["properties"]["evidence_layer"]["enum"] = ["UNIT"]
     with pytest.raises(ValueError, match=prai.FAIL_SCHEMA_RUNTIME_PARITY):
         prai.validate_schema_runtime_parity(contract, schema)
 
@@ -414,6 +425,32 @@ def test_stale_candidate_and_tree_current_identity_block() -> None:
     assert prai.FAIL_STALE_CANDIDATE in invalid.failure_codes
 
 
+def test_version_context_is_current_and_bound() -> None:
+    base = make_unit()
+    stale = evaluate(base, current_version_ref="orchestra-prai-plan-20260907-v1")
+    assert stale.result == "BLOCKED"
+    assert prai.FAIL_STALE_VERSION in stale.failure_codes
+
+    mismatched_receipt = replace_receipt(
+        base.review_receipts[0],
+        version_ref="orchestra-prai-plan-20260907-v1",
+        logical_identity=None,
+    )
+    mismatched = evaluate(
+        clone(
+            base,
+            review_receipts=(mismatched_receipt,) + base.review_receipts[1:],
+        )
+    )
+    assert mismatched.result == "BLOCKED"
+    assert prai.FAIL_STALE_VERSION in mismatched.failure_codes
+    assert prai.FAIL_EVIDENCE_BINDING in mismatched.failure_codes
+
+    missing = evaluate(base, current_version_ref=None)
+    assert missing.result == "BLOCKED"
+    assert prai.FAIL_CURRENT_IDENTITY_REQUIRED in missing.failure_codes
+
+
 def test_stale_audit_reuse_after_repair_is_bound_to_new_candidate() -> None:
     repaired = clone(make_unit(), candidate_sha="c" * 40)
     decision = evaluate(repaired)
@@ -544,6 +581,10 @@ def test_aliases_strict_fields_and_digests() -> None:
     missing.pop("authority_boundary")
     with pytest.raises(ValueError):
         prai.PraiWorkUnit.from_mapping(missing)
+    missing_version = base.to_dict(include_digest=False)
+    missing_version.pop("version_ref")
+    with pytest.raises(ValueError):
+        prai.PraiWorkUnit.from_mapping(missing_version)
     with pytest.raises(ValueError):
         prai.PraiWorkUnit.from_mapping({**base.to_dict(), "unexpected": True})
     with pytest.raises(TypeError):
@@ -617,6 +658,33 @@ def test_noncanonical_known_risk_case_fails_closed() -> None:
         prai.PraiWorkUnit.from_mapping(data)
     with pytest.raises(ValidationError):
         Draft202012Validator(schema).validate(data)
+
+
+def test_evidence_layer_vocabulary_is_canonical() -> None:
+    root = Path(__file__).resolve().parents[2]
+    schema = json.loads(
+        (root / "machine" / "schemas" / "prai-post-run-assurance.v1.schema.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    from jsonschema import Draft202012Validator, ValidationError
+
+    data = make_unit().review_receipts[0].to_dict()
+    data["evidence_layer"] = "specialist-review"
+    with pytest.raises(ValueError, match=prai.FAIL_EVIDENCE_LAYER):
+        prai.PraiReviewReceipt.from_mapping(data)
+    with pytest.raises(ValidationError):
+        Draft202012Validator(schema).validate(
+            {
+                **make_unit().to_dict(),
+                "review_receipts": [
+                    {
+                        **data,
+                        "evidence_layer": "specialist-review",
+                    }
+                ],
+            }
+        )
 
 
 def test_evidence_scope_must_cover_claim_scope() -> None:
