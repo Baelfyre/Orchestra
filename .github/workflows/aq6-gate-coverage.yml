@@ -12,11 +12,13 @@ on:
       - main
     paths:
       - .github/workflows/aq6-gate-coverage.yml
+      - CHANGELOG.md
       - docs/architecture/ADAPTIVE_ASSURANCE_AQ6.md
       - machine/adaptive/aq6-gate-coverage.v1.json
       - machine/schemas/aq6-gate-coverage.v1.schema.json
       - orchestra_runtime/domain/adaptive/__init__.py
       - orchestra_runtime/domain/adaptive/gate_coverage.py
+      - README.json
       - scripts/validation/validate_gate_coverage.py
       - tests/behavior/test_gate_coverage.py
       - tests/runtime/test_adaptive_assurance_aq6.py
@@ -134,11 +136,13 @@ jobs:
           git diff --name-only "$comparison_base_sha..HEAD" | sort > actual-paths.txt
           cat > expected-paths.txt <<'EOF'
           .github/workflows/aq6-gate-coverage.yml
+          CHANGELOG.md
           docs/architecture/ADAPTIVE_ASSURANCE_AQ6.md
           machine/adaptive/aq6-gate-coverage.v1.json
           machine/schemas/aq6-gate-coverage.v1.schema.json
           orchestra_runtime/domain/adaptive/__init__.py
           orchestra_runtime/domain/adaptive/gate_coverage.py
+          README.json
           scripts/validation/validate_gate_coverage.py
           tests/behavior/test_gate_coverage.py
           tests/runtime/test_adaptive_assurance_aq6.py

@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased ADAPT-QA AQ-6 gate coverage truthfulness
+
+- Adds a strict machine-readable AQ6 contract, schema, runtime evaluator, and validator for changed-behavior, required-assurance, and declared-gate coverage.
+- Adds fail-closed negative fixtures for missing execution, undeclared workflow commands, unknown or irrelevant tests, stale evidence, insufficient legacy or tenant-security coverage, and green tests that do not reach changed code.
+- Adds the AQ6 workflow with exact-scope, schema, behavior, runtime, and branch-coverage gates; AQ6 remains evidence-only and cannot grant transition authority.
+
 ## Unreleased Post-Run Assurance Invariant
 
 - Enforces canonical risk casing, AQ1-compatible evidence/claim scope coverage, derived logical identities, and changed-path-derived PRAI self-modification detection.
