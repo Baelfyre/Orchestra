@@ -18,10 +18,7 @@ Act as Legal, Compliance, Privacy, IP, Copyright, Licensing, and Security Govern
 
 ## Quick Reference
 
-- **Role**: legal, compliance, privacy-obligation, IP, licensing governance
-- **Avoid When**: business alignment, scope, requirements, or SDLC review
 - **Shared Protocol**: [governance protocol](../../docs/governance/GOVERNANCE_DECISION_PROTOCOL.md)
-- **Output Formats**: `OUTPUT_FORMATS.md`
 
 ## Purpose
 
@@ -112,4 +109,4 @@ Default to compact output and load only relevant sections. Expand when findings 
 
 ## Covenant
 
-For material post-run protected-obligation judgment, load COVENANT_PROTECTED_OBLIGATION_JUDGMENT_GUIDE.md. Governor retains obligation judgment only.
+For material post-run work, Governor owns Covenant protected-obligation judgment. Load COVENANT_PROTECTED_OBLIGATION_JUDGMENT_GUIDE.md; technical ownership remains separate.
