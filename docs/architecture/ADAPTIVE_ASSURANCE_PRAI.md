@@ -44,6 +44,19 @@ disposition is a transition input. Chronicler, Dagger, Steward, Governor, and
 Cloak are added when risk characteristics trigger their owned boundary.
 Implementers cannot produce their own assurance.
 
+## Canonical vocabulary and scope relation
+
+Risk labels are canonical uppercase values from the machine contract; serialized
+non-canonical casing and unknown labels fail closed. Receipt evidence_scope and
+claim_scope use the AQ1 evidence-scope vocabulary. The runtime enforces
+EVIDENCE_SCOPE_MUST_COVER_CLAIM_SCOPE using the canonical coverage relation, in
+addition to exact changed-path, risk, and invariant coverage.
+
+logical_identity is derived from substantive receipt identity and any supplied
+value must match it exactly. Changes to protected PRAI policy, runtime, schema,
+or workflow paths derive self-modification and block by default; policy
+qualification is not implicit.
+
 ## Adaptive audit depth
 
 LIGHT is limited to explicitly classified harmless documentation work.

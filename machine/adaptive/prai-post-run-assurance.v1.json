@@ -263,7 +263,11 @@
     "unknown_risk_characteristic",
     "partial_changed_path_coverage",
     "uncovered_risk_coverage",
-    "uncovered_invariant_coverage"
+    "uncovered_invariant_coverage",
+    "noncanonical_risk_characteristic",
+    "evidence_scope_claim_scope_mismatch",
+    "spoofed_logical_identity",
+    "undeclared_prai_policy_self_modification"
   ],
   "required_property_invariants": [
     "audit_is_mandatory",
@@ -339,5 +343,99 @@
     "UI",
     "UX",
     "VISUAL"
+  ],
+  "evidence_scopes": [
+    "SOURCE",
+    "COMPLETION",
+    "DOMAIN",
+    "APPLICATION",
+    "API",
+    "UI",
+    "UNIT",
+    "CONTRACT",
+    "INTEGRATION",
+    "RUNTIME",
+    "PERSISTENCE",
+    "CONCURRENCY",
+    "SECURITY",
+    "ADVERSARIAL",
+    "CANONICAL",
+    "PRODUCT",
+    "EMPIRICAL_EFFECTIVENESS"
+  ],
+  "evidence_scope_coverage": {
+    "SOURCE": [
+      "SOURCE"
+    ],
+    "COMPLETION": [
+      "COMPLETION"
+    ],
+    "DOMAIN": [
+      "DOMAIN"
+    ],
+    "APPLICATION": [
+      "DOMAIN",
+      "APPLICATION"
+    ],
+    "API": [
+      "API",
+      "APPLICATION",
+      "DOMAIN"
+    ],
+    "UI": [
+      "UI",
+      "APPLICATION",
+      "DOMAIN"
+    ],
+    "UNIT": [
+      "UNIT"
+    ],
+    "CONTRACT": [
+      "CONTRACT"
+    ],
+    "INTEGRATION": [
+      "INTEGRATION",
+      "APPLICATION",
+      "API",
+      "UI",
+      "DOMAIN"
+    ],
+    "RUNTIME": [
+      "RUNTIME",
+      "INTEGRATION",
+      "APPLICATION",
+      "API",
+      "UI",
+      "DOMAIN"
+    ],
+    "PERSISTENCE": [
+      "PERSISTENCE"
+    ],
+    "CONCURRENCY": [
+      "CONCURRENCY"
+    ],
+    "SECURITY": [
+      "SECURITY"
+    ],
+    "ADVERSARIAL": [
+      "ADVERSARIAL"
+    ],
+    "CANONICAL": [
+      "CANONICAL"
+    ],
+    "PRODUCT": [
+      "PRODUCT"
+    ],
+    "EMPIRICAL_EFFECTIVENESS": [
+      "EMPIRICAL_EFFECTIVENESS"
+    ]
+  },
+  "evidence_scope_rule": "EVIDENCE_SCOPE_MUST_COVER_CLAIM_SCOPE",
+  "protected_prai_paths": [
+    ".github/workflows/prai.yml",
+    "machine/adaptive/prai-post-run-assurance.v1.json",
+    "machine/schemas/prai-post-run-assurance.v1.schema.json",
+    "orchestra_runtime/domain/adaptive/prai.py",
+    "scripts/validation/validate_prai.py"
   ]
 }

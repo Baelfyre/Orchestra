@@ -16,8 +16,8 @@ WORK_ITEM = "prai-implementation"
 FRESHNESS = "2026-09-09T00:00:00Z"
 VERSION = "orchestra-prai-plan-20260908-v1"
 CODE_PATHS = (
-    "orchestra_runtime/domain/adaptive/prai.py",
     "tests/runtime/test_prai.py",
+    "tests/behavior/test_prai.py",
 )
 
 
@@ -55,7 +55,7 @@ def receipt(
         evidence_refs=evidence_refs,
         audited_paths=audited_paths,
         evidence_layer="specialist-review",
-        evidence_scope="post-run-assurance",
+        evidence_scope="UNIT",
         covered_risks=covered_risks or (),
         covered_invariants=covered_invariants or (),
         freshness_ref=FRESHNESS,
@@ -64,7 +64,7 @@ def receipt(
         independent=independent,
         producer=producer,
         validator=f"{role.lower()}-validator",
-        claim_scope="bounded PRAI assurance",
+        claim_scope="UNIT",
         limitations=("bounded to this work unit",),
         examined_changed_code=examined_changed_code,
         security_classification=security_classification,
@@ -220,7 +220,7 @@ def test_depth_and_triggered_reviewers_are_adaptive() -> None:
     ) == "DEEP"
     deep = make_unit(risks=("AUTHORIZATION", "CONCURRENCY"), audit_depth="DEEP")
     assert prai.required_audit_depth(deep) == "DEEP"
-    assert prai.triggered_reviewers(("authorization", "concurrency")) == (
+    assert prai.triggered_reviewers(("AUTHORIZATION", "CONCURRENCY")) == (
         "CHRONICLER",
         "DAGGER",
     )
@@ -411,13 +411,11 @@ def test_contradictory_and_duplicate_receipts_are_order_invariant() -> None:
             "receipt_id": "clockwork-conflict",
             "result": "FAIL",
             "logical_identity": shared,
-            "evidence_refs": ["evidence://clockwork-conflict"],
         }
     )
     conflict = prai.PraiReviewReceipt.from_mapping(conflict_data)
     conflicted = clone(
         base,
-        evidence_refs=base.evidence_refs + ("evidence://clockwork-conflict",),
         review_receipts=base.review_receipts + (conflict,),
     )
     first = evaluate(conflicted)
@@ -432,13 +430,11 @@ def test_contradictory_and_duplicate_receipts_are_order_invariant() -> None:
         {
             "receipt_id": "clockwork-duplicate",
             "logical_identity": shared,
-            "evidence_refs": ["evidence://clockwork-duplicate"],
         }
     )
     duplicate = prai.PraiReviewReceipt.from_mapping(duplicate_data)
     duplicated = clone(
         base,
-        evidence_refs=base.evidence_refs + ("evidence://clockwork-duplicate",),
         review_receipts=base.review_receipts + (duplicate,),
     )
     blocked(duplicated, prai.FAIL_DUPLICATE_RECEIPT)
@@ -471,6 +467,7 @@ def test_scope_and_receipt_identity_binding_block() -> None:
             "receipt_id": "cipher-mismatch",
             "work_item_ref": "different-work",
             "evidence_refs": ["evidence://cipher"],
+            "logical_identity": None,
         }
     )
     mismatch = prai.PraiReviewReceipt.from_mapping(mismatch_data)
@@ -583,6 +580,46 @@ def test_unknown_risk_characteristics_fail_closed() -> None:
         Draft202012Validator(schema).validate(data)
     with pytest.raises(ValueError, match=prai.FAIL_UNKNOWN_RISK_CHARACTERISTIC):
         prai.triggered_reviewers(("AUTHORIZATON",))
+
+
+def test_noncanonical_known_risk_case_fails_closed() -> None:
+    root = Path(__file__).resolve().parents[2]
+    schema = json.loads(
+        (root / "machine" / "schemas" / "prai-post-run-assurance.v1.schema.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    from jsonschema import Draft202012Validator, ValidationError
+
+    data = make_unit().to_dict()
+    data["risk_characteristics"] = ["authorization"]
+    with pytest.raises(ValueError, match=prai.FAIL_UNKNOWN_RISK_CHARACTERISTIC):
+        prai.PraiWorkUnit.from_mapping(data)
+    with pytest.raises(ValidationError):
+        Draft202012Validator(schema).validate(data)
+
+
+def test_evidence_scope_must_cover_claim_scope() -> None:
+    data = make_unit().review_receipts[0].to_dict(include_digest=False)
+    data["evidence_scope"] = "UNIT"
+    data["claim_scope"] = "INTEGRATION"
+    data["logical_identity"] = None
+    with pytest.raises(ValueError, match=prai.FAIL_EVIDENCE_SCOPE):
+        prai.PraiReviewReceipt.from_mapping(data)
+
+
+def test_logical_identity_cannot_be_spoofed() -> None:
+    data = make_unit().review_receipts[0].to_dict(include_digest=False)
+    data["logical_identity"] = "f" * 64
+    with pytest.raises(ValueError, match=prai.FAIL_LOGICAL_IDENTITY):
+        prai.PraiReviewReceipt.from_mapping(data)
+
+
+def test_protected_prai_path_derives_self_modification() -> None:
+    unit = make_unit(changed_paths=("orchestra_runtime/domain/adaptive/prai.py",))
+    assert unit.policy_self_modification is False
+    assert unit.policy_modified_paths == ()
+    blocked(unit, prai.FAIL_POLICY_SELF_MODIFICATION)
 
 
 def test_pass_receipts_must_cover_all_claimed_dimensions() -> None:

@@ -2,6 +2,7 @@
 
 ## Unreleased Post-Run Assurance Invariant
 
+- Enforces canonical risk casing, AQ1-compatible evidence/claim scope coverage, derived logical identities, and changed-path-derived PRAI self-modification detection.
 - Implements the approved PRAI post-run work-unit contract with independent logical, security/authority, evidence-sufficiency, and transition-assurance records.
 - Adds adaptive LIGHT/STANDARD/DEEP audit depth, candidate/source/tree binding, repair invalidation, duplicate and contradiction detection, and the required fail-closed negative fixtures.
 - Adds the dedicated PRAI machine contract, schema, validator, runtime/behavior coverage, and qualification workflow.

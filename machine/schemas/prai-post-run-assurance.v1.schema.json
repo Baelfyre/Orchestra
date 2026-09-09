@@ -432,7 +432,26 @@
         },
         "evidence_scope": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "enum": [
+            "SOURCE",
+            "COMPLETION",
+            "DOMAIN",
+            "APPLICATION",
+            "API",
+            "UI",
+            "UNIT",
+            "CONTRACT",
+            "INTEGRATION",
+            "RUNTIME",
+            "PERSISTENCE",
+            "CONCURRENCY",
+            "SECURITY",
+            "ADVERSARIAL",
+            "CANONICAL",
+            "PRODUCT",
+            "EMPIRICAL_EFFECTIVENESS"
+          ]
         },
         "covered_risks": {
           "type": "array",
@@ -479,7 +498,26 @@
         },
         "claim_scope": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "enum": [
+            "SOURCE",
+            "COMPLETION",
+            "DOMAIN",
+            "APPLICATION",
+            "API",
+            "UI",
+            "UNIT",
+            "CONTRACT",
+            "INTEGRATION",
+            "RUNTIME",
+            "PERSISTENCE",
+            "CONCURRENCY",
+            "SECURITY",
+            "ADVERSARIAL",
+            "CANONICAL",
+            "PRODUCT",
+            "EMPIRICAL_EFFECTIVENESS"
+          ]
         },
         "limitations": {
           "type": "array",
@@ -501,7 +539,8 @@
         },
         "logical_identity": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "pattern": "^[a-f0-9]{64}$"
         },
         "digest": {
           "type": "string",

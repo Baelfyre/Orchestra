@@ -16,7 +16,6 @@ TREE_SHA = "b" * 40
 WORK_ITEM = "prai-cli-behavior"
 FRESHNESS = "2026-09-09T00:00:00Z"
 PATHS = (
-    "orchestra_runtime/domain/adaptive/prai.py",
     "tests/behavior/test_prai.py",
 )
 
@@ -39,7 +38,7 @@ def unit() -> prai.PraiWorkUnit:
             evidence_refs=(ref,),
             audited_paths=PATHS,
             evidence_layer="cli-behavior",
-            evidence_scope="bounded-command",
+            evidence_scope="UNIT",
             covered_risks=(),
             covered_invariants=(),
             freshness_ref=FRESHNESS,
@@ -48,7 +47,7 @@ def unit() -> prai.PraiWorkUnit:
             independent=True,
             producer="independent-review",
             validator=f"{role.lower()}-validator",
-            claim_scope="bounded PRAI assurance",
+            claim_scope="UNIT",
             limitations=("fixture",),
             examined_changed_code=True,
         )

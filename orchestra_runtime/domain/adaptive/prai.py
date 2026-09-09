@@ -107,6 +107,51 @@ ALLOWED_RISK_CHARACTERISTICS = tuple(
         )
     )
 )
+EVIDENCE_SCOPES = (
+    "SOURCE",
+    "COMPLETION",
+    "DOMAIN",
+    "APPLICATION",
+    "API",
+    "UI",
+    "UNIT",
+    "CONTRACT",
+    "INTEGRATION",
+    "RUNTIME",
+    "PERSISTENCE",
+    "CONCURRENCY",
+    "SECURITY",
+    "ADVERSARIAL",
+    "CANONICAL",
+    "PRODUCT",
+    "EMPIRICAL_EFFECTIVENESS",
+)
+EVIDENCE_SCOPE_COVERAGE = {
+    "SOURCE": ("SOURCE",),
+    "COMPLETION": ("COMPLETION",),
+    "DOMAIN": ("DOMAIN",),
+    "APPLICATION": ("DOMAIN", "APPLICATION"),
+    "API": ("API", "APPLICATION", "DOMAIN"),
+    "UI": ("UI", "APPLICATION", "DOMAIN"),
+    "UNIT": ("UNIT",),
+    "CONTRACT": ("CONTRACT",),
+    "INTEGRATION": ("INTEGRATION", "APPLICATION", "API", "UI", "DOMAIN"),
+    "RUNTIME": ("RUNTIME", "INTEGRATION", "APPLICATION", "API", "UI", "DOMAIN"),
+    "PERSISTENCE": ("PERSISTENCE",),
+    "CONCURRENCY": ("CONCURRENCY",),
+    "SECURITY": ("SECURITY",),
+    "ADVERSARIAL": ("ADVERSARIAL",),
+    "CANONICAL": ("CANONICAL",),
+    "PRODUCT": ("PRODUCT",),
+    "EMPIRICAL_EFFECTIVENESS": ("EMPIRICAL_EFFECTIVENESS",),
+}
+PRAI_PROTECTED_PATHS = (
+    ".github/workflows/prai.yml",
+    "machine/adaptive/prai-post-run-assurance.v1.json",
+    "machine/schemas/prai-post-run-assurance.v1.schema.json",
+    "orchestra_runtime/domain/adaptive/prai.py",
+    "scripts/validation/validate_prai.py",
+)
 _DOC_SUFFIXES = (".md", ".rst", ".txt")
 _DEPTH_RANK = {"LIGHT": 0, "STANDARD": 1, "DEEP": 2}
 
@@ -147,6 +192,8 @@ FAIL_INVALID_DIGEST = "FAIL_INVALID_DIGEST"
 FAIL_ASSURANCE_COVERAGE = "FAIL_ASSURANCE_COVERAGE"
 FAIL_SCHEMA_RUNTIME_PARITY = "FAIL_SCHEMA_RUNTIME_PARITY"
 FAIL_UNKNOWN_RISK_CHARACTERISTIC = "FAIL_UNKNOWN_RISK_CHARACTERISTIC"
+FAIL_EVIDENCE_SCOPE = "FAIL_EVIDENCE_SCOPE"
+FAIL_LOGICAL_IDENTITY = "FAIL_LOGICAL_IDENTITY"
 
 REQUIRED_NEGATIVE_FIXTURES = (
     "green_tests_contradictory_logical_invariant",
@@ -172,6 +219,10 @@ REQUIRED_NEGATIVE_FIXTURES = (
     "partial_changed_path_coverage",
     "uncovered_risk_coverage",
     "uncovered_invariant_coverage",
+    "noncanonical_risk_characteristic",
+    "evidence_scope_claim_scope_mismatch",
+    "spoofed_logical_identity",
+    "undeclared_prai_policy_self_modification",
 )
 REQUIRED_PROPERTY_INVARIANTS = (
     "audit_is_mandatory",
@@ -310,11 +361,13 @@ def _strings(
 
 
 def _canonical_risks(values: Any) -> tuple[str, ...]:
-    result = tuple(value.upper() for value in _strings(values, "risk_characteristics"))
+    result = _strings(values, "risk_characteristics")
+    noncanonical = sorted(value for value in result if value != value.upper())
     unknown = sorted(set(result) - set(ALLOWED_RISK_CHARACTERISTICS))
-    if unknown:
+    if noncanonical or unknown:
+        invalid = sorted(set(noncanonical).union(unknown))
         raise ValueError(
-            f"{FAIL_UNKNOWN_RISK_CHARACTERISTIC}: " + ", ".join(unknown)
+            f"{FAIL_UNKNOWN_RISK_CHARACTERISTIC}: " + ", ".join(invalid)
         )
     return result
 
@@ -402,6 +455,21 @@ class PraiReviewReceipt:
             "version_ref",
         ):
             object.__setattr__(self, name, _text(getattr(self, name), name))
+        object.__setattr__(
+            self,
+            "evidence_scope",
+            _choice(self.evidence_scope, EVIDENCE_SCOPES, "evidence_scope"),
+        )
+        object.__setattr__(
+            self,
+            "claim_scope",
+            _choice(self.claim_scope, EVIDENCE_SCOPES, "claim_scope"),
+        )
+        if self.claim_scope not in EVIDENCE_SCOPE_COVERAGE[self.evidence_scope]:
+            raise ValueError(
+                f"{FAIL_EVIDENCE_SCOPE}: evidence scope {self.evidence_scope} "
+                f"does not cover claim scope {self.claim_scope}"
+            )
         object.__setattr__(self, "role", _choice(self.role, REVIEW_ROLES, "role"))
         object.__setattr__(self, "result", _choice(self.result, REVIEW_RESULTS, "result"))
         object.__setattr__(self, "audit_depth", _choice(self.audit_depth, AUDIT_DEPTHS, "audit_depth"))
@@ -424,20 +492,27 @@ class PraiReviewReceipt:
             object.__setattr__(self, "security_classification", _text(self.security_classification, "security_classification"))
         if self.schema_version != PRAI_CONTRACT_SCHEMA_VERSION:
             raise ValueError("unsupported PRAI receipt schema version")
-        logical_identity = self.logical_identity
-        if logical_identity is None:
-            logical_identity = _canonical_digest(
-                {
-                    "work_item_ref": self.work_item_ref,
-                    "candidate_sha": self.candidate_sha,
-                    "tree_sha": self.tree_sha,
-                    "evidence_refs": _tuple_json(self.evidence_refs),
-                    "evidence_layer": self.evidence_layer,
-                    "evidence_scope": self.evidence_scope,
-                    "claim_scope": self.claim_scope,
-                }
-            )
-        object.__setattr__(self, "logical_identity", _text(logical_identity, "logical_identity"))
+        expected_identity = _canonical_digest(
+            {
+                "work_item_ref": self.work_item_ref,
+                "candidate_sha": self.candidate_sha,
+                "tree_sha": self.tree_sha,
+                "evidence_refs": _tuple_json(self.evidence_refs),
+                "evidence_layer": self.evidence_layer,
+                "evidence_scope": self.evidence_scope,
+                "claim_scope": self.claim_scope,
+            }
+        )
+        if self.logical_identity is None:
+            logical_identity = expected_identity
+        else:
+            logical_identity = _text(self.logical_identity, "logical_identity")
+            if logical_identity != expected_identity:
+                raise ValueError(
+                    f"{FAIL_LOGICAL_IDENTITY}: logical_identity does not match "
+                    "derived identity"
+                )
+        object.__setattr__(self, "logical_identity", logical_identity)
         expected_digest = _canonical_digest(self.to_dict(include_digest=False))
         if self.digest is None:
             object.__setattr__(self, "digest", expected_digest)
@@ -866,7 +941,11 @@ def evaluate_post_run_assurance(
         _add(failures, FAIL_REQUIRED_AUDIT_DEPTH)
     if work.authority_boundary != PRAI_AUTHORITY_BOUNDARY or work.authority_expansion:
         _add(failures, FAIL_AUTHORITY_EXPANSION)
-    if work.policy_self_modification or work.policy_modified_paths:
+    if (
+        set(work.changed_paths).intersection(PRAI_PROTECTED_PATHS)
+        or work.policy_self_modification
+        or work.policy_modified_paths
+    ):
         _add(failures, FAIL_POLICY_SELF_MODIFICATION)
     if work.overseer_sufficiency not in (True, "SUFFICIENT"):
         _add(failures, FAIL_OVERSEER_INSUFFICIENT)
@@ -1056,6 +1135,12 @@ def validate_prai_contract(contract: Mapping[str, Any]) -> Mapping[str, Any]:
         "baseline_assurance": list(BASELINE_ASSURANCE),
         "deep_risk_characteristics": list(DEEP_RISK_CHARACTERISTICS),
         "allowed_risk_characteristics": list(ALLOWED_RISK_CHARACTERISTICS),
+        "evidence_scopes": list(EVIDENCE_SCOPES),
+        "evidence_scope_coverage": {
+            key: list(value) for key, value in EVIDENCE_SCOPE_COVERAGE.items()
+        },
+        "evidence_scope_rule": "EVIDENCE_SCOPE_MUST_COVER_CLAIM_SCOPE",
+        "protected_prai_paths": list(PRAI_PROTECTED_PATHS),
         "triggered_specialists": {
             key: list(value) for key, value in TRIGGERED_SPECIALISTS.items()
         },
@@ -1155,6 +1240,19 @@ def validate_schema_runtime_parity(
         raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: receipt required fields drift")
     if receipt_schema.get("additionalProperties") is not False:
         raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: receipt openness drift")
+    for field in ("evidence_scope", "claim_scope"):
+        scope_schema = receipt_properties.get(field)
+        if (
+            not isinstance(scope_schema, Mapping)
+            or list(scope_schema.get("enum", ())) != list(EVIDENCE_SCOPES)
+        ):
+            raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: {field} vocabulary drift")
+    logical_schema = receipt_properties.get("logical_identity")
+    if (
+        not isinstance(logical_schema, Mapping)
+        or logical_schema.get("pattern") != "^[a-f0-9]{64}$"
+    ):
+        raise ValueError(f"{FAIL_SCHEMA_RUNTIME_PARITY}: logical identity drift")
     return data
 
 
@@ -1165,6 +1263,8 @@ evaluate = evaluate_post_run_assurance
 __all__ = [
     "ALLOWED_RISK_CHARACTERISTICS",
     "ARBITER_DISPOSITIONS",
+    "EVIDENCE_SCOPES",
+    "EVIDENCE_SCOPE_COVERAGE",
     "AUDIT_DEPTHS",
     "BASELINE_ASSURANCE",
     "BASELINE_REVIEWERS",
@@ -1180,10 +1280,12 @@ __all__ = [
     "FAIL_UNKNOWN_RISK_CHARACTERISTIC",
     "FAIL_DUPLICATE_RECEIPT",
     "FAIL_EVIDENCE_BINDING",
+    "FAIL_EVIDENCE_SCOPE",
     "FAIL_GENERIC_CI_SUBSTITUTION",
     "FAIL_IMPLEMENTER_SELF_CERTIFICATION",
     "FAIL_INVALID_RECEIPT_RESULT",
     "FAIL_LOGICAL_CONTRADICTION",
+    "FAIL_LOGICAL_IDENTITY",
     "FAIL_NON_INDEPENDENT_EVIDENCE",
     "FAIL_OVERSEER_INSUFFICIENT",
     "FAIL_POLICY_SELF_MODIFICATION",
@@ -1207,6 +1309,7 @@ __all__ = [
     "PRAI_AUTHORITY_MODEL",
     "PRAI_CONTRACT_SCHEMA_VERSION",
     "PRAI_DECISION_SCHEMA_VERSION",
+    "PRAI_PROTECTED_PATHS",
     "PraiDecision",
     "PraiReviewReceipt",
     "PraiWorkUnit",
