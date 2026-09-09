@@ -1,5 +1,12 @@
 """Governance-domain semantics for Orchestra runtime architecture."""
 
+from .covenant import (
+    CovenantBasis,
+    CovenantDecision,
+    GovernanceJudgment,
+    ReconciliationProposal,
+    evaluate_covenant,
+)
 from .authority import (
     AuthorityDecision,
     AuthorityProvenance,
@@ -49,5 +56,10 @@ __all__ = [
     "ProvenanceSource",
     "TargetSelector",
     "TargetSelectorType",
+    "CovenantBasis",
+    "CovenantDecision",
+    "GovernanceJudgment",
+    "ReconciliationProposal",
+    "evaluate_covenant",
     "TransitionDisposition",
 ]
