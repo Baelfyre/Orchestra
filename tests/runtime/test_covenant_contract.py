@@ -112,6 +112,10 @@ def test_machine_contract_matches_schema_and_authority_boundaries() -> None:
         "authority_boundaries",
     ]
     assert "SYSTEM_CONTRADICTION" in contract["reconciliation_invariants"]
+    assert (
+        "PRIME_DIRECTIVE_ALIGNMENT_CANNOT_BE_NOT_APPLICABLE"
+        in contract["reconciliation_invariants"]
+    )
     assert "CONCURRENT_AGGREGATE_INVARIANT" in contract["required_scenario_classes"]
     assert "MUTATION_VS_AUDIT_ATOMICITY" in contract["required_scenario_classes"]
     assert set(contract["dispositions"]) == set(COVENANT_DISPOSITIONS)
