@@ -305,6 +305,3 @@ Existing trusted runtime contracts cover Phase D; PR #226 found no duplicate ext
 
 *See [GOVERNANCE_DECISION_PROTOCOL.md](GOVERNANCE_DECISION_PROTOCOL.md), [STEWARD.md](STEWARD.md), [GOVERNOR.md](GOVERNOR.md), [GOVERNANCE_REVIEW_FLOW.md](GOVERNANCE_REVIEW_FLOW.md), and [RELEASE_GATES.md](RELEASE_GATES.md) for details.*
 
-## The Covenant
-
-Material cross-governance synthesis follows THE_COVENANT.md before Arbiter transition. Covenant is evidence-only; Arbiter remains transition owner.
