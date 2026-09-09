@@ -108,5 +108,4 @@ In a delegated phase governed by a `DelegatedExecutionEnvelope`:
 Default to compact output and load only relevant sections. Expand when findings exist.
 
 ## Covenant
-
-For material post-run work, Governor owns Covenant protected-obligation judgment. Load COVENANT_PROTECTED_OBLIGATION_JUDGMENT_GUIDE.md; technical ownership remains separate.
+Material post-run protected-obligation judgment: `COVENANT_PROTECTED_OBLIGATION_JUDGMENT_GUIDE.md`; output: `OUTPUT_FORMATS.md`.
