@@ -25,6 +25,17 @@ def test_covenant_machine_contract_matches_schema_and_boundaries():
     assert contract["legacy_assurance_engine"]["name"] == "PRAI"
     assert contract["legacy_assurance_engine"]["prai_pass_sufficient_for_covenant_pass"] is False
     assert contract["constitutional_precedence"][0] == "PRIME_DIRECTIVE"
+    assert contract["basis_required_fields"] == [
+        "repository",
+        "candidate_sha",
+        "tree_sha",
+        "basis_revision",
+        "project_ref",
+        "prime_directive_ref",
+        "project_goal_refs",
+        "critical_flows",
+        "system_invariants",
+    ]
     assert "PRAI_PASS_DOES_NOT_OVERRIDE_CROSS_JUDGMENT_CONTRADICTION" in contract["reconciliation_invariants"]
     assert "CONCURRENT_AGGREGATE_INVARIANT" in contract["required_scenario_classes"]
     assert "MUTATION_VS_AUDIT_ATOMICITY" in contract["required_scenario_classes"]
