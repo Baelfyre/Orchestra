@@ -2855,7 +2855,8 @@
     "cloak_ui_fidelity_handoff_guide": "skills/cloak/UI_FIDELITY_HANDOFF_GUIDE.md",
     "ui_execution_fidelity_plan": "docs/project/UI_EXECUTION_FIDELITY_PLAN.md",
     "github_copilot_adapter": "adapters/github-copilot/README.md",
-    "github_copilot_probe_guide": "adapters/github-copilot/probe-guide.md"
+    "github_copilot_probe_guide": "adapters/github-copilot/probe-guide.md",
+    "covenant_assurance_scope_policy": "docs/governance/COVENANT_ASSURANCE_SCOPE_POLICY.md"
   },
   "representation_policy": {
     "markdown": "Human-readable explanation, rationale, examples, and nuanced specialist guidance",
