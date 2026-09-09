@@ -108,3 +108,26 @@ Requires valid envelope, current evidence, no stop/escalation condition, and no 
 ### Fail-Closed Rule
 
 Unknown, malformed, missing, or unsupported transition dispositions must fail closed and produce `ESCALATE_HUMAN`. Never default to automatic continuation.
+
+
+## Protected Governance Escalation
+
+When the current candidate would need to change, relax, reinterpret, except, or supersede the governance that is blocking that same candidate, ordinary remediation is no longer eligible.
+
+Canonical transition:
+
+```text
+PROTECTED_GOVERNANCE_CONFLICT
+→ ESCALATE_HUMAN
+→ FREEZE_ORIGINATING_CANDIDATE
+→ GOVERNANCE_REVIEW_PACKET
+→ TERMINATE_ORIGINATING_RUN
+```
+
+Conductor routes the review but owns no decision. Arbiter owns transition safety and must emit `ESCALATE_HUMAN`; Overseer owns evidence sufficiency; Clockwork owns logical/system consistency; Governor, Cipher, Steward, and other specialists participate when their domain is materially affected. AI review may recommend `DENY`, `REQUEST_MORE_EVIDENCE`, `RECOMMEND_BOUNDED_EXCEPTION`, or `RECOMMEND_POLICY_AMENDMENT`.
+
+Every protected governance change requires human review regardless of governance profile. Human decisions are `DENY`, `REQUEST_MORE_EVIDENCE`, `APPROVE_BOUNDED_EXCEPTION`, or `APPROVE_POLICY_AMENDMENT`. Approval creates authority only for a new bounded execution context. The originating run may not execute or consume the approved change.
+
+`FAIL_POLICY_SELF_MODIFICATION` is a blocking PRAI result and maps at the orchestration layer to protected governance escalation; it is never converted into `AUTO_REMEDIATE_AND_REVALIDATE` for the same run.
+
+Canonical record definitions and anti-loop rules are in `PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md` and `machine/governance/protected-governance-escalation.v1.json`.
