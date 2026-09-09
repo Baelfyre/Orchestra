@@ -110,6 +110,6 @@ In a delegated phase governed by a `DelegatedExecutionEnvelope`:
 
 Default to compact output and load only relevant sections. Expand when findings exist.
 
-## Covenant protected-obligation judgment
+## Covenant
 
-For material work under The Covenant, Governor judges whether completed behavior preserves applicable protected obligations and human-review boundaries without absorbing technical specialist ownership. Load COVENANT_PROTECTED_OBLIGATION_JUDGMENT_GUIDE.md when this judgment is required.
+For material post-run protected-obligation judgment, load COVENANT_PROTECTED_OBLIGATION_JUDGMENT_GUIDE.md. Governor retains obligation judgment only.
