@@ -265,6 +265,7 @@ def evaluate_covenant(
 
     if steward.decision == "BLOCKED" or governor.decision == "BLOCKED":
         return CovenantDecision(
+            basis,
             "BLOCKED",
             ("OWNING_GOVERNANCE_BLOCK",),
             constraints,
@@ -274,6 +275,7 @@ def evaluate_covenant(
 
     if basis.assurance_required and assurance == "MISSING":
         return CovenantDecision(
+            basis,
             "WAIT_FOR_EVIDENCE",
             ("REQUIRED_ASSURANCE_MISSING",),
             constraints,
@@ -283,6 +285,7 @@ def evaluate_covenant(
 
     if assurance == "BLOCKED":
         return CovenantDecision(
+            basis,
             "BLOCKED",
             ("ASSURANCE_ENGINE_BLOCKED",),
             constraints,
@@ -302,6 +305,7 @@ def evaluate_covenant(
 
     if "CONFLICT" in goal_states:
         return CovenantDecision(
+            basis,
             "REVISION_REQUIRED",
             ("PROJECT_GOAL_MISALIGNMENT",),
             constraints,
@@ -314,6 +318,7 @@ def evaluate_covenant(
         or governor.decision == "REVISION_REQUIRED"
     ):
         return CovenantDecision(
+            basis,
             "REVISION_REQUIRED",
             ("OWNING_GOVERNANCE_REVISION_REQUIRED",),
             constraints,
@@ -335,6 +340,7 @@ def evaluate_covenant(
                 False,
             )
         return CovenantDecision(
+            basis,
             "REVISION_REQUIRED",
             ("UNRESOLVED_CROSS_GOVERNANCE_CONFLICT",),
             constraints,
