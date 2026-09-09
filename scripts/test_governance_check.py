@@ -1,3 +1,5 @@
+# @codebase_provenance_JEO
+# @codebase_rights_JEO
 import os
 import subprocess
 import sys
@@ -13,6 +15,8 @@ if str(ROOT) not in sys.path:
 from adapters.codex import validate_codex_export
 from validation.classify_adaptive_assurance_scope import (
     APPLICABLE,
+    COVENANT_IMPLEMENTATION_PATHS,
+    COVENANT_SCOPE_ANCHOR_PATHS,
     NOT_APPLICABLE,
     classify_paths,
 )
@@ -21,6 +25,18 @@ from validation.classify_adaptive_assurance_scope import (
 def assert_equal(name, actual, expected):
     if actual != expected:
         raise AssertionError(f"{name}: expected {expected!r}, got {actual!r}")
+
+
+COVENANT_COMPLETE_PATHS = tuple(
+    sorted((*COVENANT_IMPLEMENTATION_PATHS, "CHANGELOG.md", "README.json"))
+)
+
+COVENANT_POLICY_AMENDMENT_PATHS = (
+    "CHANGELOG.md",
+    "docs/governance/COVENANT_ASSURANCE_SCOPE_POLICY.md",
+    "scripts/test_governance_check.py",
+    "scripts/validation/classify_adaptive_assurance_scope.py",
+)
 
 
 PROTECTED_GOVERNANCE_AMENDMENT_PATHS = (
@@ -95,6 +111,38 @@ def test_unanchored_assurance_workflow_change_remains_applicable():
         classify_paths(("README.json", ".github/workflows/prai.yml"), "prai"),
         APPLICABLE,
     )
+
+
+
+def test_complete_covenant_scope_is_not_applicable_to_historical_gates():
+    for assurance in ("prai", "aq5", "aq7"):
+        result = classify_paths(COVENANT_COMPLETE_PATHS, assurance)
+        assert_equal(f"{assurance} complete Covenant scope", result, NOT_APPLICABLE)
+
+
+def test_partial_covenant_scope_remains_fail_closed_applicable():
+    anchored_partial = ("CHANGELOG.md", "docs/governance/THE_COVENANT.md")
+    assert_equal(
+        "Covenant anchor registered",
+        "docs/governance/THE_COVENANT.md" in COVENANT_SCOPE_ANCHOR_PATHS,
+        True,
+    )
+    for assurance in ("prai", "aq5", "aq7"):
+        result = classify_paths(anchored_partial, assurance)
+        assert_equal(f"{assurance} partial Covenant scope", result, APPLICABLE)
+
+
+def test_mixed_or_unknown_covenant_scope_remains_fail_closed_applicable():
+    mixed = (*COVENANT_COMPLETE_PATHS, "unexpected-covenant-path.txt")
+    for assurance in ("prai", "aq5", "aq7"):
+        result = classify_paths(mixed, assurance)
+        assert_equal(f"{assurance} mixed Covenant scope", result, APPLICABLE)
+
+
+def test_policy_amendment_scope_uses_preexisting_governance_classification():
+    for assurance in ("prai", "aq5", "aq7"):
+        result = classify_paths(COVENANT_POLICY_AMENDMENT_PATHS, assurance)
+        assert_equal(f"{assurance} Covenant policy amendment", result, NOT_APPLICABLE)
 
 
 def test_tracked_repo_files_only():
@@ -514,6 +562,10 @@ def main():
     test_issue_171_validators_are_registered()
     test_adaptive_assurance_scope_classifier_is_registered()
     test_protected_governance_amendment_is_not_applicable_to_assurance_gates()
+    test_complete_covenant_scope_is_not_applicable_to_historical_gates()
+    test_partial_covenant_scope_remains_fail_closed_applicable()
+    test_mixed_or_unknown_covenant_scope_remains_fail_closed_applicable()
+    test_policy_amendment_scope_uses_preexisting_governance_classification()
     test_partial_owned_assurance_changes_remain_applicable()
     test_assurance_documentation_without_governance_context_remains_applicable()
     test_unanchored_assurance_workflow_change_remains_applicable()
