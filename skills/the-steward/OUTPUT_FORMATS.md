@@ -80,14 +80,6 @@ DISPOSITION: [disposition enum]
 REFS: [evidence references]
 ```
 
-## Covenant System-Intent Judgment
+## Covenant judgment format
 
-    REVIEWER: the-steward
-    PRIME_DIRECTIVE_ALIGNMENT: [ALIGNED | CONFLICT | UNKNOWN | NOT_APPLICABLE]
-    PROJECT_GOAL_ALIGNMENT: [ALIGNED | CONFLICT | UNKNOWN | NOT_APPLICABLE]
-    CRITICAL_FLOW_ALIGNMENT: [aligned | contradictions | unknown]
-    SYSTEM_INVARIANT_ALIGNMENT: [aligned | contradictions | unknown]
-    UNINTENDED_BEHAVIOR: [list or none]
-    DECISION: [APPROVED | REVISION_REQUIRED | BLOCKED | NOT_APPLICABLE]
-    CONSTRAINTS: [list or none]
-    EVIDENCE_REFERENCES: [list]
+For the material system-intent judgment, use COVENANT_SYSTEM_INTENT_JUDGMENT_GUIDE.md.
