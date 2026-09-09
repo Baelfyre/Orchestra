@@ -80,6 +80,10 @@ def _evaluate(
     governor: GovernanceJudgment | None = None,
     **kwargs: object,
 ):
+    kwargs.setdefault("assurance_result", "PASS")
+    kwargs.setdefault("assurance_evidence_refs", ("evidence:prai",))
+    kwargs.setdefault("assurance_evidence_durable", True)
+    kwargs.setdefault("assurance_evidence_retrievable", True)
     return evaluate_covenant(
         BASIS,
         steward if steward is not None else _judgment("STEWARD"),
@@ -290,11 +294,64 @@ def test_invalid_reviewer_disposition_and_alignment_are_rejected() -> None:
         _judgment("STEWARD", decision="INVALID")
     with pytest.raises(ValueError):
         _judgment("STEWARD", prime_directive_alignment="MAYBE")
+    with pytest.raises(ValueError):
+        _judgment("STEWARD", prime_directive_alignment="NOT_APPLICABLE")
 
 
 def test_duplicate_evidence_references_are_rejected() -> None:
     with pytest.raises(ValueError):
         _judgment("STEWARD", evidence_refs=("same", "same"))
+
+
+def test_required_assurance_cannot_be_implicitly_passed() -> None:
+    missing = evaluate_covenant(
+        BASIS,
+        _judgment("STEWARD"),
+        _judgment("GOVERNOR"),
+    )
+    pass_without_refs = evaluate_covenant(
+        BASIS,
+        _judgment("STEWARD"),
+        _judgment("GOVERNOR"),
+        assurance_result="PASS",
+        assurance_evidence_durable=True,
+        assurance_evidence_retrievable=True,
+    )
+    pass_without_retrievability = evaluate_covenant(
+        BASIS,
+        _judgment("STEWARD"),
+        _judgment("GOVERNOR"),
+        assurance_result="PASS",
+        assurance_evidence_refs=("evidence:prai",),
+        assurance_evidence_durable=True,
+    )
+    explicit_pass = evaluate_covenant(
+        BASIS,
+        _judgment("STEWARD"),
+        _judgment("GOVERNOR"),
+        assurance_result="PASS",
+        assurance_evidence_refs=("evidence:prai",),
+        assurance_evidence_durable=True,
+        assurance_evidence_retrievable=True,
+    )
+
+    assert missing.disposition == "WAIT_FOR_EVIDENCE"
+    assert missing.reason_codes == ("ASSURANCE_EVIDENCE_MISSING",)
+    assert pass_without_refs.disposition == "WAIT_FOR_EVIDENCE"
+    assert pass_without_refs.reason_codes == ("ASSURANCE_EVIDENCE_MISSING",)
+    assert pass_without_retrievability.disposition == "WAIT_FOR_EVIDENCE"
+    assert pass_without_retrievability.reason_codes == ("ASSURANCE_EVIDENCE_NOT_DURABLE",)
+    assert explicit_pass.disposition == "PASS"
+
+
+def test_prime_directive_not_applicable_fails_closed_defensively() -> None:
+    steward = _judgment("STEWARD")
+    object.__setattr__(steward, "prime_directive_alignment", "NOT_APPLICABLE")
+
+    result = _evaluate(steward=steward)
+
+    assert result.disposition == "WAIT_FOR_EVIDENCE"
+    assert result.reason_codes == ("PRIME_DIRECTIVE_ALIGNMENT_NOT_APPLICABLE",)
 
 
 def test_partial_state_readback_and_malformed_evaluation_input_fail_closed() -> None:
