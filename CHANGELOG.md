@@ -94,7 +94,7 @@
 
 - Packages the additive post-v1.9.0 UAI-0 through UAI-10 completion, including the canonical host capability contract, strategy/transport boundaries, portable projections, deterministic fallback planning, shadow-only provider capability classification, negative capability tests, cross-host conformance, and maturity closeout.
 - Records maintainer-verified GitHub Copilot `/conductor` support as `SUPPORTED_VERIFIED` after the required promotion retest. Copilot ran in Auto mode; the underlying provider/model remains unresolved and no provider/model profile is admitted.
-- Preserves Conductor as the sole internal specialist router. Clear ownership may enable a direct single-specialist fast route, but `CLEAR_OWNERSHIP != CONDUCTOR_BYPASS`, `FAST_ROUTE != ROUTER_BYPASS`, and `UAI_TRANSPORT_SELECTION != AWF_SPECIALIST_ROUTING` remain enforced.
+- Preserves Conductor as the sole internal specialist router. Clear ownership may enable a direct single-specialist fast route, but `CLEAR_OWNERSHIP != CONDUCTOR_BYPASS`, `FAST_ROUTE !=_ROUTER_BYPASS`, and `UAI_TRANSPORT_SELECTION != AWF_SPECIALIST_ROUTING` remain enforced.
 - Keeps automatic provider routing/fallback, learned routing promotion, concurrency widening, AR-3, AR-4, deployment, credentials, policy activation, installed-integration refresh, and marketplace publication out of scope.
 - Aligns all 11 package/version surfaces and the host-update contract to `1.10.0`.
 - Published from exact signed commit `756a358f96363f0c377b049adcd87b1991d5aef6`, tree `42c0c8929c4dcfa5b17ff2feb293710d2468ca51`, lightweight tag `v1.10.0`, and GitHub Release `383668751`.
@@ -157,12 +157,12 @@
 - Preserves Conductor as the sole internal specialist router and keeps host capability, transport selection, provider advisory, and AWF workflow topology separate.
 - Does not promote the Copilot Conductor capability beyond `SUPPORTED_WITH_LIMITS` before the required focused live retest, and does not add automatic provider routing, fallback, concurrency widening, AR-3, AR-4, release, or deployment behavior.
 
-## v1.9.0 UI Execution Fidelity - published
+## v1.9.0 UI Execution Fidelity - published and verified
 
 - Canonically records the UIEF-5 Clockwork engineering translation at the signed Orchestra main boundary and reconciles its exact source, tree, parent, and signature evidence.
 - Completes the existing UIEF-6 and UIEF-8 specialist/regression contracts while preserving Conductor routing, serial specialist execution, and the one-active-specialist ceiling.
 - Records UIEF-7 deterministic-validation limits and UIEF-9 `NO_BENEFIT_ESTABLISHED` without claiming rendered-application benefit, harm, or new provider evidence.
-- Publishes all 11 package/version surfaces and the host-update contract at `1.9.0`; tag `v1.9.0` and GitHub Release `RE_kwDOS_4UtM4W2pDC` resolve to signed canonical commit `7129a690b041bddbf8b58f41db0c4a680317fda1`.
+- Publishes all 11 package/version surfaces and the host-update contract to `1.9.0`; tag `v1.9.0` and GitHub Release `RE_kwDOS_4UtM4W2pDC` resolve to signed canonical commit `7129a690b041bddbf8b58f41db0c4a680317fda1`.
 - Reconciles current-facing README, machine-index, installation, compatibility, portal, maturity, state, and roadmap surfaces; adds the verified support link `https://buymeacoffee.com/baelfyre`.
 - Records Adaptive Host Integration as future work only. No host integration, automatic adaptation, provider mutation, policy activation, deployment, or installed-integration refresh is included.
 
@@ -600,7 +600,7 @@
 ## Post-v1.7 Priority 2 provider execution profile candidate
 
 - Added a deterministic, non-authorizing provider execution profile and trusted provider/model/capability requirement gate for explicit host-native specialist execution, while preserving existing route-only and provider-free deterministic runtime paths.
-- Added separate provider-aware MCP constructors and Codex App Server wrappers that map the existing explicit user-selected model configuration into `openai-codex` provider profiles without widening approval, sandbox, network, write-scope, specialist, command, or mutation scope.
+- Added separate provider-aware MCP constructors and Codex App Server wrappers that map the existing explicit user-selected model configuration into `openai-codex` provider profiles without widening approval, sandbox, network, specialist, command, or mutation scope.
 - Added Draft 2020-12 provider profile/requirement schemas and focused regressions for deterministic identity, fail-closed mismatch and drift handling, authority-before-provider ordering, minimized provider evidence, and prompt/MCP metadata non-override.
 - P2.1 does not add automatic provider routing or fallback, direct provider SDKs/APIs, credential handling, a static model catalog, Registry mutation, release, deployment, policy activation, integration refresh, destructive operations, branch deletion, force push, or history rewrite.
 
@@ -790,7 +790,7 @@ See [Orchestra v1.2.0](https://github.com/Baelfyre/Orchestra/releases/tag/v1.2.0
 
 ## v1.1.2 - Trusted Runtime Authority
 
-See [the historical detailed changelog](docs/history/CHANGELOG_PRE_V1_7.md) and release history for the complete record.
+See the [historical detailed changelog](docs/history/CHANGELOG_PRE_V1_7.md) and release history for the complete record.
 
 ## v1.1.1 - Post-Release Hardening
 
