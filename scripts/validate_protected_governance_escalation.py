@@ -237,6 +237,58 @@ def main() -> int:
     require(escalation_policy.get("same_run_policy_change_forbidden") is True, errors, "policy must forbid same-run governance change")
     require(escalation_policy.get("new_execution_context_required") is True, errors, "policy must require a new execution context")
 
+    policy_whitelist_authority = escalation_policy.get("whitelist_authority", {})
+    require(
+        policy_whitelist_authority.get("authority_class") == "HUMAN_POLICY",
+        errors,
+        "governance policy whitelist authority must be HUMAN_POLICY",
+    )
+    require(
+        policy_whitelist_authority.get("human_approval_required") is True,
+        errors,
+        "governance policy must require human approval for whitelist mutation",
+    )
+    require(
+        policy_whitelist_authority.get("human_decision_record_required") is True,
+        errors,
+        "governance policy must require a human whitelist decision record",
+    )
+    require(
+        policy_whitelist_authority.get("ai_recommendation_allowed") is True,
+        errors,
+        "governance policy must allow AI whitelist recommendations",
+    )
+    require(
+        policy_whitelist_authority.get("ai_approval_allowed") is False,
+        errors,
+        "governance policy must forbid AI whitelist approval",
+    )
+    require(
+        policy_whitelist_authority.get("ai_mutation_without_human_decision_allowed") is False,
+        errors,
+        "governance policy must forbid AI whitelist mutation without human decision",
+    )
+    require(
+        policy_whitelist_authority.get("full_autonomous_override_allowed") is False,
+        errors,
+        "governance policy must forbid FULL_AUTONOMOUS whitelist override",
+    )
+    require(
+        policy_whitelist_authority.get("fresh_execution_context_required") is True,
+        errors,
+        "governance policy must require fresh execution context for whitelist mutation",
+    )
+    require(
+        policy_whitelist_authority.get("same_run_creation_and_consumption_forbidden") is True,
+        errors,
+        "governance policy must forbid same-run whitelist creation and consumption",
+    )
+    require(
+        policy_whitelist_authority.get("precedent_is_authority") is False,
+        errors,
+        "governance policy must not treat whitelist precedent as authority",
+    )
+
     require(schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema", errors, "schema draft mismatch")
     require(isinstance(schema.get("oneOf"), list) and len(schema["oneOf"]) == 2, errors, "schema must define escalation and human-decision records")
 
