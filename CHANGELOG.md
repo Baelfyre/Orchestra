@@ -1,3 +1,10 @@
+## Unreleased governance assurance realignment: tree-attested promotion
+
+- Binds full content assurance to the exact qualified source Git tree while preserving all existing required `main` check identities.
+- Adds fail-closed source-to-materialization-to-canonical provenance attestation for GitHub-verified signed carriers whose tree and changed-path set exactly match the fully qualified source.
+- Keeps ordinary or changed-content candidates on full assurance and blocks recognized signed promotions when source checks, tree identity, signature, parent/base continuity, or provenance cannot be proven.
+- Preserves human-only whitelist authority, PRAI/Covenant/specialist boundaries, validation thresholds, and independent release/deployment/provider/credential/telemetry/production authority.
+
 ## Unreleased governance policy amendment: human-only whitelist authority
 
 - Makes whitelist creation, modification, expansion, narrowing, removal, reinterpretation, and approval a human-only `HUMAN_POLICY` authority boundary.
