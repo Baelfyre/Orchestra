@@ -170,10 +170,36 @@ PROMOTION_ASSURANCE_GOVERNANCE_PATHS = frozenset(
     {
         ".github/workflows/validate.yml",
         ".github/workflows/cross-platform-validation.yml",
+        ".github/workflows/required-analysis-compat.yml",
+        ".github/workflows/governance-check.yml",
         ".github/workflows/signed-materialization.yml",
         "docs/validation/SIGNED_MATERIALIZATION_OPTIMIZATION_2026_08_16.md",
         "scripts/validate_signed_materialization.py",
+        "scripts/validate_governance_promotion_attestation.py",
         "tests/behavior/test_signed_materialization.py",
+        "tests/behavior/test_governance_promotion_attestation.py",
+    }
+)
+
+# Specialized assurance workflows are governance transport controls only when
+# they are changed together with the promotion-assurance contract and its
+# fail-closed classifier/attestation regressions. In isolation they remain
+# historical assurance implementation surfaces and therefore APPLICABLE.
+SPECIALIZED_PROMOTION_ASSURANCE_WORKFLOW_PATHS = frozenset(
+    {
+        ".github/workflows/prai.yml",
+        ".github/workflows/qa-compliance.yml",
+        ".github/workflows/aq6-gate-coverage.yml",
+        ".github/workflows/cosmic-ray-confidence.yml",
+    }
+)
+
+PROMOTION_ASSURANCE_REQUIRED_ANCHORS = frozenset(
+    {
+        "docs/governance/TREE_ATTESTED_PROMOTION_ASSURANCE.md",
+        "scripts/validation/classify_adaptive_assurance_scope.py",
+        "tests/behavior/test_governance_promotion_attestation.py",
+        "tests/behavior/test_protected_aq8_assurance_scope_policy.py",
     }
 )
 
@@ -249,10 +275,10 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
     # workflow, test, mixed, superset, or anchor-bearing subset changes.
     if normalized_set == AQ8_CANONICAL_CLOSEOUT_PATHS:
         return NOT_APPLICABLE
-    if gate != "aq7" and set(normalized).intersection(strict_implementation_paths):
+    if gate != "aq7" and normalized_set.intersection(strict_implementation_paths):
         return APPLICABLE
 
-    non_neutral = set(normalized) - COMMON_TRIGGER_PATHS
+    non_neutral = normalized_set - COMMON_TRIGGER_PATHS
     if not non_neutral:
         return NOT_APPLICABLE
 
@@ -269,14 +295,33 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
     if non_neutral in {AQ6_IMPLEMENTATION_PATHS, AQ7_IMPLEMENTATION_PATHS}:
         return NOT_APPLICABLE
 
+    specialized_workflow_paths = non_neutral.intersection(
+        SPECIALIZED_PROMOTION_ASSURANCE_WORKFLOW_PATHS
+    )
+    specialized_workflows_are_anchored = bool(specialized_workflow_paths) and (
+        PROMOTION_ASSURANCE_REQUIRED_ANCHORS.issubset(non_neutral)
+    )
+    protected_governance_context = bool(
+        PROTECTED_GOVERNANCE_ANCHORS.intersection(non_neutral)
+    )
+    if (
+        specialized_workflow_paths
+        and not specialized_workflows_are_anchored
+        and not protected_governance_context
+    ):
+        return APPLICABLE
+
     governance_paths = {path for path in non_neutral if is_governance_path(path)}
+    if specialized_workflows_are_anchored:
+        governance_paths.update(specialized_workflow_paths)
+
     reference_paths = non_neutral.intersection(ADAPTIVE_ASSURANCE_REFERENCE_PATHS)
-    workflow_paths = non_neutral.intersection(WORKFLOW_INTEGRATION_PATHS)
+    workflow_paths = non_neutral.intersection(WORKFLOW_INTEGRATION_PATHS) - governance_paths
     unknown_paths = non_neutral - governance_paths - reference_paths - workflow_paths
 
     if unknown_paths or not governance_paths:
         return APPLICABLE
-    if workflow_paths and not PROTECTED_GOVERNANCE_ANCHORS.intersection(normalized):
+    if workflow_paths and not PROTECTED_GOVERNANCE_ANCHORS.intersection(normalized_set):
         return APPLICABLE
     return NOT_APPLICABLE
 

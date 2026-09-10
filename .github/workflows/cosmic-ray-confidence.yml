@@ -25,9 +25,35 @@ on:
 
 permissions:
   contents: read
+  actions: read
+  checks: read
+  pull-requests: read
 
 jobs:
+  promotion-assurance:
+    runs-on: ubuntu-latest
+    outputs:
+      mode: ${{ steps.promotion.outputs.mode }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Resolve promotion assurance mode
+        id: promotion
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python scripts/validate_governance_promotion_attestation.py
+
   bounded-pilot:
+    needs: promotion-assurance
+    if: ${{ needs.promotion-assurance.outputs.mode != 'TREE_ATTESTED' }}
     runs-on: ubuntu-latest
     timeout-minutes: 120
 
@@ -225,3 +251,11 @@ jobs:
           if status != 'VALID_CLASSIFIED_SCORE':
               raise SystemExit(1)
           PY
+
+  tree-attested-assurance:
+    needs: promotion-assurance
+    if: ${{ needs.promotion-assurance.outputs.mode == 'TREE_ATTESTED' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm tree-attested Cosmic Ray assurance
+        run: echo "COSMIC_RAY_REUSED_QUALIFIED_TREE_ASSURANCE=PASS"
