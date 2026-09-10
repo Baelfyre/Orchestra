@@ -1,0 +1,162 @@
+name: AQ9 Policy Branch Materializer
+
+on:
+  push:
+    branches:
+      - gov/aq9-assurance-scope-policy-20260911
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout policy branch
+        uses: actions/checkout@v7
+        with:
+          ref: gov/aq9-assurance-scope-policy-20260911
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Apply exact human-approved AQ9 scope amendment
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          classifier_path = Path('scripts/validation/classify_adaptive_assurance_scope.py')
+          classifier = classifier_path.read_text(encoding='utf-8')
+          if 'AQ9_IMPLEMENTATION_PATHS = frozenset(' in classifier:
+              raise SystemExit('AQ9 classifier inventory already present; refusing duplicate mutation')
+
+          covenant_marker = '\n\nCOVENANT_IMPLEMENTATION_PATHS = frozenset('
+          if classifier.count(covenant_marker) != 1:
+              raise SystemExit('classifier insertion marker drifted')
+          aq9_constants = '''
+
+AQ9_IMPLEMENTATION_PATHS = frozenset(
+    {
+        "CHANGELOG.md",
+        "README.json",
+        "cosmic-ray.toml",
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ9.md",
+        "machine/adaptive/aq9-deep-assurance.v1.json",
+        "machine/schemas/aq9-deep-assurance.v1.schema.json",
+        "scripts/validation/validate_aq9.py",
+        "tests/behavior/run_tests.py",
+        "tests/runtime/test_adaptive_assurance_aq9.py",
+    }
+)
+
+AQ9_SCOPE_ANCHOR_PATHS = frozenset(
+    {
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ9.md",
+        "machine/adaptive/aq9-deep-assurance.v1.json",
+        "machine/schemas/aq9-deep-assurance.v1.schema.json",
+        "scripts/validation/validate_aq9.py",
+        "tests/runtime/test_adaptive_assurance_aq9.py",
+    }
+)
+'''
+          classifier = classifier.replace(
+              covenant_marker,
+              aq9_constants + covenant_marker,
+              1,
+          )
+
+          classify_marker = '''    if normalized_set == AQ8_CANONICAL_CLOSEOUT_PATHS:\n        return NOT_APPLICABLE\n    if gate != "aq7" and normalized_set.intersection(strict_implementation_paths):\n        return APPLICABLE\n'''
+          if classifier.count(classify_marker) != 1:
+              raise SystemExit('classifier decision marker drifted')
+          classifier = classifier.replace(
+              classify_marker,
+              '''    if normalized_set == AQ8_CANONICAL_CLOSEOUT_PATHS:\n        return NOT_APPLICABLE\n\n    # Human-authorized AQ9 phase-separation taxonomy. Only the exact complete\n    # nine-path AQ9 implementation inventory is exempt from historical exact\n    # inventories. Any anchor-bearing subset, mixed scope, or superset remains\n    # fail-closed APPLICABLE. This is not a lifecycle whitelist.\n    if normalized_set == AQ9_IMPLEMENTATION_PATHS:\n        return NOT_APPLICABLE\n    if normalized_set.intersection(AQ9_SCOPE_ANCHOR_PATHS):\n        return APPLICABLE\n\n    if gate != "aq7" and normalized_set.intersection(strict_implementation_paths):\n        return APPLICABLE\n''',
+              1,
+          )
+          classifier_path.write_text(classifier, encoding='utf-8')
+
+          test_path = Path('tests/behavior/test_protected_aq8_assurance_scope_policy.py')
+          test_text = test_path.read_text(encoding='utf-8')
+          import_marker = '''    AQ8_CANONICAL_CLOSEOUT_PATHS,\n    AQ8_IMPLEMENTATION_PATHS,\n    AQ8_SCOPE_ANCHOR_PATHS,\n    NOT_APPLICABLE,\n'''
+          if test_text.count(import_marker) != 1:
+              raise SystemExit('AQ9 regression import marker drifted')
+          test_text = test_text.replace(
+              import_marker,
+              '''    AQ8_CANONICAL_CLOSEOUT_PATHS,\n    AQ8_IMPLEMENTATION_PATHS,\n    AQ8_SCOPE_ANCHOR_PATHS,\n    AQ9_IMPLEMENTATION_PATHS,\n    AQ9_SCOPE_ANCHOR_PATHS,\n    NOT_APPLICABLE,\n''',
+              1,
+          )
+
+          sample_marker = '''UNREGISTERED_AQ9_SAMPLE = (\n    "CHANGELOG.md",\n    "README.json",\n    "orchestra_runtime/domain/adaptive/deep_assurance.py",\n    "tests/runtime/test_adaptive_assurance_aq9.py",\n)\n'''
+          if test_text.count(sample_marker) != 1:
+              raise SystemExit('AQ9 regression sample marker drifted')
+          test_text = test_text.replace(
+              sample_marker,
+              sample_marker + '''\nAQ9_COMPLETE_PATHS = tuple(sorted(AQ9_IMPLEMENTATION_PATHS))\nAQ9_POLICY_AMENDMENT_PATHS = (\n    "CHANGELOG.md",\n    "README.json",\n    "docs/governance/AQ9_ASSURANCE_SCOPE_POLICY.md",\n    "scripts/validation/classify_adaptive_assurance_scope.py",\n    "tests/behavior/test_protected_aq8_assurance_scope_policy.py",\n)\n''',
+              1,
+          )
+
+          test_insert_marker = '''\ndef test_historical_implementation_inventories_remain_separate() -> None:\n'''
+          if test_text.count(test_insert_marker) != 1:
+              raise SystemExit('AQ9 regression insertion marker drifted')
+          aq9_tests = '''\ndef test_complete_aq9_scope_is_not_applicable_to_historical_gates() -> None:\n    _assert_equal("AQ9 exact inventory size", len(AQ9_COMPLETE_PATHS), 9)\n    for assurance in HISTORICAL_GATES:\n        _assert_equal(\n            f"{assurance} complete AQ9 scope",\n            classify_paths(AQ9_COMPLETE_PATHS, assurance),\n            NOT_APPLICABLE,\n        )\n\n\ndef test_partial_aq9_scope_remains_fail_closed_applicable() -> None:\n    anchor = "docs/architecture/ADAPTIVE_ASSURANCE_AQ9.md"\n    _assert_equal("AQ9 anchor registered", anchor in AQ9_SCOPE_ANCHOR_PATHS, True)\n    partial = tuple(path for path in AQ9_COMPLETE_PATHS if path != "cosmic-ray.toml")\n    for assurance in HISTORICAL_GATES:\n        _assert_equal(\n            f"{assurance} partial AQ9 scope",\n            classify_paths(partial, assurance),\n            APPLICABLE,\n        )\n\n\ndef test_mixed_and_superset_aq9_scopes_remain_fail_closed() -> None:\n    mixed = (*AQ9_COMPLETE_PATHS, "orchestra_runtime/domain/adaptive/deep_assurance.py")\n    for assurance in HISTORICAL_GATES:\n        _assert_equal(\n            f"{assurance} AQ9 superset with unknown path",\n            classify_paths(mixed, assurance),\n            APPLICABLE,\n        )\n\n\ndef test_aq9_duplicate_paths_fail_closed() -> None:\n    duplicate = (\n        "docs/architecture/ADAPTIVE_ASSURANCE_AQ9.md",\n        "docs/architecture/ADAPTIVE_ASSURANCE_AQ9.md",\n    )\n    for assurance in HISTORICAL_GATES:\n        try:\n            classify_paths(duplicate, assurance)\n        except ValueError:\n            continue\n        raise AssertionError(f"{assurance} duplicate AQ9 paths did not fail closed")\n\n\ndef test_aq9_policy_amendment_uses_existing_governance_taxonomy() -> None:\n    for assurance in HISTORICAL_GATES:\n        _assert_equal(\n            f"{assurance} AQ9 policy amendment",\n            classify_paths(AQ9_POLICY_AMENDMENT_PATHS, assurance),\n            NOT_APPLICABLE,\n        )\n\n\ndef test_unregistered_future_aq_phase_remains_fail_closed() -> None:\n    future = ("CHANGELOG.md", "README.json", "docs/architecture/ADAPTIVE_ASSURANCE_AQ10.md")\n    for assurance in HISTORICAL_GATES:\n        _assert_equal(\n            f"{assurance} unregistered future AQ phase",\n            classify_paths(future, assurance),\n            APPLICABLE,\n        )\n\n'''
+          test_text = test_text.replace(
+              test_insert_marker,
+              aq9_tests + test_insert_marker,
+              1,
+          )
+
+          main_marker = '''    test_unregistered_future_aq_paths_remain_fail_closed()\n    test_historical_implementation_inventories_remain_separate()\n'''
+          if test_text.count(main_marker) != 1:
+              raise SystemExit('AQ9 regression main marker drifted')
+          test_text = test_text.replace(
+              main_marker,
+              '''    test_unregistered_future_aq_paths_remain_fail_closed()\n    test_complete_aq9_scope_is_not_applicable_to_historical_gates()\n    test_partial_aq9_scope_remains_fail_closed_applicable()\n    test_mixed_and_superset_aq9_scopes_remain_fail_closed()\n    test_aq9_duplicate_paths_fail_closed()\n    test_aq9_policy_amendment_uses_existing_governance_taxonomy()\n    test_unregistered_future_aq_phase_remains_fail_closed()\n    test_historical_implementation_inventories_remain_separate()\n''',
+              1,
+          )
+          test_path.write_text(test_text, encoding='utf-8')
+
+          readme_path = Path('README.json')
+          readme = readme_path.read_text(encoding='utf-8')
+          readme_marker = '''    "aq8_assurance_scope_policy": "docs/governance/AQ8_ASSURANCE_SCOPE_POLICY.md",\n    "aq8_canonical_closeout_whitelist_policy": "docs/governance/AQ8_ASSURANCE_SCOPE_POLICY.md",\n'''
+          if readme.count(readme_marker) != 1:
+              raise SystemExit('README.json AQ8 policy index marker drifted')
+          readme = readme.replace(
+              readme_marker,
+              '''    "aq8_assurance_scope_policy": "docs/governance/AQ8_ASSURANCE_SCOPE_POLICY.md",\n    "aq9_assurance_scope_policy": "docs/governance/AQ9_ASSURANCE_SCOPE_POLICY.md",\n    "aq8_canonical_closeout_whitelist_policy": "docs/governance/AQ8_ASSURANCE_SCOPE_POLICY.md",\n''',
+              1,
+          )
+          readme_path.write_text(readme, encoding='utf-8')
+
+          changelog_path = Path('CHANGELOG.md')
+          changelog = changelog_path.read_text(encoding='utf-8')
+          heading = '## Unreleased governance assurance realignment: tree-attested promotion\n'
+          if changelog.count(heading) != 1:
+              raise SystemExit('CHANGELOG insertion marker drifted')
+          section = '''## Unreleased governance policy amendment: AQ9 assurance scope\n\n- Adds the human-authorized exact nine-path AQ9 phase-separation inventory for the historical PRAI, AQ5, and AQ7 scope classifiers.\n- Classifies only the complete AQ9 implementation set as `NOT_APPLICABLE`; AQ9 subsets, mixed scopes, supersets, duplicates, and unknown future AQ paths remain fail-closed `APPLICABLE` or invalid.\n- Records the protected `HUMAN_POLICY` basis from Padayon canonical commit `959369ec84140198c2cb1cf86743a6e368830f71` without creating or modifying any lifecycle whitelist.\n- Preserves historical assurance inventories, validation thresholds, PRAI/Covenant/Overseer/Arbiter boundaries, signed-materialization controls, and independent release/deployment/provider/credential/telemetry/production authority.\n\n'''
+          changelog = changelog.replace(heading, section + heading, 1)
+          changelog_path.write_text(changelog, encoding='utf-8')
+          PY
+
+      - name: Validate exact amendment locally
+        shell: bash
+        run: |
+          python -m json.tool README.json > /dev/null
+          python -m py_compile scripts/validation/classify_adaptive_assurance_scope.py tests/behavior/test_protected_aq8_assurance_scope_policy.py
+          python tests/behavior/test_protected_aq8_assurance_scope_policy.py
+          git diff --check
+
+      - name: Commit amendment and retire helper
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/aq9-policy-branch-materializer.yml
+          git add CHANGELOG.md README.json docs/governance/AQ9_ASSURANCE_SCOPE_POLICY.md scripts/validation/classify_adaptive_assurance_scope.py tests/behavior/test_protected_aq8_assurance_scope_policy.py
+          git commit -m 'gov(aq9): admit exact deep-assurance phase scope'
+          git push origin HEAD:gov/aq9-assurance-scope-policy-20260911
