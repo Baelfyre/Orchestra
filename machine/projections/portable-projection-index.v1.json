@@ -105,7 +105,7 @@
         {
           "source_id": "integration_strategy_policy",
           "path": "machine/hosts/integration-strategy-policy.v1.json",
-          "sha256": "d64077135cbd3ee9ca9b2fb5f4c994e40493558fd17a98a11035e5197bdbfaaa"
+          "sha256": "d64077135cbd3ee9ca49f71be7bb450fed6611a0eb7053156d399799101256d9"
         },
         {
           "source_id": "conductor_skill",
