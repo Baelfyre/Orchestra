@@ -22,6 +22,12 @@ TREE = "3" * 40
 CARRIER = "4" * 40
 CANONICAL = "5" * 40
 MATERIALIZE_REF = "materialize/example"
+SPECIALIZED_WORKFLOWS = (
+    ROOT / ".github" / "workflows" / "prai.yml",
+    ROOT / ".github" / "workflows" / "qa-compliance.yml",
+    ROOT / ".github" / "workflows" / "aq6-gate-coverage.yml",
+    ROOT / ".github" / "workflows" / "cosmic-ray-confidence.yml",
+)
 
 
 def pr(number, base_ref, base_sha, head_ref, head_sha, *, merged=False, merge_sha=None):
@@ -144,6 +150,15 @@ class PromotionAttestationTests(unittest.TestCase):
         mode, evidence = mod.determine_mode("push", event, get=getter(mapping))
         self.assertEqual(mod.MODE_FULL, mode)
         self.assertIsNone(evidence)
+
+    def test_specialized_assurance_workflows_preserve_full_and_attested_modes(self):
+        for path in SPECIALIZED_WORKFLOWS:
+            text = path.read_text(encoding="utf-8")
+            self.assertIn("promotion-assurance:", text, path.name)
+            self.assertIn("validate_governance_promotion_attestation.py", text, path.name)
+            self.assertIn("mode != 'TREE_ATTESTED'", text, path.name)
+            self.assertIn("tree-attested-assurance:", text, path.name)
+            self.assertIn("mode == 'TREE_ATTESTED'", text, path.name)
 
 
 if __name__ == "__main__":

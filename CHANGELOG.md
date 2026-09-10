@@ -1,5 +1,6 @@
 ## Unreleased governance assurance realignment: tree-attested promotion
 
+- Extends qualified-tree assurance reuse to PRAI, AQ5, AQ6, and Cosmic Ray on independently verified signed identical-tree promotions while ordinary source candidates retain full assurance.
 - Binds full content assurance to the exact qualified source Git tree while preserving all existing required `main` check identities.
 - Adds fail-closed source-to-materialization-to-canonical provenance attestation for GitHub-verified signed carriers whose tree and changed-path set exactly match the fully qualified source.
 - Keeps ordinary or changed-content candidates on full assurance and blocks recognized signed promotions when source checks, tree identity, signature, parent/base continuity, or provenance cannot be proven.

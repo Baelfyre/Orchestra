@@ -92,11 +92,24 @@ The active `Protect main` ruleset remains authoritative. The required contexts a
 
 For an independently verified tree-identical signed promotion, these contexts execute the bounded promotion attestation instead of repeating the source content suite. For an ordinary source candidate, they execute their existing full logic.
 
+## Specialized content-assurance reuse
+
+Specialized assurance workflows also consume the same independently verified promotion mode when their path filters cause them to run on a canonical promotion:
+
+- `PRAI Post-Run Assurance`;
+- `AQ5 QA Compliance`;
+- `AQ6 Gate Coverage Truthfulness`;
+- `cosmic-ray-confidence`.
+
+For an ordinary source PR, these workflows continue to execute their normal contract, runtime, behavior, scope, or mutation evidence logic. For a recognized signed identical-tree promotion, each workflow executes the common promotion-attestation validator and then emits only a bounded tree-attested confirmation job. The expensive content-assurance jobs are skipped because their exact source tree has already qualified.
+
+This is evidence reuse, not a PASS fabrication. If the common promotion validator cannot prove the source checks, source workflows, changed paths, signed carrier, canonical base, or tree identity, it exits nonzero and the specialized workflow fails closed. `workflow_dispatch` remains full assurance.
+
 ## Historical assurance classifiers
 
-`validate.yml`, `cross-platform-validation.yml`, `signed-materialization.yml`, the signed-materialization validator/tests, and the historical signed-materialization transport document are governance-control surfaces because they define or verify repository promotion and required-assurance transport. They are classified as governance paths for historical exact-scope compatibility.
+Validation workflows, specialized assurance workflows, signed-materialization controls, the promotion validator, and their regression tests govern repository assurance transport itself. Classifying these paths as governance control surfaces is durable taxonomy, not a lifecycle whitelist.
 
-This is a control-surface classification, not a one-off lifecycle whitelist. It does not create a path-set exception for application/runtime changes and does not alter the exact AQ8 canonical-closeout whitelist.
+This control-surface classification does not create a path-set exception for application/runtime changes and does not alter the exact AQ8 canonical-closeout whitelist. Unregistered future adaptive-assurance implementation paths remain fail-closed under the historical classifier until separately governed phase-registration or policy authority exists.
 
 ## Fail-closed rules
 
@@ -117,4 +130,4 @@ The following remain unchanged:
 
 This realignment is grounded in Padayon decision `ORCHESTRA_AQ8_TREE_ATTESTED_PROMOTION_ASSURANCE_20260911`, canonicalized at Padayon commit `03d60fb5c8df4527bd13f4d09251ae57bd89cead`.
 
-The decision was made after AQ8 canonical content completion and does not authorize AQ9 by itself.
+The decision was made after AQ8 canonical content completion. A later, separate maintainer decision authorizes prospective AQ9 through AQ14 execution; that later authority does not convert this promotion-assurance control into an AQ lifecycle whitelist or authorize protected-policy self-amendment.
