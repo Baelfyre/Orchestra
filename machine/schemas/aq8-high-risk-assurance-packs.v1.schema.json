@@ -1,0 +1,410 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/aq8-high-risk-assurance-packs.v1.schema.json",
+  "title": "Orchestra AQ8 High-Risk Assurance Packs v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "contract_role",
+    "authority_model",
+    "transition_owner",
+    "packs",
+    "required_cases",
+    "required_covenant_scenarios",
+    "required_aq7_regression_anchors",
+    "adversarial_permutations",
+    "context_fields",
+    "evidence_fields",
+    "observation_fields",
+    "case_result_fields",
+    "pack_result_fields",
+    "decision_fields",
+    "dispositions",
+    "evidence_results",
+    "supported_evidence_types",
+    "failure_codes",
+    "governance_requirements",
+    "concurrency_proof",
+    "organic_effectiveness",
+    "authority"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../schemas/aq8-high-risk-assurance-packs.v1.schema.json"
+    },
+    "schema_version": {
+      "const": "orchestra.aq8-high-risk-assurance-packs.v1"
+    },
+    "contract_role": {
+      "const": "machine_high_risk_assurance_packs_contract"
+    },
+    "authority_model": {
+      "const": "EVIDENCE_ONLY_NON_AUTHORIZING"
+    },
+    "transition_owner": {
+      "const": "ARBITER"
+    },
+    "packs": {
+      "const": [
+        "SECURITY",
+        "PROVENANCE",
+        "CONCURRENCY",
+        "STATE_MACHINE",
+        "EVIDENCE_INTEGRITY"
+      ]
+    },
+    "required_cases": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "SECURITY",
+        "PROVENANCE",
+        "CONCURRENCY",
+        "STATE_MACHINE",
+        "EVIDENCE_INTEGRITY"
+      ],
+      "properties": {
+        "SECURITY": {
+          "const": [
+            "SECURITY_UNKNOWN_CREDENTIAL",
+            "SECURITY_INACTIVE_PRINCIPAL",
+            "SECURITY_MISSING_GRANT",
+            "SECURITY_GUESSED_OBJECT_ID",
+            "SECURITY_CROSS_TENANT_ID",
+            "SECURITY_CROSS_WORKSPACE_ID",
+            "SECURITY_PRIVILEGE_ESCALATION",
+            "SECURITY_TENANT_ADMIN_GLOBAL_AUTHORITY_SEPARATION",
+            "SECURITY_REVOCATION_BEFORE_REQUEST",
+            "SECURITY_REVOCATION_DURING_REQUEST",
+            "SECURITY_STALE_AUTHORIZATION_STATE"
+          ]
+        },
+        "PROVENANCE": {
+          "const": [
+            "PROVENANCE_CALLER_SUPPLIED_AUTHORITATIVE_VERSION",
+            "PROVENANCE_FORGED_SOURCE_SHA",
+            "PROVENANCE_REPORT_HASH_MISMATCH",
+            "PROVENANCE_STALE_EVIDENCE",
+            "PROVENANCE_WRONG_TENANT_WORKSPACE_EVIDENCE",
+            "PROVENANCE_WRONG_CANDIDATE_EVIDENCE",
+            "PROVENANCE_DUPLICATE_PROVENANCE_ID"
+          ]
+        },
+        "CONCURRENCY": {
+          "const": [
+            "CONCURRENCY_SAME_ROW_RACE",
+            "CONCURRENCY_DIFFERENT_ROW_SHARED_AGGREGATE",
+            "CONCURRENCY_LOST_UPDATE",
+            "CONCURRENCY_DUPLICATE_SUBMIT",
+            "CONCURRENCY_RETRY_AFTER_TIMEOUT",
+            "CONCURRENCY_IDEMPOTENCY_COLLISION",
+            "CONCURRENCY_PRIVILEGE_REVOCATION_DURING_OPERATION",
+            "CONCURRENCY_PARTIAL_WRITE_ROLLBACK",
+            "CONCURRENCY_MULTI_PROCESS_SERVICE_INSTANCE"
+          ]
+        },
+        "STATE_MACHINE": {
+          "const": [
+            "STATE_MACHINE_LEGAL_TRANSITION",
+            "STATE_MACHINE_ILLEGAL_TRANSITION",
+            "STATE_MACHINE_TERMINAL_MUTATION",
+            "STATE_MACHINE_STALE_TRANSITION",
+            "STATE_MACHINE_DUPLICATE_TRANSITION",
+            "STATE_MACHINE_FAILED_VALIDATION_BEFORE_TRANSITION",
+            "STATE_MACHINE_ROLLBACK_SEMANTICS"
+          ]
+        },
+        "EVIDENCE_INTEGRITY": {
+          "const": [
+            "EVIDENCE_SELF_ASSERTED_PASS",
+            "EVIDENCE_NONZERO_EXIT_LABELED_PASS",
+            "EVIDENCE_MISMATCHED_CANDIDATE_HASH",
+            "EVIDENCE_MISSING_VALIDATOR_IDENTITY",
+            "EVIDENCE_UNSUPPORTED_EVIDENCE_TYPE",
+            "EVIDENCE_STALE_WORKFLOW_RUN"
+          ]
+        }
+      }
+    },
+    "required_covenant_scenarios": {
+      "const": [
+        "COV-01",
+        "COV-02",
+        "COV-03",
+        "COV-04",
+        "COV-05",
+        "COV-06",
+        "COV-07",
+        "COV-08",
+        "COV-09",
+        "COV-10",
+        "COV-11",
+        "COV-12",
+        "COV-13",
+        "COV-14",
+        "COV-15",
+        "COV-16",
+        "COV-17",
+        "COV-18"
+      ]
+    },
+    "required_aq7_regression_anchors": {
+      "const": [
+        "CONCURRENT_LAST_ADMIN_AGGREGATE_INVARIANT",
+        "PRIVILEGE_MUTATION_BEFORE_AUDIT_DURABILITY",
+        "MISSING_DURABLE_ASSURANCE_EVIDENCE"
+      ]
+    },
+    "adversarial_permutations": {
+      "const": [
+        "MALFORMED_STATE",
+        "STALE_CANDIDATE_STATE",
+        "STALE_TREE_STATE",
+        "MISSING_STATE_IDENTITY",
+        "MISSING_EVIDENCE",
+        "DUPLICATE_EVIDENCE_ID",
+        "CALLER_ASSERTED_EVIDENCE",
+        "NONZERO_EXIT_PASS",
+        "UNKNOWN_CASE",
+        "UNKNOWN_PACK",
+        "SEQUENTIAL_CONCURRENCY_APPROXIMATION",
+        "INVALID_RECONCILIATION",
+        "PRAI_PASS_SYSTEM_CONTRADICTION",
+        "AUTHORITY_EXPANSION_ATTEMPT"
+      ]
+    },
+    "context_fields": {
+      "const": [
+        "repository",
+        "source_ref",
+        "candidate_sha",
+        "tree_sha",
+        "work_item_ref",
+        "basis_revision",
+        "project_context_ref",
+        "prime_directive_ref",
+        "project_goal_refs",
+        "critical_flows",
+        "system_invariants",
+        "prohibited_outcomes",
+        "authority_boundaries",
+        "observed_at",
+        "workflow_run_id"
+      ]
+    },
+    "evidence_fields": {
+      "const": [
+        "evidence_id",
+        "evidence_type",
+        "repository",
+        "source_ref",
+        "candidate_sha",
+        "tree_sha",
+        "validator_identity",
+        "observed_at",
+        "result",
+        "exit_code",
+        "workflow_run_id",
+        "freshness_ref",
+        "durable",
+        "retrievable",
+        "independent",
+        "producer_role",
+        "evidence_digest"
+      ]
+    },
+    "observation_fields": {
+      "const": [
+        "facts",
+        "evidence",
+        "controlled_fixture"
+      ]
+    },
+    "case_result_fields": {
+      "const": [
+        "schema_version",
+        "pack",
+        "case_id",
+        "disposition",
+        "compliant",
+        "reason_codes",
+        "evidence_ids",
+        "controlled_fixture",
+        "repository",
+        "candidate_sha",
+        "tree_sha",
+        "authority_granted"
+      ]
+    },
+    "pack_result_fields": {
+      "const": [
+        "schema_version",
+        "pack",
+        "result",
+        "compliant",
+        "failure_codes",
+        "evidence_ids",
+        "cases",
+        "controlled_case_count",
+        "organic_case_count",
+        "authority_granted"
+      ]
+    },
+    "decision_fields": {
+      "const": [
+        "schema_version",
+        "repository",
+        "source_ref",
+        "candidate_sha",
+        "tree_sha",
+        "work_item_ref",
+        "result",
+        "compliant",
+        "failure_codes",
+        "packs",
+        "transition_owner",
+        "authority_granted",
+        "decision_digest"
+      ]
+    },
+    "dispositions": {
+      "const": [
+        "PASS",
+        "REVISION_REQUIRED",
+        "WAIT_FOR_EVIDENCE",
+        "BLOCKED",
+        "ESCALATE_HUMAN"
+      ]
+    },
+    "evidence_results": {
+      "const": [
+        "PASS",
+        "FAIL",
+        "BLOCKED",
+        "WAIT_FOR_EVIDENCE"
+      ]
+    },
+    "supported_evidence_types": {
+      "const": [
+        "CONTROLLED_FIXTURE",
+        "UNIT_TEST",
+        "INTEGRATION_TEST",
+        "STATIC_ANALYSIS",
+        "PRAI",
+        "COVENANT",
+        "GOVERNANCE",
+        "WORKFLOW"
+      ]
+    },
+    "failure_codes": {
+      "const": [
+        "AQ8_CURRENT_IDENTITY_REQUIRED",
+        "AQ8_UNKNOWN_PACK",
+        "AQ8_UNKNOWN_CASE",
+        "AQ8_CASE_OBSERVATION_MISSING",
+        "AQ8_INVALID_OBSERVATION",
+        "AQ8_REQUIRED_FACT_MISSING",
+        "AQ8_CONTROL_VIOLATION",
+        "AQ8_UNKNOWN_STATE",
+        "AQ8_CONTROLLED_INTERLEAVING_REQUIRED",
+        "AQ8_AGGREGATE_PROOF_REQUIRED",
+        "AQ8_EVIDENCE_MISSING",
+        "AQ8_EVIDENCE_DUPLICATE_ID",
+        "AQ8_EVIDENCE_REPOSITORY_MISMATCH",
+        "AQ8_EVIDENCE_SOURCE_MISMATCH",
+        "AQ8_EVIDENCE_CANDIDATE_MISMATCH",
+        "AQ8_EVIDENCE_TREE_MISMATCH",
+        "AQ8_EVIDENCE_VALIDATOR_MISSING",
+        "AQ8_EVIDENCE_TYPE_UNSUPPORTED",
+    "AQ8_EVIDENCE_RESULT_NOT_PASS",
+        "AQ8_EVIDENCE_STALE_WORKFLOW_RUN",
+        "AQ8_EVIDENCE_NOT_DURABLE",
+        "AQ8_EVIDENCE_NOT_RETRIEVABLE",
+        "AQ8_EVIDENCE_PASS_NONZERO_EXIT",
+        "AQ8_EVIDENCE_CALLER_ASSERTED",
+        "AQ8_EVIDENCE_NOT_INDEPENDENT",
+        "AQ8_EVIDENCE_INVALID_DIGEST",
+        "AQ8_PACK_STATE_MISMATCH",
+        "AQ8_PACK_NOT_PASS",
+        "AQ8_AUTHORITY_EXPANSION",
+        "AQ8_SCHEMA_RUNTIME_DRIFT"
+      ]
+    },
+    "governance_requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "prai_mandatory",
+        "covenant_mandatory",
+        "covenant_pass_is_not_authority",
+        "prai_pass_is_not_covenant_pass",
+        "system_contradiction_overrides_prai_pass",
+        "durable_retrievable_evidence_required",
+        "unknown_state_fails_closed",
+        "arbiter_transition_owner"
+      ],
+      "properties": {
+        "prai_mandatory": {"const": true},
+        "covenant_mandatory": {"const": true},
+        "covenant_pass_is_not_authority": {"const": true},
+        "prai_pass_is_not_covenant_pass": {"const": true},
+        "system_contradiction_overrides_prai_pass": {"const": true},
+        "durable_retrievable_evidence_required": {"const": true},
+        "unknown_state_fails_closed": {"const": true},
+        "arbiter_transition_owner": {"const": true}
+      }
+    },
+    "concurrency_proof": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "controlled_interleaving_required",
+        "sequential_approximation_is_not_proof",
+        "aggregate_invariant_requires_aggregate_analysis"
+      ],
+      "properties": {
+        "controlled_interleaving_required": {"const": true},
+        "sequential_approximation_is_not_proof": {"const": true},
+        "aggregate_invariant_requires_aggregate_analysis": {"const": true}
+      }
+    },
+    "organic_effectiveness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "seeded_and_organic_must_remain_separate",
+        "generalized_percentage_requires_clear_denominator"
+      ],
+      "properties": {
+        "enabled": {"const": true},
+        "seeded_and_organic_must_remain_separate": {"const": true},
+        "generalized_percentage_requires_clear_denominator": {"const": true}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "case_result_grants_authority",
+        "pack_result_grants_authority",
+        "decision_grants_authority",
+        "transition_owner",
+        "merge_authorized",
+        "production_action",
+        "provider_activation"
+      ],
+      "properties": {
+        "case_result_grants_authority": {"const": false},
+        "pack_result_grants_authority": {"const": false},
+        "decision_grants_authority": {"const": false},
+        "transition_owner": {"const": "ARBITER"},
+        "merge_authorized": {"const": false},
+        "production_action": {"const": false},
+        "provider_activation": {"const": false}
+      }
+    }
+  }
+}
