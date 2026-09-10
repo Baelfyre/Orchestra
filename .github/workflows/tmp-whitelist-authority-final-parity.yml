@@ -28,10 +28,20 @@ jobs:
 
           validator = Path('scripts/validate_protected_governance_escalation.py')
           text = validator.read_text(encoding='utf-8')
-          old = '        "FULL_AUTONOMOUS cannot authorize whitelist mutation.",\n'
-          new = '        "`FULL_AUTONOMOUS` cannot authorize whitelist mutation.",\n'
-          assert text.count(old) == 1, f'validator anchor count={text.count(old)}'
-          validator.write_text(text.replace(old, new, 1), encoding='utf-8', newline='\n')
+          replacements = (
+              (
+                  '        "FULL_AUTONOMOUS cannot authorize whitelist mutation.",\n',
+                  '        "`FULL_AUTONOMOUS` cannot authorize whitelist mutation.",\n',
+              ),
+              (
+                  '        "FULL_AUTONOMOUS does not authorize whitelist mutation.",\n',
+                  '        "`FULL_AUTONOMOUS` does not authorize whitelist mutation.",\n',
+              ),
+          )
+          for old, new in replacements:
+              assert text.count(old) == 1, f'validator anchor count={text.count(old)} for {old.strip()}'
+              text = text.replace(old, new, 1)
+          validator.write_text(text, encoding='utf-8', newline='\n')
 
           changelog = Path('CHANGELOG.md')
           body = changelog.read_text(encoding='utf-8')
