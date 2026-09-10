@@ -239,7 +239,6 @@
         "docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_IMPLEMENTATION_PLAN.md",
         "docs/project/PRIORITY_2_PROVIDER_EXECUTION_PROFILE.md",
         "docs/validation/SPECIALIST_RUNTIME_HOST_EXECUTION_PRE_E7_EFFECTIVENESS_2026_08_29.md",
-        "docs/validation/SPECIALIST_RUNTIME_HOST_EXECUTION_E7_PROMOTION_DECISION_2026_08_30.md",
         "docs/developer/MCP_STDIO_TRANSPORT.md"
       ],
       "admission": "ADMIT",
@@ -2880,7 +2879,8 @@
     "covenant_conflict_scenario_matrix": "docs/validation/COVENANT_CONFLICT_SCENARIO_MATRIX_20260910.md",
     "covenant_machine_contract": "machine/governance/covenant.v1.json",
     "covenant_machine_schema": "machine/schemas/covenant.v1.schema.json",
-    "covenant_assurance_scope_policy": "docs/governance/COVENANT_ASSURANCE_SCOPE_POLICY.md"
+    "covenant_assurance_scope_policy": "docs/governance/COVENANT_ASSURANCE_SCOPE_POLICY.md",
+    "aq8_assurance_scope_policy": "docs/governance/AQ8_ASSURANCE_SCOPE_POLICY.md"
   },
   "representation_policy": {
     "markdown": "Human-readable explanation, rationale, examples, and nuanced specialist guidance",
