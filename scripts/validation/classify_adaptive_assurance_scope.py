@@ -168,6 +168,18 @@ PROTECTED_GOVERNANCE_ANCHORS = frozenset(
     }
 )
 
+# These files govern repository assurance transport itself. Classifying them as
+# governance control surfaces is durable taxonomy, not a lifecycle whitelist.
+PROMOTION_ASSURANCE_GOVERNANCE_PATHS = frozenset(
+    {
+        ".github/workflows/validate.yml",
+        ".github/workflows/cross-platform-validation.yml",
+        ".github/workflows/signed-materialization.yml",
+        "scripts/validate_signed_materialization.py",
+        "tests/behavior/test_signed_materialization.py",
+    }
+)
+
 GOVERNANCE_EXACT_PATHS = frozenset(
     {
         "AGENTS.md",
@@ -179,6 +191,7 @@ GOVERNANCE_EXACT_PATHS = frozenset(
         "scripts/governance_check.py",
         "scripts/test_governance_check.py",
         "scripts/validation/classify_adaptive_assurance_scope.py",
+        *PROMOTION_ASSURANCE_GOVERNANCE_PATHS,
     }
 ).union(PROTECTED_GOVERNANCE_ANCHORS)
 
