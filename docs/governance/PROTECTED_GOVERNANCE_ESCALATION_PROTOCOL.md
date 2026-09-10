@@ -4,6 +4,7 @@
 **Authority class:** `HUMAN_POLICY`
 **Status:** Canonical governance amendment
 **Applies to:** autonomous, delegated, semi-autonomous, and human-governed runs that discover a need to change, relax, reinterpret, except, or supersede an active protected governance control
+**Whitelist authority origin:** `Padayon:c8798f848df0830d04d5f25b4f0680d288768839`
 
 ## Purpose
 
@@ -42,6 +43,7 @@ This protocol is mandatory when any of the following occurs:
 - a proposed repair would relax a protected gate, authority boundary, security/privacy requirement, validation rule, release rule, or Prime Directive interpretation;
 - specialists conclude that the current rule may be logically inconsistent, obsolete, incomplete, over-broad, or in tension with the Prime Directive;
 - the candidate cannot progress without a policy choice, authority expansion, risk acceptance, or protected governance exception;
+- a whitelist must be created, modified, expanded, narrowed, removed, reinterpreted, or otherwise changed;
 - a repeated failure appears to be caused by governance topology rather than the implementation under review.
 
 ## Immediate stop behavior
@@ -137,6 +139,20 @@ The human decision may be:
 - `APPROVE_POLICY_AMENDMENT`.
 
 Human approval creates authority for a later bounded execution context only. It does not retroactively authorize mutation in the originating run.
+
+## Whitelist authority hard boundary
+
+Whitelist authority is human-only.
+
+AI models, agents, specialists, autonomous workflows, and delegated execution may detect, analyze, and recommend a whitelist change, but they may not approve or execute whitelist mutation unless an explicit human governance decision already authorizes that exact bounded change.
+
+`FULL_AUTONOMOUS` does not authorize whitelist mutation.
+
+The following are always protected governance changes: creating a whitelist; adding or removing entries; expanding or narrowing match behavior; reinterpreting scope; changing precedence, transitivity, expiration, consumption, or reason-code semantics; and deleting or disabling a whitelist.
+
+A blanket development grant, unanimous specialist agreement, passing CI, prior whitelist precedent, or available repository write access does not create whitelist authority.
+
+After explicit human approval, whitelist mutation must occur in a fresh bounded execution context. The originating run must not create and consume its own whitelist change.
 
 ## New execution context rule
 
@@ -238,56 +254,3 @@ A human decision record must preserve:
 - `supersedes` when applicable.
 
 Earlier escalation evidence must never be rewritten. Later decisions link forward to it.
-
-## Transition integration
-
-Protected governance escalation has higher precedence than ordinary automatic remediation.
-
-```text
-POLICY_SELF_MODIFICATION_OR_PROTECTED_GOVERNANCE_CONFLICT
-    -> ESCALATE_HUMAN
-    -> FREEZE_ORIGINATING_CANDIDATE
-    -> GOVERNANCE_REVIEW_PACKET
-    -> TERMINATE_ORIGINATING_RUN
-```
-
-`AUTO_REMEDIATE_AND_REVALIDATE` is not valid for a repair that changes the governance controlling that same blocked candidate.
-
-## PRAI integration
-
-PRAI remains fail-closed.
-
-`FAIL_POLICY_SELF_MODIFICATION` remains a blocking PRAI result. PRAI does not create exceptions and does not authorize policy changes.
-
-The orchestration layer interprets that failure as requiring the protected governance escalation path. The failure therefore means:
-
-```text
-PRAI = BLOCKED
-ORCHESTRATION = GOVERNANCE_ESCALATION_REQUIRED
-HUMAN_REVIEW_REQUIRED = TRUE
-SAME_RUN_POLICY_CHANGE = FORBIDDEN
-```
-
-This preserves PRAI's independence while allowing governance to evolve through a separate human-authorized path.
-
-## Anti-loop rule
-
-The same originating candidate, protected rule, and materially identical evidence may not repeatedly request governance reconsideration merely to obtain a different outcome.
-
-A repeated escalation requires materially new evidence or a human request for reconsideration.
-
-## Audit and continuity
-
-Every escalation and human decision must be forward-only, auditable, exact-state-bound, and preserved during handoff or context reset.
-
-Missing, stale, contradictory, or malformed escalation/decision records fail closed.
-
-## Canonical outcome
-
-```text
-AUTONOMY_HANDLES_IMPLEMENTATION
-PRAI_HANDLES_POST_RUN_ASSURANCE
-AI_GOVERNANCE_REVIEW_HANDLES_ANALYSIS_AND_RECOMMENDATION
-HUMAN_GOVERNANCE_GATE_HANDLES_PROTECTED_RULE_CHANGE_AUTHORITY
-NEW_RUN_HANDLES_EXECUTION_OF_THE_APPROVED_CHANGE
-```
