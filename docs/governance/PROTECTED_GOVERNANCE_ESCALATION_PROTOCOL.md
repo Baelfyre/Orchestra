@@ -254,3 +254,56 @@ A human decision record must preserve:
 - `supersedes` when applicable.
 
 Earlier escalation evidence must never be rewritten. Later decisions link forward to it.
+
+## Transition integration
+
+Protected governance escalation has higher precedence than ordinary automatic remediation.
+
+```text
+POLICY_SELF_MODIFICATION_OR_PROTECTED_GOVERNANCE_CONFLICT
+    -> ESCALATE_HUMAN
+    -> FREEZE_ORIGINATING_CANDIDATE
+    -> GOVERNANCE_REVIEW_PACKET
+    -> TERMINATE_ORIGINATING_RUN
+```
+
+`AUTO_REMEDIATE_AND_REVALIDATE` is not valid for a repair that changes the governance controlling that same blocked candidate.
+
+## PRAI integration
+
+PRAI remains fail-closed.
+
+`FAIL_POLICY_SELF_MODIFICATION` remains a blocking PRAI result. PRAI does not create exceptions and does not authorize policy changes.
+
+The orchestration layer interprets that failure as requiring the protected governance escalation path. The failure therefore means:
+
+```text
+PRAI = BLOCKED
+ORCHESTRATION = GOVERNANCE_ESCALATION_REQUIRED
+HUMAN_REVIEW_REQUIRED = TRUE
+SAME_RUN_POLICY_CHANGE = FORBIDDEN
+```
+
+This preserves PRAI's independence while allowing governance to evolve through a separate human-authorized path.
+
+## Anti-loop rule
+
+The same originating candidate, protected rule, and materially identical evidence may not repeatedly request governance reconsideration merely to obtain a different outcome.
+
+A repeated escalation requires materially new evidence or a human request for reconsideration.
+
+## Audit and continuity
+
+Every escalation and human decision must be forward-only, auditable, exact-state-bound, and preserved during handoff or context reset.
+
+Missing, stale, contradictory, or malformed escalation/decision records fail closed.
+
+## Canonical outcome
+
+```text
+AUTONOMY_HANDLES_IMPLEMENTATION
+PRAI_HANDLES_POST_RUN_ASSURANCE
+AI_GOVERNANCE_REVIEW_HANDLES_ANALYSIS_AND_RECOMMENDATION
+HUMAN_GOVERNANCE_GATE_HANDLES_PROTECTED_RULE_CHANGE_AUTHORITY
+NEW_RUN_HANDLES_EXECUTION_OF_THE_APPROVED_CHANGE
+```
