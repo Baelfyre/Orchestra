@@ -122,8 +122,8 @@ The suite also runs the AQ-7 regression anchors:
 Seeded controlled fixtures are reported separately from organic observations.
 The implementation does not claim a generalized effectiveness percentage unless
 a clear denominator is available. AQ-8 introduces no network, provider, or
-production side effect and remains a source-candidate phase until independent
-review and separately authorized later gates.
+production side effect. Before independent review and separately authorized
+later gates, AQ-8 remained a source-candidate phase.
 
 ## Canonical closeout
 
