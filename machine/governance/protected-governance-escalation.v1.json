@@ -15,7 +15,8 @@
     "GOVERNANCE_TOPOLOGY_CONFLICT",
     "POLICY_CHOICE_REQUIRED",
     "AUTHORITY_EXPANSION_REQUIRED",
-    "PROTECTED_GATE_RELAXATION_REQUIRED"
+    "PROTECTED_GATE_RELAXATION_REQUIRED",
+    "WHITELIST_MUTATION_REQUIRED"
   ],
   "ai_recommendations": [
     "DENY",
@@ -91,6 +92,33 @@
     "independent_canonical_readback_required": true,
     "original_candidate_re_evaluation_required": true,
     "self_amended_assurance_mechanism_cannot_be_claimed_as_independent_certifier": true
+  },
+  "whitelist_authority": {
+    "authority_class": "HUMAN_POLICY",
+    "authority_origin_record": "Padayon:c8798f848df0830d04d5f25b4f0680d288768839",
+    "human_approval_required": true,
+    "human_decision_record_required": true,
+    "ai_recommendation_allowed": true,
+    "ai_approval_allowed": false,
+    "ai_mutation_without_human_decision_allowed": false,
+    "full_autonomous_override_allowed": false,
+    "fresh_execution_context_required": true,
+    "same_run_creation_and_consumption_forbidden": true,
+    "precedent_is_authority": false,
+    "protected_mutations": [
+      "CREATE_WHITELIST",
+      "ADD_WHITELIST_ENTRY",
+      "REMOVE_WHITELIST_ENTRY",
+      "EXPAND_WHITELIST_MATCH",
+      "NARROW_WHITELIST_MATCH",
+      "REINTERPRET_WHITELIST_SCOPE",
+      "CHANGE_WHITELIST_PRECEDENCE",
+      "CHANGE_WHITELIST_TRANSITIVITY",
+      "CHANGE_WHITELIST_EXPIRATION",
+      "CHANGE_WHITELIST_CONSUMPTION",
+      "CHANGE_WHITELIST_REASON_CODE",
+      "DELETE_OR_DISABLE_WHITELIST"
+    ]
   },
   "anti_loop": {
     "same_candidate_rule_evidence_one_escalation": true,

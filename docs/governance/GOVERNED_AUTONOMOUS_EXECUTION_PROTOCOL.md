@@ -136,6 +136,10 @@ AI specialists may analyze and recommend but may not execute the protected chang
 
 PRAI remains fail-closed. `FAIL_POLICY_SELF_MODIFICATION` is evidence that this escalation path is required; it is not converted into a same-run PRAI pass or automatic repair.
 
+Whitelist mutation is always a protected governance change.
+
+`FULL_AUTONOMOUS` cannot authorize whitelist mutation. AI models, agents, specialists, and delegated workflows may recommend a whitelist change, but creation, modification, expansion, narrowing, removal, reinterpretation, or autonomous approval of whitelist policy requires an explicit human governance decision and a fresh bounded execution context. Prior whitelist precedent, passing CI, unanimous specialist agreement, or available write capability does not create that authority.
+
 See `PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md`.
 
 ## Merge integration
@@ -161,7 +165,7 @@ Reviewed-head ancestry is not required after a valid Squash merge.
 
 - `HUMAN_GOVERNED`: stop before every material Git/remote transition and unapproved major phase progression. Mechanical candidate-state recording may continue only after the required human decision/evidence already exists.
 - `SEMI_AUTONOMOUS`: may reach exact-head `MERGE_READY` automatically when qualification evidence is current, then stop before merge. Major progression outside the explicit candidate-transition contract remains human-gated.
-- `FULL_AUTONOMOUS`: may continue through an exactly granted merge and subsequent candidate verification/closeout while evidence remains green; stop at the first hard boundary, adoption judgment, or authority gap.
+- `FULL_AUTONOMOUS`: may continue through an exactly granted merge and subsequent candidate verification/closeout while evidence remains green; stop at the first hard boundary, adoption judgment, whitelist mutation request, or authority gap.
 
 ## Audit and provenance
 
