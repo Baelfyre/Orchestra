@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/aq9-deep-assurance.v1.schema.json",
+  "title": "Orchestra AQ9 Deep Assurance Contract v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "phase",
+    "owner",
+    "authority_model",
+    "purpose",
+    "implementation_inventory",
+    "assurance_families",
+    "mutation",
+    "property",
+    "metamorphic",
+    "bounded_fuzz",
+    "fail_closed_conditions",
+    "authority",
+    "validation"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "orchestra.aq9-deep-assurance.v1"
+    },
+    "phase": {
+      "const": "AQ9_DEEP_ASSURANCE"
+    },
+    "owner": {
+      "const": "overseer"
+    },
+    "authority_model": {
+      "const": "EVIDENCE_ONLY_NON_AUTHORIZING"
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 40,
+      "maxLength": 1024
+    },
+    "implementation_inventory": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      }
+    },
+    "assurance_families": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "prefixItems": [
+        {
+          "const": "MUTATION"
+        },
+        {
+          "const": "PROPERTY"
+        },
+        {
+          "const": "METAMORPHIC"
+        },
+        {
+          "const": "BOUNDED_FUZZ"
+        }
+      ],
+      "items": false
+    },
+    "mutation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tool",
+        "config",
+        "required_existing_targets",
+        "aq9_added_targets",
+        "test_surfaces",
+        "score_policy"
+      ],
+      "properties": {
+        "tool": {
+          "const": "cosmic-ray"
+        },
+        "config": {
+          "const": "cosmic-ray.toml"
+        },
+        "required_existing_targets": {
+          "type": "array",
+          "minItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "aq9_added_targets": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "test_surfaces": {
+          "type": "array",
+          "minItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "score_policy": {
+          "const": "PRESERVE_EXISTING_SCOREABLE_COMPATIBILITY_GATE"
+        }
+      }
+    },
+    "property": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cases",
+        "invariants"
+      ],
+      "properties": {
+        "cases": {
+          "type": "integer",
+          "minimum": 32,
+          "maximum": 512
+        },
+        "invariants": {
+          "type": "array",
+          "minItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "metamorphic": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cases",
+        "relations"
+      ],
+      "properties": {
+        "cases": {
+          "type": "integer",
+          "minimum": 16,
+          "maximum": 256
+        },
+        "relations": {
+          "type": "array",
+          "minItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "bounded_fuzz": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cases",
+        "seed",
+        "max_generated_paths",
+        "oracle",
+        "unsafe_input_policy"
+      ],
+      "properties": {
+        "cases": {
+          "type": "integer",
+          "minimum": 128,
+          "maximum": 4096
+        },
+        "seed": {
+          "const": 20260911
+        },
+        "max_generated_paths": {
+          "type": "integer",
+          "minimum": 9,
+          "maximum": 64
+        },
+        "oracle": {
+          "type": "string",
+          "minLength": 20
+        },
+        "unsafe_input_policy": {
+          "const": "REJECT"
+        }
+      }
+    },
+    "fail_closed_conditions": {
+      "type": "array",
+      "minItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 3
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "creates_execution_authority",
+        "creates_transition_authority",
+        "creates_whitelist_authority",
+        "changes_protected_policy",
+        "lowers_assurance_thresholds",
+        "activates_provider",
+        "activates_telemetry",
+        "mutates_production",
+        "authorizes_release"
+      ],
+      "properties": {
+        "creates_execution_authority": {
+          "const": false
+        },
+        "creates_transition_authority": {
+          "const": false
+        },
+        "creates_whitelist_authority": {
+          "const": false
+        },
+        "changes_protected_policy": {
+          "const": false
+        },
+        "lowers_assurance_thresholds": {
+          "const": false
+        },
+        "activates_provider": {
+          "const": false
+        },
+        "activates_telemetry": {
+          "const": false
+        },
+        "mutates_production": {
+          "const": false
+        },
+        "authorizes_release": {
+          "const": false
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "validator",
+        "runtime_test",
+        "behavior_registration",
+        "architecture_reference",
+        "schema",
+        "canonical_start_sha"
+      ],
+      "properties": {
+        "validator": {
+          "const": "scripts/validation/validate_aq9.py"
+        },
+        "runtime_test": {
+          "const": "tests/runtime/test_adaptive_assurance_aq9.py"
+        },
+        "behavior_registration": {
+          "const": "tests/behavior/run_tests.py"
+        },
+        "architecture_reference": {
+          "const": "docs/architecture/ADAPTIVE_ASSURANCE_AQ9.md"
+        },
+        "schema": {
+          "const": "machine/schemas/aq9-deep-assurance.v1.schema.json"
+        },
+        "canonical_start_sha": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        }
+      }
+    }
+  }
+}

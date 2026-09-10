@@ -3,10 +3,11 @@ module-path = [
   "orchestra_runtime/evidence.py",
   "orchestra_runtime/governance_kernel.py",
   "orchestra_runtime/preexecution.py",
+  "scripts/validation/classify_adaptive_assurance_scope.py",
 ]
 timeout = 90.0
 excluded-modules = []
-test-command = "python -m pytest -q tests/runtime/test_evidence_kernel.py tests/runtime/test_governance_kernel.py tests/runtime/test_preexecution.py"
+test-command = "python -m pytest -q tests/runtime/test_evidence_kernel.py tests/runtime/test_governance_kernel.py tests/runtime/test_preexecution.py tests/behavior/test_protected_aq8_assurance_scope_policy.py tests/runtime/test_adaptive_assurance_aq9.py"
 
 [cosmic-ray.distributor]
 name = "local"

@@ -1,0 +1,100 @@
+{
+  "schema_version": "orchestra.aq9-deep-assurance.v1",
+  "phase": "AQ9_DEEP_ASSURANCE",
+  "owner": "overseer",
+  "authority_model": "EVIDENCE_ONLY_NON_AUTHORIZING",
+  "purpose": "Deepen deterministic assurance over existing Orchestra QA logic through mutation, property, metamorphic, and bounded fuzz evidence without creating a second QA engine or new authority.",
+  "implementation_inventory": [
+    "CHANGELOG.md",
+    "README.json",
+    "cosmic-ray.toml",
+    "docs/architecture/ADAPTIVE_ASSURANCE_AQ9.md",
+    "machine/adaptive/aq9-deep-assurance.v1.json",
+    "machine/schemas/aq9-deep-assurance.v1.schema.json",
+    "scripts/validation/validate_aq9.py",
+    "tests/behavior/run_tests.py",
+    "tests/runtime/test_adaptive_assurance_aq9.py"
+  ],
+  "assurance_families": [
+    "MUTATION",
+    "PROPERTY",
+    "METAMORPHIC",
+    "BOUNDED_FUZZ"
+  ],
+  "mutation": {
+    "tool": "cosmic-ray",
+    "config": "cosmic-ray.toml",
+    "required_existing_targets": [
+      "orchestra_runtime/evidence.py",
+      "orchestra_runtime/governance_kernel.py",
+      "orchestra_runtime/preexecution.py"
+    ],
+    "aq9_added_targets": [
+      "scripts/validation/classify_adaptive_assurance_scope.py"
+    ],
+    "test_surfaces": [
+      "tests/runtime/test_evidence_kernel.py",
+      "tests/runtime/test_governance_kernel.py",
+      "tests/runtime/test_preexecution.py",
+      "tests/behavior/test_protected_aq8_assurance_scope_policy.py",
+      "tests/runtime/test_adaptive_assurance_aq9.py"
+    ],
+    "score_policy": "PRESERVE_EXISTING_SCOREABLE_COMPATIBILITY_GATE"
+  },
+  "property": {
+    "cases": 64,
+    "invariants": [
+      "EXACT_AQ9_SCOPE_IS_ORDER_INVARIANT",
+      "EXACT_AQ9_SCOPE_IS_SEPARATOR_ONLY_FOR_HISTORICAL_GATES",
+      "AQ9_PARTIAL_SCOPE_FAILS_CLOSED",
+      "AQ9_UNKNOWN_SUPERSET_FAILS_CLOSED",
+      "DUPLICATE_NORMALIZED_PATHS_ARE_REJECTED"
+    ]
+  },
+  "metamorphic": {
+    "cases": 32,
+    "relations": [
+      "PERMUTING_EQUIVALENT_PATHS_PRESERVES_CLASSIFICATION",
+      "SLASH_NORMALIZATION_PRESERVES_EXACT_SCOPE_CLASSIFICATION",
+      "REMOVING_ANY_EXACT_AQ9_PATH_REVOKES_EXEMPTION",
+      "ADDING_UNKNOWN_PATH_TO_EXACT_AQ9_SCOPE_REVOKES_EXEMPTION",
+      "RESTORING_EXACT_AQ9_SCOPE_RESTORES_ONLY_THE_PHASE_SEPARATOR_RESULT"
+    ]
+  },
+  "bounded_fuzz": {
+    "cases": 256,
+    "seed": 20260911,
+    "max_generated_paths": 12,
+    "oracle": "ONLY_EXACT_COMPLETE_AQ9_INVENTORY_MAY_BE_NOT_APPLICABLE_FOR_HISTORICAL_GATES",
+    "unsafe_input_policy": "REJECT"
+  },
+  "fail_closed_conditions": [
+    "AQ9_PARTIAL_SCOPE",
+    "AQ9_MIXED_SCOPE",
+    "AQ9_UNKNOWN_SUPERSET",
+    "DUPLICATE_NORMALIZED_PATH",
+    "UNSAFE_PATH",
+    "UNREGISTERED_FUTURE_AQ_PHASE",
+    "SCHEMA_OR_SEMANTIC_DRIFT",
+    "MUTATION_TARGET_OR_TEST_SURFACE_DRIFT"
+  ],
+  "authority": {
+    "creates_execution_authority": false,
+    "creates_transition_authority": false,
+    "creates_whitelist_authority": false,
+    "changes_protected_policy": false,
+    "lowers_assurance_thresholds": false,
+    "activates_provider": false,
+    "activates_telemetry": false,
+    "mutates_production": false,
+    "authorizes_release": false
+  },
+  "validation": {
+    "validator": "scripts/validation/validate_aq9.py",
+    "runtime_test": "tests/runtime/test_adaptive_assurance_aq9.py",
+    "behavior_registration": "tests/behavior/run_tests.py",
+    "architecture_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ9.md",
+    "schema": "machine/schemas/aq9-deep-assurance.v1.schema.json",
+    "canonical_start_sha": "1e1a0f18ebb144bed76bc2ec617d3a3913b1c041"
+  }
+}
