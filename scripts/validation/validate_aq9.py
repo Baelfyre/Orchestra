@@ -10,8 +10,7 @@ import json
 from pathlib import Path
 import sys
 import tomllib
-
-import jsonschema
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 CONTRACT_PATH = ROOT / "machine/adaptive/aq9-deep-assurance.v1.json"
@@ -33,6 +32,33 @@ EXACT_INVENTORY = (
     "tests/runtime/test_adaptive_assurance_aq9.py",
 )
 FAMILIES = ("MUTATION", "PROPERTY", "METAMORPHIC", "BOUNDED_FUZZ")
+CONTRACT_KEYS = {
+    "schema_version",
+    "phase",
+    "owner",
+    "authority_model",
+    "purpose",
+    "implementation_inventory",
+    "assurance_families",
+    "mutation",
+    "property",
+    "metamorphic",
+    "bounded_fuzz",
+    "fail_closed_conditions",
+    "authority",
+    "validation",
+}
+AUTHORITY_KEYS = {
+    "creates_execution_authority",
+    "creates_transition_authority",
+    "creates_whitelist_authority",
+    "changes_protected_policy",
+    "lowers_assurance_thresholds",
+    "activates_provider",
+    "activates_telemetry",
+    "mutates_production",
+    "authorizes_release",
+}
 BASE_MUTATION_TARGETS = {
     "orchestra_runtime/evidence.py",
     "orchestra_runtime/governance_kernel.py",
@@ -53,10 +79,77 @@ def _require(condition: bool, message: str) -> None:
         raise ValueError(message)
 
 
+def _require_mapping(value: Any, message: str) -> dict[str, Any]:
+    _require(isinstance(value, dict), message)
+    return value
+
+
+def _validate_dependency_free_schema_parity(
+    contract: dict[str, Any], schema: dict[str, Any]
+) -> None:
+    """Check critical schema/contract parity without third-party dependencies.
+
+    Draft 2020-12 schema validity and full instance conformance are exercised by
+    tests/runtime/test_adaptive_assurance_aq9.py in the runtime assurance job,
+    where jsonschema is an explicit installed dependency. The behavior runner
+    intentionally remains dependency-light, matching the established AQ8
+    validator split between dependency-free semantic parity and runtime schema
+    conformance.
+    """
+
+    _require(schema.get("$schema") == "https://json-schema.org/draft/2020-12/schema", "AQ9 schema draft drift")
+    _require(schema.get("type") == "object", "AQ9 schema root type drift")
+    _require(schema.get("additionalProperties") is False, "AQ9 schema must reject unknown root properties")
+    _require(set(schema.get("required", ())) == CONTRACT_KEYS, "AQ9 schema required-key drift")
+
+    properties = _require_mapping(schema.get("properties"), "AQ9 schema properties must be an object")
+    _require(set(properties) == CONTRACT_KEYS, "AQ9 schema property-key drift")
+    _require(set(contract) == CONTRACT_KEYS, "AQ9 contract top-level key drift")
+
+    expected_constants = {
+        "schema_version": "orchestra.aq9-deep-assurance.v1",
+        "phase": "AQ9_DEEP_ASSURANCE",
+        "owner": "overseer",
+        "authority_model": "EVIDENCE_ONLY_NON_AUTHORIZING",
+    }
+    for key, expected in expected_constants.items():
+        definition = _require_mapping(properties.get(key), f"AQ9 schema {key} definition missing")
+        _require(definition.get("const") == expected, f"AQ9 schema {key} constant drift")
+        _require(contract.get(key) == expected, f"AQ9 contract {key} drift")
+
+    family_definition = _require_mapping(properties.get("assurance_families"), "AQ9 assurance-family schema missing")
+    prefix_items = family_definition.get("prefixItems")
+    _require(isinstance(prefix_items, list), "AQ9 assurance-family prefixItems drift")
+    schema_families = tuple(
+        _require_mapping(item, "AQ9 assurance-family schema entry must be an object").get("const")
+        for item in prefix_items
+    )
+    _require(schema_families == FAMILIES, "AQ9 assurance-family schema constants drift")
+
+    fuzz_definition = _require_mapping(properties.get("bounded_fuzz"), "AQ9 bounded-fuzz schema missing")
+    fuzz_properties = _require_mapping(fuzz_definition.get("properties"), "AQ9 bounded-fuzz properties missing")
+    seed_definition = _require_mapping(fuzz_properties.get("seed"), "AQ9 deterministic-seed schema missing")
+    _require(seed_definition.get("const") == 20260911, "AQ9 deterministic-seed schema drift")
+
+    authority_definition = _require_mapping(properties.get("authority"), "AQ9 authority schema missing")
+    _require(set(authority_definition.get("required", ())) == AUTHORITY_KEYS, "AQ9 authority required-key drift")
+    authority_properties = _require_mapping(authority_definition.get("properties"), "AQ9 authority properties missing")
+    _require(set(authority_properties) == AUTHORITY_KEYS, "AQ9 authority schema key drift")
+    for key in AUTHORITY_KEYS:
+        definition = _require_mapping(authority_properties[key], f"AQ9 authority schema entry missing: {key}")
+        _require(definition.get("const") is False, f"AQ9 authority schema must keep {key}=false")
+
+
 def validate() -> None:
-    contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
-    schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
-    jsonschema.validate(contract, schema)
+    contract = _require_mapping(
+        json.loads(CONTRACT_PATH.read_text(encoding="utf-8")),
+        "AQ9 contract root must be an object",
+    )
+    schema = _require_mapping(
+        json.loads(SCHEMA_PATH.read_text(encoding="utf-8")),
+        "AQ9 schema root must be an object",
+    )
+    _validate_dependency_free_schema_parity(contract, schema)
 
     _require(contract["schema_version"] == "orchestra.aq9-deep-assurance.v1", "AQ9 schema version drift")
     _require(contract["phase"] == "AQ9_DEEP_ASSURANCE", "AQ9 phase drift")
@@ -69,6 +162,7 @@ def validate() -> None:
     _require(contract["bounded_fuzz"]["cases"] == 256, "AQ9 fuzz bound drift")
     _require(contract["bounded_fuzz"]["seed"] == 20260911, "AQ9 deterministic seed drift")
     _require(contract["bounded_fuzz"]["max_generated_paths"] == 12, "AQ9 fuzz path bound drift")
+    _require(set(contract["authority"]) == AUTHORITY_KEYS, "AQ9 authority contract key drift")
     _require(all(value is False for value in contract["authority"].values()), "AQ9 authority must remain non-authorizing")
 
     cosmic = tomllib.loads(COSMIC_RAY_PATH.read_text(encoding="utf-8"))["cosmic-ray"]
@@ -109,7 +203,7 @@ def validate() -> None:
 def main() -> int:
     try:
         validate()
-    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError, jsonschema.ValidationError, tomllib.TOMLDecodeError) as exc:
+    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError, tomllib.TOMLDecodeError) as exc:
         print(f"AQ9_DEEP_ASSURANCE_VALIDATION=FAIL: {exc}", file=sys.stderr)
         return 1
     print("AQ9_DEEP_ASSURANCE_VALIDATION=PASS")
