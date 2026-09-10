@@ -1,0 +1,42 @@
+name: Temporary AQ8 README LF normalization
+
+on:
+  push:
+    branches:
+      - tmp/aq8-readme-lf-workspace-20260910
+
+permissions:
+  contents: write
+
+jobs:
+  normalize-readme:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Normalize README.json line endings only
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('README.json')
+          data = path.read_bytes()
+          normalized = data.replace(b'\r\n', b'\n')
+          path.write_bytes(normalized)
+          PY
+          git diff -- README.json
+          git diff --check -- README.json
+      - name: Commit normalization when needed
+        shell: bash
+        run: |
+          if git diff --quiet -- README.json; then
+            echo 'README.json already normalized'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add README.json
+          git commit -m 'style(aq8): produce normalized README donor blob'
+          git push origin HEAD:tmp/aq8-readme-lf-workspace-20260910
