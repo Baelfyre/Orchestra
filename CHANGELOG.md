@@ -1,3 +1,10 @@
+## Unreleased governance policy amendment: AQ8 assurance scope
+
+- Adds the human-authorized exact-complete AQ8 implementation-scope classification as `NOT_APPLICABLE` to the historical PRAI, AQ5, and AQ7 exact inventories while leaving all historical PRAI, AQ5, AQ6, and AQ7 inventory definitions unchanged.
+- Keeps partial, mixed, unknown, unanchored, and otherwise unrecognized AQ8 scope fail-closed `APPLICABLE`.
+- Adds protected regression coverage, Governance Check wiring, and `README.json` machine-index parity for the AQ8 assurance-scope policy.
+- Preserves frozen PRs #858, #868, and #875, keeps AQ9 unauthorized, and grants no implementation, merge, release, deployment, provider, credential, telemetry, production, or other protected-action authority.
+
 ## Unreleased Covenant cross-governance synthesis
 
 - Adds the evidence-only, non-authorizing Covenant runtime contract, machine schema, exact candidate/tree binding, and no-vote reconciliation rules.
