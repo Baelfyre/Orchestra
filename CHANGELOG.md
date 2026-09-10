@@ -3,7 +3,8 @@
 - Adds deterministic, state-bound security, provenance, concurrency, state-machine, and evidence-integrity assurance packs with machine contract/schema parity.
 - Requires controlled interleavings for concurrency proof, aggregate-level analysis for shared invariants, and durable retrievable evidence bound to the exact candidate/tree/workflow.
 - Executes the COV-01 through COV-18 conflict matrix and AQ7 regression anchors while preserving PRAI, Covenant, Steward, Governor, and Arbiter ownership boundaries.
-- Keeps AQ8 source-only: no signed materialization, canonical merge, Padayon reconciliation, provider activation, production action, or AQ9+ authority.
+- Canonicalizes the qualified AQ8 Run N+2 through source PR #879, signed materialization PR #883, and canonical PR #884 at commit `1ef3faf459c9c64ed3ce7b316b44e3d7d793bf82` and tree `f5fa432d154651152061267b23c678d3e389338c`, preserving source/materialized/canonical tree identity.
+- Confirms canonical post-merge Governance, validate/runtime, Required Analysis, cross-platform, and CodeQL validation PASS while leaving AQ9 unauthorized and release, deployment, provider, production, and protected-policy authority unchanged.
 
 ## Unreleased governance policy amendment: AQ8 assurance scope
 

@@ -124,3 +124,22 @@ The implementation does not claim a generalized effectiveness percentage unless
 a clear denominator is available. AQ-8 introduces no network, provider, or
 production side effect and remains a source-candidate phase until independent
 review and separately authorized later gates.
+
+## Canonical closeout
+
+AQ-8 completed its governed Run N+2 promotion without authority expansion.
+
+- Qualified source PR: #879 at `c0d30070dfc7655907a87964caffd005078f8896`
+- Qualified source tree: `f5fa432d154651152061267b23c678d3e389338c`
+- Signed materialization PR: #883
+- Signed carrier commit: `e124efb4fdf9a0e5a69815662c53acb0c1829265`
+- Canonical PR: #884
+- Canonical commit: `1ef3faf459c9c64ed3ce7b316b44e3d7d793bf82`
+- Canonical tree: `f5fa432d154651152061267b23c678d3e389338c`
+- Canonical signature: verified / valid
+- Post-merge validation: PASS
+
+The qualified source tree, signed materialization tree, and canonical tree are
+identical. AQ-8 remains evidence-only and non-authorizing. AQ9 is not admitted
+by this closeout. Release, deployment, provider, production, protected-policy,
+and other protected-action authority remain independently governed.

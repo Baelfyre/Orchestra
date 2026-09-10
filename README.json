@@ -87,7 +87,7 @@
       "authority_note": "Covenant results are evidence-only and non-authorizing. Arbiter remains transition owner; PRAI PASS and specialist PASS do not establish Covenant PASS."
     },
     "adaptive_assurance_aq8_high_risk_packs": {
-      "status": "IMPLEMENTATION_CANDIDATE",
+      "status": "AQ8_COMPLETE_CANONICAL_VERIFIED",
       "purpose": "Evaluates reusable security, provenance, concurrency, state-machine, and evidence-integrity packs as state-bound evidence without creating authority.",
       "machine_sources": [
         "machine/adaptive/aq8-high-risk-assurance-packs.v1.json",
@@ -102,7 +102,16 @@
         "tests/runtime/test_adaptive_assurance_aq8.py",
         "scripts/validation/validate_aq8.py"
       ],
-      "authority_note": "AQ8 results are evidence-only and non-authorizing. Arbiter remains transition owner; the source candidate is not signed-materialized, merged, or reconciled to Padayon."
+      "canonical_source_pr": 879,
+      "qualified_source_head": "c0d30070dfc7655907a87964caffd005078f8896",
+      "signed_materialization_pr": 883,
+      "signed_materialization_commit": "e124efb4fdf9a0e5a69815662c53acb0c1829265",
+      "canonical_pr": 884,
+      "canonical_sha": "1ef3faf459c9c64ed3ce7b316b44e3d7d793bf82",
+      "canonical_tree": "f5fa432d154651152061267b23c678d3e389338c",
+      "canonical_signature": "VERIFIED_VALID",
+      "post_merge_validation": "PASS",
+      "authority_note": "AQ8 results remain evidence-only and non-authorizing after canonicalization. Arbiter remains transition owner; canonical completion does not grant release, deployment, provider, production, protected-policy, or AQ9 authority."
     },
     "runtime_architecture_refoundation": {
       "status": "AR_2_COMPLETE_CANONICAL_VERIFIED",
@@ -2962,7 +2971,7 @@
     "adaptive_assurance_aq1": "AQ1_CANONICAL_VERIFIED_AQ2_AUTHORIZED_IMPLEMENTATION_ONLY",
     "adaptive_assurance_aq2": "AQ2_AUTHORIZED_IMPLEMENTATION_ONLY",
     "adaptive_assurance_aq4": "AQ4_AUTHORIZED_IMPLEMENTATION_ONLY",
-    "adaptive_assurance_aq8": "AQ8_SOURCE_CANDIDATE_IMPLEMENTATION_ONLY"
+    "adaptive_assurance_aq8": "AQ8_COMPLETE_CANONICAL_VERIFIED"
   },
   "ai_review_guidance": {
     "preferred_entrypoint": "README.json",
