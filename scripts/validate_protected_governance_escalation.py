@@ -52,7 +52,7 @@ REQUIRED_TEXT = {
         "The originating run must not create and consume its own exception",
         "FAIL_POLICY_SELF_MODIFICATION",
         "Whitelist authority is human-only.",
-        "FULL_AUTONOMOUS does not authorize whitelist mutation.",
+        "`FULL_AUTONOMOUS` does not authorize whitelist mutation.",
         WHITELIST_AUTHORITY_ORIGIN,
     ),
     "docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md": (
@@ -69,7 +69,7 @@ REQUIRED_TEXT = {
         "FULL_AUTONOMOUS",
         "new execution context",
         "Whitelist mutation is always a protected governance change.",
-        "FULL_AUTONOMOUS cannot authorize whitelist mutation.",
+        "`FULL_AUTONOMOUS` cannot authorize whitelist mutation.",
     ),
     "docs/architecture/ADAPTIVE_ASSURANCE_PRAI.md": (
         "GOVERNANCE_ESCALATION_REQUIRED",
