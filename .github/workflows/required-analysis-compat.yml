@@ -16,6 +16,9 @@ on:
 
 permissions:
   contents: read
+  actions: read
+  checks: read
+  pull-requests: read
 
 env:
   ORCHESTRA_APPROVED_BASE_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.approved_base_sha || '' }}
@@ -26,28 +29,51 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      actions: read
+      checks: read
+      pull-requests: read
       security-events: write
+    outputs:
+      promotion_mode: ${{ steps.promotion.outputs.mode }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Resolve promotion assurance mode
+        id: promotion
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python scripts/validate_governance_promotion_attestation.py
+
       - name: Initialize CodeQL
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
         uses: github/codeql-action/init@v4
         with:
           languages: python
           build-mode: none
 
       - name: Analyze Python without uploading duplicate SARIF
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
         uses: github/codeql-action/analyze@v4
         with:
           upload: never
           upload-database: false
 
+      - name: Confirm tree-attested analysis assurance
+        if: steps.promotion.outputs.mode == 'TREE_ATTESTED'
+        run: echo "COMPATIBILITY_CODEQL_REUSED_QUALIFIED_TREE_ASSURANCE=PASS"
+
   analyze-actions:
     name: Analyze (actions)
     needs: compatibility-codeql
+    if: ${{ needs.compatibility-codeql.outputs.promotion_mode != 'TREE_ATTESTED' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -69,6 +95,7 @@ jobs:
   analyze-python:
     name: Analyze (python)
     needs: compatibility-codeql
+    if: ${{ needs.compatibility-codeql.outputs.promotion_mode != 'TREE_ATTESTED' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
