@@ -1,3 +1,10 @@
+## Unreleased governance policy amendment: AQ8 assurance scope
+
+- Adds the human-authorized exact-complete AQ8 implementation-scope classification as `NOT_APPLICABLE` to the historical PRAI, AQ5, and AQ7 exact inventories while leaving all historical PRAI, AQ5, AQ6, and AQ7 inventory definitions unchanged.
+- Keeps partial, mixed, unknown, unanchored, and otherwise unrecognized AQ8 scope fail-closed `APPLICABLE`.
+- Adds protected regression coverage, Governance Check wiring, and `README.json` machine-index parity for the AQ8 assurance-scope policy.
+- Preserves frozen PRs #858, #868, and #875, keeps AQ9 unauthorized, and grants no implementation, merge, release, deployment, provider, credential, telemetry, production, or other protected-action authority.
+
 ## Unreleased Covenant cross-governance synthesis
 
 - Adds the evidence-only, non-authorizing Covenant runtime contract, machine schema, exact candidate/tree binding, and no-vote reconciliation rules.
@@ -156,7 +163,7 @@
 - Completes the existing UIEF-6 and UIEF-8 specialist/regression contracts while preserving Conductor routing, serial specialist execution, and the one-active-specialist ceiling.
 - Records UIEF-7 deterministic-validation limits and UIEF-9 `NO_BENEFIT_ESTABLISHED` without claiming rendered-application benefit, harm, or new provider evidence.
 - Publishes all 11 package/version surfaces and the host-update contract at `1.9.0`; tag `v1.9.0` and GitHub Release `RE_kwDOS_4UtM4W2pDC` resolve to signed canonical commit `7129a690b041bddbf8b58f41db0c4a680317fda1`.
-- Reconciles current-facing README, machine-index, installation, compatibility, portal, maturity, state, and roadmap surfaces; adds the verified support link `https://buymeacoffee.com/baelfyre`.
+- Reconciles current-facing README, machine index, installation, compatibility, portal, maturity, state, and roadmap surfaces; adds the verified support link `https://buymeacoffee.com/baelfyre`.
 - Records Adaptive Host Integration as future work only. No host integration, automatic adaptation, provider mutation, policy activation, deployment, or installed-integration refresh is included.
 
 ## Post-v1.8.0 UIEF-5 hardened Clockwork engineering translation candidate
@@ -442,7 +449,7 @@
 ## Post-v1.7 runtime architecture AR-2 residual domain extraction closeout candidate
 
 - Moves qualified pure-domain semantics for capability manifests, governance decision/result contracts, pre-execution intent and policy, and workflow sanity receipts into bounded inward domain packages.
-- Preserves exact legacy compatibility surfaces and public object identity while leaving machine-policy evaluation, application/use-case coordination, host gates, routing/builders, DTOs, persistence, audit projection, provider, and MCP responsibilities for their later AR-3/AR-4 phases.
+- Preserves exact legacy compatibility surfaces and public object identity while leaving machine-policy evaluation, application/use-case coordination, host gates, routing/builders, DTOs/DPOs, persistence, audit projection, provider, and MCP responsibilities for their later AR-3/AR-4 phases.
 - Adds targeted domain, compatibility, fail-closed, and import-boundary tests plus the residual AR-2 closeout documentation and machine-index parity.
 - Keeps AR-3 unstarted, makes no provider/MCP behavior change, retires no public imports, and grants no release, deployment, or policy authority.
 
