@@ -301,7 +301,14 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
     specialized_workflows_are_anchored = bool(specialized_workflow_paths) and (
         PROMOTION_ASSURANCE_REQUIRED_ANCHORS.issubset(non_neutral)
     )
-    if specialized_workflow_paths and not specialized_workflows_are_anchored:
+    protected_governance_context = bool(
+        PROTECTED_GOVERNANCE_ANCHORS.intersection(non_neutral)
+    )
+    if (
+        specialized_workflow_paths
+        and not specialized_workflows_are_anchored
+        and not protected_governance_context
+    ):
         return APPLICABLE
 
     governance_paths = {path for path in non_neutral if is_governance_path(path)}
