@@ -10,24 +10,45 @@ This control is evidence-only and non-authorizing. It does not create merge, rel
 
 ```text
 NO_CONTENT_CHANGE => REUSE_CONTENT_ASSURANCE_THROUGH_VERIFIED_TREE_ATTESTATION
-CONTENT_CHANGE_OR_UNPROVEN_ATTESTATION => FULL_ASSURANCE_REQUIRED_OR_BLOCK
+CONTENT_CHANGE_OR_UNPROVEN_ATTESTATION => FULL_ASSURANCE_REQUIRED_OR BLOCK
 ```
 
 A commit SHA is part of provenance, but content assurance is bound to the Git tree. Reuse is permitted only when the complete source-to-carrier-to-canonical chain is independently verified.
+
+## API-authored unsigned transport
+
+The current transport is deliberately three-stage and three-PR:
+
+```text
+unsigned source branch
+    -> source PR to main
+    -> full exact-source assurance
+    -> isolated materialization PR
+    -> bounded signing validation
+    -> GitHub-signed identical-tree carrier
+    -> canonical PR to main
+    -> tree/provenance attestation through required contexts
+    -> protected squash merge
+    -> canonical tree/provenance readback
+```
+
+The extra source PR is the qualification surface. It is not merged directly. Its role is to establish full assurance on the exact content tree before signing and promotion. The materialization PR is signing transport only, and the canonical PR is the promotion surface.
+
+This replaces the earlier two-PR transport documented in `docs/validation/SIGNED_MATERIALIZATION_OPTIMIZATION_2026_08_16.md`, because a two-PR flow does not provide an independently full-qualified unsigned source tree to which later promotion assurance can be safely bound.
 
 ## Assurance stages
 
 ### 1. Source candidate
 
-Ordinary pull requests to `main` remain full-assurance candidates. The existing required checks and any applicable specialized assurance workflows execute normally against the exact source SHA and tree.
+The source branch opens a dedicated PR to `main`. It remains a full-assurance candidate. The existing required checks and any applicable specialized assurance workflows execute normally against the exact source SHA and tree.
 
-The promotion validator does not classify ordinary source branches as tree-attested promotions.
+The promotion validator does not classify ordinary source branches as tree-attested promotions. Source qualification must be complete before materialization may support assurance reuse.
 
 ### 2. Signed materialization
 
-The existing `materialize/**` signing transport remains bounded and non-authorizing. GitHub Squash produces a signed carrier whose parent must equal the verified canonical base and whose tree must equal the qualified source tree.
+The `materialize/**` signing transport remains bounded and non-authorizing. GitHub Squash produces a signed carrier whose parent must equal the verified canonical base and whose tree must equal the qualified source tree.
 
-Materialization does not independently grant canonical readiness.
+Materialization does not repeat the source content matrix and does not independently grant canonical readiness.
 
 ### 3. Canonical promotion
 
@@ -73,7 +94,7 @@ For an independently verified tree-identical signed promotion, these contexts ex
 
 ## Historical assurance classifiers
 
-`validate.yml`, `cross-platform-validation.yml`, `scripts/validate_signed_materialization.py`, and `tests/behavior/test_signed_materialization.py` are governance-control surfaces because they define or verify repository promotion and required-assurance transport. They are classified as governance paths for historical exact-scope compatibility.
+`validate.yml`, `cross-platform-validation.yml`, `signed-materialization.yml`, the signed-materialization validator/tests, and the historical signed-materialization transport document are governance-control surfaces because they define or verify repository promotion and required-assurance transport. They are classified as governance paths for historical exact-scope compatibility.
 
 This is a control-surface classification, not a one-off lifecycle whitelist. It does not create a path-set exception for application/runtime changes and does not alter the exact AQ8 canonical-closeout whitelist.
 
