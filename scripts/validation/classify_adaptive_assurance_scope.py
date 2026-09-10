@@ -170,10 +170,18 @@ PROMOTION_ASSURANCE_GOVERNANCE_PATHS = frozenset(
     {
         ".github/workflows/validate.yml",
         ".github/workflows/cross-platform-validation.yml",
+        ".github/workflows/required-analysis-compat.yml",
+        ".github/workflows/governance-check.yml",
         ".github/workflows/signed-materialization.yml",
+        ".github/workflows/prai.yml",
+        ".github/workflows/qa-compliance.yml",
+        ".github/workflows/aq6-gate-coverage.yml",
+        ".github/workflows/cosmic-ray-confidence.yml",
         "docs/validation/SIGNED_MATERIALIZATION_OPTIMIZATION_2026_08_16.md",
         "scripts/validate_signed_materialization.py",
+        "scripts/validate_governance_promotion_attestation.py",
         "tests/behavior/test_signed_materialization.py",
+        "tests/behavior/test_governance_promotion_attestation.py",
     }
 )
 
@@ -271,7 +279,10 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
 
     governance_paths = {path for path in non_neutral if is_governance_path(path)}
     reference_paths = non_neutral.intersection(ADAPTIVE_ASSURANCE_REFERENCE_PATHS)
-    workflow_paths = non_neutral.intersection(WORKFLOW_INTEGRATION_PATHS)
+    workflow_paths = (
+        non_neutral.intersection(WORKFLOW_INTEGRATION_PATHS)
+        - PROMOTION_ASSURANCE_GOVERNANCE_PATHS
+    )
     unknown_paths = non_neutral - governance_paths - reference_paths - workflow_paths
 
     if unknown_paths or not governance_paths:
