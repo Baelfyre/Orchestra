@@ -1,3 +1,10 @@
+## Unreleased governance policy amendment: AQ8 canonical closeout whitelist
+
+- Adds the human-authorized exact three-path AQ8 canonical-closeout whitelist for `CHANGELOG.md`, `README.json`, and `docs/architecture/ADAPTIVE_ASSURANCE_AQ8.md`.
+- Emits an explicit PRAI whitelist notice when that exact lifecycle-only projection is classified `NOT_APPLICABLE` to historical PRAI/AQ5/AQ7 implementation inventories.
+- Keeps AQ8-identifiable subsets, supersets, mixed/unknown scopes, runtime or machine-contract changes, and all other partial AQ8 changes fail-closed `APPLICABLE`; historical assurance inventories and thresholds remain unchanged.
+- Changes no runtime/plugin-engine behavior, PRAI/Covenant disposition semantics, Arbiter authority, release/deployment authority, provider configuration, credentials, telemetry, or production behavior.
+
 ## Unreleased ADAPT-QA AQ-8 high-risk assurance packs
 
 - Adds deterministic, state-bound security, provenance, concurrency, state-machine, and evidence-integrity assurance packs with machine contract/schema parity.
