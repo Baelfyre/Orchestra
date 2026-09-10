@@ -33,7 +33,7 @@
         {
           "source_id": "governance_policy",
           "path": "machine/governance/policy.v1.json",
-          "sha256": "a301f2124c975036b6f967aeb0eeaad25eb45a1e2fb9fd747060de4c2ba66c75"
+          "sha256": "3cff0a92609860a8ca9b2fb5f4c994e40493558fd17a98a11035e5197bdbfaaa"
         },
         {
           "source_id": "specialist_registry",
@@ -85,7 +85,7 @@
         {
           "source_id": "governance_policy",
           "path": "machine/governance/policy.v1.json",
-          "sha256": "a301f2124c975036b6f967aeb0eeaad25eb45a1e2fb9fd747060de4c2ba66c75"
+          "sha256": "3cff0a92609860a8ca9b2fb5f4c994e40493558fd17a98a11035e5197bdbfaaa"
         },
         {
           "source_id": "specialist_registry",
@@ -137,7 +137,7 @@
         {
           "source_id": "governance_policy",
           "path": "machine/governance/policy.v1.json",
-          "sha256": "a301f2124c975036b6f967aeb0eeaad25eb45a1e2fb9fd747060de4c2ba66c75"
+          "sha256": "3cff0a92609860a8ca9b2fb5f4c994e40493558fd17a98a11035e5197bdbfaaa"
         },
         {
           "source_id": "specialist_registry",
