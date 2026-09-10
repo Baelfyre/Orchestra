@@ -86,6 +86,24 @@
       ],
       "authority_note": "Covenant results are evidence-only and non-authorizing. Arbiter remains transition owner; PRAI PASS and specialist PASS do not establish Covenant PASS."
     },
+    "adaptive_assurance_aq8_high_risk_packs": {
+      "status": "IMPLEMENTATION_CANDIDATE",
+      "purpose": "Evaluates reusable security, provenance, concurrency, state-machine, and evidence-integrity packs as state-bound evidence without creating authority.",
+      "machine_sources": [
+        "machine/adaptive/aq8-high-risk-assurance-packs.v1.json",
+        "machine/schemas/aq8-high-risk-assurance-packs.v1.schema.json"
+      ],
+      "human_sources": [
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ8.md",
+        "docs/governance/THE_COVENANT.md"
+      ],
+      "runtime_surface": "orchestra_runtime/domain/adaptive/high_risk_assurance.py",
+      "validation_surface": [
+        "tests/runtime/test_adaptive_assurance_aq8.py",
+        "scripts/validation/validate_aq8.py"
+      ],
+      "authority_note": "AQ8 results are evidence-only and non-authorizing. Arbiter remains transition owner; the source candidate is not signed-materialized, merged, or reconciled to Padayon."
+    },
     "runtime_architecture_refoundation": {
       "status": "AR_2_COMPLETE_CANONICAL_VERIFIED",
       "purpose": "Incrementally refactor the Orchestra Python runtime into bounded clean/hexagonal architecture layers while preserving public behavior and legacy import compatibility.",
@@ -2496,6 +2514,12 @@
     "adaptive_assurance_aq6_validator": "scripts/validation/validate_gate_coverage.py",
     "adaptive_assurance_aq6_workflow": ".github/workflows/aq6-gate-coverage.yml",
     "adaptive_assurance_aq6_documentation": "docs/architecture/ADAPTIVE_ASSURANCE_AQ6.md",
+    "adaptive_assurance_aq8_contract": "machine/adaptive/aq8-high-risk-assurance-packs.v1.json",
+    "adaptive_assurance_aq8_schema": "machine/schemas/aq8-high-risk-assurance-packs.v1.schema.json",
+    "adaptive_assurance_aq8_runtime": "orchestra_runtime/domain/adaptive/high_risk_assurance.py",
+    "adaptive_assurance_aq8_validator": "scripts/validation/validate_aq8.py",
+    "adaptive_assurance_aq8_validation": "tests/runtime/test_adaptive_assurance_aq8.py",
+    "adaptive_assurance_aq8_documentation": "docs/architecture/ADAPTIVE_ASSURANCE_AQ8.md",
     "comparative_measurement_contract": "machine/benchmarking/comparative-measurement-contract.v1.json",
     "comparative_benchmark_run_schema": "machine/schemas/comparative-benchmark-run.schema.json",
     "comparative_benchmark_experiment_schema": "machine/schemas/comparative-benchmark-experiment.schema.json",
@@ -2665,7 +2689,8 @@
     "adaptive_assurance_aq3_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ3.md",
     "adaptive_assurance_aq4_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ4.md",
     "adaptive_assurance_aq5_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ5.md",
-    "adaptive_assurance_aq7_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ7.md"
+    "adaptive_assurance_aq7_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ7.md",
+    "adaptive_assurance_aq8_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ8.md"
   },
   "hosts_integrations": {
     "host_update_contract": "machine/hosts/update-contract.v1.json",
@@ -2935,7 +2960,8 @@
     "adaptive_agentic_workflow_advanced_adaptation_n6": "COMPLETE_CANONICAL_VERIFIED_NO_PROMOTION",
     "adaptive_assurance_aq1": "AQ1_CANONICAL_VERIFIED_AQ2_AUTHORIZED_IMPLEMENTATION_ONLY",
     "adaptive_assurance_aq2": "AQ2_AUTHORIZED_IMPLEMENTATION_ONLY",
-    "adaptive_assurance_aq4": "AQ4_AUTHORIZED_IMPLEMENTATION_ONLY"
+    "adaptive_assurance_aq4": "AQ4_AUTHORIZED_IMPLEMENTATION_ONLY",
+    "adaptive_assurance_aq8": "AQ8_SOURCE_CANDIDATE_IMPLEMENTATION_ONLY"
   },
   "ai_review_guidance": {
     "preferred_entrypoint": "README.json",
