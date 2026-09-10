@@ -1,3 +1,11 @@
+## Unreleased ADAPT-QA AQ-9 deep assurance expansion
+
+- Adds a deterministic AQ9 machine contract and schema for mutation, property, metamorphic, and bounded-fuzz assurance over existing QA logic without creating a second QA engine.
+- Preserves existing Cosmic Ray targets and adds the adaptive-assurance scope classifier as a real mutation target, with protected policy and AQ9 runtime regressions in the mutation test command.
+- Adds 64 property cases, 32 metamorphic cases, and 256 reproducible bounded-fuzz cases using fixed seed `20260911`, keeping non-exact AQ9 scopes fail-closed.
+- Adds semantic parity validation across contract, schema, Cosmic Ray configuration, behavior registration, README references, and non-authorizing governance boundaries.
+- Changes no production runtime authority, whitelist authority, provider/credential/telemetry state, release authority, or existing assurance threshold.
+
 ## Unreleased governance policy amendment: AQ9 assurance scope
 
 - Adds the human-authorized exact nine-path AQ9 phase-separation inventory for the historical PRAI, AQ5, and AQ7 scope classifiers.
