@@ -1,10 +1,10 @@
 # AQ8 Assurance Scope Policy
 
-**Contract:** `ORCHESTRA_AQ8_ASSURANCE_SCOPE_POLICY_V1`  
-**Authority:** explicit human `APPROVE_POLICY_AMENDMENT` decision  
-**Authority record:** Padayon commit `707693aebac73d84cf46f92d725f2d0d99b4b712`  
-**Escalation:** `ORCHESTRA_AQ8_ASSURANCE_SCOPE_POLICY_ESCALATION_20260910`  
-**Originating frozen candidate:** Orchestra PR #875 at `06e4d12fdcb6fc7f5d604a9a36936a3fd1c98a8c` / tree `74b6e315dd7b6493bf7938c96648176b1ead21b1`  
+**Contract:** `ORCHESTRA_AQ8_ASSURANCE_SCOPE_POLICY_V1`
+**Authority:** explicit human `APPROVE_POLICY_AMENDMENT` decision
+**Authority record:** Padayon commit `707693aebac73d84cf46f92d725f2d0d99b4b712`
+**Escalation:** `ORCHESTRA_AQ8_ASSURANCE_SCOPE_POLICY_ESCALATION_20260910`
+**Originating frozen candidate:** Orchestra PR #875 at `06e4d12fdcb6fc7f5d604a9a36936a3fd1c98a8c` / tree `74b6e315dd7b6493bf7938c96648176b1ead21b1`
 **Policy-amendment run:** Run N+1
 
 ## Purpose
