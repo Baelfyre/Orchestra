@@ -1,3 +1,10 @@
+## Unreleased ADAPT-QA AQ-8 high-risk assurance packs
+
+- Adds deterministic, state-bound security, provenance, concurrency, state-machine, and evidence-integrity assurance packs with machine contract/schema parity.
+- Requires controlled interleavings for concurrency proof, aggregate-level analysis for shared invariants, and durable retrievable evidence bound to the exact candidate/tree/workflow.
+- Executes the COV-01 through COV-18 conflict matrix and AQ7 regression anchors while preserving PRAI, Covenant, Steward, Governor, and Arbiter ownership boundaries.
+- Keeps AQ8 source-only: no signed materialization, canonical merge, Padayon reconciliation, provider activation, production action, or AQ9+ authority.
+
 ## Unreleased governance policy amendment: AQ8 assurance scope
 
 - Adds the human-authorized exact-complete AQ8 implementation-scope classification as `NOT_APPLICABLE` to the historical PRAI, AQ5, and AQ7 exact inventories while leaving all historical PRAI, AQ5, AQ6, and AQ7 inventory definitions unchanged.
@@ -411,7 +418,7 @@
 
 - Upgrades Clockwork (`skills/clockwork/SKILL.md`, `OUTPUT_FORMATS.md`, and dedicated `ARCHITECTURE_COMPLEXITY_AND_SCALE_POSTURE_GUIDE.md`) with architecture complexity decisions, scale-ready versus scale-provisioned posture formalization, simpler-alternative justification, and the future-scalability invariant.
 - Enforces the primary invariant `FUTURE_SCALABILITY_ALONE_IS_NOT_SUFFICIENT_JUSTIFICATION`, preventing vague future-scale claims from causing premature infrastructure expansion while rejecting unsupported complexity, not growth itself.
-- Formalizes `SCALE_READY` (preserving proportionate evolution paths without pre-provisioning unnecessary scale infrastructure) and `SCALE_PROVISIONED` (actively provisioning physical infrastructure based on verified capacity, performance, or isolation requirements), defaulting to `SCALE_READY` when both satisfy current accepted requirements.
+- Formalizes `SCALE_READY` (preserving proportionate evolution paths without pre-provisioning unnecessary scale infrastructure) and `SCALE_PROVISIONED` (actively provisioning physical infrastructure based on verified capacity, performance, or isolation requirements), defaulting to `SCALE_READY` when both satisfy current accepted requirements).
 - Implements mandatory simpler-alternative analysis for material complexity additions, canonical justification categorization, and decision states (`ACCEPT`, `ACCEPT_WITH_CONSTRAINTS`, `DEFER`, `REJECT`).
 - Consumes upstream `ProductIntentContract` and `CapacityEnvelope` from The Steward, preserving `UNKNOWN IS VALID`, ranges without averaging, partial capacity tolerance, and cost constraints as binding architecture inputs.
 - Adds Codex mirror parity (`adapters/codex/skills/clockwork/`), behavioral regression tests (`tests/behavior/test_clockwork_architecture_complexity.py`), route/registry metadata updates, and machine discovery in `README.json`.
