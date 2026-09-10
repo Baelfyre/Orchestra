@@ -42,9 +42,7 @@ jobs:
         id: promotion
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: >-
-          python scripts/validate_governance_promotion_attestation.py
-          --github-output "$GITHUB_OUTPUT"
+        run: python scripts/validate_governance_promotion_attestation.py
 
       - name: Install test dependencies
         if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
@@ -84,9 +82,7 @@ jobs:
         id: promotion
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: >-
-          python scripts/validate_governance_promotion_attestation.py
-          --github-output "$GITHUB_OUTPUT"
+        run: python scripts/validate_governance_promotion_attestation.py
 
       - name: Install runtime test dependencies
         if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
@@ -117,7 +113,7 @@ jobs:
 
       - name: Build machine-readable runtime test evidence
         id: evidence
-        if: steps.promotion.outputs.mode != 'TREE_ATTESTED' && always()
+        if: ${{ always() && steps.promotion.outputs.mode != 'TREE_ATTESTED' }}
         continue-on-error: true
         env:
           SOURCE_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -132,7 +128,7 @@ jobs:
 
       - name: Build and enforce machine-readable critical coverage inventory
         id: critical_coverage
-        if: steps.promotion.outputs.mode != 'TREE_ATTESTED' && always()
+        if: ${{ always() && steps.promotion.outputs.mode != 'TREE_ATTESTED' }}
         continue-on-error: true
         run: >-
           python scripts/validation/build_coverage_inventory.py
@@ -142,7 +138,7 @@ jobs:
           --critical-branch-floor 95
 
       - name: Upload runtime test evidence
-        if: steps.promotion.outputs.mode != 'TREE_ATTESTED' && always()
+        if: ${{ always() && steps.promotion.outputs.mode != 'TREE_ATTESTED' }}
         uses: actions/upload-artifact@v7
         with:
           name: runtime-test-evidence-${{ github.run_id }}-${{ github.run_attempt }}
@@ -151,7 +147,7 @@ jobs:
           retention-days: 90
 
       - name: Enforce runtime and evidence result
-        if: steps.promotion.outputs.mode != 'TREE_ATTESTED' && always()
+        if: ${{ always() && steps.promotion.outputs.mode != 'TREE_ATTESTED' }}
         shell: bash
         run: |
           test "${{ steps.runtime.outcome }}" = "success"
