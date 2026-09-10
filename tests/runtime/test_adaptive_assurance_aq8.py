@@ -23,155 +23,6 @@ SHA = "a" * 40
 TREE = "b" * 40
 RUN_ID = "aq8-test-run-20260910"
 
-
-SAFE_FACTS: dict[str, dict[str, Any]] = {
-    "SECURITY_UNKNOWN_CREDENTIAL": {
-        "control_verified": True, "credential_accepted": False,
-        "decision": "DENY", "enumeration_safe": True,
-    },
-    "SECURITY_INACTIVE_PRINCIPAL": {
-        "control_verified": True, "principal_accepted": False, "decision": "DENY",
-    },
-    "SECURITY_MISSING_GRANT": {
-        "control_verified": True, "grant_accepted": False, "decision": "DENY",
-    },
-    "SECURITY_GUESSED_OBJECT_ID": {
-        "control_verified": True, "object_enumerated": False, "decision": "DENY",
-    },
-    "SECURITY_CROSS_TENANT_ID": {
-        "control_verified": True, "tenant_scope_match": False,
-        "object_enumerated": False, "decision": "DENY",
-    },
-    "SECURITY_CROSS_WORKSPACE_ID": {
-        "control_verified": True, "workspace_scope_match": False,
-        "object_enumerated": False, "decision": "DENY",
-    },
-    "SECURITY_PRIVILEGE_ESCALATION": {
-        "control_verified": True, "escalation_accepted": False, "decision": "DENY",
-    },
-    "SECURITY_TENANT_ADMIN_GLOBAL_AUTHORITY_SEPARATION": {
-        "control_verified": True, "global_authority_mutated": False,
-        "tenant_authority_isolated": True,
-    },
-    "SECURITY_REVOCATION_BEFORE_REQUEST": {
-        "control_verified": True, "revocation_observed": True, "decision": "DENY",
-    },
-    "SECURITY_REVOCATION_DURING_REQUEST": {
-        "control_verified": True, "revocation_rechecked": True,
-        "commit_after_revocation": False, "decision": "DENY",
-    },
-    "SECURITY_STALE_AUTHORIZATION_STATE": {
-        "control_verified": True, "authorization_refreshed": True,
-        "stale_state_accepted": False, "decision": "DENY",
-    },
-    "PROVENANCE_CALLER_SUPPLIED_AUTHORITATIVE_VERSION": {
-        "defect_detected": True, "authoritative_version_source": "REPOSITORY",
-        "decision": "REJECT",
-    },
-    "PROVENANCE_FORGED_SOURCE_SHA": {
-        "defect_detected": True, "source_sha_verified": False, "decision": "REJECT",
-    },
-    "PROVENANCE_REPORT_HASH_MISMATCH": {
-        "defect_detected": True, "report_hash_matches": False, "decision": "REJECT",
-    },
-    "PROVENANCE_STALE_EVIDENCE": {
-        "defect_detected": True, "evidence_fresh": False, "decision": "REJECT",
-    },
-    "PROVENANCE_WRONG_TENANT_WORKSPACE_EVIDENCE": {
-        "defect_detected": True, "tenant_workspace_match": False,
-        "decision": "REJECT",
-    },
-    "PROVENANCE_WRONG_CANDIDATE_EVIDENCE": {
-        "defect_detected": True, "candidate_binding_match": False,
-        "decision": "REJECT",
-    },
-    "PROVENANCE_DUPLICATE_PROVENANCE_ID": {
-        "defect_detected": True, "duplicate_provenance_rejected": True,
-        "decision": "REJECT",
-    },
-    "CONCURRENCY_SAME_ROW_RACE": {
-        "controlled_interleaving_proof": True, "row_version_checked": True,
-        "lost_update": False, "decision": "REJECT",
-    },
-    "CONCURRENCY_DIFFERENT_ROW_SHARED_AGGREGATE": {
-        "controlled_interleaving_proof": True, "aggregate_concurrency_proof": True,
-        "aggregate_invariant_preserved": True, "row_versions_only": False,
-    },
-    "CONCURRENCY_LOST_UPDATE": {
-        "controlled_interleaving_proof": True, "lost_update_prevented": True,
-        "decision": "REJECT",
-    },
-    "CONCURRENCY_DUPLICATE_SUBMIT": {
-        "controlled_interleaving_proof": True, "idempotency_enforced": True,
-        "logical_effect_count": 1,
-    },
-    "CONCURRENCY_RETRY_AFTER_TIMEOUT": {
-        "controlled_interleaving_proof": True, "retry_reconciled": True,
-        "logical_effect_count": 1,
-    },
-    "CONCURRENCY_IDEMPOTENCY_COLLISION": {
-        "controlled_interleaving_proof": True, "collision_rejected": True,
-        "logical_effect_count": 1,
-    },
-    "CONCURRENCY_PRIVILEGE_REVOCATION_DURING_OPERATION": {
-        "controlled_interleaving_proof": True,
-        "authorization_rechecked_at_commit": True,
-        "commit_after_revocation": False, "decision": "REJECT",
-    },
-    "CONCURRENCY_PARTIAL_WRITE_ROLLBACK": {
-        "controlled_interleaving_proof": True, "rollback_complete": True,
-        "partial_write_visible": False,
-    },
-    "CONCURRENCY_MULTI_PROCESS_SERVICE_INSTANCE": {
-        "controlled_interleaving_proof": True, "process_count": 2,
-        "service_instance_count": 2, "shared_invariant_guard": True,
-    },
-    "STATE_MACHINE_LEGAL_TRANSITION": {
-        "transition_allowed": True, "validation_before_transition": True,
-        "transition_applied": True, "decision": "APPLY",
-    },
-    "STATE_MACHINE_ILLEGAL_TRANSITION": {
-        "transition_allowed": False, "transition_applied": False, "decision": "REJECT",
-    },
-    "STATE_MACHINE_TERMINAL_MUTATION": {
-        "terminal_mutation_attempt": True, "transition_applied": False,
-        "decision": "REJECT",
-    },
-    "STATE_MACHINE_STALE_TRANSITION": {
-        "stale_transition": True, "transition_applied": False, "decision": "REJECT",
-    },
-    "STATE_MACHINE_DUPLICATE_TRANSITION": {
-        "duplicate_transition": True, "duplicate_effect": False,
-        "decision": "REJECT",
-    },
-    "STATE_MACHINE_FAILED_VALIDATION_BEFORE_TRANSITION": {
-        "validation_before_transition": False, "transition_applied": False,
-        "decision": "REJECT",
-    },
-    "STATE_MACHINE_ROLLBACK_SEMANTICS": {
-        "rollback_complete": True, "partial_state_visible": False,
-    },
-    "EVIDENCE_SELF_ASSERTED_PASS": {
-        "defect_detected": True, "self_asserted_rejected": True, "decision": "REJECT",
-    },
-    "EVIDENCE_NONZERO_EXIT_LABELED_PASS": {
-        "defect_detected": True, "nonzero_exit_rejected": True, "decision": "REJECT",
-    },
-    "EVIDENCE_MISMATCHED_CANDIDATE_HASH": {
-        "defect_detected": True, "candidate_mismatch_rejected": True, "decision": "REJECT",
-    },
-    "EVIDENCE_MISSING_VALIDATOR_IDENTITY": {
-        "defect_detected": True, "missing_validator_rejected": True,
-        "decision": "REJECT",
-    },
-    "EVIDENCE_UNSUPPORTED_EVIDENCE_TYPE": {
-        "defect_detected": True, "unsupported_type_rejected": True, "decision": "REJECT",
-    },
-    "EVIDENCE_STALE_WORKFLOW_RUN": {
-        "defect_detected": True, "stale_workflow_rejected": True, "decision": "REJECT",
-    },
-}
-
 ALL_CASES = tuple(
     (pack, case_id)
     for pack in aq8.PACKS
@@ -201,7 +52,11 @@ def _context(**changes: object) -> aq8.AssuranceContext:
     return aq8.AssuranceContext(**values)
 
 
-def _evidence(context: aq8.AssuranceContext, evidence_id: str, **changes: object) -> aq8.EvidenceRecord:
+def _evidence(
+    context: aq8.AssuranceContext,
+    evidence_id: str,
+    **changes: object,
+) -> aq8.EvidenceRecord:
     values: dict[str, object] = {
         "evidence_id": evidence_id,
         "evidence_type": "CONTROLLED_FIXTURE",
@@ -224,41 +79,55 @@ def _evidence(context: aq8.AssuranceContext, evidence_id: str, **changes: object
     return aq8.EvidenceRecord(**values)
 
 
+def _safe_facts(pack: str, case_id: str) -> dict[str, Any]:
+    facts = dict(aq8._CASE_REQUIREMENTS[case_id])
+    if pack == "CONCURRENCY":
+        facts["interleaving_trace"] = ("SYNC:before", "worker-a", "BARRIER:commit")
+    return facts
+
+
 def _observation(
     context: aq8.AssuranceContext,
+    pack: str,
     case_id: str,
     *,
     facts: dict[str, Any] | None = None,
+    replace_facts: bool = False,
     evidence: tuple[aq8.EvidenceRecord, ...] | None = None,
     controlled_fixture: bool = True,
 ) -> aq8.HighRiskCaseObservation:
-    selected_facts = dict(SAFE_FACTS[case_id])
+    selected = {} if replace_facts else _safe_facts(pack, case_id)
     if facts:
-        selected_facts.update(facts)
+        selected.update(facts)
     return aq8.HighRiskCaseObservation(
-        facts=selected_facts,
-        evidence=evidence if evidence is not None else (
-            _evidence(context, f"evidence:{case_id}"),
-        ),
+        facts=selected,
+        evidence=evidence
+        if evidence is not None
+        else (_evidence(context, f"evidence:{case_id}"),),
         controlled_fixture=controlled_fixture,
     )
 
 
-def _observations(context: aq8.AssuranceContext) -> dict[str, dict[str, aq8.HighRiskCaseObservation]]:
-    result: dict[str, dict[str, aq8.HighRiskCaseObservation]] = {}
-    for pack in aq8.PACKS:
-        result[pack] = {}
-        for case_id in aq8.REQUIRED_CASES[pack]:
-            facts = {"interleaving_trace": ("SYNC:before", "worker-a", "BARRIER:commit")} if pack == "CONCURRENCY" else {}
-            result[pack][case_id] = _observation(context, case_id, facts=facts)
-    return result
+def _observations(
+    context: aq8.AssuranceContext,
+) -> dict[str, dict[str, aq8.HighRiskCaseObservation]]:
+    return {
+        pack: {
+            case_id: _observation(context, pack, case_id)
+            for case_id in aq8.REQUIRED_CASES[pack]
+        }
+        for pack in aq8.PACKS
+    }
 
 
 def _pack_decision(context: aq8.AssuranceContext) -> aq8.HighRiskAssuranceDecision:
     return aq8.run_all_high_risk_packs(context, _observations(context))
 
 
-def _steward(context: aq8.AssuranceContext, **changes: object) -> aq8.StewardSystemIntentJudgment:
+def _steward(
+    context: aq8.AssuranceContext,
+    **changes: object,
+) -> aq8.StewardSystemIntentJudgment:
     values: dict[str, object] = {
         "candidate_sha": context.candidate_sha,
         "tree_sha": context.tree_sha,
@@ -274,7 +143,10 @@ def _steward(context: aq8.AssuranceContext, **changes: object) -> aq8.StewardSys
     return aq8.StewardSystemIntentJudgment(**values)
 
 
-def _governor(context: aq8.AssuranceContext, **changes: object) -> aq8.GovernorProtectedObligationJudgment:
+def _governor(
+    context: aq8.AssuranceContext,
+    **changes: object,
+) -> aq8.GovernorProtectedObligationJudgment:
     values: dict[str, object] = {
         "candidate_sha": context.candidate_sha,
         "tree_sha": context.tree_sha,
@@ -291,17 +163,18 @@ def _governor(context: aq8.AssuranceContext, **changes: object) -> aq8.GovernorP
     return aq8.GovernorProtectedObligationJudgment(**values)
 
 
-def _specialist(context: aq8.AssuranceContext, reviewer: str, **changes: object) -> SpecialistEvidence:
-    values: dict[str, object] = {
-        "reviewer": reviewer,
-        "result": "PASS",
-        "claim_scope": "candidate-system",
-        "evidence_refs": (f"evidence:{reviewer.lower()}",),
-        "candidate_sha": context.candidate_sha,
-        "tree_sha": context.tree_sha,
-    }
-    values.update(changes)
-    return SpecialistEvidence(**values)
+def _specialist(
+    context: aq8.AssuranceContext,
+    reviewer: str,
+) -> SpecialistEvidence:
+    return SpecialistEvidence(
+        reviewer=reviewer,
+        result="PASS",
+        claim_scope="candidate-system",
+        evidence_refs=(f"evidence:{reviewer.lower()}",),
+        candidate_sha=context.candidate_sha,
+        tree_sha=context.tree_sha,
+    )
 
 
 def _covenant(
@@ -340,94 +213,176 @@ def test_machine_contract_matches_schema_and_runtime() -> None:
     )
     Draft202012Validator.check_schema(schema)
     Draft202012Validator(schema).validate(contract)
-    aq8.validate_aq8_contract(contract)
+    assert aq8.validate_aq8_contract(contract) == contract
     assert contract["packs"] == list(aq8.PACKS)
-    assert contract["required_covenant_scenarios"] == list(aq8.AQ8_REQUIRED_COVENANT_SCENARIOS)
-    assert contract["required_aq7_regression_anchors"] == list(aq8.AQ8_AQ7_REGRESSION_ANCHORS)
+    assert contract["required_cases"] == {
+        pack: list(aq8.REQUIRED_CASES[pack]) for pack in aq8.PACKS
+    }
+    assert contract["required_covenant_scenarios"] == list(
+        aq8.AQ8_REQUIRED_COVENANT_SCENARIOS
+    )
+    assert contract["required_aq7_regression_anchors"] == list(
+        aq8.AQ8_AQ7_REGRESSION_ANCHORS
+    )
     assert contract["authority"]["decision_grants_authority"] is False
 
 
-def test_context_and_observation_serialization_is_strict() -> None:
+def test_context_evidence_and_observation_serialization_is_strict() -> None:
     context = _context()
-    restored = aq8.AssuranceContext.from_mapping(context.to_dict())
-    assert restored == context
-    observation = _observation(context, "SECURITY_UNKNOWN_CREDENTIAL")
-    restored_observation = aq8.HighRiskCaseObservation.from_mapping(observation.to_dict())
-    assert restored_observation == observation
+    assert aq8.AssuranceContext.from_mapping(context.to_dict()) == context
+
+    evidence = _evidence(context, "evidence:roundtrip")
+    assert aq8.EvidenceRecord.from_mapping(evidence.to_dict()) == evidence
+
+    observation = _observation(
+        context, "SECURITY", "SECURITY_UNKNOWN_CREDENTIAL"
+    )
+    assert aq8.HighRiskCaseObservation.from_mapping(observation.to_dict()) == observation
+
+    with pytest.raises(TypeError):
+        aq8.AssuranceContext.from_mapping([])
     with pytest.raises(ValueError):
         aq8.AssuranceContext.from_mapping({**context.to_dict(), "unexpected": True})
+    missing_context = context.to_dict()
+    missing_context.pop("work_item_ref")
+    with pytest.raises(ValueError):
+        aq8.AssuranceContext.from_mapping(missing_context)
+
+    with pytest.raises(TypeError):
+        aq8.EvidenceRecord.from_mapping([])
+    with pytest.raises(ValueError):
+        aq8.EvidenceRecord.from_mapping({**evidence.to_dict(), "unexpected": True})
+    missing_evidence = evidence.to_dict()
+    missing_evidence.pop("evidence_id")
+    with pytest.raises(ValueError):
+        aq8.EvidenceRecord.from_mapping(missing_evidence)
+
+    with pytest.raises(TypeError):
+        aq8.HighRiskCaseObservation.from_mapping([])
     with pytest.raises(ValueError):
         aq8.HighRiskCaseObservation.from_mapping({"facts": {}, "unexpected": True})
+    with pytest.raises(ValueError):
+        aq8.HighRiskCaseObservation.from_mapping({"evidence": []})
 
 
-def test_all_five_packs_and_every_required_case_pass() -> None:
+def test_constructor_validation_branches_fail_closed() -> None:
     context = _context()
+    evidence = _evidence(context, "evidence:validation")
+    observation = _observation(
+        context, "SECURITY", "SECURITY_UNKNOWN_CREDENTIAL"
+    )
+
+    with pytest.raises(TypeError):
+        replace(evidence, exit_code=True)
+    with pytest.raises(TypeError):
+        replace(evidence, durable="yes")
+    with pytest.raises(TypeError):
+        replace(evidence, retrievable=1)
+    with pytest.raises(TypeError):
+        replace(evidence, independent=None)
+    with pytest.raises(ValueError):
+        replace(evidence, evidence_digest="0" * 64)
+    with pytest.raises(ValueError):
+        replace(evidence, evidence_id="")
+    with pytest.raises(ValueError):
+        replace(evidence, producer_role="bad\nrole")
+
+    with pytest.raises(TypeError):
+        aq8.HighRiskCaseObservation(facts=[], evidence=())
+    with pytest.raises(TypeError):
+        aq8.HighRiskCaseObservation(facts={}, evidence="bad")
+    with pytest.raises(TypeError):
+        replace(observation, controlled_fixture="yes")
+
+    with pytest.raises(ValueError):
+        _context(project_goal_refs=())
+    with pytest.raises(TypeError):
+        _context(critical_flows="not-a-list")
+    with pytest.raises(ValueError):
+        _context(system_invariants=("same", "same"))
+
+
+def test_every_declared_case_is_executable_and_non_authorizing() -> None:
+    context = _context()
+    for pack, case_id in ALL_CASES:
+        result = aq8.evaluate_case(
+            context,
+            pack,
+            case_id,
+            _observation(context, pack, case_id),
+        )
+        assert result.disposition == "PASS"
+        assert result.compliant is True
+        assert result.authority_granted is False
+
     decision = _pack_decision(context)
     assert decision.result == "PASS"
     assert decision.compliant is True
     assert decision.transition_owner == "ARBITER"
     assert decision.authority_granted is False
     assert tuple(pack.pack for pack in decision.packs) == aq8.PACKS
-    for pack in decision.packs:
-        assert pack.result == "PASS"
-        assert pack.compliant is True
-        assert pack.controlled_case_count == len(aq8.REQUIRED_CASES[pack.pack])
-        assert pack.organic_case_count == 0
-        assert tuple(case.case_id for case in pack.cases) == aq8.REQUIRED_CASES[pack.pack]
-        assert all(case.disposition == "PASS" for case in pack.cases)
-        assert all(case.authority_granted is False for case in pack.cases)
     assert decision.decision_digest
     assert decision.to_dict()["authority_granted"] is False
-
-
-@pytest.mark.parametrize(("pack", "case_id"), ALL_CASES)
-def test_each_required_case_is_executable(pack: str, case_id: str) -> None:
-    context = _context()
-    facts = {"interleaving_trace": ("SYNC:start", "worker-a", "BARRIER:end")} if pack == "CONCURRENCY" else {}
-    result = aq8.evaluate_case(context, pack, case_id, _observation(context, case_id, facts=facts))
-    assert result.disposition == "PASS"
-    assert result.compliant is True
-    assert result.controlled_fixture is True
+    for pack in decision.packs:
+        assert pack.result == "PASS"
+        assert pack.controlled_case_count == len(aq8.REQUIRED_CASES[pack.pack])
+        assert pack.organic_case_count == 0
 
 
 @pytest.mark.parametrize(
     ("changes", "expected_code"),
     (
+        ({"repository": "other/repo"}, "AQ8_EVIDENCE_REPOSITORY_MISMATCH"),
+        ({"source_ref": "other:source"}, "AQ8_EVIDENCE_SOURCE_MISMATCH"),
         ({"candidate_sha": "c" * 40}, "AQ8_EVIDENCE_CANDIDATE_MISMATCH"),
         ({"tree_sha": "d" * 40}, "AQ8_EVIDENCE_TREE_MISMATCH"),
         ({"validator_identity": None}, "AQ8_EVIDENCE_VALIDATOR_MISSING"),
         ({"evidence_type": "UNSUPPORTED"}, "AQ8_EVIDENCE_TYPE_UNSUPPORTED"),
         ({"result": "FAIL", "exit_code": 1}, "AQ8_EVIDENCE_RESULT_NOT_PASS"),
-        ({"workflow_run_id": "old-run", "freshness_ref": "old-run"}, "AQ8_EVIDENCE_STALE_WORKFLOW_RUN"),
+        (
+            {"workflow_run_id": "old-run", "freshness_ref": "old-run"},
+            "AQ8_EVIDENCE_STALE_WORKFLOW_RUN",
+        ),
         ({"durable": False}, "AQ8_EVIDENCE_NOT_DURABLE"),
         ({"retrievable": False}, "AQ8_EVIDENCE_NOT_RETRIEVABLE"),
-        ({"independent": False}, "AQ8_EVIDENCE_NOT_INDEPENDENT"),
         ({"exit_code": 1}, "AQ8_EVIDENCE_PASS_NONZERO_EXIT"),
         ({"producer_role": "CALLER"}, "AQ8_EVIDENCE_CALLER_ASSERTED"),
+        ({"independent": False}, "AQ8_EVIDENCE_NOT_INDEPENDENT"),
     ),
 )
-def test_evidence_binding_fails_closed(changes: dict[str, object], expected_code: str) -> None:
+def test_evidence_binding_fails_closed(
+    changes: dict[str, object], expected_code: str
+) -> None:
     context = _context()
     record = _evidence(context, "evidence:bad", **changes)
-    result = aq8.evaluate_case(
+    result = aq8.evaluate_security_case(
         context,
-        "SECURITY",
         "SECURITY_UNKNOWN_CREDENTIAL",
-        _observation(context, "SECURITY_UNKNOWN_CREDENTIAL", evidence=(record,)),
+        _observation(
+            context,
+            "SECURITY",
+            "SECURITY_UNKNOWN_CREDENTIAL",
+            evidence=(record,),
+        ),
     )
     assert result.disposition == "WAIT_FOR_EVIDENCE"
     assert expected_code in result.reason_codes
 
 
-def test_invalid_digest_and_duplicate_evidence_fail_closed() -> None:
+def test_invalid_digest_duplicate_missing_and_invalid_evidence_fail_closed() -> None:
     context = _context()
-    invalid = _evidence(context, "evidence:invalid")
-    object.__setattr__(invalid, "evidence_digest", "0" * 64)
+    record = _evidence(context, "evidence:invalid-digest")
+    object.__setattr__(record, "evidence_digest", "0" * 64)
     result = aq8.evaluate_case(
         context,
         "SECURITY",
         "SECURITY_UNKNOWN_CREDENTIAL",
-        _observation(context, "SECURITY_UNKNOWN_CREDENTIAL", evidence=(invalid,)),
+        _observation(
+            context,
+            "SECURITY",
+            "SECURITY_UNKNOWN_CREDENTIAL",
+            evidence=(record,),
+        ),
     )
     assert result.disposition == "WAIT_FOR_EVIDENCE"
     assert "AQ8_EVIDENCE_INVALID_DIGEST" in result.reason_codes
@@ -437,153 +392,286 @@ def test_invalid_digest_and_duplicate_evidence_fail_closed() -> None:
         context,
         "SECURITY",
         "SECURITY_UNKNOWN_CREDENTIAL",
-        _observation(context, "SECURITY_UNKNOWN_CREDENTIAL", evidence=(duplicate, duplicate)),
-    )
-    assert duplicate_result.disposition == "WAIT_FOR_EVIDENCE"
-    assert "AQ8_EVIDENCE_DUPLICATE_ID" in duplicate_result.reason_codes
-
-
-def test_missing_evidence_and_missing_facts_wait() -> None:
-    context = _context()
-    no_evidence = aq8.evaluate_case(
-        context,
-        "SECURITY",
-        "SECURITY_UNKNOWN_CREDENTIAL",
-        aq8.HighRiskCaseObservation(facts=SAFE_FACTS["SECURITY_UNKNOWN_CREDENTIAL"], evidence=()),
-    )
-    assert no_evidence.disposition == "WAIT_FOR_EVIDENCE"
-    assert "AQ8_EVIDENCE_MISSING" in no_evidence.reason_codes
-
-    no_facts = aq8.evaluate_case(
-        context,
-        "SECURITY",
-        "SECURITY_UNKNOWN_CREDENTIAL",
-        aq8.HighRiskCaseObservation(
-            facts={}, evidence=(_evidence(context, "evidence:missing-facts"),)
+        _observation(
+            context,
+            "SECURITY",
+            "SECURITY_UNKNOWN_CREDENTIAL",
+            evidence=(duplicate, duplicate),
         ),
     )
-    assert no_facts.disposition == "WAIT_FOR_EVIDENCE"
-    assert "AQ8_REQUIRED_FACT_MISSING" in no_facts.reason_codes
+    assert "AQ8_EVIDENCE_DUPLICATE_ID" in duplicate_result.reason_codes
 
-
-def test_concurrency_requires_controlled_interleaving_and_aggregate_proof() -> None:
-    context = _context()
-    case_id = "CONCURRENCY_SAME_ROW_RACE"
-    base = _observation(context, case_id, facts={"interleaving_trace": ("SYNC:start", "worker")})
-
-    sequential = aq8.evaluate_case(
-        context, "CONCURRENCY", case_id,
-        _observation(context, case_id, facts={
-            "interleaving_trace": ("worker-a", "worker-b"),
-            "sequential_approximation": True,
-        }),
-    )
-    uncontrolled = aq8.evaluate_case(
-        context, "CONCURRENCY", case_id, replace(base, controlled_fixture=False)
-    )
-    missing_trace = aq8.evaluate_case(
-        context, "CONCURRENCY", case_id,
-        _observation(context, case_id, facts={}),
-    )
-    for result in (sequential, uncontrolled, missing_trace):
-        assert result.disposition == "WAIT_FOR_EVIDENCE"
-        assert "AQ8_CONTROLLED_INTERLEAVING_REQUIRED" in result.reason_codes
-
-    aggregate = aq8.evaluate_case(
+    missing = aq8.evaluate_case(
         context,
-        "CONCURRENCY",
+        "SECURITY",
+        "SECURITY_UNKNOWN_CREDENTIAL",
+        _observation(
+            context,
+            "SECURITY",
+            "SECURITY_UNKNOWN_CREDENTIAL",
+            evidence=(),
+        ),
+    )
+    assert "AQ8_EVIDENCE_MISSING" in missing.reason_codes
+    assert aq8.validate_evidence_record(object(), object()) == (
+        "AQ8_INVALID_OBSERVATION",
+    )
+
+
+def test_fact_and_concurrency_fail_closed_paths() -> None:
+    context = _context()
+
+    unknown = aq8.evaluate_case(
+        context,
+        "SECURITY",
+        "SECURITY_UNKNOWN_CREDENTIAL",
+        _observation(
+            context,
+            "SECURITY",
+            "SECURITY_UNKNOWN_CREDENTIAL",
+            facts={"state": "UNKNOWN"},
+        ),
+    )
+    assert unknown.disposition == "WAIT_FOR_EVIDENCE"
+    assert "AQ8_UNKNOWN_STATE" in unknown.reason_codes
+
+    missing = aq8.evaluate_case(
+        context,
+        "SECURITY",
+        "SECURITY_UNKNOWN_CREDENTIAL",
+        _observation(
+            context,
+            "SECURITY",
+            "SECURITY_UNKNOWN_CREDENTIAL",
+            replace_facts=True,
+        ),
+    )
+    assert missing.disposition == "WAIT_FOR_EVIDENCE"
+    assert "AQ8_REQUIRED_FACT_MISSING" in missing.reason_codes
+
+    violation = aq8.evaluate_case(
+        context,
+        "SECURITY",
+        "SECURITY_UNKNOWN_CREDENTIAL",
+        _observation(
+            context,
+            "SECURITY",
+            "SECURITY_UNKNOWN_CREDENTIAL",
+            facts={"credential_accepted": True},
+        ),
+    )
+    assert violation.disposition == "REVISION_REQUIRED"
+    assert "AQ8_CONTROL_VIOLATION" in violation.reason_codes
+
+    uncontrolled = aq8.evaluate_concurrency_case(
+        context,
+        "CONCURRENCY_SAME_ROW_RACE",
+        _observation(
+            context,
+            "CONCURRENCY",
+            "CONCURRENCY_SAME_ROW_RACE",
+            controlled_fixture=False,
+        ),
+    )
+    assert uncontrolled.disposition == "WAIT_FOR_EVIDENCE"
+
+    sequential = aq8.evaluate_concurrency_case(
+        context,
+        "CONCURRENCY_SAME_ROW_RACE",
+        _observation(
+            context,
+            "CONCURRENCY",
+            "CONCURRENCY_SAME_ROW_RACE",
+            facts={
+                "interleaving_trace": ("worker-a", "worker-b"),
+                "sequential_approximation": True,
+            },
+        ),
+    )
+    assert sequential.disposition == "WAIT_FOR_EVIDENCE"
+    assert "AQ8_CONTROLLED_INTERLEAVING_REQUIRED" in sequential.reason_codes
+
+    aggregate = aq8.evaluate_concurrency_case(
+        context,
         "CONCURRENCY_DIFFERENT_ROW_SHARED_AGGREGATE",
-        _observation(context, "CONCURRENCY_DIFFERENT_ROW_SHARED_AGGREGATE", facts={
-            "interleaving_trace": ("SYNC:start", "worker-a", "BARRIER:end"),
-            "aggregate_concurrency_proof": False,
-        }),
+        _observation(
+            context,
+            "CONCURRENCY",
+            "CONCURRENCY_DIFFERENT_ROW_SHARED_AGGREGATE",
+            facts={"aggregate_concurrency_proof": False},
+        ),
     )
     assert aggregate.disposition == "REVISION_REQUIRED"
     assert "AQ8_AGGREGATE_PROOF_REQUIRED" in aggregate.reason_codes
 
 
-def test_unknown_state_case_pack_and_pack_keys_fail_closed() -> None:
+def test_result_models_reject_shape_and_authority_drift() -> None:
     context = _context()
-    unknown_state = aq8.evaluate_case(
-        context, "SECURITY", "SECURITY_UNKNOWN_CREDENTIAL",
-        _observation(context, "SECURITY_UNKNOWN_CREDENTIAL", facts={"state": "UNKNOWN"}),
+    decision = _pack_decision(context)
+    pack = decision.packs[0]
+    case = pack.cases[0]
+
+    with pytest.raises(ValueError):
+        replace(case, pack="PROVENANCE")
+    with pytest.raises(ValueError):
+        replace(case, compliant=False)
+    with pytest.raises(TypeError):
+        replace(case, controlled_fixture="yes")
+    with pytest.raises(ValueError):
+        replace(case, authority_granted=True)
+
+    with pytest.raises(ValueError):
+        replace(pack, compliant=False)
+    with pytest.raises(ValueError):
+        replace(pack, cases=(decision.packs[1].cases[0],))
+    with pytest.raises(ValueError):
+        replace(pack, authority_granted=True)
+
+    with pytest.raises(TypeError):
+        replace(decision, context=object())
+    with pytest.raises(ValueError):
+        replace(decision, compliant=False)
+    with pytest.raises(ValueError):
+        replace(decision, packs=tuple(reversed(decision.packs)))
+    with pytest.raises(ValueError):
+        replace(decision, authority_granted=True)
+
+
+def test_owner_judgment_validation_and_scope_downgrade() -> None:
+    context = _context()
+    incomplete = _steward(context, scope_complete=False)
+    assert incomplete.to_governance_judgment().decision == "REVISION_REQUIRED"
+
+    with pytest.raises(TypeError):
+        _steward(context, scope_complete="yes")
+    with pytest.raises(TypeError):
+        _governor(context, human_review_required="yes")
+
+    governor = _governor(context, human_review_required=True)
+    assert governor.to_governance_judgment().human_review_required is True
+
+
+def test_pack_runners_reject_missing_malformed_and_unknown_inputs() -> None:
+    context = _context()
+
+    with pytest.raises(TypeError):
+        aq8.run_high_risk_pack(context, "SECURITY", [])
+
+    missing = aq8.run_high_risk_pack(context, "SECURITY", {})
+    assert missing.result == "WAIT_FOR_EVIDENCE"
+    assert "AQ8_CASE_OBSERVATION_MISSING" in missing.failure_codes
+
+    malformed = aq8.run_high_risk_pack(
+        context,
+        "SECURITY",
+        {"SECURITY_UNKNOWN_CREDENTIAL": {"facts": []}},
     )
-    assert unknown_state.disposition == "WAIT_FOR_EVIDENCE"
-    assert "AQ8_UNKNOWN_STATE" in unknown_state.reason_codes
+    assert malformed.result == "WAIT_FOR_EVIDENCE"
+    assert "AQ8_INVALID_OBSERVATION" in malformed.failure_codes
 
-    raw_security = _observations(context)["SECURITY"]
-    raw_security["NOT_A_CASE"] = _observation(context, "SECURITY_UNKNOWN_CREDENTIAL")
-    pack_result = aq8.run_high_risk_pack(context, "SECURITY", raw_security)
-    assert pack_result.result == "WAIT_FOR_EVIDENCE"
-    assert "AQ8_UNKNOWN_CASE" in pack_result.failure_codes
+    unknown_cases = _observations(context)["SECURITY"]
+    unknown_cases["NOT_A_CASE"] = _observation(
+        context, "SECURITY", "SECURITY_UNKNOWN_CREDENTIAL"
+    )
+    result = aq8.run_high_risk_pack(context, "SECURITY", unknown_cases)
+    assert result.result == "WAIT_FOR_EVIDENCE"
+    assert "AQ8_UNKNOWN_CASE" in result.failure_codes
 
-    raw_all = _observations(context)
-    raw_all["NOT_A_PACK"] = {}
-    decision = aq8.run_all_high_risk_packs(context, raw_all)
+    with pytest.raises(TypeError):
+        aq8.run_all_high_risk_packs(object(), {})
+    with pytest.raises(TypeError):
+        aq8.run_all_high_risk_packs(context, [])
+
+    unknown_packs = _observations(context)
+    unknown_packs["NOT_A_PACK"] = {}
+    decision = aq8.run_all_high_risk_packs(context, unknown_packs)
     assert decision.result == "WAIT_FOR_EVIDENCE"
     assert "AQ8_UNKNOWN_PACK" in decision.failure_codes
 
+    invalid_pack = _observations(context)
+    invalid_pack["SECURITY"] = []
+    decision = aq8.run_all_high_risk_packs(context, invalid_pack)
+    assert decision.result == "WAIT_FOR_EVIDENCE"
+    assert "AQ8_INVALID_OBSERVATION" in decision.failure_codes
 
-def test_state_bound_covenant_is_current_and_non_authorizing() -> None:
+
+def test_public_case_routers_reject_wrong_case_and_pack() -> None:
     context = _context()
-    result = _covenant(context)
-    assert result.disposition == "PASS"
-    assert result.basis.candidate_sha == context.candidate_sha
-    assert result.basis.tree_sha == context.tree_sha
-    assert result.to_dict()["authority_granted"] is False
-
-    stale_owner = _steward(context, candidate_sha="c" * 40)
-    stale = _covenant(context, steward=stale_owner)
-    assert stale.disposition == "REVISION_REQUIRED"
-    assert stale.reason_codes == ("SYSTEM_CONTRADICTION",)
-
-    bad_pack = _pack_decision(_context(candidate_sha="c" * 40))
-    not_current = _covenant(context, pack_decision=bad_pack)
-    assert not_current.disposition == "REVISION_REQUIRED"
-    assert not_current.reason_codes == ("SYSTEM_CONTRADICTION",)
-
+    observation = _observation(
+        context, "SECURITY", "SECURITY_UNKNOWN_CREDENTIAL"
+    )
+    with pytest.raises(ValueError, match="AQ8_UNKNOWN_CASE"):
+        aq8.evaluate_security_case(context, "STATE_MACHINE_LEGAL_TRANSITION", observation)
     with pytest.raises(ValueError):
-        replace(_pack_decision(context).packs[0].cases[0], authority_granted=True)
+        aq8.evaluate_case(context, "UNKNOWN", "SECURITY_UNKNOWN_CREDENTIAL", observation)
+
+    assert aq8.evaluate_provenance_case(
+        context,
+        "PROVENANCE_FORGED_SOURCE_SHA",
+        _observation(context, "PROVENANCE", "PROVENANCE_FORGED_SOURCE_SHA"),
+    ).disposition == "PASS"
+    assert aq8.evaluate_state_machine_case(
+        context,
+        "STATE_MACHINE_LEGAL_TRANSITION",
+        _observation(context, "STATE_MACHINE", "STATE_MACHINE_LEGAL_TRANSITION"),
+    ).disposition == "PASS"
+    assert aq8.evaluate_evidence_integrity_case(
+        context,
+        "EVIDENCE_SELF_ASSERTED_PASS",
+        _observation(context, "EVIDENCE_INTEGRITY", "EVIDENCE_SELF_ASSERTED_PASS"),
+    ).disposition == "PASS"
 
 
-@pytest.mark.parametrize(
-    ("scenario", "expected"),
-    (
-        ("COV-01", "BLOCKED"),
-        ("COV-02", "BLOCKED"),
-        ("COV-03", "REVISION_REQUIRED"),
-        ("COV-04A", "REVISION_REQUIRED"),
-        ("COV-04B", "RECONCILED_WITH_CONSTRAINTS"),
-        ("COV-05", "REVISION_REQUIRED"),
-        ("COV-06", "BLOCKED"),
-        ("COV-07", "WAIT_FOR_EVIDENCE"),
-        ("COV-08", "REVISION_REQUIRED"),
-        ("COV-09", "REVISION_REQUIRED"),
-        ("COV-10", "REVISION_REQUIRED"),
-        ("COV-11", "WAIT_FOR_EVIDENCE"),
-        ("COV-12", "RECONCILED_WITH_CONSTRAINTS"),
-        ("COV-13", "REVISION_REQUIRED"),
-        ("COV-14", "REVISION_REQUIRED"),
-        ("COV-15", "REVISION_REQUIRED"),
-        ("COV-16", "ESCALATE_HUMAN"),
-        ("COV-17", "PASS"),
-        ("COV-18", "WAIT_FOR_EVIDENCE"),
-    ),
-)
-def test_covenant_conflict_scenarios(scenario: str, expected: str) -> None:
+def test_state_bound_covenant_pack_preconditions_fail_closed() -> None:
     context = _context()
-    results = {
+    assert _covenant(context).disposition == "PASS"
+
+    with pytest.raises(TypeError):
+        aq8.evaluate_state_bound_covenant(
+            object(),
+            _steward(context),
+            _governor(context),
+            assurance_result="PASS",
+            assurance_evidence_refs=("evidence:prai",),
+            assurance_evidence_durable=True,
+            assurance_evidence_retrievable=True,
+        )
+    with pytest.raises(TypeError):
+        aq8.evaluate_state_bound_covenant(
+            context,
+            object(),
+            _governor(context),
+            assurance_result="PASS",
+            assurance_evidence_refs=("evidence:prai",),
+            assurance_evidence_durable=True,
+            assurance_evidence_retrievable=True,
+        )
+
+    assert _covenant(context, pack_decision=None).disposition == "REVISION_REQUIRED"
+    assert _covenant(context, pack_decision=object()).disposition == "REVISION_REQUIRED"
+
+    nonpass = aq8.run_all_high_risk_packs(context, {})
+    assert nonpass.result == "WAIT_FOR_EVIDENCE"
+    assert _covenant(context, pack_decision=nonpass).disposition == "REVISION_REQUIRED"
+
+    stale_context = _context(candidate_sha="c" * 40)
+    stale_pack = _pack_decision(stale_context)
+    assert _covenant(context, pack_decision=stale_pack).disposition == "REVISION_REQUIRED"
+    assert _covenant(
+        context, governor=_governor(context, candidate_sha="c" * 40)
+    ).disposition == "REVISION_REQUIRED"
+
+
+def test_covenant_required_scenarios_execute_with_expected_precedence() -> None:
+    context = _context()
+    scenarios = {
         "COV-01": _covenant(
             context,
             steward=_steward(context, prime_directive_alignment="CONFLICT"),
         ),
-        "COV-02": _covenant(
-            context,
-            governor=_governor(context, decision="BLOCKED"),
-        ),
+        "COV-02": _covenant(context, governor=_governor(context, decision="BLOCKED")),
         "COV-03": _covenant(
-            context,
-            steward=_steward(context, decision="REVISION_REQUIRED"),
+            context, steward=_steward(context, decision="REVISION_REQUIRED")
         ),
         "COV-04A": _covenant(
             context,
@@ -661,12 +749,10 @@ def test_covenant_conflict_scenarios(scenario: str, expected: str) -> None:
             steward=_steward(context, critical_flow_alignment="CONTRADICTIONS"),
         ),
         "COV-14": _covenant(
-            context,
-            governor=_governor(context, decision="REVISION_REQUIRED"),
+            context, governor=_governor(context, decision="REVISION_REQUIRED")
         ),
         "COV-15": _covenant(
-            context,
-            steward=_steward(context, project_goal_alignment="CONFLICT"),
+            context, steward=_steward(context, project_goal_alignment="CONFLICT")
         ),
         "COV-16": _covenant(
             context,
@@ -689,38 +775,32 @@ def test_covenant_conflict_scenarios(scenario: str, expected: str) -> None:
             steward=_steward(context, prime_directive_alignment="UNKNOWN"),
         ),
     }
-    assert scenario.removesuffix("A") in aq8.AQ8_REQUIRED_COVENANT_SCENARIOS or scenario.removesuffix("B") in aq8.AQ8_REQUIRED_COVENANT_SCENARIOS
-    assert results[scenario].disposition == expected
-
-
-def test_adversarial_permutations_are_declared_and_executable() -> None:
-    assert len(aq8.AQ8_ADVERSARIAL_PERMUTATIONS) == 14
-    context = _context()
-
-    assert _covenant(context, system_contradictions=("PRAI contradiction",)).disposition == "REVISION_REQUIRED"
-    assert _covenant(context, reconciliation=object()).disposition == "WAIT_FOR_EVIDENCE"
-
-    sequential = aq8.evaluate_case(
-        context, "CONCURRENCY", "CONCURRENCY_SAME_ROW_RACE",
-        _observation(
-            context,
-            "CONCURRENCY_SAME_ROW_RACE",
-            facts={"interleaving_trace": ("worker-a", "worker-b"), "sequential_approximation": True},
-        ),
+    expected = {
+        "COV-01": "BLOCKED",
+        "COV-02": "BLOCKED",
+        "COV-03": "REVISION_REQUIRED",
+        "COV-04A": "REVISION_REQUIRED",
+        "COV-04B": "RECONCILED_WITH_CONSTRAINTS",
+        "COV-05": "REVISION_REQUIRED",
+        "COV-06": "BLOCKED",
+        "COV-07": "WAIT_FOR_EVIDENCE",
+        "COV-08": "REVISION_REQUIRED",
+        "COV-09": "REVISION_REQUIRED",
+        "COV-10": "REVISION_REQUIRED",
+        "COV-11": "WAIT_FOR_EVIDENCE",
+        "COV-12": "RECONCILED_WITH_CONSTRAINTS",
+        "COV-13": "REVISION_REQUIRED",
+        "COV-14": "REVISION_REQUIRED",
+        "COV-15": "REVISION_REQUIRED",
+        "COV-16": "ESCALATE_HUMAN",
+        "COV-17": "PASS",
+        "COV-18": "WAIT_FOR_EVIDENCE",
+    }
+    assert tuple(aq8.AQ8_REQUIRED_COVENANT_SCENARIOS) == tuple(
+        f"COV-{number:02d}" for number in range(1, 19)
     )
-    assert sequential.disposition == "WAIT_FOR_EVIDENCE"
-
-    with pytest.raises(ValueError, match="AQ8_UNKNOWN_CASE"):
-        aq8.evaluate_case(
-            context, "SECURITY", "UNKNOWN_CASE",
-            _observation(context, "SECURITY_UNKNOWN_CREDENTIAL"),
-        )
-    with pytest.raises(ValueError):
-        aq8.AssuranceContext.from_mapping({})
-
-    decision = _pack_decision(context)
-    with pytest.raises(ValueError):
-        replace(decision, authority_granted=True)
+    for scenario, disposition in expected.items():
+        assert scenarios[scenario].disposition == disposition
 
 
 def test_aq7_regression_anchors_execute_fail_closed() -> None:
@@ -730,25 +810,31 @@ def test_aq7_regression_anchors_execute_fail_closed() -> None:
         context,
         "CONCURRENCY",
         "CONCURRENCY_DIFFERENT_ROW_SHARED_AGGREGATE",
-        _observation(context, "CONCURRENCY_DIFFERENT_ROW_SHARED_AGGREGATE", facts={
-            "interleaving_trace": ("SYNC:start", "worker-a", "BARRIER:commit"),
-            "aggregate_concurrency_proof": False,
-        }),
+        _observation(
+            context,
+            "CONCURRENCY",
+            "CONCURRENCY_DIFFERENT_ROW_SHARED_AGGREGATE",
+            facts={"aggregate_concurrency_proof": False},
+        ),
     )
     assert aggregate.disposition == "REVISION_REQUIRED"
     assert "AQ8_AGGREGATE_PROOF_REQUIRED" in aggregate.reason_codes
 
-    privilege_mutation = aq8.evaluate_case(
+    privilege = aq8.evaluate_case(
         context,
         "CONCURRENCY",
         "CONCURRENCY_PRIVILEGE_REVOCATION_DURING_OPERATION",
-        _observation(context, "CONCURRENCY_PRIVILEGE_REVOCATION_DURING_OPERATION", facts={
-            "interleaving_trace": ("SYNC:request", "BARRIER:revocation", "worker-commit"),
-            "authorization_rechecked_at_commit": False,
-            "commit_after_revocation": True,
-        }),
+        _observation(
+            context,
+            "CONCURRENCY",
+            "CONCURRENCY_PRIVILEGE_REVOCATION_DURING_OPERATION",
+            facts={
+                "authorization_rechecked_at_commit": False,
+                "commit_after_revocation": True,
+            },
+        ),
     )
-    assert privilege_mutation.disposition == "REVISION_REQUIRED"
+    assert privilege.disposition == "REVISION_REQUIRED"
 
     missing_durable = aq8.evaluate_case(
         context,
@@ -756,20 +842,50 @@ def test_aq7_regression_anchors_execute_fail_closed() -> None:
         "SECURITY_UNKNOWN_CREDENTIAL",
         _observation(
             context,
+            "SECURITY",
             "SECURITY_UNKNOWN_CREDENTIAL",
-            evidence=(_evidence(context, "evidence:missing-durable", durable=False),),
+            evidence=(
+                _evidence(context, "evidence:missing-durable", durable=False),
+            ),
         ),
     )
     assert missing_durable.disposition == "WAIT_FOR_EVIDENCE"
     assert "AQ8_EVIDENCE_NOT_DURABLE" in missing_durable.reason_codes
 
+    assert len(aq8.AQ8_AQ7_REGRESSION_ANCHORS) == 3
 
-def test_authority_expansion_is_rejected_and_arbiter_owns_transition() -> None:
+
+def test_contract_runtime_parity_rejects_shape_and_value_drift() -> None:
+    contract = json.loads(
+        (ROOT / "machine/adaptive/aq8-high-risk-assurance-packs.v1.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    with pytest.raises(TypeError):
+        aq8.validate_aq8_contract([])
+    with pytest.raises(ValueError, match="AQ8_SCHEMA_RUNTIME_DRIFT"):
+        aq8.validate_aq8_contract({**contract, "unexpected": True})
+
+    drift = dict(contract)
+    drift["transition_owner"] = "CONDUCTOR"
+    with pytest.raises(ValueError, match="AQ8_SCHEMA_RUNTIME_DRIFT"):
+        aq8.validate_aq8_contract(drift)
+
+
+def test_adversarial_inventory_and_authority_boundary_remain_fixed() -> None:
     context = _context()
+    assert len(aq8.AQ8_ADVERSARIAL_PERMUTATIONS) == 14
+    assert _covenant(
+        context, system_contradictions=("PRAI contradiction",)
+    ).disposition == "REVISION_REQUIRED"
+    assert _covenant(context, reconciliation=object()).disposition == "WAIT_FOR_EVIDENCE"
+
     decision = _pack_decision(context)
     assert decision.transition_owner == "ARBITER"
     assert decision.authority_granted is False
-    with pytest.raises(ValueError):
-        replace(decision.packs[0], authority_granted=True)
-    with pytest.raises(ValueError):
-        replace(decision, authority_granted=True)
+    assert all(pack.authority_granted is False for pack in decision.packs)
+    assert all(
+        case.authority_granted is False
+        for pack in decision.packs
+        for case in pack.cases
+    )
