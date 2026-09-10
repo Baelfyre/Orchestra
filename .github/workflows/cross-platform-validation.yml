@@ -52,9 +52,7 @@ jobs:
         id: promotion
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: >-
-          python scripts/validate_governance_promotion_attestation.py
-          --github-output "$GITHUB_OUTPUT"
+        run: python scripts/validate_governance_promotion_attestation.py
 
       - name: Install Dependencies
         if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
@@ -132,7 +130,7 @@ jobs:
           echo "Validation completed on \`${{ matrix.os }}\`." >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Cross-platform Artifacts
-        if: steps.promotion.outputs.mode != 'TREE_ATTESTED' && always()
+        if: ${{ always() && steps.promotion.outputs.mode != 'TREE_ATTESTED' }}
         uses: actions/upload-artifact@v7
         with:
           name: cross-platform-validation-${{ matrix.os }}
