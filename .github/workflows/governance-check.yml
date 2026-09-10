@@ -46,6 +46,9 @@ jobs:
           python tests/behavior/test_readme_impact.py
           python tests/behavior/test_readme_machine_index.py
 
+      - name: Test AQ8 Assurance Scope Policy
+        run: python tests/behavior/test_protected_aq8_assurance_scope_policy.py
+
       - name: Enforce Documentation Impact Gate
         run: |
           set +e

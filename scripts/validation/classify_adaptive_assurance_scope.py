@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # @codebase_provenance_JEO
 # @codebase_rights_JEO
-"""Classify whether a change set requires legacy AQ5 or PRAI exact-scope validation."""
+"""Classify whether changes require historical adaptive-assurance exact-scope validation."""
 
 from __future__ import annotations
 
@@ -79,6 +79,31 @@ AQ7_IMPLEMENTATION_PATHS = frozenset(
         "scripts/validation/classify_adaptive_assurance_scope.py",
         "tests/runtime/test_adaptive_assurance_scope.py",
         "tests/runtime/test_aq7_http_adapter_parity.py",
+    }
+)
+
+
+AQ8_IMPLEMENTATION_PATHS = frozenset(
+    {
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ8.md",
+        "machine/adaptive/aq8-high-risk-assurance-packs.v1.json",
+        "machine/schemas/aq8-high-risk-assurance-packs.v1.schema.json",
+        "orchestra_runtime/domain/adaptive/__init__.py",
+        "orchestra_runtime/domain/adaptive/high_risk_assurance.py",
+        "scripts/validation/validate_aq8.py",
+        "tests/behavior/run_tests.py",
+        "tests/runtime/test_adaptive_assurance_aq8.py",
+    }
+)
+
+AQ8_SCOPE_ANCHOR_PATHS = frozenset(
+    {
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ8.md",
+        "machine/adaptive/aq8-high-risk-assurance-packs.v1.json",
+        "machine/schemas/aq8-high-risk-assurance-packs.v1.schema.json",
+        "orchestra_runtime/domain/adaptive/high_risk_assurance.py",
+        "scripts/validation/validate_aq8.py",
+        "tests/runtime/test_adaptive_assurance_aq8.py",
     }
 )
 
@@ -204,6 +229,15 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
     non_neutral = set(normalized) - COMMON_TRIGGER_PATHS
     if not non_neutral:
         return NOT_APPLICABLE
+
+    # AQ8 is a separate, human-authorized later assurance scope. Only its exact
+    # complete declared slice is outside the historical PRAI/AQ5/AQ7 exact
+    # inventories. Anchored partial, mixed, unknown, or unrecognized AQ8
+    # changes remain APPLICABLE so historical gates continue to fail closed.
+    if non_neutral == AQ8_IMPLEMENTATION_PATHS:
+        return NOT_APPLICABLE
+    if non_neutral.intersection(AQ8_SCOPE_ANCHOR_PATHS):
+        return APPLICABLE
 
     # The Covenant is a separate, human-authorized governance-assurance scope.
     # Only its complete declared slice is outside the historical AQ5/AQ6/PRAI
