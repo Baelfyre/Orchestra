@@ -17,6 +17,7 @@ from validation.classify_adaptive_assurance_scope import (  # noqa: E402
     AQ5_IMPLEMENTATION_PATHS,
     AQ6_IMPLEMENTATION_PATHS,
     AQ7_IMPLEMENTATION_PATHS,
+    AQ8_CANONICAL_CLOSEOUT_PATHS,
     AQ8_IMPLEMENTATION_PATHS,
     AQ8_SCOPE_ANCHOR_PATHS,
     NOT_APPLICABLE,
@@ -29,6 +30,7 @@ HISTORICAL_GATES = ("prai", "aq5", "aq7")
 AQ8_COMPLETE_PATHS = tuple(
     sorted((*AQ8_IMPLEMENTATION_PATHS, "CHANGELOG.md", "README.json"))
 )
+AQ8_CLOSEOUT_PATHS = tuple(sorted(AQ8_CANONICAL_CLOSEOUT_PATHS))
 
 AQ8_POLICY_AMENDMENT_PATHS = (
     ".github/workflows/governance-check.yml",
@@ -51,6 +53,38 @@ def test_complete_aq8_scope_is_not_applicable_to_historical_gates() -> None:
             f"{assurance} complete AQ8 scope",
             classify_paths(AQ8_COMPLETE_PATHS, assurance),
             NOT_APPLICABLE,
+        )
+
+
+def test_exact_aq8_canonical_closeout_whitelist_is_not_applicable() -> None:
+    for assurance in HISTORICAL_GATES:
+        _assert_equal(
+            f"{assurance} exact AQ8 canonical closeout whitelist",
+            classify_paths(AQ8_CLOSEOUT_PATHS, assurance),
+            NOT_APPLICABLE,
+        )
+
+
+def test_anchor_bearing_closeout_subsets_remain_fail_closed() -> None:
+    anchor = "docs/architecture/ADAPTIVE_ASSURANCE_AQ8.md"
+    for removed in ("CHANGELOG.md", "README.json"):
+        subset = tuple(path for path in AQ8_CLOSEOUT_PATHS if path != removed)
+        _assert_equal(f"{removed} removed retains anchor", anchor in subset, True)
+        for assurance in HISTORICAL_GATES:
+            _assert_equal(
+                f"{assurance} AQ8 closeout subset without {removed}",
+                classify_paths(subset, assurance),
+                APPLICABLE,
+            )
+
+
+def test_closeout_whitelist_superset_remains_fail_closed() -> None:
+    superset = (*AQ8_CLOSEOUT_PATHS, "unexpected-aq8-closeout-surface.txt")
+    for assurance in HISTORICAL_GATES:
+        _assert_equal(
+            f"{assurance} AQ8 closeout whitelist superset",
+            classify_paths(superset, assurance),
+            APPLICABLE,
         )
 
 
@@ -122,6 +156,9 @@ def test_historical_implementation_inventories_remain_separate() -> None:
 
 def main() -> None:
     test_complete_aq8_scope_is_not_applicable_to_historical_gates()
+    test_exact_aq8_canonical_closeout_whitelist_is_not_applicable()
+    test_anchor_bearing_closeout_subsets_remain_fail_closed()
+    test_closeout_whitelist_superset_remains_fail_closed()
     test_partial_aq8_scope_remains_fail_closed_applicable()
     test_mixed_aq8_scope_remains_fail_closed_applicable()
     test_unknown_unanchored_scope_remains_fail_closed_applicable()

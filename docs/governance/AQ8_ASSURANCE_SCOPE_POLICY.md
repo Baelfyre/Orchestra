@@ -3,6 +3,7 @@
 **Contract:** `ORCHESTRA_AQ8_ASSURANCE_SCOPE_POLICY_V1`
 **Authority:** explicit human `APPROVE_POLICY_AMENDMENT` decision
 **Authority record:** Padayon commit `707693aebac73d84cf46f92d725f2d0d99b4b712`
+**Closeout-whitelist authority:** Padayon commit `d2e209851065925688344118d0cef26601ae36e0`
 **Escalation:** `ORCHESTRA_AQ8_ASSURANCE_SCOPE_POLICY_ESCALATION_20260910`
 **Originating frozen candidate:** Orchestra PR #875 at `06e4d12fdcb6fc7f5d604a9a36936a3fd1c98a8c` / tree `74b6e315dd7b6493bf7938c96648176b1ead21b1`
 **Policy-amendment run:** Run N+1
@@ -27,6 +28,9 @@ MIXED_AQ8_SCOPE
 
 UNKNOWN_OR_UNANCHORED_AQ8_SCOPE
 = APPLICABLE
+
+EXACT_AQ8_CANONICAL_CLOSEOUT_SCOPE
+= NOT_APPLICABLE_TO_HISTORICAL_PRAI_AQ5_AQ7_EXACT_INVENTORIES
 ```
 
 The exact complete AQ8 implementation slice is defined mechanically by `AQ8_IMPLEMENTATION_PATHS` in `scripts/validation/classify_adaptive_assurance_scope.py`.
@@ -34,6 +38,20 @@ The exact complete AQ8 implementation slice is defined mechanically by `AQ8_IMPL
 Unique AQ8 anchors are separately declared by `AQ8_SCOPE_ANCHOR_PATHS`. If any AQ8 anchor appears without the complete declared AQ8 slice, the historical gates remain fail-closed `APPLICABLE`.
 
 `CHANGELOG.md` and `README.json` remain neutral documentation triggers for exact-scope classification and do not change the semantic identity of the AQ8 implementation slice.
+
+## Canonical-closeout whitelist
+
+A later human governance decision authorizes one lifecycle-only exception after AQ8 implementation has already been promoted and independently verified. The exact whitelist is:
+
+- `CHANGELOG.md`
+- `README.json`
+- `docs/architecture/ADAPTIVE_ASSURANCE_AQ8.md`
+
+Only that exact three-path set is exempt from the historical PRAI, AQ5, and AQ7 implementation inventories. AQ8-identifiable subsets containing the architecture anchor, supersets, mixed scopes, unknown paths, runtime changes, machine-contract changes, test changes, and workflow changes remain fail-closed `APPLICABLE`. A neutral-only metadata subset retains the preexisting common-documentation behavior and is not treated as an AQ8 closeout.
+
+For PRAI, the classifier emits `PRAI_WHITELIST_NOTICE=AQ8_CANONICAL_CLOSEOUT_EXACT_PATHS` plus a GitHub Actions notice when this exact exception is consumed. The notice records why the historical inventory is not applicable; it is not a PRAI approval, runtime waiver, authority grant, or general bypass.
+
+The whitelist changes classification only. It has no effect on Orchestra runtime/plugin-engine logic, AQ8 assurance evaluation, Covenant evaluation, Arbiter ownership, thresholds, release/deployment authority, providers, credentials, telemetry, or production behavior.
 
 ## Complete declared AQ8 slice
 

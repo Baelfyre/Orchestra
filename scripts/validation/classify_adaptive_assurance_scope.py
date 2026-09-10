@@ -108,6 +108,15 @@ AQ8_SCOPE_ANCHOR_PATHS = frozenset(
 )
 
 
+AQ8_CANONICAL_CLOSEOUT_PATHS = frozenset(
+    {
+        "CHANGELOG.md",
+        "README.json",
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ8.md",
+    }
+)
+
+
 COVENANT_IMPLEMENTATION_PATHS = frozenset(
     {
         "AGENTS.md",
@@ -222,7 +231,14 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
         raise ValueError(f"unsupported assurance gate: {assurance}") from exc
 
     normalized = normalize_paths(paths)
+    normalized_set = set(normalized)
     strict_implementation_paths = implementation_paths - WORKFLOW_INTEGRATION_PATHS
+
+    # Human-authorized AQ8 lifecycle closeout whitelist. This exemption is
+    # exact-set only and does not apply to AQ8 runtime, machine-contract,
+    # workflow, test, mixed, superset, or anchor-bearing subset changes.
+    if normalized_set == AQ8_CANONICAL_CLOSEOUT_PATHS:
+        return NOT_APPLICABLE
     if gate != "aq7" and set(normalized).intersection(strict_implementation_paths):
         return APPLICABLE
 
@@ -275,11 +291,28 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
 
 def main(argv: Iterable[str] | None = None) -> int:
     args = parse_args(argv)
+    raw_paths = tuple(sys.stdin)
     try:
-        result = classify_paths(sys.stdin, args.assurance)
+        result = classify_paths(raw_paths, args.assurance)
+        normalized = normalize_paths(raw_paths)
     except ValueError as exc:
         print(f"scope classification failed: {exc}", file=sys.stderr)
         return 2
+    if (
+        args.assurance == "prai"
+        and result == NOT_APPLICABLE
+        and set(normalized) == AQ8_CANONICAL_CLOSEOUT_PATHS
+    ):
+        print(
+            "::notice title=PRAI scope whitelist::"
+            "AQ8 canonical closeout exact-path whitelist applied; "
+            "lifecycle-only projection with no runtime or authority bypass.",
+            file=sys.stderr,
+        )
+        print(
+            "PRAI_WHITELIST_NOTICE=AQ8_CANONICAL_CLOSEOUT_EXACT_PATHS",
+            file=sys.stderr,
+        )
     print(result)
     return 0
 
