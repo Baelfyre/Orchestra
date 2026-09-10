@@ -1,0 +1,38 @@
+name: Temporary regenerate portable projection index
+
+on:
+  push:
+    branches:
+      - governance/whitelist-human-only-authority-20260911
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: governance/whitelist-human-only-authority-20260911
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Regenerate deterministic projection index
+        shell: bash
+        run: |
+          python scripts/compile_portable_projections.py --write
+          python scripts/compile_portable_projections.py --check
+          git diff --check
+      - name: Commit generated index and remove temporary workflow
+        shell: bash
+        run: |
+          rm .github/workflows/tmp-regenerate-portable-projection-index.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add machine/projections/portable-projection-index.v1.json .github/workflows/tmp-regenerate-portable-projection-index.yml
+          git diff --cached --check
+          git commit -m "chore(governance): refresh portable projection parity index"
+          git push origin HEAD:governance/whitelist-human-only-authority-20260911
