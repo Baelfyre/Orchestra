@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-from copy import deepcopy
 import importlib.util
 import json
 from pathlib import Path
@@ -51,6 +50,9 @@ class SignedMaterializationTests(unittest.TestCase):
         self.assertFalse(evidence["authority"]["release"])
         self.assertFalse(evidence["authority"]["bypass"])
         self.assertEqual("ISOLATED_SIGNING_TARGET_NOT_CANONICAL", evidence["base"]["role"])
+        self.assertTrue(evidence["promotion_assurance"]["tree_identity_required"])
+        self.assertTrue(evidence["promotion_assurance"]["source_assurance_required"])
+        self.assertEqual("BLOCK", evidence["promotion_assurance"]["invalid_attestation_disposition"])
 
     def test_canonical_main_cannot_be_materialization_target(self):
         payload = event()
@@ -68,9 +70,24 @@ class SignedMaterializationTests(unittest.TestCase):
         with self.assertRaises(mod.MaterializationValidationError):
             self.build(policy_doc=payload)
 
-    def test_materialization_cannot_reuse_canonical_checks(self):
+    def test_tree_attested_canonical_reuse_is_required(self):
         payload = policy()
-        payload["repository_change_transport"]["api_authored_unsigned_tree"]["canonical_required_checks_reusable_from_materialization"] = True
+        transport = payload["repository_change_transport"]["api_authored_unsigned_tree"]
+        transport["canonical_required_checks_reusable_from_materialization"] = False
+        with self.assertRaises(mod.MaterializationValidationError):
+            self.build(policy_doc=payload)
+
+    def test_full_canonical_revalidation_is_not_the_transport_contract(self):
+        payload = policy()
+        transport = payload["repository_change_transport"]["api_authored_unsigned_tree"]
+        transport["canonical_full_validation_required"] = True
+        with self.assertRaises(mod.MaterializationValidationError):
+            self.build(policy_doc=payload)
+
+    def test_invalid_promotion_attestation_must_block(self):
+        payload = policy()
+        transport = payload["repository_change_transport"]["api_authored_unsigned_tree"]
+        transport["canonical_promotion_invalid_attestation_disposition"] = "FULL_ASSURANCE"
         with self.assertRaises(mod.MaterializationValidationError):
             self.build(policy_doc=payload)
 

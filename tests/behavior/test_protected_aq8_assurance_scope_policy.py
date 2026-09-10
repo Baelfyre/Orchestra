@@ -25,7 +25,6 @@ from validation.classify_adaptive_assurance_scope import (  # noqa: E402
     classify_paths,
 )
 
-
 HISTORICAL_GATES = ("prai", "aq5", "aq7")
 AQ8_COMPLETE_PATHS = tuple(
     sorted((*AQ8_IMPLEMENTATION_PATHS, "CHANGELOG.md", "README.json"))
@@ -39,6 +38,23 @@ AQ8_POLICY_AMENDMENT_PATHS = (
     "docs/governance/AQ8_ASSURANCE_SCOPE_POLICY.md",
     "scripts/validation/classify_adaptive_assurance_scope.py",
     "tests/behavior/test_protected_aq8_assurance_scope_policy.py",
+)
+
+TREE_ATTESTED_PROMOTION_POLICY_PATHS = (
+    ".github/workflows/cross-platform-validation.yml",
+    ".github/workflows/governance-check.yml",
+    ".github/workflows/required-analysis-compat.yml",
+    ".github/workflows/validate.yml",
+    "README.json",
+    "docs/governance/TREE_ATTESTED_PROMOTION_ASSURANCE.md",
+    "docs/validation/SIGNED_MATERIALIZATION_OPTIMIZATION_2026_08_16.md",
+    "machine/governance/policy.v1.json",
+    "scripts/validate_governance_promotion_attestation.py",
+    "scripts/validate_signed_materialization.py",
+    "scripts/validation/classify_adaptive_assurance_scope.py",
+    "tests/behavior/test_governance_promotion_attestation.py",
+    "tests/behavior/test_protected_aq8_assurance_scope_policy.py",
+    "tests/behavior/test_signed_materialization.py",
 )
 
 
@@ -142,6 +158,20 @@ def test_policy_amendment_uses_preexisting_governance_classification() -> None:
         )
 
 
+def test_tree_attested_promotion_realigns_through_governance_taxonomy() -> None:
+    _assert_equal(
+        "tree-attested realignment must not equal AQ8 closeout whitelist",
+        set(TREE_ATTESTED_PROMOTION_POLICY_PATHS) == set(AQ8_CLOSEOUT_PATHS),
+        False,
+    )
+    for assurance in HISTORICAL_GATES:
+        _assert_equal(
+            f"{assurance} tree-attested promotion governance realignment",
+            classify_paths(TREE_ATTESTED_PROMOTION_POLICY_PATHS, assurance),
+            NOT_APPLICABLE,
+        )
+
+
 def test_historical_implementation_inventories_remain_separate() -> None:
     unique_aq8_anchors = AQ8_SCOPE_ANCHOR_PATHS
     for name, historical in (
@@ -164,6 +194,7 @@ def main() -> None:
     test_unknown_unanchored_scope_remains_fail_closed_applicable()
     test_duplicate_paths_fail_closed()
     test_policy_amendment_uses_preexisting_governance_classification()
+    test_tree_attested_promotion_realigns_through_governance_taxonomy()
     test_historical_implementation_inventories_remain_separate()
     print("AQ8 assurance scope policy tests passed.")
 

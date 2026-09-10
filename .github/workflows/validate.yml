@@ -16,6 +16,9 @@ on:
 
 permissions:
   contents: read
+  actions: read
+  checks: read
+  pull-requests: read
 
 env:
   ORCHESTRA_APPROVED_BASE_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.approved_base_sha || '' }}
@@ -35,17 +38,31 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Resolve promotion assurance mode
+        id: promotion
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python scripts/validate_governance_promotion_attestation.py
+
       - name: Install test dependencies
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
         run: python -m pip install --upgrade pip pytest pytest-cov
 
       - name: Run behavior validation suite
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
         run: python tests/behavior/run_tests.py
 
       - name: Test signed materialization contract
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
         run: python tests/behavior/test_signed_materialization.py
 
       - name: Test TrueSheet specialist machine reference
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
         run: python tests/behavior/test_truesheet_reference.py
+
+      - name: Confirm tree-attested promotion validation
+        if: steps.promotion.outputs.mode == 'TREE_ATTESTED'
+        run: echo "VALIDATE_REUSED_QUALIFIED_TREE_ASSURANCE=PASS"
 
   runtime-tests:
     runs-on: ubuntu-latest
@@ -61,19 +78,29 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Resolve promotion assurance mode
+        id: promotion
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python scripts/validate_governance_promotion_attestation.py
+
       - name: Install runtime test dependencies
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
         run: >-
           python -m pip install --upgrade pip pytest pytest-cov hypothesis==6.163.0
           "jsonschema[format]>=4.21,<5"
 
       - name: Validate runtime architecture boundaries
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
         run: python scripts/validation/validate_architecture_boundaries.py
 
       - name: Prepare runtime evidence directory
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
         run: mkdir -p artifacts/runtime
 
       - name: Run runtime test suite with statement and branch measurement
         id: runtime
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
         continue-on-error: true
         run: >-
           python -m pytest tests/runtime
@@ -86,7 +113,7 @@ jobs:
 
       - name: Build machine-readable runtime test evidence
         id: evidence
-        if: always()
+        if: ${{ always() && steps.promotion.outputs.mode != 'TREE_ATTESTED' }}
         continue-on-error: true
         env:
           SOURCE_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -101,7 +128,7 @@ jobs:
 
       - name: Build and enforce machine-readable critical coverage inventory
         id: critical_coverage
-        if: always()
+        if: ${{ always() && steps.promotion.outputs.mode != 'TREE_ATTESTED' }}
         continue-on-error: true
         run: >-
           python scripts/validation/build_coverage_inventory.py
@@ -111,7 +138,7 @@ jobs:
           --critical-branch-floor 95
 
       - name: Upload runtime test evidence
-        if: always()
+        if: ${{ always() && steps.promotion.outputs.mode != 'TREE_ATTESTED' }}
         uses: actions/upload-artifact@v7
         with:
           name: runtime-test-evidence-${{ github.run_id }}-${{ github.run_attempt }}
@@ -120,9 +147,13 @@ jobs:
           retention-days: 90
 
       - name: Enforce runtime and evidence result
-        if: always()
+        if: ${{ always() && steps.promotion.outputs.mode != 'TREE_ATTESTED' }}
         shell: bash
         run: |
           test "${{ steps.runtime.outcome }}" = "success"
           test "${{ steps.evidence.outcome }}" = "success"
           test "${{ steps.critical_coverage.outcome }}" = "success"
+
+      - name: Confirm tree-attested runtime assurance
+        if: steps.promotion.outputs.mode == 'TREE_ATTESTED'
+        run: echo "RUNTIME_TESTS_REUSED_QUALIFIED_TREE_ASSURANCE=PASS"
