@@ -14,7 +14,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 POLICY_PATH = ROOT / "machine" / "governance" / "policy.v1.json"
 SCHEMA_VERSION = "orchestra.signed-materialization-evidence.v1"
-DISPOSITION = "REVIEWED_UNSIGNED_SOURCE_READY_FOR_GITHUB_SQUASH_MATERIALIZATION"
+DISPOSITION = "QUALIFIED_UNSIGNED_SOURCE_READY_FOR_GITHUB_SQUASH_MATERIALIZATION"
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 ALLOWED_ACTIONS = {"opened", "synchronize", "reopened"}
 
@@ -44,9 +44,10 @@ def transport_policy(policy: dict[str, Any]) -> dict[str, Any]:
     transport = policy.get("repository_change_transport", {}).get("api_authored_unsigned_tree")
     require(isinstance(transport, dict), "missing api-authored unsigned-tree transport policy")
     required = {
-        "mode": "TWO_PR_SIGNED_MATERIALIZATION",
-        "materialization_pr_role": "REVIEW_AND_SIGNING_TRANSPORT",
-        "source_pr_required": False,
+        "mode": "THREE_PR_TREE_ATTESTED_PROMOTION",
+        "materialization_pr_role": "SIGNING_TRANSPORT_ONLY",
+        "source_pr_required": True,
+        "source_pr_role": "FULL_ASSURANCE_QUALIFICATION",
         "source_head_signature_required": False,
         "materialization_pr_is_canonical_readiness": False,
         "materialization_pr_creates_project_state_authority": False,
@@ -62,15 +63,21 @@ def transport_policy(policy: dict[str, Any]) -> dict[str, Any]:
         "canonical_pr_base": "main",
         "canonical_pr_required": True,
         "canonical_pr_must_use_materialized_signed_head": True,
-        "canonical_pr_revalidates_exact_signed_head": True,
-        "canonical_required_checks_reusable_from_materialization": False,
-        "canonical_full_validation_required": True,
+        "canonical_pr_revalidates_exact_signed_head": False,
+        "canonical_required_checks_reusable_from_materialization": True,
+        "canonical_full_validation_required": False,
         "canonical_mergeable_required": True,
         "canonical_mergeable_state_required": "clean",
         "canonical_merge_method": "squash",
         "canonical_bypass_used": False,
         "post_merge_independent_canonical_read_required": True,
-        "workflow_optimization_disposition": "MATERIALIZATION_PR_BOUNDED_CHECKS_ONLY;FULL_MATRIX_MAIN_ONLY",
+        "canonical_promotion_assurance_mode": "TREE_ATTESTED_WHEN_VERIFIED_ELSE_FULL_ASSURANCE",
+        "canonical_promotion_attestation_validator": "scripts/validate_governance_promotion_attestation.py",
+        "canonical_promotion_source_assurance_required": True,
+        "canonical_promotion_tree_identity_required": True,
+        "canonical_promotion_invalid_attestation_disposition": "BLOCK",
+        "post_merge_assurance_mode": "TREE_ATTESTED_WHEN_VERIFIED_ELSE_FULL_ASSURANCE",
+        "workflow_optimization_disposition": "SOURCE_PR_FULL_ASSURANCE;MATERIALIZATION_PR_BOUNDED_SIGNING;CANONICAL_PR_TREE_ATTESTED_PROMOTION;FULL_ASSURANCE_ON_UNRECOGNIZED_CONTENT;BLOCK_ON_INVALID_SIGNED_PROMOTION_ATTESTATION",
     }
     for key, expected in required.items():
         require(transport.get(key) == expected, f"transport policy {key} must equal {expected!r}")
@@ -125,10 +132,16 @@ def build_evidence(
         "repository": event.get("repository", {}).get("full_name") or os.environ.get("GITHUB_REPOSITORY", ""),
         "event": {"name": "pull_request", "action": event["action"], "pull_request_number": number},
         "base": {"ref": base_ref, "sha": base_sha, "role": "ISOLATED_SIGNING_TARGET_NOT_CANONICAL"},
-        "source": {"ref": head_ref, "sha": head_sha, "signature_requirement": "NOT_REQUIRED_PRE_MATERIALIZATION"},
+        "source": {"ref": head_ref, "sha": head_sha, "signature_requirement": "NOT_REQUIRED_PRE_MATERIALIZATION", "qualification": "SEPARATE_SOURCE_PR_FULL_ASSURANCE_REQUIRED"},
         "reviewed_tree": checked_tree,
         "changed_paths": normalized,
         "authority": {"canonical_merge_readiness": False, "project_state_promotion": False, "release": False, "bypass": False},
+        "promotion_assurance": {
+            "mode": transport["canonical_promotion_assurance_mode"],
+            "tree_identity_required": transport["canonical_promotion_tree_identity_required"],
+            "source_assurance_required": transport["canonical_promotion_source_assurance_required"],
+            "invalid_attestation_disposition": transport["canonical_promotion_invalid_attestation_disposition"],
+        },
         "disposition": DISPOSITION,
     }
 

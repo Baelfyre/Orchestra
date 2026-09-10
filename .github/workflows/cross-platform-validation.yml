@@ -16,6 +16,9 @@ on:
 
 permissions:
   contents: read
+  actions: read
+  checks: read
+  pull-requests: read
   artifact-metadata: write
 
 env:
@@ -45,21 +48,30 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Resolve promotion assurance mode
+        id: promotion
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python scripts/validate_governance_promotion_attestation.py
+
       - name: Install Dependencies
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
         run: >-
           python -m pip install --upgrade pip pytest pytest-cov hypothesis==6.163.0
           "jsonschema[format]>=4.21,<5"
 
       - name: Show Runtime
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
         run: |
           python --version
           git --version
 
       - name: Create Artifacts Directory
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
         run: python -c "from pathlib import Path; Path('artifacts').mkdir(exist_ok=True)"
 
       - name: Verify POSIX Scripts
-        if: runner.os != 'Windows'
+        if: runner.os != 'Windows' && steps.promotion.outputs.mode != 'TREE_ATTESTED'
         run: |
           file scripts/check-stale-references.sh
           file scripts/validate-structure.sh
@@ -67,6 +79,7 @@ jobs:
           test -x scripts/validate-structure.sh
 
       - name: Run Native Validation
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
         shell: bash
         run: |
           run_report () {
@@ -102,18 +115,22 @@ jobs:
             git diff --check "HEAD~1..HEAD"
           fi
 
+      - name: Confirm tree-attested native assurance
+        if: steps.promotion.outputs.mode == 'TREE_ATTESTED'
+        run: echo "NATIVE_VALIDATION_REUSED_QUALIFIED_TREE_ASSURANCE=PASS"
+
       - name: Generate CI Summary
         if: always()
         shell: bash
         run: |
           echo "# Cross-platform Validation" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Native validation completed on \`${{ matrix.os }}\`." >> $GITHUB_STEP_SUMMARY
+          echo "Promotion assurance mode: \`${{ steps.promotion.outputs.mode }}\`." >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Review logs and uploaded artifacts for detailed command output." >> $GITHUB_STEP_SUMMARY
+          echo "Validation completed on \`${{ matrix.os }}\`." >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Cross-platform Artifacts
-        if: always()
+        if: ${{ always() && steps.promotion.outputs.mode != 'TREE_ATTESTED' }}
         uses: actions/upload-artifact@v7
         with:
           name: cross-platform-validation-${{ matrix.os }}

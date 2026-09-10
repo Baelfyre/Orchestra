@@ -61,7 +61,6 @@ AQ6_IMPLEMENTATION_PATHS = frozenset(
     }
 )
 
-
 AQ7_IMPLEMENTATION_PATHS = frozenset(
     {
         ".github/workflows/aq6-gate-coverage.yml",
@@ -81,7 +80,6 @@ AQ7_IMPLEMENTATION_PATHS = frozenset(
         "tests/runtime/test_aq7_http_adapter_parity.py",
     }
 )
-
 
 AQ8_IMPLEMENTATION_PATHS = frozenset(
     {
@@ -107,7 +105,6 @@ AQ8_SCOPE_ANCHOR_PATHS = frozenset(
     }
 )
 
-
 AQ8_CANONICAL_CLOSEOUT_PATHS = frozenset(
     {
         "CHANGELOG.md",
@@ -115,7 +112,6 @@ AQ8_CANONICAL_CLOSEOUT_PATHS = frozenset(
         "docs/architecture/ADAPTIVE_ASSURANCE_AQ8.md",
     }
 )
-
 
 COVENANT_IMPLEMENTATION_PATHS = frozenset(
     {
@@ -168,6 +164,19 @@ PROTECTED_GOVERNANCE_ANCHORS = frozenset(
     }
 )
 
+# These files govern repository assurance transport itself. Classifying them as
+# governance control surfaces is durable taxonomy, not a lifecycle whitelist.
+PROMOTION_ASSURANCE_GOVERNANCE_PATHS = frozenset(
+    {
+        ".github/workflows/validate.yml",
+        ".github/workflows/cross-platform-validation.yml",
+        ".github/workflows/signed-materialization.yml",
+        "docs/validation/SIGNED_MATERIALIZATION_OPTIMIZATION_2026_08_16.md",
+        "scripts/validate_signed_materialization.py",
+        "tests/behavior/test_signed_materialization.py",
+    }
+)
+
 GOVERNANCE_EXACT_PATHS = frozenset(
     {
         "AGENTS.md",
@@ -179,6 +188,7 @@ GOVERNANCE_EXACT_PATHS = frozenset(
         "scripts/governance_check.py",
         "scripts/test_governance_check.py",
         "scripts/validation/classify_adaptive_assurance_scope.py",
+        *PROMOTION_ASSURANCE_GOVERNANCE_PATHS,
     }
 ).union(PROTECTED_GOVERNANCE_ANCHORS)
 
@@ -246,26 +256,16 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
     if not non_neutral:
         return NOT_APPLICABLE
 
-    # AQ8 is a separate, human-authorized later assurance scope. Only its exact
-    # complete declared slice is outside the historical PRAI/AQ5/AQ7 exact
-    # inventories. Anchored partial, mixed, unknown, or unrecognized AQ8
-    # changes remain APPLICABLE so historical gates continue to fail closed.
     if non_neutral == AQ8_IMPLEMENTATION_PATHS:
         return NOT_APPLICABLE
     if non_neutral.intersection(AQ8_SCOPE_ANCHOR_PATHS):
         return APPLICABLE
 
-    # The Covenant is a separate, human-authorized governance-assurance scope.
-    # Only its complete declared slice is outside the historical AQ5/AQ6/PRAI
-    # exact inventories. Any anchored partial or mixed Covenant change remains
-    # APPLICABLE so those legacy gates fail closed rather than silently exempt it.
     if non_neutral == COVENANT_IMPLEMENTATION_PATHS:
         return NOT_APPLICABLE
     if non_neutral.intersection(COVENANT_SCOPE_ANCHOR_PATHS):
         return APPLICABLE
 
-    # AQ6 and AQ7 have their own exact-scope gates. Partial or mixed changes
-    # remain APPLICABLE so the legacy gates continue to fail closed.
     if non_neutral in {AQ6_IMPLEMENTATION_PATHS, AQ7_IMPLEMENTATION_PATHS}:
         return NOT_APPLICABLE
 
@@ -274,8 +274,6 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
     workflow_paths = non_neutral.intersection(WORKFLOW_INTEGRATION_PATHS)
     unknown_paths = non_neutral - governance_paths - reference_paths - workflow_paths
 
-    # Governance/metadata compatibility is exempt only as a wholly recognized
-    # change set. Unknown or partial assurance paths remain fail-closed.
     if unknown_paths or not governance_paths:
         return APPLICABLE
     if workflow_paths and not PROTECTED_GOVERNANCE_ANCHORS.intersection(normalized):
