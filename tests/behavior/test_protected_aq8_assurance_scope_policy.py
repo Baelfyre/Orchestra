@@ -41,8 +41,12 @@ AQ8_POLICY_AMENDMENT_PATHS = (
 )
 
 TREE_ATTESTED_PROMOTION_POLICY_PATHS = (
+    ".github/workflows/aq6-gate-coverage.yml",
+    ".github/workflows/cosmic-ray-confidence.yml",
     ".github/workflows/cross-platform-validation.yml",
     ".github/workflows/governance-check.yml",
+    ".github/workflows/prai.yml",
+    ".github/workflows/qa-compliance.yml",
     ".github/workflows/required-analysis-compat.yml",
     ".github/workflows/validate.yml",
     "README.json",
@@ -55,6 +59,13 @@ TREE_ATTESTED_PROMOTION_POLICY_PATHS = (
     "tests/behavior/test_governance_promotion_attestation.py",
     "tests/behavior/test_protected_aq8_assurance_scope_policy.py",
     "tests/behavior/test_signed_materialization.py",
+)
+
+UNREGISTERED_AQ9_SAMPLE = (
+    "CHANGELOG.md",
+    "README.json",
+    "orchestra_runtime/domain/adaptive/deep_assurance.py",
+    "tests/runtime/test_adaptive_assurance_aq9.py",
 )
 
 
@@ -172,6 +183,15 @@ def test_tree_attested_promotion_realigns_through_governance_taxonomy() -> None:
         )
 
 
+def test_unregistered_future_aq_paths_remain_fail_closed() -> None:
+    for assurance in HISTORICAL_GATES:
+        _assert_equal(
+            f"{assurance} unregistered AQ9 sample",
+            classify_paths(UNREGISTERED_AQ9_SAMPLE, assurance),
+            APPLICABLE,
+        )
+
+
 def test_historical_implementation_inventories_remain_separate() -> None:
     unique_aq8_anchors = AQ8_SCOPE_ANCHOR_PATHS
     for name, historical in (
@@ -195,6 +215,7 @@ def main() -> None:
     test_duplicate_paths_fail_closed()
     test_policy_amendment_uses_preexisting_governance_classification()
     test_tree_attested_promotion_realigns_through_governance_taxonomy()
+    test_unregistered_future_aq_paths_remain_fail_closed()
     test_historical_implementation_inventories_remain_separate()
     print("AQ8 assurance scope policy tests passed.")
 
