@@ -1,0 +1,52 @@
+name: Branch-only changelog parity helper
+
+on:
+  push:
+    branches:
+      - gov/tree-attested-specialized-assurance-completion-20260911
+    paths:
+      - .github/workflows/changelog-tree-attestation-branch-helper.yml
+
+permissions:
+  contents: write
+
+jobs:
+  update-and-retire:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source branch
+        uses: actions/checkout@v7
+        with:
+          ref: gov/tree-attested-specialized-assurance-completion-20260911
+          fetch-depth: 0
+
+      - name: Insert bounded changelog note and remove helper
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("CHANGELOG.md")
+          text = path.read_text(encoding="utf-8")
+          heading = "## Unreleased governance assurance realignment: tree-attested promotion\n\n"
+          note = (
+              "- Extends qualified-tree assurance reuse to PRAI, AQ5, AQ6, and Cosmic Ray on independently "
+              "verified signed identical-tree promotions while ordinary source candidates retain full assurance.\n"
+          )
+          if heading not in text:
+              raise SystemExit("tree-attested changelog heading not found")
+          if note not in text:
+              text = text.replace(heading, heading + note, 1)
+              path.write_text(text, encoding="utf-8")
+          PY
+          git rm .github/workflows/changelog-tree-attestation-branch-helper.yml
+          git diff --check
+
+      - name: Commit bounded branch repair
+        shell: bash
+        run: |
+          git config user.name "JEO"
+          git config user.email "192281269+Baelfyre@users.noreply.github.com"
+          git add CHANGELOG.md .github/workflows/changelog-tree-attestation-branch-helper.yml
+          git commit -m "docs: complete tree-attested assurance changelog parity"
+          git push origin HEAD:gov/tree-attested-specialized-assurance-completion-20260911
