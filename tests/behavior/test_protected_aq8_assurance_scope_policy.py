@@ -20,6 +20,8 @@ from validation.classify_adaptive_assurance_scope import (  # noqa: E402
     AQ8_CANONICAL_CLOSEOUT_PATHS,
     AQ8_IMPLEMENTATION_PATHS,
     AQ8_SCOPE_ANCHOR_PATHS,
+    AQ9_IMPLEMENTATION_PATHS,
+    AQ9_SCOPE_ANCHOR_PATHS,
     NOT_APPLICABLE,
     PRAI_IMPLEMENTATION_PATHS,
     classify_paths,
@@ -73,6 +75,15 @@ UNREGISTERED_AQ9_SAMPLE = (
     "README.json",
     "orchestra_runtime/domain/adaptive/deep_assurance.py",
     "tests/runtime/test_adaptive_assurance_aq9.py",
+)
+
+AQ9_COMPLETE_PATHS = tuple(sorted(AQ9_IMPLEMENTATION_PATHS))
+AQ9_POLICY_AMENDMENT_PATHS = (
+    "CHANGELOG.md",
+    "README.json",
+    "docs/governance/AQ9_ASSURANCE_SCOPE_POLICY.md",
+    "scripts/validation/classify_adaptive_assurance_scope.py",
+    "tests/behavior/test_protected_aq8_assurance_scope_policy.py",
 )
 
 
@@ -209,6 +220,69 @@ def test_unregistered_future_aq_paths_remain_fail_closed() -> None:
         )
 
 
+def test_complete_aq9_scope_is_not_applicable_to_historical_gates() -> None:
+    _assert_equal("AQ9 exact inventory size", len(AQ9_COMPLETE_PATHS), 9)
+    for assurance in HISTORICAL_GATES:
+        _assert_equal(
+            f"{assurance} complete AQ9 scope",
+            classify_paths(AQ9_COMPLETE_PATHS, assurance),
+            NOT_APPLICABLE,
+        )
+
+
+def test_partial_aq9_scope_remains_fail_closed_applicable() -> None:
+    anchor = "docs/architecture/ADAPTIVE_ASSURANCE_AQ9.md"
+    _assert_equal("AQ9 anchor registered", anchor in AQ9_SCOPE_ANCHOR_PATHS, True)
+    partial = tuple(path for path in AQ9_COMPLETE_PATHS if path != "cosmic-ray.toml")
+    for assurance in HISTORICAL_GATES:
+        _assert_equal(
+            f"{assurance} partial AQ9 scope",
+            classify_paths(partial, assurance),
+            APPLICABLE,
+        )
+
+
+def test_mixed_and_superset_aq9_scopes_remain_fail_closed() -> None:
+    mixed = (*AQ9_COMPLETE_PATHS, "orchestra_runtime/domain/adaptive/deep_assurance.py")
+    for assurance in HISTORICAL_GATES:
+        _assert_equal(
+            f"{assurance} AQ9 superset with unknown path",
+            classify_paths(mixed, assurance),
+            APPLICABLE,
+        )
+
+
+def test_aq9_duplicate_paths_fail_closed() -> None:
+    duplicate = (
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ9.md",
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ9.md",
+    )
+    for assurance in HISTORICAL_GATES:
+        try:
+            classify_paths(duplicate, assurance)
+        except ValueError:
+            continue
+        raise AssertionError(f"{assurance} duplicate AQ9 paths did not fail closed")
+
+
+def test_aq9_policy_amendment_uses_existing_governance_taxonomy() -> None:
+    for assurance in HISTORICAL_GATES:
+        _assert_equal(
+            f"{assurance} AQ9 policy amendment",
+            classify_paths(AQ9_POLICY_AMENDMENT_PATHS, assurance),
+            NOT_APPLICABLE,
+        )
+
+
+def test_unregistered_future_aq_phase_remains_fail_closed() -> None:
+    future = ("CHANGELOG.md", "README.json", "docs/architecture/ADAPTIVE_ASSURANCE_AQ10.md")
+    for assurance in HISTORICAL_GATES:
+        _assert_equal(
+            f"{assurance} unregistered future AQ phase",
+            classify_paths(future, assurance),
+            APPLICABLE,
+        )
+
 def test_historical_implementation_inventories_remain_separate() -> None:
     unique_aq8_anchors = AQ8_SCOPE_ANCHOR_PATHS
     for name, historical in (
@@ -234,6 +308,12 @@ def main() -> None:
     test_tree_attested_promotion_realigns_through_governance_taxonomy()
     test_unanchored_specialized_assurance_workflows_remain_fail_closed()
     test_unregistered_future_aq_paths_remain_fail_closed()
+    test_complete_aq9_scope_is_not_applicable_to_historical_gates()
+    test_partial_aq9_scope_remains_fail_closed_applicable()
+    test_mixed_and_superset_aq9_scopes_remain_fail_closed()
+    test_aq9_duplicate_paths_fail_closed()
+    test_aq9_policy_amendment_uses_existing_governance_taxonomy()
+    test_unregistered_future_aq_phase_remains_fail_closed()
     test_historical_implementation_inventories_remain_separate()
     print("AQ8 assurance scope policy tests passed.")
 

@@ -113,6 +113,30 @@ AQ8_CANONICAL_CLOSEOUT_PATHS = frozenset(
     }
 )
 
+AQ9_IMPLEMENTATION_PATHS = frozenset(
+    {
+        "CHANGELOG.md",
+        "README.json",
+        "cosmic-ray.toml",
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ9.md",
+        "machine/adaptive/aq9-deep-assurance.v1.json",
+        "machine/schemas/aq9-deep-assurance.v1.schema.json",
+        "scripts/validation/validate_aq9.py",
+        "tests/behavior/run_tests.py",
+        "tests/runtime/test_adaptive_assurance_aq9.py",
+    }
+)
+
+AQ9_SCOPE_ANCHOR_PATHS = frozenset(
+    {
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ9.md",
+        "machine/adaptive/aq9-deep-assurance.v1.json",
+        "machine/schemas/aq9-deep-assurance.v1.schema.json",
+        "scripts/validation/validate_aq9.py",
+        "tests/runtime/test_adaptive_assurance_aq9.py",
+    }
+)
+
 COVENANT_IMPLEMENTATION_PATHS = frozenset(
     {
         "AGENTS.md",
@@ -275,6 +299,16 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
     # workflow, test, mixed, superset, or anchor-bearing subset changes.
     if normalized_set == AQ8_CANONICAL_CLOSEOUT_PATHS:
         return NOT_APPLICABLE
+
+    # Human-authorized AQ9 phase-separation taxonomy. Only the exact complete
+    # nine-path AQ9 implementation inventory is exempt from historical exact
+    # inventories. Any anchor-bearing subset, mixed scope, or superset remains
+    # fail-closed APPLICABLE. This is not a lifecycle whitelist.
+    if normalized_set == AQ9_IMPLEMENTATION_PATHS:
+        return NOT_APPLICABLE
+    if normalized_set.intersection(AQ9_SCOPE_ANCHOR_PATHS):
+        return APPLICABLE
+
     if gate != "aq7" and normalized_set.intersection(strict_implementation_paths):
         return APPLICABLE
 

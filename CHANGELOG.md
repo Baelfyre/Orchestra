@@ -1,3 +1,10 @@
+## Unreleased governance policy amendment: AQ9 assurance scope
+
+- Adds the human-authorized exact nine-path AQ9 phase-separation inventory for the historical PRAI, AQ5, and AQ7 scope classifiers.
+- Classifies only the complete AQ9 implementation set as `NOT_APPLICABLE`; AQ9 subsets, mixed scopes, supersets, duplicates, and unknown future AQ paths remain fail-closed `APPLICABLE` or invalid.
+- Records the protected `HUMAN_POLICY` basis from Padayon canonical commit `959369ec84140198c2cb1cf86743a6e368830f71` without creating or modifying any lifecycle whitelist.
+- Preserves historical assurance inventories, validation thresholds, PRAI/Covenant/Overseer/Arbiter boundaries, signed-materialization controls, and independent release/deployment/provider/credential/telemetry/production authority.
+
 ## Unreleased governance assurance realignment: tree-attested promotion
 
 - Extends qualified-tree assurance reuse to PRAI, AQ5, AQ6, and Cosmic Ray on independently verified signed identical-tree promotions while ordinary source candidates retain full assurance.
