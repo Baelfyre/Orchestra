@@ -26,6 +26,9 @@ jobs:
       - name: Materialize exact AQ9 inventory
         run: python scripts/_aq9_bootstrap.py
 
+      - name: Align README machine-contract indexing
+        run: python scripts/_aq9_readme_alignment_fix.py
+
       - name: Install focused dependencies
         run: python -m pip install --upgrade pytest jsonschema
 
@@ -46,7 +49,7 @@ jobs:
         run: |
           set -euo pipefail
           base=1e1a0f18ebb144bed76bc2ec617d3a3913b1c041
-          rm .github/workflows/_aq9-bootstrap.yml scripts/_aq9_bootstrap.py
+          rm .github/workflows/_aq9-bootstrap.yml scripts/_aq9_bootstrap.py scripts/_aq9_readme_alignment_fix.py
           expected="$(printf '%s\n' CHANGELOG.md README.json cosmic-ray.toml docs/architecture/ADAPTIVE_ASSURANCE_AQ9.md machine/adaptive/aq9-deep-assurance.v1.json machine/schemas/aq9-deep-assurance.v1.schema.json scripts/validation/validate_aq9.py tests/behavior/run_tests.py tests/runtime/test_adaptive_assurance_aq9.py | sort)"
           actual="$(git diff --name-only "$base" -- | sort)"
           if [ "$actual" != "$expected" ]; then
