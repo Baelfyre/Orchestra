@@ -11,11 +11,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from jsonschema import Draft202012Validator
-
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_CONTRACT = ROOT / "machine/adaptive/aq8-high-risk-assurance-packs.v1.json"
-DEFAULT_SCHEMA = ROOT / "machine/schemas/aq8-high-risk-assurance-packs.v1.schema.json"
 
 
 def _read_json(path: Path) -> Any:
@@ -27,7 +24,6 @@ def _parser() -> argparse.ArgumentParser:
         description="Validate AQ8 contract parity and optional state-bound observations."
     )
     parser.add_argument("--contract", type=Path, default=DEFAULT_CONTRACT)
-    parser.add_argument("--schema", type=Path, default=DEFAULT_SCHEMA)
     parser.add_argument(
         "--context",
         type=Path,
@@ -50,9 +46,6 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         contract = _read_json(args.contract)
-        schema = _read_json(args.schema)
-        Draft202012Validator.check_schema(schema)
-        Draft202012Validator(schema).validate(contract)
 
         sys.path.insert(0, str(ROOT))
         from orchestra_runtime.domain.adaptive.high_risk_assurance import (
@@ -61,6 +54,8 @@ def main(argv: list[str] | None = None) -> int:
             validate_aq8_contract,
         )
 
+        # Runtime parity is dependency-free. Draft 2020-12 schema validity and
+        # contract/schema conformance remain exercised by the runtime test suite.
         validate_aq8_contract(contract)
         print("AQ8_CONTRACT=PASS")
 
