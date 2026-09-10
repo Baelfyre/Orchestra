@@ -31,21 +31,11 @@
     "authority"
   ],
   "properties": {
-    "$schema": {
-      "const": "../schemas/aq8-high-risk-assurance-packs.v1.schema.json"
-    },
-    "schema_version": {
-      "const": "orchestra.aq8-high-risk-assurance-packs.v1"
-    },
-    "contract_role": {
-      "const": "machine_high_risk_assurance_packs_contract"
-    },
-    "authority_model": {
-      "const": "EVIDENCE_ONLY_NON_AUTHORIZING"
-    },
-    "transition_owner": {
-      "const": "ARBITER"
-    },
+    "$schema": {"const": "../schemas/aq8-high-risk-assurance-packs.v1.schema.json"},
+    "schema_version": {"const": "orchestra.aq8-high-risk-assurance-packs.v1"},
+    "contract_role": {"const": "machine_high_risk_assurance_packs_contract"},
+    "authority_model": {"const": "EVIDENCE_ONLY_NON_AUTHORIZING"},
+    "transition_owner": {"const": "ARBITER"},
     "packs": {
       "const": [
         "SECURITY",
@@ -215,13 +205,7 @@
         "evidence_digest"
       ]
     },
-    "observation_fields": {
-      "const": [
-        "facts",
-        "evidence",
-        "controlled_fixture"
-      ]
-    },
+    "observation_fields": {"const": ["facts", "evidence", "controlled_fixture"]},
     "case_result_fields": {
       "const": [
         "schema_version",
@@ -270,22 +254,9 @@
       ]
     },
     "dispositions": {
-      "const": [
-        "PASS",
-        "REVISION_REQUIRED",
-        "WAIT_FOR_EVIDENCE",
-        "BLOCKED",
-        "ESCALATE_HUMAN"
-      ]
+      "const": ["PASS", "REVISION_REQUIRED", "WAIT_FOR_EVIDENCE", "BLOCKED", "ESCALATE_HUMAN"]
     },
-    "evidence_results": {
-      "const": [
-        "PASS",
-        "FAIL",
-        "BLOCKED",
-        "WAIT_FOR_EVIDENCE"
-      ]
-    },
+    "evidence_results": {"const": ["PASS", "FAIL", "BLOCKED", "WAIT_FOR_EVIDENCE"]},
     "supported_evidence_types": {
       "const": [
         "CONTROLLED_FIXTURE",
@@ -318,7 +289,7 @@
         "AQ8_EVIDENCE_TREE_MISMATCH",
         "AQ8_EVIDENCE_VALIDATOR_MISSING",
         "AQ8_EVIDENCE_TYPE_UNSUPPORTED",
-    "AQ8_EVIDENCE_RESULT_NOT_PASS",
+        "AQ8_EVIDENCE_RESULT_NOT_PASS",
         "AQ8_EVIDENCE_STALE_WORKFLOW_RUN",
         "AQ8_EVIDENCE_NOT_DURABLE",
         "AQ8_EVIDENCE_NOT_RETRIEVABLE",
