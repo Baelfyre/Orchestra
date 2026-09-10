@@ -23,14 +23,13 @@ jobs:
           git show origin/main:CHANGELOG.md > /tmp/base-changelog.md
           python - <<'PY'
           from pathlib import Path
-          section = '''## Unreleased ADAPT-QA AQ-8 high-risk assurance packs
-
-- Adds deterministic, state-bound security, provenance, concurrency, state-machine, and evidence-integrity assurance packs with machine contract/schema parity.
-- Requires controlled interleavings for concurrency proof, aggregate-level analysis for shared invariants, and durable retrievable evidence bound to the exact candidate/tree/workflow.
-- Executes the COV-01 through COV-18 conflict matrix and AQ7 regression anchors while preserving PRAI, Covenant, Steward, Governor, and Arbiter ownership boundaries.
-- Keeps AQ8 source-only: no signed materialization, canonical merge, Padayon reconciliation, provider activation, production action, or AQ9+ authority.
-
-'''
+          section = (
+              "## Unreleased ADAPT-QA AQ-8 high-risk assurance packs\n\n"
+              "- Adds deterministic, state-bound security, provenance, concurrency, state-machine, and evidence-integrity assurance packs with machine contract/schema parity.\n"
+              "- Requires controlled interleavings for concurrency proof, aggregate-level analysis for shared invariants, and durable retrievable evidence bound to the exact candidate/tree/workflow.\n"
+              "- Executes the COV-01 through COV-18 conflict matrix and AQ7 regression anchors while preserving PRAI, Covenant, Steward, Governor, and Arbiter ownership boundaries.\n"
+              "- Keeps AQ8 source-only: no signed materialization, canonical merge, Padayon reconciliation, provider activation, production action, or AQ9+ authority.\n\n"
+          )
           base = Path('/tmp/base-changelog.md').read_text(encoding='utf-8')
           Path('CHANGELOG.md').write_text(section + base, encoding='utf-8', newline='\n')
           PY
