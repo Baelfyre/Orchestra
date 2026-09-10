@@ -1,0 +1,45 @@
+name: Temporary AQ8 changelog reconstruction
+
+on:
+  push:
+    branches:
+      - tmp/aq8-changelog-clean-workspace-20260910
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild-changelog:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Rebuild from canonical main plus AQ8 section
+        shell: bash
+        run: |
+          git fetch origin main
+          git show origin/main:CHANGELOG.md > /tmp/base-changelog.md
+          python - <<'PY'
+          from pathlib import Path
+          section = '''## Unreleased ADAPT-QA AQ-8 high-risk assurance packs
+
+- Adds deterministic, state-bound security, provenance, concurrency, state-machine, and evidence-integrity assurance packs with machine contract/schema parity.
+- Requires controlled interleavings for concurrency proof, aggregate-level analysis for shared invariants, and durable retrievable evidence bound to the exact candidate/tree/workflow.
+- Executes the COV-01 through COV-18 conflict matrix and AQ7 regression anchors while preserving PRAI, Covenant, Steward, Governor, and Arbiter ownership boundaries.
+- Keeps AQ8 source-only: no signed materialization, canonical merge, Padayon reconciliation, provider activation, production action, or AQ9+ authority.
+
+'''
+          base = Path('/tmp/base-changelog.md').read_text(encoding='utf-8')
+          Path('CHANGELOG.md').write_text(section + base, encoding='utf-8', newline='\n')
+          PY
+          git diff --check -- CHANGELOG.md
+      - name: Commit clean changelog donor
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add CHANGELOG.md
+          git commit -m 'docs(aq8): produce clean changelog donor blob'
+          git push origin HEAD:tmp/aq8-changelog-clean-workspace-20260910
