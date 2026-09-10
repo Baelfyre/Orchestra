@@ -1,10 +1,3 @@
-## Unreleased governance policy amendment: AQ8 assurance scope
-
-- Adds a human-authorized exact-scope classification for the fresh AQ8 high-risk assurance-pack implementation without changing historical PRAI, AQ5, AQ6, or AQ7 implementation inventories.
-- Keeps anchored partial, mixed, unknown, and unrecognized AQ8 changes fail-closed `APPLICABLE`.
-- Adds dedicated governance regression coverage and README machine-index parity for the AQ8 scope policy.
-- Preserves frozen PR #875 as historical evidence, keeps AQ9 unauthorized, and requires a fresh AQ8 Run N+2 candidate after canonical policy amendment.
-
 ## Unreleased Covenant cross-governance synthesis
 
 - Adds the evidence-only, non-authorizing Covenant runtime contract, machine schema, exact candidate/tree binding, and no-vote reconciliation rules.
@@ -301,7 +294,7 @@
 
 - **Governance Hardening**: Reinforces the Orchestra Prime Directive and Governed Execution Lifecycle V2, enforcing strict separation of authority, capability, routing, and validation readiness.
 - **Architecture Governance System (OR-GOV-1 through OR-GOV-10)**: Formalizes seven machine-readable contracts (`CapacityEnvelope`, `ProductIntentContract`, `ArchitectureComplexityDecision`, `MigrationRiskContract`, `ArchitectureGovernanceIntake`, `ArchitectureValidationContract`, `ProjectArchitectureGovernanceProfile`) with adaptive capacity reasoning, scale-ready vs. scale-provisioned distinction, engine-aware migration risk, proportional routing, declared-edge semantic invalidation, and revision-bound validation proof states.
-- **Specialist Governance Upgrades**: Formalizes operational boundaries and evidence-bound governance for The Steward, Conductor, Clockwork, Chronicler, Cipher (tenant-security governance), Arbiter (evidence freshness), Ponytail (upstream-contract enforcement), Scribe, and audits Governor, Weaver, Cloak, and Dagger.
+- **Specialist Governance Upgrades**: Formalizes operational boundaries and evidence-bound governance for The Steward, Clockwork, Chronicler, Conductor, The Tuner, Overseer, Cipher (tenant-security governance), Arbiter (evidence freshness), Ponytail (upstream-contract enforcement), Scribe, and audits Governor, Weaver, Cloak, and Dagger.
 - **Scribe Specialist Upgrade (SSU)**: Expands Scribe into domain narrative modeling, requirements traceability, and documentation drift reconciliation with `SPEC_TO_SYSTEM`, `SYSTEM_TO_DOCS`, and `RECONCILE` operating modes.
 - **Runtime Architecture Refoundation (AR-0, AR-1, AR-2)**: Refounds `orchestra_runtime` into clean hexagonal architecture layers (`domain/`, `application/`, `infrastructure/`, `bootstrap/`, `shared/`), extracting pure domain models while preserving legacy compatibility facades and enforcing machine-checked architecture boundaries. (AR-3 and AR-4 remain future work).
 - **Specialist & Provider Execution Boundaries**: Formalizes specialist execution requests and receipts, revalidates Codex MCP integration, and enforces provider boundaries without authority expansion.
@@ -600,7 +593,7 @@
 ## Post-v1.7 Priority 2 provider execution profile candidate
 
 - Added a deterministic, non-authorizing provider execution profile and trusted provider/model/capability requirement gate for explicit host-native specialist execution, while preserving existing route-only and provider-free deterministic runtime paths.
-- Added separate provider-aware MCP constructors and Codex App Server wrappers that map the existing explicit user-selected model configuration into `openai-codex` provider profiles without widening approval, sandbox, network, write-scope, specialist, command, or mutation scope.
+- Added separate provider-aware MCP constructors and Codex App Server wrappers that map the existing explicit user-selected model configuration into `openai-codex` provider profiles without widening approval, sandbox, network, specialist, command, or mutation scope.
 - Added Draft 2020-12 provider profile/requirement schemas and focused regressions for deterministic identity, fail-closed mismatch and drift handling, authority-before-provider ordering, minimized provider evidence, and prompt/MCP metadata non-override.
 - P2.1 does not add automatic provider routing or fallback, direct provider SDKs/APIs, credential handling, a static model catalog, Registry mutation, release, deployment, policy activation, integration refresh, destructive operations, branch deletion, force push, or history rewrite.
 
