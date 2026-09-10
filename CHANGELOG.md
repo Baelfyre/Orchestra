@@ -1,9 +1,3 @@
-## Unreleased ADAPT-QA AQ-8 high-risk assurance packs
-
-- Adds deterministic, state-bound security, provenance, concurrency, state-machine, and evidence-integrity assurance packs with machine contract/schema parity.
-- Requires controlled interleavings for concurrency proof, aggregate-level analysis for shared invariants, and durable retrievable evidence bound to the exact candidate/tree/workflow.
-- Executes the COV-01 through COV-18 conflict matrix and AQ7 regression anchors while preserving PRAI, Covenant, Steward, Governor, and Arbiter ownership boundaries.
-- Keeps AQ8 source-only: no signed materialization, canonical merge, Padayon reconciliation, provider activation, production action, or AQ9+ authority.
 ## Unreleased Covenant cross-governance synthesis
 
 - Adds the evidence-only, non-authorizing Covenant runtime contract, machine schema, exact candidate/tree binding, and no-vote reconciliation rules.
