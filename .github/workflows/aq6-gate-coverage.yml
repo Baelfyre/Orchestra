@@ -24,10 +24,36 @@ on:
       - tests/runtime/test_adaptive_assurance_aq6.py
 permissions:
   contents: read
+  actions: read
+  checks: read
+  pull-requests: read
 
 jobs:
+  promotion-assurance:
+    runs-on: ubuntu-latest
+    outputs:
+      mode: ${{ steps.promotion.outputs.mode }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Resolve promotion assurance mode
+        id: promotion
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python scripts/validate_governance_promotion_attestation.py
+
   aq6-runtime:
     name: AQ6 runtime contract
+    needs: promotion-assurance
+    if: ${{ needs.promotion-assurance.outputs.mode != 'TREE_ATTESTED' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -59,6 +85,8 @@ jobs:
 
   aq6-behavior:
     name: AQ6 CLI behavior
+    needs: promotion-assurance
+    if: ${{ needs.promotion-assurance.outputs.mode != 'TREE_ATTESTED' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -81,6 +109,8 @@ jobs:
 
   aq6-contract:
     name: AQ6 schema and contract parity
+    needs: promotion-assurance
+    if: ${{ needs.promotion-assurance.outputs.mode != 'TREE_ATTESTED' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -101,6 +131,8 @@ jobs:
 
   aq6-scope:
     name: AQ6 exact scope
+    needs: promotion-assurance
+    if: ${{ needs.promotion-assurance.outputs.mode != 'TREE_ATTESTED' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -165,3 +197,11 @@ jobs:
           sort -o expected-paths.txt expected-paths.txt
           diff -u expected-paths.txt actual-paths.txt
           echo "AQ6_SCOPE=PASS"
+
+  tree-attested-assurance:
+    needs: promotion-assurance
+    if: ${{ needs.promotion-assurance.outputs.mode == 'TREE_ATTESTED' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm tree-attested AQ6 assurance
+        run: echo "AQ6_REUSED_QUALIFIED_TREE_ASSURANCE=PASS"
