@@ -62,15 +62,21 @@ def transport_policy(policy: dict[str, Any]) -> dict[str, Any]:
         "canonical_pr_base": "main",
         "canonical_pr_required": True,
         "canonical_pr_must_use_materialized_signed_head": True,
-        "canonical_pr_revalidates_exact_signed_head": True,
-        "canonical_required_checks_reusable_from_materialization": False,
-        "canonical_full_validation_required": True,
+        "canonical_pr_revalidates_exact_signed_head": False,
+        "canonical_required_checks_reusable_from_materialization": True,
+        "canonical_full_validation_required": False,
         "canonical_mergeable_required": True,
         "canonical_mergeable_state_required": "clean",
         "canonical_merge_method": "squash",
         "canonical_bypass_used": False,
         "post_merge_independent_canonical_read_required": True,
-        "workflow_optimization_disposition": "MATERIALIZATION_PR_BOUNDED_CHECKS_ONLY;FULL_MATRIX_MAIN_ONLY",
+        "canonical_promotion_assurance_mode": "TREE_ATTESTED_WHEN_VERIFIED_ELSE_FULL_ASSURANCE",
+        "canonical_promotion_attestation_validator": "scripts/validate_governance_promotion_attestation.py",
+        "canonical_promotion_source_assurance_required": True,
+        "canonical_promotion_tree_identity_required": True,
+        "canonical_promotion_invalid_attestation_disposition": "BLOCK",
+        "post_merge_assurance_mode": "TREE_ATTESTED_WHEN_VERIFIED_ELSE_FULL_ASSURANCE",
+        "workflow_optimization_disposition": "SOURCE_FULL_ASSURANCE;MATERIALIZATION_BOUNDED_SIGNING;TREE_ATTESTED_CANONICAL_PROMOTION;FULL_ASSURANCE_ON_UNRECOGNIZED_OR_CHANGED_CONTENT",
     }
     for key, expected in required.items():
         require(transport.get(key) == expected, f"transport policy {key} must equal {expected!r}")
@@ -129,6 +135,12 @@ def build_evidence(
         "reviewed_tree": checked_tree,
         "changed_paths": normalized,
         "authority": {"canonical_merge_readiness": False, "project_state_promotion": False, "release": False, "bypass": False},
+        "promotion_assurance": {
+            "mode": transport["canonical_promotion_assurance_mode"],
+            "tree_identity_required": transport["canonical_promotion_tree_identity_required"],
+            "source_assurance_required": transport["canonical_promotion_source_assurance_required"],
+            "invalid_attestation_disposition": transport["canonical_promotion_invalid_attestation_disposition"],
+        },
         "disposition": DISPOSITION,
     }
 
