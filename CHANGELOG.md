@@ -1,3 +1,10 @@
+## Unreleased governance policy amendment: human-only whitelist authority
+
+- Makes whitelist creation, modification, expansion, narrowing, removal, reinterpretation, and approval a human-only `HUMAN_POLICY` authority boundary.
+- Allows AI models, agents, and specialists to analyze and recommend whitelist changes while forbidding AI approval or mutation without an explicit human governance decision and fresh bounded execution context.
+- Makes the boundary non-delegable to `FULL_AUTONOMOUS`; prior whitelist precedent, passing CI, specialist consensus, or available write capability does not create whitelist authority.
+- Binds the rule across the protected-governance machine contract, canonical governance policy/schema, deterministic validator, behavior tests, and governance documentation using Padayon authority record `c8798f848df0830d04d5f25b4f0680d288768839`.
+
 ## Unreleased governance policy amendment: AQ8 canonical closeout whitelist
 
 - Adds the human-authorized exact three-path AQ8 canonical-closeout whitelist for `CHANGELOG.md`, `README.json`, and `docs/architecture/ADAPTIVE_ASSURANCE_AQ8.md`.

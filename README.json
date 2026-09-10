@@ -2907,7 +2907,8 @@
     "covenant_machine_schema": "machine/schemas/covenant.v1.schema.json",
     "covenant_assurance_scope_policy": "docs/governance/COVENANT_ASSURANCE_SCOPE_POLICY.md",
     "aq8_assurance_scope_policy": "docs/governance/AQ8_ASSURANCE_SCOPE_POLICY.md",
-    "aq8_canonical_closeout_whitelist_policy": "docs/governance/AQ8_ASSURANCE_SCOPE_POLICY.md"
+    "aq8_canonical_closeout_whitelist_policy": "docs/governance/AQ8_ASSURANCE_SCOPE_POLICY.md",
+    "whitelist_human_only_authority": "docs/governance/PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md"
   },
   "representation_policy": {
     "markdown": "Human-readable explanation, rationale, examples, and nuanced specialist guidance",
