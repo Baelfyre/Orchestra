@@ -50,9 +50,7 @@ jobs:
         id: promotion
         env:
           GITHUB_TOKEN: ${{ github.token }}
-        run: >-
-          python scripts/validate_governance_promotion_attestation.py
-          --github-output "$GITHUB_OUTPUT"
+        run: python scripts/validate_governance_promotion_attestation.py
 
       - name: Initialize CodeQL
         if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
@@ -75,7 +73,7 @@ jobs:
   analyze-actions:
     name: Analyze (actions)
     needs: compatibility-codeql
-    if: needs.compatibility-codeql.outputs.promotion_mode != 'TREE_ATTESTED'
+    if: ${{ needs.compatibility-codeql.outputs.promotion_mode != 'TREE_ATTESTED' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -97,7 +95,7 @@ jobs:
   analyze-python:
     name: Analyze (python)
     needs: compatibility-codeql
-    if: needs.compatibility-codeql.outputs.promotion_mode != 'TREE_ATTESTED'
+    if: ${{ needs.compatibility-codeql.outputs.promotion_mode != 'TREE_ATTESTED' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
