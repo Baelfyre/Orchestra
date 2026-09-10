@@ -61,6 +61,13 @@ TREE_ATTESTED_PROMOTION_POLICY_PATHS = (
     "tests/behavior/test_signed_materialization.py",
 )
 
+SPECIALIZED_ASSURANCE_WORKFLOWS = (
+    ".github/workflows/prai.yml",
+    ".github/workflows/qa-compliance.yml",
+    ".github/workflows/aq6-gate-coverage.yml",
+    ".github/workflows/cosmic-ray-confidence.yml",
+)
+
 UNREGISTERED_AQ9_SAMPLE = (
     "CHANGELOG.md",
     "README.json",
@@ -183,6 +190,16 @@ def test_tree_attested_promotion_realigns_through_governance_taxonomy() -> None:
         )
 
 
+def test_unanchored_specialized_assurance_workflows_remain_fail_closed() -> None:
+    for workflow in SPECIALIZED_ASSURANCE_WORKFLOWS:
+        for assurance in HISTORICAL_GATES:
+            _assert_equal(
+                f"{assurance} unanchored specialized workflow {workflow}",
+                classify_paths(("README.json", workflow), assurance),
+                APPLICABLE,
+            )
+
+
 def test_unregistered_future_aq_paths_remain_fail_closed() -> None:
     for assurance in HISTORICAL_GATES:
         _assert_equal(
@@ -215,6 +232,7 @@ def main() -> None:
     test_duplicate_paths_fail_closed()
     test_policy_amendment_uses_preexisting_governance_classification()
     test_tree_attested_promotion_realigns_through_governance_taxonomy()
+    test_unanchored_specialized_assurance_workflows_remain_fail_closed()
     test_unregistered_future_aq_paths_remain_fail_closed()
     test_historical_implementation_inventories_remain_separate()
     print("AQ8 assurance scope policy tests passed.")
