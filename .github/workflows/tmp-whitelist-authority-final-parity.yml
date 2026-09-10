@@ -1,0 +1,62 @@
+name: Temporary whitelist authority final parity
+
+on:
+  push:
+    branches:
+      - governance/whitelist-human-only-authority-20260911
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: governance/whitelist-human-only-authority-20260911
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Apply exact changelog and validator parity
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          validator = Path('scripts/validate_protected_governance_escalation.py')
+          text = validator.read_text(encoding='utf-8')
+          old = '        "FULL_AUTONOMOUS cannot authorize whitelist mutation.",\n'
+          new = '        "`FULL_AUTONOMOUS` cannot authorize whitelist mutation.",\n'
+          assert text.count(old) == 1, f'validator anchor count={text.count(old)}'
+          validator.write_text(text.replace(old, new, 1), encoding='utf-8', newline='\n')
+
+          changelog = Path('CHANGELOG.md')
+          body = changelog.read_text(encoding='utf-8')
+          heading = '## Unreleased governance policy amendment: human-only whitelist authority'
+          assert heading not in body, 'changelog entry already present'
+          entry = (
+              heading + '\n\n'
+              '- Makes whitelist creation, modification, expansion, narrowing, removal, reinterpretation, and approval a human-only `HUMAN_POLICY` authority boundary.\n'
+              '- Allows AI models, agents, and specialists to analyze and recommend whitelist changes while forbidding AI approval or mutation without an explicit human governance decision and fresh bounded execution context.\n'
+              '- Makes the boundary non-delegable to `FULL_AUTONOMOUS`; prior whitelist precedent, passing CI, specialist consensus, or available write capability does not create whitelist authority.\n'
+              '- Binds the rule across the protected-governance machine contract, canonical governance policy/schema, deterministic validator, behavior tests, and governance documentation using Padayon authority record `c8798f848df0830d04d5f25b4f0680d288768839`.\n\n'
+          )
+          changelog.write_text(entry + body, encoding='utf-8', newline='\n')
+          PY
+          python -m json.tool machine/governance/policy.v1.json >/dev/null
+          python -m json.tool machine/governance/protected-governance-escalation.v1.json >/dev/null
+          python scripts/validate_protected_governance_escalation.py
+          git diff --check
+      - name: Commit parity repair and remove temporary workflow
+        shell: bash
+        run: |
+          rm .github/workflows/tmp-whitelist-authority-final-parity.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md scripts/validate_protected_governance_escalation.py .github/workflows/tmp-whitelist-authority-final-parity.yml
+          git diff --cached --check
+          git commit -m "docs(governance): complete human-only whitelist authority parity"
+          git push origin HEAD:governance/whitelist-human-only-authority-20260911
