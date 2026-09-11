@@ -16,6 +16,7 @@ POST_PUBLICATION_DOCS_PATHS = [
     "PROJECT_STATE.md",
     "README.json",
     "README.md",
+    "SESSION_HANDOFF.md",
     "docs/MATURITY.md",
     "docs/README.md",
     "docs/project/OOP_RUNTIME_ARCHITECTURE.md",
