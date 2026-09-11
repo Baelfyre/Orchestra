@@ -1,0 +1,83 @@
+name: Temporary post-v1.11 documentation scope inventory repair
+
+on:
+  push:
+    branches:
+      - "gov/post-v1.11-docs-normalization-scope-20260911"
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install focused dependency
+        run: python -m pip install pytest
+
+      - name: Expand test inventory and prove classifier is still fail-closed
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('tests/behavior/test_governance_post_publication_docs_scope.py')
+          text = p.read_text(encoding='utf-8')
+          anchor = '    "README.md",\n'
+          if '    "SESSION_HANDOFF.md",\n' not in text:
+              if anchor not in text:
+                  raise SystemExit('test inventory anchor missing')
+              text = text.replace(anchor, anchor + '    "SESSION_HANDOFF.md",\n', 1)
+          p.write_text(text, encoding='utf-8')
+          PY
+          if python -m pytest -q tests/behavior/test_governance_post_publication_docs_scope.py; then
+            echo "Expanded exact inventory unexpectedly passed before classifier update."
+            exit 1
+          fi
+
+      - name: Expand protected exact-set inventory
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('scripts/validation/classify_adaptive_assurance_scope.py')
+          text = p.read_text(encoding='utf-8')
+          marker = 'POST_PUBLICATION_DOCUMENTATION_NORMALIZATION_PATHS = frozenset('
+          start = text.index(marker)
+          end = text.index('\n)\n\nIMPLEMENTATION_PATHS_BY_GATE', start)
+          block = text[start:end]
+          anchor = '        "README.md",\n'
+          if '        "SESSION_HANDOFF.md",\n' not in block:
+              if anchor not in block:
+                  raise SystemExit('classifier inventory anchor missing')
+              block = block.replace(anchor, anchor + '        "SESSION_HANDOFF.md",\n', 1)
+              text = text[:start] + block + text[end:]
+          p.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Run repaired Gate 0 and prior scope regressions
+        run: |
+          python -m pytest -q tests/behavior/test_governance_post_publication_docs_scope.py
+          python -m pytest -q tests/behavior/test_governance_release_packaging_assurance_scope.py
+
+      - name: Commit repair and self-retire helper
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/tmp-post-v1.11-docs-scope-inventory-repair.yml
+          git add scripts/validation/classify_adaptive_assurance_scope.py tests/behavior/test_governance_post_publication_docs_scope.py
+          git commit -m "fix(governance): include stale session handoff in v1.11 docs scope"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
