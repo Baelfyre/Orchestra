@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = "34eb2a38a97f6d1acef6bbd206da8795393457de"
 BRANCH = "feat/aq14-final-effectiveness-qualification-20260911"
 HELPERS = [ROOT / "tools/_aq14_materialize.py", ROOT / ".github/workflows/_aq14-materialize.yml"]
+DIAGNOSTIC_LOG = ROOT / "aq14-materialize.log"
 EXACT_PATHS = {
     "CHANGELOG.md",
     "README.json",
@@ -88,6 +89,8 @@ def main() -> None:
     run("git", "add", "CHANGELOG.md", "README.json", "tests/behavior/run_tests.py")
     run("git", "commit", "-m", "feat(aq14): wire final effectiveness qualification")
 
+    if DIAGNOSTIC_LOG.exists():
+        DIAGNOSTIC_LOG.unlink()
     for helper in HELPERS:
         if helper.exists():
             helper.unlink()
