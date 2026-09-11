@@ -142,3 +142,51 @@ def test_unknown_class_and_unsafe_context_are_rejected() -> None:
         context(canonical_sha="0" * 40)
     with pytest.raises(ValueError):
         context(cud10_state="AUTHORIZED")
+
+
+def test_context_identity_fields_fail_closed_on_drift() -> None:
+    with pytest.raises(ValueError):
+        context(repository="Baelfyre/Other")
+    with pytest.raises(ValueError):
+        context(incident_reference="Baelfyre/Padayon#999")
+    with pytest.raises(ValueError):
+        context(mode="PRODUCTION")
+
+
+def test_case_scalar_and_collection_validation_fails_closed() -> None:
+    with pytest.raises(TypeError):
+        RemediationCase(123, REQUIRED_ESCAPE_CLASSES[0], "REPRODUCED_DEFECT", "PREVENTED", ("ACTION",), ("E",), True, False)
+    with pytest.raises(ValueError):
+        RemediationCase("", REQUIRED_ESCAPE_CLASSES[0], "REPRODUCED_DEFECT", "PREVENTED", ("ACTION",), ("E",), True, False)
+    with pytest.raises(ValueError):
+        RemediationCase("BAD\x01ID", REQUIRED_ESCAPE_CLASSES[0], "REPRODUCED_DEFECT", "PREVENTED", ("ACTION",), ("E",), True, False)
+    with pytest.raises(TypeError):
+        RemediationCase("X", REQUIRED_ESCAPE_CLASSES[0], "REPRODUCED_DEFECT", "PREVENTED", "ACTION", ("E",), True, False)
+    with pytest.raises(ValueError):
+        RemediationCase("X", REQUIRED_ESCAPE_CLASSES[0], "REPRODUCED_DEFECT", "PREVENTED", (), ("E",), True, False)
+    with pytest.raises(ValueError):
+        RemediationCase("X", REQUIRED_ESCAPE_CLASSES[0], "REPRODUCED_DEFECT", "PREVENTED", ("ACTION", "ACTION"), ("E",), True, False)
+    with pytest.raises(ValueError):
+        RemediationCase("X", REQUIRED_ESCAPE_CLASSES[0], "UNKNOWN", "PREVENTED", ("ACTION",), ("E",), True, False)
+    with pytest.raises(TypeError):
+        RemediationCase("X", REQUIRED_ESCAPE_CLASSES[0], "REPRODUCED_DEFECT", "PREVENTED", ("ACTION",), ("E",), 1, False)
+    with pytest.raises(TypeError):
+        RemediationCase("X", REQUIRED_ESCAPE_CLASSES[0], "REPRODUCED_DEFECT", "PREVENTED", ("ACTION",), ("E",), True, 0)
+
+
+def test_case_mapping_contract_fails_closed() -> None:
+    with pytest.raises(TypeError):
+        RemediationCase.from_mapping("not-a-mapping")
+    with pytest.raises(ValueError):
+        RemediationCase.from_mapping({"case_id": "X"})
+
+
+def test_pilot_container_types_fail_closed() -> None:
+    with pytest.raises(TypeError):
+        evaluate_remediation_pilot("not-a-context", cases())
+    with pytest.raises(TypeError):
+        evaluate_remediation_pilot(context(), "not-cases")
+    sample = list(cases())
+    sample[-1] = object()
+    with pytest.raises(TypeError):
+        evaluate_remediation_pilot(context(), sample)
