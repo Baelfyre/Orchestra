@@ -26,6 +26,6 @@ jobs:
         with:
           python-version: '3.12'
       - name: Install test dependencies
-        run: python -m pip install -U pip pytest pytest-cov jsonschema
+        run: python -m pip install -U pip pytest pytest-cov jsonschema hypothesis
       - name: Repair transport and materialize candidate
         run: python tools/_v1_11_0_release_repair.py
