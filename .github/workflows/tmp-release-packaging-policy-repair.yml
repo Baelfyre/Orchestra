@@ -58,7 +58,7 @@ jobs:
           python -B -m pytest tests/behavior/test_governance_release_packaging_assurance_scope.py -q
           python -B -m py_compile scripts/validation/classify_adaptive_assurance_scope.py
           rm .github/workflows/tmp-release-packaging-policy-repair.yml
-          git add README.json tests/behavior/test_governance_release_packaging_assurance_scope.py tests/runtime/test_release_packaging_assurance_scope.py scripts/validation/classify_adaptive_assurance_scope.py .github/workflows/tmp-release-packaging-policy-repair.yml
+          git add -A
           git diff --cached --check
           git commit -m "fix(governance): align release packaging policy parity"
           git push origin HEAD:governance/release-packaging-assurance-scope-20260911
