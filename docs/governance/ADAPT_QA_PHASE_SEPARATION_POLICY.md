@@ -1,7 +1,7 @@
 # ADAPT-QA Phase Separation Policy
 
-**Policy authority:** `ORCHESTRA_ADAPT_QA_PHASE_SEPARATION_FRAMEWORK_AQ10_AQ14_HUMAN_POLICY_20260911`  
-**Authority class:** `HUMAN_POLICY`  
+**Policy authority:** `ORCHESTRA_ADAPT_QA_PHASE_SEPARATION_FRAMEWORK_AQ10_AQ14_HUMAN_POLICY_20260911`
+**Authority class:** `HUMAN_POLICY`
 **Canonical authority:** `https://github.com/Baelfyre/Padayon/blob/384f78dd27da52a3fff99fe40379ae3c3273e12f/projects/orchestra/10-approved/decisions/ADAPT_QA_Phase_Separation_Framework_AQ10_AQ14_Human_Policy_Decision_20260911.md`
 
 ## Purpose
