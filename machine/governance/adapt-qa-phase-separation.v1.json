@@ -1,0 +1,139 @@
+{
+  "schema_version": "orchestra.adapt-qa-phase-separation.v1",
+  "policy_id": "ORCHESTRA_ADAPT_QA_PHASE_SEPARATION_FRAMEWORK_AQ10_AQ14_HUMAN_POLICY_20260911",
+  "authority_class": "HUMAN_POLICY",
+  "authority_source": "https://github.com/Baelfyre/Padayon/blob/384f78dd27da52a3fff99fe40379ae3c3273e12f/projects/orchestra/10-approved/decisions/ADAPT_QA_Phase_Separation_Framework_AQ10_AQ14_Human_Policy_Decision_20260911.md",
+  "historical_gates": [
+    "prai",
+    "aq5",
+    "aq7"
+  ],
+  "phases": [
+    {
+      "phase_id": "AQ10",
+      "status": "HUMAN_APPROVED_REGISTERED",
+      "implementation_paths": [
+        "CHANGELOG.md",
+        "README.json",
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ10.md",
+        "machine/adaptive/aq10-defect-escape-rca.v1.json",
+        "machine/schemas/aq10-defect-escape-rca.v1.schema.json",
+        "orchestra_runtime/domain/adaptive/defect_escape_rca.py",
+        "scripts/validation/validate_aq10.py",
+        "tests/behavior/run_tests.py",
+        "tests/runtime/test_adaptive_assurance_aq10.py"
+      ],
+      "anchor_paths": [
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ10.md",
+        "machine/adaptive/aq10-defect-escape-rca.v1.json",
+        "machine/schemas/aq10-defect-escape-rca.v1.schema.json",
+        "orchestra_runtime/domain/adaptive/defect_escape_rca.py",
+        "scripts/validation/validate_aq10.py",
+        "tests/runtime/test_adaptive_assurance_aq10.py"
+      ]
+    },
+    {
+      "phase_id": "AQ11",
+      "status": "HUMAN_APPROVED_REGISTERED",
+      "implementation_paths": [
+        "CHANGELOG.md",
+        "README.json",
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ11.md",
+        "machine/adaptive/aq11-remediation-effectiveness-pilot.v1.json",
+        "machine/schemas/aq11-remediation-effectiveness-pilot.v1.schema.json",
+        "orchestra_runtime/domain/adaptive/remediation_effectiveness.py",
+        "scripts/validation/validate_aq11.py",
+        "tests/behavior/run_tests.py",
+        "tests/runtime/test_adaptive_assurance_aq11.py"
+      ],
+      "anchor_paths": [
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ11.md",
+        "machine/adaptive/aq11-remediation-effectiveness-pilot.v1.json",
+        "machine/schemas/aq11-remediation-effectiveness-pilot.v1.schema.json",
+        "orchestra_runtime/domain/adaptive/remediation_effectiveness.py",
+        "scripts/validation/validate_aq11.py",
+        "tests/runtime/test_adaptive_assurance_aq11.py"
+      ]
+    },
+    {
+      "phase_id": "AQ12",
+      "status": "HUMAN_APPROVED_REGISTERED",
+      "implementation_paths": [
+        "CHANGELOG.md",
+        "README.json",
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ12.md",
+        "machine/adaptive/aq12-adversarial-self-test.v1.json",
+        "machine/schemas/aq12-adversarial-self-test.v1.schema.json",
+        "orchestra_runtime/domain/adaptive/adversarial_self_test.py",
+        "scripts/validation/validate_aq12.py",
+        "tests/behavior/run_tests.py",
+        "tests/runtime/test_adaptive_assurance_aq12.py"
+      ],
+      "anchor_paths": [
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ12.md",
+        "machine/adaptive/aq12-adversarial-self-test.v1.json",
+        "machine/schemas/aq12-adversarial-self-test.v1.schema.json",
+        "orchestra_runtime/domain/adaptive/adversarial_self_test.py",
+        "scripts/validation/validate_aq12.py",
+        "tests/runtime/test_adaptive_assurance_aq12.py"
+      ]
+    },
+    {
+      "phase_id": "AQ13",
+      "status": "HUMAN_APPROVED_REGISTERED",
+      "implementation_paths": [
+        "CHANGELOG.md",
+        "README.json",
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ13.md",
+        "machine/adaptive/aq13-staged-rollout-evaluation.v1.json",
+        "machine/schemas/aq13-staged-rollout-evaluation.v1.schema.json",
+        "orchestra_runtime/domain/adaptive/staged_rollout.py",
+        "scripts/validation/validate_aq13.py",
+        "tests/behavior/run_tests.py",
+        "tests/runtime/test_adaptive_assurance_aq13.py"
+      ],
+      "anchor_paths": [
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ13.md",
+        "machine/adaptive/aq13-staged-rollout-evaluation.v1.json",
+        "machine/schemas/aq13-staged-rollout-evaluation.v1.schema.json",
+        "orchestra_runtime/domain/adaptive/staged_rollout.py",
+        "scripts/validation/validate_aq13.py",
+        "tests/runtime/test_adaptive_assurance_aq13.py"
+      ]
+    },
+    {
+      "phase_id": "AQ14",
+      "status": "HUMAN_APPROVED_REGISTERED",
+      "implementation_paths": [
+        "CHANGELOG.md",
+        "README.json",
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ14.md",
+        "machine/adaptive/aq14-effectiveness-qualification.v1.json",
+        "machine/schemas/aq14-effectiveness-qualification.v1.schema.json",
+        "orchestra_runtime/domain/adaptive/effectiveness_qualification.py",
+        "scripts/validation/validate_aq14.py",
+        "tests/behavior/run_tests.py",
+        "tests/runtime/test_adaptive_assurance_aq14.py"
+      ],
+      "anchor_paths": [
+        "docs/architecture/ADAPTIVE_ASSURANCE_AQ14.md",
+        "machine/adaptive/aq14-effectiveness-qualification.v1.json",
+        "machine/schemas/aq14-effectiveness-qualification.v1.schema.json",
+        "orchestra_runtime/domain/adaptive/effectiveness_qualification.py",
+        "scripts/validation/validate_aq14.py",
+        "tests/runtime/test_adaptive_assurance_aq14.py"
+      ]
+    }
+  ],
+  "invariants": {
+    "exact_registered_phase_set": "HISTORICAL_GATE_NOT_APPLICABLE_WHEN_PHASE_SEPARATION_REQUIRES_IT",
+    "partial_registered_phase_set": "APPLICABLE",
+    "registered_phase_superset": "APPLICABLE",
+    "registered_phase_plus_unknown_path": "APPLICABLE",
+    "unregistered_future_phase": "APPLICABLE",
+    "duplicate_or_unsafe_path": "FAIL_CLOSED",
+    "registry_mutation_authority": "HUMAN_POLICY",
+    "phase_registration_is_lifecycle_whitelist": false,
+    "phase_separation_is_assurance_bypass": false
+  }
+}

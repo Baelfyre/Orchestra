@@ -6,12 +6,18 @@
 from __future__ import annotations
 
 import argparse
+import json
 import sys
+from json import JSONDecodeError
 from collections.abc import Iterable
+from pathlib import Path
 
 
 APPLICABLE = "APPLICABLE"
 NOT_APPLICABLE = "NOT_APPLICABLE"
+
+ROOT = Path(__file__).resolve().parents[2]
+ADAPT_QA_PHASE_SEPARATION_REGISTRY_PATH = ROOT / "machine/governance/adapt-qa-phase-separation.v1.json"
 
 COMMON_TRIGGER_PATHS = frozenset({"CHANGELOG.md", "README.json"})
 
@@ -235,6 +241,8 @@ GOVERNANCE_EXACT_PATHS = frozenset(
         "docs/CONTRIBUTING.md",
         "machine/projections/portable-projection-index.v1.json",
         "machine/schemas/governance-policy.schema.json",
+        "machine/governance/adapt-qa-phase-separation.v1.json",
+        "machine/schemas/adapt-qa-phase-separation.v1.schema.json",
         "scripts/governance_check.py",
         "scripts/test_governance_check.py",
         "scripts/validation/classify_adaptive_assurance_scope.py",
@@ -277,6 +285,33 @@ def normalize_paths(paths: Iterable[str]) -> tuple[str, ...]:
     return tuple(sorted(normalized))
 
 
+def load_registered_phase_scopes() -> dict[str, tuple[frozenset[str], frozenset[str]]]:
+    try:
+        raw = json.loads(ADAPT_QA_PHASE_SEPARATION_REGISTRY_PATH.read_text(encoding="utf-8"))
+    except (OSError, JSONDecodeError) as exc:
+        raise ValueError(f"invalid ADAPT-QA phase separation registry: {exc}") from exc
+    if not isinstance(raw, dict) or raw.get("schema_version") != "orchestra.adapt-qa-phase-separation.v1":
+        raise ValueError("invalid ADAPT-QA phase separation registry schema_version")
+    if raw.get("authority_class") != "HUMAN_POLICY":
+        raise ValueError("ADAPT-QA phase separation registry must be HUMAN_POLICY")
+    phases = raw.get("phases")
+    if not isinstance(phases, list) or not phases:
+        raise ValueError("ADAPT-QA phase separation registry requires phases")
+    result: dict[str, tuple[frozenset[str], frozenset[str]]] = {}
+    for entry in phases:
+        if not isinstance(entry, dict):
+            raise ValueError("ADAPT-QA phase entry must be an object")
+        phase_id = entry.get("phase_id")
+        if not isinstance(phase_id, str) or not phase_id.startswith("AQ") or phase_id in result:
+            raise ValueError("ADAPT-QA phase_id must be unique AQ identifier")
+        implementation = frozenset(normalize_paths(entry.get("implementation_paths", ())))
+        anchors = frozenset(normalize_paths(entry.get("anchor_paths", ())))
+        if not anchors or not anchors.issubset(implementation):
+            raise ValueError(f"{phase_id} anchor_paths must be non-empty subset of implementation_paths")
+        result[phase_id] = (implementation, anchors)
+    return result
+
+
 def is_governance_path(path: str) -> bool:
     return path in GOVERNANCE_EXACT_PATHS or any(
         path.startswith(prefix) for prefix in GOVERNANCE_PREFIXES
@@ -308,6 +343,15 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
         return NOT_APPLICABLE
     if normalized_set.intersection(AQ9_SCOPE_ANCHOR_PATHS):
         return APPLICABLE
+
+    # Human-approved reusable ADAPT-QA phase separation. Exact complete
+    # registered phase scopes are separated from historical inventories; any
+    # anchor-bearing subset or mixed/superset scope remains fail-closed.
+    for _phase_id, (registered_paths, anchor_paths) in load_registered_phase_scopes().items():
+        if normalized_set == registered_paths:
+            return NOT_APPLICABLE
+        if normalized_set.intersection(anchor_paths):
+            return APPLICABLE
 
     if gate != "aq7" and normalized_set.intersection(strict_implementation_paths):
         return APPLICABLE
