@@ -1,0 +1,30 @@
+name: AQ11 Bootstrap
+
+on:
+  push:
+    branches:
+      - feat/aq11-remediation-effectiveness-pilot-20260911
+    paths:
+      - 'scripts/_aq11_bootstrap.py'
+      - '.github/workflows/_aq11-bootstrap.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out AQ11 branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/aq11-remediation-effectiveness-pilot-20260911
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install focused runtime dependencies
+        run: python -m pip install pytest 'jsonschema[format]>=4.21,<5'
+      - name: Materialize and qualify exact AQ11 inventory
+        run: python -B scripts/_aq11_bootstrap.py
