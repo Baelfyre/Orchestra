@@ -25,6 +25,15 @@ text = text.replace(
     '"All canonical release/version surfaces and `machine/hosts/update-contract.v1.json#/package_version` are normalized to the v1.11.0 candidate; the current public release remains immutable v1.10.0 until publication completes."',
 )
 
+# v1.10.0 release preparation intentionally pins version-sensitive runtime tests
+# and the JetBrains XML descriptor. Advance those release-coupled surfaces as part
+# of the candidate rather than weakening or bypassing their assertions.
+anchor = '''    host_update["package_version"] = VERSION\n    dump_json(ROOT / "machine/hosts/update-contract.v1.json", host_update)\n'''
+addition = anchor + '''\n    replace_once(\n        ROOT / "adapters/jetbrains/plugin.xml",\n        "<version>1.10.0</version>",\n        "<version>1.11.0</version>",\n    )\n    replace_once(\n        ROOT / "tests/runtime/test_release_version_surfaces.py",\n        'EXPECTED_VERSION = "1.10.0"',\n        'EXPECTED_VERSION = "1.11.0"',\n    )\n    replace_once(\n        ROOT / "tests/runtime/test_host_updates.py",\n        'CURRENT_VERSION = "1.10.0"',\n        'CURRENT_VERSION = "1.11.0"',\n    )\n    replace_once(\n        ROOT / "tests/runtime/test_host_updates.py",\n        'latest_version="v1.11.0"',\n        'latest_version="v1.12.0"',\n    )\n    replace_once(\n        ROOT / "tests/runtime/test_host_updates.py",\n        'assert available.latest_version == "1.11.0"',\n        'assert available.latest_version == "1.12.0"',\n    )\n'''
+if anchor not in text:
+    raise RuntimeError("host-update materializer anchor not found")
+text = text.replace(anchor, addition, 1)
+
 text = text.replace(
     'if current != VERSION or len(surfaces) != 11:\n        raise RuntimeError(f"version surface mismatch: {current}, {len(surfaces)} surfaces")',
     'if current != VERSION or len(surfaces) != surface_count:\n        raise RuntimeError(f"version surface mismatch: {current}, {len(surfaces)} surfaces; expected {surface_count}")',
