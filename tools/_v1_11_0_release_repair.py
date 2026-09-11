@@ -14,9 +14,17 @@ new = '''    surface_count = len(adapter_packages) + 3\n    if surface_count < 3
 if old not in text:
     raise RuntimeError("version-surface assertion target not found")
 text = text.replace(old, new, 1)
+
+# Candidate-facing wording follows the live surface inventory. Preserve the exact
+# v1.10 source text used by replace_once so drift detection still compares against
+# the untouched canonical source document.
 text = text.replace("Aligns all 11 package/version surfaces", "Aligns all canonical package/version surfaces")
-text = text.replace("All 11 release/version surfaces", "All canonical release/version surfaces")
 text = text.replace("All 11 package/version surfaces", "All canonical package/version surfaces")
+text = text.replace(
+    '"All 11 release/version surfaces and `machine/hosts/update-contract.v1.json#/package_version` are normalized to the v1.11.0 candidate; the current public release remains immutable v1.10.0 until publication completes."',
+    '"All canonical release/version surfaces and `machine/hosts/update-contract.v1.json#/package_version` are normalized to the v1.11.0 candidate; the current public release remains immutable v1.10.0 until publication completes."',
+)
+
 text = text.replace(
     'if current != VERSION or len(surfaces) != 11:\n        raise RuntimeError(f"version surface mismatch: {current}, {len(surfaces)} surfaces")',
     'if current != VERSION or len(surfaces) != surface_count:\n        raise RuntimeError(f"version surface mismatch: {current}, {len(surfaces)} surfaces; expected {surface_count}")',
