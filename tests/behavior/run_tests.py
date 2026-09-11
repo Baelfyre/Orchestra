@@ -101,6 +101,7 @@ def main():
         {"Name": "validate_aq8.py", "Path": "scripts/validation/validate_aq8.py"},
         {"Name": "validate_aq9.py", "Path": "scripts/validation/validate_aq9.py"},
         {"Name": "validate_aq10.py", "Path": "scripts/validation/validate_aq10.py"},
+        {"Name": "validate_aq11.py", "Path": "scripts/validation/validate_aq11.py"},
         {"Name": "evaluate_governance.py", "Path": "tests/behavior/evaluate_governance.py"},
         {"Name": "runtime_guardrail.py", "Path": "scripts/runtime_guardrail.py"},
         {"Name": "test_dagger_guardrail.py", "Path": "scripts/test_dagger_guardrail.py"},

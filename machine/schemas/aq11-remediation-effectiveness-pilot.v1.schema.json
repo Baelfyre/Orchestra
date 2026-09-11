@@ -1,0 +1,319 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/aq11-remediation-effectiveness-pilot.v1.schema.json",
+  "title": "Orchestra AQ11 remediation effectiveness pilot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "phase",
+    "owner",
+    "authority_model",
+    "purpose",
+    "implementation_inventory",
+    "pilot_boundary",
+    "required_escape_classes",
+    "effectiveness_policy",
+    "reference_cases",
+    "fail_closed_conditions",
+    "authority",
+    "validation"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "orchestra.aq11-remediation-effectiveness-pilot.v1"
+    },
+    "phase": {
+      "const": "AQ11_REMEDIATION_EFFECTIVENESS_PILOT"
+    },
+    "owner": {
+      "const": "overseer"
+    },
+    "authority_model": {
+      "const": "EVIDENCE_ONLY_NON_AUTHORIZING"
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "implementation_inventory": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "uniqueItems": true,
+      "prefixItems": [
+        {
+          "const": "CHANGELOG.md"
+        },
+        {
+          "const": "README.json"
+        },
+        {
+          "const": "docs/architecture/ADAPTIVE_ASSURANCE_AQ11.md"
+        },
+        {
+          "const": "machine/adaptive/aq11-remediation-effectiveness-pilot.v1.json"
+        },
+        {
+          "const": "machine/schemas/aq11-remediation-effectiveness-pilot.v1.schema.json"
+        },
+        {
+          "const": "orchestra_runtime/domain/adaptive/remediation_effectiveness.py"
+        },
+        {
+          "const": "scripts/validation/validate_aq11.py"
+        },
+        {
+          "const": "tests/behavior/run_tests.py"
+        },
+        {
+          "const": "tests/runtime/test_adaptive_assurance_aq11.py"
+        }
+      ],
+      "items": false
+    },
+    "pilot_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_repository",
+        "observed_canonical_sha",
+        "incident_reference",
+        "mode",
+        "cud10_state",
+        "source_mutation_allowed",
+        "production_evidence_allowed",
+        "organic_effectiveness_claimed"
+      ],
+      "properties": {
+        "target_repository": {
+          "const": "Baelfyre/CritiQual"
+        },
+        "observed_canonical_sha": {
+          "const": "166bbac50a4f02e222aa15ff914c60cec658b7c0"
+        },
+        "incident_reference": {
+          "const": "Baelfyre/Padayon#441"
+        },
+        "mode": {
+          "const": "CONTROLLED_NON_PRODUCTION_EVIDENCE_PILOT"
+        },
+        "cud10_state": {
+          "const": "READY_NOT_STARTED_HELD_BY_CURRENT_USER"
+        },
+        "source_mutation_allowed": {
+          "const": false
+        },
+        "production_evidence_allowed": {
+          "const": false
+        },
+        "organic_effectiveness_claimed": {
+          "const": false
+        }
+      }
+    },
+    "required_escape_classes": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "uniqueItems": true,
+      "prefixItems": [
+        {
+          "const": "PROVENANCE_OWNERSHIP"
+        },
+        {
+          "const": "AGGREGATE_CONCURRENCY"
+        },
+        {
+          "const": "CALIBRATION_EVIDENCE_INTEGRITY"
+        },
+        {
+          "const": "AUTHORITY_BOUNDARY"
+        },
+        {
+          "const": "RUNTIME_INTEGRATION"
+        },
+        {
+          "const": "GATE_COVERAGE_TRUTHFULNESS"
+        }
+      ],
+      "items": false
+    },
+    "effectiveness_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimum_case_count",
+        "minimum_effectiveness_bps",
+        "effective_after_results",
+        "unresolved_after_results",
+        "independent_evidence_required",
+        "recurrence_must_be_false",
+        "claim_scope"
+      ],
+      "properties": {
+        "minimum_case_count": {
+          "const": 6
+        },
+        "minimum_effectiveness_bps": {
+          "const": 10000
+        },
+        "effective_after_results": {
+          "const": [
+            "PREVENTED",
+            "DETECTED_BEFORE_TRANSITION"
+          ]
+        },
+        "unresolved_after_results": {
+          "const": [
+            "STILL_ESCAPES",
+            "INCONCLUSIVE"
+          ]
+        },
+        "independent_evidence_required": {
+          "const": true
+        },
+        "recurrence_must_be_false": {
+          "const": true
+        },
+        "claim_scope": {
+          "const": "CONTROLLED_PILOT_ONLY"
+        }
+      }
+    },
+    "reference_cases": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "case_id",
+          "escape_class",
+          "before_result",
+          "evidence_basis"
+        ],
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "escape_class": {
+            "enum": [
+              "PROVENANCE_OWNERSHIP",
+              "AGGREGATE_CONCURRENCY",
+              "CALIBRATION_EVIDENCE_INTEGRITY",
+              "AUTHORITY_BOUNDARY",
+              "RUNTIME_INTEGRATION",
+              "GATE_COVERAGE_TRUTHFULNESS"
+            ]
+          },
+          "before_result": {
+            "enum": [
+              "REPRODUCED_DEFECT",
+              "STATIC_RISK_CONFIRMED"
+            ]
+          },
+          "evidence_basis": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "fail_closed_conditions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "creates_execution_authority",
+        "creates_transition_authority",
+        "creates_whitelist_authority",
+        "changes_protected_policy",
+        "lowers_assurance_thresholds",
+        "activates_provider",
+        "activates_telemetry",
+        "mutates_production",
+        "authorizes_release",
+        "authorizes_critiqual_cud10_admission"
+      ],
+      "properties": {
+        "creates_execution_authority": {
+          "const": false
+        },
+        "creates_transition_authority": {
+          "const": false
+        },
+        "creates_whitelist_authority": {
+          "const": false
+        },
+        "changes_protected_policy": {
+          "const": false
+        },
+        "lowers_assurance_thresholds": {
+          "const": false
+        },
+        "activates_provider": {
+          "const": false
+        },
+        "activates_telemetry": {
+          "const": false
+        },
+        "mutates_production": {
+          "const": false
+        },
+        "authorizes_release": {
+          "const": false
+        },
+        "authorizes_critiqual_cud10_admission": {
+          "const": false
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "validator",
+        "runtime",
+        "runtime_test",
+        "behavior_registration",
+        "architecture_reference",
+        "schema",
+        "canonical_start_sha"
+      ],
+      "properties": {
+        "validator": {
+          "const": "scripts/validation/validate_aq11.py"
+        },
+        "runtime": {
+          "const": "orchestra_runtime/domain/adaptive/remediation_effectiveness.py"
+        },
+        "runtime_test": {
+          "const": "tests/runtime/test_adaptive_assurance_aq11.py"
+        },
+        "behavior_registration": {
+          "const": "tests/behavior/run_tests.py"
+        },
+        "architecture_reference": {
+          "const": "docs/architecture/ADAPTIVE_ASSURANCE_AQ11.md"
+        },
+        "schema": {
+          "const": "machine/schemas/aq11-remediation-effectiveness-pilot.v1.schema.json"
+        },
+        "canonical_start_sha": {
+          "const": "2fa5d648b5b19d483ecbe2342f5a28927a85d28f"
+        }
+      }
+    }
+  }
+}
