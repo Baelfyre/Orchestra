@@ -1,0 +1,42 @@
+name: AQ14 Materialize Bootstrap
+
+on:
+  push:
+    branches:
+      - feat/aq14-final-effectiveness-qualification-20260911
+    paths:
+      - tools/_aq14_materialize.py
+      - .github/workflows/_aq14-materialize.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout AQ14 branch
+        uses: actions/checkout@v4
+        with:
+          ref: feat/aq14-final-effectiveness-qualification-20260911
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Materialize, validate, self-retire, and push
+        shell: bash
+        run: |
+          set -o pipefail
+          python -B tools/_aq14_materialize.py 2>&1 | tee aq14-materialize.log
+
+      - name: Upload diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aq14-materialize-diagnostics-${{ github.run_id }}
+          path: aq14-materialize.log
+          if-no-files-found: ignore
