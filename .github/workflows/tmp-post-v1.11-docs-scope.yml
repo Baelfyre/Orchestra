@@ -1,0 +1,130 @@
+name: Temporary post-v1.11 documentation scope amendment
+
+on:
+  push:
+    branches:
+      - "gov/post-v1.11-docs-normalization-scope-20260911"
+
+permissions:
+  contents: write
+
+jobs:
+  amend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install focused test dependency
+        run: python -m pip install pytest
+
+      - name: Prove Gate 0 tests fail before policy implementation
+        shell: bash
+        run: |
+          set -euo pipefail
+          if python -m pytest -q tests/behavior/test_governance_post_publication_docs_scope.py; then
+            echo "Post-publication documentation scope tests unexpectedly passed before classifier implementation."
+            exit 1
+          fi
+
+      - name: Implement narrowly bounded classifier and governance record
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          classifier = Path('scripts/validation/classify_adaptive_assurance_scope.py')
+          text = classifier.read_text(encoding='utf-8')
+          constant = '''POST_PUBLICATION_DOCUMENTATION_NORMALIZATION_PATHS = frozenset(\n    {\n        "CHANGELOG.md",\n        "PROJECT_CONTEXT.md",\n        "PROJECT_STATE.md",\n        "README.json",\n        "README.md",\n        "docs/MATURITY.md",\n        "docs/README.md",\n        "docs/project/OOP_RUNTIME_ARCHITECTURE.md",\n        "docs/project/ROADMAP.md",\n        "docs/reference/README.md",\n        "docs/reference/releases/README.md",\n        "docs/reference/releases/v1.11.0.md",\n        "docs/setup/COMPATIBILITY.md",\n        "docs/setup/INSTALLATION.md",\n    }\n)\n\n'''
+          marker = 'IMPLEMENTATION_PATHS_BY_GATE = {'
+          if 'POST_PUBLICATION_DOCUMENTATION_NORMALIZATION_PATHS' not in text:
+              if marker not in text:
+                  raise SystemExit('classifier insertion marker missing')
+              text = text.replace(marker, constant + marker, 1)
+          check_marker = '    if is_release_packaging_scope(normalized_set):\n        return NOT_APPLICABLE\n\n'
+          check = check_marker + '    # Human-approved exact post-publication documentation-normalization lane.\n    # Only the complete registered v1.11 public-state documentation inventory is\n    # exempt from historical AQ5/AQ7/PRAI implementation scopes. Partial, mixed,\n    # or superset changes continue through the fail-closed classifier.\n    if normalized_set == POST_PUBLICATION_DOCUMENTATION_NORMALIZATION_PATHS:\n        return NOT_APPLICABLE\n\n'
+          if 'normalized_set == POST_PUBLICATION_DOCUMENTATION_NORMALIZATION_PATHS' not in text:
+              if check_marker not in text:
+                  raise SystemExit('classifier check marker missing')
+              text = text.replace(check_marker, check, 1)
+          classifier.write_text(text, encoding='utf-8')
+
+          readme = Path('README.json')
+          doc = json.loads(readme.read_text(encoding='utf-8'))
+          caps = doc.setdefault('capabilities', {})
+          caps['post_publication_documentation_normalization_scope'] = {
+              'status': 'HUMAN_POLICY_CANONICALIZATION_CANDIDATE',
+              'purpose': 'Permit only the exact v1.11 post-publication documentation normalization inventory to bypass historical AQ5/AQ7/PRAI implementation-scope matching while preserving all ordinary repository validation.',
+              'classifier': 'scripts/validation/classify_adaptive_assurance_scope.py',
+              'validation_surface': 'tests/behavior/test_governance_post_publication_docs_scope.py',
+              'authority_class': 'HUMAN_POLICY',
+              'scope_rule': 'EXACT_SET_ONLY_FAIL_CLOSED_PARTIAL_MIXED_SUPERSET',
+              'target_public_release': 'v1.11.0',
+              'authority_note': 'Documentation normalization does not grant runtime, provider, telemetry, production, deployment, whitelist, protected-policy, AQ15, AR3, or CritiQual CUD10 authority.'
+          }
+          readme.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+
+          changelog = Path('CHANGELOG.md')
+          ctext = changelog.read_text(encoding='utf-8')
+          heading = '## Unreleased governance policy: post-v1.11 documentation-normalization assurance scope\n'
+          if heading not in ctext:
+              anchor = '## Unreleased governance policy: deterministic release-packaging assurance scope\n'
+              section = '''## Unreleased governance policy: post-v1.11 documentation-normalization assurance scope\n\n- Adds the maintainer-authorized exact-set documentation-normalization lane for the verified v1.11.0 public state.\n- Historical PRAI/AQ5/AQ7 implementation inventories are `NOT_APPLICABLE` only for the complete registered documentation set.\n- Partial, mixed, superset, runtime, governance, provider, telemetry, deployment, and unknown scopes remain fail-closed `APPLICABLE`.\n- The lane grants no runtime behavior, release, deployment, provider, telemetry, production, whitelist, protected-policy, AQ15, AR3, or CritiQual CUD10 authority.\n\n'''
+              if anchor not in ctext:
+                  raise SystemExit('changelog insertion anchor missing')
+              ctext = ctext.replace(anchor, section + anchor, 1)
+              changelog.write_text(ctext, encoding='utf-8')
+          PY
+
+          cat > docs/governance/POST_V1_11_DOCUMENTATION_NORMALIZATION_SCOPE_POLICY.md <<'EOF'
+          # Post-v1.11 Documentation Normalization Assurance Scope
+
+          Decision ID: `ORCHESTRA_POST_V1_11_DOCUMENTATION_NORMALIZATION_SCOPE_HUMAN_POLICY_20260911`
+
+          Authority class: `HUMAN_POLICY`
+
+          ## Decision
+
+          The maintainer authorizes one deterministic exact-set assurance-scope lane for the post-publication normalization of Orchestra v1.11.0 documentation.
+
+          Historical PRAI, AQ5, and AQ7 implementation inventories are `NOT_APPLICABLE` only when the candidate diff is exactly the registered documentation inventory enforced by `scripts/validation/classify_adaptive_assurance_scope.py`.
+
+          Partial, mixed, superset, runtime, protected-governance, provider, telemetry, production, deployment, and unknown changes remain fail-closed and do not inherit this classification.
+
+          ## Preserved authority boundaries
+
+          This decision does not authorize runtime behavior changes, provider/model activation, telemetry, production mutation, deployment, whitelist mutation, protected-policy self-amendment, AQ15, AR3 implementation, or CritiQual CUD10 admission. Ordinary Governance, validate, Required Analysis, Cross-platform, Cosmic Ray/CodeQL when applicable, signed materialization, canonical promotion, and post-merge validation remain governed by their existing contracts.
+
+          ## Execution separation
+
+          This governance amendment is canonicalized separately. The documentation-normalization candidate must be created only after this policy is canonical and must match the exact registered path inventory.
+          EOF
+
+      - name: Run focused Gate 0 policy tests
+        run: python -m pytest -q tests/behavior/test_governance_post_publication_docs_scope.py
+
+      - name: Run release-packaging regression tests
+        run: python -m pytest -q tests/behavior/test_governance_release_packaging_assurance_scope.py
+
+      - name: Commit amendment and self-retire helper
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/tmp-post-v1.11-docs-scope.yml
+          git add scripts/validation/classify_adaptive_assurance_scope.py \
+                  tests/behavior/test_governance_post_publication_docs_scope.py \
+                  docs/governance/POST_V1_11_DOCUMENTATION_NORMALIZATION_SCOPE_POLICY.md \
+                  README.json CHANGELOG.md
+          git commit -m "gov: authorize exact post-v1.11 documentation normalization scope"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
