@@ -25,6 +25,7 @@ from validation.classify_adaptive_assurance_scope import (  # noqa: E402
     NOT_APPLICABLE,
     PRAI_IMPLEMENTATION_PATHS,
     classify_paths,
+    load_registered_phase_scopes,
 )
 
 HISTORICAL_GATES = ("prai", "aq5", "aq7")
@@ -82,6 +83,16 @@ AQ9_POLICY_AMENDMENT_PATHS = (
     "CHANGELOG.md",
     "README.json",
     "docs/governance/AQ9_ASSURANCE_SCOPE_POLICY.md",
+    "scripts/validation/classify_adaptive_assurance_scope.py",
+    "tests/behavior/test_protected_aq8_assurance_scope_policy.py",
+)
+
+ADAPT_QA_PHASE_SEPARATION_POLICY_PATHS = (
+    "CHANGELOG.md",
+    "README.json",
+    "docs/governance/ADAPT_QA_PHASE_SEPARATION_POLICY.md",
+    "machine/governance/adapt-qa-phase-separation.v1.json",
+    "machine/schemas/adapt-qa-phase-separation.v1.schema.json",
     "scripts/validation/classify_adaptive_assurance_scope.py",
     "tests/behavior/test_protected_aq8_assurance_scope_policy.py",
 )
@@ -283,6 +294,44 @@ def test_unregistered_future_aq_phase_remains_fail_closed() -> None:
             APPLICABLE,
         )
 
+def test_registered_aq10_aq14_exact_scopes_are_phase_separated() -> None:
+    registry = load_registered_phase_scopes()
+    _assert_equal("registered future phases", tuple(sorted(registry)), ("AQ10", "AQ11", "AQ12", "AQ13", "AQ14"))
+    for phase_id, (implementation, anchors) in registry.items():
+        _assert_equal(f"{phase_id} exact inventory size", len(implementation), 9)
+        _assert_equal(f"{phase_id} anchors subset", anchors.issubset(implementation), True)
+        for assurance in HISTORICAL_GATES:
+            _assert_equal(f"{assurance} {phase_id} exact scope", classify_paths(tuple(implementation), assurance), NOT_APPLICABLE)
+
+
+def test_registered_future_phase_partial_and_superset_scopes_fail_closed() -> None:
+    registry = load_registered_phase_scopes()
+    for phase_id, (implementation, anchors) in registry.items():
+        anchor = sorted(anchors)[0]
+        partial = tuple(path for path in sorted(implementation) if path != sorted(implementation)[-1])
+        if anchor not in partial:
+            partial = ("CHANGELOG.md", anchor)
+        superset = (*tuple(sorted(implementation)), f"unexpected-{phase_id.lower()}-surface.txt")
+        for assurance in HISTORICAL_GATES:
+            _assert_equal(f"{assurance} {phase_id} partial", classify_paths(partial, assurance), APPLICABLE)
+            _assert_equal(f"{assurance} {phase_id} superset", classify_paths(superset, assurance), APPLICABLE)
+
+
+def test_unregistered_aq15_remains_fail_closed() -> None:
+    future = ("CHANGELOG.md", "README.json", "docs/architecture/ADAPTIVE_ASSURANCE_AQ15.md")
+    for assurance in HISTORICAL_GATES:
+        _assert_equal(f"{assurance} AQ15 unregistered", classify_paths(future, assurance), APPLICABLE)
+
+
+def test_phase_separation_policy_amendment_is_governance_only() -> None:
+    for assurance in HISTORICAL_GATES:
+        _assert_equal(
+            f"{assurance} reusable phase separation policy amendment",
+            classify_paths(ADAPT_QA_PHASE_SEPARATION_POLICY_PATHS, assurance),
+            NOT_APPLICABLE,
+        )
+
+
 def test_historical_implementation_inventories_remain_separate() -> None:
     unique_aq8_anchors = AQ8_SCOPE_ANCHOR_PATHS
     for name, historical in (
@@ -314,6 +363,10 @@ def main() -> None:
     test_aq9_duplicate_paths_fail_closed()
     test_aq9_policy_amendment_uses_existing_governance_taxonomy()
     test_unregistered_future_aq_phase_remains_fail_closed()
+    test_registered_aq10_aq14_exact_scopes_are_phase_separated()
+    test_registered_future_phase_partial_and_superset_scopes_fail_closed()
+    test_unregistered_aq15_remains_fail_closed()
+    test_phase_separation_policy_amendment_is_governance_only()
     test_historical_implementation_inventories_remain_separate()
     print("AQ8 assurance scope policy tests passed.")
 

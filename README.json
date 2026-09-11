@@ -41,6 +41,21 @@
     "core_trust_boundary": "Permission and execution authority are explicit bounded inputs. Routing, host capability, governance disposition, validation evidence, compatibility certification, presentation mode, and GitHub state cannot independently grant or expand authority."
   },
   "capabilities": {
+    "adapt_qa_phase_separation_policy": {
+      "status": "HUMAN_POLICY_CANONICALIZATION_CANDIDATE",
+      "purpose": "Deterministically separates exact human-approved later ADAPT-QA phase inventories from historical assurance inventories without weakening fail-closed behavior.",
+      "machine_sources": [
+        "machine/governance/adapt-qa-phase-separation.v1.json",
+        "machine/schemas/adapt-qa-phase-separation.v1.schema.json"
+      ],
+      "human_sources": [
+        "docs/governance/ADAPT_QA_PHASE_SEPARATION_POLICY.md"
+      ],
+      "registered_phases": ["AQ10", "AQ11", "AQ12", "AQ13", "AQ14"],
+      "registry_mutation_authority": "HUMAN_POLICY",
+      "unregistered_future_phases": "FAIL_CLOSED_APPLICABLE",
+      "authority_note": "Phase registration is not a lifecycle whitelist or assurance bypass; AQ15+ and inventory expansion require fresh human governance authority."
+    },
     "specialist_orchestration": {
       "status": "IMPLEMENTED",
       "machine_sources": [
