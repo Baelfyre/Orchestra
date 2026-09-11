@@ -2363,6 +2363,19 @@
       "transport_fallback": "DETERMINISTIC_NON_EXECUTING_CHAIN",
       "provider_capability_broker": "SHADOW_ADVISORY_NON_AUTHORIZING",
       "learned_routing_promotion": false
+    },
+    "release_packaging_assurance_scope": {
+      "status": "HUMAN_POLICY_APPROVED_CANDIDATE",
+      "purpose": "Deterministically separates exact release/version/documentation packaging from historical AQ5, AQ6, and PRAI implementation inventories while preserving fail-closed mixed-scope behavior.",
+      "human_sources": [
+        "docs/governance/RELEASE_PACKAGING_ASSURANCE_SCOPE_POLICY.md"
+      ],
+      "classifier": "scripts/validation/classify_adaptive_assurance_scope.py",
+      "validation_surface": "tests/behavior/test_governance_release_packaging_assurance_scope.py",
+      "authority_class": "HUMAN_POLICY",
+      "scope_rule": "EXACT_SET_ONLY_MATCHED_VERSION_DOCS",
+      "mixed_or_unknown_scope": "FAIL_CLOSED_APPLICABLE",
+      "authority_note": "This classification does not bypass repository qualification, signed materialization, canonical promotion, post-merge verification, or release publication gates."
     }
   },
   "machine_scan_order": [
