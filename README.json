@@ -51,7 +51,13 @@
       "human_sources": [
         "docs/governance/ADAPT_QA_PHASE_SEPARATION_POLICY.md"
       ],
-      "registered_phases": ["AQ10", "AQ11", "AQ12", "AQ13", "AQ14"],
+      "registered_phases": [
+        "AQ10",
+        "AQ11",
+        "AQ12",
+        "AQ13",
+        "AQ14"
+      ],
       "registry_mutation_authority": "HUMAN_POLICY",
       "unregistered_future_phases": "FAIL_CLOSED_APPLICABLE",
       "authority_note": "Phase registration is not a lifecycle whitelist or assurance bypass; AQ15+ and inventory expansion require fresh human governance authority."
@@ -2555,6 +2561,12 @@
     "adaptive_assurance_aq10_validator": "scripts/validation/validate_aq10.py",
     "adaptive_assurance_aq10_validation": "tests/runtime/test_adaptive_assurance_aq10.py",
     "adaptive_assurance_aq10_documentation": "docs/architecture/ADAPTIVE_ASSURANCE_AQ10.md",
+    "adaptive_assurance_aq11_contract": "machine/adaptive/aq11-remediation-effectiveness-pilot.v1.json",
+    "adaptive_assurance_aq11_schema": "machine/schemas/aq11-remediation-effectiveness-pilot.v1.schema.json",
+    "adaptive_assurance_aq11_runtime": "orchestra_runtime/domain/adaptive/remediation_effectiveness.py",
+    "adaptive_assurance_aq11_validator": "scripts/validation/validate_aq11.py",
+    "adaptive_assurance_aq11_validation": "tests/runtime/test_adaptive_assurance_aq11.py",
+    "adaptive_assurance_aq11_documentation": "docs/architecture/ADAPTIVE_ASSURANCE_AQ11.md",
     "comparative_measurement_contract": "machine/benchmarking/comparative-measurement-contract.v1.json",
     "comparative_benchmark_run_schema": "machine/schemas/comparative-benchmark-run.schema.json",
     "comparative_benchmark_experiment_schema": "machine/schemas/comparative-benchmark-experiment.schema.json",

@@ -1,0 +1,121 @@
+{
+  "schema_version": "orchestra.aq11-remediation-effectiveness-pilot.v1",
+  "phase": "AQ11_REMEDIATION_EFFECTIVENESS_PILOT",
+  "owner": "overseer",
+  "authority_model": "EVIDENCE_ONLY_NON_AUTHORIZING",
+  "purpose": "Measure bounded before/after remediation effectiveness for known CritiQual development-assurance escape classes without mutating CritiQual, resuming CUD10, or granting lifecycle authority.",
+  "implementation_inventory": [
+    "CHANGELOG.md",
+    "README.json",
+    "docs/architecture/ADAPTIVE_ASSURANCE_AQ11.md",
+    "machine/adaptive/aq11-remediation-effectiveness-pilot.v1.json",
+    "machine/schemas/aq11-remediation-effectiveness-pilot.v1.schema.json",
+    "orchestra_runtime/domain/adaptive/remediation_effectiveness.py",
+    "scripts/validation/validate_aq11.py",
+    "tests/behavior/run_tests.py",
+    "tests/runtime/test_adaptive_assurance_aq11.py"
+  ],
+  "pilot_boundary": {
+    "target_repository": "Baelfyre/CritiQual",
+    "observed_canonical_sha": "166bbac50a4f02e222aa15ff914c60cec658b7c0",
+    "incident_reference": "Baelfyre/Padayon#441",
+    "mode": "CONTROLLED_NON_PRODUCTION_EVIDENCE_PILOT",
+    "cud10_state": "READY_NOT_STARTED_HELD_BY_CURRENT_USER",
+    "source_mutation_allowed": false,
+    "production_evidence_allowed": false,
+    "organic_effectiveness_claimed": false
+  },
+  "required_escape_classes": [
+    "PROVENANCE_OWNERSHIP",
+    "AGGREGATE_CONCURRENCY",
+    "CALIBRATION_EVIDENCE_INTEGRITY",
+    "AUTHORITY_BOUNDARY",
+    "RUNTIME_INTEGRATION",
+    "GATE_COVERAGE_TRUTHFULNESS"
+  ],
+  "effectiveness_policy": {
+    "minimum_case_count": 6,
+    "minimum_effectiveness_bps": 10000,
+    "effective_after_results": [
+      "PREVENTED",
+      "DETECTED_BEFORE_TRANSITION"
+    ],
+    "unresolved_after_results": [
+      "STILL_ESCAPES",
+      "INCONCLUSIVE"
+    ],
+    "independent_evidence_required": true,
+    "recurrence_must_be_false": true,
+    "claim_scope": "CONTROLLED_PILOT_ONLY"
+  },
+  "reference_cases": [
+    {
+      "case_id": "CQ-A-REVIEW-SNAPSHOT-PROVENANCE",
+      "escape_class": "PROVENANCE_OWNERSHIP",
+      "before_result": "REPRODUCED_DEFECT",
+      "evidence_basis": "PADAYON_ISSUE_441_FINDING_A"
+    },
+    {
+      "case_id": "CQ-B-LAST-ADMIN-CONCURRENCY",
+      "escape_class": "AGGREGATE_CONCURRENCY",
+      "before_result": "REPRODUCED_DEFECT",
+      "evidence_basis": "PADAYON_ISSUE_441_FINDING_B"
+    },
+    {
+      "case_id": "CQ-C-CALIBRATION-PASS-EVIDENCE",
+      "escape_class": "CALIBRATION_EVIDENCE_INTEGRITY",
+      "before_result": "REPRODUCED_DEFECT",
+      "evidence_basis": "PADAYON_ISSUE_441_FINDING_C"
+    },
+    {
+      "case_id": "CQ-D-GLOBAL-CALIBRATION-AUTHORITY",
+      "escape_class": "AUTHORITY_BOUNDARY",
+      "before_result": "REPRODUCED_DEFECT",
+      "evidence_basis": "PADAYON_ISSUE_441_FINDING_D"
+    },
+    {
+      "case_id": "CQ-R-RUNTIME-INTEGRATION",
+      "escape_class": "RUNTIME_INTEGRATION",
+      "before_result": "STATIC_RISK_CONFIRMED",
+      "evidence_basis": "PADAYON_ISSUE_441_RUNTIME_INTEGRATION_THEME"
+    },
+    {
+      "case_id": "CQ-G-GATE-COVERAGE-TRUTH",
+      "escape_class": "GATE_COVERAGE_TRUTHFULNESS",
+      "before_result": "STATIC_RISK_CONFIRMED",
+      "evidence_basis": "PADAYON_ISSUE_441_GATE_COVERAGE_THEME"
+    }
+  ],
+  "fail_closed_conditions": [
+    "UNKNOWN_ESCAPE_CLASS_REJECTED",
+    "DUPLICATE_CASE_ID_REJECTED",
+    "MISSING_REQUIRED_ESCAPE_CLASS_REJECTED",
+    "SOURCE_MUTATION_ATTEMPT_REJECTED",
+    "PRODUCTION_MODE_REJECTED",
+    "STALE_CRITIQUAL_BASELINE_REJECTED",
+    "NON_INDEPENDENT_EVIDENCE_CANNOT_COUNT_EFFECTIVE",
+    "RECURRENCE_FORCES_REVISION_REQUIRED",
+    "PILOT_PASS_DOES_NOT_ADMIT_CUD10"
+  ],
+  "authority": {
+    "creates_execution_authority": false,
+    "creates_transition_authority": false,
+    "creates_whitelist_authority": false,
+    "changes_protected_policy": false,
+    "lowers_assurance_thresholds": false,
+    "activates_provider": false,
+    "activates_telemetry": false,
+    "mutates_production": false,
+    "authorizes_release": false,
+    "authorizes_critiqual_cud10_admission": false
+  },
+  "validation": {
+    "validator": "scripts/validation/validate_aq11.py",
+    "runtime": "orchestra_runtime/domain/adaptive/remediation_effectiveness.py",
+    "runtime_test": "tests/runtime/test_adaptive_assurance_aq11.py",
+    "behavior_registration": "tests/behavior/run_tests.py",
+    "architecture_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ11.md",
+    "schema": "machine/schemas/aq11-remediation-effectiveness-pilot.v1.schema.json",
+    "canonical_start_sha": "2fa5d648b5b19d483ecbe2342f5a28927a85d28f"
+  }
+}

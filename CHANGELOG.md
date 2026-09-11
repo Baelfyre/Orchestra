@@ -1,3 +1,10 @@
+## Unreleased ADAPT-QA AQ-11 CritiQual remediation effectiveness pilot
+
+- Adds a deterministic evidence-only controlled pilot for six known CritiQual development-assurance escape classes without mutating CritiQual or resuming CUD10.
+- Requires independently supported before/after evidence, treats recurrence or remaining escapes as revision-required, and treats inconclusive/non-independent evidence as wait-for-evidence.
+- Binds the pilot to CritiQual canonical `166bbac50a4f02e222aa15ff914c60cec658b7c0` and Padayon incident #441 while explicitly making no organic-effectiveness or production-readiness claim.
+- Keeps CUD10 held and makes any AQ11 PASS non-admitting and non-authorizing for policy, release, deployment, provider, telemetry, production, or lifecycle transitions.
+
 ## Unreleased ADAPT-QA AQ-10 defect-escape RCA
 
 - Adds deterministic evidence-only defect-escape RCA classification with explicit taxonomy, signal mapping, bounded prevention recommendations, and fail-closed unresolved-cause handling.
