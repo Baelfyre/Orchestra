@@ -6,9 +6,9 @@ Authority class: `HUMAN_POLICY`
 
 ## Decision
 
-The maintainer authorizes one deterministic exact-set assurance-scope lane for the post-publication normalization of Orchestra v1.11.0 documentation.
+The maintainer authorizes one deterministic exact-set assurance-scope lane for the post-publication normalization of Orchestra v1.11.0 documentation plus the single runtime test assertion that binds the machine README current-public-release value.
 
-Historical PRAI, AQ5, and AQ7 implementation inventories are `NOT_APPLICABLE` only when the candidate diff is exactly the registered documentation inventory enforced by `scripts/validation/classify_adaptive_assurance_scope.py`.
+Historical PRAI, AQ5, and AQ7 implementation inventories are `NOT_APPLICABLE` only when the candidate diff is exactly the registered documentation inventory plus `tests/runtime/test_uai10_maturity_closeout.py`, limited there to the corresponding current-public-release assertion, as enforced by `scripts/validation/classify_adaptive_assurance_scope.py`.
 
 Partial, mixed, superset, runtime, protected-governance, provider, telemetry, production, deployment, and unknown changes remain fail-closed and do not inherit this classification.
 

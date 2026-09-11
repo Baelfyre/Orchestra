@@ -302,6 +302,7 @@ POST_PUBLICATION_DOCUMENTATION_NORMALIZATION_PATHS = frozenset(
         "docs/reference/releases/v1.11.0.md",
         "docs/setup/COMPATIBILITY.md",
         "docs/setup/INSTALLATION.md",
+        "tests/runtime/test_uai10_maturity_closeout.py",
     }
 )
 
@@ -402,7 +403,8 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
         return NOT_APPLICABLE
 
     # Human-approved exact post-publication documentation-normalization lane.
-    # Only the complete registered v1.11 public-state documentation inventory is
+    # Only the complete registered v1.11 public-state documentation inventory plus
+# its single current-release parity assertion is
     # exempt from historical AQ5/AQ7/PRAI implementation scopes. Partial, mixed,
     # or superset changes continue through the fail-closed classifier.
     if normalized_set == POST_PUBLICATION_DOCUMENTATION_NORMALIZATION_PATHS:

@@ -26,6 +26,7 @@ POST_PUBLICATION_DOCS_PATHS = [
     "docs/reference/releases/v1.11.0.md",
     "docs/setup/COMPATIBILITY.md",
     "docs/setup/INSTALLATION.md",
+    "tests/runtime/test_uai10_maturity_closeout.py",
 ]
 
 

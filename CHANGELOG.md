@@ -12,7 +12,7 @@
 ## Unreleased governance policy: post-v1.11 documentation-normalization assurance scope
 
 - Adds the maintainer-authorized exact-set documentation-normalization lane for the verified v1.11.0 public state.
-- Historical PRAI/AQ5/AQ7 implementation inventories are `NOT_APPLICABLE` only for the complete registered documentation set.
+- Historical PRAI/AQ5/AQ7 implementation inventories are `NOT_APPLICABLE` only for the complete registered documentation set plus the one current-release parity assertion that reads `README.json`.
 - Partial, mixed, superset, runtime, governance, provider, telemetry, deployment, and unknown scopes remain fail-closed `APPLICABLE`.
 - The lane grants no runtime behavior, release, deployment, provider, telemetry, production, whitelist, protected-policy, AQ15, AR3, or CritiQual CUD10 authority.
 
