@@ -1,0 +1,53 @@
+name: V1.11 Changelog Integration Repair
+
+on:
+  push:
+    branches:
+      - "release/v1.11.0-qualified-20260911"
+    paths:
+      - ".github/workflows/tmp-v1-11-changelog-repair.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout exact branch head
+        uses: actions/checkout@v7
+        with:
+          ref: release/v1.11.0-qualified-20260911
+          fetch-depth: 0
+
+      - name: Restore canonical policy changelog entry and self-retire
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("CHANGELOG.md")
+          text = path.read_text(encoding="utf-8")
+          heading = "## Unreleased governance policy: deterministic release-packaging assurance scope"
+          anchor = "## Unreleased ADAPT-QA AQ-14 final effectiveness qualification"
+          section = """## Unreleased governance policy: deterministic release-packaging assurance scope
+
+          - Adds the human-authorized exact-set `RELEASE_PACKAGING` classification for historical PRAI/AQ5/AQ7 exact-scope gates without changing their implementation inventories or assurance thresholds.
+          - Requires the complete fixed release/version/documentation/test surface plus exactly one matching versioned release-candidate document and release-readiness evidence document.
+          - Keeps partial, mixed, superset, runtime, governance, provider, telemetry, deployment, unknown, mismatched-version, duplicate, and unsafe scopes fail-closed `APPLICABLE` or invalid.
+          - Preserves Governance, validate, Required Analysis, Cross-platform, Cosmic Ray, CodeQL, signed-materialization, canonical-promotion, post-merge, publication, AQ15+, provider, telemetry, production, deployment, secret, and CritiQual CUD10 authority boundaries.
+
+          """
+          if heading not in text:
+              if anchor not in text:
+                  raise SystemExit("AQ14 changelog anchor missing")
+              text = text.replace(anchor, section + anchor, 1)
+              path.write_text(text, encoding="utf-8")
+          PY
+          rm .github/workflows/tmp-v1-11-changelog-repair.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md .github/workflows/tmp-v1-11-changelog-repair.yml
+          git diff --cached --check
+          git commit -m "docs(release): preserve canonical release-packaging policy changelog"
+          git push origin HEAD:release/v1.11.0-qualified-20260911
