@@ -1,10 +1,3 @@
-## Unreleased governance policy: deterministic release-packaging assurance scope
-
-- Adds the human-authorized exact-set `RELEASE_PACKAGING` classification for historical PRAI/AQ5/AQ7 exact-scope gates without changing their implementation inventories or assurance thresholds.
-- Requires the complete fixed release/version/documentation/test surface plus exactly one matching versioned release-candidate document and release-readiness evidence document.
-- Keeps partial, mixed, superset, runtime, governance, provider, telemetry, deployment, unknown, mismatched-version, duplicate, and unsafe scopes fail-closed `APPLICABLE` or invalid.
-- Preserves Governance, validate, Required Analysis, Cross-platform, Cosmic Ray, CodeQL, signed-materialization, canonical-promotion, post-merge, publication, AQ15+, provider, telemetry, production, deployment, secret, and CritiQual CUD10 authority boundaries.
-
 ## Unreleased ADAPT-QA AQ-14 final effectiveness qualification
 
 - Adds deterministic final qualification over the exact canonical AQ9-AQ13 evidence chain, pinned to canonical PR/SHA/tree identities.
