@@ -1,3 +1,10 @@
+## Unreleased ADAPT-QA AQ-12 Orchestra adversarial self-test
+
+- Adds a deterministic evidence-only adversarial self-test across scope drift, authority escalation, evidence tampering, state-transition forgery, assurance-gate bypass, and determinism drift.
+- Requires every registered attack class to be blocked or detected fail-closed with independent evidence and deterministic replay parity; any escape or replay mismatch forces revision.
+- Keeps the test controlled and non-production while preserving human-policy registry ownership, Arbiter transition ownership, and all existing assurance thresholds.
+- Makes AQ12 PASS explicitly non-authorizing for release, deployment, providers, telemetry, production, protected policy, whitelist mutation, or CritiQual CUD10 admission.
+
 ## Unreleased ADAPT-QA AQ-11 CritiQual remediation effectiveness pilot
 
 - Adds a deterministic evidence-only controlled pilot for six known CritiQual development-assurance escape classes without mutating CritiQual or resuming CUD10.
