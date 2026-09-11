@@ -11,6 +11,7 @@ from scripts.validation.classify_adaptive_assurance_scope import (
 
 
 POST_PUBLICATION_DOCS_PATHS = [
+    "CHANGELOG.md",
     "PROJECT_CONTEXT.md",
     "PROJECT_STATE.md",
     "README.json",
