@@ -2380,6 +2380,16 @@
       "scope_rule": "EXACT_SET_ONLY_MATCHED_VERSION_DOCS",
       "mixed_or_unknown_scope": "FAIL_CLOSED_APPLICABLE",
       "authority_note": "This classification does not bypass repository qualification, signed materialization, canonical promotion, post-merge verification, or release publication gates."
+    },
+    "post_publication_documentation_normalization_scope": {
+      "status": "HUMAN_POLICY_CANONICALIZATION_CANDIDATE",
+      "purpose": "Permit only the exact v1.11 post-publication documentation normalization inventory to bypass historical AQ5/AQ7/PRAI implementation-scope matching while preserving all ordinary repository validation.",
+      "classifier": "scripts/validation/classify_adaptive_assurance_scope.py",
+      "validation_surface": "tests/behavior/test_governance_post_publication_docs_scope.py",
+      "authority_class": "HUMAN_POLICY",
+      "scope_rule": "EXACT_SET_ONLY_FAIL_CLOSED_PARTIAL_MIXED_SUPERSET",
+      "target_public_release": "v1.11.0",
+      "authority_note": "Documentation normalization does not grant runtime, provider, telemetry, production, deployment, whitelist, protected-policy, AQ15, AR3, or CritiQual CUD10 authority."
     }
   },
   "machine_scan_order": [

@@ -285,6 +285,25 @@ RELEASE_READINESS_DOC_RE = re.compile(
     r"^docs/validation/V(?P<major>\d+)_(?P<minor>\d+)_(?P<patch>\d+)_RELEASE_READINESS_EVIDENCE\.md$"
 )
 
+POST_PUBLICATION_DOCUMENTATION_NORMALIZATION_PATHS = frozenset(
+    {
+        "CHANGELOG.md",
+        "PROJECT_CONTEXT.md",
+        "PROJECT_STATE.md",
+        "README.json",
+        "README.md",
+        "docs/MATURITY.md",
+        "docs/README.md",
+        "docs/project/OOP_RUNTIME_ARCHITECTURE.md",
+        "docs/project/ROADMAP.md",
+        "docs/reference/README.md",
+        "docs/reference/releases/README.md",
+        "docs/reference/releases/v1.11.0.md",
+        "docs/setup/COMPATIBILITY.md",
+        "docs/setup/INSTALLATION.md",
+    }
+)
+
 IMPLEMENTATION_PATHS_BY_GATE = {
     "aq5": AQ5_IMPLEMENTATION_PATHS,
     "aq7": AQ7_IMPLEMENTATION_PATHS,
@@ -379,6 +398,13 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
     # AQ6, and PRAI implementation inventories. Partial, mixed, or superset
     # scopes remain fail-closed APPLICABLE.
     if is_release_packaging_scope(normalized_set):
+        return NOT_APPLICABLE
+
+    # Human-approved exact post-publication documentation-normalization lane.
+    # Only the complete registered v1.11 public-state documentation inventory is
+    # exempt from historical AQ5/AQ7/PRAI implementation scopes. Partial, mixed,
+    # or superset changes continue through the fail-closed classifier.
+    if normalized_set == POST_PUBLICATION_DOCUMENTATION_NORMALIZATION_PATHS:
         return NOT_APPLICABLE
 
     if normalized_set == AQ8_CANONICAL_CLOSEOUT_PATHS:
