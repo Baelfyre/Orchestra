@@ -34,47 +34,36 @@ jobs:
 
           path = Path("scripts/_aq11_bootstrap.py")
           text = path.read_text(encoding="utf-8")
-          old = '''    for helper in HELPERS:
-              if helper.exists():
-                  helper.unlink()
-          run("git", "add", "-A")
-          changed = set(out("git", "diff", "--cached", "--name-only").splitlines())
-          if changed != set(INVENTORY):
-              raise RuntimeError(f"AQ11 packaging drift: {sorted(changed)}")
-          run("git", "diff", "--cached", "--check")
-          run("git", "commit", "-m", "feat(aq11): add controlled remediation effectiveness pilot")
-          print("AQ11_FOCUSED_BOOTSTRAP=PASS")
-          print("AQ11_HEAD=" + out("git", "rev-parse", "HEAD"))
-          print("AQ11_TREE=" + out("git", "rev-parse", "HEAD^{tree}"))
-          run("git", "push", "origin", f"HEAD:{BRANCH}")
-          '''
-          new = '''    for helper in HELPERS:
-              if helper.exists():
-                  helper.unlink()
-
-          helper_paths = [str(path.relative_to(ROOT)) for path in HELPERS]
-          run("git", "add", "--", *helper_paths)
-          run("git", "commit", "-m", "chore(aq11): retire bounded bootstrap helpers")
-
-          run("git", "add", "-A")
-          changed = set(out("git", "diff", "--cached", "--name-only").splitlines())
-          if changed != set(INVENTORY):
-              raise RuntimeError(f"AQ11 packaging drift: {sorted(changed)}")
-          run("git", "diff", "--cached", "--check")
-          run("git", "commit", "-m", "feat(aq11): add controlled remediation effectiveness pilot")
-
-          net_changed = set(out("git", "diff", "--name-only", BASE, "HEAD").splitlines())
-          if net_changed != set(INVENTORY):
-              raise RuntimeError(f"AQ11 net packaging drift: {sorted(net_changed)}")
-
-          print("AQ11_FOCUSED_BOOTSTRAP=PASS")
-          print("AQ11_HEAD=" + out("git", "rev-parse", "HEAD"))
-          print("AQ11_TREE=" + out("git", "rev-parse", "HEAD^{tree}"))
-          run("git", "push", "origin", f"HEAD:{BRANCH}")
-          '''
-          if old not in text:
-              raise SystemExit("AQ11 packaging repair anchor missing")
-          path.write_text(text.replace(old, new, 1), encoding="utf-8")
+          start_marker = "    for helper in HELPERS:\n"
+          end_marker = '\n\n\nif __name__ == "__main__":'
+          start = text.index(start_marker)
+          end = text.index(end_marker, start)
+          new_tail = (
+              "    for helper in HELPERS:\n"
+              "        if helper.exists():\n"
+              "            helper.unlink()\n"
+              "\n"
+              "    helper_paths = [str(path.relative_to(ROOT)) for path in HELPERS]\n"
+              "    run(\"git\", \"add\", \"--\", *helper_paths)\n"
+              "    run(\"git\", \"commit\", \"-m\", \"chore(aq11): retire bounded bootstrap helpers\")\n"
+              "\n"
+              "    run(\"git\", \"add\", \"-A\")\n"
+              "    changed = set(out(\"git\", \"diff\", \"--cached\", \"--name-only\").splitlines())\n"
+              "    if changed != set(INVENTORY):\n"
+              "        raise RuntimeError(f\"AQ11 packaging drift: {sorted(changed)}\")\n"
+              "    run(\"git\", \"diff\", \"--cached\", \"--check\")\n"
+              "    run(\"git\", \"commit\", \"-m\", \"feat(aq11): add controlled remediation effectiveness pilot\")\n"
+              "\n"
+              "    net_changed = set(out(\"git\", \"diff\", \"--name-only\", BASE, \"HEAD\").splitlines())\n"
+              "    if net_changed != set(INVENTORY):\n"
+              "        raise RuntimeError(f\"AQ11 net packaging drift: {sorted(net_changed)}\")\n"
+              "\n"
+              "    print(\"AQ11_FOCUSED_BOOTSTRAP=PASS\")\n"
+              "    print(\"AQ11_HEAD=\" + out(\"git\", \"rev-parse\", \"HEAD\"))\n"
+              "    print(\"AQ11_TREE=\" + out(\"git\", \"rev-parse\", \"HEAD^{tree}\"))\n"
+              "    run(\"git\", \"push\", \"origin\", f\"HEAD:{BRANCH}\")\n"
+          )
+          path.write_text(text[:start] + new_tail + text[end:], encoding="utf-8")
           PY
       - name: Materialize and qualify exact AQ11 inventory
         run: python -B scripts/_aq11_bootstrap.py
