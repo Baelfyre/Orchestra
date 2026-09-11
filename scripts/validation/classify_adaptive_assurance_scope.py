@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from json import JSONDecodeError
 from collections.abc import Iterable
@@ -194,8 +195,6 @@ PROTECTED_GOVERNANCE_ANCHORS = frozenset(
     }
 )
 
-# These files govern repository assurance transport itself. Classifying them as
-# governance control surfaces is durable taxonomy, not a lifecycle whitelist.
 PROMOTION_ASSURANCE_GOVERNANCE_PATHS = frozenset(
     {
         ".github/workflows/validate.yml",
@@ -211,10 +210,6 @@ PROMOTION_ASSURANCE_GOVERNANCE_PATHS = frozenset(
     }
 )
 
-# Specialized assurance workflows are governance transport controls only when
-# they are changed together with the promotion-assurance contract and its
-# fail-closed classifier/attestation regressions. In isolation they remain
-# historical assurance implementation surfaces and therefore APPLICABLE.
 SPECIALIZED_PROMOTION_ASSURANCE_WORKFLOW_PATHS = frozenset(
     {
         ".github/workflows/prai.yml",
@@ -257,6 +252,37 @@ GOVERNANCE_PREFIXES = (
     "scripts/validate_protected_",
     "tests/behavior/test_governance_",
     "tests/behavior/test_protected_",
+)
+
+RELEASE_PACKAGING_FIXED_PATHS = frozenset(
+    {
+        ".claude-plugin/marketplace.json",
+        ".claude-plugin/plugin.json",
+        ".codex-plugin/plugin.json",
+        "CHANGELOG.md",
+        "PROJECT_CONTEXT.md",
+        "PROJECT_STATE.md",
+        "README.json",
+        "README.md",
+        "adapters/cursor/package.json",
+        "adapters/jetbrains/package.json",
+        "adapters/jetbrains/plugin.xml",
+        "adapters/neovim/package.json",
+        "adapters/vscode/package.json",
+        "adapters/windsurf/package.json",
+        "adapters/zed/package.json",
+        "docs/reference/releases/README.md",
+        "machine/hosts/update-contract.v1.json",
+        "plugin.json",
+        "tests/runtime/test_host_updates.py",
+        "tests/runtime/test_release_version_surfaces.py",
+    }
+)
+RELEASE_CANDIDATE_DOC_RE = re.compile(
+    r"^docs/releases/v(?P<version>\d+\.\d+\.\d+)-[a-z0-9][a-z0-9-]*-release-candidate\.md$"
+)
+RELEASE_READINESS_DOC_RE = re.compile(
+    r"^docs/validation/V(?P<major>\d+)_(?P<minor>\d+)_(?P<patch>\d+)_RELEASE_READINESS_EVIDENCE\.md$"
 )
 
 IMPLEMENTATION_PATHS_BY_GATE = {
@@ -318,6 +344,24 @@ def is_governance_path(path: str) -> bool:
     )
 
 
+def is_release_packaging_scope(paths: set[str]) -> bool:
+    if len(paths) != len(RELEASE_PACKAGING_FIXED_PATHS) + 2:
+        return False
+    if not RELEASE_PACKAGING_FIXED_PATHS.issubset(paths):
+        return False
+    variable_paths = paths - RELEASE_PACKAGING_FIXED_PATHS
+    release_matches = [RELEASE_CANDIDATE_DOC_RE.fullmatch(path) for path in variable_paths]
+    release_matches = [match for match in release_matches if match is not None]
+    readiness_matches = [RELEASE_READINESS_DOC_RE.fullmatch(path) for path in variable_paths]
+    readiness_matches = [match for match in readiness_matches if match is not None]
+    if len(release_matches) != 1 or len(readiness_matches) != 1:
+        return False
+    release_version = release_matches[0].group("version")
+    readiness = readiness_matches[0]
+    readiness_version = f"{readiness.group('major')}.{readiness.group('minor')}.{readiness.group('patch')}"
+    return release_version == readiness_version
+
+
 def classify_paths(paths: Iterable[str], assurance: str) -> str:
     gate = assurance.casefold()
     try:
@@ -329,24 +373,22 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
     normalized_set = set(normalized)
     strict_implementation_paths = implementation_paths - WORKFLOW_INTEGRATION_PATHS
 
-    # Human-authorized AQ8 lifecycle closeout whitelist. This exemption is
-    # exact-set only and does not apply to AQ8 runtime, machine-contract,
-    # workflow, test, mixed, superset, or anchor-bearing subset changes.
+    # Human-approved deterministic release-packaging taxonomy. Only the exact
+    # registered packaging inventory plus one matching versioned release-candidate
+    # document and readiness-evidence document is exempt from historical AQ5,
+    # AQ6, and PRAI implementation inventories. Partial, mixed, or superset
+    # scopes remain fail-closed APPLICABLE.
+    if is_release_packaging_scope(normalized_set):
+        return NOT_APPLICABLE
+
     if normalized_set == AQ8_CANONICAL_CLOSEOUT_PATHS:
         return NOT_APPLICABLE
 
-    # Human-authorized AQ9 phase-separation taxonomy. Only the exact complete
-    # nine-path AQ9 implementation inventory is exempt from historical exact
-    # inventories. Any anchor-bearing subset, mixed scope, or superset remains
-    # fail-closed APPLICABLE. This is not a lifecycle whitelist.
     if normalized_set == AQ9_IMPLEMENTATION_PATHS:
         return NOT_APPLICABLE
     if normalized_set.intersection(AQ9_SCOPE_ANCHOR_PATHS):
         return APPLICABLE
 
-    # Human-approved reusable ADAPT-QA phase separation. Exact complete
-    # registered phase scopes are separated from historical inventories; any
-    # anchor-bearing subset or mixed/superset scope remains fail-closed.
     for _phase_id, (registered_paths, anchor_paths) in load_registered_phase_scopes().items():
         if normalized_set == registered_paths:
             return NOT_APPLICABLE
