@@ -1,0 +1,110 @@
+{
+  "schema_version": "orchestra.aq13-staged-rollout-evaluation.v1",
+  "phase": "AQ13_STAGED_NON_PRODUCTION_ROLLOUT_EVALUATION",
+  "owner": "overseer",
+  "authority_model": "EVIDENCE_ONLY_NON_AUTHORIZING",
+  "purpose": "Evaluate staged non-production rollout evidence with deterministic hold, rollback, revision, and evidence-sufficiency criteria without creating production, release, provider, lifecycle, or CritiQual CUD10 authority.",
+  "implementation_inventory": [
+    "CHANGELOG.md",
+    "README.json",
+    "docs/architecture/ADAPTIVE_ASSURANCE_AQ13.md",
+    "machine/adaptive/aq13-staged-rollout-evaluation.v1.json",
+    "machine/schemas/aq13-staged-rollout-evaluation.v1.schema.json",
+    "orchestra_runtime/domain/adaptive/staged_rollout.py",
+    "scripts/validation/validate_aq13.py",
+    "tests/behavior/run_tests.py",
+    "tests/runtime/test_adaptive_assurance_aq13.py"
+  ],
+  "rollout_boundary": {
+    "target_repository": "Baelfyre/Orchestra",
+    "canonical_start_sha": "2fc2d9ce9fc263813981e4dc8c88d1e4f604f036",
+    "mode": "CONTROLLED_NON_PRODUCTION_STAGED_ROLLOUT_EVALUATION",
+    "environment_scope": "NON_PRODUCTION_ONLY",
+    "cud10_state": "READY_NOT_STARTED_HELD_BY_CURRENT_USER",
+    "protected_policy_mutation_allowed": false,
+    "production_mutation_allowed": false,
+    "provider_activation_allowed": false,
+    "telemetry_activation_allowed": false,
+    "release_or_deploy_allowed": false
+  },
+  "required_stages": [
+    {
+      "stage_id": "SHADOW",
+      "sequence": 1,
+      "minimum_observations": 10
+    },
+    {
+      "stage_id": "CANARY",
+      "sequence": 2,
+      "minimum_observations": 10
+    },
+    {
+      "stage_id": "LIMITED",
+      "sequence": 3,
+      "minimum_observations": 10
+    },
+    {
+      "stage_id": "EXPANDED",
+      "sequence": 4,
+      "minimum_observations": 10
+    }
+  ],
+  "rollout_policy": {
+    "minimum_total_observations": 40,
+    "maximum_regression_rate_bps": 500,
+    "maximum_critical_violations": 0,
+    "independent_evidence_required": true,
+    "deterministic_replay_required": true,
+    "rollback_on_any_critical_violation": true,
+    "rollback_signal_forces_hold": true,
+    "claim_scope": "CONTROLLED_NON_PRODUCTION_EVALUATION_ONLY"
+  },
+  "disposition_precedence": [
+    "REVISION_REQUIRED",
+    "HOLD",
+    "WAIT_FOR_EVIDENCE",
+    "PASS"
+  ],
+  "fail_closed_conditions": [
+    "UNKNOWN_STAGE_REJECTED",
+    "DUPLICATE_STAGE_REJECTED",
+    "MISSING_REQUIRED_STAGE_REJECTED",
+    "OUT_OF_ORDER_STAGE_REJECTED",
+    "NEGATIVE_COUNTS_REJECTED",
+    "REGRESSION_COUNT_ABOVE_OBSERVATIONS_REJECTED",
+    "CRITICAL_COUNT_ABOVE_OBSERVATIONS_REJECTED",
+    "ANY_CRITICAL_VIOLATION_FORCES_REVISION_REQUIRED",
+    "REGRESSION_RATE_ABOVE_THRESHOLD_FORCES_REVISION_REQUIRED",
+    "ROLLBACK_SIGNAL_FORCES_HOLD",
+    "INSUFFICIENT_STAGE_OR_TOTAL_EVIDENCE_CANNOT_PASS",
+    "NON_INDEPENDENT_EVIDENCE_CANNOT_PASS",
+    "DETERMINISTIC_REPLAY_MISMATCH_CANNOT_PASS",
+    "PROTECTED_POLICY_MUTATION_REJECTED",
+    "PRODUCTION_MUTATION_REJECTED",
+    "PROVIDER_OR_TELEMETRY_ACTIVATION_REJECTED",
+    "RELEASE_OR_DEPLOY_ACTION_REJECTED",
+    "AQ13_PASS_CREATES_NO_TRANSITION_OR_RELEASE_AUTHORITY",
+    "AQ13_PASS_DOES_NOT_ADMIT_CRITIQUAL_CUD10"
+  ],
+  "authority": {
+    "creates_execution_authority": false,
+    "creates_transition_authority": false,
+    "creates_whitelist_authority": false,
+    "changes_protected_policy": false,
+    "lowers_assurance_thresholds": false,
+    "activates_provider": false,
+    "activates_telemetry": false,
+    "mutates_production": false,
+    "authorizes_release": false,
+    "authorizes_critiqual_cud10_admission": false
+  },
+  "validation": {
+    "validator": "scripts/validation/validate_aq13.py",
+    "runtime": "orchestra_runtime/domain/adaptive/staged_rollout.py",
+    "runtime_test": "tests/runtime/test_adaptive_assurance_aq13.py",
+    "behavior_registration": "tests/behavior/run_tests.py",
+    "architecture_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ13.md",
+    "schema": "machine/schemas/aq13-staged-rollout-evaluation.v1.schema.json",
+    "canonical_start_sha": "2fc2d9ce9fc263813981e4dc8c88d1e4f604f036"
+  }
+}

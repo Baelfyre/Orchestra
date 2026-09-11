@@ -2677,7 +2677,13 @@
     "advanced_adaptation_admission": "machine/adaptive/advanced-adaptation-admission.v1.json",
     "protected_governance_escalation_contract": "machine/governance/protected-governance-escalation.v1.json",
     "protected_governance_escalation_schema": "machine/schemas/protected-governance-escalation.v1.schema.json",
-    "protected_governance_escalation_validator": "scripts/validate_protected_governance_escalation.py"
+    "protected_governance_escalation_validator": "scripts/validate_protected_governance_escalation.py",
+    "adaptive_assurance_aq13_contract": "machine/adaptive/aq13-staged-rollout-evaluation.v1.json",
+    "adaptive_assurance_aq13_schema": "machine/schemas/aq13-staged-rollout-evaluation.v1.schema.json",
+    "adaptive_assurance_aq13_runtime": "orchestra_runtime/domain/adaptive/staged_rollout.py",
+    "adaptive_assurance_aq13_validator": "scripts/validation/validate_aq13.py",
+    "adaptive_assurance_aq13_validation": "tests/runtime/test_adaptive_assurance_aq13.py",
+    "adaptive_assurance_aq13_documentation": "docs/architecture/ADAPTIVE_ASSURANCE_AQ13.md"
   },
   "specialists": {
     "count": 14,
