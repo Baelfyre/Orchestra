@@ -1,3 +1,9 @@
+## Unreleased ADAPT-QA AQ-10 defect-escape RCA
+
+- Adds deterministic evidence-only defect-escape RCA classification with explicit taxonomy, signal mapping, bounded prevention recommendations, and fail-closed unresolved-cause handling.
+- Encodes reference regressions from the AQ9/framework campaign so dependency/environment and assurance-tool compatibility escapes remain reproducible evidence rather than informal lessons.
+- Preserves all existing authority boundaries: AQ10 cannot change protected policy, lower assurance, mutate whitelists, activate providers or telemetry, touch production, or authorize release/deployment.
+
 ## Unreleased governance policy: reusable ADAPT-QA phase separation
 
 - Adds a human-authorized, data-driven phase registry for exact AQ10-AQ14 implementation inventories so historical PRAI/AQ5/AQ7 exact-scope gates can distinguish complete later phases without one-off classifier branches.
