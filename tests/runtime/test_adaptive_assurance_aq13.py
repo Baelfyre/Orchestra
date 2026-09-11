@@ -154,7 +154,7 @@ class AQ13StagedRolloutTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.context(repository="   ")
         with self.assertRaises(ValueError):
-            self.context(repository="Baelfyre/Orchestra\n")
+            self.context(repository="Baelfyre/\nOrchestra")
 
     def test_stage_identity_and_counts_fail_closed(self):
         with self.assertRaises(ValueError):
