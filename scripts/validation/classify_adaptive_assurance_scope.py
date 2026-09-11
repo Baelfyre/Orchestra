@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from json import JSONDecodeError
 from collections.abc import Iterable
 from pathlib import Path
 
@@ -287,7 +288,7 @@ def normalize_paths(paths: Iterable[str]) -> tuple[str, ...]:
 def load_registered_phase_scopes() -> dict[str, tuple[frozenset[str], frozenset[str]]]:
     try:
         raw = json.loads(ADAPT_QA_PHASE_SEPARATION_REGISTRY_PATH.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as exc:
+    except (OSError, JSONDecodeError) as exc:
         raise ValueError(f"invalid ADAPT-QA phase separation registry: {exc}") from exc
     if not isinstance(raw, dict) or raw.get("schema_version") != "orchestra.adapt-qa-phase-separation.v1":
         raise ValueError("invalid ADAPT-QA phase separation registry schema_version")
