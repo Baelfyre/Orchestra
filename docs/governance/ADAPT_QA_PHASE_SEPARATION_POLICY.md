@@ -22,6 +22,10 @@ The machine registry is `machine/governance/adapt-qa-phase-separation.v1.json`. 
 
 AQ10 through AQ14 are registered exactly as approved by the primary maintainer. Each phase contains exactly nine implementation paths. Any implementation need outside the applicable inventory freezes that phase for fresh human review. AQ15 and later phases remain unregistered.
 
+## Assurance-tool compatibility
+
+Implementation-only compatibility repairs needed so an assurance tool can generate and evaluate its intended mutants are permitted only when they preserve classifier semantics and do not suppress, reclassify, bypass, or lower assurance. Unknown mutation outcomes remain fail-closed.
+
 ## Non-authority
 
 Phase separation is not a lifecycle whitelist, assurance bypass, threshold reduction, release authority, deployment authority, provider authority, credential authority, telemetry authority, or production authority. PRAI, Covenant, specialist review, signed materialization, tree attestation, repository rulesets, and human-only whitelist boundaries remain unchanged.
