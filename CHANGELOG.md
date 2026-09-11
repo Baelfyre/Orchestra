@@ -1,3 +1,14 @@
+## v1.11.0 Adaptive Assurance and Governance Hardening - release candidate - prepared
+
+- Packages all 30 canonical commits after the immutable v1.10.0 release commit `756a358f96363f0c377b049adcd87b1991d5aef6` through AQ14 canonical `8c75fb53cbcdc5f05a74f8377f097c336e5ccce6`.
+- Delivers the complete ADAPT-QA AQ1-AQ14 assurance sequence: normative doctrine, risk profiling, specialist assurance contracts, manifests/receipts, repository QA compliance, gate-coverage truthfulness, runtime/adapter parity, high-risk assurance packs, deep assurance, defect-escape RCA, remediation-effectiveness pilot, adversarial self-test, staged non-production evaluation, and final effectiveness qualification.
+- Includes PRAI post-run assurance, Protected Governance Escalation, Covenant cross-governance synthesis, human-only whitelist authority, exact-scope phase separation, and tree-attested promotion assurance.
+- Includes the AQ7 tenant-administration reference slice with domain/application/persistence/HTTP-shaped adapter parity as bounded architecture evidence.
+- Preserves evidence-only/non-authorizing semantics: assurance PASS does not grant provider, telemetry, production, deployment, policy, whitelist, AQ15, or CritiQual CUD10 authority.
+- Keeps AQ15 unregistered and excludes AR-3 through AR-9 implementation from this release; architecture refoundation resumes only after v1.11.0 publication and reconciliation.
+- Aligns all canonical package/version surfaces and the host-update contract to `1.11.0`.
+- Candidate status is `PREPARED_NOT_PUBLISHED`; publication is separately authorized by the maintainer and occurs only after governed exact-head qualification and signed canonical promotion.
+
 ## Unreleased governance policy: deterministic release-packaging assurance scope
 
 - Adds the human-authorized exact-set `RELEASE_PACKAGING` classification for historical PRAI/AQ5/AQ7 exact-scope gates without changing their implementation inventories or assurance thresholds.

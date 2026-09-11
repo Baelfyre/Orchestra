@@ -7,8 +7,8 @@
 - **Stable Continuation Branch:** `main`
 - **Current Public Release:** `v1.10.0`
 - **Release Status:** `v1.10.0 PUBLISHED_VERIFIED`
-- **Target Release:** `POST_PUBLICATION_DOCUMENTATION_NORMALIZATION`
-- **Release-Candidate Metadata:** `1.10.0` (`PUBLISHED_VERIFIED_COMPLETE`)
+- **Target Release:** `v1.11.0`
+- **Release-Candidate Metadata:** `1.11.0` (`PREPARED_NOT_PUBLISHED`)
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.3.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.4.0 Release State:** `PUBLISHED_VERIFIED`
@@ -30,9 +30,17 @@
 - **v1.8.0 Tag Ref:** lightweight `commit` ref targeting the exact release commit
 - **v1.8.0 GitHub Release:** id `RE_kwDOS_4UtM4WyusI`, immutable, non-draft, non-prerelease, independently verified latest
 - **v1.8.0 Post-Publication Verification:** PASS
-- **Control Plane State:** `V1_10_0_CANDIDATE`
+- **Control Plane State:** `V1_11_0_CANDIDATE`
 - **MCP State:** `PUBLISHED_V1_6_STABLE_RETAINED_V1_7`
 - **Policy Activation State:** `NOT_PERFORMED`
+
+## v1.11.0 Adaptive Assurance and Governance Hardening Candidate
+
+The v1.11.0 candidate freezes the complete post-v1.10.0 delta: 30 canonical commits after release commit `756a358f96363f0c377b049adcd87b1991d5aef6` through AQ14 canonical `8c75fb53cbcdc5f05a74f8377f097c336e5ccce6`. The release centers the full AQ1-AQ14 assurance stack, PRAI post-run assurance, Covenant cross-governance synthesis, Protected Governance Escalation, human-only whitelist authority, and tree-attested promotion assurance. AQ7 also contributes the bounded tenant-administration domain/application/persistence/HTTP adapter-parity reference slice.
+
+All canonical package/version surfaces and the host-update contract are aligned to `1.11.0`. The current public release remains immutable `v1.10.0` until publication. AQ15 is unregistered and not included. AR-3 through AR-9 are intentionally deferred until after v1.11.0 publication and Padayon reconciliation.
+
+The candidate is `PREPARED_NOT_PUBLISHED`. The maintainer has explicitly authorized v1.11.0 publication, but tag and GitHub Release creation remain downstream of exact-head source qualification, signed identical-tree materialization, canonical promotion, and post-merge verification.
 
 ## v1.10.0 Universal Adaptive Integration and Conductor Routing Publication
 
