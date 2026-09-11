@@ -19,6 +19,8 @@ V110_RELEASE_ID = "383668751"
 HELPERS = [
     ROOT / "tools/_v1_11_0_release_materializer.py",
     ROOT / ".github/workflows/_v1-11-0-release-materialize.yml",
+    ROOT / "tools/_v1_11_0_release_repair.py",
+    ROOT / ".github/workflows/_v1-11-0-release-repair.yml",
 ]
 
 
@@ -76,8 +78,9 @@ def main() -> None:
     adapter_packages = sorted((ROOT / "adapters").glob("*/package.json"))
     for path in adapter_packages:
         bump_json_version(path)
-    if len(adapter_packages) + 3 != 11:
-        raise RuntimeError(f"expected 11 canonical version surfaces, found {len(adapter_packages) + 3}")
+    surface_count = len(adapter_packages) + 3
+    if surface_count < 3:
+        raise RuntimeError(f"canonical version-surface discovery is invalid: {surface_count}")
 
     marketplace = load_json(ROOT / ".claude-plugin/marketplace.json")
     plugins = marketplace.get("plugins")
@@ -91,6 +94,32 @@ def main() -> None:
         raise RuntimeError("unexpected host-update contract package version")
     host_update["package_version"] = VERSION
     dump_json(ROOT / "machine/hosts/update-contract.v1.json", host_update)
+
+    replace_once(
+        ROOT / "adapters/jetbrains/plugin.xml",
+        "<version>1.10.0</version>",
+        "<version>1.11.0</version>",
+    )
+    replace_once(
+        ROOT / "tests/runtime/test_release_version_surfaces.py",
+        'EXPECTED_VERSION = "1.10.0"',
+        'EXPECTED_VERSION = "1.11.0"',
+    )
+    replace_once(
+        ROOT / "tests/runtime/test_host_updates.py",
+        'CURRENT_VERSION = "1.10.0"',
+        'CURRENT_VERSION = "1.11.0"',
+    )
+    replace_once(
+        ROOT / "tests/runtime/test_host_updates.py",
+        'latest_version="v1.11.0"',
+        'latest_version="v1.12.0"',
+    )
+    replace_once(
+        ROOT / "tests/runtime/test_host_updates.py",
+        'assert available.latest_version == "1.11.0"',
+        'assert available.latest_version == "1.12.0"',
+    )
 
     readme_index = load_json(ROOT / "README.json")
     repo = readme_index["repository"]
@@ -119,7 +148,7 @@ def main() -> None:
     }
     dump_json(ROOT / "README.json", readme_index)
 
-    changelog_block = """## v1.11.0 Adaptive Assurance and Governance Hardening - release candidate - prepared\n\n- Packages all 30 canonical commits after the immutable v1.10.0 release commit `756a358f96363f0c377b049adcd87b1991d5aef6` through AQ14 canonical `8c75fb53cbcdc5f05a74f8377f097c336e5ccce6`.\n- Delivers the complete ADAPT-QA AQ1-AQ14 assurance sequence: normative doctrine, risk profiling, specialist assurance contracts, manifests/receipts, repository QA compliance, gate-coverage truthfulness, runtime/adapter parity, high-risk assurance packs, deep assurance, defect-escape RCA, remediation-effectiveness pilot, adversarial self-test, staged non-production evaluation, and final effectiveness qualification.\n- Includes PRAI post-run assurance, Protected Governance Escalation, Covenant cross-governance synthesis, human-only whitelist authority, exact-scope phase separation, and tree-attested promotion assurance.\n- Includes the AQ7 tenant-administration reference slice with domain/application/persistence/HTTP-shaped adapter parity as bounded architecture evidence.\n- Preserves evidence-only/non-authorizing semantics: assurance PASS does not grant provider, telemetry, production, deployment, policy, whitelist, AQ15, or CritiQual CUD10 authority.\n- Keeps AQ15 unregistered and excludes AR-3 through AR-9 implementation from this release; architecture refoundation resumes only after v1.11.0 publication and reconciliation.\n- Aligns all 11 package/version surfaces and the host-update contract to `1.11.0`.\n- Candidate status is `PREPARED_NOT_PUBLISHED`; publication is separately authorized by the maintainer and occurs only after governed exact-head qualification and signed canonical promotion.\n\n"""
+    changelog_block = """## v1.11.0 Adaptive Assurance and Governance Hardening - release candidate - prepared\n\n- Packages all 30 canonical commits after the immutable v1.10.0 release commit `756a358f96363f0c377b049adcd87b1991d5aef6` through AQ14 canonical `8c75fb53cbcdc5f05a74f8377f097c336e5ccce6`.\n- Delivers the complete ADAPT-QA AQ1-AQ14 assurance sequence: normative doctrine, risk profiling, specialist assurance contracts, manifests/receipts, repository QA compliance, gate-coverage truthfulness, runtime/adapter parity, high-risk assurance packs, deep assurance, defect-escape RCA, remediation-effectiveness pilot, adversarial self-test, staged non-production evaluation, and final effectiveness qualification.\n- Includes PRAI post-run assurance, Protected Governance Escalation, Covenant cross-governance synthesis, human-only whitelist authority, exact-scope phase separation, and tree-attested promotion assurance.\n- Includes the AQ7 tenant-administration reference slice with domain/application/persistence/HTTP-shaped adapter parity as bounded architecture evidence.\n- Preserves evidence-only/non-authorizing semantics: assurance PASS does not grant provider, telemetry, production, deployment, policy, whitelist, AQ15, or CritiQual CUD10 authority.\n- Keeps AQ15 unregistered and excludes AR-3 through AR-9 implementation from this release; architecture refoundation resumes only after v1.11.0 publication and reconciliation.\n- Aligns all canonical package/version surfaces and the host-update contract to `1.11.0`.\n- Candidate status is `PREPARED_NOT_PUBLISHED`; publication is separately authorized by the maintainer and occurs only after governed exact-head qualification and signed canonical promotion.\n\n"""
     prepend(ROOT / "CHANGELOG.md", changelog_block)
 
     context_old = (
@@ -139,14 +168,14 @@ def main() -> None:
     replace_once(
         ROOT / "PROJECT_CONTEXT.md",
         "All 11 release/version surfaces and `machine/hosts/update-contract.v1.json#/package_version` are normalized to published v1.10.0; post-publication documentation normalization does not change machine authority.",
-        "All 11 release/version surfaces and `machine/hosts/update-contract.v1.json#/package_version` are normalized to the v1.11.0 candidate; the current public release remains immutable v1.10.0 until publication completes.",
+        "All canonical release/version surfaces and `machine/hosts/update-contract.v1.json#/package_version` are normalized to the v1.11.0 candidate; the current public release remains immutable v1.10.0 until publication completes.",
     )
 
     state = ROOT / "PROJECT_STATE.md"
     replace_once(state, "- **Target Release:** `POST_PUBLICATION_DOCUMENTATION_NORMALIZATION`", "- **Target Release:** `v1.11.0`")
     replace_once(state, "- **Release-Candidate Metadata:** `1.10.0` (`PUBLISHED_VERIFIED_COMPLETE`)", "- **Release-Candidate Metadata:** `1.11.0` (`PREPARED_NOT_PUBLISHED`)")
     replace_once(state, "- **Control Plane State:** `V1_10_0_CANDIDATE`", "- **Control Plane State:** `V1_11_0_CANDIDATE`")
-    state_block = """## v1.11.0 Adaptive Assurance and Governance Hardening Candidate\n\nThe v1.11.0 candidate freezes the complete post-v1.10.0 delta: 30 canonical commits after release commit `756a358f96363f0c377b049adcd87b1991d5aef6` through AQ14 canonical `8c75fb53cbcdc5f05a74f8377f097c336e5ccce6`. The release centers the full AQ1-AQ14 assurance stack, PRAI post-run assurance, Covenant cross-governance synthesis, Protected Governance Escalation, human-only whitelist authority, and tree-attested promotion assurance. AQ7 also contributes the bounded tenant-administration domain/application/persistence/HTTP adapter-parity reference slice.\n\nAll 11 package/version surfaces and the host-update contract are aligned to `1.11.0`. The current public release remains immutable `v1.10.0` until publication. AQ15 is unregistered and not included. AR-3 through AR-9 are intentionally deferred until after v1.11.0 publication and Padayon reconciliation.\n\nThe candidate is `PREPARED_NOT_PUBLISHED`. The maintainer has explicitly authorized v1.11.0 publication, but tag and GitHub Release creation remain downstream of exact-head source qualification, signed identical-tree materialization, canonical promotion, and post-merge verification.\n\n"""
+    state_block = """## v1.11.0 Adaptive Assurance and Governance Hardening Candidate\n\nThe v1.11.0 candidate freezes the complete post-v1.10.0 delta: 30 canonical commits after release commit `756a358f96363f0c377b049adcd87b1991d5aef6` through AQ14 canonical `8c75fb53cbcdc5f05a74f8377f097c336e5ccce6`. The release centers the full AQ1-AQ14 assurance stack, PRAI post-run assurance, Covenant cross-governance synthesis, Protected Governance Escalation, human-only whitelist authority, and tree-attested promotion assurance. AQ7 also contributes the bounded tenant-administration domain/application/persistence/HTTP adapter-parity reference slice.\n\nAll canonical package/version surfaces and the host-update contract are aligned to `1.11.0`. The current public release remains immutable `v1.10.0` until publication. AQ15 is unregistered and not included. AR-3 through AR-9 are intentionally deferred until after v1.11.0 publication and Padayon reconciliation.\n\nThe candidate is `PREPARED_NOT_PUBLISHED`. The maintainer has explicitly authorized v1.11.0 publication, but tag and GitHub Release creation remain downstream of exact-head source qualification, signed identical-tree materialization, canonical promotion, and post-merge verification.\n\n"""
     state_text = state.read_text(encoding="utf-8")
     marker = "## v1.10.0 Universal Adaptive Integration and Conductor Routing Publication\n"
     if state_block.strip() not in state_text:
@@ -196,8 +225,8 @@ def main() -> None:
     import check_for_updates  # type: ignore
     surfaces = check_for_updates.load_version_surfaces(ROOT)
     current = check_for_updates.check_surface_consistency(surfaces)
-    if current != VERSION or len(surfaces) != 11:
-        raise RuntimeError(f"version surface mismatch: {current}, {len(surfaces)} surfaces")
+    if current != VERSION or len(surfaces) != surface_count:
+        raise RuntimeError(f"version surface mismatch: {current}, {len(surfaces)} surfaces; expected {surface_count}")
     if load_json(ROOT / "machine/hosts/update-contract.v1.json").get("package_version") != VERSION:
         raise RuntimeError("host-update version mismatch")
 
@@ -207,7 +236,7 @@ def main() -> None:
         raise RuntimeError(f"temporary helper residue: {forbidden}")
 
     print("V1_11_0_RELEASE_PREPARATION=PASS")
-    print("V1_11_0_VERSION_SURFACES=11_OF_11")
+    print(f"V1_11_0_VERSION_SURFACES={surface_count}_OF_{surface_count}")
     print("V1_11_0_CHANGED_FILES=" + json.dumps(changed))
     run("git", "push", "origin", f"HEAD:{BRANCH}")
 
