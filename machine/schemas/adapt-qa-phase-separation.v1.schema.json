@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/machine/schemas/adapt-qa-phase-separation.v1.schema.json",
+  "title": "Orchestra ADAPT-QA phase separation registry",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "policy_id",
+    "authority_class",
+    "authority_source",
+    "historical_gates",
+    "phases",
+    "invariants"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "orchestra.adapt-qa-phase-separation.v1"
+    },
+    "policy_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "authority_class": {
+      "const": "HUMAN_POLICY"
+    },
+    "authority_source": {
+      "type": "string",
+      "minLength": 1
+    },
+    "historical_gates": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "prai",
+          "aq5",
+          "aq7"
+        ]
+      },
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "phases": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "phase_id",
+          "status",
+          "implementation_paths",
+          "anchor_paths"
+        ],
+        "properties": {
+          "phase_id": {
+            "type": "string",
+            "pattern": "^AQ[0-9]+$"
+          },
+          "status": {
+            "const": "HUMAN_APPROVED_REGISTERED"
+          },
+          "implementation_paths": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "anchor_paths": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "invariants": {
+      "type": "object"
+    }
+  }
+}

@@ -1,3 +1,10 @@
+## Unreleased governance policy: reusable ADAPT-QA phase separation
+
+- Adds a human-authorized, data-driven phase registry for exact AQ10-AQ14 implementation inventories so historical PRAI/AQ5/AQ7 exact-scope gates can distinguish complete later phases without one-off classifier branches.
+- Keeps partial, mixed, superset, duplicate, unknown, and unregistered AQ15+ scopes fail-closed `APPLICABLE` or invalid.
+- Makes registry mutation protected `HUMAN_POLICY` under Padayon decision `ORCHESTRA_ADAPT_QA_PHASE_SEPARATION_FRAMEWORK_AQ10_AQ14_HUMAN_POLICY_20260911` at canonical commit `384f78dd27da52a3fff99fe40379ae3c3273e12f`.
+- Preserves all existing assurance thresholds, human-only whitelist authority, PRAI/Covenant/specialist boundaries, signed-materialization/tree-attestation controls, and release/deployment/provider/credential/telemetry/production boundaries.
+
 ## Unreleased ADAPT-QA AQ-9 deep assurance expansion
 
 - Adds a deterministic AQ9 machine contract and schema for mutation, property, metamorphic, and bounded-fuzz assurance over existing QA logic without creating a second QA engine.
