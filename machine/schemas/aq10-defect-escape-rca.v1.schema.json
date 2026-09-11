@@ -1,0 +1,462 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/machine/schemas/aq10-defect-escape-rca.v1.schema.json",
+  "title": "Orchestra AQ10 Defect Escape RCA Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "phase",
+    "owner",
+    "authority_model",
+    "purpose",
+    "implementation_inventory",
+    "taxonomy",
+    "signal_map",
+    "prevention_actions",
+    "reference_incidents",
+    "fail_closed_conditions",
+    "authority",
+    "validation"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "orchestra.aq10-defect-escape-rca.v1"
+    },
+    "phase": {
+      "const": "AQ10_DEFECT_ESCAPE_RCA"
+    },
+    "owner": {
+      "const": "overseer"
+    },
+    "authority_model": {
+      "const": "EVIDENCE_ONLY_NON_AUTHORIZING"
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "implementation_inventory": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "const": "CHANGELOG.md"
+        },
+        {
+          "const": "README.json"
+        },
+        {
+          "const": "docs/architecture/ADAPTIVE_ASSURANCE_AQ10.md"
+        },
+        {
+          "const": "machine/adaptive/aq10-defect-escape-rca.v1.json"
+        },
+        {
+          "const": "machine/schemas/aq10-defect-escape-rca.v1.schema.json"
+        },
+        {
+          "const": "orchestra_runtime/domain/adaptive/defect_escape_rca.py"
+        },
+        {
+          "const": "scripts/validation/validate_aq10.py"
+        },
+        {
+          "const": "tests/behavior/run_tests.py"
+        },
+        {
+          "const": "tests/runtime/test_adaptive_assurance_aq10.py"
+        }
+      ],
+      "items": false,
+      "minItems": 9,
+      "maxItems": 9
+    },
+    "taxonomy": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "const": "COVERAGE_GAP"
+        },
+        {
+          "const": "ASSERTION_GAP"
+        },
+        {
+          "const": "ORACLE_GAP"
+        },
+        {
+          "const": "SCOPE_CLASSIFICATION_GAP"
+        },
+        {
+          "const": "DEPENDENCY_ENVIRONMENT_GAP"
+        },
+        {
+          "const": "ASSURANCE_TOOL_COMPATIBILITY"
+        },
+        {
+          "const": "PROCESS_GOVERNANCE_GAP"
+        },
+        {
+          "const": "UNKNOWN"
+        }
+      ],
+      "items": false,
+      "minItems": 8,
+      "maxItems": 8
+    },
+    "signal_map": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "MISSING_TEST_SURFACE",
+        "UNEXERCISED_BRANCH",
+        "WEAK_ASSERTION",
+        "MISSING_NEGATIVE_ASSERTION",
+        "WRONG_EXPECTED_RESULT",
+        "SELF_ASSERTED_PASS",
+        "INCORRECT_SCOPE_CLASSIFICATION",
+        "UNREGISTERED_PHASE_COLLISION",
+        "MISSING_OPTIONAL_DEPENDENCY",
+        "ENVIRONMENT_PARITY_MISMATCH",
+        "MUTATION_OPERATOR_CRASH",
+        "ASSURANCE_TOOL_INCOMPATIBILITY",
+        "MISSING_GOVERNANCE_CONTRACT",
+        "STALE_TRANSACTION_METADATA",
+        "STALE_RELAY_PROJECTION",
+        "CAUSE_UNRESOLVED"
+      ],
+      "properties": {
+        "MISSING_TEST_SURFACE": {
+          "const": "COVERAGE_GAP"
+        },
+        "UNEXERCISED_BRANCH": {
+          "const": "COVERAGE_GAP"
+        },
+        "WEAK_ASSERTION": {
+          "const": "ASSERTION_GAP"
+        },
+        "MISSING_NEGATIVE_ASSERTION": {
+          "const": "ASSERTION_GAP"
+        },
+        "WRONG_EXPECTED_RESULT": {
+          "const": "ORACLE_GAP"
+        },
+        "SELF_ASSERTED_PASS": {
+          "const": "ORACLE_GAP"
+        },
+        "INCORRECT_SCOPE_CLASSIFICATION": {
+          "const": "SCOPE_CLASSIFICATION_GAP"
+        },
+        "UNREGISTERED_PHASE_COLLISION": {
+          "const": "SCOPE_CLASSIFICATION_GAP"
+        },
+        "MISSING_OPTIONAL_DEPENDENCY": {
+          "const": "DEPENDENCY_ENVIRONMENT_GAP"
+        },
+        "ENVIRONMENT_PARITY_MISMATCH": {
+          "const": "DEPENDENCY_ENVIRONMENT_GAP"
+        },
+        "MUTATION_OPERATOR_CRASH": {
+          "const": "ASSURANCE_TOOL_COMPATIBILITY"
+        },
+        "ASSURANCE_TOOL_INCOMPATIBILITY": {
+          "const": "ASSURANCE_TOOL_COMPATIBILITY"
+        },
+        "MISSING_GOVERNANCE_CONTRACT": {
+          "const": "PROCESS_GOVERNANCE_GAP"
+        },
+        "STALE_TRANSACTION_METADATA": {
+          "const": "PROCESS_GOVERNANCE_GAP"
+        },
+        "STALE_RELAY_PROJECTION": {
+          "const": "PROCESS_GOVERNANCE_GAP"
+        },
+        "CAUSE_UNRESOLVED": {
+          "const": "UNKNOWN"
+        }
+      }
+    },
+    "prevention_actions": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "COVERAGE_GAP",
+        "ASSERTION_GAP",
+        "ORACLE_GAP",
+        "SCOPE_CLASSIFICATION_GAP",
+        "DEPENDENCY_ENVIRONMENT_GAP",
+        "ASSURANCE_TOOL_COMPATIBILITY",
+        "PROCESS_GOVERNANCE_GAP",
+        "UNKNOWN"
+      ],
+      "properties": {
+        "COVERAGE_GAP": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "EXPAND_TARGETED_TEST_COVERAGE"
+            }
+          ],
+          "items": false,
+          "minItems": 1,
+          "maxItems": 1
+        },
+        "ASSERTION_GAP": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "STRENGTHEN_ASSERTIONS_AND_NEGATIVE_CASES"
+            }
+          ],
+          "items": false,
+          "minItems": 1,
+          "maxItems": 1
+        },
+        "ORACLE_GAP": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "INDEPENDENT_ORACLE_CROSS_CHECK"
+            }
+          ],
+          "items": false,
+          "minItems": 1,
+          "maxItems": 1
+        },
+        "SCOPE_CLASSIFICATION_GAP": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "EXACT_SCOPE_REGRESSION_AND_FAIL_CLOSED_CLASSIFICATION"
+            }
+          ],
+          "items": false,
+          "minItems": 1,
+          "maxItems": 1
+        },
+        "DEPENDENCY_ENVIRONMENT_GAP": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "DEPENDENCY_FREE_BEHAVIOR_VALIDATION_OR_EXPLICIT_RUNTIME_DEPENDENCY"
+            }
+          ],
+          "items": false,
+          "minItems": 1,
+          "maxItems": 1
+        },
+        "ASSURANCE_TOOL_COMPATIBILITY": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "TOOL_COMPATIBILITY_REGRESSION_WITH_UNKNOWN_OUTCOME_FAIL_CLOSED"
+            }
+          ],
+          "items": false,
+          "minItems": 1,
+          "maxItems": 1
+        },
+        "PROCESS_GOVERNANCE_GAP": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "CONTRACT_PARITY_AND_COMPILER_GENERATED_RECONCILIATION"
+            }
+          ],
+          "items": false,
+          "minItems": 1,
+          "maxItems": 1
+        },
+        "UNKNOWN": {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "HUMAN_RCA_REVIEW_REQUIRED"
+            }
+          ],
+          "items": false,
+          "minItems": 1,
+          "maxItems": 1
+        }
+      }
+    },
+    "reference_incidents": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "incident_id",
+          "phase_detected",
+          "escaped_gates",
+          "detection_gate",
+          "signals",
+          "expected_root_cause"
+        ],
+        "properties": {
+          "incident_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "phase_detected": {
+            "type": "string",
+            "minLength": 1
+          },
+          "escaped_gates": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "detection_gate": {
+            "type": "string",
+            "minLength": 1
+          },
+          "signals": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "MISSING_TEST_SURFACE",
+                "UNEXERCISED_BRANCH",
+                "WEAK_ASSERTION",
+                "MISSING_NEGATIVE_ASSERTION",
+                "WRONG_EXPECTED_RESULT",
+                "SELF_ASSERTED_PASS",
+                "INCORRECT_SCOPE_CLASSIFICATION",
+                "UNREGISTERED_PHASE_COLLISION",
+                "MISSING_OPTIONAL_DEPENDENCY",
+                "ENVIRONMENT_PARITY_MISMATCH",
+                "MUTATION_OPERATOR_CRASH",
+                "ASSURANCE_TOOL_INCOMPATIBILITY",
+                "MISSING_GOVERNANCE_CONTRACT",
+                "STALE_TRANSACTION_METADATA",
+                "STALE_RELAY_PROJECTION",
+                "CAUSE_UNRESOLVED"
+              ]
+            }
+          },
+          "expected_root_cause": {
+            "enum": [
+              "COVERAGE_GAP",
+              "ASSERTION_GAP",
+              "ORACLE_GAP",
+              "SCOPE_CLASSIFICATION_GAP",
+              "DEPENDENCY_ENVIRONMENT_GAP",
+              "ASSURANCE_TOOL_COMPATIBILITY",
+              "PROCESS_GOVERNANCE_GAP",
+              "UNKNOWN"
+            ]
+          }
+        }
+      }
+    },
+    "fail_closed_conditions": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "const": "UNKNOWN_SIGNAL_REJECTED"
+        },
+        {
+          "const": "DUPLICATE_IDENTITY_REJECTED"
+        },
+        {
+          "const": "MALFORMED_OBSERVATION_REJECTED"
+        },
+        {
+          "const": "UNRESOLVED_CAUSE_REQUIRES_HUMAN_REVIEW"
+        },
+        {
+          "const": "NO_AUTOMATIC_POLICY_CHANGE"
+        }
+      ],
+      "items": false,
+      "minItems": 5,
+      "maxItems": 5
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "creates_execution_authority",
+        "creates_transition_authority",
+        "creates_whitelist_authority",
+        "changes_protected_policy",
+        "lowers_assurance_thresholds",
+        "activates_provider",
+        "activates_telemetry",
+        "mutates_production",
+        "authorizes_release"
+      ],
+      "properties": {
+        "creates_execution_authority": {
+          "const": false
+        },
+        "creates_transition_authority": {
+          "const": false
+        },
+        "creates_whitelist_authority": {
+          "const": false
+        },
+        "changes_protected_policy": {
+          "const": false
+        },
+        "lowers_assurance_thresholds": {
+          "const": false
+        },
+        "activates_provider": {
+          "const": false
+        },
+        "activates_telemetry": {
+          "const": false
+        },
+        "mutates_production": {
+          "const": false
+        },
+        "authorizes_release": {
+          "const": false
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "validator",
+        "runtime",
+        "runtime_test",
+        "behavior_registration",
+        "architecture_reference",
+        "schema",
+        "canonical_start_sha"
+      ],
+      "properties": {
+        "validator": {
+          "const": "scripts/validation/validate_aq10.py"
+        },
+        "runtime": {
+          "const": "orchestra_runtime/domain/adaptive/defect_escape_rca.py"
+        },
+        "runtime_test": {
+          "const": "tests/runtime/test_adaptive_assurance_aq10.py"
+        },
+        "behavior_registration": {
+          "const": "tests/behavior/run_tests.py"
+        },
+        "architecture_reference": {
+          "const": "docs/architecture/ADAPTIVE_ASSURANCE_AQ10.md"
+        },
+        "schema": {
+          "const": "machine/schemas/aq10-defect-escape-rca.v1.schema.json"
+        },
+        "canonical_start_sha": {
+          "const": "62208416de9c131569aeb116716df6b9dc130f8b"
+        }
+      }
+    }
+  }
+}
