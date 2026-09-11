@@ -1,3 +1,10 @@
+## Unreleased ADAPT-QA AQ-13 staged non-production rollout evaluation
+
+- Adds deterministic evidence-only staged evaluation across SHADOW, CANARY, LIMITED, and EXPANDED non-production evidence stages.
+- Makes any critical violation or excessive aggregate regression force revision, while explicit rollback signals force HOLD and insufficient/non-independent/non-deterministic evidence cannot PASS.
+- Preserves the Prime Directive, human-owned phase registry, Arbiter transition ownership, existing assurance thresholds, and CritiQual CUD10 hold.
+- Makes AQ13 PASS explicitly non-authorizing for production, release/deployment, providers, telemetry, protected policy, whitelist mutation, lifecycle transition, or CUD10 admission.
+
 ## Unreleased ADAPT-QA AQ-12 Orchestra adversarial self-test
 
 - Adds a deterministic evidence-only adversarial self-test across scope drift, authority escalation, evidence tampering, state-transition forgery, assurance-gate bypass, and determinism drift.
