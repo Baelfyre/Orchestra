@@ -2683,7 +2683,13 @@
     "adaptive_assurance_aq13_runtime": "orchestra_runtime/domain/adaptive/staged_rollout.py",
     "adaptive_assurance_aq13_validator": "scripts/validation/validate_aq13.py",
     "adaptive_assurance_aq13_validation": "tests/runtime/test_adaptive_assurance_aq13.py",
-    "adaptive_assurance_aq13_documentation": "docs/architecture/ADAPTIVE_ASSURANCE_AQ13.md"
+    "adaptive_assurance_aq13_documentation": "docs/architecture/ADAPTIVE_ASSURANCE_AQ13.md",
+    "adaptive_assurance_aq14_contract": "machine/adaptive/aq14-effectiveness-qualification.v1.json",
+    "adaptive_assurance_aq14_schema": "machine/schemas/aq14-effectiveness-qualification.v1.schema.json",
+    "adaptive_assurance_aq14_runtime": "orchestra_runtime/domain/adaptive/effectiveness_qualification.py",
+    "adaptive_assurance_aq14_validator": "scripts/validation/validate_aq14.py",
+    "adaptive_assurance_aq14_validation": "tests/runtime/test_adaptive_assurance_aq14.py",
+    "adaptive_assurance_aq14_documentation": "docs/architecture/ADAPTIVE_ASSURANCE_AQ14.md"
   },
   "specialists": {
     "count": 14,
