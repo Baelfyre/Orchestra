@@ -13,6 +13,7 @@
 
   <p>
     <img src="https://img.shields.io/badge/release-v1.10.0-blue" alt="Latest release v1.10.0" />
+    <img src="https://img.shields.io/badge/candidate-v1.11.0-orange" alt="Release candidate v1.11.0" />
     <a href="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml">
       <img src="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml/badge.svg" alt="Repository validation status" />
     </a>
@@ -182,10 +183,18 @@ v1.10.0 adds evidence-bounded Universal Adaptive Integration, deterministic tran
 
 Conductor remains the sole internal specialist router. Clear specialist ownership can use a lightweight direct route, but it never bypasses Conductor. Copilot Auto mode did not expose its provider/model identity, so no provider/model profile is admitted.
 
+### v1.11.0 candidate
+
+**v1.11.0: Adaptive Assurance and Governance Hardening** is prepared and currently in governed qualification. It packages the complete canonical post-v1.10.0 change set through AQ14, including AQ1–AQ14 Adaptive Assurance, PRAI post-run assurance, Covenant cross-governance synthesis, Protected Governance Escalation, human-only whitelist authority, tree-attested promotion assurance, and the AQ7 tenant-administration parity reference slice.
+
+AQ15 is not a defined or registered phase. AR-3 through AR-9 remain deferred until v1.11.0 is published and reconciled. The candidate does not grant provider, telemetry, production, deployment, whitelist, protected-policy, or CritiQual CUD10 authority.
+
 See:
 
 - [Changelog](CHANGELOG.md)
 - [Published v1.10.0 reference](docs/reference/releases/v1.10.0.md)
+- [v1.11.0 candidate](docs/releases/v1.11.0-adaptive-assurance-governance-release-candidate.md)
+- [v1.11.0 readiness evidence](docs/validation/V1_11_0_RELEASE_READINESS_EVIDENCE.md)
 - [Maturity](docs/MATURITY.md)
 - [Validation documentation](docs/setup/VALIDATION.md)
 
@@ -217,5 +226,3 @@ If Orchestra is useful to you and you want to support its continued development:
 </div>
 
 ---
-
-**License:** [MIT](LICENSE) | **Security:** [SECURITY.md](SECURITY.md) | **Changelog:** [CHANGELOG.md](CHANGELOG.md)

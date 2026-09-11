@@ -10,7 +10,7 @@ A governance-first specialist orchestration framework that routes complex AI-ass
 Open-source developer tooling and AI orchestration framework
 
 ## Current Stage
-v1.10.0 Universal Adaptive Integration and Conductor Routing is published and verified at signed canonical commit `756a358f96363f0c377b049adcd87b1991d5aef6`, tree `42c0c8929c4dcfa5b17ff2feb293710d2468ca51`, tag `v1.10.0`, and GitHub Release `383668751`. Post-publication documentation normalization is active. UAI-0 through UAI-10 and the Conductor routing reconciliation are complete. GitHub Copilot `/conductor` is `SUPPORTED_VERIFIED` from maintainer evidence, while Auto-mode provider/model identity remains unresolved and unadmitted.
+v1.11.0 Adaptive Assurance and Governance Hardening is the active release candidate over the immutable published v1.10.0 baseline at `756a358f96363f0c377b049adcd87b1991d5aef6`. The candidate freezes all 30 post-v1.10.0 canonical commits through AQ14 at `8c75fb53cbcdc5f05a74f8377f097c336e5ccce6`, including AQ1-AQ14, PRAI, Covenant, protected-governance escalation, human-only whitelist authority, and tree-attested promotion assurance. AQ15 is unregistered and AR-3 through AR-9 remain deferred until after v1.11.0 publication.
 
 ## Primary Users
 Developers and maintainers who install Orchestra as a plugin, skill set, or runtime package inside supported or scaffold-only coding hosts.
@@ -58,7 +58,7 @@ The Orchestra Prime Directive is the stable constitutional boundary for developm
 - `python scripts/governance_check.py --strict` must pass.
 - The documentation-impact contract must pass and require the correct human/machine surfaces for the actual changed scope.
 - Prime Directive, Feature Admission, Candidate Maturity/Feature Freeze, autonomy lifecycle integration, qualification/evaluation/audit, recovery/retirement, and merge-readiness contract validators must pass when those surfaces are present or changed.
-- All 11 release/version surfaces and `machine/hosts/update-contract.v1.json#/package_version` are normalized to published v1.10.0; post-publication documentation normalization does not change machine authority.
+- All canonical release/version surfaces and `machine/hosts/update-contract.v1.json#/package_version` are normalized to the v1.11.0 candidate; the current public release remains immutable v1.10.0 until publication completes.
 - Required Analysis Compatibility must execute real exact-head CodeQL successfully before its compatibility status surface is accepted.
 - Native Windows, Ubuntu, and macOS validation must pass on the exact candidate where required by repository policy.
 - Release-candidate mutation-confidence and Cosmic Ray evidence must be fresh where repository policy triggers them.
