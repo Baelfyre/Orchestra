@@ -1,3 +1,10 @@
+## Unreleased ADAPT-QA AQ-14 final effectiveness qualification
+
+- Adds deterministic final qualification over the exact canonical AQ9-AQ13 evidence chain, pinned to canonical PR/SHA/tree identities.
+- Requires PASS dispositions, canonical verification, source/promotion/post-merge assurance, independent deterministic evidence, and zero unresolved critical findings for all five prior phases.
+- Fails closed to revision on prior HOLD/revision or critical findings, and waits when assurance evidence is incomplete rather than inferring effectiveness.
+- Keeps AQ14 evidence-only and non-authorizing: no organic-effectiveness or production-readiness claim, release/deployment, provider, telemetry, protected-policy, AQ15, or CritiQual CUD10 authority.
+
 ## Unreleased ADAPT-QA AQ-13 staged non-production rollout evaluation
 
 - Adds deterministic evidence-only staged evaluation across SHADOW, CANARY, LIMITED, and EXPANDED non-production evidence stages.
