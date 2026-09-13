@@ -9,6 +9,13 @@
 - Aligns all canonical package/version surfaces and the host-update contract to `1.11.0`.
 - Candidate status is `PREPARED_NOT_PUBLISHED`; publication is separately authorized by the maintainer and occurs only after governed exact-head qualification and signed canonical promotion.
 
+## Unreleased governance policy: post-v1.11 documentation-normalization assurance scope
+
+- Adds the maintainer-authorized exact-set documentation-normalization lane for the verified v1.11.0 public state.
+- Historical PRAI/AQ5/AQ7 implementation inventories are `NOT_APPLICABLE` only for the complete registered documentation set plus the one current-release parity assertion that reads `README.json`.
+- Partial, mixed, superset, runtime, governance, provider, telemetry, deployment, and unknown scopes remain fail-closed `APPLICABLE`.
+- The lane grants no runtime behavior, release, deployment, provider, telemetry, production, whitelist, protected-policy, AQ15, AR3, or CritiQual CUD10 authority.
+
 ## Unreleased governance policy: deterministic release-packaging assurance scope
 
 - Adds the human-authorized exact-set `RELEASE_PACKAGING` classification for historical PRAI/AQ5/AQ7 exact-scope gates without changing their implementation inventories or assurance thresholds.
