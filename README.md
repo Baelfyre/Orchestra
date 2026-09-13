@@ -12,8 +12,7 @@
   </p>
 
   <p>
-    <img src="https://img.shields.io/badge/release-v1.10.0-blue" alt="Latest release v1.10.0" />
-    <img src="https://img.shields.io/badge/candidate-v1.11.0-orange" alt="Release candidate v1.11.0" />
+    <img src="https://img.shields.io/badge/release-v1.11.0-blue" alt="Latest release v1.11.0" />
     <a href="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml">
       <img src="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml/badge.svg" alt="Repository validation status" />
     </a>
@@ -177,23 +176,19 @@ See [MCP stdio governed tool transport](docs/developer/MCP_STDIO_TRANSPORT.md).
 
 ## Current release
 
-The latest published release is **[v1.10.0: Universal Adaptive Integration](https://github.com/Baelfyre/Orchestra/releases/tag/v1.10.0)**.
+The latest published release is **[v1.11.0: Adaptive Assurance and Governance Hardening](https://github.com/Baelfyre/Orchestra/releases/tag/v1.11.0)**.
 
-v1.10.0 adds evidence-bounded Universal Adaptive Integration, deterministic transport and projection contracts, cross-host conformance, and verified GitHub Copilot `/conductor` support while preserving existing governance and authority boundaries.
+v1.11.0 packages the complete governed post-v1.10.0 development line through AQ14, including AQ1-AQ14 Adaptive Assurance, PRAI post-run assurance, Covenant cross-governance synthesis, Protected Governance Escalation, human-only whitelist authority, tree-attested promotion assurance, deterministic release-packaging classification, and the AQ7 tenant-administration parity reference slice.
 
-Conductor remains the sole internal specialist router. Clear specialist ownership can use a lightweight direct route, but it never bypasses Conductor. Copilot Auto mode did not expose its provider/model identity, so no provider/model profile is admitted.
+The immutable release identity is canonical commit `72c2884a66bb0e0d0ff1e070e7cc1feccd968e35`, tree `e4072cff4de83efa1c1d2d495aa5c186a2469db4`, lightweight tag `v1.11.0`, and GitHub Release `387061978`.
 
-### v1.11.0 candidate
-
-**v1.11.0: Adaptive Assurance and Governance Hardening** is prepared and currently in governed qualification. It packages the complete canonical post-v1.10.0 change set through AQ14, including AQ1–AQ14 Adaptive Assurance, PRAI post-run assurance, Covenant cross-governance synthesis, Protected Governance Escalation, human-only whitelist authority, tree-attested promotion assurance, and the AQ7 tenant-administration parity reference slice.
-
-AQ15 is not a defined or registered phase. AR-3 through AR-9 remain deferred until v1.11.0 is published and reconciled. The candidate does not grant provider, telemetry, production, deployment, whitelist, protected-policy, or CritiQual CUD10 authority.
+AQ15 remains unregistered. AR-3 through AR-9 remain separate post-v1.11 work and are not authorized by publication. The release does not grant provider, telemetry, production, deployment, whitelist, protected-policy, or CritiQual CUD10 authority.
 
 See:
 
 - [Changelog](CHANGELOG.md)
-- [Published v1.10.0 reference](docs/reference/releases/v1.10.0.md)
-- [v1.11.0 candidate](docs/releases/v1.11.0-adaptive-assurance-governance-release-candidate.md)
+- [Published v1.11.0 reference](docs/reference/releases/v1.11.0.md)
+- [Preserved v1.11.0 candidate qualification record](docs/releases/v1.11.0-adaptive-assurance-governance-release-candidate.md)
 - [v1.11.0 readiness evidence](docs/validation/V1_11_0_RELEASE_READINESS_EVIDENCE.md)
 - [Maturity](docs/MATURITY.md)
 - [Validation documentation](docs/setup/VALIDATION.md)

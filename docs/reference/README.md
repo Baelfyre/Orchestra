@@ -23,7 +23,7 @@ Use this reference layer to choose a starting point. Follow the linked source do
 
 ## Current release
 
-The current public release is [Orchestra v1.10.0](releases/v1.10.0.md). Its exact publication identity is `v1.10.0` at commit `756a358f96363f0c377b049adcd87b1991d5aef6` with tree `42c0c8929c4dcfa5b17ff2feb293710d2468ca51`.
+The current public release is [Orchestra v1.11.0](releases/v1.11.0.md). Its exact publication identity is lightweight tag `v1.11.0` at commit `72c2884a66bb0e0d0ff1e070e7cc1feccd968e35` with tree `e4072cff4de83efa1c1d2d495aa5c186a2469db4` and immutable GitHub Release `387061978`.
 
 ## Existing detailed maps
 

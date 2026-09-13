@@ -1,5 +1,18 @@
 # Roadmap
 
+## v1.11.0 Adaptive Assurance and Governance Hardening - Published Verified
+
+The v1.11.0 publication completes the governed release line through AQ14. Lightweight tag `v1.11.0` resolves to signed canonical release commit `72c2884a66bb0e0d0ff1e070e7cc1feccd968e35`, tree `e4072cff4de83efa1c1d2d495aa5c186a2469db4`, and immutable GitHub Release `387061978`.
+
+- [x] Complete AQ1-AQ14 Adaptive Assurance without converting assurance evidence into execution or transition authority.
+- [x] Canonicalize PRAI post-run assurance and Covenant cross-governance synthesis.
+- [x] Enforce Protected Governance Escalation and human-only whitelist mutation authority.
+- [x] Add tree-attested promotion assurance and deterministic exact-set release-packaging classification.
+- [x] Include the bounded AQ7 tenant-administration parity reference slice.
+- [x] Complete exact-head source qualification, signed identical-tree materialization, canonical promotion, post-merge verification, tag creation, GitHub Release publication, and independent readback.
+- [x] Preserve AQ15 as unregistered and keep AR-3 through AR-9 outside release authority.
+- [ ] Post-v1.11 documentation normalization is a separate bounded maintenance lane and does not move the immutable v1.11.0 release identity.
+
 ## v1.10.0 Universal Adaptive Integration and Conductor Routing - Published
 
 The v1.10.0 publication is an additive minor release from the post-v1.9.0 change set. UAI-0 through UAI-10 are canonically verified, and maintainer evidence promotes GitHub Copilot `/conductor` to `SUPPORTED_VERIFIED` without admitting an Auto-mode provider/model identity. The exact published commit is `756a358f96363f0c377b049adcd87b1991d5aef6`, tree `42c0c8929c4dcfa5b17ff2feb293710d2468ca51`, tag `v1.10.0`, and GitHub Release `383668751`.

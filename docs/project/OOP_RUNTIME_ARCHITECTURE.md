@@ -3,7 +3,7 @@
 This document describes `orchestra_runtime/` as the reusable runtime core for Orchestra.
 
 Historical implementation baseline: `release/v1.0.0-portable-runtime`
-Current public release line: `v1.10.0`
+Current public release line: `v1.11.0` at immutable release commit `72c2884a66bb0e0d0ff1e070e7cc1feccd968e35` / tree `e4072cff4de83efa1c1d2d495aa5c186a2469db4`; later post-release documentation or governance commits on `main` do not move that release identity.
 
 ## Why this exists
 

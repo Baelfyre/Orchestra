@@ -3,9 +3,9 @@
 - **Canonical Repo:** `Baelfyre/Orchestra`
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
-- **Current Public Release:** `v1.9.0`
-- **Release-Candidate Metadata:** `1.10.0` (`PREPARED_NOT_PUBLISHED`)
-- **Target Release:** `v1.10.0`
+- **Current Public Release:** `v1.11.0`
+- **Release-Candidate Metadata:** `1.11.0` (`PUBLISHED_VERIFIED`)
+- **Target Release:** `NONE_ACTIVE_POST_V1_11_RECONCILIATION`
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.3.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.4.0 Release State:** `PUBLISHED_VERIFIED`
@@ -25,15 +25,21 @@
 - **v1.8.0 Tag Ref:** lightweight `commit` ref targeting the exact release commit
 - **v1.8.0 GitHub Release:** id `RE_kwDOS_4UtM4WyusI`, immutable, non-draft, non-prerelease, independently verified latest
 - **v1.8.0 Post-Publication Verification:** PASS
-- **Control Plane State:** `V1_9_0_CURRENT`
+- **Control Plane State:** `V1_11_0_PUBLISHED`
 - **MCP State:** `PUBLISHED_V1_6_STABLE_RETAINED_V1_7`
 - **Policy Activation:** `NOT_PERFORMED`
 
-## v1.10.0 Universal Adaptive Integration and Conductor Routing Candidate
+## v1.11.0 Adaptive Assurance and Governance Hardening Publication Continuity
 
-The v1.10.0 candidate is prepared from the post-v1.9.0 additive UAI and Conductor routing work. UAI-0 through UAI-10 are canonically verified, and the maintainer-run GitHub Copilot `/conductor` promotion retest passed. Copilot ran in Auto mode; the underlying provider/model remains unresolved and no provider/model profile is admitted.
+Orchestra `v1.11.0` is the current `PUBLISHED_VERIFIED` release. Lightweight tag `v1.11.0` resolves directly to signed canonical release commit `72c2884a66bb0e0d0ff1e070e7cc1feccd968e35` with tree `e4072cff4de83efa1c1d2d495aa5c186a2469db4` and immutable GitHub Release `387061978`.
 
-All 11 package/version surfaces and the host-update contract are aligned to `1.10.0`. Conductor remains the sole internal specialist router, with clear ownership permitting only a direct single-specialist fast route. No automatic provider routing/fallback, learned routing promotion, concurrency widening, AR-3, AR-4, deployment, tag, or GitHub Release publication is included. The exact post-merge candidate identity is recorded in the Padayon qualification report.
+The release packages AQ1-AQ14 Adaptive Assurance, PRAI, Covenant, Protected Governance Escalation, human-only whitelist authority, tree-attested promotion assurance, deterministic release-packaging scope, and the AQ7 tenant-administration parity reference slice. AQ15 remains unregistered. AR-3 through AR-9 remain separately governed post-v1.11 work.
+
+Post-release `main` includes the canonical exact-set documentation-normalization policy at `fdc34793330cb87d5dc3eecb661c4ed321c4617d`. That maintenance state does not move the immutable v1.11.0 release identity.
+
+## v1.10.0 Universal Adaptive Integration Publication Continuity
+
+The prior `v1.10.0` release remains immutable historical publication evidence at commit `756a358f96363f0c377b049adcd87b1991d5aef6`, tree `42c0c8929c4dcfa5b17ff2feb293710d2468ca51`, tag `v1.10.0`, and GitHub Release `383668751`.
 
 ## v1.9.0 UI Execution Fidelity Publication Continuity
 

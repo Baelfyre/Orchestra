@@ -5,10 +5,10 @@
 - **Canonical Branch:** `main`
 - **Base Branch:** `main`
 - **Stable Continuation Branch:** `main`
-- **Current Public Release:** `v1.10.0`
-- **Release Status:** `v1.10.0 PUBLISHED_VERIFIED`
-- **Target Release:** `v1.11.0`
-- **Release-Candidate Metadata:** `1.11.0` (`PREPARED_NOT_PUBLISHED`)
+- **Current Public Release:** `v1.11.0`
+- **Release Status:** `v1.11.0 PUBLISHED_VERIFIED`
+- **Target Release:** `NONE_ACTIVE_POST_V1_11_RECONCILIATION`
+- **Release-Candidate Metadata:** `1.11.0` (`PUBLISHED_VERIFIED`)
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.3.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.4.0 Release State:** `PUBLISHED_VERIFIED`
@@ -30,17 +30,19 @@
 - **v1.8.0 Tag Ref:** lightweight `commit` ref targeting the exact release commit
 - **v1.8.0 GitHub Release:** id `RE_kwDOS_4UtM4WyusI`, immutable, non-draft, non-prerelease, independently verified latest
 - **v1.8.0 Post-Publication Verification:** PASS
-- **Control Plane State:** `V1_11_0_CANDIDATE`
+- **Control Plane State:** `V1_11_0_PUBLISHED`
 - **MCP State:** `PUBLISHED_V1_6_STABLE_RETAINED_V1_7`
 - **Policy Activation State:** `NOT_PERFORMED`
 
-## v1.11.0 Adaptive Assurance and Governance Hardening Candidate
+## v1.11.0 Adaptive Assurance and Governance Hardening Publication
 
-The v1.11.0 candidate freezes the complete post-v1.10.0 delta: 30 canonical commits after release commit `756a358f96363f0c377b049adcd87b1991d5aef6` through AQ14 canonical `8c75fb53cbcdc5f05a74f8377f097c336e5ccce6`. The release centers the full AQ1-AQ14 assurance stack, PRAI post-run assurance, Covenant cross-governance synthesis, Protected Governance Escalation, human-only whitelist authority, and tree-attested promotion assurance. AQ7 also contributes the bounded tenant-administration domain/application/persistence/HTTP adapter-parity reference slice.
+Orchestra `v1.11.0` is `PUBLISHED_VERIFIED`. Lightweight tag `v1.11.0` resolves directly to exact signed canonical release commit `72c2884a66bb0e0d0ff1e070e7cc1feccd968e35` with tree `e4072cff4de83efa1c1d2d495aa5c186a2469db4`. Immutable GitHub Release `387061978` is non-draft and non-prerelease.
 
-All canonical package/version surfaces and the host-update contract are aligned to `1.11.0`. The current public release remains immutable `v1.10.0` until publication. AQ15 is unregistered and not included. AR-3 through AR-9 are intentionally deferred until after v1.11.0 publication and Padayon reconciliation.
+The release packages the governed post-v1.10.0 development line through AQ14, including AQ1-AQ14 Adaptive Assurance, PRAI post-run assurance, Covenant cross-governance synthesis, Protected Governance Escalation, human-only whitelist authority, tree-attested promotion assurance, deterministic release-packaging classification, and the AQ7 tenant-administration domain/application/persistence/HTTP-shaped adapter parity reference slice.
 
-The candidate is `PREPARED_NOT_PUBLISHED`. The maintainer has explicitly authorized v1.11.0 publication, but tag and GitHub Release creation remain downstream of exact-head source qualification, signed identical-tree materialization, canonical promotion, and post-merge verification.
+AQ15 remains unregistered and outside the release. AR-3 through AR-9 remain separate post-v1.11 work and receive no authority from publication.
+
+Post-release `main` subsequently advanced to the canonical documentation-normalization policy at `fdc34793330cb87d5dc3eecb661c4ed321c4617d`. That post-release governance/documentation state does not move or redefine the immutable v1.11.0 tag, release commit, release tree, or GitHub Release identity.
 
 ## v1.10.0 Universal Adaptive Integration and Conductor Routing Publication
 

@@ -1,8 +1,17 @@
 # Orchestra Project Maturity
 
-This document classifies Orchestra's published v1.10.0 surfaces and preserved historical qualification evidence. It distinguishes implemented deterministic controls from bounded/advisory capabilities and from planned work so compatibility or test success is not mistaken for authority or production maturity.
+This document classifies Orchestra's published v1.11.0 surfaces and preserved historical qualification evidence. It distinguishes implemented deterministic controls from bounded/advisory capabilities and from planned work so compatibility or test success is not mistaken for authority or production maturity.
 
-## Current v1.10.0 publication
+## Current v1.11.0 publication
+
+- **Adaptive Assurance**: AQ1 through AQ14 are included in the published v1.11.0 line with evidence-only/non-authorizing semantics preserved.
+- **PRAI and Covenant**: post-run assurance and cross-governance synthesis are included without creating transition or protected-policy authority.
+- **Protected governance**: escalation remains fail-closed, whitelist mutation remains human-only, and tree-attested promotion evidence remains identity-bound.
+- **Release packaging**: deterministic exact-set release-packaging classification is published without lowering historical assurance thresholds.
+- **Publication identity**: lightweight tag `v1.11.0` and GitHub Release `387061978` resolve to signed canonical commit `72c2884a66bb0e0d0ff1e070e7cc1feccd968e35`, tree `e4072cff4de83efa1c1d2d495aa5c186a2469db4`.
+- **Publication boundary**: AQ15 is unregistered; AR-3 through AR-9, provider/model activation, telemetry, production, deployment, whitelist mutation, protected-policy mutation, and CritiQual CUD10 are not authorized by publication.
+
+## Prior v1.10.0 publication
 
 - **Universal Adaptive Integration**: UAI-0 through UAI-10 are canonically verified within the candidate scope. Host/transport capability remains separate from provider/model eligibility and Conductor/AWF specialist routing.
 - **GitHub Copilot Conductor**: `SUPPORTED_VERIFIED` from the maintainer live retest. Copilot Auto mode did not expose the underlying provider/model, so that identity remains unresolved and unadmitted.
