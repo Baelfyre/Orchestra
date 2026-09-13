@@ -161,9 +161,9 @@ Murmurs changes presentation only. It does not alter authority, governance, vali
 - `../machine/release-evidence/`: structured release evidence.
 - [Decision Log](../DECISION_LOG.md): architectural and governance decisions.
 
-The current public release is immutable `v1.10.0`, tagged at canonical commit `756a358f96363f0c377b049adcd87b1991d5aef6` with tree `42c0c8929c4dcfa5b17ff2feb293710d2468ca51` and GitHub Release `383668751`. Its exact-head qualification, canonical merge, tag, and release identity were independently verified.
+The current public release is immutable `v1.11.0`, tagged at canonical commit `72c2884a66bb0e0d0ff1e070e7cc1feccd968e35` with tree `e4072cff4de83efa1c1d2d495aa5c186a2469db4` and GitHub Release `387061978`. Its exact-head qualification, signed identical-tree materialization, canonical promotion, tag, release identity, and post-merge validation were independently verified.
 
-The published [v1.10.0 human reference](reference/releases/v1.10.0.md) is separate from the preserved [candidate qualification record](releases/v1.10.0-universal-adaptive-integration-release-candidate.md) and [release-readiness evidence](validation/V1_10_0_RELEASE_READINESS_EVIDENCE.md). The candidate evidence remains revision-bound historical evidence.
+The published [v1.11.0 human reference](reference/releases/v1.11.0.md) is separate from the preserved [v1.11.0 candidate qualification record](releases/v1.11.0-adaptive-assurance-governance-release-candidate.md) and [release-readiness evidence](validation/V1_11_0_RELEASE_READINESS_EVIDENCE.md). Candidate/readiness evidence remains revision-bound historical evidence. The prior [v1.10.0 published reference](reference/releases/v1.10.0.md) remains immutable historical release documentation.
 
 ## Developer extension path
 

@@ -1,4 +1,4 @@
-## v1.11.0 Adaptive Assurance and Governance Hardening - release candidate - prepared
+## v1.11.0 Adaptive Assurance and Governance Hardening - published verified
 
 - Packages all 30 canonical commits after the immutable v1.10.0 release commit `756a358f96363f0c377b049adcd87b1991d5aef6` through AQ14 canonical `8c75fb53cbcdc5f05a74f8377f097c336e5ccce6`.
 - Delivers the complete ADAPT-QA AQ1-AQ14 assurance sequence: normative doctrine, risk profiling, specialist assurance contracts, manifests/receipts, repository QA compliance, gate-coverage truthfulness, runtime/adapter parity, high-risk assurance packs, deep assurance, defect-escape RCA, remediation-effectiveness pilot, adversarial self-test, staged non-production evaluation, and final effectiveness qualification.
@@ -7,7 +7,7 @@
 - Preserves evidence-only/non-authorizing semantics: assurance PASS does not grant provider, telemetry, production, deployment, policy, whitelist, AQ15, or CritiQual CUD10 authority.
 - Keeps AQ15 unregistered and excludes AR-3 through AR-9 implementation from this release; architecture refoundation resumes only after v1.11.0 publication and reconciliation.
 - Aligns all canonical package/version surfaces and the host-update contract to `1.11.0`.
-- Candidate status is `PREPARED_NOT_PUBLISHED`; publication is separately authorized by the maintainer and occurs only after governed exact-head qualification and signed canonical promotion.
+- Publication status is `PUBLISHED_VERIFIED`. Lightweight tag `v1.11.0` resolves directly to canonical release commit `72c2884a66bb0e0d0ff1e070e7cc1feccd968e35`, tree `e4072cff4de83efa1c1d2d495aa5c186a2469db4`, and immutable GitHub Release `387061978`. Historical candidate/readiness evidence remains preserved as revision-bound qualification evidence.
 
 ## Unreleased governance policy: post-v1.11 documentation-normalization assurance scope
 
