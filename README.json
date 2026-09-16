@@ -39,10 +39,37 @@
     }
   },
   "purpose": {
-    "summary": "Portable orchestration runtime for structured AI-assisted software development.",
+    "summary": "Governed orchestration for AI-assisted software development.",
     "runtime_role": "Routes, sequences, constrains, validates, records, and coordinates specialist AI-assisted development work without treating tool access, routing, governance success, validation success, or mergeability as authority.",
     "not_an_ai_model": true,
-    "core_trust_boundary": "Permission and execution authority are explicit bounded inputs. Routing, host capability, governance disposition, validation evidence, compatibility certification, presentation mode, and GitHub state cannot independently grant or expand authority."
+    "core_trust_boundary": "Permission and execution authority are explicit bounded inputs. Routing, host capability, governance disposition, validation evidence, compatibility certification, presentation mode, and GitHub state cannot independently grant or expand authority.",
+    "user_onboarding": {
+      "default_entrypoint": "@Orchestra",
+      "default_behavior": "Users describe the outcome and important authority limits; Conductor chooses the smallest useful specialist route, specialists perform bounded work, Orchestra validates the result, and protected next steps stop for human authority when required.",
+      "specialist_selection": "AUTOMATIC_BY_CONDUCTOR_BY_DEFAULT",
+      "recommended_prompt_shape": [
+        "Describe the result you want.",
+        "State important limits or permissions.",
+        "Let Orchestra determine the workflow."
+      ],
+      "workflow": [
+        "USER_DESCRIBES_TASK",
+        "ORCHESTRA_INTERPRETS_GOAL_SCOPE_AND_AUTHORITY",
+        "CONDUCTOR_SELECTS_SMALLEST_USEFUL_ROUTE",
+        "SPECIALISTS_PERFORM_BOUNDED_WORK",
+        "ORCHESTRA_VALIDATES_RESULT",
+        "HUMAN_GATE_IF_REQUIRED",
+        "RESULT_EVIDENCE_AND_NEXT_ACTION"
+      ],
+      "advanced_terms_required_for_normal_use": false,
+      "advanced_terms": {
+        "PRAI": "Post-Run Assurance Invariant. Internal assurance that checks completed work and evidence before certain transitions are accepted.",
+        "ADAPT_QA": "Adaptive assurance and quality program. AQ phases are engineering and validation stages, not normal user commands.",
+        "ARBITER": "Workflow continuity, validation-state, and governed-transition specialist.",
+        "CONDUCTOR": "Primary routing and coordination layer. New users normally start with @Orchestra and let Conductor choose the route.",
+        "COVENANT": "Internal cross-governance synthesis that reconciles independent governance evidence without independently granting authority."
+      }
+    }
   },
   "capabilities": {
     "adapt_qa_phase_separation_policy": {
