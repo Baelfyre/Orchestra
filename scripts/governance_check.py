@@ -1,3 +1,5 @@
+# @codebase_provenance_JEO
+# @codebase_rights_JEO
 import argparse
 import fnmatch
 import json
@@ -291,6 +293,22 @@ def get_memory_path_references(line):
     return list(dict.fromkeys(references))
 
 
+EXPLICIT_HISTORICAL_GIT_REF_CONTEXT_PATTERN = re.compile(
+    r"^\s*(?:[-*]\s*)?\*{0,2}Historical\s+(?:Git\s+)?(?:branch(?:\s+reference)?|ref(?:erence)?)(?:\s*/\s*(?:branch|ref(?:erence)?))?\*{0,2}\s*[:=]\s*(.*)$",
+    re.IGNORECASE,
+)
+
+
+def get_explicit_historical_git_references(line):
+    match = EXPLICIT_HISTORICAL_GIT_REF_CONTEXT_PATTERN.match(line)
+    if not match:
+        return set()
+    return {
+        reference.strip().strip("`").replace("\\", "/").rstrip("/")
+        for reference in get_memory_path_references(match.group(1))
+    }
+
+
 def get_known_git_branches(repo_root):
     known = set()
 
@@ -343,8 +361,11 @@ def run_repo_memory_path_check(repo_root, counters):
             continue
 
         for line_number, line in enumerate(memory_path.read_text(encoding="utf-8").splitlines(), 1):
+            historical_git_references = get_explicit_historical_git_references(line)
             for reference in get_memory_path_references(line):
                 normalized = reference.strip().strip("`").replace("\\", "/").rstrip("/")
+                if normalized in historical_git_references:
+                    continue
                 if known_branches and normalized in known_branches:
                     continue
                 if not is_repo_relative_memory_path(normalized):

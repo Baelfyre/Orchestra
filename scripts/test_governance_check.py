@@ -372,6 +372,79 @@ def test_active_branch_memory_path_exception():
             gc.get_current_git_branch = original_get_current
 
 
+def test_explicit_historical_git_references_without_current_refs():
+    historical_branch = "docs/archive/retired-governance"
+    historical_ref = "scripts/archive/retired-validator"
+    memory_content = (
+        f"- Historical branch: `{historical_branch}`\n"
+        f"- Historical Git reference: `{historical_ref}`\n"
+        "- Missing documentation path: `docs/governance/DOES_NOT_EXIST.md`\n"
+        "- Missing validation script: `scripts/does_not_exist.py`\n"
+    )
+    original_path = gc.Path
+    original_get_current = gc.get_current_git_branch
+    original_get_known = gc.get_known_git_branches
+    original_record_failure = gc.record_failure
+
+    class MemoryPath:
+        def __init__(self, value):
+            self.value = str(value)
+
+        def __truediv__(self, part):
+            return MemoryPath(f"{self.value}/{part}")
+
+        @property
+        def suffix(self):
+            return Path(self.value).suffix
+
+        def is_file(self):
+            return self.value.endswith("/SESSION_HANDOFF.md")
+
+        def read_text(self, encoding):
+            return memory_content
+
+        def exists(self):
+            return False
+
+    recorded_failures = []
+
+    def record_failure_and_track(counters, path, reason, remediation):
+        recorded_failures.append(path)
+        original_record_failure(counters, path, reason, remediation)
+
+    try:
+        gc.Path = MemoryPath
+        gc.get_known_git_branches = lambda root: {gc.get_current_git_branch(root)} - {None}
+        gc.record_failure = record_failure_and_track
+
+        for detached_head in (False, True):
+            current_branch = None if detached_head else "main"
+            gc.get_current_git_branch = lambda root, branch=current_branch: branch
+            if detached_head:
+                assert_equal("detached HEAD has no current branch", gc.get_current_git_branch("repo"), None)
+            known_branches = gc.get_known_git_branches("repo")
+            assert_equal(f"historical branch absent from refs with detached_head={detached_head}", historical_branch in known_branches, False)
+            assert_equal(f"historical ref absent from refs with detached_head={detached_head}", historical_ref in known_branches, False)
+
+            recorded_failures.clear()
+            counters = {"warnings": 0, "errors": 0}
+            gc.run_repo_memory_path_check("repo", counters)
+            assert_equal(f"missing docs and scripts remain errors with detached_head={detached_head}", counters["errors"], 2)
+            assert_equal(
+                f"only genuine missing paths fail with detached_head={detached_head}",
+                recorded_failures,
+                [
+                    "SESSION_HANDOFF.md:3: docs/governance/DOES_NOT_EXIST.md",
+                    "SESSION_HANDOFF.md:4: scripts/does_not_exist.py",
+                ],
+            )
+    finally:
+        gc.Path = original_path
+        gc.get_current_git_branch = original_get_current
+        gc.get_known_git_branches = original_get_known
+        gc.record_failure = original_record_failure
+
+
 def test_known_git_branches_detached_head_and_ci():
     with tempfile.TemporaryDirectory(prefix="governance-detached-test-") as temp_dir:
         repo_root = Path(temp_dir)
@@ -572,6 +645,7 @@ def main():
     test_codex_parity_normalizes_only_approved_reference_depths()
     test_repo_memory_path_check()
     test_active_branch_memory_path_exception()
+    test_explicit_historical_git_references_without_current_refs()
     test_known_git_branches_detached_head_and_ci()
     test_isolated_github_head_ref_and_ref_name_rejection()
     test_git_enumeration_failure_fail_closed()

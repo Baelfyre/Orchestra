@@ -1,3 +1,7 @@
+## Unreleased governance validator historical branch references
+
+- Treat explicitly labeled historical Git branches and refs as references before checking repo-local memory paths, including when the ref is absent or HEAD is detached; keep genuine missing docs and scripts paths failing.
+
 ## v1.11.0 Adaptive Assurance and Governance Hardening - published verified
 
 - Packages all 30 canonical commits after the immutable v1.10.0 release commit `756a358f96363f0c377b049adcd87b1991d5aef6` through AQ14 canonical `8c75fb53cbcdc5f05a74f8377f097c336e5ccce6`.
