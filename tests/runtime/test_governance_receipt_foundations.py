@@ -654,3 +654,131 @@ def test_receipt_verifier_resolver_consumption_clock_and_authorizer_failure_bran
     ).authorize(
         SECURITY_SENSITIVE_EXECUTION, "run-execution",
     ).reason_code == "trusted_receipt_context_mismatch"
+
+def test_remaining_review_result_validation_branches() -> None:
+    from orchestra_runtime.domain.execution.operation_contracts import ReadOnlySpecialistExecutionRequest
+
+    request = ReadOnlySpecialistExecutionRequest(
+        "review-coverage",
+        "a" * 64,
+        "b" * 64,
+        "run-coverage",
+        "codex",
+        "security-check",
+        "cipher",
+        DEFENSIVE_SECURITY_REVIEW.operation_id,
+        "review",
+    )
+    review = SpecialistReviewResult.create(
+        request,
+        SpecialistReviewStatus.PASS,
+        "No finding.",
+        ("evidence:coverage",),
+    )
+
+    for field in ("request_digest", "workspace_snapshot_digest", "review_digest"):
+        with pytest.raises(ValueError, match="SHA-256"):
+            replace(review, **{field: "not-a-digest"})
+
+    with pytest.raises(ValueError, match="only a defensive review"):
+        replace(review, operation_id=SECURITY_SENSITIVE_EXECUTION.operation_id)
+    with pytest.raises(ValueError, match="requires evidence"):
+        replace(review, evidence_refs=())
+    with pytest.raises(ValueError, match="does not match result"):
+        replace(review, review_digest="0" * 64)
+    with pytest.raises(ValueError, match="review_id does not match"):
+        replace(review, review_id="specialist-review.wrong")
+
+
+def test_remaining_receipt_helper_and_verification_branches() -> None:
+    from orchestra_runtime.domain.governance.receipts import (
+        AuthorizationDecision,
+        GovernanceReceiptVerification,
+        ResolvedGovernanceReceipt,
+        _SCOPE,
+        _items,
+        _text,
+        _time,
+    )
+
+    with pytest.raises(ValueError, match="non-empty string"):
+        _text(123, "value")
+    with pytest.raises(ValueError, match="non-empty string"):
+        _text("   ", "value")
+    with pytest.raises(TypeError, match="must be an array"):
+        _items("scope", "scope", _SCOPE)
+    with pytest.raises(ValueError, match="non-empty and unique"):
+        _items(("same", "same"), "scope", _SCOPE)
+    with pytest.raises(ValueError, match="ISO-8601"):
+        _time("not-a-time", "issued_at")
+    with pytest.raises(ValueError, match="timezone"):
+        _time("2026-10-07T10:00:00", "issued_at")
+
+    with pytest.raises(ValueError, match="owner/repository"):
+        AuthorizationDecision(
+            "decision-coverage",
+            False,
+            SECURITY_SENSITIVE_EXECUTION.operation_id,
+            "run-execution",
+            "denied",
+            repository="bad-repository",
+        )
+
+    with pytest.raises(ValueError, match="canonical"):
+        GovernanceReceiptAuditEvent(
+            REFERENCE,
+            SECURITY_SENSITIVE_EXECUTION.operation_id,
+            "run-execution",
+            "baelfyre/orchestra",
+            HEAD,
+            TREE,
+            GovernanceValidationStatus.DENIED,
+            "denied",
+            receipt_id="bad receipt id",
+        )
+    with pytest.raises(ValueError, match="SHA"):
+        GovernanceReceiptAuditEvent(
+            REFERENCE,
+            SECURITY_SENSITIVE_EXECUTION.operation_id,
+            "run-execution",
+            "baelfyre/orchestra",
+            HEAD,
+            TREE,
+            GovernanceValidationStatus.DENIED,
+            "denied",
+            receipt_digest="bad",
+        )
+
+    successful = verify(make_store())
+    with pytest.raises(TypeError, match="AuthorizationDecision"):
+        GovernanceReceiptVerification(successful.validation, object())
+    with pytest.raises(ValueError, match="verified receipt identity"):
+        GovernanceReceiptVerification(
+            successful.validation,
+            replace(successful.authorization, receipt_digest="f" * 64),
+        )
+
+    malformed_resolved = make_store().resolved
+    assert isinstance(malformed_resolved, ResolvedGovernanceReceipt)
+    object.__setattr__(malformed_resolved, "receipt", object())
+    verifier = VerifyGovernanceReceipt(make_store(), clock=lambda: NOW)
+    assert verifier._validate(malformed_resolved, make_request()) == "malformed_receipt"
+
+    class ContextProvider:
+        def __init__(self, value) -> None:
+            self.value = value
+
+        def for_operation(self, operation_id: str, execution_context_id: str):
+            return self.value
+
+    non_request = AuthorizeGovernedOperation(
+        verifier,
+        ContextProvider((REFERENCE, object())),
+    ).authorize(SECURITY_SENSITIVE_EXECUTION, "run-execution")
+    assert non_request.reason_code == "trusted_receipt_context_mismatch"
+
+    wrong_execution_context = AuthorizeGovernedOperation(
+        verifier,
+        ContextProvider((REFERENCE, make_request(execution_context_id="run-other"))),
+    ).authorize(SECURITY_SENSITIVE_EXECUTION, "run-execution")
+    assert wrong_execution_context.reason_code == "trusted_receipt_context_mismatch"

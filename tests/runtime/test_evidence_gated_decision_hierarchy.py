@@ -326,3 +326,28 @@ def test_task_floor_and_unique_append_type_and_duplicate_branches() -> None:
     assert values == ["cipher"]
     _append_unique(values, "cloak")
     assert values == ["cipher", "cloak"]
+
+def test_terminal_reentry_and_single_candidate_parallel_branch_paths() -> None:
+    terminal_reentry = _plan(
+        _task(
+            risk_level="HIGH",
+            authority_domains=["SECURITY"],
+            reentry_specialists=["ponytail"],
+            implementation_required=True,
+        )
+    )
+    assert "ponytail" in terminal_reentry["workflow_profile"]["required_specialists"]
+
+    one_parallel_candidate = _plan(
+        _task(
+            risk_level="HIGH",
+            authority_domains=["SECURITY"],
+            implementation_required=True,
+            independent_subtasks=2,
+            parallelizable=True,
+        )
+    )
+    profile = one_parallel_candidate["workflow_profile"]
+    assert "MULTI_AGENT" in profile["patterns"]
+    assert profile["parallel_groups"] == []
+    assert profile["concurrency_mode"] == "SEQUENTIAL_MULTI_AGENT"
