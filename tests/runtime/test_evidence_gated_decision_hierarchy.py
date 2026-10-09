@@ -253,3 +253,77 @@ def test_jev_is_optional_and_advisory_only() -> None:
     assert contract["jev"]["absence_blocks_flow"] is False
     assert contract["jev"]["may_authorize_or_replace_review_or_reduce_risk"] is False
     assert contract["jev"]["may_mutate_candidate"] is False
+
+def test_assurance_union_rejects_malformed_floor_and_source_evidence() -> None:
+    malformed_cases = (
+        ([], None, TypeError),
+        ({"audit_depth": "UNKNOWN", "targeted_verification_required": False}, None, ValueError),
+        ({"audit_depth": "LIGHT", "targeted_verification_required": 1}, None, ValueError),
+        ({"audit_depth": "LIGHT", "targeted_verification_required": False}, [], TypeError),
+        ({"audit_depth": "LIGHT", "targeted_verification_required": False}, {1: {}}, ValueError),
+        (
+            {"audit_depth": "LIGHT", "targeted_verification_required": False},
+            {"AQ99": {"audit_depth": "LIGHT", "targeted_verification_required": False}},
+            ValueError,
+        ),
+        (
+            {"audit_depth": "LIGHT", "targeted_verification_required": False},
+            {"AQ2": {"audit_depth": "LIGHT"}},
+            ValueError,
+        ),
+        (
+            {"audit_depth": "LIGHT", "targeted_verification_required": False},
+            {"AQ2": {"audit_depth": "UNKNOWN", "targeted_verification_required": False}},
+            ValueError,
+        ),
+        (
+            {"audit_depth": "LIGHT", "targeted_verification_required": False},
+            {"AQ2": {"audit_depth": "LIGHT", "targeted_verification_required": 1}},
+            ValueError,
+        ),
+    )
+    for floor, sources, error in malformed_cases:
+        with pytest.raises(error):
+            _resolve_assurance_requirement_union(floor, sources)
+
+
+def test_candidate_binding_validation_and_matcher_fail_closed_branches() -> None:
+    invalid_identities = (
+        [],
+        {"repository": "Baelfyre/Orchestra", "candidate_sha": "a" * 40},
+        {"repository": 1, "candidate_sha": "a" * 40, "tree_sha": "b" * 40},
+        {"repository": "x" * 256, "candidate_sha": "a" * 40, "tree_sha": "b" * 40},
+        {"repository": "not-a-repository", "candidate_sha": "a" * 40, "tree_sha": "b" * 40},
+        {"repository": "Baelfyre/Orchestra", "candidate_sha": "bad", "tree_sha": "b" * 40},
+        {"repository": "Baelfyre/Orchestra", "candidate_sha": "a" * 40, "tree_sha": "bad"},
+    )
+    for identity in invalid_identities:
+        with pytest.raises((TypeError, ValueError)):
+            _build_candidate_freshness_binding(identity)
+
+    valid_identity = {
+        "repository": "Baelfyre/Orchestra",
+        "candidate_sha": "a" * 40,
+        "tree_sha": "b" * 40,
+    }
+    binding = _build_candidate_freshness_binding(valid_identity)
+
+    assert _candidate_binding_matches([], valid_identity) is False
+    assert _candidate_binding_matches({"state": "BOUND"}, valid_identity) is False
+    assert _candidate_binding_matches({**binding, "state": "UNBOUND"}, valid_identity) is False
+    assert _candidate_binding_matches({**binding, "may_authorize": True}, valid_identity) is False
+    assert _candidate_binding_matches(binding, {"repository": "bad"}) is False
+
+
+def test_task_floor_and_unique_append_type_and_duplicate_branches() -> None:
+    from orchestra_runtime.domain.adaptive.agentic_workflow import _append_unique
+
+    with pytest.raises(TypeError, match="TaskProfile"):
+        minimum_task_audit_depth(object())
+
+    values = ["cipher"]
+    _append_unique(values, "cipher")
+    assert values == ["cipher"]
+    _append_unique(values, "cloak")
+    assert values == ["cipher", "cloak"]
+

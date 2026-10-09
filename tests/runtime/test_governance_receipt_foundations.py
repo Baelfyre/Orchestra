@@ -329,3 +329,329 @@ def test_authorizer_uses_only_trusted_host_context_lookup() -> None:
     assert decision.reason_code == "trusted_receipt_context_unavailable"
     assert store.resolve_calls == 0
     assert store.consumed == set()
+
+def test_review_change_path_and_status_validation_branches() -> None:
+    from orchestra_runtime.application.ports.specialist_execution import (
+        ReviewChangeStatus,
+        SpecialistReviewChange,
+    )
+
+    invalid_paths = (
+        "",
+        "/absolute.py",
+        "C:/windows.py",
+        "src\\windows.py",
+        "src//double.py",
+        "src/./dot.py",
+        "src/../parent.py",
+        "src/\x00null.py",
+    )
+    for path in invalid_paths:
+        with pytest.raises(ValueError, match="normalized and relative"):
+            SpecialistReviewChange(path, ReviewChangeStatus.ADDED, current_content="new")
+
+    with pytest.raises(ValueError, match="previous_path"):
+        SpecialistReviewChange(
+            "src/new.py", ReviewChangeStatus.RENAMED,
+            previous_path="/src/old.py", base_content="old", current_content="new",
+        )
+    with pytest.raises(ValueError, match="distinct paths"):
+        SpecialistReviewChange(
+            "src/file.py", ReviewChangeStatus.RENAMED,
+            previous_path="src/file.py", base_content="old", current_content="new",
+        )
+    with pytest.raises(ValueError, match="content must be text"):
+        SpecialistReviewChange(
+            "src/file.py", ReviewChangeStatus.MODIFIED,
+            base_content=object(), current_content="new",
+        )
+    with pytest.raises(ValueError, match="only renamed"):
+        SpecialistReviewChange(
+            "src/file.py", ReviewChangeStatus.MODIFIED,
+            previous_path="src/old.py", base_content="old", current_content="new",
+        )
+    with pytest.raises(ValueError, match="only current content"):
+        SpecialistReviewChange(
+            "src/file.py", ReviewChangeStatus.ADDED,
+            base_content="old", current_content="new",
+        )
+    with pytest.raises(ValueError, match="base and current"):
+        SpecialistReviewChange(
+            "src/file.py", ReviewChangeStatus.MODIFIED,
+            base_content="old", current_content=None,
+        )
+    with pytest.raises(ValueError, match="only base content"):
+        SpecialistReviewChange(
+            "src/file.py", ReviewChangeStatus.DELETED,
+            base_content="old", current_content="new",
+        )
+    with pytest.raises(ValueError, match="before and after"):
+        SpecialistReviewChange(
+            "src/new.py", ReviewChangeStatus.RENAMED,
+            previous_path="src/old.py", base_content="old", current_content=None,
+        )
+
+
+def test_operation_contract_and_read_only_request_negative_branches() -> None:
+    from orchestra_runtime.domain.execution.operation_contracts import ReadOnlySpecialistExecutionRequest
+
+    with pytest.raises(ValueError, match="canonical"):
+        OperationContract(
+            "bad operation", OperationKind.SECURITY_SENSITIVE_EXECUTION,
+            SpecialistSideEffectClass.UNKNOWN, OperationAuthority.EXPLICIT_AUTHORIZATION_REQUIRED,
+            True, False, True,
+        )
+    with pytest.raises(TypeError, match="tuple"):
+        OperationContract(
+            "security-sensitive-test", OperationKind.SECURITY_SENSITIVE_EXECUTION,
+            SpecialistSideEffectClass.UNKNOWN, OperationAuthority.EXPLICIT_AUTHORIZATION_REQUIRED,
+            True, False, True, ["repository.read"],
+        )
+    with pytest.raises(ValueError, match="unique"):
+        OperationContract(
+            "security-sensitive-test", OperationKind.SECURITY_SENSITIVE_EXECUTION,
+            SpecialistSideEffectClass.UNKNOWN, OperationAuthority.EXPLICIT_AUTHORIZATION_REQUIRED,
+            True, False, True, ("repository.read", "repository.read"),
+        )
+    with pytest.raises(ValueError, match="read-only and non-authorizing"):
+        OperationContract(
+            "defensive-test", OperationKind.DEFENSIVE_SECURITY_REVIEW,
+            SpecialistSideEffectClass.NONE, OperationAuthority.REVIEW_ONLY,
+            False, False, False, (),
+        )
+    with pytest.raises(ValueError, match="read-only and non-authorizing"):
+        OperationContract(
+            "defensive-test", OperationKind.DEFENSIVE_SECURITY_REVIEW,
+            SpecialistSideEffectClass.NONE, OperationAuthority.REVIEW_ONLY,
+            False, False, False, ("repository.write",),
+        )
+    with pytest.raises(ValueError, match="verified governance authority"):
+        OperationContract(
+            "effectful-test", OperationKind.SECURITY_SENSITIVE_EXECUTION,
+            SpecialistSideEffectClass.FILE_MUTATION, OperationAuthority.EXPLICIT_AUTHORIZATION_REQUIRED,
+            False, False, True,
+        )
+    with pytest.raises(ValueError, match="non-empty string"):
+        operation_contract_for_route("", "cipher")
+    with pytest.raises(ValueError, match="non-empty string"):
+        operation_contract_for_route("cipher", "")
+
+    valid = {
+        "request_id": "review-request",
+        "request_digest": "d" * 64,
+        "workspace_snapshot_digest": "e" * 64,
+        "run_id": "run-1",
+        "adapter_name": "codex",
+        "command_name": "security-check",
+        "specialist": "cipher",
+        "operation_id": DEFENSIVE_SECURITY_REVIEW.operation_id,
+        "task_input": "review",
+    }
+    for field, value, message in (
+        ("request_digest", "not-a-digest", "SHA-256"),
+        ("workspace_snapshot_digest", "not-a-digest", "SHA-256"),
+        ("operation_id", SECURITY_SENSITIVE_EXECUTION.operation_id, "defensive-security-review"),
+        ("task_input", "   ", "non-empty string"),
+    ):
+        candidate = dict(valid)
+        candidate[field] = value
+        with pytest.raises(ValueError, match=message):
+            ReadOnlySpecialistExecutionRequest(**candidate)
+
+
+@pytest.mark.parametrize(
+    "overrides",
+    [
+        {"schema_version": "wrong"},
+        {"human_authority_id": "bad authority*"},
+        {"repository": "not-a-repository"},
+        {"candidate_base": "g" * 40},
+        {"protected_rule": "bad rule"},
+        {"allowed_operations": ()},
+        {"allowed_operations": ("cipher", "cipher")},
+        {"allowed_scope": ()},
+        {"allowed_scope": ("security:*",)},
+        {"evidence_references": ()},
+        {"evidence_references": ("bad*",)},
+        {"expires_at": "2026-10-07T09:00:00+00:00"},
+        {"issued_execution_context_id": "run-same", "execution_context_binding": "run-same"},
+        {"fresh_execution_context_required": False},
+        {"consumption_semantics": "MULTI_USE"},
+    ],
+)
+def test_governance_receipt_model_additional_fail_closed_branches(
+    overrides: dict[str, object],
+) -> None:
+    with pytest.raises((TypeError, ValueError)):
+        make_receipt(**overrides)
+
+
+def test_governance_receipt_from_dict_type_validation_branches() -> None:
+    with pytest.raises(ValueError, match="missing or unknown"):
+        GovernanceReceipt.from_dict([])
+
+    raw = make_receipt().to_dict()
+    raw["allowed_scope"] = "security:execute"
+    with pytest.raises(TypeError, match="must be arrays"):
+        GovernanceReceipt.from_dict(raw)
+
+    raw = make_receipt().to_dict()
+    raw["fresh_execution_context_required"] = 1
+    with pytest.raises(TypeError, match="must be boolean"):
+        GovernanceReceipt.from_dict(raw)
+
+    raw = make_receipt().to_dict()
+    raw["repository"] = 123
+    with pytest.raises(TypeError, match="scalar fields"):
+        GovernanceReceipt.from_dict(raw)
+
+
+def test_governance_receipt_support_models_fail_closed_on_invalid_types() -> None:
+    from orchestra_runtime.domain.governance.receipts import (
+        AuthorizationDecision,
+        GovernanceReceiptVerification,
+        ResolvedGovernanceReceipt,
+    )
+
+    with pytest.raises(TypeError, match="typed"):
+        ResolvedGovernanceReceipt(
+            object(),
+            ReceiptProvenance.CANONICAL_HUMAN_GOVERNANCE_STORE,
+            "0" * 64,
+        )
+    with pytest.raises(ValueError, match="owner/repository"):
+        make_request(repository="not-a-repository")
+    with pytest.raises(ValueError, match="SHA"):
+        make_request(candidate_head="z" * 40)
+    with pytest.raises(ValueError, match="canonical"):
+        make_request(execution_context_id="bad context")
+
+    with pytest.raises(TypeError, match="authorized must be boolean"):
+        AuthorizationDecision(
+            "decision-1", "yes", SECURITY_SENSITIVE_EXECUTION.operation_id,
+            "run-execution", "denied",
+        )
+    with pytest.raises(ValueError, match="authorization must retain"):
+        AuthorizationDecision(
+            "decision-1", True, SECURITY_SENSITIVE_EXECUTION.operation_id,
+            "run-execution", "verified",
+        )
+
+    with pytest.raises(ValueError, match="bounded"):
+        GovernanceReceiptAuditEvent(
+            "bad reference*", SECURITY_SENSITIVE_EXECUTION.operation_id,
+            "run-execution", "baelfyre/orchestra", HEAD, TREE,
+            GovernanceValidationStatus.DENIED, "denied",
+        )
+    with pytest.raises(ValueError, match="owner/repository"):
+        GovernanceReceiptAuditEvent(
+            REFERENCE, SECURITY_SENSITIVE_EXECUTION.operation_id,
+            "run-execution", "bad-repository", HEAD, TREE,
+            GovernanceValidationStatus.DENIED, "denied",
+        )
+
+    denied = AuthorizationDecision.denied(
+        SECURITY_SENSITIVE_EXECUTION.operation_id, "run-execution", "denied",
+    )
+    verified = GovernanceValidationResult(
+        GovernanceValidationStatus.VERIFIED, "verified",
+        "governance-receipt.937", "a" * 64,
+    )
+    with pytest.raises(ValueError, match="outcomes must agree"):
+        GovernanceReceiptVerification(verified, denied)
+    with pytest.raises(TypeError, match="GovernanceValidationResult"):
+        GovernanceReceiptVerification(object(), denied)
+
+
+def test_receipt_verifier_resolver_consumption_clock_and_authorizer_failure_branches() -> None:
+    from orchestra_runtime.domain.governance.receipts import ResolvedGovernanceReceipt
+
+    class ResolverFailureStore(MemoryReceiptStore):
+        def resolve(self, receipt_reference: str):
+            raise OSError("resolver unavailable")
+
+    class ConsumptionFailureStore(MemoryReceiptStore):
+        def consume_once(self, receipt_id: str, execution_context_id: str) -> bool:
+            raise OSError("consume unavailable")
+
+    with pytest.raises(TypeError, match="GovernanceReceiptStore"):
+        VerifyGovernanceReceipt(object())
+
+    result = VerifyGovernanceReceipt(
+        ResolverFailureStore(), clock=lambda: NOW,
+    ).execute(REFERENCE, make_request())
+    assert result.validation.reason_code == "receipt_resolver_failure"
+
+    result = VerifyGovernanceReceipt(
+        ConsumptionFailureStore(make_store().resolved), clock=lambda: NOW,
+    ).execute(REFERENCE, make_request())
+    assert result.validation.reason_code == "receipt_consumption_failure"
+
+    assert verify(make_store(), now=datetime(2026, 10, 7, 10, 30)).validation.reason_code == "invalid_verifier_clock"
+    assert verify(
+        make_store(), now=datetime(2026, 10, 7, 9, 59, tzinfo=timezone.utc),
+    ).validation.reason_code == "receipt_not_yet_valid"
+
+    malformed = make_receipt()
+    object.__setattr__(malformed, "issued_at", "not-a-time")
+    malformed_store = MemoryReceiptStore(
+        ResolvedGovernanceReceipt(
+            malformed,
+            ReceiptProvenance.CANONICAL_HUMAN_GOVERNANCE_STORE,
+            malformed.digest,
+        )
+    )
+    assert verify(malformed_store).validation.reason_code == "malformed_receipt_time"
+
+    forged = make_receipt()
+    object.__setattr__(forged, "human_authority_source", "MODEL_OUTPUT")
+    forged_store = MemoryReceiptStore(
+        ResolvedGovernanceReceipt(
+            forged,
+            ReceiptProvenance.CANONICAL_HUMAN_GOVERNANCE_STORE,
+            forged.digest,
+        )
+    )
+    assert verify(forged_store).validation.reason_code == "forged_authority_source"
+
+    verifier = VerifyGovernanceReceipt(make_store(), clock=lambda: NOW)
+    assert verifier._validate(object(), make_request()) == "malformed_receipt"
+
+    class ContextProvider:
+        def __init__(self, value=None, *, raises: bool = False) -> None:
+            self.value = value
+            self.raises = raises
+
+        def for_operation(self, operation_id: str, execution_context_id: str):
+            if self.raises:
+                raise OSError("context unavailable")
+            return self.value
+
+    with pytest.raises(TypeError, match="GovernanceReceiptContextProvider"):
+        AuthorizeGovernedOperation(verifier, object())
+
+    assert AuthorizeGovernedOperation(
+        verifier, ContextProvider(),
+    ).authorize(
+        DEFENSIVE_SECURITY_REVIEW, "run-execution",
+    ).reason_code == "receipt_not_required_for_operation"
+
+    assert AuthorizeGovernedOperation(
+        verifier, ContextProvider(raises=True),
+    ).authorize(
+        SECURITY_SENSITIVE_EXECUTION, "run-execution",
+    ).reason_code == "trusted_receipt_context_unavailable"
+
+    assert AuthorizeGovernedOperation(
+        verifier, ContextProvider(("only-one",)),
+    ).authorize(
+        SECURITY_SENSITIVE_EXECUTION, "run-execution",
+    ).reason_code == "trusted_receipt_context_unavailable"
+
+    assert AuthorizeGovernedOperation(
+        verifier,
+        ContextProvider((REFERENCE, make_request(operation_id="different-operation"))),
+    ).authorize(
+        SECURITY_SENSITIVE_EXECUTION, "run-execution",
+    ).reason_code == "trusted_receipt_context_mismatch"
+
