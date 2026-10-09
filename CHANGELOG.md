@@ -1,3 +1,9 @@
+## Unreleased governance policy: issue #937 F1/F2 historical assurance scope separation
+
+- Registers the exact 47-path PR #939 F1/F2 integration inventory as human-approved for historical AQ5/AQ7/PRAI scope separation.
+- Keeps partial, mixed, superset, unknown, duplicate, and F3-extended scopes fail-closed and applicable to historical assurance checks.
+- Preserves all current validation thresholds, including runtime branch coverage, and grants no merge, F3, TypeSafe/provider, release, deployment, production, or protected-policy authority.
+
 ## Unreleased governance validator historical branch references
 
 - Treat explicitly labeled historical Git branches and refs as references before checking repo-local memory paths, including when the ref is absent or HEAD is detached; keep genuine missing docs and scripts paths failing.

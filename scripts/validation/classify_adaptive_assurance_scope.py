@@ -19,6 +19,7 @@ NOT_APPLICABLE = "NOT_APPLICABLE"
 
 ROOT = Path(__file__).resolve().parents[2]
 ADAPT_QA_PHASE_SEPARATION_REGISTRY_PATH = ROOT / "machine/governance/adapt-qa-phase-separation.v1.json"
+HISTORICAL_ASSURANCE_SCOPE_EXCEPTIONS_REGISTRY_PATH = ROOT / "machine/governance/historical-assurance-scope-exceptions.v1.json"
 
 COMMON_TRIGGER_PATHS = frozenset({"CHANGELOG.md", "README.json"})
 
@@ -238,6 +239,7 @@ GOVERNANCE_EXACT_PATHS = frozenset(
         "machine/schemas/governance-policy.schema.json",
         "machine/governance/adapt-qa-phase-separation.v1.json",
         "machine/schemas/adapt-qa-phase-separation.v1.schema.json",
+        "machine/schemas/historical-assurance-scope-exceptions.v1.schema.json",
         "scripts/governance_check.py",
         "scripts/test_governance_check.py",
         "scripts/validation/classify_adaptive_assurance_scope.py",
@@ -359,6 +361,35 @@ def load_registered_phase_scopes() -> dict[str, tuple[frozenset[str], frozenset[
     return result
 
 
+def load_registered_exception_scopes() -> dict[str, tuple[frozenset[str], frozenset[str]]]:
+    try:
+        raw = json.loads(HISTORICAL_ASSURANCE_SCOPE_EXCEPTIONS_REGISTRY_PATH.read_text(encoding="utf-8"))
+    except (OSError, JSONDecodeError) as exc:
+        raise ValueError(f"invalid historical assurance scope exception registry: {exc}") from exc
+    if not isinstance(raw, dict) or raw.get("schema_version") != "orchestra.historical-assurance-scope-exceptions.v1":
+        raise ValueError("invalid historical assurance scope exception registry schema_version")
+    if raw.get("authority_class") != "HUMAN_POLICY":
+        raise ValueError("historical assurance scope exception registry must be HUMAN_POLICY")
+    scopes = raw.get("scopes")
+    if not isinstance(scopes, list) or not scopes:
+        raise ValueError("historical assurance scope exception registry requires scopes")
+    result: dict[str, tuple[frozenset[str], frozenset[str]]] = {}
+    for entry in scopes:
+        if not isinstance(entry, dict):
+            raise ValueError("historical assurance scope entry must be an object")
+        scope_id = entry.get("scope_id")
+        if not isinstance(scope_id, str) or not scope_id or scope_id in result:
+            raise ValueError("historical assurance scope_id must be a unique non-empty string")
+        if entry.get("status") != "HUMAN_APPROVED_REGISTERED":
+            raise ValueError(f"{scope_id} must be HUMAN_APPROVED_REGISTERED")
+        exact_paths = frozenset(normalize_paths(entry.get("exact_paths", ())))
+        anchors = frozenset(normalize_paths(entry.get("anchor_paths", ())))
+        if not anchors or not anchors.issubset(exact_paths):
+            raise ValueError(f"{scope_id} anchor_paths must be non-empty subset of exact_paths")
+        result[scope_id] = (exact_paths, anchors)
+    return result
+
+
 def is_governance_path(path: str) -> bool:
     return path in GOVERNANCE_EXACT_PATHS or any(
         path.startswith(prefix) for prefix in GOVERNANCE_PREFIXES
@@ -419,6 +450,15 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
         return APPLICABLE
 
     for _phase_id, (registered_paths, anchor_paths) in load_registered_phase_scopes().items():
+        if normalized_set == registered_paths:
+            return NOT_APPLICABLE
+        if normalized_set.intersection(anchor_paths):
+            return APPLICABLE
+
+    # Human-approved exact integration scopes may be separated from historical
+    # AQ5/AQ7/PRAI implementation inventories. Exact equality is required;
+    # anchor-bearing partial, mixed, and superset scopes remain fail-closed.
+    for _scope_id, (registered_paths, anchor_paths) in load_registered_exception_scopes().items():
         if normalized_set == registered_paths:
             return NOT_APPLICABLE
         if normalized_set.intersection(anchor_paths):
