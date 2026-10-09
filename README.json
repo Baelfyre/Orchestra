@@ -2884,6 +2884,8 @@
     "runtime_suite": "tests/runtime",
     "cross_platform_workflow": ".github/workflows/cross-platform-validation.yml",
     "governance_workflow": ".github/workflows/governance-check.yml",
+    "governance_repository_memory_validator": "scripts/governance_check.py",
+    "governance_repository_memory_validator_tests": "scripts/test_governance_check.py",
     "required_analysis_compatibility_workflow": ".github/workflows/required-analysis-compat.yml",
     "cosmic_ray_confidence_workflow": ".github/workflows/cosmic-ray-confidence.yml",
     "legacy_mutmut_evidence_workflow": ".github/workflows/mutation-confidence.yml",
