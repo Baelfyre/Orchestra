@@ -1,10 +1,14 @@
 from __future__ import annotations
 
+# @codebase_provenance_JEO
+# @codebase_rights_JEO
+
 from collections.abc import Callable
 from pathlib import Path
 from typing import TextIO
 from uuid import uuid4
 
+from .application.ports.specialist_execution import ReadOnlyWorkspaceProvider
 from .factories import AdapterFactory
 from .interfaces import IIDEAdapter
 from .mcp_transport import McpToolTransport, RuntimeFactory
@@ -33,6 +37,7 @@ def build_mcp_provider_runtime_factory(
     execution_engine_factory: ProviderExecutionEngineFactory,
     provider_requirement: ProviderExecutionRequirement | None = None,
     backing_adapter: str = "codex",
+    read_only_workspace_provider: ReadOnlyWorkspaceProvider | None = None,
 ) -> RuntimeFactory:
     """Build an explicit provider-aware MCP specialist runtime.
 
@@ -73,6 +78,7 @@ def build_mcp_provider_runtime_factory(
             composition,
             execution_engine=engine,
             provider_requirement=provider_requirement,
+            read_only_workspace_provider=read_only_workspace_provider,
         )
         adapter = AdapterFactory.create(adapter_name, root)
         return executor, adapter
@@ -86,6 +92,7 @@ def build_mcp_stdio_transport_with_provider_execution(
     execution_engine_factory: ProviderExecutionEngineFactory,
     provider_requirement: ProviderExecutionRequirement | None = None,
     backing_adapter: str = "codex",
+    read_only_workspace_provider: ReadOnlyWorkspaceProvider | None = None,
     error_stream: TextIO | None = None,
 ) -> McpToolTransport:
     """Explicit opt-in MCP transport for provider-aware host execution."""
@@ -100,6 +107,7 @@ def build_mcp_stdio_transport_with_provider_execution(
             root,
             execution_engine_factory=execution_engine_factory,
             provider_requirement=provider_requirement,
+            read_only_workspace_provider=read_only_workspace_provider,
             backing_adapter=backing_adapter,
         ),
         server_name="orchestra",

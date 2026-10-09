@@ -1,0 +1,195 @@
+{
+  "$schema": "../schemas/evidence-gated-decision-hierarchy.v1.schema.json",
+  "schema_version": "orchestra.evidence-gated-decision-hierarchy.v1",
+  "status": "CONTRACT_DEFINED",
+  "authority_model": "EVIDENCE_ONLY_NON_AUTHORIZING",
+  "transition_owner": "arbiter",
+  "separation_invariants": [
+    "FINDING_IS_NOT_VERIFIED_FACT",
+    "VERIFIED_FACT_IS_NOT_RISK_JUDGMENT",
+    "RISK_JUDGMENT_IS_NOT_MITIGATION",
+    "MITIGATION_IS_NOT_ADJUDICATION",
+    "ADJUDICATION_IS_NOT_GOVERNANCE",
+    "GOVERNANCE_IS_NOT_EXECUTION_AUTHORITY",
+    "EXECUTION_AUTHORITY_IS_NOT_IMPLEMENTATION",
+    "IMPLEMENTATION_IS_NOT_VERIFIED_REMEDIATION"
+  ],
+  "stages": [
+    {
+      "stage": "ROUTING",
+      "owners": ["conductor"],
+      "inputs": ["task_intent", "current_source_identity"],
+      "outputs": ["bounded_task_profile", "specialist_routes"],
+      "contract_refs": ["skills/conductor/SKILL.md", "machine/adaptive/awf-agentic-workflow-implementation.v1.json", "machine/adaptive/aq1-normative-doctrine.v1.json", "machine/adaptive/aq2-adaptive-risk-profiler.v1.json", "machine/adaptive/aq3-specialist-assurance-contract.v1.json", "skills/the-tuner/SKILL.md", "docs/routing/CROSS_SPECIALIST_COORDINATION_PROTOCOL.md"],
+      "coordination": {
+        "optional_owner": "the-tuner",
+        "trigger": "MATERIAL_CROSS_SPECIALIST_CONTRACTS",
+        "may_authorize_or_override_owner": false
+      },
+      "may_authorize": false
+    },
+    {
+      "stage": "ASSESSMENT",
+      "owners": ["cipher", "cloak", "clockwork", "chronicler", "scribe", "weaver"],
+      "inputs": ["routed_scope", "source_evidence"],
+      "outputs": ["substantive_findings", "review_result"],
+      "contract_refs": ["machine/adaptive/aq3-specialist-assurance-contract.v1.json", "skills/cipher/SKILL.md", "skills/cloak/SKILL.md", "skills/clockwork/SKILL.md", "skills/chronicler/SKILL.md", "skills/scribe/SKILL.md", "skills/weaver/SKILL.md"],
+      "may_authorize": false
+    },
+    {
+      "stage": "VERIFICATION",
+      "owners": ["overseer", "independent_verifier"],
+      "inputs": ["substantive_findings", "verification_requirements"],
+      "outputs": ["empirical_evidence", "evidence_sufficiency"],
+      "contract_refs": ["machine/adaptive/aq1-normative-doctrine.v1.json", "machine/adaptive/aq4-assurance-manifests-receipts.v1.json", "machine/adaptive/aq5-qa-compliance.v1.json", "machine/adaptive/aq6-gate-coverage.v1.json", "docs/architecture/ADAPTIVE_ASSURANCE_AQ7.md", "machine/adaptive/aq8-high-risk-assurance-packs.v1.json", "machine/adaptive/prai-post-run-assurance.v1.json", "skills/overseer/SKILL.md"],
+      "may_authorize": false
+    },
+    {
+      "stage": "IMPACT_RISK",
+      "owners": ["conductor", "overseer"],
+      "inputs": ["task_profile", "risk_characteristics", "verified_evidence"],
+      "outputs": ["risk_assessment", "required_assurance_union"],
+      "contract_refs": ["machine/adaptive/aq2-adaptive-risk-profiler.v1.json", "machine/adaptive/aq3-specialist-assurance-contract.v1.json", "machine/adaptive/prai-post-run-assurance.v1.json", "skills/overseer/SKILL.md"],
+      "may_authorize": false
+    },
+    {
+      "stage": "MITIGATION",
+      "owners": ["conductor", "relevant_domain_specialist", "ponytail"],
+      "inputs": ["verified_findings", "risk_assessment"],
+      "outputs": ["bounded_mitigation_options", "implementation_plan_candidate"],
+      "contract_refs": ["skills/conductor/SKILL.md", "skills/ponytail/SKILL.md", "machine/adaptive/aq3-specialist-assurance-contract.v1.json"],
+      "may_authorize": false
+    },
+    {
+      "stage": "ADJUDICATION",
+      "optional": true,
+      "owners": ["optional_advisory_integration"],
+      "inputs": ["verified_findings", "risk_assessment", "mitigation_options"],
+      "outputs": ["advisory_evidence_if_available"],
+      "contract_refs": [],
+      "may_authorize": false
+    },
+    {
+      "stage": "GOVERNANCE",
+      "owners": ["the-steward", "the-governor"],
+      "inputs": ["evidence_packet", "risk_assessment", "mitigation_options"],
+      "outputs": ["governance_judgments", "governance_constraints"],
+      "contract_refs": ["docs/governance/THE_COVENANT.md", "machine/governance/covenant.v1.json", "docs/governance/PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md"],
+      "may_authorize": false
+    },
+    {
+      "stage": "AUTHORITY",
+      "owners": ["human", "existing_trusted_policy"],
+      "inputs": ["exact_candidate_identity", "governance_constraints", "existing_grants"],
+      "outputs": ["resolved_preexisting_authority"],
+      "contract_refs": ["machine/governance/policy.v1.json", "docs/governance/GOVERNED_AUTONOMY_MODES.md", "docs/governance/PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md"],
+      "may_authorize": false
+    },
+    {
+      "stage": "TRANSITION",
+      "owners": ["arbiter"],
+      "inputs": ["current_evidence", "governance_state", "resolved_preexisting_authority"],
+      "outputs": ["arbiter_transition_decision"],
+      "contract_refs": ["orchestra_runtime/governance_kernel.py", "machine/schemas/arbiter-kernel-input.schema.json", "machine/schemas/arbiter-kernel-result.schema.json", "skills/arbiter/SKILL.md"],
+      "may_authorize": false
+    },
+    {
+      "stage": "IMPLEMENTATION",
+      "owners": ["conductor", "ponytail"],
+      "inputs": ["bounded_implementation_plan", "arbiter_transition_decision", "existing_execution_envelope"],
+      "outputs": ["candidate_mutation"],
+      "contract_refs": ["skills/conductor/SKILL.md", "skills/ponytail/SKILL.md", "docs/governance/GOVERNED_AUTONOMY_MODES.md"],
+      "may_authorize": false
+    },
+    {
+      "stage": "REVALIDATION",
+      "owners": ["relevant_domain_specialist", "independent_verifier", "overseer", "arbiter"],
+      "inputs": ["new_candidate_identity", "invalidated_prior_evidence"],
+      "outputs": ["fresh_bound_evidence", "post_run_assurance", "closeout_transition"],
+      "contract_refs": ["machine/adaptive/aq1-normative-doctrine.v1.json", "machine/adaptive/aq4-assurance-manifests-receipts.v1.json", "machine/adaptive/aq8-high-risk-assurance-packs.v1.json", "machine/adaptive/prai-post-run-assurance.v1.json", "machine/governance/covenant.v1.json", "orchestra_runtime/governance_kernel.py"],
+      "may_authorize": false
+    }
+  ],
+  "assurance_depth": {
+    "risk_levels": ["LOW", "MEDIUM", "HIGH", "CRITICAL"],
+    "audit_depths": ["LIGHT", "STANDARD", "DEEP"],
+    "risk_floor_rules": [
+      {"risk_level": "LOW", "condition": "EXPLICITLY_HARMLESS", "depth": "LIGHT", "targeted_verification_required": false},
+      {"risk_level": "LOW", "condition": "OTHERWISE", "depth": "STANDARD", "targeted_verification_required": true},
+      {"risk_level": "MEDIUM", "condition": "ALWAYS", "depth": "STANDARD", "targeted_verification_required": true},
+      {"risk_level": "HIGH", "condition": "ALWAYS", "depth": "DEEP", "targeted_verification_required": true},
+      {"risk_level": "CRITICAL", "condition": "ALWAYS", "depth": "DEEP", "targeted_verification_required": true}
+    ],
+    "requirements_combine": "MAX_TASK_RISK_FLOOR_AND_AQ2_AQ3_AQ4_PRAI_REQUIREMENTS",
+    "unknown_or_contradictory_evidence": "RAISE_ASSURANCE_OR_BLOCK_AT_EXISTING_EVALUATOR",
+    "protected_is_separate_hard_gate_overlay": true
+  },
+  "runtime_plan_contract": {
+    "schema_version": "orchestra.agentic-assurance-plan.v2",
+    "composition_contract_version": "orchestra.evidence-gated-decision-hierarchy.v1",
+    "risk_reconciliation": {
+      "profile_claims_are_untrusted": true,
+      "resolution": "MAXIMUM_APPLICABLE_RISK",
+      "protected_signal_merge": "ANY_TRUE",
+      "may_authorize": false
+    },
+    "requirement_sources": ["AQ2", "AQ3", "AQ4", "PRAI"],
+    "unresolved_requirement_semantics": "EXPLICIT_STATE_AND_NULL_NOT_FALSE",
+    "candidate_binding": {
+      "identity_fields": ["repository", "candidate_sha", "tree_sha"],
+      "source_state_identity": "SHA256_CANONICAL_IDENTITY_FIELDS",
+      "missing_identity_state": "UNBOUND",
+      "unbound_or_stale_satisfies_current_requirements": false,
+      "candidate_mutation_invalidates_plan": true,
+      "may_authorize": false
+    },
+    "required_assurance_is_completed_evidence": false,
+    "completed_assurance_is_governance_approval": false,
+    "governance_approval_is_execution_authority": false,
+    "execution_authority_is_arbiter_transition": false,
+    "plan_may_authorize": false
+  },
+  "evidence_semantics": {
+    "routing_not_required_is_substantive_review": false,
+    "specialist_pass_is_authority": false,
+    "verification_is_governance": false,
+    "governance_is_execution_authority": false,
+    "implementation_completion_is_verified_remediation": false,
+    "assessor_may_self_verify": false,
+    "candidate_mutation_invalidates_prior_candidate_evidence": true
+  },
+  "assessment_execution": {
+    "defensive_security_review_side_effect_class": "NONE",
+    "assessment_may_mutate": false,
+    "assessment_may_issue_authorization": false,
+    "effectful_verification_requires_existing_separate_authority": true
+  },
+  "specialist_flows": {
+    "security": ["cipher_assesses_read_only", "dagger_active_verification_only_when_separately_required_and_authorized", "overseer_assesses_evidence_sufficiency_and_impact", "domain_specialists_propose_mitigation", "fresh_cipher_and_required_verification_after_change"],
+    "ui_ux": ["cloak_assesses", "browser_accessibility_or_runtime_evidence_verifies", "overseer_assesses_user_impact", "cloak_and_clockwork_propose_mitigation_when_relevant", "fresh_cloak_and_required_verification_after_change"],
+    "architecture": ["clockwork_assesses", "deterministic_structural_or_runtime_checks_verify_when_applicable", "overseer_assesses_evidence_and_impact", "clockwork_proposes_mitigation", "fresh_checks_after_change"]
+  },
+  "autonomy": {
+    "modes": ["HUMAN_GOVERNED", "SEMI_AUTONOMOUS", "FULL_AUTONOMOUS"],
+    "profiles_reduce_existing_authority_only": true,
+    "full_autonomous_requires": ["exact_current_candidate", "non_stale_evidence", "required_specialist_reviews", "required_empirical_verification", "no_unresolved_material_contradictions", "valid_governance_state", "valid_execution_envelope", "valid_arbiter_transition"],
+    "satisfied_gates_may_be_traversed_automatically": true,
+    "unsatisfied_or_protected_gate_may_be_bypassed": false
+  },
+  "protected_change": {
+    "candidate_freeze_required": true,
+    "same_run_change_and_continuation_allowed": false,
+    "fresh_authorized_execution_context_required": true,
+    "protocol": "docs/governance/PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md"
+  },
+  "jev": {
+    "tracked_supported_integration": false,
+    "advisory_insertion_point": {
+      "after": ["VERIFIED_FINDINGS", "RISK_ASSESSMENT", "MITIGATION_ALTERNATIVES"],
+      "before": "GOVERNANCE"
+    },
+    "may_authorize_or_replace_review_or_reduce_risk": false,
+    "may_mutate_candidate": false,
+    "absence_blocks_flow": false
+  }
+}

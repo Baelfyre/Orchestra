@@ -261,6 +261,88 @@ def test_router_service_attaches_execution_effective_awf_plan_for_conductor():
     assert profile["topology_effective"] is True
     assert profile["topology_change_requires_human_approval"] is False
     assert decision.metadata["agentic_authority_rule"] == "WORKFLOW_TOPOLOGY_CHANGE != AUTHORITY_EXPANSION"
+    assert decision.metadata["agentic_assurance_plan"]["composition_contract"] == (
+        "machine/adaptive/evidence-gated-decision-hierarchy.v1.json"
+    )
+    assert decision.metadata["agentic_assurance_plan"]["task_risk_floor"]["audit_depth"] == "STANDARD"
+    assert decision.metadata["agentic_assurance_plan"]["targeted_verification_required"] is True
+    assert decision.metadata["agentic_assurance_plan"]["authority_model"] == "EVIDENCE_ONLY_NON_AUTHORIZING"
+
+
+def test_router_reconciles_untrusted_low_profile_with_protected_prompt_risk():
+    profile = _task(
+        task_id="untrusted-low-profile",
+        goal="Fix a documentation typo.",
+        execution_mode="FAST",
+        risk_level="LOW",
+        authority_domains=["DOCUMENTATION"],
+        external_state_required=False,
+        protected_action_required=False,
+        protected_action_authorized=False,
+    )
+    prompt = "Deploy the production database"
+    context = ContextPackage(
+        adapter_name="test",
+        prompt=prompt,
+        project_root=ROOT,
+        available_commands=("conductor", "scribe"),
+        manifest_version="test",
+        metadata={
+            "agentic_task_profile": profile,
+            "current_source_identity": "a" * 40,
+        },
+    )
+    decision = _router().route(Command("conductor", prompt, "test"), context)
+
+    task = decision.metadata["agentic_task_profile"]
+    assurance = decision.metadata["agentic_assurance_plan"]
+    assert task["risk_level"] == "CRITICAL"
+    assert task["execution_mode"] == "DESTRUCTIVE"
+    assert task["protected_action_required"] is True
+    assert task["protected_action_authorized"] is False
+    assert assurance["task_risk_floor"]["audit_depth"] == "DEEP"
+    assert assurance["risk_reconciliation"] == {
+        "declared_profile_risk": "LOW",
+        "derived_prompt_risk": "CRITICAL",
+        "resolved_risk": "CRITICAL",
+        "resolution": "MAXIMUM_APPLICABLE_RISK",
+        "profile_claims_untrusted": True,
+    }
+    assert assurance["candidate_freshness"]["state"] == "UNBOUND"
+    assert decision.metadata["agentic_workflow_profile"]["human_gate_required"] is True
+
+
+def test_router_profile_claim_can_raise_but_cannot_authorize_or_lower_prompt_risk():
+    profile = _task(
+        task_id="claimed-high-risk",
+        goal="Review a documentation typo.",
+        execution_mode="FAST",
+        risk_level="HIGH",
+        authority_domains=["DOCUMENTATION"],
+        external_state_required=False,
+        protected_action_required=True,
+        protected_action_authorized=True,
+    )
+    prompt = "What does this documentation sentence mean?"
+    context = ContextPackage(
+        adapter_name="test",
+        prompt=prompt,
+        project_root=ROOT,
+        available_commands=("conductor", "scribe"),
+        manifest_version="test",
+        metadata={"agentic_task_profile": profile},
+    )
+    decision = _router().route(Command("conductor", prompt, "test"), context)
+
+    task = decision.metadata["agentic_task_profile"]
+    assurance = decision.metadata["agentic_assurance_plan"]
+    assert task["risk_level"] == "HIGH"
+    assert task["protected_action_required"] is True
+    assert task["protected_action_authorized"] is False
+    assert assurance["risk_reconciliation"]["declared_profile_risk"] == "HIGH"
+    assert assurance["risk_reconciliation"]["derived_prompt_risk"] == "LOW"
+    assert assurance["risk_reconciliation"]["resolved_risk"] == "HIGH"
+    assert decision.metadata["agentic_workflow_profile"]["human_gate_required"] is True
 
 
 def test_router_service_rejects_agentic_profile_on_non_conductor_route():

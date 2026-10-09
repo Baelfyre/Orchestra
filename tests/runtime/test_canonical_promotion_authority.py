@@ -153,7 +153,7 @@ def test_machine_dry_run_requirement_is_enforced_without_rule_name_special_case(
 def test_machine_policy_does_not_require_dry_run_for_high_risk_security_rule():
     validator = GovernanceValidator()
     result = validator.validate(
-        _decision("security-check", "cipher"),
+        _decision("security-check", "the-steward"),
         _context(destructive_validated=False, governance_validated=True, dry_run=False),
     )
     assert result.allowed is True

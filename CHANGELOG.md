@@ -13,6 +13,32 @@
 - Aligns all canonical package/version surfaces and the host-update contract to `1.11.0`.
 - Publication status is `PUBLISHED_VERIFIED`. Lightweight tag `v1.11.0` resolves directly to canonical release commit `72c2884a66bb0e0d0ff1e070e7cc1feccd968e35`, tree `e4072cff4de83efa1c1d2d495aa5c186a2469db4`, and immutable GitHub Release `387061978`. Historical candidate/readiness evidence remains preserved as revision-bound qualification evidence.
 
+## Unreleased issue #937 Unit B defensive-review candidate
+
+- Adds one schema-constrained exception for the exact `security-check`/Cipher `defensive-security-review` operation and its trusted read-only host profile; all other high-risk matches retain the existing gate.
+- Passes the registered operation contract into governance validation and returns `REVIEW_ONLY_ELIGIBLE` only when the opt-in host has a dedicated read-only engine and content-addressed workspace provider.
+- Binds substantive review requests/results to the workspace snapshot digest. Effectful Cipher execution remains fail-closed pending separately verified receipt authority.
+- This is an unactivated local candidate. A separate human decision bound to its exact commit is required before policy activation.
+
+## Unreleased governance architecture foundation for issue #937
+
+- Adds typed operation contracts, substantive review results, trusted receipt verification, and single-use consumption interfaces.
+- Separates the bounded read-only review engine boundary from effectful specialist execution and preserves exact candidate and scope checks.
+- Unit A alone left the active protected routing policy unchanged; the Unit B candidate above proposes the narrowly scoped protected amendment without activating it.
+
+## Unreleased evidence-gated decision hierarchy for issue #937
+
+- Composes the existing AQ1-AQ8, PRAI, Covenant, specialist, governance, and Arbiter responsibilities into an ordered non-authorizing decision flow.
+- Separates the task-risk floor from the resolved assurance union; unavailable AQ2/AQ3/AQ4/PRAI inputs remain explicitly unresolved instead of becoming a false verification result.
+- Reconciles supplied TaskProfile claims with prompt-derived risk monotonically and records declared/derived provenance while preserving protected-action gates.
+- Binds freshness to exact repository, candidate SHA, and tree when trusted identity is supplied; otherwise marks the plan UNBOUND, which cannot satisfy current assurance requirements.
+- Documents the v2 consumer migration: `risk_depth_floor` is removed; `task_risk_floor` carries only the minimum floor, and consumers use `resolved_assurance_requirements` only when `requirement_resolution_state` is `RESOLVED`.
+- Keeps protected policy, authorization behavior, autonomy modes, and the single Arbiter transition boundary unchanged.
+
+## Unreleased v1.12 F1 custom-provider migration note
+
+- Track the `ReadOnlyWorkspaceSource` compatibility change separately for custom providers: implement bounded `read_bytes(relative_path, *, max_bytes)` so Orchestra can materialize candidate content. This F1 provider migration is independent of the F2 assurance-plan v2 consumer migration.
+
 ## Unreleased governance policy: post-v1.11 documentation-normalization assurance scope
 
 - Adds the maintainer-authorized exact-set documentation-normalization lane for the verified v1.11.0 public state.

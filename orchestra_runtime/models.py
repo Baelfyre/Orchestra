@@ -1,11 +1,20 @@
 from __future__ import annotations
 
+# @codebase_provenance_JEO
+# @codebase_rights_JEO
+
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
-from .domain.execution import RunIdentity, validate_correlation_id
+from .domain.execution import RoutingDisposition, RunIdentity, validate_correlation_id
+from .domain.execution.operation_contracts import (
+    DEFENSIVE_REVIEW_HOST_PROFILE_ID,
+    DEFENSIVE_SECURITY_REVIEW,
+    OperationContract,
+    operation_contract_for_route,
+)
 
 if TYPE_CHECKING:
     from .lifecycle import StructuredTerminalResult
@@ -310,6 +319,52 @@ class RouteDecision:
     reason: str
     metadata: dict[str, Any] = field(default_factory=dict)
 
+    @property
+    def routing_disposition(self) -> RoutingDisposition:
+        return RoutingDisposition.REQUIRED if self.governance_required else RoutingDisposition.NOT_REQUIRED
+
+
+@dataclass(frozen=True)
+class ReviewOnlyOperationException:
+    operation_id: str
+    command_name: str
+    skill_slug: str
+    host_profile_id: str
+
+    def __post_init__(self) -> None:
+        expected = (
+            DEFENSIVE_SECURITY_REVIEW.operation_id,
+            "security-check",
+            "cipher",
+            DEFENSIVE_REVIEW_HOST_PROFILE_ID,
+        )
+        actual = tuple(
+            str(getattr(self, field)).strip().casefold()
+            for field in ("operation_id", "command_name", "skill_slug", "host_profile_id")
+        )
+        if actual != expected or operation_contract_for_route(actual[1], actual[2]) != DEFENSIVE_SECURITY_REVIEW:
+            raise ValueError("review-only policy exception must match the registered defensive security review")
+        for field, value in zip(("operation_id", "command_name", "skill_slug", "host_profile_id"), actual):
+            object.__setattr__(self, field, value)
+
+
+@dataclass(frozen=True)
+class OperationGovernanceContext:
+    operation_contract: OperationContract
+    host_profile_id: str | None = None
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.operation_contract, OperationContract):
+            raise TypeError("operation governance context requires a trusted operation contract")
+        if self.host_profile_id is not None:
+            profile_id = str(self.host_profile_id).strip().casefold()
+            if (
+                self.operation_contract != DEFENSIVE_SECURITY_REVIEW
+                or profile_id != DEFENSIVE_REVIEW_HOST_PROFILE_ID
+            ):
+                raise ValueError("host profile is not registered for this operation")
+            object.__setattr__(self, "host_profile_id", profile_id)
+
 
 @dataclass(frozen=True)
 class GovernanceRule:
@@ -319,6 +374,7 @@ class GovernanceRule:
     command_names: tuple[str, ...] = ()
     validator_key: str = ""
     blocking: bool = True
+    review_only_exceptions: tuple[ReviewOnlyOperationException, ...] = ()
 
 
 @dataclass(frozen=True)

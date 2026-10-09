@@ -104,6 +104,21 @@ def test_governance_compatibility_rejects_unknown_disposition(monkeypatch):
     assert "GOVERNANCE_COMPATIBILITY_INVALID:APPROVED" in contracts.machine_contract_errors(ROOT)
 
 
+def test_governance_review_only_exception_is_exact_and_fail_closed(monkeypatch):
+    policy = deepcopy(contracts.load_governance_policy(ROOT))
+    rule = next(
+        item for item in policy["runtime_validation_rules"]
+        if item["rule_id"] == "high-risk-skill-approval"
+    )
+    rule["review_only_exceptions"][0]["operation_id"] = "security-sensitive-execution"
+    monkeypatch.setattr(contracts, "load_governance_policy", lambda root=None: policy)
+
+    assert (
+        "GOVERNANCE_REVIEW_ONLY_EXCEPTION_INVALID:high-risk-skill-approval"
+        in contracts.machine_contract_errors(ROOT)
+    )
+
+
 def test_registry_duplicate_slug_is_rejected(monkeypatch):
     registry = deepcopy(contracts.load_specialist_registry(ROOT))
     registry["specialists"].append(deepcopy(registry["specialists"][0]))

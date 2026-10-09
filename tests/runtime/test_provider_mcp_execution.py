@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import inspect
 from pathlib import Path
 
 from orchestra_runtime.mcp_transport import MCP_PROTOCOL_VERSION, MCP_PROTOCOL_VERSION_META_KEY
@@ -193,3 +194,30 @@ def test_provider_mcp_stdio_rejects_empty_plugin_version(tmp_path: Path) -> None
         assert "non-empty version" in str(exc)
     else:
         raise AssertionError("provider MCP stdio transport must require a plugin version")
+
+
+def test_provider_mcp_factory_wires_read_only_provider_without_receipt_authorizer() -> None:
+    class HostReadOnlyWorkspaceProvider:
+        def for_review(self, repository_root: Path, expected_paths: tuple[str, ...]):
+            raise AssertionError("factory construction must not request a workspace")
+
+    workspace_provider = HostReadOnlyWorkspaceProvider()
+    factory = build_mcp_provider_runtime_factory(
+        ROOT,
+        execution_engine_factory=McpProviderEngine,
+        read_only_workspace_provider=workspace_provider,
+    )
+
+    executor, _adapter = factory()
+
+    assert not hasattr(executor.composition, "governance_receipt_authorizer")
+    assert executor._read_only_workspace_provider is workspace_provider
+
+
+def test_provider_mcp_factories_do_not_accept_receipt_authorizers() -> None:
+    builders = (
+        build_mcp_provider_runtime_factory,
+        build_mcp_stdio_transport_with_provider_execution,
+    )
+    for builder in builders:
+        assert "governance_receipt_authorizer" not in inspect.signature(builder).parameters
