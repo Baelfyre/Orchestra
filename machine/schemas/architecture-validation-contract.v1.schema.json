@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/architecture-validation-contract.v1.schema.json",
+  "title": "Orchestra Architecture Validation Contract v1",
+  "description": "Derives validation obligations from upstream contracts. Invariant: NOT_PROVEN is distinct from FAILED, and missing empirical capacity metrics are not automatic implementation failure.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_name",
+    "owner",
+    "contract_refs",
+    "exact_revision",
+    "environment_identity",
+    "functional_validation",
+    "capacity_validation",
+    "performance_validation",
+    "tenant_isolation_validation",
+    "migration_validation",
+    "failure_behavior_validation",
+    "compatibility_validation"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orchestra.architecture-validation-contract.v1"
+    },
+    "contract_name": {
+      "const": "ArchitectureValidationContract"
+    },
+    "owner": {
+      "const": "overseer"
+    },
+    "contract_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "exact_revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "environment_identity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "functional_validation": {
+      "$ref": "#/$defs/validation_result"
+    },
+    "capacity_validation": {
+      "$ref": "#/$defs/validation_result"
+    },
+    "performance_validation": {
+      "$ref": "#/$defs/validation_result"
+    },
+    "tenant_isolation_validation": {
+      "$ref": "#/$defs/validation_result"
+    },
+    "migration_validation": {
+      "$ref": "#/$defs/validation_result"
+    },
+    "failure_behavior_validation": {
+      "$ref": "#/$defs/validation_result"
+    },
+    "compatibility_validation": {
+      "$ref": "#/$defs/validation_result"
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "validation_result": {
+      "enum": [
+        "PROVEN",
+        "NOT_PROVEN",
+        "NOT_REQUIRED",
+        "FAILED"
+      ]
+    }
+  }
+}

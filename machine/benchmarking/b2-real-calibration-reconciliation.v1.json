@@ -1,0 +1,219 @@
+{
+  "schema_version": "orchestra.b2-real-calibration-reconciliation.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "phase": "B2_REAL_CALIBRATION_EVIDENCE_RECONCILIATION",
+  "recorded_date": "2026-08-23",
+  "status": "B2_REAL_CALIBRATION_COMPLETE_VALID_RECONCILIATION_CANDIDATE",
+  "evidence_maturity": "CALIBRATION_ONLY",
+  "benefit_claim": "NOT_ESTABLISHED",
+  "canonical_entry": {
+    "repository": "Baelfyre/Orchestra",
+    "branch": "main",
+    "sha": "f8ad563f2a6444345671a7b8548c9d27d04d10e0",
+    "tree": "dc7165547f0b9b782666c1e2995d808af6dd8d6b",
+    "signature": "VERIFIED_VALID"
+  },
+  "frozen_identity": {
+    "experiment_id": "b2-a5-isolated-real-calibration-v1",
+    "freeze_digest": "be5e2926642d7f52c31e8d8dcdce13962b7a9ac2f708483ad31ab2f4f6adf2f8",
+    "manifest_digest": "b4d9c279da5681d5c3c3f76dbb04592d575121bc66772861926dacdeeedea8d7",
+    "plan_digest": "2378893ae121d398628a2fe15ffd50a281a4e769219cd42d012318520531578a",
+    "eligibility_envelope_digest": "26af9b40870a13a138f52b23e45189a052875a81c8d4004366f2b93e9361bb55",
+    "task_set_digest": "f7af904895107a7f00abb6ab125d7a33a7bcb5c729b0665acfe9049bf2050ee8",
+    "provider": "openai-codex",
+    "cli_version": "0.148.0",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "medium",
+    "communication_mode": "DEFAULT",
+    "validator": "EXACT_JSON_CONFORMANCE_V1"
+  },
+  "human_authorization": {
+    "scope": "B2_REAL_CALIBRATION_ONLY",
+    "authorization_consumed": true,
+    "automatic_retry": false,
+    "stop_on_first_invalid_or_boundary_violation": true,
+    "a5_execution_promotion_authorized": false,
+    "b4_authorized": false
+  },
+  "execution": {
+    "started_at": "2026-08-23T04:13:37.507674-06:00",
+    "completed_at": "2026-08-23T04:25:57.074197-06:00",
+    "planned_runs": 20,
+    "recorded_runs": 20,
+    "pass_runs": 20,
+    "invalid_runs": 0,
+    "maximum_underlying_model_calls": 60,
+    "observed_model_calls": 60,
+    "cumulative_accepted_tokens": 632037,
+    "cumulative_accepted_token_ceiling": 1200000,
+    "automatic_retry": false,
+    "stop_reason": null
+  },
+  "evidence_archive": {
+    "filename": "ORCHESTRA_B2_REAL_CALIBRATION_20260823T041337-0600.zip",
+    "sha256": "9de700264d005cdb7afe1f0daca1dbed44d050bab3d0715d6f7f359848eddc7c",
+    "repository_committed": false,
+    "external_operator_provided": true,
+    "file_count": 67,
+    "structure": {
+      "session_level_records": 7,
+      "requests": 20,
+      "executor_results": 20,
+      "run_records": 20,
+      "partial_evidence_records": 0
+    }
+  },
+  "integrity_audit": {
+    "plan_request_executor_run_bijection": "PASS_20_OF_20",
+    "run_index_digest_recomputation": "PASS_20_OF_20",
+    "experiment_run_digest_order_match": "PASS_20_OF_20",
+    "final_response_exact_json_validation": "PASS_20_OF_20",
+    "safety_flags_all_false": true,
+    "calls_per_run": 3,
+    "topology_stage_order_matches_arm": "PASS_20_OF_20",
+    "final_response_unique_count_per_task": 1,
+    "raw_specialist_advisory_text_preserved": false
+  },
+  "arms": {
+    "b2-arm-clockwork-overseer": {
+      "topology": "Clockwork -> Overseer -> fixed finalizer",
+      "topology_candidate_id": "b2.seq.clockwork-overseer.v1",
+      "runs": 10,
+      "passes": 10,
+      "task_success_rate": 1.0,
+      "total_tokens": 313073,
+      "mean_total_tokens": 31307.3,
+      "median_total_tokens": 30858.5,
+      "total_wall_clock_ms": 337566,
+      "mean_wall_clock_ms": 33756.6,
+      "median_wall_clock_ms": 33702.0,
+      "output_tokens": 3267,
+      "context_transfer_bytes": 11254
+    },
+    "b2-arm-overseer-clockwork": {
+      "topology": "Overseer -> Clockwork -> fixed finalizer",
+      "topology_candidate_id": "b2.seq.overseer-clockwork.v1",
+      "runs": 10,
+      "passes": 10,
+      "task_success_rate": 1.0,
+      "total_tokens": 318964,
+      "mean_total_tokens": 31896.4,
+      "median_total_tokens": 30999.5,
+      "total_wall_clock_ms": 344902,
+      "mean_wall_clock_ms": 34490.2,
+      "median_wall_clock_ms": 33616.0,
+      "output_tokens": 3609,
+      "context_transfer_bytes": 16840
+    }
+  },
+  "paired_analysis": {
+    "total_tokens": {
+      "mean_delta_overseer_clockwork_minus_clockwork_overseer": 589.1,
+      "median_delta_overseer_clockwork_minus_clockwork_overseer": 135.5,
+      "overseer_clockwork_higher_blocks": 8,
+      "equal_blocks": 0,
+      "overseer_clockwork_lower_blocks": 2,
+      "aggregate_relative_delta_pct": 1.8817
+    },
+    "wall_clock_ms": {
+      "mean_delta_overseer_clockwork_minus_clockwork_overseer": 733.6,
+      "median_delta_overseer_clockwork_minus_clockwork_overseer": 1993.0,
+      "overseer_clockwork_higher_blocks": 6,
+      "equal_blocks": 0,
+      "overseer_clockwork_lower_blocks": 4,
+      "aggregate_relative_delta_pct": 2.1732
+    },
+    "context_transfer_bytes": {
+      "mean_delta_overseer_clockwork_minus_clockwork_overseer": 558.6,
+      "median_delta_overseer_clockwork_minus_clockwork_overseer": 543.5,
+      "overseer_clockwork_higher_blocks": 10,
+      "equal_blocks": 0,
+      "overseer_clockwork_lower_blocks": 0,
+      "aggregate_relative_delta_pct": 49.6357,
+      "directional_signal": "OVERSEER_CLOCKWORK_HIGHER_IN_ALL_10_MATCHED_BLOCKS"
+    },
+    "output_tokens": {
+      "mean_delta_overseer_clockwork_minus_clockwork_overseer": 34.2,
+      "median_delta_overseer_clockwork_minus_clockwork_overseer": 17.0,
+      "overseer_clockwork_higher_blocks": 9,
+      "equal_blocks": 0,
+      "overseer_clockwork_lower_blocks": 1,
+      "aggregate_relative_delta_pct": 10.4683
+    }
+  },
+  "quality_result": {
+    "clockwork_overseer_passes": "10/10",
+    "overseer_clockwork_passes": "10/10",
+    "observed_topology_quality_difference": "NONE",
+    "task_final_response_identity": "BYTE_IDENTICAL_WITHIN_EACH_TASK_ACROSS_ALL_FOUR_EXECUTIONS",
+    "conclusion": "QUALITY_TIE_AT_CALIBRATION_VALIDATOR_CEILING"
+  },
+  "measurement_anomalies": [
+    {
+      "id": "B2-CODEX-COUNTER-001",
+      "kind": "IDENTICAL_PROMPT_DIGEST_INPUT_TOKEN_VARIANCE",
+      "prompt_digest": "787328ab443402a884bb71a383adfbeae79c38e3d30fb3b9860d24503d7ecec4",
+      "task_id": "b2-cal-cache-freshness",
+      "arm_id": "b2-arm-overseer-clockwork",
+      "specialist": "overseer",
+      "call_position": 1,
+      "observations": [
+        {
+          "repetition_index": 1,
+          "input_tokens": 10108,
+          "cached_input_tokens": 0
+        },
+        {
+          "repetition_index": 2,
+          "input_tokens": 14761,
+          "cached_input_tokens": 5888
+        }
+      ],
+      "input_token_delta": 4653,
+      "invalidates_run_under_frozen_contract": false,
+      "interpretation": "RAW_TOKEN_EFFICIENCY_EFFECT_NOT_ATTRIBUTABLE_TO_TOPOLOGY_WITHOUT_COUNTER_STABILITY_REVIEW"
+    }
+  ],
+  "evidence_design_limitations": [
+    {
+      "id": "B2-EVIDENCE-001",
+      "kind": "SPECIALIST_ADVISORY_TEXT_NOT_PRESERVED",
+      "impact": "SPECIALIST_RESPONSE_DIGESTS_AND_MEASUREMENTS_ARE_AUDITABLE_BUT_CONTEXT_TRANSFER_BYTES_CANNOT_BE_RECOMPUTED_FROM_RAW_ADVISORY_TEXT",
+      "recommended_remediation_before_confirmatory": "PRESERVE_BOUNDED_SYNTHETIC_SPECIALIST_ADVISORY_TEXT_OR_EQUIVALENT_RECOMPUTABLE_BYTE_EVIDENCE"
+    }
+  ],
+  "a5_shadow_result": {
+    "same_observation_all_20_runs": true,
+    "ranked_topology_candidate_ids": [
+      "b2.seq.clockwork-overseer.v1",
+      "b2.seq.overseer-clockwork.v1"
+    ],
+    "top_candidate_id": "b2.seq.clockwork-overseer.v1",
+    "decision_disposition": "DETERMINISTIC_FALLBACK",
+    "topology_effective": false,
+    "shadow_influenced_execution": false,
+    "predictive_benefit_established": false
+  },
+  "reconciliation_conclusion": {
+    "execution_valid": true,
+    "quality_result": "NO_OBSERVED_TOPOLOGY_DIFFERENCE",
+    "efficiency_result": "DESCRIPTIVE_ONLY_NOT_BENEFIT_ESTABLISHED",
+    "context_transfer_result": "CONSISTENT_DIRECTIONAL_SIGNAL_OVERSEER_CLOCKWORK_HIGHER_10_OF_10",
+    "token_measurement_stability": "REQUIRES_REVIEW_BEFORE_CONFIRMATORY_USE",
+    "a5_execution_promotion": "NOT_AUTHORIZED",
+    "b4": "BLOCKED",
+    "next_gate": "B2_CALIBRATION_RECONCILIATION_VALIDATION_THEN_SEPARATELY_DESIGN_PILOT_OR_CONFIRMATORY_MEASUREMENT"
+  },
+  "authority": {
+    "a5_execution_effective_promotion": false,
+    "a6_authorized": false,
+    "a7_authorized": false,
+    "a8_authorized": false,
+    "b4_authorized": false,
+    "release_publication_authorized": false,
+    "deployment_authorized": false,
+    "policy_activation_authorized": false,
+    "installed_integration_refresh_authorized": false,
+    "destructive_cleanup_authorized": false
+  }
+}

@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/project-architecture-governance-profile.v1.schema.json",
+  "title": "Orchestra Project Architecture Governance Profile v1",
+  "description": "Project-facing governance profile defining tenancy, scale posture, approved infrastructure, and migration policies without arbitrary universal numeric thresholds.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_name",
+    "project_identity",
+    "project_stage",
+    "architecture_summary",
+    "tenancy_model",
+    "scale_posture",
+    "approved_infrastructure",
+    "revision"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orchestra.project-architecture-governance-profile.v1"
+    },
+    "contract_name": {
+      "const": "ProjectArchitectureGovernanceProfile"
+    },
+    "project_identity": {
+      "type": "string",
+      "minLength": 1
+    },
+    "project_stage": {
+      "type": "string",
+      "minLength": 1
+    },
+    "architecture_summary": {
+      "type": "string",
+      "minLength": 1
+    },
+    "tenancy_model": {
+      "enum": [
+        "SINGLE_TENANT",
+        "MULTI_TENANT",
+        "HYBRID",
+        "UNDECIDED_BLOCKING",
+        "NOT_APPLICABLE"
+      ]
+    },
+    "capacity_envelope_ref": {
+      "type": "string"
+    },
+    "product_intent_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "scale_posture": {
+      "enum": [
+        "SCALE_READY",
+        "SCALE_PROVISIONED"
+      ]
+    },
+    "approved_infrastructure": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "infrastructure_triggers": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "migration_policy": {
+      "type": "string"
+    },
+    "tenant_isolation_policy_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "known_constraints": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "deferred_capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "exceptions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "lifecycle_state": {
+      "type": "string"
+    },
+    "revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

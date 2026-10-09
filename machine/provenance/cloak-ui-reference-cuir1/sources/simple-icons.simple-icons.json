@@ -1,0 +1,17 @@
+{
+  "schema_version": "orchestra.cloak-ui-reference-source-record.v1",
+  "record_id": "simple-icons.simple-icons",
+  "repository": "simple-icons/simple-icons",
+  "owner": "simple-icons",
+  "source_revision": "e3d830c3b553bb657df7389b673d1d78abf5159b",
+  "source_paths_or_artifact_ids": ["LICENSE.md","repository-root@e3d830c3b553bb657df7389b673d1d78abf5159b"],
+  "source_category": "BRAND_ICONS",
+  "license_identifier": "CC0-1.0",
+  "license_evidence": [{"type":"LICENSE_FILE","reference":"https://github.com/simple-icons/simple-icons/blob/e3d830c3b553bb657df7389b673d1d78abf5159b/LICENSE.md","source_revision":"e3d830c3b553bb657df7389b673d1d78abf5159b","notes":"Pinned LICENSE.md applies CC0 1.0 to the project while explicitly not waiving trademark or patent rights and warning that other-person rights may require clearance."}],
+  "reuse_classification": "REUSE_WITH_RIGHTS_REVIEW",
+  "attribution_or_notice_requirements": ["CC0 copyright treatment does not clear trademark, logo, publicity, patent, or other brand rights.","Perform rights review before reusing any brand icon asset."],
+  "pattern_or_asset_summary": "Brand-icon corpus pinned for later provenance-aware icon suitability review. No brand icon asset is reused during CUIR-1.",
+  "what_was_learned_or_reused": ["Retained exact repository identity, revision, CC0-1.0 copyright treatment, and the separate trademark/brand-rights review requirement."],
+  "what_was_not_copied": ["No icon artwork, SVG path data, source code, package content, or generated output was copied during CUIR-1."],
+  "review_owner": "Artificer"
+}

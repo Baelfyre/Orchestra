@@ -1,0 +1,267 @@
+{
+  "schema_version": "orchestra.awf-agentic-workflow-implementation.v1",
+  "program": "AWF_ADAPTIVE_AGENTIC_WORKFLOW",
+  "status": "COMPLETE_CANONICAL_VERIFIED",
+  "architecture_baseline": {
+    "padayon_pr": 382,
+    "padayon_merge_sha": "b4b59d04ea37c4f23bb6a54e7d217bd3037eb6ab",
+    "orchestra_source_baseline": "75100c3ad0fd9a11c69f2b9b7c5172edd8841cd2"
+  },
+  "phases": [
+    {
+      "id": "AWF-I0",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
+      "goal": "machine schemas and source-binding rules"
+    },
+    {
+      "id": "AWF-I1",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
+      "goal": "source-bound specialist authority view"
+    },
+    {
+      "id": "AWF-I2",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
+      "goal": "topology authority validator"
+    },
+    {
+      "id": "AWF-I3",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
+      "goal": "TaskProfile and deterministic owner resolution"
+    },
+    {
+      "id": "AWF-I4",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
+      "goal": "Planning and bounded Tool/ReAct selection"
+    },
+    {
+      "id": "AWF-I5",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
+      "goal": "bounded critic contract activation"
+    },
+    {
+      "id": "AWF-I6",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
+      "goal": "conditional multi-agent graph semantics under OEE"
+    },
+    {
+      "id": "AWF-I7",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
+      "goal": "specialist re-entry and transition topology integration"
+    },
+    {
+      "id": "AWF-I8",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
+      "goal": "deterministic topology telemetry"
+    },
+    {
+      "id": "AWF-I9",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
+      "goal": "UIEF-5 and synthetic regression corpus"
+    },
+    {
+      "id": "AWF-I10",
+      "status": "COMPLETE_CANONICAL_VERIFIED",
+      "goal": "source PR validation and canonical integration"
+    }
+  ],
+  "authority": {
+    "topology_change_requires_human_approval": false,
+    "execution_within_granted_authority": true,
+    "authority_expansion": false,
+    "specialist_authority_mutation": false,
+    "protected_actions_require_independent_authority": true,
+    "uief_resume": false,
+    "release_deployment_policy_activation": false
+  },
+  "oee": {
+    "execution_budget": "machine/governance/execution-budget.v1.json",
+    "max_parallel_specialists_default_preserved": 1,
+    "owner_first": true,
+    "earliest_decisive_evidence_wins": true
+  },
+  "legacy_a5_relationship": {
+    "historical_status": "A5_CLOSED_AT_SHADOW_MATURITY_EXECUTION_PROMOTION_DEFERRED_BENEFIT_NOT_ESTABLISHED",
+    "a5_shadow_ranker_controls_awf_execution": false,
+    "awf_is_a5_execution_promotion": false,
+    "comparative_a5_benefit_claimed": false
+  },
+  "runtime_surfaces": [
+    "orchestra_runtime/domain/adaptive/task_profile.py",
+    "orchestra_runtime/domain/adaptive/topology_validator.py",
+    "orchestra_runtime/domain/adaptive/agentic_workflow.py",
+    "orchestra_runtime/application/use_cases/agentic_workflow.py",
+    "orchestra_runtime/infrastructure/machine/agentic_workflow.py",
+    "orchestra_runtime/services.py",
+    "orchestra_runtime/domain/adaptive/advanced_adaptation.py"
+  ],
+  "validation_surfaces": [
+    "tests/runtime/test_agentic_workflow.py",
+    "tests/runtime/test_agentic_workflow_oee_replay.py",
+    "tests/runtime/test_agentic_workflow_scenarios.py",
+    "scripts/validate_machine_contracts.py",
+    "tests/runtime/test_agentic_workflow_edges.py",
+    "tests/runtime/test_agentic_workflow_intake.py",
+    "tests/runtime/test_agentic_workflow_intake_edges.py",
+    "tests/fixtures/agentic-workflow/awf-intake-calibration.v1.json",
+    "tests/runtime/test_agentic_workflow_intake_calibration.py",
+    "tests/fixtures/agentic-workflow/awf-negative-routing.v1.json",
+    "tests/runtime/test_agentic_workflow_negative_routing.py",
+    "tests/fixtures/agentic-workflow/awf-semantic-robustness.v1.json",
+    "tests/runtime/test_agentic_workflow_semantic_robustness.py",
+    "tests/runtime/test_advanced_adaptation_admission.py"
+  ],
+  "historical_replay": {
+    "case": "UIEF5_20260905_USAGE_EXHAUSTION",
+    "owner": "cloak",
+    "expected_required_specialists": [
+      "cloak"
+    ],
+    "evidence_claim_scope": "HISTORICAL_REPLAY_ONLY"
+  },
+  "qualification": {
+    "source_pr": 800,
+    "qualified_source_head": "7040618b4faf6998fd88d6bc984677fc42764da4",
+    "canonical_merge_commit": "7f1e1962817b1b363fbcb1629902d69d50f1daa6",
+    "github_ci": "ALL_SIX_REQUIRED_WORKFLOWS_SUCCESS_ON_QUALIFIED_SOURCE_HEAD",
+    "workflows": [
+      "Governance Check",
+      "Required Analysis Compatibility",
+      "validate",
+      "mutation-confidence",
+      "Cross-platform Validation",
+      "cosmic-ray-confidence"
+    ],
+    "structural_readback": "CANONICAL_MAIN_CONTAINS_MERGED_AWF_TREE"
+  },
+  "efficiency": {
+    "conductor_prompt_load_strategy": "UNCHANGED_CANONICAL_SKILL_RUNTIME_CONTROL_PLANE_ACTIVATION",
+    "conductor_skill_modified": false,
+    "codex_portable_reference_modified": false,
+    "prompt_load_budget_weakened": false
+  },
+  "next_program": {
+    "id": "AWF_N1_N6_CONTINUOUS_ADAPTIVE_INTAKE_AND_CALIBRATION",
+    "status": "N1_N6_COMPLETE_CANONICAL_VERIFIED_NO_PROMOTION",
+    "authority_expansion": false,
+    "phases": [
+      {
+        "id": "AWF-N1",
+        "status": "COMPLETE_CANONICAL_VERIFIED"
+      },
+      {
+        "id": "AWF-N2",
+        "status": "COMPLETE_CANONICAL_VERIFIED"
+      },
+      {
+        "id": "AWF-N3",
+        "status": "COMPLETE_CANONICAL_VERIFIED"
+      },
+      {
+        "id": "AWF-N4",
+        "status": "COMPLETE_CANONICAL_VERIFIED"
+      },
+      {
+        "id": "AWF-N5",
+        "status": "COMPLETE_CANONICAL_VERIFIED"
+      },
+      {
+        "id": "AWF-N6",
+        "status": "COMPLETE_CANONICAL_VERIFIED_NO_PROMOTION"
+      }
+    ],
+    "canonical_n5": {
+      "source_pr": 802,
+      "qualified_source_head": "d3541396f919b6f628768f4eed79924a32610538",
+      "canonical_merge_commit": "0b5582e7175cb1ca432b371aad21634f35fa34aa",
+      "padayon_n6_authorization_merge": "61769d2cc67a769967b324afd058be718c7d0f75",
+      "semantic_cases": 30,
+      "total_controlled_cases": 68
+    },
+    "current_scope": [
+      "AWF N1-N6 canonical closeout",
+      "deterministic AWF remains active",
+      "future advanced adaptation requires new qualifying evidence and separate governed transition"
+    ],
+    "prohibited": [
+      "A5 execution attachment",
+      "learned routing execution attachment",
+      "OEE concurrency widening",
+      "specialist authority expansion",
+      "release/deploy/policy activation",
+      "UIEF resumption",
+      "benchmark reruns solely to rescue negative evidence"
+    ]
+  },
+  "negative_routing": {
+    "status": "COMPLETE_CANONICAL_VERIFIED",
+    "corpus_cases": 20,
+    "policy": "machine/workflows/task-profile-derivation.v1.json",
+    "invariants": [
+      "MENTION != INTENT",
+      "NEGATED_ACTION != AUTHORIZED_ACTION",
+      "QUOTED_DANGEROUS_TEXT != PROTECTED_ACTION",
+      "HYPOTHETICAL_ACTION != EXECUTION_REQUEST",
+      "REPRESENTATION_CONTEXT != REFERENCED_DOMAIN_AUTHORITY"
+    ]
+  },
+  "semantic_robustness_n5": {
+    "status": "COMPLETE_CANONICAL_VERIFIED",
+    "corpus_cases": 30,
+    "diagnostic_failure_classes": [
+      "NEGATION_SCOPE_LEAK",
+      "HYPOTHETICAL_SCOPE_LEAK",
+      "PROMPT_WIDE_REPRESENTATION_SUPPRESSION",
+      "REPEATED_ACTION_PRECEDENCE_GAP"
+    ],
+    "invariants": [
+      "NEGATION_SCOPE_IS_LOCAL",
+      "HYPOTHETICAL_SCOPE_IS_LOCAL",
+      "REPRESENTATION_SCOPE_IS_LOCAL",
+      "MIXED_REPRESENTATION_AND_EXECUTION_MUST_PRESERVE_EXECUTION_INTENT",
+      "LATER_SAME_SIGNAL_DIRECTIVE_SUPERSEDES_EARLIER_SAME_SIGNAL_DIRECTIVE",
+      "CONDITIONAL_PROTECTED_ACTION_REMAINS_PROTECTED"
+    ],
+    "source_pr": 802,
+    "qualified_source_head": "d3541396f919b6f628768f4eed79924a32610538",
+    "canonical_merge_commit": "0b5582e7175cb1ca432b371aad21634f35fa34aa",
+    "controlled_cases": 30,
+    "total_controlled_routing_cases_after_n5": 68,
+    "applicable_workflows": [
+      "Governance Check",
+      "Required Analysis Compatibility",
+      "validate",
+      "Cross-platform Validation",
+      "cosmic-ray-confidence"
+    ],
+    "mutation_confidence_applicable": false
+  },
+  "advanced_adaptation_n6": {
+    "status": "COMPLETE_CANONICAL_VERIFIED_NO_PROMOTION",
+    "admission_record": "machine/adaptive/advanced-adaptation-admission.v1.json",
+    "schema": "machine/schemas/advanced-adaptation-admission.v1.schema.json",
+    "evaluator": "orchestra_runtime/domain/adaptive/advanced_adaptation.py",
+    "current_disposition": "COMPLETE_NO_PROMOTION_EVIDENCE_INSUFFICIENT",
+    "a5_execution_effective_topology_selection": "BLOCKED_CONFIRMATORY_BENEFIT_NOT_ESTABLISHED",
+    "learned_routing_recommendations": "BLOCKED_NO_EXACT_PREDICTIVE_BENEFIT_EVIDENCE",
+    "oee_concurrency_widening": "BLOCKED_NO_PARALLEL_BENEFIT_OR_POLICY_AUTHORIZATION",
+    "promotion_effective": false,
+    "separate_governed_transition_required_for_any_future_candidate": true,
+    "source_pr": 803,
+    "qualified_source_head": "550a94fc14081d51da02fb451e0a25517e7ac7f7",
+    "canonical_merge_commit": "7cac0beb337dc43b5b1cbbdae7cf561b477adcdf",
+    "applicable_workflows": [
+      "Governance Check",
+      "Required Analysis Compatibility",
+      "validate",
+      "Cross-platform Validation",
+      "cosmic-ray-confidence"
+    ],
+    "runtime_tests": {
+      "total": 2572,
+      "failures": 0,
+      "branch_percent": 95.56,
+      "statement_percent": 98.27
+    },
+    "final_disposition": "COMPLETE_NO_PROMOTION_EVIDENCE_INSUFFICIENT"
+  }
+}

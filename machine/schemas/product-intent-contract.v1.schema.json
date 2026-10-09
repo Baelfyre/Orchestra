@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/product-intent-contract.v1.schema.json",
+  "title": "Orchestra Product Intent Contract v1",
+  "description": "Separates customer/user problem evidence and strategic intent from requested solutions, preventing automatic premature implementation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "contract_name",
+    "owner",
+    "revision",
+    "problem_statement",
+    "problem_evidence",
+    "affected_users",
+    "decision",
+    "decision_rationale"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orchestra.product-intent-contract.v1"
+    },
+    "contract_name": {
+      "const": "ProductIntentContract"
+    },
+    "owner": {
+      "const": "the-steward"
+    },
+    "revision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "problem_statement": {
+      "type": "string",
+      "minLength": 1
+    },
+    "problem_evidence": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "affected_users": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "current_workaround": {
+      "type": "string"
+    },
+    "requested_solution": {
+      "type": "string"
+    },
+    "strategic_alignment": {
+      "type": "string"
+    },
+    "alternative_analysis_required": {
+      "type": "boolean"
+    },
+    "existing_capability_overlap": {
+      "type": "string"
+    },
+    "obsolescence_risk": {
+      "type": "string"
+    },
+    "maintenance_burden": {
+      "type": "string"
+    },
+    "decision": {
+      "enum": [
+        "ACCEPT_REQUESTED_SOLUTION",
+        "ACCEPT_WITH_CONSTRAINTS",
+        "REQUIRE_ALTERNATIVES",
+        "DEFER",
+        "REJECT",
+        "INSUFFICIENT_CONTEXT",
+        "NOT_APPLICABLE"
+      ]
+    },
+    "decision_rationale": {
+      "type": "string",
+      "minLength": 1
+    },
+    "acceptance_criteria": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

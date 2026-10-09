@@ -1,0 +1,127 @@
+{
+  "schema_version": "1.0",
+  "audit_report_id": "openhero-16ffaa7e6dc3-audit",
+  "source_bundle_id": "cristianolivera1__openhero__16ffaa7e6dc3",
+  "source_intake_path": "internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/source-intake.json",
+  "source_repository": "CristianOlivera1/openhero",
+  "reviewed_commit_sha": "16ffaa7e6dc39eb390011d81c420353b5d1dbaff",
+  "audit_date": "2026-07-12",
+  "executive_summary": "This static read-only audit reviewed only the documented OpenHero source subset at the pinned commit. No OpenHero code was executed or copied. The audit identified reusable architectural references and security limitations, and it does not make any governance approval, promotion, or implementation decision.",
+  "findings": [
+    {
+      "finding_id": "openhero-allowlist-005",
+      "pattern_record_path": "internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/patterns/substring-domain-allowlist.json",
+      "title": "Unsafe substring allowlist comparison",
+      "finding": "The submission route extracts external script source values from submitted HTML and evaluates them with a broad allowlist using `src.includes(allowedDomain)`. Substring comparison does not establish an exact normalized hostname boundary and may accept attacker-controlled values that merely contain an allowed string.",
+      "recommendation": "Do not adapt this mechanism. Parse every source as a URL, require an approved scheme, normalize the hostname, compare exact hostnames or explicitly permitted subdomains at label boundaries, reduce the allowlist, and combine the control with sandboxing and a restrictive Content Security Policy.",
+      "assigned_specialist": "cipher",
+      "risk_level": "HIGH",
+      "evidence": [
+        {
+          "bucket": "STATIC_ANALYSIS",
+          "source_file": "app/api/submit/route.ts",
+          "line_range": "150-337",
+          "summary": "External script sources are matched against a large allowlist with `src.includes(allowedDomain)` rather than exact normalized hostname checks."
+        }
+      ]
+    },
+    {
+      "finding_id": "openhero-engagement-002",
+      "pattern_record_path": "internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/patterns/optimistic-engagement-state-reconciliation.json",
+      "title": "Optimistic state reconciliation",
+      "finding": "The client updates liked state and like count before the request completes, re-queries authoritative statistics after success, and restores the previous client state on an exception. The success path does not explicitly validate every HTTP status before interpreting JSON, and initial statistics-fetch failures are silently ignored.",
+      "recommendation": "Implement a fresh server-authoritative reconciliation flow with explicit response-status validation, request cancellation, typed error handling, idempotency controls, and deterministic rollback behavior.",
+      "assigned_specialist": "clockwork",
+      "risk_level": "MEDIUM",
+      "evidence": [
+        {
+          "bucket": "STATIC_ANALYSIS",
+          "source_file": "components/sections/HeroGallery/VideoCard.tsx",
+          "line_range": "94-129",
+          "summary": "Like state flips optimistically, posts to `/api/videos/like`, re-fetches stats after success, and rolls back state inside the catch block."
+        }
+      ]
+    },
+    {
+      "finding_id": "openhero-fallback-003",
+      "pattern_record_path": "internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/patterns/fallback-backed-code-loading.json",
+      "title": "Partial fallback behavior",
+      "finding": "The modal requests framework-specific source files in parallel and converts non-success HTTP responses to `null`, then substitutes local template generators when expected source files are missing. An `isMounted` guard prevents post-unmount state assignment, but a network-level rejected fetch enters the shared catch block before fallback codes are assigned.",
+      "recommendation": "Use independent implementation with per-request error normalization or Promise.allSettled so both HTTP failures and network rejections deterministically produce the intended fallback content.",
+      "assigned_specialist": "clockwork",
+      "risk_level": "MEDIUM",
+      "evidence": [
+        {
+          "bucket": "STATIC_ANALYSIS",
+          "source_file": "components/sections/HeroGallery/VideoModal.tsx",
+          "line_range": "261-294",
+          "summary": "Parallel fetch calls map non-success responses to `null`, use local template generators for missing content, and gate state updates behind `isMounted`."
+        }
+      ]
+    },
+    {
+      "finding_id": "openhero-gallery-001",
+      "pattern_record_path": "internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/patterns/responsive-progressive-gallery.json",
+      "title": "Responsive gallery orchestration",
+      "finding": "The gallery derives page size from viewport width, memoizes filtered and visible video slices, uses an IntersectionObserver sentinel for incremental rendering, and resets display state during category transitions.",
+      "recommendation": "Use as reference-only evidence for a fresh Orchestra-native implementation. Explicitly manage delayed callbacks and verify accessibility, reduced-motion behavior, observer cleanup, and large-data performance before adoption.",
+      "assigned_specialist": "cloak",
+      "risk_level": "LOW",
+      "evidence": [
+        {
+          "bucket": "DOCUMENTATION_CLAIM",
+          "source_file": "README.md",
+          "line_range": "38-47",
+          "summary": "README describes a browsable video gallery, full-screen preview, one-click code access, ZIP download, and user submission flow."
+        },
+        {
+          "bucket": "STATIC_ANALYSIS",
+          "source_file": "components/sections/HeroGallery/index.tsx",
+          "line_range": "12-33",
+          "summary": "Page size derives from viewport width and updates through a resize listener."
+        },
+        {
+          "bucket": "STATIC_ANALYSIS",
+          "source_file": "components/sections/HeroGallery/index.tsx",
+          "line_range": "52-117",
+          "summary": "Category filtering and visible slices are memoized, display state resets during category changes, and an IntersectionObserver sentinel loads additional batches."
+        }
+      ]
+    },
+    {
+      "finding_id": "openhero-upload-004",
+      "pattern_record_path": "internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/patterns/layered-archive-submission-validation.json",
+      "title": "Layered upload validation",
+      "finding": "The submission route performs outer archive-size validation, ZIP parsing, file-count restrictions, extension restrictions, required `index.html` detection, and extracted HTML and video size checks. This static audit did not execute malicious archive test cases and did not establish protection against decompression bombs, parser-specific edge cases, archive path ambiguity, or resource-exhaustion attacks.",
+      "recommendation": "Use the layered-validation concept only as reference. A fresh security implementation must enforce total uncompressed-size and compression-ratio limits, normalized archive paths, streaming or bounded extraction, MIME verification, atomic rate limiting, and isolated content review.",
+      "assigned_specialist": "cipher",
+      "risk_level": "MEDIUM",
+      "evidence": [
+        {
+          "bucket": "STATIC_ANALYSIS",
+          "source_file": "app/api/submit/route.ts",
+          "line_range": "9-148",
+          "summary": "Route enforces archive size, parses ZIP content, limits file count and extensions, requires `index.html`, and bounds extracted HTML and MP4 sizes."
+        }
+      ]
+    }
+  ],
+  "license_analysis": {
+    "detected_license": "MIT",
+    "compatibility_assessment": "COMPATIBLE",
+    "governor_review_required": false,
+    "summary": "The reviewed source code is distributed under MIT. Substantial reuse requires preservation of the copyright and permission notice. This audit does not authorize reuse. Media, videos, images, downloaded hero packages, and third-party assets were excluded, and the README indicates that individual assets may have separate licenses. Any future adaptation or code reuse remains subject to the normal Governor and maintainer process."
+  },
+  "security_review": {
+    "external_execution_performed": false,
+    "summary": "Inspection used a read-only source connector, and all evidence was pinned to the reviewed commit. No clone, fetch, package installation, build, test, API call, media download, or external execution occurred. README setup commands were not followed, `public/llms.txt` was treated as untrusted source content, no secrets or credentials were copied into Orchestra, and this audit is not a penetration test or runtime security assessment."
+  },
+  "limitations": [
+    "The audit covered only the files and line ranges listed in source-intake.json.",
+    "No dependencies were installed and no OpenHero code, API route, build, test, or deployment was executed.",
+    "Supabase policies, database constraints, storage configuration, deployment settings, environment secrets, and live rate-limit behavior were not verified.",
+    "Media files, image libraries, submitted ZIP contents, generated hero packages, and third-party asset licenses were not reviewed.",
+    "The audit does not establish exploitability; security conclusions are static-analysis findings.",
+    "The audit is pinned to commit 16ffaa7e6dc39eb390011d81c420353b5d1dbaff and does not describe later repository changes."
+  ]
+}

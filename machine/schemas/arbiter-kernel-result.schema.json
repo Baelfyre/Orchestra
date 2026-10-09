@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.orchestra.dev/machine/arbiter-kernel-result/1.0.0",
+  "title": "Orchestra Arbiter Kernel Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "disposition", "reason_codes", "input_digest"],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "disposition": {"enum": ["AUTO_CONTINUE", "AUTO_REMEDIATE_AND_REVALIDATE", "WAIT_FOR_EVIDENCE", "WAIT_FOR_CAPACITY", "ESCALATE_HUMAN", "STOP"]},
+    "reason_codes": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "input_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

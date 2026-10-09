@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/adaptive-store-meta.schema.json",
+  "title": "Orchestra Adaptive Store Metadata v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "layout_version",
+    "generation",
+    "compacted_at",
+    "reason",
+    "removed_count",
+    "observation_count",
+    "head_digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.adaptive-store-meta.v1"},
+    "layout_version": {"const": 1},
+    "generation": {"type": "integer", "minimum": 1},
+    "compacted_at": {"type": "string", "format": "date-time"},
+    "reason": {"type": "string", "minLength": 1},
+    "removed_count": {"type": "integer", "minimum": 1},
+    "observation_count": {"type": "integer", "minimum": 0},
+    "head_digest": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      ]
+    }
+  }
+}

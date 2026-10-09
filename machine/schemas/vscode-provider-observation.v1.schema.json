@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/vscode-provider-observation.v1.schema.json",
+  "title": "Orchestra VS Code Provider Observation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "host_id",
+    "harness_id",
+    "provider_source_id",
+    "provider_id",
+    "model_id",
+    "execution_environment",
+    "repository_sha",
+    "fixture_id",
+    "fixture_sha256",
+    "live_model_execution",
+    "session_target_observed",
+    "model_identity_observed",
+    "provider_source_observed",
+    "fixture_result_observed",
+    "worktree_clean_before",
+    "worktree_clean_after",
+    "result",
+    "evidence_refs",
+    "limitations"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.vscode-provider-observation.v1"},
+    "host_id": {"const": "vscode"},
+    "harness_id": {"enum": ["local", "copilot", "claude", "codex"]},
+    "provider_source_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]*$"},
+    "provider_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]*$"},
+    "model_id": {"type": "string", "minLength": 1, "pattern": "^[^\\r\\n\\u0000]+$"},
+    "execution_environment": {"enum": ["CURRENT_WORKSPACE", "ISOLATED_WORKTREE", "REMOTE", "CLOUD"]},
+    "repository_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "fixture_id": {"const": "vscode-provider-qualification-fixture-v1"},
+    "fixture_sha256": {"const": "010ab2a84c45bf6aa30e056fdaf5bb1d7fd61e224499fb2055744746a391b569"},
+    "live_model_execution": {"type": "boolean"},
+    "session_target_observed": {"type": "boolean"},
+    "model_identity_observed": {"type": "boolean"},
+    "provider_source_observed": {"type": "boolean"},
+    "fixture_result_observed": {"type": "boolean"},
+    "worktree_clean_before": {"type": "boolean"},
+    "worktree_clean_after": {"type": "boolean"},
+    "result": {"enum": ["NOT_RUN", "PASS", "FAIL"]},
+    "evidence_refs": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1, "pattern": "^[^\\r\\n\\u0000]+$"},
+      "uniqueItems": true
+    },
+    "limitations": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1, "pattern": "^[^\\r\\n\\u0000]+$"},
+      "uniqueItems": true
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"live_model_execution": {"const": false}}, "required": ["live_model_execution"]},
+      "then": {"properties": {"result": {"const": "NOT_RUN"}}}
+    },
+    {
+      "if": {"properties": {"live_model_execution": {"const": true}}, "required": ["live_model_execution"]},
+      "then": {
+        "properties": {
+          "result": {"enum": ["PASS", "FAIL"]},
+          "session_target_observed": {"const": true},
+          "model_identity_observed": {"const": true},
+          "provider_source_observed": {"const": true},
+          "evidence_refs": {"minItems": 1}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"result": {"const": "PASS"}}, "required": ["result"]},
+      "then": {
+        "properties": {
+          "live_model_execution": {"const": true},
+          "fixture_result_observed": {"const": true},
+          "worktree_clean_before": {"const": true},
+          "worktree_clean_after": {"const": true}
+        }
+      }
+    }
+  ]
+}

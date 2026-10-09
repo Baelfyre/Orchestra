@@ -1,0 +1,76 @@
+{
+  "schema_version": "orchestra.adaptive-selection-execution-attachment-implementation.v1",
+  "phase": "A4.2_SHADOW_POST_EXECUTION_ATTACHMENT",
+  "status": "IMPLEMENTED_SOURCE_CANDIDATE",
+  "source_baseline": {
+    "canonical_branch": "main",
+    "canonical_head": "14f6b0dca28f013b2e0561074a312f0050574115",
+    "canonical_tree": "13f36a478a483854dfaffadac28c71a0f033450d",
+    "a4_contract": "machine/adaptive/a4-bounded-selection-contract.v1.json",
+    "a4_1_implementation": "machine/adaptive/a4-shadow-ranker-implementation.v1.json",
+    "issue": 340
+  },
+  "surfaces": {
+    "runtime": "orchestra_runtime/adaptive/selection_runtime.py",
+    "validation": "tests/runtime/test_adaptive_selection_runtime.py",
+    "human_documentation": "docs/architecture/ADAPTIVE_SELECTION_A4_EXECUTION_ATTACHMENT.md"
+  },
+  "attachment_boundary": {
+    "opt_in_executor_subclass": true,
+    "default_runtime_executor_changed": false,
+    "attachment_timing": "AFTER_DETERMINISTIC_EXECUTION_RESULT",
+    "operation_inputs_receive_shadow_data": false,
+    "route_decision_mutated": false,
+    "runtime_operation_output_mutated": false,
+    "execution_controlled_by": "DETERMINISTIC_ORCHESTRA",
+    "selection_effective": false,
+    "shadow_influenced_execution": false,
+    "promotion_state": "NOT_PROMOTED",
+    "audit_persisted": false,
+    "delegated_execution_attachment": false
+  },
+  "input_boundary": {
+    "eligibility_source": "EXTERNAL_IMMUTABLE_A4_ELIGIBILITY_ENVELOPE",
+    "evidence_source": "EXTERNAL_VALIDATED_A4_EVIDENCE_PACKET",
+    "adaptive_layer_constructs_eligibility": false,
+    "adaptive_layer_adds_or_restores_candidate": false,
+    "runtime_route_binding_checks": [
+      "command_name_matches_deterministic_route",
+      "routed_specialist_matches_deterministic_route"
+    ],
+    "runtime_evidence_refs_attached": [
+      "run_id",
+      "authority_decision_ref",
+      "capability_decision_ref",
+      "lifecycle_state"
+    ]
+  },
+  "failure_and_attribution_boundary": {
+    "deterministic_runtime_gates_incomplete": "NOT_EVALUATED",
+    "adaptive_provider_unavailable_or_mismatched": "UNAVAILABLE",
+    "adaptive_failure_changes_deterministic_result": false,
+    "runtime_terminal_outcome_becomes_selection_evidence": false,
+    "generic_execution_success_proves_option_success": false,
+    "performance_attribution": "NONE",
+    "provider_exception_text_exported": false
+  },
+  "validation_targets": [
+    "shadow_provider_runs_only_after_operation",
+    "operation_inputs_never_receive_shadow_selection_data",
+    "deterministic_route_and_output_remain_unchanged",
+    "shadow_ranked_decision_can_be_attached_without_execution_effect",
+    "blocked_deterministic_governance_prevents_shadow_evaluation",
+    "adaptive_provider_failure_preserves_completed_deterministic_result",
+    "route_or_specialist_mismatch_fails adaptive attachment closed",
+    "delegated_execution_attachment_remains_disabled"
+  ],
+  "future_boundary": {
+    "execution_effective_adaptive_selection": "NOT_GRANTED_BY_THIS_UNIT",
+    "persistent_runtime_audit_attachment": "NOT_IMPLEMENTED_BY_THIS_UNIT",
+    "eligibility_construction_or_expansion": "PROHIBITED",
+    "authority_capability_governance_change": "NONE",
+    "provider_model_worker_eligibility_expansion": "NONE",
+    "a5_a6_a7_a8_behavior": "NOT_INTRODUCED",
+    "release_deployment_publication": "PROHIBITED"
+  }
+}

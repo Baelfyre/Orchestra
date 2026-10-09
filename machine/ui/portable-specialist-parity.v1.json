@@ -1,0 +1,205 @@
+{
+  "$schema": "../schemas/portable-specialist-parity.schema.json",
+  "schema_version": "orchestra.ui-portable-specialist-parity.v1",
+  "role": "UIX_8_PORTABLE_SPECIALIST_PARITY",
+  "entry_baseline": "593c7b4444d422f8fb4d78eaf25f2532ffd096ac",
+  "source_authority": {
+    "integration_flow": "machine/ui/specialist-integration-flow.v1.json",
+    "contract_inputs": [
+      "docs/project/UIX_1_UI_DESIGN_CONTRACT.md",
+      "docs/project/UIX_2_DESIGN_SOURCE_PRESERVATION.md",
+      "docs/project/UIX_3_THEME_LAYOUT_EFFECT_PROFILE_REGISTRY.md",
+      "docs/project/UIX_4_COMPONENT_ASSET_PRESERVATION.md",
+      "docs/project/UIX_5_SPECIALIST_INTEGRATION.md",
+      "docs/project/UIX_6_OPTIONAL_ADAPTER_BOUNDARIES.md",
+      "docs/project/UIX_7_DETERMINISTIC_VALIDATION_FIXTURES.md",
+      "machine/ui/specialist-integration-flow.v1.json",
+      "machine/ui/optional-adapter-boundaries.v1.json"
+    ],
+    "owners": ["conductor", "cloak", "clockwork", "the-governor", "ponytail", "overseer", "arbiter"],
+    "authority_note": "Parity proves semantic portability of source guidance only. It does not grant host maturity, runtime capability, installation authority, execution authority, or adoption authority."
+  },
+  "host_projections": [
+    {
+      "host_id": "codex",
+      "maturity_source": "machine/hosts/update-contract.v1.json",
+      "maturity": "SUPPORTED",
+      "disposition": "NORMALIZED_PORTABLE_COPY",
+      "source_root": "skills",
+      "projection_root": "adapters/codex/skills",
+      "validator": "adapters/codex/validate_codex_export.py",
+      "copy_required": true,
+      "rationale": "Codex has a canonical exporter and normalized parity validator for portable specialist copies."
+    },
+    {
+      "host_id": "antigravity",
+      "maturity_source": "machine/hosts/update-contract.v1.json",
+      "maturity": "SUPPORTED",
+      "disposition": "NO_COPY_REQUIRED",
+      "source_root": "skills",
+      "projection_root": null,
+      "validator": null,
+      "copy_required": false,
+      "rationale": "The current Antigravity adapter surface has no mirrored specialist tree; no fabricated symmetry is required."
+    },
+    {
+      "host_id": "claude-code",
+      "maturity_source": "machine/hosts/update-contract.v1.json",
+      "maturity": "SCAFFOLD_ONLY",
+      "disposition": "SCAFFOLD_ONLY_EXCLUDED",
+      "source_root": null,
+      "projection_root": null,
+      "validator": null,
+      "copy_required": false,
+      "rationale": "Scaffold-only host; UIX specialist guidance is not projected into this adapter."
+    },
+    {
+      "host_id": "cursor",
+      "maturity_source": "machine/hosts/update-contract.v1.json",
+      "maturity": "SCAFFOLD_ONLY",
+      "disposition": "SCAFFOLD_ONLY_EXCLUDED",
+      "source_root": null,
+      "projection_root": null,
+      "validator": null,
+      "copy_required": false,
+      "rationale": "Scaffold-only host; UIX specialist guidance is not projected into this adapter."
+    },
+    {
+      "host_id": "windsurf",
+      "maturity_source": "machine/hosts/update-contract.v1.json",
+      "maturity": "SCAFFOLD_ONLY",
+      "disposition": "SCAFFOLD_ONLY_EXCLUDED",
+      "source_root": null,
+      "projection_root": null,
+      "validator": null,
+      "copy_required": false,
+      "rationale": "Scaffold-only host; UIX specialist guidance is not projected into this adapter."
+    },
+    {
+      "host_id": "vscode",
+      "maturity_source": "machine/hosts/update-contract.v1.json",
+      "maturity": "SCAFFOLD_ONLY",
+      "disposition": "SCAFFOLD_ONLY_EXCLUDED",
+      "source_root": null,
+      "projection_root": null,
+      "validator": null,
+      "copy_required": false,
+      "rationale": "Scaffold-only host; UIX specialist guidance is not projected into this adapter."
+    },
+    {
+      "host_id": "jetbrains",
+      "maturity_source": "machine/hosts/update-contract.v1.json",
+      "maturity": "SCAFFOLD_ONLY",
+      "disposition": "SCAFFOLD_ONLY_EXCLUDED",
+      "source_root": null,
+      "projection_root": null,
+      "validator": null,
+      "copy_required": false,
+      "rationale": "Scaffold-only host; UIX specialist guidance is not projected into this adapter."
+    },
+    {
+      "host_id": "zed",
+      "maturity_source": "machine/hosts/update-contract.v1.json",
+      "maturity": "SCAFFOLD_ONLY",
+      "disposition": "SCAFFOLD_ONLY_EXCLUDED",
+      "source_root": null,
+      "projection_root": null,
+      "validator": null,
+      "copy_required": false,
+      "rationale": "Scaffold-only host; UIX specialist guidance is not projected into this adapter."
+    },
+    {
+      "host_id": "neovim",
+      "maturity_source": "machine/hosts/update-contract.v1.json",
+      "maturity": "SCAFFOLD_ONLY",
+      "disposition": "SCAFFOLD_ONLY_EXCLUDED",
+      "source_root": null,
+      "projection_root": null,
+      "validator": null,
+      "copy_required": false,
+      "rationale": "Scaffold-only host; UIX specialist guidance is not projected into this adapter."
+    }
+  ],
+  "surfaces": [
+    {
+      "owner": "conductor",
+      "source_path": "skills/conductor/SKILL.md",
+      "projection_path": "adapters/codex/skills/conductor/SKILL.md",
+      "disposition": "NORMALIZED_PORTABLE_COPY",
+      "parity_mode": "NORMALIZED_BODY",
+      "required_markers": ["UIX-5 router", "preserve authority", "route declared specialists"]
+    },
+    {
+      "owner": "cloak",
+      "source_path": "skills/cloak/SKILL.md",
+      "projection_path": "adapters/codex/skills/cloak/SKILL.md",
+      "disposition": "NORMALIZED_PORTABLE_COPY",
+      "parity_mode": "NORMALIZED_BODY",
+      "required_markers": ["design-source identity and evidence before implementation", "project-native component, token, and asset mappings", "`MISSING` and `UNRESOLVED` evidence explicit", "profile-composition and accessibility invariants", "static-fidelity review again", "not rendered proof"]
+    },
+    {
+      "owner": "clockwork",
+      "source_path": "skills/clockwork/SKILL.md",
+      "projection_path": "adapters/codex/skills/clockwork/SKILL.md",
+      "disposition": "NORMALIZED_PORTABLE_COPY",
+      "parity_mode": "NORMALIZED_BODY",
+      "required_markers": ["frozen UI evidence", "component, state, and responsive architecture", "existing project boundaries and design-system ownership", "visual-fidelity authority or implementation authority"]
+    },
+    {
+      "owner": "the-governor",
+      "source_path": "skills/the-governor/SKILL.md",
+      "projection_path": "adapters/codex/skills/the-governor/SKILL.md",
+      "disposition": "NORMALIZED_PORTABLE_COPY",
+      "parity_mode": "NORMALIZED_BODY",
+      "required_markers": ["NO_ADOPTION", "explicitly authorized", "release-governance boundaries"]
+    },
+    {
+      "owner": "ponytail",
+      "source_path": "skills/ponytail/SKILL.md",
+      "projection_path": "adapters/codex/skills/ponytail/SKILL.md",
+      "disposition": "NORMALIZED_PORTABLE_COPY",
+      "parity_mode": "NORMALIZED_BODY",
+      "required_markers": ["upstream contracts are sufficiently frozen", "mapped project-native components, semantic tokens, and approved assets", "arbitrary styling", "unapproved asset"]
+    },
+    {
+      "owner": "overseer",
+      "source_path": "skills/overseer/SKILL.md",
+      "projection_path": "adapters/codex/skills/overseer/SKILL.md",
+      "disposition": "NORMALIZED_PORTABLE_COPY",
+      "parity_mode": "NORMALIZED_BODY",
+      "required_markers": ["exact implementation revision and design-reference identity", "interaction, responsive behavior, and accessibility", "silent visual-baseline replacement", "Functional or static evidence alone"]
+    },
+    {
+      "owner": "arbiter",
+      "source_path": "skills/arbiter/SKILL.md",
+      "projection_path": "adapters/codex/skills/arbiter/SKILL.md",
+      "disposition": "NORMALIZED_PORTABLE_COPY",
+      "parity_mode": "NORMALIZED_BODY",
+      "required_markers": ["fresh, revision-bound UI evidence", "stale, mismatched, or incomplete evidence", "transition-disposition ownership"]
+    }
+  ],
+  "validation": {
+    "deterministic_test": "tests/runtime/test_portable_specialist_parity.py",
+    "codex_validator": "adapters/codex/validate_codex_export.py",
+    "host_maturity_contract": "machine/hosts/update-contract.v1.json",
+    "positive_cases": ["SUPPORTED_CODEX_NORMALIZED_PARITY"],
+    "negative_cases": ["STALE_SOURCE_COPY", "AUTHORITY_EXPANSION", "SCAFFOLD_HOST_PROMOTION", "FABRICATED_ANTIGRAVITY_COPY"],
+    "no_fabricated_antigravity_projection": true,
+    "no_scaffold_promotion": true,
+    "no_host_maturity_promotion": true,
+    "zero_external_calls": true,
+    "no_runtime_integration": true
+  },
+  "authority": {
+    "parity_grants_host_maturity": false,
+    "parity_grants_runtime_authority": false,
+    "parity_grants_installation_authority": false,
+    "parity_grants_execution_authority": false,
+    "dependency_adoption_authorized": false,
+    "external_calls_authorized": false,
+    "figma_mutation_authorized": false,
+    "release_authorized": false,
+    "policy_activation_authorized": false,
+    "destructive_action_authorized": false
+  }
+}

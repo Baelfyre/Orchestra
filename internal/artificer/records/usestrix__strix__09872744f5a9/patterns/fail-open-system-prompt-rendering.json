@@ -1,0 +1,9 @@
+{
+  "name": "Fail-Open System Prompt Rendering",
+  "description": "Catches any exception raised while resolving prompt resources, loading skills, or rendering the system template and returns an empty system prompt instead of failing agent creation.",
+  "source_file": "strix/agents/prompt.py",
+  "line_range": "62-101",
+  "classification": "OUT_OF_SCOPE",
+  "assigned_specialist": "cipher",
+  "license_implications": "The source is Apache-2.0 licensed, but this fail-open mechanism is recorded as a safety anti-pattern and is not approved for adaptation or reuse."
+}

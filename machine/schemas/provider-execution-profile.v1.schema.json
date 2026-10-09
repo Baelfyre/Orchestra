@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/provider-execution-profile.v1.schema.json",
+  "title": "Orchestra Provider Execution Profile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "profile_version",
+    "profile_id",
+    "provider_id",
+    "model_id",
+    "capabilities",
+    "profile_digest"
+  ],
+  "properties": {
+    "profile_version": {
+      "const": "orchestra.provider-execution-profile.v1"
+    },
+    "profile_id": {
+      "type": "string",
+      "pattern": "^provider-profile\\.[0-9a-f]{24}$"
+    },
+    "provider_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_.:-]*$"
+    },
+    "model_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[^\\r\\n\\u0000]+$"
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "APPROVAL_CONTROL",
+          "CANCELLATION",
+          "HOST_ACTIVITY_OBSERVATION",
+          "NETWORK_RESTRICTION",
+          "READ_ONLY_SANDBOX_CONTROL",
+          "STRUCTURED_OUTPUT"
+        ]
+      },
+      "uniqueItems": true
+    },
+    "profile_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

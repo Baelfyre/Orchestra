@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/provider-execution-requirement.v1.schema.json",
+  "title": "Orchestra Provider Execution Requirement v1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "required_provider_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_.:-]*$"
+    },
+    "required_model_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[^\\r\\n\\u0000]+$"
+    },
+    "required_capabilities": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "APPROVAL_CONTROL",
+          "CANCELLATION",
+          "HOST_ACTIVITY_OBSERVATION",
+          "NETWORK_RESTRICTION",
+          "READ_ONLY_SANDBOX_CONTROL",
+          "STRUCTURED_OUTPUT"
+        ]
+      },
+      "uniqueItems": true
+    }
+  }
+}

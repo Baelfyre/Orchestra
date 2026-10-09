@@ -1,0 +1,118 @@
+{
+  "schema_version": "orchestra.aq14-effectiveness-qualification.v1",
+  "phase": "AQ14_FINAL_ADAPT_QA_EFFECTIVENESS_QUALIFICATION",
+  "owner": "overseer",
+  "authority_model": "EVIDENCE_ONLY_NON_AUTHORIZING",
+  "purpose": "Perform a final deterministic qualification of the canonical AQ9 through AQ13 ADAPT-QA evidence chain without converting assurance evidence into release, deployment, production, provider, policy, lifecycle, or AQ15 authority.",
+  "implementation_inventory": [
+    "CHANGELOG.md",
+    "README.json",
+    "docs/architecture/ADAPTIVE_ASSURANCE_AQ14.md",
+    "machine/adaptive/aq14-effectiveness-qualification.v1.json",
+    "machine/schemas/aq14-effectiveness-qualification.v1.schema.json",
+    "orchestra_runtime/domain/adaptive/effectiveness_qualification.py",
+    "scripts/validation/validate_aq14.py",
+    "tests/behavior/run_tests.py",
+    "tests/runtime/test_adaptive_assurance_aq14.py"
+  ],
+  "qualification_boundary": {
+    "target_repository": "Baelfyre/Orchestra",
+    "canonical_start_sha": "34eb2a38a97f6d1acef6bbd206da8795393457de",
+    "mode": "CONTROLLED_NON_PRODUCTION_FINAL_EFFECTIVENESS_QUALIFICATION",
+    "cud10_state": "READY_NOT_STARTED_HELD_BY_CURRENT_USER",
+    "protected_policy_mutation_allowed": false,
+    "production_mutation_allowed": false,
+    "provider_activation_allowed": false,
+    "telemetry_activation_allowed": false,
+    "release_or_deploy_allowed": false,
+    "aq15_authorization_allowed": false
+  },
+  "required_phases": ["AQ9", "AQ10", "AQ11", "AQ12", "AQ13"],
+  "phase_evidence": [
+    {
+      "phase_id": "AQ9",
+      "canonical_pr": 907,
+      "canonical_sha": "b5b6e1761e9ebf265e3e2b3ffbfc17a52c6c99b3",
+      "canonical_tree": "ac90102a77339baff72b5ca52e512885e47f2819",
+      "required_disposition": "PASS"
+    },
+    {
+      "phase_id": "AQ10",
+      "canonical_pr": 913,
+      "canonical_sha": "2fa5d648b5b19d483ecbe2342f5a28927a85d28f",
+      "canonical_tree": "e9199f374d5c6b1f32b3c52f826e0141d021b4d3",
+      "required_disposition": "PASS"
+    },
+    {
+      "phase_id": "AQ11",
+      "canonical_pr": 916,
+      "canonical_sha": "34c7fcf45ee42db92289479c1ec8e0b425af29e7",
+      "canonical_tree": "6832c5050a5319876cded35e4a206dc44c10b050",
+      "required_disposition": "PASS"
+    },
+    {
+      "phase_id": "AQ12",
+      "canonical_pr": 919,
+      "canonical_sha": "2fc2d9ce9fc263813981e4dc8c88d1e4f604f036",
+      "canonical_tree": "85681748eb895898d8c941c69b0ddd5da1da754c",
+      "required_disposition": "PASS"
+    },
+    {
+      "phase_id": "AQ13",
+      "canonical_pr": 922,
+      "canonical_sha": "34eb2a38a97f6d1acef6bbd206da8795393457de",
+      "canonical_tree": "60e8410e0031f2977c920f429afccad5f983ce2a",
+      "required_disposition": "PASS"
+    }
+  ],
+  "qualification_policy": {
+    "minimum_phase_count": 5,
+    "canonical_identity_required": true,
+    "source_assurance_required": true,
+    "promotion_assurance_required": true,
+    "post_merge_assurance_required": true,
+    "independent_evidence_required": true,
+    "deterministic_evidence_required": true,
+    "maximum_unresolved_critical_findings": 0,
+    "disposition_precedence": ["REVISION_REQUIRED", "WAIT_FOR_EVIDENCE", "PASS"],
+    "claim_scope": "CONTROLLED_ADAPT_QA_EVIDENCE_CHAIN_ONLY",
+    "organic_effectiveness_claim_allowed": false,
+    "production_readiness_claim_allowed": false
+  },
+  "fail_closed_conditions": [
+    "MISSING_OR_REORDERED_PHASE_EVIDENCE_REJECTED",
+    "CANONICAL_PR_SHA_OR_TREE_IDENTITY_DRIFT_REJECTED",
+    "PRIOR_PHASE_HOLD_OR_REVISION_FORCES_REVISION_REQUIRED",
+    "UNRESOLVED_CRITICAL_FINDING_FORCES_REVISION_REQUIRED",
+    "INCOMPLETE_ASSURANCE_OR_NON_INDEPENDENT_EVIDENCE_CANNOT_PASS",
+    "NON_DETERMINISTIC_EVIDENCE_CANNOT_PASS",
+    "PROTECTED_POLICY_MUTATION_REJECTED",
+    "PRODUCTION_PROVIDER_TELEMETRY_OR_RELEASE_ACTION_REJECTED",
+    "AQ14_PASS_CREATES_NO_TRANSITION_OR_RELEASE_AUTHORITY",
+    "AQ14_PASS_DOES_NOT_AUTHORIZE_AQ15",
+    "AQ14_PASS_DOES_NOT_ADMIT_CRITIQUAL_CUD10",
+    "AQ14_PASS_MAKES_NO_ORGANIC_EFFECTIVENESS_OR_PRODUCTION_READINESS_CLAIM"
+  ],
+  "authority": {
+    "creates_execution_authority": false,
+    "creates_transition_authority": false,
+    "creates_whitelist_authority": false,
+    "changes_protected_policy": false,
+    "lowers_assurance_thresholds": false,
+    "activates_provider": false,
+    "activates_telemetry": false,
+    "mutates_production": false,
+    "authorizes_release": false,
+    "authorizes_aq15": false,
+    "authorizes_critiqual_cud10_admission": false
+  },
+  "validation": {
+    "validator": "scripts/validation/validate_aq14.py",
+    "runtime": "orchestra_runtime/domain/adaptive/effectiveness_qualification.py",
+    "runtime_test": "tests/runtime/test_adaptive_assurance_aq14.py",
+    "behavior_registration": "tests/behavior/run_tests.py",
+    "architecture_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ14.md",
+    "schema": "machine/schemas/aq14-effectiveness-qualification.v1.schema.json",
+    "canonical_start_sha": "34eb2a38a97f6d1acef6bbd206da8795393457de"
+  }
+}

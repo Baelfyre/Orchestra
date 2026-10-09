@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/uix9b-live-metric-evaluator.v2.schema.json",
+  "title": "Orchestra UIX-9B V2 Frozen Evaluator Contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "role", "evaluator_version", "source", "treatment_blind_inputs", "forbidden_scoring_inputs", "global_behavior", "metric_directions", "metrics"],
+  "properties": {
+    "$schema": {"const": "../../../machine/schemas/uix9b-live-metric-evaluator.v2.schema.json"},
+    "schema_version": {"const": "uix9b.live-metric-evaluator.v2"},
+    "role": {"const": "UIX_9B_FROZEN_LIVE_METRIC_EVALUATOR"},
+    "evaluator_version": {"const": "uix9b-live-metric-evaluator-v2.0.0"},
+    "source": {"const": "scripts/uix9_live_metric_evaluator_v2.py"},
+    "treatment_blind_inputs": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "forbidden_scoring_inputs": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+    "global_behavior": {"type": "object", "additionalProperties": {"type": ["string", "integer", "boolean"]}},
+    "metric_directions": {"type": "object", "additionalProperties": {"enum": ["true_is_better", "false_is_better", "higher_is_better", "lower_is_better"]}},
+    "metrics": {"type": "object", "additionalProperties": {"$ref": "#/$defs/metric"}, "minProperties": 13, "maxProperties": 13}
+  },
+  "$defs": {
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["semantic_definition", "exact_inputs", "deterministic_computation", "output", "missing_input_behavior", "invalid_input_behavior", "aggregation"],
+      "properties": {
+        "semantic_definition": {"type": "string", "minLength": 1},
+        "exact_inputs": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+        "deterministic_computation": {"type": "string", "minLength": 1},
+        "output": {"type": "string", "minLength": 1},
+        "missing_input_behavior": {"const": "FAIL_CLOSED"},
+        "invalid_input_behavior": {"const": "FAIL_CLOSED"},
+        "aggregation": {"type": "string", "minLength": 1}
+      }
+    }
+  }
+}

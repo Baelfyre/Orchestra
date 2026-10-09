@@ -1,0 +1,23 @@
+{
+  "schema_version": "uix9b.accessibility-contract.v1",
+  "reference_identity": "uix9b-operations-workspace-reference-v1",
+  "standard_target": "WCAG_2_2_AA",
+  "invariants": [
+    "one_main_landmark",
+    "navigation_has_accessible_name",
+    "headings_follow_logical_order",
+    "every_interactive_control_has_accessible_name",
+    "keyboard_operation_has_no_pointer_only_action",
+    "visible_focus_indicator_is_preserved",
+    "table_has_header_cells_and_scope",
+    "loading_and_error_status_is_programmatically_exposed",
+    "error_text_is_not_color_only",
+    "drawer_uses_dialog_semantics_when_open",
+    "drawer_close_is_keyboard_operable",
+    "reduced_motion_is_respected",
+    "forced_colors_remain_usable"
+  ],
+  "aria_policy": "semantic_html_before_aria",
+  "contrast_policy": "meaning_must_not_depend_on_color_alone",
+  "focus_policy": "no_outline_removal_without_replacement"
+}

@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/adaptive-selection-evidence.schema.json",
+  "title": "Orchestra Adaptive Selection Evidence Packet v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_id",
+    "eligibility_envelope_ref",
+    "eligibility_envelope_digest",
+    "selection_type",
+    "collected_at",
+    "items"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.adaptive-selection-evidence.v1"},
+    "packet_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "eligibility_envelope_ref": {"type": "string", "minLength": 1, "maxLength": 512},
+    "eligibility_envelope_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "selection_type": {"enum": ["SPECIALIST_STRATEGY", "MODEL", "WORKER"]},
+    "collected_at": {"type": "string", "format": "date-time"},
+    "items": {
+      "type": "array",
+      "maxItems": 256,
+      "items": {"$ref": "#/$defs/evidence_item"}
+    },
+    "notes": {
+      "type": "array",
+      "maxItems": 16,
+      "items": {"type": "string", "minLength": 1, "maxLength": 512}
+    }
+  },
+  "$defs": {
+    "evidence_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id",
+        "source_kind",
+        "source_ref",
+        "source_digest",
+        "option_id",
+        "selection_type",
+        "qualification_status",
+        "reason_code"
+      ],
+      "properties": {
+        "evidence_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "source_kind": {
+          "enum": [
+            "A3_SHADOW_CANDIDATE",
+            "A3_SHADOW_COMPARISON",
+            "GOVERNED_SELECTION_OUTCOME",
+            "VALIDATION_EVIDENCE",
+            "REMEDIATION_EVIDENCE",
+            "TRUSTWORTHY_MEASURED_TELEMETRY"
+          ]
+        },
+        "source_ref": {"type": "string", "minLength": 1, "maxLength": 512},
+        "source_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "option_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "selection_type": {"enum": ["SPECIALIST_STRATEGY", "MODEL", "WORKER"]},
+        "a3_candidate_type": {
+          "enum": ["USER_PREFERENCE_TENDENCY", "WORKFLOW_TENDENCY", "SPECIALIST_STRATEGY_TENDENCY"]
+        },
+        "direction": {"enum": ["POSITIVE", "NEGATIVE", "NEUTRAL"]},
+        "qualification_status": {"enum": ["QUALIFIED", "REJECTED"]},
+        "reason_code": {"type": "string", "pattern": "^[A-Z0-9][A-Z0-9_]{0,127}$"},
+        "measurement": {"$ref": "#/$defs/measurement"}
+      }
+    },
+    "measurement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["metric", "value", "unit", "measurement_status"],
+      "properties": {
+        "metric": {"enum": ["LATENCY", "COST", "TOKEN_COUNT"]},
+        "value": {"type": "number", "minimum": 0},
+        "unit": {"type": "string", "minLength": 1, "maxLength": 64},
+        "measurement_status": {"const": "TRUSTWORTHY_MEASURED"}
+      }
+    }
+  }
+}

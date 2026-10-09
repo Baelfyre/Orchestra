@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/cosmic-ray-evidence.schema.json",
+  "title": "Orchestra Cosmic Ray Mutation Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "repository", "tested_sha", "source_head_sha", "workflow", "tool", "scope", "execution", "mutation_summary", "reports"],
+  "properties": {
+    "schema_version": {"type": "string", "const": "orchestra.cosmic-ray-evidence.v2"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "repository": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+    "tested_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "source_head_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "workflow": {
+      "type": "object", "additionalProperties": false,
+      "required": ["run_id", "run_attempt", "event_name", "ref_name"],
+      "properties": {
+        "run_id": {"type": "string", "minLength": 1}, "run_attempt": {"type": "string", "minLength": 1},
+        "event_name": {"type": "string", "minLength": 1}, "ref_name": {"type": "string", "minLength": 1}
+      }
+    },
+    "tool": {
+      "type": "object", "additionalProperties": false, "required": ["name", "version"],
+      "properties": {"name": {"type": "string", "const": "cosmic-ray"}, "version": {"type": "string", "minLength": 1}}
+    },
+    "scope": {
+      "type": "object", "additionalProperties": false, "required": ["modules", "test_command", "configuration", "pilot"],
+      "properties": {
+        "modules": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "test_command": {"type": "string", "minLength": 1}, "configuration": {"type": "string", "minLength": 1},
+        "pilot": {"type": "boolean"}
+      }
+    },
+    "execution": {
+      "type": "object", "additionalProperties": false,
+      "required": ["init_exit_code", "baseline_exit_code", "exec_exit_code", "dump_exit_code", "classification_exit_code", "score_status", "interpretation"],
+      "properties": {
+        "init_exit_code": {"type": "integer"}, "baseline_exit_code": {"type": "integer"},
+        "exec_exit_code": {"type": "integer"}, "dump_exit_code": {"type": "integer"},
+        "classification_exit_code": {"type": "integer"},
+        "score_status": {"type": "string", "enum": ["VALID_CLASSIFIED_SCORE", "UNSCORED_TOOL_FAILURE", "UNSCORED_INCOMPLETE", "UNSCORED_UNKNOWN_OUTCOME"]},
+        "interpretation": {"type": "string", "minLength": 1}
+      }
+    },
+    "mutation_summary": {
+      "type": "object", "additionalProperties": false,
+      "required": ["raw", "runtime_relevant", "excluded_equivalent"],
+      "properties": {
+        "raw": {
+          "type": "object", "additionalProperties": false, "required": ["total", "killed", "survived", "other", "score_percent"],
+          "properties": {
+            "total": {"type": "integer", "minimum": 0}, "killed": {"type": "integer", "minimum": 0},
+            "survived": {"type": "integer", "minimum": 0}, "other": {"type": "integer", "minimum": 0},
+            "score_percent": {"type": ["number", "null"], "minimum": 0, "maximum": 100}
+          }
+        },
+        "runtime_relevant": {
+          "type": "object", "additionalProperties": false, "required": ["total", "killed", "survived", "score_percent"],
+          "properties": {
+            "total": {"type": "integer", "minimum": 0}, "killed": {"type": "integer", "minimum": 0},
+            "survived": {"type": "integer", "minimum": 0},
+            "score_percent": {"type": ["number", "null"], "minimum": 0, "maximum": 100}
+          }
+        },
+        "excluded_equivalent": {"type": "integer", "minimum": 0}
+      }
+    },
+    "reports": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "init_output", "init_output_sha256", "baseline_output", "baseline_output_sha256",
+        "exec_output", "exec_output_sha256", "report_output", "report_output_sha256",
+        "dump_output", "dump_output_sha256", "classification_output", "classification_output_sha256",
+        "session_database", "session_database_sha256"
+      ],
+      "properties": {
+        "init_output": {"type": "string", "minLength": 1}, "init_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "baseline_output": {"type": "string", "minLength": 1}, "baseline_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "exec_output": {"type": "string", "minLength": 1}, "exec_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "report_output": {"type": "string", "minLength": 1}, "report_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "dump_output": {"type": "string", "minLength": 1}, "dump_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "classification_output": {"type": "string", "minLength": 1}, "classification_output_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "session_database": {"type": "string", "minLength": 1}, "session_database_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

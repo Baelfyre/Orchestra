@@ -1,0 +1,137 @@
+{
+  "schema_version": "orchestra.b2-a5-topology-executor-binding.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "phase": "B2_1_A5_TOPOLOGY_EXECUTION_ENABLEMENT",
+  "status": "SOURCE_CANDIDATE_ZERO_LIVE_CALLS",
+  "canonical_entry": {
+    "repository": "Baelfyre/Orchestra",
+    "branch": "main",
+    "sha": "fee39a1feae254dae0de54d21663bed4cc3f1fd2",
+    "tree": "4ac379e9f05290f3e282cc66dee46e35ef4a157e"
+  },
+  "purpose": "Enable scientifically valid non-production B2 A5-isolated topology execution without making A5 execution-effective in Orchestra runtime.",
+  "audit_finding": {
+    "existing_benchmark_executors_enact_topology": false,
+    "existing_behavior": "Existing Antigravity and Codex benchmark executors record topology_candidate_id and topology_digest as provenance but do not change execution ordering from those fields.",
+    "false_experiment_risk": "Using the B2 plan with an existing communication executor would compare topology labels over effectively identical execution and is prohibited.",
+    "required_remediation": "A benchmark-only executor must enact the frozen eligible candidate topology before any B2 live measurement."
+  },
+  "executor": {
+    "path": "scripts/a5_topology_benchmark_executor.py",
+    "binding_version": "orchestra.b2-a5-topology-executor.v1",
+    "experiment_kind": "A5_ISOLATED",
+    "communication_mode": "DEFAULT",
+    "production_runtime_attachment": false,
+    "conductor_dispatch_attachment": false,
+    "runtime_executor_attachment": false,
+    "parallel_execution_authorized": false,
+    "supported_stage_mode_in_b2_1": "SEQUENTIAL",
+    "one_specialist_per_stage": true,
+    "required_specialists": [
+      "clockwork",
+      "overseer"
+    ],
+    "candidate_selected_by": "SHARED_BENCHMARK_HARNESS_ARM_SCHEDULE",
+    "candidate_selected_by_a5_ranker": false,
+    "fixed_finalizer_outside_topology": true,
+    "fixed_finalizer_receives_advisories_in": "CANONICAL_SPECIALIST_NAME_ORDER",
+    "retry_policy": "OFF"
+  },
+  "specialist_projection": {
+    "version": "orchestra.b2-specialist-projection.v1",
+    "purpose": "Compact benchmark-only ownership projections used to isolate coordination ordering without importing whole specialist skill files as a prompt-size confound.",
+    "authoritative_specialist_runtime_replacement": false,
+    "clockwork_digest": "a11fe6d40360ab6e443047f0ab220f1d6cd7737f6fc2aed30ab7f066b3bb2520",
+    "overseer_digest": "325c6a765a0cbc704dd03f2ce6b361bd26cc64a99c932d51849d2ab9e81814e7"
+  },
+  "topology_binding": {
+    "eligibility_source": "CANONICAL_A5_TOPOLOGY_ELIGIBILITY_ENVELOPE_REQUIRED",
+    "eligibility_envelope_frozen_by_this_unit": false,
+    "request_eligibility_digest_must_match_loaded_envelope": true,
+    "request_candidate_must_exist_in_loaded_envelope": true,
+    "request_candidate_digest_must_match_canonical_candidate": true,
+    "manifest_candidate_set_and_order_must_equal_envelope": true,
+    "required_specialist_set_must_be_preserved": true,
+    "parallel_stage_disposition": "FAIL_CLOSED_NOT_AUTHORIZED_BY_B2_1"
+  },
+  "a5_shadow_observation": {
+    "same_frozen_eligible_set": true,
+    "evidence_packet_for_execution_enablement": "EMPTY_EXACT_BOUND_PACKET",
+    "shadow_ranker": "orchestra.adaptive-topology-scorer.v1",
+    "topology_effective": false,
+    "shadow_influenced_execution": false,
+    "promotion_state": "NOT_PROMOTED"
+  },
+  "provider_binding": {
+    "planned_provider": "openai-codex",
+    "planned_cli_version": "0.148.0",
+    "planned_model": "gpt-5.6-sol",
+    "planned_reasoning_effort": "medium",
+    "transport": "jsonl-usage",
+    "exact_host_command_prefix": "MUST_BE_FROZEN_OUTSIDE_THIS_SOURCE_CANDIDATE_BEFORE_LIVE_EXECUTION",
+    "workspace": "EXISTING_EMPTY_GIT_WORKTREE_REQUIRED",
+    "sandbox": "read-only",
+    "approval_policy": "never",
+    "agents": false,
+    "web_search": false,
+    "shell_tool": false
+  },
+  "run_structure": {
+    "specialist_calls_per_two_stage_candidate": 2,
+    "fixed_finalizer_calls": 1,
+    "total_model_calls_per_benchmark_run": 3,
+    "stage_two_receives_stage_one_advisory": true,
+    "finalizer_receives_both_advisories": true,
+    "task_prompt_held_constant_across_candidate_arms": true,
+    "validator": "EXACT_JSON_CONFORMANCE_V1",
+    "host_reported_usage_aggregated_across_all_calls": true
+  },
+  "fail_closed_conditions": [
+    "ELIGIBILITY_DIGEST_MISMATCH",
+    "CANDIDATE_OUTSIDE_FROZEN_ENVELOPE",
+    "CANDIDATE_DIGEST_MISMATCH",
+    "MANIFEST_CANDIDATE_SET_DRIFT",
+    "NON_DEFAULT_COMMUNICATION",
+    "PARALLEL_STAGE_NOT_AUTHORIZED",
+    "REQUIRED_SPECIALIST_SET_DRIFT",
+    "LIVE_EXECUTION_FLAG_FALSE",
+    "CLI_VERSION_DRIFT",
+    "MODEL_DRIFT",
+    "REASONING_SETTING_DRIFT",
+    "INVALID_GIT_WORKSPACE",
+    "CODEX_TOOL_EVENT_OR_JSONL_FAILURE",
+    "PER_RUN_TOKEN_CEILING_BREACH"
+  ],
+  "validation": {
+    "focused_test": "tests/runtime/test_comparative_benchmark_a5_topology_executor.py",
+    "zero_call_tests_required": true,
+    "live_model_calls_by_this_unit": 0
+  },
+  "next_gate": {
+    "phase": "B2_2_REAL_CALIBRATION_FREEZE_AND_ZERO_CALL_PREFLIGHT",
+    "required_before_live_calls": [
+      "VALIDATED_BENCHMARK_COORDINATION_SESSION",
+      "CANONICAL_EXACT_A5_ELIGIBILITY_ENVELOPE",
+      "AT_LEAST_TWO_ALREADY_PERMITTED_SEQUENTIAL_TOPOLOGY_CANDIDATES",
+      "FROZEN_EXECUTABLE_B2_TASK_SET",
+      "EXACT_CODEX_COMMAND_PREFIX_AND_BINARY_DIGESTS",
+      "EXACT_GIT_WORKSPACE_IDENTITY",
+      "PER_RUN_TOKEN_CEILING",
+      "CUMULATIVE_EXPERIMENT_TOKEN_CEILING",
+      "MAXIMUM_MODEL_CALL_COUNT",
+      "ZERO_LIVE_CALL_PREFLIGHT_PASS",
+      "SEPARATE_EXPLICIT_LIVE_EXECUTION_AUTHORIZATION"
+    ]
+  },
+  "authority": {
+    "live_execution_authorized": false,
+    "a5_execution_effective_promotion": false,
+    "a6_authorized": false,
+    "a7_authorized": false,
+    "a8_authorized": false,
+    "b4_authorized": false,
+    "release_publication_authorized": false,
+    "deployment_authorized": false,
+    "policy_activation_authorized": false
+  }
+}

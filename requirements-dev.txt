@@ -1,0 +1,6 @@
+# Core local behavior/runtime validation dependencies.
+# Keep aligned with .github/workflows/validate.yml.
+pytest
+pytest-cov
+hypothesis==6.163.0
+jsonschema[format]>=4.21,<5

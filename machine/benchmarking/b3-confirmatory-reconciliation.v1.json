@@ -1,0 +1,103 @@
+{
+  "schema_version": "orchestra.b3-confirmatory-reconciliation.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "phase": "B3_CONFIRMATORY_EVIDENCE_RECONCILIATION_AND_TERMINAL_CONCLUSION",
+  "recorded_date": "2026-08-24",
+  "status": "B3_TERMINAL_EVIDENCE_RECONCILED",
+  "canonical_preparation": {
+    "sha": "e568ee4d9f72d005e73e828fd5d8aa6fc6cc3020",
+    "tree": "3b3bf7fc342eda0a0afb8754737f80524953ff4d",
+    "parent": "65ac344030065ce1a1c5ced5ce63d420bbf13711",
+    "signature": "GITHUB_VERIFIED_VALID"
+  },
+  "frozen_identity": {
+    "freeze_digest": "144ce7acc5c1301b7589516a0ff7aad3b835276e7959b74ca321b71da0e8a4d4",
+    "manifest_digest": "6b0c591072666473ffd48503f14c3ede8a6895d700df82d23f0e6e6357693abc",
+    "plan_digest": "d87d7d13d653e9a6ed599310f2094abe841cae7717ce8c3c439a2c6c2c864c69",
+    "task_set_digest": "c29b6988df9b53deb02b938849c6115b7bc7f18b0a3c7093183ee0d9eae4b7ee",
+    "preregistration_digest": "3e6cf35815395ef0fb34341464983827d16729a1d9982c301e48f848bce17bcb",
+    "provider": "antigravity",
+    "cli_version": "1.1.19",
+    "model": "gemini-3.7-flash-high",
+    "reasoning_setting": "high",
+    "counter_id": "antigravity-cli-1.1.19:stream-json-usage:gemini-3.7-flash-high"
+  },
+  "authorization": {
+    "authorized_by": "HUMAN_REPOSITORY_OWNER_MASTER_B_PHASE_AUTHORIZATION",
+    "authorization_digest": "c2ffb06d29d03f65fe2d25ac9d41649a02d7af57a6006b24d362a971a11b2abd",
+    "automatic_retry": false,
+    "authorization_consumed": true
+  },
+  "execution": {
+    "planned_runs": 450,
+    "accepted_runs": 450,
+    "invalid_runs": 0,
+    "live_model_calls_consumed": 450,
+    "accepted_total_tokens": 8885182,
+    "session_status": "COMPLETE",
+    "stop_reason": null
+  },
+  "evidence_archive": {
+    "directory": "D:\\Dev\\Orchestra-Benchmark-Evidence\\b3-confirmatory-20260824T041357Z",
+    "filename": "B3_CONFIRMATORY_SESSION.zip",
+    "sha256": "ed0d8fb053de46b966d24e0bd9f47f05a71216ea541aa0801fa958d679a4ff31",
+    "analysis_sha256": "1516701a8cf2c1cfa67743b4dfc6501f61be114e415cd93e200f669683831828",
+    "repository_committed": false,
+    "external_operator_retained": true,
+    "file_count": 1355,
+    "uncompressed_bytes": 9336722,
+    "derived_record_digests": {
+      "authorization": "c2ffb06d29d03f65fe2d25ac9d41649a02d7af57a6006b24d362a971a11b2abd",
+      "plan": "d87d7d13d653e9a6ed599310f2094abe841cae7717ce8c3c439a2c6c2c864c69",
+      "run_index": "9345416e49438bb17a5c26cd8628cfc11a96ac93e4248939aa1f04601b839de7",
+      "experiment": "bfaf57e0773dcd578f0eefce102ae08e20eb1a4f0bf61f2cac63b711425166db",
+      "session_summary": "46ef1ea0e4264c4cd7fe20c90c012de1d90a4dfd26fe3a674517bc06a0d374ae"
+    }
+  },
+  "integrity_audit": {
+    "repository_unchanged_during_session": true,
+    "plan_request_executor_run_bijection": "PASS_450_OF_450",
+    "run_index_digest_recomputation": "PASS_450_OF_450",
+    "raw_evidence_digest_recomputation": "PASS_450_OF_450",
+    "paired_blocks": 150,
+    "all_outcomes_pass": true,
+    "all_safety_flags_false": true
+  },
+  "primary_analysis": {
+    "endpoint": "MEDIAN_PAIRED_OUTPUT_TOKEN_RELATIVE_REDUCTION_MURMURS_VS_DEFAULT",
+    "matched_blocks": 150,
+    "median_relative_reduction": -0.010250675612710838,
+    "minimum_practical_reduction": 0.1,
+    "practical_threshold_pass": false,
+    "paired_bootstrap_samples": 20000,
+    "paired_bootstrap_seed": 24082027,
+    "bootstrap_95_ci": [-0.04682317578772803, 0.020726934275213594],
+    "bootstrap_lower_bound_pass": false,
+    "positive_blocks": 73,
+    "negative_blocks": 76,
+    "ties": 1,
+    "two_sided_exact_sign_test_p": 0.8699229710286416,
+    "sign_test_alpha": 0.05,
+    "sign_test_pass": false
+  },
+  "guards": {
+    "quality_and_safety": "PASS",
+    "median_total_token_relative_reduction": -0.00012753286275791884,
+    "total_token_minimum": -0.05,
+    "total_token_guard": "PASS",
+    "median_input_token_relative_reduction": -0.00010346879184893632,
+    "input_token_minimum": -0.05,
+    "input_token_guard": "PASS",
+    "median_latency_relative_reduction": 0.0006034819293136623,
+    "latency_minimum": -0.1,
+    "latency_guard": "PASS"
+  },
+  "b3_terminal_conclusion": {
+    "measurement_valid": true,
+    "murmurs_benefit": "CONFIRMATORY_BENEFIT_NOT_ESTABLISHED",
+    "token_efficiency": "TRUSTWORTHY_COMPARABLE_COUNTERS_NEGATIVE_RESULT",
+    "semantic_compression_authority_expansion": "NOT_AUTHORIZED_AND_NOT_PERFORMED",
+    "production_runtime_attachment": "NOT_AUTHORIZED_AND_NOT_PERFORMED",
+    "next_gate": "B4_ELIGIBILITY_RESOLUTION_AND_B5_SYNTHESIS"
+  }
+}

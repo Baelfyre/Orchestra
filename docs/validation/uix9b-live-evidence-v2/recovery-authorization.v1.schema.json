@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "orchestra.uix9c-invalid-infrastructure-recovery.v1.schema",
+  "title": "Orchestra UIX-9C Invalid Infrastructure Recovery Authorization",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "role",
+    "authorization_status",
+    "authority_class",
+    "approved_at",
+    "approval_text",
+    "scientific_candidate",
+    "recovery_candidate",
+    "prior_invalid_attempt",
+    "restarted_effort_ceiling",
+    "fresh_campaign",
+    "authority_boundaries"
+  ],
+  "properties": {
+    "$schema": {"const": "./recovery-authorization.v1.schema.json"},
+    "schema_version": {"const": "orchestra.uix9c-invalid-infrastructure-recovery.v1"},
+    "role": {"const": "UIX_9C_INVALID_INFRASTRUCTURE_RECOVERY_AUTHORIZATION"},
+    "authorization_status": {"const": "APPROVED"},
+    "authority_class": {"const": "HUMAN_SCIENTIFIC_AUTHORIZATION"},
+    "approved_at": {"type": "string", "format": "date-time"},
+    "approval_text": {"type": "string", "minLength": 1},
+    "scientific_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pr", "authorized_source_head_sha"],
+      "properties": {
+        "pr": {"const": 572},
+        "authorized_source_head_sha": {"const": "7c39b9cba0fc9521c53a97c9cea09218009a1094"}
+      }
+    },
+    "recovery_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pr", "pre_authorization_recovery_head_sha"],
+      "properties": {
+        "pr": {"const": 584},
+        "pre_authorization_recovery_head_sha": {"const": "78202b08ef896acf2c27e2b823aba3d3bf377a34"}
+      }
+    },
+    "prior_invalid_attempt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "attempts",
+        "model_calls",
+        "provider_calls",
+        "provider_interactions",
+        "valid_session",
+        "final_observations",
+        "final_metric_results",
+        "classification",
+        "scientific_observation",
+        "calibration_input",
+        "directional_model_behavior_claim"
+      ],
+      "properties": {
+        "run_id": {"const": "A1"},
+        "attempts": {"const": 1},
+        "model_calls": {"const": 1},
+        "provider_calls": {"const": 1},
+        "provider_interactions": {"const": 1},
+        "valid_session": {"const": false},
+        "final_observations": {"const": 0},
+        "final_metric_results": {"const": 0},
+        "classification": {"const": "INVALID_INFRASTRUCTURE_WINDOWS_HOST_OUTPUT_DECODING_FAILURE"},
+        "scientific_observation": {"const": false},
+        "calibration_input": {"const": false},
+        "directional_model_behavior_claim": {"const": false}
+      }
+    },
+    "restarted_effort_ceiling": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "prior_invalid_infrastructure_interactions",
+        "fresh_campaign_max_new_model_calls",
+        "fresh_campaign_max_new_provider_calls",
+        "fresh_campaign_max_new_provider_interactions",
+        "max_valid_observations",
+        "overall_experimental_interaction_ceiling",
+        "seventh_valid_observation_authorized",
+        "additional_ceiling_expansion_authorized"
+      ],
+      "properties": {
+        "prior_invalid_infrastructure_interactions": {"const": 1},
+        "fresh_campaign_max_new_model_calls": {"const": 6},
+        "fresh_campaign_max_new_provider_calls": {"const": 6},
+        "fresh_campaign_max_new_provider_interactions": {"const": 6},
+        "max_valid_observations": {"const": 6},
+        "overall_experimental_interaction_ceiling": {"const": 7},
+        "seventh_valid_observation_authorized": {"const": false},
+        "additional_ceiling_expansion_authorized": {"const": false}
+      }
+    },
+    "fresh_campaign": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "execution_order",
+        "evidence_root",
+        "preserve_parent_failed_evidence",
+        "outcome_based_retry_authorized",
+        "retry_may_extend_overall_ceiling"
+      ],
+      "properties": {
+        "execution_order": {"const": ["A1", "B1", "B2", "A2", "A3", "B3"]},
+        "evidence_root": {"const": "docs/validation/uix9b-live-evidence-v2/restart-20260827"},
+        "preserve_parent_failed_evidence": {"const": true},
+        "outcome_based_retry_authorized": {"const": false},
+        "retry_may_extend_overall_ceiling": {"const": false}
+      }
+    },
+    "authority_boundaries": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "merge_authorized",
+        "release_authorized",
+        "deployment_authorized",
+        "policy_activation_authorized",
+        "external_repository_mutation_authorized",
+        "branch_deletion_authorized",
+        "force_push_authorized",
+        "history_rewrite_authorized",
+        "destructive_cleanup_authorized"
+      ],
+      "properties": {
+        "merge_authorized": {"const": false},
+        "release_authorized": {"const": false},
+        "deployment_authorized": {"const": false},
+        "policy_activation_authorized": {"const": false},
+        "external_repository_mutation_authorized": {"const": false},
+        "branch_deletion_authorized": {"const": false},
+        "force_push_authorized": {"const": false},
+        "history_rewrite_authorized": {"const": false},
+        "destructive_cleanup_authorized": {"const": false}
+      }
+    }
+  }
+}

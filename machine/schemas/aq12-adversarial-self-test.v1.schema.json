@@ -1,0 +1,327 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/aq12-adversarial-self-test.v1.schema.json",
+  "title": "Orchestra AQ12 adversarial self-test",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "phase",
+    "owner",
+    "authority_model",
+    "purpose",
+    "implementation_inventory",
+    "self_test_boundary",
+    "required_attack_classes",
+    "test_policy",
+    "reference_cases",
+    "fail_closed_conditions",
+    "authority",
+    "validation"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "orchestra.aq12-adversarial-self-test.v1"
+    },
+    "phase": {
+      "const": "AQ12_ORCHESTRA_ADVERSARIAL_SELF_TEST"
+    },
+    "owner": {
+      "const": "overseer"
+    },
+    "authority_model": {
+      "const": "EVIDENCE_ONLY_NON_AUTHORIZING"
+    },
+    "purpose": {
+      "type": "string",
+      "minLength": 1
+    },
+    "implementation_inventory": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "uniqueItems": true,
+      "prefixItems": [
+        {
+          "const": "CHANGELOG.md"
+        },
+        {
+          "const": "README.json"
+        },
+        {
+          "const": "docs/architecture/ADAPTIVE_ASSURANCE_AQ12.md"
+        },
+        {
+          "const": "machine/adaptive/aq12-adversarial-self-test.v1.json"
+        },
+        {
+          "const": "machine/schemas/aq12-adversarial-self-test.v1.schema.json"
+        },
+        {
+          "const": "orchestra_runtime/domain/adaptive/adversarial_self_test.py"
+        },
+        {
+          "const": "scripts/validation/validate_aq12.py"
+        },
+        {
+          "const": "tests/behavior/run_tests.py"
+        },
+        {
+          "const": "tests/runtime/test_adaptive_assurance_aq12.py"
+        }
+      ],
+      "items": false
+    },
+    "self_test_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_repository",
+        "canonical_start_sha",
+        "mode",
+        "cud10_state",
+        "protected_policy_mutation_allowed",
+        "production_mutation_allowed",
+        "provider_activation_allowed",
+        "telemetry_activation_allowed",
+        "release_or_deploy_allowed"
+      ],
+      "properties": {
+        "target_repository": {
+          "const": "Baelfyre/Orchestra"
+        },
+        "canonical_start_sha": {
+          "const": "34c7fcf45ee42db92289479c1ec8e0b425af29e7"
+        },
+        "mode": {
+          "const": "CONTROLLED_NON_PRODUCTION_ADVERSARIAL_SELF_TEST"
+        },
+        "cud10_state": {
+          "const": "READY_NOT_STARTED_HELD_BY_CURRENT_USER"
+        },
+        "protected_policy_mutation_allowed": {
+          "const": false
+        },
+        "production_mutation_allowed": {
+          "const": false
+        },
+        "provider_activation_allowed": {
+          "const": false
+        },
+        "telemetry_activation_allowed": {
+          "const": false
+        },
+        "release_or_deploy_allowed": {
+          "const": false
+        }
+      }
+    },
+    "required_attack_classes": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "uniqueItems": true,
+      "prefixItems": [
+        {
+          "const": "SCOPE_DRIFT"
+        },
+        {
+          "const": "AUTHORITY_ESCALATION"
+        },
+        {
+          "const": "EVIDENCE_TAMPERING"
+        },
+        {
+          "const": "STATE_TRANSITION_FORGERY"
+        },
+        {
+          "const": "ASSURANCE_GATE_BYPASS"
+        },
+        {
+          "const": "DETERMINISM_DRIFT"
+        }
+      ],
+      "items": false
+    },
+    "test_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimum_case_count",
+        "minimum_effectiveness_bps",
+        "effective_results",
+        "unresolved_results",
+        "independent_evidence_required",
+        "deterministic_replay_required",
+        "claim_scope"
+      ],
+      "properties": {
+        "minimum_case_count": {
+          "const": 6
+        },
+        "minimum_effectiveness_bps": {
+          "const": 10000
+        },
+        "effective_results": {
+          "const": [
+            "BLOCKED",
+            "DETECTED_FAIL_CLOSED"
+          ]
+        },
+        "unresolved_results": {
+          "const": [
+            "ESCAPED",
+            "INCONCLUSIVE"
+          ]
+        },
+        "independent_evidence_required": {
+          "const": true
+        },
+        "deterministic_replay_required": {
+          "const": true
+        },
+        "claim_scope": {
+          "const": "CONTROLLED_SELF_TEST_ONLY"
+        }
+      }
+    },
+    "reference_cases": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "case_id",
+          "attack_class",
+          "expected_control",
+          "adversarial_stimulus"
+        ],
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "attack_class": {
+            "enum": [
+              "SCOPE_DRIFT",
+              "AUTHORITY_ESCALATION",
+              "EVIDENCE_TAMPERING",
+              "STATE_TRANSITION_FORGERY",
+              "ASSURANCE_GATE_BYPASS",
+              "DETERMINISM_DRIFT"
+            ]
+          },
+          "expected_control": {
+            "enum": [
+              "PHASE_REGISTRY_FAIL_CLOSED",
+              "EXPLICIT_AUTHORITY_BOUNDARY",
+              "EVIDENCE_IDENTITY_AND_INTEGRITY",
+              "ARBITER_TRANSITION_OWNERSHIP",
+              "PROTECTED_ASSURANCE_GATES",
+              "DETERMINISTIC_REPLAY_PARITY"
+            ]
+          },
+          "adversarial_stimulus": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "fail_closed_conditions": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "creates_execution_authority",
+        "creates_transition_authority",
+        "creates_whitelist_authority",
+        "changes_protected_policy",
+        "lowers_assurance_thresholds",
+        "activates_provider",
+        "activates_telemetry",
+        "mutates_production",
+        "authorizes_release",
+        "authorizes_critiqual_cud10_admission"
+      ],
+      "properties": {
+        "creates_execution_authority": {
+          "const": false
+        },
+        "creates_transition_authority": {
+          "const": false
+        },
+        "creates_whitelist_authority": {
+          "const": false
+        },
+        "changes_protected_policy": {
+          "const": false
+        },
+        "lowers_assurance_thresholds": {
+          "const": false
+        },
+        "activates_provider": {
+          "const": false
+        },
+        "activates_telemetry": {
+          "const": false
+        },
+        "mutates_production": {
+          "const": false
+        },
+        "authorizes_release": {
+          "const": false
+        },
+        "authorizes_critiqual_cud10_admission": {
+          "const": false
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "validator",
+        "runtime",
+        "runtime_test",
+        "behavior_registration",
+        "architecture_reference",
+        "schema",
+        "canonical_start_sha"
+      ],
+      "properties": {
+        "validator": {
+          "const": "scripts/validation/validate_aq12.py"
+        },
+        "runtime": {
+          "const": "orchestra_runtime/domain/adaptive/adversarial_self_test.py"
+        },
+        "runtime_test": {
+          "const": "tests/runtime/test_adaptive_assurance_aq12.py"
+        },
+        "behavior_registration": {
+          "const": "tests/behavior/run_tests.py"
+        },
+        "architecture_reference": {
+          "const": "docs/architecture/ADAPTIVE_ASSURANCE_AQ12.md"
+        },
+        "schema": {
+          "const": "machine/schemas/aq12-adversarial-self-test.v1.schema.json"
+        },
+        "canonical_start_sha": {
+          "const": "34c7fcf45ee42db92289479c1ec8e0b425af29e7"
+        }
+      }
+    }
+  }
+}

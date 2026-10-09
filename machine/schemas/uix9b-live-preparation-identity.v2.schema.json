@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/uix9b-live-preparation-identity.v2.schema.json",
+  "title": "Orchestra UIX-9B V2 Canonical Preparation Identity",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "role", "frozen_experiment_base_sha", "reviewed_canonical_sha", "required_paths"],
+  "properties": {
+    "$schema": {"const": "../../../machine/schemas/uix9b-live-preparation-identity.v2.schema.json"},
+    "schema_version": {"const": "uix9b.live-preparation-identity.v2"},
+    "role": {"const": "UIX_9B_V2_CANONICAL_PREPARATION_IDENTITY"},
+    "frozen_experiment_base_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "reviewed_canonical_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "required_paths": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+  }
+}

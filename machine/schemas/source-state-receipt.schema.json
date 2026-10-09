@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.orchestra.dev/machine/source-state-receipt/1.0.0",
+  "title": "Orchestra Source State Receipt",
+  "description": "Machine-bound source repository identity used for canonical promotion checks.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "repository",
+    "canonical_branch",
+    "live_canonical_sha",
+    "verification_timestamp",
+    "verification_method"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "repository": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+    "canonical_branch": {"type": "string", "minLength": 1},
+    "live_canonical_sha": {"$ref": "#/$defs/gitSha"},
+    "verification_timestamp": {"type": "string", "format": "date-time"},
+    "verification_method": {"type": "string", "minLength": 1},
+    "pull_request_number": {"type": "integer", "minimum": 1},
+    "exact_pr_head": {"$ref": "#/$defs/gitSha"},
+    "merge_or_squash_sha": {"$ref": "#/$defs/gitSha"},
+    "tree_sha": {"$ref": "#/$defs/gitSha"}
+  },
+  "$defs": {
+    "gitSha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    }
+  }
+}

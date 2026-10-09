@@ -1,0 +1,33 @@
+{
+  "schema_version": "orchestra.presentation-policy.v1",
+  "default_disposition": "EXPLAIN",
+  "events": {
+    "EXECUTION_HEARTBEAT": "MURMUR",
+    "TOOL_STARTED": "SILENT",
+    "TOOL_COMPLETED": "MURMUR",
+    "ROUTINE_VALIDATION_PASSED": "MURMUR",
+    "HUMAN_ACTION_REQUIRED": "EXPLAIN",
+    "AUTHORITY_REQUIRED": "EXPLAIN",
+    "VALIDATION_FAILED": "EXPLAIN",
+    "UNRECOVERABLE_BLOCKER": "EXPLAIN",
+    "GOVERNANCE_STOP": "EXPLAIN",
+    "HANDOFF_REQUIRED": "EXPLAIN",
+    "TASK_COMPLETED": "EXPLAIN",
+    "TASK_FAILED": "EXPLAIN"
+  },
+  "explain_required": [
+    "HUMAN_ACTION_REQUIRED",
+    "AUTHORITY_REQUIRED",
+    "VALIDATION_FAILED",
+    "UNRECOVERABLE_BLOCKER",
+    "GOVERNANCE_STOP",
+    "HANDOFF_REQUIRED",
+    "TASK_COMPLETED",
+    "TASK_FAILED"
+  ],
+  "authority_effect": {
+    "presentation_may_change_machine_state": false,
+    "presentation_may_override_governance": false,
+    "presentation_may_suppress_required_explanation": false
+  }
+}

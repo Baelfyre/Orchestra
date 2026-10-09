@@ -1,0 +1,357 @@
+{
+  "schema_version": "orchestra.comparative-measurement-contract.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "phase": "BENCHMARK_B0_COMPARATIVE_MEASUREMENT_CONTRACT_FREEZE",
+  "status": "CONTRACT_FREEZE_NO_BENCHMARK_EXECUTION",
+  "authorization": {
+    "authorized_scope": "ONE_SHARED_BENCHMARK_PLATFORM_TWO_ISOLATED_PRIMARY_EXPERIMENTS_THEN_ONE_CONTROLLED_COMBINED_EXPERIMENT",
+    "authorized_on": "2026-08-19",
+    "issue": 340,
+    "canonical_entry_head": "579bf4be46a0dcb1fd46b83a8e0ca1a6df17ff4b",
+    "canonical_entry_tree": "7dd2f25fc4f8ac72a8cc83b431e2f1694acb887d",
+    "a5_entry_disposition": "A5_CLOSED_AT_SHADOW_MATURITY_EXECUTION_PROMOTION_DEFERRED_BENEFIT_NOT_ESTABLISHED",
+    "a6_authorized": false
+  },
+  "program_sequence": [
+    {
+      "phase": "B0",
+      "name": "COMPARATIVE_MEASUREMENT_CONTRACT_FREEZE",
+      "state": "CURRENT_UNIT",
+      "purpose": "Freeze common measurement, provenance, isolation, validity, analysis, and promotion boundaries without executing comparative workloads."
+    },
+    {
+      "phase": "B1",
+      "name": "SHARED_BENCHMARK_HARNESS",
+      "state": "AUTHORIZED_AFTER_B0_VALIDATION",
+      "purpose": "Implement one non-production benchmark harness that can execute controlled topology and communication arms and emit provenance-bound evidence."
+    },
+    {
+      "phase": "B2",
+      "name": "A5_ISOLATED_COMPARATIVE_EXPERIMENT",
+      "state": "AUTHORIZED_AFTER_B1_VALIDATION",
+      "purpose": "Measure A5 topology-ranking benefit with communication behavior held fixed and A5 remaining shadow-only."
+    },
+    {
+      "phase": "B3",
+      "name": "MURMURS_ISOLATED_COMPARATIVE_EXPERIMENT",
+      "state": "AUTHORIZED_AFTER_B1_VALIDATION",
+      "purpose": "Measure Murmurs against DEFAULT and CAVEMAN with coordination topology held fixed."
+    },
+    {
+      "phase": "B4",
+      "name": "CONTROLLED_A5_MURMURS_INTERACTION_EXPERIMENT",
+      "state": "AUTHORIZED_AFTER_VALID_B2_AND_B3_EVIDENCE",
+      "purpose": "Measure topology-by-communication interaction only after isolated causal effects are independently measurable."
+    },
+    {
+      "phase": "B5",
+      "name": "EVIDENCE_SYNTHESIS_AND_PROMOTION_DECISION",
+      "state": "AUTHORIZED_AFTER_B2_B3_AND_IF_RUN_B4",
+      "purpose": "Produce separate A5, Murmurs, and interaction conclusions; evidence does not automatically grant runtime promotion authority."
+    }
+  ],
+  "experimental_separation": {
+    "shared_platform": true,
+    "a5_and_murmurs_primary_experiments_must_be_isolated": true,
+    "combined_experiment_may_run_before_isolated_experiments": false,
+    "reason": "Changing coordination topology and communication representation in the same primary experiment would confound causal attribution.",
+    "a5_primary_variable": "COORDINATION_TOPOLOGY",
+    "murmurs_primary_variable": "COMMUNICATION_MODE",
+    "combined_variables": ["COORDINATION_TOPOLOGY", "COMMUNICATION_MODE"]
+  },
+  "authority_boundary": {
+    "benchmark_harness_is_production_runtime": false,
+    "benchmark_execution_grants_runtime_authority": false,
+    "a5_may_rank_or_predict": true,
+    "a5_may_control_benchmark_arm_selection": false,
+    "a5_may_control_production_execution": false,
+    "a5_topology_effective": false,
+    "a5_shadow_influenced_execution": false,
+    "murmurs_benefit_assumed_before_measurement": false,
+    "caveman_is_runtime_dependency": false,
+    "external_benchmark_result_is_orchestra_benefit_evidence": false,
+    "measurement_evidence_is_promotion_authority": false,
+    "required_specialist_omission_allowed": false,
+    "authority_expansion_allowed": false,
+    "capability_expansion_allowed": false,
+    "governance_bypass_allowed": false,
+    "provider_privacy_expansion_allowed": false,
+    "mandatory_validation_gate_change_allowed": false,
+    "a6_or_later_runtime_behavior": "PROHIBITED"
+  },
+  "external_references": [
+    {
+      "id": "MAFBENCH",
+      "role": "PRIMARY_A5_EXPERIMENTAL_METHOD_REFERENCE",
+      "repository": "CoDS-GCS/MAFBench",
+      "pinned_revision": "86893aa65f0ecf404779749ec046e78afdb1bd35",
+      "paper": "arXiv:2602.03128",
+      "url": "https://github.com/CoDS-GCS/MAFBench",
+      "usage_boundary": "Reference controlled architectural isolation, standardized execution, logging, and coordination/topology evaluation methodology. Published MAFBench outcomes are not Orchestra measurements."
+    },
+    {
+      "id": "AGENTSNET",
+      "role": "PRIMARY_A5_COORDINATION_WORKLOAD_REFERENCE",
+      "repository": "floriangroetschla/AgentsNet",
+      "pinned_revision": "269f576e966f441e54ba72a653769663a4f4322c",
+      "paper": "arXiv:2507.08616",
+      "url": "https://github.com/floriangroetschla/AgentsNet",
+      "usage_boundary": "Reference topology-sensitive distributed coordination tasks and repeatable graph-based workloads. External benchmark scores do not establish Orchestra benefit."
+    },
+    {
+      "id": "CAVEMAN",
+      "role": "PRIMARY_MURMURS_EXTERNAL_COMPARATIVE_BASELINE",
+      "repository": "JuliusBrussee/caveman",
+      "pinned_revision": "ae405e872270acc57484693612ae038b16c8f6cd",
+      "url": "https://github.com/JuliusBrussee/caveman",
+      "usage_boundary": "Run Caveman as an external comparison arm under the same controlled workload and provider-native counters. Do not copy Caveman published percentages into Orchestra evidence."
+    },
+    {
+      "id": "SWE_BENCH_VERIFIED",
+      "role": "SECONDARY_REAL_SOFTWARE_ENGINEERING_WORKLOAD_REFERENCE",
+      "repository": "SWE-bench/SWE-bench",
+      "dataset": "SWE-bench Verified",
+      "url": "https://github.com/SWE-bench/SWE-bench",
+      "usage_boundary": "Use only as one bounded real-world task source with contamination and benchmark-age limitations explicitly recorded. It must not be the sole confirmatory workload."
+    },
+    {
+      "id": "GPTSWARM",
+      "role": "SECONDARY_ADAPTIVE_TOPOLOGY_RESEARCH_REFERENCE",
+      "repository": "metauto-ai/gptswarm",
+      "paper": "arXiv:2402.16823",
+      "url": "https://github.com/metauto-ai/gptswarm",
+      "usage_boundary": "Reference graph-connectivity optimization research only. No external adaptive policy becomes Orchestra runtime authority."
+    }
+  ],
+  "record_types": {
+    "run": "machine/schemas/comparative-benchmark-run.schema.json",
+    "experiment": "machine/schemas/comparative-benchmark-experiment.schema.json"
+  },
+  "experimental_unit": {
+    "definition": "ONE_TASK_PLUS_ONE_EXACT_STARTING_STATE_PLUS_ONE_FIXED_MODEL_WORKER_CONFIGURATION_PLUS_ONE_FIXED_SPECIALIST_SET_PLUS_ONE_EXPERIMENTAL_ARM",
+    "paired_task_design_required": true,
+    "each_task_runs_all_eligible_arms_for_its_experiment": true,
+    "same_starting_state_required": true
+  },
+  "controlled_variables": [
+    "MODEL_AND_MODEL_REVISION",
+    "PROVIDER",
+    "REASONING_SETTING_WHEN_CONFIGURABLE",
+    "TEMPERATURE_WHEN_CONFIGURABLE",
+    "TOOL_ACCESS",
+    "REPOSITORY_SHA",
+    "STARTING_WORKTREE_OR_FIXTURE",
+    "TASK_PROMPT",
+    "SYSTEM_INSTRUCTIONS_EXCEPT_EXPERIMENTAL_MECHANIC",
+    "SPECIALIST_SET",
+    "REQUIRED_SPECIALIST_SET",
+    "AUTHORITY_ENVELOPE",
+    "GOVERNANCE_STATE",
+    "CONTEXT_CEILING",
+    "TOKEN_OR_RESOURCE_BUDGET_WHEN_CONFIGURABLE",
+    "TOOL_CALL_BUDGET_WHEN_CONFIGURABLE",
+    "TIME_BUDGET_WHEN_CONFIGURABLE",
+    "RETRY_POLICY",
+    "VALIDATION_CONTRACT",
+    "DEPENDENCY_AND_ENVIRONMENT_IDENTITY"
+  ],
+  "run_order_policy": {
+    "randomize_arm_order_within_task": true,
+    "record_execution_order": true,
+    "record_timestamp": true,
+    "record_provider_and_model_revision": true,
+    "block_all_one-arm-first_batch_ordering_when_randomization_is_available": true
+  },
+  "primary_outcome": {
+    "name": "VALIDATED_GOVERNED_TASK_SUCCESS",
+    "pass_requires": [
+      "TASK_COMPLETED",
+      "REQUIRED_VALIDATION_PASSED",
+      "GOVERNANCE_BOUNDARIES_PRESERVED"
+    ],
+    "values": ["PASS", "FAIL", "INVALID_RUN"],
+    "invalid_run_is_failure": false
+  },
+  "winner_hierarchy": [
+    "GOVERNANCE_VALID",
+    "TASK_SUCCESS",
+    "VALIDATION_SUCCESS",
+    "FEWER_REMEDIATION_ITERATIONS",
+    "LOWER_RESOURCE_CONSUMPTION",
+    "LOWER_LATENCY",
+    "LOWER_COMMUNICATION_OVERHEAD",
+    "DETERMINISTIC_BASELINE_TIE_BREAK"
+  ],
+  "measurement_policy": {
+    "provider_native_counters_are_authoritative_when_available": true,
+    "estimated_tokens_may_substitute_for_provider_native_tokens": false,
+    "unknown_measurements_are_inferred": false,
+    "quality_parity_precedes_efficiency_claim": true,
+    "required_metrics": [
+      "TASK_OUTCOME",
+      "VALIDATION_RESULT",
+      "GOVERNANCE_RESULT",
+      "REMEDIATION_ITERATIONS",
+      "VALIDATION_FAILURES",
+      "REGRESSIONS_INTRODUCED",
+      "WALL_CLOCK_MS",
+      "INPUT_TOKENS_WHEN_HOST_REPORTED",
+      "OUTPUT_TOKENS_WHEN_HOST_REPORTED",
+      "CACHED_INPUT_TOKENS_WHEN_HOST_REPORTED",
+      "REASONING_TOKENS_WHEN_HOST_REPORTED",
+      "FRESH_BILLABLE_TOKENS_WHEN_HOST_REPORTED",
+      "PROVIDER_REPORTED_COST_WHEN_AVAILABLE",
+      "SPECIALIST_MESSAGES",
+      "CROSS_SPECIALIST_MESSAGES",
+      "HANDOFFS",
+      "HANDOFF_FAILURES",
+      "DUPLICATE_WORK_EVENTS",
+      "CONTRADICTION_EVENTS",
+      "JOIN_WAIT_MS",
+      "SPECIALIST_REENTRY_EVENTS",
+      "CONTEXT_TRANSFER_BYTES",
+      "SEMANTIC_PRESERVATION_FAILURES",
+      "REQUIRED_INFORMATION_OMISSIONS"
+    ]
+  },
+  "invalid_run_policy": {
+    "allowed_reasons": [
+      "PROVIDER_OUTAGE",
+      "INFRASTRUCTURE_OUTAGE",
+      "HARNESS_FAILURE",
+      "CORRUPTED_STARTING_STATE",
+      "UNRESOLVABLE_EXTERNAL_DEPENDENCY_FAILURE",
+      "MEASUREMENT_CAPTURE_FAILURE"
+    ],
+    "must_record_reason": true,
+    "must_preserve_partial_evidence_when_safe": true,
+    "may_be_silently_dropped": false,
+    "may_be_reclassified_as_task_failure": false
+  },
+  "a5_isolated_experiment": {
+    "experiment_kind": "A5_ISOLATED",
+    "communication_mode": "DEFAULT",
+    "eligible_topology_source": "FROZEN_A5_ELIGIBILITY_ENVELOPE",
+    "run_every_eligible_topology_candidate": true,
+    "a5_shadow_ranker_runs_on_same_frozen_eligible_set": true,
+    "a5_shadow_ranker_may_select_execution_arm": false,
+    "record_a5_ranked_order": true,
+    "record_empirical_best_topology": true,
+    "selection_metrics": [
+      "TOP_1_MATCH",
+      "TOP_K_MATCH",
+      "REGRET",
+      "TASK_CLASS_CONDITIONAL_PERFORMANCE"
+    ],
+    "benefit_question": "DOES_THE_A5_RANKED_TOPOLOGY_OUTPERFORM_OR_MATCH_FIXED_ELIGIBLE_COORDINATION_WITH_PRACTICALLY_MEANINGFUL_EFFICIENCY_OR_REMEDIATION_BENEFIT_WITHOUT_QUALITY_OR_GOVERNANCE_REGRESSION"
+  },
+  "murmurs_isolated_experiment": {
+    "experiment_kind": "MURMURS_ISOLATED",
+    "topology_mode": "FIXED_DETERMINISTIC",
+    "communication_arms": ["DEFAULT", "CAVEMAN", "MURMURS"],
+    "same_provider_counter_identity_required_for_token_delta": true,
+    "caveman_published_savings_may_be_imported_as_orchestra_result": false,
+    "benefit_question": "DOES_MURMURS_REDUCE_TOTAL_FRESH_TOKEN_CONSUMPTION_OUTPUT_CONSUMPTION_LATENCY_OR_COST_WITHOUT_TASK_VALIDATION_GOVERNANCE_OR_INFORMATION_PRESERVATION_REGRESSION"
+  },
+  "combined_experiment": {
+    "experiment_kind": "A5_MURMURS_INTERACTION",
+    "entry_requires_valid_a5_isolated_evidence": true,
+    "entry_requires_valid_murmurs_isolated_evidence": true,
+    "design": "CONTROLLED_FACTORIAL_TOPOLOGY_BY_COMMUNICATION_MODE",
+    "interaction_states": ["POSITIVE", "NEUTRAL", "NEGATIVE", "INCONCLUSIVE"],
+    "may_retroactively_reclassify_isolated_results": false
+  },
+  "task_stratification": [
+    "SINGLE_DOMAIN",
+    "MULTI_DOMAIN",
+    "ARCHITECTURE_HEAVY",
+    "DEBUGGING",
+    "SECURITY_SENSITIVE",
+    "VALIDATION_HEAVY",
+    "DOCUMENTATION_AND_IMPLEMENTATION",
+    "DEPENDENCY_HEAVY",
+    "PARALLEL_FRIENDLY",
+    "HIGH_COORDINATION"
+  ],
+  "repetition_plan": {
+    "calibration": {
+      "minimum_tasks": 5,
+      "target_repetitions_per_arm": 2,
+      "claims_allowed": false,
+      "purpose": "Validate harness, measurement capture, arm isolation, and variance estimation."
+    },
+    "pilot": {
+      "target_tasks": 20,
+      "target_repetitions_per_arm": 3,
+      "claims_allowed": "SIGNAL_ONLY",
+      "purpose": "Estimate variance, identify task-class effects, test metric stability, and determine confirmatory design."
+    },
+    "confirmatory": {
+      "task_count": "DETERMINED_FROM_PILOT_VARIANCE_AND_POWER_ANALYSIS",
+      "minimum_target_range": "50_TO_100_TASKS_WHEN_FEASIBLE",
+      "target_repetitions_per_arm": 3,
+      "protocol_must_be_frozen_before_confirmatory_outcomes": true,
+      "tuning_against_confirmatory_set_allowed": false
+    }
+  },
+  "analysis_policy": {
+    "paired_analysis_required": true,
+    "report_absolute_and_relative_differences": true,
+    "report_success_rate_with_uncertainty": true,
+    "skewed_continuous_metrics_prefer_median_and_iqr": true,
+    "paired_bootstrap_confidence_interval_preferred_for_continuous_deltas": true,
+    "report_p90_p95_and_worst_case_for_key_regression_metrics": true,
+    "statistical_significance_alone_is_promotion_evidence": false,
+    "task_class_stratified_results_required": true
+  },
+  "practical_benefit_policy": {
+    "pilot_planning_signals_are_promotion_thresholds": false,
+    "pilot_planning_signals": {
+      "task_success_absolute_improvement": 0.05,
+      "remediation_relative_reduction": 0.15,
+      "fresh_token_relative_reduction": 0.10,
+      "latency_relative_reduction": 0.10
+    },
+    "confirmatory_thresholds_must_be_preregistered_after_pilot": true,
+    "confirmatory_thresholds_may_be_changed_after_confirmatory_outcomes": false
+  },
+  "regression_guards": [
+    "NO_REQUIRED_SPECIALIST_OMISSION",
+    "NO_AUTHORITY_EXPANSION",
+    "NO_CAPABILITY_EXPANSION",
+    "NO_GOVERNANCE_VIOLATION",
+    "NO_PROVIDER_PRIVACY_EXPANSION",
+    "NO_MANDATORY_GATE_SUPPRESSION",
+    "NO_SIGNIFICANT_TASK_SUCCESS_DEGRADATION",
+    "NO_UNACCEPTABLE_TAIL_FAILURE_REGRESSION",
+    "NO_UNRESOLVED_INFORMATION_PRESERVATION_REGRESSION"
+  ],
+  "evidence_states": [
+    "MEASUREMENT_NOT_STARTED",
+    "MEASUREMENT_CALIBRATED",
+    "PILOT_EVIDENCE_INSUFFICIENT",
+    "PILOT_BENEFIT_SIGNAL",
+    "CONFIRMATORY_BENEFIT_ESTABLISHED",
+    "CONFIRMATORY_BENEFIT_NOT_ESTABLISHED",
+    "CONFIRMATORY_REGRESSION_DETECTED"
+  ],
+  "promotion_boundary": {
+    "a5_benefit_conclusion_is_separate_from_murmurs_benefit_conclusion": true,
+    "combined_interaction_conclusion_is_separate": true,
+    "a5_execution_effective_promotion_requires_separate_governed_transition": true,
+    "murmurs_authority_or_semantic_compression_expansion_requires_separate_governed_transition": true,
+    "successful_benchmark_run_rewrites_active_policy": false,
+    "automatic_promotion": false
+  },
+  "future_boundary": {
+    "b1_shared_harness": "AUTHORIZED_AFTER_B0_VALIDATION",
+    "b2_a5_isolated": "AUTHORIZED_AFTER_B1_VALIDATION",
+    "b3_murmurs_isolated": "AUTHORIZED_AFTER_B1_VALIDATION",
+    "b4_combined": "AUTHORIZED_AFTER_VALID_B2_AND_B3_EVIDENCE",
+    "b5_evidence_synthesis": "AUTHORIZED_AFTER_REQUIRED_EVIDENCE",
+    "a5_execution_effective_selection": "NOT_AUTHORIZED_BY_BENCHMARK_PROGRAM",
+    "a6_adaptive_context_routing": "NOT_AUTHORIZED",
+    "release_or_deployment": "NOT_AUTHORIZED"
+  },
+  "human_documentation": "docs/benchmarking/COMPARATIVE_MEASUREMENT_B0.md"
+}

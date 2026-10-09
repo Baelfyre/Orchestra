@@ -1,0 +1,58 @@
+{
+  "schema_version": "orchestra.advanced-adaptation-admission.v1",
+  "overall_disposition": "COMPLETE_NO_PROMOTION_EVIDENCE_INSUFFICIENT",
+  "promotion_effective": false,
+  "requires_separate_governed_transition": false,
+  "candidates": [
+    {
+      "candidate_id": "A5_EXECUTION_EFFECTIVE_TOPOLOGY_SELECTION",
+      "eligible": false,
+      "disposition": "BLOCKED_CONFIRMATORY_BENEFIT_NOT_ESTABLISHED",
+      "blockers": [
+        "CONFIRMATORY_BENEFIT_CRITERIA_NOT_ALL_PASSED",
+        "A5_TOPOLOGY_BENEFIT_NOT_ESTABLISHED",
+        "B5_FINAL_SYNTHESIS_DOES_NOT_ESTABLISH_A5_BENEFIT",
+        "EXISTING_PROMOTION_DECISION_IS_NOT_AUTHORIZED_CANDIDATE"
+      ],
+      "evidence_refs": [
+        "machine/adaptive/a5-shadow-topology-ranker-implementation.v1.json",
+        "machine/benchmarking/b2-5-confirmatory-reconciliation.v1.json",
+        "machine/benchmarking/b5-final-evidence-synthesis.v1.json"
+      ]
+    },
+    {
+      "candidate_id": "LEARNED_ROUTING_RECOMMENDATIONS",
+      "eligible": false,
+      "disposition": "BLOCKED_NO_EXACT_PREDICTIVE_BENEFIT_EVIDENCE",
+      "blockers": [
+        "NO_EXACT_TASKPROFILE_TOPOLOGY_BOUND_PREDICTIVE_BENEFIT_EVIDENCE",
+        "NO_MEASURED_LEARNED_ROUTING_BENEFIT_OVER_DETERMINISTIC_AWF"
+      ],
+      "evidence_refs": [
+        "machine/adaptive/a3-shadow-learning-contract.v1.json",
+        "machine/adaptive/awf-agentic-workflow-implementation.v1.json"
+      ]
+    },
+    {
+      "candidate_id": "OEE_CONCURRENCY_WIDENING",
+      "eligible": false,
+      "disposition": "BLOCKED_NO_PARALLEL_BENEFIT_OR_POLICY_AUTHORIZATION",
+      "blockers": [
+        "NO_CONFIRMATORY_PARALLEL_TOPOLOGY_BENEFIT_EVIDENCE",
+        "NO_SEPARATE_OEE_POLICY_AUTHORIZATION_FOR_CONCURRENCY_WIDENING"
+      ],
+      "evidence_refs": [
+        "machine/governance/execution-budget.v1.json",
+        "machine/benchmarking/b5-final-evidence-synthesis.v1.json"
+      ]
+    }
+  ],
+  "invariants": {
+    "runtime_executor_attachment": false,
+    "conductor_dispatch_mutation": false,
+    "specialist_authority_expansion": false,
+    "learned_routing_controls_execution": false,
+    "a5_ranking_controls_execution": false,
+    "oee_concurrency_widened": false
+  }
+}

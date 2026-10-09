@@ -1,0 +1,210 @@
+{
+  "schema_version": "orchestra.antigravity-executor-binding.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "phase": "BENCHMARK_B3_CALIBRATION_COMPLETED_AND_VALIDATED",
+  "status": "CALIBRATION_COMPLETED_AND_VALIDATED",
+  "canonical_entry_baseline": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
+  "binding": {
+    "host": "Antigravity CLI",
+    "cli_version": "1.1.15",
+    "validated_cli_version": "1.1.15",
+    "expected_cli_version_externalized": true,
+    "model": "gemini-3.7-flash-high",
+    "supported_transports": ["json-usage", "stream-json-usage"],
+    "default_transport": "json-usage",
+    "output_formats": ["json", "stream-json"],
+    "workspace_mechanism": "CLI_ADD_DIR",
+    "workspace_flag": "--add-dir",
+    "explicit_workspace_required_for_live": true,
+    "non_interactive": true,
+    "personal_credit_fallback": "disabled",
+    "use_g1_credits_effective": false,
+    "sparse_settings_persistence": true,
+    "use_g1_credits_system_default": false,
+    "use_g1_credits": false,
+    "executor_script": "scripts/antigravity_benchmark_executor.py",
+    "qualification_method": "ZERO_TURN_STRUCTURED_PREFLIGHT_PROBES",
+    "qualification_evidence": {
+      "structured_command_probes": ["/model", "/effort", "/usage"],
+      "num_turns": 0,
+      "usage_counters": 0,
+      "model": "gemini-3.7-flash-high",
+      "status": "QUALIFIED"
+    }
+  },
+  "communication_arms": {
+    "default": {
+      "mode": "DEFAULT",
+      "presentation_mode": "NORMAL",
+      "treatment": "NO_COMPRESSION_BASELINE",
+      "prompt_substance_altered": false
+    },
+    "caveman": {
+      "mode": "CAVEMAN",
+      "presentation_mode": "NORMAL",
+      "external_repository": "JuliusBrussee/caveman",
+      "pinned_revision": "ae405e872270acc57484693612ae038b16c8f6cd",
+      "skill_path": "skills/caveman/SKILL.md",
+      "pinned_blob_identity": "bd22d86b32e4a99e09ff7482a35509faac7a6f65",
+      "fail_closed_on_revision_mismatch": true,
+      "fail_closed_on_blob_mismatch": true,
+      "vendoring_allowed": false,
+      "runtime_dependency": false
+    },
+    "murmurs": {
+      "mode": "MURMURS",
+      "presentation_mode": "MURMURS",
+      "presentation_engine": "orchestra_runtime.presentation",
+      "policy_contract": "machine/presentation/murmurs-policy.v1.json",
+      "vocabulary_contract": "machine/presentation/murmurs-vocabulary.v1.json",
+      "prompt_substance_altered": false
+    }
+  },
+  "counter_identity": {
+    "canonical_json_counter_id": "antigravity-cli-1.1.15:json-usage:gemini-3.7-flash-high",
+    "canonical_stream_json_counter_id": "antigravity-cli-1.1.15:stream-json-usage:gemini-3.7-flash-high",
+    "provenance": "ORCHESTRA_ASSIGNED_MEASUREMENT_SURFACE",
+    "vendor_assigned_claim": false,
+    "paired_comparability_rule": "IDENTICAL_COUNTER_IDENTITY_REQUIRED_ACROSS_ALL_ARMS"
+  },
+  "token_mapping": {
+    "input_tokens": "tokens.input_tokens",
+    "output_tokens": "tokens.output_tokens",
+    "cache_read_tokens": "tokens.cached_input_tokens",
+    "thinking_tokens": "tokens.reasoning_tokens",
+    "total_tokens": "raw_evidence_only",
+    "fresh_billable_tokens": null,
+    "cost_source": "UNAVAILABLE",
+    "cost_amount": null,
+    "cost_currency": null
+  },
+  "execution_controls": {
+    "fail_closed_on_unparsed_json": true,
+    "fail_closed_on_unusable_status": true,
+    "fail_closed_on_missing_usage": true,
+    "fail_closed_on_missing_input_output": true,
+    "fail_closed_on_model_mismatch": true,
+    "fail_closed_on_counter_identity_drift": true,
+    "fail_closed_on_corrupted_starting_state": true,
+    "fail_closed_on_caveman_policy_mismatch": true,
+    "fail_closed_on_missing_expected_cli_version": true,
+    "fail_closed_on_cli_version_mismatch": true,
+    "fail_closed_on_use_g1_credits_true": true,
+    "fail_closed_on_malformed_use_g1_credits": true,
+    "fail_closed_on_missing_workspace": true,
+    "fail_closed_on_invalid_workspace": true,
+    "sparse_settings_default_fallback_disabled": true,
+    "stream_result_normalization_enabled": true,
+    "explicit_workspace_binding_enabled": true,
+    "raw_outer_envelope_preserved": true,
+    "raw_terminal_result_payload_preserved": true,
+    "no_metric_inference": true
+  },
+  "quality_boundary": {
+    "host_success_implies_task_pass": false,
+    "task_outcome_independent_evaluation": true,
+    "task_outcome_criteria": [
+      "task_completed",
+      "validation_passed",
+      "governance_valid"
+    ]
+  },
+  "governance_boundaries": {
+    "b3_1_5_stream_result_normalization": "CANONICAL",
+    "b3_1_6_headless_workspace_binding": "CANONICAL",
+    "b3_2_diagnostic_attempt_2_disposition": "INVALID_RUN",
+    "b3_2_diagnostic_attempt_2_cause": "AGY_STREAM_RESULT_ENVELOPE_SCHEMA_MISMATCH",
+    "b3_2_diagnostic_attempt_2_resource_ceiling_exceeded": true,
+    "b3_2_diagnostic_attempt_3_disposition": "INVALID_RUN",
+    "b3_2_diagnostic_attempt_3_cause": "HEADLESS_WORKSPACE_BINDING_FAILURE",
+    "b3_2_diagnostic_attempt_3_live_host_turns": 1,
+    "b3_2_diagnostic_attempt_3_accepted_measurements": 0,
+    "b3_2_diagnostic_attempt_3_observed_total_tokens": 61230,
+    "b3_2_diagnostic_attempt_3_minimal_workspace_resource_ceiling": "NOT_ESTABLISHED",
+    "b3_2_diagnostic_attempt_4_disposition": "VALID_COMPLETE",
+    "b3_2_diagnostic_attempt_4_diagnostic_execution": "PASS",
+    "b3_2_diagnostic_attempt_4_task_outcomes": "FAIL_FAIL_FAIL",
+    "b3_2_diagnostic_attempt_4_live_host_turns": 3,
+    "b3_2_diagnostic_attempt_4_accepted_measurements": 3,
+    "b3_2_diagnostic_attempt_4_invalid_runs": 0,
+    "b3_2_diagnostic_attempt_4_observed_arm_totals": {
+      "DEFAULT": 29908,
+      "MURMURS": 29668,
+      "CAVEMAN": 33054
+    },
+    "b3_2_diagnostic_attempt_4_cumulative_total_tokens": 92630,
+    "b3_2_diagnostic_attempt_4_minimal_workspace_resource_ceiling": "ESTABLISHED_WITHIN_LIMIT",
+    "b3_2_diagnostic_attempt_4_evidence_directory": "D:\\Dev\Repositories\\_orchestra-benchmark-evidence\\b3-2-three-arm-diagnostic-20260820-013812",
+    "b3_calibration_disposition": "VALID_COMPLETE",
+    "b3_calibration_execution": "PASS",
+    "b3_calibration_live_host_turns": 30,
+    "b3_calibration_accepted_measurements": 30,
+    "b3_calibration_invalid_runs": 0,
+    "b3_calibration_pass_count": 30,
+    "b3_calibration_fail_count": 0,
+    "b3_calibration_observed_arm_means": {
+      "DEFAULT": {
+        "total_tokens": 29049.1,
+        "input_tokens": 27751.3,
+        "output_tokens": 1297.8,
+        "reasoning_tokens": 1120.0,
+        "pass_rate": 1.0
+      },
+      "CAVEMAN": {
+        "total_tokens": 29864.6,
+        "input_tokens": 28597.9,
+        "output_tokens": 1266.7,
+        "reasoning_tokens": 1092.4,
+        "pass_rate": 1.0
+      },
+      "MURMURS": {
+        "total_tokens": 28844.5,
+        "input_tokens": 27752.8,
+        "output_tokens": 1091.7,
+        "reasoning_tokens": 913.9,
+        "pass_rate": 1.0
+      }
+    },
+    "b3_calibration_deltas_relative_to_default": {
+      "total_tokens_pct": {
+        "CAVEMAN": 2.8073158909914594,
+        "MURMURS": -0.7043247467219293
+      },
+      "output_tokens_pct": {
+        "CAVEMAN": -2.3963630759747265,
+        "MURMURS": -15.880721220527045
+      },
+      "reasoning_tokens_pct": {
+        "CAVEMAN": -2.4642857142857144,
+        "MURMURS": -18.401785714285715
+      }
+    },
+    "b3_calibration_cumulative_total_tokens": 877582,
+    "b3_calibration_evidence_directory": "_orchestra-benchmark-evidence/b3-calibration-live-30-runs",
+    "b3_calibration_evidence_digests": {
+      "manifest.json": "2b49ce2c4680d82190f7d7a249067d971cbeb79cbffa75c9d8fb167f90e70fcc",
+      "experiment.json": "d21c7ee23c9a6ae72584200fdddff69ae685773129e9cbc3afbf5fca146555eb",
+      "run-index.json": "2700d2c4fd6fa3f422f43d3104437381af1a141a873e7c77658b8a5857ca2108",
+      "calibration_summary.json": "3143e0c5d59472f062d308a0b79f35e86c39d800c7ec57a81918a50e01bb17de"
+    },
+    "current_validated_agy_version": "1.1.15",
+    "credit_fallback_effective": false,
+    "b3_measurement_maturity": "CALIBRATION_COMPLETED_AND_VALIDATED",
+    "b3_valid_diagnostic": "COMPLETED",
+    "b3_diagnostic_execution": "VALID_COMPLETE",
+    "calibration_plan_only_ready": true,
+    "calibration_planned_runs": 30,
+    "calibration_live_execution_authorized": true,
+    "calibration_live_resource_budget": "FROZEN_1200000_CEILING",
+    "calibration_live_workload": "COMPLETED_30_RUNS",
+    "murmurs_benefit": "NOT_ESTABLISHED",
+    "murmurs_token_savings": "EVIDENCE_DERIVED_ONLY",
+    "a5_benefit": "NOT_ESTABLISHED",
+    "a5_execution_promotion": "NOT_AUTHORIZED",
+    "a6_authorized": false,
+    "b4_state": "BLOCKED",
+    "diagnostic_executed": true,
+    "calibration_executed": true,
+    "live_provider_calls_in_unit": false
+  }
+}

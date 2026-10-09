@@ -1,0 +1,146 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/candidate-maturity-record.v1.schema.json",
+  "title": "Orchestra Candidate Maturity Record v1",
+  "description": "Machine-validatable development-candidate maturity and Feature Freeze record. It records exact identity and bounded progression without creating execution or protected-action authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "record_type", "record_id", "candidate_id", "title", "admission_basis", "repository_identity", "maturity", "freeze", "authority", "supersession"],
+  "properties": {
+    "$schema": {"const": "../schemas/candidate-maturity-record.v1.schema.json"},
+    "schema_version": {"const": "orchestra.candidate-maturity-record.v1"},
+    "record_type": {"const": "CANDIDATE_MATURITY_RECORD"},
+    "record_id": {"$ref": "#/$defs/identifier"},
+    "candidate_id": {"$ref": "#/$defs/identifier"},
+    "title": {"type": "string", "minLength": 3},
+    "admission_basis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "reference", "disposition"],
+      "properties": {
+        "kind": {"enum": ["FEATURE_DECISION_RECORD", "INLINE_RATIONALE"]},
+        "reference": {"type": "string", "minLength": 3},
+        "disposition": {"enum": ["ADMIT", "EXPERIMENT_ONLY", "INLINE_RATIONALE_ALLOWED"]}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"kind": {"const": "INLINE_RATIONALE"}}, "required": ["kind"]},
+          "then": {"properties": {"disposition": {"const": "INLINE_RATIONALE_ALLOWED"}}}
+        },
+        {
+          "if": {"properties": {"kind": {"const": "FEATURE_DECISION_RECORD"}}, "required": ["kind"]},
+          "then": {"properties": {"disposition": {"enum": ["ADMIT", "EXPERIMENT_ONLY"]}}}
+        }
+      ]
+    },
+    "repository_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repository", "base_sha", "base_tree"],
+      "properties": {
+        "repository": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+        "base_sha": {"$ref": "#/$defs/git_sha"},
+        "base_tree": {"$ref": "#/$defs/git_sha"}
+      }
+    },
+    "maturity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["previous_state", "state", "overlay", "disposition", "transition_rationale", "transition_evidence_refs"],
+      "properties": {
+        "previous_state": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/maturity_state"}]},
+        "state": {"$ref": "#/$defs/maturity_state"},
+        "overlay": {"enum": ["NONE", "WAITING_FOR_EVIDENCE", "WAITING_FOR_CAPACITY", "REMEDIATING", "ESCALATED", "STOPPED"]},
+        "disposition": {"enum": ["ACTIVE", "DEFERRED", "REJECTED", "SUPERSEDED"]},
+        "transition_rationale": {"type": "string", "minLength": 3},
+        "transition_evidence_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 3}}
+      }
+    },
+    "freeze": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "candidate_identity", "scope", "acceptance", "authority_reference", "gate_applicability_ref", "evaluation_disposition_ref", "artifact_lifecycle_refs"],
+      "properties": {
+        "status": {"enum": ["NOT_FROZEN", "FROZEN"]},
+        "candidate_identity": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["head_sha", "tree_sha", "base_sha", "base_tree"],
+              "properties": {
+                "head_sha": {"$ref": "#/$defs/git_sha"},
+                "tree_sha": {"$ref": "#/$defs/git_sha"},
+                "base_sha": {"$ref": "#/$defs/git_sha"},
+                "base_tree": {"$ref": "#/$defs/git_sha"}
+              }
+            }
+          ]
+        },
+        "scope": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["allowed_paths", "prohibited_paths", "allowed_behavior_changes", "prohibited_behavior_changes"],
+              "properties": {
+                "allowed_paths": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+                "prohibited_paths": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+                "allowed_behavior_changes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 3}},
+                "prohibited_behavior_changes": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 3}}
+              }
+            }
+          ]
+        },
+        "acceptance": {
+          "oneOf": [
+            {"type": "null"},
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["revision", "criteria_digest"],
+              "properties": {
+                "revision": {"type": "string", "minLength": 1},
+                "criteria_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+              }
+            }
+          ]
+        },
+        "authority_reference": {"oneOf": [{"type": "null"}, {"type": "string", "minLength": 3}]},
+        "gate_applicability_ref": {"oneOf": [{"type": "null"}, {"type": "string", "minLength": 3}]},
+        "evaluation_disposition_ref": {"oneOf": [{"type": "null"}, {"type": "string", "minLength": 3}]},
+        "artifact_lifecycle_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 3}}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["record_grants_authority", "freeze_grants_implementation_authority", "freeze_grants_merge_authority", "maturity_grants_merge_authority", "merge_ready_grants_merge_authority", "merged_verified_grants_release_authority", "retired_grants_branch_deletion_authority"],
+      "properties": {
+        "record_grants_authority": {"const": false},
+        "freeze_grants_implementation_authority": {"const": false},
+        "freeze_grants_merge_authority": {"const": false},
+        "maturity_grants_merge_authority": {"const": false},
+        "merge_ready_grants_merge_authority": {"const": false},
+        "merged_verified_grants_release_authority": {"const": false},
+        "retired_grants_branch_deletion_authority": {"const": false}
+      }
+    },
+    "supersession": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["supersedes_candidate_id", "superseded_by_candidate_id"],
+      "properties": {
+        "supersedes_candidate_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/identifier"}]},
+        "superseded_by_candidate_id": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/identifier"}]}
+      }
+    }
+  },
+  "$defs": {
+    "identifier": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$"},
+    "git_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "maturity_state": {"enum": ["PROPOSED", "IMPLEMENTING", "FROZEN_CANDIDATE", "ACCEPTED", "MERGE_READY", "MERGE_APPLIED_UNVERIFIED", "MERGED_VERIFIED", "RETIRED"]}
+  }
+}

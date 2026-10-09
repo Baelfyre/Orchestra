@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/aq14-effectiveness-qualification.v1.schema.json",
+  "title": "Orchestra AQ14 Final ADAPT-QA Effectiveness Qualification v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "phase", "owner", "authority_model", "purpose",
+    "implementation_inventory", "qualification_boundary", "required_phases",
+    "phase_evidence", "qualification_policy", "fail_closed_conditions",
+    "authority", "validation"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.aq14-effectiveness-qualification.v1"},
+    "phase": {"const": "AQ14_FINAL_ADAPT_QA_EFFECTIVENESS_QUALIFICATION"},
+    "owner": {"const": "overseer"},
+    "authority_model": {"const": "EVIDENCE_ONLY_NON_AUTHORIZING"},
+    "purpose": {"type": "string", "minLength": 40, "maxLength": 1024},
+    "implementation_inventory": {
+      "type": "array", "minItems": 9, "maxItems": 9, "uniqueItems": true,
+      "prefixItems": [
+        {"const": "CHANGELOG.md"},
+        {"const": "README.json"},
+        {"const": "docs/architecture/ADAPTIVE_ASSURANCE_AQ14.md"},
+        {"const": "machine/adaptive/aq14-effectiveness-qualification.v1.json"},
+        {"const": "machine/schemas/aq14-effectiveness-qualification.v1.schema.json"},
+        {"const": "orchestra_runtime/domain/adaptive/effectiveness_qualification.py"},
+        {"const": "scripts/validation/validate_aq14.py"},
+        {"const": "tests/behavior/run_tests.py"},
+        {"const": "tests/runtime/test_adaptive_assurance_aq14.py"}
+      ],
+      "items": false
+    },
+    "qualification_boundary": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "target_repository", "canonical_start_sha", "mode", "cud10_state",
+        "protected_policy_mutation_allowed", "production_mutation_allowed",
+        "provider_activation_allowed", "telemetry_activation_allowed",
+        "release_or_deploy_allowed", "aq15_authorization_allowed"
+      ],
+      "properties": {
+        "target_repository": {"const": "Baelfyre/Orchestra"},
+        "canonical_start_sha": {"const": "34eb2a38a97f6d1acef6bbd206da8795393457de"},
+        "mode": {"const": "CONTROLLED_NON_PRODUCTION_FINAL_EFFECTIVENESS_QUALIFICATION"},
+        "cud10_state": {"const": "READY_NOT_STARTED_HELD_BY_CURRENT_USER"},
+        "protected_policy_mutation_allowed": {"const": false},
+        "production_mutation_allowed": {"const": false},
+        "provider_activation_allowed": {"const": false},
+        "telemetry_activation_allowed": {"const": false},
+        "release_or_deploy_allowed": {"const": false},
+        "aq15_authorization_allowed": {"const": false}
+      }
+    },
+    "required_phases": {
+      "type": "array", "minItems": 5, "maxItems": 5,
+      "prefixItems": [
+        {"const": "AQ9"}, {"const": "AQ10"}, {"const": "AQ11"},
+        {"const": "AQ12"}, {"const": "AQ13"}
+      ],
+      "items": false
+    },
+    "phase_evidence": {
+      "type": "array", "minItems": 5, "maxItems": 5,
+      "items": {"$ref": "#/$defs/phaseEvidence"}
+    },
+    "qualification_policy": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "minimum_phase_count", "canonical_identity_required", "source_assurance_required",
+        "promotion_assurance_required", "post_merge_assurance_required",
+        "independent_evidence_required", "deterministic_evidence_required",
+        "maximum_unresolved_critical_findings", "disposition_precedence", "claim_scope",
+        "organic_effectiveness_claim_allowed", "production_readiness_claim_allowed"
+      ],
+      "properties": {
+        "minimum_phase_count": {"const": 5},
+        "canonical_identity_required": {"const": true},
+        "source_assurance_required": {"const": true},
+        "promotion_assurance_required": {"const": true},
+        "post_merge_assurance_required": {"const": true},
+        "independent_evidence_required": {"const": true},
+        "deterministic_evidence_required": {"const": true},
+        "maximum_unresolved_critical_findings": {"const": 0},
+        "disposition_precedence": {
+          "type": "array", "minItems": 3, "maxItems": 3,
+          "prefixItems": [
+            {"const": "REVISION_REQUIRED"}, {"const": "WAIT_FOR_EVIDENCE"}, {"const": "PASS"}
+          ],
+          "items": false
+        },
+        "claim_scope": {"const": "CONTROLLED_ADAPT_QA_EVIDENCE_CHAIN_ONLY"},
+        "organic_effectiveness_claim_allowed": {"const": false},
+        "production_readiness_claim_allowed": {"const": false}
+      }
+    },
+    "fail_closed_conditions": {
+      "type": "array", "minItems": 10, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "authority": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "creates_execution_authority", "creates_transition_authority", "creates_whitelist_authority",
+        "changes_protected_policy", "lowers_assurance_thresholds", "activates_provider",
+        "activates_telemetry", "mutates_production", "authorizes_release", "authorizes_aq15",
+        "authorizes_critiqual_cud10_admission"
+      ],
+      "properties": {
+        "creates_execution_authority": {"const": false},
+        "creates_transition_authority": {"const": false},
+        "creates_whitelist_authority": {"const": false},
+        "changes_protected_policy": {"const": false},
+        "lowers_assurance_thresholds": {"const": false},
+        "activates_provider": {"const": false},
+        "activates_telemetry": {"const": false},
+        "mutates_production": {"const": false},
+        "authorizes_release": {"const": false},
+        "authorizes_aq15": {"const": false},
+        "authorizes_critiqual_cud10_admission": {"const": false}
+      }
+    },
+    "validation": {
+      "type": "object", "additionalProperties": false,
+      "required": [
+        "validator", "runtime", "runtime_test", "behavior_registration",
+        "architecture_reference", "schema", "canonical_start_sha"
+      ],
+      "properties": {
+        "validator": {"const": "scripts/validation/validate_aq14.py"},
+        "runtime": {"const": "orchestra_runtime/domain/adaptive/effectiveness_qualification.py"},
+        "runtime_test": {"const": "tests/runtime/test_adaptive_assurance_aq14.py"},
+        "behavior_registration": {"const": "tests/behavior/run_tests.py"},
+        "architecture_reference": {"const": "docs/architecture/ADAPTIVE_ASSURANCE_AQ14.md"},
+        "schema": {"const": "machine/schemas/aq14-effectiveness-qualification.v1.schema.json"},
+        "canonical_start_sha": {"const": "34eb2a38a97f6d1acef6bbd206da8795393457de"}
+      }
+    }
+  },
+  "$defs": {
+    "gitSha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "phaseEvidence": {
+      "type": "object", "additionalProperties": false,
+      "required": ["phase_id", "canonical_pr", "canonical_sha", "canonical_tree", "required_disposition"],
+      "properties": {
+        "phase_id": {"enum": ["AQ9", "AQ10", "AQ11", "AQ12", "AQ13"]},
+        "canonical_pr": {"type": "integer", "minimum": 1},
+        "canonical_sha": {"$ref": "#/$defs/gitSha"},
+        "canonical_tree": {"$ref": "#/$defs/gitSha"},
+        "required_disposition": {"const": "PASS"}
+      }
+    }
+  }
+}

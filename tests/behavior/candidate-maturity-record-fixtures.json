@@ -1,0 +1,277 @@
+{
+  "schema_version": "orchestra.candidate-maturity-fixtures.v1",
+  "base_record": {
+    "$schema": "../schemas/candidate-maturity-record.v1.schema.json",
+    "schema_version": "orchestra.candidate-maturity-record.v1",
+    "record_type": "CANDIDATE_MATURITY_RECORD",
+    "record_id": "candidate-record.campaign2.sample",
+    "candidate_id": "candidate.campaign2.sample.v1",
+    "title": "Sample frozen Campaign 2 candidate",
+    "admission_basis": {
+      "kind": "FEATURE_DECISION_RECORD",
+      "reference": "feature-decision.campaign2.sample",
+      "disposition": "ADMIT"
+    },
+    "repository_identity": {
+      "repository": "Baelfyre/Orchestra",
+      "base_sha": "1111111111111111111111111111111111111111",
+      "base_tree": "2222222222222222222222222222222222222222"
+    },
+    "maturity": {
+      "previous_state": "IMPLEMENTING",
+      "state": "FROZEN_CANDIDATE",
+      "overlay": "WAITING_FOR_EVIDENCE",
+      "disposition": "ACTIVE",
+      "transition_rationale": "Implementation scope is complete and the exact candidate identity is frozen.",
+      "transition_evidence_refs": ["evidence://candidate-freeze/sample"]
+    },
+    "freeze": {
+      "status": "FROZEN",
+      "candidate_identity": {
+        "head_sha": "3333333333333333333333333333333333333333",
+        "tree_sha": "4444444444444444444444444444444444444444",
+        "base_sha": "1111111111111111111111111111111111111111",
+        "base_tree": "2222222222222222222222222222222222222222"
+      },
+      "scope": {
+        "allowed_paths": ["docs/governance/", "machine/schemas/", "scripts/", "tests/"],
+        "prohibited_paths": ["orchestra_runtime/"],
+        "allowed_behavior_changes": ["candidate maturity and freeze contract only"],
+        "prohibited_behavior_changes": ["runtime authority expansion", "autonomy profile changes", "automatic merge"]
+      },
+      "acceptance": {
+        "revision": "campaign2-v1",
+        "criteria_digest": "5555555555555555555555555555555555555555555555555555555555555555"
+      },
+      "authority_reference": "authority://campaign2/bounded-implementation",
+      "gate_applicability_ref": null,
+      "evaluation_disposition_ref": null,
+      "artifact_lifecycle_refs": []
+    },
+    "authority": {
+      "record_grants_authority": false,
+      "freeze_grants_implementation_authority": false,
+      "freeze_grants_merge_authority": false,
+      "maturity_grants_merge_authority": false,
+      "merge_ready_grants_merge_authority": false,
+      "merged_verified_grants_release_authority": false,
+      "retired_grants_branch_deletion_authority": false
+    },
+    "supersession": {
+      "supersedes_candidate_id": null,
+      "superseded_by_candidate_id": null
+    }
+  },
+  "valid_record_cases": [
+    {
+      "id": "proposed-unfrozen",
+      "set": {
+        "maturity.previous_state": null,
+        "maturity.state": "PROPOSED",
+        "maturity.overlay": "NONE",
+        "maturity.transition_evidence_refs": [],
+        "freeze.status": "NOT_FROZEN",
+        "freeze.candidate_identity": null,
+        "freeze.scope": null,
+        "freeze.acceptance": null,
+        "freeze.authority_reference": null
+      }
+    },
+    {
+      "id": "implementing-unfrozen",
+      "set": {
+        "maturity.previous_state": "PROPOSED",
+        "maturity.state": "IMPLEMENTING",
+        "maturity.overlay": "NONE",
+        "freeze.status": "NOT_FROZEN",
+        "freeze.candidate_identity": null,
+        "freeze.scope": null,
+        "freeze.acceptance": null,
+        "freeze.authority_reference": null
+      }
+    },
+    {
+      "id": "accepted-frozen",
+      "set": {
+        "maturity.previous_state": "FROZEN_CANDIDATE",
+        "maturity.state": "ACCEPTED",
+        "maturity.overlay": "NONE"
+      }
+    },
+    {
+      "id": "merge-ready-frozen",
+      "set": {
+        "maturity.previous_state": "ACCEPTED",
+        "maturity.state": "MERGE_READY",
+        "maturity.overlay": "NONE",
+        "maturity.transition_evidence_refs": ["evidence://merge-readiness/current"]
+      }
+    },
+    {
+      "id": "merged-verified-frozen",
+      "set": {
+        "maturity.previous_state": "MERGE_APPLIED_UNVERIFIED",
+        "maturity.state": "MERGED_VERIFIED",
+        "maturity.overlay": "NONE",
+        "maturity.transition_evidence_refs": ["evidence://canonical-readback/current"]
+      }
+    },
+    {
+      "id": "superseded-frozen",
+      "set": {
+        "maturity.disposition": "SUPERSEDED",
+        "maturity.overlay": "STOPPED",
+        "supersession.superseded_by_candidate_id": "candidate.campaign2.sample.v2"
+      }
+    },
+    {
+      "id": "inline-rationale-candidate",
+      "set": {
+        "admission_basis.kind": "INLINE_RATIONALE",
+        "admission_basis.reference": "inline://bounded-bug-fix/accepted-requirement",
+        "admission_basis.disposition": "INLINE_RATIONALE_ALLOWED"
+      }
+    }
+  ],
+  "invalid_record_cases": [
+    {
+      "id": "authority-claim",
+      "set": {"authority.merge_ready_grants_merge_authority": true}
+    },
+    {
+      "id": "bad-head-sha",
+      "set": {"freeze.candidate_identity.head_sha": "not-a-sha"}
+    },
+    {
+      "id": "inline-with-admit-disposition",
+      "set": {
+        "admission_basis.kind": "INLINE_RATIONALE",
+        "admission_basis.disposition": "ADMIT"
+      }
+    }
+  ],
+  "semantic_invalid_cases": [
+    {
+      "id": "frozen-state-without-freeze",
+      "set": {
+        "freeze.status": "NOT_FROZEN",
+        "freeze.candidate_identity": null,
+        "freeze.scope": null,
+        "freeze.acceptance": null,
+        "freeze.authority_reference": null
+      }
+    },
+    {
+      "id": "prefreeze-state-with-freeze",
+      "set": {
+        "maturity.previous_state": "PROPOSED",
+        "maturity.state": "IMPLEMENTING"
+      }
+    },
+    {
+      "id": "skipped-transition",
+      "set": {
+        "maturity.previous_state": "IMPLEMENTING",
+        "maturity.state": "ACCEPTED"
+      }
+    },
+    {
+      "id": "self-transition",
+      "set": {
+        "maturity.previous_state": "FROZEN_CANDIDATE",
+        "maturity.state": "FROZEN_CANDIDATE"
+      }
+    },
+    {
+      "id": "freeze-base-mismatch",
+      "set": {"freeze.candidate_identity.base_sha": "6666666666666666666666666666666666666666"}
+    },
+    {
+      "id": "superseded-without-successor",
+      "set": {
+        "maturity.disposition": "SUPERSEDED",
+        "supersession.superseded_by_candidate_id": null
+      }
+    },
+    {
+      "id": "active-with-successor",
+      "set": {
+        "maturity.disposition": "ACTIVE",
+        "supersession.superseded_by_candidate_id": "candidate.campaign2.sample.v2"
+      }
+    },
+    {
+      "id": "merge-ready-without-evidence",
+      "set": {
+        "maturity.previous_state": "ACCEPTED",
+        "maturity.state": "MERGE_READY",
+        "maturity.transition_evidence_refs": []
+      }
+    }
+  ],
+  "frozen_change_cases": [
+    {
+      "id": "bug-fix-new-identity",
+      "change_class": "BUG_FIX",
+      "candidate_identity_changes": true,
+      "frozen_dimension_changes": [],
+      "expected": "BOUNDED_REMEDIATION_NEW_IDENTITY_REQUIRED"
+    },
+    {
+      "id": "evidence-correction-new-identity",
+      "change_class": "EVIDENCE_CORRECTION",
+      "candidate_identity_changes": true,
+      "frozen_dimension_changes": [],
+      "expected": "BOUNDED_REMEDIATION_NEW_IDENTITY_REQUIRED"
+    },
+    {
+      "id": "bug-fix-reuses-identity",
+      "change_class": "BUG_FIX",
+      "candidate_identity_changes": false,
+      "frozen_dimension_changes": [],
+      "expected": "INVALID_FROZEN_IDENTITY_REUSE"
+    },
+    {
+      "id": "acceptance-remediation-without-criteria-change",
+      "change_class": "ACCEPTANCE_CRITERIA_REMEDIATION",
+      "candidate_identity_changes": true,
+      "frozen_dimension_changes": [],
+      "expected": "BOUNDED_REMEDIATION_NEW_IDENTITY_REQUIRED"
+    },
+    {
+      "id": "acceptance-criteria-rewritten",
+      "change_class": "ACCEPTANCE_CRITERIA_REMEDIATION",
+      "candidate_identity_changes": true,
+      "frozen_dimension_changes": ["ACCEPTANCE_CRITERIA"],
+      "expected": "READMISSION_OR_IMPLEMENTATION_REQUIRED"
+    },
+    {
+      "id": "new-scope",
+      "change_class": "NEW_SCOPE",
+      "candidate_identity_changes": true,
+      "frozen_dimension_changes": ["SCOPE"],
+      "expected": "PROHIBITED_AS_REMEDIATION"
+    },
+    {
+      "id": "architecture-expansion",
+      "change_class": "ARCHITECTURAL_EXPANSION",
+      "candidate_identity_changes": true,
+      "frozen_dimension_changes": ["ARCHITECTURE_DECISION"],
+      "expected": "PROHIBITED_AS_REMEDIATION"
+    },
+    {
+      "id": "validator-weakening",
+      "change_class": "VALIDATOR_WEAKENING",
+      "candidate_identity_changes": true,
+      "frozen_dimension_changes": [],
+      "expected": "PROHIBITED_AS_REMEDIATION"
+    },
+    {
+      "id": "unknown-class",
+      "change_class": "MYSTERY_CHANGE",
+      "candidate_identity_changes": true,
+      "frozen_dimension_changes": [],
+      "expected": "FULL_REVIEW_REQUIRED"
+    }
+  ]
+}

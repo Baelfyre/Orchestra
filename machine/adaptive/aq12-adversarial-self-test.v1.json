@@ -1,0 +1,126 @@
+{
+  "schema_version": "orchestra.aq12-adversarial-self-test.v1",
+  "phase": "AQ12_ORCHESTRA_ADVERSARIAL_SELF_TEST",
+  "owner": "overseer",
+  "authority_model": "EVIDENCE_ONLY_NON_AUTHORIZING",
+  "purpose": "Adversarially self-test Orchestra's own scope, authority, evidence-integrity, lifecycle-transition, assurance-gate, and determinism controls without mutating protected policy or creating lifecycle authority.",
+  "implementation_inventory": [
+    "CHANGELOG.md",
+    "README.json",
+    "docs/architecture/ADAPTIVE_ASSURANCE_AQ12.md",
+    "machine/adaptive/aq12-adversarial-self-test.v1.json",
+    "machine/schemas/aq12-adversarial-self-test.v1.schema.json",
+    "orchestra_runtime/domain/adaptive/adversarial_self_test.py",
+    "scripts/validation/validate_aq12.py",
+    "tests/behavior/run_tests.py",
+    "tests/runtime/test_adaptive_assurance_aq12.py"
+  ],
+  "self_test_boundary": {
+    "target_repository": "Baelfyre/Orchestra",
+    "canonical_start_sha": "34c7fcf45ee42db92289479c1ec8e0b425af29e7",
+    "mode": "CONTROLLED_NON_PRODUCTION_ADVERSARIAL_SELF_TEST",
+    "cud10_state": "READY_NOT_STARTED_HELD_BY_CURRENT_USER",
+    "protected_policy_mutation_allowed": false,
+    "production_mutation_allowed": false,
+    "provider_activation_allowed": false,
+    "telemetry_activation_allowed": false,
+    "release_or_deploy_allowed": false
+  },
+  "required_attack_classes": [
+    "SCOPE_DRIFT",
+    "AUTHORITY_ESCALATION",
+    "EVIDENCE_TAMPERING",
+    "STATE_TRANSITION_FORGERY",
+    "ASSURANCE_GATE_BYPASS",
+    "DETERMINISM_DRIFT"
+  ],
+  "test_policy": {
+    "minimum_case_count": 6,
+    "minimum_effectiveness_bps": 10000,
+    "effective_results": [
+      "BLOCKED",
+      "DETECTED_FAIL_CLOSED"
+    ],
+    "unresolved_results": [
+      "ESCAPED",
+      "INCONCLUSIVE"
+    ],
+    "independent_evidence_required": true,
+    "deterministic_replay_required": true,
+    "claim_scope": "CONTROLLED_SELF_TEST_ONLY"
+  },
+  "reference_cases": [
+    {
+      "case_id": "AQ12-SCOPE-DRIFT",
+      "attack_class": "SCOPE_DRIFT",
+      "expected_control": "PHASE_REGISTRY_FAIL_CLOSED",
+      "adversarial_stimulus": "PARTIAL_OR_SUPERSET_REGISTERED_PHASE_INVENTORY"
+    },
+    {
+      "case_id": "AQ12-AUTHORITY-ESCALATION",
+      "attack_class": "AUTHORITY_ESCALATION",
+      "expected_control": "EXPLICIT_AUTHORITY_BOUNDARY",
+      "adversarial_stimulus": "PASSING_EVIDENCE_ATTEMPTS_TO_CREATE_EXECUTION_AUTHORITY"
+    },
+    {
+      "case_id": "AQ12-EVIDENCE-TAMPERING",
+      "attack_class": "EVIDENCE_TAMPERING",
+      "expected_control": "EVIDENCE_IDENTITY_AND_INTEGRITY",
+      "adversarial_stimulus": "MISMATCHED_OR_NON_INDEPENDENT_EVIDENCE_IDENTITY"
+    },
+    {
+      "case_id": "AQ12-TRANSITION-FORGERY",
+      "attack_class": "STATE_TRANSITION_FORGERY",
+      "expected_control": "ARBITER_TRANSITION_OWNERSHIP",
+      "adversarial_stimulus": "NON_ARBITER_COMPONENT_ATTEMPTS_LIFECYCLE_TRANSITION"
+    },
+    {
+      "case_id": "AQ12-GATE-BYPASS",
+      "attack_class": "ASSURANCE_GATE_BYPASS",
+      "expected_control": "PROTECTED_ASSURANCE_GATES",
+      "adversarial_stimulus": "PARTIAL_OR_UNKNOWN_SCOPE_ATTEMPTS_HISTORICAL_GATE_EXEMPTION"
+    },
+    {
+      "case_id": "AQ12-DETERMINISM-DRIFT",
+      "attack_class": "DETERMINISM_DRIFT",
+      "expected_control": "DETERMINISTIC_REPLAY_PARITY",
+      "adversarial_stimulus": "IDENTICAL_INPUT_REPLAY_ATTEMPTS_NON_IDENTICAL_DISPOSITION"
+    }
+  ],
+  "fail_closed_conditions": [
+    "UNKNOWN_ATTACK_CLASS_REJECTED",
+    "DUPLICATE_CASE_ID_REJECTED",
+    "MISSING_REQUIRED_ATTACK_CLASS_REJECTED",
+    "EXPECTED_CONTROL_DRIFT_REJECTED",
+    "PROTECTED_POLICY_MUTATION_REJECTED",
+    "PRODUCTION_MUTATION_REJECTED",
+    "PROVIDER_OR_TELEMETRY_ACTIVATION_REJECTED",
+    "RELEASE_OR_DEPLOY_ACTION_REJECTED",
+    "ESCAPED_ATTACK_FORCES_REVISION_REQUIRED",
+    "DETERMINISTIC_REPLAY_MISMATCH_FORCES_REVISION_REQUIRED",
+    "NON_INDEPENDENT_OR_INCONCLUSIVE_EVIDENCE_CANNOT_PASS",
+    "AQ12_PASS_CREATES_NO_TRANSITION_OR_RELEASE_AUTHORITY",
+    "AQ12_PASS_DOES_NOT_ADMIT_CRITIQUAL_CUD10"
+  ],
+  "authority": {
+    "creates_execution_authority": false,
+    "creates_transition_authority": false,
+    "creates_whitelist_authority": false,
+    "changes_protected_policy": false,
+    "lowers_assurance_thresholds": false,
+    "activates_provider": false,
+    "activates_telemetry": false,
+    "mutates_production": false,
+    "authorizes_release": false,
+    "authorizes_critiqual_cud10_admission": false
+  },
+  "validation": {
+    "validator": "scripts/validation/validate_aq12.py",
+    "runtime": "orchestra_runtime/domain/adaptive/adversarial_self_test.py",
+    "runtime_test": "tests/runtime/test_adaptive_assurance_aq12.py",
+    "behavior_registration": "tests/behavior/run_tests.py",
+    "architecture_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ12.md",
+    "schema": "machine/schemas/aq12-adversarial-self-test.v1.schema.json",
+    "canonical_start_sha": "34c7fcf45ee42db92289479c1ec8e0b425af29e7"
+  }
+}

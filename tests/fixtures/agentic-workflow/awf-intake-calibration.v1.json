@@ -1,0 +1,420 @@
+{
+  "schema_version": "orchestra.awf-intake-calibration.v1",
+  "purpose": "Higher-coverage deterministic calibration corpus for ordinary-prompt AWF intake.",
+  "invariants": {
+    "max_parallel_specialists": 1,
+    "topology_change_requires_human_approval": false,
+    "authority_expansion": false
+  },
+  "cases": [
+    {
+      "id": "C01_UI_REVIEW_SINGLE_OWNER",
+      "prompt": "Review this responsive checkout screen for accessibility and layout issues.",
+      "expected": {
+        "authority_domains": [
+          "UI_UX"
+        ],
+        "primary_owner": "cloak",
+        "execution_mode": "AUDIT",
+        "risk_level": "MEDIUM",
+        "required_specialists": [
+          "cloak"
+        ],
+        "selected_patterns": [
+          "ROUTING",
+          "TOOL_REACT"
+        ],
+        "concurrency_mode": "SINGLE_OWNER",
+        "human_gate_required": false
+      }
+    },
+    {
+      "id": "C02_SECURITY_AUDIT_SINGLE_OWNER",
+      "prompt": "Audit authentication, authorization, and secret handling.",
+      "expected": {
+        "authority_domains": [
+          "SECURITY"
+        ],
+        "primary_owner": "cipher",
+        "execution_mode": "AUDIT",
+        "risk_level": "HIGH",
+        "required_specialists": [
+          "cipher"
+        ],
+        "selected_patterns": [
+          "ROUTING",
+          "TOOL_REACT"
+        ],
+        "concurrency_mode": "SINGLE_OWNER",
+        "human_gate_required": false
+      }
+    },
+    {
+      "id": "C03_PERSISTENCE_IMPLEMENT_VALIDATE",
+      "prompt": "Implement a database schema migration and validate it.",
+      "expected": {
+        "authority_domains": [
+          "PERSISTENCE",
+          "IMPLEMENTATION",
+          "VALIDATION"
+        ],
+        "primary_owner": "chronicler",
+        "execution_mode": "GOVERNED",
+        "risk_level": "HIGH",
+        "required_specialists": [
+          "chronicler",
+          "ponytail",
+          "overseer"
+        ],
+        "selected_patterns": [
+          "ROUTING",
+          "PLANNING",
+          "TOOL_REACT"
+        ],
+        "concurrency_mode": "SEQUENTIAL_MULTI_AGENT",
+        "human_gate_required": false
+      }
+    },
+    {
+      "id": "C04_ARCHITECTURE_REFACTOR_VALIDATE",
+      "prompt": "Refactor code layering and dependency direction, then validate it.",
+      "expected": {
+        "authority_domains": [
+          "ARCHITECTURE",
+          "IMPLEMENTATION",
+          "VALIDATION"
+        ],
+        "primary_owner": "clockwork",
+        "execution_mode": "STANDARD",
+        "risk_level": "MEDIUM",
+        "required_specialists": [
+          "clockwork",
+          "ponytail",
+          "overseer"
+        ],
+        "selected_patterns": [
+          "ROUTING",
+          "PLANNING",
+          "TOOL_REACT"
+        ],
+        "concurrency_mode": "SEQUENTIAL_MULTI_AGENT",
+        "human_gate_required": false
+      }
+    },
+    {
+      "id": "C05_DOCUMENTATION_UPDATE",
+      "prompt": "Update documentation in the README for the new workflow.",
+      "expected": {
+        "authority_domains": [
+          "DOCUMENTATION"
+        ],
+        "primary_owner": "scribe",
+        "execution_mode": "STANDARD",
+        "risk_level": "MEDIUM",
+        "required_specialists": [
+          "scribe"
+        ],
+        "selected_patterns": [
+          "ROUTING",
+          "TOOL_REACT"
+        ],
+        "concurrency_mode": "SINGLE_OWNER",
+        "human_gate_required": false
+      }
+    },
+    {
+      "id": "C06_DIAGRAM_BUILD",
+      "prompt": "Build a PlantUML sequence diagram from verified facts.",
+      "expected": {
+        "authority_domains": [
+          "DIAGRAM"
+        ],
+        "primary_owner": "weaver",
+        "execution_mode": "STANDARD",
+        "risk_level": "MEDIUM",
+        "required_specialists": [
+          "weaver"
+        ],
+        "selected_patterns": [
+          "ROUTING",
+          "TOOL_REACT"
+        ],
+        "concurrency_mode": "SINGLE_OWNER",
+        "human_gate_required": false
+      }
+    },
+    {
+      "id": "C07_BUSINESS_SCOPE_REVIEW",
+      "prompt": "Review requirements and acceptance criteria for the checkout scope.",
+      "expected": {
+        "authority_domains": [
+          "BUSINESS_SCOPE"
+        ],
+        "primary_owner": "the-steward",
+        "execution_mode": "AUDIT",
+        "risk_level": "MEDIUM",
+        "required_specialists": [
+          "the-steward"
+        ],
+        "selected_patterns": [
+          "ROUTING",
+          "TOOL_REACT"
+        ],
+        "concurrency_mode": "SINGLE_OWNER",
+        "human_gate_required": false
+      }
+    },
+    {
+      "id": "C08_LEGAL_COMPLIANCE_REVIEW",
+      "prompt": "Review licensing, copyright, and compliance obligations.",
+      "expected": {
+        "authority_domains": [
+          "LEGAL_COMPLIANCE"
+        ],
+        "primary_owner": "the-governor",
+        "execution_mode": "AUDIT",
+        "risk_level": "HIGH",
+        "required_specialists": [
+          "the-governor"
+        ],
+        "selected_patterns": [
+          "ROUTING",
+          "TOOL_REACT"
+        ],
+        "concurrency_mode": "SINGLE_OWNER",
+        "human_gate_required": false
+      }
+    },
+    {
+      "id": "C09_AMBIGUOUS_FAILS_TO_CONDUCTOR",
+      "prompt": "Consider the options.",
+      "expected": {
+        "authority_domains": [
+          "ROUTING"
+        ],
+        "primary_owner": "conductor",
+        "execution_mode": "FAST",
+        "risk_level": "LOW",
+        "required_specialists": [
+          "conductor"
+        ],
+        "selected_patterns": [
+          "ROUTING"
+        ],
+        "concurrency_mode": "SINGLE_OWNER",
+        "human_gate_required": false
+      }
+    },
+    {
+      "id": "C10_PARALLEL_UI_SECURITY_ANALYSIS",
+      "prompt": "Analyze UI and security in parallel.",
+      "expected": {
+        "authority_domains": [
+          "UI_UX",
+          "SECURITY"
+        ],
+        "primary_owner": "cloak",
+        "execution_mode": "AUDIT",
+        "risk_level": "HIGH",
+        "required_specialists": [
+          "the-tuner",
+          "cloak",
+          "cipher"
+        ],
+        "selected_patterns": [
+          "ROUTING",
+          "PLANNING",
+          "TOOL_REACT",
+          "MULTI_AGENT"
+        ],
+        "concurrency_mode": "SEQUENTIAL_MULTI_AGENT",
+        "human_gate_required": false
+      }
+    },
+    {
+      "id": "C11_PROTECTED_MERGE",
+      "prompt": "Merge the approved pull request.",
+      "expected": {
+        "authority_domains": [
+          "TRANSITION"
+        ],
+        "primary_owner": "arbiter",
+        "execution_mode": "STANDARD",
+        "risk_level": "HIGH",
+        "required_specialists": [
+          "arbiter"
+        ],
+        "selected_patterns": [
+          "ROUTING",
+          "TOOL_REACT"
+        ],
+        "concurrency_mode": "SINGLE_OWNER",
+        "human_gate_required": true
+      }
+    },
+    {
+      "id": "C12_PRODUCTION_DEPLOY",
+      "prompt": "Deploy the checkout change to production.",
+      "expected": {
+        "authority_domains": [
+          "TRANSITION"
+        ],
+        "primary_owner": "arbiter",
+        "execution_mode": "DESTRUCTIVE",
+        "risk_level": "CRITICAL",
+        "required_specialists": [
+          "arbiter"
+        ],
+        "selected_patterns": [
+          "ROUTING",
+          "TOOL_REACT"
+        ],
+        "concurrency_mode": "SINGLE_OWNER",
+        "human_gate_required": true
+      }
+    },
+    {
+      "id": "C13_FORCE_PUSH_FAILS_TO_CONDUCTOR_GATE",
+      "prompt": "Force push the branch and rewrite history.",
+      "expected": {
+        "authority_domains": [
+          "ROUTING"
+        ],
+        "primary_owner": "conductor",
+        "execution_mode": "DESTRUCTIVE",
+        "risk_level": "CRITICAL",
+        "required_specialists": [
+          "conductor"
+        ],
+        "selected_patterns": [
+          "ROUTING"
+        ],
+        "concurrency_mode": "SINGLE_OWNER",
+        "human_gate_required": true
+      }
+    },
+    {
+      "id": "C14_CHAOS_TEST_DAGGER_GATE",
+      "prompt": "Run a chaos test against the service in staging.",
+      "expected": {
+        "authority_domains": [
+          "ADVERSARIAL"
+        ],
+        "primary_owner": "dagger",
+        "execution_mode": "DESTRUCTIVE",
+        "risk_level": "CRITICAL",
+        "required_specialists": [
+          "dagger"
+        ],
+        "selected_patterns": [
+          "ROUTING"
+        ],
+        "concurrency_mode": "SINGLE_OWNER",
+        "human_gate_required": true
+      }
+    },
+    {
+      "id": "C15_UI_IMPLEMENT_VALIDATE_NO_TUNER",
+      "prompt": "Fix bug in responsive UI and validate it.",
+      "expected": {
+        "authority_domains": [
+          "UI_UX",
+          "IMPLEMENTATION",
+          "VALIDATION"
+        ],
+        "primary_owner": "cloak",
+        "execution_mode": "STANDARD",
+        "risk_level": "MEDIUM",
+        "required_specialists": [
+          "cloak",
+          "ponytail",
+          "overseer"
+        ],
+        "selected_patterns": [
+          "ROUTING",
+          "PLANNING",
+          "TOOL_REACT"
+        ],
+        "concurrency_mode": "SEQUENTIAL_MULTI_AGENT",
+        "human_gate_required": false
+      }
+    },
+    {
+      "id": "C16_PERSISTENCE_SECURITY_IMPLEMENT",
+      "prompt": "Implement database authorization constraints and validate them.",
+      "expected": {
+        "authority_domains": [
+          "PERSISTENCE",
+          "SECURITY",
+          "IMPLEMENTATION",
+          "VALIDATION"
+        ],
+        "primary_owner": "chronicler",
+        "execution_mode": "GOVERNED",
+        "risk_level": "HIGH",
+        "required_specialists": [
+          "the-tuner",
+          "chronicler",
+          "cipher",
+          "ponytail",
+          "overseer"
+        ],
+        "selected_patterns": [
+          "ROUTING",
+          "PLANNING",
+          "TOOL_REACT",
+          "MULTI_AGENT"
+        ],
+        "concurrency_mode": "SEQUENTIAL_MULTI_AGENT",
+        "human_gate_required": false
+      }
+    },
+    {
+      "id": "C17_PRODUCTION_WORD_FALSE_POSITIVE_GUARD",
+      "prompt": "Review the production roadmap documentation.",
+      "expected": {
+        "authority_domains": [
+          "DOCUMENTATION"
+        ],
+        "primary_owner": "scribe",
+        "execution_mode": "AUDIT",
+        "risk_level": "MEDIUM",
+        "required_specialists": [
+          "scribe"
+        ],
+        "selected_patterns": [
+          "ROUTING",
+          "TOOL_REACT"
+        ],
+        "concurrency_mode": "SINGLE_OWNER",
+        "human_gate_required": false
+      }
+    },
+    {
+      "id": "C18_SECURITY_UI_REVIEW_CROSS_DOMAIN",
+      "prompt": "Review the secure visual design for the checkout screen.",
+      "expected": {
+        "authority_domains": [
+          "SECURITY",
+          "UI_UX"
+        ],
+        "primary_owner": "cipher",
+        "execution_mode": "AUDIT",
+        "risk_level": "HIGH",
+        "required_specialists": [
+          "the-tuner",
+          "cipher",
+          "cloak"
+        ],
+        "selected_patterns": [
+          "ROUTING",
+          "PLANNING",
+          "TOOL_REACT",
+          "MULTI_AGENT"
+        ],
+        "concurrency_mode": "SEQUENTIAL_MULTI_AGENT",
+        "human_gate_required": false
+      }
+    }
+  ]
+}

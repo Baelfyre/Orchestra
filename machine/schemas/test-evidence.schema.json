@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/test-evidence.schema.json",
+  "title": "Orchestra Runtime Test Evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "generated_at",
+    "repository",
+    "tested_sha",
+    "source_head_sha",
+    "workflow",
+    "runtime",
+    "tests",
+    "coverage",
+    "reports",
+    "result"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "const": "orchestra.test-evidence.v1"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "repository": {"type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"},
+    "tested_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "source_head_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "workflow": {"type": "object"},
+    "runtime": {"type": "object"},
+    "tests": {"type": "object"},
+    "coverage": {"type": "object"},
+    "reports": {"type": "object"},
+    "result": {"type": "string", "enum": ["PASS", "FAIL"]}
+  }
+}

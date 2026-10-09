@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/adaptive-observation.schema.json",
+  "title": "Orchestra Adaptive Observation v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "memory_rule_version",
+    "observation_id",
+    "sequence",
+    "event_type",
+    "scope",
+    "subject_key",
+    "evidence_class",
+    "source_type",
+    "source_ref",
+    "occurred_at",
+    "payload",
+    "previous_observation_digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.adaptive-observation.v1"},
+    "memory_rule_version": {"const": "orchestra.adaptive-memory-rules.v1"},
+    "observation_id": {"type": "string", "minLength": 1},
+    "sequence": {"type": "integer", "minimum": 1},
+    "event_type": {
+      "enum": [
+        "EXPLICIT_PREFERENCE_SET",
+        "EXPLICIT_PREFERENCE_CORRECTED",
+        "EXPLICIT_PREFERENCE_REMOVED",
+        "INFERRED_PATTERN_CANDIDATE",
+        "INFERRED_PATTERN_CONFIRMED",
+        "INFERRED_PATTERN_DEPRECATED",
+        "INFERRED_PATTERN_REJECTED",
+        "GOVERNED_OUTCOME_RECORDED"
+      ]
+    },
+    "scope": {"$ref": "#/$defs/scope"},
+    "subject_key": {
+      "type": "string",
+      "pattern": "^(?!(?:authority|capability|required_specialist|governance|human_gate|security_prohibition|mandatory_validation|evidence_integrity|audit_requirement|fail_closed|exact_head|release_gate|merge_gate|privacy_restriction|provider_restriction|resource_ceiling)(?:[.:]|$))[a-z0-9][a-z0-9_.:-]{0,127}$"
+    },
+    "evidence_class": {
+      "enum": [
+        "EXPLICIT_CURRENT_INSTRUCTION",
+        "EXPLICIT_SCOPED_PREFERENCE",
+        "GOVERNED_OUTCOME",
+        "USER_FEEDBACK",
+        "INFERRED_CANDIDATE"
+      ]
+    },
+    "source_type": {
+      "enum": [
+        "explicit_user_instruction",
+        "explicit_user_correction",
+        "governed_pattern_materializer",
+        "orchestra_phase_retrospective"
+      ]
+    },
+    "source_ref": {"type": "string", "minLength": 1},
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "payload": {"type": "object"},
+    "previous_observation_digest": {
+      "oneOf": [
+        {"type": "null"},
+        {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      ]
+    },
+    "expires_at": {"type": "string", "format": "date-time"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"event_type": {"const": "GOVERNED_OUTCOME_RECORDED"}}, "required": ["event_type"]},
+      "then": {
+        "properties": {
+          "evidence_class": {"const": "GOVERNED_OUTCOME"},
+          "source_type": {"const": "orchestra_phase_retrospective"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"event_type": {"pattern": "^INFERRED_PATTERN_"}}, "required": ["event_type"]},
+      "then": {
+        "properties": {
+          "evidence_class": {"const": "INFERRED_CANDIDATE"},
+          "source_type": {"const": "governed_pattern_materializer"}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"evidence_class": {"const": "EXPLICIT_CURRENT_INSTRUCTION"}}, "required": ["evidence_class"]},
+      "then": {
+        "properties": {
+          "scope": {
+            "allOf": [
+              {"$ref": "#/$defs/scope"},
+              {"properties": {"scope_type": {"const": "task_session"}}}
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "scope": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scope_type", "user_key"],
+          "properties": {
+            "scope_type": {"const": "global_user"},
+            "user_key": {"type": "string", "minLength": 1}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scope_type", "user_key", "project_key"],
+          "properties": {
+            "scope_type": {"const": "project"},
+            "user_key": {"type": "string", "minLength": 1},
+            "project_key": {"type": "string", "minLength": 1}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scope_type", "user_key", "specialist_slug"],
+          "properties": {
+            "scope_type": {"const": "specialist"},
+            "user_key": {"type": "string", "minLength": 1},
+            "project_key": {"type": "string", "minLength": 1},
+            "specialist_slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]{0,127}$"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scope_type", "user_key", "task_session_key"],
+          "properties": {
+            "scope_type": {"const": "task_session"},
+            "user_key": {"type": "string", "minLength": 1},
+            "project_key": {"type": "string", "minLength": 1},
+            "specialist_slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]{0,127}$"},
+            "task_session_key": {"type": "string", "minLength": 1}
+          }
+        }
+      ]
+    }
+  }
+}

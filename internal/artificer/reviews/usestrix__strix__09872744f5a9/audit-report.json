@@ -1,0 +1,135 @@
+{
+  "schema_version": "1.0",
+  "audit_report_id": "strix-09872744f5a9-audit",
+  "source_bundle_id": "usestrix__strix__09872744f5a9",
+  "source_intake_path": "internal/artificer/records/usestrix__strix__09872744f5a9/source-intake.json",
+  "source_repository": "usestrix/strix",
+  "reviewed_commit_sha": "09872744f5a9d3ffad750478f823e656ac1a7c88",
+  "audit_date": "2026-07-12",
+  "executive_summary": "This static read-only audit reviewed only the listed Strix orchestration and safety-boundary files at the pinned commit. No Strix installation, Docker operation, scan, exploit, payload, target, API call, or external execution occurred. No source code or proof-of-concept content was copied. The audit identified governance-relevant orchestration references and safety risks. No governance approval, proposal, promotion, Pattern Catalog action, or implementation decision was made.",
+  "findings": [
+    {
+      "finding_id": "strix-delegation-002",
+      "pattern_record_path": "internal/artificer/records/usestrix__strix__09872744f5a9/patterns/validated-specialist-delegation.json",
+      "title": "Delegation and inherited-context breadth",
+      "finding": "Child-agent creation resolves a coordinator and runner-provided spawner from context; requested skill names are validated; parent turn history is inherited by default when available; the inherited history is forwarded to the runner-owned spawner; skill validation does not itself minimize, classify, or redact inherited task context; no runtime behavior was tested.",
+      "recommendation": "Use a fresh Orchestra-native delegation contract with explicit context minimization, structured task schemas, sensitive-data filtering, per-child evidence scopes, capability limits, bounded ancestry, and deterministic rejection when the requested delegation exceeds the parent’s authority.",
+      "assigned_specialist": "overseer",
+      "risk_level": "MEDIUM",
+      "evidence": [
+        {
+          "bucket": "STATIC_ANALYSIS",
+          "source_file": "strix/core/inputs.py",
+          "line_range": "149-180",
+          "summary": "Context construction logic shows authorization metadata and inherited instruction context are passed through downstream delegation paths."
+        },
+        {
+          "bucket": "STATIC_ANALYSIS",
+          "source_file": "strix/tools/agents_graph/tools.py",
+          "line_range": "350-464",
+          "summary": "Child agent delegation validates specialists, resolves a coordinator and runner spawner, and forwards parent history to the child task spawner without minimizing inherited task context."
+        }
+      ]
+    },
+    {
+      "finding_id": "strix-lifecycle-003",
+      "pattern_record_path": "internal/artificer/records/usestrix__strix__09872744f5a9/patterns/lifecycle-gated-agent-completion.json",
+      "title": "Explicit lifecycle completion signals",
+      "finding": "Lifecycle output is parsed as structured JSON; successful agent_finish and finish_scan results allow final output; an interactive wait_for_message parked state may also terminate the current turn; ordinary text output does not independently complete the lifecycle; the audit did not test malformed, delayed, duplicated, or adversarial tool results.",
+      "recommendation": "Use the concept as reference for a typed Orchestra lifecycle state machine with explicit transition enums, schema-validated tool results, idempotent completion, duplicate-signal handling, timeout behavior, and transition-level audit events.",
+      "assigned_specialist": "clockwork",
+      "risk_level": "LOW",
+      "evidence": [
+        {
+          "bucket": "STATIC_ANALYSIS",
+          "source_file": "strix/agents/factory.py",
+          "line_range": "271-321",
+          "summary": "Agent lifecycle completion depends on explicit structured signals such as agent_finish, finish_scan, and wait_for_message rather than ordinary text output."
+        }
+      ]
+    },
+    {
+      "finding_id": "strix-prompt-fallback-005",
+      "pattern_record_path": "internal/artificer/records/usestrix__strix__09872744f5a9/patterns/fail-open-system-prompt-rendering.json",
+      "title": "Fail-open prompt construction",
+      "finding": "Prompt resource resolution, skill loading, and template rendering occur inside one broad exception boundary; any exception is logged; the function returns an empty string after failure; downstream agent construction may therefore receive an empty system prompt; the audit did not execute a template failure or establish runtime exploitability.",
+      "recommendation": "Do not adapt the fail-open behavior. Prompt construction must fail closed with a typed configuration error, prevent agent startup, identify the failed resource without exposing sensitive paths, and require validated non-empty system instructions before any tool-capable agent is created.",
+      "assigned_specialist": "cipher",
+      "risk_level": "HIGH",
+      "evidence": [
+        {
+          "bucket": "STATIC_ANALYSIS",
+          "source_file": "strix/agents/prompt.py",
+          "line_range": "62-101",
+          "summary": "A broad exception boundary around prompt rendering catches errors and returns an empty system prompt."
+        }
+      ]
+    },
+    {
+      "finding_id": "strix-scope-001",
+      "pattern_record_path": "internal/artificer/records/usestrix__strix__09872744f5a9/patterns/declared-scope-context.json",
+      "title": "Declarative scope context is not enforcement",
+      "finding": "Configured targets are converted into structured authorization context; the context names its scope and authorization sources; the context states that user instructions do not expand scope; this function creates metadata but does not itself enforce network, filesystem, tool, or target restrictions; enforcement depends on downstream consumers not reviewed in this finding.",
+      "recommendation": "Use the declaration concept only with independent enforcement at every privileged boundary. Bind tools and resources to an immutable validated scope object, reject undeclared targets before execution, preserve provenance, and ensure prompt text cannot broaden authority.",
+      "assigned_specialist": "arbiter",
+      "risk_level": "MEDIUM",
+      "evidence": [
+        {
+          "bucket": "DOCUMENTATION_CLAIM",
+          "source_file": "README.md",
+          "line_range": "44-54",
+          "summary": "README describes scope and authorization boundaries without implying an enforcement guarantee in the inspected code."
+        },
+        {
+          "bucket": "STATIC_ANALYSIS",
+          "source_file": "strix/core/inputs.py",
+          "line_range": "97-122",
+          "summary": "Scope context construction derives authorization metadata from configured targets but does not itself enforce restrictions."
+        }
+      ]
+    },
+    {
+      "finding_id": "strix-tool-registry-004",
+      "pattern_record_path": "internal/artificer/records/usestrix__strix__09872744f5a9/patterns/run-wide-tool-extension-registry.json",
+      "title": "Broad capability propagation through mutable registration",
+      "finding": "The module defines a fixed base tool set; additional tools may be registered into a mutable module-level collection; duplicate tool names are rejected; registered tools are added to agents created afterward; root and child construction combine base, registered, per-agent, and lifecycle tools; global registration can broaden capabilities across multiple agent roles; no malicious or conflicting tool was registered during the audit.",
+      "recommendation": "Use a fresh run-scoped immutable capability registry with explicit provenance, per-role allowlists, least-privilege defaults, approval metadata, collision rejection by stable identity, no process-global mutation, and a deterministic capability manifest recorded for every agent.",
+      "assigned_specialist": "clockwork",
+      "risk_level": "MEDIUM",
+      "evidence": [
+        {
+          "bucket": "STATIC_ANALYSIS",
+          "source_file": "strix/agents/factory.py",
+          "line_range": "324-388",
+          "summary": "Base and registered tools are merged into agent capability sets at construction time, allowing global registration to affect subsequent agents."
+        },
+        {
+          "bucket": "STATIC_ANALYSIS",
+          "source_file": "strix/agents/factory.py",
+          "line_range": "390-477",
+          "summary": "Root and child agents combine base, registered, per-agent, and lifecycle tools into a single runtime tool set."
+        }
+      ]
+    }
+  ],
+  "license_analysis": {
+    "detected_license": "Apache-2.0",
+    "compatibility_assessment": "GOVERNOR_REVIEW_REQUIRED",
+    "governor_review_required": true,
+    "summary": "The reviewed repository and package metadata declare Apache-2.0. This audit is reference-only and does not authorize source reuse. Redistribution or derivative use may require a copy of the license, retained notices, prominent modified-file notices, and applicable NOTICE handling. Apache-2.0 includes patent-license and patent-termination provisions. Trademark rights are not granted except for customary descriptive use. Future source reuse, adaptation, or distribution requires Governor and maintainer review. Third-party dependencies and their transitive licenses were not audited. No conclusion is made about hosted Strix services, Docker images, bundled external tools, documentation assets, or third-party security utilities."
+  },
+  "security_review": {
+    "external_execution_performed": false,
+    "summary": "Inspection used a read-only GitHub source connector. All evidence was pinned to the reviewed commit. GitHub connector requests were limited to retrieving the approved static source evidence. No local clone, Git fetch, package installation, Docker operation, build, test, Strix CLI invocation, Strix API or model request, agent execution, scan, browser action, shell action, proxy operation, payload execution, or target interaction occurred. README installation and scan commands were not followed. No target credentials, API keys, domains, applications, repositories, or IP addresses were supplied. No exploit skills, payloads, or proof-of-concept artifacts were copied. External prompt and task content was treated as untrusted. This audit is not a penetration test, vulnerability assessment, exploit validation, or runtime security certification."
+  },
+  "limitations": [
+    "The audit covered only the files and line ranges listed in source-intake.json.",
+    "No Strix dependency, package, Docker image, command, test, CLI, API or model request, agent, scan, exploit, payload, browser, shell, proxy, or external tool was executed.",
+    "The offensive skill library, exploit payloads, reconnaissance modules, proxy implementation, browser integration, report generation, Docker client, sandbox implementation, telemetry, session database, and hosted platform were not reviewed.",
+    "Third-party dependencies, bundled security tools, Docker images, and transitive license obligations were not audited.",
+    "The audit did not test whether declared scope metadata is enforced by every downstream runtime and tool boundary.",
+    "The audit did not trigger system-prompt rendering failures or establish runtime exploitability of the empty-prompt fallback.",
+    "Static findings do not establish that a vulnerability is exploitable in a deployed Strix configuration.",
+    "The audit is pinned to commit 09872744f5a9d3ffad750478f823e656ac1a7c88 and does not describe later repository changes."
+  ]
+}

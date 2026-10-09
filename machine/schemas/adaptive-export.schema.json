@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/adaptive-export.schema.json",
+  "title": "Orchestra Adaptive Export v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "user_key",
+    "profile",
+    "observations",
+    "forensic_secure_erase_guaranteed"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.adaptive-export.v1"},
+    "user_key": {"type": "string", "minLength": 1},
+    "profile": {
+      "oneOf": [
+        {"type": "null"},
+        {
+          "type": "object",
+          "required": ["schema_version", "memory_rule_version", "profile_id", "user_key", "generated_at", "source_head_digest", "patterns"]
+        }
+      ]
+    },
+    "observations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["schema_version", "memory_rule_version", "observation_id", "sequence", "event_type", "scope", "subject_key", "evidence_class", "source_type", "source_ref", "occurred_at", "payload", "previous_observation_digest"]
+      }
+    },
+    "forensic_secure_erase_guaranteed": {"const": false}
+  }
+}

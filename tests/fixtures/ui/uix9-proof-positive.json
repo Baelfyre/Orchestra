@@ -1,0 +1,66 @@
+{
+  "$schema": "../../../machine/schemas/uix-proof-observation.schema.json",
+  "schema_version": "orchestra.uix-proof-observation.v1",
+  "fixture_id": "uix9-positive-validator",
+  "fixture_kind": "POSITIVE_VALIDATOR",
+  "task_id": "uix9-frozen-ui-requirements",
+  "requirements_digest": "69ad856533b5a7733b7a1a186f8bf6ac04561938f6836d01d544951445a5a6df",
+  "project_fixture_digest": "69ad856533b5a7733b7a1a186f8bf6ac04561938f6836d01d544951445a5a6df",
+  "frozen_endpoint_revision": "uix9-zero-call-v1",
+  "arms_differ_only_by_uixtreatment": true,
+  "observations": [
+    {
+      "observation_id": "uix9-positive-baseline",
+      "arm_id": "BASELINE_NO_ORCHESTRA_UIX_GUIDANCE",
+      "guidance_treatment": "NO_ORCHESTRA_UIX_GUIDANCE",
+      "requirements_digest": "69ad856533b5a7733b7a1a186f8bf6ac04561938f6836d01d544951445a5a6df",
+      "project_fixture_digest": "69ad856533b5a7733b7a1a186f8bf6ac04561938f6836d01d544951445a5a6df",
+      "frozen_endpoint_revision": "uix9-zero-call-v1",
+      "metrics": {
+        "component_reuse": true,
+        "duplicate_component_count": 0,
+        "token_violations": 0,
+        "arbitrary_style_drift": 0,
+        "state_coverage": 1.0,
+        "asset_provenance": true,
+        "asset_substitution": false,
+        "responsive_containment": true,
+        "accessibility_invariants": true,
+        "unresolved_mappings": 0,
+        "revision_mismatch": false,
+        "visual_baseline_replacement": false,
+        "deterministic_acceptance": true
+      },
+      "acceptance": {"status": "PASS", "failure_codes": [], "deterministic": true},
+      "calls": {"model_calls": 0, "provider_calls": 0, "external_repo_mutations": 0, "model_self_ratings": 0, "subjective_visual_scores": 0, "endpoint_changes": 0},
+      "evidence": {"observed_from": "REPOSITORY_FIXTURE", "model_output_observed": false, "external_evidence_used": false, "human_rating_used": false}
+    },
+    {
+      "observation_id": "uix9-positive-governed",
+      "arm_id": "GOVERNED_CANONICAL_UIX_1_8_GUIDANCE",
+      "guidance_treatment": "CANONICAL_UIX_1_8_GUIDANCE",
+      "requirements_digest": "69ad856533b5a7733b7a1a186f8bf6ac04561938f6836d01d544951445a5a6df",
+      "project_fixture_digest": "69ad856533b5a7733b7a1a186f8bf6ac04561938f6836d01d544951445a5a6df",
+      "frozen_endpoint_revision": "uix9-zero-call-v1",
+      "metrics": {
+        "component_reuse": true,
+        "duplicate_component_count": 0,
+        "token_violations": 0,
+        "arbitrary_style_drift": 0,
+        "state_coverage": 1.0,
+        "asset_provenance": true,
+        "asset_substitution": false,
+        "responsive_containment": true,
+        "accessibility_invariants": true,
+        "unresolved_mappings": 0,
+        "revision_mismatch": false,
+        "visual_baseline_replacement": false,
+        "deterministic_acceptance": true
+      },
+      "acceptance": {"status": "PASS", "failure_codes": [], "deterministic": true},
+      "calls": {"model_calls": 0, "provider_calls": 0, "external_repo_mutations": 0, "model_self_ratings": 0, "subjective_visual_scores": 0, "endpoint_changes": 0},
+      "evidence": {"observed_from": "REPOSITORY_FIXTURE", "model_output_observed": false, "external_evidence_used": false, "human_rating_used": false}
+    }
+  ],
+  "external_side_effects": {"model_calls": 0, "provider_calls": 0, "external_repo_mutations": 0, "model_self_ratings": 0, "subjective_visual_scores": 0, "endpoint_changes": 0}
+}

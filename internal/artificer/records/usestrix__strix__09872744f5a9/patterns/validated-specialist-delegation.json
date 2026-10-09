@@ -1,0 +1,9 @@
+{
+  "name": "Validated Specialist Delegation",
+  "description": "Validates requested specialist skills, resolves the coordinator and runner-owned child spawner from context, optionally inherits parent turn history, delegates a focused task, and returns structured spawn results.",
+  "source_file": "strix/tools/agents_graph/tools.py",
+  "line_range": "350-464",
+  "classification": "REFERENCE_ONLY",
+  "assigned_specialist": "overseer",
+  "license_implications": "The source is Apache-2.0 licensed. Preserve only the architectural concept unless later Governor and maintainer review authorizes reuse under the applicable Apache-2.0 obligations."
+}

@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "decision_id": "strix-fail-open-system-prompt-rendering-decision",
+  "source_bundle_id": "usestrix__strix__09872744f5a9",
+  "pattern_record_path": "internal/artificer/records/usestrix__strix__09872744f5a9/patterns/fail-open-system-prompt-rendering.json",
+  "audit_report_id": "strix-09872744f5a9-audit",
+  "decision_status": "REJECTED",
+  "assigned_specialist": "cipher",
+  "reviews": {
+    "arbiter": {
+      "status": "BLOCKED",
+      "rationale": "The audit supports classification of empty-prompt fallback after broad exception handling as an OUT_OF_SCOPE high-risk anti-pattern. The behavior removes required system instructions during an error path and must not advance as an adoptable design.",
+      "review_date": "2026-07-12"
+    },
+    "governor": {
+      "status": "APPROVED",
+      "rationale": "Mandatory Apache-2.0 Governor review is complete for the governance disposition. This approval does not approve the fail-open mechanism and authorizes no Strix prompt, source, payload, exploit, media, documentation expression, or implementation reuse. Any unrelated future adaptation still requires separate Apache-2.0 notice, NOTICE, attribution, patent, distribution, and dependency review.",
+      "review_date": "2026-07-12"
+    },
+    "steward": {
+      "status": "BLOCKED",
+      "rationale": "Returning an empty system prompt after rendering failure conflicts with Orchestra fail-closed governance and safety requirements. The finding may be retained only as a prohibited-behavior lesson supporting deterministic failure, typed errors, validation, observability, and explicit safe termination.",
+      "review_date": "2026-07-12"
+    }
+  },
+  "maintainer_decision": {
+    "status": "REJECTED",
+    "rationale": "Reject the fail-open prompt-rendering mechanism and block implementation. Preserve the finding only as a negative safety lesson requiring prompt construction to fail closed, emit a typed auditable error, prevent agent execution, and avoid silently removing system authority or policy instructions.",
+    "decision_date": "2026-07-12"
+  },
+  "implementation_restriction": "IMPLEMENTATION_BLOCKED",
+  "decision_date": "2026-07-12"
+}

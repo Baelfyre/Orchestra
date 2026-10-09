@@ -1,0 +1,9 @@
+{
+  "name": "Layered Archive Submission Validation",
+  "description": "Applies layered request validation to an uploaded archive, including archive-size limits, allowed file counts, extension restrictions, required-file checks, and extracted-file size limits.",
+  "source_file": "app/api/submit/route.ts",
+  "line_range": "9-148",
+  "classification": "REFERENCE_ONLY",
+  "assigned_specialist": "cipher",
+  "license_implications": "The source is MIT-licensed. Security-sensitive implementation must be independently designed and reviewed rather than copied directly."
+}

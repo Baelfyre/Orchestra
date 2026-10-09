@@ -1,0 +1,133 @@
+{
+  "schema_version": "orchestra.aq10-defect-escape-rca.v1",
+  "phase": "AQ10_DEFECT_ESCAPE_RCA",
+  "owner": "overseer",
+  "authority_model": "EVIDENCE_ONLY_NON_AUTHORIZING",
+  "purpose": "Deterministically classify observed defect escapes, preserve evidence of why earlier gates missed them, and emit bounded prevention recommendations without changing policy or granting authority.",
+  "implementation_inventory": [
+    "CHANGELOG.md",
+    "README.json",
+    "docs/architecture/ADAPTIVE_ASSURANCE_AQ10.md",
+    "machine/adaptive/aq10-defect-escape-rca.v1.json",
+    "machine/schemas/aq10-defect-escape-rca.v1.schema.json",
+    "orchestra_runtime/domain/adaptive/defect_escape_rca.py",
+    "scripts/validation/validate_aq10.py",
+    "tests/behavior/run_tests.py",
+    "tests/runtime/test_adaptive_assurance_aq10.py"
+  ],
+  "taxonomy": [
+    "COVERAGE_GAP",
+    "ASSERTION_GAP",
+    "ORACLE_GAP",
+    "SCOPE_CLASSIFICATION_GAP",
+    "DEPENDENCY_ENVIRONMENT_GAP",
+    "ASSURANCE_TOOL_COMPATIBILITY",
+    "PROCESS_GOVERNANCE_GAP",
+    "UNKNOWN"
+  ],
+  "signal_map": {
+    "MISSING_TEST_SURFACE": "COVERAGE_GAP",
+    "UNEXERCISED_BRANCH": "COVERAGE_GAP",
+    "WEAK_ASSERTION": "ASSERTION_GAP",
+    "MISSING_NEGATIVE_ASSERTION": "ASSERTION_GAP",
+    "WRONG_EXPECTED_RESULT": "ORACLE_GAP",
+    "SELF_ASSERTED_PASS": "ORACLE_GAP",
+    "INCORRECT_SCOPE_CLASSIFICATION": "SCOPE_CLASSIFICATION_GAP",
+    "UNREGISTERED_PHASE_COLLISION": "SCOPE_CLASSIFICATION_GAP",
+    "MISSING_OPTIONAL_DEPENDENCY": "DEPENDENCY_ENVIRONMENT_GAP",
+    "ENVIRONMENT_PARITY_MISMATCH": "DEPENDENCY_ENVIRONMENT_GAP",
+    "MUTATION_OPERATOR_CRASH": "ASSURANCE_TOOL_COMPATIBILITY",
+    "ASSURANCE_TOOL_INCOMPATIBILITY": "ASSURANCE_TOOL_COMPATIBILITY",
+    "MISSING_GOVERNANCE_CONTRACT": "PROCESS_GOVERNANCE_GAP",
+    "STALE_TRANSACTION_METADATA": "PROCESS_GOVERNANCE_GAP",
+    "STALE_RELAY_PROJECTION": "PROCESS_GOVERNANCE_GAP",
+    "CAUSE_UNRESOLVED": "UNKNOWN"
+  },
+  "prevention_actions": {
+    "COVERAGE_GAP": [
+      "EXPAND_TARGETED_TEST_COVERAGE"
+    ],
+    "ASSERTION_GAP": [
+      "STRENGTHEN_ASSERTIONS_AND_NEGATIVE_CASES"
+    ],
+    "ORACLE_GAP": [
+      "INDEPENDENT_ORACLE_CROSS_CHECK"
+    ],
+    "SCOPE_CLASSIFICATION_GAP": [
+      "EXACT_SCOPE_REGRESSION_AND_FAIL_CLOSED_CLASSIFICATION"
+    ],
+    "DEPENDENCY_ENVIRONMENT_GAP": [
+      "DEPENDENCY_FREE_BEHAVIOR_VALIDATION_OR_EXPLICIT_RUNTIME_DEPENDENCY"
+    ],
+    "ASSURANCE_TOOL_COMPATIBILITY": [
+      "TOOL_COMPATIBILITY_REGRESSION_WITH_UNKNOWN_OUTCOME_FAIL_CLOSED"
+    ],
+    "PROCESS_GOVERNANCE_GAP": [
+      "CONTRACT_PARITY_AND_COMPILER_GENERATED_RECONCILIATION"
+    ],
+    "UNKNOWN": [
+      "HUMAN_RCA_REVIEW_REQUIRED"
+    ]
+  },
+  "reference_incidents": [
+    {
+      "incident_id": "AQ9_VALIDATOR_DEPENDENCY_ENVIRONMENT",
+      "phase_detected": "AQ9",
+      "escaped_gates": [
+        "AQ9_FOCUSED_BOOTSTRAP"
+      ],
+      "detection_gate": "GOVERNANCE_GENERAL_BEHAVIOR",
+      "signals": [
+        "MISSING_OPTIONAL_DEPENDENCY",
+        "ENVIRONMENT_PARITY_MISMATCH"
+      ],
+      "expected_root_cause": "DEPENDENCY_ENVIRONMENT_GAP"
+    },
+    {
+      "incident_id": "PHASE_FRAMEWORK_MUTATION_OPERATOR_COMPATIBILITY",
+      "phase_detected": "AQ10_POLICY_FRAMEWORK",
+      "escaped_gates": [
+        "AQ5",
+        "AQ6",
+        "PRAI",
+        "GOVERNANCE",
+        "VALIDATE",
+        "REQUIRED_ANALYSIS",
+        "CROSS_PLATFORM"
+      ],
+      "detection_gate": "COSMIC_RAY",
+      "signals": [
+        "MUTATION_OPERATOR_CRASH",
+        "ASSURANCE_TOOL_INCOMPATIBILITY"
+      ],
+      "expected_root_cause": "ASSURANCE_TOOL_COMPATIBILITY"
+    }
+  ],
+  "fail_closed_conditions": [
+    "UNKNOWN_SIGNAL_REJECTED",
+    "DUPLICATE_IDENTITY_REJECTED",
+    "MALFORMED_OBSERVATION_REJECTED",
+    "UNRESOLVED_CAUSE_REQUIRES_HUMAN_REVIEW",
+    "NO_AUTOMATIC_POLICY_CHANGE"
+  ],
+  "authority": {
+    "creates_execution_authority": false,
+    "creates_transition_authority": false,
+    "creates_whitelist_authority": false,
+    "changes_protected_policy": false,
+    "lowers_assurance_thresholds": false,
+    "activates_provider": false,
+    "activates_telemetry": false,
+    "mutates_production": false,
+    "authorizes_release": false
+  },
+  "validation": {
+    "validator": "scripts/validation/validate_aq10.py",
+    "runtime": "orchestra_runtime/domain/adaptive/defect_escape_rca.py",
+    "runtime_test": "tests/runtime/test_adaptive_assurance_aq10.py",
+    "behavior_registration": "tests/behavior/run_tests.py",
+    "architecture_reference": "docs/architecture/ADAPTIVE_ASSURANCE_AQ10.md",
+    "schema": "machine/schemas/aq10-defect-escape-rca.v1.schema.json",
+    "canonical_start_sha": "62208416de9c131569aeb116716df6b9dc130f8b"
+  }
+}

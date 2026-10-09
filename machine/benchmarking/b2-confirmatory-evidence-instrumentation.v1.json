@@ -1,0 +1,159 @@
+{
+  "schema_version": "orchestra.b2-confirmatory-evidence-instrumentation.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "phase": "B2_3_1_EXECUTOR_EVIDENCE_IMPLEMENTATION_WITH_B2_3_2_ZERO_CALL_VALIDATION",
+  "status": "SOURCE_CANDIDATE_ZERO_LIVE_CALLS",
+  "canonical_predecessor": {
+    "repository": "Baelfyre/Orchestra",
+    "branch": "main",
+    "sha": "5ab0a042109cdc2aa7eca01b4d356e5c96c888d5",
+    "tree": "a14f5aef3235e39aa93e995cfe815828f90089c3",
+    "design": "docs/benchmarking/B2_CONFIRMATORY_MEASUREMENT_DESIGN.md"
+  },
+  "purpose": "Implement recomputable synthetic specialist-handoff evidence and exact Codex counter provenance before any new B2 pilot or confirmatory execution.",
+  "implementation": {
+    "executor": "scripts/a5_topology_benchmark_executor.py",
+    "executor_binding_version": "orchestra.b2-a5-topology-executor.v1.1",
+    "pure_evidence_helpers": "scripts/b2_confirmatory_evidence.py",
+    "evidence_instrumentation_version": "orchestra.b2-confirmatory-evidence-instrumentation.v1",
+    "shared_codex_adapter_changed": false,
+    "production_runtime_attachment": false,
+    "conductor_dispatch_attachment": false,
+    "runtime_executor_attachment": false,
+    "topology_effective": false,
+    "shadow_influenced_execution": false,
+    "parallel_execution_authorized": false
+  },
+  "specialist_handoff_evidence": {
+    "synthetic_benchmark_content_only": true,
+    "response_encoding": "UTF-8",
+    "maximum_retained_advisory_utf8_bytes_per_specialist": 16384,
+    "overflow_policy": "FAIL_CLOSED_NO_TRUNCATION",
+    "required_specialist_call_fields": [
+      "response_text",
+      "response_encoding",
+      "response_utf8_bytes",
+      "response_utf8_sha256",
+      "response_digest",
+      "prompt_digest",
+      "prior_advisory_inputs"
+    ],
+    "prior_advisory_reference_fields": [
+      "source_call_index",
+      "specialist",
+      "response_utf8_bytes",
+      "response_utf8_sha256"
+    ],
+    "finalizer_required_field": "advisory_inputs",
+    "context_transfer_recomputation": {
+      "ledger_fields": [
+        "downstream_specialist_handoff_bytes",
+        "finalizer_advisory_bytes",
+        "recomputed_context_transfer_bytes"
+      ],
+      "required_equality": "communication.context_transfer_bytes == raw_evidence.context_transfer_recomputation.recomputed_context_transfer_bytes",
+      "mismatch_disposition": "INVALID_RUN_MEASUREMENT_CAPTURE_FAILURE"
+    }
+  },
+  "counter_provenance": {
+    "source": "CODEX_TURN_COMPLETED_USAGE",
+    "preserve_exact_usage_object": true,
+    "preserve_usage_object_digest": true,
+    "required_usage_fields": [
+      "input_tokens",
+      "cached_input_tokens",
+      "output_tokens",
+      "reasoning_output_tokens"
+    ],
+    "derived_field": "non_cached_input_tokens",
+    "derived_formula": "input_tokens - cached_input_tokens",
+    "cached_greater_than_input_disposition": "INVALID_RUN_MEASUREMENT_CAPTURE_FAILURE",
+    "counter_stability_identity_fields": [
+      "counter_id",
+      "prompt_digest",
+      "role",
+      "specialist",
+      "cli_version",
+      "model",
+      "reasoning_effort",
+      "transport",
+      "workspace_identity"
+    ],
+    "counter_stability_key": "SHA256_CANONICAL_JSON_OF_IDENTITY_FIELDS",
+    "cross_run_classifications": [
+      "STABLE_EXACT",
+      "CACHE_STATE_VARIANT",
+      "INPUT_COUNTER_VARIANT",
+      "UNSTABLE_ATTRIBUTION"
+    ],
+    "single_run_classification": null,
+    "cross_run_evaluation_required": true,
+    "token_efficiency_claim_gate": "ALL_REQUIRED_REPEATED_FIRST_STAGE_CONTROL_GROUPS_STABLE_EXACT",
+    "failed_gate_disposition": "TOKEN_EFFICIENCY_DESCRIPTIVE_ONLY"
+  },
+  "workspace_identity": {
+    "inputs": [
+      "resolved_path",
+      "git_is_inside_work_tree"
+    ],
+    "representation": "SHA256_CANONICAL_JSON",
+    "existing_git_preflight_preserved": true
+  },
+  "zero_call_validation": {
+    "focused_test": "tests/runtime/test_comparative_benchmark_a5_topology_executor.py",
+    "live_model_calls": 0,
+    "fixture_runners_only": true,
+    "required_cases": [
+      "UTF8_BYTE_AND_SHA256_RECOMPUTATION",
+      "CONTEXT_TRANSFER_COMPONENT_RECOMPUTATION",
+      "CONTEXT_TRANSFER_MISMATCH_REJECTION",
+      "ADVISORY_BYTE_CEILING_REJECTION",
+      "EXACT_TURN_COMPLETED_USAGE_PRESERVATION_AND_DIGEST",
+      "STABLE_EXACT_CLASSIFICATION",
+      "CACHE_STATE_VARIANT_CLASSIFICATION",
+      "INPUT_COUNTER_VARIANT_CLASSIFICATION",
+      "UNSTABLE_ATTRIBUTION_CLASSIFICATION",
+      "CACHED_GREATER_THAN_INPUT_REJECTION",
+      "INJECTED_FAKE_RUNNER_ZERO_LIVE_CALL_PROOF"
+    ]
+  },
+  "historical_evidence": {
+    "b2_1_binding_mutated": false,
+    "b2_2_calibration_evidence_mutated": false,
+    "b2_calibration_result_reinterpreted": false,
+    "benefit_claim": "NOT_ESTABLISHED"
+  },
+  "next_gate": {
+    "phase": "B2_4_INSTRUMENTATION_PILOT_FREEZE_AND_SEPARATE_HUMAN_AUTHORIZATION",
+    "eligible_only_after": [
+      "B2_3_1_IMPLEMENTATION_CANONICAL",
+      "B2_3_2_ZERO_CALL_FIXTURE_VALIDATION_PASS",
+      "EXACT_HOST_ZERO_CALL_PREFLIGHT",
+      "FROZEN_TWO_TASK_PILOT_PLAN",
+      "FROZEN_RESOURCE_CEILINGS",
+      "SEPARATE_EXPLICIT_HUMAN_LIVE_AUTHORIZATION"
+    ],
+    "pilot_execution_authorized_by_this_record": false
+  },
+  "authority": {
+    "live_b2_model_calls_authorized": false,
+    "b2_rerun_authorized": false,
+    "b2_4_instrumentation_pilot_authorized": false,
+    "b2_5_confirmatory_execution_authorized": false,
+    "a5_execution_effective_promotion_authorized": false,
+    "production_runtime_attachment_authorized": false,
+    "parallel_production_capability_authorized": false,
+    "a6_authorized": false,
+    "a7_authorized": false,
+    "a8_authorized": false,
+    "b4_authorized": false,
+    "release_publication_authorized": false,
+    "deployment_authorized": false,
+    "policy_activation_authorized": false,
+    "installed_integration_refresh_authorized": false,
+    "destructive_cleanup_authorized": false,
+    "branch_deletion_authorized": false,
+    "force_push_authorized": false,
+    "history_rewrite_authorized": false
+  }
+}

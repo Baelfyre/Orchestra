@@ -1,0 +1,193 @@
+{
+  "measurement_method": "utf8_chars_div_4",
+  "packages": {
+    "conductor": {
+      "package_name": "Conductor",
+      "file_list": [
+        "skills/conductor/SKILL.md"
+      ],
+      "approved_baseline_tokens": 1075,
+      "revision_percentage": 5,
+      "maximum_percentage": 10,
+      "measurement_method": "utf8_chars_div_4",
+      "approval_date": "2026-07-12",
+      "approved_reference": "Issue #171 recalibration baseline bootstrap",
+      "change_rationale": "Issue #171 recalibration baseline bootstrap",
+      "decision_log_reference": "Issue #171 recalibration baseline bootstrap",
+      "maintainer_approval": "BOOTSTRAP_PENDING",
+      "baseline_change": {
+        "previous_baseline_tokens": null,
+        "new_baseline_tokens": 1075,
+        "growth_percentage": 0,
+        "reason": "Issue #171 recalibration baseline bootstrap",
+        "alternatives_considered": "Keep advisory-only prompt-load tracking without blocking enforcement.",
+        "maintainer_approval": "BOOTSTRAP_PENDING",
+        "decision_log_reference": "Issue #171 recalibration baseline bootstrap"
+      }
+    },
+    "default_routing": {
+      "package_name": "Default routing package",
+      "file_list": [
+        "skills/conductor/SKILL.md",
+        "SKILL_INDEX.md",
+        "docs/routing/CONTEXT_RETRIEVAL_RULES.md",
+        "docs/routing/MINIMAL_PROMPT_FORMAT.md",
+        "docs/routing/EXECUTION_MODES_POLICY.md"
+      ],
+      "approved_baseline_tokens": 7401,
+      "revision_percentage": 5,
+      "maximum_percentage": 10,
+      "measurement_method": "utf8_chars_div_4",
+      "approval_date": "2026-09-03",
+      "approved_reference": "Project SSU exact current prompt-load qualification",
+      "change_rationale": "Rebaseline the measured routing surface after the approved Scribe SSU and prior canonical changes; percentage thresholds remain unchanged.",
+      "decision_log_reference": "docs/project/SCRIBE_SPECIALIST_UPGRADE_SSU.md",
+      "maintainer_approval": "APPROVED",
+      "baseline_change": {
+        "previous_baseline_tokens": 7074,
+        "new_baseline_tokens": 7401,
+        "growth_percentage": 4.62,
+        "reason": "Approved exact-current routing package rebaseline for SSU qualification.",
+        "alternatives_considered": "Compress required routing and governance guidance below the stale baseline or weaken percentage thresholds.",
+        "maintainer_approval": "APPROVED",
+        "decision_log_reference": "docs/project/SCRIBE_SPECIALIST_UPGRADE_SSU.md"
+      }
+    },
+    "ambiguous_routing": {
+      "package_name": "Ambiguous-routing package",
+      "file_list": [
+        "skills/conductor/SKILL.md",
+        "SKILL_INDEX.md",
+        "docs/routing/CONTEXT_RETRIEVAL_RULES.md",
+        "docs/routing/MINIMAL_PROMPT_FORMAT.md",
+        "docs/routing/EXECUTION_MODES_POLICY.md",
+        "ROUTING_MAP.md"
+      ],
+      "approved_baseline_tokens": 9806,
+      "revision_percentage": 15,
+      "maximum_percentage": 25,
+      "measurement_method": "utf8_chars_div_4",
+      "approval_date": "2026-09-03",
+      "approved_reference": "Project SSU exact current prompt-load qualification",
+      "change_rationale": "Rebaseline the measured ambiguous-routing surface after the approved Scribe SSU and prior canonical changes; percentage thresholds remain unchanged.",
+      "decision_log_reference": "docs/project/SCRIBE_SPECIALIST_UPGRADE_SSU.md",
+      "maintainer_approval": "APPROVED",
+      "baseline_change": {
+        "previous_baseline_tokens": 8033,
+        "new_baseline_tokens": 9806,
+        "growth_percentage": 22.07,
+        "reason": "Approved exact-current ambiguous-routing package rebaseline for SSU qualification.",
+        "alternatives_considered": "Compress required mode and boundary routing below the stale baseline or weaken percentage thresholds.",
+        "maintainer_approval": "APPROVED",
+        "decision_log_reference": "docs/project/SCRIBE_SPECIALIST_UPGRADE_SSU.md"
+      }
+    },
+    "governance_core": {
+      "package_name": "Governance core",
+      "file_list": [
+        "docs/governance/GOVERNANCE_LAYER.md"
+      ],
+      "approved_baseline_tokens": 3981,
+      "revision_percentage": 10,
+      "maximum_percentage": 15,
+      "measurement_method": "utf8_chars_div_4",
+      "approval_date": "2026-07-12",
+      "approved_reference": "Issue #171 recalibration baseline bootstrap",
+      "change_rationale": "Issue #171 recalibration baseline bootstrap",
+      "decision_log_reference": "Issue #171 recalibration baseline bootstrap",
+      "maintainer_approval": "BOOTSTRAP_PENDING",
+      "baseline_change": {
+        "previous_baseline_tokens": null,
+        "new_baseline_tokens": 3981,
+        "growth_percentage": 0,
+        "reason": "Issue #171 recalibration baseline bootstrap",
+        "alternatives_considered": "Continue measuring only legacy governance Group C without canonical package protection.",
+        "maintainer_approval": "BOOTSTRAP_PENDING",
+        "decision_log_reference": "Issue #171 recalibration baseline bootstrap"
+      }
+    },
+    "steward_governance": {
+      "package_name": "Steward governance decision package",
+      "file_list": [
+        "docs/governance/GOVERNANCE_LAYER.md",
+        "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md",
+        "skills/the-steward/SKILL.md",
+        "skills/the-steward/OUTPUT_FORMATS.md"
+      ],
+      "approved_baseline_tokens": 7257,
+      "revision_percentage": 10,
+      "maximum_percentage": 15,
+      "measurement_method": "utf8_chars_div_4",
+      "approval_date": "2026-09-03",
+      "approved_reference": "Project SSU exact current prompt-load qualification",
+      "change_rationale": "Rebaseline the measured Steward governance package after the approved Scribe authority-boundary documentation; percentage thresholds remain unchanged.",
+      "decision_log_reference": "docs/project/SCRIBE_SPECIALIST_UPGRADE_SSU.md",
+      "maintainer_approval": "APPROVED",
+      "baseline_change": {
+        "previous_baseline_tokens": 6474,
+        "new_baseline_tokens": 7257,
+        "growth_percentage": 12.09,
+        "reason": "Approved exact-current Steward governance package rebaseline for SSU qualification.",
+        "alternatives_considered": "Remove the required Scribe authority-boundary explanation or weaken percentage thresholds.",
+        "maintainer_approval": "APPROVED",
+        "decision_log_reference": "docs/project/SCRIBE_SPECIALIST_UPGRADE_SSU.md"
+      }
+    },
+    "governor_governance": {
+      "package_name": "Governor governance decision package",
+      "file_list": [
+        "docs/governance/GOVERNANCE_LAYER.md",
+        "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md",
+        "skills/the-governor/SKILL.md",
+        "skills/the-governor/OUTPUT_FORMATS.md"
+      ],
+      "approved_baseline_tokens": 7636,
+      "revision_percentage": 10,
+      "maximum_percentage": 15,
+      "measurement_method": "utf8_chars_div_4",
+      "approval_date": "2026-09-03",
+      "approved_reference": "Project SSU exact current prompt-load qualification",
+      "change_rationale": "Rebaseline the measured Governor governance package after the approved Scribe provenance boundary; percentage thresholds remain unchanged.",
+      "decision_log_reference": "docs/project/SCRIBE_SPECIALIST_UPGRADE_SSU.md",
+      "maintainer_approval": "APPROVED",
+      "baseline_change": {
+        "previous_baseline_tokens": 6811,
+        "new_baseline_tokens": 7636,
+        "growth_percentage": 12.11,
+        "reason": "Approved exact-current Governor governance package rebaseline for SSU qualification.",
+        "alternatives_considered": "Remove the required provenance boundary or weaken percentage thresholds.",
+        "maintainer_approval": "APPROVED",
+        "decision_log_reference": "docs/project/SCRIBE_SPECIALIST_UPGRADE_SSU.md"
+      }
+    },
+    "release_governance": {
+      "package_name": "Release governance package",
+      "file_list": [
+        "docs/governance/GOVERNANCE_LAYER.md",
+        "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md",
+        "skills/the-steward/SKILL.md",
+        "skills/the-steward/OUTPUT_FORMATS.md",
+        "skills/the-governor/SKILL.md",
+        "skills/the-governor/OUTPUT_FORMATS.md"
+      ],
+      "approved_baseline_tokens": 9131,
+      "revision_percentage": 10,
+      "maximum_percentage": 15,
+      "measurement_method": "utf8_chars_div_4",
+      "approval_date": "2026-09-03",
+      "approved_reference": "Project SSU exact current prompt-load qualification",
+      "change_rationale": "Rebaseline the measured release-governance package after the approved Scribe authority and provenance boundary; percentage thresholds remain unchanged.",
+      "decision_log_reference": "docs/project/SCRIBE_SPECIALIST_UPGRADE_SSU.md",
+      "maintainer_approval": "APPROVED",
+      "baseline_change": {
+        "previous_baseline_tokens": 8136,
+        "new_baseline_tokens": 9131,
+        "growth_percentage": 12.23,
+        "reason": "Approved exact-current release-governance package rebaseline for SSU qualification.",
+        "alternatives_considered": "Remove the required Scribe authority and provenance boundary or weaken percentage thresholds.",
+        "maintainer_approval": "APPROVED",
+        "decision_log_reference": "docs/project/SCRIBE_SPECIALIST_UPGRADE_SSU.md"
+      }
+    }
+  }
+}

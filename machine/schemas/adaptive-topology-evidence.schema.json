@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/adaptive-topology-evidence.schema.json",
+  "title": "Orchestra Adaptive Tuner Topology Evidence Packet v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "packet_id",
+    "eligibility_envelope_id",
+    "eligibility_digest",
+    "session_id",
+    "coordination_contract_revision",
+    "collected_at",
+    "items",
+    "digest"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.adaptive-topology-evidence.v1"},
+    "packet_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "eligibility_envelope_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "eligibility_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "session_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "coordination_contract_revision": {"type": "integer", "minimum": 1},
+    "collected_at": {"type": "string", "format": "date-time"},
+    "items": {
+      "type": "array",
+      "maxItems": 512,
+      "items": {"$ref": "#/$defs/evidence_item"}
+    },
+    "digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "$defs": {
+    "evidence_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "evidence_id",
+        "source_kind",
+        "source_ref",
+        "source_digest",
+        "candidate_id",
+        "session_id",
+        "coordination_contract_revision",
+        "qualification_status",
+        "reason_code",
+        "direction"
+      ],
+      "properties": {
+        "evidence_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "source_kind": {
+          "enum": [
+            "GOVERNED_COORDINATION_OUTCOME",
+            "VALIDATION_EVIDENCE",
+            "REMEDIATION_EVIDENCE",
+            "TRUSTWORTHY_MEASURED_TELEMETRY"
+          ]
+        },
+        "source_ref": {"type": "string", "minLength": 1, "maxLength": 512},
+        "source_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "candidate_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "session_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "coordination_contract_revision": {"type": "integer", "minimum": 1},
+        "qualification_status": {"enum": ["QUALIFIED", "REJECTED"]},
+        "reason_code": {"type": "string", "pattern": "^[A-Z0-9][A-Z0-9_:-]{0,127}$"},
+        "direction": {"enum": ["POSITIVE", "NEGATIVE", "NEUTRAL"]},
+        "measured_metric": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["metric_name", "value", "unit", "measurement_ref"],
+          "properties": {
+            "metric_name": {"enum": ["LATENCY", "COST", "TOKENS", "ITERATIONS", "REMEDIATIONS", "VALIDATION_FAILURES", "PARALLELISM"]},
+            "value": {"type": "number"},
+            "unit": {"type": "string", "minLength": 1, "maxLength": 64},
+            "measurement_ref": {"type": "string", "minLength": 1, "maxLength": 512}
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": "orchestra.b2-5-confirmatory-preregistration.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "experiment_id": "b2-confirmatory-measurement-v1",
+  "stage": "CONFIRMATORY",
+  "task_set_source": "machine/benchmarking/b2-5-held-out-task-set.v1.json",
+  "task_set_rule_id": "B2_5_ONE_HELD_OUT_TASK_PER_B0_STRATUM_V1",
+  "primary_hypothesis": "Clockwork -> Overseer uses less specialist context transfer than Overseer -> Clockwork without degrading deterministic task quality.",
+  "primary_endpoint": "INDEPENDENTLY_RECOMPUTED_CONTEXT_TRANSFER_BYTES",
+  "paired_delta": "Overseer->Clockwork bytes - Clockwork->Overseer bytes",
+  "quality_role": "NON_DEGRADATION_GUARDRAIL",
+  "decision_criteria": {
+    "all_accepted_runs_validator_pass_required": true,
+    "zero_safety_or_governance_violations_required": true,
+    "minimum_positive_directional_blocks": 15,
+    "total_matched_blocks": 20,
+    "two_sided_exact_sign_test_alpha": 0.05,
+    "minimum_median_paired_relative_context_reduction": 0.1,
+    "all_context_values_must_recompute": true
+  },
+  "secondary_endpoints": [
+    "WALL_CLOCK_LATENCY",
+    "MODEL_EXECUTION_LATENCY",
+    "OUTPUT_TOKENS",
+    "HOST_INPUT_TOKENS",
+    "HOST_CACHED_INPUT_TOKENS",
+    "A5_SHADOW_ORDERING"
+  ],
+  "token_efficiency_rule": "CLAIM_ELIGIBLE_ONLY_IF_TOKEN_ATTRIBUTION_GATE_PASS",
+  "structure": {
+    "task_count": 10,
+    "repetitions_per_task": 2,
+    "arm_count": 2,
+    "matched_blocks": 20,
+    "planned_runs": 40,
+    "model_calls_per_run": 3,
+    "maximum_underlying_model_calls": 120,
+    "automatic_retry": false,
+    "communication_mode": "DEFAULT"
+  },
+  "authority": {
+    "benefit_claim_allowed": false,
+    "a5_execution_effective_promotion": false,
+    "production_runtime_attachment": false
+  }
+}

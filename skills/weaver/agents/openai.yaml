@@ -1,0 +1,4 @@
+interface:
+  display_name: "Weaver"
+  short_description: "Create and review accurate project diagrams"
+  default_prompt: "Use $weaver to create or review the highest-priority project diagram without inventing missing facts."

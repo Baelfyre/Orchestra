@@ -1,0 +1,9 @@
+{
+  "registry": "machine/ui/ui-profile-registry.v1.json",
+  "selection": {
+    "foundation": ["minimalist"],
+    "layout": ["bento_grid"],
+    "full_theme_or_system": ["material_3"],
+    "optional_effect": ["aurora"]
+  }
+}

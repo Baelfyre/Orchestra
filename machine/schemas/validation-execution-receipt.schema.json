@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.orchestra.dev/machine/validation-execution-receipt/1.0.0",
+  "title": "Orchestra Validation Execution Receipt",
+  "description": "Exact command execution evidence. The authoritative verdict is derived from exit_code by the runtime.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "command_id",
+    "command",
+    "exit_code",
+    "verdict",
+    "started_at",
+    "finished_at",
+    "stdout_sha256",
+    "stderr_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "command_id": {"type": "string", "minLength": 1},
+    "command": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "exit_code": {"type": "integer"},
+    "verdict": {"enum": ["PASS", "FAIL"]},
+    "started_at": {"type": "string", "format": "date-time"},
+    "finished_at": {"type": "string", "format": "date-time"},
+    "stdout_sha256": {"$ref": "#/$defs/sha256"},
+    "stderr_sha256": {"$ref": "#/$defs/sha256"},
+    "head_before": {"$ref": "#/$defs/gitSha"},
+    "head_after": {"$ref": "#/$defs/gitSha"},
+    "evidence_ref": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "gitSha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

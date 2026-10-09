@@ -1,0 +1,95 @@
+{
+  "schema_version": "1.0.0",
+  "specialist": "clockwork",
+  "purpose": "Deterministic lookup metadata for architecture pattern selection and specialist handoff. Repository evidence and Markdown guidance remain authoritative.",
+  "patterns": [
+    {
+      "id": "modular_monolith",
+      "category": "service_boundary",
+      "use_when": ["single_deployment_is_acceptable", "in_process_module_boundaries_are_sufficient", "local_transactions_are_valuable"],
+      "avoid_when": ["independent_deployment_is_required", "independent_failure_isolation_is_required"],
+      "primary_risks": ["module_boundary_erosion", "shared_state_coupling"],
+      "handoffs": ["ponytail", "overseer"]
+    },
+    {
+      "id": "distributed_service_boundary",
+      "category": "service_boundary",
+      "use_when": ["independent_deployment_has_evidence", "independent_scaling_has_evidence", "fault_isolation_has_evidence", "clear_capability_ownership_exists"],
+      "avoid_when": ["split_is_only_for_code_organization", "synchronous_chatty_coupling_would_dominate"],
+      "primary_risks": ["partial_failure", "latency", "contract_drift", "operational_complexity"],
+      "handoffs": ["ponytail", "cipher", "chronicler", "overseer"]
+    },
+    {
+      "id": "compatible_api_evolution",
+      "category": "api_versioning",
+      "use_when": ["existing_consumers_must_remain_compatible", "additive_contract_change_is_possible"],
+      "avoid_when": ["breaking_change_is_required_and_cannot_be_bridged"],
+      "primary_risks": ["consumer_breakage", "ambiguous_defaults", "enum_incompatibility"],
+      "handoffs": ["ponytail", "cipher", "overseer"]
+    },
+    {
+      "id": "cache_aside",
+      "category": "caching",
+      "use_when": ["read_latency_or_load_requires_cache", "authoritative_source_is_known", "stale_read_tolerance_is_defined"],
+      "avoid_when": ["cache_would_become_implicit_source_of_truth", "invalidation_owner_is_unknown"],
+      "primary_risks": ["stale_reads", "cache_stampede", "tenant_key_leakage"],
+      "handoffs": ["ponytail", "cipher", "chronicler", "overseer"]
+    },
+    {
+      "id": "tenant_context_boundary",
+      "category": "multi_tenancy",
+      "use_when": ["system_serves_multiple_tenants", "tenant_context_crosses_services_jobs_events_or_caches"],
+      "avoid_when": ["tenant_identity_or_isolation_requirements_are_undefined"],
+      "primary_risks": ["lost_tenant_context", "cross_tenant_access", "shared_cache_collision"],
+      "handoffs": ["cipher", "chronicler", "ponytail", "overseer"]
+    },
+    {
+      "id": "bounded_concurrency_owner",
+      "category": "concurrency",
+      "use_when": ["parallel_work_mutates_shared_state", "ordering_or_conflict_behavior_matters"],
+      "avoid_when": ["single_owner_serial_processing_is_sufficient"],
+      "primary_risks": ["race_condition", "duplicate_effect", "resource_exhaustion", "deadlock"],
+      "handoffs": ["chronicler", "ponytail", "overseer"]
+    },
+    {
+      "id": "background_job",
+      "category": "jobs",
+      "use_when": ["work_can_be_deferred", "work_must_survive_request_lifetime", "retryable_processing_is_required"],
+      "avoid_when": ["caller_requires_immediate_atomic_result", "job_ownership_is_unclear"],
+      "primary_risks": ["duplicate_execution", "lost_context", "silent_failure", "unbounded_retry"],
+      "handoffs": ["ponytail", "cipher", "overseer"]
+    },
+    {
+      "id": "integration_event",
+      "category": "event_driven",
+      "use_when": ["owner_reports_completed_fact", "consumers_can_react_independently", "eventual_consistency_is_acceptable"],
+      "avoid_when": ["producer_requires_immediate_consumer_result", "flow_requires_hidden_request_response"],
+      "primary_risks": ["duplicate_delivery", "out_of_order_delivery", "schema_drift", "implicit_workflow"],
+      "handoffs": ["ponytail", "cipher", "overseer"]
+    },
+    {
+      "id": "transactional_outbox",
+      "category": "event_driven",
+      "use_when": ["local_state_change_and_message_publication_must_not_diverge", "distributed_transaction_is_not_desired"],
+      "avoid_when": ["no_durable_publication_problem_exists"],
+      "primary_risks": ["duplicate_publication", "dispatcher_lag", "consumer_non_idempotency"],
+      "handoffs": ["chronicler", "ponytail", "overseer"]
+    },
+    {
+      "id": "durable_workflow_orchestration",
+      "category": "workflow",
+      "use_when": ["multi_step_work_must_survive_restart", "explicit_sequence_or_compensation_is_required", "human_gate_may_pause_progress"],
+      "avoid_when": ["single_transaction_or_simple_job_is_sufficient"],
+      "primary_risks": ["central_coordinator_coupling", "stale_workflow_state", "unsafe_retry", "authority_confusion"],
+      "handoffs": ["ponytail", "cipher", "chronicler", "overseer", "conductor"]
+    },
+    {
+      "id": "saga_compensation",
+      "category": "workflow",
+      "use_when": ["workflow_spans_multiple_local_transactions", "atomic_cross_boundary_transaction_is_unavailable", "business_compensation_is_defined"],
+      "avoid_when": ["compensation_semantics_are_unknown", "single_local_transaction_is_possible"],
+      "primary_risks": ["partial_compensation", "irreversible_side_effect", "retry_conflict"],
+      "handoffs": ["chronicler", "ponytail", "overseer"]
+    }
+  ]
+}

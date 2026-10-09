@@ -1,0 +1,115 @@
+{
+  "schema_version": "orchestra.codex-c2-portability-r1-preexecution.v1",
+  "status": "PORTABILITY_R1_RECONCILED_PREEXECUTION_LIVE_EXECUTION_LOCKED",
+  "recorded_date": "2026-08-22",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "experiment_id": "b3-codex-machine-json-prompt-extension-v1",
+  "portability_revision": "orchestra.codex-c2-portability-r1.v1",
+  "reason": "ORIGINAL_EXTERNAL_C2_EXECUTION_ARTIFACTS_UNAVAILABLE_ON_CURRENT_HOST",
+  "live_c2_calls": 0,
+  "historical_original_freeze": {
+    "status": "SUPERSEDED_PRE_EXECUTION_FOR_LIVE_USE",
+    "freeze_envelope_sha256": "0285f97f0f509ddd41bebfe7254aec82d9292f6ae0097cf05776923c8f5bcc7b",
+    "validated_launcher_sha256": "b20010df254a329696441565c2827df5d4c880b198f192da3d2c51662573c142",
+    "execution_bundle_sha256": "d2d4fcbc67cea1b8f7b898105e39cf0cc6cd47823dfd104d6b6162eba66a874d",
+    "exact_prompt_identity_recovered": false,
+    "original_prompt_digest_match_count": 0,
+    "preservation": "HISTORICAL_PROVENANCE_ONLY_NOT_CURRENT_EXECUTION_AUTHORITY"
+  },
+  "preserved_scientific_design": {
+    "benchmark_subject_sha": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
+    "benchmark_subject_tree": "ceab55bd512ea6fde4e8e76877cbb7006d18500e",
+    "executable_adapter_sha": "0af078f6ad34d5cf406823bbd0e8258496923b60",
+    "executable_adapter_tree": "90255564c13fcbb132a7e4cf8b98eb106d039e39",
+    "taskset_digest": "fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8",
+    "validator": "EXACT_JSON_CONFORMANCE_V1",
+    "task_count": 5,
+    "communication_modes": [
+      "DEFAULT",
+      "CAVEMAN",
+      "MURMURS"
+    ],
+    "repetitions_per_arm": 2,
+    "planned_accepted_runs": 30,
+    "schedule_policy": "PAIR_TASK_REPETITION_COMMUNICATION_MODE_AND_EXECUTION_SLOT_TO_C1",
+    "exact_original_slot_assignment_preserved": true,
+    "new_randomization_performed": false,
+    "resource_ceiling_changed": false
+  },
+  "prompt_representation": {
+    "representation": "MACHINE_JSON",
+    "schema_version": "orchestra.prompt-representation.machine-json.v1",
+    "canonicalization": "sort_keys=true,separators=(comma,colon),ensure_ascii=true",
+    "source_natural_prompt_embedded": false,
+    "original_prompt_identity_recovered_exactly": false,
+    "original_prompt_digest_match_count": 0,
+    "portable_r1_task_prompt_digests": {
+      "b3-cal-padayon-r5-capability-manifest": "6ff223d1a9be6dead014f09d29b53e0fdde8962e882510c1da9763b46369a35f",
+      "b3-cal-padayon-o1-o2-compatibility": "8773c63736c9147a5a2b094ee0147fbaf8e2df18e5e59feea86ab08257b66f2c",
+      "b3-cal-padayon-o3-o4-freshness": "99d7105bf9cc5a75585fe459d576dc95c608aaa3728c64a56c94789767ddfa6e",
+      "b3-cal-padayon-assurance-drift": "4ba0fd7a26c9fdf82bc23e8ccc1a662fd595e5aca78135a1f631ebd88d5fae4e",
+      "b3-cal-padayon-o5-o6-routing": "8bbe7165b43f8276bfb6e1f09c460d2ca6ab9c25b6eb9bd39368bf5e23bd2d52"
+    },
+    "constraint_profile": {
+      "authority_expansion_allowed": false,
+      "response_format": "EXACTLY_ONE_VALID_JSON_OBJECT_NO_MARKDOWN_NO_SURROUNDING_COMMENTARY"
+    }
+  },
+  "codex_host": {
+    "cli_version": "0.148.0",
+    "provider": "openai-codex",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "medium",
+    "transport": "jsonl-usage",
+    "counter_id": "codex-cli-0.148.0:jsonl-usage:gpt-5.6-sol:medium",
+    "local_auth_status": "Logged in using ChatGPT",
+    "auth_server_validated": false,
+    "windows_executable_binding": {
+      "strategy": "NODE_EXACT_NPM_ENTRYPOINT",
+      "node_exe_sha256": "e921fe5307e29bf6fd00000dd594356affd3a7b044e52720c7f10decbdc305b9",
+      "codex_js_sha256": "134063e133f0b4244fa3b251acf973d4fe4b4aeeacbdc135211bf480f59f1477",
+      "codex_package_json_sha256": "071f84ec4e6ff199b3dce2c2560a77c2248443b0d8b17e64f6e3f08427d32fc2",
+      "reason": "PowerShell bare codex resolved 0.148.0 while Python shell-false bare codex resolved desktop 0.149.0; exact npm entrypoint binding removes ambiguity."
+    }
+  },
+  "portability_artifacts": {
+    "prompt_set_sha256": "9cb5e34fc4a66911ca702acd52eee12187946a471c81fbba471412c79b805165",
+    "execution_plan_sha256": "e780e8c7c4793cd2eff465e0629cb0887c31faad14265232d6524e55560a94f2",
+    "portability_revision_sha256": "d8a30e401c71d3625a51b7d265548dff2f31866195d50065b3fcfa2d7ae21b11",
+    "hash_manifest_sha256": "dee5a1281c55d32918987279ec32e2d1e6ca34f2f9e2d2733ea7948473091283",
+    "launcher_sha256": "014f38025e3b8491b7cf84e46cb19b1ca8484f0ea3a57abfbb65be6ca1c567d3",
+    "launcher_preflight_sha256": "c04cf9610605acb1836c9806bfef60c45786c150769805c88bffd0effedb82f6",
+    "launcher_preflight_status": "PASS_ZERO_LIVE_CALLS"
+  },
+  "execution_boundary": {
+    "autonomy": "CONTROLLED_READ_ONLY",
+    "isolated_empty_git_workspace": true,
+    "agents_md_absent": true,
+    "task_required_network_access": false,
+    "repository_mutation_prohibited": true,
+    "caveman_revision": "ae405e872270acc57484693612ae038b16c8f6cd",
+    "caveman_skill_blob": "bd22d86b32e4a99e09ff7482a35509faac7a6f65",
+    "live_execution_authorized": false,
+    "explicit_live_authorization_record_required": true
+  },
+  "resource_freeze": {
+    "per_call_total_token_ceiling": 45000,
+    "cumulative_accepted_token_ceiling": 1200000,
+    "automatic_retry": false,
+    "stop_on_invalid_run": true,
+    "stop_on_provider_model_counter_drift": true,
+    "stop_on_tool_event": true,
+    "stop_on_token_ceiling_breach": true
+  },
+  "authority": {
+    "c1_mutation_authorized": false,
+    "c3_execution_authorized": false,
+    "a5_execution_promotion": "NOT_AUTHORIZED",
+    "a6": "NOT_AUTHORIZED",
+    "b4": "BLOCKED",
+    "release_publication_authorized": false,
+    "deployment_authorized": false,
+    "policy_activation_authorized": false
+  },
+  "next_gate": "SOURCE_VALIDATE_RECONCILIATION_THEN_SEPARATELY_AUTHORIZE_FIRST_LOCAL_C2R1_SLOT"
+}

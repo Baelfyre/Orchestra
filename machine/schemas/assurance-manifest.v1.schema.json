@@ -1,0 +1,417 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/schemas/assurance-manifest.v1.schema.json",
+  "title": "Orchestra AQ-4 assurance manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "repository",
+    "source_ref",
+    "candidate_sha",
+    "tree_sha",
+    "work_item_ref",
+    "development_mode",
+    "change_class",
+    "quality_dimensions",
+    "risk_characteristics",
+    "invariants",
+    "risk_fingerprint",
+    "selected_specialists",
+    "required_assurance",
+    "completion_target",
+    "protected_gates",
+    "authority_boundary",
+    "required_evidence_slots",
+    "generated_at",
+    "manifest_digest"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "orchestra.assurance-manifest.v1"
+    },
+    "manifest_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "repository": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "source_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "candidate_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "tree_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "work_item_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "development_mode": {
+      "enum": [
+        "SPEC_FIRST",
+        "DISCOVERY_FIRST",
+        "AS_BUILT",
+        "RECONCILIATION",
+        "DEFECT_DRIVEN",
+        "MAINTENANCE"
+      ]
+    },
+    "change_class": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_:-]{0,127}$"
+    },
+    "quality_dimensions": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "FUNCTIONAL_SUITABILITY",
+          "PERFORMANCE_EFFICIENCY",
+          "COMPATIBILITY",
+          "INTERACTION_CAPABILITY",
+          "RELIABILITY",
+          "SECURITY",
+          "MAINTAINABILITY",
+          "FLEXIBILITY",
+          "SAFETY",
+          "PROVENANCE",
+          "AUTHORITY_TRUST",
+          "PRIVACY",
+          "TENANT_WORKSPACE_ISOLATION",
+          "DATA_OWNERSHIP",
+          "CONCURRENCY",
+          "STATE_TRANSITIONS",
+          "RETRY_IDEMPOTENCY",
+          "RECOVERY_ROLLBACK",
+          "EXTERNAL_INPUT",
+          "EXTERNAL_DEPENDENCY",
+          "MIGRATION",
+          "DESTRUCTIVE_LIFECYCLE",
+          "HUMAN_AUTHORITY",
+          "OBSERVABILITY"
+        ]
+      }
+    },
+    "risk_characteristics": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "AUTHENTICATION",
+          "AUTHORIZATION",
+          "PRIVILEGE_MUTATION",
+          "MULTI_TENANT",
+          "MULTI_ACTOR",
+          "CONCURRENCY",
+          "AGGREGATE_INVARIANT",
+          "STATE_MACHINE",
+          "TRANSACTION",
+          "RETRY_IDEMPOTENCY",
+          "RECOVERY_ROLLBACK",
+          "DELETION",
+          "EXTERNAL_INPUT",
+          "EXTERNAL_PROVIDER",
+          "PROVENANCE",
+          "MIGRATION",
+          "RESOURCE_PRESSURE",
+          "UI_ACCESSIBILITY",
+          "PUBLICATION",
+          "HUMAN_DECISION_AUTHORITY"
+        ]
+      }
+    },
+    "invariants": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 128,
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z][A-Z0-9_:-]{0,127}$"
+      }
+    },
+    "risk_fingerprint": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "selected_specialists": {
+      "type": "array",
+      "uniqueItems": true,
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "the-steward",
+          "the-governor",
+          "clockwork",
+          "cloak",
+          "cipher",
+          "chronicler",
+          "scribe",
+          "overseer",
+          "arbiter",
+          "dagger",
+          "the-tuner",
+          "weaver",
+          "ponytail",
+          "conductor"
+        ]
+      }
+    },
+    "required_assurance": {
+      "type": "array",
+      "uniqueItems": true,
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "DOCUMENTATION_RECONCILIATION",
+          "ARCHITECTURE_BOUNDARY",
+          "FUNCTIONAL_ASSURANCE",
+          "PERFORMANCE_ASSURANCE",
+          "COMPATIBILITY_ASSURANCE",
+          "INTERACTION_ASSURANCE",
+          "RELIABILITY_ASSURANCE",
+          "SECURITY_ASSURANCE",
+          "MAINTAINABILITY_ASSURANCE",
+          "FLEXIBILITY_ASSURANCE",
+          "SAFETY_ASSURANCE",
+          "PROVENANCE_ASSURANCE",
+          "AUTHORITY_TRUST_ASSURANCE",
+          "PRIVACY_ASSURANCE",
+          "TENANT_ISOLATION_ASSURANCE",
+          "DATA_OWNERSHIP_ASSURANCE",
+          "CONCURRENCY_ASSURANCE",
+          "STATE_TRANSITION_ASSURANCE",
+          "RETRY_IDEMPOTENCY_ASSURANCE",
+          "RECOVERY_ROLLBACK_ASSURANCE",
+          "EXTERNAL_INPUT_ASSURANCE",
+          "EXTERNAL_PROVIDER_ASSURANCE",
+          "MIGRATION_ASSURANCE",
+          "DESTRUCTIVE_LIFECYCLE_ASSURANCE",
+          "HUMAN_AUTHORITY_ASSURANCE",
+          "OBSERVABILITY_ASSURANCE",
+          "AUTHENTICATION_ASSURANCE",
+          "AUTHORIZATION_ASSURANCE",
+          "PRIVILEGE_BOUNDARY_ASSURANCE",
+          "MULTI_ACTOR_ASSURANCE",
+          "AGGREGATE_INVARIANT_ASSURANCE",
+          "TRANSACTION_ASSURANCE",
+          "DELETION_ASSURANCE",
+          "PUBLICATION_ASSURANCE",
+          "INVARIANT_PRESERVATION_ASSURANCE",
+          "ADVERSARIAL_ASSURANCE",
+          "INDEPENDENT_QA"
+        ]
+      }
+    },
+    "completion_target": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "protected_gates": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 128,
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z][A-Z0-9_:-]{0,127}$"
+      }
+    },
+    "authority_boundary": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 128,
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z][A-Z0-9_:-]{0,127}$"
+      }
+    },
+    "required_evidence_slots": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "items": {
+        "$ref": "#/$defs/evidenceSlot"
+      }
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "manifest_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "$defs": {
+    "evidenceSlot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "slot_id",
+        "assurance_class",
+        "required_layer",
+        "required_scope",
+        "required_validator",
+        "required_source_truth",
+        "required_provenance",
+        "covered_risks",
+        "covered_invariants",
+        "candidate_binding_required",
+        "tree_binding_required",
+        "freshness_binding_required",
+        "independence_required"
+      ],
+      "properties": {
+        "slot_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "assurance_class": {
+          "enum": [
+            "DOCUMENTATION_RECONCILIATION",
+            "ARCHITECTURE_BOUNDARY",
+            "FUNCTIONAL_ASSURANCE",
+            "PERFORMANCE_ASSURANCE",
+            "COMPATIBILITY_ASSURANCE",
+            "INTERACTION_ASSURANCE",
+            "RELIABILITY_ASSURANCE",
+            "SECURITY_ASSURANCE",
+            "MAINTAINABILITY_ASSURANCE",
+            "FLEXIBILITY_ASSURANCE",
+            "SAFETY_ASSURANCE",
+            "PROVENANCE_ASSURANCE",
+            "AUTHORITY_TRUST_ASSURANCE",
+            "PRIVACY_ASSURANCE",
+            "TENANT_ISOLATION_ASSURANCE",
+            "DATA_OWNERSHIP_ASSURANCE",
+            "CONCURRENCY_ASSURANCE",
+            "STATE_TRANSITION_ASSURANCE",
+            "RETRY_IDEMPOTENCY_ASSURANCE",
+            "RECOVERY_ROLLBACK_ASSURANCE",
+            "EXTERNAL_INPUT_ASSURANCE",
+            "EXTERNAL_PROVIDER_ASSURANCE",
+            "MIGRATION_ASSURANCE",
+            "DESTRUCTIVE_LIFECYCLE_ASSURANCE",
+            "HUMAN_AUTHORITY_ASSURANCE",
+            "OBSERVABILITY_ASSURANCE",
+            "AUTHENTICATION_ASSURANCE",
+            "AUTHORIZATION_ASSURANCE",
+            "PRIVILEGE_BOUNDARY_ASSURANCE",
+            "MULTI_ACTOR_ASSURANCE",
+            "AGGREGATE_INVARIANT_ASSURANCE",
+            "TRANSACTION_ASSURANCE",
+            "DELETION_ASSURANCE",
+            "PUBLICATION_ASSURANCE",
+            "INVARIANT_PRESERVATION_ASSURANCE",
+            "ADVERSARIAL_ASSURANCE",
+            "INDEPENDENT_QA"
+          ]
+        },
+        "required_layer": {
+          "enum": [
+            "STATIC",
+            "UNIT",
+            "DOMAIN",
+            "CONTRACT",
+            "INTEGRATION",
+            "HTTP",
+            "RUNTIME",
+            "PERSISTENCE",
+            "CONCURRENCY",
+            "SECURITY",
+            "PROVENANCE",
+            "MUTATION",
+            "ADVERSARIAL",
+            "DOCUMENTATION",
+            "COMPLETION_STATE"
+          ]
+        },
+        "required_scope": {
+          "enum": [
+            "SOURCE",
+            "COMPLETION",
+            "DOMAIN",
+            "APPLICATION",
+            "API",
+            "UI",
+            "UNIT",
+            "CONTRACT",
+            "INTEGRATION",
+            "RUNTIME",
+            "PERSISTENCE",
+            "CONCURRENCY",
+            "SECURITY",
+            "ADVERSARIAL",
+            "CANONICAL",
+            "PRODUCT",
+            "EMPIRICAL_EFFECTIVENESS"
+          ]
+        },
+        "required_validator": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "required_source_truth": {
+          "enum": [
+            "OBSERVED",
+            "INFERRED",
+            "DECIDED",
+            "UNVERIFIED"
+          ]
+        },
+        "required_provenance": {
+          "enum": [
+            "AUTHORITATIVE",
+            "SELF_ASSERTED",
+            "UNQUALIFIED"
+          ]
+        },
+        "covered_risks": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 128,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_:-]{0,127}$"
+          }
+        },
+        "covered_invariants": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 128,
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_:-]{0,127}$"
+          }
+        },
+        "candidate_binding_required": {
+          "type": "boolean"
+        },
+        "tree_binding_required": {
+          "type": "boolean"
+        },
+        "freshness_binding_required": {
+          "type": "boolean"
+        },
+        "independence_required": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

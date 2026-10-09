@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ArtificerPromotionRecord",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0"],
+      "description": "The fixed schema version."
+    },
+    "promotion_id": {
+      "type": "string",
+      "description": "Unique identifier for the promotion record."
+    },
+    "catalog_pattern_id": {
+      "type": "string",
+      "description": "Unique identifier for the cataloged pattern."
+    },
+    "decision_id": {
+      "type": "string",
+      "description": "Identifier of the governance decision approving this promotion."
+    },
+    "proposal_id": {
+      "type": "string",
+      "description": "Identifier of the evolution proposal leading to this promotion."
+    },
+    "source_bundle_id": {
+      "type": "string",
+      "description": "Identifier of the associated source bundle."
+    },
+    "pattern_record_path": {
+      "type": "string",
+      "description": "Path to the pattern record."
+    },
+    "approval_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date when the promotion was approved."
+    },
+    "promotion_status": {
+      "type": "string",
+      "enum": ["APPROVED", "IMPLEMENTING", "IMPLEMENTED", "RETIRED"],
+      "description": "Lifecycle status of the promoted pattern."
+    },
+    "assigned_specialist": {
+      "type": "string",
+      "description": "Specialist responsible for the implementation."
+    },
+    "source_traceability": {
+      "type": "object",
+      "properties": {
+        "repository": { "type": "string" },
+        "reviewed_commit_sha": { "type": "string" },
+        "source_file": { "type": "string" },
+        "line_range": { "type": "string" }
+      },
+      "required": [
+        "repository",
+        "reviewed_commit_sha",
+        "source_file",
+        "line_range"
+      ],
+      "additionalProperties": false
+    },
+    "license_and_attribution": {
+      "type": "object",
+      "properties": {
+        "original_license": { "type": "string" },
+        "attribution_required": { "type": "boolean" },
+        "summary": { "type": "string" }
+      },
+      "required": ["original_license", "attribution_required", "summary"],
+      "additionalProperties": false
+    },
+    "automatic_promotion": {
+      "type": "boolean",
+      "enum": [false],
+      "description": "Must be false to record that the promotion was not automatic."
+    }
+  },
+  "required": [
+    "schema_version",
+    "promotion_id",
+    "catalog_pattern_id",
+    "decision_id",
+    "proposal_id",
+    "source_bundle_id",
+    "pattern_record_path",
+    "approval_date",
+    "promotion_status",
+    "assigned_specialist",
+    "source_traceability",
+    "license_and_attribution",
+    "automatic_promotion"
+  ],
+  "additionalProperties": false
+}

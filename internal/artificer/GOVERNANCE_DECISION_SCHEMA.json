@@ -1,0 +1,133 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ArtificerGovernanceDecision",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["1.0"],
+      "description": "The fixed schema version."
+    },
+    "decision_id": {
+      "type": "string",
+      "description": "Unique identifier for the governance decision."
+    },
+    "source_bundle_id": {
+      "type": "string",
+      "description": "Identifier of the associated source bundle."
+    },
+    "pattern_record_path": {
+      "type": "string",
+      "description": "Path to the pattern record."
+    },
+    "audit_report_id": {
+      "type": "string",
+      "description": "Identifier of the audit report informing this decision."
+    },
+    "decision_status": {
+      "type": "string",
+      "enum": [
+        "PENDING",
+        "APPROVED",
+        "REVISION_REQUIRED",
+        "DEFERRED",
+        "REJECTED",
+        "BLOCKED"
+      ],
+      "description": "Overall status of the governance decision."
+    },
+    "assigned_specialist": {
+      "type": "string",
+      "description": "Specialist assigned to implement or manage this pattern."
+    },
+    "reviews": {
+      "type": "object",
+      "properties": {
+        "arbiter": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": ["NOT_REQUIRED", "PENDING", "APPROVED", "REVISION_REQUIRED", "BLOCKED"]
+            },
+            "rationale": { "type": "string" },
+            "review_date": { "type": "string", "format": "date" }
+          },
+          "required": ["status", "rationale", "review_date"],
+          "additionalProperties": false
+        },
+        "governor": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": ["NOT_REQUIRED", "PENDING", "APPROVED", "REVISION_REQUIRED", "BLOCKED"]
+            },
+            "rationale": { "type": "string" },
+            "review_date": { "type": "string", "format": "date" }
+          },
+          "required": ["status", "rationale", "review_date"],
+          "additionalProperties": false
+        },
+        "steward": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": ["NOT_REQUIRED", "PENDING", "APPROVED", "REVISION_REQUIRED", "BLOCKED"]
+            },
+            "rationale": { "type": "string" },
+            "review_date": { "type": "string", "format": "date" }
+          },
+          "required": ["status", "rationale", "review_date"],
+          "additionalProperties": false
+        }
+      },
+      "required": ["arbiter", "governor", "steward"],
+      "additionalProperties": false
+    },
+    "maintainer_decision": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["PENDING", "APPROVED", "REVISION_REQUIRED", "DEFERRED", "REJECTED", "BLOCKED"]
+        },
+        "rationale": { "type": "string" },
+        "decision_date": { "type": "string", "format": "date" }
+      },
+      "required": ["status", "rationale", "decision_date"],
+      "additionalProperties": false
+    },
+    "implementation_restriction": {
+      "type": "string",
+      "enum": [
+        "CONCEPT_ONLY",
+        "FRESH_IMPLEMENTATION_REQUIRED",
+        "ATTRIBUTION_REQUIRED",
+        "CODE_REUSE_REVIEW_REQUIRED",
+        "IMPLEMENTATION_BLOCKED"
+      ],
+      "description": "Restrictions on how this pattern can be implemented."
+    },
+    "decision_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date when the decision was finalized."
+    }
+  },
+  "required": [
+    "schema_version",
+    "decision_id",
+    "source_bundle_id",
+    "pattern_record_path",
+    "audit_report_id",
+    "decision_status",
+    "assigned_specialist",
+    "reviews",
+    "maintainer_decision",
+    "implementation_restriction",
+    "decision_date"
+  ],
+  "additionalProperties": false
+}

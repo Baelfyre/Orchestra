@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../machine/schemas/uix9b-live-proof-result.v2.schema.json",
+  "schema_version": "orchestra.uix9b.live-proof-result.v2",
+  "role": "UIX_9B_LIVE_PROOF_RESULT",
+  "result_classification": "NO_BENEFIT_ESTABLISHED",
+  "observations_count": 6,
+  "valid_executions_counted": 6,
+  "failure_codes": [],
+  "model_behavior_claim": "NONE",
+  "benefit_claim": "NONE",
+  "harm_claim": "NONE"
+}

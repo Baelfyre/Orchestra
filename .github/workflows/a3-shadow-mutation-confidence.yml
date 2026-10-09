@@ -1,0 +1,222 @@
+name: a3-shadow-mutation-confidence
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "cosmic-ray-a3-shadow.toml"
+      - ".github/workflows/a3-shadow-mutation-confidence.yml"
+      - "scripts/validation/build_cosmic_ray_evidence.py"
+      - "scripts/validation/classify_cosmic_ray_dump.py"
+      - "machine/schemas/cosmic-ray-evidence.schema.json"
+      - "machine/schemas/cosmic-ray-classification.schema.json"
+      - "orchestra_runtime/adaptive/shadow.py"
+      - "tests/runtime/test_adaptive_shadow.py"
+      - "tests/runtime/test_adaptive_shadow_edges.py"
+
+permissions:
+  contents: read
+
+jobs:
+  a3-shadow-assurance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install bounded mutation dependencies
+        run: >-
+          python -m pip install --upgrade pip
+          pytest
+          cosmic-ray==8.7.0
+          jsonschema
+
+      - name: Prepare evidence directory
+        run: mkdir -p artifacts/cosmic-ray-a3
+
+      - name: Record Cosmic Ray version
+        run: >-
+          python -c "import importlib.metadata; print(importlib.metadata.version('cosmic-ray'))"
+          | tee artifacts/cosmic-ray-a3/tool-version.txt
+
+      - name: Initialize A3 shadow mutation session
+        shell: bash
+        run: |
+          set +e
+          set -o pipefail
+          cosmic-ray --verbosity=INFO init cosmic-ray-a3-shadow.toml artifacts/cosmic-ray-a3/session.sqlite 2>&1 | tee artifacts/cosmic-ray-a3/init.txt
+          code=${PIPESTATUS[0]}
+          echo "$code" | tee artifacts/cosmic-ray-a3/init-exit-code.txt
+          exit 0
+
+      - name: Baseline A3 shadow tests
+        shell: bash
+        run: |
+          set +e
+          set -o pipefail
+          cosmic-ray --verbosity=INFO baseline cosmic-ray-a3-shadow.toml 2>&1 | tee artifacts/cosmic-ray-a3/baseline.txt
+          code=${PIPESTATUS[0]}
+          echo "$code" | tee artifacts/cosmic-ray-a3/baseline-exit-code.txt
+          exit 0
+
+      - name: Execute A3 shadow mutations
+        shell: bash
+        run: |
+          init_code="$(cat artifacts/cosmic-ray-a3/init-exit-code.txt)"
+          baseline_code="$(cat artifacts/cosmic-ray-a3/baseline-exit-code.txt)"
+          if [ "$init_code" != "0" ] || [ "$baseline_code" != "0" ]; then
+            echo "Mutation execution skipped because init or baseline failed." | tee artifacts/cosmic-ray-a3/exec.txt
+            echo "97" | tee artifacts/cosmic-ray-a3/exec-exit-code.txt
+            exit 0
+          fi
+          set +e
+          set -o pipefail
+          cosmic-ray --verbosity=INFO exec cosmic-ray-a3-shadow.toml artifacts/cosmic-ray-a3/session.sqlite 2>&1 | tee artifacts/cosmic-ray-a3/exec.txt
+          code=${PIPESTATUS[0]}
+          echo "$code" | tee artifacts/cosmic-ray-a3/exec-exit-code.txt
+          exit 0
+
+      - name: Record A3 mutation report and detailed dump
+        if: always()
+        shell: bash
+        run: |
+          set +e
+          if [ -f artifacts/cosmic-ray-a3/session.sqlite ]; then
+            cr-report artifacts/cosmic-ray-a3/session.sqlite --show-pending 2>&1 | tee artifacts/cosmic-ray-a3/report.txt
+            cosmic-ray dump artifacts/cosmic-ray-a3/session.sqlite > artifacts/cosmic-ray-a3/dump.jsonl 2> artifacts/cosmic-ray-a3/dump-stderr.txt
+            dump_code=$?
+          else
+            echo "No Cosmic Ray session database was produced." | tee artifacts/cosmic-ray-a3/report.txt
+            : > artifacts/cosmic-ray-a3/dump.jsonl
+            echo "No Cosmic Ray session database was produced." > artifacts/cosmic-ray-a3/dump-stderr.txt
+            dump_code=98
+          fi
+          echo "$dump_code" | tee artifacts/cosmic-ray-a3/dump-exit-code.txt
+          exit 0
+
+      - name: Classify A3 mutation outcomes
+        if: always()
+        env:
+          SOURCE_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        shell: bash
+        run: |
+          set +e
+          python scripts/validation/classify_cosmic_ray_dump.py \
+            --dump artifacts/cosmic-ray-a3/dump.jsonl \
+            --repository-root . \
+            --source-head-sha "$SOURCE_HEAD_SHA" \
+            --output artifacts/cosmic-ray-a3/classification.json
+          code=$?
+          echo "$code" | tee artifacts/cosmic-ray-a3/classification-exit-code.txt
+          if [ "$code" != "0" ]; then
+            SOURCE_HEAD_SHA="$SOURCE_HEAD_SHA" python - <<'PY'
+          import json, os
+          from pathlib import Path
+          payload = {
+              "schema_version": "orchestra.cosmic-ray-classification.v1",
+              "source_head_sha": os.environ["SOURCE_HEAD_SHA"].lower(),
+              "raw": {"total": 0, "killed": 0, "survived": 0, "other": 0},
+              "runtime_relevant": {"total": 0, "killed": 0, "survived": 0, "score_percent": None},
+              "excluded_equivalent": {"count": 0, "classifications": {}},
+              "jobs": [],
+              "score_status": "UNSCORED_EMPTY"
+          }
+          Path("artifacts/cosmic-ray-a3/classification.json").write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+          PY
+          fi
+          exit 0
+
+      - name: Validate A3 mutation classification schema
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import jsonschema
+          schema = json.loads(Path('machine/schemas/cosmic-ray-classification.schema.json').read_text())
+          classification = json.loads(Path('artifacts/cosmic-ray-a3/classification.json').read_text())
+          jsonschema.validate(classification, schema)
+          print('A3_COSMIC_RAY_CLASSIFICATION_SCHEMA=PASS')
+          PY
+
+      - name: Build machine-readable A3 Cosmic Ray evidence
+        if: always()
+        env:
+          SOURCE_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        shell: bash
+        run: |
+          python scripts/validation/build_cosmic_ray_evidence.py \
+            --init-output artifacts/cosmic-ray-a3/init.txt \
+            --baseline-output artifacts/cosmic-ray-a3/baseline.txt \
+            --exec-output artifacts/cosmic-ray-a3/exec.txt \
+            --report-output artifacts/cosmic-ray-a3/report.txt \
+            --dump-output artifacts/cosmic-ray-a3/dump.jsonl \
+            --classification-output artifacts/cosmic-ray-a3/classification.json \
+            --session-database artifacts/cosmic-ray-a3/session.sqlite \
+            --config cosmic-ray-a3-shadow.toml \
+            --init-exit-code "$(cat artifacts/cosmic-ray-a3/init-exit-code.txt)" \
+            --baseline-exit-code "$(cat artifacts/cosmic-ray-a3/baseline-exit-code.txt)" \
+            --exec-exit-code "$(cat artifacts/cosmic-ray-a3/exec-exit-code.txt)" \
+            --dump-exit-code "$(cat artifacts/cosmic-ray-a3/dump-exit-code.txt)" \
+            --classification-exit-code "$(cat artifacts/cosmic-ray-a3/classification-exit-code.txt)" \
+            --tool-version "$(cat artifacts/cosmic-ray-a3/tool-version.txt)" \
+            --tested-sha "$(git rev-parse HEAD)" \
+            --source-head-sha "$SOURCE_HEAD_SHA" \
+            --repository "$GITHUB_REPOSITORY" \
+            --workflow-run-id "$GITHUB_RUN_ID" \
+            --workflow-run-attempt "$GITHUB_RUN_ATTEMPT" \
+            --event-name "$GITHUB_EVENT_NAME" \
+            --ref-name "$GITHUB_REF_NAME" \
+            --output artifacts/cosmic-ray-a3/cosmic-ray-evidence.json
+
+      - name: Validate A3 machine-readable evidence schema
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import jsonschema
+          schema = json.loads(Path('machine/schemas/cosmic-ray-evidence.schema.json').read_text())
+          evidence = json.loads(Path('artifacts/cosmic-ray-a3/cosmic-ray-evidence.json').read_text())
+          jsonschema.validate(evidence, schema)
+          print('A3_COSMIC_RAY_EVIDENCE_SCHEMA=PASS')
+          PY
+
+      - name: Upload A3 Cosmic Ray evidence
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: a3-shadow-mutation-confidence-${{ github.run_id }}-${{ github.run_attempt }}
+          path: artifacts/cosmic-ray-a3/
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Enforce A3 runtime-relevant mutation floor
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          evidence = json.loads(Path('artifacts/cosmic-ray-a3/cosmic-ray-evidence.json').read_text())
+          status = evidence['execution']['score_status']
+          runtime_score = evidence['mutation_summary']['runtime_relevant']['score_percent']
+          raw_score = evidence['mutation_summary']['raw']['score_percent']
+          excluded = evidence['mutation_summary']['excluded_equivalent']
+          print(f'A3_COSMIC_RAY_SCORE_STATUS={status}')
+          print(f'A3_COSMIC_RAY_RAW_SCORE={raw_score}')
+          print(f'A3_COSMIC_RAY_RUNTIME_RELEVANT_SCORE={runtime_score}')
+          print(f'A3_COSMIC_RAY_EXCLUDED_EQUIVALENT={excluded}')
+          if status != 'VALID_CLASSIFIED_SCORE':
+              raise SystemExit(1)
+          if runtime_score is None or float(runtime_score) < 90.0:
+              raise SystemExit(f'A3 runtime-relevant mutation score {runtime_score} is below required 90.0%')
+          PY

@@ -1,0 +1,32 @@
+{
+  "$schema": "../../../machine/schemas/uix9b-validator-result.v2.schema.json",
+  "schema_version": "orchestra.uix9b-validator-result.v2",
+  "role": "UIX_9B_INDEPENDENT_VALIDATOR_RESULT",
+  "candidate_tree_digest": "e27a51258973737989d7afe1fce533098e333cbe0533578910bfcfa8d36e89f1",
+  "fixture_digest": "280f1361eda45c2b632c37dd049ec47dec81ab1e8e9e81c61a7aa0d9fb96b978",
+  "validator_digest": "285494688ef105c813ef5f449f1e13b75529c8cddbf8a42ea76d283a9d5eecf3",
+  "dependency_manifest_digest": "e3eaf63f9b113ee24c3f21fd70775f24fc15beb8887c2a91ca806ef03007a6a1",
+  "asset_manifest_digest": "882ecf57a9a8074f1412a6e14121cb68f3b914310e1ff254fa9bc415fb32b6cb",
+  "component_map_digest": "30a01398eff887f025ff9c65ea9fb362f59eb8467999bb8bb95fc0510f9ad534",
+  "design_token_digest": "2ac1223787d92ce62d3828561b783614a7f705965d37d26df8ca7abe04f11b69",
+  "checks": {
+    "fresh_setup": {"status": "PASS", "deterministic": true, "details": "Synthetic offline setup contract passed."},
+    "typecheck": {"status": "PASS", "deterministic": true, "details": "Synthetic typecheck contract passed."},
+    "unit_component_tests": {"status": "PASS", "deterministic": true, "details": "Synthetic component contract passed."},
+    "production_build": {"status": "FAIL", "deterministic": true, "details": "Known negative calibration candidate is not accepted."},
+    "fixture_reset": {"status": "PASS", "deterministic": true, "details": "Candidate reset digest was stable."},
+    "dependency_manifest_equality": {"status": "PASS", "deterministic": true, "details": "Dependency manifest equals the frozen fixture."},
+    "asset_manifest_equality": {"status": "PASS", "deterministic": true, "details": "Asset manifest equals the frozen fixture."},
+    "component_map_equality": {"status": "PASS", "deterministic": true, "details": "Component map equals the frozen fixture."},
+    "design_token_equality": {"status": "PASS", "deterministic": true, "details": "Design tokens equal the frozen fixture."},
+    "validator_digest_equality": {"status": "PASS", "deterministic": true, "details": "Validator digest equals the frozen validator."},
+    "asset_reference_integrity": {"status": "FAIL", "deterministic": true, "details": "Negative calibration includes an external asset reference."},
+    "responsive_validation": {"status": "FAIL", "deterministic": true, "details": "Negative calibration omits the desktop containment contract."},
+    "accessibility_validation": {"status": "FAIL", "deterministic": true, "details": "Negative calibration omits keyboard and focus evidence."},
+    "validator_determinism": {"status": "PASS", "deterministic": true, "details": "Repeated validator result was identical."}
+  },
+  "model_calls": 0,
+  "provider_calls": 0,
+  "network_access": 0,
+  "external_repo_mutations": 0
+}

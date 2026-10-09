@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/adaptive-shadow-comparison.schema.json",
+  "title": "Orchestra Adaptive Shadow Comparison v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "learner_rule_version",
+    "comparison_id",
+    "candidate_ref",
+    "candidate_digest",
+    "scope",
+    "subject_key",
+    "evaluated_at",
+    "shadow_recommendation",
+    "actual_deterministic_choice",
+    "actual_choice_ref",
+    "disposition",
+    "execution_controlled_by",
+    "shadow_influenced_execution"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.adaptive-shadow-comparison.v1"},
+    "learner_rule_version": {"const": "orchestra.adaptive-shadow-rules.v1"},
+    "comparison_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "candidate_ref": {"type": "string", "minLength": 1, "maxLength": 256},
+    "candidate_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "scope": {"$ref": "#/$defs/scope"},
+    "subject_key": {
+      "type": "string",
+      "pattern": "^(?!(?:authority|capability|required_specialist|governance|human_gate|security_prohibition|mandatory_validation|evidence_integrity|audit_requirement|fail_closed|exact_head|release_gate|merge_gate|privacy_restriction|provider_restriction|resource_ceiling)(?:[.:]|$))[a-z0-9][a-z0-9_.:-]{0,127}$"
+    },
+    "evaluated_at": {"type": "string", "format": "date-time"},
+    "shadow_recommendation": {
+      "oneOf": [
+        {"type": "string", "minLength": 1, "maxLength": 512},
+        {"type": "number"},
+        {"type": "boolean"}
+      ]
+    },
+    "actual_deterministic_choice": {
+      "oneOf": [
+        {"type": "string", "minLength": 1, "maxLength": 512},
+        {"type": "number"},
+        {"type": "boolean"}
+      ]
+    },
+    "actual_choice_ref": {"type": "string", "minLength": 1, "maxLength": 512},
+    "disposition": {
+      "enum": ["MATCH", "MISMATCH", "NO_COMPARABLE_DETERMINISTIC_CHOICE", "CANDIDATE_BLOCKED"]
+    },
+    "execution_controlled_by": {"const": "DETERMINISTIC_ORCHESTRA"},
+    "shadow_influenced_execution": {"const": false},
+    "outcome_evidence_refs": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 32,
+      "items": {"type": "string", "minLength": 1, "maxLength": 512}
+    },
+    "outcome_evidence_digests": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 32,
+      "items": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    },
+    "notes": {
+      "type": "array",
+      "maxItems": 16,
+      "items": {"type": "string", "minLength": 1, "maxLength": 512}
+    }
+  },
+  "$defs": {
+    "scope": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scope_type", "user_key"],
+          "properties": {
+            "scope_type": {"const": "global_user"},
+            "user_key": {"type": "string", "minLength": 1}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scope_type", "user_key", "project_key"],
+          "properties": {
+            "scope_type": {"const": "project"},
+            "user_key": {"type": "string", "minLength": 1},
+            "project_key": {"type": "string", "minLength": 1}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scope_type", "user_key", "specialist_slug"],
+          "properties": {
+            "scope_type": {"const": "specialist"},
+            "user_key": {"type": "string", "minLength": 1},
+            "project_key": {"type": "string", "minLength": 1},
+            "specialist_slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]{0,127}$"}
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scope_type", "user_key", "task_session_key"],
+          "properties": {
+            "scope_type": {"const": "task_session"},
+            "user_key": {"type": "string", "minLength": 1},
+            "project_key": {"type": "string", "minLength": 1},
+            "specialist_slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]{0,127}$"},
+            "task_session_key": {"type": "string", "minLength": 1}
+          }
+        }
+      ]
+    }
+  }
+}

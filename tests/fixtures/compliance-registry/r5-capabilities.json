@@ -1,0 +1,62 @@
+{
+  "schema_version": "orchestra.compliance-registry.capability-manifest.v1",
+  "canonical_repository": "Baelfyre/Orchestra-Compliance-Registry",
+  "authority": "DESCRIPTIVE_NON_AUTHORIZING",
+  "capabilities": [
+    {
+      "capability_id": "cap.query.v1",
+      "contract_version": "1.0.0",
+      "status": "SUPPORTED",
+      "required_records": ["sources", "obligations"],
+      "optional": false,
+      "fallback": "NONE"
+    },
+    {
+      "capability_id": "cap.query.multi-jurisdiction.v1",
+      "contract_version": "1.0.0",
+      "status": "SUPPORTED",
+      "required_records": ["sources", "obligations", "jurisdictions"],
+      "optional": true,
+      "fallback": "SINGLE_JURISDICTION_QUERY"
+    },
+    {
+      "capability_id": "cap.query.scoped-freshness.v1",
+      "contract_version": "1.0.0",
+      "status": "SUPPORTED",
+      "required_records": ["source_status", "review_due"],
+      "optional": true,
+      "fallback": "GLOBAL_FRESHNESS_FAIL_CLOSED"
+    },
+    {
+      "capability_id": "cap.release-delta.v1",
+      "contract_version": "1.0.0",
+      "status": "SUPPORTED",
+      "required_records": ["sources", "obligations", "jurisdictions", "providers", "source_status", "review_due", "capabilities"],
+      "optional": true,
+      "fallback": "FULL_REVALIDATION"
+    },
+    {
+      "capability_id": "cap.source-monitor.v1",
+      "contract_version": "1.0.0",
+      "status": "SUPPORTED",
+      "required_records": ["sources", "source_status"],
+      "optional": true,
+      "fallback": "NO_AUTOMATIC_MONITOR_ASSUMPTION"
+    },
+    {
+      "capability_id": "cap.schema-negotiation.v1",
+      "contract_version": "1.0.0",
+      "status": "SUPPORTED",
+      "required_records": ["capabilities"],
+      "optional": false,
+      "fallback": "FAIL_CLOSED_ON_MISSING_REQUIRED_CAPABILITY"
+    }
+  ],
+  "authority_boundaries": {
+    "legal_interpretation": false,
+    "project_applicability": false,
+    "orchestra_execution": false,
+    "automatic_merge": false,
+    "trusted_release_publication": false
+  }
+}

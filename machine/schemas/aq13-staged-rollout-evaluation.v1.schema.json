@@ -1,0 +1,214 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.orchestra.dev/adaptive/aq13-staged-rollout-evaluation.v1.schema.json",
+  "title": "Orchestra AQ13 Staged Non-Production Rollout Evaluation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "phase",
+    "owner",
+    "authority_model",
+    "purpose",
+    "implementation_inventory",
+    "rollout_boundary",
+    "required_stages",
+    "rollout_policy",
+    "disposition_precedence",
+    "fail_closed_conditions",
+    "authority",
+    "validation"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.aq13-staged-rollout-evaluation.v1"},
+    "phase": {"const": "AQ13_STAGED_NON_PRODUCTION_ROLLOUT_EVALUATION"},
+    "owner": {"const": "overseer"},
+    "authority_model": {"const": "EVIDENCE_ONLY_NON_AUTHORIZING"},
+    "purpose": {"type": "string", "minLength": 1},
+    "implementation_inventory": {
+      "type": "array",
+      "prefixItems": [
+        {"const": "CHANGELOG.md"},
+        {"const": "README.json"},
+        {"const": "docs/architecture/ADAPTIVE_ASSURANCE_AQ13.md"},
+        {"const": "machine/adaptive/aq13-staged-rollout-evaluation.v1.json"},
+        {"const": "machine/schemas/aq13-staged-rollout-evaluation.v1.schema.json"},
+        {"const": "orchestra_runtime/domain/adaptive/staged_rollout.py"},
+        {"const": "scripts/validation/validate_aq13.py"},
+        {"const": "tests/behavior/run_tests.py"},
+        {"const": "tests/runtime/test_adaptive_assurance_aq13.py"}
+      ],
+      "items": false,
+      "minItems": 9,
+      "maxItems": 9
+    },
+    "rollout_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_repository",
+        "canonical_start_sha",
+        "mode",
+        "environment_scope",
+        "cud10_state",
+        "protected_policy_mutation_allowed",
+        "production_mutation_allowed",
+        "provider_activation_allowed",
+        "telemetry_activation_allowed",
+        "release_or_deploy_allowed"
+      ],
+      "properties": {
+        "target_repository": {"const": "Baelfyre/Orchestra"},
+        "canonical_start_sha": {"const": "2fc2d9ce9fc263813981e4dc8c88d1e4f604f036"},
+        "mode": {"const": "CONTROLLED_NON_PRODUCTION_STAGED_ROLLOUT_EVALUATION"},
+        "environment_scope": {"const": "NON_PRODUCTION_ONLY"},
+        "cud10_state": {"const": "READY_NOT_STARTED_HELD_BY_CURRENT_USER"},
+        "protected_policy_mutation_allowed": {"const": false},
+        "production_mutation_allowed": {"const": false},
+        "provider_activation_allowed": {"const": false},
+        "telemetry_activation_allowed": {"const": false},
+        "release_or_deploy_allowed": {"const": false}
+      }
+    },
+    "required_stages": {
+      "type": "array",
+      "prefixItems": [
+        {"$ref": "#/$defs/shadowStage"},
+        {"$ref": "#/$defs/canaryStage"},
+        {"$ref": "#/$defs/limitedStage"},
+        {"$ref": "#/$defs/expandedStage"}
+      ],
+      "items": false,
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "rollout_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimum_total_observations",
+        "maximum_regression_rate_bps",
+        "maximum_critical_violations",
+        "independent_evidence_required",
+        "deterministic_replay_required",
+        "rollback_on_any_critical_violation",
+        "rollback_signal_forces_hold",
+        "claim_scope"
+      ],
+      "properties": {
+        "minimum_total_observations": {"const": 40},
+        "maximum_regression_rate_bps": {"const": 500},
+        "maximum_critical_violations": {"const": 0},
+        "independent_evidence_required": {"const": true},
+        "deterministic_replay_required": {"const": true},
+        "rollback_on_any_critical_violation": {"const": true},
+        "rollback_signal_forces_hold": {"const": true},
+        "claim_scope": {"const": "CONTROLLED_NON_PRODUCTION_EVALUATION_ONLY"}
+      }
+    },
+    "disposition_precedence": {
+      "type": "array",
+      "prefixItems": [
+        {"const": "REVISION_REQUIRED"},
+        {"const": "HOLD"},
+        {"const": "WAIT_FOR_EVIDENCE"},
+        {"const": "PASS"}
+      ],
+      "items": false,
+      "minItems": 4,
+      "maxItems": 4
+    },
+    "fail_closed_conditions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "creates_execution_authority",
+        "creates_transition_authority",
+        "creates_whitelist_authority",
+        "changes_protected_policy",
+        "lowers_assurance_thresholds",
+        "activates_provider",
+        "activates_telemetry",
+        "mutates_production",
+        "authorizes_release",
+        "authorizes_critiqual_cud10_admission"
+      ],
+      "properties": {
+        "creates_execution_authority": {"const": false},
+        "creates_transition_authority": {"const": false},
+        "creates_whitelist_authority": {"const": false},
+        "changes_protected_policy": {"const": false},
+        "lowers_assurance_thresholds": {"const": false},
+        "activates_provider": {"const": false},
+        "activates_telemetry": {"const": false},
+        "mutates_production": {"const": false},
+        "authorizes_release": {"const": false},
+        "authorizes_critiqual_cud10_admission": {"const": false}
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "validator",
+        "runtime",
+        "runtime_test",
+        "behavior_registration",
+        "architecture_reference",
+        "schema",
+        "canonical_start_sha"
+      ],
+      "properties": {
+        "validator": {"const": "scripts/validation/validate_aq13.py"},
+        "runtime": {"const": "orchestra_runtime/domain/adaptive/staged_rollout.py"},
+        "runtime_test": {"const": "tests/runtime/test_adaptive_assurance_aq13.py"},
+        "behavior_registration": {"const": "tests/behavior/run_tests.py"},
+        "architecture_reference": {"const": "docs/architecture/ADAPTIVE_ASSURANCE_AQ13.md"},
+        "schema": {"const": "machine/schemas/aq13-staged-rollout-evaluation.v1.schema.json"},
+        "canonical_start_sha": {"const": "2fc2d9ce9fc263813981e4dc8c88d1e4f604f036"}
+      }
+    }
+  },
+  "$defs": {
+    "stageBase": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stage_id", "sequence", "minimum_observations"],
+      "properties": {
+        "stage_id": {"type": "string"},
+        "sequence": {"type": "integer", "minimum": 1},
+        "minimum_observations": {"const": 10}
+      }
+    },
+    "shadowStage": {
+      "allOf": [
+        {"$ref": "#/$defs/stageBase"},
+        {"properties": {"stage_id": {"const": "SHADOW"}, "sequence": {"const": 1}}}
+      ]
+    },
+    "canaryStage": {
+      "allOf": [
+        {"$ref": "#/$defs/stageBase"},
+        {"properties": {"stage_id": {"const": "CANARY"}, "sequence": {"const": 2}}}
+      ]
+    },
+    "limitedStage": {
+      "allOf": [
+        {"$ref": "#/$defs/stageBase"},
+        {"properties": {"stage_id": {"const": "LIMITED"}, "sequence": {"const": 3}}}
+      ]
+    },
+    "expandedStage": {
+      "allOf": [
+        {"$ref": "#/$defs/stageBase"},
+        {"properties": {"stage_id": {"const": "EXPANDED"}, "sequence": {"const": 4}}}
+      ]
+    }
+  }
+}

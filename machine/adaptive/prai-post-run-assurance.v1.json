@@ -1,0 +1,473 @@
+{
+  "$schema": "./machine/schemas/prai-post-run-assurance.v1.schema.json",
+  "schema_version": "orchestra.post-run-assurance.v1",
+  "contract_role": "machine_prai_post_run_assurance_contract",
+  "decision_schema_version": "orchestra.post-run-assurance-decision.v1",
+  "authority_model": "EVIDENCE_ONLY_NON_AUTHORIZING",
+  "authority_boundary": "EVIDENCE_ONLY_NON_AUTHORIZING",
+  "security_no_material_impact": "SECURITY_REVIEWED_NO_MATERIAL_SECURITY_IMPACT",
+  "audit_depths": [
+    "LIGHT",
+    "STANDARD",
+    "DEEP"
+  ],
+  "impact_levels": [
+    "NONE",
+    "LOW",
+    "MEDIUM",
+    "HIGH",
+    "CRITICAL"
+  ],
+  "review_results": [
+    "PASS",
+    "FAIL",
+    "BLOCKED"
+  ],
+  "arbiter_dispositions": [
+    "AUTO_CONTINUE",
+    "AUTO_REMEDIATE_AND_REVALIDATE",
+    "WAIT_FOR_EVIDENCE",
+    "WAIT_FOR_CAPACITY",
+    "ESCALATE_HUMAN",
+    "STOP"
+  ],
+  "review_roles": [
+    "CLOCKWORK",
+    "CIPHER",
+    "OVERSEER",
+    "CHRONICLER",
+    "DAGGER",
+    "STEWARD",
+    "GOVERNOR",
+    "CLOAK",
+    "CI",
+    "GENERIC_CI"
+  ],
+  "baseline_reviewers": [
+    "CLOCKWORK",
+    "CIPHER",
+    "OVERSEER"
+  ],
+  "baseline_assurance": [
+    "POST_RUN_LOGICAL_ASSURANCE",
+    "POST_RUN_SECURITY_ASSURANCE",
+    "EVIDENCE_SUFFICIENCY"
+  ],
+  "deep_risk_characteristics": [
+    "AUTHENTICATION",
+    "AUTHORIZATION",
+    "PRIVILEGE",
+    "TENANT_ISOLATION",
+    "EXTERNAL_INPUT",
+    "CONCURRENCY",
+    "AGGREGATE_INVARIANTS",
+    "STATE_MACHINE",
+    "DESTRUCTIVE_LIFECYCLE",
+    "MIGRATION",
+    "RECOVERY",
+    "RETRY_IDEMPOTENCY",
+    "PARTIAL_FAILURE",
+    "SENSITIVE_PROVENANCE",
+    "RESOURCE_PRESSURE",
+    "PRODUCTION_CRITICAL"
+  ],
+  "triggered_specialists": {
+    "CHRONICLER": [
+      "PERSISTENCE",
+      "MIGRATION",
+      "TRANSACTION",
+      "CONCURRENCY",
+      "DURABILITY",
+      "DATA_OWNERSHIP",
+      "AGGREGATE_INVARIANTS"
+    ],
+    "DAGGER": [
+      "AUTHENTICATION",
+      "AUTHORIZATION",
+      "PRIVILEGE",
+      "TENANT_ISOLATION",
+      "EXTERNAL_INPUT",
+      "CONCURRENCY",
+      "AGGREGATE_INVARIANTS",
+      "STATE_MACHINE",
+      "DESTRUCTIVE_LIFECYCLE",
+      "RECOVERY",
+      "RETRY_IDEMPOTENCY",
+      "PARTIAL_FAILURE",
+      "SENSITIVE_PROVENANCE",
+      "RESOURCE_PRESSURE"
+    ],
+    "STEWARD": [
+      "SCOPE_EXPANSION",
+      "PRODUCT",
+      "CAPACITY",
+      "RESOURCE_ALLOCATION"
+    ],
+    "GOVERNOR": [
+      "LEGAL",
+      "PRIVACY",
+      "COMPLIANCE",
+      "IP",
+      "POLICY"
+    ],
+    "CLOAK": [
+      "UI",
+      "UX",
+      "ACCESSIBILITY",
+      "VISUAL"
+    ]
+  },
+  "required_work_unit_fields": [
+    "schema_version",
+    "work_item_ref",
+    "repository",
+    "source_ref",
+    "candidate_sha",
+    "tree_sha",
+    "freshness_ref",
+    "version_ref",
+    "changed_paths",
+    "implementer",
+    "logical_impact",
+    "security_impact",
+    "audit_depth",
+    "required_reviewers",
+    "required_additional_assurance",
+    "logical_result",
+    "security_result",
+    "evidence_refs",
+    "limitations",
+    "overseer_sufficiency",
+    "arbiter_disposition",
+    "review_receipts",
+    "authority_boundary",
+    "risk_characteristics",
+    "invariants",
+    "logical_findings",
+    "security_findings",
+    "caller_contract_issues",
+    "policy_modified_paths",
+    "policy_self_modification",
+    "authority_expansion",
+    "green_tests",
+    "security_classification"
+  ],
+  "work_unit_fields": [
+    "schema_version",
+    "work_item_ref",
+    "repository",
+    "source_ref",
+    "candidate_sha",
+    "tree_sha",
+    "freshness_ref",
+    "version_ref",
+    "changed_paths",
+    "implementer",
+    "logical_impact",
+    "security_impact",
+    "audit_depth",
+    "required_reviewers",
+    "required_additional_assurance",
+    "logical_result",
+    "security_result",
+    "evidence_refs",
+    "limitations",
+    "overseer_sufficiency",
+    "arbiter_disposition",
+    "review_receipts",
+    "authority_boundary",
+    "risk_characteristics",
+    "invariants",
+    "logical_findings",
+    "security_findings",
+    "caller_contract_issues",
+    "policy_modified_paths",
+    "policy_self_modification",
+    "authority_expansion",
+    "green_tests",
+    "security_classification",
+    "digest"
+  ],
+  "receipt_fields": [
+    "schema_version",
+    "receipt_id",
+    "role",
+    "reviewer",
+    "result",
+    "repository",
+    "source_ref",
+    "candidate_sha",
+    "tree_sha",
+    "work_item_ref",
+    "audit_depth",
+    "evidence_refs",
+    "audited_paths",
+    "evidence_layer",
+    "evidence_scope",
+    "covered_risks",
+    "covered_invariants",
+    "freshness_ref",
+    "version_ref",
+    "provenance",
+    "independent",
+    "producer",
+    "validator",
+    "claim_scope",
+    "limitations",
+    "examined_changed_code",
+    "security_classification",
+    "logical_identity",
+    "digest"
+  ],
+  "decision_fields": [
+    "schema_version",
+    "decision_id",
+    "repository",
+    "source_ref",
+    "candidate_sha",
+    "tree_sha",
+    "work_item_ref",
+    "version_ref",
+    "result",
+    "compliant",
+    "failure_codes",
+    "required_reviewers",
+    "satisfied_reviewers",
+    "required_additional_assurance",
+    "satisfied_additional_assurance",
+    "audit_depth",
+    "evidence_receipt_ids",
+    "authority_model",
+    "authority_expansion",
+    "generated_at",
+    "limitations",
+    "decision_digest"
+  ],
+  "required_negative_fixtures": [
+    "green_tests_contradictory_logical_invariant",
+    "security_sensitive_without_cipher",
+    "harmless_docs_explicit_light",
+    "implementer_self_certification",
+    "stale_candidate_receipt",
+    "stale_tree_receipt",
+    "light_for_deep_trigger",
+    "security_none_without_classification",
+    "broken_caller_contract",
+    "tenant_global_authority_expansion",
+    "missing_chronicler_assurance",
+    "missing_dagger_assurance",
+    "contradictory_logical_receipts",
+    "duplicate_pseudo_independent_receipts",
+    "stale_audit_reuse_after_repair",
+    "audit_does_not_examine_changed_code",
+    "generic_green_ci_substitution",
+    "self_modifying_prai_policy",
+    "schema_runtime_divergence",
+    "unknown_risk_characteristic",
+    "partial_changed_path_coverage",
+    "uncovered_risk_coverage",
+    "uncovered_invariant_coverage",
+    "noncanonical_risk_characteristic",
+    "evidence_scope_claim_scope_mismatch",
+    "spoofed_logical_identity",
+    "stale_version_context",
+    "mismatched_version_context",
+    "missing_version_context",
+    "unknown_evidence_layer",
+    "noncanonical_evidence_layer",
+    "undeclared_prai_policy_self_modification"
+  ],
+  "required_property_invariants": [
+    "audit_is_mandatory",
+    "adaptive_proportionality",
+    "assurance_monotonicity",
+    "authority_non_expansion",
+    "candidate_binding",
+    "repair_invalidation",
+    "receipt_order_invariance",
+    "duplicate_normalization"
+  ],
+  "authority": {
+    "execution": false,
+    "merge": false,
+    "release": false,
+    "provider_routing": false,
+    "production": false
+  },
+  "integration_slots": [
+    "POST_RUN_LOGICAL_ASSURANCE",
+    "POST_RUN_SECURITY_ASSURANCE"
+  ],
+  "transport": {
+    "native_arbiter_mcp": "preferred",
+    "host_policy_rejection": "in_process_deterministic_transition_only",
+    "substantive_reviewer_substitution": false
+  },
+  "activation_boundary": "PRAI_COMPLETE_CANONICAL_VERIFIED_REQUIRED_BEFORE_AQ6",
+  "authorized_trial_phases": [
+    "AQ6",
+    "AQ7"
+  ],
+  "protected_after_trial": [
+    "AQ8",
+    "AQ9",
+    "AQ10",
+    "AQ11",
+    "AQ12",
+    "AQ13",
+    "AQ14"
+  ],
+  "allowed_risk_characteristics": [
+    "ACCESSIBILITY",
+    "AGGREGATE_INVARIANTS",
+    "AUTHENTICATION",
+    "AUTHORIZATION",
+    "CAPACITY",
+    "COMPLIANCE",
+    "CONCURRENCY",
+    "DATA_OWNERSHIP",
+    "DESTRUCTIVE_LIFECYCLE",
+    "DURABILITY",
+    "EXTERNAL_INPUT",
+    "IP",
+    "LEGAL",
+    "MIGRATION",
+    "PARTIAL_FAILURE",
+    "PERSISTENCE",
+    "POLICY",
+    "PRIVACY",
+    "PRIVILEGE",
+    "PRODUCT",
+    "PRODUCTION_CRITICAL",
+    "RECOVERY",
+    "RESOURCE_ALLOCATION",
+    "RESOURCE_PRESSURE",
+    "RETRY_IDEMPOTENCY",
+    "SCOPE_EXPANSION",
+    "SENSITIVE_PROVENANCE",
+    "STATE_MACHINE",
+    "TENANT_ISOLATION",
+    "TRANSACTION",
+    "UI",
+    "UX",
+    "VISUAL"
+  ],
+  "evidence_layers": [
+    "STATIC",
+    "UNIT",
+    "DOMAIN",
+    "CONTRACT",
+    "INTEGRATION",
+    "HTTP",
+    "RUNTIME",
+    "PERSISTENCE",
+    "CONCURRENCY",
+    "SECURITY",
+    "PROVENANCE",
+    "MUTATION",
+    "ADVERSARIAL",
+    "DOCUMENTATION",
+    "COMPLETION_STATE"
+  ],
+  "evidence_scopes": [
+    "SOURCE",
+    "COMPLETION",
+    "DOMAIN",
+    "APPLICATION",
+    "API",
+    "UI",
+    "UNIT",
+    "CONTRACT",
+    "INTEGRATION",
+    "RUNTIME",
+    "PERSISTENCE",
+    "CONCURRENCY",
+    "SECURITY",
+    "ADVERSARIAL",
+    "CANONICAL",
+    "PRODUCT",
+    "EMPIRICAL_EFFECTIVENESS"
+  ],
+  "evidence_scope_coverage": {
+    "SOURCE": [
+      "SOURCE"
+    ],
+    "COMPLETION": [
+      "COMPLETION"
+    ],
+    "DOMAIN": [
+      "DOMAIN"
+    ],
+    "APPLICATION": [
+      "DOMAIN",
+      "APPLICATION"
+    ],
+    "API": [
+      "API",
+      "APPLICATION",
+      "DOMAIN"
+    ],
+    "UI": [
+      "UI",
+      "APPLICATION",
+      "DOMAIN"
+    ],
+    "UNIT": [
+      "UNIT"
+    ],
+    "CONTRACT": [
+      "CONTRACT"
+    ],
+    "INTEGRATION": [
+      "INTEGRATION",
+      "APPLICATION",
+      "API",
+      "UI",
+      "DOMAIN"
+    ],
+    "RUNTIME": [
+      "RUNTIME",
+      "INTEGRATION",
+      "APPLICATION",
+      "API",
+      "UI",
+      "DOMAIN"
+    ],
+    "PERSISTENCE": [
+      "PERSISTENCE"
+    ],
+    "CONCURRENCY": [
+      "CONCURRENCY"
+    ],
+    "SECURITY": [
+      "SECURITY"
+    ],
+    "ADVERSARIAL": [
+      "ADVERSARIAL"
+    ],
+    "CANONICAL": [
+      "CANONICAL"
+    ],
+    "PRODUCT": [
+      "PRODUCT"
+    ],
+    "EMPIRICAL_EFFECTIVENESS": [
+      "EMPIRICAL_EFFECTIVENESS"
+    ]
+  },
+  "evidence_scope_rule": "EVIDENCE_SCOPE_MUST_COVER_CLAIM_SCOPE",
+  "version_context": {
+    "work_unit_field": "version_ref",
+    "receipt_field": "version_ref",
+    "decision_field": "version_ref",
+    "current_identity_parameter": "current_version_ref",
+    "failure_code": "FAIL_STALE_VERSION"
+  },
+  "protected_prai_paths": [
+    ".github/workflows/prai.yml",
+    "machine/adaptive/prai-post-run-assurance.v1.json",
+    "machine/schemas/prai-post-run-assurance.v1.schema.json",
+    "orchestra_runtime/domain/adaptive/prai.py",
+    "scripts/validation/validate_prai.py"
+  ]
+}

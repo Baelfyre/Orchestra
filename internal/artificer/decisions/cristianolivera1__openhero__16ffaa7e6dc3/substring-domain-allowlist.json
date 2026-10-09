@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "decision_id": "openhero-substring-domain-allowlist-decision",
+  "source_bundle_id": "cristianolivera1__openhero__16ffaa7e6dc3",
+  "pattern_record_path": "internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/patterns/substring-domain-allowlist.json",
+  "audit_report_id": "openhero-16ffaa7e6dc3-audit",
+  "decision_status": "REJECTED",
+  "assigned_specialist": "cipher",
+  "reviews": {
+    "arbiter": {
+      "status": "BLOCKED",
+      "rationale": "The audit supports classification of substring-based domain matching as an OUT_OF_SCOPE security anti-pattern. The mechanism does not establish an exact normalized hostname boundary and must not advance as an adoptable pattern.",
+      "review_date": "2026-07-12"
+    },
+    "governor": {
+      "status": "NOT_REQUIRED",
+      "rationale": "The audit marks the OpenHero source as MIT and compatible, but licensing does not make the rejected mechanism acceptable. This decision authorizes no OpenHero source reuse, no third-party asset reuse, and no implementation. Any future use of unrelated OpenHero source would still require normal Governor review and notice preservation.",
+      "review_date": "2026-07-12"
+    },
+    "steward": {
+      "status": "BLOCKED",
+      "rationale": "Substring domain matching conflicts with Orchestra security goals and creates no acceptable implementation path. The finding may inform prohibited-behavior documentation or adversarial validation, but the source mechanism must not enter an evolution proposal.",
+      "review_date": "2026-07-12"
+    }
+  },
+  "maintainer_decision": {
+    "status": "REJECTED",
+    "rationale": "Reject the source mechanism and block implementation. Preserve the audit finding only as a negative security lesson supporting exact URL parsing, approved schemes, normalized hostname comparison, explicit subdomain boundaries, restrictive allowlists, sandboxing, and Content Security Policy controls.",
+    "decision_date": "2026-07-12"
+  },
+  "implementation_restriction": "IMPLEMENTATION_BLOCKED",
+  "decision_date": "2026-07-12"
+}

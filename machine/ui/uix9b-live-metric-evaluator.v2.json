@@ -1,0 +1,154 @@
+{
+  "$schema": "../../../machine/schemas/uix9b-live-metric-evaluator.v2.schema.json",
+  "schema_version": "uix9b.live-metric-evaluator.v2",
+  "role": "UIX_9B_FROZEN_LIVE_METRIC_EVALUATOR",
+  "evaluator_version": "uix9b-live-metric-evaluator-v2.0.0",
+  "source": "scripts/uix9_live_metric_evaluator_v2.py",
+  "treatment_blind_inputs": ["fixture_root", "completed_candidate_root", "independent_validator_result", "frozen_evaluator_identity"],
+  "forbidden_scoring_inputs": ["arm_id", "guidance_treatment", "pair_id", "repetition", "execution_order", "session_id", "campaign_outcome", "model_self_rating", "subjective_visual_score"],
+  "global_behavior": {
+    "identical_input_result": "byte-identical canonical JSON result",
+    "model_calls": 0,
+    "provider_calls": 0,
+    "network_access": 0,
+    "external_repository_mutations": 0,
+    "unsupported_or_ambiguous_state": "FAIL_CLOSED",
+    "malformed_or_missing_required_input": "FAIL_CLOSED",
+    "result_schema": "machine/schemas/uix9b-live-metric-result.v2.schema.json",
+    "observation_schema": "machine/schemas/uix9b-live-proof-observation.v2.schema.json"
+  },
+  "metric_directions": {
+    "COMPONENT_REUSE": "true_is_better",
+    "DUPLICATE_COMPONENT_COUNT": "lower_is_better",
+    "TOKEN_VIOLATIONS": "lower_is_better",
+    "ARBITRARY_STYLE_DRIFT": "lower_is_better",
+    "STATE_COVERAGE": "higher_is_better",
+    "ASSET_PROVENANCE": "true_is_better",
+    "ASSET_SUBSTITUTION": "false_is_better",
+    "RESPONSIVE_CONTAINMENT": "true_is_better",
+    "ACCESSIBILITY_INVARIANTS": "true_is_better",
+    "UNRESOLVED_MAPPINGS": "lower_is_better",
+    "REVISION_MISMATCH": "false_is_better",
+    "VISUAL_BASELINE_REPLACEMENT": "false_is_better",
+    "DETERMINISTIC_ACCEPTANCE": "true_is_better"
+  },
+  "metrics": {
+    "COMPONENT_REUSE": {
+      "semantic_definition": "Every required component has exactly one declaration and that declaration is in the frozen project-native source_of_truth file.",
+      "exact_inputs": ["requirements.required_components", "component-map.source_of_truth", "candidate project source files"],
+      "deterministic_computation": "Count the frozen declaration patterns for each required component across source files; true only when total count is one and source_of_truth count is one for every component.",
+      "output": "boolean",
+      "missing_input_behavior": "FAIL_CLOSED",
+      "invalid_input_behavior": "FAIL_CLOSED",
+      "aggregation": "all required components must pass"
+    },
+    "DUPLICATE_COMPONENT_COUNT": {
+      "semantic_definition": "Number of declarations beyond the first for required components across the candidate source tree.",
+      "exact_inputs": ["requirements.required_components", "component-map.source_of_truth", "candidate project source files"],
+      "deterministic_computation": "Sum max(total declarations for component minus one, zero) for every required component.",
+      "output": "integer >= 0",
+      "missing_input_behavior": "FAIL_CLOSED",
+      "invalid_input_behavior": "FAIL_CLOSED",
+      "aggregation": "sum across required component names"
+    },
+    "TOKEN_VIOLATIONS": {
+      "semantic_definition": "Count of declarations using a token-governed CSS property without a known frozen project token variable or a frozen structural literal.",
+      "exact_inputs": ["design-tokens", "candidate project CSS excluding tokens.css"],
+      "deterministic_computation": "Parse CSS declarations; for the frozen governed-property set, count declarations containing an unknown or no token variable unless the complete value is in the structural-literal allowlist.",
+      "output": "integer >= 0",
+      "missing_input_behavior": "FAIL_CLOSED",
+      "invalid_input_behavior": "FAIL_CLOSED",
+      "aggregation": "count declarations, not literal occurrences"
+    },
+    "ARBITRARY_STYLE_DRIFT": {
+      "semantic_definition": "Count of non-token CSS declarations containing a raw color or dimensional/time literal that is not represented by a token variable.",
+      "exact_inputs": ["design-tokens", "candidate project CSS excluding tokens.css"],
+      "deterministic_computation": "Parse CSS declarations and count each declaration matching the frozen raw-style literal expression when it has no token variable.",
+      "output": "integer >= 0",
+      "missing_input_behavior": "FAIL_CLOSED",
+      "invalid_input_behavior": "FAIL_CLOSED",
+      "aggregation": "count declarations"
+    },
+    "STATE_COVERAGE": {
+      "semantic_definition": "Fraction of required state identifiers represented in candidate source text.",
+      "exact_inputs": ["requirements.required_states", "state-contract.states", "candidate project source files"],
+      "deterministic_computation": "Count required state identifiers with a word-boundary occurrence in source files and divide by required-state count.",
+      "output": "number in [0,1]",
+      "missing_input_behavior": "FAIL_CLOSED",
+      "invalid_input_behavior": "FAIL_CLOSED",
+      "aggregation": "present required states / total required states"
+    },
+    "ASSET_PROVENANCE": {
+      "semantic_definition": "Every approved asset exists with the frozen digest and every approved asset is referenced by its exact frozen path.",
+      "exact_inputs": ["asset-manifest.approved_assets", "candidate asset files", "candidate source asset references"],
+      "deterministic_computation": "Compare candidate file digests with frozen approved digests and compare normalized source references with approved paths.",
+      "output": "boolean",
+      "missing_input_behavior": "FAIL_CLOSED",
+      "invalid_input_behavior": "FAIL_CLOSED",
+      "aggregation": "all approved assets must pass"
+    },
+    "ASSET_SUBSTITUTION": {
+      "semantic_definition": "An asset reference is external or not in the approved manifest, or an approved asset digest differs.",
+      "exact_inputs": ["asset-manifest", "candidate asset files", "candidate source asset references"],
+      "deterministic_computation": "Return true when any normalized referenced asset is not approved or any approved asset content digest differs.",
+      "output": "boolean",
+      "missing_input_behavior": "FAIL_CLOSED",
+      "invalid_input_behavior": "FAIL_CLOSED",
+      "aggregation": "any substitution makes the metric true"
+    },
+    "RESPONSIVE_CONTAINMENT": {
+      "semantic_definition": "Candidate CSS represents the frozen tablet and desktop breakpoints and includes the three frozen containment declarations.",
+      "exact_inputs": ["design-tokens.responsive_breakpoints", "candidate CSS"],
+      "deterministic_computation": "Require media queries containing the frozen tablet and desktop values plus overflow-x auto/hidden, min-width 0, and max-width 100% declarations.",
+      "output": "boolean",
+      "missing_input_behavior": "FAIL_CLOSED",
+      "invalid_input_behavior": "FAIL_CLOSED",
+      "aggregation": "all breakpoint and containment predicates must pass"
+    },
+    "ACCESSIBILITY_INVARIANTS": {
+      "semantic_definition": "All thirteen frozen accessibility invariants have deterministic source evidence.",
+      "exact_inputs": ["accessibility-contract.invariants", "candidate source and CSS files"],
+      "deterministic_computation": "Apply the frozen regular-expression evidence predicate for each invariant; true only when all invariant predicates pass.",
+      "output": "boolean",
+      "missing_input_behavior": "FAIL_CLOSED",
+      "invalid_input_behavior": "FAIL_CLOSED",
+      "aggregation": "all invariants must pass"
+    },
+    "UNRESOLVED_MAPPINGS": {
+      "semantic_definition": "Count frozen unresolved-mapping markers in candidate source files.",
+      "exact_inputs": ["candidate project source files"],
+      "deterministic_computation": "Count case-insensitive occurrences of UNRESOLVED_MAPPING, TODO_MAPPING, MAPPING_REQUIRED, or UNKNOWN_MAPPING.",
+      "output": "integer >= 0",
+      "missing_input_behavior": "FAIL_CLOSED",
+      "invalid_input_behavior": "FAIL_CLOSED",
+      "aggregation": "sum marker occurrences"
+    },
+    "REVISION_MISMATCH": {
+      "semantic_definition": "A frozen fixture contract or dependency manifest differs from the canonical fixture.",
+      "exact_inputs": ["all CONTRACT_FILES", "canonical fixture root", "candidate fixture root"],
+      "deterministic_computation": "Compare normalized SHA-256 digests for every frozen contract file.",
+      "output": "boolean",
+      "missing_input_behavior": "FAIL_CLOSED",
+      "invalid_input_behavior": "FAIL_CLOSED",
+      "aggregation": "any digest difference makes the metric true"
+    },
+    "VISUAL_BASELINE_REPLACEMENT": {
+      "semantic_definition": "The approved visual/reference identity is replaced or an approved asset is substituted.",
+      "exact_inputs": ["fixture-manifest.reference_identity", "asset-manifest", "candidate fixture manifest", "candidate source", "ASSET_SUBSTITUTION"],
+      "deterministic_computation": "Return true for asset substitution, a frozen baseline replacement marker, or a reference-identity mismatch.",
+      "output": "boolean",
+      "missing_input_behavior": "FAIL_CLOSED",
+      "invalid_input_behavior": "FAIL_CLOSED",
+      "aggregation": "any replacement predicate makes the metric true"
+    },
+    "DETERMINISTIC_ACCEPTANCE": {
+      "semantic_definition": "The independently produced validator record proves every required deterministic fixture and candidate gate passed with zero calls, zero network access, and zero external mutation.",
+      "exact_inputs": ["independent validator result", "canonical fixture digests", "frozen validator digest", "candidate tree digest", "frozen evaluator identity"],
+      "deterministic_computation": "Validate the validator-result schema, compare all frozen identity and candidate digests, require PASS for every check, and require all four zero-side-effect counters.",
+      "output": "boolean",
+      "missing_input_behavior": "FAIL_CLOSED",
+      "invalid_input_behavior": "FAIL_CLOSED",
+      "aggregation": "all validator checks and identity predicates must pass"
+    }
+  }
+}

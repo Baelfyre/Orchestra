@@ -1,0 +1,65 @@
+{
+  "schema_version": "orchestra.adaptive-research-provenance.v1",
+  "reviewed_on": "2026-08-17",
+  "classification": "REFERENCE_ONLY_RESEARCH_FOR_A0_A1_BOUNDARIES",
+  "runtime_authority": false,
+  "runtime_dependency": false,
+  "source_copied_or_vendored": false,
+  "upstream_source_adapted": false,
+  "sources": [
+    {
+      "id": "sakana-fugu",
+      "type": "UPSTREAM_REPOSITORY",
+      "url": "https://github.com/SakanaAI/fugu",
+      "reviewed_revision": "ca7f1884b400e39018c6884d40b45c66cd78413e",
+      "revision_status": "PINNED_COMMIT",
+      "license_spdx": "NOASSERTION",
+      "license_status": "UPSTREAM_LICENSE_NOT_ASSERTED_BY_GITHUB_METADATA"
+    },
+    {
+      "id": "fugu-technical-report",
+      "type": "RESEARCH_REPORT",
+      "url": "https://arxiv.org/abs/2606.21228",
+      "version": "v2",
+      "revision_date": "2026-06-23",
+      "license_spdx": "CC-BY-4.0"
+    },
+    {
+      "id": "trinity",
+      "type": "RESEARCH_PAPER",
+      "url": "https://arxiv.org/abs/2512.04695",
+      "version": "v3",
+      "revision_date": "2026-04-27",
+      "license_spdx": "CC-BY-4.0"
+    },
+    {
+      "id": "conductor-paper",
+      "type": "RESEARCH_PAPER",
+      "url": "https://arxiv.org/abs/2512.04388",
+      "version": "v5",
+      "revision_date": "2026-05-06",
+      "license_spdx": "CC-BY-4.0"
+    }
+  ],
+  "patterns_reviewed": [
+    "performance_based_worker_selection",
+    "bounded_task_decomposition",
+    "coordination_topology",
+    "selective_context_access",
+    "bounded_recursive_or_test_time_compute",
+    "offline_policy_evaluation_and_promotion"
+  ],
+  "a1_adopted_patterns": [
+    "machine_local_state_separate_from_repository_policy",
+    "evidence_based_observation_foundation",
+    "strict_deterministic_governance_ceiling"
+  ],
+  "deferred_patterns": [
+    "worker_selection",
+    "coordination_topology_learning",
+    "selective_specialist_context",
+    "recursive_compute",
+    "offline_learned_policy_promotion"
+  ],
+  "notes": "This dedicated A0 provenance record pins the adaptive-orchestration research set. The v1.6 third-party summary predates A0 and must not be read as a newer adaptive implementation authority."
+}

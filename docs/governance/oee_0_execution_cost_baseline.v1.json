@@ -1,0 +1,36 @@
+{
+  "schema_version": "orchestra.execution-efficiency-baseline.v1",
+  "record_id": "oee0-uief5-usage-exhaustion-20260905",
+  "source_case": "UIEF5_20260905_USAGE_EXHAUSTION",
+  "source_evidence": {
+    "padayon_checkpoint_pr": 378,
+    "orchestra_candidate_pr": 791,
+    "checkpoint_is_canonical": false,
+    "candidate_is_canonical": false
+  },
+  "observed": {
+    "canonical_phase_at_start": "UIEF-4",
+    "canonical_phase_at_end": "UIEF-4",
+    "canonical_phase_advance": 0,
+    "phase_outcome": "BLOCKED_PRE_IMPLEMENTATION_REVIEW",
+    "host_usage_window_exhausted": true,
+    "host_reported_usage_units": null,
+    "unique_specialist_roles_observed": [
+      "clockwork",
+      "overseer",
+      "cloak",
+      "arbiter"
+    ],
+    "specialist_invocation_count_exact": null,
+    "specialist_retry_count_exact": null,
+    "repository_wide_search_count_exact": null,
+    "ci_watch_observed": true,
+    "first_decisive_blocker_owner": "cloak",
+    "first_decisive_blocker": "UIEF5_UPSTREAM_RESPONSIVE_CONTRADICTION"
+  },
+  "measurement_policy": {
+    "unknown_is_not_zero": true,
+    "do_not_invent_host_usage_units": true,
+    "replay_target": "SAME_OR_SAFER_DISPOSITION_WITH_MATERIALLY_LESS_REDUNDANT_EXECUTION_ACTIVITY"
+  }
+}

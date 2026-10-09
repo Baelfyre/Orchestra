@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/uix-proof-result.schema.json",
+  "title": "Orchestra UIX-9A Proof Result",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "role", "entry_baseline", "status", "dry_run", "observation_refs", "metrics_covered", "claim_boundary", "authority"],
+  "properties": {
+    "$schema": {"type": "string"},
+    "schema_version": {"const": "orchestra.uix-proof-result.v1"},
+    "role": {"const": "UIX_9A_CONTROLLED_PROOF_RESULT"},
+    "entry_baseline": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "status": {"const": "UIX_9_PROOF_PREPARED_WAITING_LIVE_CALL_AUTHORIZATION"},
+    "dry_run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fixtures_validated", "positive_validator_case", "negative_validator_case", "baseline_governed_requirements_same", "arms_differ_only_by_uixtreatment", "live_model_calls", "provider_calls", "external_repo_mutations", "model_self_ratings", "subjective_visual_scores", "endpoint_changes", "write_isolated"],
+      "properties": {
+        "fixtures_validated": {"const": true},
+        "positive_validator_case": {"const": true},
+        "negative_validator_case": {"const": true},
+        "baseline_governed_requirements_same": {"const": true},
+        "arms_differ_only_by_uixtreatment": {"const": true},
+        "live_model_calls": {"const": 0},
+        "provider_calls": {"const": 0},
+        "external_repo_mutations": {"const": 0},
+        "model_self_ratings": {"const": 0},
+        "subjective_visual_scores": {"const": 0},
+        "endpoint_changes": {"const": 0},
+        "write_isolated": {"const": true}
+      }
+    },
+    "observation_refs": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "metrics_covered": {
+      "type": "array",
+      "minItems": 13,
+      "maxItems": 13,
+      "prefixItems": [
+        {"const": "COMPONENT_REUSE"},
+        {"const": "DUPLICATE_COMPONENT_COUNT"},
+        {"const": "TOKEN_VIOLATIONS"},
+        {"const": "ARBITRARY_STYLE_DRIFT"},
+        {"const": "STATE_COVERAGE"},
+        {"const": "ASSET_PROVENANCE"},
+        {"const": "ASSET_SUBSTITUTION"},
+        {"const": "RESPONSIVE_CONTAINMENT"},
+        {"const": "ACCESSIBILITY_INVARIANTS"},
+        {"const": "UNRESOLVED_MAPPINGS"},
+        {"const": "REVISION_MISMATCH"},
+        {"const": "VISUAL_BASELINE_REPLACEMENT"},
+        {"const": "DETERMINISTIC_ACCEPTANCE"}
+      ],
+      "items": false
+    },
+    "claim_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["behavior_improvement_claimed", "benefit_established", "live_call_authorization_required", "allowed_terminal", "rationale"],
+      "properties": {
+        "behavior_improvement_claimed": {"const": false},
+        "benefit_established": {"const": false},
+        "live_call_authorization_required": {"const": true},
+        "allowed_terminal": {"const": "UIX_9_PROOF_PREPARED_WAITING_LIVE_CALL_AUTHORIZATION"},
+        "rationale": {"type": "string", "minLength": 1}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["live_model_calls_authorized", "provider_calls_authorized", "external_repo_mutation_authorized", "release_authorized", "deployment_authorized", "policy_activation_authorized", "destructive_action_authorized"],
+      "properties": {
+        "live_model_calls_authorized": {"const": false},
+        "provider_calls_authorized": {"const": false},
+        "external_repo_mutation_authorized": {"const": false},
+        "release_authorized": {"const": false},
+        "deployment_authorized": {"const": false},
+        "policy_activation_authorized": {"const": false},
+        "destructive_action_authorized": {"const": false}
+      }
+    }
+  }
+}

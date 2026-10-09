@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/uix9b-live-calibration-manifest.v2.schema.json",
+  "title": "Orchestra UIX-9B V2 Calibration Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "role", "evaluator_version", "evaluator_digest", "historical_evidence_used", "cases"],
+  "properties": {
+    "$schema": {"const": "../../../machine/schemas/uix9b-live-calibration-manifest.v2.schema.json"},
+    "schema_version": {"const": "uix9b.live-calibration-manifest.v2"},
+    "role": {"const": "UIX_9B_FROZEN_CALIBRATION_MANIFEST"},
+    "evaluator_version": {"const": "uix9b-live-metric-evaluator-v2.0.0"},
+    "evaluator_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "historical_evidence_used": {"const": false},
+    "cases": {"type": "array", "minItems": 5, "maxItems": 5, "items": {"$ref": "#/$defs/case"}}
+  },
+  "$defs": {"case": {"type": "object", "additionalProperties": false, "required": ["case_id", "candidate_path", "validator_result_path", "calibration_fixture_digest", "expected_result_path", "expected_result_digest"], "properties": {"case_id": {"enum": ["EXPECTED_POSITIVE", "EXPECTED_NEGATIVE", "BOUNDARY_STRUCTURAL_LITERAL", "MALFORMED_CANDIDATE", "MISSING_REQUIRED_ARTIFACT"]}, "candidate_path": {"type": "string", "minLength": 1}, "validator_result_path": {"type": ["string", "null"]}, "calibration_fixture_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "expected_result_path": {"type": "string", "minLength": 1}, "expected_result_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}}}
+}

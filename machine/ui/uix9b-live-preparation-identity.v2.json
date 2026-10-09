@@ -1,0 +1,28 @@
+{
+  "$schema": "../../../machine/schemas/uix9b-live-preparation-identity.v2.schema.json",
+  "schema_version": "uix9b.live-preparation-identity.v2",
+  "role": "UIX_9B_V2_CANONICAL_PREPARATION_IDENTITY",
+  "frozen_experiment_base_sha": "bf6f14316fa8814eeac91440c4a7d70be0d04b9e",
+  "reviewed_canonical_sha": "7e08a1d4aa09cbdf7632f5a86461fb3cd3e50fe9",
+  "required_paths": [
+    "docs/project/UIX_9B_LIVE_PROOF_EXECUTION_PROTOCOL_V2.md",
+    "machine/schemas/uix9b-live-calibration-manifest.v2.schema.json",
+    "machine/schemas/uix9b-live-metric-result.v2.schema.json",
+    "machine/schemas/uix9b-live-proof-observation.v2.schema.json",
+    "machine/schemas/uix9b-live-proof-plan.v2.schema.json",
+    "machine/schemas/uix9b-live-proof-result.v2.schema.json",
+    "machine/schemas/uix9b-live-proof-v2-identity.schema.json",
+    "machine/schemas/uix9b-validator-result.v2.schema.json",
+    "machine/ui/uix9-live-guidance-manifest.v1.json",
+    "machine/ui/uix9b-live-calibration-manifest.v2.json",
+    "machine/ui/uix9b-live-metric-evaluator.v2.json",
+    "machine/ui/uix9b-live-proof-plan.v2.json",
+    "machine/ui/uix9b-live-proof-v2-identity.json",
+    "scripts/uix9_live_metric_evaluator_v2.py",
+    "scripts/uix9_live_proof_runner.py",
+    "scripts/uix9b_live_proof_adjudicator_v2.py",
+    "scripts/uix9b_live_proof_runner_v2.py",
+    "tests/fixtures/ui/uix9-live-project/fixture-manifest.json",
+    "tests/fixtures/ui/uix9-live-project/task.md"
+  ]
+}

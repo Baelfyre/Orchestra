@@ -1,0 +1,152 @@
+{
+  "schema_version": "orchestra.adaptive-selection-contract.v1",
+  "phase": "A4_BOUNDED_SPECIALIST_STRATEGY_MODEL_WORKER_SELECTION",
+  "status": "CONTRACT_FREEZE_SHADOW_RANKING_ONLY",
+  "dependency": {
+    "canonical_entry_head": "a520beabe6761161baf3179c1f6de5f055adbfc2",
+    "canonical_entry_tree": "b81703473e2350c9c41fecd7b459de6097d24fee",
+    "canonical_a3_contract": "machine/adaptive/a3-shadow-learning-contract.v1.json",
+    "canonical_a3_runtime_surface": "orchestra_runtime/adaptive/shadow.py",
+    "issue": 340
+  },
+  "authority": {
+    "mode": "SHADOW_RANKING_CONTRACT_ONLY",
+    "runtime_execution_control": false,
+    "routing_authority_change": false,
+    "specialist_ownership_change": false,
+    "authority_change": false,
+    "capability_change": false,
+    "governance_change": false,
+    "lifecycle_authority_change": false,
+    "mandatory_gate_change": false,
+    "provider_eligibility_expansion": false,
+    "provider_integration": "NONE",
+    "training": "NONE",
+    "recursive_or_test_time_compute": "NONE",
+    "a5_or_later_behavior": "PROHIBITED"
+  },
+  "record_types": {
+    "eligibility_envelope": "machine/schemas/adaptive-selection-eligibility-envelope.schema.json",
+    "evidence_packet": "machine/schemas/adaptive-selection-evidence.schema.json",
+    "shadow_decision": "machine/schemas/adaptive-selection-decision.schema.json"
+  },
+  "selection_types": {
+    "SPECIALIST_STRATEGY": {
+      "adaptive_shadow_ranking": "ALLOWED_WHEN_ELIGIBILITY_AND_EVIDENCE_VALIDATE",
+      "current_a3_direct_tendency_support": true
+    },
+    "MODEL": {
+      "adaptive_shadow_ranking": "CONTRACT_DEFINED_BUT_REQUIRES_DIRECT_GOVERNED_MODEL_EVIDENCE",
+      "current_a3_direct_tendency_support": false,
+      "default_without_qualified_evidence": "DETERMINISTIC_FALLBACK"
+    },
+    "WORKER": {
+      "adaptive_shadow_ranking": "CONTRACT_DEFINED_BUT_REQUIRES_DIRECT_GOVERNED_WORKER_EVIDENCE",
+      "current_a3_direct_tendency_support": false,
+      "default_without_qualified_evidence": "DETERMINISTIC_FALLBACK"
+    }
+  },
+  "eligibility_policy": {
+    "candidate_source": "EXISTING_DETERMINISTIC_ORCHESTRA",
+    "filters_must_run_before_adaptive_ranking": [
+      "registered_specialist_and_required_ownership",
+      "trusted_route_binding",
+      "authority",
+      "runtime_capability",
+      "governance",
+      "provider_privacy_restrictions",
+      "lifecycle_state",
+      "deterministic_resource_ceilings"
+    ],
+    "adaptive_layer_may_add_candidate": false,
+    "adaptive_layer_may_restore_filtered_candidate": false,
+    "adaptive_layer_may_change_candidate_capabilities": false,
+    "eligible_set_is_immutable_for_one_selection_decision": true,
+    "empty_eligible_set_disposition": "NO_ELIGIBLE_CANDIDATES_FAIL_CLOSED",
+    "explicit_current_user_constraint_may_narrow_eligible_set": true,
+    "explicit_current_user_constraint_may_expand_eligible_set": false
+  },
+  "evidence_policy": {
+    "allowed_source_kinds": [
+      "A3_SHADOW_CANDIDATE",
+      "A3_SHADOW_COMPARISON",
+      "GOVERNED_SELECTION_OUTCOME",
+      "VALIDATION_EVIDENCE",
+      "REMEDIATION_EVIDENCE",
+      "TRUSTWORTHY_MEASURED_TELEMETRY"
+    ],
+    "raw_conversation_authority": false,
+    "generic_phase_success_proves_option_success": false,
+    "unknown_or_unavailable_measurements_are_inferred": false,
+    "latency_cost_or_token_metrics_require_trustworthy_measurement": true,
+    "evidence_must_bind_exact_selection_type_and_option": true,
+    "cross_user_project_specialist_scope_leakage": "PROHIBITED",
+    "minimum_distinct_support_for_adaptive_preference": 2,
+    "duplicate_source_digest_counts_once": true,
+    "a3_candidate_type_support": {
+      "SPECIALIST_STRATEGY_TENDENCY": [
+        "SPECIALIST_STRATEGY"
+      ],
+      "USER_PREFERENCE_TENDENCY": [],
+      "WORKFLOW_TENDENCY": []
+    },
+    "model_worker_rule": "A3_DOES_NOT_CURRENTLY_SUPPLY_DIRECT_MODEL_OR_WORKER_TENDENCY_EVIDENCE"
+  },
+  "precedence_policy": [
+    "DETERMINISTIC_GOVERNANCE_AUTHORITY_CAPABILITY_PRIVACY_AND_OWNERSHIP_CEILINGS",
+    "EXPLICIT_CURRENT_USER_CONSTRAINT",
+    "EXPLICIT_SCOPED_USER_PREFERENCE",
+    "QUALIFIED_ADAPTIVE_EVIDENCE",
+    "DETERMINISTIC_DEFAULT_ORDER"
+  ],
+  "ranking_policy": {
+    "shadow_only": true,
+    "selection_effective": false,
+    "named_versioned_scorer_required": true,
+    "same_inputs_produce_same_order": true,
+    "stable_tie_break_required": true,
+    "scorer_may_consume_only_validated_evidence_packet": true,
+    "score_is_authority": false,
+    "score_may_create_eligibility": false,
+    "score_may_override_explicit_current_constraint": false,
+    "insufficient_evidence_disposition": "DETERMINISTIC_FALLBACK",
+    "adaptive_unavailable_disposition": "DETERMINISTIC_FALLBACK",
+    "current_execution_choice_source": "EXISTING_DETERMINISTIC_ORCHESTRA"
+  },
+  "decision_policy": {
+    "record_immutable_eligibility_digest": true,
+    "record_evidence_digest": true,
+    "record_ranked_candidate_ids": true,
+    "record_actual_deterministic_choice": true,
+    "record_shadow_recommendation": true,
+    "execution_controlled_by": "DETERMINISTIC_ORCHESTRA",
+    "shadow_recommendation_influences_execution": false,
+    "automatic_promotion": false,
+    "successful_execution_rewrites_active_policy": false
+  },
+  "required_adversarial_validation_for_a4_implementation": [
+    "adaptive_ranker_cannot_add_ineligible_candidate",
+    "adaptive_ranker_cannot_restore_provider_or_privacy_filtered_candidate",
+    "adaptive_ranker_cannot_expand_authority_or_capability",
+    "adaptive_ranker_cannot_change_required_specialist_ownership",
+    "explicit_current_user_constraint_dominates_adaptive_score",
+    "cross_scope_evidence_fails_closed",
+    "duplicate_evidence_does_not_inflate_support",
+    "generic_phase_success_does_not_become_strategy_model_or_worker_success",
+    "unmeasured_latency_cost_or_tokens_are_not_invented",
+    "model_or_worker_without_direct_qualified_evidence_falls_back_deterministically",
+    "shadow_recommendation_never_changes_execution",
+    "malformed_or_stale_eligibility_or_evidence_fails_closed",
+    "no_a5_a6_a7_a8_behavior_is_introduced"
+  ],
+  "future_boundary": {
+    "a4_0_contract_freeze": "AUTHORIZED_CURRENT_UNIT",
+    "a4_shadow_ranker_implementation": "NOT_IMPLEMENTED_BY_A4_0",
+    "a4_execution_effective_promotion": "REQUIRES_SEPARATE_EXPLICIT_PROMOTION_DECISION",
+    "a5_tuner_topology_learning": "NOT_AUTHORIZED",
+    "a6_adaptive_context_routing": "NOT_AUTHORIZED",
+    "a7_route_ranking_policy_promotion": "NOT_AUTHORIZED",
+    "a8_recursive_test_time_compute": "NOT_AUTHORIZED"
+  },
+  "human_documentation": "docs/architecture/ADAPTIVE_SELECTION_A4.md"
+}

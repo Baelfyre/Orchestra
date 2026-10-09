@@ -1,0 +1,160 @@
+name: Governance Check
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      approved_base_sha:
+        description: Explicit approved evidence baseline commit SHA
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  actions: read
+  checks: read
+  pull-requests: read
+  artifact-metadata: write
+
+env:
+  ORCHESTRA_APPROVED_BASE_SHA: ${{ github.event_name == 'workflow_dispatch' && inputs.approved_base_sha || '' }}
+
+jobs:
+  governance-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Show Python version
+        run: python --version
+
+      - name: Create Artifacts Directory
+        run: mkdir -p artifacts
+
+      - name: Resolve promotion assurance mode
+        id: promotion
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: >-
+          python scripts/validate_governance_promotion_attestation.py
+          --evidence-output artifacts/promotion-attestation.json
+
+      - name: Test Documentation Contracts
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
+        run: |
+          python tests/behavior/test_readme_impact.py
+          python tests/behavior/test_readme_machine_index.py
+
+      - name: Test AQ8 Assurance Scope Policy
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
+        run: python tests/behavior/test_protected_aq8_assurance_scope_policy.py
+
+      - name: Enforce Documentation Impact Gate
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
+        run: |
+          set +e
+          python scripts/check_readme_impact.py > artifacts/readme_impact_report.txt
+          status=$?
+          set -e
+
+          cat artifacts/readme_impact_report.txt
+          exit $status
+
+      - name: Run Router Benchmark Validation
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
+        run: |
+          python scripts/router_benchmark_runner.py > artifacts/router_benchmark_report.txt
+          cat artifacts/router_benchmark_report.txt
+
+      - name: Run Negative Router Benchmark Validation
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
+        run: |
+          python tests/behavior/test_router_benchmark_fixture_validation.py > artifacts/router_benchmark_negative_fixture_report.txt
+          cat artifacts/router_benchmark_negative_fixture_report.txt
+
+      - name: Measure Prompt Load
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
+        run: |
+          python scripts/measure_prompt_load.py > artifacts/prompt_load_metrics.txt
+          cat artifacts/prompt_load_metrics.txt
+
+      - name: Check Prompt Load Thresholds
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
+        run: |
+          python scripts/check_prompt_load_thresholds.py > artifacts/prompt_load_threshold_report.txt
+          cat artifacts/prompt_load_threshold_report.txt
+
+      - name: Run Project Context Validation
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
+        run: |
+          python scripts/validate_project_context.py > artifacts/project_context_report.txt
+          cat artifacts/project_context_report.txt
+
+      - name: Validate Runtime Architecture Boundaries
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
+        run: python scripts/validation/validate_architecture_boundaries.py
+
+      - name: Run Stage 1 Strict Governance Check
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
+        run: |
+          set +e
+          python scripts/governance_check.py --strict > artifacts/governance_report.txt
+          status=$?
+          set -e
+
+          cat artifacts/governance_report.txt
+          exit $status
+
+      - name: Run Phase 2 Dagger Guardrail Simulation Test
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
+        run: |
+          python scripts/test_dagger_guardrail.py > artifacts/dagger_guardrail_report.txt
+          cat artifacts/dagger_guardrail_report.txt
+
+      - name: Run Governance Behavior Tests
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
+        run: |
+          python tests/behavior/evaluate_governance.py > artifacts/evaluate_governance_report.txt
+          cat artifacts/evaluate_governance_report.txt
+
+      - name: Run General Behavior Tests
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
+        run: |
+          python tests/behavior/run_tests.py > artifacts/run_tests_report.txt
+          cat artifacts/run_tests_report.txt
+
+      - name: Validate plugin.json Syntax
+        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
+        run: python -m json.tool plugin.json > /dev/null
+
+      - name: Confirm tree-attested governance assurance
+        if: steps.promotion.outputs.mode == 'TREE_ATTESTED'
+        run: echo "GOVERNANCE_REUSED_QUALIFIED_TREE_ASSURANCE=PASS"
+
+      - name: Generate CI Summary
+        if: always()
+        run: |
+          echo "# Governance Validation Report" >> $GITHUB_STEP_SUMMARY
+          echo "## Promotion assurance mode: ${{ steps.promotion.outputs.mode }}" >> $GITHUB_STEP_SUMMARY
+          echo "Repository governance validation completed. Tree-attested promotion is evidence-only and never bypasses required status contexts." >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Governance Artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: governance-validation-report
+          path: artifacts/
+          retention-days: 14

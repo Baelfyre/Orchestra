@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/communication-measurement.schema.json",
+  "title": "Orchestra Communication Measurement",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "scenario_id",
+    "mode",
+    "implementation_revision",
+    "progress_messages",
+    "model_progress_calls",
+    "user_visible_bytes",
+    "context_bytes_admitted",
+    "tool_result_bytes_admitted",
+    "repeated_reads",
+    "task_outcome",
+    "validation_digest",
+    "governance_digest",
+    "token_source",
+    "token_counter_id",
+    "input_tokens",
+    "output_tokens",
+    "elapsed_communication_ms"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.communication-measurement.v1"},
+    "scenario_id": {"type": "string", "minLength": 1},
+    "mode": {"enum": ["NORMAL", "MURMURS"]},
+    "implementation_revision": {"type": "string", "minLength": 1},
+    "progress_messages": {"type": "integer", "minimum": 0},
+    "model_progress_calls": {"type": "integer", "minimum": 0},
+    "user_visible_bytes": {"type": "integer", "minimum": 0},
+    "context_bytes_admitted": {"type": "integer", "minimum": 0},
+    "tool_result_bytes_admitted": {"type": "integer", "minimum": 0},
+    "repeated_reads": {"type": "integer", "minimum": 0},
+    "task_outcome": {"type": "string", "minLength": 1},
+    "validation_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "governance_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "token_source": {"enum": ["HOST_REPORTED", "UNAVAILABLE"]},
+    "token_counter_id": {"type": ["string", "null"]},
+    "input_tokens": {"type": ["integer", "null"], "minimum": 0},
+    "output_tokens": {"type": ["integer", "null"], "minimum": 0},
+    "elapsed_communication_ms": {"type": ["integer", "null"], "minimum": 0}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"token_source": {"const": "HOST_REPORTED"}}},
+      "then": {
+        "properties": {
+          "token_counter_id": {"type": "string", "minLength": 1},
+          "input_tokens": {"type": "integer", "minimum": 0},
+          "output_tokens": {"type": "integer", "minimum": 0}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"token_source": {"const": "UNAVAILABLE"}}},
+      "then": {
+        "properties": {
+          "token_counter_id": {"const": null},
+          "input_tokens": {"const": null},
+          "output_tokens": {"const": null}
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Lifecycle-Gated Agent Completion",
+  "description": "Examines tool results for explicit successful lifecycle signals and permits final output only after scan completion, child completion, or an interactive waiting transition.",
+  "source_file": "strix/agents/factory.py",
+  "line_range": "271-321",
+  "classification": "REFERENCE_ONLY",
+  "assigned_specialist": "clockwork",
+  "license_implications": "The source is Apache-2.0 licensed. Use as behavioral reference for an independently implemented Orchestra-native lifecycle state machine, subject to normal Governor review if source expression is reused."
+}

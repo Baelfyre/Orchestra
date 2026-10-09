@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "orchestra.cloak-ui-pattern-intelligence-cuir4.v1.schema.json",
+  "title": "Cloak CUIR-4 Pattern Intelligence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "phase",
+    "status",
+    "authority_class",
+    "canonical_cuir3_input",
+    "retrieval_policy",
+    "problem_classes",
+    "fallback",
+    "handoff",
+    "protected_boundaries"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "orchestra.cloak-ui-pattern-intelligence-cuir4.v1"
+    },
+    "phase": {
+      "const": "CUIR-4"
+    },
+    "status": {
+      "type": "string"
+    },
+    "authority_class": {
+      "const": "CLOAK_ADVISORY_PATTERN_RETRIEVAL_ONLY"
+    },
+    "canonical_cuir3_input": {
+      "type": "object"
+    },
+    "retrieval_policy": {
+      "type": "object"
+    },
+    "problem_classes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "problem_class",
+          "trigger_terms",
+          "categories"
+        ],
+        "properties": {
+          "problem_class": {
+            "type": "string",
+            "minLength": 1
+          },
+          "trigger_terms": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "categories": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "fallback": {
+      "type": "object"
+    },
+    "handoff": {
+      "type": "object"
+    },
+    "protected_boundaries": {
+      "type": "object"
+    }
+  }
+}

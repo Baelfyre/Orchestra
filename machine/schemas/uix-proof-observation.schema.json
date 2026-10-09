@@ -1,0 +1,123 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/uix-proof-observation.schema.json",
+  "title": "Orchestra UIX-9A Proof Observation Bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "fixture_id", "fixture_kind", "task_id", "requirements_digest", "project_fixture_digest", "frozen_endpoint_revision", "arms_differ_only_by_uixtreatment", "observations", "external_side_effects"],
+  "properties": {
+    "$schema": {"type": "string"},
+    "schema_version": {"const": "orchestra.uix-proof-observation.v1"},
+    "fixture_id": {"type": "string", "minLength": 1},
+    "fixture_kind": {"enum": ["POSITIVE_VALIDATOR", "NEGATIVE_VALIDATOR"]},
+    "task_id": {"const": "uix9-frozen-ui-requirements"},
+    "requirements_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "project_fixture_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "frozen_endpoint_revision": {"const": "uix9-zero-call-v1"},
+    "arms_differ_only_by_uixtreatment": {"const": true},
+    "observations": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        {
+          "$ref": "#/$defs/observation",
+          "properties": {
+            "arm_id": {"const": "BASELINE_NO_ORCHESTRA_UIX_GUIDANCE"},
+            "guidance_treatment": {"const": "NO_ORCHESTRA_UIX_GUIDANCE"}
+          }
+        },
+        {
+          "$ref": "#/$defs/observation",
+          "properties": {
+            "arm_id": {"const": "GOVERNED_CANONICAL_UIX_1_8_GUIDANCE"},
+            "guidance_treatment": {"const": "CANONICAL_UIX_1_8_GUIDANCE"}
+          }
+        }
+      ],
+      "items": false
+    },
+    "external_side_effects": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["model_calls", "provider_calls", "external_repo_mutations", "model_self_ratings", "subjective_visual_scores", "endpoint_changes"],
+      "properties": {
+        "model_calls": {"const": 0},
+        "provider_calls": {"const": 0},
+        "external_repo_mutations": {"const": 0},
+        "model_self_ratings": {"const": 0},
+        "subjective_visual_scores": {"const": 0},
+        "endpoint_changes": {"const": 0}
+      }
+    }
+  },
+  "$defs": {
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observation_id", "arm_id", "guidance_treatment", "requirements_digest", "project_fixture_digest", "frozen_endpoint_revision", "metrics", "acceptance", "calls", "evidence"],
+      "properties": {
+        "observation_id": {"type": "string", "minLength": 1},
+        "arm_id": {"enum": ["BASELINE_NO_ORCHESTRA_UIX_GUIDANCE", "GOVERNED_CANONICAL_UIX_1_8_GUIDANCE"]},
+        "guidance_treatment": {"enum": ["NO_ORCHESTRA_UIX_GUIDANCE", "CANONICAL_UIX_1_8_GUIDANCE"]},
+        "requirements_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "project_fixture_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "frozen_endpoint_revision": {"const": "uix9-zero-call-v1"},
+        "metrics": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["component_reuse", "duplicate_component_count", "token_violations", "arbitrary_style_drift", "state_coverage", "asset_provenance", "asset_substitution", "responsive_containment", "accessibility_invariants", "unresolved_mappings", "revision_mismatch", "visual_baseline_replacement", "deterministic_acceptance"],
+          "properties": {
+            "component_reuse": {"type": "boolean"},
+            "duplicate_component_count": {"type": "integer", "minimum": 0},
+            "token_violations": {"type": "integer", "minimum": 0},
+            "arbitrary_style_drift": {"type": "integer", "minimum": 0},
+            "state_coverage": {"type": "number", "minimum": 0, "maximum": 1},
+            "asset_provenance": {"type": "boolean"},
+            "asset_substitution": {"type": "boolean"},
+            "responsive_containment": {"type": "boolean"},
+            "accessibility_invariants": {"type": "boolean"},
+            "unresolved_mappings": {"type": "integer", "minimum": 0},
+            "revision_mismatch": {"type": "boolean"},
+            "visual_baseline_replacement": {"type": "boolean"},
+            "deterministic_acceptance": {"type": "boolean"}
+          }
+        },
+        "acceptance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "failure_codes", "deterministic"],
+          "properties": {
+            "status": {"enum": ["PASS", "FAIL_CLOSED"]},
+            "failure_codes": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+            "deterministic": {"const": true}
+          }
+        },
+        "calls": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["model_calls", "provider_calls", "external_repo_mutations", "model_self_ratings", "subjective_visual_scores", "endpoint_changes"],
+          "properties": {
+            "model_calls": {"const": 0},
+            "provider_calls": {"const": 0},
+            "external_repo_mutations": {"const": 0},
+            "model_self_ratings": {"const": 0},
+            "subjective_visual_scores": {"const": 0},
+            "endpoint_changes": {"const": 0}
+          }
+        },
+        "evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["observed_from", "model_output_observed", "external_evidence_used", "human_rating_used"],
+          "properties": {
+            "observed_from": {"const": "REPOSITORY_FIXTURE"},
+            "model_output_observed": {"const": false},
+            "external_evidence_used": {"const": false},
+            "human_rating_used": {"const": false}
+          }
+        }
+      }
+    }
+  }
+}

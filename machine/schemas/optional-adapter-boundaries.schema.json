@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/optional-adapter-boundaries.schema.json",
+  "title": "Orchestra UIX-6 Optional Adapter Boundaries",
+  "description": "Closed capability audit and explicit no-adoption disposition for optional UI evidence adapters.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "role",
+    "entry_baseline",
+    "host_maturity",
+    "capabilities",
+    "audit",
+    "adapter_policy",
+    "terminal_disposition",
+    "authority"
+  ],
+  "properties": {
+    "$schema": {"const": "../schemas/optional-adapter-boundaries.schema.json"},
+    "schema_version": {"const": "orchestra.ui-optional-adapter-boundaries.v1"},
+    "role": {"const": "UIX_6_OPTIONAL_ADAPTER_BOUNDARIES"},
+    "entry_baseline": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "host_maturity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "supported_hosts", "scaffold_only_hosts"],
+      "properties": {
+        "source": {"const": "machine/hosts/update-contract.v1.json"},
+        "supported_hosts": {"const": ["codex", "antigravity"]},
+        "scaffold_only_hosts": {"const": ["claude-code", "cursor", "windsurf", "vscode", "jetbrains", "zed", "neovim"]}
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "prefixItems": [
+        {"allOf": [{"$ref": "#/$defs/capability"}, {"properties": {"id": {"const": "FIGMA_STRUCTURED_CONTEXT"}, "status": {"const": "UNAVAILABLE_OPTIONAL"}}}]},
+        {"allOf": [{"$ref": "#/$defs/capability"}, {"properties": {"id": {"const": "FIGMA_CODE_CONNECT_TEMPLATE_EVIDENCE"}, "status": {"const": "UNAVAILABLE_OPTIONAL"}}}]},
+        {"allOf": [{"$ref": "#/$defs/capability"}, {"properties": {"id": {"const": "STORYBOOK_COMPONENT_STATE_EVIDENCE"}, "status": {"const": "UNAVAILABLE_OPTIONAL"}}}]},
+        {"allOf": [{"$ref": "#/$defs/capability"}, {"properties": {"id": {"const": "PLAYWRIGHT_RENDERED_BROWSER_EVIDENCE"}, "status": {"const": "UNAVAILABLE_OPTIONAL"}}}]},
+        {"allOf": [{"$ref": "#/$defs/capability"}, {"properties": {"id": {"const": "AXE_ACCESSIBILITY_EVIDENCE"}, "status": {"const": "UNAVAILABLE_OPTIONAL"}}}]},
+        {"allOf": [{"$ref": "#/$defs/capability"}, {"properties": {"id": {"const": "PROJECT_NATIVE_DESIGN_TOKEN_EVIDENCE"}, "status": {"const": "AVAILABLE_CONTRACT_ONLY"}}}]}
+      ],
+      "items": false
+    },
+    "audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository_evidence_only",
+        "project_target",
+        "external_calls_performed",
+        "dependency_changes",
+        "installed_integration_refresh",
+        "figma_mutations"
+      ],
+      "properties": {
+        "repository_evidence_only": {"const": true},
+        "project_target": {"const": "ORCHESTRA_REPOSITORY_ONLY_NO_EXTERNAL_TARGET"},
+        "external_calls_performed": {"const": false},
+        "dependency_changes": {"const": false},
+        "installed_integration_refresh": {"const": false},
+        "figma_mutations": {"const": false}
+      }
+    },
+    "adapter_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "project_native_first",
+        "external_service_authority",
+        "dependency_adoption_authorized",
+        "installed_integration_refresh_authorized",
+        "homegrown_figma_client_allowed",
+        "missing_capability_behavior",
+        "runtime_integration"
+      ],
+      "properties": {
+        "project_native_first": {"const": true},
+        "external_service_authority": {"const": false},
+        "dependency_adoption_authorized": {"const": false},
+        "installed_integration_refresh_authorized": {"const": false},
+        "homegrown_figma_client_allowed": {"const": false},
+        "missing_capability_behavior": {"const": "EXPLICIT_EVIDENCE_LIMITATION"},
+        "runtime_integration": {"const": false}
+      }
+    },
+    "terminal_disposition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "reason", "new_dependencies", "new_runtime_adapters", "next_gate"],
+      "properties": {
+        "status": {"const": "NO_ADOPTION"},
+        "reason": {"type": "string", "minLength": 1},
+        "new_dependencies": {"const": []},
+        "new_runtime_adapters": {"const": []},
+        "next_gate": {"const": "SEPARATE_DEPENDENCY_AND_HOST_AUTHORIZATION"}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "adapter_contract_grants_authority",
+        "capability_detection_grants_authority",
+        "external_tool_grants_authority",
+        "dependency_adoption_authorized",
+        "installed_refresh_authorized",
+        "figma_mutation_authorized",
+        "release_authorized"
+      ],
+      "properties": {
+        "adapter_contract_grants_authority": {"const": false},
+        "capability_detection_grants_authority": {"const": false},
+        "external_tool_grants_authority": {"const": false},
+        "dependency_adoption_authorized": {"const": false},
+        "installed_refresh_authorized": {"const": false},
+        "figma_mutation_authorized": {"const": false},
+        "release_authorized": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "status", "evidence_refs", "reader_boundary", "authority_class", "adoption_disposition", "missing_capability_behavior"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "status": {"enum": ["AVAILABLE_CONTRACT_ONLY", "UNAVAILABLE_OPTIONAL"]},
+        "evidence_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "reader_boundary": {"enum": ["PROJECT_NATIVE_EVIDENCE_ONLY", "OPTIONAL_READ_ONLY_EXTERNAL_EVIDENCE"]},
+        "authority_class": {"const": "EVIDENCE_ONLY"},
+        "adoption_disposition": {"const": "NO_ADOPTION"},
+        "missing_capability_behavior": {"const": "EXPLICIT_EVIDENCE_LIMITATION"}
+      }
+    }
+  }
+}

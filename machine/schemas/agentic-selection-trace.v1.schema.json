@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/agentic-selection-trace.v1.schema.json",
+  "title": "Orchestra Agentic Selection Trace",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "trace_id",
+    "source",
+    "task_id",
+    "matched_signals",
+    "derivation_reasons",
+    "selected_specialists",
+    "selected_patterns",
+    "rejected_patterns",
+    "selection_reasons",
+    "human_gate_required",
+    "escalation_reasons",
+    "authority_rule"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "orchestra.agentic-selection-trace.v1"
+    },
+    "trace_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "source": {
+      "enum": [
+        "DERIVED_INTAKE",
+        "STRUCTURED_TASK_PROFILE"
+      ]
+    },
+    "task_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "matched_signals": {
+      "type": "array",
+      "maxItems": 128,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "value",
+          "signal",
+          "position"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "DOMAIN",
+              "OPERATION"
+            ]
+          },
+          "value": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          },
+          "signal": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 128
+          },
+          "position": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "derivation_reasons": {
+      "type": "array",
+      "maxItems": 128,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      }
+    },
+    "selected_specialists": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 14,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 128
+      }
+    },
+    "selected_patterns": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 5,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "ROUTING",
+          "PLANNING",
+          "TOOL_REACT",
+          "REFLECTION_CRITIC",
+          "MULTI_AGENT"
+        ]
+      }
+    },
+    "rejected_patterns": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      }
+    },
+    "selection_reasons": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      }
+    },
+    "human_gate_required": {
+      "type": "boolean"
+    },
+    "escalation_reasons": {
+      "type": "array",
+      "maxItems": 32,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      }
+    },
+    "authority_rule": {
+      "const": "WORKFLOW_TOPOLOGY_CHANGE != AUTHORITY_EXPANSION"
+    }
+  }
+}

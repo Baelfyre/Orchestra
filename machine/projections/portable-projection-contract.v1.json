@@ -1,0 +1,139 @@
+{
+  "$schema": "./machine/schemas/portable-projection-contract.v1.schema.json",
+  "schema_version": "orchestra.portable-projection-contract.v1",
+  "contract_id": "orchestra-uai-portable-projection",
+  "contract_revision": 1,
+  "contract_role": "canonical_uai_portable_projection_contract",
+  "authority": {
+    "canonical_source_remains_authoritative": true,
+    "generated_projection_is_derived_only": true,
+    "projection_grants_execution_authority": false,
+    "projection_grants_routing_authority": false,
+    "projection_grants_specialist_selection_authority": false,
+    "projection_grants_workflow_topology_authority": false,
+    "projection_grants_provider_selection_authority": false,
+    "projection_grants_governance_authority": false,
+    "installed_integration_refresh": false,
+    "automatic_provider_routing": false,
+    "automatic_provider_fallback": false,
+    "learned_routing_promotion": false
+  },
+  "required_invariants": [
+    "CONDUCTOR_IS_SOLE_INTERNAL_SPECIALIST_ROUTER",
+    "CLEAR_OWNERSHIP != CONDUCTOR_BYPASS",
+    "CLEAR_OWNERSHIP MAY_ENABLE DIRECT_SINGLE_SPECIALIST_FAST_ROUTE",
+    "FAST_ROUTE != ROUTER_BYPASS",
+    "HOST != PROVIDER",
+    "PROVIDER != SPECIALIST",
+    "HOST_CAPABILITY != EXECUTION_AUTHORITY",
+    "TRANSPORT != WORKFLOW",
+    "UAI_TRANSPORT_SELECTION != AWF_SPECIALIST_ROUTING",
+    "MODEL_SELECTION != GOVERNANCE"
+  ],
+  "canonical_sources": [
+    {
+      "source_id": "governance_policy",
+      "path": "machine/governance/policy.v1.json",
+      "source_role": "GOVERNANCE_POLICY"
+    },
+    {
+      "source_id": "specialist_registry",
+      "path": "machine/specialists/registry.v1.json",
+      "source_role": "SPECIALIST_IDENTITY_AND_OWNERSHIP"
+    },
+    {
+      "source_id": "routing_contract",
+      "path": "machine/routing/routes.v1.json",
+      "source_role": "CONDUCTOR_ROUTING"
+    },
+    {
+      "source_id": "host_capability_contract",
+      "path": "machine/hosts/capability-contract.v1.json",
+      "source_role": "HOST_CAPABILITY_EVIDENCE"
+    },
+    {
+      "source_id": "integration_strategy_policy",
+      "path": "machine/hosts/integration-strategy-policy.v1.json",
+      "source_role": "TRANSPORT_SELECTION_POLICY"
+    },
+    {
+      "source_id": "conductor_skill",
+      "path": "skills/conductor/SKILL.md",
+      "source_role": "CONDUCTOR_BEHAVIOR"
+    },
+    {
+      "source_id": "ponytail_skill",
+      "path": "skills/ponytail/SKILL.md",
+      "source_role": "IMPLEMENTATION_BEHAVIOR"
+    }
+  ],
+  "supported_projection_formats": ["MARKDOWN_TEMPLATE"],
+  "projections": [
+    {
+      "projection_id": "github-copilot-repository-instructions-template",
+      "host_id": "github-copilot",
+      "strategy_id": "REPOSITORY_INSTRUCTIONS",
+      "format": "MARKDOWN_TEMPLATE",
+      "output_path": "adapters/github-copilot/copilot-instructions.template.md",
+      "source_ids": [
+        "governance_policy",
+        "specialist_registry",
+        "routing_contract",
+        "host_capability_contract",
+        "integration_strategy_policy",
+        "conductor_skill",
+        "ponytail_skill"
+      ],
+      "required_markers": [
+        {"marker_id": "conductor-sole-router", "text": "CONDUCTOR_IS_SOLE_INTERNAL_SPECIALIST_ROUTER"},
+        {"marker_id": "clear-ownership-boundary", "text": "CLEAR_OWNERSHIP != CONDUCTOR_BYPASS"},
+        {"marker_id": "fast-route-boundary", "text": "FAST_ROUTE != ROUTER_BYPASS"},
+        {"marker_id": "transport-routing-boundary", "text": "UAI_TRANSPORT_SELECTION != AWF_SPECIALIST_ROUTING"}
+      ]
+    },
+    {
+      "projection_id": "github-copilot-repository-instructions-anchor",
+      "host_id": "github-copilot",
+      "strategy_id": "REPOSITORY_INSTRUCTIONS",
+      "format": "MARKDOWN_TEMPLATE",
+      "output_path": ".github/copilot-instructions.md",
+      "source_ids": [
+        "governance_policy",
+        "specialist_registry",
+        "routing_contract",
+        "host_capability_contract",
+        "integration_strategy_policy",
+        "conductor_skill",
+        "ponytail_skill"
+      ],
+      "required_markers": [
+        {"marker_id": "conductor-sole-router", "text": "CONDUCTOR_IS_SOLE_INTERNAL_SPECIALIST_ROUTER"},
+        {"marker_id": "clear-ownership-boundary", "text": "CLEAR_OWNERSHIP != CONDUCTOR_BYPASS"},
+        {"marker_id": "fast-route-boundary", "text": "FAST_ROUTE != ROUTER_BYPASS"},
+        {"marker_id": "transport-routing-boundary", "text": "UAI_TRANSPORT_SELECTION != AWF_SPECIALIST_ROUTING"}
+      ]
+    },
+    {
+      "projection_id": "github-copilot-custom-agent-template",
+      "host_id": "github-copilot",
+      "strategy_id": "CUSTOM_AGENT",
+      "format": "MARKDOWN_TEMPLATE",
+      "output_path": "adapters/github-copilot/custom-agent.template.md",
+      "source_ids": [
+        "governance_policy",
+        "specialist_registry",
+        "routing_contract",
+        "host_capability_contract",
+        "integration_strategy_policy",
+        "conductor_skill",
+        "ponytail_skill"
+      ],
+      "required_markers": [
+        {"marker_id": "conductor-sole-router", "text": "CONDUCTOR_IS_SOLE_INTERNAL_SPECIALIST_ROUTER"},
+        {"marker_id": "clear-ownership-boundary", "text": "CLEAR_OWNERSHIP != CONDUCTOR_BYPASS"},
+        {"marker_id": "fast-route-boundary", "text": "FAST_ROUTE != ROUTER_BYPASS"},
+        {"marker_id": "transport-routing-boundary", "text": "UAI_TRANSPORT_SELECTION != AWF_SPECIALIST_ROUTING"}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "name": "Run-Wide Tool Extension Registry",
+  "description": "Combines a fixed base tool set with globally registered and per-agent extensions, checks tool-name uniqueness, and propagates the resulting capability set into root and child agent construction.",
+  "source_file": "strix/agents/factory.py",
+  "line_range": "324-477",
+  "classification": "REFERENCE_ONLY",
+  "assigned_specialist": "clockwork",
+  "license_implications": "The source is Apache-2.0 licensed. The concept may be reviewed independently, but no implementation or source reuse is authorized without Governor, security, and maintainer approval."
+}

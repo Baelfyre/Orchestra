@@ -1,0 +1,87 @@
+{
+  "schema_version": "orchestra.comparative-benchmark-manifest.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "experiment_id": "b2-instrumentation-pilot-v1",
+  "experiment_kind": "A5_ISOLATED",
+  "stage": "PILOT",
+  "randomization_seed": 20260822,
+  "repetitions_per_arm": 2,
+  "executor_timeout_seconds": 600,
+  "common_control_identity": {
+    "orchestra_revision": "f165153358474f68a128b9e9c636ff05052b1be7",
+    "repository_revision": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
+    "system_instruction_digest": "0d73f104eb0624032eeaec5473961345758478336bdad83aa4837021a3b7c451",
+    "provider": "openai-codex",
+    "model": "gpt-5.6-sol",
+    "model_revision": null,
+    "reasoning_setting": "medium",
+    "temperature": null,
+    "tool_access_digest": "ed731bd5dfa081afb7a732c2aabdafd869dd5ab98f206d204c48d6dcd402bf7a",
+    "specialist_set_digest": "9075492b1f72c6bd6ca7f14e9c223c26e93348098508d6aa9c12fc30625133de",
+    "required_specialist_set_digest": "9075492b1f72c6bd6ca7f14e9c223c26e93348098508d6aa9c12fc30625133de",
+    "authority_digest": "6cad6668dd989b436188bafbc4ffca4fdf91dd80aef7cf6d99c21b1701d0b866",
+    "governance_digest": "7558d5f60c3f93067af0b3d0af1f4f69a0208daac2f3cce19831bdfb96700463",
+    "validation_contract_digest": "039bac4e2e44f1fcacda6bf3d7fb596496bf37cc722c505c71a3c5bd0086b3c9",
+    "environment_digest": "82b5eb93963b609b71f7754f4fb2dc89959734369c31df81b3dec2283539efae",
+    "retry_policy_digest": "6df621c17d68b4c7d77ad8ac51efe183e3021200c58c1898b0656ce8e0fc89c2",
+    "resource_budget_digest": "7421c9ca1baeee338756d93da3114a085c505f9249c42b0a5f3209eb80fdd71a"
+  },
+  "arms": [
+    {
+      "arm_id": "b2-arm-clockwork-overseer",
+      "topology_candidate_id": "b2.seq.clockwork-overseer.v1",
+      "topology_class": "SEQUENTIAL",
+      "topology_digest": "c28e14b11c586cd21397892239ce881f46e230993353013918212dbef7291183",
+      "communication_mode": "DEFAULT"
+    },
+    {
+      "arm_id": "b2-arm-overseer-clockwork",
+      "topology_candidate_id": "b2.seq.overseer-clockwork.v1",
+      "topology_class": "SEQUENTIAL",
+      "topology_digest": "067a8867aaa3a7bc82b4915da40ec60222413e261460863b1e8de90b836773f3",
+      "communication_mode": "DEFAULT"
+    }
+  ],
+  "tasks": [
+    {
+      "task_id": "b2-cal-cache-freshness",
+      "task_class": "VALIDATION_HEAVY",
+      "starting_state_digest": "2cee16af8991d23d33be669a013eb3dc2999f9263027515b48b4b10aed90072b",
+      "task_prompt_digest": "d8bb49e72f868f59c1bb74b27ad7712aee4270aa6183def7f4b26102dc97763c",
+      "task_payload": {
+        "prompt": "You are evaluating a synthetic compliance-query cache. Cache entries are scoped to one query and include source_version and expires_at. A stale or mismatched source version cannot be silently accepted. Direct source reads are available as a safe fallback.\n\nReturn EXACTLY:\n{\"task_id\":\"b2-cal-cache-freshness\",\"cache_strategy\":\"QUERY_SCOPED_TTL_WITH_SOURCE_VERSION\",\"stale_read_disposition\":\"FAIL_CLOSED_REFRESH_REQUIRED\",\"validation_gates\":[\"source_version_match\",\"ttl_not_expired\"],\"fallback\":\"DIRECT_SOURCE_READ\",\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "execution_allowed": true,
+        "validation_contract": {
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1",
+          "expected_response": {"task_id": "b2-cal-cache-freshness", "cache_strategy": "QUERY_SCOPED_TTL_WITH_SOURCE_VERSION", "stale_read_disposition": "FAIL_CLOSED_REFRESH_REQUIRED", "validation_gates": ["source_version_match", "ttl_not_expired"], "fallback": "DIRECT_SOURCE_READ", "authority_expansion": false},
+          "required_keys": ["task_id", "cache_strategy", "stale_read_disposition", "validation_gates", "fallback", "authority_expansion"],
+          "prohibited_dispositions": ["AUTHORITY_EXPANSION", "GOVERNANCE_BYPASS"]
+        }
+      }
+    },
+    {
+      "task_id": "b2-cal-cross-layer-release",
+      "task_class": "HIGH_COORDINATION",
+      "starting_state_digest": "1d40e285ca50e0889f20f694cf81aa965e0823fdce4b48a5b87964d01588d91c",
+      "task_prompt_digest": "7039e383ae6053d21f1b98a0f33a83bed243b762b52100cccf7dbe01ba97eb3d",
+      "task_payload": {
+        "prompt": "You are planning a synthetic cross-layer release change. Architecture must freeze an interface before implementation. Validation acceptance criteria must be frozen before the change is evaluated. Implementation is bounded and release remains a human gate.\n\nReturn EXACTLY:\n{\"task_id\":\"b2-cal-cross-layer-release\",\"ordered_coordination\":[\"clockwork:freeze_interface\",\"overseer:freeze_acceptance\",\"implementation:bounded_change\",\"overseer:validate_exact_head\"],\"required_evidence\":[\"interface_contract\",\"regression_results\",\"validation_receipt\"],\"release_disposition\":\"HUMAN_GATE_REQUIRED\",\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "execution_allowed": true,
+        "validation_contract": {
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1",
+          "expected_response": {"task_id": "b2-cal-cross-layer-release", "ordered_coordination": ["clockwork:freeze_interface", "overseer:freeze_acceptance", "implementation:bounded_change", "overseer:validate_exact_head"], "required_evidence": ["interface_contract", "regression_results", "validation_receipt"], "release_disposition": "HUMAN_GATE_REQUIRED", "authority_expansion": false},
+          "required_keys": ["task_id", "ordered_coordination", "required_evidence", "release_disposition", "authority_expansion"],
+          "prohibited_dispositions": ["AUTHORITY_EXPANSION", "GOVERNANCE_BYPASS"]
+        }
+      }
+    }
+  ],
+  "a5_evaluation": {
+    "eligibility_envelope_digest": "26af9b40870a13a138f52b23e45189a052875a81c8d4004366f2b93e9361bb55",
+    "eligible_topology_candidate_ids": ["b2.seq.clockwork-overseer.v1", "b2.seq.overseer-clockwork.v1"]
+  },
+  "murmurs_evaluation": null,
+  "interaction_evaluation": null,
+  "preregistration_digest": null,
+  "benefit_thresholds": null
+}

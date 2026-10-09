@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../machine/schemas/uix9b-live-proof-v2-identity.schema.json",
+  "schema_version": "uix9b.live-proof-v2-identity.v1",
+  "role": "UIX_9B_V2_FROZEN_IDENTITY",
+  "canonical_sha": "bf6f14316fa8814eeac91440c4a7d70be0d04b9e",
+  "evaluator_version": "uix9b-live-metric-evaluator-v2.0.0",
+  "evaluator_source": "scripts/uix9_live_metric_evaluator_v2.py",
+  "evaluator_digest": "d585010eb83ec23b1df2c3512868e9ff5285e7dced1393dcafb0233b835f7ae1",
+  "fixture_digest": "280f1361eda45c2b632c37dd049ec47dec81ab1e8e9e81c61a7aa0d9fb96b978",
+  "task_digest": "3708f0d7d172a424ed426a6275d5012df6a11b0718ed37cba95ba0724c0c506d",
+  "validator_digest": "285494688ef105c813ef5f449f1e13b75529c8cddbf8a42ea76d283a9d5eecf3",
+  "uix_guidance_revision": "uix9b-canonical-uix1-through-uix8-guidance-v1",
+  "uix_guidance_digest": "f989ac579875fbcd349f812fa6e241ba5c8505f9f940abcb5e0e30006f1606ab",
+  "model_calls_authorized": false,
+  "provider_calls_authorized": false,
+  "external_repo_mutations_authorized": false
+}

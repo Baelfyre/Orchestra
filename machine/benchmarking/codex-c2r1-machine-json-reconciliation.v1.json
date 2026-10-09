@@ -1,0 +1,223 @@
+{
+  "benchmark_identity": {
+    "adapter_sha": "0af078f6ad34d5cf406823bbd0e8258496923b60",
+    "adapter_tree": "90255564c13fcbb132a7e4cf8b98eb106d039e39",
+    "benchmark_subject_sha": "d95f677dbf23ab79c4698c26645ea30cea9b3019",
+    "benchmark_subject_tree": "ceab55bd512ea6fde4e8e76877cbb7006d18500e",
+    "cli_version": "0.148.0",
+    "common_measurement_core_sha": "e182e478988c77125127811375aa1b69278cca63",
+    "common_measurement_core_tree": "9e1d9c0dcf5e615c4b16dfd95bb72f63eaacc33e",
+    "counter_id": "codex-cli-0.148.0:jsonl-usage:gpt-5.6-sol:medium",
+    "model": "gpt-5.6-sol",
+    "prompt_representation_schema": "orchestra.prompt-representation.machine-json.v1",
+    "provider": "openai-codex",
+    "reasoning_effort": "medium",
+    "taskset_digest": "fd5109b2ec94709883bd75a9b7c6c89b6cd4f9bcc9840554bbd7cbb277a931a8",
+    "validator": "EXACT_JSON_CONFORMANCE_V1"
+  },
+  "c1_to_c2r1_comparison": {
+    "arm_mean_comparison": {
+      "CAVEMAN": {
+        "absolute_delta_tokens": 131.10000000000036,
+        "c1_natural_language_mean_total_tokens": 12377.8,
+        "c2r1_supplemental_sensitivity_mean_total_tokens": 12508.9,
+        "relative_delta_pct": 1.059154292362141
+      },
+      "DEFAULT": {
+        "absolute_delta_tokens": 928.5,
+        "c1_natural_language_mean_total_tokens": 10437.7,
+        "c2r1_supplemental_sensitivity_mean_total_tokens": 11366.2,
+        "relative_delta_pct": 8.895637927895983
+      },
+      "MURMURS": {
+        "absolute_delta_tokens": 834.0,
+        "c1_natural_language_mean_total_tokens": 10442.3,
+        "c2r1_supplemental_sensitivity_mean_total_tokens": 11276.3,
+        "relative_delta_pct": 7.986746214914331
+      },
+      "treatment_effect_change_percentage_points": {
+        "CAVEMAN": -8.536508067779929,
+        "MURMURS": -0.8309415635832695
+      }
+    },
+    "c1_representation": "NATURAL_LANGUAGE",
+    "c1_source": "machine/benchmarking/codex-c1-cross-provider-reconciliation.v1.json",
+    "c2r1_representation": "MACHINE_JSON",
+    "caveat": "The canonical C1 reconciliation files inspected here expose aggregate and paired-summary statistics but not the full per-run Codex token series. C1-to-C2R1 arm-mean comparisons are therefore descriptive; exact matched run-level representation-effect statistics require the original per-run C1 evidence series.",
+    "interpretation": {
+      "caveman_overhead_direction_replicated": true,
+      "direct_causal_claim_from_aggregate_c1_vs_c2r1": false,
+      "machine_json_global_token_savings_established": false,
+      "murmurs_effect_task_dependent": true,
+      "murmurs_global_token_savings_established": false
+    }
+  },
+  "conclusions": {
+    "caveman_observation": "OVERHEAD_DIRECTION_PERSISTS_BUT_MAGNITUDE_IS_TASK_DEPENDENT",
+    "machine_json_observation": "NO_GLOBAL_TOKEN_SAVINGS_ESTABLISHED_RELATIVE_TO_C1_AGGREGATE",
+    "murmurs_observation": "AGGREGATE_EFFECT_NEAR_NEUTRAL_WITH_STRONG_TASK_DEPENDENCE",
+    "primary_c2r1_validity": "VALID_WITH_ONE_PRESERVED_PROVIDER_OUTAGE_INVALID_RUN",
+    "production_promotion_authority": "NONE",
+    "supplemental_recovery_validity": "VALID_SEPARATE_SENSITIVITY_OBSERVATION"
+  },
+  "evidence_maturity": "CALIBRATION_ONLY",
+  "experiment_id": "b3-codex-machine-json-prompt-extension-v1",
+  "primary_complete_case_analysis": {
+    "arm_summary": {
+      "CAVEMAN": {
+        "mean_total_tokens": 12567.555555555555,
+        "median_total_tokens": 12030,
+        "paired": {
+          "blocks": 9,
+          "deltas": [1608,1608,1608,1608,1608,1608,1608,1608,1608],
+          "equal_to_default": 0,
+          "higher_than_default": 9,
+          "lower_than_default": 0,
+          "mean_delta_tokens": 1608.0
+        },
+        "relative_to_default_pct": 14.672127823512703,
+        "runs": 9
+      },
+      "DEFAULT": {
+        "mean_total_tokens": 10959.555555555555,
+        "median_total_tokens": 10422,
+        "runs": 9
+      },
+      "MURMURS": {
+        "mean_total_tokens": 10859.666666666666,
+        "median_total_tokens": 10422,
+        "paired": {
+          "blocks": 9,
+          "deltas": [-4504,0,-1048,0,0,0,4653,0,0],
+          "equal_to_default": 6,
+          "higher_than_default": 1,
+          "lower_than_default": 2,
+          "mean_delta_tokens": -99.88888888888889
+        },
+        "relative_to_default_pct": -0.9114319315462915,
+        "runs": 9
+      }
+    },
+    "complete_blocks": 9,
+    "excluded_block": {
+      "reason": "DEFAULT_PRIMARY_SLOT_5_PROVIDER_OUTAGE",
+      "repetition_index": 2,
+      "task": "b3-cal-padayon-r5-capability-manifest"
+    },
+    "method": "EXCLUDE_ENTIRE_TASK_REPETITION_BLOCK_WHEN_ANY_ARM_IS_INVALID"
+  },
+  "primary_execution": {
+    "accepted_cumulative_total_tokens": 336488,
+    "accepted_runs": 29,
+    "arm_summary_unbalanced_descriptive": {
+      "CAVEMAN": {"mean_total_tokens": 12508.9,"median_total_tokens": 12012.5,"runs": 10,"sum_total_tokens": 125089},
+      "DEFAULT": {"mean_total_tokens": 10959.555555555555,"median_total_tokens": 10422,"runs": 9,"sum_total_tokens": 98636},
+      "MURMURS": {"mean_total_tokens": 11276.3,"median_total_tokens": 10422.0,"runs": 10,"sum_total_tokens": 112763}
+    },
+    "invalid_observation": {
+      "attempt_consumed": true,
+      "invalid_reason": "PROVIDER_OUTAGE",
+      "mode": "DEFAULT",
+      "preserved": true,
+      "retry_performed": false,
+      "slot": 5,
+      "status": "INVALID_RUN"
+    },
+    "invalid_runs": 1,
+    "planned_slots": 30,
+    "primary_slot_records": [
+      {"mode":"DEFAULT","rep":1,"slot":1,"status":"PASS","task":"b3-cal-padayon-r5-capability-manifest","tokens":15026},
+      {"mode":"CAVEMAN","rep":1,"slot":2,"status":"PASS","task":"b3-cal-padayon-r5-capability-manifest","tokens":16634},
+      {"mode":"MURMURS","rep":1,"slot":3,"status":"PASS","task":"b3-cal-padayon-r5-capability-manifest","tokens":10522},
+      {"mode":"CAVEMAN","rep":2,"slot":4,"status":"PASS","task":"b3-cal-padayon-r5-capability-manifest","tokens":11981},
+      {"invalid_reason":"PROVIDER_OUTAGE","mode":"DEFAULT","rep":2,"slot":5,"status":"INVALID_RUN","task":"b3-cal-padayon-r5-capability-manifest","tokens":null},
+      {"mode":"MURMURS","rep":2,"slot":6,"status":"PASS","task":"b3-cal-padayon-r5-capability-manifest","tokens":15026},
+      {"mode":"DEFAULT","rep":1,"slot":7,"status":"PASS","task":"b3-cal-padayon-o1-o2-compatibility","tokens":10381},
+      {"mode":"CAVEMAN","rep":1,"slot":8,"status":"PASS","task":"b3-cal-padayon-o1-o2-compatibility","tokens":11989},
+      {"mode":"MURMURS","rep":1,"slot":9,"status":"PASS","task":"b3-cal-padayon-o1-o2-compatibility","tokens":10381},
+      {"mode":"MURMURS","rep":2,"slot":10,"status":"PASS","task":"b3-cal-padayon-o1-o2-compatibility","tokens":9333},
+      {"mode":"DEFAULT","rep":2,"slot":11,"status":"PASS","task":"b3-cal-padayon-o1-o2-compatibility","tokens":10381},
+      {"mode":"CAVEMAN","rep":2,"slot":12,"status":"PASS","task":"b3-cal-padayon-o1-o2-compatibility","tokens":11989},
+      {"mode":"MURMURS","rep":1,"slot":13,"status":"PASS","task":"b3-cal-padayon-o3-o4-freshness","tokens":10422},
+      {"mode":"CAVEMAN","rep":1,"slot":14,"status":"PASS","task":"b3-cal-padayon-o3-o4-freshness","tokens":12030},
+      {"mode":"DEFAULT","rep":1,"slot":15,"status":"PASS","task":"b3-cal-padayon-o3-o4-freshness","tokens":10422},
+      {"mode":"MURMURS","rep":2,"slot":16,"status":"PASS","task":"b3-cal-padayon-o3-o4-freshness","tokens":10422},
+      {"mode":"CAVEMAN","rep":2,"slot":17,"status":"PASS","task":"b3-cal-padayon-o3-o4-freshness","tokens":12030},
+      {"mode":"DEFAULT","rep":2,"slot":18,"status":"PASS","task":"b3-cal-padayon-o3-o4-freshness","tokens":10422},
+      {"mode":"MURMURS","rep":1,"slot":19,"status":"PASS","task":"b3-cal-padayon-assurance-drift","tokens":10615},
+      {"mode":"DEFAULT","rep":1,"slot":20,"status":"PASS","task":"b3-cal-padayon-assurance-drift","tokens":10615},
+      {"mode":"CAVEMAN","rep":1,"slot":21,"status":"PASS","task":"b3-cal-padayon-assurance-drift","tokens":12223},
+      {"mode":"DEFAULT","rep":2,"slot":22,"status":"PASS","task":"b3-cal-padayon-assurance-drift","tokens":10615},
+      {"mode":"MURMURS","rep":2,"slot":23,"status":"PASS","task":"b3-cal-padayon-assurance-drift","tokens":15268},
+      {"mode":"CAVEMAN","rep":2,"slot":24,"status":"PASS","task":"b3-cal-padayon-assurance-drift","tokens":12223},
+      {"mode":"MURMURS","rep":1,"slot":25,"status":"PASS","task":"b3-cal-padayon-o5-o6-routing","tokens":10387},
+      {"mode":"CAVEMAN","rep":1,"slot":26,"status":"PASS","task":"b3-cal-padayon-o5-o6-routing","tokens":11995},
+      {"mode":"DEFAULT","rep":1,"slot":27,"status":"PASS","task":"b3-cal-padayon-o5-o6-routing","tokens":10387},
+      {"mode":"DEFAULT","rep":2,"slot":28,"status":"PASS","task":"b3-cal-padayon-o5-o6-routing","tokens":10387},
+      {"mode":"MURMURS","rep":2,"slot":29,"status":"PASS","task":"b3-cal-padayon-o5-o6-routing","tokens":10387},
+      {"mode":"CAVEMAN","rep":2,"slot":30,"status":"PASS","task":"b3-cal-padayon-o5-o6-routing","tokens":11995}
+    ]
+  },
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "provenance": {
+    "c1_canonical_human": "docs/benchmarking/CODEX_C1_CROSS_PROVIDER_RECONCILIATION.md",
+    "c1_canonical_machine": "machine/benchmarking/codex-c1-cross-provider-reconciliation.v1.json",
+    "c2r1_source": "operator-provided exact terminal/evidence outputs from Stage8B/8C/8D/8E",
+    "repository_mutation_performed_by_this_candidate": false
+  },
+  "recorded_date": "2026-08-22",
+  "research_boundary": {
+    "a5_execution_effective_promotion_authorized": false,
+    "a6_authorized": false,
+    "automatic_promotion": false,
+    "b4_execution_authorized": false,
+    "calibration_only": true,
+    "deployment_authorized": false,
+    "release_publication_authorized": false
+  },
+  "schema_version": "orchestra.codex-c2r1-machine-json-reconciliation.v1",
+  "status": "C2R1_EXECUTION_COMPLETE_RECONCILIATION_CANDIDATE",
+  "supplemental_balanced_sensitivity_analysis": {
+    "arm_summary": {
+      "CAVEMAN": {
+        "mean_total_tokens": 12508.9,
+        "median_total_tokens": 12012.5,
+        "paired": {"blocks":10,"bootstrap_95_ci_tokens":[212.1,1608.0],"deltas":[1608,-3045,1608,1608,1608,1608,1608,1608,1608,1608],"equal_to_default":0,"higher_than_default":9,"lower_than_default":1,"mean_delta_tokens":1142.7},
+        "relative_to_default_pct": 10.053491932220071,
+        "runs": 10,
+        "sum_total_tokens": 125089
+      },
+      "DEFAULT": {"mean_total_tokens":11366.2,"median_total_tokens":10422.0,"runs":10,"sum_total_tokens":113662},
+      "MURMURS": {
+        "mean_total_tokens":11276.3,
+        "median_total_tokens":10422.0,
+        "paired":{"blocks":10,"bootstrap_95_ci_tokens":[-1351.2,1291.1],"deltas":[-4504,0,0,-1048,0,0,0,4653,0,0],"equal_to_default":7,"higher_than_default":1,"lower_than_default":2,"mean_delta_tokens":-89.9},
+        "relative_to_default_pct":-0.7909415635832695,
+        "runs":10,
+        "sum_total_tokens":112763
+      }
+    },
+    "blocks":10,
+    "method":"USE_ONE_SEPARATELY_LABELED_SUPPLEMENTAL_DEFAULT_OBSERVATION_TO_COMPLETE_MISSING_BLOCK_WITHOUT_REWRITING_PRIMARY_DATASET",
+    "task_effects": {
+      "ASSURANCE_DRIFT":{"caveman_mean_total_tokens":12223,"caveman_vs_default_pct":15.148374941121045,"default_mean_total_tokens":10615,"murmurs_mean_total_tokens":12941.5,"murmurs_vs_default_pct":21.91709844559586},
+      "O1_O2_COMPATIBILITY":{"caveman_mean_total_tokens":11989,"caveman_vs_default_pct":15.489837202581636,"default_mean_total_tokens":10381,"murmurs_mean_total_tokens":9857,"murmurs_vs_default_pct":-5.047683267507952},
+      "O3_O4_FRESHNESS":{"caveman_mean_total_tokens":12030,"caveman_vs_default_pct":15.428900402993673,"default_mean_total_tokens":10422,"murmurs_mean_total_tokens":10422,"murmurs_vs_default_pct":0.0},
+      "O5_O6_ROUTING":{"caveman_mean_total_tokens":11995,"caveman_vs_default_pct":15.480889573505351,"default_mean_total_tokens":10387,"murmurs_mean_total_tokens":10387,"murmurs_vs_default_pct":0.0},
+      "R5_CAPABILITY_MANIFEST":{"caveman_mean_total_tokens":14307.5,"caveman_vs_default_pct":-4.781711699720481,"default_mean_total_tokens":15026,"murmurs_mean_total_tokens":12774,"murmurs_vs_default_pct":-14.987355250898437}
+    }
+  },
+  "supplemental_recovery": {
+    "accepted_supplemental": true,
+    "counts_as_primary_run": false,
+    "experiment_id": "b3-codex-machine-json-prompt-extension-v1-supplemental-slot5-recovery-r1",
+    "mode": "DEFAULT",
+    "primary_record_after_supplemental": {"accepted_cumulative_total_tokens":336488,"accepted_runs":29,"invalid_runs":1},
+    "rep": 2,
+    "replaces_primary": false,
+    "source_primary_slot": 5,
+    "status": "PASS",
+    "task": "b3-cal-padayon-r5-capability-manifest",
+    "tokens": 15026
+  }
+}

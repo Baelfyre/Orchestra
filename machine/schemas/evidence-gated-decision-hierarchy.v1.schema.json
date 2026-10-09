@@ -1,0 +1,530 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/evidence-gated-decision-hierarchy.v1.schema.json",
+  "title": "Orchestra Evidence-Gated Decision Hierarchy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "status",
+    "authority_model",
+    "transition_owner",
+    "separation_invariants",
+    "stages",
+    "assurance_depth",
+    "runtime_plan_contract",
+    "evidence_semantics",
+    "assessment_execution",
+    "specialist_flows",
+    "autonomy",
+    "protected_change",
+    "jev"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "orchestra.evidence-gated-decision-hierarchy.v1"
+    },
+    "status": {
+      "const": "CONTRACT_DEFINED"
+    },
+    "authority_model": {
+      "const": "EVIDENCE_ONLY_NON_AUTHORIZING"
+    },
+    "transition_owner": {
+      "const": "arbiter"
+    },
+    "separation_invariants": {
+      "const": [
+        "FINDING_IS_NOT_VERIFIED_FACT",
+        "VERIFIED_FACT_IS_NOT_RISK_JUDGMENT",
+        "RISK_JUDGMENT_IS_NOT_MITIGATION",
+        "MITIGATION_IS_NOT_ADJUDICATION",
+        "ADJUDICATION_IS_NOT_GOVERNANCE",
+        "GOVERNANCE_IS_NOT_EXECUTION_AUTHORITY",
+        "EXECUTION_AUTHORITY_IS_NOT_IMPLEMENTATION",
+        "IMPLEMENTATION_IS_NOT_VERIFIED_REMEDIATION"
+      ]
+    },
+    "stages": {
+      "type": "array",
+      "minItems": 11,
+      "maxItems": 11,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "stage",
+          "owners",
+          "inputs",
+          "outputs",
+          "contract_refs",
+          "may_authorize"
+        ],
+        "properties": {
+          "stage": {
+            "enum": [
+              "ROUTING",
+              "ASSESSMENT",
+              "VERIFICATION",
+              "IMPACT_RISK",
+              "MITIGATION",
+              "ADJUDICATION",
+              "GOVERNANCE",
+              "AUTHORITY",
+              "TRANSITION",
+              "IMPLEMENTATION",
+              "REVALIDATION"
+            ]
+          },
+          "optional": {
+            "type": "boolean"
+          },
+          "owners": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "inputs": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "outputs": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "contract_refs": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^(?!/)(?![A-Za-z]:)[^\\\\]+$"
+            }
+          },
+          "coordination": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "optional_owner",
+              "trigger",
+              "may_authorize_or_override_owner"
+            ],
+            "properties": {
+              "optional_owner": {
+                "const": "the-tuner"
+              },
+              "trigger": {
+                "const": "MATERIAL_CROSS_SPECIALIST_CONTRACTS"
+              },
+              "may_authorize_or_override_owner": {
+                "const": false
+              }
+            }
+          },
+          "may_authorize": {
+            "const": false
+          }
+        }
+      }
+    },
+    "assurance_depth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "risk_levels",
+        "audit_depths",
+        "risk_floor_rules",
+        "requirements_combine",
+        "unknown_or_contradictory_evidence",
+        "protected_is_separate_hard_gate_overlay"
+      ],
+      "properties": {
+        "risk_levels": {
+          "const": [
+            "LOW",
+            "MEDIUM",
+            "HIGH",
+            "CRITICAL"
+          ]
+        },
+        "audit_depths": {
+          "const": [
+            "LIGHT",
+            "STANDARD",
+            "DEEP"
+          ]
+        },
+        "risk_floor_rules": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "risk_level",
+              "condition",
+              "depth",
+              "targeted_verification_required"
+            ],
+            "properties": {
+              "risk_level": {
+                "enum": [
+                  "LOW",
+                  "MEDIUM",
+                  "HIGH",
+                  "CRITICAL"
+                ]
+              },
+              "condition": {
+                "enum": [
+                  "EXPLICITLY_HARMLESS",
+                  "OTHERWISE",
+                  "ALWAYS"
+                ]
+              },
+              "depth": {
+                "enum": [
+                  "LIGHT",
+                  "STANDARD",
+                  "DEEP"
+                ]
+              },
+              "targeted_verification_required": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        "requirements_combine": {
+          "const": "MAX_TASK_RISK_FLOOR_AND_AQ2_AQ3_AQ4_PRAI_REQUIREMENTS"
+        },
+        "unknown_or_contradictory_evidence": {
+          "const": "RAISE_ASSURANCE_OR_BLOCK_AT_EXISTING_EVALUATOR"
+        },
+        "protected_is_separate_hard_gate_overlay": {
+          "const": true
+        }
+      }
+    },
+    "runtime_plan_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "composition_contract_version",
+        "risk_reconciliation",
+        "requirement_sources",
+        "unresolved_requirement_semantics",
+        "candidate_binding",
+        "required_assurance_is_completed_evidence",
+        "completed_assurance_is_governance_approval",
+        "governance_approval_is_execution_authority",
+        "execution_authority_is_arbiter_transition",
+        "plan_may_authorize"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "orchestra.agentic-assurance-plan.v2"
+        },
+        "composition_contract_version": {
+          "const": "orchestra.evidence-gated-decision-hierarchy.v1"
+        },
+        "risk_reconciliation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "profile_claims_are_untrusted",
+            "resolution",
+            "protected_signal_merge",
+            "may_authorize"
+          ],
+          "properties": {
+            "profile_claims_are_untrusted": {
+              "const": true
+            },
+            "resolution": {
+              "const": "MAXIMUM_APPLICABLE_RISK"
+            },
+            "protected_signal_merge": {
+              "const": "ANY_TRUE"
+            },
+            "may_authorize": {
+              "const": false
+            }
+          }
+        },
+        "requirement_sources": {
+          "const": ["AQ2", "AQ3", "AQ4", "PRAI"]
+        },
+        "unresolved_requirement_semantics": {
+          "const": "EXPLICIT_STATE_AND_NULL_NOT_FALSE"
+        },
+        "candidate_binding": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "identity_fields",
+            "source_state_identity",
+            "missing_identity_state",
+            "unbound_or_stale_satisfies_current_requirements",
+            "candidate_mutation_invalidates_plan",
+            "may_authorize"
+          ],
+          "properties": {
+            "identity_fields": {
+              "const": ["repository", "candidate_sha", "tree_sha"]
+            },
+            "source_state_identity": {
+              "const": "SHA256_CANONICAL_IDENTITY_FIELDS"
+            },
+            "missing_identity_state": {
+              "const": "UNBOUND"
+            },
+            "unbound_or_stale_satisfies_current_requirements": {
+              "const": false
+            },
+            "candidate_mutation_invalidates_plan": {
+              "const": true
+            },
+            "may_authorize": {
+              "const": false
+            }
+          }
+        },
+        "required_assurance_is_completed_evidence": {
+          "const": false
+        },
+        "completed_assurance_is_governance_approval": {
+          "const": false
+        },
+        "governance_approval_is_execution_authority": {
+          "const": false
+        },
+        "execution_authority_is_arbiter_transition": {
+          "const": false
+        },
+        "plan_may_authorize": {
+          "const": false
+        }
+      }
+    },
+    "evidence_semantics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "routing_not_required_is_substantive_review",
+        "specialist_pass_is_authority",
+        "verification_is_governance",
+        "governance_is_execution_authority",
+        "implementation_completion_is_verified_remediation",
+        "assessor_may_self_verify",
+        "candidate_mutation_invalidates_prior_candidate_evidence"
+      ],
+      "properties": {
+        "routing_not_required_is_substantive_review": {
+          "const": false
+        },
+        "specialist_pass_is_authority": {
+          "const": false
+        },
+        "verification_is_governance": {
+          "const": false
+        },
+        "governance_is_execution_authority": {
+          "const": false
+        },
+        "implementation_completion_is_verified_remediation": {
+          "const": false
+        },
+        "assessor_may_self_verify": {
+          "const": false
+        },
+        "candidate_mutation_invalidates_prior_candidate_evidence": {
+          "const": true
+        }
+      }
+    },
+    "assessment_execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "defensive_security_review_side_effect_class",
+        "assessment_may_mutate",
+        "assessment_may_issue_authorization",
+        "effectful_verification_requires_existing_separate_authority"
+      ],
+      "properties": {
+        "defensive_security_review_side_effect_class": {
+          "const": "NONE"
+        },
+        "assessment_may_mutate": {
+          "const": false
+        },
+        "assessment_may_issue_authorization": {
+          "const": false
+        },
+        "effectful_verification_requires_existing_separate_authority": {
+          "const": true
+        }
+      }
+    },
+    "specialist_flows": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "security",
+        "ui_ux",
+        "architecture"
+      ],
+      "properties": {
+        "security": {
+          "type": "array",
+          "minItems": 5,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "ui_ux": {
+          "type": "array",
+          "minItems": 5,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "architecture": {
+          "type": "array",
+          "minItems": 5,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "autonomy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "modes",
+        "profiles_reduce_existing_authority_only",
+        "full_autonomous_requires",
+        "satisfied_gates_may_be_traversed_automatically",
+        "unsatisfied_or_protected_gate_may_be_bypassed"
+      ],
+      "properties": {
+        "modes": {
+          "const": [
+            "HUMAN_GOVERNED",
+            "SEMI_AUTONOMOUS",
+            "FULL_AUTONOMOUS"
+          ]
+        },
+        "profiles_reduce_existing_authority_only": {
+          "const": true
+        },
+        "full_autonomous_requires": {
+          "type": "array",
+          "minItems": 8,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "satisfied_gates_may_be_traversed_automatically": {
+          "const": true
+        },
+        "unsatisfied_or_protected_gate_may_be_bypassed": {
+          "const": false
+        }
+      }
+    },
+    "protected_change": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_freeze_required",
+        "same_run_change_and_continuation_allowed",
+        "fresh_authorized_execution_context_required",
+        "protocol"
+      ],
+      "properties": {
+        "candidate_freeze_required": {
+          "const": true
+        },
+        "same_run_change_and_continuation_allowed": {
+          "const": false
+        },
+        "fresh_authorized_execution_context_required": {
+          "const": true
+        },
+        "protocol": {
+          "const": "docs/governance/PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md"
+        }
+      }
+    },
+    "jev": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tracked_supported_integration",
+        "advisory_insertion_point",
+        "may_authorize_or_replace_review_or_reduce_risk",
+        "may_mutate_candidate",
+        "absence_blocks_flow"
+      ],
+      "properties": {
+        "tracked_supported_integration": {
+          "const": false
+        },
+        "advisory_insertion_point": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "after",
+            "before"
+          ],
+          "properties": {
+            "after": {
+              "const": [
+                "VERIFIED_FINDINGS",
+                "RISK_ASSESSMENT",
+                "MITIGATION_ALTERNATIVES"
+              ]
+            },
+            "before": {
+              "const": "GOVERNANCE"
+            }
+          }
+        },
+        "may_authorize_or_replace_review_or_reduce_risk": {
+          "const": false
+        },
+        "may_mutate_candidate": {
+          "const": false
+        },
+        "absence_blocks_flow": {
+          "const": false
+        }
+      }
+    }
+  }
+}

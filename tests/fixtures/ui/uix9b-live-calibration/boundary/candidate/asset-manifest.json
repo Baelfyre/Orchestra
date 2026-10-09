@@ -1,0 +1,25 @@
+{
+  "schema_version": "uix9b.asset-manifest.v1",
+  "reference_identity": "uix9b-operations-workspace-reference-v1",
+  "approved_assets": [
+    {
+      "asset_id": "operations-mark",
+      "asset_type": "LOGO",
+      "semantic_role": "workspace_brand_mark",
+      "path": "project/src/assets/operations-mark.svg",
+      "content_digest": "de515e316372e9a786f3b514ed5e560d7e1eef4a067b231e4e7fce0bd0281fc4",
+      "source_identity": "uix9b-operations-mark-v1",
+      "provenance_status": "CONFIRMED_PROJECT_NATIVE",
+      "substitution_policy": "EXACT_REQUIRED"
+    }
+  ],
+  "icon_mappings": {
+    "queue": "inline:queue",
+    "search": "inline:search",
+    "filter": "inline:filter",
+    "more": "inline:more",
+    "close": "inline:close"
+  },
+  "external_assets_allowed": false,
+  "asset_identity_must_be_preserved": true
+}

@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.orchestra.dev/machine/ui-profile-registry/1.0.0",
+  "title": "Orchestra UI Theme, Layout, and Effect Profile Registry",
+  "description": "Library-neutral UIX-3 profile taxonomy and deterministic composition constraints.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "registry_id",
+    "role",
+    "taxonomy",
+    "profiles",
+    "composition_rules",
+    "accessibility_invariants",
+    "authority"
+  ],
+  "properties": {
+    "$schema": {"const": "../schemas/ui-profile-registry.schema.json"},
+    "schema_version": {"const": "orchestra.ui-profile-registry.v1"},
+    "registry_id": {"const": "uix3-theme-layout-effect-profiles"},
+    "role": {"const": "UIX_3_PROFILE_REGISTRY"},
+    "taxonomy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["foundation", "layout", "full_theme_or_system", "optional_effect"],
+      "properties": {
+        "foundation": {
+          "type": "array",
+          "prefixItems": [{"const": "minimalist"}],
+          "items": false,
+          "minItems": 1,
+          "maxItems": 1
+        },
+        "layout": {
+          "type": "array",
+          "prefixItems": [{"const": "bento_grid"}],
+          "items": false,
+          "minItems": 1,
+          "maxItems": 1
+        },
+        "full_theme_or_system": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "dark_cyberpunk"},
+            {"const": "neo_brutalism"},
+            {"const": "material_3"},
+            {"const": "retro_web_90s"}
+          ],
+          "items": false,
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "optional_effect": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "glassmorphism"},
+            {"const": "neumorphism"},
+            {"const": "claymorphism"},
+            {"const": "aurora"}
+          ],
+          "items": false,
+          "minItems": 4,
+          "maxItems": 4
+        }
+      }
+    },
+    "profiles": {
+      "type": "array",
+      "minItems": 10,
+      "maxItems": 10,
+      "items": {"$ref": "#/$defs/profile"}
+    },
+    "composition_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_categories",
+        "optional_categories",
+        "maximum_selections_by_category",
+        "full_system_mix_policy",
+        "incompatibility_rules",
+        "layout_classification",
+        "effect_safety",
+        "profile_name_authority",
+        "project_precedence",
+        "unknown_profile_disposition"
+      ],
+      "properties": {
+        "required_categories": {
+          "type": "array",
+          "prefixItems": [{"const": "foundation"}, {"const": "layout"}],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "optional_categories": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "full_theme_or_system"},
+            {"const": "optional_effect"}
+          ],
+          "items": false,
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "maximum_selections_by_category": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["foundation", "layout", "full_theme_or_system", "optional_effect"],
+          "properties": {
+            "foundation": {"const": 1},
+            "layout": {"const": 1},
+            "full_theme_or_system": {"const": 1},
+            "optional_effect": {"const": 1}
+          }
+        },
+        "full_system_mix_policy": {"const": "MUTUALLY_EXCLUSIVE"},
+        "incompatibility_rules": {
+          "type": "array",
+          "minItems": 2,
+          "items": {"$ref": "#/$defs/incompatibilityRule"}
+        },
+        "layout_classification": {"const": "BENTO_GRID_IS_LAYOUT_NOT_THEME"},
+        "effect_safety": {
+          "const": "OPTIONAL_EFFECTS_MUST_NOT_WEAKEN_INTERACTION_CRITICAL_CONTRAST_OR_FOCUS"
+        },
+        "profile_name_authority": {
+          "const": "PROFILE_IDENTIFIERS_DO_NOT_AUTHORIZE_ARBITRARY_CSS_VALUES"
+        },
+        "project_precedence": {
+          "const": "EXISTING_PROJECT_DESIGN_SYSTEM_OVERRIDES_PROFILE_DEFAULTS"
+        },
+        "unknown_profile_disposition": {"const": "REJECT_COMPOSITION"}
+      }
+    },
+    "accessibility_invariants": {
+      "type": "array",
+      "minItems": 6,
+      "items": {"$ref": "#/$defs/accessibilityInvariant"}
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registry_grants_implementation_authority",
+        "profile_grants_css_authority",
+        "external_tools_grant_authority",
+        "validation_grants_authority",
+        "dependency_adoption_authorized",
+        "figma_mutation_authorized"
+      ],
+      "properties": {
+        "registry_grants_implementation_authority": {"const": false},
+        "profile_grants_css_authority": {"const": false},
+        "external_tools_grant_authority": {"const": false},
+        "validation_grants_authority": {"const": false},
+        "dependency_adoption_authorized": {"const": false},
+        "figma_mutation_authorized": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile_id",
+        "category",
+        "display_name",
+        "purpose",
+        "composition_role",
+        "accessibility_behavior",
+        "value_authority"
+      ],
+      "properties": {
+        "profile_id": {"type": "string", "pattern": "^[a-z0-9_]+$"},
+        "category": {
+          "enum": ["foundation", "layout", "full_theme_or_system", "optional_effect"]
+        },
+        "display_name": {"type": "string", "minLength": 1},
+        "purpose": {"type": "string", "minLength": 1},
+        "composition_role": {
+          "enum": [
+            "REQUIRED_FOUNDATION",
+            "REQUIRED_LAYOUT",
+            "OPTIONAL_FULL_THEME_OR_SYSTEM",
+            "OPTIONAL_EFFECT"
+          ]
+        },
+        "accessibility_behavior": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["contrast", "reduced_motion", "forced_colors"],
+          "properties": {
+            "contrast": {
+              "enum": ["INHERIT_GLOBAL_INVARIANT", "RESTRICT_INTERACTION_CRITICAL_SURFACES"]
+            },
+            "reduced_motion": {"const": "INHERIT_GLOBAL_INVARIANT"},
+            "forced_colors": {"const": "INHERIT_GLOBAL_INVARIANT"}
+          }
+        },
+        "value_authority": {
+          "const": "METADATA_ONLY_NO_ARBITRARY_CSS_AUTHORITY"
+        }
+      }
+    },
+    "incompatibilityRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rule_id", "kind", "profile_ids", "disposition", "reason"],
+      "properties": {
+        "rule_id": {"type": "string", "minLength": 1},
+        "kind": {"enum": ["CATEGORY_MUTUALLY_EXCLUSIVE", "CATEGORY_MAXIMUM"]},
+        "profile_ids": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "disposition": {"const": "REJECT_COMPOSITION"},
+        "reason": {"type": "string", "minLength": 1}
+      }
+    },
+    "accessibilityInvariant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["invariant_id", "requirement", "applies_to"],
+      "properties": {
+        "invariant_id": {
+          "enum": [
+            "SEMANTIC_STRUCTURE_AND_NAMES",
+            "KEYBOARD_AND_FOCUS",
+            "INTERACTION_CRITICAL_CONTRAST",
+            "TARGET_SIZE_AND_ERROR_STATES",
+            "REDUCED_MOTION",
+            "FORCED_COLORS"
+          ]
+        },
+        "requirement": {"type": "string", "minLength": 1},
+        "applies_to": {"const": "ALL_PROFILE_COMPOSITIONS"}
+      }
+    }
+  }
+}

@@ -1,0 +1,272 @@
+[
+  {
+    "id": "capacity-change-invalidates-architecture",
+    "previous_contracts": {
+      "capacity": {"revision": "rev-1", "hash": "hash-1", "clauses": {"peak_concurrency": 100}}
+    },
+    "current_contracts": {
+      "capacity": {"revision": "rev-2", "hash": "hash-2", "clauses": {"peak_concurrency": 500}}
+    },
+    "dependency_edges": [
+      {"source": "capacity", "target": "architecture", "consumed_clauses": ["peak_concurrency"]}
+    ],
+    "contract_owners": {"capacity": "the-steward", "architecture": "clockwork"},
+    "trigger_contracts": ["capacity"],
+    "expected": {
+      "coordination_status": "SPECIALIST_REENTRY_REQUIRED",
+      "semantic_changed_contracts": ["capacity"],
+      "minimal_reentry": ["clockwork"],
+      "recommended_next_route": "conductor",
+      "tuner_dispatches": false
+    }
+  },
+  {
+    "id": "unrelated-capacity-field-refreshes-reference",
+    "previous_contracts": {
+      "capacity": {"revision": "rev-1", "hash": "hash-1", "clauses": {"peak_concurrency": 100, "documents_per_day": 100}}
+    },
+    "current_contracts": {
+      "capacity": {"revision": "rev-2", "hash": "hash-2", "clauses": {"peak_concurrency": 100, "documents_per_day": 200}}
+    },
+    "dependency_edges": [
+      {"source": "capacity", "target": "architecture", "consumed_clauses": ["peak_concurrency"]}
+    ],
+    "contract_owners": {"capacity": "the-steward", "architecture": "clockwork"},
+    "trigger_contracts": ["capacity"],
+    "expected": {
+      "coordination_status": "CROSS_LAYER_CONTRACT_STALE",
+      "identity_only": true,
+      "dependency_semantic_change": false,
+      "minimal_reentry": []
+    }
+  },
+  {
+    "id": "capacity-chain-stops-without-migration-edge",
+    "previous_contracts": {
+      "capacity": {"revision": "rev-1", "clauses": {"tenants": 50}}
+    },
+    "current_contracts": {
+      "capacity": {"revision": "rev-2", "clauses": {"tenants": 5000}}
+    },
+    "dependency_edges": [
+      {"source": "capacity", "target": "architecture", "consumed_clauses": ["tenants"]}
+    ],
+    "contract_owners": {"capacity": "the-steward", "architecture": "clockwork", "migration": "chronicler"},
+    "trigger_contracts": ["capacity"],
+    "expected": {"minimal_reentry": ["clockwork"], "affected_contracts": ["architecture"]}
+  },
+  {
+    "id": "capacity-chain-reaches-validation",
+    "previous_contracts": {
+      "capacity": {"revision": "rev-1", "clauses": {"tenants": 50}},
+      "architecture": {"revision": "rev-1", "clauses": {"topology": "single-db"}},
+      "migration": {"revision": "rev-1", "clauses": {"rollback_boundary": "before-contract"}}
+    },
+    "current_contracts": {
+      "capacity": {"revision": "rev-2", "clauses": {"tenants": 5000}},
+      "architecture": {"revision": "rev-1", "clauses": {"topology": "single-db"}},
+      "migration": {"revision": "rev-1", "clauses": {"rollback_boundary": "before-contract"}}
+    },
+    "dependency_edges": [
+      {"source": "capacity", "target": "architecture", "consumed_clauses": ["tenants"]},
+      {"source": "architecture", "target": "migration", "consumed_clauses": ["topology"]},
+      {"source": "migration", "target": "validation", "consumed_clauses": ["rollback_boundary"]}
+    ],
+    "contract_owners": {"capacity": "the-steward", "architecture": "clockwork", "migration": "chronicler", "validation": "overseer"},
+    "trigger_contracts": ["capacity"],
+    "expected": {"minimal_reentry": ["chronicler", "clockwork", "overseer"], "affected_contracts": ["architecture", "migration", "validation"]}
+  },
+  {
+    "id": "strategic-product-intent-revision",
+    "previous_contracts": {
+      "product": {"revision": "rev-1", "clauses": {"deployment_posture": "single-client"}}
+    },
+    "current_contracts": {
+      "product": {"revision": "rev-2", "clauses": {"deployment_posture": "multi-organization-saas"}}
+    },
+    "dependency_edges": [
+      {"source": "product", "target": "architecture", "consumed_clauses": ["deployment_posture"]}
+    ],
+    "contract_owners": {"product": "the-steward", "architecture": "clockwork"},
+    "trigger_contracts": ["product"],
+    "expected": {"minimal_reentry": ["clockwork"], "affected_contracts": ["architecture"]}
+  },
+  {
+    "id": "migration-rollback-change-invalidates-validation",
+    "previous_contracts": {
+      "migration": {"revision": "rev-1", "clauses": {"rollback_boundary": "before-backfill"}}
+    },
+    "current_contracts": {
+      "migration": {"revision": "rev-2", "clauses": {"rollback_boundary": "after-backfill"}}
+    },
+    "dependency_edges": [
+      {"source": "migration", "target": "validation", "consumed_clauses": ["rollback_boundary"]}
+    ],
+    "contract_owners": {"migration": "chronicler", "validation": "overseer", "architecture": "clockwork"},
+    "trigger_contracts": ["migration"],
+    "expected": {"minimal_reentry": ["overseer"], "affected_contracts": ["validation"]}
+  },
+  {
+    "id": "intake-composition-change",
+    "previous_contracts": {
+      "intake": {"revision": "rev-1", "clauses": {"persistence_impact": "NONE"}}
+    },
+    "current_contracts": {
+      "intake": {"revision": "rev-2", "clauses": {"persistence_impact": "HIGH_RISK"}}
+    },
+    "dependency_edges": [
+      {"source": "intake", "target": "chronicler", "consumed_clauses": ["persistence_impact"]}
+    ],
+    "contract_owners": {"intake": "conductor", "chronicler": "chronicler"},
+    "trigger_contracts": ["intake"],
+    "expected": {"minimal_reentry": ["chronicler"], "recommended_next_route": "conductor", "tuner_dispatches": false}
+  },
+  {
+    "id": "identity-only-contract-revision",
+    "previous_contracts": {
+      "capacity": {"revision": "rev-1", "hash": "hash-1", "clauses": {"peak_concurrency": 100}}
+    },
+    "current_contracts": {
+      "capacity": {"revision": "rev-2", "hash": "hash-2", "clauses": {"peak_concurrency": 100}}
+    },
+    "dependency_edges": [
+      {"source": "capacity", "target": "architecture", "consumed_clauses": ["peak_concurrency"]}
+    ],
+    "contract_owners": {"capacity": "the-steward", "architecture": "clockwork"},
+    "trigger_contracts": ["capacity"],
+    "expected": {"identity_only": true, "reference_refresh_required": true, "minimal_reentry": [], "affected_contracts": []}
+  },
+  {
+    "id": "unknown-trigger-contract",
+    "previous_contracts": {},
+    "current_contracts": {},
+    "dependency_edges": [],
+    "contract_owners": {"unknown": "clockwork"},
+    "trigger_contracts": ["unknown"],
+    "expected_error": "unknown trigger contract"
+  },
+  {
+    "id": "missing-governance-owner",
+    "previous_contracts": {"capacity": {"clauses": {"peak_concurrency": 100}}},
+    "current_contracts": {"capacity": {"clauses": {"peak_concurrency": 200}}},
+    "dependency_edges": [
+      {"source": "capacity", "target": "architecture", "consumed_clauses": ["peak_concurrency"]}
+    ],
+    "contract_owners": {"capacity": "the-steward"},
+    "trigger_contracts": ["capacity"],
+    "expected_error": "missing owner"
+  },
+  {
+    "id": "malformed-governance-edge",
+    "previous_contracts": {"capacity": {"clauses": {"peak_concurrency": 100}}},
+    "current_contracts": {"capacity": {"clauses": {"peak_concurrency": 200}}},
+    "dependency_edges": [{"source": "capacity", "target": "architecture"}],
+    "contract_owners": {"capacity": "the-steward", "architecture": "clockwork"},
+    "trigger_contracts": ["capacity"],
+    "expected_error": "explicit consumed_clauses"
+  },
+  {
+    "id": "cyclic-governance-invalidation",
+    "previous_contracts": {
+      "capacity": {"clauses": {"peak_concurrency": 100}},
+      "architecture": {"clauses": {"topology": "single-db"}},
+      "migration": {"clauses": {"rollback_boundary": "before-contract"}}
+    },
+    "current_contracts": {
+      "capacity": {"clauses": {"peak_concurrency": 500}},
+      "architecture": {"clauses": {"topology": "single-db"}},
+      "migration": {"clauses": {"rollback_boundary": "before-contract"}}
+    },
+    "dependency_edges": [
+      {"source": "capacity", "target": "architecture", "consumed_clauses": ["peak_concurrency"]},
+      {"source": "architecture", "target": "migration", "consumed_clauses": ["topology"]},
+      {"source": "migration", "target": "capacity", "consumed_clauses": ["rollback_boundary"]}
+    ],
+    "contract_owners": {"capacity": "the-steward", "architecture": "clockwork", "migration": "chronicler"},
+    "trigger_contracts": ["capacity"],
+    "expected": {"minimal_reentry": ["chronicler", "clockwork"], "affected_contracts": ["architecture", "capacity", "migration"]}
+  },
+  {
+    "id": "duplicate-governance-paths",
+    "previous_contracts": {"a": {"clauses": {"scope": "old"}}, "b": {"clauses": {"scope": "same"}}},
+    "current_contracts": {"a": {"clauses": {"scope": "new"}}, "b": {"clauses": {"scope": "same"}}},
+    "dependency_edges": [
+      {"source": "a", "target": "b", "consumed_clauses": ["scope"]},
+      {"source": "a", "target": "c", "consumed_clauses": ["scope"]},
+      {"source": "b", "target": "c", "consumed_clauses": ["scope"]}
+    ],
+    "contract_owners": {"a": "the-steward", "b": "clockwork", "c": "overseer"},
+    "trigger_contracts": ["a"],
+    "expected": {"minimal_reentry": ["clockwork", "overseer"], "affected_contracts": ["b", "c"]}
+  },
+  {
+    "id": "documentation-only-dependency",
+    "previous_contracts": {"migration": {"clauses": {"rollback_boundary": "before-contract"}}},
+    "current_contracts": {"migration": {"clauses": {"rollback_boundary": "before-backfill"}}},
+    "dependency_edges": [
+      {"source": "migration", "target": "docs.scribe", "target_kind": "DOCUMENTATION", "consumed_clauses": ["rollback_boundary"]}
+    ],
+    "contract_owners": {"migration": "chronicler", "docs.scribe": "scribe", "clockwork": "clockwork"},
+    "trigger_contracts": ["migration"],
+    "expected": {"minimal_reentry": ["scribe"], "invalidated_documentation": ["docs.scribe"], "invalidated_evidence": []}
+  },
+  {
+    "id": "diagram-only-dependency",
+    "previous_contracts": {"architecture": {"clauses": {"topology": "single-db"}}},
+    "current_contracts": {"architecture": {"clauses": {"topology": "split-db"}}},
+    "dependency_edges": [
+      {"source": "architecture", "target": "diagram.weaver", "target_kind": "DIAGRAM", "consumed_clauses": ["topology"]}
+    ],
+    "contract_owners": {"architecture": "clockwork", "diagram.weaver": "weaver"},
+    "trigger_contracts": ["architecture"],
+    "expected": {"minimal_reentry": ["weaver"], "invalidated_diagrams": ["diagram.weaver"]}
+  },
+  {
+    "id": "implementation-invalidates-trigger-owner",
+    "previous_contracts": {"migration": {"clauses": {"rollback_boundary": "before-contract"}}},
+    "current_contracts": {"migration": {"clauses": {"rollback_boundary": "before-contract"}}},
+    "dependency_edges": [
+      {"source": "migration", "target": "validation", "consumed_clauses": ["rollback_boundary"]}
+    ],
+    "contract_owners": {"migration": "chronicler", "validation": "overseer"},
+    "trigger_contracts": ["migration"],
+    "self_invalidated_contracts": ["migration"],
+    "expected": {"minimal_reentry": ["chronicler", "overseer"], "affected_contracts": ["validation"]}
+  },
+  {
+    "id": "participation-without-dependency",
+    "previous_contracts": {"cipher": {"clauses": {"policy": "old"}}, "clockwork": {"clauses": {"topology": "same"}}},
+    "current_contracts": {"cipher": {"clauses": {"policy": "new"}}, "clockwork": {"clauses": {"topology": "same"}}},
+    "dependency_edges": [],
+    "contract_owners": {"cipher": "cipher", "clockwork": "clockwork"},
+    "trigger_contracts": ["cipher"],
+    "expected": {"minimal_reentry": [], "affected_contracts": [], "dependency_semantic_change": false}
+  },
+  {
+    "id": "authority-scope-change",
+    "previous_contracts": {"intake": {"clauses": {"scope": "approved-paths-only"}}},
+    "current_contracts": {"intake": {"clauses": {"scope": "approved-paths-plus-new-boundary"}}},
+    "dependency_edges": [
+      {"source": "intake", "target": "architecture", "consumed_clauses": ["scope"]}
+    ],
+    "contract_owners": {"intake": "conductor", "architecture": "clockwork"},
+    "trigger_contracts": ["intake"],
+    "trigger_category": "AUTHORITY_CHANGE",
+    "expected": {"authority_change": true, "authority_expansion": false, "minimal_reentry": ["clockwork"], "recommended_next_route": "conductor"}
+  },
+  {
+    "id": "migration-risk-unknown-production-gap",
+    "previous_contracts": {
+      "migration": {"contract_name": "MigrationRiskContract", "clauses": {"production_data": "UNKNOWN", "rollback_boundary": "before-contract"}}
+    },
+    "current_contracts": {
+      "migration": {"contract_name": "MigrationRiskContract", "clauses": {"production_data": "UNKNOWN", "rollback_boundary": "before-backfill"}}
+    },
+    "dependency_edges": [
+      {"source": "migration", "target": "validation", "consumed_clauses": ["rollback_boundary"]}
+    ],
+    "contract_owners": {"migration": "chronicler", "validation": "overseer"},
+    "trigger_contracts": ["migration"],
+    "expected": {"migration_risk_unknown_production_gap": "MIGRATION_RISK_SCHEMA_GAP", "production_data_preserved": true, "minimal_reentry": ["overseer"]}
+  }
+]

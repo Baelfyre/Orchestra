@@ -1,0 +1,38 @@
+{
+  "schema_version": "uix9b.validation-contract.v1",
+  "reference_identity": "uix9b-operations-workspace-reference-v1",
+  "commands": [
+    {"name": "fresh_setup", "command": "npm install --ignore-scripts --package-lock=false", "network": false},
+    {"name": "typecheck", "command": "npm run typecheck", "network": false},
+    {"name": "unit_component_tests", "command": "npm test", "network": false},
+    {"name": "production_build", "command": "npm run build", "network": false}
+  ],
+  "required_manifest_equality": [
+    "fixture_digest",
+    "dependency_manifest_digest",
+    "asset_manifest_digest",
+    "component_map_digest",
+    "design_token_digest",
+    "validator_digest"
+  ],
+  "responsive_viewports": [
+    {"name": "mobile", "width": 390, "height": 844},
+    {"name": "tablet", "width": 834, "height": 1112},
+    {"name": "desktop", "width": 1440, "height": 900}
+  ],
+  "hard_guardrails": [
+    "ACCESSIBILITY_INVARIANTS",
+    "RESPONSIVE_CONTAINMENT",
+    "REFERENCE_IDENTITY",
+    "VISUAL_BASELINE_PRESERVATION",
+    "ASSET_PROVENANCE",
+    "DEPENDENCY_BOUNDARY",
+    "EXTERNAL_MUTATION_BOUNDARY"
+  ],
+  "determinism": {
+    "reset_source": "project",
+    "reset_excludes": ["dist", "node_modules", ".cache"],
+    "repeat_count": 2,
+    "line_endings": "LF_NORMALIZED_FOR_DIGEST"
+  }
+}

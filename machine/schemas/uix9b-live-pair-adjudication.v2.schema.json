@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/uix9b-live-pair-adjudication.v2.schema.json",
+  "title": "Orchestra UIX-9B V2 Pair Adjudication",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "role", "pair_id", "repetition", "valid", "failure_codes", "metric_comparison", "model_behavior_claim"],
+  "properties": {
+    "$schema": {"const": "../../../machine/schemas/uix9b-live-pair-adjudication.v2.schema.json"},
+    "schema_version": {"const": "orchestra.uix9b.live-pair-adjudication.v2"},
+    "role": {"const": "UIX_9B_PAIR_ADJUDICATION"},
+    "pair_id": {"enum": ["PAIR_1", "PAIR_2", "PAIR_3"]},
+    "repetition": {"type": "integer", "minimum": 1, "maximum": 3},
+    "valid": {"type": "boolean"},
+    "failure_codes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "metric_comparison": {"type": "object", "minProperties": 13, "maxProperties": 13, "additionalProperties": {"$ref": "#/$defs/comparison"}},
+    "model_behavior_claim": {"const": "NONE"}
+  },
+  "$defs": {"comparison": {"type": "object", "additionalProperties": false, "required": ["baseline", "governed", "improved", "regressed"], "properties": {"baseline": {}, "governed": {}, "improved": {"type": "boolean"}, "regressed": {"type": "boolean"}}}}
+}

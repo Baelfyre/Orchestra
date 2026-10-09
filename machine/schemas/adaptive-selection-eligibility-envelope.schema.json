@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/adaptive-selection-eligibility-envelope.schema.json",
+  "title": "Orchestra Adaptive Selection Eligibility Envelope v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "envelope_id",
+    "selection_type",
+    "created_at",
+    "user_key",
+    "command_name",
+    "routed_specialist_slug",
+    "deterministic_route_ref",
+    "filters_applied",
+    "filter_evidence_refs",
+    "candidates",
+    "disposition"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.adaptive-selection-eligibility-envelope.v1"},
+    "envelope_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "selection_type": {"enum": ["SPECIALIST_STRATEGY", "MODEL", "WORKER"]},
+    "created_at": {"type": "string", "format": "date-time"},
+    "user_key": {"type": "string", "minLength": 1, "maxLength": 256},
+    "project_key": {"type": "string", "minLength": 1, "maxLength": 256},
+    "task_session_key": {"type": "string", "minLength": 1, "maxLength": 256},
+    "command_name": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]{0,127}$"},
+    "routed_specialist_slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]{0,127}$"},
+    "deterministic_route_ref": {"type": "string", "minLength": 1, "maxLength": 512},
+    "explicit_current_constraint_ref": {"type": "string", "minLength": 1, "maxLength": 512},
+    "filters_applied": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ownership", "route_binding", "authority", "capability", "governance", "provider_privacy", "lifecycle", "resource_ceilings"],
+      "properties": {
+        "ownership": {"const": true},
+        "route_binding": {"const": true},
+        "authority": {"const": true},
+        "capability": {"const": true},
+        "governance": {"const": true},
+        "provider_privacy": {"const": true},
+        "lifecycle": {"const": true},
+        "resource_ceilings": {"const": true}
+      }
+    },
+    "filter_evidence_refs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1, "maxLength": 512}
+    },
+    "candidates": {
+      "type": "array",
+      "maxItems": 128,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/candidate"}
+    },
+    "disposition": {"enum": ["ELIGIBLE_SET_READY", "NO_ELIGIBLE_CANDIDATES"]}
+  },
+  "$defs": {
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["candidate_id", "option_kind", "option_key", "eligibility_status", "eligibility_evidence_refs"],
+      "properties": {
+        "candidate_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "option_kind": {"enum": ["SPECIALIST_STRATEGY", "MODEL", "WORKER"]},
+        "option_key": {"type": "string", "minLength": 1, "maxLength": 256},
+        "owner_specialist_slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]{0,127}$"},
+        "provider_id": {"type": "string", "minLength": 1, "maxLength": 128},
+        "eligibility_status": {"const": "ELIGIBLE"},
+        "eligibility_evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 32,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1, "maxLength": 512}
+        }
+      }
+    }
+  }
+}

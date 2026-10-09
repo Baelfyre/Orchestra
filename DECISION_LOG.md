@@ -1,0 +1,1263 @@
+# Decision Log
+
+## Date: 2026-08-05
+
+**Decision:**
+Accept PR #212 merge as canonical Phase 3B implementation state. The Phase 3B `OrchestraStatusProjection` runtime implementation (`feat(runtime): add read-only status projection`) is now merged and canonical on `main`.
+
+**Reviewed Head:** `2a6c7ea8db16ce73d66fae566672f3681094b0f7`
+**Merge Commit:** `fa1e052d82301e70a5869258c3fc6af765163353`
+**Merged At:** 2026-08-04T21:34:29Z
+**PR:** #212
+**Title:** feat(runtime): add read-only status projection
+**Base SHA:** `e55658da698e7b8871dd7851c62b9e22d860fb2f`
+
+**Status:**
+IMPLEMENTED_AND_MERGED | NOT_RELEASED | POLICY_NOT_ACTIVATED
+
+**Implemented Contracts:**
+- `OrchestraStatusProjection`: Read-only, deterministic, non-authorizing runtime and CLI surface (`orchestra_runtime/status.py`). Canonical Owner: Scribe. Surfaces live Git facts, project state, contract implementation status, and revision-matched validation results in human-readable terminal output and structured JSON. Does not mutate repository state, Git refs, or governance policy. Missing or conflicting data reports UNKNOWN. Exit codes report command execution success only and do not create governance authority.
+- CLI surfaces: `python -m orchestra_runtime.status` and `python scripts/orchestra_status.py`.
+- 28 focused unit tests in `tests/runtime/test_status_projection.py` (91% statement and branch coverage for `orchestra_runtime/status.py`).
+- Full lazy package export in `orchestra_runtime/__init__.py` to eliminate module execution runpy warning.
+
+**Changed Paths (8):**
+- `orchestra_runtime/status.py` (added, 839 lines)
+- `orchestra_runtime/__init__.py` (modified, +49)
+- `scripts/orchestra_status.py` (added, 19 lines)
+- `tests/runtime/test_status_projection.py` (added, 530 lines)
+- `docs/project/ORCHESTRA_STATUS_PROJECTION.md` (modified, +87/-50)
+- `docs/project/SPEC_KITTY_DERIVED_PHASE_3_IMPLEMENTATION_PLAN.md` (modified, +1/-1)
+- `CHANGELOG.md` (modified, +11)
+- `docs/artificer/external-sources/SPEC_KITTY_PHASE_3B_IMPLEMENTATION_HANDOFF.md` (added, 81 lines)
+
+**Validation Evidence:**
+- 418 runtime tests passed (93.80% overall runtime-package coverage)
+- 28 focused StatusProjection tests: 91% statement and branch coverage for `orchestra_runtime/status.py`
+- Full behavior suite passed (exit 0)
+- All 9 required CI checks passed: Analyze (actions), Analyze (python), CodeQL, governance-check, native-macos-latest, native-ubuntu-latest, native-windows-latest, runtime-tests, validate.
+
+**Governance Process Deviation:**
+All required technical checks passed before merge. No independent APPROVED review was recorded before merge. The maintainer completed the merge after reviewing the passing validation state. The Copilot review state was COMMENTED only because review quota was exhausted; it is not an approval. This record does not treat the technical self-review as an independent approval. This is documented as a governance process deviation and does not retroactively convert the technical self-review into an independent approval. The GitHub API returned `reviewDecision: REVIEW_REQUIRED` at the time of merge.
+
+**Decision Boundary:**
+This acceptance records PR #212 merge as canonical Phase 3B implementation state. It does NOT authorize Phase 3C runtime code edits, script edits, adapter edits, test edits, policy amendments, release, or deployment. Phase 3C requires separate maintainer authorization.
+
+---
+
+## Date: 2026-08-05
+
+**Decision:**
+Accept PR #210 merge as canonical Phase 3A design state. The Phase 3A documentation package (`docs(spec-kitty): define Phase 3 deferred capability designs`) is now merged and canonical on `main`.
+
+**Reviewed Head:** `3d8b14aaffa00d66d1faaaef55ec27ecbc10cdc3`
+**Merge Commit:** `1629eaf3cd3f156f8913f84c9229666257a3145a`
+**Merged At:** 2026-08-04T15:48:49Z
+**PR:** #210
+
+**Status:**
+DESIGN_ACCEPTED_MERGED | IMPLEMENTATION NOT STARTED | NOT RELEASED | POLICY NOT ACTIVATED
+
+**Accepted Phase 3A Designs:**
+- `OrchestraStatusProjection`: Read-only status summary and JSON schema (`docs/project/ORCHESTRA_STATUS_PROJECTION.md`). Canonical Owner: Scribe. Secondary Consumers: Conductor, Arbiter, Overseer, Ponytail. Priority 1 target for Candidate Phase 3B.
+- `OrchestraWorktreeContract`: Optional host worktree negotiation and path confinement contract (`docs/project/ORCHESTRA_WORKTREE_CONTRACT.md`). Canonical Owner: Ponytail. Secondary Consumers: Conductor, Arbiter, Overseer, Host Adapters. Priority 2 target for Candidate Phase 3C.
+
+**Technical Validation Before Merge:**
+- All 9 required CI checks passed: Analyze (actions), Analyze (python), CodeQL, governance-check, native-macos-latest, native-ubuntu-latest, native-windows-latest, runtime-tests, validate.
+- 390 runtime tests, 93.72% coverage, behavior suite exit 0, all direct validators passed.
+
+**Governance Process Deviation:**
+All required technical checks passed before merge. No independent APPROVED review was recorded before merge. The maintainer completed the merge after reviewing the passing validation state. The Copilot review state was COMMENTED only because review quota was exhausted; it is not an approval. This record does not treat the technical self-review as an independent approval. This is documented as a governance process deviation and does not retroactively convert the technical self-review into an independent approval. No administrator bypass has been asserted; the GitHub API returned `reviewDecision: REVIEW_REQUIRED` at the time of the immutable-head review.
+
+**Implementation Sequence:**
+- Phase 3B: `OrchestraStatusProjection` model, JSON serializer, CLI renderer, and unit tests
+- Phase 3C: `OrchestraWorktreeContract` model, path confinement validator, base SHA checker, and unit tests
+- Phase 3D: Consolidated cross-platform, behavior, governance, security, and compatibility validation
+- Phase 3E: Maintainer review, commit authorization, push authorization, remote verification, and PR merge
+
+**Review Findings as Implementation Constraints (from Phase 3A immutable-head review):**
+
+Phase 3B mandatory edge-case coverage (F-001 advisory):
+- Multiple remotes, no origin, unborn branch
+- Detached HEAD, shallow clone, CI detached checkout
+- Git binary unavailable, not a Git repository
+- Read-only filesystem, worktree checkout
+- Dirty repository, conflicting canonical files, malformed canonical prose
+
+Before Phase 3C implementation (F-003 non-blocking):
+- Define or remove `ADVISORY_SAFE_SUBSET` from `OrchestraWorktreeContract` cleanup_policy schema. If retained, it MUST NOT permit automatic destructive cleanup; all destructive cleanup remains `EXPLICIT_HOST_ACTION_ONLY`.
+
+Phase 3C mandatory coverage (F-002 advisory):
+- Locked worktrees, nested repositories, submodules
+- Creation races, cleanup races, case-insensitive path collisions
+
+Compatibility advisory (F-004 advisory):
+- JetBrains, Zed, and Neovim adapter rows are absent from the Phase 3 matrix. Acknowledge absence or add NOT_APPLICABLE rows before Phase 3C implementation.
+
+**Decision Boundary:**
+This acceptance records PR #210 merge as canonical Phase 3A design state. It does NOT authorize Phase 3B runtime code edits, script edits, adapter edits, test edits, policy amendments, release, or deployment. Phase 3B requires separate maintainer authorization.
+
+## Date: 2026-08-04
+
+**Decision:**
+Accept Candidate Phase 3A capability selection, single specialist ownership assignments (`OrchestraStatusProjection` owned by Scribe, `OrchestraWorktreeContract` owned by Ponytail), design specifications (`docs/project/ORCHESTRA_STATUS_PROJECTION.md`, `docs/project/ORCHESTRA_WORKTREE_CONTRACT.md`), implementation plan (`docs/project/SPEC_KITTY_DERIVED_PHASE_3_IMPLEMENTATION_PLAN.md`), and compatibility/security matrix (`docs/project/SPEC_KITTY_DERIVED_PHASE_3_COMPATIBILITY_AND_SECURITY_MATRIX.md`).
+
+**Baseline Commit:** `0eebe7d7b65708c61c22d9f31c2ea50189407727` (`origin/main` after PR #208 and PR #209)
+**Design Branch:** `design/spec-kitty-phase3-deferred-capabilities`
+**Worktree:** `C:\conductor\.tmp\spec-kitty-phase3-deferred-capabilities`
+
+**Status:**
+DESIGN_COMPLETE | IMPLEMENTATION NOT STARTED | NOT RELEASED | POLICY NOT ACTIVATED
+
+**Promoted Designs:**
+- `OrchestraStatusProjection`: Read-only status summary and JSON schema (`docs/project/ORCHESTRA_STATUS_PROJECTION.md`). Canonical Owner: Scribe. Secondary Consumers: Conductor, Arbiter, Overseer, Ponytail. Priority 1 target for Candidate Phase 3B.
+- `OrchestraWorktreeContract`: Optional host worktree negotiation and path confinement contract (`docs/project/ORCHESTRA_WORKTREE_CONTRACT.md`). Canonical Owner: Ponytail. Secondary Consumers: Conductor, Arbiter, Overseer, Host Adapters. Priority 2 target for Candidate Phase 3C.
+
+**Reconciled Ownership Matrix:**
+- `OrchestraRuntimeEnvelope`: Clockwork (`IMPLEMENTED_MERGED`)
+- `OrchestraCorrelationID`: Chronicler (`IMPLEMENTED_MERGED`)
+- `OrchestraPhaseRetrospective`: Overseer (`MODEL_AND_BUILDER_IMPLEMENTED_MERGED`)
+- `ApprovedUnitPlan extension`: The Steward (`MODEL_AND_CONTEXTUAL_VALIDATOR_IMPLEMENTED_MERGED`)
+- `OrchestraStatusProjection`: Scribe (`DESIGN_SPECIFIED`)
+- `OrchestraWorktreeContract`: Ponytail (`DESIGN_SPECIFIED`)
+
+**Explicit Boundaries & Security Rules:**
+- Read-only status projection NEVER mutates repository state, Git refs, or policy.
+- Worktree contract is optional (`worktree_supported: true/false`). Path confinement strictly enforced to `.tmp/` or `.orchestra/worktrees/`. Zero automatic deletion of dirty or user worktrees (`EXPLICIT_HOST_ACTION_ONLY`).
+- Neither capability creates execution, merge, release, or policy authority.
+
+**Decision Boundary:**
+This acceptance records documentation-only design and planning completeness for Candidate Phase 3A. It does NOT authorize runtime code edits, script edits, adapter edits, test edits, policy amendments, staging, commit, push, PR creation, merge, or release.
+
+## Date: 2026-08-04
+
+**Decision:**
+Accept PR #208 as the canonical merged implementation of the Spec Kitty-derived Phase 2 Orchestra runtime contracts (`OrchestraRuntimeEnvelope`, `OrchestraCorrelationID`, `OrchestraPhaseRetrospective`, `ApprovedUnitPlan` extension).
+
+**Design Baseline Commit:** `7a3cd1aef86e4edb5194cd68f52d5e26cc2c66fc`
+**Implementation Commit:** `ddd6ce7b3e504b9fc89aa1735a9d561a423341f8`
+**CI Correction Commit:** `1a57c489445a9a333e929cae8f857312bb126a62`
+**Merge Commit:** `1e2992b94abe67a76c1e6ec0b98f8b712ae256e4`
+**Merged PR:** #208
+
+**Status:**
+IMPLEMENTED AND MERGED | NOT RELEASED | POLICY NOT ACTIVATED
+
+**Implemented Contracts:**
+- `OrchestraRuntimeEnvelope`: Typed variants (`execution_result`, `transition_decision`, `audit_event`) with strict UTF-8 JSON serialization/deserialization and bounded support for Codex and Antigravity runtime adapters. Non-authorizing transport metadata.
+- `OrchestraCorrelationID`: Project-owned RFC 9562 UUIDv7 generator with trusted root generation and child propagation. Non-authorizing observational identifier.
+- `OrchestraPhaseRetrospective`: Typed model and deterministic builder deriving metrics from canonical records. Supplementary audit record.
+- `ApprovedUnitPlan`: 15-field extension with structural, path, and contextual validation. Governance decision references do not replace envelope authority; dependency completion is not equivalent to accepted predecessor evidence.
+
+**Validation Evidence:**
+- Runtime tests: 390 passed (93.72% coverage)
+- Behavior suite: passed (exit 0)
+- Cross-contract integration: 20 scenarios passed
+- Cross-platform CI: Windows, Ubuntu, macOS passed
+- CodeQL, Governance Check, validate, runtime-tests passed
+
+**Explicit Deferred Boundaries:**
+- Cross-session correlation restoration and durable correlation persistence
+- Retry, wait, resume, remediation, and escalation continuation engines
+- Automatic retrospective phase-closeout generation and durable retention enforcement
+- Automatic Steward planning/dispatch integration and revision-history ordering integration
+- Automatic policy activation (`docs/governance/DELEGATED_EXECUTION_POLICY.md` remains unamended)
+- `OrchestraWorktreeContract` & `OrchestraStatusProjection`
+
+**Decision Boundary:**
+This acceptance records canonical merged runtime state. It does NOT constitute a release, version bump, policy activation, durable persistence grant, or Phase 3 implementation authorization.
+
+## Date: 2026-08-03
+
+**Decision:**
+Accept the Spec Kitty external pattern review Candidate Phase 1 design specifications (`OrchestraRuntimeEnvelope`, `OrchestraCorrelationID`, `OrchestraPhaseRetrospective`, `OrchestraUnitRecord extension`) as canonical Orchestra-native design specifications.
+
+**Reviewed Head:** `317c9449b2c6d264d0e826f229808439f1549ceb`
+
+**External Source:** `https://github.com/Priivacy-ai/spec-kitty` (v3.2.6, commit `8466727ebbbc01fcaf43575657c9b1b9553784d9`)
+
+**Status:**
+NOT IMPLEMENTED | NOT RELEASED
+
+**Accepted Design Specifications:**
+- `OrchestraRuntimeEnvelope` (`docs/project/ORCHESTRA_RUNTIME_ENVELOPE.md`): Derived non-authorizing serialization profile for LLM machine adapters (`json:orchestra-envelope`). Canonical owner: Clockwork.
+- `OrchestraCorrelationID` (`docs/governance/CORRELATION_ID_PROTOCOL.md`): Optional RFC 9562 UUIDv7 correlation header linking root task lineage across sessions with 0 PyPI dependencies authorized. Canonical owner: Chronicler.
+- `OrchestraPhaseRetrospective` (`docs/governance/PHASE_RETROSPECTIVE_PROTOCOL.md`): Source-backed closeout evidence artifact (`replacement_effect: none`) with `MIXED_RETENTION_MODEL`. Canonical owner: Overseer.
+- `OrchestraUnitRecord extension` (`docs/project/ORCHESTRA_UNIT_RECORD_EXTENSION.md`): Immutable JSON schema extension embedded inside `ApprovedUnitPlan` with canonical `scope_ref` and accepted predecessor eligibility. Canonical owner: The Steward.
+
+**Rejected Concepts:**
+- Standalone mutable unit-state files (e.g. `.orchestra/units/`).
+- Duplicate manual doctrine packs.
+- Workflow-state merge authority or automatic acceptance / policy mutation.
+- Direct runtime dependency on Spec Kitty or copying Spec Kitty code/schemas.
+
+**Deferred Concepts:**
+- `OrchestraWorktreeContract` & `OrchestraStatusProjection`.
+- UUIDv7 generator implementation strategy.
+- Retrospective template & generator implementation.
+- Envelope serializer, parser, adapter integration, and runtime implementation.
+- `docs/governance/DELEGATED_EXECUTION_POLICY.md` Section 4 normative policy integration (deferred to future implementation phases).
+
+**Boundaries:**
+This decision records design acceptance only. It does NOT grant runtime implementation, policy integration, release, merge, deployment, or external-action authority.
+
+## Date: 2026-07-26
+
+**Decision:**
+Adopt the split Phase 4 runtime-integration boundary for The Tuner: retain a public stateless `CoordinationRuntimeService`, add validation-only executor preflight for explicitly supplied collaboration sessions, and keep signal application explicit.
+
+**Accepted Baseline:** `3cee0e174d2c4106bb024ab09c58b7fae2020334`
+
+**Reason:**
+The public service and executor preflight address different responsibilities. The service preserves an explicit API for validation, signal application, and deterministic coordination audit. The executor preflight prevents activated multi-domain work from reaching lifecycle initialization, adapter access, command parsing, or domain operation when the supplied coordination snapshot is blocked. Direct single-owner work remains a zero-coordination bypass.
+
+**Identity and Audit Rules:**
+- `RuntimeComposition` requires a real non-null `ICoordinationController`.
+- A delegated child composition reuses the exact parent coordination-controller and audit-logger objects.
+- Each `RuntimeExecutor` constructs one `CoordinationRuntimeService` and reuses that exact service for root and delegated execution.
+- `CoordinationRuntimeService.apply()` is the sole Phase 4 signal-application and coordination-audit boundary.
+- Accepted non-idempotent transitions and typed rejections each emit exactly one deterministic audit event.
+- Exact idempotent replay emits no duplicate transition event.
+- Validation-only preflight emits no coordination event.
+
+**Scenario Decision:**
+Retain SCN-01 through SCN-06 as the canonical Phase 4 scenario set. Supersede none. Treat INT-01 through INT-05 as supplemental runtime-boundary checks.
+
+**Rejected Alternatives:**
+- Direct controller access from `RuntimeExecutor`.
+- Service-only integration with no fail-closed execution preflight.
+- Adding the coordination service itself to `RuntimeComposition`.
+- Automatic signal application or prompt-text Tuner activation.
+- Nullable, no-op, or host-constructed controllers.
+- Persistence, SQLite, migrations, RPC, or host orchestration.
+
+**Boundaries:**
+This decision authorizes only the exact Phase 4 implementation gate and 12-path ceiling. It does not grant staging, commit, push, pull-request, merge, release, deployment, branch-deletion, ruleset-change, Dagger, or external-action authority.
+
+## Date: 2026-07-25
+
+**Decision:**
+Merge The Tuner Phase 3 pull request #198 using GitHub's explicit administrator-bypass path after the repository's required external-approval rule could not be satisfied by the pull-request author.
+
+**Reviewed Head:** `ca7c37f33fe20376193a4aff752bbe0795cb6ee9`
+
+**Merge Commit:** `1b73e232930c9289601474a5cddb282e98378261`
+
+**Reason:**
+GitHub required an external approval, but the authenticated repository administrator, `Baelfyre`, was also the pull-request author. GitHub rejected formal self-approval. Before bypass authorization, the final code review reported zero blocking findings, all exact-head workflows passed, all review threads were resolved, the exact 13-path scope was verified, and the applicable repository ruleset exposed an administrator bypass. The owner then explicitly selected and separately authorized the administrator-bypass merge path, pinned to the reviewed head.
+
+**Rejected Alternatives:**
+- Self-approval, because GitHub technically prohibits authors from approving their own pull requests.
+- Weakening or removing the repository approval rule.
+- Enabling auto-merge.
+- Force-pushing or directly moving `main`.
+- Merging without exact-head verification.
+- Treating the bypass as a CI exception or emergency-timing exception.
+- Requesting an external reviewer, which remained available as an alternative but was not selected.
+
+**Boundaries:**
+The bypass authorized only the exact merge of PR #198 as a merge commit. It did not authorize a ruleset change, release, deployment, knowledgebase synchronization, consumer-repository change, or feature-branch deletion.
+
+## Date: 2026-07-25
+
+**Decision:**
+Require `ICoordinationController` as a non-null trusted dependency of `RuntimeComposition` for The Tuner Phase 4 runtime-integration boundary.
+
+**Reason:**
+Orchestra's trusted runtime composition already fails closed when required services are absent. Coordination state is continuity- and authority-sensitive for activated multi-domain work. Making the controller optional would spread nullable handling through the service path, while a no-op implementation could silently convert required coordination into bypass. Single-owner work must bypass through Conductor's route classification rather than through a missing runtime dependency.
+
+**Rejected Alternatives:**
+- Optional nullable controller field.
+- No-op or null-object coordination controller.
+- Host-specific implicit controller construction.
+- Automatic Tuner activation for every command.
+
+**Compatibility Rule:**
+Every trusted runtime composition receives a real coordination controller. Direct single-owner execution does not invoke it. Activated multi-domain execution fails closed when the trusted dependency is missing or invalid.
+
+**Boundaries:**
+This decision does not authorize persistence, SQLite, migrations, RPC, host process integration, routing changes, implementation, commit, push, pull request, merge, release, or deployment.
+
+## Date: 2026-07-24
+
+**Decision:**
+Accept PR #197 merge as the canonical completion of The Tuner Phase 2 evidence and continuity enforcement, then begin the separately authorized Phase 3 typed runtime foundation.
+
+**Phase 2 Merge Commit:** `7423d3e7db7fb8e32dfe91454f5c2c5d10aba9bb`
+
+**Phase 2 Reviewed Head:** `01376a55c15014b6d185d936f41d8006ca7f9713`
+
+**Phase 3 Baseline:** `7423d3e7db7fb8e32dfe91454f5c2c5d10aba9bb`
+
+**Phase 3 Boundary:**
+Immutable in-memory coordination contracts, deterministic transition enforcement, runtime audit facts, public Python exports, and focused runtime tests only. Persistence, SQLite, RPC, host orchestration, public direct Tuner commands, release, deployment, and authority expansion remain prohibited.
+
+## Date: 2026-07-22
+
+**Decision:**
+Accept PR #190 merge as the canonical completion of Phase B instruction-level delegated autonomous governance.
+
+**Merge Commit:** `d37a2f7b31543efacf7a5e81c3f4d08c12da017d`
+
+**Former Feature Head:** `861e70b6f06aa823e0a52f017bc0a39faf76c2e7`
+
+**Result:**
+Phase B is canonical on `main`.
+
+**Boundaries:**
+Phase C and Phase D remain unstarted. No release or deployment was authorized or performed.
+
+## Date: 2026-07-22
+
+**Decision:**
+Implement and locally validate Phase B instruction-level delegated autonomous governance loop for Orchestra.
+
+**Reason:**
+Phase B activates the Phase A canonical contracts across Conductor, Arbiter, Steward, Governor, Overseer, execution modes policy, routing map, skill index, and ecosystem guidelines. Conductor can now consume Arbiter transition dispositions (`AUTO_CONTINUE`, `AUTO_REMEDIATE_AND_REVALIDATE`, `WAIT_FOR_EVIDENCE`, `WAIT_FOR_CAPACITY`, `ESCALATE_HUMAN`, `STOP`) and manage internal unit transitions automatically within authorized phase envelopes.
+
+**Phase Implementation Status:**
+Phase B instruction-level behavior implemented, committed (`777eca8`), and locally validated; remote and host reliability remain pending until separately authorized.
+
+**Implementation Commit:** `777eca8a1dc3a2a6b281f6ebcf16c7cfcde9b4d8` (`777eca8`)
+
+**Key changes implemented:**
+- `skills/the-steward/OUTPUT_FORMATS.md`: Added `Delegated Governance Review`.
+- `skills/the-governor/OUTPUT_FORMATS.md`: Added `Delegated Governance Review`.
+- `skills/arbiter/OUTPUT_FORMATS.md`: Added `Transition Decision Record` and `Checkpoint / Capacity Handoff`.
+- `skills/overseer/OUTPUT_FORMATS.md`: Added `Delegated Unit Evidence`.
+- `skills/overseer/SKILL.md`: Registered `Delegated Unit Evidence` in frontmatter and added `Delegated Unit Evidence Role`.
+- `skills/the-steward/SKILL.md`: Added `Delegated Phase Behavior` section.
+- `skills/the-governor/SKILL.md`: Removed domain-membership-only escalation; added `Delegated Phase Behavior`.
+- `skills/arbiter/SKILL.md`: Added `Delegated Phase Transition Evaluation` with 6-tier precedence (`STOP` > `ESCALATE_HUMAN` > `WAIT_FOR_CAPACITY` > `WAIT_FOR_EVIDENCE` > `AUTO_REMEDIATE_AND_REVALIDATE` > `AUTO_CONTINUE`).
+- `skills/conductor/SKILL.md`: Added `Delegated Phase Autonomous Loop` section.
+- `docs/routing/EXECUTION_MODES_POLICY.md`: Added `Risk Mode vs Progression Mode` section.
+- `ROUTING_MAP.md`: Added `Delegated Phase Progression Routing` section.
+- `SKILL_INDEX.md`: Added `Progression Modes` section and updated overseer `output_formats`.
+- `AGENTS.md`: Added Delegated Phase Progression Rule #8.
+- `plugin.json`: Added `Delegated Unit Evidence` to overseer `output_formats`.
+- `tests/behavior/governance-conformance-fixtures.json`: Added four delegated-governance conformance fixtures.
+- `tests/behavior/delegated-phase-trace-fixtures.json`: Added the contract-driven three-unit delegated phase trace, derived phase gate, canonical external-action map, and required negative mutations.
+- `tests/behavior/test_router_contracts.py`, `tests/behavior/test_governance_protocol_consistency.py`, and `scripts/validate_governance_protocol_consistency.py`: Updated behavior and governance validation for the delegated trace, exact record schemas, reference integrity, and Phase B status consistency.
+- `adapters/codex/export-codex-skills.ps1` and `adapters/codex/validate_codex_export.py`: Added package-local reference context generation and operational Markdown/JSON target validation for tracked and arbitrary-depth Codex exports.
+
+## Date: 2026-07-22
+
+
+**Decision:**
+Define canonical Phase A delegated autonomous governance contracts for Orchestra.
+
+**Reason:**
+The Governance Bottleneck ADR (ADR-009) identified that requiring a human relay for every
+internal work unit was preventing continuous autonomous development. Phase A establishes the
+contract foundation required for a bounded, resumable, fail-closed delegated execution loop
+without weakening governance, authority, capabilities, validation, lifecycle, audit, or
+Dagger safeguards.
+
+**Contracts implemented (local branch only):**
+- `DelegatedExecutionEnvelope` - reduction-only human-authorized phase specification.
+- `ApprovedUnitPlan` - ordered or constrained internal unit authorization.
+- `ExecutionEvidencePacket` - compact evidence per unit; staleness-checked before transition.
+- `TransitionDecisionRecord` - governance decision + transition disposition; six additive
+  disposition values (`AUTO_CONTINUE`, `AUTO_REMEDIATE_AND_REVALIDATE`, `WAIT_FOR_EVIDENCE`,
+  `WAIT_FOR_CAPACITY`, `ESCALATE_HUMAN`, `STOP`) separate from the existing five governance
+  decision values (unchanged: `APPROVED`, `ADVISORY_ONLY`, `REVISION_REQUIRED`, `BLOCKED`,
+  `NOT_APPLICABLE`).
+- `AutomaticRemediationPolicy` - maximum 3 attempts per unit, 2 identical-failure repetitions,
+  0 scope growth; escalates when budget exhausted.
+- `CheckpointPolicy` and `CapacityHandoffRecord` - resumable capacity wait, not a new approval.
+- `ExternalActionAuthorityPolicy` - default-deny; all flags false for Phase A.
+- `LegacyHostFallbackPolicy` - absent or unknown dispositions fail closed, never AUTO_CONTINUE.
+- Delegated phase state machine - bounded; no automatic scope expansion.
+- Token-efficiency requirements - load envelope once, compact evidence, checkpoint every unit.
+
+**Key authority principles enforced:**
+- Authority creation remains human-controlled.
+- Governance approval is not runtime authority.
+- Validation is evidence of conformance, not authority expansion.
+- Prompt text and adapter metadata cannot create or widen an envelope.
+- Unknown or unsupported dispositions fail closed.
+
+**Files changed:**
+- `docs/governance/DELEGATED_EXECUTION_POLICY.md` [new]
+- `docs/project/DELEGATED_GOVERNANCE_IMPLEMENTATION_PLAN.md` [new]
+- `docs/governance/GOVERNANCE_DECISION_PROTOCOL.md` [additive]
+- `docs/governance/GOVERNANCE_LAYER.md` [additive]
+- `docs/governance/GOVERNANCE_REVIEW_FLOW.md` [additive]
+- `scripts/validate_governance_protocol_consistency.py` [additive]
+- `tests/behavior/test_governance_protocol_consistency.py` [additive]
+- `CHANGELOG.md`, `DECISION_LOG.md`, `PROJECT_STATE.md`, `SESSION_HANDOFF.md` [state sync]
+
+**Rejected alternatives:**
+- Adding transition dispositions inside existing governance decision values (rejected: would
+  confuse governance decisions with workflow control and break existing downstream parsing).
+- Duplicating the full contract in each role skill (rejected: one canonical source required).
+- Activating Phase B instruction-level behavior in Phase A (rejected: out of scope; requires
+  separate authorization after Phase A review).
+
+**Authorization:**
+Local Phase A contract-design implementation only. No commit, push, pull request, merge, tag,
+release, or deployment authorized. Branch: `docs/delegated-autonomous-governance-phase-a`.
+Starting SHA: `51c194afd6ea12539a19b05c8785bb155002296f`.
+
+---
+
+## Date: 2026-07-22
+
+**Decision:**
+Phase A contract implementation was reviewed and authorized for commit and remote push.
+
+**Reason:**
+Phase A contract design, governance integration, protocol consistency validator, and behavior test suite passed all validation checks cleanly without error or warning. The commit and push establish the remote review baseline for maintainer inspection.
+
+**Historical State Evidence (at initial Phase A push):**
+- Phase A Implementation Commit: `176da20100dce99e26748c53b9c14e7033c119dd` (`176da20`)
+- Commit subject: `feat: add delegated autonomous governance contracts`
+- Active Branch: `docs/delegated-autonomous-governance-phase-a`
+- Remote Feature Branch: `origin/docs/delegated-autonomous-governance-phase-a`
+- Initial Remote Push: Completed and verified
+- Initial Remote Comparison: At the time of the initial Phase A push, the feature branch was ahead of main by 1 and behind by 0
+- Working Tree at Initial Push: Clean
+- Pull Request: Not authorized and not created
+- Merge: Not authorized and not performed
+- Release/Deployment: Not authorized and not performed
+- Next Decision Gate: Maintainer review followed by separate pull-request authorization
+
+**Authorization Boundary:**
+The commit and push did not authorize a pull request, merge, release, or deployment.
+
+---
+
+## Date: 2026-07-22
+
+**Decision:**
+Fix repository-memory branch reference validation in detached-HEAD PR CI for PR #189.
+
+**Reason:**
+GitHub Actions checked out PR #189's merge ref (`refs/remotes/pull/189/merge`) in detached-HEAD mode. The existing `get_current_git_branch` exception returned `None` in detached HEAD, causing exact feature branch references (`docs/delegated-autonomous-governance-phase-a`) to be misclassified as missing repository paths.
+
+**Remediation Approach:**
+- Introduced `get_known_git_branches(repo_root)` in `scripts/governance_check.py` to build an exact set of known branch identities from local branch refs (`refs/heads/*`), remote-tracking refs (`refs/remotes/*`), and trusted CI environment (`GITHUB_HEAD_REF`).
+- Broad `docs/*` exemptions and workflow modifications were explicitly rejected to avoid weakening stale-path detection.
+
+**State Update:**
+- PR: #189 (open)
+- Active Branch: `docs/delegated-autonomous-governance-phase-a`
+- Fix Status: Implemented locally and validated; awaiting commit authorization
+- Workflow changes: None
+
+---
+
+## Date: 2026-06-26
+
+**Decision:**
+Add lightweight project memory files (`PROJECT_STATE.md`, `SESSION_HANDOFF.md`, `DECISION_LOG.md`).
+
+**Reason:**
+Prevent cross-session drift, preserve latest validated state, and reduce reliance on raw transcript history.
+
+**Rejected Alternatives:**
+- Raw transcript logs
+- SQL database
+- Large JSON-only memory
+- Adding new Governor or Stewardess roles at this stage
+
+**Affected Components:**
+- Conductor orchestration behavior
+- Repo startup workflow
+- Future audit and implementation safety
+
+---
+
+## Date: 2026-06-26
+
+**Decision:**
+Implement initial Governance Gates (Workspace Boundary, Session Isolation, Audit Mode, Record Accuracy, Caveman Public-Content Exclusion, Ponytail Handoff Restriction, Acme Readiness Gate Expansion).
+
+**Reason:**
+Address failure caused by cross-repository context drift where an agent edited the wrong repo (`C:\+AA`) due to stale context.
+
+**Rejected Alternatives:**
+- Creating new specialist agents to handle these specific gates.
+
+**Affected Components:**
+- `skills/conductor/SKILL.md`
+- `skills/chronicler/SKILL.md`
+- `skills/scribe/SKILL.md`
+- `skills/overseer/SKILL.md`
+
+---
+
+## Date: 2026-06-26
+
+**Decision:**
+Use lightweight curated memory files as a token-control and drift-prevention mechanism.
+
+**Reason:**
+Repeated prompts, repeated corrections, stale context, and cross-repo drift create unnecessary token usage and implementation risk. A concise repo-local state file can reduce friction by preserving the latest validated state without loading raw conversation history.
+
+**Rejected Alternatives:**
+- raw transcript logs
+- large history dumps
+- SQL memory storage
+- long JSON-only memory
+- relying only on chat history
+
+**Affected Components:**
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- DECISION_LOG.md
+- Orchestra startup workflow
+- Workspace Boundary Gate
+- Session Isolation Gate
+
+---
+
+## Date: 2026-07-03
+
+**Decision:**
+Strengthen Codex adapter export validation so exported routing, governance skills, and relative Markdown links are verified before Codex installation.
+
+**Reason:**
+The Codex adapter can pass structural validation while missing governance skills or support documents that exported Conductor and specialist skills reference at runtime.
+
+**Rejected Alternatives:**
+- Relying on manual adapter inspection
+- Keeping Governor activation-level skills out of the Codex export
+- Installing Codex skills before export validation
+
+**Affected Components:**
+- adapters/codex/export-codex-skills.ps1
+- adapters/codex/validate_codex_export.py
+- scripts/refresh-installed-integrations.ps1
+- scripts/governance_check.py
+- scripts/runtime_guardrail.py
+
+---
+
+## Date: 2026-07-10
+
+**Decision:**
+Published v1.1.0 (Specialist Governance & Boundary Standard). Opened v1.1.1 post-release hardening track to fix release-surface drift, stale startup state, and validation gaps found in the post-release audit.
+
+**Reason:**
+Post-release audit confirmed core is healthy (42 runtime tests pass, strict governance passes), but Codex metadata and example manifest were stuck at v1.0.0, startup state files referenced a merged branch, and governance only checked path existence in memory files.
+
+**Rejected Alternatives:**
+- Regenerating the drifted example manifest (removed instead; canonical plugin.json and MANIFEST_SCHEMA.md suffice)
+- Advisory-only governance for structured startup-state claims (strict mode chosen because startup-state accuracy is the stated purpose of these files)
+
+**Affected Components:**
+- Codex plugin.json
+- Example manifest (deleted)
+- scripts/check_for_updates.py
+- scripts/validate_structure.py
+- scripts/governance_check.py
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- PROJECT_CONTEXT.md
+
+---
+
+## Date: 2026-07-11
+
+**Decision:**
+Transition from transient checkout branch validation to stable repository branch policy checking. The validator now parses and verifies `Canonical Branch` and `Base Branch` policy claims in committed files, rather than matching them against `git branch --show-current`.
+
+**Reason:**
+Transient checkout branches are runtime facts, not durable repository-memory facts. Validating them strictly against committed files forces developers to modify committed repository files for every temporary feature branch name, creating self-invalidating state as soon as a pull request merges into the default branch. Using `Canonical Branch: main` avoids making `main` stale immediately post-merge.
+
+**Rejected Alternatives:**
+- Advisory-only startup-state validation (rejected; strict startup-state validation remains required for version and baseline alignment).
+- Bypassing branch policy checks entirely.
+
+**Affected Components:**
+- scripts/governance_check.py
+- scripts/test_governance_check.py
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+
+---
+
+## Date: 2026-07-11
+
+**Decision:**
+Implemented a deterministic internal validator script (`scripts/validate_artificer_internal.py`) and integrated it into strict governance checking and the behavior runner. The validator enforces schema integrity, markdown boundaries, and ensures non-registration of Artificer on any public runtime surfaces.
+
+**Reason:**
+Phase 2 introduces strict enforcement of the Artificer Phase 1 specification boundaries. Artificer must remain internal and non-routable to maintain separation of concerns. Since dynamic execution or external audits are not supported in this phase, no external source execution or audit runtime is introduced. Furthermore, standard library tools were used exclusively, avoiding third-party validation dependencies (such as `jsonschema`).
+
+**Rejected Alternatives:**
+- Automatic file repair (rejected; the validator reports failures but does not automatically modify files to prevent accidental configuration rewrites).
+- Advisory-only checking for Artificer specification (rejected; strict validation is required to prevent accidental registration in public command/skill surfaces).
+
+**Affected Components:**
+- scripts/validate_artificer_internal.py
+- tests/behavior/test_artificer_internal.py
+- scripts/governance_check.py
+- tests/behavior/run_tests.py
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+
+---
+
+## Date: 2026-07-11
+
+**Decision:**
+Strengthened the Artificer boundary validator and test suite to resolve false-positive tests identified during a post-merge audit. The validator has been refactored to expose pure, testable functions returning `ValidationFailure` dataclass instances. Documentation-boundary negative safety contracts now require explicit Artificer-bound prohibition statements.
+
+**Reason:**
+PR #158 successfully merged the Phase 2 validator, but subsequent audit revealed that some regression tests used placeholder `pass` blocks, did not assert validator responses, or allowed unrelated negative statements to satisfy negative safety contracts. A narrow follow-up PR was chosen instead of reverting. Passing tests now verify the entire repository via `validate_repository()`, and a quality gate prevents any placeholder or unasserted tests in the test suite.
+
+**Rejected Alternatives:**
+- Reverting PR #158 (rejected; the validator functionality is sound and integration is correct; fixing the tests directly is less disruptive).
+- Allowing implicit or general negative safety contracts (rejected; without explicit Artificer-bound prohibition statements, unrelated negative text can satisfy a contract, risking false-positives).
+
+**Affected Components:**
+- scripts/validate_artificer_internal.py
+- tests/behavior/test_artificer_internal.py
+- internal/artificer/ARTIFICER.md
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+
+---
+
+## Date: 2026-07-11
+
+**Decision:**
+Completed the specialist-boundary polarity enforcement within the Artificer internal boundary validator (`scripts/validate_artificer_internal.py`). Refactored all keyword-presence validation checks in `check_artificer_boundaries_md()` to require explicit Artificer-bound negative polarity. Introduced sub-clause split-normalizer capabilities and subject-inheritance to reject mixed-polarity bypasses (e.g. positive permissions paired with unrelated negative clauses).
+
+**Reason:**
+A final review of PR #159 identified that several specialist boundary checks in `check_artificer_boundaries_md()` still validated boundaries using simple keyword presence rather than explicit polarity. Simple keyword presence could allow positive permission statements to satisfy a safety contract. Explicit positive permission detection and mixed-polarity test cases have been added to the behavior test suite, verifying that positive/mixed statements successfully trigger validation failures. A narrow follow-up PR was chosen to preserve the integrated validator structure.
+
+**Rejected Alternatives:**
+- Verbatim paragraph matching (rejected; matching whole paragraphs verbatim reduces flexibility and is brittle to formatting updates in the specs).
+- Deferring the final polarity checks (rejected; keyword-only validation left open potential false-positives for critical safety contracts).
+
+**Affected Components:**
+- scripts/validate_artificer_internal.py
+- tests/behavior/test_artificer_internal.py
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+
+---
+
+## Date: 2026-07-11
+
+**Decision:**
+Implemented the Phase 3 Artificer Source-Intake and Pattern-Record Instance Validator, then hardened its schema-configuration defenses, cross-platform path handling, and empty-examined-range tracking. A comprehensive test suite with 54 regression assertions ensures the validator rejects anomalies and missing layouts strictly.
+
+**Reason:**
+To assure that governance standards strictly enforce metadata shape, registry formatting, internal slug and boundary constraints, without ever evaluating external source logic dynamically or communicating with external APIs.
+
+**Rejected Alternatives:**
+- Using an external JSON schema validator (rejected; requires additional external Python dependencies).
+- Live code evaluation of patterns (rejected; explicitly forbidden by governance rules).
+
+**Affected Components:**
+- scripts/validate_artificer_records.py
+- tests/behavior/test_artificer_records.py
+- internal/artificer/records/README.md
+- scripts/governance_check.py
+- tests/behavior/run_tests.py
+
+---
+
+## Date: 2026-07-12
+
+**Decision:**
+Implemented the Phase 4A Artificer Governance Contracts foundation. Created native JSON schemas for Audit Reports, Evolution Proposals, Governance Decisions, and Promotion Records, separating governance outcomes from extraction classification. Created isolated read-only registries for the new records and explicitly documented the Phase 4 no-execution and read-only boundaries.
+
+**Reason:**
+Phase 4 separates extraction taxonomy from governance decisions, ensuring a robust, contract-only governance foundation. Phase 4A made narrow, required changes to `internal/artificer/SOURCE_INTAKE_SCHEMA.json`, `internal/artificer/PATTERN_SCHEMA.json`, `scripts/validate_artificer_internal.py`, and focused regression tests to require `default_branch` and separate extraction classifications from governance outcomes.
+
+**Rejected Alternatives:**
+- Broad legacy-validator refactoring (rejected; only the narrow contract and boundary changes required by Phase 4A were made).
+
+**Affected Components:**
+- internal/artificer/AUDIT_REPORT_SCHEMA.json
+- internal/artificer/EVOLUTION_PROPOSAL_SCHEMA.json
+- internal/artificer/GOVERNANCE_DECISION_SCHEMA.json
+- internal/artificer/PROMOTION_RECORD_SCHEMA.json
+- docs/internal/SECURITY_BOUNDARIES.md
+- docs/internal/EVIDENCE_REQUIREMENTS.md
+- internal/artificer/CHECKLIST.md
+- docs/internal/PATTERN_CLASSIFICATION.md
+
+---
+
+## Date: 2026-07-12
+
+**Decision:**
+Implemented the separate Phase 4B governance-record validator with deterministic registry-layout, schema, semantic, and cross-record checks for audits, decisions, proposals, and promotions.
+
+**Reason:**
+The governance chain must remain traceable and fail closed without cloning, installing, compiling, or executing external sources. Phase 4B does not mutate the Pattern Catalog; strict governance and behavior runners execute the validator.
+
+**Affected Components:**
+- scripts/validate_artificer_governance_records.py
+- tests/behavior/test_artificer_governance_records.py
+
+---
+
+## Date: 2026-07-13
+
+**Issue:** #176
+
+**Decision:**
+Defined the Phase 6A Orchestra-native authority and capability runtime architecture after Phase 5C-B, Phase 5D, and Phase 5E completed through PR #175. The architecture separates trusted authority from prompts, adapter metadata, routing, governance approval, PRAP host support, and audit evidence; defines immutable per-run runtime capabilities, bounded delegation, typed lifecycle control, and fail-closed initialization; and sequences later specialist-owned implementation without changing runtime behavior.
+
+**Reason:**
+The current runtime provides adapter context, command parsing, routing, generic governance validation, execution results, and audit logging, but it has no trusted authority scope, explicit target or operation decisions, immutable per-run runtime capability manifest, bounded delegation, typed lifecycle state, structured completion signals, or authority-specific audit events. Architecture must define these trust boundaries before implementation so prompt or adapter metadata cannot become authority by accident.
+
+The selected contracts require child authority and capabilities to be intersections of parent grants, keep `RuntimeCapability*` terminology distinct from PRAP `AdapterCapabilities`, prohibit ordinary text from completing a run, and reserve all implementation for separately authorized Phase 6B batches. This is an original Orchestra architecture based on repository-local governance and runtime evidence. No external source expression is reused, promotions remain `APPROVED`, and the Pattern Catalog remains unchanged.
+
+**Rejected Alternatives:**
+- Trusting prompt text, adapter metadata, routing, governance approval, or audit evidence as runtime authority.
+- Treating PRAP adapter support as runtime execution permission.
+- Using a mutable process-global capability registry or silent unlimited compatibility policy.
+- Copying or unioning parent grants into child runs instead of intersecting them.
+- Inferring lifecycle completion from ordinary text.
+- Combining Phase 6A architecture with runtime implementation, test changes, promotion lifecycle changes, or Catalog updates.
+
+**Affected Components:**
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- docs/internal/ARTIFICER_WORKFLOW.md
+- docs/project/AUTHORITY_CAPABILITY_CONTRACTS.md
+- docs/project/AUTHORITY_CAPABILITY_IMPLEMENTATION_PLAN.md
+- docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md
+- docs/project/OOP_RUNTIME_ARCHITECTURE.md
+- docs/project/ROADMAP.md
+- scripts/governance_check.py
+- tests/behavior/run_tests.py
+
+---
+
+## Date: 2026-07-12
+
+**Decision:**
+Implemented Phase 4C-A as a standard-library-only, read-only renderer that
+validates the complete Phase 4B governance repository before converting one
+canonical audit JSON record into deterministic Markdown on standard output.
+
+**Reason:**
+Human-readable audit views must preserve validated JSON as the sole governance
+authority, remain independent of repository location and filesystem order, and
+create no Catalog, governance, source, or runtime writes.
+
+**Rejected Alternatives:**
+- Writing rendered Markdown files (rejected; Phase 4C-A is stdout-only).
+- Combining Catalog synchronization with rendering (rejected; Phase 4C-B owns
+  the separate Pattern Catalog gate).
+- Adding a Markdown or schema dependency (rejected; existing validation and the
+  Python standard library cover the required behavior).
+
+**Affected Components:**
+- scripts/render_artificer_audit_report.py
+- tests/behavior/test_artificer_audit_report_renderer.py
+- scripts/governance_check.py
+- scripts/test_governance_check.py
+- tests/behavior/run_tests.py
+- docs/internal/ARTIFICER_PHASE4_GOVERNANCE_CONTRACT.md
+- docs/internal/ARTIFICER_WORKFLOW.md
+- internal/artificer/reviews/README.md
+
+---
+
+## Date: 2026-07-12
+
+**Decision:**
+Implement Phase 4C-B as a deterministic, read-only gate that treats validated
+promotion JSON as canonical and `docs/internal/PATTERN_CATALOG.md` as a manual,
+human-readable projection that must match those records exactly.
+
+**Reason:**
+The Catalog must remain manually synchronized, fully traceable, and unable to
+invent implementation or approval authority in Markdown. Exact whole-file
+comparison keeps stale rows, stale entries, reordered content, and formatting
+drift visible at the first deterministic line mismatch.
+
+**Rejected Alternatives:**
+- Automatic Catalog rewrites (rejected; Phase 4C-B is read-only).
+- Catalog-derived authority (rejected; validated JSON promotion records remain canonical).
+- Advisory-only mismatch reporting (rejected; the Catalog gate is a strict validator).
+
+**Affected Components:**
+- scripts/validate_artificer_pattern_catalog.py
+- tests/behavior/test_artificer_pattern_catalog.py
+
+---
+
+## Date: 2026-07-13
+
+**Decision:**
+Approved the Orchestra authority, capability, delegation, and lifecycle proposal through independent Phase 5C-B Arbiter, Governor, and Steward reviews followed by conditional Butler disposition through the canonical `maintainer_decision` field. Created four separate manual Phase 5D promotion records and synchronized their deterministic Phase 5E Pattern Catalog projection.
+
+**Reason:**
+Arbiter confirmed one pinned audit, four unique approved concept-only decisions, exact pattern and specialist traceability, a coherent authority chain, and exclusion of the rejected fail-open decision. Governor approved the proposal and source traceability only under the recorded Apache-2.0 boundaries, with no source-expression reuse authority. Steward confirmed bounded roadmap alignment, measurable verification constraints, proposal cohesion, and safe later technical decomposition. Conditional Butler authority applied only after all three reviews approved without unresolved material conditions.
+
+Four promotions remain separate because declared authority, run-scoped capabilities, bounded delegation, and lifecycle completion have distinct catalog identities, specialists, source locations, and future design ownership. Catalog synchronization was allowed only after all four manual promotion records validated and remains a human-readable projection of canonical JSON. Proposal approval, promotion, and Catalog synchronization do not authorize implementation. Strix source code, prompts, payloads, examples, media, and documentation expression remain unauthorized for reuse; later applicable adaptation or distribution still requires license, NOTICE, patent, modified-file, attribution, trademark, and dependency review.
+
+**Rejected Alternatives:**
+- Treating one reviewer outcome as a substitute for independent Arbiter, Governor, or Steward analysis.
+- Combining four distinct specialist-owned concepts into one promotion or Catalog identity.
+- Treating proposal approval, promotion, or Catalog synchronization as implementation authority.
+- Authorizing source-expression reuse through conceptual governance approval.
+- Beginning Phase 6A architecture or runtime implementation in this governance progression.
+
+**Affected Components:**
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- docs/internal/ARTIFICER_PHASE4_GOVERNANCE_CONTRACT.md
+- docs/internal/ARTIFICER_WORKFLOW.md
+- docs/internal/PATTERN_CATALOG.md
+- internal/artificer/CHECKLIST.md
+- internal/artificer/promotions/agent-lifecycle-state-machine.json
+- internal/artificer/promotions/authority-scope-contract.json
+- internal/artificer/promotions/run-scoped-capability-manifest.json
+- internal/artificer/promotions/specialist-delegation-contract.json
+- internal/artificer/proposals/orchestra-authority-capability-contract.json
+- scripts/governance_check.py
+- scripts/test_governance_check.py
+- tests/behavior/run_tests.py
+- docs/internal/PATTERN_CATALOG.md
+- docs/internal/ARTIFICER_PHASE4_GOVERNANCE_CONTRACT.md
+- docs/internal/ARTIFICER_WORKFLOW.md
+- internal/artificer/promotions/README.md
+- internal/artificer/CHECKLIST.md
+
+---
+
+## Date: 2026-07-12
+
+**Decision:**
+Audit OpenHero and Strix in separate PRs. OpenHero is the first Phase 4.5
+pilot, pinned to commit `16ffaa7e6dc39eb390011d81c420353b5d1dbaff`, and the
+pilot remains static and read-only.
+
+**Reason:**
+Pilot evidence must stay pinned, scoped, and reviewable without mixing two
+external repositories or implying governance advancement. Phase 4.5-A creates
+source-intake, pattern, and audit records only. Media libraries and third-party
+assets stay outside the code-license conclusion. The substring-domain allowlist
+is recorded as `OUT_OF_SCOPE` source classification, not as a governance
+rejection. Governance decisions, proposals, promotions, and Catalog updates
+remain later manual actions.
+
+**Rejected Alternatives:**
+- Auditing OpenHero and Strix together (rejected; mixes evidence and raises review risk).
+- Treating the substring allowlist as a governance rejection record (rejected; Phase 4.5-A records source findings only).
+- Advancing directly into proposal or promotion artifacts (rejected; pilot is evidence-only).
+
+**Affected Components:**
+- internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/source-intake.json
+- internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/patterns/responsive-progressive-gallery.json
+- internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/patterns/optimistic-engagement-state-reconciliation.json
+- internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/patterns/fallback-backed-code-loading.json
+- internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/patterns/layered-archive-submission-validation.json
+- internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/patterns/substring-domain-allowlist.json
+- internal/artificer/reviews/cristianolivera1__openhero__16ffaa7e6dc3/audit-report.json
+- docs/internal/ARTIFICER_PHASE4_GOVERNANCE_CONTRACT.md
+- docs/internal/ARTIFICER_WORKFLOW.md
+- internal/artificer/CHECKLIST.md
+---
+
+## Date: 2026-07-12
+
+**Decision:**
+Conduct the Strix pilot independently from the completed OpenHero pilot. Phase
+4.5-B is pinned to commit
+`09872744f5a9d3ffad750478f823e656ac1a7c88` and is limited to static,
+read-only inspection of selected orchestration and safety-boundary files.
+
+No Strix code, dependency, Docker image, model, agent, scan, target, exploit,
+payload, API, browser, shell, proxy, or external tool may be executed. Offensive
+skill and payload directories remain excluded from the audit.
+
+The reviewed repository and package metadata declare Apache-2.0. Any future
+reuse, adaptation, or distribution requires Governor and maintainer review of
+license-copy, attribution, NOTICE, modified-file, patent, and trademark
+obligations.
+
+The fail-open system-prompt rendering mechanism is recorded as an
+`OUT_OF_SCOPE` source-pattern classification. It is not a governance rejection.
+
+OpenHero records remain unchanged. Strix findings are audit evidence only and
+do not constitute a vulnerability disclosure, governance approval, proposal,
+promotion, Pattern Catalog entry, pentesting authorization, or implementation
+authorization.
+
+**Reason:**
+Strix is a high-risk offensive-security source whose documented capabilities
+include dynamic testing, shell access, Docker-backed execution, exploitation,
+and proof-of-concept generation. Restricting the pilot to pinned static evidence
+keeps the Artificer audit non-executing, independently reviewable, and within
+the approved governance boundary.
+
+**Rejected Alternatives:**
+- Auditing Strix together with OpenHero (rejected; the pilots require separate evidence and review chains).
+- Installing or executing Strix to validate runtime behavior (rejected; external execution is prohibited).
+- Reviewing exploit skills, payloads, targets, or proof-of-concept artifacts (rejected; outside the authorized pilot scope).
+- Treating the prompt-rendering finding as a governance rejection (rejected; this phase creates source and audit evidence only).
+- Advancing directly into decisions, proposals, promotions, Catalog synchronization, or implementation (rejected; those remain later manual actions).
+
+**Affected Components:**
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- docs/internal/ARTIFICER_PHASE4_GOVERNANCE_CONTRACT.md
+- docs/internal/ARTIFICER_WORKFLOW.md
+- internal/artificer/CHECKLIST.md
+- internal/artificer/records/usestrix__strix__09872744f5a9/source-intake.json
+- internal/artificer/records/usestrix__strix__09872744f5a9/patterns/declared-scope-context.json
+- internal/artificer/records/usestrix__strix__09872744f5a9/patterns/validated-specialist-delegation.json
+- internal/artificer/records/usestrix__strix__09872744f5a9/patterns/lifecycle-gated-agent-completion.json
+- internal/artificer/records/usestrix__strix__09872744f5a9/patterns/run-wide-tool-extension-registry.json
+- internal/artificer/records/usestrix__strix__09872744f5a9/patterns/fail-open-system-prompt-rendering.json
+- internal/artificer/reviews/usestrix__strix__09872744f5a9/audit-report.json
+
+---
+
+## Date: 2026-07-12
+
+**Decision:**
+Recorded Phase 5B-A OpenHero governance decisions for three approved concept-only reference patterns, one deferred concept-only UI pattern, and one rejected security anti-pattern. No Strix governance decisions, proposals, promotions, Pattern Catalog changes, or implementation authority were created in this Phase 5B-A record set.
+
+**Reason:**
+The Phase 5A independent governance review established the corrected OpenHero dispositions, and the Maintainer adopted those outcomes. Recording OpenHero decisions separately preserves licensing and security review clarity, keeps the MIT-licensed OpenHero governance chain independent from the Apache-2.0 Strix review, and prevents premature proposal, promotion, Pattern Catalog, or implementation advancement.
+
+Approved `REFERENCE_ONLY` patterns remain restricted to `CONCEPT_ONLY`. The deferred UI pattern requires an approved roadmap need before advancement. The `OUT_OF_SCOPE` substring-domain mechanism is rejected and implementation-blocked. No OpenHero source reuse, media reuse, or third-party asset reuse is authorized.
+
+**Rejected Alternatives:**
+- Recording OpenHero and Strix decisions together.
+- Automatically approving all audited patterns.
+- Approving Responsive Progressive Gallery without a roadmap need.
+- Approving the substring allowlist as an implementation pattern.
+- Creating a proposal or promotion in the same phase.
+- Copying external source implementation.
+
+**Affected Components:**
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- docs/internal/ARTIFICER_PHASE4_GOVERNANCE_CONTRACT.md
+- docs/internal/ARTIFICER_WORKFLOW.md
+- internal/artificer/decisions/cristianolivera1__openhero__16ffaa7e6dc3/fallback-backed-code-loading.json
+- internal/artificer/decisions/cristianolivera1__openhero__16ffaa7e6dc3/layered-archive-submission-validation.json
+- internal/artificer/decisions/cristianolivera1__openhero__16ffaa7e6dc3/optimistic-engagement-state-reconciliation.json
+- internal/artificer/decisions/cristianolivera1__openhero__16ffaa7e6dc3/responsive-progressive-gallery.json
+- internal/artificer/decisions/cristianolivera1__openhero__16ffaa7e6dc3/substring-domain-allowlist.json
+
+---
+
+## Date: 2026-07-12
+
+**Decision:**
+Recorded Phase 5B-B Strix governance decisions for four approved concept-only patterns and one rejected implementation-blocked prompt-safety anti-pattern. Governor review was mandatory for all Strix records. No proposal, promotion, Pattern Catalog update, source reuse, prompt reuse, or implementation authority was created in this phase, and existing OpenHero decisions remain unchanged.
+
+**Reason:**
+The Strix review is security-sensitive and Apache-2.0 licensed, so governance decisions must be recorded separately from OpenHero and require mandatory Governor review. The Phase 5A independent review provided corrected dispositions, and this record preserves evidence, licensing, security, and specialist traceability without advancing any proposals or Catalog lifecycle changes.
+
+Approved `REFERENCE_ONLY` patterns remain restricted to `CONCEPT_ONLY`, while the `OUT_OF_SCOPE` fail-open prompt-rendering pattern cannot receive `APPROVED` status and is therefore rejected with `IMPLEMENTATION_BLOCKED`. Governor approval accepts the governance disposition and restriction only; it does not authorize Strix source, prompt, payload, example, or implementation reuse.
+
+**Rejected Alternatives:**
+- Combining OpenHero and Strix decisions in one PR.
+- Treating Governor review as optional.
+- Automatically promoting approved decisions.
+- Approving the fail-open prompt mechanism.
+- Copying Strix source, prompts, payloads, examples, or implementation.
+- Creating the authority/capability proposal in this same phase.
+- Modifying the Pattern Catalog before promotion.
+
+**Affected Components:**
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- docs/internal/ARTIFICER_PHASE4_GOVERNANCE_CONTRACT.md
+- docs/internal/ARTIFICER_WORKFLOW.md
+- internal/artificer/decisions/usestrix__strix__09872744f5a9/declared-scope-context.json
+- internal/artificer/decisions/usestrix__strix__09872744f5a9/fail-open-system-prompt-rendering.json
+- internal/artificer/decisions/usestrix__strix__09872744f5a9/lifecycle-gated-agent-completion.json
+- internal/artificer/decisions/usestrix__strix__09872744f5a9/run-wide-tool-extension-registry.json
+- internal/artificer/decisions/usestrix__strix__09872744f5a9/validated-specialist-delegation.json
+
+---
+
+## Date: 2026-07-12
+
+**Decision:**
+Implemented Issue #171 governance, prompt-load, and routing recalibration before Artificer Phase 5C. Established one canonical shared governance decision protocol, restored Conductor to lightweight routing, added deterministic routing and governance anti-drift validation, and defined the post-cleanup prompt-load bootstrap baseline. No Artificer proposal, promotion, Pattern Catalog update, source-reuse authority, prompt-reuse authority, or implementation authority was created in this issue.
+
+**Reason:**
+Governance decision values, gate rules, ownership statements, and compact output structure had drifted across the governance layer and specialist skill files. Conductor had also grown beyond its historical review baseline and was repeating routing and governance material that already belonged in lighter canonical sources. Issue #171 needed deterministic protection before Phase 5C so future changes cannot silently reintroduce duplicated policy, route architecture or governance work straight to Ponytail, or self-raise prompt-load baselines to hide drift.
+
+The canonical shared protocol now lives in `docs/governance/GOVERNANCE_DECISION_PROTOCOL.md`. Shared decision values remain `APPROVED`, `ADVISORY_ONLY`, `REVISION_REQUIRED`, `BLOCKED`, and `NOT_APPLICABLE`. Shared gates remain blocking for governance `BLOCKED`, pausing for `REVISION_REQUIRED`, pausing for `human_review_required: true`, and blocking for Arbiter `HOLD` or `BLOCKED`. Steward and Governor retain role-specific output fields and review nuance only. The prompt-load bootstrap baseline is explicit configuration enforced by strict governance rather than advisory reporting alone.
+
+**Rejected Alternatives:**
+- Keeping duplicated decision tables and gate rules in multiple governance files.
+- Letting Conductor continue to carry repeated routing and governance policy instead of routing from lighter canonical sources.
+- Treating routing benchmarks as sufficient without deterministic fixture validation.
+- Raising baselines implicitly inside the same feature change that caused growth.
+- Beginning Artificer Phase 5C before governance and routing drift protections were in place.
+
+**Affected Components:**
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- SKILL_INDEX.md
+- ROUTING_MAP.md
+- docs/governance/GOVERNANCE_LAYER.md
+- docs/governance/GOVERNANCE_DECISION_PROTOCOL.md
+- docs/performance/PROMPT_LOAD_BASELINE.json
+- docs/performance/PROMPT_LOAD_RECALIBRATION_AUDIT.md
+- docs/performance/PROMPT_LOAD_THRESHOLD_POLICY.md
+- skills/conductor/SKILL.md
+- skills/the-steward/SKILL.md
+- skills/the-governor/SKILL.md
+- adapters/codex/skills/conductor/SKILL.md
+- adapters/codex/skills/conductor/ROUTING_MAP.md
+- adapters/codex/skills/the-steward/SKILL.md
+- adapters/codex/skills/the-governor/SKILL.md
+- adapters/codex/validate_codex_export.py
+- scripts/measure_prompt_load.py
+- scripts/check_prompt_load_thresholds.py
+- scripts/validate_prompt_load_budget.py
+- scripts/validate_governance_protocol_consistency.py
+- scripts/validate_routing_contract.py
+- scripts/governance_check.py
+- scripts/test_governance_check.py
+- tests/behavior/router-contract-fixtures.json
+- tests/behavior/test_prompt_load_budget.py
+- tests/behavior/test_governance_protocol_consistency.py
+- tests/behavior/test_router_contracts.py
+- tests/behavior/run_tests.py
+
+---
+
+## Date: 2026-07-12
+
+**Decision:**
+Implemented the Phase 5C-A proposal contract for Issue #173 by advancing the Evolution Proposal schema to version `1.1`, adding deterministic lifecycle and date validation, and creating one Orchestra authority/capability proposal in `UNDER_REVIEW`. The proposal connects declared authority scope, immutable run-scoped capabilities, bounded specialist delegation, and typed lifecycle completion as an Orchestra-native design contract.
+
+**Reason:**
+The four approved Strix governance decisions are eligible for design-only proposal consideration, but they do not authorize promotion, reuse, or implementation. Phase 5C-A therefore records reviewer evidence and Maintainer disposition explicitly, enforces lifecycle consistency and real calendar-date ordering, and fails promotion references unless a proposal reaches final `APPROVED` status.
+
+The fail-open system-prompt-rendering decision remains rejected and implementation-blocked. It is not selected or positively adapted; the proposal uses fail-closed prompt construction only as a negative safety constraint. No Strix source, prompt, payload, exploit, example, media, or documentation expression is reused. Independent Arbiter, Governor, Steward, and Maintainer disposition remains pending for Phase 5C-B, and even a later approved proposal would remain design-only until separate manual promotion, Catalog synchronization, and Maintainer-authorized specialist implementation.
+
+**Rejected Alternatives:**
+- Treating an `UNDER_REVIEW` proposal as approved or promotion-eligible.
+- Allowing proposal status to diverge from final Maintainer disposition.
+- Permitting prompt text, mutable process-global registration, or child delegation to expand authority.
+- Selecting or positively adapting the rejected fail-open prompt-rendering decision.
+- Combining Phase 5C-A contract work with Phase 5C-B disposition, promotion, Catalog synchronization, or runtime implementation.
+
+**Affected Components:**
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- docs/internal/ARTIFICER_PHASE4_GOVERNANCE_CONTRACT.md
+- docs/internal/ARTIFICER_WORKFLOW.md
+- internal/artificer/CHECKLIST.md
+- internal/artificer/EVOLUTION_PROPOSAL_SCHEMA.json
+- internal/artificer/proposals/README.md
+- internal/artificer/proposals/orchestra-authority-capability-contract.json
+- scripts/validate_artificer_governance_records.py
+- tests/behavior/test_artificer_governance_records.py
+
+---
+
+## Date: 2026-07-13
+
+**Issue:** #178
+
+**Decision:**
+Implemented the bounded Phase 6B-A core domain foundation and Phase 6B-B authority and capability enforcement. Added immutable shared, authority, runtime capability, delegation, lifecycle, error, and audit-event contracts; concrete authority and capability evaluators; repository-contained trusted JSON policy loading; deterministic intersections and collision rejection; typed enforcement; and additive public exports. RuntimeExecutor, adapters, delegation validation behavior, lifecycle transition behavior, and active compatibility policy remain unchanged.
+
+**Reason:**
+Phase 6A established that prompt text, adapter metadata, routing, governance approval, PRAP host support, and audit evidence cannot grant runtime authority. Phase 6B-A implements the smallest immutable domain boundary needed to represent those decisions safely. Phase 6B-B enforces exact target, operation, constraint, and capability checks without accepting prompt or adapter inputs and fails closed for missing, malformed, escaped, untrusted, colliding, or empty policy data.
+
+The four promoted contracts moved from `APPROVED` to `IMPLEMENTING` because implementation has begun. The Pattern Catalog was manually synchronized from canonical promotion JSON. No promotion is `IMPLEMENTED`; delegation and lifecycle remain model-only; RuntimeExecutor integration is deferred to Phase 6B-D. The implementation is original Orchestra code derived from repository-local contracts and reuses no external source expression.
+
+**Rejected Alternatives:**
+- Trusting prompt text, adapter metadata, routing, governance state, or audit records as authority inputs.
+- Adding a process-global mutable capability registry.
+- Using prefix target matching or silent allow-by-default behavior.
+- Activating a default compatibility policy before Phase 6B-D authorization.
+- Implementing delegation validation, lifecycle transitions, RuntimeExecutor integration, or adapter changes in this batch.
+- Marking any promotion `IMPLEMENTED` before later implementation and verification complete.
+
+**Affected Components:**
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- docs/internal/PATTERN_CATALOG.md
+- docs/project/AUTHORITY_CAPABILITY_IMPLEMENTATION_PLAN.md
+- internal/artificer/promotions/agent-lifecycle-state-machine.json
+- internal/artificer/promotions/authority-scope-contract.json
+- internal/artificer/promotions/run-scoped-capability-manifest.json
+- internal/artificer/promotions/specialist-delegation-contract.json
+- orchestra_runtime/__init__.py
+- orchestra_runtime/authority.py
+- orchestra_runtime/capabilities.py
+- orchestra_runtime/delegation.py
+- orchestra_runtime/errors.py
+- orchestra_runtime/interfaces.py
+- orchestra_runtime/lifecycle.py
+- orchestra_runtime/models.py
+- tests/runtime/test_authority.py
+- tests/runtime/test_capabilities.py
+- tests/runtime/test_delegation_contracts.py
+- tests/runtime/test_lifecycle_contracts.py
+
+---
+
+## Date: 2026-07-13
+
+**Issue:** #180
+
+**Decision:**
+Implemented Phase 6B-C delegation and lifecycle control after PR #179 merged and Issue #178 closed. Added immutable delegation policy and resolution contracts, constructor-injected bounded validation, accepted and rejected delegation events, the exact lifecycle transition table, deterministic accepted-signal identity, idempotent identical terminal replay, conflicting terminal-signal rejection, and lifecycle transition, rejection, and terminal-result events. Delegation validation and lifecycle control are operational. RuntimeExecutor integration has not started.
+
+**Reason:**
+Phase 6B-A and Phase 6B-B established immutable authority and capability contracts at approved base `f05d7814019c9f2abb188050baf8e9bb67c7d584`. Phase 6B-C completes the separately authorized delegation and lifecycle batch without executing delegated work or integrating runtime execution. Accepted delegation provenance is created only after parent, specialist, depth, authority, capability, and context checks pass; rejected resolutions contain no effective child scope or manifest. Lifecycle changes remain stateless and signal-driven, preserve snapshots on rejection, keep `WAITING` resumable, and keep all terminal states distinct.
+
+The four promotions remain `IMPLEMENTING`. The Pattern Catalog is unchanged. Phase 6B-D is the next separately authorized phase. Phase 6C and release finalization have not started, and no external Strix content was accessed.
+
+**Rejected Alternatives:**
+- Copying parent authority, capabilities, or context into a child without explicit reduction checks.
+- Creating accepted delegation provenance before validation succeeds.
+- Executing child work or modifying `RuntimeExecutor` during Phase 6B-C.
+- Inferring lifecycle state from ordinary text.
+- Treating different terminal states or conflicting terminal signals as equivalent.
+- Modifying promotions, the Pattern Catalog, adapters, compatibility policy, or release versions.
+
+**Affected Components:**
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- docs/project/AUTHORITY_CAPABILITY_CONTRACTS.md
+- docs/project/AUTHORITY_CAPABILITY_IMPLEMENTATION_PLAN.md
+- orchestra_runtime/__init__.py
+- orchestra_runtime/delegation.py
+- orchestra_runtime/interfaces.py
+- orchestra_runtime/lifecycle.py
+- tests/runtime/test_delegation_contracts.py
+- tests/runtime/test_delegation_lifecycle_integration.py
+- tests/runtime/test_delegation_validator.py
+- tests/runtime/test_lifecycle_contracts.py
+- tests/runtime/test_lifecycle_controller.py
+
+---
+
+## Date: 2026-07-13
+
+**Issue:** #182
+
+**Decision:**
+Implemented the combined Phase 6B-D runtime integration and Phase 6C adversarial-validation batch after PR #181 merged and Issue #180 closed. Runtime composition now requires an explicit finite `ACTIVE` or `COMPATIBILITY` authority mode, immutable trusted route bindings, fail-closed authority and capability checks before governance, single initialization per exact root or child run identity, manifest-grant provenance consistency, binding-to-capability owner consistency, structured lifecycle control, bounded in-process delegated child execution, and deterministic audit evidence. The Butler-authorized corrective expansion also enforces exact lifecycle source states for `ACTIVATE`, `WAIT`, and `RESUME`.
+
+**Reason:**
+Phase 6B-C supplied the immutable authority, capability, delegation, and lifecycle dependencies required for runtime composition. Issue #182 integrates them without moving authority into prompts, adapter metadata, routing, governance, or audit records. Active mode fails before adapter access when trusted composition is missing or invalid. Compatibility mode is explicit and bounded to existing supported commands and specialists. Accepted delegation resolutions alone can initialize child runs, and lifecycle state changes occur only through structured signals.
+
+Adversarial validation covers initialization, repeated root and child execution, prompt and adapter escalation, routing and governance confusion, authority and capability attacks, delegation attacks, lifecycle attacks, execution ordering, and audit-sink failure. Repeated run identities fail before contract revalidation or adapter access and preserve the retained waiting or terminal snapshot. Capability grants must share manifest provenance, and present bound capabilities must be owned by the bound specialist; absent capability identifiers still reach deterministic runtime denial. The lifecycle repair rejects destination-valid signals from the wrong source state with deterministic typed evidence while preserving the immutable snapshot and existing terminal replay and conflict semantics. Promotions remain `IMPLEMENTING`; the Pattern Catalog and README are unchanged; Phase 6D has not started; the target patch remains `v1.1.2`; and the project is intentionally parked after this batch pending Butler review.
+
+**Rejected Alternatives:**
+- Inferring compatibility mode from missing active configuration or treating compatibility as unlimited authority.
+- Constructing trusted bindings from prompts, adapter metadata, routing metadata, governance results, audit entries, or Artificer records.
+- Allowing governance or audit evidence to reverse authority or capability denial.
+- Creating child runs from rejected delegation resolutions or spawning worker processes.
+- Inferring lifecycle completion from ordinary text or accepting structured signals from an invalid source state.
+- Modifying adapters, protocols, authority, capability, delegation, promotions, the Pattern Catalog, README, or release versions.
+- Starting Phase 6D as part of Issue #182.
+
+**Affected Components:**
+- CHANGELOG.md
+- DECISION_LOG.md
+- PROJECT_STATE.md
+- SESSION_HANDOFF.md
+- docs/project/AUTHORITY_CAPABILITY_CONTRACTS.md
+- docs/project/AUTHORITY_CAPABILITY_IMPLEMENTATION_PLAN.md
+- docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md
+- orchestra_runtime/__init__.py
+- orchestra_runtime/errors.py
+- orchestra_runtime/interfaces.py
+- orchestra_runtime/lifecycle.py
+- orchestra_runtime/models.py
+- orchestra_runtime/services.py
+- tests/runtime/test_adapter_contracts.py
+- tests/runtime/test_governance.py
+- tests/runtime/test_runtime_adversarial.py
+- tests/runtime/test_runtime_authority_integration.py
+- tests/runtime/test_runtime_core.py
+- tests/runtime/test_runtime_delegated_execution.py
+
+---
+
+## Date: 2026-07-14
+
+**Issue:** #184
+
+**Decision:**
+Begin the authorized combined Phase 6D-A through Phase 6D-C release-preparation batch from merged commit `96adf09ea898dbc43f55a691f2587cf5ba75084c`. PR #183 is merged and Issue #182 is closed. The four canonical authority, capability, delegation, and lifecycle promotions have sufficient merged implementation and validation evidence to move from `IMPLEMENTING` to `IMPLEMENTED`, and the Pattern Catalog is manually synchronized from those canonical records.
+
+Phase 6D completes locally with a source-backed README and documentation refresh, approved `1.1.2` metadata normalization, release notes, changelog synchronization, release-mode review, two matching complete validation passes around the final evidence update, README acceptance review, and exact 31-file scope audit with zero staged files. Maintainer review, merge, and publication remain pending.
+
+**Reason:**
+PRs #179, #181, and #183 establish the implementation chain for immutable authority and capability contracts, bounded delegation, lifecycle control, RuntimeExecutor integration, fail-closed adversarial validation, and deterministic audit evidence. Promotion traceability, Apache-2.0 attribution language, conceptual-adaptation boundaries, and `automatic_promotion: false` remain unchanged. This branch changes documentation and release metadata only; it does not add runtime behavior.
+
+The current public release remains `v1.1.1`. Target `v1.1.2` is prepared but not published. Staging, committing, pushing, pull-request creation, tag creation, GitHub Release publication, and Issue #184 closure remain outside this mutation gate.
+
+**Rejected Alternatives:**
+- Marking promotions implemented without merged runtime and validation evidence.
+- Automatically mutating the Pattern Catalog.
+- Changing runtime, tests, validators, schemas, workflows, skills, commands, or adapter implementation to support release prose.
+- Claiming unsupported adapter maturity, final validation values, a `v1.1.2` tag, or a published GitHub Release.
+- Reusing external source code, prompts, payloads, examples, media, or documentation expression.
+
+**Affected Components:**
+- Four canonical promotion records and `docs/internal/PATTERN_CATALOG.md`
+- `README.md` and approved authority, setup, compatibility, readiness, state, and handoff documentation
+- Approved version manifests and scaffold package metadata
+- `CHANGELOG.md` and `docs/releases/v1.1.2-trusted-runtime-authority.md`
+
+
+<!-- THE_TUNER_PHASE_2_EVIDENCE_CONTINUITY -->:DECISION_LOG.md
+
+## 2026-08-06: Frontend-to-backend synchronicity first slice
+
+**Status:** Implemented and locally validated on an isolated feature worktree; commit, push, pull request, merge, release, deployment, and policy activation remain separately authorized.
+
+**Baseline:** `6bce297c7469f9c08ce41308cbb993cc863ac540`
+
+**Decision:** Extend the existing Tuner cross-layer packet with one shared cross-module audit protocol and a first frontend-to-backend checklist. Preserve the eleven-stage UI-to-render trace, exactly one specialist owner per finding, deterministic fail-closed statuses, executable workflow evidence, evidence identity, invalidation, and minimal re-entry. Do not create a new specialist, plugin, command, runtime model, or persistence contract.
+
+**Authority:** Conductor routes; The Tuner coordinates and detects contradictions; domain specialists own findings; Ponytail implements; Overseer owns evidence; Arbiter owns continuation. The protocol and passing validation do not create Git or release authority.
+
+**Deferred:** Backend-persistence expansion, broader cross-module checklists, runtime changes, installed integration refresh, release, deployment, and policy activation.
+
+## 2026-07-24: The Tuner Phase 2 evidence identity and continuity integration
+
+**Status:** Implemented, committed, pushed, and under review in PR #197. Merge remains separately authorized.
+
+**Baseline:** `0c5790e3ac55db08c7a97f44d0d29b337e7b6dac`
+
+**Decision:** Use SHA-256 over canonical UTF-8 JSON (`orchestra-evidence-v1`) and Git clean-filter/object semantics for evidence identity. Bind evidence to the frozen contract hash and revision, tracked and staged patch hashes, complete non-ignored untracked manifests, added-file identities, relevant artifact lifecycle records, branch, baseline, current commit, and working-tree fingerprint.
+
+**Authority:** Overseer owns evidence, Arbiter owns continuity and transition decisions, The Tuner detects stale coordination references and recommends minimal re-entry, and Conductor remains the exclusive router. Evidence never creates authority.
+
+**Deferred:** Typed Tuner runtime models, persistence, SQLite, RPC, host orchestration, release, and deployment remain outside Phase 2.

@@ -1,0 +1,338 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.orchestra.dev/machine/component-asset-preservation/1.0.0",
+  "title": "Orchestra Component and Asset Preservation Contract",
+  "description": "Evidence-bound UIX-4 component reuse, coverage, provenance, substitution, and deviation rules.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "contract_id",
+    "role",
+    "consumes",
+    "precedence",
+    "component_contract",
+    "asset_contract",
+    "components",
+    "assets",
+    "deviation_rules",
+    "authority"
+  ],
+  "properties": {
+    "$schema": {"const": "../schemas/component-asset-preservation.schema.json"},
+    "schema_version": {"const": "orchestra.component-asset-preservation.v1"},
+    "contract_id": {"const": "uix4-component-asset-preservation"},
+    "role": {"const": "CLOAK_COMPONENT_ASSET_PRESERVATION"},
+    "consumes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ui_design_contract_schema",
+        "source_preservation_report_schema",
+        "profile_registry_schema"
+      ],
+      "properties": {
+        "ui_design_contract_schema": {"const": "machine/schemas/ui-design-contract.schema.json"},
+        "source_preservation_report_schema": {
+          "const": "machine/schemas/design-source-preservation-report.schema.json"
+        },
+        "profile_registry_schema": {"const": "machine/schemas/ui-profile-registry.schema.json"}
+      }
+    },
+    "precedence": {
+      "type": "array",
+      "prefixItems": [
+        {"const": "EXACT_SUPPLIED_PROJECT_ASSET_OR_COMPONENT"},
+        {"const": "VERIFIED_EXISTING_PROJECT_NATIVE_EQUIVALENT"},
+        {"const": "APPROVED_SEMANTIC_MAPPING"},
+        {"const": "EXPLICITLY_APPROVED_ADAPTATION"},
+        {"const": "REVIEWED_NEW_IMPLEMENTATION"},
+        {"const": "UNRESOLVED_NO_FABRICATED_REPLACEMENT"}
+      ],
+      "items": false,
+      "minItems": 6,
+      "maxItems": 6
+    },
+    "component_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_variant_coverage",
+        "required_interaction_state_coverage",
+        "semantic_token_preservation",
+        "mapping_kinds",
+        "incomplete_coverage_disposition",
+        "unresolved_mapping_disposition"
+      ],
+      "properties": {
+        "required_variant_coverage": {"const": true},
+        "required_interaction_state_coverage": {"const": true},
+        "semantic_token_preservation": {"const": true},
+        "mapping_kinds": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "EXACT"},
+            {"const": "VERIFIED_PROJECT_NATIVE"},
+            {"const": "APPROVED_SEMANTIC_MAPPING"},
+            {"const": "APPROVED_ADAPTATION"},
+            {"const": "REVIEWED_NEW"},
+            {"const": "UNRESOLVED"}
+          ],
+          "items": false,
+          "minItems": 6,
+          "maxItems": 6
+        },
+        "incomplete_coverage_disposition": {"const": "BLOCKED_INCOMPLETE_COVERAGE"},
+        "unresolved_mapping_disposition": {"const": "UNRESOLVED_NO_FABRICATION"}
+      }
+    },
+    "asset_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asset_types",
+        "provenance_requirement",
+        "substitution_policies",
+        "known_asset_without_evidence",
+        "known_asset_approximation"
+      ],
+      "properties": {
+        "asset_types": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "FONT"},
+            {"const": "ICON"},
+            {"const": "IMAGE"},
+            {"const": "ILLUSTRATION"},
+            {"const": "LOGO"}
+          ],
+          "items": false,
+          "minItems": 5,
+          "maxItems": 5
+        },
+        "provenance_requirement": {"const": "SOURCE_IDENTITY_AND_PROVENANCE_STATUS_REQUIRED"},
+        "substitution_policies": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "EXACT_REQUIRED"},
+            {"const": "PROJECT_MATCH_ALLOWED"},
+            {"const": "APPROVAL_REQUIRED"},
+            {"const": "NO_SUBSTITUTION"}
+          ],
+          "items": false,
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "known_asset_without_evidence": {"const": "REJECT"},
+        "known_asset_approximation": {"const": "REJECT_WITHOUT_EXPLICIT_APPROVAL_AND_PROVENANCE"}
+      }
+    },
+    "components": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/component"}
+    },
+    "assets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/asset"}
+    },
+    "deviation_rules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "intentional_adaptation_requires_reason_and_approval",
+        "substitution_requires_approval_when_not_exact",
+        "invented_svg_or_logo_allowed",
+        "novel_font_adoption_allowed",
+        "silent_known_asset_substitution_allowed",
+        "unresolved_is_implementation_ready"
+      ],
+      "properties": {
+        "intentional_adaptation_requires_reason_and_approval": {"const": true},
+        "substitution_requires_approval_when_not_exact": {"const": true},
+        "invented_svg_or_logo_allowed": {"const": false},
+        "novel_font_adoption_allowed": {"const": false},
+        "silent_known_asset_substitution_allowed": {"const": false},
+        "unresolved_is_implementation_ready": {"const": false}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_grants_implementation_authority",
+        "external_tools_grant_authority",
+        "validation_grants_authority",
+        "dependency_adoption_authorized",
+        "figma_mutation_authorized"
+      ],
+      "properties": {
+        "contract_grants_implementation_authority": {"const": false},
+        "external_tools_grant_authority": {"const": false},
+        "validation_grants_authority": {"const": false},
+        "dependency_adoption_authorized": {"const": false},
+        "figma_mutation_authorized": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "component_id",
+        "source_ref",
+        "mapping_kind",
+        "target",
+        "variants",
+        "states",
+        "semantic_tokens",
+        "coverage_status",
+        "implementation_disposition"
+      ],
+      "properties": {
+        "component_id": {"type": "string", "minLength": 1},
+        "source_ref": {"type": "string", "minLength": 1},
+        "mapping_kind": {
+          "enum": [
+            "EXACT",
+            "VERIFIED_PROJECT_NATIVE",
+            "APPROVED_SEMANTIC_MAPPING",
+            "APPROVED_ADAPTATION",
+            "REVIEWED_NEW",
+            "UNRESOLVED"
+          ]
+        },
+        "target": {"type": ["string", "null"]},
+        "variants": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "states": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "semantic_tokens": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "coverage_status": {"enum": ["COMPLETE", "INCOMPLETE", "UNRESOLVED"]},
+        "implementation_disposition": {
+          "enum": [
+            "READY_FOR_IMPLEMENTATION",
+            "BLOCKED_INCOMPLETE_COVERAGE",
+            "UNRESOLVED_NO_FABRICATION"
+          ]
+        },
+        "reason": {"type": "string", "minLength": 1},
+        "approval_ref": {"type": "string", "minLength": 1},
+        "review_ref": {"type": "string", "minLength": 1},
+        "unresolved_reason": {"type": "string", "minLength": 1}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "mapping_kind": {
+                "enum": [
+                  "EXACT",
+                  "VERIFIED_PROJECT_NATIVE",
+                  "APPROVED_SEMANTIC_MAPPING",
+                  "APPROVED_ADAPTATION",
+                  "REVIEWED_NEW"
+                ]
+              }
+            },
+            "required": ["mapping_kind"]
+          },
+          "then": {
+            "properties": {"target": {"type": "string", "minLength": 1}},
+            "required": ["target"]
+          }
+        },
+        {
+          "if": {"properties": {"mapping_kind": {"const": "APPROVED_ADAPTATION"}}, "required": ["mapping_kind"]},
+          "then": {"required": ["reason", "approval_ref"]}
+        },
+        {
+          "if": {"properties": {"mapping_kind": {"const": "REVIEWED_NEW"}}, "required": ["mapping_kind"]},
+          "then": {"required": ["review_ref"]}
+        },
+        {
+          "if": {"properties": {"mapping_kind": {"const": "UNRESOLVED"}}, "required": ["mapping_kind"]},
+          "then": {
+            "properties": {"target": {"type": "null"}},
+            "required": ["unresolved_reason"]
+          }
+        },
+        {
+          "if": {"properties": {"coverage_status": {"const": "COMPLETE"}}, "required": ["coverage_status"]},
+          "then": {"properties": {"implementation_disposition": {"const": "READY_FOR_IMPLEMENTATION"}}}
+        },
+        {
+          "if": {"properties": {"coverage_status": {"const": "INCOMPLETE"}}, "required": ["coverage_status"]},
+          "then": {"properties": {"implementation_disposition": {"const": "BLOCKED_INCOMPLETE_COVERAGE"}}}
+        },
+        {
+          "if": {"properties": {"coverage_status": {"const": "UNRESOLVED"}}, "required": ["coverage_status"]},
+          "then": {"properties": {"implementation_disposition": {"const": "UNRESOLVED_NO_FABRICATION"}}}
+        }
+      ]
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asset_id",
+        "asset_type",
+        "semantic_role",
+        "source_identity",
+        "provenance_status",
+        "license_or_source_status",
+        "substitution_policy",
+        "evidence_ref"
+      ],
+      "properties": {
+        "asset_id": {"type": "string", "minLength": 1},
+        "asset_type": {"enum": ["FONT", "ICON", "IMAGE", "ILLUSTRATION", "LOGO"]},
+        "semantic_role": {"type": "string", "minLength": 1},
+        "source_identity": {"type": "string", "minLength": 1},
+        "provenance_status": {"enum": ["CONFIRMED", "REVIEW_REQUIRED", "UNRESOLVED"]},
+        "license_or_source_status": {
+          "enum": ["CONFIRMED", "REVIEW_REQUIRED", "NOT_APPLICABLE", "UNRESOLVED"]
+        },
+        "substitution_policy": {
+          "enum": ["EXACT_REQUIRED", "PROJECT_MATCH_ALLOWED", "APPROVAL_REQUIRED", "NO_SUBSTITUTION"]
+        },
+        "evidence_ref": {"type": "string", "minLength": 1},
+        "match_basis": {"type": "string", "minLength": 1},
+        "reason": {"type": "string", "minLength": 1},
+        "approval_ref": {"type": "string", "minLength": 1}
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"substitution_policy": {"const": "PROJECT_MATCH_ALLOWED"}},
+            "required": ["substitution_policy"]
+          },
+          "then": {"required": ["match_basis"]}
+        },
+        {
+          "if": {
+            "properties": {"substitution_policy": {"const": "APPROVAL_REQUIRED"}},
+            "required": ["substitution_policy"]
+          },
+          "then": {"required": ["reason", "approval_ref"]}
+        }
+      ]
+    }
+  }
+}

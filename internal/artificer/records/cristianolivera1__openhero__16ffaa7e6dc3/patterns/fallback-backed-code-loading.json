@@ -1,0 +1,9 @@
+{
+  "name": "Fallback-Backed Code Loading",
+  "description": "Attempts parallel loading of framework-specific source examples and substitutes locally generated templates when an HTTP response does not provide the expected source.",
+  "source_file": "components/sections/HeroGallery/VideoModal.tsx",
+  "line_range": "261-294",
+  "classification": "REFERENCE_ONLY",
+  "assigned_specialist": "clockwork",
+  "license_implications": "The source is MIT-licensed. Treat the design as reference-only and do not reuse generated examples or source expression without the required notice and governance review."
+}

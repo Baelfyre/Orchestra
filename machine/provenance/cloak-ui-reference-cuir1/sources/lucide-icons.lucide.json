@@ -1,0 +1,17 @@
+{
+  "schema_version": "orchestra.cloak-ui-reference-source-record.v1",
+  "record_id": "lucide-icons.lucide",
+  "repository": "lucide-icons/lucide",
+  "owner": "lucide-icons",
+  "source_revision": "796dad298f8d78c5da204c3e62a5ed93c2bfcd1e",
+  "source_paths_or_artifact_ids": ["LICENSE","repository-root@796dad298f8d78c5da204c3e62a5ed93c2bfcd1e"],
+  "source_category": "GENERAL_UI_ICONS",
+  "license_identifier": "ISC",
+  "license_evidence": [{"type":"LICENSE_FILE","reference":"https://github.com/lucide-icons/lucide/blob/796dad298f8d78c5da204c3e62a5ed93c2bfcd1e/LICENSE","source_revision":"796dad298f8d78c5da204c3e62a5ed93c2bfcd1e","notes":"Pinned LICENSE states the Lucide project is primarily ISC licensed."},{"type":"ARTIFACT_LICENSE_MAP","reference":"https://github.com/lucide-icons/lucide/blob/796dad298f8d78c5da204c3e62a5ed93c2bfcd1e/LICENSE","source_revision":"796dad298f8d78c5da204c3e62a5ed93c2bfcd1e","notes":"The LICENSE separately lists Feather-derived icons under MIT. The ISC versus Feather/MIT distinction must be preserved at artifact/subset level."}],
+  "reuse_classification": "REUSE_WITH_NOTICE",
+  "attribution_or_notice_requirements": ["Preserve the Lucide ISC notice for ISC-licensed material.","For a listed Feather-derived icon, preserve the applicable Feather MIT notice and the artifact-level license distinction."],
+  "pattern_or_asset_summary": "General UI icon corpus pinned with explicit subset-level licensing distinction for later icon suitability review. No icon asset is reused during CUIR-1.",
+  "what_was_learned_or_reused": ["Retained exact repository identity, revision, primary ISC license, and the Feather-derived MIT subset distinction."],
+  "what_was_not_copied": ["No icon artwork, SVG path data, source code, package content, or generated output was copied during CUIR-1."],
+  "review_owner": "Artificer"
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/uix-live-guidance-manifest.schema.json",
+  "title": "Orchestra UIX-9B Canonical UIX-1 through UIX-8 Guidance Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "schema_version", "manifest_id", "role", "canonical_branch", "canonical_sha", "materials", "excluded_from_treatment", "guidance_digest"],
+  "properties": {
+    "$schema": {"const": "../schemas/uix-live-guidance-manifest.schema.json"},
+    "schema_version": {"const": "orchestra.uix9b-live-guidance-manifest.v1"},
+    "manifest_id": {"const": "uix9b-canonical-uix1-through-uix8-guidance"},
+    "role": {"const": "UIX_9B_GOVERNED_TREATMENT_GUIDANCE"},
+    "canonical_branch": {"const": "main"},
+    "canonical_sha": {"const": "bf6f14316fa8814eeac91440c4a7d70be0d04b9e"},
+    "materials": {"type": "array", "minItems": 28, "uniqueItems": true, "items": {"type": "object", "additionalProperties": false, "required": ["path", "canonical_blob_digest", "role", "revision_identity"], "properties": {"path": {"type": "string", "minLength": 1}, "canonical_blob_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "role": {"type": "string", "minLength": 1}, "revision_identity": {"type": "string", "minLength": 1}}}},
+    "excluded_from_treatment": {"type": "array", "minItems": 10, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+    "guidance_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

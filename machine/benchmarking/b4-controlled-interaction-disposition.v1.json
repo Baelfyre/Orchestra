@@ -1,0 +1,27 @@
+{
+  "schema_version": "orchestra.b4-controlled-interaction-disposition.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "phase": "B4_CONTROLLED_A5_MURMURS_INTERACTION_ELIGIBILITY",
+  "recorded_date": "2026-08-24",
+  "status": "NOT_ELIGIBLE_NO_EXECUTION",
+  "eligibility_rule": "B4 requires independently established isolated B2 and B3 benefits before a controlled interaction experiment may execute.",
+  "isolated_evidence": {
+    "b2": "CONFIRMATORY_BENEFIT_NOT_ESTABLISHED",
+    "b2_benefit_prerequisite": "NOT_SATISFIED",
+    "b3": "CONFIRMATORY_BENEFIT_NOT_ESTABLISHED",
+    "b3_benefit_prerequisite": "NOT_SATISFIED"
+  },
+  "decision": {
+    "eligible": false,
+    "interaction_executed": false,
+    "live_model_calls_consumed": 0,
+    "interaction_conclusion": "NOT_RUN_NOT_ELIGIBLE",
+    "reason": "Neither isolated confirmatory experiment established benefit; B2 already canonically records its B4 isolated-benefit prerequisite as unsatisfied."
+  },
+  "authority": {
+    "a5_execution_effective_promotion": false,
+    "murmurs_semantic_authority_expansion": false,
+    "production_runtime_attachment": false
+  },
+  "next_gate": "B5_FINAL_EVIDENCE_SYNTHESIS"
+}

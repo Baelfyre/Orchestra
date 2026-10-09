@@ -1,0 +1,4 @@
+interface:
+  display_name: "Overseer"
+  short_description: "Review QA evidence and release readiness"
+  default_prompt: "Use $overseer to review this project quality evidence, regression risk, and release readiness without editing files."

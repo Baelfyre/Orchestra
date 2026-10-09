@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/adaptive-selection-decision.schema.json",
+  "title": "Orchestra Adaptive Selection Shadow Decision v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "decision_id",
+    "selection_type",
+    "eligibility_envelope_ref",
+    "eligibility_envelope_digest",
+    "evidence_packet_ref",
+    "evidence_packet_digest",
+    "evaluated_at",
+    "scorer_version",
+    "disposition",
+    "ranked_candidate_ids",
+    "shadow_recommendation_id",
+    "actual_deterministic_choice_id",
+    "execution_controlled_by",
+    "selection_effective",
+    "shadow_influenced_execution",
+    "promotion_state"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.adaptive-selection-decision.v1"},
+    "decision_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "selection_type": {"enum": ["SPECIALIST_STRATEGY", "MODEL", "WORKER"]},
+    "eligibility_envelope_ref": {"type": "string", "minLength": 1, "maxLength": 512},
+    "eligibility_envelope_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "evidence_packet_ref": {"type": "string", "minLength": 1, "maxLength": 512},
+    "evidence_packet_digest": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "evaluated_at": {"type": "string", "format": "date-time"},
+    "scorer_version": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]{0,127}$"},
+    "disposition": {
+      "enum": [
+        "SHADOW_RANKED",
+        "DETERMINISTIC_FALLBACK",
+        "NO_ELIGIBLE_CANDIDATES",
+        "INVALID_ELIGIBILITY",
+        "INVALID_EVIDENCE",
+        "EXPLICIT_CONSTRAINT",
+        "UNSUPPORTED_EVIDENCE_FOR_SELECTION_TYPE"
+      ]
+    },
+    "ranked_candidate_ids": {
+      "type": "array",
+      "maxItems": 128,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1, "maxLength": 256}
+    },
+    "shadow_recommendation_id": {"type": ["string", "null"], "minLength": 1, "maxLength": 256},
+    "actual_deterministic_choice_id": {"type": ["string", "null"], "minLength": 1, "maxLength": 256},
+    "execution_controlled_by": {"const": "DETERMINISTIC_ORCHESTRA"},
+    "selection_effective": {"const": false},
+    "shadow_influenced_execution": {"const": false},
+    "promotion_state": {"const": "NOT_PROMOTED"},
+    "notes": {
+      "type": "array",
+      "maxItems": 16,
+      "items": {"type": "string", "minLength": 1, "maxLength": 512}
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../machine/schemas/uix9b-live-calibration-manifest.v2.schema.json",
+  "schema_version": "uix9b.live-calibration-manifest.v2",
+  "role": "UIX_9B_FROZEN_CALIBRATION_MANIFEST",
+  "evaluator_version": "uix9b-live-metric-evaluator-v2.0.0",
+  "evaluator_digest": "d585010eb83ec23b1df2c3512868e9ff5285e7dced1393dcafb0233b835f7ae1",
+  "historical_evidence_used": false,
+  "cases": [
+    {"case_id": "EXPECTED_POSITIVE", "candidate_path": "tests/fixtures/ui/uix9b-live-calibration/positive/candidate", "validator_result_path": "tests/fixtures/ui/uix9b-live-calibration/positive/validator-result.json", "calibration_fixture_digest": "1ce084167feed85bad8fe35b03aa9c547fa9fd149639f21589e564026f4fafdf", "expected_result_path": "tests/fixtures/ui/uix9b-live-calibration/positive/expected-metric-result.json", "expected_result_digest": "2ae79f23083be7fcce459474b47cf19a876223a9e175cc0e928c6c2a2d25b6f8"},
+    {"case_id": "EXPECTED_NEGATIVE", "candidate_path": "tests/fixtures/ui/uix9b-live-calibration/negative/candidate", "validator_result_path": "tests/fixtures/ui/uix9b-live-calibration/negative/validator-result.json", "calibration_fixture_digest": "e27a51258973737989d7afe1fce533098e333cbe0533578910bfcfa8d36e89f1", "expected_result_path": "tests/fixtures/ui/uix9b-live-calibration/negative/expected-metric-result.json", "expected_result_digest": "602e82ed589e9b8c180b606b0d19611374bc9ed09d23b68e3b342b4d4a9e0bf8"},
+    {"case_id": "BOUNDARY_STRUCTURAL_LITERAL", "candidate_path": "tests/fixtures/ui/uix9b-live-calibration/boundary/candidate", "validator_result_path": "tests/fixtures/ui/uix9b-live-calibration/boundary/validator-result.json", "calibration_fixture_digest": "e704a8faf863886255ee1eb7a4a6bb2ae5eeebcf6e7b99b47d4573b65bee341f", "expected_result_path": "tests/fixtures/ui/uix9b-live-calibration/boundary/expected-metric-result.json", "expected_result_digest": "2827ce3398314f47b763378fa56a882ccd2ac31a8ef48115f19a810500a833c8"},
+    {"case_id": "MALFORMED_CANDIDATE", "candidate_path": "tests/fixtures/ui/uix9b-live-calibration/malformed/candidate", "validator_result_path": "tests/fixtures/ui/uix9b-live-calibration/malformed/validator-result.json", "calibration_fixture_digest": "c10e57ab3658a286e17840785dafa3df04e46e44f5a2ebcfca3b63cc48cb085d", "expected_result_path": "tests/fixtures/ui/uix9b-live-calibration/malformed/expected-metric-result.json", "expected_result_digest": "74c6e1a901aa32ca3e2b79026b4502b73315d7322f7c347d83dce2d0d5c07314"},
+    {"case_id": "MISSING_REQUIRED_ARTIFACT", "candidate_path": "tests/fixtures/ui/uix9b-live-calibration/missing-artifact/candidate", "validator_result_path": null, "calibration_fixture_digest": "280f1361eda45c2b632c37dd049ec47dec81ab1e8e9e81c61a7aa0d9fb96b978", "expected_result_path": "tests/fixtures/ui/uix9b-live-calibration/missing-artifact/expected-metric-result.json", "expected_result_digest": "276d8ee95e8df426ed6533651023816b0d9dd0768dce31b20cd0583ae07e8cf0"}
+  ]
+}

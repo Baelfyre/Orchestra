@@ -1,0 +1,125 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/portable-projection-contract.v1.schema.json",
+  "title": "Orchestra UAI Portable Projection Contract v1",
+  "description": "Canonical source and derived host projection declarations. Projection parity never grants authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "contract_id",
+    "contract_revision",
+    "contract_role",
+    "authority",
+    "required_invariants",
+    "canonical_sources",
+    "supported_projection_formats",
+    "projections"
+  ],
+  "properties": {
+    "$schema": {"const": "./machine/schemas/portable-projection-contract.v1.schema.json"},
+    "schema_version": {"const": "orchestra.portable-projection-contract.v1"},
+    "contract_id": {"const": "orchestra-uai-portable-projection"},
+    "contract_revision": {"const": 1},
+    "contract_role": {"const": "canonical_uai_portable_projection_contract"},
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "canonical_source_remains_authoritative",
+        "generated_projection_is_derived_only",
+        "projection_grants_execution_authority",
+        "projection_grants_routing_authority",
+        "projection_grants_specialist_selection_authority",
+        "projection_grants_workflow_topology_authority",
+        "projection_grants_provider_selection_authority",
+        "projection_grants_governance_authority",
+        "installed_integration_refresh",
+        "automatic_provider_routing",
+        "automatic_provider_fallback",
+        "learned_routing_promotion"
+      ],
+      "properties": {
+        "canonical_source_remains_authoritative": {"const": true},
+        "generated_projection_is_derived_only": {"const": true},
+        "projection_grants_execution_authority": {"const": false},
+        "projection_grants_routing_authority": {"const": false},
+        "projection_grants_specialist_selection_authority": {"const": false},
+        "projection_grants_workflow_topology_authority": {"const": false},
+        "projection_grants_provider_selection_authority": {"const": false},
+        "projection_grants_governance_authority": {"const": false},
+        "installed_integration_refresh": {"const": false},
+        "automatic_provider_routing": {"const": false},
+        "automatic_provider_fallback": {"const": false},
+        "learned_routing_promotion": {"const": false}
+      }
+    },
+    "required_invariants": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "canonical_sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_id", "path", "source_role"],
+        "properties": {
+          "source_id": {"type": "string", "pattern": "^[a-z][a-z0-9_]+$"},
+          "path": {"type": "string", "minLength": 1},
+          "source_role": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "supported_projection_formats": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "projections": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/projection"}
+    }
+  },
+  "$defs": {
+    "marker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["marker_id", "text"],
+      "properties": {
+        "marker_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]+$"},
+        "text": {"type": "string", "minLength": 1}
+      }
+    },
+    "projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["projection_id", "host_id", "strategy_id", "format", "output_path", "source_ids", "required_markers"],
+      "properties": {
+        "projection_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]+$"},
+        "host_id": {"type": "string", "pattern": "^[a-z][a-z0-9-]+$"},
+        "strategy_id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"},
+        "format": {"type": "string", "minLength": 1},
+        "output_path": {"type": "string", "minLength": 1},
+        "source_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z][a-z0-9_]+$"}
+        },
+        "required_markers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/marker"}
+        }
+      }
+    }
+  }
+}

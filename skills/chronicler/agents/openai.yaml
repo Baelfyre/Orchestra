@@ -1,0 +1,4 @@
+interface:
+  display_name: "Chronicler"
+  short_description: "Audit database schemas and documentation"
+  default_prompt: "Use $chronicler to review this database schema, integrity rules, and documentation gaps without changing files."

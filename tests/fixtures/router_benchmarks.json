@@ -1,0 +1,403 @@
+{
+  "schema_version": "1.0",
+  "benchmarks": [
+    {
+      "case_id": "BM-01",
+      "request_type": "simple Q&A",
+      "expected_mode": "FAST",
+      "expected_skill_route": "conductor (direct answer)",
+      "required_context": [
+        "SKILL.md"
+      ],
+      "excluded_context": [
+        "Full index",
+        "Governance"
+      ],
+      "governance_status": "NOT_REQUIRED",
+      "pass_criteria": "Answers directly without full context"
+    },
+    {
+      "case_id": "BM-02",
+      "request_type": "documentation update",
+      "expected_mode": "STANDARD",
+      "expected_skill_route": "scribe",
+      "required_context": [
+        "Target file",
+        "Scribe"
+      ],
+      "excluded_context": [
+        "Governance",
+        "Unrelated skills"
+      ],
+      "governance_status": "CONDITIONAL",
+      "pass_criteria": "Routes to Scribe, low prompt load"
+    },
+    {
+      "case_id": "BM-03",
+      "request_type": "normal implementation",
+      "expected_mode": "STANDARD",
+      "expected_skill_route": "ponytail",
+      "required_context": [
+        "Target files",
+        "Ponytail"
+      ],
+      "excluded_context": [
+        "Governance",
+        "Audit rules"
+      ],
+      "governance_status": "CONDITIONAL",
+      "pass_criteria": "Routes to Ponytail, local context"
+    },
+    {
+      "case_id": "BM-04",
+      "request_type": "frontend-only request",
+      "expected_mode": "STANDARD",
+      "expected_skill_route": "cloak",
+      "required_context": [
+        "UI files",
+        "Cloak"
+      ],
+      "excluded_context": [
+        "Governance",
+        "Backend files"
+      ],
+      "governance_status": "CONDITIONAL",
+      "pass_criteria": "Routes to Cloak, preserves workflow"
+    },
+    {
+      "case_id": "BM-05",
+      "request_type": "frontend plus backend-sensitive request",
+      "expected_mode": "GOVERNED",
+      "expected_skill_route": "clockwork -> cloak",
+      "required_context": [
+        "UI/Backend files",
+        "Clockwork"
+      ],
+      "excluded_context": [
+        "Unrelated skills"
+      ],
+      "governance_status": "REQUIRED",
+      "pass_criteria": "Routes to Clockwork first"
+    },
+    {
+      "case_id": "BM-06",
+      "request_type": "database change",
+      "expected_mode": "GOVERNED",
+      "expected_skill_route": "chronicler",
+      "required_context": [
+        "DB Schema",
+        "Chronicler",
+        "Governance"
+      ],
+      "excluded_context": [
+        "Unrelated frontend"
+      ],
+      "governance_status": "REQUIRED",
+      "pass_criteria": "Loads GOVERNANCE_LAYER.md"
+    },
+    {
+      "case_id": "BM-07",
+      "request_type": "security-sensitive task",
+      "expected_mode": "GOVERNED",
+      "expected_skill_route": "cipher",
+      "required_context": [
+        "Target files",
+        "Cipher",
+        "Governance"
+      ],
+      "excluded_context": [
+        "Unrelated UI"
+      ],
+      "governance_status": "REQUIRED",
+      "pass_criteria": "Loads GOVERNANCE_LAYER.md"
+    },
+    {
+      "case_id": "BM-08",
+      "request_type": "CI/CD task",
+      "expected_mode": "GOVERNED",
+      "expected_skill_route": "overseer",
+      "required_context": [
+        "CI workflows",
+        "Overseer",
+        "Governance"
+      ],
+      "excluded_context": [
+        "Feature code"
+      ],
+      "governance_status": "REQUIRED",
+      "pass_criteria": "Escalates mode, loads Governance"
+    },
+    {
+      "case_id": "BM-09",
+      "request_type": "audit-only task",
+      "expected_mode": "AUDIT",
+      "expected_skill_route": "arbiter / cipher",
+      "required_context": [
+        "Feature slice",
+        "Governance"
+      ],
+      "excluded_context": [
+        "Implementation context"
+      ],
+      "governance_status": "REQUIRED",
+      "pass_criteria": "Read-only mode preserved"
+    },
+    {
+      "case_id": "BM-10",
+      "request_type": "release-readiness task",
+      "expected_mode": "AUDIT",
+      "expected_skill_route": "overseer / steward",
+      "required_context": [
+        "Release slice",
+        "Governance"
+      ],
+      "excluded_context": [
+        "Destructive context"
+      ],
+      "governance_status": "REQUIRED",
+      "pass_criteria": "Formal audit report generated"
+    },
+    {
+      "case_id": "BM-11",
+      "request_type": "destructive-operation task",
+      "expected_mode": "DESTRUCTIVE",
+      "expected_skill_route": "dagger",
+      "required_context": [
+        "Target environment",
+        "Guardrails"
+      ],
+      "excluded_context": [
+        "Standard context"
+      ],
+      "governance_status": "BLOCKED_PENDING_AUTHORIZATION",
+      "pass_criteria": "Pauses for authorization"
+    },
+    {
+      "case_id": "BM-12",
+      "request_type": "ambiguous multi-skill task",
+      "expected_mode": "STANDARD",
+      "expected_skill_route": "conductor (workflow gen)",
+      "required_context": [
+        "ROUTING_MAP.md"
+      ],
+      "excluded_context": [
+        "Specific implementations"
+      ],
+      "governance_status": "CONDITIONAL",
+      "pass_criteria": "Loads ROUTING_MAP.md to resolve"
+    },
+    {
+      "case_id": "BM-13",
+      "request_type": "multi-skill routing chain",
+      "expected_mode": "GOVERNED",
+      "expected_skill_route": "conductor -> clockwork -> cipher -> chronicler -> ponytail",
+      "required_context": [
+        "routing",
+        "architecture",
+        "security",
+        "persistence",
+        "frontend"
+      ],
+      "excluded_context": [
+        "destructive-operation context"
+      ],
+      "governance_status": "REQUIRED",
+      "pass_criteria": "Preserves ordered specialist routing before implementation"
+    },
+    {
+      "case_id": "BM-14",
+      "request_type": "ambiguous request requiring clarification or reroute",
+      "expected_mode": "STANDARD",
+      "expected_skill_route": "conductor",
+      "required_context": [
+        "routing",
+        "skill index"
+      ],
+      "excluded_context": [
+        "destructive-operation context",
+        "database/security context unless clarified"
+      ],
+      "governance_status": "CONDITIONAL",
+      "pass_criteria": "Ambiguity detection and no premature specialist execution"
+    },
+    {
+      "case_id": "BM-15",
+      "request_type": "STANDARD to GOVERNED escalation",
+      "expected_mode": "GOVERNED",
+      "expected_skill_route": "conductor -> the-steward -> the-governor",
+      "required_context": [
+        "governance",
+        "routing",
+        "execution modes"
+      ],
+      "excluded_context": [
+        "implementation-only context until governance clears"
+      ],
+      "governance_status": "REQUIRED",
+      "pass_criteria": "Escalation when security, database, CI/CD, compliance, or credential-sensitive scope appears"
+    },
+    {
+      "case_id": "BM-16",
+      "request_type": "audit-only no-edit task",
+      "expected_mode": "AUDIT",
+      "expected_skill_route": "conductor -> arbiter",
+      "required_context": [
+        "audit",
+        "governance",
+        "relevant routing context"
+      ],
+      "excluded_context": [
+        "implementation",
+        "destructive-operation context"
+      ],
+      "governance_status": "CONDITIONAL",
+      "pass_criteria": "Read-only findings and no file edits unless explicitly approved"
+    },
+    {
+      "case_id": "BM-17",
+      "request_type": "frontend requiring Clockwork before Ponytail",
+      "expected_mode": "GOVERNED",
+      "expected_skill_route": "conductor -> clockwork -> ponytail",
+      "required_context": [
+        "routing",
+        "architecture",
+        "frontend",
+        "execution modes"
+      ],
+      "excluded_context": [
+        "destructive-operation context"
+      ],
+      "governance_status": "REQUIRED",
+      "pass_criteria": "Clockwork review before Ponytail when frontend work affects API shape, data flow, service boundaries, backend validation, auth boundary placement, or architectural layering"
+    },
+    {
+      "case_id": "BM-18",
+      "request_type": "frontend requiring Cipher before Ponytail",
+      "expected_mode": "GOVERNED",
+      "expected_skill_route": "conductor -> cipher -> ponytail",
+      "required_context": [
+        "routing",
+        "security",
+        "frontend",
+        "governance"
+      ],
+      "excluded_context": [
+        "destructive-operation context unless destructive scope appears"
+      ],
+      "governance_status": "REQUIRED",
+      "pass_criteria": "Cipher review before Ponytail when frontend work affects authorization, privacy, destructive actions, secrets, security-sensitive workflows, payments, or compliance-sensitive journeys"
+    },
+    {
+      "case_id": "BM-19",
+      "request_type": "frontend requiring Chronicler before Ponytail",
+      "expected_mode": "GOVERNED",
+      "expected_skill_route": "conductor -> chronicler -> ponytail",
+      "required_context": [
+        "routing",
+        "persistence",
+        "database",
+        "frontend",
+        "governance"
+      ],
+      "excluded_context": [
+        "destructive-operation context"
+      ],
+      "governance_status": "REQUIRED",
+      "pass_criteria": "Chronicler review before Ponytail when frontend work affects persistence, schema, migrations, reporting data, ORM behavior, or stored records"
+    },
+    {
+      "case_id": "BM-20",
+      "request_type": "docs-only lightweight routing",
+      "expected_mode": "FAST",
+      "expected_skill_route": "conductor -> scribe",
+      "required_context": [
+        "documentation",
+        "skill index"
+      ],
+      "excluded_context": [
+        "governance",
+        "destructive-operation",
+        "database",
+        "security",
+        "CI/CD",
+        "implementation-heavy context"
+      ],
+      "governance_status": "NOT_REQUIRED",
+      "pass_criteria": "Lightweight docs routing with no unnecessary governance hydration"
+    },
+    {
+      "case_id": "BM-21",
+      "request_type": "CI/CD-sensitive request requiring GOVERNED routing",
+      "expected_mode": "GOVERNED",
+      "expected_skill_route": "conductor -> the-steward -> the-governor -> overseer",
+      "required_context": [
+        "routing",
+        "governance",
+        "CI/CD",
+        "validation",
+        "release/readiness"
+      ],
+      "excluded_context": [
+        "destructive-operation context unless destructive commands appear"
+      ],
+      "governance_status": "REQUIRED",
+      "pass_criteria": "Requires governance review before CI/CD workflow changes and preserve existing validation gates"
+    },
+    {
+      "case_id": "BM-22",
+      "request_type": "release-readiness request requiring AUDIT routing",
+      "expected_mode": "AUDIT",
+      "expected_skill_route": "conductor -> arbiter -> overseer",
+      "required_context": [
+        "audit",
+        "release/readiness",
+        "governance",
+        "validation",
+        "changelog"
+      ],
+      "excluded_context": [
+        "implementation-heavy",
+        "destructive-operation context"
+      ],
+      "governance_status": "CONDITIONAL",
+      "pass_criteria": "Requires read-only release readiness findings and no implementation unless explicitly approved"
+    },
+    {
+      "case_id": "BM-23",
+      "request_type": "prompt-load/context-selection scenario requiring minimal context control",
+      "expected_mode": "STANDARD",
+      "expected_skill_route": "conductor",
+      "required_context": [
+        "prompt-load metrics",
+        "threshold policy",
+        "routing",
+        "context retrieval rules"
+      ],
+      "excluded_context": [
+        "destructive-operation",
+        "implementation-heavy",
+        "database",
+        "security context unless triggered"
+      ],
+      "governance_status": "CONDITIONAL",
+      "pass_criteria": "Requires loading only minimal relevant context and avoiding broad hydration"
+    },
+    {
+      "case_id": "BM-24",
+      "request_type": "complex destructive-operation request requiring blocked authorization",
+      "expected_mode": "DESTRUCTIVE",
+      "expected_skill_route": "conductor -> dagger",
+      "required_context": [
+        "destructive-operation",
+        "governance",
+        "safety",
+        "authorization"
+      ],
+      "excluded_context": [
+        "implementation execution context until authorization clears"
+      ],
+      "governance_status": "BLOCKED_PENDING_AUTHORIZATION",
+      "pass_criteria": "Requires blocking execution pending explicit authorization and safety gate evidence"
+    }
+  ]
+}

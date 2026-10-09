@@ -1,0 +1,4 @@
+interface:
+  display_name: "Orchestra"
+  short_description: "Orchestrate the smallest effective skill stack"
+  default_prompt: "Use $conductor to inspect this project and produce the shortest safe Orchestra routing plan."

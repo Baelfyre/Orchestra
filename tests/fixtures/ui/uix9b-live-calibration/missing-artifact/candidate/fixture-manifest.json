@@ -1,0 +1,20 @@
+{
+  "schema_version": "uix9b.fixture-manifest.v1",
+  "fixture_id": "uix9b-live-project",
+  "fixture_revision": "uix9b-fixture-2026-08-26",
+  "reference_identity": "uix9b-operations-workspace-reference-v1",
+  "project_root": "project",
+  "requirements": "requirements.json",
+  "task": "task.md",
+  "component_map": "component-map.json",
+  "design_tokens": "design-tokens.json",
+  "asset_manifest": "asset-manifest.json",
+  "state_contract": "state-contract.json",
+  "accessibility_contract": "accessibility-contract.json",
+  "validation_contract": "validation-contract.json",
+  "dependency_manifest": "project/package-lock.json",
+  "starting_tree_digest": "280f1361eda45c2b632c37dd049ec47dec81ab1e8e9e81c61a7aa0d9fb96b978",
+  "fixture_digest": "280f1361eda45c2b632c37dd049ec47dec81ab1e8e9e81c61a7aa0d9fb96b978",
+  "file_digest_algorithm": "SHA256_UTF8_LF_NORMALIZED",
+  "excluded_from_fixture_digest": ["fixture-manifest.json", "project/dist/**", "project/node_modules/**"]
+}

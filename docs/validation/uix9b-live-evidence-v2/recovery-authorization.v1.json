@@ -1,0 +1,59 @@
+{
+  "$schema": "./recovery-authorization.v1.schema.json",
+  "schema_version": "orchestra.uix9c-invalid-infrastructure-recovery.v1",
+  "role": "UIX_9C_INVALID_INFRASTRUCTURE_RECOVERY_AUTHORIZATION",
+  "authorization_status": "APPROVED",
+  "authority_class": "HUMAN_SCIENTIFIC_AUTHORIZATION",
+  "approved_at": "2026-08-27T11:54:00+08:00",
+  "approval_text": "7 total experimental interactions, consisting of the 1 already-preserved invalid-infrastructure attempt plus at most 6 fresh calls producing at most 6 valid observations.",
+  "scientific_candidate": {
+    "pr": 572,
+    "authorized_source_head_sha": "7c39b9cba0fc9521c53a97c9cea09218009a1094"
+  },
+  "recovery_candidate": {
+    "pr": 584,
+    "pre_authorization_recovery_head_sha": "78202b08ef896acf2c27e2b823aba3d3bf377a34"
+  },
+  "prior_invalid_attempt": {
+    "run_id": "A1",
+    "attempts": 1,
+    "model_calls": 1,
+    "provider_calls": 1,
+    "provider_interactions": 1,
+    "valid_session": false,
+    "final_observations": 0,
+    "final_metric_results": 0,
+    "classification": "INVALID_INFRASTRUCTURE_WINDOWS_HOST_OUTPUT_DECODING_FAILURE",
+    "scientific_observation": false,
+    "calibration_input": false,
+    "directional_model_behavior_claim": false
+  },
+  "restarted_effort_ceiling": {
+    "prior_invalid_infrastructure_interactions": 1,
+    "fresh_campaign_max_new_model_calls": 6,
+    "fresh_campaign_max_new_provider_calls": 6,
+    "fresh_campaign_max_new_provider_interactions": 6,
+    "max_valid_observations": 6,
+    "overall_experimental_interaction_ceiling": 7,
+    "seventh_valid_observation_authorized": false,
+    "additional_ceiling_expansion_authorized": false
+  },
+  "fresh_campaign": {
+    "execution_order": ["A1", "B1", "B2", "A2", "A3", "B3"],
+    "evidence_root": "docs/validation/uix9b-live-evidence-v2/restart-20260827",
+    "preserve_parent_failed_evidence": true,
+    "outcome_based_retry_authorized": false,
+    "retry_may_extend_overall_ceiling": false
+  },
+  "authority_boundaries": {
+    "merge_authorized": false,
+    "release_authorized": false,
+    "deployment_authorized": false,
+    "policy_activation_authorized": false,
+    "external_repository_mutation_authorized": false,
+    "branch_deletion_authorized": false,
+    "force_push_authorized": false,
+    "history_rewrite_authorized": false,
+    "destructive_cleanup_authorized": false
+  }
+}

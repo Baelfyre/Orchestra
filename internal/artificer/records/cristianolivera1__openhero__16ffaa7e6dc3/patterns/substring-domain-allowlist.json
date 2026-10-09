@@ -1,0 +1,9 @@
+{
+  "name": "Substring Domain Allowlist",
+  "description": "Extracts external script source values from submitted HTML and accepts them when the source string contains an entry from a broad domain allowlist.",
+  "source_file": "app/api/submit/route.ts",
+  "line_range": "150-337",
+  "classification": "OUT_OF_SCOPE",
+  "assigned_specialist": "cipher",
+  "license_implications": "The source code is MIT-licensed, but this mechanism is recorded as a security anti-pattern and is not approved for adaptation or reuse."
+}

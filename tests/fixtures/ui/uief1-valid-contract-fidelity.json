@@ -1,0 +1,42 @@
+{
+  "$schema": "../../machine/schemas/ui-implementation-profile.v1.schema.json",
+  "schema_version": "orchestra.ui-implementation-profile.v1",
+  "contract_id": "uief1-valid-contract-fidelity",
+  "profile": "UI_CONTRACT_FIDELITY",
+  "selected_by": "conductor",
+  "selection_reason": "High-fidelity UI contract requiring strict structural fidelity and interaction state preservation.",
+  "design_contract_ref": "machine/schemas/ui-design-contract.schema.json",
+  "cloak_handoff_ref": "skills/cloak/UI_FIDELITY_HANDOFF_GUIDE.md",
+  "pattern_refs": [
+    {
+      "pattern_id": "cuir3.destination_state_navigation",
+      "source_kind": "CUIR_NORMALIZED",
+      "reference_ref": "machine/knowledge/cloak-ui-reference-cuir3.v1.json",
+      "advisory_only": false
+    }
+  ],
+  "composition_refs": [
+    {
+      "composition_id": "desktop-macro-grid",
+      "structural_role": "MACRO_LAYOUT",
+      "reference_ref": "docs/project/UI_EXECUTION_FIDELITY_PLAN.md"
+    }
+  ],
+  "clockwork_boundary_ref": "docs/project/UI_EXECUTION_FIDELITY_PLAN.md",
+  "execution_mode": "DETERMINISTIC_TEST_ENGINE",
+  "required_fidelity": {
+    "preserve_macro_composition": true,
+    "preserve_visual_hierarchy": true,
+    "preserve_interaction_states": true,
+    "preserve_responsive_transformation": true,
+    "min_accessibility_level": "WCAG_AA",
+    "optical_balance_required": false
+  },
+  "allowed_deviations": [],
+  "authority": {
+    "grants_specialist_authority": false,
+    "grants_implementation_authority": false,
+    "ponytail_can_self_select": false,
+    "ponytail_can_downgrade": false
+  }
+}

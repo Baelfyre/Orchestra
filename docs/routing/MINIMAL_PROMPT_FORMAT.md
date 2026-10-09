@@ -1,0 +1,110 @@
+# Minimal Prompt Format
+
+## Purpose
+Define Conductor's minimum safe downstream task packet.
+
+## Prompt Assembly Principle
+Include only context required by the selected mode. Do not load full READMEs, governance files, skills, or routing maps without a direct trigger.
+
+## Standard Prompt Package
+Every assembled prompt must include the following metadata block:
+
+- **Task**: The immediate goal to accomplish.
+- **Intent**: What the user ultimately wants (e.g., bug fix, feature, audit).
+- **Selected Skill**: The executing specialist slug.
+- **Execution Mode**: FAST, STANDARD, GOVERNED, AUDIT, or DESTRUCTIVE.
+- **Risk Level**: Low, Medium, High, or Extreme.
+- **Required Context**: Absolute paths to minimal context documents.
+- **CONDITIONAL Context**: Conditionally included paths based on domain overlap.
+- **Constraints**: Task boundaries, do-nots, and style locks.
+- **Governance Status**: Current standing of the request.
+- **Expected Output**: The desired artifact or standard response format.
+- **Validation Requirements**: What tests, checks, or commands must be run post-execution.
+- **Result Status**: The success identifier to return.
+- **Coordination**: Active Tuner session, contract state, and re-entry.
+
+## Execution Mode Formats
+The layout of the prompt package adapts to the execution mode selected during intake.
+
+## FAST mode Format
+**Use**: Ideation, prototype, simple Q&A.
+**Include**: Task, Intent, Selected Skill, Result Status.
+**Exclude**: Deep governance, detailed validation, and Tuner metadata.
+
+## STANDARD mode Format
+**Use**: Routine feature development, documentation, general backend/frontend implementation.
+**Include**: All standard package fields. Minimal required context (e.g., standard testing context).
+**Exclude**: Formal governance audit steps unless explicitly triggered.
+
+## GOVERNED mode Format
+**Use**: Security-sensitive logic, database persistence, access control.
+**Include**: All standard package fields, Governance Status, explicit conditional contexts (Security, Database).
+**Exclude**: Broad UI/UX context (unless UI touches security/auth).
+
+## AUDIT mode Format
+**Use**: Formal compliance, release reviews, read-only inspections.
+**Include**: Task, Intent, `docs/governance/GOVERNANCE_LAYER.md`, Risk Level, Constraints, Expected Output.
+**Exclude**: Implementation commands, destructive operation context.
+
+## DESTRUCTIVE mode Format
+**Use**: Chaos, negative path, resilience testing (e.g., `dagger`).
+**Include**: Task, Intent, Destructive-operation context, Explicit Authorization checks, Validation Requirements.
+**Rule**: Destructive-operation prompts must never proceed without explicit user authorization and required guardrail validation (`scripts/dagger_guardrail.py`).
+
+## Required Exclusions
+The prompt package **must not** include full README content, full governance files, full skill files, or full routing maps unless they are directly required by the selected mode and relevant task context categories.
+
+## Governance Status Values
+Governance status must be explicitly marked as one of the following:
+- `NOT_REQUIRED`
+- `CONDITIONAL`
+- `REQUIRED`
+- `BLOCKED_PENDING_AUTHORIZATION`
+
+## Examples
+
+### Simple Q&A
+- Task: Explain the application entry point.
+- Mode: FAST
+- Required Context: Core manifest only.
+- Governance: NOT_REQUIRED.
+
+### Documentation update
+- Task: Update setup instructions in README.
+- Mode: STANDARD
+- Required Context: Documentation context.
+- Governance: NOT_REQUIRED.
+
+### Code implementation
+- Task: Add retry logic to the HTTP client.
+- Mode: STANDARD
+- Required Context: Backend/implementation context.
+- Governance: CONDITIONAL.
+
+### Governance review
+- Task: Assess the project for GDPR compliance risks.
+- Mode: AUDIT
+- Required Context: `docs/governance/GOVERNANCE_LAYER.md`.
+- Governance: REQUIRED.
+
+### Destructive operation request
+- Task: Run fuzz testing on the auth endpoint.
+- Mode: DESTRUCTIVE
+- Required Context: Destructive-operation context.
+- Governance: BLOCKED_PENDING_AUTHORIZATION (until user confirms).
+
+## Validation Requirements
+- All downstream output must pass `git diff --check`.
+- The final token cost should be flagged if it exceeds standard baseline limits.
+
+## Non-Goals
+- Restricting human user input formats.
+- Rewriting the base execution logic of any individual specialist.
+
+## Canonical References
+- [Router-First Architecture](ROUTER_FIRST_ARCHITECTURE.md)
+- [Context Retrieval Rules](CONTEXT_RETRIEVAL_RULES.md)
+- [Governance Layer](../governance/GOVERNANCE_LAYER.md)
+
+## Format Result
+MINIMAL_PROMPT_FORMAT_DEFINED

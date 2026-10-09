@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/shadow-conformance.schema.json",
+  "title": "Orchestra Shadow Conformance Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "migration_stage",
+    "authorizes_execution",
+    "record_count",
+    "record_digests",
+    "discrepancy_count",
+    "discrepancy_codes",
+    "eligible_for_separately_governed_next_stage",
+    "records"
+  ],
+  "properties": {
+    "schema_version": {"type": "string", "const": "orchestra.shadow-conformance.v1"},
+    "migration_stage": {"type": "string", "const": "SHADOW"},
+    "authorizes_execution": {"type": "boolean", "const": false},
+    "record_count": {"type": "integer", "minimum": 0},
+    "record_digests": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+    },
+    "discrepancy_count": {"type": "integer", "minimum": 0},
+    "discrepancy_codes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "UNKNOWN_LEGACY_SPECIALIST",
+          "SPECIALIST_MISMATCH",
+          "GOVERNANCE_REQUIRED_MISMATCH",
+          "VALIDATION_MISMATCH",
+          "UNKNOWN_LEGACY_DISPOSITION",
+          "ARBITER_DISPOSITION_MISMATCH",
+          "MISSING_EVIDENCE_DIGEST"
+        ]
+      }
+    },
+    "eligible_for_separately_governed_next_stage": {"type": "boolean"},
+    "records": {"type": "array", "items": {"type": "object"}}
+  }
+}

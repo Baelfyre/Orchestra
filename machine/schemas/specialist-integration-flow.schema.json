@@ -1,0 +1,251 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/specialist-integration-flow.schema.json",
+  "title": "Orchestra UIX-5 Specialist Integration Flow",
+  "description": "Closed, library-neutral contract for consuming governed UI evidence through the existing specialist workflow without authority expansion.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "role",
+    "consumes",
+    "flow",
+    "ownership",
+    "handoff_rules",
+    "validation",
+    "authority"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../schemas/specialist-integration-flow.schema.json"
+    },
+    "schema_version": {
+      "const": "orchestra.ui-specialist-integration-flow.v1"
+    },
+    "role": {
+      "const": "UIX_5_SPECIALIST_INTEGRATION"
+    },
+    "consumes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ui_design_contract_schema",
+        "design_source_preservation_workflow_schema",
+        "ui_profile_registry_schema",
+        "component_asset_preservation_schema"
+      ],
+      "properties": {
+        "ui_design_contract_schema": {
+          "const": "machine/schemas/ui-design-contract.schema.json"
+        },
+        "design_source_preservation_workflow_schema": {
+          "const": "machine/schemas/design-source-preservation-workflow.schema.json"
+        },
+        "ui_profile_registry_schema": {
+          "const": "machine/schemas/ui-profile-registry.schema.json"
+        },
+        "component_asset_preservation_schema": {
+          "const": "machine/schemas/component-asset-preservation.schema.json"
+        }
+      }
+    },
+    "flow": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "prefixItems": [
+        {
+          "allOf": [
+            {"$ref": "#/$defs/stage"},
+            {"properties": {"order": {"const": 1}, "stage": {"const": "ROUTE"}, "specialist": {"const": "conductor"}, "conditional": {"const": false}}}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/stage"},
+            {"properties": {"order": {"const": 2}, "stage": {"const": "CAPTURE_DESIGN_UX_EVIDENCE"}, "specialist": {"const": "cloak"}, "conditional": {"const": false}}}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/stage"},
+            {"properties": {"order": {"const": 3}, "stage": {"const": "DEFINE_ARCHITECTURE"}, "specialist": {"const": "clockwork"}, "conditional": {"const": false}}}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/stage"},
+            {"properties": {"order": {"const": 4}, "stage": {"const": "REVIEW_ADOPTION"}, "specialist": {"const": "the-governor"}, "conditional": {"const": true}}}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/stage"},
+            {"properties": {"order": {"const": 5}, "stage": {"const": "IMPLEMENT_PROJECT_NATIVE"}, "specialist": {"const": "ponytail"}, "conditional": {"const": false}}}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/stage"},
+            {"properties": {"order": {"const": 6}, "stage": {"const": "STATIC_FIDELITY_REVIEW"}, "specialist": {"const": "cloak"}, "conditional": {"const": false}}}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/stage"},
+            {"properties": {"order": {"const": 7}, "stage": {"const": "RENDERED_ACCESSIBILITY_EVIDENCE"}, "specialist": {"const": "overseer"}, "conditional": {"const": false}}}
+          ]
+        },
+        {
+          "allOf": [
+            {"$ref": "#/$defs/stage"},
+            {"properties": {"order": {"const": 8}, "stage": {"const": "TRANSITION_DISPOSITION"}, "specialist": {"const": "arbiter"}, "conditional": {"const": false}}}
+          ]
+        }
+      ],
+      "items": false
+    },
+    "ownership": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "conductor",
+        "cloak",
+        "clockwork",
+        "the-governor",
+        "ponytail",
+        "overseer",
+        "arbiter"
+      ],
+      "properties": {
+        "conductor": {"$ref": "#/$defs/ownership/conductor"},
+        "cloak": {"$ref": "#/$defs/ownership/cloak"},
+        "clockwork": {"$ref": "#/$defs/ownership/clockwork"},
+        "the-governor": {"$ref": "#/$defs/ownership/the-governor"},
+        "ponytail": {"$ref": "#/$defs/ownership/ponytail"},
+        "overseer": {"$ref": "#/$defs/ownership/overseer"},
+        "arbiter": {"$ref": "#/$defs/ownership/arbiter"}
+      }
+    },
+    "handoff_rules": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "prefixItems": [
+        {"allOf": [{"$ref": "#/$defs/handoff"}, {"properties": {"order": {"const": 1}, "from": {"const": "conductor"}, "to": {"const": "cloak"}}}]},
+        {"allOf": [{"$ref": "#/$defs/handoff"}, {"properties": {"order": {"const": 2}, "from": {"const": "cloak"}, "to": {"const": "clockwork"}}}]},
+        {"allOf": [{"$ref": "#/$defs/handoff"}, {"properties": {"order": {"const": 3}, "from": {"const": "clockwork"}, "to": {"const": "the-governor"}}}]},
+        {"allOf": [{"$ref": "#/$defs/handoff"}, {"properties": {"order": {"const": 4}, "from": {"const": "the-governor"}, "to": {"const": "ponytail"}}}]},
+        {"allOf": [{"$ref": "#/$defs/handoff"}, {"properties": {"order": {"const": 5}, "from": {"const": "ponytail"}, "to": {"const": "cloak"}}}]},
+        {"allOf": [{"$ref": "#/$defs/handoff"}, {"properties": {"order": {"const": 6}, "from": {"const": "cloak"}, "to": {"const": "overseer"}}}]},
+        {"allOf": [{"$ref": "#/$defs/handoff"}, {"properties": {"order": {"const": 7}, "from": {"const": "overseer"}, "to": {"const": "arbiter"}}}]}
+      ],
+      "items": false
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_specialists",
+        "ownership_non_overlapping",
+        "conductor_routing_only",
+        "overseer_rendered_evidence_owner",
+        "arbiter_transition_owner",
+        "caveman_role",
+        "butler_role",
+        "ui_evidence_authority",
+        "implementation_requires_upstream_contracts",
+        "runtime_integration",
+        "new_specialist_required"
+      ],
+      "properties": {
+        "required_specialists": {
+          "const": ["conductor", "cloak", "clockwork", "the-governor", "ponytail", "overseer", "arbiter"]
+        },
+        "ownership_non_overlapping": {"const": true},
+        "conductor_routing_only": {"const": true},
+        "overseer_rendered_evidence_owner": {"const": true},
+        "arbiter_transition_owner": {"const": true},
+        "caveman_role": {"const": "PRESENTATION_ONLY_NO_AUTHORITY"},
+        "butler_role": {"const": "NOT_REGISTERED_OR_ACTIVE_OWNER"},
+        "ui_evidence_authority": {"const": "EVIDENCE_NOT_AUTHORITY"},
+        "implementation_requires_upstream_contracts": {"const": true},
+        "runtime_integration": {"const": false},
+        "new_specialist_required": {"const": false}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "flow_grants_implementation_authority",
+        "ui_evidence_grants_implementation_authority",
+        "rendered_evidence_grants_release_authority",
+        "validation_grants_approval",
+        "external_tools_grant_authority",
+        "dependency_adoption_authorized",
+        "asset_adoption_authorized",
+        "figma_mutation_authorized",
+        "transition_disposition_required"
+      ],
+      "properties": {
+        "flow_grants_implementation_authority": {"const": false},
+        "ui_evidence_grants_implementation_authority": {"const": false},
+        "rendered_evidence_grants_release_authority": {"const": false},
+        "validation_grants_approval": {"const": false},
+        "external_tools_grant_authority": {"const": false},
+        "dependency_adoption_authorized": {"const": false},
+        "asset_adoption_authorized": {"const": false},
+        "figma_mutation_authorized": {"const": false},
+        "transition_disposition_required": {"const": true}
+      }
+    }
+  },
+  "$defs": {
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["order", "stage", "specialist", "responsibility", "input", "output", "conditional"],
+      "properties": {
+        "order": {"type": "integer", "minimum": 1},
+        "stage": {"type": "string", "minLength": 1},
+        "specialist": {"enum": ["conductor", "cloak", "clockwork", "the-governor", "ponytail", "overseer", "arbiter"]},
+        "responsibility": {"type": "string", "minLength": 1},
+        "input": {"type": "string", "minLength": 1},
+        "output": {"type": "string", "minLength": 1},
+        "conditional": {"type": "boolean"}
+      }
+    },
+    "handoff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["order", "from", "to", "condition", "requires"],
+      "properties": {
+        "order": {"type": "integer", "minimum": 1},
+        "from": {"enum": ["conductor", "cloak", "clockwork", "the-governor", "ponytail", "overseer"]},
+        "to": {"enum": ["cloak", "clockwork", "the-governor", "ponytail", "overseer", "arbiter"]},
+        "condition": {"type": "string", "minLength": 1},
+        "requires": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "owner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["owns", "does_not_own"],
+      "properties": {
+        "owns": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "does_not_own": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "ownership": {
+      "conductor": {"allOf": [{"$ref": "#/$defs/owner"}, {"properties": {"owns": {"const": ["ROUTING", "SEQUENCING"]}, "does_not_own": {"const": ["UI_UX_REQUIREMENTS", "ARCHITECTURE", "IMPLEMENTATION", "VALIDATION_EVIDENCE", "TRANSITION_DISPOSITION"]}}}]},
+      "cloak": {"allOf": [{"$ref": "#/$defs/owner"}, {"properties": {"owns": {"const": ["DESIGN_UX_EVIDENCE", "ACCESSIBILITY_REQUIREMENTS", "STATIC_FIDELITY_REVIEW"]}, "does_not_own": {"const": ["ARCHITECTURE", "IMPLEMENTATION", "RENDERED_EVIDENCE", "TRANSITION_DISPOSITION"]}}}]},
+      "clockwork": {"allOf": [{"$ref": "#/$defs/owner"}, {"properties": {"owns": {"const": ["COMPONENT_STATE_ARCHITECTURE", "RESPONSIVE_ARCHITECTURE", "INTEGRATION_BOUNDARIES"]}, "does_not_own": {"const": ["DESIGN_UX_REQUIREMENTS", "IMPLEMENTATION", "RENDERED_EVIDENCE", "TRANSITION_DISPOSITION"]}}}]},
+      "the-governor": {"allOf": [{"$ref": "#/$defs/owner"}, {"properties": {"owns": {"const": ["DEPENDENCY_ASSET_LICENSE_IP_REVIEW"]}, "does_not_own": {"const": ["ROUTING", "IMPLEMENTATION", "VALIDATION", "TRANSITION_DISPOSITION"]}}}]},
+      "ponytail": {"allOf": [{"$ref": "#/$defs/owner"}, {"properties": {"owns": {"const": ["PROJECT_NATIVE_IMPLEMENTATION"]}, "does_not_own": {"const": ["DESIGN_UX_REQUIREMENTS", "ARCHITECTURE", "GOVERNANCE_REVIEW", "RENDERED_EVIDENCE", "TRANSITION_DISPOSITION"]}}}]},
+      "overseer": {"allOf": [{"$ref": "#/$defs/owner"}, {"properties": {"owns": {"const": ["RENDERED_EVIDENCE", "ACCESSIBILITY_EVIDENCE", "VALIDATION_REVIEW"]}, "does_not_own": {"const": ["DESIGN_UX_REQUIREMENTS", "ARCHITECTURE", "IMPLEMENTATION", "TRANSITION_DISPOSITION"]}}}]},
+      "arbiter": {"allOf": [{"$ref": "#/$defs/owner"}, {"properties": {"owns": {"const": ["TRANSITION_DISPOSITION", "EVIDENCE_FRESHNESS"]}, "does_not_own": {"const": ["DESIGN_UX_REQUIREMENTS", "ARCHITECTURE", "IMPLEMENTATION", "RENDERED_EVIDENCE"]}}}]}
+    }
+  }
+}

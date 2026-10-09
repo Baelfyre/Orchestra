@@ -1,0 +1,379 @@
+{
+  "schema_version": "orchestra.specialist-authority-view.v1",
+  "source_of_truth": "skills_and_governance_contracts",
+  "generation_policy": "source_bound_compiled_view",
+  "specialists": [
+    {
+      "slug": "the-steward",
+      "authority_class": "GOVERNANCE_BUSINESS_SCOPE",
+      "source_path": "skills/the-steward/SKILL.md",
+      "source_blob_sha": "3c77259c1ece383133b15d4724622ae4dbf139cb",
+      "observe_classes": [
+        "PROJECT_CONTEXT",
+        "REQUIREMENTS",
+        "ACCEPTANCE_CRITERIA",
+        "CAPACITY_EVIDENCE"
+      ],
+      "decide_classes": [
+        "BUSINESS_ALIGNMENT",
+        "SCOPE",
+        "PRODUCT_INTENT",
+        "CAPACITY_ASSUMPTIONS",
+        "SDLC_SUFFICIENCY"
+      ],
+      "mutate_classes": [
+        "GOVERNANCE_ARTIFACTS"
+      ],
+      "can_dispatch": false,
+      "can_transition": false,
+      "can_validate": false,
+      "can_coordinate": false,
+      "can_implement": false,
+      "can_execute_protected_action_without_external_authority": false
+    },
+    {
+      "slug": "the-governor",
+      "authority_class": "GOVERNANCE_LEGAL_COMPLIANCE",
+      "source_path": "skills/the-governor/SKILL.md",
+      "source_blob_sha": "0101d28effb18eec66df7fa2534b2eba8a2bf926",
+      "observe_classes": [
+        "AUTHORITATIVE_RULES",
+        "DATA_USE",
+        "LICENSES",
+        "COMPLIANCE_EVIDENCE"
+      ],
+      "decide_classes": [
+        "LEGAL_COMPLIANCE_GOVERNANCE",
+        "PRIVACY_OBLIGATIONS",
+        "IP_LICENSING",
+        "HUMAN_REVIEW_REQUIREMENT"
+      ],
+      "mutate_classes": [
+        "GOVERNANCE_ARTIFACTS"
+      ],
+      "can_dispatch": false,
+      "can_transition": false,
+      "can_validate": false,
+      "can_coordinate": false,
+      "can_implement": false,
+      "can_execute_protected_action_without_external_authority": false
+    },
+    {
+      "slug": "arbiter",
+      "authority_class": "CONTINUITY_TRANSITION",
+      "source_path": "skills/arbiter/SKILL.md",
+      "source_blob_sha": "86ee43bbfa708f262afd186d38ce79e08e65d9b6",
+      "observe_classes": [
+        "SOURCE_IDENTITY",
+        "VALIDATION_EVIDENCE",
+        "HANDOFF_STATE",
+        "COORDINATION_STATE"
+      ],
+      "decide_classes": [
+        "CONTINUITY",
+        "EVIDENCE_FRESHNESS",
+        "TRANSITION_DISPOSITION"
+      ],
+      "mutate_classes": [
+        "TRANSITION_CONTROL_RECORDS"
+      ],
+      "can_dispatch": false,
+      "can_transition": true,
+      "can_validate": false,
+      "can_coordinate": false,
+      "can_implement": false,
+      "can_execute_protected_action_without_external_authority": false
+    },
+    {
+      "slug": "overseer",
+      "authority_class": "VALIDATION_EVIDENCE",
+      "source_path": "skills/overseer/SKILL.md",
+      "source_blob_sha": "1ca8aafd2f6dfa020e87a77ca08e1756f861bddc",
+      "observe_classes": [
+        "REQUIREMENTS",
+        "IMPLEMENTATION_REVISION",
+        "TESTS",
+        "CI",
+        "RUNTIME_EVIDENCE"
+      ],
+      "decide_classes": [
+        "QA_STRATEGY",
+        "VALIDATION_GATES",
+        "EVIDENCE_QUALITY",
+        "READINESS_EVIDENCE"
+      ],
+      "mutate_classes": [
+        "VALIDATION_ARTIFACTS"
+      ],
+      "can_dispatch": false,
+      "can_transition": false,
+      "can_validate": true,
+      "can_coordinate": false,
+      "can_implement": false,
+      "can_execute_protected_action_without_external_authority": false
+    },
+    {
+      "slug": "conductor",
+      "authority_class": "ROUTING_SEQUENCE_CONTROL_PLANE",
+      "source_path": "skills/conductor/SKILL.md",
+      "source_blob_sha": "6d190812e5514357c60ca54355b0e2ec1ca4839b",
+      "observe_classes": [
+        "REQUEST_INTENT",
+        "AUTHORITY_ENVELOPE",
+        "SPECIALIST_METADATA",
+        "GATE_STATE",
+        "OEE_BUDGET"
+      ],
+      "decide_classes": [
+        "ROUTING",
+        "SEQUENCING",
+        "TOPOLOGY_SELECTION",
+        "EXECUTION_MODE"
+      ],
+      "mutate_classes": [
+        "CONTROL_PLANE_STATE"
+      ],
+      "can_dispatch": true,
+      "can_transition": false,
+      "can_validate": false,
+      "can_coordinate": false,
+      "can_implement": false,
+      "can_execute_protected_action_without_external_authority": false
+    },
+    {
+      "slug": "the-tuner",
+      "authority_class": "CROSS_SPECIALIST_COORDINATION",
+      "source_path": "skills/the-tuner/SKILL.md",
+      "source_blob_sha": "be50eb0499a89c8211ddc5fda1ad79041e49eddc",
+      "observe_classes": [
+        "SPECIALIST_CONTRACTS",
+        "HANDOFF_DELTAS",
+        "INVALIDATION_GRAPH"
+      ],
+      "decide_classes": [
+        "CONTRADICTION_DETECTION",
+        "MISSING_OWNER_DETECTION",
+        "REENTRY_RECOMMENDATION"
+      ],
+      "mutate_classes": [
+        "COORDINATION_RECORDS"
+      ],
+      "can_dispatch": false,
+      "can_transition": false,
+      "can_validate": false,
+      "can_coordinate": true,
+      "can_implement": false,
+      "can_execute_protected_action_without_external_authority": false
+    },
+    {
+      "slug": "cipher",
+      "authority_class": "DOMAIN_SECURITY_PRIVACY_CONTROLS",
+      "source_path": "skills/cipher/SKILL.md",
+      "source_blob_sha": "2808e9156e6e38f7e8c54590d8cdde8711a273c6",
+      "observe_classes": [
+        "CODE",
+        "CONFIGURATION",
+        "AUTH_FLOWS",
+        "SECURITY_TOOL_EVIDENCE"
+      ],
+      "decide_classes": [
+        "SECURITY_CONTROLS",
+        "AUTHORIZATION_REQUIREMENTS",
+        "THREAT_FINDINGS",
+        "TECHNICAL_PRIVACY_CONTROLS"
+      ],
+      "mutate_classes": [
+        "SECURITY_REVIEW_ARTIFACTS"
+      ],
+      "can_dispatch": false,
+      "can_transition": false,
+      "can_validate": false,
+      "can_coordinate": false,
+      "can_implement": false,
+      "can_execute_protected_action_without_external_authority": false
+    },
+    {
+      "slug": "cloak",
+      "authority_class": "DOMAIN_UI_UX",
+      "source_path": "skills/cloak/SKILL.md",
+      "source_blob_sha": "4b2a0dcda9ef7b20a5e1b87ab70d3809d9fcbd16",
+      "observe_classes": [
+        "DESIGN_SOURCES",
+        "SCREENSHOTS",
+        "UI_SOURCE",
+        "ACCESSIBILITY_EVIDENCE"
+      ],
+      "decide_classes": [
+        "UI_UX_REQUIREMENTS",
+        "ACCESSIBILITY",
+        "RESPONSIVE_RULES",
+        "VISIBLE_INTERACTION"
+      ],
+      "mutate_classes": [
+        "DESIGN_ARTIFACTS"
+      ],
+      "can_dispatch": false,
+      "can_transition": false,
+      "can_validate": false,
+      "can_coordinate": false,
+      "can_implement": false,
+      "can_execute_protected_action_without_external_authority": false
+    },
+    {
+      "slug": "dagger",
+      "authority_class": "GATED_ADVERSARIAL_RESILIENCE",
+      "source_path": "skills/dagger/SKILL.md",
+      "source_blob_sha": "0e3cddb6180ec7a91bf4e6848db2f35f92566c02",
+      "observe_classes": [
+        "QA_BASELINE",
+        "SANDBOX_EVIDENCE",
+        "FAILURE_MODELS",
+        "GUARDRAILS"
+      ],
+      "decide_classes": [
+        "ADVERSARIAL_SCENARIOS",
+        "RESILIENCE_FINDINGS",
+        "STOP_CONDITIONS"
+      ],
+      "mutate_classes": [
+        "AUTHORIZED_SANDBOX_EXECUTION"
+      ],
+      "can_dispatch": false,
+      "can_transition": false,
+      "can_validate": false,
+      "can_coordinate": false,
+      "can_implement": false,
+      "can_execute_protected_action_without_external_authority": false
+    },
+    {
+      "slug": "chronicler",
+      "authority_class": "DOMAIN_PERSISTENCE",
+      "source_path": "skills/chronicler/SKILL.md",
+      "source_blob_sha": "28eeaf05131634f1c79ca89a590c04ab2db46703",
+      "observe_classes": [
+        "SCHEMAS",
+        "MIGRATIONS",
+        "ORM_MODELS",
+        "QUERIES",
+        "DATA_RULES"
+      ],
+      "decide_classes": [
+        "PERSISTENCE_SEMANTICS",
+        "SCHEMA",
+        "MIGRATION_STRATEGY",
+        "DATA_INTEGRITY"
+      ],
+      "mutate_classes": [
+        "PERSISTENCE_DESIGN_ARTIFACTS"
+      ],
+      "can_dispatch": false,
+      "can_transition": false,
+      "can_validate": false,
+      "can_coordinate": false,
+      "can_implement": false,
+      "can_execute_protected_action_without_external_authority": false
+    },
+    {
+      "slug": "weaver",
+      "authority_class": "REPRESENTATION_VISUAL",
+      "source_path": "skills/weaver/SKILL.md",
+      "source_blob_sha": "fbfe449bdc44de2dd9dbadb9a5f69248ae681258",
+      "observe_classes": [
+        "VERIFIED_SOURCE_FACTS",
+        "SPECIALIST_OUTPUTS"
+      ],
+      "decide_classes": [
+        "DIAGRAM_NOTATION",
+        "VISUAL_REPRESENTATION"
+      ],
+      "mutate_classes": [
+        "DIAGRAM_ARTIFACTS"
+      ],
+      "can_dispatch": false,
+      "can_transition": false,
+      "can_validate": false,
+      "can_coordinate": false,
+      "can_implement": false,
+      "can_execute_protected_action_without_external_authority": false
+    },
+    {
+      "slug": "scribe",
+      "authority_class": "REPRESENTATION_DOCUMENTATION",
+      "source_path": "skills/scribe/SKILL.md",
+      "source_blob_sha": "9e86c309011255e259b35677066384c8cd8b1a63",
+      "observe_classes": [
+        "SOURCE",
+        "TESTS",
+        "RUNTIME_EVIDENCE",
+        "SPECIALIST_OUTPUTS",
+        "GOVERNANCE_DECISIONS"
+      ],
+      "decide_classes": [
+        "DOCUMENTATION_REPRESENTATION",
+        "TRACEABILITY",
+        "DOCUMENTATION_RECONCILIATION"
+      ],
+      "mutate_classes": [
+        "DOCUMENTATION_ARTIFACTS"
+      ],
+      "can_dispatch": false,
+      "can_transition": false,
+      "can_validate": false,
+      "can_coordinate": false,
+      "can_implement": false,
+      "can_execute_protected_action_without_external_authority": false
+    },
+    {
+      "slug": "clockwork",
+      "authority_class": "DOMAIN_ARCHITECTURE",
+      "source_path": "skills/clockwork/SKILL.md",
+      "source_blob_sha": "8cf851aaab03eedfabe4c25a2e378065ccb57473",
+      "observe_classes": [
+        "SOURCE_STRUCTURE",
+        "DATA_FLOWS",
+        "STATE_OWNERS",
+        "RUNTIME_BOUNDARIES"
+      ],
+      "decide_classes": [
+        "ARCHITECTURE",
+        "LAYERING",
+        "DEPENDENCY_DIRECTION",
+        "STATE_CONCURRENCY_OWNERSHIP"
+      ],
+      "mutate_classes": [
+        "ARCHITECTURE_ARTIFACTS"
+      ],
+      "can_dispatch": false,
+      "can_transition": false,
+      "can_validate": false,
+      "can_coordinate": false,
+      "can_implement": false,
+      "can_execute_protected_action_without_external_authority": false
+    },
+    {
+      "slug": "ponytail",
+      "authority_class": "IMPLEMENTATION",
+      "source_path": "skills/ponytail/SKILL.md",
+      "source_blob_sha": "7e1b3d56a9e5a076ae8a129f2677d4240d5d77f1",
+      "observe_classes": [
+        "SOURCE",
+        "RUNTIME_CONTEXT",
+        "ACCEPTED_CONTRACTS",
+        "REPOSITORY_COMMANDS"
+      ],
+      "decide_classes": [
+        "LOCAL_IMPLEMENTATION_MECHANICS"
+      ],
+      "mutate_classes": [
+        "TRACKED_REPOSITORY_SOURCE",
+        "FOCUSED_TESTS"
+      ],
+      "can_dispatch": false,
+      "can_transition": false,
+      "can_validate": false,
+      "can_coordinate": false,
+      "can_implement": true,
+      "can_execute_protected_action_without_external_authority": false
+    }
+  ]
+}

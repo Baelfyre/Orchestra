@@ -1,0 +1,77 @@
+# UIX-9B Host Remediation and Active Model Re-Freeze
+
+Terminal: `UIX_9B_HOST_REMEDIATION_COMPLETE_WAITING_UIX_9C_AUTHORIZATION`
+
+Date: 2026-08-26
+
+This record supersedes neither the historical failed probe nor the frozen
+experimental inputs. It records the explicitly authorized pre-experiment
+model re-freeze and one isolated availability probe only.
+
+## Model re-freeze
+
+```text
+PREVIOUS_FROZEN_MODEL=gpt-5.3-codex
+PREVIOUS_MODEL_STATUS=UNVERIFIED_CLIENT_FAILURE
+ACTIVE_FROZEN_MODEL=gpt-5.6-luna
+ACTIVE_REASONING_EFFORT=xhigh
+PROVIDER=openai-codex
+MODEL_REFREEZE_REASON=HUMAN_SELECTED_PRE_EXPERIMENT_MODEL
+EXPERIMENTAL_RESULTS_EXISTED_AT_REFREEZE=false
+MODEL_SUBSTITUTION_PERFORMED=false
+MODEL_REVISION=NOT_EXPOSED_BY_PROVIDER
+```
+
+The historical `gpt-5.3-codex` probe evidence remains unchanged at
+`docs/validation/UIX_9B_MODEL_AVAILABILITY_PROBE_2026-08-26.md`. No
+experimental result existed when the active model was re-frozen.
+
+## Host-side validation and probe
+
+```text
+HOST_VALIDATION_MODEL=gpt-5.6-luna
+HOST_VALIDATION_REASONING_EFFORT=xhigh
+HOST_VALIDATION_STATUS=PASS
+PROBE_PROMPT=Return exactly: UIX9_MODEL_AVAILABILITY_PROBE_OK
+PROBE_CONTEXT=FRESH_PROJECTLESS_SESSION_WITH_NO_UIX_CONTEXT
+PROBE_SESSION_THREAD_ID=01a03bae-f77a-71f2-ab7b-da442dd2862b
+PROVIDER_RESPONSE=UIX9_MODEL_AVAILABILITY_PROBE_OK
+MODEL_AVAILABILITY=AVAILABLE
+HOST_REMEDIATION_STATUS=PASS
+PRECAMPAIGN_PROVIDER_PROBES_EXECUTED=2
+PRECAMPAIGN_PROVIDER_CALLS_EXECUTED=1
+PRECAMPAIGN_MODEL_CALLS_EXECUTED=1
+RETRY_COUNT_FOR_THIS_REMEDIATION=0
+MODEL_SUBSTITUTION_PERFORMED=false
+```
+
+The probe received no UIX task, fixture, validator, guidance, experimental
+arm, prior result, repository context, or customer data. It did not modify the
+Orchestra repository or any external repository.
+
+## Frozen identity preservation
+
+```text
+CANONICAL_SHA=bf6f14316fa8814eeac91440c4a7d70be0d04b9e
+FIXTURE_DIGEST=280f1361eda45c2b632c37dd049ec47dec81ab1e8e9e81c61a7aa0d9fb96b978
+TASK_DIGEST=3708f0d7d172a424ed426a6275d5012df6a11b0718ed37cba95ba0724c0c506d
+VALIDATOR_DIGEST=285494688ef105c813ef5f449f1e13b75529c8cddbf8a42ea76d283a9d5eecf3
+UIX_GUIDANCE_DIGEST=f989ac579875fbcd349f812fa6e241ba5c8505f9f940abcb5e0e30006f1606ab
+CODEX_CLI_VERSION=codex-cli 0.148.0
+HOST_OS=Windows-11-10.0.26200-SP0
+HOST_ARCHITECTURE=AMD64
+FROZEN_DIGESTS_UNCHANGED=true
+REPOSITORY_MUTATIONS=0
+EXTERNAL_REPO_MUTATIONS=0
+```
+
+The six experimental executions remain unstarted:
+
+```text
+LIVE_EXPERIMENTAL_RUNS_EXECUTED=0
+LIVE_UIX9_TASK_CALLS_EXECUTED=0
+UIX_9C_EXECUTION_AUTHORIZED=false
+NEXT_REQUIRED_GATE=HUMAN_UIX_9C_LIVE_CALL_AUTHORIZATION
+```
+
+No UIX-9C result or model-behavior conclusion is established by this probe.

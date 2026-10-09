@@ -1,0 +1,24 @@
+{
+  "schema_version": "uix9b.component-map.v1",
+  "reference_identity": "uix9b-operations-workspace-reference-v1",
+  "source_of_truth": "project/src/components/primitives.js",
+  "mapping_precedence": [
+    "EXACT_PROJECT_NATIVE_COMPONENT",
+    "APPROVED_ADAPTATION",
+    "UNRESOLVED_NO_GUESS"
+  ],
+  "components": [
+    {"name": "AppShell", "path": "project/src/components/primitives.js", "disposition": "EXACT", "states": ["DEFAULT", "MOBILE_NAV_COLLAPSED"]},
+    {"name": "Sidebar", "path": "project/src/components/primitives.js", "disposition": "EXACT", "states": ["DEFAULT", "MOBILE_NAV_COLLAPSED"]},
+    {"name": "PageHeader", "path": "project/src/components/primitives.js", "disposition": "EXACT", "states": ["DEFAULT"]},
+    {"name": "Button", "path": "project/src/components/primitives.js", "disposition": "EXACT", "states": ["DEFAULT", "HOVER", "FOCUS", "DISABLED"]},
+    {"name": "StatusBadge", "path": "project/src/components/primitives.js", "disposition": "EXACT", "states": ["DEFAULT"]},
+    {"name": "StatCard", "path": "project/src/components/primitives.js", "disposition": "EXACT", "states": ["DEFAULT", "LOADING"]},
+    {"name": "DataTable", "path": "project/src/components/primitives.js", "disposition": "EXACT", "states": ["LOADING", "EMPTY", "ERROR", "POPULATED"]},
+    {"name": "Alert", "path": "project/src/components/primitives.js", "disposition": "EXACT", "states": ["DEFAULT"]},
+    {"name": "EmptyState", "path": "project/src/components/primitives.js", "disposition": "EXACT", "states": ["EMPTY"]},
+    {"name": "Drawer", "path": "project/src/components/primitives.js", "disposition": "EXACT", "states": ["DEFAULT", "OPEN", "CLOSED"]},
+    {"name": "Card", "path": "project/src/components/primitives.js", "disposition": "EXACT", "states": ["DEFAULT"]},
+    {"name": "FormField", "path": "project/src/components/primitives.js", "disposition": "EXACT", "states": ["DEFAULT", "ERROR"]}
+  ]
+}

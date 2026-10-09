@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/adaptive-topology-eligibility-envelope.schema.json",
+  "title": "Orchestra Adaptive Tuner Topology Eligibility Envelope v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "envelope_id",
+    "session_id",
+    "created_at",
+    "user_key",
+    "coordination_contract_ref",
+    "coordination_contract_revision",
+    "required_specialists",
+    "invariants_applied",
+    "invariant_evidence_refs",
+    "candidates",
+    "disposition"
+  ],
+  "properties": {
+    "schema_version": {"const": "orchestra.adaptive-topology-eligibility-envelope.v1"},
+    "envelope_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "session_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "created_at": {"type": "string", "format": "date-time"},
+    "user_key": {"type": "string", "minLength": 1, "maxLength": 256},
+    "project_key": {"type": "string", "minLength": 1, "maxLength": 256},
+    "task_session_key": {"type": "string", "minLength": 1, "maxLength": 256},
+    "coordination_contract_ref": {"type": "string", "minLength": 1, "maxLength": 512},
+    "coordination_contract_revision": {"type": "integer", "minimum": 1},
+    "deterministic_topology_candidate_id": {"type": "string", "minLength": 1, "maxLength": 256},
+    "explicit_current_constraint_ref": {"type": "string", "minLength": 1, "maxLength": 512},
+    "required_specialists": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]{0,127}$"}
+    },
+    "invariants_applied": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "coordination_validated",
+        "required_specialists_complete",
+        "ownership_complete",
+        "authority_external_to_tuner",
+        "governance_complete",
+        "contradictions_resolved",
+        "stale_contracts_resolved",
+        "provider_privacy",
+        "lifecycle",
+        "resource_ceilings",
+        "context_disclosure_ceiling"
+      ],
+      "properties": {
+        "coordination_validated": {"const": true},
+        "required_specialists_complete": {"const": true},
+        "ownership_complete": {"const": true},
+        "authority_external_to_tuner": {"const": true},
+        "governance_complete": {"const": true},
+        "contradictions_resolved": {"const": true},
+        "stale_contracts_resolved": {"const": true},
+        "provider_privacy": {"const": true},
+        "lifecycle": {"const": true},
+        "resource_ceilings": {"const": true},
+        "context_disclosure_ceiling": {"const": true}
+      }
+    },
+    "invariant_evidence_refs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 128,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1, "maxLength": 512}
+    },
+    "candidates": {
+      "type": "array",
+      "maxItems": 128,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/topology_candidate"}
+    },
+    "disposition": {"enum": ["ELIGIBLE_TOPOLOGY_SET_READY", "NO_ELIGIBLE_TOPOLOGIES"]}
+  },
+  "$defs": {
+    "topology_candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_id",
+        "coordination_contract_revision",
+        "required_specialists",
+        "stages",
+        "reentry_order",
+        "prior_output_disclosure_refs",
+        "eligibility_status",
+        "eligibility_evidence_refs"
+      ],
+      "properties": {
+        "candidate_id": {"type": "string", "minLength": 1, "maxLength": 256},
+        "coordination_contract_revision": {"type": "integer", "minimum": 1},
+        "required_specialists": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]{0,127}$"}
+        },
+        "stages": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "items": {"$ref": "#/$defs/stage"}
+        },
+        "reentry_order": {
+          "type": "array",
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]{0,127}$"}
+        },
+        "prior_output_disclosure_refs": {
+          "type": "array",
+          "maxItems": 128,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1, "maxLength": 512}
+        },
+        "eligibility_status": {"const": "ELIGIBLE"},
+        "eligibility_evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1, "maxLength": 512}
+        }
+      }
+    },
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["stage_id", "mode", "specialists", "join_required"],
+      "properties": {
+        "stage_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]{0,127}$"},
+        "mode": {"enum": ["SEQUENTIAL", "PARALLEL"]},
+        "specialists": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]{0,127}$"}
+        },
+        "join_required": {"type": "boolean"},
+        "review_owner": {"type": "string", "pattern": "^[a-z0-9][a-z0-9_.:-]{0,127}$"}
+      }
+    }
+  }
+}

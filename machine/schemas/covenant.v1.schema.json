@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Orchestra Covenant v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "contract_role",
+    "authority_model",
+    "transition_owner",
+    "legacy_assurance_engine",
+    "governance_owners",
+    "specialist_evidence_owners",
+    "evaluated_dimensions",
+    "constitutional_precedence",
+    "basis_required_fields",
+    "judgment_required_fields",
+    "reconciliation_required_fields",
+    "state_binding_fields",
+    "dispositions",
+    "reconciliation_invariants",
+    "required_scenario_classes",
+    "adversarial_permutations",
+    "transition_boundary"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schema_version": {
+      "const": "orchestra.covenant.v1"
+    },
+    "contract_role": {
+      "const": "machine_cross_governance_synthesis_contract"
+    },
+    "authority_model": {
+      "const": "EVIDENCE_ONLY_NON_AUTHORIZING"
+    },
+    "transition_owner": {
+      "const": "ARBITER"
+    },
+    "legacy_assurance_engine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "prai_pass_sufficient_for_covenant_pass",
+        "prai_limitations_must_be_preserved"
+      ],
+      "properties": {
+        "name": {
+          "const": "PRAI"
+        },
+        "prai_pass_sufficient_for_covenant_pass": {
+          "const": false
+        },
+        "prai_limitations_must_be_preserved": {
+          "const": true
+        }
+      }
+    },
+    "governance_owners": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "STEWARD",
+        "GOVERNOR"
+      ],
+      "properties": {
+        "STEWARD": {
+          "const": "PRODUCT_INTENT_SCOPE_AND_SYSTEM_COHERENCE_AUTHORITY"
+        },
+        "GOVERNOR": {
+          "const": "GOVERNANCE_INTEGRITY_AND_PROTECTED_OBLIGATION_AUTHORITY"
+        }
+      }
+    },
+    "specialist_evidence_owners": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "evaluated_dimensions": {
+      "$ref": "#/$defs/string_list"
+    },
+    "constitutional_precedence": {
+      "$ref": "#/$defs/string_list"
+    },
+    "basis_required_fields": {
+      "$ref": "#/$defs/string_list"
+    },
+    "judgment_required_fields": {
+      "$ref": "#/$defs/string_list"
+    },
+    "reconciliation_required_fields": {
+      "$ref": "#/$defs/string_list"
+    },
+    "state_binding_fields": {
+      "$ref": "#/$defs/string_list"
+    },
+    "dispositions": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "reconciliation_invariants": {
+      "$ref": "#/$defs/string_list"
+    },
+    "required_scenario_classes": {
+      "$ref": "#/$defs/string_list"
+    },
+    "adversarial_permutations": {
+      "$ref": "#/$defs/string_list"
+    },
+    "transition_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "covenant_is_non_authorizing",
+        "arbiter_remains_transition_owner",
+        "arbiter_must_observe_current_evidence",
+        "merge_is_separately_authorized",
+        "protected_governance_change_requires_new_run"
+      ],
+      "properties": {
+        "covenant_is_non_authorizing": {
+          "const": true
+        },
+        "arbiter_remains_transition_owner": {
+          "const": true
+        },
+        "arbiter_must_observe_current_evidence": {
+          "const": true
+        },
+        "merge_is_separately_authorized": {
+          "const": true
+        },
+        "protected_governance_change_requires_new_run": {
+          "const": true
+        }
+      }
+    }
+  },
+  "$defs": {
+    "string_list": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "benefit_claim_allowed": false,
+  "canonical_preparation_sha": "65ac344030065ce1a1c5ced5ce63d420bbf13711",
+  "canonical_preparation_tree": "9682e49f93110c54a8f247abd94fe6fbce517d39",
+  "confirmatory_power_design": {
+    "b0_clamped_task_count": 50,
+    "maximum_model_calls": 450,
+    "normal_approximation_required_blocks": 48,
+    "pilot_paired_relative_stdev": 0.24671837802012273,
+    "planned_runs": 450,
+    "power": 0.8,
+    "practical_effect": 0.1,
+    "primary_endpoint": "PAIRED_OUTPUT_TOKEN_RELATIVE_REDUCTION",
+    "repetitions_per_task": 3,
+    "two_sided_alpha": 0.05
+  },
+  "evidence": {
+    "analysis_sha256": "000709091d5cebaa53a4c195a5570afa519196c01024ac2b154ce93aa2593034",
+    "archive_sha256": "c144155aa5ba50e415161651b1b1cc6942974ab13d609cf86ac965357e5534f5",
+    "directory": "D:\\Dev\\Orchestra-Benchmark-Evidence\\b3-pilot-20260824T031600Z"
+  },
+  "integrity": {
+    "all_outcomes_pass": true,
+    "all_safety_flags_false": true,
+    "paired_blocks": 60,
+    "raw_evidence_digests_verified": true,
+    "run_digests_verified": true,
+    "runs": 180
+  },
+  "metrics": {
+    "input_tokens": {
+      "arm_mean": {
+        "CAVEMAN": 20305.033333333333,
+        "DEFAULT": 18371.783333333333,
+        "MURMURS": 19186.233333333334
+      },
+      "median_bootstrap_95_ci": [
+        -0.00010345541071798055,
+        7.764243632031251e-05
+      ],
+      "murmurs_vs_default_relative_reduction_mean": -0.07805887167213123,
+      "murmurs_vs_default_relative_reduction_median": 0.0,
+      "negative_blocks": 28,
+      "paired_relative_reduction_stdev": 0.244873867072728,
+      "positive_blocks": 26,
+      "ties": 6
+    },
+    "output_tokens": {
+      "arm_mean": {
+        "CAVEMAN": 384,
+        "DEFAULT": 325.6,
+        "MURMURS": 320.21666666666664
+      },
+      "median_bootstrap_95_ci": [
+        -0.04895104895104895,
+        0.08135593220338982
+      ],
+      "murmurs_vs_default_relative_reduction_mean": -0.014777589567896333,
+      "murmurs_vs_default_relative_reduction_median": 0.042520557625594244,
+      "negative_blocks": 26,
+      "paired_relative_reduction_stdev": 0.24671837802012273,
+      "positive_blocks": 34,
+      "ties": 0
+    },
+    "reasoning_tokens": {
+      "arm_mean": {
+        "CAVEMAN": 324.1,
+        "DEFAULT": 265.7,
+        "MURMURS": 260.31666666666666
+      },
+      "median_bootstrap_95_ci": [
+        -0.06334841628959276,
+        0.10080645161290322
+      ],
+      "murmurs_vs_default_relative_reduction_mean": -0.027093509892859465,
+      "murmurs_vs_default_relative_reduction_median": 0.05037187288708587,
+      "negative_blocks": 26,
+      "paired_relative_reduction_stdev": 0.30695761424927454,
+      "positive_blocks": 34,
+      "ties": 0
+    },
+    "total_tokens": {
+      "arm_mean": {
+        "CAVEMAN": 20689.033333333333,
+        "DEFAULT": 18697.383333333335,
+        "MURMURS": 19506.45
+      },
+      "median_bootstrap_95_ci": [
+        -0.0016745318922210383,
+        0.001297238324860255
+      ],
+      "murmurs_vs_default_relative_reduction_mean": -0.07540609552576452,
+      "murmurs_vs_default_relative_reduction_median": 0.0001268546142805669,
+      "negative_blocks": 30,
+      "paired_relative_reduction_stdev": 0.23795612386226575,
+      "positive_blocks": 30,
+      "ties": 0
+    },
+    "wall_clock_ms": {
+      "arm_mean": {
+        "CAVEMAN": 9597.35,
+        "DEFAULT": 9428.933333333332,
+        "MURMURS": 10176.816666666668
+      },
+      "median_bootstrap_95_ci": [
+        -0.060737249972736745,
+        0.02374885332789726
+      ],
+      "murmurs_vs_default_relative_reduction_mean": -0.08796348309764847,
+      "murmurs_vs_default_relative_reduction_median": -0.014958046987176381,
+      "negative_blocks": 34,
+      "paired_relative_reduction_stdev": 0.35225020351856895,
+      "positive_blocks": 26,
+      "ties": 0
+    }
+  },
+  "murmurs_benefit": "NOT_ESTABLISHED_FROM_PILOT",
+  "schema_version": "orchestra.b3-pilot-reconciliation.v1",
+  "session": {
+    "accepted_total_tokens": 3533572,
+    "completed_runs": 180,
+    "live_model_calls_consumed": 180,
+    "maximum_model_calls": 180,
+    "repository_snapshot": {
+      "head": "65ac344030065ce1a1c5ced5ce63d420bbf13711",
+      "status": "",
+      "tree": "9682e49f93110c54a8f247abd94fe6fbce517d39"
+    },
+    "schema_version": "orchestra.b3-pilot-session-summary.v1",
+    "status": "COMPLETE",
+    "stop_reason": null
+  },
+  "status": "VALID_COMPLETE_PILOT_SIGNAL_ONLY"
+}

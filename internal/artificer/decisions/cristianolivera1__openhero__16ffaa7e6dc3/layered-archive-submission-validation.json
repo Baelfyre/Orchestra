@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "decision_id": "openhero-layered-archive-submission-validation-decision",
+  "source_bundle_id": "cristianolivera1__openhero__16ffaa7e6dc3",
+  "pattern_record_path": "internal/artificer/records/cristianolivera1__openhero__16ffaa7e6dc3/patterns/layered-archive-submission-validation.json",
+  "audit_report_id": "openhero-16ffaa7e6dc3-audit",
+  "decision_status": "APPROVED",
+  "assigned_specialist": "cipher",
+  "reviews": {
+    "arbiter": {
+      "status": "APPROVED",
+      "rationale": "The audit provides sufficient static evidence for layered archive validation as a reference-only security concept. The audit also records the unverified decompression, path, parser, and resource-exhaustion boundaries, so the recommendation does not overstate the source control.",
+      "review_date": "2026-07-12"
+    },
+    "governor": {
+      "status": "NOT_REQUIRED",
+      "rationale": "The audit marks the OpenHero source as MIT and compatible. This decision permits only a fresh concept-level security design, authorizes no OpenHero source reuse, authorizes no archive, media, or third-party asset reuse, and preserves normal Governor review and notice requirements for any future direct reuse.",
+      "review_date": "2026-07-12"
+    },
+    "steward": {
+      "status": "APPROVED",
+      "rationale": "Layered validation is aligned with Orchestra security and input-integrity goals. The concept has practical value for future archive or file-ingestion features, provided implementation includes stronger bounded extraction and resource controls than those confirmed by the audit.",
+      "review_date": "2026-07-12"
+    }
+  },
+  "maintainer_decision": {
+    "status": "APPROVED",
+    "rationale": "Approve the layered-validation concept for later proposal consideration. Any implementation must be independently designed by Cipher, remain fail-closed, and address decompression ratios, total uncompressed size, normalized paths, bounded extraction, MIME validation, rate limiting, and isolation.",
+    "decision_date": "2026-07-12"
+  },
+  "implementation_restriction": "CONCEPT_ONLY",
+  "decision_date": "2026-07-12"
+}

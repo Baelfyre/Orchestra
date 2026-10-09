@@ -1,0 +1,133 @@
+name: Registry O7 Joint Conformance
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/registry-o7-joint-conformance.yml"
+      - "scripts/validate_registry_o7_joint_conformance.py"
+      - "orchestra_runtime/registry_o7.py"
+      - "orchestra_runtime/registry_adaptive.py"
+      - "docs/architecture/contracts/registry-o7-runtime-state.v1.json"
+      - "tests/runtime/test_registry_o7_joint_conformance_contract.py"
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/registry-o7-joint-conformance.yml"
+      - "scripts/validate_registry_o7_joint_conformance.py"
+      - "orchestra_runtime/registry_o7.py"
+      - "orchestra_runtime/registry_adaptive.py"
+      - "docs/architecture/contracts/registry-o7-runtime-state.v1.json"
+      - "tests/runtime/test_registry_o7_joint_conformance_contract.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  joint-conformance:
+    runs-on: ubuntu-latest
+    env:
+      REGISTRY_REPOSITORY: Baelfyre/Orchestra-Compliance-Registry
+      REGISTRY_CODE_COMMIT: 4926a3b5f48122dd45f3c8e83a12b8d071dd5387
+      REGISTRY_CODE_TREE: 01be27bde90f6faa59ab74d60ba13af480c11b1d
+      REGISTRY_RELEASE_TAG: registry-v0.4.0
+      REGISTRY_RELEASE_SOURCE: 488c979b37dd84d8645fd8e6c288d297375c4e5b
+      REGISTRY_RELEASE_MANIFEST_SHA256: 040d6576cf10e9f7e3a9a051792869541c1d33b7af3c665fad8eecb939c7baaa
+      REGISTRY_BUNDLE_SHA256: e0457a75837d169d7bb8a7da14d8f4141d35a691952ff8f8978ef793e3cf92d3
+
+    steps:
+      - name: Checkout Orchestra
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Checkout exact Registry integration code
+        uses: actions/checkout@v4
+        with:
+          repository: Baelfyre/Orchestra-Compliance-Registry
+          ref: 4926a3b5f48122dd45f3c8e83a12b8d071dd5387
+          path: _registry
+          fetch-depth: 1
+
+      - name: Verify Registry integration code identity
+        shell: bash
+        run: |
+          test "$(git -C _registry rev-parse HEAD)" = "$REGISTRY_CODE_COMMIT"
+          test "$(git -C _registry rev-parse HEAD^{tree})" = "$REGISTRY_CODE_TREE"
+
+      - name: Install Registry MCP transport dependency
+        run: python -m pip install -r _registry/requirements-mcp.txt
+
+      - name: Verify immutable release and download exact assets
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+          from pathlib import Path
+
+          repo = os.environ["REGISTRY_REPOSITORY"]
+          tag = os.environ["REGISTRY_RELEASE_TAG"]
+          source = os.environ["REGISTRY_RELEASE_SOURCE"]
+          manifest_sha = os.environ["REGISTRY_RELEASE_MANIFEST_SHA256"]
+          bundle_sha = os.environ["REGISTRY_BUNDLE_SHA256"]
+          headers = {"User-Agent": "Orchestra-O7-Joint-Conformance"}
+
+          def get_json(url: str):
+              request = urllib.request.Request(url, headers=headers)
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  return json.load(response)
+
+          release = get_json(f"https://api.github.com/repos/{repo}/releases/tags/{tag}")
+          if release.get("tag_name") != tag:
+              raise SystemExit("Registry release tag mismatch")
+          if release.get("draft") is not False or release.get("prerelease") is not False or release.get("immutable") is not True:
+              raise SystemExit("Registry v0.4.0 is not published immutable non-prerelease")
+          ref = get_json(f"https://api.github.com/repos/{repo}/git/ref/tags/{tag}")
+          if ref.get("object", {}).get("sha") != source:
+              raise SystemExit("Registry v0.4.0 tag source drift")
+
+          required = {
+              "orchestra-compliance-registry.zip",
+              "orchestra-compliance-registry.zip.sha256",
+              "release-manifest.json",
+              "release-manifest.sha256",
+          }
+          assets = {item.get("name"): item for item in release.get("assets", [])}
+          if set(assets) != required:
+              raise SystemExit(f"Registry v0.4.0 asset set mismatch: {sorted(assets)}")
+          if assets["release-manifest.json"].get("digest") != f"sha256:{manifest_sha}":
+              raise SystemExit("Registry release-manifest asset digest drift")
+          if assets["orchestra-compliance-registry.zip"].get("digest") != f"sha256:{bundle_sha}":
+              raise SystemExit("Registry bundle asset digest drift")
+
+          target = Path("artifacts/registry-v0.4.0")
+          target.mkdir(parents=True, exist_ok=True)
+          for name in sorted(required):
+              request = urllib.request.Request(assets[name]["browser_download_url"], headers=headers)
+              with urllib.request.urlopen(request, timeout=60) as response:
+                  (target / name).write_bytes(response.read())
+          PY
+
+      - name: Validate O7.7 joint conformance
+        run: |
+          python scripts/validate_registry_o7_joint_conformance.py \
+            --registry-root _registry \
+            --release-assets artifacts/registry-v0.4.0 \
+            --output artifacts/o7-7-joint-conformance.json
+
+      - name: Run O7.7 contract tests
+        run: python -m unittest tests.runtime.test_registry_o7_joint_conformance_contract -v
+
+      - name: Preserve O7.7 joint conformance evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: registry-o7-joint-conformance-${{ github.sha }}
+          path: artifacts/o7-7-joint-conformance.json
+          if-no-files-found: error
+          retention-days: 90

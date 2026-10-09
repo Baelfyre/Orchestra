@@ -1,0 +1,512 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/adaptive-assurance-doctrine.v1.schema.json",
+  "title": "Orchestra Adaptive Assurance Doctrine v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "phase",
+    "status",
+    "source",
+    "authority",
+    "development_modes",
+    "mode_transition",
+    "source_truth_labels",
+    "completion_states",
+    "completion_policy",
+    "evidence_policy",
+    "validation_fixtures",
+    "future_boundary",
+    "human_documentation"
+  ],
+  "properties": {
+    "$schema": {"type": "string", "minLength": 1},
+    "schema_version": {"const": "orchestra.adaptive-assurance-doctrine.v1"},
+    "phase": {"const": "AQ1_NORMATIVE_ADAPT_QA_DOCTRINE"},
+    "status": {"const": "CONTRACT_DEFINED"},
+    "source": {"$ref": "#/$defs/source"},
+    "authority": {"$ref": "#/$defs/authority"},
+    "development_modes": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "uniqueItems": true,
+      "items": {"enum": ["SPEC_FIRST", "DISCOVERY_FIRST", "AS_BUILT", "RECONCILIATION", "DEFECT_DRIVEN", "MAINTENANCE"]}
+    },
+    "mode_transition": {"$ref": "#/$defs/mode_transition"},
+    "source_truth_labels": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "uniqueItems": true,
+      "items": {"enum": ["OBSERVED", "INFERRED", "DECIDED", "UNVERIFIED"]}
+    },
+    "completion_states": {
+      "type": "array",
+      "minItems": 14,
+      "maxItems": 14,
+      "uniqueItems": true,
+      "items": {"enum": [
+        "IDEATED",
+        "PROTOTYPED",
+        "DOMAIN_IMPLEMENTED",
+        "APPLICATION_INTEGRATED",
+        "API_INTEGRATED",
+        "UI_INTEGRATED",
+        "UNIT_VERIFIED",
+        "CONTRACT_VERIFIED",
+        "INTEGRATION_VERIFIED",
+        "RUNTIME_VERIFIED",
+        "SECURITY_VERIFIED",
+        "ADVERSARIALLY_VERIFIED",
+        "CANONICAL_VERIFIED",
+        "PRODUCT_COMPLETE"
+      ]}
+    },
+    "completion_policy": {"$ref": "#/$defs/completion_policy"},
+    "evidence_policy": {"$ref": "#/$defs/evidence_policy"},
+    "validation_fixtures": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/canonical_fixture"},
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "required": ["id"],
+            "properties": {"id": {"const": "AQ1-F1"}}
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["id"],
+            "properties": {"id": {"const": "AQ1-F2"}}
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["id"],
+            "properties": {"id": {"const": "AQ1-F3"}}
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["id"],
+            "properties": {"id": {"const": "AQ1-F4"}}
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["id"],
+            "properties": {"id": {"const": "AQ1-F5"}}
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["id"],
+            "properties": {"id": {"const": "AQ1-F6"}}
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": ["id"],
+            "properties": {"id": {"const": "AQ1-F7"}}
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
+    },
+    "future_boundary": {"$ref": "#/$defs/future_boundary"},
+    "human_documentation": {"const": "docs/architecture/ADAPTIVE_ASSURANCE_AQ1.md"}
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["plan", "reference_basis", "derived_doctrine"],
+      "properties": {
+        "plan": {"type": "string", "minLength": 1},
+        "reference_basis": {"type": "string", "minLength": 1},
+        "derived_doctrine": {"const": true}
+      }
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "owner",
+        "implementation_owner",
+        "validation_owner",
+        "transition_owner",
+        "authority_expansion",
+        "routing_authority_change",
+        "provider_integration",
+        "aq2_or_later_authorized",
+        "cud10_authorized"
+      ],
+      "properties": {
+        "owner": {"const": "conductor"},
+        "implementation_owner": {"const": "ponytail"},
+        "validation_owner": {"const": "overseer"},
+        "transition_owner": {"const": "arbiter"},
+        "authority_expansion": {"const": false},
+        "routing_authority_change": {"const": false},
+        "provider_integration": {"const": "NONE"},
+        "aq2_or_later_authorized": {"const": false},
+        "cud10_authorized": {"const": false}
+      }
+    },
+    "mode_transition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["supported", "all_declared_modes_supported", "example_sequence"],
+      "properties": {
+        "supported": {"const": true},
+        "all_declared_modes_supported": {"const": true},
+        "example_sequence": {
+          "const": ["DISCOVERY_FIRST", "PROTOTYPE", "SYSTEM_TO_DOCS", "RECONCILIATION", "HARDENING", "CANONICAL"]
+        }
+      }
+    },
+    "completion_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lower_state_does_not_imply_higher_state",
+        "state_evidence_required",
+        "canonical_verified_proves_empirical_effectiveness",
+        "canonical_verified_scope",
+        "domain_only_implies_application_integration",
+        "product_complete_requires_explicit_evidence",
+        "discovery_first_product_complete_requires_reconciliation",
+        "inferred_requires_authority_for_decided"
+      ],
+      "properties": {
+        "lower_state_does_not_imply_higher_state": {"const": true},
+        "state_evidence_required": {"const": true},
+        "canonical_verified_proves_empirical_effectiveness": {"const": false},
+        "canonical_verified_scope": {"const": "SOURCE_AND_EVIDENCE_QUALIFICATION_ONLY"},
+        "domain_only_implies_application_integration": {"const": false},
+        "product_complete_requires_explicit_evidence": {"const": true},
+        "discovery_first_product_complete_requires_reconciliation": {"const": true},
+        "inferred_requires_authority_for_decided": {"const": true}
+      }
+    },
+    "evidence_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "layers",
+        "scopes",
+        "provenance_qualifications",
+        "required_metadata",
+        "required_verifier_context",
+        "claim_scope_by_state",
+        "required_layers_by_state",
+        "scope_rule",
+        "false_green_invariants"
+      ],
+      "properties": {
+        "layers": {
+          "const": [
+            "STATIC",
+            "UNIT",
+            "DOMAIN",
+            "CONTRACT",
+            "INTEGRATION",
+            "HTTP",
+            "RUNTIME",
+            "PERSISTENCE",
+            "CONCURRENCY",
+            "SECURITY",
+            "PROVENANCE",
+            "MUTATION",
+            "ADVERSARIAL",
+            "DOCUMENTATION",
+            "COMPLETION_STATE"
+          ]
+        },
+        "scopes": {
+          "const": [
+            "SOURCE",
+            "COMPLETION",
+            "DOMAIN",
+            "APPLICATION",
+            "API",
+            "UI",
+            "UNIT",
+            "CONTRACT",
+            "INTEGRATION",
+            "RUNTIME",
+            "PERSISTENCE",
+            "CONCURRENCY",
+            "SECURITY",
+            "ADVERSARIAL",
+            "CANONICAL",
+            "PRODUCT",
+            "EMPIRICAL_EFFECTIVENESS"
+          ]
+        },
+        "provenance_qualifications": {
+          "const": ["AUTHORITATIVE", "SELF_ASSERTED", "UNQUALIFIED"]
+        },
+        "required_metadata": {
+          "const": [
+            "originating_source",
+            "authoritative_source_ref",
+            "producer",
+            "validator",
+            "source_ref",
+            "candidate_ref",
+            "work_item_ref",
+            "freshness_ref",
+            "version_ref",
+            "provenance_qualification",
+            "evidence_layer",
+            "evidence_scope",
+            "claim_scope",
+            "authority_ref"
+          ]
+        },
+        "required_verifier_context": {
+          "const": [
+            "source_ref",
+            "candidate_ref",
+            "work_item_ref",
+            "freshness_ref",
+            "version_ref",
+            "verified_authority_ref"
+          ]
+        },
+        "claim_scope_by_state": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "IDEATED",
+            "PROTOTYPED",
+            "DOMAIN_IMPLEMENTED",
+            "APPLICATION_INTEGRATED",
+            "API_INTEGRATED",
+            "UI_INTEGRATED",
+            "UNIT_VERIFIED",
+            "CONTRACT_VERIFIED",
+            "INTEGRATION_VERIFIED",
+            "RUNTIME_VERIFIED",
+            "SECURITY_VERIFIED",
+            "ADVERSARIALLY_VERIFIED",
+            "CANONICAL_VERIFIED",
+            "PRODUCT_COMPLETE"
+          ],
+          "properties": {
+            "IDEATED": {"const": "COMPLETION"},
+            "PROTOTYPED": {"const": "COMPLETION"},
+            "DOMAIN_IMPLEMENTED": {"const": "DOMAIN"},
+            "APPLICATION_INTEGRATED": {"const": "APPLICATION"},
+            "API_INTEGRATED": {"const": "API"},
+            "UI_INTEGRATED": {"const": "UI"},
+            "UNIT_VERIFIED": {"const": "UNIT"},
+            "CONTRACT_VERIFIED": {"const": "CONTRACT"},
+            "INTEGRATION_VERIFIED": {"const": "INTEGRATION"},
+            "RUNTIME_VERIFIED": {"const": "RUNTIME"},
+            "SECURITY_VERIFIED": {"const": "SECURITY"},
+            "ADVERSARIALLY_VERIFIED": {"const": "ADVERSARIAL"},
+            "CANONICAL_VERIFIED": {"const": "CANONICAL"},
+            "PRODUCT_COMPLETE": {"const": "PRODUCT"}
+          }
+        },
+        "required_layers_by_state": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "IDEATED",
+            "PROTOTYPED",
+            "DOMAIN_IMPLEMENTED",
+            "APPLICATION_INTEGRATED",
+            "API_INTEGRATED",
+            "UI_INTEGRATED",
+            "UNIT_VERIFIED",
+            "CONTRACT_VERIFIED",
+            "INTEGRATION_VERIFIED",
+            "RUNTIME_VERIFIED",
+            "SECURITY_VERIFIED",
+            "ADVERSARIALLY_VERIFIED",
+            "CANONICAL_VERIFIED",
+            "PRODUCT_COMPLETE"
+          ],
+          "properties": {
+            "IDEATED": {"const": ["COMPLETION_STATE"]},
+            "PROTOTYPED": {"const": ["COMPLETION_STATE"]},
+            "DOMAIN_IMPLEMENTED": {"const": ["DOMAIN"]},
+            "APPLICATION_INTEGRATED": {"const": ["INTEGRATION"]},
+            "API_INTEGRATED": {"const": ["INTEGRATION"]},
+            "UI_INTEGRATED": {"const": ["INTEGRATION"]},
+            "UNIT_VERIFIED": {"const": ["UNIT"]},
+            "CONTRACT_VERIFIED": {"const": ["CONTRACT"]},
+            "INTEGRATION_VERIFIED": {"const": ["INTEGRATION"]},
+            "RUNTIME_VERIFIED": {"const": ["HTTP", "RUNTIME"]},
+            "SECURITY_VERIFIED": {"const": ["SECURITY"]},
+            "ADVERSARIALLY_VERIFIED": {"const": ["ADVERSARIAL", "MUTATION"]},
+            "CANONICAL_VERIFIED": {"const": ["PROVENANCE"]},
+            "PRODUCT_COMPLETE": {"const": ["COMPLETION_STATE"]}
+          }
+        },
+        "scope_rule": {"const": "EVIDENCE_SCOPE_MUST_COVER_CLAIM_SCOPE"},
+        "false_green_invariants": {
+          "const": [
+            "SCHEMA_VALID_NOT_SEMANTICALLY_CONFORMANT",
+            "GREEN_CI_NOT_ASSURANCE_CONTRACT_SATISFIED",
+            "RECORD_BOUND_NOT_SEMANTICALLY_VERIFIED",
+            "EVIDENCE_PRESENT_NOT_EVIDENCE_SUFFICIENT",
+            "LOWER_ASSURANCE_LAYER_NOT_HIGHER_ASSURANCE_LAYER",
+            "CANONICAL_VERIFIED_NOT_EMPIRICALLY_VERIFIED"
+          ]
+        }
+      }
+    },
+    "fixture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "mode", "scenario", "required_evidence", "expected_disposition"],
+      "properties": {
+        "id": {"enum": ["AQ1-F1", "AQ1-F2", "AQ1-F3", "AQ1-F4", "AQ1-F5", "AQ1-F6", "AQ1-F7"]},
+        "mode": {"enum": ["SPEC_FIRST", "DISCOVERY_FIRST", "AS_BUILT", "RECONCILIATION", "DEFECT_DRIVEN", "MAINTENANCE"]},
+        "scenario": {"type": "string", "minLength": 1},
+        "required_evidence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"enum": [
+            "REQUIREMENT",
+            "INVARIANT",
+            "IMPLEMENTATION",
+            "TEST",
+            "PROTOTYPE",
+            "RECONCILIATION",
+            "OBSERVED_BEHAVIOR",
+            "HISTORICAL_INTENT_AUTHORITY",
+            "CONFLICT_RECORD",
+            "RECONCILIATION_DECISION",
+            "INFERRED_STATEMENT",
+            "AUTHORITY_RECORD",
+            "TARGET_STATE_EVIDENCE"
+          ]}
+        },
+        "expected_disposition": {
+          "enum": [
+            "ADVANCE_WITH_EVIDENCE",
+            "ALLOW_PROTOTYPE_ONLY",
+            "REQUIRE_RECONCILIATION",
+            "RECONCILIATION_REQUIRED",
+            "AUTHORITY_REQUIRED",
+            "FAIL_CLOSED_NO_EVIDENCE"
+          ]
+        }
+      }
+    },
+    "canonical_fixture": {
+      "allOf": [
+        {"$ref": "#/$defs/fixture"},
+        {
+          "oneOf": [
+            {
+              "properties": {
+                "id": {"const": "AQ1-F1"},
+                "mode": {"const": "SPEC_FIRST"},
+                "scenario": {"const": "A feature follows requirement to invariant to implementation to test."},
+                "required_evidence": {"const": ["REQUIREMENT", "INVARIANT", "IMPLEMENTATION", "TEST"]},
+                "expected_disposition": {"const": "ADVANCE_WITH_EVIDENCE"}
+              }
+            },
+            {
+              "properties": {
+                "id": {"const": "AQ1-F2"},
+                "mode": {"const": "DISCOVERY_FIRST"},
+                "scenario": {"const": "A prototype is allowed before documentation exists."},
+                "required_evidence": {"const": ["PROTOTYPE"]},
+                "expected_disposition": {"const": "ALLOW_PROTOTYPE_ONLY"}
+              }
+            },
+            {
+              "properties": {
+                "id": {"const": "AQ1-F3"},
+                "mode": {"const": "DISCOVERY_FIRST"},
+                "scenario": {"const": "A discovery-first work item cannot become product complete before reconciliation."},
+                "required_evidence": {"const": ["RECONCILIATION"]},
+                "expected_disposition": {"const": "REQUIRE_RECONCILIATION"}
+              }
+            },
+            {
+              "properties": {
+                "id": {"const": "AQ1-F4"},
+                "mode": {"const": "AS_BUILT"},
+                "scenario": {"const": "Reconstruction records observed behavior without inventing historical intent."},
+                "required_evidence": {"const": ["OBSERVED_BEHAVIOR", "HISTORICAL_INTENT_AUTHORITY"]},
+                "expected_disposition": {"const": "AUTHORITY_REQUIRED"}
+              }
+            },
+            {
+              "properties": {
+                "id": {"const": "AQ1-F5"},
+                "mode": {"const": "RECONCILIATION"},
+                "scenario": {"const": "Conflicting documentation and code selects reconciliation."},
+                "required_evidence": {"const": ["CONFLICT_RECORD", "RECONCILIATION_DECISION"]},
+                "expected_disposition": {"const": "RECONCILIATION_REQUIRED"}
+              }
+            },
+            {
+              "properties": {
+                "id": {"const": "AQ1-F6"},
+                "mode": {"const": "AS_BUILT"},
+                "scenario": {"const": "An inferred statement cannot become decided without authority."},
+                "required_evidence": {"const": ["INFERRED_STATEMENT", "AUTHORITY_RECORD"]},
+                "expected_disposition": {"const": "AUTHORITY_REQUIRED"}
+              }
+            },
+            {
+              "properties": {
+                "id": {"const": "AQ1-F7"},
+                "mode": {"const": "MAINTENANCE"},
+                "scenario": {"const": "Completion-state escalation without evidence fails closed."},
+                "required_evidence": {"const": ["TARGET_STATE_EVIDENCE"]},
+                "expected_disposition": {"const": "FAIL_CLOSED_NO_EVIDENCE"}
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "future_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["aq2", "aq3_to_a14", "cud10"],
+      "properties": {
+        "aq2": {"const": "NOT_IMPLEMENTED"},
+        "aq3_to_a14": {"const": "NOT_IMPLEMENTED"},
+        "cud10": {"const": "NOT_AUTHORIZED"}
+      }
+    }
+  }
+}

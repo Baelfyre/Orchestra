@@ -1,0 +1,19 @@
+{
+  "schema_version": "orchestra.comparative-benchmark-plan.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "experiment_id": "b2-instrumentation-pilot-v1",
+  "experiment_kind": "A5_ISOLATED",
+  "stage": "PILOT",
+  "randomization_seed_digest": "086dd7de1564abbf6f63862ddedfd5ff8fb042901746dde04b403785778572ee",
+  "manifest_digest": "d7ca2eed1a087c5509ed529b151e5f06342cdc5ad796282419e87392aba3b04a",
+  "entries": [
+    {"request_id": "1dd6d92d5eb457a38b9f02c4", "task_id": "b2-cal-cache-freshness", "task_class": "VALIDATION_HEAVY", "repetition_index": 1, "execution_order_index": 1, "arm": {"arm_id": "b2-arm-overseer-clockwork", "topology_candidate_id": "b2.seq.overseer-clockwork.v1", "topology_class": "SEQUENTIAL", "topology_digest": "067a8867aaa3a7bc82b4915da40ec60222413e261460863b1e8de90b836773f3", "communication_mode": "DEFAULT"}},
+    {"request_id": "80083ef1ee50ea5dfa747252", "task_id": "b2-cal-cache-freshness", "task_class": "VALIDATION_HEAVY", "repetition_index": 1, "execution_order_index": 2, "arm": {"arm_id": "b2-arm-clockwork-overseer", "topology_candidate_id": "b2.seq.clockwork-overseer.v1", "topology_class": "SEQUENTIAL", "topology_digest": "c28e14b11c586cd21397892239ce881f46e230993353013918212dbef7291183", "communication_mode": "DEFAULT"}},
+    {"request_id": "13b1dae0d3c3ddf5c26898ae", "task_id": "b2-cal-cache-freshness", "task_class": "VALIDATION_HEAVY", "repetition_index": 2, "execution_order_index": 3, "arm": {"arm_id": "b2-arm-overseer-clockwork", "topology_candidate_id": "b2.seq.overseer-clockwork.v1", "topology_class": "SEQUENTIAL", "topology_digest": "067a8867aaa3a7bc82b4915da40ec60222413e261460863b1e8de90b836773f3", "communication_mode": "DEFAULT"}},
+    {"request_id": "00cfb5ee4139353e25217e7b", "task_id": "b2-cal-cache-freshness", "task_class": "VALIDATION_HEAVY", "repetition_index": 2, "execution_order_index": 4, "arm": {"arm_id": "b2-arm-clockwork-overseer", "topology_candidate_id": "b2.seq.clockwork-overseer.v1", "topology_class": "SEQUENTIAL", "topology_digest": "c28e14b11c586cd21397892239ce881f46e230993353013918212dbef7291183", "communication_mode": "DEFAULT"}},
+    {"request_id": "e26ef117e5ae4aba629a30c5", "task_id": "b2-cal-cross-layer-release", "task_class": "HIGH_COORDINATION", "repetition_index": 1, "execution_order_index": 5, "arm": {"arm_id": "b2-arm-clockwork-overseer", "topology_candidate_id": "b2.seq.clockwork-overseer.v1", "topology_class": "SEQUENTIAL", "topology_digest": "c28e14b11c586cd21397892239ce881f46e230993353013918212dbef7291183", "communication_mode": "DEFAULT"}},
+    {"request_id": "a8505644856be85a44f48388", "task_id": "b2-cal-cross-layer-release", "task_class": "HIGH_COORDINATION", "repetition_index": 1, "execution_order_index": 6, "arm": {"arm_id": "b2-arm-overseer-clockwork", "topology_candidate_id": "b2.seq.overseer-clockwork.v1", "topology_class": "SEQUENTIAL", "topology_digest": "067a8867aaa3a7bc82b4915da40ec60222413e261460863b1e8de90b836773f3", "communication_mode": "DEFAULT"}},
+    {"request_id": "6bde0ee731eda7cbc8096474", "task_id": "b2-cal-cross-layer-release", "task_class": "HIGH_COORDINATION", "repetition_index": 2, "execution_order_index": 7, "arm": {"arm_id": "b2-arm-clockwork-overseer", "topology_candidate_id": "b2.seq.clockwork-overseer.v1", "topology_class": "SEQUENTIAL", "topology_digest": "c28e14b11c586cd21397892239ce881f46e230993353013918212dbef7291183", "communication_mode": "DEFAULT"}},
+    {"request_id": "749b82d286388c1bc626e08e", "task_id": "b2-cal-cross-layer-release", "task_class": "HIGH_COORDINATION", "repetition_index": 2, "execution_order_index": 8, "arm": {"arm_id": "b2-arm-overseer-clockwork", "topology_candidate_id": "b2.seq.overseer-clockwork.v1", "topology_class": "SEQUENTIAL", "topology_digest": "067a8867aaa3a7bc82b4915da40ec60222413e261460863b1e8de90b836773f3", "communication_mode": "DEFAULT"}}
+  ]
+}

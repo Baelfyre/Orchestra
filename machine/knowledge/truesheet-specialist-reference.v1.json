@@ -1,0 +1,98 @@
+{
+  "schema_version": "orchestra.truesheet-specialist-reference.v1",
+  "record_id": "orchestra-truesheet-specialist-reference-v1",
+  "status": "ACTIVE_ORCHESTRA_NATIVE_REFERENCE",
+  "authority_class": "EXTERNAL_REFERENCE_ONLY",
+  "canonical_padayon_reference": {
+    "repository": "Baelfyre/Padayon",
+    "canonical_commit": "1fa5b773b04877bcbc3b85e22b6af70a0a8dd738",
+    "record_path": "planning/Orchestra_TrueSheet_External_Knowledge_Reference_V2.json",
+    "intake_contract_path": "planning/Orchestra_External_Knowledge_Reference_Intake_Contract_V2.json"
+  },
+  "external_source": {
+    "repository": "lodev09/react-native-true-sheet",
+    "reviewed_branch": "main",
+    "reviewed_commit": "23e119c026e2040d960725bd260e6cd4bf680b95",
+    "license": "MIT",
+    "license_path": "LICENSE",
+    "source_drift_at_last_reverification": false,
+    "copied_source_code": false,
+    "wholesale_material_copied": false
+  },
+  "adaptation_policy": {
+    "guidance_style": "PARAPHRASED_OR_INDEPENDENTLY_DERIVED_ORCHESTRA_NATIVE_GUIDANCE",
+    "library_specific_facts_remain_scoped": true,
+    "external_agent_instructions_are_not_orchestra_governance": true,
+    "external_test_results_are_not_orchestra_validation_evidence": true,
+    "runtime_dependency_added": false,
+    "specialist_authority_expanded": false,
+    "conductor_role": "ROUTING_ONLY",
+    "the_tuner_role": "CROSS_SPECIALIST_COORDINATION_ONLY",
+    "mcp_role": "NOT_IMPLEMENTED_DEFERRED_FINAL_INTEGRATION_PHASE"
+  },
+  "specialists": {
+    "cloak": {
+      "guide": "skills/cloak/TRUESHEET_REFERENCE.md",
+      "feature_ids": ["TSF-001","TSF-002","TSF-003","TSF-004","TSF-005","TSF-006","TSF-009"],
+      "scope": "UI_UX_ACCESSIBILITY_RESPONSIVE_INTERACTION"
+    },
+    "ponytail": {
+      "guide": "skills/ponytail/TRUESHEET_REFERENCE.md",
+      "feature_ids": ["TSF-001","TSF-002","TSF-003","TSF-004","TSF-006","TSF-007","TSF-008","TSF-009","TSF-011","TSF-012","TSF-013","TSF-015","TSF-017","TSF-018"],
+      "scope": "IMPLEMENTATION_NAVIGATION_API_USAGE"
+    },
+    "clockwork": {
+      "guide": "skills/clockwork/TRUESHEET_REFERENCE.md",
+      "feature_ids": ["TSF-007","TSF-008","TSF-009","TSF-010","TSF-011","TSF-012","TSF-013","TSF-014"],
+      "scope": "ARCHITECTURE_CROSS_PLATFORM_BOUNDARIES"
+    },
+    "overseer": {
+      "guide": "skills/overseer/TRUESHEET_REFERENCE.md",
+      "feature_ids": ["TSF-004","TSF-006","TSF-007","TSF-009","TSF-015","TSF-017","TSF-018"],
+      "scope": "TESTING_VALIDATION_REGRESSION"
+    },
+    "scribe": {
+      "guide": "skills/scribe/TRUESHEET_REFERENCE.md",
+      "feature_ids": ["TSF-016","TSF-017"],
+      "scope": "DOCUMENTATION_KNOWLEDGE_PACKAGING"
+    }
+  },
+  "feature_titles": {
+    "TSF-001":"Sheet control patterns",
+    "TSF-002":"Detents and responsive presentation",
+    "TSF-003":"Scrollable sheet layout and fixed chrome",
+    "TSF-004":"Keyboard and focus handling",
+    "TSF-005":"Dimming and background interaction",
+    "TSF-006":"Stacking and lifecycle events",
+    "TSF-007":"Navigation and Expo Router integration",
+    "TSF-008":"Reanimated integration",
+    "TSF-009":"Native and web divergence",
+    "TSF-010":"Fabric, Codegen, and TurboModule architecture",
+    "TSF-011":"TypeScript to native API contracts",
+    "TSF-012":"iOS native sheet architecture",
+    "TSF-013":"Android native bottom-sheet architecture",
+    "TSF-014":"Shared C++ state and shadow-node patterns",
+    "TSF-015":"Testing, mocks, and mobile E2E patterns",
+    "TSF-016":"Progressive-disclosure specialist knowledge packaging",
+    "TSF-017":"Migration and troubleshooting knowledge organization",
+    "TSF-018":"Worked example applications"
+  },
+  "validation": {
+    "test": "tests/behavior/test_truesheet_reference.py",
+    "source_codex_parity_required": true,
+    "guide_feature_ids_must_equal_machine_mapping": true,
+    "undeclared_feature_ids_forbidden": true,
+    "conductor_or_tuner_knowledge_file_forbidden": true
+  },
+  "protected_boundaries": [
+    "NO_WHOLESALE_VENDORING",
+    "NO_RUNTIME_DEPENDENCY_ADDITION",
+    "NO_EXTERNAL_TEST_EVIDENCE_SUBSTITUTION",
+    "NO_SPECIALIST_AUTHORITY_EXPANSION",
+    "NO_GOVERNANCE_SEMANTICS_CHANGE",
+    "NO_RELEASE_OR_TAG_MOVEMENT",
+    "NO_DEPLOYMENT_OR_POLICY_ACTIVATION",
+    "NO_INSTALLED_INTEGRATION_REFRESH",
+    "NO_MCP_IMPLEMENTATION"
+  ]
+}

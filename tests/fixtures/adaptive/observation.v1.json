@@ -1,0 +1,21 @@
+{
+  "event_type": "EXPLICIT_PREFERENCE_SET",
+  "evidence_class": "EXPLICIT_SCOPED_PREFERENCE",
+  "memory_rule_version": "orchestra.adaptive-memory-rules.v1",
+  "observation_id": "obs-d1d0516f8868df7dbe72748e",
+  "occurred_at": "2026-08-17T10:00:00Z",
+  "payload": {
+    "value": "compact"
+  },
+  "previous_observation_digest": null,
+  "schema_version": "orchestra.adaptive-observation.v1",
+  "scope": {
+    "project_key": "Baelfyre/Orchestra",
+    "scope_type": "project",
+    "user_key": "fixture-user"
+  },
+  "sequence": 1,
+  "source_ref": "fixture:explicit-1",
+  "source_type": "explicit_user_instruction",
+  "subject_key": "docs.response_style"
+}

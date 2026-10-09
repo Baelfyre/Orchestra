@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0",
+  "decision_id": "strix-declared-scope-context-decision",
+  "source_bundle_id": "usestrix__strix__09872744f5a9",
+  "pattern_record_path": "internal/artificer/records/usestrix__strix__09872744f5a9/patterns/declared-scope-context.json",
+  "audit_report_id": "strix-09872744f5a9-audit",
+  "decision_status": "APPROVED",
+  "assigned_specialist": "arbiter",
+  "reviews": {
+    "arbiter": {
+      "status": "APPROVED",
+      "rationale": "The static audit evidence supports declared scope metadata as a distinct reference-only governance pattern. The audit correctly distinguishes scope declaration from enforcement and does not claim that metadata alone restricts agent authority or runtime behavior.",
+      "review_date": "2026-07-12"
+    },
+    "governor": {
+      "status": "APPROVED",
+      "rationale": "The Strix audit requires Governor review because the source is Apache-2.0. This approval accepts only the concept-level governance disposition and authorizes no Strix source, prompt, payload, exploit, media, documentation expression, or implementation reuse. Any future direct adaptation requires separate review of Apache-2.0 notices, NOTICE obligations, attribution, patent terms, distribution duties, and third-party licenses.",
+      "review_date": "2026-07-12"
+    },
+    "steward": {
+      "status": "APPROVED",
+      "rationale": "Explicit scope metadata aligns with Orchestra authority, provenance, and governance objectives. The pattern may advance as a design concept provided any future implementation includes independent enforcement rather than treating declared metadata as an effective security boundary.",
+      "review_date": "2026-07-12"
+    }
+  },
+  "maintainer_decision": {
+    "status": "APPROVED",
+    "rationale": "Approve declared scope context as concept-only evidence for a fresh Orchestra-native authority contract. Any later proposal must separate scope declaration from scope enforcement and require explicit validation, provenance, denial behavior, and auditable authority boundaries.",
+    "decision_date": "2026-07-12"
+  },
+  "implementation_restriction": "CONCEPT_ONLY",
+  "decision_date": "2026-07-12"
+}

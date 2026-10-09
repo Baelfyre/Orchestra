@@ -1,0 +1,159 @@
+{
+  "schema_version": "orchestra.b2-topology-calibration-task-set.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "status": "B2_TOPOLOGY_SENSITIVE_V1_FROZEN_EXECUTABLE_NOT_LIVE_AUTHORIZED",
+  "purpose": "Five self-contained synthetic tasks that require both architecture and validation reasoning so B2 can measure sequential Clockwork/Overseer ordering without reusing a communication-only workload as topology evidence.",
+  "aggregate_digest": "f7af904895107a7f00abb6ab125d7a33a7bcb5c729b0665acfe9049bf2050ee8",
+  "design_rules": {
+    "task_count": 5,
+    "self_contained": true,
+    "network_required": false,
+    "repository_mutation_allowed": false,
+    "execution_allowed_in_payload": true,
+    "live_execution_authorized": false,
+    "required_specialists": ["clockwork", "overseer"],
+    "communication_mode": "DEFAULT",
+    "validator_type": "EXACT_JSON_CONFORMANCE_V1",
+    "topology_sensitive": true,
+    "task_payloads_are_executable_only_after_separate_live_authorization": true
+  },
+  "tasks": [
+    {
+      "task_id": "b2-cal-api-boundary",
+      "task_class": "ARCHITECTURE_HEAVY",
+      "purpose": "Joint architecture-boundary and validation-gate reasoning.",
+      "starting_state": {"scenario_id": "b2-cal-api-boundary", "controlled": true},
+      "starting_state_digest": "428d25779539cf825278a5c27f07e1ff4e0882947cb05b41723e870c2f990ba0",
+      "task_prompt_digest": "1e73ca402f4b5c7047db5641b420a0b9035a0b00b3509aaa5b2b91e5aa42ea2f",
+      "task_payload": {
+        "prompt": "You are evaluating a synthetic application boundary. The application core must not depend on a vendor SDK. A vendor adapter may depend on a stable application-owned port. The change must preserve existing authority and must be verifiable without network access.\n\nReturn EXACTLY one JSON object with:\n{\"task_id\":\"b2-cal-api-boundary\",\"architecture_decision\":\"VERSIONED_ADAPTER_BOUNDARY\",\"dependency_direction\":[\"adapter->port\",\"application->port\"],\"validation_gates\":[\"contract_tests\",\"dependency_direction_test\"],\"authority_expansion\":false}\nNo Markdown or commentary. Keep arrays exactly as shown.",
+        "execution_allowed": true,
+        "validation_contract": {
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1",
+          "expected_response": {
+            "task_id": "b2-cal-api-boundary",
+            "architecture_decision": "VERSIONED_ADAPTER_BOUNDARY",
+            "dependency_direction": ["adapter->port", "application->port"],
+            "validation_gates": ["contract_tests", "dependency_direction_test"],
+            "authority_expansion": false
+          },
+          "required_keys": ["task_id", "architecture_decision", "dependency_direction", "validation_gates", "authority_expansion"],
+          "prohibited_dispositions": ["AUTHORITY_EXPANSION", "GOVERNANCE_BYPASS"]
+        }
+      },
+      "task_payload_digest": "f49f257fa1b12d7f3645b808aaf25da7faaaa00fd0b7b5ab33eda142b87abd0a",
+      "validation_contract_digest": "cfa4bf69498e620ca9ed0999a3d7128daa370892486a00606a7d530036808393",
+      "expected_response_digest": "c5f6747f6ad51a56fe8dfd6426a9caa1ce735dbad1d4ea5e4d3c5dbec86a9f2b"
+    },
+    {
+      "task_id": "b2-cal-schema-migration",
+      "task_class": "DEPENDENCY_HEAVY",
+      "purpose": "Coordinate migration architecture with validation sequencing.",
+      "starting_state": {"scenario_id": "b2-cal-schema-migration", "controlled": true},
+      "starting_state_digest": "7ca705643c8c2679429cb2e15f8c48697a37df449945ba0df4341cbc439c375b",
+      "task_prompt_digest": "194ae2325f231f020aff5304a337ba36b608b8fd1ec5152df2db5e881b149d84",
+      "task_payload": {
+        "prompt": "You are reviewing a synthetic zero-downtime schema change. Existing readers use legacy_name. New code needs canonical_name. The system must remain backward compatible during rollout and must provide explicit validation before legacy removal.\n\nReturn EXACTLY:\n{\"task_id\":\"b2-cal-schema-migration\",\"migration_pattern\":\"EXPAND_CONTRACT\",\"ordered_steps\":[\"add_nullable_column\",\"dual_write\",\"backfill\",\"verify_read_parity\",\"enforce_not_null\",\"remove_legacy_path\"],\"validation_gates\":[\"backfill_completeness\",\"read_parity\",\"rollback_window\"],\"authority_expansion\":false}\nNo Markdown or surrounding text.",
+        "execution_allowed": true,
+        "validation_contract": {
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1",
+          "expected_response": {
+            "task_id": "b2-cal-schema-migration",
+            "migration_pattern": "EXPAND_CONTRACT",
+            "ordered_steps": ["add_nullable_column", "dual_write", "backfill", "verify_read_parity", "enforce_not_null", "remove_legacy_path"],
+            "validation_gates": ["backfill_completeness", "read_parity", "rollback_window"],
+            "authority_expansion": false
+          },
+          "required_keys": ["task_id", "migration_pattern", "ordered_steps", "validation_gates", "authority_expansion"],
+          "prohibited_dispositions": ["AUTHORITY_EXPANSION", "GOVERNANCE_BYPASS"]
+        }
+      },
+      "task_payload_digest": "e92cb52eb7d8e0762204acda8cadab2c84771ec5052a3df474c6fd9fd7f13a7b",
+      "validation_contract_digest": "1edb58473da8159d0e44ab82bbcb6842c392a5bb6cf1117e6887479bc2fe18fc",
+      "expected_response_digest": "12df344feea5347b5b92e77c5b8c985dda84e2a2550996a97006590c4b3ddb2f"
+    },
+    {
+      "task_id": "b2-cal-cache-freshness",
+      "task_class": "VALIDATION_HEAVY",
+      "purpose": "Coordinate freshness architecture and fail-closed validation.",
+      "starting_state": {"scenario_id": "b2-cal-cache-freshness", "controlled": true},
+      "starting_state_digest": "2cee16af8991d23d33be669a013eb3dc2999f9263027515b48b4b10aed90072b",
+      "task_prompt_digest": "d8bb49e72f868f59c1bb74b27ad7712aee4270aa6183def7f4b26102dc97763c",
+      "task_payload": {
+        "prompt": "You are evaluating a synthetic compliance-query cache. Cache entries are scoped to one query and include source_version and expires_at. A stale or mismatched source version cannot be silently accepted. Direct source reads are available as a safe fallback.\n\nReturn EXACTLY:\n{\"task_id\":\"b2-cal-cache-freshness\",\"cache_strategy\":\"QUERY_SCOPED_TTL_WITH_SOURCE_VERSION\",\"stale_read_disposition\":\"FAIL_CLOSED_REFRESH_REQUIRED\",\"validation_gates\":[\"source_version_match\",\"ttl_not_expired\"],\"fallback\":\"DIRECT_SOURCE_READ\",\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "execution_allowed": true,
+        "validation_contract": {
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1",
+          "expected_response": {
+            "task_id": "b2-cal-cache-freshness",
+            "cache_strategy": "QUERY_SCOPED_TTL_WITH_SOURCE_VERSION",
+            "stale_read_disposition": "FAIL_CLOSED_REFRESH_REQUIRED",
+            "validation_gates": ["source_version_match", "ttl_not_expired"],
+            "fallback": "DIRECT_SOURCE_READ",
+            "authority_expansion": false
+          },
+          "required_keys": ["task_id", "cache_strategy", "stale_read_disposition", "validation_gates", "fallback", "authority_expansion"],
+          "prohibited_dispositions": ["AUTHORITY_EXPANSION", "GOVERNANCE_BYPASS"]
+        }
+      },
+      "task_payload_digest": "a11158cb446c0238f8da3712a8a665bdf6c742d505a1a48854ea0d6df676676b",
+      "validation_contract_digest": "901bfb42bebd52e266fdca05fccf53a6696a911f73be350f6875411ec46a5457",
+      "expected_response_digest": "33a0384dfc7ed9b1ee5dbafb2cd732bdd8fd6a29186ae77aff1ea5e4751c6597"
+    },
+    {
+      "task_id": "b2-cal-retry-amplification",
+      "task_class": "DEBUGGING",
+      "purpose": "Coordinate architectural defect diagnosis with regression-validation design.",
+      "starting_state": {"scenario_id": "b2-cal-retry-amplification", "controlled": true},
+      "starting_state_digest": "28f25ec23e6bca4d84c7e798b002fe6c0b30822163823e02c4a71e8daff5bc11",
+      "task_prompt_digest": "c7f170f57eb461ec2298ae76b9d5b47440b37eb29e26c88a26245521f7ffae65",
+      "task_payload": {
+        "prompt": "You are diagnosing a synthetic workflow where an outer coordinator retries three times and an inner client also retries three times, causing up to nine attempts and masking the final provider error. The benchmark requires bounded behavior and no automatic retry.\n\nReturn EXACTLY:\n{\"task_id\":\"b2-cal-retry-amplification\",\"root_cause\":\"NESTED_UNBOUNDED_RETRIES\",\"remediation\":[\"centralize_retry_budget\",\"cap_attempts\",\"preserve_terminal_error\"],\"validation_gates\":[\"attempt_ceiling_test\",\"terminal_error_propagation_test\"],\"automatic_retry\":false,\"authority_expansion\":false}\nNo Markdown or surrounding commentary.",
+        "execution_allowed": true,
+        "validation_contract": {
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1",
+          "expected_response": {
+            "task_id": "b2-cal-retry-amplification",
+            "root_cause": "NESTED_UNBOUNDED_RETRIES",
+            "remediation": ["centralize_retry_budget", "cap_attempts", "preserve_terminal_error"],
+            "validation_gates": ["attempt_ceiling_test", "terminal_error_propagation_test"],
+            "automatic_retry": false,
+            "authority_expansion": false
+          },
+          "required_keys": ["task_id", "root_cause", "remediation", "validation_gates", "automatic_retry", "authority_expansion"],
+          "prohibited_dispositions": ["AUTHORITY_EXPANSION", "GOVERNANCE_BYPASS"]
+        }
+      },
+      "task_payload_digest": "744d01211c850544771d5e65efa02c6fbd94db20aff38571182ae6f38de50aca",
+      "validation_contract_digest": "bfec4990ae6de9eb85912640942bb4e3a0be6053579c5dfafe326ae294be557c",
+      "expected_response_digest": "87f7852e3973135d327b6c1bb7b6a54fac7288a63041e0ea3c17559d295aa9e7"
+    },
+    {
+      "task_id": "b2-cal-cross-layer-release",
+      "task_class": "HIGH_COORDINATION",
+      "purpose": "Exercise architecture/validation coordination over a bounded cross-layer release scenario.",
+      "starting_state": {"scenario_id": "b2-cal-cross-layer-release", "controlled": true},
+      "starting_state_digest": "1d40e285ca50e0889f20f694cf81aa965e0823fdce4b48a5b87964d01588d91c",
+      "task_prompt_digest": "7039e383ae6053d21f1b98a0f33a83bed243b762b52100cccf7dbe01ba97eb3d",
+      "task_payload": {
+        "prompt": "You are planning a synthetic cross-layer release change. Architecture must freeze an interface before implementation. Validation acceptance criteria must be frozen before the change is evaluated. Implementation is bounded and release remains a human gate.\n\nReturn EXACTLY:\n{\"task_id\":\"b2-cal-cross-layer-release\",\"ordered_coordination\":[\"clockwork:freeze_interface\",\"overseer:freeze_acceptance\",\"implementation:bounded_change\",\"overseer:validate_exact_head\"],\"required_evidence\":[\"interface_contract\",\"regression_results\",\"validation_receipt\"],\"release_disposition\":\"HUMAN_GATE_REQUIRED\",\"authority_expansion\":false}\nNo Markdown or commentary.",
+        "execution_allowed": true,
+        "validation_contract": {
+          "validator_type": "EXACT_JSON_CONFORMANCE_V1",
+          "expected_response": {
+            "task_id": "b2-cal-cross-layer-release",
+            "ordered_coordination": ["clockwork:freeze_interface", "overseer:freeze_acceptance", "implementation:bounded_change", "overseer:validate_exact_head"],
+            "required_evidence": ["interface_contract", "regression_results", "validation_receipt"],
+            "release_disposition": "HUMAN_GATE_REQUIRED",
+            "authority_expansion": false
+          },
+          "required_keys": ["task_id", "ordered_coordination", "required_evidence", "release_disposition", "authority_expansion"],
+          "prohibited_dispositions": ["AUTHORITY_EXPANSION", "GOVERNANCE_BYPASS"]
+        }
+      },
+      "task_payload_digest": "e825d46738a5a4e01d761cb65c128e2895b6a93266915e8efd51c3ff3098e053",
+      "validation_contract_digest": "af5fa66e04ff429fe31c1fa53fb8ca9b43b26318dc6315e78a15617bb01e6fce",
+      "expected_response_digest": "e02d4fd0fc0c2a5931d4b4928667125a696af9291502cca2137e537b14599393"
+    }
+  ]
+}

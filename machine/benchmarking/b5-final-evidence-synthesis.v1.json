@@ -1,0 +1,47 @@
+{
+  "schema_version": "orchestra.b5-final-evidence-synthesis.v1",
+  "program_id": "orchestra.shared-comparative-benchmark.v1",
+  "phase": "B5_EVIDENCE_SYNTHESIS_AND_PROMOTION_DECISION",
+  "recorded_date": "2026-08-24",
+  "status": "B_PHASE_COMPLETE_NO_BENEFIT_ESTABLISHED_NO_PROMOTION",
+  "evidence": {
+    "b2_reconciliation": "machine/benchmarking/b2-5-confirmatory-reconciliation.v1.json",
+    "b2_reconciliation_digest": "523e85b837adc8fd0bcb7ef9f476f09f59b5930e8236d68495948b6fc1f0a921",
+    "b3_reconciliation": "machine/benchmarking/b3-confirmatory-reconciliation.v1.json",
+    "b4_disposition": "machine/benchmarking/b4-controlled-interaction-disposition.v1.json"
+  },
+  "separate_conclusions": {
+    "a5_topology_benefit": "CONFIRMATORY_BENEFIT_NOT_ESTABLISHED",
+    "murmurs_benefit": "CONFIRMATORY_BENEFIT_NOT_ESTABLISHED",
+    "a5_murmurs_interaction": "NOT_RUN_NOT_ELIGIBLE"
+  },
+  "resource_history": {
+    "b2_calibration_model_calls": 60,
+    "b2_instrumentation_pilot_model_calls": 24,
+    "b2_5_historical_stopped_model_calls": 42,
+    "b2_5_replacement_model_calls": 120,
+    "b3_invalid_diagnostic_model_calls": 2,
+    "b3_valid_diagnostic_model_calls": 3,
+    "b3_calibration_model_calls": 30,
+    "b3_pilot_model_calls": 180,
+    "b3_confirmatory_model_calls": 450,
+    "b4_model_calls": 0,
+    "total_b_phase_model_calls": 911
+  },
+  "promotion_decision": {
+    "a5_execution_effective_promotion": "NOT_AUTHORIZED_AND_NOT_PERFORMED",
+    "murmurs_semantic_authority_expansion": "NOT_AUTHORIZED_AND_NOT_PERFORMED",
+    "production_runtime_attachment": "NOT_AUTHORIZED_AND_NOT_PERFORMED",
+    "release_publication": "NOT_AUTHORIZED_AND_NOT_PERFORMED",
+    "deployment": "NOT_AUTHORIZED_AND_NOT_PERFORMED",
+    "policy_activation": "NOT_AUTHORIZED_AND_NOT_PERFORMED"
+  },
+  "terminal_state": {
+    "b2": "COMPLETE_VALID_NEGATIVE",
+    "b3": "COMPLETE_VALID_NEGATIVE",
+    "b4": "NOT_ELIGIBLE_NO_EXECUTION",
+    "b5": "COMPLETE",
+    "a5": "DEFERRED_NOT_PROMOTED",
+    "murmurs": "NO_BENEFIT_CLAIM_NO_AUTHORITY_EXPANSION"
+  }
+}

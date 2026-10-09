@@ -1,0 +1,216 @@
+{
+  "baseline_proxy": {
+    "checks": [
+      "exact subject revision syntax",
+      "per-evidence revision equality",
+      "terminal evidence reference presence",
+      "explicit FAIL",
+      "explicit PENDING"
+    ],
+    "deliberate_exclusions": [
+      "required-stage completeness",
+      "T0/T9 mandatory applicability",
+      "duplicate stage evidence",
+      "evidence on NOT_APPLICABLE stages",
+      "canonical stage ownership mapping",
+      "complete T0-T9 declaration"
+    ],
+    "id": "DISTRIBUTED_EVIDENCE_PROXY_V1",
+    "limitation": "This is a controlled aggregation proxy for the documented pre-UTM coordination gap, not a claim that every historical/manual Orchestra workflow behaves identically.",
+    "purpose": "Model only the aggregate behavior available when evidence items are inspected independently without a common T0-T9 applicability contract."
+  },
+  "cases": [
+    {
+      "case_id": "C01_DOCS_CLEAN",
+      "category": "CLEAN",
+      "description": "Documentation-only bounded change with T0/T9 evidence.",
+      "expected_readiness_evidence_complete": true,
+      "mutation": {"kind": "NONE"},
+      "required_stages": ["T0", "T9"]
+    },
+    {
+      "case_id": "C02_RUNTIME_CLEAN",
+      "category": "CLEAN",
+      "description": "Runtime change with smoke, functional, integration and portability evidence.",
+      "expected_readiness_evidence_complete": true,
+      "mutation": {"kind": "NONE"},
+      "required_stages": ["T0", "T1", "T2", "T3", "T8", "T9"]
+    },
+    {
+      "case_id": "C03_SECURITY_CLEAN",
+      "category": "CLEAN",
+      "description": "Security-sensitive change with security and regression evidence.",
+      "expected_readiness_evidence_complete": true,
+      "mutation": {"kind": "NONE"},
+      "required_stages": ["T0", "T1", "T2", "T3", "T7", "T8", "T9"]
+    },
+    {
+      "case_id": "C04_UI_CLEAN",
+      "category": "CLEAN",
+      "description": "UI change with UI/accessibility and regression evidence.",
+      "expected_readiness_evidence_complete": true,
+      "mutation": {"kind": "NONE"},
+      "required_stages": ["T0", "T1", "T2", "T4", "T8", "T9"]
+    },
+    {
+      "case_id": "C05_MISSING_SECURITY",
+      "category": "EVIDENCE_COMPLETENESS",
+      "description": "Required T7 security evidence omitted.",
+      "expected_readiness_evidence_complete": false,
+      "mutation": {"kind": "REMOVE_EVIDENCE", "stage_id": "T7"},
+      "required_stages": ["T0", "T1", "T2", "T3", "T7", "T8", "T9"]
+    },
+    {
+      "case_id": "C06_MISSING_REGRESSION",
+      "category": "EVIDENCE_COMPLETENESS",
+      "description": "Required T8 regression evidence omitted.",
+      "expected_readiness_evidence_complete": false,
+      "mutation": {"kind": "REMOVE_EVIDENCE", "stage_id": "T8"},
+      "required_stages": ["T0", "T1", "T2", "T3", "T8", "T9"]
+    },
+    {
+      "case_id": "C07_FUNCTIONAL_FAIL",
+      "category": "RISK_SIGNAL",
+      "description": "Explicit functional test failure.",
+      "expected_readiness_evidence_complete": false,
+      "mutation": {"kind": "SET_RESULT", "result": "FAIL", "stage_id": "T2"},
+      "required_stages": ["T0", "T1", "T2", "T3", "T8", "T9"]
+    },
+    {
+      "case_id": "C08_SECURITY_PENDING",
+      "category": "RISK_SIGNAL",
+      "description": "Required security evidence remains pending.",
+      "expected_readiness_evidence_complete": false,
+      "mutation": {"kind": "SET_RESULT", "result": "PENDING", "stage_id": "T7"},
+      "required_stages": ["T0", "T1", "T2", "T3", "T7", "T8", "T9"]
+    },
+    {
+      "case_id": "C09_STALE_REGRESSION",
+      "category": "STRUCTURAL_INTEGRITY",
+      "description": "Regression evidence is bound to another revision.",
+      "expected_readiness_evidence_complete": false,
+      "mutation": {"kind": "SET_STALE_REVISION", "stage_id": "T8"},
+      "required_stages": ["T0", "T1", "T2", "T3", "T8", "T9"]
+    },
+    {
+      "case_id": "C10_DUPLICATE_EVIDENCE",
+      "category": "STRUCTURAL_INTEGRITY",
+      "description": "Functional evidence is duplicated under one packet.",
+      "expected_readiness_evidence_complete": false,
+      "mutation": {"kind": "DUPLICATE_EVIDENCE", "stage_id": "T2"},
+      "required_stages": ["T0", "T1", "T2", "T3", "T8", "T9"]
+    },
+    {
+      "case_id": "C11_EVIDENCE_FOR_NA",
+      "category": "STRUCTURAL_INTEGRITY",
+      "description": "Evidence supplied for UI stage declared NOT_APPLICABLE.",
+      "expected_readiness_evidence_complete": false,
+      "mutation": {"kind": "ADD_EVIDENCE_FOR_NA", "stage_id": "T4"},
+      "required_stages": ["T0", "T1", "T2", "T3", "T8", "T9"]
+    },
+    {
+      "case_id": "C12_T0_NA",
+      "category": "STRUCTURAL_INTEGRITY",
+      "description": "T0 applicability/evidence planning is incorrectly omitted.",
+      "expected_readiness_evidence_complete": false,
+      "mutation": {"kind": "MAKE_NOT_APPLICABLE", "stage_id": "T0"},
+      "required_stages": ["T0", "T9"]
+    },
+    {
+      "case_id": "C13_STAGE_DECLARATION_MISSING",
+      "category": "STRUCTURAL_INTEGRITY",
+      "description": "Packet omits a T-stage declaration.",
+      "expected_readiness_evidence_complete": false,
+      "mutation": {"kind": "REMOVE_STAGE_DECLARATION", "stage_id": "T3"},
+      "required_stages": ["T0", "T1", "T2", "T3", "T8", "T9"]
+    },
+    {
+      "case_id": "C14_OWNER_DRIFT",
+      "category": "STRUCTURAL_INTEGRITY",
+      "description": "Security stage owner mapping drops Cipher.",
+      "expected_readiness_evidence_complete": false,
+      "mutation": {"kind": "SET_OWNERS", "owners": ["overseer"], "stage_id": "T7"},
+      "required_stages": ["T0", "T1", "T2", "T3", "T7", "T8", "T9"]
+    },
+    {
+      "case_id": "C15_TERMINAL_NO_REF",
+      "category": "STRUCTURAL_INTEGRITY",
+      "description": "Terminal regression PASS lacks evidence reference.",
+      "expected_readiness_evidence_complete": false,
+      "mutation": {"kind": "REMOVE_TERMINAL_REFS", "stage_id": "T8"},
+      "required_stages": ["T0", "T1", "T2", "T3", "T8", "T9"]
+    }
+  ],
+  "complexity_snapshot": {
+    "assessment": "MEDIUM_BUT_BOUNDED",
+    "canonical_candidate_additions": 815,
+    "canonical_candidate_files_changed": 7,
+    "default_mode": "NON_RELEASE",
+    "new_ci_platform": false,
+    "new_runtime_dependencies": 0,
+    "runtime_integration": false,
+    "second_test_engine": false
+  },
+  "frozen_subject": {
+    "baseline_parent_sha": "8d7df8aa397f7ed6ad628dd7c06a9ab5ca8b097d",
+    "baseline_parent_tree": "433e04a08958aafc78d3bfd7b28c797109e3d592",
+    "implementation_pr": 644,
+    "repository": "Baelfyre/Orchestra",
+    "revision_sha": "d5d1c9af408cc229838b68da2bb21ad1d19e76ee",
+    "tree_sha": "36d7376a1ab087f0a7814141667b48c934179645"
+  },
+  "hypothesis": "On representative bounded fixtures, UTM will improve readiness decision accuracy and unsafe-case detection by at least 20 percentage points, detect at least 95% of structural/evidence-completeness defects, preserve all clean cases, and introduce no authority expansion.",
+  "measurement_boundaries": {
+    "cross_host_consistency": "NOT_APPLICABLE_NO_HOST_EXECUTION",
+    "interpretation": "The calibration may establish core evidence-completeness and fail-closed detection value. It cannot establish default-use efficiency or live-host cost benefit.",
+    "live_host_latency": "UNMEASURED",
+    "live_host_token_cost": "UNMEASURED",
+    "live_model_calls": 0,
+    "operator_effort_time": "UNMEASURED",
+    "provider_calls": 0
+  },
+  "preregistration": {
+    "all_attempts_retained": true,
+    "metrics": [
+      "decision_accuracy",
+      "risk_detection",
+      "false_positives",
+      "false_negatives",
+      "structural_violation_detection",
+      "missing_evidence_detection"
+    ],
+    "negative_inconclusive_preserved": true,
+    "order_policy": "Cases execute in frozen case_id order; no randomized model/provider behavior exists in this offline deterministic calibration.",
+    "outcome_based_retry_prohibited": true,
+    "post_start_metric_change_prohibited": true,
+    "resource_ceiling": "Zero model/provider calls; stdlib-only evaluator; no network required.",
+    "retry_policy": "No outcome-based retry. Evaluation is deterministic and a failed evaluator run fails the campaign.",
+    "selective_exclusion_prohibited": true,
+    "state_isolation": "Read-only fixture evaluation; no repository mutation by evaluator.",
+    "stop_conditions": [
+      "frozen subject identity mismatch",
+      "corpus shape invalid",
+      "unexpected evaluator exception",
+      "authority-expansion assertion failure"
+    ],
+    "thresholds": {
+      "utm_accuracy_gain_over_baseline_min": 0.2,
+      "utm_decision_accuracy_min": 0.95,
+      "utm_false_negative_rate_max": 0.05,
+      "utm_false_positive_rate_max": 0.05,
+      "utm_missing_evidence_detection_min": 0.95,
+      "utm_risk_detection_min": 0.95,
+      "utm_structural_violation_detection_min": 0.95
+    }
+  },
+  "program_id": "orchestra.unified-testing-mechanism-efficacy.v1",
+  "research_question": "Does the experimental UTM coordination layer improve revision-bound readiness evidence completeness and fail-closed risk detection relative to a distributed-evidence aggregation proxy, without introducing false-positive blocking or new execution authority?",
+  "schema_version": "orchestra.unified-testing-efficacy-study.v1",
+  "stage": "CALIBRATION",
+  "study_id": "utm-efficacy-2026-08-30",
+  "utm_evaluator": {
+    "behavior": "Use validate_packet() and aggregate_packet() from the frozen canonical UTM implementation; invalid packets are treated as fail-closed not-ready outcomes.",
+    "id": "CANONICAL_UTM_AGGREGATOR_V1",
+    "runtime_surface": "orchestra_runtime/unified_testing.py"
+  }
+}

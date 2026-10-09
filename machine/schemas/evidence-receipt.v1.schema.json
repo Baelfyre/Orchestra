@@ -1,0 +1,240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/schemas/evidence-receipt.v1.schema.json",
+  "title": "Orchestra AQ-4 evidence receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "receipt_id",
+    "manifest_id",
+    "repository",
+    "source_ref",
+    "candidate_sha",
+    "tree_sha",
+    "work_item_ref",
+    "gate_id",
+    "gate_type",
+    "command_or_workflow",
+    "result",
+    "observed_at",
+    "producer",
+    "validator",
+    "source_truth",
+    "provenance_qualification",
+    "evidence_layer",
+    "evidence_scope",
+    "covered_risks",
+    "covered_invariants",
+    "limitations",
+    "evidence_digest"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "orchestra.evidence-receipt.v1"
+    },
+    "receipt_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "manifest_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "repository": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "source_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "candidate_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "tree_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "work_item_ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "gate_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "gate_type": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_:-]{0,127}$"
+    },
+    "command_or_workflow": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 512
+    },
+    "result": {
+      "enum": [
+        "PASS",
+        "FAIL",
+        "BLOCKED",
+        "NOT_APPLICABLE"
+      ]
+    },
+    "observed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "producer": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "validator": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "source_truth": {
+      "enum": [
+        "OBSERVED",
+        "INFERRED",
+        "DECIDED",
+        "UNVERIFIED"
+      ]
+    },
+    "provenance_qualification": {
+      "enum": [
+        "AUTHORITATIVE",
+        "SELF_ASSERTED",
+        "UNQUALIFIED"
+      ]
+    },
+    "evidence_layer": {
+      "enum": [
+        "STATIC",
+        "UNIT",
+        "DOMAIN",
+        "CONTRACT",
+        "INTEGRATION",
+        "HTTP",
+        "RUNTIME",
+        "PERSISTENCE",
+        "CONCURRENCY",
+        "SECURITY",
+        "PROVENANCE",
+        "MUTATION",
+        "ADVERSARIAL",
+        "DOCUMENTATION",
+        "COMPLETION_STATE"
+      ]
+    },
+    "evidence_scope": {
+      "enum": [
+        "SOURCE",
+        "COMPLETION",
+        "DOMAIN",
+        "APPLICATION",
+        "API",
+        "UI",
+        "UNIT",
+        "CONTRACT",
+        "INTEGRATION",
+        "RUNTIME",
+        "PERSISTENCE",
+        "CONCURRENCY",
+        "SECURITY",
+        "ADVERSARIAL",
+        "CANONICAL",
+        "PRODUCT",
+        "EMPIRICAL_EFFECTIVENESS"
+      ]
+    },
+    "covered_risks": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 128,
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z][A-Z0-9_:-]{0,127}$"
+      }
+    },
+    "covered_invariants": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 128,
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z][A-Z0-9_:-]{0,127}$"
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "uniqueItems": true,
+      "maxItems": 128,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 256
+      }
+    },
+    "evidence_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "workflow_run_id": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      ]
+    },
+    "job_or_check_id": {
+      "oneOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      ]
+    },
+    "exit_code": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "logical_identity": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 256
+    }
+  }
+}

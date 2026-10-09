@@ -1,0 +1,63 @@
+{
+  "$schema": "../schemas/specialist-integration-flow.schema.json",
+  "schema_version": "orchestra.ui-specialist-integration-flow.v1",
+  "role": "UIX_5_SPECIALIST_INTEGRATION",
+  "consumes": {
+    "ui_design_contract_schema": "machine/schemas/ui-design-contract.schema.json",
+    "design_source_preservation_workflow_schema": "machine/schemas/design-source-preservation-workflow.schema.json",
+    "ui_profile_registry_schema": "machine/schemas/ui-profile-registry.schema.json",
+    "component_asset_preservation_schema": "machine/schemas/component-asset-preservation.schema.json"
+  },
+  "flow": [
+    {"order": 1, "stage": "ROUTE", "specialist": "conductor", "responsibility": "Route the governed UI task and sequence the declared specialists.", "input": "UIX_TASK_OR_AMBIGUOUS_REQUEST", "output": "ROUTED_MINIMUM_PACKET", "conditional": false},
+    {"order": 2, "stage": "CAPTURE_DESIGN_UX_EVIDENCE", "specialist": "cloak", "responsibility": "Capture design-source, accessibility, responsive, interaction, and static-fidelity requirements.", "input": "ROUTED_MINIMUM_PACKET_AND_UIX_EVIDENCE", "output": "CLOAK_DESIGN_EVIDENCE", "conditional": false},
+    {"order": 3, "stage": "DEFINE_ARCHITECTURE", "specialist": "clockwork", "responsibility": "Define project-native component, state, responsive, and integration boundaries.", "input": "CLOAK_DESIGN_EVIDENCE", "output": "CLOCKWORK_COMPONENT_STATE_RESPONSIVE_BOUNDARY", "conditional": false},
+    {"order": 4, "stage": "REVIEW_ADOPTION", "specialist": "the-governor", "responsibility": "Review proposed external dependency, asset, license, IP, or copyright adoption.", "input": "CLOCKWORK_BOUNDARY_AND_PROPOSED_ADOPTION", "output": "GOVERNOR_DEPENDENCY_ASSET_DECISION", "conditional": true},
+    {"order": 5, "stage": "IMPLEMENT_PROJECT_NATIVE", "specialist": "ponytail", "responsibility": "Implement the accepted project-native UI against frozen upstream contracts.", "input": "FROZEN_UPSTREAM_CONTRACTS_AND_GOVERNOR_DECISION", "output": "PROJECT_NATIVE_IMPLEMENTATION_DELTA", "conditional": false},
+    {"order": 6, "stage": "STATIC_FIDELITY_REVIEW", "specialist": "cloak", "responsibility": "Recheck the implementation for static fidelity, accessibility, responsive intent, and unresolved evidence.", "input": "PROJECT_NATIVE_IMPLEMENTATION_DELTA", "output": "CLOAK_STATIC_FIDELITY_RESULT", "conditional": false},
+    {"order": 7, "stage": "RENDERED_ACCESSIBILITY_EVIDENCE", "specialist": "overseer", "responsibility": "Produce revision-bound rendered, interaction, responsive, and accessibility evidence.", "input": "CURRENT_IMPLEMENTATION_AND_CLOAK_RESULT", "output": "OVERSEER_RENDERED_ACCESSIBILITY_EVIDENCE", "conditional": false},
+    {"order": 8, "stage": "TRANSITION_DISPOSITION", "specialist": "arbiter", "responsibility": "Evaluate evidence freshness, continuity, and the transition disposition.", "input": "CURRENT_EVIDENCE_PACKET_AND_REPOSITORY_LINEAGE", "output": "ARBITER_TRANSITION_DECISION", "conditional": false}
+  ],
+  "ownership": {
+    "conductor": {"owns": ["ROUTING", "SEQUENCING"], "does_not_own": ["UI_UX_REQUIREMENTS", "ARCHITECTURE", "IMPLEMENTATION", "VALIDATION_EVIDENCE", "TRANSITION_DISPOSITION"]},
+    "cloak": {"owns": ["DESIGN_UX_EVIDENCE", "ACCESSIBILITY_REQUIREMENTS", "STATIC_FIDELITY_REVIEW"], "does_not_own": ["ARCHITECTURE", "IMPLEMENTATION", "RENDERED_EVIDENCE", "TRANSITION_DISPOSITION"]},
+    "clockwork": {"owns": ["COMPONENT_STATE_ARCHITECTURE", "RESPONSIVE_ARCHITECTURE", "INTEGRATION_BOUNDARIES"], "does_not_own": ["DESIGN_UX_REQUIREMENTS", "IMPLEMENTATION", "RENDERED_EVIDENCE", "TRANSITION_DISPOSITION"]},
+    "the-governor": {"owns": ["DEPENDENCY_ASSET_LICENSE_IP_REVIEW"], "does_not_own": ["ROUTING", "IMPLEMENTATION", "VALIDATION", "TRANSITION_DISPOSITION"]},
+    "ponytail": {"owns": ["PROJECT_NATIVE_IMPLEMENTATION"], "does_not_own": ["DESIGN_UX_REQUIREMENTS", "ARCHITECTURE", "GOVERNANCE_REVIEW", "RENDERED_EVIDENCE", "TRANSITION_DISPOSITION"]},
+    "overseer": {"owns": ["RENDERED_EVIDENCE", "ACCESSIBILITY_EVIDENCE", "VALIDATION_REVIEW"], "does_not_own": ["DESIGN_UX_REQUIREMENTS", "ARCHITECTURE", "IMPLEMENTATION", "TRANSITION_DISPOSITION"]},
+    "arbiter": {"owns": ["TRANSITION_DISPOSITION", "EVIDENCE_FRESHNESS"], "does_not_own": ["DESIGN_UX_REQUIREMENTS", "ARCHITECTURE", "IMPLEMENTATION", "RENDERED_EVIDENCE"]}
+  },
+  "handoff_rules": [
+    {"order": 1, "from": "conductor", "to": "cloak", "condition": "ALWAYS", "requires": ["ROUTED_MINIMUM_PACKET"]},
+    {"order": 2, "from": "cloak", "to": "clockwork", "condition": "DESIGN_EVIDENCE_CAPTURED", "requires": ["CLOAK_DESIGN_EVIDENCE"]},
+    {"order": 3, "from": "clockwork", "to": "the-governor", "condition": "ADOPTION_REVIEW_REQUIRED_OR_NOT_APPLICABLE", "requires": ["CLOCKWORK_COMPONENT_STATE_RESPONSIVE_BOUNDARY"]},
+    {"order": 4, "from": "the-governor", "to": "ponytail", "condition": "GOVERNOR_DECISION_OR_NOT_APPLICABLE", "requires": ["FROZEN_UPSTREAM_CONTRACTS"]},
+    {"order": 5, "from": "ponytail", "to": "cloak", "condition": "IMPLEMENTATION_COMPLETE", "requires": ["PROJECT_NATIVE_IMPLEMENTATION_DELTA"]},
+    {"order": 6, "from": "cloak", "to": "overseer", "condition": "STATIC_REVIEW_COMPLETE", "requires": ["CLOAK_STATIC_FIDELITY_RESULT"]},
+    {"order": 7, "from": "overseer", "to": "arbiter", "condition": "CURRENT_EVIDENCE_BOUND", "requires": ["OVERSEER_RENDERED_ACCESSIBILITY_EVIDENCE"]}
+  ],
+  "validation": {
+    "required_specialists": ["conductor", "cloak", "clockwork", "the-governor", "ponytail", "overseer", "arbiter"],
+    "ownership_non_overlapping": true,
+    "conductor_routing_only": true,
+    "overseer_rendered_evidence_owner": true,
+    "arbiter_transition_owner": true,
+    "caveman_role": "PRESENTATION_ONLY_NO_AUTHORITY",
+    "butler_role": "NOT_REGISTERED_OR_ACTIVE_OWNER",
+    "ui_evidence_authority": "EVIDENCE_NOT_AUTHORITY",
+    "implementation_requires_upstream_contracts": true,
+    "runtime_integration": false,
+    "new_specialist_required": false
+  },
+  "authority": {
+    "flow_grants_implementation_authority": false,
+    "ui_evidence_grants_implementation_authority": true,
+    "rendered_evidence_grants_release_authority": false,
+    "validation_grants_approval": false,
+    "external_tools_grant_authority": false,
+    "dependency_adoption_authorized": false,
+    "asset_adoption_authorized": false,
+    "figma_mutation_authorized": false,
+    "transition_disposition_required": true
+  }
+}

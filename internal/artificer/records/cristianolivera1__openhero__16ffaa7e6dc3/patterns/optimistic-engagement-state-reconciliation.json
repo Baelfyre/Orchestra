@@ -1,0 +1,9 @@
+{
+  "name": "Optimistic Engagement State Reconciliation",
+  "description": "Updates engagement state optimistically, reconciles the result against a server response, and rolls the client state back when the request fails.",
+  "source_file": "components/sections/HeroGallery/VideoCard.tsx",
+  "line_range": "94-129",
+  "classification": "REFERENCE_ONLY",
+  "assigned_specialist": "clockwork",
+  "license_implications": "The source is MIT-licensed. Record the behavior as reference evidence only and prefer an independently implemented Orchestra-native state-reconciliation mechanism."
+}

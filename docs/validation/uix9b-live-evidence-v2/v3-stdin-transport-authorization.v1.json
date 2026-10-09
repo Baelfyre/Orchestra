@@ -1,0 +1,62 @@
+{
+  "schema_version": "orchestra.uix9c-v3-stdin-transport-authorization.v1",
+  "authorization_status": "APPROVED",
+  "authority_class": "HUMAN_SCIENTIFIC_AUTHORIZATION",
+  "scientific_inputs": {
+    "task_fixture_prompt_guidance_evaluator_validator_unchanged": true,
+    "execution_order": ["A1", "B1", "B2", "A2", "A3", "B3"],
+    "max_valid_observations": 6,
+    "outcome_based_retry_authorized": false
+  },
+  "transport": {
+    "version": "V3_STDIN_UTF8",
+    "prompt_transport": "STDIN",
+    "stdin_encoding": "UTF-8",
+    "codex_exec_stdin_sentinel": "-",
+    "prompt_in_argv": false,
+    "windows_createprocess_argv_limit_bypassed": true
+  },
+  "fresh_campaign_proposed_ceiling": {
+    "max_new_model_calls": 7,
+    "max_new_provider_calls": 7,
+    "max_new_provider_interactions": 7,
+    "max_invalid_infrastructure_replacements": 1,
+    "max_valid_observations": 6,
+    "seventh_valid_observation_authorized": false,
+    "additional_ceiling_expansion_authorized": false
+  },
+  "prior_invalid_studies": [
+    {
+      "study": "V2_INITIAL_WINDOWS_DECODE_FAILURE",
+      "interactions_consumed": 1,
+      "valid_observations": 0,
+      "terminal_disposition": "PROTOCOL_INVALID_INFRASTRUCTURE",
+      "reason": "Windows cp1252 host decoding failure before a scientific observation"
+    },
+    {
+      "study": "V2_UTF8_RECOVERY_SEVEN_INTERACTION_ENVELOPE",
+      "interactions_consumed": 3,
+      "valid_observations": 0,
+      "candidate_observations_pending_unpaired": 1,
+      "terminal_disposition": "PROTOCOL_INVALID_INCOMPLETE",
+      "reason": "B1 failed twice with WinError 206 because the governed prompt was passed in argv; the study could no longer produce six valid observations inside its approved ceiling"
+    }
+  ],
+  "evidence_policy": {
+    "reuse_prior_a1_observation": false,
+    "preserve_all_prior_invalid_evidence": true,
+    "fresh_evidence_root": "docs/validation/uix9b-live-evidence-v2/v3-stdin-transport-20260827",
+    "prior_invalid_evidence_is_scientific_result": false
+  },
+  "authority_boundary": {
+    "live_execution_authorized": true,
+    "merge_authorized": false,
+    "release_authorized": false,
+    "deployment_authorized": false,
+    "policy_activation_authorized": false,
+    "external_repository_mutation_authorized": false,
+    "destructive_cleanup_authorized": false,
+    "branch_deletion_authorized": false,
+    "force_push_or_history_rewrite_authorized": false
+  }
+}

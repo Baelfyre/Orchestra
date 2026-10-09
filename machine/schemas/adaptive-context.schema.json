@@ -1,0 +1,187 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://orchestra.local/schemas/adaptive-context.schema.json",
+  "title": "Orchestra Adaptive Specialist Context v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "specialist_slug",
+    "command_name",
+    "status",
+    "reason_code",
+    "advisory_only",
+    "repository_refs",
+    "current_instruction_refs",
+    "items",
+    "outcome_evidence"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "orchestra.adaptive-context.v1"
+    },
+    "specialist_slug": {
+      "type": "string",
+      "minLength": 1
+    },
+    "command_name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "ADVISORY",
+        "DETERMINISTIC_FALLBACK"
+      ]
+    },
+    "reason_code": {
+      "type": "string",
+      "minLength": 1
+    },
+    "advisory_only": {
+      "const": true
+    },
+    "repository_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "current_instruction_refs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "subject_key",
+          "value",
+          "scope",
+          "status",
+          "evidence_class",
+          "evidence_refs",
+          "confidence",
+          "precedence"
+        ],
+        "properties": {
+          "subject_key": {
+            "type": "string",
+            "minLength": 1
+          },
+          "value": {},
+          "scope": {
+            "$ref": "#/$defs/scope"
+          },
+          "status": {
+            "enum": [
+              "candidate",
+              "confirmed"
+            ]
+          },
+          "evidence_class": {
+            "enum": [
+              "EXPLICIT_CURRENT_INSTRUCTION",
+              "EXPLICIT_SCOPED_PREFERENCE",
+              "INFERRED_CANDIDATE"
+            ]
+          },
+          "evidence_refs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "uniqueItems": true
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "precedence": {
+            "enum": [
+              "EXPLICIT_CURRENT_INSTRUCTION",
+              "EXPLICIT_SCOPED_PREFERENCE",
+              "CONFIRMED_LEARNED_PATTERN",
+              "INFERRED_CANDIDATE"
+            ]
+          }
+        }
+      }
+    },
+    "outcome_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_ref",
+          "scope",
+          "occurred_at",
+          "payload"
+        ],
+        "properties": {
+          "source_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "scope": {
+            "$ref": "#/$defs/scope"
+          },
+          "occurred_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "payload": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope_type",
+        "user_key"
+      ],
+      "properties": {
+        "scope_type": {
+          "enum": [
+            "global_user",
+            "project",
+            "specialist",
+            "task_session"
+          ]
+        },
+        "user_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "project_key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "specialist_slug": {
+          "type": "string",
+          "minLength": 1
+        },
+        "task_session_key": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

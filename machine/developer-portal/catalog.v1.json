@@ -1,0 +1,254 @@
+{
+  "schema_version": "orchestra.developer-portal-catalog.v1",
+  "portal_mode": "REPOSITORY_NATIVE_DISCOVERY",
+  "description": "Discovery index over stabilized Orchestra extension, governance, host, and validation contracts.",
+  "authority": {
+    "documentation_and_discovery_only": true,
+    "grants_runtime_authority": false,
+    "grants_runtime_capabilities": false,
+    "grants_mutation_authority": false,
+    "promotes_host_maturity": false,
+    "publishes_marketplace_listings": false,
+    "implements_mcp": true,
+    "activates_policy": false,
+    "deploys_or_mutates_production": false,
+    "refreshes_installed_integrations": false
+  },
+  "public_release_boundary": {
+    "release": "v1.10.0",
+    "target_commit": "756a358f96363f0c377b049adcd87b1991d5aef6",
+    "moved_by_portal": false
+  },
+  "surfaces": [
+    {
+      "id": "adapter-sdk-guide",
+      "title": "Adapter SDK and PRAP v1 guide",
+      "kind": "human_guide",
+      "path": "docs/setup/ADAPTER_SDK_PRAP.md",
+      "authority_role": "GUIDANCE_OVER_EXISTING_PROTOCOL"
+    },
+    {
+      "id": "prap-certification-contract",
+      "title": "PRAP certification contract",
+      "kind": "machine_contract",
+      "path": "machine/protocol/prap-certification-contract.v1.json",
+      "authority_role": "CERTIFICATION_CONTRACT"
+    },
+    {
+      "id": "prap-certification-schema",
+      "title": "PRAP certification evidence schema",
+      "kind": "machine_schema",
+      "path": "machine/schemas/prap-certification-evidence.schema.json",
+      "authority_role": "EVIDENCE_SCHEMA"
+    },
+    {
+      "id": "host-update-contract",
+      "title": "Host Update maturity contract",
+      "kind": "machine_contract",
+      "path": "machine/hosts/update-contract.v1.json",
+      "authority_role": "HOST_MATURITY_AUTHORITY"
+    },
+    {
+      "id": "host-update-guide",
+      "title": "Host Update guide",
+      "kind": "human_guide",
+      "path": "docs/setup/HOST_UPDATES.md",
+      "authority_role": "GUIDANCE_OVER_HOST_CONTRACT"
+    },
+    {
+      "id": "uai-host-capability-contract",
+      "title": "UAI Host Capability Contract",
+      "kind": "machine_contract",
+      "path": "machine/hosts/capability-contract.v1.json",
+      "authority_role": "HOST_CAPABILITY_EVIDENCE_WITHOUT_AUTHORITY"
+    },
+    {
+      "id": "uai-host-capability-schema",
+      "title": "UAI Host Capability Contract schema",
+      "kind": "machine_schema",
+      "path": "machine/schemas/host-capability-contract.v1.schema.json",
+      "authority_role": "EVIDENCE_SCHEMA"
+    },
+    {
+      "id": "uai-host-capability-guide",
+      "title": "UAI Host Capability Contract guide",
+      "kind": "human_guide",
+      "path": "docs/setup/HOST_CAPABILITY_CONTRACT.md",
+      "authority_role": "GUIDANCE_OVER_HOST_CAPABILITY_CONTRACT"
+    },
+    {
+      "id": "uai-provider-model-capability-contract",
+      "title": "UAI Provider/Model Capability Contract and Shadow Broker",
+      "kind": "machine_contract",
+      "path": "machine/providers/provider-model-capability-contract.v1.json",
+      "authority_role": "PROVIDER_MODEL_CAPABILITY_EVIDENCE_AND_SHADOW_ADVISORY_WITHOUT_AUTHORITY"
+    },
+    {
+      "id": "uai-provider-model-capability-schema",
+      "title": "UAI Provider/Model Capability Contract schema",
+      "kind": "machine_schema",
+      "path": "machine/schemas/provider-model-capability-contract.v1.schema.json",
+      "authority_role": "EVIDENCE_SCHEMA"
+    },
+    {
+      "id": "uai-provider-model-capability-guide",
+      "title": "UAI Provider/Model Capability Contract guide",
+      "kind": "human_guide",
+      "path": "docs/setup/PROVIDER_MODEL_CAPABILITY_CONTRACT.md",
+      "authority_role": "GUIDANCE_OVER_PROVIDER_MODEL_CAPABILITY_CONTRACT"
+    },
+    {
+      "id": "uai-integration-strategy-policy",
+      "title": "UAI Integration Strategy and Transport Fallback Policy",
+      "kind": "machine_contract",
+      "path": "machine/hosts/integration-strategy-policy.v1.json",
+      "authority_role": "TRANSPORT_SELECTION_AND_NON_EXECUTING_FALLBACK_WITHOUT_ROUTING_AUTHORITY"
+    },
+    {
+      "id": "uai-integration-strategy-policy-schema",
+      "title": "UAI Integration Strategy Policy schema",
+      "kind": "machine_schema",
+      "path": "machine/schemas/integration-strategy-policy.v1.schema.json",
+      "authority_role": "EVIDENCE_SCHEMA"
+    },
+    {
+      "id": "uai-transport-fallback-guide",
+      "title": "UAI Transport and Fallback Integration guide",
+      "kind": "human_guide",
+      "path": "docs/setup/TRANSPORT_FALLBACK_INTEGRATION.md",
+      "authority_role": "NON_EXECUTING_TRANSPORT_FALLBACK_GUIDANCE"
+    },
+    {
+      "id": "uai-negative-unknown-capability-testing-guide",
+      "title": "UAI Negative and Unknown Capability Testing guide",
+      "kind": "human_guide",
+      "path": "docs/setup/UAI_NEGATIVE_UNKNOWN_TESTING.md",
+      "authority_role": "FAIL_CLOSED_EVIDENCE_GUIDANCE_WITHOUT_AUTHORITY"
+    },
+    {
+      "id": "uai-cross-host-capability-conformance-guide",
+      "title": "UAI Cross-Host Capability Conformance guide",
+      "kind": "human_guide",
+      "path": "docs/setup/UAI_CROSS_HOST_CONFORMANCE.md",
+      "authority_role": "EVIDENCE_BOUND_CROSS_HOST_COMPARISON_WITHOUT_AUTHORITY"
+    },
+    {
+      "id": "uai-maturity-closeout-guide",
+      "title": "UAI Maturity and Closeout guide",
+      "kind": "human_guide",
+      "path": "docs/setup/UAI_MATURITY_CLOSEOUT.md",
+      "authority_role": "MATURITY_BOUNDARY_GUIDANCE_WITHOUT_RELEASE_OR_AUTHORITY"
+    },
+    {
+      "id": "uai-portable-projection-contract",
+      "title": "UAI Portable Projection Contract",
+      "kind": "machine_contract",
+      "path": "machine/projections/portable-projection-contract.v1.json",
+      "authority_role": "CANONICAL_SOURCE_AND_DERIVED_PROJECTION_BOUNDARY"
+    },
+    {
+      "id": "uai-portable-projection-index",
+      "title": "UAI Portable Projection Parity Index",
+      "kind": "machine_contract",
+      "path": "machine/projections/portable-projection-index.v1.json",
+      "authority_role": "GENERATED_PARITY_EVIDENCE_ONLY"
+    },
+    {
+      "id": "uai-portable-projection-guide",
+      "title": "UAI Portable Projection Compiler guide",
+      "kind": "human_guide",
+      "path": "docs/setup/PORTABLE_PROJECTION_COMPILER.md",
+      "authority_role": "GUIDANCE_OVER_DERIVED_PROJECTION_COMPILER"
+    },
+    {
+      "id": "specialist-registry",
+      "title": "Specialist registry",
+      "kind": "machine_contract",
+      "path": "machine/specialists/registry.v1.json",
+      "authority_role": "SPECIALIST_IDENTITY_AUTHORITY"
+    },
+    {
+      "id": "governance-policy",
+      "title": "Governance policy",
+      "kind": "machine_contract",
+      "path": "machine/governance/policy.v1.json",
+      "authority_role": "GOVERNANCE_POLICY_AUTHORITY"
+    },
+    {
+      "id": "governance-guide",
+      "title": "Governance layer guide",
+      "kind": "human_guide",
+      "path": "docs/governance/GOVERNANCE_LAYER.md",
+      "authority_role": "GUIDANCE_OVER_GOVERNANCE_POLICY"
+    },
+    {
+      "id": "authority-architecture",
+      "title": "Authority, capability, runtime architecture",
+      "kind": "human_guide",
+      "path": "docs/project/AUTHORITY_CAPABILITY_RUNTIME_ARCHITECTURE.md",
+      "authority_role": "ARCHITECTURE_GUIDANCE"
+    },
+    {
+      "id": "validation-guide",
+      "title": "Validation guide",
+      "kind": "human_guide",
+      "path": "docs/setup/VALIDATION.md",
+      "authority_role": "VALIDATION_GUIDANCE"
+    }
+  ],
+  "journeys": [
+    {
+      "id": "understand-adapter-contract",
+      "title": "Understand or build an adapter",
+      "surface_ids": [
+        "adapter-sdk-guide",
+        "prap-certification-contract",
+        "specialist-registry",
+        "authority-architecture"
+      ]
+    },
+    {
+      "id": "certify-adapter",
+      "title": "Produce read-only PRAP compatibility evidence",
+      "surface_ids": [
+        "adapter-sdk-guide",
+        "prap-certification-contract",
+        "prap-certification-schema",
+        "validation-guide"
+      ]
+    },
+    {
+      "id": "inspect-host-maturity",
+      "title": "Inspect host support without promoting maturity",
+      "surface_ids": [
+        "host-update-contract",
+        "host-update-guide",
+        "adapter-sdk-guide"
+      ]
+    },
+    {
+      "id": "understand-specialist-extension",
+      "title": "Understand specialist and Downstream Role boundaries",
+      "surface_ids": [
+        "specialist-registry",
+        "authority-architecture",
+        "governance-policy",
+        "governance-guide"
+      ]
+    },
+    {
+      "id": "review-governance-and-validation",
+      "title": "Review governance and validation boundaries",
+      "surface_ids": [
+        "governance-policy",
+        "governance-guide",
+        "validation-guide",
+        "authority-architecture"
+      ]
+    }
+  ],
+  "future_phase_boundaries": {
+    "third_party_specialist_marketplace": "NOT_IMPLEMENTED",
+    "mcp_server": "PUBLISHED_V1_6_STABLE_RETAINED_V1_7"
+  }
+}
