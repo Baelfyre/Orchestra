@@ -373,11 +373,11 @@ def test_active_branch_memory_path_exception():
 
 
 def test_explicit_historical_git_references_without_current_refs():
-    historical_branch = "docs/archive/retired-governance"
+    historical_branch = "docs/delegated-autonomous-governance-phase-a"
     historical_ref = "scripts/archive/retired-validator"
     memory_content = (
-        f"- Historical branch: `{historical_branch}`\n"
-        f"- Historical Git reference: `{historical_ref}`\n"
+        f"- Active Branch: `{historical_branch}`\n"
+        f"- Remote Branch: `{historical_ref}`\n"
         "- Missing documentation path: `docs/governance/DOES_NOT_EXIST.md`\n"
         "- Missing validation script: `scripts/does_not_exist.py`\n"
     )
@@ -443,6 +443,57 @@ def test_explicit_historical_git_references_without_current_refs():
         gc.get_current_git_branch = original_get_current
         gc.get_known_git_branches = original_get_known
         gc.record_failure = original_record_failure
+
+
+def test_historical_ref_exemption_is_token_scoped():
+    with tempfile.TemporaryDirectory(prefix="governance-ref-token-test-") as temp_dir:
+        repo_root = Path(temp_dir)
+        (repo_root / "docs").mkdir()
+        (repo_root / "docs" / "CONTRIBUTING.md").write_text("# Contributing\n", encoding="utf-8")
+        memory_content = (
+            "Historical Branch: `docs/old-feature`; migration guide: `docs/DOES_NOT_EXIST.md`\n"
+            "Remote Branch: `feature/old-work`; runner: `scripts/does_not_exist.py`\n"
+            "Historical Branch: `docs/old-feature`; policy: `docs/CONTRIBUTING.md`\n"
+            "Active Branch: `docs/active-old`; Remote Branch: `feature/remote-old`; policy: `docs/multiple_missing.md`\n"
+            "`docs/branch-shaped-without-context`\n"
+            "Active Branch: `docs/adjacent-old`\n"
+            "migration guide: `docs/adjacent_missing.md`\n"
+            "Historical Branch: `docs/duplicate-old`; guide: `docs/duplicate-old`\n"
+            "Historical branch with notes: `docs/ambiguous-old`; guide: `docs/ambiguous_missing.md`\n"
+        )
+        (repo_root / "SESSION_HANDOFF.md").write_text(memory_content, encoding="utf-8")
+
+        original_get_known = gc.get_known_git_branches
+        original_record_failure = gc.record_failure
+        recorded_failures = []
+
+        def record_failure_and_track(counters, path, reason, remediation):
+            recorded_failures.append(path)
+            original_record_failure(counters, path, reason, remediation)
+
+        try:
+            gc.get_known_git_branches = lambda _root: set()
+            gc.record_failure = record_failure_and_track
+            counters = {"warnings": 0, "errors": 0}
+            gc.run_repo_memory_path_check(str(repo_root), counters)
+            assert_equal(
+                "only explicit branch tokens are exempt",
+                recorded_failures,
+                [
+                    "SESSION_HANDOFF.md:1: docs/DOES_NOT_EXIST.md",
+                    "SESSION_HANDOFF.md:2: scripts/does_not_exist.py",
+                    "SESSION_HANDOFF.md:4: docs/multiple_missing.md",
+                    "SESSION_HANDOFF.md:5: docs/branch-shaped-without-context",
+                    "SESSION_HANDOFF.md:7: docs/adjacent_missing.md",
+                    "SESSION_HANDOFF.md:8: docs/duplicate-old",
+                    "SESSION_HANDOFF.md:9: docs/ambiguous-old",
+                    "SESSION_HANDOFF.md:9: docs/ambiguous_missing.md",
+                ],
+            )
+            assert_equal("token-scoped missing path count", counters["errors"], 8)
+        finally:
+            gc.get_known_git_branches = original_get_known
+            gc.record_failure = original_record_failure
 
 
 def test_known_git_branches_detached_head_and_ci():
@@ -615,6 +666,7 @@ def test_wildcard_glob_handling_regression():
 
 
 def main():
+    test_historical_ref_exemption_is_token_scoped()
     assert_equal("forbidden artifacts", gc.is_forbidden_repo_path("artifacts/governance_report.txt"), True)
     assert_equal("forbidden runtime folder", gc.is_forbidden_repo_path(".agents/skills/dagger/SKILL.md"), True)
     assert_equal("allowed source file", gc.is_forbidden_repo_path("skills/arbiter/SKILL.md"), False)

@@ -288,25 +288,27 @@ def is_repo_relative_memory_path(path_text):
 
 def get_memory_path_references(line):
     references = []
-    references.extend(match.group(1) for match in re.finditer(r"`([^`]+)`", line))
-    references.extend(match.group(0) for match in re.finditer(r"\b[A-Za-z0-9_.-]+(?:[\\/][A-Za-z0-9_.-]+)+(?:[\\/])?", line))
+    references.extend((match.group(1), match.span(1)) for match in re.finditer(r"`([^`]+)`", line))
+    references.extend((match.group(0), match.span(0)) for match in re.finditer(r"\b[A-Za-z0-9_.-]+(?:[\\/][A-Za-z0-9_.-]+)+(?:[\\/])?", line))
     return list(dict.fromkeys(references))
 
 
-EXPLICIT_HISTORICAL_GIT_REF_CONTEXT_PATTERN = re.compile(
-    r"^\s*(?:[-*]\s*)?\*{0,2}Historical\s+(?:Git\s+)?(?:branch(?:\s+reference)?|ref(?:erence)?)(?:\s*/\s*(?:branch|ref(?:erence)?))?\*{0,2}\s*[:=]\s*(.*)$",
+EXPLICIT_GIT_REF_CONTEXT_PATTERN = re.compile(
+    r"(?:^|[;,|])\s*(?:[-*]\s*)?\*{0,2}"
+    r"(?:(?:Historical|Active|Remote|Current|Base|Target|Source)\s+)?"
+    r"(?:Git\s+)?(?:branch(?:\s+reference)?|ref(?:erence)?)"
+    r"(?:\s*/\s*(?:branch|ref(?:erence)?))?\*{0,2}\s*[:=]\s*"
+    r"(?:`(?P<quoted>[^`]+)`|(?P<plain>[^;,|\s]+))",
     re.IGNORECASE,
 )
 
 
-def get_explicit_historical_git_references(line):
-    match = EXPLICIT_HISTORICAL_GIT_REF_CONTEXT_PATTERN.match(line)
-    if not match:
-        return set()
-    return {
-        reference.strip().strip("`").replace("\\", "/").rstrip("/")
-        for reference in get_memory_path_references(match.group(1))
-    }
+def get_explicit_git_ref_spans(line):
+    reference_spans = set()
+    for match in EXPLICIT_GIT_REF_CONTEXT_PATTERN.finditer(line):
+        value_group = "quoted" if match.group("quoted") is not None else "plain"
+        reference_spans.add(match.span(value_group))
+    return reference_spans
 
 
 def get_known_git_branches(repo_root):
@@ -361,10 +363,10 @@ def run_repo_memory_path_check(repo_root, counters):
             continue
 
         for line_number, line in enumerate(memory_path.read_text(encoding="utf-8").splitlines(), 1):
-            historical_git_references = get_explicit_historical_git_references(line)
-            for reference in get_memory_path_references(line):
+            explicit_git_ref_spans = get_explicit_git_ref_spans(line)
+            for reference, reference_span in get_memory_path_references(line):
                 normalized = reference.strip().strip("`").replace("\\", "/").rstrip("/")
-                if normalized in historical_git_references:
+                if reference_span in explicit_git_ref_spans:
                     continue
                 if known_branches and normalized in known_branches:
                     continue
