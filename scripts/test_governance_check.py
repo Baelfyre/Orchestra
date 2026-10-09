@@ -372,6 +372,148 @@ def test_active_branch_memory_path_exception():
             gc.get_current_git_branch = original_get_current
 
 
+def test_explicit_historical_git_references_without_current_refs():
+    historical_branch = "docs/delegated-autonomous-governance-phase-a"
+    historical_ref = "scripts/archive/retired-validator"
+    memory_content = (
+        f"- Active Branch: `{historical_branch}`\n"
+        f"- Remote Branch: `{historical_ref}`\n"
+        "- Missing documentation path: `docs/governance/DOES_NOT_EXIST.md`\n"
+        "- Missing validation script: `scripts/does_not_exist.py`\n"
+    )
+    original_path = gc.Path
+    original_get_current = gc.get_current_git_branch
+    original_get_known = gc.get_known_git_branches
+    original_record_failure = gc.record_failure
+
+    class MemoryPath:
+        def __init__(self, value):
+            self.value = str(value)
+
+        def __truediv__(self, part):
+            return MemoryPath(f"{self.value}/{part}")
+
+        @property
+        def suffix(self):
+            return Path(self.value).suffix
+
+        def is_file(self):
+            return self.value.endswith("/SESSION_HANDOFF.md")
+
+        def read_text(self, encoding):
+            return memory_content
+
+        def exists(self):
+            return False
+
+    recorded_failures = []
+
+    def record_failure_and_track(counters, path, reason, remediation):
+        recorded_failures.append(path)
+        original_record_failure(counters, path, reason, remediation)
+
+    try:
+        gc.Path = MemoryPath
+        gc.get_known_git_branches = lambda root: {gc.get_current_git_branch(root)} - {None}
+        gc.record_failure = record_failure_and_track
+
+        for detached_head in (False, True):
+            current_branch = None if detached_head else "main"
+            gc.get_current_git_branch = lambda root, branch=current_branch: branch
+            if detached_head:
+                assert_equal("detached HEAD has no current branch", gc.get_current_git_branch("repo"), None)
+            known_branches = gc.get_known_git_branches("repo")
+            assert_equal(f"historical branch absent from refs with detached_head={detached_head}", historical_branch in known_branches, False)
+            assert_equal(f"historical ref absent from refs with detached_head={detached_head}", historical_ref in known_branches, False)
+
+            recorded_failures.clear()
+            counters = {"warnings": 0, "errors": 0}
+            gc.run_repo_memory_path_check("repo", counters)
+            assert_equal(f"missing docs and scripts remain errors with detached_head={detached_head}", counters["errors"], 2)
+            assert_equal(
+                f"only genuine missing paths fail with detached_head={detached_head}",
+                recorded_failures,
+                [
+                    "SESSION_HANDOFF.md:3: docs/governance/DOES_NOT_EXIST.md",
+                    "SESSION_HANDOFF.md:4: scripts/does_not_exist.py",
+                ],
+            )
+    finally:
+        gc.Path = original_path
+        gc.get_current_git_branch = original_get_current
+        gc.get_known_git_branches = original_get_known
+        gc.record_failure = original_record_failure
+
+
+def test_historical_ref_exemption_is_token_scoped():
+    with tempfile.TemporaryDirectory(prefix="governance-ref-token-test-") as temp_dir:
+        repo_root = Path(temp_dir)
+        (repo_root / "docs").mkdir()
+        (repo_root / "docs" / "CONTRIBUTING.md").write_text("# Contributing\n", encoding="utf-8")
+        memory_content = (
+            "Historical Branch: `docs/old-feature`; migration guide: `docs/DOES_NOT_EXIST.md`\n"
+            "Remote Branch: `feature/old-work`; runner: `scripts/does_not_exist.py`\n"
+            "Historical Branch: `docs/old-feature`; policy: `docs/CONTRIBUTING.md`\n"
+            "Active Branch: `docs/active-old`; Remote Branch: `feature/remote-old`; policy: `docs/multiple_missing.md`\n"
+            "`docs/branch-shaped-without-context`\n"
+            "Active Branch: `docs/adjacent-old`\n"
+            "migration guide: `docs/adjacent_missing.md`\n"
+            "Historical Branch: `docs/duplicate-old`; guide: `docs/duplicate-old`\n"
+            "Historical branch with notes: `docs/ambiguous-old`; guide: `docs/ambiguous_missing.md`\n"
+            "Reference: docs/DOES_NOT_EXIST.md\n"
+            "Ref: scripts/does_not_exist.py\n"
+            "Source Reference: docs/missing.md\n"
+            "Target Reference: docs/target_missing.md\n"
+            "Git Reference: `docs/historical-branch`\n"
+            "Historical Git Ref: `feature/old-work`\n"
+            "Remote Branch: `docs/historical-branch`\n"
+        )
+        (repo_root / "SESSION_HANDOFF.md").write_text(memory_content, encoding="utf-8")
+
+        original_get_known = gc.get_known_git_branches
+        original_record_failure = gc.record_failure
+        recorded_failures = []
+
+        def record_failure_and_track(counters, path, reason, remediation):
+            recorded_failures.append(path)
+            original_record_failure(counters, path, reason, remediation)
+
+        try:
+            gc.get_known_git_branches = lambda _root: set()
+            gc.record_failure = record_failure_and_track
+            counters = {"warnings": 0, "errors": 0}
+            gc.run_repo_memory_path_check(str(repo_root), counters)
+            assert_equal(
+                "only explicit branch tokens are exempt",
+                recorded_failures,
+                [
+                    "SESSION_HANDOFF.md:1: docs/DOES_NOT_EXIST.md",
+                    "SESSION_HANDOFF.md:2: scripts/does_not_exist.py",
+                    "SESSION_HANDOFF.md:4: docs/multiple_missing.md",
+                    "SESSION_HANDOFF.md:5: docs/branch-shaped-without-context",
+                    "SESSION_HANDOFF.md:7: docs/adjacent_missing.md",
+                    "SESSION_HANDOFF.md:8: docs/duplicate-old",
+                    "SESSION_HANDOFF.md:9: docs/ambiguous-old",
+                    "SESSION_HANDOFF.md:9: docs/ambiguous_missing.md",
+                    "SESSION_HANDOFF.md:10: docs/DOES_NOT_EXIST.md",
+                    "SESSION_HANDOFF.md:11: scripts/does_not_exist.py",
+                    "SESSION_HANDOFF.md:12: docs/missing.md",
+                    "SESSION_HANDOFF.md:13: docs/target_missing.md",
+                ],
+            )
+            assert_equal("token-scoped missing path count", counters["errors"], 12)
+            historical_git_ref = "Historical Git Ref: `feature/old-work`"
+            historical_git_ref_start = historical_git_ref.index("feature/old-work")
+            assert_equal(
+                "historical Git Ref token is explicitly classified",
+                gc.get_explicit_git_ref_spans(historical_git_ref),
+                {(historical_git_ref_start, historical_git_ref_start + len("feature/old-work"))},
+            )
+        finally:
+            gc.get_known_git_branches = original_get_known
+            gc.record_failure = original_record_failure
+
+
 def test_known_git_branches_detached_head_and_ci():
     with tempfile.TemporaryDirectory(prefix="governance-detached-test-") as temp_dir:
         repo_root = Path(temp_dir)
@@ -542,6 +684,7 @@ def test_wildcard_glob_handling_regression():
 
 
 def main():
+    test_historical_ref_exemption_is_token_scoped()
     assert_equal("forbidden artifacts", gc.is_forbidden_repo_path("artifacts/governance_report.txt"), True)
     assert_equal("forbidden runtime folder", gc.is_forbidden_repo_path(".agents/skills/dagger/SKILL.md"), True)
     assert_equal("allowed source file", gc.is_forbidden_repo_path("skills/arbiter/SKILL.md"), False)
@@ -572,6 +715,7 @@ def main():
     test_codex_parity_normalizes_only_approved_reference_depths()
     test_repo_memory_path_check()
     test_active_branch_memory_path_exception()
+    test_explicit_historical_git_references_without_current_refs()
     test_known_git_branches_detached_head_and_ci()
     test_isolated_github_head_ref_and_ref_name_rejection()
     test_git_enumeration_failure_fail_closed()
