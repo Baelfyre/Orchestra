@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from hashlib import sha256
 import json
 import re
@@ -503,6 +503,48 @@ def _stronger(current: str, explicit: object, ordered: tuple[str, ...], field_na
     if candidate not in ordered:
         raise ValueError(f"{field_name} is invalid")
     return ordered[max(ordered.index(current), ordered.index(candidate))]
+
+
+def _reconcile_task_profile_claim(
+    derived: TaskProfile,
+    claim: TaskProfile,
+) -> TaskProfile:
+    """Merge an untrusted profile claim upward into prompt-derived classification."""
+
+    if not isinstance(derived, TaskProfile) or not isinstance(claim, TaskProfile):
+        raise TypeError("profile reconciliation requires TaskProfile values")
+    risk = max((derived.risk_level, claim.risk_level), key=RISK_ORDER.index)
+    mode = max((derived.execution_mode, claim.execution_mode), key=MODE_ORDER.index)
+
+    def union(left: tuple[str, ...], right: tuple[str, ...]) -> tuple[str, ...]:
+        return tuple(dict.fromkeys((*left, *right)))
+
+    return replace(
+        derived,
+        execution_mode=mode,
+        risk_level=risk,
+        authority_domains=union(derived.authority_domains, claim.authority_domains),
+        dependency_depth=max(derived.dependency_depth, claim.dependency_depth),
+        independent_subtasks=max(derived.independent_subtasks, claim.independent_subtasks),
+        parallelizable=derived.parallelizable or claim.parallelizable,
+        mutation_required=derived.mutation_required or claim.mutation_required,
+        implementation_required=derived.implementation_required or claim.implementation_required,
+        validation_required=derived.validation_required or claim.validation_required,
+        transition_required=derived.transition_required or claim.transition_required,
+        external_state_required=derived.external_state_required or claim.external_state_required,
+        protected_action_required=(
+            derived.protected_action_required or claim.protected_action_required
+        ),
+        # Profile metadata is classification input and cannot supply protected authority.
+        protected_action_authorized=derived.protected_action_authorized,
+        critic_owner=derived.critic_owner or claim.critic_owner,
+        critic_domain=derived.critic_domain or claim.critic_domain,
+        reentry_specialists=union(derived.reentry_specialists, claim.reentry_specialists),
+        human_gate_requirements=union(
+            derived.human_gate_requirements,
+            claim.human_gate_requirements,
+        ),
+    )
 
 
 def _stable_task_id(prompt: str, source_identity: str) -> str:

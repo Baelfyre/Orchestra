@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+# @codebase_provenance_JEO
+# @codebase_rights_JEO
+
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from enum import Enum
@@ -8,6 +11,7 @@ import json
 import re
 
 from .errors import RuntimeContractError, RuntimeInitializationError
+from .application.ports.specialist_execution import ReadOnlyWorkspaceProvider
 from .interfaces import ISpecialistExecutionEngine
 from .lifecycle import LifecycleState
 from .services import ContextAssembler, RuntimeComposition, RuntimeOperationResult
@@ -289,6 +293,7 @@ class ProviderSpecialistRuntimeExecutor(SpecialistRuntimeExecutor):
         *,
         execution_engine: IProviderExecutionEngine,
         provider_requirement: ProviderExecutionRequirement | None = None,
+        read_only_workspace_provider: ReadOnlyWorkspaceProvider | None = None,
     ) -> None:
         if not isinstance(execution_engine, IProviderExecutionEngine):
             raise RuntimeInitializationError(
@@ -318,6 +323,7 @@ class ProviderSpecialistRuntimeExecutor(SpecialistRuntimeExecutor):
             composition,
             execution_engine=execution_engine,
             execution_mode=SpecialistExecutionMode.HOST_NATIVE,
+            read_only_workspace_provider=read_only_workspace_provider,
         )
 
     @property

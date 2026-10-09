@@ -4,6 +4,11 @@ import json
 from pathlib import Path
 from typing import Any
 
+from .domain.execution.operation_contracts import (
+    DEFENSIVE_REVIEW_HOST_PROFILE_ID,
+    DEFENSIVE_SECURITY_REVIEW,
+    operation_contract_for_route,
+)
 from .repositories import ManifestRepository, SkillSourceRepository
 
 SPECIALIST_REGISTRY_SCHEMA_VERSION = "orchestra.specialist-registry.v1"
@@ -425,6 +430,25 @@ def machine_contract_errors(root: Path | str | None = None) -> tuple[str, ...]:
             unknown = set(rule.get("skill_slugs", [])) - specialist_ids
             if unknown:
                 errors.append(f"GOVERNANCE_RULE_UNKNOWN_SPECIALIST:{rule_id}:{','.join(sorted(unknown))}")
+            if "review_only_exceptions" in rule:
+                exceptions = rule.get("review_only_exceptions")
+                valid_exception = (
+                    rule_id == "high-risk-skill-approval"
+                    and isinstance(exceptions, list)
+                    and len(exceptions) == 1
+                    and isinstance(exceptions[0], dict)
+                    and set(exceptions[0]) == {
+                        "operation_id", "command_name", "skill_slug", "host_profile_id"
+                    }
+                    and exceptions[0].get("operation_id") == DEFENSIVE_SECURITY_REVIEW.operation_id
+                    and exceptions[0].get("command_name") == "security-check"
+                    and exceptions[0].get("skill_slug") == "cipher"
+                    and exceptions[0].get("host_profile_id") == DEFENSIVE_REVIEW_HOST_PROFILE_ID
+                    and operation_contract_for_route("security-check", "cipher")
+                    == DEFENSIVE_SECURITY_REVIEW
+                )
+                if not valid_exception:
+                    errors.append(f"GOVERNANCE_REVIEW_ONLY_EXCEPTION_INVALID:{rule_id}")
         compatibility = policy.get("compatibility_rules", {})
         if not isinstance(compatibility, dict) or set(compatibility) != set(decisions):
             errors.append("GOVERNANCE_COMPATIBILITY_DECISION_SET_MISMATCH")

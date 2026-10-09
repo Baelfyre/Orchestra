@@ -1,12 +1,16 @@
 from __future__ import annotations
 
+# @codebase_provenance_JEO
+# @codebase_rights_JEO
+
 from collections.abc import Callable
 from pathlib import Path
 from typing import TextIO
 from uuid import uuid4
 
+from .application.ports.specialist_execution import ReadOnlyWorkspaceProvider
 from .factories import AdapterFactory
-from .interfaces import IIDEAdapter, ISpecialistExecutionEngine
+from .interfaces import IIDEAdapter, IReadOnlySpecialistExecutionEngine, ISpecialistExecutionEngine
 from .mcp_transport import McpToolTransport, RuntimeFactory
 from .repositories import ManifestRepository, SkillSourceRepository
 from .services import (
@@ -20,7 +24,7 @@ from .services import (
 from .specialist_execution import SpecialistExecutionMode, SpecialistRuntimeExecutor
 
 
-SpecialistExecutionEngineFactory = Callable[[], ISpecialistExecutionEngine]
+SpecialistExecutionEngineFactory = Callable[[], ISpecialistExecutionEngine | IReadOnlySpecialistExecutionEngine]
 
 
 def build_mcp_specialist_runtime_factory(
@@ -29,6 +33,7 @@ def build_mcp_specialist_runtime_factory(
     execution_engine_factory: SpecialistExecutionEngineFactory,
     execution_mode: SpecialistExecutionMode = SpecialistExecutionMode.DETERMINISTIC_TEST_ENGINE,
     backing_adapter: str = "codex",
+    read_only_workspace_provider: ReadOnlyWorkspaceProvider | None = None,
 ) -> RuntimeFactory:
     """Build an MCP runtime that explicitly opts into a specialist execution engine.
 
@@ -55,8 +60,8 @@ def build_mcp_specialist_runtime_factory(
             run_id=f"mcp-{uuid4().hex}",
         )
         engine = execution_engine_factory()
-        if not isinstance(engine, ISpecialistExecutionEngine):
-            raise TypeError("execution_engine_factory must return ISpecialistExecutionEngine")
+        if not isinstance(engine, (ISpecialistExecutionEngine, IReadOnlySpecialistExecutionEngine)):
+            raise TypeError("execution_engine_factory must return ISpecialistExecutionEngine or IReadOnlySpecialistExecutionEngine")
         executor = SpecialistRuntimeExecutor(
             skill_registry,
             RouterService(skill_registry),
@@ -65,6 +70,7 @@ def build_mcp_specialist_runtime_factory(
             composition,
             execution_engine=engine,
             execution_mode=mode,
+            read_only_workspace_provider=read_only_workspace_provider,
         )
         adapter = AdapterFactory.create(adapter_name, root)
         return executor, adapter
@@ -78,6 +84,7 @@ def build_mcp_stdio_transport_with_specialist_execution(
     execution_engine_factory: SpecialistExecutionEngineFactory,
     execution_mode: SpecialistExecutionMode = SpecialistExecutionMode.DETERMINISTIC_TEST_ENGINE,
     backing_adapter: str = "codex",
+    read_only_workspace_provider: ReadOnlyWorkspaceProvider | None = None,
     error_stream: TextIO | None = None,
 ) -> McpToolTransport:
     """Explicit opt-in MCP transport builder for typed specialist execution."""
@@ -93,6 +100,7 @@ def build_mcp_stdio_transport_with_specialist_execution(
             execution_engine_factory=execution_engine_factory,
             execution_mode=execution_mode,
             backing_adapter=backing_adapter,
+            read_only_workspace_provider=read_only_workspace_provider,
         ),
         server_name="orchestra",
         server_version=server_version,

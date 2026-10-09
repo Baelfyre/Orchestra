@@ -99,11 +99,14 @@ Trusted RuntimeComposition
 -> ExecutionResult
 ```
 
+The `security-check`/Cipher defensive-review route uses a distinct operation contract before governance validation. Only the registered `defensive-security-review` contract paired with the trusted `orchestra.specialist.read-only-review.v1` host profile receives `REVIEW_ONLY_ELIGIBLE`. The opt-in profile requires a dedicated `IReadOnlySpecialistExecutionEngine` and a trusted content-addressed workspace provider. The engine receives only the read-only facade, and both request and result bind the workspace snapshot digest. This disposition permits defensive assessment only; it is neither `APPROVED` nor an `AuthorizationDecision`. The `cipher` effectful operation still requires verified receipt authority and remains blocked in the current runtime.
+
 No engine is inferred from adapter name, MCP client metadata, prompt content, provider availability, environment discovery, or installed host state.
 
-The implementation is additive:
+The operation-boundary implementation is additive:
 
-- existing `RuntimeExecutor` remains unchanged;
+- the default runtime still receives no read-only host profile and remains fail-closed for the high-risk Cipher route;
+- `RuntimeExecutor` passes the operation contract resolved from the trusted route binding to governance validation; it never reads operation identity or profile from task text or client metadata;
 - `SpecialistRuntimeExecutor` subclasses it for explicit opt-in execution;
 - existing `build_mcp_runtime_factory(...)` remains route-only;
 - existing `build_mcp_stdio_transport(...)` remains route-only;

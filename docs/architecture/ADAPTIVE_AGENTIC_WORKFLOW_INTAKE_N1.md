@@ -20,7 +20,7 @@ WORKFLOW_TOPOLOGY_CHANGE != AUTHORITY_EXPANSION
 
 ## N1: Automatic TaskProfile derivation
 
-When Conductor receives an ordinary request and no explicit `agentic_task_profile` is supplied, RouterService derives a TaskProfile from:
+When Conductor receives a request, RouterService derives a TaskProfile from:
 
 - the user request text;
 - existing canonical `risk_mode` constraints and namespaced `agentic_execution_mode` / `agentic_risk_level` constraints;
@@ -39,7 +39,8 @@ The policy is deliberately calibratable. It stores domain and operation signals 
 - Host `execution_mode` values used by execution engines, such as `HOST_NATIVE`, are not interpreted as AWF risk modes. Canonical `risk_mode` and namespaced AWF mode/risk hints may escalate the derived result but cannot downgrade it.
 - Protected-action authorization is never inferred from text.
 - Unknown domains fail to `ROUTING` with Conductor as owner instead of guessing.
-- Explicit valid structured TaskProfiles remain supported.
+- A supplied `agentic_task_profile` is treated as an untrusted classification claim and reconciled with prompt-derived signals. Risk resolves upward, required operation flags are preserved, and the profile cannot supply protected-action authorization.
+- A supplied profile cannot suppress prompt-derived protected-action or risk signals.
 - Automatic derivation can be disabled with exact boolean `agentic_workflow_auto = false`.
 
 ## N2: Selection trace

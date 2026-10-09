@@ -168,7 +168,12 @@ class RecordingGovernance(GovernanceValidator):
         self.sequence = sequence
         self.allowed = allowed
 
-    def validate(self, decision: RouteDecision, context: ContextPackage) -> ValidationResult:
+    def validate(
+        self,
+        decision: RouteDecision,
+        context: ContextPackage,
+        operation_context=None,
+    ) -> ValidationResult:
         self.sequence.append("governance")
         if self.allowed:
             return ValidationResult(True, "NOT_REQUIRED")

@@ -2434,6 +2434,53 @@
       "exact_path_count": 47,
       "candidate_pr": 939,
       "authority_note": "Exact-scope separation is not an assurance bypass and grants no merge, F3, TypeSafe/provider, release, deployment, production, or protected-policy authority."
+    },
+    "issue_937_governed_defensive_review_f1": {
+      "status": "IMPLEMENTATION_CANDIDATE_PENDING_CANONICALIZATION",
+      "purpose": "Provide typed operation contracts, trusted governance receipt verification, and a bounded read-only Cipher defensive-review path without granting effectful execution authority.",
+      "machine_sources": [
+        "machine/governance/policy.v1.json",
+        "machine/schemas/governance-receipt.v1.schema.json",
+        "machine/schemas/specialist-review-result.v1.schema.json"
+      ],
+      "human_sources": [
+        "docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_ARCHITECTURE.md",
+        "docs/developer/MCP_STDIO_TRANSPORT.md"
+      ],
+      "runtime_surfaces": [
+        "orchestra_runtime/domain/execution/operation_contracts.py",
+        "orchestra_runtime/domain/governance/receipts.py",
+        "orchestra_runtime/application/ports/governance_receipts.py",
+        "orchestra_runtime/application/use_cases/verify_governance_receipt.py",
+        "orchestra_runtime/specialist_execution.py"
+      ],
+      "validation_surface": [
+        "tests/runtime/test_governance_receipt_foundations.py",
+        "tests/runtime/test_specialist_operation_boundaries.py",
+        "tests/runtime/test_specialist_snapshot_binding.py"
+      ],
+      "authority_note": "The bounded defensive-review path is review-only evidence. Receipt verification, host capability, or successful review cannot grant effectful specialist execution, merge, release, deployment, provider, production, or protected-policy authority."
+    },
+    "issue_937_evidence_gated_decision_hierarchy_f2": {
+      "status": "IMPLEMENTATION_CANDIDATE_PENDING_CANONICALIZATION",
+      "purpose": "Compose task-risk, assurance requirements, specialist evidence, governance inputs, and Arbiter transition ownership into an evidence-gated non-authorizing decision hierarchy.",
+      "machine_sources": [
+        "machine/adaptive/evidence-gated-decision-hierarchy.v1.json",
+        "machine/schemas/evidence-gated-decision-hierarchy.v1.schema.json"
+      ],
+      "human_sources": [
+        "docs/architecture/EVIDENCE_GATED_DECISION_HIERARCHY.md",
+        "docs/architecture/ADAPTIVE_AGENTIC_WORKFLOW_INTAKE_N1.md"
+      ],
+      "runtime_surfaces": [
+        "orchestra_runtime/domain/adaptive/agentic_workflow.py",
+        "orchestra_runtime/application/use_cases/agentic_workflow.py"
+      ],
+      "validation_surface": [
+        "tests/runtime/test_evidence_gated_decision_hierarchy.py",
+        "tests/runtime/test_agentic_workflow.py"
+      ],
+      "authority_note": "Decision-hierarchy output is evidence and routing/assurance state only. It cannot create protected-action authority, replace required assurance, alter protected policy, or bypass Arbiter transition ownership."
     }
   },
   "machine_scan_order": [
@@ -2918,7 +2965,9 @@
     "prai_contract": "machine/adaptive/prai-post-run-assurance.v1.json",
     "prai_schema": "machine/schemas/prai-post-run-assurance.v1.schema.json",
     "prai_validator": "scripts/validation/validate_prai.py",
-    "prai_workflow_dispatch_baseline": "PRAI workflow_dispatch requires the explicit approved_base_sha input bound to ORCHESTRA_APPROVED_BASE_SHA; pull_request comparison identity remains event-derived."
+    "prai_workflow_dispatch_baseline": "PRAI workflow_dispatch requires the explicit approved_base_sha input bound to ORCHESTRA_APPROVED_BASE_SHA; pull_request comparison identity remains event-derived.",
+    "issue_937_f1_governance_receipt_tests": "tests/runtime/test_governance_receipt_foundations.py",
+    "issue_937_f2_evidence_hierarchy_tests": "tests/runtime/test_evidence_gated_decision_hierarchy.py"
   },
   "continuity": {
     "repository_human_state": "PROJECT_STATE.md",

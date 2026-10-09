@@ -90,16 +90,26 @@ def test_machine_validation_rules_are_runtime_governance_defaults():
         for record in machine_rules
         if record.get("dry_run_required") is True
     }
-    normalized_runtime = [
-        {
+    normalized_runtime = []
+    for rule in runtime_rules:
+        normalized = {
             "rule_id": rule.name,
             "skill_slugs": list(rule.skill_slugs),
             "command_names": list(rule.command_names),
             "validator_key": rule.validator_key,
             "dry_run_required": rule.name in dry_run_required,
         }
-        for rule in runtime_rules
-    ]
+        if rule.review_only_exceptions:
+            normalized["review_only_exceptions"] = [
+                {
+                    "operation_id": exception.operation_id,
+                    "host_profile_id": exception.host_profile_id,
+                    "skill_slug": exception.skill_slug,
+                    "command_name": exception.command_name,
+                }
+                for exception in rule.review_only_exceptions
+            ]
+        normalized_runtime.append(normalized)
     assert list(machine_rules) == normalized_runtime
 
 

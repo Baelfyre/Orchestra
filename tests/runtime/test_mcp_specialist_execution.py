@@ -1,8 +1,14 @@
 from __future__ import annotations
 
+import inspect
 from pathlib import Path
 
-from orchestra_runtime.interfaces import ISpecialistExecutionEngine
+from orchestra_runtime.domain.execution.operation_contracts import (
+    ReadOnlySpecialistExecutionRequest,
+    SpecialistReviewResult,
+    SpecialistReviewStatus,
+)
+from orchestra_runtime.interfaces import IReadOnlySpecialistExecutionEngine, ISpecialistExecutionEngine
 from orchestra_runtime.mcp_specialist_execution import (
     build_mcp_specialist_runtime_factory,
     build_mcp_stdio_transport_with_specialist_execution,
@@ -54,6 +60,61 @@ class McpDeterministicEngine(ISpecialistExecutionEngine):
             output=f"mcp-deterministic:{request.specialist}:{request.command_name}:{request.task_input}",
             evidence_refs=("fixture:mcp-deterministic-engine",),
             side_effect_class=SpecialistSideEffectClass.NONE,
+        )
+
+
+class McpReadOnlyWorkspace:
+    snapshot_digest = "e" * 64
+    repository_root: Path | None = None
+    paths: tuple[str, ...] = ()
+
+    def list_paths(self, relative_path: str = "") -> tuple[str, ...]:
+        return self.paths
+
+    def read_text(self, relative_path: str, *, max_bytes: int) -> str:
+        assert max_bytes > 0
+        assert self.repository_root is not None
+        return (self.repository_root / relative_path).read_text(encoding="utf-8")
+
+    def read_bytes(self, relative_path: str, *, max_bytes: int) -> bytes:
+        assert max_bytes > 0
+        assert self.repository_root is not None
+        return (self.repository_root / relative_path).read_bytes()
+
+
+class McpReadOnlyWorkspaceProvider:
+    snapshot_digest = "e" * 64
+
+    def __init__(self) -> None:
+        self.calls = 0
+        self.workspace = McpReadOnlyWorkspace()
+
+    def for_review(self, repository_root: Path, expected_paths: tuple[str, ...]):
+        self.calls += 1
+        self.workspace.repository_root = repository_root
+        self.workspace.paths = expected_paths
+        return self.workspace
+
+
+class McpReadOnlyEngine(IReadOnlySpecialistExecutionEngine):
+    def __init__(self) -> None:
+        self.requests: list[ReadOnlySpecialistExecutionRequest] = []
+
+    def execute_read_only(self, request, workspace):
+        self.requests.append(request)
+        assert not hasattr(workspace, "snapshot_digest")
+        paths = workspace.list_paths()
+        assert paths
+        assert isinstance(workspace.read_text(paths[0], max_bytes=1024 * 1024), str)
+        assert isinstance(workspace.list_changes(), tuple)
+        assert not hasattr(workspace, "write_text")
+        assert not hasattr(workspace, "source")
+        return SpecialistReviewResult.create(
+            request,
+            SpecialistReviewStatus.FINDINGS,
+            "Authorization accepts every user.",
+            ("evidence:src/auth.py:1",),
+            ("Authorization does not verify the user.",),
         )
 
 
@@ -111,6 +172,29 @@ def test_opt_in_mcp_builder_returns_deterministic_engine_output() -> None:
     assert request.skill_source_path == "skills/scribe/SKILL.md"
 
 
+def test_opt_in_mcp_builder_runs_only_trusted_snapshot_bound_read_only_cipher_review() -> None:
+    engine = McpReadOnlyEngine()
+    provider = McpReadOnlyWorkspaceProvider()
+    transport = build_mcp_stdio_transport_with_specialist_execution(
+        ROOT,
+        execution_engine_factory=lambda: engine,
+        read_only_workspace_provider=provider,
+        backing_adapter="codex",
+    )
+
+    response = transport.handle_message(
+        _call("security-check", "review the authorization boundary")
+    )
+    result = response["result"]
+
+    assert result["isError"] is False
+    assert len(engine.requests) == 1
+    assert provider.calls == 1
+    assert engine.requests[0].operation_id == "defensive-security-review"
+    assert engine.requests[0].workspace_snapshot_digest != provider.snapshot_digest
+    assert "workspace_snapshot_digest" in result["content"][0]["text"]
+
+
 def test_mcp_client_metadata_and_prompt_cannot_select_execution_engine() -> None:
     McpDeterministicEngine.requests.clear()
     route_only = build_mcp_stdio_transport(ROOT, backing_adapter="codex")
@@ -136,3 +220,12 @@ def test_opt_in_runtime_factory_requires_explicit_engine_factory() -> None:
         assert "execution_engine_factory" in str(exc)
     else:
         raise AssertionError("missing explicit engine factory must fail closed")
+
+
+def test_specialist_mcp_factories_do_not_accept_receipt_authorizers() -> None:
+    builders = (
+        build_mcp_specialist_runtime_factory,
+        build_mcp_stdio_transport_with_specialist_execution,
+    )
+    for builder in builders:
+        assert "governance_receipt_authorizer" not in inspect.signature(builder).parameters

@@ -20,6 +20,8 @@ Validation and machine-readable evidence
 Arbiter transition / human gate / next bounded action
 ```
 
+For the composed assessment-to-revalidation sequence, see [Evidence-Gated Decision Hierarchy](EVIDENCE_GATED_DECISION_HIERARCHY.md).
+
 ## Architectural boundaries
 
 ### Routing is not authority

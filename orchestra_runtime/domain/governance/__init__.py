@@ -1,5 +1,20 @@
 """Governance-domain semantics for Orchestra runtime architecture."""
 
+from .receipts import (
+    GOVERNANCE_RECEIPT_SCHEMA_VERSION,
+    AuthorizationDecision,
+    GovernanceReceipt,
+    GovernanceReceiptAuditEvent,
+    GovernanceReceiptRequest,
+    GovernanceReceiptVerification,
+    GovernanceValidationResult,
+    GovernanceValidationStatus,
+    ReceiptConsumptionSemantics,
+    ReceiptProvenance,
+    ResolvedGovernanceReceipt,
+    evidence_digest,
+)
+
 # @codebase_provenance_JEO
 # @codebase_rights_JEO
 
@@ -49,6 +64,18 @@ from .covenant import (
 )
 
 __all__ = [
+    "GOVERNANCE_RECEIPT_SCHEMA_VERSION",
+    "AuthorizationDecision",
+    "GovernanceReceipt",
+    "GovernanceReceiptAuditEvent",
+    "GovernanceReceiptRequest",
+    "GovernanceReceiptVerification",
+    "GovernanceValidationResult",
+    "GovernanceValidationStatus",
+    "ReceiptConsumptionSemantics",
+    "ReceiptProvenance",
+    "ResolvedGovernanceReceipt",
+    "evidence_digest",
     "GOVERNANCE_KERNEL_SCHEMA_VERSION",
     "PREEXECUTION_SCHEMA_VERSION",
     "ArbiterKernelResult",

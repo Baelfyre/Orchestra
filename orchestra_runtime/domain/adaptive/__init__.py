@@ -25,7 +25,11 @@ from .assurance import (
     validate_development_mode,
     validate_product_complete,
 )
-from .agentic_workflow import STOP_CONDITIONS, select_agentic_workflow
+from .agentic_workflow import (
+    STOP_CONDITIONS,
+    minimum_task_audit_depth,
+    select_agentic_workflow,
+)
 from .gate_coverage import (
     AQ6_AUTHORITY_MODEL,
     AQ6_CONTRACT_SCHEMA_VERSION,
@@ -400,6 +404,7 @@ __all__ = [
     "TransportCapabilityEvidence",
     "parse_authority_view",
     "select_agentic_workflow",
+    "minimum_task_audit_depth",
     "select_mode_for_evidence",
     "transition_mode",
     "validate_completion_escalation",

@@ -1,9 +1,23 @@
 from __future__ import annotations
 
+# @codebase_provenance_JEO
+# @codebase_rights_JEO
+
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
-from .models import Command, ContextPackage, ExecutionResult, RouteDecision, Skill, ValidationResult
+from .application.ports.specialist_execution import ReadOnlyWorkspace
+from .domain.execution.operation_contracts import OperationContract, ReadOnlySpecialistExecutionRequest, SpecialistReviewResult
+from .domain.governance.receipts import AuthorizationDecision
+from .models import (
+    Command,
+    ContextPackage,
+    ExecutionResult,
+    OperationGovernanceContext,
+    RouteDecision,
+    Skill,
+    ValidationResult,
+)
 
 if TYPE_CHECKING:
     from .authority import AuthorityDecision, AuthorityProvenance, AuthorityScope, Constraint, TargetSelector
@@ -55,7 +69,12 @@ class IRouterService(ABC):
 
 class IGovernanceValidator(ABC):
     @abstractmethod
-    def validate(self, decision: RouteDecision, context: ContextPackage) -> ValidationResult:
+    def validate(
+        self,
+        decision: RouteDecision,
+        context: ContextPackage,
+        operation_context: OperationGovernanceContext | None = None,
+    ) -> ValidationResult:
         raise NotImplementedError
 
 
@@ -210,4 +229,25 @@ class ISpecialistExecutionEngine(ABC):
 
     @abstractmethod
     def execute(self, request: SpecialistExecutionRequest) -> SpecialistExecutionReceipt:
+        raise NotImplementedError
+
+class IReadOnlySpecialistExecutionEngine(ABC):
+    """Engine with only the defensive review entry point."""
+
+    @abstractmethod
+    def execute_read_only(
+        self, request: ReadOnlySpecialistExecutionRequest, workspace: ReadOnlyWorkspace
+    ) -> SpecialistReviewResult:
+        raise NotImplementedError
+
+class IProtectedSpecialistExecutionEngine(ISpecialistExecutionEngine, ABC):
+    """Effectful security engine that consumes a verified, exact-scope decision."""
+
+    @abstractmethod
+    def execute_authorized(
+        self,
+        request: SpecialistExecutionRequest,
+        operation: OperationContract,
+        authorization: AuthorizationDecision,
+    ) -> SpecialistExecutionReceipt:
         raise NotImplementedError

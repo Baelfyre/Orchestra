@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+# @codebase_provenance_JEO
+# @codebase_rights_JEO
+
 from collections.abc import Callable, Iterable
 from copy import deepcopy
 from dataclasses import dataclass
@@ -46,8 +49,13 @@ from .delegation import (
     delegation_rejected_event,
 )
 from .application.use_cases.agentic_workflow import (
-    plan_agentic_workflow,
     plan_agentic_workflow_from_intake,
+)
+from .domain.execution.operation_contracts import (
+    DEFENSIVE_REVIEW_HOST_PROFILE_ID,
+    DEFENSIVE_SECURITY_REVIEW,
+    OperationContract,
+    operation_contract_for_route,
 )
 from .domain.orchestration.ui_fidelity import classify_ui_fidelity
 from .infrastructure.machine.agentic_workflow import load_agentic_workflow_contracts
@@ -103,6 +111,8 @@ from .models import (
     ContextPackage,
     ExecutionResult,
     GovernanceRule,
+    OperationGovernanceContext,
+    ReviewOnlyOperationException,
     RouteDecision,
     RunIdentity,
     RuntimeAuditEvent,
@@ -153,6 +163,33 @@ def _default_governance_rules(
         validator_key = str(record.get("validator_key", "")).strip()
         skill_slugs = tuple(str(item).strip() for item in record.get("skill_slugs", ()))
         command_names = tuple(str(item).strip() for item in record.get("command_names", ()))
+        raw_exceptions = record.get("review_only_exceptions", ())
+        if not isinstance(raw_exceptions, (tuple, list)):
+            raise RuntimeInitializationError(
+                "machine governance review-only exceptions are invalid",
+                "INVALID_RUNTIME_POLICY",
+                {"rule_id": rule_id or "<missing>"},
+            )
+        if len(raw_exceptions) > 1:
+            raise RuntimeInitializationError(
+                "machine governance permits only one exact review-only exception",
+                "INVALID_RUNTIME_POLICY",
+                {"rule_id": rule_id or "<missing>"},
+            )
+        review_only_exceptions: list[ReviewOnlyOperationException] = []
+        try:
+            for item in raw_exceptions:
+                if not isinstance(item, dict) or set(item) != {
+                    "operation_id", "command_name", "skill_slug", "host_profile_id"
+                }:
+                    raise ValueError("exception fields do not match the strict policy contract")
+                review_only_exceptions.append(ReviewOnlyOperationException(**item))
+        except (TypeError, ValueError) as exc:
+            raise RuntimeInitializationError(
+                "machine governance review-only exception is invalid",
+                "INVALID_RUNTIME_POLICY",
+                {"rule_id": rule_id or "<missing>"},
+            ) from exc
         if (
             not rule_id
             or rule_id in seen_rule_ids
@@ -165,6 +202,12 @@ def _default_governance_rules(
                 "INVALID_RUNTIME_POLICY",
                 {"rule_id": rule_id or "<missing>"},
             )
+        if review_only_exceptions and rule_id != "high-risk-skill-approval":
+            raise RuntimeInitializationError(
+                "review-only exception is only permitted on the high-risk approval rule",
+                "INVALID_RUNTIME_POLICY",
+                {"rule_id": rule_id},
+            )
         seen_rule_ids.add(rule_id)
         rules.append(
             GovernanceRule(
@@ -173,6 +216,7 @@ def _default_governance_rules(
                 skill_slugs=skill_slugs,
                 command_names=command_names,
                 validator_key=validator_key,
+                review_only_exceptions=tuple(review_only_exceptions),
             )
         )
     if not rules:
@@ -225,8 +269,12 @@ class RuntimePolicyBinding:
         object.__setattr__(self, "authority_constraints", authority_constraints)
         object.__setattr__(self, "capability_constraints", capability_constraints)
 
+    @property
+    def operation_contract(self) -> OperationContract | None:
+        return operation_contract_for_route(self.command_name, self.skill_slug)
+
     def to_dict(self) -> dict[str, object]:
-        return {
+        data: dict[str, object] = {
             "command_name": self.command_name,
             "skill_slug": self.skill_slug,
             "authority_target": self.authority_target.to_dict(),
@@ -236,6 +284,10 @@ class RuntimePolicyBinding:
             "authority_constraints": [item.to_dict() for item in self.authority_constraints],
             "capability_constraints": [item.to_dict() for item in self.capability_constraints],
         }
+        contract = self.operation_contract
+        if contract is not None:
+            data["operation_contract_id"] = contract.operation_id
+        return data
 
 
 @dataclass(frozen=True, slots=True)
@@ -395,33 +447,27 @@ class RouterService(IRouterService):
                     for registered in self._skill_registry.load_skills()
                 ]
             }
-            if raw_task_profile is not None:
-                if not isinstance(raw_task_profile, dict):
-                    raise ValueError("agentic_task_profile must be a mapping")
-                agentic_plan = plan_agentic_workflow(
-                    task_profile=raw_task_profile,
-                    specialist_authority_view=contracts["authority_view"],
-                    specialist_registry=registry,
-                    execution_budget=execution_budget,
-                )
-            else:
-                source_identity = str(
-                    context.metadata.get("current_source_identity")
-                    or f"{context.project_root}@{context.manifest_version}"
-                ).strip()
-                agentic_plan = plan_agentic_workflow_from_intake(
-                    prompt=command.raw_input,
-                    metadata=context.metadata,
-                    current_source_identity=source_identity,
-                    derivation_policy=contracts["derivation_policy"],
-                    specialist_authority_view=contracts["authority_view"],
-                    specialist_registry=registry,
-                    execution_budget=execution_budget,
-                )
+            if raw_task_profile is not None and not isinstance(raw_task_profile, dict):
+                raise ValueError("agentic_task_profile must be a mapping")
+            source_identity = str(
+                context.metadata.get("current_source_identity")
+                or f"{context.project_root}@{context.manifest_version}"
+            ).strip()
+            agentic_plan = plan_agentic_workflow_from_intake(
+                prompt=command.raw_input,
+                metadata=context.metadata,
+                current_source_identity=source_identity,
+                derivation_policy=contracts["derivation_policy"],
+                specialist_authority_view=contracts["authority_view"],
+                specialist_registry=registry,
+                execution_budget=execution_budget,
+                task_profile_claim=raw_task_profile,
+            )
 
             route_metadata["agentic_task_profile"] = agentic_plan["task_profile"]
             route_metadata["agentic_task_profile_source"] = agentic_plan["task_profile_source"]
             route_metadata["agentic_workflow_profile"] = agentic_plan["workflow_profile"]
+            route_metadata["agentic_assurance_plan"] = agentic_plan["assurance_plan"]
             route_metadata["agentic_critic_contract"] = agentic_plan["critic_contract"]
             route_metadata["agentic_selection_trace"] = agentic_plan["selection_trace"]
             route_metadata["agentic_workflow_telemetry"] = agentic_plan["telemetry"]
@@ -474,9 +520,15 @@ class GovernanceValidator(IGovernanceValidator):
             rule.name for rule in self._rules if rule.name in dry_run_required_rules
         )
 
-    def validate(self, decision: RouteDecision, context: ContextPackage) -> ValidationResult:
+    def validate(
+        self,
+        decision: RouteDecision,
+        context: ContextPackage,
+        operation_context: OperationGovernanceContext | None = None,
+    ) -> ValidationResult:
         triggered_rules: list[str] = []
         reasons: list[str] = []
+        review_only_eligible = False
         for rule in self._rules:
             skill_match = decision.skill_slug in rule.skill_slugs
             command_match = decision.command_name in rule.command_names
@@ -484,7 +536,32 @@ class GovernanceValidator(IGovernanceValidator):
                 continue
 
             triggered_rules.append(rule.name)
-            if rule.validator_key and not context.metadata.get(rule.validator_key):
+            relevant_exceptions = tuple(
+                exception
+                for exception in rule.review_only_exceptions
+                if decision.command_name.casefold() == exception.command_name
+                and decision.skill_slug.casefold() == exception.skill_slug
+            )
+            exception_satisfied = False
+            if relevant_exceptions:
+                exception_satisfied = any(
+                    decision.command_name.casefold() == exception.command_name
+                    and decision.skill_slug.casefold() == exception.skill_slug
+                    and rule.name == "high-risk-skill-approval"
+                    and isinstance(operation_context, OperationGovernanceContext)
+                    and operation_context.operation_contract == DEFENSIVE_SECURITY_REVIEW
+                    and operation_context.operation_contract.operation_id == exception.operation_id
+                    and operation_context.host_profile_id == exception.host_profile_id
+                    and exception.host_profile_id == DEFENSIVE_REVIEW_HOST_PROFILE_ID
+                    and operation_contract_for_route(decision.command_name, decision.skill_slug)
+                    == DEFENSIVE_SECURITY_REVIEW
+                    for exception in relevant_exceptions
+                )
+                if exception_satisfied:
+                    review_only_eligible = True
+                else:
+                    reasons.append(f"{rule.name} requires the exact trusted read-only review operation")
+            if rule.validator_key and not relevant_exceptions and not context.metadata.get(rule.validator_key):
                 reasons.append(f"{rule.name} blocked execution")
             if rule.name in self._dry_run_required_rules and not context.metadata.get("dry_run"):
                 reasons.append("destructive execution requires dry-run mode")
@@ -497,7 +574,11 @@ class GovernanceValidator(IGovernanceValidator):
                 evaluated_rules=tuple(triggered_rules),
             )
 
-        status = "APPROVED" if triggered_rules else "NOT_REQUIRED"
+        status = (
+            "REVIEW_ONLY_ELIGIBLE"
+            if review_only_eligible
+            else "APPROVED" if triggered_rules else "NOT_REQUIRED"
+        )
         return ValidationResult(
             allowed=True,
             status=status,
@@ -787,8 +868,6 @@ class RuntimeComposition:
             )
         object.__setattr__(self, "mode", mode)
         object.__setattr__(self, "delegation_decision_id", decision_id)
-
-
 def build_compatibility_composition(
     skill_registry: ISkillRegistry,
     audit_sink: IAuditSink,
@@ -913,6 +992,14 @@ class RuntimeExecutor(IRuntimeExecutor):
     @property
     def last_lifecycle_snapshot(self) -> LifecycleSnapshot | None:
         return self._last_lifecycle_snapshot
+
+    def _operation_governance_context(
+        self,
+        decision: RouteDecision,
+        binding: RuntimePolicyBinding,
+    ) -> OperationGovernanceContext | None:
+        contract = binding.operation_contract
+        return OperationGovernanceContext(contract) if contract is not None else None
 
     def execute(
         self,
@@ -1168,7 +1255,13 @@ class RuntimeExecutor(IRuntimeExecutor):
                 capability_decision.reason_code.value,
             )
 
-        validation = self._governance.validate(decision, context)
+        operation_contract = binding.operation_contract
+        operation_context = self._operation_governance_context(decision, binding)
+        validation = (
+            self._governance.validate(decision, context, operation_context)
+            if operation_context is not None
+            else self._governance.validate(decision, context)
+        )
         if not validation.allowed:
             output = self._build_output(adapter.adapter_name, decision, validation)
             return self._block(
@@ -1184,6 +1277,29 @@ class RuntimeExecutor(IRuntimeExecutor):
                 authority_decision.decision_id,
                 capability_decision.decision_id,
                 "GOVERNANCE_DENIED",
+            )
+
+        if operation_contract is not None and operation_contract.requires_verified_governance_receipt:
+            validation = ValidationResult(
+                False,
+                "BLOCKED_PENDING_VALIDATION",
+                ("protected execution requires a separately governed authorization path",),
+                validation.evaluated_rules,
+            )
+            output = self._build_output(adapter.adapter_name, decision, validation)
+            return self._block(
+                adapter.adapter_name,
+                command,
+                decision,
+                validation,
+                output,
+                context,
+                composition,
+                snapshot,
+                event_ids,
+                authority_decision.decision_id,
+                capability_decision.decision_id,
+                "TRUSTED_GOVERNANCE_AUTHORITY_REQUIRED",
             )
 
         activation = self._signal(
