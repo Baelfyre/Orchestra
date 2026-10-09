@@ -221,3 +221,18 @@ def test_provider_mcp_factories_do_not_accept_receipt_authorizers() -> None:
     )
     for builder in builders:
         assert "governance_receipt_authorizer" not in inspect.signature(builder).parameters
+
+def test_provider_requirement_serialization_covers_optional_identity_fields() -> None:
+    empty = ProviderExecutionRequirement()
+    assert empty.to_dict() == {"required_capabilities": []}
+
+    bound = ProviderExecutionRequirement(
+        required_provider_id="openai-codex",
+        required_model_id="gpt-test",
+        required_capabilities=(ProviderExecutionCapability.STRUCTURED_OUTPUT,),
+    )
+    assert bound.to_dict() == {
+        "required_capabilities": ["STRUCTURED_OUTPUT"],
+        "required_provider_id": "openai-codex",
+        "required_model_id": "gpt-test",
+    }

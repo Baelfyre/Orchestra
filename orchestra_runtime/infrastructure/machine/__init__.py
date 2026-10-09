@@ -1,1 +1,0 @@
-"""Machine-contract infrastructure adapters."""

@@ -1,3 +1,0 @@
-body { color: #000000; padding: 3rem; }
-.negative { color: #000000; padding: 3rem; }
-@media (min-width: 768px) { .negative { max-width: 100%; } }

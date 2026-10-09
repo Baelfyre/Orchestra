@@ -1,6 +1,0 @@
-interface:
-  display_name: "Dagger"
-  short_description: "Run gated adversarial resilience testing"
-  default_prompt: "Use $dagger to create a safety-gated negative and destructive testing plan without executing risky tests."
-policy:
-  allow_implicit_invocation: false

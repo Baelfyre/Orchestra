@@ -1,4 +1,0 @@
-interface:
-  display_name: "Scribe"
-  short_description: "Audit and compile project documentation"
-  default_prompt: "Use $scribe to audit this project documentation against its objective and available evidence."

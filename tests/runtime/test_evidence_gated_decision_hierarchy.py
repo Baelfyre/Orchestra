@@ -348,6 +348,6 @@ def test_terminal_reentry_and_single_candidate_parallel_branch_paths() -> None:
         )
     )
     profile = one_parallel_candidate["workflow_profile"]
-    assert "MULTI_AGENT" in profile["patterns"]
+    assert "MULTI_AGENT" in profile["selected_patterns"]
     assert profile["parallel_groups"] == []
     assert profile["concurrency_mode"] == "SEQUENTIAL_MULTI_AGENT"

@@ -1,4 +1,0 @@
-interface:
-  display_name: "Cipher"
-  short_description: "Review security and privacy risks defensively"
-  default_prompt: "Use $cipher to review security and privacy risks using only available evidence and defensive recommendations."

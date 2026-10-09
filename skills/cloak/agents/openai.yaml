@@ -1,4 +1,0 @@
-interface:
-  display_name: "Cloak"
-  short_description: "Review UI, UX, accessibility, and frontend experience"
-  default_prompt: "Use $cloak to review this interface for usability, accessibility, responsiveness, and frontend maintainability."
