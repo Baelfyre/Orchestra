@@ -654,4 +654,3 @@ def test_receipt_verifier_resolver_consumption_clock_and_authorizer_failure_bran
     ).authorize(
         SECURITY_SENSITIVE_EXECUTION, "run-execution",
     ).reason_code == "trusted_receipt_context_mismatch"
-

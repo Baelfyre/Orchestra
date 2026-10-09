@@ -326,4 +326,3 @@ def test_task_floor_and_unique_append_type_and_duplicate_branches() -> None:
     assert values == ["cipher"]
     _append_unique(values, "cloak")
     assert values == ["cipher", "cloak"]
-
