@@ -295,9 +295,10 @@ def get_memory_path_references(line):
 
 EXPLICIT_GIT_REF_CONTEXT_PATTERN = re.compile(
     r"(?:^|[;,|])\s*(?:[-*]\s*)?\*{0,2}"
-    r"(?:(?:Historical|Active|Remote|Current|Base|Target|Source)\s+)?"
-    r"(?:Git\s+)?(?:branch(?:\s+reference)?|ref(?:erence)?)"
-    r"(?:\s*/\s*(?:branch|ref(?:erence)?))?\*{0,2}\s*[:=]\s*"
+    r"(?:(?:(?:Historical|Active|Remote|Current|Base|Target|Source)\s+)?"
+    r"(?:Git\s+)?branch(?:\s+reference)?(?:\s*/\s*(?:branch|ref(?:erence)?))?"
+    r"|(?:(?:Historical|Active|Remote|Current|Base|Target|Source)\s+)?Git\s+ref(?:erence)?)"
+    r"\*{0,2}\s*[:=]\s*"
     r"(?:`(?P<quoted>[^`]+)`|(?P<plain>[^;,|\s]+))",
     re.IGNORECASE,
 )

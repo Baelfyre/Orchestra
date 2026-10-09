@@ -460,6 +460,13 @@ def test_historical_ref_exemption_is_token_scoped():
             "migration guide: `docs/adjacent_missing.md`\n"
             "Historical Branch: `docs/duplicate-old`; guide: `docs/duplicate-old`\n"
             "Historical branch with notes: `docs/ambiguous-old`; guide: `docs/ambiguous_missing.md`\n"
+            "Reference: docs/DOES_NOT_EXIST.md\n"
+            "Ref: scripts/does_not_exist.py\n"
+            "Source Reference: docs/missing.md\n"
+            "Target Reference: docs/target_missing.md\n"
+            "Git Reference: `docs/historical-branch`\n"
+            "Historical Git Ref: `feature/old-work`\n"
+            "Remote Branch: `docs/historical-branch`\n"
         )
         (repo_root / "SESSION_HANDOFF.md").write_text(memory_content, encoding="utf-8")
 
@@ -488,9 +495,20 @@ def test_historical_ref_exemption_is_token_scoped():
                     "SESSION_HANDOFF.md:8: docs/duplicate-old",
                     "SESSION_HANDOFF.md:9: docs/ambiguous-old",
                     "SESSION_HANDOFF.md:9: docs/ambiguous_missing.md",
+                    "SESSION_HANDOFF.md:10: docs/DOES_NOT_EXIST.md",
+                    "SESSION_HANDOFF.md:11: scripts/does_not_exist.py",
+                    "SESSION_HANDOFF.md:12: docs/missing.md",
+                    "SESSION_HANDOFF.md:13: docs/target_missing.md",
                 ],
             )
-            assert_equal("token-scoped missing path count", counters["errors"], 8)
+            assert_equal("token-scoped missing path count", counters["errors"], 12)
+            historical_git_ref = "Historical Git Ref: `feature/old-work`"
+            historical_git_ref_start = historical_git_ref.index("feature/old-work")
+            assert_equal(
+                "historical Git Ref token is explicitly classified",
+                gc.get_explicit_git_ref_spans(historical_git_ref),
+                {(historical_git_ref_start, historical_git_ref_start + len("feature/old-work"))},
+            )
         finally:
             gc.get_known_git_branches = original_get_known
             gc.record_failure = original_record_failure
