@@ -2417,6 +2417,23 @@
       "scope_rule": "EXACT_SET_ONLY_DOCS_PLUS_SINGLE_RELEASE_STATE_PARITY_TEST_FAIL_CLOSED_PARTIAL_MIXED_SUPERSET",
       "target_public_release": "v1.11.0",
       "authority_note": "Documentation normalization does not grant runtime, provider, telemetry, production, deployment, whitelist, protected-policy, AQ15, AR3, or CritiQual CUD10 authority."
+    },
+    "issue_937_f1_f2_historical_assurance_scope_policy": {
+      "status": "HUMAN_POLICY_APPROVED",
+      "purpose": "Separate the exact human-approved issue #937 F1/F2 integration inventory from historical AQ5/AQ7/PRAI implementation inventories without bypassing current validation.",
+      "machine_sources": [
+        "machine/governance/historical-assurance-scope-exceptions.v1.json",
+        "machine/schemas/historical-assurance-scope-exceptions.v1.schema.json"
+      ],
+      "human_sources": [
+        "docs/governance/HISTORICAL_ASSURANCE_SCOPE_EXCEPTIONS.md"
+      ],
+      "classifier": "scripts/validation/classify_adaptive_assurance_scope.py",
+      "validation_surface": "tests/behavior/test_protected_historical_assurance_scope_exceptions.py",
+      "registered_scope": "ISSUE_937_F1_F2_INTEGRATION",
+      "exact_path_count": 47,
+      "candidate_pr": 939,
+      "authority_note": "Exact-scope separation is not an assurance bypass and grants no merge, F3, TypeSafe/provider, release, deployment, production, or protected-policy authority."
     }
   },
   "machine_scan_order": [
