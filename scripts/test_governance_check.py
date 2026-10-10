@@ -385,6 +385,7 @@ def test_explicit_historical_git_references_without_current_refs():
     original_get_current = gc.get_current_git_branch
     original_get_known = gc.get_known_git_branches
     original_record_failure = gc.record_failure
+    original_run_git = gc.run_git
 
     class MemoryPath:
         def __init__(self, value):
@@ -412,10 +413,16 @@ def test_explicit_historical_git_references_without_current_refs():
         recorded_failures.append(path)
         original_record_failure(counters, path, reason, remediation)
 
+    def run_git_for_ref_validation(root, *args):
+        if args and args[0] == "check-ref-format":
+            return subprocess.CompletedProcess(args, 0, "", "")
+        return original_run_git(root, *args)
+
     try:
         gc.Path = MemoryPath
         gc.get_known_git_branches = lambda root: {gc.get_current_git_branch(root)} - {None}
         gc.record_failure = record_failure_and_track
+        gc.run_git = run_git_for_ref_validation
 
         for detached_head in (False, True):
             current_branch = None if detached_head else "main"
@@ -443,6 +450,7 @@ def test_explicit_historical_git_references_without_current_refs():
         gc.get_current_git_branch = original_get_current
         gc.get_known_git_branches = original_get_known
         gc.record_failure = original_record_failure
+        gc.run_git = original_run_git
 
 
 def test_historical_ref_exemption_is_token_scoped():
@@ -467,6 +475,10 @@ def test_historical_ref_exemption_is_token_scoped():
             "Git Reference: `docs/historical-branch`\n"
             "Historical Git Ref: `feature/old-work`\n"
             "Remote Branch: `docs/historical-branch`\n"
+            "The recorded phase closed without deployment. Branch: `docs/delegated-autonomous-governance-phase-a`.\n"
+            "- Remote Feature Branch: `docs/delegated-autonomous-governance-phase-a`\n"
+            "The decision log names exact feature branch references (`docs/delegated-autonomous-governance-phase-a`).\n"
+            "Historical Git Ref: `docs/invalid..ref`\n"
         )
         (repo_root / "SESSION_HANDOFF.md").write_text(memory_content, encoding="utf-8")
 
@@ -499,9 +511,10 @@ def test_historical_ref_exemption_is_token_scoped():
                     "SESSION_HANDOFF.md:11: scripts/does_not_exist.py",
                     "SESSION_HANDOFF.md:12: docs/missing.md",
                     "SESSION_HANDOFF.md:13: docs/target_missing.md",
+                    "SESSION_HANDOFF.md:20: docs/invalid..ref",
                 ],
             )
-            assert_equal("token-scoped missing path count", counters["errors"], 12)
+            assert_equal("token-scoped missing path count", counters["errors"], 13)
             historical_git_ref = "Historical Git Ref: `feature/old-work`"
             historical_git_ref_start = historical_git_ref.index("feature/old-work")
             assert_equal(

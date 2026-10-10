@@ -6,7 +6,11 @@
 
 ## Unreleased governance validator historical branch references
 
-- Treat explicitly labeled historical Git branches and refs as references before checking repo-local memory paths, including when the ref is absent or HEAD is detached; keep genuine missing docs and scripts paths failing.
+- Treat only syntactically valid refs in explicit branch/ref labels or recorded feature-branch-reference prose as Git references, including when absent from current refs; keep genuine missing docs and scripts paths failing.
+
+## Unreleased truthful runtime test-evidence accounting
+
+- Count concrete JUnit `<testcase>` elements as tests while retaining producer totals and additional subtest outcomes separately; reject producer undercounts and preserve summary-only compatibility, coverage floors, SHA binding, and report digests.
 
 ## v1.11.0 Adaptive Assurance and Governance Hardening - published verified
 

@@ -60,7 +60,11 @@ The Python behavior runner executes the following checks sequentially:
 
 ### Git context requirement for strict evidence checks
 
-`python scripts/governance_check.py --strict` intentionally uses repository Git identity and refs when validating startup memory, evidence freshness, and branch/path ambiguity. Run strict governance from a real clone with the required refs available. Tarball extractions, reconstructed `.git` directories, single-branch/shallow clones, or synthetic audit sandboxes can fail closed because the checker cannot prove a historical `docs/...` token is a Git branch rather than a missing repository path. That is insufficient Git evidence, not permission to weaken the check.
+`python scripts/governance_check.py --strict` uses repository Git identity and refs for startup-state claims and evidence freshness. In repo-local memory, a syntactically valid value in an explicit branch/ref label or after the phrase `feature branch references` in parentheses is treated as a Git reference even when that historical ref is absent from the clone. The validator checks ref syntax with `git check-ref-format`; it does not exempt arbitrary slash-containing values or unlabeled path-like tokens. Missing `docs/...` and `scripts/...` paths continue to fail. Run strict governance from a real clone because other checks depend on repository identity and available refs.
+
+### Runtime test-evidence accounting
+
+Runtime evidence counts concrete JUnit `<testcase>` elements in `tests.total` and derives their pass, failure, error, and skipped outcomes from testcase records. It preserves producer-reported aggregate counts under `tests.accounting`; any producer outcomes beyond concrete testcase elements are reported as `producer_reported_additional_outcomes`, which can include subtest outcomes and does not increase the concrete test count. Producer totals and failure, error, or skipped counts may not undercount the concrete records. Summary-only JUnit reports remain supported for legacy fixtures. Coverage floors, tested-source SHA binding, and report digest behavior are unchanged.
 
 Run the focused cross-layer checks directly:
 
