@@ -2956,6 +2956,7 @@
     "command_surface_parity_test": "tests/runtime/test_command_surface_parity.py",
     "test_evidence_schema": "machine/schemas/test-evidence.schema.json",
     "test_evidence_schema_version": "orchestra.test-evidence.v1",
+    "test_evidence_accounting": "Concrete JUnit testcase counts are reported separately from producer totals and additional outcomes.",
     "communication_measurement_schema": "machine/schemas/communication-measurement.schema.json",
     "murmurs_measurement_policy": "Repository simulation may prove deterministic structural reductions such as fewer model-progress calls, but billing/model token deltas are reportable only when comparable live host-reported counters share the same counter identity. Unavailable token evidence remains unavailable rather than estimated.",
     "future_release_candidate_policy": "Any future release candidate requires fresh exact-head runtime, branch, critical-module, mutation, Cosmic Ray, cross-platform, CodeQL/required-analysis, governance, documentation-parity, and release-identity evidence.",

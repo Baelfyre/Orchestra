@@ -294,22 +294,35 @@ def get_memory_path_references(line):
 
 
 EXPLICIT_GIT_REF_CONTEXT_PATTERN = re.compile(
-    r"(?:^|[;,|])\s*(?:[-*]\s*)?\*{0,2}"
+    r"(?:^|[;,|]|\.(?=\s))\s*(?:[-*]\s*)?\*{0,2}"
     r"(?:(?:(?:Historical|Active|Remote|Current|Base|Target|Source)\s+)?"
-    r"(?:Git\s+)?branch(?:\s+reference)?(?:\s*/\s*(?:branch|ref(?:erence)?))?"
+    r"(?:Feature\s+)?(?:Git\s+)?branch(?:\s+reference)?(?:\s*/\s*(?:branch|ref(?:erence)?))?"
     r"|(?:(?:Historical|Active|Remote|Current|Base|Target|Source)\s+)?Git\s+ref(?:erence)?)"
     r"\*{0,2}\s*[:=]\s*"
     r"(?:`(?P<quoted>[^`]+)`|(?P<plain>[^;,|\s]+))",
+    re.IGNORECASE,
+)
+FEATURE_BRANCH_REFERENCE_PATTERN = re.compile(
+    r"\bfeature\s+branch\s+references?\s*\(\s*"
+    r"(?:`(?P<quoted>[^`]+)`|(?P<plain>[^()\s]+))\s*\)",
     re.IGNORECASE,
 )
 
 
 def get_explicit_git_ref_spans(line):
     reference_spans = set()
-    for match in EXPLICIT_GIT_REF_CONTEXT_PATTERN.finditer(line):
-        value_group = "quoted" if match.group("quoted") is not None else "plain"
-        reference_spans.add(match.span(value_group))
+    for pattern in (EXPLICIT_GIT_REF_CONTEXT_PATTERN, FEATURE_BRANCH_REFERENCE_PATTERN):
+        for match in pattern.finditer(line):
+            value_group = "quoted" if match.group("quoted") is not None else "plain"
+            reference_spans.add(match.span(value_group))
     return reference_spans
+
+
+def is_valid_git_ref(repo_root, reference):
+    try:
+        return run_git(repo_root, "check-ref-format", reference).returncode == 0
+    except (OSError, ValueError):
+        return False
 
 
 def get_known_git_branches(repo_root):
@@ -366,8 +379,9 @@ def run_repo_memory_path_check(repo_root, counters):
         for line_number, line in enumerate(memory_path.read_text(encoding="utf-8").splitlines(), 1):
             explicit_git_ref_spans = get_explicit_git_ref_spans(line)
             for reference, reference_span in get_memory_path_references(line):
+                git_ref = reference.strip().strip("`").replace("\\", "/")
                 normalized = reference.strip().strip("`").replace("\\", "/").rstrip("/")
-                if reference_span in explicit_git_ref_spans:
+                if reference_span in explicit_git_ref_spans and is_valid_git_ref(repo_root, git_ref):
                     continue
                 if known_branches and normalized in known_branches:
                     continue
