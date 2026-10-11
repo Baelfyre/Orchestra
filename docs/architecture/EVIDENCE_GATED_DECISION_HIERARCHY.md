@@ -133,7 +133,7 @@ A protected policy or authority change freezes the candidate, preserves evidence
 
 ## Optional JEV advisory
 
-No tracked supported JEV integration was found for this contract. The advisory insertion point is after verified findings, risk, and mitigation options and before governance. JEV cannot authorize execution, replace required review, reduce AQ2 risk, create governance or transition authority, or mutate the candidate. Its absence does not block the hierarchy.
+The optional TypeSafe System One adapter is tracked under `orchestra_runtime/infrastructure/providers/typesafe_jev.py`, with the normalized state and local interpreter in `orchestra_runtime/domain/adaptive/jev_adjudication.py`. The application use case accepts only the already-prepared findings, verification, Overseer assessment, mitigation alternatives, dissent, constraints, and exact candidate binding; it submits one request and rechecks candidate freshness afterward. Its output remains advisory and preserves native probabilities. It is not assurance evidence, governance approval, execution authority, or a transition. JEV cannot replace required review, reduce AQ2 risk or assurance depth, create authority, or mutate the candidate. Provider absence and fewer than two material alternatives do not block the existing hierarchy.
 
 ## Existing contracts
 
