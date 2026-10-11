@@ -60,7 +60,11 @@ The Python behavior runner executes the following checks sequentially:
 
 ### Git context requirement for strict evidence checks
 
-`python scripts/governance_check.py --strict` intentionally uses repository Git identity and refs when validating startup memory, evidence freshness, and branch/path ambiguity. Run strict governance from a real clone with the required refs available. Tarball extractions, reconstructed `.git` directories, single-branch/shallow clones, or synthetic audit sandboxes can fail closed because the checker cannot prove a historical `docs/...` token is a Git branch rather than a missing repository path. That is insufficient Git evidence, not permission to weaken the check.
+`python scripts/governance_check.py --strict` uses repository Git identity and refs when validating startup memory, evidence freshness, and branch/path ambiguity. Explicitly labeled historical Git refs and supported inline branch-reference forms are exempt from repo-path existence checks only if `git check-ref-format` validates their syntax. The check verifies syntax, not whether the historical branch still exists; invalid ref syntax and ordinary unlabeled missing `docs/...` or `scripts/...` paths continue to fail. Strict governance still requires a real clone with suitable Git identity and refs for its other checks; reconstructed or incomplete Git contexts may fail closed.
+
+### Runtime test-evidence accounting
+
+Runtime evidence uses concrete JUnit `<testcase>` elements as `tests.total`, deriving their outcomes from those testcase records. Producer-reported aggregates remain in `tests.accounting`; additional producer outcomes (including subtest outcomes) are reported separately and do not inflate the concrete test count. Producer totals, failures, errors, and skips cannot undercount concrete testcase records. Summary-only JUnit reports remain supported for legacy fixtures. Tested/source SHA identity, file digests, and existing 97% statement / 95% branch minimums are preserved.
 
 Run the focused cross-layer checks directly:
 

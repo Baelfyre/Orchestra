@@ -50,11 +50,7 @@ def _int_attr(element: ET.Element, name: str) -> int:
         raise ValueError(f"JUnit attribute {name!r} must be an integer") from exc
 
 
-def parse_junit(path: Path) -> dict[str, int]:
-    root = ET.parse(path).getroot()
-    if root.tag not in {"testsuite", "testsuites"}:
-        raise ValueError(f"unsupported JUnit root element: {root.tag!r}")
-
+def _declared_junit_counts(root: ET.Element) -> dict[str, int]:
     if "tests" in root.attrib:
         total = _int_attr(root, "tests")
         failures = _int_attr(root, "failures")
@@ -68,8 +64,10 @@ def parse_junit(path: Path) -> dict[str, int]:
         skipped = sum(_int_attr(item, "skipped") for item in suites)
 
     passed = total - failures - errors - skipped
+
     if min(total, failures, errors, skipped, passed) < 0:
         raise ValueError("JUnit counts are internally inconsistent")
+
     return {
         "total": total,
         "passed": passed,
@@ -77,6 +75,96 @@ def parse_junit(path: Path) -> dict[str, int]:
         "errors": errors,
         "skipped": skipped,
     }
+
+
+def _concrete_junit_counts(root: ET.Element) -> dict[str, int]:
+    testcases = tuple(root.iter("testcase"))
+    failures = 0
+    errors = 0
+    skipped = 0
+
+    for testcase in testcases:
+        has_failure = testcase.find("failure") is not None
+        has_error = testcase.find("error") is not None
+        has_skipped = testcase.find("skipped") is not None
+
+        if sum((has_failure, has_error, has_skipped)) > 1:
+            raise ValueError(
+                "JUnit testcase outcomes are internally inconsistent"
+            )
+
+        failures += int(has_failure)
+        errors += int(has_error)
+        skipped += int(has_skipped)
+
+    total = len(testcases)
+    passed = total - failures - errors - skipped
+
+    return {
+        "total": total,
+        "passed": passed,
+        "failures": failures,
+        "errors": errors,
+        "skipped": skipped,
+    }
+
+
+def _parse_junit_with_accounting(
+    path: Path,
+) -> tuple[dict[str, int], dict[str, int | str]]:
+    root = ET.parse(path).getroot()
+
+    if root.tag not in {"testsuite", "testsuites"}:
+        raise ValueError(
+            f"unsupported JUnit root element: {root.tag!r}"
+        )
+
+    declared = _declared_junit_counts(root)
+    testcases = tuple(root.iter("testcase"))
+
+    # Legacy/synthetic Orchestra fixtures contain summary counters only.
+    if not testcases:
+        return declared, {
+            "mode": "summary_only",
+            "producer_reported_total": declared["total"],
+        }
+
+    concrete = _concrete_junit_counts(root)
+
+    # Producer accounting may include subtest outcomes in addition to
+    # concrete testcase elements, but it must never undercount them.
+    if declared["total"] < concrete["total"]:
+        raise ValueError(
+            "JUnit producer-reported total undercounts "
+            "concrete testcase records"
+        )
+
+    for field in ("failures", "errors", "skipped"):
+        if declared[field] < concrete[field]:
+            raise ValueError(
+                "JUnit producer-reported outcomes undercount "
+                f"concrete testcase {field}"
+            )
+
+    accounting: dict[str, int | str] = {
+        "mode": "concrete_testcases",
+        "producer_reported_total": declared["total"],
+        "producer_reported_passed": declared["passed"],
+        "producer_reported_failures": declared["failures"],
+        "producer_reported_errors": declared["errors"],
+        "producer_reported_skipped": declared["skipped"],
+        "concrete_testcases": concrete["total"],
+        "producer_reported_additional_outcomes": (
+            declared["total"] - concrete["total"]
+        ),
+    }
+
+    return concrete, accounting
+
+
+def parse_junit(path: Path) -> dict[str, int]:
+    counts, _ = _parse_junit_with_accounting(path)
+    return counts
 
 
 def parse_coverage(path: Path) -> dict[str, int | float]:
@@ -131,7 +219,11 @@ def build_test_evidence(
     ref_name: str,
     minimum_branch_coverage: float | None = None,
 ) -> dict[str, Any]:
-    tests = parse_junit(junit_path)
+    tests, test_accounting = _parse_junit_with_accounting(junit_path)
+    tests = {
+        **tests,
+        "accounting": test_accounting,
+    }
     coverage = parse_coverage(coverage_path)
     outcome = str(runtime_test_outcome or "").strip().lower()
     if outcome not in {"success", "failure", "cancelled", "skipped"}:
