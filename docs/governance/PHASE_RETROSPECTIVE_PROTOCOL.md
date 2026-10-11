@@ -1,8 +1,9 @@
 # Orchestra Phase Retrospective Protocol Specification
 
 > [!NOTE]
-> **Status:** DESIGN SPECIFICATION ONLY
-> **Implementation Status:** NOT IMPLEMENTED | NOT RELEASED
+> **Status:** CANONICAL IMPLEMENTED CONTRACT
+> **Implementation Status:** IMPLEMENTED | RELEASED (v1.2.0 lineage)
+> **Runtime:** `orchestra_runtime/retrospective.py`
 > **Canonical Owner:** Overseer (QA, Validation & Release Readiness Specialist)
 > **Requirement Level:** `CONDITIONALLY_REQUIRED` (Triggered for delegated execution phases with >1 unit combined with remediation cycles, capacity/evidence waits, human escalations, or non-completed terminal results)
 > **Replacement Effect:** `replacement_effect: none` (Does NOT replace session handoffs, post-merge records, decision logs, or evidence packets)
@@ -94,7 +95,7 @@ Total Schema Fields: **16 fields** (12 required, 4 optional).
 | Field Name | Type | Required/Optional | Provenance Source | Description |
 |---|---|---|---|---|
 | `schema_version` | String | **Required** | Protocol Metadata | Fixed version string (`"1.0.0"`). |
-| `retrospective_id` | String | **Required** | Derived Key | Phase-scoped derived key (`"retro-<phase_id>-<created_at>"`). |
+| `retrospective_id` | String | **Required** | Derived Key | Phase-scoped derived key (`"retro-<phase_id>-<execution_envelope_ref>"`). |
 | `phase_id` | String | **Required** | `ApprovedUnitPlan.phase_id` | Associated delegated phase identifier. |
 | `execution_envelope_ref` | String | **Required** | `DelegatedExecutionEnvelope.id` | Reference to governing delegated execution envelope. |
 | `phase_status` | String | **Required** | Canonical phase state | Canonical terminal phase status (`"COMPLETED"`, `"FAILED"`, `"BLOCKED"`, `"CANCELLED"`, `"TIMED_OUT"`). |
@@ -114,7 +115,7 @@ Total Schema Fields: **16 fields** (12 required, 4 optional).
 
 ## 7. Recovery & Completeness Behavior
 
-- **Retrospective Completeness Metadata:** If required evidence records are unreadable or missing, the retrospective sets `completeness: PARTIAL` and `reason_code: INCOMPLETE_EVIDENCE`. This metadata does NOT alter the canonical phase lifecycle state.
+- **Construction completeness:** The implemented v1 retrospective schema does not define separate `completeness` or `reason_code` fields. Missing required construction evidence remains unresolved at the caller/governance layer; implementations must not invent unversioned retrospective fields to represent partial evidence.
 - **Evidence Recovery:**
   - `WAIT_FOR_EVIDENCE`: Used when missing evidence can be recovered deterministically within the authorized execution phase.
   - `ESCALATE_HUMAN`: Used when evidence is unrecoverable, an exception is requested, or policy is ambiguous.
