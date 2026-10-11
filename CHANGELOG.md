@@ -1,3 +1,7 @@
+## Unreleased documentation lifecycle applicability
+
+- Adds the [Documentation Lifecycle Applicability](docs/project/DOCUMENTATION_LIFECYCLE_APPLICABILITY.md) contract, mapped to the existing development lifecycle with proportionate Scribe routing, claim ownership, traceability, and evidence-drift handling. It reuses existing governance and validation contracts without adding a lifecycle engine or CI gate.
+
 ## Unreleased runtime validation: isolated defensive-review test candidates
 
 - Run the four positive read-only Cipher/MCP review tests against a detached, disposable Git worktree with a controlled tracked-file change; canonical-main push checkouts otherwise contain no changed files relative to origin/main.
