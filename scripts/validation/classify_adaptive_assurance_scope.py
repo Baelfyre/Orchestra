@@ -23,6 +23,14 @@ HISTORICAL_ASSURANCE_SCOPE_EXCEPTIONS_REGISTRY_PATH = ROOT / "machine/governance
 
 GENERIC_METADATA_PATHS = frozenset({"CHANGELOG.md", "README.json"})
 
+REPOSITORY_CONTINUITY_STATE_PATHS = frozenset(
+    {
+        "PROJECT_STATE.md",
+        "SESSION_HANDOFF.md",
+        "DECISION_LOG.md",
+    }
+)
+
 WORKFLOW_INTEGRATION_PATHS = frozenset(
     {
         ".github/workflows/prai.yml",
@@ -231,6 +239,7 @@ PROMOTION_ASSURANCE_REQUIRED_ANCHORS = frozenset(
 
 GOVERNANCE_EXACT_PATHS = frozenset(
     {
+        *REPOSITORY_CONTINUITY_STATE_PATHS,
         "AGENTS.md",
         ".github/workflows/governance-check.yml",
         ".github/workflows/required-analysis-compat.yml",
