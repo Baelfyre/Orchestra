@@ -167,7 +167,7 @@ class PromotionAttestationTests(unittest.TestCase):
             text = path.read_text(encoding="utf-8")
             trigger_block = text.split("permissions:", 1)[0]
             for generic_path in GENERIC_METADATA_TRIGGER_PATHS:
-                pattern = rf'^\s*-\s*["\']?{re.escape(generic_path)}["\']?\s*
+                pattern = rf"^\\s*-\\s*[\\"']?{re.escape(generic_path)}[\\"']?\\s*$"
                 self.assertIsNone(
                     re.search(pattern, trigger_block, flags=re.MULTILINE),
                     f"{path.name} must not trigger solely on generic metadata path {generic_path}",
