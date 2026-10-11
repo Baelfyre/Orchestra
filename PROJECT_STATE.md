@@ -303,8 +303,7 @@ runtime-tests
 native-windows-latest
 native-ubuntu-latest
 native-macos-latest
-Analyze (actions)
-Analyze (python)
+Compatibility CodeQL (python)
 ```
 
 The current bypass list is intentionally retained for repository-operational access. Bypass capability is not governance authorization; ordinary governed automation must not rely on it to skip evidence or policy gates.
