@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parents[2]
 ADAPT_QA_PHASE_SEPARATION_REGISTRY_PATH = ROOT / "machine/governance/adapt-qa-phase-separation.v1.json"
 HISTORICAL_ASSURANCE_SCOPE_EXCEPTIONS_REGISTRY_PATH = ROOT / "machine/governance/historical-assurance-scope-exceptions.v1.json"
 
-COMMON_TRIGGER_PATHS = frozenset({"CHANGELOG.md", "README.json"})
+GENERIC_METADATA_PATHS = frozenset({"CHANGELOG.md", "README.json"})
 
 WORKFLOW_INTEGRATION_PATHS = frozenset(
     {
@@ -467,7 +467,7 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
     if gate != "aq7" and normalized_set.intersection(strict_implementation_paths):
         return APPLICABLE
 
-    non_neutral = normalized_set - COMMON_TRIGGER_PATHS
+    # Generic repository metadata may accompany an assurance change, but it does not\n    # independently establish historical-assurance applicability.\n    non_neutral = normalized_set - GENERIC_METADATA_PATHS
     if not non_neutral:
         return NOT_APPLICABLE
 
