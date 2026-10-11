@@ -2482,6 +2482,27 @@
         "tests/runtime/test_agentic_workflow.py"
       ],
       "authority_note": "Decision-hierarchy output is evidence and routing/assurance state only. It cannot create protected-action authority, replace required assurance, alter protected policy, or bypass Arbiter transition ownership."
+    },
+    "issue_937_f3_jev_advisory": {
+      "status": "IMPLEMENTATION_CANDIDATE_PENDING_CANONICALIZATION",
+      "purpose": "Defines an optional candidate-bound TypeSafe advisory adapter and use case for comparing mitigation alternatives while keeping deterministic decisions and authority local to Orchestra.",
+      "machine_sources": [
+        "machine/adaptive/evidence-gated-decision-hierarchy.v1.json",
+        "machine/schemas/evidence-gated-decision-hierarchy.v1.schema.json"
+      ],
+      "human_sources": [
+        "docs/architecture/EVIDENCE_GATED_DECISION_HIERARCHY.md"
+      ],
+      "runtime_surfaces": [
+        "orchestra_runtime/domain/adaptive/jev_adjudication.py",
+        "orchestra_runtime/application/use_cases/jev_adjudication.py",
+        "orchestra_runtime/infrastructure/providers/typesafe_jev.py"
+      ],
+      "validation_surface": [
+        "tests/runtime/test_jev_adjudication.py",
+        "tests/runtime/test_evidence_gated_decision_hierarchy.py"
+      ],
+      "authority_note": "JEV remains optional advisory input only. Its output is not assurance evidence, governance approval, execution authority, or an Arbiter transition, and it cannot override required verification or activate a provider automatically."
     }
   },
   "machine_scan_order": [

@@ -493,7 +493,7 @@
       ],
       "properties": {
         "tracked_supported_integration": {
-          "const": false
+          "const": true
         },
         "advisory_insertion_point": {
           "type": "object",
