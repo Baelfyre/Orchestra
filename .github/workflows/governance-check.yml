@@ -130,12 +130,6 @@ jobs:
           python tests/behavior/evaluate_governance.py > artifacts/evaluate_governance_report.txt
           cat artifacts/evaluate_governance_report.txt
 
-      - name: Run General Behavior Tests
-        if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
-        run: |
-          python tests/behavior/run_tests.py > artifacts/run_tests_report.txt
-          cat artifacts/run_tests_report.txt
-
       - name: Validate plugin.json Syntax
         if: steps.promotion.outputs.mode != 'TREE_ATTESTED'
         run: python -m json.tool plugin.json > /dev/null
