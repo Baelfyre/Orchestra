@@ -467,7 +467,9 @@ def classify_paths(paths: Iterable[str], assurance: str) -> str:
     if gate != "aq7" and normalized_set.intersection(strict_implementation_paths):
         return APPLICABLE
 
-    # Generic repository metadata may accompany an assurance change, but it does not\n    # independently establish historical-assurance applicability.\n    non_neutral = normalized_set - GENERIC_METADATA_PATHS
+    # Generic repository metadata may accompany an assurance change, but it does not
+    # independently establish historical-assurance applicability.
+    non_neutral = normalized_set - GENERIC_METADATA_PATHS
     if not non_neutral:
         return NOT_APPLICABLE
 
