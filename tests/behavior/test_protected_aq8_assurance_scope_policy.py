@@ -21,6 +21,7 @@ from validation.classify_adaptive_assurance_scope import (  # noqa: E402
     AQ8_IMPLEMENTATION_PATHS,
     AQ8_SCOPE_ANCHOR_PATHS,
     GENERIC_METADATA_PATHS,
+    REPOSITORY_CONTINUITY_STATE_PATHS,
     AQ9_IMPLEMENTATION_PATHS,
     AQ9_SCOPE_ANCHOR_PATHS,
     NOT_APPLICABLE,
@@ -233,6 +234,24 @@ def test_generic_metadata_alone_does_not_activate_historical_assurance() -> None
         )
 
 
+def test_repository_continuity_state_is_governance_taxonomy() -> None:
+    paths = (*tuple(sorted(GENERIC_METADATA_PATHS)), *tuple(sorted(REPOSITORY_CONTINUITY_STATE_PATHS)))
+    for assurance in HISTORICAL_GATES:
+        _assert_equal(
+            f"{assurance} repository continuity state",
+            classify_paths(paths, assurance),
+            NOT_APPLICABLE,
+        )
+
+    mixed = (*paths, "orchestra_runtime/unrelated-runtime-change.py")
+    for assurance in HISTORICAL_GATES:
+        _assert_equal(
+            f"{assurance} continuity state plus unknown runtime",
+            classify_paths(mixed, assurance),
+            APPLICABLE,
+        )
+
+
 def test_unregistered_future_aq_paths_remain_fail_closed() -> None:
     for assurance in HISTORICAL_GATES:
         _assert_equal(
@@ -368,6 +387,7 @@ def main() -> None:
     test_tree_attested_promotion_realigns_through_governance_taxonomy()
     test_unanchored_specialized_assurance_workflows_remain_fail_closed()
     test_generic_metadata_alone_does_not_activate_historical_assurance()
+    test_repository_continuity_state_is_governance_taxonomy()
     test_unregistered_future_aq_paths_remain_fail_closed()
     test_complete_aq9_scope_is_not_applicable_to_historical_gates()
     test_partial_aq9_scope_remains_fail_closed_applicable()
