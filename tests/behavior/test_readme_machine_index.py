@@ -64,6 +64,10 @@ def main() -> int:
     for key in required_contracts:
         require_repo_path(index["machine_contracts"][key])
 
+    aq6_scope_classifier = index["machine_contracts"]["adaptive_assurance_aq6_scope_classifier"]
+    assert aq6_scope_classifier == "scripts/validation/classify_f3_jev_successor_scope.py"
+    require_repo_path(aq6_scope_classifier)
+
     for key in (
         "documentation_map",
         "architecture_overview",
