@@ -64,9 +64,9 @@
       "stage": "ADJUDICATION",
       "optional": true,
       "owners": ["optional_advisory_integration"],
-      "inputs": ["verified_findings", "risk_assessment", "mitigation_options"],
-      "outputs": ["advisory_evidence_if_available"],
-      "contract_refs": [],
+      "inputs": ["exact_candidate_identity", "verified_findings", "verification_results", "risk_assessment", "overseer_assessment", "mitigation_options", "specialist_dissent", "constraints"],
+      "outputs": ["advisory_result_if_available"],
+      "contract_refs": ["orchestra_runtime/domain/adaptive/jev_adjudication.py", "orchestra_runtime/application/ports/jev_adjudication.py", "orchestra_runtime/application/use_cases/jev_adjudication.py", "orchestra_runtime/infrastructure/providers/typesafe_jev.py"],
       "may_authorize": false
     },
     {
@@ -183,7 +183,7 @@
     "protocol": "docs/governance/PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md"
   },
   "jev": {
-    "tracked_supported_integration": false,
+    "tracked_supported_integration": true,
     "advisory_insertion_point": {
       "after": ["VERIFIED_FINDINGS", "RISK_ASSESSMENT", "MITIGATION_ALTERNATIVES"],
       "before": "GOVERNANCE"

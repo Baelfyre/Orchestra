@@ -90,7 +90,12 @@ def test_composition_contract_is_strict_ordered_source_bound_and_non_authorizing
     assert [stage["stage"] for stage in stages] == STAGE_ORDER
     assert all(stage["may_authorize"] is False for stage in stages)
     assert stages[5]["optional"] is True
-    assert stages[5]["contract_refs"] == []
+    assert stages[5]["contract_refs"] == [
+        "orchestra_runtime/domain/adaptive/jev_adjudication.py",
+        "orchestra_runtime/application/ports/jev_adjudication.py",
+        "orchestra_runtime/application/use_cases/jev_adjudication.py",
+        "orchestra_runtime/infrastructure/providers/typesafe_jev.py",
+    ]
     assert stages[0]["coordination"] == {
         "optional_owner": "the-tuner",
         "trigger": "MATERIAL_CROSS_SPECIALIST_CONTRACTS",
@@ -243,7 +248,7 @@ def test_existing_authority_view_keeps_dispatch_validation_and_transition_owners
 
 def test_jev_is_optional_and_advisory_only() -> None:
     contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
-    assert contract["jev"]["tracked_supported_integration"] is False
+    assert contract["jev"]["tracked_supported_integration"] is True
     assert contract["jev"]["advisory_insertion_point"]["after"] == [
         "VERIFIED_FINDINGS",
         "RISK_ASSESSMENT",
@@ -253,6 +258,11 @@ def test_jev_is_optional_and_advisory_only() -> None:
     assert contract["jev"]["absence_blocks_flow"] is False
     assert contract["jev"]["may_authorize_or_replace_review_or_reduce_risk"] is False
     assert contract["jev"]["may_mutate_candidate"] is False
+    adjudication = contract["stages"][5]
+    assert adjudication["optional"] is True
+    assert adjudication["may_authorize"] is False
+    assert adjudication["outputs"] == ["advisory_result_if_available"]
+    assert all((ROOT / reference).is_file() for reference in adjudication["contract_refs"])
 
 def test_assurance_union_rejects_malformed_floor_and_source_evidence() -> None:
     malformed_cases = (
