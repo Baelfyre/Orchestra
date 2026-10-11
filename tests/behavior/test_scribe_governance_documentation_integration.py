@@ -23,6 +23,11 @@ Validates Scribe's deterministic post-SSU governance documentation discipline:
   T20 - Progressive disclosure integration in SKILL.md
   T21 - Specialist boundary and non-ownership adherence
   T22 - SSU foundation preservation (SSU guides and project documentation preserved)
+  T23 - Applicable DOC-L1 obligations route substantive prose through Scribe
+  T24 - Assessed NOT_APPLICABLE keeps documentation-neutral work direct
+  T25 - UNRESOLVED applicability remains distinct and routes to the fact owner
+  T26 - Documentation and implementation drift retain their owners
+  T27 - Conductor and Scribe Codex adapters preserve DOC-L1 guidance
 """
 
 import json
@@ -42,6 +47,9 @@ DOMAIN_GUIDE = ROOT / "skills" / "scribe" / "DOMAIN_NARRATIVE_MODELING_GUIDE.md"
 REQ_GUIDE = ROOT / "skills" / "scribe" / "REQUIREMENTS_TRACEABILITY_GUIDE.md"
 CAPSTONE_GUIDE = ROOT / "skills" / "scribe" / "RESEARCH_CAPSTONE_DOCUMENTATION_GUIDE.md"
 RECONCILE_GUIDE = ROOT / "skills" / "scribe" / "DOCUMENTATION_SYSTEM_RECONCILIATION_GUIDE.md"
+DOC_L1 = ROOT / "docs" / "project" / "DOCUMENTATION_LIFECYCLE_APPLICABILITY.md"
+ROUTING_MAP_SOURCE = ROOT / "ROUTING_MAP.md"
+ROUTING_MAP_CODEX = ROOT / "adapters" / "codex" / "skills" / "conductor" / "ROUTING_MAP.md"
 
 
 def _guide_text():
@@ -238,6 +246,58 @@ def test_t22_ssu_foundation_preservation():
     assert RECONCILE_GUIDE.exists(), "DOCUMENTATION_SYSTEM_RECONCILIATION_GUIDE.md must exist"
 
 
+# ===== T23-T27: DOC-L1 workflow integration =====
+def test_t23_applicable_obligations_route_substantive_prose_to_scribe():
+    contract = DOC_L1.read_text(encoding="utf-8")
+    routing = ROUTING_MAP_SOURCE.read_text(encoding="utf-8")
+    assert "`REQUIRED`" in contract
+    assert "`CONDITIONAL`" in contract
+    assert "at existing lifecycle decision points" in routing
+    assert "Route `REQUIRED` or triggered `CONDITIONAL` obligations to Scribe only for durable prose, traceability, or reconciliation" in routing
+    assert "the fact owner verifies claims" in routing
+
+
+def test_t24_assessed_not_applicable_keeps_documentation_neutral_work_direct():
+    contract = DOC_L1.read_text(encoding="utf-8")
+    routing = ROUTING_MAP_SOURCE.read_text(encoding="utf-8")
+    scribe = SKILL_MD.read_text(encoding="utf-8")
+    assert "`NOT_APPLICABLE`" in contract
+    assert "`NOT_APPLICABLE` needs a reason" in routing
+    assert "Documentation-neutral code, tests, and evidence stay direct without Scribe" in routing
+    assert "Do not activate Scribe solely for code, test, or evidence work when current documentation remains accurate" in scribe
+
+
+def test_t25_unresolved_applicability_routes_to_owner_without_becoming_not_applicable():
+    contract = DOC_L1.read_text(encoding="utf-8")
+    routing = ROUTING_MAP_SOURCE.read_text(encoding="utf-8")
+    assert "`UNRESOLVED`" in contract
+    assert "keep `UNRESOLVED` distinct" in routing
+    assert "route missing facts or authority through Conductor to their owner" in routing
+
+
+def test_t26_drift_dispositions_preserve_documentation_and_implementation_owners():
+    contract = DOC_L1.read_text(encoding="utf-8")
+    routing = ROUTING_MAP_SOURCE.read_text(encoding="utf-8")
+    assert "`DOC_DRIFT`" in contract
+    assert "`IMPLEMENTATION_DRIFT`" in contract
+    assert "Scribe corrects verified `DOC_DRIFT`" in routing
+    assert "the technical owner resolves `IMPLEMENTATION_DRIFT`" in routing
+
+
+def test_t27_doc_l1_guidance_reaches_codex_adapters():
+    routing_source = ROUTING_MAP_SOURCE.read_text(encoding="utf-8")
+    routing_codex = ROUTING_MAP_CODEX.read_text(encoding="utf-8")
+    scribe_source = SKILL_MD.read_text(encoding="utf-8").replace("\r\n", "\n")
+    scribe_codex = SKILL_MD_CODEX.read_text(encoding="utf-8").replace("\r\n", "\n")
+    scribe_source_body = scribe_source.split("---", 2)[2].lstrip()
+    scribe_codex_body = scribe_codex.split("---", 2)[2].lstrip()
+    for marker in ("DOC-L1 applicability contract", "`REQUIRED`", "`NOT_APPLICABLE`", "`UNRESOLVED`", "`DOC_DRIFT`", "`IMPLEMENTATION_DRIFT`"):
+        assert marker in routing_source
+        assert marker in routing_codex
+    assert scribe_source_body == scribe_codex_body
+    assert "DOC-L1 applicability contract" in scribe_source_body
+
+
 ALL_TESTS = [
     ("T1: Governance documentation gate", test_t1_governance_documentation_gate),
     ("T2: Core governance documentation tenets", test_t2_core_governance_documentation_tenets),
@@ -261,6 +321,11 @@ ALL_TESTS = [
     ("T20: Progressive disclosure integration in SKILL.md", test_t20_progressive_disclosure_integration),
     ("T21: Specialist boundary and non-ownership adherence", test_t21_specialist_boundary_adherence),
     ("T22: SSU foundation preservation", test_t22_ssu_foundation_preservation),
+    ("T23: Applicable DOC-L1 obligation routes substantive prose through Scribe", test_t23_applicable_obligations_route_substantive_prose_to_scribe),
+    ("T24: Assessed NOT_APPLICABLE keeps documentation-neutral work direct", test_t24_assessed_not_applicable_keeps_documentation_neutral_work_direct),
+    ("T25: UNRESOLVED applicability remains distinct and routes to the fact owner", test_t25_unresolved_applicability_routes_to_owner_without_becoming_not_applicable),
+    ("T26: Documentation and implementation drift retain their owners", test_t26_drift_dispositions_preserve_documentation_and_implementation_owners),
+    ("T27: DOC-L1 guidance reaches Codex adapters", test_t27_doc_l1_guidance_reaches_codex_adapters),
 ]
 
 

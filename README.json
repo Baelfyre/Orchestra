@@ -104,7 +104,8 @@
       ],
       "human_sources": [
         "SKILL_INDEX.md",
-        "ROUTING_MAP.md"
+        "ROUTING_MAP.md",
+        "docs/project/DOCUMENTATION_LIFECYCLE_APPLICABILITY.md"
       ]
     },
     "governed_runtime": {

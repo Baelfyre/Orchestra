@@ -1,6 +1,7 @@
 ## Unreleased documentation lifecycle applicability
 
 - Adds the [Documentation Lifecycle Applicability](docs/project/DOCUMENTATION_LIFECYCLE_APPLICABILITY.md) contract, mapped to the existing development lifecycle with proportionate Scribe routing, claim ownership, traceability, and evidence-drift handling. It reuses existing governance and validation contracts without adding a lifecycle engine or CI gate.
+- Applies DOC-L1 at Conductor routing and Scribe intake, keeping documentation-neutral changes on their direct route and preserving fact-owner handling for unresolved or drifted claims.
 
 ## Unreleased runtime validation: isolated defensive-review test candidates
 
