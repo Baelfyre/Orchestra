@@ -17,6 +17,7 @@ on:
       - machine/schemas/aq6-gate-coverage.v1.schema.json
       - orchestra_runtime/domain/adaptive/__init__.py
       - orchestra_runtime/domain/adaptive/gate_coverage.py
+      - scripts/validation/classify_aq6_scope.py
       - scripts/validation/validate_gate_coverage.py
       - tests/behavior/test_gate_coverage.py
       - tests/runtime/test_adaptive_assurance_aq6.py
@@ -164,16 +165,30 @@ jobs:
           git cat-file -e "${comparison_base_sha}^{commit}"
           git diff --check "$comparison_base_sha..HEAD"
           git diff --name-only "$comparison_base_sha..HEAD" | sort > actual-paths.txt
-          scope_applicability="$(python -B scripts/validation/classify_adaptive_assurance_scope.py --assurance aq7 < actual-paths.txt)"
-          case "$scope_applicability" in
+          aq6_scope="$(python -B scripts/validation/classify_aq6_scope.py < actual-paths.txt)"
+          case "$aq6_scope" in
             NOT_APPLICABLE)
               echo "AQ6_SCOPE=NOT_APPLICABLE"
+              echo "AQ6_SCOPE_REASON=NO_AQ6_OWNED_SURFACES"
               exit 0
               ;;
-            APPLICABLE)
+            AQ6_MAINTENANCE)
+              echo "AQ6_SCOPE=PASS"
+              echo "AQ6_SCOPE_LANE=GOVERNANCE_MAINTENANCE"
+              echo "AQ6_INDEPENDENT_REVIEW_REQUIRED=TRUE"
+              exit 0
+              ;;
+            AQ6_FUNCTIONAL_CHANGE)
+              echo "AQ6_SCOPE=PASS"
+              echo "AQ6_SCOPE_LANE=FUNCTIONAL_ASSURANCE"
+              echo "AQ6_INDEPENDENT_REVIEW_REQUIRED=TRUE"
+              exit 0
+              ;;
+            HISTORICAL_AQ6_EXACT)
+              echo "AQ6_SCOPE_LANE=HISTORICAL_AQ6_EXACT"
               ;;
             *)
-              echo "AQ6_SCOPE_CLASSIFICATION_INVALID: $scope_applicability" >&2
+              echo "AQ6_SCOPE_INVALID: $aq6_scope" >&2
               exit 1
               ;;
           esac
