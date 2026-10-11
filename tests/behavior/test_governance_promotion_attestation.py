@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import importlib.util
 from pathlib import Path
+import re
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -28,6 +29,7 @@ SPECIALIZED_WORKFLOWS = (
     ROOT / ".github" / "workflows" / "aq6-gate-coverage.yml",
     ROOT / ".github" / "workflows" / "cosmic-ray-confidence.yml",
 )
+GENERIC_METADATA_TRIGGER_PATHS = ("CHANGELOG.md", "README.json")
 
 
 def pr(number, base_ref, base_sha, head_ref, head_sha, *, merged=False, merge_sha=None):
@@ -159,6 +161,17 @@ class PromotionAttestationTests(unittest.TestCase):
             self.assertIn("mode != 'TREE_ATTESTED'", text, path.name)
             self.assertIn("tree-attested-assurance:", text, path.name)
             self.assertIn("mode == 'TREE_ATTESTED'", text, path.name)
+
+    def test_specialized_assurance_workflows_ignore_generic_metadata_triggers(self):
+        for path in SPECIALIZED_WORKFLOWS:
+            text = path.read_text(encoding="utf-8")
+            trigger_block = text.split("permissions:", 1)[0]
+            for generic_path in GENERIC_METADATA_TRIGGER_PATHS:
+                pattern = rf'^\s*-\s*["\']?{re.escape(generic_path)}["\']?\s*
+                self.assertIsNone(
+                    re.search(pattern, trigger_block, flags=re.MULTILINE),
+                    f"{path.name} must not trigger solely on generic metadata path {generic_path}",
+                )
 
 
 if __name__ == "__main__":
