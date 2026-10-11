@@ -306,11 +306,26 @@ EXPLICIT_GIT_REF_CONTEXT_PATTERN = re.compile(
 )
 
 
+INLINE_GIT_REF_CONTEXT_PATTERNS = (
+    re.compile(
+        r"(?:^|[.!?]\s+)Branch\s*:\s*`(?P<quoted>[^`]+)`",
+        re.IGNORECASE,
+    ),
+    re.compile(
+        r"\b(?:exact\s+)?(?:feature\s+)?branch\s+references?\s*\(\s*`(?P<quoted>[^`]+)`\s*\)",
+        re.IGNORECASE,
+    ),
+)
+
+
 def get_explicit_git_ref_spans(line):
     reference_spans = set()
     for match in EXPLICIT_GIT_REF_CONTEXT_PATTERN.finditer(line):
         value_group = "quoted" if match.group("quoted") is not None else "plain"
         reference_spans.add(match.span(value_group))
+    for pattern in INLINE_GIT_REF_CONTEXT_PATTERNS:
+        for match in pattern.finditer(line):
+            reference_spans.add(match.span("quoted"))
     return reference_spans
 
 
