@@ -494,6 +494,8 @@ def test_historical_ref_exemption_is_token_scoped():
             "Git Reference: `docs/historical-branch`\n"
             "Historical Git Ref: `feature/old-work`\n"
             "Remote Branch: `docs/historical-branch`\n"
+            "Historical Git Ref: `docs/invalid..ref`\n"
+            "Missing unlabelled document: `docs/still_missing.md`\n"
         )
         (repo_root / "SESSION_HANDOFF.md").write_text(memory_content, encoding="utf-8")
 
@@ -526,9 +528,21 @@ def test_historical_ref_exemption_is_token_scoped():
                     "SESSION_HANDOFF.md:11: scripts/does_not_exist.py",
                     "SESSION_HANDOFF.md:12: docs/missing.md",
                     "SESSION_HANDOFF.md:13: docs/target_missing.md",
+                    "SESSION_HANDOFF.md:17: docs/invalid..ref",
+                    "SESSION_HANDOFF.md:18: docs/still_missing.md",
                 ],
             )
-            assert_equal("token-scoped missing path count", counters["errors"], 12)
+            assert_equal("token-scoped missing path count", counters["errors"], 14)
+            assert_equal(
+                "valid historical Git ref accepted",
+                gc.is_valid_git_ref(str(repo_root), "docs/historical-branch"),
+                True,
+            )
+            assert_equal(
+                "invalid historical Git ref rejected",
+                gc.is_valid_git_ref(str(repo_root), "docs/invalid..ref"),
+                False,
+            )
             historical_git_ref = "Historical Git Ref: `feature/old-work`"
             historical_git_ref_start = historical_git_ref.index("feature/old-work")
             assert_equal(

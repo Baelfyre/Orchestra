@@ -329,6 +329,14 @@ def get_explicit_git_ref_spans(line):
     return reference_spans
 
 
+def is_valid_git_ref(repo_root, reference):
+    """Validate the syntax, not existence, of a historical branch reference."""
+    try:
+        return run_git(repo_root, "check-ref-format", reference).returncode == 0
+    except (OSError, ValueError):
+        return False
+
+
 def get_known_git_branches(repo_root):
     known = set()
 
@@ -383,8 +391,9 @@ def run_repo_memory_path_check(repo_root, counters):
         for line_number, line in enumerate(memory_path.read_text(encoding="utf-8").splitlines(), 1):
             explicit_git_ref_spans = get_explicit_git_ref_spans(line)
             for reference, reference_span in get_memory_path_references(line):
-                normalized = reference.strip().strip("`").replace("\\", "/").rstrip("/")
-                if reference_span in explicit_git_ref_spans:
+                git_ref = reference.strip().strip("`").replace("\\", "/")
+                normalized = git_ref.rstrip("/")
+                if reference_span in explicit_git_ref_spans and is_valid_git_ref(repo_root, git_ref):
                     continue
                 if known_branches and normalized in known_branches:
                     continue
