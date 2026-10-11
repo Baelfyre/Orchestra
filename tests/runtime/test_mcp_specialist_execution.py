@@ -172,11 +172,13 @@ def test_opt_in_mcp_builder_returns_deterministic_engine_output() -> None:
     assert request.skill_source_path == "skills/scribe/SKILL.md"
 
 
-def test_opt_in_mcp_builder_runs_only_trusted_snapshot_bound_read_only_cipher_review() -> None:
+def test_opt_in_mcp_builder_runs_only_trusted_snapshot_bound_read_only_cipher_review(
+    read_only_review_candidate_root: Path,
+) -> None:
     engine = McpReadOnlyEngine()
     provider = McpReadOnlyWorkspaceProvider()
     transport = build_mcp_stdio_transport_with_specialist_execution(
-        ROOT,
+        read_only_review_candidate_root,
         execution_engine_factory=lambda: engine,
         read_only_workspace_provider=provider,
         backing_adapter="codex",
