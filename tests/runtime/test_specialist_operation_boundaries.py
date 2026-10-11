@@ -189,9 +189,9 @@ class GeneralEngineFixture(ISpecialistExecutionEngine):
         raise AssertionError("ordinary execution engine must not run")
 
 
-def _runtime(engine_factory, provider=None):
+def _runtime(engine_factory, provider=None, *, root=ROOT):
     factory = build_mcp_specialist_runtime_factory(
-        ROOT,
+        root,
         execution_engine_factory=engine_factory,
         read_only_workspace_provider=provider,
     )
@@ -200,7 +200,9 @@ def _runtime(engine_factory, provider=None):
     return executor
 
 
-def _request(executor: SpecialistRuntimeExecutor, command: str) -> SpecialistExecutionRequest:
+def _request(
+    executor: SpecialistRuntimeExecutor, command: str, *, root=ROOT
+) -> SpecialistExecutionRequest:
     return SpecialistExecutionRequest.create(
         run_id=executor.composition.run_identity.run_id,
         parent_run_id=None,
@@ -208,7 +210,7 @@ def _request(executor: SpecialistRuntimeExecutor, command: str) -> SpecialistExe
         adapter_name="codex",
         command_name=command,
         specialist="cipher",
-        project_root=str(ROOT),
+        project_root=str(root),
         skill_source_path="skills/cipher/SKILL.md",
         skill_source_digest="a" * 64,
         task_input="Review the authorization boundary.",
@@ -221,11 +223,13 @@ def _request(executor: SpecialistRuntimeExecutor, command: str) -> SpecialistExe
     )
 
 
-def test_registered_defensive_review_dispatch_uses_only_read_capabilities() -> None:
+def test_registered_defensive_review_dispatch_uses_only_read_capabilities(
+    read_only_review_candidate_root: Path,
+) -> None:
     provider = ReadOnlyWorkspaceProviderFixture()
     engine = ReviewOnlyEngine()
-    executor = _runtime(lambda: engine, provider)
-    request = _request(executor, "security-check")
+    executor = _runtime(lambda: engine, provider, root=read_only_review_candidate_root)
+    request = _request(executor, "security-check", root=read_only_review_candidate_root)
     executor._build_request = lambda *_args: request
     token = executor._pending_execution.set(object())
     try:
@@ -252,13 +256,15 @@ def test_registered_defensive_review_dispatch_uses_only_read_capabilities() -> N
     assert DEFENSIVE_SECURITY_REVIEW.side_effect_class.value == "NONE"
 
 
-def test_security_check_reaches_substantive_review_only_with_trusted_read_only_host() -> None:
+def test_security_check_reaches_substantive_review_only_with_trusted_read_only_host(
+    read_only_review_candidate_root: Path,
+) -> None:
     provider = ReadOnlyWorkspaceProviderFixture()
     engine = ReviewOnlyEngine()
-    executor = _runtime(lambda: engine, provider)
+    executor = _runtime(lambda: engine, provider, root=read_only_review_candidate_root)
 
     result = executor.execute(
-        AdapterFactory.create("codex", ROOT),
+        AdapterFactory.create("codex", read_only_review_candidate_root),
         "security-check review the authorization boundary",
     )
 
@@ -323,7 +329,9 @@ def test_effectful_or_dual_engine_cannot_satisfy_read_only_profile() -> None:
     assert provider.calls == 0
 
 
-def test_provider_snapshot_digest_is_ignored_in_favor_of_host_computed_identity() -> None:
+def test_provider_snapshot_digest_is_ignored_in_favor_of_host_computed_identity(
+    read_only_review_candidate_root: Path,
+) -> None:
     class MismatchedProvider(ReadOnlyWorkspaceProviderFixture):
         @property
         def snapshot_digest(self) -> str:
@@ -331,10 +339,10 @@ def test_provider_snapshot_digest_is_ignored_in_favor_of_host_computed_identity(
 
     provider = MismatchedProvider()
     engine = ReviewOnlyEngine()
-    executor = _runtime(lambda: engine, provider)
+    executor = _runtime(lambda: engine, provider, root=read_only_review_candidate_root)
 
     result = executor.execute(
-        AdapterFactory.create("codex", ROOT),
+        AdapterFactory.create("codex", read_only_review_candidate_root),
         "security-check review the authorization boundary",
     )
 
