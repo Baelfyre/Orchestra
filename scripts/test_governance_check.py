@@ -385,6 +385,7 @@ def test_explicit_historical_git_references_without_current_refs():
     original_get_current = gc.get_current_git_branch
     original_get_known = gc.get_known_git_branches
     original_record_failure = gc.record_failure
+    original_run_git = gc.run_git
 
     class MemoryPath:
         def __init__(self, value):
@@ -412,10 +413,16 @@ def test_explicit_historical_git_references_without_current_refs():
         recorded_failures.append(path)
         original_record_failure(counters, path, reason, remediation)
 
+    def run_git_for_ref_validation(root, *args):
+        if args and args[0] == "check-ref-format":
+            return subprocess.CompletedProcess(args, 0, "", "")
+        return original_run_git(root, *args)
+
     try:
         gc.Path = MemoryPath
         gc.get_known_git_branches = lambda root: {gc.get_current_git_branch(root)} - {None}
         gc.record_failure = record_failure_and_track
+        gc.run_git = run_git_for_ref_validation
 
         for detached_head in (False, True):
             current_branch = None if detached_head else "main"
@@ -443,6 +450,7 @@ def test_explicit_historical_git_references_without_current_refs():
         gc.get_current_git_branch = original_get_current
         gc.get_known_git_branches = original_get_known
         gc.record_failure = original_record_failure
+        gc.run_git = original_run_git
 
 
 def test_inline_historical_branch_references_are_token_scoped():
