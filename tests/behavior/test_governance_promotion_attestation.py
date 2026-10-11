@@ -5,7 +5,6 @@ from __future__ import annotations
 
 import importlib.util
 from pathlib import Path
-import re
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -166,10 +165,15 @@ class PromotionAttestationTests(unittest.TestCase):
         for path in SPECIALIZED_WORKFLOWS:
             text = path.read_text(encoding="utf-8")
             trigger_block = text.split("permissions:", 1)[0]
+            trigger_paths = {
+                line.strip()[1:].strip().strip("\"'")
+                for line in trigger_block.splitlines()
+                if line.strip().startswith("-")
+            }
             for generic_path in GENERIC_METADATA_TRIGGER_PATHS:
-                pattern = rf"^\\s*-\\s*[\\"']?{re.escape(generic_path)}[\\"']?\\s*$"
-                self.assertIsNone(
-                    re.search(pattern, trigger_block, flags=re.MULTILINE),
+                self.assertNotIn(
+                    generic_path,
+                    trigger_paths,
                     f"{path.name} must not trigger solely on generic metadata path {generic_path}",
                 )
 
