@@ -1,5 +1,9 @@
 # Dagger Runtime Guardrail Gap
 
+> [!NOTE]
+> **Historical planning/reference document.** This file is preserved for audit history and is not a current required-governance source. For current authority and enforcement, use `ORCHESTRA_PRIME_DIRECTIVE.md`, `GOVERNANCE_DECISION_PROTOCOL.md`, `PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md`, `AUTONOMOUS_MERGE_READINESS_PROTOCOL.md`, `OEE_EXECUTION_EFFICIENCY_V1.md`, and `machine/governance/policy.v1.json`. Live GitHub ruleset state and canonical machine contracts override stale phase-era status text here.
+
+
 ## Important Dagger Governance Gap
 The current `plugin.json` includes a safety note stating that the destructive Dagger skill (and `resilience-check` command) does not yet have a fully enforced automated runtime guardrail. Phase 2 adds a script-level guardrail, but the manifest warning remains in place until CI/CD and runtime integration are completed.
 
