@@ -17,6 +17,7 @@ on:
       - machine/schemas/aq6-gate-coverage.v1.schema.json
       - orchestra_runtime/domain/adaptive/__init__.py
       - orchestra_runtime/domain/adaptive/gate_coverage.py
+      - scripts/validation/classify_f3_jev_successor_scope.py
       - scripts/validation/validate_gate_coverage.py
       - tests/behavior/test_gate_coverage.py
       - tests/runtime/test_adaptive_assurance_aq6.py
@@ -164,6 +165,20 @@ jobs:
           git cat-file -e "${comparison_base_sha}^{commit}"
           git diff --check "$comparison_base_sha..HEAD"
           git diff --name-only "$comparison_base_sha..HEAD" | sort > actual-paths.txt
+          f3_scope_applicability="$(python -B scripts/validation/classify_f3_jev_successor_scope.py < actual-paths.txt)"
+          case "$f3_scope_applicability" in
+            EXACT_F3_JEV_SUCCESSOR)
+              echo "AQ6_SCOPE=PASS"
+              echo "AQ6_SCOPE_LANE=F3_JEV_SUCCESSOR_EXACT"
+              exit 0
+              ;;
+            NOT_EXACT_F3_JEV_SUCCESSOR)
+              ;;
+            *)
+              echo "AQ6_F3_SCOPE_CLASSIFICATION_INVALID: $f3_scope_applicability" >&2
+              exit 1
+              ;;
+          esac
           scope_applicability="$(python -B scripts/validation/classify_adaptive_assurance_scope.py --assurance aq7 < actual-paths.txt)"
           case "$scope_applicability" in
             NOT_APPLICABLE)

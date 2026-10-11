@@ -30,3 +30,16 @@ The runtime suite keeps controlled negative fixtures for missing execution,
 missing workflow commands, unknown tests, tests that do not reach changed code,
 stale evidence, insufficient legacy or tenant assurance, failed execution, and
 uncovered changed paths.
+
+## Exact scope for the Issue #937 F3 JEV successor
+
+The AQ6 scope job retains its original exact AQ6 implementation inventory. It
+also reports `AQ6_SCOPE=PASS` for the Issue #937 F3 JEV successor only when the
+changed paths exactly equal the 18-path inventory in
+`scripts/validation/classify_f3_jev_successor_scope.py`, including the approved
+`CHANGELOG.md` correction. Partial, mixed, duplicate, unknown, and superset
+inventories never match this lane; all fallback behavior remains the existing
+AQ6 classifier and exact-inventory logic. This recognition applies only to the
+exact-scope job; the AQ6 runtime, behavior, and contract checks still run,
+test-to-code coverage is unchanged, and statement and branch coverage floors
+remain 97 percent and 95 percent.
