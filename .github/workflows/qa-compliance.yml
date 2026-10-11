@@ -12,8 +12,6 @@ on:
       - main
     paths:
       - .github/workflows/qa-compliance.yml
-      - CHANGELOG.md
-      - README.json
       - docs/architecture/ADAPTIVE_ASSURANCE_AQ5.md
       - machine/adaptive/aq5-qa-compliance.v1.json
       - machine/schemas/qa-compliance.v1.schema.json
