@@ -90,6 +90,8 @@ The two compliance commands are explicit public commands. They must not rely on 
 
 ## Scribe SSU Routing Rules
 
+Use the [DOC-L1 applicability contract](https://github.com/Baelfyre/Orchestra/blob/main/docs/project/DOCUMENTATION_LIFECYCLE_APPLICABILITY.md) at existing lifecycle decision points. Record per-obligation outcomes in the current issue, candidate, evidence, or report; add no record or gate. Route `REQUIRED` or triggered `CONDITIONAL` obligations to Scribe only for durable prose, traceability, or reconciliation; the fact owner verifies claims. `NOT_APPLICABLE` needs a reason; keep `UNRESOLVED` distinct and route missing facts or authority through Conductor to their owner. Scribe corrects verified `DOC_DRIFT`; the technical owner resolves `IMPLEMENTATION_DRIFT`. Documentation-neutral code, tests, and evidence stay direct without Scribe.
+
 - Existing-system, implemented-system, or current-capstone requests -> `scribe` in `SYSTEM_TO_DOCS` with only required evidence-verification specialists.
 - Requirements, problem-to-specification, or approved-requirements requests -> `scribe` in `SPEC_TO_SYSTEM`, then the appropriate technical and implementation owners.
 - Domain-model requests -> `scribe` for concept discovery; `weaver`, `clockwork`, or `chronicler` owns formal modeling as applicable.

@@ -41,6 +41,8 @@ Use Scribe when the task is primarily about:
 - reconciling documentation, specification, implementation, validation, and documented/research claims;
 - identifying documentation drift, implementation drift, missing evidence, superseded documentation, or unresolved contradictions.
 
+Do not activate Scribe solely for code, test, or evidence work when current documentation remains accurate. Keep such work on its direct route; record `NOT_APPLICABLE` only in an existing task or evidence surface where applicability is tracked.
+
 Do not use it for:
 
 - **Ambiguous ownership or multi-specialist routing** (Route to Conductor)
@@ -143,6 +145,7 @@ SSU guides:
 - Load [RESEARCH_CAPSTONE_DOCUMENTATION_GUIDE.md](RESEARCH_CAPSTONE_DOCUMENTATION_GUIDE.md) for research/capstone documentation, prototype-first research, existing-system research reconstruction, literature/source provenance, research evidence maps, or implementation-to-claim discipline.
 - Load [DOCUMENTATION_SYSTEM_RECONCILIATION_GUIDE.md](DOCUMENTATION_SYSTEM_RECONCILIATION_GUIDE.md) for `SPEC_TO_SYSTEM`, `SYSTEM_TO_DOCS`, `RECONCILE`, as-built reconstruction, documentation drift, implementation drift, historical-intent comparison, or claim/evidence reconciliation.
 - Load [GOVERNANCE_DOCUMENTATION_INTEGRATION_GUIDE.md](GOVERNANCE_DOCUMENTATION_INTEGRATION_GUIDE.md) for post-SSU governance documentation discipline, specialist contract matrices, exact-head commit/tree lineage bindings, prohibited silent promotions, or reconciling documentation with governance reality.
+- Load the [DOC-L1 applicability contract](https://github.com/Baelfyre/Orchestra/blob/main/docs/project/DOCUMENTATION_LIFECYCLE_APPLICABILITY.md) when lifecycle timing or a material documentation obligation is in question; reuse its per-obligation outcomes and existing-record boundary.
 
 ## Supported Work
 
