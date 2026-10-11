@@ -2951,6 +2951,17 @@
     "governance_repository_memory_validator": "scripts/governance_check.py",
     "governance_repository_memory_validator_tests": "scripts/test_governance_check.py",
     "required_analysis_compatibility_workflow": ".github/workflows/required-analysis-compat.yml",
+    "specialized_assurance_trigger_policy": "AQ5, AQ6, PRAI, and Cosmic Ray use owned assurance/runtime/configuration surfaces for pull-request applicability; generic CHANGELOG.md or README.json changes do not independently trigger those expensive workflows.",
+    "ci_evidence_reuse_policy": "validate is the canonical general behavior/runtime evidence producer; Governance Check retains governance-specific evidence; native required contexts focus portability; Required Analysis Compatibility owns the required exact-head Python CodeQL compatibility signal.",
+    "required_status_contexts": [
+      "governance-check",
+      "validate",
+      "runtime-tests",
+      "native-windows-latest",
+      "native-ubuntu-latest",
+      "native-macos-latest",
+      "Compatibility CodeQL (python)"
+    ],
     "cosmic_ray_confidence_workflow": ".github/workflows/cosmic-ray-confidence.yml",
     "legacy_mutmut_evidence_workflow": ".github/workflows/mutation-confidence.yml",
     "command_surface_parity_test": "tests/runtime/test_command_surface_parity.py",

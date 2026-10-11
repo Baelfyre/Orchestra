@@ -1,3 +1,12 @@
+## Unreleased governance hygiene: scope applicability and CI evidence deduplication
+
+- Removes generic `CHANGELOG.md` and `README.json` pull-request triggers from AQ5, AQ6, PRAI, and Cosmic Ray so expensive specialized assurance runs only for owned assurance/runtime/configuration surfaces.
+- Preserves the live seven required status contexts while narrowing Required Analysis Compatibility to its CodeQL signal, removing duplicate general behavior execution from Governance Check, and focusing the native matrix on portability evidence.
+- Keeps full runtime qualification on the canonical Ubuntu validate workflow and on Windows/macOS native runners, while the Ubuntu native context performs bounded runtime smoke because the full Ubuntu evidence already exists for the same candidate.
+- Replaces historical campaign-plan documents in the strict required-governance-file inventory with current constitutional, decision, autonomous-execution, protected-escalation, merge-readiness, and OEE policy documents.
+- Reconciles the Phase Retrospective governance document with its implemented/released runtime contract and current retrospective identity semantics.
+- Preserves exact-state evidence binding, live required-check names, protected-policy human authority, same-run self-amendment prohibition, mutation assurance on owned surfaces, and all merge/release/deployment/destructive-action boundaries.
+
 ## Unreleased governance policy: issue #937 F1/F2 historical assurance scope separation
 
 - Registers the exact 47-path PR #939 F1/F2 integration inventory as human-approved for historical AQ5/AQ7/PRAI scope separation.

@@ -1,5 +1,9 @@
 # CI/CD Governance Plan
 
+> [!NOTE]
+> **Historical planning/reference document.** This file is preserved for audit history and is not a current required-governance source. For current authority and enforcement, use `ORCHESTRA_PRIME_DIRECTIVE.md`, `GOVERNANCE_DECISION_PROTOCOL.md`, `PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md`, `AUTONOMOUS_MERGE_READINESS_PROTOCOL.md`, `OEE_EXECUTION_EFFICIENCY_V1.md`, and `machine/governance/policy.v1.json`. Live GitHub ruleset state and canonical machine contracts override stale phase-era status text here.
+
+
 This document outlines the governance validation foundation for the Orchestra repository. These checks will later be enforced by CI/CD (e.g., GitHub Actions) to act as quality and release gates before merging.
 
 ## Phase 1 Objectives

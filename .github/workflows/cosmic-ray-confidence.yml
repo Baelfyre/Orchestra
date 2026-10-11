@@ -14,7 +14,6 @@ on:
       - "machine/schemas/cosmic-ray-classification.schema.json"
       - "machine/provenance/third-party.v1.json"
       - "docs/THIRD_PARTY_PROVENANCE.md"
-      - "README.json"
       - "orchestra_runtime/evidence.py"
       - "orchestra_runtime/governance_kernel.py"
       - "orchestra_runtime/preexecution.py"

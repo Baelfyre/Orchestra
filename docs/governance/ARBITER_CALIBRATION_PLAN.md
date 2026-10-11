@@ -1,5 +1,9 @@
 # Arbiter Calibration Plan
 
+> [!NOTE]
+> **Historical planning/reference document.** This file is preserved for audit history and is not a current required-governance source. For current authority and enforcement, use `ORCHESTRA_PRIME_DIRECTIVE.md`, `GOVERNANCE_DECISION_PROTOCOL.md`, `PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md`, `AUTONOMOUS_MERGE_READINESS_PROTOCOL.md`, `OEE_EXECUTION_EFFICIENCY_V1.md`, and `machine/governance/policy.v1.json`. Live GitHub ruleset state and canonical machine contracts override stale phase-era status text here.
+
+
 Phase 4 calibrates Arbiter against the advisory CI/CD governance layer before any strict enforcement is introduced.
 
 ## Phase Record

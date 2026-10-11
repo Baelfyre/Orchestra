@@ -28,8 +28,7 @@ Require the active GitHub check contexts corresponding to these jobs before merg
 - Cross-platform Validation / `native-windows-latest`;
 - Cross-platform Validation / `native-ubuntu-latest`;
 - Cross-platform Validation / `native-macos-latest`;
-- CodeQL / `Analyze (actions)`;
-- CodeQL / `Analyze (python)`.
+- Required Analysis Compatibility / `Compatibility CodeQL (python)`.
 
 Workflow and job names are distinct concepts in GitHub. When configuring rules, select the actual check contexts presented by a current pull request rather than assuming the human-readable workflow title is the exact stored context.
 
@@ -95,7 +94,7 @@ Rebase is not an allowed merge method under the current ruleset. Merge commits a
 3. Confirm the rule targets `main` and is Active.
 4. Confirm the solo-maintainer protection profile above.
 5. Confirm Allowed merge methods is `Squash` only.
-6. Confirm all eight required check contexts are present.
+6. Confirm all seven required check contexts are present.
 7. Confirm required approvals remains `0` while the repository has no independent maintainer reviewer.
 8. Confirm conversation resolution, signed commits, linear history, branch-up-to-date, restricted deletion, and blocked force pushes remain enabled.
 9. Leave the current bypass list unchanged unless a separate repository-hardening decision explicitly changes it.
@@ -109,7 +108,7 @@ Use a safe controlled PR and prove all of the following from live GitHub behavio
 2. The PR cannot ordinarily merge when `governance-check` fails.
 3. The PR cannot ordinarily merge when `runtime-tests` fails.
 4. The PR cannot ordinarily merge when any native Windows, Ubuntu, or macOS job fails.
-5. The PR cannot ordinarily merge when either required CodeQL Analyze job fails or is missing.
+5. The PR cannot ordinarily merge when the required Compatibility CodeQL job fails or is missing.
 6. The PR cannot ordinarily merge with unresolved review conversations.
 7. The branch must be up to date before merge.
 8. Squash is the only ordinary merge method offered by the ruleset.

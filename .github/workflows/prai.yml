@@ -13,8 +13,6 @@ on:
     paths:
       - .github/workflows/prai.yml
       - .github/workflows/qa-compliance.yml
-      - CHANGELOG.md
-      - README.json
       - docs/architecture/ADAPTIVE_ASSURANCE_PRAI.md
       - machine/adaptive/prai-post-run-assurance.v1.json
       - machine/schemas/prai-post-run-assurance.v1.schema.json

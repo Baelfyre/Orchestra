@@ -445,6 +445,33 @@ def test_explicit_historical_git_references_without_current_refs():
         gc.record_failure = original_record_failure
 
 
+def test_inline_historical_branch_references_are_token_scoped():
+    cases = (
+        (
+            "release, or deployment authorized. Branch: `docs/delegated-autonomous-governance-phase-a`.",
+            "docs/delegated-autonomous-governance-phase-a",
+        ),
+        (
+            "detached HEAD caused exact feature branch references (`docs/delegated-autonomous-governance-phase-a`) to be misclassified.",
+            "docs/delegated-autonomous-governance-phase-a",
+        ),
+    )
+    for line, expected in cases:
+        start = line.index(expected)
+        assert_equal(
+            f"inline branch reference {expected}",
+            gc.get_explicit_git_ref_spans(line),
+            {(start, start + len(expected))},
+        )
+
+    ambiguous = "Historical branch with notes: `docs/ambiguous-old`"
+    assert_equal(
+        "ambiguous historical prose remains path-checked",
+        gc.get_explicit_git_ref_spans(ambiguous),
+        set(),
+    )
+
+
 def test_historical_ref_exemption_is_token_scoped():
     with tempfile.TemporaryDirectory(prefix="governance-ref-token-test-") as temp_dir:
         repo_root = Path(temp_dir)
@@ -716,6 +743,7 @@ def main():
     test_repo_memory_path_check()
     test_active_branch_memory_path_exception()
     test_explicit_historical_git_references_without_current_refs()
+    test_inline_historical_branch_references_are_token_scoped()
     test_known_git_branches_detached_head_and_ci()
     test_isolated_github_head_ref_and_ref_name_rejection()
     test_git_enumeration_failure_fail_closed()

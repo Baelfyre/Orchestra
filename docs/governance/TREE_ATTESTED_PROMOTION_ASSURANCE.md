@@ -111,6 +111,14 @@ Validation workflows, specialized assurance workflows, signed-materialization co
 
 This control-surface classification does not create a path-set exception for application/runtime changes and does not alter the exact AQ8 canonical-closeout whitelist. Unregistered future adaptive-assurance implementation paths remain fail-closed under the historical classifier until separately governed phase-registration or policy authority exists.
 
+## Applicability and evidence-reuse hygiene
+
+Specialized content-assurance workflows must be triggered by surfaces they actually own. Generic repository metadata such as `CHANGELOG.md` and `README.json` may accompany a substantive assurance change, but those files alone do not establish AQ5, AQ6, PRAI, or mutation-assurance applicability.
+
+For one exact candidate identity, the repository should prefer one authoritative evidence producer for a validation fact and allow downstream governance consumers to reuse that evidence. A consumer may still perform its own domain-specific checks, but it should not rerun a complete general validation suite merely to recreate evidence already produced for the same candidate.
+
+This optimization does not relax exact-state binding, fail-closed behavior, required status contexts, or source-to-tree promotion attestation.
+
 ## Fail-closed rules
 
 Tree-attested reuse is rejected when source identity, source checks, source workflows, tree equality, changed-path continuity, materialization identity, carrier signature, canonical base, canonical parent, or canonical signature cannot be proven exactly.

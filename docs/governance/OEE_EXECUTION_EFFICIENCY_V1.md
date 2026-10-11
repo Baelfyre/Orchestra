@@ -88,6 +88,19 @@ A decisive stop signal records:
 
 When evidence is sufficient and stop is required, downstream execution must be false.
 
+## CI evidence reuse
+
+For one exact candidate identity, Orchestra should prefer:
+
+```text
+ONE AUTHORITATIVE EVIDENCE PRODUCER
+        -> MANY GOVERNANCE CONSUMERS
+```
+
+over independently rerunning the same general behavior, governance, benchmark, or runtime suite in several workflows. Cross-platform, security, mutation, resilience, and other domain-specific checks remain separate when they provide genuinely different evidence.
+
+Generic metadata changes must not activate expensive specialized assurance by themselves. Required status-check names may remain stable while their jobs are narrowed to the distinct evidence they own.
+
 ## Existing authority is preserved
 
 Conductor owns routing and sequencing. Arbiter retains transition/stop authority. Overseer retains validation evidence authority. The Tuner retains evidence freshness/invalidation coordination. Scribe records durable measurements. The Governor remains legal/compliance governance and is not converted into an execution owner.
