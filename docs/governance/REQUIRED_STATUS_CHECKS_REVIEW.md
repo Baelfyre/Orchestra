@@ -23,8 +23,7 @@ BYPASS_CAPABILITY != GOVERNANCE_AUTHORIZATION
 | Cross-platform Validation | `native-windows-latest` | Required | Native Windows repository/runtime validation |
 | Cross-platform Validation | `native-ubuntu-latest` | Required | Native Ubuntu repository/runtime validation |
 | Cross-platform Validation | `native-macos-latest` | Required | Native macOS repository/runtime validation |
-| CodeQL | `Analyze (actions)` | Required | GitHub Actions security/code-analysis signal required by the live ruleset |
-| CodeQL | `Analyze (python)` | Required | Python security/code-analysis signal required by the live ruleset |
+| Required Analysis Compatibility | `Compatibility CodeQL (python)` | Required | Exact-head Python CodeQL compatibility signal required by the live ruleset |
 
 Additional checks required by a stricter future repository rule or a specific phase remain additive. This table is the current exact autonomous merge evidence inventory, not a bypass list.
 
@@ -85,7 +84,7 @@ Immediately before merge:
 
 1. Re-read the PR and confirm its exact head SHA.
 2. Re-read the live ruleset and selected merge method.
-3. Require all eight current required jobs and any additional repository-required checks to be completed and successful for that exact head.
+3. Require all seven current required jobs and any additional repository-required checks to be completed and successful for that exact head.
 4. Require zero unresolved review threads.
 5. Require Squash as the selected merge method.
 6. Require no bypass for ordinary governed execution.
@@ -118,4 +117,4 @@ Do not remove, rename, consolidate, or convert a workflow to manual-only while i
 
 ## Current Recommendation
 
-Keep Governance Check, validate, Cross-platform Validation, and the two CodeQL Analyze jobs active. Treat all eight jobs listed above as required autonomous merge evidence until a separately validated CI or ruleset change replaces this contract.
+Keep Governance Check, validate, Cross-platform Validation, and Required Analysis Compatibility active. Treat all seven jobs listed above as required autonomous merge evidence until a separately validated CI or ruleset change replaces this contract.
