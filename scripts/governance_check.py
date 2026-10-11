@@ -22,10 +22,12 @@ REQUIRED_ROOT_FILES = [
 REQUIRED_GOVERNANCE_DOCS = [
     "AGENTS.md",
     "docs/CONTRIBUTING.md",
-    "docs/governance/CI_CD_GOVERNANCE_PLAN.md",
-    "docs/governance/ARBITER_CALIBRATION_PLAN.md",
-    "docs/governance/DAGGER_RUNTIME_GUARDRAIL_GAP.md",
-    "docs/governance/STRICT_GOVERNANCE_RELEASE_GATE_PLAN.md",
+    "docs/governance/ORCHESTRA_PRIME_DIRECTIVE.md",
+    "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md",
+    "docs/governance/GOVERNED_AUTONOMOUS_EXECUTION_PROTOCOL.md",
+    "docs/governance/PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md",
+    "docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md",
+    "docs/governance/OEE_EXECUTION_EFFICIENCY_V1.md",
 ]
 
 REQUIRED_VALIDATION_SCRIPTS = [
