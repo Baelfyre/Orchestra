@@ -1,3 +1,14 @@
+## Unreleased AQ6 semantic applicability correction
+
+- Classify AQ6-owned maintenance, AQ6 functional changes, and shared-facade
+  feature integration separately, while preserving the original historical
+  twelve-path AQ6 inventory and rejecting unsafe mixed AQ6-owned changes.
+- Maintain independent AQ6 runtime, behavior, schema, freshness, and coverage
+  validation with the original 97% statement and 95% branch floors. This
+  separately human-authorized governance candidate supersedes, but does not
+  alter, the frozen PR #951 bootstrap approach; no CI exception, merge,
+  JEV activation, or TypeSafe credential usage is granted.
+
 ## Unreleased documentation lifecycle applicability
 
 - Adds the [Documentation Lifecycle Applicability](docs/project/DOCUMENTATION_LIFECYCLE_APPLICABILITY.md) contract, mapped to the existing development lifecycle with proportionate Scribe routing, claim ownership, traceability, and evidence-drift handling. It reuses existing governance and validation contracts without adding a lifecycle engine or CI gate.
