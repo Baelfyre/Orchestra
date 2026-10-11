@@ -1,3 +1,11 @@
+## Unreleased AQ6 exact-scope policy amendment for Issue #937 F3
+
+- Adds exact-set recognition for the reviewed 18-path F3 JEV successor in AQ6
+  scope validation while preserving the original AQ6 inventory, all runtime
+  and contract checks, and the 97 percent statement / 95 percent branch
+  coverage floors. Human authorization was explicitly granted on 2026-10-11;
+  no signed approval receipt is claimed.
+
 ## Unreleased documentation lifecycle applicability
 
 - Adds the [Documentation Lifecycle Applicability](docs/project/DOCUMENTATION_LIFECYCLE_APPLICABILITY.md) contract, mapped to the existing development lifecycle with proportionate Scribe routing, claim ownership, traceability, and evidence-drift handling. It reuses existing governance and validation contracts without adding a lifecycle engine or CI gate.
