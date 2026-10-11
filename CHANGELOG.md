@@ -1,3 +1,8 @@
+## Unreleased runtime validation: isolated defensive-review test candidates
+
+- Run the four positive read-only Cipher/MCP review tests against a detached, disposable Git worktree with a controlled tracked-file change; canonical-main push checkouts otherwise contain no changed files relative to origin/main.
+- Preserve production snapshot construction, host-computed identity, read-only capability restrictions, non-authorizing review semantics, coverage thresholds, and protected governance boundaries; no production runtime or policy changes.
+
 ## Unreleased runtime test evidence: truthful JUnit and historical ref syntax
 
 - Derive concrete test totals from JUnit testcase elements and retain producer-reported and additional outcomes separately; preserve legacy summary-only evidence and strict rejection of undercounts.
