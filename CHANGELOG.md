@@ -1,3 +1,8 @@
+## Unreleased runtime validation: isolated defensive-review test candidates
+
+- Run the four positive read-only Cipher/MCP review tests against a detached, disposable Git worktree with a controlled tracked-file change; canonical-main push checkouts otherwise contain no changed files relative to origin/main.
+- Preserve production snapshot construction, host-computed identity, read-only capability restrictions, non-authorizing review semantics, coverage thresholds, and protected governance boundaries; no production runtime or policy changes.
+
 ## Unreleased governance hygiene: scope applicability and CI evidence deduplication
 
 - Removes generic `CHANGELOG.md` and `README.json` pull-request triggers from AQ5, AQ6, PRAI, and Cosmic Ray so expensive specialized assurance runs only for owned assurance/runtime/configuration surfaces.
