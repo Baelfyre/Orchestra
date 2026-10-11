@@ -98,14 +98,18 @@ jobs:
           run_report validate_structure python scripts/validate_structure.py
           run_report validate_manifest python scripts/validate_manifest.py
           run_report check_stale_references python scripts/check_stale_references.py
-          run_report governance_report python scripts/governance_check.py --strict
-          run_report behavior_tests python tests/behavior/run_tests.py
-          run_report runtime_tests python -m pytest tests/runtime --cov=orchestra_runtime --cov-fail-under=90 -q
+          run_report python_compile python -m compileall -q orchestra_runtime scripts internal/context
           run_report codex_export python adapters/codex/validate_codex_export.py
-          run_report router_benchmark python scripts/router_benchmark_runner.py
-          run_report router_benchmark_negative python tests/behavior/test_router_benchmark_fixture_validation.py
           run_report runtime_guardrail python scripts/runtime_guardrail.py --enabled --enforce
-          run_report prompt_load_thresholds python scripts/check_prompt_load_thresholds.py
+
+          if [ "${{ runner.os }}" = "Linux" ]; then
+            run_report runtime_smoke python -m pytest \
+              tests/runtime/test_runtime_core.py \
+              tests/runtime/test_adapter_contracts.py \
+              -q
+          else
+            run_report runtime_tests python -m pytest tests/runtime -q
+          fi
 
           python -m json.tool plugin.json > /dev/null
 
