@@ -2661,6 +2661,7 @@
     "adaptive_assurance_aq6_schema": "machine/schemas/aq6-gate-coverage.v1.schema.json",
     "adaptive_assurance_aq6_runtime": "orchestra_runtime/domain/adaptive/gate_coverage.py",
     "adaptive_assurance_aq6_validator": "scripts/validation/validate_gate_coverage.py",
+    "adaptive_assurance_aq6_scope_classifier": "scripts/validation/classify_aq6_scope.py",
     "adaptive_assurance_aq6_workflow": ".github/workflows/aq6-gate-coverage.yml",
     "adaptive_assurance_aq6_documentation": "docs/architecture/ADAPTIVE_ASSURANCE_AQ6.md",
     "adaptive_assurance_aq8_contract": "machine/adaptive/aq8-high-risk-assurance-packs.v1.json",
