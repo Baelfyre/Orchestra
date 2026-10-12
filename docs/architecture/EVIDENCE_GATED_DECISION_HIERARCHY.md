@@ -135,6 +135,8 @@ A protected policy or authority change freezes the candidate, preserves evidence
 
 The optional TypeSafe System One adapter is tracked under `orchestra_runtime/infrastructure/providers/typesafe_jev.py`, with the normalized state and local interpreter in `orchestra_runtime/domain/adaptive/jev_adjudication.py`. The application use case accepts only the already-prepared findings, verification, Overseer assessment, mitigation alternatives, dissent, constraints, and exact candidate binding; it submits one request and rechecks candidate freshness afterward. Its output remains advisory and preserves native probabilities. It is not assurance evidence, governance approval, execution authority, or a transition. JEV cannot replace required review, reduce AQ2 risk or assurance depth, create authority, or mutate the candidate. Provider absence and fewer than two material alternatives do not block the existing hierarchy.
 
+Successful TypeSafe responses require nonnegative integer `usage.input_tokens` and `usage.output_tokens`, plus answers that match the local question identities and types. Choice answers require finite confidence and select a maximum-probability criterion; equal-probability ties are allowed, and the existing probability-sum tolerance remains in force. Unsupported top-level response metadata is ignored and not propagated.
+
 Results marked `STALE` or `UNBOUND` redact provider answers, resolved-model provenance, and recommendations from the public result and its serialized form while retaining candidate-binding metadata. This does not redact a bound `INCONCLUSIVE` result.
 
 ## Existing contracts
