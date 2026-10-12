@@ -112,6 +112,12 @@ class TypeSafeJevAdapter(JevAdjudicationProvider):
             raise JevProviderFailure("RESPONSE_CONTRACT_INCOMPATIBLE", status) from None
         if not isinstance(data, dict) or "error" in data:
             raise JevProviderFailure("RESPONSE_CONTRACT_INCOMPATIBLE", status)
+        usage = data.get("usage")
+        if not isinstance(usage, dict) or any(
+            type(usage.get(field)) is not int or usage[field] < 0
+            for field in ("input_tokens", "output_tokens")
+        ):
+            raise JevProviderFailure("RESPONSE_CONTRACT_INCOMPATIBLE", status)
         model = data.get("model")
         answers = data.get("answers")
         if not isinstance(model, str) or not isinstance(answers, dict):
@@ -125,20 +131,24 @@ class TypeSafeJevAdapter(JevAdjudicationProvider):
                 answer = answers[question_id]
                 if not isinstance(question, Mapping) or not isinstance(answer, dict):
                     raise ValueError
-                if answer.get("type") != question.get("type"):
+                answer_type = question.get("type")
+                if answer.get("type") != answer_type:
                     raise ValueError
-                if question["type"] == "noul":
+                if answer_type == "noul":
                     typed_answers.append((question_id, JevNoulAnswer(_finite_probability(answer.get("noul")))))
-                elif question["type"] == "choice":
+                elif answer_type == "choice":
                     criteria = question.get("criteria")
                     choice = answer.get("choice")
                     if not isinstance(criteria, Mapping) or not isinstance(choice, str) or choice not in criteria:
                         raise ValueError
-                    confidence = answer.get("confidence")
-                    if "confidence" in answer:
-                        confidence = _finite_probability(confidence)
+                    confidence = _finite_probability(answer["confidence"])
                     probabilities = answer.get("probabilities")
                     if not isinstance(probabilities, dict) or set(probabilities) != set(criteria):
+                        raise ValueError
+                    typed_probabilities = {
+                        key: _finite_probability(value) for key, value in probabilities.items()
+                    }
+                    if typed_probabilities[choice] != max(typed_probabilities.values()):
                         raise ValueError
                     typed_answers.append(
                         (
@@ -146,10 +156,7 @@ class TypeSafeJevAdapter(JevAdjudicationProvider):
                             JevChoiceAnswer(
                                 choice,
                                 confidence,
-                                tuple(
-                                    (key, _finite_probability(value))
-                                    for key, value in probabilities.items()
-                                ),
+                                tuple(typed_probabilities.items()),
                             ),
                         )
                     )

@@ -186,7 +186,11 @@ def _answer_payload(questions: Mapping[str, Mapping[str, object]]) -> dict[str, 
                     key: 1.0 if key == selected else 0.0 for key in criteria
                 },
             }
-    return {"model": "jev-1.13.0", "answers": answers}
+    return {
+        "model": "jev-1.13.0",
+        "answers": answers,
+        "usage": {"input_tokens": 120, "output_tokens": 24},
+    }
 
 
 class _Response:
@@ -330,11 +334,16 @@ def test_state_rejects_unsafe_or_reserved_mitigation_ids(mitigation_id: str) -> 
         _state(mitigation_options=options)
 
 
-def test_system_one_adapter_sends_one_exact_request_and_preserves_native_typed_values() -> None:
+def test_system_one_adapter_sends_one_exact_request_and_preserves_native_typed_values(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
     state = _state()
     questions = OrchestraJevQuestionBuilder().build(state)
     fake_secret = "test-only-not-a-secret"
-    opener = _Opener(_Response(_answer_payload(questions)))
+    payload = _answer_payload(questions)
+    payload["request_id"] = "synthetic-ignored-metadata"
+    payload["provider_metadata"] = {"trace": "synthetic-only"}
+    opener = _Opener(_Response(payload))
     adapter = TypeSafeJevAdapter(lambda: fake_secret, opener=opener)
     response = adapter.adjudicate(state, questions)
 
@@ -361,6 +370,9 @@ def test_system_one_adapter_sends_one_exact_request_and_preserves_native_typed_v
         ("M2", 0.0),
         ("NO_CLEAR_PREFERENCE", 0.0),
     )
+    assert not hasattr(response, "usage")
+    assert not hasattr(response, "request_id")
+    assert not caplog.records
 
 
 def test_adapter_rejects_incomplete_local_catalog_before_network_call() -> None:
@@ -374,19 +386,102 @@ def test_adapter_rejects_incomplete_local_catalog_before_network_call() -> None:
     assert opener.requests == []
 
 
-def test_choice_confidence_may_be_absent_but_native_distribution_is_retained() -> None:
+def test_adapter_rejects_choice_without_required_confidence() -> None:
     state = _state()
     questions = OrchestraJevQuestionBuilder().build(state)
     payload = _answer_payload(questions)
     choice = payload["answers"]["recommended_mitigation"]
     del choice["confidence"]
-    choice["probabilities"] = {"M1": 1, "M2": 0, "NO_CLEAR_PREFERENCE": 0}
+    adapter = TypeSafeJevAdapter(lambda: "test-only-not-a-secret", opener=_Opener(_Response(payload)))
+    with pytest.raises(JevProviderFailure) as caught:
+        adapter.adjudicate(state, questions)
+    assert caught.value.code == "RESPONSE_CONTRACT_INCOMPATIBLE"
+
+
+@pytest.mark.parametrize(
+    "mutate",
+    [
+        pytest.param(lambda payload: payload.pop("usage"), id="missing-usage"),
+        pytest.param(lambda payload: payload["usage"].pop("input_tokens"), id="missing-input-tokens"),
+        pytest.param(lambda payload: payload["usage"].pop("output_tokens"), id="missing-output-tokens"),
+        pytest.param(lambda payload: payload["usage"].update(input_tokens=-1), id="negative-input-tokens"),
+        pytest.param(lambda payload: payload["usage"].update(output_tokens=-1), id="negative-output-tokens"),
+        pytest.param(lambda payload: payload["usage"].update(input_tokens=True), id="boolean-input-tokens"),
+        pytest.param(lambda payload: payload["usage"].update(output_tokens=False), id="boolean-output-tokens"),
+        pytest.param(lambda payload: payload["usage"].update(input_tokens=1.0), id="fractional-input-tokens"),
+    ],
+)
+def test_adapter_rejects_missing_or_invalid_usage_counts(mutate) -> None:
+    state = _state()
+    questions = OrchestraJevQuestionBuilder().build(state)
+    payload = _answer_payload(questions)
+    mutate(payload)
+    adapter = TypeSafeJevAdapter(lambda: "test-only-not-a-secret", opener=_Opener(_Response(payload)))
+    with pytest.raises(JevProviderFailure) as caught:
+        adapter.adjudicate(state, questions)
+    assert caught.value.code == "RESPONSE_CONTRACT_INCOMPATIBLE"
+
+
+@pytest.mark.parametrize(
+    "confidence",
+    [
+        pytest.param(float("nan"), id="nan"),
+        pytest.param(float("inf"), id="infinity"),
+        pytest.param(-0.01, id="below-zero"),
+        pytest.param(1.01, id="above-one"),
+        pytest.param(True, id="boolean"),
+        pytest.param("0.81", id="string"),
+    ],
+)
+def test_adapter_rejects_invalid_choice_confidence(confidence: object) -> None:
+    state = _state()
+    questions = OrchestraJevQuestionBuilder().build(state)
+    payload = _answer_payload(questions)
+    payload["answers"]["recommended_mitigation"]["confidence"] = confidence
+    adapter = TypeSafeJevAdapter(lambda: "test-only-not-a-secret", opener=_Opener(_Response(payload)))
+    with pytest.raises(JevProviderFailure) as caught:
+        adapter.adjudicate(state, questions)
+    assert caught.value.code == "RESPONSE_CONTRACT_INCOMPATIBLE"
+
+
+def test_adapter_rejects_choice_that_is_not_a_maximum_probability_option() -> None:
+    state = _state()
+    questions = OrchestraJevQuestionBuilder().build(state)
+    payload = _answer_payload(questions)
+    choice = payload["answers"]["recommended_mitigation"]
+    choice["choice"] = "M2"
+    choice["probabilities"] = {"M1": 0.5, "M2": 0.4, "NO_CLEAR_PREFERENCE": 0.1}
+    adapter = TypeSafeJevAdapter(lambda: "test-only-not-a-secret", opener=_Opener(_Response(payload)))
+    with pytest.raises(JevProviderFailure) as caught:
+        adapter.adjudicate(state, questions)
+    assert caught.value.code == "RESPONSE_CONTRACT_INCOMPATIBLE"
+
+
+def test_adapter_allows_equal_probability_choice_tie() -> None:
+    state = _state()
+    questions = OrchestraJevQuestionBuilder().build(state)
+    payload = _answer_payload(questions)
+    payload["answers"]["recommended_mitigation"].update(
+        choice="M2",
+        confidence=0.5,
+        probabilities={"M1": 0.5, "M2": 0.5, "NO_CLEAR_PREFERENCE": 0.0},
+    )
     adapter = TypeSafeJevAdapter(lambda: "test-only-not-a-secret", opener=_Opener(_Response(payload)))
     response = adapter.adjudicate(state, questions)
     answer = response.answer_map()["recommended_mitigation"]
-    assert answer.confidence is None
-    assert answer.probabilities == (("M1", 1), ("M2", 0), ("NO_CLEAR_PREFERENCE", 0))
-    assert answer.to_dict()["probabilities"] == {"M1": 1, "M2": 0, "NO_CLEAR_PREFERENCE": 0}
+    assert answer.selected == "M2"
+    assert answer.probabilities == (("M1", 0.5), ("M2", 0.5), ("NO_CLEAR_PREFERENCE", 0.0))
+
+
+def test_adapter_rejects_score_answers_for_current_catalog() -> None:
+    state = _state()
+    questions = OrchestraJevQuestionBuilder().build(state)
+    payload = _answer_payload(questions)
+    payload["answers"]["material_unresolved_uncertainty"] = {"type": "score", "score": 0.65}
+    adapter = TypeSafeJevAdapter(lambda: "test-only-not-a-secret", opener=_Opener(_Response(payload)))
+    with pytest.raises(JevProviderFailure) as caught:
+        adapter.adjudicate(state, questions)
+    assert caught.value.code == "RESPONSE_CONTRACT_INCOMPATIBLE"
 
 
 @pytest.mark.parametrize(
@@ -397,6 +492,12 @@ def test_choice_confidence_may_be_absent_but_native_distribution_is_retained() -
         lambda payload: payload["answers"]["material_unresolved_uncertainty"].update(noul=float("nan")),
         lambda payload: payload["answers"]["recommended_mitigation"].update(choice="UNSUPPLIED"),
         lambda payload: payload["answers"]["recommended_mitigation"]["probabilities"].pop("M2"),
+        lambda payload: payload["answers"]["recommended_mitigation"]["probabilities"].update(
+            M1=0.5, M2=0.25, NO_CLEAR_PREFERENCE=0.0
+        ),
+        lambda payload: payload["answers"].update(
+            unknown_question={"type": "noul", "noul": 0.5}
+        ),
         lambda payload: payload.update(model="other-model"),
     ],
 )

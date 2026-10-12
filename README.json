@@ -2502,6 +2502,7 @@
         "tests/runtime/test_jev_adjudication.py",
         "tests/runtime/test_evidence_gated_decision_hierarchy.py"
       ],
+      "response_contract": "Successful responses require nonnegative integer usage.input_tokens and usage.output_tokens and complete typed answers. Choice answers require finite confidence and a maximum-probability selection; ties are valid. Unsupported top-level metadata is ignored.",
       "authority_note": "JEV remains optional advisory input only. Its output is not assurance evidence, governance approval, execution authority, or an Arbiter transition, and it cannot override required verification or activate a provider automatically."
     }
   },
