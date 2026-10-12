@@ -13,6 +13,7 @@ from typing import Any
 
 import pytest
 
+from orchestra_runtime.application.services import jev_provider_projection as projection
 from orchestra_runtime.application.services.jev_provider_projection import (
     JEV_PROVIDER_PROJECTION_CONTRACT,
     JEV_PROVIDER_SEMANTIC_PROJECTION_CONTRACT,
@@ -134,6 +135,96 @@ def _state(
         dissent=[dict(item) for item in _DISSENT],
         constraints=dict(_CONSTRAINTS),
     )
+
+
+def _state_with_cardinalities(
+    *,
+    finding_count: int = 2,
+    verification_count: int = 2,
+    mitigation_count: int = 2,
+    dissent_count: int = 1,
+    tradeoffs_per_mitigation: int = 2,
+) -> OrchestraJevAdjudicationState:
+    base = _state(mitigation_count=mitigation_count).to_payload()
+    findings = [
+        {
+            "id": f"F-{index:03}",
+            "producer": "Cipher",
+            "status": "VERIFIED" if index == 1 else "UNVERIFIED",
+            "summary": f"Raw local finding F-{index:03} wording.",
+            "evidence_refs": [],
+        }
+        for index in range(1, finding_count + 1)
+    ]
+    verification = [
+        {
+            "id": f"V-{index:03}",
+            "producer": "Cipher",
+            "finding_id": f"F-{((index - 1) % finding_count) + 1:03}",
+            "result": "CONFIRMED",
+            "evidence_refs": [],
+        }
+        for index in range(1, verification_count + 1)
+    ]
+    mitigations = base["mitigation_options"]
+    for index, option in enumerate(mitigations, start=1):
+        option["addresses"] = ["F-001"]
+        option["tradeoffs"] = [
+            f"Raw local tradeoff {index}-{tradeoff}."
+            for tradeoff in range(1, tradeoffs_per_mitigation + 1)
+        ]
+    dissent = [
+        {
+            "id": f"D-{index:03}",
+            "producer": "Cipher",
+            "summary": f"Raw local dissent D-{index:03} wording.",
+            "evidence_refs": [],
+        }
+        for index in range(1, dissent_count + 1)
+    ]
+    return OrchestraJevAdjudicationState.create(
+        candidate={key: base["candidate"][key] for key in ("repository", "commit", "tree")},
+        task=base["task"],
+        findings=findings,
+        verification=verification,
+        overseer_assessment=base["overseer_assessment"],
+        mitigation_options=mitigations,
+        dissent=dissent,
+        constraints=base["constraints"],
+    )
+
+
+def _reviewed_text_values(bundle: ReviewedJevTextBundle) -> list[str]:
+    return [
+        bundle.task_domain,
+        *bundle.finding_summaries.values(),
+        *bundle.overseer_assessment.values(),
+        *bundle.mitigation_summaries.values(),
+        *(value for tradeoffs in bundle.mitigation_tradeoffs.values() for value in tradeoffs),
+        *bundle.dissent_summaries.values(),
+    ]
+
+
+def _replace_reviewed_text_value(
+    bundle: ReviewedJevTextBundle,
+    field: str,
+    value: str,
+) -> ReviewedJevTextBundle:
+    if field == "task_domain":
+        return replace(bundle, task_domain=value)
+    if field == "finding_summary":
+        return replace(bundle, finding_summaries={**bundle.finding_summaries, "F-001": value})
+    if field == "overseer_assessment":
+        return replace(bundle, overseer_assessment={**bundle.overseer_assessment, "impact": value})
+    if field == "mitigation_summary":
+        return replace(bundle, mitigation_summaries={**bundle.mitigation_summaries, "M-001": value})
+    if field == "tradeoff":
+        tradeoffs = {key: list(items) for key, items in bundle.mitigation_tradeoffs.items()}
+        tradeoffs["M-001"][0] = value
+        return replace(bundle, mitigation_tradeoffs=tradeoffs)
+    if field == "dissent_summary":
+        return replace(bundle, dissent_summaries={**bundle.dissent_summaries, "D-001": value})
+    raise AssertionError(f"unknown reviewed text field: {field}")
 
 
 def _reviewed_text(state: OrchestraJevAdjudicationState) -> ReviewedJevTextBundle:
@@ -263,6 +354,17 @@ def _assert_error(code: str, action) -> None:
         action()
     assert error.value.code == code
     assert str(error.value) == code
+
+
+def test_reviewed_text_private_guards_reject_malformed_values_and_maps() -> None:
+    _assert_error(
+        "REVIEWED_TEXT_INCOMPLETE",
+        lambda: projection._safe_text(None, set()),
+    )
+    _assert_error(
+        "REVIEWED_TEXT_INCOMPLETE",
+        lambda: projection._text_map({}, ["F-001"], set()),
+    )
 
 
 def test_projection_allowlist_omits_candidate_evidence_and_source_identifiers() -> None:
@@ -1104,9 +1206,264 @@ def test_projection_preserves_long_reviewed_text_without_truncation() -> None:
     long_summary = "Reviewed synthetic context remains complete. " * 256
     summaries = dict(bundle.finding_summaries)
     summaries["F-001"] = long_summary
-    body = _build(state, replace(bundle, finding_summaries=summaries))
+    reviewed = replace(bundle, finding_summaries=summaries)
+    body = _build(state, reviewed)
+    semantic_body, _ = build_offline_jev_provider_semantic_projection_with_context(
+        state,
+        reviewed,
+        nonce="synthetic-request-nonce-20261012",
+    )
 
     assert _request(body)["state"]["findings"][0]["summary"] == long_summary
+    assert _request(semantic_body)["state"]["findings"][0]["summary"] == long_summary
+    assert len(body) < projection._JEV_OFFLINE_BUDGET_V1_MAX_REQUEST_BYTES
+    assert len(semantic_body) < projection._JEV_OFFLINE_BUDGET_V1_MAX_REQUEST_BYTES
+
+
+@pytest.mark.parametrize(
+    ("field", "overrides"),
+    [
+        ("findings", {"finding_count": 33}),
+        ("verification", {"verification_count": 65}),
+        ("mitigations", {"mitigation_count": 17}),
+        ("dissent", {"dissent_count": 33}),
+        ("tradeoffs", {"tradeoffs_per_mitigation": 17}),
+    ],
+)
+def test_projection_rejects_each_structural_limit_before_aliases_or_questions(
+    field: str,
+    overrides: dict[str, int],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    state = _state_with_cardinalities(**overrides)
+    reviewed = _reviewed_text(state)
+    calls: list[str] = []
+
+    def forbidden(*args: object, **kwargs: object) -> None:
+        calls.append("called")
+        raise AssertionError("oversized source reached projection expansion")
+
+    monkeypatch.setattr(projection, "_alias", forbidden)
+    monkeypatch.setattr(OrchestraJevQuestionBuilder, "build", forbidden)
+    _assert_error(
+        "STRUCTURE_LIMIT_EXCEEDED",
+        lambda: build_offline_jev_provider_projection_with_context(
+            state, reviewed, nonce="synthetic-structure-limit-nonce"
+        ),
+    )
+    assert calls == [], field
+
+
+def test_projection_accepts_exact_structural_caps_and_question_formula() -> None:
+    state = _state_with_cardinalities(
+        finding_count=32,
+        verification_count=64,
+        mitigation_count=16,
+        dissent_count=32,
+        tradeoffs_per_mitigation=16,
+    )
+    before = state.to_payload()
+    reviewed = _reviewed_text(state)
+    source = state.to_payload()
+    reviewed = replace(
+        reviewed,
+        mitigation_tradeoffs={
+            item["id"]: ["Reviewed tradeoff."] * len(item["tradeoffs"])
+            for item in source["mitigation_options"]
+        },
+    )
+    body = _build(state, reviewed)
+    semantic_body, context = build_offline_jev_provider_semantic_projection_with_context(
+        state,
+        reviewed,
+        nonce="synthetic-request-nonce-20261012",
+        evidence_annotations=_reviewed_evidence_annotations(state),
+    )
+
+    for request_bytes in (body, semantic_body):
+        request = _request(request_bytes)
+        assert len(request["questions"]) == 6 + 3 * 16 == 54
+        assert len(request_bytes) <= projection._JEV_OFFLINE_BUDGET_V1_MAX_REQUEST_BYTES
+    assert len(source["findings"]) == 32
+    assert len(source["verification"]) == 64
+    assert len(source["mitigation_options"]) == 16
+    assert len(source["dissent"]) == 32
+    assert max(len(item["tradeoffs"]) for item in source["mitigation_options"]) == 16
+    assert len(semantic_body) > len(body)
+    response = _typed_response(semantic_body, state.candidate_binding)
+    restored = reverse_map_offline_jev_provider_response(
+        state, semantic_body, context, response
+    )
+    assert restored.candidate_binding == state.candidate_binding
+    assert state.to_payload() == before
+
+
+@pytest.mark.parametrize(
+    "field",
+    [
+        "task_domain",
+        "finding_summary",
+        "overseer_assessment",
+        "mitigation_summary",
+        "tradeoff",
+        "dissent_summary",
+    ],
+)
+def test_projection_rejects_oversized_text_before_hazard_scans(
+    field: str,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    state = _state()
+    bundle = _replace_reviewed_text_value(
+        _reviewed_text(state),
+        field,
+        "x" * (projection._JEV_OFFLINE_BUDGET_V1_MAX_REVIEWED_TEXT_BYTES + 1),
+    )
+    calls: list[str] = []
+
+    class ForbiddenPattern:
+        def search(self, value: str) -> None:
+            calls.append("searched")
+            raise AssertionError("oversized text reached a hazard pattern")
+
+    monkeypatch.setattr(projection, "_UNSAFE_TEXT_PATTERNS", (ForbiddenPattern(),))
+    with pytest.raises(JevProjectionError) as error:
+        _build(state, bundle)
+    assert error.value.code == "REVIEWED_TEXT_LIMIT_EXCEEDED"
+    assert str(error.value) == "REVIEWED_TEXT_LIMIT_EXCEEDED"
+    assert "x" * 64 not in str(error.value)
+    assert calls == []
+
+
+def test_projection_bounds_reviewed_text_by_utf8_bytes_without_truncation() -> None:
+    state = _state(mitigation_count=1)
+    bundle = _reviewed_text(state)
+    max_bytes = projection._JEV_OFFLINE_BUDGET_V1_MAX_REVIEWED_TEXT_BYTES
+
+    ascii_boundary = _replace_reviewed_text_value(bundle, "finding_summary", "x" * max_bytes)
+    ascii_body = _build(state, ascii_boundary)
+    assert _request(ascii_body)["state"]["findings"][0]["summary"] == "x" * max_bytes
+    _assert_error(
+        "REVIEWED_TEXT_LIMIT_EXCEEDED",
+        lambda: _build(
+            state,
+            _replace_reviewed_text_value(bundle, "finding_summary", "x" * (max_bytes + 1)),
+        ),
+    )
+
+    multibyte_boundary = _replace_reviewed_text_value(bundle, "finding_summary", "é" * (max_bytes // 2))
+    multibyte_body = _build(state, multibyte_boundary)
+    assert len(("é" * (max_bytes // 2)).encode("utf-8")) == max_bytes
+    assert _request(multibyte_body)["state"]["findings"][0]["summary"] == "é" * (max_bytes // 2)
+    _assert_error(
+        "REVIEWED_TEXT_LIMIT_EXCEEDED",
+        lambda: _build(
+            state,
+            _replace_reviewed_text_value(
+                bundle, "finding_summary", "é" * (max_bytes // 2 + 1)
+            ),
+        ),
+    )
+
+
+def test_projection_enforces_aggregate_reviewed_text_utf8_budget() -> None:
+    state = _state()
+    bundle = _reviewed_text(state)
+    other_fields = [
+        bundle.overseer_assessment["evidence_sufficiency"],
+        bundle.overseer_assessment["residual_risk_context"],
+        *[value for key, value in bundle.finding_summaries.items() if key != "F-001"],
+        *bundle.mitigation_summaries.values(),
+        *(value for values in bundle.mitigation_tradeoffs.values() for value in values),
+        *bundle.dissent_summaries.values(),
+    ]
+    other_bytes = sum(len(value.encode("utf-8")) for value in other_fields)
+    total_limit = projection._JEV_OFFLINE_BUDGET_V1_MAX_TOTAL_REVIEWED_TEXT_BYTES
+    field_limit = projection._JEV_OFFLINE_BUDGET_V1_MAX_REVIEWED_TEXT_BYTES
+    impact_bytes = total_limit - other_bytes - 2 * field_limit
+    assert 0 < impact_bytes <= field_limit
+    at_limit = replace(
+        bundle,
+        task_domain="x" * field_limit,
+        finding_summaries={**bundle.finding_summaries, "F-001": "x" * field_limit},
+        overseer_assessment={**bundle.overseer_assessment, "impact": "x" * impact_bytes},
+    )
+    assert sum(len(value.encode("utf-8")) for value in _reviewed_text_values(at_limit)) == total_limit
+    body = _build(state, at_limit)
+    assert len(body) <= projection._JEV_OFFLINE_BUDGET_V1_MAX_REQUEST_BYTES
+
+    over_limit = replace(
+        at_limit,
+        overseer_assessment={**at_limit.overseer_assessment, "impact": "x" * (impact_bytes + 1)},
+    )
+    _assert_error("REVIEWED_TEXT_LIMIT_EXCEEDED", lambda: _build(state, over_limit))
+
+
+@pytest.mark.parametrize("builder", ["v1_bytes", "v1_context", "v2"])
+@pytest.mark.parametrize("delta", [-1, 0, 1])
+def test_projection_enforces_exact_serialized_request_byte_boundary(
+    builder: str,
+    delta: int,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    state = _state()
+    reviewed = _reviewed_text(state)
+    annotations = _reviewed_evidence_annotations(state)
+    target_bytes = projection._JEV_OFFLINE_BUDGET_V1_MAX_REQUEST_BYTES + delta
+    expected_serializations = 2 if builder == "v2" else 1
+    actual_serializations = 0
+    canonical = projection.canonical_json_bytes
+
+    def sized_serialization(value: object) -> bytes:
+        nonlocal actual_serializations
+        actual_serializations += 1
+        result = canonical(value)
+        if actual_serializations == expected_serializations:
+            assert len(result) <= target_bytes
+            return result + b" " * (target_bytes - len(result))
+        return result
+
+    monkeypatch.setattr(projection, "canonical_json_bytes", sized_serialization)
+
+    def build() -> bytes | tuple[bytes, JevProjectionMappingContext]:
+        if builder == "v1_bytes":
+            return build_offline_jev_provider_projection(
+                state, reviewed, nonce="synthetic-request-nonce-20261012"
+            )
+        if builder == "v1_context":
+            return build_offline_jev_provider_projection_with_context(
+                state, reviewed, nonce="synthetic-request-nonce-20261012"
+            )
+        return build_offline_jev_provider_semantic_projection_with_context(
+            state,
+            reviewed,
+            nonce="synthetic-request-nonce-20261012",
+            evidence_annotations=annotations,
+        )
+
+    if delta == 1:
+        result: object = "no-result"
+        with pytest.raises(JevProjectionError) as error:
+            result = build()
+        assert error.value.code == "REQUEST_TOO_LARGE"
+        assert str(error.value) == "REQUEST_TOO_LARGE"
+        assert result == "no-result"
+    else:
+        built = build()
+        body = built if isinstance(built, bytes) else built[0]
+        assert len(body) == target_bytes
+        request = _request(body)
+        assert len(request["questions"]) == 12
+        if builder == "v2":
+            assert "semantic_context" in request["state"]
+        if builder != "v1_bytes":
+            context = built[1]
+            response = _typed_response(body, state.candidate_binding)
+            restored = reverse_map_offline_jev_provider_response(
+                state, body, context, response
+            )
+            assert restored.candidate_binding == state.candidate_binding
+    assert actual_serializations == expected_serializations
 
 
 def test_projection_makes_no_network_or_environment_credential_calls(
