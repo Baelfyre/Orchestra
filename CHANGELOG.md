@@ -1,3 +1,7 @@
+## Unreleased F3 optional JEV advisory component
+
+- Adds the optional candidate-bound TypeSafe JEV advisory component for comparing competing mitigations after verified findings and before governance. It remains advisory only, has no production caller, and grants no assurance, governance, execution, or transition authority.
+
 ## Unreleased AQ6 semantic applicability correction
 
 - Classify AQ6-owned maintenance, AQ6 functional changes, and shared-facade

@@ -8,12 +8,18 @@ from .governance_receipts import (
     GovernanceReceiptStore,
     ProtectedOperationAuthorizer,
 )
+from .jev_adjudication import (
+    CurrentJevCandidateBindingProvider,
+    JevAdjudicationProvider,
+)
 from .specialist_execution import ReadOnlyWorkspace, ReadOnlyWorkspaceProvider
 
 __all__ = [
     "GovernanceReceiptContextProvider",
     "GovernanceReceiptStore",
     "ProtectedOperationAuthorizer",
+    "CurrentJevCandidateBindingProvider",
+    "JevAdjudicationProvider",
     "ReadOnlyWorkspace",
     "ReadOnlyWorkspaceProvider",
 ]
