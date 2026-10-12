@@ -531,6 +531,31 @@ def test_reverse_mapping_rejects_wrong_request_and_stale_source_bindings() -> No
     )
 
 
+def test_reverse_mapping_rejects_invalid_boundary_argument_types() -> None:
+    state = _state()
+    request_bytes, context = _build_with_context(state)
+    response = _typed_response(request_bytes, state.candidate_binding)
+
+    _assert_error(
+        "INVALID_SOURCE_STATE",
+        lambda: reverse_map_offline_jev_provider_response(
+            object(), request_bytes, context, response
+        ),
+    )
+    _assert_error(
+        "INVALID_INPUT",
+        lambda: reverse_map_offline_jev_provider_response(
+            state, bytearray(request_bytes), context, response
+        ),
+    )
+    _assert_error(
+        "RESPONSE_CONTRACT_INCOMPATIBLE",
+        lambda: reverse_map_offline_jev_provider_response(
+            state, request_bytes, context, object()
+        ),
+    )
+
+
 def test_reverse_mapping_rejects_unknown_duplicate_missing_and_extra_answers() -> None:
     state = _state()
     request_bytes, context = _build_with_context(state)
@@ -690,6 +715,47 @@ def test_projection_requires_scope_bound_reviewed_text_and_rejects_review_flags(
         dissent_summaries=bundle.dissent_summaries,
     )
     _assert_error("REVIEWED_TEXT_REQUIRED", lambda: _build(state, untrusted_flag))
+
+
+@pytest.mark.parametrize(
+    ("changes", "expected_code"),
+    [
+        ({"task_domain": None}, "REVIEWED_TEXT_INCOMPLETE"),
+        ({"task_domain": "   "}, "REVIEWED_TEXT_INCOMPLETE"),
+        ({"task_domain": "Contains source identifier F-001."}, "UNSAFE_REVIEWED_TEXT"),
+        ({"overseer_assessment": None}, "REVIEWED_TEXT_INCOMPLETE"),
+        ({"mitigation_tradeoffs": None}, "REVIEWED_TEXT_INCOMPLETE"),
+    ],
+)
+def test_projection_rejects_invalid_reviewed_text_values_and_shapes(
+    changes: dict[str, object],
+    expected_code: str,
+) -> None:
+    state = _state()
+    reviewed = replace(_reviewed_text(state), **changes)
+
+    _assert_error(
+        expected_code,
+        lambda: build_offline_jev_provider_projection(
+            state,
+            reviewed,
+            nonce="synthetic-invalid-reviewed-text-nonce",
+        ),
+    )
+
+
+@pytest.mark.parametrize("nonce", ["", None, 17])
+def test_projection_rejects_invalid_nonce_values(nonce: object) -> None:
+    state = _state()
+
+    _assert_error(
+        "INVALID_NONCE",
+        lambda: build_offline_jev_provider_projection(
+            state,
+            _reviewed_text(state),
+            nonce=nonce,  # type: ignore[arg-type]
+        ),
+    )
 
 
 def test_projection_rejects_incomplete_or_ambiguous_reviewed_content() -> None:
