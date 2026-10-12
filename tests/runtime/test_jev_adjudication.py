@@ -19,6 +19,7 @@ from orchestra_runtime.domain.adaptive.jev_adjudication import (
     JEV_NOT_REQUIRED,
     JEV_UNAVAILABLE,
     JevCandidateBinding,
+    JevAdvisoryResult,
     JevChoiceAnswer,
     JevNoulAnswer,
     JevProviderFailure,
@@ -488,6 +489,8 @@ def test_no_clear_preference_is_inconclusive_without_probability_thresholds() ->
     )
     assert result.advisory_state == JEV_ADVISORY_INCONCLUSIVE
     assert result.recommendation == "NO_CLEAR_PREFERENCE"
+    assert len(result.answers) == 12
+    assert result.resolved_model == "jev-1.13.0"
     assert result.to_dict()["answers"]["material_unresolved_uncertainty"]["noul"] == 0.55
 
 
@@ -502,22 +505,66 @@ def test_interpreter_marks_candidate_binding_mismatch_stale(field: str) -> None:
     else:
         candidate[field] = "c" * 40
         current = JevCandidateBinding.from_mapping(candidate)
-    result = OrchestraJevInterpreter().interpret(
-        state, _typed_response(questions, state.candidate_binding), current
-    )
+    response = _typed_response(questions, state.candidate_binding)
+    result = OrchestraJevInterpreter().interpret(state, response, current)
     assert result.advisory_state == JEV_ADVISORY_STALE
     assert result.recommendation is None
-    assert result.to_dict()["answers"]["recommended_mitigation"]["choice"] == "M1"
+    assert result.answers == ()
+    assert result.resolved_model is None
+    serialized = result.to_dict()
+    assert serialized["answers"] == {}
+    assert serialized["model_provenance"]["resolved_model"] is None
 
 
 def test_interpreter_marks_missing_trusted_binding_unbound() -> None:
     state = _state()
     questions = OrchestraJevQuestionBuilder().build(state)
-    result = OrchestraJevInterpreter().interpret(
-        state, _typed_response(questions, state.candidate_binding), None
-    )
+    response = _typed_response(questions, state.candidate_binding)
+    result = OrchestraJevInterpreter().interpret(state, response, None)
     assert result.advisory_state == JEV_ADVISORY_UNBOUND
     assert result.recommendation is None
+    assert result.answers == ()
+    assert result.resolved_model is None
+    serialized = result.to_dict()
+    assert serialized["answers"] == {}
+    assert serialized["model_provenance"]["resolved_model"] is None
+
+
+@pytest.mark.parametrize("advisory_state", [JEV_ADVISORY_STALE, JEV_ADVISORY_UNBOUND])
+def test_direct_stale_or_unbound_result_construction_redacts_provider_fields(advisory_state: str) -> None:
+    state = _state()
+    questions = OrchestraJevQuestionBuilder().build(state)
+    response = _typed_response(questions, state.candidate_binding)
+    current_binding = (
+        _state(task={"domain": "security", "risk_level": "HIGH", "assurance_depth": "STANDARD"}).candidate_binding
+        if advisory_state == JEV_ADVISORY_STALE
+        else None
+    )
+
+    result = JevAdvisoryResult(
+        candidate_binding=response.candidate_binding,
+        advisory_state=advisory_state,
+        risk_level="MEDIUM",
+        assurance_depth="STANDARD",
+        answers=response.answers,
+        resolved_model=response.model,
+        recommendation="M1",
+        current_candidate_binding=current_binding,
+    )
+
+    assert result.candidate_binding == state.candidate_binding
+    assert result.current_candidate_binding == current_binding
+    assert result.answers == ()
+    assert result.resolved_model is None
+    assert result.recommendation is None
+    serialized = result.to_dict()
+    assert serialized["candidate"] == state.candidate_binding.to_dict()
+    assert serialized["current_candidate"] == (
+        None if current_binding is None else current_binding.to_dict()
+    )
+    assert serialized["answers"] == {}
+    assert serialized["recommendation"] is None
+    assert serialized["model_provenance"]["resolved_model"] is None
 
 
 def test_interpreter_rejects_replayed_typed_answers_bound_to_an_older_scope() -> None:
@@ -531,6 +578,11 @@ def test_interpreter_rejects_replayed_typed_answers_bound_to_an_older_scope() ->
     assert result.recommendation is None
     assert result.candidate_binding == original.candidate_binding
     assert result.current_candidate_binding == current.candidate_binding
+    assert result.answers == ()
+    assert result.resolved_model is None
+    serialized = result.to_dict()
+    assert serialized["answers"] == {}
+    assert serialized["model_provenance"]["resolved_model"] is None
 
 
 def test_application_makes_one_call_only_after_upstream_is_ready() -> None:
@@ -574,6 +626,10 @@ def test_application_does_not_call_provider_for_stale_candidate(field: str) -> N
     use_case, provider = _use_case(state, None, current)
     result = use_case.execute(state)
     assert result.advisory_state == JEV_ADVISORY_STALE
+    assert result.answers == ()
+    assert result.resolved_model is None
+    assert result.to_dict()["answers"] == {}
+    assert result.to_dict()["model_provenance"]["resolved_model"] is None
     assert provider.calls == []
 
 
@@ -584,8 +640,12 @@ def test_application_rechecks_candidate_after_provider_returns_and_stales_replay
     result = use_case.execute(state)
     assert result.advisory_state == JEV_ADVISORY_STALE
     assert result.recommendation is None
+    assert result.answers == ()
+    assert result.resolved_model is None
     assert len(provider.calls) == 1
-    assert result.to_dict()["answers"]["recommended_mitigation"]["choice"] == "M1"
+    serialized = result.to_dict()
+    assert serialized["answers"] == {}
+    assert serialized["model_provenance"]["resolved_model"] is None
 
 
 @pytest.mark.parametrize("options", [[], [_MITIGATIONS[0]], [_MITIGATIONS[0], dict(_MITIGATIONS[0], id="M3")]])

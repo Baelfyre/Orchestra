@@ -645,6 +645,11 @@ class JevAdvisoryResult:
     current_candidate_binding: JevCandidateBinding | None = None
 
     def __post_init__(self) -> None:
+        if self.advisory_state in (JEV_ADVISORY_STALE, JEV_ADVISORY_UNBOUND):
+            object.__setattr__(self, "answers", ())
+            object.__setattr__(self, "resolved_model", None)
+            object.__setattr__(self, "recommendation", None)
+
         if self.advisory_state not in JEV_STATES:
             raise ValueError("unknown JEV advisory state")
         if self.risk_level not in _RISK_LEVELS or self.assurance_depth not in _ASSURANCE_DEPTHS:
