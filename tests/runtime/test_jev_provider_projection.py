@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import replace
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -14,12 +15,16 @@ import pytest
 
 from orchestra_runtime.application.services.jev_provider_projection import (
     JEV_PROVIDER_PROJECTION_CONTRACT,
+    JEV_PROVIDER_SEMANTIC_PROJECTION_CONTRACT,
     JevProjectionError,
     JevProjectionMappingContext,
+    ReviewedJevEvidenceAnnotations,
     ReviewedJevTextBundle,
     _KNOWN_PRODUCERS,
+    _PRODUCER_EXPERTISE,
     build_offline_jev_provider_projection,
     build_offline_jev_provider_projection_with_context,
+    build_offline_jev_provider_semantic_projection_with_context,
     reverse_map_offline_jev_provider_response,
 )
 from orchestra_runtime.domain.adaptive.jev_adjudication import (
@@ -188,6 +193,42 @@ def _build_with_context(
     )
 
 
+def _reviewed_evidence_annotations(
+    state: OrchestraJevAdjudicationState,
+    *,
+    finding_layers: dict[str, tuple[str, ...] | None] | None = None,
+    verification_layers: dict[str, tuple[str, ...] | None] | None = None,
+) -> ReviewedJevEvidenceAnnotations:
+    source = state.to_payload()
+    return ReviewedJevEvidenceAnnotations(
+        source_scope_hash=source["candidate"]["scope_hash"],
+        finding_layers=(
+            {item["id"]: None for item in source["findings"]}
+            if finding_layers is None
+            else finding_layers
+        ),
+        verification_layers=(
+            {item["id"]: None for item in source["verification"]}
+            if verification_layers is None
+            else verification_layers
+        ),
+    )
+
+
+def _build_semantic_with_context(
+    state: OrchestraJevAdjudicationState,
+    evidence_annotations: ReviewedJevEvidenceAnnotations | None = None,
+    *,
+    nonce: str = "synthetic-request-nonce-20261012",
+) -> tuple[bytes, JevProjectionMappingContext]:
+    return build_offline_jev_provider_semantic_projection_with_context(
+        state,
+        _reviewed_text(state),
+        nonce=nonce,
+        evidence_annotations=evidence_annotations,
+    )
+
+
 def _request(body: bytes) -> dict[str, Any]:
     return json.loads(body.decode("utf-8"))
 
@@ -290,6 +331,233 @@ def test_projection_is_deterministic_and_nonce_scoped_without_mutating_source() 
     assert first == second
     assert first != other_nonce
     assert state.to_payload() == before
+
+
+def test_v1_projection_bytes_remain_byte_identical() -> None:
+    body = _build(_state())
+
+    assert hashlib.sha256(body).hexdigest() == (
+        "7fb302801eb85361e522a17cd6ed40a856129979360f8a799bce43b8ea615db8"
+    )
+
+
+def test_semantic_projection_is_opt_in_registry_scoped_and_round_trips() -> None:
+    state = _state()
+    source = state.to_payload()
+    before = state.to_payload()
+    annotations = _reviewed_evidence_annotations(
+        state,
+        finding_layers={"F-001": ("UNIT", "STATIC"), "F-002": None},
+        verification_layers={"V-001": ("RUNTIME",), "V-002": None},
+    )
+    body, context = _build_semantic_with_context(state, annotations)
+    request = _request(body)
+    projected = request["state"]
+    v1_request = _request(_build(state))
+    semantic = projected["semantic_context"]
+
+    assert set(request) == {"state", "model", "questions"}
+    assert projected["contract"] == JEV_PROVIDER_SEMANTIC_PROJECTION_CONTRACT
+    assert set(projected) == set(v1_request["state"]) | {"semantic_context"}
+    v2_without_semantics = dict(projected)
+    v2_without_semantics.pop("semantic_context")
+    expected_v1_state = dict(v1_request["state"])
+    expected_v1_state["contract"] = JEV_PROVIDER_SEMANTIC_PROJECTION_CONTRACT
+    assert v2_without_semantics == expected_v1_state
+    assert request["questions"] == v1_request["questions"]
+    assert semantic.keys() == {"producer_expertise", "evidence_annotations"}
+    assert not any(
+        marker in json.dumps(semantic).casefold()
+        for marker in ("authorization", "authority", "execute", "consent", "approval")
+    )
+    assert set(semantic["producer_expertise"].values()) == {
+        "RISK_SECURITY_VALIDATION",
+        "SYSTEM_DESIGN_AND_DELIVERY",
+    }
+
+    projected_producers = {
+        record["producer"]
+        for section in ("findings", "verification", "dissent")
+        for record in projected[section]
+    }
+    projected_producers.update(
+        producer
+        for option in projected["mitigation_options"]
+        for producer in option["producers"]
+    )
+    assert set(semantic["producer_expertise"]) == projected_producers
+    assert semantic["producer_expertise"][projected["findings"][0]["producer"]] == (
+        _PRODUCER_EXPERTISE["cipher"]
+    )
+    assert semantic["producer_expertise"][projected["findings"][1]["producer"]] == (
+        _PRODUCER_EXPERTISE["clockwork"]
+    )
+
+    finding_aliases = {
+        source_item["id"]: projected_item["id"]
+        for source_item, projected_item in zip(source["findings"], projected["findings"])
+    }
+    verification_aliases = {
+        source_item["id"]: projected_item["id"]
+        for source_item, projected_item in zip(
+            source["verification"], projected["verification"]
+        )
+    }
+    assert ("finding", finding_aliases["F-001"], "F-001") in context._semantic_aliases
+    assert (
+        "verification",
+        verification_aliases["V-001"],
+        "V-001",
+    ) in context._semantic_aliases
+    assert "F-001" not in repr(context)
+    with pytest.raises(TypeError):
+        pickle.dumps(context)
+    assert semantic["evidence_annotations"]["findings"] == {
+        finding_aliases["F-001"]: {
+            "status": "ANNOTATED",
+            "evidence_layers": ["STATIC", "UNIT"],
+        },
+        finding_aliases["F-002"]: {"status": "UNKNOWN", "evidence_layers": []},
+    }
+    assert semantic["evidence_annotations"]["verification"] == {
+        verification_aliases["V-001"]: {
+            "status": "ANNOTATED",
+            "evidence_layers": ["RUNTIME"],
+        },
+        verification_aliases["V-002"]: {"status": "UNKNOWN", "evidence_layers": []},
+    }
+    assert [item["status"] for item in projected["findings"]] == [
+        item["status"] for item in source["findings"]
+    ]
+    assert [item["result"] for item in projected["verification"]] == [
+        item["result"] for item in source["verification"]
+    ]
+    assert state.to_payload() == before
+
+    for secret_or_identity in (
+        *source["candidate"].values(),
+        "F-001",
+        "V-001",
+        "M-001",
+        "D-001",
+        "Cipher",
+        "Clockwork",
+        "Dagger",
+        "docs/private/finding-one.json",
+        r"D:\Private\evidence\two.txt",
+        "https://synthetic.invalid/evidence-one",
+        "synthetic-secret-reference-two",
+        "private-evidence-three",
+    ):
+        assert secret_or_identity.encode("utf-8") not in body
+
+    recommendation_alias = next(
+        item
+        for item in request["questions"]["recommended_mitigation"]["criteria"]
+        if item != "NO_CLEAR_PREFERENCE"
+    )
+    response = _typed_response(
+        body,
+        state.candidate_binding,
+        recommendation=recommendation_alias,
+    )
+    restored = reverse_map_offline_jev_provider_response(state, body, context, response)
+    restored_answers = dict(restored.answers)
+    assert restored.candidate_binding == state.candidate_binding
+    assert set(restored_answers) == set(OrchestraJevQuestionBuilder().build(state))
+    assert restored_answers["recommended_mitigation"].selected == dict(
+        context._mitigation_ids
+    )[recommendation_alias]
+    _assert_error(
+        "REQUEST_MISMATCH",
+        lambda: reverse_map_offline_jev_provider_response(
+            state, body + b" ", context, response
+        ),
+    )
+
+
+def test_semantic_projection_does_not_infer_evidence_from_refs_or_status() -> None:
+    state = _state()
+    body, _ = _build_semantic_with_context(state)
+    request = _request(body)
+    projected = request["state"]
+    evidence = projected["semantic_context"]["evidence_annotations"]
+
+    assert projected["findings"][0]["status"] == "VERIFIED"
+    assert projected["verification"][0]["result"] == "CONFIRMED"
+    assert all(item["status"] == "UNAVAILABLE" for item in evidence["findings"].values())
+    assert all(item["status"] == "UNAVAILABLE" for item in evidence["verification"].values())
+    assert all(not item["evidence_layers"] for item in evidence["findings"].values())
+    assert all(not item["evidence_layers"] for item in evidence["verification"].values())
+    assert "evidence_refs" not in json.dumps(projected)
+
+
+def test_semantic_projection_is_deterministic_and_nonce_scoped() -> None:
+    state = _state()
+    annotations = _reviewed_evidence_annotations(state)
+    before = state.to_payload()
+    first, _ = _build_semantic_with_context(state, annotations, nonce="semantic-nonce-one")
+    repeated, _ = _build_semantic_with_context(state, annotations, nonce="semantic-nonce-one")
+    changed_nonce, _ = _build_semantic_with_context(
+        state, annotations, nonce="semantic-nonce-two"
+    )
+
+    assert first == repeated
+    assert first != changed_nonce
+    assert state.to_payload() == before
+    assert repr(annotations) == "ReviewedJevEvidenceAnnotations(<local>)"
+    with pytest.raises(TypeError):
+        pickle.dumps(annotations)
+
+
+def test_semantic_projection_rejects_unbound_and_invalid_annotations() -> None:
+    state = _state()
+    valid = _reviewed_evidence_annotations(state)
+    invalid_bundles = (
+        (
+            replace(valid, source_scope_hash="0" * 64),
+            "EVIDENCE_ANNOTATIONS_UNBOUND",
+        ),
+        (
+            replace(valid, finding_layers={"F-001": ("UNIT",)}),
+            "INVALID_EVIDENCE_ANNOTATIONS",
+        ),
+        (
+            replace(
+                valid,
+                finding_layers={
+                    **valid.finding_layers,
+                    "F-999": ("UNIT",),
+                },
+            ),
+            "INVALID_EVIDENCE_ANNOTATIONS",
+        ),
+        (
+            replace(valid, finding_layers={**valid.finding_layers, "F-001": ("PRAI",)}),
+            "INVALID_EVIDENCE_ANNOTATIONS",
+        ),
+        (
+            replace(valid, finding_layers={**valid.finding_layers, "F-001": ()}),
+            "INVALID_EVIDENCE_ANNOTATIONS",
+        ),
+        (
+            replace(
+                valid,
+                verification_layers={**valid.verification_layers, "V-001": ("UNIT", "UNIT")},
+            ),
+            "INVALID_EVIDENCE_ANNOTATIONS",
+        ),
+        (
+            replace(valid, verification_layers={**valid.verification_layers, "V-001": "UNIT"}),
+            "INVALID_EVIDENCE_ANNOTATIONS",
+        ),
+    )
+
+    for annotations, code in invalid_bundles:
+        _assert_error(
+            code,
+            lambda annotations=annotations: _build_semantic_with_context(state, annotations),
+        )
 
 
 @pytest.mark.parametrize("mitigation_count", [1, 2, 4])
@@ -840,6 +1108,11 @@ def test_projection_makes_no_network_or_environment_credential_calls(
     body, context = _build_with_context(state)
     response = _typed_response(body, state.candidate_binding)
     reverse_map_offline_jev_provider_response(state, body, context, response)
+    semantic_body, semantic_context = _build_semantic_with_context(state)
+    semantic_response = _typed_response(semantic_body, state.candidate_binding)
+    reverse_map_offline_jev_provider_response(
+        state, semantic_body, semantic_context, semantic_response
+    )
 
     assert calls == []
 
@@ -853,6 +1126,13 @@ def test_projection_cannot_issue_authority_and_uses_registry_producers() -> None
     registry_producers = {item["name"].casefold() for item in registry["specialists"]}
 
     assert _KNOWN_PRODUCERS == registry_producers
+    assert set(_PRODUCER_EXPERTISE) == registry_producers
+    assert set(_PRODUCER_EXPERTISE.values()) == {
+        "SCOPE_COORDINATION_TRACEABILITY",
+        "RISK_SECURITY_VALIDATION",
+        "SYSTEM_DESIGN_AND_DELIVERY",
+    }
+    assert all("AUTHORITY" not in category for category in _PRODUCER_EXPERTISE.values())
     assert set(request) == {"state", "model", "questions"}
     assert not any(key in body for key in ("authorization", "execute", "consent", "authority_effect"))
     assert request["state"]["constraints"] == _CONSTRAINTS
