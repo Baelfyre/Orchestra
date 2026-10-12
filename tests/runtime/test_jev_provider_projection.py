@@ -4,6 +4,7 @@ from dataclasses import replace
 import json
 import os
 from pathlib import Path
+import pickle
 import socket
 import urllib.request
 from types import SimpleNamespace
@@ -14,12 +15,21 @@ import pytest
 from orchestra_runtime.application.services.jev_provider_projection import (
     JEV_PROVIDER_PROJECTION_CONTRACT,
     JevProjectionError,
+    JevProjectionMappingContext,
     ReviewedJevTextBundle,
     _KNOWN_PRODUCERS,
     build_offline_jev_provider_projection,
+    build_offline_jev_provider_projection_with_context,
+    reverse_map_offline_jev_provider_response,
 )
 from orchestra_runtime.domain.adaptive.jev_adjudication import (
+    JEV_ADVISORY_INCONCLUSIVE,
+    JevCandidateBinding,
+    JevChoiceAnswer,
+    JevNoulAnswer,
+    JevProviderResponse,
     OrchestraJevAdjudicationState,
+    OrchestraJevInterpreter,
     OrchestraJevQuestionBuilder,
     TYPESAFE_JEV_MODEL,
 )
@@ -89,6 +99,7 @@ def _state(
     first_status: str = "VERIFIED",
     first_result: str = "CONFIRMED",
     overseer: dict[str, str] | None = None,
+    candidate: dict[str, str] | None = None,
 ) -> OrchestraJevAdjudicationState:
     findings = [dict(item) for item in _FINDINGS]
     findings[0]["producer"] = first_producer
@@ -109,7 +120,7 @@ def _state(
         for index in range(1, mitigation_count + 1)
     ]
     return OrchestraJevAdjudicationState.create(
-        candidate=_CANDIDATE,
+        candidate=_CANDIDATE if candidate is None else candidate,
         task={"domain": "security", "risk_level": "MEDIUM", "assurance_depth": "STANDARD"},
         findings=findings,
         verification=verification,
@@ -165,8 +176,45 @@ def _build(
     )
 
 
+def _build_with_context(
+    state: OrchestraJevAdjudicationState,
+    *,
+    nonce: str = "synthetic-request-nonce-20261012",
+) -> tuple[bytes, JevProjectionMappingContext]:
+    return build_offline_jev_provider_projection_with_context(
+        state,
+        _reviewed_text(state),
+        nonce=nonce,
+    )
+
+
 def _request(body: bytes) -> dict[str, Any]:
     return json.loads(body.decode("utf-8"))
+
+
+def _typed_response(
+    body: bytes,
+    candidate_binding: JevCandidateBinding,
+    *,
+    recommendation: str | None = None,
+) -> JevProviderResponse:
+    answers: list[tuple[str, JevNoulAnswer | JevChoiceAnswer]] = []
+    for question_id, question in _request(body)["questions"].items():
+        if question["type"] == "noul":
+            answers.append((question_id, JevNoulAnswer(0.65)))
+            continue
+        criteria = list(question["criteria"])
+        selected = (
+            recommendation
+            if question_id == "recommended_mitigation" and recommendation is not None
+            else criteria[0]
+        )
+        probabilities = tuple(
+            (criterion, 0.8 if criterion == selected else 0.2 / (len(criteria) - 1))
+            for criterion in criteria
+        )
+        answers.append((question_id, JevChoiceAnswer(selected, 0.75, probabilities)))
+    return JevProviderResponse("jev-synthetic", candidate_binding, tuple(answers))
 
 
 def _assert_error(code: str, action) -> None:
@@ -338,6 +386,283 @@ def test_projection_preserves_alias_relationships_and_complete_questions(
     ]["criteria"]["NO_CLEAR_PREFERENCE"]
 
 
+@pytest.mark.parametrize("mitigation_count", [1, 3])
+def test_projection_context_restores_questions_and_mitigation_answers(
+    mitigation_count: int,
+) -> None:
+    state = _state(mitigation_count=mitigation_count)
+    source_before = state.to_payload()
+    request_bytes, context = _build_with_context(state)
+    request = _request(request_bytes)
+    source_options = source_before["mitigation_options"]
+    projected_options = request["state"]["mitigation_options"]
+    alias_by_source = {
+        source["id"]: projected["id"]
+        for source, projected in zip(source_options, projected_options)
+    }
+    selected_source = source_options[-1]["id"]
+    provider_candidate = _state(
+        candidate={
+            "repository": "Synthetic/ProviderCandidate",
+            "commit": "c" * 40,
+            "tree": "d" * 40,
+        }
+    ).candidate_binding
+    projected_response = _typed_response(
+        request_bytes,
+        provider_candidate,
+        recommendation=alias_by_source[selected_source],
+    )
+
+    restored = reverse_map_offline_jev_provider_response(
+        state,
+        request_bytes,
+        context,
+        projected_response,
+    )
+    restored_answers = restored.answer_map()
+    source_questions = OrchestraJevQuestionBuilder().build(state)
+    dynamic_question_ids = {
+        question_id
+        for mitigation_id in state.mitigation_ids
+        for question_id in (
+            f"evidence_supports_{mitigation_id}",
+            f"{mitigation_id}_introduces_scope_risk",
+            f"{mitigation_id}_preserves_architecture",
+        )
+    }
+
+    assert restored.candidate_binding == state.candidate_binding
+    assert restored.candidate_binding != projected_response.candidate_binding
+    assert set(restored_answers) == set(source_questions)
+    assert dynamic_question_ids <= set(restored_answers)
+    recommendation = restored_answers["recommended_mitigation"]
+    assert isinstance(recommendation, JevChoiceAnswer)
+    assert recommendation.selected == selected_source
+    assert set(dict(recommendation.probabilities)) == {
+        *state.mitigation_ids,
+        "NO_CLEAR_PREFERENCE",
+    }
+    assert dict(recommendation.probabilities)[selected_source] == 0.8
+    assert state.to_payload() == source_before
+
+
+def test_projection_context_preserves_no_clear_preference_and_advisory_authority() -> None:
+    state = _state()
+    request_bytes, context = _build_with_context(state)
+    projected_response = _typed_response(
+        request_bytes,
+        state.candidate_binding,
+        recommendation="NO_CLEAR_PREFERENCE",
+    )
+
+    restored = reverse_map_offline_jev_provider_response(
+        state,
+        request_bytes,
+        context,
+        projected_response,
+    )
+    result = OrchestraJevInterpreter().interpret(state, restored, state.candidate_binding)
+    serialized = result.to_dict()
+
+    assert result.advisory_state == JEV_ADVISORY_INCONCLUSIVE
+    assert result.recommendation == "NO_CLEAR_PREFERENCE"
+    assert dict(dict(result.answers)["recommended_mitigation"].probabilities)[
+        "NO_CLEAR_PREFERENCE"
+    ] == 0.8
+    assert serialized["advisory_only"] is True
+    assert serialized["may_authorize"] is False
+    assert serialized["authority_effect"] == "NONE"
+
+
+def test_projection_context_is_transient_and_never_enters_request_bytes() -> None:
+    state = _state()
+    request_bytes, context = _build_with_context(state)
+
+    assert repr(context) == "JevProjectionMappingContext(<transient>)"
+    assert not hasattr(context, "__dict__")
+    assert b"mapping_context" not in request_bytes
+    assert b"request_digest" not in request_bytes
+    assert b"source_scope_hash" not in request_bytes
+    with pytest.raises(TypeError):
+        json.dumps(context)
+    with pytest.raises(TypeError):
+        pickle.dumps(context)
+    with pytest.raises(TypeError):
+        JevProjectionMappingContext()
+
+
+def test_reverse_mapping_rejects_wrong_request_and_stale_source_bindings() -> None:
+    state = _state()
+    request_bytes, context = _build_with_context(state, nonce="synthetic-context-nonce-one")
+    other_request, _ = _build_with_context(state, nonce="synthetic-context-nonce-two")
+    response = _typed_response(request_bytes, state.candidate_binding)
+
+    _assert_error(
+        "REQUEST_MISMATCH",
+        lambda: reverse_map_offline_jev_provider_response(
+            state, other_request, context, response
+        ),
+    )
+    _assert_error(
+        "REQUEST_MISMATCH",
+        lambda: reverse_map_offline_jev_provider_response(
+            state, request_bytes + b" ", context, response
+        ),
+    )
+    stale_state = _state(
+        overseer={
+            "evidence_sufficiency": "Changed synthetic evidence assessment.",
+            "impact": "MEDIUM",
+            "residual_risk_context": "The synthetic residual risk remains bounded.",
+        }
+    )
+    _assert_error(
+        "SOURCE_STATE_MISMATCH",
+        lambda: reverse_map_offline_jev_provider_response(
+            stale_state, request_bytes, context, response
+        ),
+    )
+    _assert_error(
+        "INVALID_MAPPING_CONTEXT",
+        lambda: reverse_map_offline_jev_provider_response(
+            state, request_bytes, object(), response
+        ),
+    )
+
+
+def test_reverse_mapping_rejects_invalid_boundary_argument_types() -> None:
+    state = _state()
+    request_bytes, context = _build_with_context(state)
+    response = _typed_response(request_bytes, state.candidate_binding)
+
+    _assert_error(
+        "INVALID_SOURCE_STATE",
+        lambda: reverse_map_offline_jev_provider_response(
+            object(), request_bytes, context, response
+        ),
+    )
+    _assert_error(
+        "INVALID_INPUT",
+        lambda: reverse_map_offline_jev_provider_response(
+            state, bytearray(request_bytes), context, response
+        ),
+    )
+    _assert_error(
+        "RESPONSE_CONTRACT_INCOMPATIBLE",
+        lambda: reverse_map_offline_jev_provider_response(
+            state, request_bytes, context, object()
+        ),
+    )
+
+
+def test_reverse_mapping_rejects_unknown_duplicate_missing_and_extra_answers() -> None:
+    state = _state()
+    request_bytes, context = _build_with_context(state)
+    response = _typed_response(request_bytes, state.candidate_binding)
+    unknown_question = list(response.answers)
+    unknown_index = next(
+        index
+        for index, (question_id, _) in enumerate(unknown_question)
+        if question_id.startswith("evidence_supports_")
+    )
+    unknown_question[unknown_index] = ("unknown_dynamic_question", unknown_question[unknown_index][1])
+    missing = replace(response, answers=response.answers[:-1])
+    extra = replace(
+        response,
+        answers=(*response.answers, ("unknown_question", JevNoulAnswer(0.5))),
+    )
+
+    _assert_error(
+        "RESPONSE_CONTRACT_INCOMPATIBLE",
+        lambda: reverse_map_offline_jev_provider_response(
+            state, request_bytes, context, replace(response, answers=unknown_question)
+        ),
+    )
+    _assert_error(
+        "RESPONSE_CONTRACT_INCOMPATIBLE",
+        lambda: reverse_map_offline_jev_provider_response(state, request_bytes, context, missing),
+    )
+    _assert_error(
+        "RESPONSE_CONTRACT_INCOMPATIBLE",
+        lambda: reverse_map_offline_jev_provider_response(state, request_bytes, context, extra),
+    )
+    with pytest.raises(ValueError):
+        JevProviderResponse(
+            response.model,
+            response.candidate_binding,
+            (response.answers[0], response.answers[0]),
+        )
+
+
+def test_reverse_mapping_rejects_wrong_types_aliases_and_probabilities() -> None:
+    state = _state()
+    request_bytes, context = _build_with_context(state)
+    response = _typed_response(request_bytes, state.candidate_binding)
+    answer_map = response.answer_map()
+    questions = _request(request_bytes)["questions"]
+    recommendation = answer_map["recommended_mitigation"]
+    assert isinstance(recommendation, JevChoiceAnswer)
+    selected = recommendation.selected
+    probabilities = dict(recommendation.probabilities)
+    non_selected = next(key for key in probabilities if key != selected)
+
+    wrong_type_answers = tuple(
+        (
+            question_id,
+            JevChoiceAnswer("true", 0.75, (("true", 0.8), ("false", 0.2)))
+            if question_id == "material_unresolved_uncertainty"
+            else answer,
+        )
+        for question_id, answer in response.answers
+    )
+    unknown_alias_probabilities = tuple(
+        ("M-unknown" if key == selected else key, value)
+        for key, value in recommendation.probabilities
+    )
+    unknown_alias = JevChoiceAnswer("M-unknown", 0.75, unknown_alias_probabilities)
+    non_maximal = JevChoiceAnswer(
+        selected,
+        0.75,
+        tuple(
+            (key, 0.1 if key == selected else 0.8 if key == non_selected else 0.1)
+            for key in probabilities
+        ),
+    )
+    missing_confidence = JevChoiceAnswer(
+        recommendation.selected,
+        None,
+        recommendation.probabilities,
+    )
+
+    _assert_error(
+        "RESPONSE_CONTRACT_INCOMPATIBLE",
+        lambda: reverse_map_offline_jev_provider_response(
+            state, request_bytes, context, replace(response, answers=wrong_type_answers)
+        ),
+    )
+    for invalid_recommendation in (unknown_alias, non_maximal, missing_confidence):
+        invalid_answers = tuple(
+            (question_id, invalid_recommendation if question_id == "recommended_mitigation" else answer)
+            for question_id, answer in response.answers
+        )
+        _assert_error(
+            "RESPONSE_CONTRACT_INCOMPATIBLE",
+            lambda invalid_answers=invalid_answers: reverse_map_offline_jev_provider_response(
+                state,
+                request_bytes,
+                context,
+                replace(response, answers=invalid_answers),
+            ),
+        )
+
+    with pytest.raises(ValueError):
+        JevChoiceAnswer(selected, 0.75, ((selected, True),))
+    with pytest.raises(ValueError):
+        JevChoiceAnswer(selected, 0.75, ((selected, 0.5), (selected, 0.5)))
+    assert questions["recommended_mitigation"]["type"] == "choice"
+
+
 @pytest.mark.parametrize(
     "unsafe_text",
     [
@@ -390,6 +715,47 @@ def test_projection_requires_scope_bound_reviewed_text_and_rejects_review_flags(
         dissent_summaries=bundle.dissent_summaries,
     )
     _assert_error("REVIEWED_TEXT_REQUIRED", lambda: _build(state, untrusted_flag))
+
+
+@pytest.mark.parametrize(
+    ("changes", "expected_code"),
+    [
+        ({"task_domain": None}, "REVIEWED_TEXT_INCOMPLETE"),
+        ({"task_domain": "   "}, "REVIEWED_TEXT_INCOMPLETE"),
+        ({"task_domain": "Contains source identifier F-001."}, "UNSAFE_REVIEWED_TEXT"),
+        ({"overseer_assessment": None}, "REVIEWED_TEXT_INCOMPLETE"),
+        ({"mitigation_tradeoffs": None}, "REVIEWED_TEXT_INCOMPLETE"),
+    ],
+)
+def test_projection_rejects_invalid_reviewed_text_values_and_shapes(
+    changes: dict[str, object],
+    expected_code: str,
+) -> None:
+    state = _state()
+    reviewed = replace(_reviewed_text(state), **changes)
+
+    _assert_error(
+        expected_code,
+        lambda: build_offline_jev_provider_projection(
+            state,
+            reviewed,
+            nonce="synthetic-invalid-reviewed-text-nonce",
+        ),
+    )
+
+
+@pytest.mark.parametrize("nonce", ["", None, 17])
+def test_projection_rejects_invalid_nonce_values(nonce: object) -> None:
+    state = _state()
+
+    _assert_error(
+        "INVALID_NONCE",
+        lambda: build_offline_jev_provider_projection(
+            state,
+            _reviewed_text(state),
+            nonce=nonce,  # type: ignore[arg-type]
+        ),
+    )
 
 
 def test_projection_rejects_incomplete_or_ambiguous_reviewed_content() -> None:
@@ -471,7 +837,9 @@ def test_projection_makes_no_network_or_environment_credential_calls(
     monkeypatch.setattr(urllib.request, "build_opener", forbidden)
     monkeypatch.setattr(socket, "create_connection", forbidden)
     monkeypatch.setattr(os, "getenv", forbidden)
-    _build(state)
+    body, context = _build_with_context(state)
+    response = _typed_response(body, state.candidate_binding)
+    reverse_map_offline_jev_provider_response(state, body, context, response)
 
     assert calls == []
 
