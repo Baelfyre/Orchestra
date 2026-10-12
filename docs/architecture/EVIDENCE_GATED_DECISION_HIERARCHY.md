@@ -139,6 +139,8 @@ Successful TypeSafe responses require nonnegative integer `usage.input_tokens` a
 
 Results marked `STALE` or `UNBOUND` redact provider answers, resolved-model provenance, and recommendations from the public result and its serialized form while retaining candidate-binding metadata. This does not redact a bound `INCONCLUSIVE` result.
 
+The standalone offline projection at [jev_provider_projection.py](../../orchestra_runtime/application/services/jev_provider_projection.py) builds deterministic provider-facing bytes from normalized state using an explicit field allowlist, aliases local identifiers per request, omits candidate identity and raw evidence references, and accepts separate replacement wording bound to the source scope hash. It has no production caller and performs no provider or credential access. Its automated hazard checks reject some unsafe patterns but cannot establish that wording received human review or guarantee privacy. Actual privacy review and human consent remain prerequisites for any future provider communication.
+
 ## Existing contracts
 
 The stage references in the machine contract link to AQ1-AQ8, PRAI, Covenant, the protected-governance protocol, governed autonomy, the source Conductor and specialist skills, and the existing Arbiter kernel. This hierarchy adds no second risk, authorization, or transition engine.

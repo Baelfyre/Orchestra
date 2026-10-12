@@ -1,3 +1,8 @@
+## Unreleased offline JEV privacy projection
+
+- Adds a standalone, deterministic JEV provider projection from normalized state using an explicit field allowlist, request-scoped aliases, and separate scope-bound replacement wording. It has no production caller, network behavior, or credential access.
+- Automated hazard checks are defense-in-depth and do not establish human review or guarantee privacy. Actual privacy review and human consent remain prerequisites for future provider communication.
+
 ## Unreleased F3 optional JEV advisory component
 
 - Adds the optional candidate-bound TypeSafe JEV advisory component for comparing competing mitigations after verified findings and before governance. It remains advisory only, has no production caller, and grants no assurance, governance, execution, or transition authority.
