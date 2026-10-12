@@ -1,6 +1,7 @@
 ## Unreleased offline JEV privacy projection
 
 - Adds a standalone, deterministic JEV provider projection from normalized state using an explicit field allowlist, request-scoped aliases, and separate scope-bound replacement wording. It has no production caller, network behavior, or credential access.
+- Adds a local transient mapping context bound to the original candidate, source scope, and exact projected request bytes so validated typed answers can reverse request-scoped question and mitigation aliases without exposing mapping metadata in provider bytes.
 - Automated hazard checks are defense-in-depth and do not establish human review or guarantee privacy. Actual privacy review and human consent remain prerequisites for future provider communication.
 
 ## Unreleased F3 optional JEV advisory component
