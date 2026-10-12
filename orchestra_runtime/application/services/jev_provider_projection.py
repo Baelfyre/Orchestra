@@ -18,6 +18,7 @@ import json
 import re
 from typing import Any
 
+from ...domain.adaptive.assurance import EVIDENCE_LAYERS
 from ...domain.adaptive.jev_adjudication import (
     JevAdjudicationEligibilityError,
     JevCandidateBinding,
@@ -33,6 +34,7 @@ from ...shared.canonicalization import canonical_json_bytes
 
 
 JEV_PROVIDER_PROJECTION_CONTRACT = "orchestra.jev.provider_projection.v1"
+JEV_PROVIDER_SEMANTIC_PROJECTION_CONTRACT = "orchestra.jev.provider_projection.v2"
 
 # Keep this snapshot aligned with machine/specialists/registry.v1.json.
 _KNOWN_PRODUCERS = frozenset(
@@ -53,6 +55,24 @@ _KNOWN_PRODUCERS = frozenset(
         "weaver",
     }
 )
+# Descriptive, projection-local groupings of registry primary_use, never authority.
+_PRODUCER_EXPERTISE = {
+    "arbiter": "SCOPE_COORDINATION_TRACEABILITY",
+    "conductor": "SCOPE_COORDINATION_TRACEABILITY",
+    "scribe": "SCOPE_COORDINATION_TRACEABILITY",
+    "the-steward": "SCOPE_COORDINATION_TRACEABILITY",
+    "the-tuner": "SCOPE_COORDINATION_TRACEABILITY",
+    "cipher": "RISK_SECURITY_VALIDATION",
+    "dagger": "RISK_SECURITY_VALIDATION",
+    "overseer": "RISK_SECURITY_VALIDATION",
+    "the-governor": "RISK_SECURITY_VALIDATION",
+    "chronicler": "SYSTEM_DESIGN_AND_DELIVERY",
+    "cloak": "SYSTEM_DESIGN_AND_DELIVERY",
+    "clockwork": "SYSTEM_DESIGN_AND_DELIVERY",
+    "ponytail": "SYSTEM_DESIGN_AND_DELIVERY",
+    "weaver": "SYSTEM_DESIGN_AND_DELIVERY",
+}
+_EVIDENCE_LAYERS = frozenset(EVIDENCE_LAYERS)
 _FINDING_STATUSES = frozenset({"VERIFIED", "UNVERIFIED"})
 _VERIFICATION_RESULTS = frozenset(
     {"CONFIRMED", "INCOMPLETE", "NOT_STARTED", "PENDING", "RUNNING"}
@@ -70,6 +90,7 @@ _ERROR_CODES = frozenset(
         "INVALID_INPUT",
         "INVALID_MAPPING_CONTEXT",
         "INVALID_NONCE",
+        "INVALID_EVIDENCE_ANNOTATIONS",
         "INVALID_SOURCE_STATE",
         "INVALID_SOURCE_VALUE",
         "REQUEST_MISMATCH",
@@ -80,6 +101,7 @@ _ERROR_CODES = frozenset(
         "SOURCE_STATE_INELIGIBLE",
         "SOURCE_STATE_MISMATCH",
         "UNSAFE_REVIEWED_TEXT",
+        "EVIDENCE_ANNOTATIONS_UNBOUND",
         "UNKNOWN_PRODUCER",
     }
 )
@@ -117,6 +139,25 @@ class ReviewedJevTextBundle:
     dissent_summaries: Mapping[str, str]
 
 
+@dataclass(frozen=True, slots=True, repr=False)
+class ReviewedJevEvidenceAnnotations:
+    """Caller-supplied evidence-layer labels for one source scope.
+
+    Shape and scope checks do not authenticate external review or prove evidence
+    sufficiency. The mappings remain local and are never serialized directly.
+    """
+
+    source_scope_hash: str
+    finding_layers: Mapping[str, tuple[str, ...] | None]
+    verification_layers: Mapping[str, tuple[str, ...] | None]
+
+    def __repr__(self) -> str:
+        return "ReviewedJevEvidenceAnnotations(<local>)"
+
+    def __reduce__(self) -> object:
+        raise TypeError("evidence annotations are transient")
+
+
 class JevProjectionMappingContext:
     """Transient local state; deliberately has no normal serializer or value repr."""
 
@@ -126,6 +167,7 @@ class JevProjectionMappingContext:
         "_request_digest",
         "_question_ids",
         "_mitigation_ids",
+        "_semantic_aliases",
     )
 
     _candidate_binding: JevCandidateBinding
@@ -133,6 +175,7 @@ class JevProjectionMappingContext:
     _request_digest: str
     _question_ids: tuple[tuple[str, str], ...]
     _mitigation_ids: tuple[tuple[str, str], ...]
+    _semantic_aliases: tuple[tuple[str, str, str], ...]
 
     def __init__(self) -> None:
         raise TypeError("projection mapping context is created by the local projection builder")
@@ -206,6 +249,68 @@ def _text_map(
         source_id: _safe_text(value[source_id], blocked_values)
         for source_id in source_ids
     }
+
+
+def _evidence_layer_annotation(value: object) -> dict[str, object]:
+    if value is None:
+        return {"status": "UNKNOWN", "evidence_layers": []}
+    if (
+        not isinstance(value, (tuple, list))
+        or not value
+        or any(type(layer) is not str or layer not in _EVIDENCE_LAYERS for layer in value)
+        or len(value) != len(set(value))
+    ):
+        _fail("INVALID_EVIDENCE_ANNOTATIONS")
+    return {"status": "ANNOTATED", "evidence_layers": sorted(value)}
+
+
+def _evidence_annotations(
+    bundle: ReviewedJevEvidenceAnnotations | None,
+    source: Mapping[str, Any],
+    finding_aliases: Mapping[str, str],
+    verification_aliases: Mapping[str, str],
+) -> dict[str, dict[str, dict[str, object]]]:
+    if bundle is None:
+        return {
+            "findings": {
+                alias: {"status": "UNAVAILABLE", "evidence_layers": []}
+                for alias in finding_aliases.values()
+            },
+            "verification": {
+                alias: {"status": "UNAVAILABLE", "evidence_layers": []}
+                for alias in verification_aliases.values()
+            },
+        }
+    if type(bundle) is not ReviewedJevEvidenceAnnotations:
+        _fail("INVALID_EVIDENCE_ANNOTATIONS")
+    if (
+        not isinstance(bundle.source_scope_hash, str)
+        or bundle.source_scope_hash != source["candidate"]["scope_hash"]
+    ):
+        _fail("EVIDENCE_ANNOTATIONS_UNBOUND")
+
+    result: dict[str, dict[str, dict[str, object]]] = {}
+    for section, aliases, source_ids, annotations in (
+        (
+            "findings",
+            finding_aliases,
+            [item["id"] for item in source["findings"]],
+            bundle.finding_layers,
+        ),
+        (
+            "verification",
+            verification_aliases,
+            [item["id"] for item in source["verification"]],
+            bundle.verification_layers,
+        ),
+    ):
+        if not isinstance(annotations, Mapping) or set(annotations) != set(source_ids):
+            _fail("INVALID_EVIDENCE_ANNOTATIONS")
+        result[section] = {
+            aliases[source_id]: _evidence_layer_annotation(annotations[source_id])
+            for source_id in source_ids
+        }
+    return result
 
 
 def _producer_value(value: object) -> str:
@@ -321,6 +426,7 @@ def _new_mapping_context(
     request_bytes: bytes,
     question_ids: tuple[tuple[str, str], ...],
     mitigation_aliases: Mapping[str, str],
+    semantic_aliases: tuple[tuple[str, str, str], ...] = (),
 ) -> JevProjectionMappingContext:
     context = object.__new__(JevProjectionMappingContext)
     object.__setattr__(context, "_candidate_binding", state.candidate_binding)
@@ -332,6 +438,7 @@ def _new_mapping_context(
         "_mitigation_ids",
         tuple(sorted((alias, source_id) for source_id, alias in mitigation_aliases.items())),
     )
+    object.__setattr__(context, "_semantic_aliases", semantic_aliases)
     return context
 
 
@@ -391,11 +498,11 @@ def build_offline_jev_provider_projection_with_context(
         verification_aliases = _aliases(
             "verification", [item["id"] for item in source["verification"]], nonce_bytes
         )
-        mitigation_aliases = _aliases(
-            "mitigation", [item["id"] for item in source["mitigation_options"]], nonce_bytes
-        )
         dissent_aliases = _aliases(
             "dissent", [item["id"] for item in source["dissent"]], nonce_bytes
+        )
+        mitigation_aliases = _aliases(
+            "mitigation", [item["id"] for item in source["mitigation_options"]], nonce_bytes
         )
 
         projected = OrchestraJevAdjudicationState.create(
@@ -500,6 +607,97 @@ def build_offline_jev_provider_projection(
         nonce=nonce,
     )
     return request_bytes
+
+
+def build_offline_jev_provider_semantic_projection_with_context(
+    state: OrchestraJevAdjudicationState,
+    reviewed_text: ReviewedJevTextBundle,
+    *,
+    nonce: str,
+    evidence_annotations: ReviewedJevEvidenceAnnotations | None = None,
+) -> tuple[bytes, JevProjectionMappingContext]:
+    """Build the opt-in v2 semantic projection and matching transient context.
+
+    V2 keeps the existing request envelope and question catalog. Producer
+    categories are descriptive registry groupings; evidence-layer annotations
+    are caller supplied and never establish verification or sufficiency.
+    """
+    try:
+        request_bytes, base_context = build_offline_jev_provider_projection_with_context(
+            state,
+            reviewed_text,
+            nonce=nonce,
+        )
+        source = state.to_payload()
+        nonce_bytes = nonce.encode("utf-8")
+        producers = [
+            _producer_value(record["producer"])
+            for section in ("findings", "verification", "dissent")
+            for record in source[section]
+        ]
+        producers.extend(
+            _producer_value(producer)
+            for option in source["mitigation_options"]
+            for producer in option["producers"]
+        )
+        producer_aliases = _aliases("producer", producers, nonce_bytes)
+        finding_aliases = _aliases(
+            "finding", [item["id"] for item in source["findings"]], nonce_bytes
+        )
+        verification_aliases = _aliases(
+            "verification", [item["id"] for item in source["verification"]], nonce_bytes
+        )
+        dissent_aliases = _aliases(
+            "dissent", [item["id"] for item in source["dissent"]], nonce_bytes
+        )
+
+        request = json.loads(request_bytes.decode("utf-8"))
+        if not isinstance(request, dict) or set(request) != {"state", "model", "questions"}:
+            _fail("INVALID_MAPPING_CONTEXT")
+        projected_state = request["state"]
+        if not isinstance(projected_state, dict):
+            _fail("INVALID_MAPPING_CONTEXT")
+        projected_state["contract"] = JEV_PROVIDER_SEMANTIC_PROJECTION_CONTRACT
+        projected_state["semantic_context"] = {
+            "producer_expertise": {
+                alias: _PRODUCER_EXPERTISE[producer]
+                for producer, alias in producer_aliases.items()
+            },
+            "evidence_annotations": _evidence_annotations(
+                evidence_annotations,
+                source,
+                finding_aliases,
+                verification_aliases,
+            ),
+        }
+        semantic_request_bytes = canonical_json_bytes(request)
+        mitigation_aliases = {
+            source_id: alias
+            for alias, source_id in base_context._mitigation_ids
+        }
+        semantic_aliases = tuple(
+            sorted(
+                (kind, alias, source_id)
+                for kind, aliases in (
+                    ("producer", producer_aliases),
+                    ("finding", finding_aliases),
+                    ("verification", verification_aliases),
+                    ("dissent", dissent_aliases),
+                )
+                for source_id, alias in aliases.items()
+            )
+        )
+        return semantic_request_bytes, _new_mapping_context(
+            state,
+            semantic_request_bytes,
+            base_context._question_ids,
+            mitigation_aliases,
+            semantic_aliases,
+        )
+    except JevProjectionError:
+        raise
+    except Exception:
+        raise JevProjectionError("INVALID_INPUT") from None
 
 
 def reverse_map_offline_jev_provider_response(
@@ -639,10 +837,13 @@ def reverse_map_offline_jev_provider_response(
 
 __all__ = [
     "JEV_PROVIDER_PROJECTION_CONTRACT",
+    "JEV_PROVIDER_SEMANTIC_PROJECTION_CONTRACT",
     "JevProjectionError",
     "JevProjectionMappingContext",
+    "ReviewedJevEvidenceAnnotations",
     "ReviewedJevTextBundle",
     "build_offline_jev_provider_projection",
     "build_offline_jev_provider_projection_with_context",
+    "build_offline_jev_provider_semantic_projection_with_context",
     "reverse_map_offline_jev_provider_response",
 ]
