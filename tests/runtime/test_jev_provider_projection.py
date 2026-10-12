@@ -1,0 +1,491 @@
+from __future__ import annotations
+
+from dataclasses import replace
+import json
+import os
+from pathlib import Path
+import socket
+import urllib.request
+from types import SimpleNamespace
+from typing import Any
+
+import pytest
+
+from orchestra_runtime.application.services.jev_provider_projection import (
+    JEV_PROVIDER_PROJECTION_CONTRACT,
+    JevProjectionError,
+    ReviewedJevTextBundle,
+    _KNOWN_PRODUCERS,
+    build_offline_jev_provider_projection,
+)
+from orchestra_runtime.domain.adaptive.jev_adjudication import (
+    OrchestraJevAdjudicationState,
+    OrchestraJevQuestionBuilder,
+    TYPESAFE_JEV_MODEL,
+)
+
+
+_CANDIDATE = {
+    "repository": "Synthetic/PrivateRepo",
+    "commit": "a" * 40,
+    "tree": "b" * 40,
+}
+_CONSTRAINTS = {
+    "protected_policy_change_allowed": False,
+    "authority_change_allowed": False,
+    "scope_expansion_allowed": False,
+}
+_FINDINGS = [
+    {
+        "id": "F-001",
+        "producer": "Cipher",
+        "status": "VERIFIED",
+        "summary": "Raw local finding F-001 wording.",
+        "evidence_refs": ["docs/private/finding-one.json"],
+    },
+    {
+        "id": "F-002",
+        "producer": "Clockwork",
+        "status": "UNVERIFIED",
+        "summary": "Raw local finding F-002 wording.",
+        "evidence_refs": [r"D:\Private\evidence\two.txt"],
+    },
+]
+_VERIFICATION = [
+    {
+        "id": "V-001",
+        "producer": "Dagger",
+        "finding_id": "F-001",
+        "result": "CONFIRMED",
+        "evidence_refs": ["https://synthetic.invalid/evidence-one"],
+    },
+    {
+        "id": "V-002",
+        "producer": "Cipher",
+        "finding_id": "F-002",
+        "result": "CONFIRMED",
+        "evidence_refs": ["synthetic-secret-reference-two"],
+    },
+]
+_OVERSEER = {
+    "evidence_sufficiency": "SUFFICIENT",
+    "impact": "MEDIUM",
+    "residual_risk_context": "Raw local residual risk details.",
+}
+_DISSENT = [
+    {
+        "id": "D-001",
+        "producer": "Cipher",
+        "summary": "Raw local dissent D-001 wording.",
+        "evidence_refs": ["private-evidence-three"],
+    }
+]
+
+
+def _state(
+    *,
+    mitigation_count: int = 2,
+    first_producer: str = "Cipher",
+    first_status: str = "VERIFIED",
+    first_result: str = "CONFIRMED",
+    overseer: dict[str, str] | None = None,
+) -> OrchestraJevAdjudicationState:
+    findings = [dict(item) for item in _FINDINGS]
+    findings[0]["producer"] = first_producer
+    findings[0]["status"] = first_status
+    verification = [dict(item) for item in _VERIFICATION]
+    verification[0]["result"] = first_result
+    mitigations = [
+        {
+            "id": f"M-{index:03}",
+            "producers": ["Cipher", "Clockwork"],
+            "summary": f"Raw local mitigation M-{index:03} wording.",
+            "addresses": ["F-001"] if index % 2 else ["F-001", "F-002"],
+            "tradeoffs": [
+                f"Raw local tradeoff {index}a.",
+                f"Raw local tradeoff {index}b.",
+            ],
+        }
+        for index in range(1, mitigation_count + 1)
+    ]
+    return OrchestraJevAdjudicationState.create(
+        candidate=_CANDIDATE,
+        task={"domain": "security", "risk_level": "MEDIUM", "assurance_depth": "STANDARD"},
+        findings=findings,
+        verification=verification,
+        overseer_assessment=_OVERSEER if overseer is None else overseer,
+        mitigation_options=mitigations,
+        dissent=[dict(item) for item in _DISSENT],
+        constraints=dict(_CONSTRAINTS),
+    )
+
+
+def _reviewed_text(state: OrchestraJevAdjudicationState) -> ReviewedJevTextBundle:
+    source = state.to_payload()
+    return ReviewedJevTextBundle(
+        source_scope_hash=source["candidate"]["scope_hash"],
+        task_domain="security",
+        finding_summaries={
+            item["id"]: f"Reviewed synthetic finding summary {index}."
+            for index, item in enumerate(source["findings"], start=1)
+        },
+        overseer_assessment={
+            "evidence_sufficiency": "Reviewed synthetic evidence supports comparison.",
+            "impact": "The synthetic impact is moderate.",
+            "residual_risk_context": "A bounded residual risk remains in the synthetic scenario.",
+        },
+        mitigation_summaries={
+            item["id"]: f"Reviewed synthetic mitigation alternative {index}."
+            for index, item in enumerate(source["mitigation_options"], start=1)
+        },
+        mitigation_tradeoffs={
+            item["id"]: [
+                f"Keep synthetic alternative {index} bounded.",
+                "Preserve current behavior.",
+            ]
+            for index, item in enumerate(source["mitigation_options"], start=1)
+        },
+        dissent_summaries={
+            item["id"]: "Reviewed synthetic dissent identifies a compatibility concern."
+            for item in source["dissent"]
+        },
+    )
+
+
+def _build(
+    state: OrchestraJevAdjudicationState,
+    reviewed: ReviewedJevTextBundle | None = None,
+    *,
+    nonce: str = "synthetic-request-nonce-20261012",
+) -> bytes:
+    return build_offline_jev_provider_projection(
+        state,
+        _reviewed_text(state) if reviewed is None else reviewed,
+        nonce=nonce,
+    )
+
+
+def _request(body: bytes) -> dict[str, Any]:
+    return json.loads(body.decode("utf-8"))
+
+
+def _assert_error(code: str, action) -> None:
+    with pytest.raises(JevProjectionError) as error:
+        action()
+    assert error.value.code == code
+    assert str(error.value) == code
+
+
+def test_projection_allowlist_omits_candidate_evidence_and_source_identifiers() -> None:
+    state = _state()
+    source = state.to_payload()
+    body = _build(state)
+    request = _request(body)
+    projected = request["state"]
+
+    assert set(request) == {"state", "model", "questions"}
+    assert request["model"] == TYPESAFE_JEV_MODEL
+    assert projected["contract"] == JEV_PROVIDER_PROJECTION_CONTRACT
+    assert set(projected) == {
+        "contract",
+        "task",
+        "findings",
+        "verification",
+        "overseer_assessment",
+        "mitigation_options",
+        "dissent",
+        "constraints",
+    }
+    assert "candidate" not in projected
+    assert projected["task"] == {
+        "domain": "security",
+        "risk_level": "MEDIUM",
+        "assurance_depth": "STANDARD",
+    }
+    assert projected["constraints"] == source["constraints"]
+    assert all("evidence_refs" not in record for record in projected["findings"])
+    assert all("evidence_refs" not in record for record in projected["verification"])
+    assert all("evidence_refs" not in record for record in projected["dissent"])
+    assert all(
+        set(record) == {"id", "producer", "status", "summary"}
+        for record in projected["findings"]
+    )
+    assert all(
+        set(record) == {"id", "producer", "finding_id", "result"}
+        for record in projected["verification"]
+    )
+
+    blocked = {
+        *source["candidate"].values(),
+        *(item["id"] for item in source["findings"]),
+        *(item["id"] for item in source["verification"]),
+        *(item["id"] for item in source["mitigation_options"]),
+        *(item["id"] for item in source["dissent"]),
+        *(item["producer"] for section in ("findings", "verification", "dissent") for item in source[section]),
+        *(producer for item in source["mitigation_options"] for producer in item["producers"]),
+        *(reference for section in ("findings", "verification", "dissent") for item in source[section] for reference in item["evidence_refs"]),
+        *(finding_id for item in source["mitigation_options"] for finding_id in item["addresses"]),
+        *(item["finding_id"] for item in source["verification"]),
+    }
+    assert all(value.encode("utf-8") not in body for value in blocked)
+    assert b"Raw local" not in body
+
+
+def test_projection_is_deterministic_and_nonce_scoped_without_mutating_source() -> None:
+    state = _state()
+    before = state.to_payload()
+
+    first = _build(state, nonce="synthetic-nonce-one-0001")
+    second = _build(state, nonce="synthetic-nonce-one-0001")
+    other_nonce = _build(state, nonce="synthetic-nonce-two-0002")
+
+    assert first == second
+    assert first != other_nonce
+    assert state.to_payload() == before
+
+
+@pytest.mark.parametrize("mitigation_count", [1, 2, 4])
+def test_projection_preserves_alias_relationships_and_complete_questions(
+    mitigation_count: int,
+) -> None:
+    state = _state(mitigation_count=mitigation_count)
+    source = state.to_payload()
+    request = _request(_build(state))
+    projected = request["state"]
+    questions = request["questions"]
+
+    finding_aliases = {
+        original["id"]: projected_item["id"]
+        for original, projected_item in zip(source["findings"], projected["findings"])
+    }
+    verification_aliases = {
+        original["id"]: projected_item["id"]
+        for original, projected_item in zip(source["verification"], projected["verification"])
+    }
+    mitigation_aliases = {
+        original["id"]: projected_item["id"]
+        for original, projected_item in zip(
+            source["mitigation_options"], projected["mitigation_options"]
+        )
+    }
+    dissent_aliases = {
+        original["id"]: projected_item["id"]
+        for original, projected_item in zip(source["dissent"], projected["dissent"])
+    }
+
+    assert all(
+        alias != original
+        for mapping in (
+            finding_aliases,
+            verification_aliases,
+            mitigation_aliases,
+            dissent_aliases,
+        )
+        for original, alias in mapping.items()
+    )
+    assert all(value.startswith("F-") for value in finding_aliases.values())
+    assert all(value.startswith("V-") for value in verification_aliases.values())
+    assert all(value.startswith("M-") for value in mitigation_aliases.values())
+    assert all(value.startswith("D-") for value in dissent_aliases.values())
+    assert all(
+        record["producer"].startswith("P-")
+        for section in ("findings", "verification", "dissent")
+        for record in projected[section]
+    )
+    assert all(
+        producer.startswith("P-")
+        for option in projected["mitigation_options"]
+        for producer in option["producers"]
+    )
+    assert projected["verification"][0]["finding_id"] == finding_aliases["F-001"]
+    for original, projected_item in zip(
+        source["mitigation_options"], projected["mitigation_options"]
+    ):
+        assert projected_item["addresses"] == [
+            finding_aliases[finding_id] for finding_id in original["addresses"]
+        ]
+    assert projected["findings"][0]["producer"] == projected["mitigation_options"][0]["producers"][0]
+    assert projected["dissent"][0]["producer"] == projected["findings"][0]["producer"]
+
+    assert len(questions) == 6 + 3 * mitigation_count
+    original_questions = OrchestraJevQuestionBuilder().build(state)
+    unchanged_question_ids = {
+        "material_unresolved_uncertainty",
+        "material_specialist_dissent",
+        "unsupported_assumption_dependency",
+        "primary_decision_factor",
+        "strongest_residual_risk",
+    }
+    for question_id in unchanged_question_ids:
+        assert questions[question_id] == original_questions[question_id]
+
+    recommendation = questions["recommended_mitigation"]
+    reviewed_summaries = _reviewed_text(state).mitigation_summaries
+    expected_criteria = {
+        mitigation_aliases[item["id"]]: reviewed_summaries[item["id"]]
+        for item in source["mitigation_options"]
+    }
+    assert set(recommendation["criteria"]) == set(expected_criteria) | {
+        "NO_CLEAR_PREFERENCE"
+    }
+    for alias, summary in expected_criteria.items():
+        assert recommendation["criteria"][alias] == summary
+        assert f"evidence_supports_{alias}" in questions
+        assert f"{alias}_introduces_scope_risk" in questions
+        assert f"{alias}_preserves_architecture" in questions
+    assert recommendation["criteria"]["NO_CLEAR_PREFERENCE"] == original_questions[
+        "recommended_mitigation"
+    ]["criteria"]["NO_CLEAR_PREFERENCE"]
+
+
+@pytest.mark.parametrize(
+    "unsafe_text",
+    [
+        "Synthetic finding includes api_key=synthetic-secret-value.",
+        r"Synthetic finding came from C:\Users\Example\private.txt.",
+        "Synthetic finding points to docs/private/report.json.",
+        "Synthetic finding references https://example.invalid/private.",
+        "Synthetic finding includes reviewer@example.invalid.",
+    ],
+)
+def test_unsafe_reviewed_text_rejects_entire_projection_without_disclosure(
+    unsafe_text: str,
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    state = _state()
+    bundle = _reviewed_text(state)
+    summaries = dict(bundle.finding_summaries)
+    summaries["F-001"] = unsafe_text
+    bundle = replace(bundle, finding_summaries=summaries)
+
+    with pytest.raises(JevProjectionError) as error:
+        _build(state, bundle)
+
+    assert error.value.code == "UNSAFE_REVIEWED_TEXT"
+    assert unsafe_text not in str(error.value)
+    assert caplog.records == []
+
+
+def test_projection_requires_scope_bound_reviewed_text_and_rejects_review_flags() -> None:
+    state = _state()
+    bundle = _reviewed_text(state)
+    _assert_error(
+        "REVIEWED_TEXT_REQUIRED",
+        lambda: build_offline_jev_provider_projection(
+            state, None, nonce="synthetic-request-nonce-20261012"
+        ),
+    )
+    _assert_error(
+        "REVIEWED_TEXT_UNBOUND",
+        lambda: _build(state, replace(bundle, source_scope_hash="sha256:" + "0" * 64)),
+    )
+    untrusted_flag = SimpleNamespace(
+        reviewed=True,
+        source_scope_hash=bundle.source_scope_hash,
+        task_domain=bundle.task_domain,
+        finding_summaries=bundle.finding_summaries,
+        overseer_assessment=bundle.overseer_assessment,
+        mitigation_summaries=bundle.mitigation_summaries,
+        mitigation_tradeoffs=bundle.mitigation_tradeoffs,
+        dissent_summaries=bundle.dissent_summaries,
+    )
+    _assert_error("REVIEWED_TEXT_REQUIRED", lambda: _build(state, untrusted_flag))
+
+
+def test_projection_rejects_incomplete_or_ambiguous_reviewed_content() -> None:
+    state = _state()
+    bundle = _reviewed_text(state)
+    missing_finding = dict(bundle.finding_summaries)
+    missing_finding.pop("F-002")
+    _assert_error(
+        "REVIEWED_TEXT_INCOMPLETE",
+        lambda: _build(state, replace(bundle, finding_summaries=missing_finding)),
+    )
+    extra_mitigation = dict(bundle.mitigation_summaries)
+    extra_mitigation["M-999"] = "Unknown synthetic alternative."
+    _assert_error(
+        "REVIEWED_TEXT_INCOMPLETE",
+        lambda: _build(state, replace(bundle, mitigation_summaries=extra_mitigation)),
+    )
+    shortened_tradeoffs = dict(bundle.mitigation_tradeoffs)
+    shortened_tradeoffs["M-001"] = ["Only one reviewed tradeoff."]
+    _assert_error(
+        "REVIEWED_TEXT_INCOMPLETE",
+        lambda: _build(state, replace(bundle, mitigation_tradeoffs=shortened_tradeoffs)),
+    )
+
+
+def test_projection_rejects_unknown_source_producers_and_values() -> None:
+    unknown_producer = _state(first_producer="unregistered-source")
+    _assert_error(
+        "UNKNOWN_PRODUCER",
+        lambda: _build(unknown_producer),
+    )
+    unknown_status = _state(first_status="PRIVATE_NOTE")
+    _assert_error("INVALID_SOURCE_VALUE", lambda: _build(unknown_status))
+    unknown_result = _state(first_result="PRIVATE_RESULT")
+    _assert_error("INVALID_SOURCE_VALUE", lambda: _build(unknown_result))
+
+
+def test_projection_rejects_unknown_state_fields_and_empty_mitigation_context() -> None:
+    state = _state()
+    raw = state.to_payload()
+    raw["unexpected"] = "synthetic unknown value"
+    with pytest.raises(ValueError):
+        OrchestraJevAdjudicationState(raw)
+    _assert_error(
+        "INVALID_SOURCE_STATE",
+        lambda: build_offline_jev_provider_projection(
+            raw, _reviewed_text(state), nonce="synthetic-request-nonce-20261012"
+        ),
+    )
+    no_mitigations = _state(mitigation_count=0)
+    _assert_error(
+        "SOURCE_STATE_INELIGIBLE",
+        lambda: _build(no_mitigations),
+    )
+
+
+def test_projection_preserves_long_reviewed_text_without_truncation() -> None:
+    state = _state(mitigation_count=1)
+    bundle = _reviewed_text(state)
+    long_summary = "Reviewed synthetic context remains complete. " * 256
+    summaries = dict(bundle.finding_summaries)
+    summaries["F-001"] = long_summary
+    body = _build(state, replace(bundle, finding_summaries=summaries))
+
+    assert _request(body)["state"]["findings"][0]["summary"] == long_summary
+
+
+def test_projection_makes_no_network_or_environment_credential_calls(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    state = _state()
+    calls: list[str] = []
+
+    def forbidden(*args: object, **kwargs: object) -> None:
+        calls.append("called")
+        raise AssertionError("offline projection attempted external I/O")
+
+    monkeypatch.setattr(urllib.request, "urlopen", forbidden)
+    monkeypatch.setattr(urllib.request, "build_opener", forbidden)
+    monkeypatch.setattr(socket, "create_connection", forbidden)
+    monkeypatch.setattr(os, "getenv", forbidden)
+    _build(state)
+
+    assert calls == []
+
+
+def test_projection_cannot_issue_authority_and_uses_registry_producers() -> None:
+    state = _state()
+    request = _request(_build(state))
+    body = json.dumps(request, sort_keys=True)
+    registry_path = Path(__file__).resolve().parents[2] / "machine" / "specialists" / "registry.v1.json"
+    registry = json.loads(registry_path.read_text(encoding="utf-8"))
+    registry_producers = {item["name"].casefold() for item in registry["specialists"]}
+
+    assert _KNOWN_PRODUCERS == registry_producers
+    assert set(request) == {"state", "model", "questions"}
+    assert not any(key in body for key in ("authorization", "execute", "consent", "authority_effect"))
+    assert request["state"]["constraints"] == _CONSTRAINTS
+    assert "advisory only" in request["questions"]["recommended_mitigation"]["instructions"]
