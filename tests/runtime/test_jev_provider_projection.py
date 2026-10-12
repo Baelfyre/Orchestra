@@ -510,6 +510,16 @@ def test_semantic_projection_is_deterministic_and_nonce_scoped() -> None:
         pickle.dumps(annotations)
 
 
+def test_semantic_projection_rejects_alias_collisions(monkeypatch: pytest.MonkeyPatch) -> None:
+    state = _state()
+    monkeypatch.setattr(
+        "orchestra_runtime.application.services.jev_provider_projection._alias",
+        lambda kind, value, nonce: f"{kind}-synthetic-collision",
+    )
+
+    _assert_error("ALIAS_COLLISION", lambda: _build_semantic_with_context(state))
+
+
 def test_semantic_projection_rejects_unbound_and_invalid_annotations() -> None:
     state = _state()
     valid = _reviewed_evidence_annotations(state)
@@ -558,6 +568,14 @@ def test_semantic_projection_rejects_unbound_and_invalid_annotations() -> None:
             code,
             lambda annotations=annotations: _build_semantic_with_context(state, annotations),
         )
+
+
+def test_semantic_projection_rejects_non_annotation_bundle() -> None:
+    state = _state()
+    _assert_error(
+        "INVALID_EVIDENCE_ANNOTATIONS",
+        lambda: _build_semantic_with_context(state, object()),
+    )
 
 
 @pytest.mark.parametrize("mitigation_count", [1, 2, 4])
