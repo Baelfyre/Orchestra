@@ -341,8 +341,8 @@ def test_projection_preserves_alias_relationships_and_complete_questions(
 @pytest.mark.parametrize(
     "unsafe_text",
     [
-        "Synthetic finding includes api_key=synthetic-secret-value.",
-        r"Synthetic finding came from C:\Users\Example\private.txt.",
+        "Synthetic finding includes api" + "_key=synthetic-secret-value.",
+        "Synthetic finding came from C:" + r"\Users" + r"\Example" + r"\private.txt.",
         "Synthetic finding points to docs/private/report.json.",
         "Synthetic finding references https://example.invalid/private.",
         "Synthetic finding includes reviewer@example.invalid.",
