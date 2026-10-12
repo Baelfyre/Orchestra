@@ -36,6 +36,17 @@ from ...shared.canonicalization import canonical_json_bytes
 JEV_PROVIDER_PROJECTION_CONTRACT = "orchestra.jev.provider_projection.v1"
 JEV_PROVIDER_SEMANTIC_PROJECTION_CONTRACT = "orchestra.jev.provider_projection.v2"
 
+# Provisional offline resource budgets, not provider API or live cost limits.
+_JEV_OFFLINE_BUDGET_V1_MAX_REQUEST_BYTES = 65_536
+_JEV_OFFLINE_BUDGET_V1_MAX_REVIEWED_TEXT_BYTES = 16_384
+_JEV_OFFLINE_BUDGET_V1_MAX_TOTAL_REVIEWED_TEXT_BYTES = 49_152
+_JEV_OFFLINE_BUDGET_V1_MAX_FINDINGS = 32
+_JEV_OFFLINE_BUDGET_V1_MAX_VERIFICATION_RECORDS = 64
+_JEV_OFFLINE_BUDGET_V1_MAX_MITIGATION_OPTIONS = 16
+_JEV_OFFLINE_BUDGET_V1_MAX_DISSENT_RECORDS = 32
+_JEV_OFFLINE_BUDGET_V1_MAX_TRADEOFFS_PER_MITIGATION = 16
+_JEV_OFFLINE_BUDGET_V1_MAX_QUESTIONS = 54
+
 # Keep this snapshot aligned with machine/specialists/registry.v1.json.
 _KNOWN_PRODUCERS = frozenset(
     {
@@ -95,12 +106,15 @@ _ERROR_CODES = frozenset(
         "INVALID_SOURCE_VALUE",
         "REQUEST_MISMATCH",
         "REVIEWED_TEXT_INCOMPLETE",
+        "REVIEWED_TEXT_LIMIT_EXCEEDED",
         "REVIEWED_TEXT_REQUIRED",
         "REVIEWED_TEXT_UNBOUND",
         "RESPONSE_CONTRACT_INCOMPATIBLE",
         "SOURCE_STATE_INELIGIBLE",
         "SOURCE_STATE_MISMATCH",
+        "STRUCTURE_LIMIT_EXCEEDED",
         "UNSAFE_REVIEWED_TEXT",
+        "REQUEST_TOO_LARGE",
         "EVIDENCE_ANNOTATIONS_UNBOUND",
         "UNKNOWN_PRODUCER",
     }
@@ -231,10 +245,6 @@ def _safe_text(value: object, blocked_values: set[str]) -> str:
     folded = value.casefold()
     if any(blocked and blocked.casefold() in folded for blocked in blocked_values):
         _fail("UNSAFE_REVIEWED_TEXT")
-    try:
-        value.encode("utf-8")
-    except UnicodeEncodeError:
-        _fail("UNSAFE_REVIEWED_TEXT")
     return value
 
 
@@ -249,6 +259,50 @@ def _text_map(
         source_id: _safe_text(value[source_id], blocked_values)
         for source_id in source_ids
     }
+
+
+def _enforce_structure_limits(source: Mapping[str, Any]) -> None:
+    if (
+        len(source["findings"]) > _JEV_OFFLINE_BUDGET_V1_MAX_FINDINGS
+        or len(source["verification"])
+        > _JEV_OFFLINE_BUDGET_V1_MAX_VERIFICATION_RECORDS
+        or len(source["mitigation_options"])
+        > _JEV_OFFLINE_BUDGET_V1_MAX_MITIGATION_OPTIONS
+        or len(source["dissent"]) > _JEV_OFFLINE_BUDGET_V1_MAX_DISSENT_RECORDS
+        or any(
+            len(option["tradeoffs"])
+            > _JEV_OFFLINE_BUDGET_V1_MAX_TRADEOFFS_PER_MITIGATION
+            for option in source["mitigation_options"]
+        )
+        or 6 + 3 * len(source["mitigation_options"])
+        > _JEV_OFFLINE_BUDGET_V1_MAX_QUESTIONS
+    ):
+        _fail("STRUCTURE_LIMIT_EXCEEDED")
+
+
+def _enforce_reviewed_text_limits(values: list[object]) -> None:
+    total_bytes = 0
+    for value in values:
+        if not isinstance(value, str):
+            _fail("REVIEWED_TEXT_INCOMPLETE")
+        if len(value) > _JEV_OFFLINE_BUDGET_V1_MAX_REVIEWED_TEXT_BYTES:
+            _fail("REVIEWED_TEXT_LIMIT_EXCEEDED")
+        if not value.strip():
+            _fail("REVIEWED_TEXT_INCOMPLETE")
+        try:
+            field_bytes = len(value.encode("utf-8"))
+        except UnicodeEncodeError:
+            _fail("UNSAFE_REVIEWED_TEXT")
+        if field_bytes > _JEV_OFFLINE_BUDGET_V1_MAX_REVIEWED_TEXT_BYTES:
+            _fail("REVIEWED_TEXT_LIMIT_EXCEEDED")
+        total_bytes += field_bytes
+        if total_bytes > _JEV_OFFLINE_BUDGET_V1_MAX_TOTAL_REVIEWED_TEXT_BYTES:
+            _fail("REVIEWED_TEXT_LIMIT_EXCEEDED")
+
+
+def _enforce_request_size(request_bytes: bytes) -> None:
+    if len(request_bytes) > _JEV_OFFLINE_BUDGET_V1_MAX_REQUEST_BYTES:
+        _fail("REQUEST_TOO_LARGE")
 
 
 def _evidence_layer_annotation(value: object) -> dict[str, object]:
@@ -343,20 +397,23 @@ def _reviewed_text(
     finding_ids = [item["id"] for item in source["findings"]]
     mitigation_ids = [item["id"] for item in source["mitigation_options"]]
     dissent_ids = [item["id"] for item in source["dissent"]]
-    overseer_fields = {"evidence_sufficiency", "impact", "residual_risk_context"}
+    overseer_fields = ("evidence_sufficiency", "impact", "residual_risk_context")
     if not isinstance(bundle.source_scope_hash, str) or bundle.source_scope_hash != source["candidate"]["scope_hash"]:
         _fail("REVIEWED_TEXT_UNBOUND")
-    if not isinstance(bundle.overseer_assessment, Mapping) or set(bundle.overseer_assessment) != overseer_fields:
+    if not isinstance(bundle.overseer_assessment, Mapping) or set(bundle.overseer_assessment) != set(overseer_fields):
         _fail("REVIEWED_TEXT_INCOMPLETE")
-    overseer = {
-        field: _safe_text(bundle.overseer_assessment[field], blocked_values)
-        for field in ("evidence_sufficiency", "impact", "residual_risk_context")
-    }
-    if not isinstance(bundle.mitigation_tradeoffs, Mapping) or set(bundle.mitigation_tradeoffs) != set(
-        mitigation_ids
+    if (
+        not isinstance(bundle.finding_summaries, Mapping)
+        or set(bundle.finding_summaries) != set(finding_ids)
+        or not isinstance(bundle.mitigation_summaries, Mapping)
+        or set(bundle.mitigation_summaries) != set(mitigation_ids)
+        or not isinstance(bundle.dissent_summaries, Mapping)
+        or set(bundle.dissent_summaries) != set(dissent_ids)
+        or not isinstance(bundle.mitigation_tradeoffs, Mapping)
+        or set(bundle.mitigation_tradeoffs) != set(mitigation_ids)
     ):
         _fail("REVIEWED_TEXT_INCOMPLETE")
-    tradeoffs: dict[str, list[str]] = {}
+
     source_tradeoffs = {
         item["id"]: item["tradeoffs"] for item in source["mitigation_options"]
     }
@@ -367,9 +424,32 @@ def _reviewed_text(
             or len(items) != len(source_tradeoffs[mitigation_id])
         ):
             _fail("REVIEWED_TEXT_INCOMPLETE")
-        tradeoffs[mitigation_id] = [
-            _safe_text(item, blocked_values) for item in items
+
+    _enforce_reviewed_text_limits(
+        [
+            bundle.task_domain,
+            *(bundle.finding_summaries[item] for item in finding_ids),
+            *(bundle.overseer_assessment[field] for field in overseer_fields),
+            *(bundle.mitigation_summaries[item] for item in mitigation_ids),
+            *(
+                value
+                for mitigation_id in mitigation_ids
+                for value in bundle.mitigation_tradeoffs[mitigation_id]
+            ),
+            *(bundle.dissent_summaries[item] for item in dissent_ids),
         ]
+    )
+    overseer = {
+        field: _safe_text(bundle.overseer_assessment[field], blocked_values)
+        for field in overseer_fields
+    }
+    tradeoffs = {
+        mitigation_id: [
+            _safe_text(item, blocked_values)
+            for item in bundle.mitigation_tradeoffs[mitigation_id]
+        ]
+        for mitigation_id in mitigation_ids
+    }
     return {
         "task_domain": _safe_text(bundle.task_domain, blocked_values),
         "finding_summaries": _text_map(
@@ -467,6 +547,7 @@ def build_offline_jev_provider_projection_with_context(
             _fail("INVALID_NONCE")
 
         source = state.to_payload()
+        _enforce_structure_limits(source)
         if any(item["status"] not in _FINDING_STATUSES for item in source["findings"]):
             _fail("INVALID_SOURCE_VALUE")
         if any(item["result"] not in _VERIFICATION_RESULTS for item in source["verification"]):
@@ -576,6 +657,7 @@ def build_offline_jev_provider_projection_with_context(
             "questions": OrchestraJevQuestionBuilder().build(projected),
         }
         request_bytes = canonical_json_bytes(request)
+        _enforce_request_size(request_bytes)
         source_questions = OrchestraJevQuestionBuilder().build(state)
         question_ids = _question_id_aliases(
             source_questions,
@@ -671,6 +753,7 @@ def build_offline_jev_provider_semantic_projection_with_context(
             ),
         }
         semantic_request_bytes = canonical_json_bytes(request)
+        _enforce_request_size(semantic_request_bytes)
         mitigation_aliases = {
             source_id: alias
             for alias, source_id in base_context._mitigation_ids
