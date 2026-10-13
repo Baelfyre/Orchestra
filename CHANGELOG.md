@@ -1,3 +1,7 @@
+## Unreleased JEV responsibility owner alignment
+
+- Limit the optional single-owner responsibility-advice bypass to routes whose sole specialist matches the existing owner mapping for the task's authority domain; mismatched routes remain eligible for explicitly requested advice. Add synthetic fail-closed coverage in `tests/runtime/test_jev_responsibility_adjudication.py`.
+
 ## Unreleased offline JEV privacy projection
 
 - Adds a standalone, deterministic JEV provider projection from normalized state using an explicit field allowlist, request-scoped aliases, and separate scope-bound replacement wording. It has no production caller, network behavior, or credential access.

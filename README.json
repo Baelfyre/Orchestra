@@ -2205,6 +2205,19 @@
         "cosmic-ray-confidence"
       ]
     },
+    "jev_project_adaptive_responsibility_adjudication": {
+      "status": "OFFLINE_CONTRACT_ONLY; NO_PRODUCTION_CALLER; UNQUALIFIED_HOST_TRUST; NO_PROVIDER_ACCESS",
+      "purpose": "Carries and freshness-checks optional, nonbinding specialist-responsibility advice against a normalized task and proposed workflow without granting routing or action authority.",
+      "contract": "orchestra.jev.responsibility-adjudication.v1",
+      "legacy_post_mitigation_contract": "orchestra.jev.adjudication.v1",
+      "runtime_surface": "orchestra_runtime/domain/adaptive/jev_responsibility_adjudication.py",
+      "validation_surface": "tests/runtime/test_jev_responsibility_adjudication.py",
+      "human_sources": [
+        "docs/architecture/JEV_RESPONSIBILITY_ADJUDICATION.md"
+      ],
+      "adoption": "OPTIONAL_CONDUCTOR_REQUESTED; MULTI_SPECIALIST_COUNT_ALONE_DOES_NOT_TRIGGER",
+      "authority_note": "Offline inputs and recommendations remain unqualified. The contract has no production caller or trusted host producer and cannot authorize, dispatch, activate The Tuner, issue completion credit, or block read-only assessment."
+    },
     "uief_reference_provenance_responsive_erratum": {
       "status": "COMPLETE_CANONICAL_VERIFIED",
       "purpose": "Repair UIEF-1/UIEF-4 canonical reference integrity and responsive consistency by binding only real repository evidence, preserving missing consuming-project evidence explicitly, and freezing the historical OEE-7 blocker input.",
