@@ -1,3 +1,8 @@
+## Unreleased offline capability coverage foundation
+
+- Add a pure, deterministic capability-coverage evaluator for explicit task facets, declarations, and evidence references. Preserve declared, verified-input, unknown, missing, stale, and unresolved conflict states without ranking sources or selecting a route.
+- Keep trusted-producer evidence as an upstream contract: the evaluator validates record shape and freshness but does not authenticate the producer or make routing decisions.
+
 ## Unreleased JEV responsibility owner alignment
 
 - Limit the optional single-owner responsibility-advice bypass to routes whose sole specialist matches the existing owner mapping for the task's authority domain; mismatched routes remain eligible for explicitly requested advice. Add synthetic fail-closed coverage in `tests/runtime/test_jev_responsibility_adjudication.py`.

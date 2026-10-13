@@ -2996,6 +2996,8 @@
     "jev_offline_semantic_projection_v2_tests": "tests/runtime/test_jev_provider_projection.py",
     "jev_offline_projection_resource_bounds": "orchestra_runtime/application/services/jev_provider_projection.py",
     "jev_offline_projection_resource_bounds_tests": "tests/runtime/test_jev_provider_projection.py",
+    "capability_coverage": "orchestra_runtime/domain/adaptive/capability_coverage.py",
+    "capability_coverage_tests": "tests/runtime/test_capability_coverage.py",
     "required_analysis_compatibility_workflow": ".github/workflows/required-analysis-compat.yml",
     "specialized_assurance_trigger_policy": "AQ5, AQ6, PRAI, and Cosmic Ray use owned assurance/runtime/configuration surfaces for pull-request applicability; generic CHANGELOG.md or README.json changes do not independently trigger those expensive workflows.",
     "ci_evidence_reuse_policy": "validate is the canonical general behavior/runtime evidence producer; Governance Check retains governance-specific evidence; native required contexts focus portability; Required Analysis Compatibility owns the required exact-head Python CodeQL compatibility signal.",
