@@ -329,6 +329,18 @@ def test_explicit_task_owner_mismatching_domain_map_remains_advisable() -> None:
     assert result.decision == "CONDUCTOR_RECHECK_RECOMMENDED"
 
 
+def test_task_and_workflow_owner_mismatch_remains_advisable_when_requested() -> None:
+    task = _task(primary_owner="cipher")
+    workflow = replace(_workflow(task, ("cloak",)), primary_owner="cloak")
+    context = _context(task=task, workflow=workflow)
+    advice = ResponsibilityAdjudicationAdvice.for_context(context, "OWNERSHIP_CONFLICT")
+
+    result = evaluate_responsibility_advice(context, advice, conductor_requested=True)
+
+    assert result.decision == "OWNERSHIP_CONFLICT"
+    assert result.context_digest == context.binding_digest
+
+
 def test_critic_owner_is_included_in_the_context_roles() -> None:
     task = replace(_task(), critic_owner="scribe", critic_domain="DOCUMENTATION")
     context = _context(task=task)
