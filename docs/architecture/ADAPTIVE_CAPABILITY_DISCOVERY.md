@@ -50,6 +50,14 @@ This unit defines cache identity and invalidation hints only. It creates no disk
 
 Permission observations never authorize an operation. A future execution path must independently recheck live host permissions, package identity, and action scope. Capability inventory cannot grant specialist authority, alter Conductor/AWF routing, activate JEV, or authorize external research or tool execution.
 
+## Passive producer boundary (D3B-2B-P)
+
+`CapabilityInventoryProducer.read_cached_snapshot()` is a passive application port for observations that already exist. It has no refresh, catalog-discovery, disk-scan, MCP-connection, plugin-invocation, or permission-check operation. `CapabilityInventoryReadResult` separates a successful read from `UNKNOWN` and `UNSUPPORTED`; an unknown or unsupported result cannot carry descriptors. A successful empty read means only that no descriptors were supplied, not that a resource is absent.
+
+The only runtime implementation in this unit is `UnavailableCapabilityInventoryProducer`. It returns `UNKNOWN` with no descriptors because this installation has no qualified trusted-host bridge. The protocol, result type, and descriptor labels do not authenticate identity, inventory, compatibility, provenance, or permissions. A future implementation must establish an authenticated active user/workspace boundary before returning scoped observations; otherwise it must return `UNKNOWN` without data. Operation permissions remain observations and are never invocation authorization.
+
+Synthetic producers belong only in tests. Their records exercise shape, ordering, and fail-closed behavior; they are not live host observations, cannot be promoted to trusted evidence, and cannot authorize execution. D3B-2B-P does not enable host discovery or change D3B-2A planning.
+
 ## Validation and limitations
 
 `tests/runtime/test_capability_inventory.py` uses synthetic records to cover explicit and absent triggers, narrow user selections, cache-first capability lookups, negative-only claims that remain targeted, partial capability gaps, within-source contradictions across records, cross-provider claim preservation, complete-scope isolation, scoped identities sharing a resource label, version/scope/permission invalidation, stale and unknown states, unsupported host interfaces, input-order invariance, malformed and duplicate inputs, and non-authorizing behavior.
