@@ -22,7 +22,7 @@ Changes to any covered task, workflow, source, work-item, specialist-authority, 
 
 ## Applicability and evaluation
 
-The caller must explicitly set `conductor_requested` to the exact boolean `true` before supplied advice can be considered. This flag is an unqualified request indicator, not authenticated Conductor provenance. A multi-specialist workflow alone does not trigger review. The contract always bypasses a clear single-owner route: one authority domain and one required specialist, single-owner concurrency, matching primary owner, and no re-entry specialist, critic contract, or escalation reason.
+The caller must explicitly set `conductor_requested` to the exact boolean `true` before supplied advice can be considered. This flag is an unqualified request indicator, not authenticated Conductor provenance. A multi-specialist workflow alone does not trigger review. The contract bypasses a single-owner route only when its sole required specialist and workflow primary owner match the existing owner mapped from the task's sole authority domain, the task's optional primary owner agrees, concurrency is single-owner, and there is no re-entry specialist, critic contract, or escalation reason.
 
 The contract does not infer whether a route is ambiguous and does not calculate which responsibility recommendation is correct. It structurally validates a supplied recommendation and checks whether its context digest still matches. A future caller may request this optional check for a contested route, but that behavior is not implemented here.
 
@@ -40,7 +40,7 @@ The code contains no project-name-specific branch. The AlteredEgo test is a synt
 
 ## Verification and future integration
 
-The synthetic tests cover contract version separation, missing identities, Git and non-Git source identity shapes, unknown roles, untrusted provenance, stale advice after context changes, authority-content changes, clear single-owner bypass, non-automatic multi-specialist behavior, explicit cross-domain advice, malformed recommendations, task/workflow binding, and non-authorizing result fields.
+The synthetic tests cover contract version separation, missing identities, Git and non-Git source identity shapes, unknown roles, untrusted provenance, stale advice after context changes, authority-content changes, domain-mapped single-owner bypass, mismatched task/workflow ownership remaining eligible for requested advice, non-automatic multi-specialist behavior, explicit cross-domain advice, malformed inputs and recommendations, task/workflow binding, and non-authorizing result fields.
 
 Local tests establish behavior of these typed offline fixtures only. They do not establish production integration, trusted source or authority evidence, mandatory project obligations, privacy or consent guarantees, or live provider compatibility. Any later runtime integration requires a separately approved trusted host contract, independently qualified inputs and applicability rules, and its own implementation and validation authority. This document grants none of those permissions.
 

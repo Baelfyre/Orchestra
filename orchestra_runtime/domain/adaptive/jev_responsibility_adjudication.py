@@ -13,7 +13,7 @@ import re
 from typing import Mapping
 
 from ...shared.canonicalization import normalize_git_sha, normalize_sha256, receipt_digest
-from .task_profile import TaskProfile
+from .task_profile import AUTHORITY_DOMAIN_OWNERS, TaskProfile
 from .topology_validator import EXPECTED_SPECIALISTS, AgenticWorkflowProfile, SpecialistAuthority
 
 
@@ -380,6 +380,7 @@ def _clear_single_owner_route(context: ResponsibilityAdjudicationContext) -> boo
         and len(workflow.required_specialists) == 1
         and workflow.concurrency_mode == "SINGLE_OWNER"
         and workflow.primary_owner == workflow.required_specialists[0]
+        and AUTHORITY_DOMAIN_OWNERS.get(task.authority_domains[0]) == workflow.primary_owner
         and task.primary_owner in (None, workflow.primary_owner)
         and not task.reentry_specialists
         and task.critic_owner is None

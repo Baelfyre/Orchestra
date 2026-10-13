@@ -15,6 +15,7 @@ from orchestra_runtime.domain.adaptive import (
     ProjectWorkItemIdentity,
     ResponsibilityAdjudicationAdvice,
     ResponsibilityAdjudicationContext,
+    ResponsibilityAdjudicationResult,
     ResponsibilitySourceIdentity,
     SpecialistAuthority,
     TaskProfile,
@@ -291,14 +292,54 @@ def test_authority_description_content_change_makes_prior_advice_stale() -> None
     ).decision == "STALE"
 
 
-def test_clear_single_owner_route_bypasses_optional_advice() -> None:
-    context = _context()
+@pytest.mark.parametrize(("domain", "owner"), tuple(AUTHORITY_DOMAIN_OWNERS.items()))
+def test_clear_domain_mapped_single_owner_route_bypasses_optional_advice(
+    domain: str, owner: str
+) -> None:
+    task = _task(domains=(domain,), primary_owner=owner)
+    context = _context(task=task, workflow=_workflow(task, (owner,)))
     advice = ResponsibilityAdjudicationAdvice.for_context(context, "OWNERSHIP_CONFLICT")
 
     result = evaluate_responsibility_advice(context, advice, conductor_requested=True)
 
     assert result.decision == "NO_ADVICE"
     assert result.context_digest == context.binding_digest
+
+
+def test_unmapped_single_owner_route_remains_advisable_when_requested() -> None:
+    task = _task(primary_owner=None)
+    workflow = replace(_workflow(task, ("cloak",)), primary_owner="cloak")
+    context = _context(task=task, workflow=workflow)
+    advice = ResponsibilityAdjudicationAdvice.for_context(context, "OWNERSHIP_CONFLICT")
+
+    unrequested = evaluate_responsibility_advice(context, advice, conductor_requested=False)
+    requested = evaluate_responsibility_advice(context, advice, conductor_requested=True)
+
+    assert unrequested.decision == "NO_ADVICE"
+    assert requested.decision == "OWNERSHIP_CONFLICT"
+
+
+def test_explicit_task_owner_mismatching_domain_map_remains_advisable() -> None:
+    task = _task(primary_owner="cloak")
+    context = _context(task=task, workflow=_workflow(task, ("cloak",)))
+    advice = ResponsibilityAdjudicationAdvice.for_context(context, "CONDUCTOR_RECHECK_RECOMMENDED")
+
+    result = evaluate_responsibility_advice(context, advice, conductor_requested=True)
+
+    assert result.decision == "CONDUCTOR_RECHECK_RECOMMENDED"
+
+
+def test_critic_owner_is_included_in_the_context_roles() -> None:
+    task = replace(_task(), critic_owner="scribe", critic_domain="DOCUMENTATION")
+    context = _context(task=task)
+
+    assert context.binding_digest is not None
+
+
+def test_policy_context_revision_remains_optional() -> None:
+    context = _context(policy_revision=None)
+
+    assert context.binding_digest is not None
 
 
 def test_multi_specialist_route_does_not_automatically_request_advice() -> None:
@@ -379,3 +420,173 @@ def test_result_serialization_keeps_every_authority_effect_false() -> None:
             "may_block_read_only_assessment",
         )
     )
+
+
+@pytest.mark.parametrize(
+    ("project_id", "error", "message"),
+    (
+        (None, TypeError, "project_id must be a string"),
+        ("  ", ValueError, "project_id must be non-empty"),
+        ("x" * 513, ValueError, "project_id exceeds 512 characters"),
+        ("bad\nvalue", ValueError, "project_id must not contain control characters"),
+    ),
+)
+def test_identity_text_fields_reject_malformed_values(project_id, error, message) -> None:
+    with pytest.raises(error, match=message):
+        ProjectWorkItemIdentity(project_id=project_id, work_item_id="work-item")
+
+
+@pytest.mark.parametrize(
+    ("identity_fields", "message"),
+    (
+        ({"kind": "URL", "artifact_id": "artifact"}, "unsupported source identity kind"),
+        (
+            {
+                "kind": "GIT_COMMIT_TREE",
+                "repository": "example/project",
+                "commit_sha": "a" * 40,
+                "tree_sha": "b" * 40,
+                "artifact_id": "unexpected",
+            },
+            "Git source identity cannot contain artifact fields",
+        ),
+        (
+            {
+                "kind": "GIT_COMMIT_TREE",
+                "repository": "invalid-repository",
+                "commit_sha": "a" * 40,
+                "tree_sha": "b" * 40,
+            },
+            "source_identity.repository is invalid",
+        ),
+        (
+            {"kind": "ARTIFACT_DIGEST", "artifact_id": "artifact"},
+            "artifact digest identity requires only an algorithm and digest",
+        ),
+        (
+            {
+                "kind": "ARTIFACT_DIGEST",
+                "artifact_id": "artifact",
+                "digest_algorithm": "md5",
+                "digest": "c" * 64,
+            },
+            "only explicitly identified SHA-256 artifact digests are supported",
+        ),
+        (
+            {
+                "kind": "ARTIFACT_VERSION",
+                "artifact_id": "artifact",
+                "version": "v1",
+                "digest_algorithm": "sha256",
+            },
+            "artifact version identity requires only a version",
+        ),
+    ),
+)
+def test_source_identity_rejects_unsupported_or_inconsistent_shapes(identity_fields, message) -> None:
+    with pytest.raises(ValueError, match=message):
+        ResponsibilitySourceIdentity(**identity_fields)
+
+
+@pytest.mark.parametrize(
+    ("mutate", "error", "message"),
+    (
+        (lambda context: replace(context, task_profile=None), TypeError, "task_profile must be TaskProfile"),
+        (
+            lambda context: replace(context, workflow_profile=None),
+            TypeError,
+            "workflow_profile must be AgenticWorkflowProfile",
+        ),
+        (
+            lambda context: replace(context, project_work_item_identity="untrusted"),
+            TypeError,
+            "project_work_item_identity must be ProjectWorkItemIdentity or None",
+        ),
+        (
+            lambda context: replace(context, source_identity="untrusted"),
+            TypeError,
+            "source_identity must be ResponsibilitySourceIdentity or None",
+        ),
+        (
+            lambda context: replace(context, specialist_authorities="not-a-list"),
+            TypeError,
+            "specialist_authorities must be a tuple or list",
+        ),
+        (
+            lambda context: replace(context, specialist_authorities=(object(),)),
+            TypeError,
+            "specialist_authorities entries must be SpecialistAuthority",
+        ),
+        (
+            lambda context: replace(
+                context,
+                specialist_authorities=tuple(
+                    _authority("cipher") for _ in range(len(EXPECTED_SPECIALISTS) + 1)
+                ),
+            ),
+            ValueError,
+            "specialist_authorities exceeds the canonical specialist count",
+        ),
+        (
+            lambda context: replace(
+                context, specialist_authorities=(_authority("cipher"), _authority("cipher"))
+            ),
+            ValueError,
+            "specialist_authorities contains duplicate slugs",
+        ),
+    ),
+)
+def test_context_rejects_malformed_types_and_authority_records(mutate, error, message) -> None:
+    with pytest.raises(error, match=message):
+        mutate(_context())
+
+
+def test_missing_required_authority_record_prevents_advice_binding() -> None:
+    context = _context()
+    advice = ResponsibilityAdjudicationAdvice.for_context(context, "ROUTE_SUPPORTED")
+    incomplete = replace(
+        context,
+        specialist_authorities=tuple(
+            authority for authority in context.specialist_authorities if authority.slug != "cipher"
+        ),
+    )
+
+    assert incomplete.binding_digest is None
+    assert evaluate_responsibility_advice(
+        incomplete, advice, conductor_requested=True
+    ).decision == "NO_ADVICE"
+    with pytest.raises(ValueError, match="context is insufficiently bound"):
+        ResponsibilityAdjudicationAdvice.for_context(incomplete, "ROUTE_SUPPORTED")
+
+
+def test_advice_and_result_reject_malformed_decisions_and_digests() -> None:
+    with pytest.raises(ValueError, match="context_digest must use the sha256 prefix"):
+        ResponsibilityAdjudicationAdvice(context_digest="a" * 64, recommendation="ABSTAIN")
+    with pytest.raises(TypeError, match="context must be ResponsibilityAdjudicationContext"):
+        ResponsibilityAdjudicationAdvice.for_context(None, "ABSTAIN")  # type: ignore[arg-type]
+    with pytest.raises(ValueError, match="unsupported responsibility adjudication decision"):
+        ResponsibilityAdjudicationResult("UNKNOWN", None)
+    with pytest.raises(ValueError, match="context_digest must use the sha256 prefix"):
+        ResponsibilityAdjudicationResult("NO_ADVICE", "a" * 64)
+
+
+def test_context_repr_and_advice_serialization_keep_expected_fields() -> None:
+    context = _context(task=_task(goal="synthetic private task text"))
+    advice = ResponsibilityAdjudicationAdvice.for_context(context, "ABSTAIN")
+
+    assert "synthetic private task text" not in repr(context)
+    assert advice.to_dict() == {
+        "contract": "orchestra.jev.responsibility-adjudication.v1",
+        "context_digest": context.binding_digest,
+        "recommendation": "ABSTAIN",
+    }
+
+
+def test_evaluation_rejects_malformed_call_arguments() -> None:
+    context = _context()
+    with pytest.raises(TypeError, match="context must be ResponsibilityAdjudicationContext"):
+        evaluate_responsibility_advice(None, None, conductor_requested=True)  # type: ignore[arg-type]
+    with pytest.raises(TypeError, match="advice must be ResponsibilityAdjudicationAdvice or None"):
+        evaluate_responsibility_advice(context, "ROUTE_SUPPORTED", conductor_requested=True)  # type: ignore[arg-type]
+    with pytest.raises(TypeError, match="conductor_requested must be an exact boolean"):
+        evaluate_responsibility_advice(context, None, conductor_requested=1)  # type: ignore[arg-type]
