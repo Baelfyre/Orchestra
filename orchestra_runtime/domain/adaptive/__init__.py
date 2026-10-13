@@ -1,5 +1,8 @@
 """Pure authority-aware adaptive workflow domain contracts."""
 
+# @codebase_provenance_JEO
+# @codebase_rights_JEO
+
 from .advanced_adaptation import (
     AdvancedAdaptationAdmission,
     PromotionCandidateDecision,
@@ -49,6 +52,22 @@ from .jev_adjudication import (
     OrchestraJevInterpreter,
     OrchestraJevQuestionBuilder,
     validate_jev_adjudication_eligibility,
+)
+from .jev_responsibility_adjudication import (
+    RESPONSIBILITY_ABSTAIN,
+    RESPONSIBILITY_ADJUDICATION_CONTRACT,
+    RESPONSIBILITY_CONDUCTOR_RECHECK_RECOMMENDED,
+    RESPONSIBILITY_NO_ADVICE,
+    RESPONSIBILITY_OWNERSHIP_CONFLICT,
+    RESPONSIBILITY_OWNERSHIP_GAP,
+    RESPONSIBILITY_ROUTE_SUPPORTED,
+    RESPONSIBILITY_STALE,
+    ProjectWorkItemIdentity,
+    ResponsibilityAdjudicationAdvice,
+    ResponsibilityAdjudicationContext,
+    ResponsibilityAdjudicationResult,
+    ResponsibilitySourceIdentity,
+    evaluate_responsibility_advice,
 )
 from .gate_coverage import (
     AQ6_AUTHORITY_MODEL,
@@ -306,6 +325,20 @@ from .high_risk_assurance import (
 )
 __all__ = [
     "AUTHORITY_RULE",
+    "RESPONSIBILITY_ABSTAIN",
+    "RESPONSIBILITY_ADJUDICATION_CONTRACT",
+    "RESPONSIBILITY_CONDUCTOR_RECHECK_RECOMMENDED",
+    "RESPONSIBILITY_NO_ADVICE",
+    "RESPONSIBILITY_OWNERSHIP_CONFLICT",
+    "RESPONSIBILITY_OWNERSHIP_GAP",
+    "RESPONSIBILITY_ROUTE_SUPPORTED",
+    "RESPONSIBILITY_STALE",
+    "ProjectWorkItemIdentity",
+    "ResponsibilityAdjudicationAdvice",
+    "ResponsibilityAdjudicationContext",
+    "ResponsibilityAdjudicationResult",
+    "ResponsibilitySourceIdentity",
+    "evaluate_responsibility_advice",
     "JEV_ADJUDICATION_CONTRACT",
     "JEV_ADVISORY_INCONCLUSIVE",
     "JEV_ADVISORY_RECOMMENDATION_AVAILABLE",
