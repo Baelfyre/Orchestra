@@ -236,3 +236,85 @@ def test_claim_objects_cannot_be_promoted_by_a_verification_label() -> None:
 
     assert result.items[0].status is CapabilityCoverageStatus.DECLARED
     assert not hasattr(declaration(), "verified")
+
+
+def test_validation_rejects_malformed_values_at_each_input_boundary() -> None:
+    with pytest.raises(TypeError, match="facet_id must be a string"):
+        TaskCapabilityFacet(None, ("accessibility",))  # type: ignore[arg-type]
+    with pytest.raises(TypeError, match="evidence_ref must be a string"):
+        declaration(evidence_refs=(None,))  # type: ignore[arg-type]
+    with pytest.raises(ValueError, match="evidence_ref must be non-empty"):
+        declaration(evidence_refs=("",))
+    with pytest.raises(ValueError, match="control characters"):
+        declaration(evidence_refs=("ref:\x00unsafe",))
+    with pytest.raises(TypeError, match="claim must be a string"):
+        declaration(claim=1)  # type: ignore[arg-type]
+    with pytest.raises(TypeError, match="required_capabilities must be a list or tuple"):
+        TaskCapabilityFacet("ui", "accessibility")  # type: ignore[arg-type]
+    with pytest.raises(ValueError, match="required_capabilities must not be empty"):
+        TaskCapabilityFacet("ui", ())
+    with pytest.raises(TypeError, match="evidence_refs must be a list or tuple"):
+        declaration(evidence_refs="ref:one")  # type: ignore[arg-type]
+    with pytest.raises(ValueError, match="evidence_refs must not be empty"):
+        declaration(evidence_refs=())
+    with pytest.raises(TypeError, match="valid_until must be a string or None"):
+        declaration(valid_until=123)  # type: ignore[arg-type]
+
+
+def test_records_and_required_facet_validation_reject_bad_containers() -> None:
+    with pytest.raises(TypeError, match="task_facets must contain TaskCapabilityFacet"):
+        evaluate_capability_coverage("ui", (), evaluated_at=AS_OF)  # type: ignore[arg-type]
+    with pytest.raises(TypeError, match="declarations must be iterable"):
+        evaluate_capability_coverage((facet(),), 1, evaluated_at=AS_OF)  # type: ignore[arg-type]
+    with pytest.raises(ValueError, match="task_facets must not be empty"):
+        assess(facets=())
+    duplicate = trusted_evidence()
+    with pytest.raises(ValueError, match="trusted_evidence must not contain duplicates"):
+        assess(evidence=(duplicate, duplicate))
+
+
+def test_negative_claims_distinguish_declared_absence_from_unknown_evidence() -> None:
+    declared_absence = assess(declarations=(declaration(claim="DOES_NOT_SUPPORT"),))
+    unverified_absence = assess(
+        evidence=(trusted_evidence(claim="DOES_NOT_SUPPORT", valid_until=None),)
+    )
+
+    assert declared_absence.items[0].status is CapabilityCoverageStatus.MISSING
+    assert unverified_absence.items[0].status is CapabilityCoverageStatus.UNKNOWN
+    assert unverified_absence.items[0].evidence[0].freshness is CapabilityEvidenceFreshness.UNKNOWN
+
+
+def test_enum_instances_are_accepted_as_normalized_claim_inputs() -> None:
+    result = assess(
+        declarations=(
+            declaration(
+                source_kind=CapabilitySourceKind.INTERNAL,
+                claim=CapabilityClaim.SUPPORTS,
+            ),
+        )
+    )
+
+    assert result.items[0].status is CapabilityCoverageStatus.DECLARED
+    assert result.items[0].evidence[0].source_kind is CapabilitySourceKind.INTERNAL
+    assert result.items[0].evidence[0].claim is CapabilityClaim.SUPPORTS
+
+
+def test_stale_opposition_does_not_create_a_current_conflict() -> None:
+    result = assess(
+        declarations=(
+            declaration("EXTERNAL", "impeccable", "SUPPORTS", valid_until=STALE_AT),
+            declaration(
+                "INTERNAL",
+                "cloak",
+                "DOES_NOT_SUPPORT",
+                evidence_refs=("skill:cloak/limitation",),
+                valid_until=VALID_UNTIL,
+            ),
+        )
+    )
+
+    assert result.items[0].status is CapabilityCoverageStatus.MISSING
+    assert {item.freshness for item in result.items[0].evidence} == {
+        CapabilityEvidenceFreshness.STALE,
+        CapabilityEvidenceFreshness.CURRENT,
+    }
