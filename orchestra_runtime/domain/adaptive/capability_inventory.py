@@ -467,7 +467,7 @@ def plan_capability_discovery(
     }
     reuse_hints: set[CapabilityInventoryIdentity] = set()
     revalidate: set[CapabilityInventoryIdentity] = set()
-    reusable_capabilities: set[str] = set()
+    claims_by_source: dict[tuple[str, str], set[CapabilityClaim]] = {}
     for entry in relevant:
         scope = entry.identity.observation_scope
         current = current_by_scope.get(scope) if scope is not None else None
@@ -481,21 +481,23 @@ def plan_capability_discovery(
         )
         if reusable:
             reuse_hints.add(entry.identity)
-            claims_by_capability: dict[str, set[CapabilityClaim]] = {}
             for claim in entry.capability_claims:
                 if claim.capability_id in requested_capabilities:
-                    claims_by_capability.setdefault(claim.capability_id, set()).add(claim.claim)
-            for capability_id, claims in claims_by_capability.items():
-                if (
-                    CapabilityClaim.SUPPORTS in claims
-                    or CapabilityClaim.DOES_NOT_SUPPORT in claims
-                ) and not {
-                    CapabilityClaim.SUPPORTS,
-                    CapabilityClaim.DOES_NOT_SUPPORT,
-                } <= claims:
-                    reusable_capabilities.add(capability_id)
+                    claims_by_source.setdefault(
+                        (claim.capability_id, entry.identity.source_id), set()
+                    ).add(claim.claim)
         else:
             revalidate.add(entry.identity)
+
+    supporting_capabilities: set[str] = set()
+    contradictory_capabilities: set[str] = set()
+    for (capability_id, _), claims in claims_by_source.items():
+        if CapabilityClaim.SUPPORTS in claims:
+            if CapabilityClaim.DOES_NOT_SUPPORT in claims:
+                contradictory_capabilities.add(capability_id)
+            else:
+                supporting_capabilities.add(capability_id)
+    reusable_capabilities = supporting_capabilities - contradictory_capabilities
 
     target_resources = {identity.resource_id for identity in revalidate}
     target_resources.update(set(requested_resources) - {entry.identity.resource_id for entry in relevant})

@@ -198,6 +198,30 @@ def test_gap_lookup_is_narrow_and_preserves_different_provider_claims() -> None:
         identity("research-tool", source_id="vendor.research", distribution_id="vendor.research"),
         claims=(claim("source.review", ref="publisher:source-review"),),
     )
+    coverage = evaluate_capability_coverage(
+        (TaskCapabilityFacet("ui", ("ui.accessibility",)),),
+        (
+            CapabilityDeclaration(
+                "ui",
+                "ui.accessibility",
+                "INTERNAL",
+                "orchestra.cloak",
+                "SUPPORTS",
+                ("registry:cloak",),
+                FRESH_UNTIL,
+            ),
+            CapabilityDeclaration(
+                "ui",
+                "ui.accessibility",
+                "EXTERNAL",
+                "vendor.impeccable",
+                "DOES_NOT_SUPPORT",
+                ("publisher:limit",),
+                FRESH_UNTIL,
+            ),
+        ),
+        evaluated_at=AS_OF,
+    )
 
     result = plan(
         trigger("CAPABILITY_GAP", capabilities=("ui.accessibility",), resources=()),
@@ -214,6 +238,7 @@ def test_gap_lookup_is_narrow_and_preserves_different_provider_claims() -> None:
         CapabilityClaim.SUPPORTS,
         CapabilityClaim.DOES_NOT_SUPPORT,
     ]
+    assert coverage.items[0].status is CapabilityCoverageStatus.DECLARED
 
 
 def test_capability_trigger_reuses_current_claim_without_qualifying_it() -> None:
@@ -265,6 +290,25 @@ def test_capability_trigger_targets_only_capabilities_without_reusable_knowledge
     assert result.disposition is CapabilityDiscoveryDisposition.TARGETED_DISCOVERY
     assert result.reuse_hint_identities == (current,)
     assert result.target_capability_ids == ("ui.data_visualization",)
+
+
+def test_negative_only_capability_claim_is_reusable_but_stays_targeted() -> None:
+    current = identity()
+    negative = observation(
+        current,
+        claims=(claim(value="DOES_NOT_SUPPORT", ref="publisher:limitation"),),
+    )
+
+    result = plan(
+        trigger("CAPABILITY_GAP", capabilities=("ui.accessibility",), resources=()),
+        (negative,),
+        (current,),
+    )
+
+    assert result.disposition is CapabilityDiscoveryDisposition.TARGETED_DISCOVERY
+    assert result.target_capability_ids == ("ui.accessibility",)
+    assert result.reuse_hint_identities == (current,)
+    assert result.relevant_observations == (negative,)
 
 
 def test_cached_observations_from_another_workspace_are_not_disclosed_or_reused() -> None:
@@ -399,6 +443,72 @@ def test_unknown_or_contradictory_capability_claims_remain_targeted() -> None:
     assert contradictory_result.disposition is CapabilityDiscoveryDisposition.TARGETED_DISCOVERY
     assert contradictory_result.reuse_hint_identities == (current,)
     assert contradictory_result.relevant_observations == (contradictory,)
+
+
+def test_same_source_conflict_stays_targeted_despite_other_source_support() -> None:
+    source_support_identity = identity(
+        "impeccable-support",
+        source_id="vendor.impeccable",
+        host_id="host-support",
+    )
+    source_negative_identity = identity(
+        "impeccable-limit",
+        source_id="vendor.impeccable",
+        host_id="host-limit",
+    )
+    other_support_identity = identity(
+        "cloak",
+        source_id="orchestra.cloak",
+        host_id="host-cloak",
+        distribution_id=None,
+    )
+    source_support = observation(
+        source_support_identity,
+        claims=(claim(value="SUPPORTS", ref="publisher:positive"),),
+    )
+    source_negative = observation(
+        source_negative_identity,
+        claims=(claim(value="DOES_NOT_SUPPORT", ref="publisher:negative"),),
+    )
+    other_support = observation(
+        other_support_identity,
+        resource_kind="REGISTERED_SPECIALIST",
+        claims=(claim(value="SUPPORTS", ref="registry:cloak"),),
+    )
+    requested = trigger("CAPABILITY_GAP", capabilities=("ui.accessibility",), resources=())
+    entries = (source_support, source_negative, other_support)
+    identities = (source_support_identity, source_negative_identity, other_support_identity)
+
+    result = plan(requested, entries, identities)
+    reverse_result = plan(requested, tuple(reversed(entries)), tuple(reversed(identities)))
+    coverage = evaluate_capability_coverage(
+        (TaskCapabilityFacet("ui", ("ui.accessibility",)),),
+        (
+            CapabilityDeclaration(
+                "ui", "ui.accessibility", "EXTERNAL", "vendor.impeccable", "SUPPORTS",
+                ("publisher:positive",), FRESH_UNTIL,
+            ),
+            CapabilityDeclaration(
+                "ui", "ui.accessibility", "EXTERNAL", "vendor.impeccable", "DOES_NOT_SUPPORT",
+                ("publisher:negative",), FRESH_UNTIL,
+            ),
+            CapabilityDeclaration(
+                "ui", "ui.accessibility", "INTERNAL", "orchestra.cloak", "SUPPORTS",
+                ("registry:cloak",), FRESH_UNTIL,
+            ),
+        ),
+        evaluated_at=AS_OF,
+    )
+
+    assert result == reverse_result
+    assert result.disposition is CapabilityDiscoveryDisposition.TARGETED_DISCOVERY
+    assert result.target_capability_ids == ("ui.accessibility",)
+    assert set(result.reuse_hint_identities) == set(identities)
+    assert {entry.identity.source_id for entry in result.relevant_observations} == {
+        "vendor.impeccable",
+        "orchestra.cloak",
+    }
+    assert coverage.items[0].status is CapabilityCoverageStatus.CONFLICT
 
 
 @pytest.mark.parametrize(
