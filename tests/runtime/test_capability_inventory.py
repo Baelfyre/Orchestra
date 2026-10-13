@@ -10,9 +10,11 @@ import pytest
 from orchestra_runtime.domain.adaptive import (
     CAPABILITY_INVENTORY_SCHEMA_VERSION,
     CapabilityClaim,
+    CapabilityCoverageStatus,
     CapabilityDiscoveryDisposition,
     CapabilityDiscoveryTrigger,
     CapabilityDiscoveryTriggerKind,
+    CapabilityDeclaration,
     CapabilityInventoryClaim,
     CapabilityInventoryDescriptor,
     CapabilityInventoryIdentity,
@@ -25,6 +27,8 @@ from orchestra_runtime.domain.adaptive import (
     OperationPermissionStatus,
     SideEffectObservation,
     SideEffectObservationStatus,
+    TaskCapabilityFacet,
+    evaluate_capability_coverage,
     plan_capability_discovery,
 )
 
@@ -161,7 +165,7 @@ def test_explicit_user_selection_is_preserved_and_fresh_cache_only_yields_a_hint
 
     assert result.disposition is CapabilityDiscoveryDisposition.CACHE_REUSE_HINT
     assert result.requested_resource_ids == ("impeccable",)
-    assert result.reuse_hint_resource_ids == ("impeccable",)
+    assert result.reuse_hint_identities == (selected,)
     assert result.target_resource_ids == ()
     assert result.relevant_observations == (cached,)
     assert not hasattr(result, "selected_provider")
@@ -201,14 +205,200 @@ def test_gap_lookup_is_narrow_and_preserves_different_provider_claims() -> None:
         (identity("cloak", source_id="orchestra.cloak", distribution_id=None), identity()),
     )
 
-    assert result.disposition is CapabilityDiscoveryDisposition.TARGETED_DISCOVERY
-    assert result.target_capability_ids == ("ui.accessibility",)
+    assert result.disposition is CapabilityDiscoveryDisposition.CACHE_REUSE_HINT
+    assert result.target_capability_ids == ()
     assert result.requested_resource_ids == ()
     assert {entry.identity.resource_id for entry in result.relevant_observations} == {"cloak", "impeccable"}
+    assert {identity.resource_id for identity in result.reuse_hint_identities} == {"cloak", "impeccable"}
     assert [entry.capability_claims[0].claim for entry in result.relevant_observations] == [
         CapabilityClaim.SUPPORTS,
         CapabilityClaim.DOES_NOT_SUPPORT,
     ]
+
+
+def test_capability_trigger_reuses_current_claim_without_qualifying_it() -> None:
+    current = identity()
+    cached = observation(current)
+
+    result = plan(
+        trigger("CAPABILITY_GAP", capabilities=("ui.accessibility",), resources=()),
+        (cached,),
+        (current,),
+    )
+    coverage = evaluate_capability_coverage(
+        (TaskCapabilityFacet("ui", ("ui.accessibility",)),),
+        (
+            CapabilityDeclaration(
+                "ui",
+                "ui.accessibility",
+                "EXTERNAL",
+                current.source_id,
+                "SUPPORTS",
+                ("publisher:accessibility",),
+                FRESH_UNTIL,
+            ),
+        ),
+        evaluated_at=AS_OF,
+    )
+
+    assert result.disposition is CapabilityDiscoveryDisposition.CACHE_REUSE_HINT
+    assert result.target_capability_ids == ()
+    assert result.relevant_observations == (cached,)
+    assert result.reuse_hint_identities == (current,)
+    assert coverage.items[0].status is CapabilityCoverageStatus.DECLARED
+
+
+def test_capability_trigger_targets_only_capabilities_without_reusable_knowledge() -> None:
+    current = identity()
+    cached = observation(current)
+
+    result = plan(
+        trigger(
+            "CAPABILITY_GAP",
+            capabilities=("ui.accessibility", "ui.data_visualization"),
+            resources=(),
+        ),
+        (cached,),
+        (current,),
+    )
+
+    assert result.disposition is CapabilityDiscoveryDisposition.TARGETED_DISCOVERY
+    assert result.reuse_hint_identities == (current,)
+    assert result.target_capability_ids == ("ui.data_visualization",)
+
+
+def test_cached_observations_from_another_workspace_are_not_disclosed_or_reused() -> None:
+    active = identity("shared-tool", host_id="host-a", source_id="vendor.shared")
+    other_workspace = identity(
+        "shared-tool",
+        host_id="host-a",
+        source_id="vendor.shared",
+        user_scope_id="user-b",
+        workspace_scope_id="workspace-b",
+    )
+    cached = observation(other_workspace)
+
+    result = plan(trigger(resources=("shared-tool",)), (cached,), (active,))
+
+    assert result.relevant_observations == ()
+    assert result.reuse_hint_identities == ()
+    assert result.revalidate_identities == ()
+    assert result.target_resource_ids == ("shared-tool",)
+
+
+def test_cache_without_complete_active_scope_and_permission_is_not_disclosed() -> None:
+    unscoped = identity(
+        "impeccable",
+        user_scope_id=None,
+        workspace_scope_id=None,
+        permission_scope_id=None,
+    )
+    cached = observation(unscoped)
+
+    result = plan(trigger(resources=("impeccable",)), (cached,), (unscoped,))
+
+    assert result.relevant_observations == ()
+    assert result.reuse_hint_identities == ()
+    assert result.revalidate_identities == ()
+    assert result.target_resource_ids == ("impeccable",)
+
+
+def test_same_resource_name_preserves_distinct_scoped_reuse_entries() -> None:
+    host_a = identity(
+        "shared-tool",
+        source_id="vendor.host-a",
+        host_id="host-a",
+        distribution_id="vendor.host-a",
+    )
+    host_b = identity(
+        "shared-tool",
+        source_id="vendor.host-b",
+        host_id="host-b",
+        distribution_id="vendor.host-b",
+    )
+
+    result = plan(
+        trigger(resources=("shared-tool",)),
+        (observation(host_b), observation(host_a)),
+        (host_a, host_b),
+    )
+
+    assert result.relevant_observations == (observation(host_a), observation(host_b))
+    assert result.reuse_hint_identities == (host_a, host_b)
+
+
+def test_same_resource_name_keeps_reuse_and_revalidation_identities_separate() -> None:
+    host_a = identity("shared-tool", source_id="vendor.host-a", host_id="host-a")
+    host_b = identity("shared-tool", source_id="vendor.host-b", host_id="host-b")
+    cached = (
+        observation(host_a, valid_until="2026-10-14T07:30:00Z"),
+        observation(host_b),
+    )
+    current = (host_a, host_b)
+    requested = trigger("CAPABILITY_GAP", capabilities=("ui.accessibility",), resources=())
+
+    result = plan(requested, cached, current)
+    reverse = plan(requested, tuple(reversed(cached)), tuple(reversed(current)))
+
+    assert result == reverse
+    assert result.reuse_hint_identities == (host_b,)
+    assert result.revalidate_identities == (host_a,)
+    assert result.target_resource_ids == ("shared-tool",)
+    assert result.target_capability_ids == ()
+
+
+@pytest.mark.parametrize("missing_scope", ("host_id", "user_scope_id", "workspace_scope_id", "permission_scope_id"))
+def test_incomplete_active_identity_cannot_reuse_a_scoped_cache(missing_scope: str) -> None:
+    current = replace(identity(), **{missing_scope: None})
+    cached_identity = identity()
+    cached = observation(cached_identity)
+
+    result = plan(trigger(resources=("impeccable",)), (cached,), (current,))
+
+    assert result.relevant_observations == ()
+    assert result.reuse_hint_identities == ()
+    assert result.revalidate_identities == ()
+    assert result.target_resource_ids == ("impeccable",)
+
+
+def test_multiple_active_user_workspace_scopes_fail_closed() -> None:
+    active_a = identity("tool-a")
+    active_b = identity("tool-b", user_scope_id="user-b", workspace_scope_id="workspace-b")
+
+    with pytest.raises(ValueError, match="one active user/workspace scope"):
+        plan(trigger(resources=("tool-a",)), (), (active_a, active_b))
+
+
+def test_unknown_or_contradictory_capability_claims_remain_targeted() -> None:
+    current = identity()
+    unknown = observation(current, claims=(claim(value="UNKNOWN"),))
+    contradictory = observation(
+        current,
+        claims=(
+            claim(value="SUPPORTS", ref="publisher:positive"),
+            claim(value="DOES_NOT_SUPPORT", ref="publisher:negative"),
+        ),
+    )
+
+    unknown_result = plan(
+        trigger("CAPABILITY_GAP", capabilities=("ui.accessibility",), resources=()),
+        (unknown,),
+        (current,),
+    )
+    contradictory_result = plan(
+        trigger("CAPABILITY_GAP", capabilities=("ui.accessibility",), resources=()),
+        (contradictory,),
+        (current,),
+    )
+
+    assert unknown_result.target_capability_ids == ("ui.accessibility",)
+    assert unknown_result.disposition is CapabilityDiscoveryDisposition.TARGETED_DISCOVERY
+    assert unknown_result.reuse_hint_identities == (current,)
+    assert unknown_result.relevant_observations == (unknown,)
+    assert contradictory_result.target_capability_ids == ("ui.accessibility",)
+    assert contradictory_result.disposition is CapabilityDiscoveryDisposition.TARGETED_DISCOVERY
+    assert contradictory_result.reuse_hint_identities == (current,)
+    assert contradictory_result.relevant_observations == (contradictory,)
 
 
 @pytest.mark.parametrize(
@@ -242,22 +432,13 @@ def test_unknown_stale_incompatible_or_unreviewed_observation_is_revalidated(
     result = plan(trigger(resources=("impeccable",)), (cached,), (current,))
 
     assert result.disposition is CapabilityDiscoveryDisposition.TARGETED_DISCOVERY
-    assert result.revalidate_resource_ids == ("impeccable",)
+    assert result.revalidate_identities == (current,)
     assert result.target_resource_ids == ("impeccable",)
-    assert result.reuse_hint_resource_ids == ()
+    assert result.reuse_hint_identities == ()
 
 
-@pytest.mark.parametrize(
-    "changes",
-    [
-        {"distribution_version": "1.2.4"},
-        {"permission_scope_id": "read-write-v1"},
-        {"workspace_scope_id": "workspace-b"},
-        {"user_scope_id": "user-b"},
-        {"source_revision": "release-1.2.4"},
-    ],
-)
-def test_changed_binding_invalidates_only_the_affected_observation(changes: dict[str, str]) -> None:
+@pytest.mark.parametrize("changes", [{"distribution_version": "1.2.4"}, {"source_revision": "release-1.2.4"}])
+def test_changed_version_or_revision_revalidates_only_the_affected_observation(changes: dict[str, str]) -> None:
     affected_cached = identity("impeccable")
     affected_current = replace(affected_cached, **changes)
     unaffected = identity("cloak", source_id="orchestra.cloak", distribution_id=None)
@@ -269,10 +450,34 @@ def test_changed_binding_invalidates_only_the_affected_observation(changes: dict
         (affected_current, unaffected, unrelated),
     )
 
-    assert result.revalidate_resource_ids == ("impeccable",)
-    assert result.reuse_hint_resource_ids == ("cloak",)
+    assert result.revalidate_identities == (affected_cached,)
+    assert result.reuse_hint_identities == (unaffected,)
     assert result.target_resource_ids == ("impeccable",)
     assert {entry.identity.resource_id for entry in result.relevant_observations} == {"cloak", "impeccable"}
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"permission_scope_id": "read-write-v1"},
+        {"workspace_scope_id": "workspace-b"},
+        {"user_scope_id": "user-b"},
+    ],
+)
+def test_changed_permission_or_privacy_scope_hides_old_observation(changes: dict[str, str]) -> None:
+    affected_cached = identity("impeccable")
+    affected_current = replace(affected_cached, **changes)
+
+    result = plan(
+        trigger("CAPABILITY_GAP", capabilities=("ui.accessibility",), resources=()),
+        (observation(affected_cached),),
+        (affected_current,),
+    )
+
+    assert result.relevant_observations == ()
+    assert result.reuse_hint_identities == ()
+    assert result.revalidate_identities == ()
+    assert result.target_capability_ids == ("ui.accessibility",)
 
 
 def test_missing_host_interface_remains_unknown_and_never_becomes_absent() -> None:
@@ -290,10 +495,12 @@ def test_missing_host_interface_remains_unknown_and_never_becomes_absent() -> No
 
     result = plan(trigger(resources=("impeccable",)), (cached,), ())
 
-    assert result.relevant_observations[0].observation is InventoryObservationStatus.UNSUPPORTED
-    assert result.relevant_observations[0].compatibility is InventoryCompatibilityStatus.UNSUPPORTED
-    assert result.revalidate_resource_ids == ("impeccable",)
-    assert result.relevant_observations[0].observation is not InventoryObservationStatus.ABSENT
+    assert cached.observation is InventoryObservationStatus.UNSUPPORTED
+    assert cached.compatibility is InventoryCompatibilityStatus.UNSUPPORTED
+    assert result.relevant_observations == ()
+    assert result.revalidate_identities == ()
+    assert result.target_resource_ids == ("impeccable",)
+    assert cached.observation is not InventoryObservationStatus.ABSENT
 
 
 def test_future_observation_timestamp_is_unknown_not_current() -> None:
@@ -302,8 +509,8 @@ def test_future_observation_timestamp_is_unknown_not_current() -> None:
 
     result = plan(trigger(resources=("impeccable",)), (cached,), (current,))
 
-    assert result.revalidate_resource_ids == ("impeccable",)
-    assert result.reuse_hint_resource_ids == ()
+    assert result.revalidate_identities == (current,)
+    assert result.reuse_hint_identities == ()
 
 
 @pytest.mark.parametrize(
@@ -322,8 +529,8 @@ def test_material_failure_or_change_forces_targeted_revalidation(kind: Capabilit
 
     assert result.disposition is CapabilityDiscoveryDisposition.TARGETED_DISCOVERY
     assert result.target_resource_ids == ("impeccable",)
-    assert result.revalidate_resource_ids == ("impeccable",)
-    assert result.reuse_hint_resource_ids == ()
+    assert result.revalidate_identities == (current,)
+    assert result.reuse_hint_identities == ()
 
 
 def test_provider_claim_differences_are_preserved_without_aggregation_or_ranking() -> None:

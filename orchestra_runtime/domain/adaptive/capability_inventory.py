@@ -205,10 +205,21 @@ class CapabilityInventoryIdentity:
         object.__setattr__(self, "identity_evidence_refs", _references(self.identity_evidence_refs, "identity_evidence_ref"))
 
     @property
-    def observation_scope(self) -> tuple[str, str, str, str] | None:
-        if self.host_id is None or (self.user_scope_id is None and self.workspace_scope_id is None):
+    def observation_scope(self) -> tuple[str, str, str, str, str] | None:
+        if (
+            self.host_id is None
+            or self.user_scope_id is None
+            or self.workspace_scope_id is None
+            or self.permission_scope_id is None
+        ):
             return None
-        return (self.host_id, self.user_scope_id or "", self.workspace_scope_id or "", self.resource_id)
+        return (
+            self.host_id,
+            self.user_scope_id,
+            self.workspace_scope_id,
+            self.permission_scope_id,
+            self.resource_id,
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -342,8 +353,8 @@ class CapabilityDiscoveryPlan:
     requested_resource_ids: tuple[str, ...]
     target_capability_ids: tuple[str, ...]
     target_resource_ids: tuple[str, ...]
-    reuse_hint_resource_ids: tuple[str, ...]
-    revalidate_resource_ids: tuple[str, ...]
+    reuse_hint_identities: tuple[CapabilityInventoryIdentity, ...]
+    revalidate_identities: tuple[CapabilityInventoryIdentity, ...]
     relevant_observations: tuple[CapabilityInventoryDescriptor, ...]
 
 
@@ -400,7 +411,7 @@ def plan_capability_discovery(
     identities = _records(current_identities, CapabilityInventoryIdentity, "current_identities")
     if len({entry.identity for entry in observations}) != len(observations):
         raise ValueError("cached_observations must have unique identities")
-    current_by_scope: dict[tuple[str, str, str, str], CapabilityInventoryIdentity] = {}
+    current_by_scope: dict[tuple[str, str, str, str, str], CapabilityInventoryIdentity] = {}
     for identity in identities:
         scope = identity.observation_scope
         if scope is not None:
@@ -424,6 +435,14 @@ def plan_capability_discovery(
             (),
         )
 
+    active_user_workspaces = {
+        (identity.user_scope_id, identity.workspace_scope_id)
+        for identity in identities
+        if identity.observation_scope is not None
+    }
+    if len(active_user_workspaces) > 1:
+        raise ValueError("current_identities must share one active user/workspace scope")
+
     requested_capabilities = trigger.capability_ids
     requested_resources = trigger.resource_ids
     relevant = tuple(
@@ -431,8 +450,11 @@ def plan_capability_discovery(
             (
                 entry
                 for entry in observations
-                if entry.identity.resource_id in requested_resources
-                or any(claim.capability_id in requested_capabilities for claim in entry.capability_claims)
+                if entry.identity.observation_scope in current_by_scope
+                and (
+                    entry.identity.resource_id in requested_resources
+                    or any(claim.capability_id in requested_capabilities for claim in entry.capability_claims)
+                )
             ),
             key=lambda entry: _identity_sort_key(entry.identity),
         )
@@ -443,10 +465,10 @@ def plan_capability_discovery(
         CapabilityDiscoveryTriggerKind.STALE_OBSERVATION,
         CapabilityDiscoveryTriggerKind.ENVIRONMENT_CHANGE,
     }
-    reuse_hints: set[str] = set()
-    revalidate: set[str] = set()
+    reuse_hints: set[CapabilityInventoryIdentity] = set()
+    revalidate: set[CapabilityInventoryIdentity] = set()
+    reusable_capabilities: set[str] = set()
     for entry in relevant:
-        resource_id = entry.identity.resource_id
         scope = entry.identity.observation_scope
         current = current_by_scope.get(scope) if scope is not None else None
         reusable = (
@@ -457,16 +479,35 @@ def plan_capability_discovery(
             and entry.compatibility is InventoryCompatibilityStatus.COMPATIBLE
             and bool(entry.review_refs)
         )
-        (reuse_hints if reusable else revalidate).add(resource_id)
+        if reusable:
+            reuse_hints.add(entry.identity)
+            claims_by_capability: dict[str, set[CapabilityClaim]] = {}
+            for claim in entry.capability_claims:
+                if claim.capability_id in requested_capabilities:
+                    claims_by_capability.setdefault(claim.capability_id, set()).add(claim.claim)
+            for capability_id, claims in claims_by_capability.items():
+                if (
+                    CapabilityClaim.SUPPORTS in claims
+                    or CapabilityClaim.DOES_NOT_SUPPORT in claims
+                ) and not {
+                    CapabilityClaim.SUPPORTS,
+                    CapabilityClaim.DOES_NOT_SUPPORT,
+                } <= claims:
+                    reusable_capabilities.add(capability_id)
+        else:
+            revalidate.add(entry.identity)
 
-    target_resources = set(revalidate)
+    target_resources = {identity.resource_id for identity in revalidate}
     target_resources.update(set(requested_resources) - {entry.identity.resource_id for entry in relevant})
     if force_refresh:
         target_resources.update(requested_resources)
-    target_capabilities = set(requested_capabilities)
-    if not force_refresh and not requested_capabilities and requested_resources and set(requested_resources) <= reuse_hints:
+    target_capabilities = (
+        set(requested_capabilities)
+        if force_refresh
+        else set(requested_capabilities) - reusable_capabilities
+    )
+    if not target_resources and not target_capabilities and reuse_hints:
         disposition = CapabilityDiscoveryDisposition.CACHE_REUSE_HINT
-        target_resources.difference_update(reuse_hints)
     else:
         disposition = CapabilityDiscoveryDisposition.TARGETED_DISCOVERY
     return CapabilityDiscoveryPlan(
@@ -477,8 +518,8 @@ def plan_capability_discovery(
         requested_resources,
         tuple(sorted(target_capabilities)),
         tuple(sorted(target_resources)),
-        tuple(sorted(reuse_hints)),
-        tuple(sorted(revalidate)),
+        tuple(sorted(reuse_hints, key=_identity_sort_key)),
+        tuple(sorted(revalidate, key=_identity_sort_key)),
         relevant,
     )
 
