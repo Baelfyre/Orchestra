@@ -3,6 +3,11 @@
 - Add a pure, versioned host-neutral inventory descriptor and explicit trigger-based lookup plan with cache reuse and selective revalidation hints. Keep claims, host observations, compatibility, permission observations, side effects, independent outputs, source identity, and freshness separate; no host discovery, persistence, routing, authorization, plugin activation, or execution is added.
 - Preserve user-selected resource IDs and source-neutral evidence. Unknown or unsupported host data remains explicit, and a reuse hint never authenticates its source or proves current permissions.
 
+## Unreleased passive capability inventory producer boundary
+
+- Add a host-neutral passive snapshot port and an unavailable producer that returns UNKNOWN without discovery, refresh, filesystem scanning, MCP connections, plugin invocation, or permission checks.
+- Keep synthetic inventory fixtures test-only and untrusted; the producer contract does not establish Desktop identity, compatibility, provenance, or current execution authorization.
+
 ## Unreleased offline capability coverage foundation
 
 - Add a pure, deterministic capability-coverage evaluator for explicit task facets, declarations, and evidence references. Preserve declared, verified-input, unknown, missing, stale, and unresolved conflict states without ranking sources or selecting a route.
