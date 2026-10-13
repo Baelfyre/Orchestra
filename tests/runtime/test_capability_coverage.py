@@ -114,7 +114,7 @@ def test_unknown_and_stale_evidence_never_count_as_verified_coverage() -> None:
     assert stale.items[0].evidence[0].freshness is CapabilityEvidenceFreshness.STALE
 
 
-def test_conflicting_sources_remain_unresolved_without_source_priority() -> None:
+def test_different_sources_can_disagree_without_creating_a_conflict() -> None:
     internal = declaration("INTERNAL", "cloak", "SUPPORTS")
     external = declaration(
         "EXTERNAL",
@@ -125,10 +125,14 @@ def test_conflicting_sources_remain_unresolved_without_source_priority() -> None
 
     result = assess(declarations=(internal, external))
 
-    assert result.items[0].status is CapabilityCoverageStatus.CONFLICT
+    assert result.items[0].status is CapabilityCoverageStatus.DECLARED
     assert {item.source_kind for item in result.items[0].evidence} == {
         CapabilitySourceKind.INTERNAL,
         CapabilitySourceKind.EXTERNAL,
+    }
+    assert {item.claim for item in result.items[0].evidence} == {
+        CapabilityClaim.SUPPORTS,
+        CapabilityClaim.DOES_NOT_SUPPORT,
     }
     assert not hasattr(result.items[0], "selected_source")
     assert not hasattr(result.items[0], "selected_strategy")
@@ -141,6 +145,30 @@ def test_conflicting_sources_remain_unresolved_without_source_priority() -> None
     )
     assert both_support.items[0].status is CapabilityCoverageStatus.DECLARED
     assert len(both_support.items[0].evidence) == 2
+
+
+def test_same_source_contradiction_remains_visible_with_other_source_support() -> None:
+    same_source = (
+        declaration("EXTERNAL", "impeccable", "SUPPORTS"),
+        declaration(
+            "EXTERNAL",
+            "impeccable",
+            "DOES_NOT_SUPPORT",
+            evidence_refs=("report:impeccable-limitation",),
+        ),
+    )
+    other_source_support = declaration("INTERNAL", "cloak", "SUPPORTS")
+
+    conflicted = assess(declarations=same_source)
+    mixed = assess(declarations=(*same_source, other_source_support))
+
+    assert conflicted.items[0].status is CapabilityCoverageStatus.CONFLICT
+    assert mixed.items[0].status is CapabilityCoverageStatus.CONFLICT
+    assert len(mixed.items[0].evidence) == 3
+    assert {(item.source_kind, item.source_id) for item in mixed.items[0].evidence} == {
+        (CapabilitySourceKind.EXTERNAL, "impeccable"),
+        (CapabilitySourceKind.INTERNAL, "cloak"),
+    }
 
 
 def test_multiple_sources_can_supply_complementary_coverage() -> None:
@@ -202,7 +230,7 @@ def test_result_is_invariant_to_facet_and_evidence_input_order() -> None:
 
     assert forward == reversed_inputs
     assert forward.items[0].facet_id == "research"
-    assert forward.items[0].status is CapabilityCoverageStatus.CONFLICT
+    assert forward.items[0].status is CapabilityCoverageStatus.DECLARED
     assert forward.items[1].facet_id == "ui"
     assert forward.items[1].status is CapabilityCoverageStatus.VERIFIED
 

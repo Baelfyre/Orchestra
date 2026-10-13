@@ -265,6 +265,30 @@ def _coverage_status(evidence: tuple[CapabilityEvidenceReference, ...]) -> Capab
     return CapabilityCoverageStatus.MISSING
 
 
+def _aggregate_coverage_status(evidence: tuple[CapabilityEvidenceReference, ...]) -> CapabilityCoverageStatus:
+    by_source: dict[tuple[CapabilitySourceKind, str], list[CapabilityEvidenceReference]] = {}
+    for item in evidence:
+        by_source.setdefault((item.source_kind, item.source_id), []).append(item)
+    source_statuses = tuple(
+        _coverage_status(tuple(source_evidence))
+        for _, source_evidence in sorted(
+            by_source.items(), key=lambda entry: (entry[0][0].value, entry[0][1])
+        )
+    )
+    if CapabilityCoverageStatus.CONFLICT in source_statuses:
+        return CapabilityCoverageStatus.CONFLICT
+    for status in (
+        CapabilityCoverageStatus.VERIFIED,
+        CapabilityCoverageStatus.DECLARED,
+        CapabilityCoverageStatus.UNKNOWN,
+        CapabilityCoverageStatus.MISSING,
+        CapabilityCoverageStatus.STALE,
+    ):
+        if status in source_statuses:
+            return status
+    return CapabilityCoverageStatus.MISSING
+
+
 def evaluate_capability_coverage(
     task_facets: Iterable[TaskCapabilityFacet],
     declarations: Iterable[CapabilityDeclaration],
@@ -330,7 +354,7 @@ def evaluate_capability_coverage(
                 CapabilityCoverageItem(
                     facet.facet_id,
                     capability_id,
-                    _coverage_status(evidence),
+                    _aggregate_coverage_status(evidence),
                     evidence,
                 )
             )

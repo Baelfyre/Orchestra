@@ -17,9 +17,9 @@ For each required facet/capability pair, `evaluate_capability_coverage` returns 
 - `UNKNOWN`: evidence is explicitly unknown or trusted evidence freshness cannot be established.
 - `MISSING`: no matching evidence exists, or evidence declares that the capability is unsupported.
 - `STALE`: all matching evidence is expired.
-- `CONFLICT`: non-stale evidence contains both support and non-support claims. The disagreement remains unresolved.
+- `CONFLICT`: non-stale evidence from the same `(source_kind, source_id)` contains both support and non-support claims. The disagreement remains unresolved. Different sources may make different claims without creating a conflict.
 
-Evidence references and result items are sorted to make output independent of input ordering. Malformed identifiers, duplicate facets or records, unsupported claims, and invalid timestamps are rejected. Expired evidence remains visible in the result and cannot establish current verified coverage.
+Claims are first evaluated per `(source_kind, source_id)`, then aggregated without selecting or prioritizing a source. Any within-source conflict keeps the aggregate `CONFLICT`, even if another source supports the capability. Otherwise, aggregate precedence is `VERIFIED`, `DECLARED`, `UNKNOWN`, `MISSING`, then `STALE`. Thus, a current negative claim remains `MISSING` when another source has only stale support; `STALE` applies when all matching evidence is expired. All evidence remains attached to the result. Evidence references and result items are sorted to make output independent of input ordering. Malformed identifiers, duplicate facets or records, unsupported claims, and invalid timestamps are rejected. Expired evidence remains visible in the result and cannot establish current verified coverage.
 
 ## Trust and integration boundary
 
@@ -29,4 +29,4 @@ This foundation does not inspect host inventory, discover internal specialists o
 
 ## Validation
 
-Focused synthetic tests cover declared and missing coverage, future trusted-producer input, unknown and stale evidence, unresolved cross-source conflicts, complementary coverage, malformed and duplicate records, and input-order invariance. Architecture boundaries and repository governance remain required for changes to this domain surface.
+Focused synthetic tests cover declared and missing coverage, future trusted-producer input, unknown and stale evidence, cross-source disagreement, within-source conflicts, complementary coverage, malformed and duplicate records, and input-order invariance. Architecture boundaries and repository governance remain required for changes to this domain surface.
