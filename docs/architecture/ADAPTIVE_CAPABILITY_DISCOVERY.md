@@ -58,6 +58,16 @@ The only runtime implementation in this unit is `UnavailableCapabilityInventoryP
 
 Synthetic producers belong only in tests. Their records exercise shape, ordering, and fail-closed behavior; they are not live host observations, cannot be promoted to trusted evidence, and cannot authorize execution. D3B-2B-P does not enable host discovery or change D3B-2A planning.
 
+## Offline planning preview (D3B-4)
+
+`build_capability_planning_preview` composes the passive producer, read-only memory port, D3B-2A planner, and D3B-1 coverage evaluator for one explicit request. Without a trigger, it reads neither port. Without a supplied host, user, and workspace scope, it returns unknown inventory state without reading either port. Unknown or unsupported producer results and successful empty snapshots do not imply absence and do not trigger a memory read.
+
+For a successful nonempty inventory result, each descriptor must identify the supplied host, user, and workspace, and include a permission-scope identity. Otherwise the use case fails closed before reading memory. The memory port is queried only in the matching host/user/workspace partition; the existing planner then exposes or reuses a cached descriptor only when its complete identity, including permission scope and resource identity, exactly matches the current inventory. Cached records outside that complete identity are not returned as relevant observations. Scope identifiers remain descriptive and do not authenticate the active user or prove current permission.
+
+The preview reads active memory records only and never invokes memory write methods. It reports current trigger-relevant observations, cache and revalidation hints, and coverage declarations while preserving evidence references and source identity. Descriptor claims are declarations only; no trusted verification evidence is accepted by this use case, so it cannot produce `VERIFIED` coverage. Negative, unknown, stale, and within-source conflicting evidence remains available to the existing planner and evaluator without source ranking or provider selection.
+
+The preview is not wired into production composition or Conductor/AWF routing. Synthetic producer and memory implementations exist only in tests and cannot be promoted to trusted live observations. Host authentication, current permission enforcement at invocation, real private-memory writes, JEV, plugin execution, and live integration remain blocked or deferred to separately qualified units.
+
 ## Validation and limitations
 
 `tests/runtime/test_capability_inventory.py` uses synthetic records to cover explicit and absent triggers, narrow user selections, cache-first capability lookups, negative-only claims that remain targeted, partial capability gaps, within-source contradictions across records, cross-provider claim preservation, complete-scope isolation, scoped identities sharing a resource label, version/scope/permission invalidation, stale and unknown states, unsupported host interfaces, input-order invariance, malformed and duplicate inputs, and non-authorizing behavior.

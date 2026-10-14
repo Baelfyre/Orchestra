@@ -13,6 +13,11 @@
 - Add a versioned, explicit-root local store for scoped capability observations and evidence-backed reusable-pattern references, with cache records preserved for D3B-2A freshness and selective revalidation.
 - Add synthetic-only scope isolation, invalidation, supersession, deletion, and fail-closed storage validation. The store is not wired into runtime composition and does not enable real private-memory writes.
 
+## Unreleased offline capability planning preview
+
+- Compose explicit-trigger inventory reads, exact-scope memory lookup, existing discovery planning, and source-neutral coverage assessment in a read-only application use case.
+- Keep synthetic observations non-trusted, memory access read-only, unknown host state explicit, and planning results non-authorizing and disconnected from Conductor routing.
+
 ## Unreleased offline capability coverage foundation
 
 - Add a pure, deterministic capability-coverage evaluator for explicit task facets, declarations, and evidence references. Preserve declared, verified-input, unknown, missing, stale, and unresolved conflict states without ranking sources or selecting a route.
