@@ -24,6 +24,9 @@ Older phase documents may retain the status language of the phase in which they 
 
 ## Adaptive intelligence
 
+- [Adaptive memory — user and developer guide](setup/ADAPTIVE_MEMORY_GUIDE.md): practical maturity, scope, persistence, privacy and backend boundaries.
+- [JEV local API and BYOK](setup/JEV_LOCAL_API.md): current non-activated integration status and prerequisites for any future user-owned API key setup.
+
 - [Adaptive Memory A0/A1](architecture/ADAPTIVE_MEMORY_A0_A1.md): research boundary and machine-local adaptive-memory foundation.
 - [Adaptive Specialist Context A2](architecture/ADAPTIVE_CONTEXT_A2.md): opt-in read-only specialist context after deterministic runtime gates.
 - [Adaptive Behavioral Pattern Learning A3](architecture/ADAPTIVE_SHADOW_LEARNING_A3.md): A3.0 shadow-learning contract and non-authorizing signal/candidate/comparison model.
@@ -58,6 +61,7 @@ Specialist prose and progressive-disclosure knowledge remain under `../skills/*/
 - [Arbiter Continuity and Evidence Freshness Evaluation Guide](../skills/arbiter/CONTINUITY_EVALUATION_GUIDE.md): evidence freshness taxonomy, six-tier transition precedence, exact commit and tree lineage binding, and non-authorizing constraints.
 - [Ponytail Upstream-Contract Enforcement Guide](../skills/ponytail/UPSTREAM_CONTRACT_ENFORCEMENT_GUIDE.md): deterministic upstream-contract consumption, minimal safe diff discipline, zero-invented-facts boundaries, and specialist handoffs.
 - [Overseer Architecture Validation Contract Guide](../skills/overseer/ARCHITECTURE_VALIDATION_CONTRACT_GUIDE.md): contract-derived validation obligations, exact-bound proof states, and evidence limitations.
+- [Pre-Development Blueprint Coverage Guide](project/PRE_DEVELOPMENT_BLUEPRINT_GUIDE.md): optional six-area Scribe crosswalk, existing document reuse and specialist fact ownership.
 - [Scribe Specialist Upgrade SSU](project/SCRIBE_SPECIALIST_UPGRADE_SSU.md): adaptive domain narrative, traceability, research/capstone documentation, and documentation/system reconciliation guidance.
 - [Documentation Lifecycle Applicability](project/DOCUMENTATION_LIFECYCLE_APPLICABILITY.md): risk-proportional documentation decisions mapped to the existing development lifecycle, claim owners, evidence, and Scribe activation.
 - [Scribe Post-SSU Governance Documentation Integration Guide](../skills/scribe/GOVERNANCE_DOCUMENTATION_INTEGRATION_GUIDE.md): deterministic post-SSU governance documentation discipline, specialist contract matrices, bidirectional traceability, and evidence-bound claim verification.

@@ -1,353 +1,82 @@
 <div align="center">
-  <img src="./assets/readme/orchestra-governance-banner.svg" alt="Orchestra banner showing coordinated software responsibilities" width="100%" />
-
+  <img src="./assets/readme/orchestra-governance-banner.svg" alt="Orchestra governance and specialist orchestration" width="100%" />
   <p><strong>Governed orchestration for AI-assisted software development.</strong></p>
-
-  <p>
-    <a href="docs/setup/INSTALLATION.md">Install</a> |
-    <a href="docs/reference/README.md">Documentation</a> |
-    <a href="docs/developer/README.md">Developer Portal</a> |
-    <a href="docs/governance/README.md">Governance</a> |
-    <a href="CHANGELOG.md">Changelog</a>
-  </p>
-
-  <p>
-    <img src="https://img.shields.io/badge/release-v1.11.0-blue" alt="Latest release v1.11.0" />
-    <a href="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml">
-      <img src="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml/badge.svg" alt="Repository validation status" />
-    </a>
-    <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license" />
-    <a href="https://buymeacoffee.com/baelfyre">
-      <img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=flat-square&logo=buymeacoffee&logoColor=000000" alt="Buy Me a Coffee" />
-    </a>
-  </p>
+  <p><a href="docs/setup/INSTALLATION.md">Install</a> | <a href="docs/reference/README.md">Documentation</a> | <a href="docs/reference/specialists/README.md">Specialists</a> | <a href="docs/governance/README.md">Governance</a> | <a href="CHANGELOG.md">Changelog</a></p>
+  <p><a href="https://github.com/Baelfyre/Orchestra/releases/tag/v1.11.0"><img src="https://img.shields.io/badge/published-v1.11.0-blue" alt="Published release v1.11.0" /></a> <a href="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml"><img src="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml/badge.svg" alt="Validation status" /></a> <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license" /></p>
 </div>
-
----
 
 ## What is Orchestra?
 
-Orchestra is a governance and orchestration framework for AI-assisted software development.
+Orchestra coordinates AI-assisted development across specialists for architecture, implementation, UI/UX, data, security, testing, documentation, and governance. It routes the task, preserves evidence, validates results, and respects human authority.
 
-It helps an AI coding workflow behave more like a coordinated engineering process by routing work to focused specialists, keeping authority boundaries explicit, validating important transitions, and preserving enough evidence to continue safely across handoffs.
-
-Orchestra is **not an AI model** and it does not replace your IDE, coding agent, or engineering judgment. It sits around those tools and helps coordinate how work moves from intent to implementation to validation.
-
-## Why use it?
-
-AI can generate code quickly, but larger projects can still suffer from:
-
-- context drift between tasks or sessions;
-- architecture, security, UI, database, and implementation decisions conflicting with each other;
-- agents doing work outside the authority actually granted by the user;
-- successful tests being mistaken for permission to merge, deploy, or change policy;
-- repeated re-analysis because earlier evidence was not carried forward clearly.
-
-Orchestra is designed to reduce those problems without turning every task into a large multi-agent workflow.
-
-## Use Orchestra in 60 seconds
-
-You do not need to learn Orchestra's specialists, governance system, or internal assurance mechanisms before using it.
-
-After installing Orchestra, start with:
-
-```text
-@Orchestra
-```
-
-Then describe the outcome you want and any important limits or permissions.
-
-```text
-@Orchestra
-
-Review this repository, find the cause of the failing tests,
-fix the problem, and validate the result.
-
-You may edit files and run tests.
-Do not merge anything.
-```
-
-Orchestra determines the smallest useful workflow for the task. You normally do not need to choose specialists yourself.
-
-A useful rule of thumb is:
-
-```text
-Start with @Orchestra.
-Describe the result you want.
-State important limits or permissions.
-Let Orchestra determine the workflow.
-```
-
-## How Orchestra works for you
-
-```text
-You describe the task
-        ↓
-Orchestra interprets the goal, scope, and authority
-        ↓
-Conductor chooses the smallest useful specialist route
-        ↓
-The appropriate specialists perform bounded work
-        ↓
-Orchestra validates the result
-        ↓
-Is additional human authority required?
-       ↙                     ↘
-     No                       Yes
-      ↓                        ↓
-Continue within             Stop and
-approved scope              ask you
-       ↘                     ↙
-        Result + evidence
-        + next action
-```
-
-### 1. Describe the outcome
-
-Tell Orchestra what you want accomplished instead of trying to design the internal workflow yourself.
-
-For example:
-
-```text
-@Orchestra
-
-Add authentication to this application.
-Keep the existing architecture where possible.
-Run the relevant tests.
-Prepare the changes on a branch, but do not merge.
-```
-
-For review-only work:
-
-```text
-@Orchestra
-
-Review this pull request for architecture, security,
-and test coverage. Do not modify the repository.
-```
-
-For investigation-first work:
-
-```text
-@Orchestra
-
-Investigate why this application became slower after
-the latest change. Find the root cause first.
-Do not modify anything until the cause is identified.
-```
-
-### 2. Let Conductor choose the route
-
-Conductor is Orchestra's coordinator. It decides whether a request needs one specialist, several cooperating specialists, validation only, investigation before implementation, or a human decision before work can continue.
-
-Simple tasks should stay simple. Orchestra does not need to activate every specialist for every request.
-
-Advanced users can invoke a specific specialist directly when they already know what they need, but new users should normally start with `@Orchestra`.
-
-### 3. Specialists perform bounded work
-
-Different specialists own responsibilities such as architecture, implementation, UI and UX, databases, security, testing and QA, documentation, governance, and workflow continuity.
-
-Orchestra coordinates these responsibilities so that one part of the work does not silently invalidate another. Normal users do not need to manage these handoffs manually.
-
-### 4. Orchestra validates important results
-
-Completing a change is not the same as proving that the change is correct.
-
-Depending on the task, Orchestra may check tests, static analysis, security concerns, architecture boundaries, changed files, repository state, exact branch or commit identity, and evidence from earlier stages. Validation should scale with the risk and complexity of the task.
-
-### 5. Orchestra respects your authority
-
-The key distinction is simple:
-
-```text
-CAN_DO != MAY_DO
-TESTS_PASS != MERGE_AUTHORITY
-MERGEABLE != APPROVED
-TOOL_ACCESS != PERMISSION
-```
-
-Capability is not authority.
-
-Having access to a tool does not mean Orchestra has permission to use that tool for every action. For example, Orchestra may be technically capable of creating a commit or merging a pull request, but it should only do so when the authority you provided allows it.
-
-Passing tests also does not automatically grant permission to merge, release, deploy, change policy, or perform another protected action.
-
-### 6. Human-controlled boundaries stay human-controlled
-
-When Orchestra reaches a decision that requires human authority, it should stop, preserve the relevant evidence, explain what is blocking progress, and ask for the required decision.
-
-Examples can include changing protected governance policy, granting a new exception, expanding authority beyond the approved scope, performing a protected production action, or taking an action with significant unresolved risk.
-
-The system should not change the rule blocking its own work simply so that the work can continue.
-
-## What Orchestra provides
-
-| Area | What Orchestra adds |
-| --- | --- |
-| **Specialist routing** | Focused ownership for architecture, implementation, security, UI/UX, persistence, QA, documentation, governance, and coordination. |
-| **Governed execution** | Clear separation between what a tool can do and what the user has actually authorized. |
-| **Cross-specialist coordination** | Re-entry and handoff rules when a decision in one domain invalidates another. |
-| **UI fidelity** | Preserves accepted design complexity, reusable project-native components, responsive intent, and validation boundaries. |
-| **Validation and evidence** | Deterministic checks, exact-head evidence, cross-platform validation, and fail-closed transitions where appropriate. |
-| **Continuity** | Machine-readable state, receipts, contracts, and bounded adaptive memory to reduce repeated reconstruction. |
-| **Portable integration** | Adapter and MCP surfaces that allow Orchestra to work across supported AI coding hosts without transferring authority to the host. |
-
-For the full capability map, see the [Orchestra Reference](docs/reference/README.md).
+Orchestra is **not an AI model**. It works around compatible coding hosts and does not replace engineering judgment.
 
 ## Quick start
 
-### Codex
-
-Add this repository as a Marketplace source, install Orchestra, then invoke:
+Install through the [host installation guide](docs/setup/INSTALLATION.md). Then describe the result you want and what Orchestra may do:
 
 ```text
 @Orchestra
+
+Review this repository, identify the failing tests,
+fix the issue, and run relevant checks.
+You may edit files and prepare a PR. Do not merge or deploy.
 ```
 
-### Claude
+Conductor chooses the smallest useful specialist route. [Compatibility](docs/setup/COMPATIBILITY.md) and [getting started](docs/reference/getting-started/README.md) explain supported hosts.
 
-#### Claude app / desktop plugin marketplace
+## Capabilities
 
-1. Open **Customize > Plugins**.
-2. Under **Personal plugins**, select **+ > Add marketplace > Add from a repository**.
-3. Paste:
+| Area | What it provides | Important limit |
+| --- | --- | --- |
+| **Specialist coordination** | Focused roles, bounded execution, and handoffs | Tool access never creates permission |
+| **Assurance and governance** | Evidence-based validation and human-controlled boundaries | Passing tests never authorizes a merge |
+| **Adaptive memory** | Local observations, opt-in read-only context, and shadow learning | No automatic authority, preference promotion, or private cloud sync |
+| **Adaptive discovery** | Scoped capability-memory contracts and offline planning | Live host discovery and trusted private-memory writes are not activated |
+| **JEV advisory** | Optional TypeSafe System One advisory components | Public local API/BYOK onboarding is not qualified |
+| **Scribe documentation** | Requirements, as-built reconstruction, drift reconciliation, and an optional six-dimension blueprint | Scribe does not approve technical decisions or impose six mandatory files |
+
+These are **source and maturity claims**, not a guarantee that each capability is enabled in every host or in the latest published release.
+
+## JEV and local API keys
+
+JEV supports non-binding engineering advice when independently reviewed alternatives exist. The TypeSafe adapter and offline data-minimization components exist, but there is **no verified general-purpose end-user BYOK activation flow**. Ordinary Orchestra use needs no JEV key. Never paste credentials into prompts or tracked project files.
+
+Read [JEV local API setup and limitations](docs/setup/JEV_LOCAL_API.md) and the [decision hierarchy](docs/architecture/EVIDENCE_GATED_DECISION_HIERARCHY.md).
+
+## Adaptive memory
+
+**A1** maintains scoped machine-local observations. **A2** can provide opt-in, read-only context to an already-selected specialist. **A3** compares inferred tendencies in shadow mode; they cannot silently change execution. Portable memory supports backend contracts, not built-in synchronization. D3B capability memory/discovery remains offline and does not authenticate a live host.
+
+Read [adaptive memory setup and limitations](docs/setup/ADAPTIVE_MEMORY_GUIDE.md) and [portable memory](docs/architecture/PORTABLE_ADAPTIVE_MEMORY.md).
+
+## Scribe and the pre-development blueprint
+
+Scribe operates in **SPEC_TO_SYSTEM**, **SYSTEM_TO_DOCS**, and **RECONCILE** modes. It can organize sources and identify documentation gaps; relevant specialists retain ownership of architecture, UI, persistence, security, validation, and governance decisions.
+
+The six coverage areas are **product requirements, technical requirements, application flow, design brief, backend/data schema, and implementation plan**. They are *not six mandatory documents*. Reuse existing artifacts, label missing evidence, and preserve unresolved decisions.
+
+This blueprint guidance is **merged to `main`**, but post-v1.11.0 work is not necessarily in the latest published release. Read the [blueprint guide](docs/project/PRE_DEVELOPMENT_BLUEPRINT_GUIDE.md), [Scribe skill](skills/scribe/SKILL.md), and [documentation applicability rules](docs/project/DOCUMENTATION_LIFECYCLE_APPLICABILITY.md).
+
+## Permissions and privacy
 
 ```text
-https://github.com/Baelfyre/Orchestra
+TOOL_ACCESS != USER_AUTHORIZATION
+TESTS_PASS != MERGE_APPROVAL
+JEV_ADVICE != EXECUTION_AUTHORITY
+MEMORY_CONFIDENCE != PERMISSION
 ```
 
-4. Install the **orchestra** plugin.
+No model output, learned preference, documentation matrix, or installed plugin may bypass protected decisions, transmit sensitive data without proper authority, or silently change policy.
 
-If your Claude client exposes plugin management under **Settings > Extensions > Plugins**, choose **Add Marketplace** there and use the same repository URL.
+## More documentation
 
-#### Claude Code
+[Installation](docs/setup/INSTALLATION.md) · [MCP](docs/developer/MCP_STDIO_TRANSPORT.md) · [Architecture](docs/reference/architecture/README.md) · [Governance](docs/reference/governance/README.md) · [Developer portal](docs/developer/README.md) · [Detailed documentation map](docs/README.md) · [Machine index](README.json)
 
-From a Claude Code session:
+## Published release
 
-```text
-/plugin marketplace add Baelfyre/Orchestra
-/plugin install orchestra@orchestra
-```
-
-If Claude reports that plugin changes require a reload, run `/reload-plugins`.
-
-### Antigravity
-
-```sh
-agy plugin install https://github.com/Baelfyre/Orchestra
-```
-
-### Other hosts
-
-See the [Getting Started reference](docs/reference/getting-started/README.md), [Installation Guide](docs/setup/INSTALLATION.md), and [Compatibility Guide](docs/setup/COMPATIBILITY.md).
-
-## Terms you may see
-
-Most users do not need to configure or invoke these systems directly.
-
-| Term | Plain-language meaning |
-| --- | --- |
-| **Conductor** | Orchestra's primary routing and coordination layer. New users normally start with `@Orchestra` and let Conductor choose the route. |
-| **Arbiter** | The specialist responsible for workflow continuity, validation state, and governed transitions when work reaches an important boundary. |
-| **PRAI** | **Post-Run Assurance Invariant.** An internal assurance mechanism that checks completed work and its evidence before certain workflow transitions are accepted. |
-| **ADAPT-QA / AQ** | Orchestra's adaptive assurance and quality program. AQ phases are engineering and validation stages used to strengthen Orchestra, not normal user commands. |
-| **Covenant** | An internal cross-governance synthesis that reconciles independent governance evidence. It provides evidence and does not independently grant authority. |
-
-For implementation-level details, see the [Governance reference](docs/reference/governance/README.md), [Architecture reference](docs/reference/architecture/README.md), and [Validation documentation](docs/setup/VALIDATION.md).
-
-## MCP
-
-Orchestra can expose a bounded tool surface to an MCP-compatible client while preserving the same runtime and governance boundaries.
-
-### Codex MCP
-
-```sh
-python scripts/mcp_server.py --adapter codex
-```
-
-### Claude Code MCP
-
-Orchestra already registers `claude-code` as a runtime adapter, so the same local stdio server can be launched with the Claude adapter:
-
-```sh
-python scripts/mcp_server.py --adapter claude-code
-```
-
-To register the local server with Claude Code, replace `<path-to-Orchestra>` with your local clone path:
-
-```sh
-claude mcp add --scope user --transport stdio orchestra -- python "<path-to-Orchestra>/scripts/mcp_server.py" --adapter claude-code
-claude mcp get orchestra
-```
-
-Restart Claude Code after registration, then run:
-
-```text
-/mcp
-```
-
-The Claude MCP path is **prepared at the adapter and stdio-transport level**. The repository does not yet record an installed-host Claude MCP end-to-end proof equivalent to the existing Codex validation, so do not classify Claude MCP host execution as verified until that test is completed.
-
-The Claude marketplace plugin also does not currently auto-register Orchestra MCP because the plugin root does not ship a `.mcp.json`; MCP registration is a separate explicit setup step.
-
-MCP is transport, not authority. Discovery or tool access does not grant permission to perform protected actions.
-
-See [MCP stdio governed tool transport](docs/developer/MCP_STDIO_TRANSPORT.md).
-
-## Current release
-
-The latest published release is **[v1.11.0: Adaptive Assurance and Governance Hardening](https://github.com/Baelfyre/Orchestra/releases/tag/v1.11.0)**.
-
-v1.11.0 strengthens Orchestra's validation and governance system. It adds deeper post-run assurance, stronger protection against autonomous policy changes, cross-governance evidence synthesis, adversarial and high-risk assurance, and clearer human approval boundaries.
-
-These mechanisms operate behind the normal user workflow above. Most users do not need to invoke AQ phases, PRAI, or Covenant directly.
-
-<details>
-<summary>Advanced v1.11 implementation and release identity</summary>
-
-v1.11.0 packages the complete governed post-v1.10.0 development line through AQ14, including AQ1-AQ14 Adaptive Assurance, PRAI post-run assurance, Covenant cross-governance synthesis, Protected Governance Escalation, human-only whitelist authority, tree-attested promotion assurance, deterministic release-packaging classification, and the AQ7 tenant-administration parity reference slice.
-
-The immutable release identity is canonical commit `72c2884a66bb0e0d0ff1e070e7cc1feccd968e35`, tree `e4072cff4de83efa1c1d2d495aa5c186a2469db4`, lightweight tag `v1.11.0`, and GitHub Release `387061978`.
-
-AQ15 remains unregistered. AR-3 through AR-9 remain separate post-v1.11 work and are not authorized by publication. The release does not grant provider, telemetry, production, deployment, whitelist, protected-policy, or CritiQual CUD10 authority.
-
-</details>
-
-See:
-
-- [Changelog](CHANGELOG.md)
-- [Published v1.11.0 reference](docs/reference/releases/v1.11.0.md)
-- [Preserved v1.11.0 candidate qualification record](docs/releases/v1.11.0-adaptive-assurance-governance-release-candidate.md)
-- [v1.11.0 readiness evidence](docs/validation/V1_11_0_RELEASE_READINESS_EVIDENCE.md)
-- [Maturity](docs/MATURITY.md)
-- [Validation documentation](docs/setup/VALIDATION.md)
-
-## Documentation
-
-Use the README as the entry point, then go deeper only when needed:
-
-- [Orchestra Reference](docs/reference/README.md)
-- [Getting started](docs/reference/getting-started/README.md)
-- [Governance](docs/reference/governance/README.md)
-- [Developer Portal](docs/developer/README.md)
-- [Architecture](docs/reference/architecture/README.md)
-- [Integrations](docs/reference/integrations/README.md)
-- [Specialists](docs/reference/specialists/README.md)
-- [Releases](docs/reference/releases/README.md)
-- [Detailed Documentation Map](docs/README.md)
-- [Third-party provenance](docs/THIRD_PARTY_PROVENANCE.md)
-
-For AI systems and exact structured project state, start with [`README.json`](README.json); for human navigation, start with the [Orchestra Reference](docs/reference/README.md).
+The latest public release is **[v1.11.0](https://github.com/Baelfyre/Orchestra/releases/tag/v1.11.0)**. The development branch contains later work, which remains unreleased until the complete version-specific qualification and publication process is completed. See [releases](docs/reference/releases/README.md) and [changelog](CHANGELOG.md).
 
 ## Support
 
-If Orchestra is useful to you and you want to support its continued development:
-
-<div align="center">
-  <a href="https://buymeacoffee.com/baelfyre">
-    <img src="https://img.shields.io/badge/Buy%20Me%20a%20Coffee-FFDD00?style=for-the-badge&logo=buymeacoffee&logoColor=000000" alt="Buy Me a Coffee" />
-  </a>
-</div>
-
----
+[Support development](https://buymeacoffee.com/baelfyre) · [MIT License](LICENSE)
