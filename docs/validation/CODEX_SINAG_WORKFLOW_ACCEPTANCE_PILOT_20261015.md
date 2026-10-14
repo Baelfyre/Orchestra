@@ -104,3 +104,24 @@ Orchestra should improve source-grounded documentation and disciplined UI develo
 **Reviewer recommendation (not yet recorded as human authorization):** select `T04-B` for a **single bounded read-only Sinag Home reduced-motion/state-feedback evidence check**, retaining permitted sanitized screenshot bytes and interaction/focus receipts for independent inspection. Until confirmed otherwise, keep **`NO_CHANGE` as the default code disposition**. No UI patch is justified by the first pilot. T04-B does not authorize edits, plugin downloads, provider calls, PR merge, or release. Any demonstrated defect requires separate exact-path implementation proposal and user decision.
 
 **Separate follow-up gaps:** product owner to reconcile README/source descriptions of navigation, language-pair direction, Shape Words status, progress wiring, accessibility and deployed URL; repair MEM-A import-context harness in a fresh bounded test authorization; verify Node 22 parity. No release qualification is claimed.
+
+## T04-C local UI prototype — independent screenshot review (2026-10-15)
+
+**Status:** `PROTOTYPE_GEOMETRY_VERIFIED; HUMAN_VISUAL_ACCEPTANCE_PENDING; MINOR_REFINEMENT_RECOMMENDED`. This is a new experimental worktree variant, not a production change, merged candidate, or proof that JEV/Impeccable executed.
+
+At frozen private Sinag source `2b6b611fa39418777a3e3353adcde64e5d3a8eee` (tree `63bcf1151d811be73ae8125a0e58d25e128b1c94`), a disposable worktree changes only `src/js/app.js` by moving existing `.hero-actions` from below the lead paragraph to directly below the greeting. No labels, routes, or instructional copy are changed. Diff SHA-256 `2253A1263B230738192C38D36009F50AE4769124664E3BA8B9A7AE75227974D0`. No code commit, push, merge or deployment reported.
+
+| Captured view | Action group start before → after | Movement | Lead/action gap before → after |
+| --- | --- | --- | --- |
+| Mobile 375×812, light/night | 364.3125 → 237.25 px | 127.0625 px upward | 16 → 0 px |
+| Desktop 1280×900, light/night | 414 → 342.46875 px | 71.53125 px upward | 16 → 0 px |
+
+An independent inspection of the eight supplied neutral before/after PNG files verified every PNG SHA-256 against `t04c-visual-comparison.json` and the after manifest (zero mismatches). Their side-by-side visual comparison shows greater CTA prominence but cramped separation between the action block and descriptive paragraph; the computed bounding boxes are directly adjacent. The existing `.hero-copy .lead` CSS supplies bottom margin, not margin above a preceding CTA. Treat this as a **visual-polish issue**, not a proven child comprehension or WCAG failure. Consider restoring separation using an *existing approved spacing token*, followed by four-view screenshot recapture; do not introduce one-off pixel literals.
+
+All 294 Node tests passed, and the reported syntax, whitespace, route, focus, reduced-motion and narrow/desktop overflow checks passed. The actual retained Node test log ends `pass 294, fail 0, skipped 0`; its SHA-256 is `8F66F538ED80E8CEFA99C99398C6B9E60B4D3D4076F9156363AE0344C42BA4A2`. Screenshots rendered Google Fonts icon ligatures as words because remote font requests were intentionally blocked; this affects visual representativeness and is not attributable to the one-line action-order change. No formal axe/WCAG scan or learner preference/comprehension test was supplied.
+
+The follow-up Impeccable context step was reported to succeed, but attempted `audit` exited 1 with `Unknown command`; **no detector result** exists. The earlier Cloak/Impeccable assessments were baseline-only, not post-change independent reviews; Orchestra routing acknowledgments were not substantive specialist judgments. JEV was not called. Accordingly the experiment shows a correct **directed layout mutation** and regression-test continuity, not demonstrated incremental effectiveness of Cloak+Impeccable collaboration or JEV.
+
+**Proposed next action, not automatically authorized:** local revision R1 confined to the original disposable Sinag worktree, scoped spacing around `.hero-actions + .lead` with approved semantic spacing token, capture new actual screenshots under icon-font-available and separately offline conditions, check keyboard/visual rhythm and obtain human visual decision. Keep original variant and unfavorable evidence. No merge, release or activation follows.
+
+**Evidence handling:** raw PNGs, interaction receipts, and all local paths stay in the private evidence bundle. Audit indices: `t04c-visual-comparison.json` SHA-256 `271EEE71F449DD4185C4214D8ECE5415E1AD2C0CE5E58F6F75AC4F3BF7664A56`; `after-interaction-evidence.json` SHA-256 `9B736170806836F5ADFDEEB86EB92E687468DAEE73165D5A06B150DC3C764B37`. No private learner data was used (synthetic `Pilot`).
