@@ -50,6 +50,24 @@ This unit defines cache identity and invalidation hints only. It creates no disk
 
 Permission observations never authorize an operation. A future execution path must independently recheck live host permissions, package identity, and action scope. Capability inventory cannot grant specialist authority, alter Conductor/AWF routing, activate JEV, or authorize external research or tool execution.
 
+## Passive producer boundary (D3B-2B-P)
+
+`CapabilityInventoryProducer.read_cached_snapshot()` is a passive application port for observations that already exist. It has no refresh, catalog-discovery, disk-scan, MCP-connection, plugin-invocation, or permission-check operation. `CapabilityInventoryReadResult` separates a successful read from `UNKNOWN` and `UNSUPPORTED`; an unknown or unsupported result cannot carry descriptors. A successful empty read means only that no descriptors were supplied, not that a resource is absent.
+
+The only runtime implementation in this unit is `UnavailableCapabilityInventoryProducer`. It returns `UNKNOWN` with no descriptors because this installation has no qualified trusted-host bridge. The protocol, result type, and descriptor labels do not authenticate identity, inventory, compatibility, provenance, or permissions. A future implementation must establish an authenticated active user/workspace boundary before returning scoped observations; otherwise it must return `UNKNOWN` without data. Operation permissions remain observations and are never invocation authorization.
+
+Synthetic producers belong only in tests. Their records exercise shape, ordering, and fail-closed behavior; they are not live host observations, cannot be promoted to trusted evidence, and cannot authorize execution. D3B-2B-P does not enable host discovery or change D3B-2A planning.
+
+## Offline planning preview (D3B-4)
+
+`build_capability_planning_preview` composes the passive producer, read-only memory port, D3B-2A planner, and D3B-1 coverage evaluator for one explicit request. Without a trigger, it reads neither port. Without a supplied host, user, and workspace scope, it returns unknown inventory state without reading either port. Unknown or unsupported producer results and successful empty snapshots do not imply absence and do not trigger a memory read.
+
+For a successful nonempty inventory result, each descriptor must identify the supplied host, user, and workspace, and include a permission-scope identity. Otherwise the use case fails closed before reading memory. The memory port is queried only in the matching host/user/workspace partition; the existing planner then exposes or reuses a cached descriptor only when its complete identity, including permission scope and resource identity, exactly matches the current inventory. Cached records outside that complete identity are not returned as relevant observations. Scope identifiers remain descriptive and do not authenticate the active user or prove current permission.
+
+The preview reads active memory records only and never invokes memory write methods. It reports current trigger-relevant observations, cache and revalidation hints, and coverage declarations while preserving evidence references and source identity. Descriptor claims are declarations only; no trusted verification evidence is accepted by this use case, so it cannot produce `VERIFIED` coverage. Negative, unknown, stale, and within-source conflicting evidence remains available to the existing planner and evaluator without source ranking or provider selection.
+
+The preview is not wired into production composition or Conductor/AWF routing. Synthetic producer and memory implementations exist only in tests and cannot be promoted to trusted live observations. Host authentication, current permission enforcement at invocation, real private-memory writes, JEV, plugin execution, and live integration remain blocked or deferred to separately qualified units.
+
 ## Validation and limitations
 
 `tests/runtime/test_capability_inventory.py` uses synthetic records to cover explicit and absent triggers, narrow user selections, cache-first capability lookups, negative-only claims that remain targeted, partial capability gaps, within-source contradictions across records, cross-provider claim preservation, complete-scope isolation, scoped identities sharing a resource label, version/scope/permission invalidation, stale and unknown states, unsupported host interfaces, input-order invariance, malformed and duplicate inputs, and non-authorizing behavior.
