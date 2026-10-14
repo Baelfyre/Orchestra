@@ -82,3 +82,25 @@ Orchestra should improve source-grounded documentation and disciplined UI develo
 - Detailed test receipts remain in the private Sinag test workspace or a scoped private evidence branch. Orchestra records sanitized integration/effectiveness evidence with links and exact revisions. Padayon records the cross-project conclusion, decision rationale, blockers, and proposed follow-up.
 - If only some workflows run, state which are source-qualified versus host-qualified. Regressions require minimal, separately authorized repair work and follow-up tests.
 - Release qualification is separate. A passing Sinag pilot cannot qualify unrelated Orchestra changes or authorize new version publication.
+
+## First local pilot observation — 2026-10-15
+
+**Disposition:** `SINAG_PROPOSAL_READY_FOR_IMPLEMENTATION_DECISION`; implementation **not authorized**, no Sinag source changed. This is an observed first-pass report, not a claim of host-wide effectiveness or release readiness.
+
+**Evidence integrity:** private 18-record JSONL ledger independently SHA-256 verified as `6D7461514995629DF9BBF2A8E8A6781019F299D8048366B71ED8C004134CC188`. The local evidence bundle and its detailed receipts are not reproduced in this public record. Source identities: Orchestra `d619deb51c4184f034f0986bc342ca6d447b1ecf` (tree `ba54d6d7d9f9a96e716e99da647dfe5beee28a98`); private Sinag `2b6b611fa39418777a3e3353adcde64e5d3a8eee` (tree `63bcf1151d811be73ae8125a0e58d25e128b1c94`).
+
+| Track | Observed finding | Evidence limitation |
+| --- | --- | --- |
+| Baseline | Six Sinag validators passed; Node suite 294 passed, zero failed | Local Node 24.14.1; project CI pins Node 22 |
+| Scribe | Manual source-guided reconciliation recorded documentation drift and unresolved decisions | Native Codex skill activation unobserved; comparative baseline contamination and uncalibrated scores prevent causal benefit claim |
+| Home/Cloak | Keyboard, two viewport sizes, themes, enlarged text and reduced motion exercised; zero confirmed UI defects; NO_CHANGE proposed | Screenshot bytes not retained, so independent visual inspection incomplete |
+| Impeccable | Manual guide assessment raised one reduced-motion question; reconciliation: DISPUTED / NEEDS_VERIFICATION | Target 4.5.0 engine/detector unavailable; no live plugin execution |
+| JEV | Eleven offline contract tests passed; `NO_ADVICE` | No live provider route, no independent live judgment |
+| Memory | Eleven synthetic contract checks reported passing across four cases; scope and authority boundaries preserved | MEM-A standalone smoke failed before import (`ModuleNotFoundError: No module named orchestra_runtime`); real Codex memory injection/D3B unobserved |
+| Action controls | T04 proposal contained `NO_CHANGE` and evidence-only option; T06/T07 not run; no Sinag changes | Neither alternative is authorization to implement |
+
+**Run accounting:** eight configured `gpt-6-luna` assessment dispatches at max reasoning; one Scribe route acknowledgment counted conservatively as another run unit; 9/12 units, zero retries. Root-thread model telemetry, timeouts and token/cost counters unavailable. `configured` is not a proof of the exact executing model in each output.
+
+**Reviewer recommendation (not yet recorded as human authorization):** select `T04-B` for a **single bounded read-only Sinag Home reduced-motion/state-feedback evidence check**, retaining permitted sanitized screenshot bytes and interaction/focus receipts for independent inspection. Until confirmed otherwise, keep **`NO_CHANGE` as the default code disposition**. No UI patch is justified by the first pilot. T04-B does not authorize edits, plugin downloads, provider calls, PR merge, or release. Any demonstrated defect requires separate exact-path implementation proposal and user decision.
+
+**Separate follow-up gaps:** product owner to reconcile README/source descriptions of navigation, language-pair direction, Shape Words status, progress wiring, accessibility and deployed URL; repair MEM-A import-context harness in a fresh bounded test authorization; verify Node 22 parity. No release qualification is claimed.
