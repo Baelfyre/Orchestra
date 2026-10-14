@@ -149,3 +149,16 @@ This is **not** an instruction to merge the Sinag prototype, alter production, o
 Next bounded local Codex campaign: `ORCHESTRA-CODEX-WORKFLOW-EFFECTIVENESS-R2-2026-10-15`, prompt SHA-256 `D3A0BC6C6EB03A8B5F502184535887CB32A1BF12D716D3A59015A1B3CFE2DF04`. Ordered tests: (1) synthetic MEM-A import-context and A1/A2/A3/D3B integration truth; (2) source-grounded Scribe reconstruction in uncontaminated sessions; (3) optional offline JEV binding/host availability checks with no provider calls; (4) diagnostic-only Impeccable installed detector availability, no auto-download; (5) sanitized findings. All source modifications, installs, PR merges and release actions excluded.
 
 **Status:** `UI_PILOT_EVIDENCE_SUFFICIENT; R2_TESTS_PREPARED_NOT_RUN`. No R2 outcomes are claimed by this record.
+
+## R2-MEM focused local follow-up (2026-10-15)
+
+**Result:** `PASS_LIBRARY_CONTRACTS_WITH_NATIVE_HOST_LIMITATION`; this is not proof of native Codex adaptive-memory injection.
+
+- Source: Orchestra `d619deb51c4184f034f0986bc342ca6d447b1ecf` / tree `ba54d6d7d9f9a96e716e99da647dfe5beee28a98`; detached isolated test checkout remained clean; user's dirty primary checkout was preserved.
+- One focused run of eight test files yielded **103 passed, 0 failed** in 4.07 seconds on Python 3.12.10 / pytest 9.1.1. A separate bounded smoke under an explicitly supported project-root `PYTHONPATH` created, corrected and removed a synthetic preference, verified observation hash-chain integrity, and reported no repository writes.
+- Previous MEM-A `ModuleNotFoundError: No module named orchestra_runtime` is preserved. Cause classification: `LIKELY_HARNESS_IMPORT_CONTEXT`, exact original command and working directory absent, so root cause **NOT_PROVEN**. The supported-context run passed; no product source was modified.
+- A1 lifecycle and scope, A2 gated opt-in context/fallback, A3 shadow non-authority, and D3B unavailable producer behaved as their synthetic library tests prescribe. Actual Codex host injection, production caller, private-user bridge, and live D3B capability discovery remain `NOT_DEMONSTRATED`.
+- Uploaded private evidence manifest's six referenced files were independently checked against SHA-256 and all **6/6 matched**. Raw receipts and exact local paths remain outside public repositories. Model/provider calls, external installs, source edits, commits/pushes/merges/releases/deployments: **zero**.
+- R2-DOC, R2-JEV, R2-IMP and R2-EVIDENCE remain `NOT_RUN` at this checkpoint. The prior Codex pasted prompt was incomplete; its exact local truncated attachment cannot be used as authority for missing tasks.
+
+**Next step:** provide a complete standalone JSON continuation for the remaining tracks, preserving the same six-run model assessment ceiling and zero retries. Do not rerun R2-MEM or claim native host integration. The result does not independently qualify an Orchestra release.
