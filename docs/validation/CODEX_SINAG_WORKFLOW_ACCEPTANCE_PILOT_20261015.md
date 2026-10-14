@@ -139,3 +139,13 @@ The follow-up Impeccable context step was reported to succeed, but attempted `au
 - **Remaining limits:** Google Fonts was blocked by the loopback-only capture, so icon ligature words are visible and production-font appearance was not tested. No axe/WCAG/screen-reader assessment or user testing; no release readiness. The prototype only demonstrates a correct limited layout transformation and tested regression preservation.
 
 **Recommendation, not human authorization:** retain R1 as the preferred local visual candidate over P0, but first verify font/icon rendering in an approved controlled environment, review the final image and decide whether to accept the prototype. Do not silently install external tools, run paid JEV, edit Sinag `main`, push, merge or release. Document observed skill contributions separately from route acknowledgments. Existing `T04-B` reduced-motion concern remains unproven unless reproduced.
+
+## Pilot checkpoint — sufficient UI evidence; continue other workflow tests (2026-10-15)
+
+The maintainer considers the existing Sinag T04-C and R1 visual, source-diff, and regression-test evidence **sufficient for the exploratory UI test** and directs the campaign to other workflows. Stop additional home-page spacing, icon-capture and screenshot iterations for this pilot unless a new reproducible regression arises.
+
+This is **not** an instruction to merge the Sinag prototype, alter production, or claim measured improvement in learner outcomes. The R1 layout variant remains an isolated preferred experimental outcome with human product adoption and publication separate. Preserve all original/R1 receipts and limitations. The earlier review recommendation for further font verification is recorded but is no longer a prerequisite to ending this pilot's UI track.
+
+Next bounded local Codex campaign: `ORCHESTRA-CODEX-WORKFLOW-EFFECTIVENESS-R2-2026-10-15`, prompt SHA-256 `D3A0BC6C6EB03A8B5F502184535887CB32A1BF12D716D3A59015A1B3CFE2DF04`. Ordered tests: (1) synthetic MEM-A import-context and A1/A2/A3/D3B integration truth; (2) source-grounded Scribe reconstruction in uncontaminated sessions; (3) optional offline JEV binding/host availability checks with no provider calls; (4) diagnostic-only Impeccable installed detector availability, no auto-download; (5) sanitized findings. All source modifications, installs, PR merges and release actions excluded.
+
+**Status:** `UI_PILOT_EVIDENCE_SUFFICIENT; R2_TESTS_PREPARED_NOT_RUN`. No R2 outcomes are claimed by this record.
