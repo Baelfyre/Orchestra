@@ -28,6 +28,10 @@ Validates Scribe's deterministic post-SSU governance documentation discipline:
   T25 - UNRESOLVED applicability remains distinct and routes to the fact owner
   T26 - Documentation and implementation drift retain their owners
   T27 - Conductor and Scribe Codex adapters preserve DOC-L1 guidance
+  T28 - Six blueprint dimensions remain optional and reusable
+  T29 - Blueprint crosswalk preserves DOC-L1 outcomes and provenance
+  T30 - Blueprint guidance preserves specialist authority and existing records
+  T31 - Blueprint guide is discoverable and Scribe mirrors stay in sync
 """
 
 import json
@@ -48,6 +52,8 @@ REQ_GUIDE = ROOT / "skills" / "scribe" / "REQUIREMENTS_TRACEABILITY_GUIDE.md"
 CAPSTONE_GUIDE = ROOT / "skills" / "scribe" / "RESEARCH_CAPSTONE_DOCUMENTATION_GUIDE.md"
 RECONCILE_GUIDE = ROOT / "skills" / "scribe" / "DOCUMENTATION_SYSTEM_RECONCILIATION_GUIDE.md"
 DOC_L1 = ROOT / "docs" / "project" / "DOCUMENTATION_LIFECYCLE_APPLICABILITY.md"
+BLUEPRINT_GUIDE = ROOT / "docs" / "project" / "PRE_DEVELOPMENT_BLUEPRINT_GUIDE.md"
+README_JSON = ROOT / "README.json"
 ROUTING_MAP_SOURCE = ROOT / "ROUTING_MAP.md"
 ROUTING_MAP_CODEX = ROOT / "adapters" / "codex" / "skills" / "conductor" / "ROUTING_MAP.md"
 
@@ -298,6 +304,84 @@ def test_t27_doc_l1_guidance_reaches_codex_adapters():
     assert "DOC-L1 applicability contract" in scribe_source_body
 
 
+def _blueprint_guide_text():
+    assert BLUEPRINT_GUIDE.exists(), "the optional pre-development blueprint guide must exist"
+    return BLUEPRINT_GUIDE.read_text(encoding="utf-8")
+
+
+def test_t28_blueprint_dimensions_are_optional_and_reusable():
+    text = _blueprint_guide_text()
+    for dimension in (
+        "PRD",
+        "TRD",
+        "APPLICATION_FLOW",
+        "DESIGN_BRIEF",
+        "DATA_SCHEMA",
+        "IMPLEMENTATION_PLAN",
+    ):
+        assert dimension in text
+    assert "coverage areas, not six mandatory files" in text
+    assert "A single existing artifact may cover more than one dimension" in text
+    for mode in ("SPEC_TO_SYSTEM", "SYSTEM_TO_DOCS", "RECONCILE"):
+        assert mode in text
+
+
+def test_t29_blueprint_preserves_applicability_and_provenance():
+    text = _blueprint_guide_text()
+    for marker in (
+        "REQUIRED",
+        "CONDITIONAL",
+        "NOT_APPLICABLE",
+        "UNRESOLVED",
+        "MISSING_EVIDENCE",
+        "PROPOSED",
+        "APPROVED",
+        "IMPLEMENTED",
+        "VALIDATED",
+        "Requirement IDs",
+        "Acceptance-criterion IDs",
+        "Source / evidence references",
+        "Scribe interpretation",
+        "Unresolved issue and owner next action",
+    ):
+        assert marker in text
+    assert "Evaluate a CONDITIONAL trigger against the current project scope" in text
+    assert "A NOT_APPLICABLE outcome requires a reason" in text
+
+
+def test_t30_blueprint_preserves_specialist_authority_and_existing_records():
+    text = _blueprint_guide_text()
+    for boundary in (
+        "Scribe cannot independently approve product requirements",
+        "Scribe cannot choose or approve system architecture",
+        "Scribe cannot decide database or persistence design",
+        "Scribe cannot approve UI/UX design decisions",
+        "Scribe cannot establish security or privacy controls",
+        "Scribe cannot determine QA sufficiency",
+        "Scribe cannot approve governance transitions",
+        "Scribe cannot promote inferred facts into verified facts",
+    ):
+        assert boundary in text
+    for record in ("Feature Admission", "CandidateMaturityRecord", "QualificationGatePlan"):
+        assert record in text
+    assert "does not create a new readiness state or gate" in text
+    assert "presence or apparent completeness does not create a new readiness state or gate, authorize implementation" in text
+    assert "Never silently promote PROPOSED to APPROVED, PLANNED to IMPLEMENTED, or IMPLEMENTED to VALIDATED." in text
+    assert "Conflicting specialist findings remain unresolved" in text
+
+
+def test_t31_blueprint_discovery_and_scribe_mirror_parity():
+    readme = json.loads(README_JSON.read_text(encoding="utf-8"))
+    expected_path = "docs/project/PRE_DEVELOPMENT_BLUEPRINT_GUIDE.md"
+    assert expected_path in readme["capabilities"]["scribe_specialist_upgrade_ssu"]["human_sources"]
+    assert readme["documentation"]["scribe_predevelopment_blueprint_guide"] == expected_path
+
+    source_body = SKILL_MD.read_text(encoding="utf-8").replace("\r\n", "\n").split("---", 2)[2].lstrip()
+    codex_body = SKILL_MD_CODEX.read_text(encoding="utf-8").replace("\r\n", "\n").split("---", 2)[2].lstrip()
+    assert source_body == codex_body
+    assert "docs/project/PRE_DEVELOPMENT_BLUEPRINT_GUIDE.md" in source_body
+
+
 ALL_TESTS = [
     ("T1: Governance documentation gate", test_t1_governance_documentation_gate),
     ("T2: Core governance documentation tenets", test_t2_core_governance_documentation_tenets),
@@ -326,6 +410,10 @@ ALL_TESTS = [
     ("T25: UNRESOLVED applicability remains distinct and routes to the fact owner", test_t25_unresolved_applicability_routes_to_owner_without_becoming_not_applicable),
     ("T26: Documentation and implementation drift retain their owners", test_t26_drift_dispositions_preserve_documentation_and_implementation_owners),
     ("T27: DOC-L1 guidance reaches Codex adapters", test_t27_doc_l1_guidance_reaches_codex_adapters),
+    ("T28: Six blueprint dimensions remain optional and reusable", test_t28_blueprint_dimensions_are_optional_and_reusable),
+    ("T29: Blueprint crosswalk preserves DOC-L1 outcomes and provenance", test_t29_blueprint_preserves_applicability_and_provenance),
+    ("T30: Blueprint guidance preserves specialist authority and existing records", test_t30_blueprint_preserves_specialist_authority_and_existing_records),
+    ("T31: Blueprint guide discovery and Scribe mirror parity", test_t31_blueprint_discovery_and_scribe_mirror_parity),
 ]
 
 
