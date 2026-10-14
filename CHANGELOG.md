@@ -1,3 +1,7 @@
+## Unreleased README and integration status clarification
+
+- Shorten the main README and link focused JEV local API, adaptive-memory and Scribe blueprint guides. Separate merged development features from published v1.11.0 capabilities; preserve BYOK consent, privacy, memory and specialist-authority limits.
+
 ## Unreleased Scribe pre-development blueprint guidance
 
 - Add an optional six-dimension coverage crosswalk to Scribe's existing documentation workflow. Reuse equivalent artifacts and DOC-L1 outcomes, preserve requirement identities, specialist ownership, and evidence provenance, and do not require six separate files or infer implementation authority.

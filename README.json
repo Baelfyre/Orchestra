@@ -3152,6 +3152,8 @@
     "runtime_architecture_ar2_domain_execution_lifecycle_core": "docs/project/ORCHESTRA_AR2_DOMAIN_EXECUTION_LIFECYCLE_CORE_EXTRACTION.md",
     "scribe_specialist_upgrade_ssu": "docs/project/SCRIBE_SPECIALIST_UPGRADE_SSU.md",
     "scribe_predevelopment_blueprint_guide": "docs/project/PRE_DEVELOPMENT_BLUEPRINT_GUIDE.md",
+    "jev_local_api_guide": "docs/setup/JEV_LOCAL_API.md",
+    "adaptive_memory_user_guide": "docs/setup/ADAPTIVE_MEMORY_GUIDE.md",
     "scribe_domain_narrative_guide": "skills/scribe/DOMAIN_NARRATIVE_MODELING_GUIDE.md",
     "scribe_requirements_traceability_guide": "skills/scribe/REQUIREMENTS_TRACEABILITY_GUIDE.md",
     "scribe_research_capstone_guide": "skills/scribe/RESEARCH_CAPSTONE_DOCUMENTATION_GUIDE.md",
