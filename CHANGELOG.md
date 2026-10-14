@@ -1,3 +1,7 @@
+## Unreleased Scribe pre-development blueprint guidance
+
+- Add an optional six-dimension coverage crosswalk to Scribe's existing documentation workflow. Reuse equivalent artifacts and DOC-L1 outcomes, preserve requirement identities, specialist ownership, and evidence provenance, and do not require six separate files or infer implementation authority.
+
 ## Unreleased trigger-driven capability inventory contract
 
 - Add a pure, versioned host-neutral inventory descriptor and explicit trigger-based lookup plan with cache reuse and selective revalidation hints. Keep claims, host observations, compatibility, permission observations, side effects, independent outputs, source identity, and freshness separate; no host discovery, persistence, routing, authorization, plugin activation, or execution is added.
