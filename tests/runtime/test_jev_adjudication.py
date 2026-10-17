@@ -866,6 +866,32 @@ def test_interpreter_preserves_uncertainty_dissent_assumption_and_all_choice_dis
     assert serialized["task"] == {"risk_level": "MEDIUM", "assurance_depth": "STANDARD"}
 
 
+def test_synthetic_mitigation_conflict_preserves_dissent_without_authority() -> None:
+    state = _state(
+        dissent=[
+            {
+                "id": "D-002",
+                "producer": "Clockwork",
+                "summary": "Specialist recommends M2 because it reduces future maintenance cost.",
+                "evidence_refs": ["E-003"],
+            }
+        ]
+    )
+    before = state.to_payload()
+    questions = OrchestraJevQuestionBuilder().build(state)
+    response = _typed_response(questions, state.candidate_binding, recommendation="M1")
+
+    result = OrchestraJevInterpreter().interpret(state, response, state.candidate_binding)
+    serialized = result.to_dict()
+
+    assert result.advisory_state == JEV_ADVISORY_RECOMMENDATION_AVAILABLE
+    assert result.recommendation == "M1"
+    assert state.to_payload() == before
+    assert "recommends M2" in state.to_payload()["dissent"][0]["summary"]
+    assert serialized["may_authorize"] is False
+    assert serialized["authority_effect"] == "NONE"
+
+
 def test_no_clear_preference_is_inconclusive_without_probability_thresholds() -> None:
     state = _state()
     questions = OrchestraJevQuestionBuilder().build(state)
