@@ -13,8 +13,8 @@ runner_fix_commit=8faf27f0a15b2bb45e4636799144ce94783b6bae
 runner_fix_tree=f459fa4f7d84c2b9d5032b87fe95d7ca64fdac80
 initial_pr_ci_snapshot_head=281185fcef68283a0ad3526594ef3a7d2dd415eb
 initial_pr_ci_snapshot_tree=124a3b2e5c4e7a7e5b818e12e9221dcab9ff1172
-last_exact_pr_ci_pass_head=724d59d1c18cc6b74d80f9f755e5007f4e76d7f8
-last_exact_pr_ci_pass_tree=f4fc2e3d51949baafa44888507e0ac1ade478a87
+recorded_exact_pr_ci_snapshot_head=996947cc67627e6386e7ee39f862c593bbdad2dd
+recorded_exact_pr_ci_snapshot_tree=a681bb27fbc52f0be5a59f7355696739a7ff7b1e
 release_qualification_head=PENDING_THREE_WEEK_PILOT_AND_RELEASE_DECISION
 release_qualification_tree=PENDING_THREE_WEEK_PILOT_AND_RELEASE_DECISION
 release_candidate=docs/releases/v1.12.0-offline-jev-pilot-release-candidate.md
@@ -52,7 +52,8 @@ Update this section only with commands actually executed against the stated sour
 | Structure, manifest, stale-reference checks | `python -B scripts/validate_structure.py`; `python -B scripts/validate_manifest.py`; `python -B scripts/check_stale_references.py` | All PASS |
 | Windows and Linux syntax / manifest checks | Windows `python -B -m compileall -q orchestra_runtime scripts internal/context` with external bytecode cache; WSL Python 3.14 equivalent plus `python3 -B -m json.tool plugin.json` | PASS on both. WSL emitted a systemd user-session warning. Linux pytest was NOT RUN because WSL Python has no pytest installed; WSL Git status also cannot resolve this Windows-linked worktree's `.git` pointer. No dependencies or Git settings were changed. |
 | Initial exact-head pull-request checks | GitHub PR #975, head `281185fcef68283a0ad3526594ef3a7d2dd415eb`, tree `124a3b2e5c4e7a7e5b818e12e9221dcab9ff1172` | 8 checks passed and 2 failed. `governance-check` required `README.md` and `README.json` parity for the public JEV release candidate and runtime changes. `native-windows-latest` had 7 JEV V6 fixture failures: Windows CRLF checkout bytes hashed to `b2c8bee1b6323ee04f437035a06bbf89d391384abd213f6dcf39dcbdd98992af`, while the manifest pins LF bytes `3e52cb1258ad47921774ffc49e587d23111450528a77e8681c66d022fc75e9c0`. |
-| Corrected exact-head pull-request checks | GitHub PR #975, head `724d59d1c18cc6b74d80f9f755e5007f4e76d7f8`, tree `f4fc2e3d51949baafa44888507e0ac1ade478a87` | All 10 reported checks passed: governance-check, validate, runtime-tests, native macOS/Linux/Windows, CodeQL, Compatibility CodeQL (Python), and Analyze (Actions/Python). The Windows job passed with the LF fixture rule. PR remained open and unmerged. |
+| Corrected exact-head pull-request checks | GitHub PR #975, head `724d59d1c18cc6b74d80f9f755e5007f4e76d7f8`, tree `f4fc2e3d51949baafa44888507e0ac1ade478a87` | All 10 reported checks passed, including Windows with the LF fixture rule. PR remained open and unmerged. |
+| Readiness evidence exact-head pull-request checks | GitHub PR #975, head `996947cc67627e6386e7ee39f862c593bbdad2dd`, tree `a681bb27fbc52f0be5a59f7355696739a7ff7b1e` | All 10 reported checks passed. `validate` ran the repository behavior suite and reported `Validation suite PASSED!`. `runtime-tests` passed 3,571 tests, 0 failures/errors/skips; statement coverage was 97.62%, branch coverage 95.01%, and the critical coverage inventory had no failures. Windows native validation passed. |
 
 ## Pytest collection resolution
 
@@ -64,8 +65,8 @@ The combined default collection of `tests/runtime` and `tests/behavior` has a pr
 - The original V6 packet and source artifacts referenced by hashes are not present. Do not reconstruct them or label the fixture as real evidence.
 - The local full TypeSafe request path and production composition are not exercised by this offline pilot.
 - R3-A host trust is explicitly unqualified.
-- The full local behavior runner did not pass in either attempt; reported failures passed individually, but no aggregate green result is available.
-- PR #975 passed all 10 reported checks at the exact head listed above. Subsequent commits require their own exact-head validation; this PR CI result does not complete the three-week pilot or release qualification.
+- The full local behavior runner failed in both attempts; reported failures passed individually. The exact PR `validate` workflow passed the behavior suite at the recorded snapshot; the difference between local and CI runs remains unexplained.
+- PR #975 passed all 10 reported checks at the exact recorded head above, including the behavior suite and full runtime coverage gates. Subsequent commits require their own exact-head validation; these results do not complete the three-week pilot or release qualification.
 - `tests/behavior/run_tests.py` requires an explicit baseline for local runs. Use the verified current PR base, never a fabricated SHA.
 
 ## Release disposition
