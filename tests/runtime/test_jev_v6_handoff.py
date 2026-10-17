@@ -32,9 +32,8 @@ def _adapt(
 ):
     return adapt_v6_r2_evidence_packet(
         packet_bytes,
-        expected_packet_sha256=hashlib.sha256(packet_bytes).hexdigest(),
-        expected_candidate_locator=packet["candidate"]["repository"],
-        candidate_binding=manifest["candidate_binding"],
+        trusted_packet_sha256=manifest["fixture_sha256"],
+        trusted_candidate_binding=manifest["candidate_binding"],
     )
 
 
@@ -44,6 +43,10 @@ def test_v6_fixture_provenance_and_candidate_identity_are_pinned() -> None:
         "3695867befaf8bdd6687e2f25d63f898d17537379586cfe98cdfac73d77d6d2c"
     )
     assert packet["candidate"]["head"] == manifest["candidate_binding"]["commit"]
+    assert packet["candidate"]["repository"] == (
+        "candidate://"
+        + manifest["candidate_binding"]["repository"].rsplit("/", 1)[-1].casefold()
+    )
     impeccable_input = next(
         item for item in packet["specialist_inputs"] if item["id"] == "IMPECCABLE-V6-R2"
     )
@@ -137,9 +140,8 @@ def test_packet_hash_mismatch_fails_before_mapping() -> None:
     with pytest.raises(JevV6HandoffError) as caught:
         adapt_v6_r2_evidence_packet(
             packet_bytes,
-            expected_packet_sha256="0" * 64,
-            expected_candidate_locator=packet["candidate"]["repository"],
-            candidate_binding={
+            trusted_packet_sha256="0" * 64,
+            trusted_candidate_binding={
                 "repository": "Baelfyre/Sinag",
                 "commit": "2b6b611fa39418777a3e3353adcde64e5d3a8eee",
                 "tree": "63bcf1151d811be73ae8125a0e58d25e128b1c94",
@@ -148,14 +150,17 @@ def test_packet_hash_mismatch_fails_before_mapping() -> None:
     assert caught.value.code == "PACKET_HASH_MISMATCH"
 
 
-def test_candidate_locator_and_commit_mismatches_fail_closed() -> None:
+def test_candidate_identity_is_bound_to_trusted_evidence_and_git_facts() -> None:
     packet_bytes, packet, manifest = _fixture()
+    packet["candidate"]["repository"] = "candidate://forged"
+    packet["candidate"]["head"] = "c" * 40
+    packet["candidate"]["tree"] = "d" * 40
+    forged_bytes = json.dumps(packet, separators=(",", ":")).encode("utf-8")
     with pytest.raises(JevV6HandoffError) as wrong_repository:
         adapt_v6_r2_evidence_packet(
-            packet_bytes,
-            expected_packet_sha256=manifest["fixture_sha256"],
-            expected_candidate_locator="candidate://another-repository",
-            candidate_binding=manifest["candidate_binding"],
+            forged_bytes,
+            trusted_packet_sha256=hashlib.sha256(forged_bytes).hexdigest(),
+            trusted_candidate_binding=manifest["candidate_binding"],
         )
     assert wrong_repository.value.code == "CANDIDATE_REPOSITORY_MISMATCH"
 
@@ -164,11 +169,18 @@ def test_candidate_locator_and_commit_mismatches_fail_closed() -> None:
     with pytest.raises(JevV6HandoffError) as changed_commit:
         adapt_v6_r2_evidence_packet(
             packet_bytes,
-            expected_packet_sha256=manifest["fixture_sha256"],
-            expected_candidate_locator=packet["candidate"]["repository"],
-            candidate_binding=changed_candidate,
+            trusted_packet_sha256=manifest["fixture_sha256"],
+            trusted_candidate_binding=changed_candidate,
         )
     assert changed_commit.value.code == "CANDIDATE_COMMIT_MISMATCH"
+
+    with pytest.raises(JevV6HandoffError) as unavailable_binding:
+        adapt_v6_r2_evidence_packet(
+            packet_bytes,
+            trusted_packet_sha256=manifest["fixture_sha256"],
+            trusted_candidate_binding=None,
+        )
+    assert unavailable_binding.value.code == "INVALID_CANDIDATE_BINDING"
 
 
 def test_packet_tree_mismatch_fails_closed_when_source_supplies_tree() -> None:
@@ -178,9 +190,8 @@ def test_packet_tree_mismatch_fails_closed_when_source_supplies_tree() -> None:
     with pytest.raises(JevV6HandoffError) as caught:
         adapt_v6_r2_evidence_packet(
             changed_bytes,
-            expected_packet_sha256=hashlib.sha256(changed_bytes).hexdigest(),
-            expected_candidate_locator=packet["candidate"]["repository"],
-            candidate_binding=manifest["candidate_binding"],
+            trusted_packet_sha256=hashlib.sha256(changed_bytes).hexdigest(),
+            trusted_candidate_binding=manifest["candidate_binding"],
         )
     assert caught.value.code == "CANDIDATE_TREE_MISMATCH"
 
@@ -192,9 +203,8 @@ def test_relaxed_source_restriction_fails_closed() -> None:
     with pytest.raises(JevV6HandoffError) as caught:
         adapt_v6_r2_evidence_packet(
             changed_bytes,
-            expected_packet_sha256=hashlib.sha256(changed_bytes).hexdigest(),
-            expected_candidate_locator=packet["candidate"]["repository"],
-            candidate_binding=manifest["candidate_binding"],
+            trusted_packet_sha256=hashlib.sha256(changed_bytes).hexdigest(),
+            trusted_candidate_binding=manifest["candidate_binding"],
         )
     assert caught.value.code == "INVALID_CONSTRAINT_SOURCE"
 
@@ -206,9 +216,8 @@ def test_unmapped_or_ambiguous_packet_shape_is_not_silently_normalized() -> None
     with pytest.raises(JevV6HandoffError) as caught:
         adapt_v6_r2_evidence_packet(
             changed_bytes,
-            expected_packet_sha256=hashlib.sha256(changed_bytes).hexdigest(),
-            expected_candidate_locator=packet["candidate"]["repository"],
-            candidate_binding=manifest["candidate_binding"],
+            trusted_packet_sha256=hashlib.sha256(changed_bytes).hexdigest(),
+            trusted_candidate_binding=manifest["candidate_binding"],
         )
     assert caught.value.code == "UNMAPPED_FINDING_SOURCE"
 
@@ -218,9 +227,8 @@ def test_unmapped_or_ambiguous_packet_shape_is_not_silently_normalized() -> None
     with pytest.raises(JevV6HandoffError) as duplicate_id:
         adapt_v6_r2_evidence_packet(
             duplicate_bytes,
-            expected_packet_sha256=hashlib.sha256(duplicate_bytes).hexdigest(),
-            expected_candidate_locator=packet["candidate"]["repository"],
-            candidate_binding=manifest["candidate_binding"],
+            trusted_packet_sha256=hashlib.sha256(duplicate_bytes).hexdigest(),
+            trusted_candidate_binding=manifest["candidate_binding"],
         )
     assert duplicate_id.value.code == "INVALID_FINDING_RECORD"
 
@@ -229,9 +237,8 @@ def test_unmapped_or_ambiguous_packet_shape_is_not_silently_normalized() -> None
     with pytest.raises(JevV6HandoffError) as invalid_schema:
         adapt_v6_r2_evidence_packet(
             invalid_schema_bytes,
-            expected_packet_sha256=hashlib.sha256(invalid_schema_bytes).hexdigest(),
-            expected_candidate_locator=packet["candidate"]["repository"],
-            candidate_binding=manifest["candidate_binding"],
+            trusted_packet_sha256=hashlib.sha256(invalid_schema_bytes).hexdigest(),
+            trusted_candidate_binding=manifest["candidate_binding"],
         )
     assert invalid_schema.value.code == "INVALID_PACKET_SCHEMA"
 
@@ -239,8 +246,7 @@ def test_unmapped_or_ambiguous_packet_shape_is_not_silently_normalized() -> None
     with pytest.raises(JevV6HandoffError) as duplicate_key:
         adapt_v6_r2_evidence_packet(
             duplicate_key_bytes,
-            expected_packet_sha256=hashlib.sha256(duplicate_key_bytes).hexdigest(),
-            expected_candidate_locator=packet["candidate"]["repository"],
-            candidate_binding=manifest["candidate_binding"],
+            trusted_packet_sha256=hashlib.sha256(duplicate_key_bytes).hexdigest(),
+            trusted_candidate_binding=manifest["candidate_binding"],
         )
     assert duplicate_key.value.code == "INVALID_PACKET"

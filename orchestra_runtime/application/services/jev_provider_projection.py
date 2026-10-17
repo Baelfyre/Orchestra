@@ -31,6 +31,7 @@ from ...domain.adaptive.jev_adjudication import (
     TYPESAFE_JEV_MODEL,
     validate_jev_adjudication_eligibility,
 )
+from ..ports.jev_adjudication import JevProviderRequestProjectionContext
 from ...shared.canonicalization import canonical_json_bytes
 
 
@@ -171,7 +172,7 @@ class ReviewedJevEvidenceAnnotations:
         raise TypeError("evidence annotations are transient")
 
 
-class JevProjectionMappingContext:
+class JevProjectionMappingContext(JevProviderRequestProjectionContext):
     """Transient local state; deliberately has no normal serializer or value repr."""
 
     __slots__ = (
@@ -201,6 +202,26 @@ class JevProjectionMappingContext:
 
     def __reduce__(self) -> object:
         raise TypeError("projection mapping context is transient")
+
+    def validate_request(
+        self,
+        state: OrchestraJevAdjudicationState,
+        request_bytes: bytes,
+    ) -> Mapping[str, object]:
+        request, _question_ids, _mitigation_ids = _validated_projection_request(
+            state, request_bytes, self
+        )
+        return request
+
+    def restore_response(
+        self,
+        state: OrchestraJevAdjudicationState,
+        request_bytes: bytes,
+        response: JevProviderResponse,
+    ) -> JevProviderResponse:
+        return reverse_map_offline_jev_provider_response(
+            state, request_bytes, self, response
+        )
 
 
 class JevProjectionError(ValueError):
@@ -782,6 +803,73 @@ def build_offline_jev_provider_semantic_projection_with_context(
         raise JevProjectionError("INVALID_INPUT") from None
 
 
+def _validated_projection_request(
+    state: OrchestraJevAdjudicationState,
+    request_bytes: bytes,
+    mapping_context: JevProjectionMappingContext,
+) -> tuple[dict[str, Any], dict[str, str], dict[str, str]]:
+    if not isinstance(state, OrchestraJevAdjudicationState):
+        _fail("INVALID_SOURCE_STATE")
+    if type(mapping_context) is not JevProjectionMappingContext:
+        _fail("INVALID_MAPPING_CONTEXT")
+    if not isinstance(request_bytes, bytes):
+        _fail("INVALID_INPUT")
+
+    source = state.to_payload()
+    if (
+        state.candidate_binding != mapping_context._candidate_binding
+        or source["candidate"]["scope_hash"] != mapping_context._source_scope_hash
+    ):
+        _fail("SOURCE_STATE_MISMATCH")
+    request_digest = hashlib.sha256(request_bytes).hexdigest()
+    if not hmac.compare_digest(request_digest, mapping_context._request_digest):
+        _fail("REQUEST_MISMATCH")
+
+    try:
+        request = json.loads(request_bytes.decode("utf-8"))
+    except (UnicodeError, json.JSONDecodeError, TypeError, ValueError):
+        _fail("INVALID_MAPPING_CONTEXT")
+    if (
+        not isinstance(request, dict)
+        or set(request) != {"state", "model", "questions"}
+        or request["model"] != TYPESAFE_JEV_MODEL
+        or not isinstance(request["questions"], dict)
+    ):
+        _fail("INVALID_MAPPING_CONTEXT")
+
+    projected_questions = request["questions"]
+    source_questions = OrchestraJevQuestionBuilder().build(state)
+    question_ids = dict(mapping_context._question_ids)
+    mitigation_ids = dict(mapping_context._mitigation_ids)
+    try:
+        valid_mappings = (
+            len(question_ids) == len(mapping_context._question_ids)
+            and len(set(question_ids.values())) == len(question_ids)
+            and len(mitigation_ids) == len(mapping_context._mitigation_ids)
+            and len(set(mitigation_ids.values())) == len(mitigation_ids)
+            and set(question_ids) == set(projected_questions)
+            and set(question_ids.values()) == set(source_questions)
+            and set(mitigation_ids.values()) == set(state.mitigation_ids)
+            and set(mitigation_ids)
+            == set(projected_questions["recommended_mitigation"]["criteria"])
+            - {"NO_CLEAR_PREFERENCE"}
+        )
+    except (KeyError, TypeError, ValueError):
+        valid_mappings = False
+    if not valid_mappings:
+        _fail("INVALID_MAPPING_CONTEXT")
+
+    source_to_alias = {source_id: alias for alias, source_id in mitigation_ids.items()}
+    expected_question_ids = _question_id_aliases(
+        source_questions,
+        source_to_alias,
+        projected_questions,
+    )
+    if tuple(sorted(question_ids.items())) != expected_question_ids:
+        _fail("INVALID_MAPPING_CONTEXT")
+    return request, question_ids, mitigation_ids
+
+
 def reverse_map_offline_jev_provider_response(
     state: OrchestraJevAdjudicationState,
     request_bytes: bytes,
@@ -790,60 +878,13 @@ def reverse_map_offline_jev_provider_response(
 ) -> JevProviderResponse:
     """Restore typed synthetic answers using only the matching local context."""
     try:
-        if not isinstance(state, OrchestraJevAdjudicationState):
-            _fail("INVALID_SOURCE_STATE")
-        if type(mapping_context) is not JevProjectionMappingContext:
-            _fail("INVALID_MAPPING_CONTEXT")
-        if not isinstance(request_bytes, bytes):
-            _fail("INVALID_INPUT")
         if not isinstance(response, JevProviderResponse):
             _fail("RESPONSE_CONTRACT_INCOMPATIBLE")
 
-        source = state.to_payload()
-        if (
-            state.candidate_binding != mapping_context._candidate_binding
-            or source["candidate"]["scope_hash"] != mapping_context._source_scope_hash
-        ):
-            _fail("SOURCE_STATE_MISMATCH")
-        request_digest = hashlib.sha256(request_bytes).hexdigest()
-        if not hmac.compare_digest(request_digest, mapping_context._request_digest):
-            _fail("REQUEST_MISMATCH")
-
-        request = json.loads(request_bytes.decode("utf-8"))
-        if (
-            not isinstance(request, dict)
-            or set(request) != {"state", "model", "questions"}
-            or request["model"] != TYPESAFE_JEV_MODEL
-            or not isinstance(request["questions"], dict)
-        ):
-            _fail("INVALID_MAPPING_CONTEXT")
-
-        projected_questions = request["questions"]
-        source_questions = OrchestraJevQuestionBuilder().build(state)
-        question_ids = dict(mapping_context._question_ids)
-        mitigation_ids = dict(mapping_context._mitigation_ids)
-        if (
-            len(question_ids) != len(mapping_context._question_ids)
-            or len(set(question_ids.values())) != len(question_ids)
-            or len(mitigation_ids) != len(mapping_context._mitigation_ids)
-            or len(set(mitigation_ids.values())) != len(mitigation_ids)
-            or set(question_ids) != set(projected_questions)
-            or set(question_ids.values()) != set(source_questions)
-            or set(mitigation_ids.values()) != set(state.mitigation_ids)
-            or set(mitigation_ids)
-            != set(projected_questions["recommended_mitigation"]["criteria"])
-            - {"NO_CLEAR_PREFERENCE"}
-        ):
-            _fail("INVALID_MAPPING_CONTEXT")
-
-        source_to_alias = {source_id: alias for alias, source_id in mitigation_ids.items()}
-        expected_question_ids = _question_id_aliases(
-            source_questions,
-            source_to_alias,
-            projected_questions,
+        request, question_ids, mitigation_ids = _validated_projection_request(
+            state, request_bytes, mapping_context
         )
-        if tuple(sorted(question_ids.items())) != expected_question_ids:
-            _fail("INVALID_MAPPING_CONTEXT")
+        projected_questions = request["questions"]
 
         answer_ids = [question_id for question_id, _ in response.answers]
         if (

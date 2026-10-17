@@ -252,15 +252,14 @@ def _validate_packet(packet_bytes: bytes) -> dict[str, Any]:
 def adapt_v6_r2_evidence_packet(
     packet_bytes: bytes,
     *,
-    expected_packet_sha256: str,
-    expected_candidate_locator: str,
-    candidate_binding: Mapping[str, object],
+    trusted_packet_sha256: str,
+    trusted_candidate_binding: Mapping[str, object],
 ) -> JevV6EvidenceHandoff:
-    """Map only V6-R2 evidence into JEV sections; keep known evidence gaps explicit."""
+    """Map V6-R2 only against separately trusted packet and Git identities."""
     if not isinstance(packet_bytes, bytes):
         raise JevV6HandoffError("INVALID_PACKET")
     try:
-        expected_digest = normalize_sha256(expected_packet_sha256, "expected_packet_sha256")
+        expected_digest = normalize_sha256(trusted_packet_sha256, "trusted_packet_sha256")
     except (TypeError, ValueError) as exc:
         raise JevV6HandoffError("INVALID_EXPECTED_PACKET_HASH") from exc
     actual_digest = hashlib.sha256(packet_bytes).hexdigest()
@@ -268,9 +267,10 @@ def adapt_v6_r2_evidence_packet(
         raise JevV6HandoffError("PACKET_HASH_MISMATCH")
 
     packet = _validate_packet(packet_bytes)
-    trusted_candidate = _candidate_identity(candidate_binding)
+    trusted_candidate = _candidate_identity(trusted_candidate_binding)
     source_candidate = packet["candidate"]
-    if _locator(source_candidate["repository"]) != _locator(expected_candidate_locator):
+    trusted_locator = f"candidate://{trusted_candidate['repository'].rsplit('/', 1)[-1]}"
+    if _locator(source_candidate["repository"]) != _locator(trusted_locator):
         raise JevV6HandoffError("CANDIDATE_REPOSITORY_MISMATCH")
     if normalize_git_sha(source_candidate["head"], "candidate.head") != trusted_candidate["commit"]:
         raise JevV6HandoffError("CANDIDATE_COMMIT_MISMATCH")
@@ -447,7 +447,9 @@ def adapt_v6_r2_evidence_packet(
 
     sections: dict[str, Any] = {
         "contract": JEV_ADJUDICATION_CONTRACT,
-        "candidate": trusted_candidate,
+        "candidate": {
+            key: trusted_candidate[key] for key in ("repository", "commit", "tree")
+        },
         "task": task,
         "findings": findings,
         "verification": [],
