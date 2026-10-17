@@ -11,8 +11,10 @@ implementation_commit=12af49f8db91f967895d52d2810c40216550b4e3
 implementation_tree=2df69ce25416114208d8a0211c72409007ba2e39
 runner_fix_commit=8faf27f0a15b2bb45e4636799144ce94783b6bae
 runner_fix_tree=f459fa4f7d84c2b9d5032b87fe95d7ca64fdac80
-qualification_head=PENDING_EXACT_PR_HEAD_CI_AND_PILOT
-qualification_tree=PENDING_EXACT_PR_HEAD_CI_AND_PILOT
+initial_pr_ci_snapshot_head=281185fcef68283a0ad3526594ef3a7d2dd415eb
+initial_pr_ci_snapshot_tree=124a3b2e5c4e7a7e5b818e12e9221dcab9ff1172
+qualification_head=PENDING_FOLLOW_UP_EXACT_HEAD_VALIDATION
+qualification_tree=PENDING_FOLLOW_UP_EXACT_HEAD_VALIDATION
 release_candidate=docs/releases/v1.12.0-offline-jev-pilot-release-candidate.md
 pilot_protocol=docs/setup/JEV_OFFLINE_PILOT.md
 pilot_window=2026-10-17..2026-11-07 (suggested; manual weekly sessions)
@@ -47,7 +49,7 @@ Update this section only with commands actually executed against the stated sour
 | Architecture boundaries | `python -B scripts/validation/validate_architecture_boundaries.py` | PASS |
 | Structure, manifest, stale-reference checks | `python -B scripts/validate_structure.py`; `python -B scripts/validate_manifest.py`; `python -B scripts/check_stale_references.py` | All PASS |
 | Windows and Linux syntax / manifest checks | Windows `python -B -m compileall -q orchestra_runtime scripts internal/context` with external bytecode cache; WSL Python 3.14 equivalent plus `python3 -B -m json.tool plugin.json` | PASS on both. WSL emitted a systemd user-session warning. Linux pytest was NOT RUN because WSL Python has no pytest installed; WSL Git status also cannot resolve this Windows-linked worktree's `.git` pointer. No dependencies or Git settings were changed. |
-| Exact-head pull-request checks | Required checks for final PR head | Pending; no PR created yet |
+| Initial exact-head pull-request checks | GitHub PR #975, head `281185fcef68283a0ad3526594ef3a7d2dd415eb`, tree `124a3b2e5c4e7a7e5b818e12e9221dcab9ff1172` | 8 checks passed and 2 failed. `governance-check` required `README.md` and `README.json` parity for the public JEV release candidate and runtime changes. `native-windows-latest` had 7 JEV V6 fixture failures: Windows CRLF checkout bytes hashed to `b2c8bee1b6323ee04f437035a06bbf89d391384abd213f6dcf39dcbdd98992af`, while the manifest pins LF bytes `3e52cb1258ad47921774ffc49e587d23111450528a77e8681c66d022fc75e9c0`. This record describes the pre-correction head; corrected exact-head CI remains required. |
 
 ## Pytest collection resolution
 
@@ -60,7 +62,7 @@ The combined default collection of `tests/runtime` and `tests/behavior` has a pr
 - The local full TypeSafe request path and production composition are not exercised by this offline pilot.
 - R3-A host trust is explicitly unqualified.
 - The full local behavior runner did not pass in either attempt; reported failures passed individually, but no aggregate green result is available.
-- Required pull-request checks, protected-matrix applicability, and live GitHub state remain unverified until an authorized PR run.
+- The initial PR CI snapshot identified documentation parity and Windows fixture line-ending defects. The follow-up commit must pass required checks at its exact head; no earlier result is reusable for that state.
 - `tests/behavior/run_tests.py` requires an explicit baseline for local runs. Use the verified current PR base, never a fabricated SHA.
 
 ## Release disposition
