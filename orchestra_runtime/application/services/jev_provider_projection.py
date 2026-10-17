@@ -25,6 +25,7 @@ from ...domain.adaptive.jev_adjudication import (
     JevChoiceAnswer,
     JevNoulAnswer,
     JevProviderResponse,
+    JEV_VERIFICATION_RESULTS,
     OrchestraJevAdjudicationState,
     OrchestraJevQuestionBuilder,
     TYPESAFE_JEV_MODEL,
@@ -85,9 +86,7 @@ _PRODUCER_EXPERTISE = {
 }
 _EVIDENCE_LAYERS = frozenset(EVIDENCE_LAYERS)
 _FINDING_STATUSES = frozenset({"VERIFIED", "UNVERIFIED"})
-_VERIFICATION_RESULTS = frozenset(
-    {"CONFIRMED", "INCOMPLETE", "NOT_STARTED", "PENDING", "RUNNING"}
-)
+_VERIFICATION_RESULTS = JEV_VERIFICATION_RESULTS
 _ALIAS_PREFIXES = {
     "finding": "F",
     "verification": "V",
@@ -603,7 +602,7 @@ def build_offline_jev_provider_projection_with_context(
                     "producer": producer_aliases[_producer_value(item["producer"])],
                     "status": item["status"],
                     "summary": reviewed["finding_summaries"][item["id"]],
-                    "evidence_refs": [],
+                    "evidence_refs": item["evidence_refs"],
                 }
                 for item in source["findings"]
             ],
@@ -613,7 +612,7 @@ def build_offline_jev_provider_projection_with_context(
                     "producer": producer_aliases[_producer_value(item["producer"])],
                     "finding_id": finding_aliases[item["finding_id"]],
                     "result": item["result"],
-                    "evidence_refs": [],
+                    "evidence_refs": item["evidence_refs"],
                 }
                 for item in source["verification"]
             ],
@@ -638,7 +637,7 @@ def build_offline_jev_provider_projection_with_context(
                     "id": dissent_aliases[item["id"]],
                     "producer": producer_aliases[_producer_value(item["producer"])],
                     "summary": reviewed["dissent_summaries"][item["id"]],
-                    "evidence_refs": [],
+                    "evidence_refs": item["evidence_refs"],
                 }
                 for item in source["dissent"]
             ],

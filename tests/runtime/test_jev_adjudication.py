@@ -701,7 +701,10 @@ def test_application_makes_one_call_only_after_upstream_is_ready() -> None:
     [
         ({"findings": [{**_FINDING, "status": "UNVERIFIED"}], "verification": []}, "VERIFIED_FINDINGS_REQUIRED"),
         ({"overseer_assessment": None}, "OVERSEER_ASSESSMENT_REQUIRED"),
+        ({"verification": [{**_VERIFICATION, "result": "INCOMPLETE"}]}, "EMPIRICAL_VERIFICATION_INCOMPLETE"),
+        ({"verification": [{**_VERIFICATION, "result": "NOT_STARTED"}]}, "EMPIRICAL_VERIFICATION_INCOMPLETE"),
         ({"verification": [{**_VERIFICATION, "result": "PENDING"}]}, "EMPIRICAL_VERIFICATION_INCOMPLETE"),
+        ({"verification": [{**_VERIFICATION, "result": "RUNNING"}]}, "EMPIRICAL_VERIFICATION_INCOMPLETE"),
     ],
 )
 def test_application_blocks_when_upstream_evidence_is_missing_or_incomplete(
@@ -894,6 +897,7 @@ def test_state_nested_contract_rejections_cover_defensive_branches() -> None:
     reject(lambda p: p.__setitem__("verification", [{}]))
     reject(lambda p: p["verification"].append(dict(p["verification"][0])))
     reject(lambda p: p["verification"][0].update(finding_id="F-UNKNOWN"))
+    reject(lambda p: p["verification"][0].update(producer=""))
     reject(lambda p: p.__setitem__("mitigation_options", [{}]))
     reject(lambda p: p["mitigation_options"][0].update(addresses=["F-UNKNOWN"]))
     reject(lambda p: p.__setitem__("dissent", ["not-a-record"]))
@@ -950,30 +954,63 @@ def test_create_string_list_and_eligibility_guards() -> None:
         with pytest.raises(ValueError):
             jev._validate_string_list(value, "synthetic", nonempty=nonempty)
 
-    class _EligibilityState:
-        def to_payload(self):
-            return {
-                "findings": [
-                    {
-                        "id": "F-001",
-                        "status": "VERIFIED",
-                        "verification_required": True,
-                    }
-                ],
-                "verification": [],
-                "overseer_assessment": {
-                    "evidence_sufficiency": "SUFFICIENT",
-                    "impact": "MEDIUM",
-                },
-            }
-
+    state = _state(
+        findings=[{**_FINDING, "verification_required": True}],
+        verification=[],
+    )
+    use_case, provider = _use_case(state)
     with pytest.raises(JevAdjudicationEligibilityError) as caught:
-        jev.validate_jev_adjudication_eligibility(_EligibilityState())
+        use_case.execute(state)
 
     assert caught.value.code == "EMPIRICAL_VERIFICATION_REQUIRED"
+    assert state.to_payload()["findings"][0]["verification_required"] is True
+    assert provider.calls == []
 
     with pytest.raises(TypeError):
         OrchestraJevQuestionBuilder().build(object())
+
+
+@pytest.mark.parametrize("flag", [None, False])
+def test_verification_requirement_is_optional_when_not_enabled(flag: bool | None) -> None:
+    finding = dict(_FINDING)
+    if flag is not None:
+        finding["verification_required"] = flag
+    state = _state(findings=[finding], verification=[])
+    use_case, provider = _use_case(state)
+    result = use_case.execute(state)
+    assert result.advisory_state == JEV_ADVISORY_RECOMMENDATION_AVAILABLE
+    assert len(provider.calls) == 1
+
+
+@pytest.mark.parametrize("value", [1, "true", None])
+def test_verification_required_rejects_non_boolean_values(value: object) -> None:
+    with pytest.raises(ValueError, match="verification_required"):
+        _state(findings=[{**_FINDING, "verification_required": value}])
+
+
+@pytest.mark.parametrize("result", ["NOT_CONFIRMED", "PRIVATE_RESULT", "confirmed"])
+def test_verification_rejects_unsupported_results(result: str) -> None:
+    with pytest.raises(ValueError, match="verification.result is unsupported"):
+        _state(verification=[{**_VERIFICATION, "result": result}])
+
+
+def test_confirmed_verification_requires_supporting_evidence() -> None:
+    with pytest.raises(ValueError, match="verification.evidence_refs"):
+        _state(verification=[{**_VERIFICATION, "evidence_refs": []}])
+
+
+def test_conflicting_verification_records_fail_closed_before_provider_call() -> None:
+    state = _state(
+        verification=[
+            _VERIFICATION,
+            {**_VERIFICATION, "id": "V-002", "result": "PENDING"},
+        ]
+    )
+    use_case, provider = _use_case(state)
+    with pytest.raises(JevAdjudicationEligibilityError) as caught:
+        use_case.execute(state)
+    assert caught.value.code == "EMPIRICAL_VERIFICATION_INCOMPLETE"
+    assert provider.calls == []
 
 
 def test_typed_answer_and_provider_response_guards() -> None:

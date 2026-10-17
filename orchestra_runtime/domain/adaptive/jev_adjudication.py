@@ -39,9 +39,10 @@ _STABLE_ID_RE = re.compile(r"^[A-Za-z][A-Za-z0-9_-]{0,63}$")
 _RESOLVED_MODEL_RE = re.compile(r"^jev-[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
 _RISK_LEVELS = frozenset({"LOW", "MEDIUM", "HIGH", "CRITICAL"})
 _ASSURANCE_DEPTHS = frozenset({"LIGHT", "STANDARD", "DEEP"})
-_INCOMPLETE_VERIFICATION_RESULTS = frozenset(
-    {"INCOMPLETE", "NOT_STARTED", "PENDING", "RUNNING"}
+JEV_VERIFICATION_RESULTS = frozenset(
+    {"CONFIRMED", "INCOMPLETE", "NOT_STARTED", "PENDING", "RUNNING"}
 )
+_INCOMPLETE_VERIFICATION_RESULTS = JEV_VERIFICATION_RESULTS - {"CONFIRMED"}
 _PROVIDER_FAILURE_CODES = frozenset(
     {
         "AUTHENTICATION_FAILED",
@@ -278,9 +279,14 @@ class OrchestraJevAdjudicationState:
                 "evidence_refs",
             }.issubset(finding):
                 raise ValueError("finding records are malformed")
+            finding_keys = {"id", "producer", "status", "summary", "evidence_refs"}
+            if "verification_required" in finding:
+                finding_keys.add("verification_required")
+                if type(finding["verification_required"]) is not bool:
+                    raise ValueError("finding.verification_required must be a boolean")
             _require_keys(
                 finding,
-                {"id", "producer", "status", "summary", "evidence_refs"},
+                finding_keys,
                 "finding",
             )
             identifier = _required_text(finding["id"], "finding.id")
@@ -316,8 +322,14 @@ class OrchestraJevAdjudicationState:
             _required_text(item["finding_id"], "verification.finding_id")
             if item["finding_id"] not in finding_ids:
                 raise ValueError("verification record refers to an unknown finding")
-            _required_text(item["result"], "verification.result")
-            _validate_string_list(item["evidence_refs"], "verification.evidence_refs")
+            result = _required_text(item["result"], "verification.result")
+            if result not in JEV_VERIFICATION_RESULTS:
+                raise ValueError("verification.result is unsupported")
+            _validate_string_list(
+                item["evidence_refs"],
+                "verification.evidence_refs",
+                nonempty=result == "CONFIRMED",
+            )
 
         overseer = raw["overseer_assessment"]
         if overseer is not None:
@@ -801,6 +813,7 @@ __all__ = [
     "JEV_NOT_REQUIRED",
     "JEV_STATES",
     "JEV_UNAVAILABLE",
+    "JEV_VERIFICATION_RESULTS",
     "JevAdjudicationEligibilityError",
     "JevCandidateBinding",
     "JevChoiceAnswer",

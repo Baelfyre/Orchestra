@@ -162,7 +162,7 @@ def _state_with_cardinalities(
             "producer": "Cipher",
             "finding_id": f"F-{((index - 1) % finding_count) + 1:03}",
             "result": "CONFIRMED",
-            "evidence_refs": [],
+            "evidence_refs": [f"synthetic-verification-evidence-{index:03}"],
         }
         for index in range(1, verification_count + 1)
     ]
@@ -1177,8 +1177,8 @@ def test_projection_rejects_unknown_source_producers_and_values() -> None:
     )
     unknown_status = _state(first_status="PRIVATE_NOTE")
     _assert_error("INVALID_SOURCE_VALUE", lambda: _build(unknown_status))
-    unknown_result = _state(first_result="PRIVATE_RESULT")
-    _assert_error("INVALID_SOURCE_VALUE", lambda: _build(unknown_result))
+    with pytest.raises(ValueError, match="verification.result is unsupported"):
+        _state(first_result="PRIVATE_RESULT")
 
 
 def test_projection_rejects_unknown_state_fields_and_empty_mitigation_context() -> None:

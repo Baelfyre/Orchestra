@@ -1,0 +1,26 @@
+{
+  "fixture_contract": "orchestra.test_fixture.provenance.v1",
+  "fixture_file": "jev_v6_r2_packet.json",
+  "fixture_sha256": "3e52cb1258ad47921774ffc49e587d23111450528a77e8681c66d022fc75e9c0",
+  "source_packet_file": "jev-input-normalized-r2.json",
+  "source_packet_sha256": "3695867befaf8bdd6687e2f25d63f898d17537379586cfe98cdfac73d77d6d2c",
+  "source_evidence": {
+    "impeccable_critique_sha256": "dd62b843b6f51214634dd0a869c291cef6affcd2f717695a654258aa9fb18a6c",
+    "cloak_review_sha256": "62f61c1383af9a5616645a6fd430bc687cdc18282b21a48ce0e56971a3d1157b",
+    "v4_browser_observations_sha256": "d2175f7f0b76b24ef33ad244c11a479cd6948713e664ed9d82e3f15b8f52202d",
+    "v5_review_packet_sha256": "7c0582dd8208ae599625ec6279b9fb0793c260a10f87d30b4d49f231aa6bc342",
+    "v7_summary_sha256": "9c17cf70ad799635820774ddbc3e62c24557e5f581a5f161651bffe7d5dd14ee"
+  },
+  "candidate_binding": {
+    "repository": "Baelfyre/Sinag",
+    "commit": "2b6b611fa39418777a3e3353adcde64e5d3a8eee",
+    "tree": "63bcf1151d811be73ae8125a0e58d25e128b1c94"
+  },
+  "candidate_binding_source": "V7 summary plus read-only Git identity check",
+  "sanitized": true,
+  "sanitization": [
+    "Replaced local candidate and evidence paths with stable source locators.",
+    "Replaced assessment-agent filesystem handles with generic labels.",
+    "Preserved packet findings, uncertainty, restrictions, evidence identifiers, and digests present in V6; the omitted Impeccable V6 digest remains omitted, with V7 corroboration recorded separately."
+  ]
+}
