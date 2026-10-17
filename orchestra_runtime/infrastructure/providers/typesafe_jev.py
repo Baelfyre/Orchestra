@@ -15,6 +15,12 @@ from ...application.ports.jev_adjudication import (
     JevAdjudicationProvider,
     JevProviderRequestProjectionContext,
 )
+from ...application.services.jev_provider_projection import (
+    JevProjectionMappingContext,
+    _consume_jev_projection_authorization,
+    _validated_projection_request,
+    reverse_map_offline_jev_provider_response,
+)
 from ...domain.adaptive.jev_adjudication import (
     JevChoiceAnswer,
     JevNoulAnswer,
@@ -61,7 +67,7 @@ class TypeSafeJevAdapter(JevAdjudicationProvider):
         *,
         request_projection: tuple[bytes, JevProviderRequestProjectionContext] | None = None,
     ) -> JevProviderResponse:
-        if not isinstance(state, OrchestraJevAdjudicationState):
+        if type(state) is not OrchestraJevAdjudicationState:
             raise TypeError("state must be a normalized Orchestra adjudication state")
         expected_questions = OrchestraJevQuestionBuilder().build(state)
         if not isinstance(questions, Mapping) or canonical_json_bytes(dict(questions)) != canonical_json_bytes(
@@ -69,15 +75,22 @@ class TypeSafeJevAdapter(JevAdjudicationProvider):
         ):
             raise ValueError("questions must be the complete local Orchestra catalog")
         if (
-            not isinstance(request_projection, tuple)
+            type(request_projection) is not tuple
             or len(request_projection) != 2
-            or not isinstance(request_projection[0], bytes)
-            or not isinstance(request_projection[1], JevProviderRequestProjectionContext)
+            or type(request_projection[0]) is not bytes
+            or type(request_projection[1]) is not JevProjectionMappingContext
         ):
             raise JevProviderFailure("REQUEST_CONTRACT_REJECTED")
         request_body, projection_context = request_projection
         try:
-            projected_request = projection_context.validate_request(state, request_body)
+            projected_request, _, _ = _validated_projection_request(
+                state, request_body, projection_context
+            )
+            validated_request_body = canonical_json_bytes(projected_request)
+            if validated_request_body != request_body:
+                raise ValueError("projection bytes are not canonical")
+            request_body = validated_request_body
+            _consume_jev_projection_authorization(projection_context)
         except Exception:
             raise JevProviderFailure("REQUEST_CONTRACT_REJECTED") from None
         if not isinstance(projected_request, Mapping):
@@ -190,8 +203,8 @@ class TypeSafeJevAdapter(JevAdjudicationProvider):
             projected_response = JevProviderResponse(
                 model, state.candidate_binding, tuple(typed_answers)
             )
-            return projection_context.restore_response(
-                state, request_body, projected_response
+            return reverse_map_offline_jev_provider_response(
+                state, request_body, projection_context, projected_response
             )
         except (TypeError, ValueError):
             raise JevProviderFailure("RESPONSE_CONTRACT_INCOMPATIBLE", status) from None

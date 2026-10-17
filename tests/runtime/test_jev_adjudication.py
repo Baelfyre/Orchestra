@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import io
 import json
+from concurrent.futures import ThreadPoolExecutor
+from threading import Barrier
 from typing import Any, Mapping
 import urllib.error
 
@@ -13,6 +15,7 @@ from orchestra_runtime.application.use_cases.jev_adjudication import (
 )
 from orchestra_runtime.application.services.jev_provider_projection import (
     JEV_PROVIDER_PROJECTION_CONTRACT,
+    JevProjectionMappingContext,
     ReviewedJevTextBundle,
     build_offline_jev_provider_projection_with_context,
 )
@@ -37,6 +40,7 @@ from orchestra_runtime.domain.adaptive.jev_adjudication import (
     OrchestraJevQuestionBuilder,
 )
 from orchestra_runtime.infrastructure.providers.typesafe_jev import TypeSafeJevAdapter
+from orchestra_runtime.shared.canonicalization import canonical_json_bytes
 
 
 _CANDIDATE = {
@@ -489,6 +493,156 @@ def test_adapter_rejects_projection_bytes_not_bound_to_local_context() -> None:
     assert caught.value.code == "REQUEST_CONTRACT_REJECTED"
     assert credential_calls == []
     assert opener.requests == []
+
+
+def test_adapter_rejects_raw_state_projection_from_caller_context() -> None:
+    state = _state()
+    questions = OrchestraJevQuestionBuilder().build(state)
+    request_body = canonical_json_bytes(
+        {"state": state.to_payload(), "model": "jev-latest", "questions": questions}
+    )
+    credential_calls: list[bool] = []
+    opener = _Opener(_Response(_answer_payload(questions)))
+
+    class _MaliciousContext(JevProviderRequestProjectionContext):
+        def validate_request(self, supplied_state, supplied_bytes):
+            return json.loads(supplied_bytes.decode("utf-8"))
+
+        def restore_response(self, supplied_state, supplied_bytes, response):
+            return response
+
+    adapter = TypeSafeJevAdapter(
+        lambda: credential_calls.append(True) or "test-only-not-a-secret",
+        opener=opener,
+    )
+    with pytest.raises(JevProviderFailure) as caught:
+        adapter.adjudicate(
+            state,
+            questions,
+            request_projection=(request_body, _MaliciousContext()),
+        )
+
+    assert caught.value.code == "REQUEST_CONTRACT_REJECTED"
+    assert credential_calls == []
+    assert opener.requests == []
+
+
+def test_adapter_rejects_unregistered_projection_context() -> None:
+    state = _state()
+    questions = OrchestraJevQuestionBuilder().build(state)
+    request_body, _ = _request_projection(state)
+    forged_context = object.__new__(JevProjectionMappingContext)
+    credential_calls: list[bool] = []
+    opener = _Opener(_Response(_answer_payload(json.loads(request_body)["questions"])))
+    adapter = TypeSafeJevAdapter(
+        lambda: credential_calls.append(True) or "test-only-not-a-secret",
+        opener=opener,
+    )
+
+    with pytest.raises(JevProviderFailure) as caught:
+        adapter.adjudicate(
+            state,
+            questions,
+            request_projection=(request_body, forged_context),
+        )
+
+    assert caught.value.code == "REQUEST_CONTRACT_REJECTED"
+    assert credential_calls == []
+    assert opener.requests == []
+
+
+def test_adapter_uses_trusted_projection_functions_not_context_methods(monkeypatch) -> None:
+    state = _state()
+    questions = OrchestraJevQuestionBuilder().build(state)
+    request_body, context = _request_projection(state)
+    projected_questions = json.loads(request_body)["questions"]
+    opener = _Opener(_Response(_answer_payload(projected_questions)))
+    adapter = TypeSafeJevAdapter(lambda: "test-only-not-a-secret", opener=opener)
+    monkeypatch.setattr(
+        JevProjectionMappingContext,
+        "validate_request",
+        lambda self, supplied_state, supplied_bytes: json.loads(
+            canonical_json_bytes(
+                {"state": state.to_payload(), "model": "jev-latest", "questions": questions}
+            ).decode("utf-8")
+        ),
+    )
+    monkeypatch.setattr(
+        JevProjectionMappingContext,
+        "restore_response",
+        lambda self, supplied_state, supplied_bytes, response: response,
+    )
+
+    response = adapter.adjudicate(
+        state,
+        questions,
+        request_projection=(request_body, context),
+    )
+
+    sent = opener.requests[0][0].data
+    sent_payload = json.loads(sent)
+    assert sent == request_body
+    assert "candidate" not in sent_payload["state"]
+    assert "evidence_refs" not in json.dumps(sent_payload["state"])
+    assert "F-001" not in sent.decode("utf-8")
+    assert response.candidate_binding == state.candidate_binding
+
+
+def test_adapter_projection_authorization_rejects_sequential_replay_before_credentials() -> None:
+    state = _state()
+    questions = OrchestraJevQuestionBuilder().build(state)
+    request_projection = _request_projection(state)
+    credential_calls: list[bool] = []
+    opener = _Opener(
+        _Response(_answer_payload(json.loads(request_projection[0])["questions"]))
+    )
+    adapter = TypeSafeJevAdapter(
+        lambda: credential_calls.append(True) or "test-only-not-a-secret",
+        opener=opener,
+    )
+
+    adapter.adjudicate(state, questions, request_projection=request_projection)
+    with pytest.raises(JevProviderFailure) as caught:
+        adapter.adjudicate(state, questions, request_projection=request_projection)
+
+    assert caught.value.code == "REQUEST_CONTRACT_REJECTED"
+    assert credential_calls == [True]
+    assert len(opener.requests) == 1
+
+
+def test_adapter_projection_authorization_rejects_concurrent_replay() -> None:
+    state = _state()
+    questions = OrchestraJevQuestionBuilder().build(state)
+    request_projection = _request_projection(state)
+    credential_calls: list[bool] = []
+    opener = _Opener(
+        _Response(_answer_payload(json.loads(request_projection[0])["questions"]))
+    )
+    adapter = TypeSafeJevAdapter(
+        lambda: credential_calls.append(True) or "test-only-not-a-secret",
+        opener=opener,
+    )
+    start = Barrier(2)
+
+    def attempt():
+        start.wait()
+        try:
+            return adapter.adjudicate(
+                state, questions, request_projection=request_projection
+            )
+        except JevProviderFailure as error:
+            return error
+
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        outcomes = [executor.submit(attempt) for _ in range(2)]
+        results = [future.result() for future in outcomes]
+
+    assert sum(isinstance(result, JevProviderFailure) for result in results) == 1
+    failure = next(result for result in results if isinstance(result, JevProviderFailure))
+    assert failure.code == "REQUEST_CONTRACT_REJECTED"
+    assert sum(not isinstance(result, JevProviderFailure) for result in results) == 1
+    assert credential_calls == [True]
+    assert len(opener.requests) == 1
 
 
 def test_adapter_rejects_incomplete_local_catalog_before_network_call() -> None:
@@ -1406,13 +1560,15 @@ def test_typesafe_adapter_rejects_non_http_success_contract_failures() -> None:
         _adjudicate_with_projection(adapter, state, questions)
     assert caught.value.code == "RESPONSE_CONTRACT_INCOMPATIBLE"
 
+    failed_opener = _Opener(RuntimeError("synthetic opener failure"))
     adapter = TypeSafeJevAdapter(
         lambda: "test-only-not-a-secret",
-        opener=_Opener(RuntimeError("synthetic opener failure")),
+        opener=failed_opener,
     )
     with pytest.raises(JevProviderFailure) as caught:
         _adjudicate_with_projection(adapter, state, questions)
     assert caught.value.code == "TRANSPORT_FAILURE"
+    assert len(failed_opener.requests) == 1
 
 
 def test_typesafe_adapter_unknown_local_question_type_fails_closed(monkeypatch) -> None:

@@ -505,12 +505,13 @@ def test_semantic_projection_is_opt_in_registry_scoped_and_round_trips() -> None
             source["verification"], projected["verification"]
         )
     }
-    assert ("finding", finding_aliases["F-001"], "F-001") in context._semantic_aliases
+    context_record = projection._projection_context_record(context)
+    assert ("finding", finding_aliases["F-001"], "F-001") in context_record.semantic_aliases
     assert (
         "verification",
         verification_aliases["V-001"],
         "V-001",
-    ) in context._semantic_aliases
+    ) in context_record.semantic_aliases
     assert "F-001" not in repr(context)
     with pytest.raises(TypeError):
         pickle.dumps(context)
@@ -568,7 +569,7 @@ def test_semantic_projection_is_opt_in_registry_scoped_and_round_trips() -> None
     assert restored.candidate_binding == state.candidate_binding
     assert set(restored_answers) == set(OrchestraJevQuestionBuilder().build(state))
     assert restored_answers["recommended_mitigation"].selected == dict(
-        context._mitigation_ids
+        context_record.mitigation_ids
     )[recommendation_alias]
     _assert_error(
         "REQUEST_MISMATCH",

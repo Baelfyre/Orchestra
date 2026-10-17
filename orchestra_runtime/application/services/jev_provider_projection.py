@@ -11,12 +11,14 @@ separate requirements. This module never dispatches or persists a request.
 from __future__ import annotations
 
 from collections.abc import Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import hashlib
 import hmac
 import json
 import re
+from threading import Lock, RLock
 from typing import Any
+from weakref import WeakKeyDictionary
 
 from ...domain.adaptive.assurance import EVIDENCE_LAYERS
 from ...domain.adaptive.jev_adjudication import (
@@ -104,6 +106,7 @@ _ERROR_CODES = frozenset(
         "INVALID_EVIDENCE_ANNOTATIONS",
         "INVALID_SOURCE_STATE",
         "INVALID_SOURCE_VALUE",
+        "PROJECTION_ALREADY_USED",
         "REQUEST_MISMATCH",
         "REVIEWED_TEXT_INCOMPLETE",
         "REVIEWED_TEXT_LIMIT_EXCEEDED",
@@ -175,21 +178,7 @@ class ReviewedJevEvidenceAnnotations:
 class JevProjectionMappingContext(JevProviderRequestProjectionContext):
     """Transient local state; deliberately has no normal serializer or value repr."""
 
-    __slots__ = (
-        "_candidate_binding",
-        "_source_scope_hash",
-        "_request_digest",
-        "_question_ids",
-        "_mitigation_ids",
-        "_semantic_aliases",
-    )
-
-    _candidate_binding: JevCandidateBinding
-    _source_scope_hash: str
-    _request_digest: str
-    _question_ids: tuple[tuple[str, str], ...]
-    _mitigation_ids: tuple[tuple[str, str], ...]
-    _semantic_aliases: tuple[tuple[str, str, str], ...]
+    __slots__ = ("__weakref__",)
 
     def __init__(self) -> None:
         raise TypeError("projection mapping context is created by the local projection builder")
@@ -222,6 +211,23 @@ class JevProjectionMappingContext(JevProviderRequestProjectionContext):
         return reverse_map_offline_jev_provider_response(
             state, request_bytes, self, response
         )
+
+
+@dataclass(slots=True)
+class _ProjectionContextRecord:
+    candidate_binding: JevCandidateBinding
+    request_digest: str
+    question_ids: tuple[tuple[str, str], ...]
+    mitigation_ids: tuple[tuple[str, str], ...]
+    semantic_aliases: tuple[tuple[str, str, str], ...]
+    authorization_lock: Any = field(default_factory=Lock, repr=False)
+    authorization_consumed: bool = False
+
+
+_PROJECTION_CONTEXTS: WeakKeyDictionary[
+    JevProjectionMappingContext, _ProjectionContextRecord
+] = WeakKeyDictionary()
+_PROJECTION_CONTEXTS_LOCK = RLock()
 
 
 class JevProjectionError(ValueError):
@@ -529,17 +535,41 @@ def _new_mapping_context(
     semantic_aliases: tuple[tuple[str, str, str], ...] = (),
 ) -> JevProjectionMappingContext:
     context = object.__new__(JevProjectionMappingContext)
-    object.__setattr__(context, "_candidate_binding", state.candidate_binding)
-    object.__setattr__(context, "_source_scope_hash", state.candidate_binding.scope_hash)
-    object.__setattr__(context, "_request_digest", hashlib.sha256(request_bytes).hexdigest())
-    object.__setattr__(context, "_question_ids", question_ids)
-    object.__setattr__(
-        context,
-        "_mitigation_ids",
-        tuple(sorted((alias, source_id) for source_id, alias in mitigation_aliases.items())),
+    record = _ProjectionContextRecord(
+        candidate_binding=state.candidate_binding,
+        request_digest=hashlib.sha256(request_bytes).hexdigest(),
+        question_ids=question_ids,
+        mitigation_ids=tuple(
+            sorted((alias, source_id) for source_id, alias in mitigation_aliases.items())
+        ),
+        semantic_aliases=semantic_aliases,
     )
-    object.__setattr__(context, "_semantic_aliases", semantic_aliases)
+    with _PROJECTION_CONTEXTS_LOCK:
+        _PROJECTION_CONTEXTS[context] = record
     return context
+
+
+def _projection_context_record(
+    context: JevProviderRequestProjectionContext,
+) -> _ProjectionContextRecord:
+    if type(context) is not JevProjectionMappingContext:
+        _fail("INVALID_MAPPING_CONTEXT")
+    with _PROJECTION_CONTEXTS_LOCK:
+        record = _PROJECTION_CONTEXTS.get(context)
+    if record is None:
+        _fail("INVALID_MAPPING_CONTEXT")
+    return record
+
+
+def _consume_jev_projection_authorization(
+    context: JevProviderRequestProjectionContext,
+) -> None:
+    """Consume one local execution authorization; protection is process-local only."""
+    record = _projection_context_record(context)
+    with record.authorization_lock:
+        if record.authorization_consumed:
+            _fail("PROJECTION_ALREADY_USED")
+        record.authorization_consumed = True
 
 
 def build_offline_jev_provider_projection_with_context(
@@ -774,9 +804,9 @@ def build_offline_jev_provider_semantic_projection_with_context(
         }
         semantic_request_bytes = canonical_json_bytes(request)
         _enforce_request_size(semantic_request_bytes)
+        base_record = _projection_context_record(base_context)
         mitigation_aliases = {
-            source_id: alias
-            for alias, source_id in base_context._mitigation_ids
+            source_id: alias for alias, source_id in base_record.mitigation_ids
         }
         semantic_aliases = tuple(
             sorted(
@@ -793,7 +823,7 @@ def build_offline_jev_provider_semantic_projection_with_context(
         return semantic_request_bytes, _new_mapping_context(
             state,
             semantic_request_bytes,
-            base_context._question_ids,
+            base_record.question_ids,
             mitigation_aliases,
             semantic_aliases,
         )
@@ -803,26 +833,82 @@ def build_offline_jev_provider_semantic_projection_with_context(
         raise JevProjectionError("INVALID_INPUT") from None
 
 
+_PROHIBITED_PROJECTION_KEYS = frozenset(
+    {"candidate", "repository", "commit", "tree", "scope_hash", "evidence_refs", "source_path", "artifact_path"}
+)
+_PROJECTED_STATE_FIELDS = frozenset(
+    {
+        "contract",
+        "task",
+        "findings",
+        "verification",
+        "overseer_assessment",
+        "mitigation_options",
+        "dissent",
+        "constraints",
+    }
+)
+
+
+def _contains_prohibited_projection_content(value: object, blocked: set[str]) -> bool:
+    if isinstance(value, dict):
+        return any(
+            isinstance(key, str)
+            and (
+                key.casefold() in _PROHIBITED_PROJECTION_KEYS
+                or key.casefold() in blocked
+            )
+            or _contains_prohibited_projection_content(item, blocked)
+            for key, item in value.items()
+        )
+    if isinstance(value, list):
+        return any(_contains_prohibited_projection_content(item, blocked) for item in value)
+    return isinstance(value, str) and value.casefold() in blocked
+
+
+def _validate_provider_projection_bytes(
+    state: Mapping[str, Any], request: Mapping[str, Any]
+) -> None:
+    try:
+        projected_state = request["state"]
+        contract = projected_state.get("contract") if isinstance(projected_state, dict) else None
+        if contract == JEV_PROVIDER_PROJECTION_CONTRACT:
+            expected_fields = _PROJECTED_STATE_FIELDS
+        elif contract == JEV_PROVIDER_SEMANTIC_PROJECTION_CONTRACT:
+            expected_fields = _PROJECTED_STATE_FIELDS | {"semantic_context"}
+        else:
+            _fail("INVALID_MAPPING_CONTEXT")
+        if not isinstance(projected_state, dict) or set(projected_state) != expected_fields:
+            _fail("INVALID_MAPPING_CONTEXT")
+        blocked = {
+            value.casefold()
+            for value in _blocked_source_values(state)
+            if value
+        }
+        if _contains_prohibited_projection_content(request, blocked):
+            _fail("INVALID_MAPPING_CONTEXT")
+    except (TypeError, UnicodeError, ValueError):
+        _fail("INVALID_MAPPING_CONTEXT")
+
+
 def _validated_projection_request(
     state: OrchestraJevAdjudicationState,
     request_bytes: bytes,
     mapping_context: JevProjectionMappingContext,
 ) -> tuple[dict[str, Any], dict[str, str], dict[str, str]]:
-    if not isinstance(state, OrchestraJevAdjudicationState):
+    if type(state) is not OrchestraJevAdjudicationState:
         _fail("INVALID_SOURCE_STATE")
     if type(mapping_context) is not JevProjectionMappingContext:
         _fail("INVALID_MAPPING_CONTEXT")
-    if not isinstance(request_bytes, bytes):
+    if type(request_bytes) is not bytes:
         _fail("INVALID_INPUT")
 
+    record = _projection_context_record(mapping_context)
     source = state.to_payload()
-    if (
-        state.candidate_binding != mapping_context._candidate_binding
-        or source["candidate"]["scope_hash"] != mapping_context._source_scope_hash
-    ):
+    if state.candidate_binding != record.candidate_binding:
         _fail("SOURCE_STATE_MISMATCH")
     request_digest = hashlib.sha256(request_bytes).hexdigest()
-    if not hmac.compare_digest(request_digest, mapping_context._request_digest):
+    if not hmac.compare_digest(request_digest, record.request_digest):
         _fail("REQUEST_MISMATCH")
 
     try:
@@ -836,16 +922,17 @@ def _validated_projection_request(
         or not isinstance(request["questions"], dict)
     ):
         _fail("INVALID_MAPPING_CONTEXT")
+    _validate_provider_projection_bytes(source, request)
 
     projected_questions = request["questions"]
     source_questions = OrchestraJevQuestionBuilder().build(state)
-    question_ids = dict(mapping_context._question_ids)
-    mitigation_ids = dict(mapping_context._mitigation_ids)
+    question_ids = dict(record.question_ids)
+    mitigation_ids = dict(record.mitigation_ids)
     try:
         valid_mappings = (
-            len(question_ids) == len(mapping_context._question_ids)
+            len(question_ids) == len(record.question_ids)
             and len(set(question_ids.values())) == len(question_ids)
-            and len(mitigation_ids) == len(mapping_context._mitigation_ids)
+            and len(mitigation_ids) == len(record.mitigation_ids)
             and len(set(mitigation_ids.values())) == len(mitigation_ids)
             and set(question_ids) == set(projected_questions)
             and set(question_ids.values()) == set(source_questions)
@@ -949,7 +1036,7 @@ def reverse_map_offline_jev_provider_response(
 
         return JevProviderResponse(
             response.model,
-            mapping_context._candidate_binding,
+            _projection_context_record(mapping_context).candidate_binding,
             tuple(mapped_answers),
         )
     except JevProjectionError:
