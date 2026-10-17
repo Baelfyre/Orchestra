@@ -11,7 +11,16 @@ from typing import Any, Callable, Mapping
 import urllib.error
 import urllib.request
 
-from ...application.ports.jev_adjudication import JevAdjudicationProvider
+from ...application.ports.jev_adjudication import (
+    JevAdjudicationProvider,
+    JevProviderRequestProjectionContext,
+)
+from ...application.services.jev_provider_projection import (
+    JevProjectionMappingContext,
+    _consume_jev_projection_authorization,
+    _validated_projection_request,
+    reverse_map_offline_jev_provider_response,
+)
 from ...domain.adaptive.jev_adjudication import (
     JevChoiceAnswer,
     JevNoulAnswer,
@@ -55,15 +64,44 @@ class TypeSafeJevAdapter(JevAdjudicationProvider):
         self,
         state: OrchestraJevAdjudicationState,
         questions: Mapping[str, Mapping[str, object]],
+        *,
+        request_projection: tuple[bytes, JevProviderRequestProjectionContext] | None = None,
     ) -> JevProviderResponse:
-        if not isinstance(state, OrchestraJevAdjudicationState):
+        if type(state) is not OrchestraJevAdjudicationState:
             raise TypeError("state must be a normalized Orchestra adjudication state")
-        state_payload = state.to_payload()
         expected_questions = OrchestraJevQuestionBuilder().build(state)
         if not isinstance(questions, Mapping) or canonical_json_bytes(dict(questions)) != canonical_json_bytes(
             expected_questions
         ):
             raise ValueError("questions must be the complete local Orchestra catalog")
+        if (
+            type(request_projection) is not tuple
+            or len(request_projection) != 2
+            or type(request_projection[0]) is not bytes
+            or type(request_projection[1]) is not JevProjectionMappingContext
+        ):
+            raise JevProviderFailure("REQUEST_CONTRACT_REJECTED")
+        request_body, projection_context = request_projection
+        try:
+            projected_request, _, _ = _validated_projection_request(
+                state, request_body, projection_context
+            )
+            validated_request_body = canonical_json_bytes(projected_request)
+            if validated_request_body != request_body:
+                raise ValueError("projection bytes are not canonical")
+            request_body = validated_request_body
+            _consume_jev_projection_authorization(projection_context)
+        except Exception:
+            raise JevProviderFailure("REQUEST_CONTRACT_REJECTED") from None
+        if not isinstance(projected_request, Mapping):
+            raise JevProviderFailure("REQUEST_CONTRACT_REJECTED")
+        projected_questions = projected_request.get("questions")
+        if (
+            set(projected_request) != {"state", "model", "questions"}
+            or projected_request.get("model") != TYPESAFE_JEV_MODEL
+            or not isinstance(projected_questions, dict)
+        ):
+            raise JevProviderFailure("REQUEST_CONTRACT_REJECTED")
         try:
             credential = self._credential_provider()
         except Exception:
@@ -71,9 +109,6 @@ class TypeSafeJevAdapter(JevAdjudicationProvider):
         if not isinstance(credential, str) or not credential:
             raise JevProviderFailure("CREDENTIAL_UNAVAILABLE")
 
-        request_body = canonical_json_bytes(
-            {"state": state_payload, "model": TYPESAFE_JEV_MODEL, "questions": dict(questions)}
-        )
         request = urllib.request.Request(
             TYPESAFE_SYSTEM_ONE_ENDPOINT,
             data=request_body,
@@ -122,12 +157,12 @@ class TypeSafeJevAdapter(JevAdjudicationProvider):
         answers = data.get("answers")
         if not isinstance(model, str) or not isinstance(answers, dict):
             raise JevProviderFailure("RESPONSE_CONTRACT_INCOMPATIBLE", status)
-        if set(answers) != set(questions):
+        if set(answers) != set(projected_questions):
             raise JevProviderFailure("RESPONSE_CONTRACT_INCOMPATIBLE", status)
 
         typed_answers: list[tuple[str, JevNoulAnswer | JevChoiceAnswer]] = []
         try:
-            for question_id, question in questions.items():
+            for question_id, question in projected_questions.items():
                 answer = answers[question_id]
                 if not isinstance(question, Mapping) or not isinstance(answer, dict):
                     raise ValueError
@@ -165,7 +200,12 @@ class TypeSafeJevAdapter(JevAdjudicationProvider):
         except (KeyError, TypeError, ValueError):
             raise JevProviderFailure("RESPONSE_CONTRACT_INCOMPATIBLE", status) from None
         try:
-            return JevProviderResponse(model, state.candidate_binding, tuple(typed_answers))
+            projected_response = JevProviderResponse(
+                model, state.candidate_binding, tuple(typed_answers)
+            )
+            return reverse_map_offline_jev_provider_response(
+                state, request_body, projection_context, projected_response
+            )
         except (TypeError, ValueError):
             raise JevProviderFailure("RESPONSE_CONTRACT_INCOMPATIBLE", status) from None
 

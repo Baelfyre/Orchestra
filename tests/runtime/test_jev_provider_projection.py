@@ -162,7 +162,7 @@ def _state_with_cardinalities(
             "producer": "Cipher",
             "finding_id": f"F-{((index - 1) % finding_count) + 1:03}",
             "result": "CONFIRMED",
-            "evidence_refs": [],
+            "evidence_refs": [f"synthetic-verification-evidence-{index:03}"],
         }
         for index in range(1, verification_count + 1)
     ]
@@ -505,12 +505,13 @@ def test_semantic_projection_is_opt_in_registry_scoped_and_round_trips() -> None
             source["verification"], projected["verification"]
         )
     }
-    assert ("finding", finding_aliases["F-001"], "F-001") in context._semantic_aliases
+    context_record = projection._projection_context_record(context)
+    assert ("finding", finding_aliases["F-001"], "F-001") in context_record.semantic_aliases
     assert (
         "verification",
         verification_aliases["V-001"],
         "V-001",
-    ) in context._semantic_aliases
+    ) in context_record.semantic_aliases
     assert "F-001" not in repr(context)
     with pytest.raises(TypeError):
         pickle.dumps(context)
@@ -568,7 +569,7 @@ def test_semantic_projection_is_opt_in_registry_scoped_and_round_trips() -> None
     assert restored.candidate_binding == state.candidate_binding
     assert set(restored_answers) == set(OrchestraJevQuestionBuilder().build(state))
     assert restored_answers["recommended_mitigation"].selected == dict(
-        context._mitigation_ids
+        context_record.mitigation_ids
     )[recommendation_alias]
     _assert_error(
         "REQUEST_MISMATCH",
@@ -1177,8 +1178,8 @@ def test_projection_rejects_unknown_source_producers_and_values() -> None:
     )
     unknown_status = _state(first_status="PRIVATE_NOTE")
     _assert_error("INVALID_SOURCE_VALUE", lambda: _build(unknown_status))
-    unknown_result = _state(first_result="PRIVATE_RESULT")
-    _assert_error("INVALID_SOURCE_VALUE", lambda: _build(unknown_result))
+    with pytest.raises(ValueError, match="verification.result is unsupported"):
+        _state(first_result="PRIVATE_RESULT")
 
 
 def test_projection_rejects_unknown_state_fields_and_empty_mitigation_context() -> None:

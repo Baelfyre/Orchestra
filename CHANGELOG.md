@@ -1,3 +1,8 @@
+## Unreleased offline JEV validation pilot
+
+- Add a repeatable local pilot runner and fixed scenario catalog that reuse the existing JEV contracts and synthetic regressions. The runner blocks HTTP, DNS, and TCP dispatch in its test process and records sanitized per-session results outside the repository for later comparison.
+- Keep the V6 packet labeled as sanitized fixture replay, preserve all findings as `UNVERIFIED`, and leave R3-A host trust, live TypeSafe integration, and production JEV wiring unqualified or unavailable.
+
 ## Unreleased README and integration status clarification
 
 - Shorten the main README and link focused JEV local API, adaptive-memory and Scribe blueprint guides. Separate merged development features from published v1.11.0 capabilities; preserve BYOK consent, privacy, memory and specialist-authority limits.

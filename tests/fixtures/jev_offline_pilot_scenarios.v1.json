@@ -1,0 +1,239 @@
+{
+  "schema_version": "orchestra.jev-offline-pilot-scenarios.v1",
+  "pilot_window": {
+    "suggested_start": "2026-10-17",
+    "suggested_end": "2026-11-07",
+    "cadence": "manual weekly sessions"
+  },
+  "scenarios": [
+    {
+      "id": "single_specialist_routine",
+      "name": "Single mapped specialist route bypasses optional responsibility advice",
+      "test_ids": [
+        "tests/runtime/test_jev_responsibility_adjudication.py::test_clear_domain_mapped_single_owner_route_bypasses_optional_advice"
+      ],
+      "expected": {
+        "result": "NO_ADVICE",
+        "eligibility": "NOT_REQUIRED",
+        "rejection_reason": null
+      },
+      "response_provenance": "NO_PROVIDER_RESPONSE",
+      "evidence_refs": ["synthetic responsibility-adjudication unit inputs"],
+      "evidence_gap": "This validates the local ownership contract, not a production Conductor caller."
+    },
+    {
+      "id": "contested_specialist_ownership",
+      "name": "Contested cross-domain ownership remains non-authorizing advice",
+      "test_ids": [
+        "tests/runtime/test_jev_responsibility_adjudication.py::test_conductor_requested_contested_cross_domain_advice_remains_non_authorizing"
+      ],
+      "expected": {
+        "result": "OWNERSHIP_CONFLICT",
+        "eligibility": "ADVISORY_ONLY",
+        "rejection_reason": null
+      },
+      "response_provenance": "NO_PROVIDER_RESPONSE",
+      "evidence_refs": ["synthetic responsibility-adjudication unit inputs"],
+      "evidence_gap": "No real specialist execution or production routing is exercised."
+    },
+    {
+      "id": "conflicting_mitigation_recommendations",
+      "name": "Synthetic JEV choice coexists with specialist dissent",
+      "test_ids": [
+        "tests/runtime/test_jev_adjudication.py::test_synthetic_mitigation_conflict_preserves_dissent_without_authority"
+      ],
+      "expected": {
+        "result": "RECOMMENDATION_WITH_DISSENT_PRESERVED",
+        "eligibility": "ADVISORY_ONLY",
+        "rejection_reason": null
+      },
+      "response_provenance": "SYNTHETIC_TYPED_RESPONSE",
+      "evidence_refs": ["synthetic typed answer and synthetic specialist dissent"],
+      "evidence_gap": "No independent specialist judgment or actual model response is represented."
+    },
+    {
+      "id": "insufficient_or_unverified_evidence",
+      "name": "Unverified findings and incomplete assurance inputs block JEV",
+      "test_ids": [
+        "tests/runtime/test_jev_adjudication.py::test_application_blocks_when_upstream_evidence_is_missing_or_incomplete",
+        "tests/runtime/test_jev_adjudication.py::test_verification_requirement_is_optional_when_not_enabled",
+        "tests/runtime/test_jev_adjudication.py::test_verification_required_rejects_non_boolean_values",
+        "tests/runtime/test_jev_adjudication.py::test_use_case_defensive_runtime_contracts_and_unbound_lookup"
+      ],
+      "expected": {
+        "result": "UNVERIFIED_INPUT_BLOCKED; OPTIONAL_FLAG_MATRIX_ENFORCED",
+        "eligibility": "CASE_SPECIFIC_CONTRACT_MATRIX",
+        "rejection_reason": "UPSTREAM_EVIDENCE_OR_REQUIRED_VERIFICATION_MISSING"
+      },
+      "expected_cases": [
+        {"case": "UNVERIFIED_FINDING", "eligibility": "INELIGIBLE", "reason": "VERIFIED_FINDINGS_REQUIRED"},
+        {"case": "INCOMPLETE_VERIFICATION", "eligibility": "INELIGIBLE", "reason": "EMPIRICAL_VERIFICATION_INCOMPLETE"},
+        {"case": "verification_required_omitted_or_false", "eligibility": "OPTIONAL", "reason": null},
+        {"case": "verification_required_true_without_evidence", "eligibility": "INELIGIBLE", "reason": "EMPIRICAL_VERIFICATION_REQUIRED"},
+        {"case": "verification_required_non_boolean", "eligibility": "REJECTED", "reason": "INVALID_VERIFICATION_REQUIREMENT"}
+      ],
+      "response_provenance": "NO_PROVIDER_RESPONSE",
+      "evidence_refs": ["synthetic eligibility unit inputs"],
+      "evidence_gap": "This does not establish provenance for real upstream evidence."
+    },
+    {
+      "id": "original_v6_findings_unverified",
+      "name": "Sanitized V6 fixture preserves findings as UNVERIFIED",
+      "test_ids": [
+        "tests/runtime/test_jev_v6_handoff.py::test_real_v6_shape_maps_to_nine_sections_and_structured_gaps"
+      ],
+      "expected": {
+        "result": "FINDINGS_REMAIN_UNVERIFIED_STATE_NOT_CREATED",
+        "eligibility": "INELIGIBLE",
+        "rejection_reason": "SOURCE_EVIDENCE_AND_UPSTREAM_VERIFICATION_MISSING"
+      },
+      "response_provenance": "SANITIZED_FIXTURE_REPLAY",
+      "evidence_refs": [
+        "tests/fixtures/jev_v6_r2_packet.json",
+        "tests/fixtures/jev_v6_r2_manifest.json"
+      ],
+      "evidence_gap": "The original normalized V6 packet and linked source artifacts are not present; this is fixture replay, not real evidence ingestion."
+    },
+    {
+      "id": "stale_candidate_identity",
+      "name": "Stale candidate binding rejects advice before provider invocation",
+      "test_ids": [
+        "tests/runtime/test_jev_adjudication.py::test_application_does_not_call_provider_for_stale_candidate"
+      ],
+      "expected": {
+        "result": "JEV_ADVISORY_STALE_NO_PROVIDER_CALL",
+        "eligibility": "INELIGIBLE",
+        "rejection_reason": "CANDIDATE_BINDING_MISMATCH"
+      },
+      "response_provenance": "NO_PROVIDER_RESPONSE",
+      "evidence_refs": ["synthetic candidate-binding regression inputs"],
+      "evidence_gap": "Freshness is tested through the injected local binding provider; no host integration is exercised."
+    },
+    {
+      "id": "forged_candidate_binding",
+      "name": "Forged V6 candidate and packet bindings fail closed",
+      "test_ids": [
+        "tests/runtime/test_jev_v6_handoff.py::test_packet_hash_mismatch_fails_before_mapping",
+        "tests/runtime/test_jev_v6_handoff.py::test_candidate_identity_is_bound_to_trusted_evidence_and_git_facts",
+        "tests/runtime/test_jev_v6_handoff.py::test_packet_tree_mismatch_fails_closed_when_source_supplies_tree"
+      ],
+      "expected": {
+        "result": "FORGED_PACKET_OR_CANDIDATE_REJECTED_BEFORE_STATE_CREATION",
+        "eligibility": "INELIGIBLE",
+        "rejection_reason": "TRUSTED_PACKET_OR_CANDIDATE_BINDING_MISMATCH"
+      },
+      "response_provenance": "SANITIZED_FIXTURE_REPLAY",
+      "evidence_refs": [
+        "tests/fixtures/jev_v6_r2_packet.json",
+        "tests/fixtures/jev_v6_r2_manifest.json"
+      ],
+      "evidence_gap": "The tests bind to the checked-in fixture manifest; they do not provide a production host identity authority."
+    },
+    {
+      "id": "missing_host_trust_binding",
+      "name": "Unavailable trusted candidate binding fails closed",
+      "test_ids": [
+        "tests/runtime/test_jev_adjudication.py::test_use_case_defensive_runtime_contracts_and_unbound_lookup"
+      ],
+      "expected": {
+        "result": "JEV_ADVISORY_UNBOUND_NO_PROVIDER_CALL",
+        "eligibility": "INELIGIBLE",
+        "rejection_reason": "CURRENT_TRUSTED_BINDING_UNAVAILABLE"
+      },
+      "response_provenance": "NO_PROVIDER_RESPONSE",
+      "evidence_refs": ["synthetic missing-binding provider regression input"],
+      "evidence_gap": "Only the injected binding-port failure is tested; R3-A host trust remains UNQUALIFIED."
+    },
+    {
+      "id": "malformed_noul_choice_responses",
+      "name": "Malformed typed NOUL and Choice answers are rejected",
+      "test_ids": [
+        "tests/runtime/test_jev_adjudication.py::test_adapter_rejects_incomplete_or_malformed_typed_response"
+      ],
+      "expected": {
+        "result": "RESPONSE_CONTRACT_INCOMPATIBLE",
+        "eligibility": "UNAVAILABLE",
+        "rejection_reason": "MALFORMED_OR_INCOMPLETE_TYPED_RESPONSE"
+      },
+      "response_provenance": "FAKE_TRANSPORT_SYNTHETIC_RESPONSE",
+      "evidence_refs": ["synthetic malformed typed-response cases"],
+      "evidence_gap": "No live provider schema compatibility is established."
+    },
+    {
+      "id": "inconclusive_synthetic_recommendation",
+      "name": "NO_CLEAR_PREFERENCE stays inconclusive",
+      "test_ids": [
+        "tests/runtime/test_jev_adjudication.py::test_no_clear_preference_is_inconclusive_without_probability_thresholds"
+      ],
+      "expected": {
+        "result": "JEV_ADVISORY_INCONCLUSIVE",
+        "eligibility": "INCONCLUSIVE",
+        "rejection_reason": "NO_CLEAR_PREFERENCE"
+      },
+      "response_provenance": "SYNTHETIC_TYPED_RESPONSE",
+      "evidence_refs": ["synthetic NO_CLEAR_PREFERENCE answer"],
+      "evidence_gap": "The response is locally constructed and is not a model judgment."
+    },
+    {
+      "id": "sanitized_request_integrity",
+      "name": "Fake transport receives only exact sanitized projection bytes",
+      "test_ids": [
+        "tests/runtime/test_jev_adjudication.py::test_system_one_adapter_sends_one_exact_request_and_preserves_native_typed_values"
+      ],
+      "expected": {
+        "result": "REQUEST_BYTES_MATCH_APPROVED_PROJECTION",
+        "eligibility": "SANITIZED_FAKE_TRANSPORT_ONLY",
+        "rejection_reason": null
+      },
+      "response_provenance": "FAKE_TRANSPORT_SYNTHETIC_RESPONSE",
+      "evidence_refs": ["in-memory fake opener and projection byte equality assertion"],
+      "evidence_gap": "No real outbound request, provider response, user consent, or vendor behavior is exercised."
+    },
+    {
+      "id": "sequential_and_concurrent_replay_rejection",
+      "name": "Sequential and concurrent projection replay are rejected",
+      "test_ids": [
+        "tests/runtime/test_jev_adjudication.py::test_adapter_projection_authorization_rejects_sequential_replay_before_credentials",
+        "tests/runtime/test_jev_adjudication.py::test_adapter_projection_authorization_rejects_concurrent_replay"
+      ],
+      "expected": {
+        "result": "REPLAY_REJECTED",
+        "eligibility": "ONE_USE_PROJECTION_CONTEXT",
+        "rejection_reason": "PROJECTION_CONTEXT_ALREADY_CONSUMED"
+      },
+      "response_provenance": "FAKE_TRANSPORT_SYNTHETIC_RESPONSE",
+      "evidence_refs": ["synthetic sequential and barrier-synchronized concurrent replay tests"],
+      "evidence_gap": "Concurrency coverage is local-process only; no distributed host or provider behavior is implied."
+    },
+    {
+      "id": "transport_failure_without_retry",
+      "name": "Synthetic transport failure is sanitized and not retried",
+      "test_ids": [
+        "tests/runtime/test_jev_adjudication.py::test_adapter_maps_auth_schema_and_transport_failures_without_retry_or_body_disclosure"
+      ],
+      "expected": {
+        "result": "TRANSPORT_FAILURE_ONE_ATTEMPT",
+        "eligibility": "UNAVAILABLE",
+        "rejection_reason": "TRANSPORT_FAILURE"
+      },
+      "response_provenance": "FAKE_TRANSPORT_SYNTHETIC_RESPONSE",
+      "evidence_refs": ["synthetic timeout and HTTP error opener cases"],
+      "evidence_gap": "No live network behavior or provider retry policy is exercised."
+    },
+    {
+      "id": "advisory_authority_boundary",
+      "name": "Advisory result cannot authorize or lower risk",
+      "test_ids": [
+        "tests/runtime/test_jev_adjudication.py::test_advisory_result_has_no_governance_or_execution_authority_and_cannot_lower_risk"
+      ],
+      "expected": {
+        "result": "MAY_AUTHORIZE_FALSE_AUTHORITY_EFFECT_NONE",
+        "eligibility": "ADVISORY_ONLY",
+        "rejection_reason": null
+      },
+      "response_provenance": "SYNTHETIC_TYPED_RESPONSE",
+      "evidence_refs": ["synthetic advisory-result unit inputs"],
+      "evidence_gap": "This preserves the local contract; it does not qualify host trust or release authority."
+    }
+  ]
+}

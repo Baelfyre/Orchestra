@@ -33,16 +33,16 @@ Conductor chooses the smallest useful specialist route. [Compatibility](docs/set
 | **Assurance and governance** | Evidence-based validation and human-controlled boundaries | Passing tests never authorizes a merge |
 | **Adaptive memory** | Local observations, opt-in read-only context, and shadow learning | No automatic authority, preference promotion, or private cloud sync |
 | **Adaptive discovery** | Scoped capability-memory contracts and offline planning | Live host discovery and trusted private-memory writes are not activated |
-| **JEV advisory** | Optional TypeSafe System One advisory components | Public local API/BYOK onboarding is not qualified |
+| **JEV advisory** | Optional TypeSafe System One advisory components | Live TypeSafe/BYOK onboarding, R3-A host trust, and production wiring remain unqualified |
 | **Scribe documentation** | Requirements, as-built reconstruction, drift reconciliation, and an optional six-dimension blueprint | Scribe does not approve technical decisions or impose six mandatory files |
 
 These are **source and maturity claims**, not a guarantee that each capability is enabled in every host or in the latest published release.
 
 ## JEV and local API keys
 
-JEV supports non-binding engineering advice when independently reviewed alternatives exist. The TypeSafe adapter and offline data-minimization components exist, but there is **no verified general-purpose end-user BYOK activation flow**. Ordinary Orchestra use needs no JEV key. Never paste credentials into prompts or tracked project files.
+JEV supports non-binding engineering advice when independently reviewed alternatives exist. The v1.12 offline pilot provides a repeatable 14-scenario pytest replay with explicitly labeled synthetic responses and evidence-gap recording. It makes no TypeSafe calls or actual JEV inference. The original V6 packet and source artifacts are absent, so replayed V6 findings remain **UNVERIFIED**. Live TypeSafe integration, R3-A host trust, and production wiring remain unqualified. The TypeSafe adapter and offline data-minimization components exist, but there is **no verified general-purpose end-user BYOK activation flow**. Ordinary Orchestra use needs no JEV key. Never paste credentials into prompts or tracked project files.
 
-Read [JEV local API setup and limitations](docs/setup/JEV_LOCAL_API.md) and the [decision hierarchy](docs/architecture/EVIDENCE_GATED_DECISION_HIERARCHY.md).
+Read the [offline pilot instructions](docs/setup/JEV_OFFLINE_PILOT.md), [JEV local API setup and limitations](docs/setup/JEV_LOCAL_API.md), and the [decision hierarchy](docs/architecture/EVIDENCE_GATED_DECISION_HIERARCHY.md).
 
 ## Adaptive memory
 

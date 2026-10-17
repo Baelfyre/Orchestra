@@ -1,0 +1,100 @@
+{
+  "task_id": "ORCHESTRA-V1.12-V6-R2-IMPECCABLE-COMPLETION",
+  "purpose": "Prepared normalized input for a future offline JEV comparison. This packet does not authorize or execute JEV.",
+  "candidate": {
+    "repository": "candidate://sinag",
+    "branch": "main",
+    "head": "2b6b611fa39418777a3e3353adcde64e5d3a8eee",
+    "worktree_status_at_preflight": "clean"
+  },
+  "shared_evidence": [
+    {
+      "id": "V4-MANIFEST",
+      "path": "evidence://V4-MANIFEST",
+      "sha256": "c430baddcad5bf38ddcc1511b3ea58ea94db3fe9c52348026cb4e55dcafc656a",
+      "scope": "20 V4 evidence files; all manifest entries previously verified."
+    },
+    {
+      "id": "V4-BROWSER-OBSERVATIONS",
+      "path": "evidence://V4-BROWSER-OBSERVATIONS",
+      "sha256": "d2175f7f0b76b24ef33ad244c11a479cd6948713e664ed9d82e3f15b8f52202d",
+      "scope": "Previously captured local rendered flow, viewport measurements, browser console, and blocked-font observation."
+    },
+    {
+      "id": "V5-REVIEW-PACKET",
+      "path": "evidence://V5-REVIEW-PACKET",
+      "sha256": "7c0582dd8208ae599625ec6279b9fb0793c260a10f87d30b4d49f231aa6bc342",
+      "scope": "Prior evidence-index and analyst packet; not an independent specialist opinion."
+    }
+  ],
+  "specialist_inputs": [
+    {
+      "id": "CLOAK-HOST-NATIVE",
+      "path": "evidence://CLOAK-HOST-NATIVE",
+      "sha256": "62f61c1383af9a5616645a6fd430bc687cdc18282b21a48ce0e56971a3d1157b",
+      "invocation_count": 1,
+      "finding_ids": ["C1", "C2", "C3"],
+      "attribution": "One host-native Cloak skill pass; not Orchestra MCP or a separate model process. Exact model slug was not exposed."
+    },
+    {
+      "id": "IMPECCABLE-V6-R2",
+      "path": "evidence://IMPECCABLE-V6-R2",
+      "invocation_count": 1,
+      "assessment_agents": ["assessment-a", "assessment-b"],
+      "detector_invocations": 1,
+      "detector_result": "EMPTY_FINDING_ARRAY",
+      "browser_navigation": "NOT_PERFORMED",
+      "attribution": "Separate Assessment A design review and Assessment B detector-only context. Agent model identities were not exposed."
+    }
+  ],
+  "normalized_findings": [
+    {
+      "id": "C1-I1",
+      "classification": "OBSERVED_CONDITIONAL_VISUAL_DEFECT",
+      "severity": "P1; MAJOR_WHEN_MATERIAL_SYMBOLS_FONT_UNAVAILABLE",
+      "confidence": "HIGH_FOR_CAPTURED_FONT-UNAVAILABLE_STATE; ORDINARY_ONLINE_BEHAVIOR_UNTESTED",
+      "claim": "V4 captures show Material Symbol names such as home, arrow_forward, monitoring, volume_up, flag, and help_outline rendered as words when the Google Fonts stylesheet is blocked.",
+      "acceptance": "With external Google Fonts blocked, no raw icon ligature is visible at 320px, 390px, or desktop; action labels remain readable."
+    },
+    {
+      "id": "C2-I3",
+      "classification": "OBSERVED_TERMINOLOGY_CANDIDATE",
+      "severity": "P2; MINOR_IN_CLOAK_REVIEW",
+      "confidence": "HIGH_THAT_TEXT_IS_RENDERED; LEARNER_IMPACT_UNTESTED",
+      "claim": "Question badges show technical values such as prediction and event_sequence. These are plain labels, not icon ligatures.",
+      "acceptance": "Decide approved learner-facing labels separately; no enum or snake-case identifier should appear unless expressly approved."
+    },
+    {
+      "id": "I2",
+      "classification": "DISPUTED_SCREENSHOT_VISUAL_OBSERVATION",
+      "severity": "P1_CANDIDATE",
+      "confidence": "MEDIUM; CURRENT_RENDER_UNVERIFIED",
+      "claim": "Assessment A sees apparent right-edge clipping in the V4 390px home screenshot, while V4/Cloak report no horizontal document overflow at 390px. Do not treat as confirmed overflow.",
+      "acceptance": "On a future authorized render, inspect visible bounds and document scroll width at 320px and 390px."
+    },
+    {
+      "id": "I4",
+      "classification": "COPY_REQUIREMENT_DIVERGENCE",
+      "severity": "P2_CANDIDATE",
+      "confidence": "HIGH_FOR_SOURCE_AND_CAPTURED_WORDING; IMPACT_UNTESTED",
+      "claim": "Home journey and navigation labels differ from cited UI semantics and practice-track coverage.",
+      "acceptance": "Human/product owner clarifies whether the home label names the full journey or a selected language pair and confirms entry-point wording."
+    },
+    {
+      "id": "I-DETECTOR",
+      "classification": "STATIC_DETECTOR_NO_FINDINGS",
+      "severity": "NONE_REPORTED",
+      "confidence": "HIGH_FOR_ONE_STAGED_INDEX_HTML_SCAN_ONLY",
+      "claim": "Impeccable detector emitted [] with exit status 0 for staged index.html; it did not evaluate rendered states or accessibility.",
+      "acceptance": "Retain as narrow static evidence; do not use as proof that the UI has no defects."
+    }
+  ],
+  "comparison_status": "PARTIAL_AGREEMENT_WITH_DISPUTED_VISUAL_CLIPPING",
+  "readiness": "READY_FOR_OFFLINE_JEV_COMPARISON_WITH_EXPLICIT_EVIDENCE_LIMITS; JEV_NOT_EXECUTED",
+  "restrictions": {
+    "offline_only": true,
+    "no_provider_calls": true,
+    "no_source_or_repository_writes": true,
+    "no_release_or_implementation_authority": true
+  }
+}
