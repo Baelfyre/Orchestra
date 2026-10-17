@@ -282,6 +282,8 @@ def run_pilot(
     old_dont_write_bytecode = sys.dont_write_bytecode
     os.environ["PYTEST_DISABLE_PLUGIN_AUTOLOAD"] = "1"
     sys.dont_write_bytecode = True
+    if str(ROOT) not in sys.path:
+        sys.path.insert(0, str(ROOT))
     started = time.perf_counter()
     cpu_started = time.process_time()
     runner_error = None
