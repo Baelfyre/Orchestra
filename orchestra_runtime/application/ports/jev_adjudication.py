@@ -5,6 +5,7 @@
 
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
 from typing import Mapping, Protocol, runtime_checkable
 
 from ...domain.adaptive.jev_adjudication import (
@@ -23,6 +24,29 @@ class JevAdjudicationProvider(Protocol):
     ) -> JevProviderResponse: ...
 
 
+class JevProviderRequestProjectionContext(ABC):
+    """Local capability for validating and restoring one sanitized provider request."""
+
+    __slots__ = ()
+
+    @abstractmethod
+    def validate_request(
+        self,
+        state: OrchestraJevAdjudicationState,
+        request_bytes: bytes,
+    ) -> Mapping[str, object]:
+        raise NotImplementedError
+
+    @abstractmethod
+    def restore_response(
+        self,
+        state: OrchestraJevAdjudicationState,
+        request_bytes: bytes,
+        response: JevProviderResponse,
+    ) -> JevProviderResponse:
+        raise NotImplementedError
+
+
 @runtime_checkable
 class CurrentJevCandidateBindingProvider(Protocol):
     """Trusted host lookup used before and after one advisory provider request."""
@@ -30,4 +54,8 @@ class CurrentJevCandidateBindingProvider(Protocol):
     def current_binding(self) -> JevCandidateBinding | None: ...
 
 
-__all__ = ["CurrentJevCandidateBindingProvider", "JevAdjudicationProvider"]
+__all__ = [
+    "CurrentJevCandidateBindingProvider",
+    "JevAdjudicationProvider",
+    "JevProviderRequestProjectionContext",
+]

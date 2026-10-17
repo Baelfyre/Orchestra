@@ -2506,7 +2506,8 @@
         "machine/schemas/evidence-gated-decision-hierarchy.v1.schema.json"
       ],
       "human_sources": [
-        "docs/architecture/EVIDENCE_GATED_DECISION_HIERARCHY.md"
+        "docs/architecture/EVIDENCE_GATED_DECISION_HIERARCHY.md",
+        "docs/setup/JEV_OFFLINE_PILOT.md"
       ],
       "runtime_surfaces": [
         "orchestra_runtime/domain/adaptive/jev_adjudication.py",
@@ -2515,8 +2516,25 @@
       ],
       "validation_surface": [
         "tests/runtime/test_jev_adjudication.py",
-        "tests/runtime/test_evidence_gated_decision_hierarchy.py"
+        "tests/runtime/test_evidence_gated_decision_hierarchy.py",
+        "tests/runtime/test_jev_offline_pilot.py"
       ],
+      "offline_validation_pilot": {
+        "status": "PREPARED_NOT_QUALIFIED",
+        "runner": "scripts/jev_offline_pilot.py",
+        "scenario_catalog": "tests/fixtures/jev_offline_pilot_scenarios.v1.json",
+        "test_surface": "tests/runtime/test_jev_offline_pilot.py",
+        "execution": "LOCAL_DETERMINISTIC_PYTEST_REPLAY",
+        "synthetic_response_provenance": "EXPLICITLY_LABELED",
+        "external_provider_calls": 0,
+        "actual_jev_inference": false,
+        "formal_weekly_sessions_completed": 0,
+        "original_v6_source_evidence": "NOT_PRESENT; FIXTURE_REPLAY_ONLY; FINDINGS_REMAIN_UNVERIFIED",
+        "r3_a_host_trust": "UNQUALIFIED",
+        "r3_b_c": "UNCHANGED_NO_NEW_QUALIFICATION",
+        "production_jev_wiring": "NOT_WIRED",
+        "authority_note": "Offline replay validates deterministic local contracts only. Synthetic responses are not independent model judgments, fixture replay is not original V6 evidence, and pilot results do not qualify live TypeSafe integration, R3-A host trust, production wiring, assurance, governance, execution, release, or publication."
+      },
       "response_contract": "Successful responses require nonnegative integer usage.input_tokens and usage.output_tokens and complete typed answers. Choice answers require finite confidence and a maximum-probability selection; ties are valid. Unsupported top-level metadata is ignored.",
       "authority_note": "JEV remains optional advisory input only. Its output is not assurance evidence, governance approval, execution authority, or an Arbiter transition, and it cannot override required verification or activate a provider automatically."
     }
@@ -2998,6 +3016,9 @@
     "jev_offline_semantic_projection_v2_tests": "tests/runtime/test_jev_provider_projection.py",
     "jev_offline_projection_resource_bounds": "orchestra_runtime/application/services/jev_provider_projection.py",
     "jev_offline_projection_resource_bounds_tests": "tests/runtime/test_jev_provider_projection.py",
+    "jev_offline_pilot_runner": "scripts/jev_offline_pilot.py",
+    "jev_offline_pilot_scenarios": "tests/fixtures/jev_offline_pilot_scenarios.v1.json",
+    "jev_offline_pilot_tests": "tests/runtime/test_jev_offline_pilot.py",
     "capability_coverage": "orchestra_runtime/domain/adaptive/capability_coverage.py",
     "capability_coverage_tests": "tests/runtime/test_capability_coverage.py",
     "capability_inventory": "orchestra_runtime/domain/adaptive/capability_inventory.py",
@@ -3153,6 +3174,9 @@
     "scribe_specialist_upgrade_ssu": "docs/project/SCRIBE_SPECIALIST_UPGRADE_SSU.md",
     "scribe_predevelopment_blueprint_guide": "docs/project/PRE_DEVELOPMENT_BLUEPRINT_GUIDE.md",
     "jev_local_api_guide": "docs/setup/JEV_LOCAL_API.md",
+    "jev_offline_pilot_guide": "docs/setup/JEV_OFFLINE_PILOT.md",
+    "release_candidate_v1_12_0_offline_jev_pilot": "docs/releases/v1.12.0-offline-jev-pilot-release-candidate.md",
+    "release_readiness_v1_12_0_offline_jev": "docs/validation/V1_12_0_RELEASE_READINESS_EVIDENCE.md",
     "adaptive_memory_user_guide": "docs/setup/ADAPTIVE_MEMORY_GUIDE.md",
     "scribe_domain_narrative_guide": "skills/scribe/DOMAIN_NARRATIVE_MODELING_GUIDE.md",
     "scribe_requirements_traceability_guide": "skills/scribe/REQUIREMENTS_TRACEABILITY_GUIDE.md",

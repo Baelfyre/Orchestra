@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import io
 import json
+from concurrent.futures import ThreadPoolExecutor
+from threading import Barrier
 from typing import Any, Mapping
 import urllib.error
 
@@ -10,6 +12,15 @@ import pytest
 from orchestra_runtime.application.use_cases.jev_adjudication import (
     JevAdjudicationEligibilityError,
     OrchestraJevAdjudicationUseCase,
+)
+from orchestra_runtime.application.services.jev_provider_projection import (
+    JEV_PROVIDER_PROJECTION_CONTRACT,
+    JevProjectionMappingContext,
+    ReviewedJevTextBundle,
+    build_offline_jev_provider_projection_with_context,
+)
+from orchestra_runtime.application.ports.jev_adjudication import (
+    JevProviderRequestProjectionContext,
 )
 from orchestra_runtime.domain.adaptive.jev_adjudication import (
     JEV_ADVISORY_INCONCLUSIVE,
@@ -29,6 +40,7 @@ from orchestra_runtime.domain.adaptive.jev_adjudication import (
     OrchestraJevQuestionBuilder,
 )
 from orchestra_runtime.infrastructure.providers.typesafe_jev import TypeSafeJevAdapter
+from orchestra_runtime.shared.canonicalization import canonical_json_bytes
 
 
 _CANDIDATE = {
@@ -91,6 +103,63 @@ def _state(**overrides: object) -> OrchestraJevAdjudicationState:
     }
     sections.update(overrides)
     return OrchestraJevAdjudicationState.create(**sections)
+
+
+def _request_projection(
+    state: OrchestraJevAdjudicationState,
+) -> tuple[bytes, JevProviderRequestProjectionContext]:
+    source = state.to_payload()
+    reviewed_text = ReviewedJevTextBundle(
+        source_scope_hash=source["candidate"]["scope_hash"],
+        task_domain="synthetic review task",
+        finding_summaries={
+            item["id"]: f"Reviewed synthetic finding {index}."
+            for index, item in enumerate(source["findings"], start=1)
+        },
+        overseer_assessment={
+            "evidence_sufficiency": "Reviewed synthetic evidence supports comparison.",
+            "impact": "The synthetic impact is moderate.",
+            "residual_risk_context": "A bounded residual risk remains in the synthetic scenario.",
+        },
+        mitigation_summaries={
+            item["id"]: f"Reviewed synthetic mitigation {index}."
+            for index, item in enumerate(source["mitigation_options"], start=1)
+        },
+        mitigation_tradeoffs={
+            item["id"]: [
+                f"Reviewed synthetic tradeoff {index}-{tradeoff}."
+                for tradeoff, _ in enumerate(item["tradeoffs"], start=1)
+            ]
+            for index, item in enumerate(source["mitigation_options"], start=1)
+        },
+        dissent_summaries={
+            item["id"]: f"Reviewed synthetic dissent {index}."
+            for index, item in enumerate(source["dissent"], start=1)
+        },
+    )
+    return build_offline_jev_provider_projection_with_context(
+        state, reviewed_text, nonce="synthetic-typesafe-adapter-test"
+    )
+
+
+def _projected_questions(state: OrchestraJevAdjudicationState) -> Mapping[str, Mapping[str, object]]:
+    return json.loads(_request_projection(state)[0])["questions"]
+
+
+def _adjudicate_with_projection(adapter, state, questions):
+    return adapter.adjudicate(
+        state,
+        questions,
+        request_projection=_request_projection(state),
+    )
+
+
+def _projected_mitigation_ids(payload: Mapping[str, Any]) -> list[str]:
+    return [
+        key
+        for key in payload["answers"]["recommended_mitigation"]["probabilities"]
+        if key != "NO_CLEAR_PREFERENCE"
+    ]
 
 
 def _typed_response(
@@ -339,27 +408,37 @@ def test_system_one_adapter_sends_one_exact_request_and_preserves_native_typed_v
 ) -> None:
     state = _state()
     questions = OrchestraJevQuestionBuilder().build(state)
+    request_projection = _request_projection(state)
+    projected_request_bytes, _projection_context = request_projection
+    projected_questions = json.loads(projected_request_bytes)["questions"]
     fake_secret = "test-only-not-a-secret"
-    payload = _answer_payload(questions)
+    payload = _answer_payload(projected_questions)
     payload["request_id"] = "synthetic-ignored-metadata"
     payload["provider_metadata"] = {"trace": "synthetic-only"}
     opener = _Opener(_Response(payload))
     adapter = TypeSafeJevAdapter(lambda: fake_secret, opener=opener)
-    response = adapter.adjudicate(state, questions)
+    response = adapter.adjudicate(
+        state, questions, request_projection=request_projection
+    )
 
     assert len(opener.requests) == 1
     request, timeout = opener.requests[0]
     request_payload = json.loads(request.data)
+    serialized_state = json.dumps(request_payload["state"])
     assert request.full_url == "https://api.typesafe.ai/v1/systemone"
     assert request.get_method() == "POST"
     assert request.get_header("Authorization") == f"Bearer {fake_secret}"
     assert request.get_header("Content-type") == "application/json"
     assert timeout == 60
+    assert request.data == projected_request_bytes
     assert set(request_payload) == {"state", "model", "questions"}
     assert "Authorization" not in request_payload
-    assert request_payload["state"] == state.to_payload()
+    assert request_payload["state"]["contract"] == JEV_PROVIDER_PROJECTION_CONTRACT
+    assert "candidate" not in request_payload["state"]
+    assert "evidence_refs" not in serialized_state
+    assert "F-001" not in request.data.decode("utf-8")
     assert request_payload["model"] == "jev-latest"
-    assert request_payload["questions"] == questions
+    assert request_payload["questions"] == projected_questions
     assert response.model == "jev-1.13.0"
     assert len(response.answers) == 12
     assert response.answer_map()["material_unresolved_uncertainty"].probability == 0.65
@@ -373,6 +452,197 @@ def test_system_one_adapter_sends_one_exact_request_and_preserves_native_typed_v
     assert not hasattr(response, "usage")
     assert not hasattr(response, "request_id")
     assert not caplog.records
+
+
+def test_adapter_rejects_direct_raw_state_serialization_before_credential_or_network() -> None:
+    state = _state()
+    questions = OrchestraJevQuestionBuilder().build(state)
+    credential_calls: list[bool] = []
+    opener = _Opener(_Response(_answer_payload(_projected_questions(state))))
+    adapter = TypeSafeJevAdapter(
+        lambda: credential_calls.append(True) or "test-only-not-a-secret",
+        opener=opener,
+    )
+
+    with pytest.raises(JevProviderFailure) as caught:
+        adapter.adjudicate(state, questions)
+
+    assert caught.value.code == "REQUEST_CONTRACT_REJECTED"
+    assert credential_calls == []
+    assert opener.requests == []
+
+
+def test_adapter_rejects_projection_bytes_not_bound_to_local_context() -> None:
+    state = _state()
+    questions = OrchestraJevQuestionBuilder().build(state)
+    request_bytes, context = _request_projection(state)
+    credential_calls: list[bool] = []
+    opener = _Opener(_Response(_answer_payload(json.loads(request_bytes)["questions"])))
+    adapter = TypeSafeJevAdapter(
+        lambda: credential_calls.append(True) or "test-only-not-a-secret",
+        opener=opener,
+    )
+
+    with pytest.raises(JevProviderFailure) as caught:
+        adapter.adjudicate(
+            state,
+            questions,
+            request_projection=(request_bytes + b" ", context),
+        )
+
+    assert caught.value.code == "REQUEST_CONTRACT_REJECTED"
+    assert credential_calls == []
+    assert opener.requests == []
+
+
+def test_adapter_rejects_raw_state_projection_from_caller_context() -> None:
+    state = _state()
+    questions = OrchestraJevQuestionBuilder().build(state)
+    request_body = canonical_json_bytes(
+        {"state": state.to_payload(), "model": "jev-latest", "questions": questions}
+    )
+    credential_calls: list[bool] = []
+    opener = _Opener(_Response(_answer_payload(questions)))
+
+    class _MaliciousContext(JevProviderRequestProjectionContext):
+        def validate_request(self, supplied_state, supplied_bytes):
+            return json.loads(supplied_bytes.decode("utf-8"))
+
+        def restore_response(self, supplied_state, supplied_bytes, response):
+            return response
+
+    adapter = TypeSafeJevAdapter(
+        lambda: credential_calls.append(True) or "test-only-not-a-secret",
+        opener=opener,
+    )
+    with pytest.raises(JevProviderFailure) as caught:
+        adapter.adjudicate(
+            state,
+            questions,
+            request_projection=(request_body, _MaliciousContext()),
+        )
+
+    assert caught.value.code == "REQUEST_CONTRACT_REJECTED"
+    assert credential_calls == []
+    assert opener.requests == []
+
+
+def test_adapter_rejects_unregistered_projection_context() -> None:
+    state = _state()
+    questions = OrchestraJevQuestionBuilder().build(state)
+    request_body, _ = _request_projection(state)
+    forged_context = object.__new__(JevProjectionMappingContext)
+    credential_calls: list[bool] = []
+    opener = _Opener(_Response(_answer_payload(json.loads(request_body)["questions"])))
+    adapter = TypeSafeJevAdapter(
+        lambda: credential_calls.append(True) or "test-only-not-a-secret",
+        opener=opener,
+    )
+
+    with pytest.raises(JevProviderFailure) as caught:
+        adapter.adjudicate(
+            state,
+            questions,
+            request_projection=(request_body, forged_context),
+        )
+
+    assert caught.value.code == "REQUEST_CONTRACT_REJECTED"
+    assert credential_calls == []
+    assert opener.requests == []
+
+
+def test_adapter_uses_trusted_projection_functions_not_context_methods(monkeypatch) -> None:
+    state = _state()
+    questions = OrchestraJevQuestionBuilder().build(state)
+    request_body, context = _request_projection(state)
+    projected_questions = json.loads(request_body)["questions"]
+    opener = _Opener(_Response(_answer_payload(projected_questions)))
+    adapter = TypeSafeJevAdapter(lambda: "test-only-not-a-secret", opener=opener)
+    monkeypatch.setattr(
+        JevProjectionMappingContext,
+        "validate_request",
+        lambda self, supplied_state, supplied_bytes: json.loads(
+            canonical_json_bytes(
+                {"state": state.to_payload(), "model": "jev-latest", "questions": questions}
+            ).decode("utf-8")
+        ),
+    )
+    monkeypatch.setattr(
+        JevProjectionMappingContext,
+        "restore_response",
+        lambda self, supplied_state, supplied_bytes, response: response,
+    )
+
+    response = adapter.adjudicate(
+        state,
+        questions,
+        request_projection=(request_body, context),
+    )
+
+    sent = opener.requests[0][0].data
+    sent_payload = json.loads(sent)
+    assert sent == request_body
+    assert "candidate" not in sent_payload["state"]
+    assert "evidence_refs" not in json.dumps(sent_payload["state"])
+    assert "F-001" not in sent.decode("utf-8")
+    assert response.candidate_binding == state.candidate_binding
+
+
+def test_adapter_projection_authorization_rejects_sequential_replay_before_credentials() -> None:
+    state = _state()
+    questions = OrchestraJevQuestionBuilder().build(state)
+    request_projection = _request_projection(state)
+    credential_calls: list[bool] = []
+    opener = _Opener(
+        _Response(_answer_payload(json.loads(request_projection[0])["questions"]))
+    )
+    adapter = TypeSafeJevAdapter(
+        lambda: credential_calls.append(True) or "test-only-not-a-secret",
+        opener=opener,
+    )
+
+    adapter.adjudicate(state, questions, request_projection=request_projection)
+    with pytest.raises(JevProviderFailure) as caught:
+        adapter.adjudicate(state, questions, request_projection=request_projection)
+
+    assert caught.value.code == "REQUEST_CONTRACT_REJECTED"
+    assert credential_calls == [True]
+    assert len(opener.requests) == 1
+
+
+def test_adapter_projection_authorization_rejects_concurrent_replay() -> None:
+    state = _state()
+    questions = OrchestraJevQuestionBuilder().build(state)
+    request_projection = _request_projection(state)
+    credential_calls: list[bool] = []
+    opener = _Opener(
+        _Response(_answer_payload(json.loads(request_projection[0])["questions"]))
+    )
+    adapter = TypeSafeJevAdapter(
+        lambda: credential_calls.append(True) or "test-only-not-a-secret",
+        opener=opener,
+    )
+    start = Barrier(2)
+
+    def attempt():
+        start.wait()
+        try:
+            return adapter.adjudicate(
+                state, questions, request_projection=request_projection
+            )
+        except JevProviderFailure as error:
+            return error
+
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        outcomes = [executor.submit(attempt) for _ in range(2)]
+        results = [future.result() for future in outcomes]
+
+    assert sum(isinstance(result, JevProviderFailure) for result in results) == 1
+    failure = next(result for result in results if isinstance(result, JevProviderFailure))
+    assert failure.code == "REQUEST_CONTRACT_REJECTED"
+    assert sum(not isinstance(result, JevProviderFailure) for result in results) == 1
+    assert credential_calls == [True]
+    assert len(opener.requests) == 1
 
 
 def test_adapter_rejects_incomplete_local_catalog_before_network_call() -> None:
@@ -389,12 +659,12 @@ def test_adapter_rejects_incomplete_local_catalog_before_network_call() -> None:
 def test_adapter_rejects_choice_without_required_confidence() -> None:
     state = _state()
     questions = OrchestraJevQuestionBuilder().build(state)
-    payload = _answer_payload(questions)
+    payload = _answer_payload(_projected_questions(state))
     choice = payload["answers"]["recommended_mitigation"]
     del choice["confidence"]
     adapter = TypeSafeJevAdapter(lambda: "test-only-not-a-secret", opener=_Opener(_Response(payload)))
     with pytest.raises(JevProviderFailure) as caught:
-        adapter.adjudicate(state, questions)
+        _adjudicate_with_projection(adapter, state, questions)
     assert caught.value.code == "RESPONSE_CONTRACT_INCOMPATIBLE"
 
 
@@ -414,11 +684,11 @@ def test_adapter_rejects_choice_without_required_confidence() -> None:
 def test_adapter_rejects_missing_or_invalid_usage_counts(mutate) -> None:
     state = _state()
     questions = OrchestraJevQuestionBuilder().build(state)
-    payload = _answer_payload(questions)
+    payload = _answer_payload(_projected_questions(state))
     mutate(payload)
     adapter = TypeSafeJevAdapter(lambda: "test-only-not-a-secret", opener=_Opener(_Response(payload)))
     with pytest.raises(JevProviderFailure) as caught:
-        adapter.adjudicate(state, questions)
+        _adjudicate_with_projection(adapter, state, questions)
     assert caught.value.code == "RESPONSE_CONTRACT_INCOMPATIBLE"
 
 
@@ -436,38 +706,48 @@ def test_adapter_rejects_missing_or_invalid_usage_counts(mutate) -> None:
 def test_adapter_rejects_invalid_choice_confidence(confidence: object) -> None:
     state = _state()
     questions = OrchestraJevQuestionBuilder().build(state)
-    payload = _answer_payload(questions)
+    payload = _answer_payload(_projected_questions(state))
     payload["answers"]["recommended_mitigation"]["confidence"] = confidence
     adapter = TypeSafeJevAdapter(lambda: "test-only-not-a-secret", opener=_Opener(_Response(payload)))
     with pytest.raises(JevProviderFailure) as caught:
-        adapter.adjudicate(state, questions)
+        _adjudicate_with_projection(adapter, state, questions)
     assert caught.value.code == "RESPONSE_CONTRACT_INCOMPATIBLE"
 
 
 def test_adapter_rejects_choice_that_is_not_a_maximum_probability_option() -> None:
     state = _state()
     questions = OrchestraJevQuestionBuilder().build(state)
-    payload = _answer_payload(questions)
+    payload = _answer_payload(_projected_questions(state))
+    mitigation_ids = _projected_mitigation_ids(payload)
     choice = payload["answers"]["recommended_mitigation"]
-    choice["choice"] = "M2"
-    choice["probabilities"] = {"M1": 0.5, "M2": 0.4, "NO_CLEAR_PREFERENCE": 0.1}
+    choice["choice"] = mitigation_ids[1]
+    choice["probabilities"] = {
+        mitigation_ids[0]: 0.5,
+        mitigation_ids[1]: 0.4,
+        "NO_CLEAR_PREFERENCE": 0.1,
+    }
     adapter = TypeSafeJevAdapter(lambda: "test-only-not-a-secret", opener=_Opener(_Response(payload)))
     with pytest.raises(JevProviderFailure) as caught:
-        adapter.adjudicate(state, questions)
+        _adjudicate_with_projection(adapter, state, questions)
     assert caught.value.code == "RESPONSE_CONTRACT_INCOMPATIBLE"
 
 
 def test_adapter_allows_equal_probability_choice_tie() -> None:
     state = _state()
     questions = OrchestraJevQuestionBuilder().build(state)
-    payload = _answer_payload(questions)
+    payload = _answer_payload(_projected_questions(state))
+    mitigation_ids = _projected_mitigation_ids(payload)
     payload["answers"]["recommended_mitigation"].update(
-        choice="M2",
+        choice=mitigation_ids[1],
         confidence=0.5,
-        probabilities={"M1": 0.5, "M2": 0.5, "NO_CLEAR_PREFERENCE": 0.0},
+        probabilities={
+            mitigation_ids[0]: 0.5,
+            mitigation_ids[1]: 0.5,
+            "NO_CLEAR_PREFERENCE": 0.0,
+        },
     )
     adapter = TypeSafeJevAdapter(lambda: "test-only-not-a-secret", opener=_Opener(_Response(payload)))
-    response = adapter.adjudicate(state, questions)
+    response = _adjudicate_with_projection(adapter, state, questions)
     answer = response.answer_map()["recommended_mitigation"]
     assert answer.selected == "M2"
     assert answer.probabilities == (("M1", 0.5), ("M2", 0.5), ("NO_CLEAR_PREFERENCE", 0.0))
@@ -476,11 +756,11 @@ def test_adapter_allows_equal_probability_choice_tie() -> None:
 def test_adapter_rejects_score_answers_for_current_catalog() -> None:
     state = _state()
     questions = OrchestraJevQuestionBuilder().build(state)
-    payload = _answer_payload(questions)
+    payload = _answer_payload(_projected_questions(state))
     payload["answers"]["material_unresolved_uncertainty"] = {"type": "score", "score": 0.65}
     adapter = TypeSafeJevAdapter(lambda: "test-only-not-a-secret", opener=_Opener(_Response(payload)))
     with pytest.raises(JevProviderFailure) as caught:
-        adapter.adjudicate(state, questions)
+        _adjudicate_with_projection(adapter, state, questions)
     assert caught.value.code == "RESPONSE_CONTRACT_INCOMPATIBLE"
 
 
@@ -491,9 +771,15 @@ def test_adapter_rejects_score_answers_for_current_catalog() -> None:
         lambda payload: payload["answers"]["material_specialist_dissent"].update(type="choice"),
         lambda payload: payload["answers"]["material_unresolved_uncertainty"].update(noul=float("nan")),
         lambda payload: payload["answers"]["recommended_mitigation"].update(choice="UNSUPPLIED"),
-        lambda payload: payload["answers"]["recommended_mitigation"]["probabilities"].pop("M2"),
+        lambda payload: payload["answers"]["recommended_mitigation"]["probabilities"].pop(
+            _projected_mitigation_ids(payload)[1]
+        ),
         lambda payload: payload["answers"]["recommended_mitigation"]["probabilities"].update(
-            M1=0.5, M2=0.25, NO_CLEAR_PREFERENCE=0.0
+            {
+                _projected_mitigation_ids(payload)[0]: 0.5,
+                _projected_mitigation_ids(payload)[1]: 0.25,
+                "NO_CLEAR_PREFERENCE": 0.0,
+            }
         ),
         lambda payload: payload["answers"].update(
             unknown_question={"type": "noul", "noul": 0.5}
@@ -504,11 +790,11 @@ def test_adapter_rejects_score_answers_for_current_catalog() -> None:
 def test_adapter_rejects_incomplete_or_malformed_typed_response(mutate) -> None:
     state = _state()
     questions = OrchestraJevQuestionBuilder().build(state)
-    payload = _answer_payload(questions)
+    payload = _answer_payload(_projected_questions(state))
     mutate(payload)
     adapter = TypeSafeJevAdapter(lambda: "test-only-not-a-secret", opener=_Opener(_Response(payload)))
     with pytest.raises(JevProviderFailure) as caught:
-        adapter.adjudicate(state, questions)
+        _adjudicate_with_projection(adapter, state, questions)
     assert caught.value.code == "RESPONSE_CONTRACT_INCOMPATIBLE"
 
 
@@ -519,7 +805,7 @@ def test_adapter_bounds_response_body_before_json_parsing() -> None:
     adapter = TypeSafeJevAdapter(lambda: "test-only-not-a-secret", opener=_Opener(response))
 
     with pytest.raises(JevProviderFailure) as caught:
-        adapter.adjudicate(state, questions)
+        _adjudicate_with_projection(adapter, state, questions)
 
     assert caught.value.code == "RESPONSE_CONTRACT_INCOMPATIBLE"
     assert caught.value.http_status == 200
@@ -538,7 +824,7 @@ def test_adapter_maps_auth_schema_and_transport_failures_without_retry_or_body_d
         opener = _Opener(exception)
         adapter = TypeSafeJevAdapter(lambda: "test-only-not-a-secret", opener=opener)
         with pytest.raises(JevProviderFailure) as caught:
-            adapter.adjudicate(state, questions)
+            _adjudicate_with_projection(adapter, state, questions)
         assert caught.value.code == code
         assert caught.value.http_status in (None, 401, 422)
         assert len(opener.requests) == 1
@@ -550,7 +836,7 @@ def test_unavailable_credential_is_not_loaded_from_environment_or_serialized() -
     questions = OrchestraJevQuestionBuilder().build(state)
     adapter = TypeSafeJevAdapter(lambda: "")
     with pytest.raises(JevProviderFailure) as caught:
-        adapter.adjudicate(state, questions)
+        _adjudicate_with_projection(adapter, state, questions)
     assert caught.value.code == "CREDENTIAL_UNAVAILABLE"
     assert "TYPESAFE_API_KEY" not in adapter.__dict__
 
@@ -578,6 +864,32 @@ def test_interpreter_preserves_uncertainty_dissent_assumption_and_all_choice_dis
     assert serialized["answers"]["strongest_residual_risk"]["probabilities"]["SECURITY_RISK"] == 1.0
     assert serialized["model_provenance"]["resolved_model"] == "jev-1.13.0"
     assert serialized["task"] == {"risk_level": "MEDIUM", "assurance_depth": "STANDARD"}
+
+
+def test_synthetic_mitigation_conflict_preserves_dissent_without_authority() -> None:
+    state = _state(
+        dissent=[
+            {
+                "id": "D-002",
+                "producer": "Clockwork",
+                "summary": "Specialist recommends M2 because it reduces future maintenance cost.",
+                "evidence_refs": ["E-003"],
+            }
+        ]
+    )
+    before = state.to_payload()
+    questions = OrchestraJevQuestionBuilder().build(state)
+    response = _typed_response(questions, state.candidate_binding, recommendation="M1")
+
+    result = OrchestraJevInterpreter().interpret(state, response, state.candidate_binding)
+    serialized = result.to_dict()
+
+    assert result.advisory_state == JEV_ADVISORY_RECOMMENDATION_AVAILABLE
+    assert result.recommendation == "M1"
+    assert state.to_payload() == before
+    assert "recommends M2" in state.to_payload()["dissent"][0]["summary"]
+    assert serialized["may_authorize"] is False
+    assert serialized["authority_effect"] == "NONE"
 
 
 def test_no_clear_preference_is_inconclusive_without_probability_thresholds() -> None:
@@ -701,7 +1013,10 @@ def test_application_makes_one_call_only_after_upstream_is_ready() -> None:
     [
         ({"findings": [{**_FINDING, "status": "UNVERIFIED"}], "verification": []}, "VERIFIED_FINDINGS_REQUIRED"),
         ({"overseer_assessment": None}, "OVERSEER_ASSESSMENT_REQUIRED"),
+        ({"verification": [{**_VERIFICATION, "result": "INCOMPLETE"}]}, "EMPIRICAL_VERIFICATION_INCOMPLETE"),
+        ({"verification": [{**_VERIFICATION, "result": "NOT_STARTED"}]}, "EMPIRICAL_VERIFICATION_INCOMPLETE"),
         ({"verification": [{**_VERIFICATION, "result": "PENDING"}]}, "EMPIRICAL_VERIFICATION_INCOMPLETE"),
+        ({"verification": [{**_VERIFICATION, "result": "RUNNING"}]}, "EMPIRICAL_VERIFICATION_INCOMPLETE"),
     ],
 )
 def test_application_blocks_when_upstream_evidence_is_missing_or_incomplete(
@@ -802,9 +1117,9 @@ def test_advisory_result_has_no_governance_or_execution_authority_and_cannot_low
 def test_type_safe_adapter_does_not_persist_the_authorization_header() -> None:
     state = _state()
     questions = OrchestraJevQuestionBuilder().build(state)
-    opener = _Opener(_Response(_answer_payload(questions)))
+    opener = _Opener(_Response(_answer_payload(_projected_questions(state))))
     adapter = TypeSafeJevAdapter(lambda: "test-only-not-a-secret", opener=opener)
-    response = adapter.adjudicate(state, questions)
+    response = _adjudicate_with_projection(adapter, state, questions)
     assert "Authorization" not in adapter.__dict__
     assert all("Authorization" not in answer.to_dict() for _, answer in response.answers)
 
@@ -894,6 +1209,7 @@ def test_state_nested_contract_rejections_cover_defensive_branches() -> None:
     reject(lambda p: p.__setitem__("verification", [{}]))
     reject(lambda p: p["verification"].append(dict(p["verification"][0])))
     reject(lambda p: p["verification"][0].update(finding_id="F-UNKNOWN"))
+    reject(lambda p: p["verification"][0].update(producer=""))
     reject(lambda p: p.__setitem__("mitigation_options", [{}]))
     reject(lambda p: p["mitigation_options"][0].update(addresses=["F-UNKNOWN"]))
     reject(lambda p: p.__setitem__("dissent", ["not-a-record"]))
@@ -950,30 +1266,63 @@ def test_create_string_list_and_eligibility_guards() -> None:
         with pytest.raises(ValueError):
             jev._validate_string_list(value, "synthetic", nonempty=nonempty)
 
-    class _EligibilityState:
-        def to_payload(self):
-            return {
-                "findings": [
-                    {
-                        "id": "F-001",
-                        "status": "VERIFIED",
-                        "verification_required": True,
-                    }
-                ],
-                "verification": [],
-                "overseer_assessment": {
-                    "evidence_sufficiency": "SUFFICIENT",
-                    "impact": "MEDIUM",
-                },
-            }
-
+    state = _state(
+        findings=[{**_FINDING, "verification_required": True}],
+        verification=[],
+    )
+    use_case, provider = _use_case(state)
     with pytest.raises(JevAdjudicationEligibilityError) as caught:
-        jev.validate_jev_adjudication_eligibility(_EligibilityState())
+        use_case.execute(state)
 
     assert caught.value.code == "EMPIRICAL_VERIFICATION_REQUIRED"
+    assert state.to_payload()["findings"][0]["verification_required"] is True
+    assert provider.calls == []
 
     with pytest.raises(TypeError):
         OrchestraJevQuestionBuilder().build(object())
+
+
+@pytest.mark.parametrize("flag", [None, False])
+def test_verification_requirement_is_optional_when_not_enabled(flag: bool | None) -> None:
+    finding = dict(_FINDING)
+    if flag is not None:
+        finding["verification_required"] = flag
+    state = _state(findings=[finding], verification=[])
+    use_case, provider = _use_case(state)
+    result = use_case.execute(state)
+    assert result.advisory_state == JEV_ADVISORY_RECOMMENDATION_AVAILABLE
+    assert len(provider.calls) == 1
+
+
+@pytest.mark.parametrize("value", [1, "true", None])
+def test_verification_required_rejects_non_boolean_values(value: object) -> None:
+    with pytest.raises(ValueError, match="verification_required"):
+        _state(findings=[{**_FINDING, "verification_required": value}])
+
+
+@pytest.mark.parametrize("result", ["NOT_CONFIRMED", "PRIVATE_RESULT", "confirmed"])
+def test_verification_rejects_unsupported_results(result: str) -> None:
+    with pytest.raises(ValueError, match="verification.result is unsupported"):
+        _state(verification=[{**_VERIFICATION, "result": result}])
+
+
+def test_confirmed_verification_requires_supporting_evidence() -> None:
+    with pytest.raises(ValueError, match="verification.evidence_refs"):
+        _state(verification=[{**_VERIFICATION, "evidence_refs": []}])
+
+
+def test_conflicting_verification_records_fail_closed_before_provider_call() -> None:
+    state = _state(
+        verification=[
+            _VERIFICATION,
+            {**_VERIFICATION, "id": "V-002", "result": "PENDING"},
+        ]
+    )
+    use_case, provider = _use_case(state)
+    with pytest.raises(JevAdjudicationEligibilityError) as caught:
+        use_case.execute(state)
+    assert caught.value.code == "EMPIRICAL_VERIFICATION_INCOMPLETE"
+    assert provider.calls == []
 
 
 def test_typed_answer_and_provider_response_guards() -> None:
@@ -1162,7 +1511,7 @@ def test_typesafe_adapter_constructor_and_local_input_guards() -> None:
 
     adapter = TypeSafeJevAdapter(
         lambda: "test-only-not-a-secret",
-        opener=_Opener(_Response(_answer_payload(questions))),
+        opener=_Opener(_Response(_answer_payload(_projected_questions(state)))),
     )
 
     with pytest.raises(TypeError):
@@ -1173,25 +1522,26 @@ def test_typesafe_adapter_constructor_and_local_input_guards() -> None:
 
     adapter = TypeSafeJevAdapter(
         broken_credential,
-        opener=_Opener(_Response(_answer_payload(questions))),
+        opener=_Opener(_Response(_answer_payload(_projected_questions(state)))),
     )
     with pytest.raises(JevProviderFailure) as caught:
-        adapter.adjudicate(state, questions)
+        _adjudicate_with_projection(adapter, state, questions)
     assert caught.value.code == "CREDENTIAL_UNAVAILABLE"
 
 
 def test_typesafe_adapter_rejects_non_http_success_contract_failures() -> None:
     state = _state()
     questions = OrchestraJevQuestionBuilder().build(state)
+    projected_questions = _projected_questions(state)
 
-    response = _Response(_answer_payload(questions))
+    response = _Response(_answer_payload(projected_questions))
     response.status = 500
     adapter = TypeSafeJevAdapter(
         lambda: "test-only-not-a-secret",
         opener=_Opener(response),
     )
     with pytest.raises(JevProviderFailure) as caught:
-        adapter.adjudicate(state, questions)
+        _adjudicate_with_projection(adapter, state, questions)
     assert caught.value.code == "TRANSPORT_FAILURE"
 
     adapter = TypeSafeJevAdapter(
@@ -1199,7 +1549,7 @@ def test_typesafe_adapter_rejects_non_http_success_contract_failures() -> None:
         opener=_Opener(_Response(b"{not-json")),
     )
     with pytest.raises(JevProviderFailure) as caught:
-        adapter.adjudicate(state, questions)
+        _adjudicate_with_projection(adapter, state, questions)
     assert caught.value.code == "RESPONSE_CONTRACT_INCOMPATIBLE"
 
     for payload in (
@@ -1212,10 +1562,10 @@ def test_typesafe_adapter_rejects_non_http_success_contract_failures() -> None:
             opener=_Opener(_Response(payload)),
         )
         with pytest.raises(JevProviderFailure) as caught:
-            adapter.adjudicate(state, questions)
+            _adjudicate_with_projection(adapter, state, questions)
         assert caught.value.code == "RESPONSE_CONTRACT_INCOMPATIBLE"
 
-    payload = _answer_payload(questions)
+    payload = _answer_payload(projected_questions)
     first_question = next(iter(payload["answers"]))
     payload["answers"][first_question] = None
     adapter = TypeSafeJevAdapter(
@@ -1223,31 +1573,34 @@ def test_typesafe_adapter_rejects_non_http_success_contract_failures() -> None:
         opener=_Opener(_Response(payload)),
     )
     with pytest.raises(JevProviderFailure) as caught:
-        adapter.adjudicate(state, questions)
+        _adjudicate_with_projection(adapter, state, questions)
     assert caught.value.code == "RESPONSE_CONTRACT_INCOMPATIBLE"
 
-    payload = _answer_payload(questions)
+    payload = _answer_payload(projected_questions)
     payload["answers"]["material_unresolved_uncertainty"]["noul"] = True
     adapter = TypeSafeJevAdapter(
         lambda: "test-only-not-a-secret",
         opener=_Opener(_Response(payload)),
     )
     with pytest.raises(JevProviderFailure) as caught:
-        adapter.adjudicate(state, questions)
+        _adjudicate_with_projection(adapter, state, questions)
     assert caught.value.code == "RESPONSE_CONTRACT_INCOMPATIBLE"
 
+    failed_opener = _Opener(RuntimeError("synthetic opener failure"))
     adapter = TypeSafeJevAdapter(
         lambda: "test-only-not-a-secret",
-        opener=_Opener(RuntimeError("synthetic opener failure")),
+        opener=failed_opener,
     )
     with pytest.raises(JevProviderFailure) as caught:
-        adapter.adjudicate(state, questions)
+        _adjudicate_with_projection(adapter, state, questions)
     assert caught.value.code == "TRANSPORT_FAILURE"
+    assert len(failed_opener.requests) == 1
 
 
 def test_typesafe_adapter_unknown_local_question_type_fails_closed(monkeypatch) -> None:
     state = _state()
     original_questions = OrchestraJevQuestionBuilder().build(state)
+    request_projection = _request_projection(state)
 
     questions = {
         key: dict(value)
@@ -1257,7 +1610,7 @@ def test_typesafe_adapter_unknown_local_question_type_fails_closed(monkeypatch) 
     first_question = next(iter(questions))
     questions[first_question]["type"] = "synthetic-unknown"
 
-    payload = _answer_payload(original_questions)
+    payload = _answer_payload(json.loads(request_projection[0])["questions"])
     payload["answers"][first_question] = {
         "type": "synthetic-unknown",
     }
@@ -1268,12 +1621,18 @@ def test_typesafe_adapter_unknown_local_question_type_fails_closed(monkeypatch) 
         lambda self, supplied_state: questions,
     )
 
+    opener = _Opener(_Response(payload))
     adapter = TypeSafeJevAdapter(
         lambda: "test-only-not-a-secret",
-        opener=_Opener(_Response(payload)),
+        opener=opener,
     )
 
     with pytest.raises(JevProviderFailure) as caught:
-        adapter.adjudicate(state, questions)
+        adapter.adjudicate(
+            state,
+            questions,
+            request_projection=request_projection,
+        )
 
     assert caught.value.code == "RESPONSE_CONTRACT_INCOMPATIBLE"
+    assert len(opener.requests) == 1
