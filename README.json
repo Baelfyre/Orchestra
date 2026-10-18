@@ -889,10 +889,41 @@
         "tools/list",
         "tools/call"
       ],
+      "r2a_runtime_identity_candidate": {
+        "status": "PR_976_CANDIDATE",
+        "metadata_namespace": "io.orchestra/runtimeIdentity",
+        "availability": [
+          "server/discover response _meta",
+          "tool response _meta"
+        ],
+        "fields": [
+          "runtime_version",
+          "source_commit",
+          "source_tree",
+          "source_state",
+          "adapter",
+          "policy_sha256",
+          "startup_timestamp_utc",
+          "process_id",
+          "host_profile_id"
+        ],
+        "source_state_semantics": {
+          "CLEAN": "Git commit and tree identity are established and the startup working tree has no reported changes.",
+          "DIRTY": "Git commit and tree identity are established and the startup working tree has reported changes.",
+          "UNKNOWN": "Git commit/tree identity or working-tree state could not be established."
+        },
+        "policy_sha256_semantics": "SHA-256 of machine/governance/policy.v1.json bytes observed at startup, or UNKNOWN when unavailable; this digest does not establish policy validity, activation, or authority.",
+        "host_profile_id_semantics": "UNKNOWN until supplied through a trusted host path; client metadata cannot provide it.",
+        "runtime_surface": "orchestra_runtime/mcp_transport.py",
+        "validation_surface": [
+          "tests/runtime/test_mcp_transport.py"
+        ],
+        "phase_boundary": "Documents the R2A PR candidate only; it does not claim R2B specialist-host execution or R2C trusted receipt consumption."
+      },
       "human_sources": [
         "docs/developer/MCP_STDIO_TRANSPORT.md"
       ],
-      "authority_note": "MCP is transport, not authority. Discovery uses ttlMs=0 and cacheScope=private so capability discovery is not reusable cached authority."
+      "authority_note": "MCP is transport, not authority. Discovery uses ttlMs=0 and cacheScope=private so capability discovery is not reusable cached authority. Runtime identity is server-generated observational metadata, cannot be overridden by clients, and is not governance validation, a receipt, specialist review evidence, host-profile authority, or authorization for Cipher or another protected operation."
     },
     "murmurs_presentation": {
       "status": "IMPLEMENTED_OPT_IN_RESEARCH_NOT_PROMOTED",
