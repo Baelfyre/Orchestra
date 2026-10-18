@@ -1,11 +1,19 @@
 from __future__ import annotations
 
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
+from datetime import datetime, timezone
+import hashlib
 import json
+import os
 from pathlib import Path
+import re
+import subprocess
 import sys
 from typing import TextIO
 from uuid import uuid4
+
+# @codebase_provenance_JEO
+# @codebase_rights_JEO
 
 from .factories import AdapterFactory
 from .interfaces import IIDEAdapter
@@ -28,6 +36,7 @@ MCP_PROTOCOL_VERSION_META_KEY = "io.modelcontextprotocol/protocolVersion"
 MCP_CLIENT_INFO_META_KEY = "io.modelcontextprotocol/clientInfo"
 MCP_CLIENT_CAPABILITIES_META_KEY = "io.modelcontextprotocol/clientCapabilities"
 MCP_SERVER_INFO_META_KEY = "io.modelcontextprotocol/serverInfo"
+MCP_RUNTIME_IDENTITY_META_KEY = "io.orchestra/runtimeIdentity"
 
 JSONRPC_PARSE_ERROR = -32700
 JSONRPC_INVALID_REQUEST = -32600
@@ -74,6 +83,47 @@ class _ExactCommandAdapter(IIDEAdapter):
 RuntimeFactory = Callable[[], tuple[RuntimeExecutor, IIDEAdapter]]
 
 
+def _git_output(root: Path, *args: str) -> str | None:
+    try:
+        result = subprocess.run(
+            ["git", "-C", str(root), *args],
+            capture_output=True,
+            check=True,
+            text=True,
+            timeout=5,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    return result.stdout.strip()
+
+
+def _runtime_identity(root: Path, *, server_version: str, adapter: str) -> dict[str, object]:
+    commit = _git_output(root, "rev-parse", "--verify", "HEAD^{commit}")
+    tree = _git_output(root, "rev-parse", "--verify", "HEAD^{tree}")
+    source_commit = commit if commit and re.fullmatch(r"[0-9a-f]{40}", commit) else "UNKNOWN"
+    source_tree = tree if tree and re.fullmatch(r"[0-9a-f]{40}", tree) else "UNKNOWN"
+    status = (
+        _git_output(root, "status", "--porcelain", "--untracked-files=normal")
+        if source_commit != "UNKNOWN" and source_tree != "UNKNOWN"
+        else None
+    )
+    try:
+        policy_digest = hashlib.sha256((root / "machine/governance/policy.v1.json").read_bytes()).hexdigest()
+    except OSError:
+        policy_digest = "UNKNOWN"
+    return {
+        "runtime_version": server_version,
+        "source_commit": source_commit,
+        "source_tree": source_tree,
+        "source_state": "UNKNOWN" if status is None else "DIRTY" if status else "CLEAN",
+        "adapter": adapter,
+        "policy_sha256": policy_digest,
+        "startup_timestamp_utc": datetime.now(timezone.utc).isoformat(),
+        "process_id": os.getpid(),
+        "host_profile_id": "UNKNOWN",
+    }
+
+
 class McpToolTransport:
     """MCP 2026-07-28 stdio transport over Orchestra's existing trusted runtime."""
 
@@ -83,6 +133,7 @@ class McpToolTransport:
         *,
         server_name: str = "orchestra",
         server_version: str,
+        runtime_identity: Mapping[str, object] | None = None,
         error_stream: TextIO | None = None,
     ) -> None:
         if not callable(runtime_factory):
@@ -94,6 +145,7 @@ class McpToolTransport:
         self._runtime_factory = runtime_factory
         self._server_name = name
         self._server_version = version
+        self._runtime_identity = None if runtime_identity is None else dict(runtime_identity)
         self._error_stream = error_stream or sys.stderr
 
     @property
@@ -101,7 +153,10 @@ class McpToolTransport:
         return {"name": self._server_name, "version": self._server_version}
 
     def _response_meta(self) -> dict[str, object]:
-        return {MCP_SERVER_INFO_META_KEY: self.server_info}
+        metadata: dict[str, object] = {MCP_SERVER_INFO_META_KEY: self.server_info}
+        if self._runtime_identity is not None:
+            metadata[MCP_RUNTIME_IDENTITY_META_KEY] = dict(self._runtime_identity)
+        return metadata
 
     @staticmethod
     def _request_id(message: object) -> object:
@@ -366,9 +421,15 @@ def build_mcp_stdio_transport(
     server_version = str(manifest.get("version", "")).strip()
     if not server_version:
         raise ValueError("plugin.json must declare a non-empty version")
+    runtime_factory = build_mcp_runtime_factory(root, backing_adapter=backing_adapter)
     return McpToolTransport(
-        build_mcp_runtime_factory(root, backing_adapter=backing_adapter),
+        runtime_factory,
         server_name="orchestra",
         server_version=server_version,
+        runtime_identity=_runtime_identity(
+            root,
+            server_version=server_version,
+            adapter=str(backing_adapter).strip().casefold(),
+        ),
         error_stream=error_stream,
     )

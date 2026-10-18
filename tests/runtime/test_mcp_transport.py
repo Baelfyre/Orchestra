@@ -3,9 +3,13 @@ from __future__ import annotations
 # @codebase_provenance_JEO
 # @codebase_rights_JEO
 
+from datetime import datetime
+import hashlib
 from io import StringIO
 import json
+import os
 from pathlib import Path
+import subprocess
 
 import pytest
 
@@ -17,6 +21,7 @@ from orchestra_runtime.mcp_transport import (
     JSONRPC_PARSE_ERROR,
     MCP_PROTOCOL_VERSION,
     MCP_PROTOCOL_VERSION_META_KEY,
+    MCP_RUNTIME_IDENTITY_META_KEY,
     MCP_SERVER_INFO_META_KEY,
     MCP_UNSUPPORTED_PROTOCOL_VERSION,
     McpToolTransport,
@@ -53,7 +58,66 @@ def test_discover_is_modern_stateless_tools_only() -> None:
     assert result["supportedVersions"] == [MCP_PROTOCOL_VERSION]
     assert result["capabilities"] == {"tools": {}}
     assert MCP_SERVER_INFO_META_KEY in result["_meta"]
+    assert MCP_RUNTIME_IDENTITY_META_KEY in result["_meta"]
     assert "initialize" not in json.dumps(result).lower()
+
+
+def test_runtime_identity_matches_source_policy_and_process_without_client_override() -> None:
+    transport = _transport()
+    request = _request("server/discover")
+    baseline = transport.handle_message(request)["result"]["_meta"][MCP_RUNTIME_IDENTITY_META_KEY]
+    request["params"]["_meta"][MCP_RUNTIME_IDENTITY_META_KEY] = {
+        "source_commit": "f" * 40,
+        "source_tree": "f" * 40,
+        "policy_sha256": "f" * 64,
+    }
+    observed = transport.handle_message(request)["result"]["_meta"][MCP_RUNTIME_IDENTITY_META_KEY]
+
+    expected_commit = subprocess.run(
+        ["git", "-C", str(ROOT), "rev-parse", "--verify", "HEAD^{commit}"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    expected_tree = subprocess.run(
+        ["git", "-C", str(ROOT), "rev-parse", "--verify", "HEAD^{tree}"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    working_tree_status = subprocess.run(
+        ["git", "-C", str(ROOT), "status", "--porcelain", "--untracked-files=normal"],
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+    expected_policy = hashlib.sha256((ROOT / "machine/governance/policy.v1.json").read_bytes()).hexdigest()
+
+    assert observed == baseline
+    assert observed["runtime_version"] == json.loads((ROOT / "plugin.json").read_text(encoding="utf-8"))["version"]
+    assert observed["source_commit"] == expected_commit
+    assert observed["source_tree"] == expected_tree
+    assert observed["source_state"] == ("DIRTY" if working_tree_status else "CLEAN")
+    assert observed["policy_sha256"] == expected_policy
+    assert observed["adapter"] == "codex"
+    assert observed["process_id"] == os.getpid()
+    startup = datetime.fromisoformat(str(observed["startup_timestamp_utc"]))
+    assert startup.utcoffset() is not None and startup.utcoffset().total_seconds() == 0
+    assert observed["host_profile_id"] == "UNKNOWN"
+
+
+def test_runtime_identity_reports_unknown_for_unavailable_source_and_policy(tmp_path: Path) -> None:
+    root = tmp_path / "source"
+    root.mkdir()
+    (root / "plugin.json").write_text('{"version":"test"}', encoding="utf-8")
+
+    transport = build_mcp_stdio_transport(root)
+    identity = transport.handle_message(_request("server/discover"))["result"]["_meta"][MCP_RUNTIME_IDENTITY_META_KEY]
+
+    assert identity["source_commit"] == "UNKNOWN"
+    assert identity["source_tree"] == "UNKNOWN"
+    assert identity["source_state"] == "UNKNOWN"
+    assert identity["policy_sha256"] == "UNKNOWN"
 
 
 def test_tools_list_is_deterministic_and_bound_to_runtime_policy() -> None:
@@ -79,6 +143,7 @@ def test_tool_call_uses_exact_command_and_fresh_runtime_per_request() -> None:
     second = transport.handle_message(request)["result"]
     assert first["isError"] is False
     assert second["isError"] is False
+    assert MCP_RUNTIME_IDENTITY_META_KEY in first["_meta"]
     assert "review-architecture" in first["content"][0]["text"]
     assert "clockwork" in first["content"][0]["text"]
 
