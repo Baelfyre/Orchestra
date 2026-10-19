@@ -1,3 +1,9 @@
+## Unreleased R2A MCP runtime identity candidate
+
+- Add server-generated runtime identity metadata to MCP stdio discovery and tool responses, including the startup-observed source commit/tree, working-tree state, adapter, policy-file digest, timestamp, process ID, and unknown host-profile identity.
+- Treat the metadata as observational only: it does not establish trusted host identity, governance approval, specialist-review evidence, a governance receipt, or authority for protected operations.
+- Keep R2B specialist-host execution, R2C trusted receipt consumption, and production host-trust qualification outside this candidate.
+
 ## Unreleased offline JEV validation pilot
 
 - Add a repeatable local pilot runner and fixed scenario catalog that reuse the existing JEV contracts and synthetic regressions. The runner blocks HTTP, DNS, and TCP dispatch in its test process and records sanitized per-session results outside the repository for later comparison.
