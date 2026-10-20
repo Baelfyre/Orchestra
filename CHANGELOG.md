@@ -1,3 +1,7 @@
+## Unreleased Issue #937 GOV-937 human decision packet
+
+- Add the schema-bound, non-authorizing GOV-937 review packet and current R2B/R2C evidence and gaps; no protected governance changes.
+
 ## Unreleased R2A MCP runtime identity candidate
 
 - Add server-generated runtime identity metadata to MCP stdio discovery and tool responses, including the startup-observed source commit/tree, working-tree state, adapter, policy-file digest, timestamp, process ID, and unknown host-profile identity.

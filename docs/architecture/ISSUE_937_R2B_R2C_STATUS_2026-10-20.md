@@ -57,7 +57,15 @@ Additional checks:
 - `git diff --check`: PASS in each worktree before commit; commits also passed the repository pre-commit guardrail.
 - `python tests/behavior/run_tests.py`: BLOCKED before test execution because an explicit approved baseline was required and unavailable. No baseline was substituted.
 
-The GitHub cross-platform workflow has not yet run on these commits. No macOS/Linux host-parity or installed-runtime activation is claimed.
+## Hosted CI on the initial draft PR heads
+
+Fresh Actions reads on 2026-10-20 show PR #977 green on `validate`, `Governance Check`, `Required Analysis Compatibility`, and `Cross-platform Validation`. PRs #978-#981 each passed `validate`, `Required Analysis Compatibility`, and `Cross-platform Validation`; only `Governance Check` failed.
+
+The failed runs all reached `Run Stage 1 Strict Governance Check` and failed the changelog freshness rule. The exact significant path reported was `tests/runtime/test_specialist_snapshot_binding.py` on #978, `tests/runtime/test_specialist_operation_boundaries.py` on #979, `tests/runtime/test_governance_receipt_atomic_lifecycle.py` on #980, and `docs/governance/issue-937/GOV-937-escalation-packet-2026-10-20.json` on #981. The CI remediation explicitly requested a focused `CHANGELOG.md` entry. No governance threshold, validator, or workflow configuration was changed.
+
+The four branches now each contain a focused changelog entry. `python scripts/governance_check.py --strict` passed locally on each branch with 0 errors and 0 warnings. Since these changelog repairs change all four heads, hosted CI on the repaired exact heads is pending. Initial failed Governance Check run IDs: #978 `39413834981`, #979 `39413841113`, #980 `39413845196`, #981 `39413848367`.
+
+No review submissions or inline review threads were present on PRs #977-#981 at the latest read. No macOS/Linux installed-host parity or production runtime activation is claimed.
 
 ## Specialist and human decision state
 
