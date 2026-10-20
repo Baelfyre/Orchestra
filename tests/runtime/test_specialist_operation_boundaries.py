@@ -11,6 +11,7 @@ import pytest
 from orchestra_runtime.domain.execution.operation_contracts import (
     DEFENSIVE_SECURITY_REVIEW,
     ReadOnlySpecialistExecutionRequest,
+    RoutingDisposition,
     SECURITY_SENSITIVE_EXECUTION,
     SpecialistReviewResult,
     SpecialistReviewStatus,
@@ -221,6 +222,28 @@ def _request(
         execution_constraints=(),
         execution_mode=SpecialistExecutionMode.DETERMINISTIC_TEST_ENGINE,
     )
+
+
+def test_not_required_routing_disposition_cannot_be_a_substantive_review() -> None:
+    request = ReadOnlySpecialistExecutionRequest(
+        request_id="review-request.test",
+        request_digest="a" * 64,
+        workspace_snapshot_digest="b" * 64,
+        run_id="review-run.test",
+        adapter_name="codex",
+        command_name="security-check",
+        specialist="cipher",
+        operation_id=DEFENSIVE_SECURITY_REVIEW.operation_id,
+        task_input="Review the bound candidate.",
+    )
+
+    with pytest.raises(ValueError, match="NOT_REQUIRED"):
+        SpecialistReviewResult.create(
+            request,
+            RoutingDisposition.NOT_REQUIRED,
+            "No substantive assessment was performed.",
+            ("candidate:src/auth.py",),
+        )
 
 
 def test_registered_defensive_review_dispatch_uses_only_read_capabilities(
