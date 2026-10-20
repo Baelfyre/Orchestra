@@ -1,8 +1,9 @@
-## Unreleased R2A MCP runtime identity candidate
+## Unreleased Issue #937 MCP runtime identity and read-only review evidence
 
 - Add server-generated runtime identity metadata to MCP stdio discovery and tool responses, including the startup-observed source commit/tree, working-tree state, adapter, policy-file digest, timestamp, process ID, and unknown host-profile identity.
 - Treat the metadata as observational only: it does not establish trusted host identity, governance approval, specialist-review evidence, a governance receipt, or authority for protected operations.
-- Keep R2B specialist-host execution, R2C trusted receipt consumption, and production host-trust qualification outside this candidate.
+- Bind the opt-in v2 typed read-only Cipher review result to the server-generated runtime identity and host-computed candidate snapshot. This is evidence only and grants no authority.
+- Keep a production host engine/workspace provider, R2C trusted receipt consumption, and host-trust qualification outside this candidate; the default MCP entrypoint remains route-only and protected execution remains fail-closed.
 
 ## Unreleased offline JEV validation pilot
 
