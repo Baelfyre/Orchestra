@@ -1,3 +1,12 @@
+## Unreleased Issue #937 GOV-937 human decision packet
+
+- Add the schema-bound, non-authorizing GOV-937 review packet and current R2B/R2C evidence and gaps; no protected governance changes.
+- Add an append-only continuation addendum with exact PR CI, integrated contract validation, current host-isolation and receipt-source gaps, and pending human decisions.
+- Record the current Codex E5 host qualification failure: the read-only sandbox read a synthetic canary outside the candidate workspace; production Cipher remains unqualified.
+- Record the disposable-VM follow-up as BLOCKED_VM_UNAVAILABLE on Windows 11 Home; no guest probes, host changes, or live Cipher execution occurred.
+- Record bounded WSL 2/bubblewrap synthetic evidence: candidate-only reads and tested filesystem, interop, and network denials passed; seccomp and cgroup resource limits are unavailable, and Cipher remains unqualified.
+- Record the approved WSL 2/Bubblewrap hardening follow-up: test-only seccomp works when supplied but omission allows an unfiltered child; per-process rlimits work but cgroup delegation is unavailable, process creation remains allowed, and explicitly inherited descriptors cross the boundary. Result: `HOST_ARCHITECTURE_NOT_FIT`; Cipher remains unqualified and host configuration is unchanged.
+
 ## Unreleased R2A MCP runtime identity candidate
 
 - Add server-generated runtime identity metadata to MCP stdio discovery and tool responses, including the startup-observed source commit/tree, working-tree state, adapter, policy-file digest, timestamp, process ID, and unknown host-profile identity.

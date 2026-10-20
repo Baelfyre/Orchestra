@@ -1,0 +1,206 @@
+{
+  "record_type": "orchestra.issue-937.wsl2-bubblewrap-hardening-qualification",
+  "record_version": 1,
+  "task_id": "ORCHESTRA-937-WSL2-BUBBLEWRAP-HARDENING-20261021",
+  "observed_date": "2026-10-21",
+  "repository": {
+    "name": "Baelfyre/Orchestra",
+    "origin_main_commit": "b215a48b678e8708a8a6e7123f5ee1893d3f4f15",
+    "origin_main_tree": "fac2140e41e81bdf243ddc6c389b38c0453ad28c",
+    "evidence_pr": 981,
+    "evidence_branch": "JEO/issue-937-r2d-readiness-20261020",
+    "evidence_pre_update_commit": "93f6bfc88faeb6c9c79c5b1f5ea1b453b3c4c789",
+    "evidence_pre_update_tree": "0b8e557900ba3d5b05bee39fc8284828422f24cb",
+    "preflight": {
+      "status": "PROCEED_WITH_CAUTION",
+      "worktree_clean": true,
+      "ahead_of_origin_main": 6,
+      "behind_origin_main": 0
+    }
+  },
+  "preview_source": {
+    "status": "VERIFIED",
+    "commit": "d23fc66accc3f3a52a2ab494e8ce655b42ae57b5",
+    "tree": "5aa714e88c0f3e4739e564c4008b2974125cbe34",
+    "worktree_clean": true,
+    "claim_limit": "Source instructions verified only; no production runtime parity or live specialist execution claimed."
+  },
+  "schema_status": {
+    "dedicated_wsl_bubblewrap_schema": "NOT_FOUND",
+    "structural_json_and_invariant_validation_only": true,
+    "related_wsl_feasibility_record_is_schema": false
+  },
+  "scope": {
+    "synthetic_fixtures_only": true,
+    "repository_source_mounted_or_read": false,
+    "real_user_data_or_secret_read": false,
+    "external_model_invoked": false,
+    "cipher_invoked": false,
+    "external_provider_called": false,
+    "windows_host_canary_created": false,
+    "host_drive_or_wsl_interop_probe_inside_sandbox": false,
+    "wsl_or_distribution_configuration_changed": false,
+    "packages_installed": false,
+    "elevation_or_reboot_used": false,
+    "shutdown_or_termination_used": false,
+    "alteredego_repository_inspected_or_modified": false,
+    "production_route_or_authority_changed": false
+  },
+  "host": {
+    "os_caption": "Microsoft Windows 11 Home Single Language",
+    "os_version": "10.0.26300",
+    "os_build": "26300",
+    "architecture": "64-bit",
+    "wsl_version": "2.7.11.0",
+    "kernel_version": "6.18.33.2-microsoft-standard-WSL2",
+    "wslg_version": "1.0.73.2",
+    "distribution": "Ubuntu 26.04 LTS",
+    "effective_uid": 1000,
+    "bubblewrap_version": "0.11.1",
+    "unshare_version": "util-linux 2.41.3",
+    "probe_time_distribution_state": {
+      "Ubuntu": "Running",
+      "docker-desktop": "Stopped",
+      "shutdown_or_terminate_command_used": false
+    },
+    "ordinary_distribution": {
+      "writable_9p_windows_mounts": [
+        {"target": "/mnt/c", "backing": "C:\\", "read_write": true},
+        {"target": "/mnt/d", "backing": "D:\\", "read_write": true}
+      ],
+      "windows_interop": "ENABLED",
+      "baseline_no_new_privs": false,
+      "baseline_seccomp_mode": 0,
+      "baseline_seccomp_filters": 0,
+      "effective_capabilities_zero": true
+    },
+    "cgroup_v2": {
+      "mount_read_write": true,
+      "delegated_writable_child_cgroup": false,
+      "current_path": "init.scope",
+      "current_path_writable_by_uid_1000": false,
+      "cpu_max": "max 100000",
+      "memory_max": "max",
+      "pids_max": "4282"
+    }
+  },
+  "trusted_boundary_model": [
+    "The actual Windows Codex review engine is outside the tested Bubblewrap boundary and was not run.",
+    "The ordinary Ubuntu distribution exposes writable Windows-drive 9p mounts and Windows interop; it is not isolated by default.",
+    "Only an explicitly constructed synthetic Bubblewrap child was tested.",
+    "Bubblewrap receives seccomp only when the caller supplies the filter FD; omitting it permits an unfiltered child.",
+    "Descriptors explicitly passed by the parent remain visible in the child unless caller launch behavior closes them."
+  ],
+  "q_results": [
+    {
+      "id": "Q0",
+      "name": "read_only_inventory_and_scope",
+      "status": "PASS",
+      "evidence": "Inventory was observational; no installs, privilege changes, WSL configuration changes, or production operations occurred. WSL invocations started Ubuntu; final observed state was Ubuntu Running and docker-desktop Stopped."
+    },
+    {
+      "id": "Q1",
+      "name": "mandatory_seccomp",
+      "status": "FAIL",
+      "subtests": [
+        {"name": "test_filter_compiles_and_loads", "status": "PASS", "filter_bytes": 72, "bpf_sha256": "76d1d0c2e89ae30f1d3fca9529ad8ced888034f6bec58d16d92260a1c8aa709f", "child_seccomp_mode": 2, "child_filter_count": 1, "getppid_result": -1, "getppid_errno": "EPERM", "getuid_allowed": true},
+        {"name": "invalid_filter_fd_fails_closed", "status": "PASS", "bubblewrap_exit": 1, "target_started": false, "error": "Can't read seccomp data: Bad file descriptor"},
+        {"name": "filter_omission_fails_closed", "status": "FAIL", "target_started": true, "child_seccomp_mode": 0, "child_filter_count": 0}
+      ],
+      "conclusion": "No mandatory production filter gate exists; an omitted filter allows an unfiltered target."
+    },
+    {
+      "id": "Q2",
+      "name": "resource_bounds",
+      "status": "PARTIAL",
+      "subtests": [
+        {"name": "rlimit_as", "status": "PASS", "limit_bytes": 536870912, "attempt_bytes": 1073741824, "allocation_rejected": true},
+        {"name": "rlimit_cpu", "status": "PASS", "limit_seconds": 1, "process": "/usr/bin/yes", "exit": 137, "elapsed_seconds": 1.11, "watchdog_seconds": 4},
+        {"name": "aggregate_cgroup_quotas", "status": "BLOCKED", "delegated_writable_child_cgroup": false, "cpu_max": "max 100000", "memory_max": "max", "pids_max": "4282"}
+      ],
+      "conclusion": "Per-process rlimits worked; aggregate CPU, memory, and PID quotas were not established."
+    },
+    {
+      "id": "Q3",
+      "name": "child_process_policy",
+      "status": "FAIL",
+      "subtests": [
+        {"name": "fork_exec_at_nproc_128", "status": "FAIL", "operation_allowed": true},
+        {"name": "raw_clone_at_nproc_128", "status": "FAIL", "operation_allowed": true},
+        {"name": "clone3_at_nproc_128", "status": "FAIL", "operation_allowed": true},
+        {"name": "nproc_8_or_32_namespace_setup", "status": "BLOCKED", "error": "Resource temporarily unavailable"},
+        {"name": "vfork_denial_probe", "status": "BLOCKED", "reason": "No safe compiler or tracer was available."}
+      ],
+      "conclusion": "Child creation remains allowed; CHILD_PROCESS_POLICY_UNQUALIFIED."
+    },
+    {
+      "id": "Q4",
+      "name": "descriptor_boundary_and_original_synthetic_isolation",
+      "status": "FAIL",
+      "subtests": [
+        {"name": "explicitly_passed_canary_and_socket_fds", "status": "FAIL", "matching_descriptors_visible_in_child": 2},
+        {"name": "test_parent_close_fds_variant", "status": "PASS", "matching_descriptors_visible_in_child": 0, "production_codex_host_behavior_verified": false},
+        {"name": "candidate_read", "status": "PASS"},
+        {"name": "forbidden_canary_and_symlink_denial", "status": "PASS"},
+        {"name": "read_only_candidate_write_denial", "status": "PASS"},
+        {"name": "windows_mounts_and_interop_absent_in_child", "status": "PASS"},
+        {"name": "pid_network_cgroup_namespace_separation", "status": "PASS"},
+        {"name": "nested_user_namespace_denied", "status": "PASS"},
+        {"name": "no_new_privs_and_zero_effective_capabilities", "status": "PASS"},
+        {"name": "no_routes_and_reserved_test_net_denied", "status": "PASS", "target": "192.0.2.1:9", "errno": 101},
+        {"name": "timeout_and_no_post_timeout_write", "status": "PASS", "timeout_exit": 124},
+        {"name": "candidate_unchanged_and_fixture_cleanup", "status": "PASS", "candidate_sha256": "6d38d170d592cf4ef2d8c4cc080410c2ad244752be464d90240fe1344136a004", "scratch_absent": true},
+        {"name": "sandbox_proc_view", "status": "PASS", "visible_process_count": 2}
+      ],
+      "conclusion": "Explicitly inherited descriptors cross the child boundary. The close-fds result applies only to a test parent harness."
+    },
+    {
+      "id": "Q5",
+      "name": "production_fit_and_cipher_qualification",
+      "status": "FAIL",
+      "disposition": "HOST_ARCHITECTURE_NOT_FIT",
+      "cipher_qualification": "NOT_QUALIFIED",
+      "live_codex_review_engine_inside_sandbox": false,
+      "substantive_cipher_findings_produced": false,
+      "conclusion": "Mandatory seccomp, aggregate quotas, child-process policy, production FD closure, host-engine binding, and substantive execution evidence are not jointly established."
+    },
+    {
+      "id": "Q6",
+      "name": "evidence_record_and_local_repository_validation",
+      "status": "PASS",
+      "dedicated_schema": "NOT_FOUND",
+      "structural_json_and_invariant_validation": "PASS",
+      "governance_check": {"status": "PASS", "command": "python scripts/governance_check.py --strict", "errors": 0, "warnings": 0},
+      "architecture_boundary_check": {"status": "PASS", "command": "python scripts/validation/validate_architecture_boundaries.py"},
+      "stale_reference_check": {"status": "PASS", "command": "python scripts/check_stale_references.py"},
+      "diff_check": {"status": "PASS", "command": "git diff --check"},
+      "full_repository_test_suite": "NOT_RUN_DOCUMENTATION_ONLY_CHANGE",
+      "exact_head_hosted_checks": "RUN_AFTER_PUSH_AND_REPORTED_SEPARATELY"
+    }
+  ],
+  "test_harness": {
+    "path_in_wsl_user_home_relative": "orchestra-937-bubblewrap-qualification-20261021/qualification.py",
+    "sha256": "37503eb53aa77004b99db9885c2f106a3cbc5d3c8ca42248c0d5d15a244887c3",
+    "removed_after_recording": true,
+    "scratch_fixtures_removed": true,
+    "argv_sha256": {
+      "Q1_INVALID_FD": "f110d1dde33134fc2d5a50cbc8a7df9dc1a3500fd58c70088f1de54b62892b93",
+      "Q1_SECCOMP": "241a4b623c7616a248f0aec4f749980a7045bf964739dc736b41a8819edfe99c",
+      "Q2_RLIMIT_AS": "07cd9289b04b434ca0be0ffc00c886e8ba55add7aa9f5c3c7f5e73ce2358471d",
+      "Q2_RLIMIT_CPU": "f60e9d8280a98cf01602b5864635c747464d693b0412506f0444befcdac61559",
+      "Q3_PROCESS": "39948476d618e2a736fda617a17a585fef50496df4ab4f30d163715304b45b87",
+      "Q4_CANCELLATION": "be87884ee97b631f6ff56fc9a74cb7bab12443d3029cfa9a5f5e5b2c8c2b3a3e",
+      "Q4_FULL_AND_TRUSTED_LAUNCHER_CLOSE_FDS": "cc50ed0d26df1c25f80aa8d32d26f1c1bf4a87bac829bee2ef01e7edcbaa3596"
+    },
+    "q4_argv_note": "Q4 full and close-fds invocations have the same argv digest but different pass_fds configuration."
+  },
+  "overall_disposition": "HOST_ARCHITECTURE_NOT_FIT",
+  "cipher_qualification": "NOT_QUALIFIED",
+  "production_activation": "NOT_AUTHORIZED",
+  "protected_governance": "UNCHANGED",
+  "receipt_authority": "NOT_ACTIVATED",
+  "alteredego_phase_2": "PENDING_HUMAN_DECISION",
+  "pr_977": "PRESERVED_UNCHANGED",
+  "gov_937_decision_packet": "PRESERVED_UNCHANGED",
+  "next_recommendation": "Do not activate Bubblewrap for production Cipher. A separately authorized evaluation may consider a host-owned tool-less snapshot-only assessment broker or a separately qualified runner with mandatory seccomp, delegated aggregate quotas, process policy, descriptor closure, and exact server-bound candidate identity. No follow-on implementation is authorized by this record."
+}

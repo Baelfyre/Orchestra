@@ -1,0 +1,156 @@
+{
+  "schema_version": "orchestra.issue-937.vm-isolation-qualification.v1",
+  "task_id": "ORCHESTRA-937-R2B-VM-ISOLATION-QUALIFICATION-20261021",
+  "observed_date": "2026-10-21",
+  "repository": {
+    "name": "Baelfyre/Orchestra",
+    "origin_main_commit": "b215a48b678e8708a8a6e7123f5ee1893d3f4f15",
+    "origin_main_tree": "fac2140e41e81bdf243ddc6c389b38c0453ad28c",
+    "documentation_pr": 981,
+    "documentation_branch": "JEO/issue-937-r2d-readiness-20261020",
+    "documentation_pre_update_commit": "929a495c1d12ef4145ecc48043778f8698876a68",
+    "documentation_pre_update_tree": "b72e260326f9d32e1b0087ab8521ce8bed00f90f",
+    "documentation_worktree_initially_clean": true
+  },
+  "preview_source": {
+    "status": "VERIFIED",
+    "commit": "d23fc66accc3f3a52a2ab494e8ce655b42ae57b5",
+    "tree": "5aa714e88c0f3e4739e564c4008b2974125cbe34",
+    "worktree_clean": true,
+    "claim_limit": "Source instructions verified; no specialist execution or runtime parity claimed."
+  },
+  "host": {
+    "os_edition": "Microsoft Windows 11 Home Single Language",
+    "os_version": "10.0.26300",
+    "os_build": "26300",
+    "architecture": "64-bit",
+    "current_token_is_administrator": false,
+    "hypervisor_present": true,
+    "virtualization_firmware_enabled": true,
+    "vm_monitor_mode_extensions": false,
+    "services": {
+      "vmcompute": "Running",
+      "hns": "Running",
+      "vmms": "NOT_FOUND"
+    },
+    "codex_cli_version": "codex-cli 0.163.0-alpha.10.2",
+    "codex_executable_sha256": "F6DBF48CB70F62649C645F26C87DC9BF84CC36986202DFAD8E12FB5B8CA70312"
+  },
+  "availability_checks": [
+    {
+      "id": "HOST_IDENTITY_INVENTORY",
+      "status": "PASS",
+      "executed": true,
+      "evidence_locator": "GOV-937-Codex-E5-host-qualification-2026-10-21.md#disposable-vm-isolation-qualification-2026-10-21"
+    },
+    {
+      "id": "WINDOWS_SANDBOX_SUPPORTED_EDITION",
+      "status": "FAIL",
+      "executed": true,
+      "observation": "Windows Sandbox is unsupported on Windows Home; this host runs Windows 11 Home Single Language.",
+      "evidence_locator": "https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-sandbox/windows-sandbox-overview"
+    },
+    {
+      "id": "WINDOWS_SANDBOX_BINARY",
+      "status": "FAIL",
+      "executed": true,
+      "observation": "WindowsSandbox.exe was absent.",
+      "evidence_locator": "GOV-937-Codex-E5-host-qualification-2026-10-21.md#disposable-vm-isolation-qualification-2026-10-21"
+    },
+    {
+      "id": "WINDOWS_SANDBOX_FEATURE_STATE",
+      "status": "BLOCKED",
+      "executed": true,
+      "observation": "Get-WindowsOptionalFeature returned an elevation-required error; no elevation was attempted.",
+      "evidence_locator": "GOV-937-Codex-E5-host-qualification-2026-10-21.md#disposable-vm-isolation-qualification-2026-10-21"
+    },
+    {
+      "id": "HYPERV_GUEST_INVENTORY",
+      "status": "BLOCKED",
+      "executed": true,
+      "observation": "Hyper-V module/Get-VM absent; root/virtualization/v2 WMI namespace invalid; vmms service not found; feature-state query requires elevation.",
+      "evidence_locator": "GOV-937-Codex-E5-host-qualification-2026-10-21.md#disposable-vm-isolation-qualification-2026-10-21"
+    },
+    {
+      "id": "ELIGIBLE_DISPOSABLE_GUEST_VERIFIED",
+      "status": "FAIL",
+      "executed": true,
+      "observation": "No supported Sandbox or existing isolated Hyper-V guest was verified within the authorized host environment.",
+      "evidence_locator": "GOV-937-Codex-E5-host-qualification-2026-10-21.md#disposable-vm-isolation-qualification-2026-10-21"
+    }
+  ],
+  "phase_results": {
+    "T0": "BLOCKED_VM_UNAVAILABLE",
+    "T1": "BLOCKED",
+    "T2": "BLOCKED",
+    "T3": "BLOCKED",
+    "T4": "BLOCKED",
+    "T5": "RECORDED",
+    "T6": "DOCUMENTATION_ONLY"
+  },
+  "mandatory_guest_results": [
+    {
+      "id": "HOST_DATA_NONEXPOSURE",
+      "status": "BLOCKED",
+      "execution": "NOT_TESTED",
+      "reason": "No eligible disposable guest was verified."
+    },
+    {
+      "id": "CANDIDATE_ONLY_READ_SCOPE",
+      "status": "BLOCKED",
+      "execution": "NOT_TESTED",
+      "reason": "No guest process context was available."
+    },
+    {
+      "id": "IMMUTABLE_CANDIDATE",
+      "status": "BLOCKED",
+      "execution": "NOT_TESTED",
+      "reason": "No guest or synthetic candidate stage was created."
+    },
+    {
+      "id": "GUEST_NO_UNBOUNDED_EGRESS",
+      "status": "BLOCKED",
+      "execution": "NOT_TESTED",
+      "reason": "No guest network interface or route could be audited."
+    },
+    {
+      "id": "GUEST_CHILD_PROCESS_RESTRICTION",
+      "status": "BLOCKED",
+      "execution": "NOT_TESTED",
+      "reason": "No guest process runner was available."
+    },
+    {
+      "id": "HOST_CHANNELS_DISABLED",
+      "status": "BLOCKED",
+      "execution": "NOT_TESTED",
+      "reason": "No guest sharing configuration could be inspected."
+    },
+    {
+      "id": "TIMEOUT_TERMINATES_PROCESSES",
+      "status": "BLOCKED",
+      "execution": "NOT_TESTED",
+      "reason": "No guest process was started."
+    },
+    {
+      "id": "CLEANUP_CONFIRMED",
+      "status": "BLOCKED",
+      "execution": "NOT_TESTED",
+      "reason": "No disposable guest lifecycle was exercised."
+    }
+  ],
+  "execution_limits": {
+    "synthetic_fixture_created": false,
+    "host_canary_created": false,
+    "guest_started": false,
+    "model_invoked": false,
+    "cipher_invoked": false,
+    "network_probe_run": false,
+    "host_sensitive_data_accessed": false,
+    "host_configuration_changed": false,
+    "protected_governance_changed": false,
+    "alteredego_repository_modified": false
+  },
+  "overall_disposition": "BLOCKED_VM_UNAVAILABLE",
+  "cipher_qualification": "NOT_QUALIFIED",
+  "next_human_decision": "Provide a pre-existing supported Sandbox or verified disposable Hyper-V guest, or separately authorize the necessary host feature/edition setup and any reboot before a new qualification run."
+}
