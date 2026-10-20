@@ -209,6 +209,31 @@ def test_provider_cannot_add_paths_outside_host_candidate_inventory(tmp_path: Pa
     assert error.value.reason_code == "SNAPSHOT_BINDING_FAILED"
 
 
+@pytest.mark.parametrize("link_parent", (False, True), ids=("file-link", "directory-link"))
+def test_candidate_snapshot_rejects_symbolic_link_traversal(tmp_path: Path, link_parent: bool) -> None:
+    root = create_candidate_repo(tmp_path)
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    (outside / "auth.py").write_text("outside candidate content\n", encoding="utf-8")
+    source = root / "src" / "auth.py"
+
+    try:
+        if link_parent:
+            source.unlink()
+            source.parent.rmdir()
+            source.parent.symlink_to(outside, target_is_directory=True)
+        else:
+            source.unlink()
+            source.symlink_to(outside / "auth.py")
+    except (OSError, NotImplementedError):
+        pytest.skip("symbolic links are unavailable for this test environment")
+
+    with pytest.raises(SpecialistExecutionContractError, match="symbolic links") as error:
+        snapshot(root)
+
+    assert error.value.reason_code == "SNAPSHOT_BINDING_FAILED"
+
+
 @pytest.mark.parametrize("changed_field", ("head_sha", "tree_sha"))
 def test_expected_candidate_identity_change_during_snapshot_fails_closed(
     tmp_path: Path,
