@@ -23,6 +23,7 @@ from orchestra_runtime.mcp_specialist_execution import build_mcp_specialist_runt
 from orchestra_runtime.models import Command, ContextPackage, RouteDecision, ValidationResult
 from orchestra_runtime.specialist_execution import (
     SPECIALIST_EXECUTION_REQUEST_VERSION,
+    SpecialistExecutionContractError,
     SpecialistExecutionMode,
     SpecialistExecutionRequest,
     SpecialistExecutionConstraint,
@@ -394,6 +395,32 @@ def test_protected_security_execution_without_verified_authorization_never_calls
     assert not hasattr(executor.composition, "governance_receipt_authorizer")
 
 
+@pytest.mark.parametrize(
+    ("engine_type", "with_provider", "without_runtime_identity", "reason_code"),
+    (
+        (GeneralEngineFixture, False, False, "READ_ONLY_ENGINE_CAPABILITY_REQUIRED"),
+        (DualExecutionEngine, True, False, "EFFECTFUL_ENGINE_REJECTED_FOR_REVIEW"),
+        (ReviewOnlyEngine, False, False, "READ_ONLY_WORKSPACE_UNAVAILABLE"),
+        (ReviewOnlyEngine, True, True, "RUNTIME_IDENTITY_UNAVAILABLE"),
+    ),
+)
+def test_read_only_review_rejects_missing_or_effectful_trusted_host_components(
+    engine_type, with_provider, without_runtime_identity, reason_code
+) -> None:
+    provider = ReadOnlyWorkspaceProviderFixture() if with_provider else None
+    executor = _runtime(lambda: engine_type(), provider)
+    if without_runtime_identity:
+        executor._runtime_identity = None
+
+    with pytest.raises(SpecialistExecutionContractError) as error:
+        executor._execute_read_only_review(
+            _request(executor, "security-check"),
+            DEFENSIVE_SECURITY_REVIEW,
+        )
+
+    assert error.value.reason_code == reason_code
+
+
 def test_typed_authorization_and_metadata_cannot_enable_protected_dispatch() -> None:
     engine = GeneralEngineFixture()
     factory = build_mcp_specialist_runtime_factory(ROOT, execution_engine_factory=lambda: engine)
@@ -472,3 +499,4 @@ def test_review_only_engine_cannot_fall_through_to_generic_specialist_execution(
     assert result.reason_code == "SPECIALIST_ENGINE_CAPABILITY_REQUIRED"
     assert engine.requests == []
     assert provider.calls == 0
+
