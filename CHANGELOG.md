@@ -5,6 +5,7 @@
 - Record the current Codex E5 host qualification failure: the read-only sandbox read a synthetic canary outside the candidate workspace; production Cipher remains unqualified.
 - Record the disposable-VM follow-up as BLOCKED_VM_UNAVAILABLE on Windows 11 Home; no guest probes, host changes, or live Cipher execution occurred.
 - Record bounded WSL 2/bubblewrap synthetic evidence: candidate-only reads and tested filesystem, interop, and network denials passed; seccomp and cgroup resource limits are unavailable, and Cipher remains unqualified.
+- Record the approved WSL 2/Bubblewrap hardening follow-up: test-only seccomp works when supplied but omission allows an unfiltered child; per-process rlimits work but cgroup delegation is unavailable, process creation remains allowed, and explicitly inherited descriptors cross the boundary. Result: `HOST_ARCHITECTURE_NOT_FIT`; Cipher remains unqualified and host configuration is unchanged.
 
 ## Unreleased R2A MCP runtime identity candidate
 
