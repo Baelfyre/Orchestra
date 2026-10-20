@@ -1,3 +1,7 @@
+## Unreleased Issue #937 R2C-2A receipt lifecycle tests
+
+- Add synthetic transaction coverage and documentation for atomic receipt consumption and audit; no production resolver or authority source changes.
+
 ## Unreleased R2A MCP runtime identity candidate
 
 - Add server-generated runtime identity metadata to MCP stdio discovery and tool responses, including the startup-observed source commit/tree, working-tree state, adapter, policy-file digest, timestamp, process ID, and unknown host-profile identity.
