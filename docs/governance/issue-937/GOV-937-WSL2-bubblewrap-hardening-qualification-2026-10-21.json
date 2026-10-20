@@ -172,13 +172,14 @@
       "structural_json_and_invariant_validation": "PASS",
       "governance_check": {"status": "PASS", "command": "python scripts/governance_check.py --strict", "errors": 0, "warnings": 0},
       "architecture_boundary_check": {"status": "PASS", "command": "python scripts/validation/validate_architecture_boundaries.py"},
+      "stale_reference_check": {"status": "PASS", "command": "python scripts/check_stale_references.py"},
       "diff_check": {"status": "PASS", "command": "git diff --check"},
       "full_repository_test_suite": "NOT_RUN_DOCUMENTATION_ONLY_CHANGE",
       "exact_head_hosted_checks": "RUN_AFTER_PUSH_AND_REPORTED_SEPARATELY"
     }
   ],
   "test_harness": {
-    "path_in_wsl_user_home": "/home/jeomancer/orchestra-937-bubblewrap-qualification-20261021/qualification.py",
+    "path_in_wsl_user_home_relative": "orchestra-937-bubblewrap-qualification-20261021/qualification.py",
     "sha256": "37503eb53aa77004b99db9885c2f106a3cbc5d3c8ca42248c0d5d15a244887c3",
     "removed_after_recording": true,
     "scratch_fixtures_removed": true,

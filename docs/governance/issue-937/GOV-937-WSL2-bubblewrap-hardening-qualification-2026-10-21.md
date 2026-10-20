@@ -58,6 +58,7 @@ The synthetic candidate SHA-256 was `6d38d170d592cf4ef2d8c4cc080410c2ad244752be4
 - `git diff --check`: PASS.
 - `python scripts/governance_check.py --strict`: PASS, 0 errors and 0 warnings.
 - `python scripts/validation/validate_architecture_boundaries.py`: PASS (`RUNTIME_ARCHITECTURE_BOUNDARIES=PASS`).
+- `python scripts/check_stale_references.py`: PASS (`No stale or disallowed references found.`).
 - JSON parse and invariant checks for this record: PASS; seven ordered Q0–Q6 results, overall disposition `HOST_ARCHITECTURE_NOT_FIT`, and Cipher status `NOT_QUALIFIED`.
 - Dedicated WSL hardening schema lookup: NOT_FOUND; validation is structural JSON and task-specific invariants only.
 - Full repository test suite: NOT RUN; this documentation-only update does not change runtime code. The Q1–Q4 synthetic host probes are recorded above.
