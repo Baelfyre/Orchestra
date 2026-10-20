@@ -499,4 +499,3 @@ def test_review_only_engine_cannot_fall_through_to_generic_specialist_execution(
     assert result.reason_code == "SPECIALIST_ENGINE_CAPABILITY_REQUIRED"
     assert engine.requests == []
     assert provider.calls == 0
-
