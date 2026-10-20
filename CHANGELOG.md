@@ -1,6 +1,7 @@
 ## Unreleased Issue #937 GOV-937 human decision packet
 
 - Add the schema-bound, non-authorizing GOV-937 review packet and current R2B/R2C evidence and gaps; no protected governance changes.
+- Add an append-only continuation addendum with exact PR CI, integrated contract validation, current host-isolation and receipt-source gaps, and pending human decisions.
 
 ## Unreleased R2A MCP runtime identity candidate
 
