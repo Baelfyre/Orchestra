@@ -57,3 +57,44 @@ Focused `python -m pytest tests/runtime/test_codex_app_server_bridge.py -q` pass
 Do not qualify this host for Cipher while it can read user-readable paths outside the immutable candidate snapshot. A future proposal must provide an independently enforced read boundary (or a separately isolated host), then repeat outside-read, inside/outside-write, symlink/junction, network, subprocess, approval, cancellation/timeout, secret-redaction, and audit tests on the exact installed version. Do not use real credentials or user files in those probes.
 
 No live Cipher assessment was run after the failed H2 test. AlteredEgo #7 remains `BLOCKED_PENDING_VALIDATION`; its handoff is not approval. The R2C human receipt-authority gate remains unchanged. Orchestra v1.12 remains in monitoring mode. No merge, activation, policy/validator/whitelist change, receipt issuance/consumption, or AlteredEgo mutation occurred.
+
+## Disposable VM isolation qualification (2026-10-21)
+
+Disposition: **BLOCKED_VM_UNAVAILABLE**
+
+This was a non-production host-capability preflight. No VM was started, no synthetic candidate or host canary was created, no host-sensitive path was accessed, and no model or Cipher operation was invoked.
+
+### T0 host and source evidence
+
+- Live Orchestra main remained commit b215a48b678e8708a8a6e7123f5ee1893d3f4f15, tree fac2140e41e81bdf243ddc6c389b38c0453ad28c. PR #981 was a clean ahead-only checkout at commit 929a495c1d12ef4145ecc48043778f8698876a68, tree b72e260326f9d32e1b0087ab8521ce8bed00f90f. Its pre-edit sync preflight returned PROCEED_WITH_CAUTION (ahead 4, behind 0). The primary checkout remained dirty/diverged and was not edited.
+- The verified preview source was commit d23fc66accc3f3a52a2ab494e8ce655b42ae57b5, tree 5aa714e88c0f3e4739e564c4008b2974125cbe34, clean. Preview availability is verified for source instructions only; no specialist execution is claimed.
+- Host OS: Microsoft Windows 11 Home Single Language, version 10.0.26300, build 26300, 64-bit. The current token is not an administrator.
+- Windows Sandbox is unsupported on Windows Home per [Microsoft Learn](https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-sandbox/windows-sandbox-overview). WindowsSandbox.exe was absent. The optional-feature query failed with “The requested operation requires elevation”; no elevation was attempted.
+- Hyper-V guest enumeration was unavailable: the Hyper-V PowerShell module and Get-VM command were absent; the root/virtualization/v2 WMI namespace was invalid; the vmms service was not found. Querying the Hyper-V optional feature also required elevation. No pre-existing disposable Hyper-V VM was verified.
+- HypervisorPresent and VirtualizationFirmwareEnabled were true, VMMonitorModeExtensions was false, and vmcompute/hns services were running. These observations do not establish that a safe disposable guest is available or isolated.
+- Installed Codex CLI was codex-cli 0.163.0-alpha.10.2; executable SHA-256 F6DBF48CB70F62649C645F26C87DC9BF84CC36986202DFAD8E12FB5B8CA70312.
+
+### Actual result matrix
+
+| Check | Result | Evidence |
+|---|---|---|
+| Host identity inventory | PASS | Read-only OS, token, virtualization, service, and Codex inventory above. |
+| Windows Sandbox supported edition | FAIL | Host is Windows 11 Home; Microsoft documents Sandbox as unsupported on Home. |
+| Windows Sandbox feature-state query | BLOCKED | Query requires elevation; current token is not administrator. |
+| Windows Sandbox executable present | FAIL | WindowsSandbox.exe was absent. |
+| Hyper-V VM inventory | BLOCKED | No Get-VM/module or WMI namespace; vmms was not found; optional-feature query requires elevation. |
+| Eligible disposable guest verified | FAIL | No supported Sandbox or pre-existing isolated Hyper-V guest could be verified within this execution scope. |
+| Synthetic candidate stage (T1) | BLOCKED | T0 did not establish an eligible guest; fixture creation was not useful or safe without one. |
+| Guest configuration and sharing audit (T2) | BLOCKED | No guest to configure or inspect. |
+| Host-canary, candidate-scope, write, link, network, subprocess, timeout, channel, and teardown probes (T3) | BLOCKED | Not run because no guest was available. No canary plaintext exists in this record. |
+| Live Cipher trial (T4) | BLOCKED | T3 controls and candidate-only read scope were not established; no model trial occurred. |
+
+All eight mandatory guest results are BLOCKED / NOT_TESTED: HOST_DATA_NONEXPOSURE, CANDIDATE_ONLY_READ_SCOPE, IMMUTABLE_CANDIDATE, GUEST_NO_UNBOUNDED_EGRESS, GUEST_CHILD_PROCESS_RESTRICTION, HOST_CHANNELS_DISABLED, TIMEOUT_TERMINATES_PROCESSES, and CLEANUP_CONFIRMED. The detailed machine-readable record is [GOV-937-VM-isolation-qualification-2026-10-21.json](GOV-937-VM-isolation-qualification-2026-10-21.json).
+
+This disposition does not reverse the prior E5 finding: the direct read-only CLI probe read an outside-repository synthetic canary. It adds no evidence that E5 or Cipher is isolated or qualified. The prior test used a synthetic canary only and is not an App Server Cipher execution.
+
+### Boundary and next decision
+
+Do not use Codex read-only mode, WSL2, Docker, or the presence of a hypervisor/service as VM-isolation evidence. The next qualification attempt requires a pre-existing supported Windows Sandbox or a verified disposable Hyper-V guest with host shares, clipboard, networking, and integration channels audited. If host feature setup, edition changes, elevated configuration, or reboot is needed, obtain separate human authorization first.
+
+No host feature, ACL, firewall, account, VM, runtime, policy, validator, whitelist, receipt, or production setting was changed. PR #977 remains frozen. AlteredEgo #7 remains BLOCKED_PENDING_VALIDATION; its handoff is not approval. The R2C receipt-authority gate is unchanged. No merge, production activation, receipt issuance/consumption, live Cipher execution, or AlteredEgo mutation occurred.

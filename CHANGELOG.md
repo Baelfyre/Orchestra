@@ -3,6 +3,7 @@
 - Add the schema-bound, non-authorizing GOV-937 review packet and current R2B/R2C evidence and gaps; no protected governance changes.
 - Add an append-only continuation addendum with exact PR CI, integrated contract validation, current host-isolation and receipt-source gaps, and pending human decisions.
 - Record the current Codex E5 host qualification failure: the read-only sandbox read a synthetic canary outside the candidate workspace; production Cipher remains unqualified.
+- Record the disposable-VM follow-up as BLOCKED_VM_UNAVAILABLE on Windows 11 Home; no guest probes, host changes, or live Cipher execution occurred.
 
 ## Unreleased R2A MCP runtime identity candidate
 
