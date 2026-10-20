@@ -1,3 +1,7 @@
+## Unreleased Issue #937 specialist review result v2 schema
+
+- Add `machine/schemas/specialist-review-result.v2.schema.json` and `tests/runtime/test_specialist_review_result_v2_schema.py` for the runtime-bound v2 result shape; keep the v1 contract intact and reject authority-bearing or unknown fields.
+
 ## Unreleased R2A MCP runtime identity candidate
 
 - Add server-generated runtime identity metadata to MCP stdio discovery and tool responses, including the startup-observed source commit/tree, working-tree state, adapter, policy-file digest, timestamp, process ID, and unknown host-profile identity.
