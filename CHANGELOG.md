@@ -4,6 +4,7 @@
 - Add an append-only continuation addendum with exact PR CI, integrated contract validation, current host-isolation and receipt-source gaps, and pending human decisions.
 - Record the current Codex E5 host qualification failure: the read-only sandbox read a synthetic canary outside the candidate workspace; production Cipher remains unqualified.
 - Record the disposable-VM follow-up as BLOCKED_VM_UNAVAILABLE on Windows 11 Home; no guest probes, host changes, or live Cipher execution occurred.
+- Record bounded WSL 2/bubblewrap synthetic evidence: candidate-only reads and tested filesystem, interop, and network denials passed; seccomp and cgroup resource limits are unavailable, and Cipher remains unqualified.
 
 ## Unreleased R2A MCP runtime identity candidate
 
