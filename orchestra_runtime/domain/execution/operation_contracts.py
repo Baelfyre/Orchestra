@@ -155,6 +155,7 @@ class ReadOnlySpecialistExecutionRequest:
     request_id: str
     request_digest: str
     workspace_snapshot_digest: str
+    runtime_identity_digest: str
     run_id: str
     adapter_name: str
     command_name: str
@@ -171,10 +172,14 @@ class ReadOnlySpecialistExecutionRequest:
         snapshot_digest = _text(self.workspace_snapshot_digest, "workspace_snapshot_digest").casefold()
         if not _SHA256.fullmatch(snapshot_digest):
             raise ValueError("workspace_snapshot_digest must be SHA-256")
+        runtime_digest = _text(self.runtime_identity_digest, "runtime_identity_digest").casefold()
+        if not _SHA256.fullmatch(runtime_digest):
+            raise ValueError("runtime_identity_digest must be SHA-256")
         if self.operation_id != DEFENSIVE_SECURITY_REVIEW.operation_id:
             raise ValueError("read-only request requires defensive-security-review")
         object.__setattr__(self, "request_digest", digest)
         object.__setattr__(self, "workspace_snapshot_digest", snapshot_digest)
+        object.__setattr__(self, "runtime_identity_digest", runtime_digest)
         object.__setattr__(self, "task_input", _text(self.task_input, "task_input"))
 
 
@@ -185,6 +190,7 @@ class SpecialistReviewResult:
     request_id: str
     request_digest: str
     workspace_snapshot_digest: str
+    runtime_identity_digest: str
     operation_id: str
     specialist: str
     status: SpecialistReviewStatus
@@ -197,10 +203,12 @@ class SpecialistReviewResult:
             object.__setattr__(self, name, _text(getattr(self, name), name))
         request_digest = _text(self.request_digest, "request_digest").casefold()
         snapshot_digest = _text(self.workspace_snapshot_digest, "workspace_snapshot_digest").casefold()
+        runtime_digest = _text(self.runtime_identity_digest, "runtime_identity_digest").casefold()
         digest = _text(self.review_digest, "review_digest").casefold()
         if (
             not _SHA256.fullmatch(request_digest)
             or not _SHA256.fullmatch(snapshot_digest)
+            or not _SHA256.fullmatch(runtime_digest)
             or not _SHA256.fullmatch(digest)
         ):
             raise ValueError("review digests must be SHA-256")
@@ -214,6 +222,7 @@ class SpecialistReviewResult:
             raise ValueError("substantive specialist review requires evidence references")
         object.__setattr__(self, "request_digest", request_digest)
         object.__setattr__(self, "workspace_snapshot_digest", snapshot_digest)
+        object.__setattr__(self, "runtime_identity_digest", runtime_digest)
         object.__setattr__(self, "review_digest", digest)
         object.__setattr__(self, "status", status)
         object.__setattr__(self, "conclusion", conclusion)
@@ -234,10 +243,11 @@ class SpecialistReviewResult:
         findings: tuple[str, ...] = (),
     ) -> SpecialistReviewResult:
         payload = {
-            "review_version": "orchestra.specialist-review-result.v1",
+            "review_version": "orchestra.specialist-review-result.v2",
             "request_id": request.request_id,
             "request_digest": request.request_digest,
             "workspace_snapshot_digest": request.workspace_snapshot_digest,
+            "runtime_identity_digest": request.runtime_identity_digest,
             "operation_id": request.operation_id,
             "specialist": request.specialist,
             "status": SpecialistReviewStatus(status).value,
@@ -248,16 +258,18 @@ class SpecialistReviewResult:
         digest = _digest(payload)
         return cls(
             f"specialist-review.{digest[:24]}", digest, request.request_id, request.request_digest,
-            request.workspace_snapshot_digest, request.operation_id, request.specialist, SpecialistReviewStatus(status),
+            request.workspace_snapshot_digest, request.runtime_identity_digest, request.operation_id,
+            request.specialist, SpecialistReviewStatus(status),
             payload["conclusion"], tuple(payload["findings"]), tuple(payload["evidence_refs"]),
         )
 
     def digest_payload(self) -> dict[str, object]:
         return {
-            "review_version": "orchestra.specialist-review-result.v1",
+            "review_version": "orchestra.specialist-review-result.v2",
             "request_id": self.request_id,
             "request_digest": self.request_digest,
             "workspace_snapshot_digest": self.workspace_snapshot_digest,
+            "runtime_identity_digest": self.runtime_identity_digest,
             "operation_id": self.operation_id,
             "specialist": self.specialist,
             "status": self.status.value,
@@ -274,12 +286,14 @@ class SpecialistReviewResult:
             self.request_id,
             self.request_digest,
             self.workspace_snapshot_digest,
+            self.runtime_identity_digest,
             self.operation_id,
             self.specialist,
         ) != (
             request.request_id,
             request.request_digest,
             request.workspace_snapshot_digest,
+            request.runtime_identity_digest,
             request.operation_id,
             request.specialist,
         ):
@@ -287,7 +301,7 @@ class SpecialistReviewResult:
 
     def to_dict(self) -> dict[str, object]:
         return {
-            "review_version": "orchestra.specialist-review-result.v1",
+            "review_version": "orchestra.specialist-review-result.v2",
             "review_id": self.review_id,
             "review_digest": self.review_digest,
             **self.digest_payload(),

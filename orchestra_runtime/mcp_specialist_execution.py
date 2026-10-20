@@ -3,7 +3,7 @@ from __future__ import annotations
 # @codebase_provenance_JEO
 # @codebase_rights_JEO
 
-from collections.abc import Callable
+from collections.abc import Callable, Mapping
 from pathlib import Path
 from typing import TextIO
 from uuid import uuid4
@@ -11,7 +11,7 @@ from uuid import uuid4
 from .application.ports.specialist_execution import ReadOnlyWorkspaceProvider
 from .factories import AdapterFactory
 from .interfaces import IIDEAdapter, IReadOnlySpecialistExecutionEngine, ISpecialistExecutionEngine
-from .mcp_transport import McpToolTransport, RuntimeFactory
+from .mcp_transport import McpToolTransport, RuntimeFactory, _runtime_identity
 from .repositories import ManifestRepository, SkillSourceRepository
 from .services import (
     ContextAssembler,
@@ -34,6 +34,7 @@ def build_mcp_specialist_runtime_factory(
     execution_mode: SpecialistExecutionMode = SpecialistExecutionMode.DETERMINISTIC_TEST_ENGINE,
     backing_adapter: str = "codex",
     read_only_workspace_provider: ReadOnlyWorkspaceProvider | None = None,
+    runtime_identity: Mapping[str, object] | None = None,
 ) -> RuntimeFactory:
     """Build an MCP runtime that explicitly opts into a specialist execution engine.
 
@@ -48,6 +49,15 @@ def build_mcp_specialist_runtime_factory(
     if not callable(execution_engine_factory):
         raise TypeError("execution_engine_factory must be callable")
     mode = SpecialistExecutionMode(execution_mode)
+    manifest = ManifestRepository(root).load_manifest()
+    server_version = str(manifest.get("version", "")).strip()
+    if not server_version:
+        raise ValueError("plugin.json must declare a non-empty version")
+    server_identity = (
+        dict(runtime_identity)
+        if runtime_identity is not None
+        else _runtime_identity(root, server_version=server_version, adapter=adapter_name)
+    )
 
     def factory() -> tuple[SpecialistRuntimeExecutor, IIDEAdapter]:
         manifest_repository = ManifestRepository(root)
@@ -71,6 +81,7 @@ def build_mcp_specialist_runtime_factory(
             execution_engine=engine,
             execution_mode=mode,
             read_only_workspace_provider=read_only_workspace_provider,
+            runtime_identity=server_identity,
         )
         adapter = AdapterFactory.create(adapter_name, root)
         return executor, adapter
@@ -94,6 +105,11 @@ def build_mcp_stdio_transport_with_specialist_execution(
     server_version = str(manifest.get("version", "")).strip()
     if not server_version:
         raise ValueError("plugin.json must declare a non-empty version")
+    server_identity = _runtime_identity(
+        root,
+        server_version=server_version,
+        adapter=str(backing_adapter).strip().casefold(),
+    )
     return McpToolTransport(
         build_mcp_specialist_runtime_factory(
             root,
@@ -101,8 +117,10 @@ def build_mcp_stdio_transport_with_specialist_execution(
             execution_mode=execution_mode,
             backing_adapter=backing_adapter,
             read_only_workspace_provider=read_only_workspace_provider,
+            runtime_identity=server_identity,
         ),
         server_name="orchestra",
         server_version=server_version,
+        runtime_identity=server_identity,
         error_stream=error_stream,
     )

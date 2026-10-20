@@ -1135,6 +1135,7 @@ class SpecialistRuntimeExecutor(RuntimeExecutor):
         execution_engine: ISpecialistExecutionEngine | IReadOnlySpecialistExecutionEngine | None = None,
         execution_mode: SpecialistExecutionMode = SpecialistExecutionMode.DETERMINISTIC_TEST_ENGINE,
         read_only_workspace_provider: ReadOnlyWorkspaceProvider | None = None,
+        runtime_identity: Mapping[str, object] | None = None,
     ) -> None:
         if execution_engine is not None and not isinstance(execution_engine, (ISpecialistExecutionEngine, IReadOnlySpecialistExecutionEngine)):
             raise RuntimeInitializationError(
@@ -1151,7 +1152,28 @@ class SpecialistRuntimeExecutor(RuntimeExecutor):
                 "read-only workspace provider must expose bounded read methods",
                 "INVALID_READ_ONLY_WORKSPACE_PROVIDER",
             )
+        if runtime_identity is not None and not isinstance(runtime_identity, Mapping):
+            raise RuntimeInitializationError(
+                "runtime identity must be server-derived mapping data",
+                "INVALID_RUNTIME_IDENTITY",
+            )
+        if runtime_identity is not None and not {
+            "runtime_version",
+            "source_commit",
+            "source_tree",
+            "source_state",
+            "adapter",
+            "policy_sha256",
+            "host_profile_id",
+        }.issubset(runtime_identity):
+            raise RuntimeInitializationError(
+                "runtime identity is missing R2A identity fields",
+                "INVALID_RUNTIME_IDENTITY",
+            )
         self._read_only_workspace_provider = read_only_workspace_provider
+        self._runtime_identity = (
+            None if runtime_identity is None else MappingProxyType(dict(runtime_identity))
+        )
         self._execution_engine = execution_engine
         self._execution_mode = SpecialistExecutionMode(execution_mode)
         self._execution_skill_registry = skill_registry
@@ -1348,6 +1370,12 @@ class SpecialistRuntimeExecutor(RuntimeExecutor):
                 "a trusted read-only workspace provider is required",
                 "READ_ONLY_WORKSPACE_UNAVAILABLE",
             )
+        if self._runtime_identity is None:
+            raise SpecialistExecutionContractError(
+                "server-derived runtime identity is required for a read-only review",
+                "RUNTIME_IDENTITY_UNAVAILABLE",
+            )
+        runtime_identity_digest = _digest(dict(self._runtime_identity))
         workspace, snapshot_digest = _create_host_read_only_snapshot(
             provider,
             Path(request.project_root),
@@ -1357,12 +1385,14 @@ class SpecialistRuntimeExecutor(RuntimeExecutor):
                 "request_digest": request.request_digest,
                 "operation_id": contract.operation_id,
                 "workspace_snapshot_digest": snapshot_digest,
+                "runtime_identity_digest": runtime_identity_digest,
             }
         )
         review_request = ReadOnlySpecialistExecutionRequest(
             request_id=request.request_id,
             request_digest=review_request_digest,
             workspace_snapshot_digest=snapshot_digest,
+            runtime_identity_digest=runtime_identity_digest,
             run_id=request.run_id,
             adapter_name=request.adapter_name,
             command_name=request.command_name,
