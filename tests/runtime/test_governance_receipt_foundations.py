@@ -164,7 +164,7 @@ def test_routing_not_required_is_not_a_specialist_review_result() -> None:
                 "orchestra_runtime.domain.execution.operation_contracts",
                 fromlist=["ReadOnlySpecialistExecutionRequest"],
             ).ReadOnlySpecialistExecutionRequest(
-                "request-1", "d" * 64, "c" * 64, "run-1", "codex", "security-check", "cipher",
+                "request-1", "d" * 64, "c" * 64, "f" * 64, "run-1", "codex", "security-check", "cipher",
                 DEFENSIVE_SECURITY_REVIEW.operation_id, "review this security boundary",
             ),
             status="NOT_REQUIRED",
@@ -293,7 +293,7 @@ def test_substantive_review_result_carries_evidence_but_no_authorization_field()
     from orchestra_runtime.domain.execution.operation_contracts import ReadOnlySpecialistExecutionRequest
 
     request = ReadOnlySpecialistExecutionRequest(
-        "specialist-request.abc", "d" * 64, "c" * 64, "run-1", "codex", "security-check",
+        "specialist-request.abc", "d" * 64, "c" * 64, "f" * 64, "run-1", "codex", "security-check",
         "cipher", DEFENSIVE_SECURITY_REVIEW.operation_id, "review",
     )
     review = SpecialistReviewResult.create(
@@ -304,6 +304,7 @@ def test_substantive_review_result_carries_evidence_but_no_authorization_field()
     review.assert_matches(request)
     assert review.evidence_refs == ("evidence:source:auth.py",)
     assert review.workspace_snapshot_digest == "c" * 64
+    assert review.runtime_identity_digest == "f" * 64
     assert not hasattr(review, "authorized")
     with pytest.raises(ValueError, match="does not match"):
         review.assert_matches(replace(request, workspace_snapshot_digest="e" * 64))
@@ -440,6 +441,7 @@ def test_operation_contract_and_read_only_request_negative_branches() -> None:
         "request_id": "review-request",
         "request_digest": "d" * 64,
         "workspace_snapshot_digest": "e" * 64,
+        "runtime_identity_digest": "f" * 64,
         "run_id": "run-1",
         "adapter_name": "codex",
         "command_name": "security-check",
@@ -450,6 +452,7 @@ def test_operation_contract_and_read_only_request_negative_branches() -> None:
     for field, value, message in (
         ("request_digest", "not-a-digest", "SHA-256"),
         ("workspace_snapshot_digest", "not-a-digest", "SHA-256"),
+        ("runtime_identity_digest", "not-a-digest", "SHA-256"),
         ("operation_id", SECURITY_SENSITIVE_EXECUTION.operation_id, "defensive-security-review"),
         ("task_input", "   ", "non-empty string"),
     ):
@@ -662,6 +665,7 @@ def test_remaining_review_result_validation_branches() -> None:
         "review-coverage",
         "a" * 64,
         "b" * 64,
+        "f" * 64,
         "run-coverage",
         "codex",
         "security-check",

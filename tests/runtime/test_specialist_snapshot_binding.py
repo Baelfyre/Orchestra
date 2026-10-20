@@ -499,6 +499,7 @@ def test_review_result_from_one_snapshot_cannot_match_another(tmp_path: Path) ->
         "review-a",
         "a" * 64,
         digest_a,
+        "f" * 64,
         "run-a",
         "codex",
         "security-check",
@@ -510,6 +511,7 @@ def test_review_result_from_one_snapshot_cannot_match_another(tmp_path: Path) ->
         request_a.request_id,
         request_a.request_digest,
         digest_b,
+        request_a.runtime_identity_digest,
         request_a.run_id,
         request_a.adapter_name,
         request_a.command_name,
@@ -527,3 +529,5 @@ def test_review_result_from_one_snapshot_cannot_match_another(tmp_path: Path) ->
     review_a.assert_matches(request_a)
     with pytest.raises(ValueError, match="does not match"):
         review_a.assert_matches(request_b)
+    with pytest.raises(ValueError, match="does not match"):
+        review_a.assert_matches(replace(request_a, runtime_identity_digest="0" * 64))

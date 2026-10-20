@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import inspect
+import json
 from pathlib import Path
 
 from orchestra_runtime.domain.execution.operation_contracts import (
@@ -16,6 +17,7 @@ from orchestra_runtime.mcp_specialist_execution import (
 from orchestra_runtime.mcp_transport import (
     MCP_PROTOCOL_VERSION,
     MCP_PROTOCOL_VERSION_META_KEY,
+    MCP_RUNTIME_IDENTITY_META_KEY,
     build_mcp_stdio_transport,
 )
 from orchestra_runtime.specialist_execution import (
@@ -24,6 +26,7 @@ from orchestra_runtime.specialist_execution import (
     SpecialistExecutionRequest,
     SpecialistExecutionStatus,
     SpecialistSideEffectClass,
+    _digest,
 )
 
 
@@ -184,9 +187,13 @@ def test_opt_in_mcp_builder_runs_only_trusted_snapshot_bound_read_only_cipher_re
         backing_adapter="codex",
     )
 
-    response = transport.handle_message(
-        _call("security-check", "review the authorization boundary")
-    )
+    call = _call("security-check", "review the authorization boundary")
+    call["params"]["_meta"][MCP_RUNTIME_IDENTITY_META_KEY] = {
+        "source_commit": "f" * 40,
+        "source_tree": "f" * 40,
+        "source_state": "CLEAN",
+    }
+    response = transport.handle_message(call)
     result = response["result"]
 
     assert result["isError"] is False
@@ -194,7 +201,13 @@ def test_opt_in_mcp_builder_runs_only_trusted_snapshot_bound_read_only_cipher_re
     assert provider.calls == 1
     assert engine.requests[0].operation_id == "defensive-security-review"
     assert engine.requests[0].workspace_snapshot_digest != provider.snapshot_digest
-    assert "workspace_snapshot_digest" in result["content"][0]["text"]
+    review = json.loads(result["content"][0]["text"])
+    runtime_identity = result["_meta"][MCP_RUNTIME_IDENTITY_META_KEY]
+    assert runtime_identity["source_commit"] != "f" * 40
+    assert review["review_version"] == "orchestra.specialist-review-result.v2"
+    assert review["workspace_snapshot_digest"] == engine.requests[0].workspace_snapshot_digest
+    assert review["runtime_identity_digest"] == _digest(runtime_identity)
+    assert engine.requests[0].runtime_identity_digest == review["runtime_identity_digest"]
 
 
 def test_mcp_client_metadata_and_prompt_cannot_select_execution_engine() -> None:
