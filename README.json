@@ -890,7 +890,7 @@
         "tools/call"
       ],
       "r2a_runtime_identity_candidate": {
-        "status": "PR_976_CANDIDATE",
+        "status": "MERGED_PR_976",
         "metadata_namespace": "io.orchestra/runtimeIdentity",
         "availability": [
           "server/discover response _meta",
@@ -918,7 +918,31 @@
         "validation_surface": [
           "tests/runtime/test_mcp_transport.py"
         ],
-        "phase_boundary": "Documents the R2A PR candidate only; it does not claim R2B specialist-host execution or R2C trusted receipt consumption."
+        "phase_boundary": "R2A runtime identity was merged in PR #976. The separate R2B candidate below binds read-only review evidence to this server-generated identity; R2C trusted receipt consumption remains unimplemented."
+      },
+      "r2b_read_only_cipher_review_candidate": {
+        "status": "PR_977_DRAFT_CANDIDATE",
+        "operation_id": "defensive-security-review",
+        "side_effect_class": "NONE",
+        "authority_effect": "NONE",
+        "protected_execution_receipt_required": false,
+        "review_result_version": "orchestra.specialist-review-result.v2",
+        "evidence_bindings": [
+          "server-generated R2A runtime identity digest",
+          "host-computed candidate workspace snapshot digest"
+        ],
+        "production_engine": "HOST_CONFIGURED_OPT_IN_ONLY",
+        "machine_sources": [
+          "orchestra_runtime/domain/execution/operation_contracts.py",
+          "orchestra_runtime/mcp_specialist_execution.py",
+          "orchestra_runtime/specialist_execution.py"
+        ],
+        "validation_surface": [
+          "tests/runtime/test_governance_receipt_foundations.py",
+          "tests/runtime/test_mcp_specialist_execution.py",
+          "tests/runtime/test_specialist_snapshot_binding.py"
+        ],
+        "phase_boundary": "This draft binds typed read-only review evidence but does not configure a production host engine or workspace provider, add a production receipt resolver, or change protected execution. The default MCP entrypoint remains route-only."
       },
       "human_sources": [
         "docs/developer/MCP_STDIO_TRANSPORT.md"
