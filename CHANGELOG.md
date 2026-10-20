@@ -1,3 +1,8 @@
+## Unreleased GOV-937 synthetic snapshot-only broker feasibility
+
+- Add an isolated synthetic-only snapshot producer and in-memory deterministic mock broker under `internal/`, with bounded paths/content, candidate and runtime digest binding, replay rejection, and explicit non-authorizing test output.
+- Add adversarial fixture tests and feasibility evidence. The prototype is not imported by Orchestra runtime, is not a Cipher review, and does not establish model-host isolation, provider safety, governance receipt authority, or production readiness.
+
 ## Unreleased R2A MCP runtime identity candidate
 
 - Add server-generated runtime identity metadata to MCP stdio discovery and tool responses, including the startup-observed source commit/tree, working-tree state, adapter, policy-file digest, timestamp, process ID, and unknown host-profile identity.

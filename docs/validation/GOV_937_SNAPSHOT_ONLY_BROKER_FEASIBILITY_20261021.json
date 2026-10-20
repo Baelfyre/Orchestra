@@ -1,0 +1,340 @@
+{
+  "schema_version": "orchestra.gov-937.snapshot-broker-feasibility.v1",
+  "task_id": "GOV-937-SNAPSHOT-BROKER-FEASIBILITY",
+  "recorded_at_local": "2026-10-21",
+  "terminal_disposition": "BROKER_FEASIBILITY_PARTIAL",
+  "disposition_note": "Synthetic implementation and local suites are complete. Strict staged governance, commit/push, draft PR, and exact-head hosted CI remain pending.",
+  "repository": {
+    "full_name": "Baelfyre/Orchestra",
+    "issue": {
+      "number": 937,
+      "state": "OPEN",
+      "updated_at": "2026-10-07T10:26:24Z",
+      "url": "https://github.com/Baelfyre/Orchestra/issues/937"
+    },
+    "fresh_origin_main": {
+      "commit": "b215a48b678e8708a8a6e7123f5ee1893d3f4f15",
+      "tree": "fac2140e41e81bdf243ddc6c389b38c0453ad28c"
+    },
+    "execution_branch": "JEO/issue-937-snapshot-broker-feasibility",
+    "execution_worktree": "C: local clone under CodexWorktrees/orchestra-937-snapshot-broker",
+    "branch_base": "b215a48b678e8708a8a6e7123f5ee1893d3f4f15",
+    "source_checkout_preserved": true,
+    "alteredego_source_read_or_modified": false,
+    "execution_checkout_type": "fresh_local_clone_fallback",
+    "preserved_worktree_after_disk_limit": "D:/CodexHome/visualizations/2026/10/20/01a15750-e146-78b2-8680-554a48f79cff/orchestra-937-snapshot-broker"
+  },
+  "preview": {
+    "status": "SOURCE_IDENTITY_VERIFIED_READ_ONLY",
+    "worktree": "D:/CodexHome/worktrees/orchestra-v112-jev-handoff",
+    "commit": "d23fc66accc3f3a52a2ab494e8ce655b42ae57b5",
+    "tree": "5aa714e88c0f3e4739e564c4008b2974125cbe34",
+    "installed_host_parity": "NOT_VERIFIED"
+  },
+  "existing_pull_requests": [
+    {
+      "number": 977,
+      "state": "OPEN",
+      "draft": true,
+      "head": "ec0c99dd634dc98588b722d07dc2badf63865122",
+      "preserved": true
+    },
+    {
+      "number": 978,
+      "state": "OPEN",
+      "draft": true,
+      "head": "ba17689192309bca5819fd72a90ed04feec1dbf8",
+      "preserved": true
+    },
+    {
+      "number": 979,
+      "state": "OPEN",
+      "draft": true,
+      "head": "8094d36607bdeee8c7badc8aee3bdb27da8f7a35",
+      "preserved": true
+    },
+    {
+      "number": 980,
+      "state": "OPEN",
+      "draft": true,
+      "head": "6573353cf84efaa1b11107418843f8cb9776be18",
+      "preserved": true
+    },
+    {
+      "number": 981,
+      "state": "OPEN",
+      "draft": true,
+      "head": "215a225f25bcf3f77b53b36ee4c03823ddb20084",
+      "preserved": true
+    },
+    {
+      "number": 982,
+      "state": "OPEN",
+      "draft": true,
+      "head": "36aae532ba68cfe9614165527d3e1a32a868075e",
+      "preserved": true
+    }
+  ],
+  "source_contract_findings": {
+    "root_cause": "The current policy keeps effectful Cipher execution behind verified authority, and read-only review is eligible only for the exact trusted review-only host profile. The default MCP builder is route-only and cannot prove a substantive host assessment or consume a trusted receipt.",
+    "review_result_v1": "PRESENT_ON_FRESH_MAIN",
+    "review_result_v2_on_fresh_main": "NOT_FOUND",
+    "related_v2_evidence": {
+      "pull_request": 982,
+      "state": "OPEN_DRAFT",
+      "head": "36aae532ba68cfe9614165527d3e1a32a868075e",
+      "schema_adds_runtime_identity_digest": true
+    },
+    "production_receipt_resolver_and_consumption": "NOT_CONFIGURED_OR_ACTIVATED",
+    "pr_980_receipt_tests": "SEPARATE_DRAFT_TEST_EVIDENCE_ONLY",
+    "pr_981_host_qualification": "HOST_ARCHITECTURE_NOT_FIT",
+    "frozen_pr_977": "PRESERVED"
+  },
+  "units": {
+    "S0": {
+      "status": "COMPLETE",
+      "evidence": "Fresh origin/main, issue #937, PRs #977-#982, current policy, runtime snapshot path, v1 schema, and PR #982 v2 proposal reviewed."
+    },
+    "S1": {
+      "status": "COMPLETE",
+      "evidence": "Distinct test-only envelope binds synthetic candidate identity, paths, file digests, ordered manifest, content, request, runtime digest, and non-authorizing mode."
+    },
+    "S2": {
+      "status": "COMPLETE",
+      "evidence": "Internal-only fixed-root producer and in-memory deterministic mock; no production runtime or MCP integration."
+    },
+    "S3": {
+      "status": "COMPLETE",
+      "command": "python -m pytest tests/runtime/test_gov_937_snapshot_broker_prototype.py -q",
+      "result": "34 passed"
+    },
+    "S4": {
+      "status": "COMPLETE",
+      "evidence": "Default MCP security-check blocked without configured engine; v1/v2, policy, and receipt surfaces unchanged."
+    },
+    "S5": {
+      "status": "COMPLETE",
+      "evidence": "Human and machine feasibility reports plus changelog entry added."
+    },
+    "S6": {
+      "status": "IN_PROGRESS",
+      "evidence": "Local focused/runtime/behavior suites, architecture, stale-reference, staged diff, and strict governance checks passed; the behavior suite has one case-sensitive-filesystem skip. Commit/push, draft PR, and exact-head hosted CI are pending."
+    }
+  },
+  "prototype_contract": {
+    "source_path": "internal/gov_937_snapshot_broker_prototype.py",
+    "test_path": "tests/runtime/test_gov_937_snapshot_broker_prototype.py",
+    "runtime_wired": false,
+    "mcp_registered": false,
+    "provider_or_model_calls": false,
+    "filesystem_root_client_selectable": false,
+    "authority_effect": "NONE",
+    "mode": "TEST_ONLY_NON_AUTHORIZING",
+    "bounds": {
+      "files": 4,
+      "file_bytes": 4096,
+      "total_bytes": 12288,
+      "assessment_timeout_ms": 50,
+      "output_bytes": 2048
+    },
+    "path_and_content_policy": [
+      "NFC relative paths only",
+      "case and Unicode normalization collisions rejected",
+      "traversal and absolute paths rejected",
+      "symlink and reparse points rejected",
+      "hardlink aliases rejected",
+      "file identity checked before, during, and after descriptor read",
+      "candidate digest mismatch rejected",
+      "binary, NUL, invalid UTF-8, oversize, and TEST_SECRET_ marker content rejected"
+    ],
+    "mock_result": "Typed TEST_ONLY output bound to request and snapshot; no governance, receipt, specialist, or execution authority fields.",
+    "trust_limit": "No operating-system process isolation is demonstrated. The timeout only cancels a cooperative coroutine. Runtime and candidate identities in tests are synthetic fixtures, not production R2A identity or repository identities."
+  },
+  "adversarial_probes": [
+    {
+      "id": "APPROVED_CONTENT_INCLUDED_EXACTLY",
+      "result": "PASS",
+      "test": "test_approved_bytes_are_exact_and_mock_findings_are_explicitly_test_only"
+    },
+    {
+      "id": "UNAPPROVED_SIBLING_FILE_EXCLUDED",
+      "result": "PASS",
+      "test": "test_approved_bytes_are_exact_and_mock_findings_are_explicitly_test_only"
+    },
+    {
+      "id": "SYMLINK_AND_PATH_TRAVERSAL_DENIED",
+      "result": "PASS",
+      "tests": [
+        "test_symlink_target_is_rejected",
+        "test_traversal_absolute_and_unapproved_paths_are_denied"
+      ]
+    },
+    {
+      "id": "HARDLINK_OR_EXTERNAL_ALIAS_REJECTED",
+      "result": "PASS",
+      "test": "test_hardlink_alias_is_rejected"
+    },
+    {
+      "id": "RENAMED_CHANGED_OR_RACING_FILE_REJECTED",
+      "result": "PASS",
+      "tests": [
+        "test_renamed_or_changed_candidate_file_is_rejected",
+        "test_racing_file_mutation_is_rejected"
+      ]
+    },
+    {
+      "id": "DUPLICATE_NORMALIZATION_COLLISION_DENIED",
+      "result": "PASS",
+      "test": "test_allowlist_normalization_collisions_and_noncanonical_unicode_are_denied"
+    },
+    {
+      "id": "BINARY_ENCODING_OVERSIZE_AND_TRUNCATION_FAIL_CLOSED",
+      "result": "PASS",
+      "tests": [
+        "test_binary_encoding_oversize_and_synthetic_secret_markers_fail_closed",
+        "test_file_count_and_total_content_budgets_are_enforced"
+      ]
+    },
+    {
+      "id": "FORGED_STALE_OR_CROSS_CANDIDATE_SNAPSHOT_DENIED",
+      "result": "PASS",
+      "tests": [
+        "test_forged_or_cross_context_snapshot_is_denied",
+        "test_renamed_or_changed_candidate_file_is_rejected"
+      ]
+    },
+    {
+      "id": "REPLAYED_MISMATCHED_REQUEST_RUNTIME_OR_MANIFEST_DIGEST_DENIED",
+      "result": "PASS",
+      "tests": [
+        "test_forged_or_cross_context_snapshot_is_denied",
+        "test_content_digest_mismatch_and_request_replay_are_denied"
+      ]
+    },
+    {
+      "id": "UNTRUSTED_SOURCE_INSTRUCTIONS_CANNOT_EXPAND_SCOPE",
+      "result": "PASS",
+      "test": "test_untrusted_fixture_instructions_cannot_expand_the_snapshot"
+    },
+    {
+      "id": "MODEL_TOOL_REQUEST_HAS_NO_EXECUTABLE_TOOL_ROUTE",
+      "result": "PASS",
+      "test": "test_engine_contract_has_only_immutable_in_memory_snapshot_input"
+    },
+    {
+      "id": "MALFORMED_FINDINGS_EVIDENCE_AND_AUTHORITY_FIELDS_DENIED",
+      "result": "PASS",
+      "tests": [
+        "test_malformed_authority_evidence_and_oversized_engine_output_fail_closed",
+        "test_malformed_finding_reference_and_partial_response_fail_closed"
+      ]
+    },
+    {
+      "id": "TIMEOUT_CANCEL_EXCEPTION_AND_PARTIAL_RESPONSE_FAIL_CLOSED",
+      "result": "PASS",
+      "tests": [
+        "test_timeout_and_cancellation_return_no_assessment",
+        "test_oversized_output_engine_failure_and_missing_engine_fail_closed",
+        "test_malformed_finding_reference_and_partial_response_fail_closed"
+      ]
+    },
+    {
+      "id": "NO_NEW_FILES_OR_HOST_SIDE_EFFECTS_FROM_MOCK_EXECUTION",
+      "result": "PASS",
+      "test": "test_mock_execution_writes_no_fixture_files"
+    },
+    {
+      "id": "NO_EXTERNAL_PROVIDER_CALL_OR_REAL_DATA_ACCESS",
+      "result": "PASS",
+      "evidence_note": "The candidate root check enumerated directory names to find its synthetic marker, then rejected the real Orchestra root before opening source bytes. No private AlteredEgo source was read.",
+      "tests": [
+        "test_mock_has_no_network_mcp_provider_or_model_imports",
+        "test_real_repository_root_is_rejected_before_source_bytes_are_opened"
+      ]
+    },
+    {
+      "id": "DEFAULT_MCP_SECURITY_CHECK_REMAINS_BLOCKED",
+      "result": "PASS",
+      "test": "test_default_mcp_security_check_stays_blocked_without_runtime_engine"
+    }
+  ],
+  "validation": {
+    "local": [
+      {
+        "command": "python -m pytest tests/runtime/test_gov_937_snapshot_broker_prototype.py -q",
+        "result": "PASS",
+        "summary": "34 passed",
+        "worktree": "C: fresh clone"
+      },
+      {
+        "command": "python -m pytest tests/runtime",
+        "result": "PASS",
+        "summary": "3607 passed, 36 subtests passed",
+        "worktree": "C: fresh clone"
+      },
+      {
+        "command": "python -m pytest tests/behavior -q -rs",
+        "result": "PASS_WITH_SKIP",
+        "summary": "636 passed, 1 skipped, 215 subtests passed",
+        "skip": "tests/behavior/test_artificer_governance_records.py:500; filesystem is case-insensitive in the temporary directory",
+        "worktree": "C: fresh clone"
+      },
+      {
+        "command": "python scripts/validation/validate_architecture_boundaries.py",
+        "result": "PASS",
+        "summary": "RUNTIME_ARCHITECTURE_BOUNDARIES=PASS",
+        "worktree": "C: fresh clone"
+      },
+      {
+        "command": "python scripts/check_stale_references.py",
+        "result": "PASS",
+        "summary": "No stale or disallowed references found",
+        "worktree": "C: fresh clone"
+      },
+      {
+        "command": "git diff --check",
+        "result": "PASS",
+        "summary": "git diff --cached --check returned exit 0 with no whitespace errors."
+      },
+      {
+        "command": "python tests/behavior/run_tests.py",
+        "result": "NOT_RUN",
+        "reason": "ORCHESTRA_APPROVED_BASE_SHA is unset; no baseline was inferred or substituted."
+      },
+      {
+        "command": "cross-platform host parity",
+        "result": "NOT_RUN",
+        "reason": "Only the current Windows host was locally available; hosted exact-head checks are pending."
+      }
+    ],
+    "strict_governance": "PASS: Stage 1 strict deterministic gates, 0 errors, 0 warnings.",
+    "stale_reference_check": "PASS: no stale or disallowed references found.",
+    "manual_documentation_impact": "SKIP: python scripts/check_readme_impact.py returned README_IMPACT_GATE=SKIP event=workflow_dispatch reason=no_revision_transition; no README file changed.",
+    "hosted_exact_head_ci": "PENDING"
+  },
+  "initial_test_failure_and_repair": {
+    "command": "python -m pytest tests/runtime/test_gov_937_snapshot_broker_prototype.py -q",
+    "initial_result": "10 failed",
+    "cause": "Windows fstat ctime differs from path lstat ctime, and the initial test harness expected an empty typed finding result to be incomplete.",
+    "repair": "Use stable descriptor/path identity fields and reject an actually partial untyped response; rerun now passes 34 tests.",
+    "unresolved_failures": 0
+  },
+  "protected_boundaries": {
+    "production_cipher_activation": false,
+    "trusted_receipt_issuance_or_consumption": false,
+    "protected_policy_validator_or_whitelist_changes": false,
+    "merge_release_deploy_or_installed_runtime_refresh": false,
+    "existing_prs_977_to_982_modified": false,
+    "v1_12_monitoring_scope_changed": false
+  },
+  "human_decisions_required_before_live_use": [
+    "Approve the exact production host and model data-transfer boundary after independent isolation review.",
+    "Complete privacy and data-handling review for any live provider transport.",
+    "Define and independently validate substantive Cipher review criteria and evidence acceptance.",
+    "Authorize and implement a trusted receipt resolver, execution-context binding, and consumption lifecycle under the protected-governance protocol."
+  ],
+  "source_digests": {
+    "internal/gov_937_snapshot_broker_prototype.py": "AC4B52B1C53AFA6CF81C396AC09222E96F17E43F6769FDA8C0735F7FE82E23E2",
+    "tests/runtime/test_gov_937_snapshot_broker_prototype.py": "9B16D2C5AF81BF8E628477805C6566AFC04DC5F6D7795EECB94DDAC713B7BEDD"
+  }
+}
