@@ -2488,7 +2488,8 @@
       "machine_sources": [
         "machine/governance/policy.v1.json",
         "machine/schemas/governance-receipt.v1.schema.json",
-        "machine/schemas/specialist-review-result.v1.schema.json"
+        "machine/schemas/specialist-review-result.v1.schema.json",
+        "machine/schemas/specialist-review-result.v2.schema.json"
       ],
       "human_sources": [
         "docs/project/SPECIALIST_RUNTIME_HOST_EXECUTION_ARCHITECTURE.md",
