@@ -1,3 +1,7 @@
+## Unreleased Issue #937 R2B-2A snapshot traversal regression
+
+- Add file-link and directory-link traversal regression coverage for specialist candidate snapshots; no runtime behavior changes.
+
 ## Unreleased R2A MCP runtime identity candidate
 
 - Add server-generated runtime identity metadata to MCP stdio discovery and tool responses, including the startup-observed source commit/tree, working-tree state, adapter, policy-file digest, timestamp, process ID, and unknown host-profile identity.
