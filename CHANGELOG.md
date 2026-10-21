@@ -1,3 +1,8 @@
+## Unreleased GOV-937 synthetic provider-boundary qualification
+
+- Extend the internal snapshot-only prototype with typed synthetic provider requests and responses, an exact-scope mock-only transfer intent, payload/expiry/replay checks, and bounded response validation.
+- Keep the provider contract disconnected from MCP, production runtime composition, live models, receipt authority, and Cipher activation; findings remain explicitly `TEST_ONLY`.
+
 ## Unreleased GOV-937 synthetic snapshot-only broker feasibility
 
 - Add an isolated synthetic-only snapshot producer and in-memory deterministic mock broker under `internal/`, with bounded paths/content, candidate and runtime digest binding, replay rejection, and explicit non-authorizing test output.

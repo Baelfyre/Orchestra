@@ -6,13 +6,14 @@
 from __future__ import annotations
 
 import asyncio
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from hashlib import sha256
 import json
 import os
 from pathlib import Path
 import re
 import stat
+import time
 import unicodedata
 from typing import Mapping
 
@@ -26,6 +27,13 @@ MAX_FILE_BYTES = 4096
 MAX_TOTAL_BYTES = 12288
 MAX_OUTPUT_BYTES = 2048
 MAX_ASSESSMENT_SECONDS = 0.05
+MAX_TRANSFER_INTENT_TTL_SECONDS = 60
+TRANSFER_INTENT_VERSION = "orchestra.gov-937.synthetic-transfer-intent.v1"
+PROVIDER_REQUEST_VERSION = "orchestra.gov-937.synthetic-provider-request.v1"
+PROVIDER_RESPONSE_VERSION = "orchestra.gov-937.synthetic-provider-response.v1"
+SYNTHETIC_ASSESSMENT_OPERATION = "READ_ONLY_ASSESSMENT"
+SYNTHETIC_ASSESSMENT_PURPOSE = "SYNTHETIC_DEFENSIVE_ASSESSMENT"
+MOCK_ONLY_RECIPIENT = "MOCK_ONLY"
 _SHA256 = re.compile(r"^[0-9a-f]{64}$")
 _SECRET_MARKER = b"TEST_SECRET_"
 
@@ -199,6 +207,115 @@ class MockAssessmentResult:
                 for finding in self.findings
             ],
         }
+
+
+@dataclass(frozen=True, slots=True)
+class SyntheticTransferIntent:
+    schema_version: str
+    intent_id: str
+    purpose: str
+    operation: str
+    recipient: str
+    request_id: str
+    request_digest: str
+    snapshot_digest: str
+    candidate_digest: str
+    runtime_identity_digest: str
+    approved_file_digests: tuple[tuple[str, str], ...]
+    max_payload_bytes: int
+    issued_at: int
+    expires_at: int
+
+
+@dataclass(frozen=True, slots=True)
+class SyntheticProviderRequest:
+    schema_version: str
+    mode: str
+    purpose: str
+    operation: str
+    recipient: str
+    intent_id: str
+    request_id: str
+    request_digest: str
+    manifest_digest: str
+    content_digest: str
+    snapshot_digest: str
+    candidate: SyntheticCandidateIdentity
+    runtime_identity_digest: str
+    files: tuple[SnapshotFile, ...]
+
+
+@dataclass(frozen=True, slots=True)
+class SyntheticProviderResponse:
+    schema_version: str
+    mode: str
+    classification: str
+    test_only: bool
+    status: str
+    request_id: str
+    request_digest: str
+    snapshot_digest: str
+    runtime_identity_digest: str
+    findings: tuple[MockFinding, ...]
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "schema_version": self.schema_version,
+            "mode": self.mode,
+            "classification": self.classification,
+            "test_only": self.test_only,
+            "status": self.status,
+            "request_id": self.request_id,
+            "request_digest": self.request_digest,
+            "snapshot_digest": self.snapshot_digest,
+            "runtime_identity_digest": self.runtime_identity_digest,
+            "findings": [
+                {
+                    "path": finding.path,
+                    "message": finding.message,
+                    "evidence_sha256": finding.evidence_sha256,
+                    "classification": "TEST_ONLY",
+                }
+                for finding in self.findings
+            ],
+        }
+
+
+def _synthetic_findings(files: tuple[SnapshotFile, ...]) -> tuple[MockFinding, ...]:
+    return tuple(
+        MockFinding(
+            item.path,
+            "TEST_ONLY: synthetic marker detected; this is not Cipher review.",
+            item.sha256,
+        )
+        for item in files
+        if b"TEST_ONLY_INTENTIONAL_FINDING" in item.content
+    )
+
+
+def _transfer_intent_payload(intent: SyntheticTransferIntent) -> dict[str, object]:
+    return {
+        "schema_version": intent.schema_version,
+        "purpose": intent.purpose,
+        "operation": intent.operation,
+        "recipient": intent.recipient,
+        "request_id": intent.request_id,
+        "request_digest": intent.request_digest,
+        "snapshot_digest": intent.snapshot_digest,
+        "candidate_digest": intent.candidate_digest,
+        "runtime_identity_digest": intent.runtime_identity_digest,
+        "approved_file_digests": [
+            {"path": path, "sha256": digest}
+            for path, digest in intent.approved_file_digests
+        ],
+        "max_payload_bytes": intent.max_payload_bytes,
+        "issued_at": intent.issued_at,
+        "expires_at": intent.expires_at,
+    }
+
+
+def _transfer_intent_id(intent: SyntheticTransferIntent) -> str:
+    return f"synthetic-transfer.{_digest(_canonical_bytes(_transfer_intent_payload(intent)))[:24]}"
 
 
 def _stat_key(info: os.stat_result) -> tuple[int, ...]:
@@ -405,15 +522,7 @@ class DeterministicMockAssessmentEngine:
     """In-memory deterministic fixture scanner with no tool or provider surface."""
 
     async def assess(self, snapshot: SnapshotEnvelope) -> MockAssessmentResult:
-        findings = tuple(
-            MockFinding(
-                item.path,
-                "TEST_ONLY: synthetic marker detected; this is not Cipher review.",
-                item.sha256,
-            )
-            for item in snapshot.files
-            if b"TEST_ONLY_INTENTIONAL_FINDING" in item.content
-        )
+        findings = _synthetic_findings(snapshot.files)
         return MockAssessmentResult(
             PROTOTYPE_VERSION,
             NON_AUTHORIZING_MODE,
@@ -426,8 +535,31 @@ class DeterministicMockAssessmentEngine:
         )
 
 
+class InMemoryRecordingProvider:
+    """Synthetic-only provider contract fake; requests stay in process memory."""
+
+    def __init__(self) -> None:
+        self.requests: list[SyntheticProviderRequest] = []
+
+    async def assess(self, request: SyntheticProviderRequest) -> SyntheticProviderResponse:
+        self.requests.append(request)
+        findings = _synthetic_findings(request.files)
+        return SyntheticProviderResponse(
+            PROVIDER_RESPONSE_VERSION,
+            NON_AUTHORIZING_MODE,
+            "TEST_ONLY",
+            True,
+            "FINDINGS" if findings else "NO_FINDINGS",
+            request.request_id,
+            request.request_digest,
+            request.snapshot_digest,
+            request.runtime_identity_digest,
+            findings,
+        )
+
+
 class SnapshotOnlyBroker:
-    """Verifies a synthetic envelope, then calls only its private deterministic mock."""
+    """Verifies synthetic envelopes before invoking in-memory deterministic fakes."""
 
     def __init__(self, candidate: SyntheticCandidateIdentity, runtime_identity_digest: str) -> None:
         if type(candidate) is not SyntheticCandidateIdentity:
@@ -439,7 +571,31 @@ class SnapshotOnlyBroker:
         self._allowlist = tuple(path for path, _ in candidate.approved_file_digests)
         self._expected_digests = dict(candidate.approved_file_digests)
         self._engine: DeterministicMockAssessmentEngine | None = DeterministicMockAssessmentEngine()
+        self._provider: InMemoryRecordingProvider | None = InMemoryRecordingProvider()
         self._seen_requests: set[str] = set()
+        self._seen_transfer_intents: set[str] = set()
+
+    def create_synthetic_transfer_intent(self, snapshot: SnapshotEnvelope) -> SyntheticTransferIntent:
+        """Create a short-lived fixture transfer request, not consent or authority."""
+        self._validate_snapshot(snapshot)
+        now = int(time.time())
+        intent = SyntheticTransferIntent(
+            TRANSFER_INTENT_VERSION,
+            "",
+            SYNTHETIC_ASSESSMENT_PURPOSE,
+            SYNTHETIC_ASSESSMENT_OPERATION,
+            MOCK_ONLY_RECIPIENT,
+            snapshot.request_id,
+            snapshot.request_digest,
+            snapshot.snapshot_digest,
+            _digest(_canonical_bytes(snapshot.candidate.to_dict())),
+            snapshot.runtime_identity_digest,
+            tuple((item.path, item.sha256) for item in snapshot.files),
+            min(MAX_TOTAL_BYTES, sum(len(item.content) for item in snapshot.files)),
+            now,
+            now + MAX_TRANSFER_INTENT_TTL_SECONDS,
+        )
+        return replace(intent, intent_id=_transfer_intent_id(intent))
 
     def _validate_snapshot(self, snapshot: SnapshotEnvelope) -> None:
         if type(snapshot) is not SnapshotEnvelope or type(snapshot.candidate) is not SyntheticCandidateIdentity:
@@ -536,4 +692,151 @@ class SnapshotOnlyBroker:
             seen_findings.add(key)
         if len(_canonical_bytes(result.to_dict())) > MAX_OUTPUT_BYTES:
             raise BrokerRejected("ASSESSMENT_OUTPUT_TOO_LARGE")
+        return result
+
+    async def assess_with_synthetic_provider(
+        self,
+        snapshot: SnapshotEnvelope,
+        intent: SyntheticTransferIntent | None = None,
+    ) -> SyntheticProviderResponse:
+        if intent is None:
+            raise BrokerRejected("TRANSFER_INTENT_REQUIRED")
+        self._validate_snapshot(snapshot)
+        if type(intent) is not SyntheticTransferIntent:
+            raise BrokerRejected("INVALID_TRANSFER_INTENT")
+        if intent.schema_version != TRANSFER_INTENT_VERSION:
+            raise BrokerRejected("INVALID_TRANSFER_INTENT")
+        if (
+            type(intent.intent_id) is not str
+            or re.fullmatch(r"synthetic-transfer\.[0-9a-f]{24}", intent.intent_id) is None
+            or type(intent.approved_file_digests) is not tuple
+            or any(
+                type(pair) is not tuple
+                or len(pair) != 2
+                or type(pair[0]) is not str
+                or not _valid_sha(pair[1])
+                for pair in intent.approved_file_digests
+            )
+            or any(
+                type(value) is not str
+                for value in (
+                    intent.purpose,
+                    intent.operation,
+                    intent.recipient,
+                    intent.request_id,
+                    intent.request_digest,
+                    intent.snapshot_digest,
+                    intent.candidate_digest,
+                    intent.runtime_identity_digest,
+                )
+            )
+        ):
+            raise BrokerRejected("INVALID_TRANSFER_INTENT")
+        if (
+            intent.purpose != SYNTHETIC_ASSESSMENT_PURPOSE
+            or intent.operation != SYNTHETIC_ASSESSMENT_OPERATION
+            or intent.recipient != MOCK_ONLY_RECIPIENT
+        ):
+            raise BrokerRejected("TRANSFER_INTENT_SCOPE_MISMATCH")
+        expected_candidate_digest = _digest(_canonical_bytes(snapshot.candidate.to_dict()))
+        approved_files = tuple((item.path, item.sha256) for item in snapshot.files)
+        payload_size = sum(len(item.content) for item in snapshot.files)
+        if (
+            intent.request_id != snapshot.request_id
+            or intent.request_digest != snapshot.request_digest
+            or intent.snapshot_digest != snapshot.snapshot_digest
+            or intent.candidate_digest != expected_candidate_digest
+            or intent.runtime_identity_digest != snapshot.runtime_identity_digest
+            or intent.approved_file_digests != approved_files
+            or type(intent.max_payload_bytes) is not int
+            or intent.max_payload_bytes < payload_size
+            or intent.max_payload_bytes > MAX_TOTAL_BYTES
+        ):
+            raise BrokerRejected("TRANSFER_INTENT_BINDING_MISMATCH")
+        now = int(time.time())
+        if (
+            type(intent.issued_at) is not int
+            or type(intent.expires_at) is not int
+            or intent.issued_at > now
+            or intent.expires_at <= now
+            or intent.expires_at <= intent.issued_at
+            or intent.expires_at - intent.issued_at > MAX_TRANSFER_INTENT_TTL_SECONDS
+        ):
+            raise BrokerRejected("TRANSFER_INTENT_EXPIRED_OR_INVALID")
+        if intent.intent_id != _transfer_intent_id(intent):
+            raise BrokerRejected("INVALID_TRANSFER_INTENT")
+        if intent.intent_id in self._seen_transfer_intents:
+            raise BrokerRejected("TRANSFER_INTENT_REPLAY")
+        if type(self._provider) is not InMemoryRecordingProvider:
+            raise BrokerRejected("MOCK_PROVIDER_UNAVAILABLE")
+
+        request = SyntheticProviderRequest(
+            PROVIDER_REQUEST_VERSION,
+            NON_AUTHORIZING_MODE,
+            intent.purpose,
+            intent.operation,
+            intent.recipient,
+            intent.intent_id,
+            snapshot.request_id,
+            snapshot.request_digest,
+            snapshot.manifest_digest,
+            snapshot.content_digest,
+            snapshot.snapshot_digest,
+            snapshot.candidate,
+            snapshot.runtime_identity_digest,
+            snapshot.files,
+        )
+        self._seen_transfer_intents.add(intent.intent_id)
+        try:
+            result = await asyncio.wait_for(
+                self._provider.assess(request), timeout=MAX_ASSESSMENT_SECONDS
+            )
+        except asyncio.CancelledError:
+            raise
+        except asyncio.TimeoutError:
+            raise BrokerRejected("PROVIDER_TIMEOUT") from None
+        except Exception:
+            raise BrokerRejected("PROVIDER_FAILED") from None
+        if type(result) is not SyntheticProviderResponse:
+            raise BrokerRejected("MALFORMED_PROVIDER_RESPONSE")
+        if (
+            type(result.findings) is not tuple
+            or any(
+                type(value) is not str
+                for value in (
+                    result.schema_version,
+                    result.mode,
+                    result.classification,
+                    result.status,
+                    result.request_id,
+                    result.request_digest,
+                    result.snapshot_digest,
+                    result.runtime_identity_digest,
+                )
+            )
+            or any(
+                type(finding) is not MockFinding
+                or type(finding.path) is not str
+                or type(finding.message) is not str
+                or type(finding.evidence_sha256) is not str
+                for finding in result.findings
+            )
+        ):
+            raise BrokerRejected("MALFORMED_PROVIDER_RESPONSE")
+        if (
+            result.schema_version != PROVIDER_RESPONSE_VERSION
+            or result.mode != NON_AUTHORIZING_MODE
+            or result.classification != "TEST_ONLY"
+            or result.test_only is not True
+            or result.status != ("FINDINGS" if _synthetic_findings(snapshot.files) else "NO_FINDINGS")
+            or result.request_id != request.request_id
+            or result.request_digest != request.request_digest
+            or result.snapshot_digest != request.snapshot_digest
+            or result.runtime_identity_digest != request.runtime_identity_digest
+        ):
+            raise BrokerRejected("PROVIDER_RESPONSE_BINDING_MISMATCH")
+        if result.findings != _synthetic_findings(snapshot.files):
+            raise BrokerRejected("PROVIDER_EVIDENCE_MISMATCH")
+        if len(_canonical_bytes(result.to_dict())) > MAX_OUTPUT_BYTES:
+            raise BrokerRejected("PROVIDER_RESPONSE_TOO_LARGE")
         return result
