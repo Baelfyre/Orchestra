@@ -1,6 +1,6 @@
 # GOV-937 Offline Provider-Boundary Qualification
 
-**Result:** `PARTIAL_BLOCKED` while the new stacked draft PR and its exact-head CI are pending. The local offline synthetic provider contract passed its applicable adversarial and repository validation.
+**Result:** `PARTIAL_BLOCKED`. The local offline synthetic provider contract passed its applicable adversarial and repository validation. PR #984 is open as a draft, but GitHub scheduled no checks on its exact head.
 
 **Qualification limit:** this result covers a deterministic in-memory fake over synthetic snapshot bytes only. It does not qualify Cipher, a live model/provider, production data transfer, host isolation, or governance authority.
 
@@ -59,3 +59,14 @@ The focused tests check byte-for-byte transfer of approved synthetic files; prom
 - **Blocker:** the new stacked PR and exact-head hosted CI are not yet recorded in this pre-delivery report. Production Cipher execution and trusted receipt activation remain blocked.
 
 Existing PRs #977–#983 remain unchanged. The only proposed changes are the internal prototype, its runtime test file, this addendum and machine record, and `CHANGELOG.md`. No merge, production activation, installed-runtime replacement, protected-governance mutation, live provider invocation, or AlteredEgo access occurred.
+
+## P7: stacked delivery and exact-head CI
+
+Draft PR [#984](https://github.com/Baelfyre/Orchestra/pull/984) is stacked on PR #983 branch `JEO/issue-937-snapshot-broker-feasibility` at base `4ee018a9e302bd212aa8e9f47af196cf6b2072f0`. The observed provider-boundary head was `69c17bf52987aa49df1b2561a8c990161577ec97` (tree `9d9c8c0798999bf2cf32fef809d1d899dcd9af40`). It remained open and draft.
+
+- `gh pr checks 984`: **BLOCKED**, no checks reported on the branch.
+- Commit check-runs API: **NOT_RUN**, `total_count=0`; commit status API reports pending with zero statuses; `gh run list` returned no runs.
+- Repository `validate`, `governance-check`, `required-analysis-compat`, and cross-platform workflows filter pull requests to base branch `main`. PR #984 targets PR #983's branch, so those required workflows did not trigger.
+- Their manual validation dispatches require an explicit `approved_base_sha`. `ORCHESTRA_APPROVED_BASE_SHA` is unset, and no baseline was inferred or supplied.
+
+P7 therefore remains blocked on an explicitly approved baseline or a separately authorized CI path that preserves the stacked base. PRs #977–#983 were reread after PR #984 creation: each remains open/draft at the recorded head; all ten hosted checks on each passed. PR #982 still has only the previously reported quota-limited Copilot comment, not an approval.

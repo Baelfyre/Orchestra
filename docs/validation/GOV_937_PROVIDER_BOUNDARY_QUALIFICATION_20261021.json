@@ -3,7 +3,7 @@
   "task_id": "ORCHESTRA_937_SNAPSHOT_BROKER_PROVIDER_BOUNDARY_QUALIFICATION_20261021",
   "recorded_at": "2026-10-21",
   "terminal_status": "PARTIAL_BLOCKED",
-  "terminal_status_note": "Local synthetic provider contract and applicable repository validation passed; new stacked draft PR and its exact-head CI are pending.",
+  "terminal_status_note": "Local synthetic provider contract and applicable repository validation passed. PR #984 is open as a draft, but GitHub scheduled no checks on its exact head.",
   "repository": {
     "full_name": "Baelfyre/Orchestra",
     "issue": {
@@ -72,6 +72,26 @@
     },
     "branch_modified": false
   },
+  "new_stacked_pr": {
+    "number": 984,
+    "url": "https://github.com/Baelfyre/Orchestra/pull/984",
+    "state": "OPEN",
+    "draft": true,
+    "base_branch": "JEO/issue-937-snapshot-broker-feasibility",
+    "base_commit": "4ee018a9e302bd212aa8e9f47af196cf6b2072f0",
+    "observed_head_branch": "JEO/issue-937-snapshot-broker-provider-boundary",
+    "observed_head_commit": "69c17bf52987aa49df1b2561a8c990161577ec97",
+    "observed_head_tree": "9d9c8c0798999bf2cf32fef809d1d899dcd9af40",
+    "reviews": [],
+    "exact_head_ci": {
+      "status": "BLOCKED",
+      "checks_reported": 0,
+      "check_runs": 0,
+      "commit_statuses": 0,
+      "workflow_runs": 0,
+      "reason": "Required pull_request workflows filter base branch main; this stacked PR targets PR #983's branch. Manual validation dispatch requires an explicit approved_base_sha, which is unset."
+    }
+  },
   "preserved_pull_requests": [
     {"number": 977, "state": "OPEN", "draft": true, "head": "ec0c99dd634dc98588b722d07dc2badf63865122", "preserved": true},
     {"number": 978, "state": "OPEN", "draft": true, "head": "ba17689192309bca5819fd72a90ed04feec1dbf8", "preserved": true},
@@ -112,7 +132,7 @@
     {"stage": "P4", "status": "PASS", "evidence": "Adversarial tests cover denial before transfer, data injection, authority fields, malformed/misbound findings, timeout, cancellation, replay, and sanitized errors."},
     {"stage": "P5", "status": "PASS", "evidence": "Human addendum and machine record document fact/inference/assumption/risk/recommendation/blocker classes and historical PR #983 exact-head CI."},
     {"stage": "P6", "status": "PASS", "evidence": "Applicable local full runtime/behavior, governance, architecture, stale-reference, README contract/index, coverage evidence, and focused tests passed. The environment-gated behavior runner is separately recorded as NOT_RUN because approved base SHA is unset."},
-    {"stage": "P7", "status": "NOT_RUN", "evidence": "New stacked draft PR and exact-head GitHub CI are pending."}
+    {"stage": "P7", "status": "BLOCKED", "evidence": "PR #984 is open/draft; exact head 69c17bf52987aa49df1b2561a8c990161577ec97 has zero check runs, statuses, or workflow runs. Branch filters and missing approved baseline prevent hosted validation."}
   ],
   "validation": {
     "results": [
@@ -128,13 +148,16 @@
       {"command": "python tests/behavior/test_readme_machine_index.py", "status": "PASS", "summary": "18 index entries"},
       {"command": "python scripts/check_readme_impact.py", "status": "NOT_RUN", "summary": "The command ran and returned SKIP because workflow_dispatch has no revision-transition event; no README or machine-contract surface changed", "observed_result": "SKIP"},
       {"command": "python tests/behavior/run_tests.py", "status": "NOT_RUN", "summary": "ORCHESTRA_APPROVED_BASE_SHA is unset; no baseline inferred"},
-      {"command": "git diff --check", "status": "PASS", "summary": "No whitespace errors"}
+      {"command": "git diff --check", "status": "PASS", "summary": "No whitespace errors"},
+      {"command": "gh pr checks 984 --repo Baelfyre/Orchestra", "status": "BLOCKED", "summary": "No checks reported on the stacked branch"},
+      {"command": "gh api repos/Baelfyre/Orchestra/commits/69c17bf52987aa49df1b2561a8c990161577ec97/check-runs", "status": "NOT_RUN", "summary": "API read succeeded; total_count=0"},
+      {"command": "gh run list --repo Baelfyre/Orchestra --branch JEO/issue-937-snapshot-broker-provider-boundary", "status": "NOT_RUN", "summary": "No workflow runs exist for the branch"}
     ],
     "initial_focused_attempt": {
       "status": "FAIL",
       "summary": "One test expected zero global log records; Windows asyncio emitted a benign Proactor debug record. The assertion now checks for prototype logs and secret-content leakage only; final focused suite passes."
     },
-    "candidate_head_local_evidence": "Local test commands ran on the clean PR #983-based checkout with the provider implementation in its worktree; the tested Git HEAD before commit was the PR #983 base commit."
+    "candidate_head_local_evidence": "Full runtime and behavior suites ran on the PR #983-based worktree with the staged provider implementation; Git HEAD at that time was the PR #983 base commit. No source or test file changed between those full runs and implementation commit 69c17bf52987aa49df1b2561a8c990161577ec97. The focused suite, strict governance, and architecture checks were rerun after that commit."
   },
   "classification": {
     "facts": [
@@ -160,7 +183,7 @@
       "Keep receipt resolution, consumption, production Cipher execution, and authority expansion behind human-governed follow-up work."
     ],
     "blockers": [
-      "New stacked draft PR and its exact-head hosted CI have not run yet.",
+      "PR #984 has no exact-head hosted checks because required PR workflows filter base branch main; a manual approved baseline SHA is not available.",
       "Production Cipher execution and trusted receipt activation remain unavailable and unauthorized."
     ]
   },
