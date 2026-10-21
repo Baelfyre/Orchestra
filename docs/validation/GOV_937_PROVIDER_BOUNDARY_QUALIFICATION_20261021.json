@@ -157,7 +157,7 @@
       "status": "FAIL",
       "summary": "One test expected zero global log records; Windows asyncio emitted a benign Proactor debug record. The assertion now checks for prototype logs and secret-content leakage only; final focused suite passes."
     },
-    "candidate_head_local_evidence": "Full runtime and behavior suites ran on the PR #983-based worktree with the staged provider implementation; Git HEAD at that time was the PR #983 base commit. No source or test file changed between those full runs and implementation commit 69c17bf52987aa49df1b2561a8c990161577ec97. The focused suite, strict governance, and architecture checks were rerun after that commit."
+    "candidate_head_local_evidence": "Full runtime and behavior suites ran against the modified working-tree provider implementation before staging; Git HEAD at that time was the PR #983 base commit. No source or test file changed between those full runs and implementation commit 69c17bf52987aa49df1b2561a8c990161577ec97. The focused suite, strict governance, and architecture checks were rerun after that commit."
   },
   "classification": {
     "facts": [
