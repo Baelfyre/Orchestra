@@ -11,7 +11,7 @@
     "full_name": "Baelfyre/Orchestra",
     "url": "https://github.com/Baelfyre/Orchestra",
     "license": "MIT",
-    "package_version": "1.11.0",
+    "package_version": "1.12.0",
     "package_version_source": "plugin.json#/version",
     "current_public_release": "v1.11.0",
     "current_public_release_commit": "72c2884a66bb0e0d0ff1e070e7cc1feccd968e35",
