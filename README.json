@@ -2903,7 +2903,13 @@
     "human_index": "SKILL_INDEX.md",
     "routing_reference": "ROUTING_MAP.md",
     "knowledge_root": "skills/",
-    "source_of_truth_note": "Specialist prose and reasoning guidance remain in skills/*/SKILL.md; machine routing-critical metadata is compiled and parity-validated."
+    "source_of_truth_note": "Specialist prose and reasoning guidance remain in skills/*/SKILL.md; machine routing-critical metadata is compiled and parity-validated.",
+    "cipher_security_review_guidance": {
+      "source": "skills/cipher/SKILL.md",
+      "provenance_source": "machine/provenance/third-party.v1.json",
+      "summary": "Focused defensive review by default; comprehensive coverage only on explicit request. Assess variants independently and verify safeguards at their actual enforcement paths.",
+      "authority_note": "Guidance and provenance are non-authorizing; existing authority and non-effectful boundaries remain controlling."
+    }
   },
   "governance": {
     "human_overview": "docs/governance/README.md",
