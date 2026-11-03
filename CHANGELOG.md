@@ -1,3 +1,8 @@
+## Unreleased artifact authoring and review guidance
+
+- Add progressive Scribe and Cloak guides for structured artifact requirements, backend capability selection (`SUPPORTED`, `PARTIAL`, `UNSUPPORTED`, `UNVERIFIED`), evidence separation, editability, citations, notes, branding, accessibility, and target-application checks for Office, OpenOffice/LibreOffice, Keynote, and Google Drive workflows.
+- Preserve the frozen Cloak UIX-8 core guidance and UIEF-4 contract; add no runtime schema, exporter behavior, dependency, provider operation, or cloud authorization.
+
 ## Unreleased R2A MCP runtime identity candidate
 
 - Add server-generated runtime identity metadata to MCP stdio discovery and tool responses, including the startup-observed source commit/tree, working-tree state, adapter, policy-file digest, timestamp, process ID, and unknown host-profile identity.

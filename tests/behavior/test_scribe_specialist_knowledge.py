@@ -11,6 +11,7 @@ REQUIRED_SUPPORT = [
     "OUTPUT_FORMATS.md",
     "OUTPUT_TEMPLATES.md",
     "SOURCE_BACKED_DOCUMENTATION_GUIDE.md",
+    "ARTIFACT_AUTHORING_AND_BACKEND_SELECTION_GUIDE.md",
     "MARKDOWN_TECHNICAL_SYNTAX_GUIDE.md",
     "CHANGELOG_ADR_GUIDE.md",
     "API_VERSIONED_DOCUMENTATION_GUIDE.md",
@@ -52,6 +53,7 @@ def main() -> None:
         "CHANGELOG_ADR_GUIDE.md",
         "API_VERSIONED_DOCUMENTATION_GUIDE.md",
         "LINK_CLAIM_VALIDATION_GUIDE.md",
+        "ARTIFACT_AUTHORING_AND_BACKEND_SELECTION_GUIDE.md",
     ]:
         if filename not in skill:
             raise AssertionError(f"Scribe progressive disclosure misses {filename}")
@@ -88,6 +90,54 @@ def main() -> None:
 
     claims = read(SOURCE / "LINK_CLAIM_VALIDATION_GUIDE.md")
     require(claims, "Claim Ledger", "VERIFIED_CURRENT", "fragment/anchor existence", "authoritative sources", "invalidates dependent documentation evidence")
+
+    artifacts = read(SOURCE / "ARTIFACT_AUTHORING_AND_BACKEND_SELECTION_GUIDE.md")
+    require(
+        artifacts,
+        "SUPPORTED",
+        "PARTIAL",
+        "UNSUPPORTED",
+        "UNVERIFIED",
+        "Feature support, evidence, and output validation are separate.",
+        "Treat as unknown, not supported.",
+        "Do not silently drop, flatten, or approximate the requirement.",
+        "intended presentation duration",
+        "institution, course, or rubric requirements",
+        "Template identity and revision",
+        "Document-family structure",
+        "document outline with section and subsection purpose",
+        "story arc from the problem or question through evidence and reasoning to the conclusion",
+        "workbook and sheet map",
+        "source/input data, formulas or transformations",
+        "narrative/story arc and slide sequence",
+        "For every slide, state its purpose, key message, supporting evidence/data",
+        "substantive speaker notes",
+        "Conversion risks",
+        "Validation and confirmation",
+        "PowerPoint desktop presentation",
+        "PowerPoint for the web presentation",
+        "PDF presentation",
+        "Markdown presentation",
+        "LaTeX document",
+        "OpenDocument text document",
+        "`.odt`",
+        "OpenDocument spreadsheet",
+        "`.ods`",
+        "OpenDocument presentation",
+        "`.odp`",
+        "local tool availability before comparing backend features",
+        "Google account/tenant, authentication or OAuth authorization",
+        "Native target format",
+        "Qualified interchange format",
+        "User-approved fixed format",
+        "Excel and Calc calculations and charts",
+        "Apache OpenOffice and LibreOffice as separate target products",
+        "Apple Keynote",
+        "Google's cloud",
+        "provider operation",
+        "Cloak's artifact visual/accessibility guide",
+        "The Governor",
+    )
 
     example = read(SOURCE / "examples" / "source-backed-api-change-example.md")
     require(example, "`DOCUMENTATION_PLANNED`", "Release evidence: `NOT_FOUND`", "must remain under `Unreleased`", "no release or documentation-site publication occurred")

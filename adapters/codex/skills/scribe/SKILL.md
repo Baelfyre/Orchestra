@@ -127,6 +127,7 @@ Existing guides:
 
 - Load [DOCUMENTATION_STANDARDS.md](DOCUMENTATION_STANDARDS.md) for document structure, README standards, requirements documentation, architecture summaries, system readiness, testing documentation, user/developer guides, changelogs, decision logs, or final project/release submission.
 - Load [SOURCE_BACKED_DOCUMENTATION_GUIDE.md](SOURCE_BACKED_DOCUMENTATION_GUIDE.md) for thesis/capstone documentation, final submission packaging, source-backed writing, claim verification, citation discipline, evidence mapping, README accuracy, technical summaries, or handoff documentation.
+- Load [ARTIFACT_AUTHORING_AND_BACKEND_SELECTION_GUIDE.md](ARTIFACT_AUTHORING_AND_BACKEND_SELECTION_GUIDE.md) when specifying or creating a Word, spreadsheet, or presentation artifact, comparing authoring backends, or separating feature support from output evidence.
 - Load [MARKDOWN_TECHNICAL_SYNTAX_GUIDE.md](MARKDOWN_TECHNICAL_SYNTAX_GUIDE.md) for Markdown structure, headings, links, anchors, code fences, tables, lists, callouts, or rendering portability.
 - Load [CHANGELOG_ADR_GUIDE.md](CHANGELOG_ADR_GUIDE.md) for changelog entries, release notes, architecture decision records, supersession, or decision-history maintenance.
 - Load [API_VERSIONED_DOCUMENTATION_GUIDE.md](API_VERSIONED_DOCUMENTATION_GUIDE.md) for API/reference content, versioned documentation, compatibility, deprecation, migration, or sunset communication.

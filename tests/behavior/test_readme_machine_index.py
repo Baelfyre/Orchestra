@@ -76,6 +76,13 @@ def main() -> int:
     ):
         require_repo_path(index["documentation"][key])
 
+    assert index["documentation"]["scribe_artifact_authoring_guide"] == (
+        "skills/scribe/ARTIFACT_AUTHORING_AND_BACKEND_SELECTION_GUIDE.md"
+    )
+    assert index["documentation"]["cloak_artifact_visual_accessibility_guide"] == (
+        "skills/cloak/ARTIFACT_VISUAL_ACCESSIBILITY_GUIDE.md"
+    )
+
     assert index["representation_policy"]["json"].startswith("Canonical structured machine state")
     assert "non-authoritative" in index["representation_policy"]["toon"]
     assert index["ai_review_guidance"]["preferred_entrypoint"] == "README.json"

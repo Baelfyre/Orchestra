@@ -68,6 +68,11 @@ Use the base guide for broad UI review, then load only the specialized reference
 - `FRONTEND_ROUTING_COMPONENT_BOUNDARIES_GUIDE.md` for route orientation, deep links, focus transitions, history/recovery, responsive navigation, or component-boundary review.
 
 Do not load all five by default. Progressive disclosure remains the context-efficiency rule.
+
+## Generated document and presentation artifacts
+
+Load [ARTIFACT_VISUAL_ACCESSIBILITY_GUIDE.md](ARTIFACT_VISUAL_ACCESSIBILITY_GUIDE.md) only when reviewing the visual structure, editability, brand treatment, notes, or accessibility of a generated document, spreadsheet, or presentation. The artifact guide is separate from software UI fidelity and does not change the UIEF-4 handoff contract.
+
 ## Handoff Blueprint Requirements
 - **Blueprint over Code**: Cloak hands off semantic structure, component intent, visible state expectations, and review findings, not production code.
 - **Design-System Constraints**: Name the token, component, and variant constraints that the implementation should preserve.
