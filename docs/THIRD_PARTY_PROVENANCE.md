@@ -48,6 +48,16 @@ A static, read-only adversarial-security review informed declared authority scop
 
 Historical Orchestra evidence: commit `7a6e63702a469f4d72261dffa19800c9f75b60dd`.
 
+### Cloudflare Security Audit Skill
+
+`cloudflare/security-audit-skill` (Cloudflare, Inc.) | MIT | **REFERENCE_ONLY**
+
+Reviewed commit: [`c1c8a8c1471069fb0e188eeaff69b8e8db6564a8`](https://github.com/cloudflare/security-audit-skill/tree/c1c8a8c1471069fb0e188eeaff69b8e8db6564a8)
+
+Used to refine Cipher's focused-review default, independently evidenced vulnerability variants, and checks of safeguards at their actual enforcement paths. Broad checklist use remains limited to explicitly requested comprehensive coverage. No upstream text, workflow, or scripts were copied; the full audit workflow and its execution/sandbox requirements are not imported. Existing Cipher authority and non-effectful boundaries remain controlling.
+
+Canonical machine record: [`machine/provenance/third-party.v1.json`](../machine/provenance/third-party.v1.json).
+
 ### Spec-Kitty
 
 `Priivacy-ai/spec-kitty` | MIT | **REFERENCE_ONLY**

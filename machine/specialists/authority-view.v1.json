@@ -169,7 +169,7 @@
       "slug": "cipher",
       "authority_class": "DOMAIN_SECURITY_PRIVACY_CONTROLS",
       "source_path": "skills/cipher/SKILL.md",
-      "source_blob_sha": "2808e9156e6e38f7e8c54590d8cdde8711a273c6",
+      "source_blob_sha": "c90a9175f93f4b7318f41a34e1115c71f79ec526",
       "observe_classes": [
         "CODE",
         "CONFIGURATION",

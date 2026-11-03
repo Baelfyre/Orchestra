@@ -1,6 +1,6 @@
 {
   "schema_version": "orchestra.third-party-provenance.v1",
-  "updated_on": "2026-08-17",
+  "updated_on": "2026-11-04",
   "policy": {
     "allowed_classifications": [
       "TEST_TOOL_DEPENDENCY",
@@ -18,10 +18,10 @@
     "unknown_historical_facts_must_remain_unknown": true
   },
   "summary": {
-    "total_items": 15,
+    "total_items": 16,
     "classification_counts": {
       "TEST_TOOL_DEPENDENCY": 3,
-      "REFERENCE_ONLY": 6,
+      "REFERENCE_ONLY": 7,
       "HISTORICAL_RESEARCH_REFERENCE": 4,
       "PROTOCOL_STANDARD_REFERENCE": 1,
       "EVALUATED_OR_PLANNED_REFERENCE": 1
@@ -102,6 +102,25 @@
       "upstream_source_adapted": false,
       "orchestra_surfaces": ["historical Artificer audit records", "governance and authority design", "specialist delegation and validation guidance"],
       "evidence": [{"type": "ORCHESTRA_COMMIT", "reference": "7a6e63702a469f4d72261dffa19800c9f75b60dd", "description": "Added the Strix pilot audit records."}, {"type": "HISTORICAL_README", "reference": "External Repository Reviews and Incorporated Patterns", "description": "Recorded Strix as reference-only and independently implemented."}]
+    },
+    {
+      "id": "cloudflare-security-audit-skill",
+      "name": "Cloudflare Security Audit Skill",
+      "classification": "REFERENCE_ONLY",
+      "status": "INCORPORATED_REFERENCE",
+      "version": "reviewed commit",
+      "upstream_repository": "https://github.com/cloudflare/security-audit-skill",
+      "package_source": null,
+      "reviewed_revision": {"status": "PINNED_COMMIT", "value": "c1c8a8c1471069fb0e188eeaff69b8e8db6564a8", "branch": null},
+      "license": {"spdx": "MIT", "status": "RECORDED"},
+      "purpose": "Defensive review reference used to refine Cipher's focused scope, per-variant evidence, and actual safeguard-enforcement checks.",
+      "incorporated_or_learned_patterns": ["Focused review is the default; comprehensive checklists are used only when explicitly requested", "Each distinct vulnerability variant receives its own source evidence and confidence assessment", "Sibling safeguards are credited only when their actual enforcement paths are verified"],
+      "runtime_dependency": false,
+      "source_copied_or_vendored": false,
+      "upstream_source_adapted": false,
+      "orchestra_surfaces": ["skills/cipher/SKILL.md", "docs/THIRD_PARTY_PROVENANCE.md", "machine/provenance/third-party.v1.json"],
+      "evidence": [{"type": "UPSTREAM_COMMIT", "reference": "c1c8a8c1471069fb0e188eeaff69b8e8db6564a8", "description": "Reviewed the upstream security-audit skill and its reporting guidance at this pinned revision."}, {"type": "UPSTREAM_LICENSE_FILE", "reference": "LICENSE @ c1c8a8c1471069fb0e188eeaff69b8e8db6564a8", "description": "MIT license text verified at the pinned revision."}],
+      "notes": "No upstream text or scripts were copied. The full audit workflow and its execution/sandbox requirements are not imported; existing Cipher authority and non-effectful boundaries remain controlling."
     },
     {
       "id": "openhero",
