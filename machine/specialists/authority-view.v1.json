@@ -300,7 +300,7 @@
       "slug": "scribe",
       "authority_class": "REPRESENTATION_DOCUMENTATION",
       "source_path": "skills/scribe/SKILL.md",
-      "source_blob_sha": "2efc824ac8ab27ce057a6c6672e0470748156f57",
+      "source_blob_sha": "82c96cbcfe6fc2dd54e754f9cad6ba2d8ade24f6",
       "observe_classes": [
         "SOURCE",
         "TESTS",

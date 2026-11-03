@@ -6,6 +6,7 @@ CODEX = ROOT / "adapters" / "codex" / "skills" / "cloak"
 
 REQUIRED_SUPPORT = [
     "ACCESSIBILITY_CHECKLIST.md",
+    "ARTIFACT_VISUAL_ACCESSIBILITY_GUIDE.md",
     "CHECKLIST.md",
     "FRONTEND_REVIEW_GUIDE.md",
     "UI_UX_FOUNDATIONS_GUIDE.md",
@@ -103,6 +104,31 @@ def main() -> None:
         "Clockwork",
         "Cipher",
     )
+
+    artifacts = read(SOURCE / "ARTIFACT_VISUAL_ACCESSIBILITY_GUIDE.md")
+    require(
+        artifacts,
+        "document, spreadsheet, or presentation",
+        "Do not rasterize or flatten editable content",
+        "Use only supplied or approved logos",
+        "speaker note",
+        "alt",
+        "reading order",
+        "PARTIAL",
+        "UNSUPPORTED",
+        "UNVERIFIED",
+        "NOT_RUN",
+        "Capture physical layout requirements",
+        "page or slide dimensions",
+        "template identity, theme, fonts",
+        "predictable wrapping",
+        "Capture screenshots",
+        "application/version and artifact identity recorded",
+        "UI Fidelity Handoff Guide",
+    )
+
+    foundations = read(SOURCE / "UI_UX_FOUNDATIONS_GUIDE.md")
+    require(foundations, "ARTIFACT_VISUAL_ACCESSIBILITY_GUIDE.md", "UIEF-4 handoff contract")
 
     skill = read(SOURCE / "SKILL.md")
     for filename in [
