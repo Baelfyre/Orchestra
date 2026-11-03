@@ -80,6 +80,7 @@
 
 - Run the four positive read-only Cipher/MCP review tests against a detached, disposable Git worktree with a controlled tracked-file change; canonical-main push checkouts otherwise contain no changed files relative to origin/main.
 - Preserve production snapshot construction, host-computed identity, read-only capability restrictions, non-authorizing review semantics, coverage thresholds, and protected governance boundaries; no production runtime or policy changes.
+- Clarify Cipher's focused-review default, explicit comprehensive-coverage requests, per-variant evidence, and actual-enforcement checks; cover candidate-snapshot file and parent-directory symlink traversal while retaining current read-only, non-authorizing boundaries.
 
 ## Unreleased runtime test evidence: truthful JUnit and historical ref syntax
 
