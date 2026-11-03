@@ -7,7 +7,9 @@
 - **Stable Continuation Branch:** `main`
 - **Current Public Release:** `v1.11.0`
 - **Release Status:** `v1.11.0 PUBLISHED_VERIFIED`
-- **Target Release:** `NONE_ACTIVE_POST_V1_11_RECONCILIATION`
+- **Target Release:** `v1.12.0 SCOPE_APPROVED_CANDIDATE_PENDING_VALIDATION`
+- **v1.12 Scope Authorization:** `ORCHESTRA-V112-WU7-IMPLEMENTATION-AUTHORIZATION`
+- **v1.12 JEV Disposition:** `PRESERVED_UNQUALIFIED_FURTHER_QUALIFICATION_AND_INTEGRATION_DEFERRED`
 - **Release-Candidate Metadata:** `1.11.0` (`PUBLISHED_VERIFIED`)
 - **v1.2.0 Release State:** `PUBLISHED_VERIFIED`
 - **v1.3.0 Release State:** `PUBLISHED_VERIFIED`
