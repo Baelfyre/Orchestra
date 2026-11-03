@@ -10,7 +10,7 @@ A governance-first specialist orchestration framework that routes complex AI-ass
 Open-source developer tooling and AI orchestration framework
 
 ## Current Stage
-v1.11.0 Adaptive Assurance and Governance Hardening is the current published release. Lightweight tag `v1.11.0` resolves directly to signed canonical release commit `72c2884a66bb0e0d0ff1e070e7cc1feccd968e35` with tree `e4072cff4de83efa1c1d2d495aa5c186a2469db4`, published as immutable GitHub Release `387061978`. The release packages the governed post-v1.10.0 development line through AQ14, including AQ1-AQ14, PRAI, Covenant, protected-governance escalation, human-only whitelist authority, tree-attested promotion assurance, deterministic release-packaging classification, and the AQ7 tenant-administration parity reference slice. AQ15 remains unregistered. AR-3 through AR-9 remain separate post-v1.11 work and are not authorized by publication.
+v1.12.0 is a proposed release candidate pending validation and release approval; v1.11.0 Adaptive Assurance and Governance Hardening remains the current published release. Lightweight tag `v1.11.0` resolves directly to signed canonical release commit `72c2884a66bb0e0d0ff1e070e7cc1feccd968e35` with tree `e4072cff4de83efa1c1d2d495aa5c186a2469db4`, published as immutable GitHub Release `387061978`. The release packages the governed post-v1.10.0 development line through AQ14, including AQ1-AQ14, PRAI, Covenant, protected-governance escalation, human-only whitelist authority, tree-attested promotion assurance, deterministic release-packaging classification, and the AQ7 tenant-administration parity reference slice. AQ15 remains unregistered. AR-3 through AR-9 remain separate post-v1.11 work and are not authorized by publication.
 
 ## Primary Users
 Developers and maintainers who install Orchestra as a plugin, skill set, or runtime package inside supported or scaffold-only coding hosts.
@@ -58,7 +58,7 @@ The Orchestra Prime Directive is the stable constitutional boundary for developm
 - `python scripts/governance_check.py --strict` must pass.
 - The documentation-impact contract must pass and require the correct human/machine surfaces for the actual changed scope.
 - Prime Directive, Feature Admission, Candidate Maturity/Feature Freeze, autonomy lifecycle integration, qualification/evaluation/audit, recovery/retirement, and merge-readiness contract validators must pass when those surfaces are present or changed.
-- All canonical release/version surfaces and `machine/hosts/update-contract.v1.json#/package_version` are published at `1.11.0`. The immutable v1.11.0 release identity remains commit `72c2884a66bb0e0d0ff1e070e7cc1feccd968e35` / tree `e4072cff4de83efa1c1d2d495aa5c186a2469db4` even when post-release `main` advances.
+- The proposed v1.12.0 candidate's canonical package-version surfaces and `machine/hosts/update-contract.v1.json#/package_version` use `1.12.0`; this does not change the immutable published v1.11.0 release identity at commit `72c2884a66bb0e0d0ff1e070e7cc1feccd968e35` / tree `e4072cff4de83efa1c1d2d495aa5c186a2469db4`.
 - Required Analysis Compatibility must execute real exact-head CodeQL successfully before its compatibility status surface is accepted.
 - Native Windows, Ubuntu, and macOS validation must pass on the exact candidate where required by repository policy.
 - Release-candidate mutation-confidence and Cosmic Ray evidence must be fresh where repository policy triggers them.
