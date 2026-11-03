@@ -1,3 +1,5 @@
+> The unreleased entries below describe merged post-v1.11 source in the approved v1.12 development scope. v1.12.0 remains unpublished and pending final candidate validation. See [the v1.12 release candidate record](docs/releases/v1.12.0-release-candidate.md).
+
 ## Unreleased R2A MCP runtime identity candidate
 
 - Add server-generated runtime identity metadata to MCP stdio discovery and tool responses, including the startup-observed source commit/tree, working-tree state, adapter, policy-file digest, timestamp, process ID, and unknown host-profile identity.
@@ -8,6 +10,7 @@
 
 - Add a repeatable local pilot runner and fixed scenario catalog that reuse the existing JEV contracts and synthetic regressions. The runner blocks HTTP, DNS, and TCP dispatch in its test process and records sanitized per-session results outside the repository for later comparison.
 - Keep the V6 packet labeled as sanitized fixture replay, preserve all findings as `UNVERIFIED`, and leave R3-A host trust, live TypeSafe integration, and production JEV wiring unqualified or unavailable.
+- Preserve the merged implementation and historical evidence; further JEV qualification and integration are deferred from v1.12. The historical pilot remains `PREPARED_NOT_QUALIFIED`.
 
 ## Unreleased README and integration status clarification
 
