@@ -1,3 +1,7 @@
+## Unreleased Issue #937 R2B-2B review evidence contract design
+
+- Reject `NOT_REQUIRED` as substantive specialist review evidence and document the proposed typed finding contract; no production result schema or authority behavior changes.
+
 ## Unreleased R2A MCP runtime identity candidate
 
 - Add server-generated runtime identity metadata to MCP stdio discovery and tool responses, including the startup-observed source commit/tree, working-tree state, adapter, policy-file digest, timestamp, process ID, and unknown host-profile identity.
