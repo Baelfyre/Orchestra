@@ -1,3 +1,8 @@
+## Unreleased Cipher R5 offline inference boundary prototype
+
+- Add a deterministic, test-only Cipher review broker and snapshot-bound engine fixture, with focused regression coverage for request identity, malformed responses, input limits, and evidence references.
+- Document the proposed inference-only architecture and Windows host-isolation requirements. No model inference, provider access, qualified host isolation, substantive Cipher audit, or production activation is included.
+
 ## Unreleased R2A MCP runtime identity candidate
 
 - Add server-generated runtime identity metadata to MCP stdio discovery and tool responses, including the startup-observed source commit/tree, working-tree state, adapter, policy-file digest, timestamp, process ID, and unknown host-profile identity.
