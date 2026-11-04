@@ -1,0 +1,201 @@
+{
+  "record_type": "orchestra.issue-937.wsl2-isolation-feasibility",
+  "record_version": 1,
+  "task_id": "ORCHESTRA-937-WSL2-ISOLATION-FEASIBILITY-20261021",
+  "observed_date": "2026-10-21",
+  "repository": {
+    "name": "Baelfyre/Orchestra",
+    "origin_main_commit": "b215a48b678e8708a8a6e7123f5ee1893d3f4f15",
+    "origin_main_tree": "fac2140e41e81bdf243ddc6c389b38c0453ad28c",
+    "evidence_pr": 981,
+    "evidence_branch": "JEO/issue-937-r2d-readiness-20261020",
+    "evidence_pre_update_commit": "81d0f0ab0328672b22572c75aad14fddaa5f1e7e",
+    "evidence_pre_update_tree": "7c17738d9d4195193abafba87436a2ad20dfea8e",
+    "preflight": {
+      "status": "PROCEED_WITH_CAUTION",
+      "worktree_clean": true,
+      "ahead_of_origin_main": 5,
+      "behind_origin_main": 0
+    }
+  },
+  "preview_source": {
+    "status": "VERIFIED",
+    "commit": "d23fc66accc3f3a52a2ab494e8ce655b42ae57b5",
+    "tree": "5aa714e88c0f3e4739e564c4008b2974125cbe34",
+    "worktree_clean": true,
+    "claim_limit": "Source instructions verified; no specialist execution or runtime parity claimed."
+  },
+  "schema_status": {
+    "dedicated_wsl_schema": "NOT_FOUND",
+    "structural_json_validation_only": true,
+    "related_vm_record_is_schema": false
+  },
+  "host": {
+    "os_edition": "Microsoft Windows 11 Home Single Language",
+    "os_version": "10.0.26300",
+    "os_build": "26300",
+    "architecture": "64-bit",
+    "administrator_token": false,
+    "wsl": {
+      "version": "2.7.11.0",
+      "kernel_version": "6.18.33.2-microsoft-standard-WSL2",
+      "wslg_version": "1.0.73.2",
+      "default_distribution": "Ubuntu",
+      "default_version": 2,
+      "distributions_before": [
+        {"name": "Ubuntu", "state": "Stopped", "version": 2},
+        {"name": "docker-desktop", "state": "Stopped", "version": 2}
+      ],
+      "distributions_after": [
+        {"name": "Ubuntu", "state": "Stopped", "version": 2},
+        {"name": "docker-desktop", "state": "Stopped", "version": 2}
+      ],
+      "historically_reported_distribution": "OrchestraReview",
+      "historically_reported_distribution_observed": "NOT_FOUND"
+    }
+  },
+  "ubuntu_inventory": {
+    "distribution": "Ubuntu 26.04 LTS",
+    "wsl_version": 2,
+    "effective_uid": 1000,
+    "mounts": [
+      {"target": "/mnt/c", "filesystem": "9p", "read_write": true, "backing": "C:\\"},
+      {"target": "/mnt/d", "filesystem": "9p", "read_write": true, "backing": "D:\\"}
+    ],
+    "windows_interop": "ENABLED",
+    "cgroup_v2_mount": "READ_WRITE",
+    "baseline_process_controls": {
+      "effective_capabilities_zero": true,
+      "no_new_privs": false,
+      "seccomp_mode": 0,
+      "seccomp_filters": 0
+    },
+    "namespace_support": {
+      "unshare_version": "util-linux 2.41.3",
+      "unprivileged_user_namespace_probe": "PASS",
+      "max_user_namespaces": 14273
+    }
+  },
+  "available_tools": {
+    "bubblewrap": {"status": "PRESENT", "version": "0.11.1"},
+    "unshare": {"status": "PRESENT", "version": "util-linux 2.41.3"},
+    "podman": "NOT_FOUND",
+    "nerdctl": "NOT_FOUND",
+    "runc": "NOT_FOUND",
+    "crun": "NOT_FOUND",
+    "docker_cli": "WINDOWS_INTEROP_PATH_NOT_USED",
+    "docker_desktop_distribution": "PRESENT_STOPPED_NOT_INSPECTED"
+  },
+  "synthetic_sandbox_profile": {
+    "runtime": "bubblewrap",
+    "unshared_namespaces": ["user", "pid", "network", "cgroup"],
+    "nested_user_namespace": "DISABLED_AND_ASSERTED",
+    "root_filesystem": "FRESH_TMPFS",
+    "read_only_system_bind_roots": [
+      "/usr/bin",
+      "/usr/lib/x86_64-linux-gnu",
+      "/usr/lib64",
+      "/usr/lib/python3.14",
+      "/usr/lib/cargo/bin/coreutils"
+    ],
+    "candidate": {
+      "source": "synthetic WSL /tmp fixture",
+      "mountpoint": "/candidate",
+      "mode": "READ_ONLY"
+    },
+    "forbidden_canary": {
+      "source": "synthetic sibling under same WSL /tmp scratch directory",
+      "mounted_into_sandbox": false,
+      "content_recorded": false
+    },
+    "environment_cleared": true,
+    "host_drives_sockets_home_and_wsl_integration_bound_into_sandbox": false,
+    "effective_capabilities_zero": true,
+    "no_new_privs": true,
+    "writable_tmpfs_mounts": [
+      {"target": "/tmp", "size_bytes": 4194304},
+      {"target": "/run", "size_bytes": 4194304}
+    ]
+  },
+  "probe_runs": [
+    {
+      "attempt": 1,
+      "status": "BLOCKED",
+      "reason": "Harness assertion compared PID namespace identities from distinct Bubblewrap invocations; execution stopped at the assertion.",
+      "probes_before_stop": [
+        "approved_candidate_read",
+        "forbidden_synthetic_canary_read",
+        "symlink_escape_read",
+        "candidate_write",
+        "windows_drive_and_wsl_mount_access",
+        "windows_interop_visibility"
+      ],
+      "cleanup": "PASS",
+      "security_breach_observed": false
+    },
+    {
+      "attempt": 2,
+      "status": "PASS",
+      "helper_sha256": "8090E61F3D81CAF110B696B175C4DD0E4777DB04937E71295D7E8E5C3D2608B8",
+      "scratch_scope": "one unique directory under Ubuntu /tmp; removed and verified absent"
+    }
+  ],
+  "probe_results": [
+    {"id": "APPROVED_CANDIDATE_READ", "status": "PASS", "executed": true},
+    {"id": "FORBIDDEN_SYNTHETIC_CANARY_READ", "status": "PASS", "executed": true, "canary_content_recorded": false},
+    {"id": "SYMLINK_ESCAPE_READ", "status": "PASS", "executed": true},
+    {"id": "CANDIDATE_WRITE", "status": "PASS", "executed": true, "write_artifact_created": false},
+    {"id": "WINDOWS_DRIVE_AND_WSL_MOUNT_ACCESS", "status": "PASS", "executed": true},
+    {"id": "WINDOWS_INTEROP_VISIBILITY", "status": "PASS", "executed": true, "windows_executable_launched": false},
+    {
+      "id": "PID_AND_NETWORK_NAMESPACE_ISOLATION",
+      "status": "PASS",
+      "executed": true,
+      "outer_pid_namespace": "pid:[4026532221]",
+      "sandbox_pid_namespace": "pid:[4026532256]",
+      "outer_network_namespace": "net:[4026531833]",
+      "sandbox_network_namespace": "net:[4026532359]",
+      "outer_cgroup_namespace": "cgroup:[4026531835]",
+      "sandbox_cgroup_namespace": "cgroup:[4026532722]"
+    },
+    {"id": "CHILD_PROCESS_INHERITS_ISOLATION", "status": "PASS", "executed": true},
+    {"id": "NESTED_USER_NAMESPACE", "status": "PASS", "executed": true, "attempt_denied": true},
+    {"id": "NO_NEW_PRIVILEGES_AND_ZERO_EFFECTIVE_CAPABILITIES", "status": "PASS", "executed": true},
+    {
+      "id": "NETWORK_EGRESS",
+      "status": "PASS",
+      "executed": true,
+      "non_loopback_routes_present": false,
+      "target": "192.0.2.1:9 (reserved TEST-NET)",
+      "connect_denied": true,
+      "exact_errno_retained": false
+    },
+    {"id": "TIMEOUT_CANCELLATION", "status": "PASS", "executed": true, "observed_timeout_exit": 124},
+    {"id": "CLEANUP_CONFIRMED", "status": "PASS", "executed": true},
+    {"id": "SECCOMP_SYSCALL_FILTER", "status": "BLOCKED", "executed": true, "observed_mode": 0, "filter_count": 0},
+    {"id": "CGROUP_RESOURCE_LIMITS", "status": "BLOCKED", "executed": false, "reason": "No CPU, memory, or PID resource limits were configured or tested."},
+    {"id": "CHILD_PROCESS_CREATION_DENIAL", "status": "BLOCKED", "executed": false, "reason": "Bubblewrap profile allows child creation; confinement inheritance only was tested."}
+  ],
+  "execution_limits": {
+    "synthetic_candidate_created": true,
+    "synthetic_forbidden_canary_created": true,
+    "all_synthetic_fixtures_cleaned": true,
+    "windows_host_canary_created": false,
+    "real_user_data_or_secret_read": false,
+    "repository_source_mounted_or_read": false,
+    "external_model_invoked": false,
+    "cipher_invoked": false,
+    "external_provider_called": false,
+    "wsl_or_distribution_configuration_changed": false,
+    "elevation_or_reboot_used": false,
+    "packages_installed": false,
+    "production_route_or_authority_changed": false,
+    "alteredego_repository_inspected_or_modified": false
+  },
+  "overall_disposition": "WSL_QUALIFICATION_CANDIDATE",
+  "wsl2_alone_isolation": "NOT_QUALIFIED",
+  "bubblewrap_synthetic_boundary": "PASS_FOR_FURTHER_CONSIDERATION",
+  "cipher_qualification": "NOT_QUALIFIED",
+  "production_activation": "NOT_AUTHORIZED",
+  "next_human_decision": "Decide whether to authorize a separate fresh-context host qualification addressing seccomp, cgroup resource controls, child-process policy, and exact server-controlled candidate binding. If those controls cannot be established, evaluate a tool-less snapshot-only assessment broker. No follow-on campaign started in this task."
+}

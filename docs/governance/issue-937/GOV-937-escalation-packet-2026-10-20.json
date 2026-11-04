@@ -1,0 +1,66 @@
+{
+  "schema_version": "orchestra.protected-governance-escalation.v1",
+  "record_type": "GovernanceEscalationPacket",
+  "escalation_id": "GOV-937-20261020-ec0c99dd634d",
+  "originating_run_id": "NOT_FOUND",
+  "repository": "Baelfyre/Orchestra",
+  "base_sha": "b215a48b678e8708a8a6e7123f5ee1893d3f4f15",
+  "candidate_sha": "ec0c99dd634dc98588b722d07dc2badf63865122",
+  "tree_sha": "c38482c126bc2616cf9fe0fb0879c268153671ab",
+  "work_item_ref": "https://github.com/Baelfyre/Orchestra/issues/937",
+  "phase_id": "GOV-937",
+  "trigger_code": "AUTHORITY_EXPANSION_REQUIRED",
+  "protected_rule": "machine/governance/policy.v1.json::high-risk-skill-approval and human-only trusted governance receipt source/consumption boundary",
+  "affected_paths": [
+    "machine/governance/policy.v1.json",
+    "orchestra_runtime/services.py",
+    "orchestra_runtime/application/ports/governance_receipts.py",
+    "orchestra_runtime/application/use_cases/verify_governance_receipt.py",
+    "orchestra_runtime/mcp_transport.py",
+    "orchestra_runtime/mcp_specialist_execution.py"
+  ],
+  "failing_evidence_refs": [
+    "https://github.com/Baelfyre/Orchestra/issues/937",
+    "https://github.com/Baelfyre/Orchestra/pull/977",
+    "schema:machine/schemas/protected-governance-escalation.v1.schema.json",
+    "orchestra_runtime/application/use_cases/verify_governance_receipt.py::VerifyGovernanceReceipt.execute (separate consume_once and record_audit calls)",
+    "tests/runtime/test_governance_receipt_foundations.py::test_audit_failure_denies_even_after_atomic_consumption",
+    "repository-search:b215a48:production receipt store/context provider/MCP receipt-reference consumer=NOT_FOUND",
+    "repository-search:b215a48:qualified production read-only Cipher engine/provider=NOT_FOUND"
+  ],
+  "decision_digest": null,
+  "proposed_governance_change": "No policy amendment or bounded exception is requested in this run. Request human direction on whether a later, fresh execution context may establish an independently controlled human-authority receipt source and production exact-scope receipt resolver/store/context consumption under the existing protected rule. If that requires changing the rule or expanding runtime authority, that change remains separately gated. This packet itself does not authorize implementation.",
+  "prime_directive_analysis": "The active rule preserves human control and fail-closed protected execution. The registered defensive review exception is non-authorizing, but no qualified production Cipher engine is evidenced. Production receipt consumption also lacks an independently controlled authority source and atomic store/audit implementation. Preserving these controls leaves protected execution unavailable and can strand a single-use receipt after audit failure; changing them without exact provenance, candidate, scope, freshness, consumption, and audit binding risks forged or replayed authority. Available evidence supports requesting more evidence and a later human decision, not self-approval.",
+  "alternatives_considered": [
+    "Keep the active rule and default route-only MCP behavior; continue only bounded non-authorizing tests and design work.",
+    "In a later fresh context, implement a host-owned production receipt resolver/store only after an independent human-authority source, transaction contract, exact-context binding, and required specialist reviews are established.",
+    "If the current rule cannot support that design, prepare a separate protected policy amendment or bounded exception for human review; do not create or consume it in this run."
+  ],
+  "risk_if_unchanged": "MCP remains unable to consume trusted governance receipts; protected execution remains fail-closed. The existing audit-write failure path denies after consumption, which can leave a valid single-use receipt unavailable for retry. Read-only Cipher assessment still lacks a qualified production engine/provider and default MCP execution route.",
+  "risk_if_changed": "Without separate human authority and exact binding, a resolver or rule change could accept forged, stale, cross-repository, cross-candidate, over-scoped, or replayed authority; split consumption and audit could leave unaudited authorization state; broad changes could weaken unrelated protected operations.",
+  "required_reviewers": [
+    "ARBITER",
+    "OVERSEER",
+    "CLOCKWORK",
+    "GOVERNOR",
+    "CIPHER",
+    "CHRONICLER"
+  ],
+  "reviewer_findings": [
+    "ARBITER: registered command returned NOT_REQUIRED routing acknowledgement only; no continuity or transition disposition.",
+    "OVERSEER: registered command returned NOT_REQUIRED routing acknowledgement only; no validation assessment.",
+    "CLOCKWORK: registered command returned NOT_REQUIRED routing acknowledgement only; no architecture assessment.",
+    "GOVERNOR: NOT_FOUND; no dedicated Governor tool was exposed. compliance-review routes to Conductor and is not a Governor assessment.",
+    "CIPHER: BLOCKED_PENDING_VALIDATION for cipher and security-check commands; no substantive security assessment.",
+    "CHRONICLER: review-db returned NOT_REQUIRED routing acknowledgement only; no persistence contract.",
+    "PACKET_FORMAT (non-review evidence): validated against machine/schemas/protected-governance-escalation.v1.schema.json with python -m jsonschema on 2026-10-20; validation exited 0.",
+    "MISSING_VALUE_SEMANTICS: originating_run_id=NOT_FOUND means the source run ID was unavailable; decision_digest=null means no human decision digest was supplied; dissenting_findings=[] means no substantive reviewer view was returned and does not assert that no dissent exists."
+  ],
+  "dissenting_findings": [],
+  "ai_recommendation": "REQUEST_MORE_EVIDENCE",
+  "human_review_required": true,
+  "candidate_frozen": true,
+  "same_run_mutation_forbidden": true,
+  "next_allowed_action": "HUMAN_GOVERNANCE_REVIEW",
+  "generated_at": "2026-10-20T11:10:33Z"
+}
