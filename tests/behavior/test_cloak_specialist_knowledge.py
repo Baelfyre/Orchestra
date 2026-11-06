@@ -6,6 +6,7 @@ CODEX = ROOT / "adapters" / "codex" / "skills" / "cloak"
 
 REQUIRED_SUPPORT = [
     "ACCESSIBILITY_CHECKLIST.md",
+    "ARTIFACT_VISUAL_ACCESSIBILITY_GUIDE.md",
     "CHECKLIST.md",
     "FRONTEND_REVIEW_GUIDE.md",
     "UI_UX_FOUNDATIONS_GUIDE.md",
@@ -39,7 +40,13 @@ def main() -> None:
             raise AssertionError(f"Missing canonical Cloak support file: {relative}")
         if not mirror.is_file():
             raise AssertionError(f"Missing Codex Cloak support file: {relative}")
-        if source.read_bytes() != mirror.read_bytes():
+        source_text = read(source)
+        if relative == "ARTIFACT_VISUAL_ACCESSIBILITY_GUIDE.md":
+            marker_header = "<!-- @codebase_provenance_JEO -->\n<!-- @codebase_rights_JEO -->\n"
+            if not source_text.startswith(marker_header):
+                raise AssertionError("Cloak artifact guide is missing its leading source markers")
+            source_text = source_text[len(marker_header):]
+        if source_text != read(mirror):
             raise AssertionError(f"Cloak source/Codex support parity failed: {relative}")
 
     semantic = read(SOURCE / "SEMANTIC_HTML_ARIA_KEYBOARD_GUIDE.md")
@@ -102,6 +109,31 @@ def main() -> None:
         "Permission-aware UX",
         "Clockwork",
         "Cipher",
+    )
+
+    foundations = read(SOURCE / "UI_UX_FOUNDATIONS_GUIDE.md")
+    require(foundations, "ARTIFACT_VISUAL_ACCESSIBILITY_GUIDE.md", "UIEF-4 handoff contract")
+
+    artifacts = read(SOURCE / "ARTIFACT_VISUAL_ACCESSIBILITY_GUIDE.md")
+    require(
+        artifacts,
+        "document, spreadsheet, or presentation",
+        "Do not rasterize or flatten editable content",
+        "Use only supplied or approved logos",
+        "speaker note",
+        "alt",
+        "page or slide dimensions",
+        "template identity, theme, fonts",
+        "predictable wrapping",
+        "Capture screenshots",
+        "application/version and artifact identity recorded",
+        "reading order",
+        "PARTIAL",
+        "UNSUPPORTED",
+        "UNVERIFIED",
+        "NOT_RUN",
+        "Capture physical layout requirements",
+        "UI Fidelity Handoff Guide",
     )
 
     skill = read(SOURCE / "SKILL.md")

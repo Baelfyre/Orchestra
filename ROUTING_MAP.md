@@ -41,7 +41,7 @@ After Conductor classification, do not load it for a clear single-owner fast rou
 | `SPEC_TO_SYSTEM`, `SYSTEM_TO_DOCS`, or `RECONCILE` | `scribe` -> only required specialists -> implementation/validation owners as applicable | Scribe leads the mode-specific narrative, reconstruction, or drift review without inventing intent or specialist-owned decisions |
 | Diagram and model generation | `weaver` | Visual artifact owner is clear |
 | Minimal implementation after design is ready | `ponytail` | Execution owner is clear and upstream design/governance are ready |
-| Controlled destructive-path simulation | `dagger` | Explicit authorization and guardrail validation are present |
+| Explicit adversarial/negative/resilience request | `dagger` | Plan only until target-owner authorization and guardrail pass |
 | Compliance Registry cache lifecycle and query operations | `conductor` -> deterministic `scripts/compliance_registry.py` | Explicit `/compliance-registry` command; Registry data remains evidence, not authority |
 | Registry-backed governed compliance review | `conductor` | Explicit `/compliance-review` command; Governor applicability, Steward traceability, and Arbiter freshness/set-equality review are required |
 | Broad, unclear, or overlapping requests | `conductor` | Ownership overlaps, dependencies exist, or route split is unclear |
@@ -149,14 +149,15 @@ No single role may treat successful source inspection, implementation, or automa
 
 ## Gate and Conflict Rules
 
-- Dagger stays `BLOCKED_PENDING_AUTHORIZATION` until explicit authorization and guardrail validation exist.
+- Dagger execution stays `BLOCKED_PENDING_AUTHORIZATION` pending target-owner authorization and guardrail pass.
+- Cipher findings/keywords do not trigger Dagger or authorize tests.
 - Governor human-review behavior is blocking.
 - Arbiter `HOLD` and `BLOCKED` are blocking.
 - `CROSS_LAYER_CONTRACT_INCOMPLETE`, `CROSS_SPECIALIST_CONTRADICTION_REVIEW_REQUIRED`, `CROSS_LAYER_CONTRACT_STALE`, and `SPECIALIST_REENTRY_REQUIRED` are blocking coordination states.
 - `CROSS_LAYER_CONTRACT_READY` is readiness evidence only and does not create implementation authority.
 - No architecture, security, database, or governance task defaults directly to `ponytail`.
 - Assign one owner per output and sequence dependencies instead of parallel policy conflicts.
-- Use `dagger` only for guarded destructive-path work, never as default QA, security, DB, or UI reviewer.
+- Dagger is never default QA/security/DB/UI; use only on explicit request.
 - For ERDs, use `chronicler` for semantics and `weaver` for notation.
 - Scribe reconciliation may identify `DOC_DRIFT`, `IMPLEMENTATION_DRIFT`, `MISSING_EVIDENCE`, or `UNRESOLVED`, but those states do not grant code, policy, approval, validation, or release authority.
 

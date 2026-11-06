@@ -56,6 +56,8 @@ Version-sensitive references must be identified by version when a specific requi
 
 Use `SKILL.md` first. Load only the support file needed for the current objective.
 
+For routine questions and bounded reviews, stay within the requested scope and load only relevant guidance. Use broad control or privacy checklists for comprehensive coverage only when explicitly requested. Skill activation or a broad review request does not itself authorize scans, target-code execution, or audit-file creation; follow existing authority and non-effectful boundaries.
+
 - `OUTPUT_FORMATS.md` -> final review shape.
 - `SECURITY_PRIVACY_STANDARDS.md` -> standards/taxonomy framing.
 - `SECURITY_CHECKLIST.md` -> broad control audit.
@@ -75,12 +77,12 @@ The JSON catalog is metadata, not authority, not a vulnerability scanner, and no
 
 For each material finding, follow this chain:
 
-1. **Evidence** — identify the exact code, configuration, data flow, dependency, endpoint, policy, or observed behavior.
+1. **Evidence** — for each distinct vulnerability variant, identify its exact code, configuration, data flow, dependency, endpoint, policy, or observed behavior; assess confidence independently and do not transfer confirmation or severity between variants.
 2. **Boundary** — identify the trust/identity/privilege/data boundary crossed.
 3. **Security objective** — state what must remain true.
 4. **Weakness/control mapping** — optionally map to CWE, ASVS, OWASP API, or protocol guidance when the mapping is actually supported.
 5. **Impact** — explain plausible defensive impact without operational exploit instructions.
-6. **Existing safeguards** — record relevant protections already present.
+6. **Existing safeguards** — verify the actual enforcement path and relevant test behavior. A sibling skill, checklist, or named test alone does not prove enforcement; mark external or out-of-scope enforcement as needing verification.
 7. **Remediation boundary** — define the smallest correction needed and route implementation to the owning specialist.
 8. **Verification handoff** — state what evidence Overseer or the implementing specialist should verify after remediation.
 
@@ -133,6 +135,8 @@ Treat the frontend as untrusted for enforcement. Review server-side controls for
 - error and debug information exposure.
 
 Rate limiting is one possible control, not a universal substitute for authorization or business-state invariants.
+
+For scoped reviews of AI, MCP, plugin, or other tool-enabled code, conditionally trace declared availability and prerequisites, invocation ownership and argument/schema validation, runtime admission and cancellation/resource bounds, and output size, redaction, provenance, and relevant record invariants. Keep this check limited to tool-enabled systems in scope; do not apply it to unrelated UI-only work or infer unobserved runtime behavior from source text alone.
 
 ## Security Tooling Interpretation
 
@@ -209,7 +213,7 @@ Severity and confidence are separate. A severe category with weak evidence is no
 - Persistence, migrations, audit-log storage -> Chronicler.
 - Frontend security UX -> Cloak.
 - Validation strategy/readiness -> Overseer.
-- Controlled negative/resilience testing -> Dagger when authorized.
+- Recommend bounded Dagger validation only for material findings with unresolved behavior or exploitability; never self-route or imply authority.
 - Documentation -> Scribe.
 - Legal/compliance/privacy-obligation sufficiency -> The Governor through Conductor.
 - Ambiguous multi-owner sequencing -> Conductor.

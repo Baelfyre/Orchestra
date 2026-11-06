@@ -63,6 +63,8 @@ Specialist prose and progressive-disclosure knowledge remain under `../skills/*/
 - [Overseer Architecture Validation Contract Guide](../skills/overseer/ARCHITECTURE_VALIDATION_CONTRACT_GUIDE.md): contract-derived validation obligations, exact-bound proof states, and evidence limitations.
 - [Pre-Development Blueprint Coverage Guide](project/PRE_DEVELOPMENT_BLUEPRINT_GUIDE.md): optional six-area Scribe crosswalk, existing document reuse and specialist fact ownership.
 - [Scribe Specialist Upgrade SSU](project/SCRIBE_SPECIALIST_UPGRADE_SSU.md): adaptive domain narrative, traceability, research/capstone documentation, and documentation/system reconciliation guidance.
+- [Scribe Artifact Authoring and Backend Selection Guide](../skills/scribe/ARTIFACT_AUTHORING_AND_BACKEND_SELECTION_GUIDE.md): structured artifact requirements, evidence-separated backend support, and target-application constraints.
+- [Cloak Artifact Visual and Accessibility Guide](../skills/cloak/ARTIFACT_VISUAL_ACCESSIBILITY_GUIDE.md): editable-content fidelity, approved branding, note placement, and target-application accessibility review.
 - [Documentation Lifecycle Applicability](project/DOCUMENTATION_LIFECYCLE_APPLICABILITY.md): risk-proportional documentation decisions mapped to the existing development lifecycle, claim owners, evidence, and Scribe activation.
 - [Scribe Post-SSU Governance Documentation Integration Guide](../skills/scribe/GOVERNANCE_DOCUMENTATION_INTEGRATION_GUIDE.md): deterministic post-SSU governance documentation discipline, specialist contract matrices, bidirectional traceability, and evidence-bound claim verification.
 

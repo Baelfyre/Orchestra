@@ -74,3 +74,9 @@ The combined default collection of `tests/runtime` and `tests/behavior` has a pr
 `NOT_QUALIFIED_PENDING_VALIDATION_AND_PILOT`
 
 Passing offline tests can support pull-request review. They do not establish actual JEV inference, real evidence provenance, production integration, R3-A host trust, exact-head CI readiness, or release/publication authority.
+
+## Subsequent scope decision (2026-11-03)
+
+The approved v1.12 release scope preserves the merged JEV code and this historical evidence, while deferring further JEV qualification and integration. The historical candidate remains PREPARED_NOT_QUALIFIED; the three-week acceptance condition was not met, and no smoke run is credited as a formal session. All test counts, failures, limitations, and evidence gaps above remain historical facts.
+
+The general v1.12 candidate scope is recorded in [the release candidate record](../releases/v1.12.0-release-candidate.md). This scope decision does not qualify JEV, activate a provider, authorize a merge, or authorize release or publication.

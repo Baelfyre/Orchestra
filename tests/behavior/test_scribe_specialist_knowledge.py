@@ -11,6 +11,7 @@ REQUIRED_SUPPORT = [
     "OUTPUT_FORMATS.md",
     "OUTPUT_TEMPLATES.md",
     "SOURCE_BACKED_DOCUMENTATION_GUIDE.md",
+    "ARTIFACT_AUTHORING_AND_BACKEND_SELECTION_GUIDE.md",
     "MARKDOWN_TECHNICAL_SYNTAX_GUIDE.md",
     "CHANGELOG_ADR_GUIDE.md",
     "API_VERSIONED_DOCUMENTATION_GUIDE.md",
@@ -43,7 +44,13 @@ def main() -> None:
         mirror = CODEX / relative
         if not source.is_file() or not mirror.is_file():
             raise AssertionError(f"Missing Scribe support or mirror: {relative}")
-        if source.read_bytes() != mirror.read_bytes():
+        source_text = read(source)
+        if relative == "ARTIFACT_AUTHORING_AND_BACKEND_SELECTION_GUIDE.md":
+            marker_header = "<!-- @codebase_provenance_JEO -->\n<!-- @codebase_rights_JEO -->\n"
+            if not source_text.startswith(marker_header):
+                raise AssertionError("Scribe artifact guide is missing its leading source markers")
+            source_text = source_text[len(marker_header):]
+        if source_text != read(mirror):
             raise AssertionError(f"Scribe source/Codex support parity failed: {relative}")
 
     skill = read(SOURCE / "SKILL.md")
@@ -88,6 +95,54 @@ def main() -> None:
 
     claims = read(SOURCE / "LINK_CLAIM_VALIDATION_GUIDE.md")
     require(claims, "Claim Ledger", "VERIFIED_CURRENT", "fragment/anchor existence", "authoritative sources", "invalidates dependent documentation evidence")
+
+    artifacts = read(SOURCE / "ARTIFACT_AUTHORING_AND_BACKEND_SELECTION_GUIDE.md")
+    require(
+        artifacts,
+        "SUPPORTED",
+        "PARTIAL",
+        "UNSUPPORTED",
+        "UNVERIFIED",
+        "Feature support, evidence, and output validation are separate.",
+        "Treat as unknown, not supported.",
+        "Do not silently drop, flatten, or approximate the requirement.",
+        "document outline with section and subsection purpose",
+        "workbook and sheet map",
+        "narrative/story arc and slide sequence",
+        "PowerPoint desktop presentation",
+        "PowerPoint for the web presentation",
+        "OpenDocument text document",
+        "OpenDocument spreadsheet",
+        "OpenDocument presentation",
+        "intended presentation duration",
+        "institution, course, or rubric requirements",
+        "Template identity and revision",
+        "Document-family structure",
+        "story arc from the problem or question through evidence and reasoning to the conclusion",
+        "source/input data, formulas or transformations",
+        "For every slide, state its purpose, key message, supporting evidence/data",
+        "substantive speaker notes",
+        "Conversion risks",
+        "Validation and confirmation",
+        "PDF presentation",
+        "Markdown presentation",
+        "LaTeX document",
+        ".odt",
+        ".ods",
+        ".odp",
+        "local tool availability before comparing backend features",
+        "Google account/tenant, authentication or OAuth authorization",
+        "Native target format",
+        "Qualified interchange format",
+        "User-approved fixed format",
+        "Excel and Calc calculations and charts",
+        "Apache OpenOffice and LibreOffice as separate target products",
+        "Apple Keynote",
+        "Google's cloud",
+        "provider operation",
+        "Cloak's artifact visual/accessibility guide",
+        "The Governor",
+    )
 
     example = read(SOURCE / "examples" / "source-backed-api-change-example.md")
     require(example, "`DOCUMENTATION_PLANNED`", "Release evidence: `NOT_FOUND`", "must remain under `Unreleased`", "no release or documentation-site publication occurred")
