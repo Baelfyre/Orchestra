@@ -208,7 +208,13 @@ def main(argv=None):
         return 2
     print(f"RELEASE_REVIEW_DISPOSITION={disposition}")
     print("RELEASE_PUBLICATION_AUTHORIZED=false")
-    return 0
+    # Exit zero means this record is internally ready for *human review*, not for release.
+    # Pending remediation, missing evidence, and escalation must not appear CI-green.
+    if disposition == "EVIDENCE_READY_FOR_FINAL_REVIEW":
+        return 0
+    if disposition == "ESCALATE_HUMAN":
+        return 3
+    return 1
 
 
 if __name__ == "__main__":
