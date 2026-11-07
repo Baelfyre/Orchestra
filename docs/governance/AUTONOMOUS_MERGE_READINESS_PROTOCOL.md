@@ -47,7 +47,7 @@ Allowed merge methods: Squash only
 
 Restrict deletions: ON
 Require linear history: ON
-Require signed commits: ON
+Require signed commits: OFF
 Require pull request before merging: ON
 Require status checks to pass: ON
 Require branches to be up to date before merging: ON
@@ -201,7 +201,7 @@ Required evidence:
 - exact canonical main parent SHA;
 - exact canonical tree SHA after merge;
 - empty content diff between the reviewed head tree and canonical result;
-- verified signature on the canonical squash commit;
+- GitHub signature status for the canonical squash commit, when available (supplemental evidence, not required for merge equivalence);
 - independent canonical remote read.
 
 Required equivalence:
@@ -213,10 +213,9 @@ bypass_used == false
 canonical_tree == reviewed_tree
 canonical_parent == pre_merge_base
 content_diff_empty == true
-canonical_signature_verified == true
 ```
 
-Tree/content equivalence is not a substitute for pre-merge exact-head CI or ordinary merge readiness. It is the post-write proof that the newly created squash commit contains exactly the already-reviewed result.
+Tree/content equivalence is not a substitute for pre-merge exact-head CI or ordinary merge readiness. It is the post-write proof that the newly created squash commit contains exactly the already-reviewed result. The live `Protect main` ruleset does not require signed commits. Record GitHub signature status when available; a verified signature is supplemental provenance, and an unsigned squash result is not by itself a merge failure. All identity, content, CI, bypass, and clean-state checks remain mandatory.
 
 A rebase merge is not valid under the current ruleset. A merge commit is not valid while linear history is required.
 
@@ -235,7 +234,7 @@ The controller must first retain the accepted pre-merge evidence and then perfor
 - the canonical parent equals the exact pre-merge base;
 - the canonical tree equals the reviewed head tree;
 - the reviewed-head-to-canonical content diff is empty;
-- the canonical squash commit has a verified signature;
+- the canonical squash commit signature status is recorded when available; an unsigned commit does not by itself fail verification under the current ruleset;
 - the remote read corresponds to the intended repository and PR.
 
 Only then may state advance to:
@@ -256,7 +255,7 @@ An intended action, attempted action, successful API response, actor bypass capa
 
 PR #230 exposed the previous ancestry-only post-merge assumption. Its reviewed head `f49a03c929be7df7c10c457a227a46532ef47854` and canonical rebase result `80f9bc71f00cc86c0021fd9da258f2eec596d7e0` have equivalent trees/content, but the reviewed head is not in canonical ancestry and the platform-generated canonical commit is unsigned.
 
-The repository history must not be rewritten merely to satisfy the old validator. That incident requires an explicit human canonical-history disposition and forward-only governance remediation. It is not successful precedent for future unsigned or rebase merges.
+The repository history must not be rewritten merely to satisfy the old validator. That incident requires an explicit human canonical-history disposition and forward-only governance remediation. It is not successful precedent for rebase merges or for bypassing protections that applied at that time.
 
 ## PR #299 Merge-State Incident Boundary
 
@@ -288,4 +287,4 @@ The executable contract is:
 - `tests/behavior/autonomous-merge-readiness-fixtures.json`
 - `tests/runtime/test_autonomous_merge_readiness_contract.py`
 
-The v4 fixtures intentionally cover missing check data, pending jobs, failed governance/runtime/cross-platform/required-analysis checks, stale heads, red baseline progression, changelog omission, boolean mergeability misuse, missing and unknown mergeable state, blocked/behind/dirty/unstable mergeable states, ruleset drift, duplicate required status contexts, retired required contexts, unauthorized bypass use, non-Squash merge selection, unresolved review threads, pre-merge gate preservation, tree mismatch, parent drift, unsigned canonical commits, and unverified post-merge state.
+The v4 fixtures intentionally cover missing check data, pending jobs, failed governance/runtime/cross-platform/required-analysis checks, stale heads, red baseline progression, changelog omission, boolean mergeability misuse, missing and unknown mergeable state, blocked/behind/dirty/unstable mergeable states, ruleset drift, duplicate required status contexts, retired required contexts, unauthorized bypass use, non-Squash merge selection, unresolved review threads, pre-merge gate preservation, tree mismatch, parent drift, optional unsigned canonical commits, and unverified post-merge state.

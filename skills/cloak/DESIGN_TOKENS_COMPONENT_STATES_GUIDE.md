@@ -60,6 +60,7 @@ Not every component needs every state. Missing states are findings only when the
 - Spacing should communicate grouping and separation consistently rather than act as arbitrary pixel tuning.
 - Dense modes must retain target size, focus visibility, readable labels, and error communication.
 - Localization and longer content must not break the component contract.
+- For product-level visual polish or spacing-rhythm review, see [`VISUAL_REFINEMENT_8PT_GUIDE.md`](VISUAL_REFINEMENT_8PT_GUIDE.md). Its 8px rhythm is soft and remains subordinate to approved tokens, accessibility, responsive sizing, and localization.
 
 ## Motion tokens and transitions
 

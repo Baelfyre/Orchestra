@@ -31,6 +31,9 @@ Conductor chooses the smallest useful specialist route. [Compatibility](docs/set
 | --- | --- | --- |
 | **Specialist coordination** | Focused roles, bounded execution, and handoffs | Tool access never creates permission |
 | **Assurance and governance** | Evidence-based validation and human-controlled boundaries | Passing tests never authorizes a merge |
+| **Security and adversarial review** | [Cipher](skills/cipher/SKILL.md) provides scoped, evidence-based source review; [Dagger](skills/dagger/SKILL.md) supports authorized adversarial validation planning | Cipher runtime and live penetration testing remain unqualified; Dagger execution requires exact target-owner authorization, Conductor routing, a non-production target, and a passing guardrail |
+| **Optional visual refinement** | [Cloak](skills/cloak/SKILL.md) offers optional [8-point spacing and visual refinement](skills/cloak/VISUAL_REFINEMENT_8PT_GUIDE.md) | Advisory under project tokens, accessibility, and responsive behavior; rendered effectiveness needs rendered evidence |
+| **Artifact authoring and review** | [Scribe artifact guidance](skills/scribe/ARTIFACT_AUTHORING_AND_BACKEND_SELECTION_GUIDE.md) records requirements and backend evidence; [Cloak artifact guidance](skills/cloak/ARTIFACT_VISUAL_ACCESSIBILITY_GUIDE.md) covers visual hierarchy and accessibility | Guides do not establish backend capability, output correctness, or cloud-operation authorization |
 | **Adaptive memory** | Local observations, opt-in read-only context, and shadow learning | No automatic authority, preference promotion, or private cloud sync |
 | **Adaptive discovery** | Scoped capability-memory contracts and offline planning | Live host discovery and trusted private-memory writes are not activated |
 | **JEV advisory** | Optional TypeSafe System One advisory components | Live TypeSafe/BYOK onboarding, R3-A host trust, and production wiring remain unqualified |
@@ -40,7 +43,7 @@ These are **source and maturity claims**, not a guarantee that each capability i
 
 ## JEV and local API keys
 
-JEV supports non-binding engineering advice when independently reviewed alternatives exist. The v1.12 offline pilot provides a repeatable 14-scenario pytest replay with explicitly labeled synthetic responses and evidence-gap recording. It makes no TypeSafe calls or actual JEV inference. The original V6 packet and source artifacts are absent, so replayed V6 findings remain **UNVERIFIED**. Live TypeSafe integration, R3-A host trust, and production wiring remain unqualified. The TypeSafe adapter and offline data-minimization components exist, but there is **no verified general-purpose end-user BYOK activation flow**. Ordinary Orchestra use needs no JEV key. Never paste credentials into prompts or tracked project files.
+JEV supports non-binding engineering advice when independently reviewed alternatives exist. The existing offline pilot provides a repeatable 14-scenario pytest replay with explicitly labeled synthetic responses and evidence-gap recording. It makes no TypeSafe calls or actual JEV inference. The original V6 packet and source artifacts are absent, so replayed V6 findings remain **UNVERIFIED**. The pilot remains PREPARED_NOT_QUALIFIED; further qualification and integration are deferred from v1.12. Live TypeSafe integration, R3-A host trust, and production wiring remain unqualified. The TypeSafe adapter and offline data-minimization components exist, but there is **no verified general-purpose end-user BYOK activation flow**. Ordinary Orchestra use needs no JEV key. Never paste credentials into prompts or tracked project files.
 
 Read the [offline pilot instructions](docs/setup/JEV_OFFLINE_PILOT.md), [JEV local API setup and limitations](docs/setup/JEV_LOCAL_API.md), and the [decision hierarchy](docs/architecture/EVIDENCE_GATED_DECISION_HIERARCHY.md).
 
@@ -76,6 +79,8 @@ No model output, learned preference, documentation matrix, or installed plugin m
 ## Published release
 
 The latest public release is **[v1.11.0](https://github.com/Baelfyre/Orchestra/releases/tag/v1.11.0)**. The development branch contains later work, which remains unreleased until the complete version-specific qualification and publication process is completed. See [releases](docs/reference/releases/README.md) and [changelog](CHANGELOG.md).
+
+The proposed v1.12.0 scope and pending candidate gates are recorded in the [release candidate record](docs/releases/v1.12.0-release-candidate.md). The [2026-11-06 reconciliation note](docs/releases/v1.12.0-local-scope-reconciliation-2026-11-06.md) preserves the earlier local review context; this candidate remains uncommitted and unqualified.
 
 ## Support
 

@@ -18,7 +18,7 @@
     "require_conversation_resolution": true,
     "allowed_merge_methods": ["squash"],
     "require_linear_history": true,
-    "require_signed_commits": true,
+    "require_signed_commits": false,
     "require_pull_request": true,
     "require_status_checks": true,
     "require_branches_up_to_date": true,
@@ -55,7 +55,7 @@
       "require_conversation_resolution": true,
       "allowed_merge_methods": ["squash"],
       "require_linear_history": true,
-      "require_signed_commits": true,
+      "require_signed_commits": false,
       "require_pull_request": true,
       "require_status_checks": true,
       "require_branches_up_to_date": true,
@@ -116,7 +116,7 @@
     {"id": "duplicate-ubuntu-required-context", "ruleset_overrides": {"required_status_contexts": ["governance-check", "validate", "runtime-tests", "native-windows-latest", "native-ubuntu-latest", "native-ubuntu-latest", "native-macos-latest", "Compatibility CodeQL (python)"]}, "expected_disposition": "BLOCK"},
     {"id": "retired-codeql-required-contexts", "ruleset_overrides": {"required_status_contexts": ["governance-check", "validate", "runtime-tests", "native-windows-latest", "native-ubuntu-latest", "native-macos-latest", "Analyze (actions)", "Analyze (python)"]}, "expected_disposition": "BLOCK"},
     {"id": "selected-rebase", "overrides": {"selected_merge_method": "rebase"}, "expected_disposition": "BLOCK"},
-    {"id": "signature-rule-disabled", "ruleset_overrides": {"require_signed_commits": false}, "expected_disposition": "BLOCK"},
+    {"id": "signature-rule-enabled", "ruleset_overrides": {"require_signed_commits": true}, "expected_disposition": "BLOCK"},
     {"id": "bypass-used", "overrides": {"bypass_used": true}, "expected_disposition": "BLOCK"}
   ],
   "post_merge_cases": [
@@ -293,8 +293,11 @@
     },
     {
       "id": "unsigned-canonical-commit",
-      "expected_disposition": "MERGE_STATE_UNVERIFIED",
+      "expected_disposition": "MERGED_VERIFIED",
       "snapshot": {
+        "pre_merge_disposition": "READY_FOR_MERGE",
+        "pre_merge_mergeable_state": "clean",
+        "bypass_used": false,
         "merge_api_result": "success",
         "canonical_read_completed": true,
         "pr_merged": true,

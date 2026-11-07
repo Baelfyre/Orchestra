@@ -143,6 +143,8 @@ Treat the frontend as untrusted for enforcement. Review server-side controls for
 
 Rate limiting is one possible control, not a universal substitute for authorization or business-state invariants.
 
+For scoped reviews of AI, MCP, plugin, or other tool-enabled code, conditionally trace declared availability and prerequisites, invocation ownership and argument/schema validation, runtime admission and cancellation/resource bounds, and output size, redaction, provenance, and relevant record invariants. Keep this check limited to tool-enabled systems in scope; do not apply it to unrelated UI-only work or infer unobserved runtime behavior from source text alone.
+
 ## Security Tooling Interpretation
 
 Scanner output is evidence to investigate, not automatic truth.
@@ -218,7 +220,7 @@ Severity and confidence are separate. A severe category with weak evidence is no
 - Persistence, migrations, audit-log storage -> Chronicler.
 - Frontend security UX -> Cloak.
 - Validation strategy/readiness -> Overseer.
-- Controlled negative/resilience testing -> Dagger when authorized.
+- Recommend bounded Dagger validation only for material findings with unresolved behavior or exploitability; never self-route or imply authority.
 - Documentation -> Scribe.
 - Legal/compliance/privacy-obligation sufficiency -> The Governor through Conductor.
 - Ambiguous multi-owner sequencing -> Conductor.

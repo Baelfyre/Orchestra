@@ -54,6 +54,29 @@ TRACKED_EXPORT_PARITY_PATHS = (
         Path("adapters/codex/skills/cloak/templates/bryl-minimal-design.md"),
     ),
 )
+CLOAK_VISUAL_GUIDE_SOURCE = Path("skills/cloak/VISUAL_REFINEMENT_8PT_GUIDE.md")
+CLOAK_VISUAL_GUIDE_EXPORT = Path("cloak/VISUAL_REFINEMENT_8PT_GUIDE.md")
+CLOAK_VISUAL_GUIDE_MARKERS = (
+    "@codebase_provenance_JEO",
+    "@codebase_rights_JEO",
+)
+MARKED_SUPPORT_GUIDES = (
+    (
+        CLOAK_VISUAL_GUIDE_SOURCE,
+        CLOAK_VISUAL_GUIDE_EXPORT,
+        "Cloak visual guide",
+    ),
+    (
+        Path("skills/cloak/ARTIFACT_VISUAL_ACCESSIBILITY_GUIDE.md"),
+        Path("cloak/ARTIFACT_VISUAL_ACCESSIBILITY_GUIDE.md"),
+        "Cloak artifact visual guide",
+    ),
+    (
+        Path("skills/scribe/ARTIFACT_AUTHORING_AND_BACKEND_SELECTION_GUIDE.md"),
+        Path("scribe/ARTIFACT_AUTHORING_AND_BACKEND_SELECTION_GUIDE.md"),
+        "Scribe artifact authoring guide",
+    ),
+)
 NORMALIZED_EXPORT_PARITY_PATHS = (
     (Path("skills/conductor/SKILL.md"), Path("adapters/codex/skills/conductor/SKILL.md")),
     (Path("ROUTING_MAP.md"), Path("adapters/codex/skills/conductor/ROUTING_MAP.md")),
@@ -77,6 +100,24 @@ def print_error(message):
 
 def read_text(path):
     return path.read_text(encoding="utf-8")
+
+
+def strip_jeo_support_markers(content, label):
+    normalized = content.replace("\r\n", "\n")
+    expected_header = "\n".join(
+        f"<!-- {marker} -->" for marker in CLOAK_VISUAL_GUIDE_MARKERS
+    ) + "\n"
+    if not normalized.startswith(expected_header):
+        raise ValueError(f"{label} is missing or misorders its exact leading JEO markers")
+
+    markers = re.findall(r"@\s*codebase[^\s<>]*", normalized, re.IGNORECASE)
+    if markers != list(CLOAK_VISUAL_GUIDE_MARKERS):
+        raise ValueError(f"{label} contains malformed or unexpected codebase markers")
+    return normalized[len(expected_header):]
+
+
+def strip_cloak_visual_guide_markers(content):
+    return strip_jeo_support_markers(content, "Cloak visual guide")
 
 
 def parse_frontmatter(content):
@@ -314,6 +355,41 @@ def validate_normalized_export_parity(root):
     return errors
 
 
+def validate_marked_support_guide_parity(root, codex_skills_dir, guides=MARKED_SUPPORT_GUIDES):
+    errors = 0
+    for source_relative, export_relative, label in guides:
+        source_path = root / source_relative
+        export_path = codex_skills_dir / export_relative
+        if not source_path.is_file():
+            print_error(f"Missing source file for {label} parity: {source_relative.as_posix()}")
+            errors += 1
+            continue
+        if not export_path.is_file():
+            print_error(f"Missing exported {label}: {export_relative.as_posix()}")
+            errors += 1
+            continue
+
+        try:
+            expected = strip_jeo_support_markers(read_text(source_path), label)
+        except ValueError as error:
+            print_error(f"Invalid source markers for {label}: {error}")
+            errors += 1
+            continue
+
+        exported = read_text(export_path).replace("\r\n", "\n")
+        if re.search(r"@\s*codebase[^\s<>]*", exported, re.IGNORECASE):
+            print_error(f"Exported {label} contains unexpected codebase markers")
+            errors += 1
+        elif exported != expected:
+            print_error(f"Exported {label} differs from its source after removing the two leading JEO markers")
+            errors += 1
+    return errors
+
+
+def validate_cloak_visual_guide_parity(root, codex_skills_dir):
+    return validate_marked_support_guide_parity(root, codex_skills_dir, MARKED_SUPPORT_GUIDES[:1])
+
+
 def parse_args(argv=None):
     parser = argparse.ArgumentParser(description="Validate Codex export output.")
     parser.add_argument(
@@ -394,6 +470,7 @@ def main(argv=None):
         )
 
     errors += validate_portable_reference_context(root, codex_skills_dir)
+    errors += validate_marked_support_guide_parity(root, codex_skills_dir)
 
     routing_map = codex_skills_dir / "conductor" / "ROUTING_MAP.md"
     conductor_skill = codex_skills_dir / "conductor" / "SKILL.md"

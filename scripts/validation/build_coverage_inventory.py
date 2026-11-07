@@ -1,3 +1,5 @@
+# @codebase_provenance_JEO
+# @codebase_rights_JEO
 from __future__ import annotations
 
 import argparse
@@ -25,6 +27,15 @@ CRITICAL_MODULES = (
 
 def _percent(covered: int, total: int) -> float:
     return round((covered / total) * 100, 2) if total else 100.0
+
+
+def _unique_object(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError(f"coverage JSON contains duplicate object key: {key}")
+        result[key] = value
+    return result
 
 
 def _summary(record: dict[str, Any]) -> dict[str, Any]:
@@ -61,7 +72,9 @@ def build_inventory(
     minimum_critical_statement: float = 98.0,
     minimum_critical_branch: float = 95.0,
 ) -> dict[str, Any]:
-    payload = json.loads(coverage_path.read_text(encoding="utf-8"))
+    payload = json.loads(
+        coverage_path.read_text(encoding="utf-8"), object_pairs_hook=_unique_object
+    )
     files = payload.get("files")
     totals = payload.get("totals")
     if not isinstance(files, dict) or not isinstance(totals, dict):
@@ -69,6 +82,9 @@ def build_inventory(
 
     modules: list[dict[str, Any]] = []
     critical_failures: list[dict[str, Any]] = []
+    critical_names = set(CRITICAL_MODULES)
+    seen_critical: set[str] = set()
+    duplicate_critical: set[str] = set()
     for path in sorted(files):
         record = files[path]
         if not isinstance(record, dict):
@@ -76,9 +92,21 @@ def build_inventory(
         metrics = _summary(record)
         missing_lines = tuple(int(item) for item in record.get("missing_lines", ()))
         excluded_lines = tuple(int(item) for item in record.get("excluded_lines", ()))
+        normalized_path = path.replace("\\", "/")
+        critical = normalized_path in critical_names
+        if critical:
+            if normalized_path in seen_critical and normalized_path not in duplicate_critical:
+                critical_failures.append(
+                    {
+                        "path": normalized_path,
+                        "reasons": ["DUPLICATE_CRITICAL_MODULE_IDENTITY"],
+                    }
+                )
+                duplicate_critical.add(normalized_path)
+            seen_critical.add(normalized_path)
         module = {
             "path": path,
-            "critical": path in CRITICAL_MODULES,
+            "critical": critical,
             **metrics,
             "missing_lines": list(missing_lines),
             "excluded_lines": list(excluded_lines),
@@ -92,6 +120,12 @@ def build_inventory(
                 reasons.append("CRITICAL_BRANCH_COVERAGE_BELOW_FLOOR")
             if reasons:
                 critical_failures.append({"path": path, "reasons": reasons, **metrics})
+
+    for path in CRITICAL_MODULES:
+        if path not in seen_critical:
+            critical_failures.append(
+                {"path": path, "reasons": ["CRITICAL_MODULE_MISSING"]}
+            )
 
     aggregate_statements = int(totals.get("num_statements", 0))
     aggregate_covered_statements = int(totals.get("covered_lines", 0))

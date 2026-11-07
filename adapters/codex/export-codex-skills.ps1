@@ -10,6 +10,11 @@ if (-not (Test-Path $manifestPath)) {
 }
 $manifest = Get-Content -Raw -Path $manifestPath | ConvertFrom-Json
 $skills = $manifest.skills | Select-Object -ExpandProperty slug
+$jeoMarkerSupportFiles = @(
+    "cloak/VISUAL_REFINEMENT_8PT_GUIDE.md",
+    "cloak/ARTIFACT_VISUAL_ACCESSIBILITY_GUIDE.md",
+    "scribe/ARTIFACT_AUTHORING_AND_BACKEND_SELECTION_GUIDE.md"
+)
 
 function Write-Utf8NoBomLfFile {
     param(
@@ -181,6 +186,24 @@ description: $desc
         }
 
         $supportContent = Read-Utf8TextFile -Path $supportFile.FullName
+        $supportKey = "$skill/$($relativePath.Replace('\', '/'))"
+        if ($jeoMarkerSupportFiles -ccontains $supportKey) {
+            $normalizedSupportContent = $supportContent -replace "`r`n", "`n"
+            $expectedHeader = "<!-- @codebase_provenance_JEO -->`n<!-- @codebase_rights_JEO -->`n"
+            $markerMatches = [regex]::Matches(
+                $normalizedSupportContent,
+                '@\s*codebase[^\s<>]*',
+                [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+            )
+            if (-not $normalizedSupportContent.StartsWith($expectedHeader, [System.StringComparison]::Ordinal) -or
+                $markerMatches.Count -ne 2 -or
+                $markerMatches[0].Value -cne "@codebase_provenance_JEO" -or
+                $markerMatches[1].Value -cne "@codebase_rights_JEO") {
+                Write-Error "JEO-marked support guide must start with the exact provenance and rights markers and contain no other codebase markers: $supportKey"
+                exit 1
+            }
+            $supportContent = $normalizedSupportContent.Substring($expectedHeader.Length)
+        }
         Write-Utf8NoBomLfFile -Path $targetSupportFile -Content $supportContent
     }
 

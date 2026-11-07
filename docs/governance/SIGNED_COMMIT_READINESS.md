@@ -2,11 +2,11 @@
 
 ## Purpose
 
-Record the current signed-commit readiness state for the solo maintainer and define the active signed-commit workflow without changing repository rulesets, rewriting history, or weakening recovery options.
+Preserve the solo maintainer's established signed-commit readiness evidence and preferred signing workflow. The repository ruleset no longer requires signatures; historical setup evidence is retained without rewriting history or recovery options.
 
 ## Current Repository Policy
 
-- The active `Protect main` ruleset already includes `required_signatures`.
+- The active `Protect main` ruleset no longer includes `required_signatures` (verified on 2026-11-07). Signed commits are recommended for provenance but optional for ordinary protected merges.
 - Maintainer bypass remains enabled for solo-maintainer recovery.
 - Signed-commit readiness is complete for the current local repository workflow.
 

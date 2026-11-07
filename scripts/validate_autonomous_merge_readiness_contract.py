@@ -35,7 +35,7 @@ EXPECTED_RULESET = {
     "require_conversation_resolution": True,
     "allowed_merge_methods": ["squash"],
     "require_linear_history": True,
-    "require_signed_commits": True,
+    "require_signed_commits": False,
     "require_pull_request": True,
     "require_status_checks": True,
     "require_branches_up_to_date": True,
@@ -209,8 +209,6 @@ def evaluate_post_merge(snapshot):
         return "MERGE_STATE_UNVERIFIED"
     if canonical_parent != pre_merge_base:
         return "MERGE_STATE_UNVERIFIED"
-    if snapshot.get("canonical_signature_verified") is not True:
-        return "MERGE_STATE_UNVERIFIED"
 
     return "MERGED_VERIFIED"
 
@@ -351,7 +349,7 @@ def validate(root):
         "MERGED_VERIFIED",
         "canonical remote read",
         "canonical tree",
-        "verified signature",
+        "signature status",
         "red canonical baseline",
     )
     for term in required_terms:

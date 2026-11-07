@@ -1,3 +1,21 @@
+> The proposed v1.12.0 candidate is pending validation and release approval; v1.11.0 remains the latest published release. See the [v1.12.0 release candidate record](docs/releases/v1.12.0-release-candidate.md).
+
+## Unreleased protected-main signature-policy alignment
+
+- Reconcile the autonomous merge-readiness contract with the active `Protect main` ruleset, which no longer requires signed commits. Retain recommended SSH signing and optional GitHub signature-status evidence without treating an unsigned Squash commit as a merge failure.
+- Preserve exact-head CI, clean merge state, Squash-only merges, zero unauthorized bypass, canonical parent/tree/content equivalence, and independent post-merge state verification.
+
+## Unreleased Scribe and Cloak artifact guidance
+
+- Add standalone Scribe artifact authoring/backend selection and Cloak visual/accessibility guides, index them in repository documentation, and generate Codex exports with source markers removed and checked for parity.
+- Keep Scribe progressive disclosure pending separate source-identity reconciliation because its authority-view hash is outside this task's protected-path boundary.
+
+## Unreleased Cipher, Dagger, and Cloak guidance
+
+- Keep Cipher reviews focused and evidence-based, with conditional checks for tool-enabled systems and no inference of runtime behavior from source alone. A finding does not activate or authorize Dagger.
+- Clarify that Dagger may plan without executing and that active adversarial, negative, resilience, or destructive validation requires exact target-owner authorization, Conductor's existing gate, a non-production target, and the existing guardrail.
+- Add optional Cloak visual-refinement guidance with a soft 8px rhythm, project-first precedence, and preserved accessibility, token, and rights constraints; no automatic styling, asset permission, or runtime behavior is added.
+
 ## Unreleased Cipher R5 offline inference boundary prototype
 
 - Add a deterministic, test-only Cipher review broker and snapshot-bound engine fixture, with focused regression coverage for request identity, malformed responses, input limits, and evidence references.
@@ -13,6 +31,7 @@
 
 - Add a repeatable local pilot runner and fixed scenario catalog that reuse the existing JEV contracts and synthetic regressions. The runner blocks HTTP, DNS, and TCP dispatch in its test process and records sanitized per-session results outside the repository for later comparison.
 - Keep the V6 packet labeled as sanitized fixture replay, preserve all findings as `UNVERIFIED`, and leave R3-A host trust, live TypeSafe integration, and production JEV wiring unqualified or unavailable.
+- Preserve the historical pilot as `PREPARED_NOT_QUALIFIED`; further JEV qualification and integration are deferred from v1.12, with no pilot credit or qualified status created.
 
 ## Unreleased README and integration status clarification
 

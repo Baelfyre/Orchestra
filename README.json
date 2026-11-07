@@ -11,14 +11,14 @@
     "full_name": "Baelfyre/Orchestra",
     "url": "https://github.com/Baelfyre/Orchestra",
     "license": "MIT",
-    "package_version": "1.11.0",
+    "package_version": "1.12.0",
     "package_version_source": "plugin.json#/version",
     "current_public_release": "v1.11.0",
     "current_public_release_commit": "72c2884a66bb0e0d0ff1e070e7cc1feccd968e35",
     "current_public_release_state_scope": "LIVE_VERIFIED_PUBLICATION",
     "main_contains_post_release_work": true,
-    "next_release_plan": "POST_V1_11_DOCUMENTATION_NORMALIZATION",
-    "next_release_plan_status": "POST_PUBLICATION_NORMALIZATION_ACTIVE",
+    "next_release_plan": "V1_12_APPROVED_GENERAL_RELEASE_SCOPE",
+    "next_release_plan_status": "SCOPE_APPROVED_VALIDATION_PENDING",
     "release_candidate": {
       "version": "1.11.0",
       "status": "PUBLISHED_VERIFIED",
@@ -2552,6 +2552,7 @@
       ],
       "offline_validation_pilot": {
         "status": "PREPARED_NOT_QUALIFIED",
+        "v1_12_disposition": "PRESERVED_UNQUALIFIED_FURTHER_QUALIFICATION_AND_INTEGRATION_DEFERRED",
         "runner": "scripts/jev_offline_pilot.py",
         "scenario_catalog": "tests/fixtures/jev_offline_pilot_scenarios.v1.json",
         "test_surface": "tests/runtime/test_jev_offline_pilot.py",
@@ -2907,8 +2908,18 @@
     "cipher_security_review_guidance": {
       "source": "skills/cipher/SKILL.md",
       "provenance_source": "machine/provenance/third-party.v1.json",
-      "summary": "Focused defensive review by default; comprehensive coverage only on explicit request. Assess variants independently and verify safeguards at their actual enforcement paths.",
-      "authority_note": "Guidance and provenance are non-authorizing; existing authority and non-effectful boundaries remain controlling."
+      "summary": "Focused, evidence-based defensive source review by default; tool-enabled-system checks are conditional, and source text alone does not establish runtime behavior.",
+      "authority_note": "Guidance and provenance are non-authorizing; source review does not qualify runtime behavior, and existing authority and non-effectful boundaries remain controlling."
+    },
+    "dagger_adversarial_validation_guidance": {
+      "source": "skills/dagger/SKILL.md",
+      "summary": "Plans explicit adversarial, failure-path, and resilience validation; execution remains gated by exact target-owner authorization, Conductor routing, a non-production target, and a passing guardrail.",
+      "authority_note": "A plan, finding, dry-run, or guardrail result does not create authority; no qualified live penetration testing is claimed."
+    },
+    "cloak_optional_visual_refinement_guidance": {
+      "source": "skills/cloak/VISUAL_REFINEMENT_8PT_GUIDE.md",
+      "summary": "Optional advisory soft 8-point spacing and product-specific visual refinement; approved project tokens, accessibility, responsiveness, and localization take precedence.",
+      "authority_note": "Guidance creates no implementation or release authority; rendered effectiveness requires rendered evidence."
     }
   },
   "governance": {
@@ -3213,8 +3224,11 @@
     "jev_local_api_guide": "docs/setup/JEV_LOCAL_API.md",
     "jev_offline_pilot_guide": "docs/setup/JEV_OFFLINE_PILOT.md",
     "release_candidate_v1_12_0_offline_jev_pilot": "docs/releases/v1.12.0-offline-jev-pilot-release-candidate.md",
+    "release_candidate_v1_12_0_general_scope": "docs/releases/v1.12.0-release-candidate.md",
     "release_readiness_v1_12_0_offline_jev": "docs/validation/V1_12_0_RELEASE_READINESS_EVIDENCE.md",
+    "v1_12_0_local_scope_reconciliation": "docs/releases/v1.12.0-local-scope-reconciliation-2026-11-06.md",
     "adaptive_memory_user_guide": "docs/setup/ADAPTIVE_MEMORY_GUIDE.md",
+    "scribe_artifact_authoring_guide": "skills/scribe/ARTIFACT_AUTHORING_AND_BACKEND_SELECTION_GUIDE.md",
     "scribe_domain_narrative_guide": "skills/scribe/DOMAIN_NARRATIVE_MODELING_GUIDE.md",
     "scribe_requirements_traceability_guide": "skills/scribe/REQUIREMENTS_TRACEABILITY_GUIDE.md",
     "scribe_research_capstone_guide": "skills/scribe/RESEARCH_CAPSTONE_DOCUMENTATION_GUIDE.md",
@@ -3223,6 +3237,7 @@
     "conductor_routing_evaluation_guide": "skills/conductor/ROUTING_EVALUATION_GUIDE.md",
     "conductor_architecture_governance_intake_guide": "skills/conductor/ARCHITECTURE_GOVERNANCE_INTAKE_GUIDE.md",
     "ponytail_frontend_fidelity_execution_guide": "skills/ponytail/FRONTEND_FIDELITY_EXECUTION_GUIDE.md",
+    "cloak_artifact_visual_accessibility_guide": "skills/cloak/ARTIFACT_VISUAL_ACCESSIBILITY_GUIDE.md",
     "cloak_ui_fidelity_handoff_guide": "skills/cloak/UI_FIDELITY_HANDOFF_GUIDE.md",
     "ui_execution_fidelity_plan": "docs/project/UI_EXECUTION_FIDELITY_PLAN.md",
     "github_copilot_adapter": "adapters/github-copilot/README.md",
@@ -3247,6 +3262,8 @@
   },
   "maturity": {
     "current_public_release": "PUBLISHED_VERIFIED_V1_11_0",
+    "v1_12_candidate": "SCOPE_APPROVED_VALIDATION_PENDING_UNPUBLISHED",
+    "v1_12_jev_qualification": "DEFERRED_PRESERVED_UNQUALIFIED",
     "v1_6_publication": "PUBLISHED_VERIFIED",
     "v1_7_release_candidate": "PUBLISHED_VERIFIED_COMPLETE",
     "v1_8_publication": "PUBLISHED_VERIFIED_COMPLETE",
