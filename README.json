@@ -18,7 +18,7 @@
     "current_public_release_state_scope": "LIVE_VERIFIED_PUBLICATION",
     "main_contains_post_release_work": true,
     "next_release_plan": "V1_12_APPROVED_GENERAL_RELEASE_SCOPE",
-    "next_release_plan_status": "SCOPE_APPROVED_VALIDATION_PENDING",
+    "next_release_plan_status": "MERGED_VERIFIED_RELEASE_CLEARANCE_PENDING",
     "release_candidate": {
       "version": "1.11.0",
       "status": "PUBLISHED_VERIFIED",
