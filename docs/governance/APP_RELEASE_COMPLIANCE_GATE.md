@@ -32,6 +32,14 @@ The Governor must review this gate before approving release work that includes a
 | GDPR and CCPA applicability screening | Personal data processing may apply to covered users, jurisdictions, or release targets | Short screening note with outcome |
 | IP, trademark, asset, dependency, and license clearance | Any public, client, marketplace, or distributed release | Completed IP clearance checklist |
 
+## Proportional Applicability and Evidence
+
+The release evidence-first process in [Release Gates](RELEASE_GATES.md) applies without weakening any mandatory artifact or disclosure requirement below. Each artifact is `REQUIRED` only when its stated real-world condition is satisfied; a conditional artifact may be `NOT_APPLICABLE` only with an evidence-backed explanation of the actual release model and supporting scope, data, host, and distribution facts.
+
+Use existing accurate product records as evidence instead of generating duplicate templates. A general template, absent integration, unverified source assertion, or green CI check does not prove that a privacy/data-handling obligation is met. Record unknown personal-data processing, vendor behavior, retention, usage rights, jurisdiction, and account existence as unresolved. Do not declare them absent merely to make a check pass.
+
+A bounded documentation correction may be produced and tested autonomously under an approved grant. A material disagreement, protected interpretation, missing owner fact, or required legal judgment escalates to the appropriate authority. Only the final consolidated release decision should require routine human publication approval; earlier human involvement remains necessary where substantive unresolved obligations require it. The existing mandatory block conditions remain controlling.
+
 ## Required Checks
 
 The Governor must verify:
