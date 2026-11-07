@@ -42,9 +42,9 @@ Release Mode usually maps to `GSL-4` or `GSL-5`, depending on public exposure, d
 
 For release gating, The Governor decides whether security, privacy, and compliance governance is sufficiently addressed to proceed. `Cipher` owns the technical defensive security review, security-control findings, and related remediation boundaries that may feed that release decision.
 
-## Evidence-First Release Review (Approved Proposal, Pending Canonical Merge)
+## Evidence-First Release Review
 
-The issue [#993](https://github.com/Baelfyre/Orchestra/issues/993) amendment was separately authorized for development on 2026-11-07. It does not apply retroactively to release issue #991 or change existing blockers before independently reviewed canonical integration. This section defines a proportional *review procedure*, not a waiver of any required gate.
+The issue [#993](https://github.com/Baelfyre/Orchestra/issues/993) amendment was separately authorized for development on 2026-11-07. This procedure applies only after separately reviewed and authorized integration into the governing branch. It never applies retroactively to release issue #991 or clears existing blockers without fresh release-specific evidence and governing decisions. This is a proportional *review procedure*, not a waiver of any required gate.
 
 For each current Pre-Release Checklist gate, evaluate three independently traceable questions:
 
