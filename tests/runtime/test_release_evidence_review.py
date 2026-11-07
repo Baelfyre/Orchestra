@@ -251,3 +251,42 @@ def test_unsupported_distribution_channel_does_not_pass_schema():
     r = record()
     r["candidate"]["release_channel"] = "UNVERIFIED_UNKNOWN"
     assert outcome(r)[1] == "INVALID_EVIDENCE"
+
+
+def test_required_gate_needs_applicability_source_not_only_ci():
+    r = record()
+    gate(r)["relevance_evidence_refs"] = []
+    assert outcome(r)[1] == "INVALID_EVIDENCE"
+    gate(r)["relevance_evidence_refs"] = ["ci-synthetic"]
+    assert outcome(r)[1] == "INVALID_EVIDENCE"
+    gate(r)["relevance_evidence_refs"] = ["repo-synthetic"]
+    assert outcome(r) == ([], "EVIDENCE_READY_FOR_FINAL_REVIEW")
+
+
+def test_flagged_human_legal_review_cannot_be_auto_waived_by_false_boolean():
+    r = record()
+    g = gate(r, "Human legal review completed (if flagged)")
+    g["human_judgment_required"] = False
+    assert outcome(r) == ([], "ESCALATE_HUMAN")
+    g["human_decision_ref"] = "human-synthetic"
+    assert outcome(r) == ([], "EVIDENCE_READY_FOR_FINAL_REVIEW")
+
+
+def test_governing_delegated_policy_is_part_of_fingerprint(tmp_path):
+    for relative in (
+        review.GATE_PATH,
+        review.APP_PATH,
+        review.DECISION_PATH,
+        review.POLICY_PATH,
+        review.DELEGATED_PATH,
+        review.PROTECTED_PATH,
+        review.QUALIFICATION_PATH,
+    ):
+        target = tmp_path / relative
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes((ROOT / relative).read_bytes())
+    expected = review.policy_fingerprint(tmp_path)
+    assert expected == review.policy_fingerprint(ROOT)
+    target = tmp_path / review.DELEGATED_PATH
+    target.write_bytes(target.read_bytes() + b"\\n# Simulated policy revision\\n")
+    assert review.policy_fingerprint(tmp_path) != expected
