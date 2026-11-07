@@ -1,4 +1,10 @@
-> The proposed v1.12.0 candidate is pending validation and release approval; v1.11.0 remains the latest published release. See the [v1.12.0 release candidate record](docs/releases/v1.12.0-release-candidate.md).
+> v1.12.0 code integration through PR #990 and the evidence-first governance amendment through PR #996 are merged and verified; release-specific rights/privacy/retention/authority clearance remains open. v1.11.0 remains the latest published release. See the [candidate record](docs/releases/v1.12.0-release-candidate.md) and [applicability dossier](docs/releases/v1.12.0-release-clearance-evidence.md).
+
+## Unreleased v1.12.0 release-evidence reconciliation
+
+- Record the verified integration/current-main checkpoints, product-specific provisional data inventory and evidence-backed applicability without treating templates as cleared policies.
+- Pin and attribute Damir Sokolovsky's CC BY 4.0 and Matt Shumer's MIT Unslop conceptual references in the third-party ledgers, retaining open adaptation and rights review.
+- Preserve unqualified JEV/TypeSafe/host and other deferred work. Tagging/publication remains blocked by current Governor/Arbiter decisions.
 
 ## Unreleased evidence-first proportional release governance (Issue #993)
 
