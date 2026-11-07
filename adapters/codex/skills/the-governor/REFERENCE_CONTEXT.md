@@ -46,12 +46,6 @@ Generated from canonical Orchestra sources. Indented snapshots are code-only con
     - Execution specialists cannot bypass governance.
     - Governance authorities produce decisions and constraints, not implementation.
 
-    ## Evidence-First Review and Bounded Corrections
-
-    `REVISION_REQUIRED` pauses the *governed transition*, not every authorized evidence-gathering or remediation action. Existing [Delegated Execution Policy](DELEGATED_EXECUTION_POLICY.md) may issue `AUTO_REMEDIATE_AND_REVALIDATE` for an independently identified deterministic in-scope defect with remaining budget and explicit remediation authority. The originating governance decision stays `REVISION_REQUIRED` until fresh evidence is re-evaluated by its governing authority. A `BLOCKED` decision, unresolved `human_review_required: true`, protected-governance conflict, or Arbiter `HOLD` is never silently converted to approval.
-
-    For release checks, [Release Gates](RELEASE_GATES.md) now defines relevance, revision-bound validation, and compliance as separable evidence questions. A `NOT_APPLICABLE` gate requires a justified policy condition; unknown applicability or missing owner/host facts cannot be treated as an automatic pass. The read-only release evidence classifier returns `EVIDENCE_READY_FOR_FINAL_REVIEW` when its supplied record is internally sufficient, but it cannot authenticate external evidence or grant governance, merge, release, or deployment authority. Current protected publication still requires separate human authorization.
-
     ## Canonical Separation of Concerns
 
     | Specialist | Governance Decision Ownership | Technical Review Ownership | Execution Ownership | Routing Ownership | Validation Ownership | Continuity Ownership |
