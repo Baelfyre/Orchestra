@@ -4,6 +4,7 @@
 
 - Record the verified integration/current-main checkpoints, product-specific provisional data inventory and evidence-backed applicability without treating templates as cleared policies.
 - Pin and attribute Damir Sokolovsky's CC BY 4.0 and Matt Shumer's MIT Unslop conceptual references in the third-party ledgers, retaining open adaptation and rights review.
+- Add source-backed plugin privacy/retention and terms drafts, a complete item-by-item release-specific IP review with unresolved name/conflict findings, and scoped dependency inventory. These are review artifacts, not release/legal approvals.
 - Preserve unqualified JEV/TypeSafe/host and other deferred work. Tagging/publication remains blocked by current Governor/Arbiter decisions.
 
 ## Unreleased evidence-first proportional release governance (Issue #993)
