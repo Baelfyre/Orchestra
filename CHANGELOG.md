@@ -1,4 +1,9 @@
-> The proposed v1.12.0 candidate is pending validation and release approval; v1.11.0 remains the latest published release. See the [v1.12.0 release candidate record](docs/releases/v1.12.0-release-candidate.md).
+> The v1.12.0 integration candidate was merged into `main` through PR #990 on 2026-11-07. Release-specific governance clearance and human publication approval remain pending; v1.11.0 remains the latest published release. See the [v1.12.0 release candidate record](docs/releases/v1.12.0-release-candidate.md).
+
+## Unreleased v1.12.0 post-merge release-record reconciliation
+
+- Record PR #990's reviewed source identity, successful exact-head checks, verified Squash merge identity, and successful post-merge workflows without claiming release qualification or production JEV readiness.
+- Keep outstanding IP, privacy, license, governance, publication, and owner-approval gates open in Release Issue #991.
 
 ## Unreleased protected-main signature-policy alignment
 
