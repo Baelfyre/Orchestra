@@ -1,9 +1,16 @@
-> The proposed v1.12.0 candidate is pending validation and release approval; v1.11.0 remains the latest published release. See the [v1.12.0 release candidate record](docs/releases/v1.12.0-release-candidate.md).
+> v1.12.0 code integration through PR #990 and the evidence-first governance amendment through PR #996 are merged and verified; release-specific rights/privacy/retention/authority clearance remains open. v1.11.0 remains the latest published release. See the [candidate record](docs/releases/v1.12.0-release-candidate.md) and [applicability dossier](docs/releases/v1.12.0-release-clearance-evidence.md).
+
+## Unreleased v1.12.0 release-evidence reconciliation
+
+- Record the verified integration/current-main checkpoints, product-specific provisional data inventory and evidence-backed applicability without treating templates as cleared policies.
+- Pin and attribute Damir Sokolovsky's CC BY 4.0 and Matt Shumer's MIT Unslop conceptual references in the third-party ledgers, retaining open adaptation and rights review.
+- Add source-backed plugin privacy/retention and terms drafts, a complete item-by-item release-specific IP review with unresolved name/conflict findings, and scoped dependency inventory. These are review artifacts, not release/legal approvals.
+- Preserve unqualified JEV/TypeSafe/host and other deferred work. Tagging/publication remains blocked by current Governor/Arbiter decisions.
 
 ## Unreleased evidence-first proportional release governance (Issue #993)
 
 - Define a risk-proportional relevance, validation, and compliance review path that reuses exact-head CI evidence, permits existing bounded deterministic remediation within a human-approved envelope, and routes unresolved factual or protected decisions to human review.
-- Add a read-only, non-authorizing machine evidence schema, gate-inventory classifier, and adversarial regression tests. Preserve required release gates, source/policy freshness, manual final publication authorization, and existing v1.12.0 blockers. This governance amendment requires independent PR validation and canonical merge before it becomes active.
+- Add a read-only, non-authorizing machine evidence schema, gate-inventory classifier, and adversarial regression tests. Preserve required release gates, source/policy freshness, manual final publication authorization, and existing v1.12.0 blockers. The governance amendment was independently validated at the source and promoted through signed materialization and PR #996; the associated release clearance remains separate.
 
 ## Unreleased protected-main signature-policy alignment
 

@@ -1,6 +1,6 @@
 {
   "schema_version": "orchestra.third-party-provenance.v1",
-  "updated_on": "2026-11-04",
+  "updated_on": "2026-11-07",
   "policy": {
     "allowed_classifications": [
       "TEST_TOOL_DEPENDENCY",
@@ -18,10 +18,10 @@
     "unknown_historical_facts_must_remain_unknown": true
   },
   "summary": {
-    "total_items": 16,
+    "total_items": 18,
     "classification_counts": {
       "TEST_TOOL_DEPENDENCY": 3,
-      "REFERENCE_ONLY": 7,
+      "REFERENCE_ONLY": 9,
       "HISTORICAL_RESEARCH_REFERENCE": 4,
       "PROTOCOL_STANDARD_REFERENCE": 1,
       "EVALUATED_OR_PLANNED_REFERENCE": 1
@@ -325,6 +325,103 @@
       "orchestra_surfaces": ["issue #340 planning only"],
       "evidence": [{"type": "ORCHESTRA_ISSUE", "reference": "#340", "description": "Adaptive Governed Orchestration planning record explicitly identifies SakanaAI/fugu as the primary future reference and requires a pinned revision/license review before implementation."}],
       "notes": "Issue #340 is deferred planning only. Learning may eventually optimize how permitted work is performed but must never expand what work is permitted."
+    },
+    {
+      "runtime_dependency": false,
+      "source_copied_or_vendored": false,
+      "orchestra_surfaces": [
+        "skills/cloak/VISUAL_REFINEMENT_8PT_GUIDE.md",
+        "adapters/codex/skills/cloak/VISUAL_REFINEMENT_8PT_GUIDE.md"
+      ],
+      "package_source": null,
+      "version": "pinned source review, 2026-11-07",
+      "id": "heydamir-unslop",
+      "name": "Unslop visual-refinement guidance (Damir Sokolovsky)",
+      "classification": "REFERENCE_ONLY",
+      "status": "ATTRIBUTED_REFERENCE_RIGHTS_ASSESSMENT_PENDING",
+      "upstream_repository": "https://github.com/heydamir/unslop",
+      "reviewed_revision": {
+        "status": "PINNED_COMMIT",
+        "value": "a6f121eee5f29c2f74976b75456feae8b66afb3a",
+        "branch": null
+      },
+      "license": {
+        "spdx": "CC-BY-4.0",
+        "status": "VERIFIED_UPSTREAM_LICENSE_NOT_FINAL_REDISTRIBUTION_CLEARANCE"
+      },
+      "purpose": "Source of the optional anti-generic UI visual review sequence and product-specific design ideas cited in Cloak; preserve visible attribution and adaptation notices.",
+      "incorporated_or_learned_patterns": [
+        "Product-specific visual direction before modification",
+        "Ordered visual-quality review of spacing, hierarchy, iconography, language, typography, layout, assets, and motion",
+        "Preserve usable, accessible product behavior rather than imposing stylistic bans"
+      ],
+      "upstream_source_adapted": false,
+      "evidence": [
+        {
+          "type": "PINNED_UPSTREAM_SOURCE",
+          "reference": "https://github.com/heydamir/unslop/blob/a6f121eee5f29c2f74976b75456feae8b66afb3a/skills/unslop/SKILL.md",
+          "description": "Source frontmatter declares author Damir Sokolovsky and CC-BY-4.0; directly reviewed at pinned commit."
+        },
+        {
+          "type": "PINNED_UPSTREAM_LICENSE",
+          "reference": "https://github.com/heydamir/unslop/blob/a6f121eee5f29c2f74976b75456feae8b66afb3a/LICENSE",
+          "description": "CC BY 4.0 license text directly read at pinned upstream commit."
+        },
+        {
+          "type": "ORCHESTRA_GUIDANCE",
+          "reference": "skills/cloak/VISUAL_REFINEMENT_8PT_GUIDE.md",
+          "description": "Guide identifies high-level concepts, credits author and license, and describes adaptation of owner-supplied guidance."
+        }
+      ],
+      "notes": "Reference-only records current observable incorporation; the guide does not claim upstream source vendoring. Direct reviewed text comparison found no identical 8-word contiguous phrase against the pinned skill, which is limited evidence, not a full historical derivation or rights audit. Adaptation of owner-supplied material and sufficiency of CC BY attribution/change notices remain subject to Governor release-specific clearance; this record does not certify infringement absence."
+    },
+    {
+      "runtime_dependency": false,
+      "source_copied_or_vendored": false,
+      "orchestra_surfaces": [
+        "skills/cloak/VISUAL_REFINEMENT_8PT_GUIDE.md",
+        "adapters/codex/skills/cloak/VISUAL_REFINEMENT_8PT_GUIDE.md"
+      ],
+      "package_source": null,
+      "version": "pinned source review, 2026-11-07",
+      "id": "mshumer-unslop",
+      "name": "Unslop repeated-output analysis reference (Matt Shumer)",
+      "classification": "REFERENCE_ONLY",
+      "status": "ATTRIBUTED_CONCEPTUAL_REFERENCE_RIGHTS_ASSESSMENT_PENDING",
+      "upstream_repository": "https://github.com/mshumer/unslop",
+      "reviewed_revision": {
+        "status": "PINNED_COMMIT",
+        "value": "edcb62386d129c65e4395f0cfcc9168eb1ba2148",
+        "branch": null
+      },
+      "license": {
+        "spdx": "MIT",
+        "status": "VERIFIED_UPSTREAM_LICENSE_NOT_FINAL_REDISTRIBUTION_CLEARANCE"
+      },
+      "purpose": "Conceptual source for identifying repeated AI model-output defaults and optional before/after visual experiments; no tool or model is bundled.",
+      "incorporated_or_learned_patterns": [
+        "Identify repeated model-output defaults using examples before proposing general UI heuristics",
+        "Compare before and after changes using bounded, measurable evidence"
+      ],
+      "upstream_source_adapted": false,
+      "evidence": [
+        {
+          "type": "PINNED_UPSTREAM_LICENSE",
+          "reference": "https://github.com/mshumer/unslop/blob/edcb62386d129c65e4395f0cfcc9168eb1ba2148/LICENSE",
+          "description": "MIT license and Copyright (c) 2026 Matt Shumer read at pinned commit."
+        },
+        {
+          "type": "PINNED_UPSTREAM_README",
+          "reference": "https://github.com/mshumer/unslop/blob/edcb62386d129c65e4395f0cfcc9168eb1ba2148/README.md",
+          "description": "Readme describes repeated-output analysis and optional skill generation; no source copied in the reviewed Cloak guide."
+        },
+        {
+          "type": "ORCHESTRA_GUIDANCE",
+          "reference": "skills/cloak/VISUAL_REFINEMENT_8PT_GUIDE.md",
+          "description": "Guide credits conceptual methods while disallowing default model bulk runs and requiring separate execution authority."
+        }
+      ],
+      "notes": "Attribution and MIT source identity verified. The inspected Cloak guidance has no matching 8-word contiguous passage with pinned upstream README, but the review did not audit every upstream file or redistributed build asset. If copyrighted code or documentation is later reused, retain copyright/permission notice. Governor applicability and final redistribution clearance remain pending."
     }
   ]
 }
