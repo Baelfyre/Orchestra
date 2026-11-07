@@ -1,0 +1,188 @@
+# @codebase_provenance_JEO
+# @codebase_rights_JEO
+"""Read-only evidence classification for release review; never authorizes publication."""
+
+import argparse
+import hashlib
+import json
+import re
+import sys
+from pathlib import Path
+
+from jsonschema import Draft202012Validator
+
+
+ROOT = Path(__file__).resolve().parents[1]
+SCHEMA_PATH = "machine/schemas/release-evidence-review.v1.schema.json"
+GATE_PATH = "docs/governance/RELEASE_GATES.md"
+APP_PATH = "docs/governance/APP_RELEASE_COMPLIANCE_GATE.md"
+DECISION_PATH = "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
+POLICY_PATH = "machine/governance/policy.v1.json"
+
+
+def load_json(path):
+    return json.loads(Path(path).read_text(encoding="utf-8"))
+
+
+def policy_fingerprint(root=ROOT):
+    """Bind the review to the exact governing bytes, not to a claimed policy label."""
+    digest = hashlib.sha256()
+    for relative in (GATE_PATH, APP_PATH, DECISION_PATH, POLICY_PATH):
+        digest.update(relative.encode("utf-8") + b"\0")
+        digest.update((Path(root) / relative).read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def release_gate_inventory(root=ROOT):
+    """Derive expected gates from the existing policy table, not user-supplied IDs."""
+    content = (Path(root) / GATE_PATH).read_text(encoding="utf-8")
+    section = content.split("## Pre-Release Checklist", 1)[1].split("\nFor release gating,", 1)[0]
+    gates = {}
+    for line in section.splitlines():
+        if not line.strip().startswith("|"):
+            continue
+        columns = [column.strip() for column in line.strip().strip("|").split("|")]
+        if len(columns) != 3 or columns[0] == "Gate" or set(columns[0]) <= {"-", " "}:
+            continue
+        name, _, required = columns
+        if not required.startswith("Yes") or name in gates:
+            raise ValueError("release gate table contains an invalid or duplicate gate")
+        conditional = any(term in name.lower() or term in required.lower()
+                          for term in ("if flagged", "if needed", "when applicable"))
+        gates[name] = {"conditional": conditional}
+    if len(gates) < 15:
+        raise ValueError("release gate inventory is missing or unexpectedly small")
+    return gates
+
+
+def validate_review(record, root=ROOT):
+    """Return (errors, disposition); semantic checks cannot authenticate external claims."""
+    root = Path(root)
+    schema = load_json(root / SCHEMA_PATH)
+    Draft202012Validator.check_schema(schema)
+    errors = []
+    for error in sorted(Draft202012Validator(schema).iter_errors(record),
+                        key=lambda value: str(value.path)):
+        errors.append(f"schema {'.'.join(map(str, error.path)) or '$'}: {error.message}")
+    if errors:
+        return errors, "INVALID_EVIDENCE"
+
+    expected_policy = policy_fingerprint(root)
+    if record["policy_fingerprint"] != expected_policy:
+        errors.append("stale or mismatched governing policy fingerprint")
+
+    expected_gates = release_gate_inventory(root)
+    actual_names = [gate["name"] for gate in record["gates"]]
+    if len(actual_names) != len(set(actual_names)):
+        errors.append("duplicate release gate")
+    if set(actual_names) != set(expected_gates):
+        errors.append("release gate inventory differs from required policy inventory")
+
+    evidence = {item["id"]: item for item in record["evidence"]}
+    if len(evidence) != len(record["evidence"]):
+        errors.append("duplicate evidence id")
+    for item in record["evidence"]:
+        if item["head_sha"] != record["candidate"]["head_sha"]:
+            errors.append(f"stale candidate head in evidence {item['id']}")
+        if item["policy_fingerprint"] != expected_policy:
+            errors.append(f"stale policy in evidence {item['id']}")
+        if item["kind"] == "CI_CHECK" and (
+            item["check_status"] != "completed"
+            or item["check_conclusion"] != "success"
+            or item["status"] != "PASS"
+        ):
+            errors.append(f"CI evidence {item['id']} is not a successful completed check")
+
+    unresolved_human = False
+    has_failure = False
+    has_pending = False
+    for gate in record["gates"]:
+        name = gate["name"]
+        conditional = expected_gates.get(name, {}).get("conditional", False)
+        decision = gate["relevance"]
+        if decision == "NOT_APPLICABLE":
+            if not conditional:
+                errors.append(f"required gate cannot be marked not applicable: {name}")
+            if gate["validation"] != "NOT_APPLICABLE" or gate["compliance"] != "NOT_APPLICABLE":
+                errors.append(f"N/A gate has inconsistent validation/compliance: {name}")
+            if not gate["relevance_evidence_refs"]:
+                errors.append(f"N/A gate needs positive applicability evidence: {name}")
+            if len(gate["rationale"].strip()) < 12:
+                errors.append(f"N/A gate needs a substantive rationale: {name}")
+        elif decision == "REQUIRED":
+            if gate["validation"] == "NOT_APPLICABLE" or gate["compliance"] == "NOT_APPLICABLE":
+                errors.append(f"required gate cannot skip validation/compliance: {name}")
+        else:
+            has_pending = True
+            if gate["validation"] == "PASS" or gate["compliance"] == "PASS":
+                errors.append(f"unknown relevance cannot be treated as passed: {name}")
+
+        for field in ("relevance_evidence_refs", "validation_evidence_refs", "compliance_evidence_refs"):
+            for ref in gate[field]:
+                item = evidence.get(ref)
+                if item is None or item["status"] != "PASS":
+                    errors.append(f"missing or unsuccessful evidence {ref} for {name}/{field}")
+        for status_field, ref_field in (
+            ("validation", "validation_evidence_refs"),
+            ("compliance", "compliance_evidence_refs"),
+        ):
+            if gate[status_field] == "PASS" and not gate[ref_field]:
+                errors.append(f"unsupported {status_field} pass: {name}")
+
+        human_ref = gate["human_decision_ref"]
+        if human_ref is not None:
+            item = evidence.get(human_ref)
+            if item is None or item["kind"] != "HUMAN_DECISION" or item["status"] != "PASS":
+                errors.append(f"invalid human decision reference: {name}")
+        if gate["human_judgment_required"] and not human_ref:
+            unresolved_human = True
+        if gate["validation"] == "FAIL" or gate["compliance"] == "FAIL":
+            has_failure = True
+        if decision == "UNKNOWN" or "PENDING" in (gate["validation"], gate["compliance"]):
+            has_pending = True
+
+    if record["publication_authorized"] is not False:
+        errors.append("evidence review must never grant publication authority")
+    if errors:
+        return errors, "INVALID_EVIDENCE"
+
+    remediation = record["remediation"]
+    limits = load_json(root / POLICY_PATH)["default_remediation"]
+    max_attempts = limits["maximum_remediation_attempts_per_unit"]
+    if record["protected_policy_change"] or remediation["would_change_governing_gate"]:
+        return [], "ESCALATE_HUMAN"
+    if record["unresolved_conflicts"] or unresolved_human:
+        return [], "ESCALATE_HUMAN"
+    if has_failure:
+        if (remediation["deterministic_in_scope"]
+                and remediation["authorized"]
+                and not remediation["scope_growth"]
+                and remediation["attempts_used"] < max_attempts):
+            return [], "AUTO_REMEDIATE_AND_REVALIDATE"
+        return [], "ESCALATE_HUMAN"
+    if has_pending:
+        return [], "WAIT_FOR_EVIDENCE"
+    return [], "EVIDENCE_READY_FOR_FINAL_REVIEW"
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--record", required=True, type=Path)
+    args = parser.parse_args(argv)
+    try:
+        errors, disposition = validate_review(load_json(args.record))
+    except (OSError, ValueError, KeyError, TypeError, json.JSONDecodeError) as exc:
+        print(f"INVALID_EVIDENCE: {exc}")
+        return 2
+    if errors:
+        for error in errors:
+            print(f"INVALID_EVIDENCE: {error}")
+        return 2
+    print(f"RELEASE_REVIEW_DISPOSITION={disposition}")
+    print("RELEASE_PUBLICATION_AUTHORIZED=false")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
