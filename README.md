@@ -72,6 +72,8 @@ MEMORY_CONFIDENCE != PERMISSION
 
 No model output, learned preference, documentation matrix, or installed plugin may bypass protected decisions, transmit sensitive data without proper authority, or silently change policy.
 
+Release governance uses a proportional [evidence-first relevance, validation, and compliance review](docs/governance/RELEASE_GATES.md): deterministic issues may be corrected and retested within granted scope, while unresolved legal, privacy, IP, authority, and final publication decisions remain governed. A machine evidence result never authorizes a release.
+
 ## More documentation
 
 [Installation](docs/setup/INSTALLATION.md) · [MCP](docs/developer/MCP_STDIO_TRANSPORT.md) · [Architecture](docs/reference/architecture/README.md) · [Governance](docs/reference/governance/README.md) · [Developer portal](docs/developer/README.md) · [Detailed documentation map](docs/README.md) · [Machine index](README.json)

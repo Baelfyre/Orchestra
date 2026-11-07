@@ -1,5 +1,10 @@
 > The proposed v1.12.0 candidate is pending validation and release approval; v1.11.0 remains the latest published release. See the [v1.12.0 release candidate record](docs/releases/v1.12.0-release-candidate.md).
 
+## Unreleased evidence-first proportional release governance (Issue #993)
+
+- Define a risk-proportional relevance, validation, and compliance review path that reuses exact-head CI evidence, permits existing bounded deterministic remediation within a human-approved envelope, and routes unresolved factual or protected decisions to human review.
+- Add a read-only, non-authorizing machine evidence schema, gate-inventory classifier, and adversarial regression tests. Preserve required release gates, source/policy freshness, manual final publication authorization, and existing v1.12.0 blockers. This governance amendment requires independent PR validation and canonical merge before it becomes active.
+
 ## Unreleased protected-main signature-policy alignment
 
 - Reconcile the autonomous merge-readiness contract with the active `Protect main` ruleset, which no longer requires signed commits. Retain recommended SSH signing and optional GitHub signature-status evidence without treating an unsigned Squash commit as a merge failure.
