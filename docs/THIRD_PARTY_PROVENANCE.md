@@ -38,6 +38,27 @@ Used as the bounded mutation-confidence runner after the mutmut instrumentation 
 
 ## Incorporated reference patterns
 
+### Unslop visual-refinement guidance (Damir Sokolovsky)
+
+[`heydamir/unslop`](https://github.com/heydamir/unslop/tree/a6f121eee5f29c2f74976b75456feae8b66afb3a) | **CC BY 4.0** | **REFERENCE_ONLY**, rights assessment pending
+
+Reviewed commit: `a6f121eee5f29c2f74976b75456feae8b66afb3a`. Upstream `skills/unslop/SKILL.md` credits **Damir Sokolovsky** and declares CC BY 4.0; the [pinned LICENSE](https://github.com/heydamir/unslop/blob/a6f121eee5f29c2f74976b75456feae8b66afb3a/LICENSE) contains the license text. License and author attribution: © Damir Sokolovsky; [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
+
+Orchestra's optional [Cloak visual-refinement and soft 8-point guide](skills/cloak/VISUAL_REFINEMENT_8PT_GUIDE.md) credits this source for product-specific design direction and ordered visual-quality passes. The guide is a changed, project-specific synthesis: it adds Orchestra specialist ownership and source boundaries, project-token and accessibility precedence, and spacing-rhythm heuristics. It is **not** a copy of the upstream skill or its scripts. The direct reviewed guide-to-upstream comparison identified no identical contiguous eight-word sequences; this is limited, non-exhaustive evidence rather than proof of every historical authoring step.
+
+**Change and rights notice:** This is an Orchestra-specific adaptation of owner-supplied guidance informed by the linked source, not the original upstream publication. The owner's source-guide rights chain, extent of any protectable adaptation, and adequacy of all notices remain for the Governor to determine before v1.12.0 release. Upstream authors do not endorse Orchestra.
+
+### Unslop repeated-output analysis reference (Matt Shumer)
+
+[`mshumer/unslop`](https://github.com/mshumer/unslop/tree/edcb62386d129c65e4395f0cfcc9168eb1ba2148) | **MIT** | **REFERENCE_ONLY**, rights assessment pending
+
+Reviewed commit: `edcb62386d129c65e4395f0cfcc9168eb1ba2148`. Its [pinned MIT LICENSE](https://github.com/mshumer/unslop/blob/edcb62386d129c65e4395f0cfcc9168eb1ba2148/LICENSE) contains **Copyright (c) 2026 Matt Shumer**.
+
+Cloak mentions this project's repeated-output analysis and optional before/after empirical methodology as conceptual references. Orchestra did not import its scripts or make its experiments a default dependency. Its reviewed guide has no matching contiguous eight-word run against the pinned upstream README, but this limited comparison is not comprehensive package/source clearance. If MIT-covered source or substantial documentation is incorporated in the future, preserve the relevant copyright and permission notice.
+
+**Both records:** See `machine/provenance/third-party.v1.json`. Classifying these as credited references does not certify that the complete distributed dependency, font, icon, media, and asset inventory has been legally cleared.
+
+
 ### Strix
 
 `usestrix/strix` | Apache-2.0 | **REFERENCE_ONLY**
