@@ -56,8 +56,14 @@
           "pattern": "^[0-9a-f]{40}$"
         },
         "release_channel": {
-          "type": "string",
-          "minLength": 3
+          "enum": [
+            "PLUGIN_DISTRIBUTION",
+            "OPEN_SOURCE_DISTRIBUTION",
+            "HOSTED_SERVICE",
+            "MARKETPLACE",
+            "CLIENT_DELIVERY",
+            "PRIVATE_INTERNAL"
+          ]
         }
       }
     },
