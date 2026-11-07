@@ -42,6 +42,24 @@ Release Mode usually maps to `GSL-4` or `GSL-5`, depending on public exposure, d
 
 For release gating, The Governor decides whether security, privacy, and compliance governance is sufficiently addressed to proceed. `Cipher` owns the technical defensive security review, security-control findings, and related remediation boundaries that may feed that release decision.
 
+## Evidence-First Release Review (Approved Proposal, Pending Canonical Merge)
+
+The issue [#993](https://github.com/Baelfyre/Orchestra/issues/993) amendment was separately authorized for development on 2026-11-07. It does not apply retroactively to release issue #991 or change existing blockers before independently reviewed canonical integration. This section defines a proportional *review procedure*, not a waiver of any required gate.
+
+For each current Pre-Release Checklist gate, evaluate three independently traceable questions:
+
+1. **Relevance:** Is the obligation `REQUIRED`, or genuinely `NOT_APPLICABLE` under the verified release channel, affected feature, data/processor, and jurisdiction? The record must cite the applicable policy and supporting evidence. Unknown applicability is not N/A, and an unconditional "Yes" gate may not be exempted.
+2. **Validation:** Do reproducible technical checks, independent domain findings, and documentation match the exact reviewed candidate, governing policy revision, and required frameworks? Use existing CI evidence once per exact revision, rather than repeating unchanged tests for each specialist. CI does not authenticate human attestations, factual legal claims, actual provider behavior, or rights ownership.
+3. **Compliance:** Does that evidence demonstrate the required rule was met? Show the rights, privacy, security, and distribution obligations actually triggered by this release. Do not call an upstream license declaration complete redistribution clearance or a documentation template a completed data inventory.
+
+The read-only evidence projection is `scripts/validate_release_evidence_review.py --record <review.json>`, with schema `machine/schemas/release-evidence-review.v1.schema.json`. It derives the complete gate inventory from the Pre-Release Checklist, rejects missing/duplicate gates, binds evidence to candidate head and current governing policy bytes, and classifies outcomes. Its recorded CI states are assertions requiring an independent GitHub/current-source read before consequential use. A successful command does **not** approve a release.
+
+Within an already valid delegated envelope, use existing `AUTO_CONTINUE` when in-scope technical prerequisites pass, `AUTO_REMEDIATE_AND_REVALIDATE` for deterministic authorized corrections within the existing three-attempt / zero-scope-growth limit, and `WAIT_FOR_EVIDENCE` for missing or stale inputs. After each fix, rebuild exact-head evidence; never recycle earlier CI conclusions. Do not open repetitive human-review loops for a deterministic error that can be safely fixed and retested within granted scope.
+
+Escalate unresolved contradictions, unverifiable owner/host/jurisdiction facts, legal or IP judgments, material risk acceptance, required authority decisions, and failures of the permitted remediation budget. Any policy, validator, or gate change needed to make the *originating blocked candidate* pass follows [Protected Governance Escalation](PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md), with an independent decision and fresh execution context. This procedure cannot change the same gates that evaluate it without that protection.
+
+When all applicable evidence is reconciled, produce one concise `EVIDENCE_READY_FOR_FINAL_REVIEW` packet for the designated human release authority. This is readiness for decision, **not** `APPROVED`, merge authority, publication authorization, or a substitute for the Governor/Steward/Arbiter decisions required by the active policy. For v1.12.0, retain all existing blockers until updated attributable review decisions are recorded.
+
 ## Gate Enforcement
 
 - **Release Mode Enforcement**: The Conductor and Governance authorities (The Steward, The Governor, and Arbiter) enforce complete Basis of Review and continuation-state checks for all release activities. Bypassing compliance, scope, validation, or continuity checks is prohibited.
