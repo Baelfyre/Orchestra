@@ -100,6 +100,8 @@ def validate_review(record, root=ROOT):
     for gate in record["gates"]:
         name = gate["name"]
         conditional = expected_gates.get(name, {}).get("conditional", False)
+        if name == "App Release Compliance Gate reviewed" and record["candidate"]["release_channel"] != "PRIVATE_INTERNAL":
+            conditional = False
         decision = gate["relevance"]
         if decision == "NOT_APPLICABLE":
             if not conditional:
@@ -108,6 +110,8 @@ def validate_review(record, root=ROOT):
                 errors.append(f"N/A gate has inconsistent validation/compliance: {name}")
             if not gate["relevance_evidence_refs"]:
                 errors.append(f"N/A gate needs positive applicability evidence: {name}")
+            elif not any(evidence.get(ref, {}).get("kind") in {"REPOSITORY_SOURCE", "OWNER_ATTESTATION", "INDEPENDENT_REVIEW", "HUMAN_DECISION"} for ref in gate["relevance_evidence_refs"]):
+                errors.append(f"N/A relevance needs non-CI applicability evidence: {name}")
             if len(gate["rationale"].strip()) < 12:
                 errors.append(f"N/A gate needs a substantive rationale: {name}")
         elif decision == "REQUIRED":
@@ -129,6 +133,15 @@ def validate_review(record, root=ROOT):
         ):
             if gate[status_field] == "PASS" and not gate[ref_field]:
                 errors.append(f"unsupported {status_field} pass: {name}")
+
+        sensitive = any(token in name.lower() for token in (
+            "legal", "privacy", "ip/copyright", "license", "terms", "app release compliance",
+        ))
+        if (sensitive and decision == "REQUIRED" and gate["compliance"] == "PASS"
+                and not any(evidence.get(ref, {}).get("kind") in {
+                    "INDEPENDENT_REVIEW", "OWNER_ATTESTATION", "HUMAN_DECISION"
+                } for ref in gate["compliance_evidence_refs"])):
+            errors.append(f"sensitive compliance cannot be established by CI alone: {name}")
 
         human_ref = gate["human_decision_ref"]
         if human_ref is not None:
