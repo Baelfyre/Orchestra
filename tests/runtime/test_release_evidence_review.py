@@ -290,3 +290,25 @@ def test_governing_delegated_policy_is_part_of_fingerprint(tmp_path):
     target = tmp_path / review.DELEGATED_PATH
     target.write_bytes(target.read_bytes() + b"\\n# Simulated policy revision\\n")
     assert review.policy_fingerprint(tmp_path) != expected
+
+@pytest.mark.parametrize(
+    ("mutate", "expected_exit"),
+    [
+        (lambda r: None, 0),
+        (lambda r: gate(r).update(compliance="PENDING"), 1),
+        (lambda r: gate(r).update(validation="FAIL"), 3),
+        (lambda r: r.update(protected_policy_change=True), 3),
+        (lambda r: r.update(policy_fingerprint="f" * 64), 2),
+    ],
+)
+def test_cli_fails_closed_unless_evidence_ready(tmp_path, capsys, mutate, expected_exit):
+    import json
+
+    r = record()
+    mutate(r)
+    path = tmp_path / "record.json"
+    path.write_text(json.dumps(r), encoding="utf-8")
+    assert review.main(["--record", str(path)]) == expected_exit
+    output = capsys.readouterr().out
+    if expected_exit != 2:
+        assert "RELEASE_PUBLICATION_AUTHORIZED=false" in output
