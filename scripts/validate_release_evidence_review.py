@@ -18,6 +18,9 @@ GATE_PATH = "docs/governance/RELEASE_GATES.md"
 APP_PATH = "docs/governance/APP_RELEASE_COMPLIANCE_GATE.md"
 DECISION_PATH = "docs/governance/GOVERNANCE_DECISION_PROTOCOL.md"
 POLICY_PATH = "machine/governance/policy.v1.json"
+DELEGATED_PATH = "docs/governance/DELEGATED_EXECUTION_POLICY.md"
+PROTECTED_PATH = "docs/governance/PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md"
+QUALIFICATION_PATH = "docs/governance/QUALIFICATION_GATES_EVALUATION_AUDIT.md"
 
 
 def load_json(path):
@@ -27,7 +30,10 @@ def load_json(path):
 def policy_fingerprint(root=ROOT):
     """Bind the review to the exact governing bytes, not to a claimed policy label."""
     digest = hashlib.sha256()
-    for relative in (GATE_PATH, APP_PATH, DECISION_PATH, POLICY_PATH):
+    for relative in (
+        GATE_PATH, APP_PATH, DECISION_PATH, POLICY_PATH,
+        DELEGATED_PATH, PROTECTED_PATH, QUALIFICATION_PATH,
+    ):
         digest.update(relative.encode("utf-8") + b"\0")
         digest.update((Path(root) / relative).read_bytes())
         digest.update(b"\0")
@@ -115,6 +121,12 @@ def validate_review(record, root=ROOT):
             if len(gate["rationale"].strip()) < 12:
                 errors.append(f"N/A gate needs a substantive rationale: {name}")
         elif decision == "REQUIRED":
+            if not gate["relevance_evidence_refs"]:
+                errors.append(f"required gate missing applicability evidence: {name}")
+            elif not any(evidence.get(ref, {}).get("kind") in {
+                "REPOSITORY_SOURCE", "OWNER_ATTESTATION", "INDEPENDENT_REVIEW", "HUMAN_DECISION"
+            } for ref in gate["relevance_evidence_refs"]):
+                errors.append(f"required gate lacks non-CI applicability evidence: {name}")
             if gate["validation"] == "NOT_APPLICABLE" or gate["compliance"] == "NOT_APPLICABLE":
                 errors.append(f"required gate cannot skip validation/compliance: {name}")
         else:
@@ -144,6 +156,8 @@ def validate_review(record, root=ROOT):
             errors.append(f"sensitive compliance cannot be established by CI alone: {name}")
 
         human_ref = gate["human_decision_ref"]
+        if name == "Human legal review completed (if flagged)" and decision == "REQUIRED" and not human_ref:
+            unresolved_human = True
         if human_ref is not None:
             item = evidence.get(human_ref)
             if item is None or item["kind"] != "HUMAN_DECISION" or item["status"] != "PASS":
