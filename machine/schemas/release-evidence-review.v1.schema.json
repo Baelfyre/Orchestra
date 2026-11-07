@@ -1,0 +1,263 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Baelfyre/Orchestra/blob/main/machine/schemas/release-evidence-review.v1.schema.json",
+  "title": "Orchestra release evidence review v1",
+  "description": "Read-only, candidate- and policy-bound evidence classification. Never authenticates externally asserted facts or grants merge/release authority.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema_version",
+    "record_type",
+    "candidate",
+    "policy_fingerprint",
+    "gates",
+    "evidence",
+    "unresolved_conflicts",
+    "protected_policy_change",
+    "remediation",
+    "publication_authorized"
+  ],
+  "properties": {
+    "$schema": {
+      "const": "../schemas/release-evidence-review.v1.schema.json"
+    },
+    "schema_version": {
+      "const": "orchestra.release-evidence-review.v1"
+    },
+    "record_type": {
+      "const": "RELEASE_EVIDENCE_REVIEW"
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "repository",
+        "head_sha",
+        "tree_sha",
+        "base_sha",
+        "release_channel"
+      ],
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "head_sha": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "tree_sha": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "base_sha": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "release_channel": {
+          "type": "string",
+          "minLength": 3
+        }
+      }
+    },
+    "policy_fingerprint": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "gates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "relevance",
+          "rationale",
+          "relevance_evidence_refs",
+          "validation",
+          "validation_evidence_refs",
+          "compliance",
+          "compliance_evidence_refs",
+          "human_judgment_required",
+          "human_decision_ref"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 3
+          },
+          "relevance": {
+            "enum": [
+              "REQUIRED",
+              "NOT_APPLICABLE",
+              "UNKNOWN"
+            ]
+          },
+          "rationale": {
+            "type": "string",
+            "minLength": 3
+          },
+          "relevance_evidence_refs": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 3
+            }
+          },
+          "validation": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "PENDING",
+              "NOT_APPLICABLE"
+            ]
+          },
+          "validation_evidence_refs": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 3
+            }
+          },
+          "compliance": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "PENDING",
+              "NOT_APPLICABLE"
+            ]
+          },
+          "compliance_evidence_refs": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 3
+            }
+          },
+          "human_judgment_required": {
+            "type": "boolean"
+          },
+          "human_decision_ref": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 3
+          }
+        }
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "kind",
+          "reference",
+          "status",
+          "head_sha",
+          "policy_fingerprint",
+          "check_status",
+          "check_conclusion"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{2,127}$"
+          },
+          "kind": {
+            "enum": [
+              "CI_CHECK",
+              "REPOSITORY_SOURCE",
+              "LICENSE_SOURCE",
+              "OWNER_ATTESTATION",
+              "HUMAN_DECISION",
+              "INDEPENDENT_REVIEW"
+            ]
+          },
+          "reference": {
+            "type": "string",
+            "minLength": 5
+          },
+          "status": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "UNKNOWN"
+            ]
+          },
+          "head_sha": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$"
+          },
+          "policy_fingerprint": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "check_status": {
+            "enum": [
+              null,
+              "completed"
+            ]
+          },
+          "check_conclusion": {
+            "enum": [
+              null,
+              "success"
+            ]
+          }
+        }
+      }
+    },
+    "unresolved_conflicts": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 3
+      }
+    },
+    "protected_policy_change": {
+      "type": "boolean"
+    },
+    "remediation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "deterministic_in_scope",
+        "authorized",
+        "scope_growth",
+        "would_change_governing_gate",
+        "attempts_used"
+      ],
+      "properties": {
+        "deterministic_in_scope": {
+          "type": "boolean"
+        },
+        "authorized": {
+          "type": "boolean"
+        },
+        "scope_growth": {
+          "type": "boolean"
+        },
+        "would_change_governing_gate": {
+          "type": "boolean"
+        },
+        "attempts_used": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "publication_authorized": {
+      "const": false
+    }
+  }
+}
