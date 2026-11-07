@@ -55,7 +55,7 @@ def record():
             "compliance": "PASS",
             "compliance_evidence_refs": ["independent-synthetic"],
             "human_judgment_required": False,
-            "human_decision_ref": None,
+            "human_decision_ref": "human-synthetic" if name == "Human legal review completed (if flagged)" else None,
         }
         for name in review.release_gate_inventory(ROOT)
     ]
@@ -267,6 +267,7 @@ def test_flagged_human_legal_review_cannot_be_auto_waived_by_false_boolean():
     r = record()
     g = gate(r, "Human legal review completed (if flagged)")
     g["human_judgment_required"] = False
+    g["human_decision_ref"] = None
     assert outcome(r) == ([], "ESCALATE_HUMAN")
     g["human_decision_ref"] = "human-synthetic"
     assert outcome(r) == ([], "EVIDENCE_READY_FOR_FINAL_REVIEW")
