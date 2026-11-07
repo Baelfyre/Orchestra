@@ -80,7 +80,7 @@ No model output, learned preference, documentation matrix, or installed plugin m
 
 The latest public release is **[v1.11.0](https://github.com/Baelfyre/Orchestra/releases/tag/v1.11.0)**. The development branch contains later work, which remains unreleased until the complete version-specific qualification and publication process is completed. See [releases](docs/reference/releases/README.md) and [changelog](CHANGELOG.md).
 
-The proposed v1.12.0 scope and pending candidate gates are recorded in the [release candidate record](docs/releases/v1.12.0-release-candidate.md). The [2026-11-06 reconciliation note](docs/releases/v1.12.0-local-scope-reconciliation-2026-11-06.md) preserves the earlier local review context; this candidate remains uncommitted and unqualified.
+The v1.12.0 integration candidate was Squash-merged into `main` through [PR #990](https://github.com/Baelfyre/Orchestra/pull/990), with successful reviewed-head CI and post-merge workflows. [Release-specific governance clearance and owner publication approval remain pending](https://github.com/Baelfyre/Orchestra/issues/991); integration is not a published release. See the [release candidate record](docs/releases/v1.12.0-release-candidate.md). The [2026-11-06 reconciliation note](docs/releases/v1.12.0-local-scope-reconciliation-2026-11-06.md) describes an earlier uncommitted local review state, not the current merged state.
 
 ## Support
 
