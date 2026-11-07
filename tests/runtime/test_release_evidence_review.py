@@ -214,3 +214,40 @@ def test_release_evidence_review_is_read_only_and_policy_bound():
     assert outcome(r)[0] == []
     assert r == before
     assert len(review.release_gate_inventory(ROOT)) >= 15
+
+
+def test_sensitive_compliance_cannot_be_cleared_only_by_green_ci():
+    r = record()
+    gate(r, "Legal compliance confirmed")["compliance_evidence_refs"] = ["ci-synthetic"]
+    assert outcome(r)[1] == "INVALID_EVIDENCE"
+
+
+def test_not_applicable_cannot_be_justified_by_ci_only():
+    r = record()
+    g = gate(r, "Human legal review completed (if flagged)")
+    g.update(
+        relevance="NOT_APPLICABLE",
+        rationale="Synthetic scoped review asserts this legal trigger is not applicable.",
+        validation="NOT_APPLICABLE",
+        compliance="NOT_APPLICABLE",
+        relevance_evidence_refs=["ci-synthetic"],
+    )
+    assert outcome(r)[1] == "INVALID_EVIDENCE"
+
+
+def test_public_plugin_app_release_review_cannot_be_marked_not_applicable():
+    r = record()
+    g = gate(r, "App Release Compliance Gate reviewed")
+    g.update(
+        relevance="NOT_APPLICABLE",
+        rationale="Incorrectly omitted for public plugin distribution.",
+        validation="NOT_APPLICABLE",
+        compliance="NOT_APPLICABLE",
+    )
+    assert outcome(r)[1] == "INVALID_EVIDENCE"
+
+
+def test_unsupported_distribution_channel_does_not_pass_schema():
+    r = record()
+    r["candidate"]["release_channel"] = "UNVERIFIED_UNKNOWN"
+    assert outcome(r)[1] == "INVALID_EVIDENCE"
