@@ -34,7 +34,7 @@ This document classifies Orchestra's published v1.11.0 surfaces and preserved hi
 - **Behavior validation**: `tests/behavior/run_tests.py` remains a primary cross-platform deterministic validation runner.
 - **Runtime test evidence**: CI records statement and branch coverage. Overall evidence floors are 97% statement / 95% branch; critical-module inventory floors are 98% statement / 95% branch.
 - **Cross-platform validation**: native Windows, Ubuntu, and macOS jobs are required on protected `main`.
-- **Protected-main release discipline**: exact-head checks, signed commits, linear history, Squash-only merge, review-thread resolution, and the live required-status matrix are enforced by repository rules. Active ruleset `17927422` currently contains each required context exactly once following the separately authorized duplicate-status correction performed before PR #592 merged.
+- **Protected-main release discipline**: exact-head checks, linear history, Squash-only merge, review-thread resolution, and the live required-status matrix are enforced by repository rules. Signed commits remain recommended but are not required by the current ruleset. Active ruleset `17927422` currently contains each required context exactly once following the separately authorized duplicate-status correction performed before PR #592 merged.
 - **Adapter SDK / PRAP v1 certification**: stable read-only compatibility surface through `orchestra_runtime.protocol.sdk` and `scripts/certify_adapter.py`.
 - **MCP stdio transport**: bounded `2026-07-28` stdio transport exposing `server/discover`, `tools/list`, and `tools/call` while preserving existing runtime authority boundaries.
 

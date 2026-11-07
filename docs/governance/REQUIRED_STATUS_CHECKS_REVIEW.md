@@ -41,7 +41,7 @@ Require conversation resolution: ON
 Allowed merge methods: Squash only
 Restrict deletions: ON
 Require linear history: ON
-Require signed commits: ON
+Require signed commits: OFF
 Require pull request before merging: ON
 Require status checks to pass: ON
 Require branches to be up to date before merging: ON
@@ -93,13 +93,13 @@ Immediately before merge:
 
 `mergeable: true` is informational only. It means Git can construct a merge; it does not prove validation or governance readiness.
 
-Because Squash creates a new canonical commit identity, post-merge verification follows `AUTONOMOUS_MERGE_READINESS_PROTOCOL.md`: verify the exact canonical parent, tree/content equivalence to the reviewed head, and verified signature on the canonical squash commit rather than requiring the reviewed head SHA itself to remain in `main` ancestry.
+Because Squash creates a new canonical commit identity, post-merge verification follows `AUTONOMOUS_MERGE_READINESS_PROTOCOL.md`: verify the exact canonical parent and tree/content equivalence to the reviewed head rather than requiring the reviewed head SHA itself to remain in `main` ancestry. Record commit signature status when available without treating an unsigned squash as a failure.
 
 The executable companion contract is `docs/governance/AUTONOMOUS_MERGE_READINESS_PROTOCOL.md` with `scripts/validate_autonomous_merge_readiness_contract.py` and its regression fixtures/tests.
 
 ## GitHub Protection Alignment
 
-The live `Protect main` ruleset should continue to require the active contexts listed above, Squash-only merging, signed and linear canonical history, current-base testing, conversation resolution, pull-request flow, restricted deletion, and blocked force pushes.
+The live `Protect main` ruleset should continue to require the active contexts listed above, Squash-only merging, linear canonical history, current-base testing, conversation resolution, pull-request flow, restricted deletion, and blocked force pushes. Signed commits remain recommended but are not mandated by the active ruleset.
 
 The current bypass list is an operational repository setting. The automation-side fail-closed protocol remains mandatory even for actors technically capable of bypassing the ruleset.
 

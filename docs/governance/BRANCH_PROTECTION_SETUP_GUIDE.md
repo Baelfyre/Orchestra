@@ -42,7 +42,7 @@ Restrict updates: OFF
 Restrict deletions: ON
 Require linear history: ON
 Require deployments to succeed: OFF
-Require signed commits: ON
+Require signed commits: OFF
 Require a pull request before merging: ON
 Required approvals: 0
 Dismiss stale approvals when new commits are pushed: ON
@@ -71,7 +71,7 @@ Ordinary governed autonomous execution must still use the pull-request path, exa
 
 ## Why Squash Only
 
-The ruleset requires linear history and signed commits. Orchestra therefore standardizes autonomous merging on Squash for this repository.
+The ruleset requires linear history and permits Squash-only merging. Signed commits are recommended, but not required for an ordinary merge.
 
 A squash merge creates a new canonical commit SHA. Post-merge verification must validate the canonical squash result rather than require the reviewed PR head SHA to remain in `main` ancestry.
 
@@ -82,7 +82,7 @@ Required post-merge proof includes:
 - canonical squash commit and parent;
 - canonical tree equals reviewed tree;
 - reviewed-to-canonical content diff is empty;
-- canonical squash commit signature is verified;
+- canonical squash commit signature status is recorded if available (not a required pass condition);
 - independent canonical remote read.
 
 Rebase is not an allowed merge method under the current ruleset. Merge commits are incompatible with the current linear-history requirement.
@@ -96,7 +96,7 @@ Rebase is not an allowed merge method under the current ruleset. Merge commits a
 5. Confirm Allowed merge methods is `Squash` only.
 6. Confirm all seven required check contexts are present.
 7. Confirm required approvals remains `0` while the repository has no independent maintainer reviewer.
-8. Confirm conversation resolution, signed commits, linear history, branch-up-to-date, restricted deletion, and blocked force pushes remain enabled.
+8. Confirm conversation resolution, linear history, branch-up-to-date, restricted deletion, and blocked force pushes remain enabled; confirm required signed commits remains OFF.
 9. Leave the current bypass list unchanged unless a separate repository-hardening decision explicitly changes it.
 10. Save changes and use a current PR to verify enforcement behavior.
 
@@ -112,7 +112,7 @@ Use a safe controlled PR and prove all of the following from live GitHub behavio
 6. The PR cannot ordinarily merge with unresolved review conversations.
 7. The branch must be up to date before merge.
 8. Squash is the only ordinary merge method offered by the ruleset.
-9. The resulting canonical squash commit has a verified signature.
+9. The resulting canonical squash commit signature status is recorded when available; unsigned status alone does not fail the current protection profile.
 10. Direct force pushes and deletion of `main` are blocked for non-bypass operation.
 11. The existence of bypass-capable actors does not cause Orchestra's client-side controller to skip evidence or record a bypassed transition as governance-ready.
 
@@ -147,4 +147,4 @@ Do not retire or rename a required validation workflow/job until:
 
 ## Current Recommendation
 
-Keep the current `Protect main` profile unchanged unless a separately reviewed repository-policy change is required. Keep all eight required checks active and keep Squash as the only allowed merge method.
+Keep the current `Protect main` profile unchanged unless a separately reviewed repository-policy change is required. Keep all seven required checks active and keep Squash as the only allowed merge method.

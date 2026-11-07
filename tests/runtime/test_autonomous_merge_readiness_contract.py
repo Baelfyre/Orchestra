@@ -44,6 +44,14 @@ def test_fully_green_exact_head_is_ready():
     assert validator.evaluate_pre_merge(snapshot) == case["expected_disposition"]
 
 
+def test_optional_signature_policy_is_ready_and_reenabling_it_is_drift():
+    assert validator.EXPECTED_RULESET["require_signed_commits"] is False
+    data = fixture_data()
+    assert data["base_snapshot"]["ruleset"]["require_signed_commits"] is False
+    _, snapshot = pre_case("signature-rule-enabled")
+    assert validator.evaluate_pre_merge(snapshot) == "BLOCK"
+
+
 def test_required_status_context_order_is_not_policy_drift():
     case, snapshot = pre_case("reordered-required-contexts")
     assert validator.evaluate_pre_merge(snapshot) == "READY_FOR_MERGE"
@@ -136,7 +144,7 @@ def test_ruleset_and_merge_method_drift_block():
         "duplicate-ubuntu-required-context",
         "retired-codeql-required-contexts",
         "selected-rebase",
-        "signature-rule-disabled",
+        "signature-rule-enabled",
     ):
         _, snapshot = pre_case(case_id)
         assert validator.evaluate_pre_merge(snapshot) == "BLOCK"
@@ -167,17 +175,22 @@ def test_post_merge_requires_clean_pre_merge_state_and_no_bypass():
         assert validator.evaluate_post_merge(case["snapshot"]) == "MERGE_STATE_UNVERIFIED"
 
 
-def test_post_merge_requires_squash_equivalence_and_signature():
+def test_post_merge_requires_squash_equivalence():
     for case_id in (
         "pr-not-merged",
         "wrong-merge-method",
         "tree-mismatch",
         "content-diff-not-empty",
         "parent-drift",
-        "unsigned-canonical-commit",
     ):
         case = post_case(case_id)
         assert validator.evaluate_post_merge(case["snapshot"]) == "MERGE_STATE_UNVERIFIED"
+
+
+def test_unsigned_squash_can_be_verified_by_parent_and_tree():
+    case = post_case("unsigned-canonical-commit")
+    assert case["snapshot"]["canonical_signature_verified"] is False
+    assert validator.evaluate_post_merge(case["snapshot"]) == "MERGED_VERIFIED"
 
 
 def test_verified_squash_post_merge_state_is_accepted():

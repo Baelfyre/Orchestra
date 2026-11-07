@@ -1,5 +1,10 @@
 > The proposed v1.12.0 candidate is pending validation and release approval; v1.11.0 remains the latest published release. See the [v1.12.0 release candidate record](docs/releases/v1.12.0-release-candidate.md).
 
+## Unreleased protected-main signature-policy alignment
+
+- Reconcile the autonomous merge-readiness contract with the active `Protect main` ruleset, which no longer requires signed commits. Retain recommended SSH signing and optional GitHub signature-status evidence without treating an unsigned Squash commit as a merge failure.
+- Preserve exact-head CI, clean merge state, Squash-only merges, zero unauthorized bypass, canonical parent/tree/content equivalence, and independent post-merge state verification.
+
 ## Unreleased Scribe and Cloak artifact guidance
 
 - Add standalone Scribe artifact authoring/backend selection and Cloak visual/accessibility guides, index them in repository documentation, and generate Codex exports with source markers removed and checked for parity.
