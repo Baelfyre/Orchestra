@@ -1,19 +1,20 @@
 <div align="center">
   <img src="./assets/readme/orchestra-governance-banner.svg" alt="Orchestra governance and specialist orchestration" width="100%" />
+  <h1>[•]rchestra</h1>
   <p><strong>Governed orchestration for AI-assisted software development.</strong></p>
   <p><a href="docs/setup/INSTALLATION.md">Install</a> | <a href="docs/reference/README.md">Documentation</a> | <a href="docs/reference/specialists/README.md">Specialists</a> | <a href="docs/governance/README.md">Governance</a> | <a href="CHANGELOG.md">Changelog</a></p>
   <p><a href="https://github.com/Baelfyre/Orchestra/releases/tag/v1.11.0"><img src="https://img.shields.io/badge/published-v1.11.0-blue" alt="Published release v1.11.0" /></a> <a href="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml"><img src="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml/badge.svg" alt="Validation status" /></a> <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license" /></p>
 </div>
 
-## What is Orchestra?
+## What is [•]rchestra?
 
-Orchestra coordinates AI-assisted development across specialists for architecture, implementation, UI/UX, data, security, testing, documentation, and governance. It routes the task, preserves evidence, validates results, and respects human authority.
+[•]rchestra coordinates AI-assisted development across specialists for architecture, implementation, UI/UX, data, security, testing, documentation, and governance. It routes the task, preserves evidence, validates results, and respects human authority.
 
-Orchestra is **not an AI model**. It works around compatible coding hosts and does not replace engineering judgment.
+[•]rchestra is **not an AI model**. It works around compatible coding hosts and does not replace engineering judgment.
 
 ## Quick start
 
-Install through the [host installation guide](docs/setup/INSTALLATION.md). Then describe the result you want and what Orchestra may do:
+Install through the [host installation guide](docs/setup/INSTALLATION.md). Then describe the result you want and what [•]rchestra may do:
 
 ```text
 @Orchestra
@@ -43,7 +44,7 @@ These are **source and maturity claims**, not a guarantee that each capability i
 
 ## JEV and local API keys
 
-JEV supports non-binding engineering advice when independently reviewed alternatives exist. The existing offline pilot provides a repeatable 14-scenario pytest replay with explicitly labeled synthetic responses and evidence-gap recording. It makes no TypeSafe calls or actual JEV inference. The original V6 packet and source artifacts are absent, so replayed V6 findings remain **UNVERIFIED**. The pilot remains PREPARED_NOT_QUALIFIED; further qualification and integration are deferred from v1.12. Live TypeSafe integration, R3-A host trust, and production wiring remain unqualified. The TypeSafe adapter and offline data-minimization components exist, but there is **no verified general-purpose end-user BYOK activation flow**. Ordinary Orchestra use needs no JEV key. Never paste credentials into prompts or tracked project files.
+JEV supports non-binding engineering advice when independently reviewed alternatives exist. The existing offline pilot provides a repeatable 14-scenario pytest replay with explicitly labeled synthetic responses and evidence-gap recording. It makes no TypeSafe calls or actual JEV inference. The original V6 packet and source artifacts are absent, so replayed V6 findings remain **UNVERIFIED**. The pilot remains PREPARED_NOT_QUALIFIED; further qualification and integration are deferred from v1.12. Live TypeSafe integration, R3-A host trust, and production wiring remain unqualified. The TypeSafe adapter and offline data-minimization components exist, but there is **no verified general-purpose end-user BYOK activation flow**. Ordinary [•]rchestra use needs no JEV key. Never paste credentials into prompts or tracked project files.
 
 Read the [offline pilot instructions](docs/setup/JEV_OFFLINE_PILOT.md), [JEV local API setup and limitations](docs/setup/JEV_LOCAL_API.md), and the [decision hierarchy](docs/architecture/EVIDENCE_GATED_DECISION_HIERARCHY.md).
 
