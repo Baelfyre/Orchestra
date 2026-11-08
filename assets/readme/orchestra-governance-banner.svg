@@ -98,6 +98,6 @@
     </path>
 
     <!-- Content / Typography -->
-    <text x="500" y="110" class="title">Orchestra</text>
+    <text x="500" y="110" class="title">Conductor</text>
     <text x="500" y="150" class="subtitle">Governance-first orchestration for AI-assisted development</text>
 </svg>
