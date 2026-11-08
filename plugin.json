@@ -1,6 +1,6 @@
 {
   "name": "conductor",
-  "display_name": "Orchestra",
+  "display_name": "[•]rchestra",
   "description": "An installable AI workflow plugin that routes tasks through focused specialist skills. See SKILL_INDEX.md and ROUTING_MAP.md for detailed routing behavior.",
   "version": "1.12.0",
   "license": "MIT",
