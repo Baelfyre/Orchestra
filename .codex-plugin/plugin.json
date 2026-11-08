@@ -18,9 +18,9 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Orchestra",
+    "displayName": "[•]rchestra",
     "shortDescription": "Route complex coding work through focused specialist skills",
-    "longDescription": "Use Orchestra to route software tasks through governance, orchestration, and specialist skills for architecture, QA, security, UI/UX, documentation, diagrams, and implementation.",
+    "longDescription": "Use [•]rchestra to route software tasks through governance, orchestration, and specialist skills for architecture, QA, security, UI/UX, documentation, diagrams, and implementation.",
     "developerName": "Baelfyre",
     "category": "Developer Tools",
     "capabilities": [
