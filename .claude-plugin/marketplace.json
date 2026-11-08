@@ -7,7 +7,7 @@
     {
       "name": "orchestra",
       "source": "./",
-      "description": "Governance-first specialist skill framework for routed, auditable AI coding workflows.",
+      "description": "Conductor: AI-Assisted Development Orchestration Framework. Governance-first, auditable specialist workflows.",
       "version": "1.12.0"
     }
   ]
