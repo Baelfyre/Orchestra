@@ -179,7 +179,9 @@
                   "expires_at",
                   "unresolved_legal_risk",
                   "claims_trademark_clearance",
-                  "publication_authorized"
+                  "publication_authorized",
+                  "governor_decision_status",
+                  "superseded_blocker_ref"
                 ],
                 "properties": {
                   "case_id": {
@@ -233,6 +235,12 @@
                   },
                   "publication_authorized": {
                     "const": false
+                  },
+                  "governor_decision_status": {
+                    "const": "APPROVED"
+                  },
+                  "superseded_blocker_ref": {
+                    "const": "https://github.com/Baelfyre/Orchestra/issues/991#issuecomment-6728607774"
                   }
                 }
               }
