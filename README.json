@@ -2953,7 +2953,9 @@
     "required_analysis_ruleset_drift_state": "CLOSED_RULESET_NORMALIZED",
     "protected_governance_escalation_protocol": "docs/governance/PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md",
     "protected_governance_escalation_contract": "machine/governance/protected-governance-escalation.v1.json",
-    "protected_governance_change_authority": "HUMAN_REVIEW_REQUIRED_AND_NEW_EXECUTION_CONTEXT"
+    "protected_governance_change_authority": "HUMAN_REVIEW_REQUIRED_AND_NEW_EXECUTION_CONTEXT",
+    "proposed_v112_trademark_exception_status": "DRAFT_POLICY_REVIEW_PENDING_NO_EXCEPTION_NO_RELEASE",
+    "proposed_v112_trademark_exception_issue": "https://github.com/Baelfyre/Orchestra/issues/1003"
   },
   "architecture": {
     "current_overview": "docs/architecture/README.md",
@@ -3058,6 +3060,7 @@
     "governance_repository_memory_validator_tests": "scripts/test_governance_check.py",
     "release_evidence_review_validator": "scripts/validate_release_evidence_review.py",
     "release_evidence_review_tests": "tests/runtime/test_release_evidence_review.py",
+    "protected_exception_identity_tests": "tests/runtime/test_protected_exception_identity.py",
     "jev_adjudication": "orchestra_runtime/domain/adaptive/jev_adjudication.py",
     "jev_adjudication_tests": "tests/runtime/test_jev_adjudication.py",
     "jev_provider_projection": "orchestra_runtime/application/services/jev_provider_projection.py",
