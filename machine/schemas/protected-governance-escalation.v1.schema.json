@@ -199,6 +199,10 @@
             "minLength": 5
           }
         },
+        "originating_run_identity_governance_qualification": {
+          "const": "UNQUALIFIED",
+          "description": "VERIFIED status, run IDs, and reference strings are structural claims only; they do not authenticate identity or establish governance authority."
+        },
         "originating_run_missing_identity_decision_ref": {
           "type": "string",
           "minLength": 5
@@ -239,9 +243,15 @@
             ]
           },
           "then": {
+            "required": [
+              "originating_run_identity_governance_qualification"
+            ],
             "properties": {
               "originating_run_id": {
                 "type": "string"
+              },
+              "originating_run_identity_governance_qualification": {
+                "const": "UNQUALIFIED"
               }
             },
             "not": {
