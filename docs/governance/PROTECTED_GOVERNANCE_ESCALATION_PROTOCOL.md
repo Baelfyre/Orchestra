@@ -167,6 +167,14 @@ RUN_N_PLUS_2 = originating candidate reconsideration when required
 
 The new run must fresh-read canonical source, policy, evidence, and the human decision record before mutation.
 
+## Historical originating-run identity unavailable
+
+The default requirement is an authentic originating-run ID bound to the original execution and decision. Do not invent an ID, backfill a fictitious session, or treat a GitHub issue/comment ID as an execution ID.
+
+For a historical escalation where that ID cannot be recovered, the `GovernanceEscalationPacket` may record `originating_run_id: null` and `originating_run_identity_status: UNAVAILABLE_DOCUMENTED` only with nonempty immutable `originating_run_identity_evidence_refs` and `originating_run_missing_identity_decision_ref`. The latter must identify a **separate human decision** that knowingly accepts the *absence* of execution identity for the bounded governance inquiry. This is not proof of the missing identity, and a schema-valid record alone cannot authenticate that decision.
+
+An unavailable identity never restores the original run's authority. The originating run stays frozen and terminated; a separately approved human decision and a fresh bounded context are required. If the decision or evidence cannot be authenticated, remain `REQUEST_MORE_EVIDENCE`. Date-time formats must be validated, not merely accepted as arbitrary strings.
+
 ## Bounded exception requirements
 
 A bounded exception must identify:
