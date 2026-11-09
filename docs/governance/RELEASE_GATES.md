@@ -42,6 +42,16 @@ Release Mode usually maps to `GSL-4` or `GSL-5`, depending on public exposure, d
 
 For release gating, The Governor decides whether security, privacy, and compliance governance is sufficiently addressed to proceed. `Cipher` owns the technical defensive security review, security-control findings, and related remediation boundaries that may feed that release decision.
 
+## Bounded trademark exception evidence (protected amendment proposal)
+
+A single-use, exact-candidate protected governance decision may record an **exception-qualified evidence disposition**, distinct from trademark/IP clearance. The sole initially eligible case is the [Issue #1003 PointCross ORCHESTRA escalation](https://github.com/Baelfyre/Orchestra/issues/1003), applied to the unchanged v1.12.0 candidate head `665ec5536641683eab4c2739fb20b60835a7beed`, tree `e165cbc7687cdf3c115b4077d949030f0914843f`, for public GitHub/IDE plugin source distribution only.
+
+A valid, **separately human-approved** `APPROVE_BOUNDED_EXCEPTION` may be represented as `EXCEPTION_QUALIFIED`, **not `PASS` or `NOT_APPLICABLE`**, for only the named PointCross trademark-review component of `IP/copyright cleared` and `Human legal review completed (if flagged)`. Other intellectual-property clearance and legal compliance requirements remain unchanged. The record must bind the specific control, source, case, owner decision, independent specialist review, subsequent Governor reconsideration, channel, single-use and consumption limits, and expiration; it must explicitly state that trademark clearance has **not** been established.
+
+A `BLOCKED` Governor finding **does not disappear** when an exception is proposed or approved. Governor must separately reconsider and explicitly supersede that finding in a fresh context. Steward and Arbiter must then record their own required decisions; final publication still needs explicit human authority. Unrelated mandatory gates remain enforced; missing owner approval, stale source, other actual IP gaps, or absent review evidence remain blocking. An automated release evidence validator cannot authenticate external decision signatories and must never authorize publication.
+
+This subsection and its related schema/validator only become governing after separately authorized review, standard PR checks, merge and independent readback. They do **not** retroactively exempt issue #991 or approve the owner exception.
+
 ## Evidence-First Release Review
 
 The issue [#993](https://github.com/Baelfyre/Orchestra/issues/993) amendment was separately authorized for development on 2026-11-07. This procedure applies only after separately reviewed and authorized integration into the governing branch. It never applies retroactively to release issue #991 or clears existing blockers without fresh release-specific evidence and governing decisions. This is a proportional *review procedure*, not a waiver of any required gate.
