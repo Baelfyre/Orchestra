@@ -387,6 +387,18 @@ def test_synthetic_exception_is_distinct_from_clearance_and_not_publication_auth
         claims_trademark_clearance=True
     ),
     lambda r: gate(r, "IP/copyright cleared")["bounded_exception"].update(
+        escalation_ref="https://github.com/Baelfyre/Orchestra/issues/10030"
+    ),
+    lambda r: gate(r, "IP/copyright cleared")["bounded_exception"].update(
+        escalation_ref="https://github.com/Baelfyre/Orchestra/issues/1003/other"
+    ),
+    lambda r: gate(r, "IP/copyright cleared")["bounded_exception"].update(
+        escalation_ref="https://github.com/Baelfyre/Orchestra/issues/1003?state=closed"
+    ),
+    lambda r: gate(r, "IP/copyright cleared")["bounded_exception"].update(
+        escalation_ref="https://github.com/Baelfyre/Orchestra/issues/1003#issuecomment-fake"
+    ),
+    lambda r: gate(r, "IP/copyright cleared")["bounded_exception"].update(
         consumed=True
     ),
     lambda r: gate(r, "IP/copyright cleared")["bounded_exception"].update(
@@ -427,3 +439,12 @@ def test_unresolved_governor_block_remains_escalated_with_synthetic_exception():
     r = exception_record()
     r["unresolved_conflicts"].append("Governor BLOCKED finding not superseded")
     assert outcome(r) == ([], "ESCALATE_HUMAN")
+
+
+def test_exact_escalation_issue_comment_fragment_is_allowed():
+    r = exception_record()
+    for name in review.EXCEPTION_GATES:
+        gate(r, name)["bounded_exception"]["escalation_ref"] = (
+            "https://github.com/Baelfyre/Orchestra/issues/1003#issuecomment-6730324730"
+        )
+    assert outcome(r) == ([], "EVIDENCE_READY_FOR_FINAL_REVIEW")
