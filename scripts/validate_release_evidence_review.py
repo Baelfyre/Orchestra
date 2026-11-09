@@ -9,6 +9,7 @@ import re
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from jsonschema import Draft202012Validator
 
@@ -197,7 +198,17 @@ def validate_review(record, root=ROOT):
                         errors.append(f"missing attributable exception evidence {key}: {name}")
                 if exception["owner_decision_ref"] != gate["human_decision_ref"]:
                     errors.append(f"exception owner decision differs from gate human decision: {name}")
-                if not exception["escalation_ref"].startswith("https://github.com/Baelfyre/Orchestra/issues/1003"):
+                escalation = urlsplit(exception["escalation_ref"])
+                if not (
+                    escalation.scheme == "https"
+                    and escalation.netloc == "github.com"
+                    and escalation.path == "/Baelfyre/Orchestra/issues/1003"
+                    and not escalation.query
+                    and (
+                        not escalation.fragment
+                        or re.fullmatch(r"issuecomment-[0-9]+", escalation.fragment)
+                    )
+                ):
                     errors.append(f"unexpected escalation source: {name}")
         elif gate.get("bounded_exception") is not None:
             errors.append(f"exception attachment without exception-qualified compliance: {name}")
