@@ -66,6 +66,7 @@ def test_valid_existing_run_id_remains_supported():
     packet = synthetic_packet()
     packet["originating_run_id"] = "run-12345"
     packet["originating_run_identity_status"] = "VERIFIED"
+    packet.pop("originating_run_missing_identity_decision_ref")
     assert errors(packet) == []
 
 
@@ -75,6 +76,8 @@ def test_valid_existing_run_id_remains_supported():
     lambda p: p.pop("originating_run_identity_evidence_refs"),
     lambda p: p.pop("originating_run_missing_identity_decision_ref"),
     lambda p: p.update(originating_run_identity_status="VERIFIED"),
+    lambda p: p.update(originating_run_id="run-12345"),
+    lambda p: p.update(originating_run_id="run-12345", originating_run_identity_status="UNAVAILABLE_DOCUMENTED"),
     lambda p: p.update(originating_run_identity_evidence_refs=[]),
     lambda p: p.update(generated_at="not-an-iso-timestamp"),
 ])
@@ -88,4 +91,19 @@ def test_human_governance_record_cannot_claim_approval_from_draft_value():
     packet = synthetic_packet()
     packet["record_type"] = "HumanGovernanceDecisionRecord"
     packet["decision"] = "PENDING_HUMAN_DECISION"
+    assert errors(packet)
+
+
+@pytest.mark.parametrize("mutate", [
+    lambda p: p.pop("originating_run_identity_evidence_refs"),
+    lambda p: p.update(originating_run_identity_evidence_refs=[]),
+    lambda p: p.update(originating_run_identity_status="UNAVAILABLE_DOCUMENTED"),
+    lambda p: p.update(originating_run_missing_identity_decision_ref="synthetic:not-applicable"),
+])
+def test_existing_run_identity_cannot_be_claimed_without_valid_evidence(mutate):
+    packet = synthetic_packet()
+    packet["originating_run_id"] = "run-12345"
+    packet["originating_run_identity_status"] = "VERIFIED"
+    packet.pop("originating_run_missing_identity_decision_ref")
+    mutate(packet)
     assert errors(packet)
