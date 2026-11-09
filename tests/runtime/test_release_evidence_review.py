@@ -352,6 +352,8 @@ def exception_record():
             "owner_decision_ref": "human-synthetic",
             "independent_review_ref": "independent-synthetic",
             "governor_reconsideration_ref": "governor-synthetic",
+            "governor_decision_status": "APPROVED",
+            "superseded_blocker_ref": "https://github.com/Baelfyre/Orchestra/issues/991#issuecomment-6728607774",
             "candidate_head_sha": review.EXCEPTION_HEAD,
             "candidate_tree_sha": review.EXCEPTION_TREE,
             "release_channel": "PLUGIN_DISTRIBUTION",
@@ -386,6 +388,9 @@ def test_synthetic_exception_is_distinct_from_clearance_and_not_publication_auth
     ),
     lambda r: gate(r, "IP/copyright cleared")["bounded_exception"].update(
         consumed=True
+    ),
+    lambda r: gate(r, "IP/copyright cleared")["bounded_exception"].update(
+        governor_decision_status="BLOCKED"
     ),
     lambda r: gate(r, "IP/copyright cleared")["bounded_exception"].update(
         owner_decision_ref="governor-synthetic"
