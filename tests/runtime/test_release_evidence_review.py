@@ -313,3 +313,112 @@ def test_cli_fails_closed_unless_evidence_ready(tmp_path, capsys, mutate, expect
     output = capsys.readouterr().out
     if expected_exit != 2:
         assert "RELEASE_PUBLICATION_AUTHORIZED=false" in output
+
+
+def exception_record():
+    """Synthetic draft only. This does not authenticate human decisions or rights."""
+    from datetime import datetime, timedelta, timezone
+
+    r = record()
+    r["candidate"].update(
+        head_sha=review.EXCEPTION_HEAD,
+        tree_sha=review.EXCEPTION_TREE,
+        release_channel="PLUGIN_DISTRIBUTION",
+    )
+    for item in r["evidence"]:
+        item["head_sha"] = review.EXCEPTION_HEAD
+    r["evidence"].append({
+        "id": "governor-synthetic",
+        "kind": "INDEPENDENT_REVIEW",
+        "reference": "synthetic:governor-reconsideration",
+        "status": "PASS",
+        "head_sha": review.EXCEPTION_HEAD,
+        "policy_fingerprint": r["policy_fingerprint"],
+        "check_status": None,
+        "check_conclusion": None,
+    })
+    expires_at = (datetime.now(timezone.utc) + timedelta(days=7)).isoformat()
+    for name in review.EXCEPTION_GATES:
+        item = gate(r, name)
+        item["compliance"] = "EXCEPTION_QUALIFIED"
+        item["human_judgment_required"] = True
+        item["human_decision_ref"] = "human-synthetic"
+        item["compliance_evidence_refs"] = [
+            "human-synthetic", "independent-synthetic", "governor-synthetic"
+        ]
+        item["bounded_exception"] = {
+            "case_id": "ORCH-991-TRADEMARK-EXCEPTION-20261109",
+            "escalation_ref": "https://github.com/Baelfyre/Orchestra/issues/1003",
+            "owner_decision_ref": "human-synthetic",
+            "independent_review_ref": "independent-synthetic",
+            "governor_reconsideration_ref": "governor-synthetic",
+            "candidate_head_sha": review.EXCEPTION_HEAD,
+            "candidate_tree_sha": review.EXCEPTION_TREE,
+            "release_channel": "PLUGIN_DISTRIBUTION",
+            "exception_type": "POINTCROSS_ORCHESTRA_TRADEMARK_REVIEW_ONLY",
+            "single_use": True,
+            "consumed": False,
+            "expires_at": expires_at,
+            "unresolved_legal_risk": True,
+            "claims_trademark_clearance": False,
+            "publication_authorized": False,
+        }
+    return r
+
+
+def test_synthetic_exception_is_distinct_from_clearance_and_not_publication_authority():
+    r = exception_record()
+    assert outcome(r) == ([], "EVIDENCE_READY_FOR_FINAL_REVIEW")
+    assert all(g["compliance"] == "EXCEPTION_QUALIFIED"
+               for g in r["gates"] if g["name"] in review.EXCEPTION_GATES)
+    assert r["publication_authorized"] is False
+
+
+@pytest.mark.parametrize("mutate", [
+    lambda r: r["candidate"].update(head_sha="c" * 40),
+    lambda r: r["candidate"].update(tree_sha="c" * 40),
+    lambda r: r["candidate"].update(release_channel="MARKETPLACE"),
+    lambda r: gate(r, "IP/copyright cleared")["bounded_exception"].update(
+        candidate_tree_sha="d" * 40
+    ),
+    lambda r: gate(r, "Human legal review completed (if flagged)")["bounded_exception"].update(
+        claims_trademark_clearance=True
+    ),
+    lambda r: gate(r, "IP/copyright cleared")["bounded_exception"].update(
+        consumed=True
+    ),
+    lambda r: gate(r, "IP/copyright cleared")["bounded_exception"].update(
+        owner_decision_ref="governor-synthetic"
+    ),
+    lambda r: gate(r, "IP/copyright cleared").update(human_decision_ref=None),
+    lambda r: gate(r, "IP/copyright cleared")["bounded_exception"].update(
+        expires_at="2020-01-01T00:00:00Z"
+    ),
+    lambda r: gate(r, "IP/copyright cleared").update(
+        compliance_evidence_refs=["human-synthetic"]
+    ),
+    lambda r: gate(r, "Business alignment verified").update(
+        compliance="EXCEPTION_QUALIFIED",
+        bounded_exception=copy.deepcopy(gate(r, "IP/copyright cleared")["bounded_exception"]),
+    ),
+])
+def test_synthetic_exception_fails_closed_for_bad_scope_evidence_or_clearance_claim(mutate):
+    r = exception_record()
+    mutate(r)
+    errors, disposition = outcome(r)
+    assert errors
+    assert disposition == "INVALID_EVIDENCE"
+
+
+def test_ordinary_gate_rejects_hidden_exception_attachment():
+    r = exception_record()
+    gate(r, "Business alignment verified")["bounded_exception"] = copy.deepcopy(
+        gate(r, "IP/copyright cleared")["bounded_exception"]
+    )
+    assert outcome(r)[1] == "INVALID_EVIDENCE"
+
+
+def test_unresolved_governor_block_remains_escalated_with_synthetic_exception():
+    r = exception_record()
+    r["unresolved_conflicts"].append("Governor BLOCKED finding not superseded")
+    assert outcome(r) == ([], "ESCALATE_HUMAN")
