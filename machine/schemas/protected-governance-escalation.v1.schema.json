@@ -34,7 +34,9 @@
         "candidate_frozen",
         "same_run_mutation_forbidden",
         "next_allowed_action",
-        "generated_at"
+        "generated_at",
+        "originating_run_identity_status",
+        "originating_run_identity_evidence_refs"
       ],
       "properties": {
         "schema_version": {
@@ -206,23 +208,21 @@
         {
           "if": {
             "properties": {
-              "originating_run_id": {
-                "type": "null"
+              "originating_run_identity_status": {
+                "const": "UNAVAILABLE_DOCUMENTED"
               }
             },
             "required": [
-              "originating_run_id"
+              "originating_run_identity_status"
             ]
           },
           "then": {
             "required": [
-              "originating_run_identity_status",
-              "originating_run_identity_evidence_refs",
               "originating_run_missing_identity_decision_ref"
             ],
             "properties": {
-              "originating_run_identity_status": {
-                "const": "UNAVAILABLE_DOCUMENTED"
+              "originating_run_id": {
+                "type": "null"
               }
             }
           }
@@ -243,6 +243,11 @@
               "originating_run_id": {
                 "type": "string"
               }
+            },
+            "not": {
+              "required": [
+                "originating_run_missing_identity_decision_ref"
+              ]
             }
           }
         }
