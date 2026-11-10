@@ -11,12 +11,20 @@ def read_only_review_candidate_root(tmp_path_factory: pytest.TempPathFactory) ->
     The detached worktree shares the canonical Git objects but not its files;
     only the temporary copy is modified. This verifies snapshot binding on
     PR checkouts and on main, where HEAD may equal origin/main.
+    Starting at merge-base keeps the fixture inventory limited to its own change.
     """
     repository_root = Path(__file__).resolve().parents[2]
     candidate_root = tmp_path_factory.mktemp("read-only-review") / "candidate"
+    base_sha = subprocess.run(
+        ["git", "-C", str(repository_root), "merge-base", "HEAD", "origin/main"],
+        check=True,
+        capture_output=True,
+        text=True,
+        timeout=30,
+    ).stdout.strip()
     subprocess.run(
         ["git", "-C", str(repository_root), "worktree", "add", "--detach",
-         str(candidate_root), "HEAD"],
+         str(candidate_root), base_sha],
         check=True,
         capture_output=True,
         text=True,
