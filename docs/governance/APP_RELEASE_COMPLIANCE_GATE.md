@@ -81,6 +81,12 @@ For Release Mode, `BLOCKED` is mandatory when any of these required items are mi
 
 `BLOCKED` is also mandatory when release documentation materially conflicts with known data handling or third-party service usage.
 
+## Protected exception evidence versus clearance
+
+For the single PointCross ORCHESTRA trademark question on Orchestra v1.12.0, [the protected exception treatment](RELEASE_GATES.md#bounded-trademark-exception-evidence-protected-amendment-proposal) may permit an independently approved owner risk decision to be recorded as `EXCEPTION_QUALIFIED` **instead of claiming IP clearance**. This is a controlled exception to the internal documentary requirement for that exact issue, **not** a statement of legal non-infringement or an exception to any third party's rights. No other IP, copyright, assets, software licensing, privacy or security requirement is exempted. A material new rights claim or mismatch in the approved distribution scope invalidates the exception.
+
+Without an authentic separately authorized human exception decision, valid source/evidence binding, and a fresh attributable nonblocking Governor reconsideration, `BLOCKED` remains mandatory. Even with those records, the App Release Compliance Gate is not automatically `PASS`, and release remains separately authorized. Do not represent unresolved legal uncertainty as cleared.
+
 ## Suggested Review Record
 
 ```text

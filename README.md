@@ -41,6 +41,10 @@ Conductor chooses the smallest useful specialist route. [Compatibility](docs/set
 
 These are **source and maturity claims**, not a guarantee that each capability is enabled in every host or in the latest published release.
 
+## Release governance development
+
+A separate [Issue #1003 protected governance amendment](https://github.com/Baelfyre/Orchestra/issues/1003) proposes narrowly scoped, non-clearing trademark-exception evidence and missing-run identity handling. It is **not approved for release use** until independently reviewed and integrated; [v1.12.0 release clearance](https://github.com/Baelfyre/Orchestra/issues/991) remains blocked. Current public release remains v1.11.0.
+
 ## JEV and local API keys
 
 JEV supports non-binding engineering advice when independently reviewed alternatives exist. The existing offline pilot provides a repeatable 14-scenario pytest replay with explicitly labeled synthetic responses and evidence-gap recording. It makes no TypeSafe calls or actual JEV inference. The original V6 packet and source artifacts are absent, so replayed V6 findings remain **UNVERIFIED**. The pilot remains PREPARED_NOT_QUALIFIED; further qualification and integration are deferred from v1.12. Live TypeSafe integration, R3-A host trust, and production wiring remain unqualified. The TypeSafe adapter and offline data-minimization components exist, but there is **no verified general-purpose end-user BYOK activation flow**. Ordinary Orchestra use needs no JEV key. Never paste credentials into prompts or tracked project files.

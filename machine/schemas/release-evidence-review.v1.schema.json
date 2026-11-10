@@ -134,7 +134,8 @@
               "PASS",
               "FAIL",
               "PENDING",
-              "NOT_APPLICABLE"
+              "NOT_APPLICABLE",
+              "EXCEPTION_QUALIFIED"
             ]
           },
           "compliance_evidence_refs": {
@@ -154,8 +155,209 @@
               "null"
             ],
             "minLength": 3
+          },
+          "bounded_exception": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "case_id",
+                  "escalation_ref",
+                  "owner_decision_ref",
+                  "independent_review_ref",
+                  "governor_reconsideration_ref",
+                  "candidate_head_sha",
+                  "candidate_tree_sha",
+                  "release_channel",
+                  "exception_type",
+                  "single_use",
+                  "consumed",
+                  "expires_at",
+                  "unresolved_legal_risk",
+                  "claims_trademark_clearance",
+                  "publication_authorized",
+                  "governor_decision_status",
+                  "superseded_blocker_ref"
+                ],
+                "properties": {
+                  "case_id": {
+                    "const": "ORCH-991-TRADEMARK-EXCEPTION-20261109"
+                  },
+                  "escalation_ref": {
+                    "type": "string",
+                    "minLength": 5
+                  },
+                  "owner_decision_ref": {
+                    "type": "string",
+                    "minLength": 3
+                  },
+                  "independent_review_ref": {
+                    "type": "string",
+                    "minLength": 3
+                  },
+                  "governor_reconsideration_ref": {
+                    "type": "string",
+                    "minLength": 3
+                  },
+                  "candidate_head_sha": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{40}$"
+                  },
+                  "candidate_tree_sha": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{40}$"
+                  },
+                  "release_channel": {
+                    "const": "PLUGIN_DISTRIBUTION"
+                  },
+                  "exception_type": {
+                    "const": "POINTCROSS_ORCHESTRA_TRADEMARK_REVIEW_ONLY"
+                  },
+                  "single_use": {
+                    "const": true
+                  },
+                  "consumed": {
+                    "const": false
+                  },
+                  "expires_at": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "unresolved_legal_risk": {
+                    "const": true
+                  },
+                  "claims_trademark_clearance": {
+                    "const": false
+                  },
+                  "publication_authorized": {
+                    "const": false
+                  },
+                  "governor_decision_status": {
+                    "const": "APPROVED"
+                  },
+                  "superseded_blocker_ref": {
+                    "const": "https://github.com/Baelfyre/Orchestra/issues/991#issuecomment-6728607774"
+                  }
+                }
+              }
+            ]
           }
-        }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "compliance": {
+                  "const": "EXCEPTION_QUALIFIED"
+                }
+              },
+              "required": [
+                "compliance"
+              ]
+            },
+            "then": {
+              "required": [
+                "bounded_exception"
+              ],
+              "properties": {
+                "bounded_exception": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "case_id",
+                    "escalation_ref",
+                    "owner_decision_ref",
+                    "independent_review_ref",
+                    "governor_reconsideration_ref",
+                    "candidate_head_sha",
+                    "candidate_tree_sha",
+                    "release_channel",
+                    "exception_type",
+                    "single_use",
+                    "consumed",
+                    "expires_at",
+                    "unresolved_legal_risk",
+                    "claims_trademark_clearance",
+                    "publication_authorized",
+                    "governor_decision_status",
+                    "superseded_blocker_ref"
+                  ],
+                  "properties": {
+                    "case_id": {
+                      "const": "ORCH-991-TRADEMARK-EXCEPTION-20261109"
+                    },
+                    "escalation_ref": {
+                      "type": "string",
+                      "minLength": 5
+                    },
+                    "owner_decision_ref": {
+                      "type": "string",
+                      "minLength": 3
+                    },
+                    "independent_review_ref": {
+                      "type": "string",
+                      "minLength": 3
+                    },
+                    "governor_reconsideration_ref": {
+                      "type": "string",
+                      "minLength": 3
+                    },
+                    "candidate_head_sha": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{40}$"
+                    },
+                    "candidate_tree_sha": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{40}$"
+                    },
+                    "release_channel": {
+                      "const": "PLUGIN_DISTRIBUTION"
+                    },
+                    "exception_type": {
+                      "const": "POINTCROSS_ORCHESTRA_TRADEMARK_REVIEW_ONLY"
+                    },
+                    "single_use": {
+                      "const": true
+                    },
+                    "consumed": {
+                      "const": false
+                    },
+                    "expires_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "unresolved_legal_risk": {
+                      "const": true
+                    },
+                    "claims_trademark_clearance": {
+                      "const": false
+                    },
+                    "publication_authorized": {
+                      "const": false
+                    },
+                    "governor_decision_status": {
+                      "const": "APPROVED"
+                    },
+                    "superseded_blocker_ref": {
+                      "const": "https://github.com/Baelfyre/Orchestra/issues/991#issuecomment-6728607774"
+                    }
+                  }
+                }
+              }
+            },
+            "else": {
+              "properties": {
+                "bounded_exception": {
+                  "type": "null"
+                }
+              }
+            }
+          }
+        ]
       }
     },
     "evidence": {

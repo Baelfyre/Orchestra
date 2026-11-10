@@ -5,6 +5,12 @@
   "authority_class": "HUMAN_POLICY",
   "same_run_policy_change_forbidden": true,
   "human_review_required": true,
+  "originating_run_identity_provenance": {
+    "verified_governance_qualification": "UNQUALIFIED",
+    "run_id_and_reference_values_are_structural_claims_only": true,
+    "trusted_source_authenticator_available": false,
+    "authority_effect": "NONE"
+  },
   "new_execution_context_required": true,
   "candidate_freeze_required": true,
   "prai_failure_triggers": [

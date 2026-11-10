@@ -167,6 +167,18 @@ RUN_N_PLUS_2 = originating candidate reconsideration when required
 
 The new run must fresh-read canonical source, policy, evidence, and the human decision record before mutation.
 
+## Historical originating-run identity unavailable
+
+The default requirement is an authentic originating-run ID bound to the original execution and decision. Do not invent an ID, backfill a fictitious session, or treat a GitHub issue/comment ID as an execution ID.
+
+For a historical escalation where that ID cannot be recovered, the `GovernanceEscalationPacket` may record `originating_run_id: null` and `originating_run_identity_status: UNAVAILABLE_DOCUMENTED` only with nonempty `originating_run_identity_evidence_refs` and `originating_run_missing_identity_decision_ref`. The latter must refer to a **separate human decision** that knowingly accepts the *absence* of execution identity for the bounded governance inquiry. These strings are not proof of the missing identity or decision, and a schema-valid record alone cannot authenticate either.
+
+`VERIFIED` status, run IDs, and reference strings are structural claims only. They are `UNQUALIFIED` for governance consumption; without a trusted source authenticator they cannot establish run identity, source authenticity, a separate human decision, or governance authority. This contract provides no trusted source authenticator. A `VERIFIED` packet must carry `originating_run_identity_governance_qualification: UNQUALIFIED`; `UNAVAILABLE_DOCUMENTED` packets retain the existing null-ID and reference shape without this marker.
+
+The `originating_run_missing_identity_decision_ref` value is only a reference string; it must resolve to an authentic separate human decision. If no trustworthy decision record exists, a synthetic reference may remain in a structural fixture only when clearly labeled not authenticated. In that case, the external decision state remains `NEEDS_VERIFICATION`; do not claim human acceptance.
+
+An unavailable identity never restores the original run's authority. The originating run stays frozen and terminated; a separately authenticated human decision and a fresh bounded context are required. If the decision or evidence cannot be authenticated, remain `REQUEST_MORE_EVIDENCE`. Date-time formats must be validated, not merely accepted as arbitrary strings.
+
 ## Bounded exception requirements
 
 A bounded exception must identify:
@@ -210,6 +222,9 @@ The packet must preserve:
 - `schema_version`;
 - `escalation_id`;
 - `originating_run_id`;
+- `originating_run_identity_status` and `originating_run_identity_evidence_refs`;
+- `originating_run_identity_governance_qualification` when status is `VERIFIED`;
+- `originating_run_missing_identity_decision_ref` when identity is unavailable;
 - `repository`;
 - `base_sha`;
 - `candidate_sha`;

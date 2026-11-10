@@ -1,5 +1,11 @@
 > v1.12.0 code integration through PR #990 and the evidence-first governance amendment through PR #996 are merged and verified; release-specific rights/privacy/retention/authority clearance remains open. v1.11.0 remains the latest published release. See the [candidate record](docs/releases/v1.12.0-release-candidate.md) and [applicability dossier](docs/releases/v1.12.0-release-clearance-evidence.md).
 
+## Unreleased governance exception evidence contract (Issue #1003)
+
+- Propose a strictly candidate-bound `EXCEPTION_QUALIFIED` trademark-review evidence state for protected human decisions without claiming IP clearance or authorizing publication.
+- Introduce explicit, independently human-reviewed missing-run identity handling instead of invented or sentinel execution IDs.
+- Add synthetic fail-closed tests; retain all v1.12 release blockers until the protected amendment is independently reviewed, approved, merged and a later owner exception decision is recorded. No public release change is implied.
+
 ## Unreleased v1.12.0 release-evidence reconciliation
 
 - Record the verified integration/current-main checkpoints, product-specific provisional data inventory and evidence-backed applicability without treating templates as cleared policies.

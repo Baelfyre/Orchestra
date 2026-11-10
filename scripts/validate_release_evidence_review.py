@@ -7,7 +7,9 @@ import hashlib
 import json
 import re
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from jsonschema import Draft202012Validator
 
@@ -21,6 +23,11 @@ POLICY_PATH = "machine/governance/policy.v1.json"
 DELEGATED_PATH = "docs/governance/DELEGATED_EXECUTION_POLICY.md"
 PROTECTED_PATH = "docs/governance/PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md"
 QUALIFICATION_PATH = "docs/governance/QUALIFICATION_GATES_EVALUATION_AUDIT.md"
+
+# Candidate-bound, policy-reviewed exception proposal. This does not grant rights or release authority.
+EXCEPTION_HEAD = "665ec5536641683eab4c2739fb20b60835a7beed"
+EXCEPTION_TREE = "e165cbc7687cdf3c115b4077d949030f0914843f"
+EXCEPTION_GATES = {"IP/copyright cleared", "Human legal review completed (if flagged)"}
 
 
 def load_json(path):
@@ -103,6 +110,7 @@ def validate_review(record, root=ROOT):
     unresolved_human = False
     has_failure = False
     has_pending = False
+    qualified_exceptions = []
     for gate in record["gates"]:
         name = gate["name"]
         conditional = expected_gates.get(name, {}).get("conditional", False)
@@ -154,6 +162,56 @@ def validate_review(record, root=ROOT):
                     "INDEPENDENT_REVIEW", "OWNER_ATTESTATION", "HUMAN_DECISION"
                 } for ref in gate["compliance_evidence_refs"])):
             errors.append(f"sensitive compliance cannot be established by CI alone: {name}")
+
+        if gate["compliance"] == "EXCEPTION_QUALIFIED":
+            # Unlike PASS, this records an independently reviewed risk exception.
+            # It is available only for this exact candidate and these two controls.
+            exception = gate["bounded_exception"]
+            qualified_exceptions.append((name, exception))
+            if name not in EXCEPTION_GATES or decision != "REQUIRED":
+                errors.append(f"exception not permitted for gate: {name}")
+            if (record["candidate"]["head_sha"] != EXCEPTION_HEAD
+                    or record["candidate"]["tree_sha"] != EXCEPTION_TREE
+                    or record["candidate"]["release_channel"] != "PLUGIN_DISTRIBUTION"):
+                errors.append(f"exception candidate/channel mismatch: {name}")
+            if exception is not None:
+                if (exception["candidate_head_sha"] != record["candidate"]["head_sha"]
+                        or exception["candidate_tree_sha"] != record["candidate"]["tree_sha"]
+                        or exception["release_channel"] != record["candidate"]["release_channel"]):
+                    errors.append(f"exception evidence not bound to candidate: {name}")
+                try:
+                    expiry = datetime.fromisoformat(exception["expires_at"].replace("Z", "+00:00"))
+                    if (expiry.utcoffset() is None
+                            or not datetime.now(timezone.utc) < expiry <= datetime.now(timezone.utc) + timedelta(days=45)):
+                        errors.append(f"exception expiry invalid or outside 45-day limit: {name}")
+                except (ValueError, TypeError):
+                    errors.append(f"exception expiry not a valid timezone-aware timestamp: {name}")
+                for key, kind in (
+                    ("owner_decision_ref", "HUMAN_DECISION"),
+                    ("independent_review_ref", "INDEPENDENT_REVIEW"),
+                    ("governor_reconsideration_ref", "INDEPENDENT_REVIEW"),
+                ):
+                    ref = exception[key]
+                    item = evidence.get(ref)
+                    if (item is None or item["kind"] != kind or item["status"] != "PASS"
+                            or ref not in gate["compliance_evidence_refs"]):
+                        errors.append(f"missing attributable exception evidence {key}: {name}")
+                if exception["owner_decision_ref"] != gate["human_decision_ref"]:
+                    errors.append(f"exception owner decision differs from gate human decision: {name}")
+                escalation = urlsplit(exception["escalation_ref"])
+                if not (
+                    escalation.scheme == "https"
+                    and escalation.netloc == "github.com"
+                    and escalation.path == "/Baelfyre/Orchestra/issues/1003"
+                    and not escalation.query
+                    and (
+                        not escalation.fragment
+                        or re.fullmatch(r"issuecomment-[0-9]+", escalation.fragment)
+                    )
+                ):
+                    errors.append(f"unexpected escalation source: {name}")
+        elif gate.get("bounded_exception") is not None:
+            errors.append(f"exception attachment without exception-qualified compliance: {name}")
 
         human_ref = gate["human_decision_ref"]
         if name == "Human legal review completed (if flagged)" and decision == "REQUIRED" and not human_ref:
