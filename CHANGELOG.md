@@ -11,6 +11,10 @@
 - Add source-backed plugin privacy/retention and terms drafts, a complete item-by-item release-specific IP review with unresolved name/conflict findings, and scoped dependency inventory. These are review artifacts, not release/legal approvals.
 - Preserve unqualified JEV/TypeSafe/host and other deferred work. Tagging/publication remains blocked by current Governor/Arbiter decisions.
 
+## Unreleased read-only snapshot fixture isolation
+
+- Build the synthetic review candidate from the merge base with `origin/main`, keeping the fixture's change inventory isolated from unrelated pull request files. Runtime snapshot identity and security checks are unchanged.
+
 ## Unreleased evidence-first proportional release governance (Issue #993)
 
 - Define a risk-proportional relevance, validation, and compliance review path that reuses exact-head CI evidence, permits existing bounded deterministic remediation within a human-approved envelope, and routes unresolved factual or protected decisions to human review.
