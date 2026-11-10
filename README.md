@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./assets/branding/kontrolled-kaos-dual-k-emblem.png" alt="Kontrolled Kaos Dual K emblem" width="180" />
+  <img src="./assets/branding/kontrolled-kaos-hero-banner.png" alt="Kontrolled Kaos: Dual K emblem and AI-Assisted Development Framework" width="100%" />
   <p><strong>Kontrolled Kaos</strong><br />AI-Assisted Development Framework</p>
   <p><a href="docs/setup/INSTALLATION.md">Install</a> | <a href="docs/reference/README.md">Documentation</a> | <a href="docs/reference/specialists/README.md">Specialists</a> | <a href="docs/governance/README.md">Governance</a> | <a href="CHANGELOG.md">Changelog</a></p>
   <p><a href="https://github.com/Baelfyre/Kaos/releases/tag/v1.11.0"><img src="https://img.shields.io/badge/published-v1.11.0-blue" alt="Published release v1.11.0" /></a> <a href="https://github.com/Baelfyre/Kaos/actions/workflows/validate.yml"><img src="https://github.com/Baelfyre/Kaos/actions/workflows/validate.yml/badge.svg" alt="Validation status" /></a> <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license" /></p>
