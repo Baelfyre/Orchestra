@@ -1,6 +1,6 @@
-﻿# Plugin Readiness
+﻿# Kontrolled Kaos Plugin Readiness
 
-This document tracks the readiness of the Orchestra framework for its release as the **Conductor** installable plugin.
+This document tracks the existing framework package surfaces under the public Kontrolled Kaos identity. The package version and host support tiers do not establish release or publication readiness.
 
 ## Status
 
@@ -14,25 +14,25 @@ This document tracks the readiness of the Orchestra framework for its release as
 - **Skill coverage status:** Completed
   - All manifest-declared skills are fully documented and integrated.
   - The current `plugin.json` skills array validates against the repository source of truth.
-- **Repository rename status:** Completed
-  - GitHub repo has been renamed to `Baelfyre/Orchestra`.
-  - Active plugin and command identity now uses `conductor`.
-  - Legacy names such as `amalgam-conductor` are compatibility aliases only.
+- **Public identity status:** Rebrand in progress
+  - Canonical repository: `Baelfyre/Kaos`.
+  - Public product name: `Kontrolled Kaos`.
+  - `conductor` remains the existing internal routing specialist; all specialist IDs and mappings are preserved.
 - **Plugin install validation status:** Completed
   - Install validation is now treated as manifest-driven and verified through repository validators instead of hardcoded historical counts.
-- **Plugin icon status:** Completed
-  - The existing Conductor icon is used as the plugin icon: `assets/icons/conductor.ico`.
-  - The broader framework logo remains available at `assets/logo/orchestra.png`.
+- **Product icon status:**
+  - The product icon and logo use the approved Dual K master at `assets/branding/kontrolled-kaos-dual-k-emblem.png`.
+  - Specialist icons, including the Conductor icon, remain unchanged.
 - **Scaffold adapter promotion policy:** Defined
   - Scaffold-only host promotion now follows `docs/project/SCAFFOLD_ADAPTER_GRADUATION_CRITERIA.md` before support or marketplace claims are raised.
-- **Remaining step:** Pending
-  - Validate whether the target plugin loader displays the manifest-level icon path.
+- **Remaining step:** Host qualification
+  - Manifest validation does not prove interactive invocation in a live host. See `docs/project/KAOS_REBRAND_DECISION.md` for the current validation boundary.
 
 ---
 
-Orchestra is intentionally designed as a **Markdown-first** framework. By keeping skill instructions, progressive disclosure rules, and routing metadata in standard markdown format, the framework remains universally readable by any AI assistant capable of file reading (e.g., Claude Code, Cursor, Antigravity) without requiring a proprietary runtime plugin.
+Kontrolled Kaos is intentionally designed as a **Markdown-first** framework. By keeping skill instructions, progressive disclosure rules, and routing metadata in standard markdown format, it remains universally readable by any AI assistant capable of file reading (e.g., Claude Code, Cursor, Antigravity) without requiring a proprietary runtime plugin.
 
-However, as agentic platforms evolve, automated skill discovery and deterministic loading become valuable. This document outlines how future plugin loaders should interact with the Orchestra without breaking its fundamental architecture.
+However, as agentic platforms evolve, automated skill discovery and deterministic loading become valuable. This document outlines how plugin loaders should interact with Kontrolled Kaos without breaking its fundamental architecture.
 
 ## How Loaders Should Discover Skills
 - A loader should scan the `skills/` directory for folders containing a `SKILL.md` file.

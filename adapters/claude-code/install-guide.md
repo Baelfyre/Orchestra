@@ -1,7 +1,18 @@
-# Claude Code Installation Guide
+# Kontrolled Kaos Claude Code Installation Guide
 
-1. Adapt `CLAUDE.template.md` for project guidance.
-2. Reference selected skill files manually or through repository context.
-3. Use the Conductor summary when context is limited.
-4. Load specialist support files only when required.
-5. Do not assume automatic Codex skill discovery.
+Add the canonical marketplace and install the Kaos package:
+
+```text
+/plugin marketplace add Baelfyre/Kaos
+/plugin install kaos@orchestra
+```
+
+Invoke Conductor with `/kaos:conductor`. The namespace is required; bare `/kaos` is not the Claude Code plugin command.
+
+The former plugin ID was `orchestra`; the marketplace key remains `orchestra` to preserve its source registration. For an existing installation, confirm the new package is enabled and `/kaos:conductor` is available before removing the old entry:
+
+```sh
+claude plugin uninstall orchestra@orchestra
+```
+
+Use `CLAUDE.template.md` only when the project needs local guidance beyond the installed skills.

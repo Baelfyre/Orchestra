@@ -1,6 +1,6 @@
 # Integrations
 
-Orchestra integrates with supported hosts through bounded adapter, MCP, and capability-contract surfaces.
+Kontrolled Kaos integrates with supported hosts through bounded adapter, MCP, and capability-contract surfaces.
 
 - [Compatibility](../../setup/COMPATIBILITY.md)
 - [Adapter SDK and PRAP](../../setup/ADAPTER_SDK_PRAP.md)

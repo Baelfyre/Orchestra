@@ -1,12 +1,12 @@
-# Orchestra Documentation Map
+# Kontrolled Kaos Documentation Map
 
-This is the human navigation layer for the Orchestra framework.
+This is the human navigation layer for the Kontrolled Kaos framework.
 
 For exact machine-readable state, identity, routing, governance, maturity, provenance, or release evidence, start with [`../README.json`](../README.json) and follow its references into `../machine/`. Human documentation explains those contracts; it does not override them.
 
 ## Stable human reference layer
 
-Start with the [Orchestra Reference](reference/README.md) for concise navigation through getting started, architecture, governance, integrations, specialists, and releases. This detailed map remains available for the full repository-local documentation index.
+Start with the [Kontrolled Kaos Reference](reference/README.md) for concise navigation through getting started, architecture, governance, integrations, specialists, and releases. This detailed map remains available for the full repository-local documentation index.
 
 ## Architecture
 
@@ -41,7 +41,7 @@ Older phase documents may retain the status language of the phase in which they 
 
 A1 and A2 are canonical. The pre-A3 precedence/materialization hardening is canonical at `8402a5acbafe923c73904dcdb90f7faca90ced9c`. A3 shadow state is defined as separate from the A1 materialized profile and A2 specialist context; contract definition does not activate an A3 learner or grant execution authority.
 
-Portable memory is optional. Orchestra does not require or identify a specific external repository, service, database, or user-selected backend. Backend identity, configuration, and credentials remain outside Orchestra's public source and portable learned-pattern payloads.
+Portable memory is optional. Kontrolled Kaos does not require or identify a specific external repository, service, database, or user-selected backend. Backend identity, configuration, and credentials remain outside Kontrolled Kaos's public source and portable learned-pattern payloads.
 
 ## Specialists, routing, and coordination
 
@@ -109,7 +109,7 @@ Structured machine governance, runtime state, receipts, and evidence use JSON. M
 
 Negative and inconclusive experimental results remain evidence. A no-benefit result must not be selectively discarded, retried until positive, or converted into a harm claim.
 
-Cross-repository continuity may be supplied by a user-selected external continuity or memory backend. That backend is outside Orchestra's public source and does not supersede live Git state, validated source evidence, or Orchestra authority boundaries.
+Cross-repository continuity may be supplied by a user-selected external continuity or memory backend. That backend is outside Kontrolled Kaos's public source and does not supersede live Git state, validated source evidence, or Kontrolled Kaos authority boundaries.
 
 ## Hosts, adapters, and integrations
 
@@ -176,4 +176,4 @@ The published [v1.11.0 human reference](reference/releases/v1.11.0.md) is separa
 
 If your goal is to build an adapter, certify PRAP compatibility, understand host maturity, or inspect extension contracts, go directly to the [Developer Portal](developer/README.md).
 
-If your goal is to understand Orchestra as a whole, use this map and [`../README.json`](../README.json) together.
+If your goal is to understand Kontrolled Kaos as a whole, use this map and [`../README.json`](../README.json) together.

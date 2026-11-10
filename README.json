@@ -6,10 +6,10 @@
   "human_readme": "README.md",
   "human_documentation_map": "docs/README.md",
   "repository": {
-    "name": "Orchestra",
+    "name": "Kontrolled Kaos",
     "owner": "Baelfyre",
-    "full_name": "Baelfyre/Orchestra",
-    "url": "https://github.com/Baelfyre/Orchestra",
+    "full_name": "Baelfyre/Kaos",
+    "url": "https://github.com/Baelfyre/Kaos",
     "license": "MIT",
     "package_version": "1.12.0",
     "package_version_source": "plugin.json#/version",
@@ -44,13 +44,13 @@
     "not_an_ai_model": true,
     "core_trust_boundary": "Permission and execution authority are explicit bounded inputs. Routing, host capability, governance disposition, validation evidence, compatibility certification, presentation mode, and GitHub state cannot independently grant or expand authority.",
     "user_onboarding": {
-      "default_entrypoint": "@Orchestra",
-      "default_behavior": "Users describe the outcome and important authority limits; Conductor chooses the smallest useful specialist route, specialists perform bounded work, Orchestra validates the result, and protected next steps stop for human authority when required.",
+      "default_entrypoint": "Host-specific Kaos invocation; see docs/setup/INSTALLATION.md",
+      "default_behavior": "Users describe the outcome and important authority limits; the existing Conductor chooses the smallest useful specialist route, specialists perform bounded work, Kontrolled Kaos validates the result, and protected next steps stop for human authority when required.",
       "specialist_selection": "AUTOMATIC_BY_CONDUCTOR_BY_DEFAULT",
       "recommended_prompt_shape": [
         "Describe the result you want.",
         "State important limits or permissions.",
-        "Let Orchestra determine the workflow."
+        "Let Kontrolled Kaos route the task through its existing Conductor specialist."
       ],
       "workflow": [
         "USER_DESCRIBES_TASK",
@@ -66,7 +66,7 @@
         "PRAI": "Post-Run Assurance Invariant. Internal assurance that checks completed work and evidence before certain transitions are accepted.",
         "ADAPT_QA": "Adaptive assurance and quality program. AQ phases are engineering and validation stages, not normal user commands.",
         "ARBITER": "Workflow continuity, validation-state, and governed-transition specialist.",
-        "CONDUCTOR": "Primary routing and coordination layer. New users normally start with @Orchestra and let Conductor choose the route.",
+        "CONDUCTOR": "Primary routing and coordination layer. New users start with the Kaos entry point documented for their host and let Conductor choose the route.",
         "COVENANT": "Internal cross-governance synthesis that reconciles independent governance evidence without independently granting authority."
       }
     }

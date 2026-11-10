@@ -1,10 +1,10 @@
-# Codex Adapter for Orchestra
+# Kontrolled Kaos on Codex
 
-This adapter provides a Codex-compatible export of the current Orchestra skills. The current published GitHub Release is `v1.5.0`; repository `main` may contain post-release candidate work without moving that immutable release.
+This adapter provides a Codex-compatible export of the established specialist skills. Kontrolled Kaos is the public product identity; Conductor remains the internal routing specialist. Release and publication status remains governed separately in the [release records](../../docs/reference/releases/README.md).
 
 ## Purpose
 
-Codex may reject extended frontmatter fields (like `role`, `activation_level`, etc.) in `SKILL.md`. It expects skill discovery to rely purely on simple `name` and `description` metadata.
+Codex may reject extended frontmatter fields (like `role`, `activation_level`, etc.) in `SKILL.md`. It expects skill discovery to rely purely on simple `name` and `description` metadata. The product alias `$kaos` is packaged separately from the 14 canonical specialist skills.
 
 This adapter exports Codex-compatible skills with only `name` and `description` in the frontmatter while preserving the original Markdown body, instructions, and progressive disclosure boundaries of the canonical skills.
 
@@ -20,6 +20,6 @@ The plan may describe the existing fast-forward repository update and Codex vali
 
 ## Note
 
-- The canonical Orchestra skills remain the source of truth. They are metadata-rich and Markdown-first.
+- The canonical skills remain the source of truth. They are metadata-rich and Markdown-first.
 - This adapter is exclusively for Codex compatibility.
 - It does not replace the Markdown-first framework.

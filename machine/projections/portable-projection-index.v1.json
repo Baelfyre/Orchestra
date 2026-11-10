@@ -28,7 +28,7 @@
       "strategy_id": "REPOSITORY_INSTRUCTIONS",
       "format": "MARKDOWN_TEMPLATE",
       "output_path": "adapters/github-copilot/copilot-instructions.template.md",
-      "output_sha256": "4685c2ba37b02331ccbf88910324bb51e688d0406d981e6164ccfc7572878df0",
+      "output_sha256": "a005f1571e42d648b1798b75ced5deb088ef46fec92287b999e371b4a5241f80",
       "source_digests": [
         {
           "source_id": "governance_policy",
@@ -80,7 +80,7 @@
       "strategy_id": "REPOSITORY_INSTRUCTIONS",
       "format": "MARKDOWN_TEMPLATE",
       "output_path": ".github/copilot-instructions.md",
-      "output_sha256": "cdfc01608176624714f5444261bbb9064af9da39732592187882b26a10d9b8a3",
+      "output_sha256": "843a391209f7193981c470ded4b35d49360da0b8bb512e6639becdff53fc6e5e",
       "source_digests": [
         {
           "source_id": "governance_policy",
@@ -132,7 +132,7 @@
       "strategy_id": "CUSTOM_AGENT",
       "format": "MARKDOWN_TEMPLATE",
       "output_path": "adapters/github-copilot/custom-agent.template.md",
-      "output_sha256": "067bf8daa66260fa12bdfb19795c642772cefc3ac80e7e05b35f0169d9255aa9",
+      "output_sha256": "69e0fa4b9c054ce44b89339d454e668b285b28f67185cf8561567d174a6f70b7",
       "source_digests": [
         {
           "source_id": "governance_policy",

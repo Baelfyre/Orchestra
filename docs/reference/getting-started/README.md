@@ -14,4 +14,4 @@ For exact host capability, update, and projection contracts, see:
 - [`machine/hosts/update-contract.v1.json`](../../../machine/hosts/update-contract.v1.json)
 - [`machine/projections/portable-projection-contract.v1.json`](../../../machine/projections/portable-projection-contract.v1.json)
 
-Orchestra capability does not grant permission. Read the governance reference before granting an agent authority to stage, commit, merge, release, deploy, or change policy.
+Kontrolled Kaos capability does not grant permission. Read the governance reference before granting an agent authority to stage, commit, merge, release, deploy, or change policy.

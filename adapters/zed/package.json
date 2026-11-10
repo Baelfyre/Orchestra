@@ -1,9 +1,9 @@
 {
   "name": "orchestra-zed-scaffold",
-  "displayName": "Orchestra Zed Scaffold",
+  "displayName": "Kontrolled Kaos Zed Scaffold",
   "version": "1.12.0",
   "private": true,
-  "description": "Scaffold-only Zed packaging manifest for Orchestra runtime adapter integration.",
+  "description": "Scaffold-only Zed packaging manifest for Kontrolled Kaos runtime adapter integration.",
   "orchestra": {
     "host": "zed",
     "runtime_adapter": "zed",
