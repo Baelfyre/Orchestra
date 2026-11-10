@@ -1,5 +1,9 @@
 > v1.12.0 code integration through PR #990 and the evidence-first governance amendment through PR #996 are merged and verified; release-specific rights/privacy/retention/authority clearance remains open. v1.11.0 remains the latest published release. See the [candidate record](docs/releases/v1.12.0-release-candidate.md) and [applicability dossier](docs/releases/v1.12.0-release-clearance-evidence.md).
 
+## Unreleased Kontrolled Kaos product identity transition
+
+- Prepare the approved public identity migration from Orchestra to Kontrolled Kaos across product metadata, host registrations, installation guidance, and brand asset references. Preserve the existing specialists, Conductor routing, governance, runtime behavior, version 1.12.0, historical Orchestra evidence, and all release and publication gates.
+
 ## Unreleased v1.12.0 release-evidence reconciliation
 
 - Record the verified integration/current-main checkpoints, product-specific provisional data inventory and evidence-backed applicability without treating templates as cleared policies.

@@ -27,7 +27,7 @@ No user installation or marketplace publication is performed by this change. Pac
 
 ## Emblem provenance
 
-The approved source image was supplied at `C:\Users\ongoj\Downloads\Kontrolled Kaos_ Dual K Emblem.png` and copied byte-for-byte to `assets/branding/kontrolled-kaos-dual-k-emblem.png`.
+The owner-supplied approved master image, named `Kontrolled Kaos_ Dual K Emblem.png`, was copied byte-for-byte to `assets/branding/kontrolled-kaos-dual-k-emblem.png`.
 
 - SHA-256: `b94250447506eaa1410804216cbef768df6e10dd5bde7ca02fb169dd79063673`
 - Format and size: PNG, 1254 × 1254 pixels, RGB, no alpha channel
