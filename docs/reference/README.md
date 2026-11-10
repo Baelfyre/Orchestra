@@ -1,6 +1,6 @@
-# Orchestra Reference
+# Kontrolled Kaos Reference
 
-This is the stable human-readable entry layer for Orchestra documentation.
+This is the stable human-readable entry layer for Kontrolled Kaos documentation.
 
 Use this reference layer to choose a starting point. Follow the linked source documents for detail, and use the machine contracts for exact structured authority. Human documentation does not override `machine/`, runtime policy, specialist skills, or live Git evidence.
 

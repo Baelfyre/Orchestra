@@ -1,4 +1,4 @@
-# GitHub Copilot Adapter for Orchestra
+# Kontrolled Kaos GitHub Copilot Adapter
 
 ## Overview
 

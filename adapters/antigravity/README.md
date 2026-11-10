@@ -1,6 +1,8 @@
-# Antigravity Adapter
+# Kontrolled Kaos on Antigravity
 
-Antigravity usage depends on the local skill or plugin support available in the installed environment. This adapter does not claim automatic marketplace discovery or installed-host mutation.
+The repository packages Antigravity metadata in `.antigravity-plugin/plugin.json` and exposes the product alias as `/kaos`. The alias reads and follows the existing `skills/conductor/SKILL.md`; it does not add a dispatcher or change authority.
+
+Validate the package locally with `agy plugin validate . --json`. It exits successfully and discovers 15 skills. Strict mode currently exits non-zero with warnings because Antigravity ignores the repository-root `AGENTS.md`, `commands/`, and `plugin.json` in favor of its dedicated manifest. Do not duplicate those files into Antigravity rules or commands just to silence the warnings. Package validation does not prove interactive behavior in an installed session. Do not install or publish the plugin as part of repository validation.
 
 ## Host update planning
 

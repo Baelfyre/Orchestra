@@ -1,13 +1,15 @@
 {
   "name": "orchestra",
+  "description": "Kontrolled Kaos, an AI-Assisted Development Framework with governed routing through Conductor and established specialist skills.",
   "owner": {
     "name": "Baelfyre"
   },
   "plugins": [
     {
-      "name": "orchestra",
+      "name": "kaos",
       "source": "./",
-      "description": "Governance-first specialist skill framework for routed, auditable AI coding workflows.",
+      "displayName": "Kontrolled Kaos",
+      "description": "An AI-Assisted Development Framework with governed routing through Conductor and established specialist skills.",
       "version": "1.12.0"
     }
   ]

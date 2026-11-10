@@ -1,9 +1,9 @@
 {
   "name": "orchestra-cursor-scaffold",
-  "displayName": "Orchestra Cursor Scaffold",
+  "displayName": "Kontrolled Kaos Cursor Scaffold",
   "version": "1.12.0",
   "private": true,
-  "description": "Scaffold-only Cursor packaging manifest for Orchestra runtime adapter integration.",
+  "description": "Scaffold-only Cursor packaging manifest for Kontrolled Kaos runtime adapter integration.",
   "orchestra": {
     "host": "cursor",
     "runtime_adapter": "cursor",

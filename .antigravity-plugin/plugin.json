@@ -1,0 +1,20 @@
+{
+  "$schema": "https://antigravity.google/schemas/v1/plugin.json",
+  "name": "kaos",
+  "displayName": "Kontrolled Kaos",
+  "version": "1.12.0",
+  "description": "An AI-Assisted Development Framework that routes work through Conductor and the established specialist skills while preserving human authority.",
+  "logo": "assets/branding/kontrolled-kaos-dual-k-emblem.png",
+  "suggestedPrompts": [
+    "Use Kaos to route this software task through the established Conductor and specialist skills."
+  ],
+  "author": {
+    "name": "Baelfyre",
+    "url": "https://github.com/Baelfyre"
+  },
+  "homepage": "https://github.com/Baelfyre/Kaos",
+  "repository": "https://github.com/Baelfyre/Kaos",
+  "license": "MIT",
+  "keywords": ["kaos", "AI-assisted development", "governance", "specialist skills"],
+  "skills": "./brand-skills/"
+}

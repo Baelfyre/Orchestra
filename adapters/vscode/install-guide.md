@@ -10,7 +10,7 @@
 
 This workflow observes an already configured VS Code environment. It does not install providers, extensions, credentials, or models.
 
-1. Use an exact Orchestra revision and confirm `git status --porcelain` is empty.
+1. Use an exact Kontrolled Kaos revision and confirm `git status --porcelain` is empty.
 2. Start a new VS Code agent session.
 3. Explicitly select the Session Target harness you intend to observe, such as Copilot, Claude, or Codex.
 4. Record the exact visible model and the provider/source grouping shown by VS Code when available.

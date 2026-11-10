@@ -1,3 +1,10 @@
-# Antigravity Installation Guide
+# Kontrolled Kaos on Antigravity
 
-Use skill folders as local references where supported. Otherwise copy the relevant `SKILL.md` content into an agent instruction profile. Use Conductor as the top-level router and load only the specialist needed for the task.
+Install from the canonical repository:
+
+```sh
+agy plugin install https://github.com/Baelfyre/Kaos
+agy plugin list --json
+```
+
+Invoke the Kaos alias with `/kaos`. It routes through the existing Conductor specialist and preserves the established specialist and governance contracts. For a local package check, run `agy plugin validate . --json` from the repository root; validation does not install into a user profile or verify interactive invocation. Strict mode currently reports repository-layout warnings for root files Antigravity does not load.
