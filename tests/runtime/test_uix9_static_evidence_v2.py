@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+import subprocess
 
 import jsonschema
 import pytest
@@ -74,48 +75,75 @@ def test_symlink_material_is_rejected(monkeypatch: pytest.MonkeyPatch, tmp_path:
         evidence._candidate_context(tmp_path, "manifest.json")
 
 
-def test_candidate_evidence_binds_worktree_and_preserves_human_hold() -> None:
-    record = evidence.build_candidate_evidence(ROOT)
-    evidence.validate_candidate_evidence(ROOT, record, SCHEMA)
+def _clone_clean_repo(dest: Path) -> Path:
+    subprocess.run(
+        ["git", "clone", "--shared", "--quiet", str(ROOT), str(dest)],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return dest
+
+
+@pytest.fixture(scope="module")
+def candidate_repo(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    repo = _clone_clean_repo(tmp_path_factory.mktemp("uix9-candidate") / "repo")
+    changelog = repo / "CHANGELOG.md"
+    changelog.write_text(
+        changelog.read_text(encoding="utf-8") + "\n<!-- deterministic candidate fixture change -->\n",
+        encoding="utf-8",
+    )
+    return repo
+
+
+def test_clean_checkout_is_rejected_as_candidate_evidence(tmp_path: Path) -> None:
+    clean_repo = _clone_clean_repo(tmp_path / "clean-repo")
+    with pytest.raises(evidence.EvidenceError, match="candidate has no changed files"):
+        evidence.build_candidate_evidence(clean_repo)
+
+
+def test_candidate_evidence_binds_worktree_and_preserves_human_hold(candidate_repo: Path) -> None:
+    record = evidence.build_candidate_evidence(candidate_repo)
+    evidence.validate_candidate_evidence(candidate_repo, record, SCHEMA)
     assert record["status"] == "DRAFT_DIAGNOSTIC"
     assert record["authority"]["human_review"] == "PENDING"
     assert record["frozen_predecessor"]["historical_approval_inherited"] is False
     assert record["authority"]["live_uix9b_authorized"] is False
 
 
-def test_candidate_evidence_rejects_changed_fingerprint() -> None:
-    record = evidence.build_candidate_evidence(ROOT)
+def test_candidate_evidence_rejects_changed_fingerprint(candidate_repo: Path) -> None:
+    record = evidence.build_candidate_evidence(candidate_repo)
     record["candidate"]["content_fingerprint"] = "0" * 64
     with pytest.raises(evidence.EvidenceError, match="candidate binding changed"):
-        evidence.validate_candidate_evidence(ROOT, record, SCHEMA)
+        evidence.validate_candidate_evidence(candidate_repo, record, SCHEMA)
 
 
-def test_candidate_evidence_rejects_changed_frozen_manifest_hash() -> None:
-    record = evidence.build_candidate_evidence(ROOT)
+def test_candidate_evidence_rejects_changed_frozen_manifest_hash(candidate_repo: Path) -> None:
+    record = evidence.build_candidate_evidence(candidate_repo)
     record["frozen_predecessor"]["manifest_sha256"] = "0" * 64
     with pytest.raises(evidence.EvidenceError, match="predecessor binding"):
-        evidence.validate_candidate_evidence(ROOT, record, SCHEMA)
+        evidence.validate_candidate_evidence(candidate_repo, record, SCHEMA)
 
 
-def test_candidate_evidence_rejects_validator_version_substitution() -> None:
-    record = evidence.build_candidate_evidence(ROOT)
+def test_candidate_evidence_rejects_validator_version_substitution(candidate_repo: Path) -> None:
+    record = evidence.build_candidate_evidence(candidate_repo)
     record["implementation"]["validator"]["version"] = "unverified"
     with pytest.raises(evidence.EvidenceError, match="implementation identity"):
-        evidence.validate_candidate_evidence(ROOT, record, SCHEMA)
+        evidence.validate_candidate_evidence(candidate_repo, record, SCHEMA)
 
 
-def test_candidate_evidence_rejects_forged_merge_approval() -> None:
-    record = evidence.build_candidate_evidence(ROOT)
+def test_candidate_evidence_rejects_forged_merge_approval(candidate_repo: Path) -> None:
+    record = evidence.build_candidate_evidence(candidate_repo)
     record["authority"]["merge_authorized"] = True
     with pytest.raises(evidence.EvidenceError, match="schema failure"):
-        evidence.validate_candidate_evidence(ROOT, record, SCHEMA)
+        evidence.validate_candidate_evidence(candidate_repo, record, SCHEMA)
 
 
-def test_candidate_evidence_rejects_approved_status() -> None:
-    record = evidence.build_candidate_evidence(ROOT)
+def test_candidate_evidence_rejects_approved_status(candidate_repo: Path) -> None:
+    record = evidence.build_candidate_evidence(candidate_repo)
     record["status"] = "G8_APPROVED"
     with pytest.raises(evidence.EvidenceError, match="schema failure"):
-        evidence.validate_candidate_evidence(ROOT, record, SCHEMA)
+        evidence.validate_candidate_evidence(candidate_repo, record, SCHEMA)
 
 
 def test_external_test_log_tampering_is_detected(tmp_path: Path) -> None:
@@ -140,11 +168,11 @@ def test_external_test_artifact_with_symlinked_parent_is_rejected(monkeypatch: p
         evidence._external_file(ROOT, str(artifact), digest)
 
 
-def test_schema_rejects_unknown_properties_and_versions() -> None:
+def test_schema_rejects_unknown_properties_and_versions(candidate_repo: Path) -> None:
     schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
     jsonschema.Draft202012Validator.check_schema(schema)
     validator = jsonschema.Draft202012Validator(schema)
-    record = evidence.build_candidate_evidence(ROOT)
+    record = evidence.build_candidate_evidence(candidate_repo)
     record["unexpected"] = True
     with pytest.raises(jsonschema.ValidationError):
         validator.validate(record)

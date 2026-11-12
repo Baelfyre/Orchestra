@@ -843,6 +843,20 @@
       "runtime_integration": false,
       "authority_note": "UIX-9C V3 is preserved terminal evidence only. It does not authorize another experiment, live model/provider calls, runtime behavior change, promotion, merge, release, deployment, policy activation, or destructive action."
     },
+    "uix9_candidate_static_evidence_v2": {
+      "status": "CANDIDATE_STATIC_EVIDENCE_CONTRACT",
+      "purpose": "Separates frozen historical UIX-9 V1 proof records from candidate-only static V2 evidence bound to an unstaged worktree, guidance digest, and schema.",
+      "machine_sources": [
+        "machine/schemas/uix9-candidate-static-evidence.v2.schema.json",
+        "machine/ui/uix9-live-guidance-manifest.v1.json"
+      ],
+      "human_sources": [
+        "docs/validation/UIX9_CANDIDATE_STATIC_EVIDENCE_V2.md"
+      ],
+      "generator": "scripts/uix9_static_evidence_v2.py",
+      "validation_surface": "tests/runtime/test_uix9_static_evidence_v2.py",
+      "authority_note": "Static V2 evidence is limited to DRAFT_DIAGNOSTIC or STATIC_EVIDENCE_PENDING_REVIEW; it does not inherit V1 approval or authorize UIX-9B/UIX-9C, merge, governance activation, or release."
+    },
     "host_update_planning": {
       "status": "PUBLISHED_V1_6_STABLE",
       "machine_sources": [
@@ -2953,7 +2967,19 @@
     "required_analysis_ruleset_drift_state": "CLOSED_RULESET_NORMALIZED",
     "protected_governance_escalation_protocol": "docs/governance/PROTECTED_GOVERNANCE_ESCALATION_PROTOCOL.md",
     "protected_governance_escalation_contract": "machine/governance/protected-governance-escalation.v1.json",
-    "protected_governance_change_authority": "HUMAN_REVIEW_REQUIRED_AND_NEW_EXECUTION_CONTEXT"
+    "protected_governance_change_authority": "HUMAN_REVIEW_REQUIRED_AND_NEW_EXECUTION_CONTEXT",
+    "governor_proportional_review_guidance": {
+      "status": "PROPORTIONAL_REVIEW_GUIDANCE",
+      "purpose": "Defines proportional Governor finding identity, release-scoped rights applicability, and the narrow conditional AI-output RISKS warning boundary without weakening human_review_required or release gates.",
+      "human_sources": [
+        "skills/the-governor/SKILL.md",
+        "skills/the-governor/LICENSE_PRIVACY_IP_COMPLIANCE_GUIDE.md",
+        "skills/the-governor/HUMAN_ESCALATION_BOUNDARIES_GUIDE.md",
+        "skills/the-governor/OUTPUT_FORMATS.md"
+      ],
+      "validation_surface": "tests/behavior/test_governor_proportional_review_contract.py",
+      "authority_note": "Proportional applicability classification and scoped RISKS warnings do not clear human_review_required: true, IP/copyright clearance, protected merge approvals, or public-release approvals."
+    }
   },
   "architecture": {
     "current_overview": "docs/architecture/README.md",
