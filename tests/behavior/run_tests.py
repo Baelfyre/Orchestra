@@ -1,3 +1,5 @@
+# @codebase_provenance_JEO
+
 import os
 import sys
 import json
@@ -151,6 +153,7 @@ def main():
         ,{"Name": "test_scribe_governance_documentation_integration.py", "Path": "tests/behavior/test_scribe_governance_documentation_integration.py"}
         ,{"Name": "test_or_gov_9_specialist_governance_sufficiency.py", "Path": "tests/behavior/test_or_gov_9_specialist_governance_sufficiency.py"}
         ,{"Name": "test_or_gov_10_e2e_integration_closeout.py", "Path": "tests/behavior/test_or_gov_10_e2e_integration_closeout.py"}
+        ,{"Name": "test_governor_proportional_review_contract.py", "Path": "tests/behavior/test_governor_proportional_review_contract.py"}
     ]
 
     failed = False

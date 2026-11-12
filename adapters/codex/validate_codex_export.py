@@ -1,3 +1,5 @@
+# @codebase_provenance_JEO
+
 import json
 import argparse
 import re
@@ -60,6 +62,7 @@ CLOAK_VISUAL_GUIDE_MARKERS = (
     "@codebase_provenance_JEO",
     "@codebase_rights_JEO",
 )
+GOVERNOR_PROVENANCE_MARKERS = ("@codebase_provenance_JEO",)
 MARKED_SUPPORT_GUIDES = (
     (
         CLOAK_VISUAL_GUIDE_SOURCE,
@@ -75,6 +78,24 @@ MARKED_SUPPORT_GUIDES = (
         Path("skills/scribe/ARTIFACT_AUTHORING_AND_BACKEND_SELECTION_GUIDE.md"),
         Path("scribe/ARTIFACT_AUTHORING_AND_BACKEND_SELECTION_GUIDE.md"),
         "Scribe artifact authoring guide",
+    ),
+    (
+        Path("skills/the-governor/LICENSE_PRIVACY_IP_COMPLIANCE_GUIDE.md"),
+        Path("the-governor/LICENSE_PRIVACY_IP_COMPLIANCE_GUIDE.md"),
+        "Governor license guide",
+        GOVERNOR_PROVENANCE_MARKERS,
+    ),
+    (
+        Path("skills/the-governor/HUMAN_ESCALATION_BOUNDARIES_GUIDE.md"),
+        Path("the-governor/HUMAN_ESCALATION_BOUNDARIES_GUIDE.md"),
+        "Governor human escalation guide",
+        GOVERNOR_PROVENANCE_MARKERS,
+    ),
+    (
+        Path("skills/the-governor/OUTPUT_FORMATS.md"),
+        Path("the-governor/OUTPUT_FORMATS.md"),
+        "Governor output formats",
+        GOVERNOR_PROVENANCE_MARKERS,
     ),
 )
 NORMALIZED_EXPORT_PARITY_PATHS = (
@@ -92,7 +113,6 @@ NORMALIZED_EXPORT_PARITY_PATHS = (
     (Path("skills/the-steward/SKILL.md"), Path("adapters/codex/skills/the-steward/SKILL.md")),
     (Path("skills/the-governor/SKILL.md"), Path("adapters/codex/skills/the-governor/SKILL.md")),
     (Path("skills/the-steward/OUTPUT_FORMATS.md"), Path("adapters/codex/skills/the-steward/OUTPUT_FORMATS.md")),
-    (Path("skills/the-governor/OUTPUT_FORMATS.md"), Path("adapters/codex/skills/the-governor/OUTPUT_FORMATS.md")),
 )
 def print_error(message):
     print(f"\033[91mERROR: {message}\033[0m")
@@ -102,16 +122,16 @@ def read_text(path):
     return path.read_text(encoding="utf-8")
 
 
-def strip_jeo_support_markers(content, label):
+def strip_jeo_support_markers(content, label, expected_markers=CLOAK_VISUAL_GUIDE_MARKERS):
     normalized = content.replace("\r\n", "\n")
     expected_header = "\n".join(
-        f"<!-- {marker} -->" for marker in CLOAK_VISUAL_GUIDE_MARKERS
+        f"<!-- {marker} -->" for marker in expected_markers
     ) + "\n"
     if not normalized.startswith(expected_header):
         raise ValueError(f"{label} is missing or misorders its exact leading JEO markers")
 
-    markers = re.findall(r"@\s*codebase[^\s<>]*", normalized, re.IGNORECASE)
-    if markers != list(CLOAK_VISUAL_GUIDE_MARKERS):
+    actual_markers = re.findall(r"@\s*codebase[^\s<>]*", normalized, re.IGNORECASE)
+    if actual_markers != list(expected_markers):
         raise ValueError(f"{label} contains malformed or unexpected codebase markers")
     return normalized[len(expected_header):]
 
@@ -357,7 +377,9 @@ def validate_normalized_export_parity(root):
 
 def validate_marked_support_guide_parity(root, codex_skills_dir, guides=MARKED_SUPPORT_GUIDES):
     errors = 0
-    for source_relative, export_relative, label in guides:
+    for guide in guides:
+        source_relative, export_relative, label = guide[:3]
+        expected_markers = guide[3] if len(guide) == 4 else CLOAK_VISUAL_GUIDE_MARKERS
         source_path = root / source_relative
         export_path = codex_skills_dir / export_relative
         if not source_path.is_file():
@@ -370,7 +392,7 @@ def validate_marked_support_guide_parity(root, codex_skills_dir, guides=MARKED_S
             continue
 
         try:
-            expected = strip_jeo_support_markers(read_text(source_path), label)
+            expected = strip_jeo_support_markers(read_text(source_path), label, expected_markers)
         except ValueError as error:
             print_error(f"Invalid source markers for {label}: {error}")
             errors += 1
@@ -381,7 +403,7 @@ def validate_marked_support_guide_parity(root, codex_skills_dir, guides=MARKED_S
             print_error(f"Exported {label} contains unexpected codebase markers")
             errors += 1
         elif exported != expected:
-            print_error(f"Exported {label} differs from its source after removing the two leading JEO markers")
+            print_error(f"Exported {label} differs from its source after removing the leading JEO marker(s)")
             errors += 1
     return errors
 

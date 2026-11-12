@@ -1,5 +1,7 @@
 # The Governor - Reference Summary
 
+<!-- @codebase_provenance_JEO -->
+
 > **Authoritative behavior is defined in [`skills/the-governor/SKILL.md`](../../skills/the-governor/SKILL.md).** This document is a human-facing quick reference only. Do not use it as a behavior source of truth.
 
 The Governor is the legal, compliance, privacy, IP, copyright, and licensing governance authority. It sits above the Conductor and reviews every request after the Steward approves it.
@@ -14,9 +16,13 @@ The Governor is the legal, compliance, privacy, IP, copyright, and licensing gov
 | `BLOCKED` | Conductor cannot proceed |
 | `NOT_APPLICABLE` | No compliance concerns identified |
 
-**Risk levels**: `LOW` (lightweight), `MEDIUM` (standard), `HIGH` (expanded with human review).
+**Risk levels**: `LOW` (lightweight), `MEDIUM` (standard), `HIGH` (expanded review; human review for the current high-risk decision when an applicable control or material uncertainty requires human authority; domain membership alone does not set the flag).
+
+For a release-scoped rights finding, see the action-applicability limits in the Governor's [Human Escalation Boundaries Guide](../../skills/the-governor/HUMAN_ESCALATION_BOUNDARIES_GUIDE.md) and [the Governance Layer's Need-To-Only Governance section](GOVERNANCE_LAYER.md#need-to-only-governance).
 
 Sets `human_review_required: true` when legal interpretation is uncertain, regulatory applicability is unclear, license compatibility cannot be confirmed, or public release has compliance implications.
+
+For unsupported, unparticularized AI-output similarity concerns or inability to reconstruct every intermediate AI-generation step, the Governor skill defines a narrow advisory boundary after proportionate review. A transition-ready `APPROVED` with a `RISKS` warning requires every applicable gate to independently pass and no separate human-review flag to remain pending. This treatment does not clear or displace the public-release trigger or any required publication approval.
 
 ## Governance Strictness Levels
 
