@@ -1,5 +1,10 @@
 > v1.12.0 code integration through PR #990 and the evidence-first governance amendment through PR #996 are merged and verified; release-specific rights/privacy/retention/authority clearance remains open. v1.11.0 remains the latest published release. See the [candidate record](docs/releases/v1.12.0-release-candidate.md) and [applicability dossier](docs/releases/v1.12.0-release-clearance-evidence.md).
 
+## Unreleased UIX-9 V1 and candidate V2 identity verification
+
+- Separate pinned historical UIX-9 V1 guidance, evaluator, and validator digest checks from static candidate V2 guidance manifest digest verification in `scripts/uix9b_live_proof_runner_v2.py`.
+- Add fail-closed regression tests in `tests/runtime/test_uix9_live_proof_protocol.py` for V1/V2 identity separation and mismatch errors, while retaining the live UIX-9 execution hold with no live provider call, merge, or release authority enabled.
+
 ## Unreleased Governor AI-output warning boundary
 
 - Add isolated static UIX-9 candidate evidence while retaining frozen V1 identities and existing live execution gates.
