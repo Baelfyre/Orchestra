@@ -212,11 +212,26 @@ def verify_canonical_preparation(plan: dict[str, Any], identity: dict[str, Any])
     validate(canonical_plan, PLAN_SCHEMA)
     if canonical_plan != plan:
         raise RuntimeError("CANONICAL_PROOF_PLAN_DRIFT")
-    if canonical_guidance_digest(current_canonical, guidance) != identity["uix_guidance_digest"]:
+    try:
+        frozen_guidance = static_evidence.guidance_context(ROOT, static_evidence.FROZEN_HISTORICAL_V1)
+    except static_evidence.EvidenceError as exc:
+        raise RuntimeError(f"FROZEN_GUIDANCE_DRIFT:{exc}") from exc
+    if frozen_guidance["source_sha"] != identity["canonical_sha"] or frozen_guidance["guidance_digest"] != identity["uix_guidance_digest"]:
+        raise RuntimeError("FROZEN_GUIDANCE_IDENTITY_MISMATCH")
+    current_guidance_digest = canonical_guidance_digest(current_canonical, guidance)
+    if current_guidance_digest != guidance["guidance_digest"]:
         raise RuntimeError("CANONICAL_GUIDANCE_MANIFEST_DRIFT")
-    if git_file_digest(current_canonical, identity["evaluator_source"]) != identity["evaluator_digest"]:
+    try:
+        frozen_evaluator_digest = static_evidence.frozen_source_digest(ROOT, "evaluator")
+    except static_evidence.EvidenceError as exc:
+        raise RuntimeError(f"CANONICAL_EVALUATOR_DRIFT:{exc}") from exc
+    if frozen_evaluator_digest != identity["evaluator_digest"]:
         raise RuntimeError("CANONICAL_EVALUATOR_DRIFT")
-    if git_file_digest(current_canonical, "scripts/uix9_live_proof_runner.py") != identity["validator_digest"]:
+    try:
+        frozen_validator_digest = static_evidence.frozen_source_digest(ROOT, "validator")
+    except static_evidence.EvidenceError as exc:
+        raise RuntimeError(f"CANONICAL_VALIDATOR_DRIFT:{exc}") from exc
+    if frozen_validator_digest != identity["validator_digest"]:
         raise RuntimeError("CANONICAL_VALIDATOR_DRIFT")
     if canonical_fixture_digest(current_canonical) != identity["fixture_digest"]:
         raise RuntimeError("CANONICAL_FIXTURE_DRIFT")
@@ -224,7 +239,9 @@ def verify_canonical_preparation(plan: dict[str, Any], identity: dict[str, Any])
         raise RuntimeError("CANONICAL_TASK_DRIFT")
     return {
         "frozen_experiment_base_sha": identity["canonical_sha"],
+        "frozen_guidance_digest": frozen_guidance["guidance_digest"],
         "current_canonical_preparation_sha": current_canonical,
+        "current_candidate_guidance_digest": current_guidance_digest,
         "reviewed_canonical_sha": preparation["reviewed_canonical_sha"],
         "canonical_lineage_verified": True,
         "preparation_content_verified": True,

@@ -94,8 +94,88 @@ def test_v2_identity_gate_separates_frozen_base_from_current_canonical() -> None
     assert report["current_canonical_preparation_sha"] == live_origin_main
     assert report["reviewed_canonical_sha"] == "7e08a1d4aa09cbdf7632f5a86461fb3cd3e50fe9"
     assert v2_runner.git_check("merge-base", "--is-ancestor", report["reviewed_canonical_sha"], live_origin_main)
+    assert report["frozen_guidance_digest"] == "f989ac579875fbcd349f812fa6e241ba5c8505f9f940abcb5e0e30006f1606ab"
+    assert report["current_candidate_guidance_digest"] == "2d0c03e755b830e749ed9842d84cb6263d1aa81bea38c1cec43ac7c321bd060c"
+    assert report["frozen_guidance_digest"] != report["current_candidate_guidance_digest"]
+    assert report["uix_guidance_digest"] == report["frozen_guidance_digest"]
     assert report["canonical_lineage_verified"] is True
     assert report["preparation_content_verified"] is True
+    assert report["live_calls_executed"] == 0
+    assert report["provider_calls_executed"] == 0
+
+
+def test_tampered_current_canonical_guidance_manifest_digest_fails_closed(monkeypatch: pytest.MonkeyPatch) -> None:
+    real_load_git_json = v2_runner.load_git_json
+
+    def tampered_load_git_json(revision: str, relative_path: str) -> dict:
+        payload = real_load_git_json(revision, relative_path)
+        if relative_path == "machine/ui/uix9-live-guidance-manifest.v1.json":
+            mutated = deepcopy(payload)
+            mutated["guidance_digest"] = "0" * 64
+            return mutated
+        return payload
+
+    monkeypatch.setattr(v2_runner, "load_git_json", tampered_load_git_json)
+    with pytest.raises(RuntimeError, match="CANONICAL_GUIDANCE_MANIFEST_DRIFT"):
+        v2_runner.verify_frozen_identities()
+
+
+def test_tampered_current_canonical_material_digest_fails_closed(monkeypatch: pytest.MonkeyPatch) -> None:
+    real_git_file_digest = v2_runner.git_file_digest
+
+    def tampered_git_file_digest(revision: str, relative_path: str) -> str:
+        if relative_path == "docs/project/UIX_1_UI_DESIGN_CONTRACT.md":
+            return "0" * 64
+        return real_git_file_digest(revision, relative_path)
+
+    monkeypatch.setattr(v2_runner, "git_file_digest", tampered_git_file_digest)
+    with pytest.raises(RuntimeError, match="CANONICAL_GUIDANCE_DRIFT:docs/project/UIX_1_UI_DESIGN_CONTRACT.md"):
+        v2_runner.verify_frozen_identities()
+
+
+def test_tampered_frozen_v1_guidance_digest_or_source_fails_closed(monkeypatch: pytest.MonkeyPatch) -> None:
+    plan = _load(v2_runner.PLAN_PATH)
+    identity = _load(v2_runner.IDENTITY_PATH)
+    real_guidance_context = v2_runner.static_evidence.guidance_context
+
+    def tampered_frozen_digest(root: Path, context: str) -> dict:
+        payload = deepcopy(real_guidance_context(root, context))
+        payload["guidance_digest"] = "0" * 64
+        return payload
+
+    monkeypatch.setattr(v2_runner.static_evidence, "guidance_context", tampered_frozen_digest)
+    with pytest.raises(RuntimeError, match="FROZEN_GUIDANCE_IDENTITY_MISMATCH"):
+        v2_runner.verify_canonical_preparation(plan, identity)
+
+    def tampered_frozen_source(_root: Path, _context: str) -> dict:
+        raise v2_runner.static_evidence.EvidenceError("frozen V1 guidance digest mismatch")
+
+    monkeypatch.setattr(v2_runner.static_evidence, "guidance_context", tampered_frozen_source)
+    with pytest.raises(RuntimeError, match="FROZEN_GUIDANCE_DRIFT:frozen V1 guidance digest mismatch"):
+        v2_runner.verify_canonical_preparation(plan, identity)
+
+
+def test_pr_like_base_and_simulated_direct_main_context_both_verify_separately(monkeypatch: pytest.MonkeyPatch) -> None:
+    real_git_value = v2_runner.git_value
+
+    def simulate_origin_main(target_sha: str) -> None:
+        monkeypatch.setattr(
+            v2_runner,
+            "git_value",
+            lambda *args: target_sha if args == ("rev-parse", "origin/main") else real_git_value(*args),
+        )
+
+    simulate_origin_main("9f49a29827513199ae16ea29b8e75bfbb90ca38d")
+    pr_like_report = v2_runner.verify_frozen_identities()
+    assert pr_like_report["current_canonical_preparation_sha"] == "9f49a29827513199ae16ea29b8e75bfbb90ca38d"
+    assert pr_like_report["frozen_guidance_digest"] == "f989ac579875fbcd349f812fa6e241ba5c8505f9f940abcb5e0e30006f1606ab"
+    assert pr_like_report["current_candidate_guidance_digest"] == "f989ac579875fbcd349f812fa6e241ba5c8505f9f940abcb5e0e30006f1606ab"
+
+    simulate_origin_main("67439db443a12bf61f44b351435b0c105780d3bd")
+    direct_main_report = v2_runner.verify_frozen_identities()
+    assert direct_main_report["current_canonical_preparation_sha"] == "67439db443a12bf61f44b351435b0c105780d3bd"
+    assert direct_main_report["frozen_guidance_digest"] == "f989ac579875fbcd349f812fa6e241ba5c8505f9f940abcb5e0e30006f1606ab"
+    assert direct_main_report["current_candidate_guidance_digest"] == "2d0c03e755b830e749ed9842d84cb6263d1aa81bea38c1cec43ac7c321bd060c"
 
 
 def test_canonical_preparation_drift_fails_closed(monkeypatch: pytest.MonkeyPatch) -> None:
