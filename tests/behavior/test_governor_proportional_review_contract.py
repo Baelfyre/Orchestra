@@ -218,6 +218,30 @@ def test_existing_arbiter_human_review_escalation_still_passes() -> None:
     assert result.returncode == 0, result.stdout + result.stderr
 
 
+def test_ip_reference_boundary_and_six_owner_scenarios() -> None:
+    expected_fragments = (
+        "Reference, inspiration, and independent implementation:",
+        "Studying ideas, workflows, or comparable functionality as a reference and independently implementing original features without copying protected source code, creative expression, artwork, icons, or assets, and without confusing branding, is not by itself infringement or an automatic rights block; record non-blocking guidance or `NONE` (or a scoped `RISKS` warning only if warranted), conditioned on fact-based assessment and all current gates.",
+        "Copied protected code or assets:",
+        "Reconstructing or copying protected source code, substantial creative expression, artwork, icons, images, or other assets without permission requires identifying the affected material and concrete evidence, and escalating, requiring remediation, or blocking the affected action.",
+        "Trademark or branding confusion:",
+        "Similar brands, names, logos, or trade dress with a plausible likelihood of commercial source confusion require evidence-backed trademark conflict escalation (`human_review_required: true`) for the affected distribution or branding decision, rather than a blanket no-go for unrelated internal work.",
+        "Reverse engineering for interoperability:",
+        "Reverse engineering for interoperability with lawful access and no unauthorized protected reuse is neither categorically infringement nor automatically permissible; evaluate case-specifically against applicable jurisdiction, local law, license terms, and contractual restrictions, escalating when material legal or terms uncertainty remains.",
+        "explain the specific risk, identify the protected element or open evidence question, and suggest legitimate alternatives (original code and assets, source separation, distinct branding, license and terms verification, permitted interoperability paths, and provenance documentation).",
+        "Do not treat all rights findings as warnings, and do not treat an infringement risk or allegation as proved infringement without adequate facts and qualified determination.",
+        "Either unsupported, unparticularized AI-output similarity concerns or inability to reconstruct every intermediate AI-generation step alone may be recorded as a scoped `RISKS` warning only after proportionate review, when no concrete conflict or material uncertainty remains, every applicable gate independently passes, and no separate `human_review_required` flag is pending.",
+        "Unknown material rights, an open applicable gate, unresolved material facts, or unknown required evidence remain blocking under the existing `BLOCKED` or `REVISION_REQUIRED` criteria",
+        "A `RISKS` warning is not rights clearance and never satisfies, waives, downgrades, removes, clears, or displaces any gate or separate flag.",
+        "Publication remains gated until every required review and approval is complete.",
+    )
+    for guide_path in (
+        "skills/the-governor/LICENSE_PRIVACY_IP_COMPLIANCE_GUIDE.md",
+        "adapters/codex/skills/the-governor/LICENSE_PRIVACY_IP_COMPLIANCE_GUIDE.md",
+    ):
+        _require(_read(guide_path), *expected_fragments)
+
+
 _PROSE_TESTS = (
     test_high_risk_decision_is_proportional_and_domain_alone_does_not_set_flag,
     test_release_rights_stay_blocked_and_local_units_keep_all_current_gates,
@@ -228,6 +252,7 @@ _PROSE_TESTS = (
     test_two_step_emblem_provenance_does_not_establish_clearance,
     test_output_formats_record_current_decision_and_applicability_scope,
     test_existing_arbiter_human_review_escalation_still_passes,
+    test_ip_reference_boundary_and_six_owner_scenarios,
 )
 
 
