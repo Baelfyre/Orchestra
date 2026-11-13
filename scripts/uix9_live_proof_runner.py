@@ -20,6 +20,11 @@ from typing import Any, Iterable
 
 import jsonschema
 
+try:
+    from . import uix9_static_evidence_v2 as static_evidence
+except ImportError:
+    import uix9_static_evidence_v2 as static_evidence
+
 
 ROOT = Path(__file__).resolve().parents[1]
 FIXTURE_ROOT = ROOT / "tests" / "fixtures" / "ui" / "uix9-live-project"
@@ -230,8 +235,8 @@ def validate_zero_call_canaries() -> dict[str, Any]:
     expected_fixture = fixture_digest()
     expected_requirements = requirements_digest()
     expected_task = task_digest()
-    expected_validator = validator_digest()
-    expected_guidance = guidance_digest()
+    expected_validator = static_evidence.frozen_source_digest(ROOT, "validator")
+    expected_guidance = static_evidence.guidance_context(ROOT, static_evidence.FROZEN_HISTORICAL_V1)["guidance_digest"]
     validate_canary_bundle(positive, "ZERO_CALL_CANARY_PASS", "NONE", expected_fixture, expected_requirements, expected_task, expected_validator)
     validate_canary_bundle(negative, "ZERO_CALL_CANARY_FAIL_CLOSED", expected_guidance, expected_fixture, expected_requirements, expected_task, expected_validator)
     assert positive["run_id"] == "A1" and negative["run_id"] == "B1"
@@ -263,7 +268,7 @@ def validate_canary_bundle(
     expected_fixture = expected_fixture or fixture_digest()
     expected_requirements = expected_requirements or requirements_digest()
     expected_task = expected_task or task_digest()
-    expected_validator = expected_validator or validator_digest()
+    expected_validator = expected_validator or static_evidence.frozen_source_digest(ROOT, "validator")
     assert bundle["starting_fixture_digest"] == expected_fixture
     assert bundle["requirements_digest"] == expected_requirements
     assert bundle["task_digest"] == expected_task
@@ -280,8 +285,8 @@ def validate_plan() -> dict[str, Any]:
     assert git_head() == plan["canonical_sha"]
     assert plan["fixture_digest"] == fixture_digest()
     assert plan["task_digest"] == task_digest()
-    assert plan["validator_digest"] == validator_digest()
-    assert plan["uix_guidance_digest"] == guidance_digest()
+    assert plan["validator_digest"] == static_evidence.frozen_source_digest(ROOT, "validator")
+    assert plan["uix_guidance_digest"] == static_evidence.guidance_context(ROOT, static_evidence.FROZEN_HISTORICAL_V1)["guidance_digest"]
     assert plan["repetitions_per_arm"] == 3
     assert plan["total_valid_executions"] == 6
     assert plan["execution_order"] == ["A1", "B1", "B2", "A2", "A3", "B3"]

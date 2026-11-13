@@ -1,4 +1,5 @@
 
+<!-- @codebase_provenance_JEO -->
 # Governance Layer
 
 The Governor, The Steward, and Arbiter form a reusable governance layer that sits above the Conductor. Their purpose is to ensure that any project, product, repository, or future development effort remains aligned with its objectives, documentation requirements, compliance obligations, legal risk boundaries, privacy expectations, IP and copyright concerns, licensing requirements, release readiness standards, and verified continuation state.
@@ -86,11 +87,11 @@ Do not load it for ordinary route classification.
 
 ## Freedom-First Development
 
-Conductor prioritizes freedom-first, need-based development. The ecosystem ensures that ideation, brainstorming, prototyping, and concept exploration are not restricted by early governance requirements. Governance checks activate only when a task moves into implementation, when files or architecture change, or when risk triggers are explicitly hit.
+Conductor keeps development freedom-first and need-based. Ideation, planning, drafting, prompt refinement, brainstorming, prototyping, and concept exploration stay unblocked. Governance checks activate at implementation, file or architecture changes, or material risk triggers.
 
 ## Need-To-Only Governance
 
-The Governor and The Steward operate on a need-to-only basis. They must not interrupt early-stage planning, rough drafting, or prompt refinement. Full formal checks are reserved for high-impact phases (like Release or Audit), while lightweight, non-blocking pathways are used for low-risk work.
+Full review applies in Release, Audit, or for material risks; low-risk work receives light, non-blocking review.
 
 Arbiter also operates on a need-to-only basis. It activates when continuation safety is uncertain, including interrupted tasks, token or context exhaustion risk, branch switches, workspace or IDE changes, unclear source of truth, failed or missing validation, handoff, merge preparation, or branch divergence.
 
@@ -167,7 +168,7 @@ Next Recommended Step:
 |---|---|---|
 | `LOW` | School work, personal prototype, no public release, no user data, no commercial use | Lightweight |
 | `MEDIUM` | Internal tool, team project, third-party deps, limited exposure | Standard |
-| `HIGH` | Public release, PII, payments, AI outputs, legal/health/finance domain, commercial use | Expanded + human review |
+| `HIGH` | Public release, user accounts, PII, payments, AI outputs, legal/health/finance domain, copyrighted content, open-source distribution, commercial use | Expanded review; human review only when an applicable control or material uncertainty requires human authority for the current decision. |
 
 ## Governance Strictness Levels
 

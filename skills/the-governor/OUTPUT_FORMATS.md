@@ -1,3 +1,4 @@
+<!-- @codebase_provenance_JEO -->
 # Output Formats
 
 ## Governance Review
@@ -5,10 +6,14 @@
 ### Compact
 Use this default compact format for general governance reviews.
 
+Scope fields: `OPERATIONAL_DECISION` records the exact current action/transition or `NOT_FOUND` if missing. `APPLICABILITY_SCOPE` lists affected actions/channels; use `UNKNOWN` if unresolved and `NOT_APPLICABLE` only with assessed rationale.
+
 ```text
 REVIEWER: the-governor
 PROJECT_CONTEXT: [project type] | [risk level]
 DECISION: [APPROVED | ADVISORY_ONLY | REVISION_REQUIRED | BLOCKED | NOT_APPLICABLE]
+OPERATIONAL_DECISION: [value]
+APPLICABILITY_SCOPE: [value]
 HUMAN_REVIEW_REQUIRED: [true | false]
 REASON: [one-line assessment]
 RISKS: [identified risks or "none"]
@@ -22,6 +27,8 @@ Use this expanded format when significant findings or risks exist.
 REVIEWER: the-governor
 PROJECT_CONTEXT: [project type] | [risk level]
 DECISION: [APPROVED | ADVISORY_ONLY | REVISION_REQUIRED | BLOCKED | NOT_APPLICABLE]
+OPERATIONAL_DECISION: [value]
+APPLICABILITY_SCOPE: [value]
 HUMAN_REVIEW_REQUIRED: [true | false]
 SUMMARY: [one-line assessment]
 COMPLIANCE: [compliant | concerns found | non-compliant]
@@ -52,6 +59,8 @@ ENVELOPE_ID: [envelope_id]
 PHASE_ID: [phase_id]
 UNIT_ID: [unit_id]
 DECISION: [APPROVED | ADVISORY_ONLY | REVISION_REQUIRED | BLOCKED | NOT_APPLICABLE]
+OPERATIONAL_DECISION: [value]
+APPLICABILITY_SCOPE: [value]
 HUMAN_REVIEW_REQUIRED: [false | true]
 REASON_CODE: [code]
 CONSTRAINTS: [list or "none"]

@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kaos.dev/schemas/uix9-candidate-static-evidence.v2.schema.json",
+  "title": "UIX-9 candidate static evidence V2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "context", "status", "created_at_utc", "candidate", "guidance", "frozen_predecessor", "implementation", "test_runs", "provenance", "authority"],
+  "properties": {
+    "schema_version": {"const": "uix9.candidate-static-evidence.v2"},
+    "context": {"const": "CANDIDATE_STATIC_V2"},
+    "status": {"enum": ["DRAFT_DIAGNOSTIC", "STATIC_EVIDENCE_PENDING_REVIEW"]},
+    "created_at_utc": {"type": "string", "format": "date-time"},
+    "candidate": {
+      "type": "object", "additionalProperties": false,
+      "required": ["base_sha", "base_tree_sha", "content_fingerprint", "changed_files"],
+      "properties": {
+        "base_sha": {"$ref": "#/$defs/sha40"},
+        "base_tree_sha": {"$ref": "#/$defs/sha40"},
+        "content_fingerprint": {"$ref": "#/$defs/sha256"},
+        "changed_files": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/changedFile"}}
+      }
+    },
+    "guidance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["manifest_path", "manifest_sha256", "source_sha", "guidance_digest", "algorithm", "materials"],
+      "properties": {
+        "manifest_path": {"const": "machine/ui/uix9-live-guidance-manifest.v1.json"},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "source_sha": {"$ref": "#/$defs/sha40"},
+        "guidance_digest": {"$ref": "#/$defs/sha256"},
+        "algorithm": {"type": "string", "minLength": 10},
+        "materials": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/material"}}
+      }
+    },
+    "frozen_predecessor": {
+      "type": "object", "additionalProperties": false,
+      "required": ["context", "manifest_snapshot_sha", "manifest_sha256", "source_sha", "guidance_digest", "historical_approval_inherited"],
+      "properties": {
+        "context": {"const": "FROZEN_HISTORICAL_V1"},
+        "manifest_snapshot_sha": {"const": "9f49a29827513199ae16ea29b8e75bfbb90ca38d"},
+        "manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "source_sha": {"const": "bf6f14316fa8814eeac91440c4a7d70be0d04b9e"},
+        "guidance_digest": {"const": "f989ac579875fbcd349f812fa6e241ba5c8505f9f940abcb5e0e30006f1606ab"},
+        "historical_approval_inherited": {"const": false}
+      }
+    },
+    "implementation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["evaluator", "validator", "frozen_evaluator_sha256", "frozen_validator_sha256"],
+      "properties": {
+        "evaluator": {"$ref": "#/$defs/implementationFile"},
+        "validator": {"$ref": "#/$defs/implementationFile"},
+        "frozen_evaluator_sha256": {"$ref": "#/$defs/sha256"},
+        "frozen_validator_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "test_runs": {"type": "array", "items": {"$ref": "#/$defs/testRun"}},
+    "provenance": {
+      "type": "object", "additionalProperties": false,
+      "required": ["creator", "python", "platform", "runtime_routing_requested_model", "runtime_routing_requested_effort", "runtime_routing_observed"],
+      "properties": {
+        "creator": {"const": "local-static-evidence-validator"},
+        "python": {"type": "string", "minLength": 1},
+        "platform": {"type": "string", "minLength": 1},
+        "runtime_routing_requested_model": {"const": "gpt-6-luna"},
+        "runtime_routing_requested_effort": {"const": "max"},
+        "runtime_routing_observed": {"const": "NEEDS_VERIFICATION"}
+      }
+    },
+    "authority": {
+      "type": "object", "additionalProperties": false,
+      "required": ["human_review", "live_uix9b_authorized", "governance_activation_authorized", "merge_authorized", "publication_authorized"],
+      "properties": {
+        "human_review": {"const": "PENDING"},
+        "live_uix9b_authorized": {"const": false},
+        "governance_activation_authorized": {"const": false},
+        "merge_authorized": {"const": false},
+        "publication_authorized": {"const": false}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "sha40": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "changedFile": {
+      "type": "object", "additionalProperties": false, "required": ["path", "status", "sha256"],
+      "properties": {"path": {"type": "string", "minLength": 1}, "status": {"enum": ["modified", "untracked"]}, "sha256": {"$ref": "#/$defs/sha256"}}
+    },
+    "material": {
+      "type": "object", "additionalProperties": false, "required": ["path", "role", "revision_identity", "sha256"],
+      "properties": {"path": {"type": "string", "minLength": 1}, "role": {"type": "string", "minLength": 1}, "revision_identity": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/$defs/sha256"}}
+    },
+    "implementationFile": {
+      "type": "object", "additionalProperties": false, "required": ["path", "version", "sha256"],
+      "properties": {"path": {"type": "string", "minLength": 1}, "version": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/$defs/sha256"}}
+    },
+    "logFile": {
+      "type": "object", "additionalProperties": false, "required": ["path", "sha256"],
+      "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/$defs/sha256"}}
+    },
+    "testCase": {
+      "type": "object", "additionalProperties": false, "required": ["case_id", "outcome"],
+      "properties": {"case_id": {"type": "string", "minLength": 1}, "outcome": {"enum": ["PASSED", "FAILED", "SKIPPED"]}}
+    },
+    "testRun": {
+      "type": "object", "additionalProperties": false,
+      "required": ["suite_id", "command", "exit_code", "total", "passed", "failed", "skipped", "log", "junit", "cases"],
+      "properties": {
+        "suite_id": {"type": "string", "minLength": 1}, "command": {"type": "string", "minLength": 1},
+        "exit_code": {"type": "integer"}, "total": {"type": "integer", "minimum": 1},
+        "passed": {"type": "integer", "minimum": 0}, "failed": {"type": "integer", "minimum": 0}, "skipped": {"type": "integer", "minimum": 0},
+        "log": {"$ref": "#/$defs/logFile"}, "junit": {"$ref": "#/$defs/logFile"},
+        "cases": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/testCase"}}
+      }
+    }
+  },
+  "allOf": [{"if": {"properties": {"status": {"const": "STATIC_EVIDENCE_PENDING_REVIEW"}}}, "then": {"properties": {"test_runs": {"minItems": 1}}}}]
+}

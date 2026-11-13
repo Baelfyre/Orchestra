@@ -3,6 +3,8 @@ param(
     [string]$TargetRoot = $PSScriptRoot
 )
 
+# @codebase_provenance_JEO
+
 $manifestPath = Join-Path $SourceRoot "plugin.json"
 if (-not (Test-Path $manifestPath)) {
     Write-Error "plugin.json not found at $manifestPath"
@@ -14,6 +16,11 @@ $jeoMarkerSupportFiles = @(
     "cloak/VISUAL_REFINEMENT_8PT_GUIDE.md",
     "cloak/ARTIFACT_VISUAL_ACCESSIBILITY_GUIDE.md",
     "scribe/ARTIFACT_AUTHORING_AND_BACKEND_SELECTION_GUIDE.md"
+)
+$jeoProvenanceSupportFiles = @(
+    "the-governor/LICENSE_PRIVACY_IP_COMPLIANCE_GUIDE.md",
+    "the-governor/HUMAN_ESCALATION_BOUNDARIES_GUIDE.md",
+    "the-governor/OUTPUT_FORMATS.md"
 )
 
 function Write-Utf8NoBomLfFile {
@@ -200,6 +207,22 @@ description: $desc
                 $markerMatches[0].Value -cne "@codebase_provenance_JEO" -or
                 $markerMatches[1].Value -cne "@codebase_rights_JEO") {
                 Write-Error "JEO-marked support guide must start with the exact provenance and rights markers and contain no other codebase markers: $supportKey"
+                exit 1
+            }
+            $supportContent = $normalizedSupportContent.Substring($expectedHeader.Length)
+        }
+        elseif ($jeoProvenanceSupportFiles -ccontains $supportKey) {
+            $normalizedSupportContent = $supportContent -replace "`r`n", "`n"
+            $expectedHeader = "<!-- @codebase_provenance_JEO -->`n"
+            $markerMatches = [regex]::Matches(
+                $normalizedSupportContent,
+                '@\s*codebase[^\s<>]*',
+                [System.Text.RegularExpressions.RegexOptions]::IgnoreCase
+            )
+            if (-not $normalizedSupportContent.StartsWith($expectedHeader, [System.StringComparison]::Ordinal) -or
+                $markerMatches.Count -ne 1 -or
+                $markerMatches[0].Value -cne "@codebase_provenance_JEO") {
+                Write-Error "Governor support guide must start with its exact provenance marker and contain no other codebase markers: $supportKey"
                 exit 1
             }
             $supportContent = $normalizedSupportContent.Substring($expectedHeader.Length)
