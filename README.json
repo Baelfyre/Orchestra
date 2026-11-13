@@ -845,7 +845,7 @@
     },
     "uix9_candidate_static_evidence_v2": {
       "status": "CANDIDATE_STATIC_EVIDENCE_CONTRACT",
-      "purpose": "Separates frozen historical UIX-9 V1 proof records from candidate-only static V2 evidence bound to an unstaged worktree, guidance digest, and schema.",
+      "purpose": "Separates frozen historical UIX-9 V1 proof records from candidate-only static V2 evidence bound to an unstaged worktree, guidance digest, and schema; verify_canonical_preparation in scripts/uix9b_live_proof_runner_v2.py verifies frozen V1 guidance, evaluator, and validator digests against historical V1 identity separately from current candidate guidance manifest digests.",
       "machine_sources": [
         "machine/schemas/uix9-candidate-static-evidence.v2.schema.json",
         "machine/ui/uix9-live-guidance-manifest.v1.json"
@@ -854,7 +854,11 @@
         "docs/validation/UIX9_CANDIDATE_STATIC_EVIDENCE_V2.md"
       ],
       "generator": "scripts/uix9_static_evidence_v2.py",
-      "validation_surface": "tests/runtime/test_uix9_static_evidence_v2.py",
+      "runner": "scripts/uix9b_live_proof_runner_v2.py",
+      "validation_surface": [
+        "tests/runtime/test_uix9_static_evidence_v2.py",
+        "tests/runtime/test_uix9_live_proof_protocol.py"
+      ],
       "authority_note": "Static V2 evidence is limited to DRAFT_DIAGNOSTIC or STATIC_EVIDENCE_PENDING_REVIEW; it does not inherit V1 approval or authorize UIX-9B/UIX-9C, merge, governance activation, or release."
     },
     "host_update_planning": {
