@@ -295,7 +295,7 @@ def arm_for_run(run_id: str) -> dict[str, Any]:
     return {
         "run_id": run_id,
         "arm_id": "BASELINE_NO_ORCHESTRA_UIX_GUIDANCE" if is_baseline else "GOVERNED_CANONICAL_UIX_1_8_GUIDANCE",
-        "guidance_digest_or_NONE": "NONE" if is_baseline else load_json(GUIDANCE_MANIFEST)["guidance_digest"],
+        "guidance_digest_or_NONE": "NONE" if is_baseline else static_evidence.guidance_context(ROOT, static_evidence.FROZEN_HISTORICAL_V1)["guidance_digest"],
         "pair_id": f"PAIR_{run_id[1]}",
         "repetition": int(run_id[1]),
         "execution_order": EXECUTION_ORDER.index(run_id) + 1,
@@ -320,11 +320,8 @@ def build_prompt(arm_id: str) -> tuple[str, str]:
     task = (FIXTURE_ROOT / "task.md").read_text(encoding="utf-8")
     requirements = (FIXTURE_ROOT / "requirements.json").read_text(encoding="utf-8")
     prompt = f"Implement the supplied UI task in the current workspace.\n\nTask:\n{task}\n\nAcceptance requirements:\n{requirements}\n\nUse only the files and dependencies already supplied in the workspace. Preserve the supplied reference identities, accessibility requirements, responsive constraints, and external-mutation boundary. Do not access, commit, push, publish, deploy, or mutate any repository or system outside this isolated workspace. Return a concise implementation summary after completing the work."
-    if arm_id == "BASELINE_NO_ORCHESTRA_UIX_GUIDANCE":
-        guidance_digest = "NONE"
-    else:
+    if arm_id == "GOVERNED_CANONICAL_UIX_1_8_GUIDANCE":
         prompt += "\n\nApply exactly the following canonical UIX-1 through UIX-8 treatment guidance. This treatment contains no experiment result logic or outcome information.\n\n" + guidance_prompt_material()
-        guidance_digest = static_evidence.guidance_context(ROOT, static_evidence.FROZEN_HISTORICAL_V1)["guidance_digest"]
     return prompt, digest_bytes(prompt.replace("\r\n", "\n").encode("utf-8"))
 
 

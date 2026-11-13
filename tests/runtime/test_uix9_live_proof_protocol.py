@@ -211,12 +211,28 @@ def test_approved_authorization_still_requires_explicit_live_gate() -> None:
 def test_arm_prompts_preserve_treatment_boundary() -> None:
     arm_a, digest_a = v2_runner.build_prompt("BASELINE_NO_ORCHESTRA_UIX_GUIDANCE")
     arm_b, digest_b = v2_runner.build_prompt("GOVERNED_CANONICAL_UIX_1_8_GUIDANCE")
+    frozen_guidance = v2_runner.static_evidence.guidance_context(ROOT, v2_runner.static_evidence.FROZEN_HISTORICAL_V1)
+    frozen_identity = _load(v2_runner.IDENTITY_PATH)
+    candidate_manifest = _load(v2_runner.GUIDANCE_MANIFEST)
+    run_a1 = v2_runner.arm_for_run("A1")
+    run_b1 = v2_runner.arm_for_run("B1")
 
     assert digest_a != digest_b
     assert "canonical UIX-1 through UIX-8" not in arm_a
     assert "UIX_1_DESIGN_CONTRACT" not in arm_a
     assert "canonical UIX-1 through UIX-8" in arm_b
     assert not any(marker in arm_b.lower() for marker in v2_runner.UIX9_RESULT_LOGIC_MARKERS)
+    assert run_a1["guidance_digest_or_NONE"] == "NONE"
+    assert run_b1["guidance_digest_or_NONE"] == frozen_guidance["guidance_digest"]
+    assert run_b1["guidance_digest_or_NONE"] == frozen_identity["uix_guidance_digest"]
+    assert run_b1["guidance_digest_or_NONE"] != candidate_manifest["guidance_digest"]
+
+    for bad_run_id in ("C1", "B9", ""):
+        with pytest.raises(v2_runner.ProtocolBreach, match="unexpected run id"):
+            v2_runner.arm_for_run(bad_run_id)
+
+    with pytest.raises(v2_runner.ProtocolBreach, match="unexpected arm"):
+        v2_runner.build_prompt("INVALID_ARM")
 
 
 def test_codex_command_is_bounded_and_provider_fixed() -> None:
