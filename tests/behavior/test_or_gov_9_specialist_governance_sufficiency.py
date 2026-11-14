@@ -10,6 +10,8 @@ Verifies:
 6. Machine and human audit disposition artifact consistency.
 """
 
+# @codebase_provenance_JEO
+
 import hashlib
 import json
 import os
@@ -49,17 +51,24 @@ class TestOrGov9SpecialistSufficiency(unittest.TestCase):
         self.assertIn("REVISION_REQUIRED", content)
         self.assertIn("BLOCKED", content)
 
-    def test_04_governor_frozen_skill_digest_preserved(self):
-        """Test skills/the-governor/SKILL.md matches canonical UIX-9 manifest digest exactly."""
+    def test_04_governor_candidate_manifest_integrity(self):
+        """Test candidate Governor guidance is bound to its UIX-9 manifest digest."""
         manifest_path = REPO_ROOT / "machine" / "ui" / "uix9-live-guidance-manifest.v1.json"
         self.assertTrue(manifest_path.exists())
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-        skill_path = REPO_ROOT / "skills" / "the-governor" / "SKILL.md"
-        actual_digest = hashlib.sha256(skill_path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
-
         governor_entry = next((m for m in manifest.get("materials", []) if m.get("path") == "skills/the-governor/SKILL.md"), None)
         self.assertIsNotNone(governor_entry)
-        self.assertEqual(actual_digest, governor_entry["canonical_blob_digest"])
+
+        records = []
+        for item in manifest.get("materials", []):
+            path = REPO_ROOT / item["path"]
+            self.assertTrue(path.is_file(), f"Missing candidate guidance material: {item['path']}")
+            content_digest = hashlib.sha256(path.read_text(encoding="utf-8").replace("\r", "\n").encode("utf-8")).hexdigest()
+            self.assertEqual(content_digest, item["canonical_blob_digest"], f"Candidate guidance digest mismatch: {item['path']}")
+            records.append((item["path"], f"{content_digest}\t{item['role']}\t{item['revision_identity']}"))
+
+        aggregate = "\n".join(f"{path}\t{value}" for path, value in sorted(records))
+        self.assertEqual(hashlib.sha256(aggregate.encode("utf-8")).hexdigest(), manifest["guidance_digest"])
 
     def test_05_weaver_source_to_model_traceability(self):
         """Test Weaver requires source facts -> diagram without inventing facts."""

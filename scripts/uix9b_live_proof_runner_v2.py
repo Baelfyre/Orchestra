@@ -26,9 +26,11 @@ import jsonschema
 
 try:
     from . import uix9_live_metric_evaluator_v2 as evaluator
+    from . import uix9_static_evidence_v2 as static_evidence
     from . import uix9b_live_proof_adjudicator_v2 as adjudicator
 except ImportError:
     import uix9_live_metric_evaluator_v2 as evaluator
+    import uix9_static_evidence_v2 as static_evidence
     import uix9b_live_proof_adjudicator_v2 as adjudicator
 
 
@@ -284,10 +286,10 @@ def arm_for_run(run_id: str) -> dict[str, Any]:
 
 
 def guidance_prompt_material() -> str:
-    manifest = load_json(GUIDANCE_MANIFEST)
+    context = static_evidence.guidance_context(ROOT, static_evidence.FROZEN_HISTORICAL_V1)
     materials: list[str] = []
-    for material in manifest["materials"]:
-        content = (ROOT / material["path"]).read_text(encoding="utf-8")
+    for material in context["materials"]:
+        content = material["content"]
         lowered = content.lower()
         if any(marker in lowered for marker in UIX9_RESULT_LOGIC_MARKERS):
             raise ProtocolBreach(f"UIX9_RESULT_LOGIC_IN_GUIDANCE:{material['path']}")
@@ -305,7 +307,7 @@ def build_prompt(arm_id: str) -> tuple[str, str]:
         guidance_digest = "NONE"
     else:
         prompt += "\n\nApply exactly the following canonical UIX-1 through UIX-8 treatment guidance. This treatment contains no experiment result logic or outcome information.\n\n" + guidance_prompt_material()
-        guidance_digest = load_json(GUIDANCE_MANIFEST)["guidance_digest"]
+        guidance_digest = static_evidence.guidance_context(ROOT, static_evidence.FROZEN_HISTORICAL_V1)["guidance_digest"]
     return prompt, digest_bytes(prompt.replace("\r\n", "\n").encode("utf-8"))
 
 

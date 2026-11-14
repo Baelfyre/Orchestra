@@ -16,6 +16,11 @@ from typing import Any, Iterable
 
 import jsonschema
 
+try:
+    from . import uix9_static_evidence_v2 as static_evidence
+except ImportError:
+    import uix9_static_evidence_v2 as static_evidence
+
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_FIXTURE_ROOT = ROOT / "tests" / "fixtures" / "ui" / "uix9-live-project"
@@ -181,21 +186,10 @@ def source_files(candidate_root: Path) -> dict[str, str]:
 
 
 def guidance_digest_from_frozen_manifest() -> str:
-    manifest = load_json(require_file(ROOT / "machine" / "ui" / "uix9-live-guidance-manifest.v1.json"))
-    records: list[tuple[str, str]] = []
-    for material in manifest.get("materials", []):
-        path = material.get("path")
-        if not isinstance(path, str):
-            raise EvaluationError("MALFORMED_GUIDANCE_MANIFEST", "material path")
-        actual = digest_file(require_file(ROOT / path, "MISSING_GUIDANCE_MATERIAL"))
-        if actual != material.get("canonical_blob_digest"):
-            raise EvaluationError("GUIDANCE_DIGEST_MISMATCH", path)
-        records.append((path, f"{actual}\t{material.get('role')}\t{material.get('revision_identity')}"))
-    actual_digest = digest_records(records)
-    if actual_digest != manifest.get("guidance_digest"):
-        raise EvaluationError("GUIDANCE_MANIFEST_DIGEST_MISMATCH", str(ROOT / "machine" / "ui" / "uix9-live-guidance-manifest.v1.json"))
-    return actual_digest
-
+    try:
+        return static_evidence.guidance_context(ROOT, static_evidence.FROZEN_HISTORICAL_V1)["guidance_digest"]
+    except static_evidence.EvidenceError as exc:
+        raise EvaluationError("GUIDANCE_DIGEST_MISMATCH", str(exc)) from exc
 
 def verify_identity(identity_path: Path, fixture_root: Path) -> dict[str, Any]:
     identity = load_json(require_file(identity_path))
@@ -203,7 +197,11 @@ def verify_identity(identity_path: Path, fixture_root: Path) -> dict[str, Any]:
         raise EvaluationError("EVALUATOR_VERSION_MISMATCH", str(identity_path))
     source_path = ROOT / identity.get("evaluator_source", "")
     require_file(source_path, "MISSING_EVALUATOR_SOURCE")
-    if digest_file(source_path) != identity.get("evaluator_digest"):
+    try:
+        actual_evaluator_digest = static_evidence.frozen_source_digest(ROOT, "evaluator")
+    except static_evidence.EvidenceError as exc:
+        raise EvaluationError("EVALUATOR_DIGEST_MISMATCH", str(source_path)) from exc
+    if actual_evaluator_digest != identity.get("evaluator_digest"):
         raise EvaluationError("EVALUATOR_DIGEST_MISMATCH", str(source_path))
     if identity.get("validator_digest") != FROZEN_VALIDATOR_DIGEST:
         raise EvaluationError("VALIDATOR_DIGEST_MISMATCH", "identity validator digest is not the frozen V1 validator")

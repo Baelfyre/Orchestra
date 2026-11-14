@@ -30,7 +30,7 @@
     {"path": "skills/conductor/SKILL.md", "canonical_blob_digest": "a1423c4e70e3f1bf2d010366e348220f83c05c7a9a13513abdb9786d74248fef", "role": "UIX_8_SOURCE_GUIDANCE_CONDUCTOR", "revision_identity": "UIX_8_SOURCE_GUIDANCE_2026-08-24"},
     {"path": "skills/cloak/SKILL.md", "canonical_blob_digest": "caad35b531aa0e9a8a9576ffadf98a64dc7d77a9a7aef1e1636f946b69660a46", "role": "UIX_8_SOURCE_GUIDANCE_CLOAK", "revision_identity": "UIX_8_SOURCE_GUIDANCE_2026-08-24"},
     {"path": "skills/clockwork/SKILL.md", "canonical_blob_digest": "4f01c67b3b217f8b08385820a014e364264afdbe7df7ef1bbc3aadf1a1f39c5c", "role": "UIX_8_SOURCE_GUIDANCE_CLOCKWORK", "revision_identity": "UIX_8_SOURCE_GUIDANCE_2026-08-24"},
-    {"path": "skills/the-governor/SKILL.md", "canonical_blob_digest": "0a96ee717e2f33109799cf7cc1600ca4dc5bc31beede86ffedcc5877be82bfa1", "role": "UIX_8_SOURCE_GUIDANCE_GOVERNOR", "revision_identity": "UIX_8_SOURCE_GUIDANCE_2026-08-24"},
+    {"path": "skills/the-governor/SKILL.md", "canonical_blob_digest": "6fe94b76d6d320b36ac2d31d9dd2d0a0cc7ef43f92224a5466246fa62e1da675", "role": "UIX_8_SOURCE_GUIDANCE_GOVERNOR", "revision_identity": "UIX_8_SOURCE_GUIDANCE_2026-08-24"},
     {"path": "skills/ponytail/SKILL.md", "canonical_blob_digest": "ed49bdfd0b777ff24a179ed1479f7ec63aeb2e1103de78b565feeb8de0c89a82", "role": "UIX_8_SOURCE_GUIDANCE_PONYTAIL", "revision_identity": "UIX_8_SOURCE_GUIDANCE_2026-08-24"},
     {"path": "skills/overseer/SKILL.md", "canonical_blob_digest": "2c63ebbcacf4132796efc978ea445b6f3c3772000b26f7e4b87e9c87e98f3049", "role": "UIX_8_SOURCE_GUIDANCE_OVERSEER", "revision_identity": "UIX_8_SOURCE_GUIDANCE_2026-08-24"},
     {"path": "skills/arbiter/SKILL.md", "canonical_blob_digest": "0028a89122d237e05460a2c7f0ded79144b07b0b4cd337a5a5c9268c6860c339", "role": "UIX_8_SOURCE_GUIDANCE_ARBITER", "revision_identity": "UIX_8_SOURCE_GUIDANCE_2026-08-24"}
@@ -48,5 +48,5 @@
     "tests/runtime/test_uix9_proof_protocol.py",
     "tests/runtime/test_uix9_live_proof_protocol.py"
   ],
-  "guidance_digest": "f989ac579875fbcd349f812fa6e241ba5c8505f9f940abcb5e0e30006f1606ab"
+  "guidance_digest": "2d0c03e755b830e749ed9842d84cb6263d1aa81bea38c1cec43ac7c321bd060c"
 }

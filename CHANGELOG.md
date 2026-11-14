@@ -4,6 +4,12 @@
 
 - Prepare the approved public identity migration from Orchestra to Kontrolled Kaos across product metadata, host registrations, installation guidance, and brand asset references. Preserve the existing specialists, Conductor routing, governance, runtime behavior, version 1.12.0, historical Orchestra evidence, and all release and publication gates.
 
+## Unreleased Governor AI-output warning boundary
+
+- Add isolated static UIX-9 candidate evidence while retaining frozen V1 identities and existing live execution gates.
+- Permit a scoped `RISKS` warning for unsupported, unparticularized AI-output similarity concerns or incomplete intermediate-generation reconstruction only after proportionate review, when no concrete conflict or material uncertainty remains, every applicable gate independently passes, and no separate human-review flag is pending. Preserve mandatory clearances and public-release, merge, and publication approvals; the warning is not rights clearance or transition authority.
+- Refresh the candidate-only Governor guidance digest for this policy amendment.
+
 ## Unreleased v1.12.0 release-evidence reconciliation
 
 - Record the verified integration/current-main checkpoints, product-specific provisional data inventory and evidence-backed applicability without treating templates as cleared policies.
@@ -628,6 +634,7 @@
 - Confirms Dagger remains strictly gated and simulation-first with live destructive execution blocked across all paths (6/6 guardrail simulation tests pass).
 - Records governed disposition `OR_GOV_9_SUFFICIENT_NO_REFINEMENT` and qualifies repository for OR-GOV-10 integration closeout.
 - Adds `docs/governance/or_gov_9_specialist_sufficiency_disposition.v1.json`, `docs/governance/OR_GOV_9_SPECIALIST_SUFFICIENCY_AUDIT.md`, and 22 deterministic behavioral tests registered in `tests/behavior/run_tests.py`.
+- Clarifies public-release prerequisites (`IP/copyright cleared`, required human review, recorded publication approvals) and the narrow conditional `RISKS` warning for unsupported, unparticularized AI-output similarity concerns or inability to reconstruct every intermediate AI-generation step; unknown evidence, unresolved material facts, and concrete conflicts remain blocking without implying rights clearance.
 
 ## Post-v1.7 OR-GOV-8D Scribe post-SSU governance documentation integration candidate
 

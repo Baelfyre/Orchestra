@@ -35,7 +35,7 @@
       "slug": "the-governor",
       "authority_class": "GOVERNANCE_LEGAL_COMPLIANCE",
       "source_path": "skills/the-governor/SKILL.md",
-      "source_blob_sha": "0101d28effb18eec66df7fa2534b2eba8a2bf926",
+      "source_blob_sha": "45c95ba241cc388b1dc136317d181ee887cc95c6",
       "observe_classes": [
         "AUTHORITATIVE_RULES",
         "DATA_USE",

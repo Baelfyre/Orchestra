@@ -7,6 +7,12 @@ import pytest
 
 from adapters.codex import validate_codex_export
 
+LEGACY_MARKED_GUIDE_TEST_IDS = {
+    Path("skills/cloak/VISUAL_REFINEMENT_8PT_GUIDE.md"): "cloak-visual",
+    Path("skills/cloak/ARTIFACT_VISUAL_ACCESSIBILITY_GUIDE.md"): "cloak-artifact",
+    Path("skills/scribe/ARTIFACT_AUTHORING_AND_BACKEND_SELECTION_GUIDE.md"): "scribe-artifact",
+}
+
 
 def copy_export_tree(tmp_path: Path) -> Path:
     repo_root = Path(__file__).resolve().parents[2]
@@ -167,12 +173,14 @@ def test_fresh_export_strips_source_markers_from_guides_and_validates(tmp_path: 
     assert "heydamir/unslop" in exported_text
     assert "mshumer/unslop" in exported_text
 
-    for source_relative, export_relative, label in validate_codex_export.MARKED_SUPPORT_GUIDES[1:]:
+    for guide in validate_codex_export.MARKED_SUPPORT_GUIDES[1:]:
+        source_relative, export_relative, label = guide[:3]
+        expected_markers = guide[3] if len(guide) == 4 else validate_codex_export.CLOAK_VISUAL_GUIDE_MARKERS
         source_path = repo_root / source_relative
         exported_path = export_root / "skills" / export_relative
         source_text = source_path.read_text(encoding="utf-8")
         exported_text = exported_path.read_text(encoding="utf-8")
-        assert exported_text == validate_codex_export.strip_jeo_support_markers(source_text, label)
+        assert exported_text == validate_codex_export.strip_jeo_support_markers(source_text, label, expected_markers)
         assert "@codebase_" not in exported_text
 
     unrelated_source = repo_root / "skills" / "cloak" / "DESIGN_TOKENS_COMPONENT_STATES_GUIDE.md"
@@ -198,7 +206,13 @@ def test_fresh_export_strips_source_markers_from_guides_and_validates(tmp_path: 
 @pytest.mark.parametrize(
     "source_relative",
     tuple(guide[0] for guide in validate_codex_export.MARKED_SUPPORT_GUIDES),
-    ids=("cloak-visual", "cloak-artifact", "scribe-artifact"),
+    ids=tuple(
+        LEGACY_MARKED_GUIDE_TEST_IDS.get(
+            guide[0],
+            guide[0].as_posix().lower().replace("/", "-").replace("_", "-").replace(".md", ""),
+        )
+        for guide in validate_codex_export.MARKED_SUPPORT_GUIDES
+    ),
 )
 def test_exporter_rejects_case_variant_unexpected_guide_marker(
     tmp_path: Path,
@@ -236,4 +250,4 @@ def test_exporter_rejects_case_variant_unexpected_guide_marker(
     result = subprocess.run(command, cwd=source_root, capture_output=True, text=True, check=False)
 
     assert result.returncode != 0
-    assert "contain no other codebase markers" in result.stderr
+    assert "contain no other codebase markers" in " ".join(result.stderr.split())
