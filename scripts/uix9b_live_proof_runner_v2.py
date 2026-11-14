@@ -372,7 +372,9 @@ def parse_codex_jsonl(raw_output: str) -> dict[str, Any]:
     if not messages:
         raise ProtocolBreach("Codex JSONL is missing a completed agent message")
     observed_models = {str(event[field]) for event in events for field in ("model", "model_name") if isinstance(event.get(field), str)}
-    if observed_models and observed_models != {EXPECTED_MODEL}:
+    if not observed_models:
+        raise ProtocolBreach("MODEL_IDENTITY_NOT_OBSERVED")
+    if observed_models != {EXPECTED_MODEL}:
         raise ProtocolBreach("provider/model substitution detected in Codex output")
     return {"events": events, "response": messages[-1], "token_counts": token_counts}
 
@@ -833,6 +835,8 @@ def execute_campaign(
     auth = load_json(AUTHORIZATION_PATH)
     validate(auth, AUTHORIZATION_SCHEMA)
     _authorize_live(auth, live_call_gate=live_call_gate)
+    if evidence_root.resolve() != EVIDENCE_ROOT.resolve():
+        raise ExecutionRefused("CAMPAIGN_EVIDENCE_ROOT_MUST_BE_CANONICAL")
     root = _ensure_evidence_root(evidence_root)
     started = time.monotonic()
     with evidence_lock(root):

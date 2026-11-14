@@ -477,3 +477,49 @@ def test_codex_0148_approval_flag_precedes_exec_and_rules_apply() -> None:
     command = v2_runner.build_codex_command(prompt="task", workspace_dir=ROOT)
     assert command[:4] == ["codex", "--ask-for-approval", "never", "exec"]
     assert "--ignore-rules" not in command
+
+
+def test_live_campaign_refuses_alternate_root_before_session(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """A new descendant directory must not reset a campaign's call accounting."""
+    monkeypatch.setattr(v2_runner, "EVIDENCE_ROOT", tmp_path)
+    monkeypatch.setattr(v2_runner, "verify_frozen_identities", lambda: {"synthetic": True})
+    monkeypatch.setattr(v2_runner, "_authorize_live", lambda *_args, **_kwargs: None)
+    invoked = False
+
+    def never_call_provider(_workspace: Path, _prompt: str) -> dict:
+        nonlocal invoked
+        invoked = True
+        raise AssertionError("provider must never be called")
+
+    alternative = tmp_path / "fresh-counters"
+    with pytest.raises(v2_runner.ExecutionRefused, match="CAMPAIGN_EVIDENCE_ROOT_MUST_BE_CANONICAL"):
+        v2_runner.execute_campaign(
+            evidence_root=alternative,
+            live_call_gate=True,
+            session_runner=never_call_provider,
+        )
+    assert invoked is False
+    assert not alternative.exists()
+
+
+def test_codex_jsonl_model_identity_required() -> None:
+    """Configured model is insufficient when no observed model is reported."""
+    events = [
+        {"type": "thread.started", "thread_id": "synthetic"},
+        {"type": "item.completed", "item": {"type": "agent_message", "text": "synthetic"}},
+        {"type": "turn.completed", "usage": {}},
+    ]
+    def text() -> str:
+        return "\n".join(json.dumps(item) for item in events)
+
+    with pytest.raises(v2_runner.ProtocolBreach, match="MODEL_IDENTITY_NOT_OBSERVED"):
+        v2_runner.parse_codex_jsonl(text())
+
+    events[0]["model"] = "different-model"
+    with pytest.raises(v2_runner.ProtocolBreach, match="provider/model substitution"):
+        v2_runner.parse_codex_jsonl(text())
+
+    events[0]["model"] = v2_runner.EXPECTED_MODEL
+    assert v2_runner.parse_codex_jsonl(text())["response"] == "synthetic"
