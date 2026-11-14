@@ -28,7 +28,7 @@ def main():
         'docs/setup/LOCAL_ONLY_GUIDE.md',
         'docs/setup/COMPATIBILITY.md',
         'docs/setup/VALIDATION.md',
-        'assets/logo/orchestra.ico'
+        'assets/branding/kontrolled-kaos-dual-k-emblem.png'
     ]
     
     adapters = ['codex','cursor','jetbrains','neovim','windsurf','vscode','zed','antigravity','claude-code','local-ai']

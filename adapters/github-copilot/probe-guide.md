@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This guide defines the exact copy-paste capability probe to evaluate GitHub Copilot's live integration surfaces with Orchestra under the **Universal Adaptive Integration (UAI)** architecture.
+This guide defines the exact copy-paste capability probe to evaluate GitHub Copilot's live integration surfaces with Kontrolled Kaos under the **Universal Adaptive Integration (UAI)** architecture.
 
 Per UAI governance:
 ```text
@@ -22,9 +22,9 @@ Capabilities not yet proven on the live Copilot surface remain `AVAILABLE_NOT_YE
 
 ## Architectural Distinctions
 
-1. **Orchestra Command Surface**: Orchestra canonically routes development tasks through slash commands such as `/conductor` (orchestration / routing) and `/ponytail` (bounded implementation).
-2. **Native Copilot Custom-Agent Capability**: Host-level `@agent` support (e.g. `.github/agents/*.agent.md` or `@conductor`) is evaluated strictly as an optional host transport capability. Native `@agent` support is not a prerequisite for Orchestra routing authority.
-3. **Transport Independence**: The UAI resolver maps Orchestra interactions to whatever transport the host supports (slash commands, repository instructions, agent skills, custom agents, MCP, extensions, or CLI). No single transport represents Orchestra's universal architecture.
+1. **Conductor Command Surface**: Kontrolled Kaos canonically routes development tasks through commands such as `/conductor` (routing) and `/ponytail` (bounded implementation).
+2. **Native Copilot Custom-Agent Capability**: Host-level `@agent` support (e.g. `.github/agents/*.agent.md` or `@conductor`) is evaluated strictly as an optional host transport capability. Native `@agent` support is not a prerequisite for Kaos routing authority or proof of an `@Kaos` alias.
+3. **Transport Independence**: The UAI resolver maps Kaos interactions to whatever transport the host supports (slash commands, repository instructions, agent skills, custom agents, MCP, extensions, or CLI). No single transport represents the framework's universal architecture.
 
 ---
 
@@ -32,10 +32,10 @@ Capabilities not yet proven on the live Copilot surface remain `AVAILABLE_NOT_YE
 
 | # | Probe Dimension | Target Surface | Test Mechanism | Deterministic Status | Maintainer Live Action Required |
 |---|---|---|---|---|---|
-| 1 | Repository & Workspace Instructions | `.github/copilot-instructions.md` | Ask Copilot to state primary Orchestra router | AVAILABLE_NOT_YET_VERIFIED | Prompt in Copilot Chat |
-| 2 | Orchestra Command Recognition: Conductor | `/conductor` invocation | Probe A: route without implementing | AVAILABLE_NOT_YET_VERIFIED | Prompt in Copilot Chat |
-| 3 | Orchestra Specialist Recognition: Ponytail | `/ponytail` invocation | Probe B: implementation boundaries | AVAILABLE_NOT_YET_VERIFIED | Prompt in Copilot Chat |
-| 4 | Orchestra Command Separation | `/conductor` vs `/ponytail` | Probe C: contrast roles and authority | AVAILABLE_NOT_YET_VERIFIED | Prompt in Copilot Chat |
+| 1 | Repository & Workspace Instructions | `.github/copilot-instructions.md` | Ask Copilot to state the primary Kaos router | AVAILABLE_NOT_YET_VERIFIED | Prompt in Copilot Chat |
+| 2 | Conductor Command Recognition | `/conductor` invocation | Probe A: route without implementing | AVAILABLE_NOT_YET_VERIFIED | Prompt in Copilot Chat |
+| 3 | Ponytail Specialist Recognition | `/ponytail` invocation | Probe B: implementation boundaries | AVAILABLE_NOT_YET_VERIFIED | Prompt in Copilot Chat |
+| 4 | Command Separation | `/conductor` vs `/ponytail` | Probe C: contrast roles and authority | AVAILABLE_NOT_YET_VERIFIED | Prompt in Copilot Chat |
 | 5 | Native Custom-Agent Capability | `.github/agents/*.agent.md` / UI picker | Probe D: check `@agent` selector support | AVAILABLE_NOT_YET_VERIFIED | Check agent picker in Chat |
 | 6 | Agent Skills Discovery | `.github/skills/*/SKILL.md` or `skills/*/SKILL.md` | Ask Copilot to list available skills | AVAILABLE_NOT_YET_VERIFIED | Prompt in Copilot Chat |
 | 7 | MCP Discovery & Tool Visibility | Workspace MCP configuration | Ask Copilot for available external tools | AVAILABLE_NOT_YET_VERIFIED | Check tool icon / call tools |
@@ -84,12 +84,12 @@ State:
 - `/conductor` recognized or correctly interpreted.
 - Conductor acts as router/orchestrator.
 - No direct implementation occurs merely from classification.
-- Routing remains bounded by Orchestra specialist ownership.
+- Routing remains bounded by Kaos specialist ownership.
 - If the task has one clear owner, Conductor may select a direct single-specialist fast route, but the result must identify that route as Conductor-selected rather than a host or specialist bypass.
 - Native custom-agent or other transport capability must not be presented as specialist routing authority.
 - UAI transport selection must remain separate from AWF specialist/workflow routing.
 - Capability does not create authority.
-*(Do not hard-code an expected destination specialist if the current Orchestra routing contract legitimately chooses another valid specialist.)*
+*(Do not hard-code an expected destination specialist if the current Kaos routing contract legitimately chooses another valid specialist.)*
 
 ---
 
@@ -121,7 +121,7 @@ Also state:
 **Surface**: GitHub Copilot Chat (VS Code, Web, or Cloud Agent)
 **Copy-paste prompt**:
 ```text
-According to this repository's Orchestra instructions, explain the difference between:
+According to this repository's Kontrolled Kaos instructions, explain the difference between:
 
 /conductor
 /ponytail
@@ -147,7 +147,7 @@ Do not modify any files.
   - `BLOCKED_BY_POLICY`: Disabled by organization or account policy.
   - `UNKNOWN`: Not determinable from current interface.
 **Boundary Note**:
-- Native `@agent` support is recorded strictly as host capability; it is not a prerequisite for Orchestra.
+- Native `@agent` support is recorded strictly as host capability; it is not a prerequisite for Kontrolled Kaos.
 
 ---
 
@@ -155,7 +155,7 @@ Do not modify any files.
 **Surface**: GitHub Copilot Chat
 **Copy-paste prompt**:
 ```text
-List all Orchestra skills available in this workspace and display the primary purpose of the 'clockwork' and 'cipher' skills.
+List all Kontrolled Kaos skills available in this workspace and display the primary purpose of the 'clockwork' and 'cipher' skills.
 ```
 **Expected verified evidence**:
 - Copilot recognizes `skills/*/SKILL.md` or reports which skill directories are indexed.

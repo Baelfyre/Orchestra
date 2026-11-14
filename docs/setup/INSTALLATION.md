@@ -1,10 +1,10 @@
 # Installation
 
-Orchestra can be installed in several ways depending on your AI host or IDE.
+Kontrolled Kaos, the AI-Assisted Development Framework, can be installed through the supported host surfaces below. Its internal Conductor specialist and all existing specialist IDs remain unchanged.
 
 ## Release Status
 
-The current public GitHub Release is `v1.11.0: Adaptive Assurance and Governance Hardening`, published from lightweight tag `v1.11.0` at exact GitHub-verified signed release commit `72c2884a66bb0e0d0ff1e070e7cc1feccd968e35` with tree `e4072cff4de83efa1c1d2d495aa5c186a2469db4`. The release is non-draft, non-prerelease, immutable, and independently verified.
+The current public GitHub Release remains the historical Orchestra release `v1.11.0: Adaptive Assurance and Governance Hardening`, published from lightweight tag `v1.11.0` at exact GitHub-verified signed release commit `72c2884a66bb0e0d0ff1e070e7cc1feccd968e35` with tree `e4072cff4de83efa1c1d2d495aa5c186a2469db4`. The release is non-draft, non-prerelease, immutable, and independently verified. This rebrand does not bump the version or publish a release.
 
 The `v1.11.0` tag is a lightweight `commit` ref resolving directly to the release commit; there is no separate tag object. All canonical package/version surfaces are normalized to `1.11.0`. Use tag `v1.11.0` when exact currently published content is required.
 
@@ -14,7 +14,7 @@ The v1.11.0 published reference and preserved candidate/readiness evidence are l
 |---|---|---|
 | Codex | Marketplace or repo-local fallback | Supported |
 | Claude Code | Marketplace plugin | Supported packaging/integration; runtime continuity `SCAFFOLD_ONLY` |
-| Antigravity | Native plugin install | Supported |
+| Antigravity | Native plugin install | Supported; current package validator is required before use |
 | Cursor | Scaffold-only packaging and workspace instructions | Scaffold-only |
 | Windsurf | Scaffold-only packaging and workspace instructions | Scaffold-only |
 | VS Code | Scaffold-only packaging and workspace instructions | Scaffold-only |
@@ -28,15 +28,18 @@ Accepted R7 live installed-host continuity evidence is verified and reconciled l
 
 ## 1. Antigravity Plugin Setup
 
-If you are using the Antigravity ecosystem, install the plugin directly:
+Install the plugin from the canonical repository, then confirm it appears in the host:
 
 ```sh
-agy plugin install https://github.com/Baelfyre/Orchestra
+agy plugin install https://github.com/Baelfyre/Kaos
+agy plugin list --json
 ```
+
+Invoke its public skill with `/kaos`. The Antigravity plugin ID is `kaos`; the separate `.antigravity-plugin/plugin.json` keeps Antigravity metadata from replacing the existing internal specialist registry. If an older entry is installed, inspect `agy plugin list --json`, verify the new `kaos` entry and `/kaos` first, then remove an obsolete entry only by its listed ID.
 
 ## 2. Codex Plugin Setup
 
-For most Codex users, install Orchestra through the Codex Marketplace and invoke it with `@Orchestra`. Repo-local `.agents/skills` setup is available for local testing, custom workspace setups, unsupported Codex workflows, or repos that intentionally want local skill files.
+Install Kontrolled Kaos through the Codex Marketplace. The existing package and marketplace IDs (`conductor@orchestra`) remain as compatibility keys; the new public skill alias is `$kaos`. Repo-local `.agents/skills` setup remains available for local testing, custom workspace setups, unsupported Codex workflows, or repos that intentionally want local skill files.
 
 ### Install in Codex through Marketplace
 
@@ -45,23 +48,30 @@ For most Codex users, install Orchestra through the Codex Marketplace and invoke
 3. Add a marketplace or open Marketplace source settings.
 4. Paste this GitHub repository URL into the Source field:
 
-   https://github.com/Baelfyre/Orchestra
+   https://github.com/Baelfyre/Kaos
 
 5. Add the marketplace source.
 6. Restart Codex.
 7. Go back to Plugins.
 8. Open Personal.
-9. Search for Orchestra.
+9. Search for Kontrolled Kaos.
 10. Click Install.
-11. Confirm that Orchestra appears as installed or enabled.
+11. Confirm that Kontrolled Kaos appears as installed or enabled.
 
-Use Orchestra in Codex with:
+The command line can register the repository marketplace and install its existing package ID:
 
 ```text
-@Orchestra
+codex plugin marketplace add Baelfyre/Kaos
+codex plugin add conductor@orchestra
 ```
 
-If Orchestra does not appear under Personal after adding the marketplace source, restart Codex again and check that the repository URL was entered correctly.
+Invoke the new entry point in a Codex skill surface with:
+
+```text
+$kaos
+```
+
+The marketplace and package IDs stay stable, so existing Codex installations do not need a package rename. Refresh the marketplace and restart Codex to receive the new alias. `@Kaos` is not claimed here because this repository has not verified an @-mention surface.
 
 ### Advanced: Install locally per-project
 
@@ -77,11 +87,19 @@ The Codex refresh path uses a temporary staging export by default. It reads trac
 
 ## 3. Claude Code Plugin Setup
 
-For Claude Code, you can install the Orchestra plugin directly using its marketplace.
+Claude Code namespaces plugin skills using the plugin ID. Install the new Kaos package from its marketplace:
 
 ```text
-/plugin marketplace add Baelfyre/Orchestra
-/plugin install orchestra@orchestra
+/plugin marketplace add Baelfyre/Kaos
+/plugin install kaos@orchestra
+```
+
+Invoke the existing Conductor specialist under the new plugin namespace with `/kaos:conductor`. Claude Code does not expose this plugin skill as bare `/kaos`.
+
+The plugin ID changes from `orchestra` to `kaos` so Claude Code uses the new namespace. The marketplace key `orchestra` stays stable for existing source registrations. For an existing installation, install the new package from that marketplace, confirm it is enabled and `/kaos:conductor` is available, then remove the old plugin:
+
+```sh
+claude plugin uninstall orchestra@orchestra
 ```
 
 To update or validate your plugin, run the following commands inside Claude Code:
@@ -106,7 +124,7 @@ If you prefer not to use a plugin manager or are using an unsupported environmen
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/Baelfyre/Orchestra.git
+   git clone https://github.com/Baelfyre/Kaos.git
    ```
 2. Copy only the specific folders you need from `skills/` into the local skill or instruction location supported by your tool.
 3. Keep the repository copy separate from unrelated source repositories. Follow [LOCAL_ONLY_GUIDE.md](LOCAL_ONLY_GUIDE.md) if you are deliberately using local skill files.
@@ -149,7 +167,7 @@ powershell -ExecutionPolicy Bypass -File .\scripts\refresh-installed-integration
 
 ## Check for Updates
 
-Orchestra update checks are notify-only. They do not silently modify installed plugin files.
+Kontrolled Kaos update checks are notify-only. They do not silently modify installed plugin files.
 
 Run:
 

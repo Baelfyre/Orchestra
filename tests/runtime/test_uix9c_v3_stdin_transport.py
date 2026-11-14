@@ -42,7 +42,7 @@ def test_session_runner_sends_exact_prompt_over_utf8_stdin(monkeypatch: pytest.M
         captured.update(kwargs)
         stdout = "\n".join(
             [
-                json.dumps({"type": "thread.started"}),
+                json.dumps({"type": "thread.started", "model": v3.v2.EXPECTED_MODEL}),
                 json.dumps({"type": "item.completed", "item": {"type": "agent_message", "text": "done"}}),
                 json.dumps({"type": "turn.completed", "usage": {"input_tokens": 3, "output_tokens": 2, "total_tokens": 5}}),
             ]
@@ -113,12 +113,14 @@ def test_approved_v3_envelope_supersedes_only_v2_call_ceiling_gate_and_restores_
         "max_interactions": v3.v2.MAX_TOTAL_PROVIDER_INTERACTIONS,
         "max_retries": v3.v2.MAX_RETRIES_FOR_INVALID_RUN,
         "authorize_live": v3.v2._authorize_live,
+        "evidence_root": v3.v2.EVIDENCE_ROOT,
     }
     observed: dict = {}
 
     def fake_execute_campaign(**kwargs):
         observed.update(kwargs)
         assert v3.v2.MAX_TOTAL_MODEL_CALLS == 7
+        assert v3.v2.EVIDENCE_ROOT == v3.EVIDENCE_ROOT
         assert v3.v2.MAX_PROVIDER_CALLS == 7
         assert v3.v2.MAX_TOTAL_PROVIDER_INTERACTIONS == 7
         assert v3.v2.MAX_RETRIES_FOR_INVALID_RUN == 1
@@ -139,14 +141,17 @@ def test_approved_v3_envelope_supersedes_only_v2_call_ceiling_gate_and_restores_
     assert v3.v2.MAX_TOTAL_PROVIDER_INTERACTIONS == originals["max_interactions"]
     assert v3.v2.MAX_RETRIES_FOR_INVALID_RUN == originals["max_retries"]
     assert v3.v2._authorize_live is originals["authorize_live"]
+    assert v3.v2.EVIDENCE_ROOT == originals["evidence_root"]
 
 
 def test_v3_envelope_restores_v2_globals_after_failure(monkeypatch: pytest.MonkeyPatch) -> None:
     authorization = _approved_authorization()
     original_authorize = v3.v2._authorize_live
     original_model_ceiling = v3.v2.MAX_TOTAL_MODEL_CALLS
+    original_evidence_root = v3.v2.EVIDENCE_ROOT
 
     def fail_campaign(**_kwargs):
+        assert v3.v2.EVIDENCE_ROOT == v3.EVIDENCE_ROOT
         assert v3.v2.MAX_TOTAL_MODEL_CALLS == 7
         raise RuntimeError("synthetic failure")
 
@@ -158,6 +163,7 @@ def test_v3_envelope_restores_v2_globals_after_failure(monkeypatch: pytest.Monke
 
     assert v3.v2.MAX_TOTAL_MODEL_CALLS == original_model_ceiling
     assert v3.v2._authorize_live is original_authorize
+    assert v3.v2.EVIDENCE_ROOT == original_evidence_root
 
 
 def test_single_invalid_replacement_is_campaign_global(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:

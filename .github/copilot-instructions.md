@@ -1,6 +1,6 @@
-# GitHub Copilot Instructions for Orchestra
+# GitHub Copilot Instructions for Kontrolled Kaos
 
-When assisting in the Orchestra repository or working with Orchestra-integrated workspaces, adhere strictly to the following architectural, routing, and governance principles:
+When assisting in the Kontrolled Kaos repository or working with Kontrolled Kaos-integrated workspaces, adhere strictly to the following architectural, routing, and governance principles:
 
 ## 1. Governance and Routing Architecture
 

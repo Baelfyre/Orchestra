@@ -1,5 +1,14 @@
 > v1.12.0 code integration through PR #990 and the evidence-first governance amendment through PR #996 are merged and verified; release-specific rights/privacy/retention/authority clearance remains open. v1.11.0 remains the latest published release. See the [candidate record](docs/releases/v1.12.0-release-candidate.md) and [applicability dossier](docs/releases/v1.12.0-release-clearance-evidence.md).
 
+## Unreleased Kontrolled Kaos product identity transition
+
+- Prepare the approved public identity migration from Orchestra to Kontrolled Kaos across product metadata, host registrations, installation guidance, and brand asset references. Preserve the existing specialists, Conductor routing, governance, runtime behavior, version 1.12.0, historical Orchestra evidence, and all release and publication gates.
+
+## Unreleased UIX-9 V1 and candidate V2 identity verification
+
+- Separate pinned historical UIX-9 V1 guidance, evaluator, and validator digest checks from static candidate V2 guidance manifest digest verification in `scripts/uix9b_live_proof_runner_v2.py`.
+- Add fail-closed regression tests in `tests/runtime/test_uix9_live_proof_protocol.py` for V1/V2 identity separation and mismatch errors. This PR performs no live provider calls and grants no merge or release authority. The earlier campaign-scoped V2 authorization is unchanged; see `docs/validation/UIX_9C_V2_AUTHORITY_RECONCILIATION_20261114.md` for the preparation/approval distinction.
+
 ## Unreleased Governor AI-output warning boundary
 
 - Add isolated static UIX-9 candidate evidence while retaining frozen V1 identities and existing live execution gates.

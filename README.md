@@ -1,27 +1,31 @@
 <div align="center">
-  <img src="./assets/readme/orchestra-governance-banner.svg" alt="Orchestra governance and specialist orchestration" width="100%" />
-  <p><strong>Governed orchestration for AI-assisted software development.</strong></p>
+  <img src="./assets/branding/kontrolled-kaos-hero-banner.png" alt="Kontrolled Kaos: Dual K emblem and AI-Assisted Development Framework" width="100%" />
+  <p><strong>Kontrolled Kaos</strong><br />AI-Assisted Development Framework</p>
   <p><a href="docs/setup/INSTALLATION.md">Install</a> | <a href="docs/reference/README.md">Documentation</a> | <a href="docs/reference/specialists/README.md">Specialists</a> | <a href="docs/governance/README.md">Governance</a> | <a href="CHANGELOG.md">Changelog</a></p>
-  <p><a href="https://github.com/Baelfyre/Orchestra/releases/tag/v1.11.0"><img src="https://img.shields.io/badge/published-v1.11.0-blue" alt="Published release v1.11.0" /></a> <a href="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml"><img src="https://github.com/Baelfyre/Orchestra/actions/workflows/validate.yml/badge.svg" alt="Validation status" /></a> <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license" /></p>
+  <p><a href="https://github.com/Baelfyre/Kaos/releases/tag/v1.11.0"><img src="https://img.shields.io/badge/published-v1.11.0-blue" alt="Published release v1.11.0" /></a> <a href="https://github.com/Baelfyre/Kaos/actions/workflows/validate.yml"><img src="https://github.com/Baelfyre/Kaos/actions/workflows/validate.yml/badge.svg" alt="Validation status" /></a> <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT license" /></p>
 </div>
 
-## What is Orchestra?
+## What is Kontrolled Kaos?
 
-Orchestra coordinates AI-assisted development across specialists for architecture, implementation, UI/UX, data, security, testing, documentation, and governance. It routes the task, preserves evidence, validates results, and respects human authority.
+Kontrolled Kaos coordinates AI-assisted development across specialists for architecture, implementation, UI/UX, data, security, testing, documentation, and governance. It routes the task, preserves evidence, validates results, and respects human authority.
 
-Orchestra is **not an AI model**. It works around compatible coding hosts and does not replace engineering judgment.
+Kontrolled Kaos is **not an AI model**. It works around compatible coding hosts and does not replace engineering judgment.
 
 ## Quick start
 
-Install through the [host installation guide](docs/setup/INSTALLATION.md). Then describe the result you want and what Orchestra may do:
+Install through the [host installation guide](docs/setup/INSTALLATION.md). Then use the entry point documented for your host:
 
 ```text
-@Orchestra
+Codex: $kaos
+Antigravity: /kaos
+Claude Code: /kaos:conductor
 
 Review this repository, identify the failing tests,
 fix the issue, and run relevant checks.
 You may edit files and prepare a PR. Do not merge or deploy.
 ```
+
+Do not assume `@Kaos` or any other invocation prefix on hosts that do not document that form.
 
 Conductor chooses the smallest useful specialist route. [Compatibility](docs/setup/COMPATIBILITY.md) and [getting started](docs/reference/getting-started/README.md) explain supported hosts.
 
@@ -43,7 +47,7 @@ These are **source and maturity claims**, not a guarantee that each capability i
 
 ## JEV and local API keys
 
-JEV supports non-binding engineering advice when independently reviewed alternatives exist. The existing offline pilot provides a repeatable 14-scenario pytest replay with explicitly labeled synthetic responses and evidence-gap recording. It makes no TypeSafe calls or actual JEV inference. The original V6 packet and source artifacts are absent, so replayed V6 findings remain **UNVERIFIED**. The pilot remains PREPARED_NOT_QUALIFIED; further qualification and integration are deferred from v1.12. Live TypeSafe integration, R3-A host trust, and production wiring remain unqualified. The TypeSafe adapter and offline data-minimization components exist, but there is **no verified general-purpose end-user BYOK activation flow**. Ordinary Orchestra use needs no JEV key. Never paste credentials into prompts or tracked project files.
+JEV supports non-binding engineering advice when independently reviewed alternatives exist. The existing offline pilot provides a repeatable 14-scenario pytest replay with explicitly labeled synthetic responses and evidence-gap recording. It makes no TypeSafe calls or actual JEV inference. The original V6 packet and source artifacts are absent, so replayed V6 findings remain **UNVERIFIED**. The pilot remains PREPARED_NOT_QUALIFIED; further qualification and integration are deferred from v1.12. Live TypeSafe integration, R3-A host trust, and production wiring remain unqualified. The TypeSafe adapter and offline data-minimization components exist, but there is **no verified general-purpose end-user BYOK activation flow**. Ordinary Kontrolled Kaos use needs no JEV key. Never paste credentials into prompts or tracked project files.
 
 Read the [offline pilot instructions](docs/setup/JEV_OFFLINE_PILOT.md), [JEV local API setup and limitations](docs/setup/JEV_LOCAL_API.md), and the [decision hierarchy](docs/architecture/EVIDENCE_GATED_DECISION_HIERARCHY.md).
 
@@ -80,9 +84,9 @@ Release governance uses a proportional [evidence-first relevance, validation, an
 
 ## Published release
 
-The latest public release is **[v1.11.0](https://github.com/Baelfyre/Orchestra/releases/tag/v1.11.0)**. The development branch contains later work, which remains unreleased until the complete version-specific qualification and publication process is completed. See [releases](docs/reference/releases/README.md) and [changelog](CHANGELOG.md).
+The latest published release remains the historical **Orchestra [v1.11.0](https://github.com/Baelfyre/Kaos/releases/tag/v1.11.0)**. The development branch contains later work, which remains unreleased until the complete version-specific qualification and publication process is completed. See [releases](docs/reference/releases/README.md) and [changelog](CHANGELOG.md).
 
-The v1.12.0 integration candidate was Squash-merged through [PR #990](https://github.com/Baelfyre/Orchestra/pull/990); the separately approved evidence-first governance amendment followed through [PR #996](https://github.com/Baelfyre/Orchestra/pull/996). These integrations are validated source states, **not** a published release. [Release-specific rights, privacy, retention, and governance gates remain open](https://github.com/Baelfyre/Orchestra/issues/991); the owner has requested publication once those gates pass. See the [candidate record](docs/releases/v1.12.0-release-candidate.md), [current release evidence and applicability screening](docs/releases/v1.12.0-release-clearance-evidence.md), [targeted source and naming rights assessment](docs/releases/v1.12.0-targeted-rights-assessment.md), [third-party provenance](docs/THIRD_PARTY_PROVENANCE.md), and [historical local reconciliation](docs/releases/v1.12.0-local-scope-reconciliation-2026-11-06.md).
+The v1.12.0 integration candidate was Squash-merged through [PR #990](https://github.com/Baelfyre/Kaos/pull/990); the separately approved evidence-first governance amendment followed through [PR #996](https://github.com/Baelfyre/Kaos/pull/996). These integrations are validated source states, **not** a published release. [Release-specific rights, privacy, retention, and governance gates remain open](https://github.com/Baelfyre/Kaos/issues/991); the owner has requested publication once those gates pass. See the [candidate record](docs/releases/v1.12.0-release-candidate.md), [current release evidence and applicability screening](docs/releases/v1.12.0-release-clearance-evidence.md), [targeted source and naming rights assessment](docs/releases/v1.12.0-targeted-rights-assessment.md), [third-party provenance](docs/THIRD_PARTY_PROVENANCE.md), and [historical local reconciliation](docs/releases/v1.12.0-local-scope-reconciliation-2026-11-06.md).
 
 ## Support
 

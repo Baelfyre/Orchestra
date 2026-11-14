@@ -1,6 +1,6 @@
-# GitHub Copilot Instructions for Orchestra Workspace
+# GitHub Copilot Instructions for Kontrolled Kaos Workspace
 
-When working in an Orchestra workspace, adhere to the following routing and execution architecture:
+When working in a Kontrolled Kaos workspace, adhere to the following routing and execution architecture:
 
 ## 1. Conductor Sole Router
 Always let Conductor classify and route domain requests:

@@ -1,10 +1,14 @@
 {
-  "name": "orchestra",
-  "description": "Governance-first specialist skill framework for routed, auditable AI coding workflows.",
+  "name": "kaos",
+  "displayName": "Kontrolled Kaos",
+  "description": "An AI-Assisted Development Framework that routes software work through Conductor and established specialist skills while preserving human authority.",
   "version": "1.12.0",
-  "update_check": {
-    "update_check_enabled": true,
-    "update_check_channel": "stable",
-    "update_check_frequency": "manual"
-  }
+  "author": {
+    "name": "Baelfyre",
+    "url": "https://github.com/Baelfyre"
+  },
+  "homepage": "https://github.com/Baelfyre/Kaos",
+  "repository": "https://github.com/Baelfyre/Kaos",
+  "license": "MIT",
+  "keywords": ["kaos", "AI-assisted development", "governance", "specialist skills"]
 }

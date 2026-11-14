@@ -1,13 +1,13 @@
 {
   "name": "conductor",
   "version": "1.12.0",
-  "description": "An installable AI workflow plugin that routes complex software tasks through focused specialist skills for architecture, UI/UX, documentation, diagrams, databases, QA, security, and gated resilience review.",
+  "description": "Kontrolled Kaos is an AI-Assisted Development Framework that routes software tasks through its existing specialist skills while preserving human authority.",
   "author": {
     "name": "Baelfyre",
     "url": "https://github.com/Baelfyre"
   },
-  "homepage": "https://github.com/Baelfyre/Orchestra",
-  "repository": "https://github.com/Baelfyre/Orchestra",
+  "homepage": "https://github.com/Baelfyre/Kaos",
+  "repository": "https://github.com/Baelfyre/Kaos",
   "license": "MIT",
   "keywords": [
     "codex",
@@ -16,25 +16,25 @@
     "skills",
     "governance"
   ],
-  "skills": "./skills/",
+  "skills": ["./skills/", "./brand-skills/"],
   "interface": {
-    "displayName": "Orchestra",
-    "shortDescription": "Route complex coding work through focused specialist skills",
-    "longDescription": "Use Orchestra to route software tasks through governance, orchestration, and specialist skills for architecture, QA, security, UI/UX, documentation, diagrams, and implementation.",
+    "displayName": "Kontrolled Kaos",
+    "shortDescription": "AI-Assisted Development Framework",
+    "longDescription": "Use Kontrolled Kaos to route software tasks through existing governance, Conductor coordination, and specialist skills for architecture, QA, security, UI/UX, documentation, diagrams, and implementation.",
     "developerName": "Baelfyre",
     "category": "Developer Tools",
     "capabilities": [
       "Interactive",
       "Write"
     ],
-    "websiteURL": "https://github.com/Baelfyre/Orchestra",
+    "websiteURL": "https://github.com/Baelfyre/Kaos",
     "privacyPolicyURL": "https://docs.github.com/site-policy/privacy-policies/github-general-privacy-statement",
     "termsOfServiceURL": "https://docs.github.com/en/site-policy/github-terms/github-terms-of-service",
     "defaultPrompt": [
-      "Use Orchestra to route this software task through the right specialist skills."
+      "Use Kontrolled Kaos to route this software task through the existing Conductor and specialist skills."
     ],
-    "composerIcon": "./assets/icons/conductor.png",
-    "logo": "./assets/logo/orchestra.png",
+    "composerIcon": "./assets/branding/kontrolled-kaos-dual-k-emblem.png",
+    "logo": "./assets/branding/kontrolled-kaos-dual-k-emblem.png",
     "screenshots": [],
     "brandColor": "#1F6FEB"
   }

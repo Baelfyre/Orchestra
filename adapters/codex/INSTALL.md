@@ -1,6 +1,6 @@
-# Codex Adapter Installation Guide
+# Kontrolled Kaos Codex Installation Guide
 
-To install the Codex-compatible exported skills, we highly recommend a repository-local installation rather than modifying your global `.codex` environment.
+The preferred setup is the Kontrolled Kaos marketplace package. The existing `conductor@orchestra` package keys remain for compatibility, and `$kaos` is the new skill entry point. This guide covers the repository-local fallback only.
 
 ## Repository-local installation
 Install the skills directly into your project's local agent folder:
