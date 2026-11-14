@@ -20,6 +20,10 @@ These records document design direction, iterations, and owner selection. They d
 
 The original master and 2026-11-10 selection record remain in Git history and in the rebrand decision as historical evidence.
 
+## Separate README hero banner
+
+The existing README banner, `assets/branding/kontrolled-kaos-hero-banner.png`, is a distinct 2026-11-10 rebrand asset (Git introduction commit `9e4070fe`; SHA-256 `689a792c13578b16d4691c05a7c3f4d0ee45c2555b910ba24796165036ae3e34`). It is retained unchanged in this bounded update. The banner is not represented as a derivative of the newly selected transparent mirrored-K emblem, and its exact design lineage has not been independently established. Any later banner redesign or substitution requires a separate design decision.
+
 ## Private evidence and rights boundaries
 
 The supporting ChatGPT provenance bundle contains the user-supplied sketches/screenshots, relevant conversation excerpts and the original image manifest. These private materials are **not** part of the distributed repository. The public record includes only this summary and the machine-readable selected-file identity.

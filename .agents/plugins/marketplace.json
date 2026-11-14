@@ -1,7 +1,7 @@
 {
   "name": "orchestra",
   "interface": {
-    "displayName": "Kontrolled Kaos"
+    "displayName": "Orchestra"
   },
   "plugins": [
     {

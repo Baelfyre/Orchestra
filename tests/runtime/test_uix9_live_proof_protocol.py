@@ -226,6 +226,12 @@ def test_arm_prompts_preserve_treatment_boundary() -> None:
     assert run_b1["guidance_digest_or_NONE"] == frozen_guidance["guidance_digest"]
     assert run_b1["guidance_digest_or_NONE"] == frozen_identity["uix_guidance_digest"]
     assert run_b1["guidance_digest_or_NONE"] != candidate_manifest["guidance_digest"]
+    expected_treatment = "\n\n".join(
+        f"## {material['role']}\n\n{material['content']}" for material in frozen_guidance["materials"]
+    )
+    assert v2_runner.guidance_prompt_material() == expected_treatment
+    assert arm_b.endswith(expected_treatment)
+    assert expected_treatment not in arm_a
 
     for bad_run_id in ("C1", "B9", ""):
         with pytest.raises(v2_runner.ProtocolBreach, match="unexpected run id"):

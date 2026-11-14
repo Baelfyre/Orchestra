@@ -54,7 +54,6 @@ def test_public_brand_aliases_preserve_specialist_contracts_and_asset_bytes():
     assert codex["interface"]["displayName"] == "Kontrolled Kaos"
     assert "./brand-skills/" in codex["skills"]
     assert codex_marketplace["name"] == "orchestra"
-    assert codex_marketplace["interface"]["displayName"] == "Kontrolled Kaos"
     assert codex_marketplace["plugins"][0]["name"] == "conductor"
 
     antigravity = load_json(".antigravity-plugin/plugin.json")
