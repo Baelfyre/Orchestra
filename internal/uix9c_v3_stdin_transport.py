@@ -292,6 +292,7 @@ def _v3_execution_envelope(authorization: dict[str, Any]) -> Iterator[None]:
         "max_interactions": v2.MAX_TOTAL_PROVIDER_INTERACTIONS,
         "max_retries": v2.MAX_RETRIES_FOR_INVALID_RUN,
         "authorize_live": v2._authorize_live,
+        "evidence_root": v2.EVIDENCE_ROOT,
     }
 
     def v3_authorize_bridge(_v2_auth: dict[str, Any], *, live_call_gate: bool) -> None:
@@ -302,6 +303,7 @@ def _v3_execution_envelope(authorization: dict[str, Any]) -> Iterator[None]:
     v2.MAX_PROVIDER_CALLS = ceiling["max_new_provider_calls"]
     v2.MAX_TOTAL_PROVIDER_INTERACTIONS = ceiling["max_new_provider_interactions"]
     v2.MAX_RETRIES_FOR_INVALID_RUN = ceiling["max_invalid_infrastructure_replacements"]
+    v2.EVIDENCE_ROOT = EVIDENCE_ROOT
     v2._authorize_live = v3_authorize_bridge
     try:
         yield
@@ -310,6 +312,7 @@ def _v3_execution_envelope(authorization: dict[str, Any]) -> Iterator[None]:
         v2.MAX_PROVIDER_CALLS = original["max_provider"]
         v2.MAX_TOTAL_PROVIDER_INTERACTIONS = original["max_interactions"]
         v2.MAX_RETRIES_FOR_INVALID_RUN = original["max_retries"]
+        v2.EVIDENCE_ROOT = original["evidence_root"]
         v2._authorize_live = original["authorize_live"]
 
 
