@@ -33,6 +33,19 @@ The owner-supplied approved master image, named `Kontrolled Kaos_ Dual K Emblem.
 - Format and size: PNG, 1254 × 1254 pixels, RGB, no alpha channel
 - No redraw, recolor, crop, regeneration, or image conversion was performed.
 
+## Superseding A5 emblem selection (2026-11-14)
+
+The 2026-11-10 emblem provenance above is retained as the historical record of the earlier opaque RGB master. The owner subsequently selected a ChatGPT-generated mirrored-K/shared-stem design for the Kaos v1.12.0 preparation candidate. The selected image supersedes the earlier master for the next release; it does not rewrite the original provenance record.
+
+- **Selected asset:** `assets/branding/kontrolled-kaos-dual-k-emblem.png`
+- **SHA-256:** `e8a9deefd3cbb0bf9a9bedec33dd1542d19de1ad044933824e7830de3de0f48b`
+- **Image:** PNG RGBA, 1254 × 1254 pixels with verified alpha transparency
+- **Design:** a controlled metallic K and reversed fiery K share a central stem, with orange/red fragments, a circular target motif, and fine white outlines
+- **Evidence:** owner-supplied screenshots and sketches, specific refinement instructions in the conversation, generated output, and explicit owner selection
+- **Private inputs:** source screenshots and conversation excerpts remain outside the public repository
+- **Provenance:** [Design provenance](../branding/KAOS_DUAL_K_DESIGN_PROVENANCE.md) and `machine/provenance/kaos-dual-k-ai-design.v1.json`
+- **Release boundary:** this update does not establish trademark availability, exclusive copyright rights, protected merge approval, or release qualification.
+
 ## Host validation status
 
 - **Codex:** isolated local marketplace discovery and package installation were verified in a temporary `CODEX_HOME`; the alias file was present in the installed package. A conversational `$kaos` invocation was not tested.

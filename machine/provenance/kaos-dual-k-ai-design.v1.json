@@ -1,0 +1,55 @@
+{
+  "schema_version": "kaos.brand-emblem-provenance.v1",
+  "date": "2026-11-14",
+  "status": "OWNER_SELECTED_STAGED_GOVERNOR_ASSESSMENT_PENDING",
+  "selected_asset": {
+    "path": "assets/branding/kontrolled-kaos-dual-k-emblem.png",
+    "sha256": "e8a9deefd3cbb0bf9a9bedec33dd1542d19de1ad044933824e7830de3de0f48b",
+    "format": "PNG",
+    "dimensions": {
+      "width": 1254,
+      "height": 1254
+    },
+    "color_mode": "RGBA",
+    "transparent_pixels_present": true
+  },
+  "previous_master": {
+    "sha256": "b94250447506eaa1410804216cbef768df6e10dd5bde7ca02fb169dd79063673",
+    "description": "Owner-approved 2026-11-10 opaque RGB master, preserved in Git history"
+  },
+  "development": {
+    "tool": "ChatGPT image generation",
+    "user_direction_documented": true,
+    "reference_material": [
+      "prior emblem image",
+      "hand-drawn reversed K/shared stem sketch",
+      "annotated silver/red sketch"
+    ],
+    "design_directions": [
+      "reverse one K and share center stem",
+      "metallic-to-orange-red flame gradient",
+      "preserve fractured energetic shards and circular ring",
+      "fine white outlines and alpha transparency"
+    ],
+    "owner_selected": true
+  },
+  "transfer": {
+    "method": "ZIP with exact byte-preserving SHA-256 verification",
+    "zip_sha256": "ca54425cb7038f1f7c091ad3104f5b03f7c99b5713979ada9459275e93ef29d6",
+    "discarded_derivative": "1024px image retained privately, not used as master"
+  },
+  "evidence_handling": {
+    "raw_screenshots_public": false,
+    "full_conversation_public": false,
+    "private_bundle": "ChatGPT provenance download, not committed to source"
+  },
+  "limitations": {
+    "sketch_authorship_independently_verified": false,
+    "exclusive_copyright_cleared": false,
+    "trademark_clearance": false,
+    "final_governor_decision": "PENDING",
+    "protected_merge_approved": false,
+    "release_published": false
+  },
+  "public_record": "docs/branding/KAOS_DUAL_K_DESIGN_PROVENANCE.md"
+}

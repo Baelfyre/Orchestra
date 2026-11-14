@@ -5,7 +5,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 BRAND_ASSET = "assets/branding/kontrolled-kaos-dual-k-emblem.png"
-BRAND_ASSET_SHA256 = "b94250447506eaa1410804216cbef768df6e10dd5bde7ca02fb169dd79063673"
+BRAND_ASSET_SHA256 = "e8a9deefd3cbb0bf9a9bedec33dd1542d19de1ad044933824e7830de3de0f48b"
 SPECIALISTS = {
     "arbiter",
     "chronicler",
@@ -127,3 +127,15 @@ def test_installation_docs_use_host_specific_kaos_namespaces():
     assert "Kontrolled Kaos integrates with supported hosts" in integrations
     assert "@Kaos" in compatibility
     assert "https://github.com/Baelfyre/Orchestra" not in readme + installation
+
+
+def test_selected_kaos_emblem_png_uses_rgba_and_expected_dimensions():
+    image = (ROOT / BRAND_ASSET).read_bytes()
+    assert image[:8] == b"\x89PNG\r\n\x1a\n"
+    assert image[12:16] == b"IHDR"
+    assert (
+        int.from_bytes(image[16:20], "big"),
+        int.from_bytes(image[20:24], "big"),
+        image[24],
+        image[25],
+    ) == (1254, 1254, 8, 6)
